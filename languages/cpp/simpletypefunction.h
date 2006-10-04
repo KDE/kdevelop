@@ -214,7 +214,9 @@ public:
   ItemDom locateModelContainer( class CodeModel* m, TypeDesc t, ClassDom cnt = ClassDom() );
 
   virtual QString specialization() const;
-		
+
+  virtual void addAliasesTo( SimpleTypeNamespace* ns );
+  
 private:
   ItemDom m_item;
   

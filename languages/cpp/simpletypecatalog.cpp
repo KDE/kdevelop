@@ -28,6 +28,35 @@ QString SimpleTypeCatalog::specialization() const {
 	return m_tag.getSpecializationDeclaration();
 }
 
+void SimpleTypeCatalog::addAliasesTo( SimpleTypeNamespace* ns ) {
+  if( m_tag.kind() != Tag::Kind_Namespace ) return;
+    QValueList<Catalog::QueryArgument> args;
+
+    ///Insert all namespace-imports
+    args << Catalog::QueryArgument( "scope", specializedScope() );
+    args << Catalog::QueryArgument( "kind", Tag::Kind_UsingDirective );
+    
+    QValueList<Tag> tags( cppCompletionInstance->m_repository->query( args ) );
+    
+    for( QValueList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it ) {
+      ns->addAliasMap( "", (*it).name(), HashedString( (*it).fileName() ), true, false );
+    }
+    ///Insert all namespace-aliases
+    args.clear();
+    args << Catalog::QueryArgument( "scope", specializedScope() );
+    args << Catalog::QueryArgument( "kind", Tag::Kind_NamespaceAlias );
+    
+    tags = cppCompletionInstance->m_repository->query( args );
+    
+    for( QValueList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it ) {
+      QVariant v = (*it).attribute( "alias" );
+      if( v.type() == QVariant::String )
+        ns->addAliasMap( (*it).name(), v.asString(), HashedString( (*it).fileName() ), true, true );
+      else
+        kdDebug( 9007 ) << "namespace-alias has no alias-text" << endl;
+    }
+}
+
 QValueList<TypePointer> SimpleTypeCatalog::getMemberClasses( const TypeDesc& name ) {
 	QValueList<TypePointer> ret;
 
@@ -78,15 +107,15 @@ SimpleTypeImpl::MemberInfo SimpleTypeCatalog::findMember( TypeDesc name, SimpleT
   
   if( tags.isEmpty() )  return ret;
 
+  ///skip all using-directives
   QValueList<Tag>::iterator it = tags.begin();
-  while( (*it).kind() == Tag::Kind_UsingDirective && it != tags.end() )
+  while( ( (*it).kind() == Tag::Kind_UsingDirective || (*it).kind() == Tag::Kind_NamespaceAlias ) && it != tags.end() )
     ++it;
 
   if( it == tags.end() ) return ret;
   
   Tag tag = *it;
   
-  ///skip all using-directives
   if( tag.kind() == Tag::Kind_Variable && (type & MemberInfo::Variable) ) {
     ret.memberType = MemberInfo::Variable;
     ret.type = tagType( tag );

@@ -21,6 +21,7 @@ StoreWalker::StoreWalker( const QString& fileName, CodeModel* store )
 : m_store( store ), m_anon( 0 )
 {
 	m_fileName = URLUtil::canonicalPath( fileName );
+    m_hashedFileName = HashedString( m_fileName );
 	
 	//kdDebug(9007) << "StoreWalker::StoreWalker(" << m_fileName << ")" << endl;
 }
@@ -104,19 +105,56 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
 
 void StoreWalker::parseNamespaceAlias( NamespaceAliasAST* ast )
 {
-	TreeParser::parseNamespaceAlias( ast );
+  QString nsName;
+  QString aliasName;
+  
+  if( !ast->namespaceName() || ast->namespaceName()->text().isEmpty() )
+  {
+        // anonymous namespace
+  }
+  else
+    nsName = ast->namespaceName()->text();
+  
+  if( ast->aliasName() )
+    aliasName = ast->aliasName()->text();
+
+  
+  if( !nsName.isNull() ) {
+    NamespaceAliasModel m;
+    m.setName( nsName );
+    m.setAliasName( aliasName );
+    m.setFileName( m_hashedFileName );
+    if( m_currentNamespace.empty() )
+      m_file->addNamespaceAlias( m );
+    else
+      m_currentNamespace.top() ->addNamespaceAlias( m );
+  }
+  
+  TreeParser::parseNamespaceAlias( ast );
 }
 
 void StoreWalker::parseUsing( UsingAST* ast )
 {
-	TreeParser::parseUsing( ast );
+  TreeParser::parseUsing( ast );
 }
 
 void StoreWalker::parseUsingDirective( UsingDirectiveAST* ast )
 {
-	QString name = ast->name()->unqualifiedName()->text();
-	QString tx = ast->name()->text();
-	m_imports.back().second.push_back( ast->name()->text() );
+  QString name;
+  if( ast->name() )
+    name = ast->name()->text();
+  
+  if( !name.isNull() ) {
+    NamespaceImportModel m;
+    m.setName( name );
+    m.setFileName( m_hashedFileName );
+    if( m_currentNamespace.empty() )
+      m_file->addNamespaceImport( m );
+    else
+      m_currentNamespace.top() ->addNamespaceImport( m );
+  }
+  
+  m_imports.back().second.push_back( name );
 }
 
 void StoreWalker::parseTypedef( TypedefAST* ast )

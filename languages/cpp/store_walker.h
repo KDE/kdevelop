@@ -16,6 +16,7 @@
 #include <codemodel.h>
 #include <qstringlist.h>
 #include <qvaluestack.h>
+#include <hashedstring.h>
 
 class StoreWalker: public TreeParser
 {
@@ -102,6 +103,7 @@ private:
     
 	FileDom m_file;
 	QString m_fileName;
+    HashedString m_hashedFileName;
 	QStringList m_currentScope;
 	CodeModel* m_store;
 	QValueList<QPair<QMap<QString, ClassDom>, QStringList> > m_imports;

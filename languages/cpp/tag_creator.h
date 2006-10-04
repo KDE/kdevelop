@@ -38,6 +38,7 @@ public:
 	// declarations
 	virtual void parseDeclaration( DeclarationAST* );
 	virtual void parseNamespace( NamespaceAST* );
+    virtual void parseNamespaceAlias( NamespaceAliasAST* decl );
 	virtual void parseUsingDirective( UsingDirectiveAST* );
 	virtual void parseTypedef( TypedefAST* );
 	virtual void parseTemplateDeclaration( TemplateDeclarationAST* );

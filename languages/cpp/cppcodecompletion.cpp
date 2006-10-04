@@ -292,7 +292,6 @@ using namespace StringHelpers;
 using namespace BitHelpers;
 using namespace CppEvaluation;
 
-
 struct PopupFillerHelpStruct {
   CppCodeCompletion* receiver;
   PopupFillerHelpStruct( CppCodeCompletion* rec ) {
@@ -321,9 +320,9 @@ struct PopupFillerHelpStruct {
     if ( d.resolved() && d.resolved() ->isNamespace() ) {
       SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
       if ( ns ) {
-        QValueList<SimpleType> slaves = ns->getSlaves();
-        for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).get().data() );
+        SimpleTypeNamespace::SlaveList slaves = ns->getSlaves();
+        for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
+          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).first.get().data() );
 	        if ( cm && cm->item() ) {
 	          QPopupMenu * m = PopupTracker::createPopup( parent );
 	          QString scope = cm->scope().join("::");
@@ -347,7 +346,7 @@ struct PopupFillerHelpStruct {
 	    if ( SimpleTypeCachedCodeModel * item = dynamic_cast<SimpleTypeCachedCodeModel*>( d.resolved().data() ) ) {  ///(1)
         if ( item->item() && item->item() ->isNamespace() ) {
 	        NamespaceModel* ns = dynamic_cast<NamespaceModel*>( item->item().data() );
-	        FileList files = receiver->cppSupport()->codeModel()->fileList();
+          FileList files = receiver->cppSupport()->codeModel()->fileList();
 	        QStringList wholeScope = ns->scope();
 	        wholeScope << ns->name();
 	        for( FileList::iterator it = files.begin(); it != files.end(); ++it ) {
@@ -378,7 +377,6 @@ struct PopupFillerHelpStruct {
 	    }
     }
 
-
     if ( d.resolved() && d.resolved() ->hasNode() ) {
       QString n = d.resolved() ->scope().join( "::" );
       if ( d.resolved() ->asFunction() )
@@ -395,7 +393,6 @@ struct PopupFillerHelpStruct {
       receiver->m_popupActions.insert( id, d.resolved() ->getDeclarationInfo() );
   }
 };
-
 
 ItemDom itemFromScope( const QStringList& scope, NamespaceDom startNamespace ) {
   if ( scope.isEmpty() )
@@ -489,14 +486,13 @@ struct PopupClassViewFillerHelpStruct {
         dom = cm->item();
     }
 
-
     if ( d.resolved() && d.resolved() ->hasNode() ) {
       if ( !dom && d.resolved() ->isNamespace() ) {
         SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
         if ( ns ) {
-          QValueList<SimpleType> slaves = ns->getSlaves();
-          for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-            SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).get().data() );
+          SimpleTypeNamespace::SlaveList slaves = ns->getSlaves();
+          for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
+            SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).first.get().data() );
 	          if ( cm && cm->item() ) {
               insertItem( parent, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
             }
@@ -525,7 +521,6 @@ struct PopupClassViewFillerHelpStruct {
       receiver->m_popupClassViewActions.insert( id, dom );
   }
 };
-
 
 template <class HelpStruct>
 class PopupFiller {
@@ -566,7 +561,6 @@ class PopupFiller {
           }
           parent->insertSeparator();
         }
-
       }
 
       struk.insertItem( parent, d, prefix );
@@ -1062,8 +1056,6 @@ void CppCodeCompletion::fitContextItem( int nLine, int nCol ) {
       } else {
         emptyCache();
       }
-
-
     }
   }
 }
@@ -2345,7 +2337,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
                 ///put the imports into the global namespace
                 for ( QValueList<QStringList>::iterator it = recoveryPoint->imports.begin(); it != recoveryPoint->imports.end(); ++it ) {
                   kdDebug( 9007 ) << "inserting import " << *it << " into the global scole" << endl;
-                  n->addAliasMap( "", ( *it ).join( "::" ) );
+                  n->addAliasMap( "", ( *it ).join( "::" ), IncludeFiles() ); ///@TODO remove this
                 }
 
               } else {
@@ -2511,7 +2503,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
       }
     }
   }
-
+  
   if ( !ctx )
     return ;
 
@@ -2539,12 +2531,11 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
         while ( !ready & cnt ) {
           if ( t->scope().isEmpty() ) {
             ready = true;
-          } else {
-	          if( !t->isNamespace() || invokedOnDemand || alwaysIncludeNamespaces )
-            	computeCompletionEntryList( t, entryList, t->scope(), false, depth );
-            t = t->parent();
-            depth++;
           }
+	       if( !t->isNamespace() || invokedOnDemand || alwaysIncludeNamespaces )
+            computeCompletionEntryList( t, entryList, t->scope(), false, depth );
+          t = t->parent();
+          depth++;
         }
       }
       {
@@ -2557,13 +2548,12 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
         while ( !ready & cnt ) {
           if ( t->scope().isEmpty() ) {
             ready = true;
-          } else {
-	          if ( ( (t->isNamespace() && invokedOnDemand) || alwaysIncludeNamespaces ) || ( first && isInstance ) )
-              computeCompletionEntryList( t, entryList, t->scope(), t->isNamespace() ? true : isInstance, depth );
-            t = t->parent();
-            depth++;
-            first = false;
           }
+	       if ( ( (t->isNamespace() && invokedOnDemand) || alwaysIncludeNamespaces ) || ( first && isInstance ) )
+            computeCompletionEntryList( t, entryList, t->scope(), t->isNamespace() ? true : isInstance, depth );
+          t = t->parent();
+          depth++;
+          first = false;
         }
       }
 	    if( ctx ) computeCompletionEntryList( entryList, ctx, isInstance );
@@ -2720,6 +2710,8 @@ void CppCodeCompletion::synchronousParseReady( const QString& file, TranslationU
 void CppCodeCompletion::slotFileParsed( const QString& fileName ) {
   if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
     return ;
+
+  emptyCache(); ///The cache has to be emptied, because the code-model changed
 
   computeRecoveryPointsLocked();
 }
@@ -3361,13 +3353,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
   if ( ignore.find( ns ) != ignore.end() )
     return ;
   ignore.insert( ns );
-  QValueList<SimpleType> slaves = ns->getSlaves();
-  for ( QValueList<SimpleType>::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-    SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( &( **it ) );
+  SimpleTypeNamespace::SlaveList slaves = ns->getSlaves();
+  for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
+    SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( &( *(*it).first ) );
     if ( !nns )
-      computeCompletionEntryList( *it, entryList, ( *it ) ->scope(), isInstance, depth );
+      computeCompletionEntryList( (*it).first, entryList, ( *it ).first ->scope(), isInstance, depth );
     else
-      computeCompletionEntryList( ( *it ), entryList, ( *it ) ->scope(), nns, ignore, isInstance, depth );
+      computeCompletionEntryList( ( *it ).first, entryList, ( *it ).first ->scope(), nns, ignore, isInstance, depth );
   }
 }
 
@@ -3471,6 +3463,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
     return ;
   QString className = type->desc().name();
 
+  bool isNs = type->isNamespace();
+
   CompTypeProcessor proc( type, m_pSupport->codeCompletionConfig() ->processFunctionArguments() && type->usingTemplates() );
   bool resolve = m_pSupport->codeCompletionConfig() ->processPrimaryTypes() && type->usingTemplates();
 
@@ -3554,13 +3548,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
       case Tag::Kind_VariableDeclaration:
       case Tag::Kind_Variable:
       sortPosition = 2;
-      if ( !isInstance && !CppVariable<Tag>( tag ).isStatic() )
+      if ( !isInstance && !CppVariable<Tag>( tag ).isStatic() && !isNs )
         continue;
       break;
       case Tag::Kind_FunctionDeclaration:
       case Tag::Kind_Function:
       sortPosition = 1;
-      if ( !isInstance && !CppFunction<Tag>( tag ).isStatic() )
+      if ( !isInstance && !CppFunction<Tag>( tag ).isStatic() && !isNs )
         continue;
       break;
       case Tag::Kind_Typedef:
@@ -3808,6 +3802,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
   if ( !safetyCounter || !d )
     return ;
   QString className = type->desc().name();
+  bool isNs = type->isNamespace();
 
   bool resolve = type->usingTemplates() && m_pSupport->codeCompletionConfig() ->processPrimaryTypes();
 
@@ -3827,7 +3822,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
     else if ( m_completionMode == VirtualDeclCompletion && !meth->isVirtual() )
       continue;
 
-    if ( !isInstance && !meth->isStatic() )
+    if ( !isInstance && !meth->isStatic() && !isNs )
       continue;
 
     CodeCompletionEntry entry;
@@ -3929,6 +3924,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList< CodeCompletionEntry > & entryList, const VariableList & attributes, bool isInstance, int depth ) {
   Debug d( "#cel#" );
   QString className = type->desc().name();
+  bool isNs = type->isNamespace();
 
   if ( !safetyCounter || !d )
     return ;
@@ -3944,7 +3940,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
     if ( isInstance && attr->isStatic() )
       continue;
-    if ( !isInstance && !attr->isStatic() )
+    if ( !isInstance && !attr->isStatic() && !isNs )
       continue;
 
     CodeCompletionEntry entry;

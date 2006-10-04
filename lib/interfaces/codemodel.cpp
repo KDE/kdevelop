@@ -140,6 +140,26 @@ void ClassModel::dump( std::ostream& file, bool recurse, QString Info )
     }
 }
 
+void NamespaceAliasModel::read( QDataStream& stream ) {
+  QString tempFileName;
+  stream >> m_name >> m_aliasName >> tempFileName;
+  m_fileName = HashedString( tempFileName );
+}
+
+void NamespaceAliasModel::write( QDataStream& stream ) const {
+  stream << m_name << m_aliasName << m_fileName.str();
+}
+
+void NamespaceImportModel::read( QDataStream& stream ) {
+  QString tempFileName;
+  stream >> m_name >> tempFileName;
+  m_fileName = HashedString( tempFileName );
+}
+
+void NamespaceImportModel::write( QDataStream& stream ) const {
+  stream << m_name << m_fileName.str();
+}
+
 void NamespaceModel::dump( std::ostream& file, bool recurse, QString Info ) 
 {
     ostringstream str( ostringstream::out );
@@ -322,6 +342,8 @@ void CodeModel::addNamespace( NamespaceDom target, NamespaceDom source )
     VariableList variableList = source->variableList();
     EnumList enumList = source->enumList();
     TypeAliasList typeAliasList = source->typeAliasList();
+    const NamespaceModel::NamespaceAliasModelList& namespaceAliases = source->namespaceAliases();
+    const NamespaceModel::NamespaceImportModelList& namespaceImports = source->namespaceImports();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	addNamespace( ns, *it );
@@ -337,6 +359,10 @@ void CodeModel::addNamespace( NamespaceDom target, NamespaceDom source )
 	ns->addEnum( *it );
     for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
 	ns->addTypeAlias( *it );
+  for( NamespaceModel::NamespaceAliasModelList::const_iterator it=namespaceAliases.begin(); it != namespaceAliases.end(); ++it )
+    ns->addNamespaceAlias( *it );
+  for( NamespaceModel::NamespaceImportModelList::const_iterator it=namespaceImports.begin(); it != namespaceImports.end(); ++it )
+    ns->addNamespaceImport( *it );
 }
 
 void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
@@ -353,7 +379,9 @@ void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
     VariableList variableList = source->variableList();
     EnumList enumList = source->enumList();
     TypeAliasList typeAliasList = source->typeAliasList();
-
+    const NamespaceModel::NamespaceAliasModelList& namespaceAliases = source->namespaceAliases();
+    const NamespaceModel::NamespaceImportModelList& namespaceImports = source->namespaceImports();
+  
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	removeNamespace( ns, *it );
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
@@ -368,14 +396,20 @@ void CodeModel::removeNamespace( NamespaceDom target, NamespaceDom source )
 	ns->removeEnum( *it );
     for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
 	ns->removeTypeAlias( *it );
-
+  for( NamespaceModel::NamespaceAliasModelList::const_iterator it=namespaceAliases.begin(); it != namespaceAliases.end(); ++it )
+    ns->removeNamespaceAlias( *it );
+  for( NamespaceModel::NamespaceImportModelList::const_iterator it=namespaceImports.begin(); it != namespaceImports.end(); ++it )
+    ns->removeNamespaceImport( *it );
+  
     if( ns->namespaceList().isEmpty() && 
     	ns->classList().isEmpty() && 
 	ns->functionList().isEmpty() && 
 	ns->functionDefinitionList().isEmpty() && 
 	ns->variableList().isEmpty() &&
 	ns->enumList().isEmpty() && 
-	ns->typeAliasList().isEmpty() )
+	ns->typeAliasList().isEmpty() &&
+  ns->namespaceImports().empty() &&
+  ns->namespaceAliases().empty() )
     {
         target->removeNamespace( ns );
     }
@@ -400,7 +434,9 @@ bool CodeModel::addFile( FileDom file )
     VariableList variableList = file->variableList();
     EnumList enumList = file->enumList();
     TypeAliasList typeAliasList = file->typeAliasList();
-
+    const NamespaceModel::NamespaceAliasModelList& namespaceAliases = file->namespaceAliases();
+    const NamespaceModel::NamespaceImportModelList& namespaceImports = file->namespaceImports();
+  
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	addNamespace( m_globalNamespace, *it );
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
@@ -415,7 +451,11 @@ bool CodeModel::addFile( FileDom file )
 	m_globalNamespace->addEnum( *it );
     for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
 	m_globalNamespace->addTypeAlias( *it );
-
+  for( NamespaceModel::NamespaceAliasModelList::const_iterator it=namespaceAliases.begin(); it != namespaceAliases.end(); ++it )
+    m_globalNamespace->addNamespaceAlias( *it );
+  for( NamespaceModel::NamespaceImportModelList::const_iterator it=namespaceImports.begin(); it != namespaceImports.end(); ++it )
+    m_globalNamespace->addNamespaceImport( *it );
+  
     m_files.insert( file->name(), file );
     return true;
 }
@@ -430,7 +470,9 @@ void CodeModel::removeFile( FileDom file )
     VariableList variableList = file->variableList();
     EnumList enumList = file->enumList();
     TypeAliasList typeAliasList = file->typeAliasList();
-
+    const NamespaceModel::NamespaceAliasModelList& namespaceAliases = file->namespaceAliases();
+    const NamespaceModel::NamespaceImportModelList& namespaceImports = file->namespaceImports();
+  
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
 	removeNamespace( m_globalNamespace, *it );
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
@@ -445,7 +487,11 @@ void CodeModel::removeFile( FileDom file )
 	m_globalNamespace->removeEnum( *it );
     for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
 	m_globalNamespace->removeTypeAlias( *it );
-	
+  for( NamespaceModel::NamespaceAliasModelList::const_iterator it=namespaceAliases.begin(); it != namespaceAliases.end(); ++it )
+    m_globalNamespace->removeNamespaceAlias( *it );
+  for( NamespaceModel::NamespaceImportModelList::const_iterator it=namespaceImports.begin(); it != namespaceImports.end(); ++it )
+    m_globalNamespace->removeNamespaceImport( *it );
+  
     m_files.remove( file->name() );
 }
 
@@ -1246,13 +1292,42 @@ void NamespaceModel::read( QDataStream & stream )
 
     int n;
 
-    m_namespaces.clear();
+    m_namespaces.clear(); m_namespaceAliases.clear(); m_namespaceImports.clear();
     stream >> n;
     for( int i=0; i<n; ++i ){
 	NamespaceDom ns = codeModel()->create<NamespaceModel>();
 	ns->read( stream );
 	addNamespace( ns );
     }
+
+  stream >> n;
+  for( int a = 0; a < n; a++ ) {
+    NamespaceAliasModel m;
+    m.read( stream );
+    m_namespaceAliases.insert( m );
+  }
+  stream >> n;
+  for( int a = 0; a < n; a++ ) {
+    NamespaceImportModel m;
+    m.read( stream );
+    m_namespaceImports.insert( m );
+  }
+}
+
+void NamespaceModel::addNamespaceImport( const NamespaceImportModel& import ) {
+  m_namespaceImports.insert( import );
+}
+
+void NamespaceModel::addNamespaceAlias( const NamespaceAliasModel& alias ) {
+  m_namespaceAliases.insert( alias );
+}
+
+void NamespaceModel::removeNamespaceImport( const NamespaceImportModel& import ) {
+  m_namespaceImports.erase( import );
+}
+
+void NamespaceModel::removeNamespaceAlias( const NamespaceAliasModel& alias ) {
+  m_namespaceAliases.erase( alias );
 }
 
 void NamespaceModel::write( QDataStream & stream ) const
@@ -1263,6 +1338,13 @@ void NamespaceModel::write( QDataStream & stream ) const
     stream << int( namespace_list.size() );
     for( NamespaceList::ConstIterator it = namespace_list.begin(); it!=namespace_list.end(); ++it )
 	(*it)->write( stream );
+
+  stream << int( m_namespaceAliases.size() );
+  for( NamespaceAliasModelList::const_iterator it = m_namespaceAliases.begin(); it != m_namespaceAliases.end(); ++it )
+    (*it).write( stream );
+  stream << int( m_namespaceImports.size() );
+  for( NamespaceImportModelList::const_iterator it = m_namespaceImports.begin(); it != m_namespaceImports.end(); ++it )
+    (*it).write( stream );
 }
 
 void FileModel::read( QDataStream & stream )
@@ -1280,6 +1362,7 @@ void FileModel::write( QDataStream & stream ) const
 void ArgumentModel::read( QDataStream & stream )
 {
     CodeModelItem::read( stream );
+  
 
     stream >> m_type >> m_defaultValue;
 }

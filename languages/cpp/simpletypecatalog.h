@@ -69,7 +69,9 @@ public:
   virtual const LocateResult findTemplateParam( const QString& name );
 
   virtual QString specialization() const;
-		
+
+  virtual void addAliasesTo( SimpleTypeNamespace* ns );
+  
 private:
   Tag m_tag;
   

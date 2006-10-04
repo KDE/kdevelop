@@ -37,6 +37,7 @@ using namespace BitHelpers;
 using namespace StringHelpers;
 
 class SimpleTypeImpl;
+class SimpleTypeNamespace;
 class SimpleTypeFunctionInterface;
 
 typedef KSharedPtr<SimpleTypeImpl> TypePointer;
@@ -474,6 +475,9 @@ class SimpleTypeImpl : public KShared {
       return !m_desc.templateParams().isEmpty() || ( m_parent && m_parent->usingTemplates() );
     }
 
+    ///This function should add aliases as well as namespace-imports into the given namespace
+    virtual void addAliasesTo( SimpleTypeNamespace* ns ) {
+    }
 
     ///An abstract class for building types lazily
   struct TypeBuildInfo : public KShared {

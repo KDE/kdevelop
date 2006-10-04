@@ -14,10 +14,49 @@
 #ifndef SIMPLETYPENAMESPACE_H
 #define SIMPLETYPENAMESPACE_H
 
+#include<hashedstring.h>
 #include "simpletype.h"
+#include "includefiles.h"
+#include <set>
 
 class SimpleTypeNamespace : public SimpleTypeImpl {
   public:
+
+    struct Alias {
+      Alias( const QString& _alias ) : alias( _alias ) {
+      }
+      
+      Alias( const IncludeFiles& _files, const QString& _alias ) : files( _files ), alias( _alias ) {
+      }
+
+      ///Does not respect the include-file-list, only the alias is compared
+      bool operator < ( const Alias& rhs ) const {
+        return alias < rhs.alias;
+      }
+
+      ///Does not respect the include-file-list, only the alias is compared
+      bool operator == ( const Alias& rhs ) const {
+        return alias == rhs.alias;
+      }
+      
+      IncludeFiles files;
+      QString alias;
+      /*
+      bool operator < ( const Alias& rhs ) const {
+        if( alias < rhs.alias ) return true;
+        return false;
+      }
+      
+      bool operator == ( const Alias& rhs ) const {
+        return alias == rhs.alias && files == rhs.files;
+      }*/
+      
+    };
+
+    typedef QPair<SimpleType, IncludeFiles> SlavePair;
+    typedef QValueList<SlavePair> SlaveList;
+  
+  typedef std::multiset<Alias> AliasList;
   
     SimpleTypeNamespace( QStringList fakeScope, QStringList realScope = QStringList() );
   
@@ -29,24 +68,28 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     
     virtual TypePointer clone();
     
-    QValueList<SimpleType> getSlaves() {
+    SlaveList getSlaves() {
       return m_activeSlaves;
     }
   
-    ///empty name means an import
-    void addAliasMap( QString name, QString alias , bool recurse = true, bool symmetric = false );
+    /**empty name means an import.
+     * @param files Set of files that must be included for this alias-map to be active. If the set is empty, the alias will be used globally.
+     */
+    void addAliasMap( QString name, QString alias , const IncludeFiles& files = IncludeFiles(), bool recurse = true, bool symmetric = false );
   
-    ///Takes a map of multiple aliases in form "A=B;C=D;....;" similar to the C++ "namespace A=B;" statement
-    void addAliases( QString map );
+    /**Takes a map of multiple aliases in form "A=B;C=D;....;" similar to the C++ "namespace A=B;" statement
+     * @param files Set of files that must be included for this alias-map to be active. If the set is empty, the alias will be used globally.
+     */
+    void addAliases( QString map, const IncludeFiles& files = IncludeFiles() );
 
   private:
-    QValueList<SimpleType> m_activeSlaves;
+    QValueList< SlavePair > m_activeSlaves;
     /// Maps local sub-namespace -> global namespace(multiple aliases are possible)
-    typedef QMap<QString, QStringList > AliasMap;
+    typedef QMap<QString, AliasList> AliasMap;
     AliasMap m_aliases;
   
   
-	void addScope( const QStringList& scope );
+    void addScope( const QStringList& scope, const IncludeFiles& files = IncludeFiles() );
 
 	void addScope( const TypePointer& t );
 	
@@ -55,11 +98,11 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     struct NamespaceBuildInfo : public TypeBuildInfo {
       QStringList m_fakeScope;
       QStringList m_realScope;
-      QValueList<QStringList> m_imports;
+      AliasList m_imports;
 	  TypePointer m_built;
     
     
-      NamespaceBuildInfo( QStringList fakeScope, QStringList realScope, const QValueList<QStringList>& imports ) {
+      NamespaceBuildInfo( QStringList fakeScope, QStringList realScope, const AliasList& imports ) {
         m_fakeScope = fakeScope;
         m_realScope = realScope;
         m_imports = imports;
@@ -82,7 +125,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
 
 	virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) ;
 
-    MemberInfo setupMemberInfo( TypeDesc& subName, QStringList tscope, QValueList<QStringList> imports = QValueList<QStringList>() );
+    MemberInfo setupMemberInfo( TypeDesc& subName, QStringList tscope, AliasList imports = AliasList() );
   
 	QStringList locateNamespaceScope( QString alias );
 

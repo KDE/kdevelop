@@ -70,6 +70,41 @@ void TagCreator::parseTranslationUnit( TranslationUnitAST* ast )
 	m_imports.pop_back();
 }
 
+void TagCreator::parseNamespaceAlias( NamespaceAliasAST* ast ) {
+  QString nsName;
+  QString aliasName;
+  
+  if( !ast->namespaceName() || ast->namespaceName()->text().isEmpty() )
+  {
+        // anonymous namespace
+  }
+  else
+    nsName = ast->namespaceName()->text();
+
+  if( ast->aliasName() )
+    aliasName = ast->aliasName()->text();
+  
+  Tag tag;
+  tag.setKind( Tag::Kind_Namespace );
+  tag.setFileName( m_fileName );
+  tag.setName( nsName ); ///nsName is the new name of the namespace
+  tag.setAttribute( "alias", aliasName ); ///aliasName is the name of the real namespace
+  tag.setScope( m_currentScope );
+  if( !ast->comment().isEmpty() )
+    tag.setComment( ast->comment() );
+  
+  int line, col;
+  ast->getStartPosition( &line, &col );
+  tag.setStartPosition( line, col );
+  
+  ast->getEndPosition( &line, &col );
+  tag.setEndPosition( line, col );
+  
+  m_catalog->addItem( tag );
+  
+  TreeParser::parseNamespaceAlias( ast );
+}
+
 void TagCreator::parseNamespace( NamespaceAST* ast )
 {
 	QString nsName;

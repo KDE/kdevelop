@@ -75,7 +75,7 @@ struct RecoveryPoint
             ///put the imports into the global namespace
       for( QValueList<QStringList>::iterator it = imports.begin(); it != imports.end(); ++it ) {
         kdDebug( 9007 ) << "inserting import " << *it << " into the global scope" << endl;
-        n->addAliasMap( "", (*it).join("::") );
+        n->addAliasMap( "", (*it).join("::"), IncludeFiles() ); ///@TODO: remove this
       }
 	  n->addAliases( hardCodedAliases );
     }

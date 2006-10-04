@@ -4,13 +4,13 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
 libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
-		kdevlanguagesupport.cpp kdevpartcontroller.cpp kdevapi.cpp KDevCoreIface.skel \
-		kdevmainwindow.cpp KDevPartControllerIface.skel kdevplugin.cpp kdevcoderepository.cpp \
-		codemodel.cpp codemodel_treeparser.cpp codemodel_utils.cpp \
-		kdevdesignerintegration.cpp kdevplugincontroller.cpp kdevplugininfo.cpp KDevCoreIface.cpp \
-		KDevPartControllerIface.cpp katedocumentmanagerinterface.cpp katedocumentmanagerinterface.skel \
-	kdevprojectiface.cpp kdevprojectiface.skel kdevdesignerintegrationiface.cpp \
-	kdevdesignerintegrationiface.skel
+			kdevlanguagesupport.cpp kdevpartcontroller.cpp kdevapi.cpp KDevCoreIface.skel \
+			kdevmainwindow.cpp KDevPartControllerIface.skel kdevplugin.cpp kdevcoderepository.cpp \
+			codemodel.cpp codemodel_treeparser.cpp codemodel_utils.cpp \
+			kdevdesignerintegration.cpp kdevplugincontroller.cpp kdevplugininfo.cpp KDevCoreIface.cpp \
+			KDevPartControllerIface.cpp katedocumentmanagerinterface.cpp katedocumentmanagerinterface.skel \
+		kdevprojectiface.cpp kdevprojectiface.skel kdevdesignerintegrationiface.cpp \
+		kdevdesignerintegrationiface.skel hashedstring.cpp
 libkdevinterfaces_la_LDFLAGS = -no-undefined $(all_libraries)
 libkdevinterfaces_la_LIBADD = $(top_builddir)/lib/interfaces/external/libkinterfacedesigner.la \
 	$(top_builddir)/lib/util/libkdevutil.la \
@@ -36,4 +36,5 @@ DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kpar
 DOXYGEN_PROJECTNAME = KDevelop Interfaces Library
 DOXYGEN_DOCDIRPREFIX = kdev
 include ../../Doxyfile.am
-noinst_HEADERS = kdevprojectiface.h kdevdesignerintegrationiface.h
+noinst_HEADERS = kdevprojectiface.h kdevdesignerintegrationiface.h \
+	hashedstring.h

@@ -31,11 +31,13 @@ Code Model - a memory symbol store.
 #include <qstringlist.h>
 #include <ksharedptr.h>
 #include <qvaluevector.h>
+#include <hashedstring.h>
 
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <sstream>
+#include <set>
 
 using namespace std;
 
@@ -854,6 +856,91 @@ private:
     friend class CodeModel;
 };
 
+class NamespaceAliasModel {
+public:
+  virtual void read( QDataStream& stream );
+  virtual void write( QDataStream& stream ) const;
+
+  QString name() const {
+    return m_name;
+  }
+
+  void setName( const QString& name ) {
+    m_name = name;
+  }
+
+  void setAliasName( const QString& theValue ) {
+    m_aliasName = theValue;
+  }
+
+  QString aliasName() const {
+    return m_aliasName;
+  }
+
+  void setFileName( const HashedString& theValue ) {
+    m_fileName = theValue;
+  }
+
+  HashedString fileName() const {
+    return m_fileName;
+  }
+
+  bool operator < ( const NamespaceAliasModel& rhs ) const {
+    if( m_name < rhs.m_name ) return true;
+    if( m_name == rhs.m_name ) {
+      if( m_aliasName < rhs.m_aliasName ) return true;
+      if(  m_aliasName == rhs.m_aliasName && m_fileName < rhs.m_fileName ) return true;
+    }
+    return false;
+  }
+
+  bool operator == ( const NamespaceAliasModel& rhs ) const {
+    return m_name == rhs.m_name && m_aliasName == rhs.m_aliasName && m_fileName == rhs.m_fileName;
+  }
+  
+private:
+  QString m_name;
+  QString m_aliasName;
+  HashedString m_fileName;
+};
+
+class NamespaceImportModel {
+public:
+  virtual void read( QDataStream& stream );
+  virtual void write( QDataStream& stream ) const;
+  
+  QString name() const {
+    return m_name;
+  }
+  
+  HashedString fileName() const {
+    return m_fileName;
+  }
+
+  void setName( const QString& name ) {
+    m_name = name;
+  }
+
+  void setFileName( const HashedString& file ) {
+    m_fileName = file;
+  }
+  
+  bool operator < ( const NamespaceImportModel& rhs ) const {
+    if( m_name < rhs.m_name ) return true;
+    if( m_name == rhs.m_name )
+      if( m_fileName < rhs.m_fileName ) return true;
+
+    return false;
+  }
+  
+  bool operator == ( const NamespaceImportModel& rhs ) const {
+    return m_name == rhs.m_name && m_fileName == rhs.m_fileName;
+  }
+  
+private:
+  QString m_name;
+  HashedString m_fileName;
+};
 
 /**
 Namespace model.
@@ -871,6 +958,9 @@ protected:
     NamespaceModel( CodeModel* model );
 
 public:
+  typedef std::set<NamespaceAliasModel> NamespaceAliasModelList; ///I'm using std-sets here, because Qt-3 has no appropriate replacement
+  typedef std::set<NamespaceImportModel> NamespaceImportModelList;
+  
     /**A definition of safe pointer to the namespace model.*/
     typedef NamespaceDom Ptr;
 
@@ -915,10 +1005,25 @@ public:
     virtual void write( QDataStream& stream ) const;
 
     virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
-    
+
+    void addNamespaceImport( const NamespaceImportModel& import );
+    void addNamespaceAlias( const NamespaceAliasModel& alias );
+    void removeNamespaceImport( const NamespaceImportModel& import );
+    void removeNamespaceAlias( const NamespaceAliasModel& alias );
+
+    ///Must not be called on temporary objects because a reference is returned(for performance-reasons)
+    const NamespaceAliasModelList& namespaceAliases() const {
+      return m_namespaceAliases;
+    }
+  
+    ///Must not be called on temporary objects because a reference is returned(for performance-reasons)
+    const NamespaceImportModelList& namespaceImports() const {
+      return m_namespaceImports;
+    }
 private:
     QMap<QString, NamespaceDom> m_namespaces;
-		QMap<QString, int> m_appearances;
+    NamespaceAliasModelList m_namespaceAliases;
+    NamespaceImportModelList m_namespaceImports;
 
 private:
     NamespaceModel( const NamespaceModel& source );

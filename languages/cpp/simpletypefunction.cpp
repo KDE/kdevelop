@@ -14,6 +14,7 @@
 
 #include "simpletypefunction.h"
 #include "safetycounter.h"
+#include "simpletypenamespace.h"
 
 extern SafetyCounter safetyCounter;
 extern CppCodeCompletion* cppCompletionInstance;
@@ -136,6 +137,18 @@ void SimpleTypeFunctionInterface::resolveImplicitTypes( QValueList<TypeDesc>& ar
 
 
 //SimpleTypeCodeModel implementation
+
+void SimpleTypeCodeModel::addAliasesTo( SimpleTypeNamespace* ns ) {
+  const NamespaceModel* m = dynamic_cast<const NamespaceModel*>( m_item.data() );
+  if( m ) {
+    const NamespaceModel::NamespaceAliasModelList namespaceAliases = m->namespaceAliases();
+    const NamespaceModel::NamespaceImportModelList namespaceImports = m->namespaceImports();
+    for( NamespaceModel::NamespaceAliasModelList::const_iterator it = namespaceAliases.begin(); it != namespaceAliases.end(); ++it )
+      ns->addAliasMap( it->name(), it->aliasName(), it->fileName(), true, true ); //should these really be symmetric?
+    for( NamespaceModel::NamespaceImportModelList::const_iterator it = namespaceImports.begin(); it != namespaceImports.end(); ++it )
+      ns->addAliasMap( "", it->name(), it->fileName(), true, false );
+  }
+}
 
 SimpleTypeCodeModel::SimpleTypeCodeModel( ItemDom& item ) : m_item( item ) {
   CodeModelItem* i = &(*item);
