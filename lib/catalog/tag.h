@@ -59,6 +59,7 @@ public:
 	Kind_Variable,
 	Kind_FunctionDeclaration,
 	Kind_Function,
+  Kind_NamespaceAlias,
 	// ...
 
 	Kind_Custom = 2000
