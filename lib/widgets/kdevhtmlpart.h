@@ -16,7 +16,6 @@ Customized KHTML part for KDevelop.
 
 class KAction;
 class KToolBarPopupAction;
-class KParts::ReadOnlyPart;
 class KDevDocument;
 
 struct DocumentationHistoryEntry {
