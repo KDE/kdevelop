@@ -75,7 +75,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
         KindMask =  (1 << 0) -  1,
 
         /* These are for classes that are not inherited from */
-        FirstKind =  1 << 0,
+        FirstKind =  1 << 0
       };
 
     public:
