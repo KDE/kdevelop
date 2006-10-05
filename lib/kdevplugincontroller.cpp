@@ -303,6 +303,7 @@ QString KDevPluginController::changeProfile( const QString &newProfile )
 
     return oldProfile;
     */
+    return QString();
 }
 
 KPluginInfo * KDevPluginController::infoForPluginId( const QString &pluginId ) const
