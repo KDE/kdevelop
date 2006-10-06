@@ -42,7 +42,7 @@ public:
     RegisterSpecifier = 0x10,
     MutableSpecifier  = 0x20
   };
-  Q_DECLARE_FLAGS(StorageSpecifiers, StorageSpecifier);
+  Q_DECLARE_FLAGS(StorageSpecifiers, StorageSpecifier)
 
   void setStorageSpecifiers(StorageSpecifiers specifiers);
 
