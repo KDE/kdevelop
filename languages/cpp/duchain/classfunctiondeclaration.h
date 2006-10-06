@@ -49,7 +49,7 @@ public:
     InlineSpecifier   = 0x2,
     ExplicitSpecifier = 0x4
   };
-  Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier);
+  Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 
   void setFunctionSpecifiers(FunctionSpecifiers specifiers);
 
@@ -71,7 +71,7 @@ private:
   bool m_isExplicit: 1;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ClassFunctionDeclaration::FunctionSpecifiers);
+Q_DECLARE_OPERATORS_FOR_FLAGS(ClassFunctionDeclaration::FunctionSpecifiers)
 
 #endif // CLASSFUNCTIONDECLARATION_H
 

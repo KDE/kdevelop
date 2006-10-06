@@ -74,7 +74,7 @@ private:
   bool m_isMutable: 1;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDeclaration::StorageSpecifiers);
+Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDeclaration::StorageSpecifiers)
 
 #endif // CLASSMEMBERDECLARATION_H
 
