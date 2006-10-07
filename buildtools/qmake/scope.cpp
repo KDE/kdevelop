@@ -559,7 +559,10 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
                 origValues.pop_back();
             if ( origValues.count() > 0 && origValues.last() != "\\\n" )
                 origValues.append( "\\\n" );
-            origValues.append( *it );
+            if( (*it).contains(" ") || (*it).contains("\t") )
+                origValues.append( "\""+*it+"\"" );
+            else
+                origValues.append( *it );
             origValues.append( "\n" );
         }
         else if ( origValues.contains( *it ) && remove )
