@@ -331,11 +331,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 
     m_rootScope = new Scope( proname, m_part->isQt4Project() );
-    m_rootSubproject = new QMakeScopeItem( overview, i18n( "Subprojects" ), m_rootScope, this );
-    //item->path = dirName;
-    //item->m_scope = m_rootScope;
-    //buildTree(item);
-    //parse(dirName.right(dirName.length()-dirName.findRev('/')-1), item);
+    m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->projectName(), m_rootScope, this );
     m_rootSubproject->setOpen( true );
     if ( m_rootSubproject->firstChild() )
     {

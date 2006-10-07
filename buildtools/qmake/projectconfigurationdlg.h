@@ -55,7 +55,6 @@ public slots:
     virtual void updateProjectConfiguration();
     virtual void browseTargetPath();
 
-
     virtual void buildorderMoveUpClicked();
     virtual void buildorderMoveDownClicked();
 

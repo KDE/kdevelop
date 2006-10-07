@@ -534,6 +534,8 @@ void ProjectConfigurationDlg::updateControls()
 {
     // Project template
     groupLibraries->setEnabled( false );
+    if( myProjectItem->scope->scopeType != Scope::ProjectScope )
+        groupTemplate->setEnabled(false);
 
     //cache the value of the some variables
     QStringList configValues = myProjectItem->scope->variableValues( "CONFIG" );
@@ -547,6 +549,7 @@ void ProjectConfigurationDlg::updateControls()
         {
             checkConsole->setChecked( true );
         }
+        groupTemplateChanged(0);
     }
     else if ( templateValues.contains( "lib" ) )
     {
@@ -588,10 +591,12 @@ void ProjectConfigurationDlg::updateControls()
             checkPkgconf->setChecked( true );
         else
             checkPkgconf->setChecked( false );
+        groupTemplateChanged(1);
     }
     else if ( templateValues.contains( "subdirs" ) )
     {
         radioSubdirs->setChecked( true );
+        groupTemplateChanged(2);
     }
     // Buildmode
     if ( configValues.contains( "debug" ) )
