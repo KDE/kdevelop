@@ -37,7 +37,7 @@ struct Value
 
   enum Kind {
     Kind_Long,
-    Kind_ULong,
+    Kind_ULong
   };
 
   Kind kind;
