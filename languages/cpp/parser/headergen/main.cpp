@@ -17,6 +17,7 @@
 #include "parsesession.h"
 #include "control.h"
 #include "name_compiler.h"
+#include "rpp/pp-stream.h"
 
 struct HeaderGeneratorVisitor : public DefaultVisitor
 {
@@ -63,6 +64,56 @@ struct HeaderGeneratorVisitor : public DefaultVisitor
   }
 };
 
+class HeaderGenerator : public Preprocessor
+{
+public:
+  HeaderGenerator();
+
+  void run();
+
+  QByteArray preprocess(const KUrl& url);
+
+  virtual Stream* sourceNeeded(QString& fileName, IncludeType type);
+
+  int status;
+
+private:
+  void addWinDeclMacro();
+
+  KUrl kdeIncludes, outputDirectory;
+
+  // path, filename
+  QMultiMap<QString, QString> filesToInstall;
+
+  QDir outputDir;
+
+  QDomDocument buildInfoXml;
+  QDomElement folderElement;
+
+  // Map of macros in each include file
+  QMap<QString, QList<MacroItem> > headerMacros;
+
+  //QStack includeUrls;
+};
+
+class HeaderStream : public Stream
+{
+public:
+  HeaderStream(QString* string)
+    : Stream(string)
+    , m_string(string)
+  {
+  }
+
+  virtual ~HeaderStream()
+  {
+    delete m_string;
+  }
+
+private:
+  QString* m_string;
+};
+
 static KCmdLineOptions options[] =
 {
   { "includes <includes>", I18N_NOOP( "KDE include directory - headers go into <includes>/KDE" ), 0 },
@@ -78,42 +129,155 @@ int main( int argc, char *argv[] )
 
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options );
+
+  HeaderGenerator hg;
+
+  if (hg.status != 0)
+    return hg.status;
+
+  hg.run();
+
+  return hg.status;
+}
+
+HeaderGenerator::HeaderGenerator()
+  : status(0)
+{
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-  KUrl kdeIncludes(args->getOption("includes"));
+  kdeIncludes = args->getOption("includes");
   QDir includeDir(kdeIncludes.path());
 
   if (!includeDir.exists()) {
     kWarning() << "KDE includes directory must be set, and point to an existing directory; please use --includes <path>" << endl;
-    return -1;
+    status = -1;
+    return;
   }
 
   if (!includeDir.exists("KDE"))
     if (!includeDir.mkdir("KDE")) {
       kWarning() << "KDE includes directory must be writable" << endl;
-      return -1;
+      status = -1;
+      return;
     }
 
-  KUrl outputDirectory = kdeIncludes;
+  outputDirectory = kdeIncludes;
   outputDirectory.cd("KDE");
 
-  QDir outputDir(outputDirectory.path());
+  outputDir = outputDirectory.path();
 
   QFile buildInfoFile(args->getOption("buildinfo"));
   if (!buildInfoFile.open(QIODevice::ReadOnly)) {
     kWarning() << "Could not open build information file \"" << args->getOption("buildinfo") << "\", please check that it exists and is readable." << endl;
-    return -1;
+    status = -1;
+    return;
   }
 
-  QDomDocument buildInfoXml;
   QString errorMsg; int errorLine, errorColumn;
   if (!buildInfoXml.setContent(buildInfoFile.readAll(), false, &errorMsg, &errorLine, &errorColumn)) {
     kWarning() << "Build information parse error \"" << errorMsg << "\" at line " << errorLine << ", column " << errorColumn << endl;
-    return -1;
+    status = -1;
+    return;
+  }
+}
+
+QByteArray HeaderGenerator::preprocess(const KUrl& url)
+{
+  //if (url.fileName() == "qglobal.h")
+//    kDebug() << "Parsing qglobal.h... " << url.path() << endl;
+
+  QFile sourceToParse(url.path());
+  if (!sourceToParse.open(QIODevice::ReadOnly)) {
+    kWarning() << "Could not open install file " << url << endl;
+    return QByteArray();
   }
 
-  Control control;
+  /*if (url.fileName() == "kdelibs_export.h")
+    kDebug() << "KDE libs export macros encountered." << endl;*/
 
+  QByteArray ret = processString(QString(sourceToParse.readAll())).toLatin1();
+
+  if (url.fileName() == "cursor.h") {
+    kDebug() << "Defined macros:" << endl;
+    foreach (MacroItem item, macros())
+      kDebug() << "Macro [" << item.name << "] definition [" << item.definition << "]" << endl;
+  }
+
+  //kDebug() << "Inserting " << macros().count() << " macros into record for " << url.path() << endl;
+  headerMacros.insert(url.path(), macros());
+
+  return ret;
+}
+
+Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/)
+{
+  QDomNodeList includes = folderElement.elementsByTagName("includes");
+
+  for (int i2 = 0; i2 < includes.count(); ++i2) {
+    QDomNodeList include = includes.at(i2).toElement().elementsByTagName("include");
+
+    for (int i = 0; i < include.count(); ++i) {
+      KUrl path(include.at(i).toElement().text() + '/');
+      KUrl url(path, fileName);
+
+      //kDebug() << "Checking file " << fileName << " in url " << url.path() << " from path " << path.path() << endl;
+
+      if (url.isValid()) {
+        if (QFile::exists(url.path())) {
+          /*QFile file(url.path());
+          if (!file.open(QIODevice::ReadOnly)) {
+            kWarning() << "Could not open file " << url.path() << " for reading!" << endl;
+            return 0;
+          }
+
+          addWinDeclMacro();
+
+          QString* input = new QString(QString::fromUtf8(file.readAll()));
+          return new HeaderStream(input);*/
+          // found it
+          if (headerMacros.contains(url.path())) {
+            QList<MacroItem> ms = headerMacros[url.path()];
+            //kDebug() << "Retrieved " << ms.count() << " macros from record of " << url.path() << endl;
+            int oldMacroCount = macros().count();
+            addMacros(ms);
+            //kDebug() << "New macro count " << macros().count() << ", old " << oldMacroCount << endl;
+            addWinDeclMacro();
+            return 0;
+
+          } else {
+            // The caching isn't going to be 100% correct, but it will be good enough for what we need
+            preprocess(url);
+            addWinDeclMacro();
+            return 0;
+          }
+        }
+      }
+
+      //kDebug() << "File " << fileName << " not in url " << url.path() << endl;
+    }
+  }
+
+  //kWarning() << "Did not find include " << fileName << endl;//" in the following directories:" << endl;
+  /*for (int j = 0; j < include.count(); ++j)
+    kDebug() << "  " << include.at(j).toElement().text() << endl;*/
+
+  return 0;
+}
+
+void HeaderGenerator::addWinDeclMacro()
+{
+  // Use the fact that the c++ parser recognises windows declaration specs
+  MacroItem exportMacro;
+  exportMacro.name = "KDE_EXPORT";
+  exportMacro.isDefined = true;
+  exportMacro.definition = "__declspec(dllexport)";
+  exportMacro.isFunctionLike = false;
+  exportMacro.variadics = false;
+  addMacros(QList<MacroItem>() << exportMacro);
+}
+
+void HeaderGenerator::run()
+{
   QDomNodeList folders = buildInfoXml.elementsByTagName("folder");
   QString sourceElementName("source"), installElementName("install");
 
@@ -122,19 +286,15 @@ int main( int argc, char *argv[] )
   QFile kdelibsExport(kdeIncludes.path(KUrl::AddTrailingSlash) + "kdelibs_export.h");
   if (!kdelibsExport.open(QIODevice::ReadOnly)) {
     kWarning() << "Could not open kdelibs_export.h in kde includes directory.  Are you sure you have installed kdelibs?" << endl;
-    return -1;
+    status = -1;
+    return;
   }
 
-  // Exploit that the c++ parser treats this specially for us :)
-  QByteArray exportMacros = "#define KDE_EXPORT __declspec(dllexport)\n" + kdelibsExport.readAll();
-
-  // path, filename
-  QMultiMap<QString, QString> filesToInstall;
-
   for (int i = 0; i < folders.count(); ++i) {
-    KUrl folderUrl(folders.at(i).toElement().attribute("name"));
+    folderElement = folders.at(i).toElement();
+    KUrl folderUrl(folderElement.attribute("name"));
 
-    for (QDomElement install = folders.at(i).firstChildElement(installElementName); !install.isNull(); install = install.nextSiblingElement(installElementName)) {
+    for (QDomElement install = folderElement.firstChildElement(installElementName); !install.isNull(); install = install.nextSiblingElement(installElementName)) {
       KUrl installDestination(install.attribute("destination"));
       if (!installDestination.path().startsWith(kdeIncludes.path())) {
         //kDebug() << "URL " << installDestination << " is not the kde include dir " << kdeIncludes << endl;
@@ -142,19 +302,33 @@ int main( int argc, char *argv[] )
       }
 
       for (QDomElement source = install.firstChildElement(sourceElementName); !source.isNull(); source = source.nextSiblingElement(sourceElementName)) {
-        QFile sourceToParse(source.text());
-        if (!sourceToParse.open(QIODevice::ReadOnly)) {
-          kWarning() << "Could not open install file " << source.text() << endl;
+        clearMacros();
+
+        // Use the fact that the c++ parser recognises windows declaration specs
+        addWinDeclMacro();
+
+        MacroItem cppmacro;
+        cppmacro.name = "__cplusplus";
+        cppmacro.isDefined = true;
+        cppmacro.isFunctionLike = false;
+        cppmacro.variadics = false;
+
+        addMacros(QList<MacroItem>() << cppmacro);
+
+        if (source.text().endsWith("cursor.h"))
+          kDebug() << "Cursor encountered" << endl;
+
+        QByteArray contents = preprocess(source.text());
+
+        if (contents.isEmpty())
           continue;
-        }
+
+        if (source.text().endsWith("cursor.h"))
+          kDebug() << QString::fromUtf8(contents).trimmed() << endl;
 
         ++fileCount;
 
-        QByteArray contents = exportMacros + sourceToParse.readAll();
-
-        Preprocessor p;
-
-        contents = p.processString(QString(contents)).toLatin1();
+        Control control;
 
         ParseSession session;
         session.setContents(contents);
@@ -162,8 +336,13 @@ int main( int argc, char *argv[] )
         Parser parser(&control);
         TranslationUnitAST* ast = parser.parse(&session);
 
+        //for (int i = 0; i < control.problemCount(); ++i)
+          //kWarning() << "Parse problem in " << source.text() << ": " << control.problem(i).message() << ", line " << control.problem(i).line() << endl;
+
         HeaderGeneratorVisitor hg(&session);
         hg.visit(ast);
+
+
 
         foreach (const QString& className, hg.m_classes) {
           QString forwardingHeaderPath(outputDirectory.path(KUrl::AddTrailingSlash) + className);
@@ -201,6 +380,12 @@ int main( int argc, char *argv[] )
 
           ts << sourceRelativeUrl << "\"\n";
 
+          /*ts << contents << endl;
+
+          ts << "Defined macros:" << endl;
+          foreach (MacroItem item, macros())
+            ts << "Macro [" << item.name << "] definition [" << item.definition << "] from [" << item.fileName << "]" << endl;*/
+
           filesToInstall.insert(classDirectory, className);
         }
       }
@@ -210,7 +395,8 @@ int main( int argc, char *argv[] )
   QFile cmakelist(outputDirectory.path(KUrl::AddTrailingSlash) + "CMakeLists.txt");
   if (!cmakelist.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     kWarning() << "Could not open cmake list file for writing." << endl;
-    return -1;
+    status = -1;
+    return;
   }
 
   QTextStream ts(&cmakelist);
