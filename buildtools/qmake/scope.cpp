@@ -129,6 +129,7 @@ void Scope::saveToFile() const
     if ( scopeType() != ProjectScope && scopeType() != IncludeScope )
     {
         m_parent->saveToFile();
+        return;
     }
 
     QString filename;
@@ -148,6 +149,10 @@ void Scope::saveToFile() const
         m_root->writeBack( astbuffer );
         out << astbuffer;
     }
+#ifdef DEBUG
+    Scope::PrintAST pa;
+    pa.processProject(m_root);
+#endif
 }
 
 void Scope::addToPlusOp( const QString& variable, const QStringList& values )
@@ -891,5 +896,97 @@ bool Scope::listIsEmpty( const QStringList& values )
     }
     return true;
 }
+
+#ifdef DEBUG
+Scope::PrintAST::PrintAST() : QMake::ASTVisitor()
+{
+    indent = 0;
+}
+
+void Scope::PrintAST::processProject( QMake::ProjectAST* p )
+{
+    QMake::ASTVisitor::processProject(p);
+}
+
+void Scope::PrintAST::enterRealProject( QMake::ProjectAST* p )
+{
+    kdDebug(9024) << getIndent() << "--------- Entering Project: " << replaceWs(p->fileName()) << " --------------" << endl;
+    indent += 4;
+    QMake::ASTVisitor::enterRealProject(p);
+}
+
+void Scope::PrintAST::leaveRealProject( QMake::ProjectAST* p )
+{
+    indent -= 4;
+    kdDebug(9024) << getIndent() << "--------- Leaving Project: " << replaceWs(p->fileName()) << " --------------" << endl;
+    QMake::ASTVisitor::leaveRealProject(p);
+}
+
+void Scope::PrintAST::enterScope( QMake::ProjectAST* p )
+{
+    kdDebug(9024) << getIndent() << "--------- Entering Scope: " << replaceWs(p->scopedID) << " --------------" << endl;
+    indent += 4;
+    QMake::ASTVisitor::enterScope(p);
+}
+
+void Scope::PrintAST::leaveScope( QMake::ProjectAST* p )
+{
+    indent -= 4;
+    kdDebug(9024) << getIndent() << "--------- Leaving Scope: " << replaceWs(p->scopedID) << " --------------" << endl;
+    QMake::ASTVisitor::leaveScope(p);
+}
+
+void Scope::PrintAST::enterFunctionScope( QMake::ProjectAST* p )
+{
+    kdDebug(9024) << getIndent() << "--------- Entering FunctionScope: " << replaceWs(p->scopedID) << "(" << replaceWs(p->args) << ")"<< " --------------" << endl;
+    indent += 4;
+    QMake::ASTVisitor::enterFunctionScope(p);
+}
+
+void Scope::PrintAST::leaveFunctionScope( QMake::ProjectAST* p )
+{
+    indent -= 4;
+    kdDebug(9024) << getIndent() << "--------- Leaving FunctionScope: " << replaceWs(p->scopedID) << "(" << replaceWs(p->args) << ")"<< " --------------" << endl;
+    QMake::ASTVisitor::leaveFunctionScope(p);
+}
+
+QString Scope::PrintAST::replaceWs(QString s)
+{
+    return s.replace("\n", "%nl").replace("\t", "%tab").replace(" ", "%spc");
+}
+
+void Scope::PrintAST::processAssignment( QMake::AssignmentAST* a)
+{
+    kdDebug(9024) << getIndent() << "Assignment: " << replaceWs(a->scopedID) << " " << replaceWs(a->op) << " "
+        << replaceWs(a->values.join("|"))<< endl;
+    QMake::ASTVisitor::processAssignment(a);
+}
+
+void Scope::PrintAST::processNewLine( QMake::NewLineAST* n)
+{
+    kdDebug(9024) << getIndent() << "Newline " << endl;
+    QMake::ASTVisitor::processNewLine(n);
+}
+
+void Scope::PrintAST::processComment( QMake::CommentAST* a)
+{
+    kdDebug(9024) << getIndent() << "Comment: " << replaceWs(a->comment) << endl;
+    QMake::ASTVisitor::processComment(a);
+}
+
+void Scope::PrintAST::processInclude( QMake::IncludeAST* a)
+{
+    kdDebug(9024) << getIndent() << "Include: " << replaceWs(a->projectName) << endl;
+    QMake::ASTVisitor::processInclude(a);
+}
+
+QString Scope::PrintAST::getIndent()
+{
+    QString ind;
+    for( int i = 0 ; i < indent ; i++)
+        ind += " ";
+    return ind;
+}
+#endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

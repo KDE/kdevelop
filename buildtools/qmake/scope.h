@@ -18,6 +18,10 @@
 
 #include "qmakeast.h"
 
+#ifdef DEBUG
+#include "qmakeastvisitor.h"
+#endif
+
 /*
  * TODO:
  * - Ask adymo again about variables, we can't just always put a new assignment at the end of the file, because that clutters the file after a few open/save cycles
@@ -229,6 +233,40 @@ private:
      */
     QMap<QString, QStringList> m_varCache;
     bool m_isEnabled;
+#ifdef DEBUG
+    class PrintAST : QMake::ASTVisitor
+    {
+
+    public:
+        PrintAST();
+        virtual void processProject( QMake::ProjectAST* p );
+        virtual void enterRealProject( QMake::ProjectAST* p );
+
+        virtual void leaveRealProject( QMake::ProjectAST* p );
+
+        virtual void enterScope( QMake::ProjectAST* p );
+
+        virtual void leaveScope( QMake::ProjectAST* p );
+
+        virtual void enterFunctionScope( QMake::ProjectAST* p );
+
+        virtual void leaveFunctionScope( QMake::ProjectAST* p );
+
+        virtual void processAssignment( QMake::AssignmentAST* a);
+
+        virtual void processNewLine( QMake::NewLineAST* n);
+
+        virtual void processComment( QMake::CommentAST* a);
+
+        virtual void processInclude( QMake::IncludeAST* a);
+
+    private:
+        QString getIndent();
+        QString replaceWs(QString);
+        int indent;
+
+    };
+#endif
 
 };
 
