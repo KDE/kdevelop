@@ -85,6 +85,11 @@ public:
      */
     void addMacros(const QList<MacroItem>& macros);
 
+    /**
+     * Clears existing macro definitions.
+     */
+    void clearMacros();
+
 private:
     Q_DISABLE_COPY(Preprocessor)
     PreprocessorPrivate *d;

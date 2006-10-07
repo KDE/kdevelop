@@ -83,12 +83,34 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       skip_blanks(++input, output);
 
       QString identifier = skip_identifier(input);
-      output << '\"';
+      QString formal = resolve_formal(identifier);
 
-      Stream is(&identifier);
-      operator()(is, output);
+      if (!formal.isEmpty()) {
+        Stream is(&formal);
+        skip_whitespaces(is, PPInternal::devnull());
 
-      output << '\"';
+        output << '\"';
+
+        while (!is.atEnd()) {
+          if (input == '"') {
+            output << '\\' << is;
+
+          } else if (input == '\n') {
+            output << '"' << is << '"';
+
+          } else {
+            output << is;
+          }
+
+          skip_whitespaces(++is, output);
+        }
+
+        output << '\"';
+
+      } else {
+        output << '#'; // TODO ### warning message?
+      }
+
     }
     else if (input == '\"')
     {
@@ -154,19 +176,55 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       if (!macro->defined || macro->hidden || m_engine->hideNextMacro())
       {
         m_engine->setHideNextMacro(name == "defined");
+
+        if (name == "__LINE__")
+          output << input.inputLineNumber();
+        else if (name == "__FILE__")
+          output << m_engine->currentFile();
+
         output << name;
         continue;
       }
 
       if (!macro->function_like)
       {
-        pp_macro_expander expand_macro(m_engine);
-        macro->hidden = true;
-        Stream ms(&macro->definition, QIODevice::ReadOnly);
-        expand_macro(ms, output);
-        macro->hidden = false;
-        continue;
+        pp_macro* m = 0;
+
+        if (!macro->definition.isEmpty()) {
+          macro->hidden = true;
+
+          pp_macro_expander expand_macro(m_engine);
+          Stream ms(&macro->definition, QIODevice::ReadOnly);
+          QString expanded;
+          {
+            Stream es(&expanded);
+            expand_macro(ms, es);
+          }
+
+          if (!expanded.isEmpty())
+          {
+            Stream es(&expanded);
+            skip_whitespaces(es, PPInternal::devnull());
+            QString identifier = skip_identifier(es);
+
+            if (es.atEnd() && m_engine->environment().contains(identifier) && m_engine->environment()[identifier]->defined) {
+              m = m_engine->environment()[identifier];
+
+            } else {
+              output << expanded;
+            }
+          }
+
+          macro->hidden = false;
+        }
+
+        if (!m)
+          continue;
+
+        macro = m;
       }
+
+      skip_whitespaces(input, PPInternal::devnull());
 
       // function like macro
       if (input.atEnd() || input != '(')

@@ -44,6 +44,17 @@ void pp_skip_blanks::operator()(Stream& input, Stream& output)
   }
 }
 
+void pp_skip_whitespaces::operator()(Stream& input, Stream& output)
+{
+  while (!input.atEnd()) {
+    if (!input.current().isSpace())
+      return;
+
+    output << input;
+    ++input;
+  }
+}
+
 void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool outputText)
 {
   enum {
@@ -223,11 +234,9 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
 
     } else if (input == '(') {
       ++depth;
-      ++input;
 
     } else if (input == ')') {
       --depth;
-      ++input;
 
     } else if (input == '\"') {
       skip_string_literal(input, output);

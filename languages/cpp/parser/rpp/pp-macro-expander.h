@@ -66,6 +66,7 @@ private:
   pp_skip_argument skip_argument;
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
+  pp_skip_whitespaces skip_whitespaces;
 };
 
 #endif // PP_MACRO_EXPANDER_H

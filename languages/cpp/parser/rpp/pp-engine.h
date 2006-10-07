@@ -31,6 +31,81 @@
 
 class Preprocessor;
 
+struct Value
+{
+  Value() : kind(Kind_Long), l(0) {}
+
+  enum Kind {
+    Kind_Long,
+    Kind_ULong,
+  };
+
+  Kind kind;
+
+  union {
+    long l;
+    unsigned long ul;
+  };
+
+  inline bool is_ulong () const { return kind == Kind_ULong; }
+
+  inline void set_ulong (unsigned long v)
+  {
+    ul = v;
+    kind = Kind_ULong;
+  }
+
+  inline void set_long (long v)
+  {
+    l = v;
+    kind = Kind_Long;
+  }
+
+  inline bool is_zero () const { return l == 0; }
+
+#define PP_DEFINE_BIN_OP2(op) \
+  inline Value operator op(const Value &other) \
+  { \
+    Value ret; \
+    if (is_ulong () || other.is_ulong ()) \
+      ret.set_ulong (ul op other.ul); \
+    else \
+      ret.set_long (l op other.l); \
+    return ret; \
+  }
+
+#define PP_DEFINE_BIN_OP(op, op2) \
+  inline Value &operator op2(const Value &other) \
+  { \
+    if (is_ulong () || other.is_ulong ()) \
+      set_ulong (ul op other.ul); \
+    else \
+      set_long (l op other.l); \
+    return *this; \
+  }
+
+  PP_DEFINE_BIN_OP(+, +=)
+  PP_DEFINE_BIN_OP(-, -=)
+  PP_DEFINE_BIN_OP(*, *=)
+  PP_DEFINE_BIN_OP(/, /=)
+  PP_DEFINE_BIN_OP(%, %=)
+  PP_DEFINE_BIN_OP(<<, <<=)
+  PP_DEFINE_BIN_OP(>>, >>=)
+  PP_DEFINE_BIN_OP(&, &=)
+  PP_DEFINE_BIN_OP(|, |=)
+  PP_DEFINE_BIN_OP(^, ^=)
+  PP_DEFINE_BIN_OP2(<)
+  PP_DEFINE_BIN_OP2(>)
+  PP_DEFINE_BIN_OP2(!=)
+  PP_DEFINE_BIN_OP2(==)
+  PP_DEFINE_BIN_OP2(<=)
+  PP_DEFINE_BIN_OP2(>=)
+  PP_DEFINE_BIN_OP2(&&)
+  PP_DEFINE_BIN_OP2(||)
+
+#undef PP_DEFINE_BIN_OP
+};
+
 class pp
 {
   QHash<QString, pp_macro*>& m_environment;
@@ -77,12 +152,16 @@ class pp
   bool haveNextToken;
   bool hideNext;
 
-  long token_value;
+  union {
+    long token_value;
+    unsigned long token_uvalue;
+  };
   QString token_text;
 
   enum TOKEN_TYPE
   {
     TOKEN_NUMBER = 1000,
+    TOKEN_UNUMBER,
     TOKEN_IDENTIFIER,
     TOKEN_DEFINED,
     TOKEN_LT_LT,
@@ -100,6 +179,7 @@ class pp
     PP_UNKNOWN_DIRECTIVE,
     PP_DEFINE,
     PP_INCLUDE,
+    PP_INCLUDE_NEXT,
     PP_ELIF,
     PP_ELSE,
     PP_ENDIF,
@@ -118,7 +198,7 @@ public:
 
   void reportError (const QString &fileName, int line, int column, const QString &message);
 
-  long eval_expression (Stream& input);
+  Value eval_expression (Stream& input);
 
   QString processFile(const QString& input, StringType);
   QString processFile(QIODevice* input);
@@ -132,6 +212,8 @@ public:
 
   QHash<QString, pp_macro*>& environment();
 
+  QString currentFile() const;
+
 private:
   int skipping() const;
   bool test_if_level();
@@ -142,33 +224,33 @@ private:
 
   void skip(Stream& input, Stream& output, bool outputText = true);
 
-  long eval_primary(Stream& input);
+  Value eval_primary(Stream& input);
 
-  long eval_multiplicative(Stream& input);
+  Value eval_multiplicative(Stream& input);
 
-  long eval_additive(Stream& input);
+  Value eval_additive(Stream& input);
 
-  long eval_shift(Stream& input);
+  Value eval_shift(Stream& input);
 
-  long eval_relational(Stream& input);
+  Value eval_relational(Stream& input);
 
-  long eval_equality(Stream& input);
+  Value eval_equality(Stream& input);
 
-  long eval_and(Stream& input);
+  Value eval_and(Stream& input);
 
-  long eval_xor(Stream& input);
+  Value eval_xor(Stream& input);
 
-  long eval_or(Stream& input);
+  Value eval_or(Stream& input);
 
-  long eval_logical_and(Stream& input);
+  Value eval_logical_and(Stream& input);
 
-  long eval_logical_or(Stream& input);
+  Value eval_logical_or(Stream& input);
 
-  long eval_constant_expression(Stream& input);
+  Value eval_constant_expression(Stream& input);
 
   void handle_directive(const QString& directive, Stream& input, Stream& output);
 
-  void handle_include(Stream& input, Stream& output);
+  void handle_include(bool skip_current_path, Stream& input, Stream& output);
 
   void handle_define(Stream& input);
 
@@ -178,7 +260,7 @@ private:
 
   void handle_elif(Stream& input);
 
-  void handle_endif();
+  void handle_endif(Stream& input);
 
   void handle_ifdef(bool check_undefined, Stream& input);
 

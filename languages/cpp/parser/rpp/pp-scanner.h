@@ -32,6 +32,12 @@ public:
   void operator()(Stream& input, Stream& output);
 };
 
+class pp_skip_whitespaces
+{
+public:
+  void operator()(Stream& input, Stream& output);
+};
+
 class pp_skip_comment_or_divop
 {
 public:

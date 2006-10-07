@@ -167,3 +167,8 @@ Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type )
 
   return new Stream(&d->includedFileContents.last());
 }
+
+void Preprocessor::clearMacros()
+{
+  d->env.clear();
+}
