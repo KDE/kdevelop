@@ -84,7 +84,7 @@ void InsideCheckListItem::stateChange( bool state )
 }
 
 ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProjectWidget* _prjWidget, QWidget* parent, const char* name, bool modal, WFlags fl )
-        : ProjectConfigurationDlgBase( parent, name, modal, fl | Qt::WStyle_Tool )
+        : ProjectConfigurationDlgBase( parent, name, modal, fl | Qt::WStyle_Tool ), myProjectItem(0)
 {
     prjList = _prjList;
     prjWidget = _prjWidget;
@@ -96,9 +96,8 @@ ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProj
 
 void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
 {
-    if ( myProjectItem )
+    if ( myProjectItem && myProjectItem->scope )
     {
-        kdDebug( 9024 ) << "changing subproject, behave: " << prjWidget->dialogSaveBehaviour() << endl;
         switch ( prjWidget->dialogSaveBehaviour() )
         {
             case TrollProjectWidget::AlwaysSave:
@@ -128,7 +127,6 @@ void ProjectConfigurationDlg::browseTargetPath()
     m_targetPath->setText( getRelativePath( myProjectItem->scope->projectDir(), KFileDialog::getExistingDirectory() ) );
     buttonApply->setEnabled( false );
 }
-
 
 void ProjectConfigurationDlg::updateProjectConfiguration()
 {
@@ -390,7 +388,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     QStringList libPaths;
 
     //inside libs to link
-    //  myProjectItem->configuration.m_prjdeps.clear();
     insideItem = ( InsideCheckListItem * ) insidelib_listview->firstChild();
     while ( insideItem )
     {
@@ -442,6 +439,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         values << depItem->text( 0 );
         depItem = depItem->itemBelow();
     }
+
     //internal project dependencies
     insideItem = dynamic_cast<InsideCheckListItem *>( intDeps_view->firstChild() );
     while ( insideItem )
