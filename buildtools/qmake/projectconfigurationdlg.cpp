@@ -350,7 +350,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     {
         if ( insideItem->isOn() )
         {
-            QString tmpInc = insideItem->prjItem->getIncAddPath( myProjectItem->getDownDirs() );
+            QString tmpInc = insideItem->prjItem->getIncAddPath(
+                myProjectItem->scope->projectDir() );
             tmpInc = QDir::cleanDirPath( tmpInc );
             values << tmpInc;
 
@@ -394,11 +395,12 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         if ( insideItem->isOn() )
         {
 
-            QString tmpLib = insideItem->prjItem->getLibAddObject( myProjectItem->getDownDirs() );
+            QString tmpLib = insideItem->prjItem->getLibAddObject( myProjectItem->scope->projectDir() );
             if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
             {
                 //add path if shared lib is linked
-                QString tmpPath = insideItem->prjItem->getLibAddPath( myProjectItem->getDownDirs() );
+                QString tmpPath = insideItem->prjItem->getLibAddPath(
+                    myProjectItem->scope->projectDir() );
                 if ( tmpPath != "" )
                 {
                     values << "-L" << tmpPath ;
@@ -448,15 +450,18 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         {
             if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
             {
-                values << insideItem->prjItem->getLibAddObject( myProjectItem->getDownDirs() );
+                values << insideItem->prjItem->getLibAddObject(
+                    myProjectItem->scope->projectDir() );
             }
             else if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
             {
-                values << insideItem->prjItem->getSharedLibAddObject( myProjectItem->getDownDirs() );
+                values << insideItem->prjItem->getSharedLibAddObject(
+                    myProjectItem->scope->projectDir() );
             }
             else
             {
-                values << insideItem->prjItem->getApplicationObject( myProjectItem->getDownDirs() );
+                values << insideItem->prjItem->getApplicationObject(
+                    myProjectItem->scope->projectDir() );
             }
         }
         insideItem = dynamic_cast<InsideCheckListItem *>( insideItem->itemBelow() );
@@ -822,7 +827,7 @@ void ProjectConfigurationDlg::updateIncludeControl()
         if ( item->scope->variableValues( "TEMPLATE" ).contains( "lib" ) ||
                 item->scope->variableValues( "TEMPLATE" ).contains( "app" ) )
         {
-            QString tmpInc = item->getIncAddPath( myProjectItem->getDownDirs() );
+            QString tmpInc = item->getIncAddPath( myProjectItem->scope->projectDir() );
             tmpInc = QDir::cleanDirPath( tmpInc );
             InsideCheckListItem *newItem = new InsideCheckListItem( insideinc_listview,
                                            insideinc_listview->lastItem(), item, this );
@@ -868,10 +873,10 @@ void ProjectConfigurationDlg::updateLibControls()
             if ( item != myProjectItem )
             {
                 // create lib string
-                QString tmpLib = item->getLibAddObject( myProjectItem->getDownDirs() );
+                QString tmpLib = item->getLibAddObject( myProjectItem->scope->projectDir() );
                 InsideCheckListItem * newItem = new InsideCheckListItem( insidelib_listview,
                                                 insidelib_listview->lastItem(), item, this );
-                QString tmpLibDir = item->getLibAddPath( myProjectItem->getDownDirs() );
+                QString tmpLibDir = item->getLibAddPath( myProjectItem->scope->projectDir() );
 
                 if ( libList.contains( "-L" + tmpLibDir ) )
                 {
@@ -922,11 +927,11 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
             QString tmpLib;
             QStringList values = item->scope->variableValues( "CONFIG" );
             if ( templateval.contains( "lib" ) && values.contains( "dll" ) )
-                tmpLib = item->getSharedLibAddObject( myProjectItem->getDownDirs() );
+                tmpLib = item->getSharedLibAddObject( myProjectItem->scope->projectDir() );
             else if ( templateval.contains( "lib" ) )
-                tmpLib = item->getLibAddObject( myProjectItem->getDownDirs() );
+                tmpLib = item->getLibAddObject( myProjectItem->scope->projectDir() );
             else
-                tmpLib = item->getApplicationObject( myProjectItem->getDownDirs() );
+                tmpLib = item->getApplicationObject( myProjectItem->scope->projectDir() );
             InsideCheckListItem * newItem = new InsideCheckListItem( intDeps_view, intDeps_view->lastItem(), item, this );
             if ( depsList.contains( tmpLib ) )
             {

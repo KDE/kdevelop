@@ -315,29 +315,29 @@ QString QMakeScopeItem::relativePath()
         return ( ( ( QMakeScopeItem* ) parent() ) ->relativePath() );
 }
 
-QString QMakeScopeItem::getDownDirs()
-{
-    QMakeScopeItem * pItem = this;
-    while ( pItem->parent() )
-        pItem = ( QMakeScopeItem* ) pItem->parent();
-    return getRelativePath( QDir::cleanDirPath( this->scope->projectDir() ), QDir::cleanDirPath( pItem->scope->projectDir() ) );
-}
+// QString QMakeScopeItem::getDownDirs()
+// {
+//     QMakeScopeItem * pItem = this;
+//     while ( pItem->parent() )
+//         pItem = ( QMakeScopeItem* ) pItem->parent();
+//     return getRelativePath( QDir::cleanDirPath( this->scope->projectDir() ), QDir::cleanDirPath( pItem->scope->projectDir() ) );
+// }
 
-QString QMakeScopeItem::getSharedLibAddObject( QString downDirs )
+QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
 {
     if ( scope->variableValues( "CONFIG" ).contains( "dll" ) )
     {
-        QString tmpPath;
+        QString tmpPath = getRelativePath(basePath, scope->projectDir() );
         if ( scope->variableValues( "DESTDIR" ).front() != "" )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-                tmpPath = downDirs + relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+                tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
             else
                 tmpPath = scope->variableValues( "DESTDIR" ).front();
         }
         else
         {
-            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
+            tmpPath += QString( QChar( QDir::separator() ) );
         }
 
         tmpPath = QDir::cleanDirPath( tmpPath );
@@ -358,19 +358,19 @@ QString QMakeScopeItem::getSharedLibAddObject( QString downDirs )
     return "";
 }
 
-QString QMakeScopeItem::getApplicationObject( QString downDirs )
+QString QMakeScopeItem::getApplicationObject( QString basePath )
 {
-    QString tmpPath;
+    QString tmpPath = getRelativePath(basePath, scope->projectDir() );
     if ( scope->variableValues( "DESTDIR" ).front() != "" )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+            tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
         else
             tmpPath = scope->variableValues( "DESTDIR" ).front();
     }
     else
     {
-        tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
+        tmpPath += QString( QChar( QDir::separator() ) );
     }
 
     tmpPath = QDir::cleanDirPath( tmpPath );
@@ -380,7 +380,7 @@ QString QMakeScopeItem::getApplicationObject( QString downDirs )
     else
         return tmpPath + QString( QChar( QDir::separator() ) ) + scope->variableValues( "TARGET" ).front();
 }
-QString QMakeScopeItem::getLibAddObject( QString downDirs )
+QString QMakeScopeItem::getLibAddObject( QString basePath )
 {
     if ( scope->variableValues( "CONFIG" ).contains( "dll" ) )
     {
@@ -393,19 +393,20 @@ QString QMakeScopeItem::getLibAddObject( QString downDirs )
             return ( "-l" + scope->projectName() );
         }
     }
-    else if ( scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+    else if ( scope->variableValues( "CONFIG" ).contains( "staticlib" )
+            || scope->variableValues("TEMPLATE").contains("lib") )
     {
-        QString tmpPath;
+        QString tmpPath = getRelativePath(basePath, scope->projectDir() );
         if ( scope->variableValues( "DESTDIR" ).front() != "" )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-                tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+                tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
             else
                 tmpPath = scope->variableValues( "DESTDIR" ).front();
         }
         else
         {
-            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
+            tmpPath += QString( QChar( QDir::separator() ) );
         }
 
         tmpPath = QDir::cleanDirPath( tmpPath );
@@ -426,23 +427,23 @@ QString QMakeScopeItem::getLibAddObject( QString downDirs )
 
     return ( "" );
 }
-QString QMakeScopeItem::getLibAddPath( QString downDirs )
+QString QMakeScopeItem::getLibAddPath( QString basePath )
 {
 
     //PATH only add if shared lib
     if ( !( scope->variableValues( "CONFIG" ).contains( "dll" ) ) ) return ( "" );
 
-    QString tmpPath;
+    QString tmpPath = getRelativePath(basePath, scope->projectDir() );
     if ( scope->variableValues( "DESTDIR" ).front() != "" )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
-            tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+            tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
         else
             tmpPath = scope->variableValues( "DESTDIR" ).front();
     }
     else
     {
-        tmpPath = downDirs + this->relativePath() + QString( QChar( QDir::separator() ) );
+        tmpPath += QString( QChar( QDir::separator() ) );
     }
 
     tmpPath = QDir::cleanDirPath( tmpPath );
