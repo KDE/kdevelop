@@ -534,7 +534,7 @@ void ProjectConfigurationDlg::updateControls()
 {
     // Project template
     groupLibraries->setEnabled( false );
-    if( myProjectItem->scope->scopeType != Scope::ProjectScope )
+    if( myProjectItem->scope->scopeType() != Scope::ProjectScope )
         groupTemplate->setEnabled(false);
 
     //cache the value of the some variables
