@@ -605,7 +605,6 @@ QStringList TrollProjectPart::availableQtDirList() const
 
 QStringList recursiveProFind( const QString &currDir, const QString &baseDir )
 {
-	kdDebug(9024) << "Dir " << currDir << endl;
 	QStringList fileList;
 
 	if( !currDir.contains( QString( QChar ( QDir::separator() ) ) +".." )

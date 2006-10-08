@@ -672,7 +672,10 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
             ast->setDepth( m_root->depth()+1 );
         m_root->addChildAST( ast );
         if ( !values.contains( "\n" ) )
+        {
+            kdDebug( 9024 ) << "Didn't find newline in values" << values.join("|") << endl;
             m_root->addChildAST( new QMake::NewLineAST() );
+        }
     }
 }
 
@@ -843,7 +846,10 @@ void Scope::updateCustomVariable( const QString& var, const QString& op, const Q
             newast->setDepth( m_root->depth()+1 );
         m_root->addChildAST( newast );
         if ( values.contains( "\n" ) )
+        {
+            kdDebug( 9024 ) << "Didn't find newline in values" << values.join("|") << endl;
             m_root->addChildAST( new QMake::NewLineAST() );
+        }
     }
 }
 

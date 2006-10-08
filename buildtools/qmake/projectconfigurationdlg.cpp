@@ -403,7 +403,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
                     myProjectItem->scope->projectDir() );
                 if ( tmpPath != "" )
                 {
-                    values << "-L" << tmpPath ;
+                    values << ("-L"+tmpPath) ;
                 }
             }
             values << tmpLib ;
@@ -416,7 +416,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     QListViewItem *lvItem = outsidelibdir_listview->firstChild();
     while ( lvItem )
     {
-        values << "-L" << lvItem->text( 0 );
+        values << ( "-L"+lvItem->text( 0 ) );
         lvItem = lvItem->itemBelow();
     }
 
