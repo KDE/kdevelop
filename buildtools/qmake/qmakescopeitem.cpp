@@ -310,18 +310,11 @@ QString QMakeScopeItem::relativePath()
     if ( !scope->parent() || !scope->parent() ->parent() || scope->scopeType() != Scope::ProjectScope )
         return ( QString( QChar( QDir::separator() ) ) + scope->scopeName() );
     else if ( scope->scopeType() == Scope::ProjectScope )
-        return ( ( ( QMakeScopeItem* ) parent() ) ->relativePath() + QString( QChar( QDir::separator() ) ) + scope->scopeName() );
+        return ( static_cast<QMakeScopeItem*>( parent() ) ->relativePath()
+                 + QString( QChar( QDir::separator() ) ) + scope->scopeName() );
     else
-        return ( ( ( QMakeScopeItem* ) parent() ) ->relativePath() );
+        return (  static_cast<QMakeScopeItem*>( parent() ) ->relativePath() );
 }
-
-// QString QMakeScopeItem::getDownDirs()
-// {
-//     QMakeScopeItem * pItem = this;
-//     while ( pItem->parent() )
-//         pItem = ( QMakeScopeItem* ) pItem->parent();
-//     return getRelativePath( QDir::cleanDirPath( this->scope->projectDir() ), QDir::cleanDirPath( pItem->scope->projectDir() ) );
-// }
 
 QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
 {

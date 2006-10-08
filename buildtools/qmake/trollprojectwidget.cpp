@@ -331,7 +331,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 
     m_rootScope = new Scope( proname, m_part->isQt4Project() );
-    m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->projectName(), m_rootScope, this );
+    m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
     m_rootSubproject->setOpen( true );
     if ( m_rootSubproject->firstChild() )
     {
@@ -757,7 +757,7 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
         return ;
     else
         spitem = m_shownSubproject;
-    QString relpath = spitem->relativePath();
+    QString projectdir = spitem->scope->projectDir();
 
     KURLRequesterDlg dialog( i18n( "Add Subdirectory" ), i18n( "Please enter a name for the subdirectory: " ), this, 0 );
     dialog.urlRequester() ->setMode( KFile::Directory );
@@ -767,11 +767,11 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
     {
         QString subdirname;
         if ( !QDir::isRelativePath( dialog.urlRequester() ->url() ) )
-            subdirname = getRelativePath( m_shownSubproject->scope->projectDir(), dialog.urlRequester() ->url() );
+            subdirname = getRelativePath( projectdir, dialog.urlRequester()->url() );
         else
-            subdirname = dialog.urlRequester() ->url();
+            subdirname = dialog.urlRequester()->url();
 
-        QDir dir( projectDirectory() + relpath );
+        QDir dir( projectdir );
         if ( !dir.exists( subdirname ) )
         {
             if ( !dir.mkdir( subdirname ) )
@@ -783,7 +783,9 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
             }
         }
         Scope* subproject = spitem->scope->createSubProject( subdirname );
-        new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+        if( subproject )
+            new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+        spitem->scope->saveToFile();
     }
 }
 

@@ -210,6 +210,9 @@ private:
     // Changes the list using the +=, -=, = operations accordingly
     QStringList calcValuesFromStatements( const QString& variable, QStringList result, QMake::AST* stopHere = 0 ) const;
 
+    // Check wether the two operators are compatible
+    bool isCompatible( const QString& op1, const QString& op2);
+
     // Load and Save project files, these only work on ProjectScope's
     bool loadFromFile( const QString& filename );
 

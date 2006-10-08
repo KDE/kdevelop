@@ -95,7 +95,6 @@ public:
 
     Scope* scope;
     QString relativePath();
-//     QString getDownDirs();
     QString getLibAddPath( QString downDirs );
     QString getLibAddObject( QString downDirs );
     QString getSharedLibAddObject( QString downDirs );

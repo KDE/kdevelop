@@ -439,11 +439,14 @@ Scope* Scope::createSubProject( const QString& dir )
         {
 
             if ( !curdir.exists( dir ) )
-                curdir.mkdir( dir );
+                if ( !curdir.mkdir( dir ) )
+                    return 0;
             QString filename = curdir.absPath() + QString( QChar( QDir::separator() ) ) + dir + QString( QChar( QDir::separator() ) ) + dir + ".pro";
             Scope* s = new Scope( m_isQt4Project, this, filename );
             if ( s->scopeType() != InvalidScope )
             {
+                s->setEqualOp("TEMPLATE", QStringList("app"));
+                s->saveToFile();
                 addToPlusOp( "SUBDIRS", QStringList( dir ) );
                 m_subProjects.insert( dir, s );
                 return s;
@@ -591,7 +594,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
         if ( m_root->m_children[ i ] ->nodeType() == QMake::AST::AssignmentAST )
         {
             QMake::AssignmentAST * assignment = static_cast<QMake::AssignmentAST*>( m_root->m_children[ i ] );
-            if ( assignment->scopedID == variable && assignment->op == op )
+            if ( assignment->scopedID == variable && isCompatible( assignment->op, op ) )
             {
                 updateValues( assignment->values, values, removeFromOp );
                 if ( removeFromOp && listIsEmpty( assignment->values ) )
@@ -601,7 +604,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
                 }
                 return ;
             }
-            else if ( assignment->scopedID == variable && assignment->op != op )
+            else if ( assignment->scopedID == variable && !isCompatible( assignment->op, op ) )
             {
                 for ( QStringList::const_iterator it = values.begin() ; it != values.end() ; ++it )
                 {
@@ -895,6 +898,17 @@ bool Scope::listIsEmpty( const QStringList& values )
             return false;
     }
     return true;
+}
+
+bool Scope::isCompatible( const QString& op1, const QString& op2)
+{
+    if( op1 == "+=" )
+        return ( op2 == "+=" || op2 == "=" );
+    else if ( op1 == "-=" )
+        return ( op2 == "-=" );
+    else if ( op1 == "=" )
+        return ( op2 == "=" || op2 == "+=" );
+    return false;
 }
 
 #ifdef DEBUG
