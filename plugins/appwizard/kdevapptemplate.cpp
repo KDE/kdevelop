@@ -24,7 +24,7 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kmacroexpander.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <ktempdir.h>
 #include <kfileitem.h>
 #include <kio/chmodjob.h>
