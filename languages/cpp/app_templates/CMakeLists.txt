@@ -9,7 +9,7 @@ set(apptemplate_DIRS
     qtopiaapp kdedcop wxhello cppsdlhello kdevlang noatunvisual noatunui 
     kbearplugin kbearimportfilter kmod kfileplugin clanlib opieapp opieapplet 
     opieinput opiemenu opienet opietoday kxt gtk2mmapp cppcurseshello 
-    win32hello win32gui cmakesimple cmakesimplec cmakelibcpp cmakelibc kscons_kxt kscons_kmdi
+    win32hello win32gui cmakesimple cmakesimplec cmakelibcpp cmakelibc
 )
 
 kdevelop_add_app_templates(${apptemplate_DIRS})
