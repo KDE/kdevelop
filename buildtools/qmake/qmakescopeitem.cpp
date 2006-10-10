@@ -307,7 +307,9 @@ QMakeScopeItem::~QMakeScopeItem()
 
 QString QMakeScopeItem::relativePath()
 {
-    if ( !scope->parent() || !scope->parent() ->parent() || scope->scopeType() != Scope::ProjectScope )
+    if( !scope->parent() )
+        return "/.";
+    else if ( !scope->parent()->parent() || scope->scopeType() != Scope::ProjectScope )
         return ( QString( QChar( QDir::separator() ) ) + scope->scopeName() );
     else if ( scope->scopeType() == Scope::ProjectScope )
         return ( static_cast<QMakeScopeItem*>( parent() ) ->relativePath()

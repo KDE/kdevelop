@@ -461,8 +461,7 @@ Scope* Scope::createSubProject( const QString& dir )
                 addToPlusOp( "SUBDIRS", QStringList( dir ) );
                 m_subProjects.insert( dir, s );
                 return s;
-            }
-            else
+            } else
             {
                 delete s;
             }
