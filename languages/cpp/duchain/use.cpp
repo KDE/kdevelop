@@ -28,7 +28,7 @@
 using namespace KTextEditor;
 
 Use::Use(KTextEditor::Range* range, DUContext* context)
-  : DUChainBase(context->topContext())
+  : DUChainBase(context ? context->topContext() : 0)
   , KDevDocumentRangeObject(range)
   , m_context(0)
   , m_declaration(0)
