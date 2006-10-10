@@ -1,5 +1,5 @@
 
-#include "guibuilder_part.h"
+#include "qtdesignerpart.h"
 
 #include <QObject>
 #include <QAction>
@@ -23,10 +23,10 @@
 #include <kdevmainwindow.h>
 #include "internals/qdesigner_integration_p.h"
 
-typedef KParts::GenericFactory<GuiBuilderPart> GuiBuilderPartFactory;
-K_EXPORT_COMPONENT_FACTORY(kdevguibuilder, GuiBuilderPartFactory)
+typedef KParts::GenericFactory<QtDesignerPart> QtDesignerPartFactory;
+K_EXPORT_COMPONENT_FACTORY(kdevguibuilder, QtDesignerPartFactory)
 
-GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
+QtDesignerPart::QtDesignerPart(QWidget* parentWidget,
                                QObject *parent,
                                const QStringList &args)
     : KParts::ReadWritePart(parent)
@@ -37,7 +37,7 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
   m_workspace->setScrollBarsEnabled(true);
   setWidget( m_workspace );
 
-  setXMLFile( "guibuilderpart.rc" );
+  setXMLFile( "kdevqtdesigner.rc" );
 
   m_designer = QDesignerComponents::createFormEditor(this);
   m_designer->setTopLevel( KDevCore::mainWindow());
@@ -63,7 +63,7 @@ GuiBuilderPart::GuiBuilderPart(QWidget* parentWidget,
            this, SLOT( activated( KDevDocument* ) ) );
 }
 
-GuiBuilderPart::~GuiBuilderPart()
+QtDesignerPart::~QtDesignerPart()
 {
     if (m_designer)
     {
@@ -79,7 +79,7 @@ GuiBuilderPart::~GuiBuilderPart()
         m_workspace->deleteLater();
 }
 
-void GuiBuilderPart::activated( KDevDocument *document )
+void QtDesignerPart::activated( KDevDocument *document )
 {
     //FIXME
 //     if ( document->url() == url() )
@@ -99,9 +99,9 @@ void GuiBuilderPart::activated( KDevDocument *document )
 //     }
 }
 
-KAboutData* GuiBuilderPart::createAboutData()
+KAboutData* QtDesignerPart::createAboutData()
 {
-  KAboutData* aboutData = new KAboutData( "KDevGuiBuilderPart",
+  KAboutData* aboutData = new KAboutData( "KDevQtDesignerPart",
                                           I18N_NOOP( "KDevelop GUI Builder" ),
                                           "4.0", 0,
                                           KAboutData::License_GPL_V2 );
@@ -112,12 +112,12 @@ KAboutData* GuiBuilderPart::createAboutData()
   return aboutData;
 }
 
-QDesignerFormEditorInterface *GuiBuilderPart::designer() const
+QDesignerFormEditorInterface *QtDesignerPart::designer() const
 {
   return m_designer;
 }
 
-void GuiBuilderPart::setupActions()
+void QtDesignerPart::setupActions()
 {
     KStdAction::save( this, SLOT( save() ), actionCollection(), "file_save" );
     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
@@ -189,7 +189,7 @@ void GuiBuilderPart::setupActions()
                                           "designer_select_all" );
 }
 
-bool GuiBuilderPart::openFile()
+bool QtDesignerPart::openFile()
 {
   QFile uiFile(m_file);
   QDesignerFormWindowManagerInterface* manager = m_designer->formWindowManager();
@@ -209,7 +209,7 @@ bool GuiBuilderPart::openFile()
   return true;
 }
 
-bool GuiBuilderPart::saveFile()
+bool QtDesignerPart::saveFile()
 {
     KSaveFile uiFile( m_file );
     //FIXME: find a way to return an error. KSaveFile
@@ -229,7 +229,7 @@ bool GuiBuilderPart::saveFile()
     return true;
 }
 
-bool GuiBuilderPart::eventFilter( QObject* obj, QEvent* event )
+bool QtDesignerPart::eventFilter( QObject* obj, QEvent* event )
 {
     if ( event->type() == QEvent::Close && obj == m_window )
     {
@@ -239,7 +239,7 @@ bool GuiBuilderPart::eventFilter( QObject* obj, QEvent* event )
     return false;
 }
 
-KAction* GuiBuilderPart::wrapDesignerAction( QAction* dAction,
+KAction* QtDesignerPart::wrapDesignerAction( QAction* dAction,
                                          KActionCollection* parent,
                                          const char* name )
 {
@@ -254,7 +254,7 @@ KAction* GuiBuilderPart::wrapDesignerAction( QAction* dAction,
     return a;
 }
 
-void GuiBuilderPart::updateDesignerAction( KAction* a, QAction* dAction )
+void QtDesignerPart::updateDesignerAction( KAction* a, QAction* dAction )
 {
     a->setActionGroup( dAction->actionGroup() );
     a->setCheckable( dAction->isCheckable() );
@@ -270,7 +270,7 @@ void GuiBuilderPart::updateDesignerAction( KAction* a, QAction* dAction )
     a->setWhatsThis( dAction->whatsThis() );
 }
 
-void GuiBuilderPart::updateDesignerActions()
+void QtDesignerPart::updateDesignerActions()
 {
     DesignerActionHash::ConstIterator it, itEnd = m_designerActions.constEnd();
     for ( it = m_designerActions.constBegin(); it != itEnd; ++it )
@@ -279,5 +279,5 @@ void GuiBuilderPart::updateDesignerActions()
     }
 }
 
-#include "guibuilder_part.moc"
+#include "qtdesignerpart.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; indent-mode cstyle;

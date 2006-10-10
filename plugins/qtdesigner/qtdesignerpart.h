@@ -1,5 +1,5 @@
-#ifndef GUIBUILDER_PART_H
-#define GUIBUILDER_PART_H
+#ifndef QTDESIGNER_PART_H
+#define QTDESIGNER_PART_H
 
 #include <QObject>
 #include <QHash>
@@ -20,12 +20,12 @@ template<class T> class QList;
 typedef QHash<KAction*, QAction*> DesignerActionHash;
 
 
-class GuiBuilderPart: public KParts::ReadWritePart
+class QtDesignerPart: public KParts::ReadWritePart
 {
   Q_OBJECT
 public:
-  GuiBuilderPart(QWidget* parentWidget, QObject *parent, const QStringList &args);
-  virtual ~GuiBuilderPart();
+  QtDesignerPart(QWidget* parentWidget, QObject *parent, const QStringList &args);
+  virtual ~QtDesignerPart();
 
   static KAboutData* createAboutData();
 
@@ -59,5 +59,5 @@ private:
 
 };
 
-#endif // GUIBUILDER_PART_H
+#endif // QTDESIGNER_PART_H
 //kate: space-indent on; indent-width 2; replace-tabs on; indent-mode cstyle;
