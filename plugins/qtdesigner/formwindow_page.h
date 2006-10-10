@@ -3,19 +3,20 @@
 
 #include <QtGui/QWidget>
 
-class GuiBuilderPart;
+class QtDesignerPart;
 
 class FormWindowPage: public QWidget
 {
   Q_OBJECT
 public:
-  FormWindowPage(GuiBuilderPart *guibuilder, QWidget *parent = 0);
+  FormWindowPage(QtDesignerPart *guibuilder, QWidget *parent = 0);
   virtual ~FormWindowPage();
 
-  GuiBuilderPart *guibuilder() const;
+  QtDesignerPart *guibuilder() const;
 
 private:
-  GuiBuilderPart *m_guibuilder;
+  QtDesignerPart *m_guibuilder;
 };
 
 #endif // FORMWINDOW_PAGE_H
+

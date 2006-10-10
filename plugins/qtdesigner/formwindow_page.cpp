@@ -1,8 +1,8 @@
 
 #include "formwindow_page.h"
-#include "guibuilder_part.h"
+#include "qtdesignerpart.h"
 
-FormWindowPage::FormWindowPage(GuiBuilderPart *guibuilder, QWidget *parent)
+FormWindowPage::FormWindowPage(QtDesignerPart *guibuilder, QWidget *parent)
   : QWidget(parent), m_guibuilder(guibuilder)
 {
 }
@@ -11,7 +11,7 @@ FormWindowPage::~FormWindowPage()
 {
 }
 
-GuiBuilderPart *FormWindowPage::guibuilder() const
+QtDesignerPart *FormWindowPage::guibuilder() const
 {
   return m_guibuilder;
 }
