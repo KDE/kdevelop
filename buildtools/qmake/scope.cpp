@@ -441,11 +441,22 @@ Scope* Scope::createSubProject( const QString& dir )
             if ( !curdir.exists( dir ) )
                 if ( !curdir.mkdir( dir ) )
                     return 0;
-            QString filename = curdir.absPath() + QString( QChar( QDir::separator() ) ) + dir + QString( QChar( QDir::separator() ) ) + dir + ".pro";
+            curdir.cd(dir);
+            QString filename;
+            QStringList entries = curdir.entryList("*.pro", QDir::Files);
+
+            if ( !entries.isEmpty() && !entries.contains( curdir.dirName()+".pro" ) )
+                filename = curdir.absPath() + QString(QChar(QDir::separator()))+entries.first();
+            else
+                filename = curdir.absPath() + QString(QChar(QDir::separator()))+curdir.dirName()+".pro";
+
+            kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
+
             Scope* s = new Scope( m_isQt4Project, this, filename );
             if ( s->scopeType() != InvalidScope )
             {
-                s->setEqualOp("TEMPLATE", QStringList("app"));
+                if( s->variableValues("TEMPLATE").isEmpty() )
+                    s->setEqualOp("TEMPLATE", QStringList("app"));
                 s->saveToFile();
                 addToPlusOp( "SUBDIRS", QStringList( dir ) );
                 m_subProjects.insert( dir, s );
