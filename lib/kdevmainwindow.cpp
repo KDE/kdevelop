@@ -124,12 +124,12 @@ void KDevMainWindow::setupActions()
     KAction *action;
 
     QString app = qApp->applicationName();
-    QString text = i18n( "Configure %1" ).arg( app );
+    QString text = i18n( "Configure %1", app );
     action = KStdAction::preferences( this, SLOT( settingsDialog() ),
                                       actionCollection(), "settings_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
-                              i18n( "Lets you customize %1." ).arg( app ) ) );
+                              i18n( "Lets you customize %1.", app ) ) );
 
     action = new KAction( i18n( "Configure &Editor..." ), actionCollection(),
                           "settings_configure_editors" );
@@ -509,21 +509,21 @@ void KDevMainWindow::gotoLastWindow()
 void KDevMainWindow::projectOpened()
 {
     QString app = i18n( "Project" );
-    QString text = i18n( "Configure %1" ).arg( app );
+    QString text = i18n( "Configure %1", app );
     KAction *action = actionCollection() ->action( "settings_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
-                              i18n( "Lets you customize %1." ).arg( app ) ) );
+                              i18n( "Lets you customize %1.", app ) ) );
 }
 
 void KDevMainWindow::projectClosed()
 {
     QString app = qApp->applicationName();
-    QString text = i18n( "Configure %1" ).arg( app );
+    QString text = i18n( "Configure %1", app );
     KAction *action = actionCollection() ->action( "settings_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
-                              i18n( "Lets you customize %1." ).arg( app ) ) );
+                              i18n( "Lets you customize %1.", app ) ) );
 }
 
 void KDevMainWindow::configureToolbars()
