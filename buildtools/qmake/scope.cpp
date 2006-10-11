@@ -734,7 +734,7 @@ void Scope::init()
         {
             QMake::AssignmentAST * m = static_cast<QMake::AssignmentAST*>( *it );
             // Check wether TEMPLATE==subdirs here too!
-            if ( m->scopedID == "SUBDIRS" )
+            if ( m->scopedID == "SUBDIRS" && variableValues("TEMPLATE").contains("subdirs") )
             {
                 for ( QStringList::const_iterator sit = m->values.begin() ; sit != m->values.end(); ++sit )
                 {
