@@ -325,7 +325,12 @@ void TrollProjectWidget::openProject( const QString &dirName )
 
     QStringList l = dir.entryList( "*.pro" );
 
-    QString profile = l.count() ? l[ 0 ] : ( fi.baseName() + ".pro" );
+    QString profile;
+    if( !l.count() || (l.count() && l.contains( fi.baseName() + ".pro") ) )
+        profile = l[0];
+    else
+        profile = fi.baseName()+".pro";
+
     QString proname = dirName + QString( QChar( QDir::separator() ) ) + profile;
 
     kdDebug( 9024 ) << "Parsing " << proname << endl;

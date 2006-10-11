@@ -669,7 +669,6 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
         }
     }
 
-
     if ( !removeFromOp )
     {
         QMake::AssignmentAST * ast = new QMake::AssignmentAST();
@@ -734,12 +733,13 @@ void Scope::init()
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
             QMake::AssignmentAST * m = static_cast<QMake::AssignmentAST*>( *it );
+            // Check wether TEMPLATE==subdirs here too!
             if ( m->scopedID == "SUBDIRS" )
             {
                 for ( QStringList::const_iterator sit = m->values.begin() ; sit != m->values.end(); ++sit )
                 {
                     QString str = *sit;
-                    if ( *sit == "\\\n" || *sit == "\n" )
+                    if ( *sit == "\\\n" || *sit == "\n" || *sit == "." || *sit == "./" )
                         continue;
                     QDir subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + *sit, "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
                     QString projectfile;
@@ -747,6 +747,7 @@ void Scope::init()
                         projectfile = *subproject.entryList().find( *sit + ".pro" );
                     else
                         projectfile = subproject.entryList().first();
+                    kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
                     m_subProjects.insert( *sit, new Scope( m_isQt4Project, this, subproject.absFilePath( projectfile ), ( m->op != "-=" ) ) );
                 }
             }
