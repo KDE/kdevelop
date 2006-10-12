@@ -5,7 +5,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib/ ${CMAKE_SOURCE_DIR}/lib/util
     ${CMAKE_SOURCE_DIR}/buildtools/importers/automake
     )
 
-if(KDE4_BUILD_TESTS)
+if(false)
 
 
 ########### next target ###############
@@ -48,6 +48,6 @@ target_link_libraries(testinterface ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kd
 add_test(kdevelop-automakeparsertest ${EXECUTABLE_OUTPUT_PATH}/testinterface)
 
 
-endif(KDE4_BUILD_TESTS)
+endif(false)
 
 
