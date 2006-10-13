@@ -778,6 +778,9 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
         else
             subdirname = dialog.urlRequester()->url();
 
+        while( subdirname.endsWith( QString(QChar(QDir::separator())) ) )
+            subdirname = subdirname.left(subdirname.length()-1);
+        kdDebug(9024) << "Cleaned subdirname: " << subdirname << endl;
         QDir dir( projectdir );
         if ( !dir.exists( subdirname ) )
         {
@@ -793,6 +796,10 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
         if( subproject )
         {
             QMakeScopeItem* newitem = new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+            QListViewItem* lastitem = spitem->firstChild();
+            while( lastitem->nextSibling() != 0 )
+                lastitem = lastitem->nextSibling();
+            newitem->moveItem( lastitem );
         }
         spitem->scope->saveToFile();
     }
