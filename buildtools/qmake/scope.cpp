@@ -593,21 +593,19 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             else
                 origValues.append( *it );
             origValues.append( "\n" );
+        } else if ( origValues.contains( *it ) && remove )
+        {
+            QStringList::iterator posit = origValues.find( *it );
+            posit++;
+            if ( *posit == "\\\n" )
+                origValues.remove( posit );
+            origValues.remove( *it );
+
         }
-        else if ( origValues.contains( *it ) && remove )
-            {
-                QStringList::iterator posit = origValues.find( *it );
-                posit++;
-                if ( *posit == "\\\n" )
-                    origValues.remove( posit );
-                origValues.remove( *it );
-                if( origValues.last() == "\\\n" )
-                {
-                    origValues.pop_back();
-                    origValues.append( "\n" );
-                }
-            }
     }
+    while( (origValues.last() == "\\\n" || origValues.last() == "\n") )
+        origValues.pop_back();
+    origValues.append("\n");
 }
 
 void Scope::updateVariable( const QString& variable, const QString& op, const QStringList& values, bool removeFromOp )
