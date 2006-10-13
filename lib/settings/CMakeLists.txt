@@ -31,7 +31,7 @@ set( kdevelop_DESKTOP
 #     kcm_kdevplugin_settings.desktop
 )
 
-kde4_automoc( ${kdev_config_SRC} )
+kde4_automoc( kdev_config ${kdev_config_SRC} )
 kde4_add_ui_files( kdev_config_SRC ${kdevelop_UI} )
 kde4_add_kcfg_files(kdev_config_SRC ${kdevelop_KCFGC} )
 kde4_add_plugin(kcm_kdevelop_settings ${kdev_config_SRC})

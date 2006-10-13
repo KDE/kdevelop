@@ -21,7 +21,7 @@ set(kdevshell_UI
     generalinfowidgetbase.ui
 )
 
-kde4_automoc(${kdevshell_LIB_SRCS})
+kde4_automoc(kdevshell ${kdevshell_LIB_SRCS})
 kde4_add_ui_files(kdevshell_LIB_SRCS ${kdevshell_UI})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
 target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} kdevplatform kdevutil
@@ -36,7 +36,7 @@ set(kdevelop_SRCS
     kdevideextension.cpp
 )
 
-kde4_automoc(${kdevelop_SRCS})
+kde4_automoc(kdevelop ${kdevelop_SRCS})
 kde4_add_executable(kdevelop ${kdevelop_SRCS})
 target_link_libraries(kdevelop ${KDE4_KDECORE_LIBS} kdevshell)
 install(TARGETS kdevelop DESTINATION ${BIN_INSTALL_DIR} )
@@ -49,7 +49,7 @@ install(TARGETS kdevelop DESTINATION ${BIN_INSTALL_DIR} )
 #     kdevassistantextension.cpp
 # )
 #
-# kde4_automoc(${kdevassistant_SRCS})
+# kde4_automoc(kdevassistant ${kdevassistant_SRCS})
 # kde4_add_executable(kdevassistant ${kdevassistant_SRCS})
 # target_link_libraries(kdevassistant ${KDE4_KDECORE_LIBS} kdevshell)
 # install(TARGETS kdevassistant DESTINATION ${BIN_INSTALL_DIR} )

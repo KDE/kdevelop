@@ -16,7 +16,7 @@ set(kdevprojectmanager_PART_SRCS
     kdevprojectmanagerdelegate.cpp
 )
 
-kde4_automoc(${kdevprojectmanager_PART_SRCS})
+kde4_automoc(kdevprojectmanager ${kdevprojectmanager_PART_SRCS})
 kde4_add_plugin(kdevprojectmanager ${kdevprojectmanager_PART_SRCS})
 target_link_libraries(kdevprojectmanager ${KDE4_KDECORE_LIBS} kdevplatform threadweaver kdevutil kdevwidgets)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevprojectmanager)

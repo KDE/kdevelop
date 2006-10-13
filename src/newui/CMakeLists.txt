@@ -14,7 +14,7 @@ set(newui_LIB_SRCS
 )
 
 add_definitions(-DQT3_SUPPORT)
-kde4_automoc(${newui_LIB_SRCS})
+kde4_automoc(newui ${newui_LIB_SRCS})
 kde4_add_library(newui SHARED ${newui_LIB_SRCS})
 target_link_libraries(newui ${KDE4_KDECORE_LIBS} kparts)
 set_target_properties(newui PROPERTIES VERSION 4.0.0 SOVERSION 4)

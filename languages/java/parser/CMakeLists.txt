@@ -71,5 +71,5 @@ ELSE(KDEVPG_EXECUTABLE)
 ENDIF(KDEVPG_EXECUTABLE)
 
 
-kde4_automoc(${kdevjavaparser_STAT_SRCS})
+kde4_automoc(kdevjavaparser_STAT ${kdevjavaparser_STAT_SRCS})
 kde4_add_library(kdevjavaparser STATIC ${kdevjavaparser_STAT_SRCS})

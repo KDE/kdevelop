@@ -5,7 +5,7 @@ include_directories(
     )
 
 set( folderxmltest_SRCS folderxmltest.cpp )
-kde4_automoc( ${folderxmltest_SRCS} )
+kde4_automoc( folderxmltest ${folderxmltest_SRCS} )
 kde4_add_executable(cmake-folderxmltest NOGUI RUN_UNINSTALLED ${folderxmltest_SRCS})
 target_link_libraries(cmake-folderxmltest
     ${QT_QTTEST_LIBRARY}
@@ -15,7 +15,7 @@ target_link_libraries(cmake-folderxmltest
 )
 
 set( targetxmltest_SRCS targetxmltest.cpp )
-kde4_automoc( ${targetxmltest_SRCS} )
+kde4_automoc( targetxmltest ${targetxmltest_SRCS} )
 kde4_add_executable(cmake-targetxmltest NOGUI RUN_UNINSTALLED ${targetxmltest_SRCS})
 target_link_libraries(cmake-targetxmltest
     ${QT_QTTEST_LIBRARY}
@@ -25,7 +25,7 @@ target_link_libraries(cmake-targetxmltest
 )
 
 set( projectxmltest_SRCS projectxmltest.cpp )
-kde4_automoc( ${projectxmltest_SRCS} )
+kde4_automoc( projectxmltest ${projectxmltest_SRCS} )
 kde4_add_executable( cmake-projectxmltest NOGUI RUN_UNINSTALLED ${projectxmltest_SRCS} )
 target_link_libraries( cmake-projectxmltest
     ${QT_QTTEST_LIBRARY}

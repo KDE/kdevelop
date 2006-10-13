@@ -72,7 +72,7 @@ set(kdevplatform_UI
     mimewarningdialog.ui
 )
 
-kde4_automoc(${kdevplatform_LIB_SRCS})
+kde4_automoc(kdevplatform ${kdevplatform_LIB_SRCS})
 
 kde4_add_ui_files(kdevplatform_LIB_SRCS ${kdevplatform_UI})
 kde4_add_library(kdevplatform SHARED ${kdevplatform_LIB_SRCS})
