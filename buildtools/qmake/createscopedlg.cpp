@@ -29,6 +29,8 @@ CreateScopeDlg::CreateScopeDlg( QMakeScopeItem* item, QWidget* parent, const cha
 {
     incUrl->setMode( KFile::File | KFile::LocalOnly );
     incUrl->setCaption( i18n( "Choose existing .pri file or give a new filename for creation" ) );
+    incUrl->setURL( QString::null );
+    incUrl->completionObject() ->setDir( item->scope->projectDir() );
 }
 
 CreateScopeDlg::~CreateScopeDlg()

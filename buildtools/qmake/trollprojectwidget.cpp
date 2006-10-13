@@ -2227,6 +2227,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                 default:
                     break;
             }
+            pitem->scope->saveToFile();
             delete spitem;
             m_shownSubproject = pitem;
             overview->setCurrentItem ( m_shownSubproject );
