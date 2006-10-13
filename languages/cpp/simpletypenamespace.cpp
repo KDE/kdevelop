@@ -27,7 +27,7 @@ SimpleTypeNamespace::SimpleTypeNamespace( QStringList fakeScope, QStringList rea
   if ( realScope.isEmpty() ) {
     ifVerbose( dbg() << "\"" << str() << "\": created namespace-proxy" << endl );
     addScope( fakeScope );
-  } else if( realScope.front() == "*" ) {
+  } else if ( realScope.front() == "*" ) {
     ifVerbose( dbg() << "\"" << str() << "\": created empty namespace-proxy" << endl );
   } else {
     ifVerbose( dbg() << "\"" << str() << "\": created namespace-proxy with real scope \"" << realScope.join( "::" ) << "\"" << endl );
@@ -42,39 +42,43 @@ SimpleTypeNamespace::SimpleTypeNamespace( SimpleTypeNamespace* ns ) : SimpleType
 }
 
 SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type ) {
-  std::set<SimpleTypeNamespace*> ignore;
+    std::set
+    <SimpleTypeNamespace*> ignore;
   SimpleTypeImpl::MemberInfo ret = findMember( name, type, ignore );
-	///chooseSpecialization( ret ); should not be necessary
+  ///chooseSpecialization( ret ); should not be necessary
   return ret;
 }
 
 QValueList<TypePointer> SimpleTypeNamespace::getMemberClasses( const TypeDesc& name ) {
-	QValueList<TypePointer> ret;
+    updateAliases();
+    QValueList<TypePointer> ret;
 
   ///@todo filter by include-files
-	for ( SlaveList::iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
-		ret += (*it).first->getMemberClasses( name );
-	}
-	
-	return ret;
+  for ( SlaveList::iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
+    ret += ( *it ).first->getMemberClasses( name );
+  }
+
+  return ret;
 }
 
-SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore ) {
-  MemberInfo mem;
+SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type, std::set
+      <SimpleTypeNamespace*>& ignore ) {
+          updateAliases();
+          MemberInfo mem;
   mem.name = "";
   mem.memberType = MemberInfo::NotFound;
-	if ( ignore.find( this ) != ignore.end() )
-		return mem;
-	ignore.insert( this );
-	
+  if ( ignore.find( this ) != ignore.end() )
+    return mem;
+  ignore.insert( this );
+
   for ( SlaveList::iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
     ///@todo filter the slave by the include-files
     ifVerbose( dbg() << "\"" << str() << "\": redirecting search for \"" << name.name() << "\" to \"" << ( *it ).first ->fullType() << "\"" << endl );
     mem = ( *it ).first ->findMember( name , type );
     if ( mem ) {
       if ( mem.memberType != MemberInfo::Namespace ) {
-	  	if ( mem.type->resolved() && !(mem.type->resolved()->parent().get().data() == this) ) {
-          mem.type->setResolved( mem.type->resolved()->clone() );
+        if ( mem.type->resolved() && !( mem.type->resolved() ->parent().get().data() == this ) ) {
+          mem.type->setResolved( mem.type->resolved() ->clone() );
           mem.type->resolved() ->setParent( this );
         }
         return mem;
@@ -83,7 +87,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
         AliasList allAliases;
 
         if ( m_aliases.contains( name.name() ) )
-          allAliases = m_aliases[name.name()];
+          allAliases = m_aliases[ name.name() ];
 
         return setupMemberInfo( name, mem.type->fullNameList(), allAliases );
       }
@@ -93,11 +97,11 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
   AliasMap::iterator itt = m_aliases.find( name.name() );
 
   if ( itt != m_aliases.end() && !( *itt ).empty() ) {
-  ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\" -> \"" << /**itt*/"..." << "\" requested, locating targets" << endl );
+    ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\" -> \"" <<  /**itt*/"..." << "\" requested, locating targets" << endl );
 
     AliasList targets;
     for ( AliasList::iterator it = ( *itt ).begin(); it != ( *itt ).end(); ++it ) {
-      QStringList l = locateNamespaceScope( (*it).alias ); ///@todo think about when this should be done
+      QStringList l = locateNamespaceScope( ( *it ).alias ); ///@todo think about when this should be done
       if ( !l.isEmpty() ) {
         Alias a = *it;
         a.alias = l.join( "::" );
@@ -107,10 +111,10 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
 
     if ( !targets.empty() ) {
       mem = setupMemberInfo( name, "*", targets );
-    ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-alias \"" << name.name() << "\" -> \"" << /*targets*/"..." << "\" <- successfully located" << endl );
+      ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-alias \"" << name.name() << "\" -> \"" <<  /*targets*/"..." << "\" <- successfully located" << endl );
 
     } else {
-    ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\" -> \"" << /**itt*/"..." << "\" no target could be located" << endl );
+      ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\" -> \"" <<  /**itt*/"..." << "\" no target could be located" << endl );
     }
   }
 
@@ -143,12 +147,14 @@ QStringList SimpleTypeNamespace::locateNamespaceScope( QString alias ) {
 
 TypePointer SimpleTypeNamespace::locateNamespace( QString alias ) {
   ifVerbose( dbg() << "\"" << str() << "\": locating namespace \"" << alias << "\"" << endl );
-	
-	TypePointer locateIn = this;
-	if( !scope().isEmpty() ) locateIn = parent().get();
-	LocateResult res;
-	if( locateIn )
-		res = locateIn->locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
+    updateAliases();
+    
+  TypePointer locateIn = this;
+  if ( !scope().isEmpty() )
+    locateIn = parent().get();
+  LocateResult res;
+  if ( locateIn )
+    res = locateIn->locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
   if ( !res->resolved() )
     return 0;
   if ( isANamespace( res->resolved() ) ) {
@@ -165,7 +171,8 @@ TypePointer SimpleTypeNamespace::locateNamespace( QString alias ) {
 
 ///This must be optimized
 void SimpleTypeNamespace::recurseAliasMap() {
-  
+    updateAliases();
+    
   bool changed = true;
   SafetyCounter s( 1000 );
   AliasMap::iterator import = m_aliases.find( "" );
@@ -179,11 +186,11 @@ void SimpleTypeNamespace::recurseAliasMap() {
     for ( AliasMap::iterator it = m_aliases.begin(); it != m_aliases.end(); ++it ) {
       AliasList& l = *it;
       for ( AliasList::iterator strIt = l.begin(); strIt != l.end(); ++strIt ) {
-        AliasMap::iterator fit = m_aliases.find( (*strIt).alias );
+        AliasMap::iterator fit = m_aliases.find( ( *strIt ).alias );
 
         for ( AliasList::iterator oit = ( *fit ).begin(); oit != ( *fit ).end(); ++oit ) {
-          if ( l.find( (*oit) ) != l.end() && it.key() != (*oit).alias ) {
-            addAliasMap( it.key(), (*oit).alias, (*oit).files + (*strIt).files, true );
+          if ( l.find( ( *oit ) ) != l.end() && it.key() != ( *oit ).alias ) {
+            addAliasMap( it.key(), ( *oit ).alias, ( *oit ).files + ( *strIt ).files, true );
             changed = true;
           }
           if ( changed )
@@ -204,34 +211,35 @@ void SimpleTypeNamespace::recurseAliasMap() {
 
 void SimpleTypeNamespace::addAliasMap( QString name, QString alias, const IncludeFiles& files, bool recurse, bool symmetric ) {
   Debug dbg;
-  if( !dbg ) {
+  if ( !dbg ) {
     kdDebug( 9007 ) << str() << " addAliasMap: cannot add alias \"" << name << "\" -> \"" << alias << "\", recursion too deep" << endl;
-    return;
+    return ;
   }
   invalidateSecondaryCache();
-  if( name == alias ) return;
-  
+  if ( name == alias )
+    return ;
+
   if ( symmetric )
     addAliasMap( alias, name, files, recurse, false );
-  
+
   AliasMap::iterator it = m_aliases.find( name );
   if ( it == m_aliases.end() )
     it = m_aliases.insert( name, AliasList() );
 
   Alias a( files, alias );
-  std::pair< AliasList::const_iterator, AliasList::const_iterator > rng = (*it).equal_range( a );
-  while( rng.first != rng.second ) {
-    if( rng.first->files == files )
-      return; //The same alias, with the same files, has already been added.
+  std::pair< AliasList::const_iterator, AliasList::const_iterator > rng = ( *it ).equal_range( a );
+  while ( rng.first != rng.second ) {
+    if ( rng.first->files == files )
+      return ; //The same alias, with the same files, has already been added.
     ++rng.first;
   }
 
-  (*it).insert( a );
+  ( *it ).insert( a );
   ifVerbose( dbg() << "\"" << str() << "\": adding namespace-alias \"" << name << ( !symmetric ? "\" -> \"" : "\" = \"" ) << alias << "\"" << endl );
 
   if ( name.isEmpty() ) {
     TypePointer t = locateNamespace( alias );
-    if( t )
+    if ( t )
       addScope( t->scope(), files );
   }
 
@@ -239,13 +247,13 @@ void SimpleTypeNamespace::addAliasMap( QString name, QString alias, const Includ
     recurseAliasMap();
 }
 
-void SimpleTypeNamespace::addAliases( QString map, const IncludeFiles& files  ) {
+void SimpleTypeNamespace::addAliases( QString map, const IncludeFiles& files ) {
   while ( !map.isEmpty() ) {
     int mid = map.find( "=" );
     int mid2 = map.find( "<<" );
     int found = mid;
     int len = 1;
-    if ( mid2 != -1 && (mid2 < found || found == -1) ) {
+    if ( mid2 != -1 && ( mid2 < found || found == -1 ) ) {
       found = mid2;
       len = 2;
     }
@@ -257,10 +265,10 @@ void SimpleTypeNamespace::addAliases( QString map, const IncludeFiles& files  ) 
       //break;
       end = map.length();
     }
-	  if ( end - ( found + len ) < 0 )
+    if ( end - ( found + len ) < 0 )
       break;
 
-	addAliasMap( map.left( found ).stripWhiteSpace(), map.mid( found + len, end - found - len ).stripWhiteSpace(), files, true, found == mid );
+    addAliasMap( map.left( found ).stripWhiteSpace(), map.mid( found + len, end - found - len ).stripWhiteSpace(), files, true, found == mid );
     map = map.mid( end + 1 );
   }
 }
@@ -273,11 +281,12 @@ void SimpleTypeNamespace::addScope( const QStringList& scope, const IncludeFiles
   cm->setMasterProxy( this );
   m_activeSlaves << SlavePair( cm, files );
   m_activeSlaves << SlavePair( ct, files );
-  cm->addAliasesTo( this );
-  cm->addAliasesTo( this );
+  m_waitingAliases << cm;
+  m_waitingAliases << ct;
 }
 
 bool SimpleTypeNamespace::hasNode() const {
+    const_cast<SimpleTypeNamespace*>(this)->updateAliases();
   for ( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it )
     if ( ( *it ).first ->hasNode() )
       return true;
@@ -285,13 +294,27 @@ bool SimpleTypeNamespace::hasNode() const {
   return false;
 };
 
+SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves() {
+  updateAliases();
+  return m_activeSlaves;
+}
+
+void SimpleTypeNamespace::updateAliases() {
+  while ( !m_waitingAliases.empty() ) {
+    SimpleType t = m_waitingAliases.front();
+    m_waitingAliases.pop_front();
+    t->addAliasesTo( this );
+  }
+}
+
 //SimpleTypeNamespace::NamespaceBuildInfo implementation
 
 TypePointer SimpleTypeNamespace::NamespaceBuildInfo::build() {
-  if( m_built ) return m_built;
+  if ( m_built )
+    return m_built;
   m_built = new SimpleTypeCachedNamespace( m_fakeScope, m_realScope );
   for ( AliasList::iterator it = m_imports.begin(); it != m_imports.end(); ++it )
-    ( (SimpleTypeCachedNamespace*)m_built.data() )->addAliasMap( "", (*it).alias, (*it).files );
+    ( ( SimpleTypeCachedNamespace* ) m_built.data() ) ->addAliasMap( "", ( *it ).alias, ( *it ).files );
   return m_built;
 }
 

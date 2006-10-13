@@ -68,9 +68,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     
     virtual TypePointer clone();
     
-    SlaveList getSlaves() {
-      return m_activeSlaves;
-    }
+    SlaveList getSlaves();
   
     /**empty name means an import.
      * @param files Set of files that must be included for this alias-map to be active. If the set is empty, the alias will be used globally.
@@ -84,6 +82,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
 
   private:
     QValueList< SlavePair > m_activeSlaves;
+    QValueList< SimpleType > m_waitingAliases; ///For caching-reasons, it is necessary to import the aliases later after the call to addScope(because addscope is already called within the constructor, but the namespace is put into the cache after the constructor was called). This list holds all aliases to add.
     /// Maps local sub-namespace -> global namespace(multiple aliases are possible)
     typedef QMap<QString, AliasList> AliasMap;
     AliasMap m_aliases;
@@ -112,6 +111,8 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     };
   
   protected:
+
+    void updateAliases();
 
 	SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore );
 		
