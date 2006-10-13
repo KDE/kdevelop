@@ -2213,7 +2213,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                     //                     pitem->scopes.remove( spitem );
                     break;
                 case Scope::IncludeScope:
-                    pitem->scope->deleteIncludeScope( spitem->scope->scopeName() );
+                    pitem->scope->deleteIncludeScope( spitem->scope->fileName() );
                     //                     pitem->scopes.remove( spitem );
                     delete spitem;
                     spitem = pitem;

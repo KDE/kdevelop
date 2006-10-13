@@ -525,10 +525,16 @@ void Scope::deleteIncludeScope( const QString& includeFile, bool negate )
         funcScopeId = "include(" + includeFile + ")";
     }
 
+
+    kdDebug(9024 )  << "include scopes:" << m_incScopes.keys() << "|file:" << includeFile << endl;
+
     Scope * incScope = m_incScopes[ includeFile ];
     m_incScopes.remove( includeFile );
-    QMake::AST* ast = m_root->m_children[ m_root->m_children.findIndex( incScope->m_root ) ];
-    m_root->removeChildAST( incScope->m_root );
+    kdDebug( 9024 ) << "children" << m_root->m_children << endl;
+    kdDebug( 9024 ) << "m_incast" << incScope->m_incast << endl;
+
+    QMake::AST* ast = incScope->m_incast;
+    m_root->removeChildAST( incScope->m_incast);
     delete incScope;
     delete ast;
 
