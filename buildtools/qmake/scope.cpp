@@ -17,8 +17,9 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qpair.h>
-
 #include <qmakedriver.h>
+
+#include "pathutil.h"
 
 const QStringList Scope::KnownVariables = QStringList() << "QT" << "CONFIG" << "TEMPLATE" << "SUBDIRS" << "VERSION" << "LIBS" << "target.path" << "INSTALLS" << "MAKEFILE" << "TARGETDEPS" << "INCLUDEPATH" << "TARGET" << "DESTDIR" << "DEFINES" << "QMAKE_CXXFLAGS_DEBUG" << "QMAKE_CXXFLAGS_RELEASE" << "OBJECTS_DIR" << "UI_DIR" << "MOC_DIR" << "IDL_COMPILER" << "IDL_OPTIONS" << "RCC_DIR" << "IDLS" << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES" << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES" << "INTERFACES" << "FORMS" ;
 
@@ -346,7 +347,13 @@ QString Scope::scopeName() const
     else if ( m_root->isScope() )
         return m_root->scopedID;
     else if ( m_root->isProject() )
-        return QFileInfo( projectDir() ).fileName() ;
+    {
+        if( m_parent )
+        {
+            return getRelativePath( m_parent->projectDir(), projectDir() );
+        }else
+            return QFileInfo( projectDir() ).fileName() ;
+    }
     return QString();
 }
 
@@ -548,9 +555,13 @@ void Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
                     QStringList entries = subdir.entryList();
                     for ( QStringList::iterator eit = entries.begin() ; eit != entries.end() ; ++eit )
                     {
-                        subdir.remove( *eit );
+                        if( *eit == "." || *eit == ".." )
+                            continue;
+                        if( !subdir.remove( *eit ) )
+                            kdDebug( 9024 ) << "Couldn't delete " << *eit << " from " << subdir.absPath() << endl;
                     }
-                    projdir.rmdir( dir );
+                    if( !projdir.rmdir( dir ) )
+                        kdDebug( 9024 ) << "Couldn't delete " << dir << " from " << projdir.absPath() << endl;
                 }
             }
             Scope* project = m_subProjects[ dir ];
@@ -590,6 +601,11 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
                 if ( *posit == "\\\n" )
                     origValues.remove( posit );
                 origValues.remove( *it );
+                if( origValues.last() == "\\\n" )
+                {
+                    origValues.pop_back();
+                    origValues.append( "\n" );
+                }
             }
     }
 }

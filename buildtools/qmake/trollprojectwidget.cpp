@@ -56,6 +56,7 @@
 #include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
 #include <kio/netaccess.h>
+#include <kurlcompletion.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -765,8 +766,9 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
     QString projectdir = spitem->scope->projectDir();
 
     KURLRequesterDlg dialog( i18n( "Add Subdirectory" ), i18n( "Please enter a name for the subdirectory: " ), this, 0 );
-    dialog.urlRequester() ->setMode( KFile::Directory );
+    dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
     dialog.urlRequester() ->setURL( QString::null );
+    dialog.urlRequester() ->completionObject() ->setDir( projectdir );
 
     if ( dialog.exec() == QDialog::Accepted && !dialog.urlRequester() ->url().isEmpty() )
     {
@@ -789,7 +791,9 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
         }
         Scope* subproject = spitem->scope->createSubProject( subdirname );
         if( subproject )
-            new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+        {
+            QMakeScopeItem* newitem = new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+        }
         spitem->scope->saveToFile();
     }
 }
@@ -804,7 +808,7 @@ void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
         bool delsubdir = false;
         if ( KMessageBox::questionYesNo( this, i18n( "Delete the directory of the subproject?" ), i18n( "Delete subdir?" ) ) == KMessageBox::Yes )
             delsubdir = true;
-        spitem->scope->deleteSubProject( m_shownSubproject->scope->scopeName(), delsubdir );
+        spitem->scope->deleteSubProject( subdirname, delsubdir );
         delete m_shownSubproject;
         m_shownSubproject = spitem;
         spitem->scope->saveToFile( );
