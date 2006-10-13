@@ -18,6 +18,7 @@
 #include <kcombobox.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kurlcompletion.h>
 
 #include "pathutil.h"
 #include "qmakescopeitem.h"
