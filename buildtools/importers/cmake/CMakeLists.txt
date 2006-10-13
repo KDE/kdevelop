@@ -27,7 +27,7 @@ set( cmakesettings_UI
 remove_definitions( -DQT_NO_STL )
 
 kde4_automoc( cmakecommon ${cmakecommon_SRCS} )
-kde4_add_kcfg_files( cmakecommon_SRCS cmakeconfig.kcfgc )
+kde4_add_kcfg_files(cmakecommon  cmakecommon_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon ${KDE4_KDECORE_LIBS}
                        kdevplatform )

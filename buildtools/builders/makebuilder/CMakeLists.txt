@@ -27,7 +27,7 @@ set( makebuilder_cfg_UI
 
 kde4_automoc( makebuilder_cfg ${makebuilder_cfg_SRCS} )
 kde4_add_ui_files( makebuilder_cfg_SRCS ${makebuilder_cfg_UI} )
-kde4_add_kcfg_files( makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
+kde4_add_kcfg_files(makebuilder_cfg  makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_makebuilder ${makebuilder_cfg_SRCS} )
 target_link_libraries( kcm_kdev_makebuilder ${KDE4_KUTILS_LIBS} kdevplatform )
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kdev_makebuilder )
