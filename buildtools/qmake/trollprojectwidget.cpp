@@ -806,7 +806,7 @@ void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
     {
         QString subdirname = m_shownSubproject->scope->scopeName();
         bool delsubdir = false;
-        if ( KMessageBox::questionYesNo( this, i18n( "Delete the directory of the subproject?" ), i18n( "Delete subdir?" ) ) == KMessageBox::Yes )
+        if ( KMessageBox::warningYesNo( this, i18n( "Delete the directory of the subproject from disk?" ), i18n( "Delete subdir?" ) ) == KMessageBox::Yes )
             delsubdir = true;
         spitem->scope->deleteSubProject( subdirname, delsubdir );
         delete m_shownSubproject;
