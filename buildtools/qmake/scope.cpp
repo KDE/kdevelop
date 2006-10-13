@@ -584,7 +584,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
     {
         if ( !origValues.contains( *it ) && !remove )
         {
-            if ( origValues.back() == "\n" )
+            while ( origValues.last() == "\n" )
                 origValues.pop_back();
             if ( origValues.count() > 0 && origValues.last() != "\\\n" )
                 origValues.append( "\\\n" );
