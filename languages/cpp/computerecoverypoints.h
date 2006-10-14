@@ -95,7 +95,7 @@ public:
    : recoveryPoints( points )
  {}
 
- virtual void parseTranslationUnit( TranslationUnitAST* ast )
+ virtual void parseTranslationUnit( const ParsedFile& ast )
  {
   QValueList<QStringList> dummy;
 
@@ -111,8 +111,8 @@ public:
   if ( !ast->name() )
    return ;
 
-  QStringList type = CppCodeCompletion::typeName( ast->name() ->text() ).scope();
-  m_imports.top().push_back( type );
+     //QStringList type = CppCodeCompletion::typeName( ast->name() ->text() ).scope();
+     m_imports.top().push_back( ast->name() ->text() );
  }
 
  virtual void parseNamespace( NamespaceAST* ast )

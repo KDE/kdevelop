@@ -19,6 +19,9 @@
 #include "simpletypecachebinder.h"
 #include "simpletypecatalog.h"
 
+HashedStringSet getIncludeFiles( const ItemDom& item );
+
+
 ///Interface that functions should implement
 class SimpleTypeFunctionInterface {
   public:
@@ -98,7 +101,7 @@ public:
   
   virtual SimpleTypeImpl::TypePointer clone() = 0;
   
-  virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name , SimpleTypeImpl::MemberInfo::MemberType type ){
+  virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type ){
     SimpleTypeImpl::MemberInfo ret;
     if( type & SimpleTypeImpl::MemberInfo::Template ) {
       TypeDesc s = Base::findTemplateParam( name.name() );
@@ -224,7 +227,7 @@ private:
   
   void init();
 
-  ClassDom pickMostRelated( ClassList lst, QString fn );
+    //ClassDom pickMostRelated( ClassList lst, QString fn );
   
 protected:
   SimpleTypeCodeModel() : SimpleTypeImpl() {

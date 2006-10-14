@@ -44,31 +44,31 @@ public:
 		TagCreator::setDocumentationDirectories( m_docDirectoryList );
 	}
 	
-	void fileParsed( const QString& fileName )
+	void fileParsed( const ParsedFile& fileName )
 	{
 		std::cout << ( m_generateTags ? "generate tags for " : "checking " ) 
-			<< QFile::encodeName( fileName ).data() << std::endl;
+			<< QFile::encodeName( fileName.fileName() ).data() << std::endl;
 		
-		QValueList<Problem> l = problems( fileName );
+		QValueList<Problem> l = problems( fileName.fileName() );
 		QValueList<Problem>::Iterator it = l.begin();
 		while ( it != l.end() )
 		{
 			const Problem & p = *it;
 			++it;
-		std::cout << QFile::encodeName( fileName ).data() << ":" << p.line() << ":" 
+		std::cout << QFile::encodeName( fileName.fileName() ).data() << ":" << p.line() << ":"
 				<< p.column() << ": " << p.text().latin1() << std::endl;
 		}
 		
-		TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
+		takeTranslationUnit( fileName );
 		
 		if ( m_generateTags )
 		{
-			TagCreator w( fileName, catalog );
-			w.parseTranslationUnit( ast.get() );
+			TagCreator w( fileName.fileName(), catalog );
+			w.parseTranslationUnit( fileName );
 		}
 		
 		if ( !isResolveDependencesEnabled() )
-			removeAllMacrosInFile( fileName );
+			removeAllMacrosInFile( fileName.fileName() );
 	}
 	
 	void setupLexer( Lexer* lex )

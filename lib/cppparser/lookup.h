@@ -25,17 +25,19 @@
 #include <qmap.h>
 
 #include "lexer.h"
+#include <ext/hash_map>
+#include <lib/interfaces/hashedstring.h>
 
 /**
 * @short Fast keyword lookup.
 */
 class Lookup {
 public:
-    typedef QMap<QString,Type> KeywordMap;
+    typedef __gnu_cxx::hash_map<HashedString,Type> KeywordMap;
     /**
     * Find an entry in the table, and return its value
     */
-    static int find( const QString& s );
+    static int find( const HashedString& s );
 
     static const KeywordMap& keywords();
 };

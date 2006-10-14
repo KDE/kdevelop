@@ -83,9 +83,9 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>gdb</dbgshell>
+      <dbgshell/>
       <programargs/>
-      <gdbpath>/usr/bin</gdbpath>
+      <gdbpath>/usr/bin/gdb</gdbpath>
       <configGdbScript/>
       <runShellScript/>
       <runGdbScript/>
@@ -129,6 +129,7 @@
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
+      <activetarget>languages/cpp/libkdevcppsupport.la</activetarget>
     </general>
     <configurations>
       <default>
@@ -162,12 +163,27 @@
       <includeTypes>true</includeTypes>
       <includeEnums>true</includeEnums>
       <includeTypedefs>false</includeTypedefs>
-      <automaticCodeCompletion>false</automaticCodeCompletion>
+      <automaticCodeCompletion>true</automaticCodeCompletion>
       <automaticArgumentsHint>true</automaticArgumentsHint>
       <automaticHeaderCompletion>true</automaticHeaderCompletion>
-      <codeCompletionDelay>250</codeCompletionDelay>
+      <codeCompletionDelay>400</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
+      <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
+      <completionBoxItemOrder>0</completionBoxItemOrder>
+      <howEvaluationContextMenu>true</howEvaluationContextMenu>
+      <showCommentWithArgumentHint>true</showCommentWithArgumentHint>
+      <statusBarTypeEvaluation>false</statusBarTypeEvaluation>
+      <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx=std;</namespaceAliases>
+      <processPrimaryTypes>true</processPrimaryTypes>
+      <processFunctionArguments>false</processFunctionArguments>
+      <preProcessAllHeaders>true</preProcessAllHeaders>
+      <parseMissingHeaders>false</parseMissingHeaders>
+      <resolveIncludePaths>false</resolveIncludePaths>
+      <alwaysParseInBackground>true</alwaysParseInBackground>
+      <usePermanentCaching>true</usePermanentCaching>
+      <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
+      <includePaths>.;/usr/share/qt3/include;/usr/include/kde;/usr/include/c++/4.0;/usr/include/c++/4.0/i486-linux-gnu;lib;lib/interfaces</includePaths>
     </codecompletion>
     <creategettersetter>
       <prefixGet/>
@@ -180,16 +196,19 @@
     <references>
       <pcs>Qt</pcs>
       <pcs>KDElibs</pcs>
+      <pcs>stdc%2B%2B</pcs>
     </references>
     <qt>
       <used>false</used>
       <version>3</version>
       <root>/usr/lib/qt3</root>
+      <includestyle>3</includestyle>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
     </qt>
     <splitheadersource>
-      <enabled>false</enabled>
+      <enabled>true</enabled>
       <synchronize>true</synchronize>
-      <orientation>Vertical</orientation>
+      <orientation>Horizontal</orientation>
     </splitheadersource>
   </kdevcppsupport>
 </kdevelop>

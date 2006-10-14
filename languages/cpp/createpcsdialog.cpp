@@ -71,7 +71,7 @@ public:
 	}
 #endif
 
-	void fileParsed( const QString& fileName )
+	void fileParsed( const ParsedFile& ast )
 	{
 		/// @todo increment progress
 
@@ -85,10 +85,10 @@ public:
 		}
 #endif
 
-		TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
+		takeTranslationUnit( ast );
 
-		TagCreator w( fileName, catalog );
-		w.parseTranslationUnit( ast.get() );
+		TagCreator w( ast.fileName(), catalog );
+		w.parseTranslationUnit( ast );
 
 		//if( !isResolveDependencesEnabled() )
 		//    removeAllMacrosInFile( fileName );

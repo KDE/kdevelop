@@ -196,6 +196,16 @@ int TypeDesc::length() const {
   return m_data->m_nextType ? 1 + m_data->m_nextType->length() : 1;
 }
 
+HashedStringSet TypeDesc::includeFiles() const {
+  if( !m_data ) return HashedStringSet();
+  return m_data->m_includeFiles;
+}
+
+void TypeDesc::setIncludeFiles( const HashedStringSet& files ) {
+  makeDataPrivate();
+  m_data->m_includeFiles = files;
+}
+
 size_t TypeDescData::hashKey() {
   size_t ret = 0;
   if ( m_hashValid ) {

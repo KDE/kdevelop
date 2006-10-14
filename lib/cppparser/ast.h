@@ -24,6 +24,7 @@
 #include <qstring.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
+#include <ksharedptr.h>
 
 #if defined( Q_OS_WIN32 ) || defined( Q_CC_SUN )
 
@@ -1552,10 +1553,10 @@ private:
 };
 
 
-class TranslationUnitAST: public AST
+class TranslationUnitAST: public AST, public KShared
 {
 public:
-    typedef AUTO_PTR<TranslationUnitAST> Node;
+    typedef KSharedPtr<TranslationUnitAST> Node;
     enum { Type = NodeType_TranslationUnit };
 
     DECLARE_ALLOC( TranslationUnitAST )

@@ -18,6 +18,7 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ksharedptr.h>
 
+#include "includefiles.h"
 #include "typedecoration.h"
 
 class TypeDesc;
@@ -138,6 +139,7 @@ struct TypeDescData : public KShared {
     TypePointer m_resolved;
     TypeDecoration m_dec;
     TypeDescFlags m_flags;
+    HashedStringSet m_includeFiles;
 
 	TypeDescData() : m_hashValid( false ), m_hash2Valid( false ) {
 	}
@@ -154,6 +156,7 @@ private:
 	bool m_hash2Valid;
 	uint m_hashKey2;
 };
+
 
 class TypeDesc {
   public:
@@ -214,6 +217,9 @@ class TypeDesc {
     bool operator == ( const TypeDesc& rhs ) const {
       return compare( rhs ) == 0;
     }
+
+    HashedStringSet includeFiles() const;
+    void setIncludeFiles( const HashedStringSet& files );
 
     QString nameWithParams() const;
 

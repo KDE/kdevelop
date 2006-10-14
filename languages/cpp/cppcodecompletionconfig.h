@@ -18,6 +18,7 @@
 class CppSupportPart;
 class QDomDocument;
 
+
 /**
 @author Roberto Raggi
 */
@@ -64,14 +65,73 @@ public:
 
     ///Whether the completion-cache should be kept alive as long as the context does not change
     bool usePermanentCaching() const {
-      return true;
+        return m_usePermanentCaching;
     }
-
+    
+    void setUsePermanentCaching(bool b)  {
+        m_usePermanentCaching = b;
+    }
+    
 	///Whether higher namespaces(like the global one) should be included while computing the
 	///completion-list when using automatic code-completion. Should get an option in the interface(slows down the completion).
-	bool alwaysIncludeNamespaces() const {
-		return false;
-	}
+    bool alwaysIncludeNamespaces() const {
+        return m_alwaysIncludeNamespaces;
+    }
+
+    void setAlwaysIncludeNamespaces(bool b) {
+        m_alwaysIncludeNamespaces = b;
+    }
+    
+    ///Whether all included headers should be processed by the preprocessor(makes macros work across header-files)
+    void setPreProcessAllHeaders(bool b) {
+        m_preProcessAllHeaders = b;
+    }
+
+    ///Whether headers that were found and were not yet parsed in their active state should be parsed into the code-model
+    void setParseMissingHeaders(bool b) {
+        m_parseMissingHeaders = b;
+    }
+
+    ///Additional include-paths defined by the user
+    void  setCustomIncludePaths(QString str) {
+        m_includePaths = str;
+    }
+
+    ///Whether we should try to automatically find out the used include-path from Makefiles etc.
+    void setResolveIncludePaths(bool b) {
+        m_resolveIncludePaths = b;
+    }
+    
+	///Whether higher namespaces(like the global one) should be included while computing the
+	///completion-list when using automatic code-completion. Should get an option in the interface(slows down the completion).
+    
+    ///Whether all included headers should be processed by the preprocessor(makes macros work across header-files)
+    bool preProcessAllHeaders() const {
+        return m_preProcessAllHeaders;
+    }
+    
+    ///Whether headers that were found and were not yet parsed in their active state should be parsed into the code-model
+    bool parseMissingHeaders() const {
+        return m_parseMissingHeaders;
+    }
+    
+    ///Additional include-paths defined by the user
+    QString customIncludePaths() const {
+        return m_includePaths;
+    }
+    
+    ///Whether we should try to automatically find out the used include-path from Makefiles etc.
+    bool resolveIncludePaths() const {
+        return m_resolveIncludePaths;
+    }
+    
+    bool alwaysParseInBackground() const {
+        return m_alwaysParseInBackground;
+    }
+    
+    void setAlwaysParseInBackground(bool b)  {
+        m_alwaysParseInBackground = b;
+    }
 
 	bool showNamespaceAppearances() const;
 
@@ -226,6 +286,14 @@ private:
 	int m_argumentsHintDelay;
 	int m_headerCompletionDelay;
 
+    bool m_preProcessAllHeaders;
+    bool m_parseMissingHeaders;
+    bool m_resolveIncludePaths;
+    bool m_alwaysIncludeNamespaces;
+    bool m_alwaysParseInBackground;
+    bool m_usePermanentCaching;
+    QString m_includePaths;
+    
 	bool m_showOnlyAccessibleItems;
 	CompletionBoxItemOrder m_completionBoxItemOrder;
 	bool m_showEvaluationContextMenu;

@@ -16,6 +16,7 @@
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+#include <lib/cppparser/driver.h>
 
 StoreWalker::StoreWalker( const QString& fileName, CodeModel* store )
 : m_store( store ), m_anon( 0 )
@@ -30,14 +31,18 @@ StoreWalker::~StoreWalker()
 {}
 
 
-void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
+void StoreWalker::parseTranslationUnit( const ParsedFile& ast )
 {
 	m_file = m_store->create<FileModel>();
 	m_file->setName( m_fileName ); /// @todo ?!?
-	
+
 	m_currentScope.clear();
 	m_currentNamespace.clear();
 	m_currentClass.clear();
+
+	ParsedFilePointer p = new ParsedFile( ast );
+	p->setTranslationUnit( 0 ); //Necessary so the memory is not bloated after the first parse
+	m_file->setParseResult( p.data() ); ///@todo beautify
 	
 	m_currentAccess = CodeModelItem::Public;
 	m_inSlots = false;
@@ -105,7 +110,7 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
 
 void StoreWalker::parseNamespaceAlias( NamespaceAliasAST* ast )
 {
-  QString nsName;
+  QString nsName; 
   QString aliasName;
   
   if( !ast->namespaceName() || ast->namespaceName()->text().isEmpty() )

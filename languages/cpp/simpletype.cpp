@@ -164,13 +164,13 @@ SimpleType::SimpleType( ItemDom item ) : m_resolved( true ) {
 SimpleType::SimpleType( Tag tag ) : m_resolved(true) {
  m_type = TypePointer( new SimpleTypeCatalog( tag ) );
 }*/
-
+//
 //SimpleTypeImpl implementation
 
 /**
 Searches for a member called "name", considering all types selected through "typ"
 TODO: cache this too */
-SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const QString& name, MemberInfo::MemberType typ ) {
+SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, MemberInfo::MemberType typ ) {
   Debug d( "#to#" );
   if ( !d ) {
     ifVerbose( dbg() << "stopping typeOf-evaluation because the recursion-depth is too high" << endl );
@@ -881,7 +881,7 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::searchBases ( const TypeDesc& name 
   for ( QValueList<LocateResult>::iterator it = parents.begin(); it != parents.end(); ++it ) {
     if ( !( *it ) ->resolved() )
       continue;
-    TypeOfResult type = ( *it ) ->resolved() ->typeOf( name.name() );
+    TypeOfResult type = ( *it ) ->resolved() ->typeOf( name );
     if ( type )
       return type;
   }

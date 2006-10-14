@@ -51,6 +51,15 @@ void CppCodeCompletionConfig::init( )
 	m_processPrimaryTypes = DomUtil::readBoolEntry( *m_dom, defaultPath + "/processPrimaryTypes", true );
 	m_processFunctionArguments = DomUtil::readBoolEntry( *m_dom, defaultPath + "/processFunctionArguments", false );
 
+        m_preProcessAllHeaders = DomUtil::readBoolEntry( *m_dom, defaultPath + "/preProcessAllHeaders", false );
+        m_parseMissingHeaders = DomUtil::readBoolEntry( *m_dom, defaultPath + "/parseMissingHeaders", false );
+        m_resolveIncludePaths = DomUtil::readBoolEntry( *m_dom, defaultPath + "/resolveIncludePaths", true );
+        m_alwaysParseInBackground = DomUtil::readBoolEntry( *m_dom, defaultPath + "/alwaysParseInBackground", true );
+        m_usePermanentCaching = DomUtil::readBoolEntry( *m_dom, defaultPath + "/usePermanentCaching", true );
+        m_alwaysIncludeNamespaces = DomUtil::readBoolEntry( *m_dom, defaultPath + "/alwaysIncludeNamespaces", false );
+        m_includePaths = DomUtil::readEntry( *m_dom, defaultPath + "/includePaths", ".;" );
+
+        
 }
 
 void CppCodeCompletionConfig::store( )
@@ -74,6 +83,13 @@ void CppCodeCompletionConfig::store( )
 	DomUtil::writeEntry( *m_dom, defaultPath + "/namespaceAliases", m_namespaceAliases );
 	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/processPrimaryTypes", m_processPrimaryTypes );
 	DomUtil::writeBoolEntry( *m_dom, defaultPath + "/processFunctionArguments", m_processFunctionArguments );
+        DomUtil::writeBoolEntry( *m_dom, defaultPath + "/preProcessAllHeaders", m_preProcessAllHeaders );
+        DomUtil::writeBoolEntry( *m_dom, defaultPath + "/parseMissingHeaders", m_parseMissingHeaders );
+        DomUtil::writeBoolEntry( *m_dom, defaultPath + "/resolveIncludePaths", m_resolveIncludePaths );
+        DomUtil::writeBoolEntry( *m_dom, defaultPath + "/alwaysParseInBackground", m_alwaysParseInBackground );
+        DomUtil::writeBoolEntry( *m_dom, defaultPath + "/usePermanentCaching", m_usePermanentCaching );
+        DomUtil::writeBoolEntry( *m_dom, defaultPath + "/alwaysIncludeNamespaces", m_alwaysIncludeNamespaces );
+        DomUtil::writeEntry( *m_dom, defaultPath + "/includePaths", m_includePaths );
 
 	emit stored();
 }

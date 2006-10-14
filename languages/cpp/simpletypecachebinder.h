@@ -51,10 +51,11 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
 
       LocateDesc() {}
 
-      LocateDesc( TypeDesc name, SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) : mname( name ), mmode( mode ) , mdir( dir ) , mtypeMask( typeMask ) {
+      LocateDesc( const TypeDesc& name, SimpleTypeImpl::LocateMode mode, int dir, SimpleTypeImpl::MemberInfo::MemberType typeMask ) : mname( name ), mmode( mode ) , mdir( dir ) , mtypeMask( typeMask ) {
         fullName = mname.fullNameChain();//fullTypeStructure();
       }
-
+      
+  ///@todo this should use hashing too
       int compare( const LocateDesc& rhs ) const {
         QString a = fullName;
         QString b = rhs.fullName;
@@ -64,7 +65,6 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
           else
             return 1;
         }
-
         if ( mmode != rhs.mmode ) {
           if ( mmode < rhs.mmode )
             return -1;
@@ -83,6 +83,7 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
           else
             return 1;
         }
+
         return 0;
       }
 
@@ -179,7 +180,7 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
 	typedef QMap<MemberFindDesc, QValueList<TypePointer> > ClassListMap;
 #endif
 
-    virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type ) {
+  virtual SimpleTypeImpl::MemberInfo findMember( TypeDesc name, SimpleTypeImpl::MemberInfo::MemberType type ) {
       if ( !primaryActive )
         return Base::findMember( name, type );
       MemberFindDesc key( name, type );

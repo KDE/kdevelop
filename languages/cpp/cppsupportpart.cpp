@@ -15,6 +15,7 @@
 *                                                                         *
 ***************************************************************************/
 
+
 #include "cppsupportpart.h"
 #include "cppsupport_events.h"
 #include "problemreporter.h"
@@ -101,11 +102,12 @@
 #include <config.h>
 
 ///Currently activating this leads to mysterious crashes, but on long-term it's better
-const bool alwaysParseInBackground = false;
+const bool alwaysParseInBackground = true;
 
 
-enum { KDEV_DB_VERSION = 16 };
-enum { KDEV_PCS_VERSION = 13 };
+
+enum { KDEV_DB_VERSION = 17 };
+enum { KDEV_PCS_VERSION = 14 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
@@ -119,56 +121,56 @@ public:
 	CppDriver( CppSupportPart* cppSupport ) : KDevDriver( cppSupport )
 	{}
 
-	void fileParsed( const QString& fileName )
+	void fileParsed( const ParsedFile& fileName )
 	{
 		//kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
 		
-		TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
+		ParsedFilePointer ast = takeTranslationUnit( fileName.fileName() );
 		
 		if ( cppSupport() ->problemReporter() )
 		{
-			cppSupport() ->problemReporter() ->removeAllProblems( fileName );
+			cppSupport() ->problemReporter() ->removeAllProblems( fileName.fileName() );
 			
-			QValueList<Problem> pl = problems( fileName );
+			QValueList<Problem> pl = problems( fileName.fileName() );
 			QValueList<Problem>::ConstIterator it = pl.begin();
 			while ( it != pl.end() )
 			{
 				const Problem & p = *it++;
-				cppSupport() ->problemReporter() ->reportProblem( fileName, p );
+				cppSupport() ->problemReporter() ->reportProblem( fileName.fileName(), p );
 			}
 		}
 		
-		StoreWalker walker( fileName, cppSupport() ->codeModel() );
+		StoreWalker walker( fileName.fileName(), cppSupport() ->codeModel() );
 		
-		if ( cppSupport() ->codeModel() ->hasFile( fileName ) )
+		if ( cppSupport() ->codeModel() ->hasFile( fileName.fileName() ) )
 		{
-			FileDom file = cppSupport() ->codeModel() ->fileByName( fileName );
-			cppSupport() ->removeWithReferences( fileName );
+			FileDom file = cppSupport() ->codeModel() ->fileByName( fileName.fileName() );
+			cppSupport() ->removeWithReferences( fileName.fileName() );
 		}
 		
-		walker.parseTranslationUnit( ast.get() );
+		walker.parseTranslationUnit( *ast );
 		cppSupport() ->codeModel() ->addFile( walker.file() );
 		remove
-			( fileName );
+			( fileName.fileName() );
 
 		if( cppSupport()->_jd ) {
 			cppSupport()->_jd->backgroundState ++;
 			cppSupport()->_jd->lastParse = QTime::currentTime();
 		}
 		
-		QFileInfo fileInfo( fileName );
-		QString path = URLUtil::canonicalPath( fileName );
+		QFileInfo fileInfo( fileName.fileName() );
+		QString path = URLUtil::canonicalPath( fileName.fileName() );
 		
 		cppSupport()->m_timestamp[ path ] = fileInfo.lastModified();
 
-		cppSupport()->emitSynchronousParseReady( fileName, ast.get() );
+		cppSupport()->emitSynchronousParseReady( fileName.fileName(), ast );
 	}
 };
 
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
 : KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ),
 	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
-	m_activeViewCursor( 0 ), m_projectClosed( true ), m_parseSilent( false ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
+	m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
 {
 	setInstance( CppSupportFactory::instance() );
 	
@@ -349,9 +351,15 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		}
 
 		if( !project()->isProjectFile( fileName ) || !m_parseEmitWaiting.reject( fileName ) ) {
-			parseEmit( m_parseEmitWaiting.processFile( fileName, ( !m_hadErrors && hasErrors && !fromDisk && m_isTyping && fileName == m_activeFileName ) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None ) );
-		}
-		emitFileParsed( m_fileParsedEmitWaiting.processFile( fileName ) );
+            ParseEmitWaiting::Processed p = m_parseEmitWaiting.processFile( fileName, ( !m_hadErrors && hasErrors && !fromDisk && m_isTyping && fileName == m_activeFileName ) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None );
+			parseEmit( p );
+			if( !p.hasFlag( ParseEmitWaiting::Silent ) )
+				emitFileParsed( p );
+        } else {
+	        ParseEmitWaiting::Processed p = m_fileParsedEmitWaiting.processFile( fileName );
+	        if( !p.hasFlag( ParseEmitWaiting::Silent ) )
+		        emitFileParsed( p );
+        }
 	}
 }
 
@@ -1256,6 +1264,7 @@ bool CppSupportPart::parseProject( bool force )
 			
 			int numFiles = 0;
 			_jd->stream >> numFiles;
+			kdDebug( 9007 ) << "Read " << numFiles << " files from pcs" << endl;
 			
 			for ( int i = 0; i < numFiles; ++i )
 			{
@@ -1287,8 +1296,6 @@ bool CppSupportPart::parseProject( bool force )
 	_jd->backgroundCount = 0;
 	_jd->cycle = 0;
 
-        m_parseSilent = true;
-	
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 5" << endl;
 	QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
 	
@@ -1315,6 +1322,8 @@ void CppSupportPart::slotParseFiles()
 			if ( isValidSource( absFilePath ) )
 			{
 				QDateTime t = fileInfo.lastModified();
+				kdDebug( 9007 ) << "reading " << absFilePath << endl;
+
 				if ( ! ( m_timestamp.contains( absFilePath ) && m_timestamp[ absFilePath ] == t ) )
 				{
 					if ( _jd->pcs.contains( absFilePath ) )
@@ -1327,15 +1336,22 @@ void CppSupportPart::slotParseFiles()
 						if( t.toTime_t() != _jd->pcs[ absFilePath ].first ) {
 							///The FileDom had to be created first, so the dependencies are known
 							_jd->reparseList << file->name();
+							kdDebug( 9007 ) << "File timestamp: " << ": " <<  t.toTime_t()   << endl;
+							kdDebug( 9007 ) << "Stored timestamp: " << ": " <<  _jd->pcs[ absFilePath ].first << endl;
 						} else {
 							m_timestamp[ absFilePath ] = t;
+							kdDebug( 9007 ) << "timestamp ok" << endl;
 						}
 					} else {
 					  _jd->reparseList <<  absFilePath;
+					  kdDebug( 9007 ) << absFilePath << " put into reparse-list"  << endl;
 					}
+				} else {
+				  kdDebug( 9007 ) << absFilePath << " is already in code-model"  << endl;
 				}
 			}
 		}
+
 		++( _jd->it );
 		QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
 		
@@ -1344,7 +1360,7 @@ void CppSupportPart::slotParseFiles()
 				_jd->backgroundCount = 0;
 			} else {
 				if( alwaysParseInBackground ) {
-					_jd->backgroundCount = parseFilesAndDependencies( _jd->reparseList, true );
+					_jd->backgroundCount = parseFilesAndDependencies( _jd->reparseList, true, false, true );
 				} else {
 					_jd->reparseList = reorder( _jd->reparseList );
 					_jd->it = _jd->reparseList.begin();
@@ -1382,10 +1398,9 @@ void CppSupportPart::slotParseFiles()
 			
 			delete _jd;
 			_jd = 0;
-			m_parseSilent = false;
 		} else {
 			_jd->progressBar->setProgress( _jd->backgroundState ); ///restart progress-bar for reparsing
-			if( _jd->lastParse.msecsTo( QTime::currentTime()) > 1000 ) {
+			if( _jd->lastParse.msecsTo( QTime::currentTime()) > 30000 ) {
 				_jd->backgroundCount = _jd->backgroundState;   ///Stop waiting if there is no progress
 				QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
 			} else {
@@ -1441,7 +1456,7 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 		return ;
 	
 	m_backgroundParser->lock();
-	TranslationUnitAST* ast = m_backgroundParser->translationUnit( m_activeFileName );
+	TranslationUnitAST* ast = *m_backgroundParser->translationUnit( m_activeFileName );
 	AST* node = 0;
 	if ( ast && ( node = findNodeAt( ast, line, column ) ) )
 	{
@@ -1471,7 +1486,7 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 		return ;
 
 	m_backgroundParser->lock();
-	TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
+	TranslationUnitAST* translationUnit = *m_backgroundParser->translationUnit( m_activeFileName );
 	if ( translationUnit )
 	{
 		unsigned int line, column;
@@ -1535,7 +1550,7 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 		QString implFile = findSourceFile();
 		
 		m_backgroundParser->lock();
-		translationUnit = m_backgroundParser->translationUnit( implFile );
+		translationUnit = *m_backgroundParser->translationUnit( implFile );
 		if ( translationUnit )
 			translationUnit->getEndPosition( &atLine, &atColumn );
 		else
@@ -1798,7 +1813,10 @@ QString CppSupportPart::formatTag( const Tag & inputTag )
 
 void CppSupportPart::codeCompletionConfigStored( )
 {
-	partController() ->setActivePart( partController() ->activePart() );
+	m_backgroundParser->updateParserConfiguration();
+	KDevDriver* d = dynamic_cast<KDevDriver*>( m_driver );
+	if( d ) d->setup();
+	partController() ->setActivePart( partController()->activePart() );
 }
 
 void CppSupportPart::splitHeaderSourceConfigStored( )
@@ -1890,7 +1908,9 @@ void CppSupportPart::saveProjectSourceInfo()
 	QFile f( project() ->projectDirectory() + "/" + project() ->projectName() + ".pcs" );
 	if ( !f.open( IO_WriteOnly ) )
 		return ;
-	
+
+	m_backgroundParser->lock();
+
 	createIgnorePCSFile();
 	
 	QDataStream stream( &f );
@@ -1898,12 +1918,15 @@ void CppSupportPart::saveProjectSourceInfo()
 	
 	QString pcs( "PCS" );
 	stream << pcs << KDEV_PCS_VERSION;
-	
+
 	stream << int( fileList.size() );
 	for ( FileList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		const FileDom dom = ( *it );
 		stream << dom->name() << m_timestamp[ dom->name() ].toTime_t();
+		if( m_timestamp.find( dom->name() ) == m_timestamp.end() ) {
+		  kdDebug( 9007 ) << dom->name() << ": timestamp is missing "  << endl;
+		}
 		offsets.insert( dom->name(), stream.device() ->at() );
 		stream << ( uint ) 0; // dummy offset
 	}
@@ -1925,6 +1948,8 @@ void CppSupportPart::saveProjectSourceInfo()
 	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
 	QFile::remove
 		( skip_file_name );
+
+	m_backgroundParser->unlock();
 }
 
 QString CppSupportPart::extractInterface( const ClassDom& klass )
@@ -2022,7 +2047,7 @@ FileDom CppSupportPart::fileByName( const QString& name) {
 }
 
 
-int CppSupportPart::parseFilesAndDependencies( QStringList files, bool background ) {
+int CppSupportPart::parseFilesAndDependencies( QStringList files, bool background, bool parseFirst, bool silent ) {
 	QMap<QString, int> fileGroups;
 	int nextGroup = 0;
 
@@ -2064,13 +2089,32 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 		kdDebug() << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";
 		if( background ) {
 			if( !group.isEmpty() ) {
-				if( !m_parseSilent ) {
-					m_parseEmitWaiting.addGroup( group );
-					m_fileParsedEmitWaiting.addGroup( group );}
+				if( !parseFirst )
+					m_parseEmitWaiting.addGroup( group, silent ? ParseEmitWaiting::Silent : ParseEmitWaiting::None  );
+				else
+					m_parseEmitWaiting.addGroupFront( group, silent ? ParseEmitWaiting::Silent : ParseEmitWaiting::None  );
+				if( !silent ) {
+					if( !parseFirst )
+						m_fileParsedEmitWaiting.addGroup( group, silent ? ParseEmitWaiting::Silent : ParseEmitWaiting::None  );
+					else
+						m_fileParsedEmitWaiting.addGroupFront( group, silent ? ParseEmitWaiting::Silent : ParseEmitWaiting::None  );
+				}
 			}
 			
-			for(QStringList::iterator it = group.begin(); it != group.end(); ++it)
-				backgroundParser()->addFile(*it);
+			if( parseFirst && !group.empty() ) {
+				for(QStringList::iterator it = --group.end(); it != group.end(); ) {
+					backgroundParser()->addFileFront(*it);
+					if( it == group.begin() ) {
+						it = group.end(); 
+					} else {
+						--it;
+					}
+				}
+			} else {
+				for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
+					backgroundParser()->addFile(*it);
+				}
+			}
 		} else {
 			for(QStringList::iterator it = group.begin(); it != group.end(); ++it)
 				m_driver->parseFile( *it );
@@ -2080,44 +2124,44 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 	return fileGroups.count();
 }
 	
-int CppSupportPart::parseFileAndDependencies( const QString & fileName, bool background ) {
+int CppSupportPart::parseFileAndDependencies( const QString & fileName, bool background, bool parseFirst, bool silent ) {
 	if(! isValidSource( fileName ) ) return 0;
 	
 	kdDebug() << "reparsing dependencies of " << fileName << "\n";
 
-	return parseFilesAndDependencies( fileName, background );
+	return parseFilesAndDependencies( fileName, background, parseFirst, silent );
 }
 
 void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 	if( files.res.isEmpty() ) return;
-
+    
 	bool modelHasFiles = true;
 
 	int oldFileCount = codeModel()->fileList().count();
 
-	if( (files.flag & ParseEmitWaiting::HadErrors) && modelHasFiles && !m_parseSilent ) {
+	if( (files.flag & ParseEmitWaiting::HadErrors) && modelHasFiles && !files.hasFlag( ParseEmitWaiting::Silent ) ) {
 		kdDebug( 9007 ) << "not updating code-model because at least one file has errors" << endl;
 		//		for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
 		  //			m_backgroundParser->removeFile( *it );
 	} else {
-		///update timestamps
-		for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it ) {
-			if( !codeModel()->hasFile( *it ) ) modelHasFiles = false;
-			QString& fileName = *it;
-			
-			QFileInfo fileInfo( fileName );
-			QString path = URLUtil::canonicalPath( fileName );
-			
-			if ( !fileInfo.exists() ) {
-				removeWithReferences( path );
-				continue ;
-			}
-			
-			m_timestamp[ path ] = fileInfo.lastModified();
-		}
-		
+	  ///update timestamps
+	  for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it ) {
+	    if( !codeModel()->hasFile( *it ) ) modelHasFiles = false;
+	    QString& fileName = *it;
 
-		if( m_parseSilent && !alwaysParseInBackground ) return;
+	    QFileInfo fileInfo( fileName );
+	    QString path = URLUtil::canonicalPath( fileName );
+
+	    if ( !fileInfo.exists() ) {
+	      removeWithReferences( path );
+	      continue ;
+	    }
+
+	    m_timestamp[ path ] = fileInfo.lastModified();
+	  }
+
+		if( files.hasFlag( ParseEmitWaiting::Silent ) && !alwaysParseInBackground )
+		  return;
 		
 		m_backgroundParser->lock();
 		
@@ -2131,6 +2175,14 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			{
 				//fileBackups << codeModel()->fileByName( l.back() );
 				removeWithReferences( l.back() );
+
+				///update timestamps
+				  QString& fileName = l.back();
+
+				  QFileInfo fileInfo( fileName );
+				  QString path = URLUtil::canonicalPath( fileName );
+
+				  m_timestamp[ path ] = fileInfo.lastModified();
 			}
 			
 			l.pop_back();
@@ -2151,12 +2203,12 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			  	kdDebug( 9007 ) << "error: translation-unit is missing" << endl;
 				missing << fileName;
 			} else {
-				if ( TranslationUnitAST * ast = m_backgroundParser->translationUnit( fileName ) )
+				if ( ParsedFilePointer ast = m_backgroundParser->translationUnit( fileName ) )
 				{
 					if ( true /*!hasErrors*/ )
 					{
 						StoreWalker walker( fileName, codeModel() );
-						walker.parseTranslationUnit( ast );
+						walker.parseTranslationUnit( *ast );
 						codeModel() ->addFile( walker.file() );
 						if( walker.file() ) {
 							QStringList grp = walker.file()->wholeGroupStrings();
@@ -2195,10 +2247,10 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 		if( !missing.isEmpty() ) {
 			kdDebug( 9007 ) << "error: translation-units were missing: " << missing << "\nreparsing them" << endl;
-			parseFilesAndDependencies( missing );
+			parseFilesAndDependencies( missing, true, false, files.hasFlag( ParseEmitWaiting::Silent ) );
 		}
 		
-		if( m_parseSilent ) {
+		if( files.hasFlag( ParseEmitWaiting::Silent ) ) {
 			if( alwaysParseInBackground )
 			for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
 				m_backgroundParser->removeFile( *it );
@@ -2218,13 +2270,12 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 	
 //}
 
-void CppSupportPart::emitSynchronousParseReady( const QString& file, TranslationUnitAST* unit ) {
+void CppSupportPart::emitSynchronousParseReady( const QString& file, ParsedFilePointer unit ) {
 	emit synchronousParseReady( file, unit );
 }
 
 void CppSupportPart::emitFileParsed( QStringList l )
 {
-  if( m_parseSilent ) return;
 	while( !l.isEmpty() ) {
 		emit fileParsed( l.front() );
 		l.pop_front();
@@ -2380,7 +2431,7 @@ void CppSupportPart::updateParserConfiguration()
 	QString conf_file_name = specialHeaderName();
 	m_driver->removeAllMacrosInFile( conf_file_name );
 	
-	m_driver->parseFile( conf_file_name, true );
+	m_driver->parseFile( conf_file_name, true, true );
 	
 	parseProject( true );
 }

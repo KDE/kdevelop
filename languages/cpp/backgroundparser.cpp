@@ -37,6 +37,7 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qprocess.h>
+#include <list>
 
 
 class KDevSourceProvider: public SourceProvider
@@ -123,6 +124,7 @@ typedef std::string SafeString;
 
 class SynchronizedFileList
 {
+  typedef std::list< QPair<SafeString, bool> > ListType;
 public:
 	SynchronizedFileList()
 	{}
@@ -130,13 +132,13 @@ public:
 	bool isEmpty() const
 	{
 		QMutexLocker locker( &m_mutex );
-		return m_fileList.isEmpty();
+		return m_fileList.empty();
 	}
 	
 	uint count() const
 	{
 		QMutexLocker locker( &m_mutex );
-		return m_fileList.count();
+		return m_fileList.size();
 	}
 	
 	QPair<SafeString, bool> front() const
@@ -151,11 +153,18 @@ public:
 		m_fileList.clear();
 	}
 	
+	void push_front( const QString& fileName, bool readFromDisk = false )
+	{
+		SafeString s( fileName.ascii() );
+		QMutexLocker locker( &m_mutex );
+		m_fileList.push_front( qMakePair( s, readFromDisk ) );
+	}
+
 	void push_back( const QString& fileName, bool readFromDisk = false )
 	{
 	        SafeString s( fileName.ascii() );
 		QMutexLocker locker( &m_mutex );
-		m_fileList.append( qMakePair( s, readFromDisk ) );
+		m_fileList.push_back( qMakePair( s, readFromDisk ) );
 	}
 	
 	void pop_front()
@@ -163,11 +172,19 @@ public:
 		QMutexLocker locker( &m_mutex );
 		m_fileList.pop_front();
 	}
+
+  QPair<SafeString, bool> takeFront()
+  {
+    QMutexLocker locker( &m_mutex );
+    QPair<SafeString, bool> ret = m_fileList.front();
+    m_fileList.pop_front();
+    return ret;
+  }
 	
 	bool contains( const QString& fileName ) const
 	{
 		QMutexLocker locker( &m_mutex );
-		QValueList< QPair<SafeString, bool> >::ConstIterator it = m_fileList.begin();
+		ListType::const_iterator it = m_fileList.begin();
 		while ( it != m_fileList.end() )
 		{
 			if ( ( *it ).first.compare( fileName.ascii() ) == 0 )
@@ -180,18 +197,19 @@ public:
 	void remove( const QString& fileName )
 	{
 		QMutexLocker locker( &m_mutex );
-		QValueList< QPair<SafeString, bool> >::Iterator it = m_fileList.begin();
+		ListType::iterator it = m_fileList.begin();
 		while ( it != m_fileList.end() )
 		{
 			if ( ( *it ).first.compare(fileName.ascii() ) == 0 )
-				m_fileList.remove( it );
-			++it;
+				m_fileList.erase( it++ );
+			else
+			  ++it;
 		}
 	}
 	
 private:
 	mutable QMutex m_mutex;
-	QValueList< QPair<SafeString, bool> > m_fileList;
+	ListType m_fileList;
 };
 
 BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consumed )
@@ -224,11 +242,26 @@ void BackgroundParser::addFile( const QString& fileName, bool readFromDisk )
 	QString fn = deepCopy( fileName );
 	
 	bool added = false;
-	if ( !m_fileList->contains( fn ) )
+	/*if ( !m_fileList->contains( fn ) )
 	{
 		m_fileList->push_back( fn, readFromDisk );
 		added = true;
-	}
+	}*/
+	
+	if ( added )
+		m_canParse.wakeAll();
+}
+
+void BackgroundParser::addFileFront( const QString& fileName, bool readFromDisk )
+{
+	QString fn = deepCopy( fileName );
+	
+	bool added = false;
+	/*if ( m_fileList->contains( fn ) )
+		m_fileList->remove( fn );*/
+
+	m_fileList->push_front( fn, readFromDisk );
+	added = true;
 	
 	if ( added )
 		m_canParse.wakeAll();
@@ -278,13 +311,14 @@ Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, b
 	
 	m_driver->remove( fileName );
 	m_driver->parseFile( fileName , false, true );
-	m_driver->removeAllMacrosInFile( fileName );  // romove all macros defined by this
+    if( !m_driver->isResolveDependencesEnabled() )
+        m_driver->removeAllMacrosInFile( fileName );  // romove all macros defined by this
 	// translation unit.
-	TranslationUnitAST::Node translationUnit = m_driver->takeTranslationUnit( fileName );
+	ParsedFilePointer translationUnit = m_driver->takeTranslationUnit( fileName );
 	
 	Unit* unit = new Unit;
 	unit->fileName = fileName;
-	unit->translationUnit = translationUnit.release();
+	unit->translationUnit = translationUnit;
 	unit->problems = m_driver->problems( fileName );
 	
 	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() ) ->setReadFromDisk( false );
@@ -326,14 +360,15 @@ bool BackgroundParser::hasTranslationUnit( const QString& fileName ) {
 	return it != m_unitDict.end();
 }
 
-TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
+ParsedFilePointer BackgroundParser::translationUnit( const QString& fileName )
 {
 	Unit * u = findUnit( fileName );
 	if ( u == 0 )
 	{
-		m_fileList->remove
+        return 0;
+        /*m_fileList->remove
 			( fileName );
-		u = parseFile( fileName, false );
+        u = parseFile( fileName, false );*/
 	}
 	
 	return u->translationUnit;
@@ -344,9 +379,10 @@ QValueList<Problem> BackgroundParser::problems( const QString& fileName, bool re
 	Unit * u = findUnit( fileName );
 	if ( u == 0 || forceParse )
 	{
+        /*   
 		m_fileList->remove
 			( fileName );
-		u = parseFile( fileName, readFromDisk );
+        u = parseFile( fileName, readFromDisk ); */
 	}
 	
 	return u ? u->problems : QValueList<Problem>();
@@ -354,12 +390,16 @@ QValueList<Problem> BackgroundParser::problems( const QString& fileName, bool re
 
 void BackgroundParser::close()
 {
+  {
 	QMutexLocker locker( &m_mutex );
 	m_close = true;
 	m_canParse.wakeAll();
+  }
+	kapp->unlock();
 	
 	while ( running() )
 		sleep( 1 );
+	kapp->lock();
 }
 
 bool BackgroundParser::filesInQueue()
@@ -373,9 +413,10 @@ void BackgroundParser::updateParserConfiguration()
 {
 	QMutexLocker locker( &m_mutex );
 	
+	m_driver->setup();
 	QString conf_file_name = m_cppSupport->specialHeaderName();
 	m_driver->removeAllMacrosInFile( conf_file_name );
-	m_driver->parseFile( conf_file_name, true );
+	m_driver->parseFile( conf_file_name, true, true );
 }
 
 void BackgroundParser::run()
@@ -396,13 +437,13 @@ void BackgroundParser::run()
 		if ( m_close )
 			break;
 		
-		QPair<SafeString, bool> entry = m_fileList->front();
+		QPair<SafeString, bool> entry = m_fileList->takeFront();
 		QString fileName = entry.first.c_str();
 		bool readFromDisk = entry.second;
 		m_currentFile = fileName;
 		
 		( void ) parseFile( fileName, readFromDisk, true );
-		m_fileList->pop_front();
+
 		
 		m_currentFile = QString::null;
 	}

@@ -613,7 +613,7 @@ class SimpleTypeImpl : public KShared {
     /**By default templates are included while the resolution, so when the type should be addressed from
     outside of the class, ExcludeTemplates should be set as LocateMode, since templates can not be directly accessed    from the outside.
     The resulting type's template-params may not be completely resolved, but can all be resolved locally by that type*/
-    LocateResult locateDecType( TypeDesc desc , LocateMode mode = Normal, int dir = 0 , MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) {
+  LocateResult locateDecType( TypeDesc desc , LocateMode mode = Normal, int dir = 0 , MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) {
       TypeDesc td = desc;
       td.clearInstanceInfo();
       LocateResult r = locateType( td, mode, dir, typeMask );
@@ -625,7 +625,7 @@ class SimpleTypeImpl : public KShared {
 
     //protected:
 
-    virtual LocateResult locateType( TypeDesc name , LocateMode mode = Normal, int dir = 0 , MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) ;
+  virtual LocateResult locateType( TypeDesc name , LocateMode mode = Normal, int dir = 0 , MemberInfo::MemberType typeMask = bitInvert( addFlag( MemberInfo::Variable, MemberInfo::Function ) ) ) ;
 
   public:
 
@@ -671,7 +671,7 @@ class SimpleTypeImpl : public KShared {
 
   public:
 
-    virtual TypeOfResult typeOf( const QString& name, MemberInfo::MemberType typ = addFlag( MemberInfo::Function, MemberInfo::Variable ) );
+    virtual TypeOfResult typeOf( const TypeDesc& name, MemberInfo::MemberType typ = addFlag( MemberInfo::Function, MemberInfo::Variable ) );
 
 
     virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = ( MemberInfo::MemberType ) 0xffffffff ) {

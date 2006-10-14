@@ -82,8 +82,8 @@
 #include <urlutil.h>
 #include <config.h>
 
-enum { KDEV_DB_VERSION = 6 };
-enum { KDEV_PCS_VERSION = 7 };
+enum { KDEV_DB_VERSION = 7 };
+enum { KDEV_PCS_VERSION = 8 };
 
 class JavaDriver: public KDevDriver
 {

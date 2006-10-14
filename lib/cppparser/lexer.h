@@ -27,6 +27,10 @@
 #include <qvaluestack.h>
 #include <qpair.h>
 #include <qptrvector.h>
+#include <lib/interfaces/hashedstring.h>
+#include <ext/hash_map>
+
+#define CHARTYPE QChar
 
 enum Type {
     Token_eof = 0,
@@ -235,11 +239,21 @@ public:
     int currentLine() const { return m_currentLine; }
     int currentColumn() const { return m_currentColumn; }
 
+    inline const CHARTYPE* offset( int offset ) const {
+        return m_source.unicode() + offset;
+    }
+
+    inline int getOffset( const QChar* p ) const {
+        return int(p - (m_source.unicode()));
+    }
+    
 private:
-    QChar currentChar() const;
+    const QChar currentChar() const;
     QChar peekChar( int n=1 ) const;
     int currentPosition() const;
 
+    void insertCurrent( const QString& str );
+    
     void tokenize();
     void nextToken( Token& token, bool stopOnNewline=false );
     void nextChar();
@@ -292,13 +306,16 @@ private:
     int m_size;
     int m_index;
     QString m_source;
-    int m_ptr;
-    int m_endPtr;
+    const QChar* m_ptr;
+    const QChar* m_endPtr;
+    QChar m_currentChar;
     bool m_recordComments;
     bool m_recordWhiteSpaces;
     bool m_startLine;
-    QMap< QString, QPair<SkipType, QString> > m_words;
+    __gnu_cxx::hash_map< HashedString, QPair<SkipType, QString> > m_words;
 
+    
+    
     int m_currentLine;
     int m_currentColumn;
     bool m_skipWordsEnabled;
@@ -501,19 +518,31 @@ inline int Lexer::tokenPosition( const Token& token ) const
 
 inline void Lexer::nextChar()
 {
-    if(m_source[m_ptr++] == '\n') {
+    if(*m_ptr == '\n') {
         ++m_currentLine;
         m_currentColumn = 0;
         m_startLine = true;
     } else {
 	++m_currentColumn;
     }
+    ++m_ptr;
+
+    if( m_ptr <  m_endPtr )
+        m_currentChar = *m_ptr;
+    else
+        m_currentChar = QChar::null;
+
 }
 
 inline void Lexer::nextChar( int n )
 {
     m_currentColumn += n;
     m_ptr += n;
+    
+    if( m_ptr <  m_endPtr )
+        m_currentChar = *m_ptr;
+    else
+        m_currentChar = QChar::null;
 }
 
 inline void Lexer::readIdentifier()
@@ -540,10 +569,28 @@ inline void Lexer::readWhiteSpaces( bool skipNewLine )
     }
 }
 
+//little hack for better performance
+inline bool isTodo( const QString& txt, int position ) {
+    if( txt.length() < position + 4 ) return false;
+    return (txt[ position ] == 't' || txt[ position ] == 'T')
+            && (txt[ position+1 ] == 'o' || txt[ position+1 ] == 'O')
+            && (txt[ position+2 ] == 'd' || txt[ position+2 ] == 'D')
+            && (txt[ position+3 ] == 'o' || txt[ position+3 ] == 'O');
+}
+
+inline bool isFixme( const QString& txt, int position ) {
+    if( txt.length() < position + 5 ) return false;
+    return (txt[ position ] == 'f' || txt[ position ] == 'F')
+            && (txt[ position+1 ] == 'i' || txt[ position+1 ] == 'I')
+            && (txt[ position+2 ] == 'x' || txt[ position+2 ] == 'X')
+            && (txt[ position+3 ] == 'm' || txt[ position+3 ] == 'M')
+            && (txt[ position+4 ] == 'e' || txt[ position+4 ] == 'E');
+}
+
 inline void Lexer::readLineComment()
 {
     while( !currentChar().isNull() && currentChar() != '\n' ){
-        if( m_reportMessages && m_source.mid(currentPosition(), 4).lower() == "todo" ){
+        if( m_reportMessages && isTodo( m_source, currentPosition() ) ){
 	    nextChar( 4 );
 	    QString msg;
 	    int line = m_currentLine;
@@ -560,7 +607,7 @@ inline void Lexer::readLineComment()
 	    }
 	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Todo) );
 	} else
-        if( m_reportMessages && m_source.mid(currentPosition(), 5).lower() == "fixme" ){
+        if( m_reportMessages && isFixme( m_source, currentPosition() ) ){
             nextChar( 5 );
             QString msg;
             int line = m_currentLine;
@@ -587,7 +634,7 @@ inline void Lexer::readMultiLineComment()
         if( currentChar() == '*' && peekChar() == '/' ){
             nextChar( 2 );
             return;
-	} else if( m_reportMessages && m_source.mid(currentPosition(), 4).lower() == "todo" ){
+        } else if( m_reportMessages && isTodo( m_source, currentPosition() ) ){
 	    nextChar( 4 );
 	    QString msg;
 	    int line = m_currentLine;
@@ -602,8 +649,8 @@ inline void Lexer::readMultiLineComment()
 		nextChar();
 	    }
 	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Todo) );
-	} else
-        if( m_reportMessages && m_source.mid(currentPosition(), 5).lower() == "fixme" ){
+        } else
+            if( m_reportMessages && isFixme( m_source, currentPosition() ) ) {
             nextChar( 5 );
             QString msg;
             int line = m_currentLine;
@@ -634,7 +681,7 @@ inline void Lexer::readCharLiteral()
         return;
 
     while( !currentChar().isNull() ){
-        int len = m_endPtr - currentPosition();
+        int len = getOffset( m_endPtr ) - currentPosition();
 
         if( len>=2 && (currentChar() == '\\' && peekChar() == '\'') ){
             nextChar( 2 );
@@ -657,7 +704,7 @@ inline void Lexer::readStringLiteral()
     nextChar(); // skip "
 
     while( !currentChar().isNull() ){
-        int len = m_endPtr - m_ptr;
+        int len = getOffset( m_endPtr ) - currentPosition();
 
         if( len>=2 && currentChar() == '\\' && peekChar() == '"' ){
             nextChar( 2 );
@@ -680,7 +727,7 @@ inline void Lexer::readNumberLiteral()
 
 inline int Lexer::findOperator3() const
 {
-    int n = int(m_endPtr - m_ptr);
+    int n = getOffset( m_endPtr ) - currentPosition();
 
     if( n >= 3){
 	QChar ch = currentChar(), ch1=peekChar(), ch2=peekChar(2);
@@ -696,7 +743,7 @@ inline int Lexer::findOperator3() const
 
 inline int Lexer::findOperator2() const
 {
-    int n = int(m_endPtr - m_ptr);
+    int n = getOffset( m_endPtr ) - currentPosition();
 
     if( n>=2 ){
 	QChar ch = currentChar(), ch1=peekChar();
@@ -750,17 +797,22 @@ inline void Lexer::setPreprocessorEnabled( bool enabled )
 
 inline int Lexer::currentPosition() const
 {
-    return m_ptr;
+    return getOffset( m_ptr );
 }
 
-inline QChar Lexer::currentChar() const
+inline const QChar Lexer::currentChar() const
 {
-    return m_ptr < m_endPtr ? m_source[m_ptr] : QChar::null;
+    return m_currentChar;
 }
 
 inline QChar Lexer::peekChar( int n ) const
 {
-    return m_ptr+n < m_endPtr ? m_source[m_ptr + n] : QChar::null;
+    const QChar* p = m_ptr + n;
+    
+    if( p <  m_endPtr )
+        return *p;
+    else
+        return QChar::null;
 }
 
 inline bool Lexer::eof() const
@@ -788,5 +840,14 @@ inline void Lexer::setReportMessages( bool enable )
     m_reportMessages = enable;
 }
 
+inline void Lexer::insertCurrent( const QString& str ) {
+    int posi = currentPosition();
+    m_source.insert( posi, str );
+
+    m_ptr = offset( posi );
+    m_endPtr = offset( m_source.length() );
+    if( m_ptr < m_endPtr )
+      m_currentChar = *m_ptr;
+}
 
 #endif

@@ -209,7 +209,7 @@ EvaluationResult ParenOperator::unaryApply( EvaluationResult param, const QValue
   }
 }
 
-ExpressionEvaluation::ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, SimpleContext* ctx ) : m_data( data ), m_ctx( ctx ), m_expr( expr ), m_global(false), m_operators( operators ) {
+ExpressionEvaluation::ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, const HashedStringSet& includeFiles, SimpleContext* ctx ) : m_data( data ), m_ctx( ctx ), m_expr( expr ), m_global(false), m_operators( operators ), m_includeFiles( includeFiles ) {
   safetyCounter.init();
   
   ifVerboseMajor( dbgMajor( ) << "Initializing evaluation of expression " << expr << endl );
@@ -356,6 +356,13 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, 
   if( !safetyCounter || !d ) return SimpleType();
 	bool canBeItemExpression = true; ///To be implemented
 
+    if( scope ) {
+        expr.setIncludeFiles( scope.resultType->includeFiles() );
+    } else {
+        expr.setIncludeFiles( m_includeFiles );
+    }
+ 
+  
   ifVerboseMajor( dbgMajor() << "evaluateAtomicExpression(\"" << expr.name() << "\") scope: \"" << scope->fullNameChain() << "\" context: " << ctx << endl );
 
 	EvaluationResult bestRet;
@@ -379,7 +386,9 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, 
 		SimpleVariable var = ctx->findVariable( expr.name() );
 	
     if ( var.type ) {
-			EvaluationResult ret = EvaluationResult( ctx->container()->locateDecType( var.type ), var.toDeclarationInfo( "current_file" ));
+        TypeDesc d( var.type );
+        d.setIncludeFiles( m_includeFiles );
+			EvaluationResult ret = EvaluationResult( ctx->container()->locateDecType( d ), var.toDeclarationInfo( "current_file" ));
       ret.expr.t = ExpressionInfo::NormalExpression;
       return ret;
     }
@@ -396,7 +405,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, 
 		{
 			if( !current ) ready = true;
 	
-			type = current->typeOf( expr.name() );
+			type = current->typeOf( expr );
       if ( type) {
 				bestRet = EvaluationResult( type.type, type.decl );
         bestDepth = depth;
@@ -414,7 +423,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, 
 
 	if( canBeItemExpression && (!bestRet || bestDepth > 0 ) ) {
 		//SimpleTypeImpl::
-		SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( expr.name() );
+		SimpleTypeImpl::TypeOfResult res = searchIn->typeOf( expr );
     
     if( res ) {
       bestRet = EvaluationResult( res.type, res.decl );
@@ -425,12 +434,9 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, 
 		///Search for Types
 		LocateResult type = searchIn->locateDecType( expr );
 
-		///Somewhere it seems to happen that constructor-definitions are placed into the same namespace as the classes themselves, so they may shadow them. This hackish code tries to deal with that, it would be better to find the position where that's done and maybe eliminate the behavior.
 		if( !bestRet ||
 		/** Did we find a constructor within a class? */
-		(type->resolved() && ( bestRet->resolved() && type->resolved()->desc() == bestRet->resolved()->parent()->desc() && bestRet->resolved()->asFunction() ) ) /*||*/
-		/** Did we find a constructor on the same level as the class? */
-		/*((type->resolved() && ( bestRet->resolved() && type->resolved()->parent()->desc() == bestRet->resolved()->parent()->desc() && bestRet->resolved()->asFunction() ) ))*/ ) {
+		(type->resolved() && ( bestRet->resolved() && type->resolved()->desc() == bestRet->resolved()->parent()->desc() && bestRet->resolved()->asFunction() ) ) ) {
     /*if ( type && type->resolved() )
     {*/
       EvaluationResult ret = type;

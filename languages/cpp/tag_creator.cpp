@@ -55,7 +55,7 @@ void TagCreator::parseDeclaration( DeclarationAST* ast )
 	}
 }
 
-void TagCreator::parseTranslationUnit( TranslationUnitAST* ast )
+void TagCreator::parseTranslationUnit( const ParsedFile& ast )
 {
 	m_currentScope.clear();
 	m_currentAccess = QString::null;

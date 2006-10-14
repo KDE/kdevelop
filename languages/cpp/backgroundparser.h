@@ -32,13 +32,12 @@ public:
 	{}
 	~Unit()
 	{
-		delete translationUnit;
 		translationUnit = 0;
 	}
 
 	QString fileName;
 	QValueList<Problem> problems;
-	TranslationUnitAST* translationUnit;
+	ParsedFilePointer translationUnit;
 
 protected:
 	Unit( const Unit& source );
@@ -75,12 +74,13 @@ public:
 
 	bool filesInQueue();
 
-	void addFile( const QString& fileName, bool readFromDisk = false );
-	void removeFile( const QString& fileName );
+    void addFile( const QString& fileName, bool readFromDisk = false );
+    void addFileFront( const QString& fileName, bool readFromDisk = false );
+    void removeFile( const QString& fileName );
 	void removeAllFiles();
 
     bool hasTranslationUnit( const QString& fileName );
-	TranslationUnitAST* translationUnit( const QString& fileName );
+	ParsedFilePointer translationUnit( const QString& fileName );
 	QValueList<Problem> problems( const QString& fileName , bool readFromDisk = false, bool forceParse = false );
 	void updateParserConfiguration();
 

@@ -15,9 +15,29 @@
 #include "simpletypefunction.h"
 #include "safetycounter.h"
 #include "simpletypenamespace.h"
+#include <lib/cppparser/driver.h>
 
 extern SafetyCounter safetyCounter;
 extern CppCodeCompletion* cppCompletionInstance;
+
+HashedStringSet getIncludeFiles( const ItemDom& item ) {
+    if( item ) {
+        FileDom f =  item->codeModel()->fileByName( item->fileName() );
+        if( f ) {
+            ParseResultPointer p = f->parseResult();
+            if( p ) {
+                ParsedFilePointer pp = dynamic_cast<ParsedFile*>( p.data() );
+                if( pp ) {
+                    return pp->includeFiles();
+                }
+            }
+        }
+    }
+
+    return HashedStringSet();
+}
+
+
 
 //SimpleTypeFunctionInterface implementation
   
@@ -202,7 +222,7 @@ ItemDom SimpleTypeCodeModel::locateModelContainer( class CodeModel* m, TypeDesc 
 }
 
 ///Until header-parsing is implemented, this tries to find the class that is most related to this item
-ClassDom SimpleTypeCodeModel::pickMostRelated( ClassList lst, QString fn ) {
+/*ClassDom SimpleTypeCodeModel::pickMostRelated( ClassList lst, QString fn ) {
   if( lst.isEmpty() ) return ClassDom();
   
   ClassDom best = lst.front();
@@ -234,7 +254,7 @@ ClassDom SimpleTypeCodeModel::pickMostRelated( ClassList lst, QString fn ) {
     //kdDebug() << "picked " << best->fileName() << endl;
   if( !best->getSpecializationDeclaration().isEmpty() ) best = 0; ///only accept non-specialized classes
   return best;
-}
+}*/
 
 /*QValueList<TypePointer> SimpleTypeCodeModel::findSpecializations( const QString& name ) {
 	ClassModel* klass = dynamic_cast<ClassModel*> ( & (*m_item) );
@@ -280,6 +300,33 @@ QValueList<TypePointer> SimpleTypeCodeModel::getMemberClasses( const TypeDesc& n
 				ret << r;
 		}
 	}
+    return ret;
+}
+
+template<class Item>
+Item pickMostRelated( const HashedStringSet& includeFiles, const QValueList<Item>& list ) {
+    if( list.isEmpty() ) return Item();
+    
+    for( typename QValueList<Item>::const_iterator it = list.begin(); it != list.end(); ++it ) {
+        if( includeFiles[ (*it)->fileName() ] )
+            return *it;
+    }
+    return list.front();
+}
+
+template<>
+ClassDom pickMostRelated( const HashedStringSet& includeFiles, const QValueList<ClassDom>& list ) {
+    if( list.isEmpty() ) return ClassDom();
+    
+    for( QValueList<ClassDom>::const_iterator it = list.begin(); it != list.end(); ++it ) {
+        if( !(*it)->getSpecializationDeclaration().isEmpty() ) continue; ///Don't consider specialized classes
+        if( includeFiles[ (*it)->fileName() ] )
+            return *it;
+    }
+
+    
+    if( !list.front()->getSpecializationDeclaration().isEmpty() ) return ClassDom(); ///Don't consider specialized classes
+    return list.front();
 }
 
 SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , MemberInfo::MemberType type )
@@ -295,12 +342,13 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     return ret;
   }
   NamespaceModel* ns = dynamic_cast<NamespaceModel*>(klass);
-  
+
   if( klass->hasVariable( name.name() )  && ( type & MemberInfo::Variable ) ) {
     ret.memberType = MemberInfo::Variable;
     VariableDom d = klass->variableByName( name.name() );
     if( d ) {
       ret.type = d->type();
+      ret.type->setIncludeFiles( getIncludeFiles( d.data() ) );
       ret.decl.name = d->name();
       ret.decl.file = d->fileName();
       ret.decl.comment = d->comment();
@@ -309,19 +357,23 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     }
   } else if( klass->hasTypeAlias( name.name() ) && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
-    TypeAliasList l = klass->typeAliasByName( name.name() );
-    if( !l.isEmpty() && l.front() ) {
-      ret.type = l.front()->type();
-	  ret.decl.name = l.front()->name();
-	  ret.decl.file = l.front()->fileName();
-	  ret.decl.comment = l.front()->comment();
-	  l.front()->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
-	  l.front()->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
+    TypeAliasList li = klass->typeAliasByName( name.name() );
+    TypeAliasDom a = pickMostRelated( name.includeFiles(), li );
+    
+    if( a ) {
+      ret.type = a->type();
+      ret.type->setIncludeFiles( getIncludeFiles( a.data() ) );
+	  ret.decl.name = a->name();
+	  ret.decl.file = a->fileName();
+	  ret.decl.comment = a->comment();
+	  a->getStartPosition( &ret.decl.startLine, &ret.decl.startCol );
+	  a->getEndPosition( &ret.decl.endLine, &ret.decl.endCol );
     }
   } else if( klass->hasEnum( name.name() ) && ( type & MemberInfo::Typedef ) ) {
     ret.memberType = MemberInfo::Typedef;
     EnumDom e = klass->enumByName( name.name() );
 	  ret.type = TypeDesc( "const int" );
+      ret.type->setIncludeFiles( getIncludeFiles( e.data() ) );
 	  ret.decl.name = e->name();
 	  ret.decl.file = e->fileName();
 	  ret.decl.comment = e->comment();
@@ -331,12 +383,13 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     ClassList l = klass->classByName( name.name() );
     
     if( !l.isEmpty() ) {
-      ClassDom i = pickMostRelated( l, globalCurrentFile );
+        ClassDom i = pickMostRelated( name.includeFiles(), l );
       if( i ) {
         ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( i ), name, TypePointer( this ) ) );
         
         ret.memberType = MemberInfo::NestedType;
         ret.type = name;
+        ret.type->setIncludeFiles( getIncludeFiles( i.data() ) );
       }
     }
   } else if( klass->hasFunction( name.name() )  && ( type & MemberInfo::Function ) ) {
@@ -345,18 +398,22 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     if( !l.isEmpty() && l.front() ) {
       ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
       ret.type = l.front()->resultType();
+        ret.type->setIncludeFiles( getIncludeFiles( l.front().data() ) );
       ret.type->increaseFunctionDepth();
     }
   } else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
-    ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( ns->namespaceByName( name.name() )), name, TypePointer( this ) ) );
+      NamespaceDom n = ns->namespaceByName( name.name() );
+    ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( n), name, TypePointer( this ) ) );
     ret.memberType = MemberInfo::Namespace;
     ret.type = name;
+      ret.type->setIncludeFiles( getIncludeFiles( n.data() ) );
   } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
 	  FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
 	  for( FunctionDefinitionList::iterator it = l.begin(); it != l.end(); ++it ) {
 		  if( !(*it)->scope().isEmpty() && (*it)->scope() != scope() ) continue; ///Only use definitions with empty scope or that are within this class
 		  ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
 		  ret.type = l.front()->resultType();
+    	  ret.type->setIncludeFiles( getIncludeFiles( l.front().data() ) );
 		  ret.type->increaseFunctionDepth();
 		  ret.memberType = MemberInfo::Function;
 		  break;

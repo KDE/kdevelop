@@ -27,6 +27,7 @@
 #include "expressioninfo.h"
 #include "simpletype.h"
 #include "declarationinfo.h"
+#include <hashedstring.h>
 
 class SimpleContext;
 
@@ -334,9 +335,10 @@ class ExpressionEvaluation {
     ExpressionInfo m_expr;
     bool m_global;
     OperatorSet& m_operators;
+    HashedStringSet m_includeFiles;
 
   public:
-    ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, SimpleContext* ctx = 0 );
+    ExpressionEvaluation( CppCodeCompletion* data, ExpressionInfo expr, OperatorSet& operators, const HashedStringSet& includeFiles, SimpleContext* ctx = 0 );
 
     EvaluationResult evaluate();
 

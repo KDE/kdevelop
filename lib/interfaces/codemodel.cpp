@@ -20,6 +20,8 @@
 #include "codemodel.h"
 #include <kdebug.h>
 
+#include "../cppparser/driver.h" //Not a nice solution
+
 CodeModel::CodeModel()
 {
     wipeout();
@@ -29,7 +31,6 @@ CodeModel::CodeModel()
 CodeModel::~ CodeModel( )
 {
 }
-
 
 int CodeModel::newGroupId() {
     return (m_currentGroupId++) * 2;
@@ -612,7 +613,7 @@ void NamespaceModel::removeNamespace( NamespaceDom ns )
 
 // ------------------------------------------------------------------------
 FileModel::FileModel( CodeModel* model )
-    : NamespaceModel( model ), m_groupId( model->newGroupId() )
+    : NamespaceModel( model ), m_groupId( model->newGroupId() ), m_parseResult( 0 )
 {
 }
 
@@ -1350,12 +1351,34 @@ void NamespaceModel::write( QDataStream & stream ) const
 void FileModel::read( QDataStream & stream )
 {
     stream >> m_groupId;
+    bool b;
+    stream >> b;
+    if( b ) {
+      int i;
+      stream >> i;
+      ParsedFileType t( (ParsedFileType) i );
+      switch( t ) {
+      case CppParsedFile:
+        m_parseResult = (AbstractParseResult*)(new ParsedFile());
+        break;
+      }
+        m_parseResult->read( stream );
+    }
+
     NamespaceModel::read( stream );
 }
 
 void FileModel::write( QDataStream & stream ) const
 {
     stream << m_groupId;
+    bool b = m_parseResult;
+    stream << b;
+    if( b ) {
+        int i = m_parseResult->type();
+        stream << i;
+        m_parseResult->write( stream );
+    }
+    
     NamespaceModel::write( stream );
 }
 
@@ -1573,4 +1596,12 @@ FileList FileModel::wholeGroup() {
 QStringList FileModel::wholeGroupStrings() const {
     if( isSingleGroup( m_groupId ) ) return (QStringList() << name() );
     return codeModel()->getGroupStrings( m_groupId );
+}
+
+ParseResultPointer FileModel::parseResult() const {
+    return m_parseResult;
+}
+
+void FileModel::setParseResult( const ParseResultPointer& result ) {
+    m_parseResult = result;
 }

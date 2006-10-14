@@ -31,7 +31,7 @@ Code Model - a memory symbol store.
 #include <qstringlist.h>
 #include <ksharedptr.h>
 #include <qvaluevector.h>
-#include <hashedstring.h>
+#include "hashedstring.h"
 
 #include <iostream>
 #include <ostream>
@@ -39,6 +39,21 @@ Code Model - a memory symbol store.
 #include <sstream>
 #include <set>
 
+enum ParsedFileType {
+  CppParsedFile
+};
+
+class AbstractParseResult : public KShared {
+public:
+  virtual void read( QDataStream& stream ) = 0;
+
+  virtual void write( QDataStream& stream ) const = 0;
+
+  virtual ParsedFileType type() const = 0;
+};
+
+typedef KSharedPtr<AbstractParseResult> ParseResultPointer;
+  
 using namespace std;
 
 class CodeModel;
@@ -53,7 +68,6 @@ class ArgumentModel;
 class EnumModel;
 class EnumeratorModel;
 class TypeAliasModel;
-
 
 /**@class ItemDom
 Safe pointer to the @ref CodeModelItem.
@@ -509,13 +523,11 @@ public:
 
     virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
     
-protected:
-
     /**@return The code model for this item.*/
     CodeModel* codeModel() { return m_model; }
 
     /**@note This is a const version provided for convenience.
-    @return The code model for this item*/ 
+    @return The code model for this item*/
     const CodeModel* codeModel() const { return m_model; }
 
 private:
@@ -1075,8 +1087,12 @@ public:
     QStringList wholeGroupStrings() const;
     
     virtual void read( QDataStream& stream );
+
+    ParseResultPointer parseResult() const;
+    void setParseResult( const ParseResultPointer& result );
 private:
     int m_groupId;
+    ParseResultPointer m_parseResult;
     FileModel( const FileModel& );
     void operator = ( const FileModel& );
     friend class CodeModel;

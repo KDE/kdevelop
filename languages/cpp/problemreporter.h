@@ -23,6 +23,7 @@
 #include <klineedit.h>
 #include <qguardedptr.h>
 #include <qdatetime.h>
+#include <map>
 
 class CppSupportPart;
 class QTimer;
@@ -32,6 +33,55 @@ class QGridLayout;
 class KDialogBase;
 class Problem;
 class KURL;
+
+class EfficientKListView {
+public:
+    typedef std::multimap<QString, QListViewItem*> Map;
+    typedef std::pair< Map::const_iterator, Map::const_iterator > Range;
+    EfficientKListView( KListView* list = 0 ) : m_list( list ) {
+    }
+    
+    EfficientKListView& operator = ( KListView* list ) {
+        m_list = list;
+        return *this;
+    }
+    
+    operator KListView* () {
+        return m_list;
+    }
+    
+    operator const KListView* () const {
+        return m_list;
+    }
+    
+    KListView* operator -> () {
+        return m_list;
+    }
+    
+    const KListView* operator -> () const {
+        return m_list;
+    }
+    
+    void addItem( const QString& str, QListViewItem* item ) {
+        m_map.insert( std::make_pair( str, item ) );
+    }
+    
+    Range getRange( const QString& str ) const {
+        return m_map.equal_range( str );
+    }
+    
+    void removeAllItems( const QString& str ) {
+        m_map.erase( str );
+    }
+    
+    bool hasItem( const QString& str ) const {
+        Map::const_iterator it = m_map.find( str );
+        return it != m_map.end();
+    }
+private:
+    Map m_map;
+    KListView* m_list;
+};
 
 namespace KParts
 {
@@ -78,18 +128,18 @@ private:
 	void InitListView( KListView* listview );
 	void removeAllItems( QListView* listview, const QString& filename );
 	void filterList( KListView* listview, const QString& level );
-	void updateCurrentWith( QListView* listview, const QString& level, const QString& filename );
+    void updateCurrentWith( EfficientKListView& listview, const QString& level, const QString& filename );
 	void initCurrentList();
 
 private:
 	QGridLayout* m_gridLayout;
 	QTabBar* m_tabBar;
 	QWidgetStack* m_widgetStack;
-	KListView* m_currentList;
-	KListView* m_errorList;
-	KListView* m_fixmeList;
-	KListView* m_warningList;
-	KListView* m_todoList;
+    KListView* m_currentList;
+    EfficientKListView m_errorList;
+    EfficientKListView m_fixmeList;
+    KListView* m_warningList;
+    EfficientKListView m_todoList;
 	KListView* m_filteredList;
 	KLineEdit* m_filterEdit;
 

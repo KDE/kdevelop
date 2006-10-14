@@ -40,6 +40,7 @@
 #include <qguardedptr.h>
 #include <qregexp.h>
 
+#include <driver.h>
 ///A little debugging class
 #include <qpopupmenu.h>
 class PopupTracker : public QObject {
@@ -129,8 +130,6 @@ public:
 	
     CppEvaluation::EvaluationResult evaluateExpression( ExpressionInfo expr, SimpleContext* ctx );
 
-    static SimpleType typeName( QString name );
-
     CppEvaluation::EvaluationResult evaluateExpressionAt( int line, int column, SimpleTypeConfiguration& conf, bool ifUnknownSetType = false );
     
     void contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int col );
@@ -161,7 +160,7 @@ private slots:
 	void slotTextHint( int line, int col, QString &text );
     void popupAction( int number );
     void popupClassViewAction( int number );
-	void synchronousParseReady( const QString& file, TranslationUnitAST* unit );
+	void synchronousParseReady( const QString& file, ParsedFilePointer unit );
 private:
 	bool functionContains( FunctionDom f , int line, int col );
 	void getFunctionBody( FunctionDom f , int& line, int& col );
@@ -172,7 +171,7 @@ private:
 	void integratePart( KParts::Part* part );
 	void setupCodeInformationRepository();
 	FunctionDefinitionAST* functionDefinition( AST* node );
-	void computeRecoveryPoints( TranslationUnitAST* unit );
+	void computeRecoveryPoints( ParsedFilePointer unit );
 	void computeRecoveryPointsLocked();
 	
     enum EvaluateExpressionOptions {
@@ -234,6 +233,8 @@ private:
 	
     
 private:
+    HashedStringSet getIncludeFiles( const QString& file );
+    
     friend class SimpleTypeCatalog;
     friend class SimpleTypeCodeModel;
     friend class SimpleTypeImpl;

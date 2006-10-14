@@ -19,6 +19,7 @@
 
 #include "tree_parser.h"
 #include <kdebug.h>
+#include "driver.h"
 
 TreeParser::TreeParser()
 {
@@ -28,7 +29,7 @@ TreeParser::~TreeParser()
 {
 }
 
-void TreeParser::parseTranslationUnit( TranslationUnitAST* translationUnit )
+void TreeParser::parseTranslationUnit( const ParsedFile& translationUnit )
 {
     //kdDebug(9007) << "TreeParser::parseTranslationUnit()" << endl;
 

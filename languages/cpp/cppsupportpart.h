@@ -29,6 +29,7 @@
 #include <qdir.h>
 #include <qprogressbar.h>
 #include <kdebug.h>
+#include <driver.h>
 
 class Context;
 class CppCodeCompletion;
@@ -88,8 +89,8 @@ public:
 	}
 
     /** parses the file and all files that belong to it using the background-parser */
-    int parseFileAndDependencies( const QString& fileName, bool background = true );
-	int parseFilesAndDependencies( QStringList files, bool background = true );
+    int parseFileAndDependencies( const QString& fileName, bool background = true, bool parseFirst = false, bool silent = false );
+    int parseFilesAndDependencies( QStringList files, bool background = true, bool parseFirst = false, bool silent = false );
     
     BackgroundParser* backgroundParser() const
 	{
@@ -176,7 +177,7 @@ public:
 signals:
 	void fileParsed( const QString& fileName );
 	///Emitted whenever a translation-unit was parsed in the main thread
-	void synchronousParseReady( const QString& file, TranslationUnitAST* unit );
+	void synchronousParseReady( const QString& file, ParsedFilePointer unit );
 
 protected:
 	virtual KDevLanguageSupport::Features features();
@@ -321,7 +322,6 @@ private:
 
 	QMap<QString, QDateTime> m_timestamp;
 	bool m_valid;
-	bool m_parseSilent;
 	bool m_isTyping;
 	bool m_hadErrors; ///Whether there were already errors when the user started typing
 	
@@ -344,7 +344,8 @@ private:
 	    enum Flags {
 		    None = 0,
 			HadErrors = 1,
-			HadQueueProblem = 2
+			HadQueueProblem = 2,
+            Silent = 4
 	    };
     private:
 	    struct Item {
@@ -376,6 +377,9 @@ private:
         void addGroup( QStringList& files, Flags flag = None ) {
             m_waiting << Item(files, QStringList(), flag);
         }
+        void addGroupFront( QStringList& files, Flags flag = None ) {
+            m_waiting.push_front( Item(files, QStringList(), flag) );
+        }
         void clear() {
             m_waiting.clear();
         }
@@ -404,6 +408,10 @@ private:
 		    bool hadQueueProblem() {
 			    return flag & HadQueueProblem;
 		    }
+
+    	    bool hasFlag( Flags flag ) const {
+        	    return flag & HadQueueProblem;
+    	    }
 	    };
 
 
@@ -470,7 +478,7 @@ private:
 	friend class KDevCppSupportIface;
 	friend class CppDriver;
 
-	void emitSynchronousParseReady( const QString& file, TranslationUnitAST* unit );
+	void emitSynchronousParseReady( const QString& file, ParsedFilePointer unit );
 
 	struct JobData
 	{

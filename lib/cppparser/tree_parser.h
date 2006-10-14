@@ -21,6 +21,7 @@
 #define __tree_parser_h
 
 #include "ast.h"
+class ParsedFile;
 
 class TreeParser
 {
@@ -29,7 +30,7 @@ public:
     virtual ~TreeParser();
     
     // translation-unit
-    virtual void parseTranslationUnit( TranslationUnitAST* );
+    virtual void parseTranslationUnit( const ParsedFile& );
     
     // declarations
     virtual void parseDeclaration( DeclarationAST* );

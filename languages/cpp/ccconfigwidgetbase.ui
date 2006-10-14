@@ -8,18 +8,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>760</width>
-            <height>741</height>
+            <width>762</width>
+            <height>704</height>
         </rect>
     </property>
     <property name="caption">
         <string>C++ Options</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QTabWidget">
+        <widget class="QTabWidget" row="0" column="0">
             <property name="name">
                 <cstring>cpp_options</cstring>
             </property>
@@ -30,11 +30,11 @@
                 <attribute name="title">
                     <string>&amp;Code Completion</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox">
+                    <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
                             <cstring>groupBox4</cstring>
                         </property>
@@ -153,67 +153,262 @@
                             </widget>
                             <widget class="QCheckBox" row="1" column="0">
                                 <property name="name">
-                                    <cstring>checkShowOnlyAccessible</cstring>
+                                    <cstring>checkListGlobalItems</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Show accessible &amp;items only</string>
+                                    <string>List global items when performing automatic completion</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+I</string>
+                                    <string></string>
                                 </property>
-                            </widget>
-                            <widget class="QButtonGroup" row="1" column="1" rowspan="3" colspan="1">
-                                <property name="name">
-                                    <cstring>buttonGroup3</cstring>
+                                <property name="toolTip" stdset="0">
+                                    <string>When this is checked, members of all higher namespaces will be included in the completion-list while performing automatic completion. This may bloat the completion-list and create a significant delay.</string>
                                 </property>
-                                <property name="title">
-                                    <string>Completion Box Item Order</string>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioGroupByAlphabet</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Alphabetical</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string></string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioGroupByClass</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;By class</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+B</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>radioGroupByAccess</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>By access level</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string></string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                </vbox>
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox">
+                    <widget class="QGroupBox" row="3" column="0">
+                        <property name="name">
+                            <cstring>groupBox5</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Code Completion Databases</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Code Completion Databases&lt;/b&gt; are used to store the parsed headers for external libraries, to allow code completion for non-project classes and methods.</string>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout6</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>618</x>
+                                    <y>23</y>
+                                    <width>85</width>
+                                    <height>194</height>
+                                </rect>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer12</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>31</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>newPCSButton</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Add...</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Click to start the Code Completion database creation wizard.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>removePCSButton</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Remove</string>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer13</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>31</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </vbox>
+                        </widget>
+                        <widget class="QListView">
+                            <column>
+                                <property name="text">
+                                    <string>Column 1</string>
+                                </property>
+                                <property name="clickable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="resizable">
+                                    <bool>true</bool>
+                                </property>
+                            </column>
+                            <property name="name">
+                                <cstring>advancedOptions</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>11</x>
+                                    <y>23</y>
+                                    <width>601</width>
+                                    <height>194</height>
+                                </rect>
+                            </property>
+                            <property name="rootIsDecorated">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizeMode">
+                                <enum>LastColumn</enum>
+                            </property>
+                        </widget>
+                    </widget>
+                    <widget class="QGroupBox" row="2" column="0">
+                        <property name="name">
+                            <cstring>groupBox9_2</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Misc</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>checkShowTypeEvaluationInStatusBar</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show t&amp;ype evaluation in status bar</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Namespace alias list:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>editNamespaceAlias</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>std=_GLIBCXX_STD</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). "&lt;&lt;" means that the right operator is imported into the left, while "=" means that both namespaces are treated as if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="3" column="2">
+                                <property name="name">
+                                    <cstring>editIncludePaths</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>src;</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>textLabel1_6</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Custom include paths:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>layout9</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkPreprocessIncludedHeaders</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>4</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Preprocess included headers</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Try to locate all included files and preprocess them. This makes macros work correctly.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkParseMissingHeaders</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>4</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Parse missing headers</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Parse preprocessed headers into the code-model if they were not parsed yet.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkResolveIncludePaths</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>4</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Automatically resolve include-paths</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Try to resolve the include-paths by using information from Makefiles etc.</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="1" column="0">
                         <property name="name">
                             <cstring>groupBox8_2</cstring>
                         </property>
@@ -307,161 +502,7 @@
                             </widget>
                         </vbox>
                     </widget>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>groupBox9_2</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Misc</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>checkShowTypeEvaluationInStatusBar</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show t&amp;ype evaluation in status bar</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+Y</string>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout6</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>textLabel1_3</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Namespace alias list:</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KLineEdit">
-                                        <property name="name">
-                                            <cstring>editNamespaceAlias</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>std=_GLIBCXX_STD</string>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). "&lt;&lt;" means that the right operator is imported into the left, while "=" means that both namespaces are treated as if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>groupBox5</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Code Completion Databases</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>&lt;b&gt;Code Completion Databases&lt;/b&gt; are used to store the parsed headers for external libraries, to allow code completion for non-project classes and methods.</string>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Column 1</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>advancedOptions</cstring>
-                                </property>
-                                <property name="rootIsDecorated">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout6</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer12</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>31</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>newPCSButton</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Add...</string>
-                                        </property>
-                                        <property name="whatsThis" stdset="0">
-                                            <string>Click to start the Code Completion database creation wizard.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>removePCSButton</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Remove</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer13</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>31</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
-                    </widget>
-                </vbox>
+                </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -1295,7 +1336,7 @@
                 </vbox>
             </widget>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <customwidgets>
 </customwidgets>

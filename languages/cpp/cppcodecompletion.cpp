@@ -91,7 +91,6 @@ const char* destructorPrefix = "<destructor>";
 //#define DISABLETOOLTIPS
 
 /**
--- TODO: The parser and code-models currently do not correctly collect all the data necessary to handle namespace-imports etc. precisely
 -- TODO: Does not yet correctly search for overloaded functions and select the right one
 -- TODO: The documentation shown in the calltips looks very bad, a better solution must be found(maybe an additional tooltip)
 */
@@ -767,7 +766,7 @@ m_codeCompleteCh2Rx( "(->)|(\\:\\:)" ) {
            this, SLOT( computeFileEntryList() ) );
   connect( cppSupport->project(), SIGNAL( removedFilesFromProject( const QStringList& ) ),
            this, SLOT( computeFileEntryList() ) );
-  connect( cppSupport, SIGNAL( synchronousParseReady( const QString&, TranslationUnitAST* ) ), this, SLOT( synchronousParseReady( const QString&, TranslationUnitAST* ) ) );
+  connect( cppSupport, SIGNAL( synchronousParseReady( const QString&, ParsedFilePointer ) ), this, SLOT( synchronousParseReady( const QString&, ParsedFilePointer ) ) );
 
   m_bArgHintShow = false;
   m_bCompletionBoxShow = false;
@@ -1689,6 +1688,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
       if ( ctx->container() ) {
         if ( !m_cachedFromContext ) {
           TypeDesc td = ctx->container() ->desc();
+	        td.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
           td.makePrivate();
           td.resetResolved( );
           TypePointer tt = ctx->container() ->locateDecType( td, SimpleTypeImpl::LocateBase ) ->resolved();
@@ -1797,12 +1797,14 @@ void CppCodeCompletion::needRecoveryPoints() {
     ;
 
     std::vector<CppCodeCompletion> vec;
-    //this->
-    TranslationUnitAST * ast = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
+    
+	  TranslationUnitAST * ast = *m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
     m_pSupport->backgroundParser() ->unlock();
     if ( !ast ) {
       kdDebug( 9007 ) << "background-parser is missing the translation-unit. The file needs to be reparsed." << endl;
-      m_pSupport->parseFileAndDependencies( m_activeFileName, false );
+	    m_pSupport->parseFileAndDependencies( m_activeFileName, true );
+	    m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Background-parser is missing the necessary translation-unit. It will be computed, but this completion will fail." ).arg( m_activeFileName ), 2000 );
+	    return;
     } else {
       computeRecoveryPointsLocked();
     }
@@ -1905,7 +1907,9 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
             if ( ! ( opt & IncludeTypeExpression ) ) {
               kdDebug( 9007 ) << "recognized a type-expression, but another expression-type is desired" << endl;
             } else {
-              ret.resultType = ctx->container() ->locateDecType( exp.expr() );
+	            TypeDesc d( exp.expr() );
+	            d.setIncludeFiles( getIncludeFiles( m_activeFileName  ));
+              ret.resultType = ctx->container() ->locateDecType( d );
               ret.expr = exp;
             }
           }
@@ -1970,7 +1974,9 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
     SimpleType container;
     if ( m_cachedFromContext ) {
-      SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( scope.join( "::" ) ).desc().resolved().data();
+	    TypeDesc d( scope.join( "::" ) );
+	    d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+      SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( d ).desc().resolved().data();
       if ( i )
         container = i;
       else
@@ -1994,7 +2000,9 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
     if ( exp && ( exp.t & ExpressionInfo::TypeExpression ) ) {
       kdDebug( 9007 ) << "locating \"" << exp.expr() << "\" in " << container->fullTypeResolvedWithScope() << endl;
-      ret.resultType = container->locateDecType( exp.expr() );
+	    TypeDesc d( exp.expr() );
+	    d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+      ret.resultType = container->locateDecType( d );
     } else {
       if ( exp ) {
         kdDebug( 9007 ) << "wrong expression-type recognized" << endl;
@@ -2302,7 +2310,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
 
             if ( m_cachedFromContext ) {
-              SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( scope.join( "::" ) ).desc().resolved().data();
+	            TypeDesc d( scope.join( "::" ) );
+	            d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+              SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( d ).desc().resolved().data();
               if ( i ) {
                 parentType = i;
               } else {
@@ -2355,6 +2365,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
               TypeDesc td = ctx->container() ->desc();
               td.makePrivate();
               td.resetResolved( );
+	            td.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
               TypePointer tt = ctx->container() ->locateDecType( td, SimpleTypeImpl::LocateBase ) ->resolved();
               if ( tt ) {
                 ctx->setContainer( SimpleType( tt ) );
@@ -2436,7 +2447,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
   }
 
   if ( !recoveredDecl.get() && !recoveredTypeSpec.get() ) {
-    TranslationUnitAST * ast = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
+    TranslationUnitAST * ast = *m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
     if ( AST * node = findNodeAt( ast, line, column ) ) {
       kdDebug( 9007 ) << "------------------- AST FOUND --------------------" << endl;
       kdDebug( 9007 ) << "node-kind = " << nodeTypeToString( node->nodeType() ) << endl;
@@ -2628,7 +2639,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
     do {
       if ( !t )
         ready = true;
-      SimpleType method = t->typeOf( methodName );
+	    TypeDesc d( methodName );
+	    d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+      SimpleType method = t->typeOf( d );
       if ( method )
         signatureList += computeSignatureList( method );
       if ( t )
@@ -2656,15 +2669,18 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResult result ) {
   SimpleType type = result;
 
-  if ( result.expr.t == ExpressionInfo::TypeExpression )
-    type = type->typeOf( result->name(), SimpleTypeImpl::MemberInfo::Function ); ///Compute the signature of the constructor
+	if ( result.expr.t == ExpressionInfo::TypeExpression ) {
+		TypeDesc d( result->name() );
+		d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+    type = type->typeOf( d, SimpleTypeImpl::MemberInfo::Function ); ///Compute the signature of the constructor
+	}
 
   QValueList<QStringList> retList;
   SimpleTypeFunctionInterface* f = type->asFunction();
   SimpleType currType = type;
 
   if ( !f && !type->isNamespace() ) {
-    SimpleType t = type->typeOf( "operator ( )", SimpleTypeImpl::MemberInfo::Function );
+	  SimpleType t = type->typeOf( TypeDesc("operator ( )"), SimpleTypeImpl::MemberInfo::Function );
 
     if ( t ) {
       f = t->asFunction();
@@ -2701,7 +2717,7 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
   return retList;
 }
 
-void CppCodeCompletion::synchronousParseReady( const QString& file, TranslationUnitAST* unit ) {
+void CppCodeCompletion::synchronousParseReady( const QString& file, ParsedFilePointer unit ) {
   if ( file == m_activeFileName ) {
     computeRecoveryPoints( unit );
   }
@@ -2711,76 +2727,14 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName ) {
   if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
     return ;
 
-  emptyCache(); ///The cache has to be emptied, because the code-model changed
+	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed" ).arg( m_activeFileName ), 1000 );
+	
+  emptyCache(); ///The cache has to be emptied, because the code-model changed. @todo Better: Only refresh the code-model(tell all code-model-types to refresh themselves on demand)
 
   computeRecoveryPointsLocked();
 }
 
 void CppCodeCompletion::setupCodeInformationRepository( ) {}
-
-/**
-This function takes a string from the point of view from within ctx,
-extracts all information, and tries to locate the resulting type globally using ctx
-*/
-SimpleType CppCodeCompletion::typeName( QString str ) {
-  if ( str.isEmpty() )
-    return QStringList();
-  /*
-
-  if( str.contains("::" ) ) {
-  	///Build a chain with corrent parents
-  	QStringList l = splitType( str );
-  	if( l.count() > 1 ) {
-  		SimpleType current;
-  		QStringList cScope;
-
-  		for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
-  			SimpleType old = current;
-  			current = typeName( *it );
-  			current->prependScope( cScope );
-  			if( old )
-  				current->setParent( &(*old) );
-  			cScope = current->scope();
-  		}
-  		return current;
-  	}
-  }*/
-
-  if ( str.startsWith( "typename " ) ) {
-    str = str.right( str.length() - strlen( "typename " ) );
-  }
-
-  Driver d;
-  Lexer lex( &d );
-  lex.setSource( str );
-  Parser parser( &d, &lex );
-
-  TypeSpecifierAST::Node typeSpec;
-  if ( parser.parseTypeSpecifier( typeSpec ) ) {
-    NameAST * name = typeSpec->name();
-
-    QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
-    QPtrListIterator<ClassOrNamespaceNameAST> it( l );
-
-    QString type;
-    while ( it.current() ) {
-      if ( it.current() ->name() ) {
-        type += it.current() ->name() ->text() + "::";
-      }
-      ++it;
-    }
-
-    if ( name->unqualifiedName() && name->unqualifiedName() ->name() ) {
-      type += name->unqualifiedName() ->name() ->text();
-    }
-
-    SimpleType ret ( type );
-    ret->parseParams( str );
-    return ret;
-  }
-
-  return QStringList();
-}
 
 SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, int line, int col, int lineOffset, int colOffset ) {
   kdDebug( 9007 ) << "CppCodeCompletion::computeContext() -- main" << endl;
@@ -3093,12 +3047,12 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
 void CppCodeCompletion::computeRecoveryPointsLocked() {
   m_pSupport->backgroundParser() ->lock ()
   ;
-  TranslationUnitAST* unit = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
+  ParsedFilePointer unit = m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
   computeRecoveryPoints( unit );
   m_pSupport->backgroundParser() ->unlock();
 }
 
-void CppCodeCompletion::computeRecoveryPoints( TranslationUnitAST* unit ) {
+void CppCodeCompletion::computeRecoveryPoints( ParsedFilePointer unit ) {
   if ( m_blockForKeyword )
     return ;
 
@@ -3109,7 +3063,7 @@ void CppCodeCompletion::computeRecoveryPoints( TranslationUnitAST* unit ) {
     return ;
 
   ComputeRecoveryPoints walker( d->recoveryPoints );
-  walker.parseTranslationUnit( unit );
+  walker.parseTranslationUnit( *unit );
 }
 
 QString codeModelAccessToString( CodeModelItem::Access access ) {
@@ -4006,7 +3960,7 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
 
 	//d->classNameList = typeNameList( m_pSupport->codeModel() );
 
-  CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, ctx );
+	CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, getIncludeFiles( m_activeFileName ), ctx );
 
   EvaluationResult res;
   res = obj.evaluate();
@@ -4031,6 +3985,21 @@ void CppCodeCompletion::computeFileEntryList( ) {
 
   m_fileEntryList = unique( m_fileEntryList );
 }
+
+HashedStringSet CppCodeCompletion::getIncludeFiles( const QString& file ) {
+	FileDom f = m_pSupport->codeModel() ->fileByName( m_activeFileName );
+	if( f ) {
+		ParseResultPointer p = f->parseResult();
+		if( p ) {
+			ParsedFilePointer pp = dynamic_cast<ParsedFile*>( p.data() );
+			if( pp ) {
+				return pp->includeFiles();
+			}
+		}
+	}
+	return HashedStringSet();
+}
+
 
 #include "cppcodecompletion.moc" 
 //kate: indent-mode csands; tab-width 2; space-indent off;

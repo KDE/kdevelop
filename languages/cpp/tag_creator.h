@@ -33,7 +33,7 @@ public:
 	virtual ~TagCreator();
 
 	// translation-unit
-	virtual void parseTranslationUnit( TranslationUnitAST* );
+	virtual void parseTranslationUnit( const ParsedFile& );
 
 	// declarations
 	virtual void parseDeclaration( DeclarationAST* );

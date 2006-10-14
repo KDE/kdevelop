@@ -278,7 +278,7 @@ void ProblemReporter::slotParseCheck() {
 
 void ProblemReporter::closedFile(const KURL &fileName)
 {
-	QValueList<Problem> problems = m_cppSupport->backgroundParser()->problems( fileName.path() , true , true);
+    //QValueList<Problem> problems = m_cppSupport->backgroundParser()->problems( fileName.path() , true , true);
 }
 
 void ProblemReporter::slotTextChanged()
@@ -309,9 +309,13 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 
 	kdDebug(9008) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
 
-	removeAllItems(m_errorList,relFileName);
-	removeAllItems(m_fixmeList,relFileName);
-	removeAllItems(m_todoList,relFileName);
+    //removeAllItems(m_errorList,relFileName);
+    //removeAllItems(m_fixmeList,relFileName);
+    //removeAllItems(m_todoList,relFileName);
+    m_errorList.removeAllItems( relFileName );
+    m_fixmeList.removeAllItems( relFileName );
+    m_todoList.removeAllItems( relFileName );
+    
 	
 	if( m_document && m_markIface )
 	{
@@ -338,9 +342,9 @@ void ProblemReporter::reparse()
     /*if( m_canParseFile )
     {*/
       
-        m_cppSupport->parseFileAndDependencies( m_fileName );
+        m_cppSupport->parseFileAndDependencies( m_fileName, true, true );
     //        m_canParseFile = false;
-        kdDebug(9007) << m_fileName << "---> file added to background-parser(by problem-reporter)" << endl;
+        kdDebug(9007) << m_fileName << "---> file added to background-parser by problem-reporter" << endl;
     /*}else{
         if(m_timeout.isNull()) {
             m_timeout = QTime::currentTime();
@@ -372,16 +376,11 @@ void ProblemReporter::initCurrentList()
 	m_tabBar->setCurrentTab(0);
 }
 
-void ProblemReporter::updateCurrentWith(QListView* listview, const QString& level, const QString& filename)
+void ProblemReporter::updateCurrentWith(EfficientKListView& listview, const QString& level, const QString& filename)
 {
-	QListViewItemIterator it(listview);
-	while ( it.current() )
-	{
-		if( it.current()->text(0) == filename)
-			new QListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
-
-		++it;
-	}
+    EfficientKListView::Range r = listview.getRange( filename );
+    for( ; r.first != r.second; ++r.first )
+        new QListViewItem(m_currentList,level,(*r.first).second->text(1),(*r.first).second->text(2),(*r.first).second->text(3));
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -402,15 +401,7 @@ void ProblemReporter::slotSelected( QListViewItem* item )
 }
 
 bool ProblemReporter::hasErrors( const QString& fileName ) {
-	QListViewItem* current = m_errorList->firstChild();
-	while( current ){
-		QListViewItem* i = current;
-		current = current->nextSibling();
-		
-		if( i->text(0) == fileName )
-			return true;
-	}
-	return false;
+    return m_errorList.hasItem( fileName );
 }
 
 void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
@@ -425,21 +416,21 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 	QString relFileName = fileName;
 	relFileName.remove(m_cppSupport->project()->projectDirectory());
 
-	KListView* list;
+	EfficientKListView* list;
 
 	switch( p.level() )
 	{
 	case Problem::Level_Error:
-		list = m_errorList;
+		list = &m_errorList;
 		break;
 	case Problem::Level_Warning:
-		list = m_errorList;
+		list = &m_errorList;
 		break;
 	case Problem::Level_Todo:
-		list = m_todoList;
+		list = &m_todoList;
 		break;
 	case Problem::Level_Fixme:
-		list = m_fixmeList;
+		list = &m_fixmeList;
 		break;
 	default:
 		list = NULL;
@@ -447,11 +438,12 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 
 	if(list)
 	{
-		new ProblemItem( list,
+		list->addItem( relFileName, new ProblemItem( *list,
 		                 relFileName,
 		                 QString::number( p.line() + 1 ),
 		                 QString::number( p.column() + 1 ),
-		                 msg );
+                                                     msg ) );
+        
 	}
 
 	if(fileName == m_fileName)

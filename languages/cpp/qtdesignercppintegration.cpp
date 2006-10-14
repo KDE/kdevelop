@@ -136,7 +136,9 @@ void QtDesignerCppIntegration::addFunctionToClass( KInterfaceDesigner::Function 
 		return ;
 	
 	int atLine = 0, atColumn = 0;
-	TranslationUnitAST *translationUnit = cppPart->backgroundParser() ->translationUnit( implementationFile );
+	TranslationUnitAST *translationUnit = 0;
+	ParsedFilePointer p = cppPart->backgroundParser() ->translationUnit( implementationFile );
+	if( p ) translationUnit = *p;
 	if ( translationUnit )
 	{
 		translationUnit->getEndPosition( &atLine, &atColumn );

@@ -130,9 +130,14 @@ void Lexer::setSource( const QString& source )
 {
     reset();
     m_source = source;
-    m_ptr = 0;
-    m_endPtr = m_source.length();
+    m_ptr = offset( 0 );
+    m_endPtr = offset( m_source.length() );
     m_inPreproc = false;
+    if( !source.isEmpty() ) {
+        m_currentChar = m_source[0];
+    } else {
+        m_currentChar = QChar::null;
+    }
 
     tokenize();
 }
@@ -271,7 +276,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
     } else if( ch.isLetter() || ch == '_' ){
 	int start = currentPosition();
 	readIdentifier();
-	QString ide = m_source.mid( start, currentPosition() - start );
+	HashedString ide = m_source.mid( start, currentPosition() - start );
 	int k = Lookup::find( ide );
 	if( m_preprocessorEnabled && m_driver->hasMacro(ide) &&
 	    (k == -1 || !m_driver->macro(ide).body().isEmpty()) ){
@@ -287,6 +292,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
 //	    Macro& m = m_driver->macro( ide );
 	    Macro m = m_driver->macro( ide );
+
+	    m_driver->usingMacro( m, m_currentLine, m_currentColumn );
 
             QString ellipsisArg;
 
@@ -346,13 +353,13 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 #if defined( KDEVELOP_BGPARSER )
 	    qthread_yield();
 #endif
-	    m_source.insert( currentPosition(), m.body() );
-
+            insertCurrent( m.body() );
+            
             // tokenize the macro body
 
             QString textToInsert;
 
-            m_endPtr = currentPosition() + m.body().length();
+            m_endPtr = offset( currentPosition() + m.body().length() );
             while( currentChar() ){
 
                 readWhiteSpaces();
@@ -370,66 +377,64 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                      break;
 
                 QString tokText = tok.text();
-                QString str = (tok == Token_identifier && d->hasBind(tokText)) ? d->apply( tokText ) : tokText;
+                HashedString str = (tok == Token_identifier && d->hasBind(tokText)) ? d->apply( tokText ) : tokText;
                 if( str == ide ){
-                    //Problem p( i18n("unsafe use of macro '%1'").arg(ide), m_currentLine, m_currentColumn );
+			//Problem p( i18n("unsafe use of macro '%1', macro is ignored").arg(ide.str()), m_currentLine, m_currentColumn, Problem::Level_Warning );
                     //m_driver->addProblem( m_driver->currentFileName(), p );
                     m_driver->removeMacro( ide );
                     // str = QString::null;
                 }
 
                 if( stringify ) {
-                    textToInsert.append( QString::fromLatin1("\"") + str + QString::fromLatin1("\" ") );
+                    textToInsert.append( QString::fromLatin1("\"") + str.str() + QString::fromLatin1("\" ") );
                 } else if( merge ){
                     textToInsert.truncate( textToInsert.length() - 1 );
-                    textToInsert.append( str );
+                    textToInsert.append( str.str() );
                 } else if( tok == Token_ellipsis && d->hasBind("...") ){
                     textToInsert.append( ellipsisArg );
                 } else {
-                    textToInsert.append( str + QString::fromLatin1(" ") );
+                    textToInsert.append( str.str() + QString::fromLatin1(" ") );
                 }
             }
 
 #if defined( KDEVELOP_BGPARSER )
 	    qthread_yield();
 #endif
-            m_source.insert( currentPosition(), textToInsert );
+            insertCurrent( textToInsert );
 
             d->endScope();
             m_preprocessorEnabled = preproc;
 	    //m_driver->addMacro( m );
 	    m_currentLine = argsEndAtLine;
 	    m_currentColumn = argsEndAtColumn;
-	    m_endPtr = m_source.length();
 	} else if( k != -1 ){
 	    tk = CREATE_TOKEN( k, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	} else if( m_skipWordsEnabled ){
-	    QMap< QString, QPair<SkipType, QString> >::Iterator pos = m_words.find( ide );
+	    __gnu_cxx::hash_map< HashedString, QPair<SkipType, QString> >::iterator pos = m_words.find( ide );
 	    if( pos != m_words.end() ){
-		if( (*pos).first == SkipWordAndArguments ){
+		if( (*pos).second.first == SkipWordAndArguments ){
 		    readWhiteSpaces();
 		    if( currentChar() == '(' )
 			skip( '(', ')' );
 		}
-		if( !(*pos).second.isEmpty() ){
+		if( !(*pos).second.second.isEmpty() ){
 #if defined( KDEVELOP_BGPARSER )
 	    qthread_yield();
 #endif
-		    m_source.insert( currentPosition(), QString(" ") + (*pos).second + QString(" ") );
-		    m_endPtr = m_source.length();
+                    insertCurrent( QString(" ") + (*pos).second.second + QString(" ") );
 		}
 	    } else if( /*qt_rx.exactMatch(ide) ||*/
-		ide.endsWith("EXPORT") ||
-		(ide.startsWith("Q_EXPORT") && ide != "Q_EXPORT_INTERFACE") ||
-		ide.startsWith("QM_EXPORT") ||
-		ide.startsWith("QM_TEMPLATE")){
+		ide.str().endsWith("EXPORT") ||
+		(ide.str().startsWith("Q_EXPORT") && ide.str() != "Q_EXPORT_INTERFACE") ||
+		ide.str().startsWith("QM_EXPORT") ||
+		ide.str().startsWith("QM_TEMPLATE")){
 
 		readWhiteSpaces();
 		if( currentChar() == '(' )
 		    skip( '(', ')' );
-	    } else if( ide.startsWith("K_TYPELIST_") || ide.startsWith("TYPELIST_") ){
+	    } else if( ide.str().startsWith("K_TYPELIST_") || ide.str().startsWith("TYPELIST_") ){
 		tk = CREATE_TOKEN( Token_identifier, start, currentPosition() - start );
 		tk.setStartPosition( startLine, startColumn );
 		tk.setEndPosition( m_currentLine, m_currentColumn );
@@ -621,9 +626,11 @@ int Lexer::macroDefined()
     readWhiteSpaces( false );
     int startWord = currentPosition();
     readIdentifier();
-    QString word = m_source.mid( startWord, currentPosition() - startWord );
+    HashedString word = m_source.mid( startWord, currentPosition() - startWord );
     bool r = m_driver->hasMacro( word );
 
+    if( r ) m_driver->usingMacro( m_driver->macro( word ), m_currentLine, m_currentColumn );
+    
     return r;
 }
 
@@ -803,7 +810,7 @@ void Lexer::processUndef()
 		m.setFileName( m_driver->currentFileName() );
 		m.setUndef();
 
-		///Adds an undef-macro that shadows the other macro
+		///Adds an undef-macro that shadows the previous macro
 		m_driver->addMacro( m );
 }
 
@@ -846,7 +853,15 @@ int Lexer::macroPrimary()
 		    return macroPrimary();
 		}
 		/// @todo implement
-		return m_driver->hasMacro( tk.text() );
+                {
+                HashedString h( tk.text() );
+                if( m_driver->hasMacro( h ) ) {
+                    m_driver->usingMacro( m_driver->macro( h ), m_currentLine, m_currentColumn );
+                    return true;
+                } else {
+                    return false;
+                }
+		}
 	    case Token_number_literal:
 	    case Token_char_literal:
 		return toInt( tk );
