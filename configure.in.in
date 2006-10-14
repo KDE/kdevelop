@@ -126,5 +126,11 @@ AC_CHECK_PROG(GZIP_COMMAND, gzip, gzip)
 AC_DEFINE_UNQUOTED(MAKE_COMMAND, "$gmake_prog", [GNU make command])
 
 CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
+case $host_os in
+hpux11*)
+    CPPFLAGS="$CPPFLAGS -D_PROTOTYPES"
+    ;;
+esac
+
 
 KDE_INIT_DOXYGEN([KDevelop], [Version $VERSION])
