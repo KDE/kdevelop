@@ -105,12 +105,14 @@ void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
         FrameStackItem *frame = dynamic_cast<FrameStackItem*> (thisItem);
         if (frame)
         {
-            controller_->
-                selectFrame(frame->frameNo(), frame->threadNo());
-
             if (frame->text(0) == "...")
-            {                
+            {   
                 getBacktrace(frame->frameNo(), frame->frameNo() + frameChunk_);
+            }
+            else
+            {
+                controller_->
+                    selectFrame(frame->frameNo(), frame->threadNo());
             }
         }
     }
@@ -161,52 +163,41 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
         case GDBController::debugger_exited: 
         {
             clear();
-	    break;
+            break;
         }        
-	case GDBController::debugger_busy:
-	case GDBController::debugger_ready:
-	case GDBController::shared_library_loaded:
-	case GDBController::program_running:
-	case GDBController::connected_to_program:
-	    break;
+        case GDBController::debugger_busy:
+        case GDBController::debugger_ready:
+        case GDBController::shared_library_loaded:
+        case GDBController::program_running:
+        case GDBController::connected_to_program:
+            break;
     }
 }
 
 void FramestackWidget::getBacktrace(int min_frame, int max_frame)
 {
-    if (stackDepth_.count(controller_->currentThread()) == 0)
-    {
-        minFrame_ = min_frame;
-        maxFrame_ = max_frame;
+    minFrame_ = min_frame;
+    maxFrame_ = max_frame;
 
-        controller_->addCommand(
-            new GDBCommand("-stack-info-depth 10000",
-                           this, 
-                           &FramestackWidget::handleStackDepth));        
-    }
-    else
-    {
-        if (stackDepth_[controller_->currentThread()] < max_frame)
-        {
-            max_frame = stackDepth_[controller_->currentThread()];
-            lastFrameToShow = max_frame-1;
-        }
-        else
-        {
-            lastFrameToShow = max_frame-1;
-        }
-        controller_->addCommand(
-            new GDBCommand(QString("-stack-list-frames %1 %2")
-                           .arg(min_frame).arg(max_frame),
-                           this, &FramestackWidget::parseGDBBacktraceList));
-    }
+    controller_->addCommand(
+        new GDBCommand(QString("-stack-info-depth %1").arg(max_frame+1),
+                       this, 
+                       &FramestackWidget::handleStackDepth));        
 }
 
 void FramestackWidget::handleStackDepth(const GDBMI::ResultRecord& r)
 {
-    stackDepth_[controller_->currentThread()] = r["depth"].literal().toInt();
+    int existing_frames = r["depth"].literal().toInt();
 
-    getBacktrace(minFrame_, maxFrame_);
+    has_more_frames = (existing_frames > maxFrame_);
+
+    if (existing_frames < maxFrame_)
+        maxFrame_ = existing_frames;
+
+    controller_->addCommand(
+        new GDBCommand(QString("-stack-list-frames %1 %2")
+                       .arg(minFrame_).arg(maxFrame_),
+                       this, &FramestackWidget::parseGDBBacktraceList));    
 }
 
 void FramestackWidget::getBacktraceForThread(int threadNo)
@@ -324,8 +315,8 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
     }
     if (last && last->text(0) == "...")
         delete last;
-    
-    bool has_more_frames = false;
+
+    int lastLevel;
     for(unsigned i = 0, e = frames.size(); i != e; ++i)
     {
         const GDBMI::Value& frame = frames[i];
@@ -342,12 +333,6 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
         QString level_s = frame["level"].literal();
         int level = level_s.toInt();
 
-        if (level > lastFrameToShow)
-        {
-            has_more_frames = true;
-            break;
-        }
-
         name_column = "#" + level_s;
 
         formatFrame(frame, func_column, source_column);
@@ -357,6 +342,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
             item = new FrameStackItem(viewedThread_, level, name_column);
         else
             item = new FrameStackItem(this, level, name_column);
+        lastLevel = level;
 
         item->setText(1, func_column);
         item->setText(2, source_column);        
@@ -365,9 +351,9 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
     {
         QListViewItem* item;
         if (viewedThread_)
-            item = new FrameStackItem(viewedThread_, lastFrameToShow+1, "...");
+            item = new FrameStackItem(viewedThread_, lastLevel+1, "...");
         else
-            item = new FrameStackItem(this, lastFrameToShow+1, "...");
+            item = new FrameStackItem(this, lastLevel+1, "...");
         item->setText(1, "(click to get more frames)");
     }
 

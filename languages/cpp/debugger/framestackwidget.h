@@ -165,16 +165,16 @@ private:
     ThreadStackItem *viewedThread_;
     int currentFrame_;
     GDBController* controller_;
-    int lastFrameToShow;
 
     // Data to pass from 'getBacktrace' to 'handleStackDepth'
     int minFrame_;
     int maxFrame_;
     QMap<int, int> stackDepth_;
+    bool has_more_frames;
 
     friend class FrameStackItem;
 
-    static const int frameChunk_ = 30;
+    static const int frameChunk_ = 5;
 };
 
 }
