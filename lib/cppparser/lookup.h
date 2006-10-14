@@ -26,7 +26,7 @@
 
 #include "lexer.h"
 #include <ext/hash_map>
-#include <lib/interfaces/hashedstring.h>
+#include <hashedstring.h>
 
 /**
 * @short Fast keyword lookup.

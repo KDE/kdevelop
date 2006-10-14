@@ -27,7 +27,7 @@
 #include <qvaluestack.h>
 #include <qpair.h>
 #include <qptrvector.h>
-#include <lib/interfaces/hashedstring.h>
+#include <hashedstring.h>
 #include <ext/hash_map>
 
 #define CHARTYPE QChar

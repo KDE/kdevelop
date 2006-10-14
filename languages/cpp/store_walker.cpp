@@ -16,7 +16,7 @@
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <lib/cppparser/driver.h>
+#include <driver.h>
 
 StoreWalker::StoreWalker( const QString& fileName, CodeModel* store )
 : m_store( store ), m_anon( 0 )

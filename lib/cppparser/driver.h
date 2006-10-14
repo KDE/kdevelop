@@ -32,9 +32,9 @@
 #include <qvaluelist.h>
 #include <map>
 #include <set>
-#include <lib/interfaces/hashedstring.h>
+#include <hashedstring.h>
 #include <ksharedptr.h>
-#include <lib/interfaces/codemodel.h>
+#include <codemodel.h>
 #include <ext/hash_map>
 
 

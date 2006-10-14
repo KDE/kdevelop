@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
+INCLUDES = -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/cppparser \
 	$(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la

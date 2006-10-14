@@ -20,7 +20,7 @@
 #include "codemodel.h"
 #include <kdebug.h>
 
-#include "../cppparser/driver.h" //Not a nice solution
+#include "driver.h" //Not a nice solution
 
 CodeModel::CodeModel()
 {

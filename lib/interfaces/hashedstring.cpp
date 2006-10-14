@@ -3,7 +3,7 @@
 size_t HashedString::hashString( const QString& str ) {
   size_t hash = 0;
   if( !str.isEmpty() ) {
-      QChar* curr = str.unicode();
+      QChar* curr = const_cast<QChar*>(str.unicode());
       QChar c;
       for(;;) {
           c = *curr;
@@ -22,15 +22,6 @@ void HashedString::initHash() {
 #include<ext/hash_set>
 #include<set>
 #include<algorithm>
-
-namespace __gnu_cxx {
-template <>
-struct hash<HashedString> {
-  size_t operator () ( const HashedString& rhs ) const {
-    return rhs.hash();
-  }
-};
-};
 
 class HashedStringSetData : public KShared {
   public:

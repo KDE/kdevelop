@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
 AM_CXXFLAGS = -DKDEVELOP_BGPARSER
 lib_LTLIBRARIES = libkdevcppparser.la
 libkdevcppparser_la_LDFLAGS = $(all_libraries)
