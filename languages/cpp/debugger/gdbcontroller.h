@@ -189,6 +189,16 @@ private:
 
     void announceWatchpointHit();
 
+    /** Default handler for errors -- shows a dialog box and reloads
+        view state.  */
+    void defaultErrorHandler(const GDBMI::ResultRecord& result);
+
+    /** Called on errors in commands that execute target -- line next.
+        Tries to guess is the error message is telling that target is
+        gone, if so, informs the user.  
+        If unrecognized error message, calls defaultErrorHandler. */
+    void handleExecCommandError(const GDBMI::ResultRecord& result);
+
 public:
     bool stateIsOn(int state);
 

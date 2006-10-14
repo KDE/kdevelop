@@ -1224,7 +1224,9 @@ void GDBController::slotStepInto()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-step", NOTINFOCMD, 0));
+    queueCmd(new GDBCommand("-exec-step", this,
+                            &GDBController::handleExecCommandError,
+                            true /* handles errors */));
 }
 
 // **************************************************************************
@@ -1236,7 +1238,9 @@ void GDBController::slotStepIntoIns()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-step-instruction", NOTINFOCMD, 0));
+    queueCmd(new GDBCommand("-exec-step-instruction", this,
+                            &GDBController::handleExecCommandError,
+                            true /* handles errors */));
 }
 
 // **************************************************************************
@@ -1248,7 +1252,9 @@ void GDBController::slotStepOver()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-next", NOTINFOCMD, 0));
+    queueCmd(new GDBCommand("-exec-next", this,
+                            &GDBController::handleExecCommandError,
+                            true /* handles errors */));
 }
 
 // **************************************************************************
@@ -1260,7 +1266,9 @@ void GDBController::slotStepOverIns()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-next-instruction", NOTINFOCMD, 0));
+    queueCmd(new GDBCommand("-exec-next-instruction", this,
+                            &GDBController::handleExecCommandError,
+                            true /* handles errors */));
 }
 
 // **************************************************************************
@@ -1369,6 +1377,46 @@ void GDBController::selectFrame(int frameNo, int threadNo)
 
 // **************************************************************************
 
+void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
+{
+    KMessageBox::error(
+        0, 
+        i18n("<b>Debugger error</b>" 
+             "<p>Debugger reported the following error:"
+             "<p><tt>") + result["msg"].literal(),
+        i18n("Debugger error"));                         
+    
+    // Error most likely means that some change made in GUI
+    // was not communicated to the gdb, so GUI is now not
+    // in sync with gdb. Resync it.
+    //
+    // Another approach is to make each widget reload it content
+    // on errors from commands that it sent, but that's too complex.
+    // Errors are supposed to happen rarely, so full reload on error
+    // is not a big deal. Well, maybe except for memory view, but
+    // it's no auto-reloaded anyway.
+    //
+    // Also, don't reload state on errors appeared during state
+    // reloading!
+    if (stateReloadingCommands_.count(currentCmd_) == 0)
+        raiseEvent(program_state_changed);    
+}
+
+void GDBController::handleExecCommandError(const GDBMI::ResultRecord& result)
+{
+    QString msg = result["msg"].literal();
+
+    if (msg.contains("No such process"))
+    {
+        setState(s_appNotStarted|s_programExited);
+        emit dbgStatus (i18n("Process exited"), state_);
+        raiseEvent(program_exited);
+        return;
+    }
+
+    defaultErrorHandler(result);
+}
+
 void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
 {
     kdDebug(9012) << "MI stop reason " << result.reason << "\n";
@@ -1404,27 +1452,7 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
         }
         else
         {
-            KMessageBox::error(
-                0, 
-                i18n("<b>Debugger error</b>" 
-                     "<p>Debugger reported the following error:"
-                     "<p><tt>") + result["msg"].literal(),
-                i18n("Debugger error"));                         
-
-            // Error most likely means that some change made in GUI
-            // was not communicated to the gdb, so GUI is now not
-            // in sync with gdb. Resync it.
-            //
-            // Another approach is to make each widget reload it content
-            // on errors from commands that it sent, but that's too complex.
-            // Errors are supposed to happen rarely, so full reload on error
-            // is not a big deal. Well, maybe except for memory view, but
-            // it's no auto-reloaded anyway.
-            //
-            // Also, don't reload state on errors appeared during state
-            // reloading!
-            if (stateReloadingCommands_.count(currentCmd_) == 0)
-                raiseEvent(program_state_changed);
+            defaultErrorHandler(result);
         }
     }
 }
