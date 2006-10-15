@@ -67,6 +67,7 @@ if(KDEVPG_EXECUTABLE)
         ARGS    --adapt-to=kdevelop
                 --output=ruby
                 --serialize-visitor
+                --debug-visitor
                 "ruby.g"
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )

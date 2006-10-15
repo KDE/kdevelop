@@ -23,6 +23,7 @@
 
 #include "ruby_parser.h"
 #include "ruby_default_visitor.h"
+#include "ruby_debug_visitor.h"
 #include "decoder.h"
 
 #include <cstdlib>
@@ -140,7 +141,8 @@ bool parse_file(char const *filename)
     bool matched = ruby_parser.parse_program(&ast);
     if (matched)
     {
-        default_visitor v;
+        debug_visitor v;
+        std::cout << std::endl << std::endl << "====== AST ======" << std::endl;
         v.visit_node(ast);
     }
     else
