@@ -39,6 +39,7 @@
 %x expect_leading_colon2
 %x expect_unary
 %x expect_operator
+%x expect_array_arguments
 
 
 

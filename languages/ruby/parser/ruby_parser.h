@@ -249,6 +249,9 @@ namespace ruby
       bool seen_star;
       bool seen_star_or_band;
 
+      bool expect_array_or_block_arguments;
+
+      Lexer *m_lexer;
 
 
     public:

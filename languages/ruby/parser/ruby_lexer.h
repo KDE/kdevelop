@@ -34,7 +34,6 @@
 m_tokenBegin = m_tokenEnd; \
 m_tokenEnd += yyleng;
 
-
 namespace ruby
 {
 
@@ -48,6 +47,8 @@ public:
     char *contents()         { return m_contents;   }
     std::size_t tokenBegin() { return m_tokenBegin; }
     std::size_t tokenEnd()   { return m_tokenEnd;   }
+
+    bool setExpectArrayArguments(bool b);
 
 protected:
     // custom input, replacing the Flex default input stdin

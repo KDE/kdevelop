@@ -9,7 +9,6 @@ set(kdevrubyparser_STAT_SRCS
     decoder.cpp
     decoder.h
     ruby_io.cpp
-    ruby_lexer.cpp
     ruby_lexer.h
     parsesession.cpp
     parsesession.h
@@ -27,6 +26,28 @@ find_program(KDEVCMG_EXECUTABLE
     NAMES kdev-cmg
     PATHS /usr/bin
     DOC "kdev-cmg executable")
+
+if(FLEX_EXECUTABLE)
+    # Add command to generate the lexer.
+    add_custom_command(
+        OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.ll"
+                "${CMAKE_CURRENT_SOURCE_DIR}/ruby_parser.h"
+        COMMAND ${FLEX_EXECUTABLE}
+        ARGS    -o"ruby_lexer.cpp"
+                "ruby_lexer.ll"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+
+    set(kdevrubyparser_STAT_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp ${kdevrubyparser_STAT_SRCS})
+    set_source_files_properties(
+        ${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp
+        GENERATED
+        )
+else(FLEX_EXECUTABLE)
+    message("Assuming existence of the generated lexer file ruby_lexer.cpp")
+    set(kdevrubyparser_STAT_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp ${kdevrubyparser_STAT_SRCS})
+endif(FLEX_EXECUTABLE)
 
 
 if(KDEVPG_EXECUTABLE)

@@ -39,6 +39,17 @@
 
 
 
+------------------------------------------------------------
+-- Global declarations
+------------------------------------------------------------
+
+[:
+namespace ruby
+{
+  class Lexer;
+}
+:]
+
 
 ------------------------------------------------------------
 -- Parser class members
@@ -79,6 +90,9 @@
   bool seen_star;
   bool seen_star_or_band;
 
+  bool expect_array_or_block_arguments;
+
+  Lexer *m_lexer;
 :]
 
 
@@ -711,21 +725,22 @@
 -> keywordAsMethodName ;;
 
 
-    LPAREN (methodDefinitionArgumentWithoutParen | 0) RPAREN (terminal | 0)
+    LPAREN
+    (methodDefinitionArgumentWithoutParen | 0) RPAREN (terminal | 0)
     | (methodDefinitionArgumentWithoutParen | 0) terminal
 -> methodDefinitionArgument ;;
 
 
     normalMethodDefinitionArgument
         (COMMA
-            [: if (Token_REST_ARG_PREFIX == yytoken || Token_BLOCK_ARG_PREFIX == yytoken)
-                {seen_star_or_band = true; break;} :]
+            [: if (Token_STAR == yytoken || Token_BAND == yytoken)
+                {expect_array_or_block_arguments = true; break;} :]
         normalMethodDefinitionArgument)*
-        (?[: seen_star_or_band :] restMethodDefinitionArgument
-            |?[: seen_star_or_band :] blockMethodDefinitionArgument
+        (?[: expect_array_or_block_arguments :] restMethodDefinitionArgument
+            |?[: expect_array_or_block_arguments :] blockMethodDefinitionArgument
             | 0)
-    | restMethodDefinitionArgument
-    | blockMethodDefinitionArgument
+    | ?[: (expect_array_or_block_arguments = true) :] restMethodDefinitionArgument
+    | ?[: (expect_array_or_block_arguments = true) :] blockMethodDefinitionArgument
 -> methodDefinitionArgumentWithoutParen ;;
 
 
@@ -733,10 +748,12 @@
 -> normalMethodDefinitionArgument ;;
 
 
-    REST_ARG_PREFIX ((IDENTIFIER | FUNCTION) (COMMA blockMethodDefinitionArgument | 0) | 0)
+    ?[: expect_array_or_block_arguments :] STAR ((IDENTIFIER | FUNCTION) (COMMA blockMethodDefinitionArgument | 0) | 0)
+    [: expect_array_or_block_arguments = false; :]
 -> restMethodDefinitionArgument ;;
 
-    BLOCK_ARG_PREFIX (IDENTIFIER | FUNCTION)
+    ?[: expect_array_or_block_arguments :] BAND (IDENTIFIER | FUNCTION)
+    [: expect_array_or_block_arguments = false; :]
 -> blockMethodDefinitionArgument ;;
 
 
@@ -1019,26 +1036,28 @@ namespace ruby {
 
 void parser::tokenize( char *contents )
 {
-    Lexer lexer( this, contents );
+    m_lexer = new Lexer( this, contents );
 
     int kind = parser::Token_EOF;
     do
     {
-        kind = lexer.yylex();
-        std::cerr << lexer.YYText() << " of kind " << kind << std::endl; //" "; // debug output
+        kind = m_lexer->yylex();
+        std::cerr << m_lexer->YYText() << " of kind " << kind << std::endl; //" "; // debug output
 
         if ( !kind ) // when the lexer returns 0, the end of file is reached
             kind = parser::Token_EOF;
 
         parser::token_type &t = this->token_stream->next();
         t.kind = kind;
-        t.begin = lexer.tokenBegin();
-        t.end = lexer.tokenEnd();
+        t.begin = m_lexer->tokenBegin();
+        t.end = m_lexer->tokenEnd();
         t.text = contents;
     }
     while (kind != parser::Token_EOF);
 
     this->yylex(); // produce the look ahead token
+    delete m_lexer;
+    m_lexer = 0;
 }
 
 parser::parser_state *parser::copy_current_state()

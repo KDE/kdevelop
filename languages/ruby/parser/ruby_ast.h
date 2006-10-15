@@ -11,6 +11,11 @@
 
 namespace ruby
   {
+  class Lexer;
+}
+
+namespace ruby
+  {
 
   struct additiveExpression_ast;
   struct aliasParameter_ast;

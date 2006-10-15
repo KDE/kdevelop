@@ -12,26 +12,28 @@ namespace ruby
 
   void parser::tokenize( char *contents )
   {
-    Lexer lexer( this, contents );
+    m_lexer = new Lexer( this, contents );
 
     int kind = parser::Token_EOF;
     do
       {
-        kind = lexer.yylex();
-        std::cerr << lexer.YYText() << " of kind " << kind << std::endl; //" "; // debug output
+        kind = m_lexer->yylex();
+        std::cerr << m_lexer->YYText() << " of kind " << kind << std::endl; //" "; // debug output
 
         if ( !kind ) // when the lexer returns 0, the end of file is reached
           kind = parser::Token_EOF;
 
         parser::token_type &t = this->token_stream->next();
         t.kind = kind;
-        t.begin = lexer.tokenBegin();
-        t.end = lexer.tokenEnd();
+        t.begin = m_lexer->tokenBegin();
+        t.end = m_lexer->tokenEnd();
         t.text = contents;
       }
     while (kind != parser::Token_EOF);
 
     this->yylex(); // produce the look ahead token
+    delete m_lexer;
+    m_lexer = 0;
   }
 
   parser::parser_state *parser::copy_current_state()
@@ -1602,13 +1604,13 @@ namespace ruby
 
     (*yynode)->start_token = token_stream->index() - 1;
 
-    if (yytoken == Token_BLOCK_ARG_PREFIX)
+    if ((yytoken == Token_BAND) && ( expect_array_or_block_arguments ))
       {
-        if (yytoken != Token_BLOCK_ARG_PREFIX)
+        if (yytoken != Token_BAND)
           {
             if (!yy_block_errors)
               {
-                yy_expected_token(yytoken, Token_BLOCK_ARG_PREFIX, "block argument prefix");
+                yy_expected_token(yytoken, Token_BAND, "&");
               }
             return false;
           }
@@ -1644,6 +1646,7 @@ namespace ruby
           {
             return false;
           }
+        expect_array_or_block_arguments = false;
       }
     else
       {
@@ -7525,11 +7528,11 @@ namespace ruby
 
     if (yytoken == Token_LPAREN
         || yytoken == Token_SEMI
-        || yytoken == Token_REST_ARG_PREFIX
+        || yytoken == Token_BAND
+        || yytoken == Token_STAR
         || yytoken == Token_LINE_BREAK
         || yytoken == Token_IDENTIFIER
-        || yytoken == Token_FUNCTION
-        || yytoken == Token_BLOCK_ARG_PREFIX)
+        || yytoken == Token_FUNCTION)
       {
         if (yytoken == Token_LPAREN)
           {
@@ -7543,10 +7546,10 @@ namespace ruby
               }
             yylex();
 
-            if (yytoken == Token_REST_ARG_PREFIX
+            if (yytoken == Token_BAND
+                || yytoken == Token_STAR
                 || yytoken == Token_IDENTIFIER
-                || yytoken == Token_FUNCTION
-                || yytoken == Token_BLOCK_ARG_PREFIX)
+                || yytoken == Token_FUNCTION)
               {
                 methodDefinitionArgumentWithoutParen_ast *__node_133 = 0;
                 if (!parse_methodDefinitionArgumentWithoutParen(&__node_133))
@@ -7595,16 +7598,16 @@ namespace ruby
               }
           }
         else if (yytoken == Token_SEMI
-                 || yytoken == Token_REST_ARG_PREFIX
+                 || yytoken == Token_BAND
+                 || yytoken == Token_STAR
                  || yytoken == Token_LINE_BREAK
                  || yytoken == Token_IDENTIFIER
-                 || yytoken == Token_FUNCTION
-                 || yytoken == Token_BLOCK_ARG_PREFIX)
+                 || yytoken == Token_FUNCTION)
           {
-            if (yytoken == Token_REST_ARG_PREFIX
+            if (yytoken == Token_BAND
+                || yytoken == Token_STAR
                 || yytoken == Token_IDENTIFIER
-                || yytoken == Token_FUNCTION
-                || yytoken == Token_BLOCK_ARG_PREFIX)
+                || yytoken == Token_FUNCTION)
               {
                 methodDefinitionArgumentWithoutParen_ast *__node_135 = 0;
                 if (!parse_methodDefinitionArgumentWithoutParen(&__node_135))
@@ -7653,10 +7656,10 @@ namespace ruby
 
     (*yynode)->start_token = token_stream->index() - 1;
 
-    if (yytoken == Token_REST_ARG_PREFIX
+    if (yytoken == Token_BAND
+        || yytoken == Token_STAR
         || yytoken == Token_IDENTIFIER
-        || yytoken == Token_FUNCTION
-        || yytoken == Token_BLOCK_ARG_PREFIX)
+        || yytoken == Token_FUNCTION)
       {
         if (yytoken == Token_IDENTIFIER
             || yytoken == Token_FUNCTION)
@@ -7682,9 +7685,9 @@ namespace ruby
                   }
                 yylex();
 
-                if (Token_REST_ARG_PREFIX == yytoken || Token_BLOCK_ARG_PREFIX == yytoken)
+                if (Token_STAR == yytoken || Token_BAND == yytoken)
                   {
-                    seen_star_or_band = true;
+                    expect_array_or_block_arguments = true;
                     break;
                   }
                 normalMethodDefinitionArgument_ast *__node_138 = 0;
@@ -7697,7 +7700,7 @@ namespace ruby
                     return false;
                   }
               }
-            if ((yytoken == Token_REST_ARG_PREFIX) && ( seen_star_or_band ))
+            if ((yytoken == Token_STAR) && ( expect_array_or_block_arguments ))
               {
                 restMethodDefinitionArgument_ast *__node_139 = 0;
                 if (!parse_restMethodDefinitionArgument(&__node_139))
@@ -7709,7 +7712,7 @@ namespace ruby
                     return false;
                   }
               }
-            else if ((yytoken == Token_BLOCK_ARG_PREFIX) && ( seen_star_or_band ))
+            else if ((yytoken == Token_BAND) && ( expect_array_or_block_arguments ))
               {
                 blockMethodDefinitionArgument_ast *__node_140 = 0;
                 if (!parse_blockMethodDefinitionArgument(&__node_140))
@@ -7728,7 +7731,7 @@ namespace ruby
                 return false;
               }
           }
-        else if (yytoken == Token_REST_ARG_PREFIX)
+        else if ((yytoken == Token_STAR) && ( (expect_array_or_block_arguments = true) ))
           {
             restMethodDefinitionArgument_ast *__node_141 = 0;
             if (!parse_restMethodDefinitionArgument(&__node_141))
@@ -7740,7 +7743,7 @@ namespace ruby
                 return false;
               }
           }
-        else if (yytoken == Token_BLOCK_ARG_PREFIX)
+        else if ((yytoken == Token_BAND) && ( (expect_array_or_block_arguments = true) ))
           {
             blockMethodDefinitionArgument_ast *__node_142 = 0;
             if (!parse_blockMethodDefinitionArgument(&__node_142))
@@ -13889,13 +13892,13 @@ namespace ruby
 
     (*yynode)->start_token = token_stream->index() - 1;
 
-    if (yytoken == Token_REST_ARG_PREFIX)
+    if ((yytoken == Token_STAR) && ( expect_array_or_block_arguments ))
       {
-        if (yytoken != Token_REST_ARG_PREFIX)
+        if (yytoken != Token_STAR)
           {
             if (!yy_block_errors)
               {
-                yy_expected_token(yytoken, Token_REST_ARG_PREFIX, "*");
+                yy_expected_token(yytoken, Token_STAR, "*");
               }
             return false;
           }
@@ -13969,6 +13972,7 @@ namespace ruby
           {
             return false;
           }
+        expect_array_or_block_arguments = false;
       }
     else
       {
