@@ -207,18 +207,27 @@ void Scope::removeFromEqualOp( const QString& variable, const QStringList& value
 
 void Scope::setPlusOp( const QString& variable, const QStringList& values )
 {
+    if( listsEqual(values, variableValuesForOp(variable, "+=") ) )
+        return;
+
     updateVariable( variable, "+=", variableValuesForOp( variable, "+=" ), true );
     updateVariable( variable, "+=", values, false );
 }
 
 void Scope::setEqualOp( const QString& variable, const QStringList& values )
 {
+    if( listsEqual(values, variableValuesForOp(variable, "=") ) )
+        return;
+
     updateVariable( variable, "=", variableValuesForOp( variable, "=" ), true );
     updateVariable( variable, "=", values, false );
 }
 
 void Scope::setMinusOp( const QString& variable, const QStringList& values )
 {
+    if( listsEqual(values, variableValuesForOp(variable, "-=") ) )
+        return;
+
     updateVariable( variable, "-=", variableValuesForOp( variable, "-=" ), true );
     updateVariable( variable, "-=", values, false );
 }
@@ -875,7 +884,7 @@ void Scope::updateCustomVariable( const QString& var, const QString& op, const Q
         m_root->addChildAST( newast );
         if ( values.contains( "\n" ) )
         {
-            ast->values.append("\n");
+            newast->values.append("\n");
         }
     }
 }
@@ -933,7 +942,7 @@ bool Scope::listIsEmpty( const QStringList& values )
     return true;
 }
 
-bool Scope::isCompatible( const QString& op1, const QString& op2)
+bool Scope::isCompatible( const QString& op1, const QString& op2) const
 {
     if( op1 == "+=" )
         return ( op2 == "+=" || op2 == "=" );
@@ -942,6 +951,17 @@ bool Scope::isCompatible( const QString& op1, const QString& op2)
     else if ( op1 == "=" )
         return ( op2 == "=" || op2 == "+=" );
     return false;
+}
+
+bool Scope::listsEqual(const QStringList& l1, const QStringList& l2) const
+{
+    QStringList left = l1;
+    QStringList right = l2;
+    left.sort();
+    right.sort();
+    kdDebug(9024) << "comparing lists:" << left.join("|").replace("\n","%n") << " == " << right.join("|").replace("\n","%n") << endl;
+    kdDebug(9024) << "Result:" << (left == right) << endl;
+    return (left == right);
 }
 
 #ifdef DEBUG

@@ -1525,7 +1525,7 @@ void ProjectConfigurationDlg::targetInstallChanged( bool checked )
 
 void ProjectConfigurationDlg::apply()
 {
-    if( buttonApply->isEnabled() )
+//     if( buttonApply->isEnabled() )
         updateProjectConfiguration();
     myProjectItem->scope->saveToFile();
     //     prjWidget->updateProjectConfiguration( myProjectItem );
