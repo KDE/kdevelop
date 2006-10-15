@@ -526,12 +526,8 @@ void Scope::deleteIncludeScope( const QString& includeFile, bool negate )
     }
 
 
-    kdDebug(9024 )  << "include scopes:" << m_incScopes.keys() << "|file:" << includeFile << endl;
-
     Scope * incScope = m_incScopes[ includeFile ];
     m_incScopes.remove( includeFile );
-    kdDebug( 9024 ) << "children" << m_root->m_children << endl;
-    kdDebug( 9024 ) << "m_incast" << incScope->m_incast << endl;
 
     QMake::AST* ast = incScope->m_incast;
     m_root->removeChildAST( incScope->m_incast);
@@ -619,6 +615,8 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
     if ( listIsEmpty( values ) )
         return ;
 
+    kdDebug(9024) << "Updating variable:" << variable << endl;
+
     for ( int i = m_root->m_children.count() - 1; i >= 0; --i )
     {
         if ( m_root->m_children[ i ] ->nodeType() == QMake::AST::AssignmentAST )
@@ -702,8 +700,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
         m_root->addChildAST( ast );
         if ( !values.contains( "\n" ) )
         {
-            kdDebug( 9024 ) << "Didn't find newline in values" << values.join("|") << endl;
-            m_root->addChildAST( new QMake::NewLineAST() );
+            ast->values.append("\n");
         }
     }
 }
@@ -878,8 +875,7 @@ void Scope::updateCustomVariable( const QString& var, const QString& op, const Q
         m_root->addChildAST( newast );
         if ( values.contains( "\n" ) )
         {
-            kdDebug( 9024 ) << "Didn't find newline in values" << values.join("|") << endl;
-            m_root->addChildAST( new QMake::NewLineAST() );
+            ast->values.append("\n");
         }
     }
 }

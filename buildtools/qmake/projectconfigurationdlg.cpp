@@ -471,7 +471,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     values.clear();
     //change build order
     lvItem = buildorder_listview->firstChild();
-    if ( lvItem && lvItem->itemBelow() )
+    if ( lvItem && lvItem->itemBelow() && myProjectItem->scope->variableValues("TEMPLATE").contains("subdirs") )
     {
 
         while ( lvItem )
