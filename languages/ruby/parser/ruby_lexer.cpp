@@ -324,8 +324,8 @@ int yyFlexLexer::yylex()
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 113
-#define YY_END_OF_BUFFER 114
+#define YY_NUM_RULES 114
+#define YY_END_OF_BUFFER 115
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -336,30 +336,30 @@ struct yy_trans_info
 static yyconst flex_int16_t yy_accept[362] =
     {   0,
        53,   53,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,  114,  113,  105,   73,  113,  113,
-      110,  113,   60,   61,   88,   85,   67,   86,  113,  109,
-       58,   58,   70,  104,   93,  103,   94,   53,   53,   53,
-       63,   64,   95,   52,   52,   52,   52,   52,   52,   52,
+        0,    0,    0,    0,  115,  114,  106,   74,  114,  114,
+      111,  114,   60,   61,   89,   86,   67,   87,   71,  110,
+       58,   58,   70,  105,   94,  104,   95,   53,   53,   53,
+       63,   64,   96,   52,   52,   52,   52,   52,   52,   52,
        52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52,   66,   97,   74,   65,   62,  113,  106,  107,  105,
-       71,   72,    0,   46,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,   98,   81,    0,   45,    0,
-        0,    0,    0,    0,    0,    0,   87,   78,   75,    0,
+       52,   66,   98,   75,   65,   62,  114,  107,  108,  106,
+       72,   73,    0,   46,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,   99,   82,    0,   45,    0,
+        0,    0,    0,    0,    0,    0,   88,   79,   76,    0,
 
-       58,   58,   76,   59,    0,  112,  108,   55,    0,    0,
-       69,  111,   91,  100,  102,  101,   90,   92,   54,   53,
-       53,   53,   82,   51,   49,   52,    0,   50,   52,   52,
+       58,   58,   77,   59,    0,  113,  109,   55,    0,    0,
+       69,  112,   92,  101,  103,  102,   91,   93,   54,   53,
+       53,   53,   83,   51,   49,   52,    0,   50,   52,   52,
        52,   52,   52,   52,   52,   52,   52,   15,   52,   52,
        52,   52,   30,   42,   52,   52,   52,   40,   52,   52,
-       52,   52,   52,   52,   52,   52,   83,   96,   68,    0,
-        0,    0,    0,    0,    7,    0,    0,    0,   79,    0,
-        0,    0,    0,    0,   77,   57,   56,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,   89,   99,   84,
+       52,   52,   52,   52,   52,   52,   84,   97,   68,    0,
+        0,    0,    0,    0,    7,    0,    0,    0,   80,    0,
+        0,    0,    0,    0,   78,   57,   56,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,   90,  100,   85,
        53,   43,   48,   52,   52,   52,   41,   52,   52,   52,
 
        52,   36,   52,    1,   52,   52,   34,   52,   52,   19,
        52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52,   52,   52,   80,    0,    0,    0,    0,    0,    0,
+       52,   52,   52,   81,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,   53,   52,   52,   52,   52,   52,
        31,   52,   52,    2,   52,   52,   52,   52,   18,   29,
@@ -1669,224 +1669,229 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 198 "ruby_lexer.ll"
-{ return parser::Token_NOT_EQUAL; }
+#line 197 "ruby_lexer.ll"
+{ return parser::Token_DOT; }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
 #line 199 "ruby_lexer.ll"
-{ return parser::Token_NOT_MATCH; }
+{ return parser::Token_NOT_EQUAL; }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
 #line 200 "ruby_lexer.ll"
-{ return parser::Token_NOT; }
+{ return parser::Token_NOT_MATCH; }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
 #line 201 "ruby_lexer.ll"
-{ return parser::Token_BNOT; }
+{ return parser::Token_NOT; }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
 #line 202 "ruby_lexer.ll"
-{ return parser::Token_PLUS_ASSIGN; }
+{ return parser::Token_BNOT; }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
 #line 203 "ruby_lexer.ll"
-{ return parser::Token_MINUS_ASSIGN; }
+{ return parser::Token_PLUS_ASSIGN; }
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
 #line 204 "ruby_lexer.ll"
-{ return parser::Token_POWER_ASSIGN; }
+{ return parser::Token_MINUS_ASSIGN; }
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
 #line 205 "ruby_lexer.ll"
-{ return parser::Token_STAR_ASSIGN; }
+{ return parser::Token_POWER_ASSIGN; }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
 #line 206 "ruby_lexer.ll"
-{ return parser::Token_LOGICAL_AND_ASSIGN; }
+{ return parser::Token_STAR_ASSIGN; }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
 #line 207 "ruby_lexer.ll"
-{ return parser::Token_LOGICAL_OR_ASSIGN; }
+{ return parser::Token_LOGICAL_AND_ASSIGN; }
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
 #line 208 "ruby_lexer.ll"
-{ return parser::Token_BAND_ASSIGN; }
+{ return parser::Token_LOGICAL_OR_ASSIGN; }
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
 #line 209 "ruby_lexer.ll"
-{ return parser::Token_BXOR_ASSIGN; }
+{ return parser::Token_BAND_ASSIGN; }
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
 #line 210 "ruby_lexer.ll"
-{ return parser::Token_BOR_ASSIGN; }
+{ return parser::Token_BXOR_ASSIGN; }
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
 #line 211 "ruby_lexer.ll"
-{ return parser::Token_RIGHT_SHIFT_ASSIGN; }
+{ return parser::Token_BOR_ASSIGN; }
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
 #line 212 "ruby_lexer.ll"
-{ return parser::Token_PLUS; }
+{ return parser::Token_RIGHT_SHIFT_ASSIGN; }
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
 #line 213 "ruby_lexer.ll"
-{ return parser::Token_MINUS; }
+{ return parser::Token_PLUS; }
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
 #line 214 "ruby_lexer.ll"
-{ return parser::Token_POWER; }
+{ return parser::Token_MINUS; }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
 #line 215 "ruby_lexer.ll"
-{ return parser::Token_STAR; }
+{ return parser::Token_POWER; }
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
 #line 216 "ruby_lexer.ll"
-{ return parser::Token_COMPARE; }
+{ return parser::Token_STAR; }
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
 #line 217 "ruby_lexer.ll"
-{ return parser::Token_GREATER_OR_EQUAL; }
+{ return parser::Token_COMPARE; }
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
 #line 218 "ruby_lexer.ll"
-{ return parser::Token_LESS_OR_EQUAL; }
+{ return parser::Token_GREATER_OR_EQUAL; }
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
 #line 219 "ruby_lexer.ll"
-{ return parser::Token_RIGHT_SHIFT; }
+{ return parser::Token_LESS_OR_EQUAL; }
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
 #line 220 "ruby_lexer.ll"
-{ return parser::Token_LESS_THAN; }
+{ return parser::Token_RIGHT_SHIFT; }
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
 #line 221 "ruby_lexer.ll"
-{ return parser::Token_GREATER_THAN; }
+{ return parser::Token_LESS_THAN; }
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
 #line 222 "ruby_lexer.ll"
-{ return parser::Token_BXOR; }
+{ return parser::Token_GREATER_THAN; }
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
 #line 223 "ruby_lexer.ll"
-{ return parser::Token_LOGICAL_OR; }
+{ return parser::Token_BXOR; }
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
 #line 224 "ruby_lexer.ll"
-{ return parser::Token_BOR; }
+{ return parser::Token_LOGICAL_OR; }
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
 #line 225 "ruby_lexer.ll"
-{ return parser::Token_LOGICAL_AND; }
+{ return parser::Token_BOR; }
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
 #line 226 "ruby_lexer.ll"
-{ return parser::Token_CASE_EQUAL; }
+{ return parser::Token_LOGICAL_AND; }
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
 #line 227 "ruby_lexer.ll"
-{ return parser::Token_EQUAL; }
+{ return parser::Token_CASE_EQUAL; }
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
 #line 228 "ruby_lexer.ll"
-{ return parser::Token_MATCH; }
+{ return parser::Token_EQUAL; }
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
 #line 229 "ruby_lexer.ll"
-{ return parser::Token_ASSOC; }
+{ return parser::Token_MATCH; }
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
 #line 230 "ruby_lexer.ll"
-{ return parser::Token_ASSIGN; }
+{ return parser::Token_ASSOC; }
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 232 "ruby_lexer.ll"
-{ return parser::Token_SEMI; }
+#line 231 "ruby_lexer.ll"
+{ return parser::Token_ASSIGN; }
 	YY_BREAK
 case 105:
-/* rule 105 can match eol */
 YY_RULE_SETUP
-#line 234 "ruby_lexer.ll"
+#line 233 "ruby_lexer.ll"
+{ return parser::Token_SEMI; }
+	YY_BREAK
+case 106:
+/* rule 106 can match eol */
+YY_RULE_SETUP
+#line 235 "ruby_lexer.ll"
 { return parser::Token_LINE_BREAK; }
 	YY_BREAK
 
-case 106:
-YY_RULE_SETUP
-#line 237 "ruby_lexer.ll"
-{ return parser::Token_UNARY_PLUS; }
-	YY_BREAK
 case 107:
 YY_RULE_SETUP
 #line 238 "ruby_lexer.ll"
+{ return parser::Token_UNARY_PLUS; }
+	YY_BREAK
+case 108:
+YY_RULE_SETUP
+#line 239 "ruby_lexer.ll"
 { return parser::Token_UNARY_MINUS; }
 	YY_BREAK
 
-case 108:
-YY_RULE_SETUP
-#line 241 "ruby_lexer.ll"
-{ return parser::Token_DIV_ASSIGN; }
-	YY_BREAK
 case 109:
 YY_RULE_SETUP
 #line 242 "ruby_lexer.ll"
-{ return parser::Token_DIV; }
+{ return parser::Token_DIV_ASSIGN; }
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
 #line 243 "ruby_lexer.ll"
-{ return parser::Token_BAND; }
+{ return parser::Token_DIV; }
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
 #line 244 "ruby_lexer.ll"
-{ return parser::Token_LEFT_SHIFT; }
+{ return parser::Token_BAND; }
 	YY_BREAK
 case 112:
-/* rule 112 can match eol */
 YY_RULE_SETUP
-#line 246 "ruby_lexer.ll"
-{ return parser::Token_REGEX; }
+#line 245 "ruby_lexer.ll"
+{ return parser::Token_LEFT_SHIFT; }
 	YY_BREAK
 case 113:
+/* rule 113 can match eol */
 YY_RULE_SETUP
-#line 250 "ruby_lexer.ll"
+#line 247 "ruby_lexer.ll"
+{ return parser::Token_REGEX; }
+	YY_BREAK
+case 114:
+YY_RULE_SETUP
+#line 251 "ruby_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 1890 "ruby_lexer.cpp"
+#line 1895 "ruby_lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(expect_hash):
 case YY_STATE_EOF(expect_array_access):
@@ -2774,7 +2779,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 250 "ruby_lexer.ll"
+#line 251 "ruby_lexer.ll"
 
 
 

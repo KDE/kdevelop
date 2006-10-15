@@ -194,6 +194,7 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 <expect_leading_colon2>"::" { return parser::Token_LEADING_TWO_COLON; }
 "::"                        { return parser::Token_TWO_COLON; }
 ":"                         { return parser::Token_COLON; }
+"."                         { return parser::Token_DOT; }
 
 "!="                        { return parser::Token_NOT_EQUAL; }
 "!~"                        { return parser::Token_NOT_MATCH; }
