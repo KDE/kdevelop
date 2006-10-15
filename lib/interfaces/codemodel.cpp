@@ -19,7 +19,7 @@
 
 #include "codemodel.h"
 #include <kdebug.h>
-
+#include <kdatastream.h>
 #include "driver.h" //Not a nice solution
 
 CodeModel::CodeModel()

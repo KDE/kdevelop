@@ -59,10 +59,6 @@ QDataStream& operator << ( QDataStream& stream, const HashedString& str );
 
 QDataStream& operator >> ( QDataStream& stream, HashedString& str );
 
-QDataStream& operator << ( QDataStream& stream, const bool& b );
-
-QDataStream& operator >> ( QDataStream& stream, bool& b );
-
 class HashedStringSetData;
 
 ///This is a reference-counting string-set optimized for fast lookup of hashed strings

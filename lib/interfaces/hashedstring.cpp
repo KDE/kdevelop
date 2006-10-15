@@ -1,4 +1,5 @@
 #include "hashedstring.h"
+#include <kdatastream.h>
 
 size_t hashStringSafe( const QString& str ) {
   size_t hash = 0;
@@ -195,19 +196,6 @@ QDataStream& operator << ( QDataStream& stream, const HashedString& str ) {
 QDataStream& operator >> ( QDataStream& stream, HashedString& str ) {
     stream >> str.m_str;
     stream >> str.m_hash;
-    return stream;
-}
-
-QDataStream& operator << ( QDataStream& stream, const bool& b ) {
-    Q_INT8 i = b;
-    stream << i;
-    return stream;
-}
-
-QDataStream& operator >> ( QDataStream& stream, bool& b ) {
-    Q_INT8 i;
-    stream >> i;
-    b = i;
     return stream;
 }
 
