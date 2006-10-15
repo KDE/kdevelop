@@ -97,7 +97,7 @@ SimpleEscape    [\\]([']|["]|[\\]|[0abfnrtv])
 Escape          ({SimpleEscape}|{UnicodeEscape}|{HexEscape})
 
 Whitespace      [ \t\v\f]+
-Linebreak       [\n]+
+Linebreak       [\n][\n \t\v\f]*
 Regexp          \/[^/]*\/
 
 Identifier      [a-z_][a-zA-Z_0-9]*

@@ -138,7 +138,7 @@ namespace ruby
   void default_visitor::visit_keywordDo(keywordDo_ast *)
   {}
 
-  void default_visitor::visit_keywordEnd(keywordEnd_ast *)
+  void default_visitor::visit_keywordEndUpcase(keywordEndUpcase_ast *)
   {}
 
   void default_visitor::visit_keywordFor(keywordFor_ast *)

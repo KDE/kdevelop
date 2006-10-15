@@ -184,7 +184,7 @@ namespace ruby
 
 
     statement (
-        terminal
+        terminal [: if (yytoken == Token_EOF) break; :]
         [:
             if ((yytoken == Token_LCURLY) || (yytoken == Token_END) //block end
                 || (yytoken == Token_RPAREN) || (yytoken == Token_ELSE)
@@ -215,7 +215,7 @@ namespace ruby
     keywordAlias aliasParameter (LINE_BREAK | 0) aliasParameter
     | keywordUndef (undefParameter @ COMMA)
     | keywordBeginUpcase LCURLY_BLOCK (compoundStatement | 0) RCURLY
-    | END_UPCASE LCURLY_BLOCK (compoundStatement | 0) RCURLY
+    | keywordEndUpcase LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | expression (parallelAssignmentLeftOver | 0)
     | REST_ARG_PREFIX mlhs_item operatorAssign mrhs
 -> statementWithoutModifier ;;
@@ -271,7 +271,7 @@ namespace ruby
 -> block_vars ;;
 
 
-    keywordDo blockContent keywordEnd
+    keywordDo blockContent END
     | LCURLY_BLOCK blockContent RCURLY
 -> codeBlock ;;
 
@@ -583,7 +583,7 @@ namespace ruby
 -> bodyStatement ;;
 
 
-    BEGIN bodyStatement keywordEnd
+    BEGIN bodyStatement END
 -> exceptionHandlingExpression ;;
 
     ( ((className|INSTANCE_VARIABLE) @ COMMA) | 0) ((ASSOC (IDENTIFIER|FUNCTION)) | 0)
@@ -593,38 +593,38 @@ namespace ruby
     IF expression thenOrTerminalOrColon (compoundStatement | 0)
     (ELSIF (expression | 0) thenOrTerminalOrColon (compoundStatement | 0))*
     (ELSE (compoundStatement|0) |0)
-    keywordEnd
+    END
 -> ifExpression ;;
 
 
     UNLESS expression thenOrTerminalOrColon (compoundStatement | 0)
     ( (ELSE (compoundStatement|0)) | 0)
-    keywordEnd
+    END
 -> unlessExpression ;;
 
 
     CASE (compoundStatement | 0)
         (keywordWhen mrhs thenOrTerminalOrColon (compoundStatement | 0))+
         ((ELSE (compoundStatement | 0)) | 0)
-        keywordEnd
+        END
 -> caseExpression ;;
 
 
     keywordFor block_vars keywordIn expression doOrTerminalOrColon
     (compoundStatement | 0)
-    keywordEnd
+    END
 -> forExpression ;;
 
 
-    keywordWhile expression doOrTerminalOrColon (compoundStatement | 0) keywordEnd
+    keywordWhile expression doOrTerminalOrColon (compoundStatement | 0) END
 -> whileExpression ;;
 
 
-    keywordUntil expression doOrTerminalOrColon (compoundStatement | 0) keywordEnd
+    keywordUntil expression doOrTerminalOrColon (compoundStatement | 0) END
 -> untilExpression ;;
 
 
-    keywordModule moduleName terminal bodyStatement keywordEnd
+    keywordModule moduleName terminal bodyStatement END
 -> moduleDefinition ;;
 
 
@@ -634,7 +634,7 @@ namespace ruby
 
     keywordClass ( className (LESS_THAN expression | 0)
         | LEFT_SHIFT expression )
-        terminal bodyStatement keywordEnd
+        terminal bodyStatement END
 -> classDefinition ;;
 
 
@@ -642,7 +642,7 @@ namespace ruby
 -> className ;;
 
 
-    keywordDef methodName methodDefinitionArgument bodyStatement keywordEnd
+    keywordDef methodName methodDefinitionArgument bodyStatement END
 -> methodDefinition ;;
 
 
@@ -814,8 +814,8 @@ namespace ruby
 -> keywordDo ;;
 
 
-    END (LINE_BREAK | 0)
--> keywordEnd ;;
+    END_UPCASE (LINE_BREAK | 0)
+-> keywordEndUpcase ;;
 
 
     FOR (LINE_BREAK | 0)

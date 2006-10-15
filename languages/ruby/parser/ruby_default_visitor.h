@@ -56,7 +56,7 @@ namespace ruby
       virtual void visit_keywordDef(keywordDef_ast *node);
       virtual void visit_keywordDefined(keywordDefined_ast *node);
       virtual void visit_keywordDo(keywordDo_ast *node);
-      virtual void visit_keywordEnd(keywordEnd_ast *node);
+      virtual void visit_keywordEndUpcase(keywordEndUpcase_ast *node);
       virtual void visit_keywordFor(keywordFor_ast *node);
       virtual void visit_keywordIn(keywordIn_ast *node);
       virtual void visit_keywordModule(keywordModule_ast *node);

@@ -359,9 +359,9 @@ namespace ruby
         default_visitor::visit_keywordDo(node);
       }
 
-      virtual void visit_keywordEnd(keywordEnd_ast *node)
+      virtual void visit_keywordEndUpcase(keywordEndUpcase_ast *node)
       {
-        default_visitor::visit_keywordEnd(node);
+        default_visitor::visit_keywordEndUpcase(node);
       }
 
       virtual void visit_keywordFor(keywordFor_ast *node)

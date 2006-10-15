@@ -110,7 +110,7 @@ namespace ruby
       {}
       virtual void visit_keywordDo(keywordDo_ast *)
       {}
-      virtual void visit_keywordEnd(keywordEnd_ast *)
+      virtual void visit_keywordEndUpcase(keywordEndUpcase_ast *)
       {}
       virtual void visit_keywordFor(keywordFor_ast *)
       {}

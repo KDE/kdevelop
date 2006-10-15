@@ -61,7 +61,7 @@ namespace ruby
   struct keywordDef_ast;
   struct keywordDefined_ast;
   struct keywordDo_ast;
-  struct keywordEnd_ast;
+  struct keywordEndUpcase_ast;
   struct keywordFor_ast;
   struct keywordIn_ast;
   struct keywordModule_ast;
@@ -212,7 +212,7 @@ namespace ruby
         Kind_keywordDef = 1041,
         Kind_keywordDefined = 1042,
         Kind_keywordDo = 1043,
-        Kind_keywordEnd = 1044,
+        Kind_keywordEndUpcase = 1044,
         Kind_keywordFor = 1045,
         Kind_keywordIn = 1046,
         Kind_keywordModule = 1047,
@@ -718,11 +718,11 @@ namespace ruby
 
     };
 
-  struct keywordEnd_ast: public ast_node
+  struct keywordEndUpcase_ast: public ast_node
     {
       enum
       {
-        KIND = Kind_keywordEnd
+        KIND = Kind_keywordEndUpcase
       };
 
     };

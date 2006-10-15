@@ -51,7 +51,7 @@ namespace ruby
         reinterpret_cast<parser_fun_t>(&visitor::visit_keywordDef),
         reinterpret_cast<parser_fun_t>(&visitor::visit_keywordDefined),
         reinterpret_cast<parser_fun_t>(&visitor::visit_keywordDo),
-        reinterpret_cast<parser_fun_t>(&visitor::visit_keywordEnd),
+        reinterpret_cast<parser_fun_t>(&visitor::visit_keywordEndUpcase),
         reinterpret_cast<parser_fun_t>(&visitor::visit_keywordFor),
         reinterpret_cast<parser_fun_t>(&visitor::visit_keywordIn),
         reinterpret_cast<parser_fun_t>(&visitor::visit_keywordModule),

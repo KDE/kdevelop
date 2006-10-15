@@ -322,7 +322,7 @@ namespace ruby
       bool parse_keywordDef(keywordDef_ast **yynode);
       bool parse_keywordDefined(keywordDefined_ast **yynode);
       bool parse_keywordDo(keywordDo_ast **yynode);
-      bool parse_keywordEnd(keywordEnd_ast **yynode);
+      bool parse_keywordEndUpcase(keywordEndUpcase_ast **yynode);
       bool parse_keywordFor(keywordFor_ast **yynode);
       bool parse_keywordIn(keywordIn_ast **yynode);
       bool parse_keywordModule(keywordModule_ast **yynode);
