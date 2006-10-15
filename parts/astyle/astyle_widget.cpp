@@ -21,6 +21,39 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
   connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged(int)));
   connect(ConfigTabs, SIGNAL(currentChanged(QWidget*)), this, SLOT(pageChanged()) );
 
+  connect(FillingGroup, SIGNAL(clicked(int)), this, SLOT(pageChanged()));
+  connect(Fill_ForceTabs, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Fill_TabCount, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
+  connect(Fill_SpaceCount, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
+
+  connect(BracketGroup, SIGNAL(clicked(int)), this, SLOT(pageChanged()));
+  connect(Brackets_CloseHeaders, SIGNAL(clicked()), this, SLOT(pageChanged()));
+
+  connect(Indent_Switches, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Cases, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Classes, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Brackets, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Namespaces, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Labels, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Blocks, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Preprocessors, SIGNAL(clicked()), this, SLOT(pageChanged()));
+
+  connect(Continue_MaxStatement, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
+  connect(Continue_MinConditional, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
+
+  connect(Block_Break, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Block_BreakAll, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Block_IfElse, SIGNAL(clicked()), this, SLOT(pageChanged()));
+
+  connect(Pad_ParenthesesIn, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Pad_ParenthesesOut, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Pad_ParenthesesUn, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Pad_Operators, SIGNAL(clicked()), this, SLOT(pageChanged()));
+
+  connect(Keep_Statements, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Keep_Blocks, SIGNAL(clicked()), this, SLOT(pageChanged()));
+
+
   // load settings
   KConfig *config = kapp->config();
   config->setGroup("AStyle");
@@ -36,11 +69,15 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
   StyleGroup->setButton(id);
 
   // fill
-  if (config->readEntry("Fill", "Tabs") == "Tabs")
-	Fill_Tabs->setChecked(true);
-  else
-	Fill_Spaces->setChecked(true);
-  Fill_SpaceCount->setValue(config->readNumEntry("FillSpaces",2));
+  Fill_Tabs->setChecked(config->readBoolEntry("FillTabs", true));
+  Fill_TabCount->setValue(config->readNumEntry("FillTabCount",2));
+  Fill_ForceTabs->setChecked(config->readBoolEntry("FillForceTabs",false));
+  Fill_Spaces->setChecked(config->readBoolEntry("FillSpaces",false));
+  Fill_SpaceCount->setValue(config->readNumEntry("FillSpaceCount",2));
+
+
+  Fill_ConvertTabs->setChecked(config->readBoolEntry("FillConvertTabs",false));
+  Fill_EmptyLines->setChecked(config->readBoolEntry("FillEmptyLines",false));
 
   // indent
   Indent_Switches->setChecked(config->readBoolEntry("IndentSwitches", false));
@@ -48,27 +85,37 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
   Indent_Classes->setChecked(config->readBoolEntry("IndentClasses", false));
   Indent_Brackets->setChecked(config->readBoolEntry("IndentBrackets", false));
   Indent_Namespaces->setChecked(config->readBoolEntry("IndentNamespaces", true));
-  Indent_Labels->setChecked(config->readBoolEntry("IndentLabels", true));  
+  Indent_Labels->setChecked(config->readBoolEntry("IndentLabels", true));
+  Indent_Blocks->setChecked(config->readBoolEntry("IndentBlocks", true));
+  Indent_Preprocessors->setChecked(config->readBoolEntry("IndentPreprocessors", true));
 
   // contiuation
   Continue_MaxStatement->setValue(config->readNumEntry("MaxStatement", 40));
   Continue_MinConditional->setValue(config->readNumEntry("MinConditional", -1));
 
   // brackets
-  s = config->readEntry("Brackets", "Break");
-  Brackets_Break->setChecked(s == "Break");
-  Brackets_Attach->setChecked(s == "Attach");
-  Brackets_Linux->setChecked(s == "Linux");
+  Brackets_None->setChecked(config->readBoolEntry("BracketsNone", true));
+  Brackets_Break->setChecked(config->readBoolEntry("BracketsBreak", false));
+  Brackets_Attach->setChecked(config->readBoolEntry("BracketsAttach", false));
+  Brackets_Linux->setChecked(config->readBoolEntry("BracketsLinux", false));
+  Brackets_CloseHeaders->setChecked(config->readBoolEntry("BracketsCloseHeaders",false));
+
+  Block_Break->setChecked(config->readBoolEntry("BlockBreak",false));
+  Block_BreakAll->setChecked(config->readBoolEntry("BlockBreakAll",false));
+  Block_IfElse->setChecked(config->readBoolEntry("BlockIfElse",false));
 
   // padding
-  Pad_Parentheses->setChecked(config->readBoolEntry("PadParentheses", false));
+  Pad_ParenthesesIn->setChecked(config->readBoolEntry("PadParenthesesIn", false));
+  Pad_ParenthesesOut->setChecked(config->readBoolEntry("PadParenthesesOut", false));
+  Pad_ParenthesesUn->setChecked(config->readBoolEntry("PadParenthesesUn", false));
+
   Pad_Operators->setChecked(config->readBoolEntry("PadOperators", false));
 
   // oneliner
   Keep_Statements->setChecked(config->readBoolEntry("KeepStatements", false));
   Keep_Blocks->setChecked(config->readBoolEntry("KeepBlocks", false));
 
-  styleChanged(id); 
+  styleChanged(id);
 }
 
 
@@ -98,11 +145,13 @@ void AStyleWidget::accept()
     config->writeEntry("Style", "JAVA");
 
   // fill
-  if (Fill_Tabs->isChecked())
-	config->writeEntry("Fill", "Tabs");
-  else
-	config->writeEntry("Fill", "Spaces");
-  config->writeEntry("FillSpaces", Fill_SpaceCount->value());
+  config->writeEntry("FillTabs", Fill_Tabs->isChecked());
+  config->writeEntry("FillTabCount", Fill_SpaceCount->value());
+  config->writeEntry("FillForceTabs", Fill_ForceTabs->isChecked());
+  config->writeEntry("FillSpaces", Fill_Spaces->isChecked());
+  config->writeEntry("FillSpaceCount", Fill_SpaceCount->value());
+  config->writeEntry("FillConvertTabs", Fill_ConvertTabs->isChecked());
+  config->writeEntry("FillEmptyLines", Fill_EmptyLines->isChecked());
 
   // indent
   config->writeEntry("IndentSwitches", Indent_Switches->isChecked());
@@ -111,26 +160,35 @@ void AStyleWidget::accept()
   config->writeEntry("IndentBrackets", Indent_Brackets->isChecked());
   config->writeEntry("IndentNamespaces", Indent_Namespaces->isChecked());
   config->writeEntry("IndentLabels", Indent_Labels->isChecked());
+  config->writeEntry("IndentBlocks", Indent_Blocks->isChecked());
+  config->writeEntry("IndentPreprocessors", Indent_Preprocessors->isChecked());
 
   // continuation
   config->writeEntry("MaxStatement", Continue_MaxStatement->value());
   config->writeEntry("MinConditional", Continue_MinConditional->value());
 
   // brackets
-  if (Brackets_Break->isChecked())
-	config->writeEntry("Brackets", "Break");
-  else if (Brackets_Attach->isChecked())
-	config->writeEntry("Brackets", "Attach");
-  else
-	config->writeEntry("Brackets", "Linux");
+  config->writeEntry("BracketsNone", Brackets_None->isChecked());
+  config->writeEntry("BracketsBreak", Brackets_Break->isChecked());
+  config->writeEntry("BracketsAttach", Brackets_Attach->isChecked());
+  config->writeEntry("BracketsLinux", Brackets_Linux->isChecked());
+  config->writeEntry("BracketsCloseHeaders", Brackets_CloseHeaders->isChecked());
+
+  // blocks
+  config->writeEntry("BlockBreak", Block_Break->isChecked());
+  config->writeEntry("BlockBreakAll", Block_BreakAll->isChecked());
+  config->writeEntry("BlockIfElse", Block_IfElse->isChecked());
 
   // padding
-  config->writeEntry("PadParentheses", Pad_Parentheses->isChecked());
+  config->writeEntry("PadParenthesesIn", Pad_ParenthesesIn->isChecked());
+  config->writeEntry("PadParenthesesOut", Pad_ParenthesesOut->isChecked());
+  config->writeEntry("PadParenthesesUn", Pad_ParenthesesUn->isChecked());
+
   config->writeEntry("PadOperators", Pad_Operators->isChecked());
 
   // oneliner
   config->writeEntry("KeepStatements", Keep_Statements->isChecked());
-  config->writeEntry("KeepBlocks", Keep_Blocks->isChecked());  
+  config->writeEntry("KeepBlocks", Keep_Blocks->isChecked());
 
   config->sync();
 }
@@ -138,27 +196,11 @@ void AStyleWidget::accept()
 
 void AStyleWidget::styleChanged( int id )
 {
-	QString sample = "namespace foospace {\n"
-		"class Bar {\n"
-		"public:\n"
-		"int foo();\n"
-		"private:\n"
-		"int m_foo;\n"
-		"};\n"
-		"int Bar::foo() {\n"
-		"switch (x) {\n"
-		"case 1:\n"
-		"break;\n"
-		"default:\n"
-		"break;\n"
-		"} if (isBar) {\n"
-		"bar();\n"
-		"return m_foo+1;\n"
-		"} else return 0; \n"
-		"}\n }\n";
+	QString sample = "namespace foospace {class Bar { public: int foo(); private: int m_foo;};int Bar::foo(){ switch (x) { case 1:{ALabel:if(true)Foo();else Bar();for(int i=0;i<10;i++){a+=i;}} break; default: break; } if ((isBar)&&(isFoo)){ bar(); return m_foo+1; } else return 0; } }";
 
 	ConfigTabs->setTabEnabled(tab_2, id == 0);
 	ConfigTabs->setTabEnabled(tab_3, id == 0);
+	ConfigTabs->setTabEnabled(tab_4, id == 0);
 	
 	StyleExample->clear();
 	

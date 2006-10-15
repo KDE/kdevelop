@@ -1,45 +1,42 @@
-/*
-* Copyright (c) 1998,1999,2000,2001,2002 Tal Davidson. All rights reserved.
-*
-* ASResource.cpp
-* by Tal Davidson (davidsont@bigfoot.com)
-* This file is a part of "Artistic Style" - an indentater and reformatter
-* of C, C++, C# and Java source files.
-*
- * The "Artistic Style" project, including all files needed to compile it,
- * is free software; you can redistribute it and/or use it and/or modify it
- * under the terms of the GNU General Public License as published 
- * by the Free Software Foundation; either version 2 of the License, 
- * or (at your option) any later version.
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *   ASResource.cpp
  *
- * You should have received a copy of the GNU General Public
- * License along with this program.
-*/
+ *   This file is a part of "Artistic Style" - an indentation and
+ *   reformatting tool for C, C++, C# and Java source files.
+ *   http://astyle.sourceforge.net
+ *
+ *   The "Artistic Style" project, including all files needed to compile
+ *   it, is free software; you can redistribute it and/or modify it
+ *   under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License,
+ *   or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ *   Boston, MA  02110-1301, USA.
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
 
-#include "compiler_defines.h"
 #include "astyle.h"
 
-#include <string>
-
-
-#ifdef USES_NAMESPACE
-using namespace std;
 
 namespace astyle
 {
-#endif
-
 const string ASResource::AS_IF = string("if");
-const string ASResource::AS_ELSE = string ("else");
+const string ASResource::AS_ELSE = string("else");
 const string ASResource::AS_FOR = string("for");
 const string ASResource::AS_DO = string("do");
 const string ASResource::AS_WHILE = string("while");
-const string ASResource::AS_SWITCH = string ("switch");
-const string ASResource::AS_CASE = string ("case");
+const string ASResource::AS_SWITCH = string("switch");
+const string ASResource::AS_CASE = string("case");
 const string ASResource::AS_DEFAULT = string("default");
 const string ASResource::AS_CLASS = string("class");
 const string ASResource::AS_STRUCT = string("struct");
@@ -72,7 +69,7 @@ const string ASResource::AS_OPEN_BRACKET = string("{");
 const string ASResource::AS_CLOSE_BRACKET = string("}");
 const string ASResource::AS_OPEN_LINE_COMMENT = string("//");
 const string ASResource::AS_OPEN_COMMENT = string("/*");
-const  string ASResource::AS_CLOSE_COMMENT = string("*/");
+const string ASResource::AS_CLOSE_COMMENT = string("*/");
 
 const string ASResource::AS_ASSIGN = string("=");
 const string ASResource::AS_PLUS_ASSIGN = string("+=");
@@ -132,8 +129,252 @@ const string ASResource::AS_SET = string("set");
 const string ASResource::AS_ADD = string("add");
 const string ASResource::AS_REMOVE = string("remove");
 
-#ifdef USES_NAMESPACE
+const string ASResource::AS_CONST_CAST = string("const_cast");
+const string ASResource::AS_DYNAMIC_CAST = string("dynamic_cast");
+const string ASResource::AS_REINTERPRET_CAST = string("reinterpret_cast");
+const string ASResource::AS_STATIC_CAST = string("static_cast");
+
+
+/**
+ * Build the vector of assignment operators.
+ * Used by BOTH ASFormatter.cpp and ASBeautifier.cpp
+ *
+ * @param assignmentOperators   a reference to the vector to be built.
+ */
+void ASResource::buildAssignmentOperators(vector<const string*> &assignmentOperators)
+{
+	assignmentOperators.push_back(&AS_ASSIGN);
+	assignmentOperators.push_back(&AS_PLUS_ASSIGN);
+	assignmentOperators.push_back(&AS_MINUS_ASSIGN);
+	assignmentOperators.push_back(&AS_MULT_ASSIGN);
+	assignmentOperators.push_back(&AS_DIV_ASSIGN);
+	assignmentOperators.push_back(&AS_MOD_ASSIGN);
+	assignmentOperators.push_back(&AS_OR_ASSIGN);
+	assignmentOperators.push_back(&AS_AND_ASSIGN);
+	assignmentOperators.push_back(&AS_XOR_ASSIGN);
+
+	// Java
+	assignmentOperators.push_back(&AS_GR_GR_GR_ASSIGN);
+	assignmentOperators.push_back(&AS_GR_GR_ASSIGN);
+	assignmentOperators.push_back(&AS_LS_LS_ASSIGN);
+
+	// Unknown
+	assignmentOperators.push_back(&AS_LS_LS_LS_ASSIGN);
+
+	assignmentOperators.push_back(&AS_RETURN);
 }
-#endif
+
+/**
+ * Build the vector of C++ cast operators.
+ * Used by ONLY ASFormatter.cpp
+ *
+ * @param castOperators     a reference to the vector to be built.
+ */
+void ASResource::buildCastOperators(vector<const string*> &castOperators)
+{
+	castOperators.push_back(&AS_CONST_CAST);
+	castOperators.push_back(&AS_DYNAMIC_CAST);
+	castOperators.push_back(&AS_REINTERPRET_CAST);
+	castOperators.push_back(&AS_STATIC_CAST);
+}
+
+/**
+ * Build the vector of header words.
+ * Used by BOTH ASFormatter.cpp and ASBeautifier.cpp
+ *
+ * @param headers       a reference to the vector to be built.
+ */
+void ASResource::buildHeaders(vector<const string*> &headers)
+{
+	headers.push_back(&AS_IF);
+	headers.push_back(&AS_ELSE);
+	headers.push_back(&AS_FOR);
+	headers.push_back(&AS_WHILE);
+	headers.push_back(&AS_DO);
+	headers.push_back(&AS_SWITCH);
+	headers.push_back(&AS_CASE);
+	headers.push_back(&AS_DEFAULT);
+	headers.push_back(&AS_TRY);
+	headers.push_back(&AS_CATCH);
+	headers.push_back(&AS_TEMPLATE);
+	headers.push_back(&AS_CONST);
+	headers.push_back(&AS_STATIC);
+	headers.push_back(&AS_EXTERN);
+
+	// C# and Java
+	headers.push_back(&AS_FINALLY);
+
+	// Java
+	headers.push_back(&AS_SYNCHRONIZED);
+
+	// C#
+	headers.push_back(&AS_FOREACH);
+	headers.push_back(&AS_LOCK);
+	headers.push_back(&AS_UNSAFE);
+	headers.push_back(&AS_FIXED);
+	headers.push_back(&AS_GET);
+	headers.push_back(&AS_SET);
+	headers.push_back(&AS_ADD);
+	headers.push_back(&AS_REMOVE);
+}
+
+/**
+ * Build the vector of non-assignment operators.
+ * Used by ONLY ASBeautifier.cpp
+ *
+ * @param nonParenHeaders       a reference to the vector to be built.
+ */
+void ASResource::buildNonAssignmentOperators(vector<const string*> &nonAssignmentOperators)
+{
+	nonAssignmentOperators.push_back(&AS_EQUAL);
+	nonAssignmentOperators.push_back(&AS_PLUS_PLUS);
+	nonAssignmentOperators.push_back(&AS_MINUS_MINUS);
+	nonAssignmentOperators.push_back(&AS_NOT_EQUAL);
+	nonAssignmentOperators.push_back(&AS_GR_EQUAL);
+	nonAssignmentOperators.push_back(&AS_GR_GR_GR);
+	nonAssignmentOperators.push_back(&AS_GR_GR);
+	nonAssignmentOperators.push_back(&AS_LS_EQUAL);
+	nonAssignmentOperators.push_back(&AS_LS_LS_LS);
+	nonAssignmentOperators.push_back(&AS_LS_LS);
+	nonAssignmentOperators.push_back(&AS_ARROW);
+	nonAssignmentOperators.push_back(&AS_AND);
+	nonAssignmentOperators.push_back(&AS_OR);
+}
+
+/**
+ * Build the vector of header non-paren headers.
+ * Used by BOTH ASFormatter.cpp and ASBeautifier.cpp
+ *
+ * @param nonParenHeaders       a reference to the vector to be built.
+ */
+void ASResource::buildNonParenHeaders(vector<const string*> &nonParenHeaders)
+{
+	nonParenHeaders.push_back(&AS_ELSE);
+	nonParenHeaders.push_back(&AS_DO);
+	nonParenHeaders.push_back(&AS_CASE);
+	nonParenHeaders.push_back(&AS_DEFAULT);
+	nonParenHeaders.push_back(&AS_TRY);
+
+	nonParenHeaders.push_back(&AS_TEMPLATE);
+	nonParenHeaders.push_back(&AS_CONST);
+	nonParenHeaders.push_back(&AS_STATIC);
+	nonParenHeaders.push_back(&AS_EXTERN);
+
+	// C# and Java
+	nonParenHeaders.push_back(&AS_FINALLY);
+
+	// C#
+	nonParenHeaders.push_back(&AS_UNSAFE);
+	nonParenHeaders.push_back(&AS_GET);
+	nonParenHeaders.push_back(&AS_SET);
+	nonParenHeaders.push_back(&AS_ADD);
+	nonParenHeaders.push_back(&AS_REMOVE);
+}
+
+/**
+ * Build the vector of operators.
+ * Used by ONLY ASFormatter.cpp
+ *
+ * @param operators             a reference to the vector to be built.
+ */
+void ASResource::buildOperators(vector<const string*> &operators)
+{
+	operators.push_back(&AS_PLUS_ASSIGN);
+	operators.push_back(&AS_MINUS_ASSIGN);
+	operators.push_back(&AS_MULT_ASSIGN);
+	operators.push_back(&AS_DIV_ASSIGN);
+	operators.push_back(&AS_MOD_ASSIGN);
+	operators.push_back(&AS_OR_ASSIGN);
+	operators.push_back(&AS_AND_ASSIGN);
+	operators.push_back(&AS_XOR_ASSIGN);
+	operators.push_back(&AS_EQUAL);
+	operators.push_back(&AS_PLUS_PLUS);
+	operators.push_back(&AS_MINUS_MINUS);
+	operators.push_back(&AS_NOT_EQUAL);
+	operators.push_back(&AS_GR_EQUAL);
+	operators.push_back(&AS_GR_GR_GR_ASSIGN);
+	operators.push_back(&AS_GR_GR_ASSIGN);
+	operators.push_back(&AS_GR_GR_GR);
+	operators.push_back(&AS_GR_GR);
+	operators.push_back(&AS_LS_EQUAL);
+	operators.push_back(&AS_LS_LS_LS_ASSIGN);
+	operators.push_back(&AS_LS_LS_ASSIGN);
+	operators.push_back(&AS_LS_LS_LS);
+	operators.push_back(&AS_LS_LS);
+	operators.push_back(&AS_ARROW);
+	operators.push_back(&AS_AND);
+	operators.push_back(&AS_OR);
+	operators.push_back(&AS_COLON_COLON);
+
+	//// BUGFIX: removed the folowing lines
+	////    operators.push_back(&AS_PAREN_PAREN);
+	////    operators.push_back(&AS_BLPAREN_BLPAREN);
+
+	operators.push_back(&AS_PLUS);
+	operators.push_back(&AS_MINUS);
+	operators.push_back(&AS_MULT);
+	operators.push_back(&AS_DIV);
+	operators.push_back(&AS_MOD);
+	operators.push_back(&AS_QUESTION);
+	operators.push_back(&AS_COLON);
+	operators.push_back(&AS_ASSIGN);
+	operators.push_back(&AS_LS);
+	operators.push_back(&AS_GR);
+	operators.push_back(&AS_NOT);
+	operators.push_back(&AS_BIT_OR);
+	operators.push_back(&AS_BIT_AND);
+	operators.push_back(&AS_BIT_NOT);
+	operators.push_back(&AS_BIT_XOR);
+	operators.push_back(&AS_OPERATOR);
+	operators.push_back(&AS_COMMA);
+	//    operators.push_back(&AS_SEMICOLON);
+
+	operators.push_back(&AS_RETURN);
+}
+
+/**
+ * Build the vector of pre-block statements.
+ * Used by ONLY ASBeautifier.cpp
+ *
+ * @param preBlockStatements        a reference to the vector to be built.
+ */
+void ASResource::buildPreBlockStatements(vector<const string*> &preBlockStatements)
+{
+	preBlockStatements.push_back(&AS_CLASS);
+	preBlockStatements.push_back(&AS_STRUCT);
+	preBlockStatements.push_back(&AS_UNION);
+	preBlockStatements.push_back(&AS_INTERFACE);
+	preBlockStatements.push_back(&AS_NAMESPACE);
+	preBlockStatements.push_back(&AS_THROWS);
+	preBlockStatements.push_back(&AS_EXTERN);
+}
+
+/**
+ * Build the vector of pre-command headers.
+ * Used by ONLY ASFormatter.cpp
+ *
+ * @param preCommandHeaders     a reference to the vector to be built.
+ */
+void ASResource::buildPreCommandHeaders(vector<const string*> &preCommandHeaders)
+{
+	preCommandHeaders.push_back(&AS_EXTERN);
+	preCommandHeaders.push_back(&AS_THROWS);
+	preCommandHeaders.push_back(&AS_CONST);
+}
+
+/**
+ * Build the vector of pre-definition headers.
+ * Used by ONLY ASFormatter.cpp
+ *
+ * @param preDefinitionHeaders      a reference to the vector to be built.
+ */
+void ASResource::buildPreDefinitionHeaders(vector<const string*> &preDefinitionHeaders)
+{
+	preDefinitionHeaders.push_back(&AS_CLASS);
+	preDefinitionHeaders.push_back(&AS_INTERFACE);
+	preDefinitionHeaders.push_back(&AS_NAMESPACE);
+	preDefinitionHeaders.push_back(&AS_STRUCT);
+}
 
 
+}   // end namespace astyle

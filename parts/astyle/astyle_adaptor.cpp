@@ -44,10 +44,10 @@ KDevFormatter::KDevFormatter()
 {
 	KConfig *config = kapp->config();
 	config->setGroup("AStyle");
-	
+
 	// style
 	QString s = config->readEntry("Style");
-	
+
 	if ( predefinedStyle( s ) )
 	{
 		return;
@@ -82,23 +82,25 @@ KDevFormatter::KDevFormatter()
   // brackets
   s = config->readEntry("Brackets", "Break");
   if (s == "Break")
-    setBracketFormatMode(BREAK_MODE);
+	  setBracketFormatMode(astyle::BREAK_MODE);
   if (s == "Attach")
-    setBracketFormatMode(ATTACH_MODE);
+	  setBracketFormatMode(astyle::ATTACH_MODE);
   if (s == "Linux")
-    setBracketFormatMode(BDAC_MODE);
+	  setBracketFormatMode(astyle::BDAC_MODE);
 
   // padding
   setOperatorPaddingMode(config->readBoolEntry("PadOperators", false));
-  setParenthesisPaddingMode(config->readBoolEntry("PadParentheses", false));
+  setParensInsidePaddingMode(config->readBoolEntry("PadOperatorsIn", false));
+  setParensOutsidePaddingMode(config->readBoolEntry("PadOperatorsOut", false));
+  setParensUnPaddingMode(config->readBoolEntry("PadOperatorsUn", false));
 
   // oneliner
-  setBreakOneLineBlocksMode(!config->readBoolEntry("KeepBlocks", false));
-  setSingleStatementsMode(!config->readBoolEntry("KeepStatements", false));
+  setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false));
+  setSingleStatementsMode(config->readBoolEntry("KeepStatements", false));
 }
 
 KDevFormatter::KDevFormatter( AStyleWidget * widget )
-{	
+{
 	if ( widget->Style_ANSI->isChecked() )
 	{
 		predefinedStyle( "ANSI" );
@@ -128,7 +130,7 @@ KDevFormatter::KDevFormatter( AStyleWidget * widget )
 	// fill
 	if ( widget->Fill_Tabs->isChecked() )
 	{
-		setTabIndentation();
+		setTabIndentation(widget->Fill_TabCount->value(), widget->Fill_ForceTabs->isChecked());
 		m_indentString = "\t";
 	}
 	else
@@ -137,7 +139,10 @@ KDevFormatter::KDevFormatter( AStyleWidget * widget )
 		m_indentString = "";
 		m_indentString.fill(' ', widget->Fill_SpaceCount->value());
 	}
-	
+
+	setTabSpaceConversionMode(widget->Fill_ConvertTabs->isChecked());
+	setEmptyLineFill(widget->Fill_EmptyLines->isChecked());
+
 	// indent
 	setSwitchIndent( widget->Indent_Switches->isChecked() );
 	setClassIndent( widget->Indent_Classes->isChecked() );
@@ -145,32 +150,50 @@ KDevFormatter::KDevFormatter( AStyleWidget * widget )
 	setBracketIndent( widget->Indent_Brackets->isChecked() );
 	setNamespaceIndent( widget->Indent_Namespaces->isChecked() );
 	setLabelIndent( widget->Indent_Labels->isChecked() );
-	
+	setBlockIndent( widget->Indent_Blocks->isChecked());
+	setPreprocessorIndent(widget->Indent_Preprocessors->isChecked());
+
 	// continuation
 	setMaxInStatementIndentLength( widget->Continue_MaxStatement->value() );
 	setMinConditionalIndentLength( widget->Continue_MinConditional->value() );
-	
+
 	// brackets
 	if ( widget->Brackets_Break->isChecked() )
 	{
-		setBracketFormatMode( BREAK_MODE );
+		setBracketFormatMode( astyle::BREAK_MODE );
 	}
 	else if ( widget->Brackets_Attach->isChecked() )
 	{
-		setBracketFormatMode( ATTACH_MODE );
+		setBracketFormatMode( astyle::ATTACH_MODE );
 	}
-	else 
+	else if ( widget->Brackets_Linux->isChecked())
 	{
-		setBracketFormatMode( BDAC_MODE );
+		setBracketFormatMode( astyle::BDAC_MODE );
 	}
-	
+	else{
+		setBracketFormatMode( astyle::NONE_MODE );
+	}
+
+	setBreakClosingHeaderBracketsMode( widget->Brackets_CloseHeaders->isChecked());
+
+	// blocks
+	setBreakBlocksMode(widget->Block_Break->isChecked());
+	if (widget->Block_BreakAll->isChecked()){
+		setBreakBlocksMode(true);
+		setBreakClosingHeaderBlocksMode(true);
+	}
+	setBreakElseIfsMode(widget->Block_IfElse->isChecked());
+
 	// padding
 	setOperatorPaddingMode( widget->Pad_Operators->isChecked() );
-	setParenthesisPaddingMode( widget->Pad_Parentheses->isChecked() );
-	
+
+	setParensInsidePaddingMode( widget->Pad_ParenthesesIn->isChecked() );
+	setParensOutsidePaddingMode( widget->Pad_ParenthesesOut->isChecked() );
+	setParensUnPaddingMode( widget->Pad_ParenthesesUn->isChecked() );
+
 	// oneliner
-	setBreakOneLineBlocksMode( widget->Keep_Blocks->isChecked() );
-	setSingleStatementsMode( widget->Keep_Statements->isChecked() );
+	setBreakOneLineBlocksMode( !widget->Keep_Blocks->isChecked() );
+	setSingleStatementsMode( !widget->Keep_Statements->isChecked() );
 }
 
 bool KDevFormatter::predefinedStyle( const QString & style )
@@ -179,7 +202,7 @@ bool KDevFormatter::predefinedStyle( const QString & style )
 	{
 		setBracketIndent(false);
 		setSpaceIndentation(4);
-		setBracketFormatMode(BREAK_MODE);
+		setBracketFormatMode(astyle::BREAK_MODE);
 		setClassIndent(false);
 		setSwitchIndent(false);
 		setNamespaceIndent(false);
@@ -189,7 +212,7 @@ bool KDevFormatter::predefinedStyle( const QString & style )
 	{
 		setBracketIndent(false);
 		setSpaceIndentation(4);
-		setBracketFormatMode(ATTACH_MODE);
+		setBracketFormatMode(astyle::ATTACH_MODE);
 		setClassIndent(false);
 		setSwitchIndent(false);
 		setNamespaceIndent(false);
@@ -199,7 +222,7 @@ bool KDevFormatter::predefinedStyle( const QString & style )
 	{
 		setBracketIndent(false);
 		setSpaceIndentation(8);
-		setBracketFormatMode(BDAC_MODE);
+		setBracketFormatMode(astyle::BDAC_MODE);
 		setClassIndent(false);
 		setSwitchIndent(false);
 		setNamespaceIndent(false);
@@ -209,7 +232,7 @@ bool KDevFormatter::predefinedStyle( const QString & style )
 	{
 		setBlockIndent(true);
 		setSpaceIndentation(2);
-		setBracketFormatMode(BREAK_MODE);
+		setBracketFormatMode(astyle::BREAK_MODE);
 		setClassIndent(false);
 		setSwitchIndent(false);
 		setNamespaceIndent(false);
@@ -220,7 +243,7 @@ bool KDevFormatter::predefinedStyle( const QString & style )
 		setJavaStyle();
 		setBracketIndent(false);
 		setSpaceIndentation(4);
-		setBracketFormatMode(ATTACH_MODE);
+		setBracketFormatMode(astyle::ATTACH_MODE);
 		setSwitchIndent(false);
 		return true;
 	}

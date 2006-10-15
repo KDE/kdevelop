@@ -10,15 +10,15 @@ class KDevPart;
 class AStyleWidget : public AStyleConfig
 {
   Q_OBJECT
-    
+
 public:
-		  
+
   AStyleWidget( AStylePart * part, QWidget *parent=0, const char *name=0 );
   ~AStyleWidget();
 
 
 public slots:
-      
+
   void accept();
 
 
@@ -26,7 +26,8 @@ private slots:
 
   void styleChanged(int id);
   void pageChanged();
-  
+
+
 private:
 
 	AStylePart * m_part;
