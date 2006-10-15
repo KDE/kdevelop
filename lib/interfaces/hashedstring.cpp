@@ -9,6 +9,11 @@ size_t hashStringSafe( const QString& str ) {
   return hash;
 }
 
+size_t HashedString::hashString(  const QString& str )
+{
+	return hashStringSafe( str );
+}
+
 size_t fastHashString( const QString& str ) {
   size_t hash = 0;
   if( !str.isEmpty() ) {
