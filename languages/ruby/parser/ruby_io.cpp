@@ -30,6 +30,7 @@
 #include "ruby_lexer.h"
 
 #include <iostream>
+#include <sstream>
 
 namespace ruby
 {
@@ -63,11 +64,22 @@ void parser::yy_expected_token(int /*expected*/, std::size_t /*where*/, char con
 
 void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
 {
+    int line;
+    int col;
+    size_t index = token_stream->index();
+    token_type &token = token_stream->token(index);
+    token_stream->start_position(index, &line, &col);
+    size_t tokenLength = token.end - token.begin;
+    char tokenValue[tokenLength+1];
+    strncpy(tokenValue, token.text + token.begin, tokenLength);
+    std::stringstream s;
+    s << " (current token: \"" << tokenValue <<
+        "\" [" << token.kind << "] at line: " << line+1 << " col: " << col+1 << ")";
     report_problem(
         parser::error,
         std::string("Expected symbol ``") + name
         //+ "'' instead of ``" + current_token_text
-        + "''"
+        + "''" + s.str()
     );
 }
 
