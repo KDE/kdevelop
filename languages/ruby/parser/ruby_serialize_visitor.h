@@ -314,9 +314,99 @@ namespace ruby
         default_visitor::visit_keyword(node);
       }
 
+      virtual void visit_keywordAlias(keywordAlias_ast *node)
+      {
+        default_visitor::visit_keywordAlias(node);
+      }
+
+      virtual void visit_keywordAnd(keywordAnd_ast *node)
+      {
+        default_visitor::visit_keywordAnd(node);
+      }
+
       virtual void visit_keywordAsMethodName(keywordAsMethodName_ast *node)
       {
         default_visitor::visit_keywordAsMethodName(node);
+      }
+
+      virtual void visit_keywordBeginUpcase(keywordBeginUpcase_ast *node)
+      {
+        default_visitor::visit_keywordBeginUpcase(node);
+      }
+
+      virtual void visit_keywordBreak(keywordBreak_ast *node)
+      {
+        default_visitor::visit_keywordBreak(node);
+      }
+
+      virtual void visit_keywordClass(keywordClass_ast *node)
+      {
+        default_visitor::visit_keywordClass(node);
+      }
+
+      virtual void visit_keywordDef(keywordDef_ast *node)
+      {
+        default_visitor::visit_keywordDef(node);
+      }
+
+      virtual void visit_keywordDefined(keywordDefined_ast *node)
+      {
+        default_visitor::visit_keywordDefined(node);
+      }
+
+      virtual void visit_keywordDo(keywordDo_ast *node)
+      {
+        default_visitor::visit_keywordDo(node);
+      }
+
+      virtual void visit_keywordEnd(keywordEnd_ast *node)
+      {
+        default_visitor::visit_keywordEnd(node);
+      }
+
+      virtual void visit_keywordFor(keywordFor_ast *node)
+      {
+        default_visitor::visit_keywordFor(node);
+      }
+
+      virtual void visit_keywordIn(keywordIn_ast *node)
+      {
+        default_visitor::visit_keywordIn(node);
+      }
+
+      virtual void visit_keywordModule(keywordModule_ast *node)
+      {
+        default_visitor::visit_keywordModule(node);
+      }
+
+      virtual void visit_keywordNot(keywordNot_ast *node)
+      {
+        default_visitor::visit_keywordNot(node);
+      }
+
+      virtual void visit_keywordOr(keywordOr_ast *node)
+      {
+        default_visitor::visit_keywordOr(node);
+      }
+
+      virtual void visit_keywordUndef(keywordUndef_ast *node)
+      {
+        default_visitor::visit_keywordUndef(node);
+      }
+
+      virtual void visit_keywordUntil(keywordUntil_ast *node)
+      {
+        default_visitor::visit_keywordUntil(node);
+      }
+
+      virtual void visit_keywordWhen(keywordWhen_ast *node)
+      {
+        default_visitor::visit_keywordWhen(node);
+      }
+
+      virtual void visit_keywordWhile(keywordWhile_ast *node)
+      {
+        default_visitor::visit_keywordWhile(node);
       }
 
       virtual void visit_literal(literal_ast *node)

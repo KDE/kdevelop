@@ -47,7 +47,25 @@ namespace ruby
   struct ifExpression_ast;
   struct keyValuePair_ast;
   struct keyword_ast;
+  struct keywordAlias_ast;
+  struct keywordAnd_ast;
   struct keywordAsMethodName_ast;
+  struct keywordBeginUpcase_ast;
+  struct keywordBreak_ast;
+  struct keywordClass_ast;
+  struct keywordDef_ast;
+  struct keywordDefined_ast;
+  struct keywordDo_ast;
+  struct keywordEnd_ast;
+  struct keywordFor_ast;
+  struct keywordIn_ast;
+  struct keywordModule_ast;
+  struct keywordNot_ast;
+  struct keywordOr_ast;
+  struct keywordUndef_ast;
+  struct keywordUntil_ast;
+  struct keywordWhen_ast;
+  struct keywordWhile_ast;
   struct literal_ast;
   struct logicalAndExpression_ast;
   struct logicalOrExpression_ast;
@@ -135,54 +153,72 @@ namespace ruby
         Kind_ifExpression = 1032,
         Kind_keyValuePair = 1033,
         Kind_keyword = 1034,
-        Kind_keywordAsMethodName = 1035,
-        Kind_literal = 1036,
-        Kind_logicalAndExpression = 1037,
-        Kind_logicalOrExpression = 1038,
-        Kind_methodCall = 1039,
-        Kind_methodDefinition = 1040,
-        Kind_methodDefinitionArgument = 1041,
-        Kind_methodDefinitionArgumentWithoutParen = 1042,
-        Kind_methodInvocationArgumentWithParen = 1043,
-        Kind_methodInvocationArgumentWithoutParen = 1044,
-        Kind_methodName = 1045,
-        Kind_methodNameSupplement = 1046,
-        Kind_mlhs_item = 1047,
-        Kind_moduleDefinition = 1048,
-        Kind_moduleName = 1049,
-        Kind_mrhs = 1050,
-        Kind_multiplicativeExpression = 1051,
-        Kind_normalMethodDefinitionArgument = 1052,
-        Kind_normalMethodInvocationArgument = 1053,
-        Kind_notExpression = 1054,
-        Kind_numeric = 1055,
-        Kind_operatorAsMethodname = 1056,
-        Kind_orExpression = 1057,
-        Kind_parallelAssignmentLeftOver = 1058,
-        Kind_powerExpression = 1059,
-        Kind_predefinedValue = 1060,
-        Kind_primaryExpression = 1061,
-        Kind_program = 1062,
-        Kind_rangeExpression = 1063,
-        Kind_regex = 1064,
-        Kind_relationalExpression = 1065,
-        Kind_restMethodDefinitionArgument = 1066,
-        Kind_restMethodInvocationArgument = 1067,
-        Kind_shiftExpression = 1068,
-        Kind_statement = 1069,
-        Kind_statementWithoutModifier = 1070,
-        Kind_statements = 1071,
-        Kind_string = 1072,
-        Kind_symbol = 1073,
-        Kind_terminal = 1074,
-        Kind_ternaryIfThenElseExpression = 1075,
-        Kind_thenOrTerminalOrColon = 1076,
-        Kind_unaryExpression = 1077,
-        Kind_undefParameter = 1078,
-        Kind_unlessExpression = 1079,
-        Kind_untilExpression = 1080,
-        Kind_variable = 1081,
-        Kind_whileExpression = 1082,
+        Kind_keywordAlias = 1035,
+        Kind_keywordAnd = 1036,
+        Kind_keywordAsMethodName = 1037,
+        Kind_keywordBeginUpcase = 1038,
+        Kind_keywordBreak = 1039,
+        Kind_keywordClass = 1040,
+        Kind_keywordDef = 1041,
+        Kind_keywordDefined = 1042,
+        Kind_keywordDo = 1043,
+        Kind_keywordEnd = 1044,
+        Kind_keywordFor = 1045,
+        Kind_keywordIn = 1046,
+        Kind_keywordModule = 1047,
+        Kind_keywordNot = 1048,
+        Kind_keywordOr = 1049,
+        Kind_keywordUndef = 1050,
+        Kind_keywordUntil = 1051,
+        Kind_keywordWhen = 1052,
+        Kind_keywordWhile = 1053,
+        Kind_literal = 1054,
+        Kind_logicalAndExpression = 1055,
+        Kind_logicalOrExpression = 1056,
+        Kind_methodCall = 1057,
+        Kind_methodDefinition = 1058,
+        Kind_methodDefinitionArgument = 1059,
+        Kind_methodDefinitionArgumentWithoutParen = 1060,
+        Kind_methodInvocationArgumentWithParen = 1061,
+        Kind_methodInvocationArgumentWithoutParen = 1062,
+        Kind_methodName = 1063,
+        Kind_methodNameSupplement = 1064,
+        Kind_mlhs_item = 1065,
+        Kind_moduleDefinition = 1066,
+        Kind_moduleName = 1067,
+        Kind_mrhs = 1068,
+        Kind_multiplicativeExpression = 1069,
+        Kind_normalMethodDefinitionArgument = 1070,
+        Kind_normalMethodInvocationArgument = 1071,
+        Kind_notExpression = 1072,
+        Kind_numeric = 1073,
+        Kind_operatorAsMethodname = 1074,
+        Kind_orExpression = 1075,
+        Kind_parallelAssignmentLeftOver = 1076,
+        Kind_powerExpression = 1077,
+        Kind_predefinedValue = 1078,
+        Kind_primaryExpression = 1079,
+        Kind_program = 1080,
+        Kind_rangeExpression = 1081,
+        Kind_regex = 1082,
+        Kind_relationalExpression = 1083,
+        Kind_restMethodDefinitionArgument = 1084,
+        Kind_restMethodInvocationArgument = 1085,
+        Kind_shiftExpression = 1086,
+        Kind_statement = 1087,
+        Kind_statementWithoutModifier = 1088,
+        Kind_statements = 1089,
+        Kind_string = 1090,
+        Kind_symbol = 1091,
+        Kind_terminal = 1092,
+        Kind_ternaryIfThenElseExpression = 1093,
+        Kind_thenOrTerminalOrColon = 1094,
+        Kind_unaryExpression = 1095,
+        Kind_undefParameter = 1096,
+        Kind_unlessExpression = 1097,
+        Kind_untilExpression = 1098,
+        Kind_variable = 1099,
+        Kind_whileExpression = 1100,
         AST_NODE_KIND_COUNT
       };
 
@@ -506,11 +542,173 @@ namespace ruby
 
     };
 
+  struct keywordAlias_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordAlias
+      };
+
+    };
+
+  struct keywordAnd_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordAnd
+      };
+
+    };
+
   struct keywordAsMethodName_ast: public ast_node
     {
       enum
       {
         KIND = Kind_keywordAsMethodName
+      };
+
+    };
+
+  struct keywordBeginUpcase_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordBeginUpcase
+      };
+
+    };
+
+  struct keywordBreak_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordBreak
+      };
+
+    };
+
+  struct keywordClass_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordClass
+      };
+
+    };
+
+  struct keywordDef_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordDef
+      };
+
+    };
+
+  struct keywordDefined_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordDefined
+      };
+
+    };
+
+  struct keywordDo_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordDo
+      };
+
+    };
+
+  struct keywordEnd_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordEnd
+      };
+
+    };
+
+  struct keywordFor_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordFor
+      };
+
+    };
+
+  struct keywordIn_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordIn
+      };
+
+    };
+
+  struct keywordModule_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordModule
+      };
+
+    };
+
+  struct keywordNot_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordNot
+      };
+
+    };
+
+  struct keywordOr_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordOr
+      };
+
+    };
+
+  struct keywordUndef_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordUndef
+      };
+
+    };
+
+  struct keywordUntil_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordUntil
+      };
+
+    };
+
+  struct keywordWhen_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordWhen
+      };
+
+    };
+
+  struct keywordWhile_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_keywordWhile
       };
 
     };

@@ -186,9 +186,9 @@
 -> statement ;;
 
 
-    ALIAS aliasParameter (LINE_BREAK | 0) aliasParameter
-    | UNDEF (undefParameter @ COMMA)
-    | BEGIN_UPCASE LCURLY_BLOCK (compoundStatement | 0) RCURLY
+    keywordAlias aliasParameter (LINE_BREAK | 0) aliasParameter
+    | keywordUndef (undefParameter @ COMMA)
+    | keywordBeginUpcase LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | END_UPCASE LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | expression (parallelAssignmentLeftOver | 0)
     | REST_ARG_PREFIX mlhs_item ASSIGN mrhs
@@ -245,7 +245,7 @@
 -> block_vars ;;
 
 
-    DO blockContent END
+    keywordDo blockContent keywordEnd
     | LCURLY_BLOCK blockContent RCURLY
 -> codeBlock ;;
 
@@ -276,11 +276,11 @@
 
 
 --FIXME: greedy issue
-    notExpression @ (AND | OR) --greedy
+    notExpression @ (keywordAnd | keywordOr) --greedy
 -> andorExpression ;;
 
 
-    KEYWORD_NOT notExpression
+    keywordNot notExpression
     | ternaryIfThenElseExpression
 -> notExpression ;;
 
@@ -517,7 +517,7 @@
     | methodDefinition
     | RETRY
     | YIELD
-    | DEFINED
+    | keywordDefined
     | REDO
 -> primaryExpression ;;
 
@@ -556,7 +556,7 @@
 -> bodyStatement ;;
 
 
-    BEGIN bodyStatement END
+    BEGIN bodyStatement keywordEnd
 -> exceptionHandlingExpression ;;
 
     ( ((className|INSTANCE_VARIABLE) @ COMMA) | 0) ((ASSOC (IDENTIFIER|FUNCTION)) | 0)
@@ -566,38 +566,38 @@
     IF expression thenOrTerminalOrColon (compoundStatement | 0)
     (ELSIF (expression | 0) thenOrTerminalOrColon (compoundStatement | 0))*
     (ELSE (compoundStatement|0) |0)
-    END
+    keywordEnd
 -> ifExpression ;;
 
 
     UNLESS expression thenOrTerminalOrColon (compoundStatement | 0)
     ( (ELSE (compoundStatement|0)) | 0)
-    END
+    keywordEnd
 -> unlessExpression ;;
 
 
     CASE (compoundStatement | 0)
-        (WHEN mrhs thenOrTerminalOrColon (compoundStatement | 0))+
+        (keywordWhen mrhs thenOrTerminalOrColon (compoundStatement | 0))+
         ((ELSE (compoundStatement | 0)) | 0)
-        END
+        keywordEnd
 -> caseExpression ;;
 
 
-    FOR block_vars IN expression doOrTerminalOrColon
+    keywordFor block_vars keywordIn expression doOrTerminalOrColon
     (compoundStatement | 0)
-    END
+    keywordEnd
 -> forExpression ;;
 
 
-    WHILE expression doOrTerminalOrColon (compoundStatement | 0) END
+    keywordWhile expression doOrTerminalOrColon (compoundStatement | 0) keywordEnd
 -> whileExpression ;;
 
 
-    UNTIL expression doOrTerminalOrColon (compoundStatement | 0) END
+    keywordUntil expression doOrTerminalOrColon (compoundStatement | 0) keywordEnd
 -> untilExpression ;;
 
 
-    MODULE moduleName terminal bodyStatement END
+    keywordModule moduleName terminal bodyStatement keywordEnd
 -> moduleDefinition ;;
 
 
@@ -605,9 +605,9 @@
 -> moduleName ;;
 
 
-    CLASS ( className (LESS_THAN expression | 0)
+    keywordClass ( className (LESS_THAN expression | 0)
         | LEFT_SHIFT expression )
-        terminal bodyStatement END
+        terminal bodyStatement keywordEnd
 -> classDefinition ;;
 
 
@@ -615,7 +615,7 @@
 -> className ;;
 
 
-    DEF methodName methodDefinitionArgument bodyStatement END
+    keywordDef methodName methodDefinitionArgument bodyStatement keywordEnd
 -> methodDefinition ;;
 
 
@@ -751,7 +751,76 @@
 -> doOrTerminalOrColon ;;
 
 
+    BEGIN_UPCASE (LINE_BREAK | 0)
+-> keywordBeginUpcase ;;
 
+
+    ALIAS (LINE_BREAK | 0)
+-> keywordAlias ;;
+
+
+    AND (LINE_BREAK | 0)
+-> keywordAnd ;;
+
+
+    BREAK (LINE_BREAK | 0)
+-> keywordBreak ;;
+
+
+    CLASS (LINE_BREAK | 0)
+-> keywordClass ;;
+
+
+    DEF (LINE_BREAK | 0)
+-> keywordDef ;;
+
+
+    DEFINED (LINE_BREAK | 0)
+-> keywordDefined ;;
+
+
+    DO (LINE_BREAK | 0)
+-> keywordDo ;;
+
+
+    END (LINE_BREAK | 0)
+-> keywordEnd ;;
+
+
+    FOR (LINE_BREAK | 0)
+-> keywordFor ;;
+
+
+    IN (LINE_BREAK | 0)
+-> keywordIn ;;
+
+
+    MODULE (LINE_BREAK | 0)
+-> keywordModule ;;
+
+
+    KEYWORD_NOT (LINE_BREAK | 0)
+-> keywordNot ;;
+
+
+    OR (LINE_BREAK | 0)
+-> keywordOr ;;
+
+
+    UNDEF (LINE_BREAK | 0)
+-> keywordUndef ;;
+
+
+    UNTIL (LINE_BREAK | 0)
+-> keywordUntil ;;
+
+
+    WHEN (LINE_BREAK | 0)
+-> keywordWhen ;;
+
+
+    WHILE (LINE_BREAK | 0)
+-> keywordWhile ;;
 
 -----------------------------------------------------------------
 -- Code segments copied to the implementation (.cpp) file.

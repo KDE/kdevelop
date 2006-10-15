@@ -111,7 +111,61 @@ namespace ruby
   void default_visitor::visit_keyword(keyword_ast *)
   {}
 
+  void default_visitor::visit_keywordAlias(keywordAlias_ast *)
+  {}
+
+  void default_visitor::visit_keywordAnd(keywordAnd_ast *)
+  {}
+
   void default_visitor::visit_keywordAsMethodName(keywordAsMethodName_ast *)
+  {}
+
+  void default_visitor::visit_keywordBeginUpcase(keywordBeginUpcase_ast *)
+  {}
+
+  void default_visitor::visit_keywordBreak(keywordBreak_ast *)
+  {}
+
+  void default_visitor::visit_keywordClass(keywordClass_ast *)
+  {}
+
+  void default_visitor::visit_keywordDef(keywordDef_ast *)
+  {}
+
+  void default_visitor::visit_keywordDefined(keywordDefined_ast *)
+  {}
+
+  void default_visitor::visit_keywordDo(keywordDo_ast *)
+  {}
+
+  void default_visitor::visit_keywordEnd(keywordEnd_ast *)
+  {}
+
+  void default_visitor::visit_keywordFor(keywordFor_ast *)
+  {}
+
+  void default_visitor::visit_keywordIn(keywordIn_ast *)
+  {}
+
+  void default_visitor::visit_keywordModule(keywordModule_ast *)
+  {}
+
+  void default_visitor::visit_keywordNot(keywordNot_ast *)
+  {}
+
+  void default_visitor::visit_keywordOr(keywordOr_ast *)
+  {}
+
+  void default_visitor::visit_keywordUndef(keywordUndef_ast *)
+  {}
+
+  void default_visitor::visit_keywordUntil(keywordUntil_ast *)
+  {}
+
+  void default_visitor::visit_keywordWhen(keywordWhen_ast *)
+  {}
+
+  void default_visitor::visit_keywordWhile(keywordWhile_ast *)
   {}
 
   void default_visitor::visit_literal(literal_ast *)

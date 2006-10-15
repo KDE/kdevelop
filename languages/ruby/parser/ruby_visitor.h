@@ -92,7 +92,43 @@ namespace ruby
       {}
       virtual void visit_keyword(keyword_ast *)
       {}
+      virtual void visit_keywordAlias(keywordAlias_ast *)
+      {}
+      virtual void visit_keywordAnd(keywordAnd_ast *)
+      {}
       virtual void visit_keywordAsMethodName(keywordAsMethodName_ast *)
+      {}
+      virtual void visit_keywordBeginUpcase(keywordBeginUpcase_ast *)
+      {}
+      virtual void visit_keywordBreak(keywordBreak_ast *)
+      {}
+      virtual void visit_keywordClass(keywordClass_ast *)
+      {}
+      virtual void visit_keywordDef(keywordDef_ast *)
+      {}
+      virtual void visit_keywordDefined(keywordDefined_ast *)
+      {}
+      virtual void visit_keywordDo(keywordDo_ast *)
+      {}
+      virtual void visit_keywordEnd(keywordEnd_ast *)
+      {}
+      virtual void visit_keywordFor(keywordFor_ast *)
+      {}
+      virtual void visit_keywordIn(keywordIn_ast *)
+      {}
+      virtual void visit_keywordModule(keywordModule_ast *)
+      {}
+      virtual void visit_keywordNot(keywordNot_ast *)
+      {}
+      virtual void visit_keywordOr(keywordOr_ast *)
+      {}
+      virtual void visit_keywordUndef(keywordUndef_ast *)
+      {}
+      virtual void visit_keywordUntil(keywordUntil_ast *)
+      {}
+      virtual void visit_keywordWhen(keywordWhen_ast *)
+      {}
+      virtual void visit_keywordWhile(keywordWhile_ast *)
       {}
       virtual void visit_literal(literal_ast *)
       {}
