@@ -1,16 +1,25 @@
 #include "hashedstring.h"
 
-size_t HashedString::hashString( const QString& str ) {
+size_t hashStringSafe( const QString& str ) {
+  size_t hash = 0;
+  int len = str.length();
+  for( int a = 0; a < len; a++ ) {
+    hash = str[a].unicode() + (hash * 17);
+  }
+  return hash;
+}
+
+size_t fastHashString( const QString& str ) {
   size_t hash = 0;
   if( !str.isEmpty() ) {
-      QChar* curr = const_cast<QChar*>(str.unicode());
-      QChar c;
-      for(;;) {
-          c = *curr;
-          if( c.isNull() ) break;
-          hash = c.unicode() + ( hash * 17 );
-          ++curr;
-      }
+    const QChar* curr = str.unicode();
+    const QChar* end = curr + str.length();
+    QChar c;
+    for(; curr < end ;) {
+      c = *curr;
+      hash = c.unicode() + ( hash * 17 );
+      ++curr;
+    }
   }
   return hash;
 }
