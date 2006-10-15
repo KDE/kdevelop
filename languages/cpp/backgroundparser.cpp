@@ -241,14 +241,15 @@ void BackgroundParser::addFile( const QString& fileName, bool readFromDisk )
 {
 	QString fn = deepCopy( fileName );
 	
-	bool added = false;
+  //bool added = false;
 	/*if ( !m_fileList->contains( fn ) )
 	{
 		m_fileList->push_back( fn, readFromDisk );
 		added = true;
 	}*/
-	
-	if ( added )
+  m_fileList->push_back( fn, readFromDisk );
+  
+  //if ( added )
 		m_canParse.wakeAll();
 }
 
