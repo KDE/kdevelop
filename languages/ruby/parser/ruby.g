@@ -29,9 +29,21 @@
 -- Ruby language reference from Programming Ruby SE book by Dave Thomas
 -----------------------------------------------------------------------------
 
--- 1 first/follow conflict:
+-- 3 first/follow conflicts:
 -- - FIRST/FOLLOW conflict in hashExpression: resolved manually using the
 --   semantic predicate
+--
+-- - FIRST/FOLLOW conflict in andExpression:
+--      Terminals [BAND]
+--      Conflicting rule: blockMethodInvocationArgument
+--      Reason: "&" is also used to denote block argument to the function
+--      Resolved manually by semantic predicate.
+--
+-- - FIRST/FOLLOW conflict in multiplicativeExpression:
+--      Terminals [STAR]
+--      Conflicting rule: restMethodInvocationArgument
+--      Reason: "*" is also used to denote array argument to the function
+--      Resolved manually by semantic predicate.
 
 -- Known problems:
 -- - command rule should use methodInvocationArgumentWithoutParen subrule
