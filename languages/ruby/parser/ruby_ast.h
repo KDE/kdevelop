@@ -87,6 +87,51 @@ namespace ruby
   struct notExpression_ast;
   struct numeric_ast;
   struct operatorAsMethodname_ast;
+  struct operatorAssign_ast;
+  struct operatorBAnd_ast;
+  struct operatorBAndAssign_ast;
+  struct operatorBNot_ast;
+  struct operatorBOr_ast;
+  struct operatorBXor_ast;
+  struct operatorBXorAssign_ast;
+  struct operatorBorAssign_ast;
+  struct operatorCaseEqual_ast;
+  struct operatorColon_ast;
+  struct operatorCompare_ast;
+  struct operatorDiv_ast;
+  struct operatorDivAssign_ast;
+  struct operatorEqual_ast;
+  struct operatorExclusiveRange_ast;
+  struct operatorGreaterOrEqual_ast;
+  struct operatorGreaterThan_ast;
+  struct operatorInclusiveRange_ast;
+  struct operatorLeftShift_ast;
+  struct operatorLeftShiftAssign_ast;
+  struct operatorLessOrEqual_ast;
+  struct operatorLessThan_ast;
+  struct operatorLogicalAnd_ast;
+  struct operatorLogicalAndAssign_ast;
+  struct operatorLogicalOr_ast;
+  struct operatorLogicalOrAssign_ast;
+  struct operatorMatch_ast;
+  struct operatorMinus_ast;
+  struct operatorMinusAssign_ast;
+  struct operatorMod_ast;
+  struct operatorModAssign_ast;
+  struct operatorNot_ast;
+  struct operatorNotEqual_ast;
+  struct operatorNotMatch_ast;
+  struct operatorPlus_ast;
+  struct operatorPlusAssign_ast;
+  struct operatorPower_ast;
+  struct operatorPowerAssign_ast;
+  struct operatorQuestion_ast;
+  struct operatorRightShift_ast;
+  struct operatorRightShiftAssign_ast;
+  struct operatorStar_ast;
+  struct operatorStarAssign_ast;
+  struct operatorUnaryMinus_ast;
+  struct operatorUnaryPlus_ast;
   struct orExpression_ast;
   struct parallelAssignmentLeftOver_ast;
   struct powerExpression_ast;
@@ -193,32 +238,77 @@ namespace ruby
         Kind_notExpression = 1072,
         Kind_numeric = 1073,
         Kind_operatorAsMethodname = 1074,
-        Kind_orExpression = 1075,
-        Kind_parallelAssignmentLeftOver = 1076,
-        Kind_powerExpression = 1077,
-        Kind_predefinedValue = 1078,
-        Kind_primaryExpression = 1079,
-        Kind_program = 1080,
-        Kind_rangeExpression = 1081,
-        Kind_regex = 1082,
-        Kind_relationalExpression = 1083,
-        Kind_restMethodDefinitionArgument = 1084,
-        Kind_restMethodInvocationArgument = 1085,
-        Kind_shiftExpression = 1086,
-        Kind_statement = 1087,
-        Kind_statementWithoutModifier = 1088,
-        Kind_statements = 1089,
-        Kind_string = 1090,
-        Kind_symbol = 1091,
-        Kind_terminal = 1092,
-        Kind_ternaryIfThenElseExpression = 1093,
-        Kind_thenOrTerminalOrColon = 1094,
-        Kind_unaryExpression = 1095,
-        Kind_undefParameter = 1096,
-        Kind_unlessExpression = 1097,
-        Kind_untilExpression = 1098,
-        Kind_variable = 1099,
-        Kind_whileExpression = 1100,
+        Kind_operatorAssign = 1075,
+        Kind_operatorBAnd = 1076,
+        Kind_operatorBAndAssign = 1077,
+        Kind_operatorBNot = 1078,
+        Kind_operatorBOr = 1079,
+        Kind_operatorBXor = 1080,
+        Kind_operatorBXorAssign = 1081,
+        Kind_operatorBorAssign = 1082,
+        Kind_operatorCaseEqual = 1083,
+        Kind_operatorColon = 1084,
+        Kind_operatorCompare = 1085,
+        Kind_operatorDiv = 1086,
+        Kind_operatorDivAssign = 1087,
+        Kind_operatorEqual = 1088,
+        Kind_operatorExclusiveRange = 1089,
+        Kind_operatorGreaterOrEqual = 1090,
+        Kind_operatorGreaterThan = 1091,
+        Kind_operatorInclusiveRange = 1092,
+        Kind_operatorLeftShift = 1093,
+        Kind_operatorLeftShiftAssign = 1094,
+        Kind_operatorLessOrEqual = 1095,
+        Kind_operatorLessThan = 1096,
+        Kind_operatorLogicalAnd = 1097,
+        Kind_operatorLogicalAndAssign = 1098,
+        Kind_operatorLogicalOr = 1099,
+        Kind_operatorLogicalOrAssign = 1100,
+        Kind_operatorMatch = 1101,
+        Kind_operatorMinus = 1102,
+        Kind_operatorMinusAssign = 1103,
+        Kind_operatorMod = 1104,
+        Kind_operatorModAssign = 1105,
+        Kind_operatorNot = 1106,
+        Kind_operatorNotEqual = 1107,
+        Kind_operatorNotMatch = 1108,
+        Kind_operatorPlus = 1109,
+        Kind_operatorPlusAssign = 1110,
+        Kind_operatorPower = 1111,
+        Kind_operatorPowerAssign = 1112,
+        Kind_operatorQuestion = 1113,
+        Kind_operatorRightShift = 1114,
+        Kind_operatorRightShiftAssign = 1115,
+        Kind_operatorStar = 1116,
+        Kind_operatorStarAssign = 1117,
+        Kind_operatorUnaryMinus = 1118,
+        Kind_operatorUnaryPlus = 1119,
+        Kind_orExpression = 1120,
+        Kind_parallelAssignmentLeftOver = 1121,
+        Kind_powerExpression = 1122,
+        Kind_predefinedValue = 1123,
+        Kind_primaryExpression = 1124,
+        Kind_program = 1125,
+        Kind_rangeExpression = 1126,
+        Kind_regex = 1127,
+        Kind_relationalExpression = 1128,
+        Kind_restMethodDefinitionArgument = 1129,
+        Kind_restMethodInvocationArgument = 1130,
+        Kind_shiftExpression = 1131,
+        Kind_statement = 1132,
+        Kind_statementWithoutModifier = 1133,
+        Kind_statements = 1134,
+        Kind_string = 1135,
+        Kind_symbol = 1136,
+        Kind_terminal = 1137,
+        Kind_ternaryIfThenElseExpression = 1138,
+        Kind_thenOrTerminalOrColon = 1139,
+        Kind_unaryExpression = 1140,
+        Kind_undefParameter = 1141,
+        Kind_unlessExpression = 1142,
+        Kind_untilExpression = 1143,
+        Kind_variable = 1144,
+        Kind_whileExpression = 1145,
         AST_NODE_KIND_COUNT
       };
 
@@ -898,6 +988,411 @@ namespace ruby
       enum
       {
         KIND = Kind_operatorAsMethodname
+      };
+
+    };
+
+  struct operatorAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorAssign
+      };
+
+    };
+
+  struct operatorBAnd_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorBAnd
+      };
+
+    };
+
+  struct operatorBAndAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorBAndAssign
+      };
+
+    };
+
+  struct operatorBNot_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorBNot
+      };
+
+    };
+
+  struct operatorBOr_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorBOr
+      };
+
+    };
+
+  struct operatorBXor_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorBXor
+      };
+
+    };
+
+  struct operatorBXorAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorBXorAssign
+      };
+
+    };
+
+  struct operatorBorAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorBorAssign
+      };
+
+    };
+
+  struct operatorCaseEqual_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorCaseEqual
+      };
+
+    };
+
+  struct operatorColon_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorColon
+      };
+
+    };
+
+  struct operatorCompare_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorCompare
+      };
+
+    };
+
+  struct operatorDiv_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorDiv
+      };
+
+    };
+
+  struct operatorDivAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorDivAssign
+      };
+
+    };
+
+  struct operatorEqual_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorEqual
+      };
+
+    };
+
+  struct operatorExclusiveRange_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorExclusiveRange
+      };
+
+    };
+
+  struct operatorGreaterOrEqual_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorGreaterOrEqual
+      };
+
+    };
+
+  struct operatorGreaterThan_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorGreaterThan
+      };
+
+    };
+
+  struct operatorInclusiveRange_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorInclusiveRange
+      };
+
+    };
+
+  struct operatorLeftShift_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLeftShift
+      };
+
+    };
+
+  struct operatorLeftShiftAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLeftShiftAssign
+      };
+
+    };
+
+  struct operatorLessOrEqual_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLessOrEqual
+      };
+
+    };
+
+  struct operatorLessThan_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLessThan
+      };
+
+    };
+
+  struct operatorLogicalAnd_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLogicalAnd
+      };
+
+    };
+
+  struct operatorLogicalAndAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLogicalAndAssign
+      };
+
+    };
+
+  struct operatorLogicalOr_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLogicalOr
+      };
+
+    };
+
+  struct operatorLogicalOrAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorLogicalOrAssign
+      };
+
+    };
+
+  struct operatorMatch_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorMatch
+      };
+
+    };
+
+  struct operatorMinus_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorMinus
+      };
+
+    };
+
+  struct operatorMinusAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorMinusAssign
+      };
+
+    };
+
+  struct operatorMod_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorMod
+      };
+
+    };
+
+  struct operatorModAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorModAssign
+      };
+
+    };
+
+  struct operatorNot_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorNot
+      };
+
+    };
+
+  struct operatorNotEqual_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorNotEqual
+      };
+
+    };
+
+  struct operatorNotMatch_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorNotMatch
+      };
+
+    };
+
+  struct operatorPlus_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorPlus
+      };
+
+    };
+
+  struct operatorPlusAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorPlusAssign
+      };
+
+    };
+
+  struct operatorPower_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorPower
+      };
+
+    };
+
+  struct operatorPowerAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorPowerAssign
+      };
+
+    };
+
+  struct operatorQuestion_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorQuestion
+      };
+
+    };
+
+  struct operatorRightShift_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorRightShift
+      };
+
+    };
+
+  struct operatorRightShiftAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorRightShiftAssign
+      };
+
+    };
+
+  struct operatorStar_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorStar
+      };
+
+    };
+
+  struct operatorStarAssign_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorStarAssign
+      };
+
+    };
+
+  struct operatorUnaryMinus_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorUnaryMinus
+      };
+
+    };
+
+  struct operatorUnaryPlus_ast: public ast_node
+    {
+      enum
+      {
+        KIND = Kind_operatorUnaryPlus
       };
 
     };

@@ -514,6 +514,231 @@ namespace ruby
         default_visitor::visit_operatorAsMethodname(node);
       }
 
+      virtual void visit_operatorAssign(operatorAssign_ast *node)
+      {
+        default_visitor::visit_operatorAssign(node);
+      }
+
+      virtual void visit_operatorBAnd(operatorBAnd_ast *node)
+      {
+        default_visitor::visit_operatorBAnd(node);
+      }
+
+      virtual void visit_operatorBAndAssign(operatorBAndAssign_ast *node)
+      {
+        default_visitor::visit_operatorBAndAssign(node);
+      }
+
+      virtual void visit_operatorBNot(operatorBNot_ast *node)
+      {
+        default_visitor::visit_operatorBNot(node);
+      }
+
+      virtual void visit_operatorBOr(operatorBOr_ast *node)
+      {
+        default_visitor::visit_operatorBOr(node);
+      }
+
+      virtual void visit_operatorBXor(operatorBXor_ast *node)
+      {
+        default_visitor::visit_operatorBXor(node);
+      }
+
+      virtual void visit_operatorBXorAssign(operatorBXorAssign_ast *node)
+      {
+        default_visitor::visit_operatorBXorAssign(node);
+      }
+
+      virtual void visit_operatorBorAssign(operatorBorAssign_ast *node)
+      {
+        default_visitor::visit_operatorBorAssign(node);
+      }
+
+      virtual void visit_operatorCaseEqual(operatorCaseEqual_ast *node)
+      {
+        default_visitor::visit_operatorCaseEqual(node);
+      }
+
+      virtual void visit_operatorColon(operatorColon_ast *node)
+      {
+        default_visitor::visit_operatorColon(node);
+      }
+
+      virtual void visit_operatorCompare(operatorCompare_ast *node)
+      {
+        default_visitor::visit_operatorCompare(node);
+      }
+
+      virtual void visit_operatorDiv(operatorDiv_ast *node)
+      {
+        default_visitor::visit_operatorDiv(node);
+      }
+
+      virtual void visit_operatorDivAssign(operatorDivAssign_ast *node)
+      {
+        default_visitor::visit_operatorDivAssign(node);
+      }
+
+      virtual void visit_operatorEqual(operatorEqual_ast *node)
+      {
+        default_visitor::visit_operatorEqual(node);
+      }
+
+      virtual void visit_operatorExclusiveRange(operatorExclusiveRange_ast *node)
+      {
+        default_visitor::visit_operatorExclusiveRange(node);
+      }
+
+      virtual void visit_operatorGreaterOrEqual(operatorGreaterOrEqual_ast *node)
+      {
+        default_visitor::visit_operatorGreaterOrEqual(node);
+      }
+
+      virtual void visit_operatorGreaterThan(operatorGreaterThan_ast *node)
+      {
+        default_visitor::visit_operatorGreaterThan(node);
+      }
+
+      virtual void visit_operatorInclusiveRange(operatorInclusiveRange_ast *node)
+      {
+        default_visitor::visit_operatorInclusiveRange(node);
+      }
+
+      virtual void visit_operatorLeftShift(operatorLeftShift_ast *node)
+      {
+        default_visitor::visit_operatorLeftShift(node);
+      }
+
+      virtual void visit_operatorLeftShiftAssign(operatorLeftShiftAssign_ast *node)
+      {
+        default_visitor::visit_operatorLeftShiftAssign(node);
+      }
+
+      virtual void visit_operatorLessOrEqual(operatorLessOrEqual_ast *node)
+      {
+        default_visitor::visit_operatorLessOrEqual(node);
+      }
+
+      virtual void visit_operatorLessThan(operatorLessThan_ast *node)
+      {
+        default_visitor::visit_operatorLessThan(node);
+      }
+
+      virtual void visit_operatorLogicalAnd(operatorLogicalAnd_ast *node)
+      {
+        default_visitor::visit_operatorLogicalAnd(node);
+      }
+
+      virtual void visit_operatorLogicalAndAssign(operatorLogicalAndAssign_ast *node)
+      {
+        default_visitor::visit_operatorLogicalAndAssign(node);
+      }
+
+      virtual void visit_operatorLogicalOr(operatorLogicalOr_ast *node)
+      {
+        default_visitor::visit_operatorLogicalOr(node);
+      }
+
+      virtual void visit_operatorLogicalOrAssign(operatorLogicalOrAssign_ast *node)
+      {
+        default_visitor::visit_operatorLogicalOrAssign(node);
+      }
+
+      virtual void visit_operatorMatch(operatorMatch_ast *node)
+      {
+        default_visitor::visit_operatorMatch(node);
+      }
+
+      virtual void visit_operatorMinus(operatorMinus_ast *node)
+      {
+        default_visitor::visit_operatorMinus(node);
+      }
+
+      virtual void visit_operatorMinusAssign(operatorMinusAssign_ast *node)
+      {
+        default_visitor::visit_operatorMinusAssign(node);
+      }
+
+      virtual void visit_operatorMod(operatorMod_ast *node)
+      {
+        default_visitor::visit_operatorMod(node);
+      }
+
+      virtual void visit_operatorModAssign(operatorModAssign_ast *node)
+      {
+        default_visitor::visit_operatorModAssign(node);
+      }
+
+      virtual void visit_operatorNot(operatorNot_ast *node)
+      {
+        default_visitor::visit_operatorNot(node);
+      }
+
+      virtual void visit_operatorNotEqual(operatorNotEqual_ast *node)
+      {
+        default_visitor::visit_operatorNotEqual(node);
+      }
+
+      virtual void visit_operatorNotMatch(operatorNotMatch_ast *node)
+      {
+        default_visitor::visit_operatorNotMatch(node);
+      }
+
+      virtual void visit_operatorPlus(operatorPlus_ast *node)
+      {
+        default_visitor::visit_operatorPlus(node);
+      }
+
+      virtual void visit_operatorPlusAssign(operatorPlusAssign_ast *node)
+      {
+        default_visitor::visit_operatorPlusAssign(node);
+      }
+
+      virtual void visit_operatorPower(operatorPower_ast *node)
+      {
+        default_visitor::visit_operatorPower(node);
+      }
+
+      virtual void visit_operatorPowerAssign(operatorPowerAssign_ast *node)
+      {
+        default_visitor::visit_operatorPowerAssign(node);
+      }
+
+      virtual void visit_operatorQuestion(operatorQuestion_ast *node)
+      {
+        default_visitor::visit_operatorQuestion(node);
+      }
+
+      virtual void visit_operatorRightShift(operatorRightShift_ast *node)
+      {
+        default_visitor::visit_operatorRightShift(node);
+      }
+
+      virtual void visit_operatorRightShiftAssign(operatorRightShiftAssign_ast *node)
+      {
+        default_visitor::visit_operatorRightShiftAssign(node);
+      }
+
+      virtual void visit_operatorStar(operatorStar_ast *node)
+      {
+        default_visitor::visit_operatorStar(node);
+      }
+
+      virtual void visit_operatorStarAssign(operatorStarAssign_ast *node)
+      {
+        default_visitor::visit_operatorStarAssign(node);
+      }
+
+      virtual void visit_operatorUnaryMinus(operatorUnaryMinus_ast *node)
+      {
+        default_visitor::visit_operatorUnaryMinus(node);
+      }
+
+      virtual void visit_operatorUnaryPlus(operatorUnaryPlus_ast *node)
+      {
+        default_visitor::visit_operatorUnaryPlus(node);
+      }
+
       virtual void visit_orExpression(orExpression_ast *node)
       {
         default_visitor::visit_orExpression(node);

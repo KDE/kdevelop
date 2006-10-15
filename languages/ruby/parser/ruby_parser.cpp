@@ -127,36 +127,34 @@ namespace ruby
           {
             if (yytoken == Token_PLUS)
               {
-                if (yytoken != Token_PLUS)
+                operatorPlus_ast *__node_1 = 0;
+                if (!parse_operatorPlus(&__node_1))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_PLUS, "+");
+                        yy_expected_symbol(ast_node::Kind_operatorPlus, "operatorPlus");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_MINUS)
               {
-                if (yytoken != Token_MINUS)
+                operatorMinus_ast *__node_2 = 0;
+                if (!parse_operatorMinus(&__node_2))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_MINUS, "-");
+                        yy_expected_symbol(ast_node::Kind_operatorMinus, "operatorMinus");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
-            multiplicativeExpression_ast *__node_1 = 0;
-            if (!parse_multiplicativeExpression(&__node_1))
+            multiplicativeExpression_ast *__node_3 = 0;
+            if (!parse_multiplicativeExpression(&__node_3))
               {
                 if (!yy_block_errors)
                   {
@@ -307,8 +305,8 @@ namespace ruby
             || yytoken == Token_CONSTANT
             || yytoken == Token_FUNCTION)
           {
-            undefParameter_ast *__node_2 = 0;
-            if (!parse_undefParameter(&__node_2))
+            undefParameter_ast *__node_4 = 0;
+            if (!parse_undefParameter(&__node_4))
               {
                 if (!yy_block_errors)
                   {
@@ -406,8 +404,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        shiftExpression_ast *__node_3 = 0;
-        if (!parse_shiftExpression(&__node_3))
+        shiftExpression_ast *__node_5 = 0;
+        if (!parse_shiftExpression(&__node_5))
           {
             if (!yy_block_errors)
               {
@@ -417,18 +415,17 @@ namespace ruby
           }
         while (yytoken == Token_BAND)
           {
-            if (yytoken != Token_BAND)
+            operatorBAnd_ast *__node_6 = 0;
+            if (!parse_operatorBAnd(&__node_6))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_BAND, "&");
+                    yy_expected_symbol(ast_node::Kind_operatorBAnd, "operatorBAnd");
                   }
                 return false;
               }
-            yylex();
-
-            shiftExpression_ast *__node_4 = 0;
-            if (!parse_shiftExpression(&__node_4))
+            shiftExpression_ast *__node_7 = 0;
+            if (!parse_shiftExpression(&__node_7))
               {
                 if (!yy_block_errors)
                   {
@@ -510,8 +507,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        notExpression_ast *__node_5 = 0;
-        if (!parse_notExpression(&__node_5))
+        notExpression_ast *__node_8 = 0;
+        if (!parse_notExpression(&__node_8))
           {
             if (!yy_block_errors)
               {
@@ -524,8 +521,8 @@ namespace ruby
           {
             if (yytoken == Token_AND)
               {
-                keywordAnd_ast *__node_6 = 0;
-                if (!parse_keywordAnd(&__node_6))
+                keywordAnd_ast *__node_9 = 0;
+                if (!parse_keywordAnd(&__node_9))
                   {
                     if (!yy_block_errors)
                       {
@@ -536,8 +533,8 @@ namespace ruby
               }
             else if (yytoken == Token_OR)
               {
-                keywordOr_ast *__node_7 = 0;
-                if (!parse_keywordOr(&__node_7))
+                keywordOr_ast *__node_10 = 0;
+                if (!parse_keywordOr(&__node_10))
                   {
                     if (!yy_block_errors)
                       {
@@ -550,8 +547,8 @@ namespace ruby
               {
                 return false;
               }
-            notExpression_ast *__node_8 = 0;
-            if (!parse_notExpression(&__node_8))
+            notExpression_ast *__node_11 = 0;
+            if (!parse_notExpression(&__node_11))
               {
                 if (!yy_block_errors)
                   {
@@ -646,8 +643,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            arrayReferenceArgument_ast *__node_9 = 0;
-            if (!parse_arrayReferenceArgument(&__node_9))
+            arrayReferenceArgument_ast *__node_12 = 0;
+            if (!parse_arrayReferenceArgument(&__node_12))
               {
                 if (!yy_block_errors)
                   {
@@ -758,8 +755,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            arrayReferenceArgument_ast *__node_10 = 0;
-            if (!parse_arrayReferenceArgument(&__node_10))
+            arrayReferenceArgument_ast *__node_13 = 0;
+            if (!parse_arrayReferenceArgument(&__node_13))
               {
                 if (!yy_block_errors)
                   {
@@ -914,8 +911,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            keyValuePair_ast *__node_11 = 0;
-            if (!parse_keyValuePair(&__node_11))
+            keyValuePair_ast *__node_14 = 0;
+            if (!parse_keyValuePair(&__node_14))
               {
                 if (!yy_block_errors)
                   {
@@ -959,8 +956,8 @@ namespace ruby
                   {
                     return false;
                   }
-                keyValuePair_ast *__node_12 = 0;
-                if (!parse_keyValuePair(&__node_12))
+                keyValuePair_ast *__node_15 = 0;
+                if (!parse_keyValuePair(&__node_15))
                   {
                     if (!yy_block_errors)
                       {
@@ -984,8 +981,8 @@ namespace ruby
               }
             yylex();
 
-            expression_ast *__node_13 = 0;
-            if (!parse_expression(&__node_13))
+            expression_ast *__node_16 = 0;
+            if (!parse_expression(&__node_16))
               {
                 if (!yy_block_errors)
                   {
@@ -1089,8 +1086,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        rangeExpression_ast *__node_14 = 0;
-        if (!parse_rangeExpression(&__node_14))
+        rangeExpression_ast *__node_17 = 0;
+        if (!parse_rangeExpression(&__node_17))
           {
             if (!yy_block_errors)
               {
@@ -1099,6 +1096,7 @@ namespace ruby
             return false;
           }
         while (yytoken == Token_ASSIGN
+               || yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE
                || yytoken == Token_PLUS_ASSIGN
                || yytoken == Token_MINUS_ASSIGN
                || yytoken == Token_STAR_ASSIGN
@@ -1113,187 +1111,174 @@ namespace ruby
                || yytoken == Token_LOGICAL_AND_ASSIGN
                || yytoken == Token_LOGICAL_OR_ASSIGN)
           {
-            if (yytoken == Token_ASSIGN)
+            if (yytoken == Token_ASSIGN
+                || yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE)
               {
-                if (yytoken != Token_ASSIGN)
+                operatorAssign_ast *__node_18 = 0;
+                if (!parse_operatorAssign(&__node_18))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_ASSIGN, "=");
+                        yy_expected_symbol(ast_node::Kind_operatorAssign, "operatorAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_PLUS_ASSIGN)
               {
-                if (yytoken != Token_PLUS_ASSIGN)
+                operatorPlusAssign_ast *__node_19 = 0;
+                if (!parse_operatorPlusAssign(&__node_19))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_PLUS_ASSIGN, "+=");
+                        yy_expected_symbol(ast_node::Kind_operatorPlusAssign, "operatorPlusAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_MINUS_ASSIGN)
               {
-                if (yytoken != Token_MINUS_ASSIGN)
+                operatorMinusAssign_ast *__node_20 = 0;
+                if (!parse_operatorMinusAssign(&__node_20))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_MINUS_ASSIGN, "-=");
+                        yy_expected_symbol(ast_node::Kind_operatorMinusAssign, "operatorMinusAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_STAR_ASSIGN)
               {
-                if (yytoken != Token_STAR_ASSIGN)
+                operatorStarAssign_ast *__node_21 = 0;
+                if (!parse_operatorStarAssign(&__node_21))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_STAR_ASSIGN, "*=");
+                        yy_expected_symbol(ast_node::Kind_operatorStarAssign, "operatorStarAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_DIV_ASSIGN)
               {
-                if (yytoken != Token_DIV_ASSIGN)
+                operatorDivAssign_ast *__node_22 = 0;
+                if (!parse_operatorDivAssign(&__node_22))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_DIV_ASSIGN, "/=");
+                        yy_expected_symbol(ast_node::Kind_operatorDivAssign, "operatorDivAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_MOD_ASSIGN)
               {
-                if (yytoken != Token_MOD_ASSIGN)
+                operatorModAssign_ast *__node_23 = 0;
+                if (!parse_operatorModAssign(&__node_23))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_MOD_ASSIGN, "%=");
+                        yy_expected_symbol(ast_node::Kind_operatorModAssign, "operatorModAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_POWER_ASSIGN)
               {
-                if (yytoken != Token_POWER_ASSIGN)
+                operatorPowerAssign_ast *__node_24 = 0;
+                if (!parse_operatorPowerAssign(&__node_24))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_POWER_ASSIGN, "**=");
+                        yy_expected_symbol(ast_node::Kind_operatorPowerAssign, "operatorPowerAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_BAND_ASSIGN)
               {
-                if (yytoken != Token_BAND_ASSIGN)
+                operatorBAndAssign_ast *__node_25 = 0;
+                if (!parse_operatorBAndAssign(&__node_25))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_BAND_ASSIGN, "&=");
+                        yy_expected_symbol(ast_node::Kind_operatorBAndAssign, "operatorBAndAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_BXOR_ASSIGN)
               {
-                if (yytoken != Token_BXOR_ASSIGN)
+                operatorBXorAssign_ast *__node_26 = 0;
+                if (!parse_operatorBXorAssign(&__node_26))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_BXOR_ASSIGN, "^=");
+                        yy_expected_symbol(ast_node::Kind_operatorBXorAssign, "operatorBXorAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_BOR_ASSIGN)
               {
-                if (yytoken != Token_BOR_ASSIGN)
+                operatorBorAssign_ast *__node_27 = 0;
+                if (!parse_operatorBorAssign(&__node_27))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_BOR_ASSIGN, "|=");
+                        yy_expected_symbol(ast_node::Kind_operatorBorAssign, "operatorBorAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_LEFT_SHIFT_ASSIGN)
               {
-                if (yytoken != Token_LEFT_SHIFT_ASSIGN)
+                operatorLeftShiftAssign_ast *__node_28 = 0;
+                if (!parse_operatorLeftShiftAssign(&__node_28))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_LEFT_SHIFT_ASSIGN, "<<=");
+                        yy_expected_symbol(ast_node::Kind_operatorLeftShiftAssign, "operatorLeftShiftAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_RIGHT_SHIFT_ASSIGN)
               {
-                if (yytoken != Token_RIGHT_SHIFT_ASSIGN)
+                operatorRightShiftAssign_ast *__node_29 = 0;
+                if (!parse_operatorRightShiftAssign(&__node_29))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_RIGHT_SHIFT_ASSIGN, ">>=");
+                        yy_expected_symbol(ast_node::Kind_operatorRightShiftAssign, "operatorRightShiftAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_LOGICAL_AND_ASSIGN)
               {
-                if (yytoken != Token_LOGICAL_AND_ASSIGN)
+                operatorLogicalAndAssign_ast *__node_30 = 0;
+                if (!parse_operatorLogicalAndAssign(&__node_30))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_LOGICAL_AND_ASSIGN, "&&=");
+                        yy_expected_symbol(ast_node::Kind_operatorLogicalAndAssign, "operatorLogicalAndAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_LOGICAL_OR_ASSIGN)
               {
-                if (yytoken != Token_LOGICAL_OR_ASSIGN)
+                operatorLogicalOrAssign_ast *__node_31 = 0;
+                if (!parse_operatorLogicalOrAssign(&__node_31))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_LOGICAL_OR_ASSIGN, "||=");
+                        yy_expected_symbol(ast_node::Kind_operatorLogicalOrAssign, "operatorLogicalOrAssign");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
@@ -1318,8 +1303,8 @@ namespace ruby
               {
                 return false;
               }
-            rangeExpression_ast *__node_15 = 0;
-            if (!parse_rangeExpression(&__node_15))
+            rangeExpression_ast *__node_32 = 0;
+            if (!parse_rangeExpression(&__node_32))
               {
                 if (!yy_block_errors)
                   {
@@ -1475,8 +1460,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                block_vars_ast *__node_16 = 0;
-                if (!parse_block_vars(&__node_16))
+                block_vars_ast *__node_33 = 0;
+                if (!parse_block_vars(&__node_33))
                   {
                     if (!yy_block_errors)
                       {
@@ -1584,8 +1569,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_17 = 0;
-            if (!parse_compoundStatement(&__node_17))
+            compoundStatement_ast *__node_34 = 0;
+            if (!parse_compoundStatement(&__node_34))
               {
                 if (!yy_block_errors)
                   {
@@ -1688,8 +1673,8 @@ namespace ruby
           }
         yylex();
 
-        expression_ast *__node_18 = 0;
-        if (!parse_expression(&__node_18))
+        expression_ast *__node_35 = 0;
+        if (!parse_expression(&__node_35))
           {
             if (!yy_block_errors)
               {
@@ -1774,8 +1759,8 @@ namespace ruby
             goto __catch_1;
           yylex();
 
-          elementReference_ast *__node_19 = 0;
-          if (!parse_elementReference(&__node_19))
+          elementReference_ast *__node_36 = 0;
+          if (!parse_elementReference(&__node_36))
             {
               goto __catch_1;
             }
@@ -1803,8 +1788,8 @@ namespace ruby
                 {
                   goto __catch_1;
                 }
-              elementReference_ast *__node_20 = 0;
-              if (!parse_elementReference(&__node_20))
+              elementReference_ast *__node_37 = 0;
+              if (!parse_elementReference(&__node_37))
                 {
                   goto __catch_1;
                 }
@@ -1894,8 +1879,8 @@ namespace ruby
                     || yytoken == Token_FLOAT
                     || yytoken == Token_ASCII_VALUE)
                   {
-                    elementReference_ast *__node_21 = 0;
-                    if (!parse_elementReference(&__node_21))
+                    elementReference_ast *__node_38 = 0;
+                    if (!parse_elementReference(&__node_38))
                       {
                         if (!yy_block_errors)
                           {
@@ -1962,8 +1947,8 @@ namespace ruby
                      || yytoken == Token_FLOAT
                      || yytoken == Token_ASCII_VALUE)
               {
-                elementReference_ast *__node_22 = 0;
-                if (!parse_elementReference(&__node_22))
+                elementReference_ast *__node_39 = 0;
+                if (!parse_elementReference(&__node_39))
                   {
                     if (!yy_block_errors)
                       {
@@ -2047,8 +2032,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        block_var_ast *__node_23 = 0;
-        if (!parse_block_var(&__node_23))
+        block_var_ast *__node_40 = 0;
+        if (!parse_block_var(&__node_40))
           {
             if (!yy_block_errors)
               {
@@ -2070,8 +2055,8 @@ namespace ruby
 
             if ((yytoken == Token_BOR) || (yytoken == Token_IN))
               break;
-            block_var_ast *__node_24 = 0;
-            if (!parse_block_var(&__node_24))
+            block_var_ast *__node_41 = 0;
+            if (!parse_block_var(&__node_41))
               {
                 if (!yy_block_errors)
                   {
@@ -2226,8 +2211,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_25 = 0;
-            if (!parse_compoundStatement(&__node_25))
+            compoundStatement_ast *__node_42 = 0;
+            if (!parse_compoundStatement(&__node_42))
               {
                 if (!yy_block_errors)
                   {
@@ -2254,8 +2239,8 @@ namespace ruby
               }
             yylex();
 
-            exceptionList_ast *__node_26 = 0;
-            if (!parse_exceptionList(&__node_26))
+            exceptionList_ast *__node_43 = 0;
+            if (!parse_exceptionList(&__node_43))
               {
                 if (!yy_block_errors)
                   {
@@ -2263,8 +2248,8 @@ namespace ruby
                   }
                 return false;
               }
-            thenOrTerminalOrColon_ast *__node_27 = 0;
-            if (!parse_thenOrTerminalOrColon(&__node_27))
+            thenOrTerminalOrColon_ast *__node_44 = 0;
+            if (!parse_thenOrTerminalOrColon(&__node_44))
               {
                 if (!yy_block_errors)
                   {
@@ -2335,8 +2320,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_28 = 0;
-                if (!parse_compoundStatement(&__node_28))
+                compoundStatement_ast *__node_45 = 0;
+                if (!parse_compoundStatement(&__node_45))
                   {
                     if (!yy_block_errors)
                       {
@@ -2427,8 +2412,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_29 = 0;
-                if (!parse_compoundStatement(&__node_29))
+                compoundStatement_ast *__node_46 = 0;
+                if (!parse_compoundStatement(&__node_46))
                   {
                     if (!yy_block_errors)
                       {
@@ -2525,8 +2510,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_30 = 0;
-                if (!parse_compoundStatement(&__node_30))
+                compoundStatement_ast *__node_47 = 0;
+                if (!parse_compoundStatement(&__node_47))
                   {
                     if (!yy_block_errors)
                       {
@@ -2640,8 +2625,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_31 = 0;
-            if (!parse_compoundStatement(&__node_31))
+            compoundStatement_ast *__node_48 = 0;
+            if (!parse_compoundStatement(&__node_48))
               {
                 if (!yy_block_errors)
                   {
@@ -2658,8 +2643,8 @@ namespace ruby
           }
         do
           {
-            keywordWhen_ast *__node_32 = 0;
-            if (!parse_keywordWhen(&__node_32))
+            keywordWhen_ast *__node_49 = 0;
+            if (!parse_keywordWhen(&__node_49))
               {
                 if (!yy_block_errors)
                   {
@@ -2667,8 +2652,8 @@ namespace ruby
                   }
                 return false;
               }
-            mrhs_ast *__node_33 = 0;
-            if (!parse_mrhs(&__node_33))
+            mrhs_ast *__node_50 = 0;
+            if (!parse_mrhs(&__node_50))
               {
                 if (!yy_block_errors)
                   {
@@ -2676,8 +2661,8 @@ namespace ruby
                   }
                 return false;
               }
-            thenOrTerminalOrColon_ast *__node_34 = 0;
-            if (!parse_thenOrTerminalOrColon(&__node_34))
+            thenOrTerminalOrColon_ast *__node_51 = 0;
+            if (!parse_thenOrTerminalOrColon(&__node_51))
               {
                 if (!yy_block_errors)
                   {
@@ -2748,8 +2733,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_35 = 0;
-                if (!parse_compoundStatement(&__node_35))
+                compoundStatement_ast *__node_52 = 0;
+                if (!parse_compoundStatement(&__node_52))
                   {
                     if (!yy_block_errors)
                       {
@@ -2841,8 +2826,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_36 = 0;
-                if (!parse_compoundStatement(&__node_36))
+                compoundStatement_ast *__node_53 = 0;
+                if (!parse_compoundStatement(&__node_53))
                   {
                     if (!yy_block_errors)
                       {
@@ -2864,8 +2849,8 @@ namespace ruby
           {
             return false;
           }
-        keywordEnd_ast *__node_37 = 0;
-        if (!parse_keywordEnd(&__node_37))
+        keywordEnd_ast *__node_54 = 0;
+        if (!parse_keywordEnd(&__node_54))
           {
             if (!yy_block_errors)
               {
@@ -2892,8 +2877,8 @@ namespace ruby
 
     if (yytoken == Token_CLASS)
       {
-        keywordClass_ast *__node_38 = 0;
-        if (!parse_keywordClass(&__node_38))
+        keywordClass_ast *__node_55 = 0;
+        if (!parse_keywordClass(&__node_55))
           {
             if (!yy_block_errors)
               {
@@ -2905,8 +2890,8 @@ namespace ruby
             || yytoken == Token_CONSTANT
             || yytoken == Token_FUNCTION)
           {
-            className_ast *__node_39 = 0;
-            if (!parse_className(&__node_39))
+            className_ast *__node_56 = 0;
+            if (!parse_className(&__node_56))
               {
                 if (!yy_block_errors)
                   {
@@ -2926,8 +2911,8 @@ namespace ruby
                   }
                 yylex();
 
-                expression_ast *__node_40 = 0;
-                if (!parse_expression(&__node_40))
+                expression_ast *__node_57 = 0;
+                if (!parse_expression(&__node_57))
                   {
                     if (!yy_block_errors)
                       {
@@ -2955,8 +2940,8 @@ namespace ruby
               }
             yylex();
 
-            expression_ast *__node_41 = 0;
-            if (!parse_expression(&__node_41))
+            expression_ast *__node_58 = 0;
+            if (!parse_expression(&__node_58))
               {
                 if (!yy_block_errors)
                   {
@@ -2969,8 +2954,8 @@ namespace ruby
           {
             return false;
           }
-        terminal_ast *__node_42 = 0;
-        if (!parse_terminal(&__node_42))
+        terminal_ast *__node_59 = 0;
+        if (!parse_terminal(&__node_59))
           {
             if (!yy_block_errors)
               {
@@ -2978,8 +2963,8 @@ namespace ruby
               }
             return false;
           }
-        bodyStatement_ast *__node_43 = 0;
-        if (!parse_bodyStatement(&__node_43))
+        bodyStatement_ast *__node_60 = 0;
+        if (!parse_bodyStatement(&__node_60))
           {
             if (!yy_block_errors)
               {
@@ -2987,8 +2972,8 @@ namespace ruby
               }
             return false;
           }
-        keywordEnd_ast *__node_44 = 0;
-        if (!parse_keywordEnd(&__node_44))
+        keywordEnd_ast *__node_61 = 0;
+        if (!parse_keywordEnd(&__node_61))
           {
             if (!yy_block_errors)
               {
@@ -3115,8 +3100,8 @@ namespace ruby
       {
         if (yytoken == Token_DO)
           {
-            keywordDo_ast *__node_45 = 0;
-            if (!parse_keywordDo(&__node_45))
+            keywordDo_ast *__node_62 = 0;
+            if (!parse_keywordDo(&__node_62))
               {
                 if (!yy_block_errors)
                   {
@@ -3124,8 +3109,8 @@ namespace ruby
                   }
                 return false;
               }
-            blockContent_ast *__node_46 = 0;
-            if (!parse_blockContent(&__node_46))
+            blockContent_ast *__node_63 = 0;
+            if (!parse_blockContent(&__node_63))
               {
                 if (!yy_block_errors)
                   {
@@ -3133,8 +3118,8 @@ namespace ruby
                   }
                 return false;
               }
-            keywordEnd_ast *__node_47 = 0;
-            if (!parse_keywordEnd(&__node_47))
+            keywordEnd_ast *__node_64 = 0;
+            if (!parse_keywordEnd(&__node_64))
               {
                 if (!yy_block_errors)
                   {
@@ -3155,8 +3140,8 @@ namespace ruby
               }
             yylex();
 
-            blockContent_ast *__node_48 = 0;
-            if (!parse_blockContent(&__node_48))
+            blockContent_ast *__node_65 = 0;
+            if (!parse_blockContent(&__node_65))
               {
                 if (!yy_block_errors)
                   {
@@ -3244,8 +3229,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        methodCall_ast *__node_49 = 0;
-        if (!parse_methodCall(&__node_49))
+        methodCall_ast *__node_66 = 0;
+        if (!parse_methodCall(&__node_66))
           {
             if (!yy_block_errors)
               {
@@ -3265,8 +3250,8 @@ namespace ruby
               }
             yylex();
 
-            methodCall_ast *__node_50 = 0;
-            if (!parse_methodCall(&__node_50))
+            methodCall_ast *__node_67 = 0;
+            if (!parse_methodCall(&__node_67))
               {
                 if (!yy_block_errors)
                   {
@@ -3391,8 +3376,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            colonAccess_ast *__node_51 = 0;
-            if (!parse_colonAccess(&__node_51))
+            colonAccess_ast *__node_68 = 0;
+            if (!parse_colonAccess(&__node_68))
               {
                 if (!yy_block_errors)
                   {
@@ -3402,8 +3387,8 @@ namespace ruby
               }
             if (yytoken == Token_LPAREN)
               {
-                methodInvocationArgumentWithParen_ast *__node_52 = 0;
-                if (!parse_methodInvocationArgumentWithParen(&__node_52))
+                methodInvocationArgumentWithParen_ast *__node_69 = 0;
+                if (!parse_methodInvocationArgumentWithParen(&__node_69))
                   {
                     if (!yy_block_errors)
                       {
@@ -3421,8 +3406,8 @@ namespace ruby
             if (yytoken == Token_DO
                 || yytoken == Token_LCURLY_BLOCK)
               {
-                codeBlock_ast *__node_53 = 0;
-                if (!parse_codeBlock(&__node_53))
+                codeBlock_ast *__node_70 = 0;
+                if (!parse_codeBlock(&__node_70))
                   {
                     if (!yy_block_errors)
                       {
@@ -3487,8 +3472,8 @@ namespace ruby
               }
             if (yytoken == Token_LPAREN)
               {
-                methodInvocationArgumentWithParen_ast *__node_54 = 0;
-                if (!parse_methodInvocationArgumentWithParen(&__node_54))
+                methodInvocationArgumentWithParen_ast *__node_71 = 0;
+                if (!parse_methodInvocationArgumentWithParen(&__node_71))
                   {
                     if (!yy_block_errors)
                       {
@@ -3553,8 +3538,8 @@ namespace ruby
               }
             yylex();
 
-            expressionSubstitution_ast *__node_55 = 0;
-            if (!parse_expressionSubstitution(&__node_55))
+            expressionSubstitution_ast *__node_72 = 0;
+            if (!parse_expressionSubstitution(&__node_72))
               {
                 if (!yy_block_errors)
                   {
@@ -3574,8 +3559,8 @@ namespace ruby
                   }
                 yylex();
 
-                expressionSubstitution_ast *__node_56 = 0;
-                if (!parse_expressionSubstitution(&__node_56))
+                expressionSubstitution_ast *__node_73 = 0;
+                if (!parse_expressionSubstitution(&__node_73))
                   {
                     if (!yy_block_errors)
                       {
@@ -3682,8 +3667,8 @@ namespace ruby
         if (yytoken == Token_SEMI
             || yytoken == Token_LINE_BREAK)
           {
-            terminal_ast *__node_57 = 0;
-            if (!parse_terminal(&__node_57))
+            terminal_ast *__node_74 = 0;
+            if (!parse_terminal(&__node_74))
               {
                 if (!yy_block_errors)
                   {
@@ -3752,8 +3737,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                statements_ast *__node_58 = 0;
-                if (!parse_statements(&__node_58))
+                statements_ast *__node_75 = 0;
+                if (!parse_statements(&__node_75))
                   {
                     if (!yy_block_errors)
                       {
@@ -3830,8 +3815,8 @@ namespace ruby
                  || yytoken == Token_FLOAT
                  || yytoken == Token_ASCII_VALUE)
           {
-            statements_ast *__node_59 = 0;
-            if (!parse_statements(&__node_59))
+            statements_ast *__node_76 = 0;
+            if (!parse_statements(&__node_76))
               {
                 if (!yy_block_errors)
                   {
@@ -3882,8 +3867,8 @@ namespace ruby
         else if (yytoken == Token_SEMI
                  || yytoken == Token_LINE_BREAK)
           {
-            terminal_ast *__node_60 = 0;
-            if (!parse_terminal(&__node_60))
+            terminal_ast *__node_77 = 0;
+            if (!parse_terminal(&__node_77))
               {
                 if (!yy_block_errors)
                   {
@@ -3977,8 +3962,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        elementReference_ast *__node_61 = 0;
-        if (!parse_elementReference(&__node_61))
+        elementReference_ast *__node_78 = 0;
+        if (!parse_elementReference(&__node_78))
           {
             if (!yy_block_errors)
               {
@@ -3998,8 +3983,8 @@ namespace ruby
               }
             yylex();
 
-            elementReference_ast *__node_62 = 0;
-            if (!parse_elementReference(&__node_62))
+            elementReference_ast *__node_79 = 0;
+            if (!parse_elementReference(&__node_79))
               {
                 if (!yy_block_errors)
                   {
@@ -4076,8 +4061,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        command_ast *__node_63 = 0;
-        if (!parse_command(&__node_63))
+        command_ast *__node_80 = 0;
+        if (!parse_command(&__node_80))
           {
             if (!yy_block_errors)
               {
@@ -4087,8 +4072,8 @@ namespace ruby
           }
         while (yytoken == Token_LBRACK_ARRAY_ACCESS)
           {
-            arrayAccess_ast *__node_64 = 0;
-            if (!parse_arrayAccess(&__node_64))
+            arrayAccess_ast *__node_81 = 0;
+            if (!parse_arrayAccess(&__node_81))
               {
                 if (!yy_block_errors)
                   {
@@ -4169,8 +4154,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        relationalExpression_ast *__node_65 = 0;
-        if (!parse_relationalExpression(&__node_65))
+        relationalExpression_ast *__node_82 = 0;
+        if (!parse_relationalExpression(&__node_82))
           {
             if (!yy_block_errors)
               {
@@ -4187,88 +4172,82 @@ namespace ruby
           {
             if (yytoken == Token_COMPARE)
               {
-                if (yytoken != Token_COMPARE)
+                operatorCompare_ast *__node_83 = 0;
+                if (!parse_operatorCompare(&__node_83))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_COMPARE, "<=>");
+                        yy_expected_symbol(ast_node::Kind_operatorCompare, "operatorCompare");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_EQUAL)
               {
-                if (yytoken != Token_EQUAL)
+                operatorEqual_ast *__node_84 = 0;
+                if (!parse_operatorEqual(&__node_84))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_EQUAL, "==");
+                        yy_expected_symbol(ast_node::Kind_operatorEqual, "operatorEqual");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_CASE_EQUAL)
               {
-                if (yytoken != Token_CASE_EQUAL)
+                operatorCaseEqual_ast *__node_85 = 0;
+                if (!parse_operatorCaseEqual(&__node_85))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_CASE_EQUAL, "===");
+                        yy_expected_symbol(ast_node::Kind_operatorCaseEqual, "operatorCaseEqual");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_NOT_EQUAL)
               {
-                if (yytoken != Token_NOT_EQUAL)
+                operatorNotEqual_ast *__node_86 = 0;
+                if (!parse_operatorNotEqual(&__node_86))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_NOT_EQUAL, "!=");
+                        yy_expected_symbol(ast_node::Kind_operatorNotEqual, "operatorNotEqual");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_MATCH)
               {
-                if (yytoken != Token_MATCH)
+                operatorMatch_ast *__node_87 = 0;
+                if (!parse_operatorMatch(&__node_87))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_MATCH, "=~");
+                        yy_expected_symbol(ast_node::Kind_operatorMatch, "operatorMatch");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_NOT_MATCH)
               {
-                if (yytoken != Token_NOT_MATCH)
+                operatorNotMatch_ast *__node_88 = 0;
+                if (!parse_operatorNotMatch(&__node_88))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_NOT_MATCH, "!~");
+                        yy_expected_symbol(ast_node::Kind_operatorNotMatch, "operatorNotMatch");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
-            relationalExpression_ast *__node_66 = 0;
-            if (!parse_relationalExpression(&__node_66))
+            relationalExpression_ast *__node_89 = 0;
+            if (!parse_relationalExpression(&__node_89))
               {
                 if (!yy_block_errors)
                   {
@@ -4306,8 +4285,8 @@ namespace ruby
           }
         yylex();
 
-        bodyStatement_ast *__node_67 = 0;
-        if (!parse_bodyStatement(&__node_67))
+        bodyStatement_ast *__node_90 = 0;
+        if (!parse_bodyStatement(&__node_90))
           {
             if (!yy_block_errors)
               {
@@ -4315,8 +4294,8 @@ namespace ruby
               }
             return false;
           }
-        keywordEnd_ast *__node_68 = 0;
-        if (!parse_keywordEnd(&__node_68))
+        keywordEnd_ast *__node_91 = 0;
+        if (!parse_keywordEnd(&__node_91))
           {
             if (!yy_block_errors)
               {
@@ -4359,8 +4338,8 @@ namespace ruby
                 || yytoken == Token_CONSTANT
                 || yytoken == Token_FUNCTION)
               {
-                className_ast *__node_69 = 0;
-                if (!parse_className(&__node_69))
+                className_ast *__node_92 = 0;
+                if (!parse_className(&__node_92))
                   {
                     if (!yy_block_errors)
                       {
@@ -4402,8 +4381,8 @@ namespace ruby
                     || yytoken == Token_CONSTANT
                     || yytoken == Token_FUNCTION)
                   {
-                    className_ast *__node_70 = 0;
-                    if (!parse_className(&__node_70))
+                    className_ast *__node_93 = 0;
+                    if (!parse_className(&__node_93))
                       {
                         if (!yy_block_errors)
                           {
@@ -4559,8 +4538,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        andorExpression_ast *__node_71 = 0;
-        if (!parse_andorExpression(&__node_71))
+        andorExpression_ast *__node_94 = 0;
+        if (!parse_andorExpression(&__node_94))
           {
             if (!yy_block_errors)
               {
@@ -4602,8 +4581,8 @@ namespace ruby
               }
             yylex();
 
-            compoundStatement_ast *__node_72 = 0;
-            if (!parse_compoundStatement(&__node_72))
+            compoundStatement_ast *__node_95 = 0;
+            if (!parse_compoundStatement(&__node_95))
               {
                 if (!yy_block_errors)
                   {
@@ -4684,8 +4663,8 @@ namespace ruby
 
     if (yytoken == Token_FOR)
       {
-        keywordFor_ast *__node_73 = 0;
-        if (!parse_keywordFor(&__node_73))
+        keywordFor_ast *__node_96 = 0;
+        if (!parse_keywordFor(&__node_96))
           {
             if (!yy_block_errors)
               {
@@ -4693,8 +4672,8 @@ namespace ruby
               }
             return false;
           }
-        block_vars_ast *__node_74 = 0;
-        if (!parse_block_vars(&__node_74))
+        block_vars_ast *__node_97 = 0;
+        if (!parse_block_vars(&__node_97))
           {
             if (!yy_block_errors)
               {
@@ -4702,8 +4681,8 @@ namespace ruby
               }
             return false;
           }
-        keywordIn_ast *__node_75 = 0;
-        if (!parse_keywordIn(&__node_75))
+        keywordIn_ast *__node_98 = 0;
+        if (!parse_keywordIn(&__node_98))
           {
             if (!yy_block_errors)
               {
@@ -4711,8 +4690,8 @@ namespace ruby
               }
             return false;
           }
-        expression_ast *__node_76 = 0;
-        if (!parse_expression(&__node_76))
+        expression_ast *__node_99 = 0;
+        if (!parse_expression(&__node_99))
           {
             if (!yy_block_errors)
               {
@@ -4720,8 +4699,8 @@ namespace ruby
               }
             return false;
           }
-        doOrTerminalOrColon_ast *__node_77 = 0;
-        if (!parse_doOrTerminalOrColon(&__node_77))
+        doOrTerminalOrColon_ast *__node_100 = 0;
+        if (!parse_doOrTerminalOrColon(&__node_100))
           {
             if (!yy_block_errors)
               {
@@ -4792,8 +4771,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_78 = 0;
-            if (!parse_compoundStatement(&__node_78))
+            compoundStatement_ast *__node_101 = 0;
+            if (!parse_compoundStatement(&__node_101))
               {
                 if (!yy_block_errors)
                   {
@@ -4808,8 +4787,8 @@ namespace ruby
           {
             return false;
           }
-        keywordEnd_ast *__node_79 = 0;
-        if (!parse_keywordEnd(&__node_79))
+        keywordEnd_ast *__node_102 = 0;
+        if (!parse_keywordEnd(&__node_102))
           {
             if (!yy_block_errors)
               {
@@ -4902,8 +4881,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            keyValuePair_ast *__node_80 = 0;
-            if (!parse_keyValuePair(&__node_80))
+            keyValuePair_ast *__node_103 = 0;
+            if (!parse_keyValuePair(&__node_103))
               {
                 if (!yy_block_errors)
                   {
@@ -4923,8 +4902,8 @@ namespace ruby
                   }
                 yylex();
 
-                keyValuePair_ast *__node_81 = 0;
-                if (!parse_keyValuePair(&__node_81))
+                keyValuePair_ast *__node_104 = 0;
+                if (!parse_keyValuePair(&__node_104))
                   {
                     if (!yy_block_errors)
                       {
@@ -4998,8 +4977,8 @@ namespace ruby
           }
         yylex();
 
-        expression_ast *__node_82 = 0;
-        if (!parse_expression(&__node_82))
+        expression_ast *__node_105 = 0;
+        if (!parse_expression(&__node_105))
           {
             if (!yy_block_errors)
               {
@@ -5007,8 +4986,8 @@ namespace ruby
               }
             return false;
           }
-        thenOrTerminalOrColon_ast *__node_83 = 0;
-        if (!parse_thenOrTerminalOrColon(&__node_83))
+        thenOrTerminalOrColon_ast *__node_106 = 0;
+        if (!parse_thenOrTerminalOrColon(&__node_106))
           {
             if (!yy_block_errors)
               {
@@ -5079,8 +5058,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_84 = 0;
-            if (!parse_compoundStatement(&__node_84))
+            compoundStatement_ast *__node_107 = 0;
+            if (!parse_compoundStatement(&__node_107))
               {
                 if (!yy_block_errors)
                   {
@@ -5163,8 +5142,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                expression_ast *__node_85 = 0;
-                if (!parse_expression(&__node_85))
+                expression_ast *__node_108 = 0;
+                if (!parse_expression(&__node_108))
                   {
                     if (!yy_block_errors)
                       {
@@ -5179,8 +5158,8 @@ namespace ruby
               {
                 return false;
               }
-            thenOrTerminalOrColon_ast *__node_86 = 0;
-            if (!parse_thenOrTerminalOrColon(&__node_86))
+            thenOrTerminalOrColon_ast *__node_109 = 0;
+            if (!parse_thenOrTerminalOrColon(&__node_109))
               {
                 if (!yy_block_errors)
                   {
@@ -5251,8 +5230,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_87 = 0;
-                if (!parse_compoundStatement(&__node_87))
+                compoundStatement_ast *__node_110 = 0;
+                if (!parse_compoundStatement(&__node_110))
                   {
                     if (!yy_block_errors)
                       {
@@ -5343,8 +5322,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_88 = 0;
-                if (!parse_compoundStatement(&__node_88))
+                compoundStatement_ast *__node_111 = 0;
+                if (!parse_compoundStatement(&__node_111))
                   {
                     if (!yy_block_errors)
                       {
@@ -5366,8 +5345,8 @@ namespace ruby
           {
             return false;
           }
-        keywordEnd_ast *__node_89 = 0;
-        if (!parse_keywordEnd(&__node_89))
+        keywordEnd_ast *__node_112 = 0;
+        if (!parse_keywordEnd(&__node_112))
           {
             if (!yy_block_errors)
               {
@@ -5448,8 +5427,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        expression_ast *__node_90 = 0;
-        if (!parse_expression(&__node_90))
+        expression_ast *__node_113 = 0;
+        if (!parse_expression(&__node_113))
           {
             if (!yy_block_errors)
               {
@@ -5469,8 +5448,8 @@ namespace ruby
               }
             yylex();
 
-            expression_ast *__node_91 = 0;
-            if (!parse_expression(&__node_91))
+            expression_ast *__node_114 = 0;
+            if (!parse_expression(&__node_114))
               {
                 if (!yy_block_errors)
                   {
@@ -5597,8 +5576,8 @@ namespace ruby
             || yytoken == Token_BEGIN_UPCASE
             || yytoken == Token_NOT)
           {
-            keywordAsMethodName_ast *__node_92 = 0;
-            if (!parse_keywordAsMethodName(&__node_92))
+            keywordAsMethodName_ast *__node_115 = 0;
+            if (!parse_keywordAsMethodName(&__node_115))
               {
                 if (!yy_block_errors)
                   {
@@ -7082,8 +7061,8 @@ namespace ruby
         if (yytoken == Token_REGEX_BEFORE_EXPRESSION_SUBSTITUTION
             || yytoken == Token_REGEX)
           {
-            regex_ast *__node_93 = 0;
-            if (!parse_regex(&__node_93))
+            regex_ast *__node_116 = 0;
+            if (!parse_regex(&__node_116))
               {
                 if (!yy_block_errors)
                   {
@@ -7098,8 +7077,8 @@ namespace ruby
           {
             do
               {
-                string_ast *__node_94 = 0;
-                if (!parse_string(&__node_94))
+                string_ast *__node_117 = 0;
+                if (!parse_string(&__node_117))
                   {
                     if (!yy_block_errors)
                       {
@@ -7128,8 +7107,8 @@ namespace ruby
         else if (yytoken == Token_COMMAND_OUTPUT
                  || yytoken == Token_COMMAND_OUTPUT_BEFORE_EXPRESSION_SUBSTITUTION)
           {
-            commandOutput_ast *__node_95 = 0;
-            if (!parse_commandOutput(&__node_95))
+            commandOutput_ast *__node_118 = 0;
+            if (!parse_commandOutput(&__node_118))
               {
                 if (!yy_block_errors)
                   {
@@ -7140,8 +7119,8 @@ namespace ruby
           }
         else if (yytoken == Token_COLON_WITH_NO_FOLLOWING_SPACE)
           {
-            symbol_ast *__node_96 = 0;
-            if (!parse_symbol(&__node_96))
+            symbol_ast *__node_119 = 0;
+            if (!parse_symbol(&__node_119))
               {
                 if (!yy_block_errors)
                   {
@@ -7239,8 +7218,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        equalityExpression_ast *__node_97 = 0;
-        if (!parse_equalityExpression(&__node_97))
+        equalityExpression_ast *__node_120 = 0;
+        if (!parse_equalityExpression(&__node_120))
           {
             if (!yy_block_errors)
               {
@@ -7250,18 +7229,17 @@ namespace ruby
           }
         while (yytoken == Token_LOGICAL_AND)
           {
-            if (yytoken != Token_LOGICAL_AND)
+            operatorLogicalAnd_ast *__node_121 = 0;
+            if (!parse_operatorLogicalAnd(&__node_121))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_LOGICAL_AND, "&");
+                    yy_expected_symbol(ast_node::Kind_operatorLogicalAnd, "operatorLogicalAnd");
                   }
                 return false;
               }
-            yylex();
-
-            equalityExpression_ast *__node_98 = 0;
-            if (!parse_equalityExpression(&__node_98))
+            equalityExpression_ast *__node_122 = 0;
+            if (!parse_equalityExpression(&__node_122))
               {
                 if (!yy_block_errors)
                   {
@@ -7342,8 +7320,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        logicalAndExpression_ast *__node_99 = 0;
-        if (!parse_logicalAndExpression(&__node_99))
+        logicalAndExpression_ast *__node_123 = 0;
+        if (!parse_logicalAndExpression(&__node_123))
           {
             if (!yy_block_errors)
               {
@@ -7353,18 +7331,17 @@ namespace ruby
           }
         while (yytoken == Token_LOGICAL_OR)
           {
-            if (yytoken != Token_LOGICAL_OR)
+            operatorLogicalOr_ast *__node_124 = 0;
+            if (!parse_operatorLogicalOr(&__node_124))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_LOGICAL_OR, "||");
+                    yy_expected_symbol(ast_node::Kind_operatorLogicalOr, "operatorLogicalOr");
                   }
                 return false;
               }
-            yylex();
-
-            logicalAndExpression_ast *__node_100 = 0;
-            if (!parse_logicalAndExpression(&__node_100))
+            logicalAndExpression_ast *__node_125 = 0;
+            if (!parse_logicalAndExpression(&__node_125))
               {
                 if (!yy_block_errors)
                   {
@@ -7438,8 +7415,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        primaryExpression_ast *__node_101 = 0;
-        if (!parse_primaryExpression(&__node_101))
+        primaryExpression_ast *__node_126 = 0;
+        if (!parse_primaryExpression(&__node_126))
           {
             if (!yy_block_errors)
               {
@@ -7449,8 +7426,8 @@ namespace ruby
           }
         if (yytoken == Token_LPAREN)
           {
-            methodInvocationArgumentWithParen_ast *__node_102 = 0;
-            if (!parse_methodInvocationArgumentWithParen(&__node_102))
+            methodInvocationArgumentWithParen_ast *__node_127 = 0;
+            if (!parse_methodInvocationArgumentWithParen(&__node_127))
               {
                 if (!yy_block_errors)
                   {
@@ -7484,8 +7461,8 @@ namespace ruby
 
     if (yytoken == Token_DEF)
       {
-        keywordDef_ast *__node_103 = 0;
-        if (!parse_keywordDef(&__node_103))
+        keywordDef_ast *__node_128 = 0;
+        if (!parse_keywordDef(&__node_128))
           {
             if (!yy_block_errors)
               {
@@ -7493,8 +7470,8 @@ namespace ruby
               }
             return false;
           }
-        methodName_ast *__node_104 = 0;
-        if (!parse_methodName(&__node_104))
+        methodName_ast *__node_129 = 0;
+        if (!parse_methodName(&__node_129))
           {
             if (!yy_block_errors)
               {
@@ -7502,8 +7479,8 @@ namespace ruby
               }
             return false;
           }
-        methodDefinitionArgument_ast *__node_105 = 0;
-        if (!parse_methodDefinitionArgument(&__node_105))
+        methodDefinitionArgument_ast *__node_130 = 0;
+        if (!parse_methodDefinitionArgument(&__node_130))
           {
             if (!yy_block_errors)
               {
@@ -7511,8 +7488,8 @@ namespace ruby
               }
             return false;
           }
-        bodyStatement_ast *__node_106 = 0;
-        if (!parse_bodyStatement(&__node_106))
+        bodyStatement_ast *__node_131 = 0;
+        if (!parse_bodyStatement(&__node_131))
           {
             if (!yy_block_errors)
               {
@@ -7520,8 +7497,8 @@ namespace ruby
               }
             return false;
           }
-        keywordEnd_ast *__node_107 = 0;
-        if (!parse_keywordEnd(&__node_107))
+        keywordEnd_ast *__node_132 = 0;
+        if (!parse_keywordEnd(&__node_132))
           {
             if (!yy_block_errors)
               {
@@ -7571,8 +7548,8 @@ namespace ruby
                 || yytoken == Token_FUNCTION
                 || yytoken == Token_BLOCK_ARG_PREFIX)
               {
-                methodDefinitionArgumentWithoutParen_ast *__node_108 = 0;
-                if (!parse_methodDefinitionArgumentWithoutParen(&__node_108))
+                methodDefinitionArgumentWithoutParen_ast *__node_133 = 0;
+                if (!parse_methodDefinitionArgumentWithoutParen(&__node_133))
                   {
                     if (!yy_block_errors)
                       {
@@ -7600,8 +7577,8 @@ namespace ruby
             if (yytoken == Token_SEMI
                 || yytoken == Token_LINE_BREAK)
               {
-                terminal_ast *__node_109 = 0;
-                if (!parse_terminal(&__node_109))
+                terminal_ast *__node_134 = 0;
+                if (!parse_terminal(&__node_134))
                   {
                     if (!yy_block_errors)
                       {
@@ -7629,8 +7606,8 @@ namespace ruby
                 || yytoken == Token_FUNCTION
                 || yytoken == Token_BLOCK_ARG_PREFIX)
               {
-                methodDefinitionArgumentWithoutParen_ast *__node_110 = 0;
-                if (!parse_methodDefinitionArgumentWithoutParen(&__node_110))
+                methodDefinitionArgumentWithoutParen_ast *__node_135 = 0;
+                if (!parse_methodDefinitionArgumentWithoutParen(&__node_135))
                   {
                     if (!yy_block_errors)
                       {
@@ -7645,8 +7622,8 @@ namespace ruby
               {
                 return false;
               }
-            terminal_ast *__node_111 = 0;
-            if (!parse_terminal(&__node_111))
+            terminal_ast *__node_136 = 0;
+            if (!parse_terminal(&__node_136))
               {
                 if (!yy_block_errors)
                   {
@@ -7684,8 +7661,8 @@ namespace ruby
         if (yytoken == Token_IDENTIFIER
             || yytoken == Token_FUNCTION)
           {
-            normalMethodDefinitionArgument_ast *__node_112 = 0;
-            if (!parse_normalMethodDefinitionArgument(&__node_112))
+            normalMethodDefinitionArgument_ast *__node_137 = 0;
+            if (!parse_normalMethodDefinitionArgument(&__node_137))
               {
                 if (!yy_block_errors)
                   {
@@ -7710,8 +7687,8 @@ namespace ruby
                     seen_star_or_band = true;
                     break;
                   }
-                normalMethodDefinitionArgument_ast *__node_113 = 0;
-                if (!parse_normalMethodDefinitionArgument(&__node_113))
+                normalMethodDefinitionArgument_ast *__node_138 = 0;
+                if (!parse_normalMethodDefinitionArgument(&__node_138))
                   {
                     if (!yy_block_errors)
                       {
@@ -7722,8 +7699,8 @@ namespace ruby
               }
             if ((yytoken == Token_REST_ARG_PREFIX) && ( seen_star_or_band ))
               {
-                restMethodDefinitionArgument_ast *__node_114 = 0;
-                if (!parse_restMethodDefinitionArgument(&__node_114))
+                restMethodDefinitionArgument_ast *__node_139 = 0;
+                if (!parse_restMethodDefinitionArgument(&__node_139))
                   {
                     if (!yy_block_errors)
                       {
@@ -7734,8 +7711,8 @@ namespace ruby
               }
             else if ((yytoken == Token_BLOCK_ARG_PREFIX) && ( seen_star_or_band ))
               {
-                blockMethodDefinitionArgument_ast *__node_115 = 0;
-                if (!parse_blockMethodDefinitionArgument(&__node_115))
+                blockMethodDefinitionArgument_ast *__node_140 = 0;
+                if (!parse_blockMethodDefinitionArgument(&__node_140))
                   {
                     if (!yy_block_errors)
                       {
@@ -7753,8 +7730,8 @@ namespace ruby
           }
         else if (yytoken == Token_REST_ARG_PREFIX)
           {
-            restMethodDefinitionArgument_ast *__node_116 = 0;
-            if (!parse_restMethodDefinitionArgument(&__node_116))
+            restMethodDefinitionArgument_ast *__node_141 = 0;
+            if (!parse_restMethodDefinitionArgument(&__node_141))
               {
                 if (!yy_block_errors)
                   {
@@ -7765,8 +7742,8 @@ namespace ruby
           }
         else if (yytoken == Token_BLOCK_ARG_PREFIX)
           {
-            blockMethodDefinitionArgument_ast *__node_117 = 0;
-            if (!parse_blockMethodDefinitionArgument(&__node_117))
+            blockMethodDefinitionArgument_ast *__node_142 = 0;
+            if (!parse_blockMethodDefinitionArgument(&__node_142))
               {
                 if (!yy_block_errors)
                   {
@@ -7866,8 +7843,8 @@ namespace ruby
             || yytoken == Token_ASCII_VALUE
             || yytoken == Token_BLOCK_ARG_PREFIX)
           {
-            methodInvocationArgumentWithoutParen_ast *__node_118 = 0;
-            if (!parse_methodInvocationArgumentWithoutParen(&__node_118))
+            methodInvocationArgumentWithoutParen_ast *__node_143 = 0;
+            if (!parse_methodInvocationArgumentWithoutParen(&__node_143))
               {
                 if (!yy_block_errors)
                   {
@@ -8042,8 +8019,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            normalMethodInvocationArgument_ast *__node_119 = 0;
-            if (!parse_normalMethodInvocationArgument(&__node_119))
+            normalMethodInvocationArgument_ast *__node_144 = 0;
+            if (!parse_normalMethodInvocationArgument(&__node_144))
               {
                 if (!yy_block_errors)
                   {
@@ -8065,8 +8042,8 @@ namespace ruby
 
                 if ((yytoken == Token_REST_ARG_PREFIX) || (yytoken == Token_BLOCK_ARG_PREFIX))
                   break;
-                normalMethodInvocationArgument_ast *__node_120 = 0;
-                if (!parse_normalMethodInvocationArgument(&__node_120))
+                normalMethodInvocationArgument_ast *__node_145 = 0;
+                if (!parse_normalMethodInvocationArgument(&__node_145))
                   {
                     if (!yy_block_errors)
                       {
@@ -8077,8 +8054,8 @@ namespace ruby
               }
             if (yytoken == Token_REST_ARG_PREFIX)
               {
-                restMethodInvocationArgument_ast *__node_121 = 0;
-                if (!parse_restMethodInvocationArgument(&__node_121))
+                restMethodInvocationArgument_ast *__node_146 = 0;
+                if (!parse_restMethodInvocationArgument(&__node_146))
                   {
                     if (!yy_block_errors)
                       {
@@ -8089,8 +8066,8 @@ namespace ruby
               }
             else if (yytoken == Token_BLOCK_ARG_PREFIX)
               {
-                blockMethodInvocationArgument_ast *__node_122 = 0;
-                if (!parse_blockMethodInvocationArgument(&__node_122))
+                blockMethodInvocationArgument_ast *__node_147 = 0;
+                if (!parse_blockMethodInvocationArgument(&__node_147))
                   {
                     if (!yy_block_errors)
                       {
@@ -8108,8 +8085,8 @@ namespace ruby
           }
         else if (yytoken == Token_REST_ARG_PREFIX)
           {
-            restMethodInvocationArgument_ast *__node_123 = 0;
-            if (!parse_restMethodInvocationArgument(&__node_123))
+            restMethodInvocationArgument_ast *__node_148 = 0;
+            if (!parse_restMethodInvocationArgument(&__node_148))
               {
                 if (!yy_block_errors)
                   {
@@ -8120,8 +8097,8 @@ namespace ruby
           }
         else if (yytoken == Token_BLOCK_ARG_PREFIX)
           {
-            blockMethodInvocationArgument_ast *__node_124 = 0;
-            if (!parse_blockMethodInvocationArgument(&__node_124))
+            blockMethodInvocationArgument_ast *__node_149 = 0;
+            if (!parse_blockMethodInvocationArgument(&__node_149))
               {
                 if (!yy_block_errors)
                   {
@@ -8247,8 +8224,8 @@ namespace ruby
             || yytoken == Token_BNOT
             || yytoken == Token_POWER)
           {
-            operatorAsMethodname_ast *__node_125 = 0;
-            if (!parse_operatorAsMethodname(&__node_125))
+            operatorAsMethodname_ast *__node_150 = 0;
+            if (!parse_operatorAsMethodname(&__node_150))
               {
                 if (!yy_block_errors)
                   {
@@ -8292,8 +8269,8 @@ namespace ruby
                  || yytoken == Token_BEGIN_UPCASE
                  || yytoken == Token_NOT)
           {
-            keywordAsMethodName_ast *__node_126 = 0;
-            if (!parse_keywordAsMethodName(&__node_126))
+            keywordAsMethodName_ast *__node_151 = 0;
+            if (!parse_keywordAsMethodName(&__node_151))
               {
                 if (!yy_block_errors)
                   {
@@ -8352,8 +8329,8 @@ namespace ruby
             if (yytoken == Token_TWO_COLON
                 || yytoken == Token_DOT)
               {
-                methodNameSupplement_ast *__node_127 = 0;
-                if (!parse_methodNameSupplement(&__node_127))
+                methodNameSupplement_ast *__node_152 = 0;
+                if (!parse_methodNameSupplement(&__node_152))
                   {
                     if (!yy_block_errors)
                       {
@@ -8394,8 +8371,8 @@ namespace ruby
               }
             yylex();
 
-            expression_ast *__node_128 = 0;
-            if (!parse_expression(&__node_128))
+            expression_ast *__node_153 = 0;
+            if (!parse_expression(&__node_153))
               {
                 if (!yy_block_errors)
                   {
@@ -8432,8 +8409,8 @@ namespace ruby
               }
             yylex();
 
-            methodNameSupplement_ast *__node_129 = 0;
-            if (!parse_methodNameSupplement(&__node_129))
+            methodNameSupplement_ast *__node_154 = 0;
+            if (!parse_methodNameSupplement(&__node_154))
               {
                 if (!yy_block_errors)
                   {
@@ -8489,8 +8466,8 @@ namespace ruby
               {
                 return false;
               }
-            methodNameSupplement_ast *__node_130 = 0;
-            if (!parse_methodNameSupplement(&__node_130))
+            methodNameSupplement_ast *__node_155 = 0;
+            if (!parse_methodNameSupplement(&__node_155))
               {
                 if (!yy_block_errors)
                   {
@@ -8588,8 +8565,8 @@ namespace ruby
               {
                 return false;
               }
-            methodNameSupplement_ast *__node_131 = 0;
-            if (!parse_methodNameSupplement(&__node_131))
+            methodNameSupplement_ast *__node_156 = 0;
+            if (!parse_methodNameSupplement(&__node_156))
               {
                 if (!yy_block_errors)
                   {
@@ -8785,8 +8762,8 @@ namespace ruby
                  || yytoken == Token_BNOT
                  || yytoken == Token_POWER)
           {
-            operatorAsMethodname_ast *__node_132 = 0;
-            if (!parse_operatorAsMethodname(&__node_132))
+            operatorAsMethodname_ast *__node_157 = 0;
+            if (!parse_operatorAsMethodname(&__node_157))
               {
                 if (!yy_block_errors)
                   {
@@ -8836,8 +8813,8 @@ namespace ruby
                  || yytoken == Token_BEGIN_UPCASE
                  || yytoken == Token_NOT)
           {
-            keyword_ast *__node_133 = 0;
-            if (!parse_keyword(&__node_133))
+            keyword_ast *__node_158 = 0;
+            if (!parse_keyword(&__node_158))
               {
                 if (!yy_block_errors)
                   {
@@ -8926,8 +8903,8 @@ namespace ruby
             goto __catch_2;
           yylex();
 
-          dotAccess_ast *__node_134 = 0;
-          if (!parse_dotAccess(&__node_134))
+          dotAccess_ast *__node_159 = 0;
+          if (!parse_dotAccess(&__node_159))
             {
               goto __catch_2;
             }
@@ -8937,8 +8914,8 @@ namespace ruby
                 goto __catch_2;
               yylex();
 
-              dotAccess_ast *__node_135 = 0;
-              if (!parse_dotAccess(&__node_135))
+              dotAccess_ast *__node_160 = 0;
+              if (!parse_dotAccess(&__node_160))
                 {
                   goto __catch_2;
                 }
@@ -8964,8 +8941,8 @@ namespace ruby
             block_errors(block_errors_2);
             rewind(try_start_token_2);
 
-            dotAccess_ast *__node_136 = 0;
-            if (!parse_dotAccess(&__node_136))
+            dotAccess_ast *__node_161 = 0;
+            if (!parse_dotAccess(&__node_161))
               {
                 if (!yy_block_errors)
                   {
@@ -8994,8 +8971,8 @@ namespace ruby
 
     if (yytoken == Token_MODULE)
       {
-        keywordModule_ast *__node_137 = 0;
-        if (!parse_keywordModule(&__node_137))
+        keywordModule_ast *__node_162 = 0;
+        if (!parse_keywordModule(&__node_162))
           {
             if (!yy_block_errors)
               {
@@ -9003,8 +8980,8 @@ namespace ruby
               }
             return false;
           }
-        moduleName_ast *__node_138 = 0;
-        if (!parse_moduleName(&__node_138))
+        moduleName_ast *__node_163 = 0;
+        if (!parse_moduleName(&__node_163))
           {
             if (!yy_block_errors)
               {
@@ -9012,8 +8989,8 @@ namespace ruby
               }
             return false;
           }
-        terminal_ast *__node_139 = 0;
-        if (!parse_terminal(&__node_139))
+        terminal_ast *__node_164 = 0;
+        if (!parse_terminal(&__node_164))
           {
             if (!yy_block_errors)
               {
@@ -9021,8 +8998,8 @@ namespace ruby
               }
             return false;
           }
-        bodyStatement_ast *__node_140 = 0;
-        if (!parse_bodyStatement(&__node_140))
+        bodyStatement_ast *__node_165 = 0;
+        if (!parse_bodyStatement(&__node_165))
           {
             if (!yy_block_errors)
               {
@@ -9030,8 +9007,8 @@ namespace ruby
               }
             return false;
           }
-        keywordEnd_ast *__node_141 = 0;
-        if (!parse_keywordEnd(&__node_141))
+        keywordEnd_ast *__node_166 = 0;
+        if (!parse_keywordEnd(&__node_166))
           {
             if (!yy_block_errors)
               {
@@ -9221,8 +9198,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            expression_ast *__node_142 = 0;
-            if (!parse_expression(&__node_142))
+            expression_ast *__node_167 = 0;
+            if (!parse_expression(&__node_167))
               {
                 if (!yy_block_errors)
                   {
@@ -9266,8 +9243,8 @@ namespace ruby
                   {
                     return false;
                   }
-                expression_ast *__node_143 = 0;
-                if (!parse_expression(&__node_143))
+                expression_ast *__node_168 = 0;
+                if (!parse_expression(&__node_168))
                   {
                     if (!yy_block_errors)
                       {
@@ -9291,8 +9268,8 @@ namespace ruby
               }
             yylex();
 
-            expression_ast *__node_144 = 0;
-            if (!parse_expression(&__node_144))
+            expression_ast *__node_169 = 0;
+            if (!parse_expression(&__node_169))
               {
                 if (!yy_block_errors)
                   {
@@ -9377,8 +9354,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        powerExpression_ast *__node_145 = 0;
-        if (!parse_powerExpression(&__node_145))
+        powerExpression_ast *__node_170 = 0;
+        if (!parse_powerExpression(&__node_170))
           {
             if (!yy_block_errors)
               {
@@ -9392,49 +9369,46 @@ namespace ruby
           {
             if (yytoken == Token_STAR)
               {
-                if (yytoken != Token_STAR)
+                operatorStar_ast *__node_171 = 0;
+                if (!parse_operatorStar(&__node_171))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_STAR, "*");
+                        yy_expected_symbol(ast_node::Kind_operatorStar, "operatorStar");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_DIV)
               {
-                if (yytoken != Token_DIV)
+                operatorDiv_ast *__node_172 = 0;
+                if (!parse_operatorDiv(&__node_172))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_DIV, "/");
+                        yy_expected_symbol(ast_node::Kind_operatorDiv, "operatorDiv");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_MOD)
               {
-                if (yytoken != Token_MOD)
+                operatorMod_ast *__node_173 = 0;
+                if (!parse_operatorMod(&__node_173))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_MOD, "%");
+                        yy_expected_symbol(ast_node::Kind_operatorMod, "operatorMod");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
-            powerExpression_ast *__node_146 = 0;
-            if (!parse_powerExpression(&__node_146))
+            powerExpression_ast *__node_174 = 0;
+            if (!parse_powerExpression(&__node_174))
               {
                 if (!yy_block_errors)
                   {
@@ -9526,8 +9500,8 @@ namespace ruby
               {
                 return false;
               }
-            expression_ast *__node_147 = 0;
-            if (!parse_expression(&__node_147))
+            expression_ast *__node_175 = 0;
+            if (!parse_expression(&__node_175))
               {
                 if (!yy_block_errors)
                   {
@@ -9615,8 +9589,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        expression_ast *__node_148 = 0;
-        if (!parse_expression(&__node_148))
+        expression_ast *__node_176 = 0;
+        if (!parse_expression(&__node_176))
           {
             if (!yy_block_errors)
               {
@@ -9636,8 +9610,8 @@ namespace ruby
               }
             yylex();
 
-            expression_ast *__node_149 = 0;
-            if (!parse_expression(&__node_149))
+            expression_ast *__node_177 = 0;
+            if (!parse_expression(&__node_177))
               {
                 if (!yy_block_errors)
                   {
@@ -9746,8 +9720,8 @@ namespace ruby
       {
         if (yytoken == Token_KEYWORD_NOT)
           {
-            keywordNot_ast *__node_150 = 0;
-            if (!parse_keywordNot(&__node_150))
+            keywordNot_ast *__node_178 = 0;
+            if (!parse_keywordNot(&__node_178))
               {
                 if (!yy_block_errors)
                   {
@@ -9755,8 +9729,8 @@ namespace ruby
                   }
                 return false;
               }
-            notExpression_ast *__node_151 = 0;
-            if (!parse_notExpression(&__node_151))
+            notExpression_ast *__node_179 = 0;
+            if (!parse_notExpression(&__node_179))
               {
                 if (!yy_block_errors)
                   {
@@ -9820,8 +9794,8 @@ namespace ruby
                  || yytoken == Token_FLOAT
                  || yytoken == Token_ASCII_VALUE)
           {
-            ternaryIfThenElseExpression_ast *__node_152 = 0;
-            if (!parse_ternaryIfThenElseExpression(&__node_152))
+            ternaryIfThenElseExpression_ast *__node_180 = 0;
+            if (!parse_ternaryIfThenElseExpression(&__node_180))
               {
                 if (!yy_block_errors)
                   {
@@ -10332,6 +10306,2208 @@ namespace ruby
     return true;
   }
 
+  bool parser::parse_operatorAssign(operatorAssign_ast **yynode)
+  {
+    *yynode = create<operatorAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_ASSIGN
+        || yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE)
+      {
+        if (yytoken == Token_ASSIGN)
+          {
+            if (yytoken != Token_ASSIGN)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_ASSIGN, "=");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE)
+          {
+            if (yytoken != Token_ASSIGN_WITH_NO_LEADING_SPACE)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_ASSIGN_WITH_NO_LEADING_SPACE, "=");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else
+          {
+            return false;
+          }
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorBAnd(operatorBAnd_ast **yynode)
+  {
+    *yynode = create<operatorBAnd_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_BAND)
+      {
+        if (yytoken != Token_BAND)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BAND, "&");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorBAndAssign(operatorBAndAssign_ast **yynode)
+  {
+    *yynode = create<operatorBAndAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_BAND_ASSIGN)
+      {
+        if (yytoken != Token_BAND_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BAND_ASSIGN, "&=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorBNot(operatorBNot_ast **yynode)
+  {
+    *yynode = create<operatorBNot_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_BNOT)
+      {
+        if (yytoken != Token_BNOT)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BNOT, "~");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorBOr(operatorBOr_ast **yynode)
+  {
+    *yynode = create<operatorBOr_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_BOR)
+      {
+        if (yytoken != Token_BOR)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BOR, "|");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorBXor(operatorBXor_ast **yynode)
+  {
+    *yynode = create<operatorBXor_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_BXOR)
+      {
+        if (yytoken != Token_BXOR)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BXOR, "^");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorBXorAssign(operatorBXorAssign_ast **yynode)
+  {
+    *yynode = create<operatorBXorAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_BXOR_ASSIGN)
+      {
+        if (yytoken != Token_BXOR_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BXOR_ASSIGN, "^=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorBorAssign(operatorBorAssign_ast **yynode)
+  {
+    *yynode = create<operatorBorAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_BOR_ASSIGN)
+      {
+        if (yytoken != Token_BOR_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_BOR_ASSIGN, "|=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorCaseEqual(operatorCaseEqual_ast **yynode)
+  {
+    *yynode = create<operatorCaseEqual_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_CASE_EQUAL)
+      {
+        if (yytoken != Token_CASE_EQUAL)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_CASE_EQUAL, "===");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorColon(operatorColon_ast **yynode)
+  {
+    *yynode = create<operatorColon_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_COLON
+        || yytoken == Token_COLON_WITH_NO_FOLLOWING_SPACE)
+      {
+        if (yytoken == Token_COLON)
+          {
+            if (yytoken != Token_COLON)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COLON, ":");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (yytoken == Token_COLON_WITH_NO_FOLLOWING_SPACE)
+          {
+            if (yytoken != Token_COLON_WITH_NO_FOLLOWING_SPACE)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COLON_WITH_NO_FOLLOWING_SPACE, ":");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else
+          {
+            return false;
+          }
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorCompare(operatorCompare_ast **yynode)
+  {
+    *yynode = create<operatorCompare_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_COMPARE)
+      {
+        if (yytoken != Token_COMPARE)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_COMPARE, "<=>");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorDiv(operatorDiv_ast **yynode)
+  {
+    *yynode = create<operatorDiv_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_DIV)
+      {
+        if (yytoken != Token_DIV)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_DIV, "/");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorDivAssign(operatorDivAssign_ast **yynode)
+  {
+    *yynode = create<operatorDivAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_DIV_ASSIGN)
+      {
+        if (yytoken != Token_DIV_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_DIV_ASSIGN, "/=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorEqual(operatorEqual_ast **yynode)
+  {
+    *yynode = create<operatorEqual_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_EQUAL)
+      {
+        if (yytoken != Token_EQUAL)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_EQUAL, "==");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorExclusiveRange(operatorExclusiveRange_ast **yynode)
+  {
+    *yynode = create<operatorExclusiveRange_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_EXCLUSIVE_RANGE)
+      {
+        if (yytoken != Token_EXCLUSIVE_RANGE)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_EXCLUSIVE_RANGE, "...");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorGreaterOrEqual(operatorGreaterOrEqual_ast **yynode)
+  {
+    *yynode = create<operatorGreaterOrEqual_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_GREATER_OR_EQUAL)
+      {
+        if (yytoken != Token_GREATER_OR_EQUAL)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_GREATER_OR_EQUAL, ">=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorGreaterThan(operatorGreaterThan_ast **yynode)
+  {
+    *yynode = create<operatorGreaterThan_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_GREATER_THAN)
+      {
+        if (yytoken != Token_GREATER_THAN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_GREATER_THAN, ">");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorInclusiveRange(operatorInclusiveRange_ast **yynode)
+  {
+    *yynode = create<operatorInclusiveRange_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_INCLUSIVE_RANGE)
+      {
+        if (yytoken != Token_INCLUSIVE_RANGE)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_INCLUSIVE_RANGE, "..");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLeftShift(operatorLeftShift_ast **yynode)
+  {
+    *yynode = create<operatorLeftShift_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LEFT_SHIFT)
+      {
+        if (yytoken != Token_LEFT_SHIFT)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LEFT_SHIFT, "<<");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLeftShiftAssign(operatorLeftShiftAssign_ast **yynode)
+  {
+    *yynode = create<operatorLeftShiftAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LEFT_SHIFT_ASSIGN)
+      {
+        if (yytoken != Token_LEFT_SHIFT_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LEFT_SHIFT_ASSIGN, "<<=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLessOrEqual(operatorLessOrEqual_ast **yynode)
+  {
+    *yynode = create<operatorLessOrEqual_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LESS_OR_EQUAL)
+      {
+        if (yytoken != Token_LESS_OR_EQUAL)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LESS_OR_EQUAL, "<=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLessThan(operatorLessThan_ast **yynode)
+  {
+    *yynode = create<operatorLessThan_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LESS_THAN)
+      {
+        if (yytoken != Token_LESS_THAN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LESS_THAN, "<");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLogicalAnd(operatorLogicalAnd_ast **yynode)
+  {
+    *yynode = create<operatorLogicalAnd_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LOGICAL_AND)
+      {
+        if (yytoken != Token_LOGICAL_AND)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LOGICAL_AND, "&");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLogicalAndAssign(operatorLogicalAndAssign_ast **yynode)
+  {
+    *yynode = create<operatorLogicalAndAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LOGICAL_AND_ASSIGN)
+      {
+        if (yytoken != Token_LOGICAL_AND_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LOGICAL_AND_ASSIGN, "&&=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLogicalOr(operatorLogicalOr_ast **yynode)
+  {
+    *yynode = create<operatorLogicalOr_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LOGICAL_OR)
+      {
+        if (yytoken != Token_LOGICAL_OR)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LOGICAL_OR, "||");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorLogicalOrAssign(operatorLogicalOrAssign_ast **yynode)
+  {
+    *yynode = create<operatorLogicalOrAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_LOGICAL_OR_ASSIGN)
+      {
+        if (yytoken != Token_LOGICAL_OR_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_LOGICAL_OR_ASSIGN, "||=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorMatch(operatorMatch_ast **yynode)
+  {
+    *yynode = create<operatorMatch_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_MATCH)
+      {
+        if (yytoken != Token_MATCH)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_MATCH, "=~");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorMinus(operatorMinus_ast **yynode)
+  {
+    *yynode = create<operatorMinus_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_MINUS)
+      {
+        if (yytoken != Token_MINUS)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_MINUS, "-");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorMinusAssign(operatorMinusAssign_ast **yynode)
+  {
+    *yynode = create<operatorMinusAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_MINUS_ASSIGN)
+      {
+        if (yytoken != Token_MINUS_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_MINUS_ASSIGN, "-=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorMod(operatorMod_ast **yynode)
+  {
+    *yynode = create<operatorMod_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_MOD)
+      {
+        if (yytoken != Token_MOD)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_MOD, "%");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorModAssign(operatorModAssign_ast **yynode)
+  {
+    *yynode = create<operatorModAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_MOD_ASSIGN)
+      {
+        if (yytoken != Token_MOD_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_MOD_ASSIGN, "%=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorNot(operatorNot_ast **yynode)
+  {
+    *yynode = create<operatorNot_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_NOT)
+      {
+        if (yytoken != Token_NOT)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_NOT, "!");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorNotEqual(operatorNotEqual_ast **yynode)
+  {
+    *yynode = create<operatorNotEqual_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_NOT_EQUAL)
+      {
+        if (yytoken != Token_NOT_EQUAL)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_NOT_EQUAL, "!=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorNotMatch(operatorNotMatch_ast **yynode)
+  {
+    *yynode = create<operatorNotMatch_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_NOT_MATCH)
+      {
+        if (yytoken != Token_NOT_MATCH)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_NOT_MATCH, "!~");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorPlus(operatorPlus_ast **yynode)
+  {
+    *yynode = create<operatorPlus_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_PLUS)
+      {
+        if (yytoken != Token_PLUS)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_PLUS, "+");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorPlusAssign(operatorPlusAssign_ast **yynode)
+  {
+    *yynode = create<operatorPlusAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_PLUS_ASSIGN)
+      {
+        if (yytoken != Token_PLUS_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_PLUS_ASSIGN, "+=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorPower(operatorPower_ast **yynode)
+  {
+    *yynode = create<operatorPower_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_POWER)
+      {
+        if (yytoken != Token_POWER)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_POWER, "**");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorPowerAssign(operatorPowerAssign_ast **yynode)
+  {
+    *yynode = create<operatorPowerAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_POWER_ASSIGN)
+      {
+        if (yytoken != Token_POWER_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_POWER_ASSIGN, "**=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorQuestion(operatorQuestion_ast **yynode)
+  {
+    *yynode = create<operatorQuestion_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_QUESTION)
+      {
+        if (yytoken != Token_QUESTION)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_QUESTION, "?");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorRightShift(operatorRightShift_ast **yynode)
+  {
+    *yynode = create<operatorRightShift_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_RIGHT_SHIFT)
+      {
+        if (yytoken != Token_RIGHT_SHIFT)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RIGHT_SHIFT, ">>");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorRightShiftAssign(operatorRightShiftAssign_ast **yynode)
+  {
+    *yynode = create<operatorRightShiftAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_RIGHT_SHIFT_ASSIGN)
+      {
+        if (yytoken != Token_RIGHT_SHIFT_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_RIGHT_SHIFT_ASSIGN, ">>=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorStar(operatorStar_ast **yynode)
+  {
+    *yynode = create<operatorStar_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_STAR)
+      {
+        if (yytoken != Token_STAR)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_STAR, "*");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorStarAssign(operatorStarAssign_ast **yynode)
+  {
+    *yynode = create<operatorStarAssign_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_STAR_ASSIGN)
+      {
+        if (yytoken != Token_STAR_ASSIGN)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_STAR_ASSIGN, "*=");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorUnaryMinus(operatorUnaryMinus_ast **yynode)
+  {
+    *yynode = create<operatorUnaryMinus_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_UNARY_MINUS)
+      {
+        if (yytoken != Token_UNARY_MINUS)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_UNARY_MINUS, "-");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
+  bool parser::parse_operatorUnaryPlus(operatorUnaryPlus_ast **yynode)
+  {
+    *yynode = create<operatorUnaryPlus_ast>();
+
+    (*yynode)->start_token = token_stream->index() - 1;
+
+    if (yytoken == Token_UNARY_PLUS)
+      {
+        if (yytoken != Token_UNARY_PLUS)
+          {
+            if (!yy_block_errors)
+              {
+                yy_expected_token(yytoken, Token_UNARY_PLUS, "+");
+              }
+            return false;
+          }
+        yylex();
+
+        if (yytoken == Token_LINE_BREAK)
+          {
+            if (yytoken != Token_LINE_BREAK)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
+        else if (true /*epsilon*/)
+        {}
+        else
+          {
+            return false;
+          }
+      }
+    else
+      {
+        return false;
+      }
+
+    (*yynode)->end_token = token_stream->index() - 1;
+
+    return true;
+  }
+
   bool parser::parse_orExpression(orExpression_ast **yynode)
   {
     *yynode = create<orExpression_ast>();
@@ -10393,8 +12569,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        andExpression_ast *__node_153 = 0;
-        if (!parse_andExpression(&__node_153))
+        andExpression_ast *__node_181 = 0;
+        if (!parse_andExpression(&__node_181))
           {
             if (!yy_block_errors)
               {
@@ -10407,36 +12583,34 @@ namespace ruby
           {
             if (yytoken == Token_BXOR)
               {
-                if (yytoken != Token_BXOR)
+                operatorBXor_ast *__node_182 = 0;
+                if (!parse_operatorBXor(&__node_182))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_BXOR, "^");
+                        yy_expected_symbol(ast_node::Kind_operatorBXor, "operatorBXor");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_BOR)
               {
-                if (yytoken != Token_BOR)
+                operatorBOr_ast *__node_183 = 0;
+                if (!parse_operatorBOr(&__node_183))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_BOR, "|");
+                        yy_expected_symbol(ast_node::Kind_operatorBOr, "operatorBOr");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
-            andExpression_ast *__node_154 = 0;
-            if (!parse_andExpression(&__node_154))
+            andExpression_ast *__node_184 = 0;
+            if (!parse_andExpression(&__node_184))
               {
                 if (!yy_block_errors)
                   {
@@ -10551,8 +12725,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                mlhs_item_ast *__node_155 = 0;
-                if (!parse_mlhs_item(&__node_155))
+                mlhs_item_ast *__node_185 = 0;
+                if (!parse_mlhs_item(&__node_185))
                   {
                     if (!yy_block_errors)
                       {
@@ -10571,20 +12745,20 @@ namespace ruby
               break;
           }
         while (yytoken == Token_COMMA);
-        if (yytoken == Token_ASSIGN)
+        if (yytoken == Token_ASSIGN
+            || yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE)
           {
-            if (yytoken != Token_ASSIGN)
+            operatorAssign_ast *__node_186 = 0;
+            if (!parse_operatorAssign(&__node_186))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_ASSIGN, "=");
+                    yy_expected_symbol(ast_node::Kind_operatorAssign, "operatorAssign");
                   }
                 return false;
               }
-            yylex();
-
-            mrhs_ast *__node_156 = 0;
-            if (!parse_mrhs(&__node_156))
+            mrhs_ast *__node_187 = 0;
+            if (!parse_mrhs(&__node_187))
               {
                 if (!yy_block_errors)
                   {
@@ -10671,8 +12845,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        unaryExpression_ast *__node_157 = 0;
-        if (!parse_unaryExpression(&__node_157))
+        unaryExpression_ast *__node_188 = 0;
+        if (!parse_unaryExpression(&__node_188))
           {
             if (!yy_block_errors)
               {
@@ -10682,18 +12856,17 @@ namespace ruby
           }
         while (yytoken == Token_POWER)
           {
-            if (yytoken != Token_POWER)
+            operatorPower_ast *__node_189 = 0;
+            if (!parse_operatorPower(&__node_189))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_POWER, "**");
+                    yy_expected_symbol(ast_node::Kind_operatorPower, "operatorPower");
                   }
                 return false;
               }
-            yylex();
-
-            unaryExpression_ast *__node_158 = 0;
-            if (!parse_unaryExpression(&__node_158))
+            unaryExpression_ast *__node_190 = 0;
+            if (!parse_unaryExpression(&__node_190))
               {
                 if (!yy_block_errors)
                   {
@@ -10896,8 +13069,8 @@ namespace ruby
                  || yytoken == Token_INSTANCE_VARIABLE
                  || yytoken == Token_CLASS_VARIABLE)
           {
-            variable_ast *__node_159 = 0;
-            if (!parse_variable(&__node_159))
+            variable_ast *__node_191 = 0;
+            if (!parse_variable(&__node_191))
               {
                 if (!yy_block_errors)
                   {
@@ -10913,8 +13086,8 @@ namespace ruby
                  || yytoken == Token_FLOAT
                  || yytoken == Token_ASCII_VALUE)
           {
-            numeric_ast *__node_160 = 0;
-            if (!parse_numeric(&__node_160))
+            numeric_ast *__node_192 = 0;
+            if (!parse_numeric(&__node_192))
               {
                 if (!yy_block_errors)
                   {
@@ -10934,8 +13107,8 @@ namespace ruby
                  || yytoken == Token_HERE_DOC_BEGIN
                  || yytoken == Token_W_ARRAY)
           {
-            literal_ast *__node_161 = 0;
-            if (!parse_literal(&__node_161))
+            literal_ast *__node_193 = 0;
+            if (!parse_literal(&__node_193))
               {
                 if (!yy_block_errors)
                   {
@@ -10946,8 +13119,8 @@ namespace ruby
           }
         else if (yytoken == Token_LBRACK)
           {
-            arrayExpression_ast *__node_162 = 0;
-            if (!parse_arrayExpression(&__node_162))
+            arrayExpression_ast *__node_194 = 0;
+            if (!parse_arrayExpression(&__node_194))
               {
                 if (!yy_block_errors)
                   {
@@ -10958,8 +13131,8 @@ namespace ruby
           }
         else if (yytoken == Token_LCURLY_HASH)
           {
-            hashExpression_ast *__node_163 = 0;
-            if (!parse_hashExpression(&__node_163))
+            hashExpression_ast *__node_195 = 0;
+            if (!parse_hashExpression(&__node_195))
               {
                 if (!yy_block_errors)
                   {
@@ -10980,8 +13153,8 @@ namespace ruby
               }
             yylex();
 
-            compoundStatement_ast *__node_164 = 0;
-            if (!parse_compoundStatement(&__node_164))
+            compoundStatement_ast *__node_196 = 0;
+            if (!parse_compoundStatement(&__node_196))
               {
                 if (!yy_block_errors)
                   {
@@ -11002,8 +13175,8 @@ namespace ruby
           }
         else if (yytoken == Token_IF)
           {
-            ifExpression_ast *__node_165 = 0;
-            if (!parse_ifExpression(&__node_165))
+            ifExpression_ast *__node_197 = 0;
+            if (!parse_ifExpression(&__node_197))
               {
                 if (!yy_block_errors)
                   {
@@ -11014,8 +13187,8 @@ namespace ruby
           }
         else if (yytoken == Token_UNLESS)
           {
-            unlessExpression_ast *__node_166 = 0;
-            if (!parse_unlessExpression(&__node_166))
+            unlessExpression_ast *__node_198 = 0;
+            if (!parse_unlessExpression(&__node_198))
               {
                 if (!yy_block_errors)
                   {
@@ -11026,8 +13199,8 @@ namespace ruby
           }
         else if (yytoken == Token_WHILE)
           {
-            whileExpression_ast *__node_167 = 0;
-            if (!parse_whileExpression(&__node_167))
+            whileExpression_ast *__node_199 = 0;
+            if (!parse_whileExpression(&__node_199))
               {
                 if (!yy_block_errors)
                   {
@@ -11038,8 +13211,8 @@ namespace ruby
           }
         else if (yytoken == Token_UNTIL)
           {
-            untilExpression_ast *__node_168 = 0;
-            if (!parse_untilExpression(&__node_168))
+            untilExpression_ast *__node_200 = 0;
+            if (!parse_untilExpression(&__node_200))
               {
                 if (!yy_block_errors)
                   {
@@ -11050,8 +13223,8 @@ namespace ruby
           }
         else if (yytoken == Token_CASE)
           {
-            caseExpression_ast *__node_169 = 0;
-            if (!parse_caseExpression(&__node_169))
+            caseExpression_ast *__node_201 = 0;
+            if (!parse_caseExpression(&__node_201))
               {
                 if (!yy_block_errors)
                   {
@@ -11062,8 +13235,8 @@ namespace ruby
           }
         else if (yytoken == Token_FOR)
           {
-            forExpression_ast *__node_170 = 0;
-            if (!parse_forExpression(&__node_170))
+            forExpression_ast *__node_202 = 0;
+            if (!parse_forExpression(&__node_202))
               {
                 if (!yy_block_errors)
                   {
@@ -11074,8 +13247,8 @@ namespace ruby
           }
         else if (yytoken == Token_BEGIN)
           {
-            exceptionHandlingExpression_ast *__node_171 = 0;
-            if (!parse_exceptionHandlingExpression(&__node_171))
+            exceptionHandlingExpression_ast *__node_203 = 0;
+            if (!parse_exceptionHandlingExpression(&__node_203))
               {
                 if (!yy_block_errors)
                   {
@@ -11086,8 +13259,8 @@ namespace ruby
           }
         else if (yytoken == Token_MODULE)
           {
-            moduleDefinition_ast *__node_172 = 0;
-            if (!parse_moduleDefinition(&__node_172))
+            moduleDefinition_ast *__node_204 = 0;
+            if (!parse_moduleDefinition(&__node_204))
               {
                 if (!yy_block_errors)
                   {
@@ -11098,8 +13271,8 @@ namespace ruby
           }
         else if (yytoken == Token_CLASS)
           {
-            classDefinition_ast *__node_173 = 0;
-            if (!parse_classDefinition(&__node_173))
+            classDefinition_ast *__node_205 = 0;
+            if (!parse_classDefinition(&__node_205))
               {
                 if (!yy_block_errors)
                   {
@@ -11110,8 +13283,8 @@ namespace ruby
           }
         else if (yytoken == Token_DEF)
           {
-            methodDefinition_ast *__node_174 = 0;
-            if (!parse_methodDefinition(&__node_174))
+            methodDefinition_ast *__node_206 = 0;
+            if (!parse_methodDefinition(&__node_206))
               {
                 if (!yy_block_errors)
                   {
@@ -11148,8 +13321,8 @@ namespace ruby
           }
         else if (yytoken == Token_DEFINED)
           {
-            keywordDefined_ast *__node_175 = 0;
-            if (!parse_keywordDefined(&__node_175))
+            keywordDefined_ast *__node_207 = 0;
+            if (!parse_keywordDefined(&__node_207))
               {
                 if (!yy_block_errors)
                   {
@@ -11318,8 +13491,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_176 = 0;
-            if (!parse_compoundStatement(&__node_176))
+            compoundStatement_ast *__node_208 = 0;
+            if (!parse_compoundStatement(&__node_208))
               {
                 if (!yy_block_errors)
                   {
@@ -11410,8 +13583,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        logicalOrExpression_ast *__node_177 = 0;
-        if (!parse_logicalOrExpression(&__node_177))
+        logicalOrExpression_ast *__node_209 = 0;
+        if (!parse_logicalOrExpression(&__node_209))
           {
             if (!yy_block_errors)
               {
@@ -11424,36 +13597,34 @@ namespace ruby
           {
             if (yytoken == Token_INCLUSIVE_RANGE)
               {
-                if (yytoken != Token_INCLUSIVE_RANGE)
+                operatorInclusiveRange_ast *__node_210 = 0;
+                if (!parse_operatorInclusiveRange(&__node_210))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_INCLUSIVE_RANGE, "..");
+                        yy_expected_symbol(ast_node::Kind_operatorInclusiveRange, "operatorInclusiveRange");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_EXCLUSIVE_RANGE)
               {
-                if (yytoken != Token_EXCLUSIVE_RANGE)
+                operatorExclusiveRange_ast *__node_211 = 0;
+                if (!parse_operatorExclusiveRange(&__node_211))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_EXCLUSIVE_RANGE, "...");
+                        yy_expected_symbol(ast_node::Kind_operatorExclusiveRange, "operatorExclusiveRange");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
-            logicalOrExpression_ast *__node_178 = 0;
-            if (!parse_logicalOrExpression(&__node_178))
+            logicalOrExpression_ast *__node_212 = 0;
+            if (!parse_logicalOrExpression(&__node_212))
               {
                 if (!yy_block_errors)
                   {
@@ -11507,8 +13678,8 @@ namespace ruby
               }
             yylex();
 
-            expressionSubstitution_ast *__node_179 = 0;
-            if (!parse_expressionSubstitution(&__node_179))
+            expressionSubstitution_ast *__node_213 = 0;
+            if (!parse_expressionSubstitution(&__node_213))
               {
                 if (!yy_block_errors)
                   {
@@ -11528,8 +13699,8 @@ namespace ruby
                   }
                 yylex();
 
-                expressionSubstitution_ast *__node_180 = 0;
-                if (!parse_expressionSubstitution(&__node_180))
+                expressionSubstitution_ast *__node_214 = 0;
+                if (!parse_expressionSubstitution(&__node_214))
                   {
                     if (!yy_block_errors)
                       {
@@ -11625,8 +13796,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        orExpression_ast *__node_181 = 0;
-        if (!parse_orExpression(&__node_181))
+        orExpression_ast *__node_215 = 0;
+        if (!parse_orExpression(&__node_215))
           {
             if (!yy_block_errors)
               {
@@ -11641,62 +13812,58 @@ namespace ruby
           {
             if (yytoken == Token_LESS_THAN)
               {
-                if (yytoken != Token_LESS_THAN)
+                operatorLessThan_ast *__node_216 = 0;
+                if (!parse_operatorLessThan(&__node_216))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_LESS_THAN, "<");
+                        yy_expected_symbol(ast_node::Kind_operatorLessThan, "operatorLessThan");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_GREATER_THAN)
               {
-                if (yytoken != Token_GREATER_THAN)
+                operatorGreaterThan_ast *__node_217 = 0;
+                if (!parse_operatorGreaterThan(&__node_217))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_GREATER_THAN, ">");
+                        yy_expected_symbol(ast_node::Kind_operatorGreaterThan, "operatorGreaterThan");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_LESS_OR_EQUAL)
               {
-                if (yytoken != Token_LESS_OR_EQUAL)
+                operatorLessOrEqual_ast *__node_218 = 0;
+                if (!parse_operatorLessOrEqual(&__node_218))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_LESS_OR_EQUAL, "<=");
+                        yy_expected_symbol(ast_node::Kind_operatorLessOrEqual, "operatorLessOrEqual");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_GREATER_OR_EQUAL)
               {
-                if (yytoken != Token_GREATER_OR_EQUAL)
+                operatorGreaterOrEqual_ast *__node_219 = 0;
+                if (!parse_operatorGreaterOrEqual(&__node_219))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_GREATER_OR_EQUAL, ">=");
+                        yy_expected_symbol(ast_node::Kind_operatorGreaterOrEqual, "operatorGreaterOrEqual");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
-            orExpression_ast *__node_182 = 0;
-            if (!parse_orExpression(&__node_182))
+            orExpression_ast *__node_220 = 0;
+            if (!parse_orExpression(&__node_220))
               {
                 if (!yy_block_errors)
                   {
@@ -11779,8 +13946,8 @@ namespace ruby
                   }
                 yylex();
 
-                blockMethodDefinitionArgument_ast *__node_183 = 0;
-                if (!parse_blockMethodDefinitionArgument(&__node_183))
+                blockMethodDefinitionArgument_ast *__node_221 = 0;
+                if (!parse_blockMethodDefinitionArgument(&__node_221))
                   {
                     if (!yy_block_errors)
                       {
@@ -11831,8 +13998,8 @@ namespace ruby
           }
         yylex();
 
-        expression_ast *__node_184 = 0;
-        if (!parse_expression(&__node_184))
+        expression_ast *__node_222 = 0;
+        if (!parse_expression(&__node_222))
           {
             if (!yy_block_errors)
               {
@@ -11852,8 +14019,8 @@ namespace ruby
               }
             yylex();
 
-            blockMethodInvocationArgument_ast *__node_185 = 0;
-            if (!parse_blockMethodInvocationArgument(&__node_185))
+            blockMethodInvocationArgument_ast *__node_223 = 0;
+            if (!parse_blockMethodInvocationArgument(&__node_223))
               {
                 if (!yy_block_errors)
                   {
@@ -11940,8 +14107,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        additiveExpression_ast *__node_186 = 0;
-        if (!parse_additiveExpression(&__node_186))
+        additiveExpression_ast *__node_224 = 0;
+        if (!parse_additiveExpression(&__node_224))
           {
             if (!yy_block_errors)
               {
@@ -11954,36 +14121,34 @@ namespace ruby
           {
             if (yytoken == Token_LEFT_SHIFT)
               {
-                if (yytoken != Token_LEFT_SHIFT)
+                operatorLeftShift_ast *__node_225 = 0;
+                if (!parse_operatorLeftShift(&__node_225))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_LEFT_SHIFT, "<<");
+                        yy_expected_symbol(ast_node::Kind_operatorLeftShift, "operatorLeftShift");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_RIGHT_SHIFT)
               {
-                if (yytoken != Token_RIGHT_SHIFT)
+                operatorRightShift_ast *__node_226 = 0;
+                if (!parse_operatorRightShift(&__node_226))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_RIGHT_SHIFT, ">>");
+                        yy_expected_symbol(ast_node::Kind_operatorRightShift, "operatorRightShift");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
-            additiveExpression_ast *__node_187 = 0;
-            if (!parse_additiveExpression(&__node_187))
+            additiveExpression_ast *__node_227 = 0;
+            if (!parse_additiveExpression(&__node_227))
               {
                 if (!yy_block_errors)
                   {
@@ -12070,8 +14235,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        statementWithoutModifier_ast *__node_188 = 0;
-        if (!parse_statementWithoutModifier(&__node_188))
+        statementWithoutModifier_ast *__node_228 = 0;
+        if (!parse_statementWithoutModifier(&__node_228))
           {
             if (!yy_block_errors)
               {
@@ -12097,8 +14262,8 @@ namespace ruby
                   }
                 yylex();
 
-                expression_ast *__node_189 = 0;
-                if (!parse_expression(&__node_189))
+                expression_ast *__node_229 = 0;
+                if (!parse_expression(&__node_229))
                   {
                     if (!yy_block_errors)
                       {
@@ -12119,8 +14284,8 @@ namespace ruby
                   }
                 yylex();
 
-                expression_ast *__node_190 = 0;
-                if (!parse_expression(&__node_190))
+                expression_ast *__node_230 = 0;
+                if (!parse_expression(&__node_230))
                   {
                     if (!yy_block_errors)
                       {
@@ -12141,8 +14306,8 @@ namespace ruby
                   }
                 yylex();
 
-                expression_ast *__node_191 = 0;
-                if (!parse_expression(&__node_191))
+                expression_ast *__node_231 = 0;
+                if (!parse_expression(&__node_231))
                   {
                     if (!yy_block_errors)
                       {
@@ -12163,8 +14328,8 @@ namespace ruby
                   }
                 yylex();
 
-                expression_ast *__node_192 = 0;
-                if (!parse_expression(&__node_192))
+                expression_ast *__node_232 = 0;
+                if (!parse_expression(&__node_232))
                   {
                     if (!yy_block_errors)
                       {
@@ -12185,8 +14350,8 @@ namespace ruby
                   }
                 yylex();
 
-                expression_ast *__node_193 = 0;
-                if (!parse_expression(&__node_193))
+                expression_ast *__node_233 = 0;
+                if (!parse_expression(&__node_233))
                   {
                     if (!yy_block_errors)
                       {
@@ -12280,8 +14445,8 @@ namespace ruby
       {
         if (yytoken == Token_ALIAS)
           {
-            keywordAlias_ast *__node_194 = 0;
-            if (!parse_keywordAlias(&__node_194))
+            keywordAlias_ast *__node_234 = 0;
+            if (!parse_keywordAlias(&__node_234))
               {
                 if (!yy_block_errors)
                   {
@@ -12289,8 +14454,8 @@ namespace ruby
                   }
                 return false;
               }
-            aliasParameter_ast *__node_195 = 0;
-            if (!parse_aliasParameter(&__node_195))
+            aliasParameter_ast *__node_235 = 0;
+            if (!parse_aliasParameter(&__node_235))
               {
                 if (!yy_block_errors)
                   {
@@ -12317,8 +14482,8 @@ namespace ruby
               {
                 return false;
               }
-            aliasParameter_ast *__node_196 = 0;
-            if (!parse_aliasParameter(&__node_196))
+            aliasParameter_ast *__node_236 = 0;
+            if (!parse_aliasParameter(&__node_236))
               {
                 if (!yy_block_errors)
                   {
@@ -12329,8 +14494,8 @@ namespace ruby
           }
         else if (yytoken == Token_UNDEF)
           {
-            keywordUndef_ast *__node_197 = 0;
-            if (!parse_keywordUndef(&__node_197))
+            keywordUndef_ast *__node_237 = 0;
+            if (!parse_keywordUndef(&__node_237))
               {
                 if (!yy_block_errors)
                   {
@@ -12338,8 +14503,8 @@ namespace ruby
                   }
                 return false;
               }
-            undefParameter_ast *__node_198 = 0;
-            if (!parse_undefParameter(&__node_198))
+            undefParameter_ast *__node_238 = 0;
+            if (!parse_undefParameter(&__node_238))
               {
                 if (!yy_block_errors)
                   {
@@ -12359,8 +14524,8 @@ namespace ruby
                   }
                 yylex();
 
-                undefParameter_ast *__node_199 = 0;
-                if (!parse_undefParameter(&__node_199))
+                undefParameter_ast *__node_239 = 0;
+                if (!parse_undefParameter(&__node_239))
                   {
                     if (!yy_block_errors)
                       {
@@ -12372,8 +14537,8 @@ namespace ruby
           }
         else if (yytoken == Token_BEGIN_UPCASE)
           {
-            keywordBeginUpcase_ast *__node_200 = 0;
-            if (!parse_keywordBeginUpcase(&__node_200))
+            keywordBeginUpcase_ast *__node_240 = 0;
+            if (!parse_keywordBeginUpcase(&__node_240))
               {
                 if (!yy_block_errors)
                   {
@@ -12454,8 +14619,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_201 = 0;
-                if (!parse_compoundStatement(&__node_201))
+                compoundStatement_ast *__node_241 = 0;
+                if (!parse_compoundStatement(&__node_241))
                   {
                     if (!yy_block_errors)
                       {
@@ -12566,8 +14731,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_202 = 0;
-                if (!parse_compoundStatement(&__node_202))
+                compoundStatement_ast *__node_242 = 0;
+                if (!parse_compoundStatement(&__node_242))
                   {
                     if (!yy_block_errors)
                       {
@@ -12649,8 +14814,8 @@ namespace ruby
                  || yytoken == Token_FLOAT
                  || yytoken == Token_ASCII_VALUE)
           {
-            expression_ast *__node_203 = 0;
-            if (!parse_expression(&__node_203))
+            expression_ast *__node_243 = 0;
+            if (!parse_expression(&__node_243))
               {
                 if (!yy_block_errors)
                   {
@@ -12660,8 +14825,8 @@ namespace ruby
               }
             if (yytoken == Token_COMMA)
               {
-                parallelAssignmentLeftOver_ast *__node_204 = 0;
-                if (!parse_parallelAssignmentLeftOver(&__node_204))
+                parallelAssignmentLeftOver_ast *__node_244 = 0;
+                if (!parse_parallelAssignmentLeftOver(&__node_244))
                   {
                     if (!yy_block_errors)
                       {
@@ -12689,8 +14854,8 @@ namespace ruby
               }
             yylex();
 
-            mlhs_item_ast *__node_205 = 0;
-            if (!parse_mlhs_item(&__node_205))
+            mlhs_item_ast *__node_245 = 0;
+            if (!parse_mlhs_item(&__node_245))
               {
                 if (!yy_block_errors)
                   {
@@ -12698,18 +14863,17 @@ namespace ruby
                   }
                 return false;
               }
-            if (yytoken != Token_ASSIGN)
+            operatorAssign_ast *__node_246 = 0;
+            if (!parse_operatorAssign(&__node_246))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_ASSIGN, "=");
+                    yy_expected_symbol(ast_node::Kind_operatorAssign, "operatorAssign");
                   }
                 return false;
               }
-            yylex();
-
-            mrhs_ast *__node_206 = 0;
-            if (!parse_mrhs(&__node_206))
+            mrhs_ast *__node_247 = 0;
+            if (!parse_mrhs(&__node_247))
               {
                 if (!yy_block_errors)
                   {
@@ -12800,8 +14964,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        statement_ast *__node_207 = 0;
-        if (!parse_statement(&__node_207))
+        statement_ast *__node_248 = 0;
+        if (!parse_statement(&__node_248))
           {
             if (!yy_block_errors)
               {
@@ -12812,8 +14976,8 @@ namespace ruby
         while (yytoken == Token_SEMI
                || yytoken == Token_LINE_BREAK)
           {
-            terminal_ast *__node_208 = 0;
-            if (!parse_terminal(&__node_208))
+            terminal_ast *__node_249 = 0;
+            if (!parse_terminal(&__node_249))
               {
                 if (!yy_block_errors)
                   {
@@ -12827,8 +14991,8 @@ namespace ruby
                 || (yytoken == Token_ELSIF) || (yytoken == Token_RESCUE)
                 || (yytoken == Token_ENSURE) || (yytoken == Token_WHEN) )
               break;
-            statement_ast *__node_209 = 0;
-            if (!parse_statement(&__node_209))
+            statement_ast *__node_250 = 0;
+            if (!parse_statement(&__node_250))
               {
                 if (!yy_block_errors)
                   {
@@ -12896,8 +15060,8 @@ namespace ruby
               }
             yylex();
 
-            expressionSubstitution_ast *__node_210 = 0;
-            if (!parse_expressionSubstitution(&__node_210))
+            expressionSubstitution_ast *__node_251 = 0;
+            if (!parse_expressionSubstitution(&__node_251))
               {
                 if (!yy_block_errors)
                   {
@@ -12917,8 +15081,8 @@ namespace ruby
                   }
                 yylex();
 
-                expressionSubstitution_ast *__node_211 = 0;
-                if (!parse_expressionSubstitution(&__node_211))
+                expressionSubstitution_ast *__node_252 = 0;
+                if (!parse_expressionSubstitution(&__node_252))
                   {
                     if (!yy_block_errors)
                       {
@@ -13143,8 +15307,8 @@ namespace ruby
                  || yytoken == Token_BNOT
                  || yytoken == Token_POWER)
           {
-            operatorAsMethodname_ast *__node_212 = 0;
-            if (!parse_operatorAsMethodname(&__node_212))
+            operatorAsMethodname_ast *__node_253 = 0;
+            if (!parse_operatorAsMethodname(&__node_253))
               {
                 if (!yy_block_errors)
                   {
@@ -13194,8 +15358,8 @@ namespace ruby
                  || yytoken == Token_BEGIN_UPCASE
                  || yytoken == Token_NOT)
           {
-            keyword_ast *__node_213 = 0;
-            if (!parse_keyword(&__node_213))
+            keyword_ast *__node_254 = 0;
+            if (!parse_keyword(&__node_254))
               {
                 if (!yy_block_errors)
                   {
@@ -13208,8 +15372,8 @@ namespace ruby
                  || yytoken == Token_SINGLE_QUOTED_STRING
                  || yytoken == Token_STRING_BEFORE_EXPRESSION_SUBSTITUTION)
           {
-            string_ast *__node_214 = 0;
-            if (!parse_string(&__node_214))
+            string_ast *__node_255 = 0;
+            if (!parse_string(&__node_255))
               {
                 if (!yy_block_errors)
                   {
@@ -13344,8 +15508,8 @@ namespace ruby
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE)
       {
-        assignmentExpression_ast *__node_215 = 0;
-        if (!parse_assignmentExpression(&__node_215))
+        assignmentExpression_ast *__node_256 = 0;
+        if (!parse_assignmentExpression(&__node_256))
           {
             if (!yy_block_errors)
               {
@@ -13355,18 +15519,17 @@ namespace ruby
           }
         if (yytoken == Token_QUESTION)
           {
-            if (yytoken != Token_QUESTION)
+            operatorQuestion_ast *__node_257 = 0;
+            if (!parse_operatorQuestion(&__node_257))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_QUESTION, "?");
+                    yy_expected_symbol(ast_node::Kind_operatorQuestion, "operatorQuestion");
                   }
                 return false;
               }
-            yylex();
-
-            ternaryIfThenElseExpression_ast *__node_216 = 0;
-            if (!parse_ternaryIfThenElseExpression(&__node_216))
+            ternaryIfThenElseExpression_ast *__node_258 = 0;
+            if (!parse_ternaryIfThenElseExpression(&__node_258))
               {
                 if (!yy_block_errors)
                   {
@@ -13374,18 +15537,17 @@ namespace ruby
                   }
                 return false;
               }
-            if (yytoken != Token_COLON)
+            operatorColon_ast *__node_259 = 0;
+            if (!parse_operatorColon(&__node_259))
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_COLON, ":");
+                    yy_expected_symbol(ast_node::Kind_operatorColon, "operatorColon");
                   }
                 return false;
               }
-            yylex();
-
-            ternaryIfThenElseExpression_ast *__node_217 = 0;
-            if (!parse_ternaryIfThenElseExpression(&__node_217))
+            ternaryIfThenElseExpression_ast *__node_260 = 0;
+            if (!parse_ternaryIfThenElseExpression(&__node_260))
               {
                 if (!yy_block_errors)
                   {
@@ -13438,8 +15600,8 @@ namespace ruby
         else if (yytoken == Token_SEMI
                  || yytoken == Token_LINE_BREAK)
           {
-            terminal_ast *__node_218 = 0;
-            if (!parse_terminal(&__node_218))
+            terminal_ast *__node_261 = 0;
+            if (!parse_terminal(&__node_261))
               {
                 if (!yy_block_errors)
                   {
@@ -13563,63 +15725,59 @@ namespace ruby
           {
             if (yytoken == Token_UNARY_PLUS)
               {
-                if (yytoken != Token_UNARY_PLUS)
+                operatorUnaryPlus_ast *__node_262 = 0;
+                if (!parse_operatorUnaryPlus(&__node_262))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_UNARY_PLUS, "+");
+                        yy_expected_symbol(ast_node::Kind_operatorUnaryPlus, "operatorUnaryPlus");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_UNARY_MINUS)
               {
-                if (yytoken != Token_UNARY_MINUS)
+                operatorUnaryMinus_ast *__node_263 = 0;
+                if (!parse_operatorUnaryMinus(&__node_263))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_UNARY_MINUS, "-");
+                        yy_expected_symbol(ast_node::Kind_operatorUnaryMinus, "operatorUnaryMinus");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_BNOT)
               {
-                if (yytoken != Token_BNOT)
+                operatorBNot_ast *__node_264 = 0;
+                if (!parse_operatorBNot(&__node_264))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_BNOT, "~");
+                        yy_expected_symbol(ast_node::Kind_operatorBNot, "operatorBNot");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else if (yytoken == Token_NOT)
               {
-                if (yytoken != Token_NOT)
+                operatorNot_ast *__node_265 = 0;
+                if (!parse_operatorNot(&__node_265))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_NOT, "!");
+                        yy_expected_symbol(ast_node::Kind_operatorNot, "operatorNot");
                       }
                     return false;
                   }
-                yylex();
-
               }
             else
               {
                 return false;
               }
           }
-        dotAccess_ast *__node_219 = 0;
-        if (!parse_dotAccess(&__node_219))
+        dotAccess_ast *__node_266 = 0;
+        if (!parse_dotAccess(&__node_266))
           {
             if (!yy_block_errors)
               {
@@ -13804,8 +15962,8 @@ namespace ruby
           }
         else if (yytoken == Token_COLON_WITH_NO_FOLLOWING_SPACE)
           {
-            symbol_ast *__node_220 = 0;
-            if (!parse_symbol(&__node_220))
+            symbol_ast *__node_267 = 0;
+            if (!parse_symbol(&__node_267))
               {
                 if (!yy_block_errors)
                   {
@@ -13849,8 +16007,8 @@ namespace ruby
                  || yytoken == Token_BEGIN_UPCASE
                  || yytoken == Token_NOT)
           {
-            keywordAsMethodName_ast *__node_221 = 0;
-            if (!parse_keywordAsMethodName(&__node_221))
+            keywordAsMethodName_ast *__node_268 = 0;
+            if (!parse_keywordAsMethodName(&__node_268))
               {
                 if (!yy_block_errors)
                   {
@@ -13883,8 +16041,8 @@ namespace ruby
                  || yytoken == Token_BNOT
                  || yytoken == Token_POWER)
           {
-            operatorAsMethodname_ast *__node_222 = 0;
-            if (!parse_operatorAsMethodname(&__node_222))
+            operatorAsMethodname_ast *__node_269 = 0;
+            if (!parse_operatorAsMethodname(&__node_269))
               {
                 if (!yy_block_errors)
                   {
@@ -13926,8 +16084,8 @@ namespace ruby
           }
         yylex();
 
-        expression_ast *__node_223 = 0;
-        if (!parse_expression(&__node_223))
+        expression_ast *__node_270 = 0;
+        if (!parse_expression(&__node_270))
           {
             if (!yy_block_errors)
               {
@@ -13935,8 +16093,8 @@ namespace ruby
               }
             return false;
           }
-        thenOrTerminalOrColon_ast *__node_224 = 0;
-        if (!parse_thenOrTerminalOrColon(&__node_224))
+        thenOrTerminalOrColon_ast *__node_271 = 0;
+        if (!parse_thenOrTerminalOrColon(&__node_271))
           {
             if (!yy_block_errors)
               {
@@ -14007,8 +16165,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_225 = 0;
-            if (!parse_compoundStatement(&__node_225))
+            compoundStatement_ast *__node_272 = 0;
+            if (!parse_compoundStatement(&__node_272))
               {
                 if (!yy_block_errors)
                   {
@@ -14098,8 +16256,8 @@ namespace ruby
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE)
               {
-                compoundStatement_ast *__node_226 = 0;
-                if (!parse_compoundStatement(&__node_226))
+                compoundStatement_ast *__node_273 = 0;
+                if (!parse_compoundStatement(&__node_273))
                   {
                     if (!yy_block_errors)
                       {
@@ -14121,8 +16279,8 @@ namespace ruby
           {
             return false;
           }
-        keywordEnd_ast *__node_227 = 0;
-        if (!parse_keywordEnd(&__node_227))
+        keywordEnd_ast *__node_274 = 0;
+        if (!parse_keywordEnd(&__node_274))
           {
             if (!yy_block_errors)
               {
@@ -14149,8 +16307,8 @@ namespace ruby
 
     if (yytoken == Token_UNTIL)
       {
-        keywordUntil_ast *__node_228 = 0;
-        if (!parse_keywordUntil(&__node_228))
+        keywordUntil_ast *__node_275 = 0;
+        if (!parse_keywordUntil(&__node_275))
           {
             if (!yy_block_errors)
               {
@@ -14158,8 +16316,8 @@ namespace ruby
               }
             return false;
           }
-        expression_ast *__node_229 = 0;
-        if (!parse_expression(&__node_229))
+        expression_ast *__node_276 = 0;
+        if (!parse_expression(&__node_276))
           {
             if (!yy_block_errors)
               {
@@ -14167,8 +16325,8 @@ namespace ruby
               }
             return false;
           }
-        doOrTerminalOrColon_ast *__node_230 = 0;
-        if (!parse_doOrTerminalOrColon(&__node_230))
+        doOrTerminalOrColon_ast *__node_277 = 0;
+        if (!parse_doOrTerminalOrColon(&__node_277))
           {
             if (!yy_block_errors)
               {
@@ -14239,8 +16397,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_231 = 0;
-            if (!parse_compoundStatement(&__node_231))
+            compoundStatement_ast *__node_278 = 0;
+            if (!parse_compoundStatement(&__node_278))
               {
                 if (!yy_block_errors)
                   {
@@ -14255,8 +16413,8 @@ namespace ruby
           {
             return false;
           }
-        keywordEnd_ast *__node_232 = 0;
-        if (!parse_keywordEnd(&__node_232))
+        keywordEnd_ast *__node_279 = 0;
+        if (!parse_keywordEnd(&__node_279))
           {
             if (!yy_block_errors)
               {
@@ -14405,8 +16563,8 @@ namespace ruby
                  || yytoken == Token_FILE
                  || yytoken == Token_LINE)
           {
-            predefinedValue_ast *__node_233 = 0;
-            if (!parse_predefinedValue(&__node_233))
+            predefinedValue_ast *__node_280 = 0;
+            if (!parse_predefinedValue(&__node_280))
               {
                 if (!yy_block_errors)
                   {
@@ -14438,8 +16596,8 @@ namespace ruby
 
     if (yytoken == Token_WHILE)
       {
-        keywordWhile_ast *__node_234 = 0;
-        if (!parse_keywordWhile(&__node_234))
+        keywordWhile_ast *__node_281 = 0;
+        if (!parse_keywordWhile(&__node_281))
           {
             if (!yy_block_errors)
               {
@@ -14447,8 +16605,8 @@ namespace ruby
               }
             return false;
           }
-        expression_ast *__node_235 = 0;
-        if (!parse_expression(&__node_235))
+        expression_ast *__node_282 = 0;
+        if (!parse_expression(&__node_282))
           {
             if (!yy_block_errors)
               {
@@ -14456,8 +16614,8 @@ namespace ruby
               }
             return false;
           }
-        doOrTerminalOrColon_ast *__node_236 = 0;
-        if (!parse_doOrTerminalOrColon(&__node_236))
+        doOrTerminalOrColon_ast *__node_283 = 0;
+        if (!parse_doOrTerminalOrColon(&__node_283))
           {
             if (!yy_block_errors)
               {
@@ -14528,8 +16686,8 @@ namespace ruby
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE)
           {
-            compoundStatement_ast *__node_237 = 0;
-            if (!parse_compoundStatement(&__node_237))
+            compoundStatement_ast *__node_284 = 0;
+            if (!parse_compoundStatement(&__node_284))
               {
                 if (!yy_block_errors)
                   {
@@ -14544,8 +16702,8 @@ namespace ruby
           {
             return false;
           }
-        keywordEnd_ast *__node_238 = 0;
-        if (!parse_keywordEnd(&__node_238))
+        keywordEnd_ast *__node_285 = 0;
+        if (!parse_keywordEnd(&__node_285))
           {
             if (!yy_block_errors)
               {

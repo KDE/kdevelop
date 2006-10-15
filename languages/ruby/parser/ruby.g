@@ -191,7 +191,7 @@
     | keywordBeginUpcase LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | END_UPCASE LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | expression (parallelAssignmentLeftOver | 0)
-    | REST_ARG_PREFIX mlhs_item ASSIGN mrhs
+    | REST_ARG_PREFIX mlhs_item operatorAssign mrhs
 -> statementWithoutModifier ;;
 
 
@@ -217,7 +217,7 @@
     ( COMMA [: if ((yytoken == Token_ASSIGN) || (yytoken == Token_ASSIGN_WITH_NO_LEADING_SPACE)) break; :]
         (REST_ARG_PREFIX [: seen_star = true; :] | 0 [: seen_star = false; :])
         (mlhs_item | 0) [: if (seen_star) break; :] )+
-    ( (ASSIGN mrhs) | 0 )
+    ( (operatorAssign mrhs) | 0 )
 -> parallelAssignmentLeftOver ;;
 
 
@@ -285,27 +285,28 @@
 -> notExpression ;;
 
 
---FIXME: greedy issue
-    assignmentExpression ( (QUESTION ternaryIfThenElseExpression COLON ternaryIfThenElseExpression) | 0) --greedy
+    assignmentExpression (
+        (operatorQuestion ternaryIfThenElseExpression operatorColon ternaryIfThenElseExpression)
+        | 0)
 -> ternaryIfThenElseExpression ;;
 
 
 --FIXME: greedy issue
     rangeExpression @ (
-        ( ASSIGN
-        | PLUS_ASSIGN
-        | MINUS_ASSIGN
-        | STAR_ASSIGN
-        | DIV_ASSIGN
-        | MOD_ASSIGN
-        | POWER_ASSIGN
-        | BAND_ASSIGN
-        | BXOR_ASSIGN
-        | BOR_ASSIGN
-        | LEFT_SHIFT_ASSIGN
-        | RIGHT_SHIFT_ASSIGN
-        | LOGICAL_AND_ASSIGN
-        | LOGICAL_OR_ASSIGN
+        ( operatorAssign
+        | operatorPlusAssign
+        | operatorMinusAssign
+        | operatorStarAssign
+        | operatorDivAssign
+        | operatorModAssign
+        | operatorPowerAssign
+        | operatorBAndAssign
+        | operatorBXorAssign
+        | operatorBorAssign
+        | operatorLeftShiftAssign
+        | operatorRightShiftAssign
+        | operatorLogicalAndAssign
+        | operatorLogicalOrAssign
         )
         (REST_ARG_PREFIX | 0)
     )
@@ -314,67 +315,67 @@
 
 --FIXME: greedy issue for all expression rules below
 
-    logicalOrExpression @ (INCLUSIVE_RANGE | EXCLUSIVE_RANGE) --greedy
+    logicalOrExpression @ (operatorInclusiveRange | operatorExclusiveRange) --greedy
 -> rangeExpression ;;
 
 
-    logicalAndExpression @ LOGICAL_OR --greedy
+    logicalAndExpression @ operatorLogicalOr --greedy
 -> logicalOrExpression ;;
 
 
-    equalityExpression @ LOGICAL_AND --greedy
+    equalityExpression @ operatorLogicalAnd --greedy
 -> logicalAndExpression ;;
 
 
     relationalExpression @ (
-        ( COMPARE
-        | EQUAL
-        | CASE_EQUAL
-        | NOT_EQUAL
-        | MATCH
-        | NOT_MATCH
+        ( operatorCompare
+        | operatorEqual
+        | operatorCaseEqual
+        | operatorNotEqual
+        | operatorMatch
+        | operatorNotMatch
         )
     ) --greedy
 -> equalityExpression ;;
 
 
     orExpression @ (
-        ( LESS_THAN
-        | GREATER_THAN
-        | LESS_OR_EQUAL
-        | GREATER_OR_EQUAL
+        ( operatorLessThan
+        | operatorGreaterThan
+        | operatorLessOrEqual
+        | operatorGreaterOrEqual
         )
     ) --greedy
 -> relationalExpression ;;
 
 
-    andExpression @ (BXOR | BOR) --greedy
+    andExpression @ (operatorBXor | operatorBOr) --greedy
 -> orExpression ;;
 
 
-    shiftExpression @ BAND --greedy
+    shiftExpression @ operatorBAnd --greedy
 -> andExpression ;;
 
 
-    additiveExpression @ (LEFT_SHIFT | RIGHT_SHIFT)
+    additiveExpression @ (operatorLeftShift | operatorRightShift)
 -> shiftExpression ;;
 
 
-    multiplicativeExpression @ (PLUS | MINUS)
+    multiplicativeExpression @ (operatorPlus | operatorMinus)
 -> additiveExpression ;;
 
 
-    powerExpression @ (STAR | DIV | MOD)
+    powerExpression @ (operatorStar | operatorDiv | operatorMod)
 -> multiplicativeExpression ;;
 
 
-    unaryExpression @ POWER
+    unaryExpression @ operatorPower
 -> powerExpression ;;
 
-    (UNARY_PLUS
-    |UNARY_MINUS
-    |BNOT
-    |NOT
+    (operatorUnaryPlus
+    |operatorUnaryMinus
+    |operatorBNot
+    |operatorNot
     )*
     dotAccess
 -> unaryExpression ;;
@@ -821,6 +822,188 @@
 
     WHILE (LINE_BREAK | 0)
 -> keywordWhile ;;
+
+
+    QUESTION (LINE_BREAK | 0)
+-> operatorQuestion ;;
+
+
+    (COLON | COLON_WITH_NO_FOLLOWING_SPACE) (LINE_BREAK | 0)
+-> operatorColon ;;
+
+
+    (ASSIGN | ASSIGN_WITH_NO_LEADING_SPACE) (LINE_BREAK | 0)
+-> operatorAssign ;;
+
+
+    PLUS_ASSIGN (LINE_BREAK | 0)
+-> operatorPlusAssign ;;
+
+
+    MINUS_ASSIGN (LINE_BREAK | 0)
+-> operatorMinusAssign ;;
+
+
+    STAR_ASSIGN (LINE_BREAK | 0)
+-> operatorStarAssign ;;
+
+
+    DIV_ASSIGN (LINE_BREAK | 0)
+-> operatorDivAssign ;;
+
+
+    MOD_ASSIGN (LINE_BREAK | 0)
+-> operatorModAssign ;;
+
+
+    POWER_ASSIGN (LINE_BREAK | 0)
+-> operatorPowerAssign ;;
+
+
+    BAND_ASSIGN (LINE_BREAK | 0)
+-> operatorBAndAssign ;;
+
+
+    BXOR_ASSIGN (LINE_BREAK | 0)
+-> operatorBXorAssign ;;
+
+
+    BOR_ASSIGN (LINE_BREAK | 0)
+-> operatorBorAssign ;;
+
+
+    LEFT_SHIFT_ASSIGN (LINE_BREAK | 0)
+-> operatorLeftShiftAssign ;;
+
+
+    RIGHT_SHIFT_ASSIGN (LINE_BREAK | 0)
+-> operatorRightShiftAssign ;;
+
+
+    LOGICAL_AND_ASSIGN (LINE_BREAK | 0)
+-> operatorLogicalAndAssign ;;
+
+
+    LOGICAL_OR_ASSIGN (LINE_BREAK | 0)
+-> operatorLogicalOrAssign ;;
+
+
+    INCLUSIVE_RANGE (LINE_BREAK | 0)
+-> operatorInclusiveRange ;;
+
+
+    EXCLUSIVE_RANGE (LINE_BREAK | 0)
+-> operatorExclusiveRange ;;
+
+
+    LOGICAL_OR (LINE_BREAK | 0)
+-> operatorLogicalOr ;;
+
+
+    LOGICAL_AND (LINE_BREAK | 0)
+-> operatorLogicalAnd ;;
+
+
+    COMPARE (LINE_BREAK | 0)
+-> operatorCompare ;;
+
+
+    EQUAL (LINE_BREAK | 0)
+-> operatorEqual ;;
+
+
+    NOT_EQUAL (LINE_BREAK | 0)
+-> operatorNotEqual ;;
+
+
+    CASE_EQUAL (LINE_BREAK | 0)
+-> operatorCaseEqual ;;
+
+
+    MATCH (LINE_BREAK | 0)
+-> operatorMatch ;;
+
+
+    NOT_MATCH (LINE_BREAK | 0)
+-> operatorNotMatch ;;
+
+
+    LESS_THAN (LINE_BREAK | 0)
+-> operatorLessThan ;;
+
+
+    GREATER_THAN (LINE_BREAK | 0)
+-> operatorGreaterThan ;;
+
+
+    LESS_OR_EQUAL (LINE_BREAK | 0)
+-> operatorLessOrEqual ;;
+
+
+    GREATER_OR_EQUAL (LINE_BREAK | 0)
+-> operatorGreaterOrEqual ;;
+
+
+    BXOR (LINE_BREAK | 0)
+-> operatorBXor ;;
+
+
+    BOR (LINE_BREAK | 0)
+-> operatorBOr ;;
+
+
+    BAND (LINE_BREAK | 0)
+-> operatorBAnd ;;
+
+
+    LEFT_SHIFT (LINE_BREAK | 0)
+-> operatorLeftShift ;;
+
+
+    RIGHT_SHIFT (LINE_BREAK | 0)
+-> operatorRightShift ;;
+
+
+    PLUS (LINE_BREAK | 0)
+-> operatorPlus ;;
+
+
+    MINUS (LINE_BREAK | 0)
+-> operatorMinus ;;
+
+
+    STAR (LINE_BREAK | 0)
+-> operatorStar ;;
+
+
+    DIV (LINE_BREAK | 0)
+-> operatorDiv ;;
+
+
+    MOD (LINE_BREAK | 0)
+-> operatorMod ;;
+
+
+    POWER (LINE_BREAK | 0)
+-> operatorPower ;;
+
+
+    UNARY_PLUS (LINE_BREAK | 0)
+-> operatorUnaryPlus ;;
+
+
+    UNARY_MINUS (LINE_BREAK | 0)
+-> operatorUnaryMinus ;;
+
+
+    BNOT (LINE_BREAK | 0)
+-> operatorBNot ;;
+
+
+    NOT (LINE_BREAK | 0)
+-> operatorNot ;;
+
+
 
 -----------------------------------------------------------------
 -- Code segments copied to the implementation (.cpp) file.

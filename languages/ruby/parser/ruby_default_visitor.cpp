@@ -231,6 +231,141 @@ namespace ruby
   void default_visitor::visit_operatorAsMethodname(operatorAsMethodname_ast *)
   {}
 
+  void default_visitor::visit_operatorAssign(operatorAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorBAnd(operatorBAnd_ast *)
+  {}
+
+  void default_visitor::visit_operatorBAndAssign(operatorBAndAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorBNot(operatorBNot_ast *)
+  {}
+
+  void default_visitor::visit_operatorBOr(operatorBOr_ast *)
+  {}
+
+  void default_visitor::visit_operatorBXor(operatorBXor_ast *)
+  {}
+
+  void default_visitor::visit_operatorBXorAssign(operatorBXorAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorBorAssign(operatorBorAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorCaseEqual(operatorCaseEqual_ast *)
+  {}
+
+  void default_visitor::visit_operatorColon(operatorColon_ast *)
+  {}
+
+  void default_visitor::visit_operatorCompare(operatorCompare_ast *)
+  {}
+
+  void default_visitor::visit_operatorDiv(operatorDiv_ast *)
+  {}
+
+  void default_visitor::visit_operatorDivAssign(operatorDivAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorEqual(operatorEqual_ast *)
+  {}
+
+  void default_visitor::visit_operatorExclusiveRange(operatorExclusiveRange_ast *)
+  {}
+
+  void default_visitor::visit_operatorGreaterOrEqual(operatorGreaterOrEqual_ast *)
+  {}
+
+  void default_visitor::visit_operatorGreaterThan(operatorGreaterThan_ast *)
+  {}
+
+  void default_visitor::visit_operatorInclusiveRange(operatorInclusiveRange_ast *)
+  {}
+
+  void default_visitor::visit_operatorLeftShift(operatorLeftShift_ast *)
+  {}
+
+  void default_visitor::visit_operatorLeftShiftAssign(operatorLeftShiftAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorLessOrEqual(operatorLessOrEqual_ast *)
+  {}
+
+  void default_visitor::visit_operatorLessThan(operatorLessThan_ast *)
+  {}
+
+  void default_visitor::visit_operatorLogicalAnd(operatorLogicalAnd_ast *)
+  {}
+
+  void default_visitor::visit_operatorLogicalAndAssign(operatorLogicalAndAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorLogicalOr(operatorLogicalOr_ast *)
+  {}
+
+  void default_visitor::visit_operatorLogicalOrAssign(operatorLogicalOrAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorMatch(operatorMatch_ast *)
+  {}
+
+  void default_visitor::visit_operatorMinus(operatorMinus_ast *)
+  {}
+
+  void default_visitor::visit_operatorMinusAssign(operatorMinusAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorMod(operatorMod_ast *)
+  {}
+
+  void default_visitor::visit_operatorModAssign(operatorModAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorNot(operatorNot_ast *)
+  {}
+
+  void default_visitor::visit_operatorNotEqual(operatorNotEqual_ast *)
+  {}
+
+  void default_visitor::visit_operatorNotMatch(operatorNotMatch_ast *)
+  {}
+
+  void default_visitor::visit_operatorPlus(operatorPlus_ast *)
+  {}
+
+  void default_visitor::visit_operatorPlusAssign(operatorPlusAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorPower(operatorPower_ast *)
+  {}
+
+  void default_visitor::visit_operatorPowerAssign(operatorPowerAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorQuestion(operatorQuestion_ast *)
+  {}
+
+  void default_visitor::visit_operatorRightShift(operatorRightShift_ast *)
+  {}
+
+  void default_visitor::visit_operatorRightShiftAssign(operatorRightShiftAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorStar(operatorStar_ast *)
+  {}
+
+  void default_visitor::visit_operatorStarAssign(operatorStarAssign_ast *)
+  {}
+
+  void default_visitor::visit_operatorUnaryMinus(operatorUnaryMinus_ast *)
+  {}
+
+  void default_visitor::visit_operatorUnaryPlus(operatorUnaryPlus_ast *)
+  {}
+
   void default_visitor::visit_orExpression(orExpression_ast *)
   {}
 

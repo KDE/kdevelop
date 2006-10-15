@@ -172,6 +172,96 @@ namespace ruby
       {}
       virtual void visit_operatorAsMethodname(operatorAsMethodname_ast *)
       {}
+      virtual void visit_operatorAssign(operatorAssign_ast *)
+      {}
+      virtual void visit_operatorBAnd(operatorBAnd_ast *)
+      {}
+      virtual void visit_operatorBAndAssign(operatorBAndAssign_ast *)
+      {}
+      virtual void visit_operatorBNot(operatorBNot_ast *)
+      {}
+      virtual void visit_operatorBOr(operatorBOr_ast *)
+      {}
+      virtual void visit_operatorBXor(operatorBXor_ast *)
+      {}
+      virtual void visit_operatorBXorAssign(operatorBXorAssign_ast *)
+      {}
+      virtual void visit_operatorBorAssign(operatorBorAssign_ast *)
+      {}
+      virtual void visit_operatorCaseEqual(operatorCaseEqual_ast *)
+      {}
+      virtual void visit_operatorColon(operatorColon_ast *)
+      {}
+      virtual void visit_operatorCompare(operatorCompare_ast *)
+      {}
+      virtual void visit_operatorDiv(operatorDiv_ast *)
+      {}
+      virtual void visit_operatorDivAssign(operatorDivAssign_ast *)
+      {}
+      virtual void visit_operatorEqual(operatorEqual_ast *)
+      {}
+      virtual void visit_operatorExclusiveRange(operatorExclusiveRange_ast *)
+      {}
+      virtual void visit_operatorGreaterOrEqual(operatorGreaterOrEqual_ast *)
+      {}
+      virtual void visit_operatorGreaterThan(operatorGreaterThan_ast *)
+      {}
+      virtual void visit_operatorInclusiveRange(operatorInclusiveRange_ast *)
+      {}
+      virtual void visit_operatorLeftShift(operatorLeftShift_ast *)
+      {}
+      virtual void visit_operatorLeftShiftAssign(operatorLeftShiftAssign_ast *)
+      {}
+      virtual void visit_operatorLessOrEqual(operatorLessOrEqual_ast *)
+      {}
+      virtual void visit_operatorLessThan(operatorLessThan_ast *)
+      {}
+      virtual void visit_operatorLogicalAnd(operatorLogicalAnd_ast *)
+      {}
+      virtual void visit_operatorLogicalAndAssign(operatorLogicalAndAssign_ast *)
+      {}
+      virtual void visit_operatorLogicalOr(operatorLogicalOr_ast *)
+      {}
+      virtual void visit_operatorLogicalOrAssign(operatorLogicalOrAssign_ast *)
+      {}
+      virtual void visit_operatorMatch(operatorMatch_ast *)
+      {}
+      virtual void visit_operatorMinus(operatorMinus_ast *)
+      {}
+      virtual void visit_operatorMinusAssign(operatorMinusAssign_ast *)
+      {}
+      virtual void visit_operatorMod(operatorMod_ast *)
+      {}
+      virtual void visit_operatorModAssign(operatorModAssign_ast *)
+      {}
+      virtual void visit_operatorNot(operatorNot_ast *)
+      {}
+      virtual void visit_operatorNotEqual(operatorNotEqual_ast *)
+      {}
+      virtual void visit_operatorNotMatch(operatorNotMatch_ast *)
+      {}
+      virtual void visit_operatorPlus(operatorPlus_ast *)
+      {}
+      virtual void visit_operatorPlusAssign(operatorPlusAssign_ast *)
+      {}
+      virtual void visit_operatorPower(operatorPower_ast *)
+      {}
+      virtual void visit_operatorPowerAssign(operatorPowerAssign_ast *)
+      {}
+      virtual void visit_operatorQuestion(operatorQuestion_ast *)
+      {}
+      virtual void visit_operatorRightShift(operatorRightShift_ast *)
+      {}
+      virtual void visit_operatorRightShiftAssign(operatorRightShiftAssign_ast *)
+      {}
+      virtual void visit_operatorStar(operatorStar_ast *)
+      {}
+      virtual void visit_operatorStarAssign(operatorStarAssign_ast *)
+      {}
+      virtual void visit_operatorUnaryMinus(operatorUnaryMinus_ast *)
+      {}
+      virtual void visit_operatorUnaryPlus(operatorUnaryPlus_ast *)
+      {}
       virtual void visit_orExpression(orExpression_ast *)
       {}
       virtual void visit_parallelAssignmentLeftOver(parallelAssignmentLeftOver_ast *)
