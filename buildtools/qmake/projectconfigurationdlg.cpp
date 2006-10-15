@@ -512,7 +512,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         else
             myProjectItem->scope->updateCustomVariable( var, op, QStringList::split( " ", item->text( 2 ) ) );
     }
-    myProjectItem->scope->saveToFile();
 }
 
 void ProjectConfigurationDlg::accept()
@@ -1526,7 +1525,9 @@ void ProjectConfigurationDlg::targetInstallChanged( bool checked )
 
 void ProjectConfigurationDlg::apply()
 {
-    updateProjectConfiguration();
+    if( buttonApply->isEnabled() )
+        updateProjectConfiguration();
+    myProjectItem->scope->saveToFile();
     //     prjWidget->updateProjectConfiguration( myProjectItem );
     prjWidget->setupContext();
     buttonApply->setEnabled( false );
