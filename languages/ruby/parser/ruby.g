@@ -752,6 +752,7 @@ namespace ruby
     [: expect_array_or_block_arguments = false; :]
 -> restMethodDefinitionArgument ;;
 
+
     ?[: expect_array_or_block_arguments :] BAND (IDENTIFIER | FUNCTION)
     [: expect_array_or_block_arguments = false; :]
 -> blockMethodDefinitionArgument ;;

@@ -223,7 +223,6 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 "||"                        { return parser::Token_LOGICAL_OR; }
 "|"                         { return parser::Token_BOR; }
 "&&"                        { return parser::Token_LOGICAL_AND; }
-"&"                         { return parser::Token_BLOCK_ARG_PREFIX; }
 "==="                       { return parser::Token_CASE_EQUAL; }
 "=="                        { return parser::Token_EQUAL; }
 "=~"                        { return parser::Token_MATCH; }
@@ -239,12 +238,10 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 "-"                         { return parser::Token_UNARY_MINUS; }
 }
 
-<expect_operator>{
 "/="                        { return parser::Token_DIV_ASSIGN; }
 "/"                         { return parser::Token_DIV; }
 "&"                         { return parser::Token_BAND; }
 "<<"                        { return parser::Token_LEFT_SHIFT; }
-}
 
 {Regexp}                    { return parser::Token_REGEX; }
 
