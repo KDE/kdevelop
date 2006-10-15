@@ -950,7 +950,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
 
     else if ( r == idQmake )
     {
-        m_part->startQMakeCommand( projectDirectory() + relpath );
+        m_part->startQMakeCommand( projectDirectory() + QString(QChar(QDir::separator())) + relpath );
     }
     else if ( r == idQmakeRecursive )
     {
