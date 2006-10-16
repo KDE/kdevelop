@@ -43,6 +43,7 @@
 #include "kdevproject.h"
 #include "kdevsourceformatter.h"
 #include "kdevcoderepository.h"
+#include "kdevpartcontroller.h"
 #include "backgroundparser.h"
 #include "domutil.h"
 #include "filetemplate.h"
@@ -1823,6 +1824,10 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 	QTextStream istream( &ifile );
 	istream << classImpl;
 	ifile.close();
+
+	KURL u;
+	u.setPath( implementationPath );
+	dlg.m_part->partController()->editDocument( u );
 }
 
 
@@ -2042,6 +2047,10 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	QTextStream hstream( &hfile );
 	hstream << classIntf;
 	hfile.close();
+
+	KURL u;
+	u.setPath( headerPath );
+	dlg.m_part->partController()->editDocument( u );
 
 	QStringList fileList;
 
