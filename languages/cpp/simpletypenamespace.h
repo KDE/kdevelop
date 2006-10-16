@@ -84,6 +84,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     QValueList< SlavePair > m_activeSlaves;
     QValueList< SimpleType > m_waitingAliases; ///For caching-reasons, it is necessary to import the aliases later after the call to addScope(because addscope is already called within the constructor, but the namespace is put into the cache after the constructor was called). This list holds all aliases to add.
     /// Maps local sub-namespace -> global namespace(multiple aliases are possible)
+    QValueList< QPair< QString, HashedStringSet > > m_waitingImports;
     typedef QMap<QString, AliasList> AliasMap;
     AliasMap m_aliases;
   
