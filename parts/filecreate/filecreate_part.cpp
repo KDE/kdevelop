@@ -208,13 +208,14 @@ void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
                                                           QString::null,
                                                           filetype->subtypeRef());
 
-  if (project())
-    openCreatedFile(createdFile);
+  openCreatedFile(createdFile);
 }
 
-void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) {
-	if (createdFile.status == KDevCreateFile::CreatedFile::STATUS_OK && project() ) {
-    KURL uu(project()->projectDirectory() + createdFile.dir + "/" + createdFile.filename );
+void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) 
+{
+  if ( createdFile.status == KDevCreateFile::CreatedFile::STATUS_OK )
+  {
+    KURL uu( createdFile.dir + "/" + createdFile.filename );
     partController()->editDocument ( uu );
   }
 }
