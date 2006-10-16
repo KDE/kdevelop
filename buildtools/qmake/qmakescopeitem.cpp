@@ -162,37 +162,37 @@ void GroupItem::addFileToScope( const QString& filename )
     switch ( groupType )
     {
         case GroupItem::Sources:
-            owner->scope->addToPlusOp( "SOURCES", filename );
+            owner->addValue( "SOURCES", filename );
             break;
         case GroupItem::Headers:
-            owner->scope->addToPlusOp( "HEADERS", filename );
+            owner->addValue( "HEADERS", filename );
             break;
         case GroupItem::Forms:
-            owner->scope->addToPlusOp( "FORMS", filename );
+            owner->addValue( "FORMS", filename );
             break;
         case GroupItem::IDLs:
-            owner->scope->addToPlusOp( "IDLS", filename );
+            owner->addValue( "IDLS", filename );
             break;
         case GroupItem::Lexsources:
-            owner->scope->addToPlusOp( "LEXSOURCES", filename );
+            owner->addValue( "LEXSOURCES", filename );
             break;
         case GroupItem::Yaccsources:
-            owner->scope->addToPlusOp( "YACCSOURCES", filename );
+            owner->addValue( "YACCSOURCES", filename );
             break;
         case GroupItem::Images:
-            owner->scope->addToPlusOp( "IMAGES", filename );
+            owner->addValue( "IMAGES", filename );
             break;
         case GroupItem::Resources:
-            owner->scope->addToPlusOp( "RESOURCES", filename );
+            owner->addValue( "RESOURCES", filename );
             break;
         case GroupItem::Distfiles:
-            owner->scope->addToPlusOp( "DISTFILES", filename );
+            owner->addValue( "DISTFILES", filename );
             break;
         case GroupItem::Translations:
-            owner->scope->addToPlusOp( "TRANSLATIONS", filename );
+            owner->addValue( "TRANSLATIONS", filename );
             break;
         case GroupItem::InstallObject:
-            owner->scope->addToPlusOp( text( 0 ) + ".files", filename );
+            owner->addValue( text( 0 ) + ".files", filename );
             break;
         default:
             break;
@@ -217,47 +217,47 @@ void GroupItem::removeFileFromScope( const QString& filename )
 
     if ( groupType == GroupItem::Sources )
     {
-        owner->scope->addToMinusOp( "SOURCES", filename );
+        owner->removeValue( "SOURCES", filename );
     }
     else if ( groupType == GroupItem::Headers )
     {
-        owner->scope->addToMinusOp( "HEADERS", filename );
+        owner->removeValue( "HEADERS", filename );
     }
     else if ( groupType == GroupItem::Forms )
     {
-        owner->scope->addToMinusOp( "FORMS", filename );
+        owner->removeValue( "FORMS", filename );
     }
     else if ( groupType == GroupItem::Distfiles )
     {
-        owner->scope->addToMinusOp( "DISTFILES", filename );
+        owner->removeValue( "DISTFILES", filename );
     }
     else if ( groupType == GroupItem::Images )
     {
-        owner->scope->addToMinusOp( "IMAGES", filename );
+        owner->removeValue( "IMAGES", filename );
     }
     else if ( groupType == GroupItem::Resources )
     {
-        owner->scope->addToMinusOp( "RESOURCES", filename );
+        owner->removeValue( "RESOURCES", filename );
     }
     else if ( groupType == GroupItem::Lexsources )
     {
-        owner->scope->addToMinusOp( "LEXSOURCES", filename );
+        owner->removeValue( "LEXSOURCES", filename );
     }
     else if ( groupType == GroupItem::Yaccsources )
     {
-        owner->scope->addToMinusOp( "YACCSOURCES", filename );
+        owner->removeValue( "YACCSOURCES", filename );
     }
     else if ( groupType == GroupItem::Translations )
     {
-        owner->scope->addToMinusOp( "TRANSLATIONS", filename );
+        owner->removeValue( "TRANSLATIONS", filename );
     }
     else if ( groupType == GroupItem::IDLs )
     {
-        owner->scope->addToMinusOp( "IDL", filename );
+        owner->removeValue( "IDL", filename );
     }
     else if ( groupType == GroupItem::InstallObject )
     {
-        owner->scope->addToMinusOp( text( 0 ) + ".files", filename );
+        owner->removeValue( text( 0 ) + ".files", filename );
     }
     owner->scope->saveToFile();
 }
@@ -265,7 +265,7 @@ void GroupItem::removeFileFromScope( const QString& filename )
 void GroupItem::addInstallObject( const QString& objectname )
 {
     GroupItem * objitem = owner->createGroupItem( GroupItem::InstallObject, objectname, owner );
-    owner->scope->addToPlusOp( "INSTALL", QStringList( objectname ) );
+    owner->addValue( "INSTALL", objectname );
     owner->scope->saveToFile();
     installs.append( objitem );
 }
@@ -659,18 +659,65 @@ void QMakeScopeItem::buildGroups()
 
 }
 
-void QMakeScopeItem::updateVariableValues( const QString& var, QStringList values )
+void QMakeScopeItem::removeValues( const QString& var, const QStringList& values )
+{
+    for( QStringList::const_iterator it = values.begin() ; it != values.end(); ++it )
+    {
+        removeValue( var, *it );
+    }
+}
+
+void QMakeScopeItem::addValues( const QString& var, const QStringList& values )
+{
+    for( QStringList::const_iterator it = values.begin() ; it != values.end(); ++it )
+    {
+        addValue( var, *it );
+    }
+}
+
+void QMakeScopeItem::removeValue( const QString& var, const QString& value )
+{
+    if( scope->variableValues( var ).contains( value ) )
+    {
+        if( scope->variableValuesForOp( var, "+=" ).contains(value) )
+            scope->removeFromPlusOp( var, QStringList( value ) );
+        else
+            scope->addToMinusOp( var, QStringList( value ) );
+    }
+}
+
+void QMakeScopeItem::addValue( const QString& var, const QString& value )
+{
+    if( !scope->variableValues( var ).contains( value ) )
+    {
+        if( scope->variableValuesForOp( var, "-=" ).contains(value) )
+            scope->removeFromMinusOp( var, QStringList( value ) );
+        else
+            scope->addToPlusOp( var, QStringList( value ) );
+    }
+}
+
+void QMakeScopeItem::updateValues( const QString& var, const QStringList& values )
 {
     QStringList curValues = scope->variableValues( var );
-    for ( QStringList::iterator it = curValues.begin() ; it != curValues.end() ; ++it )
+    QStringList scopeValues = scope->variableValuesForOp( var, "+=" );
+    for( QStringList::const_iterator it = curValues.begin(); it != curValues.end(); ++it )
     {
         if ( !values.contains( *it ) )
         {
-            scope->addToMinusOp( var, QStringList( *it ) );
-            values.remove( *it );
+            if( scopeValues.contains( *it ) )
+                scope->removeFromPlusOp( var, QStringList( *it ) );
+            else
+                scope->addToMinusOp( var, QStringList( *it ) );
         }
     }
-    scope->addToPlusOp( var, values );
+    for( QStringList::const_iterator it = values.begin(); it != values.end(); ++it )
+    {
+        if ( !curValues.contains( *it ) )
+        {
+            scope->addToPlusOp( var, QStringList( *it ) );
+        }
+    }
 }
 
 QMakeScopeItem* QMakeScopeItem::projectFileItem()

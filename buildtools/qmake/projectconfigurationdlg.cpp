@@ -142,18 +142,17 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         {
             myProjectItem->scope->setEqualOp( "TEMPLATE", "lib" );
             if ( staticRadio->isOn() )
-                myProjectItem->scope->addToPlusOp( "CONFIG", "staticlib" );
+                myProjectItem->addValue( "CONFIG", "staticlib" );
             else if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
-                myProjectItem->scope->addToMinusOp( "CONFIG", "staticlib" );
+                myProjectItem->removeValue( "CONFIG", "staticlib" );
             if ( sharedRadio->isOn() )
             {
-                myProjectItem->scope->addToPlusOp( "CONFIG", "dll" );
+                myProjectItem->addValue( "CONFIG", "dll" );
                 myProjectItem->scope->setEqualOp( "VERSION", m_targetLibraryVersion->text() );
             }
             else
             {
-                if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
-                    myProjectItem->scope->addToMinusOp( "CONFIG", "dll" );
+                myProjectItem->removeValue( "CONFIG", "dll" );
                 if ( !myProjectItem->scope->listIsEmpty( myProjectItem->scope->variableValues( "VERSION" ) ) )
                 {
                     myProjectItem->scope->removeVariable( "VERSION", "=" );
@@ -162,13 +161,13 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
                 }
             }
             if ( checkPlugin->isOn() )
-                myProjectItem->scope->addToPlusOp( "CONFIG", "plugin" );
-            else if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "plugin" ) )
-                myProjectItem->scope->addToMinusOp( "CONFIG", "plugin" );
+                myProjectItem->addValue( "CONFIG", "plugin" );
+            else
+                myProjectItem->removeValue( "CONFIG", "plugin" );
             if ( checkDesigner->isChecked() )
-                myProjectItem->scope->addToMinusOp( "CONFIG", "designer" );
-            else if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "designer" ) )
-                myProjectItem->scope->addToMinusOp( "CONFIG", "designer" );
+                myProjectItem->addValue( "CONFIG", "designer" );
+            else
+                myProjectItem->removeValue( "CONFIG", "designer" );
 
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_lib" ) );
         }
@@ -179,148 +178,145 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         }
     }
 
-    QStringList confValues = myProjectItem->scope->variableValues( "CONFIG" );
-
     // Buildmode
-    if ( radioDebugMode->isChecked() && !confValues.contains( "debug" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "debug" );
-    else if ( !radioDebugMode->isChecked() && confValues.contains( "debug" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "debug" );
-    if ( radioReleaseMode->isChecked() && !confValues.contains( "release" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "release" );
-    else if ( !radioReleaseMode->isChecked() && confValues.contains( "release" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "release" );
+    if ( radioDebugMode->isChecked() )
+        myProjectItem->addValue( "CONFIG", "debug" );
+    else
+        myProjectItem->removeValue( "CONFIG", "debug" );
+    if ( radioReleaseMode->isChecked() )
+        myProjectItem->addValue( "CONFIG", "release" );
+    else
+        myProjectItem->removeValue( "CONFIG", "release" );
 
     // requirements
-    if ( exceptionCheck->isChecked() && !confValues.contains( "exceptions" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "exceptions" );
-    else if ( !exceptionCheck->isChecked() && confValues.contains( "exceptions" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "exceptions" );
-    if ( stlCheck->isChecked() && !confValues.contains( "stl" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "stl" );
-    else if ( !stlCheck->isChecked() && confValues.contains( "stl" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "stl" );
-    if ( rttiCheck->isChecked() && !confValues.contains( "rtti" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "rtti" );
-    else if ( !rttiCheck->isChecked() && confValues.contains( "rtti" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "rtti" );
-    if ( checkQt->isChecked() && !confValues.contains( "qt" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "qt" );
-    else if ( !checkQt->isChecked() && confValues.contains( "qt" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "qt" );
-    if ( checkOpenGL->isChecked() && !confValues.contains( "opengl" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "opengl" );
-    else if ( !checkOpenGL->isChecked() && confValues.contains( "opengl" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "opengl" );
-    if ( checkThread->isChecked() && !confValues.contains( "thread" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "thread" );
-    else if ( !checkThread->isChecked() && confValues.contains( "thread" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "thread" );
-    if ( checkX11->isChecked() && !confValues.contains( "x11" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "x11" );
-    else if ( !checkX11->isChecked() && confValues.contains( "x11" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "x11" );
-    if ( checkOrdered->isChecked() && !confValues.contains( "ordered" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "ordered" );
-    else if ( !checkOrdered->isChecked() && confValues.contains( "ordered" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "ordered" );
-    if ( checkLibtool->isChecked() && !confValues.contains( "create_libtool" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "create_libtool" );
-    else if ( !checkLibtool->isChecked() && confValues.contains( "create_libtool" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "create_libtool" );
-    if ( checkPkgconf->isChecked() && !confValues.contains( "create_pkgconf" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "create_pkgconf" );
-    else if ( !checkPkgconf->isChecked() && confValues.contains( "create_pkgconf" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "create_pkgconf" );
-    if ( checkConsole->isChecked() && !confValues.contains( "console" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "console" );
-    else if ( !checkConsole->isChecked() && confValues.contains( "console" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "console" );
-    if ( checkPCH->isChecked() && !confValues.contains( "precompile_header" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "precompile_header" );
-    else if ( !checkPCH->isChecked() && confValues.contains( "precompile_header" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "precompile_header" );
+    if ( exceptionCheck->isChecked() )
+        myProjectItem->addValue( "CONFIG", "exceptions" );
+    else
+        myProjectItem->removeValue( "CONFIG", "exceptions" );
+    if ( stlCheck->isChecked() )
+        myProjectItem->addValue( "CONFIG", "stl" );
+    else
+        myProjectItem->removeValue( "CONFIG", "stl" );
+    if ( rttiCheck->isChecked() )
+        myProjectItem->addValue( "CONFIG", "rtti" );
+    else
+        myProjectItem->removeValue( "CONFIG", "rtti" );
+    if ( checkQt->isChecked() )
+        myProjectItem->addValue( "CONFIG", "qt" );
+    else
+        myProjectItem->removeValue( "CONFIG", "qt" );
+    if ( checkOpenGL->isChecked() )
+        myProjectItem->addValue( "CONFIG", "opengl" );
+    else
+        myProjectItem->removeValue( "CONFIG", "opengl" );
+    if ( checkThread->isChecked() )
+        myProjectItem->addValue( "CONFIG", "thread" );
+    else
+        myProjectItem->removeValue( "CONFIG", "thread" );
+    if ( checkX11->isChecked() )
+        myProjectItem->addValue( "CONFIG", "x11" );
+    else
+        myProjectItem->removeValue( "CONFIG", "x11" );
+    if ( checkOrdered->isChecked() )
+        myProjectItem->addValue( "CONFIG", "ordered" );
+    else
+        myProjectItem->removeValue( "CONFIG", "ordered" );
+    if ( checkLibtool->isChecked() )
+        myProjectItem->addValue( "CONFIG", "create_libtool" );
+    else
+        myProjectItem->removeValue( "CONFIG", "create_libtool" );
+    if ( checkPkgconf->isChecked() )
+        myProjectItem->addValue( "CONFIG", "create_pkgconf" );
+    else
+        myProjectItem->removeValue( "CONFIG", "create_pkgconf" );
+    if ( checkConsole->isChecked() )
+        myProjectItem->addValue( "CONFIG", "console" );
+    else
+        myProjectItem->removeValue( "CONFIG", "console" );
+    if ( checkPCH->isChecked() )
+        myProjectItem->addValue( "CONFIG", "precompile_header" );
+    else
+        myProjectItem->removeValue( "CONFIG", "precompile_header" );
     // Warnings
-    if ( checkWarning->isChecked() && !confValues.contains( "warn_on" ) )
+    if ( checkWarning->isChecked() )
     {
-        myProjectItem->scope->addToPlusOp( "CONFIG", "warn_on" );
-        myProjectItem->scope->addToMinusOp( "CONFIG", "warn_off" );
+        myProjectItem->addValue( "CONFIG", "warn_on" );
+        myProjectItem->removeValue( "CONFIG", "warn_off" );
     }
-    else if ( !checkWarning->isChecked() && confValues.contains( "warn_on" ) )
+    else
     {
-        myProjectItem->scope->addToMinusOp( "CONFIG", "warn_on" );
-        myProjectItem->scope->addToPlusOp( "CONFIG", "warn_off" );
+        myProjectItem->addValue( "CONFIG", "warn_on" );
+        myProjectItem->removeValue( "CONFIG", "warn_off" );
     }
-    if ( checkWindows->isChecked() && !confValues.contains( "windows" ) )
-        myProjectItem->scope->addToPlusOp( "CONFIG", "windows" );
-    else if ( !checkWindows->isChecked() && confValues.contains( "windows" ) )
-        myProjectItem->scope->addToMinusOp( "CONFIG", "windows" );
+    if ( checkWindows->isChecked() )
+        myProjectItem->addValue( "CONFIG", "windows" );
+    else
+        myProjectItem->removeValue( "CONFIG", "windows" );
 
     //Qt4 libs
     if ( prjWidget->m_part->isQt4Project() )
     {
+        if ( radioDebugReleaseMode->isChecked() )
+            myProjectItem->addValue( "CONFIG", "debug_and_release" );
+        else
+            myProjectItem->removeValue( "CONFIG", "debug_and_release" );
 
-        if ( radioDebugReleaseMode->isChecked() && !confValues.contains( "debug_and_release" ) )
-            myProjectItem->scope->addToPlusOp( "CONFIG", "debug_and_release" );
-        else if ( !radioDebugReleaseMode->isChecked() && confValues.contains( "debug_and_release" ) )
-            myProjectItem->scope->addToMinusOp( "CONFIG", "debug_and_release" );
+        if ( checkTestlib->isChecked() )
+            myProjectItem->addValue( "CONFIG", "qtestlib" );
+        else
+            myProjectItem->removeValue( "CONFIG", "qtestlib" );
+        if ( checkAssistant->isChecked() )
+            myProjectItem->addValue( "CONFIG", "assistant" );
+        else
+            myProjectItem->removeValue( "CONFIG", "assistant" );
+        if ( checkUiTools->isChecked() )
+            myProjectItem->addValue( "CONFIG", "uitools" );
+        else
+            myProjectItem->removeValue( "CONFIG", "uitools" );
+        if ( checkQDBus->isChecked() )
+            myProjectItem->addValue( "CONFIG", "dbus" );
+        else
+            myProjectItem->removeValue( "CONFIG", "dbus" );
+        if ( checkBuildAll->isChecked() )
+            myProjectItem->addValue( "CONFIG", "build_all" );
+        else
+            myProjectItem->removeValue( "CONFIG", "build_all" );
 
-        if ( checkTestlib->isChecked() && !confValues.contains( "qtestlib" ) )
-            myProjectItem->scope->addToPlusOp( "CONFIG", "qtestlib" );
-        else if ( !checkTestlib->isChecked() && confValues.contains( "qtestlib" ) )
-            myProjectItem->scope->addToMinusOp( "CONFIG", "qtestlib" );
-        if ( checkAssistant->isChecked() && !confValues.contains( "assistant" ) )
-            myProjectItem->scope->addToPlusOp( "CONFIG", "assistant" );
-        else if ( !checkAssistant->isChecked() && confValues.contains( "assistant" ) )
-            myProjectItem->scope->addToMinusOp( "CONFIG", "assistant" );
-        if ( checkUiTools->isChecked() && !confValues.contains( "uitools" ) )
-            myProjectItem->scope->addToPlusOp( "CONFIG", "uitools" );
-        else if ( !checkUiTools->isChecked() && confValues.contains( "uitools" ) )
-            myProjectItem->scope->addToMinusOp( "CONFIG", "uitools" );
-        if ( checkQDBus->isChecked() && !confValues.contains( "dbus" ) )
-            myProjectItem->scope->addToPlusOp( "CONFIG", "dbus" );
-        else if ( !checkQDBus->isChecked() && confValues.contains( "dbus" ) )
-            myProjectItem->scope->addToMinusOp( "CONFIG", "dbus" );
-        if ( checkBuildAll->isChecked() && !confValues.contains( "build_all" ) )
-            myProjectItem->scope->addToPlusOp( "CONFIG", "build_all" );
-        else if ( !checkBuildAll->isChecked() && confValues.contains( "build_all" ) )
-            myProjectItem->scope->addToMinusOp( "CONFIG", "build_all" );
-
-        QStringList qtValues = myProjectItem->scope->variableValues( "QT" );
-        if ( checkQt4Core->isChecked() && !qtValues.contains( "core" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "core" );
-        else if ( !checkQt4Core->isChecked() && qtValues.contains( "core" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "core" );
-        if ( checkQt4Gui->isChecked() && !qtValues.contains( "gui" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "gui" );
-        else if ( !checkQt4Gui->isChecked() && qtValues.contains( "gui" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "gui" );
-        if ( checkQt4SQL->isChecked() && !qtValues.contains( "sql" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "sql" );
-        else if ( !checkQt4SQL->isChecked() && qtValues.contains( "sql" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "sql" );
-        if ( checkQt4SVG->isChecked() && !qtValues.contains( "svg" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "svg" );
-        else if ( !checkQt4SVG->isChecked() && qtValues.contains( "svg" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "svg" );
-        if ( checkQt4XML->isChecked() && !qtValues.contains( "xml" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "xml" );
-        else if ( !checkQt4XML->isChecked() && qtValues.contains( "xml" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "xml" );
-        if ( checkQt4Network->isChecked() && !qtValues.contains( "network" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "network" );
-        else if ( !checkQt4Network->isChecked() && qtValues.contains( "network" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "network" );
-        if ( checkQt3Support->isChecked() && !qtValues.contains( "qt3support" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "qt3support" );
-        else if ( !checkQt3Support->isChecked() && qtValues.contains( "qt3support" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "qt3support" );
-        if ( checkQt4OpenGL->isChecked() && !qtValues.contains( "opengl" ) )
-            myProjectItem->scope->addToPlusOp( "QT", "opengl" );
-        else if ( !checkQt4OpenGL->isChecked() && qtValues.contains( "opengl" ) )
-            myProjectItem->scope->addToMinusOp( "QT", "opengl" );
+        if ( checkQt4Core->isChecked() )
+            myProjectItem->addValue( "QT", "core" );
+        else
+            myProjectItem->removeValue( "QT", "core" );
+        if ( checkQt4Gui->isChecked() )
+            myProjectItem->addValue( "QT", "gui" );
+        else
+            myProjectItem->removeValue( "QT", "gui" );
+        if ( checkQt4SQL->isChecked() )
+            myProjectItem->addValue( "QT", "sql" );
+        else
+            myProjectItem->removeValue( "QT", "sql" );
+        if ( checkQt4SVG->isChecked() )
+            myProjectItem->addValue( "QT", "svg" );
+        else
+            myProjectItem->removeValue( "QT", "svg" );
+        if ( checkQt4XML->isChecked() )
+            myProjectItem->addValue( "QT", "xml" );
+        else
+            myProjectItem->removeValue( "QT", "xml" );
+        if ( checkQt4Network->isChecked() )
+            myProjectItem->addValue( "QT", "network" );
+        else
+            myProjectItem->removeValue( "QT", "network" );
+        if ( checkQt3Support->isChecked() )
+            myProjectItem->addValue( "QT", "qt3support" );
+        else
+            myProjectItem->removeValue( "QT", "qt3support" );
+        if ( checkQt4OpenGL->isChecked() )
+            myProjectItem->addValue( "QT", "opengl" );
+        else
+            myProjectItem->removeValue( "QT", "opengl" );
     }
 
+    QStringList confValues = myProjectItem->scope->variableValues( "CONFIG" );
     QStringList extraValues = QStringList::split( " ", editConfigExtra->text() );
     for ( QStringList::iterator it = confValues.begin() ; it != confValues.end() ; ++it )
     {
@@ -339,9 +335,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
     myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
 
-    myProjectItem->updateVariableValues( "DEFINES", QStringList::split( " ", m_defines->text() ) );
-    myProjectItem->updateVariableValues( "QMAKE_CXXFLAGS_DEBUG", QStringList::split( " ", m_debugFlags->text() ) );
-    myProjectItem->updateVariableValues( "QMAKE_CXXFLAGS_RELEASE", QStringList::split( " ", m_releaseFlags->text() ) );
+    myProjectItem->updateValues( "DEFINES", QStringList::split( " ", m_defines->text() ) );
+    myProjectItem->updateValues( "QMAKE_CXXFLAGS_DEBUG", QStringList::split( " ", m_debugFlags->text() ) );
+    myProjectItem->updateValues( "QMAKE_CXXFLAGS_RELEASE", QStringList::split( " ", m_releaseFlags->text() ) );
 
     //add selected includes
     QStringList values;
@@ -365,19 +361,18 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         values << outsideItem->text( 0 );
         outsideItem = ( QCheckListItem* ) outsideItem->itemBelow();
     }
-    myProjectItem->updateVariableValues( "INCLUDEPATH", values );
+    myProjectItem->updateValues( "INCLUDEPATH", values );
 
     //target.install
     if ( checkInstallTarget->isChecked() == true )
     {
-        if ( !myProjectItem->scope->variableValues( "INSTALLS" ).contains( "target" ) )
-            myProjectItem->scope->addToPlusOp( "INSTALLS", QStringList( "target" ) );
+        myProjectItem->addValue( "INSTALLS", "target" );
         myProjectItem->scope->setEqualOp( "target.path", QStringList( m_InstallTargetPath->text() ) );
     }
     else
     {
-        if ( myProjectItem->scope->variableValues( "INSTALLS" ).contains( "target" ) )
-            myProjectItem->scope->addToMinusOp( "INSTALLS", QStringList( "target" ) );
+        myProjectItem->removeValue( "INSTALLS", "target" );
+        myProjectItem->scope->removeVariable( "target.path", "=" );
     }
 
     //makefile
@@ -430,7 +425,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
 
 
-    myProjectItem->updateVariableValues( "LIBS", values );
+    myProjectItem->updateValues( "LIBS", values );
 
     values.clear();
 
@@ -466,7 +461,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         }
         insideItem = dynamic_cast<InsideCheckListItem *>( insideItem->itemBelow() );
     }
-    myProjectItem->updateVariableValues( "TARGETDEPS", values );
+    myProjectItem->updateValues( "TARGETDEPS", values );
 
     values.clear();
     //change build order
@@ -499,7 +494,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
 
     //CORBA
     myProjectItem->scope->setEqualOp( "IDL_COMPILER", QStringList( idlCmdEdit->url() ) );
-    myProjectItem->updateVariableValues( "IDL_OPTIONS", QStringList::split( " ", idlCmdOptionsEdit->text() ) );
+    myProjectItem->updateValues( "IDL_OPTIONS", QStringList::split( " ", idlCmdOptionsEdit->text() ) );
 
     // custom vars
     QListViewItem *item = customVariables->firstChild();

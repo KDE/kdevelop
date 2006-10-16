@@ -965,6 +965,12 @@ bool Scope::listsEqual(const QStringList& l1, const QStringList& l2) const
 }
 
 #ifdef DEBUG
+void Scope::printTree()
+{
+    PrintAST p;
+    p.processProject(m_root);
+}
+
 Scope::PrintAST::PrintAST() : QMake::ASTVisitor()
 {
     indent = 0;

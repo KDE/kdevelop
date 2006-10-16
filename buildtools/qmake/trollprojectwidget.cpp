@@ -79,7 +79,7 @@
 
 TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     : QVBox( 0, "troll project widget" ), m_shownSubproject( 0 ), m_rootSubproject( 0 ),
-        m_rootScope ( 0 ), m_part ( part ), m_configDlg( new ProjectConfigurationDlg( overview, this, this ) )
+        m_rootScope ( 0 ), m_part ( part ), m_configDlg( 0 )
 {
     QSplitter * splitter = new QSplitter( Vertical, this );
 
@@ -301,7 +301,7 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     rebuildTargetButton->setEnabled( false );
     executeTargetButton->setEnabled( false );
 
-
+    m_configDlg = new ProjectConfigurationDlg( overview, this, this );
 }
 
 
@@ -2348,7 +2348,7 @@ void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
     if( dlg.exec() )
     {
         QStringList values = dlg.selectedProjects();
-        spitem->scope->addToMinusOp( "SUBDIRS", values );
+        spitem->removeValues( "SUBDIRS", values );
         spitem->scope->saveToFile();
     }
 }

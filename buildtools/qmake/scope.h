@@ -157,6 +157,10 @@ public:
 
     bool isEnabled() { return m_isEnabled; }
 
+#ifdef DEBUG
+    void printTree();
+#endif
+
 private:
     /*
      * Updates the given Variable+op with the values, if removeFromOp is true it removes the values, else it adds them

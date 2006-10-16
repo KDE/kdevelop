@@ -88,7 +88,11 @@ class QMakeScopeItem : public qProjectItem
 public:
     QMakeScopeItem( QListView *parent, const QString &text, Scope *s, TrollProjectWidget* widget );
     QMakeScopeItem( QMakeScopeItem *parent, const QString &text, Scope* );
-    void updateVariableValues( const QString& var, QStringList values );
+    void updateValues( const QString& var, const QStringList& values );
+    void addValue( const QString& var, const QString& value );
+    void removeValue( const QString& var, const QString& value );
+    void addValues( const QString& var, const QStringList& values );
+    void removeValues( const QString& var, const QStringList& values );
     ~QMakeScopeItem();
 
     QMap<GroupItem::GroupType, GroupItem*> groups;
