@@ -1400,7 +1400,7 @@ void CppSupportPart::slotParseFiles()
 			_jd = 0;
 		} else {
 			_jd->progressBar->setProgress( _jd->backgroundState ); ///restart progress-bar for reparsing
-			if( _jd->lastParse.msecsTo( QTime::currentTime()) > 30000 ) {
+			if( _jd->lastParse.msecsTo( QTime::currentTime()) > 300000 ) {
 				_jd->backgroundCount = _jd->backgroundState;   ///Stop waiting if there is no progress
 				QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
 			} else {

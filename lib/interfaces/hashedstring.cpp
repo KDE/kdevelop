@@ -1,5 +1,7 @@
 #include "hashedstring.h"
 #include <kdatastream.h>
+#include <sstream>
+size_t fastHashString( const QString& str );
 
 size_t hashStringSafe( const QString& str ) {
   size_t hash = 0;
@@ -12,7 +14,7 @@ size_t hashStringSafe( const QString& str ) {
 
 size_t HashedString::hashString(  const QString& str )
 {
-	return hashStringSafe( str );
+	return fastHashString( str );
 }
 
 size_t fastHashString( const QString& str ) {
@@ -186,6 +188,15 @@ void HashedStringSet::write( QDataStream& stream ) const {
     }
 }
 
+std::string HashedStringSet::print() const {
+  std::ostringstream s;
+  if( m_data ) {
+        for( HashedStringSetData::StringSet::const_iterator it = m_data->m_files.begin(); it != m_data->m_files.end(); ++it ) {
+	  s << (*it).str().ascii() << "\n";
+	}
+  }
+  return s.str();
+}
 
 QDataStream& operator << ( QDataStream& stream, const HashedString& str ) {
     stream << str.m_str;

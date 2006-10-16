@@ -320,7 +320,8 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
 
   QString file = findIncludeFile( dep );
   findOrInsertDependenceList( fileName ).insert( file, dep );
-
+  m_currentParsedFile->addIncludeFile( file, 0, dep.second == Dep_Local );
+  
   if ( !QFile::exists( file ) ) {
     Problem p( i18n( "Could not find include file %1" ).arg( dep.first ),
                lexer ? lexer->currentLine() : -1,
@@ -751,6 +752,7 @@ QDateTime ParsedFile::timeStamp() const {
 }
 
 void ParsedFile::addIncludeFile( const QString& includePath, const ParsedFilePointer& parsed, bool localInclude ) {
+    includeFiles().insert( includePath );
     if( parsed )
         includeFiles() += parsed->includeFiles();
     IncludeDesc d;

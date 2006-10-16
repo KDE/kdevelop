@@ -5,6 +5,7 @@
 #include<qdatastream.h>
 #include<ksharedptr.h>
 #include <ext/hash_map>
+#include <string>
 
 
 ///A simple class that stores a string together with it's appropriate hash-key
@@ -89,6 +90,8 @@ class HashedStringSet {
 
     void read( QDataStream& stream );
     void write( QDataStream& stream ) const;
+
+    std::string print() const;
 
   size_t hash() const;
   private:
