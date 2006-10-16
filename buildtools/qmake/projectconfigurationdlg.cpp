@@ -995,7 +995,8 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
                 item = itemList.next();;
             }
         }
-    }
+    }else
+        buildorder_listview->clear();
 }
 
 //build order buttons
@@ -1498,9 +1499,9 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         extMoveUp_button->setEnabled( true );
         extMoveDown_button->setEnabled( true );
         extDeps_view->setEnabled( true );
-        buildorder_listview->setEnabled( true );
-        buildmoveup_button->setEnabled( true );
-        buildmovedown_button->setEnabled( true );
+        buildorder_listview->setEnabled( false );
+        buildmoveup_button->setEnabled( false );
+        buildmovedown_button->setEnabled( false );
         groupLibraries->setEnabled( true );
         checkOrdered->setEnabled( false );
     }
@@ -1521,9 +1522,9 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         extMoveUp_button->setEnabled( true );
         extMoveDown_button->setEnabled( true );
         extDeps_view->setEnabled( true );
-        buildorder_listview->setEnabled( true );
-        buildmoveup_button->setEnabled( true );
-        buildmovedown_button->setEnabled( true );
+        buildorder_listview->setEnabled( false );
+        buildmoveup_button->setEnabled( false );
+        buildmovedown_button->setEnabled( false );
         groupLibraries->setEnabled( false );
         checkConsole->setEnabled( true );
         checkWindows->setEnabled( true );
