@@ -661,8 +661,8 @@ void QMakeScopeItem::buildGroups()
 
 void QMakeScopeItem::updateVariableValues( const QString& var, QStringList values )
 {
-    QStringList curVal = scope->variableValues( var );
-    for ( QStringList::iterator it = curVal.begin() ; it != curVal.end() ; ++it )
+    QStringList curValues = scope->variableValues( var );
+    for ( QStringList::iterator it = curValues.begin() ; it != curValues.end() ; ++it )
     {
         if ( !values.contains( *it ) )
         {
@@ -670,7 +670,7 @@ void QMakeScopeItem::updateVariableValues( const QString& var, QStringList value
             values.remove( *it );
         }
     }
-    scope->addToPlusOp( var, curVal + values );
+    scope->addToPlusOp( var, values );
 }
 
 QMakeScopeItem* QMakeScopeItem::projectFileItem()
