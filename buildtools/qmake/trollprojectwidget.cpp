@@ -78,7 +78,8 @@
 #include "disablesubprojectdlg.h"
 
 TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
-        : QVBox( 0, "troll project widget" ), m_configDlg( 0 )
+    : QVBox( 0, "troll project widget" ), m_shownSubproject( 0 ), m_rootSubproject( 0 ),
+        m_rootScope ( 0 ), m_part ( part ), m_configDlg( new ProjectConfigurationDlg( overview, this, this ) )
 {
     QSplitter * splitter = new QSplitter( Vertical, this );
 
@@ -157,7 +158,7 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
 
     connect ( buildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
     connect ( rebuildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
-    connect ( executeProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotExecuteProject () ) );
+    connect ( executeProjectButton, SIGNAL ( clicked () ), m_part, SLOT ( slotBuildAndExecuteProject () ) );
 
 
 
@@ -295,17 +296,12 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
 
     connect ( buildTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildTarget () ) );
     connect ( rebuildTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildTarget () ) );
-    connect ( executeTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotExecuteTarget () ) );
+    connect ( executeTargetButton, SIGNAL ( clicked () ), m_part, SLOT ( slotBuildAndExecuteTarget () ) );
     buildTargetButton->setEnabled( false );
     rebuildTargetButton->setEnabled( false );
     executeTargetButton->setEnabled( false );
 
 
-    m_configDlg = new ProjectConfigurationDlg( overview, this, this );
-    m_part = part;
-    m_shownSubproject = 0;
-    m_rootSubproject = 0;
-    m_rootScope = 0;
 }
 
 
