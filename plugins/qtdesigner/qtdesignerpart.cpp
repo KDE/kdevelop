@@ -214,14 +214,14 @@ bool QtDesignerPart::saveFile()
     KSaveFile uiFile( m_file );
     //FIXME: find a way to return an error. KSaveFile
     //doesn't use the KIO error codes
-    if ( uiFile.status() )
+    if ( !uiFile.open() )
         return false;
 
-    QTextStream* stream = uiFile.textStream();
+    QTextStream stream ( &uiFile );
     QByteArray windowXml = m_window->contents().toUtf8();
-    *stream << windowXml;
+    stream << windowXml;
 
-    if ( !uiFile.close() )
+    if ( !uiFile.finalize() )
         return false;
 
     m_window->setDirty(false);
