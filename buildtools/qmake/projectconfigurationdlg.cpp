@@ -1462,11 +1462,22 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
     if ( radioSubdirs->isChecked() )
     {
         TabBuild->setTabEnabled( custVarsTab, true );
-        TabBuild->setTabEnabled( depTab, false );
         TabBuild->setTabEnabled( libAddTab, false );
         TabBuild->setTabEnabled( incaddTab, false );
         TabBuild->setTabEnabled( buildOptsTab, false );
         TabBuild->setTabEnabled( configTab, false );
+        intDeps_view->setEnabled( false );
+        intMoveUp_button->setEnabled( false );
+        intMoveDown_button->setEnabled( false );
+        extAdd_button->setEnabled( false );
+        extRemove_button->setEnabled( false );
+        extEdit_button->setEnabled( false );
+        extMoveUp_button->setEnabled( false );
+        extMoveDown_button->setEnabled( false );
+        extDeps_view->setEnabled( false );
+        buildorder_listview->setEnabled( true );
+        buildmoveup_button->setEnabled( true );
+        buildmovedown_button->setEnabled( true );
         checkOrdered->setEnabled( true );
     }
     else if ( radioLibrary->isChecked() )
@@ -1478,6 +1489,18 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         TabBuild->setTabEnabled( incaddTab, true );
         TabBuild->setTabEnabled( buildOptsTab, true );
         TabBuild->setTabEnabled( configTab, true );
+        intDeps_view->setEnabled( true );
+        intMoveUp_button->setEnabled( true );
+        intMoveDown_button->setEnabled( true );
+        extAdd_button->setEnabled( true );
+        extRemove_button->setEnabled( true );
+        extEdit_button->setEnabled( true );
+        extMoveUp_button->setEnabled( true );
+        extMoveDown_button->setEnabled( true );
+        extDeps_view->setEnabled( true );
+        buildorder_listview->setEnabled( true );
+        buildmoveup_button->setEnabled( true );
+        buildmovedown_button->setEnabled( true );
         groupLibraries->setEnabled( true );
         checkOrdered->setEnabled( false );
     }
@@ -1489,6 +1512,18 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         TabBuild->setTabEnabled( incaddTab, true );
         TabBuild->setTabEnabled( buildOptsTab, true );
         TabBuild->setTabEnabled( configTab, true );
+        intDeps_view->setEnabled( true );
+        intMoveUp_button->setEnabled( true );
+        intMoveDown_button->setEnabled( true );
+        extAdd_button->setEnabled( true );
+        extRemove_button->setEnabled( true );
+        extEdit_button->setEnabled( true );
+        extMoveUp_button->setEnabled( true );
+        extMoveDown_button->setEnabled( true );
+        extDeps_view->setEnabled( true );
+        buildorder_listview->setEnabled( true );
+        buildmoveup_button->setEnabled( true );
+        buildmovedown_button->setEnabled( true );
         groupLibraries->setEnabled( false );
         checkConsole->setEnabled( true );
         checkWindows->setEnabled( true );
