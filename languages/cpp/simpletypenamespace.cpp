@@ -305,6 +305,11 @@ void SimpleTypeNamespace::updateAliases() {
     m_waitingAliases.pop_front();
     t->addAliasesTo( this );
   }
+  while( !m_waitingImports.empty() ) {
+    QPair<  QString, HashedStringSet > s = m_waitingImports.front();
+    m_waitingImports.pop_front();
+    addAliasMap( "", s.first, s.second );
+  }
 }
 
 //SimpleTypeNamespace::NamespaceBuildInfo implementation
@@ -314,7 +319,8 @@ TypePointer SimpleTypeNamespace::NamespaceBuildInfo::build() {
     return m_built;
   m_built = new SimpleTypeCachedNamespace( m_fakeScope, m_realScope );
   for ( AliasList::iterator it = m_imports.begin(); it != m_imports.end(); ++it )
-    ( ( SimpleTypeCachedNamespace* ) m_built.data() ) ->addAliasMap( "", ( *it ).alias, ( *it ).files );
+    ( ( SimpleTypeCachedNamespace* ) m_built.data() )->m_waitingImports << QPair<  QString, HashedStringSet >( ( *it ).alias, ( *it ).files );
+  //    ( ( SimpleTypeCachedNamespace* ) m_built.data() ) ->addAliasMap( "", ( *it ).alias, ( *it ).files );
   return m_built;
 }
 
