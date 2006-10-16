@@ -72,7 +72,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
   ignore.insert( this );
 
   for ( SlaveList::iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
-    if( !( (*it).second <= name.includeFiles() ) ) continue; //filter the slave by the include-files
+    if( !( name.includeFiles().isEmpty() || (*it).second <= name.includeFiles() ) ) continue; //filter the slave by the include-files
     ifVerbose( dbg() << "\"" << str() << "\": redirecting search for \"" << name.name() << "\" to \"" << ( *it ).first ->fullType() << "\"" << endl );
     mem = ( *it ).first ->findMember( name , type );
     if ( mem ) {

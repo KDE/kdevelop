@@ -74,6 +74,8 @@ class HashedStringSet {
 
     HashedStringSet( const HashedStringSet& rhs );
 
+    bool isEmpty() const;
+
     HashedStringSet& operator = ( const HashedStringSet& rhs );
     ///@return whether the given file-name was included
     bool operator[] ( const HashedString& rhs ) const;
