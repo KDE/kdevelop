@@ -1382,8 +1382,11 @@ bool CppNewClassDialog::ClassGenerator::generate()
 
 	project = dlg.m_part->project();
 	subDir = project->projectDirectory() + "/";
-	if ( !project->activeDirectory().isEmpty() )
-		subDir += project->activeDirectory() + "/";
+	if ( !project->activeDirectory().isEmpty() ){
+		subDir += project->activeDirectory();
+		subDir = QDir::cleanDirPath(subDir);
+		subDir += "/";
+	}
 	headerPath = subDir + header;
 	implementationPath = subDir + implementation;
 
@@ -1400,6 +1403,11 @@ bool CppNewClassDialog::ClassGenerator::generate()
 
 	gen_interface();
 
+	QStringList fileList;
+	fileList.append ( project->activeDirectory() + "/" + header );
+	if (!headeronly) fileList.append ( project->activeDirectory() + "/" + implementation );
+	project->addFiles ( fileList );
+  
 	return true;
 }
 
@@ -2051,14 +2059,6 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	KURL u;
 	u.setPath( headerPath );
 	dlg.m_part->partController()->editDocument( u );
-
-	QStringList fileList;
-
-	fileList.append ( project->activeDirectory() + "/" + header );
-	
-    if (!headeronly) fileList.append ( project->activeDirectory() + "/" + implementation );
-
-	project->addFiles ( fileList );
 }
 
 void CppNewClassDialog::ClassGenerator::beautifyHeader( QString &templ, QString &headerGuard,
