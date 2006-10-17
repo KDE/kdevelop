@@ -28,6 +28,7 @@
 #include "simpletype.h"
 #include "declarationinfo.h"
 #include <hashedstring.h>
+#include <lib/cppparser/driver.h>
 
 class SimpleContext;
 
@@ -60,10 +61,12 @@ class EvaluationResult {
       resultType = rhs.resultType;
       sourceVariable = rhs.sourceVariable;
       expr = rhs.expr;
+      isMacro = rhs.isMacro;
+      macro = rhs.macro;
       return *this;
     }
 
-    EvaluationResult( const EvaluationResult& rhs ) : resultType( rhs.resultType ), expr( rhs.expr ), sourceVariable( rhs.sourceVariable ) {}
+    EvaluationResult( const EvaluationResult& rhs ) : resultType( rhs.resultType ), expr( rhs.expr ), sourceVariable( rhs.sourceVariable ), isMacro( rhs.isMacro ), macro( rhs.macro ) {}
 
     LocateResult resultType; ///The resulting type
 
@@ -71,13 +74,16 @@ class EvaluationResult {
 
     DeclarationInfo sourceVariable; ///If the type comes from a variable, this stores Information about it
 
+    bool isMacro;
+    Macro macro;
+  
     ///should be removed
-    EvaluationResult( SimpleType rhs ) {
+    EvaluationResult( SimpleType rhs ) : isMacro( false ) {
       if ( rhs.get() != 0 )
         resultType = rhs->desc();
     }
 
-  EvaluationResult( LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ) : resultType( tp ), sourceVariable( var ) {}
+    EvaluationResult( LocateResult tp = TypeDesc(), DeclarationInfo var = DeclarationInfo() ) : resultType( tp ), sourceVariable( var ), isMacro( false )  {}
 
     /*operator TypeDesc () const {
        return (TypeDesc)resultType;

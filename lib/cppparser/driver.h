@@ -400,6 +400,9 @@ class MacroSet {
                 (*it).write( stream );
             }
         }
+
+        bool hasMacro( const QString& name ) const;
+        Macro macro( const QString& name ) const;
         
         size_t idHash() const;
         size_t valueHash() const;

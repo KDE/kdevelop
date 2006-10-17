@@ -1365,6 +1365,33 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 
   EvaluationResult type = evaluateExpressionAt( line, column, conf );
 
+	if( type.isMacro ) {
+		QPopupMenu * m = PopupTracker::createPopup( popup );
+		int gid;
+		if ( contextMenuEntriesAtTop )
+			gid = popup->insertItem( i18n( "Navigate by Macro \"%1\"" ).arg( cleanForMenu( type.macro.name() ) ), m, 5, cpos++ );
+		else
+			gid = popup->insertItem( i18n( "Navigate by Macro \"%1\"" ).arg( cleanForMenu( type.macro.name() ) ), m );
+
+		int id = m->insertItem( i18n( "Jump to %1" ).arg( cleanForMenu( type.macro.name() ) ), this, SLOT( popupAction( int ) ) );
+		QPopupMenu * b = PopupTracker::createPopup( m );
+		int bid = m->insertItem( i18n( "Body" ), b );
+
+		DeclarationInfo i;
+		i.file = type.macro.fileName();
+		i.startCol = 0;
+		i.startLine = 0;
+		i.endCol = 0;
+		i.endLine = 0;
+		m_popupActions.insert( id, i );
+		
+		QStringList ls = prepareTextForMenu( type.macro.body(), 20, 100 );
+		for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
+			b->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
+		}
+		
+	}
+	
   if ( !type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) )
     return ;
 
@@ -1901,6 +1928,18 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
         if ( ( opt & DefaultAsTypeExpression ) && ( !exp.canBeNormalExpression() && !exp.canBeTypeExpression() ) && !exp.expr().isEmpty() )
           exp.t = ExpressionInfo::TypeExpression;
 
+	      if( file->parseResult() ) {
+		      ParsedFilePointer p = dynamic_cast<ParsedFile*>( file->parseResult().data());
+		      if( p ) {
+			      if( p->usedMacros().hasMacro( exp.expr() ) ) {
+				      //It is a macro, return it
+				      ret.expr = exp.expr();
+				      ret.isMacro = true;
+				      ret.macro = p->usedMacros().macro( exp.expr() );
+				      return ret;
+			      }
+		      }
+	      }
 
         if ( exp.canBeTypeExpression() ) {
           {

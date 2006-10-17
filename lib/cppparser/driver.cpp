@@ -767,3 +767,21 @@ void ParsedFile::addIncludeFile( const QString& includePath, const ParsedFilePoi
 const QValueList<ParsedFile::IncludeDesc>& ParsedFile::directIncludeFiles() const {
     return m_directIncludeFiles;
 }
+
+bool MacroSet::hasMacro( const QString& name ) const {
+    Macros::const_iterator it = m_usedMacros.find( Macro( name, "" ) );
+    if( it != m_usedMacros.end() ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+Macro MacroSet::macro( const QString& name ) const {
+    Macros::const_iterator it = m_usedMacros.find( Macro( name, "" ) );
+    if( it != m_usedMacros.end() ) {
+        return *it;
+    } else {
+        return Macro();
+    }
+}

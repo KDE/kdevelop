@@ -60,7 +60,7 @@ struct DeclarationInfo {
     
     int startLine, startCol;
     int endLine, endCol;
-    
+
     File file;
     QString name;
     QString comment;
