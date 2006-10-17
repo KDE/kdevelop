@@ -82,7 +82,7 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
         //+ "'' instead of ``" + current_token_text
         + "''" + s.str()
     );
-    delete tokenValue;
+    delete[] tokenValue;
 }
 
 } // end of namespace ruby
