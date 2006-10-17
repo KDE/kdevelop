@@ -681,7 +681,9 @@ MacroSet& ParsedFile::usedMacros() {
   return m_usedMacros;
 }
 
-ParsedFile::ParsedFile( const QString& fileName, const QDateTime& timeStamp ) : m_translationUnit( 0 ), m_fileName( fileName ), m_timeStamp( timeStamp ) {}
+ParsedFile::ParsedFile( const QString& fileName, const QDateTime& timeStamp ) : m_translationUnit( 0 ), m_fileName( fileName ), m_timeStamp( timeStamp ) {
+    includeFiles().insert( fileName );
+}
 
 ParsedFile::ParsedFile( const QByteArray& array ) {
     QBuffer b( array );

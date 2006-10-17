@@ -161,8 +161,8 @@ void SimpleTypeFunctionInterface::resolveImplicitTypes( QValueList<TypeDesc>& ar
 void SimpleTypeCodeModel::addAliasesTo( SimpleTypeNamespace* ns ) {
   const NamespaceModel* m = dynamic_cast<const NamespaceModel*>( m_item.data() );
   if( m ) {
-    const NamespaceModel::NamespaceAliasModelList namespaceAliases = m->namespaceAliases();
-    const NamespaceModel::NamespaceImportModelList namespaceImports = m->namespaceImports();
+    const NamespaceModel::NamespaceAliasModelList& namespaceAliases = m->namespaceAliases();
+    const NamespaceModel::NamespaceImportModelList& namespaceImports = m->namespaceImports();
     for( NamespaceModel::NamespaceAliasModelList::const_iterator it = namespaceAliases.begin(); it != namespaceAliases.end(); ++it )
       ns->addAliasMap( it->name(), it->aliasName(), it->fileName(), true, true ); //should these really be symmetric?
     for( NamespaceModel::NamespaceImportModelList::const_iterator it = namespaceImports.begin(); it != namespaceImports.end(); ++it )
@@ -316,7 +316,7 @@ Item pickMostRelated( const HashedStringSet& includeFiles, const QValueList<Item
 
 template<>
 ClassDom pickMostRelated( const HashedStringSet& includeFiles, const QValueList<ClassDom>& list ) {
-    if( list.isEmpty() ) return ClassDom();
+    if( list.isEmpty() ) return ClassDom();         ///@todo the current file must be preferred
     
     for( QValueList<ClassDom>::const_iterator it = list.begin(); it != list.end(); ++it ) {
         if( !(*it)->getSpecializationDeclaration().isEmpty() ) continue; ///Don't consider specialized classes

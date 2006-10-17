@@ -83,8 +83,9 @@ HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& 
   return ret;
 }
 
-bool HashedStringSet::isEmpty() const {
-  return !m_data || m_data->m_files.empty();
+int HashedStringSet::size() const {
+    if( !m_data ) return 0;
+    return m_data->m_files.size();
 }
 
 HashedStringSet& HashedStringSet::operator = ( const HashedStringSet& rhs ) {

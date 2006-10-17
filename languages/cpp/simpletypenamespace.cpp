@@ -72,7 +72,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
   ignore.insert( this );
 
   for ( SlaveList::iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
-    if( !( name.includeFiles().isEmpty() || (*it).second <= name.includeFiles() ) ) continue; //filter the slave by the include-files
+    if( !( name.includeFiles().size() <= 1 || (*it).second <= name.includeFiles() ) ) continue; //filter the slave by the include-files
     ifVerbose( dbg() << "\"" << str() << "\": redirecting search for \"" << name.name() << "\" to \"" << ( *it ).first ->fullType() << "\"" << endl );
     mem = ( *it ).first ->findMember( name , type );
     if ( mem ) {
@@ -98,10 +98,11 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
 
   if ( itt != m_aliases.end() && !( *itt ).empty() ) {
     ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\" -> \"" <<  /**itt*/"..." << "\" requested, locating targets" << endl );
-
+      
     AliasList targets;
     for ( AliasList::iterator it = ( *itt ).begin(); it != ( *itt ).end(); ++it ) {
-      QStringList l = locateNamespaceScope( ( *it ).alias ); ///@todo think about when this should be done
+        if( !( name.includeFiles().size() <= 1 || (*it).files <= name.includeFiles() ) ) continue; //filter the slave by the include-files
+        QStringList l = locateNamespaceScope( ( *it ).alias ); ///@todo think about when this should be done
       if ( !l.isEmpty() ) {
         Alias a = *it;
         a.alias = l.join( "::" );
@@ -189,12 +190,23 @@ void SimpleTypeNamespace::recurseAliasMap() {
         AliasMap::iterator fit = m_aliases.find( ( *strIt ).alias );
 
         for ( AliasList::iterator oit = ( *fit ).begin(); oit != ( *fit ).end(); ++oit ) {
-          if ( l.find( ( *oit ) ) != l.end() && it.key() != ( *oit ).alias ) {
-            addAliasMap( it.key(), ( *oit ).alias, ( *oit ).files + ( *strIt ).files, true );
-            changed = true;
-          }
-          if ( changed )
-            break;
+            if (  it.key() == ( *oit ).alias )
+                continue;
+            HashedStringSet cfiles = ( *oit ).files + ( *strIt ).files;
+            std::pair< AliasList::const_iterator, AliasList::const_iterator > rng = ( l ).equal_range( *oit );
+            bool have = false;
+            while ( rng.first != rng.second ) {
+                if ( rng.first->files == cfiles ) {
+                    have = true ; //The same alias, with the same files, has already been added.
+                    break;
+                }
+                ++rng.first;
+            }
+            if( have ) continue;
+            
+          addAliasMap( it.key(), ( *oit ).alias, cfiles, true );
+          changed = true;
+          break;
         }
         if ( changed )
           break;
@@ -215,13 +227,14 @@ void SimpleTypeNamespace::addAliasMap( QString name, QString alias, const Includ
     kdDebug( 9007 ) << str() << " addAliasMap: cannot add alias \"" << name << "\" -> \"" << alias << "\", recursion too deep" << endl;
     return ;
   }
-  invalidateSecondaryCache();
   if ( name == alias )
     return ;
 
   if ( symmetric )
     addAliasMap( alias, name, files, recurse, false );
 
+    invalidateSecondaryCache();
+    
   AliasMap::iterator it = m_aliases.find( name );
   if ( it == m_aliases.end() )
     it = m_aliases.insert( name, AliasList() );

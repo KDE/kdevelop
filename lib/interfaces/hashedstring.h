@@ -7,7 +7,6 @@
 #include <ext/hash_map>
 #include <string>
 
-
 ///A simple class that stores a string together with it's appropriate hash-key
 class HashedString {
   public:
@@ -74,7 +73,7 @@ class HashedStringSet {
 
     HashedStringSet( const HashedStringSet& rhs );
 
-    bool isEmpty() const;
+    int size() const;
 
     HashedStringSet& operator = ( const HashedStringSet& rhs );
     ///@return whether the given file-name was included
