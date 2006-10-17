@@ -138,7 +138,6 @@ endif(KDEVCMG_EXECUTABLE)
 
 kde4_automoc(kdevrubyparser_STAT ${kdevrubyparser_STAT_SRCS})
 kde4_add_library(kdevrubyparser STATIC ${kdevrubyparser_STAT_SRCS})
-target_link_libraries( kdevrubyparser ${QT_QTCORE_LIBRARY} )
 
 # generate the command-line parser
 add_executable(ruby-parser main.cpp)
