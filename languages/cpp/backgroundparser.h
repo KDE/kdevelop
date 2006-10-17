@@ -74,6 +74,8 @@ public:
 
 	bool filesInQueue();
 
+    int countInQueue( const QString& file ) const;
+
     void addFile( const QString& fileName, bool readFromDisk = false );
     void addFileFront( const QString& fileName, bool readFromDisk = false );
     void removeFile( const QString& fileName );

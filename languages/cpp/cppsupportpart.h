@@ -172,13 +172,13 @@ public:
 
 	void createAccessMethods( ClassDom theClass, VariableDom theVariable );
 
-    ///returns a reference that allows editing the dependencies
-    
+    bool isQueued( const QString& file ) const;
+
 signals:
 	void fileParsed( const QString& fileName );
 	///Emitted whenever a translation-unit was parsed in the main thread
 	void synchronousParseReady( const QString& file, ParsedFilePointer unit );
-
+    
 protected:
 	virtual KDevLanguageSupport::Features features();
 	virtual KMimeType::List mimeTypes();
@@ -222,7 +222,7 @@ private slots:
 	void slotCreateSubclass();
 	void slotCreateAccessMethods();
 	void slotDeleteParserStore();
-	
+
 	void slotNeedTextHint( int, int, QString& );
 
 	/**
@@ -394,6 +394,19 @@ private:
             return true;
         }
 
+        bool waiting( QString file, Flags forbidFlags = None, int count = 1 ) const {
+            int hits = 0;
+            for( List::const_iterator it = m_waiting.begin(); it != m_waiting.end(); ++it) {
+                if( (*it).first.find( file ) !=  (*it).first.end() ) {
+                    if( ((Flags)((*it).flags & forbidFlags )) == None ) {
+                        hits++;
+                        if( hits >= count ) return true;
+                    }
+                }
+            }
+            return false;
+        }
+        
 	    struct Processed {
 		    QStringList res;
 		    Flags flag;

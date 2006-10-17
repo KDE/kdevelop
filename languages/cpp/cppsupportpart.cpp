@@ -1399,7 +1399,8 @@ void CppSupportPart::slotParseFiles()
 			delete _jd;
 			_jd = 0;
 		} else {
-			_jd->progressBar->setProgress( _jd->backgroundState ); ///restart progress-bar for reparsing
+			_jd->progressBar->setProgress( _jd->backgroundState ); ///restart
+			_jd->progressBar->setTotalSteps( _jd->backgroundCount );
 			if( _jd->lastParse.msecsTo( QTime::currentTime()) > 300000 ) {
 				_jd->backgroundCount = _jd->backgroundState;   ///Stop waiting if there is no progress
 				QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
@@ -1448,6 +1449,12 @@ void CppSupportPart::maybeParse( const QString& fn, bool background  )
 	QStringList l;
 	l << fn;
 	parseFilesAndDependencies( l, background );
+}
+
+bool CppSupportPart::isQueued( const QString& file ) const {
+	//int c = m_backgroundParser->countInQueue( file );
+	//if( c == 0 ) return false;
+	return m_parseEmitWaiting.waiting( file, ParseEmitWaiting::Silent, 2 ); //Since it may be possible that the background-parser is currently parsing the file(in an obselete state), it is allowed to have the file in the queue twice.
 }
 
 void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
@@ -2112,12 +2119,17 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 				}
 			} else {
 				for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
+					if( !silent && _jd ) //If this this file is not silent and thus not part of the initial parse, increase the background-count so the progress-bar does not get confused
+						++_jd->backgroundCount;
 					backgroundParser()->addFile(*it);
 				}
 			}
 		} else {
-			for(QStringList::iterator it = group.begin(); it != group.end(); ++it)
+			for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
+				if( !silent && _jd ) //If this this file is not silent and thus not part of the initial parse, increase the background-count so the progress-bar does not get confused
+					++_jd->backgroundCount;
 				m_driver->parseFile( *it );
+			}
 		}
 	}
 
@@ -2137,9 +2149,14 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
     
 	bool modelHasFiles = true;
 
+	for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it ) {
+		if( !codeModel()->hasFile( *it ) ) modelHasFiles = false;
+	}
+	
 	int oldFileCount = codeModel()->fileList().count();
 
 	if( (files.flag & ParseEmitWaiting::HadErrors) && modelHasFiles && !files.hasFlag( ParseEmitWaiting::Silent ) ) {
+		mainWindow() ->statusBar() ->message( "File parsed, but not updating code-model because of errors", 2000 );
 		kdDebug( 9007 ) << "not updating code-model because at least one file has errors" << endl;
 		//		for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
 		  //			m_backgroundParser->removeFile( *it );

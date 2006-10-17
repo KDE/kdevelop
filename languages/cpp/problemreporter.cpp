@@ -341,10 +341,13 @@ void ProblemReporter::reparse()
 
     /*if( m_canParseFile )
     {*/
-      
+
+	if( !m_cppSupport->isQueued( m_fileName ) ) {
+	
         m_cppSupport->parseFileAndDependencies( m_fileName, true, true );
     //        m_canParseFile = false;
         kdDebug(9007) << m_fileName << "---> file added to background-parser by problem-reporter" << endl;
+	}
     /*}else{
         if(m_timeout.isNull()) {
             m_timeout = QTime::currentTime();

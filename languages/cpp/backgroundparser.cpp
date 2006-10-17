@@ -173,6 +173,20 @@ public:
 		m_fileList.pop_front();
 	}
 
+	int count( const QString& fileName ) const {
+		int c = 0;
+	
+		QMutexLocker locker( &m_mutex );
+		ListType::const_iterator it = m_fileList.begin();
+		while ( it != m_fileList.end() )
+		{
+			if ( ( *it ).first.compare( fileName.ascii() ) == 0 )
+				++c;
+			++it;
+		}
+		return c;
+	}
+
   QPair<SafeString, bool> takeFront()
   {
     QMutexLocker locker( &m_mutex );
@@ -410,6 +424,10 @@ bool BackgroundParser::filesInQueue()
 	return m_fileList->count() || !m_currentFile.isEmpty();
 }
 
+int BackgroundParser::countInQueue( const QString& file ) const {
+	return m_fileList->count( file );
+}
+
 void BackgroundParser::updateParserConfiguration()
 {
 	QMutexLocker locker( &m_mutex );
@@ -441,7 +459,7 @@ void BackgroundParser::run()
 		QPair<SafeString, bool> entry = m_fileList->takeFront();
 		QString fileName = entry.first.c_str();
 		bool readFromDisk = entry.second;
-		m_currentFile = fileName;
+		m_currentFile = deepCopy(fileName);
 		
 		( void ) parseFile( fileName, readFromDisk, true );
 
