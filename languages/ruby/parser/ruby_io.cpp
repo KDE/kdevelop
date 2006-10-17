@@ -31,6 +31,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <QVarLengthArray>
 
 namespace ruby
 {
@@ -71,9 +72,9 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
     token_stream->start_position(index, &line, &col);
     size_t tokenLength = token.end - token.begin;
     QVarLengthArray<char> tokenValue(tokenLength+1);
-    strncpy(tokenValue, token.text + token.begin, tokenLength);
+    strncpy(tokenValue.data(), token.text + token.begin, tokenLength);
     std::stringstream s;
-    s << " (current token: \"" << (token.kind != 0 ? tokenValue : "EOF") <<
+    s << " (current token: \"" << (token.kind != 0 ? tokenValue.data() : "EOF") <<
         "\" [" << token.kind << "] at line: " << line+1 << " col: " << col+1 << ")";
     report_problem(
         parser::error,
