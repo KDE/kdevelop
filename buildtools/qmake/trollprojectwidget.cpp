@@ -324,9 +324,9 @@ void TrollProjectWidget::openProject( const QString &dirName )
 
     QString profile;
     if( !l.count() || (l.count() && l.contains( fi.baseName() + ".pro") ) )
-        profile = l[0];
-    else
         profile = fi.baseName()+".pro";
+    else
+      profile = l[0];
 
     QString proname = dirName + QString( QChar( QDir::separator() ) ) + profile;
 
@@ -335,7 +335,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
     m_rootScope = new Scope( proname, m_part->isQt4Project() );
     m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
     m_rootSubproject->setOpen( true );
-    if ( m_rootSubproject->firstChild() )
+    if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).contains("subdirs") )
     {
         overview->setSelected( m_rootSubproject->firstChild(), true );
     }

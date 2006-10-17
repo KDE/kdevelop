@@ -492,20 +492,20 @@ void QMakeScopeItem::init()
         QStringList tmp = scope->variableValues( "TEMPLATE" );
         if( scope->isEnabled() )
         {
-            if ( tmp.contains( "app" ) )
-                setPixmap( 0, SmallIcon( "qmake_app" ) );
+            if ( tmp.contains( "subdirs" ) )
+                setPixmap( 0, SmallIcon( "qmake_sub" ) );
             else if ( tmp.contains( "lib" ) )
                 setPixmap( 0, SmallIcon( "qmake_lib" ) );
             else
-                setPixmap( 0, SmallIcon( "qmake_sub" ) );
+                setPixmap( 0, SmallIcon( "qmake_app" ) );
         }else
         {
-            if ( tmp.contains( "app" ) )
-                setPixmap( 0, SmallIcon( "qmake_app_disabled" ) );
+            if ( tmp.contains( "subdirs" ) )
+                setPixmap( 0, SmallIcon( "qmake_sub_disabled" ) );
             else if ( tmp.contains( "lib" ) )
                 setPixmap( 0, SmallIcon( "qmake_lib_disabled" ) );
             else
-                setPixmap( 0, SmallIcon( "qmake_sub_disabled" ) );
+                setPixmap( 0, SmallIcon( "qmake_app_disabled" ) );
         }
     }
 

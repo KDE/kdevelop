@@ -536,16 +536,7 @@ void ProjectConfigurationDlg::updateControls()
     QStringList templateValues = myProjectItem->scope->variableValues( "TEMPLATE" );
     //if( !myProjectItem->isScope )
     //{
-    if ( templateValues.contains( "app" ) )
-    {
-        radioApplication->setChecked( true );
-        if ( configValues.contains( "console" ) )
-        {
-            checkConsole->setChecked( true );
-        }
-        groupTemplateChanged(0);
-    }
-    else if ( templateValues.contains( "lib" ) )
+    if ( templateValues.contains( "lib" ) )
     {
         groupLibraries->setEnabled( true );
 
@@ -591,7 +582,17 @@ void ProjectConfigurationDlg::updateControls()
     {
         radioSubdirs->setChecked( true );
         groupTemplateChanged(2);
+    }else
+    {
+        //Default is app mode
+        radioApplication->setChecked( true );
+        if ( configValues.contains( "console" ) )
+        {
+            checkConsole->setChecked( true );
+        }
+        groupTemplateChanged(0);
     }
+
     // Buildmode
     if ( configValues.contains( "debug" ) )
     {
