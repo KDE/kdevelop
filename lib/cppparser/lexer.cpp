@@ -688,7 +688,7 @@ void Lexer::processDefine( Macro& m )
 	    Token tk(m_source);
 	    nextToken( tk, true );
 
-	    if( tk.type() != -1 ){
+	    if( tk.type() != -1 && tk.type() != Token_comment ){
                 QString s = tk.text();
 		body += s;
 	    }
