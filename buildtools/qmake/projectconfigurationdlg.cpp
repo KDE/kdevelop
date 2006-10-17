@@ -560,6 +560,9 @@ void ProjectConfigurationDlg::updateControls()
             m_targetLibraryVersion->setText( "" );
         }
 
+        if( !staticRadio->isChecked() && !sharedRadio->isChecked() )
+            staticRadio->setChecked( true );
+
         if ( configValues.contains( "plugin" ) )
             checkPlugin->setChecked( true );
         else
