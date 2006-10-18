@@ -108,6 +108,11 @@ class ItemLocker {
     Item& item;
 };
 
+ParsedFilePointer  getParsedFile( CodeModelItem* i ) {
+	if( !i || !i->file() || !i->file()->parseResult() ) return 0;
+	return dynamic_cast<ParsedFile*>( i->file()->parseResult().data());
+}
+
 SafetyCounter safetyCounter;
 CppCodeCompletion* cppCompletionInstance = 0;
 
@@ -1702,14 +1707,17 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 
       SimpleType global = ctx->global();
 
-      if ( !m_cachedFromContext ) {
-	      conf.setGlobalNamespace( &( *global ) );
-        if ( recoveryPoint ) {
-          recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );
-        } else {
-          kdDebug( 9007 ) << "no recovery-point, cannot use imports" << endl;
-        }
-      }
+	    /* //Should not be necessary any more
+				if( !getParsedFile( f->file().data() ) || getParsedFile( f->file().data() )->includeFiles().size() <= 1 ) {
+				if ( !m_cachedFromContext ) {
+					conf.setGlobalNamespace( &( *global ) );
+					if ( recoveryPoint ) {
+						recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );
+					} else {
+						kdDebug( 9007 ) << "no recovery-point, cannot use imports" << endl;
+					}
+				}
+	    }*/
 
       ///Insert the "this"-type(container) and correctly resolve it using imported namespaces
       if ( ctx->container() ) {
@@ -2028,9 +2036,9 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
     if ( !m_cachedFromContext ) {
       conf.setGlobalNamespace( &( *global ) );
-
+	    /* //Should not be necessary any more
       if ( recoveryPoint )
-        recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );
+        recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );*/
     }
 
     ExpressionInfo exp = findExpressionAt( line, column , startLine, startCol );
