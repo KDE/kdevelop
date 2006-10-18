@@ -409,11 +409,13 @@ void TrollProjectPart::addFile(const QString &fileName)
 void TrollProjectPart::addFiles ( const QStringList &fileList )
 {
     QStringList files = fileList;
-    for (QStringList::iterator it = files.begin(); it != files.end(); ++it)
-//        if (!(*it).contains(projectDirectory()))
-        if (!isProjectFile(projectDirectory() + QString( QChar( QDir::separator() ) ) + (*it)))
-            *it = projectDirectory() + QString( QChar( QDir::separator() ) ) + (*it);
-
+//     for (QStringList::iterator it = files.begin(); it != files.end(); ++it)
+//     {
+// //        if (!(*it).contains(projectDirectory()))
+//       kdDebug(9024) << "Checking if isProjFile:" << (*it) << "?" << isProjectFile(projectDirectory() + QString( QChar( QDir::separator() ) ) + (*it)) << "|" << projectDirectory() << endl;
+//         if (!isProjectFile(projectDirectory() + QString( QChar( QDir::separator() ) ) + (*it)))
+//             *it = projectDirectory() + QString( QChar( QDir::separator() ) ) + (*it);
+//     }
     m_widget->addFiles(files);
 
 //	emit addedFilesToProject ( files );
@@ -649,5 +651,6 @@ bool TrollProjectPart::isQt4Project() const
 
 #include "trollprojectpart.moc"
 
+//kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 
 

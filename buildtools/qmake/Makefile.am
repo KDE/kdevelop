@@ -31,4 +31,4 @@ service_DATA = kdevtrollproject.desktop kdevtmakeproject.desktop
 rcdir = $(kde_datadir)/kdevtrollproject
 rc_DATA = kdevtrollproject.rc
 noinst_HEADERS = trolllistview.h qmakescopeitem.h qmakeoptionswidget.h \
-		createscopedlg.h disablesubprojectdlg.h
+	createscopedlg.h disablesubprojectdlg.h

@@ -994,36 +994,28 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate )
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
         QString fileName = *it;
+        kdDebug(9024) << "Adding file:" << fileName << endl;
 
-        QString origFileName = noPathTruncate ? fileName : QFileInfo( fileName ).fileName();
-        QString origFilePath = noPathTruncate ? QDir::cleanDirPath( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fileName ) : fileName;
         if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
         {
             ChooseSubprojectDlg dlg( this, false );
             if ( dlg.exec() == QDialog::Accepted )
             {
-                if ( dlg.selectedSubproject() )
+                if ( dlg.selectedSubproject() || dlg.selectedSubproject()->scope->variableValues("TEMPLATE").contains( "subdirs" ) )
                 {
+                    fileName = getRelativePath( dlg.selectedSubproject()->scope->projectDir() ,
+                                                QDir::cleanDirPath(
+                                                    m_shownSubproject->scope->projectDir()+
+                                                    QString(QChar(QDir::separator()))+
+                                                    fileName ) );
                     overview->setCurrentItem( dlg.selectedSubproject() );
-                    newPath = dlg.selectedSubproject() ->scope->projectDir();
+
                 }
             }
             else
-                return ;
-        }
-
-        if ( !newPath.isEmpty() )
-        {
-            //move file to it's new location
-            KURL source;
-            KURL dest;
-            kdDebug() << "  orig: " << origFilePath << "  dest: " << QDir::cleanDirPath( newPath + QString( QChar( QDir::separator() ) ) + origFileName ) << endl;
-            source.setPath( origFilePath );
-            dest.setPath( QDir::cleanDirPath( newPath + QString( QChar( QDir::separator() ) ) + origFileName ) );
-            if ( KIO::NetAccess::copy( source, dest, ( QWidget* ) 0 ) )
-                KIO::NetAccess::del( source, ( QWidget* ) 0 );
-            *it = QDir::cleanDirPath( newPath + QString( QChar( QDir::separator() ) ) + origFileName );
-            fileName = *it;
+            {
+                KMessageBox::error( this, i18n("You didn't select a subproject to add the file to or selected a subproject that has subdirs."), i18n( "File adding aborted" ) );
+            }
         }
 
         QFileInfo info( fileName );
@@ -1056,7 +1048,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate )
 
         addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
         slotOverviewSelectionChanged( m_shownSubproject );
-        emitAddedFile ( fileName.mid( m_part->projectDirectory().length() + 1 ) );
+        emitAddedFile ( fileName.mid( m_part->projectDirectory().length() + 1) );
     }
 
 }
@@ -1153,7 +1145,8 @@ void TrollProjectWidget::slotAddFiles()
                 {
                     // Form relative path to current subproject folder
                     QString theFile = files[ i ];
-                    QStringList files( URLUtil::relativePathToFile( cleanSubprojectDir , theFile ) );
+                    QStringList files( URLUtil::relativePathToFile( cleanSubprojectDir , theFile )
+                                     );
                     addFiles( files, true );
                 }
                 break;

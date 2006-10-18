@@ -81,13 +81,6 @@ public:
 
     QString getCurrentOutputFilename();
 
-//     GroupItem *createGroupItem( GroupItem::GroupType groupType, const QString &name, const QString &scopeName );
-//     FileItem *createFileItem( const QString &name );
-
-//     QMakeScopeItem* getScope( QMakeScopeItem *baseItem, const QString &scopeString ); // baseItem must be ansister
-//     void updateProjectFile( QListViewItem *item );
-//     void updateProjectConfiguration( QMakeScopeItem *item );
-//     void updateInstallObjects( QMakeScopeItem* item, Scope *subScope );
     void addFileToCurrentSubProject( GroupItem *titem, const QString &filename );
     void addFileToCurrentSubProject( GroupItem::GroupType gtype, const QString &filename );
     void addFiles( QStringList &files, bool noPathTruncate = false );
