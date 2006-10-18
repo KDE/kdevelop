@@ -29,6 +29,7 @@
       <includestyle>3</includestyle>
       <designerintegration>KDevEmbeddedDesigner</designerintegration>
     </qt>
+  </kdevcppsupport>
   <kdevdoctreeview>
     <ignoretocs>
       <toc>bash</toc>
