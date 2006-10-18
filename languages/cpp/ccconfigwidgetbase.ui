@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>762</width>
-            <height>704</height>
+            <width>617</width>
+            <height>690</height>
         </rect>
     </property>
     <property name="caption">
@@ -30,11 +30,11 @@
                 <attribute name="title">
                     <string>&amp;Code Completion</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox" row="0" column="0">
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>groupBox4</cstring>
                         </property>
@@ -156,10 +156,10 @@
                                     <cstring>checkListGlobalItems</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>List global items when performing automatic completion</string>
+                                    <string>List &amp;global items when performing automatic completion</string>
                                 </property>
                                 <property name="accel">
-                                    <string></string>
+                                    <string>Alt+G</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>When this is checked, members of all higher namespaces will be included in the completion-list while performing automatic completion. This may bloat the completion-list and create a significant delay.</string>
@@ -167,7 +167,223 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox" row="3" column="0">
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>groupBox8_2</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Argument Hint Options</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout19</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkAutomaticArgumentsHint</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Auto&amp;matic arguments hint:</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+M</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer15</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>31</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="KIntNumInput">
+                                        <property name="name">
+                                            <cstring>inputArgumentsHint</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_2</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>msec</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>checkShowCommentInArgumentHint</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show comment with argument hint</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>groupBox9_2</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Misc</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>checkShowTypeEvaluationInStatusBar</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show t&amp;ype evaluation in status bar</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Namespace alias list:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>editNamespaceAlias</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>std=_GLIBCXX_STD</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). "&lt;&lt;" means that the right operator is imported into the left, while "=" means that both namespaces are treated as if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="5" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_6</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Custom include paths:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="5" column="1">
+                                <property name="name">
+                                    <cstring>editIncludePaths</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>src;</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>checkParseMissingHeaders</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Parse missing headers</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Parse preprocessed headers into the code-model if they were not parsed yet.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>checkPreprocessIncludedHeaders</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Preprocess &amp;included headers</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+I</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Try to locate all included files and preprocess them. This makes macros work correctly.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>checkResolveIncludePaths</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Automatically resolve include-paths</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Try to resolve the include-paths by using information from Makefiles etc.</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>groupBox5</cstring>
                         </property>
@@ -268,230 +484,7 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QGroupBox" row="2" column="0">
-                        <property name="name">
-                            <cstring>groupBox9_2</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Misc</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="3">
-                                <property name="name">
-                                    <cstring>checkShowTypeEvaluationInStatusBar</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show t&amp;ype evaluation in status bar</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+Y</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Namespace alias list:</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>editNamespaceAlias</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>std=_GLIBCXX_STD</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). "&lt;&lt;" means that the right operator is imported into the left, while "=" means that both namespaces are treated as if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="3" column="2">
-                                <property name="name">
-                                    <cstring>editIncludePaths</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>src;</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>textLabel1_6</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Custom include paths:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
-                                <property name="name">
-                                    <cstring>layout9</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkPreprocessIncludedHeaders</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>4</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Preprocess included headers</string>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>Try to locate all included files and preprocess them. This makes macros work correctly.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkParseMissingHeaders</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>4</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Parse missing headers</string>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>Parse preprocessed headers into the code-model if they were not parsed yet.</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkResolveIncludePaths</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>4</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>Automatically resolve include-paths</string>
-                                        </property>
-                                        <property name="toolTip" stdset="0">
-                                            <string>Try to resolve the include-paths by using information from Makefiles etc.</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QGroupBox" row="1" column="0">
-                        <property name="name">
-                            <cstring>groupBox8_2</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Argument Hint Options</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout19</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkAutomaticArgumentsHint</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Auto&amp;matic arguments hint:</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+M</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer15</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>31</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="KIntNumInput">
-                                        <property name="name">
-                                            <cstring>inputArgumentsHint</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>0</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>textLabel1_2</cstring>
-                                        </property>
-                                        <property name="sizePolicy">
-                                            <sizepolicy>
-                                                <hsizetype>1</hsizetype>
-                                                <vsizetype>5</vsizetype>
-                                                <horstretch>0</horstretch>
-                                                <verstretch>0</verstretch>
-                                            </sizepolicy>
-                                        </property>
-                                        <property name="text">
-                                            <string>msec</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>checkShowCommentInArgumentHint</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show comment with argument hint</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                </grid>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -1042,7 +1035,7 @@
                     <cstring>qtPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Qt Options</string>
+                    <string>&amp;Qt Options</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -1469,10 +1462,10 @@
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
