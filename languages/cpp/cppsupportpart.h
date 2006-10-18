@@ -319,6 +319,7 @@ private:
 
 	QWaitCondition m_eventConsumed;
 	bool m_projectClosed;
+	bool m_projectClosing;
 
 	QMap<QString, QDateTime> m_timestamp;
 	bool m_valid;

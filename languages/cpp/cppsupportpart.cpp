@@ -170,7 +170,7 @@ public:
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
 : KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ),
 	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
-	m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
+	m_activeViewCursor( 0 ), m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
 {
 	setInstance( CppSupportFactory::instance() );
 	
@@ -502,6 +502,8 @@ void CppSupportPart::projectClosed( )
 {
 	kdDebug( 9007 ) << "projectClosed( )" << endl;
 	
+	m_projectClosing = true;
+	
 	QStringList enabledPCSs;
 	QValueList<Catalog*> catalogs = codeRepository() ->registeredCatalogs();
 	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
@@ -531,6 +533,7 @@ void CppSupportPart::projectClosed( )
 	m_fileParsedEmitWaiting.clear();
 	m_pCompletion = 0;
 	m_projectClosed = true;
+	m_projectClosing = false;
 }
 
 
@@ -1308,6 +1311,8 @@ void CppSupportPart::slotParseFiles()
 	// When the project is closed, the language support plugin is destroyed
 	// and as a consequence, the timer job signal never arrives at this method
 
+	Q_ASSERT( _jd );
+	if ( !_jd ) return; // how can this possibly happen?!
 
 	if ( _jd->cycle == 0 && !m_projectClosed && _jd->it != _jd->files.end() )
 	{
@@ -1820,6 +1825,8 @@ QString CppSupportPart::formatTag( const Tag & inputTag )
 
 void CppSupportPart::codeCompletionConfigStored( )
 {
+	if ( m_projectClosing ) return;
+	
 	m_backgroundParser->updateParserConfiguration();
 	KDevDriver* d = dynamic_cast<KDevDriver*>( m_driver );
 	if( d ) d->setup();
