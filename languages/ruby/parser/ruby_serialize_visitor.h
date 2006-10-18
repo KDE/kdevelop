@@ -246,6 +246,7 @@ namespace ruby
 
       virtual void visit_compoundStatement(compoundStatement_ast *node)
       {
+        handle_ast_node(node->statements);
         default_visitor::visit_compoundStatement(node);
       }
 
@@ -766,6 +767,7 @@ namespace ruby
 
       virtual void visit_program(program_ast *node)
       {
+        handle_ast_node(node->compoundStatement);
         default_visitor::visit_program(node);
       }
 
@@ -801,16 +803,22 @@ namespace ruby
 
       virtual void visit_statement(statement_ast *node)
       {
+        handle_ast_node(node->statementBody);
         default_visitor::visit_statement(node);
       }
 
       virtual void visit_statementWithoutModifier(statementWithoutModifier_ast *node)
       {
+        handle_ast_node(node->expression);
         default_visitor::visit_statementWithoutModifier(node);
       }
 
       virtual void visit_statements(statements_ast *node)
       {
+        {
+          statement_ast *e = 0;
+          handle_list_node(node->statement_sequence, e);
+        }
         default_visitor::visit_statements(node);
       }
 

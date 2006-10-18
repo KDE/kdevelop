@@ -109,7 +109,6 @@ namespace ruby
 
 
 
-
 ------------------------------------------------------------
 -- List of defined tokens
 ------------------------------------------------------------
@@ -174,16 +173,16 @@ namespace ruby
 -- Start of the actual grammar
 ------------------------------------------------------------
 
-    ( compoundStatement | 0 )
+    ( compoundStatement=compoundStatement | 0 )
 -> program ;;
 
 
-    terminal ( statements | 0 )
-    | statements
+    terminal ( statements=statements | 0 )
+    | statements=statements
 -> compoundStatement ;;
 
 
-    statement (
+    #statement=statement (
         terminal [: if (yytoken == Token_EOF) break; :]
         [:
             if ((yytoken == Token_LCURLY) || (yytoken == Token_END) //block end
@@ -192,7 +191,7 @@ namespace ruby
                 || (yytoken == Token_ENSURE) || (yytoken == Token_WHEN) )
                 break;
         :]
-        statement
+        #statement=statement
     )*
 -> statements ;;
 
@@ -202,7 +201,7 @@ namespace ruby
 -> terminal ;;
 
 
-    statementWithoutModifier (
+    statementBody=statementWithoutModifier (
         IF_MODIFIER expression
         | UNLESS_MODIFIER expression
         | WHILE_MODIFIER expression
@@ -216,7 +215,7 @@ namespace ruby
     | keywordUndef (undefParameter @ COMMA)
     | keywordBeginUpcase LCURLY_BLOCK (compoundStatement | 0) RCURLY
     | keywordEndUpcase LCURLY_BLOCK (compoundStatement | 0) RCURLY
-    | expression (parallelAssignmentLeftOver | 0)
+    | expression=expression (parallelAssignmentLeftOver | 0)
     | REST_ARG_PREFIX mlhs_item operatorAssign mrhs
 -> statementWithoutModifier ;;
 

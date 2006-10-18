@@ -69,8 +69,10 @@ namespace ruby
   void default_visitor::visit_commandOutput(commandOutput_ast *)
   {}
 
-  void default_visitor::visit_compoundStatement(compoundStatement_ast *)
-  {}
+  void default_visitor::visit_compoundStatement(compoundStatement_ast *node)
+  {
+    visit_node(node->statements);
+  }
 
   void default_visitor::visit_doOrTerminalOrColon(doOrTerminalOrColon_ast *)
   {}
@@ -381,8 +383,10 @@ namespace ruby
   void default_visitor::visit_primaryExpression(primaryExpression_ast *)
   {}
 
-  void default_visitor::visit_program(program_ast *)
-  {}
+  void default_visitor::visit_program(program_ast *node)
+  {
+    visit_node(node->compoundStatement);
+  }
 
   void default_visitor::visit_rangeExpression(rangeExpression_ast *)
   {}
@@ -402,17 +406,32 @@ namespace ruby
   void default_visitor::visit_shiftExpression(shiftExpression_ast *)
   {}
 
-  void default_visitor::visit_statement(statement_ast *)
-  {}
+  void default_visitor::visit_statement(statement_ast *node)
+  {
+    visit_node(node->statementBody);
+  }
 
-  void default_visitor::visit_statementWithoutModifier(statementWithoutModifier_ast *)
-  {}
+  void default_visitor::visit_statementWithoutModifier(statementWithoutModifier_ast *node)
+  {
+    visit_node(node->expression);
+  }
 
-  void default_visitor::visit_statements(statements_ast *)
-  {}
+  void default_visitor::visit_statements(statements_ast *node)
+  {
+    if (node->statement_sequence)
+      {
+        const list_node<statement_ast*> *__it = node->statement_sequence->to_front(), *__end = __it;
+        do
+          {
+            visit_node(__it->element);
+            __it = __it->next;
+          }
+        while (__it != __end);
+      }
+  }
 
   void default_visitor::visit_string(string_ast *)
-  {}
+{}
 
   void default_visitor::visit_symbol(symbol_ast *)
   {}

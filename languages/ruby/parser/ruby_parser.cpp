@@ -3752,6 +3752,8 @@ namespace ruby
                       }
                     return false;
                   }
+                (*yynode)->statements = __node_72;
+
               }
             else if (true /*epsilon*/)
             {}
@@ -3830,6 +3832,8 @@ namespace ruby
                   }
                 return false;
               }
+            (*yynode)->statements = __node_73;
+
           }
         else
           {
@@ -13511,6 +13515,8 @@ namespace ruby
                   }
                 return false;
               }
+            (*yynode)->compoundStatement = __node_200;
+
           }
         else if (true /*epsilon*/)
         {}
@@ -14256,6 +14262,8 @@ namespace ruby
               }
             return false;
           }
+        (*yynode)->statementBody = __node_220;
+
         while (yytoken == Token_IF_MODIFIER
                || yytoken == Token_WHILE_MODIFIER
                || yytoken == Token_UNLESS_MODIFIER
@@ -14834,6 +14842,8 @@ namespace ruby
                   }
                 return false;
               }
+            (*yynode)->expression = __node_236;
+
             if (yytoken == Token_COMMA)
               {
                 parallelAssignmentLeftOver_ast *__node_237 = 0;
@@ -14984,6 +14994,8 @@ namespace ruby
               }
             return false;
           }
+        (*yynode)->statement_sequence = snoc((*yynode)->statement_sequence, __node_241, memory_pool);
+
         while (yytoken == Token_SEMI
                || yytoken == Token_LINE_BREAK)
           {
@@ -15012,6 +15024,8 @@ namespace ruby
                   }
                 return false;
               }
+            (*yynode)->statement_sequence = snoc((*yynode)->statement_sequence, __node_243, memory_pool);
+
           }
       }
     else

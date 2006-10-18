@@ -518,6 +518,7 @@ namespace ruby
         KIND = Kind_compoundStatement
       };
 
+      statements_ast *statements;
     };
 
   struct doOrTerminalOrColon_ast: public ast_node
@@ -1454,6 +1455,7 @@ namespace ruby
         KIND = Kind_program
       };
 
+      compoundStatement_ast *compoundStatement;
     };
 
   struct rangeExpression_ast: public ast_node
@@ -1517,6 +1519,7 @@ namespace ruby
         KIND = Kind_statement
       };
 
+      statementWithoutModifier_ast *statementBody;
     };
 
   struct statementWithoutModifier_ast: public ast_node
@@ -1526,6 +1529,7 @@ namespace ruby
         KIND = Kind_statementWithoutModifier
       };
 
+      expression_ast *expression;
     };
 
   struct statements_ast: public ast_node
@@ -1535,6 +1539,7 @@ namespace ruby
         KIND = Kind_statements
       };
 
+      const list_node<statement_ast *> *statement_sequence;
     };
 
   struct string_ast: public ast_node
