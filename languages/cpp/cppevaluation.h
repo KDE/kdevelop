@@ -28,7 +28,7 @@
 #include "simpletype.h"
 #include "declarationinfo.h"
 #include <hashedstring.h>
-#include <lib/cppparser/driver.h>
+#include <driver.h>
 
 class SimpleContext;
 
