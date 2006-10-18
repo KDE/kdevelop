@@ -190,6 +190,7 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 "]"                         { return parser::Token_RBRACK; }
 <expect_hash>"{"            { return parser::Token_LCURLY_HASH; }
 "{"                         { return parser::Token_LCURLY_BLOCK; }
+"}"                         { return parser::Token_RCURLY; }
 ","                         { return parser::Token_COMMA; }
 <expect_leading_colon2>"::" { return parser::Token_LEADING_TWO_COLON; }
 "::"                        { return parser::Token_TWO_COLON; }
