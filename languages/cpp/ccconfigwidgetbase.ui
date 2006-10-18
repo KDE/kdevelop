@@ -177,107 +177,96 @@
                         <property name="whatsThis" stdset="0">
                             <string>&lt;b&gt;Code Completion Databases&lt;/b&gt; are used to store the parsed headers for external libraries, to allow code completion for non-project classes and methods.</string>
                         </property>
-                        <widget class="QLayoutWidget">
+                        <hbox>
                             <property name="name">
-                                <cstring>layout6</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>618</x>
-                                    <y>23</y>
-                                    <width>85</width>
-                                    <height>194</height>
-                                </rect>
-                            </property>
-                            <vbox>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Column 1</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
                                 <property name="name">
-                                    <cstring>unnamed</cstring>
+                                    <cstring>advancedOptions</cstring>
                                 </property>
-                                <spacer>
-                                    <property name="name">
-                                        <cstring>spacer12</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Vertical</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>20</width>
-                                            <height>31</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>newPCSButton</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&amp;Add...</string>
-                                    </property>
-                                    <property name="whatsThis" stdset="0">
-                                        <string>Click to start the Code Completion database creation wizard.</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>removePCSButton</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&amp;Remove</string>
-                                    </property>
-                                </widget>
-                                <spacer>
-                                    <property name="name">
-                                        <cstring>spacer13</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Vertical</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>20</width>
-                                            <height>31</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                            </vbox>
-                        </widget>
-                        <widget class="QListView">
-                            <column>
-                                <property name="text">
-                                    <string>Column 1</string>
-                                </property>
-                                <property name="clickable">
+                                <property name="rootIsDecorated">
                                     <bool>true</bool>
                                 </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
                                 </property>
-                            </column>
-                            <property name="name">
-                                <cstring>advancedOptions</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>23</y>
-                                    <width>601</width>
-                                    <height>194</height>
-                                </rect>
-                            </property>
-                            <property name="rootIsDecorated">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizeMode">
-                                <enum>LastColumn</enum>
-                            </property>
-                        </widget>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout6</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer12</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>31</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>newPCSButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Add...</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Click to start the Code Completion database creation wizard.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>removePCSButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer13</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>31</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
+                        </hbox>
                     </widget>
                     <widget class="QGroupBox" row="2" column="0">
                         <property name="name">
@@ -1480,7 +1469,21 @@
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>
