@@ -486,43 +486,51 @@ Scope* Scope::createSubProject( const QString& dir )
     return 0;
 }
 
-void Scope::deleteFunctionScope( const QString& functionCall )
+bool Scope::deleteFunctionScope( const QString& functionCall )
 {
     if ( !m_root )
-        return ;
+        return false;
 
     Scope* funcScope = m_funcScopes[ functionCall ];
     if ( funcScope )
     {
-        m_funcScopes.remove( functionCall );
         QMake::AST* ast = m_root->m_children[ m_root->m_children.findIndex( funcScope->m_root ) ];
+        if( !ast )
+            return false;
+        m_funcScopes.remove( functionCall );
         m_root->removeChildAST( funcScope->m_root );
         delete funcScope;
         delete ast;
+        return true;
     }
+    return false;
 }
 
-void Scope::deleteSimpleScope( const QString& scopeId )
+bool Scope::deleteSimpleScope( const QString& scopeId )
 {
     if ( !m_root )
-        return ;
+        return false;
 
     Scope* simpleScope = m_simpleScopes[ scopeId ];
     if ( simpleScope )
     {
+        QMake::AST* ast = m_root->m_children[ m_root->m_children.findIndex( simpleScope->m_root ) ];
+        if( !ast )
+            return false;
         m_simpleScopes.remove( scopeId );
         removeFromPlusOp( "CONFIG", scopeId );
-        QMake::AST* ast = m_root->m_children[ m_root->m_children.findIndex( simpleScope->m_root ) ];
         m_root->removeChildAST( simpleScope->m_root );
         delete simpleScope;
         delete ast;
+        return true;
     }
+    return false;
 }
 
-void Scope::deleteIncludeScope( const QString& includeFile, bool negate )
+bool Scope::deleteIncludeScope( const QString& includeFile, bool negate )
 {
     if ( !m_root )
-        return ;
+        return false;
 
     QString funcScopeId;
     if ( negate )
@@ -536,20 +544,23 @@ void Scope::deleteIncludeScope( const QString& includeFile, bool negate )
 
 
     Scope * incScope = m_incScopes[ includeFile ];
-    m_incScopes.remove( includeFile );
-
+    if( !incScope )
+        return false;
     QMake::AST* ast = incScope->m_incast;
+    if( !ast )
+        return false;
+    m_incScopes.remove( includeFile );
     m_root->removeChildAST( incScope->m_incast);
     delete incScope;
     delete ast;
 
-    m_parent->deleteFunctionScope( funcScopeId );
+    return m_parent->deleteFunctionScope( funcScopeId );
 }
 
-void Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
+bool Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
 {
     if ( !m_root )
-        return ;
+        return false;
 
     QValueList<QMake::AST*>::iterator it = findExistingVariable( "TEMPLATE" );
     if ( it != m_root->m_children.end() )
@@ -576,17 +587,21 @@ void Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
                 }
             }
             Scope* project = m_subProjects[ dir ];
-            m_subProjects.remove( dir );
+            if( !project )
+                return false;
             QValueList<QMake::AST*>::iterator foundit = findExistingVariable( "SUBDIRS" );
             if ( foundit != m_root->m_children.end() )
             {
                 QMake::AssignmentAST * ast = static_cast<QMake::AssignmentAST*>( *foundit );
                 updateValues( ast->values, QStringList( dir ), true );
-            }
+            }else
+                return false;
+            m_subProjects.remove( dir );
             delete project;
-            return ;
+            return true;
         }
     }
+    return false;
 }
 
 void Scope::updateValues( QStringList& origValues, const QStringList& newValues, bool remove )

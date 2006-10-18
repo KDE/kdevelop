@@ -133,13 +133,13 @@ public:
     Scope* createSubProject( const QString& dir );
 
     /* delete the given function scope */
-    void deleteFunctionScope( const QString& functionCall );
+    bool deleteFunctionScope( const QString& functionCall );
     /* delete the given simple scope */
-    void deleteSimpleScope( const QString& scopeId );
+    bool deleteSimpleScope( const QString& scopeId );
     /* delete the given include scope */
-    void deleteIncludeScope( const QString& includeFile, bool negate = false );
+    bool deleteIncludeScope( const QString& includeFile, bool negate = false );
     /* deletes the subproject (including the subdir if deleteSubdir is true) */
-    void deleteSubProject( const QString& dir, bool deleteSubdir );
+    bool deleteSubProject( const QString& dir, bool deleteSubdir );
 
     /* find out wether the project is Qt4 or Qt3 */
     bool isQt4Project() const { return m_isQt4Project; }

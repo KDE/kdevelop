@@ -26,6 +26,7 @@
 #include <kinputdialog.h>
 #include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
+#include <kurlcompletion.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klistview.h>
@@ -1167,11 +1168,41 @@ void ProjectConfigurationDlg::outsideLibMoveDownClicked()
 
 void ProjectConfigurationDlg::outsideLibAddClicked()
 {
-    bool ok;
-    QString dir = KInputDialog::getText( i18n( "Add Library" ), i18n( "Add library to link:" ), "-l", &ok, 0 );
-    if ( ok && !dir.isEmpty() && dir != "-I" )
-        new QListViewItem( outsidelib_listview, dir );
-    activateApply( 0 );
+    KURLRequesterDlg dialog( "", i18n( "Add Library: Either choose the .a/.so file or give -l<libname>" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
+    dialog.urlRequester() ->setFilter( "*.so|"+i18n("Shared Library (*.so)")+"\n*.a|"+i18n("Static Library (*.a)") );
+    dialog.urlRequester() ->setURL( QString::null );
+    dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString file = dialog.urlRequester() ->url();
+    if ( !file.isEmpty() )
+    {
+        if( file.startsWith("-l") )
+            new QListViewItem( outsidelib_listview, file );
+        else
+        {
+            QFileInfo fi(file);
+            if( !fi.exists() )
+                return;
+            if( fi.extension(false) == "a" )
+            {
+                new QListViewItem( outsidelib_listview, file );
+            }else if ( fi.extension(false) == "so" )
+            {
+                QString path = fi.dirPath( true );
+                QString name = fi.fileName();
+                if( name.startsWith( "lib" ) )
+                    name = name.mid(3);
+                name = "-l"+name.left( name.length() - 3 );
+                new QListViewItem( outsidelib_listview, name );
+                new QListViewItem( outsidelibdir_listview, path );
+            }else
+                return;
+        }
+        activateApply( 0 );
+    }
 }
 
 

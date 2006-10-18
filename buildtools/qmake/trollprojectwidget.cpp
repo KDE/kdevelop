@@ -796,7 +796,8 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
             while( lastitem->nextSibling() != 0 )
                 lastitem = lastitem->nextSibling();
             newitem->moveItem( lastitem );
-        }
+        }else
+            KMessageBox::error(this, i18n("Couldn't create subproject. This means that either the project you wanted to add a subproject isn't parsed correctly or it's not a subdirs-project."), i18n("Subproject creation failed") );
         spitem->scope->saveToFile();
     }
 }
@@ -811,7 +812,11 @@ void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
         bool delsubdir = false;
         if ( KMessageBox::warningYesNo( this, i18n( "Delete the directory of the subproject from disk?" ), i18n( "Delete subdir?" ) ) == KMessageBox::Yes )
             delsubdir = true;
-        spitem->scope->deleteSubProject( subdirname, delsubdir );
+        if( !spitem->scope->deleteSubProject( subdirname, delsubdir ) )
+        {
+            KMessageBox::error(this, i18n("Couldn't delete subproject.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Subproject Deletion failed"));
+            return;
+        }
         delete m_shownSubproject;
         m_shownSubproject = spitem;
         spitem->scope->saveToFile( );
@@ -2198,11 +2203,19 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
             switch ( spitem->scope->scopeType() )
             {
                 case Scope::FunctionScope:
-                    pitem->scope->deleteFunctionScope( spitem->scope->scopeName() );
+                    if( !pitem->scope->deleteFunctionScope( spitem->scope->scopeName() ) )
+                    {
+                        KMessageBox::error(this, i18n("Couldn't delete Function Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Function Scope Deletion failed"));
+                        return;
+                    }
                     //                     pitem->scopes.remove( spitem );
                     break;
                 case Scope::IncludeScope:
-                    pitem->scope->deleteIncludeScope( spitem->scope->fileName() );
+                    if( !pitem->scope->deleteIncludeScope( spitem->scope->fileName() ) )
+                    {
+                        KMessageBox::error(this, i18n("Couldn't delete Include Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Include Scope Deletion failed"));
+                        return;
+                    }
                     //                     pitem->scopes.remove( spitem );
                     delete spitem;
                     spitem = pitem;
@@ -2210,7 +2223,11 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                     //                     pitem->scopes.remove(spitem);
                     break;
                 case Scope::SimpleScope:
-                    pitem->scope->deleteSimpleScope( spitem->scope->scopeName() );
+                    if( !pitem->scope->deleteSimpleScope( spitem->scope->scopeName() ) )
+                    {
+                        KMessageBox::error(this, i18n("Couldn't delete Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Scope Deletion failed"));
+                        return;
+                    }
                     //                     pitem->scopes.remove( spitem );
                     break;
                 default:
