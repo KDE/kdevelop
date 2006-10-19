@@ -1814,7 +1814,7 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 
     if ( KMessageBox::warningYesNo( this,
                                     "<qt>" +
-                                    i18n( "Are you sure you wish to remove <strong>%1</strong> from this project?" )
+                                    i18n( "Are you sure you wish to remove <strong>%1</strong> from this subproject/scope?" )
                                     .arg( fitem->text( 0 ) ) +
                                     "</qt>",
                                     i18n( "Remove File" ),
