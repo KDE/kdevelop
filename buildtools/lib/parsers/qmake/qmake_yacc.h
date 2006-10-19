@@ -53,13 +53,12 @@
      NUMBER = 269,
      COMMENT = 270,
      CONT = 271,
-     DOT = 272,
-     RCURLY = 273,
-     LCURLY = 274,
-     ID_ARGS = 275,
-     LIST_COMMENT = 276,
-     QUOTED_VARIABLE_VALUE = 277,
-     VARIABLE_VALUE = 278
+     RCURLY = 272,
+     LCURLY = 273,
+     ID_ARGS = 274,
+     LIST_COMMENT = 275,
+     QUOTED_VARIABLE_VALUE = 276,
+     VARIABLE_VALUE = 277
    };
 #endif
 /* Tokens.  */
@@ -77,13 +76,12 @@
 #define NUMBER 269
 #define COMMENT 270
 #define CONT 271
-#define DOT 272
-#define RCURLY 273
-#define LCURLY 274
-#define ID_ARGS 275
-#define LIST_COMMENT 276
-#define QUOTED_VARIABLE_VALUE 277
-#define VARIABLE_VALUE 278
+#define RCURLY 272
+#define LCURLY 273
+#define ID_ARGS 274
+#define LIST_COMMENT 275
+#define QUOTED_VARIABLE_VALUE 276
+#define VARIABLE_VALUE 277
 
 
 

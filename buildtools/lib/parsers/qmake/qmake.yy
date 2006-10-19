@@ -120,7 +120,6 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token NUMBER
 %token COMMENT
 %token CONT
-%token DOT
 %token RCURLY
 %token LCURLY
 %token ID_ARGS
@@ -167,7 +166,7 @@ statement : variable_assignment
         }
     ;
 
-variable_assignment : scoped_identifier operator multiline_values
+variable_assignment : ID_SIMPLE operator multiline_values
         {
             AssignmentAST *node = new AssignmentAST();
             node->scopedID = $<value>1;
@@ -175,12 +174,6 @@ variable_assignment : scoped_identifier operator multiline_values
             node->values = $<values>3;
             $<node>$ = node;
         }
-    ;
-
-scoped_identifier : ID_SIMPLE COLON scoped_identifier
-        { $<value>$ = $<value>1 + $<value>2 + $<value>3; }
-    | ID_SIMPLE COLON  { $<value>$ = $<value>1 + $<value>2; }
-    | ID_SIMPLE
     ;
 
 multiline_values : multiline_values line_body
@@ -205,7 +198,7 @@ variable_value : VARIABLE_VALUE     { $<value>$ = $<value>1; }
 operator : EQ | PLUSEQ | MINUSQE | STAREQ | TILDEEQ
     ;
 
-scope : scoped_identifier
+scope : ID_SIMPLE
         {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
             projects.push(projectAST);
@@ -219,7 +212,7 @@ scope : scoped_identifier
         }
     ;
 
-function_call : scoped_identifier LBRACE function_args RBRACE
+function_call : ID_SIMPLE LBRACE function_args RBRACE
         {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -242,35 +235,6 @@ function_call : scoped_identifier LBRACE function_args RBRACE
             $<node>$ = projects.pop();
             depth--;
         }
-    | scoped_identifier LBRACE function_args RBRACE COLON variable_assignment
-        {
-            ProjectAST *node = new ProjectAST(ProjectAST::FunctionScope);
-	    projects.push(node);
-            node->scopedID = $<value>1;
-            node->args = $<value>3;
-	    depth++;
-
-	    node->addChildAST($<node>6);
-
-            if ($<value>1.contains("include"))
-            {
-                IncludeAST *includeAST = new IncludeAST();
-                includeAST->projectName = $<value>3;
-                projects.top()->addChildAST(includeAST);
-                includeAST->setDepth(depth);
-            }
-            if ($<value>6.contains("include"))
-            {
-                QRegExp r("include\\((.*)\\)");
-                r.search($<value>6);
-                IncludeAST *includeAST = new IncludeAST();
-                includeAST->projectName = r.cap(1);
-                projects.top()->addChildAST(includeAST);
-                includeAST->setDepth(depth);
-            }
-	    depth--;
-	    $<node>$ = projects.pop();
-        }
     ;
 
 function_args : ID_ARGS    { $<value>$ = $<value>1; }
@@ -278,6 +242,11 @@ function_args : ID_ARGS    { $<value>$ = $<value>1; }
     ;
 
 scope_body : LCURLY statements RCURLY
+    | COLON statement 
+        { 
+            projects.top()->addChildAST($<node>2);
+            $<node>2->setDepth(depth);
+        }
     |
     ;
 
@@ -289,18 +258,10 @@ else_statement : "else" LCURLY
             projects.top()->args = "";
             depth++;
         }
-    statements RCURLY
+    scope_body RCURLY
         {
             $<node>$ = projects.pop();
             depth--;
-        }
-    | "else" COLON variable_assignment
-        {
-            ProjectAST *node = new ProjectAST();
-            node->scopedID = "else";
-            node->args = "";
-            node->addChildAST($<node>3);
-            $<node>$ = node;
         }
     |
         {

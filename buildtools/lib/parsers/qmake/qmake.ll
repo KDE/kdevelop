@@ -99,7 +99,6 @@ cont              \\{ws}*\n
 "("                      { BEGIN(funcargs); return LBRACE; }
 <funcargs,INITIAL>")"    { BEGIN(INITIAL); return RBRACE; }
 ":"                      { yylval.value = yytext; return COLON; }
-"."                      { return DOT; }
 <list,INITIAL>"\n"       { BEGIN(INITIAL); return NEWLINE; }
 
 {comment}                { yylval.value = yytext; return (COMMENT); }
