@@ -1052,22 +1052,6 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate )
             }
         }
 
-        QDir dir( QFileInfo( m_shownSubproject->scope->projectDir()+QString( QChar( QDir::separator() ) )+noPathFileName ).dirPath() );
-        if( dir.isRelative() )
-            dir.convertToAbs();
-
-        QValueStack<QString> dirsToCreate;
-        while( !dir.exists() )
-        {
-            dirsToCreate.push( dir.dirName() );
-            dir.cdUp();
-        }
-
-        while( !dirsToCreate.isEmpty() )
-        {
-            dir.mkdir( dirsToCreate.top() );
-            dir.cd( dirsToCreate.pop() );
-        }
 
         addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
         slotOverviewSelectionChanged( m_shownSubproject );
@@ -2176,12 +2160,12 @@ QPtrList<QMakeScopeItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi
 void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, QMakeScopeItem * item, QString absFilePath )
 {
     QDir d( item->scope->projectDir() );
-    kdDebug( 9020 ) << "searching withing subproject: " << item->scope->projectDir() << endl;
+    kdDebug( 9024 ) << "searching withing subproject: " << item->scope->projectDir() << endl;
 
     for ( QStringList::Iterator it = item->scope->variableValues( "SOURCES" ).begin(); it != item->scope->variableValues( "SOURCES" ).end(); ++it )
     {
         QFileInfo fi2( d, *it );
-        kdDebug( 9020 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
+        kdDebug( 9024 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
         if ( absFilePath == fi2.absFilePath() )
             list.append( item );
     }
@@ -2189,7 +2173,7 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, 
     for ( QStringList::Iterator it = item->scope->variableValues( "HEADERS" ).begin(); it != item->scope->variableValues( "HEADERS" ).end(); ++it )
     {
         QFileInfo fi2( d, *it );
-        kdDebug( 9020 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
+        kdDebug( 9024 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
         if ( absFilePath == fi2.absFilePath() )
             list.append( item );
     }
@@ -2201,7 +2185,7 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, 
 
         if ( spitem )
         {
-            kdDebug( 9020 ) << "next subproject item with profile = " << spitem->scope->fileName() << endl;
+            kdDebug( 9024 ) << "next subproject item with profile = " << spitem->scope->fileName() << endl;
             findSubprojectForFile( list, spitem, absFilePath );
         }
 
