@@ -38,6 +38,7 @@
 #include <qregexp.h>
 #include <qinputdialog.h>
 #include <qwhatsthis.h>
+#include <qvaluestack.h>
 #include <kfiledialog.h>
 #include <qtooltip.h>
 #include <kdebug.h>
@@ -1049,6 +1050,23 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate )
                     addName = addName.mid( 1 );
                 noPathFileName = addName;
             }
+        }
+
+        QDir dir( QFileInfo( m_shownSubproject->scope->projectDir()+QString( QChar( QDir::separator() ) )+noPathFileName ).dirPath() );
+        if( dir.isRelative() )
+            dir.convertToAbs();
+
+        QValueStack<QString> dirsToCreate;
+        while( !dir.exists() )
+        {
+            dirsToCreate.push( dir.dirName() );
+            dir.cdUp();
+        }
+
+        while( !dirsToCreate.isEmpty() )
+        {
+            dir.mkdir( dirsToCreate.top() );
+            dir.cd( dirsToCreate.pop() );
         }
 
         addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
@@ -2304,13 +2322,6 @@ void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
     kdDebug( 9020 ) << "Compiling " << fitem->text( 0 )
     << "in dir " << sourceDir
     << " with baseName " << baseName << endl;
-
-    QString projectDir = projectDirectory();
-    if ( !sourceDir.startsWith( projectDir ) )
-    {
-        KMessageBox::sorry( this, i18n( "Can only compile files in directories which belong to the project." ) );
-        return ;
-    }
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
