@@ -216,6 +216,6 @@ namespace GDBMI
         char reason;
         QString message;
     };
-};
+}
 
 #endif

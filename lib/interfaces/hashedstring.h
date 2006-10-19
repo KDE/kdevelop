@@ -110,6 +110,6 @@ struct hash<HashedString> {
     return str.hash();
   }
 };
-};
+}
 
 #endif

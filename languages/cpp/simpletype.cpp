@@ -734,7 +734,7 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
   ///Give the type a desc, so the nearest point to the searched type is stored
   ifVerbose( dbg() << "\"" << str() << "\": search for \"" << name.fullNameChain() << "\" FAILED" << endl );
   return ret;
-};
+}
 
 void SimpleTypeImpl::breakReferences() {
   TypePointer p( this ); ///necessary so this type is not deleted in between

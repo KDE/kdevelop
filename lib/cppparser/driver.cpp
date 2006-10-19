@@ -54,7 +54,7 @@
 //         stream << m_hasArguments;
 //         stream << m_argumentList;
 //     }
-;
+
 
 class IntIncreaser {
     public:

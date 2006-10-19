@@ -67,7 +67,7 @@ public:
                    // Don't count on this being raise in all cases where
                    // program is running.
                    program_running,
-                   connected_to_program,
+                   connected_to_program
     };
 
 

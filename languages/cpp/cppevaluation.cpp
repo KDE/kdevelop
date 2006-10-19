@@ -64,7 +64,7 @@ QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
 
 void Operator::log( const QString& msg ) {
   ifVerboseMajor( dbgMajor() << "\"" << name() << "\": " << msg << endl );
-};
+}
 
 OperatorSet::~OperatorSet() {
   for( QValueList< Operator* >::iterator it = m_operators.begin(); it != m_operators.end(); ++it ) {

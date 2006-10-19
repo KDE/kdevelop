@@ -111,7 +111,7 @@ class ParamIterator {
 bool isValidIdentifierSign( const QChar& c );
 
 QString stringMult( int count, QString str );
-};
+}
 
 
 #endif 

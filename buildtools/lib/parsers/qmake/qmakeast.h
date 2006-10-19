@@ -47,7 +47,7 @@ public:
         AssignmentAST     /**<Variable assignment.*/,
         NewLineAST        /**<Line feed.*/,
         CommentAST        /**<Comment.*/,
-        IncludeAST        /**<.pri include.*/,
+        IncludeAST        /**<.pri include.*/
     };
 
     /**Constructs AST with given node type.*/

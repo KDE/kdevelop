@@ -42,8 +42,8 @@ class LocateResult {
     D* d;
     int m_resolutionCount;
     ResolutionFlags m_flags;
-    int m_locateDepth; ///How far away from the beginning the type was found(counting steps upwards and steps into base-classes. Counter is stopped on the first typedef.)
     TypeTrace* m_trace; ///pointer to the previous type in the trace-chain
+    int m_locateDepth; ///How far away from the beginning the type was found(counting steps upwards and steps into base-classes. Counter is stopped on the first typedef.)
 
   public:
     LocateResult();

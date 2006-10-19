@@ -44,7 +44,7 @@
 ///A little debugging class
 #include <qpopupmenu.h>
 class PopupTracker : public QObject {
-	Q_OBJECT;
+	Q_OBJECT
 public:
 	static PopupTracker* pt;
 	

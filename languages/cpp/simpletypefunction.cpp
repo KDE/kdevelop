@@ -514,7 +514,7 @@ const LocateResult SimpleTypeCodeModel::findTemplateParam( const QString& name )
     }
   }
   return LocateResult();
-};
+}
 
 QValueList<LocateResult> SimpleTypeCodeModel::getBases() {
   Debug d( "#getbases#" );

@@ -1527,7 +1527,7 @@ void CppCodeCompletion::slotTextHint( int line, int column, QString &text ) {
   }
 
   text = ""; ///Don't really use tooltips since those are not implemented in katepart, and don't work right in the qt-designer based part
-};
+}
 
 ///not good..
 bool CppCodeCompletion::isTypeExpression( const QString& expr ) {
@@ -3231,7 +3231,7 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item ) {
   if ( !item->comment().isEmpty() )
     ret += "\n\n" + prepareTextForMenu( item->comment(), 3, MAXCOMMENTCOLUMNS ).join( "\n" );
   return ret;
-};
+}
 
 QString commentFromTag( const SimpleType& parent, Tag& tag ) {
   int line, col;
@@ -3348,7 +3348,7 @@ QString commentFromTag( const SimpleType& parent, Tag& tag ) {
     ret += "\n\n" + prepareTextForMenu( tag.comment(), 20, MAXCOMMENTCOLUMNS ).join( "\n" );
   }
   return ret;
-};
+}
 
 void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, SimpleTypeNamespace* ns, std::set<SimpleTypeNamespace*>& ignore, bool isInstance, int depth ) {
   if ( ignore.find( ns ) != ignore.end() )

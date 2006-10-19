@@ -231,7 +231,7 @@ void ClassViewPart::graphicalClassView( )
 void ClassViewPart::refresh() {
 	if( navigator )
 			navigator->refresh();
-};
+}
 
 void ClassViewPart::activePartChanged( KParts::Part * part)
 {

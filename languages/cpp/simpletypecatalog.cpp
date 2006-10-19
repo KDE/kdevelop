@@ -344,7 +344,7 @@ const LocateResult SimpleTypeCatalog::findTemplateParam( const QString& name ) {
   }
  }
  return LocateResult();
-};
+}
 
 //SimpleTypeCatalog::CatalogBuildInfo implementation
 TypePointer SimpleTypeCatalog::CatalogBuildInfo::build() {

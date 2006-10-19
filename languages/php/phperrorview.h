@@ -51,7 +51,7 @@ enum Errors
    ErrorNoSuchFunction = 2,
    Warning = 3,
    Todo = 4,
-   Fixme = 5,
+   Fixme = 5
 };
 
 class PHPErrorView: public QWidget {

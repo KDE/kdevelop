@@ -305,7 +305,7 @@ bool SimpleTypeNamespace::hasNode() const {
       return true;
 
   return false;
-};
+}
 
 SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves() {
   updateAliases();

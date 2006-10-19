@@ -442,7 +442,7 @@ QStringList TypeDesc::fullNameList( ) const {
     ret += m_data->m_nextType->fullNameList();
   }
   return ret;
-};
+}
 
 
 /// The template-params may be changed in-place
