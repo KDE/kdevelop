@@ -1921,34 +1921,25 @@ void TrollProjectWidget::slotBuildOpenFile()
     QFileInfo fi( fileName );
     QString sourceDir = fi.dirPath();
     QString baseName = fi.baseName( true );
-    kdDebug( 9020 ) << "Compiling " << fileName
+    kdDebug( 9024 ) << "Compiling " << fileName
     << "in dir " << sourceDir
     << " with baseName " << baseName << endl;
 
-    QString projectDir = projectDirectory();
-    if ( !sourceDir.startsWith( projectDir ) )
-    {
-        KMessageBox::sorry( this, i18n( "Can only compile files in directories which belong to the project." ) );
-        return ;
-    }
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
-    kdDebug( 9020 ) << "builddir " << buildDir << ", target " << target << endl;
 
     m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
     //    m_part->startMakeCommand(buildDir, target);
 
-    kdDebug( 9020 ) << "searching for the subproject" << endl;
     QPtrList<QMakeScopeItem> list = findSubprojectForFile( fi );
-    kdDebug( 9020 ) << "searching for the subproject: success" << endl;
 
     QMakeScopeItem *spitem;
     for ( spitem = list.first(); spitem; spitem = list.next() )
     {
         QString buildcmd = constructMakeCommandLine( spitem->scope );
         QString dircmd = "cd " + KProcess::quote( spitem->scope->projectDir() ) + " && " ;
-        kdDebug( 9020 ) << "builddir " << spitem->scope->projectDir() << ", cmd " << dircmd + buildcmd + " " + target << endl;
+        kdDebug( 9024 ) << "builddir " << spitem->scope->projectDir() << ", cmd " << dircmd + buildcmd + " " + target << endl;
         m_part->queueCmd( spitem->scope->projectDir(), dircmd + buildcmd + " " + target );
     }
 
@@ -2160,20 +2151,19 @@ QPtrList<QMakeScopeItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi
 void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, QMakeScopeItem * item, QString absFilePath )
 {
     QDir d( item->scope->projectDir() );
-    kdDebug( 9024 ) << "searching withing subproject: " << item->scope->projectDir() << endl;
 
-    for ( QStringList::Iterator it = item->scope->variableValues( "SOURCES" ).begin(); it != item->scope->variableValues( "SOURCES" ).end(); ++it )
+    QStringList vars = item->scope->variableValues( "SOURCES" );
+    for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it )
     {
         QFileInfo fi2( d, *it );
-        kdDebug( 9024 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
         if ( absFilePath == fi2.absFilePath() )
             list.append( item );
     }
 
-    for ( QStringList::Iterator it = item->scope->variableValues( "HEADERS" ).begin(); it != item->scope->variableValues( "HEADERS" ).end(); ++it )
+    vars = item->scope->variableValues( "HEADERS" );
+    for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it )
     {
         QFileInfo fi2( d, *it );
-        kdDebug( 9024 ) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
         if ( absFilePath == fi2.absFilePath() )
             list.append( item );
     }
@@ -2185,7 +2175,6 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, 
 
         if ( spitem )
         {
-            kdDebug( 9024 ) << "next subproject item with profile = " << spitem->scope->fileName() << endl;
             findSubprojectForFile( list, spitem, absFilePath );
         }
 
@@ -2303,20 +2292,20 @@ void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
     QFileInfo fi( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ) );
     QString sourceDir = fi.dirPath();
     QString baseName = fi.baseName( true );
-    kdDebug( 9020 ) << "Compiling " << fitem->text( 0 )
+    kdDebug( 9024 ) << "Compiling " << fitem->text( 0 )
     << "in dir " << sourceDir
     << " with baseName " << baseName << endl;
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
-    kdDebug( 9020 ) << "builddir " << buildDir << ", target " << target << endl;
+    kdDebug( 9024 ) << "builddir " << buildDir << ", target " << target << endl;
 
     m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
     //    m_part->startMakeCommand(buildDir, target);
 
     QString buildcmd = constructMakeCommandLine( spitem->scope );
     QString dircmd = "cd " + KProcess::quote( spitem->scope->projectDir() ) + " && " ;
-    kdDebug( 9020 ) << "builddir " << spitem->scope->projectDir() << ", cmd " << dircmd + buildcmd + " " + target << endl;
+    kdDebug( 9024 ) << "builddir " << spitem->scope->projectDir() << ", cmd " << dircmd + buildcmd + " " + target << endl;
     m_part->queueCmd( spitem->scope->projectDir(), dircmd + buildcmd + " " + target );
 
 
