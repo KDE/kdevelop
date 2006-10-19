@@ -83,7 +83,7 @@ public:
 
     void addFileToCurrentSubProject( GroupItem *titem, const QString &filename );
     void addFileToCurrentSubProject( GroupItem::GroupType gtype, const QString &filename );
-    void addFiles( QStringList &files, bool noPathTruncate = false );
+    void addFiles( QStringList &files, bool relativeToProjectRoot = true );
     void emitAddedFile( const QString &name );
     void emitRemovedFile( const QString &name );
 

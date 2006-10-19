@@ -990,12 +990,10 @@ void TrollProjectWidget::addFileToCurrentSubProject( GroupItem::GroupType gtype,
 * Method adds a file to the current project by grouped
 * by file extension
 */
-void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate )
+void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoot )
 {
     if ( !m_shownSubproject )
         return ;
-
-    QString newPath;
 
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
@@ -1026,31 +1024,18 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate )
 
         QFileInfo info( fileName );
         QString ext = info.extension( false ).simplifyWhiteSpace();
-        QString noPathFileName;
-        if ( noPathTruncate )
-            noPathFileName = fileName;
-        else
-            noPathFileName = info.fileName();
 
+        QString noPathFileName;
+        if( relativeToProjectRoot )
+            noPathFileName = getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(projectDirectory()+QString(QChar(QDir::separator()))+fileName ) );
+        else
+            noPathFileName = getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(m_shownSubproject->scope->projectDir()+QString(QChar(QDir::separator()))+fileName ) );
+
+        kdDebug(9024) << "calc filename:" << noPathFileName << endl;
         GroupItem *gitem = 0;
         GroupItem::GroupType gtype = GroupItem::groupTypeForExtension( ext );
         if ( m_shownSubproject->groups.contains( gtype ) )
             gitem = m_shownSubproject->groups[ gtype ];
-
-        if ( gitem && !noPathTruncate )
-        {
-            QString addName;
-            if ( fileName.startsWith( QDir::rootDirPath() ) )
-                addName = URLUtil::relativePath( gitem->owner->scope->projectDir(), fileName );
-            else
-                addName = URLUtil::relativePath( gitem->owner->relativePath(), QString( QChar( QDir::separator() ) ) + fileName );
-            if ( !addName.isEmpty() )
-            {
-                if ( addName[ 0 ] == '/' )
-                    addName = addName.mid( 1 );
-                noPathFileName = addName;
-            }
-        }
 
 
         addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
@@ -1123,7 +1108,7 @@ void TrollProjectWidget::slotAddFiles()
                     if ( testExist.exists() )
                     {
                         QStringList files( filename );
-                        addFiles( files );
+                        addFiles( files, false );
                     }
                 }
                 break;
@@ -1143,7 +1128,7 @@ void TrollProjectWidget::slotAddFiles()
                     if ( testExist.exists() )
                     {
                         QStringList files( filename );
-                        addFiles( files );
+                        addFiles( files, false );
                     }
                 }
                 break;
@@ -1154,7 +1139,7 @@ void TrollProjectWidget::slotAddFiles()
                     QString theFile = files[ i ];
                     QStringList files( URLUtil::relativePathToFile( cleanSubprojectDir , theFile )
                                      );
-                    addFiles( files, true );
+                    addFiles( files, false );
                 }
                 break;
         }
@@ -1251,7 +1236,7 @@ void TrollProjectWidget::slotNewFile()
             }
             newfile.close();
             QStringList files( relpath + '/' + filename );
-            addFiles( files );
+            addFiles( files, false );
         }
     }
 }
@@ -1745,7 +1730,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                 QDomDocument & dom = *( m_part->projectDom() );
                 for ( uint i = 0; i < newFileNames.count(); ++i )
                 {
-                    QString srcfile_relpath = newFileNames[ i ].remove( 0, projectDirectory().length() );
+                    QString srcfile_relpath = newFileNames[ i ];
                     QString uifile_relpath = m_shownSubproject->relativePath() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 );
                     DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
                                              "subclass", "sourcefile", "uifile" );
@@ -1753,7 +1738,6 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                     list << DomUtil::Pair( srcfile_relpath, uifile_relpath );
                     DomUtil::writePairListEntry( dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list );
                     //                    newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
-                    newFileNames[ i ] = projectDirectory() + newFileNames[ i ];
                     qWarning( "new file: %s", newFileNames[ i ].latin1() );
                 }
                 m_subclasslist = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,

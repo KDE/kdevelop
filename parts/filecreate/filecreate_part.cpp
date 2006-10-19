@@ -211,7 +211,7 @@ void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
   openCreatedFile(createdFile);
 }
 
-void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) 
+void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile)
 {
   if ( createdFile.status == KDevCreateFile::CreatedFile::STATUS_OK )
   {
@@ -377,7 +377,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   selectedURL = dialog.url();
   const FileType *selectedFileType = dialog.selectedType();
 
-  if (dialog.addToProject() && !projectURL.isParentOf(selectedURL)) {
+  if (dialog.addToProject() && !projectURL.isParentOf(selectedURL) && !(project()->options() & KDevProject::UsesQMakeBuildSystem) ) {
     result.status = KDevCreateFile::CreatedFile::STATUS_NOTWITHINPROJECT;
     return result;
   }
@@ -410,8 +410,16 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   {
     // work out the path relative to the project directory
 //    QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
-    QString relToProj = URLUtil::relativePath(projectURL.path(), fullPath, URLUtil::SLASH_PREFIX );
-    project()->addFile(relToProj.mid(1));
+	  QString relToProj;
+	  if( project()->options() & KDevProject::UsesQMakeBuildSystem )
+	  {
+		relToProj = URLUtil::relativePathToFile( project()->projectDirectory(), fullPath );
+		  project()->addFile(relToProj);
+	  }else
+	  {
+        relToProj = URLUtil::relativePath(projectURL.path(), fullPath, URLUtil::SLASH_PREFIX );
+        project()->addFile(relToProj.mid(1));
+	  }
   }
   else
   {

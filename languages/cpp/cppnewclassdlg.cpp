@@ -114,7 +114,7 @@ CppNewClassDialog::CppNewClassDialog( CppSupportPart *part, QWidget *parent, con
 	compNamespace = namespace_edit->completionObject();
 	setCompletionNamespaceRecursive( m_part->codeModel() ->globalNamespace() );
 	classname_edit->setFocus();
-	
+
 	// enable/disable qt options for non qt projects
 	childclass_box->setEnabled( m_part->qtBuildConfig()->isUsed() );
 	qobject_box->setEnabled( m_part->qtBuildConfig()->isUsed() );
@@ -285,7 +285,7 @@ void CppNewClassDialog::baseclassname_changed( const QString &text )
 	if ( ( basename_edit->hasFocus() ) && ( !baseincludeModified ) )
 	{
 		QString header = text;
-		
+
 		// handle Qt classes in a special way.
 		if( m_part->qtBuildConfig()->isUsed() && header.startsWith( "Q" ) )
 		{
@@ -304,7 +304,7 @@ void CppNewClassDialog::baseclassname_changed( const QString &text )
 				header = header.mid( header.findRev( QRegExp( "::" ) ) + 2 );
 			header = header.replace( QRegExp( " *<.*>" ), "" );
 			header += interface_suffix;
-	
+
 			switch ( gen_config->superCase() )
 			{
 			case ClassGeneratorConfig::LowerCase:
@@ -317,7 +317,7 @@ void CppNewClassDialog::baseclassname_changed( const QString &text )
 				;
 			}
 		}
-		
+
 		baseinclude_edit->setText( header );
 	}
 }
@@ -1321,9 +1321,9 @@ void CppNewClassDialog::to_constructors_list_clicked()
    ----------------------------------------------------------
    ----------------------------------------------------------
    ----------------------------------------------------------
- 
+
     class CppNewClassDialog::ClassGenerator
- 
+
    ----------------------------------------------------------
    ----------------------------------------------------------
    ----------------------------------------------------------
@@ -1363,7 +1363,7 @@ bool CppNewClassDialog::ClassGenerator::validateInput()
 	}
 
 	/// \FIXME
-	if ( header.find( '/' ) != -1 || implementation.find( '/' ) != -1 )
+    if ( ( header.find( '/' ) != -1 || implementation.find( '/' ) != -1 ) && !( dlg.m_part->project() ->options() & KDevProject::UsesQMakeBuildSystem) )
 	{
 		KMessageBox::error( &dlg, i18n( "Generated files will always be added to the "
 		                                "active directory, so you must not give an "
@@ -1397,6 +1397,26 @@ bool CppNewClassDialog::ClassGenerator::generate()
 		return false;
 	}
 
+    if( ( dlg.m_part->project() ->options() & KDevProject::UsesQMakeBuildSystem) )
+    {
+        QDir dir( QFileInfo( project->projectDirectory()+QString( QChar( QDir::separator() ) )+project->activeDirectory() + QString( QChar( QDir::separator() ) ) + header ).dirPath() );
+        kdDebug(9024) << "Dir for new file:" << dir.absPath() << endl;
+        if( dir.isRelative() )
+            dir.convertToAbs();
+
+        QValueStack<QString> dirsToCreate;
+        while( !dir.exists() )
+        {
+            dirsToCreate.push( dir.dirName() );
+            dir.cdUp();
+        }
+
+        while( !dirsToCreate.isEmpty() )
+        {
+            dir.mkdir( dirsToCreate.top() );
+            dir.cd( dirsToCreate.pop() );
+        }
+    }
 	common_text();
 
 	if(!headeronly) gen_implementation();
@@ -1407,7 +1427,7 @@ bool CppNewClassDialog::ClassGenerator::generate()
 	fileList.append ( project->activeDirectory() + "/" + header );
 	if (!headeronly) fileList.append ( project->activeDirectory() + "/" + implementation );
 	project->addFiles ( fileList );
-  
+
 	return true;
 }
 
@@ -1445,7 +1465,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
 		QString email = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/email" );
 		if( !email.isEmpty() )
 			author += QString( " <%1>" ).arg( email );
-			
+
 		if ( dlg.gen_config->author_box->isChecked() )
 			doc.append( "\t@author " + author + "\n" );
 		doc.append( "*/" );
@@ -1751,7 +1771,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 				{
 					baseInitializer += ", ";
 				}
-				
+
 				if ( childClass && ( baseInitializer == " : " ) )
 				{
 					if( dlg.m_part->qtBuildConfig()->version() == 3 )
@@ -1900,18 +1920,19 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	switch ( dlg.gen_config->defCase() )
 	{
 	case ClassGeneratorConfig::UpperCase:
-		headerGuard = namespaceStr.upper() + header.upper();
+        headerGuard = namespaceStr.upper() + header.mid( header.findRev( "/" )+1 ).upper();
 		break;
 	case ClassGeneratorConfig::LowerCase:
-		headerGuard = namespaceStr.lower() + header.lower();
+        headerGuard = namespaceStr.lower() + header.mid( header.findRev( "/" )+1 ).lower();
 		break;
 	case ClassGeneratorConfig::SameAsFileCase:
-		headerGuard = dlg.header_edit->text();
+        headerGuard = dlg.header_edit->text().mid( dlg.header_edit->text().findRev( "/" )+1 );
 		break;
 	case ClassGeneratorConfig::SameAsClassCase:
-		headerGuard = namespaceStr + header;
+        headerGuard = namespaceStr + header.mid( header.findRev( "/" )+1 );
 		break;
 	}
+
 	headerGuard.replace( QRegExp( "\\." ), "_" );
 	headerGuard.replace( QRegExp( "::" ), "_" );
 	QString includeBaseHeader;
@@ -1932,7 +1953,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 				includeBaseHeader = "#include <QObject>";
 		}
 	}
-	
+
 	if ( objc )
 	{
 		if ( dlg.baseclasses_view->firstChild() )
@@ -1963,7 +1984,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	QString email = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/email" );
 	if( !email.isEmpty() )
 		author += QString( " <%1>" ).arg( email );
-	
+
 	QString inheritance;
 	if ( dlg.baseclasses_view->childCount() > 0 )
 	{
@@ -2204,5 +2225,6 @@ void CppNewClassDialog::headeronly_box_stateChanged(int val)
     implementation_edit->setEnabled(!val);
 }
 
-
 #include "cppnewclassdlg.moc"
+
+//kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
