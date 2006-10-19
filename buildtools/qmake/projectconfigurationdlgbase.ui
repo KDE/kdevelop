@@ -877,7 +877,7 @@ e</string>
                     <cstring>incaddTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>I&amp;ncludes</string>
+                    <string>Inc&amp;ludes</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -2035,12 +2035,22 @@ e</string>
                                 </item>
                                 <item>
                                     <property name="text">
+                                        <string>-=</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
                                         <string>=</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>-=</string>
+                                        <string>*=</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>~=</string>
                                     </property>
                                 </item>
                                 <property name="name">
