@@ -58,7 +58,9 @@
      ID_ARGS = 274,
      LIST_COMMENT = 275,
      QUOTED_VARIABLE_VALUE = 276,
-     VARIABLE_VALUE = 277
+     VARIABLE_VALUE = 277,
+     INDENT = 278,
+     LIST_WS = 279
    };
 #endif
 /* Tokens.  */
@@ -82,6 +84,8 @@
 #define LIST_COMMENT 275
 #define QUOTED_VARIABLE_VALUE 276
 #define VARIABLE_VALUE 277
+#define INDENT 278
+#define LIST_WS 279
 
 
 

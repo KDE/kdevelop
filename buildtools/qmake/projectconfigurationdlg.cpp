@@ -30,6 +30,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klistview.h>
+#include <ktextedit.h>
 
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -506,7 +507,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         if ( !myProjectItem->scope->customVariables().keys().contains( qMakePair( var, op ) ) )
             myProjectItem->scope->removeVariable( var, op );
         else
-            myProjectItem->scope->updateCustomVariable( var, op, QStringList::split( " ", item->text( 2 ) ) );
+            myProjectItem->scope->updateCustomVariable( var, op, QStringList( item->text( 2 ) ) );
     }
 }
 
@@ -778,7 +779,10 @@ void ProjectConfigurationDlg::updateControls()
     QMap<QPair<QString, QString>, QStringList > customvars = myProjectItem->scope->customVariables();
     QMap<QPair<QString, QString>, QStringList >::iterator idx = customvars.begin();
     for ( ; idx != customvars.end(); ++idx )
-        new KListViewItem( customVariables, idx.key().first, idx.key().second, idx.data().join( " " ) );
+    {
+        KListViewItem* item = new KListViewItem( customVariables, idx.key().first, idx.key().second, idx.data().join("") );
+        item->setMultiLinesEnabled(true);
+    }
 
 }
 
@@ -1397,7 +1401,8 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
 
 void ProjectConfigurationDlg::addCustomValueClicked()
 {
-    QListViewItem * item = new QListViewItem( customVariables, i18n( "Name" ), "=", i18n( "Value" ) );
+    KListViewItem * item = new KListViewItem( customVariables, i18n( "Name" ), "=", i18n( "Value" ) );
+    item->setMultiLinesEnabled(true);
     customVariables->setSelected( item, true );
     newCustomVariableActive();
     customVariableName->setEnabled( true );

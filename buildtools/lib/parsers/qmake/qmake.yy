@@ -67,6 +67,7 @@ struct Result {
     </pre>
     */
     QStringList values;
+    QString indent;
 };
 
 typedef Result YYSTYPE;
@@ -126,6 +127,8 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token LIST_COMMENT
 %token QUOTED_VARIABLE_VALUE
 %token VARIABLE_VALUE
+%token INDENT
+%token LIST_WS
 %%
 
 project :
@@ -172,21 +175,35 @@ variable_assignment : ID_SIMPLE operator multiline_values
             node->scopedID = $<value>1;
             node->op = $<value>2;
             node->values = $<values>3;
+            node->indent = $<indent>3;
             $<node>$ = node;
         }
     ;
 
 multiline_values : multiline_values line_body
         {
-            $<values>$ += $<values>2
+            $<values>$ += $<values>2;
+            if( $<indent>2 != "" && $<indent>$ == "" )
+                $<indent>$ = $<indent>2;
         }
-    |   { $<values>$.clear(); }
+    |   
+        { 
+            $<values>$.clear(); 
+            $<indent>$ = "";
+        }
     ;
 
 line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
-    | variable_value { $<values>$.append( $<value>1 ); }
-    | CONT                   { $<values>$.append("\\\n"); }
-    | NEWLINE                { $<values>$.append("\n"); }
+    | variable_value                 { $<values>$.append( $<value>1 ); }
+    | CONT                           { $<values>$.append("\\\n"); }
+    | NEWLINE                        { $<values>$.append("\n"); }
+    | LIST_WS                        { $<values>$.append($<value>1); }
+    | INDENT
+        { 
+            $<values>$.append($<value>1);
+            if( $<indent>$ == "" && $<value>1 != "" )
+                $<indent>$ = $<value>1;
+        }
     | LIST_COMMENT
     | RBRACE
     ;

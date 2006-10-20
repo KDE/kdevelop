@@ -250,6 +250,7 @@ QStringList Scope::variableValuesForOp( const QString& variable , const QString&
     }
     result.remove( "\\\n" );
     result.remove( "\n" );
+    result = Scope::removeWhiteSpace(result);
     return result;
 }
 
@@ -276,6 +277,7 @@ QStringList Scope::variableValues( const QString& variable ) const
     result = calcValuesFromStatements( variable, result );
     result.remove( "\\\n" );
     result.remove( "\n" );
+    result = Scope::removeWhiteSpace(result);
     return result;
 }
 
@@ -593,7 +595,7 @@ bool Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
             if ( foundit != m_root->m_children.end() )
             {
                 QMake::AssignmentAST * ast = static_cast<QMake::AssignmentAST*>( *foundit );
-                updateValues( ast->values, QStringList( dir ), true );
+                updateValues( ast->values, QStringList( dir ), true, ast->indent );
             }else
                 return false;
             m_subProjects.remove( dir );
@@ -604,7 +606,7 @@ bool Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
     return false;
 }
 
-void Scope::updateValues( QStringList& origValues, const QStringList& newValues, bool remove )
+void Scope::updateValues( QStringList& origValues, const QStringList& newValues, bool remove, QString indent )
 {
     for ( QStringList::const_iterator it = newValues.begin(); it != newValues.end() ; ++it )
     {
@@ -613,7 +615,14 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             while ( origValues.last() == "\n" )
                 origValues.pop_back();
             if ( origValues.count() > 0 && origValues.last() != "\\\n" )
+            {
                 origValues.append( "\\\n" );
+                kdDebug(9024) << " indent == |" << indent << "|" <<endl;
+                if( indent == "" )
+                    origValues.append( "  " );
+                else
+                    origValues.append( indent );
+            }
             if( (*it).contains(" ") || (*it).contains("\t") || (*it).contains("\n") )
                 origValues.append( "\""+*it+"\"" );
             else
@@ -623,13 +632,15 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
         {
             QStringList::iterator posit = origValues.find( *it );
             posit++;
-            if ( *posit == "\\\n" )
+            if ( *posit == "\\\n" || (*posit).stripWhiteSpace() == "" )
                 origValues.remove( posit );
             origValues.remove( *it );
 
         }
     }
-    while( (origValues.last() == "\\\n" || origValues.last() == "\n") )
+    while( (origValues.last() == "\\\n"
+            || origValues.last() == "\n"
+            || origValues.last().stripWhiteSpace() == "" ) )
         origValues.pop_back();
     origValues.append("\n");
 }
@@ -648,7 +659,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
             QMake::AssignmentAST * assignment = static_cast<QMake::AssignmentAST*>( m_root->m_children[ i ] );
             if ( assignment->scopedID == variable && isCompatible( assignment->op, op ) )
             {
-                updateValues( assignment->values, values, removeFromOp );
+                updateValues( assignment->values, values, removeFromOp, assignment->indent );
                 if ( removeFromOp && listIsEmpty( assignment->values ) )
                 {
                     m_root->removeChildAST( assignment );
@@ -664,12 +675,12 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
                     {
                         if ( assignment->op == "=" )
                         {
-                            updateValues( assignment->values, values, false );
+                            updateValues( assignment->values, values, false, assignment->indent );
                             return ;
                         }
                         else if ( assignment->op == "-=" )
                         {
-                            updateValues( assignment->values, QStringList( *it ), true );
+                            updateValues( assignment->values, QStringList( *it ), true, assignment->indent );
                             if ( listIsEmpty( assignment->values ) )
                             {
                                 m_root->removeChildAST( assignment );
@@ -680,7 +691,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
                     }
                     else if ( op == "-=" && !removeFromOp && assignment->values.contains( *it ) )
                     {
-                        updateValues( assignment->values, QStringList( *it ), true );
+                        updateValues( assignment->values, QStringList( *it ), true, assignment->indent );
                         if ( listIsEmpty( assignment->values ) )
                         {
                             m_root->removeChildAST( assignment );
@@ -697,7 +708,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
                         }
                         else if ( assignment->op == "+=" && assignment->values.contains( *it ) )
                         {
-                            updateValues( assignment->values, QStringList( *it ), true );
+                            updateValues( assignment->values, QStringList( *it ), true, assignment->indent );
                             if ( listIsEmpty( assignment->values ) )
                             {
                                 m_root->removeChildAST( assignment );
@@ -751,6 +762,8 @@ QValueList<QMake::AST*>::iterator Scope::findExistingVariable( const QString& va
 
 void Scope::init()
 {
+    if( !m_root )
+        return;
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {
@@ -792,7 +805,7 @@ void Scope::init()
                     m_subProjects.insert( *sit, new Scope( m_isQt4Project, this, subproject.absFilePath( projectfile ), ( m->op != "-=" ) ) );
                 }
             }
-            else if ( !KnownVariables.contains( m->scopedID ) && !m->scopedID.contains( ".files" ) && !m->scopedID.contains( ".path" ) )
+            else if ( !KnownVariables.contains( m->scopedID ) && !m->scopedID.contains( ".files" ) && !m->scopedID.contains( ".path" ) && !variableValues("INSTALL").contains(m->scopedID) )
             {
                 m_customVariables[ qMakePair( m->scopedID, m->op ) ] = m;
             }
@@ -850,7 +863,7 @@ const QValueList<Scope*> Scope::scopesInOrder() const
             {
                 for ( QStringList::const_iterator sit = s->values.begin(); sit != s->values.end() ; ++sit )
                 {
-                    if ( *sit != "\n" && *sit != "\\\n" && m_subProjects.contains( *sit ) )
+                    if ( (*sit).stripWhiteSpace() != "" && *sit != "\\\n" && m_subProjects.contains( *sit ) )
                     {
                         if ( m_subProjects.contains( *sit ) )
                         {
@@ -977,6 +990,18 @@ bool Scope::listsEqual(const QStringList& l1, const QStringList& l2) const
     kdDebug(9024) << "comparing lists:" << left.join("|").replace("\n","%n") << " == " << right.join("|").replace("\n","%n") << endl;
     kdDebug(9024) << "Result:" << (left == right) << endl;
     return (left == right);
+}
+
+QStringList Scope::removeWhiteSpace(const QStringList& list)
+{
+    QStringList result;
+    for( QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
+    {
+        QString s = *it;
+        if( s.stripWhiteSpace() != "" )
+            result.append(s);
+    }
+    return result;
 }
 
 #ifdef DEBUG

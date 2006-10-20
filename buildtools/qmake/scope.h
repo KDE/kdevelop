@@ -157,6 +157,8 @@ public:
 
     bool isEnabled() { return m_isEnabled; }
 
+    static QStringList removeWhiteSpace(const QStringList& list);
+
 #ifdef DEBUG
     void printTree();
 #endif
@@ -181,7 +183,7 @@ private:
      * depending on the state of "remove" either adds or removes all entries from newValues
      * to origValues if they didn't exist there yet
      */
-    void updateValues( QStringList& origValues, const QStringList& newValues, bool remove );
+    void updateValues( QStringList& origValues, const QStringList& newValues, bool remove, QString indent );
 
     /*
      * Finds an existing variable, returns the end() of the statemenst if it is not found

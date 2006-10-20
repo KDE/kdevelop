@@ -173,6 +173,8 @@ public:
     QString op;
     /**List of values.*/
     QStringList values;
+    /**Indentation of multiline values*/
+    QString indent;
 };
 
 

@@ -84,7 +84,7 @@ private:
 
   virtual void processAssignment( QMake::AssignmentAST* a)
   {
-      kdDebug(9024) << getIndent() << "Assignment: " << replaceWs(a->scopedID) << " " << replaceWs(a->op) << " "
+      kdDebug(9024) << getIndent() << "Assignment(" << replaceWs(a->indent) << "):" << replaceWs(a->scopedID) << " " << replaceWs(a->op) << " "
           << replaceWs(a->values.join("|"))<< endl;
       QMake::ASTVisitor::processAssignment(a);
   }

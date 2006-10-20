@@ -54,6 +54,7 @@ To debug this lexer, put the line below into the next flex file section.
 
 delim             [ \t]
 ws                {delim}+
+begin_ws          ^{delim}+[^\n\t ]
 quote             "\""
 var_value         [^\n\t ]*
 quoted_var_value  {quote}{var_value}({var_value}|"\t"|" ")*{quote}
@@ -67,8 +68,15 @@ comment_cont      {ws}*#.*\n
 cont              \\{ws}*\n
 
 %%
+<INITIAL>{ws}  {}
+<list>{ws}     { yylval.value = yytext; return LIST_WS; }
+<list>{begin_ws}       { 
+    yylval.value = yytext;
+    unput(char(yylval.value.at(yylval.value.length()-1).latin1()));
+    yylval.value = yylval.value.mid(0, yylval.value.length()-1);
+    return INDENT;
+}
 
-<list,INITIAL>{ws}     {}
 <list,INITIAL>{cont}   { BEGIN(list); return CONT; }
 {id_simple}            { yylval.value = yytext; return (ID_SIMPLE); }
 
