@@ -73,7 +73,7 @@
                             <property name="name">
                                 <cstring>spinBox1</cstring>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>15</number>
                             </property>
                             <property name="value">
