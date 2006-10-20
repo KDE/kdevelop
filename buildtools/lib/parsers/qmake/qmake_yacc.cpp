@@ -230,7 +230,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 
 /* Enabling verbose error messages.  */
@@ -243,7 +243,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 
 /* Enabling the token table.  */
 #ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 1
+# define YYTOKEN_TABLE 0
 #endif
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -1554,7 +1554,7 @@ yyreduce:
             node->scopedID = (yyvsp[(1) - (3)].value);
             node->op = (yyvsp[(2) - (3)].value);
             node->values = (yyvsp[(3) - (3)].values);
-	    node->indent = (yyvsp[(3) - (3)].indent);
+            node->indent = (yyvsp[(3) - (3)].indent);
             (yyval.node) = node;
         ;}
     break;
@@ -1563,16 +1563,16 @@ yyreduce:
 #line 184 "qmake.yy"
     {
             (yyval.values) += (yyvsp[(2) - (2)].values);
-	    if( (yyvsp[(2) - (2)].indent) != "" && (yyval.indent) == "" )
-	    	(yyval.indent) = (yyvsp[(2) - (2)].indent);
+            if( (yyvsp[(2) - (2)].indent) != "" && (yyval.indent) == "" )
+                (yyval.indent) = (yyvsp[(2) - (2)].indent);
         ;}
     break;
 
   case 13:
 #line 190 "qmake.yy"
     { 
-	    (yyval.values).clear(); 
-	    (yyval.indent) = "";
+            (yyval.values).clear(); 
+            (yyval.indent) = "";
         ;}
     break;
 
@@ -1604,9 +1604,9 @@ yyreduce:
   case 19:
 #line 202 "qmake.yy"
     { 
-	    (yyval.values).append((yyvsp[(1) - (1)].value));
-	    if( (yyval.indent) == "" && (yyvsp[(1) - (1)].value) != "" )
-	        (yyval.indent) = (yyvsp[(1) - (1)].value);
+            (yyval.values).append((yyvsp[(1) - (1)].value));
+            if( (yyval.indent) == "" && (yyvsp[(1) - (1)].value) != "" )
+                (yyval.indent) = (yyvsp[(1) - (1)].value);
         ;}
     break;
 
