@@ -585,18 +585,15 @@ TargetItem *AutoProjectWidget::createTargetItem( const QString &name,
                                                  const QString &prefix, const QString &primary,
                                                  bool take )
 {
-	bool group = !( primary == "PROGRAMS" || primary == "LIBRARIES"
-	                || primary == "LTLIBRARIES" || primary == "JAVA" );
 	bool docgroup = ( primary == "KDEDOCS" );
 	bool icongroup = ( primary == "KDEICON" );
+	bool group = !(docgroup || icongroup);
 
 	QString text;
 	if ( docgroup )
 		text = i18n( "Documentation data" );
 	else if ( icongroup )
 		text = i18n( "KDE Icon data" ).arg( prefix );
-	else if ( group )
-		text = i18n( "%1 in %2" ).arg( nicePrimary( primary ) ).arg( prefix );
 	else
 		text = i18n( "%1 (%2 in %3)" ).arg( name ).arg( nicePrimary( primary ) ).arg( prefix );
 

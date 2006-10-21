@@ -141,23 +141,6 @@ void AddTargetDialog::accept()
 	default: ;
 	}
 
-	if (primary == "DATA"){
-	    // DATA does not need a name; DATA may already exist.
-	    TargetItem *titem = m_widget->createTargetItem(name, prefix, primary, true);
-	    QPtrListIterator<TargetItem> it( m_subproject->targets );
-	    for( ; it.current(); ++it ){
-		if( (*it)->text(0) == titem->text(0) ){
-		    /// \FIXME Add message box here, after string-freeze is over
-		    ///        something like: "This data target already exists."
-		    QDialog::accept();
-		    return;
-		}
-	    }
-	    m_subproject->targets.append( titem );
-	    QDialog::accept();
-	    return;
-	}
-
 	if (name.isEmpty()) {
 		KMessageBox::sorry(this, i18n("You have to give the target a name"));
 		return;
@@ -219,12 +202,14 @@ void AddTargetDialog::accept()
 
 	QMap<QString,QString> replaceMap;
 
-        if( primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES" ){
-	    QString varname = prefix + "_" + primary;
-	    m_subproject->variables[varname] += (" " + name);
-	    replaceMap.insert(varname, m_subproject->variables[varname]);
-            replaceMap.insert(canonname + "_SOURCES", "");
-        }
+	if( primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES" || primary == "DATA"  ){
+		QString varname = prefix + "_" + primary;
+		m_subproject->variables[varname] += (" " + name);
+		replaceMap.insert(varname, m_subproject->variables[varname]);
+		if ( primary != "DATA" ){
+			replaceMap.insert(canonname + "_SOURCES", "");
+		}
+	}
 	if (primary == "LTLIBRARIES" || primary == "PROGRAMS")
             replaceMap.insert(canonname + "_LDFLAGS", ldflags);
 
