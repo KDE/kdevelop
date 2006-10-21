@@ -612,17 +612,20 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
     {
         if ( !origValues.contains( *it ) && !remove )
         {
-            while ( origValues.last() == "\n" )
+            while ( !origValues.isEmpty() origValues.last() == "\n" )
                 origValues.pop_back();
             if ( origValues.count() > 0 && origValues.last() != "\\\n" )
             {
                 origValues.append( "\\\n" );
                 kdDebug(9024) << " indent == |" << indent << "|" <<endl;
-                if( indent == "" )
-                    origValues.append( "  " );
-                else
+                if( indent != "" )
                     origValues.append( indent );
-            }
+            }else if ( !origValues.isEmpty() && origValues.last() == "\\\n" )
+            {
+                if( indent != "" )
+                    origValues.append( indent );
+            }else if ( origValues.isEmpty() )
+                origValues.append( " " );
             if( (*it).contains(" ") || (*it).contains("\t") || (*it).contains("\n") )
                 origValues.append( "\""+*it+"\"" );
             else
@@ -638,7 +641,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
 
         }
     }
-    while( (origValues.last() == "\\\n"
+    while( !origValues.isEmpty() && (origValues.last() == "\\\n"
             || origValues.last() == "\n"
             || origValues.last().stripWhiteSpace() == "" ) )
         origValues.pop_back();
@@ -793,7 +796,7 @@ void Scope::init()
                 for ( QStringList::const_iterator sit = m->values.begin() ; sit != m->values.end(); ++sit )
                 {
                     QString str = *sit;
-                    if ( *sit == "\\\n" || *sit == "\n" || *sit == "." || *sit == "./" )
+                    if ( *sit == "\\\n" || *sit == "\n" || *sit == "." || *sit == "./" || (*sit).stripWhiteSpace() == "" )
                         continue;
                     QDir subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + *sit, "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
                     QString projectfile;
