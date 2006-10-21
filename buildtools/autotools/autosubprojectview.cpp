@@ -427,12 +427,6 @@ void AutoSubprojectView::slotRemoveSubproject()
 	return;
     }
 
-    // check for config.status
-    if( !QFileInfo(m_part->buildDirectory(), "config.status").exists() ){
-	KMessageBox::sorry(this, i18n("There is no config.status in the project root build directory. Run 'Configure' first"));
-	return;
-    }
-
     QStringList list = QStringList::split( QRegExp("[ \t]"), parent->variables["SUBDIRS"] );
     QStringList::Iterator it = list.find( spitem->subdir );
     QString subdirToRemove = spitem->subdir;
@@ -530,6 +524,11 @@ void AutoSubprojectView::slotRemoveSubproject()
 
 	QString relmakefile = ( parent->path + "/Makefile" ).mid( m_part->projectDirectory().length()+1 );
 	kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
+
+    // check for config.status
+	if( !QFileInfo(m_part->buildDirectory(), "config.status").exists() ){
+		return;
+	}
 
 	QString cmdline = "cd ";
 	cmdline += KProcess::quote(m_part->projectDirectory());
