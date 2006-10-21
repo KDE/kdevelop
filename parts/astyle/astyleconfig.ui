@@ -60,9 +60,6 @@
                                 <property name="text">
                                     <string>&amp;ANSI</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                                 <property name="buttonGroupId">
                                     <number>1</number>
                                 </property>
@@ -83,9 +80,6 @@ Indent NameSpace=false</string>
                                 <property name="text">
                                     <string>Linu&amp;x</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+X</string>
-                                </property>
                                 <property name="buttonGroupId">
                                     <number>3</number>
                                 </property>
@@ -105,9 +99,6 @@ Indent NameSpace=false</string>
                                 </property>
                                 <property name="text">
                                     <string>G&amp;NU</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
                                 </property>
                                 <property name="buttonGroupId">
                                     <number>4</number>
@@ -130,9 +121,6 @@ Indent NameSpace=false</string>
                                 <property name="text">
                                     <string>&amp;JAVA</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+J</string>
-                                </property>
                                 <property name="buttonGroupId">
                                     <number>5</number>
                                 </property>
@@ -152,9 +140,6 @@ Indent Switch=false</string>
                                 <property name="text">
                                     <string>&amp;User defined</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -171,9 +156,6 @@ Indent Switch=false</string>
                                 </property>
                                 <property name="text">
                                     <string>&amp;Kernighan &amp;&amp; Ritchie</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
                                 </property>
                                 <property name="buttonGroupId">
                                     <number>2</number>
@@ -197,7 +179,7 @@ Indent Namespaces=false
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Tab &amp;&amp; Brackets</string>
+                    <string>Tab &amp;&amp; Brac&amp;kets</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -220,9 +202,6 @@ Indent Namespaces=false
                                 </property>
                                 <property name="text">
                                     <string>Fill &amp;empty lines</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Fill empty lines with the white space of their previous lines.</string>
@@ -260,9 +239,6 @@ Indent Namespaces=false
                                         <property name="text">
                                             <string>U&amp;se tabs</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+S</string>
-                                        </property>
                                         <property name="checked">
                                             <bool>true</bool>
                                         </property>
@@ -293,9 +269,6 @@ Indent Namespaces=false
                                         </property>
                                         <property name="text">
                                             <string>Con&amp;vert tabs</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+V</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Convert tabs to spaces.</string>
@@ -328,9 +301,6 @@ Indent Namespaces=false
                                         <property name="text">
                                             <string>&amp;Use spaces:</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+U</string>
-                                        </property>
                                     </widget>
                                     <widget class="QSpinBox" row="0" column="2">
                                         <property name="name">
@@ -358,10 +328,7 @@ The number of spaces per tab is controled by the editor.</string>
                                             <bool>false</bool>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Force tabs</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+F</string>
+                                            <string>F&amp;orce tabs</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Force tabs to be used in areas Astyle would prefer to use spaces.</string>
@@ -406,9 +373,6 @@ The number of spaces per tab is controled by the editor.</string>
                                 <property name="text">
                                     <string>&amp;No Change</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -422,9 +386,6 @@ The number of spaces per tab is controled by the editor.</string>
                                 </property>
                                 <property name="text">
                                     <string>&amp;Break</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+B</string>
                                 </property>
                                 <property name="checked">
                                     <bool>false</bool>
@@ -440,9 +401,6 @@ The number of spaces per tab is controled by the editor.</string>
                                 <property name="text">
                                     <string>&amp;Attach</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Attach brackets to pre-block code (i.e. Java/K&amp;R style).</string>
                                 </property>
@@ -457,9 +415,6 @@ The number of spaces per tab is controled by the editor.</string>
                                 <property name="text">
                                     <string>Break &amp;closing headers</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+C</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Break brackets before closing headers (e.g. 'else', 'catch', ...).</string>
                                 </property>
@@ -470,9 +425,6 @@ The number of spaces per tab is controled by the editor.</string>
                                 </property>
                                 <property name="text">
                                     <string>Linu&amp;x style</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+X</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Break definition-block brackets and attach command-block brackets.</string>
@@ -595,9 +547,6 @@ belonging to a conditional header.</string>
                                 <property name="text">
                                     <string>&amp;Switches</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+S</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Indent 'switch' blocks, so that the inner 'case XXX:'
 headers are indented in relation to the switch block.</string>
@@ -610,9 +559,6 @@ headers are indented in relation to the switch block.</string>
                                 <property name="text">
                                     <string>&amp;Case statements</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+C</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Indent case blocks from the 'case XXX:' headers.
 Case statements not enclosed in blocks are NOT indented.</string>
@@ -624,9 +570,6 @@ Case statements not enclosed in blocks are NOT indented.</string>
                                 </property>
                                 <property name="text">
                                     <string>Cla&amp;sses</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+S</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Indent 'class' blocks, so that the inner 'public:',
@@ -641,9 +584,6 @@ relation to the class block.</string>
                                 <property name="text">
                                     <string>&amp;Brackets</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+B</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Add extra indentation to '{' and '}' block brackets.</string>
                                 </property>
@@ -655,9 +595,6 @@ relation to the class block.</string>
                                 <property name="text">
                                     <string>&amp;Namespaces</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Indent the contents of namespace blocks.</string>
                                 </property>
@@ -668,9 +605,6 @@ relation to the class block.</string>
                                 </property>
                                 <property name="text">
                                     <string>L&amp;abels</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
                                 </property>
                                 <property name="checked">
                                     <bool>false</bool>
@@ -688,9 +622,6 @@ flushed completely to the left (which is the default).</string>
                                 <property name="text">
                                     <string>Bloc&amp;ks</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Add extra indentation entire blocks (including brackets).</string>
                                 </property>
@@ -703,10 +634,7 @@ flushed completely to the left (which is the default).</string>
                                     <bool>true</bool>
                                 </property>
                                 <property name="text">
-                                    <string>#&amp;Preprocessors</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+P</string>
+                                    <string>#Prepr&amp;ocessors</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Indent multi-line #define statements.</string>
@@ -745,9 +673,6 @@ flushed completely to the left (which is the default).</string>
                                 <property name="text">
                                     <string>&amp;Break blocks</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+B</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Insert empty lines around unrelated blocks, labels, classes, ...</string>
                                 </property>
@@ -758,9 +683,6 @@ flushed completely to the left (which is the default).</string>
                                 </property>
                                 <property name="text">
                                     <string>Break block&amp;s all</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+S</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Like --break-blocks, except also insert empty lines 
@@ -773,9 +695,6 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                                 </property>
                                 <property name="text">
                                     <string>Break i&amp;f-else</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+F</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Break 'else if()' statements into two different lines.</string>
@@ -801,9 +720,6 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                                 <property name="text">
                                     <string>Add spa&amp;ces inside parentheses</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+C</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Insert space padding around parenthesis on the inside only.</string>
                                 </property>
@@ -814,9 +730,6 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                                 </property>
                                 <property name="text">
                                     <string>A&amp;dd spaces outside parentheses</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+D</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Insert space padding around parenthesis on the outside only.</string>
@@ -829,9 +742,6 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                                 <property name="text">
                                     <string>Remove &amp;unnecessary spaces around parentheses</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Remove unnecessary space padding around parenthesis.</string>
                                 </property>
@@ -842,9 +752,6 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                                 </property>
                                 <property name="text">
                                     <string>&amp;Add spaces around operators</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Insert space paddings around operators.</string>
@@ -870,9 +777,6 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                                 <property name="text">
                                     <string>&amp;Keep one-line statements</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Don't break lines containing multiple statements into
 multiple single-statement lines.</string>
@@ -883,10 +787,7 @@ multiple single-statement lines.</string>
                                     <cstring>Keep_Blocks</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Kee&amp;p one-line blocks</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+P</string>
+                                    <string>Keep &amp;one-line blocks</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Don't break blocks residing completely on one line.</string>
@@ -1236,6 +1137,38 @@ multiple single-statement lines.</string>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>ConfigTabs</tabstop>
+    <tabstop>Style_UserDefined</tabstop>
+    <tabstop>Fill_Tabs</tabstop>
+    <tabstop>Fill_TabCount</tabstop>
+    <tabstop>Fill_ForceTabs</tabstop>
+    <tabstop>Fill_SpaceCount</tabstop>
+    <tabstop>Fill_ConvertTabs</tabstop>
+    <tabstop>Fill_EmptyLines</tabstop>
+    <tabstop>Brackets_None</tabstop>
+    <tabstop>Brackets_CloseHeaders</tabstop>
+    <tabstop>Indent_Switches</tabstop>
+    <tabstop>Indent_Cases</tabstop>
+    <tabstop>Indent_Classes</tabstop>
+    <tabstop>Indent_Brackets</tabstop>
+    <tabstop>Indent_Namespaces</tabstop>
+    <tabstop>Indent_Labels</tabstop>
+    <tabstop>Indent_Blocks</tabstop>
+    <tabstop>Indent_Preprocessors</tabstop>
+    <tabstop>Continue_MaxStatement</tabstop>
+    <tabstop>Continue_MinConditional</tabstop>
+    <tabstop>Block_Break</tabstop>
+    <tabstop>Block_BreakAll</tabstop>
+    <tabstop>Block_IfElse</tabstop>
+    <tabstop>Pad_ParenthesesIn</tabstop>
+    <tabstop>Pad_ParenthesesOut</tabstop>
+    <tabstop>Pad_ParenthesesUn</tabstop>
+    <tabstop>Pad_Operators</tabstop>
+    <tabstop>Keep_Statements</tabstop>
+    <tabstop>Keep_Blocks</tabstop>
+    <tabstop>StyleExample</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
