@@ -612,7 +612,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
     {
         if ( !origValues.contains( *it ) && !remove )
         {
-            while ( !origValues.isEmpty() origValues.last() == "\n" )
+            while ( !origValues.isEmpty() && origValues.last() == "\n" )
                 origValues.pop_back();
             if ( origValues.count() > 0 && origValues.last() != "\\\n" )
             {
