@@ -241,11 +241,6 @@ private:
     QMap<QString, Scope*> m_subProjects;
 //     bool m_isQt4Project;
 
-    /* Caching is a bit complicated, need to store var+op as key and inside the calcValuesFromStatements
-     * need to fetch values from parents, then iterate over the 3 ops and accordingly update the list, then
-     * we can return the result and we save the iteration of our own statement list
-     */
-    QMap<QString, QStringList> m_varCache;
     bool m_isEnabled;
     TrollProjectPart* m_part;
 #ifdef DEBUG
