@@ -616,6 +616,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
                 origValues.pop_back();
             if ( origValues.count() > 0 && origValues.last() != "\\\n" )
             {
+                origValues.append( " " );
                 origValues.append( "\\\n" );
                 kdDebug(9024) << " indent == |" << indent << "|" <<endl;
                 if( indent != "" )
