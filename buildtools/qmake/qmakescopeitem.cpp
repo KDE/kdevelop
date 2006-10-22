@@ -18,11 +18,11 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdirwatch.h>
 
 #include "scope.h"
 #include "pathutil.h"
 #include "trollprojectwidget.h"
-
 /*
  * Class qProjectItem
  */
@@ -303,7 +303,16 @@ QMakeScopeItem::QMakeScopeItem( QMakeScopeItem *parent, const QString &text, Sco
 }
 
 QMakeScopeItem::~QMakeScopeItem()
-{}
+{
+    QMap<GroupItem::GroupType, GroupItem*>::iterator it;
+    for ( it = groups.begin() ; it != groups.end() ; ++it )
+    {
+        GroupItem* s = it.data();
+        delete s;
+    }
+    groups.clear();
+
+}
 
 QString QMakeScopeItem::relativePath()
 {
@@ -729,6 +738,29 @@ QMakeScopeItem* QMakeScopeItem::projectFileItem()
             return parentitem->projectFileItem();
     }
     return this;
+}
+
+void QMakeScopeItem::reloadProject()
+{
+    QListViewItem* item = firstChild();
+    while( item )
+    {
+        QListViewItem* olditem = item;
+        item = olditem->nextSibling();
+        delete olditem;
+    }
+    QMap<GroupItem::GroupType, GroupItem*>::iterator it;
+    for ( it = groups.begin() ; it != groups.end() ; ++it )
+    {
+        GroupItem* s = it.data();
+        QListView* l = s->listView();
+        if(l)
+            l->removeItem(s);
+        delete s;
+    }
+    groups.clear();
+    scope->reloadProject();
+    init();
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

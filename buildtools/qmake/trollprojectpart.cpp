@@ -24,6 +24,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdirwatch.h>
 #include <qmessagebox.h>
 #include <kdevgenericfactory.h>
 #include <kaction.h>
@@ -63,6 +64,8 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     setXMLFile("kdevtrollproject.rc");
 
     m_executeAfterBuild = false;
+
+    m_dirWatch = new KDirWatch(this);
 
     m_widget = new TrollProjectWidget(this);
     m_widget->setIcon(SmallIcon("qmakerun"));
@@ -647,6 +650,11 @@ QStringList TrollProjectPart::distFiles() const
 bool TrollProjectPart::isQt4Project() const
 {
 	return ( DomUtil::readIntEntry( *projectDom(), "kdevcppsupport/qt/version", 3 ) == 4 );
+}
+
+KDirWatch* TrollProjectPart::dirWatch()
+{
+  return m_dirWatch;
 }
 
 #include "trollprojectpart.moc"

@@ -25,7 +25,7 @@
 
 class KDialogBase;
 class TrollProjectWidget;
-
+class KDirWatch;
 
 class TrollProjectPart : public KDevBuildTool
 {
@@ -38,6 +38,7 @@ public:
     bool isTMakeProject() const { return m_tmakeProject; }
     bool isQt4Project() const;
     bool isDirty();
+    KDirWatch* dirWatch();
     virtual Options options() const;
     QStringList distFiles() const;
 
@@ -89,6 +90,8 @@ private:
     QString m_buildCommand;
     QString m_defaultQtDir;
     QStringList m_availableQtDirList;
+
+    KDirWatch* m_dirWatch;
 
     friend class TrollProjectWidget;
     friend class ProjectRunOptionsDlg;

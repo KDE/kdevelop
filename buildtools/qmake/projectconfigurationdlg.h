@@ -49,6 +49,7 @@ public:
     ~ProjectConfigurationDlg();
     void updateControls();
     void updateSubproject( QMakeScopeItem* _item );
+    QMakeScopeItem* currentProjectItem() { return myProjectItem; }
 
 public slots:
     //  virtual void           radioLibrarytoggled(bool);

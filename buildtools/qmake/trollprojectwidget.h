@@ -128,6 +128,7 @@ private slots:
     void slotCreateScope( QMakeScopeItem *spitem = 0 );
     void slotRemoveScope( QMakeScopeItem *spitem = 0 );
     void slotDisableSubproject( QMakeScopeItem* spitem = 0 );
+    void slotProjectDirty( const QString& );
 
 private:
     void cleanDetailView( QMakeScopeItem *item );
@@ -152,6 +153,8 @@ private:
     TrollProjectWidget::SaveType dialogSaveBehaviour() const;
 
     QMakeScopeItem *findSubprojectForScope( QMakeScopeItem *scope );
+
+    void reloadProjectFromFile( QMakeScopeItem* item );
 
     QVBox *overviewContainer;
     KListView *overview;

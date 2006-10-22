@@ -93,6 +93,7 @@ public:
     void removeValue( const QString& var, const QString& value );
     void addValues( const QString& var, const QStringList& values );
     void removeValues( const QString& var, const QStringList& values );
+    void reloadProject();
     ~QMakeScopeItem();
 
     QMap<GroupItem::GroupType, GroupItem*> groups;

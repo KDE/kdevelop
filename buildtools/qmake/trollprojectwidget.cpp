@@ -54,6 +54,7 @@
 #include <kprocess.h>
 #include <kinputdialog.h>
 #include <kdeversion.h>
+#include <kdirwatch.h>
 #include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
 #include <kio/netaccess.h>
@@ -303,6 +304,8 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     executeTargetButton->setEnabled( false );
 
     m_configDlg = new ProjectConfigurationDlg( overview, this, this );
+
+    connect( m_part->dirWatch(), SIGNAL( dirty(const QString&) ), this, SLOT( slotProjectDirty(const QString&) ) );
 }
 
 
@@ -333,7 +336,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
 
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 
-    m_rootScope = new Scope( proname, m_part->isQt4Project() );
+    m_rootScope = new Scope( proname, m_part );
     m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
     m_rootSubproject->setOpen( true );
     if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).contains("subdirs") )
@@ -2330,6 +2333,45 @@ void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
         spitem->scope->saveToFile();
     }
 }
+
+void TrollProjectWidget::slotProjectDirty(const QString& path)
+{
+    kdDebug(9024) << "File is dirty:" << path << " using method " << endl;
+    if( KMessageBox::warningYesNo(this, i18n("The project file \"%1\" has changed on disk.\n\nDo you want to reload the it?").arg(path), i18n("Project File Changed"), i18n("Reload"), i18n("Do Not Reload"), "trollproject_reload_project_file" ) != KMessageBox::No )
+    {
+        m_part->dirWatch()->stopScan();
+        QListViewItemIterator it(m_rootSubproject);
+        QValueList<QMakeScopeItem*> itemstoreload;
+        while( it.current() )
+        {
+            QMakeScopeItem* projectitem = static_cast<QMakeScopeItem*>( it.current() );
+            if( projectitem->scope->scopeType() == Scope::ProjectScope
+                || projectitem->scope->scopeType() == Scope::IncludeScope )
+            {
+                QString projectfile = projectitem->scope->projectDir() + QString(QChar(QDir::separator())) + projectitem->scope->fileName();
+                if( projectfile == path )
+                {
+                    itemstoreload.append(projectitem);
+                }
+            }
+            it++;
+        }
+      kdDebug(9024) << "Reloading projects, involves # QMakeScopeItems: " << itemstoreload.size() << endl;
+        QValueList<QMakeScopeItem*>::const_iterator reloadit = itemstoreload.begin();
+        for( ; reloadit != itemstoreload.end() ; ++reloadit )
+        {
+            (*reloadit)->reloadProject();
+            if( m_configDlg->isShown() && m_configDlg->currentProjectItem() == (*reloadit) )
+            {
+                m_configDlg->reject();
+                m_configDlg->updateSubproject(m_shownSubproject);
+                m_configDlg->show();
+            }
+        }
+        m_part->dirWatch()->startScan();
+    }
+}
+
 
 #include "trollprojectwidget.moc"
 

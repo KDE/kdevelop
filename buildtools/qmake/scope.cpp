@@ -19,20 +19,25 @@
 #include <qpair.h>
 #include <qmakedriver.h>
 
+#include <kdirwatch.h>
+
 #include "pathutil.h"
+#include "trollprojectpart.h"
 
 const QStringList Scope::KnownVariables = QStringList() << "QT" << "CONFIG" << "TEMPLATE" << "SUBDIRS" << "VERSION" << "LIBS" << "target.path" << "INSTALLS" << "MAKEFILE" << "TARGETDEPS" << "INCLUDEPATH" << "TARGET" << "DESTDIR" << "DEFINES" << "QMAKE_CXXFLAGS_DEBUG" << "QMAKE_CXXFLAGS_RELEASE" << "OBJECTS_DIR" << "UI_DIR" << "MOC_DIR" << "IDL_COMPILER" << "IDL_OPTIONS" << "RCC_DIR" << "IDLS" << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES" << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES" << "INTERFACES" << "FORMS" ;
 
 const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "release" << "debug_and_release" << "warn_on" << "warn_off" << "staticlib" << "dll" << "plugin" << "designer" << "create_pkgconf" << "create_libtool" << "qt" << "console" << "windows" << "x11" << "thread" << "exceptions" << "stl" << "rtti" << "opengl" << "thread" << "ordered" << "precompile_header" << "qtestlib" << "uitools" << "dbus" << "assistant" << "build_all";
 
-Scope::Scope( const QString &filename, bool isQt4Project )
-        : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_isQt4Project( isQt4Project ), m_isEnabled( true )
+Scope::Scope( const QString &filename, TrollProjectPart* part )
+        : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_isEnabled( true ), m_part(part)
 {
     if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
     {
         m_root = new QMake::ProjectAST();
         m_root->setFileName( filename );
     }
+    kdDebug( 9024 ) << "Adding file: " << filename << " to dirwatch" << endl;
+    m_part->dirWatch()->addFile(filename);
 }
 
 Scope::~Scope()
@@ -74,40 +79,34 @@ Scope::~Scope()
         delete m_root;
 }
 
-Scope::Scope( bool isQt4Project, QMake::ProjectAST* scope, Scope* parent )
-        : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_isQt4Project( isQt4Project ), m_isEnabled( true )
+Scope::Scope( QMake::ProjectAST* scope, Scope* parent, TrollProjectPart* part )
+        : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_isEnabled( true ), m_part(part)
 {
     init();
 }
 
-Scope::Scope( bool isQt4Project, Scope* parent, const QString& filename )
-        : m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_isQt4Project( isQt4Project ), m_isEnabled( true )
+Scope::Scope( Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled )
+: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_isEnabled( isEnabled ), m_part(part)
 {
     if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
     {
         m_root = new QMake::ProjectAST();
         m_root->setFileName( filename );
     }
+    kdDebug( 9024 ) << "Adding file: " << filename << " to dirwatch" << endl;
+    m_part->dirWatch()->addFile(filename);
 }
 
-Scope::Scope( bool isQt4Project, Scope* parent, const QString& filename, bool isEnabled )
-: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_isQt4Project( isQt4Project ), m_isEnabled( isEnabled )
-{
-    if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
-    {
-        m_root = new QMake::ProjectAST();
-        m_root->setFileName( filename );
-    }
-}
-
-Scope::Scope( bool isQt4Project, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile )
-        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_isQt4Project( isQt4Project ), m_isEnabled( true )
+Scope::Scope( Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part )
+        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_isEnabled( true ), m_part(part)
 {
     if ( !loadFromFile( path + QString( QChar( QDir::separator() ) ) + incfile ) && !QFileInfo( path + QString( QChar( QDir::separator() ) ) + incfile ).exists() )
     {
         m_root = new QMake::ProjectAST();
         m_root->setFileName( QString( path + QString( QChar( QDir::separator() ) ) + incfile ) );
     }
+    kdDebug( 9024 ) << "Adding file: " << m_root->fileName() << " to dirwatch" << endl;
+    m_part->dirWatch()->addFile(m_root->fileName());
 }
 
 bool Scope::loadFromFile( const QString& filename )
@@ -140,7 +139,8 @@ void Scope::saveToFile() const
         filename = m_parent->projectDir() + QString( QChar( QDir::separator() ) ) + m_incast->projectName;
     if ( filename.isEmpty() )
         return ;
-
+    kdDebug(9024) << "Stopping dirscan for: " << filename << endl;
+    m_part->dirWatch()->removeFile( filename );
     QFile file( filename );
     if ( file.open( IO_WriteOnly ) )
     {
@@ -149,11 +149,13 @@ void Scope::saveToFile() const
         QString astbuffer;
         m_root->writeBack( astbuffer );
         out << astbuffer;
+        file.close();
     }
 #ifdef DEBUG
     Scope::PrintAST pa;
     pa.processProject(m_root);
 #endif
+    m_part->dirWatch()->addFile( filename );
 }
 
 void Scope::addToPlusOp( const QString& variable, const QStringList& values )
@@ -265,11 +267,11 @@ QStringList Scope::variableValues( const QString& variable ) const
     {
         result << "gui" << "core";
     }
-    else if ( variable == "CONFIG" && m_isQt4Project )
+    else if ( variable == "CONFIG" && m_part->isQt4Project() )
     {
         result << "warn_on" << "qt" << "stl";
     }
-    else if ( variable == "CONFIG" && !m_isQt4Project )
+    else if ( variable == "CONFIG" && !m_part->isQt4Project() )
     {
         result << "qt" << "warn_on" << "thread";
     }
@@ -390,7 +392,7 @@ Scope* Scope::createFunctionScope( const QString& funcName, const QString& args 
     ast->addChildAST( new QMake::NewLineAST() );
     m_root->addChildAST( ast );
     m_root->addChildAST( new QMake::NewLineAST() );
-    Scope* funcScope = new Scope( m_isQt4Project, ast, this );
+    Scope* funcScope = new Scope( ast, this, m_part );
     m_funcScopes.insert( funcScopeKey( ast ), funcScope );
     return funcScope;
 }
@@ -406,9 +408,9 @@ Scope* Scope::createSimpleScope( const QString& scopename )
     ast->setDepth( m_root->depth() );
     m_root->addChildAST( ast );
     m_root->addChildAST( new QMake::NewLineAST() );
-    if ( isQt4Project() )
+    if ( m_part->isQt4Project() )
         addToPlusOp( "CONFIG", QStringList( scopename ) );
-    Scope* simpleScope = new Scope( m_isQt4Project, ast, this );
+    Scope* simpleScope = new Scope( ast, this, m_part );
     m_simpleScopes.insert( scopename, simpleScope );
     return simpleScope;
 }
@@ -430,7 +432,7 @@ Scope* Scope::createIncludeScope( const QString& includeFile, bool negate )
     QMake::IncludeAST* ast = new QMake::IncludeAST();
     ast->setDepth( m_root->depth() );
     ast->projectName = includeFile;
-    Scope* incScope = new Scope( m_isQt4Project, funcScope, ast, projectDir(), ast->projectName );
+    Scope* incScope = new Scope( funcScope, ast, projectDir(), ast->projectName, m_part );
     if ( incScope->scopeType() != InvalidScope )
     {
         funcScope->m_incScopes.insert( includeFile, incScope );
@@ -470,7 +472,7 @@ Scope* Scope::createSubProject( const QString& dir )
 
             kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
 
-            Scope* s = new Scope( m_isQt4Project, this, filename );
+            Scope* s = new Scope( this, filename, m_part );
             if ( s->scopeType() != InvalidScope )
             {
                 if( s->variableValues("TEMPLATE").isEmpty() )
@@ -626,7 +628,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
                 if( indent != "" )
                     origValues.append( indent );
             }else if ( origValues.isEmpty() )
-                origValues.append( " " );
+                origValues.append(" ");
             if( (*it).contains(" ") || (*it).contains("\t") || (*it).contains("\n") )
                 origValues.append( "\""+*it+"\"" );
             else
@@ -644,7 +646,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
     }
     while( !origValues.isEmpty() && (origValues.last() == "\\\n"
             || origValues.last() == "\n"
-            || origValues.last().stripWhiteSpace() == "" ) )
+            || origValues.last().stripWhiteSpace() == "" ) && !origValues.isEmpty() )
         origValues.pop_back();
     origValues.append("\n");
 }
@@ -776,17 +778,17 @@ void Scope::init()
             QMake::ProjectAST * p = static_cast<QMake::ProjectAST*>( *it );
             if ( p->isFunctionScope() )
             {
-                m_funcScopes.insert( funcScopeKey( p ), new Scope( m_isQt4Project, p, this ) );
+                m_funcScopes.insert( funcScopeKey( p ), new Scope( p, this, m_part ) );
             }
             else if ( p->isScope() )
             {
-                m_simpleScopes.insert( p->scopedID, new Scope( m_isQt4Project, p, this ) );
+                m_simpleScopes.insert( p->scopedID, new Scope( p, this, m_part ) );
             }
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
         {
             QMake::IncludeAST * i = static_cast<QMake::IncludeAST*>( *it );
-            m_incScopes.insert( i->projectName, new Scope( m_isQt4Project, this, i, projectDir(), i->projectName ) );
+            m_incScopes.insert( i->projectName, new Scope( this, i, projectDir(), i->projectName, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
@@ -806,7 +808,7 @@ void Scope::init()
                     else
                         projectfile = subproject.entryList().first();
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
-                    m_subProjects.insert( *sit, new Scope( m_isQt4Project, this, subproject.absFilePath( projectfile ), ( m->op != "-=" ) ) );
+                    m_subProjects.insert( *sit, new Scope( this, subproject.absFilePath( projectfile ), m_part, ( m->op != "-=" )) );
                 }
             }
             else if ( !KnownVariables.contains( m->scopedID ) && !m->scopedID.contains( ".files" ) && !m->scopedID.contains( ".path" ) && !variableValues("INSTALL").contains(m->scopedID) )
@@ -839,7 +841,6 @@ const QValueList<Scope*> Scope::scopesInOrder() const
     QValueList<Scope*> result;
     if ( !m_root || m_root->m_children.isEmpty() )
         return result;
-
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {
@@ -1009,6 +1010,57 @@ QStringList Scope::removeWhiteSpace(const QStringList& list)
             result.append(s);
     }
     return result;
+}
+
+bool Scope::isQt4Project() const
+{
+    return m_part->isQt4Project();
+}
+
+void Scope::reloadProject()
+{
+    if ( !m_root->isProject() )
+        return;
+
+//     m_part->dirWatch()->removeFile( m_root->fileName() );
+    QString filename = m_root->fileName();
+    QMap<QString, Scope*>::iterator it;
+    for ( it = m_funcScopes.begin() ; it != m_funcScopes.end() ; ++it )
+    {
+        Scope* s = it.data();
+        delete s;
+    }
+    m_funcScopes.clear();
+
+    for ( it = m_simpleScopes.begin() ; it != m_simpleScopes.end() ; ++it )
+    {
+        Scope* s = it.data();
+        delete s;
+    }
+    m_simpleScopes.clear();
+
+    for ( it = m_incScopes.begin() ; it != m_incScopes.end() ; ++it )
+    {
+        Scope* s = it.data();
+        delete s;
+    }
+    m_incScopes.clear();
+
+    for ( it = m_subProjects.begin() ; it != m_subProjects.end() ; ++it )
+    {
+        Scope* s = it.data();
+        delete s;
+    }
+    m_subProjects.clear();
+    if ( m_root->isProject() )
+        delete m_root;
+    if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
+    {
+        m_root = new QMake::ProjectAST();
+        m_root->setFileName( filename );
+    }
+//     kdDebug( 9024 ) << "Adding file: " << filename << "to dirwatch" << endl;
+//     m_part->dirWatch()->addFile( m_root->fileName() );
 }
 
 #ifdef DEBUG

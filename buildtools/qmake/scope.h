@@ -38,6 +38,7 @@
  */
 
 class Scope;
+class TrollProjectPart;
 
 class Scope
 {
@@ -53,7 +54,7 @@ public:
     static const QStringList KnownVariables;
     static const QStringList KnownConfigValues;
 
-    Scope( const QString &filename, bool isQt4Project = false );
+    Scope( const QString &filename, TrollProjectPart* part );
     ~Scope();
 
     void saveToFile() const;
@@ -142,7 +143,7 @@ public:
     bool deleteSubProject( const QString& dir, bool deleteSubdir );
 
     /* find out wether the project is Qt4 or Qt3 */
-    bool isQt4Project() const { return m_isQt4Project; }
+    bool isQt4Project() const ;
 
     /* Provide a Map of Custom variables */
     const QMap<QPair<QString, QString>, QStringList> customVariables() const;
@@ -158,6 +159,8 @@ public:
     bool isEnabled() { return m_isEnabled; }
 
     static QStringList removeWhiteSpace(const QStringList& list);
+
+    void reloadProject();
 
 #ifdef DEBUG
     void printTree();
@@ -197,18 +200,17 @@ private:
     /*
      * just initializes the lists from the scope
      */
-    Scope( bool isQt4Project, QMake::ProjectAST* root, Scope* parent );
+    Scope( QMake::ProjectAST* root, Scope* parent, TrollProjectPart* part );
     /*
      * reads the given filename and parses it. If it doesn't exist creates an empty
      * ProjectAST with the given filename
      */
-    Scope( bool isQt4Project, Scope* parent, const QString& filename );
-    Scope( bool isQt4Project, Scope* parent, const QString& filename, bool isEnabled );
+    Scope( Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled = true );
     /*
      * Creates a scope for an include statement, parses the file and initializes the Scope
      * Create an empty ProjectAST if the file cannot be found or parsed.
      */
-    Scope( bool isQt4Project, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile );
+    Scope( Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part );
 
 
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
@@ -237,7 +239,7 @@ private:
     QMap<QString, Scope*> m_funcScopes;
     QMap<QString, Scope*> m_incScopes;
     QMap<QString, Scope*> m_subProjects;
-    bool m_isQt4Project;
+//     bool m_isQt4Project;
 
     /* Caching is a bit complicated, need to store var+op as key and inside the calcValuesFromStatements
      * need to fetch values from parents, then iterate over the 3 ops and accordingly update the list, then
@@ -245,6 +247,7 @@ private:
      */
     QMap<QString, QStringList> m_varCache;
     bool m_isEnabled;
+    TrollProjectPart* m_part;
 #ifdef DEBUG
     class PrintAST : QMake::ASTVisitor
     {
@@ -276,7 +279,6 @@ private:
         QString getIndent();
         QString replaceWs(QString);
         int indent;
-
     };
 #endif
 
