@@ -79,7 +79,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
     controller(0), previousDebuggerState_(s_dbgNotStarted), 
-    justRestarted_(false), needRebuild_(true), justOpened_(true),
+    justRestarted_(false), needRebuild_(true),
     running_(false)
 {
     setObjId("DebuggerInterface");
@@ -796,7 +796,6 @@ void DebuggerPart::slotFileSaved()
 
 void DebuggerPart::slotProjectCompiled()
 {
-    justOpened_ = false;
     needRebuild_ = false;
 }
 
@@ -836,46 +835,35 @@ void DebuggerPart::slotRun()
         bool rebuild = false;
         if (needRebuild_ && project())
         {
-            if (justOpened_)
+            // We don't add "Don't ask again" checkbox to the
+            // message because it's not clear if one cooked
+            // decision will be right for all cases when we're starting
+            // debugging with modified code, and because it's not clear
+            // how user can reset this "don't ask again" setting.
+            int r = KMessageBox::questionYesNoCancel(
+                0, 
+                "<b>" + i18n("Rebuild the project?") + "</b>" +
+                i18n("<p>The project is out of date. Rebuild it?"),
+                i18n("Rebuild the project?"));
+            if (r == KMessageBox::Cancel)
             {
-                // Always rebuild the project after opening. User likely
-                // don't remember if he modified anything, so can't say
-                // anything definitive.
-                rebuild = true;
-                justOpened_ = false;
+                return;
             }
+            if (r == KMessageBox::Yes)
+            {
+                rebuild = true;
+            }                
             else
             {
-                // We don't add "Don't ask again" checkbox to the
-                // message because it's not clear if one cooked
-                // decision will be right for all cases when we're starting
-                // debugging with modified code, and because it's not clear
-                // how user can reset this "don't ask again" setting.
-                int r = KMessageBox::questionYesNoCancel(
-                    0, 
-                    "<b>" + i18n("Rebuild the project?") + "</b>" +
-                    i18n("<p>The project is out of date. Rebuild it?"),
-                    i18n("Rebuild the project?"));
-                if (r == KMessageBox::Cancel)
-                {
-                    return;
-                }
-                if (r == KMessageBox::Yes)
-                {
-                    rebuild = true;
-                }                
-                else
-                {
-                    // If the user said don't rebuild, try to avoid
-                    // asking the same question again. 
-                    // Note that this only affects 'were any files changed'
-                    // check, if a file is changed but not saved we'll
-                    // still ask the user again. That's bad, but I don't know
-                    // a better solution -- it's hard to check that 
-                    // the file has the same content as it had when the user
-                    // last answered 'no, don't rebuild'.
-                    needRebuild_ = false;
-                }
+                // If the user said don't rebuild, try to avoid
+                // asking the same question again. 
+                // Note that this only affects 'were any files changed'
+                // check, if a file is changed but not saved we'll
+                // still ask the user again. That's bad, but I don't know
+                // a better solution -- it's hard to check that 
+                // the file has the same content as it had when the user
+                // last answered 'no, don't rebuild'.
+                needRebuild_ = false;
             }
 
             if (rebuild)

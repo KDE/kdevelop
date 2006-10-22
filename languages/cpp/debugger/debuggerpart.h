@@ -151,11 +151,6 @@ private:
     // when it's opened, and then set to 'true' each time a file is
     // modified.    
     bool needRebuild_;
-    // Flag that's true if the project was just opened. Used to distinguish
-    // 'just openeded project, don't know if it's up to date' and
-    // 'some files were modified' cases, when presenting 'rebuild project'
-    // dialog to the user.
-    bool justOpened_;
 
     // Set by 'startDebugger' and cleared by 'slotStopDebugger'.
     bool running_;
