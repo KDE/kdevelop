@@ -31,13 +31,20 @@ const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "releas
 Scope::Scope( const QString &filename, TrollProjectPart* part )
         : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_isEnabled( true ), m_part(part)
 {
-    if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
+    if ( !loadFromFile( filename ) )
     {
-        m_root = new QMake::ProjectAST();
-        m_root->setFileName( filename );
+        if( !QFileInfo( filename ).exists() )
+        {
+            m_root = new QMake::ProjectAST();
+            m_root->setFileName( filename );
+        }else
+        {
+            delete m_root;
+            m_root = 0;
+        }
     }
-    kdDebug( 9024 ) << "Adding file: " << filename << " to dirwatch" << endl;
-    m_part->dirWatch()->addFile(filename);
+    if( m_root )
+        m_part->dirWatch()->addFile(filename);
 }
 
 Scope::~Scope()
@@ -75,7 +82,7 @@ Scope::~Scope()
     }
     m_subProjects.clear();
 
-    if ( m_root->isProject() )
+    if ( m_root && m_root->isProject() )
         delete m_root;
 }
 
@@ -88,25 +95,39 @@ Scope::Scope( QMake::ProjectAST* scope, Scope* parent, TrollProjectPart* part )
 Scope::Scope( Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled )
 : m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_isEnabled( isEnabled ), m_part(part)
 {
-    if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
+if ( !loadFromFile( filename ) )
     {
-        m_root = new QMake::ProjectAST();
-        m_root->setFileName( filename );
+        if( !QFileInfo( filename ).exists() )
+        {
+            m_root = new QMake::ProjectAST();
+            m_root->setFileName( filename );
+        }else
+        {
+            delete m_root;
+            m_root = 0;
+        }
     }
-    kdDebug( 9024 ) << "Adding file: " << filename << " to dirwatch" << endl;
-    m_part->dirWatch()->addFile(filename);
+    if( m_root )
+        m_part->dirWatch()->addFile(filename);
 }
 
 Scope::Scope( Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part )
         : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_isEnabled( true ), m_part(part)
 {
-    if ( !loadFromFile( path + QString( QChar( QDir::separator() ) ) + incfile ) && !QFileInfo( path + QString( QChar( QDir::separator() ) ) + incfile ).exists() )
+    if ( !loadFromFile( path + QString( QChar( QDir::separator() ) ) + incfile ) )
     {
-        m_root = new QMake::ProjectAST();
-        m_root->setFileName( QString( path + QString( QChar( QDir::separator() ) ) + incfile ) );
+        if( !QFileInfo( path + QString( QChar( QDir::separator() ) ) + incfile ).exists() )
+        {
+            m_root = new QMake::ProjectAST();
+            m_root->setFileName( QString( path + QString( QChar( QDir::separator() ) ) + incfile ) );
+        }else
+        {
+            delete m_root;
+            m_root = 0;
+        }
     }
-    kdDebug( 9024 ) << "Adding file: " << m_root->fileName() << " to dirwatch" << endl;
-    m_part->dirWatch()->addFile(m_root->fileName());
+    if( m_root )
+        m_part->dirWatch()->addFile( m_root->fileName() );
 }
 
 bool Scope::loadFromFile( const QString& filename )
@@ -209,7 +230,7 @@ void Scope::removeFromEqualOp( const QString& variable, const QStringList& value
 
 void Scope::setPlusOp( const QString& variable, const QStringList& values )
 {
-    if( listsEqual(values, variableValuesForOp(variable, "+=") ) )
+    if( !m_root || Scope::listsEqual(values, variableValuesForOp(variable, "+=") ) )
         return;
 
     updateVariable( variable, "+=", variableValuesForOp( variable, "+=" ), true );
@@ -218,7 +239,7 @@ void Scope::setPlusOp( const QString& variable, const QStringList& values )
 
 void Scope::setEqualOp( const QString& variable, const QStringList& values )
 {
-    if( listsEqual(values, variableValuesForOp(variable, "=") ) )
+    if( !m_root || Scope::listsEqual(values, variableValuesForOp(variable, "=") ) )
         return;
 
     updateVariable( variable, "=", variableValuesForOp( variable, "=" ), true );
@@ -227,7 +248,7 @@ void Scope::setEqualOp( const QString& variable, const QStringList& values )
 
 void Scope::setMinusOp( const QString& variable, const QStringList& values )
 {
-    if( listsEqual(values, variableValuesForOp(variable, "-=") ) )
+    if( !m_root || Scope::listsEqual(values, variableValuesForOp(variable, "-=") ) )
         return;
 
     updateVariable( variable, "-=", variableValuesForOp( variable, "-=" ), true );
@@ -237,6 +258,10 @@ void Scope::setMinusOp( const QString& variable, const QStringList& values )
 QStringList Scope::variableValuesForOp( const QString& variable , const QString& op ) const
 {
     QStringList result;
+
+    if( !m_root )
+        return result;
+
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {
@@ -285,6 +310,9 @@ QStringList Scope::variableValues( const QString& variable ) const
 
 QStringList Scope::calcValuesFromStatements( const QString& variable, QStringList result, QMake::AST* stopHere ) const
 {
+    if( !m_root )
+        return result;
+
     if ( scopeType() == FunctionScope || scopeType() == SimpleScope )
     {
         result = m_parent->calcValuesFromStatements( variable, result , this->m_root );
@@ -352,7 +380,7 @@ Scope::ScopeType Scope::scopeType() const
 QString Scope::scopeName() const
 {
     if ( !m_root )
-        return QString();
+        return "";
     if ( m_incast )
         return "include<" + m_incast->projectName + ">";
     else if ( m_root->isFunctionScope() )
@@ -372,6 +400,8 @@ QString Scope::scopeName() const
 
 QString Scope::fileName() const
 {
+    if( !m_root )
+        return "";
     if ( m_incast )
         return m_incast->projectName;
     else if ( m_root->isProject() )
@@ -450,6 +480,9 @@ Scope* Scope::createIncludeScope( const QString& includeFile, bool negate )
 
 Scope* Scope::createSubProject( const QString& dir )
 {
+    if( !m_root )
+        return 0;
+
     QDir curdir( projectDir() );
     QValueList<QMake::AST*>::iterator it = findExistingVariable( "TEMPLATE" );
     if ( it != m_root->m_children.end() )
@@ -610,6 +643,9 @@ bool Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
 
 void Scope::updateValues( QStringList& origValues, const QStringList& newValues, bool remove, QString indent )
 {
+    if( !m_root )
+        return;
+
     for ( QStringList::const_iterator it = newValues.begin(); it != newValues.end() ; ++it )
     {
         if ( !origValues.contains( *it ) && !remove )
@@ -653,7 +689,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
 
 void Scope::updateVariable( const QString& variable, const QString& op, const QStringList& values, bool removeFromOp )
 {
-    if ( listIsEmpty( values ) )
+    if ( !m_root || listIsEmpty( values ) )
         return ;
 
     kdDebug(9024) << "Updating variable:" << variable << endl;
@@ -663,7 +699,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
         if ( m_root->m_children[ i ] ->nodeType() == QMake::AST::AssignmentAST )
         {
             QMake::AssignmentAST * assignment = static_cast<QMake::AssignmentAST*>( m_root->m_children[ i ] );
-            if ( assignment->scopedID == variable && isCompatible( assignment->op, op ) )
+            if ( assignment->scopedID == variable && Scope::isCompatible( assignment->op, op ) )
             {
                 updateValues( assignment->values, values, removeFromOp, assignment->indent );
                 if ( removeFromOp && listIsEmpty( assignment->values ) )
@@ -673,7 +709,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
                 }
                 return ;
             }
-            else if ( assignment->scopedID == variable && !isCompatible( assignment->op, op ) )
+            else if ( assignment->scopedID == variable && !Scope::isCompatible( assignment->op, op ) )
             {
                 for ( QStringList::const_iterator it = values.begin() ; it != values.end() ; ++it )
                 {
@@ -821,11 +857,16 @@ void Scope::init()
 
 QString Scope::projectName() const
 {
+    if( !m_root )
+        return "";
+
     return QFileInfo( projectDir() ).fileName();
 }
 
 QString Scope::projectDir() const
 {
+    if( !m_root )
+        return "";
     if ( m_root->isProject() )
     {
         return QFileInfo( m_root->fileName() ).dirPath( true );
@@ -889,6 +930,9 @@ const QValueList<Scope*> Scope::scopesInOrder() const
 const QMap<QPair<QString, QString>, QStringList> Scope::customVariables() const
 {
     QMap<QPair<QString, QString>, QStringList> result;
+    if( !m_root )
+        return result;
+
     kdDebug( 9024 ) << "# of custom vars:" << m_customVariables.size() << endl;
     QMap<QPair<QString, QString>, QMake::AssignmentAST*>::const_iterator it = m_customVariables.begin();
     for ( ; it != m_customVariables.end(); ++it )
@@ -903,6 +947,8 @@ const QMap<QPair<QString, QString>, QStringList> Scope::customVariables() const
 
 void Scope::updateCustomVariable( const QString& var, const QString& op, const QStringList& values )
 {
+    if( !m_root )
+        return;
     if ( m_customVariables.keys().contains( qMakePair( var, op ) ) )
     {
         m_customVariables[ qMakePair( var, op ) ] ->values = values;
@@ -928,6 +974,8 @@ void Scope::updateCustomVariable( const QString& var, const QString& op, const Q
 bool Scope::isVariableReset( const QString& var )
 {
     bool result = false;
+    if( !m_root )
+        return result;
     QValueList<QMake::AST*>::const_iterator it = m_root->m_children.begin();
     for ( ; it != m_root->m_children.end(); ++it )
     {
@@ -978,7 +1026,7 @@ bool Scope::listIsEmpty( const QStringList& values )
     return true;
 }
 
-bool Scope::isCompatible( const QString& op1, const QString& op2) const
+bool Scope::isCompatible( const QString& op1, const QString& op2)
 {
     if( op1 == "+=" )
         return ( op2 == "+=" || op2 == "=" );
@@ -989,7 +1037,7 @@ bool Scope::isCompatible( const QString& op1, const QString& op2) const
     return false;
 }
 
-bool Scope::listsEqual(const QStringList& l1, const QStringList& l2) const
+bool Scope::listsEqual(const QStringList& l1, const QStringList& l2)
 {
     QStringList left = l1;
     QStringList right = l2;
@@ -1019,10 +1067,9 @@ bool Scope::isQt4Project() const
 
 void Scope::reloadProject()
 {
-    if ( !m_root->isProject() )
+    if ( !m_root || !m_root->isProject() )
         return;
 
-//     m_part->dirWatch()->removeFile( m_root->fileName() );
     QString filename = m_root->fileName();
     QMap<QString, Scope*>::iterator it;
     for ( it = m_funcScopes.begin() ; it != m_funcScopes.end() ; ++it )
@@ -1059,8 +1106,6 @@ void Scope::reloadProject()
         m_root = new QMake::ProjectAST();
         m_root->setFileName( filename );
     }
-//     kdDebug( 9024 ) << "Adding file: " << filename << "to dirwatch" << endl;
-//     m_part->dirWatch()->addFile( m_root->fileName() );
 }
 
 #ifdef DEBUG

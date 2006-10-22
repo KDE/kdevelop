@@ -154,7 +154,7 @@ public:
     void updateCustomVariable( const QString& var, const QString& op, const QStringList& values );
 
     // Checks wether a QStringList contains any values that are not whitespace or \\n
-    bool listIsEmpty( const QStringList& values );
+    static bool listIsEmpty( const QStringList& values );
 
     bool isEnabled() { return m_isEnabled; }
 
@@ -219,10 +219,10 @@ private:
     QStringList calcValuesFromStatements( const QString& variable, QStringList result, QMake::AST* stopHere = 0 ) const;
 
     // Check wether the two operators are compatible
-    bool isCompatible( const QString& op1, const QString& op2) const;
+    static bool isCompatible( const QString& op1, const QString& op2);
 
     // Check wether the 2 lists are equal, regardless of element order.
-    bool listsEqual(const QStringList& , const QStringList& ) const;
+    static bool listsEqual(const QStringList& , const QStringList& );
 
     // Load and Save project files, these only work on ProjectScope's
     bool loadFromFile( const QString& filename );

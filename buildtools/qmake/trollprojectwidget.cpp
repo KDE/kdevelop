@@ -438,7 +438,6 @@ void TrollProjectWidget::setupContext()
     else if ( tmpl.contains( "subdirs" ) )
     {
         hasSubdirs = true;
-        addSubdirButton->setEnabled( true );
         runable = false;
         hasSourceFiles = false;
         fileconfigurable = false;
@@ -461,10 +460,11 @@ void TrollProjectWidget::setupContext()
     executeTargetButton->setEnabled( runable );
     m_part->actionCollection() ->action( "build_execute_target" ) ->setEnabled( runable );
 
-    excludeFileFromScopeButton->setEnabled( false );
-    newfileButton->setEnabled( true );
-    removefileButton->setEnabled( false );
-    addfilesButton->setEnabled( true );
+    excludeFileFromScopeButton->setEnabled( !hasSubdirs );
+    newfileButton->setEnabled( !hasSubdirs );
+    removefileButton->setEnabled( !hasSubdirs );
+    addfilesButton->setEnabled( !hasSubdirs );
+    buildFileButton->setEnabled( !hasSubdirs );
 
     details->setEnabled( hasSourceFiles );
 }
@@ -472,7 +472,10 @@ void TrollProjectWidget::setupContext()
 void TrollProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 {
     if ( !item )
+    {
+        kdDebug(9024) << "Trying to select a non-existing item" << endl;
         return ;
+    }
     cleanDetailView( m_shownSubproject );
     m_shownSubproject = static_cast<QMakeScopeItem*>( item );
     setupContext();
@@ -523,16 +526,23 @@ void TrollProjectWidget::cleanDetailView( QMakeScopeItem *item )
     // it is a subdir template
     if ( item && details->childCount() )
     {
-        QMapIterator<GroupItem::GroupType, GroupItem*> it1 = item->groups.begin() ;
-        for ( ; it1 != item->groups.end(); ++it1 )
+        QListViewItem* i = details->firstChild();
+        while( i )
         {
-            // After AddTargetDialog, it can happen that an
-            // item is not yet in the list view, so better check...
-            if ( it1.data() ->parent() )
-                while ( it1.data() ->firstChild() )
-                    it1.data() ->takeItem( it1.data() ->firstChild() );
-            details->takeItem( it1.data() );
+            QListViewItem* old = i;
+            i = i->nextSibling();
+            details->takeItem(old);
         }
+//         QMapIterator<GroupItem::GroupType, GroupItem*> it1 = item->groups.begin() ;
+//         for ( ; it1 != item->groups.end(); ++it1 )
+//         {
+//             // After AddTargetDialog, it can happen that an
+//             // item is not yet in the list view, so better check...
+//             if ( it1.data() ->parent() )
+//                 while ( it1.data() ->firstChild() )
+//                     it1.data() ->takeItem( it1.data() ->firstChild() );
+//             details->takeItem( it1.data() );
+//         }
     }
 }
 
@@ -2216,6 +2226,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
             m_shownSubproject = pitem;
             overview->setCurrentItem ( m_shownSubproject );
             overview->setSelected( m_shownSubproject, true );
+            slotOverviewSelectionChanged( m_shownSubproject );
         }
     }
 }
@@ -2356,7 +2367,7 @@ void TrollProjectWidget::slotProjectDirty(const QString& path)
             }
             it++;
         }
-      kdDebug(9024) << "Reloading projects, involves # QMakeScopeItems: " << itemstoreload.size() << endl;
+
         QValueList<QMakeScopeItem*>::const_iterator reloadit = itemstoreload.begin();
         for( ; reloadit != itemstoreload.end() ; ++reloadit )
         {
