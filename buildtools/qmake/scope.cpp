@@ -837,6 +837,9 @@ QString Scope::projectDir() const
 const QValueList<Scope*> Scope::scopesInOrder() const
 {
     QValueList<Scope*> result;
+    if ( !m_root || m_root->m_children.isEmpty() )
+        return result;
+
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {
