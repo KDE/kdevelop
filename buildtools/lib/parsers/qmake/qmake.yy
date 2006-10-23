@@ -125,6 +125,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token LCURLY
 %token ID_ARGS
 %token LIST_COMMENT
+%token LIST_COMMENT_WITHOUT_NEWLINE
 %token QUOTED_VARIABLE_VALUE
 %token VARIABLE_VALUE
 %token INDENT
@@ -180,7 +181,7 @@ variable_assignment : ID_SIMPLE operator multiline_values
         }
     ;
 
-multiline_values : multiline_values line_body
+multiline_values : multiline_values line_body opt_comment
         {
             $<values>$ += $<values>2;
             if( $<indent>2 != "" && $<indent>$ == "" )
@@ -206,6 +207,10 @@ line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
         }
     | LIST_COMMENT
     | RBRACE
+    ;
+    
+opt_comment: LIST_COMMENT_WITHOUT_NEWLINE
+    |
     ;
 
 variable_value : VARIABLE_VALUE     { $<value>$ = $<value>1; }

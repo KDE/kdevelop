@@ -50,6 +50,7 @@ To debug this lexer, put the line below into the next flex file section.
 %option noyywrap
 
 %x list
+%x list_with_comment
 %x funcargs
 
 delim             [ \t]
@@ -65,26 +66,34 @@ id_args           [^\n]*\)
 number            {digit}+
 comment           #.*
 comment_cont      {ws}*#.*\n
+comment_cont_nn   {ws}*#.*
 cont              \\{ws}*\n
 
 %%
 <INITIAL>{ws}  {}
-<list>{ws}     { yylval.value = yytext; return LIST_WS; }
-<list>{begin_ws}       { 
+<list,list_with_comment>{ws}     { yylval.value = yytext; return LIST_WS; }
+<list,list_with_comment>{begin_ws}       { 
     yylval.value = yytext;
     unput(char(yylval.value.at(yylval.value.length()-1).latin1()));
     yylval.value = yylval.value.mid(0, yylval.value.length()-1);
     return INDENT;
 }
 
-<list,INITIAL>{cont}   { BEGIN(list); return CONT; }
+<list,list_with_comment,INITIAL>{cont}   { BEGIN(list); return CONT; }
 {id_simple}            { yylval.value = yytext; return (ID_SIMPLE); }
+
+<list_with_comment>{comment_cont_nn} {
+    yylval.value = yytext;
+    BEGIN(list);
+    return (LIST_COMMENT_WITHOUT_NEWLINE);
+}
 
 <list>{comment_cont} {
     yylval.value = yytext;
     BEGIN(list);
     return (LIST_COMMENT);
     }
+
 
 <funcargs>{id_args} {
     yylval.value = yytext;
@@ -94,8 +103,8 @@ cont              \\{ws}*\n
     return (ID_ARGS);
     }
 
-<list>{var_value}        { yylval.value = yytext; return VARIABLE_VALUE; }
-<list>{quoted_var_value} { yylval.value = yytext; return QUOTED_VARIABLE_VALUE; }
+<list,list_with_comment>{var_value}        { BEGIN(list_with_comment); yylval.value = yytext; return VARIABLE_VALUE; }
+<list,list_with_comment>{quoted_var_value} { BEGIN(list_with_comment); yylval.value = yytext; return QUOTED_VARIABLE_VALUE; }
 
 "="                      { BEGIN(list); yylval.value = yytext; return EQ; }
 "+="                     { BEGIN(list); yylval.value = yytext; return PLUSEQ; }
@@ -108,7 +117,7 @@ cont              \\{ws}*\n
 "("                      { BEGIN(funcargs); return LBRACE; }
 <funcargs,INITIAL>")"    { BEGIN(INITIAL); return RBRACE; }
 ":"                      { yylval.value = yytext; return COLON; }
-<list,INITIAL>"\n"       { BEGIN(INITIAL); return NEWLINE; }
+<list,list_with_comment,INITIAL>"\n"       { BEGIN(INITIAL); return NEWLINE; }
 
 {comment}                { yylval.value = yytext; return (COMMENT); }
 
