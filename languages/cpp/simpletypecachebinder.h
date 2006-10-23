@@ -194,7 +194,11 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
 	      return *it;
 #endif
       } else {
-        SimpleTypeImpl::MemberInfo mem = Base::findMember( name, type );
+          SimpleTypeImpl::MemberInfo mem;
+
+          m_memberCache.insert( std::make_pair( key, mem ) ); //This is done to prevent expensive endless recursion
+          
+          mem = Base::findMember( name, type );
 #ifdef USE_HASH_MAP
 	      m_memberCache.insert( std::make_pair( key, mem ) );
 #else
@@ -250,7 +254,9 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
         ifVerbose( dbg() << "\"" << Base::str() << "\" located \"" << name.fullNameChain() << "\" from the cache" << endl );
         return *it;
       } else {
-        LocateResult t = Base::locateType( name, mode, dir, typeMask );
+          LocateResult t;
+          m_locateCache.insert( desc, t ); //Done to prevent expensive recursion.
+          t = Base::locateType( name, mode, dir, typeMask );
         m_locateCache.insert( desc, t );
 #ifdef TEST_REMAP
         typename LocateMap::iterator it = m_locateCache.find( desc );
@@ -285,9 +291,18 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
       return new SimpleTypeCacheBinder<Base>( this );
     }
 
-    virtual void invalidatePrimaryCache() {
+    virtual void invalidatePrimaryCache( bool  onlyNegative ) {
       //if( !m_memberCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" primary caches cleared" << endl;
-      m_memberCache.clear();
+        if( !onlyNegative)
+            m_memberCache.clear();
+        else {
+            for( typename MemberMap::iterator it = m_memberCache.begin(); it != m_memberCache.end(); ) {
+                if( (*it).second.memberType == SimpleTypeImpl::MemberInfo::NotFound )
+                    m_memberCache.erase( it++ );
+                else
+                    ++it;
+            }
+        }
 	  m_classListCache.clear();
     }
     virtual void invalidateSecondaryCache() {
@@ -305,7 +320,7 @@ SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCac
     }
 
     virtual void invalidateCache() {
-      invalidatePrimaryCache();
+      invalidatePrimaryCache( false );
       invalidateSecondaryCache();
     };
 

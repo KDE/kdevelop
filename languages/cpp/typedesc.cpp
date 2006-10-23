@@ -38,6 +38,7 @@ struct LocateResult::D {
 
 LocateResult& LocateResult::operator = ( const TypeDesc& rhs ) {
 	*this = LocateResult( rhs );
+        return *this;
 }
 
 LocateResult::LocateResult() : d( new D() ), m_resolutionCount( 0 ), m_flags( NoFlag ), m_trace( 0 ), m_locateDepth( 0 ) {}
@@ -461,6 +462,12 @@ TypeDescPointer TypeDesc::next() {
   if ( !m_data )
     return 0;
   return m_data->m_nextType;
+}
+
+KSharedPtr<const TypeDescShared> TypeDesc::next() const {
+    if ( !m_data )
+        return 0;
+    return m_data->m_nextType.data();
 }
 
 bool TypeDesc::hasTemplateParams() const {

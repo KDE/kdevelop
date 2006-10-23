@@ -51,7 +51,7 @@ enum Repository {
 };
 
 /**
-    A Type can be invalid( operator hasNode() returns false ) but still have a desc. In that case, the desc is the
+    A Type can be invalid( hasNode() returns false ) but still have a desc. In that case, the desc is the
     nearest point reached in the resolution of the type.
  
     Warning: The types are not copied when they are assigned to each other,
@@ -400,7 +400,7 @@ class SimpleTypeImpl : public KShared {
 
     ///Primary cache is the one associated only with this object. It must only be cleared
     ///when the object pointed to changes
-    virtual void invalidatePrimaryCache() {}
+    virtual void invalidatePrimaryCache( bool onlyNegative = false ) {}
 
     static QString operatorToString( Operator op );
 

@@ -80,6 +80,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 //#define DISABLE_TRACING
 
+
 const bool disableVerboseForCompletionList = false;
 const bool disableVerboseForContextMenu = false;
 const bool contextMenuEntriesAtTop = false;
@@ -94,6 +95,10 @@ const char* destructorPrefix = "<destructor>";
 -- TODO: Does not yet correctly search for overloaded functions and select the right one
 -- TODO: The documentation shown in the calltips looks very bad, a better solution must be found(maybe an additional tooltip)
 */
+
+TypePointer createGlobalNamespace() {
+	return new SimpleTypeCachedNamespace( QStringList(), QStringList() );
+}
 
 template <class Item>
 class ItemLocker {
@@ -324,9 +329,9 @@ struct PopupFillerHelpStruct {
     if ( d.resolved() && d.resolved() ->isNamespace() ) {
       SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
       if ( ns ) {
-        SimpleTypeNamespace::SlaveList slaves = ns->getSlaves();
+        SimpleTypeNamespace::SlaveList slaves = ns->getSlaves(d.includeFiles());
         for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).first.get().data() );
+	        SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).resolved().data() );
 	        if ( cm && cm->item() ) {
 	          QPopupMenu * m = PopupTracker::createPopup( parent );
 	          QString scope = cm->scope().join("::");
@@ -340,7 +345,12 @@ struct PopupFillerHelpStruct {
 							insertItem( m, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
 		          m_namespacePopupCache.insert( scope, m );
 	          }
-          }
+	        } else {
+		        SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *it ).resolved().data() );
+		        if( cn ) {
+			        insertItem( parent, cn->desc(), prefix );
+		        }
+	        }
         }
 	      return ;
       }
@@ -381,7 +391,7 @@ struct PopupFillerHelpStruct {
 	    }
     }
 
-    if ( d.resolved() && d.resolved() ->hasNode() ) {
+    if ( d.resolved() ) {
       QString n = d.resolved() ->scope().join( "::" );
       if ( d.resolved() ->asFunction() )
         n = receiver->buildSignature( d.resolved() );
@@ -490,16 +500,21 @@ struct PopupClassViewFillerHelpStruct {
         dom = cm->item();
     }
 
-    if ( d.resolved() && d.resolved() ->hasNode() ) {
+    if ( d.resolved() ) {
       if ( !dom && d.resolved() ->isNamespace() ) {
         SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
         if ( ns ) {
-          SimpleTypeNamespace::SlaveList slaves = ns->getSlaves();
+          SimpleTypeNamespace::SlaveList slaves = ns->getSlaves(d.includeFiles());
           for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-            SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).first.get().data() );
+	          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).resolved().data() );
 	          if ( cm && cm->item() ) {
               insertItem( parent, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
-            }
+	          }  else {
+		          SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *it ).resolved().data() );
+		          if( cn ) {
+			          insertItem( parent, cn->desc(), prefix );
+		          }
+	          }
           }
 	        return ;
         }
@@ -1664,7 +1679,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
   Parser parser( &d, &lexer );
 
   DeclarationAST::Node recoveredDecl;
-  RecoveryPoint* recoveryPoint = this->d->findRecoveryPoint( line, col );
+	RecoveryPoint* recoveryPoint = this->d->findRecoveryPoint( line, col );///@todo recovery-points are not needed anymore
 
   parser.parseDeclaration( recoveredDecl );
   if ( recoveredDecl.get() ) {
@@ -2019,7 +2034,14 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
       currentClass->getStartPosition( &startLine, &startCol );
     }
 
-    SimpleType container;
+	  if ( !m_cachedFromContext ) {
+		  conf.setGlobalNamespace( createGlobalNamespace() );
+	    /* //Should not be necessary any more
+      if ( recoveryPoint )
+        recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );*/
+	  }
+
+	  SimpleType container;
     if ( m_cachedFromContext ) {
 	    TypeDesc d( scope.join( "::" ) );
 	    d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
@@ -2030,15 +2052,6 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
         container = SimpleType( scope );
     } else {
       container = SimpleType( scope );
-    }
-
-    SimpleType global = getGlobal( container );
-
-    if ( !m_cachedFromContext ) {
-      conf.setGlobalNamespace( &( *global ) );
-	    /* //Should not be necessary any more
-      if ( recoveryPoint )
-        recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );*/
     }
 
     ExpressionInfo exp = findExpressionAt( line, column , startLine, startCol );
@@ -2355,6 +2368,19 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
           if ( !scope.isEmpty() ) {
             SimpleType parentType;
 
+	          if( !m_cachedFromContext ) {
+		          TypePointer t = createGlobalNamespace();
+		          conf.setGlobalNamespace( t );
+			          SimpleTypeNamespace * n = dynamic_cast<SimpleTypeNamespace*>( t.data() );
+			          if ( !n ) {
+			          QString str = QString( "the global namespace was not resolved correctly , real type: " ) + typeid( n ).name() + QString( " name: " ) + n->scope().join( "::" ) + " scope-size: " + n->scope().count();
+				          kdDebug( 9007 ) << str << endl;
+				          m_pSupport->mainWindow() ->statusBar() ->message( str , 1000 );
+			          } else {
+				          n->addAliases( m_pSupport->codeCompletionConfig() ->namespaceAliases() );
+			          }
+		          	this_type = SimpleType(t);
+	          }
 
             if ( m_cachedFromContext ) {
 	            TypeDesc d( scope.join( "::" ) );
@@ -2371,39 +2397,6 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
             this_type = parentType;
             this_type->setPointerDepth( 1 );
             ctx->setContainer( this_type );
-          }
-
-          * ctx->container(); ///this is necessary, to make sure that the SimpleType is physically instatiated. Copying a not instatiated type will make changes made to the copy lost.
-
-          SimpleType global = ctx->container();
-
-          while ( global.scope().size() != 0 ) {
-            if ( !safetyCounter )
-              break;
-            global = global->parent();
-          }
-
-          if ( ! m_cachedFromContext ) {
-            SimpleTypeNamespace * n = dynamic_cast<SimpleTypeNamespace*>( &( *global ) );
-            if ( !n ) {
-              QString str = QString( "the global namespace was not resolved correctly , real type: " ) + typeid( &( *global ) ).name() + QString( " name: " ) + global->scope().join( "::" ) + " scope-size: " + global->scope().count();
-              kdDebug( 9007 ) << str << endl;
-              m_pSupport->mainWindow() ->statusBar() ->message( str , 1000 );
-            } else {
-              if ( recoveryPoint ) {
-                ///put the imports into the global namespace
-                for ( QValueList<QStringList>::iterator it = recoveryPoint->imports.begin(); it != recoveryPoint->imports.end(); ++it ) {
-                  kdDebug( 9007 ) << "inserting import " << *it << " into the global scole" << endl;
-                  n->addAliasMap( "", ( *it ).join( "::" ), IncludeFiles() ); ///@TODO remove this
-                }
-
-              } else {
-                kdDebug( 9007 ) << "WARNING: no recovery-point, cannot use imports" << endl;
-              }
-
-              n->addAliases( m_pSupport->codeCompletionConfig() ->namespaceAliases() );
-              conf.setGlobalNamespace( &( *global ) );
-            }
           }
 
           ///Now locate the local type using the imported namespaces
@@ -2432,8 +2425,6 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
             ctx->add
             ( var );
             ctx->setContainer( this_type );
-          } else {
-            this_type = global;
           }
 
           ExpressionInfo exp( expr );
@@ -3354,13 +3345,13 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
   if ( ignore.find( ns ) != ignore.end() )
     return ;
   ignore.insert( ns );
-  SimpleTypeNamespace::SlaveList slaves = ns->getSlaves();
+	SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( IncludeFiles() );//getIncludeFiles( m_activeFileName ) );
   for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-    SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( &( *(*it).first ) );
+    SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( (*it).resolved().data() );
     if ( !nns )
-      computeCompletionEntryList( (*it).first, entryList, ( *it ).first ->scope(), isInstance, depth );
+	    if( ( *it ).resolved() ) computeCompletionEntryList( SimpleType((*it).resolved()), entryList, ( *it ).resolved()->scope(), isInstance, depth );
     else
-      computeCompletionEntryList( ( *it ).first, entryList, ( *it ).first ->scope(), nns, ignore, isInstance, depth );
+	    if( ( *it ).resolved() ) computeCompletionEntryList( SimpleType(( *it ).resolved()), entryList, ( *it ).resolved()->scope(), nns, ignore, isInstance, depth );
   }
 }
 

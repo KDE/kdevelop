@@ -203,7 +203,6 @@ class TypeDesc {
 
     int length() const ;
 
-    ///Something is wrong with this function.. so i use the string-comparison
     int compare ( const TypeDesc& rhs ) const;
 
     bool operator < ( const TypeDesc& rhs ) const {
@@ -295,6 +294,8 @@ class TypeDesc {
     }
 
     TypeDescPointer next();
+
+    KSharedPtr<const TypeDescShared> next() const;
 
     bool hasTemplateParams() const ;
 

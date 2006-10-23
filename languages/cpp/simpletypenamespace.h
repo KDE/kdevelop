@@ -18,29 +18,30 @@
 #include "simpletype.h"
 #include "includefiles.h"
 #include <set>
+#include <list>
 
 class SimpleTypeNamespace : public SimpleTypeImpl {
   public:
 
-    struct Alias {
-      Alias( const QString& _alias ) : alias( _alias ) {
+    struct Import {
+      Import( const TypeDesc& _import ) : import( _import ) {
       }
       
-      Alias( const IncludeFiles& _files, const QString& _alias ) : files( _files ), alias( _alias ) {
+      Import( const IncludeFiles& _files, const TypeDesc& _import ) : files( _files ), import( _import ) {
       }
 
-      ///Does not respect the include-file-list, only the alias is compared
-      bool operator < ( const Alias& rhs ) const {
-        return alias < rhs.alias;
+      ///Does not respect the include-file-list, only the import-name is compared
+      bool operator < ( const Import& rhs ) const {
+        return import.name() < rhs.import.name();
       }
 
-      ///Does not respect the include-file-list, only the alias is compared
-      bool operator == ( const Alias& rhs ) const {
-        return alias == rhs.alias;
+      ///Does not respect the include-file-list, only the import-name is compared
+      bool operator == ( const Import& rhs ) const {
+        return import.name() == rhs.import.name();
       }
       
       IncludeFiles files;
-      QString alias;
+      TypeDesc import;
       /*
       bool operator < ( const Alias& rhs ) const {
         if( alias < rhs.alias ) return true;
@@ -53,13 +54,14 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
       
     };
 
-    typedef QPair<SimpleType, IncludeFiles> SlavePair;
-    typedef QValueList<SlavePair> SlaveList;
+    typedef std::list<TypeDesc> SlaveList;
   
-  typedef std::multiset<Alias> AliasList;
+  typedef std::multiset<Import> ImportList;
   
-    SimpleTypeNamespace( QStringList fakeScope, QStringList realScope = QStringList() );
-  
+    SimpleTypeNamespace( const QStringList& fakeScope, const QStringList& realScope );
+
+    SimpleTypeNamespace( const QStringList& fakeScope );
+    
     SimpleTypeNamespace( SimpleTypeNamespace* ns );
   
     bool isANamespace( SimpleTypeImpl* t ) {
@@ -67,13 +69,14 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     }
     
     virtual TypePointer clone();
-    
-    SlaveList getSlaves();
+
+    ///Returns a list of all slave-namespaces that have an effect with the given set of include-files(the returned typedescs should be resolved)
+    SlaveList getSlaves( const IncludeFiles& includeFiles );
   
     /**empty name means an import.
      * @param files Set of files that must be included for this alias-map to be active. If the set is empty, the alias will be used globally.
      */
-    void addAliasMap( QString name, QString alias , const IncludeFiles& files = IncludeFiles(), bool recurse = true, bool symmetric = false );
+    void addAliasMap( const TypeDesc& name, const TypeDesc& alias , const IncludeFiles& files = IncludeFiles(), bool recurse = true, bool symmetric = false );
   
     /**Takes a map of multiple aliases in form "A=B;C=D;....;" similar to the C++ "namespace A=B;" statement
      * @param files Set of files that must be included for this alias-map to be active. If the set is empty, the alias will be used globally.
@@ -81,41 +84,41 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     void addAliases( QString map, const IncludeFiles& files = IncludeFiles() );
 
   private:
-    QValueList< SlavePair > m_activeSlaves;
-    QValueList< SimpleType > m_waitingAliases; ///For caching-reasons, it is necessary to import the aliases later after the call to addScope(because addscope is already called within the constructor, but the namespace is put into the cache after the constructor was called). This list holds all aliases to add.
-    /// Maps local sub-namespace -> global namespace(multiple aliases are possible)
-    QValueList< QPair< QString, HashedStringSet > > m_waitingImports;
-    typedef QMap<QString, AliasList> AliasMap;
+    SlaveList m_activeSlaves;
+    typedef QMap<QString, ImportList> AliasMap;
     AliasMap m_aliases;
-  
-  
-    void addScope( const QStringList& scope, const IncludeFiles& files = IncludeFiles() );
 
-	void addScope( const TypePointer& t );
-	
+    //Inserts all aliases necessary fo handling a request using the given IncludeFiles
+    void updateAliases( const IncludeFiles& files );
+    
+//     LocateResult locateSlave( const SlaveList::const_iterator& it, const IncludeFiles& includeFiles );
+
+    void addImport( const TypeDesc& import, const IncludeFiles& files = IncludeFiles() );
+
     friend class NamespaceBuildInfo;
   
     struct NamespaceBuildInfo : public TypeBuildInfo {
       QStringList m_fakeScope;
-      QStringList m_realScope;
-      AliasList m_imports;
+      ImportList m_imports;
 	  TypePointer m_built;
     
     
-      NamespaceBuildInfo( QStringList fakeScope, QStringList realScope, const AliasList& imports ) {
+      NamespaceBuildInfo( QStringList fakeScope, const ImportList& imports ) {
         m_fakeScope = fakeScope;
-        m_realScope = realScope;
         m_imports = imports;
       }
     
       virtual TypePointer build();
     };
+
+    explicit SimpleTypeNamespace( const SimpleTypeNamespace& rhs ) {
+    }
   
   protected:
 
-    void updateAliases();
+    //void updateAliases( const HashedStringSet& files );
 
-	SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore );
+    SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore );
 		
     virtual bool hasNode() const;
   
@@ -127,13 +130,11 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
 
 	virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) ;
 
-    MemberInfo setupMemberInfo( TypeDesc& subName, QStringList tscope, AliasList imports = AliasList() );
+    MemberInfo setupMemberInfo( const QStringList& subName, const ImportList& imports );
   
-	QStringList locateNamespaceScope( QString alias );
-
-	TypePointer locateNamespace( QString alias );
+    //TypePointer locateNamespace( const TypeDesc& alias );
 	
-    void recurseAliasMap() ;
+    //void recurseAliasMap() ;
 };
 
 

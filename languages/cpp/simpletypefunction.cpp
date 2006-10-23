@@ -164,9 +164,9 @@ void SimpleTypeCodeModel::addAliasesTo( SimpleTypeNamespace* ns ) {
     const NamespaceModel::NamespaceAliasModelList& namespaceAliases = m->namespaceAliases();
     const NamespaceModel::NamespaceImportModelList& namespaceImports = m->namespaceImports();
     for( NamespaceModel::NamespaceAliasModelList::const_iterator it = namespaceAliases.begin(); it != namespaceAliases.end(); ++it )
-      ns->addAliasMap( it->name(), it->aliasName(), it->fileName(), true, true ); //should these really be symmetric?
+      ns->addAliasMap( it->name(), it->aliasName(), it->fileName(), true, false );
     for( NamespaceModel::NamespaceImportModelList::const_iterator it = namespaceImports.begin(); it != namespaceImports.end(); ++it )
-      ns->addAliasMap( "", it->name(), it->fileName(), true, false );
+      ns->addAliasMap( TypeDesc(), it->name(), it->fileName(), true, false );
   }
 }
 
