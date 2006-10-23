@@ -161,7 +161,7 @@ void Scope::saveToFile() const
     if ( filename.isEmpty() )
         return ;
     kdDebug(9024) << "Stopping dirscan for: " << filename << endl;
-    m_part->dirWatch()->removeFile( filename );
+    m_part->dirWatch()->stopScan();
     QFile file( filename );
     if ( file.open( IO_WriteOnly ) )
     {
@@ -176,7 +176,7 @@ void Scope::saveToFile() const
     Scope::PrintAST pa;
     pa.processProject(m_root);
 #endif
-    m_part->dirWatch()->addFile( filename );
+    m_part->dirWatch()->startScan();
 }
 
 void Scope::addToPlusOp( const QString& variable, const QStringList& values )

@@ -62,7 +62,7 @@ InsideCheckListItem::InsideCheckListItem( QListView *parent, QMakeScopeItem *ite
 InsideCheckListItem::InsideCheckListItem( QListView *parent, QListViewItem *after, QMakeScopeItem *item, ProjectConfigurationDlg *config ) :
         QCheckListItem( parent,
                         after,
-                        item->relativePath().right( item->relativePath().length() - 1 ), QCheckListItem::CheckBox )
+                        item->relativePath(), QCheckListItem::CheckBox )
 {
     prjItem = item;
     m_config = config;
