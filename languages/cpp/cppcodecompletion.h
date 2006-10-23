@@ -135,7 +135,9 @@ public:
     void contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int col );
 
 	CppSupportPart* cppSupport() const;
-	
+
+    HashedStringSet getIncludeFiles( const QString& file = QString() );
+    
 public slots:
 	/**
 	 * @param invokedOnDemand if true and there is exactly one matching entry
@@ -234,7 +236,6 @@ private:
 	
     
 private:
-    HashedStringSet getIncludeFiles( const QString& file );
     
     friend class SimpleTypeCatalog;
     friend class SimpleTypeCodeModel;

@@ -86,7 +86,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
    if ( !l || !l->resolved() || !dynamic_cast<SimpleTypeNamespace*>( l->resolved().data() ) ) {
     ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\" -> \"" << ( *it ).import.fullNameChain() << "\" could not be resolved" << endl );
    } else {
-    m_aliasImports.insert( Import(  l->includeFiles(), l ) );
+    m_aliasImports.insert( Import(  d.includeFiles(), l ) );
    }
   }
  }
@@ -114,7 +114,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
        TypePointer b = mem.build();
        
        if( b )
-           m_aliasImports.insert( Import( mem.type->includeFiles(), b->desc() ) );
+           m_aliasImports.insert( Import( IncludeFiles(), b->desc() ) );
        else
            ifVerbose( dbg() << "\"" << str() << "\": found namespace \"" << name.name() << "\", but it is not resolved" << endl );
    }

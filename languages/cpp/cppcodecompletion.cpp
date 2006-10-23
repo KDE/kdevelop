@@ -331,7 +331,7 @@ struct PopupFillerHelpStruct {
     if ( d.resolved() && d.resolved() ->isNamespace() ) {
       SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
       if ( ns ) {
-        SimpleTypeNamespace::SlaveList slaves = ns->getSlaves(d.includeFiles());
+	      SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( receiver->getIncludeFiles() );
         for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
 	        SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).resolved().data() );
 	        if ( cm && cm->item() ) {
@@ -506,7 +506,7 @@ struct PopupClassViewFillerHelpStruct {
       if ( !dom && d.resolved() ->isNamespace() ) {
         SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
         if ( ns ) {
-          SimpleTypeNamespace::SlaveList slaves = ns->getSlaves(d.includeFiles());
+	        SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( receiver->getIncludeFiles() );
           for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
 	          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).resolved().data() );
 	          if ( cm && cm->item() ) {
@@ -1744,7 +1744,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
       if ( ctx->container() ) {
         if ( !m_cachedFromContext ) {
           TypeDesc td = ctx->container() ->desc();
-	        td.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+	        td.setIncludeFiles( getIncludeFiles() );
           td.makePrivate();
           
           td.resetResolved( );
@@ -1977,7 +1977,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
               kdDebug( 9007 ) << "recognized a type-expression, but another expression-type is desired" << endl;
             } else {
 	            TypeDesc d( exp.expr() );
-	            d.setIncludeFiles( getIncludeFiles( m_activeFileName  ));
+	            d.setIncludeFiles( getIncludeFiles() );
               ret.resultType = ctx->container() ->locateDecType( d );
               ret.expr = exp;
             }
@@ -2047,7 +2047,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 	  SimpleType container;
     if ( m_cachedFromContext ) {
 	    TypeDesc d( scope.join( "::" ) );
-	    d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+	    d.setIncludeFiles( getIncludeFiles() );
       SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( d ).desc().resolved().data();
       if ( i )
         container = i;
@@ -2064,7 +2064,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
     if ( exp && ( exp.t & ExpressionInfo::TypeExpression ) ) {
       kdDebug( 9007 ) << "locating \"" << exp.expr() << "\" in " << container->fullTypeResolvedWithScope() << endl;
 	    TypeDesc d( exp.expr() );
-	    d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+	    d.setIncludeFiles( getIncludeFiles() );
       ret.resultType = container->locateDecType( d );
     } else {
       if ( exp ) {
@@ -2386,7 +2386,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
             if ( m_cachedFromContext ) {
 	            TypeDesc d( scope.join( "::" ) );
-	            d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+	            d.setIncludeFiles( getIncludeFiles() );
               SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( d ).desc().resolved().data();
               if ( i ) {
                 parentType = i;
@@ -2407,7 +2407,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
               TypeDesc td = ctx->container() ->desc();
               td.makePrivate();
               td.resetResolved( );
-	            td.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+	            td.setIncludeFiles( getIncludeFiles() );
               TypePointer tt = ctx->container() ->locateDecType( td, SimpleTypeImpl::LocateBase ) ->resolved();
               if ( tt ) {
                 ctx->setContainer( SimpleType( tt ) );
@@ -2680,7 +2680,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
       if ( !t )
         ready = true;
 	    TypeDesc d( methodName );
-	    d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+	    d.setIncludeFiles( getIncludeFiles() );
       SimpleType method = t->typeOf( d );
       if ( method )
         signatureList += computeSignatureList( method );
@@ -2711,7 +2711,7 @@ QValueList<QStringList> CppCodeCompletion::computeSignatureList( EvaluationResul
 
 	if ( result.expr.t == ExpressionInfo::TypeExpression ) {
 		TypeDesc d( result->name() );
-		d.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
+		d.setIncludeFiles( getIncludeFiles() );
     type = type->typeOf( d, SimpleTypeImpl::MemberInfo::Function ); ///Compute the signature of the constructor
 	}
 
@@ -3347,7 +3347,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
   if ( ignore.find( ns ) != ignore.end() )
     return ;
   ignore.insert( ns );
-	SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( IncludeFiles() );//getIncludeFiles( m_activeFileName ) );
+	SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( getIncludeFiles() );
   for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
     SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( (*it).resolved().data() );
     if ( !nns )
@@ -4000,7 +4000,7 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
 
 	//d->classNameList = typeNameList( m_pSupport->codeModel() );
 
-	CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, getIncludeFiles( m_activeFileName ), ctx );
+	CppEvaluation::ExpressionEvaluation obj( this, expr, AllOperators, getIncludeFiles(), ctx );
 
   EvaluationResult res;
   res = obj.evaluate();
@@ -4026,7 +4026,11 @@ void CppCodeCompletion::computeFileEntryList( ) {
   m_fileEntryList = unique( m_fileEntryList );
 }
 
-HashedStringSet CppCodeCompletion::getIncludeFiles( const QString& file ) {
+HashedStringSet CppCodeCompletion::getIncludeFiles( const QString& fi ) {
+	QString file = fi;
+	if( file.isEmpty() )
+		file = m_activeFileName;
+	
 	FileDom f = m_pSupport->codeModel() ->fileByName( m_activeFileName );
 	if( f ) {
 		ParseResultPointer p = f->parseResult();
