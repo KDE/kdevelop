@@ -3367,10 +3367,11 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 	SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( getIncludeFiles() );
   for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
     SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( (*it).resolved().data() );
-    if ( !nns )
+	  if ( !nns ) {
 	    if( ( *it ).resolved() ) computeCompletionEntryList( SimpleType((*it).resolved()), entryList, ( *it ).resolved()->scope(), isInstance, depth );
-    else
+	  } else {
 	    if( ( *it ).resolved() ) computeCompletionEntryList( SimpleType(( *it ).resolved()), entryList, ( *it ).resolved()->scope(), nns, ignore, isInstance, depth );
+	  }
   }
 }
 
