@@ -216,7 +216,7 @@
                                     <cstring>checkNotInc</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>use !include instead of include</string>
+                                    <string>&amp;use !include instead of include</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Use !include instead of include for the function scope</string>
@@ -309,6 +309,16 @@
         <slot>reject()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>incUrl</tabstop>
+    <tabstop>comboScopeType</tabstop>
+    <tabstop>checkNotInc</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+    <tabstop>editScopeName</tabstop>
+    <tabstop>editFunction</tabstop>
+    <tabstop>editArguments</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>

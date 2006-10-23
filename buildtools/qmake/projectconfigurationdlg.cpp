@@ -334,8 +334,17 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             myProjectItem->scope->addToPlusOp( "CONFIG", *it );
     }
 
-    myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
-    myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
+    if( myProjectItem->scope->scopeType() == Scope::FunctionScope || myProjectItem->scope->scopeType() == Scope::SimpleScope )
+    {
+        if( !myProjectItem->scope->variableValues("TARGET").contains( m_targetOutputFile->text() ) )
+            myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
+        if( !myProjectItem->scope->variableValues("DESTDIR").contains( m_targetPath->text() ) )
+            myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
+    }else
+    {
+        myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
+        myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
+    }
 
     myProjectItem->updateValues( "DEFINES", QStringList::split( " ", m_defines->text() ) );
     myProjectItem->updateValues( "QMAKE_CXXFLAGS_DEBUG", QStringList::split( " ", m_debugFlags->text() ) );
