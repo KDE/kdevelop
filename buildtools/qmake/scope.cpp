@@ -838,8 +838,8 @@ void Scope::init()
                         continue;
                     QDir subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + *sit, "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
                     QString projectfile;
-                    if ( subproject.entryList().contains( *sit + ".pro" ) )
-                        projectfile = *subproject.entryList().find( *sit + ".pro" );
+                    if ( subproject.entryList().isEmpty() || subproject.entryList().contains( *sit + ".pro" ) )
+                        projectfile = (*sit) + ".pro";
                     else
                         projectfile = subproject.entryList().first();
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
