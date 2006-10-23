@@ -366,6 +366,10 @@ QStringList TrollProjectWidget::allFiles()
     for ( QListViewItem * item = overview->firstChild(); item;
             item = item->nextSibling() ? item->nextSibling() : s.pop() )
     {
+
+        if( !spitem->scope->isEnabled() )
+            continue;
+
         if ( item->firstChild() )
             s.push( item->firstChild() );
 
