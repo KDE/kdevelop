@@ -203,8 +203,16 @@ HashedStringSet TypeDesc::includeFiles() const {
 }
 
 void TypeDesc::setIncludeFiles( const HashedStringSet& files ) {
-  makeDataPrivate();
-  m_data->m_includeFiles = files;
+    makeDataPrivate();
+    m_data->m_includeFiles = files;
+    for ( TemplateParams::iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it ) {
+        (*it)->setIncludeFiles( files );
+    }
+    if( m_data->m_nextType ) {
+        if( m_data->m_nextType->_KShared_count() != 1 )
+            m_data->m_nextType = new TypeDescShared( *(m_data->m_nextType) );
+        m_data->m_nextType->setIncludeFiles( files );
+    }
 }
 
 size_t TypeDescData::hashKey() {

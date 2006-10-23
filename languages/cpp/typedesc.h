@@ -220,6 +220,9 @@ class TypeDesc {
     HashedStringSet includeFiles() const;
     void setIncludeFiles( const HashedStringSet& files );
 
+    ///Sets the include-files for this desc, the next-desc, and all template-params
+    void setIncludeFilesDeep( const HashedStringSet& files );
+    
     QString nameWithParams() const;
 
     ///returns the type including template-parameters and pointer-depth

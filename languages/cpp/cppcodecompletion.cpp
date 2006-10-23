@@ -1720,7 +1720,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
           else
             parentType = SimpleType( scope );
         } else {*/
-        parentType = SimpleType( scope );
+	      parentType = SimpleType( scope, getIncludeFiles() );
         //}
         parentType->setPointerDepth( 1 );
         ctx->setContainer( parentType );
@@ -2048,13 +2048,13 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
     if ( m_cachedFromContext ) {
 	    TypeDesc d( scope.join( "::" ) );
 	    d.setIncludeFiles( getIncludeFiles() );
-      SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( d ).desc().resolved().data();
+	    SimpleTypeImpl * i = SimpleType( QStringList(), getIncludeFiles() ) ->locateDecType( d ).desc().resolved().data();
       if ( i )
         container = i;
       else
-        container = SimpleType( scope );
+	      container = SimpleType( scope, getIncludeFiles() );
     } else {
-      container = SimpleType( scope );
+	    container = SimpleType( scope, getIncludeFiles() );
     }
 
     ExpressionInfo exp = findExpressionAt( line, column , startLine, startCol );
@@ -2393,14 +2393,14 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
             if ( m_cachedFromContext ) {
 	            TypeDesc d( scope.join( "::" ) );
 	            d.setIncludeFiles( getIncludeFiles() );
-              SimpleTypeImpl * i = SimpleType( QStringList() ) ->locateDecType( d ).desc().resolved().data();
+	            SimpleTypeImpl * i = SimpleType( QStringList(), getIncludeFiles() ) ->locateDecType( d ).desc().resolved().data();
               if ( i ) {
                 parentType = i;
               } else {
-                parentType = SimpleType( scope );
+	              parentType = SimpleType( scope, getIncludeFiles() );
               }
             } else {
-              parentType = SimpleType( scope );
+	            parentType = SimpleType( scope, getIncludeFiles() );
             }
             this_type = parentType;
             this_type->setPointerDepth( 1 );
@@ -2492,6 +2492,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
     }
   }
 
+	///@todo is all this necessary?
   if ( !recoveredDecl.get() && !recoveredTypeSpec.get() ) {
     TranslationUnitAST * ast = *m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
     if ( AST * node = findNodeAt( ast, line, column ) ) {
@@ -2544,7 +2545,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
         QStringList scope;
         scopeOfNode( def, scope );
-        this_type = scope;
+	      this_type = SimpleType( scope, getIncludeFiles() );
 
         if ( scope.size() ) { /*
                                                                       					SimpleVariable var;
@@ -3385,9 +3386,8 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
   SimpleTypeImpl* m = &( *typeR ) ;
 
   if ( SimpleTypeNamespace * ns = dynamic_cast<SimpleTypeNamespace*>( m ) ) {
-    std::set
-      <SimpleTypeNamespace*> ignore;
-    computeCompletionEntryList( type, entryList, type, ns, ignore, isInstance, depth );
+    std::set<SimpleTypeNamespace*> ignore;
+    computeCompletionEntryList( typeR, entryList, type, ns, ignore, isInstance, depth );
   } else if ( dynamic_cast<SimpleTypeCodeModel*>( m ) ) {
     ItemDom item = ( dynamic_cast<SimpleTypeCodeModel*>( m ) ) ->item();
     if ( item )

@@ -34,7 +34,9 @@ void SimpleType::resolve( Repository rep ) const {
           m_type = m_globalNamespace;
           return ;
         } else {
-          LocateResult t = m_globalNamespace->locateDecType( scope().join( "::" ) );
+            TypeDesc d( scope().join( "::" ) );
+            d.setIncludeFiles( m_includeFiles );
+          LocateResult t = m_globalNamespace->locateDecType( d );
           if ( t && t->resolved() ) {
             m_type = t->resolved();
             return ;
@@ -150,7 +152,8 @@ const QString SimpleType::str() const {
   return m_type -> str();
 }
 
-void SimpleType::init( const QStringList& scope , Repository rep ) {
+void SimpleType::init( const QStringList& scope, const HashedStringSet& files, Repository rep ) {
+    m_includeFiles = files;
 
   m_type = TypePointer( new SimpleTypeImpl( scope ) );
   if ( rep != Undefined )
@@ -763,7 +766,7 @@ SimpleType SimpleTypeImpl::parent() {
 
     if ( !sc.isEmpty() ) {
       sc.pop_back();
-      SimpleType r = SimpleType( sc );
+      SimpleType r = SimpleType( sc, m_desc.includeFiles() );
       if ( &( *r.get() ) == this ) {
         kdDebug( 9007 ) << "error: self set as parent: " << m_scope.join( "::" ) << "(" << m_scope.count() << ")" << ", " << sc.join( "::" ) << "(" << sc.count() << ")" /* << kdBacktrace()*/ << endl;
         return SimpleType( new SimpleTypeImpl( "" ) );

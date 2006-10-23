@@ -311,8 +311,8 @@ void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles&
  invalidateCache();
     if( import.name().isEmpty() ) {
         ///The global namespace is the entry-point, fill it by hand:
-        SimpleType cm = SimpleType( QString(), CodeModel );
-        SimpleType ct = SimpleType( QString(), Catalog );
+        SimpleType cm = SimpleType( QString(), HashedStringSet(), CodeModel );
+        SimpleType ct = SimpleType( QString(), HashedStringSet(), Catalog );
         cm->setMasterProxy( this );
         ct->setMasterProxy( this );
         m_activeSlaves.push_back( cm->desc() );

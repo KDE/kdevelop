@@ -67,16 +67,16 @@ class SimpleType {
       *this = rhs;
     }
 
-    SimpleType( const QStringList& scope, Repository rep = Undefined ) : m_resolved( false ) {
-      init( scope, rep );
+    SimpleType( const QStringList& scope, const HashedStringSet& files, Repository rep = Undefined ) : m_resolved( false ) {
+      init( scope, files, rep );
     }
 
-    SimpleType( const QString& text, Repository rep = Undefined ) : m_resolved( false ) {
-      init( splitType( text ), rep );
+    SimpleType( const QString& text,const HashedStringSet& files, Repository rep = Undefined ) : m_resolved( false ) {
+      init( splitType( text ), files, rep );
     };
 
     SimpleType( Repository rep = Undefined ) : m_resolved( false ) {
-      init( QStringList(), rep );
+      init( QStringList(), HashedStringSet(), rep );
     };
 
     SimpleType( SimpleTypeImpl* ip ) : m_type( TypePointer( ip ) ), m_resolved( true ) {}
@@ -152,9 +152,11 @@ class SimpleType {
 
   private:
 
-    void init( const QStringList& scope , Repository rep );
+    void init( const QStringList& scope, const HashedStringSet& files, Repository rep );
 
     void resolve( Repository rep = Undefined ) const ;
+
+    HashedStringSet m_includeFiles;
 
     mutable TypePointer m_type;
     mutable bool m_resolved;
