@@ -366,6 +366,7 @@ QStringList TrollProjectWidget::allFiles()
     for ( QListViewItem * item = overview->firstChild(); item;
             item = item->nextSibling() ? item->nextSibling() : s.pop() )
     {
+        QMakeScopeItem *spitem = static_cast<QMakeScopeItem*>( item );
 
         if( !spitem->scope->isEnabled() )
             continue;
@@ -373,7 +374,6 @@ QStringList TrollProjectWidget::allFiles()
         if ( item->firstChild() )
             s.push( item->firstChild() );
 
-        QMakeScopeItem *spitem = static_cast<QMakeScopeItem*>( item );
         QString path = spitem->relativePath();
 
         for ( QMapIterator<GroupItem::GroupType, GroupItem*> tit = spitem->groups.begin(); tit != spitem->groups.end(); ++tit )
