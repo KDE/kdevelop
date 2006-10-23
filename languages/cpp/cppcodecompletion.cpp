@@ -96,8 +96,10 @@ const char* destructorPrefix = "<destructor>";
 -- TODO: The documentation shown in the calltips looks very bad, a better solution must be found(maybe an additional tooltip)
 */
 
-TypePointer createGlobalNamespace() {
-	return new SimpleTypeCachedNamespace( QStringList(), QStringList() );
+TypePointer CppCodeCompletion::createGlobalNamespace() {
+  KSharedPtr<SimpleTypeCachedNamespace> n = new SimpleTypeCachedNamespace( QStringList(), QStringList() );
+  n->addAliases(m_pSupport->codeCompletionConfig()->namespaceAliases() );
+  return n.data();
 }
 
 template <class Item>
@@ -1705,6 +1707,10 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 
       QStringList scope = f->scope();
 
+      if ( !m_cachedFromContext ) {
+        conf.setGlobalNamespace( createGlobalNamespace() );
+      }
+      
       if ( !scope.isEmpty() ) {
         SimpleType parentType;
         /* if( !m_cachedFromContext ) {
@@ -1740,6 +1746,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
           TypeDesc td = ctx->container() ->desc();
 	        td.setIncludeFiles( getIncludeFiles( m_activeFileName ) );
           td.makePrivate();
+          
           td.resetResolved( );
           TypePointer tt = ctx->container() ->locateDecType( td, SimpleTypeImpl::LocateBase ) ->resolved();
           if ( tt ) {
@@ -2034,12 +2041,8 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
       currentClass->getStartPosition( &startLine, &startCol );
     }
 
-	  if ( !m_cachedFromContext ) {
+	  if ( !m_cachedFromContext )
 		  conf.setGlobalNamespace( createGlobalNamespace() );
-	    /* //Should not be necessary any more
-      if ( recoveryPoint )
-        recoveryPoint->registerImports( global, m_pSupport->codeCompletionConfig() ->namespaceAliases() );*/
-	  }
 
 	  SimpleType container;
     if ( m_cachedFromContext ) {
@@ -2377,7 +2380,6 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 				          kdDebug( 9007 ) << str << endl;
 				          m_pSupport->mainWindow() ->statusBar() ->message( str , 1000 );
 			          } else {
-				          n->addAliases( m_pSupport->codeCompletionConfig() ->namespaceAliases() );
 			          }
 		          	this_type = SimpleType(t);
 	          }

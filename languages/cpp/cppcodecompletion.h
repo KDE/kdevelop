@@ -162,6 +162,7 @@ private slots:
     void popupClassViewAction( int number );
 	void synchronousParseReady( const QString& file, ParsedFilePointer unit );
 private:
+    TypePointer createGlobalNamespace();
 	bool functionContains( FunctionDom f , int line, int col );
 	void getFunctionBody( FunctionDom f , int& line, int& col );
 	void selectItem( ItemDom item );
