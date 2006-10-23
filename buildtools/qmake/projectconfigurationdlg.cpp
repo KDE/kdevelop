@@ -1606,7 +1606,12 @@ void ProjectConfigurationDlg::targetInstallChanged( bool checked )
 void ProjectConfigurationDlg::apply()
 {
 //     if( buttonApply->isEnabled() )
-        updateProjectConfiguration();
+    if( !myProjectItem || !myProjectItem->scope )
+    {
+        buttonApply->setEnabled( false );
+        return;
+    }
+    updateProjectConfiguration();
     myProjectItem->scope->saveToFile();
     //     prjWidget->updateProjectConfiguration( myProjectItem );
     prjWidget->setupContext();
