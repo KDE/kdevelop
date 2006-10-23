@@ -203,6 +203,9 @@ void RemoveTargetDialog::accept ()
 	// they are ignored
 	removeMap.insert ( canonname + "_SOURCES", "" );
 
+	// remove from our internal list
+	m_spitem->variables.erase(canonname+"_SOURCES");
+
 	if ( m_titem->primary == "PROGRAMS" || m_titem->primary == "LTLIBRARIES" )
 	{
 		removeMap.insert ( canonname + "_LDFLAGS", "" );
