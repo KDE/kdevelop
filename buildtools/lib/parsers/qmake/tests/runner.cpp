@@ -125,7 +125,8 @@ int main(int argc, char *argv[])
         ret = QMake::Driver::parseFile(argv[1], &projectAST);
         PrintAST pa;
         if ( ret == 0 )
-          pa.processProject(projectAST);
+            if ((argc < 3) || ((argc == 3) && (strcmp(argv[2], "--silent") != 0)))
+                pa.processProject(projectAST);
         return ret;
     }
     else
