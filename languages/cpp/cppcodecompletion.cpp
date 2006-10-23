@@ -2121,6 +2121,10 @@ bool isAfterKeyword( const QString& str, int column ) {
   return false;
 }
 
+void CppCodeCompletion::setMaxComments( int count ) {
+	m_maxComments = count;
+}
+
 ///TODO: make this use findExpressionAt etc. (like the other expression-evaluation-stuff)
 void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
   kdDebug( 9007 ) << "CppCodeCompletion::completeText()" << endl;
@@ -2128,6 +2132,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
   if ( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
     return ;
 
+	setMaxComments( 1000 );
+	
   needRecoveryPoints();
 
   CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
@@ -3122,7 +3128,12 @@ QString codeModelAccessToString( CodeModelItem::Access access ) {
 #define MAXCOMMENTCOLUMNS 45
 
 
-QString commentFromItem( const SimpleType& parent, const ItemDom& item ) {
+QString CppCodeCompletion::commentFromItem( const SimpleType& parent, const ItemDom& item ) {
+	--m_maxComments;
+	static QString maxReached = " ";
+	if( m_maxComments < 0 ) {
+		return maxReached;
+	}
   QString ret;
   int line, col;
   item->getStartPosition( &line, &col );
@@ -3226,7 +3237,13 @@ QString commentFromItem( const SimpleType& parent, const ItemDom& item ) {
   return ret;
 }
 
-QString commentFromTag( const SimpleType& parent, Tag& tag ) {
+QString CppCodeCompletion::commentFromTag( const SimpleType& parent, Tag& tag ) {
+	--m_maxComments;
+	static QString maxReached = " ";
+	if( m_maxComments < 0 ) {
+		return maxReached;
+	}
+	
   int line, col;
   tag.getStartPosition( &line, &col );
   QString ret; // = tag.comment();

@@ -274,6 +274,12 @@ private:
 
 	QTime m_lastHintTime;
 
+    //If more then the given count of comments were requested, all following ones will be blank.(Performance-reasons)
+    void setMaxComments( int count );
+    
+    QString commentFromItem( const SimpleType& parent, const ItemDom& item );
+    QString commentFromTag( const SimpleType& parent, Tag& tag );
+        
     ItemDom m_cachedFromContext;  ///Can be a function or a class, representing the position from where the last completion was started. Necessary as long as all imports are put into the global namespace.
 	
 	QRegExp m_includeRx;
@@ -281,6 +287,8 @@ private:
 	QRegExp m_codeCompleteChRx;
 	QRegExp m_codeCompleteCh2Rx;
     QValueList<KTextEditor::CompletionEntry> m_fileEntryList;
+
+    int m_maxComments;
     
     typedef QMap<int, DeclarationInfo> PopupActions;
     typedef QMap<int, ItemDom> PopupClassViewActions;
