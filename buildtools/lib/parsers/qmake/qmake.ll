@@ -103,6 +103,7 @@ cont              \\{ws}*\n
 "*="                     { BEGIN(list); yylval.value = yytext; return STAREQ; }
 "~="                     { BEGIN(list); yylval.value = yytext; return TILDEEQ; }
 "{"                      { return LCURLY; }
+":{"                      { return LCURLY; }
 "}"                      { return RCURLY; }
 "("                      { BEGIN(funcargs); return LBRACE; }
 <funcargs,INITIAL>")"    { BEGIN(INITIAL); return RBRACE; }
