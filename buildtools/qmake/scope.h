@@ -156,11 +156,16 @@ public:
     // Checks wether a QStringList contains any values that are not whitespace or \\n
     static bool listIsEmpty( const QStringList& values );
 
+    /* returns wether this is an enabled subproject or a disabled one */
     bool isEnabled() { return m_isEnabled; }
 
     static QStringList removeWhiteSpace(const QStringList& list);
 
+    /* Reload a project scope */
     void reloadProject();
+
+    /* creates a new disabled Scope child and add SUBDIRS -= dir to this scope */
+    Scope* disableSubproject( const QString& );
 
 #ifdef DEBUG
     void printTree();

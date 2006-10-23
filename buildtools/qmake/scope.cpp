@@ -483,43 +483,42 @@ Scope* Scope::createSubProject( const QString& dir )
     if( !m_root )
         return 0;
 
+    if( variableValuesForOp( "SUBDIRS", "-=").contains( dir ) )
+        removeFromMinusOp( "SUBDIRS", dir );
+
     QDir curdir( projectDir() );
-    QValueList<QMake::AST*>::iterator it = findExistingVariable( "TEMPLATE" );
-    if ( it != m_root->m_children.end() )
+
+    if ( variableValues("TEMPLATE").contains( "subdirs" ) )
     {
-        QMake::AssignmentAST * tempast = static_cast<QMake::AssignmentAST*>( *it );
-        if ( tempast->values.contains( "subdirs" ) )
+        if ( !curdir.exists( dir ) )
+            if ( !curdir.mkdir( dir ) )
+                return 0;
+        curdir.cd(dir);
+        QString filename;
+        QStringList entries = curdir.entryList("*.pro", QDir::Files);
+
+        if ( !entries.isEmpty() && !entries.contains( curdir.dirName()+".pro" ) )
+            filename = curdir.absPath() + QString(QChar(QDir::separator()))+entries.first();
+        else
+            filename = curdir.absPath() + QString(QChar(QDir::separator()))+curdir.dirName()+".pro";
+
+        kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
+
+        Scope* s = new Scope( this, filename, m_part );
+        if ( s->scopeType() != InvalidScope )
         {
-
-            if ( !curdir.exists( dir ) )
-                if ( !curdir.mkdir( dir ) )
-                    return 0;
-            curdir.cd(dir);
-            QString filename;
-            QStringList entries = curdir.entryList("*.pro", QDir::Files);
-
-            if ( !entries.isEmpty() && !entries.contains( curdir.dirName()+".pro" ) )
-                filename = curdir.absPath() + QString(QChar(QDir::separator()))+entries.first();
-            else
-                filename = curdir.absPath() + QString(QChar(QDir::separator()))+curdir.dirName()+".pro";
-
-            kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
-
-            Scope* s = new Scope( this, filename, m_part );
-            if ( s->scopeType() != InvalidScope )
-            {
-                if( s->variableValues("TEMPLATE").isEmpty() )
-                    s->setEqualOp("TEMPLATE", QStringList("app"));
-                s->saveToFile();
-                addToPlusOp( "SUBDIRS", QStringList( dir ) );
-                m_subProjects.insert( dir, s );
-                return s;
-            } else
-            {
-                delete s;
-            }
+            if( s->variableValues("TEMPLATE").isEmpty() )
+                s->setEqualOp("TEMPLATE", QStringList("app"));
+            s->saveToFile();
+            addToPlusOp( "SUBDIRS", QStringList( dir ) );
+            m_subProjects.insert( dir, s );
+            return s;
+        } else
+        {
+            delete s;
         }
     }
+
     return 0;
 }
 
@@ -1106,6 +1105,38 @@ void Scope::reloadProject()
         m_root = new QMake::ProjectAST();
         m_root->setFileName( filename );
     }
+}
+
+Scope* Scope::disableSubproject( const QString& dir)
+{
+    if( !m_root || ( m_root->isProject() && !m_incast ) )
+        return 0;
+
+    if( variableValuesForOp( "SUBDIRS", "+=").contains( dir ) )
+        removeFromPlusOp( "SUBDIRS", dir );
+
+    QDir curdir( projectDir() );
+
+    if ( variableValues("TEMPLATE").contains( "subdirs" ) )
+    {
+        curdir.cd(dir);
+        QString filename;
+        QStringList entries = curdir.entryList("*.pro", QDir::Files);
+
+        if ( !entries.isEmpty() && !entries.contains( curdir.dirName()+".pro" ) )
+            filename = curdir.absPath() + QString(QChar(QDir::separator()))+entries.first();
+        else
+            filename = curdir.absPath() + QString(QChar(QDir::separator()))+curdir.dirName()+".pro";
+
+        kdDebug( 9024 ) << "Disabling subproject with filename:" << filename << endl;
+
+        Scope* s = new Scope( this, filename, m_part, false );
+        addToMinusOp( "SUBDIRS", QStringList( dir ) );
+        m_subProjects.insert( dir, s );
+        return s;
+    }
+
+    return 0;
 }
 
 #ifdef DEBUG

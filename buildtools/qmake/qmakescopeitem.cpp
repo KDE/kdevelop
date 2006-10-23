@@ -686,7 +686,7 @@ void QMakeScopeItem::addValues( const QString& var, const QStringList& values )
 
 void QMakeScopeItem::removeValue( const QString& var, const QString& value )
 {
-    if( scope->variableValues( var ).contains( value ) )
+    while( scope->variableValues( var ).contains( value ) )
     {
         if( scope->variableValuesForOp( var, "+=" ).contains(value) )
             scope->removeFromPlusOp( var, QStringList( value ) );
@@ -697,7 +697,7 @@ void QMakeScopeItem::removeValue( const QString& var, const QString& value )
 
 void QMakeScopeItem::addValue( const QString& var, const QString& value )
 {
-    if( !scope->variableValues( var ).contains( value ) )
+    while( !scope->variableValues( var ).contains( value ) )
     {
         if( scope->variableValuesForOp( var, "-=" ).contains(value) )
             scope->removeFromMinusOp( var, QStringList( value ) );
@@ -742,6 +742,7 @@ QMakeScopeItem* QMakeScopeItem::projectFileItem()
 
 void QMakeScopeItem::reloadProject()
 {
+    kdDebug(9024) << "Reloading Project" << endl;
     QListViewItem* item = firstChild();
     while( item )
     {
@@ -761,6 +762,30 @@ void QMakeScopeItem::reloadProject()
     groups.clear();
     scope->reloadProject();
     init();
+}
+
+void QMakeScopeItem::disableSubprojects( const QStringList& dirs )
+{
+    QStringList::const_iterator it = dirs.begin();
+    for( ; it != dirs.end() ; ++it)
+    {
+        if( scope->variableValues("SUBDIRS").contains(*it) )
+        {
+            Scope* s = scope->disableSubproject(*it);
+            if( !s )
+                return;
+            else
+            {
+                QMakeScopeItem* newitem = new QMakeScopeItem( this, s->scopeName(), s );
+                QListViewItem* lastitem = firstChild();
+                while( lastitem && lastitem->nextSibling() )
+                    lastitem = lastitem->nextSibling();
+                if( lastitem )
+                    newitem->moveItem(lastitem);
+            }
+        }
+    }
+
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

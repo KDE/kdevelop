@@ -777,6 +777,7 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
         return ;
     else
         spitem = m_shownSubproject;
+
     QString projectdir = spitem->scope->projectDir();
 
     KURLRequesterDlg dialog( i18n( "Add Subdirectory" ), i18n( "Please enter a name for the subdirectory: " ), this, 0 );
@@ -806,6 +807,27 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
                 return ;
             }
         }
+
+        QListViewItem* item = spitem->firstChild();
+        while( item )
+        {
+            QMakeScopeItem* sitem = static_cast<QMakeScopeItem*>(item);
+            if( sitem->scope->scopeName() == subdirname )
+            {
+                if( sitem->scope->isEnabled() )
+                {
+                    return;
+                }else
+                {
+                    spitem->scope->removeFromMinusOp( "SUBDIRS", subdirname );
+                    delete item;
+                    if( spitem->scope->variableValues( "SUBDIRS" ).contains( subdirname ) )
+                        return;
+                }
+            }
+            item = item->nextSibling();
+        }
+
         Scope* subproject = spitem->scope->createSubProject( subdirname );
         if( subproject )
         {
@@ -866,7 +888,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     int idAddScope = -2;
 
 
-    if ( spitem->scope->scopeType() == Scope::ProjectScope )
+    if ( spitem->scope->scopeType() == Scope::ProjectScope && spitem->scope->parent()->scopeType() == Scope::ProjectScope )
     {
         idBuild = popup.insertItem( SmallIcon( "make_kdevelop" ), i18n( "Build" ) );
         popup.setWhatsThis( idBuild, i18n( "<b>Build</b><p>Runs <b>make</b> from the selected subproject directory.<br>"
@@ -921,7 +943,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
             popup.setItemEnabled( idAddSubproject, false );
         idDisableSubproject = popup.insertItem( SmallIcon( "remove_subdir" ), i18n( "Disable Subproject..." ) );
         popup.setWhatsThis( idRemoveSubproject, i18n( "<b>Disable subproject</b><p>Disables the currently selected subproject when this scope is active. Does not delete the directory from disk. Deleted subproject can be later added by calling 'Add Subproject' action." ) );
-        if( !spitem->projectFileItem()->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+        if( !spitem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) && !spitem->scope->parent()->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
             popup.setItemEnabled( idDisableSubproject, false );
         popup.insertSeparator();
         idProjectConfiguration = popup.insertItem( SmallIcon( "configure" ), i18n( "Scope Settings" ) );
@@ -2339,13 +2361,33 @@ bool TrollProjectWidget::isTMakeProject()
 
 void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
 {
-    QStringList subdirs = spitem->projectFileItem()->scope->variableValues( "SUBDIRS" );
-    DisableSubprojectDlg dlg( subdirs );
-    if( dlg.exec() )
+    if( spitem->scope->variableValues("TEMPLATE").contains("subdirs") )
     {
-        QStringList values = dlg.selectedProjects();
-        spitem->removeValues( "SUBDIRS", values );
-        spitem->scope->saveToFile();
+        QStringList subdirs = spitem->scope->variableValues( "SUBDIRS" );
+        DisableSubprojectDlg dlg( subdirs );
+        if( dlg.exec() )
+        {
+            QStringList values = dlg.selectedProjects();
+            QListViewItem* item = spitem->firstChild();
+            while( item )
+            {
+                if( values.contains( item->text(0) ) )
+                    delete item;
+                item = item->nextSibling();
+            }
+            spitem->disableSubprojects( values );
+            spitem->scope->saveToFile();
+            m_shownSubproject = spitem;
+            slotOverviewSelectionChanged( m_shownSubproject );
+        }
+    }else
+    {
+        QMakeScopeItem* parent = static_cast<QMakeScopeItem*>(spitem->parent());
+        parent->disableSubprojects( QStringList( spitem->scope->scopeName() ) );
+        delete spitem;
+        parent->scope->saveToFile();
+        m_shownSubproject = parent;
+        slotOverviewSelectionChanged( m_shownSubproject );
     }
 }
 

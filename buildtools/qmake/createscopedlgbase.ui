@@ -190,6 +190,9 @@
                                 <property name="name">
                                     <cstring>incUrl</cstring>
                                 </property>
+                                <property name="focusPolicy">
+                                    <enum>StrongFocus</enum>
+                                </property>
                                 <property name="filter">
                                     <string>*.pri</string>
                                 </property>
@@ -310,14 +313,14 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>incUrl</tabstop>
+    <tabstop>editFunction</tabstop>
+    <tabstop>editArguments</tabstop>
     <tabstop>comboScopeType</tabstop>
-    <tabstop>checkNotInc</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
     <tabstop>editScopeName</tabstop>
-    <tabstop>editFunction</tabstop>
-    <tabstop>editArguments</tabstop>
+    <tabstop>incUrl</tabstop>
+    <tabstop>checkNotInc</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
