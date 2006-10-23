@@ -46,13 +46,13 @@ set(kdevcpplanguagesupport_PART_SRCS
     ${kdevcppduchain_SRCS}
 )
 
-kde4_automoc(kdevcpplanguage ${kdevcpplanguage_LIB_SRCS})
+kde4_automoc(${kdevcpplanguage_LIB_SRCS})
 kde4_add_library(kdevcpplanguage SHARED ${kdevcpplanguage_LIB_SRCS})
 target_link_libraries(kdevcpplanguage ${KDE4_KDECORE_LIBS} kdevplatform kdevcppparser kdevcpprpp )
 set_target_properties(kdevcpplanguage PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevcpplanguage DESTINATION ${LIB_INSTALL_DIR} )
 
-kde4_automoc(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
+kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport kdevcpplanguage threadweaver)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevcpplanguagesupport threadweaver)

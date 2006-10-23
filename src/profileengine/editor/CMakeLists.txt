@@ -10,7 +10,7 @@ set(profileeditor_STAT_SRCS
     profileeditor.cpp
 )
 
-kde4_automoc(profileeditor_STAT ${profileeditor_STAT_SRCS})
+kde4_automoc(${profileeditor_STAT_SRCS})
 
 set(profileeditor_UI
     profileeditorbase.ui
@@ -27,7 +27,7 @@ set(kdevprofileeditor_SRCS
     main.cpp
 )
 
-kde4_automoc(kdevprofileeditor ${kdevprofileeditor_SRCS})
+kde4_automoc(${kdevprofileeditor_SRCS})
 kde4_add_executable(kdevprofileeditor ${kdevprofileeditor_SRCS})
 target_link_libraries(kdevprofileeditor ${KDE4_KDECORE_LIBS} kdevplatform profileeditor ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 install(TARGETS kdevprofileeditor DESTINATION ${BIN_INSTALL_DIR} )

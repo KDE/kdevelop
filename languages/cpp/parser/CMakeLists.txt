@@ -34,7 +34,7 @@ set(kdevcppparser_LIB_SRCS
     type_compiler.cpp
 )
 
-kde4_automoc(kdevcppparser ${kdevcppparser_LIB_SRCS})
+kde4_automoc(${kdevcppparser_LIB_SRCS})
 kde4_add_library(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
 target_link_libraries(kdevcppparser kdevplatform )
 set_target_properties(kdevcppparser PROPERTIES VERSION 4.0.0 SOVERSION 4)

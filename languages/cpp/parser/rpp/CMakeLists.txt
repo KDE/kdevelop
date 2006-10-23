@@ -15,7 +15,7 @@ set(kdevcpprpp_LIB_SRCS
     preprocessor.cpp
 )
 
-kde4_automoc(kdevcpprpp ${kdevcpprpp_LIB_SRCS})
+kde4_automoc(${kdevcpprpp_LIB_SRCS})
 kde4_add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
 target_link_libraries(kdevcpprpp kdevplatform )
 set_target_properties(kdevcpprpp PROPERTIES VERSION 4.0.0 SOVERSION 4)

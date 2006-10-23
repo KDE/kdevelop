@@ -10,7 +10,7 @@ set(kdevrubylanguagesupport_PART_SRCS
     parsejob.cpp
 )
 
-kde4_automoc(kdevrubylanguagesupport ${kdevrubylanguagesupport_PART_SRCS})
+kde4_automoc(${kdevrubylanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevrubylanguagesupport ${kdevrubylanguagesupport_PART_SRCS})
 target_link_libraries(kdevrubylanguagesupport ${KDE4_KDECORE_LIBS} kdevplatform threadweaver kdevrubyparser)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevrubylanguagesupport)

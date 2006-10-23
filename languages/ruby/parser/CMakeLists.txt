@@ -136,7 +136,7 @@ else(KDEVCMG_EXECUTABLE)
 endif(KDEVCMG_EXECUTABLE)
 
 
-kde4_automoc(kdevrubyparser_STAT ${kdevrubyparser_STAT_SRCS})
+kde4_automoc(${kdevrubyparser_STAT_SRCS})
 kde4_add_library(kdevrubyparser STATIC ${kdevrubyparser_STAT_SRCS})
 
 # generate the command-line parser

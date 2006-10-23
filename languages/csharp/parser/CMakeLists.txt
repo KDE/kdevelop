@@ -154,5 +154,5 @@ ELSE(KDEVCMG_EXECUTABLE)
 ENDIF(KDEVCMG_EXECUTABLE)
 
 
-kde4_automoc(kdevcsharpparser_STAT ${kdevcsharpparser_STAT_SRCS})
+kde4_automoc(${kdevcsharpparser_STAT_SRCS})
 kde4_add_library(kdevcsharpparser STATIC ${kdevcsharpparser_STAT_SRCS})

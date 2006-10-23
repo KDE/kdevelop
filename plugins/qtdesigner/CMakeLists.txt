@@ -9,7 +9,7 @@ qtdesignerpart.cpp
 formwindow_page.cpp
 )
 
-kde4_automoc(kdevqtdesigner ${kdevqtdesigner_PART_SRCS})
+kde4_automoc(${kdevqtdesigner_PART_SRCS})
 
 kde4_add_plugin(kdevqtdesigner ${kdevqtdesigner_PART_SRCS})
 

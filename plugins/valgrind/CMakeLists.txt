@@ -11,7 +11,7 @@ set(kdevvalgrind_PART_SRCS
     valgrindcontrol.cpp
 )
 
-kde4_automoc(kdevvalgrind ${kdevvalgrind_PART_SRCS})
+kde4_automoc(${kdevvalgrind_PART_SRCS})
 
 set(kdevvalgrind_PART_UI
     valgrind_dialog.ui

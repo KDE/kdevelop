@@ -17,7 +17,7 @@ set(kdevautomakeparser_STAT_SRCS
     makefileinterface.cpp
 )
 
-kde4_automoc(kdevautomakeparser_STAT ${kdevautomakeparser_STAT_SRCS})
+kde4_automoc(${kdevautomakeparser_STAT_SRCS})
 kde4_add_library(kdevautomakeparser STATIC ${kdevautomakeparser_STAT_SRCS})
 
 
@@ -28,7 +28,7 @@ set(kdevautomakeimporter_PART_SRCS
     automakeimporter.cpp
 )
 
-kde4_automoc(kdevautomakeimporter ${kdevautomakeimporter_PART_SRCS})
+kde4_automoc(${kdevautomakeimporter_PART_SRCS})
 kde4_add_plugin(kdevautomakeimporter ${kdevautomakeimporter_PART_SRCS})
 target_link_libraries(kdevautomakeimporter ${KDE4_KDECORE_LIBS} kdevautomakeparser kdevplatform)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevautomakeimporter)

@@ -10,7 +10,7 @@ set(kdevfilemanager_PART_SRCS
     kdevdirmodel.cpp
 )
 
-kde4_automoc(kdevfilemanager ${kdevfilemanager_PART_SRCS})
+kde4_automoc(${kdevfilemanager_PART_SRCS})
 kde4_add_plugin(kdevfilemanager ${kdevfilemanager_PART_SRCS})
 target_link_libraries(kdevfilemanager ${KDE4_KDECORE_LIBS} kdevplatform kdevutil)
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevfilemanager)

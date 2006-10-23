@@ -25,7 +25,7 @@ set(viewer_SRCS
     viewer_main.cpp
 )
 
-kde4_automoc(viewer ${viewer_SRCS})
+kde4_automoc(${viewer_SRCS})
 
 set(viewer_UI
     viewerbase.ui
@@ -42,7 +42,7 @@ set(testinterface_SRCS
     testinterface.cpp
 )
 
-kde4_automoc(testinterface ${testinterface_SRCS})
+kde4_automoc(${testinterface_SRCS})
 kde4_add_executable(testinterface ${testinterface_SRCS})
 target_link_libraries(testinterface ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevautomakeparser ${KDE4_KIO_LIBS})
 add_test(kdevelop-automakeparsertest ${EXECUTABLE_OUTPUT_PATH}/testinterface)
