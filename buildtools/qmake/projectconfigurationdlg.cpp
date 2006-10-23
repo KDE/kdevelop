@@ -357,8 +357,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     {
         if ( insideItem->isOn() )
         {
-            QString tmpInc = insideItem->prjItem->getIncAddPath(
-                myProjectItem->scope->projectDir() );
+          QString tmpInc = insideItem->prjItem->getIncAddPath( myProjectItem->scope->projectDir() );
             tmpInc = QDir::cleanDirPath( tmpInc );
             values << tmpInc;
 

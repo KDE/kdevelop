@@ -456,9 +456,9 @@ QString QMakeScopeItem::getLibAddPath( QString basePath )
 
 }
 
-QString QMakeScopeItem::getIncAddPath( QString downDirs )
+QString QMakeScopeItem::getIncAddPath( QString basePath )
 {
-    QString tmpPath = downDirs + this->relativePath();
+    QString tmpPath = getRelativePath( basePath, scope->projectDir() );
     tmpPath = QDir::cleanDirPath( tmpPath );
 
     return ( tmpPath );
