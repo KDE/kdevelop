@@ -445,7 +445,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     {
         if ( insideItem->isOn() )
         {
-            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "staticlib" )
+                 || ( !insideItem->prjItem->scope->variableValues( "CONFIG" ).contains("dll")
+                      && insideItem->prjItem->scope->variableValues( "TEMPLATE" ).contains("lib") ) )
             {
                 values << insideItem->prjItem->getLibAddObject(
                     myProjectItem->scope->projectDir() );
@@ -829,7 +831,6 @@ void ProjectConfigurationDlg::updateIncludeControl()
     QStringList incList = myProjectItem->scope->variableValues( "INCLUDEPATH" );
     QPtrList <QMakeScopeItem> itemList = getAllProjects();
     QMakeScopeItem *item = itemList.first();
-
     while ( item )
     {
         if ( item->scope->variableValues( "TEMPLATE" ).contains( "lib" ) ||
@@ -839,7 +840,6 @@ void ProjectConfigurationDlg::updateIncludeControl()
             tmpInc = QDir::cleanDirPath( tmpInc );
             InsideCheckListItem *newItem = new InsideCheckListItem( insideinc_listview,
                                            insideinc_listview->lastItem(), item, this );
-            QStringList::Iterator it = incList.begin();
 
             if ( incList.contains( tmpInc ) )
             {
@@ -885,7 +885,8 @@ void ProjectConfigurationDlg::updateLibControls()
                 InsideCheckListItem * newItem = new InsideCheckListItem( insidelib_listview,
                                                 insidelib_listview->lastItem(), item, this );
                 QString tmpLibDir = item->getLibAddPath( myProjectItem->scope->projectDir() );
-
+                kdDebug(9024) << "lib path:" << tmpLib << endl;
+                kdDebug(9024) << "lib dir:" << tmpLibDir << endl;
                 if ( libList.contains( "-L" + tmpLibDir ) )
                 {
                     libList.remove( "-L" + tmpLibDir );
