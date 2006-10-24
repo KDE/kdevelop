@@ -175,6 +175,7 @@ public:
     QStringList values;
     /**Indentation of multiline values*/
     QString indent;
+    QMake::AST* commentnode;
 };
 
 

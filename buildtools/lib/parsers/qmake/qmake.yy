@@ -177,6 +177,7 @@ variable_assignment : ID_SIMPLE operator multiline_values
             node->op = $<value>2;
             node->values = $<values>3;
             node->indent = $<indent>3;
+	    node->commentnode = $<node>3;
             $<node>$ = node;
         }
     ;
@@ -186,11 +187,13 @@ multiline_values : multiline_values line_body opt_comment
             $<values>$ += $<values>2;
             if( $<indent>2 != "" && $<indent>$ == "" )
                 $<indent>$ = $<indent>2;
+            $<node>$ = $<node>3;
         }
     |   
         { 
             $<values>$.clear(); 
             $<indent>$ = "";
+	    $<node>$ = 0;
         }
     ;
 
@@ -210,6 +213,11 @@ line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
     ;
     
 opt_comment: LIST_COMMENT_WITHOUT_NEWLINE
+        {
+            CommentAST* node = new CommentAST();
+            node->comment = $<value>1 + "\n";
+	    $<node>$ = node;
+        }
     |
     ;
 

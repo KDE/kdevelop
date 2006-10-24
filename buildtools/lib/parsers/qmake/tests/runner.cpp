@@ -84,8 +84,10 @@ private:
 
   virtual void processAssignment( QMake::AssignmentAST* a)
   {
-      kdDebug(9024) << getIndent() << "Assignment(" << replaceWs(a->indent) << "):" << replaceWs(a->scopedID) << " " << replaceWs(a->op) << " "
-          << replaceWs(a->values.join("|"))<< endl;
+      if( a->commentnode != 0 )
+	      kdDebug(9024) << getIndent() << "Assignment(" << replaceWs(a->indent) << "):" << replaceWs(a->scopedID) << " " << replaceWs(a->op) << " " << replaceWs(a->values.join("|")) << static_cast<QMake::CommentAST*>(a->commentnode)->comment << endl;
+      else
+	      kdDebug(9024) << getIndent() << "Assignment(" << replaceWs(a->indent) << "):" << replaceWs(a->scopedID) << " " << replaceWs(a->op) << " " << replaceWs(a->values.join("|")) << endl;
       QMake::ASTVisitor::processAssignment(a);
   }
 
