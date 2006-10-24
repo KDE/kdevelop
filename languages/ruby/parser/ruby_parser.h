@@ -248,6 +248,7 @@ namespace ruby
       //state modifiers
       bool seen_star;
       bool seen_star_or_band;
+      bool seen_rparen;
 
       bool expect_array_or_block_arguments;
 

@@ -101,6 +101,7 @@ namespace ruby
   //state modifiers
   bool seen_star;
   bool seen_star_or_band;
+  bool seen_rparen;
 
   bool expect_array_or_block_arguments;
 
@@ -414,9 +415,17 @@ namespace ruby
 -> elementReference ;;
 
 
--- FIXME: 16 FIRST/FOLLOW conflicts because of this
-    colonAccess (methodInvocationArgumentWithParen | 0) (codeBlock | 0)
-    | (RETURN | BREAK | NEXT) (methodInvocationArgumentWithParen | 0)
+-- 14 FIRST/FOLLOW conflicts because of methodInvocationArgumentWithoutParen this rule
+-- seen_rparen:
+--
+--
+--
+    colonAccess (
+        ?[: !seen_rparen :]
+        methodInvocationArgumentWithoutParen
+        | 0
+    ) ( codeBlock | 0) [: seen_rparen = false; :]
+    | (RETURN | BREAK | NEXT) (methodInvocationArgumentWithoutParen | 0) [: seen_rparen = false; :]
 -> command ;;
 
 
@@ -424,7 +433,7 @@ namespace ruby
 -> colonAccess ;;
 
 
-    primaryExpression (methodInvocationArgumentWithParen | 0)
+    primaryExpression (methodInvocationArgumentWithParen [: seen_rparen = true; :] | 0)
 -> methodCall ;;
 
 

@@ -3391,14 +3391,70 @@ namespace ruby
                   }
                 return false;
               }
-            if (yytoken == Token_LPAREN)
+            if ((yytoken == Token_BEGIN
+                 || yytoken == Token_RETURN
+                 || yytoken == Token_BREAK
+                 || yytoken == Token_NEXT
+                 || yytoken == Token_NIL
+                 || yytoken == Token_TRUE
+                 || yytoken == Token_FALSE
+                 || yytoken == Token_FILE
+                 || yytoken == Token_LINE
+                 || yytoken == Token_SELF
+                 || yytoken == Token_SUPER
+                 || yytoken == Token_RETRY
+                 || yytoken == Token_YIELD
+                 || yytoken == Token_DEFINED
+                 || yytoken == Token_REDO
+                 || yytoken == Token_IF
+                 || yytoken == Token_CASE
+                 || yytoken == Token_UNTIL
+                 || yytoken == Token_WHILE
+                 || yytoken == Token_FOR
+                 || yytoken == Token_MODULE
+                 || yytoken == Token_DEF
+                 || yytoken == Token_CLASS
+                 || yytoken == Token_UNLESS
+                 || yytoken == Token_KEYWORD_NOT
+                 || yytoken == Token_LPAREN
+                 || yytoken == Token_LEADING_TWO_COLON
+                 || yytoken == Token_LBRACK
+                 || yytoken == Token_COLON_WITH_NO_FOLLOWING_SPACE
+                 || yytoken == Token_LCURLY_HASH
+                 || yytoken == Token_REST_ARG_PREFIX
+                 || yytoken == Token_UNARY_MINUS
+                 || yytoken == Token_UNARY_PLUS
+                 || yytoken == Token_NOT
+                 || yytoken == Token_BNOT
+                 || yytoken == Token_IDENTIFIER
+                 || yytoken == Token_CONSTANT
+                 || yytoken == Token_FUNCTION
+                 || yytoken == Token_GLOBAL_VARIABLE
+                 || yytoken == Token_INSTANCE_VARIABLE
+                 || yytoken == Token_CLASS_VARIABLE
+                 || yytoken == Token_DOUBLE_QUOTED_STRING
+                 || yytoken == Token_SINGLE_QUOTED_STRING
+                 || yytoken == Token_STRING_BEFORE_EXPRESSION_SUBSTITUTION
+                 || yytoken == Token_REGEX_BEFORE_EXPRESSION_SUBSTITUTION
+                 || yytoken == Token_REGEX
+                 || yytoken == Token_COMMAND_OUTPUT
+                 || yytoken == Token_COMMAND_OUTPUT_BEFORE_EXPRESSION_SUBSTITUTION
+                 || yytoken == Token_HERE_DOC_BEGIN
+                 || yytoken == Token_W_ARRAY
+                 || yytoken == Token_INTEGER
+                 || yytoken == Token_HEX
+                 || yytoken == Token_OCTAL
+                 || yytoken == Token_BINARY
+                 || yytoken == Token_FLOAT
+                 || yytoken == Token_ASCII_VALUE
+                 || yytoken == Token_BLOCK_ARG_PREFIX) && ( !seen_rparen ))
               {
-                methodInvocationArgumentWithParen_ast *__node_66 = 0;
-                if (!parse_methodInvocationArgumentWithParen(&__node_66))
+                methodInvocationArgumentWithoutParen_ast *__node_66 = 0;
+                if (!parse_methodInvocationArgumentWithoutParen(&__node_66))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_symbol(ast_node::Kind_methodInvocationArgumentWithParen, "methodInvocationArgumentWithParen");
+                        yy_expected_symbol(ast_node::Kind_methodInvocationArgumentWithoutParen, "methodInvocationArgumentWithoutParen");
                       }
                     return false;
                   }
@@ -3428,6 +3484,7 @@ namespace ruby
               {
                 return false;
               }
+            seen_rparen = false;
           }
         else if (yytoken == Token_RETURN
                  || yytoken == Token_BREAK
@@ -3476,14 +3533,70 @@ namespace ruby
               {
                 return false;
               }
-            if (yytoken == Token_LPAREN)
+            if (yytoken == Token_BEGIN
+                || yytoken == Token_RETURN
+                || yytoken == Token_BREAK
+                || yytoken == Token_NEXT
+                || yytoken == Token_NIL
+                || yytoken == Token_TRUE
+                || yytoken == Token_FALSE
+                || yytoken == Token_FILE
+                || yytoken == Token_LINE
+                || yytoken == Token_SELF
+                || yytoken == Token_SUPER
+                || yytoken == Token_RETRY
+                || yytoken == Token_YIELD
+                || yytoken == Token_DEFINED
+                || yytoken == Token_REDO
+                || yytoken == Token_IF
+                || yytoken == Token_CASE
+                || yytoken == Token_UNTIL
+                || yytoken == Token_WHILE
+                || yytoken == Token_FOR
+                || yytoken == Token_MODULE
+                || yytoken == Token_DEF
+                || yytoken == Token_CLASS
+                || yytoken == Token_UNLESS
+                || yytoken == Token_KEYWORD_NOT
+                || yytoken == Token_LPAREN
+                || yytoken == Token_LEADING_TWO_COLON
+                || yytoken == Token_LBRACK
+                || yytoken == Token_COLON_WITH_NO_FOLLOWING_SPACE
+                || yytoken == Token_LCURLY_HASH
+                || yytoken == Token_REST_ARG_PREFIX
+                || yytoken == Token_UNARY_MINUS
+                || yytoken == Token_UNARY_PLUS
+                || yytoken == Token_NOT
+                || yytoken == Token_BNOT
+                || yytoken == Token_IDENTIFIER
+                || yytoken == Token_CONSTANT
+                || yytoken == Token_FUNCTION
+                || yytoken == Token_GLOBAL_VARIABLE
+                || yytoken == Token_INSTANCE_VARIABLE
+                || yytoken == Token_CLASS_VARIABLE
+                || yytoken == Token_DOUBLE_QUOTED_STRING
+                || yytoken == Token_SINGLE_QUOTED_STRING
+                || yytoken == Token_STRING_BEFORE_EXPRESSION_SUBSTITUTION
+                || yytoken == Token_REGEX_BEFORE_EXPRESSION_SUBSTITUTION
+                || yytoken == Token_REGEX
+                || yytoken == Token_COMMAND_OUTPUT
+                || yytoken == Token_COMMAND_OUTPUT_BEFORE_EXPRESSION_SUBSTITUTION
+                || yytoken == Token_HERE_DOC_BEGIN
+                || yytoken == Token_W_ARRAY
+                || yytoken == Token_INTEGER
+                || yytoken == Token_HEX
+                || yytoken == Token_OCTAL
+                || yytoken == Token_BINARY
+                || yytoken == Token_FLOAT
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_BLOCK_ARG_PREFIX)
               {
-                methodInvocationArgumentWithParen_ast *__node_68 = 0;
-                if (!parse_methodInvocationArgumentWithParen(&__node_68))
+                methodInvocationArgumentWithoutParen_ast *__node_68 = 0;
+                if (!parse_methodInvocationArgumentWithoutParen(&__node_68))
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_symbol(ast_node::Kind_methodInvocationArgumentWithParen, "methodInvocationArgumentWithParen");
+                        yy_expected_symbol(ast_node::Kind_methodInvocationArgumentWithoutParen, "methodInvocationArgumentWithoutParen");
                       }
                     return false;
                   }
@@ -3494,6 +3607,7 @@ namespace ruby
               {
                 return false;
               }
+            seen_rparen = false;
           }
         else
           {
@@ -7448,6 +7562,7 @@ namespace ruby
                   }
                 return false;
               }
+            seen_rparen = true;
           }
         else if (true /*epsilon*/)
         {}
