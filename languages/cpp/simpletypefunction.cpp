@@ -22,7 +22,7 @@ extern CppCodeCompletion* cppCompletionInstance;
 
 HashedStringSet getIncludeFiles( const ItemDom& item ) {
     if( item ) {
-        FileDom f =  item->codeModel()->fileByName( item->fileName() );
+        FileDom f =  item->file();
         if( f ) {
             ParseResultPointer p = f->parseResult();
             if( p ) {
@@ -348,7 +348,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     VariableDom d = klass->variableByName( name.name() );
     if( d ) {
       ret.type = d->type();
-      ret.type->setIncludeFiles( getIncludeFiles( d.data() ) );
+      ret.type->setIncludeFiles( HashedString( d->fileName() ) );
       ret.decl.name = d->name();
       ret.decl.file = d->fileName();
       ret.decl.comment = d->comment();
@@ -373,7 +373,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     ret.memberType = MemberInfo::Typedef;
     EnumDom e = klass->enumByName( name.name() );
 	  ret.type = TypeDesc( "const int" );
-      ret.type->setIncludeFiles( getIncludeFiles( e.data() ) );
+      ret.type->setIncludeFiles(  HashedString( e->fileName() ) );
 	  ret.decl.name = e->name();
 	  ret.decl.file = e->fileName();
 	  ret.decl.comment = e->comment();
@@ -389,7 +389,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
         
         ret.memberType = MemberInfo::NestedType;
         ret.type = name;
-        ret.type->setIncludeFiles( getIncludeFiles( i.data() ) );
+        ret.type->setIncludeFiles(  HashedString( i->fileName() ) );
       }
     }
   } else if( klass->hasFunction( name.name() )  && ( type & MemberInfo::Function ) ) {
@@ -398,7 +398,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     if( !l.isEmpty() && l.front() ) {
       ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name , TypePointer(this) ) );
       ret.type = l.front()->resultType();
-        ret.type->setIncludeFiles( getIncludeFiles( l.front().data() ) );
+      ret.type->setIncludeFiles(  HashedString( l.front()->fileName() ) );
       ret.type->increaseFunctionDepth();
     }
   } else if ( ns && ns->hasNamespace( name.name() )  && ( type & MemberInfo::Namespace ) ) {
@@ -406,14 +406,14 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     ret.setBuildInfo( new CodeModelBuildInfo( model_cast<ItemDom>( n), name, TypePointer( this ) ) );
     ret.memberType = MemberInfo::Namespace;
     ret.type = name;
-      ret.type->setIncludeFiles( getIncludeFiles( n.data() ) );
+      //ret.type->setIncludeFiles( d->fileName() );
   } else if( klass->hasFunctionDefinition( name.name() )  && ( type & MemberInfo::Function ) ) {
 	  FunctionDefinitionList l = klass->functionDefinitionByName( name.name() );
 	  for( FunctionDefinitionList::iterator it = l.begin(); it != l.end(); ++it ) {
 		  if( !(*it)->scope().isEmpty() && (*it)->scope() != scope() ) continue; ///Only use definitions with empty scope or that are within this class
 		  ret.setBuildInfo( new SimpleTypeCodeModelFunction::CodeModelFunctionBuildInfo( l, name, TypePointer(this) ) );
 		  ret.type = l.front()->resultType();
-    	  ret.type->setIncludeFiles( getIncludeFiles( l.front().data() ) );
+    	  ret.type->setIncludeFiles(  HashedString( (*it)->fileName() ) );
 		  ret.type->increaseFunctionDepth();
 		  ret.memberType = MemberInfo::Function;
 		  break;
@@ -426,6 +426,8 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
       if( s ) {
         ret.memberType = MemberInfo::Template;
         ret.type = s;
+        if( m_item )
+          ret.type->setIncludeFiles( getIncludeFiles( m_item.data() ) );
 		ret.decl.name = name.name();
 	  if( m_item ) {
 		  ret.decl.file = m_item->fileName();
