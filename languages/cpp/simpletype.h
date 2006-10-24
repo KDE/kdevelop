@@ -313,6 +313,10 @@ class SimpleTypeImpl : public KShared {
       m_masterProxy = t;
     }
 
+    TypePointer masterProxy() const {
+        return m_masterProxy;
+    }
+
     ///@todo remove this and use getTemplateParamInfo instead
     virtual const LocateResult findTemplateParam( const QString& /*name*/ ) {
 		return LocateResult();

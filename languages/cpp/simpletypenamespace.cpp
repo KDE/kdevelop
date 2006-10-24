@@ -39,8 +39,7 @@ SimpleTypeNamespace::SimpleTypeNamespace( SimpleTypeNamespace* ns ) : SimpleType
 }
 
 SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type ) {
- std::set
-  <SimpleTypeNamespace*> ignore;
+ std::set<SimpleTypeImpl*> ignore;
  SimpleTypeImpl::MemberInfo ret = findMember( name, type, ignore );
 ///chooseSpecialization( ret ); should not be necessary
  return ret;
@@ -60,7 +59,7 @@ QValueList<TypePointer> SimpleTypeNamespace::getMemberClasses( const TypeDesc& n
 }
 
 SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type, std::set
-   <SimpleTypeNamespace*>& ignore ) {
+   <SimpleTypeImpl*>& ignore ) {
  updateAliases( name.includeFiles() );
  MemberInfo mem;
  mem.name = "";
@@ -77,7 +76,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
      ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\"" << "\" requested, locating targets" << endl );
 
   for ( ImportList::iterator it = ( *itt ).begin(); it != ( *itt ).end(); ++it ) {
-   if ( !( name.includeFiles().size() < 1 || (*it).files <= name.includeFiles() ) ) continue; //filter the slave by the include-files
+   if ( !( /*name.includeFiles().size() < 1 ||*/ (*it).files <= name.includeFiles() ) ) continue; //filter the slave by the include-files
 
   ifVerbose( dbg() << "\"" << str() << "\": namespace-sub-aliases \"" << name.name() << "\": taking target \"" << ( *it ).import.fullNameChain() << "\"" << endl );
   TypeDesc d( (*it).import );
@@ -93,14 +92,21 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
 
  SlaveList l = getSlaves( name.includeFiles() );
  for ( SlaveList::iterator it = l.begin(); it != l.end(); ++it ) {
-     //if ( !( name.includeFiles().size() < 1 || (*it).includeFiles() <= name.includeFiles() ) ) continue; //filter the slave by the include-files(done in getSlaves now)
-  ifVerbose( dbg() << "\"" << str() << "\": redirecting search for \"" << name.name() << "\" to \"" << ( *it ) .fullNameChain() << "\"" << endl );
+     if( ignore.find( (*it).resolved().data() ) != ignore.end() ) continue;
+
+   ifVerbose( dbg() << "\"" << str() << "\": redirecting search for \"" << name.name() << "\" to \"" << ( *it ) .fullNameChain() << "\"" << endl );
   if( !( *it ).resolved() ) {
   ifVerbose( dbg() << "\"" << str() << "\": while search for \"" << name.name() << "\": Imported namespace \"" << ( *it ) .fullNameChain() << "\" is not resolved(should have been resolved in updateAliases)" << endl );
       continue;
   }
  ifVerbose( dbg() << "\"Class-type: " << typeid( *(*it).resolved().data() ).name() << ")" << endl );
-  mem = ( *it ).resolved() ->findMember( name , type );
+ SimpleTypeNamespace* ns = dynamic_cast<SimpleTypeNamespace*>( (*it).resolved().data() );
+
+ if( ns )
+      mem = ns->findMember( name , type, ignore );
+  else
+      mem = (*it).resolved()->findMember( name, type );
+     
   if ( mem ) {
   if ( mem.memberType != MemberInfo::Namespace ) {
      TypePointer b = mem.build();
@@ -112,7 +118,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
     return mem;
    } else {
        TypePointer b = mem.build();
-       
+
        if( b )
            m_aliasImports.insert( Import( IncludeFiles(), b->desc() ) );
        else
@@ -123,7 +129,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
 
  if ( !m_aliasImports.empty() ) {
      return setupMemberInfo( name.fullNameList().join( "::" ), m_aliasImports );
-     
+
  }
 
  return mem;
@@ -131,7 +137,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
 
 // LocateResult SimpleTypeNamespace::locateSlave( const SlaveList::const_iterator& target, const IncludeFiles& includeFiles ) {
 //     for( SlaveList::const_iterator it = m_activeSlaves.begin(); it != target; ++it ) {
-//         
+//
 //     }
 // }
 
@@ -147,79 +153,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::setupMemberInfo( const QStringLi
  return mem;
 }
 
-
-/*TypePointer SimpleTypeNamespace::locateNamespace( const TypeDesc& alias ) {
-    ifVerbose( dbg() << "\"" << str() << "\": locating namespace \"" << alias.fullNameChain() << "\"" << endl );
-    updateAliases( name.includeFiles() );
-
-  TypePointer locateIn = this;
-  if ( !scope().isEmpty() )
-    locateIn = parent().get();
-  LocateResult res;
-  if ( locateIn )
-    res = locateIn->locateDecType( alias, addFlag( ExcludeNestedTypes, ExcludeTemplates ), 0, MemberInfo::Namespace );
-  if ( !res->resolved() )
-    return 0;
-  if ( isANamespace( res->resolved() ) ) {
-    return res->resolved();
-    ifVerbose( dbg() << "\"" << str() << "\": successfully located namespace \"" << res->fullNameChain() << "\"" << endl );
-  } else {
-    ifVerbose( dbg() << "\"" << str() << "\": searched for a namespace, but found \"" << res->fullNameChain() << "\"" << endl );
-  }
-
-  ifVerbose( dbg() << "\"" << str() << "\": failed to locate namespace \"" << alias << "\"" << endl );
-
-  return 0;
-}*/
-
 ///This must be optimized
-/*void SimpleTypeNamespace::recurseAliasMap() {
-    //updateAliases();
-
-  bool changed = true;
-  SafetyCounter s( 1000 );
-  AliasMap::iterator import = m_aliases.find( "" );
-
-  while ( changed && s ) {
-    ///this has bad runtime-performance for high counts, but it's simple and we shouldn't have that many maps :-)
-    changed = false;
-    for ( AliasMap::iterator it = m_aliases.begin(); it != m_aliases.end(); ++it ) {
-      ImportList& l = *it;
-      for ( ImportList::iterator strIt = l.begin(); strIt != l.end(); ++strIt ) {
-        AliasMap::iterator fit = m_aliases.find( ( *strIt ).alias );
-
-        for ( ImportList::iterator oit = ( *fit ).begin(); oit != ( *fit ).end(); ++oit ) {
-            if (  it.key() == ( *oit ).alias )
-                continue;
-            HashedStringSet cfiles = ( *oit ).files + ( *strIt ).files;
-            std::pair< ImportList::const_iterator, ImportList::const_iterator > rng = ( l ).equal_range( *oit );
-            bool have = false;
-            while ( rng.first != rng.second ) {
-                if ( rng.first->files == cfiles ) {
-                    have = true ; //The same alias, with the same files, has already been added.
-                    break;
-                }
-                ++rng.first;
-            }
-            if( have ) continue;
-
-          addAliasMap( it.key(), ( *oit ).alias, cfiles, true );
-          changed = true;
-          break;
-        }
-        if ( changed )
-          break;
-      }
-      if ( changed )
-        break;
-    }
-  }
-
-  if ( !s ) {
-    ifVerbose( dbg() << "\"" << str() << "\": too much recursion while applying namespace-aliases" << endl );
-  }
-}*/
-
 void SimpleTypeNamespace::addAliasMap( const TypeDesc& name, const TypeDesc& alias, const IncludeFiles& files, bool recurse, bool symmetric ) {
  Debug db;
  if ( !db ) {
@@ -260,17 +194,33 @@ void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
     SlaveList tempList;
     if( m_activeSlaves.empty() ) return;
     while( !m_activeSlaves.empty() ) {
-        if( !m_activeSlaves.back().resolved() && ( !( files.size() < 1 || m_activeSlaves.back().includeFiles() <= files ) ) ) {
+        if( !m_activeSlaves.back().resolved() && ( /*files.size() < 1 ||*/ m_activeSlaves.back().includeFiles() <= files )  ) {
             TypeDesc desc = m_activeSlaves.back();
+            
             m_activeSlaves.erase( --m_activeSlaves.end() );
+            
+            HashedStringSet importIncludeFiles = desc.includeFiles();
+            
             desc = locateDecType( desc, SimpleTypeImpl::Normal, 0, SimpleTypeImpl::MemberInfo::Namespace );
             if( desc.resolved() ) {
-                desc.setResolved( desc.resolved()->clone() );
-                desc.resolved()->setMasterProxy( this );
+                desc.setIncludeFiles( importIncludeFiles );
+                ///If exactly the same namespace was already imported use the earlier imported instance, so they can share a single cache
+                ///@todo make more efficient.
+                for( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
+                    if( (*it).resolved() && (*it).resolved()->scope() == desc.resolved()->scope() && typeid( *(*it).resolved().data() ) == typeid( desc.resolved().data() ) ) {
+                        desc.setResolved( (*it).resolved() );
+                        break;
+                    }
+                }
+                
+                if( desc.resolved()->masterProxy().data() != this ) {
+                    desc.setResolved( desc.resolved()->clone() );
+                    desc.resolved()->setMasterProxy( this );
+                }
                 m_activeSlaves.push_back( desc );
                 desc.resolved()->addAliasesTo( this );
             }
-            
+
             updateAliases( files );
             break;
         } else {
@@ -339,7 +289,7 @@ SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves( const IncludeFile
     updateAliases( files );
     SlaveList ret;
     for( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
-        if ( !( files.size() < 1 || (*it).includeFiles() <= files ) ) continue;
+        if ( !( (*it).includeFiles() <= files ) ) continue;
         ret.push_back( *it );
     }
  return ret;
@@ -356,7 +306,7 @@ TypePointer SimpleTypeNamespace::NamespaceBuildInfo::build() {
         if( i.resolved() ) {
             //            i.setResolved( i.resolved()->clone() );
         }
-                                        
+
     ( ( SimpleTypeCachedNamespace* ) m_built.data() ) ->addAliasMap( TypeDesc(), i, ( *it ).files );
     }
  return m_built;

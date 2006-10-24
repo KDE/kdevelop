@@ -118,7 +118,7 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
 
     //void updateAliases( const HashedStringSet& files );
 
-    SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeNamespace*>& ignore );
+    SimpleTypeImpl::MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type, std::set<SimpleTypeImpl*>& ignore );
 		
     virtual bool hasNode() const;
   

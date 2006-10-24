@@ -203,16 +203,20 @@ class TypeDesc {
 
     int length() const ;
 
+    ///Does not respect include-files
     int compare ( const TypeDesc& rhs ) const;
 
+    ///Does not respect include-files
     bool operator < ( const TypeDesc& rhs ) const {
       return compare( rhs ) == -1;
     }
 
+    ///Does not respect include-files
     bool operator > ( const TypeDesc& rhs ) const {
       return compare( rhs ) == 1;
     }
 
+    ///Does not respect include-files
     bool operator == ( const TypeDesc& rhs ) const {
       return compare( rhs ) == 0;
     }
