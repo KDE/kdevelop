@@ -77,16 +77,34 @@ void ProjectAST::writeBack(QString &buffer)
     }
 
     if (isScope())
-        buffer += indentation() + scopedID + "{";
+    {
+        if( !buffer.endsWith(": ") )
+            buffer += indentation();
+        buffer += scopedID;
+	if( m_children.count() == 1 )
+	    buffer += ": ";
+        else
+            buffer += "{";
+    }
     else if (isFunctionScope())
-        buffer += indentation() + scopedID + "(" + args + ")" + ((m_children.count() > 0 && hasActualStatements) ? "{" : "");
-    else
+    {
+        if( !buffer.endsWith(": ") )
+            buffer += indentation();
+        buffer += scopedID + "(" + args + ")";
+	if( m_children.count() == 1 && hasActualStatements )
+            buffer += ": ";
+        else if( (m_children.count() > 0 && hasActualStatements) )
+            buffer += "{";
+        else
+            buffer += "";
+    }
+    else if( !buffer.endsWith(": ") )
         buffer += indentation();
     AST::writeBack(buffer);
-    if (isScope())
+    if (isScope() && m_children.count() > 1 )
         buffer += indentation() + "}";
 
-    if (isFunctionScope() && (hasActualStatements))
+    if (isFunctionScope() && (hasActualStatements) && m_children.count() > 1)
         buffer += indentation() + "}";
 }
 
@@ -94,7 +112,9 @@ void ProjectAST::writeBack(QString &buffer)
 
 void AssignmentAST::writeBack(QString &buffer)
 {
-    buffer += indentation() + scopedID + " " + op;
+    if( !buffer.endsWith(": ") )
+        buffer += indentation();
+    buffer += scopedID + " " + op;
     if( values.first().stripWhiteSpace() != "" )
         buffer += " ";
     if( values.last() == "\n" && commentnode )
@@ -121,7 +141,9 @@ void NewLineAST::writeBack(QString &buffer)
 
 void CommentAST::writeBack(QString &buffer)
 {
-    buffer += indentation() + comment;
+    if( !buffer.endsWith(": ") )
+        buffer += indentation();
+    buffer += comment;
 }
 
 
