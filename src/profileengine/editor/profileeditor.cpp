@@ -20,6 +20,8 @@
 
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qlistbox.h>
+#include <qlistview.h>
 #include <qtextedit.h>
 #include <qpalette.h>
 

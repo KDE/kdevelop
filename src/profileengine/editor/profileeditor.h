@@ -24,6 +24,8 @@
 #include "profileeditorbase.h"
 
 class KListViewItem;
+class QListBoxItem;
+class QListViewItem;
 
 class ProfileEditor: public ProfileEditorBase {
     Q_OBJECT
