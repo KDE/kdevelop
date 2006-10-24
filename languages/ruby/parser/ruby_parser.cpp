@@ -113,7 +113,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         multiplicativeExpression_ast *__node_0 = 0;
         if (!parse_multiplicativeExpression(&__node_0))
@@ -404,7 +405,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         shiftExpression_ast *__node_5 = 0;
         if (!parse_shiftExpression(&__node_5))
@@ -507,7 +509,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         notExpression_ast *__node_8 = 0;
         if (!parse_notExpression(&__node_8))
@@ -643,7 +646,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             arrayReferenceArgument_ast *__node_12 = 0;
             if (!parse_arrayReferenceArgument(&__node_12))
@@ -755,7 +759,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             arrayReferenceArgument_ast *__node_13 = 0;
             if (!parse_arrayReferenceArgument(&__node_13))
@@ -855,7 +860,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_BEGIN
             || yytoken == Token_RETURN
@@ -911,7 +917,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             keyValuePair_ast *__node_14 = 0;
             if (!parse_keyValuePair(&__node_14))
@@ -1086,7 +1093,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         rangeExpression_ast *__node_17 = 0;
         if (!parse_rangeExpression(&__node_17))
@@ -1395,7 +1403,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE || yytoken == Token_END
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT || yytoken == Token_END
         || yytoken == Token_RCURLY)
       {
         if (yytoken == Token_BOR)
@@ -1460,7 +1469,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 block_vars_ast *__node_33 = 0;
                 if (!parse_block_vars(&__node_33))
@@ -1569,7 +1579,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_34 = 0;
             if (!parse_compoundStatement(&__node_34))
@@ -1752,7 +1763,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         bool block_errors_1 = block_errors(true);
         std::size_t try_start_token_1 = token_stream->index() - 1;
@@ -1880,7 +1892,8 @@ namespace ruby
                     || yytoken == Token_OCTAL
                     || yytoken == Token_BINARY
                     || yytoken == Token_FLOAT
-                    || yytoken == Token_ASCII_VALUE)
+                    || yytoken == Token_ASCII_VALUE
+                    || yytoken == Token_COMMENT)
                   {
                     elementReference_ast *__node_38 = 0;
                     if (!parse_elementReference(&__node_38))
@@ -1948,7 +1961,8 @@ namespace ruby
                      || yytoken == Token_OCTAL
                      || yytoken == Token_BINARY
                      || yytoken == Token_FLOAT
-                     || yytoken == Token_ASCII_VALUE)
+                     || yytoken == Token_ASCII_VALUE
+                     || yytoken == Token_COMMENT)
               {
                 elementReference_ast *__node_39 = 0;
                 if (!parse_elementReference(&__node_39))
@@ -2033,7 +2047,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         block_var_ast *__node_40 = 0;
         if (!parse_block_var(&__node_40))
@@ -2149,7 +2164,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE || yytoken == Token_END)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT || yytoken == Token_END)
       {
         if (yytoken == Token_UNDEF
             || yytoken == Token_ALIAS
@@ -2212,7 +2228,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_42 = 0;
             if (!parse_compoundStatement(&__node_42))
@@ -2321,7 +2338,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_45 = 0;
                 if (!parse_compoundStatement(&__node_45))
@@ -2413,7 +2431,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_46 = 0;
                 if (!parse_compoundStatement(&__node_46))
@@ -2511,7 +2530,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_47 = 0;
                 if (!parse_compoundStatement(&__node_47))
@@ -2626,7 +2646,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_48 = 0;
             if (!parse_compoundStatement(&__node_48))
@@ -2734,7 +2755,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_52 = 0;
                 if (!parse_compoundStatement(&__node_52))
@@ -2827,7 +2849,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_53 = 0;
                 if (!parse_compoundStatement(&__node_53))
@@ -3233,7 +3256,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         methodCall_ast *__node_63 = 0;
         if (!parse_methodCall(&__node_63))
@@ -3332,7 +3356,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_BEGIN
             || yytoken == Token_NIL
@@ -3380,7 +3405,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             colonAccess_ast *__node_65 = 0;
             if (!parse_colonAccess(&__node_65))
@@ -3447,7 +3473,8 @@ namespace ruby
                  || yytoken == Token_BINARY
                  || yytoken == Token_FLOAT
                  || yytoken == Token_ASCII_VALUE
-                 || yytoken == Token_BLOCK_ARG_PREFIX) && ( !seen_rparen ))
+                 || yytoken == Token_BLOCK_ARG_PREFIX
+                 || yytoken == Token_COMMENT) && ( !seen_rparen ))
               {
                 methodInvocationArgumentWithoutParen_ast *__node_66 = 0;
                 if (!parse_methodInvocationArgumentWithoutParen(&__node_66))
@@ -3589,7 +3616,8 @@ namespace ruby
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
                 || yytoken == Token_ASCII_VALUE
-                || yytoken == Token_BLOCK_ARG_PREFIX)
+                || yytoken == Token_BLOCK_ARG_PREFIX
+                || yytoken == Token_COMMENT)
               {
                 methodInvocationArgumentWithoutParen_ast *__node_68 = 0;
                 if (!parse_methodInvocationArgumentWithoutParen(&__node_68))
@@ -3782,7 +3810,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_SEMI
             || yytoken == Token_LINE_BREAK)
@@ -3855,7 +3884,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 statements_ast *__node_72 = 0;
                 if (!parse_statements(&__node_72))
@@ -3935,7 +3965,8 @@ namespace ruby
                  || yytoken == Token_OCTAL
                  || yytoken == Token_BINARY
                  || yytoken == Token_FLOAT
-                 || yytoken == Token_ASCII_VALUE)
+                 || yytoken == Token_ASCII_VALUE
+                 || yytoken == Token_COMMENT)
           {
             statements_ast *__node_73 = 0;
             if (!parse_statements(&__node_73))
@@ -4084,7 +4115,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         elementReference_ast *__node_75 = 0;
         if (!parse_elementReference(&__node_75))
@@ -4183,7 +4215,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         command_ast *__node_77 = 0;
         if (!parse_command(&__node_77))
@@ -4276,7 +4309,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         relationalExpression_ast *__node_79 = 0;
         if (!parse_relationalExpression(&__node_79))
@@ -4661,7 +4695,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         andorExpression_ast *__node_90 = 0;
         if (!parse_andorExpression(&__node_90))
@@ -4894,7 +4929,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_97 = 0;
             if (!parse_compoundStatement(&__node_97))
@@ -5005,7 +5041,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             keyValuePair_ast *__node_98 = 0;
             if (!parse_keyValuePair(&__node_98))
@@ -5182,7 +5219,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_102 = 0;
             if (!parse_compoundStatement(&__node_102))
@@ -5266,7 +5304,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 expression_ast *__node_103 = 0;
                 if (!parse_expression(&__node_103))
@@ -5354,7 +5393,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_105 = 0;
                 if (!parse_compoundStatement(&__node_105))
@@ -5446,7 +5486,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_106 = 0;
                 if (!parse_compoundStatement(&__node_106))
@@ -5552,7 +5593,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         expression_ast *__node_107 = 0;
         if (!parse_expression(&__node_107))
@@ -7343,7 +7385,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         equalityExpression_ast *__node_114 = 0;
         if (!parse_equalityExpression(&__node_114))
@@ -7445,7 +7488,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         logicalAndExpression_ast *__node_117 = 0;
         if (!parse_logicalAndExpression(&__node_117))
@@ -7540,7 +7584,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         primaryExpression_ast *__node_120 = 0;
         if (!parse_primaryExpression(&__node_120))
@@ -7970,7 +8015,8 @@ namespace ruby
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
             || yytoken == Token_ASCII_VALUE
-            || yytoken == Token_BLOCK_ARG_PREFIX)
+            || yytoken == Token_BLOCK_ARG_PREFIX
+            || yytoken == Token_COMMENT)
           {
             methodInvocationArgumentWithoutParen_ast *__node_136 = 0;
             if (!parse_methodInvocationArgumentWithoutParen(&__node_136))
@@ -8090,7 +8136,8 @@ namespace ruby
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
         || yytoken == Token_ASCII_VALUE
-        || yytoken == Token_BLOCK_ARG_PREFIX)
+        || yytoken == Token_BLOCK_ARG_PREFIX
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_BEGIN
             || yytoken == Token_RETURN
@@ -8146,7 +8193,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             normalMethodInvocationArgument_ast *__node_137 = 0;
             if (!parse_normalMethodInvocationArgument(&__node_137))
@@ -9022,7 +9070,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         bool block_errors_2 = block_errors(true);
         std::size_t try_start_token_2 = token_stream->index() - 1;
@@ -9187,11 +9236,11 @@ namespace ruby
               }
             yylex();
 
-            if (yytoken != Token_FUNCTION)
+            if (yytoken != Token_CONSTANT)
               {
                 if (!yy_block_errors)
                   {
-                    yy_expected_token(yytoken, Token_FUNCTION, "function");
+                    yy_expected_token(yytoken, Token_CONSTANT, "constant");
                   }
                 return false;
               }
@@ -9270,7 +9319,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_BEGIN
             || yytoken == Token_RETURN
@@ -9326,7 +9376,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             expression_ast *__node_159 = 0;
             if (!parse_expression(&__node_159))
@@ -9482,7 +9533,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         powerExpression_ast *__node_162 = 0;
         if (!parse_powerExpression(&__node_162))
@@ -9717,7 +9769,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         expression_ast *__node_168 = 0;
         if (!parse_expression(&__node_168))
@@ -9749,25 +9802,6 @@ namespace ruby
                   }
                 return false;
               }
-          }
-        else if (true /*epsilon*/)
-        {}
-        else
-          {
-            return false;
-          }
-        if (yytoken == Token_LINE_BREAK)
-          {
-            if (yytoken != Token_LINE_BREAK)
-              {
-                if (!yy_block_errors)
-                  {
-                    yy_expected_token(yytoken, Token_LINE_BREAK, "line break");
-                  }
-                return false;
-              }
-            yylex();
-
           }
         else if (true /*epsilon*/)
         {}
@@ -9846,7 +9880,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_KEYWORD_NOT)
           {
@@ -9922,7 +9957,8 @@ namespace ruby
                  || yytoken == Token_OCTAL
                  || yytoken == Token_BINARY
                  || yytoken == Token_FLOAT
-                 || yytoken == Token_ASCII_VALUE)
+                 || yytoken == Token_ASCII_VALUE
+                 || yytoken == Token_COMMENT)
           {
             ternaryIfThenElseExpression_ast *__node_172 = 0;
             if (!parse_ternaryIfThenElseExpression(&__node_172))
@@ -12697,7 +12733,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         andExpression_ast *__node_173 = 0;
         if (!parse_andExpression(&__node_173))
@@ -12853,7 +12890,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 mlhs_item_ast *__node_177 = 0;
                 if (!parse_mlhs_item(&__node_177))
@@ -12973,7 +13011,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         unaryExpression_ast *__node_180 = 0;
         if (!parse_unaryExpression(&__node_180))
@@ -13160,7 +13199,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_LEADING_TWO_COLON)
           {
@@ -13474,6 +13514,19 @@ namespace ruby
             yylex();
 
           }
+        else if (yytoken == Token_COMMENT)
+          {
+            if (yytoken != Token_COMMENT)
+              {
+                if (!yy_block_errors)
+                  {
+                    yy_expected_token(yytoken, Token_COMMENT, "comment");
+                  }
+                return false;
+              }
+            yylex();
+
+          }
         else
           {
             return false;
@@ -13556,7 +13609,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE || yytoken == Token_EOF)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT || yytoken == Token_EOF)
       {
         if (yytoken == Token_UNDEF
             || yytoken == Token_ALIAS
@@ -13619,7 +13673,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_200 = 0;
             if (!parse_compoundStatement(&__node_200))
@@ -13713,7 +13768,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         logicalOrExpression_ast *__node_201 = 0;
         if (!parse_logicalOrExpression(&__node_201))
@@ -13926,7 +13982,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         orExpression_ast *__node_207 = 0;
         if (!parse_orExpression(&__node_207))
@@ -14238,7 +14295,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         additiveExpression_ast *__node_216 = 0;
         if (!parse_additiveExpression(&__node_216))
@@ -14366,7 +14424,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         statementWithoutModifier_ast *__node_220 = 0;
         if (!parse_statementWithoutModifier(&__node_220))
@@ -14379,19 +14438,19 @@ namespace ruby
           }
         (*yynode)->statementBody = __node_220;
 
-        while (yytoken == Token_IF_MODIFIER
-               || yytoken == Token_WHILE_MODIFIER
-               || yytoken == Token_UNLESS_MODIFIER
-               || yytoken == Token_UNTIL_MODIFIER
-               || yytoken == Token_RESCUE_MODIFIER)
+        while (yytoken == Token_RESCUE_MODIFIER
+               || yytoken == Token_IF
+               || yytoken == Token_UNTIL
+               || yytoken == Token_WHILE
+               || yytoken == Token_UNLESS)
           {
-            if (yytoken == Token_IF_MODIFIER)
+            if (yytoken == Token_IF)
               {
-                if (yytoken != Token_IF_MODIFIER)
+                if (yytoken != Token_IF)
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_IF_MODIFIER, "if");
+                        yy_expected_token(yytoken, Token_IF, "if");
                       }
                     return false;
                   }
@@ -14407,13 +14466,13 @@ namespace ruby
                     return false;
                   }
               }
-            else if (yytoken == Token_UNLESS_MODIFIER)
+            else if (yytoken == Token_UNLESS)
               {
-                if (yytoken != Token_UNLESS_MODIFIER)
+                if (yytoken != Token_UNLESS)
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_UNLESS_MODIFIER, "unless");
+                        yy_expected_token(yytoken, Token_UNLESS, "unless");
                       }
                     return false;
                   }
@@ -14429,13 +14488,13 @@ namespace ruby
                     return false;
                   }
               }
-            else if (yytoken == Token_WHILE_MODIFIER)
+            else if (yytoken == Token_WHILE)
               {
-                if (yytoken != Token_WHILE_MODIFIER)
+                if (yytoken != Token_WHILE)
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_WHILE_MODIFIER, "while");
+                        yy_expected_token(yytoken, Token_WHILE, "while");
                       }
                     return false;
                   }
@@ -14451,13 +14510,13 @@ namespace ruby
                     return false;
                   }
               }
-            else if (yytoken == Token_UNTIL_MODIFIER)
+            else if (yytoken == Token_UNTIL)
               {
-                if (yytoken != Token_UNTIL_MODIFIER)
+                if (yytoken != Token_UNTIL)
                   {
                     if (!yy_block_errors)
                       {
-                        yy_expected_token(yytoken, Token_UNTIL_MODIFIER, "until");
+                        yy_expected_token(yytoken, Token_UNTIL, "until");
                       }
                     return false;
                   }
@@ -14576,7 +14635,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         if (yytoken == Token_ALIAS)
           {
@@ -14752,7 +14812,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_233 = 0;
                 if (!parse_compoundStatement(&__node_233))
@@ -14863,7 +14924,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_235 = 0;
                 if (!parse_compoundStatement(&__node_235))
@@ -14946,7 +15008,8 @@ namespace ruby
                  || yytoken == Token_OCTAL
                  || yytoken == Token_BINARY
                  || yytoken == Token_FLOAT
-                 || yytoken == Token_ASCII_VALUE)
+                 || yytoken == Token_ASCII_VALUE
+                 || yytoken == Token_COMMENT)
           {
             expression_ast *__node_236 = 0;
             if (!parse_expression(&__node_236))
@@ -15098,7 +15161,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         statement_ast *__node_241 = 0;
         if (!parse_statement(&__node_241))
@@ -15647,7 +15711,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         assignmentExpression_ast *__node_249 = 0;
         if (!parse_assignmentExpression(&__node_249))
@@ -15857,7 +15922,8 @@ namespace ruby
         || yytoken == Token_OCTAL
         || yytoken == Token_BINARY
         || yytoken == Token_FLOAT
-        || yytoken == Token_ASCII_VALUE)
+        || yytoken == Token_ASCII_VALUE
+        || yytoken == Token_COMMENT)
       {
         while (yytoken == Token_UNARY_MINUS
                || yytoken == Token_UNARY_PLUS
@@ -16304,7 +16370,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_265 = 0;
             if (!parse_compoundStatement(&__node_265))
@@ -16395,7 +16462,8 @@ namespace ruby
                 || yytoken == Token_OCTAL
                 || yytoken == Token_BINARY
                 || yytoken == Token_FLOAT
-                || yytoken == Token_ASCII_VALUE)
+                || yytoken == Token_ASCII_VALUE
+                || yytoken == Token_COMMENT)
               {
                 compoundStatement_ast *__node_266 = 0;
                 if (!parse_compoundStatement(&__node_266))
@@ -16537,7 +16605,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_270 = 0;
             if (!parse_compoundStatement(&__node_270))
@@ -16827,7 +16896,8 @@ namespace ruby
             || yytoken == Token_OCTAL
             || yytoken == Token_BINARY
             || yytoken == Token_FLOAT
-            || yytoken == Token_ASCII_VALUE)
+            || yytoken == Token_ASCII_VALUE
+            || yytoken == Token_COMMENT)
           {
             compoundStatement_ast *__node_275 = 0;
             if (!parse_compoundStatement(&__node_275))

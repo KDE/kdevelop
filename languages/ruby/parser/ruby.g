@@ -163,7 +163,8 @@ namespace ruby
     HERE_DOC_BEGIN ("here document beginning"), W_ARRAY ("%w{} array"),
     INTEGER ("integer number"), HEX ("hexadecimal number"), OCTAL ("octal number"),
     BINARY ("binary number"), FLOAT ("float number"), ASCII_VALUE ("ascii value"),
-    DO_IN_CONDITION ("do in condition"), BLOCK_ARG_PREFIX ("block argument prefix") ;;
+    DO_IN_CONDITION ("do in condition"), BLOCK_ARG_PREFIX ("block argument prefix"),
+    COMMENT ("comment") ;;
 
 %token STUB_A, STUB_B, STUB_C ;;
 
@@ -184,7 +185,8 @@ namespace ruby
 
 
     #statement=statement (
-        terminal [: if (yytoken == Token_EOF) break; :]
+        terminal
+        [: if (yytoken == Token_EOF) break; :]
         [:
             if ((yytoken == Token_LCURLY) || (yytoken == Token_END) //block end
                 || (yytoken == Token_RPAREN) || (yytoken == Token_ELSE)
@@ -203,10 +205,10 @@ namespace ruby
 
 
     statementBody=statementWithoutModifier (
-        IF_MODIFIER expression
-        | UNLESS_MODIFIER expression
-        | WHILE_MODIFIER expression
-        | UNTIL_MODIFIER expression
+        IF expression
+        | UNLESS expression
+        | WHILE expression
+        | UNTIL expression
         | RESCUE_MODIFIER expression    -- FIXME: statement after rescue
     )*
 -> statement ;;
@@ -452,8 +454,8 @@ namespace ruby
     | blockMethodInvocationArgument
 -> methodInvocationArgumentWithoutParen ;;
 
-
-    expression (ASSOC expression | 0) (LINE_BREAK | 0)
+-- there was (LINE_BREAK | 0) at the end of this rule
+    expression (ASSOC expression | 0)
 -> normalMethodInvocationArgument ;;
 
 
@@ -554,6 +556,7 @@ namespace ruby
     | YIELD
     | keywordDefined
     | REDO
+    | COMMENT
 -> primaryExpression ;;
 
 
@@ -636,7 +639,7 @@ namespace ruby
 -> moduleDefinition ;;
 
 
-    CONSTANT (TWO_COLON FUNCTION)*
+    CONSTANT @ TWO_COLON
 -> moduleName ;;
 
 

@@ -97,6 +97,8 @@ SimpleEscape    [\\]([']|["]|[\\]|[0abfnrtv])
 Escape          ({SimpleEscape}|{UnicodeEscape}|{HexEscape})
 
 Whitespace      [ \t\v\f]+
+
+ /* used to add this: [\n \t\v\f]* - no longer needed since we allow terminals as statements */
 Linebreak       [\n][\n \t\v\f]*
 Regexp          \/[^/]*\/
 
@@ -104,7 +106,7 @@ Identifier      [a-z_][a-zA-Z_0-9]*
 Constant        [A-Z_]*
 ClassName       [A-Z][a-zA-Z_0-9]*
 
-
+Comment         #[^\n]*
 
 
 %%
@@ -156,7 +158,6 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 "END"       { return parser::Token_END_UPCASE; }
 "BEGIN"     { return parser::Token_BEGIN_UPCASE; }
 
-
  /* strings */
 [']({Escape}|{Multibyte}|[^\\\n\'])*[']       { return parser::Token_SINGLE_QUOTED_STRING; }
 ["]({Escape}|{Multibyte}|[^\\\n\"])*["]       { return parser::Token_DOUBLE_QUOTED_STRING; }
@@ -194,6 +195,7 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 ","                         { return parser::Token_COMMA; }
 <expect_leading_colon2>"::" { return parser::Token_LEADING_TWO_COLON; }
 "::"                        { return parser::Token_TWO_COLON; }
+":"[^ \t\v\f\n]             { yyless(1); return parser::Token_COLON_WITH_NO_FOLLOWING_SPACE; }
 ":"                         { return parser::Token_COLON; }
 "."                         { return parser::Token_DOT; }
 
@@ -234,6 +236,9 @@ ClassName       [A-Z][a-zA-Z_0-9]*
 ";"                         { return parser::Token_SEMI; }
 
 {Linebreak}                 { return parser::Token_LINE_BREAK; }
+
+ /* comments */
+{Comment}                   { return parser::Token_COMMENT; }
 
 <expect_unary>{
 "+"                         { return parser::Token_UNARY_PLUS; }
