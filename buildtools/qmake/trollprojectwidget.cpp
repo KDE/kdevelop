@@ -338,6 +338,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
 
     m_rootScope = new Scope( proname, m_part );
     m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
+
     m_rootSubproject->setOpen( true );
     if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).contains("subdirs") )
     {
@@ -888,7 +889,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     int idAddScope = -2;
 
 
-    if ( spitem->scope->scopeType() == Scope::ProjectScope && spitem->scope->parent()->scopeType() == Scope::ProjectScope )
+    if ( spitem->scope->scopeType() == Scope::ProjectScope && ( !spitem->scope->parent() || spitem->scope->parent()->scopeType() == Scope::ProjectScope ) )
     {
         idBuild = popup.insertItem( SmallIcon( "make_kdevelop" ), i18n( "Build" ) );
         popup.setWhatsThis( idBuild, i18n( "<b>Build</b><p>Runs <b>make</b> from the selected subproject directory.<br>"
