@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>617</width>
+            <width>723</width>
             <height>690</height>
         </rect>
     </property>
@@ -1169,6 +1169,17 @@
                                         </property>
                                     </widget>
                                 </hbox>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_7</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>For autotools the directory setting only affects the place where an external Qt designer is searched, not the build process.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignVCenter</set>
+                                </property>
                             </widget>
                         </vbox>
                     </widget>
