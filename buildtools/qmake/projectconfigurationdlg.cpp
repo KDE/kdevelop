@@ -223,14 +223,24 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         myProjectItem->addValue( "CONFIG", "ordered" );
     else
         myProjectItem->removeValue( "CONFIG", "ordered" );
+    QString libtoolconf;
+    if ( prjWidget->m_part->isQt4Project() )
+        libtoolconf = "create_libtool";
+    else
+        libtoolconf = "compile_libtool";
     if ( checkLibtool->isChecked() )
-        myProjectItem->addValue( "CONFIG", "create_libtool" );
+        myProjectItem->addValue( "CONFIG", libtoolconf );
     else
-        myProjectItem->removeValue( "CONFIG", "create_libtool" );
+        myProjectItem->removeValue( "CONFIG", libtoolconf );
+    QString pkgconfenable;
+    if ( prjWidget->m_part->isQt4Project() )
+        pkgconfenable = "create_pkgconf";
+    else
+        pkgconfenable = "create_pc";
     if ( checkPkgconf->isChecked() )
-        myProjectItem->addValue( "CONFIG", "create_pkgconf" );
+        myProjectItem->addValue( "CONFIG", pkgconfenable );
     else
-        myProjectItem->removeValue( "CONFIG", "create_pkgconf" );
+        myProjectItem->removeValue( "CONFIG", pkgconfenable );
     if ( checkConsole->isChecked() )
         myProjectItem->addValue( "CONFIG", "console" );
     else
