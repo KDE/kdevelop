@@ -106,6 +106,7 @@ class SimpleType {
     SimpleType& operator = ( const SimpleType& rhs ) {
       m_type = rhs.m_type;
       m_resolved = rhs.m_resolved;
+      m_includeFiles = rhs.m_includeFiles;
       return *this;
     }
 
