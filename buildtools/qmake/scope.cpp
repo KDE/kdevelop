@@ -805,6 +805,9 @@ void Scope::init()
 {
     if( !m_root )
         return;
+
+    m_maxCustomVarNum = 1;
+
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {
@@ -846,9 +849,21 @@ void Scope::init()
                     m_subProjects.insert( *sit, new Scope( this, subproject.absFilePath( projectfile ), m_part, ( m->op != "-=" )) );
                 }
             }
-            else if ( !KnownVariables.contains( m->scopedID ) && !m->scopedID.contains( ".files" ) && !m->scopedID.contains( ".path" ) && !variableValues("INSTALL").contains(m->scopedID) )
+            else
             {
-                m_customVariables[ qMakePair( m->scopedID, m->op ) ] = m;
+                if ( !(
+                         KnownVariables.contains( m->scopedID )
+                         && ( m->op == "=" || m->op == "+=" || m->op == "-=")
+                       )
+                      && !(
+                            ( m->scopedID.contains( ".files" ) || m->scopedID.contains( ".path" ) )
+                            && variableValues("INSTALL").contains(m->scopedID.left( m->scopedID.findRev(".")-1 ) )
+                          )
+                    )
+                {
+                    m_customVariables[ m_maxCustomVarNum++ ] = m;
+                    kdDebug(9024) << m_customVariables.count() << endl;
+                }
             }
         }
     }
@@ -926,47 +941,58 @@ const QValueList<Scope*> Scope::scopesInOrder() const
 }
 
 
-const QMap<QPair<QString, QString>, QStringList> Scope::customVariables() const
+const QMap<unsigned int, QMap<QString, QString> > Scope::customVariables() const
 {
-    QMap<QPair<QString, QString>, QStringList> result;
+    QMap<unsigned int, QMap<QString, QString> > result;
     if( !m_root )
         return result;
 
     kdDebug( 9024 ) << "# of custom vars:" << m_customVariables.size() << endl;
-    QMap<QPair<QString, QString>, QMake::AssignmentAST*>::const_iterator it = m_customVariables.begin();
+    QMap<unsigned int, QMake::AssignmentAST*>::const_iterator it = m_customVariables.begin();
     for ( ; it != m_customVariables.end(); ++it )
     {
-        kdDebug( 9024 ) << "Pair is: " << it.key().first << "|" << it.key().second << endl;
-        it.data()->values;
-        kdDebug( 9024 ) << "access test passed, now assign" << endl;
-        result[ it.key() ] = it.data()->values;
+        QMap<QString,QString> temp;
+        temp[ "var" ] = it.data()->scopedID;
+        temp[ "op" ] = it.data()->op;
+        temp[ "values" ] = it.data()->values.join("");
+        result[ it.key() ] = temp;
     }
     return result;
 }
 
-void Scope::updateCustomVariable( const QString& var, const QString& op, const QStringList& values )
+void Scope::updateCustomVariable( unsigned int id, const QString& newop, const QString& newvalues )
 {
     if( !m_root )
         return;
-    if ( m_customVariables.keys().contains( qMakePair( var, op ) ) )
+    if ( id > 0 && m_customVariables.contains( id ) )
     {
-        m_customVariables[ qMakePair( var, op ) ] ->values = values;
+        m_customVariables[ id ] ->values.clear();
+        m_customVariables[ id ] ->values.append( newvalues);
+        m_customVariables[ id ] ->op = newop;
     }
+}
+
+void Scope::addCustomVariable( const QString& var, const QString& op, const QString& values )
+{
+    QMake::AssignmentAST* newast = new QMake::AssignmentAST();
+    newast->scopedID = var;
+    newast->op = op;
+    newast->values.append(values);
+    if( scopeType() == ProjectScope )
+        newast->setDepth( m_root->depth() );
     else
+        newast->setDepth( m_root->depth()+1 );
+    m_root->addChildAST( newast );
+    m_customVariables[ m_maxCustomVarNum++ ] = newast;
+}
+
+void Scope::removeCustomVariable( unsigned int id )
+{
+    if( m_customVariables.contains(id) )
     {
-        QMake::AssignmentAST* newast = new QMake::AssignmentAST();
-        newast->scopedID = var;
-        newast->op = op;
-        newast->values = values;
-        if( scopeType() == ProjectScope )
-            newast->setDepth( m_root->depth() );
-        else
-            newast->setDepth( m_root->depth()+1 );
-        m_root->addChildAST( newast );
-        if ( values.contains( "\n" ) )
-        {
-            newast->values.append("\n");
-        }
+        QMake::AssignmentAST* m = m_customVariables[id];
+        m_customVariables.remove(id);
+        m_root->m_children.remove( m );
     }
 }
 

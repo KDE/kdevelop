@@ -29,7 +29,6 @@
 #include <kurlcompletion.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <klistview.h>
 #include <ktextedit.h>
 
 #include <qdialog.h>
@@ -83,6 +82,21 @@ void InsideCheckListItem::stateChange( bool state )
             ++it;
         }
     }
+}
+
+CustomVarListItem::CustomVarListItem(QListView* parent, unsigned int id, QMap<QString, QString> var)
+    : KListViewItem(parent), m_key(id)
+{
+    setText(0, var["var"]);
+    setText(1, var["op"]);
+    setText(2, var["values"]);
+}
+
+QString CustomVarListItem::key(int column, bool ascending) const
+{
+    if( column == 0)
+        return QString::number(m_key);
+    return KListViewItem::key(column, ascending);
 }
 
 ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProjectWidget* _prjWidget, QWidget* parent, const char* name, bool modal, WFlags fl )
@@ -522,12 +536,13 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     QListViewItem *item = customVariables->firstChild();
     for ( ; item; item = item->nextSibling() )
     {
-        QString var = item->text( 0 );
         QString op = item->text( 1 );
-        if ( !myProjectItem->scope->customVariables().keys().contains( qMakePair( var, op ) ) )
-            myProjectItem->scope->removeVariable( var, op );
+        QString vals = item->text( 2 );
+
+        if( item->key(0, true).toUInt() > 0 )
+            myProjectItem->scope->updateCustomVariable( item->key(0, true).toUInt(), op, vals );
         else
-            myProjectItem->scope->updateCustomVariable( var, op, QStringList( item->text( 2 ) ) );
+            myProjectItem->scope->addCustomVariable( item->text(0), op, vals );
     }
 }
 
@@ -796,11 +811,11 @@ void ProjectConfigurationDlg::updateControls()
     idlCmdOptionsEdit->setText( myProjectItem->scope->variableValues( "IDL_OPTIONS" ).join( " " ) );
 
     customVariables->clear();
-    QMap<QPair<QString, QString>, QStringList > customvars = myProjectItem->scope->customVariables();
-    QMap<QPair<QString, QString>, QStringList >::iterator idx = customvars.begin();
+    QMap<unsigned int, QMap<QString, QString> > customvars = myProjectItem->scope->customVariables();
+    QMap<unsigned int, QMap<QString, QString> >::iterator idx = customvars.begin();
     for ( ; idx != customvars.end(); ++idx )
     {
-        KListViewItem* item = new KListViewItem( customVariables, idx.key().first, idx.key().second, idx.data().join("") );
+        CustomVarListItem* item = new CustomVarListItem( customVariables, idx.key(), idx.data() );
         item->setMultiLinesEnabled(true);
     }
 
@@ -1425,7 +1440,6 @@ void ProjectConfigurationDlg::addCustomValueClicked()
     customVariables->setSelected( item, true );
     newCustomVariableActive();
     customVariableName->setEnabled( true );
-    customVariableOp->setEnabled( true );
     activateApply( 0 );
 }
 void ProjectConfigurationDlg::removeCustomValueClicked()
@@ -1433,7 +1447,7 @@ void ProjectConfigurationDlg::removeCustomValueClicked()
     QListViewItem * item = customVariables->currentItem();
     if ( item )
     {
-        delete item;
+        myProjectItem->scope->removeCustomVariable( item->key(0, true).toUInt() );
     }
     activateApply( 0 );
 }
@@ -1484,7 +1498,6 @@ void ProjectConfigurationDlg::newCustomVariableActive( )
         customVariableOp->setCurrentText( item->text( 1 ) );
         customVariableName->setFocus();
         customVariableName->setEnabled( false );
-        customVariableOp->setEnabled( false );
     }
 }
 

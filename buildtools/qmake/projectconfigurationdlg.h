@@ -22,8 +22,11 @@
 //#include "trollprojectwidget.h"
 #include <kdeversion.h>
 #include <qlistview.h>
+#include <klistview.h>
+#include <qmap.h>
 
 class QMakeScopeItem;
+class KListViewItem;
 class qProjectItem;
 class ProjectConfigurationDlg;
 class TrollProjectWidget;
@@ -41,6 +44,14 @@ protected:
     virtual void stateChange ( bool state );
 };
 
+class CustomVarListItem : public KListViewItem
+{
+    public:
+        CustomVarListItem( QListView*, unsigned int, QMap<QString, QString> );
+        QString key(int column, bool ascending) const;
+    private:
+        unsigned int m_key;
+};
 
 class ProjectConfigurationDlg : public ProjectConfigurationDlgBase
 {

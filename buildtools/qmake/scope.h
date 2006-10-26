@@ -146,12 +146,15 @@ public:
     bool isQt4Project() const ;
 
     /* Provide a Map of Custom variables */
-    const QMap<QPair<QString, QString>, QStringList> customVariables() const;
+    const QMap<unsigned int, QMap<QString, QString> > customVariables() const;
 
-    void removeCustomVariable( const QString& var, const QString& op );
+    void addCustomVariable( const QString& var, const QString& op, const QString& values );
+
+    /* Removes the variable with the given id if it exists */
+    void removeCustomVariable( unsigned int );
 
     /* Update the values of the variable/operation combo var+op to values */
-    void updateCustomVariable( const QString& var, const QString& op, const QStringList& values );
+    void updateCustomVariable( unsigned int, const QString& , const QString& );
 
     // Checks wether a QStringList contains any values that are not whitespace or \\n
     static bool listIsEmpty( const QStringList& values );
@@ -236,8 +239,9 @@ private:
 
     QMake::ProjectAST* m_root;
     QMake::IncludeAST* m_incast;
-    QMap<QPair<QString, QString>, QMake::AssignmentAST*> m_customVariables;
+    QMap<unsigned int, QMake::AssignmentAST*> m_customVariables;
     Scope* m_parent;
+    unsigned int m_maxCustomVarNum;
 
     // subProjects and includes are separated because their keys could interfere with simple scope keys
     QMap<QString, Scope*> m_simpleScopes;
