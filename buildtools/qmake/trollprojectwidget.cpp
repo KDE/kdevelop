@@ -1038,7 +1038,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
         QString fileName = *it;
-        kdDebug(9024) << "Adding file:" << fileName << endl;
+        kdDebug(9024) << "Adding file:" << fileName << " " << relativeToProjectRoot << endl;
 
         if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
         {
@@ -1765,12 +1765,14 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         {
             QStringList newFileNames;
             newFileNames = m_part->languageSupport() ->subclassWidget( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ) );
+            kdDebug(9024) << "got new filenames: " << newFileNames << endl;
             if ( !newFileNames.empty() )
             {
                 QDomDocument & dom = *( m_part->projectDom() );
                 for ( uint i = 0; i < newFileNames.count(); ++i )
                 {
-                    QString srcfile_relpath = newFileNames[ i ];
+                    QString srcfile_relpath = getRelativePath( m_shownSubproject->scope->projectDir(), newFileNames[ i ] ) ;
+                    newFileNames[i] = getRelativePath( projectDirectory(), newFileNames[ i ] ) ;
                     QString uifile_relpath = m_shownSubproject->relativePath() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 );
                     DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
                                              "subclass", "sourcefile", "uifile" );
