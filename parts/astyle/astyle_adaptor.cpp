@@ -54,16 +54,17 @@ KDevFormatter::KDevFormatter()
 	}
 
   // fill
-  if (config->readEntry("Fill", "Tabs") != "Tabs")
+	int wsCount = config->readNumEntry("FillCount",2);
+  if (config->readEntry("Fill", "Tabs") == "Tabs")
   {
-		int wsCount = config->readNumEntry("FillSpaces",2);
-		setSpaceIndentation(wsCount);
-		m_indentString = "";
-		m_indentString.fill(' ', wsCount);
+	  setTabIndentation(wsCount, config->readBoolEntry("FillForce",false) );
+	  m_indentString = "\t";
   } else
   {
-	setTabIndentation();
-	m_indentString = "\t";
+	  setSpaceIndentation(wsCount);
+	  m_indentString = "";
+	  m_indentString.fill(' ', wsCount);
+	  setTabSpaceConversionMode(config->readBoolEntry("FillForce",true));
   }
 
   // indent
@@ -80,13 +81,15 @@ KDevFormatter::KDevFormatter()
     setMinConditionalIndentLength(config->readNumEntry("MinConditional"));
 
   // brackets
-  s = config->readEntry("Brackets", "Break");
+  s = config->readEntry("Brackets", "None");
   if (s == "Break")
 	  setBracketFormatMode(astyle::BREAK_MODE);
-  if (s == "Attach")
+  else if (s == "Attach")
 	  setBracketFormatMode(astyle::ATTACH_MODE);
-  if (s == "Linux")
+  else if (s == "Linux")
 	  setBracketFormatMode(astyle::BDAC_MODE);
+  else
+	  setBracketFormatMode(astyle::NONE_MODE);
 
   // padding
   setOperatorPaddingMode(config->readBoolEntry("PadOperators", false));
@@ -101,6 +104,8 @@ KDevFormatter::KDevFormatter()
 
 KDevFormatter::KDevFormatter( AStyleWidget * widget )
 {
+	setCStyle();
+
 	if ( widget->Style_ANSI->isChecked() )
 	{
 		predefinedStyle( "ANSI" );

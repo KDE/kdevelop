@@ -68,54 +68,74 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
   if (s == "JAVA") id=5;
   StyleGroup->setButton(id);
 
-  // fill
-  Fill_Tabs->setChecked(config->readBoolEntry("FillTabs", true));
-  Fill_TabCount->setValue(config->readNumEntry("FillTabCount",2));
-  Fill_ForceTabs->setChecked(config->readBoolEntry("FillForceTabs",false));
-  Fill_Spaces->setChecked(config->readBoolEntry("FillSpaces",false));
-  Fill_SpaceCount->setValue(config->readNumEntry("FillSpaceCount",2));
+  if ( s == "UserDefined" ){
 
+	  int wsCount = config->readNumEntry("FillCount",2);
+	  if (config->readEntry("Fill", "Tabs") == "Tabs")
+	  {
+		  Fill_Tabs->setChecked(true);
+		  Fill_TabCount->setValue(wsCount);
+		  Fill_TabCount->setEnabled(true);
+		  Fill_ForceTabs->setChecked(config->readBoolEntry("FillForce",false));
+		  Fill_ForceTabs->setEnabled(true);
 
-  Fill_ConvertTabs->setChecked(config->readBoolEntry("FillConvertTabs",false));
-  Fill_EmptyLines->setChecked(config->readBoolEntry("FillEmptyLines",false));
+	  } else
+	  {
+		  Fill_Spaces->setChecked(true);
+		  Fill_SpaceCount->setValue(wsCount);
+		  Fill_SpaceCount->setEnabled(true);
+		  Fill_ConvertTabs->setChecked(config->readBoolEntry("FillForce",false));
+		  Fill_ConvertTabs->setEnabled(true);
+	  }
 
-  // indent
-  Indent_Switches->setChecked(config->readBoolEntry("IndentSwitches", false));
-  Indent_Cases->setChecked(config->readBoolEntry("IndentCases", false));
-  Indent_Classes->setChecked(config->readBoolEntry("IndentClasses", false));
-  Indent_Brackets->setChecked(config->readBoolEntry("IndentBrackets", false));
-  Indent_Namespaces->setChecked(config->readBoolEntry("IndentNamespaces", true));
-  Indent_Labels->setChecked(config->readBoolEntry("IndentLabels", true));
-  Indent_Blocks->setChecked(config->readBoolEntry("IndentBlocks", true));
-  Indent_Preprocessors->setChecked(config->readBoolEntry("IndentPreprocessors", true));
+	  Fill_EmptyLines->setChecked(config->readBoolEntry("FillEmptyLines",false));
 
-  // contiuation
-  Continue_MaxStatement->setValue(config->readNumEntry("MaxStatement", 40));
-  Continue_MinConditional->setValue(config->readNumEntry("MinConditional", -1));
+	// indent
+	Indent_Switches->setChecked(config->readBoolEntry("IndentSwitches", false));
+	Indent_Cases->setChecked(config->readBoolEntry("IndentCases", false));
+	Indent_Classes->setChecked(config->readBoolEntry("IndentClasses", false));
+	Indent_Brackets->setChecked(config->readBoolEntry("IndentBrackets", false));
+	Indent_Namespaces->setChecked(config->readBoolEntry("IndentNamespaces", true));
+	Indent_Labels->setChecked(config->readBoolEntry("IndentLabels", true));
+	Indent_Blocks->setChecked(config->readBoolEntry("IndentBlocks", true));
+	Indent_Preprocessors->setChecked(config->readBoolEntry("IndentPreprocessors", true));
 
-  // brackets
-  Brackets_None->setChecked(config->readBoolEntry("BracketsNone", true));
-  Brackets_Break->setChecked(config->readBoolEntry("BracketsBreak", false));
-  Brackets_Attach->setChecked(config->readBoolEntry("BracketsAttach", false));
-  Brackets_Linux->setChecked(config->readBoolEntry("BracketsLinux", false));
-  Brackets_CloseHeaders->setChecked(config->readBoolEntry("BracketsCloseHeaders",false));
+	// contiuation
+	Continue_MaxStatement->setValue(config->readNumEntry("MaxStatement", 40));
+	Continue_MinConditional->setValue(config->readNumEntry("MinConditional", -1));
 
-  Block_Break->setChecked(config->readBoolEntry("BlockBreak",false));
-  Block_BreakAll->setChecked(config->readBoolEntry("BlockBreakAll",false));
-  Block_IfElse->setChecked(config->readBoolEntry("BlockIfElse",false));
+	// brackets
+	 // brackets
+	s = config->readEntry("Brackets", "None");
+	if (s == "Break")
+		Brackets_Break->setChecked(true);
+	else if (s == "Attach")
+		Brackets_Attach->setChecked(true);
+	else if (s == "Linux")
+		Brackets_Linux->setChecked(true);
+	else
+		Brackets_None->setChecked(true);
 
-  // padding
-  Pad_ParenthesesIn->setChecked(config->readBoolEntry("PadParenthesesIn", false));
-  Pad_ParenthesesOut->setChecked(config->readBoolEntry("PadParenthesesOut", false));
-  Pad_ParenthesesUn->setChecked(config->readBoolEntry("PadParenthesesUn", false));
+	Brackets_CloseHeaders->setChecked(config->readBoolEntry("BracketsCloseHeaders",false));
 
-  Pad_Operators->setChecked(config->readBoolEntry("PadOperators", false));
+	Block_Break->setChecked(config->readBoolEntry("BlockBreak",false));
+	Block_BreakAll->setChecked(config->readBoolEntry("BlockBreakAll",false));
+	Block_IfElse->setChecked(config->readBoolEntry("BlockIfElse",false));
 
-  // oneliner
-  Keep_Statements->setChecked(config->readBoolEntry("KeepStatements", false));
-  Keep_Blocks->setChecked(config->readBoolEntry("KeepBlocks", false));
+	// padding
+	Pad_ParenthesesIn->setChecked(config->readBoolEntry("PadParenthesesIn", false));
+	Pad_ParenthesesOut->setChecked(config->readBoolEntry("PadParenthesesOut", false));
+	Pad_ParenthesesUn->setChecked(config->readBoolEntry("PadParenthesesUn", false));
 
-  styleChanged(id);
+	Pad_Operators->setChecked(config->readBoolEntry("PadOperators", false));
+
+	// oneliner
+	Keep_Statements->setChecked(config->readBoolEntry("KeepStatements", false));
+	Keep_Blocks->setChecked(config->readBoolEntry("KeepBlocks", false));
+  }
+  else{
+  	styleChanged(id);
+  }
 }
 
 
@@ -131,9 +151,7 @@ void AStyleWidget::accept()
   config->setGroup("AStyle");
 
   // style
-  if (Style_UserDefined->isChecked())
-	config->writeEntry("Style", "UserDefined");
-  else if (Style_ANSI->isChecked())
+  if (Style_ANSI->isChecked())
 	config->writeEntry("Style", "ANSI");
   else if (Style_KR->isChecked())
     config->writeEntry("Style", "KR");
@@ -143,53 +161,66 @@ void AStyleWidget::accept()
     config->writeEntry("Style", "GNU");
   else if (Style_JAVA->isChecked())
     config->writeEntry("Style", "JAVA");
+  else if (Style_UserDefined->isChecked()){
 
-  // fill
-  config->writeEntry("FillTabs", Fill_Tabs->isChecked());
-  config->writeEntry("FillTabCount", Fill_SpaceCount->value());
-  config->writeEntry("FillForceTabs", Fill_ForceTabs->isChecked());
-  config->writeEntry("FillSpaces", Fill_Spaces->isChecked());
-  config->writeEntry("FillSpaceCount", Fill_SpaceCount->value());
-  config->writeEntry("FillConvertTabs", Fill_ConvertTabs->isChecked());
-  config->writeEntry("FillEmptyLines", Fill_EmptyLines->isChecked());
+	config->writeEntry("Style", "UserDefined");
 
-  // indent
-  config->writeEntry("IndentSwitches", Indent_Switches->isChecked());
-  config->writeEntry("IndentCases", Indent_Cases->isChecked());
-  config->writeEntry("IndentClasses", Indent_Classes->isChecked());
-  config->writeEntry("IndentBrackets", Indent_Brackets->isChecked());
-  config->writeEntry("IndentNamespaces", Indent_Namespaces->isChecked());
-  config->writeEntry("IndentLabels", Indent_Labels->isChecked());
-  config->writeEntry("IndentBlocks", Indent_Blocks->isChecked());
-  config->writeEntry("IndentPreprocessors", Indent_Preprocessors->isChecked());
+	// fill
+	if ( Fill_Tabs->isChecked()){
+		config->writeEntry("Fill", "Tabs");
+		config->writeEntry("FillCount", Fill_TabCount->value());
+		config->writeEntry("FillForce", Fill_ForceTabs->isChecked());
+	}
+	else{
+		config->writeEntry("Fill", "Spaces");
+		config->writeEntry("FillCount", Fill_SpaceCount->value());
+		config->writeEntry("FillForce", Fill_ConvertTabs->isChecked());
+	}
 
-  // continuation
-  config->writeEntry("MaxStatement", Continue_MaxStatement->value());
-  config->writeEntry("MinConditional", Continue_MinConditional->value());
+	config->writeEntry("FillEmptyLines", Fill_EmptyLines->isChecked());
 
-  // brackets
-  config->writeEntry("BracketsNone", Brackets_None->isChecked());
-  config->writeEntry("BracketsBreak", Brackets_Break->isChecked());
-  config->writeEntry("BracketsAttach", Brackets_Attach->isChecked());
-  config->writeEntry("BracketsLinux", Brackets_Linux->isChecked());
-  config->writeEntry("BracketsCloseHeaders", Brackets_CloseHeaders->isChecked());
+	// indent
+	config->writeEntry("IndentSwitches", Indent_Switches->isChecked());
+	config->writeEntry("IndentCases", Indent_Cases->isChecked());
+	config->writeEntry("IndentClasses", Indent_Classes->isChecked());
+	config->writeEntry("IndentBrackets", Indent_Brackets->isChecked());
+	config->writeEntry("IndentNamespaces", Indent_Namespaces->isChecked());
+	config->writeEntry("IndentLabels", Indent_Labels->isChecked());
+	config->writeEntry("IndentBlocks", Indent_Blocks->isChecked());
+	config->writeEntry("IndentPreprocessors", Indent_Preprocessors->isChecked());
 
-  // blocks
-  config->writeEntry("BlockBreak", Block_Break->isChecked());
-  config->writeEntry("BlockBreakAll", Block_BreakAll->isChecked());
-  config->writeEntry("BlockIfElse", Block_IfElse->isChecked());
+	// continuation
+	config->writeEntry("MaxStatement", Continue_MaxStatement->value());
+	config->writeEntry("MinConditional", Continue_MinConditional->value());
 
-  // padding
-  config->writeEntry("PadParenthesesIn", Pad_ParenthesesIn->isChecked());
-  config->writeEntry("PadParenthesesOut", Pad_ParenthesesOut->isChecked());
-  config->writeEntry("PadParenthesesUn", Pad_ParenthesesUn->isChecked());
+	// brackets
+	if ( Brackets_None->isChecked())
+		config->writeEntry("Brackets", "None");
+	else if (Brackets_Break->isChecked())
+		config->writeEntry("Brackets","Break" );
+	else if (Brackets_Attach->isChecked())
+		config->writeEntry("Brackets", "Attach" );
+	else if (Brackets_Linux->isChecked())
+		config->writeEntry("Brackets","Linux");
 
-  config->writeEntry("PadOperators", Pad_Operators->isChecked());
+	config->writeEntry("BracketsCloseHeaders", Brackets_CloseHeaders->isChecked());
 
-  // oneliner
-  config->writeEntry("KeepStatements", Keep_Statements->isChecked());
-  config->writeEntry("KeepBlocks", Keep_Blocks->isChecked());
+	// blocks
+	config->writeEntry("BlockBreak", Block_Break->isChecked());
+	config->writeEntry("BlockBreakAll", Block_BreakAll->isChecked());
+	config->writeEntry("BlockIfElse", Block_IfElse->isChecked());
 
+	// padding
+	config->writeEntry("PadParenthesesIn", Pad_ParenthesesIn->isChecked());
+	config->writeEntry("PadParenthesesOut", Pad_ParenthesesOut->isChecked());
+	config->writeEntry("PadParenthesesUn", Pad_ParenthesesUn->isChecked());
+
+	config->writeEntry("PadOperators", Pad_Operators->isChecked());
+
+	// oneliner
+	config->writeEntry("KeepStatements", Keep_Statements->isChecked());
+	config->writeEntry("KeepBlocks", Keep_Blocks->isChecked());
+  }
   config->sync();
 }
 
@@ -201,9 +232,9 @@ void AStyleWidget::styleChanged( int id )
 	ConfigTabs->setTabEnabled(tab_2, id == 0);
 	ConfigTabs->setTabEnabled(tab_3, id == 0);
 	ConfigTabs->setTabEnabled(tab_4, id == 0);
-	
+
 	StyleExample->clear();
-	
+
 	StyleExample->setText( m_part->formatSource( sample, this ) );
 }
 
