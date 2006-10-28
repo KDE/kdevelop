@@ -35,6 +35,9 @@ public:
                         const QModelIndex &index ) const;
 
     virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+private:
+    void updateStyle( QStyleOptionViewItem&, const QModelIndex& ) const;
 };
 
 #endif

@@ -34,35 +34,9 @@ void CodeDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option,
                           const QModelIndex &index ) const
 {
     Q_ASSERT( index.isValid() );
-    const QAbstractItemModel *model = index.model();
-    Q_ASSERT( model );
     QStyleOptionViewItem opt = option;
 
-    QVariant value = model->data( index, Qt::UserRole );
-    Q_ASSERT( value.isValid() ); //This should be set to the KDevCodeItem kind()
-
-    switch ( value.toInt() )
-    {
-    case _CodeModelItem::Kind_Namespace:
-        opt.palette.setColor( QPalette::Text, Qt::blue );
-        break;
-    case _CodeModelItem::Kind_Member:
-        opt.palette.setColor( QPalette::Text, Qt::gray );
-        break;
-    case _CodeModelItem::Kind_Class:
-        opt.font.setBold( true );
-        break;
-    case _CodeModelItem::Kind_File:
-        opt.font.setBold( true );
-        break;
-    case _CodeModelItem::Kind_FunctionDefinition:
-        opt.font.setItalic( true );
-        break;
-    default:
-        break;
-    }
-
-    opt.fontMetrics = QFontMetrics(opt.font);
+    updateStyle( opt, index );
 
     QItemDelegate::paint( painter, opt, index );
 }
@@ -70,10 +44,17 @@ void CodeDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option,
 QSize CodeDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     Q_ASSERT( index.isValid() );
-    const QAbstractItemModel *model = index.model();
-    Q_ASSERT( model );
     QStyleOptionViewItem opt = option;
 
+    updateStyle( opt, index );
+
+    return QItemDelegate::sizeHint( opt, index );
+}
+
+void CodeDelegate::updateStyle( QStyleOptionViewItem& opt, const QModelIndex& index ) const
+{
+    const QAbstractItemModel *model = index.model();
+    Q_ASSERT( model );
     QVariant value = model->data( index, Qt::UserRole );
     Q_ASSERT( value.isValid() ); //This should be set to the KDevCodeItem kind()
 
@@ -99,8 +80,6 @@ QSize CodeDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModel
     }
 
     opt.fontMetrics = QFontMetrics(opt.font);
-
-    return QItemDelegate::sizeHint( opt, index );
 }
 
 #include "codedelegate.moc"
