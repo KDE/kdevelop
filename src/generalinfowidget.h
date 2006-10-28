@@ -47,6 +47,7 @@ private:
     QString projectDirectory();
     void setProjectDirectoryError( const QString& error );
     void setProjectDirectorySuccess();
+    void configureinUpdateVersion( QString configureinpath, QString newVersion );
 };
 
 #endif

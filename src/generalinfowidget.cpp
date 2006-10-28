@@ -19,6 +19,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcharsets.h>
+#include <qregexp.h>
+#include <kmessagebox.h>
 
 #include "generalinfowidget.h"
 #include "generalinfowidget.moc"
@@ -75,6 +77,92 @@ void GeneralInfoWidget::readConfig() {
 	}
 
 }
+/**
+ * Update the configure.in file with the version value from project options.
+ * Very basic updating - uses regex to update the field in
+ * AC_INIT, AM_INIT_AUTOMAKE, and AC_DEFINE macros.
+ * On next make, the build system re-runs configure to update config.h
+ * version info.
+ *
+ * @param configureinpath Full path to configure.in file
+ * @param newVersion The new version number or string
+*/
+void GeneralInfoWidget::configureinUpdateVersion( QString configureinpath, QString newVersion )
+{
+    QFile configurein(configureinpath);
+
+    if ( !configurein.open( IO_ReadOnly ) ){
+        KMessageBox::error(this, i18n("Could not open %1 for reading.").arg(configureinpath));
+        return;
+    }
+
+    QTextStream stream( &configurein);
+    QStringList list;
+
+    // Options for version:
+
+    // we ignore old AC_INIT that had no version..
+    // only match the if there is a comma and at least two args..
+    // AC_INIT (package, version, [bug-report], [tarname])
+    QRegExp ac_init("^AC_INIT\\s*\\(\\s*([^,]+),([^,\\)]+)(.*)");
+
+    // AM_INIT_AUTOMAKE([OPTIONS])
+    // example: AM_INIT_AUTOMAKE([gnits 1.5 no-define dist-bzip2])
+    QRegExp am_autoSpace("^AM_INIT_AUTOMAKE\\s{0,}\\(\\s{0,}([\\[\\s]{0,}[^\\s]+)\\s+([^\\s\\)\\]]+)(.*)");
+
+    // AM_INIT_AUTOMAKE(PACKAGE, VERSION, [NO-DEFINE])
+    QRegExp am_autoComma("^AM_INIT_AUTOMAKE\\s*\\(\\s*([^,]+),([^,\\)]+)(.*)");
+
+    // look for version in a define.
+    // AC_DEFINE(VERSION, "5.6")
+    QRegExp ac_define("^AC_DEFINE\\s*\\(");
+    QRegExp version("(\\bversion\\b)");
+    version.setCaseSensitive(FALSE);
+
+    while ( !stream.eof() ) {
+        QString line = stream.readLine();
+        if ( ac_init.search(line) >= 0){
+            line = "AC_INIT(" + ac_init.cap(1).stripWhiteSpace();
+            line += ", ";
+            line += newVersion;
+            line += ac_init.cap(3).stripWhiteSpace();
+        }
+        else if ( am_autoComma.search(line) >= 0 ){
+            line="AM_INIT_AUTOMAKE(";
+            line += am_autoComma.cap(1).stripWhiteSpace();
+            line += ", ";
+            line += newVersion;
+            line += am_autoComma.cap(3).stripWhiteSpace();
+        }
+        else if ( am_autoSpace.search(line) >= 0 ){
+            line = "AM_INIT_AUTOMAKE(" + am_autoSpace.cap(1).stripWhiteSpace();
+            line += " ";
+            line += newVersion;
+            line += " ";
+            line += am_autoSpace.cap(3).stripWhiteSpace();
+        }
+        else if ( ac_define.search(line) >=0 && version.search(line) >=0) {
+            // replace version in: AC_DEFINE(VERSION,"0.1")
+            line="AC_DEFINE(" + version.cap(1).stripWhiteSpace()+", \"" + newVersion +"\")";
+        }
+        list.push_back(line);
+    }
+    configurein.close();
+
+    // write our changes..
+    QFile configureout(configureinpath);
+    if ( !configureout.open( IO_WriteOnly ) ){
+        KMessageBox::error(this, i18n("Could not open %1 for writing.").arg(configureinpath));
+        return ;
+    }
+    QTextStream output( &configureout);
+    for(QStringList::iterator iter = list.begin();iter!=list.end();iter++){
+        output << (*iter) <<"\n";
+    }
+    configureout.close();
+
+}
+
 
 void GeneralInfoWidget::writeConfig() {
     DomUtil::writeEntry(m_projectDom,"/general/projectdirectory",project_directory_edit->text());
@@ -82,6 +170,10 @@ void GeneralInfoWidget::writeConfig() {
     DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/author",author_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
+    if ( DomUtil::readEntry(m_projectDom,"/general/version") != version_edit->text() ){
+        // update the configure.in file.
+        configureinUpdateVersion( projectDirectory() + "/configure.in", version_edit->text() );
+    }
     DomUtil::writeEntry(m_projectDom,"/general/version",version_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/description",description_edit->text());
 
