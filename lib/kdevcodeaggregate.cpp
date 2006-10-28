@@ -133,11 +133,14 @@ QModelIndex KDevCodeAggregate::index( int row, int column,
         }
         else
         {
-            KDevCodeModel *source_model = m_modelHash[ row ] ->source_model;
-            QModelIndex source_index = m_modelHash[ row ] ->source_index;
-            KDevCodeItem *item = source_model->item( source_index );
+            if ( m_modelHash[ row ] )
+            {
+                KDevCodeModel *source_model = m_modelHash[ row ] ->source_model;
+                QModelIndex source_index = m_modelHash[ row ] ->source_index;
+                KDevCodeItem *item = source_model->item( source_index );
 
-            return createIndex( row, column, item );
+                return createIndex( row, column, item );
+            }
         }
     }
     else if ( KDevCodeItem * codeItem = sourceToItem( parent ) )
