@@ -61,12 +61,12 @@ AutoDetailsView::AutoDetailsView(AutoProjectWidget* widget, AutoProjectPart* par
 {
 	m_widget = widget;
 	m_part = part;
-	
+
 	initActions();
 	QDomDocument dom = *(m_part->projectDom());
 	m_subclasslist = DomUtil::readPairListEntry(dom, "/kdevautoproject/subclassing",
 	                                            "subclass","sourcefile", "uifile");
-	
+
 	m_listView->setAllColumnsShowFocus( true );
 	m_listView->setRootIsDecorated( true );
 	m_listView->setResizeMode( QListView::LastColumn );
@@ -97,18 +97,18 @@ void AutoDetailsView::slotSelectionChanged( QListViewItem* item )
 		bool isRegularTarget = false;
 		bool isFile = false;
 		bool isProgram = false;
-		
+
 		if ( item )
 		{
 			// We assume here that ALL items in the detail list view
 			// are ProjectItem's
 			ProjectItem * pvitem = static_cast<ProjectItem*>( item );
 			TargetItem* titem = 0;
-			
+
 			if ( pvitem->type() == ProjectItem::File )
 			{
 				titem = static_cast <TargetItem*> ( pvitem->parent() );
-				
+
 				QString primary = titem->primary;
 				if ( primary == "PROGRAMS" || primary == "LIBRARIES" ||
 				     primary == "LTLIBRARIES" || primary == "JAVA" )
@@ -122,23 +122,23 @@ void AutoDetailsView::slotSelectionChanged( QListViewItem* item )
 				titem = static_cast <TargetItem*> ( pvitem );
 				isTarget = true;
 			}
-			
+
 			QString primary = titem->primary;
 			if ( primary == "PROGRAMS" || primary == "LIBRARIES" ||
 			     primary == "LTLIBRARIES" || primary == "JAVA" )
 			{
 				isRegularTarget = true; // not a data group
 			}
-			
+
 			if ( primary == "PROGRAMS" )
 				isProgram = true;
 		}
-		
+
 		targetOptionsAction->setEnabled( isRegularTarget && !isFile );
 		addNewFileAction->setEnabled( isTarget );
 		addExistingFileAction->setEnabled( isTarget );
 		removeDetailAction->setEnabled ( true );
-		
+
 		if ( isRegularTarget && isFile || isRegularTarget )
 		{
 			buildTargetAction->setEnabled ( true );
@@ -151,16 +151,16 @@ void AutoDetailsView::slotSelectionChanged( QListViewItem* item )
 			executeTargetAction->setEnabled ( false );
 		}
 	}
-	
+
 	emit selectionChanged( item );
 }
 
 void AutoDetailsView::initActions()
 {
 	KActionCollection * actions = new KActionCollection( this );
-	
+
 	targetOptionsAction = new AutoToolsAction( i18n( "Options..." ), "configure", 0,
-	                                   this, SLOT( slotTargetOptions() ), actions, 
+	                                   this, SLOT( slotTargetOptions() ), actions,
 	                                   "target options" );
 	targetOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Target options dialog that "
 	                                       "provides settings for linker flags and lists "
@@ -168,7 +168,8 @@ void AutoDetailsView::initActions()
 	                                       "are used when compiling the target."));
 	targetOptionsAction->plug( m_optionsButton );
 	targetOptionsAction->setEnabled( false );
-	
+
+	QToolTip::add( m_button1, tr2i18n( "Create New File..." ) );
 	addNewFileAction = new AutoToolsAction( i18n( "Create New File..." ), "filenew", 0,
 	                                this, SLOT( slotAddNewFile() ), actions,
 	                                "add new file" );
@@ -176,7 +177,8 @@ void AutoDetailsView::initActions()
 	                                    "adds it to a currently selected target."));
 	addNewFileAction->plug( m_button1 );
 	addNewFileAction->setEnabled( false );
-	
+
+	QToolTip::add( m_button2, tr2i18n( "Add Existing Files..." ) );
 	addExistingFileAction = new AutoToolsAction( i18n( "Add Existing Files..." ), "fileimport", 0,
 	                                     this, SLOT( slotAddExistingFile() ), actions,
 	                                     "add existing file" );
@@ -187,11 +189,12 @@ void AutoDetailsView::initActions()
 	                                         "noinst_HEADERS instead."));
 	addExistingFileAction->plug( m_button2 );
 	addExistingFileAction->setEnabled( false );
-	
+
 	addIconAction = new KAction( i18n( "Add Icon..." ), "iconadd_kdevelop", 0,
 	                             this, SLOT( slotAddIcon() ), actions, "add icon" );
 	addIconAction->setWhatsThis(i18n("<b>Add icon</b><p>Adds an icon to a KDEICON target."));
-	
+
+	QToolTip::add( m_button4, tr2i18n( "Build Target"));
 	buildTargetAction = new AutoToolsAction( i18n( "Build Target..." ), "launch", 0,
 	                                 this, SLOT( slotBuildTarget() ), actions,
 	                                 "build target" );
@@ -200,7 +203,8 @@ void AutoDetailsView::initActions()
 	                                     "Also builds dependent targets."));
 	buildTargetAction->plug( m_button4 );
 	buildTargetAction->setEnabled( false );
-	
+
+	QToolTip::add( m_button5, tr2i18n( "Execute Target..."));
 	executeTargetAction = new AutoToolsAction( i18n( "Execute Target..." ), "exec", 0,
 	                                   this, SLOT( slotExecuteTarget() ), actions,
 	                                   "execute target" );
@@ -208,7 +212,7 @@ void AutoDetailsView::initActions()
 	                                       "and tries to build in case it is not built."));
 	executeTargetAction->plug( m_button5 );
 	executeTargetAction->setEnabled( false );
-	
+
 	setActiveTargetAction = new KAction( i18n( "Make Target Active" ), "", 0,
 	                                     this, SLOT( slotSetActiveTarget() ), actions,
 	                                     "set active target" );
@@ -218,7 +222,8 @@ void AutoDetailsView::initActions()
 	                                         "target. "
 	                                         "Using the <b>Build Active Target</b> menu "
 	                                         "command builds it."));
-	
+
+	QToolTip::add( m_button3, tr2i18n( "Remove"));
 	removeDetailAction = new AutoToolsAction( i18n( "Remove" ), "editdelete", 0, this,
 	                                  SLOT( slotRemoveDetail() ), actions,
 	                                  "remove detail" );
@@ -228,7 +233,7 @@ void AutoDetailsView::initActions()
 	                                      "file should be removed from disk."));
 	removeDetailAction->plug( m_button3 );
 	removeDetailAction->setEnabled( false );
-	
+
 	connect( m_listView, SIGNAL( executed( QListViewItem* ) ),
 	         this, SLOT( slotDetailsExecuted( QListViewItem* ) ) );
 	connect( m_listView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
@@ -361,8 +366,8 @@ void AutoDetailsView::slotExecuteTarget()
 		titem = static_cast <TargetItem*> ( pvitem->parent() );
 	else
 		titem = static_cast <TargetItem*> ( m_listView->selectedItem() );
-		
-	
+
+
 	m_part->executeTarget(m_widget->selectedSubproject()->path, titem);
 }
 
@@ -386,7 +391,7 @@ void AutoDetailsView::slotRemoveDetail()
 
 		TargetItem *titem = static_cast<TargetItem*>( fitem->parent() );
 
-		RemoveFileDialog dlg( m_widget, m_part, m_widget->selectedSubproject(), 
+		RemoveFileDialog dlg( m_widget, m_part, m_widget->selectedSubproject(),
 		                      titem, fitem->text( 0 ), this, "remove file dialog" );
 
 		QString caption;
@@ -470,7 +475,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 			caption = i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix );
 		else
 			caption = titem->name;
-		
+
 		KPopupMenu popup( i18n( "Target: %1" ).arg( caption ), this );
 
 		if ( titem->primary == "PROGRAMS" || titem->primary == "LIBRARIES"
@@ -565,7 +570,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 			popup.removeItem(idViewUIH);
 			popup.removeItem(idSubclassWidget);
 		}
-		
+
 		if (fitem->uiFileLink.isEmpty())
 			popup.removeItem(idUpdateWidgetclass);
 
@@ -576,7 +581,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 
 		if(r == idViewUIH)
 		{
-			m_part->partController()->editDocument(KURL(m_widget->selectedSubproject()->path 
+			m_part->partController()->editDocument(KURL(m_widget->selectedSubproject()->path
 			                                            + "/" + QString(fitem->name + ".h")));
 		}
 		else if (r == idSubclassWidget)
@@ -630,7 +635,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 			                                                    "subclass","sourcefile", "uifile");
 			SubclassesDlg *sbdlg = new SubclassesDlg( QString(m_widget->selectedSubproject()->path + "/" +fitem->name).remove(0,m_part->projectDirectory().length()),
 			                                          list, m_part->projectDirectory());
-			
+
 			if (sbdlg->exec())
 			{
 				QDomElement el = DomUtil::elementByPath( dom,  "/kdevautoproject");
@@ -639,10 +644,10 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 				{
 					el.removeChild(el2);
 				}
-				
+
 				DomUtil::writePairListEntry(dom, "/kdevautoproject/subclassing", "subclass",
 				                            "sourcefile", "uifile", list);
-				
+
 				m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing",
 				                                            "subclass","sourcefile", "uifile");
 			}
@@ -670,7 +675,7 @@ void AutoDetailsView::slotDetailsExecuted( QListViewItem *item )
 		fitem->changeSubstitution();
 		return;
 	}
-	
+
 	m_part->partController()->editDocument( KURL( dirName + "/" + fitem->name ) );
 }
 
