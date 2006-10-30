@@ -243,7 +243,6 @@ bool KDevAppTemplate::unpackTemplateArchive()
 
     // Unpack template archive to temp dir, and get the name
     KTempDir archDir;
-    archDir.setAutoDelete(true);
     KTar templateArchive( archiveName, "application/x-gzip" );
     if( templateArchive.open( QIODevice::ReadOnly ) )
     {
