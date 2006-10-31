@@ -163,7 +163,7 @@ a.cpp
 */
 class AssignmentAST: public AST {
 public:
-    AssignmentAST(): AST(AST::AssignmentAST) {}
+    AssignmentAST(): AST(AST::AssignmentAST), commentnode(0){}
 
     virtual void writeBack(QString &buffer);
 
