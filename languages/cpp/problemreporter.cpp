@@ -304,10 +304,9 @@ void ProblemReporter::removeAllItems( QListView* listview, const QString& filena
 
 void ProblemReporter::removeAllProblems( const QString& filename )
 {
-	QString relFileName = filename;
-	relFileName.remove(m_cppSupport->project()->projectDirectory());
-
-	kdDebug(9008) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
+	QString relFileName = m_cppSupport->project()->relativeProjectFile(filename);
+	
+	kdDebug(9007) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
 
     //removeAllItems(m_errorList,relFileName);
     //removeAllItems(m_fixmeList,relFileName);
@@ -367,8 +366,7 @@ void ProblemReporter::initCurrentList()
 {
 	m_tabBar->setTabEnabled(0,true);
 
-	QString relFileName = m_fileName;
-	relFileName.remove(m_cppSupport->project()->projectDirectory());
+	QString relFileName = m_cppSupport->project()->relativeProjectFile(m_fileName);
 
 	m_currentList->clear();
 
@@ -395,8 +393,8 @@ void ProblemReporter::slotSelected( QListViewItem* item )
 	else if(item->listView() == m_currentList)
 		is_current = true;
 
-
-	KURL url( is_current ? m_fileName : m_cppSupport->project()->projectDirectory() + item->text(0 + is_filtered) );
+	//either use current file m_fileName or assemble a new one from current item (relative path) and projectDirectory
+	KURL url( is_current ? m_fileName : m_cppSupport->project()->projectDirectory() + "/" + item->text(0 + is_filtered) );
 	int line = item->text( 1 + is_filtered).toInt();
     // int column = item->text( 3 ).toInt();
 	m_cppSupport->partController()->editDocument( url, line-1 );
@@ -416,8 +414,7 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 	QString msg = p.text();
 	msg = msg.replace( QRegExp("\n"), "" );
 
-	QString relFileName = fileName;
-	relFileName.remove(m_cppSupport->project()->projectDirectory());
+	QString relFileName = m_cppSupport->project()->relativeProjectFile(fileName);
 
 	EfficientKListView* list;
 
