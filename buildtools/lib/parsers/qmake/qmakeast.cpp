@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "qmakeast.h"
 
+#include <kdebug.h>
+
 namespace QMake {
 
 //AST
@@ -110,8 +112,14 @@ void ProjectAST::writeBack(QString &buffer)
 
 //AssignmentAST
 
+AssignmentAST::~AssignmentAST()
+{
+	delete commentnode;
+}
+
 void AssignmentAST::writeBack(QString &buffer)
 {
+    kdDebug(9024) << "Writing variable: " << scopedID << " " << op << endl;
     if( !buffer.endsWith(": ") )
         buffer += indentation();
     buffer += scopedID + " " + op;

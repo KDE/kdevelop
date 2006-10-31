@@ -164,6 +164,7 @@ a.cpp
 class AssignmentAST: public AST {
 public:
     AssignmentAST(): AST(AST::AssignmentAST), commentnode(0){}
+    ~AssignmentAST();
 
     virtual void writeBack(QString &buffer);
 
