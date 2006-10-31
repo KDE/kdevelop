@@ -154,7 +154,7 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
                          "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options." ) );
 
     // Project button connections
-    connect ( addSubdirButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSubdir () ) );
+    connect ( addSubdirButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSubproject () ) );
     connect ( createScopeButton, SIGNAL ( clicked () ), this, SLOT ( slotCreateScope () ) );
 
 
@@ -772,7 +772,7 @@ void TrollProjectWidget::slotCreateScope( QMakeScopeItem *spitem )
     return ;
 }
 
-void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
+void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
 {
     if ( spitem == 0 && m_shownSubproject == 0 )
         return ;
@@ -781,8 +781,8 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
 
     QString projectdir = spitem->scope->projectDir();
 
-    KURLRequesterDlg dialog( i18n( "Add Subdirectory" ), i18n( "Please enter a name for the subdirectory: " ), this, 0 );
-    dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
+    KURLRequesterDlg dialog( i18n( "Add Subproject" ), i18n( "Please enter a name for the subproject: " ), this, 0 );
+    dialog.urlRequester() ->setMode( KFile::Directory | KFile::Files | KFile::LocalOnly );
     dialog.urlRequester() ->setURL( QString::null );
     dialog.urlRequester() ->completionObject() ->setDir( projectdir );
 
@@ -796,16 +796,19 @@ void TrollProjectWidget::slotAddSubdir( QMakeScopeItem *spitem )
 
         while( subdirname.endsWith( QString(QChar(QDir::separator())) ) )
             subdirname = subdirname.left(subdirname.length()-1);
-        kdDebug(9024) << "Cleaned subdirname: " << subdirname << endl;
-        QDir dir( projectdir );
-        if ( !dir.exists( subdirname ) )
+        if( !subdirname.endsWith(".pro") )
         {
-            if ( !dir.mkdir( subdirname ) )
+            kdDebug(9024) << "Cleaned subdirname: " << subdirname << endl;
+            QDir dir( projectdir );
+            if ( !dir.exists( subdirname ) )
             {
-                KMessageBox::error( this, i18n( "Failed to create subdirectory. "
+                if ( !dir.mkdir( subdirname ) )
+                {
+                    KMessageBox::error( this, i18n( "Failed to create subdirectory. "
                                                 "Do you have write permission "
                                                 "in the project folder?" ) );
-                return ;
+                    return ;
+                }
             }
         }
 
@@ -958,7 +961,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     QString relpath = spitem->relativePath();
     if ( r == idAddSubproject )
     {
-        slotAddSubdir( spitem );
+        slotAddSubproject( spitem );
     }
     if ( r == idRemoveSubproject )
     {

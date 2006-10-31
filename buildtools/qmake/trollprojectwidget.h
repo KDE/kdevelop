@@ -123,7 +123,7 @@ private slots:
     void slotDetailsExecuted( QListViewItem *item );
     void slotDetailsContextMenu( KListView *, QListViewItem *item, const QPoint &p );
     void slotExcludeFileFromScopeButton();
-    void slotAddSubdir( QMakeScopeItem *spitem = 0 );
+    void slotAddSubproject( QMakeScopeItem *spitem = 0 );
     void slotRemoveSubproject( QMakeScopeItem *spitem = 0 );
     void slotCreateScope( QMakeScopeItem *spitem = 0 );
     void slotRemoveScope( QMakeScopeItem *spitem = 0 );
