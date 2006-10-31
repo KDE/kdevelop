@@ -63,7 +63,7 @@ protected:
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
-//    void slotBuild();
+    void slotBuild();
 //    void slotClean();
 //    void slotExecute();
     void slotCommandFinished( const QString& command );

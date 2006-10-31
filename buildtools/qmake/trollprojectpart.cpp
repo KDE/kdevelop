@@ -654,7 +654,12 @@ bool TrollProjectPart::isQt4Project() const
 
 KDirWatch* TrollProjectPart::dirWatch()
 {
-  return m_dirWatch;
+    return m_dirWatch;
+}
+
+void TrollProjectPart::slotBuild()
+{
+    m_widget->slotBuildProject();
 }
 
 #include "trollprojectpart.moc"
