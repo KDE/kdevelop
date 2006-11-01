@@ -24,8 +24,7 @@ public slots:
 
 private slots:
 
-  void styleChanged(int id);
-  void pageChanged();
+  void styleChanged();
 
 
 private:

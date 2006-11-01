@@ -18,40 +18,41 @@
 AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name )
  : AStyleConfig(parent, name), m_part ( part )
 {
-  connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged(int)));
-  connect(ConfigTabs, SIGNAL(currentChanged(QWidget*)), this, SLOT(pageChanged()) );
+	// which style changed - disable the other pages.
+	connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
+  connect(ConfigTabs, SIGNAL(currentChanged(QWidget*)), this, SLOT(styleChanged()) );
 
-  connect(FillingGroup, SIGNAL(clicked(int)), this, SLOT(pageChanged()));
-  connect(Fill_ForceTabs, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Fill_TabCount, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
-  connect(Fill_SpaceCount, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
+  connect(FillingGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
+  connect(Fill_ForceTabs, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Fill_TabCount, SIGNAL(valueChanged(int)), this, SLOT(styleChanged()));
+  connect(Fill_SpaceCount, SIGNAL(valueChanged(int)), this, SLOT(styleChanged()));
 
-  connect(BracketGroup, SIGNAL(clicked(int)), this, SLOT(pageChanged()));
-  connect(Brackets_CloseHeaders, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(BracketGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
+  connect(Brackets_CloseHeaders, SIGNAL(clicked()), this, SLOT(styleChanged()));
 
-  connect(Indent_Switches, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Indent_Cases, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Indent_Classes, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Indent_Brackets, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Indent_Namespaces, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Indent_Labels, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Indent_Blocks, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Indent_Preprocessors, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Indent_Switches, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Indent_Cases, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Indent_Classes, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Indent_Brackets, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Indent_Namespaces, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Indent_Labels, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Indent_Blocks, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Indent_Preprocessors, SIGNAL(clicked()), this, SLOT(styleChanged()));
 
-  connect(Continue_MaxStatement, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
-  connect(Continue_MinConditional, SIGNAL(valueChanged(int)), this, SLOT(pageChanged()));
+  connect(Continue_MaxStatement, SIGNAL(valueChanged(int)), this, SLOT(styleChanged()));
+  connect(Continue_MinConditional, SIGNAL(valueChanged(int)), this, SLOT(styleChanged()));
 
-  connect(Block_Break, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Block_BreakAll, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Block_IfElse, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Block_Break, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Block_BreakAll, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Block_IfElse, SIGNAL(clicked()), this, SLOT(styleChanged()));
 
-  connect(Pad_ParenthesesIn, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Pad_ParenthesesOut, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Pad_ParenthesesUn, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Pad_Operators, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Pad_ParenthesesIn, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Pad_ParenthesesOut, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Pad_ParenthesesUn, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Pad_Operators, SIGNAL(clicked()), this, SLOT(styleChanged()));
 
-  connect(Keep_Statements, SIGNAL(clicked()), this, SLOT(pageChanged()));
-  connect(Keep_Blocks, SIGNAL(clicked()), this, SLOT(pageChanged()));
+  connect(Keep_Statements, SIGNAL(clicked()), this, SLOT(styleChanged()));
+  connect(Keep_Blocks, SIGNAL(clicked()), this, SLOT(styleChanged()));
 
 
   // load settings
@@ -59,7 +60,8 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
   config->setGroup("AStyle");
 
   // style
-  QString s = config->readEntry("Style");
+  QString s = config->readEntry("FStyle");
+  // fake the id so we disable the other pages.
   int id=0;
   if (s == "ANSI") id=1;
   if (s == "KR") id=2;
@@ -133,9 +135,9 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
 	Keep_Statements->setChecked(config->readBoolEntry("KeepStatements", false));
 	Keep_Blocks->setChecked(config->readBoolEntry("KeepBlocks", false));
   }
-  else{
-  	styleChanged(id);
-  }
+
+
+  styleChanged();
 }
 
 
@@ -152,18 +154,17 @@ void AStyleWidget::accept()
 
   // style
   if (Style_ANSI->isChecked())
-	config->writeEntry("Style", "ANSI");
+	config->writeEntry("FStyle", "ANSI");
   else if (Style_KR->isChecked())
-    config->writeEntry("Style", "KR");
+    config->writeEntry("FStyle", "KR");
   else if (Style_Linux->isChecked())
-	config->writeEntry("Style", "Linux");
+	config->writeEntry("FStyle", "Linux");
   else if (Style_GNU->isChecked())
-    config->writeEntry("Style", "GNU");
+    config->writeEntry("FStyle", "GNU");
   else if (Style_JAVA->isChecked())
-    config->writeEntry("Style", "JAVA");
+    config->writeEntry("FStyle", "JAVA");
   else if (Style_UserDefined->isChecked()){
-
-	config->writeEntry("Style", "UserDefined");
+	config->writeEntry("FStyle", "UserDefined");
 
 	// fill
 	if ( Fill_Tabs->isChecked()){
@@ -225,26 +226,47 @@ void AStyleWidget::accept()
 }
 
 
-void AStyleWidget::styleChanged( int id )
+/**
+ * Change the sample formatting text depending on what tab is selected.
+ *
+ * @param id Tab selected
+ */
+void AStyleWidget::styleChanged(  )
 {
-	QString sample = "namespace foospace {class Bar { public: int foo(); private: int m_foo;};int Bar::foo(){ switch (x) { case 1:{ALabel:if(true)Foo();else Bar();for(int i=0;i<10;i++){a+=i;}} break; default: break; } if ((isBar)&&(isFoo)){ bar(); return m_foo+1; } else return 0; } }";
 
-	ConfigTabs->setTabEnabled(tab_2, id == 0);
-	ConfigTabs->setTabEnabled(tab_3, id == 0);
-	ConfigTabs->setTabEnabled(tab_4, id == 0);
+	// diable the tabs for predefined sample
+	// only user define id==0, enables the other tabs
+	ConfigTabs->setTabEnabled(tab_2, Style_UserDefined->isChecked());
+	ConfigTabs->setTabEnabled(tab_3, Style_UserDefined->isChecked());
+	ConfigTabs->setTabEnabled(tab_4, Style_UserDefined->isChecked());
+
+	int id = ConfigTabs->currentPageIndex();
+
 
 	StyleExample->clear();
 
-	StyleExample->setText( m_part->formatSource( sample, this ) );
-}
+	QString bracketSample = "if (isFoo){\n\tbar();\n} else {\n\tbar();\n}\n";
 
-void AStyleWidget::pageChanged( )
-{
-	if ( Style_UserDefined->isChecked() )
-	{
-		styleChanged( 0 );
+	QString indentSample = "#define foobar(A)\\\n{Foo();Bar();}\n#define anotherFoo(B)\\\nreturn Bar()\n\nnamespace Bar\n{\nclass Foo\n{public:\nFoo();\nvirtual !Foo();\n};\nswitch (foo)\n{\ncase 1:\na+=1;\nbreak;\ncase 2:\n{\na += 2;\n break;\n}\n}\nif (isFoo)\n{\nbar();\n{\nelse\n{\nanotherBar();\n}\n}\nint foo()\n\twhile(isFoo)\n\t\t{\n\t\t\t...\n\t\t\tgoto error;\n\t\t....\n\t\terror:\n\t\t\t...\n\t\t}\n\t}\nfooArray[]={ red,\n\tgreen,\n\tdarkblue};\nfooFunction(barArg1,\n\tbarArg2,\n\tbarArg3);\n";
+
+	QString formattingSample = "if(isFoo(a,b))\n\tbar(a,b);\nif(isFoo)\n\ta=bar((b-c)*a,*d--);\nif(  isFoo( a,b ) )\n\tbar(a, b);\nif (isFoo) {isFoo=false;cat << isFoo <<endl;}\nif(isFoo)DoBar();if (isFoo){\n\tbar();\n\telse if(isBar()){\n\tannotherBar();\n}\n";
+
+	QString styleSample = "\t//Tabs & Brackets\nnamespace foo{\n" + bracketSample + "}\n\t// Indentation\n" + indentSample + "\t// Formatting\n" + formattingSample;
+
+
+	switch(id){
+		case 1:
+			StyleExample->setText( m_part->formatSource( bracketSample, this ) );
+			break;
+		case 2:
+			StyleExample->setText( m_part->formatSource( indentSample, this ) );
+			break;
+		case 3:
+			StyleExample->setText( m_part->formatSource( formattingSample, this ) );
+			break;
+		default:
+		StyleExample->setText( m_part->formatSource( styleSample, this ) );
 	}
 }
-
 
 #include "astyle_widget.moc"

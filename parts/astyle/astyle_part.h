@@ -12,6 +12,8 @@ class KDialogBase;
 #include <kparts/part.h>
 
 class AStyleWidget;
+class QPopupMenu;
+class Context;
 
 class AStylePart : public KDevSourceFormatter
 {
@@ -29,12 +31,9 @@ public:
 private slots:
 
   void activePartChanged(KParts::Part *part);
-
   void beautifySource();
-
   void configWidget(KDialogBase *dlg);
-
-
+  void contextMenu(QPopupMenu *popup, const Context *context);
 
 private:
 

@@ -46,6 +46,18 @@
                         <property name="name">
                             <cstring>StyleGroup</cstring>
                         </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>400</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
                         <property name="title">
                             <string>&amp;Style</string>
                         </property>
@@ -140,6 +152,9 @@ Indent Switch=false</string>
                                 <property name="text">
                                     <string>&amp;User defined</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -156,6 +171,9 @@ Indent Switch=false</string>
                                 </property>
                                 <property name="text">
                                     <string>&amp;Kernighan &amp;&amp; Ritchie</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
                                 </property>
                                 <property name="buttonGroupId">
                                     <number>2</number>
@@ -179,7 +197,7 @@ Indent Namespaces=false
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Tab &amp;&amp; Brac&amp;kets</string>
+                    <string>Tab &amp;&amp; &amp;Brackets</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -188,6 +206,12 @@ Indent Namespaces=false
                     <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
                             <cstring>FillingGroup</cstring>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
                         </property>
                         <property name="title">
                             <string>&amp;Filling</string>
@@ -359,6 +383,12 @@ The number of spaces per tab is controled by the editor.</string>
                         <property name="name">
                             <cstring>BracketGroup</cstring>
                         </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
                         <property name="title">
                             <string>Brackets</string>
                         </property>
@@ -466,6 +496,12 @@ The number of spaces per tab is controled by the editor.</string>
                         <property name="name">
                             <cstring>ContinueationGroup</cstring>
                         </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
                         <property name="title">
                             <string>Contin&amp;uation</string>
                         </property>
@@ -532,6 +568,12 @@ belonging to a conditional header.</string>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
                             <cstring>IndentGroup</cstring>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
                         </property>
                         <property name="title">
                             <string>Indented &amp;Entities</string>
@@ -659,6 +701,12 @@ flushed completely to the left (which is the default).</string>
                         <property name="name">
                             <cstring>BlockGroup</cstring>
                         </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
                         <property name="title">
                             <string>Blocks</string>
                         </property>
@@ -673,8 +721,20 @@ flushed completely to the left (which is the default).</string>
                                 <property name="text">
                                     <string>&amp;Break blocks</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+B</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Insert empty lines around unrelated blocks, labels, classes, ...</string>
+                                    <string>Insert empty lines around unrelated blocks, labels, classes,...
+Known problems:
+
+1. If a statement is NOT part of a block, 
+the following statements are all double spaced. 
+Statements enclosed in a block are formatted 
+correctly.
+
+2. Comments are broken from the block.
+</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="0">
@@ -682,11 +742,24 @@ flushed completely to the left (which is the default).</string>
                                     <cstring>Block_BreakAll</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Break block&amp;s all</string>
+                                    <string>Break bl&amp;ocks all</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+O</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Like --break-blocks, except also insert empty lines 
-around closing headers (e.g. 'else', 'catch', ...).</string>
+around closing headers (e.g. 'else', 'catch', ...).
+
+Known problems:
+
+1. If a statement is NOT part of a block, 
+the following statements are all double spaced. 
+Statements enclosed in a block are formatted 
+correctly.
+
+2. Comments are broken from the block.
+</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">
@@ -695,6 +768,9 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                                 </property>
                                 <property name="text">
                                     <string>Break i&amp;f-else</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+F</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Break 'else if()' statements into two different lines.</string>
@@ -705,6 +781,12 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                     <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
                             <cstring>PaddingGroup</cstring>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
                         </property>
                         <property name="title">
                             <string>Padding</string>
@@ -763,6 +845,12 @@ around closing headers (e.g. 'else', 'catch', ...).</string>
                         <property name="name">
                             <cstring>OneLinersGroup</cstring>
                         </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
                         <property name="title">
                             <string>One Liners</string>
                         </property>
@@ -787,7 +875,7 @@ multiple single-statement lines.</string>
                                     <cstring>Keep_Blocks</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Keep &amp;one-line blocks</string>
+                                    <string>Keep o&amp;ne-line blocks</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Don't break blocks residing completely on one line.</string>

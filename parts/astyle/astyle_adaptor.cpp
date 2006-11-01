@@ -46,7 +46,7 @@ KDevFormatter::KDevFormatter()
 	config->setGroup("AStyle");
 
 	// style
-	QString s = config->readEntry("Style");
+	QString s = config->readEntry("FStyle");
 
 	if ( predefinedStyle( s ) )
 	{
@@ -93,13 +93,22 @@ KDevFormatter::KDevFormatter()
 
   // padding
   setOperatorPaddingMode(config->readBoolEntry("PadOperators", false));
-  setParensInsidePaddingMode(config->readBoolEntry("PadOperatorsIn", false));
-  setParensOutsidePaddingMode(config->readBoolEntry("PadOperatorsOut", false));
-  setParensUnPaddingMode(config->readBoolEntry("PadOperatorsUn", false));
+  setParensInsidePaddingMode(config->readBoolEntry("PadParenthesesIn", false));
+  setParensOutsidePaddingMode(config->readBoolEntry("PadParenthesesOut", false));
+  setParensUnPaddingMode(config->readBoolEntry("PadParenthesesUn", false));
 
   // oneliner
   setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false));
   setSingleStatementsMode(config->readBoolEntry("KeepStatements", false));
+
+  // blocks
+  setBreakBlocksMode(config->readBoolEntry("BlockBreak",false));
+  if (config->readBoolEntry("BlockBreakAll",false)){
+	  setBreakBlocksMode(true);
+	  setBreakClosingHeaderBlocksMode(true);
+  }
+  setBreakElseIfsMode(config->readBoolEntry("BlockIfElse",false));
+
 }
 
 KDevFormatter::KDevFormatter( AStyleWidget * widget )

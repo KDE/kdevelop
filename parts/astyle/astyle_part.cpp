@@ -3,7 +3,7 @@
 #include <qwhatsthis.h>
 #include <qvbox.h>
 #include <qtextstream.h>
-
+#include <qpopupmenu.h>
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -21,6 +21,10 @@
 #include <kdevapi.h>
 #include <kdevpartcontroller.h>
 #include <kdevplugininfo.h>
+
+#include <kapplication.h>
+#include <kconfig.h>
+
 
 #include "astyle_widget.h"
 #include "astyle_adaptor.h"
@@ -47,6 +51,8 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
+
+  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
   // maybe there is a file open already
   activePartChanged( partController()->activePart() );
@@ -81,8 +87,58 @@ void AStylePart::beautifySource()
   QString output;
   QTextStream os(&output, IO_WriteOnly);
 
-  while (formatter.hasMoreLines())
-	os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
+  // put the selection back to the same indent level.
+  // taking note of the config options.
+  unsigned int indentCount=0;
+  QString indentWith("");
+  if ( has_selection){
+  	QString original = sel_iface->selection();
+	for (;indentCount<original.length();indentCount++){
+		QChar ch = original[indentCount];
+		if ( ch.isSpace()){
+			if ( ch == QChar('\n') || ch == QChar('\r')){
+				indentWith="";
+			}
+			else{
+				indentWith+=original[indentCount];
+			}
+	  	}
+		else{
+			break;
+		}
+	}
+
+	KConfig *config = kapp->config();
+	config->setGroup("AStyle");
+	int wsCount = config->readNumEntry("FillCount",2);
+	if (config->readEntry("Fill", "Tabs") == "Tabs")
+	{
+		// tabs and wsCount spaces to be a tab
+		QString replace;
+		for (int i =0;i<wsCount;i++)
+			replace+=' ';
+
+		indentWith=indentWith.replace(replace, QChar('\t'));
+		indentWith=indentWith.remove(' ');
+	} else
+	{
+		if ( config->readBoolEntry("FillForce",false)){
+			//convert tabs to spaces
+			QString replace;
+			for (int i =0;i<wsCount;i++)
+				replace+=' ';
+
+			indentWith=indentWith.replace(QChar('\t'),replace);
+		}
+	}
+  }
+
+  while (formatter.hasMoreLines()){
+	  if ( has_selection ){
+		  os << indentWith;
+	  }
+	  os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
+  }
 
   uint col = 0;
   uint line = 0;
@@ -198,6 +254,17 @@ QString AStylePart::indentString( ) const
 {
   KDevFormatter formatter;
   return formatter.indentString();
+}
+
+void AStylePart::contextMenu(QPopupMenu *popup, const Context *context)
+{
+	if (!context->hasType( Context::EditorContext ))
+		return;
+
+	popup->insertSeparator();
+	int id = popup->insertItem( i18n("Format selection"), this, SLOT(beautifySource()) );
+	popup->setWhatsThis(id, i18n("<b>Format</b><p>Formats the current selection, if possible"));
+
 }
 
 #include "astyle_part.moc"
