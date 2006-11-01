@@ -10,14 +10,28 @@ typedef int (*fp)(int);
 int g = 10;
 int g2 = 23;
 
+void func2()
+{
+    int foobar = 123;
+    printf("func2\n");
+}
+
 void func(QString& xs)
 {
    int ac = 10;	
    std::string s;
+   func2();
    g = 10;
    xs = "foo";
    
 }
+
+class Test
+{
+ public:
+     QString n;
+     int b;
+};
 
 int test_main(int ac, char* av[])
 {
@@ -52,11 +66,20 @@ int test_main(int ac, char* av[])
     wchar_t* p15 = L"test1"; 
 
  
-    QString s = "test";
+    QString s = "test test test test";
     QString* sp = &s;
     const QString& sr = s;
     func(s);
     i = 15;
+    
+    Test* test = new Test;
+    Test& test2 = *test;
+    test->n = "foo";
+    printf("hi\n");
+    test = 0;
+    printf("hi2\n");
+    printf("hi %d\n", test->b);
+    
     
     
     p5[1] = 14;
