@@ -1224,9 +1224,7 @@ void GDBController::slotStepInto()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-step", this,
-                            &GDBController::handleExecCommandError,
-                            true /* handles errors */));
+    queueCmd(new GDBCommand("-exec-step", this));
 }
 
 // **************************************************************************
@@ -1238,9 +1236,7 @@ void GDBController::slotStepIntoIns()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-step-instruction", this,
-                            &GDBController::handleExecCommandError,
-                            true /* handles errors */));
+    queueCmd(new GDBCommand("-exec-step-instruction", this));
 }
 
 // **************************************************************************
@@ -1252,9 +1248,7 @@ void GDBController::slotStepOver()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-next", this,
-                            &GDBController::handleExecCommandError,
-                            true /* handles errors */));
+    queueCmd(new GDBCommand("-exec-next", this));
 }
 
 // **************************************************************************
@@ -1266,9 +1260,7 @@ void GDBController::slotStepOverIns()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-next-instruction", this,
-                            &GDBController::handleExecCommandError,
-                            true /* handles errors */));
+    queueCmd(new GDBCommand("-exec-next-instruction", this));
 }
 
 // **************************************************************************
@@ -1379,6 +1371,16 @@ void GDBController::selectFrame(int frameNo, int threadNo)
 
 void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
 {
+    QString msg = result["msg"].literal();
+
+    if (msg.contains("No such process"))
+    {
+        setState(s_appNotStarted|s_programExited);
+        emit dbgStatus (i18n("Process exited"), state_);
+        raiseEvent(program_exited);
+        return;
+    }
+
     KMessageBox::error(
         0, 
         i18n("<b>Debugger error</b>" 
@@ -1400,21 +1402,6 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
     // reloading!
     if (stateReloadingCommands_.count(currentCmd_) == 0)
         raiseEvent(program_state_changed);    
-}
-
-void GDBController::handleExecCommandError(const GDBMI::ResultRecord& result)
-{
-    QString msg = result["msg"].literal();
-
-    if (msg.contains("No such process"))
-    {
-        setState(s_appNotStarted|s_programExited);
-        emit dbgStatus (i18n("Process exited"), state_);
-        raiseEvent(program_exited);
-        return;
-    }
-
-    defaultErrorHandler(result);
 }
 
 void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
