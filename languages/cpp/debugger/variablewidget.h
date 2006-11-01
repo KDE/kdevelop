@@ -172,10 +172,6 @@ private:
 
     QMap<QString, VarItem*> varobj2varitem;
 
-    // Name of expression to evaluate, need by
-    // handleEvaluateExpression.
-    QString evaluatedExpressionName_;
-
     KPopupMenu* activePopup_;
     static const int idToggleWatch = 10;
 
@@ -238,7 +234,7 @@ public:
     */
     VarItem( TrimmableItem *parent, 
              const QString& expression, 
-             const QString& displayName = QString::null);
+             bool frozen = false);
 
     VarItem( TrimmableItem *parent, const GDBMI::Value& varobj,
              format_t format);
@@ -321,7 +317,7 @@ private:
         expression_ and format_ member variables should already
         be set.
      */
-    void createVarobj(bool handlesError = false);
+    void createVarobj();
 
     /** Precondition: 'name' is a name of existing
         gdb variable object.
@@ -348,6 +344,10 @@ private:
     void handleCurrentAddress(const QValueVector<QString>& lines);
     void handleType(const QValueVector<QString>& lines);
 
+    /** Called to handle the output of the cli print command.
+     */
+    void handleCliPrint(const QValueVector<QString>& lines);
+
     // Assuming 'expression_' is already set, returns the
     // displayName to use when showing this to the user.
     // This function exists because if we have item with
@@ -364,9 +364,6 @@ private:
     // The gdb expression for this varItem relatively to
     // parent VarItem. 
     QString expression_;
-    // The name initially shown to use. For example,
-    // expression can be '$1' while name will be 'p'.
-    QString displayName_;
 
     bool      highlight_;
     GDBController* controller_;
@@ -389,6 +386,11 @@ private:
     QString lastObtainedAddress_;
 
     bool updateUnconditionally_;
+    bool frozen_;
+
+    /* Set to true whan calling createVarobj for the
+       first time, and to false other time. */
+    bool initialCreation_;
 };
 
 

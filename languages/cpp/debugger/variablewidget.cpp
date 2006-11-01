@@ -41,7 +41,7 @@
 #include <kmessagebox.h>
 
 #include <set>
-
+#include <typeinfo>
 
 /** The variables widget is passive, and is invoked by the rest of the
     code via two main slots:
@@ -376,7 +376,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         {
             if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
             {
-                item->updateValue();
+                item->recreate();
             }
         }
     }
@@ -397,10 +397,10 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         }
         else if (res == idReevaluate)
         {
-            for(QListViewItemIterator it(item); *it; ++it)
+            for(QListViewItem* child = recentExpressions_->firstChild();
+                child; child = child->nextSibling())
             {
-                VarItem* var = dynamic_cast<VarItem*>(*it);                    
-                var->updateValue();
+                static_cast<VarItem*>(child)->recreate();
             }
         }
     }
@@ -524,14 +524,10 @@ void VariableTree::slotEvaluateExpression(const QString &expression)
         recentExpressions_->setOpen(true);
     }
 
-    // Need to issue 'print' to get at gdb $NNN history variable,
-    // so that the thing does not change on next steps.
-    evaluatedExpressionName_ = expression;
-    controller_->addCommand(
-        new CliCommand(
-            QString("print %1").arg(expression),
-            this,
-            &VariableTree::handleEvaluateExpression));
+    VarItem *varItem = new VarItem(recentExpressions_, 
+                                   expression,
+                                   true /* freeze */);
+    varItem->setRenameEnabled(0, 1);            
 }
 
 // **************************************************************************
@@ -862,7 +858,7 @@ void VariableTree::handleVarUpdate(const GDBMI::ResultRecord& r)
     }
 }
 
-void VariableTree::handleEvaluateExpression(const QValueVector<QString>& lines)
+void VarItem::handleCliPrint(const QValueVector<QString>& lines)
 {
     static QRegExp r("(\\$[0-9]+)");
     if (lines.size() >= 2)
@@ -870,9 +866,16 @@ void VariableTree::handleEvaluateExpression(const QValueVector<QString>& lines)
         int i = r.search(lines[1]);
         if (i == 0)
         {
-            VarItem *varItem = new VarItem(recentExpressions_, r.cap(1),
-                                           evaluatedExpressionName_);
-            varItem->setRenameEnabled(0, 1);            
+            controller_->addCommand(
+                new GDBCommand(QString("-var-create %1 * \"%2\"")
+                               .arg(varobjName_)
+                               .arg(r.cap(1)),
+                               this,
+                               &VarItem::varobjCreated,
+                               // On initial create, errors get reported
+                               // by generic code. After then, errors
+                               // are swallowed by varobjCreated.
+                               initialCreation_ ? false : true));            
         }
         else
         {
@@ -1058,16 +1061,17 @@ int VarItem::varobjIndex = 0;
 
 VarItem::VarItem(TrimmableItem *parent, 
                  const QString& expression,
-                 const QString& dispayName)
+                 bool frozen)
     : TrimmableItem (parent),
       expression_(expression),
-      displayName_(dispayName),
       highlight_(false),
       oldSpecialRepresentationSet_(false),
       format_(natural),
       numChildren_(0),
       childrenFetched_(false),
-      updateUnconditionally_(false)
+      updateUnconditionally_(false),
+      frozen_(frozen),
+      initialCreation_(true)
 {
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1089,10 +1093,7 @@ VarItem::VarItem(TrimmableItem *parent,
         expression_ = explicit_format.cap(2);
     }
 
-    if (displayName_.isEmpty())
-        displayName_ = expression_;
-
-    setText(VarNameCol, displayName_);
+    setText(VarNameCol, expression_);
     // Allow to change variable name by editing.
     setRenameEnabled(ValueCol, true);
 
@@ -1110,7 +1111,9 @@ VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
   oldSpecialRepresentationSet_(false),
   format_(format),
   numChildren_(0),
-  childrenFetched_(false)
+  childrenFetched_(false),
+  frozen_(false),
+  initialCreation_(false)
 { 
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1121,8 +1124,7 @@ VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
 
     varobjNameChange("", varobjName_);
   
-    displayName_ = displayName();
-    setText(VarNameCol, displayName_);
+    setText(VarNameCol, displayName());
 
     // Allow to change variable name by editing.
     setRenameEnabled(ValueCol, true);
@@ -1139,30 +1141,47 @@ VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
     updateValue();
 }
 
-void VarItem::createVarobj(bool handlesError)
+void VarItem::createVarobj()
 {
     QString old = varobjName_;
     varobjName_ = QString("KDEV%1").arg(varobjIndex++);
     emit varobjNameChange(old, varobjName_);
 
-    controller_->addCommand(
-        new CliCommand(
-            QString("print /x &%1").arg(expression_),
-            this,
-            &VarItem::handleCurrentAddress));
-
-    controller_->addCommand(
-        // Need to quote expression, otherwise gdb won't like spaces inside it.
-        new GDBCommand(QString("-var-create %1 * \"%2\"")
-                       .arg(varobjName_)
-                       .arg(expression_),
-                       this,
-                       &VarItem::varobjCreated,
-                       handlesError));
+    if (frozen_)
+    {
+        // MI has no way to freeze a variable object. So, we
+        // issue print command that returns $NN convenience
+        // variable and we create variable object from that.
+        controller_->addCommand(
+            new CliCommand(
+                QString("print %1").arg(expression_),
+                this,
+                &VarItem::handleCliPrint));        
+    }
+    else
+    {
+        controller_->addCommand(
+            new CliCommand(
+                QString("print /x &%1").arg(expression_),
+                this,
+                &VarItem::handleCurrentAddress));
+        
+        controller_->addCommand(
+            // Need to quote expression, otherwise gdb won't like 
+            // spaces inside it.
+            new GDBCommand(QString("-var-create %1 * \"%2\"")
+                           .arg(varobjName_)
+                           .arg(expression_),
+                           this,
+                           &VarItem::varobjCreated,
+                           initialCreation_ ? false : true));
+    }
 }
 
 void VarItem::varobjCreated(const GDBMI::ResultRecord& r)
 {
+    // If we've tried to recreate varobj (for example for watched expression)
+    // after step, and it's no longer valid, it's fine.
     if (r.reason == "error")
     {
         varobjName_ = "";
@@ -1257,7 +1276,7 @@ void VarItem::valueDone(const GDBMI::ResultRecord& r)
 
         if (format_ == binary)
         {
-            // For binary format, split the value at 4-byte boundaries
+            // For binary format, split the value at 4-bit boundaries
             static QRegExp r("^[01]+$");
             int i = r.search(s);
             if (i == 0)
@@ -1398,9 +1417,6 @@ void VarItem::handleType(const QValueVector<QString>& lines)
 
 QString VarItem::displayName() const
 {
-    if (!displayName_.isEmpty())
-        return displayName_;
-
     if (expression_[0] != '*')
         return expression_;
 
@@ -1604,7 +1620,8 @@ void VarItem::recreate()
 {
     unhookFromGdb();
 
-    createVarobj(true /* handle error */);    
+    initialCreation_ = false;
+    createVarobj();    
 }
 
 
