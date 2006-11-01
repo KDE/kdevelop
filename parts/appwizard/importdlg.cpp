@@ -91,6 +91,7 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     connect( fetchModuleButton, SIGNAL(clicked()),
         this, SLOT(slotFetchModulesFromRepository()) );
     connect(urlinput_edit, SIGNAL(urlSelected(const QString& )), this, SLOT(dirChanged()));
+    connect(urlinput_edit, SIGNAL(returnPressed(const QString& )), this, SLOT(dirChanged()));
     slotProjectNameChanged( name_edit->text() );
 }
 
