@@ -131,6 +131,7 @@ void RubySupportPart::maybeParse(const QString fileName)
     }
 
     parse(fileName);
+    emit addedSourceInfo( fileName );
   }
 }
 
@@ -163,7 +164,6 @@ void RubySupportPart::addedFilesToProject(const QStringList &fileList)
   {
     QString fileName = project()->projectDirectory() + "/" + ( *it );
     maybeParse( fileName );
-    emit addedSourceInfo( fileName );
   }
 }
 

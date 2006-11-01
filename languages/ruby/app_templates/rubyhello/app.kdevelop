@@ -18,10 +18,8 @@
  </general>
  <kdevscriptproject>
   <general>
-		<activedir>src</activedir>
 		<includepatterns>*.rb</includepatterns>
 		<excludepatterns>*~</excludepatterns>
-
   </general>
  </kdevscriptproject>
  <kdevfileview>
