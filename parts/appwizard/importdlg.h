@@ -35,7 +35,7 @@ public:
 
 protected:
     virtual void accept();
-    
+
 protected slots:
     virtual void dirChanged();
     virtual void projectTypeChanged(const QString &type);
@@ -51,12 +51,13 @@ private:
     void scanLegacyStudioProject(const QString &fileName);
     void scanAutomakeProject(const QString &dirName);
     void setProjectType(const QString &type);
-    
+
     void createProjectInfrastructure();
 
     QStringList importNames;
     AppWizardPart *m_part;
-    
+    QString projectVersion;
+
     QMap<QString, InfrastructureCmd> m_infrastructure;
 };
 

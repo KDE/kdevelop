@@ -2,7 +2,7 @@
 *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
 *   bernd@kdevelop.org                                                    *
 *                                                                         *
-*   Copyright (C) 2002 by Victor R�er                                    *
+*   Copyright (C) 2002 by Victor Rï¿½er                                    *
 *   victor_roeder@gmx.de                                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -21,7 +21,6 @@
 #include <qdatetime.h>
 #include <qdir.h>
 #include <kdevgenericfactory.h>
-
 #include "kdevbuildtool.h"
 
 class QDomElement;
@@ -80,6 +79,7 @@ public:
 	bool isDirty();
 	bool isKDE() const;
 	QStringList distFiles() const;
+	QString getAutoConfFile(const QString& dir);
 
 protected:
 	/**
@@ -112,6 +112,7 @@ private slots:
 	void slotCommandFailed( const QString& command );
 	//void slotImportExisting();
 	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
+
 
 private:
 	QGuardedPtr<AutoProjectWidget> m_widget;
@@ -146,5 +147,5 @@ private:
 
 typedef KDevGenericFactory<AutoProjectPart> AutoProjectFactory;
 
-#endif 
+#endif
 // kate: indent-mode csands; tab-width 4;

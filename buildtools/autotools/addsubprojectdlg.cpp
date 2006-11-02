@@ -164,13 +164,13 @@ void AddSubprojectDialog::accept()
         QString subdirectory = dir.path();
         QString relpath = subdirectory.replace(0, projroot.length(),"");
 
-        QString configurein = projroot + "configure.in";
+        QString configureFile = m_part->getAutoConfFile(projroot);
 
-        QStringList list = AutoProjectTool::configureinLoadMakefiles(configurein);
+        QStringList list = AutoProjectTool::configureinLoadMakefiles(configureFile);
         if ( !list.isEmpty() )
         {
             list.push_back( relpath + "/Makefile" );
-            AutoProjectTool::configureinSaveMakefiles(configurein, list);
+            AutoProjectTool::configureinSaveMakefiles(configureFile, list);
         }
     }
 

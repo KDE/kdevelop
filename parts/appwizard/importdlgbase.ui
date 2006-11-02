@@ -238,6 +238,13 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>If there exists a file AUTHOR in the
+directory, and it has email addresses
+formated as XXXX &lt;.....&gt; the XXXX
+will be the author, everything between 
+&lt;....&gt; is the email address.</string>
+            </property>
         </widget>
         <widget class="KLineEdit" row="6" column="1" rowspan="1" colspan="2">
             <property name="name">
@@ -250,6 +257,13 @@
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>If there exists a file AUTHOR in the
+directory, and it has email addresses
+formated as XXXX &lt;.....&gt; the XXXX
+will be the author, everything between 
+&lt;....&gt; is the email address.</string>
             </property>
         </widget>
         <spacer row="5" column="2">

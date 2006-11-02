@@ -71,7 +71,7 @@ AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* pa
     QWidget::setTabOrder(okButton, cancelButton);
 
     sourceSelector->setFocus();
-    
+
 	init();
 }
 
@@ -239,19 +239,19 @@ void AddExistingDirectoriesDialog::slotOk()
 
 
 
-        // if !isKDE: add the new sub-proj to configure.in
+        // if !isKDE: add the new sub-proj to configure.in or configure.ac
         if ( !m_part->isKDE() ) {
             QString projroot = m_part->projectDirectory() + "/";
             QString subdirectory = dir.path();
             QString relpath = subdirectory.replace(0, projroot.length(),"");
 
-            QString configurein = projroot + "configure.in";
+            QString configureFile = m_part->getAutoConfFile(projroot);
 
-            QStringList list = AutoProjectTool::configureinLoadMakefiles(configurein);
+            QStringList list = AutoProjectTool::configureinLoadMakefiles(configureFile);
             if ( !list.isEmpty() )
             {
                 list.push_back( relpath + "/Makefile" );
-                AutoProjectTool::configureinSaveMakefiles(configurein, list);
+                AutoProjectTool::configureinSaveMakefiles(configureFile, list);
             }
         }
 

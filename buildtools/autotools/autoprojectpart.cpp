@@ -1346,6 +1346,18 @@ void AutoProjectPart::startSimpleMakeCommand( const QString & dir, const QString
         makeFrontend()->queueCommand(dir, m_buildCommand);
 }
 
+QString AutoProjectPart::getAutoConfFile(const QString& dir){
+
+    QFile inFile(dir + "/configure.in");
+    QFile acFile(dir + "/configure.ac");
+    if ( inFile.exists()){
+        return inFile.name();
+    }else if (acFile.exists()){
+        return acFile.name();
+    }
+    return acFile.name();;
+}
+
 #include "autoprojectpart.moc"
 
 // kate: space-indent on; indent-width 4;

@@ -140,58 +140,61 @@ void ImportDialog::accept()
         return;
     }
 
-	// Read the DOM of the newly created project
-	QDomDocument projectDOM;
+    // Read the DOM of the newly created project
+    QDomDocument projectDOM;
 
-	int errorLine, errorCol;
-	QString errorMsg;
-	bool success = projectDOM.setContent( &src, &errorMsg, &errorLine, &errorCol);
-	src.close();
-	if ( !success )
-	{
-		KMessageBox::sorry( 0, i18n("This is not a valid project file.\n"
-				"XML error in line %1, column %2:\n%3")
-				.arg(errorLine).arg(errorCol).arg(errorMsg));
-		return;
-	}
+    int errorLine, errorCol;
+    QString errorMsg;
+    bool success = projectDOM.setContent( &src, &errorMsg, &errorLine, &errorCol);
+    src.close();
+    if ( !success )
+    {
+        KMessageBox::sorry( 0, i18n("This is not a valid project file.\n"
+                "XML error in line %1, column %2:\n%3")
+                .arg(errorLine).arg(errorCol).arg(errorMsg));
+        return;
+    }
 
-	DomUtil::writeEntry( projectDOM, "/general/author", author_edit->text() );
-	DomUtil::writeEntry( projectDOM, "/general/email" , email_edit->text() );
-	DomUtil::writeEntry( projectDOM, "/general/projectname", name_edit->text() );
+    DomUtil::writeEntry( projectDOM, "/general/author", author_edit->text() );
+    DomUtil::writeEntry( projectDOM, "/general/email" , email_edit->text() );
+    DomUtil::writeEntry( projectDOM, "/general/projectname", name_edit->text() );
+    if ( !projectVersion.isNull()){
+        DomUtil::writeEntry( projectDOM, "/general/version", projectVersion );
+    }
 
-	// figure out what plugins we should disable by default
-	QString profileName = DomUtil::readEntry( projectDOM, "general/profile" );
-	if ( profileName.isEmpty() )
-	{
-		QString language = DomUtil::readEntry( projectDOM, "general/primarylanguage" );
-		QStringList keywords = DomUtil::readListEntry( projectDOM, "general/keywords", "keyword" );
+    // figure out what plugins we should disable by default
+    QString profileName = DomUtil::readEntry( projectDOM, "general/profile" );
+    if ( profileName.isEmpty() )
+    {
+        QString language = DomUtil::readEntry( projectDOM, "general/primarylanguage" );
+        QStringList keywords = DomUtil::readListEntry( projectDOM, "general/keywords", "keyword" );
 
-		profileName = Settings::profileByAttributes( language, keywords );
-	}
+        profileName = Settings::profileByAttributes( language, keywords );
+    }
 
-	ProfileEngine & engine = m_part->pluginController()->engine();
-	Profile * profile = engine.findProfile( profileName );
+    ProfileEngine & engine = m_part->pluginController()->engine();
+    Profile * profile = engine.findProfile( profileName );
 
-	QStringList disableList;
-	Profile::EntryList disableEntryList = profile->list( Profile::ExplicitDisable );
-	for ( Profile::EntryList::const_iterator it = disableEntryList.constBegin(); it != disableEntryList.constEnd(); ++it )
-	{
-		disableList << (*it).name;
-	}
+    QStringList disableList;
+    Profile::EntryList disableEntryList = profile->list( Profile::ExplicitDisable );
+    for ( Profile::EntryList::const_iterator it = disableEntryList.constBegin(); it != disableEntryList.constEnd(); ++it )
+    {
+        disableList << (*it).name;
+    }
 
-	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", disableList );
+    DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", disableList );
 
 
-	// write the dom back
+    // write the dom back
     QFile dest(dir.filePath(projectName + ".kdevelop"));
     if (!dest.open(IO_WriteOnly)) {
         KMessageBox::sorry(this, i18n("Cannot write the project file."));
         return;
     }
-	QTextStream ts( &dest );
-	ts.setEncoding(QTextStream::UnicodeUTF8);
-	ts << projectDOM.toString(2);
-	dest.close();
+    QTextStream ts( &dest );
+    ts.setEncoding(QTextStream::UnicodeUTF8);
+    ts << projectDOM.toString(2);
+    dest.close();
 
 
 //     QTextStream srcstream(&src);
@@ -270,7 +273,7 @@ void ImportDialog::dirChanged()
     }
 
     // Automake based?
-    if (dir.exists("config.guess") || dir.exists("configure.in.in")) {
+    if ( dir.exists("configure.in.in")|| dir.exists("configure.ac")|| dir.exists("configure.in")) {
         scanAutomakeProject(dirName);
         return;
     }
@@ -358,42 +361,108 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
         setProjectType("c-auto");
     }
 
+    // if we get an authors file, use it.
     QFile af(dirName + "/AUTHORS");
-    if (!af.open(IO_ReadOnly))
-        return;
-    QTextStream astream(&af);
+    if (af.open(IO_ReadOnly)){
+        QTextStream astream(&af);
 
-    QRegExp authorre("(.*)<(.*)>");
-    while (!astream.atEnd()) {
-        QString s = astream.readLine();
-        if (authorre.search(s) != -1) {
-            author_edit->setText(authorre.cap(1).stripWhiteSpace());
-            email_edit->setText(authorre.cap(2).stripWhiteSpace());
-            break;
+        QRegExp authorre("(.*)<(.*)>");
+        while (!astream.atEnd()) {
+            QString s = astream.readLine();
+            if (authorre.search(s) != -1) {
+                author_edit->setText(authorre.cap(1).stripWhiteSpace());
+                email_edit->setText(authorre.cap(2).stripWhiteSpace());
+                break;
+            }
+        }
+        af.close();
+    }
+
+    // we ignore old AC_INIT that had no version..
+    // only match the if there is a comma and at least two args..
+    // AC_INIT (package, version, [bug-report], [tarname])
+    QRegExp ac_init("^AC_INIT\\s*\\(\\s*([^,]+),([^,\\)]+)(.*)");
+
+    // AM_INIT_AUTOMAKE([OPTIONS])
+    // example: AM_INIT_AUTOMAKE([gnits 1.5 no-define dist-bzip2])
+    QRegExp am_autoSpace("^AM_INIT_AUTOMAKE\\s{0,}\\(\\s{0,}([\\[\\s]{0,}[^\\s]+)\\s+([^\\s\\)\\]]+)(.*)");
+
+    // AM_INIT_AUTOMAKE(PACKAGE, VERSION, [NO-DEFINE])
+    QRegExp am_autoComma("^AM_INIT_AUTOMAKE\\s*\\(\\s*([^,]+),([^,\\)]+)(.*)");
+
+    // look for version in a define.
+    // AC_DEFINE(VERSION, "5.6")
+    QRegExp ac_define("^AC_DEFINE\\s*\\(\\s*[^,]+,([^\\)]+)");
+    QRegExp version("(\\bversion\\b)");
+    version.setCaseSensitive(FALSE);
+
+    QTextStream cstream;
+    // try for configure.in.in, configure.in, then configure.ac
+    QFile configInIn(dirName + "/configure.in.in");
+    QFile configIn(dirName+"/configure.in");
+    QFile configAc(dirName+"/configure.ac");
+    if (configInIn.open(IO_ReadOnly)){
+        cstream.setDevice(&configInIn);
+        while (!cstream.atEnd()) {
+            QString line = cstream.readLine();
+            if ( ac_init.search(line) >= 0){
+                projectVersion=ac_init.cap(2).stripWhiteSpace();
+            }
+            else if ( am_autoComma.search(line) >= 0 ){
+                projectVersion=am_autoComma.cap(2).stripWhiteSpace();
+            }
+            else if ( am_autoSpace.search(line) >= 0 ){
+                projectVersion=am_autoSpace.cap(2).stripWhiteSpace();
+            }
+            else if ( ac_define.search(line) >=0 && version.search(line) >=0) {
+                projectVersion=ac_define.cap(2).stripWhiteSpace();
+            }
+        }
+        configInIn.close();
+    }
+
+    if (configIn.open(IO_ReadOnly)){
+        cstream.setDevice(&configIn);
+    }
+    else{
+        if (configAc.open(IO_ReadOnly)){
+            cstream.setDevice(&configAc);
+        }
+        else{
+            return;
         }
     }
-    af.close();
-
-    QFile cf(dirName + "/configure.in");
-    if (!cf.open(IO_ReadOnly))
-        return;
-    QTextStream cstream(&cf);
 
     QRegExp namere("\\s*AM_INIT_AUTOMAKE\\((.*),.*\\).*");
     QRegExp cppre("\\s*AC_PROG_CXX");
     QRegExp f77re("\\s*AC_PROG_F77");
     while (!cstream.atEnd()) {
-        QString s = cstream.readLine();
-        if (namere.search(s) == 0)
+        QString line = cstream.readLine();
+        if ( ac_init.search(line) >= 0){
+            projectVersion=ac_init.cap(2).stripWhiteSpace();
+        }
+        else if ( am_autoComma.search(line) >= 0 ){
+            projectVersion=am_autoComma.cap(2).stripWhiteSpace();
+        }
+        else if ( am_autoSpace.search(line) >= 0 ){
+            projectVersion=am_autoSpace.cap(2).stripWhiteSpace();
+        }
+        else if ( ac_define.search(line) >=0 && version.search(line) >=0) {
+            projectVersion=ac_define.cap(2).stripWhiteSpace();
+        }
+
+        if (namere.search(line) == 0)
             name_edit->setText(namere.cap(1).stripWhiteSpace());
         if (!stop)
             continue;
-        else if (cppre.search(s) == 0)
+        else if (cppre.search(line) == 0)
             setProjectType("cpp-auto");
-        else if (f77re.search(s) == 0)
+        else if (f77re.search(line) == 0)
             setProjectType("fortran-auto");
     }
-    cf.close();
+
+    if ( configIn.isOpen()) configIn.close();
+    if ( configAc.isOpen()) configAc.close();
 }
 
 
@@ -417,14 +486,14 @@ void ImportDialog::setProjectType(const QString &type)
 void ImportDialog::scanAvailableVCS()
 {
 //    vcsCombo->insertStringList( m_part->registeredVersionControls() );
-	int i = 0;
-	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl");
-	KTrader::OfferList::const_iterator it = offers.begin();
-	while( it != offers.end() )
-	{
-		vcsCombo->insertItem( (*it)->genericName(), i++ );
-		++it;
-	}
+    int i = 0;
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl");
+    KTrader::OfferList::const_iterator it = offers.begin();
+    while( it != offers.end() )
+    {
+        vcsCombo->insertItem( (*it)->genericName(), i++ );
+        ++it;
+    }
 }
 */
 /*

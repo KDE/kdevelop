@@ -450,60 +450,60 @@ void AutoSubprojectView::slotRemoveSubproject()
         i18n("Do you really want to remove subproject %1 with all targets and files?").arg(spitem->text(0)));
     if( dlg.exec() ){
 
-	bool removeSources = dlg.removeFromDisk();
+    bool removeSources = dlg.removeFromDisk();
 
     if (!topsubdirs)
     {
-	list.remove( it );
-	parent->variables[ "SUBDIRS" ] = list.join( " " );
+    list.remove( it );
+    parent->variables[ "SUBDIRS" ] = list.join( " " );
     }
 
-	parent->listView()->setSelected( parent, true );
-	kapp->processEvents( 500 );
+    parent->listView()->setSelected( parent, true );
+    kapp->processEvents( 500 );
 
 
-	if( removeSources ){
-	    kdDebug(9020) << "remove dir " << spitem->path << endl;
-	    AutoProjectPrivate::removeDir( spitem->path );
-	}
+    if( removeSources ){
+        kdDebug(9020) << "remove dir " << spitem->path << endl;
+        AutoProjectPrivate::removeDir( spitem->path );
+    }
 
-	if( m_widget->activeSubproject() == spitem ){
-	    m_widget->setActiveSubproject( 0 );
-	}
+    if( m_widget->activeSubproject() == spitem ){
+        m_widget->setActiveSubproject( 0 );
+    }
 
-	// Adjust AC_OUTPUT in configure.in
-	if ( !m_part->isKDE() ) {
+    // Adjust AC_OUTPUT in configure.in
+    if ( !m_part->isKDE() ) {
 
-		QString projroot = m_part->projectDirectory() + "/";
-		QString subdirectory = spitem->path;
-		QString relpath = subdirectory.replace(0, projroot.length(),"");
+        QString projroot = m_part->projectDirectory() + "/";
+        QString subdirectory = spitem->path;
+        QString relpath = subdirectory.replace(0, projroot.length(),"");
 
-		QString configurein = projroot + "configure.in";
+        QString configureFile = m_part->getAutoConfFile(projroot);
 
-		QStringList list = AutoProjectTool::configureinLoadMakefiles(configurein);
+        QStringList list = AutoProjectTool::configureinLoadMakefiles(configureFile);
 
-		QStringList::iterator it;
+        QStringList::iterator it;
 
-		for ( it = list.begin(); it != list.end(); it++ ) {
-			QString current = (QString) (*it);
-			QRegExp path_regex(relpath);
-			if ( path_regex.search(current) >= 0) {
-				list.remove(it);
-				break;
-			}
-		}
-		AutoProjectTool::configureinSaveMakefiles(configurein, list);
+        for ( it = list.begin(); it != list.end(); it++ ) {
+            QString current = (QString) (*it);
+            QRegExp path_regex(relpath);
+            if ( path_regex.search(current) >= 0) {
+                list.remove(it);
+                break;
+            }
+        }
+        AutoProjectTool::configureinSaveMakefiles(configureFile, list);
 
-	}
+    }
 
-	// remove all targets
-	spitem->targets.setAutoDelete( true );
-	spitem->targets.clear();
-	delete( spitem );
-	spitem = 0;
+    // remove all targets
+    spitem->targets.setAutoDelete( true );
+    spitem->targets.clear();
+    delete( spitem );
+    spitem = 0;
 
-	// Adjust SUBDIRS variable in containing Makefile.am
-	QMap<QString,QString> replaceMap;
+    // Adjust SUBDIRS variable in containing Makefile.am
+    QMap<QString,QString> replaceMap;
     if (parent->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
     {
         QFile subdirsfile( parent->path + "/subdirs" );

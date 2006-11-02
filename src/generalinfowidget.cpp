@@ -54,31 +54,31 @@ void GeneralInfoWidget::readConfig() {
     this->version_edit->setText(DomUtil::readEntry(m_projectDom,"/general/version"));
     this->description_edit->setText(DomUtil::readEntry(m_projectDom,"/general/description"));
 
-	QStringList encodings;
-	encodings << i18n("Use global editor settings");
-	encodings += KGlobal::charsets()->descriptiveEncodingNames();
-	QStringList::const_iterator it = encodings.constBegin();
-	while ( it != encodings.constEnd() )
-	{
-		encoding_combo->insertItem( *it );
-		++it;
-	}
-	encoding_combo->setCurrentItem( 0 );
+    QStringList encodings;
+    encodings << i18n("Use global editor settings");
+    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    QStringList::const_iterator it = encodings.constBegin();
+    while ( it != encodings.constEnd() )
+    {
+        encoding_combo->insertItem( *it );
+        ++it;
+    }
+    encoding_combo->setCurrentItem( 0 );
 
-//	const QString DefaultEncoding = KGlobal::charsets()->encodingForName( DomUtil::readEntry( m_projectDom, "/general/defaultencoding", QString::null ) );
-	const QString DefaultEncoding = DomUtil::readEntry( m_projectDom, "/general/defaultencoding", QString::null );
-	for ( int i = 0; i < encoding_combo->count(); i++ )
-	{
-		if ( KGlobal::charsets()->encodingForName( encoding_combo->text( i ) ) == DefaultEncoding )
-		{
-			encoding_combo->setCurrentItem( i );
-			break;
-		}
-	}
+//    const QString DefaultEncoding = KGlobal::charsets()->encodingForName( DomUtil::readEntry( m_projectDom, "/general/defaultencoding", QString::null ) );
+    const QString DefaultEncoding = DomUtil::readEntry( m_projectDom, "/general/defaultencoding", QString::null );
+    for ( int i = 0; i < encoding_combo->count(); i++ )
+    {
+        if ( KGlobal::charsets()->encodingForName( encoding_combo->text( i ) ) == DefaultEncoding )
+        {
+            encoding_combo->setCurrentItem( i );
+            break;
+        }
+    }
 
 }
 /**
- * Update the configure.in file with the version value from project options.
+ * Update the configure.in, configure.in or configure.ac file with the version value from project options.
  * Very basic updating - uses regex to update the field in
  * AC_INIT, AM_INIT_AUTOMAKE, and AC_DEFINE macros.
  * On next make, the build system re-runs configure to update config.h
@@ -160,9 +160,7 @@ void GeneralInfoWidget::configureinUpdateVersion( QString configureinpath, QStri
         output << (*iter) <<"\n";
     }
     configureout.close();
-
 }
-
 
 void GeneralInfoWidget::writeConfig() {
     DomUtil::writeEntry(m_projectDom,"/general/projectdirectory",project_directory_edit->text());
@@ -171,18 +169,32 @@ void GeneralInfoWidget::writeConfig() {
     DomUtil::writeEntry(m_projectDom,"/general/author",author_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
     if ( DomUtil::readEntry(m_projectDom,"/general/version") != version_edit->text() ){
-        // update the configure.in file.
-        configureinUpdateVersion( projectDirectory() + "/configure.in", version_edit->text() );
+        // update the configure.in.in, configure.in or configure.ac file.
+		QFile inInFile(projectDirectory() + "/configure.in.in");
+        QFile inFile(projectDirectory() + "/configure.in");
+        QFile acFile(projectDirectory() + "/configure.ac");
+		if ( inInFile.exists()){
+			configureinUpdateVersion( inInFile.name(), version_edit->text() );
+		}
+        if ( inFile.exists()){
+            configureinUpdateVersion( inFile.name(), version_edit->text() );
+        }
+		if (acFile.exists()){
+            configureinUpdateVersion( acFile.name(), version_edit->text() );
+        }
+		if (! inInFile.exists()&& !inFile.exists() && !acFile.exists()) {
+            KMessageBox::error(this, i18n("Could find configure.in.in, configure.in or configure.ac to update the project version."));
+        }
     }
     DomUtil::writeEntry(m_projectDom,"/general/version",version_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/description",description_edit->text());
 
-	QString DefaultEncoding = QString::null;
-	if ( encoding_combo->currentItem() > 0 )
-	{
-		DefaultEncoding = KGlobal::charsets()->encodingForName( encoding_combo->currentText() );
-	}
-	DomUtil::writeEntry( m_projectDom, "/general/defaultencoding", DefaultEncoding );
+    QString DefaultEncoding = QString::null;
+    if ( encoding_combo->currentItem() > 0 )
+    {
+        DefaultEncoding = KGlobal::charsets()->encodingForName( encoding_combo->currentText() );
+    }
+    DomUtil::writeEntry( m_projectDom, "/general/defaultencoding", DefaultEncoding );
 }
 
 void GeneralInfoWidget::accept() {
