@@ -997,6 +997,7 @@ void CustomProjectPart::slotCommandFailed( const QString& /*command*/ )
     kdDebug(9020) << k_funcinfo << endl;
 
     m_lastCompilationFailed = true;
+	m_executeAfterBuild=false;
 }
 
 bool CustomProjectPart::isDirty()
