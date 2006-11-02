@@ -31,8 +31,8 @@ static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject 
 		kdDebug( 9020 ) << "Can't find service " << name;
 		return 0;
 	}
-	
-	
+
+
     KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
     if (!factory) {
         QString errorMessage = KLibLoader::self()->lastErrorMessage();
@@ -56,7 +56,7 @@ static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject 
     KDevCompilerOptions *dlg = (KDevCompilerOptions*) obj;
 
     return dlg;
-	
+
 /*
 	QStringList args;
 	QVariant prop = service->property( "X-KDevelop-Args" );
@@ -291,22 +291,43 @@ QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
 	QString ac_match("^AC_OUTPUT");
 
 	QRegExp ac_regex(ac_match);
-
+	bool multiLine=false;
+	QChar cont('\\');
+	QRegExp close("\\)");
 	while ( !stream.eof() ) {
-		QString line = stream.readLine();
-		if ( ac_regex.search(line) >= 0 ) {
+		QString line = stream.readLine().stripWhiteSpace();
+		if ( multiLine){
+			if (close.search(line) >= 0){
+				line = line.replace(close.search(line), 1, "");
+				list += QStringList::split(" ", line);
+				break;
+			}
+			else{
+				line.setLength(line.length()-1);
+				list += QStringList::split(" ", line);
+			}
+		}else if ( ac_regex.search(line) >= 0 ) {
 			QRegExp open("\\(");
-			QRegExp close("\\)");
 			line = line.replace(ac_regex.search(line), ac_match.length() - 1, "");
 
-			if (open.search(line) >= 0)
+			if (open.search(line) >= 0){
 				line = line.replace(open.search(line), 1, "");
+			}
 
-			if (close.search(line) >= 0)
-				line = line.replace(close.search(line), 1, "");
+			if ( line.endsWith(cont) ){
+				line.setLength(line.length()-1);
+				multiLine=true;
+			}else{
+				if (close.search(line) >= 0){
+					line = line.replace(close.search(line), 1, "");
+				}
+			}
 
 			list = QStringList::split(" ", line);
-			break;
+
+			if (!multiLine){
+				break;
+			}
 		}
 	}
 
@@ -340,19 +361,33 @@ void AutoProjectTool::configureinSaveMakefiles(QString configureinpath, QStringL
 	configurein.open ( IO_WriteOnly );
 	QTextStream outstream( &configurein);
 
+	QRegExp close("\\)");
+	bool multiLine=false;
 	QStringList::iterator it;
 	for ( it = origfilecontent.begin(); it != origfilecontent.end(); it++ ) {
 		QRegExp ac_regexp("^AC_OUTPUT");
 		QString currline = (QString) (*it);
 
 		if ( ac_regexp.search(currline) >= 0 ) {
+			QChar cont('\\');
+			if ( currline.endsWith(cont)){
+				multiLine=true;
+			}
 			QString acline("AC_OUTPUT(");
 			acline = acline.append(makefiles.join(" "));
 			acline = acline.append(")");
 			outstream << acline << "\n";
 		}
-		else
-			outstream << currline << "\n";
+		else{
+			if (multiLine){
+				if (close.search(currline) >= 0){
+					multiLine=false;
+				}
+			}
+			else{
+				outstream << currline << "\n";
+			}
+		}
 	}
 
 	configurein.close();
