@@ -1549,6 +1549,8 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         buildorder_listview->setEnabled( true );
         buildmoveup_button->setEnabled( true );
         buildmovedown_button->setEnabled( true );
+        targetGroupbox->setEnabled( false );
+        targetInstGroupbox->setEnabled( false );
         checkOrdered->setEnabled( true );
     }
     else if ( radioLibrary->isChecked() )
@@ -1573,6 +1575,8 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         buildmoveup_button->setEnabled( false );
         buildmovedown_button->setEnabled( false );
         groupLibraries->setEnabled( true );
+        targetGroupbox->setEnabled( true );
+        targetInstGroupbox->setEnabled( true );
         checkOrdered->setEnabled( false );
     }
     else if ( radioApplication->isChecked() )
@@ -1596,6 +1600,8 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         buildmoveup_button->setEnabled( false );
         buildmovedown_button->setEnabled( false );
         groupLibraries->setEnabled( false );
+        targetGroupbox->setEnabled( true );
+        targetInstGroupbox->setEnabled( true );
         checkConsole->setEnabled( true );
         checkWindows->setEnabled( true );
         checkOrdered->setEnabled( false );

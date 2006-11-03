@@ -110,7 +110,7 @@
                                     <string>Alt+E</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Support required for X11 application or library</string>
+                                    <string>Build the subprojects in the order they are listed in the .pro file</string>
                                 </property>
                             </widget>
                             <spacer row="2" column="2">
@@ -148,7 +148,7 @@
                     </widget>
                     <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>GroupBox1</cstring>
+                            <cstring>targetGroupbox</cstring>
                         </property>
                         <property name="title">
                             <string>Target</string>
@@ -215,7 +215,7 @@
                     </widget>
                     <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>groupBox7</cstring>
+                            <cstring>targetInstGroupbox</cstring>
                         </property>
                         <property name="title">
                             <string>Target Installation</string>
