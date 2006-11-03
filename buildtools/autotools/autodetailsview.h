@@ -45,6 +45,7 @@ public:
 
 public slots:
 	void slotSelectionChanged( QListViewItem* item );
+	void slotSelectionChanged();
 
 signals:
 	void selectionChanged( QListViewItem* );
@@ -83,5 +84,5 @@ private:
 
 };
 
-#endif 
+#endif
 // kate: indent-mode csands; tab-width 4;

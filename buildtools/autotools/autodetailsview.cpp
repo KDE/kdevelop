@@ -72,8 +72,16 @@ AutoDetailsView::AutoDetailsView(AutoProjectWidget* widget, AutoProjectPart* par
 	m_listView->setResizeMode( QListView::LastColumn );
 	m_listView->addColumn( QString::null );
 	m_listView->header()->hide();
+	targetOptionsAction->setEnabled( false );
+	addNewFileAction->setEnabled( false );
+	addExistingFileAction->setEnabled( false );
+	buildTargetAction->setEnabled( false );
+	executeTargetAction->setEnabled( false );
+	removeDetailAction->setEnabled(false);
 	connect( m_listView, SIGNAL( selectionChanged( QListViewItem* ) ),
 	         this, SLOT( slotSelectionChanged( QListViewItem* ) ) );
+	connect( m_listView, SIGNAL( selectionChanged() ),
+	         this, SLOT( slotSelectionChanged( ) ) );
 }
 
 
@@ -81,77 +89,85 @@ AutoDetailsView::~AutoDetailsView()
 {
 }
 
-void AutoDetailsView::slotSelectionChanged( QListViewItem* item )
-{
-	if ( m_listView->selectedItems().isEmpty() )
-	{
+/**
+ * If nothing selected, disable all the icons.
+ */
+void AutoDetailsView::slotSelectionChanged( ){
+
+	if ( m_listView->selectedItems().isEmpty()){
 		targetOptionsAction->setEnabled( false );
 		addNewFileAction->setEnabled( false );
 		addExistingFileAction->setEnabled( false );
 		buildTargetAction->setEnabled( false );
 		executeTargetAction->setEnabled( false );
+		removeDetailAction->setEnabled(false);
 	}
-	else
+}
+
+/**
+ * Change the enabled icons depending on what is selected.
+ * This is never called if nothing is selected..
+ * @param item
+ */
+void AutoDetailsView::slotSelectionChanged( QListViewItem* item )
+{
+	bool isTarget = false;
+	bool isRegularTarget = false;
+	bool isFile = false;
+	bool isProgram = false;
+
+	if ( item )
 	{
-		bool isTarget = false;
-		bool isRegularTarget = false;
-		bool isFile = false;
-		bool isProgram = false;
+		// We assume here that ALL items in the detail list view
+		// are ProjectItem's
+		ProjectItem * pvitem = static_cast<ProjectItem*>( item );
+		TargetItem* titem = 0;
 
-		if ( item )
+		if ( pvitem->type() == ProjectItem::File )
 		{
-			// We assume here that ALL items in the detail list view
-			// are ProjectItem's
-			ProjectItem * pvitem = static_cast<ProjectItem*>( item );
-			TargetItem* titem = 0;
-
-			if ( pvitem->type() == ProjectItem::File )
-			{
-				titem = static_cast <TargetItem*> ( pvitem->parent() );
-
-				QString primary = titem->primary;
-				if ( primary == "PROGRAMS" || primary == "LIBRARIES" ||
-				     primary == "LTLIBRARIES" || primary == "JAVA" )
-				{
-					isRegularTarget = true; // not a data group
-					isFile = true;
-				}
-			}
-			else
-			{
-				titem = static_cast <TargetItem*> ( pvitem );
-				isTarget = true;
-			}
+			titem = static_cast <TargetItem*> ( pvitem->parent() );
 
 			QString primary = titem->primary;
 			if ( primary == "PROGRAMS" || primary == "LIBRARIES" ||
-			     primary == "LTLIBRARIES" || primary == "JAVA" )
+					primary == "LTLIBRARIES" || primary == "JAVA" )
 			{
 				isRegularTarget = true; // not a data group
+				isFile = true;
 			}
-
-			if ( primary == "PROGRAMS" )
-				isProgram = true;
-		}
-
-		targetOptionsAction->setEnabled( isRegularTarget && !isFile );
-		addNewFileAction->setEnabled( isTarget );
-		addExistingFileAction->setEnabled( isTarget );
-		removeDetailAction->setEnabled ( true );
-
-		if ( isRegularTarget && isFile || isRegularTarget )
-		{
-			buildTargetAction->setEnabled ( true );
-			if( isProgram )
-				executeTargetAction->setEnabled ( true );
 		}
 		else
 		{
-			buildTargetAction->setEnabled ( false );
-			executeTargetAction->setEnabled ( false );
+			titem = static_cast <TargetItem*> ( pvitem );
+			isTarget = true;
 		}
+
+		QString primary = titem->primary;
+		if ( primary == "PROGRAMS" || primary == "LIBRARIES" ||
+				primary == "LTLIBRARIES" || primary == "JAVA" )
+		{
+			isRegularTarget = true; // not a data group
+		}
+
+		if ( primary == "PROGRAMS" )
+			isProgram = true;
 	}
 
+	targetOptionsAction->setEnabled( isRegularTarget && !isFile );
+	addNewFileAction->setEnabled( isTarget );
+	addExistingFileAction->setEnabled( isTarget );
+	removeDetailAction->setEnabled ( true );
+
+	if ( isRegularTarget && isFile || isRegularTarget )
+	{
+		buildTargetAction->setEnabled ( true );
+		if( isProgram )
+			executeTargetAction->setEnabled ( true );
+	}
+	else
+	{
+		buildTargetAction->setEnabled ( false );
+		executeTargetAction->setEnabled ( false );
+	}
 	emit selectionChanged( item );
 }
 
