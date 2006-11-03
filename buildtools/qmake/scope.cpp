@@ -778,7 +778,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
         QMake::AssignmentAST * ast = new QMake::AssignmentAST();
         ast->scopedID = variable;
         ast->op = op;
-        ast->values = values;
+        updateValues( ast->values, values );
         if( scopeType() == ProjectScope )
             ast->setDepth( m_root->depth() );
         else

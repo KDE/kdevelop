@@ -511,15 +511,18 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             lvItem = lvItem->itemBelow();
         }
 
-        if ( myProjectItem->scope->isVariableReset( "SUBDIRS" ) )
+        if( values != myProjectItem->scope->variableValues("SUBDIRS") )
         {
-            myProjectItem->scope->removeVariable( "SUBDIRS", "=" );
-            myProjectItem->scope->setEqualOp( "SUBDIRS", values );
-        }
-        else
-        {
-            myProjectItem->scope->removeVariable( "SUBDIRS", "+=" );
-            myProjectItem->scope->setPlusOp( "SUBDIRS", values );
+            if ( myProjectItem->scope->isVariableReset( "SUBDIRS" ) )
+            {
+                myProjectItem->scope->removeVariable( "SUBDIRS", "=" );
+                myProjectItem->scope->setEqualOp( "SUBDIRS", values );
+            }
+            else
+            {
+                myProjectItem->scope->removeVariable( "SUBDIRS", "+=" );
+                myProjectItem->scope->setPlusOp( "SUBDIRS", values );
+            }
         }
     }
 
