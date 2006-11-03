@@ -83,7 +83,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                                    "targets and files for the subproject selected in the overview."));
 
     mainWindow()->embedSelectViewRight(m_widget, i18n("Automake Manager"), i18n("Automake manager"));
-
+    mainWindow()->raiseView(m_widget);
     KAction *action;
 
     action = new KAction( i18n("Add Translation..."), 0,

@@ -177,10 +177,10 @@ void AutoSubprojectView::initActions()
 	                                           "prefixes and build order.</qt>"));
 	subProjectOptionsAction->plug( m_optionsButton );
 
-	QToolTip::add( m_button1, tr2i18n( "Add Subproject..."));
-	addSubprojectAction = new AutoToolsAction( i18n( "Add Subproject..." ), "folder_new", 0,
+	QToolTip::add( m_button1, tr2i18n( "Add new subproject..."));
+	addSubprojectAction = new AutoToolsAction( i18n( "Add new subproject..." ), "folder_new", 0,
 	                                   this, SLOT( slotAddSubproject() ), actions, "add subproject" );
-	addSubprojectAction->setWhatsThis(i18n("<qt><b>Add subproject</b><p>Creates a new "
+	addSubprojectAction->setWhatsThis(i18n("<qt><b>Add new subproject</b><p>Creates a new "
 	                                       "subproject in currently selected subproject.</qt>"));
 	addSubprojectAction->plug( m_button1 );
 
