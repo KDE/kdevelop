@@ -1,20 +1,20 @@
 # KDE Config File
 [General]
-Name=Hello world program
-Name[da]=Goddag verden program
-Name[de]=Hello-world-Programm
-Name[et]="Tere,maailm" programm
-Name[fr]=Programme « Hello world »
-Name[it]=Programma di "Hello world"
-Name[sv]=Hello world-program
-Name[tr]=Merhaba Dünya Programı
-Name[zh_CN]=Hello world 程序
+Name=Qt3 Hello world program
+Name[da]=Qt3 Goddag verden program
+Name[de]=Qt3 Hello-world-Programm
+Name[et]=Qt3 "Tere,maailm" programm
+Name[fr]=Qt3 Programme « Hello world »
+Name[it]=Qt3 Programma di "Hello world"
+Name[sv]=Qt3 Hello world-program
+Name[tr]=Qt3 Merhaba Dünya Programı
+Name[zh_CN]=Qt3 Hello world 程序
 Icon=qmakesimple.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
-Comment=Generates a simple Hello world program in C++ using QMake based project manager
+Comment=Generates a simple Hello world program in C++ using QMake/Qt3 based project manager
 Comment[da]=Genererer et simpelt Goddag verden program in C++ ved brug af QMake baseret projekthåndtering
-Comment[de]=Erstellt ein einfaches "Hello World"-Programm in C++ basierend auf dem QMake-Projektmanager.
+Comment[de]=Erstellt ein einfaches "Hello World"-Programm in C++ basierend auf dem QMake/Qt3-Projektmanager.
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s projektihalduriga QMake'i põhjal
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban, QMake-alapú projektkezelővel
 Comment[it]=Genera un semplice programma di "Hello world" in C++ usando il gestore di progetto QMake
@@ -51,9 +51,9 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 
 [MSG]
 Type=message
-Comment=A Qmake based hello world program was created in %{dest}
+Comment=A Qmake/Qt3 based hello world program was created in %{dest}
 Comment[da]=et Qmake baseret Goddag verden program blev oprettet i %{dest}
-Comment[de]=Ein auf Qmake basierendes "Hello World"-Programm wurde in %{dest} erstellt.
+Comment[de]=Ein auf Qmake/Qt3 basierendes "Hello World"-Programm wurde in %{dest} erstellt.
 Comment[et]="Tere, maailm" programm QMake'i põhjal loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Qmake-alapú Hello world program itt: %{dest}
 Comment[it]=È stato creato un programma di "hello world" basato su Qmake in %{dest}
