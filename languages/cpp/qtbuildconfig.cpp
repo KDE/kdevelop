@@ -54,6 +54,11 @@ void QtBuildConfig::init( )
 	if( m_root.isEmpty() )
 	{
 		m_root = QString( getenv( "QTDIR" ) );
+		int pos;
+		if( m_version == 4 && (pos = m_root.find("qt3", 0, false) ) != -1 )
+			m_root = m_root.replace(pos+2, 1, "4");
+		else if( m_version == 3 && (pos = m_root.find("qt4", 0, false) ) != -1 )
+			m_root = m_root.replace(pos+2, 1, "3");
 	}
 	m_designerIntegration = DomUtil::readEntry( *m_dom, m_configRoot + "/designerintegration" );
 	if( m_designerIntegration.isEmpty() )

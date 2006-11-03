@@ -38,7 +38,7 @@
 #include "urlutil.h"
 #include "creategettersetterconfiguration.h"
 #include "kdevsourceformatter.h"
-#include "kdevcreatefile.h" 
+#include "kdevcreatefile.h"
 #include "qtbuildconfig.h"
 #include <kpopupmenu.h>
 // wizards
@@ -46,7 +46,7 @@
 #include "subclassingdlg.h"
 #include "addmethoddialog.h"
 #include "addattributedialog.h"
-#include "creategettersetterdialog.h" 
+#include "creategettersetterdialog.h"
 // designer integration
 #include "qtdesignercppintegration.h"
 #include "cppimplementationwidget.h"
@@ -124,13 +124,13 @@ public:
 	void fileParsed( const ParsedFile& fileName )
 	{
 		//kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
-		
+
 		ParsedFilePointer ast = takeTranslationUnit( fileName.fileName() );
-		
+
 		if ( cppSupport() ->problemReporter() )
 		{
 			cppSupport() ->problemReporter() ->removeAllProblems( fileName.fileName() );
-			
+
 			QValueList<Problem> pl = problems( fileName.fileName() );
 			QValueList<Problem>::ConstIterator it = pl.begin();
 			while ( it != pl.end() )
@@ -139,15 +139,15 @@ public:
 				cppSupport() ->problemReporter() ->reportProblem( fileName.fileName(), p );
 			}
 		}
-		
+
 		StoreWalker walker( fileName.fileName(), cppSupport() ->codeModel() );
-		
+
 		if ( cppSupport() ->codeModel() ->hasFile( fileName.fileName() ) )
 		{
 			FileDom file = cppSupport() ->codeModel() ->fileByName( fileName.fileName() );
 			cppSupport() ->removeWithReferences( fileName.fileName() );
 		}
-		
+
 		walker.parseTranslationUnit( *ast );
 		cppSupport() ->codeModel() ->addFile( walker.file() );
 		remove
@@ -157,10 +157,10 @@ public:
 			cppSupport()->_jd->backgroundState ++;
 			cppSupport()->_jd->lastParse = QTime::currentTime();
 		}
-		
+
 		QFileInfo fileInfo( fileName.fileName() );
 		QString path = URLUtil::canonicalPath( fileName.fileName() );
-		
+
 		cppSupport()->m_timestamp[ path ] = fileInfo.lastModified();
 
 		cppSupport()->emitSynchronousParseReady( fileName.fileName(), ast );
@@ -173,15 +173,16 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	m_activeViewCursor( 0 ), m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
 {
 	setInstance( CppSupportFactory::instance() );
-	
+
 	m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
 	m_pSplitHeaderSourceConfig = new CppSplitHeaderSourceConfig( this, projectDom() );
-	m_pCreateGetterSetterConfiguration = new CreateGetterSetterConfiguration( this );	connect( m_pSplitHeaderSourceConfig, SIGNAL( stored() ), 
+	m_pCreateGetterSetterConfiguration = new CreateGetterSetterConfiguration( this );	connect( m_pSplitHeaderSourceConfig, SIGNAL( stored() ),
 		this, SLOT( splitHeaderSourceConfigStored() ) );
-	connect( m_pCompletionConfig, SIGNAL( stored() ), 
+	connect( m_pCompletionConfig, SIGNAL( stored() ),
 	         this, SLOT( codeCompletionConfigStored() ) );
 	m_qtBuildConfig = new QtBuildConfig( this, projectDom() );
-	
+        m_qtBuildConfig->store();
+
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;
 
@@ -190,11 +191,11 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	connect( m_deleteParserStoreTimer, SIGNAL(timeout()), this, SLOT(slotDeleteParserStore()) );
 	resetParserStoreTimer();
 	//    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
-	
+
 	setXMLFile( "kdevcppsupport.rc" );
-	
+
 	m_catalogList.setAutoDelete( true );
-	
+
 	connect( core(), SIGNAL( projectOpened() ), this, SLOT( projectOpened() ) );
 	connect( core(), SIGNAL( projectClosed() ), this, SLOT( projectClosed() ) );
 	connect( core(), SIGNAL( languageChanged() ), this, SLOT( projectOpened() ) );
@@ -206,12 +207,12 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	         this, SLOT( activePartChanged( KParts::Part* ) ) );
 	connect( partController(), SIGNAL( partRemoved( KParts::Part* ) ),
 	         this, SLOT( partRemoved( KParts::Part* ) ) );
-	
+
 	connect( core(), SIGNAL( configWidget( KDialogBase* ) ),
 	         this, SLOT( configWidget( KDialogBase* ) ) );
-	
+
 	KAction *action;
-	
+
 	action = new KAction( i18n( "Switch Header/Implementation" ), SHIFT + Key_F12,
 	                      this, SLOT( slotSwitchHeader() ),
 	                      actionCollection(), "edit_switchheader" );
@@ -222,7 +223,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	                            "If you are looking at an implementation file (.cpp etc.), "
 	                            "this brings you to the corresponding header file." ) );
 	action->setEnabled( false );
-	
+
 	action = new KAction( i18n( "Complete Text" ), CTRL + Key_Space,
 	                      this, SLOT( slotCompleteText() ),
 	                      actionCollection(), "edit_complete_text" );
@@ -231,11 +232,11 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	                            "memory class store for the current project and persistant class stores "
 	                            "for external libraries." ) );
 	action->setEnabled( false );
-	
+
 	m_createGetterSetterAction = new KAction( i18n( "Create Accessor Methods" ), 0,
 	                                          this, SLOT( slotCreateAccessMethods() ), actionCollection(),
 	                                          "edit_create_getter_setter" );
-	
+
 	action = new KAction( i18n( "Make Member" ), 0, Key_F2,
 	                      this, SLOT( slotMakeMember() ),
 	                      actionCollection(), "edit_make_member" );
@@ -250,24 +251,24 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	action->setToolTip( i18n( "Show the navigation-menu" ) );
 	action->setWhatsThis( i18n( "<b>Navigate</b><p>Shows a navigation-menu based on the type-evaluation of the item under the cursor." ) );
 	action->plug( new QWidget() );
-	
-	
+
+
 	action = new KAction( i18n( "New Class..." ), "classnew", 0,
 	                      this, SLOT( slotNewClass() ),
 	                      actionCollection(), "project_newclass" );
 	action->setToolTip( i18n( "Generate a new class" ) );
 	action->setWhatsThis( i18n( "<b>New Class</b><p>Calls the <b>New Class</b> wizard." ) );
-	
+
 	m_pCompletion = 0;
-	
+
 	withcpp = false;
 	if ( args.count() == 1 && args[ 0 ] == "Cpp" )
 		withcpp = true;
-	
+
 	// daniel
 	connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,
 	         SLOT( projectConfigWidget( KDialogBase* ) ) );
-	
+
 	new KDevCppSupportIface( this );
 	//(void) dcopClient();
 }
@@ -277,10 +278,10 @@ CppSupportPart::~CppSupportPart()
 {
 	if ( !m_projectClosed )
 		projectClosed();
-	
+
 	delete( m_driver );
 	m_driver = 0;
-	
+
 	if ( m_backgroundParser )
 	{
 		m_backgroundParser->close();
@@ -288,27 +289,27 @@ CppSupportPart::~CppSupportPart()
 		delete m_backgroundParser;
 		m_backgroundParser = 0;
 	}
-	
+
 	codeRepository() ->setMainCatalog( 0 );
-	
+
 	QPtrListIterator<Catalog> it( m_catalogList );
 	while ( Catalog * catalog = it.current() )
 	{
 		++it;
 		codeRepository() ->unregisterCatalog( catalog );
 	}
-	
+
 	mainWindow( ) ->removeView( m_problemReporter );
-	
+
 	delete m_pCompletion;
 	delete m_problemReporter;
-	
+
 	m_pCompletion = 0;
 	m_problemReporter = 0;
-	
+
 	delete _jd;
 	_jd = 0;
-	
+
 	kdDebug( 9007 ) << k_funcinfo << endl;
 }
 
@@ -316,20 +317,20 @@ CppSupportPart::~CppSupportPart()
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
 	kdDebug( 9007 ) << "CppSupportPart::customEvent(" << ev->type() << ")" << endl;
-	
+
 	QTime t;
 	t.start();
 	bool fromDisk = false;
-	
+
 	if ( ev->type() == int( Event_FileParsed ) )
 	{
 		resetParserStoreTimer();
-		
+
 		if( _jd ) {
 			_jd->backgroundState ++;
 			_jd->lastParse = QTime::currentTime();
 		}
-		
+
 		FileParsedEvent * event = ( FileParsedEvent* ) ev;
 		fromDisk = event->fromDisk();
 		QString fileName = event->fileName();
@@ -337,7 +338,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		if ( m_problemReporter )
 		{
 			m_problemReporter->removeAllProblems( fileName );
-			
+
 			QValueList<Problem> problems = event->problems();
 			QValueList<Problem>::ConstIterator it = problems.begin();
 			while ( it != problems.end() )
@@ -345,7 +346,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 				const Problem & p = *it++;
 				if ( p.level() == Problem::Level_Error )
 					hasErrors = true;
-				
+
 				m_problemReporter->reportProblem( fileName, p );
 			}
 		}
@@ -367,7 +368,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
 	QVBox * vbox = 0;
-	
+
 	vbox = dlg->addVBoxPage( i18n( "C++ Support" ), i18n( "C++ Support" ),
 	                         BarIcon( info() ->icon(), KIcon::SizeMedium ) );
 	CCConfigWidget* w = new CCConfigWidget( this, vbox );
@@ -385,11 +386,11 @@ void CppSupportPart::configWidget( KDialogBase *dlg )
 void CppSupportPart::activePartChanged( KParts::Part *part )
 {
 	kdDebug( 9032 ) << "CppSupportPart::activePartChanged()" << endl;
-	
+
 	bool enabled = false;
-	
+
 	m_functionHintTimer->stop();
-	
+
 	if ( m_activeView )
 	{
 		disconnect( m_activeView, SIGNAL( cursorPositionChanged() ), this, SLOT( slotCursorPositionChanged() ) );
@@ -402,9 +403,9 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 	m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
 	m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
 	m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( m_activeView ) : 0;
-	
+
 	m_activeFileName = QString::null;
-	
+
 	if ( m_activeDocument )
 	{
 		m_activeFileName = URLUtil::canonicalPath( m_activeDocument->url().path() );
@@ -413,31 +414,31 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 		if ( isSource( m_activeFileName ) || isHeader( m_activeFileName ) )
 			enabled = true;
 	}
-	
+
 	actionCollection() ->action( "edit_switchheader" ) ->setEnabled( enabled );
 	actionCollection() ->action( "edit_complete_text" ) ->setEnabled( enabled );
 	actionCollection() ->action( "edit_make_member" ) ->setEnabled( enabled );
-	
+
 	if ( !part )
 		return ;
-	
+
 	if ( !m_activeView )
 		return ;
-	
+
 	if ( m_activeViewCursor )
 	{
 		connect( m_activeView, SIGNAL( cursorPositionChanged() ),
 		         this, SLOT( slotCursorPositionChanged() ) );
 	}
-	
+
 #if 0
 	KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
 	if ( !textHintIface )
 		return ;
-	
+
 	connect( view, SIGNAL( needTextHint( int, int, QString& ) ),
 	         this, SLOT( slotNeedTextHint( int, int, QString& ) ) );
-	
+
 	textHintIface->enableTextHints( 1000 );
 #endif
 }
@@ -454,28 +455,28 @@ void CppSupportPart::setTyping( bool typing ) {
 void CppSupportPart::projectOpened( )
 {
 	kdDebug( 9007 ) << "projectOpened( )" << endl;
-	
+
 	m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
 	m_backgroundParser->start();
-	
+
 	// setup the driver
 	QString conf_file_name = specialHeaderName();
 	if ( QFile::exists( conf_file_name ) )
 		m_driver->parseFile( conf_file_name, true );
-	
+
 	m_projectDirectory = URLUtil::canonicalPath( project() ->projectDirectory() );
 	m_projectFileList = project() ->allFiles();
-	
+
 	setupCatalog();
-	
+
 	m_problemReporter = new ProblemReporter( this );
 	m_problemReporter->setIcon( SmallIcon( "info" ) );
 	m_problemReporter->setCaption( i18n( "Problem Reporter" ) );
 	mainWindow( ) ->embedOutputView( m_problemReporter, i18n( "Problems" ), i18n( "Problem reporter" ) );
-	
+
 	connect( core(), SIGNAL( configWidget( KDialogBase* ) ),
 	         m_problemReporter, SLOT( configWidget( KDialogBase* ) ) );
-	
+
 	connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
 	         this, SLOT( addedFilesToProject( const QStringList & ) ) );
 	connect( project( ), SIGNAL( removedFilesFromProject( const QStringList & ) ),
@@ -484,16 +485,16 @@ void CppSupportPart::projectOpened( )
 	         this, SLOT( changedFilesInProject( const QStringList & ) ) );
 	connect( project(), SIGNAL( projectCompiled() ),
 	         this, SLOT( slotProjectCompiled() ) );
-	
+
 	QDir::setCurrent( m_projectDirectory );
-	
+
 	m_timestamp.clear();
 	m_parseEmitWaiting.clear();
 	m_fileParsedEmitWaiting.clear();
-	
+
 	m_pCompletion = new CppCodeCompletion( this );
 	m_projectClosed = false;
-	
+
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
@@ -501,9 +502,9 @@ void CppSupportPart::projectOpened( )
 void CppSupportPart::projectClosed( )
 {
 	kdDebug( 9007 ) << "projectClosed( )" << endl;
-	
+
 	m_projectClosing = true;
-	
+
 	QStringList enabledPCSs;
 	QValueList<Catalog*> catalogs = codeRepository() ->registeredCatalogs();
 	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
@@ -513,21 +514,21 @@ void CppSupportPart::projectClosed( )
 			enabledPCSs.push_back( QFileInfo( c->dbName() ).baseName() );
 	}
 	DomUtil::writeListEntry( *project() ->projectDom(), "kdevcppsupport/references", "pcs", enabledPCSs );
-	
+
 	for ( QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*>::const_iterator it = m_designers.begin();
 	      it != m_designers.end(); ++it )
 	{
 		kdDebug() << "calling save settings fro designer integration" << endl;
 		it.data() ->saveSettings( *project() ->projectDom(), "kdevcppsupport/designerintegration" );
 	}
-	
+
 	saveProjectSourceInfo();
-	
+
 	m_pCompletionConfig->store();
-	
+
 	delete _jd;
 	_jd = 0;
-	
+
 	delete m_pCompletion;
 	m_parseEmitWaiting.clear();
 	m_fileParsedEmitWaiting.clear();
@@ -548,7 +549,7 @@ QString CppSupportPart::findHeader( const QStringList &list, const QString &head
 		if ( ( s.right( header.length() ) == header ) && ( s[s.length() - header.length() - 1] == '/' ) )
 			return s;
 	}
-	
+
 	return QString::null;
 }
 
@@ -559,9 +560,9 @@ void CppSupportPart::slotNavigate() {
 		m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
 
 		if( m_navigationMenu ) delete (KPopupMenu*)m_navigationMenu;
-		
+
 		m_navigationMenu = new KPopupMenu( m_activeView );
-		
+
 		codeCompletion()->contextEvaluationMenus( m_navigationMenu, 0, curLine, curCol );
 
 		m_navigationMenu->move( m_activeView->mapToGlobal( m_activeViewCursor->cursorCoordinates() ) );
@@ -577,18 +578,18 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 	m_activeVariable = 0;
 	m_curAttribute = 0;
 	m_curClass = 0;
-	
+
 	if ( context->hasType( Context::EditorContext ) )
 	{
 		int id;
-		
+
 		id = popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
 		popup->setWhatsThis( id, i18n( "<b>Switch Header/Implementation</b><p>"
 		                               "If you are currently looking at a header file, this "
 		                               "brings you to the corresponding implementation file. "
 		                               "If you are looking at an implementation file (.cpp etc.), "
 		                               "this brings you to the corresponding header file." ) );
-		
+
 		// 	CodeModelItemContext
 		if ( context->type() == Context::EditorContext )
 		{
@@ -600,7 +601,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 					m_createGetterSetterAction->plug( popup );
 			}
 		}
-		
+
 		QString text;
 		int atline, atcol;
 		MakeMemberHelper( text, atline, atcol );
@@ -610,9 +611,9 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 			popup->setWhatsThis( id, i18n( "<b>Make member</b><p>Creates a class member function in implementation file "
 			                               "based on the member declaration at the current line." ) );
 		}
-		
+
 		kdDebug( 9007 ) << "======> code model has the file: " << m_activeFileName << " = " << codeModel() ->hasFile( m_activeFileName ) << endl;
-		
+
 		bool showContextMenuExplosion = false;
 		bool showContextTypeEvaluation = false;
 		KConfig *config = CppSupportFactory::instance() ->config();
@@ -623,20 +624,20 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 			config->setGroup( "General" );
 			showContextTypeEvaluation = config->readBoolEntry( "ShowContextTypeEvaluation", true );
 		}
-		
-		
+
+
 		if( codeModel() ->hasFile( m_activeFileName ) ) {
-		
+
 		if( showContextTypeEvaluation && m_activeViewCursor != 0 ) {
 			if( codeCompletion() ) {
 				unsigned int curLine = 0, curCol = 0;
 				m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
-			
+
 				codeCompletion()->contextEvaluationMenus( popup, context, curLine, curCol );
 			}
 		}
-			
-			
+
+
 		if ( showContextMenuExplosion )
 		{
 			//kdDebug() << "CppSupportPart::contextMenu 1" << endl;
@@ -645,23 +646,23 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 				candidate = sourceOrHeaderCandidate();
 			else
 				candidate = m_activeFileName;
-			
+
 			unsigned int curLine = 0, curCol = 0;
 			if ( m_activeViewCursor != 0 )
 				m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
-			
+
 			//kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
-			
+
 			if ( !candidate.isEmpty() && codeModel() ->hasFile( candidate ) )
 			{
 				QPopupMenu * m2 = new QPopupMenu( popup );
 				id = popup->insertItem( i18n( "Go to Declaration" ), m2 );
 				popup->setWhatsThis( id, i18n( "<b>Go to declaration</b><p>Provides a menu to select available function declarations "
 				                               "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file." ) );
-				
+
 				FileDom file2 = codeModel() ->fileByName( candidate );
 				//kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
-				
+
 				FunctionList functionList2 = CodeModelUtils::allFunctions( file2 );
 				for ( FunctionList::ConstIterator it = functionList2.begin(); it != functionList2.end(); ++it )
 				{
@@ -678,14 +679,14 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 					( *it ) ->getStartPosition( &line, &column );
 					m2->setItemParameter( id, line );
 				}
-				
+
 				if ( m2->count() == 0 )
 				{
 					popup->removeItem( id );
 				}
 				//kdDebug() << "CppSupportPart::contextMenu 4" << endl;
 			}
-			
+
 			QString candidate1;
 			if ( isHeader( m_activeFileName ) )
 			{
@@ -702,7 +703,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 				id = popup->insertItem( i18n( "Go to Definition" ), m );
 				popup->setWhatsThis( id, i18n( "<b>Go to definition</b><p>Provides a menu to select available function definitions "
 				                               "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file." ) );
-				
+
 				const FileDom file = codeModel() ->fileByName( candidate1 );
 				const FunctionDefinitionList functionDefinitionList = CodeModelUtils::allFunctionDefinitionsDetailed( file ).functionList;
 				for ( FunctionDefinitionList::ConstIterator it = functionDefinitionList.begin(); it != functionDefinitionList.end(); ++it )
@@ -723,7 +724,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 				{
 					popup->removeItem( id );
 				}
-				
+
 			}
 		}
 		}
@@ -732,24 +733,24 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 		QString str = econtext->currentLine();
 		if ( str.isEmpty() )
 			return ;
-		
+
 		QRegExp re( "[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*" );
 		if ( !re.exactMatch( str ) )
 			return ;
-		
+
 		QString popupstr = re.cap( 1 );
 		m_contextFileName = findHeader( m_projectFileList, popupstr );
 		if ( m_contextFileName.isEmpty() )
 			return ;
-		
+
 		id = popup->insertItem( i18n( "Goto Include File: %1" ).arg( popupstr ), this, SLOT( slotGotoIncludeFile() ) );
 		popup->setWhatsThis( id, i18n( "<b>Goto include file</b><p>Opens an include file under the cursor position." ) );
-		
+
 	}
 	else if ( context->hasType( Context::CodeModelItemContext ) )
 	{
 		const CodeModelItemContext * mcontext = static_cast<const CodeModelItemContext*>( context );
-		
+
 		if ( mcontext->item() ->isClass() )
 		{
 			m_activeClass = ( ClassModel* ) mcontext->item();
@@ -785,7 +786,7 @@ QStringList makeListUnique( const QStringList& rhs ) {
 		if( map.find( *it ) == map.end() ) {
 			ret << *it;
 			map.insert( *it, true );
-		} 
+		}
 	}
 	return ret;
 }
@@ -794,9 +795,9 @@ QStringList makeListUnique( const QStringList& rhs ) {
 QStringList CppSupportPart::reorder( const QStringList &list )
 {
 	QStringList headers, others;
-	
+
 	QStringList headerExtensions = QStringList::split( ",", "h,H,hh,hxx,hpp,tlh" );
-	
+
 	QStringList::ConstIterator it;
 	for ( it = list.begin(); it != list.end(); ++it )
 	{
@@ -807,7 +808,7 @@ QStringList CppSupportPart::reorder( const QStringList &list )
 		else
 			others << ( *it );
 	}
-	
+
 	return makeListUnique( headers + others );
 }
 
@@ -815,11 +816,11 @@ void CppSupportPart::addedFilesToProject( const QStringList &fileList )
 {
 	m_projectFileList = project() ->allFiles();
 	QStringList files = reorder( fileList );
-	
+
 	for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
 	{
 		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + ( *it ) );
-		
+
 		maybeParse( path );
 		//emit addedSourceInfo( path );
 	}
@@ -832,7 +833,7 @@ void CppSupportPart::removedFilesFromProject( const QStringList &fileList )
 	{
 		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
 		kdDebug( 9007 ) << "=====================> remove file: " << path << endl;
-		
+
 		removeWithReferences( path );
 		m_backgroundParser->removeFile( path );
 	}
@@ -841,11 +842,11 @@ void CppSupportPart::removedFilesFromProject( const QStringList &fileList )
 void CppSupportPart::changedFilesInProject( const QStringList & fileList )
 {
 	QStringList files = reorder( fileList );
-	
+
 	for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
 	{
 		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
-		
+
 		maybeParse( path );
 		//emit addedSourceInfo( path );
 	}
@@ -858,7 +859,7 @@ void CppSupportPart::savedFile( const KURL &file )
 		m_hadErrors = false;
 		maybeParse( file.path() );
 	}
-	
+
 	Q_UNUSED( file.path() );
 
 #if 0  // not needed anymore
@@ -896,7 +897,7 @@ QString CppSupportPart::findSourceFile()
 		candidates << ( base + ".inl" );
 		candidates << ( base + "_impl.h" );
 	}
-	
+
 	QStringList::ConstIterator it;
 	for ( it = candidates.begin(); it != candidates.end(); ++it )
 	{
@@ -914,7 +915,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 	QString urlPath;
 	if ( url.isEmpty() )
 	{
-		KTextEditor::Document * doc = 
+		KTextEditor::Document * doc =
 			dynamic_cast<KTextEditor::Document*>( partController() ->activePart() );
 		if ( !doc )
 			return QString::null;
@@ -1002,7 +1003,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 		//kdDebug( 9007 ) << "candidate file: " << *fileIt << endl;
 		if( !candidateFileWoExt.extension().isEmpty() )
 			candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.extension(), "" );
-		if ( candidateFileWoExtString == fileNameWoExt ) 
+		if ( candidateFileWoExtString == fileNameWoExt )
 		{
 			if ( possibleExtsList.contains( candidateFileWoExt.extension() ) || candidateFileWoExt.extension().isEmpty() )
 			{
@@ -1021,7 +1022,7 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 	QString candidate = sourceOrHeaderCandidate();
 	if ( candidate == QString::null )
 		return ;
-	
+
 	bool attemptMatch = true;
 	KConfig *config = CppSupportFactory::instance() ->config();
 	if ( config )
@@ -1038,14 +1039,14 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 		if( codeModel()->hasFile( candidate ) ) candidates << codeModel()->fileByName( candidate );
 		FileDom activeFile = codeModel() ->fileByName( m_activeFileName );
 		candidates += activeFile->wholeGroup();
-		
-		
+
+
 		unsigned int currentline, column;
 		m_activeViewCursor->cursorPositionReal( &currentline, &column );
-		
+
 		CodeModelUtils::CodeModelHelper h( codeModel(), activeFile );
 		FunctionDom d = h.functionAt( currentline, column );
-		
+
 		if( d ) {
 			if( d->isFunctionDefinition() ) {
 				///Find the declaration in one of the other files
@@ -1083,7 +1084,7 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 					      it_def != functionDefList.end(); ++it_def )
 					{
 						if( *it_def == d || (scrollOnly && (*it_def)->fileName() == m_activeFileName ) ) continue;
-						
+
 						if ( CodeModelUtils::compareDeclarationToDefinition( d, *it_def ) )
 						{
 							// found the declaration, let's jump!
@@ -1106,11 +1107,11 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 			///No current function could be located, just open the other file
 		}
 	}
-	
+
 	// last chance
 	KURL url;
 	url.setPath( candidate );
-	
+
 	if ( scrollOnly )
 		return;
 	else if ( !splitHeaderSourceConfig()->splitEnabled() )
@@ -1123,7 +1124,7 @@ void CppSupportPart::slotGotoIncludeFile()
 {
 	if ( !m_contextFileName.isEmpty() )
 		partController() ->editDocument( KURL( m_contextFileName ), 0 );
-	
+
 }
 
 KDevLanguageSupport::Features CppSupportPart::features()
@@ -1151,7 +1152,7 @@ bool CppSupportPart::shouldSplitDocument(const KURL &url)
 {
 	if ( !splitHeaderSourceConfig()->splitEnabled() )
 		return false;
-	
+
 	KURL::List list = partController()->openURLs();
 	KURL::List::ConstIterator it = list.begin();
 	while ( it != list.end() )
@@ -1162,12 +1163,12 @@ bool CppSupportPart::shouldSplitDocument(const KURL &url)
 			++it;
 			continue;
 		}
-		
+
 		KURL urlCandidate;
 		urlCandidate.setPath( candidate );
 		if ( url == urlCandidate )
 		{
-			// It is already open, so switch to it so 
+			// It is already open, so switch to it so
 			// our split view will open with it
 			partController() ->editDocument( ( *it ) );
 			return true;
@@ -1199,7 +1200,7 @@ void CppSupportPart::addMethod( ClassDom klass )
 		KMessageBox::error( 0, i18n( "Please select a class." ), i18n( "Error" ) );
 		return ;
 	}
-	
+
 	AddMethodDialog dlg( this, klass, mainWindow() ->main() );
 	dlg.exec();
 }
@@ -1211,7 +1212,7 @@ void CppSupportPart::addAttribute( ClassDom klass )
 		KMessageBox::error( 0, i18n( "Please select a class." ), i18n( "Error" ) );
 		return ;
 	}
-	
+
 	AddAttributeDialog dlg( this, klass, mainWindow() ->main() );
 	dlg.exec();
 }
@@ -1235,7 +1236,7 @@ void CppSupportPart::initialParse( )
 		kdDebug( 9007 ) << "No project" << endl;
 		return ;
 	}
-	
+
 	parseProject( );
 	m_valid = true;
 	return ;
@@ -1245,53 +1246,53 @@ bool CppSupportPart::parseProject( bool force )
 {
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 1" << endl;
 	mainWindow() ->statusBar() ->message( i18n( "Updating..." ) );
-	
+
 	kapp->setOverrideCursor( waitCursor );
-	
+
 	_jd = new JobData;
 	_jd->file.setName( project() ->projectDirectory() + "/" + project() ->projectName() + ".pcs" );
-	
+
 	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
-	
+
 	if ( !force && !QFile::exists( skip_file_name ) && _jd->file.open( IO_ReadOnly ) )
 	{
 		_jd->stream.setDevice( &( _jd->file ) );
-		
+
 		createIgnorePCSFile();
-		
+
 		QString sig;
 		int pcs_version = 0;
 		_jd->stream >> sig >> pcs_version;
 		if ( sig == "PCS" && pcs_version == KDEV_PCS_VERSION )
 		{
-			
+
 			int numFiles = 0;
 			_jd->stream >> numFiles;
 			kdDebug( 9007 ) << "Read " << numFiles << " files from pcs" << endl;
-			
+
 			for ( int i = 0; i < numFiles; ++i )
 			{
 				QString fn;
 				uint ts;
 				uint offset;
-				
+
 				_jd->stream >> fn >> ts >> offset;
 				_jd->pcs[ fn ] = qMakePair( ts, offset );
 			}
 		}
 	}
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 2" << endl;
-	
+
 	_jd->files = reorder( modifiedFileList() );
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 3" << endl;
-	
+
 	QProgressBar* bar = new QProgressBar( _jd->files.count( ), mainWindow( ) ->statusBar( ) );
 	bar->setMinimumWidth( 120 );
 	bar->setCenterIndicator( true );
 	mainWindow( ) ->statusBar( ) ->addWidget( bar );
 	bar->show( );
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 4" << endl;
-	
+
 	_jd->progressBar = bar;
 	_jd->dir.setPath( m_projectDirectory );
 	_jd->it = _jd->files.begin();
@@ -1301,7 +1302,7 @@ bool CppSupportPart::parseProject( bool force )
 
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 5" << endl;
 	QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
-	
+
 	return true;
 }
 
@@ -1317,13 +1318,13 @@ void CppSupportPart::slotParseFiles()
 	if ( _jd->cycle == 0 && !m_projectClosed && _jd->it != _jd->files.end() )
 	{
 		_jd->progressBar->setProgress( _jd->progressBar->progress() + 1 );
-		
+
 		QFileInfo fileInfo( _jd->dir, *( _jd->it ) );
-		
+
 		if ( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() )
 		{
 			QString absFilePath = URLUtil::canonicalPath( fileInfo.absFilePath() );
-			
+
 			if ( isValidSource( absFilePath ) )
 			{
 				QDateTime t = fileInfo.lastModified();
@@ -1359,7 +1360,7 @@ void CppSupportPart::slotParseFiles()
 
 		++( _jd->it );
 		QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
-		
+
 		if( _jd->it == _jd->files.end()) {
 			if( _jd->reparseList.isEmpty() ) {
 				_jd->backgroundCount = 0;
@@ -1374,7 +1375,7 @@ void CppSupportPart::slotParseFiles()
 				_jd->progressBar->setProgress( 0 ); ///restart progress-bar for reparsing
 				_jd->progressBar->setTotalSteps( _jd->backgroundCount );
 			}
-			
+
 			_jd->lastBackgroundState = -1;
 			_jd->backgroundState = 0;
 			_jd->cycle = 1;
@@ -1386,7 +1387,7 @@ void CppSupportPart::slotParseFiles()
 	{
 		if( _jd->backgroundCount <= _jd->backgroundState || m_projectClosed ) {
 			mainWindow( ) ->statusBar( ) ->removeWidget( _jd->progressBar );
-			
+
 			if ( !m_projectClosed )
 			{
 				kdDebug( 9007 ) << "updating sourceinfo" << endl;
@@ -1400,7 +1401,7 @@ void CppSupportPart::slotParseFiles()
 			{
 				kdDebug( 9007 ) << "ABORT" << endl;
 			}
-			
+
 			delete _jd;
 			_jd = 0;
 		} else {
@@ -1443,10 +1444,10 @@ void CppSupportPart::maybeParse( const QString& fn, bool background  )
 	QFileInfo fileInfo( fn );
 	QString path = URLUtil::canonicalPath( fn );
 	QDateTime t = fileInfo.lastModified();
-	
+
 	if ( !fileInfo.exists() )
 		return;
-	
+
 	QMap<QString, QDateTime>::Iterator it = m_timestamp.find( path );
 	if ( codeModel()->hasFile( fn ) && it != m_timestamp.end() && *it == t )
 		return;
@@ -1466,23 +1467,23 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 {
 	if ( 1 || !m_activeEditor )
 		return ;
-	
+
 	m_backgroundParser->lock();
 	TranslationUnitAST* ast = *m_backgroundParser->translationUnit( m_activeFileName );
 	AST* node = 0;
 	if ( ast && ( node = findNodeAt( ast, line, column ) ) )
 	{
-		
+
 		while ( node && node->nodeType() != NodeType_FunctionDefinition )
 			node = node->parent();
-		
+
 		if ( node )
 		{
 			int startLine, startColumn;
 			int endLine, endColumn;
 			node->getStartPosition( &startLine, &startColumn );
 			node->getEndPosition( &endLine, &endColumn );
-			
+
 			if ( !node->text().isNull() )
 				textHint = node->text();
 			else
@@ -1503,7 +1504,7 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 	{
 		unsigned int line, column;
 		m_activeViewCursor->cursorPositionReal( &line, &column );
-		
+
 		AST* currentNode = findNodeAt( translationUnit, line, column );
 		DeclaratorAST* declarator = 0;
 		while ( currentNode && currentNode->nodeType() != NodeType_SimpleDeclaration )
@@ -1519,17 +1520,17 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 			if ( i )
 				declarator = i->declarator();
 		}
-		
+
 		if ( decl && declarator && declarator->parameterDeclarationClause() )
 		{
-			
+
 			QStringList scope;
 			scopeOfNode( decl, scope );
-			
+
 			QString scopeStr = scope.join( "::" );
 			if ( !scopeStr.isEmpty() )
 				scopeStr += "::";
-			
+
 			QString declStr = declaratorToString( declarator, scopeStr ).simplifyWhiteSpace();
 			if ( declarator->exceptionSpecification() )
 			{
@@ -1540,27 +1541,27 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 				{
 					declStr += type_it.current() ->text();
 					++type_it;
-					
+
 					if ( type_it.current() )
 						declStr += QString::fromLatin1( ", " );
 				}
-				
+
 				declStr += QString::fromLatin1( " )" );
 			}
-			
+
 			text += "\n\n";
 			QString type = typeSpecToString( decl->typeSpec() );
 			text += type;
 			if ( !type.isNull() )
 				text += + " ";
-			
+
 			text += declStr + "\n{\n}";
 		}
-		
+
 		m_backgroundParser->unlock();
-		
+
 		QString implFile = findSourceFile();
-		
+
 		m_backgroundParser->lock();
 		translationUnit = *m_backgroundParser->translationUnit( implFile );
 		if ( translationUnit )
@@ -1580,11 +1581,11 @@ void CppSupportPart::slotMakeMember()
 	QString text;
 	int atColumn, atLine;
 	MakeMemberHelper( text, atLine, atColumn );
-	
+
 	if ( !text.isEmpty() )
 	{
 		QString implFile = findSourceFile();
-		
+
 		if ( !implFile.isEmpty() )
 		{
 			partController() ->editDocument( KURL( implFile ) );
@@ -1592,17 +1593,17 @@ void CppSupportPart::slotMakeMember()
 		}
 		if ( atLine == -2 )
 			atLine = m_activeEditor->numLines() - 1;
-		
+
 		m_backgroundParser->lock ()
 			;
-		
+
 		kdDebug() << "at line in mm: " << atLine << " atCol: " << atColumn << endl;
 		kdDebug() << "text: " << text << endl;
 		if ( m_activeEditor )
 			m_activeEditor->insertText( atLine, atColumn, text );
 		if ( m_activeViewCursor )
 			m_activeViewCursor->setCursorPositionReal( atLine + 3, 1 );
-		
+
 		m_backgroundParser->unlock();
 	}
 }
@@ -1626,14 +1627,14 @@ QStringList CppSupportPart::updateWidget( const QString& formName, const QString
 void CppSupportPart::partRemoved( KParts::Part* part )
 {
 	kdDebug( 9032 ) << "CppSupportPart::partRemoved()" << endl;
-	
+
 	if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part ) )
 	{
-		
+
 		QString fileName = doc->url().path();
 		if ( !isValidSource( fileName ) )
 			return ;
-		
+
 		QString canonicalFileName = URLUtil::canonicalPath( fileName );
 		m_backgroundParser->removeFile( canonicalFileName );
 		m_backgroundParser->addFile( canonicalFileName, true );
@@ -1649,29 +1650,29 @@ void CppSupportPart::slotProjectCompiled()
 QStringList CppSupportPart::modifiedFileList()
 {
 	QStringList lst;
-	
+
 	QStringList fileList = m_projectFileList;
 	QStringList::Iterator it = fileList.begin();
 	while ( it != fileList.end() )
 	{
 		QString fileName = *it;
 		++it;
-		
+
 		QFileInfo fileInfo( m_projectDirectory, fileName );
 		QString path = URLUtil::canonicalPath( fileInfo.absFilePath() );
-		
+
 		if ( !( isSource( path ) || isHeader( path ) ) )
 			continue;
-		
+
 		QDateTime t = fileInfo.lastModified();
-		
+
 		QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( path );
 		if ( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
 			continue;
-		
+
 		lst << fileName;
 	}
-	
+
 	return lst;
 }
 
@@ -1679,7 +1680,7 @@ KTextEditor::Document * CppSupportPart::findDocument( const KURL & url )
 {
 	if ( !partController() ->parts() )
 		return 0;
-	
+
 	QPtrList<KParts::Part> parts( *partController() ->parts() );
 	QPtrListIterator<KParts::Part> it( parts );
 	while ( KParts::Part * part = it.current() )
@@ -1689,7 +1690,7 @@ KTextEditor::Document * CppSupportPart::findDocument( const KURL & url )
 			return doc;
 		++it;
 	}
-	
+
 	return 0;
 }
 
@@ -1795,15 +1796,15 @@ void CppSupportPart::setPcsVersion( int version )
 QString CppSupportPart::formatTag( const Tag & inputTag )
 {
 	Tag tag = inputTag;
-	
+
 	switch ( tag.kind() )
 	{
 	case Tag::Kind_Namespace:
 		return QString::fromLatin1( "namespace " ) + tag.name();
-		
+
 	case Tag::Kind_Class:
 		return QString::fromLatin1( "class " ) + tag.name();
-		
+
 	case Tag::Kind_Function:
 	case Tag::Kind_FunctionDeclaration:
 		{
@@ -1811,7 +1812,7 @@ QString CppSupportPart::formatTag( const Tag & inputTag )
 			return tagInfo.name() + "( " + tagInfo.arguments().join( ", " ) + " ) : " + tagInfo.type();
 		}
 		break;
-		
+
 	case Tag::Kind_Variable:
 	case Tag::Kind_VariableDeclaration:
 		{
@@ -1826,7 +1827,7 @@ QString CppSupportPart::formatTag( const Tag & inputTag )
 void CppSupportPart::codeCompletionConfigStored( )
 {
 	if ( m_projectClosing ) return;
-	
+
 	m_backgroundParser->updateParserConfiguration();
 	KDevDriver* d = dynamic_cast<KDevDriver*>( m_driver );
 	if( d ) d->setup();
@@ -1848,9 +1849,9 @@ kdDebug( 9007 ) << "remove with references: " << fileName << endl;
 	m_timestamp.remove( fileName );
 	if ( !codeModel() ->hasFile( fileName ) )
 		return ;
-	
+
 	emit aboutToRemoveSourceInfo( fileName );
-	
+
 	codeModel() ->removeFile( codeModel() ->fileByName( fileName ) );
 }
 
@@ -1858,7 +1859,7 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
 {
 	QFileInfo fileInfo( fileName );
 	QString path = URLUtil::canonicalPath( fileInfo.absFilePath() );
-	
+
 	return project() && project() ->isProjectFile( path )
 		&& ( isSource( path ) || isHeader( path ) )
 		&& !QFile::exists( fileInfo.dirPath( true ) + "/.kdev_ignore" );
@@ -1879,10 +1880,10 @@ QString CppSupportPart::formatModelItem( const CodeModelItem *item, bool shortDe
 		}
 		if ( !shortDescription )
 			function += ( model->isVirtual() ? QString( "virtual " ) : QString( "" ) ) + model->resultType() + " ";
-		
+
 		function += model->name() + "(" + args + ")" + ( model->isConstant() ? QString( " const" ) : QString( "" ) ) +
 			( model->isAbstract() ? QString( " = 0" ) : QString( "" ) );
-		
+
 		return function;
 	}
 	else if ( item->isVariable() )
@@ -1915,10 +1916,10 @@ void CppSupportPart::addClass()
 void CppSupportPart::saveProjectSourceInfo()
 {
 	const FileList fileList = codeModel() ->fileList();
-	
+
 	if ( !project() || fileList.isEmpty() )
 		return ;
-	
+
 	QFile f( project() ->projectDirectory() + "/" + project() ->projectName() + ".pcs" );
 	if ( !f.open( IO_WriteOnly ) )
 		return ;
@@ -1926,10 +1927,10 @@ void CppSupportPart::saveProjectSourceInfo()
 	m_backgroundParser->lock();
 
 	createIgnorePCSFile();
-	
+
 	QDataStream stream( &f );
 	QMap<QString, uint> offsets;
-	
+
 	QString pcs( "PCS" );
 	stream << pcs << KDEV_PCS_VERSION;
 
@@ -1944,21 +1945,21 @@ void CppSupportPart::saveProjectSourceInfo()
 		offsets.insert( dom->name(), stream.device() ->at() );
 		stream << ( uint ) 0; // dummy offset
 	}
-	
+
 	for ( FileList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		const FileDom dom = ( *it );
 		int offset = stream.device() ->at();
-		
+
 		dom->write( stream );
-		
+
 		int end = stream.device() ->at();
-		
+
 		stream.device() ->at( offsets[ dom->name() ] );
 		stream << offset;
 		stream.device() ->at( end );
 	}
-	
+
 	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
 	QFile::remove
 		( skip_file_name );
@@ -1970,11 +1971,11 @@ QString CppSupportPart::extractInterface( const ClassDom& klass )
 {
 	QString txt;
 	QTextStream stream( &txt, IO_WriteOnly );
-	
+
 	QString name = klass->name() + "Interface";
 	QString ind;
 	ind.fill( QChar( ' ' ), 4 );
-	
+
 	stream
 		<< "class " << name << "\n"
 		<< "{" << "\n"
@@ -1982,29 +1983,29 @@ QString CppSupportPart::extractInterface( const ClassDom& klass )
 		<< ind << name << "() {}" << "\n"
 		<< ind << "virtual ~" << name << "() {}" << "\n"
 		<< "\n";
-	
+
 	const FunctionList functionList = klass->functionList();
 	for ( FunctionList::ConstIterator it = functionList.begin(); it != functionList.end(); ++it )
 	{
 		const FunctionDom& fun = *it;
-		
+
 		if ( !fun->isVirtual() || fun->name().startsWith( "~" ) )
 			continue;
-		
+
 		stream << ind << formatModelItem( fun );
 		if ( !fun->isAbstract() )
 			stream << " = 0";
-		
+
 		stream << ";\n";
 	}
-	
+
 	stream
 		<< "\n"
 		<< "private:" << "\n"
 		<< ind << name << "( const " << name << "& source );" << "\n"
 		<< ind << "void operator = ( const " << name << "& source );" << "\n"
 		<< "};" << "\n\n";
-	
+
 	return txt;
 }
 
@@ -2012,7 +2013,7 @@ void CppSupportPart::slotExtractInterface( )
 {
 	if ( !m_activeClass )
 		return ;
-	
+
 	QFileInfo fileInfo( m_activeClass->fileName() );
 	QString ifaceFileName = fileInfo.dirPath( true ) + "/" + m_activeClass->name().lower() + "_interface.h";
 	if ( QFile::exists( ifaceFileName ) )
@@ -2023,7 +2024,7 @@ void CppSupportPart::slotExtractInterface( )
 	else
 	{
 		QString text = extractInterface( m_activeClass );
-		
+
 		QFile f( ifaceFileName );
 		if ( f.open( IO_WriteOnly ) )
 		{
@@ -2036,11 +2037,11 @@ void CppSupportPart::slotExtractInterface( )
 				<< "\n"
 				<< "#endif // __" << m_activeClass->name().upper() << "_INTERFACE_H" << "\n";
 			f.close();
-			
+
 			project() ->addFile( ifaceFileName );
 		}
 	}
-	
+
 	m_activeClass = 0;
 }
 
@@ -2083,7 +2084,7 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 
 		if( fileGroups.find( *it ) != fileGroups.end() )
 			cgroup = fileGroups[*it];
-		
+
 		for( QStringList::iterator lit = lst.begin(); lit != lst.end(); ++lit )
 			fileGroups[*lit] = cgroup;
 	}
@@ -2099,7 +2100,7 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 	for( int a = 0; a < nextGroup; a++ ) {
 		QStringList group = reorder( groups[a] );
 
-		
+
 		kdDebug() << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";
 		if( background ) {
 			if( !group.isEmpty() ) {
@@ -2114,12 +2115,12 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 						m_fileParsedEmitWaiting.addGroupFront( group, silent ? ParseEmitWaiting::Silent : ParseEmitWaiting::None  );
 				}
 			}
-			
+
 			if( parseFirst && !group.empty() ) {
 				for(QStringList::iterator it = --group.end(); it != group.end(); ) {
 					backgroundParser()->addFileFront(*it);
 					if( it == group.begin() ) {
-						it = group.end(); 
+						it = group.end();
 					} else {
 						--it;
 					}
@@ -2142,10 +2143,10 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 
 	return fileGroups.count();
 }
-	
+
 int CppSupportPart::parseFileAndDependencies( const QString & fileName, bool background, bool parseFirst, bool silent ) {
 	if(! isValidSource( fileName ) ) return 0;
-	
+
 	kdDebug() << "reparsing dependencies of " << fileName << "\n";
 
 	return parseFilesAndDependencies( fileName, background, parseFirst, silent );
@@ -2153,13 +2154,13 @@ int CppSupportPart::parseFileAndDependencies( const QString & fileName, bool bac
 
 void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 	if( files.res.isEmpty() ) return;
-    
+
 	bool modelHasFiles = true;
 
 	for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it ) {
 		if( !codeModel()->hasFile( *it ) ) modelHasFiles = false;
 	}
-	
+
 	int oldFileCount = codeModel()->fileList().count();
 
 	if( (files.flag & ParseEmitWaiting::HadErrors) && modelHasFiles && !files.hasFlag( ParseEmitWaiting::Silent ) ) {
@@ -2186,14 +2187,14 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 		if( files.hasFlag( ParseEmitWaiting::Silent ) && !alwaysParseInBackground )
 		  return;
-		
+
 		m_backgroundParser->lock();
-		
+
 		QStringList l = files.res;
-	
+
 		//QValueList<FileDom> fileBackups;
-		
-		while(!l.isEmpty() ) 
+
+		while(!l.isEmpty() )
 		{
 			if ( codeModel() ->hasFile( l.back() ) && m_backgroundParser->hasTranslationUnit( l.back() ) )
 			{
@@ -2208,21 +2209,21 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 				  m_timestamp[ path ] = fileInfo.lastModified();
 			}
-			
+
 			l.pop_back();
 		}
-		
+
 		l = files.res;
-		
+
 		///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
 		int currentGroup = 0;
 
 		QMap<QString, bool> wholeResult;
 		QStringList missing;
-		
+
 		while(!l.isEmpty() ) {
 			QString fileName = l.front();
-			
+
 			if( !m_backgroundParser->hasTranslationUnit( fileName ) ) {
 			  	kdDebug( 9007 ) << "error: translation-unit is missing" << endl;
 				missing << fileName;
@@ -2239,7 +2240,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 							for( QStringList::const_iterator it = grp.begin(); it != grp.end(); ++it )
 								wholeResult[*it] = true;
 						}
-						
+
 						/*
 							///Merge the groups together so that files parsed together get into one group again
 							if( walker.file() ) {
@@ -2257,23 +2258,23 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 				}
 			}
 
-				
+
 			l.pop_front();
 		}
 
 		///make the list unique
-		
+
 		l.clear();
 		for( QMap<QString, bool>::const_iterator it = wholeResult.begin(); it != wholeResult.end(); ++it )
 			l << it.key();
-		
+
 		m_backgroundParser->unlock();
 
 		if( !missing.isEmpty() ) {
 			kdDebug( 9007 ) << "error: translation-units were missing: " << missing << "\nreparsing them" << endl;
 			parseFilesAndDependencies( missing, true, false, files.hasFlag( ParseEmitWaiting::Silent ) );
 		}
-		
+
 		if( files.hasFlag( ParseEmitWaiting::Silent ) ) {
 			if( alwaysParseInBackground )
 			for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
@@ -2291,7 +2292,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 /*void CppSupportPart::recomputeCodeModel( const QString& fileName )
 {*/
-	
+
 //}
 
 void CppSupportPart::emitSynchronousParseReady( const QString& file, ParsedFilePointer unit ) {
@@ -2311,7 +2312,7 @@ bool CppSupportPart::isHeader( const QString& fileName ) const
 	/*KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
 	if ( ptr && m_headerMimeTypes.contains( ptr->name() ) )
 		return true;*/
-	
+
 	return ( m_headerExtensions.findIndex( QFileInfo( fileName ).extension() ) != -1 );
 }
 
@@ -2320,7 +2321,7 @@ bool CppSupportPart::isSource( const QString& fileName ) const
 	/*KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
 	if ( ptr && m_sourceMimeTypes.contains( ptr->name() ) )
 		return true;*/
-	
+
 	return ( m_sourceExtensions.findIndex( QFileInfo( fileName ).extension() ) != -1 );
 }
 
@@ -2340,7 +2341,7 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 {
 	if ( !QFile::exists( dbName ) )
 		return ;
-	
+
 	QValueList<Catalog*> catalogs = codeRepository() ->registeredCatalogs();
 	Catalog* c = 0;
 	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
@@ -2351,13 +2352,13 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 			break;
 		}
 	}
-	
+
 	if ( c )
 	{
 		codeRepository() ->unregisterCatalog( c );
 		m_catalogList.remove( c );
 	}
-	
+
 	QFileInfo fileInfo( dbName );
 	QDir dir( fileInfo.dir( true ) );
 	QStringList fileList = dir.entryList( fileInfo.baseName() + "*.idx" );
@@ -2367,7 +2368,7 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 	kdDebug( 9007 ) << "=========> remove db index: " << idxName << endl;
 		dir.remove( *it );
 	}
-	
+
 	dir.remove( fileInfo.fileName() );
 }
 
@@ -2381,9 +2382,9 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( int line, int column
 {
 	if ( !codeModel() ->hasFile( m_activeFileName ) )
 		return FunctionDefinitionDom();
-	
+
 	CodeModelUtils::CodeModelHelper h( codeModel(), codeModel()->fileByName( m_activeFileName ) );
-	
+
 	FunctionDom d = h.functionAt( line, column, CodeModelUtils::CodeModelHelper::Definition );
 	if( d ) {
 		FunctionDefinitionModel* m = dynamic_cast<FunctionDefinitionModel*>( d.data() );
@@ -2396,7 +2397,7 @@ FunctionDefinitionDom CppSupportPart::currentFunctionDefinition( )
 {
 	if ( !this->m_activeViewCursor )
 		return FunctionDefinitionDom();
-	
+
 	unsigned int line, column;
 	this->m_activeViewCursor->cursorPositionReal( &line, &column );
 	return functionDefinitionAt( line, column );
@@ -2405,7 +2406,7 @@ FunctionDefinitionDom CppSupportPart::currentFunctionDefinition( )
 void CppSupportPart::slotCursorPositionChanged()
 {
 	//    m_functionHintTimer->changeInterval( 1000 );
-	if ( splitHeaderSourceConfig()->splitEnabled() 
+	if ( splitHeaderSourceConfig()->splitEnabled()
 	     && splitHeaderSourceConfig()->autoSync() )
 		slotSwitchHeader( true );
 }
@@ -2420,9 +2421,9 @@ void CppSupportPart::slotFunctionHint( )
 		QString funName = scope.join( "::" );
 		if ( !funName.isEmpty() )
 			funName += "::";
-		
+
 		funName += formatModelItem( fun, true );
-		
+
 		mainWindow() ->statusBar() ->message( funName, 2000 );
 	}
 }
@@ -2430,7 +2431,7 @@ void CppSupportPart::slotFunctionHint( )
 void CppSupportPart::createIgnorePCSFile( )
 {
 	static QCString skip_me( "ignore me\n" );
-	
+
 	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
 	QFile skip_pcs_file( skip_file_name );
 	if ( skip_pcs_file.open( IO_WriteOnly ) )
@@ -2444,19 +2445,19 @@ QString CppSupportPart::specialHeaderName( bool local ) const
 {
 	if ( local )
 		return ::locateLocal( "data", "kdevcppsupport/configuration", CppSupportFactory::instance() );
-	
+
 	return ::locate( "data", "kdevcppsupport/configuration", CppSupportFactory::instance() );
 }
 
 void CppSupportPart::updateParserConfiguration()
 {
 	m_backgroundParser->updateParserConfiguration();
-	
+
 	QString conf_file_name = specialHeaderName();
 	m_driver->removeAllMacrosInFile( conf_file_name );
-	
+
 	m_driver->parseFile( conf_file_name, true, true );
-	
+
 	parseProject( true );
 }
 
@@ -2540,14 +2541,14 @@ void CppSupportPart::addMethod( ClassDom aClass, const QString& name, const QStr
 
 	// construct fully qualified name for method definition
 	QString fullyQualifiedName = aClass->scope().join("::");
-	if (! fullyQualifiedName.isEmpty()) 
+	if (! fullyQualifiedName.isEmpty())
 	{
 		fullyQualifiedName += "::";
 	}
 	fullyQualifiedName += aClass->name() + "::" + name;
-	
+
 	QString definitionString = "\n" + type + " " + fullyQualifiedName + "(" + parameters + ")" + ( isConst ? " const" : "" ) + "\n{\n" + implementation + "\n}\n";
-	
+
 	if ( sourceFormatter != 0 )
 		definitionString = sourceFormatter->formatSource( definitionString );
 
@@ -2578,7 +2579,7 @@ ClassDom CppSupportPart::currentClass( ) const
 	m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
 
 	CodeModelUtils::CodeModelHelper h( codeModel(), file );
-	
+
 	return h.classAt( curLine, curCol );
 }
 
@@ -2586,12 +2587,12 @@ VariableDom CppSupportPart::currentAttribute( ClassDom curClass ) const
 {
 	if ( m_activeViewCursor == 0 || curClass == 0 )
 		return 0;
-	
+
 	unsigned int line, col;
 	m_activeViewCursor->cursorPositionReal( &line, &col );
-	
+
 	VariableList vars = curClass->variableList();
-	
+
 	for ( VariableList::iterator i = vars.begin(); i != vars.end(); ++i )
 	{
 		int startLine, startCol;
@@ -2640,19 +2641,19 @@ int CppSupportPart::findInsertionLineVariable( ClassDom aClass, CodeModelItem::A
 {
 	int line, column;
 	aClass->getEndPosition( &line, &column );
-	
+
 	int point = CodeModelUtils::findLastVariableLine( aClass, access );
-	
+
 	if ( point == -1 )
 	{
 		KTextEditor::EditInterface * editIface = dynamic_cast<KTextEditor::EditInterface*>( partController() ->activePart() );
 		if ( !editIface )
 			return -1;
-		
+
 		editIface->insertLine( line - 1, CodeModelUtils::accessSpecifierToString( access ) + ":\n" );
 		return line;
 	}
-	
+
 	return point;
 }
 
@@ -2660,7 +2661,7 @@ void CppSupportPart::createAccessMethods( ClassDom theClass, VariableDom theVari
 {
 	m_curClass = theClass;
 	m_curAttribute = theVariable;
-	
+
 	slotCreateAccessMethods();
 }
 
