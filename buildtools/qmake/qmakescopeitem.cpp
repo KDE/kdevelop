@@ -686,24 +686,28 @@ void QMakeScopeItem::addValues( const QString& var, const QStringList& values )
 
 void QMakeScopeItem::removeValue( const QString& var, const QString& value )
 {
-    while( scope->variableValues( var ).contains( value ) )
+    if( scope->scopeType() != Scope::IncludeScope && scope->variableValues( var ).contains( value ) )
     {
         if( scope->variableValuesForOp( var, "+=" ).contains(value) )
             scope->removeFromPlusOp( var, QStringList( value ) );
         else
             scope->addToMinusOp( var, QStringList( value ) );
+    }else if( scope->scopeType() == Scope::IncludeScope )
+    {
+        scope->addToMinusOp( var, QStringList( value ) );
     }
 }
 
 void QMakeScopeItem::addValue( const QString& var, const QString& value )
 {
-    while( !scope->variableValues( var ).contains( value ) )
+    if( scope->scopeType() != Scope::IncludeScope && !scope->variableValues( var ).contains( value ) )
     {
         if( scope->variableValuesForOp( var, "-=" ).contains(value) )
             scope->removeFromMinusOp( var, QStringList( value ) );
         else
             scope->addToPlusOp( var, QStringList( value ) );
-    }
+    }else if( scope->scopeType() == Scope::IncludeScope )
+        scope->addToPlusOp( var, QStringList( value ) );
 }
 
 void QMakeScopeItem::updateValues( const QString& var, const QStringList& values )

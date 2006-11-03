@@ -317,10 +317,10 @@ QStringList Scope::calcValuesFromStatements( const QString& variable, QStringLis
     {
         result = m_parent->calcValuesFromStatements( variable, result , this->m_root );
     }
-    else if ( scopeType() == IncludeScope )
-    {
-        result = m_parent->calcValuesFromStatements( variable, result , this->m_incast );
-    }
+//     else if ( scopeType() == IncludeScope )
+//     {
+//         result = m_parent->calcValuesFromStatements( variable, result , this->m_incast );
+//     }
 
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
@@ -1155,7 +1155,9 @@ Scope* Scope::disableSubproject( const QString& dir)
     if( !m_root || ( m_root->isProject() && !m_incast ) )
         return 0;
 
-    if( variableValuesForOp( "SUBDIRS", "+=").contains( dir ) )
+    if( scopeType() != Scope::IncludeScope && variableValuesForOp( "SUBDIRS", "+=").contains( dir ) )
+        removeFromPlusOp( "SUBDIRS", dir );
+    else if( scopeType() != Scope::IncludeScope )
         removeFromPlusOp( "SUBDIRS", dir );
 
     QDir curdir( projectDir() );
