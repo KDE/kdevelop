@@ -14,6 +14,7 @@ set( cmakecommon_SRCS
   parser/cmListFileLexer.c
   parser/astfactory.cpp
   parser/cmakelistsparser.cpp
+  parser/cmakeast.cpp
  )
 
 set( cmakeimporter_SRCS

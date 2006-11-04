@@ -22,10 +22,18 @@
 #include <QtCore/QString>
 
 #include "astfactory.h"
+#include "cmakeast.h"
 
-class Ast { int foo; };
 
 QTEST_MAIN( AstFactoryTest );
+
+class FooAst : public CMakeAst
+{
+public:
+    static CMakeAst* createFooAst() {
+        return new FooAst;
+    }
+};
 
 
 AstFactoryTest::AstFactoryTest()
@@ -39,28 +47,46 @@ AstFactoryTest::~AstFactoryTest()
 
 void AstFactoryTest::testNonRegisteredObject()
 {
-    Ast* a = AstFactory::self()->createAst( "foo" );
+    CMakeAst* a = AstFactory::self()->createAst( "foo" );
     QVERIFY( a == 0 );
 }
 
 void AstFactoryTest::testRegisteredObject()
 {
     const QString fooType = "foo";
-
-    class FooAst : public Ast
-    {
-    public:
-        static Ast* createFooAst() {
-            return new FooAst;
-        }
-
-    };
-
     bool registered = AstFactory::self()->registerAst( fooType,
                                                          &FooAst::createFooAst );
-    Ast* foo = AstFactory::self()->createAst( QLatin1String( "foo" ) );
+    AstFactory::self()->unregisterAst( fooType );
+    QVERIFY( registered );
+}
 
-    QVERIFY( foo != 0 );
+void AstFactoryTest::testCaseSensitivity()
+{
+    const QString fooType = "Foo";
+    bool registered = AstFactory::self()->registerAst( "Foo", &FooAst::createFooAst );
+    bool notRegistered = AstFactory::self()->registerAst( "FOO", &FooAst::createFooAst );
+    AstFactory::self()->unregisterAst( fooType );
+    QVERIFY( registered == true );
+    QVERIFY( notRegistered == false );
+}
+
+void AstFactoryTest::testUnregisterObject()
+{
+    bool registered = AstFactory::self()->registerAst( "Foo", &FooAst::createFooAst );
+    bool unregistered = AstFactory::self()->unregisterAst( "Foo" );
+
+    QVERIFY( registered );
+    QVERIFY( unregistered );
+}
+
+void AstFactoryTest::testCreateObject()
+{
+    bool registered = AstFactory::self()->registerAst( "Foo",  &FooAst::createFooAst );
+    QVERIFY( registered );
+
+    CMakeAst* ast = AstFactory::self()->createAst( "foo" );
+    QVERIFY( ast != 0 );
+    delete ast;
 }
 
 #include "astfactorytest.moc"

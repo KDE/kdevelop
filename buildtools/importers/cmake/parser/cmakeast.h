@@ -21,11 +21,14 @@
 #ifndef CMAKEAST_H
 #define CMAKEAST_H
 
+#include <QtCore/QList>
+
 class CMakeAst
 {
 public:
-    CMakeAst() {}
-    virtual ~CMakeAst() {}
+    CMakeAst() { }
+    CMakeAst( const CMakeAst& ast ) : m_children( ast.m_children ) {}
+    virtual ~CMakeAst() { qDeleteAll( m_children ); }
 
     /**
      * Adds a child Ast Node to this node. This will only have uses in cases

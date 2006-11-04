@@ -31,7 +31,10 @@ public:
 
 private slots:
     void testNonRegisteredObject();
+    void testUnregisterObject();
     void testRegisteredObject();
+    void testCaseSensitivity();
+    void testCreateObject();
 
 };
 

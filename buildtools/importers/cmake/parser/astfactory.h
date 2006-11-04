@@ -21,11 +21,11 @@
 #ifndef ASTFACTORY_H
 #define ASTFACTORY_H
 
-#include <map>
+#include <QtCore/QMap>
 
 
 class QString;
-class Ast;
+class CMakeAst;
 
 class AstFactory
 {
@@ -34,7 +34,7 @@ public:
     static AstFactory* self();
 
     ///Alias for the AST creation callback
-    typedef Ast* ( *CreateAstCallback )();
+    typedef CMakeAst* ( *CreateAstCallback )();
 public:
     ///Returns true if registration was successful
     bool registerAst( const QString& astId,
@@ -45,10 +45,10 @@ public:
 
     ///Create the AST specified by @p astId
     ///Return either a valid AST object or zero.
-    Ast* createAst( const QString& astId );
+    CMakeAst* createAst( const QString& astId );
 
 private:
-    typedef std::map<QString, CreateAstCallback> CallbackMap;
+    typedef QMap<QString, CreateAstCallback> CallbackMap;
     AstFactory();
     class Private;
     Private* d;

@@ -22,8 +22,7 @@
 #include <map>
 #include <QtCore/QString>
 #include <kstaticdeleter.h>
-
-class Ast { int foo; };
+#include "cmakeast.h"
 
 class AstFactory::Private
 {
@@ -53,23 +52,26 @@ AstFactory::AstFactory()
 bool AstFactory::registerAst( const QString& astId,
                               CreateAstCallback createFn )
 {
-    return d->callbacks.insert( CallbackMap::value_type( astId,
-                                                         createFn ) ).second;
+    if ( d->callbacks.contains( astId.toLower() ) )
+         return false;
+
+    d->callbacks.insert( astId.toLower(), createFn );
+    return true;
 }
 
 
 bool AstFactory::unregisterAst( const QString& astId )
 {
-    return d->callbacks.erase( astId ) == 1;
+    return d->callbacks.remove( astId.toLower() ) == 1;
 }
 
 
-Ast* AstFactory::createAst( const QString& astId )
+CMakeAst* AstFactory::createAst( const QString& astId )
 {
-    CallbackMap::const_iterator it = d->callbacks.find( astId );
+    CallbackMap::const_iterator it = d->callbacks.find( astId.toLower() );
     if ( it == d->callbacks.end() )
         return 0;
 
-    return ( it->second )();
+    return ( it.value() )();
 
 }

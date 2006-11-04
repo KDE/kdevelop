@@ -20,16 +20,19 @@
 
 #include "cmakeast.h"
 
+#include <QtCore/QString>
+#include "astfactory.h"
+
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
         CMakeAst* Create##klassName() { return new klassName; }            \
-        AstFactory::self()->registerAst( #astId, Create##klassName ); };
+        bool registered = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
 
-#define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName { \
+#define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName : public CMakeAst {  \
     public:                                                  \
         klassName();                                         \
         ~klassName();                                        \
                                                              \
-        void writeBack( const QString& buffer );
+        virtual void writeBack( const QString& buffer );
 
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, name ) \
     public:                                              \
@@ -50,11 +53,19 @@ CMAKE_END_AST_CLASS( SetAst )
 CMAKE_REGISTER_AST( SetAst, set )
 
 
-
-
-
-
 void CMakeAst::writeBack(QString& buffer)
 {
 
+}
+
+SetAst::SetAst()
+{
+}
+
+SetAst::~SetAst()
+{
+}
+
+void SetAst::writeBack( const QString& buffer )
+{
 }
