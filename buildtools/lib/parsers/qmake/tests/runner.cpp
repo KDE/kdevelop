@@ -128,7 +128,12 @@ int main(int argc, char *argv[])
         PrintAST pa;
         if ( ret == 0 )
             if ((argc < 3) || ((argc == 3) && (strcmp(argv[2], "--silent") != 0)))
+            {
                 pa.processProject(projectAST);
+                QString profile;
+                projectAST->writeBack(profile);
+                kdDebug(9024) << "QMake file written back:\n" << profile << endl;
+            }
         return ret;
     }
     else
