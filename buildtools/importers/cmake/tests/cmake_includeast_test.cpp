@@ -34,6 +34,22 @@ void IncludeAstTest::testGoodParse()
 
 void IncludeAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3;
+    func1.name = "INCLUDE";
+    func2.name = func3.name = func1.name.toLower();
+
+    QStringList argList1, argList2;
+    argList1 << "SomeFile";
+    argList2 << "SomeFile" << "OPTIONAL";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList1 );
+    func3.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good upper" ) << func1;
+    QTest::newRow( "good lower" ) << func2;
+    QTest::newRow( "good all args" ) << func3;
 }
 
 void IncludeAstTest::testBadParse()
@@ -46,6 +62,20 @@ void IncludeAstTest::testBadParse()
 
 void IncludeAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "WrongFuncName";
+    func2.name = "include";
+
+    QStringList argList1, argList2;
+    argList1 << "SomeFile";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad wrong name" ) << func1;
+    QTest::newRow( "bad no args" ) << func2;
+
 }
 
 #include "cmake_includeast_test.moc"

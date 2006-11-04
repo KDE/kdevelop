@@ -320,6 +320,8 @@ CMAKE_END_AST_CLASS( IfAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, includeFile, IncludeFile )
+CMAKE_ADD_AST_MEMBER( bool, bool, optional, Optional )
 CMAKE_END_AST_CLASS( IncludeAst )
 
 

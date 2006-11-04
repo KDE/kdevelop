@@ -47,6 +47,7 @@ CMAKE_REGISTER_AST( BuildCommandAst, build_command )
 CMAKE_REGISTER_AST( BuildNameAst, build_name )
 CMAKE_REGISTER_AST( CMakeMinimumRequiredAst, cmake_minimum_required )
 CMAKE_REGISTER_AST( ConfigureFileAst, configure_file )
+CMAKE_REGISTER_AST( IncludeAst, include )
 CMAKE_REGISTER_AST( SetAst, set )
 
 CustomCommandAst::CustomCommandAst()
@@ -1082,6 +1083,7 @@ bool IfAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
 IncludeAst::IncludeAst()
 {
+    m_optional = false;
 }
 
 IncludeAst::~IncludeAst()
@@ -1094,7 +1096,16 @@ void IncludeAst::writeBack( QString& )
 
 bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "include" )
+        return false;
+    if ( func.arguments.size() < 1 || func.arguments.size() > 2 )
+        return false;
+
+    m_includeFile = func.arguments[0].value;
+    if ( func.arguments.size() == 2 && func.arguments[1].value == "OPTIONAL" )
+        m_optional = true;
+
+    return true;
 }
 
 IncludeDirectoriesAst::IncludeDirectoriesAst()
