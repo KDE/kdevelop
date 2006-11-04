@@ -45,9 +45,20 @@ target_link_libraries( cmake-parsertest
     kdevcmakecommon
 )
 
+set( astfactorytest_SRCS astfactorytest.cpp )
+kde4_automoc( ${astfactorytest_SRCS} )
+kde4_add_executable( cmake-astfactorytest NOGUI RUN_UNINSTALLED ${astfactorytest_SRCS} )
+target_link_libraries( cmake-astfactorytest
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatform
+    kdevcmakecommon
+)
+
 add_test(cmake-folderxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-folderxmltest)
 add_test(cmake-targetxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-targetxmltest)
 add_test(cmake-projectxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-projectxmltest)
 add_test(cmake-parsertest ${EXECUTABLE_OUTPUT_PATH}/cmake-parsertest)
+add_test(cmake-astfactorytest ${EXECUTABLE_OUTPUT_PATH}/cmake-astfactorytest)
 
 endif(KDE4_BUILD_TESTS)
