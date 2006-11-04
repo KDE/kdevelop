@@ -23,102 +23,17 @@
 
 #include <QtTest/QtTest>
 
-class CMakeAstTests : public QObject
+class CustomCommandAstTests : public QObject
 {
     Q_OBJECT
 public:
-    CMakeAstTests() {}
-    virtual ~CMakeAstTests() {}
+    CustomCommandAstTests() {}
+    virtual ~CustomCommandAstTests() {}
 
 private slots:
-    void testCustomCommandAstParsing();
-    void testCustomTargetAstParsing();
-    void testAddDefintionAstParsing();
-    void testAddDependenciesAstParsing();
-    void testAddExecutableAstParsing();
-    void testAddLibraryAstParsing();
-    void testAddSubdirectoryAstParsing();
-    void testAddTestAstParsing();
-    void testAuxSourceDirectoryAstParsing();
-    void testBuildCommandAstParsing();
-    void testBuildNameAstParsing();
-    void testMinimumVersionAstParsing();
-    void testConfigureFileAstParsing();
-    void testCreateTestSourceListAstParsing();
-    void testElseAstParsing();
-    void testEnableLanguageAstParsing();
-    void testEnableTestingAstParsing();
-    void testEndForeachAstParsing();
-    void testEndIfAstParsing();
-    void testEndMacroAstParsing();
-    void testEndWhileAstParsing();
-    void testExecProgramAstParsing();
-    void testExecuteProcessAstParsing();
-    void testExportLibraryDepsAstParsing();
-    void testFileAstParsing();
-    void testFindFileAstParsing();
-    void testFindLibraryAstParsing();
-    void testFindPackageAstParsing();
-    void testFindPathAstParsing();
-    void testFindProgramAstParsing();
-    void testFltkWrapUiAstParsing();
-    void testForeachAstParsing();
-    void testGetCmakePropertyAstParsing();
-    void testGetDirPropertyAstParsing();
-    void testGetFilenameComponentAstParsing();
-    void testGetSourceFilePropAstParsing();
-    void testGetTargetPropAstParsing();
-    void testGetTestPropAstParsing();
-    void testIfAstParsing();
-    void testIncludeAstParsing();
-    void testIncludeDirectoriesAstParsing();
-    void testIncludeExtMSProjectAstParsing();
-    void testIncludeRegexAstParsing();
-    void testInstallAstParsing();
-    void testInstallFilesAstParsing();
-    void testInstallProgramsAstParsing();
-    void testInstallTargetsAstParsing();
-    void testLinkDirsAstParsing();
-    void testLinkLibsAstParsing();
-    void testListAstParsing();
-    void testLoadCacheAstParsing();
-    void testLoadCommandAstParsing();
-    void testMacroAstParsing();
-    void testMakeDirAstParsing();
-    void testMarkAdvancedAstParsing();
-    void testMathAstParsing();
-    void testMessageAstParsing();
-    void testOptionAstParsing();
-    void testOutputReqFilesAstParsing();
-    void testProjectAstParsing();
-    void testQtWrapCppAstParsing();
-    void testQtWrapUiAstParsing();
-    void testRemoveAstParsing();
-    void testRemoveDefinitionsAstParsing();
-    void testSeparateArgsAstParsing();
-    void testSetAstParsing();
-    void testSetDirPropsAstParsing();
-    void testSetSourceFilePropsAstParsing();
-    void testSetTargetPropsAstParsing();
-    void testSetTestsPropsAstParsing();
-    void testSiteNameAstParsing();
-    void testSourceGroupAstParsing();
-    void testStringAstParsing();
-    void testSubdirDependsAstParsing();
-    void testSubdirsAstParsing();
-    void testTargetLinkLibsAstParsing();
-    void testTryCompileAstParsing();
-    void testTryRunAstParsing();
-    void testUseMangledMesaAstParsing();
-    void testUtilitySourceAstParsing();
-    void testVarRequiresAstParsing();
-    void testVtkMakeAstParsing();
-    void testVtkWrapJavaParsing();
-    void testVtkWrapPythonParsing();
-    void testVtkWrapTclParsing();
-    void testWhileParsing();
-    void testWriteFileParsing();
-
+    void testParsing();
+    void testParsing_data();
+    //void testWriteback();
 };
 
 #endif

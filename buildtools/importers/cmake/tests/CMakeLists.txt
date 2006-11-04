@@ -55,9 +55,10 @@ target_link_libraries( cmake-astfactorytest
     kdevcmakecommon
 )
 
-set( cmakeasttest_SRCS cmakeasttest.cpp )
-kde4_automoc( ${cmakeasttest_SRCS} )
-kde4_add_executable( cmake-asttest NOGUI RUN_UNINSTALLED ${cmakeasttest_SRCS} )
+set( customcommandasttest_SRCS cmakecustomcommandasttest.cpp )
+kde4_automoc( ${customcommandasttest_SRCS} )
+kde4_add_executable( cmake-customcommandasttest NOGUI RUN_UNINSTALLED 
+                     ${customcommandasttest_SRCS} )
 target_link_libraries( cmake-asttest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
@@ -70,5 +71,5 @@ add_test(cmake-targetxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-targetxmltest)
 add_test(cmake-projectxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-projectxmltest)
 add_test(cmake-parsertest ${EXECUTABLE_OUTPUT_PATH}/cmake-parsertest)
 add_test(cmake-astfactorytest ${EXECUTABLE_OUTPUT_PATH}/cmake-astfactorytest)
-add_test(cmake-asttests ${EXECUTABLE_OUTPUT_PATH}/cmake-asttest)
+add_test(cmake-customcommandtest ${EXECUTABLE_OUTPUT_PATH}/cmake-customcommandasttest)
 endif(KDE4_BUILD_TESTS)
