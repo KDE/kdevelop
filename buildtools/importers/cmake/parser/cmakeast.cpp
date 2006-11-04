@@ -30,8 +30,6 @@ void CMakeAst::writeBack(QString& buffer)
 }
 
 
-CMAKE_BEGIN_AST_CLASS( CustomCommandAst )
-CMAKE_END_AST_CLASS( CustomCommandAst )
 CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
 
 CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
@@ -47,10 +45,7 @@ CMAKE_BEGIN_AST_CLASS( SetAst )
 CMAKE_END_AST_CLASS( SetAst )
 CMAKE_REGISTER_AST( SetAst, set )
 
-    ;
-
-
-void CustomCommandAst::writeBack( const QString& /*buffer */ )
+void CustomCommandAst::writeBack( QString& /*buffer */ )
 {
 }
 

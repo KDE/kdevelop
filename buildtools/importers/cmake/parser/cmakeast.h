@@ -22,6 +22,8 @@
 #define CMAKEAST_H
 
 #include <QtCore/QList>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 class CMakeFunctionDesc;
 
@@ -65,6 +67,63 @@ protected:
 
 };
 
+class CustomCommandAst : public CMakeAst
+{
+public:
+    CustomCommandAst() {}
+    ~CustomCommandAst() {}
+
+    enum BuildStage {
+        PreBuild,
+        PreLink,
+        PostBuild };
+    bool isForTarget() const { return m_forTarget; }
+
+    QString targetName() const { return m_target; }
+    void setTargetName( const QString& target ) { m_target = target; }
+
+    BuildStage buildStage() const { return m_buildStage; }
+    void setBuildStage( BuildStage bs ) { m_buildStage = bs; }
+
+    void setOutputs( const QStringList& outputs ) { m_outputs = outputs; }
+    QStringList outputs() const { return m_outputs; }
+
+    void setCommands( const QStringList& commands ) { m_commands = commands; }
+    QStringList commands() const { return m_commands; }
+
+    void setMainDependency( const QString& mainDep ) { m_mainDep = mainDep; }
+    QString mainDependency() const { return m_mainDep; }
+
+    void setOtherDependencies( const QStringList& otherDeps) { m_otherDeps = otherDeps; }
+    QStringList otherDependencies() const { return m_otherDeps; }
+
+    void setWorkingDirectory( const QString& workingDir ) { m_workingDir = workingDir; }
+    QString workingDirectory() const { return m_workingDir; }
+
+    void setComment( const QString& comment ) { m_comment = comment; }
+    QString comment() const { return m_comment; }
+
+    virtual void writeBack( QString& );
+    virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
+
+private:
+    QString m_target;
+    bool m_forTarget;
+    BuildStage m_buildStage;
+    QStringList m_outputs;
+    QStringList m_commands;
+    QString m_mainDep;
+    QStringList m_otherDeps;
+    QString m_workingDir;
+    QString m_comment;
+
+};
+
+
+
+
+
+
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
         CMakeAst* Create##klassName() { return new klassName; }            \
         bool astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
@@ -77,10 +136,10 @@ protected:
         virtual void writeBack( const QString& buffer );     \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
-#define CMAKE_ADD_AST_MEMBER( returnType, setterType, name ) \
+#define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
     public:                                              \
-        returnType name() const;                         \
-        void set##name( setterType );                    \
+        returnType returnName() const;                         \
+        void set##setterName( setterType );                    \
     private:                                             \
         returnType m_##name;
 

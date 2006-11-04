@@ -21,6 +21,15 @@
 #include "cmakelistsparser.h"
 #include "cmakeast.h"
 
+void CMakeFunctionDesc::addArguments( const QStringList& args )
+{
+    foreach( QString arg, args )
+    {
+        CMakeFunctionArgument cmakeArg( arg );
+        arguments.append( cmakeArg );
+    }
+}
+
 CMakeListsParser::CMakeListsParser(QObject *parent)
  : QObject(parent)
 {

@@ -21,8 +21,9 @@
 #ifndef CMAKELISTSPARSER_H
 #define CMAKELISTSPARSER_H
 
-#include <QObject>
 #include <QList>
+#include <QObject>
+#include <QMetaType>
 #include "cmListFileLexer.h"
 
 class CMakeAst;
@@ -37,15 +38,18 @@ struct CMakeFunctionDesc
 /*  int numSpacesBeforeLeftParen;
     int numSpacesAfterLeftParen;
     int numSpacesBeforeRightParen; */
+
+    void addArguments( const QStringList& );
 };
+Q_DECLARE_METATYPE( CMakeFunctionDesc )
 
 struct CMakeFunctionArgument
 {
     CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0) {}
     CMakeFunctionArgument(const CMakeFunctionArgument& r):
         value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line) {}
-    CMakeFunctionArgument(const QString& v, bool q,
-                       const QString& file, quint32 l)
+    CMakeFunctionArgument(const QString& v, bool q = false,
+                          const QString& file = QString(), quint32 l = 0)
         : value(v), quoted(q), filePath(file), line(l) {}
     bool operator == (const CMakeFunctionArgument& r) const
     {
@@ -61,6 +65,7 @@ struct CMakeFunctionArgument
     QString filePath;
     quint32 line;
 };
+Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
 /**
  * Recursive descent parser for CMakeLists.txt files
