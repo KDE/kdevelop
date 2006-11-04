@@ -830,14 +830,31 @@ void Scope::init()
                         subproject = QDir( projectDir(), "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
                         projectfile = str;
                     }else
-                    {    subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + str, "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
+                    {
+                        subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + str,
+                                           "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
+                        if( !subproject.exists() )
+                        {
+                            kdDebug(9024) << "Project Dir doesn't exist, trying to find name.subdir variable:" << str <<  endl;
+                            if( !variableValues(str+".subdir").isEmpty() )
+                            {
+                                kdDebug(9024) << "Found name.subdir variable for " << str << endl;
+                                subproject = QDir( projectDir() + QString( QChar( QDir::separator() ) )
+                                    + variableValues(str+".subdir").first(),
+                                    "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
+                            }else
+                                continue;
+                        }
                         if ( subproject.entryList().isEmpty() || subproject.entryList().contains( *sit + ".pro" ) )
                             projectfile = (*sit) + ".pro";
                         else
                             projectfile = subproject.entryList().first();
+
                     }
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
-                    m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, subproject.absFilePath( projectfile ), m_part, ( m->op != "-=" )) );
+                    m_scopes.insert( getNextScopeNum(),
+                                     new Scope( getNextScopeNum(), this, subproject.absFilePath( projectfile ),
+                                                m_part, ( m->op != "-=" )) );
                 }
             }
             else
@@ -849,6 +866,10 @@ void Scope::init()
                       && !(
                             ( m->scopedID.contains( ".files" ) || m->scopedID.contains( ".path" ) )
                             && variableValues("INSTALL").contains(m->scopedID.left( m->scopedID.findRev(".")-1 ) )
+                          )
+                      && !(
+                            ( m->scopedID.contains( ".subdir" ) || m->scopedID.contains( ".depends" ) )
+                            && variableValues("SUBDIRS").contains(m->scopedID.left( m->scopedID.findRev(".")-1 ) )
                           )
                     )
                 {
