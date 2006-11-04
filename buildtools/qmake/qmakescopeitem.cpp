@@ -265,7 +265,7 @@ void GroupItem::removeFileFromScope( const QString& filename )
 void GroupItem::addInstallObject( const QString& objectname )
 {
     GroupItem * objitem = owner->createGroupItem( GroupItem::InstallObject, objectname, owner );
-    owner->addValue( "INSTALL", objectname );
+    owner->addValue( "INSTALLS", objectname );
     owner->scope->saveToFile();
     installs.append( objitem );
 }

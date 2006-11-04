@@ -107,7 +107,8 @@ ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProj
     //  m_projectConfiguration = conf;
     m_targetLibraryVersion->setValidator( new QRegExpValidator(
                                               QRegExp( "\\d+(\\.\\d+)?(\\.\\d+)" ), this ) );
-
+    customVariables->setSortColumn(0);
+    customVariables->setSortOrder(Qt::Ascending);
 }
 
 void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
@@ -534,19 +535,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     //CORBA
     myProjectItem->scope->setEqualOp( "IDL_COMPILER", QStringList( idlCmdEdit->url() ) );
     myProjectItem->updateValues( "IDL_OPTIONS", QStringList::split( " ", idlCmdOptionsEdit->text() ) );
-
-    // custom vars
-    QListViewItem *item = customVariables->firstChild();
-    for ( ; item; item = item->nextSibling() )
-    {
-        QString op = item->text( 1 );
-        QString vals = item->text( 2 );
-
-        if( item->key(0, true).toUInt() > 0 )
-            myProjectItem->scope->updateCustomVariable( item->key(0, true).toUInt(), op, vals );
-        else
-            myProjectItem->scope->addCustomVariable( item->text(0), op, vals );
-    }
 }
 
 void ProjectConfigurationDlg::accept()
@@ -782,7 +770,7 @@ void ProjectConfigurationDlg::updateControls()
     //makefile
     makefile_url->setURL( myProjectItem->scope->variableValues( "MAKEFILE" ).front() );
 
-    if ( myProjectItem->scope->variableValues( "INSTALL" ).contains( "target" ) )
+    if ( myProjectItem->scope->variableValues( "INSTALLS" ).contains( "target" ) )
     {
         checkInstallTarget->setChecked( true );
         m_InstallTargetPath->setEnabled( true );
@@ -814,6 +802,9 @@ void ProjectConfigurationDlg::updateControls()
     idlCmdOptionsEdit->setText( myProjectItem->scope->variableValues( "IDL_OPTIONS" ).join( " " ) );
 
     customVariables->clear();
+    customVariableName->setText("");
+    customVariableData->setText("");
+    customVariableOp->setCurrentItem( 0 );
     QMap<unsigned int, QMap<QString, QString> > customvars = myProjectItem->scope->customVariables();
     QMap<unsigned int, QMap<QString, QString> >::iterator idx = customvars.begin();
     for ( ; idx != customvars.end(); ++idx )
@@ -1438,11 +1429,16 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
 
 void ProjectConfigurationDlg::addCustomValueClicked()
 {
-    KListViewItem * item = new KListViewItem( customVariables, i18n( "Name" ), "=", i18n( "Value" ) );
+    QMap<QString, QString> customvar;
+    customvar["var"] = i18n("Name");
+    customvar["op"] = "=";
+    customvar["values"] = i18n("Value");
+    unsigned int key = myProjectItem->scope->addCustomVariable( customvar["var"], customvar["op"], customvar["values"] );
+    CustomVarListItem* item = new CustomVarListItem( customVariables, key, customvar );
     item->setMultiLinesEnabled(true);
     customVariables->setSelected( item, true );
     newCustomVariableActive();
-    customVariableName->setEnabled( true );
+    customVariables->sort();
     activateApply( 0 );
 }
 void ProjectConfigurationDlg::removeCustomValueClicked()
@@ -1451,7 +1447,21 @@ void ProjectConfigurationDlg::removeCustomValueClicked()
     if ( item )
     {
         myProjectItem->scope->removeCustomVariable( item->key(0, true).toUInt() );
+        delete item;
     }
+    if( customVariables->firstChild() )
+    {
+        customVariables->setSelected( customVariables->firstChild(), true );
+        newCustomVariableActive();
+    }else
+    {
+        customVariableName->setText( "" );
+        customVariableData->setText( "" );
+        customVariableOp->setCurrentItem( 0 );
+        customVariableName->setFocus();
+    }
+    customVariables->sort();
+
     activateApply( 0 );
 }
 void ProjectConfigurationDlg::editCustomValueClicked()
@@ -1462,6 +1472,7 @@ void ProjectConfigurationDlg::editCustomValueClicked()
         item->setText( 0, customVariableName->text() );
         item->setText( 1, customVariableOp->currentText() );
         item->setText( 2, customVariableData->text() );
+        myProjectItem->scope->updateCustomVariable( item->key(0, true).toUInt(), item->text(0), item->text(1), item->text(2) );
     }
     activateApply( 0 );
 }
@@ -1500,7 +1511,6 @@ void ProjectConfigurationDlg::newCustomVariableActive( )
         customVariableData->setText( item->text( 2 ) );
         customVariableOp->setCurrentText( item->text( 1 ) );
         customVariableName->setFocus();
-        customVariableName->setEnabled( false );
     }
 }
 

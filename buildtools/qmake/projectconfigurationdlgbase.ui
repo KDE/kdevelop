@@ -1987,6 +1987,9 @@ e</string>
                                                 <property name="text">
                                                     <string>&amp;Remove</string>
                                                 </property>
+                                                <property name="accel">
+                                                    <string>Alt+R</string>
+                                                </property>
                                             </widget>
                                             <widget class="KPushButton">
                                                 <property name="name">
@@ -2079,6 +2082,12 @@ e</string>
                                                 <horstretch>0</horstretch>
                                                 <verstretch>0</verstretch>
                                             </sizepolicy>
+                                        </property>
+                                        <property name="currentItem">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="duplicatesEnabled">
+                                            <bool>false</bool>
                                         </property>
                                     </widget>
                                     <spacer row="1" column="2">
@@ -2394,6 +2403,18 @@ e</string>
         <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
+        <sender>insideinc_listview</sender>
+        <signal>clicked(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>insideinc_listview</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
         <sender>insideIncMoveDownBtn</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -2406,6 +2427,18 @@ e</string>
         <slot>insideIncMoveUpClicked()</slot>
     </connection>
     <connection>
+        <sender>insidelib_listview</sender>
+        <signal>clicked(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>insidelib_listview</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
         <sender>insideLibMoveDownBtn</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -2416,6 +2449,18 @@ e</string>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>insideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>intDeps_view</sender>
+        <signal>clicked(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>intDeps_view</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
     </connection>
     <connection>
         <sender>intMoveDown_button</sender>
@@ -2647,45 +2692,9 @@ e</string>
     </connection>
     <connection>
         <sender>varRemove_button</sender>
-        <signal>stateChanged(int)</signal>
+        <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>removeCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideinc_listview</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>insidelib_listview</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>intDeps_view</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>insideinc_listview</sender>
-        <signal>spacePressed(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>intDeps_view</sender>
-        <signal>spacePressed(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>insidelib_listview</sender>
-        <signal>spacePressed(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
     </connection>
 </connections>
 <tabstops>

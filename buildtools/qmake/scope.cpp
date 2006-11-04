@@ -57,6 +57,8 @@ Scope::~Scope()
     }
     m_scopes.clear();
 
+    m_customVariables.clear();
+
     if ( m_root && m_root->isProject() )
         delete m_root;
     m_root = 0;
@@ -810,6 +812,8 @@ void Scope::init()
         else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
         {
             QMake::IncludeAST * i = static_cast<QMake::IncludeAST*>( *it );
+            if( i->projectName.startsWith("$") )
+                continue;
             m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), i->projectName, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
@@ -865,11 +869,11 @@ void Scope::init()
                        )
                       && !(
                             ( m->scopedID.contains( ".files" ) || m->scopedID.contains( ".path" ) )
-                            && variableValues("INSTALL").contains(m->scopedID.left( m->scopedID.findRev(".")-1 ) )
+                            && variableValues("INSTALLS").contains(m->scopedID.left( m->scopedID.findRev(".") ) )
                           )
                       && !(
                             ( m->scopedID.contains( ".subdir" ) || m->scopedID.contains( ".depends" ) )
-                            && variableValues("SUBDIRS").contains(m->scopedID.left( m->scopedID.findRev(".")-1 ) )
+                            && variableValues("SUBDIRS").contains(m->scopedID.left( m->scopedID.findRev(".") ) )
                           )
                     )
                 {
@@ -927,19 +931,20 @@ const QMap<unsigned int, QMap<QString, QString> > Scope::customVariables() const
     return result;
 }
 
-void Scope::updateCustomVariable( unsigned int id, const QString& newop, const QString& newvalues )
+void Scope::updateCustomVariable( unsigned int id, const QString& name, const QString& newop, const QString& newvalues )
 {
     if( !m_root )
         return;
     if ( id > 0 && m_customVariables.contains( id ) )
     {
         m_customVariables[ id ] ->values.clear();
-        m_customVariables[ id ] ->values.append( newvalues);
+        updateValues( m_customVariables[ id ] ->values, newvalues );
         m_customVariables[ id ] ->op = newop;
+        m_customVariables[ id ] ->scopedID = name;
     }
 }
 
-void Scope::addCustomVariable( const QString& var, const QString& op, const QString& values )
+unsigned int Scope::addCustomVariable( const QString& var, const QString& op, const QString& values )
 {
     QMake::AssignmentAST* newast = new QMake::AssignmentAST();
     newast->scopedID = var;
@@ -951,10 +956,12 @@ void Scope::addCustomVariable( const QString& var, const QString& op, const QStr
         newast->setDepth( m_root->depth()+1 );
     m_root->addChildAST( newast );
     m_customVariables[ m_maxCustomVarNum++ ] = newast;
+    return (m_maxCustomVarNum-1);
 }
 
 void Scope::removeCustomVariable( unsigned int id )
 {
+    kdDebug(9024) << "trying to remove " << id << " from " << m_customVariables.keys() << endl;
     if( m_customVariables.contains(id) )
     {
         QMake::AssignmentAST* m = m_customVariables[id];
@@ -1070,6 +1077,8 @@ void Scope::reloadProject()
         delete s;
     }
     m_scopes.clear();
+
+    m_customVariables.clear();
 
     if ( m_root->isProject() )
         delete m_root;

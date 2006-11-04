@@ -148,13 +148,13 @@ public:
     /* Provide a Map of Custom variables */
     const QMap<unsigned int, QMap<QString, QString> > customVariables() const;
 
-    void addCustomVariable( const QString& var, const QString& op, const QString& values );
+    unsigned int addCustomVariable( const QString& var, const QString& op, const QString& values );
 
     /* Removes the variable with the given id if it exists */
     void removeCustomVariable( unsigned int );
 
     /* Update the values of the variable/operation combo var+op to values */
-    void updateCustomVariable( unsigned int, const QString& , const QString& );
+    void updateCustomVariable( unsigned int, const QString&, const QString& , const QString& );
 
     // Checks wether a QStringList contains any values that are not whitespace or \\n
     static bool listIsEmpty( const QStringList& values );
