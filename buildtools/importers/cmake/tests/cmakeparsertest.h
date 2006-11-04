@@ -46,7 +46,7 @@ private slots:
     void testParserWithBadData();
     void testParserWithBadData_data();
 
-    void testAstCreation();
+    //void testAstCreation();
 
     // void testWhitespaceHandling();
 

@@ -25,6 +25,7 @@
 #include <QList>
 #include "cmListFileLexer.h"
 
+class CMakeAst;
 struct CMakeFunctionArgument;
 
 struct CMakeFunctionDesc

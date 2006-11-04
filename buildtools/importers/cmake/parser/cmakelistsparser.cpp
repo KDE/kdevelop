@@ -19,6 +19,7 @@
  */
 
 #include "cmakelistsparser.h"
+#include "cmakeast.h"
 
 CMakeListsParser::CMakeListsParser(QObject *parent)
  : QObject(parent)
