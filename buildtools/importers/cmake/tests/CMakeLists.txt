@@ -2,6 +2,7 @@ if (KDE4_BUILD_TESTS)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/buildtools/importers/cmake
+    ${CMAKE_SOURCE_DIR}/buildtools/importers/cmake/parser
     )
 
 set( folderxmltest_SRCS folderxmltest.cpp )
@@ -34,8 +35,19 @@ target_link_libraries( cmake-projectxmltest
     kdevcmakecommon
 )
 
+set( cmakeparsertest_SRCS cmakeparsertest.cpp )
+kde4_automoc( ${cmakeparsertest_SRCS} )
+kde4_add_executable( cmake-parsertest NOGUI RUN_UNINSTALLED ${cmakeparsertest_SRCS} )
+target_link_libraries( cmake-parsertest
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatform
+    kdevcmakecommon
+)
+
 add_test(cmake-folderxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-folderxmltest)
 add_test(cmake-targetxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-targetxmltest)
 add_test(cmake-projectxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-projectxmltest)
+add_test(cmake-parsertest ${EXECUTABLE_OUTPUT_PATH}/cmake-parsertest)
 
 endif(KDE4_BUILD_TESTS)
