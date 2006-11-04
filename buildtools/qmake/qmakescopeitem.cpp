@@ -473,12 +473,12 @@ void QMakeScopeItem::buildSubTree()
     QMakeScopeItem* lastItem = 0;
     for ( it = scopes.begin(); it != scopes.end(); ++it )
     {
-        Scope* s = ( *it );
-        QMakeScopeItem* newitem = new QMakeScopeItem( this, s->scopeName(), s );
-        if ( lastItem )
-            newitem->moveItem( lastItem );
-        lastItem = newitem;
+        new QMakeScopeItem( this, s->scopeName(), ( *it ) );
+//         if ( lastItem )
+//             newitem->moveItem( lastItem );
+//         lastItem = newitem;
     }
+    sortChildItems( 0, true );
 }
 
 
@@ -790,6 +790,19 @@ void QMakeScopeItem::disableSubprojects( const QStringList& dirs )
         }
     }
 
+}
+
+int QMakeScopeItem::compare( QListViewItem* i, int , bool ) const
+{
+    QMakeScopeItem* other = dynamic_cast<QMakeScopeItem*>(i);
+    if( !i )
+        return -1;
+    if( other->scope->getNum() < scope->getNum() )
+        return 1;
+    else if ( other->scope->getNum() > scope->getNum() )
+        return -1;
+    else
+        return 0;
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

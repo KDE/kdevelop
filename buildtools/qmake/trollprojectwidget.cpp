@@ -768,6 +768,7 @@ void TrollProjectWidget::slotCreateScope( QMakeScopeItem *spitem )
     if ( dlg.exec() == QDialog::Accepted )
     {
         spitem->scope->saveToFile( );
+        spitem->sortChildItems( 0, true );
     }
     return ;
 }
@@ -835,14 +836,19 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
         Scope* subproject = spitem->scope->createSubProject( subdirname );
         if( subproject )
         {
-            QMakeScopeItem* newitem = new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
-            QListViewItem* lastitem = spitem->firstChild();
-            while( lastitem->nextSibling() != 0 )
-                lastitem = lastitem->nextSibling();
-            newitem->moveItem( lastitem );
+            new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+//             QListViewItem* lastitem = spitem->firstChild();
+//             while( lastitem->nextSibling() != 0 )
+//                 lastitem = lastitem->nextSibling();
+//             newitem->moveItem( lastitem );
         }else
-            KMessageBox::error(this, i18n("Couldn't create subproject. This means that either the project you wanted to add a subproject isn't parsed correctly or it's not a subdirs-project."), i18n("Subproject creation failed") );
+        {
+            KMessageBox::error(this, i18n("Couldn't create subproject. This means that either the project you wanted"
+                                          " to add a subproject isn't parsed correctly or it's not a"
+                                          " subdirs-project."), i18n("Subproject creation failed") );
+        }
         spitem->scope->saveToFile();
+        spitem->sortChildItems( 0, true );
     }
 }
 
@@ -852,13 +858,14 @@ void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
         return ;
     else if ( ( spitem = dynamic_cast<QMakeScopeItem *>( m_shownSubproject->parent() ) ) != NULL )
     {
-        QString subdirname = m_shownSubproject->scope->scopeName();
         bool delsubdir = false;
         if ( KMessageBox::warningYesNo( this, i18n( "Delete the directory of the subproject from disk?" ), i18n( "Delete subdir?" ) ) == KMessageBox::Yes )
             delsubdir = true;
-        if( !spitem->scope->deleteSubProject( subdirname, delsubdir ) )
+        if( !spitem->scope->deleteSubProject( m_shownSubproject->scope->getNum(), delsubdir ) )
         {
-            KMessageBox::error(this, i18n("Couldn't delete subproject.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Subproject Deletion failed"));
+            KMessageBox::error(this, i18n("Couldn't delete subproject.\nThis is an internal error, please write a"
+                                          " bugreport to bugs.kde.org and include the output of kdevelop when run"
+                                          "from a shell."),i18n("Subproject Deletion failed"));
             return;
         }
         delete m_shownSubproject;
@@ -1555,10 +1562,12 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
 
                     case AddFilesDialog::Relative:
                         // Form relative path to current subproject folder
-                        addFileToCurrentSubProject( titem, URLUtil::relativePathToFile( cleanSubprojectPath , files[ i ] ) );
+                        addFileToCurrentSubProject( titem, URLUtil::relativePathToFile(
+                            cleanSubprojectPath , files[ i ] ) );
 
                         QString fileNameToAdd = URLUtil::canonicalPath( m_shownSubproject->scope->projectDir() +
-                                                QString( QChar( QDir::separator() ) ) + URLUtil::relativePathToFile( cleanSubprojectPath , files[ i ] ) );
+                                                QString( QChar( QDir::separator() ) ) +
+                                                URLUtil::relativePathToFile( cleanSubprojectPath , files[ i ] ) );
                         fileNameToAdd = fileNameToAdd.mid( m_part->projectDirectory().length() + 1 );
                         if ( fileNameToAdd.startsWith( QDir::rootDirPath() ) )
                             fileNameToAdd = fileNameToAdd.mid( 1 );
@@ -2223,7 +2232,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
             switch ( spitem->scope->scopeType() )
             {
                 case Scope::FunctionScope:
-                    if( !pitem->scope->deleteFunctionScope( spitem->scope->scopeName() ) )
+                    if( !pitem->scope->deleteFunctionScope( spitem->scope->getNum() ) )
                     {
                         KMessageBox::error(this, i18n("Couldn't delete Function Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Function Scope Deletion failed"));
                         return;
@@ -2231,7 +2240,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                     //                     pitem->scopes.remove( spitem );
                     break;
                 case Scope::IncludeScope:
-                    if( !pitem->scope->deleteIncludeScope( spitem->scope->fileName() ) )
+                    if( !pitem->scope->deleteIncludeScope( spitem->scope->getNum() ) )
                     {
                         KMessageBox::error(this, i18n("Couldn't delete Include Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Include Scope Deletion failed"));
                         return;
@@ -2243,7 +2252,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                     //                     pitem->scopes.remove(spitem);
                     break;
                 case Scope::SimpleScope:
-                    if( !pitem->scope->deleteSimpleScope( spitem->scope->scopeName() ) )
+                    if( !pitem->scope->deleteSimpleScope( spitem->scope->getNum() ) )
                     {
                         KMessageBox::error(this, i18n("Couldn't delete Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Scope Deletion failed"));
                         return;

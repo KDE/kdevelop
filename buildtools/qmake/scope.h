@@ -103,11 +103,11 @@ public:
     Scope* parent() const { return m_parent; }
 
     // Fetching sub-scopes
-    const QValueList<Scope*> functionScopes() const { return m_funcScopes.values(); }
-    const QValueList<Scope*> simpleScopes() const { return m_simpleScopes.values(); }
-    const QValueList<Scope*> includeScopes() const { return m_incScopes.values(); }
-    const QValueList<Scope*> subProjectScopes() const { return m_subProjects.values(); }
-    const QValueList<Scope*> scopesInOrder() const;
+//     const QValueList<Scope*> functionScopes() const;
+//     const QValueList<Scope*> simpleScopes() const;
+//     const QValueList<Scope*> includeScopes() const;
+//     const QValueList<Scope*> subProjectScopes() const;
+    const QValueList<Scope*> scopesInOrder() const { return m_scopes.values(); }
     // Working on SubScopes
     /*
      * creates a new function scope at the end of this (Sub-)AST and returns the Scope wrapping it
@@ -134,13 +134,13 @@ public:
     Scope* createSubProject( const QString& dir );
 
     /* delete the given function scope */
-    bool deleteFunctionScope( const QString& functionCall );
+    bool deleteFunctionScope( unsigned int );
     /* delete the given simple scope */
-    bool deleteSimpleScope( const QString& scopeId );
+    bool deleteSimpleScope( unsigned int );
     /* delete the given include scope */
-    bool deleteIncludeScope( const QString& includeFile, bool negate = false );
+    bool deleteIncludeScope( unsigned int );
     /* deletes the subproject (including the subdir if deleteSubdir is true) */
-    bool deleteSubProject( const QString& dir, bool deleteSubdir );
+    bool deleteSubProject( unsigned int, bool deleteSubdir );
 
     /* find out wether the project is Qt4 or Qt3 */
     bool isQt4Project() const ;
@@ -169,6 +169,9 @@ public:
 
     /* creates a new disabled Scope child and add SUBDIRS -= dir to this scope */
     Scope* disableSubproject( const QString& );
+
+    /* return the "position" of this scope in the list of scopes */
+    unsigned int getNum() { return m_num; }
 
 #ifdef DEBUG
     void printTree();
@@ -208,17 +211,17 @@ private:
     /*
      * just initializes the lists from the scope
      */
-    Scope( QMake::ProjectAST* root, Scope* parent, TrollProjectPart* part );
+    Scope( unsigned int num, Scope* parent, QMake::ProjectAST* root, TrollProjectPart* part );
     /*
      * reads the given filename and parses it. If it doesn't exist creates an empty
      * ProjectAST with the given filename
      */
-    Scope( Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled = true );
+    Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled = true );
     /*
      * Creates a scope for an include statement, parses the file and initializes the Scope
      * Create an empty ProjectAST if the file cannot be found or parsed.
      */
-    Scope( Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part );
+    Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part );
 
 
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
@@ -237,19 +240,20 @@ private:
 
     QString funcScopeKey( QMake::ProjectAST* funcast ) const { return funcast->scopedID + "(" + funcast->args + ")"; }
 
+    unsigned int getNextScopeNum() { if( m_scopes.isEmpty() ) return 0; else return (m_scopes.keys().last()+1); }
+
     QMake::ProjectAST* m_root;
     QMake::IncludeAST* m_incast;
     QMap<unsigned int, QMake::AssignmentAST*> m_customVariables;
+    QMap<unsigned int, Scope*> m_scopes;
     Scope* m_parent;
     unsigned int m_maxCustomVarNum;
 
-    // subProjects and includes are separated because their keys could interfere with simple scope keys
-    QMap<QString, Scope*> m_simpleScopes;
-    QMap<QString, Scope*> m_funcScopes;
-    QMap<QString, Scope*> m_incScopes;
+    // All different subscopes of this scope, the key is the "position" at which the scope starts
     QMap<QString, Scope*> m_subProjects;
-//     bool m_isQt4Project;
 
+    // The "position" inside the parent scope that this scope starts at
+    unsigned int m_num;
     bool m_isEnabled;
     TrollProjectPart* m_part;
 #ifdef DEBUG

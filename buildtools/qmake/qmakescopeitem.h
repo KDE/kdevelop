@@ -95,6 +95,7 @@ public:
     void removeValues( const QString& var, const QStringList& values );
     void disableSubprojects( const QStringList& );
     void reloadProject();
+    int compare( QListViewItem* i, int col, bool ascending ) const;
     ~QMakeScopeItem();
 
     QMap<GroupItem::GroupType, GroupItem*> groups;

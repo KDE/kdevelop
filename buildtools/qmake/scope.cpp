@@ -29,7 +29,7 @@ const QStringList Scope::KnownVariables = QStringList() << "QT" << "CONFIG" << "
 const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "release" << "debug_and_release" << "warn_on" << "warn_off" << "staticlib" << "dll" << "plugin" << "designer" << "create_pkgconf" << "create_libtool" << "qt" << "console" << "windows" << "x11" << "thread" << "exceptions" << "stl" << "rtti" << "opengl" << "thread" << "ordered" << "precompile_header" << "qtestlib" << "uitools" << "dbus" << "assistant" << "build_all";
 
 Scope::Scope( const QString &filename, TrollProjectPart* part )
-        : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_isEnabled( true ), m_part(part)
+    : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part)
 {
     if ( !loadFromFile( filename ) )
     {
@@ -49,51 +49,26 @@ Scope::Scope( const QString &filename, TrollProjectPart* part )
 
 Scope::~Scope()
 {
-    QMap<QString, Scope*>::iterator it;
-    for ( it = m_funcScopes.begin() ; it != m_funcScopes.end() ; ++it )
+    QMap<unsigned int, Scope*>::iterator it;
+    for ( it = m_scopes.begin() ; it != m_scopes.end() ; ++it )
     {
         Scope* s = it.data();
-        m_funcScopes.remove( it );
         delete s;
     }
-    m_funcScopes.clear();
-
-    for ( it = m_simpleScopes.begin() ; it != m_simpleScopes.end() ; ++it )
-    {
-        Scope* s = it.data();
-        m_simpleScopes.remove( it );
-        delete s;
-    }
-    m_simpleScopes.clear();
-
-    for ( it = m_incScopes.begin() ; it != m_incScopes.end() ; ++it )
-    {
-        Scope* s = it.data();
-        m_incScopes.remove( it );
-        delete s;
-    }
-    m_incScopes.clear();
-
-    for ( it = m_subProjects.begin() ; it != m_subProjects.end() ; ++it )
-    {
-        Scope* s = it.data();
-        m_subProjects.remove( it );
-        delete s;
-    }
-    m_subProjects.clear();
+    m_scopes.clear();
 
     if ( m_root && m_root->isProject() )
         delete m_root;
 }
 
-Scope::Scope( QMake::ProjectAST* scope, Scope* parent, TrollProjectPart* part )
-        : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_isEnabled( true ), m_part(part)
+Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope, TrollProjectPart* part )
+    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part)
 {
     init();
 }
 
-Scope::Scope( Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled )
-: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_isEnabled( isEnabled ), m_part(part)
+Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled )
+: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ), m_part(part)
 {
     if ( !loadFromFile( filename ) )
     {
@@ -111,8 +86,8 @@ Scope::Scope( Scope* parent, const QString& filename, TrollProjectPart* part, bo
         m_part->dirWatch()->addFile(filename);
 }
 
-Scope::Scope( Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part )
-        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_isEnabled( true ), m_part(part)
+Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part )
+        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part)
 {
     if ( !loadFromFile( path + QString( QChar( QDir::separator() ) ) + incfile ) )
     {
@@ -425,9 +400,14 @@ Scope* Scope::createFunctionScope( const QString& funcName, const QString& args 
     ast->addChildAST( new QMake::NewLineAST() );
     m_root->addChildAST( ast );
     m_root->addChildAST( new QMake::NewLineAST() );
-    Scope* funcScope = new Scope( ast, this, m_part );
-    m_funcScopes.insert( funcScopeKey( ast ), funcScope );
-    return funcScope;
+    Scope* funcScope = new Scope( getNextScopeNum(), this, ast, m_part );
+    if( funcScope->scopeType() != Scope::InvalidScope )
+    {
+        m_scopes.insert( getNextScopeNum(), funcScope );
+        return funcScope;
+    }else
+        delete funcScope;
+    return 0;
 }
 
 Scope* Scope::createSimpleScope( const QString& scopename )
@@ -443,9 +423,16 @@ Scope* Scope::createSimpleScope( const QString& scopename )
     m_root->addChildAST( new QMake::NewLineAST() );
     if ( m_part->isQt4Project() )
         addToPlusOp( "CONFIG", QStringList( scopename ) );
-    Scope* simpleScope = new Scope( ast, this, m_part );
-    m_simpleScopes.insert( scopename, simpleScope );
-    return simpleScope;
+    Scope* simpleScope = new Scope( getNextScopeNum(), this, ast, m_part );
+
+    if( simpleScope->scopeType() != Scope::InvalidScope )
+    {
+        m_scopes.insert( getNextScopeNum(), simpleScope );
+        return simpleScope;
+    }else
+        delete simpleScope;
+    return 0;
+
 }
 
 Scope* Scope::createIncludeScope( const QString& includeFile, bool negate )
@@ -462,19 +449,22 @@ Scope* Scope::createIncludeScope( const QString& includeFile, bool negate )
     {
         funcScope = createFunctionScope( "include", includeFile );
     }
+    if( funcScope == 0 )
+        return 0;
+
     QMake::IncludeAST* ast = new QMake::IncludeAST();
     ast->setDepth( m_root->depth() );
     ast->projectName = includeFile;
-    Scope* incScope = new Scope( funcScope, ast, projectDir(), ast->projectName, m_part );
+    Scope* incScope = new Scope( funcScope->getNextScopeNum(), funcScope, ast, projectDir(), ast->projectName, m_part );
     if ( incScope->scopeType() != InvalidScope )
     {
-        funcScope->m_incScopes.insert( includeFile, incScope );
         funcScope->m_root->addChildAST( ast );
+        funcScope->m_scopes.insert( funcScope->getNextScopeNum(), incScope );
         return funcScope;
     }
     else
     {
-        deleteFunctionScope( funcScope->m_root->scopedID );
+        deleteFunctionScope( m_scopes.keys().last() );
         delete incScope;
     }
     return 0;
@@ -511,14 +501,14 @@ Scope* Scope::createSubProject( const QString& projname )
 
         kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( this, filename, m_part );
+        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part );
         if ( s->scopeType() != InvalidScope )
         {
             if( s->variableValues("TEMPLATE").isEmpty() )
                 s->setEqualOp("TEMPLATE", QStringList("app"));
             s->saveToFile();
             addToPlusOp( "SUBDIRS", QStringList( projname ) );
-            m_subProjects.insert( projname, s );
+            m_scopes.insert( getNextScopeNum(), s );
             return s;
         } else
         {
@@ -529,18 +519,18 @@ Scope* Scope::createSubProject( const QString& projname )
     return 0;
 }
 
-bool Scope::deleteFunctionScope( const QString& functionCall )
+bool Scope::deleteFunctionScope( unsigned int num )
 {
-    if ( !m_root )
+    if ( !m_root || !m_scopes.contains( num ) )
         return false;
 
-    Scope* funcScope = m_funcScopes[ functionCall ];
+    Scope* funcScope = m_scopes[ num ];
     if ( funcScope )
     {
         QMake::AST* ast = m_root->m_children[ m_root->m_children.findIndex( funcScope->m_root ) ];
         if( !ast )
             return false;
-        m_funcScopes.remove( functionCall );
+        m_scopes.remove( num );
         m_root->removeChildAST( funcScope->m_root );
         delete funcScope;
         delete ast;
@@ -549,19 +539,19 @@ bool Scope::deleteFunctionScope( const QString& functionCall )
     return false;
 }
 
-bool Scope::deleteSimpleScope( const QString& scopeId )
+bool Scope::deleteSimpleScope( unsigned int num )
 {
-    if ( !m_root )
+    if ( !m_root || !m_scopes.contains( num ) )
         return false;
 
-    Scope* simpleScope = m_simpleScopes[ scopeId ];
+    Scope* simpleScope = m_scopes[ num ];
     if ( simpleScope )
     {
         QMake::AST* ast = m_root->m_children[ m_root->m_children.findIndex( simpleScope->m_root ) ];
         if( !ast )
             return false;
-        m_simpleScopes.remove( scopeId );
-        removeFromPlusOp( "CONFIG", scopeId );
+        m_scopes.remove( num );
+        removeFromPlusOp( "CONFIG", simpleScope->m_root->scopedID );
         m_root->removeChildAST( simpleScope->m_root );
         delete simpleScope;
         delete ast;
@@ -570,50 +560,43 @@ bool Scope::deleteSimpleScope( const QString& scopeId )
     return false;
 }
 
-bool Scope::deleteIncludeScope( const QString& includeFile, bool negate )
+bool Scope::deleteIncludeScope( unsigned int num )
 {
-    if ( !m_root )
+    if ( !m_root || !m_scopes.contains( num ) )
         return false;
 
-    QString funcScopeId;
-    if ( negate )
-    {
-        funcScopeId = "!include(" + includeFile + ")";
-    }
-    else
-    {
-        funcScopeId = "include(" + includeFile + ")";
-    }
-
-
-    Scope * incScope = m_incScopes[ includeFile ];
+    Scope * incScope = m_scopes[ num ];
     if( !incScope )
         return false;
     QMake::AST* ast = incScope->m_incast;
     if( !ast )
         return false;
-    m_incScopes.remove( includeFile );
+    m_scopes.remove( num );
     m_root->removeChildAST( incScope->m_incast);
     delete incScope;
     delete ast;
 
-    return m_parent->deleteFunctionScope( funcScopeId );
+    return m_parent->deleteFunctionScope( getNum() );
 }
 
-bool Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
+bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
 {
-    if ( !m_root )
+    if ( !m_root || !m_scopes.contains( num ) )
         return false;
 
     QValueList<QMake::AST*>::iterator it = findExistingVariable( "TEMPLATE" );
     if ( it != m_root->m_children.end() )
     {
         QMake::AssignmentAST * tempast = static_cast<QMake::AssignmentAST*>( *it );
-        if ( m_subProjects.contains( dir ) && tempast->values.contains( "subdirs" ) )
+        if ( tempast->values.contains( "subdirs" ) )
         {
+            Scope* project = m_scopes[ num ];
+            if( !project )
+                return false;
             if ( deleteSubdir )
             {
                 QDir projdir = QDir( projectDir() );
+                QString dir = project->scopeName();
                 if( !dir.endsWith(".pro") )
                 {
                     QDir subdir = QDir( projectDir() + QString( QChar( QDir::separator() ) ) + dir );
@@ -632,17 +615,14 @@ bool Scope::deleteSubProject( const QString& dir, bool deleteSubdir )
                     }
                 }
             }
-            Scope* project = m_subProjects[ dir ];
-            if( !project )
-                return false;
             QValueList<QMake::AST*>::iterator foundit = findExistingVariable( "SUBDIRS" );
             if ( foundit != m_root->m_children.end() )
             {
                 QMake::AssignmentAST * ast = static_cast<QMake::AssignmentAST*>( *foundit );
-                updateValues( ast->values, QStringList( dir ), true, ast->indent );
+                updateValues( ast->values, QStringList( project->scopeName() ), true, ast->indent );
             }else
                 return false;
-            m_subProjects.remove( dir );
+            m_scopes.remove( num );
             delete project;
             return true;
         }
@@ -824,19 +804,12 @@ void Scope::init()
         if ( ( *it ) ->nodeType() == QMake::AST::ProjectAST )
         {
             QMake::ProjectAST * p = static_cast<QMake::ProjectAST*>( *it );
-            if ( p->isFunctionScope() )
-            {
-                m_funcScopes.insert( funcScopeKey( p ), new Scope( p, this, m_part ) );
-            }
-            else if ( p->isScope() )
-            {
-                m_simpleScopes.insert( p->scopedID, new Scope( p, this, m_part ) );
-            }
+            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, p, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
         {
             QMake::IncludeAST * i = static_cast<QMake::IncludeAST*>( *it );
-            m_incScopes.insert( i->projectName, new Scope( this, i, projectDir(), i->projectName, m_part ) );
+            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), i->projectName, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
@@ -863,7 +836,7 @@ void Scope::init()
                             projectfile = subproject.entryList().first();
                     }
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
-                    m_subProjects.insert( str, new Scope( this, subproject.absFilePath( projectfile ), m_part, ( m->op != "-=" )) );
+                    m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, subproject.absFilePath( projectfile ), m_part, ( m->op != "-=" )) );
                 }
             }
             else
@@ -908,54 +881,10 @@ QString Scope::projectDir() const
     }
 }
 
-const QValueList<Scope*> Scope::scopesInOrder() const
-{
-    QValueList<Scope*> result;
-    if ( !m_root || m_root->m_children.isEmpty() )
-        return result;
-    QValueList<QMake::AST*>::const_iterator it;
-    for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
-    {
-        if ( ( *it ) ->nodeType() == QMake::AST::ProjectAST )
-        {
-            QMake::ProjectAST * p = static_cast<QMake::ProjectAST*>( *it );
-            if ( p->isScope() && m_simpleScopes.contains( p->scopedID ) )
-            {
-                result.append( m_simpleScopes[ p->scopedID ] );
-            }
-            else if ( p->isFunctionScope() && m_funcScopes.contains( funcScopeKey( p ) ) )
-            {
-                result.append( m_funcScopes[ funcScopeKey( p ) ] );
-            }
-        }
-        else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
-        {
-            QMake::IncludeAST * i = static_cast<QMake::IncludeAST*>( *it );
-            if ( m_incScopes.contains( i->projectName ) )
-            {
-                result.append( m_incScopes[ i->projectName ] );
-            }
-        }
-        else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
-        {
-            QMake::AssignmentAST * s = static_cast<QMake::AssignmentAST*>( *it );
-            if ( s->scopedID == "SUBDIRS" )
-            {
-                for ( QStringList::const_iterator sit = s->values.begin(); sit != s->values.end() ; ++sit )
-                {
-                    if ( (*sit).stripWhiteSpace() != "" && *sit != "\\\n" && m_subProjects.contains( *sit ) )
-                    {
-                        if ( m_subProjects.contains( *sit ) )
-                        {
-                            result.append( m_subProjects[ *sit ] );
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return result;
-}
+// const QValueList<Scope*> Scope::scopesInOrder() const
+// {
+//     return m_scopes->values();
+// }
 
 
 const QMap<unsigned int, QMap<QString, QString> > Scope::customVariables() const
@@ -1113,34 +1042,14 @@ void Scope::reloadProject()
         return;
 
     QString filename = m_root->fileName();
-    QMap<QString, Scope*>::iterator it;
-    for ( it = m_funcScopes.begin() ; it != m_funcScopes.end() ; ++it )
+    QMap<unsigned int, Scope*>::iterator it;
+    for ( it = m_scopes.begin() ; it != m_scopes.end() ; ++it )
     {
         Scope* s = it.data();
         delete s;
     }
-    m_funcScopes.clear();
+    m_scopes.clear();
 
-    for ( it = m_simpleScopes.begin() ; it != m_simpleScopes.end() ; ++it )
-    {
-        Scope* s = it.data();
-        delete s;
-    }
-    m_simpleScopes.clear();
-
-    for ( it = m_incScopes.begin() ; it != m_incScopes.end() ; ++it )
-    {
-        Scope* s = it.data();
-        delete s;
-    }
-    m_incScopes.clear();
-
-    for ( it = m_subProjects.begin() ; it != m_subProjects.end() ; ++it )
-    {
-        Scope* s = it.data();
-        delete s;
-    }
-    m_subProjects.clear();
     if ( m_root->isProject() )
         delete m_root;
     if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
@@ -1175,14 +1084,32 @@ Scope* Scope::disableSubproject( const QString& dir)
 
         kdDebug( 9024 ) << "Disabling subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( this, filename, m_part, false );
+        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, false );
         addToMinusOp( "SUBDIRS", QStringList( dir ) );
-        m_subProjects.insert( dir, s );
+        m_scopes.insert( getNextScopeNum(), s );
         return s;
     }
 
     return 0;
 }
+
+
+// const QValueList<Scope*> Scope::functionScopes() const
+// {
+//     QValueList<Scope*>
+// }
+//
+// const QValueList<Scope*> Scope::simpleScopes() const
+// {
+// }
+//
+// const QValueList<Scope*> Scope::includeScopes() const
+// {
+// }
+//
+// const QValueList<Scope*> Scope::subProjectScopes() const
+// {
+// }
 
 #ifdef DEBUG
 void Scope::printTree()
