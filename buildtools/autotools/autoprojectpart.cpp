@@ -39,6 +39,8 @@
 #include <kparts/part.h>
 #include <kdeversion.h>
 #include <kprocess.h>
+#include <kconfig.h>
+#include <kapplication.h>
 
 #include <domutil.h>
 #include <kdevcore.h>
@@ -83,7 +85,12 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                                    "targets and files for the subproject selected in the overview."));
 
     mainWindow()->embedSelectViewRight(m_widget, i18n("Automake Manager"), i18n("Automake manager"));
-    mainWindow()->raiseView(m_widget);
+    KConfig *config = kapp->config();
+    config->setGroup("TabState");
+    if (config->readBoolEntry("AutomakeManager", true))
+    {
+        mainWindow()->raiseView(m_widget);
+    }
     KAction *action;
 
     action = new KAction( i18n("Add Translation..."), 0,
@@ -237,8 +244,13 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
 AutoProjectPart::~AutoProjectPart()
 {
-    if (m_widget)
+    if (m_widget){
+        KConfig *config = kapp->config();
+        config->setGroup("TabState");
+        config->writeEntry("AutomakeManager", m_widget->isShown());
+        config->sync();
         mainWindow()->removeView(m_widget);
+    }
     delete m_widget;
 	delete _configProxy;
 }
