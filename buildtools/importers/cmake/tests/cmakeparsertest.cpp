@@ -23,6 +23,8 @@
 #include <QtCore/QTemporaryFile>
 #include "cmListFileLexer.h"
 
+static bool parseCMakeFile( const char* fileName );
+
 static bool parseCMakeFunction( cmListFileLexer* lexer,
                                 const char* filename );
 
@@ -76,37 +78,7 @@ void CMakeParserTest::testParserWithGoodData()
     tempFile.write( text.toUtf8() );
     QString tempName = tempFile.fileName();
     tempFile.close(); //hacks to the get name of the file
-    cmListFileLexer* lexer = cmListFileLexer_New();
-    if ( !lexer )
-        QFAIL( "unable to create lexer" );
-    QVERIFY( cmListFileLexer_SetFileName( lexer, qPrintable( tempName ) ) );
-
-    bool parseError = false;
-    bool haveNewline = true;
-    cmListFileLexer_Token* token;
-    while(!parseError && (token = cmListFileLexer_Scan(lexer)))
-    {
-        if(token->type == cmListFileLexer_Token_Newline)
-        {
-            haveNewline = true;
-        }
-        else if(token->type == cmListFileLexer_Token_Identifier)
-        {
-            if(haveNewline)
-            {
-                haveNewline = false;
-                if ( parseCMakeFunction( lexer, qPrintable( tempName ) ) )
-                    parseError = false;
-                else
-                    parseError = true;
-            }
-            else
-                parseError = true;
-        }
-        else
-            parseError = true;
-    }
-
+    bool parseError = parseCMakeFile( qPrintable( tempName ) );
     QVERIFY( parseError == false );
 
 }
@@ -131,36 +103,7 @@ void CMakeParserTest::testParserWithBadData()
     tempFile.write( text.toUtf8() );
     QString tempName = tempFile.fileName();
     tempFile.close(); //hacks to the get name of the file
-    cmListFileLexer* lexer = cmListFileLexer_New();
-    if ( !lexer )
-        QFAIL( "unable to create lexer" );
-    QVERIFY( cmListFileLexer_SetFileName( lexer, qPrintable( tempName ) ) );
-
-    bool parseError = false;
-    bool haveNewline = true;
-    cmListFileLexer_Token* token;
-    while(!parseError && (token = cmListFileLexer_Scan(lexer)))
-    {
-        if(token->type == cmListFileLexer_Token_Newline)
-        {
-            haveNewline = true;
-        }
-        else if(token->type == cmListFileLexer_Token_Identifier)
-        {
-            if(haveNewline)
-            {
-                haveNewline = false;
-                if ( parseCMakeFunction( lexer, qPrintable( tempName ) ) )
-                    parseError = false;
-                else
-                    parseError = true;
-            }
-            else
-                parseError = true;
-        }
-        else
-            parseError = true;
-    }
+    bool parseError = parseCMakeFile( qPrintable( tempName ) );
     QVERIFY( parseError == true );
 }
 
@@ -181,6 +124,44 @@ void CMakeParserTest::testParserWithBadData_data()
     QTest::newRow( "bad data 4" ) << "project(foo) set(mysrcs_SRCS foo.c)";
 }
 
+
+bool parseCMakeFile( const char* fileName )
+{
+    cmListFileLexer* lexer = cmListFileLexer_New();
+    if ( !lexer )
+        return false;
+    if ( !cmListFileLexer_SetFileName( lexer, fileName ) )
+        return false;
+
+    bool parseError = false;
+    bool haveNewline = true;
+    cmListFileLexer_Token* token;
+    while(!parseError && (token = cmListFileLexer_Scan(lexer)))
+    {
+        if(token->type == cmListFileLexer_Token_Newline)
+        {
+            haveNewline = true;
+        }
+        else if(token->type == cmListFileLexer_Token_Identifier)
+        {
+            if(haveNewline)
+            {
+                haveNewline = false;
+                if ( parseCMakeFunction( lexer, fileName ) )
+                    parseError = false;
+                else
+                    parseError = true;
+            }
+            else
+                parseError = true;
+        }
+        else
+            parseError = true;
+    }
+
+    return parseError;
+
+}
 
 
 bool parseCMakeFunction( cmListFileLexer* lexer,
