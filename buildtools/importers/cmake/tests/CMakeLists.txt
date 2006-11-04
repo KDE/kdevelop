@@ -108,4 +108,15 @@ add_test(cmake-customcommandtest ${EXECUTABLE_OUTPUT_PATH}/cmake-customcommandas
 add_test(cmake-customtargetasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-customtargetasttest)
 add_test(cmake-adddefinitionasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-adddefinitionasttest)
 add_test(cmake-adddependenciesasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-adddependenciesasttest)
+set ( addexecutableasttest_SRCS cmake_addexecutableast_test.cpp )
+kde4_automoc( cmake-addexecutableasttest ${addexecutableasttest_SRCS} )
+kde4_add_executable( cmake-addexecutableasttest NOGUI RUN_UNINSTALLED ${addexecutableasttest_SRCS} )
+target_link_libraries( cmake-addexecutableasttest 
+  ${QT_QTTEST_LIBRARY}
+  ${KDE_KDECORE_LIBS}
+  kdevplatform
+  kdevcmakecommon )
+add_test( cmake-addexecutableasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-addexecutableasttest )
 endif(KDE4_BUILD_TESTS)
+
+

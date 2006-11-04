@@ -176,5 +176,9 @@ CMAKE_ADD_AST_MEMBER( QString,  const QString&, executable, Executable )
 CMAKE_ADD_AST_MEMBER( bool, bool, isWin32, Win32 )
 CMAKE_ADD_AST_MEMBER( bool, bool, isOsXBundle, OsXBundle )
 CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, sourceLists, SourceLists )
 CMAKE_END_AST_CLASS( AddExecutableAst )
+
+
+
 #endif

@@ -361,6 +361,9 @@ bool AddDependenciesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
 AddExecutableAst::AddExecutableAst()
 {
+    m_isWin32 = false;
+    m_isOsXBundle = false;
+    m_excludeFromAll = false;
 }
 
 AddExecutableAst::~AddExecutableAst()
@@ -371,10 +374,38 @@ void AddExecutableAst::writeBack( QString& )
 {
 }
 
-bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& )
+bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "add_executable" )
+        return false;
+
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    QList<CMakeFunctionArgument> args = func.arguments;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
+    it = args.begin();
+    m_executable = ( *it ).value;
+    ++it;
+    for ( ; it != itEnd; ++it )
+    {
+        if ( ( *it ).value == "WIN32" )
+            m_isWin32 = true;
+        else if ( ( *it ).value == "MACOSX_BUNDLE" )
+            m_isOsXBundle = true;
+        else if ( ( *it ).value == "EXCLUDE_FROM_ALL" )
+            m_excludeFromAll = true;
+        else
+            m_sourceLists.append( ( *it ).value );
+    }
+
+    if ( m_sourceLists.isEmpty() )
+        return false;
+
+    return true;
+
 }
+
 
 SetAst::SetAst()
 {
