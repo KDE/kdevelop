@@ -529,7 +529,15 @@ CMAKE_END_AST_CLASS( WhileAst )
 CMAKE_BEGIN_AST_CLASS( WriteFileAst )
 CMAKE_END_AST_CLASS( WriteFileAst )
 
+CMAKE_BEGIN_AST_CLASS( CustomInvokationAst )
+CMAKE_ADD_AST_MEMBER( CMakeFunctionDesc, const CMakeFunctionDesc&
+                      function, Function )
+CMAKE_ADD_AST_MEMBER( CMakeFunctionArguments, const CMakeFunctionArguments&,
+                      arguments, Arguments )
+CMAKE_END_AST_CLASS( CustomInvokationAst )
+
 #endif
+
 
 
 

@@ -2020,3 +2020,22 @@ bool WriteFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return false;
 }
 
+CustomInvokationAst::CustomInvokationAst()
+{
+}
+
+CustomInvokationAst::~CustomInvokationAst()
+{
+}
+
+void CustomInvokationAst::writeBack( QString& )
+{
+}
+
+bool CustomInvokationAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    m_function = func;
+    m_arguments = func.arguments;
+    return true;
+}
+
