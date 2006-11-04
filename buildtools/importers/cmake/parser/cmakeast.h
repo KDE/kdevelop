@@ -23,6 +23,8 @@
 
 #include <QtCore/QList>
 
+class CMakeFunctionDesc;
+
 class CMakeAst
 {
 public:
@@ -56,9 +58,38 @@ public:
      */
     virtual void writeBack(QString& buffer);
 
+    virtual bool parseFunctionInfo( const CMakeFunctionDesc& function ) { return false; }
+
 protected:
     QList<CMakeAst*> m_children;
 
 };
+
+#define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
+        CMakeAst* Create##klassName() { return new klassName; }            \
+        bool astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
+
+#define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName : public CMakeAst {  \
+    public:                                                  \
+        klassName() {}                                       \
+        ~klassName() {}                                      \
+                                                             \
+        virtual void writeBack( const QString& buffer );     \
+        virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
+
+#define CMAKE_ADD_AST_MEMBER( returnType, setterType, name ) \
+    public:                                              \
+        returnType name() const;                         \
+        void set##name( setterType );                    \
+    private:                                             \
+        returnType m_##name;
+
+#define CMAKE_ADD_AST_FUNCTION( function ) \
+    public:                                \
+       function;
+
+#define CMAKE_END_AST_CLASS( klassName ) };
+
+
 
 #endif

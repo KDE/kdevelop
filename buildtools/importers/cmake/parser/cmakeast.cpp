@@ -22,50 +22,69 @@
 
 #include <QtCore/QString>
 #include "astfactory.h"
-
-#define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
-        CMakeAst* Create##klassName() { return new klassName; }            \
-        bool registered = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
-
-#define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName : public CMakeAst {  \
-    public:                                                  \
-        klassName();                                         \
-        ~klassName();                                        \
-                                                             \
-        virtual void writeBack( const QString& buffer );
-
-#define CMAKE_ADD_AST_MEMBER( returnType, setterType, name ) \
-    public:                                              \
-        returnType name() const;                         \
-        void set##name( setterType );                    \
-    private:                                             \
-        returnType m_##name;
-
-#define CMAKE_ADD_AST_FUNCTION( function ) \
-    public:                                \
-       function;                           \
-
-#define CMAKE_END_AST_CLASS( klassName ) };
-
-
-CMAKE_BEGIN_AST_CLASS( SetAst )
-CMAKE_END_AST_CLASS( SetAst )
-CMAKE_REGISTER_AST( SetAst, set )
-
+#include "cmakelistsparser.h"
 
 void CMakeAst::writeBack(QString& buffer)
 {
 
 }
 
-SetAst::SetAst()
+
+CMAKE_BEGIN_AST_CLASS( CustomCommandAst )
+CMAKE_END_AST_CLASS( CustomCommandAst )
+CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
+
+CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
+CMAKE_END_AST_CLASS( CustomTargetAst )
+CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
+
+CMAKE_BEGIN_AST_CLASS( AddDefinitionsAst )
+CMAKE_END_AST_CLASS( AddDefinitionsAst )
+CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
+
+
+CMAKE_BEGIN_AST_CLASS( SetAst )
+CMAKE_END_AST_CLASS( SetAst )
+CMAKE_REGISTER_AST( SetAst, set )
+
+    ;
+
+
+void CustomCommandAst::writeBack( const QString& /*buffer */ )
 {
 }
 
-SetAst::~SetAst()
+bool CustomCommandAst::parseFunctionInfo( const CMakeFunctionDesc& )
 {
+    return false;
+}
+
+void CustomTargetAst::writeBack( const QString& )
+{
+}
+
+bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& )
+{
+    return false;
+}
+
+void AddDefinitionsAst::writeBack( const QString& )
+{
+}
+
+bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& )
+{
+   return false;
 }
 
 void SetAst::writeBack( const QString& buffer )
 {
+}
+
+bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if ( func.name.toLower() != "set" )
+        return false;
+
+    return true;
 }
