@@ -283,6 +283,8 @@ private:
 
         virtual void processInclude( QMake::IncludeAST* a);
 
+        virtual void processOrOperator( QMake::OrOperatorAST* a);
+
     private:
         QString getIndent();
         QString replaceWs(QString);

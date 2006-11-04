@@ -116,6 +116,7 @@ cont              \\{ws}*\n
 "}"                      { return RCURLY; }
 "("                      { BEGIN(funcargs); return LBRACE; }
 <funcargs,INITIAL>")"    { BEGIN(INITIAL); return RBRACE; }
+"|"                      { return OR_OPERATOR; }
 ":"                      { yylval.value = yytext; return COLON; }
 <list,list_with_comment,INITIAL>"\n"       { BEGIN(INITIAL); return NEWLINE; }
 

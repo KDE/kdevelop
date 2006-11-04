@@ -61,7 +61,8 @@
      QUOTED_VARIABLE_VALUE = 277,
      VARIABLE_VALUE = 278,
      INDENT = 279,
-     LIST_WS = 280
+     LIST_WS = 280,
+     OR_OPERATOR = 281
    };
 #endif
 /* Tokens.  */
@@ -88,6 +89,7 @@
 #define VARIABLE_VALUE 278
 #define INDENT 279
 #define LIST_WS 280
+#define OR_OPERATOR 281
 
 
 

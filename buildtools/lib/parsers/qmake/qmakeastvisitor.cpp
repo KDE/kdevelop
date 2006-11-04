@@ -55,6 +55,9 @@ void ASTVisitor::processProject(ProjectAST *project)
             case AST::IncludeAST:
                 processInclude(static_cast<QMake::IncludeAST*>(ast));
                 break;
+            case AST::OrOperatorAST:
+                processOrOperator(static_cast<QMake::OrOperatorAST*>(ast));
+                break;
         }
     }
     if (project->isProject())

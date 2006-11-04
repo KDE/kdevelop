@@ -47,7 +47,8 @@ public:
         AssignmentAST     /**<Variable assignment.*/,
         NewLineAST        /**<Line feed.*/,
         CommentAST        /**<Comment.*/,
-        IncludeAST        /**<.pri include.*/
+        IncludeAST        /**<.pri include.*/,
+        OrOperatorAST     /* | */
     };
 
     /**Constructs AST with given node type.*/
@@ -191,6 +192,20 @@ public:
     virtual void writeBack(QString &buffer);
 
 };
+
+/**
+Or-Op AST node.
+Represents | between function calls
+*/
+class OrOperatorAST: public AST {
+public:
+    OrOperatorAST(): AST(AST::OrOperatorAST) {}
+
+    virtual void writeBack(QString &buffer);
+
+};
+
+
 
 
 /**

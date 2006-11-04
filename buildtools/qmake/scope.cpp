@@ -1200,6 +1200,12 @@ void Scope::PrintAST::processNewLine( QMake::NewLineAST* n)
     QMake::ASTVisitor::processNewLine(n);
 }
 
+void Scope::PrintAST::processOrOperator( QMake::OrOperatorAST* n)
+{
+    kdDebug(9024) << getIndent() << "OrOperator " << endl;
+    QMake::ASTVisitor::processOrOperator(n);
+}
+
 void Scope::PrintAST::processComment( QMake::CommentAST* a)
 {
     kdDebug(9024) << getIndent() << "Comment: " << replaceWs(a->comment) << endl;
