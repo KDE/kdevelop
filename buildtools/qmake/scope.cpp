@@ -872,7 +872,7 @@ void Scope::init()
                             && variableValues("INSTALLS").contains(m->scopedID.left( m->scopedID.findRev(".") ) )
                           )
                       && !(
-                            ( m->scopedID.contains( ".subdir" ) || m->scopedID.contains( ".depends" ) )
+                            ( m->scopedID.contains( ".subdir" ) )
                             && variableValues("SUBDIRS").contains(m->scopedID.left( m->scopedID.findRev(".") ) )
                           )
                     )
@@ -1122,24 +1122,6 @@ Scope* Scope::disableSubproject( const QString& dir)
 
     return 0;
 }
-
-
-// const QValueList<Scope*> Scope::functionScopes() const
-// {
-//     QValueList<Scope*>
-// }
-//
-// const QValueList<Scope*> Scope::simpleScopes() const
-// {
-// }
-//
-// const QValueList<Scope*> Scope::includeScopes() const
-// {
-// }
-//
-// const QValueList<Scope*> Scope::subProjectScopes() const
-// {
-// }
 
 #ifdef DEBUG
 void Scope::printTree()
