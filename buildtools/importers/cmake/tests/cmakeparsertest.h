@@ -40,7 +40,10 @@ private slots:
     void testLexerWithFile();
 
     void testParserWithGoodData();
+    void testParserWithGoodData_data();
+
     void testParserWithBadData();
+    void testParserWithBadData_data();
 
 
 };

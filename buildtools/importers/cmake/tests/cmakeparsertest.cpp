@@ -23,6 +23,9 @@
 #include <QtCore/QTemporaryFile>
 #include "cmListFileLexer.h"
 
+static bool parseCMakeFunction( cmListFileLexer* lexer,
+                                const char* filename );
+
 QTEST_MAIN( CMakeParserTest )
 
 CMakeParserTest::CMakeParserTest()
@@ -62,12 +65,161 @@ void CMakeParserTest::testLexerWithFile()
 
 void CMakeParserTest::testParserWithGoodData()
 {
-    QFAIL( "the magic is missing" );
+//    QFAIL( "the magic is missing" );
+    QFETCH( QString, text );
+    QTemporaryFile tempFile;
+    tempFile.setAutoRemove( false );
+    tempFile.open();
+    if ( !QFile::exists( tempFile.fileName() ) )
+        QFAIL( "Unable to open temporary file" );
+
+    tempFile.write( text.toUtf8() );
+    QString tempName = tempFile.fileName();
+    tempFile.close(); //hacks to the get name of the file
+    cmListFileLexer* lexer = cmListFileLexer_New();
+    if ( !lexer )
+        QFAIL( "unable to create lexer" );
+    QVERIFY( cmListFileLexer_SetFileName( lexer, qPrintable( tempName ) ) );
+
+    bool parseError = false;
+    bool haveNewline = true;
+    cmListFileLexer_Token* token;
+    while(!parseError && (token = cmListFileLexer_Scan(lexer)))
+    {
+        if(token->type == cmListFileLexer_Token_Newline)
+        {
+            haveNewline = true;
+        }
+        else if(token->type == cmListFileLexer_Token_Identifier)
+        {
+            if(haveNewline)
+            {
+                haveNewline = false;
+                if ( parseCMakeFunction( lexer, qPrintable( tempName ) ) )
+                    parseError = false;
+                else
+                    parseError = true;
+            }
+            else
+                parseError = true;
+        }
+        else
+            parseError = true;
+    }
+
+    QVERIFY( parseError == false );
+
+}
+
+void CMakeParserTest::testParserWithGoodData_data()
+{
+    QTest::addColumn<QString>( "text" );
+    QTest::newRow( "good data1" ) << "project(foo)\nset(foobar_SRCS foo.h foo.c)";
+    QTest::newRow( "good data2" ) << "set(foobar_SRCS foo.h foo.c)\n"
+                                     "add_executable( foo ${foobar_SRCS})";
 }
 
 void CMakeParserTest::testParserWithBadData()
 {
-    QFAIL( "the magic is missing" );
+    QFETCH( QString, text );
+    QTemporaryFile tempFile;
+    tempFile.setAutoRemove( false );
+    tempFile.open();
+    if ( !QFile::exists( tempFile.fileName() ) )
+        QFAIL( "Unable to open temporary file" );
+
+    tempFile.write( text.toUtf8() );
+    QString tempName = tempFile.fileName();
+    tempFile.close(); //hacks to the get name of the file
+    cmListFileLexer* lexer = cmListFileLexer_New();
+    if ( !lexer )
+        QFAIL( "unable to create lexer" );
+    QVERIFY( cmListFileLexer_SetFileName( lexer, qPrintable( tempName ) ) );
+
+    bool parseError = false;
+    bool haveNewline = true;
+    cmListFileLexer_Token* token;
+    while(!parseError && (token = cmListFileLexer_Scan(lexer)))
+    {
+        if(token->type == cmListFileLexer_Token_Newline)
+        {
+            haveNewline = true;
+        }
+        else if(token->type == cmListFileLexer_Token_Identifier)
+        {
+            if(haveNewline)
+            {
+                haveNewline = false;
+                if ( parseCMakeFunction( lexer, qPrintable( tempName ) ) )
+                    parseError = false;
+                else
+                    parseError = true;
+            }
+            else
+                parseError = true;
+        }
+        else
+            parseError = true;
+    }
+    QVERIFY( parseError == true );
+}
+
+void CMakeParserTest::testParserWithBadData_data()
+{
+    QTest::addColumn<QString>( "text" );
+
+    //just plain wrong. :)
+    QTest::newRow( "bad data 1" ) << "foo bar baz zippedy do dah";
+
+    //missing right parenthesis
+    QTest::newRow( "bad data 2" ) << "set(mysrcs_SRCS foo.c\n\n\n";
+
+    //extra identifiers between functions. cmake doesn't allow plain identifiers
+    QTest::newRow( "bad data 3" ) << "the(quick) brown fox jumped(over) the lazy dog";
+
+    //invalid due to no newline before next command
+    QTest::newRow( "bad data 4" ) << "project(foo) set(mysrcs_SRCS foo.c)";
+}
+
+
+
+bool parseCMakeFunction( cmListFileLexer* lexer,
+                         const char* fileName )
+{
+    // Command name has already been parsed.  Read the left paren.
+    cmListFileLexer_Token* token;
+    if(!(token = cmListFileLexer_Scan(lexer)))
+    {
+        return false;
+    }
+    if(token->type != cmListFileLexer_Token_ParenLeft)
+    {
+        return false;
+    }
+
+    // Arguments.
+    unsigned long lastLine = cmListFileLexer_GetCurrentLine(lexer);
+    while((token = cmListFileLexer_Scan(lexer)))
+    {
+        if(token->type == cmListFileLexer_Token_ParenRight)
+        {
+            return true;
+        }
+        else if(token->type == cmListFileLexer_Token_Identifier ||
+                token->type == cmListFileLexer_Token_ArgumentUnquoted)
+        {
+        }
+        else if(token->type == cmListFileLexer_Token_ArgumentQuoted)
+        {
+        }
+        else if(token->type != cmListFileLexer_Token_Newline)
+        {
+            return false;
+        }
+        lastLine = cmListFileLexer_GetCurrentLine(lexer);
+    }
+
+    return false;
 }
 
 
