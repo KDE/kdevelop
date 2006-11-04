@@ -470,13 +470,9 @@ void QMakeScopeItem::buildSubTree()
 
     QValueList<Scope*> scopes = scope->scopesInOrder();
 
-    QMakeScopeItem* lastItem = 0;
     for ( it = scopes.begin(); it != scopes.end(); ++it )
     {
-        new QMakeScopeItem( this, s->scopeName(), ( *it ) );
-//         if ( lastItem )
-//             newitem->moveItem( lastItem );
-//         lastItem = newitem;
+        new QMakeScopeItem( this, ( *it )->scopeName(), ( *it ) );
     }
     sortChildItems( 0, true );
 }
