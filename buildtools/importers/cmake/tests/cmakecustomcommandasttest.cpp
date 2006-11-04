@@ -29,6 +29,7 @@ void CustomCommandAstTests::testGoodParse()
     QFETCH( CMakeFunctionDesc, function );
     CustomCommandAst* ast = new CustomCommandAst();
     QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
 }
 
 void CustomCommandAstTests::testGoodParse_data()
@@ -80,6 +81,7 @@ void CustomCommandAstTests::testBadParse()
     QFETCH( CMakeFunctionDesc, function );
     CustomCommandAst* ast = new CustomCommandAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
+    delete ast;
 }
 
 void CustomCommandAstTests::testBadParse_data()
