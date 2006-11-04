@@ -22,19 +22,19 @@
 class AutoProjectTool
 {
 public:
-	
+
 	/**
 	 * Loads the compiler options plugin for the given compiler, executes the dialog
 	 * with some initial flags, and returns the new flags.
 	 */
 	static QString execFlagsDialog( const QString &compiler, const QString &flags, QWidget *parent );
-	
+
 	/**
 	 * Returns the canonicalized version of a file name, i.e.
 	 * the file name with special characters replaced by underscores
 	 */
 	static QString canonicalize( const QString &str );
-	
+
 	/**
 	 * Parses a Makefile.am and stores its variable assignments
 	 * in a map.
@@ -42,6 +42,8 @@ public:
 	static void parseMakefileam( const QString &filename, QMap<QString, QString> *variables );
 	static void modifyMakefileam( const QString &filename, QMap<QString, QString> variables );
 	static void removeFromMakefileam( const QString &filename, QMap<QString, QString> variables );
+
+	static void addRemoveMakefileam(const QString &fileName, QMap<QString, QString> variables,  bool add);
 
 	/**
 	 * Parses configure.in and splits AC_OUTPUT into a QStringList
@@ -56,6 +58,6 @@ public:
 
 };
 
-#endif 
+#endif
 // kate: indent-mode csands; tab-width 4;
 

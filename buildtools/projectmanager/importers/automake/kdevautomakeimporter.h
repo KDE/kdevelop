@@ -28,40 +28,41 @@ class KDevAutomakeImporter: public KDevProjectImporter
     Q_OBJECT
 public:
     typedef QMap<QString, QVariant> Environment;
-    
+
 public:
-    KDevAutomakeImporter(QObject *parent = 0, const char *name = 0, 
+    KDevAutomakeImporter(QObject *parent = 0, const char *name = 0,
             const QStringList &args = QStringList());
     virtual ~KDevAutomakeImporter();
-    
+
 //
 // KDevProjectImporter inerface
 //
     virtual KDevProject *project() const;
-    
-    virtual ProjectFolderList parse(ProjectFolderDom item);    
+
+    virtual ProjectFolderList parse(ProjectFolderDom item);
     virtual ProjectItemDom import(ProjectModel *model, const QString &fileName);
     virtual QString findMakefile(ProjectFolderDom dom) const;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
-  
-private:    
+
+private:
     static void setup(AutomakeTargetDom dom, const QString &name, const QString &prefix, const QString &primary);
     static QString nicePrimary(const QString &primary);
     static void parseMakefile(const QString &fileName, ProjectItemDom dom);
-    static void saveMakefile(const QString &fileName, ProjectItemDom dom);    
+    static void saveMakefile(const QString &fileName, ProjectItemDom dom);
     static void modifyMakefile(const QString &fileName, const Environment &env);
     static void removeFromMakefile(const QString &fileName, const Environment &env);
+    static void addRemoveMakefileam(const QString &fileName, QMap<QString, QString> variables,  bool add);
     static QString canonicalize(const QString &str);
-    
+
     QStringList findMakefiles(ProjectFolderDom dom);
     AutomakeTargetDom findNoinstHeaders(ProjectFolderDom item);
-    
+
     void parseKDEDOCS(ProjectItemDom item, const QString &lhs, const QString &rhs);
     void parseKDEICON(ProjectItemDom item, const QString &lhs, const QString &rhs);
     void parsePrimary(ProjectItemDom item, const QString &lhs, const QString &rhs);
     void parsePrefix(ProjectItemDom item, const QString &lhs, const QString &rhs);
     ProjectFolderList parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs);
-	
+
 private:
     KDevProject *m_project;
     QStringList headers; // ### remove me!!

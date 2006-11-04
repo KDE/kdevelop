@@ -13,6 +13,7 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <qtextstream.h>
+#include <qdict.h>
 
 #include <kdebug.h>
 #include <kparts/componentfactory.h>
@@ -94,238 +95,559 @@ QString AutoProjectTool::canonicalize( const QString &str )
 }
 
 
-void AutoProjectTool::parseMakefileam( const QString &fileName, QMap<QString, QString> *variables )
+/**
+ * Read the Makefile.am and return a map of all the variables.
+ * Will take notice of backslash and += constructs.
+ * @param fileName
+ * @param variables
+ */
+void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString, QString> *variables)
 {
-	QFile f( fileName );
-	if ( !f.open( IO_ReadOnly ) )
-		return ;
-	QTextStream stream( &f );
-
-	QRegExp re( "^(#kdevelop:[ \t]*)?([A-Za-z][@A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
-
-	while ( !stream.atEnd() )
+	QFile f(fileName);
+	if (!f.open(IO_ReadOnly))
 	{
-		QString line;
-		QString s = stream.readLine();
-		while ( !s.isEmpty() && s[ s.length() - 1 ] == '\\' && !stream.atEnd() )
-		{
-			// Read continuation lines
-			line += s.left( s.length() - 1 );
-			s = stream.readLine();
-		}
-		line += s;
-
-		if ( re.exactMatch( line ) )
-		{
-			QString lhs = re.cap( 2 );
-			// The need for stripWhitespace seems to be a Qt bug.
-			QString rhs = re.cap( 3 ).stripWhiteSpace();
-			variables->insert( lhs, rhs );
-		}
-	}
-
-	f.close();
-}
-
-
-void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, QString> variables )
-{
-	QFile fin( fileName );
-	if ( !fin.open( IO_ReadOnly ) )
-		return ;
-	QTextStream ins( &fin );
-
-	QFile fout( fileName + "#" );
-	if ( !fout.open( IO_WriteOnly ) )
-	{
-		fin.close();
 		return ;
 	}
-	QTextStream outs( &fout );
+	QTextStream stream(&f);
 
-	QRegExp re( "^([A-Za-z][@A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
+	QRegExp re("^(#kdevelop:[ \t]*)?([A-Za-z][@A-Za-z0-9_]*)[ \t]*([:\\+]?=)[ \t]*(.*)$");
 
-	while ( !ins.atEnd() )
+	QString last;
+	bool multiLine = false;
+	while (!stream.atEnd())
 	{
-		QString line;
-		QString s = ins.readLine();
-		if ( re.exactMatch( s ) )
+		QString s = stream.readLine().stripWhiteSpace();
+		if (re.exactMatch(s))
 		{
-			QString lhs = re.cap( 1 );
-			QString rhs = re.cap( 2 );
-			QMap<QString, QString>::Iterator it = variables.find( lhs );
-
-			if ( it != variables.end() )
+			QString lhs = re.cap(2);
+			QString rhs = re.cap(4);
+			if (rhs[ rhs.length() - 1 ] == '\\')
 			{
-				// Skip continuation lines
-				while ( !s.isEmpty() && s[ s.length() - 1 ] == '\\' && !ins.atEnd() )
-					s = ins.readLine();
-				if( !it.data().stripWhiteSpace().isEmpty() ) {
-					QStringList variableList = QStringList::split(' ', it.data());
-					s = it.key() + " = ";
-					int l = s.length();
-					for (uint i = 0; i < variableList.count(); i++) {
-						l += variableList[i].length() + 1;
-						if (l > 80)	{
-							s += "\\\n\t";
-							l = 8;
-						}
-						s += variableList[i];
-						if( i != variableList.count() - 1 )
-							s += ' ';
-					}
-				}
-				else
-				    s = QString::null;
-				variables.remove( it );
+				multiLine = true;
+				last = lhs;
+				rhs[rhs.length() - 1] = ' ';
+			}
+
+			// The need for stripWhiteSpace seems to be a Qt bug.
+			// make our list nice and neat.
+			QStringList bits = QStringList::split(" ", rhs);
+			rhs = bits.join(" ");
+			if (re.cap(3) == "+=")
+			{
+				((*variables)[lhs] += ' ') += rhs;
 			}
 			else
 			{
-				while ( !s.isEmpty() && s[ s.length() - 1 ] == '\\' && !ins.atEnd() )
-				{
-					outs << s << endl;
-					s = ins.readLine();
-				}
+				variables->insert(lhs, rhs);
 			}
 		}
-
-		outs << s << endl;
-	}
-
-	// Write new variables out
-	QMap<QString, QString>::Iterator it2;
-	for ( it2 = variables.begin(); it2 != variables.end(); ++it2 ){
-	    if( !it2.data().stripWhiteSpace().isEmpty() ) {
-		QStringList variableList = QStringList::split(' ', it2.data());
-		outs << it2.key() + " =";
-		int l = it2.key().length() + 2;
-		for (uint i = 0; i < variableList.count(); i++) {
-			l += variableList[i].length() + 1;
-			if (l > 80)	{
-				outs << "\\\n\t" << variableList[i];
-				l = 8 + variableList[i].length();
-			} else
+		else if (multiLine)
+		{
+			if (s[s.length()-1] == '\\')
 			{
-				outs << ' ' << variableList[i];
+				s[s.length()-1] = ' ';
 			}
+			else
+			{
+				multiLine = false;
+			}
+			QStringList bits = QStringList::split(" ", s);
+			((*variables)[last] += ' ') += bits.join(" ");
 		}
-		outs << endl;
-            }
 	}
+	f.close();
 
-	fin.close();
-	fout.close();
+	QMap<QString, QString> list;
 
-	QDir().rename( fileName + "#", fileName );
+	for (QMap<QString, QString>::iterator iter = variables->begin();iter != variables->end();iter++)
+	{
+		QStringList items = QStringList::split(" ", iter.data());
+		QMap<QString, QString> unique;
+		for (uint i = 0;i < items.size();i++)
+		{
+			unique.insert(items[i], "");
+		}
+		QString line;
+		for (QMap<QString, QString>::iterator it = unique.begin();it != unique.end();it++)
+		{
+			line += it.key() + ' ';
+		}
+		if (line.length() > 1)
+		{
+			line.setLength(line.length() - 1);
+		}
+
+		list.insert(iter.key(), line);
+	}
+	*variables = list;
 }
 
-void AutoProjectTool::removeFromMakefileam ( const QString &fileName, QMap <QString, QString> variables )
+void AutoProjectTool::modifyMakefileam(const QString &fileName, QMap<QString, QString> variables)
 {
-	QFile fin( fileName );
-	if ( !fin.open( IO_ReadOnly ) )
-		return ;
-	QTextStream ins( &fin );
+	AutoProjectTool::addRemoveMakefileam(fileName,  variables,  true);
+}
 
-	QFile fout( fileName + "#" );
-	if ( !fout.open( IO_WriteOnly ) )
+/**
+ * Add entries to a variable. Will just add the variables to the existing line, removing duplicates
+ * Will preserve += constructs and make sure that the variable only has one copy of the value across
+ * all += constructs
+ * @param fileName
+ * @param variables key=value string of entries to add
+ * @param add true= add these key,value pairs, false = remove. You can have empty values for an add - the whole line is
+ * removed. For adding, we will not add an empty line.
+ */
+void AutoProjectTool::addRemoveMakefileam(const QString &fileName, QMap<QString, QString> variables,  bool add)
+{
+	// input file reading
+	QFile fin(fileName);
+	if (!fin.open(IO_ReadOnly))
+	{
+		return ;
+	}
+	QTextStream ins(&fin);
+
+	// output file writing.
+	QFile fout(fileName + "#");
+	if (!fout.open(IO_WriteOnly))
 	{
 		fin.close();
 		return ;
 	}
-	QTextStream outs( &fout );
+	QTextStream outs(&fout);
 
-	QRegExp re( "^([A-Za-z][@A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
+	// variables
+	QRegExp re("^(#kdevelop:[ \t]*)?([A-Za-z][@A-Za-z0-9_]*)[ \t]*([:\\+]?=)[ \t]*(.*)$");
 
-	while ( !ins.atEnd() )
+	// build key=map of values to add
+	// map can be empty.we never add an empty key, but do remove empty keys from the file..
+	QDict< QMap<QString, bool> > interest;
+	for (QMap<QString, QString>::Iterator it0 = variables.begin(); it0 != variables.end(); ++it0)
 	{
-		bool found = false;
-		QString s = ins.readLine();
-
-		if ( re.exactMatch( s ) )
+		QMap<QString, bool>* set = new QMap<QString, bool>();
+		if (!it0.data().stripWhiteSpace().isEmpty())
 		{
-			QString lhs = re.cap( 1 );
-			QString rhs = re.cap( 2 );
-			QMap<QString, QString>::Iterator it;
+			QStringList variableList = QStringList::split(' ', it0.data());
 
-			for ( it = variables.begin(); it != variables.end(); ++it )
+			for (uint i = 0; i < variableList.count(); i++)
 			{
-				if ( lhs == it.key() )
-				{
-					// Skip continuation lines
-					while ( !s.isEmpty() && s[ s.length() - 1 ] == '\\' && !ins.atEnd() )
-						s = ins.readLine();
-
-					variables.remove ( it );
-
-					found = true;
-
-					break;
-				}
+				set->insert(variableList[i], true);
 			}
 		}
-
-		if ( !found )
-			outs << s << endl;
+		interest.insert(it0.key(), set);
 	}
+
+	bool multiLine = false;
+	QString lastLhs;
+	QStringList lastRhs;
+	QMap<QString, QString> seenLhs;
+	while (!fin.atEnd())
+	{
+		QString s = ins.readLine();
+		if (re.exactMatch(s))
+		{
+			QString lhs = re.cap(2);
+			QMap<QString, bool>* ourRhs = interest.find(lhs);
+
+			if (!ourRhs)
+			{
+				// not interested in this line at all
+				// write it out as is..
+				outs << s << endl;
+			}
+			else
+			{
+				// we are interested in this line..
+				QString rhs = re.cap(4).stripWhiteSpace();
+				if (rhs[ rhs.length() - 1 ] == '\\')
+				{
+					// save it for when we have the whole line..
+					multiLine = true;
+					lastLhs = lhs;
+					rhs.setLength(rhs.length() - 1);
+					lastRhs += QStringList::split(" ", rhs);
+				}
+				else
+				{
+					// deal with it now.
+
+					QStringList bits = QStringList::split(" ", rhs);
+					if (add)
+					{
+						// we are adding our interested values to this line and writing it
+
+						// add this line to we we want to add to remove duplicates.
+						for (uint index = 0; index < bits.size(); index++)
+						{
+							QMap<QString, bool>::iterator findEntry = ourRhs->find(bits[index]);
+							if (findEntry == ourRhs->end())
+							{
+								// we haven't seen it, so add it, so we don't add it again later..
+								ourRhs->insert(bits[index], true);
+							}
+							// else we have this value in our 'to add list' , it is either already been
+							// added, so we don't want to add it again, or it hasn't been added, in which
+							// case we will do so soon. so we can ignore this now..
+						}
+						// now write the line out if it is not going to be empty.
+						QString newLine(lhs);
+						if (seenLhs.find(lhs) == seenLhs.end())
+						{
+							newLine += " = ";
+							seenLhs[lhs] = "";
+						}
+						else
+						{
+							newLine += " += ";
+						}
+
+						int len = newLine.length();
+						bool added = false;
+						QValueList<QString> keys = ourRhs->keys();
+						for (uint count = 0; count < keys.size(); count++)
+						{
+							// if out entry is true, add it..
+							if ((*ourRhs)[keys[count]])
+							{
+								added = true;
+								len += keys[count].length() + 1;
+								if (len > 80)
+								{
+									newLine += "\\\n\t";
+									len = 8;
+								}
+								newLine += keys[count];
+								newLine += ' ';
+								// set our value so we don't add it again.
+								(*ourRhs)[keys[count]] = false;
+							}
+						}
+						// only print it out if there was a value to add..
+						if (added)
+						{
+							newLine.setLength(newLine.length() - 1);
+							outs << newLine << endl;
+						}
+					}
+					else
+					{
+						// we are removing our interested values from this line
+
+						// special case - no values, remove the line..
+						if (!ourRhs->empty())
+						{
+							// check if any of these values are down to remove.
+							QString newLine(lhs);
+							if (seenLhs.find(lhs) == seenLhs.end())
+							{
+								newLine += " = ";
+								seenLhs[lhs] = "";
+							}
+							else
+							{
+								newLine += " += ";
+							}
+
+							int len = newLine.length();
+							bool added = false;
+							for (QStringList::Iterator posIter = bits.begin(); posIter != bits.end();posIter++)
+							{
+								QMap<QString, bool>::iterator findEntry = ourRhs->find(*posIter);
+								if (findEntry == ourRhs->end())
+								{
+									// we do not want to remove it..
+									added = true;
+									len += (*posIter).length() + 1;
+									if (len > 80)
+									{
+										newLine += "\\\n\t";
+										len = 8;
+									}
+									newLine += (*posIter);
+									newLine += ' ';
+								}
+								// else we have this value in our 'to remove list', so don't add it.
+							}
+							// only print it out if there was a value on it..
+							if (added)
+							{
+								newLine.setLength(newLine.length() - 1);
+								outs << newLine << endl;
+							}
+						}
+					}//if (add)
+				}//if ( rhs[ rhs.length() - 1 ] == '\\'  )
+			}//if ( found == interest.end())
+		}
+		else if (multiLine)
+		{
+			s = s.stripWhiteSpace();
+			// we are only here if were interested in this line..
+			if (s[s.length()-1] == '\\')
+			{
+				s.setLength(s.length() - 1);
+				// still more multi line we wait for..
+			}
+			else
+			{
+				// end of the multi line..
+				multiLine = false;
+			}
+			lastRhs += QStringList::split(" ", s);
+
+			if (!multiLine)
+			{
+				// now we have to deal with this multiLine value..
+				// ourRhs will always be a value, as we only get multiLine if we're interested in it..
+				QMap<QString, bool>* ourRhs = interest.find(lastLhs);
+
+				if (add)
+				{
+					// we are adding our interested values to this line and writing it
+
+					// add this line to we we want to add to remove duplicates.
+					for (uint index = 0; index < lastRhs.size(); index++)
+					{
+						QMap<QString, bool>::iterator findEntry = ourRhs->find(lastRhs[index]);
+						if (findEntry == ourRhs->end())
+						{
+							// we haven't seen it, so add it, so we don't add it again later..
+							ourRhs->insert(lastRhs[index], true);
+						}
+						// else we have this value in our 'to add list' , it is either already been
+						// added, so we don't want to add it again, or it hasn't been added, in which
+						// case we will do so soon. so we can ignore this now..
+					}
+					// now write the line out if it is not going to be empty.
+					QString newLine(lastLhs);
+					if (seenLhs.find(lastLhs) == seenLhs.end())
+					{
+						newLine += " = ";
+						seenLhs[lastLhs] = "";
+					}
+					else
+					{
+						newLine += " += ";
+					}
+
+					int len = newLine.length();
+					bool added = false;
+					QValueList<QString> keys = ourRhs->keys();
+					for (uint count = 0; count < keys.size(); count++)
+					{
+						// if out entry is true, add it..
+						if ((*ourRhs)[keys[count]])
+						{
+							added = true;
+							len += keys[count].length() + 1;
+							if (len > 80)
+							{
+								newLine += "\\\n\t";
+								len = 8;
+							}
+							newLine += keys[count];
+							newLine += ' ';
+							// set our value so we don't add it again.
+							(*ourRhs)[keys[count]] = false;
+						}
+					}
+					// only print it out if there was a value to add..
+					if (added)
+					{
+						newLine.setLength(newLine.length() - 1);
+						outs << newLine << endl;
+					}
+				}
+				else
+				{
+					// we are removing our interested values from this line
+
+					// special case - no values, remove the line..
+					if (!ourRhs->empty())
+					{
+						// check if any of these values are down to remove.
+						QString newLine(lastLhs);
+						if (seenLhs.find(lastLhs) == seenLhs.end())
+						{
+							newLine += " = ";
+							seenLhs[lastLhs] = "";
+						}
+						else
+						{
+							newLine += " += ";
+						}
+						int len = newLine.length();
+						bool added = false;
+						for (QStringList::Iterator posIter = lastRhs.begin(); posIter != lastRhs.end();posIter++)
+						{
+							QMap<QString, bool>::iterator findEntry = ourRhs->find(*posIter);
+							if (findEntry == ourRhs->end())
+							{
+								// we do not want to remove it..
+								added = true;
+								len += (*posIter).length() + 1;
+								if (len > 80)
+								{
+									newLine += "\\\n\t";
+									len = 8;
+								}
+								newLine += (*posIter);
+								newLine += ' ';
+							}
+							// else we have this value in our 'to remove list', so don't add it.
+						}
+						// only print it out if there was a value on it..
+						if (added)
+						{
+							newLine.setLength(newLine.length() - 1);
+							outs << newLine << endl;
+						}
+					}
+				}
+
+				lastLhs.setLength(0);
+				lastRhs.clear();
+			}
+		}
+		else
+		{
+			// can write this line out..
+			// not a match, not a multi line,
+			outs << s << endl;
+		}
+	}
+
+	if (add)
+	{
+		QDictIterator<QMap<QString, bool> > it(interest);
+		for (; it.current(); ++it)
+		{
+			QString lhs = it.currentKey();
+			QMap<QString, bool>* ourRhs = it.current();
+
+			QString newLine(lhs);
+			if (seenLhs.find(lastLhs) == seenLhs.end())
+			{
+				newLine += " = ";
+				seenLhs[lastLhs] = "";
+			}
+			else
+			{
+				newLine += " += ";
+			}
+			int len = newLine.length();
+			bool added = false;
+			QValueList<QString> keys = ourRhs->keys();
+			for (uint count = 0; count < keys.size(); count++)
+			{
+				if ((*ourRhs)[keys[count]])
+				{
+					added = true;
+					len += keys[count].length() + 1;
+					if (len > 80)
+					{
+						newLine += "\\\n\t";
+						len = 8;
+					}
+					newLine += keys[count];
+					newLine += ' ';
+					// set our value so we don't add it again.
+					(*ourRhs)[keys[count]] = false;
+				}
+			}
+			// only print it out if there was a value to add..
+			if (added)
+			{
+				newLine.setLength(newLine.length() - 1);
+				outs << newLine << endl;
+			}
+		}
+	}
+	interest.setAutoDelete(true);
+	interest.clear();
 
 	fin.close();
 	fout.close();
 
-	QDir().rename ( fileName + "#", fileName );
+	QDir().rename(fileName + "#", fileName);
+}
+
+void AutoProjectTool::removeFromMakefileam(const QString &fileName, QMap <QString, QString> variables)
+{
+	AutoProjectTool::addRemoveMakefileam(fileName, variables,  false);
 }
 
 
+/**
+ * Open the file and parse out the AC_OUTPUT line. following backslash continue lines..
+ * @param configureinpath
+ * @return list of all the values
+ */
 QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
 {
 	QFile configurein(configureinpath);
 
-	if ( !configurein.open( IO_ReadOnly ) )
+	if (!configurein.open(IO_ReadOnly))
 	{
 		kdDebug(9020) << k_funcinfo << " - couldn't open file: " << configureinpath << endl;
 		return QStringList();
 	}
 
-	QTextStream stream( &configurein);
+	QTextStream stream(&configurein);
 	QStringList list;
 
 	QString ac_match("^AC_OUTPUT");
 
 	QRegExp ac_regex(ac_match);
-	bool multiLine=false;
+	bool multiLine = false;
 	QChar cont('\\');
 	QRegExp close("\\)");
-	while ( !stream.eof() ) {
+	QRegExp open("\\(");
+	while (!stream.eof())
+	{
 		QString line = stream.readLine().stripWhiteSpace();
-		if ( multiLine){
-			if (close.search(line) >= 0){
+		if (multiLine)
+		{
+			if (close.search(line) >= 0)
+			{
 				line = line.replace(close.search(line), 1, "");
 				list += QStringList::split(" ", line);
 				break;
 			}
-			else{
-				line.setLength(line.length()-1);
+			else
+			{
+				if (line.endsWith(cont))
+				{
+					line.setLength(line.length() - 1);
+				}
 				list += QStringList::split(" ", line);
 			}
-		}else if ( ac_regex.search(line) >= 0 ) {
-			QRegExp open("\\(");
+		}
+		else if (ac_regex.search(line) >= 0)
+		{
 			line = line.replace(ac_regex.search(line), ac_match.length() - 1, "");
 
-			if (open.search(line) >= 0){
+			if (open.search(line) >= 0)
+			{
 				line = line.replace(open.search(line), 1, "");
 			}
 
-			if ( line.endsWith(cont) ){
-				line.setLength(line.length()-1);
-				multiLine=true;
-			}else{
-				if (close.search(line) >= 0){
+			if (line.endsWith(cont))
+			{
+				line.setLength(line.length() - 1);
+				multiLine = true;
+			}
+			else
+			{
+				if (close.search(line) >= 0)
+				{
 					line = line.replace(close.search(line), 1, "");
 				}
 			}
 
 			list = QStringList::split(" ", line);
 
-			if (!multiLine){
+			if (!multiLine)
+			{
 				break;
 			}
 		}
@@ -338,59 +660,155 @@ QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
 
 }
 
-void AutoProjectTool::configureinSaveMakefiles(QString configureinpath, QStringList makefiles)
+/**
+ * Write the addition items to the AC_OUTPUT line.
+ * @param configureinpath
+ * @param makefiles
+ */
+void AutoProjectTool::configureinSaveMakefiles(QString fileName, QStringList makefiles)
 {
-	// read configure.in into buffer origfilecontent
-	QFile configurein(configureinpath);
+// input file reading
+	QFile fin(fileName);
+	if (!fin.open(IO_ReadOnly))
+	{
+		return ;
+	}
+	QTextStream ins(&fin);
 
-	configurein.open ( IO_ReadOnly );
+	// output file writing.
+	QFile fout(fileName + "#");
+	if (!fout.open(IO_WriteOnly))
+	{
+		fin.close();
+		return ;
+	}
+	QTextStream outs(&fout);
 
-	QTextStream instream( &configurein);
-
-	QStringList origfilecontent;
-
-	while ( !instream.eof() ) {
-		QString line = instream.readLine();
-		origfilecontent.push_back(line);
+	QMap<QString, QString> toAdd;
+	for (uint i = 0; i < makefiles.size();i++)
+	{
+		toAdd.insert(makefiles[i].stripWhiteSpace(), "");
 	}
 
-	configurein.close();
-
-
-	// put origfilecontent back into configure.in
-	configurein.open ( IO_WriteOnly );
-	QTextStream outstream( &configurein);
-
+	QString ac_match("^AC_OUTPUT");
+	QRegExp ac_regex(ac_match);
+	bool multiLine = false;
+	QChar cont('\\');
 	QRegExp close("\\)");
-	bool multiLine=false;
-	QStringList::iterator it;
-	for ( it = origfilecontent.begin(); it != origfilecontent.end(); it++ ) {
-		QRegExp ac_regexp("^AC_OUTPUT");
-		QString currline = (QString) (*it);
-
-		if ( ac_regexp.search(currline) >= 0 ) {
-			QChar cont('\\');
-			if ( currline.endsWith(cont)){
-				multiLine=true;
-			}
-			QString acline("AC_OUTPUT(");
-			acline = acline.append(makefiles.join(" "));
-			acline = acline.append(")");
-			outstream << acline << "\n";
+	QRegExp open("\\(");
+	bool done = false;
+	while (!fin.atEnd())
+	{
+		QString line = ins.readLine();
+		if (done)
+		{
+			outs << line << endl;
 		}
-		else{
-			if (multiLine){
-				if (close.search(currline) >= 0){
-					multiLine=false;
+		else
+		{
+			if (multiLine)
+			{
+				line = line.stripWhiteSpace();
+				if (close.search(line) >= 0)
+				{
+					line = line.replace(close.search(line), 1, "");
+					QStringList list = QStringList::split(" ", line);
+					// remove dups if any..
+					for (uint i = 0; i < list.size();i++)
+					{
+						toAdd.insert(list[i], "");
+					}
+					int len = 10;
+					QString acline("AC_OUTPUT(");
+					for (QMap<QString, QString>::iterator iter = toAdd.begin();iter != toAdd.end();iter++)
+					{
+						len += iter.key().length();
+						if (len > 80)
+						{
+							acline += "\\\n\t";
+							len = 8;
+						}
+						acline += iter.key();
+						acline += ' ';
+					}
+					acline.setLength(acline.length() - 1);
+					acline = acline.append(")");
+					outs  << acline << endl;
+					done = true;
+				}
+				else
+				{
+					if (line.endsWith(cont))
+					{
+						line.setLength(line.length() - 1);
+					}
+
+					QStringList list = QStringList::split(" ", line);
+					// remove dups if any..
+					for (uint i = 0; i < list.size();i++)
+					{
+						toAdd.insert(list[i], "");
+					}
 				}
 			}
-			else{
-				outstream << currline << "\n";
+			else if (ac_regex.search(line) >= 0)
+			{
+				line = line.stripWhiteSpace();
+				line = line.replace(ac_regex.search(line), ac_match.length() - 1, "");
+				if (line.endsWith(cont))
+				{
+					line.setLength(line.length() - 1);
+					multiLine = true;
+				}
+				if (open.search(line) >= 0)
+				{
+					line = line.replace(open.search(line), 1, "");
+				}
+				if (close.search(line) >= 0)
+				{
+					line = line.replace(close.search(line), 1, "");
+				}
+
+				QStringList list = QStringList::split(" ", line);
+				// remove dups if any..
+				for (uint i = 0; i < list.size();i++)
+				{
+					toAdd.insert(list[i], "");
+				}
+
+				if (!multiLine)
+				{
+					int len = 10;
+					QString acline("AC_OUTPUT(");
+					for (QMap<QString, QString>::iterator iter = toAdd.begin();iter != toAdd.end();iter++)
+					{
+						len += iter.key().length();
+						if (len > 80)
+						{
+							acline += "\\\n\t";
+							len = 8;
+						}
+						acline += iter.key();
+						acline += ' ';
+					}
+					acline.setLength(acline.length() - 1);
+					acline = acline.append(")");
+					outs << acline << endl;
+					done = true;
+				}
+			}
+			else
+			{
+				outs << line << endl;
 			}
 		}
 	}
 
-	configurein.close();
+	fin.close();
+	fout.close();
+
+	QDir().rename(fileName + "#", fileName);
+
 }
 
 //kate: indent-mode csands; space-indent off; tab-width 4;

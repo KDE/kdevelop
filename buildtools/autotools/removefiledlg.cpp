@@ -121,7 +121,7 @@ void RemoveFileDialog::accept()
 				QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
 				sources.remove(fileName);
 				subProject->variables[varname] = sources.join(" ");
-				replaceMap.insert(varname, subProject->variables[varname]);
+				replaceMap.insert(varname, fileName);
 			}
 		}
 	}
@@ -147,9 +147,9 @@ void RemoveFileDialog::accept()
 	QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
 	sources.remove(fileName);
 	subProject->variables[varname] = sources.join(" ");
-	replaceMap.insert(varname, subProject->variables[varname]);
+	replaceMap.insert(varname, fileName);
 
-	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+	AutoProjectTool::removeFromMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
 //  review configuration cleanup in the project file after removing subclassing related source
 	QDomDocument &dom = *(m_part->projectDom());
