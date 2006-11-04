@@ -34,6 +34,14 @@ void EnableTestingAstTest::testGoodParse()
 
 void EnableTestingAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "ENABLE_TESTING";
+    func2.name = "enable_testing";
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good upper" ) << func1;
+    QTest::newRow( "good lower" ) << func2;
+
 }
 
 void EnableTestingAstTest::testBadParse()
@@ -46,6 +54,19 @@ void EnableTestingAstTest::testBadParse()
 
 void EnableTestingAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "bad_func_name";
+    func2.name = "enable_testing";
+
+    QStringList argList;
+    argList << "foo";
+
+    func2.addArguments( argList );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad wrong name" ) << func1;
+    QTest::newRow( "bad has args" ) << func2;
+
 }
 
 #include "cmake_enabletestingast_test.moc"
