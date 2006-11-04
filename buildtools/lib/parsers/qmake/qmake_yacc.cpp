@@ -561,9 +561,9 @@ static const yytype_uint16 yyrline[] =
 {
        0,   136,   136,   136,   143,   148,   151,   155,   159,   163,
      167,   173,   185,   193,   200,   201,   202,   203,   204,   205,
-     211,   212,   215,   221,   224,   225,   228,   228,   228,   228,
-     228,   232,   231,   246,   245,   270,   271,   274,   275,   280,
-     284,   283,   297,   302,   310
+     211,   212,   215,   222,   227,   228,   231,   231,   231,   231,
+     231,   235,   234,   249,   248,   273,   274,   277,   278,   283,
+     287,   286,   300,   305,   313
 };
 #endif
 
@@ -1560,7 +1560,7 @@ yyreduce:
             node->op = (yyvsp[(2) - (3)].value);
             node->values = (yyvsp[(3) - (3)].values);
             node->indent = (yyvsp[(3) - (3)].indent);
-	    node->commentnode = (yyvsp[(3) - (3)].node);
+	        node->commentnode = (yyvsp[(3) - (3)].node);
             (yyval.node) = node;
         ;}
     break;
@@ -1577,10 +1577,10 @@ yyreduce:
 
   case 13:
 #line 193 "qmake.yy"
-    { 
-            (yyval.values).clear(); 
+    {
+            (yyval.values).clear();
             (yyval.indent) = "";
-	    (yyval.node) = 0;
+	        (yyval.node) = 0;
         ;}
     break;
 
@@ -1611,7 +1611,7 @@ yyreduce:
 
   case 19:
 #line 206 "qmake.yy"
-    { 
+    {
             (yyval.values).append((yyvsp[(1) - (1)].value));
             if( (yyval.indent) == "" && (yyvsp[(1) - (1)].value) != "" )
                 (yyval.indent) = (yyvsp[(1) - (1)].value);
@@ -1623,22 +1623,29 @@ yyreduce:
     {
             CommentAST* node = new CommentAST();
             node->comment = (yyvsp[(1) - (1)].value) + "\n";
-	    (yyval.node) = node;
+	        (yyval.node) = node;
+        ;}
+    break;
+
+  case 23:
+#line 222 "qmake.yy"
+    {
+            (yyval.node) = 0;
         ;}
     break;
 
   case 24:
-#line 224 "qmake.yy"
+#line 227 "qmake.yy"
     { (yyval.value) = (yyvsp[(1) - (1)].value); ;}
     break;
 
   case 25:
-#line 225 "qmake.yy"
+#line 228 "qmake.yy"
     { (yyval.value) = (yyvsp[(1) - (1)].value); ;}
     break;
 
   case 31:
-#line 232 "qmake.yy"
+#line 235 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
             projects.push(projectAST);
@@ -1648,7 +1655,7 @@ yyreduce:
     break;
 
   case 32:
-#line 239 "qmake.yy"
+#line 242 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -1656,7 +1663,7 @@ yyreduce:
     break;
 
   case 33:
-#line 246 "qmake.yy"
+#line 249 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -1676,7 +1683,7 @@ yyreduce:
     break;
 
   case 34:
-#line 264 "qmake.yy"
+#line 267 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -1684,25 +1691,25 @@ yyreduce:
     break;
 
   case 35:
-#line 270 "qmake.yy"
+#line 273 "qmake.yy"
     { (yyval.value) = (yyvsp[(1) - (1)].value); ;}
     break;
 
   case 36:
-#line 271 "qmake.yy"
+#line 274 "qmake.yy"
     { (yyval.value) = ""; ;}
     break;
 
   case 38:
-#line 276 "qmake.yy"
-    { 
+#line 279 "qmake.yy"
+    {
             projects.top()->addChildAST((yyvsp[(2) - (2)].node));
             (yyvsp[(2) - (2)].node)->setDepth(depth);
         ;}
     break;
 
   case 40:
-#line 284 "qmake.yy"
+#line 287 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -1713,7 +1720,7 @@ yyreduce:
     break;
 
   case 41:
-#line 292 "qmake.yy"
+#line 295 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -1721,14 +1728,14 @@ yyreduce:
     break;
 
   case 42:
-#line 297 "qmake.yy"
+#line 300 "qmake.yy"
     {
             (yyval.node) = new ProjectAST();
         ;}
     break;
 
   case 43:
-#line 303 "qmake.yy"
+#line 306 "qmake.yy"
     {
             CommentAST *node = new CommentAST();
             node->comment = (yyvsp[(1) - (2)].value) + "\n";
@@ -1738,7 +1745,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1742 "qmake_yacc.cpp"
+#line 1749 "qmake_yacc.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1952,7 +1959,7 @@ yyreturn:
 }
 
 
-#line 313 "qmake.yy"
+#line 316 "qmake.yy"
 
 
 #include "qmake_lex.cpp"

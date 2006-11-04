@@ -59,6 +59,7 @@ Scope::~Scope()
 
     if ( m_root && m_root->isProject() )
         delete m_root;
+    m_root = 0;
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope, TrollProjectPart* part )
@@ -852,7 +853,6 @@ void Scope::init()
                     )
                 {
                     m_customVariables[ m_maxCustomVarNum++ ] = m;
-                    kdDebug(9024) << m_customVariables.count() << endl;
                 }
             }
         }

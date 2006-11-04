@@ -177,7 +177,7 @@ variable_assignment : ID_SIMPLE operator multiline_values
             node->op = $<value>2;
             node->values = $<values>3;
             node->indent = $<indent>3;
-	    node->commentnode = $<node>3;
+	        node->commentnode = $<node>3;
             $<node>$ = node;
         }
     ;
@@ -189,11 +189,11 @@ multiline_values : multiline_values line_body opt_comment
                 $<indent>$ = $<indent>2;
             $<node>$ = $<node>3;
         }
-    |   
-        { 
-            $<values>$.clear(); 
+    |
+        {
+            $<values>$.clear();
             $<indent>$ = "";
-	    $<node>$ = 0;
+	        $<node>$ = 0;
         }
     ;
 
@@ -203,7 +203,7 @@ line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
     | NEWLINE                        { $<values>$.append("\n"); }
     | LIST_WS                        { $<values>$.append($<value>1); }
     | INDENT
-        { 
+        {
             $<values>$.append($<value>1);
             if( $<indent>$ == "" && $<value>1 != "" )
                 $<indent>$ = $<value>1;
@@ -211,14 +211,17 @@ line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
     | LIST_COMMENT
     | RBRACE
     ;
-    
+
 opt_comment: LIST_COMMENT_WITHOUT_NEWLINE
         {
             CommentAST* node = new CommentAST();
             node->comment = $<value>1 + "\n";
-	    $<node>$ = node;
+	        $<node>$ = node;
         }
     |
+        {
+            $<node>$ = 0;
+        }
     ;
 
 variable_value : VARIABLE_VALUE     { $<value>$ = $<value>1; }
@@ -272,8 +275,8 @@ function_args : ID_ARGS    { $<value>$ = $<value>1; }
     ;
 
 scope_body : LCURLY statements RCURLY
-    | COLON statement 
-        { 
+    | COLON statement
+        {
             projects.top()->addChildAST($<node>2);
             $<node>2->setDepth(depth);
         }

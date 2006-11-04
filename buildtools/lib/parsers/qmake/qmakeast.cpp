@@ -32,6 +32,7 @@ AST::~AST()
         AST *node = *it;
         delete node;
     }
+    m_children.clear();
 }
 
 void AST::addChildAST(AST *node)
@@ -41,7 +42,7 @@ void AST::addChildAST(AST *node)
 
 void AST::removeChildAST(AST *node)
 {
-  m_children.remove(node);
+    m_children.remove(node);
 }
 
 void AST::writeBack(QString &buffer)
@@ -114,7 +115,8 @@ void ProjectAST::writeBack(QString &buffer)
 
 AssignmentAST::~AssignmentAST()
 {
-	delete commentnode;
+    delete commentnode;
+    commentnode = 0;
 }
 
 void AssignmentAST::writeBack(QString &buffer)
@@ -162,4 +164,6 @@ void IncludeAST::writeBack(QString &/*buffer*/)
 }
 
 }
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 
