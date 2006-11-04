@@ -23,6 +23,7 @@
 
 #include "cmakeast.h"
 
+#include <QtCore/QRegExp>
 #include <QtCore/QString>
 #include "astfactory.h"
 #include "cmakelistsparser.h"
@@ -34,9 +35,6 @@ void CMakeAst::writeBack(QString& buffer)
 
 
 CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
-
-CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
-CMAKE_END_AST_CLASS( CustomTargetAst )
 CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
 
 CMAKE_BEGIN_AST_CLASS( AddDefinitionsAst )
@@ -47,6 +45,18 @@ CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_BEGIN_AST_CLASS( SetAst )
 CMAKE_END_AST_CLASS( SetAst )
 CMAKE_REGISTER_AST( SetAst, set )
+
+CustomCommandAst::CustomCommandAst()
+{
+    m_forTarget = false;
+    m_buildStage = PostBuild;
+    m_isVerbatim = false;
+    m_append = false;
+}
+
+CustomCommandAst::~CustomCommandAst()
+{
+}
 
 void CustomCommandAst::writeBack( QString& /*buffer */ )
 {
@@ -175,13 +185,122 @@ bool CustomCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 }
 
+CustomTargetAst::CustomTargetAst()
+{
+    m_buildAlways = false;
+    m_isVerbatim = false;
+}
+
+CustomTargetAst::~CustomTargetAst()
+{
+}
+
 void CustomTargetAst::writeBack( const QString& )
 {
 }
 
-bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& )
+bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != QLatin1String( "add_custom_target" ) )
+        return false;
+
+    //make sure we have at least one argument
+    if ( func.arguments.size() < 1 )
+        return false;
+
+    //check and make sure the target name isn't something silly
+    CMakeFunctionArgument arg = func.arguments.front();
+    if ( arg.value.toLower() == QLatin1String( "all" ) )
+        return false;
+    else
+        m_target = arg.value;
+
+    //check if we're part of the special "all" target
+    CMakeFunctionArgument arg2 = func.arguments[1];
+    if ( arg2.value == QLatin1String( "ALL" ) )
+        m_buildAlways = true;
+    else
+        m_buildAlways = false;
+
+    //what are we doing?
+    enum Action {
+        ParsingCommand,
+        ParsingDep,
+        ParsingWorkingDir,
+        ParsingComment,
+        ParsingVerbatim
+    };
+
+    //command should be first
+    QString currentLine;
+    Action act = ParsingCommand;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    it = func.arguments.begin() + 2; //advance the iterator two places
+    for ( ; it != itEnd; ++it )
+    {
+        QString arg = ( *it ).value;
+        if ( arg == "DEPENDS" )
+            act = ParsingDep;
+        else if ( arg == "WORKING_DIRECTORY" )
+            act = ParsingWorkingDir;
+        else if ( arg == "VERBATIM" )
+        {
+            m_isVerbatim = true;
+            act = ParsingVerbatim;
+        }
+        else if ( arg == "COMMENT" )
+            act = ParsingComment;
+        else if ( arg == "COMMAND" )
+        {
+            act = ParsingCommand;
+            if ( !currentLine.isEmpty() )
+            {
+                m_commands.append( currentLine );
+                currentLine.clear();
+            }
+        }
+        else
+        {
+            switch( act )
+            {
+            case ParsingCommand:
+                m_commands.append( arg );
+                break;
+            case ParsingDep:
+                m_dependencies.append( arg );
+                break;
+            case ParsingWorkingDir:
+                m_workingDir = arg;
+                break;
+            case ParsingComment:
+                m_comment += arg;
+                break;
+            default:
+                return false;
+            }
+        }
+    }
+
+    //check for bogus characters in the target name
+    if ( m_target.indexOf( QRegExp( "(#|<|>)" ) ) != -1 )
+        return false;
+
+    if ( !currentLine.isEmpty() )
+    {
+        m_commands.append( currentLine );
+        currentLine.clear();
+    }
+
+    return true;
+}
+
+AddDefinitionsAst::AddDefinitionsAst()
+{
+
+}
+
+AddDefinitionsAst::~AddDefinitionsAst()
+{
 }
 
 void AddDefinitionsAst::writeBack( const QString& )
@@ -191,6 +310,14 @@ void AddDefinitionsAst::writeBack( const QString& )
 bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& )
 {
    return false;
+}
+
+SetAst::SetAst()
+{
+}
+
+SetAst::~SetAst()
+{
 }
 
 void SetAst::writeBack( const QString& buffer )

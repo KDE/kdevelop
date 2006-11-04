@@ -70,8 +70,8 @@ protected:
 class CustomCommandAst : public CMakeAst
 {
 public:
-    CustomCommandAst() {}
-    ~CustomCommandAst() {}
+    CustomCommandAst();
+    ~CustomCommandAst();
 
     enum BuildStage {
         PreBuild,
@@ -132,8 +132,8 @@ private:
 
 #define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName : public CMakeAst {  \
     public:                                                  \
-        klassName() {}                                       \
-        ~klassName() {}                                      \
+        klassName();                                         \
+       ~klassName();                                         \
                                                              \
         virtual void writeBack( const QString& buffer );     \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
@@ -143,7 +143,7 @@ private:
         returnType returnName() const;                         \
         void set##setterName( setterType );                    \
     private:                                             \
-        returnType m_##name;
+        returnType m_##returnName;
 
 #define CMAKE_ADD_AST_FUNCTION( function ) \
     public:                                \
@@ -151,6 +151,16 @@ private:
 
 #define CMAKE_END_AST_CLASS( klassName ) };
 
+
+CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
+CMAKE_ADD_AST_MEMBER( bool, bool, buildAlways, BuildAlways )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, commands, Commands )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, dependencies, Dependencies )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDir, WorkingDir )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, comment, Comment )
+CMAKE_ADD_AST_MEMBER( bool, bool, isVerbatim, Verbatim )
+CMAKE_END_AST_CLASS( CustomTargetAst )
 
 
 #endif
