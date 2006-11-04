@@ -116,7 +116,9 @@ private:
     QStringList m_otherDeps;
     QString m_workingDir;
     QString m_comment;
-
+    bool m_isVerbatim;
+    bool m_append;
+    QString m_source;
 };
 
 

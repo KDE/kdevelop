@@ -55,6 +55,12 @@ struct CMakeFunctionArgument
     {
         return (this->value == r.value) && (this->quoted == r.quoted);
     }
+
+    bool operator==( const QString& rhs )
+    {
+        return ( this->value == rhs );
+    }
+
     bool operator != (const CMakeFunctionArgument& r) const
     {
         return !(*this == r);

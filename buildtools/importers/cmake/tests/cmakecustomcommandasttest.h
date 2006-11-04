@@ -31,8 +31,11 @@ public:
     virtual ~CustomCommandAstTests() {}
 
 private slots:
-    void testParsing();
-    void testParsing_data();
+    void testGoodParse();
+    void testGoodParse_data();
+
+    void testBadParse();
+    void testBadParse_data();
     //void testWriteback();
 };
 

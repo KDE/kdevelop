@@ -2,6 +2,9 @@
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
  *
+ * Some parts of this code are based on CMake
+ * Copyright 2002 Kitware, Inc. Insight Consortium
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -49,9 +52,127 @@ void CustomCommandAst::writeBack( QString& /*buffer */ )
 {
 }
 
-bool CustomCommandAst::parseFunctionInfo( const CMakeFunctionDesc& )
+bool CustomCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != QLatin1String( "add_custom_command" )  )
+        return false;
+
+    if (func.arguments.size() < 4)
+        return false;
+
+    enum tdoing {
+        doing_source,
+        doing_command,
+        doing_target,
+        doing_depends,
+        doing_main_dependency,
+        doing_output,
+        doing_outputs,
+        doing_comment,
+        doing_working_directory,
+        doing_nothing
+    };
+
+    tdoing doing = doing_nothing;
+    QString currentLine;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    for ( it = func.arguments.begin(); it != itEnd; ++it)
+    {
+        QString copy = ( *it ).value;
+        if(copy == "SOURCE")
+            doing = doing_source;
+        else if(copy == "COMMAND")
+        {
+            doing = doing_command;
+            // Save the current command before starting the next command.
+            if ( !currentLine.isEmpty() )
+            {
+                m_commands.append( currentLine );
+                currentLine.clear();
+            }
+        }
+        else if(copy == "PRE_BUILD")
+            m_buildStage = PreBuild;
+        else if(copy == "PRE_LINK")
+            m_buildStage = PreLink;
+        else if(copy == "POST_BUILD")
+            m_buildStage = PostBuild;
+        else if(copy == "VERBATIM")
+            m_isVerbatim = true;
+        else if(copy == "APPEND")
+            m_append = true;
+        else if(copy == "TARGET")
+            doing = doing_target;
+        else if(copy == "ARGS")
+            // Ignore this old keyword.
+            ;
+        else if (copy == "DEPENDS")
+            doing = doing_depends;
+        else if (copy == "OUTPUTS")
+            doing = doing_outputs;
+        else if (copy == "OUTPUT")
+            doing = doing_output;
+        else if (copy == "WORKING_DIRECTORY")
+            doing = doing_working_directory;
+        else if (copy == "MAIN_DEPENDENCY")
+            doing = doing_main_dependency;
+        else if (copy == "COMMENT")
+            doing = doing_comment;
+        else
+        {
+            switch (doing)
+            {
+            case doing_working_directory:
+                m_workingDir = copy;
+                break;
+            case doing_source:
+                m_source = copy;
+                break;
+            case doing_main_dependency:
+                m_mainDep = copy;
+                break;
+            case doing_command:
+                m_commands.append( copy );
+                break;
+            case doing_target:
+                m_target = copy;
+                break;
+            case doing_depends:
+                m_otherDeps.append( copy );
+                break;
+            case doing_outputs:
+            case doing_output:
+                m_outputs.append(copy);
+                break;
+            case doing_comment:
+                m_comment = copy;
+                break;
+            default:
+                return false;
+            }
+        }
+    }
+
+    // Store the last command line finished.
+    if ( !currentLine.isEmpty() )
+    {
+        m_commands.append( currentLine );
+        currentLine.clear();
+    }
+
+    // At this point we could complain about the lack of arguments.  For
+    // the moment, let's say that COMMAND, TARGET are always required.
+    if ( m_outputs.isEmpty() && m_target.isEmpty() )
+        return false;
+
+    if ( m_source.isEmpty() && !m_target.isEmpty() && !m_outputs.isEmpty())
+        return false;
+
+    if ( m_append && m_outputs.isEmpty() )
+        return false;
+
+    return true;
 }
 
 void CustomTargetAst::writeBack( const QString& )
