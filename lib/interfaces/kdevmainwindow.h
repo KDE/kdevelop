@@ -40,6 +40,9 @@ Provides methods to control the main window of an application.
 class KDevMainWindow
 {
 public:
+    /**Destroys the main window*/
+    virtual ~KDevMainWindow() {} // must be virtual!
+
     /**Embeds a view of a part into the main window.
     @param view The view to embed. Must be a KPart.
     @param title The title of a view.

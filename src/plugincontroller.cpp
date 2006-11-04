@@ -248,6 +248,7 @@ void PluginController::integrateAndRememberPart(const QString &name, KDevPlugin 
 
 void PluginController::removePart(KXMLGUIClient *part)
 {
+  if (TopLevel::mainWindowValid()) // is 0 when window was already closed
   TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
 }
 

@@ -142,5 +142,14 @@ int main(int argc, char *argv[])
 
   kapp->dcopClient()->registerAs("kdevelop");
 
-  return app.exec();
+  int ret = app.exec();
+
+  ProjectManager::getInstance()->closeProject( true ); // exiting
+  delete ProjectManager::getInstance();
+
+  delete PluginController::getInstance();
+  if (TopLevel::mainWindowValid())
+      delete TopLevel::getInstance();
+
+  return ret;
 }
