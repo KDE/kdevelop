@@ -25,7 +25,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-class CMakeFunctionDesc;
+#include "cmakelistsparser.h"
 
 class CMakeAst
 {
@@ -530,9 +530,9 @@ CMAKE_BEGIN_AST_CLASS( WriteFileAst )
 CMAKE_END_AST_CLASS( WriteFileAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomInvokationAst )
-CMAKE_ADD_AST_MEMBER( CMakeFunctionDesc, const CMakeFunctionDesc&
+CMAKE_ADD_AST_MEMBER( CMakeFunctionDesc, const CMakeFunctionDesc&,
                       function, Function )
-CMAKE_ADD_AST_MEMBER( CMakeFunctionArguments, const CMakeFunctionArguments&,
+CMAKE_ADD_AST_MEMBER( CMakeFunctionArgument, const CMakeFunctionArgument&,
                       arguments, Arguments )
 CMAKE_END_AST_CLASS( CustomInvokationAst )
 
