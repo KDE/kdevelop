@@ -471,6 +471,10 @@ CMAKE_END_AST_CLASS( SubdirsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( TargetLinkLibrariesAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, otherLibs, OtherLibs )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, debugLibs, DebugLibs )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, optimizedLibs, OptimizedLibs )
 CMAKE_END_AST_CLASS( TargetLinkLibrariesAst )
 
 

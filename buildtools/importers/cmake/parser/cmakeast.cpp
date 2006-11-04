@@ -1748,7 +1748,43 @@ void TargetLinkLibrariesAst::writeBack( QString& )
 
 bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "target_link_libraries" )
+        return false;
+
+    //we don't do variable expansion when parsing like CMake does, so we
+    //need to have at least two arguments for target_link_libraries
+    if ( func.arguments.size() < 2 )
+        return false;
+
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
+    it = func.arguments.begin() + 1;
+    itEnd = func.arguments.end();
+
+    for ( ; it != itEnd; ++it )
+    {
+        CMakeFunctionArgument arg = ( *it );
+        if ( arg.value == "debug" )
+        {
+            ++it;
+            if ( it == itEnd )
+                return false;
+            else
+                m_debugLibs.append( ( *it ).value );
+        }
+        else if ( arg.value == "optimized" )
+        {
+            ++it;
+            if ( it == itEnd )
+                return false;
+            else
+                m_optimizedLibs.append( ( *it ).value );
+        }
+        else
+            m_otherLibs.append( arg.value );
+    }
+
+    return true;
 }
 
 TryCompileAst::TryCompileAst()

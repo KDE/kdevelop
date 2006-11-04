@@ -34,6 +34,25 @@ void TargetLinkLibrariesAstTest::testGoodParse()
 
 void TargetLinkLibrariesAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3;
+    func1.name = "TARGET_LINK_LIBRARIES";
+    func2.name = func3.name = func1.name.toLower();
+
+    QStringList argList1, argList2, argList3;
+
+    argList1 << "MYTARGET" << "SOME_VAR";
+    argList2 << "MYTARGET" << "debug" << "onlydebuglib";
+    argList3 << "MYTARGET" << "optimized" << "onlyoptimizedlib";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+    func3.addArguments( argList3 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "whatever" ) << func1;
+    QTest::newRow( "whatever" ) << func2;
+    QTest::newRow( "whatever" ) << func3;
+
 }
 
 void TargetLinkLibrariesAstTest::testBadParse()
@@ -46,6 +65,28 @@ void TargetLinkLibrariesAstTest::testBadParse()
 
 void TargetLinkLibrariesAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3, func4;
+    func1.name = "wrong_func_name";
+    func2.name = func3.name, func4.name = "target_link_libraries";
+
+    QStringList argList1, argList2, argList3, argList4;
+
+    argList1 << "MYTARGET" << "SOME_VAR";
+    argList2 << "MYTARGET";
+    argList3 << "MYTARGET" << "optimized";
+    argList4 << "MYTARGET" << "debug";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+    func3.addArguments( argList3 );
+    func4.addArguments( argList4 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "whatever" ) << func1;
+    QTest::newRow( "whatever" ) << func2;
+    QTest::newRow( "whatever" ) << func3;
+    QTest::newRow( "whatever" ) << func4;
+
 }
 
 #include "cmake_targetlinklibrariesast_test.moc"
