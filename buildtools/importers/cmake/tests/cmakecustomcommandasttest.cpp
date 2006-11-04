@@ -24,40 +24,40 @@
 
 QTEST_MAIN( CustomCommandAstTests )
 
-void CustomCommandAstTests::testCustomCommandAstParsing()
+void CustomCommandAstTests::testParsing()
 {
 //    QFETCH( CMakeFunctionDesc, func );
-
+    QFAIL( "no magic" );
 }
 
-void CustomCommandAstTests::testCustomCommandAstParsing_data()
+void CustomCommandAstTests::testParsing_data()
 {
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    CMakeFunctionDesc func1;
+    CMakeFunctionDesc func;
     func.name = "add_custom_command";
     QStringList argList;
     argList << "output" << "foo" << "command" << "bar";
-    func.arguments = argList;
+    func.addArguments( argList );
     func.filePath = QString();
     func.line = 0;
 
     CMakeFunctionDesc func1;
     func1.name = "add_custom_command";
-    QStringList argList;
+    QStringList argList1;
     argList << "output" << "foo" << "command" << "bar";
     argList << "main_dependency" << "dep1" << "depends" << "dep1" << "dep2";
     argList << "working_directory" << "dir1" << "comment" << "some comment";
     argList << "verbatim" << "append";
-    func1.arguments = argList;
+    func1.addArguments( argList1 );
 
     CMakeFunctionDesc func2;
     func2.name = "ADD_CUSTOM_COMMAND";
-    QStringList argList;
+    QStringList argList2;
     argList << "OUTPUT" << "foo" << "COMMAND" << "bar";
     argList << "MAIN_DEPENDENCY" << "dep1" << "DEPENDS" << "dep1" << "dep2";
     argList << "WORKING_DIRECTORY" << "dir1" << "COMMENT" << "some comment";
     argList << "VERBATIM" << "APPEND";
-    func2.arguments = argList;
+    func2.addArguments( argList2 );
 
     QTest::newRow( "no optional" ) << func;
     QTest::newRow( "all optional" ) << func1;
@@ -65,4 +65,4 @@ void CustomCommandAstTests::testCustomCommandAstParsing_data()
 
 }
 
-#include "cmakeasttest.moc"
+#include "cmakecustomcommandasttest.moc"

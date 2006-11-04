@@ -36,7 +36,7 @@ target_link_libraries( cmake-projectxmltest
 )
 
 set( cmakeparsertest_SRCS cmakeparsertest.cpp )
-kde4_automoc( ${cmakeparsertest_SRCS} )
+kde4_automoc( cmake-parsertest ${cmakeparsertest_SRCS} )
 kde4_add_executable( cmake-parsertest NOGUI RUN_UNINSTALLED ${cmakeparsertest_SRCS} )
 target_link_libraries( cmake-parsertest
     ${QT_QTTEST_LIBRARY}
@@ -46,7 +46,7 @@ target_link_libraries( cmake-parsertest
 )
 
 set( astfactorytest_SRCS astfactorytest.cpp )
-kde4_automoc( ${astfactorytest_SRCS} )
+kde4_automoc( cmake-astfactorytest ${astfactorytest_SRCS} )
 kde4_add_executable( cmake-astfactorytest NOGUI RUN_UNINSTALLED ${astfactorytest_SRCS} )
 target_link_libraries( cmake-astfactorytest
     ${QT_QTTEST_LIBRARY}
@@ -56,10 +56,10 @@ target_link_libraries( cmake-astfactorytest
 )
 
 set( customcommandasttest_SRCS cmakecustomcommandasttest.cpp )
-kde4_automoc( ${customcommandasttest_SRCS} )
+kde4_automoc( cmake-customcommandasttest ${customcommandasttest_SRCS} )
 kde4_add_executable( cmake-customcommandasttest NOGUI RUN_UNINSTALLED 
                      ${customcommandasttest_SRCS} )
-target_link_libraries( cmake-asttest
+target_link_libraries( cmake-customcommandasttest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     kdevplatform
