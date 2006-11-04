@@ -34,6 +34,23 @@ void CMakeMinimumRequiredAstTest::testGoodParse()
 
 void CMakeMinimumRequiredAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3;
+    func1.name = "CMAKE_MINIMUM_REQUIRED";
+    func2.name = func3.name = func1.name.toLower();
+    QStringList argList1, argList2, argList3;
+
+    argList1 << "VERSION" << "2.4";
+    argList2 = argList1;
+    argList2 << "FATAL_ERROR";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList1 );
+    func3.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good upper case" ) << func1;
+    QTest::newRow( "good lower case" ) << func2;
+    QTest::newRow( "good all args" ) << func3;
 }
 
 void CMakeMinimumRequiredAstTest::testBadParse()
@@ -46,6 +63,26 @@ void CMakeMinimumRequiredAstTest::testBadParse()
 
 void CMakeMinimumRequiredAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3, func4;
+    func1.name = "wrong_name";
+    func2.name = func3.name = "cmake_required_version";
+    func4.name = func3.name;
+    QStringList argList1, argList2, argList3, argList4;
+
+    argList1 << "VERSION" << "2.4";
+    argList2 << "VERSION";
+    argList3 << "VERSION" << "FATAL_ERROR";
+
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList1 );
+    func3.addArguments( argList3 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "wrong name" ) << func1;
+    QTest::newRow( "no version number 1" ) << func2;
+    QTest::newRow( "no version number 2" ) << func3;
+    QTest::newRow( "no arguments" ) << func4;
 }
 
 #include "cmake_cmakeminimumrequiredast_test.moc"

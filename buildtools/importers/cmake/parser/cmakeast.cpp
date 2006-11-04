@@ -606,7 +606,6 @@ void BuildNameAst::writeBack( QString& )
 
 bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-
     if ( func.name.toLower() != "build_name" )
         return false;
     if ( func.arguments.size() != 1 )
@@ -631,7 +630,42 @@ void CMakeMinimumRequiredAst::writeBack( QString& )
 
 bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "cmake_minimum_required" )
+        return false;
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    bool versionNext = false;
+    foreach( CMakeFunctionArgument arg, func.arguments )
+    {
+        if ( arg.value == "VERSION" )
+            versionNext = true;
+        else if ( arg.value == "FATAL_ERROR" )
+        {
+            if ( versionNext )
+                return false;
+            else
+            {
+                versionNext = false;
+                m_wrongVersionIsFatal = true;
+            }
+        }
+        else if ( versionNext )
+        {
+            versionNext = false;
+            bool floatGood = true;
+            m_version = arg.value.toFloat( &floatGood );
+            if ( m_version == 0.0 || !floatGood )
+                return false;
+        }
+        else
+            return false;
+    }
+
+    if ( versionNext )
+        return false;
+
+    return true;
 }
 
 ConfigureFileAst::ConfigureFileAst()

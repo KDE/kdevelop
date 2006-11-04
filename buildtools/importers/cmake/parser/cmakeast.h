@@ -60,7 +60,7 @@ public:
      */
     virtual void writeBack(QString& buffer);
 
-    virtual bool parseFunctionInfo( const CMakeFunctionDesc& function ) { return false; }
+    virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
 
 protected:
     QList<CMakeAst*> m_children;
@@ -220,6 +220,8 @@ CMAKE_END_AST_CLASS( BuildNameAst )
 
 
 CMAKE_BEGIN_AST_CLASS( CMakeMinimumRequiredAst )
+CMAKE_ADD_AST_MEMBER( float, float, version, Version )
+CMAKE_ADD_AST_MEMBER( bool, bool, wrongVersionIsFatal, WrongVersionIsFatal )
 CMAKE_END_AST_CLASS( CMakeMinimumRequiredAst )
 
 
