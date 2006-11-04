@@ -135,7 +135,7 @@ private:
         klassName();                                         \
        ~klassName();                                         \
                                                              \
-        virtual void writeBack( const QString& buffer );     \
+        virtual void writeBack( QString& buffer );           \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
@@ -162,10 +162,19 @@ CMAKE_ADD_AST_MEMBER( QString, const QString&, comment, Comment )
 CMAKE_ADD_AST_MEMBER( bool, bool, isVerbatim, Verbatim )
 CMAKE_END_AST_CLASS( CustomTargetAst )
 
-
 CMAKE_BEGIN_AST_CLASS( AddDefinitionsAst )
 CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, definitions, Definitions )
 CMAKE_END_AST_CLASS( AddDefinitionsAst )
 
+CMAKE_BEGIN_AST_CLASS( AddDependenciesAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, dependencies, Dependencies )
+CMAKE_END_AST_CLASS( AddDependenciesAst )
 
+CMAKE_BEGIN_AST_CLASS( AddExecutableAst )
+CMAKE_ADD_AST_MEMBER( QString,  const QString&, executable, Executable )
+CMAKE_ADD_AST_MEMBER( bool, bool, isWin32, Win32 )
+CMAKE_ADD_AST_MEMBER( bool, bool, isOsXBundle, OsXBundle )
+CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
+CMAKE_END_AST_CLASS( AddExecutableAst )
 #endif

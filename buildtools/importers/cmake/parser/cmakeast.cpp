@@ -37,6 +37,8 @@ void CMakeAst::writeBack(QString& buffer)
 CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
 CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
+CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
+CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
 
 
 CMAKE_BEGIN_AST_CLASS( SetAst )
@@ -192,7 +194,7 @@ CustomTargetAst::~CustomTargetAst()
 {
 }
 
-void CustomTargetAst::writeBack( const QString& )
+void CustomTargetAst::writeBack( QString& )
 {
 }
 
@@ -291,6 +293,8 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 }
 
+/* Add Definitions AST */
+
 AddDefinitionsAst::AddDefinitionsAst()
 {
 
@@ -300,13 +304,16 @@ AddDefinitionsAst::~AddDefinitionsAst()
 {
 }
 
-void AddDefinitionsAst::writeBack( const QString& )
+void AddDefinitionsAst::writeBack( QString& )
 {
 }
 
 bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "add_definitions" )
+        return false;
+
+    if ( func.arguments.isEmpty() )
         return false;
 
     foreach( CMakeFunctionArgument arg, func.arguments )
@@ -317,6 +324,58 @@ bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 }
 
+/* Add Dependencies AST */
+
+AddDependenciesAst::AddDependenciesAst()
+{
+}
+
+AddDependenciesAst::~AddDependenciesAst()
+{
+}
+
+void AddDependenciesAst::writeBack( QString& )
+{
+}
+
+bool AddDependenciesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if ( func.name.toLower() != "add_dependencies" )
+        return false;
+
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    QList<CMakeFunctionArgument> args = func.arguments;
+    m_target = args.front().value;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
+    it = args.begin() + 1; //skip the first argument since it's the target
+    for ( ; it != itEnd; ++it )
+    {
+        m_dependencies << ( *it ).value;
+    }
+
+    return true;
+}
+
+AddExecutableAst::AddExecutableAst()
+{
+}
+
+AddExecutableAst::~AddExecutableAst()
+{
+}
+
+void AddExecutableAst::writeBack( QString& )
+{
+}
+
+bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& )
+{
+    return false;
+}
+
 SetAst::SetAst()
 {
 }
@@ -325,7 +384,7 @@ SetAst::~SetAst()
 {
 }
 
-void SetAst::writeBack( const QString& buffer )
+void SetAst::writeBack( QString& )
 {
 }
 
