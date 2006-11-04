@@ -30,8 +30,8 @@ public:
     ~AstFactoryTest();
 
 private slots:
-    void testNoRegisteredObjects();
-    void testRegisteredObjects();
+    void testNonRegisteredObject();
+    void testRegisteredObject();
 
 };
 

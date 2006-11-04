@@ -19,60 +19,9 @@
  */
 
 #include "astfactorytest.h"
-#include <kstaticdeleter.h>
 #include <QtCore/QString>
-#include <map>
 
-class Ast;
-
-class AstFactory
-{
-public:
-    static AstFactory* self();
-    typedef Ast* ( *CreateAstCallback )();
-public:
-    //Returns true if registration was successful
-    bool registerAst( const QString& astId,
-                      CreateAstCallback createFn )
-    {
-        return m_callbacks.insert( CallbackMap::value_type( astId,
-                                                            createFn ) ).second;
-    }
-
-    //Returns true if the AstId was successful
-    bool unregisterAst( const QString& astId )
-    {
-        return m_callbacks.erase( astId ) == 1;
-    }
-
-    Ast* createAst( const QString& astId )
-    {
-        CallbackMap::const_iterator it = m_callbacks.find( astId );
-        if ( it == m_callbacks.end() )
-            return 0;
-
-        return ( it->second )();
-    }
-
-private:
-    static AstFactory* s_self;
-    static KStaticDeleter<AstFactory> astDeleter;
-    AstFactory() {}
-    typedef std::map<QString,  CreateAstCallback> CallbackMap;
-    CallbackMap m_callbacks;
-
-};
-
-KStaticDeleter<AstFactory> AstFactory::astDeleter;
-AstFactory* AstFactory::s_self = 0;
-
-AstFactory* AstFactory::self()
-{
-    if ( !s_self )
-       astDeleter.setObject( s_self, new AstFactory() );
-
-    return s_self;
-}
+#include "astfactory.h"
 
 class Ast { int foo; };
 
@@ -88,13 +37,13 @@ AstFactoryTest::~AstFactoryTest()
 }
 
 
-void AstFactoryTest::testNoRegisteredObjects()
+void AstFactoryTest::testNonRegisteredObject()
 {
     Ast* a = AstFactory::self()->createAst( "foo" );
     QVERIFY( a == 0 );
 }
 
-void AstFactoryTest::testRegisteredObjects()
+void AstFactoryTest::testRegisteredObject()
 {
     const QString fooType = "foo";
 

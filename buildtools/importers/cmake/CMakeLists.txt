@@ -12,6 +12,7 @@ set( cmakecommon_SRCS
   cmakemodelitems.cpp
   cmakexmlparser.cpp
   parser/cmListFileLexer.c
+  parser/astfactory.cpp
  )
 
 set( cmakeimporter_SRCS
