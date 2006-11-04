@@ -39,11 +39,7 @@ CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
 CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
-
-
-CMAKE_BEGIN_AST_CLASS( SetAst )
-CMAKE_END_AST_CLASS( SetAst )
-CMAKE_REGISTER_AST( SetAst, set )
+CMAKE_REGISTER_AST( AddLibraryAst, add_library )
 
 CustomCommandAst::CustomCommandAst()
 {
@@ -406,23 +402,77 @@ bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
 }
 
+AddLibraryAst::AddLibraryAst()
+{
+    m_isShared = false;
+    m_isStatic = true;
+    m_isModule = false;
+    m_excludeFromAll = false;
+}
 
-SetAst::SetAst()
+AddLibraryAst::~AddLibraryAst()
 {
 }
 
-SetAst::~SetAst()
+void AddLibraryAst::writeBack( QString& )
 {
 }
 
-void SetAst::writeBack( QString& )
+bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-}
+    if ( func.name.toLower() != "add_library" )
+        return false;
 
-bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
-{
-    if ( func.name.toLower() != "set" )
+    if ( func.arguments.size() < 1 )
+        return false;
+
+    bool libTypeSet = false;
+    QList<CMakeFunctionArgument> args = func.arguments;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
+    it = args.begin();
+    m_libraryName = ( *it ).value;
+    ++it;
+    while ( it != itEnd )
+    {
+        if ( ( *it ).value == "STATIC" && !libTypeSet )
+        {
+            m_isStatic = true;
+            libTypeSet = true;
+            ++it;
+        }
+        else if ( ( *it ).value == "SHARED" && !libTypeSet )
+        {
+            m_isShared = true;
+            libTypeSet = true;
+            ++it;
+        }
+        else if ( ( *it ).value == "MODULE" && !libTypeSet )
+        {
+            m_isModule = true;
+            libTypeSet = true;
+            ++it;
+        }
+        else if ( ( *it ).value == "EXCLUDE_FROM_ALL" )
+        {
+            m_excludeFromAll = true;
+            ++it;
+        }
+        else
+            break;
+    }
+
+    if ( it == itEnd )
+        return false; //there are no sources
+
+    while ( it != itEnd )
+    {
+            m_sourceLists.append( ( *it ).value );
+            ++it;
+    }
+
+    if ( m_sourceLists.isEmpty() )
         return false;
 
     return true;
+
 }

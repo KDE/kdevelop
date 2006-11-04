@@ -117,6 +117,17 @@ target_link_libraries( cmake-addexecutableasttest
   kdevplatform
   kdevcmakecommon )
 add_test( cmake-addexecutableasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-addexecutableasttest )
+set ( addlibraryasttest_SRCS cmake_addlibraryast_test.cpp )
+kde4_automoc( cmake-addlibraryasttest ${addlibraryasttest_SRCS} )
+kde4_add_executable( cmake-addlibraryasttest NOGUI RUN_UNINSTALLED ${addlibraryasttest_SRCS} )
+target_link_libraries( cmake-addlibraryasttest 
+  ${QT_QTTEST_LIBRARY}
+  ${KDE_KDECORE_LIBS}
+  kdevplatform
+  kdevcmakecommon )
+add_test( cmake-addlibraryasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-addlibraryasttest )
 endif(KDE4_BUILD_TESTS)
+
+
 
 

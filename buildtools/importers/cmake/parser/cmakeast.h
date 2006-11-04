@@ -179,6 +179,15 @@ CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
 CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, sourceLists, SourceLists )
 CMAKE_END_AST_CLASS( AddExecutableAst )
 
+CMAKE_BEGIN_AST_CLASS( AddLibraryAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, libraryName, LibraryName )
+CMAKE_ADD_AST_MEMBER( bool, bool, isShared, IsShared )
+CMAKE_ADD_AST_MEMBER( bool, bool, isStatic, IsStatic )
+CMAKE_ADD_AST_MEMBER( bool, bool, isModule, IsModule )
+CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, sourceLists, SourceLists )
+CMAKE_END_AST_CLASS( AddLibraryAst )
+
 
 
 #endif
