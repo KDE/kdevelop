@@ -28,17 +28,17 @@ class ASTVisitor{
 public:
     ASTVisitor() {}
 
-    virtual void processProject(ProjectAST *project);
-    virtual void enterRealProject(ProjectAST *project) {}
-    virtual void leaveRealProject(ProjectAST *project) {}
-    virtual void enterScope(ProjectAST *scope) {}
-    virtual void leaveScope(ProjectAST *scope) {}
-    virtual void enterFunctionScope(ProjectAST *fscope) {}
-    virtual void leaveFunctionScope(ProjectAST *fscope) {}
-    virtual void processAssignment(AssignmentAST *assignment) {}
-    virtual void processNewLine(NewLineAST *newline) {}
-    virtual void processComment(CommentAST *comment) {}
-    virtual void processInclude(IncludeAST *include) {}
+    virtual void processProject(ProjectAST *);
+    virtual void enterRealProject(ProjectAST *) {}
+    virtual void leaveRealProject(ProjectAST *) {}
+    virtual void enterScope(ProjectAST *) {}
+    virtual void leaveScope(ProjectAST *) {}
+    virtual void enterFunctionScope(ProjectAST *) {}
+    virtual void leaveFunctionScope(ProjectAST *) {}
+    virtual void processAssignment(AssignmentAST *) {}
+    virtual void processNewLine(NewLineAST *) {}
+    virtual void processComment(CommentAST *) {}
+    virtual void processInclude(IncludeAST *) {}
 };
 
 }
