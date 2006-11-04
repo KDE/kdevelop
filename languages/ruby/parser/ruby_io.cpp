@@ -72,10 +72,10 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
     token_stream->start_position(index, &line, &col);
     size_t tokenLength = token.end - token.begin;
     char *tokenValue = new char[tokenLength+1];
-    strncpy(tokenValue.data(), token.text + token.begin, tokenLength);
+    strncpy(tokenValue, token.text + token.begin, tokenLength);
     tokenValue[tokenLength] = 0;
     std::stringstream s;
-    s << " (current token: \"" << (token.kind != 0 ? tokenValue.data() : "EOF") <<
+    s << " (current token: \"" << (token.kind != 0 ? tokenValue : "EOF") <<
         "\" [" << token.kind << "] at line: " << line+1 << " col: " << col+1 << ")";
     report_problem(
         parser::error,
@@ -83,7 +83,7 @@ void parser::yy_expected_symbol(int /*expected_symbol*/, char const *name)
         //+ "'' instead of ``" + current_token_text
         + "''" + s.str()
     );
-    delete[] tokenValue;
+    delete tokenValue;
 }
 
 } // end of namespace ruby
