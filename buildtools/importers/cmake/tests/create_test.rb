@@ -133,13 +133,19 @@ cmakeList = File.new("CMakeLists.txt", "w")
 cmakeList.write(oldCMakeText)
 
 puts "Appending AST definition to cmakeast.h"
-cmakeAst = File.new("../parser/cmakeast.h", "a")
+cmakeAst = File.new("../parser/cmakeast.h", "r+")
+oldAstText = cmakeAst.read;
+cmakeAst.close;
 astDecl =<<AST_EOF
+
 CMAKE_BEGIN_AST_CLASS( #{className} )
 CMAKE_END_AST_CLASS( #{className} )
 
+#endif
 AST_EOF
-cmakeAst.write(astDecl)
+oldAstText.gsub!(/#endif/, astDecl)
+cmakeAst = File.new("../parser/cmakeast.h", "w")
+cmakeAst.write(oldAstText)
 cmakeAst.close
 
 puts "Appending AST implementation to cmakeast.cpp"
