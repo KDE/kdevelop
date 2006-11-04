@@ -34,6 +34,18 @@ void BuildNameAstTest::testGoodParse()
 
 void BuildNameAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "build_name";
+    func2.name = func1.name.toUpper();
+
+    QStringList argList;
+    argList << "my_cool_build";
+    func1.addArguments( argList );
+    func2.arguments = func1.arguments;
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good lower" ) << func1;
+    QTest::newRow( "good upper" ) << func2;
 }
 
 void BuildNameAstTest::testBadParse()
@@ -46,6 +58,17 @@ void BuildNameAstTest::testBadParse()
 
 void BuildNameAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "build_name";
+    func2.name = "wrong_func_name";
+
+    QStringList argList;
+    argList << "my_cool_build";
+    func2.arguments = func1.arguments;
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad no args" ) << func1;
+    QTest::newRow( "ban wrong name" ) << func2;
 }
 
 #include "cmake_buildnameast_test.moc"

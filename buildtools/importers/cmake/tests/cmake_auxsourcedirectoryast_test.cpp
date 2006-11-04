@@ -34,6 +34,19 @@ void AuxSourceDirectoryAstTest::testGoodParse()
 
 void AuxSourceDirectoryAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "AUX_SOURCE_DIRECTORY";
+    func2.name = "aux_source_directory";
+
+    QStringList argList;
+    argList << "foo1" << "foo2";
+
+    func1.addArguments( argList );
+    func2.addArguments( argList );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good uppercase" ) << func1;
+    QTest::newRow( "good lowercase" ) << func2;
 }
 
 void AuxSourceDirectoryAstTest::testBadParse()
@@ -46,6 +59,18 @@ void AuxSourceDirectoryAstTest::testBadParse()
 
 void AuxSourceDirectoryAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "AUX_SOURCE_DIRECTORY";
+    func2.name = "wrong name";
+
+    QStringList argList;
+    argList << "foo1" << "foo2";
+
+    func2.addArguments( argList );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad no args" ) << func1;
+    QTest::newRow( "bad wrong name" ) << func2;
 }
 
 #include "cmake_auxsourcedirectoryast_test.moc"

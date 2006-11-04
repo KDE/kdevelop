@@ -209,10 +209,13 @@ CMAKE_END_AST_CLASS( AuxSourceDirectoryAst )
 
 
 CMAKE_BEGIN_AST_CLASS( BuildCommandAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, makeCommand, MakeCommand )
 CMAKE_END_AST_CLASS( BuildCommandAst )
 
 
 CMAKE_BEGIN_AST_CLASS( BuildNameAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, buildName, BuildName )
 CMAKE_END_AST_CLASS( BuildNameAst )
 
 

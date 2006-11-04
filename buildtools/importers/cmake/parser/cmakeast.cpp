@@ -580,7 +580,16 @@ void BuildCommandAst::writeBack( QString& )
 
 bool BuildCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "build_command" )
+        return false;
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    m_variableName = func.arguments[0].value;
+    m_makeCommand = func.arguments[1].value;
+
+    return true;
+
 }
 
 BuildNameAst::BuildNameAst()
@@ -597,7 +606,15 @@ void BuildNameAst::writeBack( QString& )
 
 bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+
+    if ( func.name.toLower() != "build_name" )
+        return false;
+    if ( func.arguments.size() != 1 )
+        return false;
+
+    m_buildName = func.arguments[0].value;
+
+    return true;
 }
 
 CMakeMinimumRequiredAst::CMakeMinimumRequiredAst()
