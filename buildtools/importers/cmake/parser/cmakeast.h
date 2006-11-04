@@ -188,6 +188,383 @@ CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
 CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, sourceLists, SourceLists )
 CMAKE_END_AST_CLASS( AddLibraryAst )
 
+CMAKE_BEGIN_AST_CLASS( AddSubdirectoryAst )
+CMAKE_END_AST_CLASS( AddSubdirectoryAst )
 
+
+CMAKE_BEGIN_AST_CLASS( AddTestAst )
+CMAKE_END_AST_CLASS( AddTestAst )
+
+
+CMAKE_BEGIN_AST_CLASS( AuxSourceDirectoryAst )
+CMAKE_END_AST_CLASS( AuxSourceDirectoryAst )
+
+
+CMAKE_BEGIN_AST_CLASS( BuildCommandAst )
+CMAKE_END_AST_CLASS( BuildCommandAst )
+
+
+CMAKE_BEGIN_AST_CLASS( BuildNameAst )
+CMAKE_END_AST_CLASS( BuildNameAst )
+
+
+CMAKE_BEGIN_AST_CLASS( CMakeMinimumRequiredAst )
+CMAKE_END_AST_CLASS( CMakeMinimumRequiredAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ConfigureFileAst )
+CMAKE_END_AST_CLASS( ConfigureFileAst )
+
+
+CMAKE_BEGIN_AST_CLASS( CreateTestSourcelistAst )
+CMAKE_END_AST_CLASS( CreateTestSourcelistAst )
+
+
+CMAKE_BEGIN_AST_CLASS( EnableLanguageAst )
+CMAKE_END_AST_CLASS( EnableLanguageAst )
+
+
+CMAKE_BEGIN_AST_CLASS( EnableTestingAst )
+CMAKE_END_AST_CLASS( EnableTestingAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ExecProgramAst )
+CMAKE_END_AST_CLASS( ExecProgramAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ExecuteProcessAst )
+CMAKE_END_AST_CLASS( ExecuteProcessAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ExportLibraryDepsAst )
+CMAKE_END_AST_CLASS( ExportLibraryDepsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( FileAst )
+CMAKE_END_AST_CLASS( FileAst )
+
+
+CMAKE_BEGIN_AST_CLASS( FindFileAst )
+CMAKE_END_AST_CLASS( FindFileAst )
+
+
+CMAKE_BEGIN_AST_CLASS( FindLibraryAst )
+CMAKE_END_AST_CLASS( FindLibraryAst )
+
+
+CMAKE_BEGIN_AST_CLASS( FindPackageAst )
+CMAKE_END_AST_CLASS( FindPackageAst )
+
+
+CMAKE_BEGIN_AST_CLASS( FindPathAst )
+CMAKE_END_AST_CLASS( FindPathAst )
+
+
+CMAKE_BEGIN_AST_CLASS( FindProgramAst )
+CMAKE_END_AST_CLASS( FindProgramAst )
+
+
+CMAKE_BEGIN_AST_CLASS( FltkWrapUiAst )
+CMAKE_END_AST_CLASS( FltkWrapUiAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ForeachAst )
+CMAKE_END_AST_CLASS( ForeachAst )
+
+
+CMAKE_BEGIN_AST_CLASS( GetCMakePropertyAst )
+CMAKE_END_AST_CLASS( GetCMakePropertyAst )
+
+
+CMAKE_BEGIN_AST_CLASS( GetDirPropertyAst )
+CMAKE_END_AST_CLASS( GetDirPropertyAst )
+
+
+CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
+CMAKE_END_AST_CLASS( GetFilenameComponentAst )
+
+
+CMAKE_BEGIN_AST_CLASS( GetSourceFilePropAst )
+CMAKE_END_AST_CLASS( GetSourceFilePropAst )
+
+
+CMAKE_BEGIN_AST_CLASS( GetTargetPropAst )
+CMAKE_END_AST_CLASS( GetTargetPropAst )
+
+
+CMAKE_BEGIN_AST_CLASS( GetTestPropAst )
+CMAKE_END_AST_CLASS( GetTestPropAst )
+
+
+CMAKE_BEGIN_AST_CLASS( IfAst )
+CMAKE_END_AST_CLASS( IfAst )
+
+
+CMAKE_BEGIN_AST_CLASS( IncludeAst )
+CMAKE_END_AST_CLASS( IncludeAst )
+
+
+CMAKE_BEGIN_AST_CLASS( IncludeDirectoriesAst )
+CMAKE_END_AST_CLASS( IncludeDirectoriesAst )
+
+
+CMAKE_BEGIN_AST_CLASS( IncludeExternalMsProjectAst )
+CMAKE_END_AST_CLASS( IncludeExternalMsProjectAst )
+
+
+CMAKE_BEGIN_AST_CLASS( IncludeRegularExpressionAst )
+CMAKE_END_AST_CLASS( IncludeRegularExpressionAst )
+
+
+CMAKE_BEGIN_AST_CLASS( InstallAst )
+CMAKE_END_AST_CLASS( InstallAst )
+
+
+CMAKE_BEGIN_AST_CLASS( InstallFilesAst )
+CMAKE_END_AST_CLASS( InstallFilesAst )
+
+
+CMAKE_BEGIN_AST_CLASS( InstallProgramsAst )
+CMAKE_END_AST_CLASS( InstallProgramsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( InstallTargetsAst )
+CMAKE_END_AST_CLASS( InstallTargetsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( LinkDirectoriesAst )
+CMAKE_END_AST_CLASS( LinkDirectoriesAst )
+
+
+CMAKE_BEGIN_AST_CLASS( LinkLibrariesAst )
+CMAKE_END_AST_CLASS( LinkLibrariesAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ListAst )
+CMAKE_END_AST_CLASS( ListAst )
+
+
+CMAKE_BEGIN_AST_CLASS( LoadCacheAst )
+CMAKE_END_AST_CLASS( LoadCacheAst )
+
+
+CMAKE_BEGIN_AST_CLASS( LoadCommandAst )
+CMAKE_END_AST_CLASS( LoadCommandAst )
+
+
+CMAKE_BEGIN_AST_CLASS( MacroAst )
+CMAKE_END_AST_CLASS( MacroAst )
+
+
+CMAKE_BEGIN_AST_CLASS( MakeDirectoryAst )
+CMAKE_END_AST_CLASS( MakeDirectoryAst )
+
+
+CMAKE_BEGIN_AST_CLASS( MarkAsAdvancedAst )
+CMAKE_END_AST_CLASS( MarkAsAdvancedAst )
+
+
+CMAKE_BEGIN_AST_CLASS( MathAst )
+CMAKE_END_AST_CLASS( MathAst )
+
+
+CMAKE_BEGIN_AST_CLASS( MessageAst )
+CMAKE_END_AST_CLASS( MessageAst )
+
+
+CMAKE_BEGIN_AST_CLASS( OptionAst )
+CMAKE_END_AST_CLASS( OptionAst )
+
+
+CMAKE_BEGIN_AST_CLASS( OutputRequiredFilesAst )
+CMAKE_END_AST_CLASS( OutputRequiredFilesAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ProjectAst )
+CMAKE_END_AST_CLASS( ProjectAst )
+
+
+CMAKE_BEGIN_AST_CLASS( QtWrapCppAst )
+CMAKE_END_AST_CLASS( QtWrapCppAst )
+
+
+CMAKE_BEGIN_AST_CLASS( QtWrapUiAst )
+CMAKE_END_AST_CLASS( QtWrapUiAst )
+
+
+CMAKE_BEGIN_AST_CLASS( RemoveAst )
+CMAKE_END_AST_CLASS( RemoveAst )
+
+
+CMAKE_BEGIN_AST_CLASS( RemoveDefinitionsAst )
+CMAKE_END_AST_CLASS( RemoveDefinitionsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SeparateArgumentsAst )
+CMAKE_END_AST_CLASS( SeparateArgumentsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SetAst )
+CMAKE_END_AST_CLASS( SetAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SetDirectoryPropsAst )
+CMAKE_END_AST_CLASS( SetDirectoryPropsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SetSourceFilesPropsAst )
+CMAKE_END_AST_CLASS( SetSourceFilesPropsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SetTargetPropsAst )
+CMAKE_END_AST_CLASS( SetTargetPropsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SetTestsPropsAst )
+CMAKE_END_AST_CLASS( SetTestsPropsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SiteNameAst )
+CMAKE_END_AST_CLASS( SiteNameAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SourceGroupAst )
+CMAKE_END_AST_CLASS( SourceGroupAst )
+
+
+CMAKE_BEGIN_AST_CLASS( StringAst )
+CMAKE_END_AST_CLASS( StringAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SubdirDependsAst )
+CMAKE_END_AST_CLASS( SubdirDependsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SubdirsAst )
+CMAKE_END_AST_CLASS( SubdirsAst )
+
+
+CMAKE_BEGIN_AST_CLASS( TargetLinkLibrariesAst )
+CMAKE_END_AST_CLASS( TargetLinkLibrariesAst )
+
+
+CMAKE_BEGIN_AST_CLASS( TryCompileAst )
+CMAKE_END_AST_CLASS( TryCompileAst )
+
+
+CMAKE_BEGIN_AST_CLASS( TryRunAst )
+CMAKE_END_AST_CLASS( TryRunAst )
+
+
+CMAKE_BEGIN_AST_CLASS( UseMangledMesaAst )
+CMAKE_END_AST_CLASS( UseMangledMesaAst )
+
+
+CMAKE_BEGIN_AST_CLASS( UtilitySourceAst )
+CMAKE_END_AST_CLASS( UtilitySourceAst )
+
+
+CMAKE_BEGIN_AST_CLASS( VariableRequiresAst )
+CMAKE_END_AST_CLASS( VariableRequiresAst )
+
+
+CMAKE_BEGIN_AST_CLASS( VtkMakeInstantiatorAst )
+CMAKE_END_AST_CLASS( VtkMakeInstantiatorAst )
+
+
+CMAKE_BEGIN_AST_CLASS( VtkWrapJavaAst )
+CMAKE_END_AST_CLASS( VtkWrapJavaAst )
+
+
+CMAKE_BEGIN_AST_CLASS( VtkWrapPythonAst )
+CMAKE_END_AST_CLASS( VtkWrapPythonAst )
+
+
+CMAKE_BEGIN_AST_CLASS( VtkWrapTclAst )
+CMAKE_END_AST_CLASS( VtkWrapTclAst )
+
+
+CMAKE_BEGIN_AST_CLASS( WhileAst )
+CMAKE_END_AST_CLASS( WhileAst )
+
+
+CMAKE_BEGIN_AST_CLASS( WriteFileAst )
+CMAKE_END_AST_CLASS( WriteFileAst )
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

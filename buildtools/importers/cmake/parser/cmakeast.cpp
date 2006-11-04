@@ -476,3 +476,1295 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 
 }
+AddSubdirectoryAst::AddSubdirectoryAst()
+{
+}
+
+AddSubdirectoryAst::~AddSubdirectoryAst()
+{
+}
+
+void AddSubdirectoryAst::writeBack( QString& )
+{
+}
+
+bool AddSubdirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+AddTestAst::AddTestAst()
+{
+}
+
+AddTestAst::~AddTestAst()
+{
+}
+
+void AddTestAst::writeBack( QString& )
+{
+}
+
+bool AddTestAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+AuxSourceDirectoryAst::AuxSourceDirectoryAst()
+{
+}
+
+AuxSourceDirectoryAst::~AuxSourceDirectoryAst()
+{
+}
+
+void AuxSourceDirectoryAst::writeBack( QString& )
+{
+}
+
+bool AuxSourceDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+BuildCommandAst::BuildCommandAst()
+{
+}
+
+BuildCommandAst::~BuildCommandAst()
+{
+}
+
+void BuildCommandAst::writeBack( QString& )
+{
+}
+
+bool BuildCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+BuildNameAst::BuildNameAst()
+{
+}
+
+BuildNameAst::~BuildNameAst()
+{
+}
+
+void BuildNameAst::writeBack( QString& )
+{
+}
+
+bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+CMakeMinimumRequiredAst::CMakeMinimumRequiredAst()
+{
+}
+
+CMakeMinimumRequiredAst::~CMakeMinimumRequiredAst()
+{
+}
+
+void CMakeMinimumRequiredAst::writeBack( QString& )
+{
+}
+
+bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+ConfigureFileAst::ConfigureFileAst()
+{
+}
+
+ConfigureFileAst::~ConfigureFileAst()
+{
+}
+
+void ConfigureFileAst::writeBack( QString& )
+{
+}
+
+bool ConfigureFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+CreateTestSourcelistAst::CreateTestSourcelistAst()
+{
+}
+
+CreateTestSourcelistAst::~CreateTestSourcelistAst()
+{
+}
+
+void CreateTestSourcelistAst::writeBack( QString& )
+{
+}
+
+bool CreateTestSourcelistAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+EnableLanguageAst::EnableLanguageAst()
+{
+}
+
+EnableLanguageAst::~EnableLanguageAst()
+{
+}
+
+void EnableLanguageAst::writeBack( QString& )
+{
+}
+
+bool EnableLanguageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+EnableTestingAst::EnableTestingAst()
+{
+}
+
+EnableTestingAst::~EnableTestingAst()
+{
+}
+
+void EnableTestingAst::writeBack( QString& )
+{
+}
+
+bool EnableTestingAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+ExecProgramAst::ExecProgramAst()
+{
+}
+
+ExecProgramAst::~ExecProgramAst()
+{
+}
+
+void ExecProgramAst::writeBack( QString& )
+{
+}
+
+bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+ExecuteProcessAst::ExecuteProcessAst()
+{
+}
+
+ExecuteProcessAst::~ExecuteProcessAst()
+{
+}
+
+void ExecuteProcessAst::writeBack( QString& )
+{
+}
+
+bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+ExportLibraryDepsAst::ExportLibraryDepsAst()
+{
+}
+
+ExportLibraryDepsAst::~ExportLibraryDepsAst()
+{
+}
+
+void ExportLibraryDepsAst::writeBack( QString& )
+{
+}
+
+bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+FileAst::FileAst()
+{
+}
+
+FileAst::~FileAst()
+{
+}
+
+void FileAst::writeBack( QString& )
+{
+}
+
+bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+FindFileAst::FindFileAst()
+{
+}
+
+FindFileAst::~FindFileAst()
+{
+}
+
+void FindFileAst::writeBack( QString& )
+{
+}
+
+bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+FindLibraryAst::FindLibraryAst()
+{
+}
+
+FindLibraryAst::~FindLibraryAst()
+{
+}
+
+void FindLibraryAst::writeBack( QString& )
+{
+}
+
+bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+FindPackageAst::FindPackageAst()
+{
+}
+
+FindPackageAst::~FindPackageAst()
+{
+}
+
+void FindPackageAst::writeBack( QString& )
+{
+}
+
+bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+FindPathAst::FindPathAst()
+{
+}
+
+FindPathAst::~FindPathAst()
+{
+}
+
+void FindPathAst::writeBack( QString& )
+{
+}
+
+bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+FindProgramAst::FindProgramAst()
+{
+}
+
+FindProgramAst::~FindProgramAst()
+{
+}
+
+void FindProgramAst::writeBack( QString& )
+{
+}
+
+bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+FltkWrapUiAst::FltkWrapUiAst()
+{
+}
+
+FltkWrapUiAst::~FltkWrapUiAst()
+{
+}
+
+void FltkWrapUiAst::writeBack( QString& )
+{
+}
+
+bool FltkWrapUiAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+ForeachAst::ForeachAst()
+{
+}
+
+ForeachAst::~ForeachAst()
+{
+}
+
+void ForeachAst::writeBack( QString& )
+{
+}
+
+bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+GetCMakePropertyAst::GetCMakePropertyAst()
+{
+}
+
+GetCMakePropertyAst::~GetCMakePropertyAst()
+{
+}
+
+void GetCMakePropertyAst::writeBack( QString& )
+{
+}
+
+bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+GetDirPropertyAst::GetDirPropertyAst()
+{
+}
+
+GetDirPropertyAst::~GetDirPropertyAst()
+{
+}
+
+void GetDirPropertyAst::writeBack( QString& )
+{
+}
+
+bool GetDirPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+GetFilenameComponentAst::GetFilenameComponentAst()
+{
+}
+
+GetFilenameComponentAst::~GetFilenameComponentAst()
+{
+}
+
+void GetFilenameComponentAst::writeBack( QString& )
+{
+}
+
+bool GetFilenameComponentAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+GetSourceFilePropAst::GetSourceFilePropAst()
+{
+}
+
+GetSourceFilePropAst::~GetSourceFilePropAst()
+{
+}
+
+void GetSourceFilePropAst::writeBack( QString& )
+{
+}
+
+bool GetSourceFilePropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+GetTargetPropAst::GetTargetPropAst()
+{
+}
+
+GetTargetPropAst::~GetTargetPropAst()
+{
+}
+
+void GetTargetPropAst::writeBack( QString& )
+{
+}
+
+bool GetTargetPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+GetTestPropAst::GetTestPropAst()
+{
+}
+
+GetTestPropAst::~GetTestPropAst()
+{
+}
+
+void GetTestPropAst::writeBack( QString& )
+{
+}
+
+bool GetTestPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+IfAst::IfAst()
+{
+}
+
+IfAst::~IfAst()
+{
+}
+
+void IfAst::writeBack( QString& )
+{
+}
+
+bool IfAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+IncludeAst::IncludeAst()
+{
+}
+
+IncludeAst::~IncludeAst()
+{
+}
+
+void IncludeAst::writeBack( QString& )
+{
+}
+
+bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+IncludeDirectoriesAst::IncludeDirectoriesAst()
+{
+}
+
+IncludeDirectoriesAst::~IncludeDirectoriesAst()
+{
+}
+
+void IncludeDirectoriesAst::writeBack( QString& )
+{
+}
+
+bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+IncludeExternalMsProjectAst::IncludeExternalMsProjectAst()
+{
+}
+
+IncludeExternalMsProjectAst::~IncludeExternalMsProjectAst()
+{
+}
+
+void IncludeExternalMsProjectAst::writeBack( QString& )
+{
+}
+
+bool IncludeExternalMsProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+IncludeRegularExpressionAst::IncludeRegularExpressionAst()
+{
+}
+
+IncludeRegularExpressionAst::~IncludeRegularExpressionAst()
+{
+}
+
+void IncludeRegularExpressionAst::writeBack( QString& )
+{
+}
+
+bool IncludeRegularExpressionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+InstallAst::InstallAst()
+{
+}
+
+InstallAst::~InstallAst()
+{
+}
+
+void InstallAst::writeBack( QString& )
+{
+}
+
+bool InstallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+InstallFilesAst::InstallFilesAst()
+{
+}
+
+InstallFilesAst::~InstallFilesAst()
+{
+}
+
+void InstallFilesAst::writeBack( QString& )
+{
+}
+
+bool InstallFilesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+InstallProgramsAst::InstallProgramsAst()
+{
+}
+
+InstallProgramsAst::~InstallProgramsAst()
+{
+}
+
+void InstallProgramsAst::writeBack( QString& )
+{
+}
+
+bool InstallProgramsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+InstallTargetsAst::InstallTargetsAst()
+{
+}
+
+InstallTargetsAst::~InstallTargetsAst()
+{
+}
+
+void InstallTargetsAst::writeBack( QString& )
+{
+}
+
+bool InstallTargetsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+LinkDirectoriesAst::LinkDirectoriesAst()
+{
+}
+
+LinkDirectoriesAst::~LinkDirectoriesAst()
+{
+}
+
+void LinkDirectoriesAst::writeBack( QString& )
+{
+}
+
+bool LinkDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+LinkLibrariesAst::LinkLibrariesAst()
+{
+}
+
+LinkLibrariesAst::~LinkLibrariesAst()
+{
+}
+
+void LinkLibrariesAst::writeBack( QString& )
+{
+}
+
+bool LinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+ListAst::ListAst()
+{
+}
+
+ListAst::~ListAst()
+{
+}
+
+void ListAst::writeBack( QString& )
+{
+}
+
+bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+LoadCacheAst::LoadCacheAst()
+{
+}
+
+LoadCacheAst::~LoadCacheAst()
+{
+}
+
+void LoadCacheAst::writeBack( QString& )
+{
+}
+
+bool LoadCacheAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+LoadCommandAst::LoadCommandAst()
+{
+}
+
+LoadCommandAst::~LoadCommandAst()
+{
+}
+
+void LoadCommandAst::writeBack( QString& )
+{
+}
+
+bool LoadCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+MacroAst::MacroAst()
+{
+}
+
+MacroAst::~MacroAst()
+{
+}
+
+void MacroAst::writeBack( QString& )
+{
+}
+
+bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+MakeDirectoryAst::MakeDirectoryAst()
+{
+}
+
+MakeDirectoryAst::~MakeDirectoryAst()
+{
+}
+
+void MakeDirectoryAst::writeBack( QString& )
+{
+}
+
+bool MakeDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+MarkAsAdvancedAst::MarkAsAdvancedAst()
+{
+}
+
+MarkAsAdvancedAst::~MarkAsAdvancedAst()
+{
+}
+
+void MarkAsAdvancedAst::writeBack( QString& )
+{
+}
+
+bool MarkAsAdvancedAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+MathAst::MathAst()
+{
+}
+
+MathAst::~MathAst()
+{
+}
+
+void MathAst::writeBack( QString& )
+{
+}
+
+bool MathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+MessageAst::MessageAst()
+{
+}
+
+MessageAst::~MessageAst()
+{
+}
+
+void MessageAst::writeBack( QString& )
+{
+}
+
+bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+OptionAst::OptionAst()
+{
+}
+
+OptionAst::~OptionAst()
+{
+}
+
+void OptionAst::writeBack( QString& )
+{
+}
+
+bool OptionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+OutputRequiredFilesAst::OutputRequiredFilesAst()
+{
+}
+
+OutputRequiredFilesAst::~OutputRequiredFilesAst()
+{
+}
+
+void OutputRequiredFilesAst::writeBack( QString& )
+{
+}
+
+bool OutputRequiredFilesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+ProjectAst::ProjectAst()
+{
+}
+
+ProjectAst::~ProjectAst()
+{
+}
+
+void ProjectAst::writeBack( QString& )
+{
+}
+
+bool ProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+QtWrapCppAst::QtWrapCppAst()
+{
+}
+
+QtWrapCppAst::~QtWrapCppAst()
+{
+}
+
+void QtWrapCppAst::writeBack( QString& )
+{
+}
+
+bool QtWrapCppAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+QtWrapUiAst::QtWrapUiAst()
+{
+}
+
+QtWrapUiAst::~QtWrapUiAst()
+{
+}
+
+void QtWrapUiAst::writeBack( QString& )
+{
+}
+
+bool QtWrapUiAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+RemoveAst::RemoveAst()
+{
+}
+
+RemoveAst::~RemoveAst()
+{
+}
+
+void RemoveAst::writeBack( QString& )
+{
+}
+
+bool RemoveAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+RemoveDefinitionsAst::RemoveDefinitionsAst()
+{
+}
+
+RemoveDefinitionsAst::~RemoveDefinitionsAst()
+{
+}
+
+void RemoveDefinitionsAst::writeBack( QString& )
+{
+}
+
+bool RemoveDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SeparateArgumentsAst::SeparateArgumentsAst()
+{
+}
+
+SeparateArgumentsAst::~SeparateArgumentsAst()
+{
+}
+
+void SeparateArgumentsAst::writeBack( QString& )
+{
+}
+
+bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SetAst::SetAst()
+{
+}
+
+SetAst::~SetAst()
+{
+}
+
+void SetAst::writeBack( QString& )
+{
+}
+
+bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SetDirectoryPropsAst::SetDirectoryPropsAst()
+{
+}
+
+SetDirectoryPropsAst::~SetDirectoryPropsAst()
+{
+}
+
+void SetDirectoryPropsAst::writeBack( QString& )
+{
+}
+
+bool SetDirectoryPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SetSourceFilesPropsAst::SetSourceFilesPropsAst()
+{
+}
+
+SetSourceFilesPropsAst::~SetSourceFilesPropsAst()
+{
+}
+
+void SetSourceFilesPropsAst::writeBack( QString& )
+{
+}
+
+bool SetSourceFilesPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SetTargetPropsAst::SetTargetPropsAst()
+{
+}
+
+SetTargetPropsAst::~SetTargetPropsAst()
+{
+}
+
+void SetTargetPropsAst::writeBack( QString& )
+{
+}
+
+bool SetTargetPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SetTestsPropsAst::SetTestsPropsAst()
+{
+}
+
+SetTestsPropsAst::~SetTestsPropsAst()
+{
+}
+
+void SetTestsPropsAst::writeBack( QString& )
+{
+}
+
+bool SetTestsPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SiteNameAst::SiteNameAst()
+{
+}
+
+SiteNameAst::~SiteNameAst()
+{
+}
+
+void SiteNameAst::writeBack( QString& )
+{
+}
+
+bool SiteNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SourceGroupAst::SourceGroupAst()
+{
+}
+
+SourceGroupAst::~SourceGroupAst()
+{
+}
+
+void SourceGroupAst::writeBack( QString& )
+{
+}
+
+bool SourceGroupAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+StringAst::StringAst()
+{
+}
+
+StringAst::~StringAst()
+{
+}
+
+void StringAst::writeBack( QString& )
+{
+}
+
+bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SubdirDependsAst::SubdirDependsAst()
+{
+}
+
+SubdirDependsAst::~SubdirDependsAst()
+{
+}
+
+void SubdirDependsAst::writeBack( QString& )
+{
+}
+
+bool SubdirDependsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+SubdirsAst::SubdirsAst()
+{
+}
+
+SubdirsAst::~SubdirsAst()
+{
+}
+
+void SubdirsAst::writeBack( QString& )
+{
+}
+
+bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+TargetLinkLibrariesAst::TargetLinkLibrariesAst()
+{
+}
+
+TargetLinkLibrariesAst::~TargetLinkLibrariesAst()
+{
+}
+
+void TargetLinkLibrariesAst::writeBack( QString& )
+{
+}
+
+bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+TryCompileAst::TryCompileAst()
+{
+}
+
+TryCompileAst::~TryCompileAst()
+{
+}
+
+void TryCompileAst::writeBack( QString& )
+{
+}
+
+bool TryCompileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+TryRunAst::TryRunAst()
+{
+}
+
+TryRunAst::~TryRunAst()
+{
+}
+
+void TryRunAst::writeBack( QString& )
+{
+}
+
+bool TryRunAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+UseMangledMesaAst::UseMangledMesaAst()
+{
+}
+
+UseMangledMesaAst::~UseMangledMesaAst()
+{
+}
+
+void UseMangledMesaAst::writeBack( QString& )
+{
+}
+
+bool UseMangledMesaAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+UtilitySourceAst::UtilitySourceAst()
+{
+}
+
+UtilitySourceAst::~UtilitySourceAst()
+{
+}
+
+void UtilitySourceAst::writeBack( QString& )
+{
+}
+
+bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+VariableRequiresAst::VariableRequiresAst()
+{
+}
+
+VariableRequiresAst::~VariableRequiresAst()
+{
+}
+
+void VariableRequiresAst::writeBack( QString& )
+{
+}
+
+bool VariableRequiresAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+VtkMakeInstantiatorAst::VtkMakeInstantiatorAst()
+{
+}
+
+VtkMakeInstantiatorAst::~VtkMakeInstantiatorAst()
+{
+}
+
+void VtkMakeInstantiatorAst::writeBack( QString& )
+{
+}
+
+bool VtkMakeInstantiatorAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+VtkWrapJavaAst::VtkWrapJavaAst()
+{
+}
+
+VtkWrapJavaAst::~VtkWrapJavaAst()
+{
+}
+
+void VtkWrapJavaAst::writeBack( QString& )
+{
+}
+
+bool VtkWrapJavaAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+VtkWrapPythonAst::VtkWrapPythonAst()
+{
+}
+
+VtkWrapPythonAst::~VtkWrapPythonAst()
+{
+}
+
+void VtkWrapPythonAst::writeBack( QString& )
+{
+}
+
+bool VtkWrapPythonAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+VtkWrapTclAst::VtkWrapTclAst()
+{
+}
+
+VtkWrapTclAst::~VtkWrapTclAst()
+{
+}
+
+void VtkWrapTclAst::writeBack( QString& )
+{
+}
+
+bool VtkWrapTclAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+WhileAst::WhileAst()
+{
+}
+
+WhileAst::~WhileAst()
+{
+}
+
+void WhileAst::writeBack( QString& )
+{
+}
+
+bool WhileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+WriteFileAst::WriteFileAst()
+{
+}
+
+WriteFileAst::~WriteFileAst()
+{
+}
+
+void WriteFileAst::writeBack( QString& )
+{
+}
+
+bool WriteFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
