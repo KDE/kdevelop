@@ -130,4 +130,3 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
 
 }
 
-#include "cmakelistsparser.moc"

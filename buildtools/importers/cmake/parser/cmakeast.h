@@ -532,7 +532,7 @@ CMAKE_END_AST_CLASS( WriteFileAst )
 CMAKE_BEGIN_AST_CLASS( CustomInvokationAst )
 CMAKE_ADD_AST_MEMBER( CMakeFunctionDesc, const CMakeFunctionDesc&,
                       function, Function )
-CMAKE_ADD_AST_MEMBER( CMakeFunctionArgument, const CMakeFunctionArgument&,
+CMAKE_ADD_AST_MEMBER( QList<CMakeFunctionArgument>, const QList<CMakeFunctionArgument>&,
                       arguments, Arguments )
 CMAKE_END_AST_CLASS( CustomInvokationAst )
 

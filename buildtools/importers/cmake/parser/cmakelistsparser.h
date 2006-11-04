@@ -79,7 +79,6 @@ Q_DECLARE_METATYPE( CMakeFunctionArgument )
  */
 class CMakeListsParser : public QObject
 {
-Q_OBJECT
 public:
     CMakeListsParser(QObject *parent = 0);
     ~CMakeListsParser();
