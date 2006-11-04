@@ -36,9 +36,6 @@ void CMakeAst::writeBack(QString& buffer)
 
 CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
 CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
-
-CMAKE_BEGIN_AST_CLASS( AddDefinitionsAst )
-CMAKE_END_AST_CLASS( AddDefinitionsAst )
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 
 
@@ -307,9 +304,17 @@ void AddDefinitionsAst::writeBack( const QString& )
 {
 }
 
-bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& )
+bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-   return false;
+    if ( func.name.toLower() != "add_definitions" )
+        return false;
+
+    foreach( CMakeFunctionArgument arg, func.arguments )
+    {
+        m_definitions << arg.value;
+    }
+
+    return true;
 }
 
 SetAst::SetAst()

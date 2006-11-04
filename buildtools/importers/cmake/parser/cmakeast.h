@@ -163,4 +163,9 @@ CMAKE_ADD_AST_MEMBER( bool, bool, isVerbatim, Verbatim )
 CMAKE_END_AST_CLASS( CustomTargetAst )
 
 
+CMAKE_BEGIN_AST_CLASS( AddDefinitionsAst )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, definitions, Definitions )
+CMAKE_END_AST_CLASS( AddDefinitionsAst )
+
+
 #endif

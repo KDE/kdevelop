@@ -77,6 +77,17 @@ target_link_libraries( cmake-customtargetasttest
     kdevcmakecommon
 )
 
+set( adddefinitiontest_SRCS cmakeadddefinitionasttest.cpp )
+kde4_automoc( cmake-adddefinitionasttest ${adddefinitiontest_SRCS} )
+kde4_add_executable( cmake-adddefinitionasttest NOGUI RUN_UNINSTALLED
+                     ${adddefinitiontest_SRCS} )
+target_link_libraries( cmake-adddefinitionasttest
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatform
+    kdevcmakecommon
+)
+
 add_test(cmake-folderxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-folderxmltest)
 add_test(cmake-targetxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-targetxmltest)
 add_test(cmake-projectxmltest ${EXECUTABLE_OUTPUT_PATH}/cmake-projectxmltest)
@@ -84,4 +95,5 @@ add_test(cmake-parsertest ${EXECUTABLE_OUTPUT_PATH}/cmake-parsertest)
 add_test(cmake-astfactorytest ${EXECUTABLE_OUTPUT_PATH}/cmake-astfactorytest)
 add_test(cmake-customcommandtest ${EXECUTABLE_OUTPUT_PATH}/cmake-customcommandasttest)
 add_test(cmake-customtargetasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-customtargetasttest)
+add_test(cmake-adddefinitionasttest ${EXECUTABLE_OUTPUT_PATH}/cmake-adddefinitionasttest)
 endif(KDE4_BUILD_TESTS)
