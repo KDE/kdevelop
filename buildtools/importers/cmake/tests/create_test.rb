@@ -132,3 +132,36 @@ oldCMakeText.gsub!(/endif\(KDE4_BUILD_TESTS\)/, cmakeText)
 cmakeList = File.new("CMakeLists.txt", "w")
 cmakeList.write(oldCMakeText)
 
+puts "Appending AST definition to cmakeast.h"
+cmakeAst = File.new("../parser/cmakeast.h", "a")
+astDecl =<<AST_EOF
+CMAKE_BEGIN_AST_CLASS( #{className} )
+CMAKE_END_AST_CLASS( #{className} )
+
+AST_EOF
+cmakeAst.write(astDecl)
+cmakeAst.close
+
+puts "Appending AST implementation to cmakeast.cpp"
+cmakeAst = File.new("../parser/cmakeast.cpp", "a")
+astDef =<<AST_EOF
+#{className}::#{className}()
+{
+}
+
+#{className}::~#{className}()
+{
+}
+
+void #{className}::writeBack( QString& )
+{
+}
+
+bool #{className}::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return false;
+}
+
+AST_EOF
+cmakeAst.write(astDef);
+cmakeAst.close
