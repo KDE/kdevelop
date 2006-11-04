@@ -60,5 +60,16 @@ void CMakeParserTest::testLexerWithFile()
     tempFile.remove();
 }
 
+void CMakeParserTest::testParserWithGoodData()
+{
+    QFAIL( "the magic is missing" );
+}
+
+void CMakeParserTest::testParserWithBadData()
+{
+    QFAIL( "the magic is missing" );
+}
+
+
 #include "cmakeparsertest.moc"
 

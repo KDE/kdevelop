@@ -39,6 +39,10 @@ private slots:
     void testLexerCreation();
     void testLexerWithFile();
 
+    void testParserWithGoodData();
+    void testParserWithBadData();
+
+
 };
 
 #endif
