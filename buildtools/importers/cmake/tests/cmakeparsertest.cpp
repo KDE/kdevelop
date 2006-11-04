@@ -22,21 +22,19 @@
 
 #include <QtCore/QTemporaryFile>
 #include "cmListFileLexer.h"
-
-static bool parseCMakeFile( const char* fileName );
-
-static bool parseCMakeFunction( cmListFileLexer* lexer,
-                                const char* filename );
+#include "cmakelistsparser.h"
 
 QTEST_MAIN( CMakeParserTest )
 
 CMakeParserTest::CMakeParserTest()
 {
+    fakeRoot = new CMakeAst;
 }
 
 
 CMakeParserTest::~CMakeParserTest()
 {
+    delete fakeRoot;
 }
 
 void CMakeParserTest::testLexerCreation()
@@ -78,7 +76,7 @@ void CMakeParserTest::testParserWithGoodData()
     tempFile.write( text.toUtf8() );
     QString tempName = tempFile.fileName();
     tempFile.close(); //hacks to the get name of the file
-    bool parseError = parseCMakeFile( qPrintable( tempName ) );
+    bool parseError = CMakeListsParser::parseCMakeFile( qPrintable( tempName ) );
     QVERIFY( parseError == false );
 
 }
@@ -103,7 +101,7 @@ void CMakeParserTest::testParserWithBadData()
     tempFile.write( text.toUtf8() );
     QString tempName = tempFile.fileName();
     tempFile.close(); //hacks to the get name of the file
-    bool parseError = parseCMakeFile( qPrintable( tempName ) );
+    bool parseError = CMakeListsParser::parseCMakeFile( qPrintable( tempName ) );
     QVERIFY( parseError == true );
 }
 
@@ -124,85 +122,10 @@ void CMakeParserTest::testParserWithBadData_data()
     QTest::newRow( "bad data 4" ) << "project(foo) set(mysrcs_SRCS foo.c)";
 }
 
-
-bool parseCMakeFile( const char* fileName )
+void CMakeParserTest::testAstCreation()
 {
-    cmListFileLexer* lexer = cmListFileLexer_New();
-    if ( !lexer )
-        return false;
-    if ( !cmListFileLexer_SetFileName( lexer, fileName ) )
-        return false;
-
-    bool parseError = false;
-    bool haveNewline = true;
-    cmListFileLexer_Token* token;
-    while(!parseError && (token = cmListFileLexer_Scan(lexer)))
-    {
-        if(token->type == cmListFileLexer_Token_Newline)
-        {
-            haveNewline = true;
-        }
-        else if(token->type == cmListFileLexer_Token_Identifier)
-        {
-            if(haveNewline)
-            {
-                haveNewline = false;
-                if ( parseCMakeFunction( lexer, fileName ) )
-                    parseError = false;
-                else
-                    parseError = true;
-            }
-            else
-                parseError = true;
-        }
-        else
-            parseError = true;
-    }
-
-    return parseError;
 
 }
-
-
-bool parseCMakeFunction( cmListFileLexer* lexer,
-                         const char* fileName )
-{
-    // Command name has already been parsed.  Read the left paren.
-    cmListFileLexer_Token* token;
-    if(!(token = cmListFileLexer_Scan(lexer)))
-    {
-        return false;
-    }
-    if(token->type != cmListFileLexer_Token_ParenLeft)
-    {
-        return false;
-    }
-
-    // Arguments.
-    unsigned long lastLine = cmListFileLexer_GetCurrentLine(lexer);
-    while((token = cmListFileLexer_Scan(lexer)))
-    {
-        if(token->type == cmListFileLexer_Token_ParenRight)
-        {
-            return true;
-        }
-        else if(token->type == cmListFileLexer_Token_Identifier ||
-                token->type == cmListFileLexer_Token_ArgumentUnquoted)
-        {
-        }
-        else if(token->type == cmListFileLexer_Token_ArgumentQuoted)
-        {
-        }
-        else if(token->type != cmListFileLexer_Token_Newline)
-        {
-            return false;
-        }
-        lastLine = cmListFileLexer_GetCurrentLine(lexer);
-    }
-
-    return false;
-}
-
 
 #include "cmakeparsertest.moc"
 

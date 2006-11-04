@@ -13,6 +13,7 @@ set( cmakecommon_SRCS
   cmakexmlparser.cpp
   parser/cmListFileLexer.c
   parser/astfactory.cpp
+  parser/cmakelistsparser.cpp
  )
 
 set( cmakeimporter_SRCS

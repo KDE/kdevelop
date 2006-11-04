@@ -23,6 +23,7 @@
 
 #include <QtTest/QtTest>
 
+class CMakeAst;
 
 /**
  * A test for the CMake parser and lexer
@@ -45,6 +46,12 @@ private slots:
     void testParserWithBadData();
     void testParserWithBadData_data();
 
+    void testAstCreation();
+
+    // void testWhitespaceHandling();
+
+private:
+    CMakeAst* fakeRoot; //our fake root
 
 };
 
