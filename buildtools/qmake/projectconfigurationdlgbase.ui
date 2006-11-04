@@ -877,7 +877,7 @@ e</string>
                     <cstring>incaddTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Inc&amp;ludes</string>
+                    <string>I&amp;ncludes</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1573,6 +1573,9 @@ e</string>
                                         <property name="text">
                                             <string>Move &amp;Up</string>
                                         </property>
+                                        <property name="accel">
+                                            <string>Alt+U</string>
+                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -1580,6 +1583,9 @@ e</string>
                                         </property>
                                         <property name="text">
                                             <string>Move &amp;Down</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+D</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -2695,6 +2701,24 @@ e</string>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>removeCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>checkOrdered</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>buildmovedown_button</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>checkOrdered</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>buildmoveup_button</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>checkOrdered</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>buildorder_listview</receiver>
+        <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>

@@ -1556,9 +1556,9 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         extMoveUp_button->setEnabled( false );
         extMoveDown_button->setEnabled( false );
         extDeps_view->setEnabled( false );
-        buildorder_listview->setEnabled( true );
-        buildmoveup_button->setEnabled( true );
-        buildmovedown_button->setEnabled( true );
+        buildorder_listview->setEnabled( checkOrdered->isOn() );
+        buildmoveup_button->setEnabled( checkOrdered->isOn() );
+        buildmovedown_button->setEnabled( checkOrdered->isOn() );
         targetGroupbox->setEnabled( false );
         targetInstGroupbox->setEnabled( false );
         checkOrdered->setEnabled( true );
