@@ -5,11 +5,13 @@ include_directories(
  ${CMAKE_SOURCE_DIR}/lib/projectmanager/interfaces
  ${CMAKE_SOURCE_DIR}/lib/project
  ${CMAKE_SOURCE_DIR}/lib/util
+ ${CMAKE_CURRENT_SOURCE_DIR}/parser
 )
 
 set( cmakecommon_SRCS 
   cmakemodelitems.cpp
   cmakexmlparser.cpp
+  parser/cmListFileLexer.c
  )
 
 set( cmakeimporter_SRCS
