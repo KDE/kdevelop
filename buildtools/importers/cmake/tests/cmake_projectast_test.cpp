@@ -34,6 +34,32 @@ void ProjectAstTest::testGoodParse()
 
 void ProjectAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3, func4, func5, func6;
+    func1.name = "PROJECT";
+    func2.name = func3.name = func4.name = func5.name = func6.name = func1.name.toLower();
+
+    QStringList argList1, argList2, argList3, argList4, argList5;
+    argList1 << "myproject";
+    argList2 << "myproject" << "C";
+    argList3 << "myproject" << "CXX";
+    argList4 << "myproject" << "Java";
+    argList5 << "myproject" << "C" << "CXX" << "Java";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList1 );
+    func3.addArguments( argList2 );
+    func4.addArguments( argList3 );
+    func5.addArguments( argList4 );
+    func6.addArguments( argList5 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good 1" ) << func1;
+    QTest::newRow( "good 2" ) << func2;
+    QTest::newRow( "good 3" ) << func3;
+    QTest::newRow( "good 4" ) << func4;
+    QTest::newRow( "good 5" ) << func5;
+    QTest::newRow( "good 6" ) << func6;
+
 }
 
 void ProjectAstTest::testBadParse()
@@ -46,6 +72,21 @@ void ProjectAstTest::testBadParse()
 
 void ProjectAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3;
+    func1.name = "wrongname";
+    func2.name = func3.name = "PROJECT";
+
+    QStringList argList1, argList2;
+    argList1 << "myproject" << "C" << "CXX" << "Java";
+    argList2 << "myproject" << "C" << "CXX" << "Java" << "foo";
+
+    func1.addArguments( argList1 );
+    func3.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow("wrong name") << func1;
+    QTest::newRow("no args") << func2;
+    QTest::newRow("wrong lang args") << func3;
 }
 
 #include "cmake_projectast_test.moc"

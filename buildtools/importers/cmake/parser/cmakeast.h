@@ -374,6 +374,8 @@ CMAKE_END_AST_CLASS( LoadCommandAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MacroAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, macroName, MacroName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, knownArgs, KnownArgs )
 CMAKE_END_AST_CLASS( MacroAst )
 
 
@@ -402,6 +404,10 @@ CMAKE_END_AST_CLASS( OutputRequiredFilesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ProjectAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, projectName, ProjectName )
+CMAKE_ADD_AST_MEMBER( bool, bool, useCpp, UseCpp )
+CMAKE_ADD_AST_MEMBER( bool, bool, useC, UseC )
+CMAKE_ADD_AST_MEMBER( bool, bool, useJava, UseJava )
 CMAKE_END_AST_CLASS( ProjectAst )
 
 

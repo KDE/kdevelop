@@ -1326,7 +1326,18 @@ void MacroAst::writeBack( QString& )
 
 bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "macro" )
+        return false;
+
+    if ( func.arguments.size() < 1 )
+        return false;
+
+    m_macroName = func.arguments[0].value;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    for ( it = func.arguments.begin() + 1; it != itEnd; ++it )
+        m_knownArgs.append( ( *it ).value );
+
+    return true;
 }
 
 MakeDirectoryAst::MakeDirectoryAst()
@@ -1445,7 +1456,31 @@ void ProjectAst::writeBack( QString& )
 
 bool ProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "project" )
+        return false;
+
+    if ( func.arguments.size() < 1 )
+        return false;
+
+    m_projectName = func.arguments[0].value;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    it = func.arguments.begin();
+    ++it;
+    for ( ; it != itEnd; ++it )
+    {
+        CMakeFunctionArgument arg = ( *it );
+        if ( arg.value == "CXX" )
+            m_useCpp = true;
+        else if ( arg.value == "C" )
+            m_useC = true;
+        else if ( arg.value == "Java" )
+            m_useJava = true;
+        else
+            return false;
+    }
+
+    return true;
 }
 
 QtWrapCppAst::QtWrapCppAst()

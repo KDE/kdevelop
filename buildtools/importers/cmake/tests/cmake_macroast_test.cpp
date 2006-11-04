@@ -34,6 +34,22 @@ void MacroAstTest::testGoodParse()
 
 void MacroAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3;
+    func1.name = "MACRO";
+    func2.name = func3.name = func1.name.toLower();
+
+    QStringList argList1, argList2;
+    argList1 << "MY_NEATO_MACRO";
+    argList2 << "MY_NEATO_MACRO" << "one_arg" << "second_arg";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList1 );
+    func3.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good upper" ) << func1;
+    QTest::newRow( "good lower" ) << func2;
+    QTest::newRow( "good with args" ) << func3;
 }
 
 void MacroAstTest::testBadParse()
@@ -46,6 +62,19 @@ void MacroAstTest::testBadParse()
 
 void MacroAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "MACRO";
+    func2.name = "wrong_function";
+
+    QStringList argList1, argList2;
+    argList2 << "MY_NEATO_MACRO" << "one_arg" << "second_arg";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad no args" ) << func1;
+    QTest::newRow( "bad wrong name" ) << func2;
 }
 
 #include "cmake_macroast_test.moc"
