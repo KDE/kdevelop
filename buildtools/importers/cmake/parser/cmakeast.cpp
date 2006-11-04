@@ -41,6 +41,13 @@ CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
 CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
 CMAKE_REGISTER_AST( AddLibraryAst, add_library )
 CMAKE_REGISTER_AST( AddSubdirectoryAst, add_subdirectory )
+CMAKE_REGISTER_AST( AddTestAst,  add_test )
+CMAKE_REGISTER_AST( AuxSourceDirectoryAst, aux_source_directory )
+CMAKE_REGISTER_AST( BuildCommandAst, build_command )
+CMAKE_REGISTER_AST( BuildNameAst, build_name )
+CMAKE_REGISTER_AST( CMakeMinimumRequiredAst, cmake_minimum_required )
+CMAKE_REGISTER_AST( ConfigureFileAst, configure_file )
+CMAKE_REGISTER_AST( SetAst, set )
 
 CustomCommandAst::CustomCommandAst()
 {
@@ -682,7 +689,32 @@ void ConfigureFileAst::writeBack( QString& )
 
 bool ConfigureFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "configure_file" )
+        return false;
+
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    m_inputFile = func.arguments[0].value;
+    m_outputFile = func.arguments[1].value;
+
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    it = func.arguments.begin() + 2;
+    for ( ; it != itEnd; ++it )
+    {
+        CMakeFunctionArgument arg = ( *it );
+        if ( arg.value == "COPYONLY" )
+            m_copyOnly = true;
+        else if ( arg.value == "ESCAPE_QUOTES" )
+            m_escapeQuotes = true;
+        else if ( arg.value == "@ONLY" )
+            m_atsOnly = true;
+        else if ( arg.value == "IMMEDIATE" )
+            m_immediate = true;
+    }
+
+    return true;
+
 }
 
 CreateTestSourcelistAst::CreateTestSourcelistAst()
@@ -733,7 +765,13 @@ void EnableTestingAst::writeBack( QString& )
 
 bool EnableTestingAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "enable_testing" )
+        return false;
+
+    if ( !func.arguments.isEmpty() )
+        return false;
+
+    return true;
 }
 
 ExecProgramAst::ExecProgramAst()
@@ -1498,7 +1536,49 @@ void SetAst::writeBack( QString& )
 
 bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "set" )
+        return false;
+
+    if ( func.arguments.size() < 1 )
+        return false;
+
+    m_variableName = func.arguments[0].value;
+
+    int argSize = func.arguments.size();
+
+    //look for the FORCE argument. Thanks to the CMake folks for letting
+    //me read their code
+    if ( argSize > 4 && func.arguments.last().value == "FORCE" )
+        m_forceStoring = true;
+
+    if ( argSize > 3 &&
+         func.arguments[argSize - 3 - ( m_forceStoring ? 1 : 0 )].value == "CACHE" )
+    {
+        m_storeInCache = true;
+    }
+
+    int numCacheArgs = ( m_storeInCache ? 3 : 0 );
+    int numForceArgs = ( m_forceStoring ? 1 : 0 );
+    if ( argSize > 1 + numCacheArgs + numForceArgs )
+    {
+        QList<CMakeFunctionArgument> args = func.arguments;
+        QList<CMakeFunctionArgument>::const_iterator it, itEnd;
+        it = args.begin() + 1;
+        itEnd = args.end() - numCacheArgs - numForceArgs;
+        for ( ; it != itEnd; ++it )
+            m_values.append( ( *it ).value );
+    }
+
+    //catch some simple things. if CACHE is the last or next to last arg or if
+    //FORCE was used without CACHE, then there's a problem.
+    if ( func.arguments.last().value == "CACHE" ||
+         ( argSize > 1 && func.arguments[argSize - 2].value == "CACHE" ) ||
+         m_forceStoring && !m_storeInCache )
+    {
+        return false;
+    }
+
+    return true;
 }
 
 SetDirectoryPropsAst::SetDirectoryPropsAst()

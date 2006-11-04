@@ -226,6 +226,12 @@ CMAKE_END_AST_CLASS( CMakeMinimumRequiredAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ConfigureFileAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, inputFile, InputFile )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputFile, OutputFile )
+CMAKE_ADD_AST_MEMBER( bool, bool, copyOnly, CopyOnly )
+CMAKE_ADD_AST_MEMBER( bool, bool, escapeQuotes, EscapeQuotes )
+CMAKE_ADD_AST_MEMBER( bool, bool, atsOnly, AtsOnly )
+CMAKE_ADD_AST_MEMBER( bool, bool, immediate, Immediate )
 CMAKE_END_AST_CLASS( ConfigureFileAst )
 
 
@@ -418,6 +424,13 @@ CMAKE_END_AST_CLASS( SeparateArgumentsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, values, Values )
+CMAKE_ADD_AST_MEMBER( bool, bool, storeInCache, StoreInCache )
+CMAKE_ADD_AST_MEMBER( bool, bool, forceStoring, ForceStoring )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, entryType, EntryType )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+
 CMAKE_END_AST_CLASS( SetAst )
 
 

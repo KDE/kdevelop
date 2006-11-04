@@ -34,6 +34,29 @@ void ConfigureFileAstTest::testGoodParse()
 
 void ConfigureFileAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3, func4, func5;
+    func1.name = "CONFIGURE_FILE";
+    func2.name = func1.name.toLower();
+    func3.name = func4.name = func5.name = func2.name;
+
+    QStringList argList1, argList2, argList3, argList4;
+    argList1 << "inputfile" << "outputfile";
+    argList2 = argList1 << "COPYONLY";
+    argList3 = argList2 << "ESCAPE_QUOTES";
+    argList4 = argList3 << "@ONLY";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList1 );
+    func3.addArguments( argList2 );
+    func4.addArguments( argList3 );
+    func5.addArguments( argList4 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good uppercase min args" ) << func1;
+    QTest::newRow( "good lowercase min args" ) << func2;
+    QTest::newRow( "good lowercase 3 args" ) << func3;
+    QTest::newRow( "good lowercase 4 args" ) << func4;
+    QTest::newRow( "good lowercase 5 args" ) << func5;
 }
 
 void ConfigureFileAstTest::testBadParse()
@@ -46,6 +69,22 @@ void ConfigureFileAstTest::testBadParse()
 
 void ConfigureFileAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3;
+    func1.name = "wrong_func_name";
+    func2.name = func3.name = "configure_file";
+
+    QStringList argList1, argList2, argList3;
+    argList1 << "sourcefile" << "outputfile";
+    argList2 << "only_one";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+    func2.addArguments( argList3 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad wrong name" ) << func1;
+    QTest::newRow( "bad only one arg" ) << func2;
+    QTest::newRow( "bad no args" ) << func3;
 }
 
 #include "cmake_configurefileast_test.moc"
