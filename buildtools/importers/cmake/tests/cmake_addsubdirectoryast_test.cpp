@@ -34,6 +34,28 @@ void AddSubdirectoryAstTest::testGoodParse()
 
 void AddSubdirectoryAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func, func2, func3, func4;
+    func.name = "ADD_SUBDIRECTORY";
+    func.addArguments( QStringList( "foodir" ) );
+
+    func2.name = "add_subdirectory";
+    func2.addArguments( QStringList( "foodir" ) );
+
+    func3.name = "add_subdirectory";
+    QStringList argList3;
+    argList3 << "foodir" << "binary_foo_dir" << "EXCLUDE_FROM_ALL";
+    func3.addArguments( argList3 );
+
+    func4.name = "add_subdirectory";
+    QStringList argList4;
+    argList4 << "foodri" << "binary_foo_dir";
+    func4.addArguments( argList4 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good lowercase" ) << func;
+    QTest::newRow( "good uppercase" ) << func2;
+    QTest::newRow( "good all args" ) << func3;
+    QTest::newRow( "good binary dir only" ) << func4;
 }
 
 void AddSubdirectoryAstTest::testBadParse()
@@ -46,6 +68,15 @@ void AddSubdirectoryAstTest::testBadParse()
 
 void AddSubdirectoryAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func, func2;
+    func.name = "ADD_SUBDIRECTORY";
+    func2.name = "foobar";
+
+    func2.addArguments( QStringList( "foodir" ) );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good lowercase" ) << func;
+    QTest::newRow( "good uppercase" ) << func2;
 }
 
 #include "cmake_addsubdirectoryast_test.moc"

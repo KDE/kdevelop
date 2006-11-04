@@ -189,14 +189,22 @@ CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, sourceLists, SourceLists 
 CMAKE_END_AST_CLASS( AddLibraryAst )
 
 CMAKE_BEGIN_AST_CLASS( AddSubdirectoryAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, sourceDir, SourceDir )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, binaryDir, BinaryDir )
+CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
 CMAKE_END_AST_CLASS( AddSubdirectoryAst )
 
 
 CMAKE_BEGIN_AST_CLASS( AddTestAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, testName, TestName )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, exeName, exeName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, testArgs, TestArgs )
 CMAKE_END_AST_CLASS( AddTestAst )
 
 
 CMAKE_BEGIN_AST_CLASS( AuxSourceDirectoryAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, dirName, DirName )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, variableName )
 CMAKE_END_AST_CLASS( AuxSourceDirectoryAst )
 
 

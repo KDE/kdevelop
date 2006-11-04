@@ -40,6 +40,7 @@ CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
 CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
 CMAKE_REGISTER_AST( AddLibraryAst, add_library )
+CMAKE_REGISTER_AST( AddSubdirectoryAst, add_subdirectory )
 
 CustomCommandAst::CustomCommandAst()
 {
@@ -490,7 +491,25 @@ void AddSubdirectoryAst::writeBack( QString& )
 
 bool AddSubdirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "add_subdirectory" )
+        return false;
+    if ( func.arguments.size() < 1 )
+        return false;
+
+    m_sourceDir = func.arguments[0].value;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    it = ++func.arguments.begin();
+    for ( ; it != itEnd; ++it )
+    {
+        if ( ( *it ).value == "EXCLUDE_FROM_ALL" )
+            m_excludeFromAll = true;
+        else if ( m_binaryDir.isEmpty() )
+            m_binaryDir = ( *it ).value;
+        else
+            return false; //invalid num of args
+    }
+
+    return true;
 }
 
 AddTestAst::AddTestAst()
@@ -507,7 +526,19 @@ void AddTestAst::writeBack( QString& )
 
 bool AddTestAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "add_test" )
+        return false;
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    m_testName = func.arguments[0].value;
+    m_exeName = func.arguments[1].value;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    it = func.arguments.begin() + 2;
+    for ( ; it != itEnd; ++it )
+        m_testArgs << ( *it ).value;
+
+    return true;
 }
 
 AuxSourceDirectoryAst::AuxSourceDirectoryAst()
@@ -524,7 +555,15 @@ void AuxSourceDirectoryAst::writeBack( QString& )
 
 bool AuxSourceDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "aux_source_directory" )
+        return false;
+    if ( func.arguments.size() != 2 )
+        return false;
+
+    m_dirName = func.arguments[0].value;
+    m_variableName = func.arguments[1].value;
+
+    return true;
 }
 
 BuildCommandAst::BuildCommandAst()

@@ -34,6 +34,20 @@ void AddTestAstTest::testGoodParse()
 
 void AddTestAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "ADD_TEST";
+    func2.name = "add_test";
+
+    QStringList argList1, argList2;
+    argList1 << "test_name" << "exec_name";
+    argList2 << "test_name" << "exec_name" << "arg1";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good req args" ) << func1;
+    QTest::newRow( "good opt args" ) << func2;
 }
 
 void AddTestAstTest::testBadParse()
@@ -46,6 +60,23 @@ void AddTestAstTest::testBadParse()
 
 void AddTestAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3;
+    func1.name = "wrong_name";
+    func2.name = func3.name = "add_test";
+
+    QStringList argList1, argList2, argList3;
+    argList1 << "some" << "args";
+    argList2 << "one arg";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+    func3.addArguments( argList3 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "wrong name" ) << func1;
+    QTest::newRow( "not enough args" ) << func2;
+    QTest::newRow( "no args" ) << func3;
+
 }
 
 #include "cmake_addtestast_test.moc"
