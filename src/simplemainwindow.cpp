@@ -686,6 +686,7 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
                 PartController::getInstance()->editDocument(*it);
             else
             {
+                PartController::getInstance()->activatePart( part );
                 QWidget *inTab = widgetForURL(*it);
                 if (inTab)
                 {
