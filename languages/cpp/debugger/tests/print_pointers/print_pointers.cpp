@@ -1,5 +1,6 @@
 
 #include <qstring.h>
+#include <vector>
 
 struct B { int i; int j; static int k; };
 struct C { int a[3]; };
@@ -71,6 +72,8 @@ int test_main(int ac, char* av[])
     const QString& sr = s;
     func(s);
     i = 15;
+    
+    std::vector<int> v;
     
     Test* test = new Test;
     Test& test2 = *test;

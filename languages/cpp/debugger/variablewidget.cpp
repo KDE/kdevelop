@@ -1222,7 +1222,7 @@ void VarItem::setVarobjName(const QString& name)
     if (format_ != natural)
     {
         controller_->addCommand(
-            new GDBCommand(QString("-var-set-format %1 %2")
+            new GDBCommand(QString("-var-set-format \"%1\" %2")
                            .arg(varobjName_).arg(varobjFormatName()),
                            NOTRUNCMD, NOTINFOCMD));
     }
@@ -1330,8 +1330,8 @@ void VarItem::childrenDone(const GDBMI::ResultRecord& r)
         {
             QString name = children[i]["name"].literal();
             controller_->addCommand(new GDBCommand(
-                                        "-var-list-children " + 
-                                        name,
+                                        "-var-list-children \"" + 
+                                        name + "\"",
                                         this,
                                         &VarItem::childrenDone));            
         }
@@ -1537,7 +1537,7 @@ void VarItem::updateValue()
 
     controller_->addCommand(
         new GDBCommand(
-            "-var-evaluate-expression " + varobjName_,
+            "-var-evaluate-expression \"" + varobjName_ + "\"",
             this,
             &VarItem::valueDone,
             true /* handle error */));
@@ -1546,7 +1546,7 @@ void VarItem::updateValue()
 void VarItem::setValue(const QString& new_value)
 {
     controller_->addCommand(
-        new GDBCommand(QString("-var-assign %1 %2").arg(varobjName_)
+        new GDBCommand(QString("-var-assign \"%1\" %2").arg(varobjName_)
                        .arg(new_value),
                        NOTRUNCMD, NOTINFOCMD));
 
@@ -1634,7 +1634,7 @@ void VarItem::setOpen(bool open)
     if (open && !childrenFetched_)
     {
         controller_->addCommand(new GDBCommand(
-                                    "-var-list-children " + varobjName_,
+                                    "-var-list-children \"" + varobjName_ + "\"",
                                     this,
                                     &VarItem::childrenDone));
     }
@@ -1698,7 +1698,7 @@ void VarItem::setFormat(format_t f)
     else
     {
          controller_->addCommand(
-            new GDBCommand(QString("-var-set-format %1 %2")
+            new GDBCommand(QString("-var-set-format \"%1\" %2")
                            .arg(varobjName_).arg(varobjFormatName()),
                            NOTRUNCMD, NOTINFOCMD));
         
@@ -1809,7 +1809,7 @@ void VarItem::unhookFromGdb()
     {
         controller_->addCommand(
             new GDBCommand(
-                QString("-var-delete %1").arg(varobjName_),
+                QString("-var-delete \"%1\"").arg(varobjName_),
                 NOTRUNCMD, NOTINFOCMD));
     }
 
