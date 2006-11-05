@@ -177,7 +177,7 @@
       <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx=std;</namespaceAliases>
       <processPrimaryTypes>true</processPrimaryTypes>
       <processFunctionArguments>false</processFunctionArguments>
-      <preProcessAllHeaders>true</preProcessAllHeaders>
+      <preProcessAllHeaders>false</preProcessAllHeaders>
       <parseMissingHeaders>false</parseMissingHeaders>
       <resolveIncludePaths>false</resolveIncludePaths>
       <alwaysParseInBackground>true</alwaysParseInBackground>
@@ -206,7 +206,7 @@
       <designerintegration>EmbeddedKDevDesigner</designerintegration>
     </qt>
     <splitheadersource>
-      <enabled>true</enabled>
+      <enabled>false</enabled>
       <synchronize>true</synchronize>
       <orientation>Horizontal</orientation>
     </splitheadersource>
