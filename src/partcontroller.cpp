@@ -57,6 +57,7 @@
 #include "urlutil.h"
 #include "mimewarningdialog.h"
 #include "domutil.h"
+#include "kdevjobtimer.h"
 
 #include "designer.h"
 #include "kdevlanguagesupport.h"
@@ -70,12 +71,21 @@ PartController *PartController::s_instance = 0;
 
 using namespace MainWindowUtils;
 
-struct HistoryEntry {
+struct HistoryEntry 
+{
     KURL url;
     QString context;
 
     HistoryEntry( const KURL& u, const QString& c ): url( u ), context( c ) {}
 };
+
+struct ModificationData
+{
+	KTextEditor::Document * doc;
+	bool isModified;
+	unsigned char reason;
+};
+
 
 PartController::PartController(QWidget *parent)
   : KDevPartController(parent), _editorFactory(0L)
@@ -1374,7 +1384,29 @@ void PartController::slotDocumentDirty( Kate::Document * d, bool isModified, uns
 		++it;
 	}
 
-	if ( !doc ) return;
+	// this is a bit strange, but in order to avoid weird crashes 
+	// down in KDirWatcher, we want to step off the call chain before 
+	// opening any messageboxes 
+	if ( doc ) 
+	{
+		ModificationData * p = new ModificationData;
+		p->doc = doc;
+		p->isModified = isModified;
+		p->reason = reason;
+		KDevJobTimer::singleShot( 0, this, SLOT(slotDocumentDirtyStepTwo(void*)), p );
+	}
+}
+
+void PartController::slotDocumentDirtyStepTwo( void * payload )
+{
+	if ( !payload ) return;
+
+	ModificationData * p = reinterpret_cast<ModificationData*>( payload );
+	KTextEditor::Document * doc = p->doc;
+	bool isModified = p->isModified;
+	unsigned char reason = p->reason;
+	delete p;
+
 	KURL url = storedURLForPart( doc );
 	if ( url.isEmpty() )
 	{
@@ -1809,3 +1841,4 @@ void PartController::slotDocumentUrlChanged()
 }
 
 #include "partcontroller.moc"
+

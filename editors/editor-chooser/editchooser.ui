@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>EditChooser</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,6 +11,9 @@
             <width>514</width>
             <height>383</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>EditChooser</string>
     </property>
     <vbox>
         <property name="name">
@@ -65,7 +68,7 @@ already open files.</string>
                         <cstring>nothing</cstring>
                     </property>
                     <property name="text">
-                        <string>Do nothing</string>
+                        <string>&amp;Do nothing</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -76,10 +79,13 @@ already open files.</string>
                         <cstring>alert</cstring>
                     </property>
                     <property name="enabled">
-                        <bool>false</bool>
+                        <bool>true</bool>
                     </property>
                     <property name="text">
-                        <string>Alert the user</string>
+                        <string>&amp;Alert the user</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -87,7 +93,7 @@ already open files.</string>
                         <cstring>reload</cstring>
                     </property>
                     <property name="text">
-                        <string>Automatically reload the file if safe, alert the user if not</string>
+                        <string>Automatically reload the file &amp;if safe, alert the user if not</string>
                     </property>
                 </widget>
             </vbox>

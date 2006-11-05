@@ -141,6 +141,7 @@ private slots:
   void updateMenuItems();
 
   void slotDocumentDirty( Kate::Document * doc, bool isModified, unsigned char reason );
+  void slotDocumentDirtyStepTwo( void * );
   void slotNewStatus();
   void slotNewDesignerStatus(const QString &formName, int status);
   void textChanged();
