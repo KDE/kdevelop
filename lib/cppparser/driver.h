@@ -395,7 +395,7 @@ class MacroSet {
 
         void write( QDataStream& stream ) const {
             //stream << m_idHashValid << m_idHash << m_valueHashValid << m_valueHash;
-            stream << m_usedMacros.size();
+            stream << int( m_usedMacros.size() );
             for( Macros::const_iterator it = m_usedMacros.begin(); it != m_usedMacros.end(); ++it ) {
                 (*it).write( stream );
             }
