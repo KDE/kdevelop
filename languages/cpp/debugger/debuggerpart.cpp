@@ -1045,7 +1045,7 @@ void DebuggerPart::slotStepOver()
 
 void DebuggerPart::slotStepOverInstruction()
 {
-    controller->slotStepOver();
+    controller->slotStepOverIns();
 }
 
 
