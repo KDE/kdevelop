@@ -635,7 +635,7 @@ e</string>
                                     <cstring>checkQt3Support</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Qt3 Support</string>
+                                    <string>Qt&amp;3 Support</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="3">
@@ -643,7 +643,7 @@ e</string>
                                     <cstring>checkQDBus</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>QDBus (Qt4.2)</string>
+                                    <string>QDBus (Qt4.&amp;2)</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="2">
@@ -2719,6 +2719,12 @@ e</string>
         <signal>toggled(bool)</signal>
         <receiver>buildorder_listview</receiver>
         <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>editConfigExtra</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
     </connection>
 </connections>
 <tabstops>

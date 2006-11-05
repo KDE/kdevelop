@@ -349,7 +349,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     {
         if ( !Scope::KnownConfigValues.contains( *it ) && !extraValues.contains( *it ) )
         {
-            myProjectItem->scope->addToMinusOp( "CONFIG", *it );
+            myProjectItem->scope->removeFromPlusOp( "CONFIG", *it );
         }
     }
 
