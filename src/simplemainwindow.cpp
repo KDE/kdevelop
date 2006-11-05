@@ -703,7 +703,7 @@ void SimpleMainWindow::openDocumentsAfterSplit(DTabWidget *tab)
 QWidget *SimpleMainWindow::widgetForURL(KURL url)
 {
     KParts::ReadOnlyPart *part = PartController::getInstance()->partForURL(url);
-    return widgetInTab(part->widget());
+    return widgetInTab( part ? part->widget() : 0 );
 }
 
 QWidget *SimpleMainWindow::widgetInTab(QWidget *w)
