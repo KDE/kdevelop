@@ -107,7 +107,7 @@ const bool alwaysParseInBackground = true;
 
 
 enum { KDEV_DB_VERSION = 17 };
-enum { KDEV_PCS_VERSION = 14 };
+enum { KDEV_PCS_VERSION = 15 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
