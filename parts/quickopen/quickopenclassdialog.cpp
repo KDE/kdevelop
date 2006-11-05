@@ -90,9 +90,13 @@ void QuickOpenClassDialog::accept()
             for( ClassList::const_iterator it = klasses.constBegin(); it != klasses.constEnd() ; ++it )
             {
                 ClassDom klass = *it;
-
-                fdlg.argBox->insertItem( m_part->languageSupport()->formatModelItem(klass) +
-                        (klass->scope().isEmpty() ? "" : "   (in " + klass->scope().join("::") + ")"));
+                //assemble class name to display (maybe with scope info and specialization)
+                QString classStr = m_part->languageSupport()->formatModelItem(klass);
+                if(klass->hasSpecializationDeclaration())
+                  classStr += klass->getSpecializationDeclaration();
+                if(!klass->scope().isEmpty())
+                  classStr += "   (in " + klass->scope().join("::") + ")";
+                fdlg.argBox->insertItem(classStr);
 
                 fileStr = KURL( klass->fileName() ).fileName();
                 KURL full_url( klass->fileName() );
