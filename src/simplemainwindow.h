@@ -58,6 +58,9 @@ public:
 
     void init();
 
+public slots:
+    void slotDropEvent( QDropEvent *event );
+
 protected:
     virtual bool queryClose();
     virtual bool queryExit();
@@ -98,6 +101,8 @@ private:
     void createFramework();
     void createActions();
     void setupWindowMenu();
+    void dragEnterEvent( QDragEnterEvent *event );
+    void dropEvent( QDropEvent *event );
     void openDocumentsAfterSplit(DTabWidget *tab);
     QWidget *widgetForURL(KURL url);
     QWidget *widgetInTab(QWidget *w);

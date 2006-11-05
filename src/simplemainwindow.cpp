@@ -33,6 +33,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <kapplication.h>
+#include <kurldrag.h>
 
 #include <ddockwindow.h>
 #include <dtabwidget.h>
@@ -78,6 +79,8 @@ void SimpleMainWindow::init()
     createActions();
     new KDevStatusBar(this);
 
+    setAcceptDrops(true);
+
     createGUI(0);
 
     m_mainWindowShare->init();
@@ -112,6 +115,30 @@ void SimpleMainWindow::init()
         this, SLOT(documentChangedState(const KURL&, DocumentState)));
 
     loadSettings();
+}
+
+void SimpleMainWindow::dragEnterEvent( QDragEnterEvent *event )
+{
+    event->accept(KURLDrag::canDecode(event));
+}
+
+void SimpleMainWindow::dropEvent( QDropEvent *event )
+{
+    slotDropEvent(event);
+}
+
+void SimpleMainWindow::slotDropEvent( QDropEvent *event )
+{
+    KURL::List list;
+    if ( !KURLDrag::decode( event, list ) ) return;
+
+    KURL::List::Iterator it = list.begin();
+    while(  it != list.end() )
+    {
+        kdDebug(9000) << "drop url:" << *it << endl;
+        PartController::getInstance()->editDocument( *it );
+        ++it;
+    }
 }
 
 void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context)

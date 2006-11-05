@@ -747,6 +747,8 @@ void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
   connect( doc, SIGNAL(fileNameChanged()),
     this, SLOT(slotDocumentUrlChanged()));
 
+  connect( doc->widget(), SIGNAL(dropEventPass(QDropEvent *)),
+    TopLevel::getInstance()->main(), SLOT(slotDropEvent(QDropEvent *)) );
 
   if ( KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( doc->widget() ) )
   {
