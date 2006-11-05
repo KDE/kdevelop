@@ -120,7 +120,6 @@ static int chownpty(int fd, int grant)
 STTY::STTY(bool ext, const QString &termAppName)
     : QObject(),
       out(0),
-      err(0),
       ttySlave(""),
       pid_(0),
       external_(ext)
@@ -148,12 +147,6 @@ STTY::~STTY()
         ::close(fout);
         delete out;
     }
-
-    //  if ( err )
-    //  {
-    //    ::close( ferr );
-    //    delete err;
-    //  }
 }
 
 // **************************************************************************
@@ -260,10 +253,14 @@ void STTY::OutReceived(int f)
     // stream of data, so the loop is unlikely to cause problems.
     while ((n = ::read(f, buf, sizeof(buf)-1)) > 0) {
         *(buf+n) = 0;         // a standard string
-        if ( f == fout )
-            emit OutOutput(buf);
-        else
-            emit ErrOutput(buf);
+        emit OutOutput(buf);
+    }
+    if (n == 0 || n == -1)
+    {
+        // Found eof or error. Disable socket notifier, otherwise Qt
+        // will repeatedly call this method, eating CPU
+        // cycles.
+        out->setEnabled(false);
     }
     
 }

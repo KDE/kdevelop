@@ -1062,14 +1062,6 @@ void GDBController::slotRun()
 
     if (stateIsOn(s_appNotStarted)) {
 
-        // Create tty that will be used to get output from the program, as opposed 
-        // to output from gdb itself. Need to do this before each run, as when
-        // the program ends, we need to delete STTY object -- otherwise, it will
-        // be repeatedly reading from pipe, eating 100% CPU.
-        // It might be possible to just disable QSockedNotifier inside STTY object,
-        // but I'm not sure it's possible to revive the PTY. Creating it fresh
-        // is more reliable.
-
         delete tty_;        
         tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *kapp->config() ));
         if (!config_dbgTerminal_)

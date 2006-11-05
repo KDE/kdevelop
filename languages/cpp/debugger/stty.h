@@ -59,7 +59,6 @@ private:
     int fout;
     int ferr;
     QSocketNotifier *out;
-    QSocketNotifier *err;
     QString ttySlave;
     int pid_;
     bool external_;
