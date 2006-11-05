@@ -48,6 +48,7 @@
 #include <kfile.h>
 #include <kapplication.h>
 #include <kpopupmenu.h>
+#include <qcheckbox.h>
 
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
@@ -1254,6 +1255,10 @@ void AppWizardDialog::loadLicenses()
 
 void AppWizardDialog::showTemplates(bool all)
 {
+	if ( m_part->project() )
+		showAll_box->setEnabled(true);
+	else
+		showAll_box->setEnabled(false);
 	if (all)
 	{
 		QListViewItemIterator it(templates_listview);
