@@ -43,9 +43,10 @@ protected:
     void findAllClasses( QStringList& classList, const ClassDom klass );
     void findAllClasses( QStringList& classList, const NamespaceDom ns );
 
-    ClassDom findClass( const QString& name );
-    ClassDom findClass( QStringList& path, const NamespaceDom ns );
-    ClassDom findClass( QStringList& path, const ClassDom klass );
+    ClassList findClass( const QString& name );
+    ClassList findClass( QStringList& path, const NamespaceDom ns );
+    ClassList findClass( QStringList& path, const ClassList klasses );
+    ClassList findClass( QStringList& path, const ClassDom klass );
 
 protected slots:
     virtual void accept();

@@ -23,6 +23,8 @@
 
 #include "quickopenfunctionchooseformbase.h"
 
+#include <qmap.h>
+
 class QuickOpenFunctionChooseForm : public QuickOpenFunctionChooseFormBase
 {
   Q_OBJECT
@@ -31,9 +33,14 @@ public:
   QuickOpenFunctionChooseForm(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
   ~QuickOpenFunctionChooseForm();
 
+  void setRelativePath(int id, const QString &path) { m_relPaths[id] = path; }
+
 public slots:
   virtual void slotArgsChange( int id );
   virtual void slotFileChange( int id );
+
+private:
+  QMap<int, QString> m_relPaths;
 
 };
 

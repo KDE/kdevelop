@@ -21,14 +21,12 @@
 #include <klistbox.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kdevproject.h>
-#include <kdevplugin.h>
+#include <kdebug.h>
 #include <ksqueezedtextlabel.h>
 
 #include <codemodel.h>
 
 #include "quickopenfunctionchooseform.h"
-#include "quickopenfunctiondialog.h"
 
 QuickOpenFunctionChooseForm::QuickOpenFunctionChooseForm(QWidget* parent, const char* name, bool modal, WFlags fl)
 : QuickOpenFunctionChooseFormBase(parent,name, modal,fl)
@@ -50,13 +48,7 @@ void QuickOpenFunctionChooseForm::slotArgsChange( int id )
 void QuickOpenFunctionChooseForm::slotFileChange( int id )
 {
 	fileBox->setCurrentItem( id );
-	
-	QuickOpenFunctionDialog *parentDlg = static_cast< QuickOpenFunctionDialog* >( parent() );
-	FunctionDefinitionModel *model = ( *(parentDlg->matchingFuncList()) )[id].data();
-	KURL full_url( model->fileName() );
-	KURL base_url( parentDlg->part()->project()->projectDirectory()+"/" );
-	KURL::relativeURL( base_url, full_url );
-	filepathlabel->setText( KURL::relativeURL( base_url, full_url ) );
+	filepathlabel->setText( m_relPaths[id] );
 }
 
 

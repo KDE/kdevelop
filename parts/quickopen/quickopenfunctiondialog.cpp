@@ -68,7 +68,7 @@ QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* 
         m_completion = new KCompletion();
         //m_functionStrList->sort();
         m_completion->setOrder( KCompletion::Sorted );
-        
+
         fillFunctions();
 
         itemList->setCurrentItem( 0 );
@@ -115,10 +115,14 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
                 for( FunctionDefinitionList::Iterator it = funcList->begin() ; it!=funcList->end() ; ++it ){
                         fmodel = (*it).data();
 
-                        fdlg.argBox->insertItem( m_part->languageSupport()->formatModelItem(fmodel) + 
+                        fdlg.argBox->insertItem( m_part->languageSupport()->formatModelItem(fmodel) +
                                 (fmodel->scope().isEmpty() ? "" : "   (in " + fmodel->scope().join("::") + ")"));
                         fileStr = KURL( fmodel->fileName() ).fileName();
-                        fdlg.fileBox->insertItem( fileStr);
+                        KURL full_url( fmodel->fileName() );
+                        KURL base_url( part()->project()->projectDirectory()+"/" );
+                        fdlg.setRelativePath(fdlg.fileBox->count(),
+                            KURL::relativeURL( base_url, full_url ));
+                        fdlg.fileBox->insertItem(fileStr);
                 }
                 if( fdlg.exec() ){
                         int id = fdlg.argBox->currentItem();
@@ -160,7 +164,7 @@ void QuickOpenFunctionDialog::slotTextChanged(const QString & text) {
             txt = parts.back();
             parts.pop_back();
         }
-        
+
         if(text.contains(':')/2 != spaces) {
             if(text.contains(':')/2 < spaces) { ///reload all function-definitions
                 m_functionDefList->clear();
@@ -171,7 +175,7 @@ void QuickOpenFunctionDialog::slotTextChanged(const QString & text) {
                     *m_functionDefList += CodeModelUtils::allFunctionDefinitionsDetailed( fileDom ).functionList;
                 }
             }
-            
+
             if(!parts.isEmpty()) {
                 FunctionDefinitionList accepted;
                 FunctionDefinitionList::iterator it = m_functionDefList->begin();
@@ -193,13 +197,13 @@ void QuickOpenFunctionDialog::slotTextChanged(const QString & text) {
                 }
                 *m_functionDefList = accepted;
             }
-            
+
             fillFunctions();
-            
+
             spaces = text.contains(':')/2;
         }
     //}
-    
+
     QuickOpenDialog::slotTextChanged(txt);
 }
 

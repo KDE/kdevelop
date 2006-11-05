@@ -20,7 +20,7 @@
 
 #include <kdevproject.h>
 #include <kdevpartcontroller.h>
-
+#include <kdevlanguagesupport.h>
 
 #include <klistbox.h>
 #include <klocale.h>
@@ -33,6 +33,7 @@
 
 #include "quickopenclassdialog.h"
 #include "quickopen_part.h"
+#include "quickopenfunctionchooseform.h"
 
 QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialog( part, parent, name, modal, fl )
@@ -68,13 +69,49 @@ void QuickOpenClassDialog::accept()
 {
     if( QListBoxItem* item = itemList->selectedItem() )
     {
-        ClassDom klass = findClass( item->text() );
-        if( klass )
+        ClassList klasses = findClass( item->text() );
+        if( klasses.count() == 1 )
         {
+            ClassDom klass = klasses.first();
             int startLine, startColumn;
             klass->getStartPosition( &startLine, &startColumn );
             m_part->partController()->editDocument( KURL( klass->fileName() ), startLine );
             selectClassViewItem( ItemDom(&(*klass)) );
+        }
+        else if (klasses.count() > 1 )
+        {
+            //several classes with the same name found
+            QString fileStr;
+
+            QuickOpenFunctionChooseForm fdlg( this, "" );
+            fdlg.setCaption(i18n("Select The Location of Class %1").arg(klasses.first()->name()));
+            fdlg.textLabel2->setText(i18n("Class name:"));
+
+            for( ClassList::const_iterator it = klasses.constBegin(); it != klasses.constEnd() ; ++it )
+            {
+                ClassDom klass = *it;
+
+                fdlg.argBox->insertItem( m_part->languageSupport()->formatModelItem(klass) +
+                        (klass->scope().isEmpty() ? "" : "   (in " + klass->scope().join("::") + ")"));
+
+                fileStr = KURL( klass->fileName() ).fileName();
+                KURL full_url( klass->fileName() );
+                KURL base_url( m_part->project()->projectDirectory()+"/" );
+                fdlg.fileBox->insertItem(fileStr);
+                fdlg.setRelativePath(fdlg.fileBox->count()-1,
+                    KURL::relativeURL( base_url, full_url ));
+            }
+            if( fdlg.exec() ){
+                int id = fdlg.argBox->currentItem();
+                if( id>-1 && id < (int) klasses.count() ){
+                    ClassDom model = klasses[id];
+                    int line, col;
+                    model->getStartPosition( &line, &col );
+                    selectClassViewItem( ItemDom(&(*model)) );
+                    QString fileNameStr = model->fileName();
+                    m_part->partController()->editDocument( KURL(fileNameStr), line );
+                }
+            }
         }
     }
 
@@ -113,48 +150,70 @@ void QuickOpenClassDialog::findAllClasses( QStringList& lst, const NamespaceDom 
         findAllClasses( lst, *it );
 }
 
-ClassDom QuickOpenClassDialog::findClass( const QString& name )
+ClassList QuickOpenClassDialog::findClass( const QString& name )
 {
     QStringList path = QStringList::split( "::", name );
     return findClass( path, m_part->codeModel()->globalNamespace() );
 }
 
-ClassDom QuickOpenClassDialog::findClass( QStringList& path, const NamespaceDom ns )
+ClassList QuickOpenClassDialog::findClass( QStringList& path, const NamespaceDom ns )
 {
+    ClassList list;
     if( path.isEmpty() )
-        return ClassDom();
+        return list;
 
     QString current = path.front();
     if( ns->hasNamespace(current) )
     {
         path.pop_front();
-        if( ClassDom klass = findClass( path, ns->namespaceByName(current) ) )
-            return klass;
+        list += findClass( path, ns->namespaceByName(current) );
         path.push_front( current );
     }
 
     if( ns->hasClass(current) )
     {
         path.pop_front();
-        return findClass( path, ns->classByName(current)[0] );
+        list += findClass( path, ns->classByName(current) );
     }
 
-    return ClassDom();
+    return list;
 }
 
-ClassDom QuickOpenClassDialog::findClass( QStringList& path, const ClassDom klass )
+ClassList QuickOpenClassDialog::findClass( QStringList& path, const ClassList klasses )
 {
+    ClassList list;
     if( path.isEmpty() )
-        return klass;
+    {
+        list += klasses;
+        return list;
+    }
+
+    for (ClassList::const_iterator it = klasses.constBegin(); it != klasses.constEnd(); ++it)
+    {
+        list += findClass(path, *it);
+    }
+
+    return list;
+}
+
+ClassList QuickOpenClassDialog::findClass( QStringList &path, const ClassDom klass )
+{
+    ClassList list;
+    if( path.isEmpty() )
+    {
+        list << klass;
+        return list;
+    }
 
     QString current = path.front();
     if( klass->hasClass(current) )
     {
         path.pop_front();
-        return findClass( path, klass->classByName(current)[0] );
+        list += findClass( path, klass->classByName(current) );
+        path.push_front(current);
     }
 
-    return ClassDom();
+    return list;
 }
 
 #include "quickopenclassdialog.moc"
