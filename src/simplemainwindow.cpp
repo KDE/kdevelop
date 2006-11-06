@@ -322,6 +322,9 @@ void SimpleMainWindow::createActions()
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
+    m_lowerAllDocks = new KAction(i18n("Lower All Docks"), CTRL+SHIFT+Key_C, 
+        this, SLOT(lowerAllDocks()), actionCollection(), "lower_all_docks");
+
     m_splitHor = new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
         this, SLOT(slotSplitHorizontalBase()), actionCollection(), "split_h");
 
@@ -805,6 +808,13 @@ void SimpleMainWindow::raiseRightDock()
 void SimpleMainWindow::raiseDock(DDockWindow *dock)
 {
     dock->selectLastWidget();
+}
+
+void SimpleMainWindow::lowerAllDocks()
+{
+    m_bottomDock->lowerWidget( m_bottomDock->currentWidget() );
+    m_leftDock->lowerWidget( m_leftDock->currentWidget() );
+    m_rightDock->lowerWidget( m_rightDock->currentWidget() );
 }
 
 #include "simplemainwindow.moc"

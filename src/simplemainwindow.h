@@ -96,6 +96,7 @@ private slots:
     void raiseLeftDock();
     void raiseRightDock();
     void raiseDock(DDockWindow *dock);
+    void lowerAllDocks();
 
 private:
     void createFramework();
@@ -113,6 +114,7 @@ private:
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
+    KAction *m_lowerAllDocks;
     KAction *m_splitHor;
     KAction *m_splitVer;
     KAction *m_splitHor1;

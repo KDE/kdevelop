@@ -86,10 +86,10 @@ void DockSplitter::appendSplitter()
 
 void DockSplitter::createSplitters(uint index)
 {
-    kdDebug() << "DockSplitter::createSplitters index = " << index << " count = " << m_splitters.count() << endl; 
+    kdDebug(9000) << "DockSplitter::createSplitters index = " << index << " count = " << m_splitters.count() << endl; 
     for (uint i = m_splitters.count(); i <= index; ++i)
     {
-        kdDebug() << "    appendSplitter..." << endl;
+        kdDebug(9000) << "    appendSplitter..." << endl;
         appendSplitter();
     }
 }
@@ -136,16 +136,16 @@ bool DockSplitter::isRowEmpty(int row)
 
 void DockSplitter::shiftWidgets(QSplitter *splitter, uint row, uint fromCol)
 {
-    kdDebug() << "shiftWidgets: row=" << row << "  from col=" << fromCol << endl;
-    kdDebug() << "row size is: " << m_docks[row].count() << endl;
+    kdDebug(9000) << "shiftWidgets: row=" << row << "  from col=" << fromCol << endl;
+    kdDebug(9000) << "row size is: " << m_docks[row].count() << endl;
     
     for (uint i = fromCol; i < m_docks[row].count(); ++i)
     {
-        kdDebug() << "move from " << i << " to last" << endl;
+        kdDebug(9000) << "move from " << i << " to last" << endl;
         if (m_docks[row][i])
             splitter->moveToLast(m_docks[row][i]);
         else
-            kdDebug() << "m_docks[" << row << "][" << i << "] is 0" << endl;
+            kdDebug(9000) << "m_docks[" << row << "][" << i << "] is 0" << endl;
     }
 }
 

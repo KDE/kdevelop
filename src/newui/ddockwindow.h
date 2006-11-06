@@ -49,6 +49,7 @@ public:
 
     virtual void addWidget(const QString &title, QWidget *widget);
     virtual void raiseWidget(QWidget *widget);
+    virtual void lowerWidget(QWidget *widget);
     /**Removes the widget from dock. Does not delete it.*/
     virtual void removeWidget(QWidget *widget);
 

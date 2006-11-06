@@ -183,21 +183,21 @@ DTabWidget *DMainWindow::splitVertical()
 void DMainWindow::invalidateActiveTabWidget()
 {
 /*    QWidget *focused = m_central->focusWidget();
-    kdDebug() << "invalidate: " << focused << endl;
+    kdDebug(9000) << "invalidate: " << focused << endl;
     if (focused == 0)
         return;
     if (!m_widgets.contains(focused))
     {
-        kdDebug() << "    focused is not in m_widgets" << endl;
+        kdDebug(9000) << "    focused is not in m_widgets" << endl;
         return;
     }
     if (m_widgetTabs.contains(focused))
     {
-        kdDebug() << "    focused is in m_widgets and m_widgetTabs" << endl;
+        kdDebug(9000) << "    focused is in m_widgets and m_widgetTabs" << endl;
         DTabWidget *tab = m_widgetTabs[focused];
         if (tab->indexOf(focused) >= 0)
             m_activeTabWidget = tab;
-        kdDebug() << "    tab: " << tab << endl;
+        kdDebug(9000) << "    tab: " << tab << endl;
     }*/
 }
 
@@ -234,7 +234,7 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
     }
     else if (ev->type() == QEvent::CaptionChange)
     {
-        kdDebug() << "caption change" << endl;
+        kdDebug(9000) << "caption change" << endl;
         DTabWidget *tab = m_widgetTabs[w];
         tab->changeTab(w, w->caption());
     }

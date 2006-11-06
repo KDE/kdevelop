@@ -164,7 +164,7 @@ QWidget *DDockWindow::currentWidget() const
 
 void DDockWindow::addWidget(const QString &title, QWidget *widget)
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(9000) << k_funcinfo << endl;
     QPixmap *pm = const_cast<QPixmap*>(widget->icon());
     Ideal::Button *button;
     if (pm != 0)
@@ -194,7 +194,7 @@ void DDockWindow::addWidget(const QString &title, QWidget *widget)
     config->setGroup(group);
     if (config->readEntry("ViewLastWidget") == title)
     {
-        kdDebug() << k_funcinfo << " : activating last widget " << title << endl;
+        kdDebug(9000) << k_funcinfo << " : activating last widget " << title << endl;
         button->setOn(true);
         selectWidget(button);
     }
@@ -202,7 +202,10 @@ void DDockWindow::addWidget(const QString &title, QWidget *widget)
 
 void DDockWindow::raiseWidget(QWidget *widget)
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(9000) << k_funcinfo << endl;
+
+    if ( !widget ) return;
+
     Ideal::Button *button = m_buttons[widget];
     if ((button != 0) && (!button->isOn()))
     {
@@ -211,9 +214,23 @@ void DDockWindow::raiseWidget(QWidget *widget)
     }
 }
 
+void DDockWindow::lowerWidget(QWidget * widget)
+{
+    kdDebug(9000) << k_funcinfo << endl;
+
+    if ( !widget ) return;
+
+    Ideal::Button *button = m_buttons[widget];
+    if ((button != 0) && (button->isOn()))
+    {
+        button->setOn(false);
+        selectWidget(button);
+    }
+}
+
 void DDockWindow::removeWidget(QWidget *widget)
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(9000) << k_funcinfo << endl;
     if (m_widgetStack->id(widget) == -1)
         return; //not in dock
 
@@ -239,7 +256,7 @@ void DDockWindow::selectWidget(Ideal::Button *button)
 {
     bool special = m_doNotCloseActiveWidget;
     m_doNotCloseActiveWidget = false;
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(9000) << k_funcinfo << endl;
     if (m_toggledButton == button)
     {
         if (special && m_visible && (!isActive()))
