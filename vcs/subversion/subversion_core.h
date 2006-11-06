@@ -38,7 +38,7 @@ class subversionCore : public QObject, public DCOPObject
   K_DCOP
 
 public:
-		  
+
   subversionCore(subversionPart *part);
   ~subversionCore();
 	subversionWidget *processWidget() const;
@@ -46,6 +46,7 @@ public:
 	void commit( const KURL::List&);
 	void add( const KURL::List&);
 	void del( const KURL::List&);
+	void diff( const KURL::List&);
 	void revert( const KURL::List&);
 	void resolve( const KURL::List&);
 	void checkout();
@@ -61,13 +62,14 @@ private slots:
 
 signals:
 	void checkoutFinished( QString dir );
-	
+
 private:
 
 	QGuardedPtr<subversionWidget> m_widget;
 	subversionPart *m_part;
 	QString wcPath;
 	SVNFileInfoProvider *m_fileInfoProvider;
+	QStringList diffresult; //for diff commands ;)
 
 };
 

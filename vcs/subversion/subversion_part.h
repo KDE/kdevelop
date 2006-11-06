@@ -62,12 +62,14 @@ private slots:
 		void slotActionCommit();
 		void slotActionAdd();
 		void slotActionDel();
+		void slotActionDiff();
 		void slotActionResolve();
 		void slotUpdate();
 		void slotRevert();
 		void slotCommit();
 		void slotAdd();
 		void slotDel();
+		void slotDiff();
 		void slotResolve();
 		void slotProjectClosed();
 		void slotProjectOpened();

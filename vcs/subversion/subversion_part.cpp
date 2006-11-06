@@ -123,6 +123,10 @@ void subversionPart::setupActions() {
 	actionUpdate->setToolTip( i18n("Update") );
 	actionUpdate->setWhatsThis( i18n("<b>Update</b><p>Updates file(s) from repository.") );
 
+	actionDiff = new KAction( i18n("&Diff"), 0, this, SLOT(slotActionDiff()), actionCollection(), "subversion_diff" );
+	actionDiff->setToolTip( i18n("Diff") );
+	actionDiff->setWhatsThis( i18n("<b>Diff</b><p>Diffs file(s) from repository.") );
+
 	actionRevert = new KAction( i18n("&Revert"), 0, this, SLOT(slotActionRevert()), actionCollection(), "subversion_revert" );
 	actionRevert->setToolTip( i18n("Revert") );
 	actionRevert->setWhatsThis( i18n("<b>Revert</b><p>Undo local changes.") );
@@ -217,6 +221,9 @@ if(!project() || !isValidDirectory(project()->projectDirectory()))
         subMenu->setWhatsThis(id, i18n("<b>Remove from repository</b><p>Removes file(s) from repository."));
 
 		subMenu->insertSeparator();
+		id = subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
+		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff file(s) from repository."));
+
 		id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
         subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Updates file(s) from repository."));
 		id = subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
@@ -302,6 +309,14 @@ void subversionPart::slotActionRevert() {
 	}
 }
 
+void subversionPart::slotActionDiff() {
+	kdDebug(9036) << "subversion: slotActionDiff()" << endl;
+	KURL doc;
+	if (urlFocusedDocument( doc )) {
+		m_impl->diff( doc );
+	}
+}
+
 void subversionPart::slotCommit() {
 	m_impl->commit (m_urls);
 }
@@ -312,6 +327,10 @@ void subversionPart::slotAdd() {
 
 void subversionPart::slotDel() {
 	m_impl->del (m_urls);
+}
+
+void subversionPart::slotDiff() {
+	m_impl->diff (m_urls);
 }
 
 void subversionPart::slotRevert() {

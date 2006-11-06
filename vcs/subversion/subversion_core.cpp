@@ -1,4 +1,4 @@
-/** 
+/**
 	 Copyright (C) 2003-2005 Mickael Marchand <marchand@kde.org>
 
 	 This program is free software; you can redistribute it and/or
@@ -19,19 +19,28 @@
 
 #include <kparts/part.h>
 #include <kdevcore.h>
-
 #include "subversion_part.h"
 #include "subversion_core.h"
 #include "subversion_widget.h"
+#include "subversiondiff.h"
 #include <kdevmainwindow.h>
 #include "svn_co.h"
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <kio/job.h>
+#include <kio/jobclasses.h>
+#include <kio/netaccess.h>
 #include <kdebug.h>
 #include <kmainwindow.h>
 #include <kapplication.h>
 #include <dcopclient.h>
+#include <ktempfile.h>
+#include <kprocess.h>
+#include <kstandarddirs.h>
+#include <qtextcodec.h>
+#include <qtextstream.h>
+#include <qtextbrowser.h>
+#include <ktempdir.h>
 
 using namespace KIO;
 
@@ -58,7 +67,7 @@ KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
 
 //not used anymore
 void subversionCore::notification( const QString& path, int action, int kind, const QString& mime_type, int content_state ,int prop_state ,long int revision, const QString& userstring ) {
-	kdDebug(9036) << "Subversion Notification : " 
+	kdDebug(9036) << "Subversion Notification : "
 		<< "path : " << path
 		<< "action: " << action
 		<< "kind : " << kind
@@ -115,6 +124,82 @@ void subversionCore::update( const KURL::List& list ) {
 		SimpleJob * job = KIO::special(servURL, parms, true);
 		job->setWindow( m_part->mainWindow()->main() );
 		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	}
+}
+
+void subversionCore::diff( const KURL::List& list){
+	kdDebug(9036) << "diff " << list << endl;
+	KURL servURL = "svn+http://this_is_a_fake_URL_and_this_is_normal/";
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+		QByteArray parms;
+		QDataStream s( parms, IO_WriteOnly );
+		int cmd = 13;
+		kdDebug(9036) << "diffing : " << (*it).prettyURL() << endl;
+		int rev1=-1;
+		int rev2=-1;
+		QString revkind1 = "BASE";
+		QString revkind2 = "WORKING";
+		s << cmd << *it << *it << rev1 << revkind1 << rev2 << revkind2 << true ;
+		KIO::SimpleJob * job = KIO::special(servURL, parms, true);
+		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+		KIO::NetAccess::synchronousRun( job, 0 );
+		if ( diffresult.count() > 0 ) {
+			//check kompare is available
+			if ( !KStandardDirs::findExe( "kompare" ).isNull() ) {
+				if (!KStandardDirs::findExe("patch").isNull()){
+					// we have patch - so can merge
+					KTempDir tmpDir = KTempDir();
+					KTempFile tmpPatch = KTempFile(tmpDir.name());
+
+					// write the patch
+					QTextStream *stream = tmpPatch.textStream();
+					stream->setCodec( QTextCodec::codecForName( "utf8" ) );
+					for ( QStringList::Iterator it2 = diffresult.begin();it2 != diffresult.end() ; ++it2 ) {
+						( *stream ) << ( *it2 ) << "\n";
+					}
+					tmpPatch.close();
+
+					QString ourCopy = tmpDir.name()+(*it).fileName();
+
+					KProcess copy;
+					copy << "cp" << (*it).prettyURL(0,KURL::StripFileProtocol) <<  tmpDir.name();
+					copy.start(KProcess::Block);
+
+					KProcess patch;
+					patch.setWorkingDirectory(tmpDir.name());
+					patch << "patch" << "-R" << ourCopy << tmpPatch.name();
+					patch.start(KProcess::Block, KProcess::All);
+
+					KProcess *p = new KProcess;
+					*p << "kompare" << ourCopy << (*it).prettyURL();
+					p->start();
+				}
+				else{
+					// only diff
+					KTempFile *tmp = new KTempFile;
+					tmp->setAutoDelete(true);
+					QTextStream *stream = tmp->textStream();
+					stream->setCodec( QTextCodec::codecForName( "utf8" ) );
+					for ( QStringList::Iterator it2 = diffresult.begin();it2 != diffresult.end() ; ++it2 ) {
+						( *stream ) << ( *it2 ) << "\n";
+					}
+					tmp->close();
+					KProcess *p = new KProcess;
+					*p << "kompare" << "-n" << "-o" << tmp->name();
+					p->start();
+				}
+			} else { //else do it with message box
+				Subversion_Diff df;
+				for ( QStringList::Iterator it2 = diffresult.begin();it2 != diffresult.end() ; ++it2 ) {
+					df.text->append( *it2 );
+				}
+				QFont f = df.font();
+				f.setFixedPitch( true );
+				df.text->setFont( f );
+				df.exec();
+			}
+		}
+		diffresult.clear();
 	}
 }
 
@@ -234,6 +319,10 @@ void subversionCore::slotResult( KIO::Job * job ) {
 			if ( ( *it ).endsWith( "string" ) ) {
 				m_part->mainWindow()->raiseView(m_widget);
 				m_widget->append( ma[ *it ] );
+			}
+			//extra check to retrieve the diff output in case with run a diff command
+			if ( ( *it ).endsWith( "diffresult" ) ) {
+				diffresult << ma[ *it ];
 			}
 		}
 }
