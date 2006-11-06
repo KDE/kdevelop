@@ -23,19 +23,18 @@ class TopDUContext;
 class QReadWriteLock;
 class DUChainModel;
 
+#include "kdevdocumentrangeobject.h"
+
 /**
  * Base class for definition-use chain objects.
  */
-class DUChainBase
+class DUChainBase : public KDevDocumentRangeObject
 {
   friend class ProxyObject;
 
 public:
-  DUChainBase(TopDUContext* top);
+  DUChainBase(KTextEditor::Range* range);
   virtual ~DUChainBase();
-
-  /// \threadsafe
-  TopDUContext* topContext() const;
 
   int modelRow;
 
@@ -43,11 +42,11 @@ public:
   /// TODO atomic set? or assert locked?
   void setEncountered(unsigned int encountered) { m_encountered = encountered; }
 
+  virtual TopDUContext* topContext() const;
+
 private:
   // For proxy object
   DUChainBase();
-
-  TopDUContext* m_topContext;
 
   unsigned int m_encountered;
 };

@@ -25,7 +25,7 @@
 using namespace KTextEditor;
 
 TopDUContext::TopDUContext(KTextEditor::Range* range)
-  : DUContext(range, this)
+  : DUContext(range)
   , m_hasUses(false)
   , m_deleting(false)
 {
@@ -252,3 +252,8 @@ void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*
 }
 
 // kate: indent-width 2;
+
+TopDUContext * TopDUContext::topContext() const
+{
+  return const_cast<TopDUContext*>(this);
+}

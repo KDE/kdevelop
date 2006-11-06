@@ -639,7 +639,7 @@ void TestDUChain::testFileParse()
   QByteArray fileData = file.readAll();
   file.close();
   QString contents = QString::fromUtf8( fileData.constData() );
-  Preprocessor preprocessor;
+  rpp::Preprocessor preprocessor;
   QString ppd = preprocessor.processString( contents );
   QByteArray preprocessed = ppd.toUtf8();
 

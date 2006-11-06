@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QMultiMap>
 #include <QMapIterator>
+#include <QSet>
 
 #include <kdebug.h>
 #include <kcmdlineargs.h>
@@ -17,11 +18,19 @@
 #include "parsesession.h"
 #include "control.h"
 #include "name_compiler.h"
+#include "dumptree.h"
+
 #include "rpp/pp-stream.h"
+#include "rpp/pp-environment.h"
+#include "rpp/preprocessor.h"
+#include "rpp/pp-macro.h"
+#include "rpp/pp-engine.h"
 
 struct HeaderGeneratorVisitor : public DefaultVisitor
 {
-  HeaderGeneratorVisitor(ParseSession* session) : m_session(session), nc(session) {};
+  HeaderGeneratorVisitor(ParseSession* session) : inTemplate(false), m_session(session), nc(session) {};
+
+  bool inTemplate;
 
   ParseSession* m_session;
   NameCompiler nc;
@@ -44,9 +53,19 @@ struct HeaderGeneratorVisitor : public DefaultVisitor
     m_currentNS = identifier;
   }
 
+  virtual void visitTemplateDeclaration(TemplateDeclarationAST* node)
+  {
+    bool wasInTemplate = inTemplate;
+    inTemplate = true;
+
+    DefaultVisitor::visitTemplateDeclaration(node);
+
+    inTemplate = wasInTemplate;
+  }
+
   virtual void visitClassSpecifier(ClassSpecifierAST* node)
   {
-    if (!node->win_decl_specifiers)
+    if (!node->win_decl_specifiers && !inTemplate)
       return;
 
     QualifiedIdentifier identifier = m_currentNS;
@@ -58,29 +77,31 @@ struct HeaderGeneratorVisitor : public DefaultVisitor
 
     m_currentNS = classIdentifier.merge(m_currentNS);
 
-    DefaultVisitor::visitClassSpecifier(node);
+    // Class-in-class doesn't work (can't have a file and a directory with the same name)
+    // so don't bother
+    //DefaultVisitor::visitClassSpecifier(node);
 
     m_currentNS = identifier;
   }
 };
 
-class HeaderGenerator : public Preprocessor
+class HeaderGenerator : public rpp::Preprocessor
 {
 public:
   HeaderGenerator();
 
   void run();
 
-  QByteArray preprocess(const KUrl& url);
+  QString preprocess(const KUrl& url, int sourceLine = -1);
 
-  virtual Stream* sourceNeeded(QString& fileName, IncludeType type);
+  virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine);
 
   int status;
 
 private:
   void addWinDeclMacro();
 
-  KUrl kdeIncludes, outputDirectory;
+  KUrl kdeIncludes, outputDirectory, folderUrl;
 
   // path, filename
   QMultiMap<QString, QString> filesToInstall;
@@ -91,12 +112,18 @@ private:
   QDomElement folderElement;
 
   // Map of macros in each include file
-  QMap<QString, QList<MacroItem> > headerMacros;
+  QMap<QString, class FileBlock*> headerMacros;
 
+  FileBlock* topBlock;
+
+  QStack<FileBlock*> currentFileBlocks;
+  QStack<KUrl> preprocessing;
+
+  rpp::pp preprocessor;
   //QStack includeUrls;
 };
 
-class HeaderStream : public Stream
+class HeaderStream : public rpp::Stream
 {
 public:
   HeaderStream(QString* string)
@@ -112,6 +139,61 @@ public:
 
 private:
   QString* m_string;
+};
+
+class FileBlock : public rpp::MacroBlock
+{
+public:
+  FileBlock() : rpp::MacroBlock(0) {}
+
+  QString file;
+};
+
+
+void visitBlock(rpp::MacroBlock* block, int indent = 0, bool elseBlock = false)
+{
+  static QSet<rpp::MacroBlock*> encountered;
+
+  if (encountered.contains(block))
+    return;
+
+  encountered.insert(block);
+
+  ++indent;
+  if (FileBlock* fb = dynamic_cast<FileBlock*>(block))
+    kDebug() << QString(indent * 2, QChar(' ')) << "Block for file [" << fb->file << "]" << endl;
+  else
+    kDebug() << QString(indent * 2, QChar(' ')) << "Block, condition" << (elseBlock ? " else" : "") << " [" << block->condition << "]" << endl;
+
+  foreach (rpp::pp_macro* macro, block->macros)
+    kDebug() << QString((indent + 1) * 2, QChar(' ')) << "Macro " << macro->name << ", defined " << macro->defined << endl;
+
+  foreach (rpp::MacroBlock* child, block->childBlocks)
+    visitBlock(child, indent);
+
+  --indent;
+
+  if (block->elseBlock)
+    visitBlock(block->elseBlock, indent, true);
+
+  if (indent == 0)
+    encountered.clear();
+}
+
+class OverridingEnvironment : public rpp::Environment
+{
+public:
+  OverridingEnvironment(rpp::pp* preprocessor) : rpp::Environment(preprocessor) {}
+
+  virtual void setMacro(rpp::pp_macro* macro)
+  {
+    if (macro->name == "KDE_EXPORT" || macro->name == "KJS_EXPORT") {
+      // Exploit that the parser understands the windows declaration spec stuff
+      macro->definition = "__declspec(dllexport)";
+    }
+
+    rpp::Environment::setMacro(macro);
+  }
 };
 
 static KCmdLineOptions options[] =
@@ -142,6 +224,7 @@ int main( int argc, char *argv[] )
 
 HeaderGenerator::HeaderGenerator()
   : status(0)
+  , preprocessor(this)
 {
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
@@ -179,12 +262,65 @@ HeaderGenerator::HeaderGenerator()
     status = -1;
     return;
   }
+
+  preprocessor.setEnvironment(new OverridingEnvironment(&preprocessor));
+
+  topBlock = new FileBlock;
+  topBlock->file = "<internal pp>";
+
+  rpp::pp_macro* exportMacro = new rpp::pp_macro;
+  exportMacro->name = "__cplusplus";
+  exportMacro->definition = "1";
+  exportMacro->function_like = false;
+  exportMacro->variadics = false;
+  topBlock->setMacro(exportMacro);
+
+  exportMacro = new rpp::pp_macro;
+  exportMacro->name = "__GNUC__";
+  exportMacro->definition = "4";
+  exportMacro->function_like = false;
+  exportMacro->variadics = false;
+  topBlock->setMacro(exportMacro);
+
+  exportMacro = new rpp::pp_macro;
+  exportMacro->name = "__GNUC_MINOR__";
+  exportMacro->definition = "1";
+  exportMacro->function_like = false;
+  exportMacro->variadics = false;
+  topBlock->setMacro(exportMacro);
+
+  exportMacro = new rpp::pp_macro;
+  exportMacro->name = "__linux__";
+  exportMacro->function_like = false;
+  exportMacro->variadics = false;
+  topBlock->setMacro(exportMacro);
+
+  exportMacro = new rpp::pp_macro;
+  exportMacro->name = "KDE_EXPORT";
+  exportMacro->definition = "__declspec(dllexport)";
+  exportMacro->function_like = false;
+  exportMacro->variadics = false;
+  topBlock->setMacro(exportMacro);
+
+  exportMacro = new rpp::pp_macro;
+  exportMacro->name = "KJS_EXPORT";
+  exportMacro->definition = "__declspec(dllexport)";
+  exportMacro->function_like = false;
+  exportMacro->variadics = false;
+  topBlock->setMacro(exportMacro);
+
+  exportMacro = new rpp::pp_macro;
+  exportMacro->name = "Q_WS_X11";
+  exportMacro->function_like = false;
+  exportMacro->variadics = false;
+  topBlock->setMacro(exportMacro);
 }
 
-QByteArray HeaderGenerator::preprocess(const KUrl& url)
+QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 {
-  //if (url.fileName() == "qglobal.h")
-//    kDebug() << "Parsing qglobal.h... " << url.path() << endl;
+  //kDebug() << k_funcinfo << url << endl;
+
+  preprocessing.push(url);
 
   QFile sourceToParse(url.path());
   if (!sourceToParse.open(QIODevice::ReadOnly)) {
@@ -192,88 +328,79 @@ QByteArray HeaderGenerator::preprocess(const KUrl& url)
     return QByteArray();
   }
 
-  /*if (url.fileName() == "kdelibs_export.h")
-    kDebug() << "KDE libs export macros encountered." << endl;*/
+  FileBlock* fileMacros = new FileBlock;
+  fileMacros->file = url.path();
+  headerMacros.insert(url.path(), fileMacros);
 
-  QByteArray ret = processString(QString(sourceToParse.readAll())).toLatin1();
+  preprocessor.environment()->enterBlock(fileMacros);
 
-  if (url.fileName() == "cursor.h") {
-    kDebug() << "Defined macros:" << endl;
-    foreach (MacroItem item, macros())
-      kDebug() << "Macro [" << item.name << "] definition [" << item.definition << "]" << endl;
-  }
+  QString ret = preprocessor.processFile(QString(sourceToParse.readAll()), rpp::pp::Data);
 
-  //kDebug() << "Inserting " << macros().count() << " macros into record for " << url.path() << endl;
-  headerMacros.insert(url.path(), macros());
+  preprocessor.environment()->leaveBlock();
+
+  preprocessing.pop();
 
   return ret;
 }
 
-Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/)
+rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/, int sourceLine)
 {
-  QDomNodeList includes = folderElement.elementsByTagName("includes");
+  //kDebug() << k_funcinfo << fileName << " from " << preprocessing.top() << endl;
 
-  for (int i2 = 0; i2 < includes.count(); ++i2) {
-    QDomNodeList include = includes.at(i2).toElement().elementsByTagName("include");
+  if (fileName.endsWith("kkeydialog.h"))
+    kDebug() << "Maybe parsing " << fileName << endl;
 
-    for (int i = 0; i < include.count(); ++i) {
-      KUrl path(include.at(i).toElement().text() + '/');
+  KUrl::List toTry;
+
+  {
+    KUrl url(folderUrl, fileName);
+
+    toTry << url;
+  }
+
+  for (QDomElement includes = folderElement.firstChildElement("includes"); !includes.isNull(); includes = includes.nextSiblingElement("includes")) {
+    for (QDomElement include = includes.firstChildElement("include"); !include.isNull(); include = include.nextSiblingElement("include")) {
+      KUrl path(include.toElement().text() + '/');
       KUrl url(path, fileName);
 
-      //kDebug() << "Checking file " << fileName << " in url " << url.path() << " from path " << path.path() << endl;
-
-      if (url.isValid()) {
-        if (QFile::exists(url.path())) {
-          /*QFile file(url.path());
-          if (!file.open(QIODevice::ReadOnly)) {
-            kWarning() << "Could not open file " << url.path() << " for reading!" << endl;
-            return 0;
-          }
-
-          addWinDeclMacro();
-
-          QString* input = new QString(QString::fromUtf8(file.readAll()));
-          return new HeaderStream(input);*/
-          // found it
-          if (headerMacros.contains(url.path())) {
-            QList<MacroItem> ms = headerMacros[url.path()];
-            //kDebug() << "Retrieved " << ms.count() << " macros from record of " << url.path() << endl;
-            int oldMacroCount = macros().count();
-            addMacros(ms);
-            //kDebug() << "New macro count " << macros().count() << ", old " << oldMacroCount << endl;
-            addWinDeclMacro();
-            return 0;
-
-          } else {
-            // The caching isn't going to be 100% correct, but it will be good enough for what we need
-            preprocess(url);
-            addWinDeclMacro();
-            return 0;
-          }
-        }
-      }
-
-      //kDebug() << "File " << fileName << " not in url " << url.path() << endl;
+      toTry << url;
     }
   }
 
-  //kWarning() << "Did not find include " << fileName << endl;//" in the following directories:" << endl;
-  /*for (int j = 0; j < include.count(); ++j)
-    kDebug() << "  " << include.at(j).toElement().text() << endl;*/
+  toTry << KUrl("/usr/include/linux/" + fileName);
+
+  foreach (const KUrl& url, toTry) {
+    if (url.isValid()) {
+      if (QFile::exists(url.path())) {
+        // found it
+        if (headerMacros.contains(url.path())) {
+          FileBlock* macros = headerMacros[url.path()];
+          preprocessor.environment()->visitBlock(macros);
+          preprocessor.environment()->currentBlock()->childBlocks.append(macros);
+          return 0;
+
+        } else {
+          // The caching isn't going to be 100% correct, but it will be good enough for what we need
+          preprocess(url, sourceLine);
+          return 0;
+        }
+      }
+    }
+  }
+
+  kWarning() << "Did not find include " << fileName <<endl;//<< " in urls " << toTry << endl;//" in the following directories:" << endl;
+  /*QDomNodeList include = folderElement.elementsByTagName("include");
+  for (int i = 0; i < include.count(); ++i)
+    kDebug() << "  " << include.at(i).toElement().text() << endl;*/
 
   return 0;
 }
 
-void HeaderGenerator::addWinDeclMacro()
+void printMacros(rpp::Environment* environment)
 {
-  // Use the fact that the c++ parser recognises windows declaration specs
-  MacroItem exportMacro;
-  exportMacro.name = "KDE_EXPORT";
-  exportMacro.isDefined = true;
-  exportMacro.definition = "__declspec(dllexport)";
-  exportMacro.isFunctionLike = false;
-  exportMacro.variadics = false;
-  addMacros(QList<MacroItem>() << exportMacro);
+  kDebug() << "Macros for environment:" << endl;
+  foreach (rpp::pp_macro* macro, environment->allMacros())
+    kDebug() << "  Macro [" << macro->name << "] " << (macro->defined ? " [" : "undefined") << macro->definition << (macro->defined ? "]" : "") << endl;
 }
 
 void HeaderGenerator::run()
@@ -292,39 +419,28 @@ void HeaderGenerator::run()
 
   for (int i = 0; i < folders.count(); ++i) {
     folderElement = folders.at(i).toElement();
-    KUrl folderUrl(folderElement.attribute("name"));
+    folderUrl = KUrl(folderElement.attribute("name") + "/");
 
     for (QDomElement install = folderElement.firstChildElement(installElementName); !install.isNull(); install = install.nextSiblingElement(installElementName)) {
       KUrl installDestination(install.attribute("destination"));
       if (!installDestination.path().startsWith(kdeIncludes.path())) {
-        //kDebug() << "URL " << installDestination << " is not the kde include dir " << kdeIncludes << endl;
         continue;
       }
 
       for (QDomElement source = install.firstChildElement(sourceElementName); !source.isNull(); source = source.nextSiblingElement(sourceElementName)) {
-        clearMacros();
+        if (source.text().endsWith("kkeydialog.h"))
+          //continue;
+          kDebug() << "Parsing " << source.text() << endl;
 
-        // Use the fact that the c++ parser recognises windows declaration specs
-        addWinDeclMacro();
+        preprocessor.environment()->clear();
+        preprocessor.environment()->visitBlock(topBlock);
 
-        MacroItem cppmacro;
-        cppmacro.name = "__cplusplus";
-        cppmacro.isDefined = true;
-        cppmacro.isFunctionLike = false;
-        cppmacro.variadics = false;
+        QByteArray contents = preprocess(source.text()).toLatin1();
 
-        addMacros(QList<MacroItem>() << cppmacro);
-
-        if (source.text().endsWith("cursor.h"))
-          kDebug() << "Cursor encountered" << endl;
-
-        QByteArray contents = preprocess(source.text());
-
-        if (contents.isEmpty())
+        if (contents.isEmpty()) {
+          kWarning() << "Contents empty for " << source.text() << endl;
           continue;
-
-        if (source.text().endsWith("cursor.h"))
-          kDebug() << QString::fromUtf8(contents).trimmed() << endl;
+        }
 
         ++fileCount;
 
@@ -336,13 +452,38 @@ void HeaderGenerator::run()
         Parser parser(&control);
         TranslationUnitAST* ast = parser.parse(&session);
 
-        //for (int i = 0; i < control.problemCount(); ++i)
-          //kWarning() << "Parse problem in " << source.text() << ": " << control.problem(i).message() << ", line " << control.problem(i).line() << endl;
-
         HeaderGeneratorVisitor hg(&session);
         hg.visit(ast);
 
+        if (hg.m_classes.isEmpty()) {
+          kWarning() << "Parse problem in " << source.text() << ": no classes found!" << endl;
 
+          //hg.m_classes.append(source.text().mid(source.text().lastIndexOf('/')).replace('.', '_'));
+
+          // << QString::fromUtf8(contents).trimmed() << endl;
+
+          //printMacros(headerMacros[source.text()]);
+
+          //kFatal() << "bye :)" << endl;
+        }
+
+        if (source.text().endsWith("kkeydialog.h")) {
+          kDebug() << "Parse " << source.text() << ": " << hg.m_classes.count() << " classes found:" << hg.m_classes << " lines " << contents.count('\n') << endl
+          << QString::fromUtf8(contents) << endl;
+
+#if 0
+          DumpTree dt;
+          dt.dump(ast, session.token_stream);
+
+          for (int i = 0; i < control.problemCount(); ++i)
+            kWarning() << "Parse problem in " << source.text() << ": " << control.problem(i).message() << ", line " << control.problem(i).line() << endl;
+#endif
+
+          visitBlock(headerMacros[source.text()]);
+          printMacros(preprocessor.environment());
+
+          //kFatal() << "bye :)" << endl;
+        }
 
         foreach (const QString& className, hg.m_classes) {
           QString forwardingHeaderPath(outputDirectory.path(KUrl::AddTrailingSlash) + className);
@@ -370,7 +511,8 @@ void HeaderGenerator::run()
           if (!sourceRelativeInstallPath.isEmpty())
             sourceRelativeInstallPath += '/';
 
-          QString sourceRelativeUrl = sourceRelativeInstallPath + source.text().mid(folderUrl.path().length() + 1);
+          KUrl sourceUrl(source.text());
+          QString sourceRelativeUrl = sourceRelativeInstallPath + source.text().mid(folderUrl.path().length());
 
           ts << "#include \"";
 
@@ -378,13 +520,9 @@ void HeaderGenerator::run()
           for (int i = 0; i <= dotdotcount; ++i)
             ts << QString("../");
 
-          ts << sourceRelativeUrl << "\"\n";
+          ts << sourceRelativeInstallPath << sourceUrl.fileName() << "\"\n";
 
-          /*ts << contents << endl;
-
-          ts << "Defined macros:" << endl;
-          foreach (MacroItem item, macros())
-            ts << "Macro [" << item.name << "] definition [" << item.definition << "] from [" << item.fileName << "]" << endl;*/
+          //ts << QString::fromUtf8(contents) << "\n";
 
           filesToInstall.insert(classDirectory, className);
         }
@@ -407,27 +545,22 @@ void HeaderGenerator::run()
   QMapIterator<QString, QString> it = filesToInstall;
   while (it.hasNext()) {
     it.next();
+
     if (it.key() != directory) {
-      if (directory != "/") {
-        if (!directory.isEmpty())
-          directory.prepend('/');
-        ts << "DESTINATION ${INCLUDE_INSTALL_DIR}/KDE" << directory << " )" << endl;
-        ts << endl;
-      }
+      directory = it.key();
+
       ts << endl;
       ts << "install( FILES " << endl;
 
-      directory = it.key();
+      QStringList classes = filesToInstall.values(directory);
+      classes.sort();
+
+      foreach (const QString& className, classes)
+        ts << "  " << className << endl;
+
+      ts << "DESTINATION ${INCLUDE_INSTALL_DIR}/KDE" << (!directory.isEmpty() ? "/" : "") << directory << " )" << endl;
+      ts << endl;
     }
-
-    ts << "  " << it.value() << endl;
-  }
-
-  if (directory != "/") {
-    if (!directory.isEmpty())
-      directory.prepend('/');
-    ts << "DESTINATION ${INCLUDE_INSTALL_DIR}/KDE" << directory << " )" << endl;
-    ts << endl;
   }
 
   kDebug() << "Finished parsing " << fileCount << " files." << endl;

@@ -30,7 +30,7 @@ class Declaration;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class Use : public DUChainBase, public KDevDocumentRangeObject
+class Use : public DUChainBase
 {
   friend class Declaration;
   friend class ForwardDeclaration;
@@ -38,6 +38,8 @@ class Use : public DUChainBase, public KDevDocumentRangeObject
 public:
   Use(KTextEditor::Range* range, DUContext* context);
   virtual ~Use();
+
+  virtual TopDUContext* topContext() const;
 
   DUContext* context() const;
   void setContext(DUContext* context);

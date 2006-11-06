@@ -21,7 +21,10 @@
 #ifndef STREAM_H
 #define STREAM_H
 
-#include <QTextStream>
+#include <QString>
+#include <QIODevice>
+
+namespace rpp {
 
 /**
  * Stream designed for character-at-a-time processing
@@ -35,7 +38,7 @@ class Stream
   public:
     Stream();
     Stream( QString * string, QIODevice::OpenMode openMode = QIODevice::ReadWrite );
-    ~Stream();
+    virtual ~Stream();
 
     bool isNull() const;
 
@@ -75,6 +78,8 @@ class Stream
     Stream& operator--();
 
     int inputLineNumber() const;
+    /// Use this to preserve the line number when passing generated streams
+    void setInputLineNumber(int line);
 
     int outputLineNumber() const;
     void setOutputLineNumber(int line);
@@ -94,5 +99,7 @@ class Stream
     int m_inputLine, m_outputLine;
     //QString output;
 };
+
+}
 
 #endif

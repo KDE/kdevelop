@@ -35,8 +35,7 @@
 using namespace KTextEditor;
 
 Declaration::Declaration(KTextEditor::Range* range, Scope scope, DUContext* context )
-  : DUChainBase(context->topContext())
-  , KDevDocumentRangeObject(range)
+  : DUChainBase(range)
   , m_context(0)
   , m_scope(scope)
   , m_definition(0)
@@ -286,4 +285,12 @@ ForwardDeclaration* Declaration::toForwardDeclaration()
 const ForwardDeclaration* Declaration::toForwardDeclaration() const
 {
   return static_cast<const ForwardDeclaration*>(this);
+}
+
+TopDUContext * Declaration::topContext() const
+{
+  if (context())
+    return context()->topContext();
+
+  return 0;
 }

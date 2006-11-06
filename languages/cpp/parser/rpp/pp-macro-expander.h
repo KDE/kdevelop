@@ -30,6 +30,8 @@
 #include "pp-stream.h"
 #include "pp-scanner.h"
 
+namespace rpp {
+
 class pp;
 
 class pp_frame
@@ -68,6 +70,8 @@ private:
   pp_skip_blanks skip_blanks;
   pp_skip_whitespaces skip_whitespaces;
 };
+
+}
 
 #endif // PP_MACRO_EXPANDER_H
 

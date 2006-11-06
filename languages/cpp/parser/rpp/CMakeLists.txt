@@ -1,7 +1,7 @@
 
 
 
-add_definitions(-fPIC -DPP_WITH_MACRO_POSITION)
+add_definitions(-fPIC)
 
 ########### next target ###############
 
@@ -12,6 +12,7 @@ set(kdevcpprpp_LIB_SRCS
     pp-macro.cpp
     pp-engine.cpp
     pp-internal.cpp
+    pp-environment.cpp
     preprocessor.cpp
 )
 
@@ -45,6 +46,7 @@ install(FILES
     pp-macro.h
     pp-scanner.h
     pp-stream.h
+    pp-environment.h
     preprocessor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/rpp
 )

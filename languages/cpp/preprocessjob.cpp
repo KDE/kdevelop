@@ -42,6 +42,8 @@
 #include "parsejob.h"
 #include "parser/ast.h"
 #include "parser/parsesession.h"
+#include "parser/rpp/pp-environment.h"
+#include "parser/rpp/pp-engine.h"
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
@@ -97,13 +99,19 @@ void PreprocessJob::run()
     if (checkAbort())
         return;
 
-    parentJob()->parseSession()->setContents( processString( contents ).toUtf8() );
-    parentJob()->parseSession()->macros = macros();
+    parentJob()->parseSession()->macros = new rpp::MacroBlock(0);
+
+    rpp::pp preprocessor(this);
+    preprocessor.environment()->enterBlock(parentJob()->parseSession()->macros);
+
+    QString result = preprocessor.processFile(contents, rpp::pp::Data);
+
+    parentJob()->parseSession()->setContents( result.toUtf8() );
 }
 
-Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
+rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine)
 {
-    Q_UNUSED(type);
+    Q_UNUSED(type)
 
     // FIXME change to interruptable preprocessor
 
@@ -155,7 +163,8 @@ Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type)
 
         if (ast) {
             TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
-            addMacros(t->session->macros);
+            // FIXME
+            //parentJob()->parseSession()->macros->importEnvironment(sourceLine, t->session->macros);
 
         } else if (!dependencyAdded && dependencyAllowed && includedFile.isValid()) {
             parentJob()->backgroundParser()->addDocument(includedFile);

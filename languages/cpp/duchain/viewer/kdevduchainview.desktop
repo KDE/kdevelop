@@ -10,3 +10,6 @@ X-KDE-Library=kdevduchainview
 X-KDevelop-Version=4
 X-KDevelop-Category=Project
 X-KDevelop-Properties=DUChainNavigation
+X-KDE-PluginInfo-Name=kdevduchainview
+X-KDE-PluginInfo-Author=Hamish Rodda
+X-KDE-PluginInfo-License=LGPL

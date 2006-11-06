@@ -1,4 +1,4 @@
-.
+EXPECT 2x DIV0 ERROR
 #define A 0
 .
 #if 10 / A
@@ -11,5 +11,5 @@ OK
 KO
 #else
 OK
-#edif
+#endif
 .

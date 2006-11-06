@@ -22,14 +22,18 @@
 #include "pp-engine.h"
 
 #include <QFile>
+#include <QTextStream>
 
 #include <kdebug.h>
 
 #include "pp-internal.h"
 #include "preprocessor.h"
+#include "pp-environment.h"
 
-pp::pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment)
-  : m_environment(environment)
+using namespace rpp;
+
+pp::pp(Preprocessor* preprocessor)
+  : m_environment(new Environment(this))
   , expand(this)
   , m_preprocessor(preprocessor)
   , nextToken(0)
@@ -39,6 +43,11 @@ pp::pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment)
   iflevel = 0;
   _M_skipping[iflevel] = 0;
   _M_true_test[iflevel] = 0;
+}
+
+pp::~pp()
+{
+  delete m_environment;
 }
 
 QList<pp::ErrorMessage> pp::errorMessages () const
@@ -137,13 +146,13 @@ QString pp::find_header_protection(Stream& input)
     {
       ++input;
     }
-    else if (PPInternal::isComment(input))
+    else if (isComment(input))
     {
-      skip_comment_or_divop (input, PPInternal::devnull());
+      skip_comment_or_divop (input, devnull());
     }
     else if (input == '#')
     {
-      skip_blanks (++input, PPInternal::devnull());
+      skip_blanks (++input, devnull());
 
       if (!input.atEnd() && input == 'i')
       {
@@ -151,7 +160,7 @@ QString pp::find_header_protection(Stream& input)
 
         if (directive == "ifndef")
         {
-          skip_blanks (input, PPInternal::devnull());
+          skip_blanks (input, devnull());
 
           QString define = skip_identifier(input);
 
@@ -249,7 +258,7 @@ void pp::handle_directive(const QString& directive, Stream& input, Stream& outpu
       return handle_elif(input);
 
     case PP_ELSE:
-      return handle_else();
+      return handle_else(input.inputLineNumber());
 
     case PP_ENDIF:
       return handle_endif(output);
@@ -278,7 +287,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
       expand_include(input, cs);
     }
 
-    skip_blanks(input, PPInternal::devnull());
+    skip_blanks(input, devnull());
     Q_ASSERT(!includeString.isEmpty() && (includeString.startsWith('<') || includeString.startsWith('"')));
 
     Stream newInput(&includeString);
@@ -299,7 +308,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     ++input;
   }
 
-  Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal);
+  Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputLineNumber());
   if (include && !include->atEnd()) {
     m_files.push(includeName);
 
@@ -310,13 +319,15 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     // restore the file name and sync the buffer
     output.mark(m_files.pop(), input.inputLineNumber());
   }
+
+  delete include;
 }
 
 void pp::operator () (Stream& input, Stream& output)
 {
 #ifndef PP_NO_SMART_HEADER_PROTECTION
   QString headerDefine = find_header_protection(input);
-  if (m_environment.contains(headerDefine) && m_environment[headerDefine]->defined)
+  if (m_environment->retrieveMacro(headerDefine))
   {
     //kDebug() << k_funcinfo << "found header protection: " << headerDefine << endl;
     return;
@@ -327,8 +338,10 @@ void pp::operator () (Stream& input, Stream& output)
 
   forever
   {
+    haveNextToken = false;
+
     if (skipping()) {
-      skip_blanks(input, PPInternal::devnull());
+      skip_blanks(input, devnull());
 
     } else {
       skip_blanks(input, output);
@@ -338,13 +351,13 @@ void pp::operator () (Stream& input, Stream& output)
       break;
 
     } else if (input == '#') {
-      skip_blanks(++input, PPInternal::devnull());
+      skip_blanks(++input, devnull());
 
       QString directive = skip_identifier(input);
 
       Q_ASSERT(directive.length() < 512);
 
-      skip_blanks(input, PPInternal::devnull());
+      skip_blanks(input, devnull());
 
       QString skipped;
       {
@@ -361,7 +374,7 @@ void pp::operator () (Stream& input, Stream& output)
       ++input;
 
     } else if (skipping ()) {
-      skip (input, PPInternal::devnull());
+      skip (input, devnull());
 
     } else {
       checkMarkNeeded(input, output);
@@ -383,25 +396,22 @@ void pp::checkMarkNeeded(Stream& input, Stream& output)
 void pp::handle_define (Stream& input)
 {
   pp_macro* macro = new pp_macro();
-  macro->defined = true;
-#if defined (PP_WITH_MACRO_POSITION)
   macro->file = m_files.top();
-#endif
   QString definition;
 
-  skip_blanks (input, PPInternal::devnull());
-  QString macro_name = skip_identifier(input);
+  skip_blanks (input, devnull());
+  macro->name = skip_identifier(input);
 
   if (!input.atEnd() && input == '(')
   {
     macro->function_like = true;
 
-    skip_blanks (++input, PPInternal::devnull()); // skip '('
+    skip_blanks (++input, devnull()); // skip '('
     QString formal = skip_identifier(input);
     if (!formal.isEmpty())
       macro->formals << formal;
 
-    skip_blanks(input, PPInternal::devnull());
+    skip_blanks(input, devnull());
 
     if (input == '.') {
       macro->variadics = true;
@@ -414,13 +424,13 @@ void pp::handle_define (Stream& input)
 
     while (!input.atEnd() && input == ',')
     {
-      skip_blanks(++input, PPInternal::devnull());
+      skip_blanks(++input, devnull());
 
       QString formal = skip_identifier(input);
       if (!formal.isEmpty())
         macro->formals << formal;
 
-      skip_blanks (input, PPInternal::devnull());
+      skip_blanks (input, devnull());
 
       if (input == '.') {
         macro->variadics = true;
@@ -436,18 +446,18 @@ void pp::handle_define (Stream& input)
     ++input;
   }
 
-  skip_blanks (input, PPInternal::devnull());
+  skip_blanks (input, devnull());
 
   while (!input.atEnd() && input != '\n')
   {
     if (input == '\\')
     {
       int pos = input.pos();
-      skip_blanks (++input, PPInternal::devnull());
+      skip_blanks (++input, devnull());
 
       if (!input.atEnd() && input == '\n')
       {
-        skip_blanks(++input, PPInternal::devnull());
+        skip_blanks(++input, devnull());
         definition += ' ';
         continue;
 
@@ -463,14 +473,7 @@ void pp::handle_define (Stream& input)
 
   macro->definition = definition;
 
-  if (m_environment.contains(macro_name)) {
-    // if (m_environment[macro_name]->defined)
-      // FIXME redefinition error
-
-    delete m_environment.take(macro_name);
-  }
-
-  m_environment.insert(macro_name, macro);
+  m_environment->setMacro(macro);
 }
 
 
@@ -550,17 +553,15 @@ Value pp::eval_primary(Stream& input)
 
       if (token != TOKEN_IDENTIFIER)
       {
-        kWarning() << k_funcinfo << "expected ``identifier'' found:" << token << endl;
+        kWarning() << k_funcinfo << "expected ``identifier'' found:" << char(token) << endl;
         break;
       }
 
-      result.set_long(m_environment.contains(token_text) && m_environment[token_text]->defined);
+      result.set_long(m_environment->retrieveMacro(token_text) ? 1 : 0);
 
       token = next_token(input); // skip '('
 
       if (expect_paren) {
-        token = next_token(input);
-
         if (token != ')')
           kWarning() << k_funcinfo << "expected ``)''" << endl;
         else
@@ -588,7 +589,7 @@ Value pp::eval_primary(Stream& input)
       token = next_token(input);
 
       if (token != ')')
-        kWarning() << k_funcinfo << "expected ``)'' = " << token << endl;
+        kWarning() << k_funcinfo << "expected ``)'' = " << char(token) << endl;
       else
         accept_token();
 
@@ -849,7 +850,7 @@ Value pp::eval_constant_expression(Stream& input)
   {
     accept_token();
     Value left_value = eval_constant_expression(input);
-    skip_blanks(input, PPInternal::devnull());
+    skip_blanks(input, devnull());
 
     token = next_token_accept(input);
     if (token == ':')
@@ -871,7 +872,7 @@ Value pp::eval_constant_expression(Stream& input)
 
 Value pp::eval_expression(Stream& input)
 {
-  skip_blanks(input, PPInternal::devnull());
+  skip_blanks(input, devnull());
   return eval_constant_expression(input);
 }
 
@@ -881,23 +882,40 @@ void pp::handle_if (Stream& input)
   if (test_if_level())
   {
     pp_macro_expander expand_condition(this);
-    skip_blanks(input, PPInternal::devnull());
+    skip_blanks(input, devnull());
     QString condition;
     {
       Stream cs(&condition);
       expand_condition(input, cs);
     }
 
+    environment()->enterBlock(input.inputLineNumber(), condition);
+
     Stream cs(&condition);
     Value result = eval_expression(cs);
 
     _M_true_test[iflevel] = !result.is_zero();
     _M_skipping[iflevel] = result.is_zero();
+
+  } else {
+    // Capture info for precompiled macros
+    pp_macro_expander expand_condition(this);
+    skip_blanks(input, devnull());
+    QString condition;
+    {
+      Stream cs(&condition);
+      expand_condition(input, cs);
+    }
+
+    environment()->enterBlock(input.inputLineNumber(), condition);
+
+    _M_true_test[iflevel] = true;
+    _M_skipping[iflevel] = true;
   }
 }
 
 
-void pp::handle_else()
+void pp::handle_else(int sourceLine)
 {
   if (iflevel == 0 && !skipping ())
   {
@@ -906,10 +924,12 @@ void pp::handle_else()
   else if (iflevel > 0 && _M_skipping[iflevel - 1])
   {
     _M_skipping[iflevel] = true;
+    environment()->elseBlock(sourceLine);
   }
   else
   {
     _M_skipping[iflevel] = _M_true_test[iflevel];
+    environment()->elseBlock(sourceLine);
   }
 }
 
@@ -922,15 +942,29 @@ void pp::handle_elif(Stream& input)
   {
     kWarning() << k_funcinfo << "#else without #if" << endl;
   }
-  else if (!_M_true_test[iflevel] && !_M_skipping[iflevel - 1])
-  {
-    Value result = eval_expression(input);
-    _M_true_test[iflevel] = !result.is_zero();
-    _M_skipping[iflevel] = result.is_zero();
-  }
   else
   {
-    _M_skipping[iflevel] = true;
+    pp_macro_expander expand_condition(this);
+    skip_blanks(input, devnull());
+    QString condition;
+    {
+      Stream cs(&condition);
+      expand_condition(input, cs);
+    }
+
+    environment()->elseBlock(input.inputLineNumber(), condition);
+
+    if (!_M_true_test[iflevel] && !_M_skipping[iflevel - 1])
+    {
+      Stream cs(&condition);
+      Value result = eval_expression(cs);
+      _M_true_test[iflevel] = !result.is_zero();
+      _M_skipping[iflevel] = result.is_zero();
+    }
+    else
+    {
+      _M_skipping[iflevel] = true;
+    }
   }
 }
 
@@ -943,6 +977,8 @@ void pp::handle_endif(Stream& output)
   }
   else
   {
+    environment()->leaveBlock();
+
     _M_skipping[iflevel] = 0;
     _M_true_test[iflevel] = 0;
 
@@ -953,10 +989,13 @@ void pp::handle_endif(Stream& output)
 
 void pp::handle_ifdef (bool check_undefined, Stream& input)
 {
+  QString macro_name = skip_identifier(input);
+
+  environment()->enterBlock(input.inputLineNumber(), QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name));
+
   if (test_if_level())
   {
-    QString macro_name = skip_identifier(input);
-    bool value = m_environment.contains(macro_name) && m_environment[macro_name]->defined;
+    bool value = m_environment->retrieveMacro(macro_name);
 
     if (check_undefined)
       value = !value;
@@ -969,19 +1008,12 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 
 void pp::handle_undef(Stream& input)
 {
-  skip_blanks (input, PPInternal::devnull());
+  skip_blanks (input, devnull());
 
   QString macro_name = skip_identifier(input);
   Q_ASSERT(!macro_name.isEmpty());
 
-  if (m_environment.contains(macro_name)) {
-    m_environment[macro_name]->defined = false;
-
-  } else {
-    pp_macro* undef = new pp_macro;
-    undef->defined = false;
-    m_environment.insert(macro_name, undef);
-  }
+  m_environment->clearMacro(macro_name);
 }
 
 int pp::next_token (Stream& input)
@@ -989,7 +1021,7 @@ int pp::next_token (Stream& input)
   if (haveNextToken)
     return nextToken;
 
-  skip_blanks(input, PPInternal::devnull());
+  skip_blanks(input, devnull());
 
   if (input.atEnd())
   {
@@ -1005,7 +1037,7 @@ int pp::next_token (Stream& input)
     case '/':
       if (ch2 == '/' || ch2 == '*')
       {
-        skip_comment_or_divop(input, PPInternal::devnull(), false);
+        skip_comment_or_divop(input, devnull(), false);
         return next_token(input);
       }
       ++input;
@@ -1157,9 +1189,15 @@ void pp::setHideNextMacro( bool h )
   hideNext = h;
 }
 
-QHash< QString, pp_macro * > & pp::environment( )
+Environment* pp::environment( ) const
 {
   return m_environment;
+}
+
+void pp::setEnvironment(Environment* env)
+{
+  delete m_environment;
+  m_environment = env;
 }
 
 QString pp::currentFile() const

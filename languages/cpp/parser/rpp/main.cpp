@@ -23,6 +23,9 @@
 #include <kdebug.h>
 
 #include "preprocessor.h"
+#include "pp-environment.h"
+
+using namespace rpp;
 
 int main (int /*argc*/, char *argv[])
 {
@@ -36,35 +39,20 @@ int main (int /*argc*/, char *argv[])
       return EXIT_FAILURE;
     }
 
-  QHash<QString, pp_macro*> env;
   Preprocessor p;
 
   QStringList ip;
 
-  pp preprocess(&p, env);
-  if (! no_stdinc)
-    {
-      ip << "/usr/include";
-#if defined (GCC_MACHINE) && defined (GCC_VERSION)
-      ip << "/usr/lib/gcc/" GCC_MACHINE "/" GCC_VERSION "/include";
-#endif
-    }
-
-  if (! no_stdincpp)
-    {
-#if defined (GCC_MACHINE) && defined (GCC_VERSION)
-      ip << "/usr/include/c++/" GCC_VERSION;
-      ip << "/usr/include/c++/" GCC_VERSION "/" GCC_MACHINE;
-#endif
-    }
-
-  ip << ".";
-
-  p.addIncludePaths(ip);
+  pp preprocess(&p);
 
   preprocess.processFile(QString("pp-configuration"), pp::File); // ### put your macros here!
 
+  preprocess.environment()->enterBlock(0, QString());
+
   QString result = preprocess.processFile(QString(filename), pp::File);
+
+  preprocess.environment()->cleanup();
+
   QStringList resultLines = result.split('\n');
   for (int i = 0; i < resultLines.count(); ++i)
     kDebug() << i << ": " << resultLines[i] << endl;
@@ -72,7 +60,6 @@ int main (int /*argc*/, char *argv[])
   /*foreach (const Preprocessor::MacroItem& macro, p.macros())
     kDebug() << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")" << endl;*/
 
-  qDeleteAll(env);
   return EXIT_SUCCESS;
 }
 

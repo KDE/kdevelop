@@ -37,7 +37,7 @@ class ForwardDeclaration;
 /**
  * Represents a single declaration in a definition-use chain.
  */
-class Declaration : public DUChainBase, public KDevDocumentRangeObject
+class Declaration : public DUChainBase
 {
   friend class DUContext;
   friend class ForwardDeclaration;
@@ -53,6 +53,8 @@ public:
 
   Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~Declaration();
+
+  virtual TopDUContext* topContext() const;
 
   const QList<ForwardDeclaration*>& forwardDeclarations() const;
   virtual bool isForwardDeclaration() const;

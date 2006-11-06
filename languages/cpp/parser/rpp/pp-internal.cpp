@@ -21,7 +21,7 @@
 
 #include "pp-internal.h"
 
-bool PPInternal::isComment(Stream& input)
+bool rpp::isComment(Stream& input)
 {
   QChar c1 = input;
   QChar c2 = input.peek();
@@ -29,9 +29,9 @@ bool PPInternal::isComment(Stream& input)
   return c1 == '/' && (c2 == '/' || c2 == '*');
 }
 
-Stream& PPInternal::devnull()
+rpp::Stream& rpp::devnull()
 {
   // Multithread safe
-  static Stream null;
+  static rpp::Stream null;
   return null;
 }

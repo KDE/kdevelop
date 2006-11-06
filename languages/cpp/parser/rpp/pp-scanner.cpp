@@ -21,6 +21,8 @@
 
 #include "pp-scanner.h"
 
+using namespace rpp;
+
 void pp_skip_blanks::operator()(Stream& input, Stream& output)
 {
   while (!input.atEnd()) {

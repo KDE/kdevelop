@@ -22,12 +22,10 @@
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
+#include <QtCore/QString>
 
-class QByteArray;
-class PreprocessorPrivate;
+namespace rpp {
+
 class Stream;
 
 class Preprocessor
@@ -40,13 +38,9 @@ public:
       IncludeGlobal
     };
 
-    Preprocessor();
     virtual ~Preprocessor();
 
-    QString processFile(const QString &fileName);
-    QString processString(const QString &str);
-
-    void addIncludePaths(const QStringList &includePaths);
+    QString processString(const QString& string);
 
     /**
      * This function is called by the preprocessor whenever
@@ -63,36 +57,9 @@ public:
      * the file to be #included.  Ownership of the Stream is yielded to
      * class pp at this point.
      */
-    virtual Stream* sourceNeeded(QString& fileName, IncludeType type);
-
-    QStringList macroNames() const;
-
-    struct MacroItem
-    {
-        QString name;
-        bool isDefined;
-        QStringList parameters;
-        QString definition;
-        bool isFunctionLike;
-        bool variadics;
-        QString fileName;
-    };
-    QList<MacroItem> macros() const;
-
-    /**
-     * Define (or undefine if MacroItem::definied is false) a list of
-     * macros.
-     */
-    void addMacros(const QList<MacroItem>& macros);
-
-    /**
-     * Clears existing macro definitions.
-     */
-    void clearMacros();
-
-private:
-    Q_DISABLE_COPY(Preprocessor)
-    PreprocessorPrivate *d;
+    virtual Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine);
 };
+
+}
 
 #endif

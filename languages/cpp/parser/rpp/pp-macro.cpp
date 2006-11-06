@@ -21,8 +21,12 @@
 
 #include "pp-macro.h"
 
+using namespace rpp;
+
 pp_macro::pp_macro( )
-  : hidden(false)
+  : sourceLine(-1)
+  , defined(true)
+  , hidden(false)
   , function_like(false)
   , variadics(false)
 {

@@ -30,13 +30,15 @@ class DUContext;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
  */
-class Definition : public DUChainBase, public KDevDocumentRangeObject
+class Definition : public DUChainBase
 {
   friend class Declaration;
 
 public:
   Definition(KTextEditor::Range* range, DUContext* context);
   virtual ~Definition();
+
+  virtual TopDUContext* topContext() const;
 
   DUContext* context() const;
   void setContext(DUContext* context);

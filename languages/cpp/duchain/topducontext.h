@@ -36,6 +36,8 @@ public:
   TopDUContext(KTextEditor::Range* range);
   virtual ~TopDUContext();
 
+  TopDUContext* topContext() const;
+
   /// Returns true if this object is being deleted, otherwise false.
   inline bool deleting() const { return m_deleting; }
 

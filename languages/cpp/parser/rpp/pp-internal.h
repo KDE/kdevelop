@@ -24,7 +24,7 @@
 
 #include "pp-stream.h"
 
-namespace PPInternal
+namespace rpp
 {
 
 bool isComment(Stream& input);

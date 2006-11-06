@@ -26,6 +26,8 @@
 
 #include "pp-stream.h"
 
+namespace rpp {
+
 class pp_skip_blanks
 {
 public:
@@ -87,6 +89,8 @@ private:
   pp_skip_char_literal skip_char_literal;
   pp_skip_comment_or_divop skip_comment_or_divop;
 };
+
+}
 
 #endif // PP_SCANNER_H
 

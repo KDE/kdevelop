@@ -22,7 +22,7 @@
 #ifndef KDEVCPPCODECOMPLETIONMODEL_H
 #define KDEVCPPCODECOMPLETIONMODEL_H
 
-#include <ktexteditor/codecompletion2.h>
+#include <ktexteditor/codecompletionmodel.h>
 
 class DUContext;
 class Declaration;
@@ -36,6 +36,8 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     virtual ~CppCodeCompletionModel();
 
     void setContext(DUContext* context, const KTextEditor::Cursor& position);
+
+    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
 
     virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

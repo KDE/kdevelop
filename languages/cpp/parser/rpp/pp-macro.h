@@ -23,15 +23,17 @@
 
 #include <QStringList>
 
+namespace rpp {
+
 class pp_macro
 {
 public:
   pp_macro();
 
+  QString name;
   QString definition;
-#if defined (PP_WITH_MACRO_POSITION)
   QString file;
-#endif
+  int sourceLine;
   QStringList formals;
 
   bool defined: 1;
@@ -39,6 +41,8 @@ public:
   bool function_like: 1;
   bool variadics: 1;
 };
+
+}
 
 #endif // PP_MACRO_H
 

@@ -29,7 +29,10 @@
 #include "pp-macro-expander.h"
 #include "pp-scanner.h"
 
+namespace rpp {
+
 class Preprocessor;
+class Environment;
 
 struct Value
 {
@@ -108,7 +111,7 @@ struct Value
 
 class pp
 {
-  QHash<QString, pp_macro*>& m_environment;
+  Environment* m_environment;
   pp_macro_expander expand;
   pp_skip_identifier skip_identifier;
   pp_skip_comment_or_divop skip_comment_or_divop;
@@ -190,7 +193,8 @@ class pp
   };
 
 public:
-  pp(Preprocessor* preprocessor, QHash<QString, pp_macro*>& environment);
+  pp(Preprocessor* preprocessor);
+  ~pp();
 
   enum StringType { File, Data };
   QList<ErrorMessage> errorMessages () const;
@@ -210,7 +214,9 @@ public:
   bool hideNextMacro() const;
   void setHideNextMacro(bool hideNext);
 
-  QHash<QString, pp_macro*>& environment();
+  Environment* environment() const;
+  // once set, belongs to the engine
+  void setEnvironment(Environment* env);
 
   QString currentFile() const;
 
@@ -256,7 +262,7 @@ private:
 
   void handle_if(Stream& input);
 
-  void handle_else();
+  void handle_else(int sourceLine);
 
   void handle_elif(Stream& input);
 
@@ -270,6 +276,8 @@ private:
   int next_token_accept (Stream& input);
   void accept_token();
 };
+
+}
 
 #endif // PP_ENGINE_H
 

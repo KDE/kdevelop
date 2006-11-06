@@ -38,7 +38,11 @@ public:
   KDevDocumentRangeObject(KTextEditor::Range* range);
   virtual ~KDevDocumentRangeObject();
 
-  void setTextRange(KTextEditor::Range* range);
+  /**
+   * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
+   * deleted when the object is deleted.
+   */
+  void setTextRange(KTextEditor::Range* range, bool ownsRange = true);
 
   void setRange(const KTextEditor::Range& range);
   const KTextEditor::Range textRange() const;
@@ -58,8 +62,11 @@ public:
   KTextEditor::Range* takeRange();
 
 private:
+  Q_DISABLE_COPY(KDevDocumentRangeObject)
+
   mutable QMutex m_rangeMutex;
   KTextEditor::Range* m_range;
+  bool m_ownsRange;
   KUrl* m_url;
 };
 

@@ -22,7 +22,6 @@
 #include <QHash>
 #include <QReadWriteLock>
 
-#include "kdevdocumentrangeobject.h"
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
 #include "typesystem.h"
@@ -43,16 +42,12 @@ class TopDUContext;
 
 // Unfortunately, impossible to check this exactly as we could be in a write lock
 #define ENSURE_CHAIN_READ_LOCKED \
-if (!topContext()->deleting()) { \
-  bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
-  Q_ASSERT(!_ensure_chain_locked); \
-}
+bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
+Q_ASSERT(!_ensure_chain_locked);
 
 #define ENSURE_CHAIN_WRITE_LOCKED \
-if (!topContext()->deleting()) { \
-  bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
-  Q_ASSERT(!_ensure_chain_locked); \
-}
+bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
+Q_ASSERT(!_ensure_chain_locked);
 
 #endif
 
@@ -65,7 +60,7 @@ if (!topContext()->deleting()) { \
  *
  * \todo change child relationships to a linked list within the context?
  */
-class DUContext : public DUChainBase, public KDevDocumentRangeObject
+class DUContext : public DUChainBase
 {
   friend class Use;
   friend class Declaration;
@@ -76,13 +71,7 @@ public:
    * Constructor. No convenience methods, as the initialisation order is important,
    * and providing all permutations would be overkill.
    */
-  DUContext(KTextEditor::Range* range, DUContext* parent);
-
-  /**
-   * Constructor. No convenience methods, as the initialisation order is important,
-   * and providing all permutations would be overkill.
-   */
-  DUContext(KTextEditor::Range* range, TopDUContext* top);
+  DUContext(KTextEditor::Range* range, DUContext* parent = 0);
 
   /**
    * Destructor. Will delete all child contexts which are defined within
@@ -105,6 +94,11 @@ public:
    * Calculate the depth of this context, from the top level context in the file.
    */
   inline int depth() const { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
+
+  /**
+   * Find the top context.
+   */
+  virtual TopDUContext* topContext() const;
 
   /**
    * Find the context which most specifically covers \a position.

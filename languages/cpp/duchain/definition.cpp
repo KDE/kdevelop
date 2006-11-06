@@ -28,8 +28,7 @@
 using namespace KTextEditor;
 
 Definition::Definition(KTextEditor::Range* range, DUContext* context)
-  : DUChainBase(context->topContext())
-  , KDevDocumentRangeObject(range)
+  : DUChainBase(range)
   , m_context(0)
   , m_declaration(0)
 {
@@ -92,3 +91,11 @@ void Definition::setDeclaration(Declaration* declaration)
 }
 
 // kate: indent-width 2;
+
+TopDUContext * Definition::topContext() const
+{
+  if (context())
+    return context()->topContext();
+
+  return 0;
+}

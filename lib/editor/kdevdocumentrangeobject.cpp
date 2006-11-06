@@ -29,6 +29,7 @@ using namespace KTextEditor;
 
 KDevDocumentRangeObject::KDevDocumentRangeObject(Range* range)
   : m_range(0)
+  , m_ownsRange(true)
   , m_url(0)
 {
   setTextRange(range);
@@ -39,11 +40,13 @@ KDevDocumentRangeObject::~ KDevDocumentRangeObject( )
   if (m_range && m_range->isSmartRange())
     m_range->toSmartRange()->removeWatcher(this);
 
-  KDevEditorIntegrator::releaseRange(m_range);
+  if (m_ownsRange)
+    KDevEditorIntegrator::releaseRange(m_range);
+
   delete m_url;
 }
 
-void KDevDocumentRangeObject::setTextRange( Range * range )
+void KDevDocumentRangeObject::setTextRange( Range * range, bool ownsRange )
 {
   Q_ASSERT(range);
 
@@ -61,10 +64,12 @@ void KDevDocumentRangeObject::setTextRange( Range * range )
       m_url = 0;
     }
 
-    delete m_range;
+    if (m_ownsRange)
+      KDevEditorIntegrator::releaseRange(m_range);
   }
 
   m_range = range;
+  m_ownsRange = ownsRange;
 
   if (m_range->isSmartRange()) {
     m_range->toSmartRange()->addWatcher(this);

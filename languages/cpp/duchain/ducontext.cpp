@@ -34,25 +34,13 @@
 using namespace KTextEditor;
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
-  : DUChainBase(parent ? parent->topContext() : 0)
-  , KDevDocumentRangeObject(range)
+  : DUChainBase(range)
   , m_contextType(Other)
   , m_parentContext(0)
   , m_inSymbolTable(false)
 {
   if (parent)
     parent->addChildContext(this);
-}
-
-DUContext::DUContext(KTextEditor::Range* range, TopDUContext* top)
-  : DUChainBase(top)
-  , KDevDocumentRangeObject(range)
-  , m_contextType(Other)
-  , m_parentContext(0)
-  , m_inSymbolTable(false)
-{
-  if (top && top != this)
-    top->addChildContext(this);
 }
 
 DUContext::~DUContext( )
@@ -755,4 +743,12 @@ void DUContext::cleanIfNotEncountered(uint encountered, bool firstPass)
       if (use->lastEncountered() != encountered)
         delete use;
   }
+}
+
+TopDUContext* DUContext::topContext() const
+{
+  if (parentContext())
+    return parentContext()->topContext();
+
+  return 0;
 }

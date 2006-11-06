@@ -21,10 +21,16 @@
 
 #include "pp-macro-expander.h"
 
+#include <QDate>
+#include <QTime>
+
 #include <kdebug.h>
 
 #include "pp-internal.h"
 #include "pp-engine.h"
+#include "pp-environment.h"
+
+using namespace rpp;
 
 pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<QString>& __actuals)
   : expandingMacro(__expandingMacro)
@@ -87,7 +93,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
       if (!formal.isEmpty()) {
         Stream is(&formal);
-        skip_whitespaces(is, PPInternal::devnull());
+        skip_whitespaces(is, devnull());
 
         output << '\"';
 
@@ -120,7 +126,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
     {
       skip_char_literal(input, output);
     }
-    else if (PPInternal::isComment(input))
+    else if (isComment(input))
     {
       skip_comment_or_divop(input, output);
     }
@@ -144,12 +150,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
       // search for the paste token
       int blankStart = input.pos();
-      skip_blanks (input, PPInternal::devnull());
+      skip_blanks (input, devnull());
       if (!input.atEnd() && input == '#') {
         ++input;
 
         if (!input.atEnd() && input == '#')
-          skip_blanks(++input, PPInternal::devnull());
+          skip_blanks(++input, devnull());
         else
           input.seek(blankStart);
 
@@ -165,24 +171,23 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         continue;
       }
 
-      if (!m_engine->environment().contains(name))
-      {
-        m_engine->setHideNextMacro(name == "defined");
-        output << name;
-        continue;
-      }
+      // TODO handle inbuilt "defined" etc functions
 
-      pp_macro* macro = m_engine->environment()[name];
-      if (!macro->defined || macro->hidden || m_engine->hideNextMacro())
+      pp_macro* macro = m_engine->environment()->retrieveMacro(name);
+      if (!macro || macro->hidden || m_engine->hideNextMacro())
       {
         m_engine->setHideNextMacro(name == "defined");
 
         if (name == "__LINE__")
-          output << input.inputLineNumber();
+          output << QString::number(input.inputLineNumber());
         else if (name == "__FILE__")
-          output << m_engine->currentFile();
-
-        output << name;
+          output << '"' << m_engine->currentFile() << '"';
+        else if (name == "__DATE__")
+          output << QDate::currentDate().toString("MMM dd yyyy");
+        else if (name == "__TIME__")
+          output << QTime::currentTime().toString("hh:mm:ss");
+        else
+          output << name;
         continue;
       }
 
@@ -195,6 +200,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
           pp_macro_expander expand_macro(m_engine);
           Stream ms(&macro->definition, QIODevice::ReadOnly);
+          ms.setInputLineNumber(input.inputLineNumber());
           QString expanded;
           {
             Stream es(&expanded);
@@ -204,11 +210,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           if (!expanded.isEmpty())
           {
             Stream es(&expanded);
-            skip_whitespaces(es, PPInternal::devnull());
+            skip_whitespaces(es, devnull());
             QString identifier = skip_identifier(es);
 
-            if (es.atEnd() && m_engine->environment().contains(identifier) && m_engine->environment()[identifier]->defined) {
-              m = m_engine->environment()[identifier];
+            pp_macro* m2 = 0;
+            if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier))) {
+              m = m2;
 
             } else {
               output << expanded;
@@ -224,7 +231,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         macro = m;
       }
 
-      skip_whitespaces(input, PPInternal::devnull());
+      skip_whitespaces(input, devnull());
 
       // function like macro
       if (input.atEnd() || input != '(')
@@ -252,6 +259,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           QString newActual;
           {
             Stream as(&actual);
+            as.setInputLineNumber(input.inputLineNumber());
             Stream nas(&newActual);
             expand_actual(as, nas);
           }
@@ -294,6 +302,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       pp_macro_expander expand_macro(m_engine, &frame);
       macro->hidden = true;
       Stream ms(&macro->definition, QIODevice::ReadOnly);
+      ms.setInputLineNumber(input.inputLineNumber());
       expand_macro(ms, output);
       macro->hidden = false;
 

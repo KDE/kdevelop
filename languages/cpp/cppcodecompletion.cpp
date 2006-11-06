@@ -23,7 +23,7 @@
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor/codecompletion2.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 #include <kdevcore.h>
 #include <kdevdocumentcontroller.h>
@@ -47,56 +47,14 @@ CppCodeCompletion::~CppCodeCompletion()
 {
 }
 
-void CppCodeCompletion::cursorPositionChanged()
-{
-  View* view = dynamic_cast<KTextEditor::View*>(sender());
-  if (!view) {
-    kWarning() << k_funcinfo << "Non-view caller" << endl;
-    return;
-  }
-
-  CodeCompletionInterface2* cc = dynamic_cast<CodeCompletionInterface2*>(view);
-
-  if (!cc || cc->isCompletionActive())
-    return;
-
-  KTextEditor::Cursor end = view->cursorPosition();
-
-  if (!end.column())
-    return;
-
-  QString text = view->document()->line(end.line());
-
-  static QRegExp findWordStart( "\\b(\\w+)$" );
-  static QRegExp findWordEnd( "^(\\w*)\\b" );
-
-  if ( findWordStart.lastIndexIn(text.left(end.column())) < 0 )
-    return;
-
-  KTextEditor::Cursor start(end.line(), findWordStart.pos(1));
-
-  if ( findWordEnd.indexIn(text.mid(end.column())) < 0 )
-    return;
-
-  end.setColumn(end.column() + findWordEnd.cap(1).length());
-
-  //m_startText = text.mid(start.column(), end.column() - start.column());
-
-  KUrl url = view->document()->url();
-  if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
-    QReadLocker lock(DUChain::lock());
-    DUContext* thisContext = top->findContextAt(end);
-
-    m_model->setContext(thisContext, end);
-
-    cc->startCompletion(KTextEditor::Range(start, end), m_model);
-  }
-}
-
 void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEditor::View * view)
 {
   Q_UNUSED(document);
-  connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), SLOT(cursorPositionChanged()));
+
+  if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
+    cc->setAutomaticInvocationEnabled(true);
+    cc->registerCompletionModel(m_model);
+  }
 }
 
 void CppCodeCompletion::documentLoaded(KDevDocument* document)

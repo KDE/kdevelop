@@ -22,6 +22,8 @@
 
 #include <kdebug.h>
 
+using namespace rpp;
+
 const QChar Stream::newline('\n');
 static const QChar nullchar;
 
@@ -150,4 +152,9 @@ void Stream::reset( )
 {
   c = m_string->constData();
   m_inputLine = m_outputLine = m_pos = 0;
+}
+
+void rpp::Stream::setInputLineNumber(int line)
+{
+  m_inputLine = line;
 }

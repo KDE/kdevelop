@@ -42,6 +42,9 @@ ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
   : parent(_parent)
   , object(_object)
 {
+  Q_ASSERT(parent && object);
+
+  setTextRange(object->textRangePtr(), false);
 }
 
 DUChainModel::DUChainModel(DUChainViewPart* parent)
@@ -67,14 +70,15 @@ void DUChainModel::documentActivated( KDevDocument* document )
 void DUChainModel::setTopContext(TopDUContext* context)
 {
   QReadLocker readLock(DUChain::lock());
+  QMutexLocker lock(&m_mutex);
 
   if (m_chain != context)
     m_chain = context;
 
-  qDeleteAll(m_proxyObjects);
+  qDeleteAll(m_proxyObjects.values());
   m_proxyObjects.clear();
 
-  m_objectCache.clear();
+  m_objectLists.clear();
 
   reset();
 }
@@ -84,6 +88,19 @@ int DUChainModel::columnCount ( const QModelIndex & parent ) const
   Q_UNUSED(parent);
 
   return 1;
+}
+
+DUChainBase* DUChainModel::objectForIndex(const QModelIndex& index) const
+{
+  DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
+  if (!base)
+    return 0;
+
+  if (m_objectLists.contains(base))
+    return base;
+
+  // Called after it's been deleted...
+  return 0;
 }
 
 QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & parent ) const
@@ -99,8 +116,11 @@ QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & paren
   }
 
   QReadLocker readLock(DUChain::lock());
+  QMutexLocker lock(&m_mutex);
 
-  DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
+  DUChainBase* base = objectForIndex(parent);
+  if (!base)
+    return QModelIndex();
 
   QList<DUChainBase*>* items = childItems(base);
 
@@ -119,8 +139,11 @@ QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
     return QModelIndex();
 
   QReadLocker readLock(DUChain::lock());
+  QMutexLocker lock(&m_mutex);
 
-  DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
+  DUChainBase* base = objectForIndex(index);
+  if (!base)
+    return QModelIndex();
 
   if (ProxyObject* proxy = dynamic_cast<ProxyObject*>(base))
     return createParentIndex(proxy->parent);
@@ -151,8 +174,12 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
     return QVariant();
 
   QReadLocker readLock(DUChain::lock());
+  QMutexLocker lock(&m_mutex);
 
-  DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
+  DUChainBase* base = objectForIndex(index);
+  if (!base)
+    return QVariant();
+
   ProxyObject* proxy = dynamic_cast<ProxyObject*>(base);
   if (proxy)
     base = proxy->object;
@@ -202,8 +229,12 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
     return 1;
 
   QReadLocker readLock(DUChain::lock());
+  QMutexLocker lock(&m_mutex);
 
-  DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
+  DUChainBase* base = objectForIndex(parent);
+  if (!base)
+    return 0;
+
   QList<DUChainBase*>* items = childItems(base);
   if (!items)
     return 0;
@@ -227,8 +258,8 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
 
 QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
 {
-  if (m_objectCache.contains(parent))
-    return m_objectCache[parent];
+  if (m_objectLists.contains(parent))
+    return m_objectLists[parent];
 
   ProxyObject* proxy = dynamic_cast<ProxyObject*>(parent);
   if (proxy)
@@ -237,8 +268,6 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
   QList<DUChainBase*>* list = 0;
 
   if (DUContext* context = dynamic_cast<DUContext*>(parent)) {
-    list = new QList<DUChainBase*>();
-
     QListIterator<DUContext*> contexts = context->childContexts();
     QListIterator<DUContext*> importedParentContexts = context->importedParentContexts();
     QListIterator<Declaration*> declarations = context->localDeclarations();
@@ -279,6 +308,9 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
             break;
         }
 
+        if (!list)
+          list = new QList<DUChainBase*>();
+
         currentItem->modelRow = list->count();
         list->append(currentItem);
 
@@ -290,21 +322,24 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(parent)) {
-    list = new QList<DUChainBase*>();
-
-    if (dec->definition())
+    if (dec->definition()) {
+      list = new QList<DUChainBase*>();
       list->append(static_cast<DUChainBase*>(dec->definition()));
+    }
 
-    foreach (Use* use, dec->uses())
+    foreach (Use* use, dec->uses()) {
+      if (!list)
+        list = new QList<DUChainBase*>();
+
       list->append(static_cast<DUChainBase*>(use));
+    }
 
   } else {
     // No child items for definitions or uses
     //kDebug() << k_funcinfo << "No child items for definitions or uses" << endl;
   }
 
-  if (list)
-    m_objectCache.insert(parent, list);
+  m_objectLists.insert(parent, list);
 
   return list;
 }
@@ -314,18 +349,19 @@ bool DUChainModel::hasChildren( const QModelIndex & parent ) const
   if (!parent.isValid())
     return m_chain;
 
+  QMutexLocker lock(&m_mutex);
   QReadLocker readLock(DUChain::lock());
 
-  DUChainBase* base = static_cast<DUChainBase*>(parent.internalPointer());
+  DUChainBase* base = objectForIndex(parent);
+  if (!base)
+    return false;
 
-  if (m_objectCache.contains(base))
-    return !m_objectCache[base]->isEmpty();
+  if (m_objectLists.contains(base))
+    return !m_objectLists[base]->isEmpty();
 
   ProxyObject* proxy = dynamic_cast<ProxyObject*>(base);
   if (proxy)
     base = proxy->object;
-
-  QList<DUChainBase*>* list = 0;
 
   if (DUContext* context = dynamic_cast<DUContext*>(base))
     return !context->childContexts().isEmpty() || !context->importedParentContexts().isEmpty() || !context->localDeclarations().isEmpty() || !context->localDefinitions().isEmpty() || !context->uses().isEmpty();
@@ -334,6 +370,81 @@ bool DUChainModel::hasChildren( const QModelIndex & parent ) const
     return dec->definition() || !dec->uses().isEmpty();
 
   return false;
+}
+
+void DUChainModel::contextChanged(DUContext * context, Modification change, Relationship relationship, DUChainBase * relatedObject)
+{
+  QMutexLocker lock(&m_mutex);
+
+  if (!m_objectLists.contains(context))
+    return;
+
+  QList<DUChainBase*>* list = m_objectLists[context];
+
+  switch (relationship) {
+    case ParentContext:
+      break;
+
+    case ChildContexts:
+      switch (change) {
+        case Change:
+        case Removal: {
+          int index = list->indexOf(relatedObject);
+          Q_ASSERT(index != -1);
+          beginRemoveRows(createIndex(context->modelRow, 0, context), index, index);
+          list->removeAt(index);
+          endInsertRows();
+          if (change == Removal)
+            break;
+          // else fallthrough
+        }
+
+        case Addition: {
+          int index = findInsertIndex(*list, relatedObject);
+          beginInsertRows(createIndex(context->modelRow, 0, context), index, index);
+          list->insert(index, relatedObject);
+          endInsertRows();
+          break;
+        }
+
+        case Deletion:
+          if (m_objectLists.contains(context))
+            m_objectLists.remove(context);
+          break;
+      }
+      break;
+
+    case ImportedParentContexts:
+    case ImportedChildContexts:
+    case LocalDeclarations:
+    case LocalDefinitions:
+    case UsingNamespaces:
+    case ContextType:
+    case Uses:
+    case Identifier:
+      break;
+  }
+}
+
+void DUChainModel::declarationChanged(Declaration * declaration, Modification change, Relationship relationship, DUChainBase * relatedObject)
+{
+}
+
+void DUChainModel::definitionChanged(Definition * definition, Modification change, Relationship relationship, DUChainBase * relatedObject)
+{
+}
+
+void DUChainModel::useChanged(Use * use, Modification change, Relationship relationship, DUChainBase * relatedObject)
+{
+}
+
+int DUChainModel::findInsertIndex(QList<DUChainBase*>& list, DUChainBase* object) const
+{
+  for (int i = 0; i < list.count(); ++i)
+    if (list.at(i)->textRange().start() > object->textRange().start())
+      return i;
+
+  return list.count();
 }
 
 #include "duchainmodel.moc"

@@ -28,7 +28,7 @@ class CPPParseJob;
 
 #include "parser/rpp/preprocessor.h"
 
-class PreprocessJob : public ThreadWeaver::Job, public Preprocessor
+class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
 {
     Q_OBJECT
 public:
@@ -36,7 +36,7 @@ public:
 
     CPPParseJob* parentJob() const;
 
-    virtual Stream* sourceNeeded(QString& fileName, IncludeType type);
+    virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine);
 
     virtual bool success() const;
 

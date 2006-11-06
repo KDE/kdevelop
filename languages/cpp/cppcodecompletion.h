@@ -41,7 +41,6 @@ class CppCodeCompletion : public QObject
   public Q_SLOTS:
     void documentLoaded(KDevDocument* document);
     void viewCreated(KTextEditor::Document *document, KTextEditor::View *view);
-    void cursorPositionChanged();
 
   private:
     CppCodeCompletionModel* m_model;

@@ -21,11 +21,15 @@
 
 #include "cppcodecompletionmodel.h"
 
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
+
 #include "declaration.h"
 #include "cpptypes.h"
 #include "classfunctiondeclaration.h"
 #include "ducontext.h"
 #include "duchain.h"
+#include "duchain/topducontext.h"
 
 using namespace KTextEditor;
 
@@ -36,6 +40,19 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
 
 CppCodeCompletionModel::~CppCodeCompletionModel()
 {
+}
+
+void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
+{
+  Q_UNUSED(invocationType)
+
+  KUrl url = view->document()->url();
+  if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
+    QReadLocker lock(DUChain::lock());
+    DUContext* thisContext = top->findContextAt(range.start());
+
+    setContext(thisContext, range.start());
+  }
 }
 
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const

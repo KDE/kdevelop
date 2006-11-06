@@ -24,11 +24,11 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
-#include "rpp/preprocessor.h"
-
 class pool;
 class TokenStream;
 class LocationTable;
+
+namespace rpp { class MacroBlock; }
 
 /// Contains everything needed to keep an AST useful once the rest of the parser
 /// has gone away.
@@ -54,7 +54,7 @@ public:
   TokenStream* token_stream;
   LocationTable* location_table;
   LocationTable* line_table;
-  QList<Preprocessor::MacroItem> macros;
+  rpp::MacroBlock* macros;
 
 private:
   void extract_line(int offset, int *line, QString *filename) const;

@@ -18,19 +18,16 @@
 
 #include "duchainbase.h"
 
-#include "topducontext.h"
-
-DUChainBase::DUChainBase(TopDUContext* top)
-  : modelRow(0)
-  , m_topContext(top)
+DUChainBase::DUChainBase(KTextEditor::Range* range)
+  : KDevDocumentRangeObject(range)
+  , modelRow(0)
   , m_encountered(0)
 {
-  Q_ASSERT(m_topContext);
 }
 
 DUChainBase::DUChainBase()
-  : modelRow(0)
-  , m_topContext(0)
+  : KDevDocumentRangeObject(0)
+  , modelRow(0)
   , m_encountered(0)
 {
 }
@@ -41,7 +38,7 @@ DUChainBase::~DUChainBase()
 
 TopDUContext* DUChainBase::topContext() const
 {
-  return m_topContext;
+  return 0;
 }
 
 // kate: indent-width 2;

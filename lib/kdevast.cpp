@@ -19,16 +19,24 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevast.h"
 
-#include "kdevlanguagesupport.h"
+#include <kdebug.h>
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+#include "kdevlanguagesupport.h"
 
 void KDevAST::release()
 {
-    language->releaseAST(this);
+    if (language)
+        language->releaseAST(this);
+    else
+        kWarning() << k_funcinfo << "No language associated with AST " << this << endl;
 }
 
 void KDevAST::documentLoaded(const KUrl& document)
 {
-    language->documentLoaded(this, document);
+    if (language)
+        language->documentLoaded(this, document);
+    else
+        kWarning() << k_funcinfo << "No language associated with AST " << this << endl;
 }
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
