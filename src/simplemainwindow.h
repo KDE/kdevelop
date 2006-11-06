@@ -76,6 +76,7 @@ private slots:
     void gotoPreviousWindow();
     void gotoFirstWindow();
     void gotoLastWindow();
+    void switchToNextTabWidget();
     void slotCoreInitialized();
     void projectOpened();
     void slotPartURLChanged(KParts::ReadOnlyPart *part);

@@ -325,6 +325,9 @@ void SimpleMainWindow::createActions()
     m_lowerAllDocks = new KAction(i18n("Lower All Docks"), CTRL+SHIFT+Key_C, 
         this, SLOT(lowerAllDocks()), actionCollection(), "lower_all_docks");
 
+    new KAction(i18n("Switch to next TabWidget"), 0, this, 
+        SLOT(switchToNextTabWidget()), actionCollection(), "switch_to_next_tabwidget" );
+
     m_splitHor = new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
         this, SLOT(slotSplitHorizontalBase()), actionCollection(), "split_h");
 
@@ -508,6 +511,12 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
 
                 if (PartController::getInstance()->parts()->count() > 1)
                     tabMenu.insertItem(i18n("Close All Others"), 4);
+
+                if( KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( ro_part ) )
+                {
+                    if( rw_part->isModified() ) tabMenu.insertItem( i18n("Save"),1);
+                    tabMenu.insertItem( i18n("Reload"),2);
+                }
 
                 if (dynamic_cast<HTMLDocumentationPart*>(ro_part))
                 {
@@ -815,6 +824,44 @@ void SimpleMainWindow::lowerAllDocks()
     m_bottomDock->lowerWidget( m_bottomDock->currentWidget() );
     m_leftDock->lowerWidget( m_leftDock->currentWidget() );
     m_rightDock->lowerWidget( m_rightDock->currentWidget() );
+}
+
+void SimpleMainWindow::switchToNextTabWidget()
+{
+    QValueList<DTabWidget*> tabWidgets = m_widgetTabs.values();
+
+    if ( tabWidgets.count() < 2 ) return;
+
+    QValueList<DTabWidget*> reduced;
+    QValueList<DTabWidget*>::iterator it = tabWidgets.begin();
+    while ( it != tabWidgets.end() )
+    {
+        if ( !reduced.contains( *it ) )
+        {
+            reduced << *it;
+        }
+        ++it;
+    }
+
+    it = reduced.begin();
+    while ( it != reduced.end() )
+    {
+        if ( *it == m_activeTabWidget )
+        {
+            if ( ++it != reduced.end() )
+            {
+                if ( (*it)->currentPage() )
+                    (*it)->currentPage()->setFocus();
+            }
+            else
+            {
+                if ( (*reduced.begin())->currentPage() )
+                    (*reduced.begin())->currentPage()->setFocus();
+            }
+            return;
+        }
+        ++it;
+    }
 }
 
 #include "simplemainwindow.moc"
