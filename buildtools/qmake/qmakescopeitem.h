@@ -102,13 +102,14 @@ public:
 
     Scope* scope;
     QString relativePath();
-    QString getLibAddPath( QString downDirs );
-    QString getLibAddObject( QString downDirs );
-    QString getSharedLibAddObject( QString downDirs );
-    QString getApplicationObject( QString downDirs );
+    QString getLibAddPath( QString );
+    QString getLibAddObject( QString );
+    QString getSharedLibAddObject( QString );
+    QString getApplicationObject( QString );
     QString getIncAddPath( QString downDirs );
     FileItem* createFileItem(const QString& file);
     GroupItem* createGroupItem(GroupItem::GroupType type, const QString& name, QMakeScopeItem* scopeitem);
+    QMap<QString, QString> getLibInfos( QString );
 
     QMakeScopeItem* projectFileItem();
 

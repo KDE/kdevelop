@@ -132,7 +132,13 @@ protected:
     TrollProjectWidget* prjWidget;
     void getAllSubProjects( QMakeScopeItem *item, QPtrList<QMakeScopeItem> *itemList );
 
-
+private:
+    void removeSharedLibDeps();
+    void removeStaticLibDeps();
+    void addSharedLibDeps();
+    void addStaticLibDeps();
+    void removeAppDeps();
+    void addAppDeps();
 };
 
 #endif

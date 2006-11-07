@@ -138,7 +138,6 @@ void Scope::saveToFile() const
         filename = m_parent->projectDir() + QString( QChar( QDir::separator() ) ) + m_incast->projectName;
     if ( filename.isEmpty() )
         return ;
-    kdDebug(9024) << "Stopping dirscan for: " << filename << endl;
     m_part->dirWatch()->stopScan();
     QFile file( filename );
     if ( file.open( IO_WriteOnly ) )
@@ -648,7 +647,6 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             {
                 origValues.append( " " );
                 origValues.append( "\\\n" );
-                kdDebug(9024) << " indent == |" << indent << "|" <<endl;
                 if( indent != "" )
                     origValues.append( indent );
             }else if ( !origValues.isEmpty() && origValues.last() == "\\\n" )
@@ -683,8 +681,6 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
 {
     if ( !m_root || listIsEmpty( values ) )
         return ;
-
-    kdDebug(9024) << "Updating variable:" << variable << endl;
 
     for ( int i = m_root->m_children.count() - 1; i >= 0; --i )
     {
@@ -918,7 +914,6 @@ const QMap<unsigned int, QMap<QString, QString> > Scope::customVariables() const
     if( !m_root )
         return result;
 
-    kdDebug( 9024 ) << "# of custom vars:" << m_customVariables.size() << endl;
     QMap<unsigned int, QMake::AssignmentAST*>::const_iterator it = m_customVariables.begin();
     for ( ; it != m_customVariables.end(); ++it )
     {
@@ -961,7 +956,6 @@ unsigned int Scope::addCustomVariable( const QString& var, const QString& op, co
 
 void Scope::removeCustomVariable( unsigned int id )
 {
-    kdDebug(9024) << "trying to remove " << id << " from " << m_customVariables.keys() << endl;
     if( m_customVariables.contains(id) )
     {
         QMake::AssignmentAST* m = m_customVariables[id];
@@ -1042,8 +1036,6 @@ bool Scope::listsEqual(const QStringList& l1, const QStringList& l2)
     QStringList right = l2;
     left.sort();
     right.sort();
-    kdDebug(9024) << "comparing lists:" << left.join("|").replace("\n","%n") << " == " << right.join("|").replace("\n","%n") << endl;
-    kdDebug(9024) << "Result:" << (left == right) << endl;
     return (left == right);
 }
 

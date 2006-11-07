@@ -152,23 +152,30 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     {
         if ( radioApplication->isChecked() )
         {
+            if( !myProjectItem->scope->variableValues("TEMPLATE").contains("app") )
+            {
+                addAppDeps();
+                removeSharedLibDeps();
+                removeStaticLibDeps();
+            }
             myProjectItem->scope->setEqualOp( "TEMPLATE", "app" );
+            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+                myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
+            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+                myProjectItem->scope->removeFromPlusOp( "CONFIG", "staticlib" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
         }
         else if ( radioLibrary->isChecked() )
         {
             myProjectItem->scope->setEqualOp( "TEMPLATE", "lib" );
             if ( staticRadio->isOn() )
+            {
+                if( myProjectItem->scope->variableValues("CONFIG").contains("dll") )
+                {
+                    addStaticLibDeps();
+                    removeSharedLibDeps();
+                }
                 myProjectItem->addValue( "CONFIG", "staticlib" );
-            else if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
-                myProjectItem->removeValue( "CONFIG", "staticlib" );
-            if ( sharedRadio->isOn() )
-            {
-                myProjectItem->addValue( "CONFIG", "dll" );
-                myProjectItem->scope->setEqualOp( "VERSION", m_targetLibraryVersion->text() );
-            }
-            else
-            {
                 myProjectItem->removeValue( "CONFIG", "dll" );
                 if ( !myProjectItem->scope->listIsEmpty( myProjectItem->scope->variableValues( "VERSION" ) ) )
                 {
@@ -176,6 +183,19 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
                     myProjectItem->scope->removeVariable( "VERSION", "+=" );
                     myProjectItem->scope->removeVariable( "VERSION", "-=" );
                 }
+            }
+            if ( sharedRadio->isOn() )
+            {
+                kdDebug(9024) << "Activating debug lib:" << myProjectItem->scope->variableValues("CONFIG") << endl;
+                if( !myProjectItem->scope->variableValues("CONFIG").contains("dll") )
+                {
+                    addSharedLibDeps();
+                    removeStaticLibDeps();
+                }
+                myProjectItem->addValue( "CONFIG", "dll" );
+                myProjectItem->scope->setEqualOp( "VERSION", m_targetLibraryVersion->text() );
+                if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+                    myProjectItem->removeValue( "CONFIG", "staticlib" );
             }
             if ( checkPlugin->isOn() )
                 myProjectItem->addValue( "CONFIG", "plugin" );
@@ -187,9 +207,20 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
                 myProjectItem->removeValue( "CONFIG", "designer" );
 
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_lib" ) );
+            removeAppDeps();
         }
         else if ( radioSubdirs->isChecked() )
         {
+            if( !myProjectItem->scope->variableValues("TEMPLATE").contains("subdirs") )
+            {
+                removeSharedLibDeps();
+                removeStaticLibDeps();
+                removeAppDeps();
+            }
+            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+                myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
+            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+                myProjectItem->scope->removeFromPlusOp( "CONFIG", "staticlib" );
             myProjectItem->scope->setEqualOp( "TEMPLATE", "subdirs" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_sub" ) );
         }
@@ -1669,10 +1700,132 @@ void ProjectConfigurationDlg::activateApply( const QString& )
     buttonApply->setEnabled( true );
 }
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
-
 void ProjectConfigurationDlg::activateApply( QListViewItem* )
 {
     buttonApply->setEnabled( true );
 }
 
+void ProjectConfigurationDlg::removeSharedLibDeps()
+{
+    QListViewItemIterator it(myProjectItem->listView());
+    for( ; it.current() ; ++it )
+    {
+        QMakeScopeItem* prjItem = static_cast<QMakeScopeItem*>( it.current() );
+        if( prjItem == myProjectItem || !prjItem->isEnabled() )
+            continue;
+
+        QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
+
+        if( prjItem->scope->variableValues("LIBS").contains(infos["shared_lib"]) )
+            prjItem->scope->removeFromPlusOp("LIBS", infos["shared_lib"]);
+        if( prjItem->scope->variableValues("LIBS").contains(infos["shared_libdir"]) )
+            prjItem->scope->removeFromPlusOp("LIBS", infos["shared_libdir"]);
+        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["shared_depend"]) )
+            prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["shared_depend"]);
+
+        prjItem->scope->saveToFile();
+    }
+}
+
+void ProjectConfigurationDlg::addStaticLibDeps()
+{
+    QListViewItemIterator it(myProjectItem->listView());
+    for( ; it.current() ; ++it )
+    {
+        QMakeScopeItem* prjItem = static_cast<QMakeScopeItem*>( it.current() );
+        if( prjItem == myProjectItem || !prjItem->isEnabled() )
+            continue;
+
+        QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
+
+        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["app_depend"])
+            || prjItem->scope->variableValues("TARGETDEPS").contains(infos["shared_depend"]) )
+        {
+            prjItem->scope->addToPlusOp("LIBS", infos["static_lib"]);
+            prjItem->scope->addToPlusOp("TARGETDEPS", infos["static_depend"]);
+        }
+
+        prjItem->scope->saveToFile();
+    }
+}
+
+void ProjectConfigurationDlg::removeStaticLibDeps()
+{
+    QListViewItemIterator it(myProjectItem->listView());
+    for( ; it.current() ; ++it )
+    {
+        QMakeScopeItem* prjItem = static_cast<QMakeScopeItem*>( it.current() );
+        if( prjItem == myProjectItem || !prjItem->isEnabled() )
+            continue;
+
+
+        QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
+
+        if( prjItem->scope->variableValues("LIBS").contains(infos["static_lib"]) )
+            prjItem->scope->removeFromPlusOp("LIBS", infos["static_lib"]);
+        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["static_depend"]) )
+            prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["static_depend"]);
+        prjItem->scope->saveToFile();
+    }
+}
+
+void ProjectConfigurationDlg::addSharedLibDeps()
+{
+    QListViewItemIterator it(myProjectItem->listView());
+    for( ; it.current() ; ++it )
+    {
+        QMakeScopeItem* prjItem = static_cast<QMakeScopeItem*>( it.current() );
+        if( prjItem == myProjectItem || !prjItem->isEnabled() )
+            continue;
+
+        QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
+        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["app_depend"])
+            || prjItem->scope->variableValues("TARGETDEPS").contains(infos["static_depend"]) )
+        {
+            prjItem->scope->addToPlusOp("LIBS", infos["shared_lib"]);
+            prjItem->scope->addToPlusOp("LIBS", infos["shared_libdir"]);
+            prjItem->scope->addToPlusOp("TARGETDEPS", infos["shared_depend"]);
+        }
+
+        prjItem->scope->saveToFile();
+    }
+}
+
+void ProjectConfigurationDlg::removeAppDeps()
+{
+    QListViewItemIterator it(myProjectItem->listView());
+    for( ; it.current() ; ++it )
+    {
+        QMakeScopeItem* prjItem = static_cast<QMakeScopeItem*>( it.current() );
+        if( prjItem == myProjectItem || !prjItem->isEnabled() )
+            continue;
+
+        QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
+
+        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["app_depend"]) )
+            prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["app_depend"]);
+
+        prjItem->scope->saveToFile();
+    }
+}
+
+void ProjectConfigurationDlg::addAppDeps()
+{
+    QListViewItemIterator it(myProjectItem->listView());
+    for( ; it.current() ; ++it )
+    {
+        QMakeScopeItem* prjItem = static_cast<QMakeScopeItem*>( it.current() );
+        if( prjItem == myProjectItem || !prjItem->isEnabled() )
+            continue;
+
+        QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
+
+        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["shared_depend"])
+            || prjItem->scope->variableValues("TARGETDEPS").contains(infos["static_depend"]) )
+            prjItem->scope->addToPlusOp("TARGETDEPS", infos["app_depend"]);
+
+        prjItem->scope->saveToFile();
+    }
+}
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

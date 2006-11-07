@@ -332,7 +332,7 @@ QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
     if ( scope->variableValues( "CONFIG" ).contains( "dll" ) )
     {
         QString tmpPath = getRelativePath(basePath, scope->projectDir() );
-        if ( scope->variableValues( "DESTDIR" ).front() != "" )
+        if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
                 tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
@@ -347,7 +347,7 @@ QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
         tmpPath = QDir::cleanDirPath( tmpPath );
 
         QString libString;
-        if ( scope->variableValues( "TARGET" ).front() != "" )
+        if ( !scope->variableValues( "TARGET" ).front().isEmpty() )
         {
             libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + scope->variableValues( "TARGET" ).front() + ".so";
 
@@ -365,7 +365,7 @@ QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
 QString QMakeScopeItem::getApplicationObject( QString basePath )
 {
     QString tmpPath = getRelativePath(basePath, scope->projectDir() );
-    if ( scope->variableValues( "DESTDIR" ).front() != "" )
+    if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
             tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
@@ -384,11 +384,12 @@ QString QMakeScopeItem::getApplicationObject( QString basePath )
     else
         return tmpPath + QString( QChar( QDir::separator() ) ) + scope->variableValues( "TARGET" ).front();
 }
+
 QString QMakeScopeItem::getLibAddObject( QString basePath )
 {
     if ( scope->variableValues( "CONFIG" ).contains( "dll" ) )
     {
-        if ( scope->variableValues( "TARGET" ).front() != "" )
+        if ( !scope->variableValues( "TARGET" ).front().isEmpty() )
         {
             return ( "-l" + scope->variableValues( "TARGET" ).front() );
         }
@@ -401,7 +402,7 @@ QString QMakeScopeItem::getLibAddObject( QString basePath )
             || scope->variableValues("TEMPLATE").contains("lib") )
     {
         QString tmpPath = getRelativePath(basePath, scope->projectDir() );
-        if ( scope->variableValues( "DESTDIR" ).front() != "" )
+        if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
                 tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
@@ -416,7 +417,7 @@ QString QMakeScopeItem::getLibAddObject( QString basePath )
         tmpPath = QDir::cleanDirPath( tmpPath );
 
         QString libString;
-        if ( scope->variableValues( "TARGET" ).front() != "" )
+        if ( !scope->variableValues( "TARGET" ).front().isEmpty() )
         {
             libString = tmpPath + QString( QChar( QDir::separator() ) ) + "lib" + scope->variableValues( "TARGET" ).front() + ".a";
 
@@ -438,7 +439,7 @@ QString QMakeScopeItem::getLibAddPath( QString basePath )
     if ( !( scope->variableValues( "CONFIG" ).contains( "dll" ) ) ) return ( "" );
 
     QString tmpPath = getRelativePath(basePath, scope->projectDir() );
-    if ( scope->variableValues( "DESTDIR" ).front() != "" )
+    if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
             tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
@@ -799,6 +800,57 @@ int QMakeScopeItem::compare( QListViewItem* i, int , bool ) const
         return -1;
     else
         return 0;
+}
+
+QMap<QString, QString> QMakeScopeItem::getLibInfos( QString basePath )
+{
+
+    QMap<QString, QString> result;
+    if ( scope->variableValues( "TARGET" ).front().isEmpty() )
+        result["shared_lib"] = "-l"+scope->projectName();
+    else
+        result["shared_lib"] = "-l"+scope->variableValues( "TARGET" ).front();
+
+    QString tmpPath = getRelativePath(basePath, scope->projectDir() );
+    if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
+    {
+        if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
+            tmpPath += QString( QChar( QDir::separator() ) ) + scope->variableValues( "DESTDIR" ).front();
+        else
+            tmpPath = scope->variableValues( "DESTDIR" ).front();
+    }
+    else
+    {
+        tmpPath += QString( QChar( QDir::separator() ) );
+    }
+
+    tmpPath = QDir::cleanDirPath( tmpPath );
+
+    result["shared_libdir"] = "-L"+tmpPath;
+
+    if ( scope->variableValues( "TARGET" ).front().isEmpty() )
+        result["shared_depend"] = tmpPath+QString(QChar(QDir::separator()))+"lib"+scope->projectName()+".so";
+    else
+        result["shared_depend"] = tmpPath+QString(QChar(QDir::separator()))+"lib"+scope->variableValues( "TARGET" ).front()+".so";
+
+
+    if ( scope->variableValues( "TARGET" ).front().isEmpty() )
+        result["static_lib"] = tmpPath+QString(QChar(QDir::separator()))+"lib"+scope->projectName()+".a";
+    else
+        result["static_lib"] = tmpPath+QString(QChar(QDir::separator()))+"lib"+scope->variableValues( "TARGET" ).front()+".a";
+
+    result["static_depend"] = result["static_lib"];
+
+    if ( scope->variableValues( "TARGET" ).front().isEmpty() )
+        result["app_depend"] = tmpPath + QString( QChar( QDir::separator() ) ) + scope->projectName();
+    else
+        result["app_depend"] = tmpPath + QString( QChar( QDir::separator() ) ) + scope->variableValues( "TARGET" ).front();
+
+    QString map;
+    for( QMap<QString, QString>::const_iterator it = result.begin(); it != result.end(); ++it )
+        map += "["+it.key() + "=>" +it.data() + "],";
+    kdDebug(9024) << "Running getLibInfo for" << scope->projectName() << "|" << map << endl;
+    return result;
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
