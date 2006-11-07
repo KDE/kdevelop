@@ -121,7 +121,6 @@ AssignmentAST::~AssignmentAST()
 
 void AssignmentAST::writeBack(QString &buffer)
 {
-    kdDebug(9024) << "Writing variable: " << scopedID << " " << op << endl;
     if( !buffer.endsWith(": ") )
         buffer += indentation();
     buffer += scopedID + " " + op;
