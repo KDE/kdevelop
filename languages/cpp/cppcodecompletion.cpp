@@ -1659,6 +1659,16 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
   return ret;
 }
 
+void macrosToDriver( Driver& d, FileDom file ) {
+	ParseResultPointer p;
+	if( file )
+		p = file->parseResult();
+	ParsedFile* pf = dynamic_cast<ParsedFile*>( p.data() );
+	if( pf ) {
+		d.insertMacros( pf->usedMacros() ); ///Add macros
+	}
+}
+
 SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int line, int col, SimpleTypeConfiguration& conf ) {
   if ( !f )
     return 0;
@@ -1675,7 +1685,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 
   Driver d;
   Lexer lexer( &d );
-  /// @todo setup the lexer(i.e. adds macro, special words, ...
+	macrosToDriver( d, f->file() );
 
   lexer.setSource( contents );
   Parser parser( &d, &lexer );
@@ -2286,7 +2296,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
       Driver d;
       Lexer lexer( &d );
-      /// @todo setup the lexer(i.e. adds macro, special words, ...
+	    
+			macrosToDriver( d, file );
 
       lexer.setSource( textToReparse );
       Parser parser( &d, &lexer );
@@ -2451,7 +2462,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
       Driver d;
       Lexer lexer( &d );
-      /// @todo setup the lexer(i.e. adds macro, special words, ...
+    	macrosToDriver( d, file );
 
       lexer.setSource( textToReparse );
       Parser parser( &d, &lexer );
@@ -4049,7 +4060,7 @@ HashedStringSet CppCodeCompletion::getIncludeFiles( const QString& fi ) {
 	if( file.isEmpty() )
 		file = m_activeFileName;
 	
-	FileDom f = m_pSupport->codeModel() ->fileByName( m_activeFileName );
+	FileDom f = m_pSupport->codeModel() ->fileByName( file );
 	if( f ) {
 		ParseResultPointer p = f->parseResult();
 		if( p ) {
