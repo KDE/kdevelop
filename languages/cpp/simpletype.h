@@ -612,7 +612,7 @@ class SimpleTypeImpl : public KShared {
 
     ///replaces template-parameters from the given structure with their value-types
     TypeDesc replaceTemplateParams( TypeDesc desc, TemplateParamInfo& paramInfo );
-    TypeDesc resolveTemplateParams( TypeDesc desc, LocateMode mode = Normal );
+    TypeDesc resolveTemplateParams( LocateResult desc, LocateMode mode = Normal );
 
 	//typedef ::LocateResult LocateResult;
 

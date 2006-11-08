@@ -340,7 +340,7 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
         //dbgMajor() << " could not evaluate " << expr << endl;
   ifVerboseMajor( dbgMajor() << "evaluating \"" << expr << "\" as atomic expression" << endl );
 
-	TypeDesc exp = m_ctx->container()->resolveTemplateParams( expr );
+  TypeDesc exp = m_ctx->container()->resolveTemplateParams( TypeDesc(expr) );
 
 	ifVerboseMajor( dbgMajor() << "after template-parameter resolution: \"" << exp << "\"" << endl );
 	

@@ -1660,6 +1660,7 @@ ExpressionInfo CppCodeCompletion::findExpressionAt( int line, int column, int st
 }
 
 void macrosToDriver( Driver& d, FileDom file ) {
+  return;  //Deactivate this for now, because macros can cause inconsistency of line/column-numbers between processed text and the not-processed text of the buffer
 	ParseResultPointer p;
 	if( file )
 		p = file->parseResult();
@@ -1936,8 +1937,25 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
   QString word;
 
-		if ( !m_cachedFromContext )
-			conf.setGlobalNamespace( createGlobalNamespace() );
+  {
+    ExpressionInfo exp_ = findExpressionAt( line, column , line, 0 );
+
+    if( file->parseResult() ) {
+      ParsedFilePointer p = dynamic_cast<ParsedFile*>( file->parseResult().data());
+      if( p ) {
+        if( p->usedMacros().hasMacro( exp_.expr() ) ) {
+          //It is a macro, return it
+          ret.expr = exp_.expr();
+          ret.isMacro = true;
+          ret.macro = p->usedMacros().macro( exp_.expr() );
+          return ret;
+        }
+      }
+    }
+  }
+
+	if ( !m_cachedFromContext )
+		conf.setGlobalNamespace( createGlobalNamespace() );
 	
   ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
 
@@ -1967,19 +1985,6 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
         ExpressionInfo exp = findExpressionAt( line, column , startLine, endLine, true );
         if ( ( opt & DefaultAsTypeExpression ) && ( !exp.canBeNormalExpression() && !exp.canBeTypeExpression() ) && !exp.expr().isEmpty() )
           exp.t = ExpressionInfo::TypeExpression;
-
-	      if( file->parseResult() ) {
-		      ParsedFilePointer p = dynamic_cast<ParsedFile*>( file->parseResult().data());
-		      if( p ) {
-			      if( p->usedMacros().hasMacro( exp.expr() ) ) {
-				      //It is a macro, return it
-				      ret.expr = exp.expr();
-				      ret.isMacro = true;
-				      ret.macro = p->usedMacros().macro( exp.expr() );
-				      return ret;
-			      }
-		      }
-	      }
 
         if ( exp.canBeTypeExpression() ) {
           {
@@ -2295,7 +2300,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
       Driver d;
       Lexer lexer( &d );
 	    
-			macrosToDriver( d, file );
+      macrosToDriver( d, file );
 
       lexer.setSource( textToReparse );
       Parser parser( &d, &lexer );

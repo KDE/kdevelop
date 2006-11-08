@@ -186,6 +186,8 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, Membe
   MemberInfo mem = findMember( td, typ );
 
   if ( mem ) {
+    mem.type = resolveTemplateParams( mem.type );
+
     ifVerbose( dbg() << "\"" << str() << "\": found member " << name << ", type: " << mem.type->fullNameChain() << endl );
     if ( mem.memberType == MemberInfo::Function ) {
       ///For functions, find all functions with the same name, so that overloaded functions can be identified correctly
@@ -324,14 +326,14 @@ TypeDesc SimpleTypeImpl::replaceTemplateParams( TypeDesc desc, TemplateParamInfo
   return ret;
 }
 
-TypeDesc SimpleTypeImpl::resolveTemplateParams( TypeDesc desc, LocateMode mode ) {
+TypeDesc SimpleTypeImpl::resolveTemplateParams( LocateResult desc, LocateMode mode ) {
   Debug d( "#resd#" );
   if ( !d || !safetyCounter )
     return desc;
 
-  TypeDesc ret = desc;
-  if ( ret.hasTemplateParams() ) {
-    TypeDesc::TemplateParams & params = ret.templateParams();
+  LocateResult ret = desc;
+  if ( ret->hasTemplateParams() ) {
+    TypeDesc::TemplateParams & params = ret->templateParams();
     for ( TypeDesc::TemplateParams::iterator it = params.begin(); it != params.end(); ++it ) {
       if ( !( *it ) ->resolved() && !( *it ) ->hasFlag( ResolutionTried ) ) {
         *it = locateDecType( **it, mode );
@@ -340,8 +342,8 @@ TypeDesc SimpleTypeImpl::resolveTemplateParams( TypeDesc desc, LocateMode mode )
     }
   }
 
-  if ( ret.next() ) {
-    ret.setNext( new TypeDescShared( resolveTemplateParams( *ret.next(), mode ) ) );
+  if ( ret->next() ) {
+    ret->setNext( new TypeDescShared( resolveTemplateParams( *ret->next(), mode ) ) );
   }
 
   return ret;
