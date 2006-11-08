@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Ian Reinhart Geiser", I18N_NOOP("Dist part, bash support, application templates"), "geiseri@yahoo.com");
   aboutData.addAuthor("Matthias Hoelzer-Kluepfel", I18N_NOOP("Several components, htdig indexing"), "hoelzer@kde.org");
   aboutData.addAuthor("Victor Roeder", I18N_NOOP("Help with Automake manager and persistant class store"), "victor_roeder@gmx.de");
+  aboutData.addAuthor("Megan Webb", I18N_NOOP("Automake manager patches, Astyle plugin update, plugin patches and improvements"),"kdeveloper.megan@gmail.com");
   aboutData.addAuthor("Harald Fernengel", I18N_NOOP("Ported to Qt 3, patches, valgrind, diff and perforce support"), "harry@kdevelop.org");
   aboutData.addAuthor("Roberto Raggi", I18N_NOOP("QEditor component, code completion, Abbrev component, C++ support, Java support"), "roberto@kdevelop.org");
   aboutData.addAuthor("Simon Hausmann", I18N_NOOP("Help with KParts infrastructure"), "hausmann@kde.org");
