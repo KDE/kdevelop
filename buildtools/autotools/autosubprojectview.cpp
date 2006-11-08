@@ -503,7 +503,7 @@ void AutoSubprojectView::slotRemoveSubproject()
     spitem = 0;
 
     // Adjust SUBDIRS variable in containing Makefile.am
-    QMap<QString,QString> replaceMap;
+
     if (parent->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
     {
         QFile subdirsfile( parent->path + "/subdirs" );
@@ -524,8 +524,10 @@ void AutoSubprojectView::slotRemoveSubproject()
             subdirsfile.close();
         }
     }
-	replaceMap.insert( "SUBDIRS", parent->variables["SUBDIRS"] );
-	AutoProjectTool::modifyMakefileam( parent->path + "/Makefile.am", replaceMap );
+
+	QMap<QString,QString> replaceMap;
+	    replaceMap.insert( "SUBDIRS", subdirToRemove );
+	AutoProjectTool::removeFromMakefileam( parent->path + "/Makefile.am", replaceMap );
 
 	QString relmakefile = ( parent->path + "/Makefile" ).mid( m_part->projectDirectory().length()+1 );
 	kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;

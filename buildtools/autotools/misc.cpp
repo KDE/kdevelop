@@ -29,7 +29,7 @@ static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject 
 	KService::Ptr service = KService::serviceByDesktopName( name );
 	if ( !service )
 	{
-		kdDebug( 9020 ) << "Can't find service " << name;
+		kdDebug( 9020 ) << "Can't find service " << name << endl;
 		return 0;
 	}
 
@@ -460,7 +460,6 @@ void AutoProjectTool::addRemoveMakefileam(const QString &fileName, QMap<QString,
 				else
 				{
 					// we are removing our interested values from this line
-
 					// special case - no values, remove the line..
 					if (!ourRhs->empty())
 					{
@@ -525,7 +524,7 @@ void AutoProjectTool::addRemoveMakefileam(const QString &fileName, QMap<QString,
 			QMap<QString, bool>* ourRhs = it.current();
 
 			QString newLine(lhs);
-			if (seenLhs.find(lastLhs) == seenLhs.end())
+			if (seenLhs.find(lhs) == seenLhs.end())
 			{
 				newLine += " = ";
 				seenLhs[lastLhs] = "";
