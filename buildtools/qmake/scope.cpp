@@ -663,11 +663,11 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
         } else if ( origValues.contains( *it ) && remove )
         {
             QStringList::iterator posit = origValues.find( *it );
-            posit++;
-            if ( *posit == "\\\n" || (*posit).stripWhiteSpace() == "" )
-                origValues.remove( posit );
-            origValues.remove( *it );
-
+            posit = origValues.remove( posit );
+            while( posit != origValues.end() && ( *posit == "\\\n" || (*posit).stripWhiteSpace() == "" ) )
+            {
+                posit = origValues.remove( posit );
+            }
         }
     }
     while( !origValues.isEmpty() && (origValues.last() == "\\\n"
