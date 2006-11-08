@@ -30,10 +30,60 @@
 #endif
 
 
-/*#if defined Q_OS_WIN
-# include <kdelibs_export_win.h>
+#if defined Q_OS_WIN
+
+#ifndef KDEVINTERFACES_EXPORT
+# ifdef MAKE_KDEVINTERFACES_LIB
+#  define KDEVINTERFACES_EXPORT KDE_EXPORT
+# else
+#  define KDEVINTERFACES_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KDEVPROJECTMANAGER_EXPORT
+# ifdef MAKE_KDEVPROJECTMANAGER_LIB
+#  define KDEVPROJECTMANAGER_EXPORT KDE_EXPORT
+# else
+#  define KDEVPROJECTMANAGER_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KDEVUTIL_EXPORT
+# ifdef MAKE_KDEVUTIL_LIB
+#  define KDEVUTIL_EXPORT KDE_EXPORT
+# else
+#  define KDEVUTIL_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KDEVWIDGETS_EXPORT
+# ifdef MAKE_KDEVWIDGETS_LIB
+#  define KDEVWIDGETS_EXPORT KDE_EXPORT
+# else
+#  define KDEVWIDGETS_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KDEVWEAVER_EXPORT
+# ifdef MAKE_KDEVWEAVER_LIB
+#  define KDEVWEAVER_EXPORT KDE_EXPORT
+# else
+#  define KDEVWEAVER_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KDEVPROFILES_EXPORT
+# ifdef MAKE_KDEVPROFILES_LIB
+#  define KDEVPROFILES_EXPORT KDE_EXPORT
+# else
+#  define KDEVPROFILES_EXPORT KDE_IMPORT
+# endif
+#endif
+
+
+
 #else //UNIX
-*/
+
 
 /* export statements for unix */
 #define KDEVINTERFACES_EXPORT KDE_EXPORT
@@ -44,4 +94,5 @@
 #define KDEVPROFILES_EXPORT KDE_EXPORT
 
 #endif /* KDEVEXPORT_H*/
+#endif
 
