@@ -413,6 +413,8 @@ class MacroSet {
         mutable bool m_valueHashValid;
         mutable size_t m_idHash; //Hash that represents the ids of all macros
         mutable size_t m_valueHash; //Hash that represents the values of all macros
+
+        friend class Driver;
 };
 
 class ParsedFile;
@@ -425,8 +427,11 @@ class ParsedFile : public AbstractParseResult {
           QString includePath;
           ParsedFilePointer parsed; //May be zero!
       };
-    ParsedFile() {
-    }
+//     ParsedFile() {
+//     }
+      ParsedFile( QDataStream& s ) {
+	read( s );
+      }
 
     ParsedFile( const QString& fileName, const QDateTime& timeStamp );
     
@@ -441,7 +446,7 @@ class ParsedFile : public AbstractParseResult {
     /**
      * @return Absolutely all files included by this one(no matter through how many other files they were included)
      */
-    HashedStringSet& includeFiles();
+//     HashedStringSet& includeFiles();
     
     const HashedStringSet& includeFiles() const;
 
@@ -644,6 +649,10 @@ class Driver {
      * @return The macros
      */
     MacroMap macros() const;
+
+    /**
+     * Take all macros from the given map(forgetting own macros) */
+    void insertMacros( const MacroSet& macros );
     /**
      * Get the list of problem areas the driver contains
      * @param fileName The filename to get problems for

@@ -390,6 +390,13 @@ Driver::MacroMap Driver::macros() const {
   return m_macros;
 }
 
+void Driver::insertMacros( const MacroSet& macros ) {
+    for( MacroSet::Macros::const_iterator it = macros.m_usedMacros.begin(); it != macros.m_usedMacros.end(); ++it ) {
+        addMacro( *it );
+    }
+    
+}
+        
 QValueList < Problem > Driver::problems( const QString & fileName ) const {
   QMap<QString, QValueList<Problem> >::ConstIterator it = m_problems.find( fileName );
   if ( it != m_problems.end() )
@@ -607,7 +614,8 @@ void Driver::fileParsed( const ParsedFile & fileName ) {
 }
 
 void Driver::usingMacro( const Macro& macro, int line, int column ) {
-    m_currentParsedFile->usedMacros().addMacro( macro, line, column );
+    if( m_currentParsedFile )
+        m_currentParsedFile->usedMacros().addMacro( macro, line, column );
 }
 
 // void Macro::computeHash() const {
@@ -682,7 +690,7 @@ MacroSet& ParsedFile::usedMacros() {
 }
 
 ParsedFile::ParsedFile( const QString& fileName, const QDateTime& timeStamp ) : m_translationUnit( 0 ), m_fileName( fileName ), m_timeStamp( timeStamp ) {
-    includeFiles().insert( fileName );
+    m_includeFiles.insert( fileName );
 }
 
 ParsedFile::ParsedFile( const QByteArray& array ) {
@@ -737,9 +745,9 @@ void ParsedFile::setTranslationUnit( const TranslationUnitAST::Node& trans ) {
   m_translationUnit = trans;
 }
 
-HashedStringSet& ParsedFile::includeFiles() {
-    return m_includeFiles;
-}
+// HashedStringSet& ParsedFile::includeFiles() {
+//     return m_includeFiles;
+// }
 
 const HashedStringSet& ParsedFile::includeFiles() const {
     return m_includeFiles;
@@ -754,9 +762,9 @@ QDateTime ParsedFile::timeStamp() const {
 }
 
 void ParsedFile::addIncludeFile( const QString& includePath, const ParsedFilePointer& parsed, bool localInclude ) {
-    includeFiles().insert( includePath );
+    m_includeFiles.insert( includePath );
     if( parsed )
-        includeFiles() += parsed->includeFiles();
+        m_includeFiles += parsed->includeFiles();
     IncludeDesc d;
     d.local = localInclude;
     d.includePath = includePath;
