@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Caleb Tennis", I18N_NOOP("KTabBar, bugfixes"), "caleb@aei-tech.com");
   aboutData.addAuthor("Richard Dale", I18N_NOOP("Java & Objective C support"), "Richard_Dale@tipitina.demon.co.uk");
   aboutData.addAuthor("John Birch", I18N_NOOP("Debugger frontend"), "jbb@kdevelop.org");
+  aboutData.addAuthor("Vladimir Prus", I18N_NOOP("Debugger frontend"), "ghost@cs.msu.su");
   aboutData.addAuthor("Sandy Meier", I18N_NOOP("PHP support, context menu stuff"), "smeier@kdevelop.org");
   aboutData.addAuthor("Kurt Granroth", I18N_NOOP("KDE application templates"), "kurth@granroth.org");
   aboutData.addAuthor("Ian Reinhart Geiser", I18N_NOOP("Dist part, bash support, application templates"), "geiseri@yahoo.com");
