@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
                        I18N_NOOP("(c) 1999-2006, The KDevelop developers"), "", "http://www.kdevelop.org");
   aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Release coordinator, Overall improvements, Pascal support, C++ support, New File and Documentation parts"), "adymo@kdevelop.org");
   aboutData.addAuthor("Amilcar do Carmo Lucas", I18N_NOOP("Release coordinator, API documentation, Doxygen and autoproject patches"), "amilcar@ida.ing.tu-bs.de");
+  aboutData.addAuthor("David Nolden", I18N_NOOP("Advanced C++ code completion, C++ support, overall improvements"), "david.nolden.kdevelop@art-master.de");
   aboutData.addAuthor("Bernd Gehrmann", I18N_NOOP("Initial idea, basic architecture, much initial source code"), "bernd@kdevelop.org");
   aboutData.addAuthor("Caleb Tennis", I18N_NOOP("KTabBar, bugfixes"), "caleb@aei-tech.com");
   aboutData.addAuthor("Richard Dale", I18N_NOOP("Java & Objective C support"), "Richard_Dale@tipitina.demon.co.uk");
