@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Roberto Raggi", I18N_NOOP("QEditor component, code completion, Abbrev component, C++ support, Java support"), "roberto@kdevelop.org");
   aboutData.addAuthor("Simon Hausmann", I18N_NOOP("Help with KParts infrastructure"), "hausmann@kde.org");
   aboutData.addAuthor("Oliver Kellogg", I18N_NOOP("Ada support"), "okellogg@users.sourceforge.net");
+  aboutData.addAuthor("Andreas Pakulat", I18N_NOOP("QMake projectmanager, Qt4 Support"), "apaku@gmx.de");
   aboutData.addAuthor("Jakob Simon-Gaarde", I18N_NOOP("QMake projectmanager"), "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("F@lk Brettschneider", I18N_NOOP("MDI modes, QEditor, bugfixes"), "falkbr@kdevelop.org");
   aboutData.addAuthor("Mario Scalas", I18N_NOOP("PartExplorer, redesign of CvsPart, patches, bugs(fixes)"), "mario.scalas@libero.it");
