@@ -159,6 +159,17 @@ class Macro {
         return false;
       }
     };
+    struct NameCompare {
+      bool operator () ( const Macro& lhs, const Macro& rhs ) const {
+          size_t lhash = lhs.idHash();
+          size_t rhash = rhs.idHash();
+          if( lhash < rhash ) return true;
+          else if( lhash > rhash ) return false;
+          
+        int df = lhs.m_name.compare( rhs.m_name );
+        return df < 0;
+      }
+    };
 
     struct NameArgHash {
         size_t operator () ( const Macro& macro ) const {
@@ -339,9 +350,9 @@ class Macro {
     }
     
     void computeHash() const {
-        m_idHash = 7 * ( HashedString::hashString( m_name ) + m_argumentList.count() * 13 );
+        m_idHash = 7 * ( HashedString::hashString( m_name ) );
         int a = 1;
-        m_idHash += 31 * m_argumentList.count();
+      //m_idHash += 31 * m_argumentList.count();
     
         m_valueHash = 27 * ( HashedString::hashString( m_body ) +  (m_isUndefMacro ? 1 : 0 ) );
 
@@ -373,7 +384,7 @@ class Macro {
 class MacroSet {
     public:
         //typedef __gnu_cxx::hash_set< Macro, Macro::NameArgHash, Macro::NameArgEqual > Macros;
-        typedef std::set< Macro, Macro::NameArgCompare > Macros;
+        typedef std::set< Macro, Macro::NameCompare > Macros;
         MacroSet() : m_idHashValid( false ), m_valueHashValid( false ) {
         }
 

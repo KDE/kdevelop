@@ -260,7 +260,7 @@ private:
     void nextChar( int n );
     void skip( int l, int r );
     void readIdentifier();
-    void readWhiteSpaces( bool skipNewLine=true );
+    void readWhiteSpaces( bool skipNewLine=true, bool skipOnlyOnce=false );
     void readLineComment();
     void readMultiLineComment();
     void readCharLiteral();
@@ -551,7 +551,7 @@ inline void Lexer::readIdentifier()
         nextChar();
 }
 
-inline void Lexer::readWhiteSpaces( bool skipNewLine )
+inline void Lexer::readWhiteSpaces( bool skipNewLine, bool skipOnlyOnce )
 {
     while( !currentChar().isNull() ){
         QChar ch = currentChar();
@@ -562,9 +562,12 @@ inline void Lexer::readWhiteSpaces( bool skipNewLine )
             nextChar();
         } else if( m_inPreproc && currentChar() == '\\' ){
             nextChar();
-            readWhiteSpaces( true );
+            readWhiteSpaces( true, true );
         } else {
             break;
+        }
+        if( skipOnlyOnce && ch == '\n' ) {
+          skipNewLine = false;
         }
     }
 }

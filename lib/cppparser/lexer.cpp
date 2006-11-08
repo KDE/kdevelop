@@ -688,7 +688,8 @@ void Lexer::processDefine( Macro& m )
 	    Token tk(m_source);
 	    nextToken( tk, true );
 
-	    if( tk.type() != -1 && tk.type() != Token_comment ){
+    //Do not ignore c-style comments, those may be useful in the body, and ignoring them using this check causes problems
+    if( tk.type() != -1 && (tk.type() != Token_comment || ( tk.text().length() >= 2 && tk.text()[1] == '*') ) ){
                 QString s = tk.text();
 		body += s;
 	    }
