@@ -574,7 +574,6 @@ void TypeDesc::clearInstanceInfo() {
   m_data->m_pointerDepth = 0;
   m_data->m_dec.clear();
 }
-simpletypefunction.cpp cppcodecompletion.cpp typedesc.cpp simpletypecatalog.cpp  simpletype.cpp
 
 void TypeDesc::takeTemplateParams( const QString& string ) {
   makeDataPrivate();
