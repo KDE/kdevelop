@@ -119,10 +119,18 @@ the version in all files after changing this.</string>
             <property name="name">
                 <cstring>email_edit</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Used in templates as $EMAIL$
+Placed in the AUTHORS file</string>
+            </property>
         </widget>
         <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>author_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Used in templates as $AUTHOR$
+Placed in the AUTHORS file</string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="1">
@@ -165,6 +173,9 @@ the version in all files after changing this.</string>
             <property name="name">
                 <cstring>project_directory_edit</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Where the project starts.</string>
+            </property>
         </widget>
         <widget class="KSqueezedTextLabel" row="1" column="2" rowspan="1" colspan="3">
             <property name="name">
@@ -197,6 +208,9 @@ the version in all files after changing this.</string>
         <widget class="QTextEdit" row="6" column="0" rowspan="1" colspan="5">
             <property name="name">
                 <cstring>description_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Text that stays in the project file.</string>
             </property>
         </widget>
     </grid>

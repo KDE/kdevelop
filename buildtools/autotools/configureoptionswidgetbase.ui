@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigureOptionsWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -43,7 +43,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Con&amp;figuration:</string>
+                        <string>&amp;Configuration:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>config_combo</cstring>
@@ -63,6 +63,12 @@
                     </property>
                     <property name="editable">
                         <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Different build profiles</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>profiles</string>
                     </property>
                 </widget>
                 <spacer>
@@ -142,6 +148,12 @@
                         <property name="name">
                             <cstring>configargs_edit</cstring>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Options to pass to configure. eg. --prefix=&lt;install dir&gt;</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Options to pass to configure. eg. --prefix=&lt;install dir&gt;</string>
+                        </property>
                     </widget>
                     <widget class="QLabel" row="3" column="0" rowspan="1" colspan="5">
                         <property name="name">
@@ -176,7 +188,7 @@
                             <cstring>topsourcedir_label</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Top source directory:</string>
+                            <string>Top source &amp;directory:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>topsourcedir_edit</cstring>
@@ -185,6 +197,36 @@
                     <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="3">
                         <property name="name">
                             <cstring>builddir_edit</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>The build process will place the object
+files and binary in this directory. 
+
+If the name does not have a leading /
+then it is relative to the project directory.
+(in the General page)
+
+The build process also checks here for 
+a Makefile and a configure script.
+
+If you have imported a project and you were 
+building in the project directory, you 
+probably want this to be blank.</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>The build process will place the object
+files and binary in this directory. 
+
+If the name does not have a leading /
+then it is relative to the project directory.
+(in the General page)
+
+The build process also checks here for 
+a Makefile and a configure script.
+
+If you have imported a project and you were 
+building in the project directory, you 
+probably want this to be blank.</string>
                         </property>
                     </widget>
                     <widget class="QPushButton" row="4" column="4">
@@ -248,6 +290,18 @@
                         <property name="name">
                             <cstring>topsourcedir_edit</cstring>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Where to start looking for the src files.
+If the name does not have a leading /
+then it is relative to the project directory.
+(in the General page)</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Where to start looking for the src files.
+If the name does not have a leading /
+then it is relative to the project directory.
+(in the General page)</string>
+                        </property>
                     </widget>
                     <spacer row="6" column="0">
                         <property name="name">
@@ -271,7 +325,7 @@
                             <cstring>ldflags_label</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Linker flags (LDFLAGS):</string>
+                            <string>Li&amp;nker flags (LDFLAGS):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>ldflags_edit</cstring>
@@ -302,6 +356,10 @@ nonstandard directory &lt;lib dir&gt;</string>
                         <property name="name">
                             <cstring>ldflags_edit</cstring>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Linker flags, e.g. -L&lt;lib dir&gt; if you have libraries in a
+nonstandard directory &lt;lib dir&gt;</string>
+                        </property>
                         <property name="whatsThis" stdset="0">
                             <string>Linker flags, e.g. -L&lt;lib dir&gt; if you have libraries in a
 nonstandard directory &lt;lib dir&gt;</string>
@@ -310,6 +368,10 @@ nonstandard directory &lt;lib dir&gt;</string>
                     <widget class="KLineEdit" row="9" column="1" rowspan="1" colspan="4">
                         <property name="name">
                             <cstring>cppflags_edit</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>C/C++ preprocessor flags, e.g. -I&lt;include dir&gt; if you have
+headers in a nonstandard directory &lt;include dir&gt;</string>
                         </property>
                         <property name="whatsThis" stdset="0">
                             <string>C/C++ preprocessor flags, e.g. -I&lt;include dir&gt; if you have
@@ -598,7 +660,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>cxxflags_label</cstring>
                         </property>
                         <property name="text">
-                            <string>Compiler f&amp;lags (CXXFLAGS):</string>
+                            <string>Compiler flags (C&amp;XXFLAGS):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>cxxflags_edit</cstring>
@@ -655,7 +717,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                     <cstring>fortran_tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Fortran</string>
+                    <string>F&amp;ortran</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -666,7 +728,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
                             <cstring>f77compiler_label</cstring>
                         </property>
                         <property name="text">
-                            <string>Fortran com&amp;piler:</string>
+                            <string>Fortra&amp;n compiler:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>f77service_combo</cstring>
@@ -972,4 +1034,7 @@ headers in a nonstandard directory &lt;include dir&gt;</string>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

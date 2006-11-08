@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>723</width>
+            <width>729</width>
             <height>690</height>
         </rect>
     </property>
@@ -74,6 +74,9 @@
                                         <property name="checked">
                                             <bool>true</bool>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Offer options to complete what you are typing.</string>
+                                        </property>
                                     </widget>
                                     <spacer>
                                         <property name="name">
@@ -103,6 +106,9 @@
                                                 <horstretch>0</horstretch>
                                                 <verstretch>0</verstretch>
                                             </sizepolicy>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>How long after a key press to offer suggestions</string>
                                         </property>
                                     </widget>
                                     <widget class="QLabel">
@@ -134,7 +140,14 @@
                                     <string>Alt+V</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Completely evaluate the function-argument-types of template-class member-functions in the completion-box.</string>
+                                    <string>Completely evaluate the function-argument-types 
+of template-class member-functions in the 
+completion-box.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Completely evaluate the function-argument-types 
+of template-class member-functions in the 
+completion-box.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">
@@ -148,7 +161,18 @@
                                     <string>Alt+D</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Completely evaluate member-types of template-classes(this includes types of member-variables and return-types of member-functions) in the completion-box.</string>
+                                    <string>Completely evaluate member-types of 
+template-classes(this includes types 
+of member-variables and return-types 
+of member-functions) in the 
+completion-box.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Completely evaluate member-types of 
+template-classes(this includes types 
+of member-variables and return-types 
+of member-functions) in the 
+completion-box.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="0">
@@ -162,7 +186,20 @@
                                     <string>Alt+G</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>When this is checked, members of all higher namespaces will be included in the completion-list while performing automatic completion. This may bloat the completion-list and create a significant delay.</string>
+                                    <string>When this is checked, members of all higher 
+namespaces will be included in the completion-list 
+while performing automatic completion. 
+
+This may bloat the completion-list 
+and create a significant delay.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>When this is checked, members of all higher 
+namespaces will be included in the completion-list 
+while performing automatic completion. 
+
+This may bloat the completion-list 
+and create a significant delay.</string>
                                 </property>
                             </widget>
                         </grid>
@@ -518,8 +555,11 @@
                                 <property name="accel">
                                     <string>Alt+U</string>
                                 </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to have header and source appear in the same page.</string>
+                                </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Check to have header and source appear always side by side</string>
+                                    <string>Check to have header and source appear in the same page.</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
@@ -543,8 +583,13 @@
                                         <property name="accel">
                                             <string>Alt+Y</string>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Check to have the source file scroll as you 
+navigate the header and vice versa</string>
+                                        </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>Check to have the source file scroll as you navigate the header and vice versa</string>
+                                            <string>Check to have the source file scroll as you 
+navigate the header and vice versa</string>
                                         </property>
                                     </widget>
                                 </vbox>
@@ -645,8 +690,17 @@
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to have the &lt;b&gt;Switch Header/Implementation&lt;/b&gt; 
+feature attempt to match the function under the 
+cursor with the matching declaration/definition.
+</string>
+                                </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Check to have the &lt;b&gt;Switch Header/Implementation&lt;/b&gt; feature attempt to match the function under the cursor with the matching declaration/definition.</string>
+                                    <string>Check to have the &lt;b&gt;Switch Header/Implementation&lt;/b&gt; 
+feature attempt to match the function under the 
+cursor with the matching declaration/definition.
+</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -659,8 +713,19 @@
                                 <property name="accel">
                                     <string>Alt+D</string>
                                 </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to show two additional submenus 
+in the editor context menu containing 
+all the declarations and definitions 
+for the current file and its matching 
+header/implementation file.</string>
+                                </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Check to show two additional submenus in the editor context menu containing all the declarations and definitions for the current file and its matching header/implementation file.</string>
+                                    <string>Check to show two additional submenus 
+in the editor context menu containing 
+all the declarations and definitions 
+for the current file and its matching 
+header/implementation file.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -683,7 +748,7 @@
                     <cstring>classWizardPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Class Wi&amp;zard</string>
+                    <string>Class Wiza&amp;rd</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1331,8 +1396,6 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
