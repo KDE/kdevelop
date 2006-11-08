@@ -1359,10 +1359,9 @@ void FileModel::read( QDataStream & stream )
       ParsedFileType t( (ParsedFileType) i );
       switch( t ) {
       case CppParsedFile:
-        m_parseResult = (AbstractParseResult*)(new ParsedFile());
+        m_parseResult = (AbstractParseResult*)(new ParsedFile( stream ));
         break;
       }
-        m_parseResult->read( stream );
     }
 
     NamespaceModel::read( stream );
