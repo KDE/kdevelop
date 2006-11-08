@@ -85,7 +85,7 @@ public:
     @param url The URL of the already opened document.
     @param lineNum The line number to place the cursor at, if applicable.
     @param col The column number to place the cursor at, if applicable.*/
-    virtual void scrollToLineColumn(const KURL &url, int lineNum=-1, int col=-1) = 0;
+    virtual void scrollToLineColumn(const KURL &url, int lineNum=-1, int col=-1, bool storeHistory = false ) = 0;
     
     /**Shows a HTML document in the documentation viewer.
     @param url The URL of the document to view.

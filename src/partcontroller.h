@@ -55,7 +55,7 @@ public:
   void setEncoding(const QString &encoding);
   void editDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
   void splitCurrentDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
-  void scrollToLineColumn(const KURL &url, int lineNum=-1, int col=-1);
+  void scrollToLineColumn(const KURL &url, int lineNum=-1, int col=-1, bool storeHistory = false );
   void editDocumentInternal(const KURL &inputUrl, int lineNum=-1, int col=-1,
                             bool activate = true, bool addToCurrentBuffer = false );
   void integrateTextEditorPart(KTextEditor::Document* doc);
@@ -207,8 +207,8 @@ private:
 		int id;
 	};
 
-	void addHistoryEntry();
-	HistoryEntry createHistoryEntry();
+        void addHistoryEntry( KParts::ReadOnlyPart * part = 0 );
+        HistoryEntry createHistoryEntry( KParts::ReadOnlyPart * part = 0 );
 	void jumpTo( const HistoryEntry & );
 
 	QValueList<HistoryEntry> m_backHistory;

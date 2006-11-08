@@ -40,6 +40,7 @@
 #include "kdevsourceformatter.h"
 #include "kdevcreatefile.h"
 #include "qtbuildconfig.h"
+#include <ktexteditor/viewcursorinterface.h>
 #include <kpopupmenu.h>
 // wizards
 #include "cppnewclassdlg.h"
@@ -1031,6 +1032,9 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 		attemptMatch = config->readBoolEntry( "SwitchShouldMatch", true );
 	}
 
+	static KURL lastSyncedUrl;
+	static int lastSyncedLine = -1;
+
 	// ok, both files exist. Do the codemodel have them?
 	if ( codeModel() ->hasFile( m_activeFileName ) &&
 	     m_activeViewCursor && attemptMatch )
@@ -1065,12 +1069,22 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 							( *it_decl ) ->getStartPosition( &line, &column );
 							KURL url;
 							url.setPath( (*it_decl)->fileName() );
-							if ( scrollOnly )
-								partController() ->scrollToLineColumn( url, line );
-							else if ( !splitHeaderSourceConfig()->splitEnabled() )
+							if ( scrollOnly ) {
+								KParts::ReadOnlyPart* part = partController()->partForURL( url );
+								uint currentLine = lastSyncedLine;
+								if( part ) {
+									uint col;
+									KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+									if( iface )
+										iface->cursorPosition(  &currentLine, &col );
+								}
+								partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
+							} else if ( !splitHeaderSourceConfig()->splitEnabled() )
 								partController() ->editDocument( url, line );
 							else
 								partController() ->splitCurrentDocument( url, line );
+							lastSyncedLine = line;
+							lastSyncedUrl = url;
 							return ;
 						}
 					}
@@ -1092,12 +1106,22 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 							( *it_def ) ->getStartPosition( &line, &column );
 							KURL url;
 							url.setPath( (*it_def)->fileName() );
-							if ( scrollOnly )
-								partController() ->scrollToLineColumn( url, line );
-							else if ( !splitHeaderSourceConfig()->splitEnabled() )
+							if ( scrollOnly ) {
+								KParts::ReadOnlyPart* part = partController()->partForURL( url );
+								uint currentLine = lastSyncedLine;
+								if( part ) {
+									uint col;
+									KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+									if( iface )
+										iface->cursorPosition(  &currentLine, &col );
+								}
+								partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
+							} else if ( !splitHeaderSourceConfig()->splitEnabled() )
 								partController() ->editDocument( url, line );
 							else
 								partController() ->splitCurrentDocument( url, line );
+							lastSyncedLine = line;
+							lastSyncedUrl = url;
 							return ;
 						}
 					}

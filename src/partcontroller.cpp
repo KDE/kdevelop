@@ -238,10 +238,11 @@ void PartController::splitCurrentDocument(const KURL &inputUrl,
 }
 
 void PartController::scrollToLineColumn(const KURL &inputUrl,
-                                        int lineNum, int col)
+                                        int lineNum, int col, bool storeHistory )
 {
-    if ( KParts::Part *existingPart = partForURL( inputUrl ) )
+    if ( KParts::ReadOnlyPart *existingPart = partForURL( inputUrl ) )
     {
+        if( storeHistory ) addHistoryEntry( existingPart );
         EditorProxy::getInstance()->setLineNumber( existingPart, lineNum, col );
         return;
     }
@@ -1699,27 +1700,29 @@ void PartController::jumpTo( const HistoryEntry & entry )
 	m_isJumping = false;
 }
 
-PartController::HistoryEntry PartController::createHistoryEntry()
-{
-	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
-	if ( !ro_part ) return HistoryEntry();
 
-	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
-	if ( !cursorIface ) return HistoryEntry();
+PartController::HistoryEntry PartController::createHistoryEntry( KParts::ReadOnlyPart * ro_part ) {
+    if( ro_part == 0 ) 
+        ro_part = dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
+    
+    if ( !ro_part ) return HistoryEntry();
+    KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
+    if ( !cursorIface ) return HistoryEntry();
 
-	uint line = 0;
-	uint col = 0;
-	cursorIface->cursorPositionReal( &line, &col );
+    uint line = 0;
+    uint col = 0;
+    cursorIface->cursorPositionReal( &line, &col );
 
-	return HistoryEntry( ro_part->url(), line, col );
+    return HistoryEntry( ro_part->url(), line, col );
 }
 
+
 // this should be called _before_ a jump is made
-void PartController::addHistoryEntry()
+void PartController::addHistoryEntry( KParts::ReadOnlyPart * part )
 {
 	if ( m_isJumping ) return;
 
-	HistoryEntry thisEntry = createHistoryEntry();
+	HistoryEntry thisEntry = createHistoryEntry( part );
 	if ( !thisEntry.url.isEmpty() )
 	{
 		m_backHistory.push_front( thisEntry );
