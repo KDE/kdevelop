@@ -438,6 +438,14 @@ SimpleTypeImpl::MemberInfo SimpleTypeCodeModel::findMember( TypeDesc name , Memb
     }
   }
 
+    if( ret.memberType == MemberInfo::Function || ret.memberType == MemberInfo::Variable || ret.memberType == MemberInfo::Template || ret.memberType == MemberInfo::Typedef || ret.memberType == MemberInfo::NestedType ) {
+     //For redirected types it is necessary to add the include-files of the context they were searched in.
+     //That is not quite correct, but it makes sure that at least the same namespace-aliases will be activated while the search for the type,
+     //Which is necessary because the alias is parented by exactly this class.
+
+     ret.type->addIncludeFiles( name.includeFiles() );
+    }
+
   chooseSpecialization( ret );
 	
   return ret;

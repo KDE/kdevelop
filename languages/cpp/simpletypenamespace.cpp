@@ -109,12 +109,14 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
      
   if ( mem ) {
   if ( mem.memberType != MemberInfo::Namespace ) {
-     TypePointer b = mem.build();
+      TypePointer b = mem.build();
      if ( b && !( b->parent().get().data() == this ) ) {
-     b = b ->clone();
-     b->setParent( this );
-     mem.setBuilt( b );
-    }
+       b = b ->clone();
+       b->setParent( this );
+
+       mem.setBuilt( b );
+     }
+
     return mem;
    } else {
        TypePointer b = mem.build();

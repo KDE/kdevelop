@@ -215,6 +215,19 @@ void TypeDesc::setIncludeFiles( const HashedStringSet& files ) {
     }
 }
 
+void TypeDesc::addIncludeFiles( const HashedStringSet& files ) {
+    makeDataPrivate();
+    m_data->m_includeFiles += files;
+    for ( TemplateParams::iterator it = m_data->m_templateParams.begin(); it != m_data->m_templateParams.end(); ++it ) {
+        (*it)->addIncludeFiles( files );
+    }
+    if( m_data->m_nextType ) {
+        if( m_data->m_nextType->_KShared_count() != 1 )
+            m_data->m_nextType = new TypeDescShared( *(m_data->m_nextType) );
+        m_data->m_nextType->addIncludeFiles( files );
+    }
+}
+
 size_t TypeDescData::hashKey() {
   size_t ret = 0;
   if ( m_hashValid ) {
@@ -561,6 +574,7 @@ void TypeDesc::clearInstanceInfo() {
   m_data->m_pointerDepth = 0;
   m_data->m_dec.clear();
 }
+simpletypefunction.cpp cppcodecompletion.cpp typedesc.cpp simpletypecatalog.cpp  simpletype.cpp
 
 void TypeDesc::takeTemplateParams( const QString& string ) {
   makeDataPrivate();

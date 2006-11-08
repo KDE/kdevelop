@@ -555,7 +555,7 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
     ifVerbose( dbg() << "stopping location because the recursion-depth is too high" << endl );
     return TypeDesc( "CompletionError::too_much_recursion" );
   }
-  ifVerbose( dbg() << "\"" << desc().fullName() << "\": locating type \"" << name.fullNameChain() << "\"" << endl );
+    ifVerbose( dbg() << "\(" << uint(this) << ")\"" << desc().fullName() << "\": locating type \"" << name.fullNameChain() << "\"" << endl );
   if ( name.resolved() && !name.next() ) {
     ifVerbose( dbg() << "\"" << desc().fullName() << "\": type \"" << name.fullNameChain() << "\" is already resolved, returning stored instance" << endl );
     return name;

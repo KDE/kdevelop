@@ -1711,15 +1711,12 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
     if ( isFunDef ) {
       FunctionDefinitionAST * def = static_cast<FunctionDefinitionAST*>( recoveredDecl.get() );
 
-      SimpleContext* ctx = computeContext( def, endLine, endColumn, modelStartLine, modelStartColumn );
+	    SimpleContext* ctx = computeContext( def, endLine, endColumn, modelStartLine, modelStartColumn );
       if ( !ctx )
         return 0;
 
       QStringList scope = f->scope();
 
-      if ( !m_cachedFromContext ) {
-        conf.setGlobalNamespace( createGlobalNamespace() );
-      }
       
       if ( !scope.isEmpty() ) {
         SimpleType parentType;
@@ -1939,6 +1936,9 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
   QString word;
 
+		if ( !m_cachedFromContext )
+			conf.setGlobalNamespace( createGlobalNamespace() );
+	
   ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
 
   FunctionDom currentFunction = fileModel.functionAt( line, column );
@@ -2031,7 +2031,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
     ClassDom currentClass = fileModel.classAt( line, column );
     int startLine = 0, startCol = 0;
 
-    RecoveryPoint* recoveryPoint = this->d->findRecoveryPoint( line, column );
+	  RecoveryPoint* recoveryPoint = this->d->findRecoveryPoint( line, column );
 
     QStringList scope;
 
@@ -2050,9 +2050,6 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
       scope << currentClass->name();
       currentClass->getStartPosition( &startLine, &startCol );
     }
-
-	  if ( !m_cachedFromContext )
-		  conf.setGlobalNamespace( createGlobalNamespace() );
 
 	  SimpleType container;
     if ( m_cachedFromContext ) {
@@ -2260,8 +2257,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
   SimpleContext* ctx = 0;
   SimpleTypeConfiguration conf( m_activeFileName );
-  if ( ! m_cachedFromContext )
-    SimpleType::setGlobalNamespace( 0 ); ///hmm
+
+	if ( !m_cachedFromContext )
+			conf.setGlobalNamespace( createGlobalNamespace() );
 
   ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
 
@@ -2388,7 +2386,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
           if ( !scope.isEmpty() ) {
             SimpleType parentType;
 
-	          if( !m_cachedFromContext ) {
+	          /*if( !m_cachedFromContext ) {
 		          TypePointer t = createGlobalNamespace();
 		          conf.setGlobalNamespace( t );
 			          SimpleTypeNamespace * n = dynamic_cast<SimpleTypeNamespace*>( t.data() );
@@ -2399,7 +2397,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 			          } else {
 			          }
 		          	this_type = SimpleType(t);
-	          }
+	          }*/
 
             if ( m_cachedFromContext ) {
 	            TypeDesc d( scope.join( "::" ) );
