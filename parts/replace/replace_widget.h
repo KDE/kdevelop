@@ -36,7 +36,7 @@ public:
 public slots:
     void showDialog();
     void stopButtonClicked( KDevPlugin * );
-    
+
 protected:
     virtual void focusInEvent(QFocusEvent *e);
 
@@ -45,6 +45,8 @@ private slots:
     void replace();
     void clear();
     void editDocument( const QString & ,int );
+    void setCursorPos( KParts::Part *part, uint line, uint col );
+    void cursorPos( KParts::Part *part, uint * line, uint * col );
 
 private:
     bool showReplacements();
@@ -67,6 +69,10 @@ private:
     ReplaceView * _listview;
     QPushButton * _cancel;
     QPushButton * _replace;
+
+    uint calledCol;
+    uint calledLine;
+    QString calledUrl;
 
     bool _terminateOperation;
 };

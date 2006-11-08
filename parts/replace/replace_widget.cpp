@@ -23,6 +23,10 @@
 #include <kdebug.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/editor.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/selectioninterface.h>
+#include <kdevpartcontroller.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
@@ -93,7 +97,20 @@ void ReplaceWidget::showDialog()
     if ( ! m_part->project() )
         return; /// @todo feedback?
 
+    KParts::ReadOnlyPart *part = dynamic_cast<KParts::ReadOnlyPart*>( m_part->partController()->activePart() );
+    if ( part ) {
+        if (part->url().isLocalFile() ) {
+            calledUrl = part->url().path();
+            cursorPos( part, &calledCol, &calledLine );
+        }
+    }
     m_dialog->show( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" );
+
+    KTextEditor::SelectionInterface *sel_iface
+            = dynamic_cast<KTextEditor::SelectionInterface*>(m_part->partController()->activePart());
+    if (sel_iface && sel_iface->hasSelection()){
+        m_dialog->find_combo->insertItem(sel_iface->selection());
+    }
 }
 
 void ReplaceWidget::find()
@@ -194,8 +211,36 @@ bool ReplaceWidget::showReplacements()
     return completed;
 }
 
+
+void ReplaceWidget::cursorPos( KParts::Part *part, uint * line, uint * col )
+{
+    if (!part || !part->inherits("KTextEditor::Document")) return;
+
+    KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+    if (iface)
+    {
+        iface->cursorPositionReal( line, col );
+    }
+}
+
+void ReplaceWidget::setCursorPos( KParts::Part *part, uint line, uint col )
+{
+    if (!part || !part->inherits("KTextEditor::Document")) return;
+
+    KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+    if (iface)
+    {
+        iface->setCursorPositionReal( line, col );
+    }
+}
+
+
 bool ReplaceWidget::makeReplacements()
 {
+    uint col=0;
+    uint line=0;
+    cursorPos( m_part->partController()->activePart(), &col, &line );
+
     m_part->core()->running( m_part, true );
 
     bool completed = true;
@@ -274,6 +319,15 @@ bool ReplaceWidget::makeReplacements()
     m_part->partController()->saveAllFiles();
 
     m_part->core()->running( m_part, false );
+
+    if ( calledUrl != QString::null )
+    {
+        m_part->partController()->editDocument( calledUrl, calledLine );
+        setCursorPos( m_part->partController()->activePart(), calledCol, calledLine );
+    }
+    else{
+        setCursorPos( m_part->partController()->activePart(), col, line );
+    }
 
     return completed;
 }
