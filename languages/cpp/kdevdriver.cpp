@@ -158,7 +158,7 @@ void KDevDriver::setup()
 		pos = end+1;
 	}
 
-	setResolveDependencesEnabled( cfg->preProcessAllHeaders() || cfg->parseMissingHeaders() );
+	setResolveDependencesEnabled( cfg->preProcessAllHeaders() /*|| cfg->parseMissingHeaders()*/ );
 	
 }
 
