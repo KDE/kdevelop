@@ -16,8 +16,3 @@ set_target_properties(kdevlang_debugger PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevlang_debugger DESTINATION ${LIB_INSTALL_DIR} )
 
 
-########### install files ###############
-
-#install( FILES DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/languages/debugger)
-
-

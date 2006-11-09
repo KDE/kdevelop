@@ -13,7 +13,7 @@ set(kdevutil_LIB_SRCS
 
 kde4_automoc(${kdevutil_LIB_SRCS})
 kde4_add_library(kdevutil SHARED ${kdevutil_LIB_SRCS})
-target_link_libraries(kdevutil ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} kdevplatform)
+target_link_libraries(kdevutil ${KDE4_KDEUI_LIBS} kdevplatform)
 set_target_properties(kdevutil PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevutil DESTINATION ${LIB_INSTALL_DIR} )
 
