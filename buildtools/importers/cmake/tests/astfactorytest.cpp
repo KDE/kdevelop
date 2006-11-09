@@ -25,7 +25,7 @@
 #include "cmakeast.h"
 
 
-QTEST_MAIN( AstFactoryTest );
+QTEST_MAIN( AstFactoryTest )
 
 class FooAst : public CMakeAst
 {
