@@ -30,7 +30,7 @@
 #endif
 
 
-#if defined Q_OS_WIN
+#if defined _WIN32 || defined _WIN64
 
 #ifndef KDEVINTERFACES_EXPORT
 # ifdef MAKE_KDEVINTERFACES_LIB
