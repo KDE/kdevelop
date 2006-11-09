@@ -16,6 +16,8 @@
 #ifndef _DISASSEMBLEWIDGET_H_
 #define _DISASSEMBLEWIDGET_H_
 
+#include "mi/gdbmi.h"
+
 #include <qtextedit.h>
 
 /***************************************************************************/
@@ -26,22 +28,19 @@ namespace GDBDebugger
 {
 
 class Breakpoint;
+class GDBController;
 
 class DisassembleWidget : public QTextEdit
 {
     Q_OBJECT
 
 public:
-    DisassembleWidget( QWidget *parent=0, const char *name=0 );
+    DisassembleWidget( GDBController* controller, QWidget *parent=0, const char *name=0 );
     virtual ~DisassembleWidget();
 
 public slots:
-    void slotDisassemble(char *buf);
     void slotActivate(bool activate);
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
-
-signals:
-    void disassemble(const QString &start, const QString &end);
 
 private:
     virtual void showEvent(QShowEvent*);
@@ -50,6 +49,10 @@ private:
     bool displayCurrent();
     void getNextDisplay();
 
+    /// callback for GDBCommand
+    void memoryRead(const GDBMI::ResultRecord& r);
+
+    GDBController* controller_;
     bool    active_;
     unsigned long    lower_;
     unsigned long    upper_;

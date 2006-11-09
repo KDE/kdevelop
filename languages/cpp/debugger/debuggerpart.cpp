@@ -137,7 +137,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     mainWindow()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("Debugger function call stack"));
     mainWindow()->setViewAvailable(framestackWidget, false);
 
-    disassembleWidget = new DisassembleWidget( 0, "disassembleWidget" );
+    disassembleWidget = new DisassembleWidget( controller, 0, "disassembleWidget" );
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
     QWhatsThis::add
@@ -586,10 +586,6 @@ void DebuggerPart::setupController()
     connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(const QString &)));
 
-    // disassembleWidget -> controller
-    connect( disassembleWidget,     SIGNAL(disassemble(const QString&, const QString&)),
-             controller,            SLOT(slotDisassemble(const QString&, const QString&)));
-
     // gdbOutputWidget -> controller
     connect( gdbOutputWidget,       SIGNAL(userGDBCmd(const QString &)),
              controller,            SLOT(slotUserGDBCmd(const QString&)));
@@ -602,8 +598,6 @@ void DebuggerPart::setupController()
     // controller -> disassembleWidget
     connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
              disassembleWidget,     SLOT(slotShowStepInSource(const QString&, int, const QString&)));
-    connect( controller,            SIGNAL(rawGDBDisassemble(char*)),
-             disassembleWidget,     SLOT(slotDisassemble(char*)));
 
     // controller -> this
     connect( controller,            SIGNAL(dbgStatus(const QString&, int)),

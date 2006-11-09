@@ -1277,20 +1277,6 @@ void GDBController::slotBreakInto()
 
 // **************************************************************************
 
-
-// **************************************************************************
-
-void GDBController::slotDisassemble(const QString &start, const QString &end)
-{
-    if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    QCString cmd = QCString().sprintf("disassemble %s %s", start.latin1(), end.latin1());
-    queueCmd(new GDBCommand(cmd, INFOCMD, DISASSEMBLE));
-}
-
-// **************************************************************************
-
 void GDBController::slotMemoryDump(
     MemoryCallback* callback,
     const QString &address, const QString &amount)

@@ -97,7 +97,6 @@ public slots:
 
     virtual void slotBreakInto()                                            = 0;
 
-    virtual void slotDisassemble(const QString &start, const QString &end)  = 0;
     virtual void slotRegisters()                                            = 0;
     virtual void slotLibraries()                                            = 0;
 
@@ -112,7 +111,6 @@ protected slots:
 
 signals:
     void gotoSourcePosition   (const QString &fileName, int lineNum);
-    void rawGDBDisassemble    (char *buf);
     void rawGDBMemoryDump     (char *buf);
     void rawGDBRegisters      (char *buf);
     void rawGDBLibraries      (char *buf);

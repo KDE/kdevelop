@@ -151,6 +151,7 @@ private:
     void processMICommandResponse(const GDBMI::ResultRecord& r);
 
     void handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r);
+
     /** Handles reply from -stack-info-frame command issues
         after switching the stack frame.
     */
@@ -220,7 +221,6 @@ public slots:
 
     void slotBreakInto();
 
-    void slotDisassemble(const QString &start, const QString &end);
     void slotMemoryDump(MemoryCallback* callback,
                         const QString &start, const QString &amount);
     void slotRegisters();

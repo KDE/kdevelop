@@ -14,6 +14,8 @@
  ***************************************************************************/
 
 #include "disassemblewidget.h"
+#include "gdbcontroller.h"
+#include "gdbcommand.h"
 
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -35,8 +37,8 @@ namespace GDBDebugger
 /***************************************************************************/
 /***************************************************************************/
 
-DisassembleWidget::DisassembleWidget(QWidget *parent, const char *name)
-        : QTextEdit(parent, name),
+DisassembleWidget::DisassembleWidget(GDBController* controller, QWidget *parent, const char *name)
+        : QTextEdit(parent, name), controller_(controller),
         active_(false),
         lower_(0),
         upper_(0),
@@ -71,39 +73,6 @@ bool DisassembleWidget::displayCurrent()
     }
 
     return false;
-}
-
-/***************************************************************************/
-
-void DisassembleWidget::slotDisassemble(char *buf)
-{
-    if (!active_)
-        return;
-
-    clear();
-    // Skip the first line (just header info)
-    char *start = strchr(buf, '\n');
-
-    // Make sure there is something there
-    if (start)
-    {
-        append(start+1);
-        // Skip the last two lines (just trailer info)
-        removeParagraph(paragraphs()-1);
-        removeParagraph(paragraphs()-1);
-
-        if (paragraphs())
-        {
-            lower_ = strtoul(text(0).latin1(), 0, 0);
-            upper_ = strtoul(text(paragraphs()-1).latin1(), 0, 0);
-            displayCurrent();
-        }
-        else
-        {
-            lower_ = 0;
-            upper_ = 0;
-        }
-    }
 }
 
 /***************************************************************************/
@@ -149,13 +118,42 @@ void DisassembleWidget::getNextDisplay()
     {
         Q_ASSERT(!currentAddress_.isNull());
 
-        // restrict this to a managable size - some functions are _big_
-        QString endAddress;
-        endAddress.sprintf("0x%x", (uint)address_+128);
-        emit disassemble(currentAddress_, endAddress);
+        QString cmd = QString("-data-disassemble -s $pc -e \"$pc + 128\" -- 0");
+        controller_->addCommandToFront( 
+                        new GDBCommand( cmd, this, &DisassembleWidget::memoryRead ) );
     }
-    else
-        emit disassemble("", "");
+}
+
+/***************************************************************************/
+
+void DisassembleWidget::memoryRead(const GDBMI::ResultRecord& r)
+{
+  const GDBMI::Value& content = r["asm_insns"];
+  QString rawdata;
+
+  clear();
+
+  for(unsigned i = 0; i < content.size(); ++i)
+  {
+    const GDBMI::Value& line = content[i];
+
+    QString addr = line["address"].literal();
+    QString fct = line["func-name"].literal();
+    QString offs = line["offset"].literal();
+    QString inst = line["inst"].literal();
+
+    rawdata += QString(addr + "  " + fct+"+"+offs + "    " + inst + "\n");
+
+    if (i == 0) {
+      lower_ = strtoul(addr.latin1(), 0, 0);
+    } else  if (i == content.size()-1) {
+      upper_ = strtoul(addr.latin1(), 0, 0);
+    }
+  }
+
+  append(rawdata);
+
+  displayCurrent();
 }
 
 
