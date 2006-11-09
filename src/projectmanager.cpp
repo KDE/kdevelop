@@ -264,6 +264,7 @@ void ProjectManager::slotLoadProject( )
   if( !loadProjectPart() ) {
     unloadLanguageSupport();
     delete m_info; m_info = 0;
+    API::getInstance()->setProjectDom( 0 );
 	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
 	kapp->restoreOverrideCursor();
     return;
