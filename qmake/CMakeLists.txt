@@ -15,7 +15,7 @@ set(kdevqmakeimporter_LIB_SRCS
 kde4_automoc(${kdevqmakeimporter_LIB_SRCS})
 kde4_add_plugin(kdevqmakeimporter ${kdevqmakeimporter_LIB_SRCS})
 target_link_libraries(kdevqmakeimporter ${KDE4_KDECORE_LIBS} kdevplatform)
-kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevqmakeimporter)
+
 install(TARGETS kdevqmakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
