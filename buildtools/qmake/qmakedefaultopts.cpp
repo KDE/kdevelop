@@ -12,17 +12,13 @@
 #include "qmakedefaultopts.h"
 
 #include <kdebug.h>
-#include <stdlib.h>
 #include <ktempfile.h>
-#include <kprocess.h>
 #include <qdir.h>
 #include <qregexp.h>
-#include <qtextstream.h>
-#include <kprocess.h>
-#include <kprocctrl.h>
+#include <qprocess.h>
 
 QMakeDefaultOpts::QMakeDefaultOpts( QObject* parent, const char* name )
-        : QObject(parent, name), makefile(0), qmakefile(0), proc(0)
+        : QObject(parent, name), makefile(0), proc(0)
 {
 
 }
@@ -30,47 +26,39 @@ QMakeDefaultOpts::QMakeDefaultOpts( QObject* parent, const char* name )
 void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projdir )
 {
     makefile = new KTempFile(projdir+"/", ".mf");
-    qmakefile = new KTempFile(QString::null, ".pro");
-    if ( makefile->status() == 0 && qmakefile->status() == 0  )
+    if ( makefile->status() == 0 )
     {
         makefile->close();
-        qmakefile->close();
         QString qmakebin = qtdir + QString( QChar( QDir::separator() ) ) + "bin" + QString( QChar( QDir::separator() ) ) + "qmake";
 
-//         The following would be needed if we'd use KProcess::Block, because KProcessController installs its signal handlers only once
-//         unsigned int refs = 0;
-//         while( KProcessController::theKProcessController )
-//         {
-//             KProcessController::deref();
-//             refs++;
-//         }
-//         kdDebug(9024) << "KProcCtrl has:" << refs << endl;
-//         while( refs > 0 )
-//         {
-//             KProcessController::ref();
-//             refs--;
-//         }
-        proc = new KProcess();
-        proc->setUseShell( true );
-        *proc <<  "cd " << KProcess::quote( projdir ) << "&&" << KProcess::quote( qmakebin );
-        *proc <<  "-d" << "-o" << KProcess::quote( makefile->name() );
-        *proc <<  KProcess::quote( qmakefile->name() );
-        kdDebug(9024) << "Executing:" << proc->args() << endl;
-        connect( proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotFinished( KProcess* ) ) );
-        connect( proc, SIGNAL( receivedStderr( KProcess*, char*, int ) ),
-                 this, SLOT( slotReadStderr( KProcess*, char*, int ) ) );
-        proc->start( KProcess::NotifyOnExit, KProcess::Stderr );
+        proc = new QProcess();
+        kdDebug(9024) << "Working dir:" << projdir << endl;
+        proc->setWorkingDirectory( projdir );
+        proc->addArgument( qmakebin );
+        proc->addArgument( "-d" );
+        proc->addArgument( "-o" );
+        proc->addArgument( makefile->name() );
+        kdDebug(9024) << "Executing:" << proc->arguments() << endl;
+        connect( proc, SIGNAL( processExited( ) ), this, SLOT( slotFinished( ) ) );
+        connect( proc, SIGNAL( readyReadStderr( ) ),
+                 this, SLOT( slotReadStderr( ) ) );
+        proc->setCommunication( QProcess::Stderr );
+        proc->start();
     }
 }
 
 QMakeDefaultOpts::~QMakeDefaultOpts()
 {
     m_variables.clear();
+    delete proc;
+    proc = 0;
+    delete makefile;
+    makefile = 0;
 }
 
-void QMakeDefaultOpts::slotReadStderr(KProcess*, char* buf, int buflen)
+void QMakeDefaultOpts::slotReadStderr()
 {
-    QString buffer = QString::fromLocal8Bit( buf, buflen );
+    QString buffer = QString::fromLocal8Bit( proc->readStderr() );
     QStringList lines = QStringList::split( "\n", buffer );
     for ( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it)
     {
@@ -85,11 +73,15 @@ void QMakeDefaultOpts::slotReadStderr(KProcess*, char* buf, int buflen)
     }
 }
 
-void QMakeDefaultOpts::slotFinished(KProcess*)
+void QMakeDefaultOpts::slotFinished()
 {
+    kdDebug(9024) << "Proc finished" << endl;
     makefile->unlink();
+    delete makefile;
+    makefile = 0;
     qmakefile->unlink();
-    proc->closeAll();
+    delete qmakefile;
+    qmakefile = 0;
     delete proc;
     proc = 0;
     emit variablesRead();
