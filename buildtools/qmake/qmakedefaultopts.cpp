@@ -79,9 +79,6 @@ void QMakeDefaultOpts::slotFinished()
     makefile->unlink();
     delete makefile;
     makefile = 0;
-    qmakefile->unlink();
-    delete qmakefile;
-    qmakefile = 0;
     delete proc;
     proc = 0;
     emit variablesRead();

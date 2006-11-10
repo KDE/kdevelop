@@ -42,7 +42,6 @@ private slots:
 private:
     QMap<QString, QStringList> m_variables;
     KTempFile* makefile;
-    KTempFile* qmakefile;
     QProcess* proc;
 };
 
