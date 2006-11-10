@@ -130,6 +130,8 @@ private slots:
     void slotDisableSubproject( QMakeScopeItem* spitem = 0 );
     void slotProjectDirty( const QString& );
 
+    void createQMakeScopeItems();
+
 private:
     void cleanDetailView( QMakeScopeItem *item );
     void buildProjectDetailTree( QMakeScopeItem *item, KListView *listviewControl );

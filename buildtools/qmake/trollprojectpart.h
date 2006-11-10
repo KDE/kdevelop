@@ -26,6 +26,7 @@
 class KDialogBase;
 class TrollProjectWidget;
 class KDirWatch;
+class QMakeDefaultOpts;
 
 class TrollProjectPart : public KDevBuildTool
 {
@@ -95,6 +96,7 @@ private:
 
     friend class TrollProjectWidget;
     friend class ProjectRunOptionsDlg;
+    friend class QMakeDefaultOpts;
 };
 
 #endif

@@ -337,6 +337,12 @@ void TrollProjectWidget::openProject( const QString &dirName )
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 
     m_rootScope = new Scope( proname, m_part );
+    connect( m_rootScope, SIGNAL( initializationFinished() ), this, SLOT( createQMakeScopeItems() ) );
+
+}
+
+void TrollProjectWidget::createQMakeScopeItems()
+{
     m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
 
     m_rootSubproject->setOpen( true );
@@ -348,8 +354,8 @@ void TrollProjectWidget::openProject( const QString &dirName )
     {
         overview->setSelected( m_rootSubproject, true );
     }
+    emit m_part->addedFilesToProject(allFiles());
 }
-
 
 void TrollProjectWidget::closeProject()
 {
@@ -363,6 +369,9 @@ QStringList TrollProjectWidget::allFiles()
 {
     QPtrStack<QListViewItem> s;
     QStringList res;
+
+    if( !m_rootSubproject )
+        return res;
 
     for ( QListViewItem * item = overview->firstChild(); item;
             item = item->nextSibling() ? item->nextSibling() : s.pop() )
@@ -409,10 +418,10 @@ QStringList TrollProjectWidget::allFiles()
 
 QString TrollProjectWidget::projectDirectory()
 {
-    if ( !overview->firstChild() )
+    if ( !m_rootScope )
         return QString::null; //confused
 
-    return static_cast<QMakeScopeItem*>( overview->firstChild() ) ->scope->projectDir();
+    return m_rootScope->projectDir();
 }
 
 

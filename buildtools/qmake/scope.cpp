@@ -18,19 +18,25 @@
 #include <qdir.h>
 #include <qpair.h>
 #include <qmakedriver.h>
+#include <qregexp.h>
 
 #include <kdirwatch.h>
 
 #include "pathutil.h"
 #include "trollprojectpart.h"
+#include "qmakedefaultopts.h"
 
 const QStringList Scope::KnownVariables = QStringList() << "QT" << "CONFIG" << "TEMPLATE" << "SUBDIRS" << "VERSION" << "LIBS" << "target.path" << "INSTALLS" << "MAKEFILE" << "TARGETDEPS" << "INCLUDEPATH" << "TARGET" << "DESTDIR" << "DEFINES" << "QMAKE_CXXFLAGS_DEBUG" << "QMAKE_CXXFLAGS_RELEASE" << "OBJECTS_DIR" << "UI_DIR" << "MOC_DIR" << "IDL_COMPILER" << "IDL_OPTIONS" << "RCC_DIR" << "IDLS" << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES" << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES" << "INTERFACES" << "FORMS" ;
 
 const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "release" << "debug_and_release" << "warn_on" << "warn_off" << "staticlib" << "dll" << "plugin" << "designer" << "create_pkgconf" << "create_libtool" << "qt" << "console" << "windows" << "x11" << "thread" << "exceptions" << "stl" << "rtti" << "opengl" << "thread" << "ordered" << "precompile_header" << "qtestlib" << "uitools" << "dbus" << "assistant" << "build_all";
 
 Scope::Scope( const QString &filename, TrollProjectPart* part )
-    : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part)
+    : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0)
 {
+    m_defaultopts = new QMakeDefaultOpts();
+    m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
+                                 QFileInfo( filename ).dirPath( true ) );
+    connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
     if ( !loadFromFile( filename ) )
     {
         if( !QFileInfo( filename ).exists() )
@@ -59,19 +65,22 @@ Scope::~Scope()
 
     m_customVariables.clear();
 
+    if( !m_parent && m_root->isProject() )
+        delete m_defaultopts;
+
     if ( m_root && m_root->isProject() )
         delete m_root;
     m_root = 0;
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope, TrollProjectPart* part )
-    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part)
+    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(0)
 {
     init();
 }
 
-Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled )
-: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ), m_part(part)
+Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, QMakeDefaultOpts* defaultopts, bool isEnabled )
+: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ), m_part(part), m_defaultopts(defaultopts)
 {
     if ( !loadFromFile( filename ) )
     {
@@ -90,14 +99,20 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollPro
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part )
-        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part)
+        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(0)
 {
-    if ( !loadFromFile( path + QString( QChar( QDir::separator() ) ) + incfile ) )
+    QString absfilename;
+    if( QFileInfo(incfile).isRelative() )
     {
-        if( !QFileInfo( path + QString( QChar( QDir::separator() ) ) + incfile ).exists() )
+        absfilename = path + QString( QChar( QDir::separator() ) ) + incfile;
+    }else
+        absfilename = incfile;
+    if ( !loadFromFile( absfilename ) )
+    {
+        if( !QFileInfo( absfilename ).exists() )
         {
             m_root = new QMake::ProjectAST();
-            m_root->setFileName( QString( path + QString( QChar( QDir::separator() ) ) + incfile ) );
+            m_root->setFileName( absfilename );
         }else
         {
             delete m_root;
@@ -116,7 +131,7 @@ bool Scope::loadFromFile( const QString& filename )
         m_root = 0;
         return false;
     }
-    init();
+//     init();
     return true;
 }
 
@@ -258,46 +273,42 @@ QStringList Scope::variableValuesForOp( const QString& variable , const QString&
     return result;
 }
 
-QStringList Scope::variableValues( const QString& variable ) const
+QStringList Scope::variableValues( const QString& variable, bool checkIncParent ) const
 {
     QStringList result;
 
     if ( !m_root )
         return result;
 
-    if ( variable == "QT" )
-    {
-        result << "gui" << "core";
-    }
-    else if ( variable == "CONFIG" && m_part->isQt4Project() )
-    {
-        result << "warn_on" << "qt" << "stl";
-    }
-    else if ( variable == "CONFIG" && !m_part->isQt4Project() )
-    {
-        result << "qt" << "warn_on" << "thread";
-    }
-
-    result = calcValuesFromStatements( variable, result );
+    result = calcValuesFromStatements( variable, result, checkIncParent );
     result.remove( "\\\n" );
     result.remove( "\n" );
     result = Scope::removeWhiteSpace(result);
     return result;
 }
 
-QStringList Scope::calcValuesFromStatements( const QString& variable, QStringList result, QMake::AST* stopHere ) const
+QStringList Scope::calcValuesFromStatements( const QString& variable, QStringList result, bool checkIncParent, QMake::AST* stopHere ) const
 {
     if( !m_root )
         return result;
+
+    /* For variables that we don't know and which are not QT/CONFIG find the default value */
+    if( scopeType() == ProjectScope
+        && m_defaultopts
+        && m_defaultopts->variables().contains(variable)
+        && ( variable == "QT" || !KnownVariables.contains(variable) || variable == "CONFIG" ) )
+    {
+        result = m_defaultopts->variableValues(variable);
+    }
 
     if ( scopeType() == FunctionScope || scopeType() == SimpleScope )
     {
         result = m_parent->calcValuesFromStatements( variable, result , this->m_root );
     }
-//     else if ( scopeType() == IncludeScope )
-//     {
-//         result = m_parent->calcValuesFromStatements( variable, result , this->m_incast );
-//     }
+    else if ( scopeType() == IncludeScope && checkIncParent )
+    {
+        result = m_parent->calcValuesFromStatements( variable, result , this->m_incast );
+    }
 
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
@@ -457,7 +468,7 @@ Scope* Scope::createIncludeScope( const QString& includeFile, bool negate )
     QMake::IncludeAST* ast = new QMake::IncludeAST();
     ast->setDepth( m_root->depth() );
     ast->projectName = includeFile;
-    Scope* incScope = new Scope( funcScope->getNextScopeNum(), funcScope, ast, projectDir(), ast->projectName, m_part );
+    Scope* incScope = new Scope( funcScope->getNextScopeNum(), funcScope, ast, projectDir(), resolveVariables( ast->projectName ), m_part );
     if ( incScope->scopeType() != InvalidScope )
     {
         funcScope->m_root->addChildAST( ast );
@@ -481,17 +492,22 @@ Scope* Scope::createSubProject( const QString& projname )
     if( variableValuesForOp( "SUBDIRS", "-=").contains( projname ) )
         removeFromMinusOp( "SUBDIRS", projname );
 
+    QString realprojname = resolveVariables(projname);
+
+    if( variableValuesForOp( "SUBDIRS", "-=").contains( realprojname ) )
+        removeFromMinusOp( "SUBDIRS", realprojname );
+
     QDir curdir( projectDir() );
 
     if ( variableValues("TEMPLATE").contains( "subdirs" ) )
     {
         QString filename;
-        if( !projname.endsWith(".pro") )
+        if( !realprojname.endsWith(".pro") )
         {
-            if ( !curdir.exists( projname ) )
-                if ( !curdir.mkdir( projname ) )
+            if ( !curdir.exists( realprojname ) )
+                if ( !curdir.mkdir( realprojname ) )
                     return 0;
-            curdir.cd( projname );
+            curdir.cd( realprojname );
             QStringList entries = curdir.entryList("*.pro", QDir::Files);
 
             if ( !entries.isEmpty() && !entries.contains( curdir.dirName()+".pro" ) )
@@ -499,17 +515,17 @@ Scope* Scope::createSubProject( const QString& projname )
             else
                 filename = curdir.absPath() + QString(QChar(QDir::separator()))+curdir.dirName()+".pro";
         }else
-            filename = curdir.absPath() + QString(QChar(QDir::separator())) + projname;
+            filename = curdir.absPath() + QString(QChar(QDir::separator())) + realprojname;
 
         kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part );
+        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, m_defaultopts );
         if ( s->scopeType() != InvalidScope )
         {
             if( s->variableValues("TEMPLATE").isEmpty() )
                 s->setEqualOp("TEMPLATE", QStringList("app"));
             s->saveToFile();
-            addToPlusOp( "SUBDIRS", QStringList( projname ) );
+            addToPlusOp( "SUBDIRS", QStringList( realprojname ) );
             m_scopes.insert( getNextScopeNum(), s );
             return s;
         } else
@@ -808,9 +824,12 @@ void Scope::init()
         else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
         {
             QMake::IncludeAST * i = static_cast<QMake::IncludeAST*>( *it );
+            QString filename = i->projectName;
             if( i->projectName.startsWith("$") )
-                continue;
-            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), i->projectName, m_part ) );
+            {
+                filename = resolveVariables(i->projectName, *it);
+            }
+            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), filename, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
@@ -825,6 +844,8 @@ void Scope::init()
                         continue;
                     QDir subproject;
                     QString projectfile;
+                    if( str.startsWith("$") )
+                        str = resolveVariables(str, *it);
                     if( str.endsWith(".pro") )
                     {
                         subproject = QDir( projectDir(), "*.pro", QDir::Name | QDir::IgnoreCase, QDir::Files );
@@ -845,8 +866,8 @@ void Scope::init()
                             }else
                                 continue;
                         }
-                        if ( subproject.entryList().isEmpty() || subproject.entryList().contains( *sit + ".pro" ) )
-                            projectfile = (*sit) + ".pro";
+                        if ( subproject.entryList().isEmpty() || subproject.entryList().contains( str + ".pro" ) )
+                            projectfile = (str) + ".pro";
                         else
                             projectfile = subproject.entryList().first();
 
@@ -854,7 +875,7 @@ void Scope::init()
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
                     m_scopes.insert( getNextScopeNum(),
                                      new Scope( getNextScopeNum(), this, subproject.absFilePath( projectfile ),
-                                                m_part, ( m->op != "-=" )) );
+                                                m_part, m_defaultopts, ( m->op != "-=" )) );
                 }
             }
             else
@@ -878,6 +899,7 @@ void Scope::init()
             }
         }
     }
+    emit initializationFinished();
 }
 
 QString Scope::projectName() const
@@ -901,12 +923,6 @@ QString Scope::projectDir() const
         return m_parent->projectDir();
     }
 }
-
-// const QValueList<Scope*> Scope::scopesInOrder() const
-// {
-//     return m_scopes->values();
-// }
-
 
 const QMap<unsigned int, QMap<QString, QString> > Scope::customVariables() const
 {
@@ -1106,13 +1122,74 @@ Scope* Scope::disableSubproject( const QString& dir)
 
         kdDebug( 9024 ) << "Disabling subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, false );
+        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, m_defaultopts, false );
         addToMinusOp( "SUBDIRS", QStringList( dir ) );
         m_scopes.insert( getNextScopeNum(), s );
         return s;
     }
 
     return 0;
+}
+
+QString Scope::resolveVariables( const QString& value, QMake::AST* stopHere ) const
+{
+    return resolveVariables(QStringList(value),  stopHere).front();
+}
+
+QStringList Scope::variableValues( const QString& variable, QMake::AST* stopHere ) const
+{
+    QStringList result;
+
+    if ( !m_root )
+        return result;
+
+    result = calcValuesFromStatements( variable, result, true, stopHere );
+    result.remove( "\\\n" );
+    result.remove( "\n" );
+    result = Scope::removeWhiteSpace(result);
+    return result;
+}
+
+QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stopHere ) const
+{
+    QStringList result = values;
+    QMap<QString, QStringList> variables;
+    for( QStringList::iterator it = result.begin(); it != result.end(); ++it )
+    {
+        QRegExp re("$$([^ ]*) ");
+        int pos = 0;
+        while( pos >= 0 )
+        {
+            pos = re.search( (*it), pos );
+            if( pos > -1 )
+            {
+                if( !variables.contains( re.cap(1) ) )
+                    variables[re.cap(1)] = resolveVariables( variableValues( re.cap(1), stopHere ) );
+                pos += re.matchedLength();
+            }
+        }
+        re = QRegExp("$$\\{([^\\}]*)\\}");
+        pos = 0;
+        while( pos >= 0 )
+        {
+            pos = re.search( (*it), pos );
+            if( pos > -1 )
+            {
+                if( !variables.contains( re.cap(1) ) )
+                    variables[re.cap(1)] = resolveVariables( variableValues( re.cap(1), stopHere ) );
+                pos += re.matchedLength();
+            }
+        }
+        for( QMap<QString, QStringList>::const_iterator it2 = variables.begin(); it2 != variables.end(); ++it2 )
+        {
+            for( QStringList::const_iterator it3 = it2.data().begin(); it3 != it2.data().end(); ++it3 )
+            {
+                (*it).replace(QRegExp( "$$"+it2.key() ), *it3 );
+                (*it).replace(QRegExp( "${"+it2.key()+"}" ), *it3 );
+            }
+        }
+    }
+    return result;
 }
 
 #ifdef DEBUG
@@ -1218,5 +1295,7 @@ QString Scope::PrintAST::getIndent()
     return ind;
 }
 #endif
+
+#include "scope.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

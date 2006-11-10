@@ -15,33 +15,21 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
+#include <qobject.h>
 
 #include "qmakeast.h"
+#include "qmakedefaultopts.h"
 
 #ifdef DEBUG
 #include "qmakeastvisitor.h"
 #endif
 
-/*
- * TODO:
- * - Ask adymo again about variables, we can't just always put a new assignment at the end of the file, because that clutters the file after a few open/save cycles
-        -> recursively check for other assignments to the variable (into scopes)
- * - talk to adymo about the possibility to add a way to parse only part of a QMake project file in case the include-creation code doesn't work
-        -> see mail, find out wether the proposed function could be better, flex reading from memory...
- * - talk to adymo why function calls are "automatically" scopes and not function calls
-        -> line 243 in parser, in init() do special handling of FunctionCall's, make a FunctionScope+AssignmentAST out of it, or use http://rafb.net/paste/results/EE43DN82.html patch
- * - talk to adymo about memory handling in AST's, do they delete their children upon deletion?
-        -> deletion of childs.
- * - talk to adymo about how to handle unparsable file's - overwrite or set m_root to 0?
-        -> to rare to handle specially.
- * - Handle multiple function calls with different arguments
- */
-
 class Scope;
 class TrollProjectPart;
 
-class Scope
+class Scope : public QObject
 {
+    Q_OBJECT
 public:
 
     enum ScopeType {
@@ -78,7 +66,7 @@ public:
 
     // Fetch the variable values by running over the statements and adding/removing/setting
     // as the encountered op's say, begin with the parent projects variableValues list
-    QStringList variableValues( const QString& variable ) const;
+    QStringList variableValues( const QString& variable, bool checkIncParent = true ) const;
 
     // Remove a variable+Op combination from the scope, if existant
     void removeVariable( const QString& var, const QString& op );
@@ -177,6 +165,13 @@ public:
     void printTree();
 #endif
 
+signals:
+    void initializationFinished();
+
+private slots:
+    // Builds the scope-lists and the customVariables list
+    void init();
+
 private:
     /*
      * Updates the given Variable+op with the values, if removeFromOp is true it removes the values, else it adds them
@@ -204,9 +199,6 @@ private:
      */
     QValueList<QMake::AST*>::iterator findExistingVariable( const QString& variable );
 
-    // Builds the scope-lists and the customVariables list
-    void init();
-
     // Private constructors for easier subscope creation
     /*
      * just initializes the lists from the scope
@@ -216,7 +208,7 @@ private:
      * reads the given filename and parses it. If it doesn't exist creates an empty
      * ProjectAST with the given filename
      */
-    Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled = true );
+    Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, QMakeDefaultOpts*, bool isEnabled = true );
     /*
      * Creates a scope for an include statement, parses the file and initializes the Scope
      * Create an empty ProjectAST if the file cannot be found or parsed.
@@ -227,7 +219,7 @@ private:
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
     // using the given list as startvalue
     // Changes the list using the +=, -=, = operations accordingly
-    QStringList calcValuesFromStatements( const QString& variable, QStringList result, QMake::AST* stopHere = 0 ) const;
+    QStringList calcValuesFromStatements( const QString& variable, QStringList result, bool, QMake::AST* stopHere = 0 ) const;
 
     // Check wether the two operators are compatible
     static bool isCompatible( const QString& op1, const QString& op2);
@@ -241,6 +233,12 @@ private:
     QString funcScopeKey( QMake::ProjectAST* funcast ) const { return funcast->scopedID + "(" + funcast->args + ")"; }
 
     unsigned int getNextScopeNum() { if( m_scopes.isEmpty() ) return 0; else return (m_scopes.keys().last()+1); }
+
+    QStringList lookupVariable( const QString& var );
+
+    QStringList resolveVariables( const QStringList&, QMake::AST* = 0 ) const;
+    QStringList variableValues( const QString& variable, QMake::AST* ) const;
+    QString resolveVariables( const QString& , QMake::AST* = 0 ) const;
 
     QMake::ProjectAST* m_root;
     QMake::IncludeAST* m_incast;
@@ -256,6 +254,8 @@ private:
     unsigned int m_num;
     bool m_isEnabled;
     TrollProjectPart* m_part;
+    QMakeDefaultOpts* m_defaultopts;
+
 #ifdef DEBUG
     class PrintAST : QMake::ASTVisitor
     {
@@ -289,6 +289,7 @@ private:
         QString getIndent();
         QString replaceWs(QString);
         int indent;
+
     };
 #endif
 

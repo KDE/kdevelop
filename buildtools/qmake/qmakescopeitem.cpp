@@ -704,12 +704,14 @@ void QMakeScopeItem::addValue( const QString& var, const QString& value )
         else
             scope->addToPlusOp( var, QStringList( value ) );
     }else if( scope->scopeType() == Scope::IncludeScope )
+    {
         scope->addToPlusOp( var, QStringList( value ) );
+    }
 }
 
 void QMakeScopeItem::updateValues( const QString& var, const QStringList& values )
 {
-    QStringList curValues = scope->variableValues( var );
+    QStringList curValues = scope->variableValues( var, (scope->scopeType() != Scope::IncludeScope) );
     QStringList scopeValues = scope->variableValuesForOp( var, "+=" );
     for( QStringList::const_iterator it = curValues.begin(); it != curValues.end(); ++it )
     {

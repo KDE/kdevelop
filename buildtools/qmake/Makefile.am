@@ -15,12 +15,12 @@ libkdevtrollproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/buildtools/lib/base/libkdevbuildbase.la \
 	$(top_builddir)/buildtools/lib/parsers/qmake/libkdevqmakeparser.la
 
-libkdevtrollproject_la_SOURCES = projectconfigurationdlgbase.ui \
-	newwidgetdlgbase.ui newwidgetdlg.cpp projectconfigurationdlg.cpp trollprojectpart.cpp \
-	trollprojectwidget.cpp choosesubprojectdlgbase.ui choosesubprojectdlg.cpp trolllistview.cpp \
-	pathutil.cpp scope.cpp qmakescopeitem.cpp qmakeoptionswidgetbase.ui \
-	qmakeoptionswidget.cpp createscopedlgbase.ui createscopedlg.cpp disablesubprojectdlgbase.ui \
-	disablesubprojectdlg.cpp
+libkdevtrollproject_la_SOURCES = choosesubprojectdlg.cpp \
+	choosesubprojectdlgbase.ui createscopedlg.cpp createscopedlgbase.ui disablesubprojectdlg.cpp \
+	disablesubprojectdlgbase.ui newwidgetdlg.cpp newwidgetdlgbase.ui pathutil.cpp \
+	projectconfigurationdlg.cpp projectconfigurationdlgbase.ui qmakedefaultopts.cpp \
+	qmakeoptionswidget.cpp qmakeoptionswidgetbase.ui qmakescopeitem.cpp scope.cpp \
+	trolllistview.cpp trollprojectpart.cpp trollprojectwidget.cpp
 
 
 METASOURCES = AUTO
@@ -30,5 +30,5 @@ service_DATA = kdevtrollproject.desktop kdevtmakeproject.desktop
 
 rcdir = $(kde_datadir)/kdevtrollproject
 rc_DATA = kdevtrollproject.rc
-noinst_HEADERS = trolllistview.h qmakescopeitem.h qmakeoptionswidget.h \
-	createscopedlg.h disablesubprojectdlg.h
+noinst_HEADERS = createscopedlg.h disablesubprojectdlg.h qmakedefaultopts.h \
+	qmakeoptionswidget.h qmakescopeitem.h trolllistview.h
