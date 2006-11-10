@@ -296,7 +296,7 @@ QStringList Scope::calcValuesFromStatements( const QString& variable, QStringLis
     if( scopeType() == ProjectScope
         && m_defaultopts
         && m_defaultopts->variables().contains(variable)
-        && ( variable == "QT" || !KnownVariables.contains(variable) || variable == "CONFIG" ) )
+        && ( variable == "TEMPLATE" || variable == "QT" || !KnownVariables.contains(variable) || variable == "CONFIG" ) )
     {
         result = m_defaultopts->variableValues(variable);
     }
