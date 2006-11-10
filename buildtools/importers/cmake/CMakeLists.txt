@@ -49,8 +49,8 @@ target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS} kdevplatform k
 
 
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kdevcmakeimporter )
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kdevcmake_settings )
+
+
 install(TARGETS kdevcmakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kdevcmakecommon DESTINATION ${LIB_INSTALL_DIR} )
