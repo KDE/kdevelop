@@ -186,17 +186,19 @@ completion-box.</string>
                                     <string>Alt+G</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>When this is checked, members of all higher 
-namespaces will be included in the completion-list 
-while performing automatic completion. 
+                                    <string>When this is checked, members of all 
+higher namespaces will be included in 
+the completion-list while performing 
+automatic completion. 
 
 This may bloat the completion-list 
 and create a significant delay.</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>When this is checked, members of all higher 
-namespaces will be included in the completion-list 
-while performing automatic completion. 
+                                    <string>When this is checked, members of all 
+higher namespaces will be included in 
+the completion-list while performing 
+automatic completion. 
 
 This may bloat the completion-list 
 and create a significant delay.</string>
@@ -738,6 +740,16 @@ header/implementation file.</string>
                                 <property name="accel">
                                     <string>Alt+B</string>
                                 </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Menus appear on the right mouse click context menu, 
+hows menu items to navigate. Needs the "Class View"
+plugin enabled to have use all options.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Menus appear on the right mouse click context menu, 
+hows menu items to navigate. Needs the "Class View"
+plugin enabled to have use all options.</string>
+                                </property>
                             </widget>
                         </vbox>
                     </widget>
@@ -748,7 +760,7 @@ header/implementation file.</string>
                     <cstring>classWizardPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Class Wiza&amp;rd</string>
+                    <string>Class Wi&amp;zard</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -941,6 +953,16 @@ header/implementation file.</string>
                         <property name="title">
                             <string>Settings</string>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Will show as "Create Accessor Methods" in the
+right mouse button context menu only when 
+you right click on a variable in a header file.</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Will show as "Create Accessor Methods" in the
+right mouse button context menu only when 
+you right click on a variable in a header file.</string>
+                        </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
@@ -948,6 +970,16 @@ header/implementation file.</string>
                             <widget class="KLineEdit" row="1" column="0">
                                 <property name="name">
                                     <cstring>m_edtGet</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Will show as "Create Accessor Methods" in the
+right mouse button context menu only when 
+you right click on a variable in a header file.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Will show as "Create Accessor Methods" in the
+right mouse button context menu only when 
+you right click on a variable in a header file.</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
@@ -964,6 +996,16 @@ header/implementation file.</string>
                                 </property>
                                 <property name="text">
                                     <string>set</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Will show as "Create Accessor Methods" in the
+right mouse button context menu only when 
+you right click on a variable in a header file.</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Will show as "Create Accessor Methods" in the
+right mouse button context menu only when 
+you right click on a variable in a header file.</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="2" rowspan="1" colspan="2">
@@ -1111,10 +1153,10 @@ header/implementation file.</string>
                             <cstring>m_qtUsed</cstring>
                         </property>
                         <property name="text">
-                            <string>Enable &amp;Qt options</string>
+                            <string>Ena&amp;ble Qt options</string>
                         </property>
                         <property name="accel">
-                            <string>Alt+Q</string>
+                            <string>Alt+B</string>
                         </property>
                     </widget>
                     <widget class="QButtonGroup">
