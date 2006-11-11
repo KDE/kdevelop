@@ -52,7 +52,6 @@ QMakeDefaultOpts::~QMakeDefaultOpts()
     m_variables.clear();
     delete proc;
     proc = 0;
-    makefile.unlink();
     delete makefile;
     makefile = 0;
 }
