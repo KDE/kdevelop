@@ -255,7 +255,11 @@ void STTY::OutReceived(int f)
         *(buf+n) = 0;         // a standard string
         emit OutOutput(buf);
     }
-    if (n == 0 || n == -1)
+    // Note: for some reason, n can be 0 here.
+    // I can understand that non-blocking read returns 0,
+    // but I don't understand how OutRecieved can be even
+    // called when there's no input.
+    if (n == -1)
     {
         // Found eof or error. Disable socket notifier, otherwise Qt
         // will repeatedly call this method, eating CPU
