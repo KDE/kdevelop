@@ -176,9 +176,9 @@ KDevVCSFileInfoProvider * subversionPart::fileInfoProvider() const {
 }
 
 void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
-// If the current project doesn't support SVN, we don't
-// want to confuse the user with a SVN popup menu.
-if(!project() || !isValidDirectory(project()->projectDirectory()))
+  //no project, no subversion. Don't test on projectDirectory() here. If the user wants this project to have subversion support
+  //give it to him. e.g. for out of root subprojects like with qmake
+if(!project())
   return;
 
 	kdDebug(9036) << "contextMenu()" << endl;
@@ -196,7 +196,7 @@ if(!project() || !isValidDirectory(project()->projectDirectory()))
 		{
 			kdDebug(9036) << "Requested for an EditorContext" << endl;
 			const EditorContext *editorContext = static_cast<const EditorContext*>( context );
-			m_urls << editorContext->url();
+			m_urls = editorContext->url();
 		}
 		// THis stuff should end up into prepareOperation()
 		URLUtil::dump( m_urls );
@@ -409,8 +409,8 @@ bool subversionPart::isValidDirectory( const QString &dirPath) const {
     QDir svndir( dirPath + svn );
     QString entriesFileName = dirPath + svn + "entries";
 
-	kdDebug(9036) << "dirpath " << dirPath+"/.svn/" << svndir.exists() << endl;
-	kdDebug(9036) << "entries " << entriesFileName << QFile::exists( entriesFileName ) << endl;
+	kdDebug(9036) << "dirpath " << dirPath+"/.svn/" << " exists:" << svndir.exists() << endl;
+	kdDebug(9036) << "entries " << entriesFileName << " exists:" << QFile::exists( entriesFileName ) << endl;
     return svndir.exists() &&
         QFile::exists( entriesFileName );
 }
