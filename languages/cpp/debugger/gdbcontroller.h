@@ -188,7 +188,7 @@ private:
     */
     void raiseEvent(event_t e);
 
-    void announceWatchpointHit();
+    void maybeAnnounceWatchpointHit();
 
     /** Default handler for errors.
         Tries to guess is the error message is telling that target is

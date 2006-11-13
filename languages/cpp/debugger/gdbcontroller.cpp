@@ -580,7 +580,7 @@ void GDBController::reloadProgramState()
                      &GDBController::handleMiFileListExecSourceFile));
     else
     {
-        announceWatchpointHit();
+        maybeAnnounceWatchpointHit();
     }
 
     emit dbgStatus ("", state_);
@@ -719,25 +719,32 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
                      r["line"].literal().toInt(),
                      (*last_stop_result)["frame"]["addr"].literal());
 
-    announceWatchpointHit();
+    /* Watchpoint hit is announced only after we've highlighted
+       the current line. */
+    maybeAnnounceWatchpointHit();
  
     last_stop_result.reset();
 }
 
-void GDBController::announceWatchpointHit()
+void GDBController::maybeAnnounceWatchpointHit()
 {
-   QString last_stop_reason = (*last_stop_result)["reason"].literal();
-    
-    if (last_stop_reason == "watchpoint-trigger")
+    /* For some cases, for example catchpoints,
+       gdb does not report any reason at all. */
+    if ((*last_stop_result).hasField("reason"))
     {
-        emit watchpointHit((*last_stop_result)["wpt"]["number"]
-                           .literal().toInt(),
-                           (*last_stop_result)["value"]["old"].literal(),
-                           (*last_stop_result)["value"]["new"].literal());
-    }    
-    else if (last_stop_reason == "read-watchpoint-trigger")
-    {
-        emit dbgStatus ("Read watchpoint triggered", state_);        
+        QString last_stop_reason = (*last_stop_result)["reason"].literal();
+        
+        if (last_stop_reason == "watchpoint-trigger")
+        {
+            emit watchpointHit((*last_stop_result)["wpt"]["number"]
+                               .literal().toInt(),
+                               (*last_stop_result)["value"]["old"].literal(),
+                               (*last_stop_result)["value"]["new"].literal());
+        }    
+        else if (last_stop_reason == "read-watchpoint-trigger")
+        {
+            emit dbgStatus ("Read watchpoint triggered", state_);        
+        }
     }
 }
 
@@ -1722,8 +1729,8 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
     // We can do it right now, and don't wait for user command to finish
     // since commands used to reload all view will be executed after
     // user command anyway.
-    if (!stateIsOn(s_appNotStarted) && !stateIsOn(s_programExited))
-        raiseEvent(program_state_changed);
+    //if (!stateIsOn(s_appNotStarted) && !stateIsOn(s_programExited))
+    //    raiseEvent(program_state_changed);
 }
 
 void GDBController::explainDebuggerStatus()
