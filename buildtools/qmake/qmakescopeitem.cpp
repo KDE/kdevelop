@@ -316,15 +316,21 @@ QMakeScopeItem::~QMakeScopeItem()
 
 QString QMakeScopeItem::relativePath()
 {
-    if( !scope->parent() )
+    if( !scope || !scope->parent() )
         return "";
-    else if ( !scope->parent()->parent() || scope->scopeType() != Scope::ProjectScope )
-        return scope->scopeName();
-    else if ( scope->scopeType() == Scope::ProjectScope )
-        return ( static_cast<QMakeScopeItem*>( parent() ) ->relativePath()
-                 + QString( QChar( QDir::separator() ) ) + scope->scopeName() );
+    if( scope->scopeType() == Scope::ProjectScope )
+        return getRelativePath( m_widget->projectDirectory(), scope->projectDir() );
     else
-        return (  static_cast<QMakeScopeItem*>( parent() ) ->relativePath() );
+        return static_cast<QMakeScopeItem*>( parent() ) ->relativePath();
+//     if( !scope->parent() )
+//         return "";
+//     else if ( !scope->parent()->parent() || scope->scopeType() != Scope::ProjectScope )
+//         return scope->scopeName();
+//     else if ( scope->scopeType() == Scope::ProjectScope )
+//         return ( static_cast<QMakeScopeItem*>( parent() ) ->relativePath()
+//                  + QString( QChar( QDir::separator() ) ) + scope->scopeName() );
+//     else
+//         return (  static_cast<QMakeScopeItem*>( parent() ) ->relativePath() );
 }
 
 QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
@@ -539,6 +545,8 @@ FileItem* QMakeScopeItem::createFileItem( const QString& name )
 
 void QMakeScopeItem::buildGroups()
 {
+    if( scope->variableValues("TEMPLATE").contains("subdirs") )
+        return;
     QStringList values;
 
     GroupItem* item;

@@ -96,6 +96,7 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollPro
     }
     if( m_root )
         m_part->dirWatch()->addFile(filename);
+    init();
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part )
@@ -121,6 +122,7 @@ Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const 
     }
     if( m_root )
         m_part->dirWatch()->addFile( m_root->fileName() );
+    init();
 }
 
 bool Scope::loadFromFile( const QString& filename )

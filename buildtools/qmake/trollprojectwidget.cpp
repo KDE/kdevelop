@@ -367,22 +367,18 @@ void TrollProjectWidget::closeProject()
 
 QStringList TrollProjectWidget::allFiles()
 {
-    QPtrStack<QListViewItem> s;
     QStringList res;
 
     if( !m_rootSubproject )
         return res;
 
-    for ( QListViewItem * item = overview->firstChild(); item;
-            item = item->nextSibling() ? item->nextSibling() : s.pop() )
+    QListViewItemIterator it(overview);
+    while( it.current() )
     {
-        QMakeScopeItem *spitem = static_cast<QMakeScopeItem*>( item );
+        QMakeScopeItem *spitem = static_cast<QMakeScopeItem*>( it.current() );
 
         if( !spitem->scope->isEnabled() )
             continue;
-
-        if ( item->firstChild() )
-            s.push( item->firstChild() );
 
         QString path = spitem->relativePath();
 
@@ -390,14 +386,23 @@ QStringList TrollProjectWidget::allFiles()
         {
             GroupItem::GroupType type = tit.key();
 
-            if ( type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images
-                    || type == GroupItem::Resources || type == GroupItem::Lexsources || type == GroupItem::Yaccsources
-                    || type == GroupItem::Distfiles || type == GroupItem::Translations || type == GroupItem::IDLs
-                    || type == GroupItem::InstallObject )
+            if ( type == GroupItem::Sources
+                 || type == GroupItem::Headers
+                 || type == GroupItem::Forms
+                 || type == GroupItem::Images
+                 || type == GroupItem::Resources
+                 || type == GroupItem::Lexsources
+                 || type == GroupItem::Yaccsources
+                 || type == GroupItem::Distfiles
+                 || type == GroupItem::Translations
+                 || type == GroupItem::IDLs
+                 || type == GroupItem::InstallObject )
             {
                 for ( QPtrListIterator<FileItem> fit( tit.data() ->files ); fit.current(); ++fit )
                 {
-                    res.append( path + QString( QChar( QDir::separator() ) ) + ( *fit ) ->text( 0 ) );
+                    QString file = path + QString( QChar( QDir::separator() ) ) + ( *fit ) ->text( 0 );
+                    if( !res.contains( file ) )
+                        res.append( file );
                 }
             }
             else if ( type == GroupItem::InstallRoot )
@@ -406,11 +411,14 @@ QStringList TrollProjectWidget::allFiles()
                 {
                     for ( QPtrListIterator<FileItem> fit( tit2.current() ->files ); fit.current(); ++fit )
                     {
-                        res.append( path + QString( QChar( QDir::separator() ) ) + ( *fit ) ->text( 0 ) );
+                        QString file = path + QString( QChar( QDir::separator() ) ) + ( *fit ) ->text( 0 );
+                        if( !res.contains( file ) )
+                            res.append( file );
                     }
                 }
             }
         }
+        it++;
     }
 
     return res;

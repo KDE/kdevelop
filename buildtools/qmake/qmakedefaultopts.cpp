@@ -44,6 +44,16 @@ void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projd
                  this, SLOT( slotReadStderr( ) ) );
         proc->setCommunication( QProcess::Stderr );
         proc->start();
+        if( !proc->isRunning() && !proc->normalExit() )
+        {
+            kdDebug(9024) << "Couldn't execute qmake" << endl;
+            makefile->unlink();
+            delete makefile;
+            makefile = 0;
+            delete proc;
+            proc = 0;
+            emit variablesRead();
+        }
     }
 }
 
