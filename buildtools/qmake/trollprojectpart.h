@@ -56,7 +56,6 @@ protected:
     virtual void addFiles ( const QStringList &fileList );
     virtual void removeFile(const QString &fileName);
     virtual void removeFiles ( const QStringList &fileList );
-    virtual QString& getQMakeHeader() {return m_qmakeHeader;}
     virtual QString buildDirectory() const;
     virtual QString runDirectory() const;
     virtual QString runArguments() const;
@@ -82,7 +81,6 @@ private:
     QStringList availableQtDirList() const;
 
     QGuardedPtr<TrollProjectWidget> m_widget;
-    QString m_qmakeHeader;
     QString m_projectName;
     bool m_tmakeProject;
 
