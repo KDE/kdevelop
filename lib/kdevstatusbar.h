@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-class KDEVINTERFACES_EXPORT KDevStatusBar : public KStatusBar
+class KDEVPLATFORM_EXPORT KDevStatusBar : public KStatusBar
 {
     Q_OBJECT
 

@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 class KDevLanguageSupport;
 
 /**The KDevAST is a simple base struct for the various Abstract Syntax Trees of the parsers.*/
-struct KDEVINTERFACES_EXPORT KDevAST
+struct KDEVPLATFORM_EXPORT KDevAST
 {
 public:
     /// Language support part which generated the AST

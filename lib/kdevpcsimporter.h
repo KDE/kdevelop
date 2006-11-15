@@ -33,7 +33,7 @@ These plugins are used by language support plugins to fill symbol stores
 with symbol information from certain files. The purpose of the importer
 is to provide file selection wizard.
 */
-class KDEVINTERFACES_EXPORT KDevPCSImporter: public QObject
+class KDEVPLATFORM_EXPORT KDevPCSImporter: public QObject
 {
     Q_OBJECT
 public:

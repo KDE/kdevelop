@@ -25,7 +25,7 @@
 
 class KDevFileManager;
 
-class KDEVINTERFACES_EXPORT ImportProjectJob: public KJob
+class KDEVPLATFORM_EXPORT ImportProjectJob: public KJob
 {
     Q_OBJECT
 public:

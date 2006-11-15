@@ -85,7 +85,7 @@ else if context->hasType(Context::FileContext))
 ...
 @endcode
  */
-class KDEVINTERFACES_EXPORT Context
+class KDEVPLATFORM_EXPORT Context
 {
 public:
     /**Pre-defined context types. More may be added so it is possible to add custom
@@ -115,7 +115,7 @@ protected:
 };
 
 /**A context for the KTextEditor.*/
-class KDEVINTERFACES_EXPORT EditorContext: public Context
+class KDEVPLATFORM_EXPORT EditorContext: public Context
 {
 public:
     /**Builds a context for a KTextEditor part.
@@ -156,7 +156,7 @@ private:
 /**
 A context for the a list of selected urls.
  */
-class KDEVINTERFACES_EXPORT FileContext : public Context
+class KDEVPLATFORM_EXPORT FileContext : public Context
 {
 public:
     /**Builds the file context using a @ref KUrl::List
@@ -182,7 +182,7 @@ private:
 /**
 A context for KDevCodeItem's.
  */
-class KDEVINTERFACES_EXPORT CodeItemContext: public Context
+class KDEVPLATFORM_EXPORT CodeItemContext: public Context
 {
 public:
     /**Builds the context.
@@ -208,7 +208,7 @@ private:
 /**
 A context for KDevProjectItem's.
  */
-class KDEVINTERFACES_EXPORT ProjectItemContext : public Context
+class KDEVPLATFORM_EXPORT ProjectItemContext : public Context
 {
 public:
     /**Builds the context.

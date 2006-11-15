@@ -31,7 +31,7 @@ class KDevProjectItem;
 
 Describes a <b>Project Builder</b> to KDevelop's Project Manager.
 */
-class KDEVINTERFACES_EXPORT KDevProjectBuilder: public QObject
+class KDEVPLATFORM_EXPORT KDevProjectBuilder: public QObject
 {
     Q_OBJECT
 public:

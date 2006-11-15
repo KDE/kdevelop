@@ -51,7 +51,7 @@ KDevelop plugin controller interface.
  *The KDevelop plugin controller.
 * The Plugin controller is responsible for querying, loading and unloading available plugins.
 */
-class KDEVINTERFACES_EXPORT KDevPluginController: public QObject
+class KDEVPLATFORM_EXPORT KDevPluginController: public QObject
 {
     
     Q_OBJECT

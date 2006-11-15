@@ -42,7 +42,7 @@ class KDevProjectTargetItem;
  * \li Build Target
  * \li File
  */
-class KDEVINTERFACES_EXPORT KDevProjectItem: public QStandardItem
+class KDEVPLATFORM_EXPORT KDevProjectItem: public QStandardItem
 {
 public:
   KDevProjectItem(const QString &name, QStandardItem *parent = 0)
@@ -82,7 +82,7 @@ public:
  * Implementation of the KDevProjectItem interface that is specific to a 
  * folder
  */
-class KDEVINTERFACES_EXPORT KDevProjectFolderItem: public KDevProjectItem
+class KDEVPLATFORM_EXPORT KDevProjectFolderItem: public KDevProjectItem
 {
 public:
   KDevProjectFolderItem(const KUrl &dir, QStandardItem *parent = 0);
@@ -106,7 +106,7 @@ private:
 /**
  * Folder which contains buildable targets as part of a buildable project
  */
-class KDEVINTERFACES_EXPORT KDevProjectBuildFolderItem: public KDevProjectFolderItem
+class KDEVPLATFORM_EXPORT KDevProjectBuildFolderItem: public KDevProjectFolderItem
 {
 public:
   KDevProjectBuildFolderItem(const KUrl &dir, QStandardItem *parent = 0)
@@ -139,7 +139,7 @@ private:
  *
  * This object contains all properties specific to a target.
  */
-class KDEVINTERFACES_EXPORT KDevProjectTargetItem: public KDevProjectItem
+class KDEVPLATFORM_EXPORT KDevProjectTargetItem: public KDevProjectItem
 {
 public:
   KDevProjectTargetItem(const QString &name, QStandardItem *parent = 0)
@@ -172,7 +172,7 @@ public:
 /**
  * Object which represents a file.
  */
-class KDEVINTERFACES_EXPORT KDevProjectFileItem: public KDevProjectItem
+class KDEVPLATFORM_EXPORT KDevProjectFileItem: public KDevProjectItem
 {
 public:
   KDevProjectFileItem(const KUrl& file, QStandardItem *parent = 0);
@@ -191,7 +191,7 @@ private:
   KUrl m_url;
 };
 
-class KDEVINTERFACES_EXPORT KDevProjectModel: public QStandardItemModel
+class KDEVPLATFORM_EXPORT KDevProjectModel: public QStandardItemModel
 {
   Q_OBJECT
 public:

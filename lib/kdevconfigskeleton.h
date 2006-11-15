@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevexport.h"
 #include <kconfigskeleton.h>
 
-class KDEVINTERFACES_EXPORT KDevConfigSkeleton: public KConfigSkeleton
+class KDEVPLATFORM_EXPORT KDevConfigSkeleton: public KConfigSkeleton
 {
     Q_OBJECT
 public:

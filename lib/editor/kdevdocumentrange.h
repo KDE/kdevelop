@@ -31,7 +31,7 @@
  *
  * \todo parent/child relationships here too?
  */
-class KDEVINTERFACES_EXPORT KDevDocumentRange : public KTextEditor::Range
+class KDEVPLATFORM_EXPORT KDevDocumentRange : public KTextEditor::Range
 {
 public:
   KDevDocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);

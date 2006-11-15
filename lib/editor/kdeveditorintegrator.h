@@ -43,7 +43,7 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
  *
  * \todo non-loaded documents don't trigger the removeDocument call...
  */
-class KDEVINTERFACES_EXPORT KDevEditorIntegrator
+class KDEVPLATFORM_EXPORT KDevEditorIntegrator
 {
 public:
   KDevEditorIntegrator();

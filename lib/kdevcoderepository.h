@@ -46,7 +46,7 @@ never or rarely changes. System libraries are perfect examples of such code.
 Symbols from code contained in project files are better stored in memory
 symbol store like @ref CodeModel.
 */
-class KDEVINTERFACES_EXPORT KDevCodeRepository : public QObject
+class KDEVPLATFORM_EXPORT KDevCodeRepository : public QObject
 {
     Q_OBJECT
 public:

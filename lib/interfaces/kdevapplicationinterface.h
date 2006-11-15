@@ -54,7 +54,7 @@ if (apf) {
 @endcode
 @sa KDevPlugin::extension method documentation.
 */
-class KDEVINTERFACES_EXPORT KDevAppFrontend : public KDevPlugin
+class KDEVPLATFORM_EXPORT KDevAppFrontend : public KDevPlugin
 {
     Q_OBJECT
 

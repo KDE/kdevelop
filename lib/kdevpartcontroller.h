@@ -28,7 +28,7 @@ class Document;
 class Editor;
 }
 
-class KDevPartController : public KParts::PartManager, protected KDevCoreInterface
+class KDEVPLATFORM_EXPORT KDevPartController : public KParts::PartManager, protected KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT

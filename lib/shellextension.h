@@ -30,7 +30,7 @@ Shell extension.
 Provides application-dependent and shell-independent functionality.
 Shell uses extensions to perform application dependent actions.
 */
-class KDEVINTERFACES_EXPORT ShellExtension {
+class KDEVPLATFORM_EXPORT ShellExtension {
 public:
     virtual ~ShellExtension() {}
 

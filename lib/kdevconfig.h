@@ -35,7 +35,7 @@ Developers using the KDevelop API should use these config objects instead of
 the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
 it can cause unexpected syncing issues.
 */
-class KDEVINTERFACES_EXPORT KDevConfig
+class KDEVPLATFORM_EXPORT KDevConfig
 {
 public:
     enum Mode

@@ -77,7 +77,7 @@ class Context;
  * The document controller manages open documents in the IDE.
  * Open documents are usually editors, GUI designers, html documentation etc.
 */
-class KDEVINTERFACES_EXPORT KDevDocumentController: public QObject, public KDevCoreInterface
+class KDEVPLATFORM_EXPORT KDevDocumentController: public QObject, public KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT

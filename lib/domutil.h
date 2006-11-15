@@ -44,7 +44,7 @@ typedef QList<DomPathElement> DomPath;
 /**
  * Utility class for conveniently accessing data in a %DOM tree.
  */
-class KDEVINTERFACES_EXPORT DomUtil
+class KDEVPLATFORM_EXPORT DomUtil
 {
 public:
     typedef QPair<QString, QString> Pair;

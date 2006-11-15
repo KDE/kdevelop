@@ -31,7 +31,7 @@ class KDevPlugin;
 class KDevProject;
 class KRecentFilesAction;
 
-class KDEVINTERFACES_EXPORT KDevProjectController : public QObject, protected KDevCoreInterface
+class KDEVPLATFORM_EXPORT KDevProjectController : public QObject, protected KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT

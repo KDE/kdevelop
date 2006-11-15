@@ -37,7 +37,7 @@ class KDevCodeModel;
 
 namespace KTextEditor { class SmartRange; }
 
-class KDEVINTERFACES_EXPORT KDevCodeItem: public KDevItemCollection, public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORM_EXPORT KDevCodeItem: public KDevItemCollection, public KTextEditor::SmartRangeWatcher
 {
 public:
     KDevCodeItem( const QString &name, KDevItemGroup *parent = 0 );
@@ -123,7 +123,7 @@ private:
     KTextEditor::SmartRange* m_definition;
 };
 
-class KDEVINTERFACES_EXPORT KDevCodeModel: public KDevItemModel
+class KDEVPLATFORM_EXPORT KDevCodeModel: public KDevItemModel
 {
     Q_OBJECT
 public:

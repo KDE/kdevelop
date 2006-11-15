@@ -30,7 +30,7 @@ typedef QList<KDevProjectFileItem*> FileItemList;
  * Manage the file and build system of the project.
  * @author Matt Rogers <mattr@kde.org>, Hamish Rodda <rodda@kde.org>
  */
-class KDEVINTERFACES_EXPORT KDevBuildManager : public KDevFileManager
+class KDEVPLATFORM_EXPORT KDevBuildManager : public KDevFileManager
 {
     Q_OBJECT
 

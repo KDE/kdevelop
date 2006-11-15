@@ -48,7 +48,7 @@ class KDevDocumentController;
  * - clearer distinction in the code between an open document and a url
  *   (which may or may not be open)
  */
-class KDEVINTERFACES_EXPORT KDevDocument : public QObject
+class KDEVPLATFORM_EXPORT KDevDocument : public QObject
 {
   Q_OBJECT
 

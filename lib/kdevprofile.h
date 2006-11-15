@@ -29,7 +29,7 @@
 
 A class which represents a profile for KDevelop platform stored on disk.
 */
-class KDEVINTERFACES_EXPORT Profile {
+class KDEVPLATFORM_EXPORT Profile {
 public:
     /**An entry in the lists that store profile information*/
     struct Entry {

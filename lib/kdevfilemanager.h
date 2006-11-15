@@ -50,7 +50,7 @@ class KDialogBase;
  *
  * @author Roberto Raggi, Matt Rogers, Hamish Rodda
  */
-class KDEVINTERFACES_EXPORT KDevFileManager: public KDevPlugin
+class KDEVPLATFORM_EXPORT KDevFileManager: public KDevPlugin
 {
     Q_OBJECT
 

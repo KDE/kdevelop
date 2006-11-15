@@ -68,7 +68,7 @@ QString beautifyToolTip( const QString& text );
  * will take ownership of the object and upon application shutdown will take
  * responsibility for deleting the objects stored by KDevCore.
  */
-class KDEVINTERFACES_EXPORT KDevCore
+class KDEVPLATFORM_EXPORT KDevCore
 {
 public:
     /** Constructor */
@@ -207,7 +207,7 @@ public:
  * These objects need to inherit the various pure virtual functions which facilitate things like
  * project loading and inter-object initialization.
  */
-class KDEVINTERFACES_EXPORT KDevCoreInterface
+class KDEVPLATFORM_EXPORT KDevCoreInterface
 {
 public:
    /**

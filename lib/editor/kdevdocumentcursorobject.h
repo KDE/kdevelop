@@ -29,7 +29,7 @@
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVINTERFACES_EXPORT KDevDocumentCursorObject : public KTextEditor::SmartCursorWatcher
+class KDEVPLATFORM_EXPORT KDevDocumentCursorObject : public KTextEditor::SmartCursorWatcher
 {
 public:
   KDevDocumentCursorObject(KTextEditor::Cursor* cursor);

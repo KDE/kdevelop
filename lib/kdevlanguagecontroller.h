@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevlanguagesupport.h"
 
-class KDEVINTERFACES_EXPORT KDevLanguageController: public QObject, protected KDevCoreInterface
+class KDEVPLATFORM_EXPORT KDevLanguageController: public QObject, protected KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT

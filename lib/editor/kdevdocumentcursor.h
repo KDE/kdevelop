@@ -33,7 +33,7 @@ namespace KTextEditor { class SmartCursor; }
  *
  * \todo override comparison operators and take them into account
  */
-class KDEVINTERFACES_EXPORT KDevDocumentCursor : public KTextEditor::Cursor
+class KDEVPLATFORM_EXPORT KDevDocumentCursor : public KTextEditor::Cursor
 {
 public:
   KDevDocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());

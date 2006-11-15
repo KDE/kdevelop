@@ -32,7 +32,7 @@
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVINTERFACES_EXPORT KDevDocumentRangeObject : public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORM_EXPORT KDevDocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
   KDevDocumentRangeObject(KTextEditor::Range* range);

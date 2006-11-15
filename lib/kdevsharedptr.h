@@ -37,7 +37,7 @@
  *
  * @author Waldo Bastian <bastian@kde.org>
  */
-class KDEVINTERFACES_EXPORT KDevShared {
+class KDEVPLATFORM_EXPORT KDevShared {
 public:
    /**
     * Standard constructor.  This will initialize the reference count

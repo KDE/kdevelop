@@ -57,7 +57,7 @@ typedef sparse_hash_map<QString, KDevAST*, QStrHash> PHASH;
 
 class KDevLanguageSupport;
 
-class KDEVINTERFACES_EXPORT KDevPersistentHash: public QObject
+class KDEVPLATFORM_EXPORT KDevPersistentHash: public QObject
 {
     Q_OBJECT
 public:

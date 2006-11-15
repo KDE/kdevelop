@@ -44,7 +44,7 @@ KDevelop main window interface.
 KDevelop main window interface.
 Provides methods to control the main window of an application.
 */
-class KDEVINTERFACES_EXPORT KDevMainWindow : public KMainWindow, protected KDevCoreInterface
+class KDEVPLATFORM_EXPORT KDevMainWindow : public KMainWindow, protected KDevCoreInterface
 {
     friend class KDevCore;
     Q_OBJECT

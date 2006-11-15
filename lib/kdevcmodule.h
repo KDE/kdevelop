@@ -33,7 +33,7 @@ class KUrl;
  *
  * The base class settings.
  */
-class KDEVINTERFACES_EXPORT KDevCModule: public KCModule
+class KDEVPLATFORM_EXPORT KDevCModule: public KCModule
 {
     Q_OBJECT
 public:

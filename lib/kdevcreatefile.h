@@ -45,7 +45,7 @@ if (cf) {
 @endcode
 @sa KDevPlugin::extension method documentation.
 */
-class KDEVINTERFACES_EXPORT KDevCreateFile : public KDevPlugin
+class KDEVPLATFORM_EXPORT KDevCreateFile : public KDevPlugin
 {
 
 public:

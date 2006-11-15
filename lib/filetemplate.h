@@ -39,7 +39,7 @@ FileTemplate class with utility methods to work with file templates.
 /**
 Utilities to work with file templates in the current project.
 */
-class KDEVINTERFACES_EXPORT FileTemplate
+class KDEVPLATFORM_EXPORT FileTemplate
 {
 public:
 

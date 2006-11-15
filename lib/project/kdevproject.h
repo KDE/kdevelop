@@ -48,7 +48,7 @@ class KDevPersistentHash;
  *
  * Provide better descriptions
  */
-class KDEVINTERFACES_EXPORT KDevProject : public QObject
+class KDEVPLATFORM_EXPORT KDevProject : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")

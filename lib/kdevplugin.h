@@ -101,7 +101,7 @@ and writing factories for plugins.
 @sa KDevCore class documentation for an information about features which are available to plugins
 from shell applications.
 */
-class KDEVINTERFACES_EXPORT KDevPlugin: public QObject, public KXMLGUIClient
+class KDEVPLATFORM_EXPORT KDevPlugin: public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 
