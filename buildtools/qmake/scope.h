@@ -203,7 +203,7 @@ private:
     /*
      * just initializes the lists from the scope
      */
-    Scope( unsigned int num, Scope* parent, QMake::ProjectAST* root, TrollProjectPart* part );
+    Scope( unsigned int num, Scope* parent, QMake::ProjectAST* root, QMakeDefaultOpts*, TrollProjectPart* part );
     /*
      * reads the given filename and parses it. If it doesn't exist creates an empty
      * ProjectAST with the given filename
@@ -213,7 +213,7 @@ private:
      * Creates a scope for an include statement, parses the file and initializes the Scope
      * Create an empty ProjectAST if the file cannot be found or parsed.
      */
-    Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part );
+    Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, QMakeDefaultOpts*, TrollProjectPart* part );
 
 
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
@@ -283,7 +283,6 @@ private:
 
         virtual void processInclude( QMake::IncludeAST* a);
 
-        virtual void processOrOperator( QMake::OrOperatorAST* a);
 
     private:
         QString getIndent();

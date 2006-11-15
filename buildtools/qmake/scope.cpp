@@ -73,8 +73,8 @@ Scope::~Scope()
     m_root = 0;
 }
 
-Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope, TrollProjectPart* part )
-    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(0)
+Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
+    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts)
 {
     init();
 }
@@ -99,15 +99,20 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollPro
     init();
 }
 
-Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, TrollProjectPart* part )
-        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(0)
+Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
+        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts)
 {
     QString absfilename;
-    if( QFileInfo(incfile).isRelative() )
+    QString tmp;
+    if( incfile.contains(")" ) )
+        tmp = incfile.mid(0, incfile.find(")") );
+    else
+        tmp = incfile;
+    if( QFileInfo(tmp).isRelative() )
     {
-        absfilename = path + QString( QChar( QDir::separator() ) ) + incfile;
+        absfilename = path + QString( QChar( QDir::separator() ) ) + tmp;
     }else
-        absfilename = incfile;
+        absfilename = tmp;
     if ( !loadFromFile( absfilename ) )
     {
         if( !QFileInfo( absfilename ).exists() )
@@ -295,9 +300,8 @@ QStringList Scope::calcValuesFromStatements( const QString& variable, QStringLis
         return result;
 
     /* For variables that we don't know and which are not QT/CONFIG find the default value */
-    if( scopeType() == ProjectScope
-        && m_defaultopts
-        && m_defaultopts->variables().contains(variable)
+    if( m_defaultopts
+        && m_defaultopts->variables().contains(variable) > 0
         && ( variable == "TEMPLATE" || variable == "QT" || !KnownVariables.contains(variable) || variable == "CONFIG" ) )
     {
         result = m_defaultopts->variableValues(variable);
@@ -415,7 +419,7 @@ Scope* Scope::createFunctionScope( const QString& funcName, const QString& args 
     ast->addChildAST( new QMake::NewLineAST() );
     m_root->addChildAST( ast );
     m_root->addChildAST( new QMake::NewLineAST() );
-    Scope* funcScope = new Scope( getNextScopeNum(), this, ast, m_part );
+    Scope* funcScope = new Scope( getNextScopeNum(), this, ast, m_defaultopts, m_part );
     if( funcScope->scopeType() != Scope::InvalidScope )
     {
         m_scopes.insert( getNextScopeNum(), funcScope );
@@ -438,7 +442,7 @@ Scope* Scope::createSimpleScope( const QString& scopename )
     m_root->addChildAST( new QMake::NewLineAST() );
     if ( m_part->isQt4Project() )
         addToPlusOp( "CONFIG", QStringList( scopename ) );
-    Scope* simpleScope = new Scope( getNextScopeNum(), this, ast, m_part );
+    Scope* simpleScope = new Scope( getNextScopeNum(), this, ast, m_defaultopts, m_part );
 
     if( simpleScope->scopeType() != Scope::InvalidScope )
     {
@@ -470,7 +474,7 @@ Scope* Scope::createIncludeScope( const QString& includeFile, bool negate )
     QMake::IncludeAST* ast = new QMake::IncludeAST();
     ast->setDepth( m_root->depth() );
     ast->projectName = includeFile;
-    Scope* incScope = new Scope( funcScope->getNextScopeNum(), funcScope, ast, projectDir(), resolveVariables( ast->projectName ), m_part );
+    Scope* incScope = new Scope( funcScope->getNextScopeNum(), funcScope, ast, projectDir(), resolveVariables( ast->projectName ), m_defaultopts, m_part );
     if ( incScope->scopeType() != InvalidScope )
     {
         funcScope->m_root->addChildAST( ast );
@@ -821,7 +825,7 @@ void Scope::init()
         if ( ( *it ) ->nodeType() == QMake::AST::ProjectAST )
         {
             QMake::ProjectAST * p = static_cast<QMake::ProjectAST*>( *it );
-            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, p, m_part ) );
+            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, p, m_defaultopts, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
         {
@@ -831,7 +835,7 @@ void Scope::init()
             {
                 filename = resolveVariables(i->projectName, *it);
             }
-            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), filename, m_part ) );
+            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), filename, m_defaultopts, m_part ) );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
@@ -876,7 +880,8 @@ void Scope::init()
                     }
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
                     m_scopes.insert( getNextScopeNum(),
-                                     new Scope( getNextScopeNum(), this, subproject.absFilePath( projectfile ),
+                                     new Scope( getNextScopeNum(), this,
+                                                subproject.absFilePath( projectfile ),
                                                 m_part, m_defaultopts, ( m->op != "-=" )) );
                 }
             }
@@ -1158,7 +1163,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
     QMap<QString, QStringList> variables;
     for( QStringList::iterator it = result.begin(); it != result.end(); ++it )
     {
-        QRegExp re("$$([^ ]*) ");
+        QRegExp re("\\$\\$([^\\) /]*)( |\\)|/)");
         int pos = 0;
         while( pos >= 0 )
         {
@@ -1170,7 +1175,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
                 pos += re.matchedLength();
             }
         }
-        re = QRegExp("$$\\{([^\\}]*)\\}");
+        re = QRegExp("\\$\\$\\{([^\\)\\}]*)\\}");
         pos = 0;
         while( pos >= 0 )
         {
@@ -1186,8 +1191,8 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
         {
             for( QStringList::const_iterator it3 = it2.data().begin(); it3 != it2.data().end(); ++it3 )
             {
-                (*it).replace(QRegExp( "$$"+it2.key() ), *it3 );
-                (*it).replace(QRegExp( "${"+it2.key()+"}" ), *it3 );
+                (*it).replace(QRegExp( "\\$\\$"+it2.key() ), *it3 );
+                (*it).replace(QRegExp( "\\$\\{"+it2.key()+"\\}" ), *it3 );
             }
         }
     }
@@ -1269,12 +1274,6 @@ void Scope::PrintAST::processNewLine( QMake::NewLineAST* n)
 {
     kdDebug(9024) << getIndent() << "Newline " << endl;
     QMake::ASTVisitor::processNewLine(n);
-}
-
-void Scope::PrintAST::processOrOperator( QMake::OrOperatorAST* n)
-{
-    kdDebug(9024) << getIndent() << "OrOperator " << endl;
-    QMake::ASTVisitor::processOrOperator(n);
 }
 
 void Scope::PrintAST::processComment( QMake::CommentAST* a)
