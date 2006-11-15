@@ -193,20 +193,6 @@ public:
 
 };
 
-/**
-Or-Op AST node.
-Represents | between function calls
-*/
-class OrOperatorAST: public AST {
-public:
-    OrOperatorAST(): AST(AST::OrOperatorAST) {}
-
-    virtual void writeBack(QString &buffer);
-
-};
-
-
-
 
 /**
 Comment AST node.

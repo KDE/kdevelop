@@ -62,7 +62,7 @@ quoted_var_value  {quote}{var_value}({var_value}|"\t"|" ")*{quote}
 letter            [A-Za-z]
 digit             [0-9]
 id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.|\+|\-)*
-id_args           [^\n\|]*\)
+id_args           [^\n]*\)
 number            {digit}+
 comment           #.*
 comment_cont      {ws}*#.*\n
@@ -94,7 +94,6 @@ cont              \\{ws}*\n
     return (LIST_COMMENT);
     }
 
-
 <funcargs>{id_args} {
     yylval.value = yytext;
     yylval.value = yylval.value.mid(0, yylval.value.length()-1);
@@ -116,7 +115,6 @@ cont              \\{ws}*\n
 "}"                      { return RCURLY; }
 "("                      { BEGIN(funcargs); return LBRACE; }
 <funcargs,INITIAL>")"    { BEGIN(INITIAL); return RBRACE; }
-"|"                      { return OR_OPERATOR; }
 ":"                      { yylval.value = yytext; return COLON; }
 <list,list_with_comment,INITIAL>"\n"       { BEGIN(INITIAL); return NEWLINE; }
 

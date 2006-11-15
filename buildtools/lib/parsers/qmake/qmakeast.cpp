@@ -146,13 +146,6 @@ void NewLineAST::writeBack(QString &buffer)
 }
 
 
-//OrOperatorAST
-
-void OrOperatorAST::writeBack(QString &buffer)
-{
-    buffer += "|";
-}
-
 //CommentAST
 
 void CommentAST::writeBack(QString &buffer)

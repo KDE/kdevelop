@@ -130,7 +130,6 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token VARIABLE_VALUE
 %token INDENT
 %token LIST_WS
-%token OR_OPERATOR
 %%
 
 project :
@@ -169,10 +168,6 @@ statement : variable_assignment
         {
             $<node>$ = new NewLineAST();
         }
-    | OR_OPERATOR
-        {
-	    $<node>$ = new OrOperatorAST();
-	}
     ;
 
 variable_assignment : ID_SIMPLE operator multiline_values

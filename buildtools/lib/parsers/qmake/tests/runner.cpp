@@ -108,11 +108,6 @@ private:
       kdDebug(9024) << getIndent() << "Include: " << replaceWs(a->projectName) << endl;
       QMake::ASTVisitor::processInclude(a);
   }
-  virtual void processOrOperator( QMake::OrOperatorAST* a)
-  {
-      kdDebug(9024) << getIndent() << "Or Operator" << endl;
-      QMake::ASTVisitor::processOrOperator(a);
-  }
 
   QString getIndent()
   {

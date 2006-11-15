@@ -39,7 +39,6 @@ public:
     virtual void processNewLine(NewLineAST *) {}
     virtual void processComment(CommentAST *) {}
     virtual void processInclude(IncludeAST *) {}
-    virtual void processOrOperator(OrOperatorAST *) {}
 };
 
 }
