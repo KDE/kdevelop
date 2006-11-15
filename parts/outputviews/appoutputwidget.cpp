@@ -34,7 +34,7 @@
 #include "kdevproject.h"
 
 AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
-    : ProcessWidget(0, "app output widget")
+    : ProcessWidget(0, "app output widget"), iFilterType(eNoFilter)
 	, m_part(part)
 {
 	connect(this, SIGNAL(executed(QListBoxItem*)), SLOT(slotRowSelected(QListBoxItem*)));
@@ -45,6 +45,11 @@ AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
 	setFont(config->readFontEntry("OutputViewFont"));
 }
 
+void AppOutputWidget::clearView()
+{
+	strList.clear();
+	clear();
+}
 
 AppOutputWidget::~AppOutputWidget()
 {}

@@ -32,6 +32,8 @@ friend class AppOutputViewPart;
 public:
     AppOutputWidget(AppOutputViewPart* part);
     ~AppOutputWidget();
+    // clears our own store and the one of our base ProcessWidget
+    void clearView();
 
 public slots:
 	void slotRowSelected(QListBoxItem* row);

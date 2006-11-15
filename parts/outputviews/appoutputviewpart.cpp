@@ -143,7 +143,7 @@ void AppOutputViewPart::insertStderrLine(const QString &line)
 
 void AppOutputViewPart::clearView()
 {
-    m_widget->clear();
+    m_widget->clearView();
 }
 
 #include "appoutputviewpart.moc"
