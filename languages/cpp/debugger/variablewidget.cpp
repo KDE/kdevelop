@@ -1112,6 +1112,7 @@ VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
   format_(format),
   numChildren_(0),
   childrenFetched_(false),
+  updateUnconditionally_(false),
   frozen_(false),
   initialCreation_(false)
 { 
