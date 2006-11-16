@@ -432,7 +432,7 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
         p.parse();
     }
     if( macrosGlobal ) {
-        for( MacroMap::iterator it = m_macros.begin(); it != m_macros.end(); ) {
+        for( MacroMap::iterator it = m_macros.begin(); it != m_macros.end(); ++it) {
             if( (*it).second.fileName() == fileName ) {
                 (*it).second.setFileName( QString::null );
             }
