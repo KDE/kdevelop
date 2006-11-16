@@ -354,6 +354,7 @@ void TrollProjectWidget::createQMakeScopeItems()
     {
         overview->setSelected( m_rootSubproject, true );
     }
+    kdDebug(9024) << "Adding " << allFiles().count() << " Files" << endl;
     emit m_part->addedFilesToProject(allFiles());
 }
 
@@ -2450,6 +2451,12 @@ void TrollProjectWidget::slotProjectDirty(const QString& path)
         for( ; reloadit != itemstoreload.end() ; ++reloadit )
         {
             (*reloadit)->reloadProject();
+            if( m_shownSubproject == (*reloadit)  )
+            {
+                cleanDetailView(*reloadit);
+                setupContext();
+                buildProjectDetailTree( *reloadit, details );
+            }
             if( m_configDlg->isShown() && m_configDlg->currentProjectItem() == (*reloadit) )
             {
                 m_configDlg->reject();
