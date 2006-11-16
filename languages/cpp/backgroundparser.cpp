@@ -431,11 +431,11 @@ int BackgroundParser::countInQueue( const QString& file ) const {
 void BackgroundParser::updateParserConfiguration()
 {
 	QMutexLocker locker( &m_mutex );
-	
+
 	m_driver->setup();
 	QString conf_file_name = m_cppSupport->specialHeaderName();
 	m_driver->removeAllMacrosInFile( conf_file_name );
-	m_driver->parseFile( conf_file_name, true, true );
+	m_driver->parseFile( conf_file_name, true, true, true );
 }
 
 void BackgroundParser::run()

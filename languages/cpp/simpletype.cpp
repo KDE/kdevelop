@@ -120,7 +120,7 @@ void SimpleType::destroyStore() {
   SafetyCounter s( 30000 );
   while ( !m_typeStore.empty() && s ) {
     TypeStore::iterator it = m_typeStore.begin();
-    SimpleTypeImpl* tp = *it;
+    TypePointer tp = *it;
     m_destroyedStore.insert( tp );
     m_typeStore.erase( it );
     tp->breakReferences();

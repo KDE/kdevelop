@@ -333,7 +333,7 @@ struct PopupFillerHelpStruct {
       if ( ns ) {
 	      SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( receiver->getIncludeFiles() );
         for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-	        SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).resolved().data() );
+	        SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).first.first.resolved().data() );
 	        if ( cm && cm->item() ) {
 	          QPopupMenu * m = PopupTracker::createPopup( parent );
 	          QString scope = cm->scope().join("::");
@@ -348,9 +348,10 @@ struct PopupFillerHelpStruct {
 		          m_namespacePopupCache.insert( scope, m );
 	          }
 	        } else {
-		        SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *it ).resolved().data() );
+		        SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *it ).first.first.resolved().data() );
 		        if( cn ) {
-			        insertItem( parent, cn->desc(), prefix );
+			        TypePointer t = new SimpleTypeNamespace( cn ); //To avoid endless recursion, this needs to be done(the dynamic-cast above fails)
+			        insertItem( parent, t->desc(), prefix );
 		        }
 	        }
         }
@@ -508,13 +509,14 @@ struct PopupClassViewFillerHelpStruct {
         if ( ns ) {
 	        SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( receiver->getIncludeFiles() );
           for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-	          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).resolved().data() );
+	          SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *it ).first.first.resolved().data() );
 	          if ( cm && cm->item() ) {
               insertItem( parent, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
 	          }  else {
-		          SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *it ).resolved().data() );
+		          SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *it ).first.first.resolved().data() );
 		          if( cn ) {
-			          insertItem( parent, cn->desc(), prefix );
+			          TypePointer t = new SimpleTypeNamespace( cn ); //to avoid endless recursion (caching would be better)
+			          insertItem( parent, t->desc(), prefix );
 		          }
 	          }
           }
@@ -3375,17 +3377,18 @@ QString CppCodeCompletion::commentFromTag( const SimpleType& parent, Tag& tag ) 
   return ret;
 }
 
-void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, SimpleTypeNamespace* ns, std::set<SimpleTypeNamespace*>& ignore, bool isInstance, int depth ) {
-  if ( ignore.find( ns ) != ignore.end() )
+void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, SimpleTypeNamespace* ns, std::set<HashedString>& ignore, bool isInstance, int depth ) {
+	 HashedString myName = HashedString( ns->scope().join("::") +"%"+typeid(*ns).name() );
+  if ( ignore.find( myName ) != ignore.end() )
     return ;
-  ignore.insert( ns );
+  ignore.insert( myName );
 	SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( getIncludeFiles() );
   for ( SimpleTypeNamespace::SlaveList::iterator it = slaves.begin(); it != slaves.end(); ++it ) {
-    SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( (*it).resolved().data() );
+    SimpleTypeNamespace* nns = dynamic_cast<SimpleTypeNamespace*>( (*it).first.first.resolved().data() );
 	  if ( !nns ) {
-	    if( ( *it ).resolved() ) computeCompletionEntryList( SimpleType((*it).resolved()), entryList, ( *it ).resolved()->scope(), isInstance, depth );
+	    if( ( *it ).first.first.resolved() ) computeCompletionEntryList( SimpleType((*it).first.first.resolved()), entryList, ( *it ).first.first.resolved()->scope(), isInstance, depth );
 	  } else {
-	    if( ( *it ).resolved() ) computeCompletionEntryList( SimpleType(( *it ).resolved()), entryList, ( *it ).resolved()->scope(), nns, ignore, isInstance, depth );
+	    if( ( *it ).first.first.resolved() ) computeCompletionEntryList( SimpleType(( *it ).first.first.resolved()), entryList, ( *it ).first.first.resolved()->scope(), nns, ignore, isInstance, depth );
 	  }
   }
 }
@@ -3400,7 +3403,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
   SimpleTypeImpl* m = &( *typeR ) ;
 
   if ( SimpleTypeNamespace * ns = dynamic_cast<SimpleTypeNamespace*>( m ) ) {
-    std::set<SimpleTypeNamespace*> ignore;
+    std::set<HashedString> ignore;
     computeCompletionEntryList( typeR, entryList, type, ns, ignore, isInstance, depth );
   } else if ( dynamic_cast<SimpleTypeCodeModel*>( m ) ) {
     ItemDom item = ( dynamic_cast<SimpleTypeCodeModel*>( m ) ) ->item();

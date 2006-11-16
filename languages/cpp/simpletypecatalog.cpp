@@ -39,7 +39,9 @@ void SimpleTypeCatalog::addAliasesTo( SimpleTypeNamespace* ns ) {
  QValueList<Tag> tags( cppCompletionInstance->m_repository->query( args ) );
 
  for ( QValueList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it ) {
-    ns->addAliasMap( TypeDesc(), (*it).name(), HashedString( (*it).fileName() ), true, false );
+     TypeDesc d( (*it).name() );
+     d.setIncludeFiles( HashedString((*it).fileName()) ); ///@todo implement the include-file-logic
+     ns->addAliasMap( TypeDesc(), d, HashedString((*it).fileName()), true, false, bigContainer() );
  }
 ///Insert all namespace-aliases
  args.clear();
@@ -50,9 +52,11 @@ void SimpleTypeCatalog::addAliasesTo( SimpleTypeNamespace* ns ) {
 
  for ( QValueList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it ) {
   QVariant v = (*it).attribute( "alias" );
-  if ( v.type() == QVariant::String )
-   ns->addAliasMap( (*it).name(), v.asString(), HashedString( (*it).fileName() ), true, false );
-  else
+  if ( v.type() == QVariant::String ) {
+      TypeDesc d( v.asString() );
+      d.setIncludeFiles( HashedString((*it).fileName()) );
+      ns->addAliasMap( (*it).name(), d, HashedString((*it).fileName()), true, false, bigContainer() );
+  } else
    kdDebug( 9007 ) << "namespace-alias has no alias-text" << endl;
  }
 }

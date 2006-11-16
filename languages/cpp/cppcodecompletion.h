@@ -206,7 +206,7 @@ private:
     
 	/// @todo remove isInstance
 	void computeCompletionEntryList( QValueList<CodeCompletionEntry>& entryList, SimpleContext* ctx, bool isInstance, int depth = 0 );
-	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, SimpleTypeNamespace* ns, std::set<SimpleTypeNamespace*>& ignore, bool isInstance, int depth = 0  );
+	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, SimpleTypeNamespace* ns, std::set<HashedString>& ignore, bool isInstance, int depth = 0  );
 	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, const QStringList& type, bool isInstance, int depth = 0  );
 	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance, int depth  );
 	void computeCompletionEntryList( SimpleType type, QValueList<CodeCompletionEntry>& entryList, ClassDom klass, bool isInstance, int depth   );

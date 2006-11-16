@@ -1851,10 +1851,15 @@ QString CppSupportPart::formatTag( const Tag & inputTag )
 void CppSupportPart::codeCompletionConfigStored( )
 {
 	if ( m_projectClosing ) return;
-
+	updateParserConfiguration();
+	/*
 	m_backgroundParser->updateParserConfiguration();
-	KDevDriver* d = dynamic_cast<KDevDriver*>( m_driver );
-	if( d ) d->setup();
+
+	KDevDriver* d = dynamic_cast<KDevDriver*>( m_driver ); //The foreground-parse isn't used anymore, and could be removed
+	if( d ) {
+		d->setup();
+		d->makeMacrosPersistent();
+	}*/
 	partController() ->setActivePart( partController()->activePart() );
 }
 
@@ -2478,9 +2483,10 @@ void CppSupportPart::updateParserConfiguration()
 	m_backgroundParser->updateParserConfiguration();
 
 	QString conf_file_name = specialHeaderName();
-	m_driver->removeAllMacrosInFile( conf_file_name );
 
-	m_driver->parseFile( conf_file_name, true, true );
+	m_driver->removeAllMacrosInFile( conf_file_name );
+	dynamic_cast<KDevDriver*>(m_driver)->setup();
+	m_driver->parseFile( conf_file_name, true, true, true );
 
 	parseProject( true );
 }
