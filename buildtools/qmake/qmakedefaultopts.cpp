@@ -26,9 +26,11 @@ QMakeDefaultOpts::QMakeDefaultOpts( QObject* parent, const char* name )
 void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projdir )
 {
     makefile = new KTempFile(projdir+"/", ".mf");
+    qmakefile = new KTempFile(projdir+"/", ".pro");
     if ( makefile->status() == 0 )
     {
         makefile->close();
+        qmakefile->close();
         QString qmakebin = qtdir + QString( QChar( QDir::separator() ) ) + "bin" + QString( QChar( QDir::separator() ) ) + "qmake";
 
         proc = new QProcess();
@@ -38,6 +40,7 @@ void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projd
         proc->addArgument( "-d" );
         proc->addArgument( "-o" );
         proc->addArgument( makefile->name() );
+        proc->addArgument( qmakefile->name() );
         kdDebug(9024) << "Executing:" << proc->arguments() << endl;
         connect( proc, SIGNAL( processExited( ) ), this, SLOT( slotFinished( ) ) );
         connect( proc, SIGNAL( readyReadStderr( ) ),
@@ -50,6 +53,9 @@ void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projd
             makefile->unlink();
             delete makefile;
             makefile = 0;
+            qmakefile->unlink();
+            delete qmakefile;
+            qmakefile = 0;
             delete proc;
             proc = 0;
             emit variablesRead();
@@ -64,6 +70,8 @@ QMakeDefaultOpts::~QMakeDefaultOpts()
     proc = 0;
     delete makefile;
     makefile = 0;
+    delete qmakefile;
+    qmakefile = 0;
 }
 
 void QMakeDefaultOpts::slotReadStderr()
@@ -89,6 +97,9 @@ void QMakeDefaultOpts::slotFinished()
     makefile->unlink();
     delete makefile;
     makefile = 0;
+    qmakefile->unlink();
+    delete qmakefile;
+    qmakefile = 0;
     delete proc;
     proc = 0;
     emit variablesRead();
