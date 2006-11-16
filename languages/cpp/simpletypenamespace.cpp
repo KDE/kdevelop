@@ -27,7 +27,14 @@ TypePointer SimpleTypeNamespace::clone() {
 
 SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope, const QStringList& realScope ) : SimpleTypeImpl( fakeScope ) {
   ifVerbose( dbg() << "\"" << str() << "\": created namespace-proxy with real scope \"" << realScope.join( "::" ) << "\"" << endl );
-  addImport( realScope.join( "::" ) );
+  SimpleType cm = SimpleType( realScope, HashedStringSet(), CodeModel );
+  SimpleType ct = SimpleType( realScope, HashedStringSet(), Catalog );
+  cm = SimpleType( cm->clone() );
+  ct = SimpleType( ct->clone() );
+  cm->setMasterProxy( this );
+  ct->setMasterProxy( this );
+  addImport( ct->desc() );
+  addImport( cm->desc() );
 }
 
 SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope ) : SimpleTypeImpl( fakeScope ) {
@@ -222,6 +229,7 @@ void SimpleTypeNamespace::addAliasMap( const TypeDesc& name, const TypeDesc& ali
 
   ( *it ).insert( a );
   ifVerbose( dbg() << "\"" << str() << "\": adding namespace-alias \"" << name.name() << ( !symmetric ? "\" -> \"" : "\" = \"" ) << alias.name() << "\"" << endl );
+  ifVerbose( if ( alias.resolved() ) dbg() << "Resolved type of the imported namespace: " << typeid( *alias.resolved() ).name() );
 
   if ( name.name().isEmpty() ) {
     addImport( alias, files, perspective );
@@ -305,25 +313,13 @@ void SimpleTypeNamespace::addAliases( QString map, const IncludeFiles& files ) {
 void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles& files, TypePointer perspective ) {
   if ( !perspective ) perspective = this;
   invalidateCache();
-  if ( import.name().isEmpty() ) {
-    ///The global namespace is the entry-point, fill it by hand:
-    SimpleType cm = SimpleType( QString(), HashedStringSet(), CodeModel );
-    SimpleType ct = SimpleType( QString(), HashedStringSet(), Catalog );
-    cm->setMasterProxy( this );
-    ct->setMasterProxy( this );
-    m_activeSlaves.push_back( std::make_pair( std::make_pair( cm->desc(), IncludeFiles() ), perspective ) );
-    m_activeSlaves.push_back( std::make_pair( std::make_pair( ct->desc(), IncludeFiles() ), perspective ) );
-    cm->addAliasesTo( this );
-    ct->addAliasesTo( this );
-  } else {
-    TypeDesc d = import;
-    if ( d.resolved() ) {
-      d.setResolved( d.resolved()->clone() ); //Expensive because of lost caching, think about how necessary this is
-      d.resolved()->setMasterProxy( this );
-      d.resolved()->addAliasesTo( this );
-    }
-    m_activeSlaves.push_back( std::make_pair( std::make_pair( d, files ) , perspective ) );
+  TypeDesc d = import;
+  if ( d.resolved() && d.resolved()->masterProxy().data() != this ) {
+    d.setResolved( d.resolved()->clone() ); //Expensive because of lost caching, think about how necessary this is
+    d.resolved()->setMasterProxy( this );
+    d.resolved()->addAliasesTo( this );
   }
+  m_activeSlaves.push_back( std::make_pair( std::make_pair( d, files ) , perspective ) );
 }
 
 bool SimpleTypeNamespace::hasNode() const {
