@@ -1,13 +1,22 @@
 
 TODO:
+
+   - Check gdb version at startup.
    
    - P1:
+
+      - Breakpoints duplicated on editing.
+
+      - Watches that are out of scope cannot be
+        disabled.
+
+      - No horizonal scrollbar in the variables widget.
+
+
+
       - Don't diable step button while stepping.
 
       - Fix moving breakpoints on editing files
-
-      - Should not issue -stack-num-frames with high limit, should
-        issue each time we request more frames.
 
       - Pressing tab in memory range dialog modified the edited file. 
 
