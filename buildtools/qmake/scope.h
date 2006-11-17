@@ -161,6 +161,10 @@ public:
     /* return the "position" of this scope in the list of scopes */
     unsigned int getNum() { return m_num; }
 
+    QStringList allFiles( const QString& ) const;
+
+    bool isInitializationFinished() const { return m_initFinished; }
+
 #ifdef DEBUG
     void printTree();
 #endif
@@ -240,6 +244,8 @@ private:
     QStringList variableValues( const QString& variable, QMake::AST* ) const;
     QString resolveVariables( const QString& , QMake::AST* = 0 ) const;
 
+    void allFiles( const QString&, QStringList& ) const;
+
     QMake::ProjectAST* m_root;
     QMake::IncludeAST* m_incast;
     QMap<unsigned int, QMake::AssignmentAST*> m_customVariables;
@@ -255,6 +261,7 @@ private:
     bool m_isEnabled;
     TrollProjectPart* m_part;
     QMakeDefaultOpts* m_defaultopts;
+    bool m_initFinished;
 
 #ifdef DEBUG
     class PrintAST : QMake::ASTVisitor

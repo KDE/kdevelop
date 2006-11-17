@@ -355,6 +355,7 @@ void TrollProjectWidget::createQMakeScopeItems()
         overview->setSelected( m_rootSubproject, true );
     }
     kdDebug(9024) << "Adding " << allFiles().count() << " Files" << endl;
+    kdDebug(9024) << allFiles() << endl;
     emit m_part->addedFilesToProject(allFiles());
 }
 
@@ -368,61 +369,11 @@ void TrollProjectWidget::closeProject()
 
 QStringList TrollProjectWidget::allFiles()
 {
-    QStringList res;
+    QStringList result;
+    if( !m_rootScope->isInitializationFinished() )
+        return result;
 
-    if( !m_rootSubproject )
-        return res;
-
-    QListViewItemIterator it(overview);
-    while( it.current() )
-    {
-        QMakeScopeItem *spitem = static_cast<QMakeScopeItem*>( it.current() );
-
-        if( !spitem->scope->isEnabled() )
-            continue;
-
-        QString path = spitem->relativePath();
-
-        for ( QMapIterator<GroupItem::GroupType, GroupItem*> tit = spitem->groups.begin(); tit != spitem->groups.end(); ++tit )
-        {
-            GroupItem::GroupType type = tit.key();
-
-            if ( type == GroupItem::Sources
-                 || type == GroupItem::Headers
-                 || type == GroupItem::Forms
-                 || type == GroupItem::Images
-                 || type == GroupItem::Resources
-                 || type == GroupItem::Lexsources
-                 || type == GroupItem::Yaccsources
-                 || type == GroupItem::Distfiles
-                 || type == GroupItem::Translations
-                 || type == GroupItem::IDLs
-                 || type == GroupItem::InstallObject )
-            {
-                for ( QPtrListIterator<FileItem> fit( tit.data() ->files ); fit.current(); ++fit )
-                {
-                    QString file = path + QString( QChar( QDir::separator() ) ) + ( *fit ) ->text( 0 );
-                    if( !res.contains( file ) )
-                        res.append( file );
-                }
-            }
-            else if ( type == GroupItem::InstallRoot )
-            {
-                for ( QPtrListIterator<GroupItem> tit2( tit.data() ->installs ); tit2.current(); ++tit2 )
-                {
-                    for ( QPtrListIterator<FileItem> fit( tit2.current() ->files ); fit.current(); ++fit )
-                    {
-                        QString file = path + QString( QChar( QDir::separator() ) ) + ( *fit ) ->text( 0 );
-                        if( !res.contains( file ) )
-                            res.append( file );
-                    }
-                }
-            }
-        }
-        it++;
-    }
-
-    return res;
+    return m_rootScope->allFiles( m_rootScope->projectDir() );
 }
 
 QString TrollProjectWidget::projectDirectory()

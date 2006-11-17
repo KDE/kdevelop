@@ -25,13 +25,14 @@
 #include "pathutil.h"
 #include "trollprojectpart.h"
 #include "qmakedefaultopts.h"
+#include "pathutil.h"
 
 const QStringList Scope::KnownVariables = QStringList() << "QT" << "CONFIG" << "TEMPLATE" << "SUBDIRS" << "VERSION" << "LIBS" << "target.path" << "INSTALLS" << "MAKEFILE" << "TARGETDEPS" << "INCLUDEPATH" << "TARGET" << "DESTDIR" << "DEFINES" << "QMAKE_CXXFLAGS_DEBUG" << "QMAKE_CXXFLAGS_RELEASE" << "OBJECTS_DIR" << "UI_DIR" << "MOC_DIR" << "IDL_COMPILER" << "IDL_OPTIONS" << "RCC_DIR" << "IDLS" << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES" << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES" << "INTERFACES" << "FORMS" ;
 
 const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "release" << "debug_and_release" << "warn_on" << "warn_off" << "staticlib" << "dll" << "plugin" << "designer" << "create_pkgconf" << "create_libtool" << "qt" << "console" << "windows" << "x11" << "thread" << "exceptions" << "stl" << "rtti" << "opengl" << "thread" << "ordered" << "precompile_header" << "qtestlib" << "uitools" << "dbus" << "assistant" << "build_all";
 
 Scope::Scope( const QString &filename, TrollProjectPart* part )
-    : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0)
+    : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0), m_initFinished(false)
 {
     m_defaultopts = new QMakeDefaultOpts();
     m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
@@ -74,13 +75,13 @@ Scope::~Scope()
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
-    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts)
+    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
 {
     init();
 }
 
 Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, QMakeDefaultOpts* defaultopts, bool isEnabled )
-: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ), m_part(part), m_defaultopts(defaultopts)
+: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ), m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
 {
     if ( !loadFromFile( filename ) )
     {
@@ -100,7 +101,7 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollPro
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
-        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts)
+        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
 {
     QString absfilename;
     QString tmp;
@@ -906,6 +907,7 @@ void Scope::init()
             }
         }
     }
+    m_initFinished = true;
     emit initializationFinished();
 }
 
@@ -1196,6 +1198,142 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
             }
         }
     }
+    return result;
+}
+
+void Scope::allFiles( const QString& projectDirectory, QStringList& res ) const
+{
+    QString myRelPath = getRelativePath( projectDirectory, projectDir() );
+    if( !variableValues("TEMPLATE").contains("subdirs") )
+    {
+        QStringList values = variableValues( "INSTALLS" );
+        QStringList::const_iterator it;
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            if ( ( *it ) == "target" )
+                continue;
+
+            QStringList files = variableValues( *it + ".files" );
+            QStringList::iterator filesit = files.begin();
+            for ( ;filesit != files.end(); ++filesit )
+            {
+                QString file = myRelPath + QString(QChar(QDir::separator())) + *filesit;
+                if( !res.contains( file ) )
+                    res.append( file );
+            }
+        }
+
+        values = variableValues( "LEXSOURCES" );
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            if( !res.contains( file ) )
+                res.append( file );
+        }
+
+        values = variableValues( "YACCSOURCES" );
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            if( !res.contains( file ) )
+                res.append( file );
+        }
+
+        values = variableValues( "DISTFILES" );
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            if( !res.contains( file ) )
+                res.append( file );
+        }
+
+        if ( isQt4Project() )
+        {
+            values = variableValues( "RESOURCES" );
+            for ( it = values.begin(); it != values.end(); ++it )
+            {
+                QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                if( !res.contains( file ) )
+                    res.append( file );
+            }
+        }
+        else
+        {
+            values = variableValues( "IMAGES" );
+            for ( it = values.begin(); it != values.end(); ++it )
+            {
+                QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                if( !res.contains( file ) )
+                    res.append( file );
+            }
+        }
+
+        values = variableValues( "TRANSLATIONS" );
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            if( !res.contains( file ) )
+                res.append( file );
+        }
+
+        values = variableValues( "IDLS" );
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            if( !res.contains( file ) )
+                res.append( file );
+        }
+
+        if ( m_part->isTMakeProject() )
+        {
+            values = variableValues( "INTERFACES" );
+            for ( it = values.begin(); it != values.end(); ++it )
+            {
+                QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                if( !res.contains( file ) )
+                    res.append( file );
+            }
+        }
+        else
+        {
+            values = variableValues( "FORMS" );
+            for ( it = values.begin(); it != values.end(); ++it )
+            {
+                QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                if( !res.contains( file ) )
+                    res.append( file );
+            }
+        }
+
+        values = variableValues( "SOURCES" );
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            if( !res.contains( file ) )
+                res.append( file );
+        }
+
+        values = variableValues( "HEADERS" );
+        for ( it = values.begin(); it != values.end(); ++it )
+        {
+            QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            if( !res.contains( file ) )
+                res.append( file );
+        }
+    }
+    QMap<unsigned int, Scope*>::const_iterator it = m_scopes.begin();
+    for( ; it != m_scopes.end(); ++it )
+    {
+        it.data()->allFiles( projectDirectory, res );
+    }
+}
+
+QStringList Scope::allFiles( const QString& projectDir ) const
+{
+    QStringList result;
+    if( !m_initFinished )
+        return result;
+    allFiles( projectDir, result );
     return result;
 }
 
