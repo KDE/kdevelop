@@ -60,6 +60,7 @@ public:
 
 public slots:
     void slotDropEvent( QDropEvent *event );
+    void setCaption(const QString &);
 
 protected:
     virtual bool queryClose();
@@ -79,6 +80,7 @@ private slots:
     void switchToNextTabWidget();
     void slotCoreInitialized();
     void projectOpened();
+    void projectClosed();
     void slotPartURLChanged(KParts::ReadOnlyPart *part);
     void activePartChanged(KParts::Part *part);
     void documentChangedState(const KURL &url, DocumentState state);

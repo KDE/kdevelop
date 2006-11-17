@@ -40,6 +40,7 @@
 #include <profile.h>
 #include <profileengine.h>
 #include <designer.h>
+#include <kdevproject.h>
 
 #include "api.h"
 #include "core.h"
@@ -103,6 +104,7 @@ void SimpleMainWindow::init()
 
     connect(Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()));
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
+    connect(Core::getInstance(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
     connect(Core::getInstance(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
         this, SLOT(contextMenu(QPopupMenu *, const Context *)));
     connect(PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart *)),
@@ -294,12 +296,12 @@ void SimpleMainWindow::saveSettings( )
 
 void SimpleMainWindow::setCurrentDocumentCaption( const QString &caption )
 {
-	if( !PartController::getInstance()->activePart() ) return;
-	
-	if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(PartController::getInstance()->activePart()))
-	{
-		widget->setCaption(caption);
-	}
+    if( !PartController::getInstance()->activePart() ) return;
+
+    if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(PartController::getInstance()->activePart()))
+    {
+        widget->setCaption(caption);
+    }
 }
 
 KMainWindow *SimpleMainWindow::main()
@@ -322,10 +324,10 @@ void SimpleMainWindow::createActions()
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
-    m_lowerAllDocks = new KAction(i18n("Lower All Docks"), CTRL+SHIFT+Key_C, 
+    m_lowerAllDocks = new KAction(i18n("Lower All Docks"), CTRL+SHIFT+Key_C,
         this, SLOT(lowerAllDocks()), actionCollection(), "lower_all_docks");
 
-    new KAction(i18n("Switch to next TabWidget"), 0, this, 
+    new KAction(i18n("Switch to next TabWidget"), 0, this,
         SLOT(switchToNextTabWidget()), actionCollection(), "switch_to_next_tabwidget" );
 
     m_splitHor = new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
@@ -864,4 +866,31 @@ void SimpleMainWindow::switchToNextTabWidget()
     }
 }
 
+void SimpleMainWindow::setCaption(const QString &caption)
+{
+    KDevProject *project = API::getInstance()->project();
+    if (project)
+    {
+        QString projectname = project->projectName();
+
+        QString suffix(".kdevelop");
+        if (projectname.endsWith(suffix))
+            projectname.truncate(projectname.length() - suffix.length());
+
+        if (!caption.isEmpty())
+            DMainWindow::setCaption(projectname + " - " + caption);
+        else
+            DMainWindow::setCaption(projectname);
+    }
+    else
+        DMainWindow::setCaption(caption);
+}
+
+void SimpleMainWindow::projectClosed()
+{
+    DMainWindow::setCaption(QString::null);
+}
+
 #include "simplemainwindow.moc"
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
