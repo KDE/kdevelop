@@ -51,3 +51,4 @@ DOXYGEN_EMPTY = YES
 DOXYGEN_PROJECTNAME = KDevelop Platform API
 include Doxyfile.am
 SUBDIRS=$(TOPSUBDIRS)
+#kdevelop: lib src parts buildtools doc editors embedded kdevdesigner languages mimetypes pics vcs
