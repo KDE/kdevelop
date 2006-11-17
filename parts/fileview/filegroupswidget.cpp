@@ -375,7 +375,7 @@ void FileGroupsWidget::addFile(const QString &fileName)
             if (fileName.contains(m_part->project()->projectDirectory()))
                 f = fileName.mid(m_part->project()->projectDirectory().length()+1);
             (void) new FileGroupsFileItem(fvgitem, f);
-            fvgitem->sortChildItems(0, true);
+//             fvgitem->sortChildItems(0, true);
             break;
         }
         item = item->nextSibling();
@@ -390,6 +390,7 @@ void FileGroupsWidget::addFiles ( const QStringList& fileList )
     {
         this->addFile ( *it );
     }
+    sort();
 }
 
 void FileGroupsWidget::removeFile(const QString &fileName)
