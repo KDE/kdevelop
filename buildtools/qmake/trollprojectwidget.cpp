@@ -354,8 +354,8 @@ void TrollProjectWidget::createQMakeScopeItems()
     {
         overview->setSelected( m_rootSubproject, true );
     }
-    kdDebug(9024) << "Adding " << allFiles().count() << " Files" << endl;
-    kdDebug(9024) << allFiles() << endl;
+//     kdDebug(9024) << "Adding " << allFiles().count() << " Files" << endl;
+//     kdDebug(9024) << allFiles() << endl;
     emit m_part->addedFilesToProject(allFiles());
 }
 
@@ -1233,7 +1233,7 @@ void TrollProjectWidget::slotNewFile()
     if ( createFileSupport )
     {
         KDevCreateFile::CreatedFile crFile =
-            createFileSupport->createNewFile( QString::null, projectDirectory() + m_shownSubproject->relativePath() );
+        createFileSupport->createNewFile( QString::null, projectDirectory() + QString(QChar(QDir::separator()))+ m_shownSubproject->relativePath() );
     }
     else
     {
