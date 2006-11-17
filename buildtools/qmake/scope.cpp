@@ -618,6 +618,7 @@ bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
             Scope* project = m_scopes[ num ];
             if( !project )
                 return false;
+            QString projdir = project->scopeName();
             if ( deleteSubdir )
             {
                 QDir projdir = QDir( projectDir() );
@@ -644,7 +645,7 @@ bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
             if ( foundit != m_root->m_children.end() )
             {
                 QMake::AssignmentAST * ast = static_cast<QMake::AssignmentAST*>( *foundit );
-                updateValues( ast->values, QStringList( project->scopeName() ), true, ast->indent );
+                updateValues( ast->values, QStringList( projdir ), true, ast->indent );
             }else
                 return false;
             m_scopes.remove( num );
