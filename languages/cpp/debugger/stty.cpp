@@ -52,6 +52,7 @@
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
+#include <errno.h>
 
 #if defined (_HPUX_SOURCE)
 #define _TERMIOS_INCLUDED
@@ -259,7 +260,8 @@ void STTY::OutReceived(int f)
     // I can understand that non-blocking read returns 0,
     // but I don't understand how OutRecieved can be even
     // called when there's no input.
-    if (n == -1)
+    if (n == 0 /* eof */
+        || (n == -1 && errno != EAGAIN))
     {
         // Found eof or error. Disable socket notifier, otherwise Qt
         // will repeatedly call this method, eating CPU
