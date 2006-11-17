@@ -1655,9 +1655,9 @@ bool VarItem::handleSpecialTypes()
 
         QString command;
         if (varTree->controller()->qtVersion() >= 4)
-            command = "print (($len=($data=%1.d).size)?*((char*)&$data.data[0])@($len>100?200:$len*2):\"\")";
+            command = "print (($len=($data=%1.d).size)>0?*((char*)&$data.data[0])@($len>100?200:$len*2):\"\")";
         else
-            command = "print (($len=($data=%1.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")";
+            command = "print (($len=($data=%1.d).len)>0?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")";
 
         varTree->controller()->addCommand(
             new ValueSpecialRepresentationCommand(
