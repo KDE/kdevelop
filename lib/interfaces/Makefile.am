@@ -21,7 +21,8 @@ kdevelopinclude_HEADERS = kdevlanguagesupport.h kdevmainwindow.h \
 	kdevpartcontroller.h kdevplugin.h kdevproject.h kdevcore.h kdevcoderepository.h codemodel.h \
 	codemodel_utils.h codemodel_treeparser.h kdevgenericfactory.h kdevapi.h \
 	kdevdesignerintegration.h kdevplugincontroller.h kdevplugininfo.h KDevCoreIface.h \
-	KDevPartControllerIface.h katedocumentmanagerinterface.h
+	KDevPartControllerIface.h katedocumentmanagerinterface.h \
+	hashedstring.h
 
 
 servicetypedir = $(kde_servicetypesdir)
@@ -36,5 +37,4 @@ DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kpar
 DOXYGEN_PROJECTNAME = KDevelop Interfaces Library
 DOXYGEN_DOCDIRPREFIX = kdev
 include ../../Doxyfile.am
-noinst_HEADERS = kdevprojectiface.h kdevdesignerintegrationiface.h \
-	hashedstring.h
+noinst_HEADERS = kdevprojectiface.h kdevdesignerintegrationiface.h 
