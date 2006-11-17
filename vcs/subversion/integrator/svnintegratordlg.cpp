@@ -50,7 +50,7 @@ void SvnIntegratorDlg::accept()
 	if ( ! servURL.protocol().startsWith( "svn" ) )
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-
+/*
 	if ( importProject->isChecked() ) {
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
@@ -62,7 +62,9 @@ void SvnIntegratorDlg::accept()
 #else
 		NetAccess::synchronousRun(job, 0);
 #endif
-	} else if ( createProject->isChecked() ) {
+	} else
+		*/
+				if ( createProject->isChecked() ) {
 /*		KURL miscURL = servURL;
 		miscURL.setPath(servURL.path() + "/tags/");
 		KIO::SimpleJob * job = KIO::mkdir(miscURL);
@@ -73,6 +75,7 @@ void SvnIntegratorDlg::accept()
 		miscURL.setPath(servURL.path() + "/vendor/");
 		job = KIO::mkdir(miscURL);
 		NetAccess::synchronousRun(job, 0);*/
+		/*
 		KURL::List list;
 		KURL miscURL = servURL;
 		miscURL.setPath( servURL.path() + "/tags/" );
@@ -92,12 +95,13 @@ void SvnIntegratorDlg::accept()
 #else
 		NetAccess::synchronousRun(job, 0);
 #endif
+		*/
 		QByteArray parms2;
 		QDataStream s2( parms2, IO_WriteOnly );
-		cmd = 5; //IMPORT
+		int cmd = 5; //IMPORT
 		servURL.setPath(servURL.path()+ "/trunk/");
 		s2 << cmd << servURL << KURL::fromPathOrURL( m_projectLocation );
-		job = KIO::special(servURL, parms2, true);
+		KIO::SimpleJob *job = KIO::special(servURL, parms2, true);
 #if KDE_VERSION <= KDE_MAKE_VERSION(3,3,90)
 		KIO_COMPAT::NetAccess::synchronousRun(job, 0);
 #else
@@ -110,7 +114,7 @@ void SvnIntegratorDlg::accept()
     *rmproc << "rm";
     *rmproc << "-f" << "-r" << m_projectLocation;
     rmproc->start(KProcess::Block);
-        
+
 	QByteArray parms3;
 	QDataStream s3( parms3, IO_WriteOnly );
 	int cmd2 = 1; //CHECKOUT

@@ -131,6 +131,7 @@ void subversionPart::setupActions() {
 	actionRevert->setToolTip( i18n("Revert") );
 	actionRevert->setWhatsThis( i18n("<b>Revert</b><p>Undo local changes.") );
 
+	/*
 	actionAddToIgnoreList = new KAction( i18n("&Ignore in Subversion Operations"), 0,
 			this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "subversion_ignore" );
 	actionAddToIgnoreList->setToolTip( i18n("Ignore in Subversion operations") );
@@ -140,7 +141,7 @@ void subversionPart::setupActions() {
 			this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "subversion_donot_ignore" );
 	actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in Subversion operations") );
 	actionRemoveFromIgnoreList->setWhatsThis( i18n("<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s).") );
-
+	*/
 	actionResolve = new KAction( i18n("Re&solve Conflicting State"), 0,
 			this, SLOT(slotActionResolve()), actionCollection(), "subversion_resolve" );
 	actionResolve->setToolTip( i18n("Resolve the conflicting state of a file after a merge") );
@@ -231,12 +232,13 @@ if(!project())
 		id = subMenu->insertItem( actionResolve->text(), this, SLOT(slotResolve()) );
 		subMenu->setWhatsThis(id, i18n("<b>Resolve</b><p>Resolve conflicting state.") );
 
+		/*
 		subMenu->insertSeparator();
 		id = subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
         subMenu->setWhatsThis(id, i18n("<b>Ignore in Subversion operations</b><p>Ignores file(s)."));
 		id = subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
         subMenu->setWhatsThis(id, i18n("<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s)."));
-
+*/
 		// Now insert in parent menu
 		popup->insertItem( i18n("Subversion"), subMenu );
 	}

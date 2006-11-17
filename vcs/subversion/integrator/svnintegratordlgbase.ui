@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SvnIntegratorDlgBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,6 +11,9 @@
             <width>634</width>
             <height>429</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>SvnIntegratorDlgBase</string>
     </property>
     <grid>
         <property name="name">
@@ -52,10 +55,27 @@
                         <cstring>doNothing</cstring>
                     </property>
                     <property name="text">
-                        <string>Do not do anything</string>
+                        <string>&amp;Do not do anything</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Adds subversion menus to project.
+
+NOTE: Unless you import the project
+out of kdevelop, you will not be able
+to perform any subversion operations.</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Adds subversion menus to project.
+
+NOTE: Unless you import the project
+out of kdevelop, you will not be able
+to perform any subversion operations.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -63,15 +83,24 @@
                         <cstring>createProject</cstring>
                     </property>
                     <property name="text">
-                        <string>Create a project tree and import new project into trunk</string>
+                        <string>&amp;Create a project tree and import new project into trunk</string>
                     </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>importProject</cstring>
+                    <property name="accel">
+                        <string>Alt+C</string>
                     </property>
-                    <property name="text">
-                        <string>Import project at given url</string>
+                    <property name="toolTip" stdset="0">
+                        <string>Creates project, imports it into the subversion
+repository and checks it out as a working copy.
+
+NOTE: The repository has to exist.
+eg. been created with 'svnadmin'</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Creates project, imports it into the subversion
+repository and checks it out as a working copy.
+
+NOTE: The repository has to exist.
+eg. been created with 'svnadmin'</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -99,6 +128,16 @@
                             </property>
                             <property name="enabled">
                                 <bool>false</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Subversion repository location.
+The repository has to exist -
+eg. been created with 'svnadmin'</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Subversion repository location.
+The repository has to exist -
+eg. been created with 'svnadmin'</string>
                             </property>
                         </widget>
                     </hbox>
@@ -135,18 +174,6 @@
         <sender>createProject</sender>
         <signal>toggled(bool)</signal>
         <receiver>repos1</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>importProject</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>repos1</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>importProject</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>repositoryLabel1</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>

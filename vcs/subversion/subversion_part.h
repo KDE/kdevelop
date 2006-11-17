@@ -84,8 +84,8 @@ private:
 		*actionAdd,
 		*actionRemove,
 		*actionUpdate,
-		*actionAddToIgnoreList,
-		*actionRemoveFromIgnoreList,
+		//*actionAddToIgnoreList,
+		//*actionRemoveFromIgnoreList,
 		*actionRevert,
 		*actionResolve;
 
