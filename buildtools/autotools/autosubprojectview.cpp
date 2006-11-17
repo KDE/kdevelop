@@ -763,13 +763,31 @@ void AutoSubprojectView::parseSUBDIRS( SubprojectItem *item,
 	{
 		QStringList dirs;
 		QFile subdirsfile( item->path + "/subdirs" );
-		if ( subdirsfile.open( IO_ReadOnly ) )
-		{
-			QTextStream subdirsstream( &subdirsfile );
-			while ( !subdirsstream.atEnd() )
-				dirs.append( subdirsstream.readLine() );
-			subdirsfile.close();
-		}
+        if( subdirsfile.exists() )
+        {
+		    if ( subdirsfile.open( IO_ReadOnly ) )
+		    {
+			    QTextStream subdirsstream( &subdirsfile );
+			    while ( !subdirsstream.atEnd() )
+				    dirs.append( subdirsstream.readLine() );
+			    subdirsfile.close();
+		    }
+        } else
+        {
+            QDir d( item->path );
+            QStringList l = d.entryList( QDir::Dirs );
+            for( QStringList::const_iterator it = l.begin(); it != l.end(); ++it )
+            {
+                if( (*it) != "CVS" && (*it) != "admin" && (*it) != ".svn" && (*it) != "." && (*it) != ".." )
+                {
+                    QDir subdir = d;
+                    subdir.cd( *it, false );
+                    if( subdir.exists( "Makefile.am" ) )
+                        dirs.append( *it );
+                }
+            }
+
+        }
 		subdirs.replace( QRegExp( "\\$\\(TOPSUBDIRS\\)" ), dirs.join( " " ) );
 	}
 
