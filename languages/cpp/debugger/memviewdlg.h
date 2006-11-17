@@ -48,8 +48,6 @@ namespace GDBDebugger
         void slotDebuggerState(const QString&, int state);
 
     signals:
-        void setValue(const QString& expression, const QString& value);
-
         void setViewShown(bool shown);
 
 
@@ -73,8 +71,6 @@ namespace GDBDebugger
         void debuggerStateChanged(int state);
 
     signals:
-        void setValue(const QString& expression, const QString& value);
-     
         void captionChanged(const QString& caption);
 
     private: // Callbacks
@@ -111,7 +107,7 @@ namespace GDBDebugger
         QWidget* khexedit2_widget;
         QWidget* khexedit2_real_widget;
 
-        unsigned start_, amount_;
+        uint start_, amount_;
         QString startAsString_, amountAsString_;
         char* data_;
         

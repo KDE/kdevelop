@@ -273,11 +273,11 @@ namespace GDBDebugger
     {
         const GDBMI::Value& content = r["memory"][0]["data"];
 
-        start_ = rangeSelector_->startAddressLineEdit->text().toInt();
         amount_ = content.size();
 
         startAsString_ = rangeSelector_->startAddressLineEdit->text();
         amountAsString_ = rangeSelector_->amountLineEdit->text();
+        start_ = startAsString_.toUInt(0, 0);
 
         setCaption(QString("%1 (%2 bytes)")
                    .arg(startAsString_).arg(amount_));
@@ -325,8 +325,14 @@ namespace GDBDebugger
     {        
         for(int i = start; i <= end; ++i)
         {
-            emit setValue(QString("*(char*)(%1 + %2)").arg(start_).arg(i),
-                          QString::number(data_[i]));
+            controller_->addCommand(
+                new GDBCommand(
+                    QString("set *(char*)(%1 + %2) = %3")
+                        .arg(start_)
+                        .arg(i)
+                        .arg(QString::number(data_[i])), 
+                    NOTRUNCMD, 
+                    NOTINFOCMD));
         }
     }
     
@@ -434,9 +440,6 @@ namespace GDBDebugger
 
         connect(widget, SIGNAL(captionChanged(const QString&)),
                 this, SLOT(slotChildCaptionChanged(const QString&)));
-
-        connect(widget, SIGNAL(setValue(const QString&, const QString&)),
-                this,   SIGNAL(setValue(const QString&, const QString&)));
 
         connect(widget, SIGNAL(destroyed(QObject*)),
                 this, SLOT(slotChildDestroyed(QObject*)));
