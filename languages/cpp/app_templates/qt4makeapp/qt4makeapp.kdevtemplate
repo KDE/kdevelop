@@ -112,3 +112,11 @@ Comment[hu]=Létrejött egy Qt4/Qmake-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione basata su Qt4/Qmake in %{dest}
 Comment[sv]=Ett QMake/Qt4-baserat program skapades i %{dest}
 Comment[tr]=Bir Qt4/QMake tabanlı uygulama %{dest} içinde yaratıldı.
+
+Comment=
+[QTDIR]
+Type=value
+ValueType=QString
+Value=QTDIR
+Comment=Directory where Qt4 is installed.
+Default=

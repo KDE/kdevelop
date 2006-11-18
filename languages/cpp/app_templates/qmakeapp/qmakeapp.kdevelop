@@ -28,6 +28,7 @@
       <version>3</version>
       <includestyle>3</includestyle>
       <designerintegration>KDevEmbeddedDesigner</designerintegration>
+      <root>%{QTDIR}</root>
     </qt>
   </kdevcppsupport>
   <kdevdoctreeview>

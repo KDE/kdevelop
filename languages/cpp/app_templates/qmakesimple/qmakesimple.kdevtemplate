@@ -59,3 +59,11 @@ Comment[hu]=Létrejött egy Qmake-alapú Hello world program itt: %{dest}
 Comment[it]=È stato creato un programma di "hello world" basato su Qmake in %{dest}
 Comment[sv]=Ett Qmake-baserat Hello world-program skapades i %{dest}
 Comment[tr]=QMake tabanlı merhaba dünya programı %{dest} içinde yaratıldı
+
+
+[QTDIR]
+Type=value
+ValueType=QString
+Value=QTDIR
+Comment=Directory where Qt3 is installed.
+Default=

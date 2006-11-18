@@ -87,3 +87,10 @@ Comment[hu]=Létrejött egy Qt/Qmake-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione basata su Qt/Qmake in %{dest}
 Comment[sv]=Ett QMake/Qt-baserat program skapades i %{dest}
 Comment[tr]=Bir Qt/QMake tabanlı uygulama %{dest} içinde yaratıldı.
+
+[QTDIR]
+Type=value
+ValueType=QString
+Value=QTDIR
+Comment=Directory where Qt3 is installed.
+Default=

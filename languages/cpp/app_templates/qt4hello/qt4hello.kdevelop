@@ -28,6 +28,7 @@
       <version>4</version>
       <includestyle>4</includestyle>
       <designerintegration>ExternalDesigner</designerintegration>
+      <root>%{QTDIR}</root>
     </qt>
   </kdevcppsupport>
   <kdevdoctreeview>

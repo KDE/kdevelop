@@ -24,6 +24,7 @@
      <used>true</used>
      <includestyle>3</includestyle>
      <designerintegration>EmbeddedKDevDesigner</designerintegration>
+      <root>%{QTDIR}</root>
    </qt>
  </kdevcppsupport>
  <kdevdoctreeview>
