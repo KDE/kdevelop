@@ -25,6 +25,7 @@
 #include <qwidget.h>
 #include <kio/job.h>
 #include <kurl.h>
+#include <ktempdir.h>
 #include <dcopobject.h>
 #include <subversion_fileinfo.h>
 
@@ -46,7 +47,7 @@ public:
 	void commit( const KURL::List&);
 	void add( const KURL::List&);
 	void del( const KURL::List&);
-	void diff( const KURL::List&);
+	void diff( const KURL::List&, const QString& where);
 	void revert( const KURL::List&);
 	void resolve( const KURL::List&);
 	void checkout();
@@ -70,7 +71,8 @@ private:
 	QString wcPath;
 	SVNFileInfoProvider *m_fileInfoProvider;
 	QStringList diffresult; //for diff commands ;)
-
+	// be nice about tmp diff files: delete all of them when exiting.
+	KTempDir* diffTmpDir;
 };
 
 #endif

@@ -123,9 +123,14 @@ void subversionPart::setupActions() {
 	actionUpdate->setToolTip( i18n("Update") );
 	actionUpdate->setWhatsThis( i18n("<b>Update</b><p>Updates file(s) from repository.") );
 
-	actionDiff = new KAction( i18n("&Diff"), 0, this, SLOT(slotActionDiff()), actionCollection(), "subversion_diff" );
-	actionDiff->setToolTip( i18n("Diff") );
-	actionDiff->setWhatsThis( i18n("<b>Diff</b><p>Diffs file(s) from repository.") );
+	actionDiffLocal = new KAction( i18n("&Diff to Disk"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_local" );
+	actionDiffLocal->setToolTip( i18n("Diff to Disk") );
+	actionDiffLocal->setWhatsThis( i18n("<b>Diff to disk</b><p>Diff current file to the BASE checked out copy.") );
+
+	actionDiffHead = new KAction( i18n("&Diff to HEAD"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_head" );
+	actionDiffHead->setToolTip( i18n("Diff to HEAD") );
+	actionDiffHead->setWhatsThis( i18n("<b>Diff HEAD</b><p>Diff the current file to HEAD in svn.") );
+
 
 	actionRevert = new KAction( i18n("&Revert"), 0, this, SLOT(slotActionRevert()), actionCollection(), "subversion_revert" );
 	actionRevert->setToolTip( i18n("Revert") );
@@ -222,8 +227,11 @@ if(!project())
         subMenu->setWhatsThis(id, i18n("<b>Remove from repository</b><p>Removes file(s) from repository."));
 
 		subMenu->insertSeparator();
-		id = subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
-		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff file(s) from repository."));
+		id = subMenu->insertItem( actionDiffLocal->text(), this, SLOT(slotDiffLocal()) );
+		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff file to local disk."));
+
+		id = subMenu->insertItem( actionDiffHead->text(), this, SLOT(slotDiffHead()) );
+		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff file to repository."));
 
 		id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
         subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Updates file(s) from repository."));
@@ -311,11 +319,18 @@ void subversionPart::slotActionRevert() {
 	}
 }
 
-void subversionPart::slotActionDiff() {
-	kdDebug(9036) << "subversion: slotActionDiff()" << endl;
+void subversionPart::slotActionDiffLocal() {
+	kdDebug(9036) << "subversion: slotActionDiffLocal()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
-		m_impl->diff( doc );
+		m_impl->diff( doc, "BASE" );
+	}
+}
+void subversionPart::slotActionDiffHead() {
+	kdDebug(9036) << "subversion: slotActionDiffHead()" << endl;
+	KURL doc;
+	if (urlFocusedDocument( doc )) {
+		m_impl->diff( doc, "HEAD" );
 	}
 }
 
@@ -331,8 +346,11 @@ void subversionPart::slotDel() {
 	m_impl->del (m_urls);
 }
 
-void subversionPart::slotDiff() {
-	m_impl->diff (m_urls);
+void subversionPart::slotDiffLocal() {
+	m_impl->diff (m_urls, "BASE");
+}
+void subversionPart::slotDiffHead() {
+	m_impl->diff (m_urls, "HEAD");
 }
 
 void subversionPart::slotRevert() {

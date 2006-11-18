@@ -40,7 +40,9 @@
 #include <qtextcodec.h>
 #include <qtextstream.h>
 #include <qtextbrowser.h>
-#include <ktempdir.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+
 
 using namespace KIO;
 
@@ -52,6 +54,8 @@ subversionCore::subversionCore(subversionPart *part)
 //			kdWarning() << "Failed to connect to kded dcop signal ! Notifications won't work..." << endl;
 
         m_fileInfoProvider = new SVNFileInfoProvider( part );
+		diffTmpDir = new KTempDir();
+		diffTmpDir->setAutoDelete(true);
 }
 
 subversionCore::~subversionCore() {
@@ -59,6 +63,7 @@ subversionCore::~subversionCore() {
 		m_part->mainWindow()->removeView( m_widget );
 		delete m_widget;
 	}
+	delete diffTmpDir;
 }
 
 KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
@@ -127,7 +132,7 @@ void subversionCore::update( const KURL::List& list ) {
 	}
 }
 
-void subversionCore::diff( const KURL::List& list){
+void subversionCore::diff( const KURL::List& list, const QString& where){
 	kdDebug(9036) << "diff " << list << endl;
 	KURL servURL = "svn+http://this_is_a_fake_URL_and_this_is_normal/";
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
@@ -137,7 +142,7 @@ void subversionCore::diff( const KURL::List& list){
 		kdDebug(9036) << "diffing : " << (*it).prettyURL() << endl;
 		int rev1=-1;
 		int rev2=-1;
-		QString revkind1 = "BASE";
+		QString revkind1 = where;
 		QString revkind2 = "WORKING";
 		s << cmd << *it << *it << rev1 << revkind1 << rev2 << revkind2 << true ;
 		KIO::SimpleJob * job = KIO::special(servURL, parms, true);
@@ -148,7 +153,7 @@ void subversionCore::diff( const KURL::List& list){
 			if ( !KStandardDirs::findExe( "kompare" ).isNull() ) {
 				if (!KStandardDirs::findExe("patch").isNull()){
 					// we have patch - so can merge
-					KTempDir tmpDir = KTempDir();
+					KTempDir tmpDir = KTempDir(diffTmpDir->name());
 					KTempFile tmpPatch = KTempFile(tmpDir.name());
 
 					// write the patch
@@ -198,6 +203,13 @@ void subversionCore::diff( const KURL::List& list){
 				df.text->setFont( f );
 				df.exec();
 			}
+		}
+		else{
+			QString diffTo = i18n("the local disk checked out copy.");
+			if ( where=="HEAD"){
+				diffTo=i18n("the current svn HEAD version.");
+			}
+			KMessageBox::information( 0, i18n("No differences between the file and %1").arg(diffTo), i18n("No difference") );
 		}
 		diffresult.clear();
 	}

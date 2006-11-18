@@ -62,14 +62,16 @@ private slots:
 		void slotActionCommit();
 		void slotActionAdd();
 		void slotActionDel();
-		void slotActionDiff();
+		void slotActionDiffHead();
+		void slotActionDiffLocal();
 		void slotActionResolve();
 		void slotUpdate();
 		void slotRevert();
 		void slotCommit();
 		void slotAdd();
 		void slotDel();
-		void slotDiff();
+		void slotDiffLocal();
+		void slotDiffHead();
 		void slotResolve();
 		void slotProjectClosed();
 		void slotProjectOpened();
@@ -80,7 +82,8 @@ private:
 		KURL::List m_urls;
 
 		KAction *actionCommit,
-		*actionDiff,
+		*actionDiffHead,
+		*actionDiffLocal,
 		*actionAdd,
 		*actionRemove,
 		*actionUpdate,
