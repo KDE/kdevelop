@@ -58,23 +58,6 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 
 	m_impl = new subversionCore( this );
 
-	m_checkout_recurse = true;
-	m_update_recurse = true;
-	m_switch_recurse = true;
-	m_add_recurse = true;
-	m_remove_force = true;
-	m_commit_recurse = true;
-	m_diff_recurse = true;
-	m_merge_recurse = true;
-	m_merge_overwrite = true;
-	m_relocate_recurse = true;
-	m_revert_recurse = true;
-	m_resolve_recurse = true;
-	m_move_force = true;
-	m_propset_recurse = true;
-	m_propget_recurse = true;
-	m_proplist_recurse = true;
-
 	//m_impl->processWidget()->setIcon( SmallIcon("db") );
 
 	setupActions();
@@ -157,12 +140,6 @@ QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
 	if ( !m_projWidget )
 		m_projWidget = new subversionProjectWidget(parent,"projectwidget");
 	return m_projWidget;
-}
-
-void subversionPart::projectConfigWidget( KDialogBase *dlg ) {
-	QVBox *vbox = dlg->addVBoxPage( i18n("Subversion"), i18n("Subversion"), BarIcon( info()->icon(), KIcon::SizeMedium) );
-	subversionOptionsWidgetImpl *w = new subversionOptionsWidgetImpl( (QWidget *)vbox, this, "svn config widget" );
-	connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
 void subversionPart::createNewProject( const QString& dirname ) {
@@ -381,22 +358,6 @@ void subversionPart::savePartialProjectSession(QDomElement* dom) {
 	kdDebug(9036) << "subversion : savePartialProjectSession" << endl;
 	QDomDocument doc = dom->ownerDocument();
 	QDomElement svn = doc.createElement( "subversion" );
-	svn.setAttribute("recursecheckout", m_checkout_recurse);
-	svn.setAttribute("recurseupdate", m_update_recurse);
-	svn.setAttribute("recurseswitch", m_switch_recurse);
-	svn.setAttribute("recurseadd", m_add_recurse);
-	svn.setAttribute("forceremove",m_remove_force);
-	svn.setAttribute("recursecommit",m_commit_recurse);
-	svn.setAttribute("recursediff", m_diff_recurse);
-	svn.setAttribute("recursemerge", m_merge_recurse);
-	svn.setAttribute("forcemerge", m_merge_overwrite);
-	svn.setAttribute("recurserelocate", m_relocate_recurse);
-	svn.setAttribute("recurserevert", m_revert_recurse);
-	svn.setAttribute("recurseresolve", m_resolve_recurse);
-	svn.setAttribute("forcemove", m_move_force);
-	svn.setAttribute("recursepropset", m_propset_recurse);
-	svn.setAttribute("recursepropget", m_propget_recurse);
-	svn.setAttribute("recurseproplist", m_proplist_recurse);
 	svn.setAttribute( "base", base.url() );
 	dom->appendChild( svn );
 }
@@ -404,23 +365,6 @@ void subversionPart::savePartialProjectSession(QDomElement* dom) {
 void subversionPart::restorePartialProjectSession(const QDomElement* dom) {
 	kdDebug(9036) << "subversion : restorePartialProjectSession" << endl;
 	QDomElement svn = dom->namedItem("subversion").toElement();
-
-	m_checkout_recurse = svn.attribute( "recursecheckout", "1" ).toInt();
-	m_update_recurse = svn.attribute("recurseupdate","1").toInt();
-	m_switch_recurse = svn.attribute("recurseswitch","1").toInt();
-	m_add_recurse = svn.attribute("recurseadd","1").toInt();
-	m_remove_force = svn.attribute("forceremove","1").toInt();
-	m_commit_recurse = svn.attribute("recursecommit","1").toInt();
-	m_diff_recurse = svn.attribute("recursediff","1").toInt();
-	m_merge_recurse = svn.attribute("recursemerge","1").toInt();
-	m_merge_overwrite = svn.attribute("forcemerge","1").toInt();
-	m_relocate_recurse = svn.attribute("recurserelocate","1").toInt();
-	m_revert_recurse = svn.attribute("recurserevert","1").toInt();
-	m_move_force = svn.attribute("forcemove","1").toInt();
-	m_resolve_recurse = svn.attribute("recurseresolve","1").toInt();
-	m_propset_recurse = svn.attribute("recursepropset","1").toInt();
-	m_propget_recurse = svn.attribute("recursepropget","1").toInt();
-	m_proplist_recurse = svn.attribute("recurseproplist","1").toInt();
 	base = svn.attribute( "base", "" );
 }
 

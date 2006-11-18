@@ -75,7 +75,6 @@ private slots:
 		void slotResolve();
 		void slotProjectClosed();
 		void slotProjectOpened();
-		void projectConfigWidget( KDialogBase *dlg );
 
 private:
 		QGuardedPtr<subversionCore> m_impl;
@@ -96,23 +95,7 @@ private:
 		KURL base;
 
 public:
-		//options
-		bool m_checkout_recurse;
-		bool m_update_recurse;
-		bool m_switch_recurse;
-		bool m_add_recurse;
-		bool m_remove_force;
-		bool m_commit_recurse;
-		bool m_diff_recurse;
-		bool m_merge_recurse;
-		bool m_merge_overwrite;
-		bool m_relocate_recurse;
-		bool m_revert_recurse;
-		bool m_resolve_recurse;
-		bool m_move_force;
-		bool m_propset_recurse;
-		bool m_propget_recurse;
-		bool m_proplist_recurse;
+
 };
 
 
