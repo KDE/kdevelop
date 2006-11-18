@@ -35,9 +35,10 @@ Scope::Scope( const QString &filename, TrollProjectPart* part )
     : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0), m_initFinished(false)
 {
     m_defaultopts = new QMakeDefaultOpts();
+    connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
     m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
                                  QFileInfo( filename ).dirPath( true ) );
-    connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
+
     if ( !loadFromFile( filename ) )
     {
         if( !QFileInfo( filename ).exists() )
