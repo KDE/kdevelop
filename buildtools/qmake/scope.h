@@ -66,7 +66,7 @@ public:
 
     // Fetch the variable values by running over the statements and adding/removing/setting
     // as the encountered op's say, begin with the parent projects variableValues list
-    QStringList variableValues( const QString& variable, bool checkIncParent = true ) const;
+    QStringList variableValues( const QString& variable, bool checkIncParent = true );
 
     // Remove a variable+Op combination from the scope, if existant
     void removeVariable( const QString& var, const QString& op );
@@ -161,7 +161,7 @@ public:
     /* return the "position" of this scope in the list of scopes */
     unsigned int getNum() { return m_num; }
 
-    QStringList allFiles( const QString& ) const;
+    QStringList allFiles( const QString& );
 
     bool isInitializationFinished() const { return m_initFinished; }
 
@@ -244,7 +244,7 @@ private:
     QStringList variableValues( const QString& variable, QMake::AST* ) const;
     QString resolveVariables( const QString& , QMake::AST* = 0 ) const;
 
-    void allFiles( const QString&, QStringList& ) const;
+    void allFiles( const QString&, QStringList& );
 
     QMake::ProjectAST* m_root;
     QMake::IncludeAST* m_incast;
@@ -262,6 +262,7 @@ private:
     TrollProjectPart* m_part;
     QMakeDefaultOpts* m_defaultopts;
     bool m_initFinished;
+    QMap<QString, QStringList> m_varCache;
 
 #ifdef DEBUG
     class PrintAST : QMake::ASTVisitor

@@ -281,17 +281,26 @@ QStringList Scope::variableValuesForOp( const QString& variable , const QString&
     return result;
 }
 
-QStringList Scope::variableValues( const QString& variable, bool checkIncParent ) const
+QStringList Scope::variableValues( const QString& variable, bool checkIncParent )
 {
     QStringList result;
 
     if ( !m_root )
         return result;
 
+    if( m_varCache.contains( variable ) && ( checkIncParent || scopeType() != Scope::IncludeScope ) )
+    {
+        return m_varCache[variable];
+    }
+
     result = calcValuesFromStatements( variable, result, checkIncParent );
     result.remove( "\\\n" );
     result.remove( "\n" );
     result = Scope::removeWhiteSpace(result);
+    if( scopeType() != Scope::IncludeScope || checkIncParent )
+    {
+        m_varCache[ variable ] = result;
+    }
     return result;
 }
 
@@ -646,6 +655,8 @@ bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
             {
                 QMake::AssignmentAST * ast = static_cast<QMake::AssignmentAST*>( *foundit );
                 updateValues( ast->values, QStringList( projdir ), true, ast->indent );
+                if( m_varCache.contains( "SUBDIRS" ) )
+                    m_varCache.erase( "SUBDIRS" );
             }else
                 return false;
             m_scopes.remove( num );
@@ -705,6 +716,9 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
 {
     if ( !m_root || listIsEmpty( values ) )
         return ;
+
+    if( m_varCache.contains( variable ) )
+        m_varCache.erase( variable );
 
     for ( int i = m_root->m_children.count() - 1; i >= 0; --i )
     {
@@ -960,6 +974,8 @@ void Scope::updateCustomVariable( unsigned int id, const QString& name, const QS
     {
         m_customVariables[ id ] ->values.clear();
         updateValues( m_customVariables[ id ] ->values, newvalues );
+        if( m_varCache.contains( m_customVariables[ id ]->scopedID ) )
+            m_varCache.erase( m_customVariables[ id ]->scopedID );
         m_customVariables[ id ] ->op = newop;
         m_customVariables[ id ] ->scopedID = name;
     }
@@ -1202,7 +1218,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
     return result;
 }
 
-void Scope::allFiles( const QString& projectDirectory, QStringList& res ) const
+void Scope::allFiles( const QString& projectDirectory, QStringList& res )
 {
     QString myRelPath = getRelativePath( projectDirectory, projectDir() );
     if( !variableValues("TEMPLATE").contains("subdirs") )
@@ -1329,7 +1345,7 @@ void Scope::allFiles( const QString& projectDirectory, QStringList& res ) const
     }
 }
 
-QStringList Scope::allFiles( const QString& projectDir ) const
+QStringList Scope::allFiles( const QString& projectDir )
 {
     QStringList result;
     if( !m_initFinished )
