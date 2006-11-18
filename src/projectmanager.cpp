@@ -209,11 +209,16 @@ bool ProjectManager::loadProject(const KURL &projectURL)
   if (url.isLocalFile())
   {
     QDir dir(url.path());
-    url.setPath(dir.canonicalPath());
+    QString can_path = dir.canonicalPath();
+               //if the directory doesn't exist, the returned string is null which confuses the user later on. so better short-cut here
+    if(can_path.isNull())
+      return false;
+    else
+      url.setPath(can_path);
   }
 
   // reopen the already opened project?
-  if( url.path() == projectFile().path() )
+  if( projectLoaded() && url.path() == projectFile().path() )
   {
     if (KMessageBox::questionYesNo(TopLevel::getInstance()->main(),
         i18n("Are you sure you want to reopen the current project?"), QString::null, i18n("Reopen"), i18n("Do Not Reopen")) == KMessageBox::No)
