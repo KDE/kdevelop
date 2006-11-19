@@ -216,7 +216,7 @@ QString TrollProjectPart::makeEnvironment()
         environstr += " ";
     }
 
-    if( !hasQtDir && !m_defaultQtDir.isEmpty() )
+    if( !hasQtDir && !isQt4Project() && !m_defaultQtDir.isEmpty() )
     {
          environstr += QString( "QTDIR=" ) + EnvVarTools::quote( m_defaultQtDir ) + QString( " " );
     }
@@ -255,7 +255,7 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
             KURLRequesterDlg dlg( i18n("Choose Qt%1 directory").arg(DomUtil::readEntry(*projectDom(),
                 "/kdevcppsupport/qt/version")),
                 i18n("Choose the Qt%1 directory to use. This directory needs to have a bin subdirectory "
-                     "containing the qmake binary.").arg(
+                     "containing the qmake binary and for Qt3 projects it also needs to contain the include directory containing qt.h.").arg(
                         DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version")), m_widget, 0);
             dlg.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
             dlg.urlRequester() ->setURL( QString::null );
@@ -268,11 +268,11 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
                 {
                     if( KMessageBox::warningYesNo( m_widget,
                                                 i18n("The directory you gave is not a proper Qt directory, the "
-                                                   "project might not work properly without one.\nPlease make "
-						   "sure you give a directory that contains bin/qmake and "
-						   "include/qt.h or include/Qt/qglobal.h (depending on the Qt "
-						   "version you use).\nDo you want to try setting a Qt "
-						   "directory again?"),
+                                                    "project might not work properly without one.\nPlease make "
+                                                    "sure you give a directory that contains a bin with the "
+                                                    "qmake binary in it and for Qt3 project also contains an "
+                                                    "include directory with qt.h in it.\nDo you want to try "
+                                                    "setting a Qt directory again?"),
                                                 i18n("Wrong Qt directory given"))
                         == KMessageBox::Yes
                     )
@@ -646,12 +646,13 @@ KDevProject::Options TrollProjectPart::options( ) const
 
 bool TrollProjectPart::isValidQtDir( const QString& path ) const
 {
-  return QFile::exists( path + QString( QChar( QDir::separator() ) )+
-                        "include"+QString( QChar( QDir::separator() ) )+
-                        "qt.h" )
-        || QFile::exists( path + QString( QChar( QDir::separator() ) )+
-                          "include"+QString( QChar( QDir::separator() ) )+
-                          "Qt"+QString( QChar( QDir::separator() ) )+"qglobal.h" ) ;
+    QFileInfo qm(  path + QString( QChar( QDir::separator() ) )+
+                   "bin"+QString( QChar( QDir::separator() ) )+
+                   "qmake" );
+    QFileInfo inc( path + QString( QChar( QDir::separator() ) )+
+                   "include"+QString( QChar( QDir::separator() ) )+
+                   "qt.h" );
+    return ( ( isQt4Project() && qm.exists() && qm.isExecutable() ) || ( !isQt4Project() && inc.exists() ) );
 }
 
 QStringList TrollProjectPart::availableQtDirList() const
