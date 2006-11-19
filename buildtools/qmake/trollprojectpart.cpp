@@ -268,8 +268,11 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
                 {
                     if( KMessageBox::warningYesNo( m_widget,
                                                 i18n("The directory you gave is not a proper Qt directory, the "
-                                                   "project might not work properly without one.\nDo you want "
-                                                   "to try setting a Qt directory again?"),
+                                                   "project might not work properly without one.\nPlease make "
+						   "sure you give a directory that contains bin/qmake and "
+						   "include/qt.h or include/Qt/qglobal.h (depending on the Qt "
+						   "version you use).\nDo you want to try setting a Qt "
+						   "directory again?"),
                                                 i18n("Wrong Qt directory given"))
                         == KMessageBox::Yes
                     )
