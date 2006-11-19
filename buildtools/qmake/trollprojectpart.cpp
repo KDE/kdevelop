@@ -658,6 +658,7 @@ QStringList TrollProjectPart::availableQtDirList() const
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt" );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString( QChar( QDir::separator() ) )+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version") );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"share"+QString( QChar( QDir::separator() ) )+"qt"+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version") );
+    qtdirs.push_back( QDir::rootDirPath()+"usr" );
 
     for( QStringList::Iterator it=qtdirs.begin(); it!=qtdirs.end(); ++it )
     {
