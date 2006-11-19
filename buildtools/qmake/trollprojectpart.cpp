@@ -125,10 +125,6 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     action->setToolTip(i18n("Execute main program"));
     action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
 
-
-
-
-
     action = new KAction( i18n("&Build Subproject"), "make_kdevelop", Key_F7,
                           m_widget, SLOT(slotBuildTarget()),
                           actionCollection(), "build_build_target" );
@@ -174,7 +170,11 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
 
     if( ( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) ) && !m_availableQtDirList.isEmpty() )
+    {
         m_defaultQtDir = m_availableQtDirList.front();
+        kdDebug(9024) << "Setting default dir to: " << m_defaultQtDir << endl;
+        DomUtil::writeEntry(*projectDom(), "/kdevcppsupport/qt/root", m_defaultQtDir );
+    }
 }
 
 
