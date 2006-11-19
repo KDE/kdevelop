@@ -172,8 +172,6 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     m_availableQtDirList = availableQtDirList();
     m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
-    if( m_defaultQtDir.isEmpty() && isValidQtDir( ::getenv( "QTDIR" ) ) )
-        m_defaultQtDir = ::getenv( "QTDIR" );
 
     if( ( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) ) && !m_availableQtDirList.isEmpty() )
         m_defaultQtDir = m_availableQtDirList.front();
@@ -658,11 +656,13 @@ bool TrollProjectPart::isValidQtDir( const QString& path ) const
 QStringList TrollProjectPart::availableQtDirList() const
 {
     QStringList qtdirs, lst;
+    if( !isQt4Project() )
+        qtdirs.push_back( ::getEnv("QTDIR") );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version") );
-    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt" );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString( QChar( QDir::separator() ) )+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version") );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"share"+QString( QChar( QDir::separator() ) )+"qt"+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version") );
     qtdirs.push_back( QDir::rootDirPath()+"usr" );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt" );
 
     for( QStringList::Iterator it=qtdirs.begin(); it!=qtdirs.end(); ++it )
     {
