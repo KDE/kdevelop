@@ -75,18 +75,22 @@ Scope::~Scope()
     m_root = 0;
 }
 
-Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
-    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
+Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope,
+              QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
+    : m_root( scope ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( true ),
+        m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
 {
     init();
 }
 
-Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, QMakeDefaultOpts* defaultopts, bool isEnabled )
-: m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ), m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
+Scope::Scope( unsigned int num, Scope* parent, const QString& filename,
+              TrollProjectPart* part, QMakeDefaultOpts* defaultopts, bool isEnabled )
+    : m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ),
+    m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
 {
     if ( !loadFromFile( filename ) )
     {
-        if( !QFileInfo( filename ).exists() )
+        if( !QFileInfo( filename ).exists() && QFileInfo( QFileInfo( filename ).dirPath( true ) ).exists() )
         {
             m_root = new QMake::ProjectAST();
             m_root->setFileName( filename );
@@ -94,6 +98,7 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollPro
         {
             delete m_root;
             m_root = 0;
+            m_isEnabled = false;
         }
     }
     if( m_root )
@@ -101,8 +106,10 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename, TrollPro
     init();
 }
 
-Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path, const QString& incfile, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
-        : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ), m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
+Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path,
+              const QString& incfile, QMakeDefaultOpts* defaultopts, TrollProjectPart* part )
+    : m_root( 0 ), m_incast( incast ), m_parent( parent ), m_num(num), m_isEnabled( true ),
+    m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
 {
     QString absfilename;
     QString tmp;
@@ -117,7 +124,7 @@ Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const 
         absfilename = tmp;
     if ( !loadFromFile( absfilename ) )
     {
-        if( !QFileInfo( absfilename ).exists() )
+        if( !QFileInfo( absfilename ).exists() && QFileInfo( QFileInfo( absfilename ).dirPath( true ) ).exists() )
         {
             m_root = new QMake::ProjectAST();
             m_root->setFileName( absfilename );
@@ -125,6 +132,7 @@ Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const 
         {
             delete m_root;
             m_root = 0;
+            m_isEnabled = false;
         }
     }
     if( m_root )

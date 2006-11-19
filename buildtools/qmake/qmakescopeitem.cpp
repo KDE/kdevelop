@@ -479,7 +479,10 @@ void QMakeScopeItem::buildSubTree()
 
     for ( it = scopes.begin(); it != scopes.end(); ++it )
     {
-        new QMakeScopeItem( this, ( *it )->scopeName(), ( *it ) );
+        if( (*it)->scopeType() != Scope::InvalidScope )
+            new QMakeScopeItem( this, ( *it )->scopeName(), ( *it ) );
+        else
+            kdDebug( 9024 ) << "No QMakeScopeItem created" << endl;
     }
     sortChildItems( 0, true );
 }
