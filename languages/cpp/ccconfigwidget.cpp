@@ -481,7 +481,14 @@ void CCConfigWidget::saveQtTab()
 
 void CCConfigWidget::isValidQtDir( const QString &dir )
 {
-	if ( !QFile::exists( dir + "/include/qt.h" ) && !QFile::exists( dir + "/include/Qt/qglobal.h" ) )
+	QFileInfo qm(  dir + QString( QChar( QDir::separator() ) )+
+			"bin"+QString( QChar( QDir::separator() ) )+
+			"qmake" );
+	QFileInfo inc( dir + QString( QChar( QDir::separator() ) )+
+			"include"+QString( QChar( QDir::separator() ) )+
+			"qt.h" );
+
+	if ( !qm.exists() || !qm.isExecutable() || ( !m_versionQt4->isChecked() && !inc.exists() )  )
 	{
 		m_qtDir->lineEdit()->setPaletteForegroundColor(QColor("#ff0000"));
 	}else
