@@ -1,15 +1,15 @@
 /*
 	Copyright (C) 2005 by Tobias Erbsland <te@profzone.ch>
-	
+
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
 	version 2, License as published by the Free Software Foundation.
-	
+
 	This library is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 	Library General Public License for more details.
-	
+
 	You should have received a copy of the GNU Library General Public License
 	along with this library; see the file COPYING.LIB.  If not, write to
 	the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -51,15 +51,6 @@ void QtBuildConfig::init( )
 		m_includeStyle = m_version;
 	}
 	m_root = DomUtil::readEntry( *m_dom, m_configRoot + "/root" );
-	if( m_root.isEmpty() )
-	{
-		m_root = QString( getenv( "QTDIR" ) );
-		int pos;
-		if( m_version == 4 && (pos = m_root.find("qt3", 0, false) ) != -1 )
-			m_root = m_root.replace(pos+2, 1, "4");
-		else if( m_version == 3 && (pos = m_root.find("qt4", 0, false) ) != -1 )
-			m_root = m_root.replace(pos+2, 1, "3");
-	}
 	m_designerIntegration = DomUtil::readEntry( *m_dom, m_configRoot + "/designerintegration" );
 	if( m_designerIntegration.isEmpty() )
 	{

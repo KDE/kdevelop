@@ -8,7 +8,7 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 *                                                                         *
-***************************************************************************/ 
+***************************************************************************/
 // qt includes
 #include <qtabwidget.h>
 #include <qbuttongroup.h>
@@ -36,7 +36,7 @@
 #include <knuminput.h>
 #include <kmainwindow.h>
 #include <klineedit.h>
-#include <kdeversion.h> 
+#include <kdeversion.h>
 // kdevelop includes
 #include <domutil.h>
 #include <kdevcoderepository.h>
@@ -67,9 +67,9 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 	connect( m_pPart->codeRepository(), SIGNAL( catalogUnregistered( Catalog* ) ),
 	         this, SLOT( catalogUnregistered( Catalog* ) ) );
 
-	connect( m_qtDir, SIGNAL(urlSelected(const QString &)), 
+	connect( m_qtDir, SIGNAL(urlSelected(const QString &)),
 		 this, SLOT(isValidQtDir(const QString &)));
-	connect( m_qtDir, SIGNAL(textChanged(const QString &)), 
+	connect( m_qtDir, SIGNAL(textChanged(const QString &)),
 		 this, SLOT(isValidQtDir(const QString &)));
 
 	initGeneralTab( );
@@ -165,7 +165,7 @@ void CCConfigWidget::initCodeCompletionTab( )
 
 		m_catalogs[ item ] = c;
 	}
-	
+
 	checkPreprocessIncludedHeaders->setChecked( c->preProcessAllHeaders() );
 	checkListGlobalItems->setChecked( c->alwaysIncludeNamespaces() );
 	checkParseMissingHeaders->setChecked( c->parseMissingHeaders() );
@@ -188,7 +188,7 @@ void CCConfigWidget::saveCodeCompletionTab( )
 	c->setProcessFunctionArguments( checkCompleteArgumentType->isChecked() );
 	c->setProcessPrimaryTypes( checkCompleteReturnType->isChecked() );
 	//c->setShowOnlyAccessibleItems( checkShowOnlyAccessible->isChecked() );
-	
+
 	c->setNamespaceAliases( editNamespaceAlias->text() );
 	c->setShowEvaluationContextMenu( checkBox18->isChecked() );
 	c->setStatusBarTypeEvaluation( checkShowTypeEvaluationInStatusBar->isChecked() );
@@ -213,7 +213,7 @@ void CCConfigWidget::saveCodeCompletionTab( )
 	c->setParseMissingHeaders( checkParseMissingHeaders->isChecked() );
 	c->setResolveIncludePaths( checkResolveIncludePaths->isChecked() );
 	c->setCustomIncludePaths( editIncludePaths->text() );
-	
+
 	c->store();
 }
 
@@ -234,7 +234,7 @@ void CCConfigWidget::slotRemovePCS()
 
 	KStandardDirs *dirs = m_pPart->instance() ->dirs();
 	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + KURL::encode_string_no_slash( db ) + ".db";
-	
+
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
 
 	if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n( "Remove Database" ), KStdGuiItem::del() ) )
@@ -371,13 +371,13 @@ void CCConfigWidget::saveGetterSetterTab( )
 void CCConfigWidget::initSplitTab( )
 {
 	CppSplitHeaderSourceConfig * config = m_pPart->splitHeaderSourceConfig();
-	
+
 	if ( config == 0 )
 		return ;
-	
+
 	m_splitEnable->setChecked( config->splitEnabled() );
 	m_splitSync->setChecked( config->autoSync() );
-	
+
 	QString o = config->orientation();
 	m_splitVertical->setChecked( o == "Vertical" );
 	m_splitHorizontal->setChecked( o == "Horizontal" );
@@ -386,26 +386,27 @@ void CCConfigWidget::initSplitTab( )
 void CCConfigWidget::saveSplitTab( )
 {
 	CppSplitHeaderSourceConfig * config = m_pPart->splitHeaderSourceConfig();
-	
+
 	if ( config == 0 )
 		return ;
-	
+
 	config->setSplitEnable( m_splitEnable->isChecked() );
 	config->setAutoSync( m_splitSync->isChecked() );
-	
+
 	if ( m_splitVertical->isChecked() )
 		config->setOrientation( "Vertical" );
 	else if ( m_splitHorizontal->isChecked() )
 		config->setOrientation( "Horizontal" );
-	
+
 	config->store();
 }
 
 void CCConfigWidget::initQtTab()
 {
 	m_qtDir->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
-	
+
 	QtBuildConfig* c = m_pPart->qtBuildConfig();
+	c->init();
 
 	m_qtUsed->setChecked( c->isUsed() );
 	if( c->version() == 4 )
@@ -447,7 +448,7 @@ void CCConfigWidget::initQtTab()
 void CCConfigWidget::saveQtTab()
 {
 	QtBuildConfig* c = m_pPart->qtBuildConfig();
-	
+
 	c->setUsed( m_qtUsed->isChecked() );
 	if( m_versionQt4->isChecked() )
 	{
