@@ -1190,7 +1190,13 @@ GroupItem* TrollProjectWidget::getInstallObject( QMakeScopeItem* item, const QSt
 
 void TrollProjectWidget::slotNewFile()
 {
-    GroupItem * gitem = static_cast<GroupItem*>( details->currentItem() );
+    GroupItem * gitem = dynamic_cast<GroupItem*>( details->currentItem() );
+
+    if( !gitem )
+    {
+        gitem = dynamic_cast<GroupItem*>( details->currentItem()->parent() );
+    }
+
     if ( gitem )
     {
         if ( gitem->groupType == GroupItem::InstallObject )
@@ -1227,13 +1233,45 @@ void TrollProjectWidget::slotNewFile()
             }
             return ;
         }
-
     }
     KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>( "KDevelop/CreateFile" );
     if ( createFileSupport )
     {
+        QString fcext;
+        if( gitem )
+        {
+            switch ( gitem->groupType )
+            {
+                case GroupItem::Sources:
+                    fcext = "cpp";
+                    break;
+                case GroupItem::Headers:
+                    fcext = "h";
+                    break;
+                case GroupItem::Forms:
+                    if ( !m_part->isQt4Project() )
+                        fcext = "ui-widget";
+                    else
+                        fcext = "ui-widget-qt4";
+                    break;
+                case GroupItem::Translations:
+                    fcext = "ts";
+                    break;
+                case GroupItem::Lexsources:
+                    fcext = "l";
+                    break;
+                case GroupItem::Yaccsources:
+                    fcext = "y";
+                    break;
+                case GroupItem::Resources:
+                    fcext = "qrc";
+                    break;
+                default:
+                    fcext = QString::null;
+            }
+        }
         KDevCreateFile::CreatedFile crFile =
-        createFileSupport->createNewFile( QString::null, projectDirectory() + QString(QChar(QDir::separator()))+ m_shownSubproject->relativePath() );
+        createFileSupport->createNewFile( fcext, projectDirectory() + QString(QChar(QDir::separator()))+ m_shownSubproject->relativePath() );
     }
     else
     {
@@ -1287,64 +1325,18 @@ void TrollProjectWidget::slotExcludeFileFromScopeButton()
     GroupItem *gitem = static_cast<GroupItem*>( fitem->parent() );
 
     gitem->removeFileFromScope( fitem->text( 0 ) );
-    /*
-    if ( !gitem )
-        return ;
-    QStringList dirtyScopes;
-    FilePropertyDlg *propdlg = new FilePropertyDlg( m_shownSubproject, gitem->groupType, fitem, dirtyScopes );
-    QMakeScopeItem *scope;
-    propdlg->exec();
-
-    for ( uint i = 0; i < dirtyScopes.count();i++ )
-    {
-        scope = getScope( m_shownSubproject, dirtyScopes[ i ] );
-        if ( gitem->groupType == GroupItem::InstallObject )
-        {
-            GroupItem * instroot = getInstallRoot( scope );
-            GroupItem* instobj = getInstallObject( scope, gitem->install_objectname );
-            if ( !instobj )
-            {
-                GroupItem * institem = createGroupItem( GroupItem::InstallObject, gitem->install_objectname , scope->scopeString );
-                institem->owner = scope;
-                institem->install_objectname = gitem->install_objectname;
-                instroot->installs.append( institem );
-                instobj = institem;
-            }
-            // Using the boolean nature of this operation I can append or remove the file from the excludelist
-            if ( instobj->str_files_exclude.join( ":" ).find( fitem->name ) >= 0 )
-            {
-                instobj->str_files_exclude.remove( fitem->name );
-            }
-            else
-            {
-                instobj->str_files_exclude.append( fitem->name );
-            }
-        }
-        if ( scope )
-        {
-            scope->updateProjectFile();
-            scope->saveToFile( );
-        }
-    }*/
 }
 
 void TrollProjectWidget::slotDetailsSelectionChanged( QListViewItem *item )
 {
     if ( !item )
     {
-        //        addfilesButton->setEnabled(false);
-        //        newfileButton->setEnabled(false);
         removefileButton->setEnabled( false );
         excludeFileFromScopeButton->setEnabled( false );
         return ;
     }
-    //    addfilesButton->setEnabled(false);
-    //    newfileButton->setEnabled(false);
     removefileButton->setEnabled( false );
     excludeFileFromScopeButton->setEnabled( false );
-    /*    buildTargetButton->setEnabled(false);
-        rebuildTargetButton->setEnabled(false);
-        executeTargetButton->setEnabled(false);*/
 
     qProjectItem *pvitem = static_cast<qProjectItem*>( item );
     if ( pvitem->type() == qProjectItem::Group )
