@@ -31,6 +31,10 @@
 #include <kaction.h>
 #include <kparts/part.h>
 #include <kprocess.h>
+#include <kurlrequesterdlg.h>
+#include <kurlrequester.h>
+#include <kurlcompletion.h>
+#include <kfile.h>
 #include <makeoptionswidget.h>
 
 
@@ -168,10 +172,11 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     m_availableQtDirList = availableQtDirList();
     m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
-    if( m_defaultQtDir.isEmpty() )
+    if( m_defaultQtDir.isEmpty() && isValidQtDir( ::getenv( "QTDIR" ) ) )
         m_defaultQtDir = ::getenv( "QTDIR" );
-    if( m_defaultQtDir.isEmpty() && !m_availableQtDirList.isEmpty() )
-        m_defaultQtDir = m_availableQtDirList.front();
+
+//     if( m_defaultQtDir.isEmpty() && !m_availableQtDirList.isEmpty() )
+//         m_defaultQtDir = m_availableQtDirList.front();
 }
 
 
@@ -241,6 +246,59 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 void TrollProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
     mainWindow()->statusBar()->message( i18n("Loading Project...") );
+
+    if( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) )
+    {
+        bool doask = true;
+        while( doask )
+        {
+            KURLRequesterDlg dlg( i18n("Choose Qt%1 directory").arg(DomUtil::readEntry(*projectDom(),
+                "/kdevcppsupport/qt/version")),
+                i18n("Choose the Qt%1 directory to use. This directory needs to have a bin subdirectory "
+                     "containing the qmake binary.").arg(
+                        DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version")), m_widget, 0);
+            dlg.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
+            dlg.urlRequester() ->setURL( QString::null );
+            dlg.urlRequester() ->completionObject() ->setDir( "/" );
+
+            if ( dlg.exec() == QDialog::Accepted && !dlg.urlRequester() ->url().isEmpty() )
+            {
+                QString qtdir = dlg.urlRequester()->url();
+                if( !isValidQtDir( qtdir ) )
+                {
+                    if( KMessageBox::warningYesNo( m_widget,
+                                                i18n("The directory you gave is not a proper Qt directory, the "
+                                                   "project might not work properly without one.\nDo you want "
+                                                   "to try setting a Qt directory again?"),
+                                                i18n("Wrong Qt directory given"))
+                        == KMessageBox::Yes
+                    )
+                    doask = true;
+                else
+                    doask = false;
+                }else
+                {
+                    m_defaultQtDir = qtdir;
+                    doask = false;
+                }
+
+            }else
+            {
+                if( KMessageBox::warningYesNo( m_widget,
+                                               i18n("You didn't specify a Qt directory, the project might not "
+                                                   "work properly without one.\nDo you want to try setting a Qt"
+                                                   " directory again?"),
+                                               i18n("No Qt directory given"))
+                        == KMessageBox::Yes
+                    )
+                    doask = true;
+                else
+                    doask = false;
+            }
+        }
+    }
+    DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/root", m_defaultQtDir );
+
     m_widget->openProject(dirName);
 
     m_projectName = projectName;
@@ -585,14 +643,17 @@ KDevProject::Options TrollProjectPart::options( ) const
 
 bool TrollProjectPart::isValidQtDir( const QString& path ) const
 {
-  return QFile::exists( path + QString( QChar( QDir::separator() ) )+"include"+QString( QChar( QDir::separator() ) )+"qt.h" ) || QFile::exists( path +
-                        QString( QChar( QDir::separator() ) )+"include"+QString( QChar( QDir::separator() ) )+"Qt"+QString( QChar( QDir::separator() ) )+"qglobal.h" ) ;
+  return QFile::exists( path + QString( QChar( QDir::separator() ) )+
+                        "include"+QString( QChar( QDir::separator() ) )+
+                        "qt.h" )
+        || QFile::exists( path + QString( QChar( QDir::separator() ) )+
+                          "include"+QString( QChar( QDir::separator() ) )+
+                          "Qt"+QString( QChar( QDir::separator() ) )+"qglobal.h" ) ;
 }
 
 QStringList TrollProjectPart::availableQtDirList() const
 {
     QStringList qtdirs, lst;
-    qtdirs.push_back( ::getenv("QTDIR") );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt3" );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt" );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"share"+QString( QChar( QDir::separator() ) )+"qt3" );
