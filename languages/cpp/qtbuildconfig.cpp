@@ -51,6 +51,12 @@ void QtBuildConfig::init( )
 		m_includeStyle = m_version;
 	}
 	m_root = DomUtil::readEntry( *m_dom, m_configRoot + "/root" );
+
+    QStringList qtdirs = availableQtDirList();
+    if( ( m_root.isEmpty() || !isValidQtDir( m_root ) ) && !qtdirs.isEmpty() )
+    {
+        m_root = qtdirs.front();
+    }
 	m_designerIntegration = DomUtil::readEntry( *m_dom, m_configRoot + "/designerintegration" );
 	if( m_designerIntegration.isEmpty() )
 	{
@@ -59,6 +65,40 @@ void QtBuildConfig::init( )
 		else
 			m_designerIntegration = "ExternalDesigner";
 	}
+}
+
+bool QtBuildConfig::isValidQtDir( const QString& path ) const
+{
+    QFileInfo qm(  path + QString( QChar( QDir::separator() ) )+
+                   "bin"+QString( QChar( QDir::separator() ) )+
+                   "qmake" );
+    QFileInfo inc( path + QString( QChar( QDir::separator() ) )+
+                   "include"+QString( QChar( QDir::separator() ) )+
+                   "qt.h" );
+    return ( ( m_version == 4 && qm.exists() && qm.isExecutable() ) || ( m_version != 4 && inc.exists() ) );
+}
+
+
+QStringList QtBuildConfig::availableQtDirList() const
+{
+    QStringList qtdirs, lst;
+    if( !m_version == 3 )
+        qtdirs.push_back( ::getenv("QTDIR") );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString("%1").arg( m_version ) );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString( QChar( QDir::separator() ) )+QString("%1").arg( m_version ) );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"share"+QString( QChar( QDir::separator() ) )+"qt"+QString("%1").arg( m_version ) );
+    qtdirs.push_back( QDir::rootDirPath()+"usr" );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt" );
+
+    for( QStringList::Iterator it=qtdirs.begin(); it!=qtdirs.end(); ++it )
+    {
+        QString qtdir = *it;
+        if( !qtdir.isEmpty() && isValidQtDir(qtdir) )
+        {
+            lst.push_back( qtdir );
+        }
+    }
+    return lst;
 }
 
 void QtBuildConfig::store( )

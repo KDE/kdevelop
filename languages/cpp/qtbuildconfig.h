@@ -56,6 +56,10 @@ signals:
 	void stored();
 
 private:
+
+    bool isValidQtDir( const QString& ) const;
+    QStringList availableQtDirList() const;
+
 	CppSupportPart* m_part; ///< The cpp support part
 	QDomDocument* m_dom; ///< The project configuration
 
