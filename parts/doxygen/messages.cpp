@@ -46,11 +46,13 @@ QString message(const QCString &key)
     addMessage("MULTILINE_CPP_IS_BRIEF", i18n("Multiline cpp is brief"));
     addMessage("DETAILS_AT_TOP", i18n("Details at top"));
     addMessage("INHERIT_DOCS", i18n("Inherit documentation"));
-    addMessage("DISTRIBUTE_GROUP_DOC", i18n("Use group documentation on undocumented members"));
+    addMessage("SEPARATE_MEMBER_PAGES", i18n("Produce a new page for each member"));
     addMessage("TAB_SIZE", i18n("Tab size"));
     addMessage("ALIASES", i18n("Aliases"));
     addMessage("OPTIMIZE_OUTPUT_FOR_C", i18n("Optimize output for C"));
     addMessage("OPTIMIZE_OUTPUT_JAVA", i18n("Optimize output for Java"));
+    addMessage("BUILTIN_STL_SUPPORT", i18n("Use built-in STL classes support"));
+    addMessage("DISTRIBUTE_GROUP_DOC", i18n("Use group documentation on undocumented members"));
     addMessage("SUBGROUPING", i18n("Class members type subgrouping"));
 
     //---------------------------------------------------------------------------
@@ -81,6 +83,8 @@ QString message(const QCString &key)
     addMessage("GENERATE_DEPRECATEDLIST", i18n("Generate Deprecated-list"));
     addMessage("MAX_INITIALIZER_LINES", i18n("Maximum lines shown for initializers"));
     addMessage("SHOW_USED_FILES", i18n("Show used files"));
+    addMessage("SHOW_DIRECTORIES", i18n("Show the directory hierarchy"));
+    addMessage("FILE_VERSION_FILTER", i18n("Script to invoke to get the current version for each file"));
 
     //---------------------------------------------------------------------------
     // configuration options related to warning and progress messages
@@ -90,6 +94,7 @@ QString message(const QCString &key)
     addMessage("WARNINGS", i18n("Show warnings"));
     addMessage("WARN_IF_UNDOCUMENTED", i18n("Warn about undocumented entities"));
     addMessage("WARN_IF_DOC_ERROR", i18n("Warn if error in documents"));
+    addMessage("WARN_NO_PARAMDOC", i18n("Warn if function parameters are not documented"));
     addMessage("WARN_FORMAT", i18n("Warnings format"));
     addMessage("WARN_LOGFILE", i18n("Write warnings to"));
 
@@ -116,6 +121,8 @@ QString message(const QCString &key)
     //---------------------------------------------------------------------------
     addMessage("Source Browser", i18n("Source Browser"));
     addMessage("SOURCE_BROWSER", i18n("Cross-reference with source files"));
+    addMessage("REFERENCES_LINK_SOURCE", i18n("References will link to source code"));
+    addMessage("USE_HTAGS", i18n("Use links to HTAGS"));
     addMessage("INLINE_SOURCES", i18n("Inline sources"));
     addMessage("STRIP_CODE_COMMENTS", i18n("Hide special comment blocks"));
     addMessage("REFERENCED_BY_RELATION", i18n("Referenced by relation"));
@@ -245,20 +252,25 @@ QString message(const QCString &key)
     addMessage("CLASS_DIAGRAMS", i18n("Generate class diagrams"));
     addMessage("HIDE_UNDOC_RELATIONS", i18n("Hide undocumented relations"));
     addMessage("HAVE_DOT", i18n("Use dot"));
+    addMessage("CALLER_GRAPH", i18n("Generate a caller dependency graph"));
     addMessage("CLASS_GRAPH", i18n("Generate class graphs"));
     addMessage("COLLABORATION_GRAPH", i18n("Generate collaboration graphs"));
+    addMessage("GROUP_GRAPHS", i18n("Generate a graph showing the direct groups dependencies"));
     addMessage("UML_LOOK", i18n("Generate UML looking inheritance and colloboration diagrams"));
     addMessage("TEMPLATE_RELATIONS", i18n("Show relations between templates and their instances"));
     addMessage("INCLUDE_GRAPH", i18n("Generate include graphs"));
     addMessage("INCLUDED_BY_GRAPH", i18n("Generate included-by graphs"));
     addMessage("CALL_GRAPH", i18n("Generate a call dependency graph for every global function or class method"));
     addMessage("GRAPHICAL_HIERARCHY", i18n("Generate graphical hierarchy"));
+    addMessage("DIRECTORY_GRAPH", i18n("Show the dependencies a directory has on other directories"));
     addMessage("DOT_IMAGE_FORMAT", i18n("Dot image format"));
     addMessage("DOT_PATH", i18n("Path to dot"));
     addMessage("DOTFILE_DIRS", i18n("Directories with extra dot files"));
     addMessage("MAX_DOT_GRAPH_WIDTH", i18n("Maximum graph width"));
     addMessage("MAX_DOT_GRAPH_HEIGHT", i18n("Maximum graph height"));
     addMessage("MAX_DOT_GRAPH_DEPTH", i18n("Maximum graph depth"));
+    addMessage("DOT_TRANSPARENT", i18n("Generate images with a transparent background"));
+    addMessage("DOT_MULTI_TARGETS", i18n("Generate multiple output files in one run"));
     addMessage("GENERATE_LEGEND", i18n("Generate legend"));
     addMessage("DOT_CLEANUP", i18n("Remove intermediate files"));
     addMessage("Search", i18n("Search"));
