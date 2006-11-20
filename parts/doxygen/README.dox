@@ -12,7 +12,7 @@ configure Doxygen (it reads and writes Doxygen Compatible configuration files).
     You'll need:
     - GNU bison v1.34 or better
     - GNU flex v2.5.4 or better
-    - Kompare from KDEsdk
+    - Kompare from KDEsdk or kdiff3
     .
     You'll have to issue:
         <code>\verbatim$ ./configure --with-doxywizard && make\endverbatim</code>
@@ -20,7 +20,7 @@ configure Doxygen (it reads and writes Doxygen Compatible configuration files).
     You should also copy config.l if you'd like to do some debugging.
     <br>
     -# To do the merge on config.cpp you should use:
-          <code>\verbatim$ kompare doxygen-location/addon/doxywizard/config.cpp kdevelop-location/parts/doxygen/config.cpp\endverbatim</code>
+          <code>\verbatim$ kdiff3 doxygen-location/src/config.cpp kdevelop-location/parts/doxygen/config.cpp\endverbatim</code>
       - Be careful because doxygen uses the deprecated QList class while KDevelop
       uses the new QPtrList so you should not merge certain lines of code!!!
       - Be careful because doxygen uses the deprecated QRegExp::match() method while
@@ -31,13 +31,13 @@ configure Doxygen (it reads and writes Doxygen Compatible configuration files).
       .
     <br>
     -# To do the merge on config.h you should use:
-          <code>\verbatim$ kompare doxygen-location/addon/doxywizard/config.h kdevelop-location/parts/doxygen/config.h\endverbatim</code>
+          <code>\verbatim$ kdiff3 doxygen-location/src/config.h kdevelop-location/parts/doxygen/config.h\endverbatim</code>
       - Again, be careful because doxygen uses the deprecated QList class while KDevelop
       uses the new QPtrList so you should not merge certain lines of code!!!
       .
     <br>
     .
-  -# Copy over the file lang_cfg.h from the src/ directory in the doxygen sources.
+  -# Copy over the file <code>doxygen-location/src/lang_cfg.h</code> to the <code>kdevelop-location/parts/doxygen/</code> directory.
   -# Add the new i18n strings to messages.cpp.
     To do so, run KDevelop and go to Project-> Project Options... -> Doxygen.
     Take a look at KDevelop' console output, it will warn you about the missing

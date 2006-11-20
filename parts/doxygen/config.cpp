@@ -2396,19 +2396,6 @@ static void writeStringList(QTextStream &t,QStrList &l)
 }
 #endif
 
-void Config::writeTemplate(QFile* f, bool sl, bool upd)
-{
-  if( !f->isOpen()  )
-  {
-    f->open(IO_WriteOnly);
-  }
-  if( f->isOpen() )
-  {
-    QTextStream s(f);
-    writeTemplate(s, sl, upd);
-  }
-}
-
 void Config::writeTemplate(QTextStream &t,bool sl,bool upd)
 {
   t << "# Doxyfile " << versionString << endl << endl;

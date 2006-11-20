@@ -205,7 +205,9 @@ void DoxygenPart::adjustDoxyfile()
     KMessageBox::information(mainWindow()->main(), i18n("Cannot write Doxyfile."));
   else
   {
-    Config::instance()->writeTemplate(&f2, true, true);
+    QTextStream ts_file(&f2);
+
+    Config::instance()->writeTemplate(ts_file, true, true);
 
     f2.close();
   }
@@ -444,7 +446,9 @@ void DoxygenPart::slotRunPreview( )
         return;
     }
 
-    config->writeTemplate(&file, false, false);
+    QTextStream ts_file(&file);
+
+    config->writeTemplate(ts_file, false, false);
 
     if (inputVal.count() == 0) //pInput is always != 0
         *pInput->valueRef() = QStrList();

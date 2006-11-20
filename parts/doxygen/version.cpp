@@ -1,1 +1,1 @@
-char versionString[]="1.4.1-KDevelop";
+char versionString[]="1.5.1-KDevelop";
