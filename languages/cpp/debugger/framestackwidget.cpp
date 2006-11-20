@@ -87,8 +87,6 @@ void FramestackWidget::clear()
     viewedThread_     = 0;
 
     QListView::clear();
-
-    stackDepth_.clear();
 }
 
 /***************************************************************************/
@@ -106,8 +104,14 @@ void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
         if (frame)
         {
             if (frame->text(0) == "...")
-            {   
-                getBacktrace(frame->frameNo(), frame->frameNo() + frameChunk_);
+            {
+               // Switch to the target thread.
+               controller_->addCommand(
+               new GDBCommand(QString("-thread-select %1")
+                           .arg(frame->threadNo()).ascii()));
+
+               viewedThread_ = findThread(frame->threadNo());
+               getBacktrace(frame->frameNo(), frame->frameNo() + frameChunk_);
             }
             else
             {
@@ -193,8 +197,8 @@ void FramestackWidget::handleStackDepth(const GDBMI::ResultRecord& r)
 
     if (existing_frames < maxFrame_)
         maxFrame_ = existing_frames;
-
-    controller_->addCommand(
+    //add the following command to the front, so noone switches threads in between
+    controller_->addCommandToFront(
         new GDBCommand(QString("-stack-list-frames %1 %2")
                        .arg(minFrame_).arg(maxFrame_),
                        this, &FramestackWidget::parseGDBBacktraceList));    

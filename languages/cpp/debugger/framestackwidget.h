@@ -169,7 +169,6 @@ private:
     // Data to pass from 'getBacktrace' to 'handleStackDepth'
     int minFrame_;
     int maxFrame_;
-    QMap<int, int> stackDepth_;
     bool has_more_frames;
 
     friend class FrameStackItem;
