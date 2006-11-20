@@ -29,7 +29,6 @@
 #include "kdevmainwindow.h"
 #include "subversion_core.h"
 #include "subversion_widget.h"
-#include "subversionoptionswidgetimpl.h"
 #include "subversionprojectwidget.h"
 #include "urlutil.h"
 #include <qvbox.h>
