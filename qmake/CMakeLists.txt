@@ -1,19 +1,17 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/buildtools/lib/parsers/qmake 
+include_directories(${CMAKE_SOURCE_DIR}/lib 
     ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/project
     )
 
 
 ########### next target ###############
 
-set(kdevqmakeimporter_LIB_SRCS
-    kdevqmakeeditor.cpp
-    qmakeprojectmodel.cpp
-    modelcreator.cpp
+set(kdevqmakeimporter_PART_SRCS
+    qmakeimporter.cpp
 )
 
-kde4_automoc(${kdevqmakeimporter_LIB_SRCS})
-kde4_add_plugin(kdevqmakeimporter ${kdevqmakeimporter_LIB_SRCS})
+kde4_automoc(${kdevqmakeimporter_PART_SRCS})
+kde4_add_plugin(kdevqmakeimporter ${kdevqmakeimporter_PART_SRCS})
 target_link_libraries(kdevqmakeimporter ${KDE4_KDECORE_LIBS} kdevplatform)
 
 install(TARGETS kdevqmakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
