@@ -15,10 +15,11 @@
 
 #include <qguardedptr.h>
 #include <kdevplugin.h>
+#include <qpopupmenu.h>
 
 
 class ReplaceWidget;
-
+class Context;
 
 class ReplacePart : public KDevPlugin
 {
@@ -30,9 +31,11 @@ public:
 
 public slots:
     void slotReplace();
+	void contextMenu(QPopupMenu *popup, const Context *context);
 
 private:
     QGuardedPtr<ReplaceWidget> m_widget;
+	QString m_popupstr;
 
 };
 

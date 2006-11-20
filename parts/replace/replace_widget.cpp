@@ -94,24 +94,53 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
 
 void ReplaceWidget::showDialog()
 {
-    if ( ! m_part->project() )
-        return; /// @todo feedback?
+	if ( ! m_part->project() )
+		return; /// @todo feedback?
 
-    KParts::ReadOnlyPart *part = dynamic_cast<KParts::ReadOnlyPart*>( m_part->partController()->activePart() );
-    if ( part ) {
-        if (part->url().isLocalFile() ) {
-            calledUrl = part->url().path();
-            cursorPos( part, &calledCol, &calledLine );
-        }
-    }
-    m_dialog->show( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" );
+	QString currentWord;
+	KParts::ReadOnlyPart *part = dynamic_cast<KParts::ReadOnlyPart*> ( m_part->partController()->activePart() );
+	if ( part )
+	{
+		if ( part->url().isLocalFile() )
+		{
+			calledUrl = part->url().path();
+			cursorPos ( part, &calledCol, &calledLine );
 
-    KTextEditor::SelectionInterface *sel_iface
-            = dynamic_cast<KTextEditor::SelectionInterface*>(m_part->partController()->activePart());
-    if (sel_iface && sel_iface->hasSelection()){
-        m_dialog->find_combo->insertItem(sel_iface->selection());
-    }
+			KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_part->partController()->activePart() );
+			QString str = editIface->textLine ( calledCol );
+
+			int i;
+			uint start, end;
+			for (i =calledLine; i< str.length();i++){
+				if (  ! (str[i].isLetter() || str[i].isNumber() || str[i] == '_' ) ){
+					break;
+				}
+			}
+			end=i;
+			for ( i = calledLine; i >= 0; --i ){
+				if ( ! ( str[i].isLetter() ||str[i].isNumber()|| str[i] == '_' ) ){
+					i+=1;
+					break;
+				}
+			}
+			start = i < 0 ? 0 : i;
+			currentWord = str.mid ( start, end-start );
+		}
+	}
+	m_dialog->show ( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" );
+
+	KTextEditor::SelectionInterface *sel_iface
+	= dynamic_cast<KTextEditor::SelectionInterface*> ( m_part->partController()->activePart() );
+	if ( sel_iface && sel_iface->hasSelection() )
+	{
+		m_dialog->find_combo->setCurrentText ( sel_iface->selection() );
+	}
+ 	else
+	{
+		m_dialog->find_combo->setCurrentText ( currentWord );
+	}
 }
+
 
 void ReplaceWidget::find()
 {

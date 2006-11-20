@@ -18,7 +18,7 @@
 #include <kdevgenericfactory.h>
 #include <kdevplugininfo.h>
 #include <kdebug.h>
-
+#include <kstringhandler.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 
@@ -38,7 +38,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     m_widget = new ReplaceWidget(this);
     m_widget->setIcon( SmallIcon("filefind") );
     m_widget->setCaption(i18n("Replace"));
-    
+
     QWhatsThis::add
         (m_widget, i18n("<b>Replace</b><p>"
                         "This window shows a preview of a string replace "
@@ -60,6 +60,8 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
                                "searched for within all files in the locations "
                                "you specify. Matches will be displayed in the <b>Replace</b> window, you "
                                "can replace them with the specified string, exclude them from replace operation or cancel the whole replace.") );
+
+	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 }
 
 
@@ -75,5 +77,22 @@ void ReplacePart::slotReplace()
     m_widget->showDialog();
 }
 
+void ReplacePart::contextMenu(QPopupMenu *popup, const Context *context)
+{
+    if (!context->hasType( Context::EditorContext ))
+        return;
+
+    const EditorContext *econtext = static_cast<const EditorContext*>(context);
+    QString ident = econtext->currentWord();
+    if (!ident.isEmpty()) {
+        m_popupstr = ident;
+        QString squeezed = KStringHandler::csqueeze(ident, 30);
+        int id = popup->insertItem( i18n("Replace Project Wide: %1").arg(squeezed),
+                           this, SLOT(slotReplace()) );
+        popup->setWhatsThis(id, i18n("<b>Replace Project Wide</b><p>Opens the find in files dialog "
+                               "and sets the pattern to the text under the cursor."));
+        popup->insertSeparator();
+    }
+}
 
 #include "replace_part.moc"
