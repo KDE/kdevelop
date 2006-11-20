@@ -505,7 +505,11 @@ class Config
      *  is \c TRUE the description of each configuration option will
      *  be omitted.
      */
-    void writeTemplate(QFile *f,bool shortIndex,bool updateOnly);
+    void writeTemplate(QFile* f,bool shortIndex,bool updateOnly);
+
+    void writeTemplate(QTextStream& t,bool shortIndex,bool updateOnly);
+
+    bool parseString(const char *fn,const char *str);
 
     /////////////////////////////
     // internal API
