@@ -2,9 +2,11 @@
 #define LANG_SE
 #define LANG_CZ
 #define LANG_FR
+#define LANG_ID
 #define LANG_IT
 #define LANG_DE
 #define LANG_JP
+#define LANG_JE
 #define LANG_ES
 #define LANG_FI
 #define LANG_RU
@@ -13,6 +15,7 @@
 #define LANG_PT
 #define LANG_HU
 #define LANG_KR
+#define LANG_KE
 #define LANG_RO
 #define LANG_SI
 #define LANG_CN
@@ -25,3 +28,7 @@
 #define LANG_TW
 #define LANG_SR
 #define LANG_CA
+#define LANG_LT
+#define LANG_ZA
+#define LANG_AR
+#define LANG_FA

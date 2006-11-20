@@ -501,11 +501,11 @@ class Config
     }
     /*! @} */
 
-    /*! Writes a template configuration file to \a f. If \a shortIndex
+    /*! Writes a template configuration to stream \a t. If \a shortIndex
      *  is \c TRUE the description of each configuration option will
      *  be omitted.
      */
-    void writeTemplate(QFile *f,bool shortIndex,bool updateOnly);
+    void writeTemplate(QTextStream &t,bool shortIndex,bool updateOnly);
 
     /////////////////////////////
     // internal API
@@ -528,6 +528,12 @@ class Config
 
     /*! Initialize config variables to their default value */
     void init();
+
+    /*! Parse a configuration data in string \a str.
+     *  \returns TRUE if successful, or FALSE if the string could not be
+     *  parsed.
+     */ 
+    bool parseString(const char *fn,const char *str);
 
     /*! Parse a configuration file with name \a fn.
      *  \returns TRUE if successful, FALSE if the file could not be 

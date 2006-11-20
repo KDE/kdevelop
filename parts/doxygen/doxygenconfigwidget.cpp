@@ -257,7 +257,9 @@ void DoxygenConfigWidget::saveFile()
     if (!f.open(IO_WriteOnly)) {
         KMessageBox::information(0, i18n("Cannot write Doxyfile."));
     } else {
-        Config::instance()->writeTemplate(&f, true, false);
+        QTextStream t(&f);
+
+        Config::instance()->writeTemplate(t, true, false);
 
         f.close();
     }
