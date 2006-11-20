@@ -1682,8 +1682,8 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         {
             idRemoveFile = popup.insertItem( SmallIconSet( "editdelete" ), i18n( "Remove File" ) );
             popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk." ) );
-            idFileProperties = popup.insertItem( SmallIconSet( "configure_file" ), i18n( "Properties..." ) );
-            popup.setWhatsThis( idFileProperties, i18n( "<b>Properties</b><p>Opens <b>File Properties</b> dialog that allows to exclude file from specified scopes." ) );
+            idFileProperties = popup.insertItem( SmallIconSet( "configure_file" ), i18n( "Exclude File" ) );
+            popup.setWhatsThis( idFileProperties, i18n( "<b>Exclude File</b><p>Excludes the file from this Scope." ) );
         }
         else
         {
