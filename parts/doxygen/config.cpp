@@ -509,7 +509,7 @@ char *yytext;
  *
  * 
  *
- * Copyright (C) 1997-2005 by Dimitri van Heesch.
+ * Copyright (C) 1997-2006 by Dimitri van Heesch.
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation under the terms of the GNU General Public License is hereby 
@@ -818,6 +818,7 @@ static int yyread(char *buf,int max_size)
     if (includeStack.isEmpty()) 
     {
         int c=0;
+	if (inputString==0) return c;
 	while( c < max_size && inputString[inputPosition] )
 	{
 	      *buf = inputString[inputPosition++] ;
@@ -1082,7 +1083,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 424 "config.l"
+#line 425 "config.l"
 
 
 
@@ -1169,17 +1170,17 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 426 "config.l"
+#line 427 "config.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 427 "config.l"
+#line 428 "config.l"
 { BEGIN(SkipComment); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 428 "config.l"
+#line 429 "config.l"
 { QCString cmd=yytext;
                                            cmd=cmd.left(cmd.length()-1).stripWhiteSpace(); 
 					   ConfigOption *option = config->get(cmd);
@@ -1235,7 +1236,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 480 "config.l"
+#line 481 "config.l"
 { QCString cmd=yytext;
                                           cmd=cmd.left(cmd.length()-2).stripWhiteSpace(); 
 					  ConfigOption *option = config->get(cmd);
@@ -1278,18 +1279,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 519 "config.l"
+#line 520 "config.l"
 { BEGIN(GetStrList); l=&includePathList; l->clear(); elemStr=""; }
 	YY_BREAK
 /* include a config file */
 case 6:
 YY_RULE_SETUP
-#line 521 "config.l"
+#line 522 "config.l"
 { BEGIN(Include);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 522 "config.l"
+#line 523 "config.l"
 { 
   					  readIncludeFile(yytext); 
   					  BEGIN(Start);
@@ -1305,7 +1306,7 @@ case YY_STATE_EOF(GetStrList):
 case YY_STATE_EOF(GetQuotedString):
 case YY_STATE_EOF(GetEnvVar):
 case YY_STATE_EOF(Include):
-#line 526 "config.l"
+#line 527 "config.l"
 {
                                           //printf("End of include file\n");
 					  //printf("Include stack depth=%d\n",g_includeStack.count());
@@ -1330,17 +1331,17 @@ case YY_STATE_EOF(Include):
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 548 "config.l"
+#line 549 "config.l"
 { config_err("Warning: ignoring unknown tag `%s' at line %d, file %s\n",yytext,yyLineNr,yyFileName.data()); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 549 "config.l"
+#line 550 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 550 "config.l"
+#line 551 "config.l"
 { 
   					  yyLineNr++; 
 					  if (!elemStr.isEmpty())
@@ -1353,7 +1354,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 559 "config.l"
+#line 560 "config.l"
 {
   				          if (!elemStr.isEmpty())
 					  {
@@ -1365,12 +1366,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 567 "config.l"
+#line 568 "config.l"
 { (*s)+=yytext; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 568 "config.l"
+#line 569 "config.l"
 { lastState=YY_START;
   					  BEGIN(GetQuotedString); 
                                           tmpString.resize(0); 
@@ -1378,7 +1379,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 572 "config.l"
+#line 573 "config.l"
 { 
   					  //printf("Quoted String = `%s'\n",tmpString.data());
   					  if (lastState==GetString)
@@ -1395,19 +1396,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 585 "config.l"
+#line 586 "config.l"
 {
   					  tmpString+='"';
   					}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 588 "config.l"
+#line 589 "config.l"
 { tmpString+=*yytext; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 589 "config.l"
+#line 590 "config.l"
 { 
   					  QCString bs=yytext; 
   					  bs=bs.upper();
@@ -1426,39 +1427,39 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 604 "config.l"
+#line 605 "config.l"
 {
   					  elemStr+=yytext;
   					}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 607 "config.l"
+#line 608 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 608 "config.l"
+#line 609 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 609 "config.l"
+#line 610 "config.l"
 { yyLineNr++; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 610 "config.l"
+#line 611 "config.l"
 
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 611 "config.l"
+#line 612 "config.l"
 { yyLineNr++ ; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 613 "config.l"
+#line 614 "config.l"
 ECHO;
 	YY_BREAK
 
@@ -2344,7 +2345,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 613 "config.l"
+#line 614 "config.l"
 
 
 /*@ ----------------------------------------------------------------------------
@@ -2395,9 +2396,8 @@ static void writeStringList(QTextStream &t,QStrList &l)
 }
 #endif
 
-void Config::writeTemplate(QFile *f,bool sl,bool upd)
+void Config::writeTemplate(QTextStream &t,bool sl,bool upd)
 {
-  QTextStream t(f);
   t << "# Doxyfile " << versionString << endl << endl;
   if (!sl)
   {
@@ -2456,6 +2456,8 @@ static void substEnvVarsInStrList(QStrList &sl)
     QCString result(s);
     bool wasQuoted = (result.find(' ')!=-1) || (result.find('\t')!=-1);
     substEnvVarsInString(result);
+
+    //printf("Result %s was quoted=%d\n",result.data(),wasQuoted);
 
     if (!wasQuoted) /* as a result of the expansion, a single string
 		       may have expanded into a list, which we'll
@@ -2829,6 +2831,7 @@ void Config::check()
     filePatternList.append("*.cxx");
     filePatternList.append("*.cpp");
     filePatternList.append("*.c++");
+    filePatternList.append("*.d");
     filePatternList.append("*.java");
     filePatternList.append("*.ii");
     filePatternList.append("*.ixx");
@@ -2849,6 +2852,7 @@ void Config::check()
     filePatternList.append("*.m");
     filePatternList.append("*.mm");
     filePatternList.append("*.dox");
+    filePatternList.append("*.py");
 #if !defined(_WIN32)
     // unix => case sensitive match => also include useful uppercase versions
     filePatternList.append("*.C");
@@ -2864,6 +2868,7 @@ void Config::check()
     filePatternList.append("*.PHP3");
     filePatternList.append("*.M");
     filePatternList.append("*.MM");
+    filePatternList.append("*.PY");
 #endif
   }
 
@@ -2876,7 +2881,7 @@ void Config::check()
 
 #undef PUTENV
 #undef SEP
-#if defined(_WIN32) && !defined(__GNUC__) && (__BORLANDC__ < 0x0550)
+#if defined(_WIN32) && (__BORLANDC__ < 0x0550)
 #define PUTENV _putenv
 #define SEP ";"
 #else 
@@ -2926,6 +2931,27 @@ void Config::check()
     annotationFromBrief.append("a");
     annotationFromBrief.append("an");
     annotationFromBrief.append("the");
+  }
+
+  if (Config_getBool("CALL_GRAPH") && 
+      (!Config_getBool("SOURCE_BROWSER") || !Config_getBool("REFERENCES_RELATION"))
+     )
+  {
+      config_err("Warning: turning on CALL_GRAPH requires turning "
+	         "SOURCE_BROWSER and\nREFERENCES_RELATION on as well!\n"
+		 "Assuming SOURCE_BROWSER=YES and REFERENCES_RELATION=YES\n");
+      Config_getBool("SOURCE_BROWSER")=TRUE;
+      Config_getBool("REFERENCES_RELATION")=TRUE;
+  }
+  if (Config_getBool("CALLER_GRAPH") && 
+      (!Config_getBool("SOURCE_BROWSER") || !Config_getBool("REFERENCED_BY_RELATION"))
+     )
+  {
+      config_err("Warning: turning on CALLER_GRAPH requires turning "
+	         "SOURCE_BROWSER and\nREFERENCEDBY_RELATION on as well!\n"
+		 "Assuming SOURCE_BROWSER=YES and REFERENCED_BY_RELATION=YES\n");
+      Config_getBool("SOURCE_BROWSER")=TRUE;
+      Config_getBool("REFERENCED_BY_RELATION")=TRUE;
   }
 }
 
@@ -2991,13 +3017,19 @@ void Config::create()
                  "documentation generated by doxygen is written. Doxygen will use this \n"
                  "information to generate all constant output in the proper language. \n"
                  "The default language is English, other supported languages are: \n"
-		 "Brazilian, Catalan, Chinese, Chinese-Traditional, Croatian, Czech, Danish, \n"
-		 "Dutch, Finnish, French, German, Greek, Hungarian, Italian, Japanese, \n"
-		 "Japanese-en (Japanese with English messages), Korean, Korean-en, Norwegian, \n"
-		 "Polish, Portuguese, Romanian, Russian, Serbian, Slovak, Slovene, Spanish, \n"
-		 "Swedish, and Ukrainian.\n", 
+		 "Afrikaans, Arabic, Brazilian, Catalan, Chinese, Chinese-Traditional, \n"
+		 "Croatian, Czech, Danish, Dutch, Finnish, French, German, Greek, Hungarian, \n"
+		 "Italian, Japanese, Japanese-en (Japanese with English messages), Korean, \n"
+		 "Korean-en, Lithuanian, Norwegian, Polish, Portuguese, Romanian, Russian, \n"
+		 "Serbian, Slovak, Slovene, Spanish, Swedish, and Ukrainian.\n", 
 		 "English"
                 );
+#ifdef LANG_ZA
+  ce->addValue("Afrikaans");
+#endif
+#ifdef LANG_AR
+  ce->addValue("Arabic");
+#endif
 #ifdef LANG_BR
   ce->addValue("Brazilian");
 #endif
@@ -3049,8 +3081,14 @@ void Config::create()
   ce->addValue("Korean");
   ce->addValue("Korean-en");
 #endif
+#ifdef LANG_LI
+  ce->addValue("Lithuanian");
+#endif
 #ifdef LANG_NO
   ce->addValue("Norwegian");
+#endif
+#ifdef LANG_FA
+  ce->addValue("Persian");
 #endif
 #ifdef LANG_PL
   ce->addValue("Polish");
@@ -3206,20 +3244,19 @@ void Config::create()
                     "re-implements. \n",
                     TRUE
                  );
-  cb = addBool(
-                    "DISTRIBUTE_GROUP_DOC",
-                    "If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC \n"
-                    "tag is set to YES, then doxygen will reuse the documentation of the first \n"
-                    "member in the group (if any) for the other members of the group. By default \n"
-                    "all members of a group must be documented explicitly.\n",
-                    FALSE
-                 );
+  cb = addBool(    
+                    "SEPARATE_MEMBER_PAGES",
+		    "If the SEPARATE_MEMBER_PAGES tag is set to YES, then doxygen will produce \n"
+		    "a new page for each member. If set to NO, the documentation of a member will \n"
+		    "be part of the file/class/namespace that contains it.\n",
+		    FALSE
+		 );
   ci = addInt(
                     "TAB_SIZE",
                     "The TAB_SIZE tag can be used to set the number of spaces in a tab. \n"
                     "Doxygen uses this value to replace tabs by spaces in code fragments. \n",
                     1,16,8
-                );
+                 );
   cl = addList(
                     "ALIASES",
                     "This tag can be used to specify a number of aliases that acts \n"
@@ -3239,10 +3276,28 @@ void Config::create()
                  );
   cb = addBool(
                     "OPTIMIZE_OUTPUT_JAVA",
-                    "Set the OPTIMIZE_OUTPUT_JAVA tag to YES if your project consists of Java sources \n"
-                    "only. Doxygen will then generate output that is more tailored for Java. \n"
+                    "Set the OPTIMIZE_OUTPUT_JAVA tag to YES if your project consists of Java \n"
+		    "sources only. Doxygen will then generate output that is more tailored for Java. \n"
                     "For instance, namespaces will be presented as packages, qualified scopes \n"
                     "will look different, etc. \n",
+                    FALSE
+                 );
+  cb = addBool(  
+                    "BUILTIN_STL_SUPPORT",
+		    "If you use STL classes (i.e. std::string, std::vector, etc.) but do not want to \n"
+		    "include (a tag file for) the STL sources as input, then you should \n"
+		    "set this tag to YES in order to let doxygen match functions declarations and \n"
+		    "definitions whose arguments contain STL classes (e.g. func(std::string); v.s. \n"
+		    "func(std::string) {}). This also make the inheritance and collaboration \n"
+		    "diagrams that involve STL classes more complete and accurate. \n",
+		    FALSE
+		 );
+  cb = addBool(
+                    "DISTRIBUTE_GROUP_DOC",
+                    "If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC \n"
+                    "tag is set to YES, then doxygen will reuse the documentation of the first \n"
+                    "member in the group (if any) for the other members of the group. By default \n"
+                    "all members of a group must be documented explicitly.\n",
                     FALSE
                  );
   cb = addBool(    
@@ -3449,8 +3504,8 @@ void Config::create()
                     "SHOW_DIRECTORIES",
 		    "If the sources in your project are distributed over multiple directories \n"
 		    "then setting the SHOW_DIRECTORIES tag to YES will show the directory hierarchy \n"
-		    "in the documentation.\n",
-		    TRUE
+		    "in the documentation. The default is NO.\n",
+		    FALSE
               );
   cs = addString(  "FILE_VERSION_FILTER",
                    "The FILE_VERSION_FILTER tag can be used to specify a program or script that \n"
@@ -3458,9 +3513,10 @@ void Config::create()
 		   "version control system). Doxygen will invoke the program by executing (via \n"
 		   "popen()) the command <command> <input-file>, where <command> is the value of \n"
 		   "the FILE_VERSION_FILTER tag, and <input-file> is the name of an input file \n"
-		   "provided by doxygen. Whatever the progam writes to standard output \n"
+		   "provided by doxygen. Whatever the program writes to standard output \n"
 		   "is used as the file version. See the manual for examples. \n"
               );
+  cs->setWidgetType(ConfigString::File);
   
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Messages","configuration options related to warning and progress messages");
@@ -3518,6 +3574,7 @@ void Config::create()
                     "and error messages should be written. If left blank the output is written \n"
                     "to stderr. \n"
                    );
+  cs->setWidgetType(ConfigString::File);
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Input","configuration options related to the input files");
   //-----------------------------------------------------------------------------------------------
@@ -3536,7 +3593,7 @@ void Config::create()
                     "and *.h) to filter out the source-files in the directories. If left \n"
                     "blank the following patterns are tested: \n"
 		    "*.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx \n"
-		    "*.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm\n"
+		    "*.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm *.py\n"
                  );
   cb = addBool(
                     "RECURSIVE",
@@ -3563,7 +3620,9 @@ void Config::create()
                     "EXCLUDE_PATTERNS",
                     "If the value of the INPUT tag contains directories, you can use the \n"
                     "EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude \n"
-                    "certain files from those directories. \n"
+                    "certain files from those directories. Note that the wildcards are matched \n"
+		    "against the file with absolute path, so to exclude all test directories \n"
+		    "for example use the pattern */test/* \n"
                  );
   cl = addList(
                     "EXAMPLE_PATH",
@@ -3604,6 +3663,7 @@ void Config::create()
                     "to standard output.  If FILTER_PATTERNS is specified, this tag will be \n"
                     "ignored. \n"
                    );
+  cs->setWidgetType(ConfigString::File);
   cl = addList(
                     "FILTER_PATTERNS",
                     "The FILTER_PATTERNS tag can be used to specify filters on a per file pattern \n"
@@ -3659,13 +3719,32 @@ void Config::create()
                     TRUE
               );
   cb->addDependency("SOURCE_BROWSER");
+  cb = addBool(     "REFERENCES_LINK_SOURCE",
+                    "If the REFERENCES_LINK_SOURCE tag is set to YES (the default)\n"
+                    "and SOURCE_BROWSER tag is set to YES, then the hyperlinks from\n"
+                    "functions in REFERENCES_RELATION and REFERENCED_BY_RELATION lists will\n"
+                    "link to the source code.  Otherwise they will link to the documentstion.\n",
+                    TRUE
+              );
+  cb->addDependency("SOURCE_BROWSER");
+  cb = addBool(
+                    "USE_HTAGS",
+		    "If the USE_HTAGS tag is set to YES then the references to source code \n"
+		    "will point to the HTML generated by the htags(1) tool instead of doxygen \n"
+		    "built-in source browser. The htags tool is part of GNU's global source \n"
+		    "tagging system (see http://www.gnu.org/software/global/global.html). You \n"
+		    "will need version 4.8.6 or higher. \n",
+		    FALSE
+              );
+  cb->addDependency("SOURCE_BROWSER");
   cb = addBool(
                     "VERBATIM_HEADERS",
                     "If the VERBATIM_HEADERS tag is set to YES (the default) then Doxygen \n"
                     "will generate a verbatim copy of the header file for each class for \n"
                     "which an include is specified. Set to NO to disable this. \n",
                     TRUE
-                 );
+              );
+  
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Index","configuration options related to the alphabetical class index");
   //-----------------------------------------------------------------------------------------------
@@ -3768,6 +3847,7 @@ void Config::create()
 		    "can add a path in front of the file if the result should not be \n"
 		    "written to the html output directory. \n"
                    );
+  cs->setWidgetType(ConfigString::File);
   cs->addDependency("GENERATE_HTML");
   cs = addString(
                     "HHC_LOCATION",
@@ -3776,6 +3856,7 @@ void Config::create()
 		    "the HTML help compiler (hhc.exe). If non-empty doxygen will try to run \n"
 		    "the HTML help compiler on the generated index.hhp.\n"
                    );
+  cs->setWidgetType(ConfigString::File);
   cs->addDependency("GENERATE_HTML");
   cb = addBool(
                     "GENERATE_CHI",
@@ -4146,7 +4227,7 @@ void Config::create()
                     "EXPAND_ONLY_PREDEF",
                     "If the EXPAND_ONLY_PREDEF and MACRO_EXPANSION tags are both set to YES \n"
                     "then the macro expansion is limited to the macros specified with the \n"
-                    "PREDEFINED and EXPAND_AS_PREDEFINED tags. \n",
+                    "PREDEFINED and EXPAND_AS_DEFINED tags. \n",
                     FALSE
                  );
   cb->addDependency("ENABLE_PREPROCESSING");
@@ -4348,6 +4429,16 @@ void Config::create()
                  );
   cb->addDependency("HAVE_DOT");
   cb = addBool(
+                    "CALLER_GRAPH",
+                    "If the CALLER_GRAPH and HAVE_DOT tags are set to YES then doxygen will \n"
+		    "generate a caller dependency graph for every global function or class method. \n"
+                    "Note that enabling this option will significantly increase the time of a run. \n"
+		    "So in most cases it will be better to enable caller graphs for selected \n"
+		    "functions only using the \\callergraph command.\n",
+                    FALSE
+                 );
+  cb->addDependency("HAVE_DOT");
+  cb = addBool(
                     "GRAPHICAL_HIERARCHY",
                     "If the GRAPHICAL_HIERARCHY and HAVE_DOT tags are set to YES then doxygen \n"
                     "will graphical hierarchy of all classes instead of a textual one. \n",
@@ -4535,15 +4626,13 @@ static QCString configFileToString(const char *name)
   return "";
 }
 
-
-bool Config::parse(const char *fn)
+bool Config::parseString(const char *fn,const char *str)
 {
-  QCString contents = configFileToString(fn);
   config = Config::instance();
-  inputString   = contents.data();
+  inputString   = str;
   inputPosition = 0;
+  yyFileName    = fn;
   yyLineNr      = 1;
-  yyFileName=fn;
   includeStack.setAutoDelete(TRUE);
   includeStack.clear();
   includeDepth  = 0;
@@ -4552,6 +4641,11 @@ bool Config::parse(const char *fn)
   configYYlex();
   inputString = 0;
   return TRUE;
+}
+
+bool Config::parse(const char *fn)
+{
+  return parseString(fn,configFileToString(fn)); 
 }
 
 extern "C" { // some bogus code to keep the compiler happy
