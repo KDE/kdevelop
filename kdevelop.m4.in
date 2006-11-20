@@ -371,29 +371,29 @@ AC_DEFUN([KDEV_CHECK_BDB],
   ac_db_libdir=""
   ac_db_lib="db"
   AC_ARG_WITH(db_includedir,
-[  --with-db-includedir=DIR    
-                          where the DB3 headers are installed ],
+[  --with-db-includedir=DIR
+                          where the DB4 headers are installed ],
 [
   ac_db_includedir="-I$withval"
 ],
   ac_db_includedir=""
 )
   AC_ARG_WITH(db_libdir,
-[  --with-db-libdir=DIR    where the DB3 libraries are installed ],
+[  --with-db-libdir=DIR    where the DB4 libraries are installed ],
 [
   ac_db_libdir="-L$withval"
 ],
   ac_db_libdir=""
 )
   AC_ARG_WITH(db_lib,
-[  --with-db-lib=LIB       library name for the DB3 library ],
+[  --with-db-lib=LIB       library name for the DB4 library ],
 [
   ac_db_lib=$withval
 ],
 ac_db_lib=db
 )
 
-  AC_MSG_CHECKING(for Berkeley DB >= 3)
+  AC_MSG_CHECKING(for Berkeley DB >= 4.1)
 
   AC_CACHE_VAL(ac_cv_bdb,
   [
@@ -408,45 +408,24 @@ ac_db_lib=db
       #include <db.h>
     ],
     [
-      #if DB_VERSION_MAJOR < 3
+      #if DB_VERSION_MAJOR < 4 && DB_VERSION_MINOR < 1
          choke me
       #else
          DB *db;
-         db->open( db, 0, NULL, DB_BTREE, DB_CREATE, 0644 );
+         db->open( db, 0, 0, NULL, DB_BTREE, DB_CREATE, 0644 );
       #endif
     ],
-      ac_cv_bdb=yes_3or40,
-
-      AC_TRY_LINK([
-        #include <db.h>
-      ],
-      [
-        #if DB_VERSION_MAJOR < 3
-           choke me
-        #else
-           DB *db;
-           db->open( db, 0, 0, NULL, DB_BTREE, DB_CREATE, 0644 );
-        #endif
-      ],
-        ac_cv_bdb=yes_ge_41,
-        ac_cv_bdb=no
-      )
-
+    ac_cv_bdb=yes,
+    ac_cv_bdb=no
     )
     CXXFLAGS="$save_CXXFLAGS"
     AC_LANG_RESTORE
    ])
 
   if test "$ac_cv_bdb" = "no"; then
-    AC_MSG_ERROR(no - please install Berkeley DB >= 3 and <= 4.1)
+    AC_MSG_ERROR(no - please install Berkeley DB >= 4.1)
   else
-    if test "$ac_cv_bdb" = "yes_3or40" ; then
-      bdb_open_hack=""
-      AC_MSG_RESULT([yes - <=4.0])
-    else
-      bdb_open_hack=",0"
-      AC_MSG_RESULT([yes - >=4.1])
-    fi
+    AC_MSG_RESULT([yes])
   fi
 
 DB3LIB="$ac_db_lib"
@@ -455,8 +434,6 @@ DB3LDFLAGS="$ac_db_libdir"
 AC_SUBST(DB3LIB)
 AC_SUBST(DB3INCLUDES)
 AC_SUBST(DB3LDFLAGS)
-
-  AC_DEFINE_UNQUOTED(BDB_OPEN_HACK, $bdb_open_hack, [account for Berkeley DB API different from v4.1 onwards])
 ])
 
 dnl  **********
@@ -587,15 +564,15 @@ AC_DEFUN([KDEV_CHECK_SVN],
             SVN_SUBDIR=
     dnl    AC_MSG_ERROR([APR is required. Try --with-apr-config.])
     fi
-            
+
     APR_CPPFLAGS="`$APR_CONFIG --cppflags`"
     APR_INCLUDE="`$APR_CONFIG --includes`"
     APR_LIBS="`$APR_CONFIG --link-ld --libs`"
-    
+
     dnl
     dnl APR util
     dnl
-    
+
     APU_CONFIGS="apu-config /usr/local/apr/bin/apu-config"
     AC_ARG_WITH(apu-config,
     [[  --with-apu-config=FILE    Use the given path to apu-config when determining
@@ -623,21 +600,21 @@ AC_DEFUN([KDEV_CHECK_SVN],
     dnl APR_CPPFLAGS="$APR_CPPFLAGS `$APU_CONFIG --includes`"
     APR_INCLUDE="$APR_INCLUDE `$APU_CONFIG --includes`"
     APR_LIBS="$APR_LIBS `$APU_CONFIG --link-ld --libs`"
-    
+
     AC_MSG_CHECKING(for Subversion svn-config)
     AC_ARG_WITH(subversion-dir,
             [  --with-subversion-dir=DIR           where Subversion is installed ],
             [
                     SVNCONFIG="$withval/bin/svn-config"
             ])
-    
+
     if test -z "$SVNCONFIG"; then
             _SVNCONFIG="`svn-config --prefix 2> /dev/null`"
             if test -n "$_SVNCONFIG"; then
                     SVNCONFIG="$_SVNCONFIG/bin/svn-config"
             fi
     fi
-    
+
     AC_SUBST(SVNCONFIG)
     if test -x "$SVNCONFIG"; then
             SVNLD="`$SVNCONFIG --ldflags`"
@@ -696,8 +673,8 @@ AC_DEFUN([KDEV_CHECK_SVN],
                     SVN_SUBDIR=
             fi
     fi
-    
-    
+
+
     NEON_CONFIGS="neon-config"
     AC_ARG_WITH(neon-config,
     [[  --with-neon-config=FILE    Use the given path to neon-config when determining
@@ -722,11 +699,11 @@ AC_DEFUN([KDEV_CHECK_SVN],
             SVN_SUBDIR=
     dnl    AC_MSG_ERROR([Neon is required. Try --with-neon-config.])
     fi
-    
+
     SVN_LIB="-L$SVN_LIB $APR_LIBS -lsvn_client-1"
     SVN_INCLUDE="-I$SVN_INCLUDE $APR_INCLUDE"
     SVN_CPPFLAGS="$APR_CPPFLAGS"
-    
+
     AC_SUBST(SVN_INCLUDE)
     AC_SUBST(SVN_LIB)
     AC_SUBST(SVN_CPPFLAGS)
@@ -742,7 +719,7 @@ dnl  **********
 AC_DEFUN([KDEV_CHECK_VCSCOMPAT],
 [
   AC_MSG_CHECKING(whether to build the vcs compat lib)
-  
+
   AC_CACHE_VAL(ac_cv_vcs_compat,
   [
     AC_LANG_SAVE
