@@ -95,7 +95,7 @@ void FileSelectorPart::newFile()
         KDevCreateFile::CreatedFile file = creator->createNewFile("",
             m_filetree->dirOperator()->url().path());
         if (file.status == KDevCreateFile::CreatedFile::STATUS_OK)
-            partController()->editDocument(KURL::fromPathOrURL(file.filename));
+            partController()->editDocument(KURL::fromPathOrURL(file.dir + "/" + file.filename));
     }
 }
 
