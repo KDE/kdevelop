@@ -195,6 +195,9 @@ private:
 
     TrollProjectView m_lastFocusedView;
 
+    bool m_filesCached;
+    QStringList m_allFilesCache;
+
     friend class ChooseSubprojectDlg;
     friend class ProjectConfigurationDlg;
 };

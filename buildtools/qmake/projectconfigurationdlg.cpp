@@ -227,14 +227,15 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
 
     // Buildmode
+  if ( radioReleaseMode->isChecked() )
+        myProjectItem->addValue( "CONFIG", "release" );
+    else
+        myProjectItem->removeValue( "CONFIG", "release" );
+
     if ( radioDebugMode->isChecked() )
         myProjectItem->addValue( "CONFIG", "debug" );
     else
         myProjectItem->removeValue( "CONFIG", "debug" );
-    if ( radioReleaseMode->isChecked() )
-        myProjectItem->addValue( "CONFIG", "release" );
-    else
-        myProjectItem->removeValue( "CONFIG", "release" );
 
     // requirements
     if ( exceptionCheck->isChecked() )
@@ -609,7 +610,7 @@ void ProjectConfigurationDlg::updateControls()
         }
         else
             staticRadio->setChecked( false );
-        if ( configValues.contains( "dll" ) )
+        if ( configValues.contains( "dll" ) && !configValues.contains( "staticlib" ) )
         {
             sharedRadio->setChecked( true );
             m_targetLibraryVersion->setText( myProjectItem->scope->variableValues( "VERSION" ).front() );

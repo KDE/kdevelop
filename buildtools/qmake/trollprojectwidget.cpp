@@ -81,7 +81,7 @@
 
 TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     : QVBox( 0, "troll project widget" ), m_shownSubproject( 0 ), m_rootSubproject( 0 ),
-        m_rootScope ( 0 ), m_part ( part ), m_configDlg( 0 )
+        m_rootScope ( 0 ), m_part ( part ), m_configDlg( 0 ), m_filesCached(false)
 {
     QSplitter * splitter = new QSplitter( Vertical, this );
 
@@ -369,11 +369,14 @@ void TrollProjectWidget::closeProject()
 
 QStringList TrollProjectWidget::allFiles()
 {
-    QStringList result;
     if( !m_rootScope->isInitializationFinished() )
-        return result;
+        return QStringList();
 
-    return m_rootScope->allFiles( m_rootScope->projectDir() );
+    if( m_filesCached )
+        return m_allFilesCache;
+    m_allFilesCache = m_rootScope->allFiles( m_rootScope->projectDir() );
+    m_filesCached = true;
+    return m_allFilesCache;
 }
 
 QString TrollProjectWidget::projectDirectory()
@@ -749,6 +752,9 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
     else
         spitem = m_shownSubproject;
 
+    m_filesCached = false;
+    m_allFilesCache.clear();
+
     QString projectdir = spitem->scope->projectDir();
 
     KURLRequesterDlg dialog( i18n( "Add Subproject" ), i18n( "Please enter a name for the subproject: " ), this, 0 );
@@ -827,6 +833,10 @@ void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
         return ;
     else if ( ( spitem = dynamic_cast<QMakeScopeItem *>( m_shownSubproject->parent() ) ) != NULL )
     {
+
+        m_filesCached = false;
+        m_allFilesCache.clear();
+
         bool delsubdir = false;
         if ( KMessageBox::warningYesNo( this, i18n( "Delete the directory of the subproject from disk?" ), i18n( "Delete subdir?" ) ) == KMessageBox::Yes )
             delsubdir = true;
@@ -997,6 +1007,9 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
 
 void TrollProjectWidget::addFileToCurrentSubProject( GroupItem *titem, const QString &filename )
 {
+
+    m_filesCached = false;
+    m_allFilesCache.clear();
     titem->addFileToScope( filename );
 }
 
@@ -1004,6 +1017,10 @@ void TrollProjectWidget::addFileToCurrentSubProject( GroupItem::GroupType gtype,
 {
     if ( !m_shownSubproject )
         return ;
+
+    m_filesCached = false;
+    m_allFilesCache.clear();
+
     GroupItem *gitem = 0;
 
     if ( m_shownSubproject->groups.contains( gtype ) )
@@ -1023,6 +1040,9 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
 {
     if ( !m_shownSubproject )
         return ;
+
+    m_filesCached = false;
+    m_allFilesCache.clear();
 
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
@@ -1086,6 +1106,9 @@ void TrollProjectWidget::slotAddFiles()
     GroupItem::GroupType type = item ? item->groupType : GroupItem::NoType;
     GroupItem::groupTypeMeanings( type, title, filter );
     filter += "|" + title;
+
+    m_filesCached = false;
+    m_allFilesCache.clear();
 
     for ( int i = GroupItem::NoType + 1; i < GroupItem::MaxTypeEnum; ++i )
     {
@@ -1202,6 +1225,9 @@ void TrollProjectWidget::slotNewFile()
 {
     GroupItem * gitem = dynamic_cast<GroupItem*>( details->currentItem() );
 
+    m_filesCached = false;
+    m_allFilesCache.clear();
+
     if( !gitem )
     {
         gitem = dynamic_cast<GroupItem*>( details->currentItem()->parent() );
@@ -1245,67 +1271,41 @@ void TrollProjectWidget::slotNewFile()
         }
     }
     KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>( "KDevelop/CreateFile" );
-    if ( createFileSupport )
+    QString fcext;
+    if( gitem )
     {
-        QString fcext;
-        if( gitem )
+        switch ( gitem->groupType )
         {
-            switch ( gitem->groupType )
-            {
-                case GroupItem::Sources:
-                    fcext = "cpp";
-                    break;
-                case GroupItem::Headers:
-                    fcext = "h";
-                    break;
-                case GroupItem::Forms:
-                    if ( !m_part->isQt4Project() )
-                        fcext = "ui-widget";
-                    else
-                        fcext = "ui-widget-qt4";
-                    break;
-                case GroupItem::Translations:
-                    fcext = "ts";
-                    break;
-                case GroupItem::Lexsources:
-                    fcext = "l";
-                    break;
-                case GroupItem::Yaccsources:
-                    fcext = "y";
-                    break;
-                case GroupItem::Resources:
-                    fcext = "qrc";
-                    break;
-                default:
-                    fcext = QString::null;
-            }
-        }
-        KDevCreateFile::CreatedFile crFile =
-        createFileSupport->createNewFile( fcext, projectDirectory() + QString(QChar(QDir::separator()))+ m_shownSubproject->relativePath() );
-    }
-    else
-    {
-        bool ok = FALSE;
-        QString relpath = m_shownSubproject->relativePath();
-        QString filename = KInputDialog::getText(
-                               i18n( "Insert New File" ),
-                               i18n( "Please enter a name for the new file:" ),
-                               QString::null, &ok, this );
-        if ( ok && !filename.isEmpty() )
-        {
-            QFile newfile( projectDirectory() + relpath + '/' + filename );
-            if ( !newfile.open( IO_WriteOnly ) )
-            {
-                KMessageBox::error( this, i18n( "Failed to create new file. "
-                                                "Do you have write permission "
-                                                "in the project folder?" ) );
-                return ;
-            }
-            newfile.close();
-            QStringList files( relpath + '/' + filename );
-            addFiles( files, false );
+            case GroupItem::Sources:
+                fcext = "cpp";
+                break;
+            case GroupItem::Headers:
+                fcext = "h";
+                break;
+            case GroupItem::Forms:
+                if ( !m_part->isQt4Project() )
+                    fcext = "ui-widget";
+                else
+                    fcext = "ui-widget-qt4";
+                break;
+            case GroupItem::Translations:
+                fcext = "ts";
+                break;
+            case GroupItem::Lexsources:
+                fcext = "l";
+                break;
+            case GroupItem::Yaccsources:
+                fcext = "y";
+                break;
+            case GroupItem::Resources:
+                fcext = "qrc";
+                break;
+            default:
+                fcext = QString::null;
         }
     }
+    KDevCreateFile::CreatedFile crFile =
+    createFileSupport->createNewFile( fcext, projectDirectory() + QString(QChar(QDir::separator()))+ m_shownSubproject->relativePath() );
 }
 
 void TrollProjectWidget::slotRemoveFile()
@@ -1313,6 +1313,10 @@ void TrollProjectWidget::slotRemoveFile()
     QListViewItem * selectedItem = details->currentItem();
     if ( !selectedItem )
         return ;
+
+    m_filesCached = false;
+    m_allFilesCache.clear();
+
     qProjectItem *pvitem = static_cast<qProjectItem*>( selectedItem );
     // Check that it is a file (just in case)
     if ( pvitem->type() != qProjectItem::File )
@@ -1558,66 +1562,39 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         else if ( r == idInsNewFile )
         {
             KDevCreateFile * createFileSupport = m_part->extension<KDevCreateFile>( "KDevelop/CreateFile" );
-            if ( createFileSupport )
+            QString fcext;
+            switch ( titem->groupType )
             {
-                QString fcext;
-                switch ( titem->groupType )
-                {
-                    case GroupItem::Sources:
-                        fcext = "cpp";
-                        break;
-                    case GroupItem::Headers:
-                        fcext = "h";
-                        break;
-                    case GroupItem::Forms:
-                        if ( !m_part->isQt4Project() )
-                            fcext = "ui-widget";
-                        else
-                            fcext = "ui-widget-qt4";
-                        break;
-                    case GroupItem::Translations:
-                        fcext = "ts";
-                        break;
-                    case GroupItem::Lexsources:
-                        fcext = "l";
-                        break;
-                    case GroupItem::Yaccsources:
-                        fcext = "y";
-                        break;
-                    case GroupItem::Resources:
-                        fcext = "qrc";
-                        break;
-                    default:
-                        fcext = QString::null;
-                }
-                KDevCreateFile::CreatedFile crFile =
-                    createFileSupport->createNewFile( fcext, cleanSubprojectPath );
+                case GroupItem::Sources:
+                    fcext = "cpp";
+                    break;
+                case GroupItem::Headers:
+                    fcext = "h";
+                    break;
+                case GroupItem::Forms:
+                    if ( !m_part->isQt4Project() )
+                        fcext = "ui-widget";
+                    else
+                        fcext = "ui-widget-qt4";
+                    break;
+                case GroupItem::Translations:
+                    fcext = "ts";
+                    break;
+                case GroupItem::Lexsources:
+                    fcext = "l";
+                    break;
+                case GroupItem::Yaccsources:
+                    fcext = "y";
+                    break;
+                case GroupItem::Resources:
+                    fcext = "qrc";
+                    break;
+                default:
+                    fcext = QString::null;
             }
-            else
-            {
-                bool ok = FALSE;
-                QString filename = KInputDialog::getText(
-                                       i18n( "Create New File" ),
-                                       i18n( "Enter a name for the new file:" ),
-                                       QString::null, &ok, this );
-                if ( ok && !filename.isEmpty() )
-                {
-                    QFile newfile( cleanSubprojectPath + QString( QChar( QDir::separator() ) ) + filename );
-                    if ( !newfile.open( IO_WriteOnly ) )
-                    {
-                        KMessageBox::error( this, i18n( "Failed to create new file. "
-                                                        "Do you have write permission "
-                                                        "in the project folder?" ) );
-                        return ;
-                    }
-                    newfile.close();
-                    addFileToCurrentSubProject( titem, filename );
-                    slotOverviewSelectionChanged( m_shownSubproject );
+            KDevCreateFile::CreatedFile crFile =
+                createFileSupport->createNewFile( fcext, cleanSubprojectPath );
 
-                    QStringList files( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) + filename );
-                    emit m_part->addedFilesToProject( files );
-                }
-            }
         }
         else if ( r == idInsInstallObject )
         {
@@ -1837,6 +1814,9 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 {
     GroupItem * gitem = static_cast<GroupItem*>( fitem->parent() );
 
+    m_filesCached = false;
+    m_allFilesCache.clear();
+
     if ( KMessageBox::warningYesNo( this,
                                     "<qt>" +
                                     i18n( "Are you sure you wish to remove <strong>%1</strong> from this subproject/scope?" )
@@ -1850,9 +1830,9 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 #endif
                                         KStdGuiItem::no(),
                                         "removeFileFromQMakeProject" ) == KMessageBox::No )
-        {
-            return ;
-        }
+    {
+        return ;
+    }
 
     if ( gitem->groupType != GroupItem::InstallObject )
     {
@@ -2065,54 +2045,11 @@ QString TrollProjectWidget::constructMakeCommandLine( Scope* s )
 
     return cmdline;
 }
-/*
-QString TrollProjectWidget::makeEnvironment()
-{
-    // Get the make environment variables pairs into the environstr string
-    // in the form of: "ENV_VARIABLE=ENV_VALUE"
-    // Note that we quote the variable value due to the possibility of
-    // embedded spaces
-    DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(*(m_part->projectDom()), "/kdevtrollproject/make/envvars", "envvar", "name", "value");
 
-    QString environstr;
-    DomUtil::PairList::ConstIterator it;
-    for (it = envvars.begin(); it != envvars.end(); ++it) {
-        environstr += (*it).first;
-        environstr += "=";
-#if (KDE_VERSION > 305)
-        environstr += KProcess::quote((*it).second);
-#else
-        environstr += KShellProcess::quote((*it).second);
-#endif
-        environstr += " ";
-    }
-    return environstr;
-}
-*/
 void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & target )
 {
     m_part->partController() ->saveAllFiles();
 
-    /*    QFileInfo fi;
-        QFileInfo fi2;
-        if (m_rootSubproject->configuration.m_makefile.isEmpty())
-        {
-            fi.setFile(dir + "/Makefile");
-            fi2.setFile(dir + "/makefile");
-        }
-        else
-        {
-            fi.setFile(m_rootSubproject->configuration.m_makefile);
-            fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
-        }
-        if (!fi.exists() && !fi2.exists()) {
-            int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-            if (r == KMessageBox::No)
-                return;
-            m_part->startQMakeCommand(dir);
-        }
-    */
     QDomDocument &dom = *( m_part->projectDom() );
 
     if ( target == "clean" )
@@ -2204,6 +2141,9 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
         return ;
     else
     {
+        m_filesCached = false;
+        m_allFilesCache.clear();
+
         QMakeScopeItem* pitem = dynamic_cast<QMakeScopeItem *>( spitem->parent() );
         if ( pitem != 0 )
         {
@@ -2354,6 +2294,9 @@ bool TrollProjectWidget::isTMakeProject()
 
 void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
 {
+    m_filesCached = false;
+    m_allFilesCache.clear();
+
     if( spitem->scope->variableValues("TEMPLATE").contains("subdirs") )
     {
         QStringList subdirs = spitem->scope->variableValues( "SUBDIRS" );

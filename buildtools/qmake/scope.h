@@ -16,6 +16,7 @@
 #include <qstringlist.h>
 #include <qmap.h>
 #include <qobject.h>
+#include <set>
 
 #include "qmakeast.h"
 #include "qmakedefaultopts.h"
@@ -244,7 +245,7 @@ private:
     QStringList variableValues( const QString& variable, QMake::AST* ) const;
     QString resolveVariables( const QString& , QMake::AST* = 0 ) const;
 
-    void allFiles( const QString&, QStringList& );
+    void allFiles( const QString&, std::set<QString>& );
 
     QMake::ProjectAST* m_root;
     QMake::IncludeAST* m_incast;
