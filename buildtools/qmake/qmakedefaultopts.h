@@ -29,8 +29,8 @@ public:
 
     void readVariables( const QString& qtdir, const QString& projdir );
 
-    QStringList variableValues( const QString& ) const;
-    QStringList variables() const;
+    const QStringList variableValues( const QString& ) const;
+    const QStringList& variables() const;
 
 signals:
     void variablesRead();
@@ -44,6 +44,7 @@ private:
     KTempFile* makefile;
     KTempFile* qmakefile;
     QProcess* proc;
+    QStringList m_keys;
 };
 
 #endif

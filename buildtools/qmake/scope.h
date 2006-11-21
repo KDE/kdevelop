@@ -223,7 +223,7 @@ private:
     // runs through the statements until stopHere is found (or the end is reached, if stopHere is 0),
     // using the given list as startvalue
     // Changes the list using the +=, -=, = operations accordingly
-    QStringList calcValuesFromStatements( const QString& variable, QStringList result, bool, QMake::AST* stopHere = 0 ) const;
+    void calcValuesFromStatements( const QString& variable, QStringList& result, bool, QMake::AST* stopHere = 0 ) const;
 
     // Check wether the two operators are compatible
     static bool isCompatible( const QString& op1, const QString& op2);

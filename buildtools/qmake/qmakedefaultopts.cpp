@@ -58,6 +58,8 @@ void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projd
             qmakefile = 0;
             delete proc;
             proc = 0;
+            m_variables.clear();
+            m_keys.clear();
             emit variablesRead();
         }
     }
@@ -102,20 +104,21 @@ void QMakeDefaultOpts::slotFinished()
     qmakefile = 0;
     delete proc;
     proc = 0;
+    m_keys = m_variables.keys();
     emit variablesRead();
 }
 
-QStringList QMakeDefaultOpts::variableValues( const QString& var ) const
+const QStringList QMakeDefaultOpts::variableValues( const QString& var ) const
 {
-    QStringList result;
+//     QStringList result;
     if ( m_variables.contains(var) )
-        result = m_variables[var];
-    return result;
+        return m_variables[var];
+    return QStringList();
 }
 
-QStringList QMakeDefaultOpts::variables() const
+const QStringList& QMakeDefaultOpts::variables() const
 {
-    return m_variables.keys();
+    return m_keys;
 }
 
 #include "qmakedefaultopts.moc"

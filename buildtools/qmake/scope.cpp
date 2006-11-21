@@ -302,7 +302,7 @@ QStringList Scope::variableValues( const QString& variable, bool checkIncParent 
         return m_varCache[variable];
     }
 
-    result = calcValuesFromStatements( variable, result, checkIncParent );
+    calcValuesFromStatements( variable, result, checkIncParent );
     result.remove( "\\\n" );
     result.remove( "\n" );
     result = Scope::removeWhiteSpace(result);
@@ -313,10 +313,10 @@ QStringList Scope::variableValues( const QString& variable, bool checkIncParent 
     return result;
 }
 
-QStringList Scope::calcValuesFromStatements( const QString& variable, QStringList result, bool checkIncParent, QMake::AST* stopHere ) const
+void Scope::calcValuesFromStatements( const QString& variable, QStringList& result, bool checkIncParent, QMake::AST* stopHere ) const
 {
     if( !m_root )
-        return result;
+        return;
 
     /* For variables that we don't know and which are not QT/CONFIG find the default value */
     if( m_defaultopts
@@ -328,18 +328,18 @@ QStringList Scope::calcValuesFromStatements( const QString& variable, QStringLis
 
     if ( scopeType() == FunctionScope || scopeType() == SimpleScope )
     {
-        result = m_parent->calcValuesFromStatements( variable, result , this->m_root );
+        m_parent->calcValuesFromStatements( variable, result , this->m_root );
     }
     else if ( scopeType() == IncludeScope && checkIncParent )
     {
-        result = m_parent->calcValuesFromStatements( variable, result , this->m_incast );
+        m_parent->calcValuesFromStatements( variable, result , this->m_incast );
     }
 
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
     {
         if ( stopHere && *it == stopHere )
-            return result;
+            return ;
         QMake::AST* ast = *it;
         if ( ast->nodeType() == QMake::AST::AssignmentAST )
         {
@@ -372,7 +372,7 @@ QStringList Scope::calcValuesFromStatements( const QString& variable, QStringLis
 
     result.remove( "\\\n" );
     result.remove( "\n" );
-    return result;
+    return ;
 }
 
 Scope::ScopeType Scope::scopeType() const
@@ -842,6 +842,7 @@ void Scope::init()
     if( !m_root )
         return;
 
+    kdDebug(9024) << "Initializing Scope: " << scopeName() << endl;
     m_maxCustomVarNum = 1;
 
     QValueList<QMake::AST*>::const_iterator it;
@@ -1178,7 +1179,7 @@ QStringList Scope::variableValues( const QString& variable, QMake::AST* stopHere
     if ( !m_root )
         return result;
 
-    result = calcValuesFromStatements( variable, result, true, stopHere );
+    calcValuesFromStatements( variable, result, true, stopHere );
     result.remove( "\\\n" );
     result.remove( "\n" );
     result = Scope::removeWhiteSpace(result);
