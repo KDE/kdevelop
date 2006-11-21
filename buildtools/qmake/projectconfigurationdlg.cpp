@@ -570,7 +570,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
 
 void ProjectConfigurationDlg::accept()
 {
-    apply();
+    if( buttonApply->isEnabled() )
+        apply();
     myProjectItem = 0;
     QDialog::accept();
 }
