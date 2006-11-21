@@ -119,6 +119,14 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
+    action = new KAction( i18n("&Dist-Clean Project"), 0,
+                          m_widget, SLOT(slotDistCleanProject()),
+                          actionCollection(), "build_distclean_project" );
+    action->setToolTip(i18n("Dist-Clean project"));
+    action->setWhatsThis(i18n("<b>Dist-Clean project</b><p>Runs <b>make distclean</b> command from the "
+                              "project directory.<br>Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
+
     action = new KAction( i18n("Execute Main Program"), "exec", SHIFT+Key_F9,
                           this, SLOT(slotBuildAndExecuteProject()),
                           actionCollection(), "build_execute_project" );
@@ -149,6 +157,15 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     action->setToolTip(i18n("Clean subproject"));
     action->setWhatsThis(i18n("<b>Clean subproject</b><p>Runs <b>make clean</b> from the current subproject directory. "
                               "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
+
+    action = new KAction( i18n("&Dist-Clean Subproject"), 0,
+                          m_widget, SLOT(slotDistCleanTarget()),
+                          actionCollection(), "build_distclean_target" );
+    action->setToolTip(i18n("Dist-Clean subproject"));
+    action->setWhatsThis(i18n("<b>Dist-Clean subproject</b><p>Runs <b>make distclean</b> from the current"
+                              " subproject directory. Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
@@ -254,7 +271,7 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
                 "/kdevcppsupport/qt/version")),
                 i18n("Choose the Qt%1 directory to use. This directory needs to have a bin subdirectory "
                      "containing the qmake binary and for Qt3 projects it also needs to contain the include directory containing qt.h.").arg(
-                        DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version")), m_widget, 0);
+                        DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version", "3")), m_widget, 0);
             dlg.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
             dlg.urlRequester() ->setURL( QString::null );
             dlg.urlRequester() ->completionObject() ->setDir( "/" );

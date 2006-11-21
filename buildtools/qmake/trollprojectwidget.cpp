@@ -858,6 +858,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     int idBuild = -2;
     int idRebuild = -2;
     int idClean = -2;
+    int idDistClean = -2;
     int idQmake = -2;
     int idQmakeRecursive = -2;
     int idProjectConfiguration = -2;
@@ -878,6 +879,11 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
         popup.setWhatsThis( idBuild, i18n( "<b>Clean project</b><p>Runs <b>make clean</b> command from the project "
                                            "directory.<br> Environment variables and make arguments can be specified "
                                            "in the project settings dialog, <b>Make Options</b> tab." ) );
+        idDistClean = popup.insertItem( i18n( "Dist-Clean" ) );
+        popup.setWhatsThis( idBuild, i18n( "<b>Dist-Clean project</b><p>Runs <b>make distclean</b> command from the project "
+                                           "directory.<br> Environment variables and make arguments can be specified "
+                                           "in the project settings dialog, <b>Make Options</b> tab." ) );
+
         idRebuild = popup.insertItem( SmallIcon( "rebuild" ), i18n( "Rebuild" ) );
         popup.setWhatsThis( idRebuild, i18n( "<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from "
                                              "the project directory.<br>Environment variables and make arguments can be "
@@ -967,6 +973,10 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     else if ( r == idClean )
     {
         slotCleanTarget();
+    }
+    else if ( r == idDistClean )
+    {
+        slotDistCleanTarget();
     }
 
     else if ( r == idQmake )
@@ -1986,34 +1996,41 @@ void TrollProjectWidget::slotExecuteProject()
 
 void TrollProjectWidget::slotCleanProject()
 {
-    QString dir = this-> projectDirectory();
-    if ( !m_rootSubproject )
-        return ;
-
-    createMakefileIfMissing( dir, m_rootSubproject );
-
-    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
-    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
-    QString rebuildcmd = constructMakeCommandLine( m_rootSubproject->scope ) + " clean";
-    m_part->queueCmd( dir, dircmd + rebuildcmd );
+    runClean(m_rootSubproject, "clean");
 }
 
 void TrollProjectWidget::slotCleanTarget()
 {
+    runClean(m_shownSubproject, "clean");
+}
+
+void TrollProjectWidget::slotDistCleanProject()
+{
+    runClean(m_rootSubproject, "distclean");
+
+}
+
+void TrollProjectWidget::slotDistCleanTarget()
+{
+    runClean(m_shownSubproject, "distclean");
+}
+
+void TrollProjectWidget::runClean( QMakeScopeItem* item, const QString& cleantargetname )
+{
     // no subproject selected
     m_part->partController() ->saveAllFiles();
-    if ( !m_shownSubproject )
+    if ( !item )
         return ;
     // can't build from scope
-    if ( m_shownSubproject->scope->scopeType() != Scope::ProjectScope )
+    if ( item->scope->scopeType() != Scope::ProjectScope )
         return ;
 
-    QString dir = subprojectDirectory();
-    createMakefileIfMissing( dir, m_shownSubproject );
+    QString dir = item->scope->projectDir();
+    createMakefileIfMissing( dir, item );
 
     m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
     QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
-    QString rebuildcmd = constructMakeCommandLine( m_shownSubproject->scope ) + " clean";
+    QString rebuildcmd = constructMakeCommandLine( item->scope ) + " "+cleantargetname;
     m_part->queueCmd( dir, dircmd + rebuildcmd );
 }
 

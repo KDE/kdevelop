@@ -98,11 +98,13 @@ public slots:
     void slotBuildTarget();
     void slotRebuildTarget();
     void slotCleanTarget();
+    void slotDistCleanTarget();
     void slotExecuteTarget();
 
     void slotBuildProject();
     void slotRebuildProject();
     void slotCleanProject();
+    void slotDistCleanProject();
     void slotExecuteProject();
 
     void slotBuildOpenFile();
@@ -134,6 +136,7 @@ private slots:
 
 private:
     void cleanDetailView( QMakeScopeItem *item );
+    void runClean( QMakeScopeItem*, const QString& );
     void buildProjectDetailTree( QMakeScopeItem *item, KListView *listviewControl );
     void removeFile( QMakeScopeItem *spitem, FileItem *fitem );
     void setupContext();
