@@ -2255,6 +2255,8 @@ void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
+    if( !spitem->scope->variableValues("OBJECTS_DIR").isEmpty() )
+        target = spitem->scope->variableValues("OBJECTS_DIR").first()+ QString( QChar( QDir::separator() ) )+target;
     kdDebug( 9024 ) << "builddir " << buildDir << ", target " << target << endl;
 
     m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
