@@ -590,7 +590,9 @@ void ProjectConfigurationDlg::updateControls()
     // Project template
     groupLibraries->setEnabled( false );
     if( myProjectItem->scope->scopeType() != Scope::ProjectScope )
-        groupTemplate->setEnabled(false);
+        groupTemplate->setEnabled( false );
+    else
+        groupTemplate->setEnabled( true );
 
     //cache the value of the some variables
     QStringList configValues = myProjectItem->scope->variableValues( "CONFIG" );

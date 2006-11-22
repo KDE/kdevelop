@@ -73,7 +73,7 @@ private slots:
 private:
 //    void startMakeCommand(const QString &dir, const QString &target);
     void startQMakeCommand(const QString &dir);
-    void execute(const QString &directory, const QString &command);
+//     void execute(const QString &directory, const QString &command);
     void queueCmd(const QString &dir, const QString &cmd);
     QString makeEnvironment();
 
