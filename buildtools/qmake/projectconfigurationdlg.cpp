@@ -607,12 +607,17 @@ void ProjectConfigurationDlg::updateControls()
         if ( configValues.findIndex( "staticlib" ) != -1 )
         {
             staticRadio->setChecked( true );
+            checkPlugin->setEnabled( false );
+            checkDesigner->setEnabled( false );
         }
         else
             staticRadio->setChecked( false );
         if ( configValues.findIndex( "dll" ) != -1 && configValues.findIndex( "staticlib" ) == -1 )
         {
             sharedRadio->setChecked( true );
+            checkPlugin->setEnabled( true );
+            if( prjWidget->m_part->isQt4Project() )
+                checkDesigner->setEnabled( true );
             m_targetLibraryVersion->setText( myProjectItem->scope->variableValues( "VERSION" ).front() );
         }
         else
