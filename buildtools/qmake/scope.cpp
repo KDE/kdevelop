@@ -699,10 +699,13 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
                     origValues.append( indent );
             }else if ( origValues.isEmpty() )
                 origValues.append(" ");
-            if( (*it).contains(" ") || (*it).contains("\t") || (*it).contains("\n") )
-                origValues.append( "\""+*it+"\"" );
+            QString newval = *it;
+            QRegExp re("\\$([^$\\{\\) /]*)( |\\)|/)");
+            newval.replace(re, "${\\1}\\2");
+            if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains("\n") )
+                origValues.append( "\""+newval+"\"" );
             else
-                origValues.append( *it );
+                origValues.append( newval );
             origValues.append( "\n" );
         } else if ( origValues.findIndex( *it ) != -1 && remove )
         {
