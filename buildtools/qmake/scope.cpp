@@ -1135,6 +1135,7 @@ void Scope::reloadProject()
         m_root = new QMake::ProjectAST();
         m_root->setFileName( filename );
     }
+    init();
 }
 
 Scope* Scope::disableSubproject( const QString& dir)
