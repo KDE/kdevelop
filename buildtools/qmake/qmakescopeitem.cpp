@@ -335,7 +335,7 @@ QString QMakeScopeItem::relativePath()
 
 QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
 {
-    if ( scope->variableValues( "CONFIG" ).contains( "dll" ) )
+    if ( scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
     {
         QString tmpPath = getRelativePath(basePath, scope->projectDir() );
         if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
@@ -393,7 +393,7 @@ QString QMakeScopeItem::getApplicationObject( QString basePath )
 
 QString QMakeScopeItem::getLibAddObject( QString basePath )
 {
-    if ( scope->variableValues( "CONFIG" ).contains( "dll" ) )
+    if ( scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
     {
         if ( !scope->variableValues( "TARGET" ).front().isEmpty() )
         {
@@ -404,8 +404,8 @@ QString QMakeScopeItem::getLibAddObject( QString basePath )
             return ( "-l" + scope->projectName() );
         }
     }
-    else if ( scope->variableValues( "CONFIG" ).contains( "staticlib" )
-            || scope->variableValues("TEMPLATE").contains("lib") )
+    else if ( scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1
+            || scope->variableValues("TEMPLATE").findIndex("lib") != -1 )
     {
         QString tmpPath = getRelativePath(basePath, scope->projectDir() );
         if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
@@ -442,7 +442,7 @@ QString QMakeScopeItem::getLibAddPath( QString basePath )
 {
 
     //PATH only add if shared lib
-    if ( !( scope->variableValues( "CONFIG" ).contains( "dll" ) ) ) return ( "" );
+    if ( scope->variableValues( "CONFIG" ).findIndex( "dll" ) == -1 ) return ( "" );
 
     QString tmpPath = getRelativePath(basePath, scope->projectDir() );
     if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
@@ -507,17 +507,17 @@ void QMakeScopeItem::init()
         QStringList tmp = scope->variableValues( "TEMPLATE" );
         if( scope->isEnabled() )
         {
-            if ( tmp.contains( "subdirs" ) )
+            if ( tmp.findIndex( "subdirs" ) != -1 )
                 setPixmap( 0, SmallIcon( "qmake_sub" ) );
-            else if ( tmp.contains( "lib" ) )
+            else if ( tmp.findIndex( "lib" ) != -1 )
                 setPixmap( 0, SmallIcon( "qmake_lib" ) );
             else
                 setPixmap( 0, SmallIcon( "qmake_app" ) );
         }else
         {
-            if ( tmp.contains( "subdirs" ) )
+            if ( tmp.findIndex( "subdirs" ) != -1 )
                 setPixmap( 0, SmallIcon( "qmake_sub_disabled" ) );
-            else if ( tmp.contains( "lib" ) )
+            else if ( tmp.findIndex( "lib" ) != -1 )
                 setPixmap( 0, SmallIcon( "qmake_lib_disabled" ) );
             else
                 setPixmap( 0, SmallIcon( "qmake_app_disabled" ) );
@@ -548,7 +548,7 @@ FileItem* QMakeScopeItem::createFileItem( const QString& name )
 
 void QMakeScopeItem::buildGroups()
 {
-    if( scope->variableValues("TEMPLATE").contains("subdirs") )
+    if( scope->variableValues("TEMPLATE").findIndex("subdirs") != -1 )
         return;
     QStringList values;
 
@@ -694,9 +694,9 @@ void QMakeScopeItem::addValues( const QString& var, const QStringList& values )
 
 void QMakeScopeItem::removeValue( const QString& var, const QString& value )
 {
-    if( scope->scopeType() != Scope::IncludeScope && scope->variableValues( var ).contains( value ) )
+    if( scope->scopeType() != Scope::IncludeScope && scope->variableValues( var ).findIndex( value ) != -1 )
     {
-        if( scope->variableValuesForOp( var, "+=" ).contains(value) )
+        if( scope->variableValuesForOp( var, "+=" ).findIndex(value) != -1 )
             scope->removeFromPlusOp( var, QStringList( value ) );
         else
             scope->addToMinusOp( var, QStringList( value ) );
@@ -708,9 +708,9 @@ void QMakeScopeItem::removeValue( const QString& var, const QString& value )
 
 void QMakeScopeItem::addValue( const QString& var, const QString& value )
 {
-    if( scope->scopeType() != Scope::IncludeScope && !scope->variableValues( var ).contains( value ) )
+    if( scope->scopeType() != Scope::IncludeScope && scope->variableValues( var ).findIndex( value ) == -1 )
     {
-        if( scope->variableValuesForOp( var, "-=" ).contains(value) )
+        if( scope->variableValuesForOp( var, "-=" ).findIndex(value) != -1 )
             scope->removeFromMinusOp( var, QStringList( value ) );
         else
             scope->addToPlusOp( var, QStringList( value ) );
@@ -726,9 +726,9 @@ void QMakeScopeItem::updateValues( const QString& var, const QStringList& values
     QStringList scopeValues = scope->variableValuesForOp( var, "+=" );
     for( QStringList::const_iterator it = curValues.begin(); it != curValues.end(); ++it )
     {
-        if ( !values.contains( *it ) )
+        if ( values.findIndex( *it ) == -1 )
         {
-            if( scopeValues.contains( *it ) )
+            if( scopeValues.findIndex( *it ) != -1 )
                 scope->removeFromPlusOp( var, QStringList( *it ) );
             else
                 scope->addToMinusOp( var, QStringList( *it ) );
@@ -736,7 +736,7 @@ void QMakeScopeItem::updateValues( const QString& var, const QStringList& values
     }
     for( QStringList::const_iterator it = values.begin(); it != values.end(); ++it )
     {
-        if ( !curValues.contains( *it ) )
+        if ( curValues.findIndex( *it ) == -1 )
         {
             scope->addToPlusOp( var, QStringList( *it ) );
         }
@@ -783,7 +783,7 @@ void QMakeScopeItem::disableSubprojects( const QStringList& dirs )
     QStringList::const_iterator it = dirs.begin();
     for( ; it != dirs.end() ; ++it)
     {
-        if( scope->variableValues("SUBDIRS").contains(*it) )
+        if( scope->variableValues("SUBDIRS").findIndex(*it) != -1 )
         {
             Scope* s = scope->disableSubproject(*it);
             if( !s )

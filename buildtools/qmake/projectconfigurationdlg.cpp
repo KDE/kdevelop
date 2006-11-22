@@ -152,16 +152,16 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     {
         if ( radioApplication->isChecked() )
         {
-            if( !myProjectItem->scope->variableValues("TEMPLATE").contains("app") )
+            if( myProjectItem->scope->variableValues("TEMPLATE").findIndex("app") == -1 )
             {
                 addAppDeps();
                 removeSharedLibDeps();
                 removeStaticLibDeps();
             }
             myProjectItem->scope->setEqualOp( "TEMPLATE", "app" );
-            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+            if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
-            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+            if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "staticlib" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
         }
@@ -170,7 +170,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             myProjectItem->scope->setEqualOp( "TEMPLATE", "lib" );
             if ( staticRadio->isOn() )
             {
-                if( myProjectItem->scope->variableValues("CONFIG").contains("dll") )
+                if( myProjectItem->scope->variableValues("CONFIG").findIndex("dll") != -1 )
                 {
                     addStaticLibDeps();
                     removeSharedLibDeps();
@@ -187,14 +187,14 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             if ( sharedRadio->isOn() )
             {
                 kdDebug(9024) << "Activating debug lib:" << myProjectItem->scope->variableValues("CONFIG") << endl;
-                if( !myProjectItem->scope->variableValues("CONFIG").contains("dll") )
+                if( myProjectItem->scope->variableValues("CONFIG").findIndex("dll") == -1 )
                 {
                     addSharedLibDeps();
                     removeStaticLibDeps();
                 }
                 myProjectItem->addValue( "CONFIG", "dll" );
                 myProjectItem->scope->setEqualOp( "VERSION", m_targetLibraryVersion->text() );
-                if ( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+                if ( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1 )
                     myProjectItem->removeValue( "CONFIG", "staticlib" );
             }
             if ( checkPlugin->isOn() )
@@ -211,15 +211,15 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         }
         else if ( radioSubdirs->isChecked() )
         {
-            if( !myProjectItem->scope->variableValues("TEMPLATE").contains("subdirs") )
+            if( myProjectItem->scope->variableValues("TEMPLATE").findIndex("subdirs") == -1 )
             {
                 removeSharedLibDeps();
                 removeStaticLibDeps();
                 removeAppDeps();
             }
-            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+            if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
-            if( myProjectItem->scope->variableValues( "CONFIG" ).contains( "staticlib" ) )
+            if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "staticlib" );
             myProjectItem->scope->setEqualOp( "TEMPLATE", "subdirs" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_sub" ) );
@@ -379,7 +379,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     QStringList extraValues = QStringList::split( " ", editConfigExtra->text() );
     for ( QStringList::iterator it = confValues.begin() ; it != confValues.end() ; ++it )
     {
-        if ( !Scope::KnownConfigValues.contains( *it ) && !extraValues.contains( *it ) )
+        if ( Scope::KnownConfigValues.findIndex( *it ) == -1 && extraValues.findIndex( *it ) == -1 )
         {
             myProjectItem->scope->removeFromPlusOp( "CONFIG", *it );
         }
@@ -387,15 +387,15 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
 
     for ( QStringList::iterator it = extraValues.begin() ; it != extraValues.end() ; ++it )
     {
-        if ( !confValues.contains( *it ) )
+        if ( confValues.findIndex( *it ) == -1 )
             myProjectItem->scope->addToPlusOp( "CONFIG", *it );
     }
 
     if( myProjectItem->scope->scopeType() == Scope::FunctionScope || myProjectItem->scope->scopeType() == Scope::SimpleScope )
     {
-        if( !myProjectItem->scope->variableValues("TARGET").contains( m_targetOutputFile->text() ) )
+        if( myProjectItem->scope->variableValues("TARGET").findIndex( m_targetOutputFile->text() ) == -1 )
             myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
-        if( !myProjectItem->scope->variableValues("DESTDIR").contains( m_targetPath->text() ) )
+        if( myProjectItem->scope->variableValues("DESTDIR").findIndex( m_targetPath->text() ) == -1 )
             myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
     }else
     {
@@ -458,7 +458,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         {
 
             QString tmpLib = insideItem->prjItem->getLibAddObject( myProjectItem->scope->projectDir() );
-            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
             {
                 //add path if shared lib is linked
                 QString tmpPath = insideItem->prjItem->getLibAddPath(
@@ -510,14 +510,14 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     {
         if ( insideItem->isOn() )
         {
-            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "staticlib" )
-                 || ( !insideItem->prjItem->scope->variableValues( "CONFIG" ).contains("dll")
-                      && insideItem->prjItem->scope->variableValues( "TEMPLATE" ).contains("lib") ) )
+            if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1
+                 || ( insideItem->prjItem->scope->variableValues( "CONFIG" ).findIndex("dll") == -1
+                      && insideItem->prjItem->scope->variableValues( "TEMPLATE" ).findIndex("lib") != -1 ) )
             {
                 values << insideItem->prjItem->getLibAddObject(
                     myProjectItem->scope->projectDir() );
             }
-            else if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).contains( "dll" ) )
+            else if ( insideItem->prjItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
             {
                 values << insideItem->prjItem->getSharedLibAddObject(
                     myProjectItem->scope->projectDir() );
@@ -535,7 +535,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     values.clear();
     //change build order
     lvItem = buildorder_listview->firstChild();
-    if ( lvItem && lvItem->itemBelow() && myProjectItem->scope->variableValues("TEMPLATE").contains("subdirs") )
+    if ( lvItem && lvItem->itemBelow() && myProjectItem->scope->variableValues("TEMPLATE").findIndex("subdirs") != -1 )
     {
 
         while ( lvItem )
@@ -597,20 +597,20 @@ void ProjectConfigurationDlg::updateControls()
     QStringList templateValues = myProjectItem->scope->variableValues( "TEMPLATE" );
     //if( !myProjectItem->isScope )
     //{
-    if ( templateValues.contains( "lib" ) )
+    if ( templateValues.findIndex( "lib" ) != -1 )
     {
         groupLibraries->setEnabled( true );
 
         radioLibrary->setChecked( true );
         staticRadio->setChecked( true ); //default
 
-        if ( configValues.contains( "staticlib" ) )
+        if ( configValues.findIndex( "staticlib" ) != -1 )
         {
             staticRadio->setChecked( true );
         }
         else
             staticRadio->setChecked( false );
-        if ( configValues.contains( "dll" ) && !configValues.contains( "staticlib" ) )
+        if ( configValues.findIndex( "dll" ) != -1 && configValues.findIndex( "staticlib" ) == -1 )
         {
             sharedRadio->setChecked( true );
             m_targetLibraryVersion->setText( myProjectItem->scope->variableValues( "VERSION" ).front() );
@@ -624,25 +624,25 @@ void ProjectConfigurationDlg::updateControls()
         if( !staticRadio->isChecked() && !sharedRadio->isChecked() )
             staticRadio->setChecked( true );
 
-        if ( configValues.contains( "plugin" ) )
+        if ( configValues.findIndex( "plugin" ) != -1 )
             checkPlugin->setChecked( true );
         else
             checkPlugin->setChecked( false );
-        if ( configValues.contains( "designer" ) )
+        if ( configValues.findIndex( "designer" ) != -1 )
             checkDesigner->setChecked( true );
         else
             checkDesigner->setChecked( false );
-        if ( configValues.contains( "create_libtool" ) )
+        if ( configValues.findIndex( "create_libtool" ) != -1 )
             checkLibtool->setChecked( true );
         else
             checkLibtool->setChecked( false );
-        if ( configValues.contains( "create_pkgconf" ) )
+        if ( configValues.findIndex( "create_pkgconf" ) != -1 )
             checkPkgconf->setChecked( true );
         else
             checkPkgconf->setChecked( false );
         groupTemplateChanged(1);
     }
-    else if ( templateValues.contains( "subdirs" ) )
+    else if ( templateValues.findIndex( "subdirs" ) != -1 )
     {
         radioSubdirs->setChecked( true );
         groupTemplateChanged(2);
@@ -650,7 +650,7 @@ void ProjectConfigurationDlg::updateControls()
     {
         //Default is app mode
         radioApplication->setChecked( true );
-        if ( configValues.contains( "console" ) )
+        if ( configValues.findIndex( "console" ) != -1 )
         {
             checkConsole->setChecked( true );
         }
@@ -658,67 +658,67 @@ void ProjectConfigurationDlg::updateControls()
     }
 
     // Buildmode
-    if ( configValues.contains( "debug" ) )
+    if ( configValues.findIndex( "debug" ) != -1 )
     {
         radioDebugMode->setChecked( true );
     }
-    else if ( configValues.contains( "release" ) )
+    else if ( configValues.findIndex( "release" ) != -1 )
     {
         radioReleaseMode->setChecked( true );
     }
-    else if ( configValues.contains( "debug_and_release" ) )
+    else if ( configValues.findIndex( "debug_and_release" ) != -1 )
     {
         radioDebugReleaseMode->setChecked( true );
     }
 
     // Requirements
-    if ( configValues.contains( "qt" ) )
+    if ( configValues.findIndex( "qt" ) != -1 )
         checkQt->setChecked( true );
     else
         checkQt->setChecked( false );
-    if ( configValues.contains( "opengl" ) )
+    if ( configValues.findIndex( "opengl" ) != -1 )
         checkOpenGL->setChecked( true );
     else
         checkOpenGL->setChecked( false );
-    if ( configValues.contains( "thread" ) )
+    if ( configValues.findIndex( "thread" ) != -1 )
         checkThread->setChecked( true );
     else
         checkThread->setChecked( false );
-    if ( configValues.contains( "x11" ) )
+    if ( configValues.findIndex( "x11" ) != -1 )
         checkX11->setChecked( true );
     else
         checkX11->setChecked( false );
-    if ( configValues.contains( "ordered" ) )
+    if ( configValues.findIndex( "ordered" ) != -1 )
         checkOrdered->setChecked( true );
     else
         checkOrdered->setChecked( false );
-    if ( configValues.contains( "exceptions" ) )
+    if ( configValues.findIndex( "exceptions" ) != -1 )
         exceptionCheck->setChecked( true );
     else
         exceptionCheck->setChecked( false );
-    if ( configValues.contains( "stl" ) )
+    if ( configValues.findIndex( "stl" ) != -1 )
         stlCheck->setChecked( true );
     else
         stlCheck->setChecked( false );
-    if ( configValues.contains( "rtti" ) )
+    if ( configValues.findIndex( "rtti" ) != -1 )
         rttiCheck->setChecked( true );
     else
         rttiCheck->setChecked( false );
-    if ( configValues.contains( "precompile_header" ) )
+    if ( configValues.findIndex( "precompile_header" ) != -1 )
         checkPCH->setChecked( true );
     else
         checkPCH->setChecked( false );
     // Warnings
-    if ( configValues.contains( "warn_on" ) )
+    if ( configValues.findIndex( "warn_on" ) != -1 )
     {
         checkWarning->setChecked( true );
     }
-    if ( configValues.contains( "warn_off" ) )
+    if ( configValues.findIndex( "warn_off" ) != -1 )
     {
         checkWarning->setChecked( false );
     }
 
-    if ( configValues.contains( "windows" ) )
+    if ( configValues.findIndex( "windows" ) != -1 )
         checkWindows->setChecked( true );
     else
         checkWindows->setChecked( false );
@@ -727,57 +727,57 @@ void ProjectConfigurationDlg::updateControls()
     if ( prjWidget->m_part->isQt4Project() )
     {
 
-        if ( configValues.contains( "assistant" ) )
+        if ( configValues.findIndex( "assistant" ) != -1 )
             checkAssistant->setChecked( true );
         else
             checkAssistant->setChecked( false );
-        if ( configValues.contains( "qtestlib" ) )
+        if ( configValues.findIndex( "qtestlib" ) != -1 )
             checkTestlib->setChecked( true );
         else
             checkTestlib->setChecked( false );
-        if ( configValues.contains( "uitools" ) )
+        if ( configValues.findIndex( "uitools" ) != -1 )
             checkUiTools->setChecked( true );
         else
             checkUiTools->setChecked( false );
-        if ( configValues.contains( "dbus" ) )
+        if ( configValues.findIndex( "dbus" ) != -1 )
             checkQDBus->setChecked( true );
         else
             checkQDBus->setChecked( false );
-        if ( configValues.contains( "build_all" ) )
+        if ( configValues.findIndex( "build_all" ) != -1 )
             checkBuildAll->setChecked( true );
         else
             checkBuildAll->setChecked( false );
 
         QStringList qtLibs = myProjectItem->scope->variableValues( "QT" );
-        if ( qtLibs.contains( "core" ) )
+        if ( qtLibs.findIndex( "core" ) != -1 )
             checkQt4Core->setChecked( true );
         else
             checkQt4Core->setChecked( false );
-        if ( qtLibs.contains( "gui" ) )
+        if ( qtLibs.findIndex( "gui" ) != -1 )
             checkQt4Gui->setChecked( true );
         else
             checkQt4Gui->setChecked( false );
-        if ( qtLibs.contains( "sql" ) )
+        if ( qtLibs.findIndex( "sql" ) != -1 )
             checkQt4SQL->setChecked( true );
         else
             checkQt4SQL->setChecked( false );
-        if ( qtLibs.contains( "xml" ) )
+        if ( qtLibs.findIndex( "xml" ) != -1 )
             checkQt4XML->setChecked( true );
         else
             checkQt4XML->setChecked( false );
-        if ( qtLibs.contains( "network" ) )
+        if ( qtLibs.findIndex( "network" ) != -1 )
             checkQt4Network->setChecked( true );
         else
             checkQt4Network->setChecked( false );
-        if ( qtLibs.contains( "svg" ) )
+        if ( qtLibs.findIndex( "svg" ) != -1 )
             checkQt4SVG->setChecked( true );
         else
             checkQt4SVG->setChecked( false );
-        if ( qtLibs.contains( "opengl" ) )
+        if ( qtLibs.findIndex( "opengl" ) != -1 )
             checkQt4OpenGL->setChecked( true );
         else
             checkQt4OpenGL->setChecked( false );
-        if ( qtLibs.contains( "qt3support" ) )
+        if ( qtLibs.findIndex( "qt3support" ) != -1 )
             checkQt3Support->setChecked( true );
         else
             checkQt3Support->setChecked( false );
@@ -793,7 +793,7 @@ void ProjectConfigurationDlg::updateControls()
     QStringList extraValues;
     for ( QStringList::const_iterator it = configValues.begin() ; it != configValues.end() ; ++it )
     {
-        if ( !Scope::KnownConfigValues.contains( *it ) )
+        if ( Scope::KnownConfigValues.findIndex( *it ) == -1 )
         {
             extraValues << *it;
         }
@@ -803,7 +803,7 @@ void ProjectConfigurationDlg::updateControls()
     //makefile
     makefile_url->setURL( myProjectItem->scope->variableValues( "MAKEFILE" ).front() );
 
-    if ( myProjectItem->scope->variableValues( "INSTALLS" ).contains( "target" ) )
+    if ( myProjectItem->scope->variableValues( "INSTALLS" ).findIndex( "target" ) != -1 )
     {
         checkInstallTarget->setChecked( true );
         m_InstallTargetPath->setEnabled( true );
@@ -893,15 +893,15 @@ void ProjectConfigurationDlg::updateIncludeControl()
     QMakeScopeItem *item = itemList.first();
     while ( item )
     {
-        if ( item->scope->variableValues( "TEMPLATE" ).contains( "lib" ) ||
-                item->scope->variableValues( "TEMPLATE" ).contains( "app" ) )
+        if ( item->scope->variableValues( "TEMPLATE" ).findIndex( "lib" ) != -1 ||
+                item->scope->variableValues( "TEMPLATE" ).findIndex( "app" ) != -1 )
         {
             QString tmpInc = item->getIncAddPath( myProjectItem->scope->projectDir() );
             tmpInc = QDir::cleanDirPath( tmpInc );
             InsideCheckListItem *newItem = new InsideCheckListItem( insideinc_listview,
                                            insideinc_listview->lastItem(), item, this );
 
-            if ( incList.contains( tmpInc ) )
+            if ( incList.findIndex( tmpInc ) != -1 )
             {
                 incList.remove( tmpInc );
                 newItem->setOn( true );
@@ -936,7 +936,7 @@ void ProjectConfigurationDlg::updateLibControls()
     QMakeScopeItem* item = itemList.first();
     while ( item )
     {
-        if ( item->scope->variableValues( "TEMPLATE" ).contains( "lib" ) )
+        if ( item->scope->variableValues( "TEMPLATE" ).findIndex( "lib" ) != -1 )
         {
             if ( item != myProjectItem )
             {
@@ -947,11 +947,11 @@ void ProjectConfigurationDlg::updateLibControls()
                 QString tmpLibDir = item->getLibAddPath( myProjectItem->scope->projectDir() );
                 kdDebug(9024) << "lib path:" << tmpLib << endl;
                 kdDebug(9024) << "lib dir:" << tmpLibDir << endl;
-                if ( libList.contains( "-L" + tmpLibDir ) )
+                if ( libList.findIndex( "-L" + tmpLibDir ) != -1 )
                 {
                     libList.remove( "-L" + tmpLibDir );
                 }
-                if ( libList.contains( tmpLib ) )
+                if ( libList.findIndex( tmpLib ) != -1 )
                 {
                     libList.remove( tmpLib );
                     newItem->setOn( true );
@@ -990,19 +990,19 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
     while ( item )
     {
         QStringList templateval = item->scope->variableValues( "TEMPLATE" );
-        if ( templateval.contains( "lib" )
-                || templateval.contains( "app" ) )
+        if ( templateval.findIndex( "lib" ) != -1
+                || templateval.findIndex( "app" ) != -1 )
         {
             QString tmpLib;
             QStringList values = item->scope->variableValues( "CONFIG" );
-            if ( templateval.contains( "lib" ) && values.contains( "dll" ) )
+            if ( templateval.findIndex( "lib" ) != -1 && values.findIndex( "dll" ) != -1 )
                 tmpLib = item->getSharedLibAddObject( myProjectItem->scope->projectDir() );
-            else if ( templateval.contains( "lib" ) )
+            else if ( templateval.findIndex( "lib" ) != -1 )
                 tmpLib = item->getLibAddObject( myProjectItem->scope->projectDir() );
             else
                 tmpLib = item->getApplicationObject( myProjectItem->scope->projectDir() );
             InsideCheckListItem * newItem = new InsideCheckListItem( intDeps_view, intDeps_view->lastItem(), item, this );
-            if ( depsList.contains( tmpLib ) )
+            if ( depsList.findIndex( tmpLib ) != -1 )
             {
                 depsList.remove( tmpLib );
                 newItem->setOn( true );
@@ -1026,7 +1026,7 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
 void ProjectConfigurationDlg::updateBuildOrderControl()
 {
     //sort build order only if subdirs
-    if ( myProjectItem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+    if ( myProjectItem->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) != -1 )
     {
 
         QPtrList <QMakeScopeItem> itemList;
@@ -1718,11 +1718,11 @@ void ProjectConfigurationDlg::removeSharedLibDeps()
 
         QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
 
-        if( prjItem->scope->variableValues("LIBS").contains(infos["shared_lib"]) )
+        if( prjItem->scope->variableValues("LIBS").findIndex(infos["shared_lib"]) != -1 )
             prjItem->scope->removeFromPlusOp("LIBS", infos["shared_lib"]);
-        if( prjItem->scope->variableValues("LIBS").contains(infos["shared_libdir"]) )
+        if( prjItem->scope->variableValues("LIBS").findIndex(infos["shared_libdir"]) != -1 )
             prjItem->scope->removeFromPlusOp("LIBS", infos["shared_libdir"]);
-        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["shared_depend"]) )
+        if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["shared_depend"]) != -1 )
             prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["shared_depend"]);
 
         prjItem->scope->saveToFile();
@@ -1740,8 +1740,8 @@ void ProjectConfigurationDlg::addStaticLibDeps()
 
         QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
 
-        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["app_depend"])
-            || prjItem->scope->variableValues("TARGETDEPS").contains(infos["shared_depend"]) )
+        if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["app_depend"]) != -1
+            || prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["shared_depend"]) != -1 )
         {
             prjItem->scope->addToPlusOp("LIBS", infos["static_lib"]);
             prjItem->scope->addToPlusOp("TARGETDEPS", infos["static_depend"]);
@@ -1763,9 +1763,9 @@ void ProjectConfigurationDlg::removeStaticLibDeps()
 
         QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
 
-        if( prjItem->scope->variableValues("LIBS").contains(infos["static_lib"]) )
+        if( prjItem->scope->variableValues("LIBS").findIndex(infos["static_lib"]) != -1 )
             prjItem->scope->removeFromPlusOp("LIBS", infos["static_lib"]);
-        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["static_depend"]) )
+        if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["static_depend"]) != -1 )
             prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["static_depend"]);
         prjItem->scope->saveToFile();
     }
@@ -1781,8 +1781,8 @@ void ProjectConfigurationDlg::addSharedLibDeps()
             continue;
 
         QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
-        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["app_depend"])
-            || prjItem->scope->variableValues("TARGETDEPS").contains(infos["static_depend"]) )
+        if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["app_depend"]) != -1
+            || prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["static_depend"]) != -1 )
         {
             prjItem->scope->addToPlusOp("LIBS", infos["shared_lib"]);
             prjItem->scope->addToPlusOp("LIBS", infos["shared_libdir"]);
@@ -1804,7 +1804,7 @@ void ProjectConfigurationDlg::removeAppDeps()
 
         QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
 
-        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["app_depend"]) )
+        if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["app_depend"]) != -1 )
             prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["app_depend"]);
 
         prjItem->scope->saveToFile();
@@ -1822,8 +1822,8 @@ void ProjectConfigurationDlg::addAppDeps()
 
         QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
 
-        if( prjItem->scope->variableValues("TARGETDEPS").contains(infos["shared_depend"])
-            || prjItem->scope->variableValues("TARGETDEPS").contains(infos["static_depend"]) )
+        if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["shared_depend"]) != -1
+            || prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["static_depend"]) != -1 )
             prjItem->scope->addToPlusOp("TARGETDEPS", infos["app_depend"]);
 
         prjItem->scope->saveToFile();

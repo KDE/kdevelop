@@ -320,8 +320,8 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
 
     /* For variables that we don't know and which are not QT/CONFIG find the default value */
     if( m_defaultopts
-        && m_defaultopts->variables().contains(variable) > 0
-        && ( variable == "TEMPLATE" || variable == "QT" || !KnownVariables.contains(variable) || variable == "CONFIG" ) )
+        && m_defaultopts->variables().findIndex(variable) != -1
+        && ( variable == "TEMPLATE" || variable == "QT" || KnownVariables.findIndex(variable) == -1 || variable == "CONFIG" ) )
     {
         result = m_defaultopts->variableValues(variable);
     }
@@ -354,7 +354,7 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
                 {
                     for ( QStringList::const_iterator sit = assign->values.begin(); sit != assign->values.end() ; ++sit )
                     {
-                        if ( !result.contains( *sit ) )
+                        if ( result.findIndex( *sit ) == -1 )
                             result.append( *sit );
                     }
                 }
@@ -362,7 +362,7 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
                 {
                     for ( QStringList::const_iterator sit = assign->values.begin(); sit != assign->values.end() ; ++sit )
                     {
-                        if ( result.contains( *sit ) )
+                        if ( result.findIndex( *sit ) != -1 )
                             result.remove( *sit );
                     }
                 }
@@ -514,17 +514,17 @@ Scope* Scope::createSubProject( const QString& projname )
     if( !m_root )
         return 0;
 
-    if( variableValuesForOp( "SUBDIRS", "-=").contains( projname ) )
+    if( variableValuesForOp( "SUBDIRS", "-=").findIndex( projname ) != -1 )
         removeFromMinusOp( "SUBDIRS", projname );
 
     QString realprojname = resolveVariables(projname);
 
-    if( variableValuesForOp( "SUBDIRS", "-=").contains( realprojname ) )
+    if( variableValuesForOp( "SUBDIRS", "-=").findIndex( realprojname ) != -1 )
         removeFromMinusOp( "SUBDIRS", realprojname );
 
     QDir curdir( projectDir() );
 
-    if ( variableValues("TEMPLATE").contains( "subdirs" ) )
+    if ( variableValues("TEMPLATE").findIndex( "subdirs" ) != -1 )
     {
         QString filename;
         if( !realprojname.endsWith(".pro") )
@@ -535,7 +535,7 @@ Scope* Scope::createSubProject( const QString& projname )
             curdir.cd( realprojname );
             QStringList entries = curdir.entryList("*.pro", QDir::Files);
 
-            if ( !entries.isEmpty() && !entries.contains( curdir.dirName()+".pro" ) )
+            if ( !entries.isEmpty() && entries.findIndex( curdir.dirName()+".pro" ) == -1 )
                 filename = curdir.absPath() + QString(QChar(QDir::separator()))+entries.first();
             else
                 filename = curdir.absPath() + QString(QChar(QDir::separator()))+curdir.dirName()+".pro";
@@ -631,7 +631,7 @@ bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
     if ( it != m_root->m_children.end() )
     {
         QMake::AssignmentAST * tempast = static_cast<QMake::AssignmentAST*>( *it );
-        if ( tempast->values.contains( "subdirs" ) )
+        if ( tempast->values.findIndex( "subdirs" ) != -1 )
         {
             Scope* project = m_scopes[ num ];
             if( !project )
@@ -683,7 +683,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
 
     for ( QStringList::const_iterator it = newValues.begin(); it != newValues.end() ; ++it )
     {
-        if ( !origValues.contains( *it ) && !remove )
+        if ( origValues.findIndex( *it ) == -1 && !remove )
         {
             while ( !origValues.isEmpty() && origValues.last() == "\n" )
                 origValues.pop_back();
@@ -704,7 +704,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             else
                 origValues.append( *it );
             origValues.append( "\n" );
-        } else if ( origValues.contains( *it ) && remove )
+        } else if ( origValues.findIndex( *it ) != -1 && remove )
         {
             QStringList::iterator posit = origValues.find( *it );
             posit = origValues.remove( posit );
@@ -748,7 +748,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
             {
                 for ( QStringList::const_iterator it = values.begin() ; it != values.end() ; ++it )
                 {
-                    if ( op == "+=" && !removeFromOp && assignment->values.contains( *it ) )
+                    if ( op == "+=" && !removeFromOp && assignment->values.findIndex( *it ) != -1 )
                     {
                         if ( assignment->op == "=" )
                         {
@@ -766,7 +766,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
                             }
                         }
                     }
-                    else if ( op == "-=" && !removeFromOp && assignment->values.contains( *it ) )
+                    else if ( op == "-=" && !removeFromOp && assignment->values.findIndex( *it ) != -1 )
                     {
                         updateValues( assignment->values, QStringList( *it ), true, assignment->indent );
                         if ( listIsEmpty( assignment->values ) )
@@ -783,7 +783,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
                             m_root->removeChildAST( assignment );
                             delete assignment;
                         }
-                        else if ( assignment->op == "+=" && assignment->values.contains( *it ) )
+                        else if ( assignment->op == "+=" && assignment->values.findIndex( *it ) != -1 )
                         {
                             updateValues( assignment->values, QStringList( *it ), true, assignment->indent );
                             if ( listIsEmpty( assignment->values ) )
@@ -810,7 +810,7 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
         else
             ast->setDepth( m_root->depth()+1 );
         m_root->addChildAST( ast );
-        if ( !values.contains( "\n" ) )
+        if ( values.findIndex( "\n" ) == -1 )
         {
             ast->values.append("\n");
         }
@@ -828,7 +828,7 @@ QValueList<QMake::AST*>::iterator Scope::findExistingVariable( const QString& va
         if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
             QMake::AssignmentAST * assignment = static_cast<QMake::AssignmentAST*>( *it );
-            if ( assignment->scopedID == variable && ops.contains( assignment->op ) )
+            if ( assignment->scopedID == variable && ops.findIndex( assignment->op ) != -1 )
             {
                 return it;
             }
@@ -867,7 +867,7 @@ void Scope::init()
         {
             QMake::AssignmentAST * m = static_cast<QMake::AssignmentAST*>( *it );
             // Check wether TEMPLATE==subdirs here too!
-            if ( m->scopedID == "SUBDIRS" && variableValues("TEMPLATE").contains("subdirs") )
+            if ( m->scopedID == "SUBDIRS" && variableValues("TEMPLATE").findIndex("subdirs") != -1 )
             {
                 for ( QStringList::const_iterator sit = m->values.begin() ; sit != m->values.end(); ++sit )
                 {
@@ -898,7 +898,7 @@ void Scope::init()
                             }else
                                 continue;
                         }
-                        if ( subproject.entryList().isEmpty() || subproject.entryList().contains( str + ".pro" ) )
+                        if ( subproject.entryList().isEmpty() || subproject.entryList().findIndex( str + ".pro" ) != -1 )
                             projectfile = (str) + ".pro";
                         else
                             projectfile = subproject.entryList().first();
@@ -914,16 +914,16 @@ void Scope::init()
             else
             {
                 if ( !(
-                         KnownVariables.contains( m->scopedID )
+                         KnownVariables.findIndex( m->scopedID ) != -1
                          && ( m->op == "=" || m->op == "+=" || m->op == "-=")
                        )
                       && !(
                             ( m->scopedID.contains( ".files" ) || m->scopedID.contains( ".path" ) )
-                            && variableValues("INSTALLS").contains(m->scopedID.left( m->scopedID.findRev(".") ) )
+                            && variableValues("INSTALLS").findIndex(m->scopedID.left( m->scopedID.findRev(".") != -1 ) )
                           )
                       && !(
                             ( m->scopedID.contains( ".subdir" ) )
-                            && variableValues("SUBDIRS").contains(m->scopedID.left( m->scopedID.findRev(".") ) )
+                            && variableValues("SUBDIRS").findIndex(m->scopedID.left( m->scopedID.findRev(".") != -1 ) )
                           )
                     )
                 {
@@ -1138,20 +1138,20 @@ Scope* Scope::disableSubproject( const QString& dir)
     if( !m_root || ( m_root->isProject() && !m_incast ) )
         return 0;
 
-    if( scopeType() != Scope::IncludeScope && variableValuesForOp( "SUBDIRS", "+=").contains( dir ) )
+    if( scopeType() != Scope::IncludeScope && variableValuesForOp( "SUBDIRS", "+=").findIndex( dir ) != -1 )
         removeFromPlusOp( "SUBDIRS", dir );
     else if( scopeType() != Scope::IncludeScope )
         removeFromPlusOp( "SUBDIRS", dir );
 
     QDir curdir( projectDir() );
 
-    if ( variableValues("TEMPLATE").contains( "subdirs" ) )
+    if ( variableValues("TEMPLATE").findIndex( "subdirs" ) != -1 )
     {
         curdir.cd(dir);
         QString filename;
         QStringList entries = curdir.entryList("*.pro", QDir::Files);
 
-        if ( !entries.isEmpty() && !entries.contains( curdir.dirName()+".pro" ) )
+        if ( !entries.isEmpty() && entries.findIndex( curdir.dirName()+".pro" )  != -1 )
             filename = curdir.absPath() + QString(QChar(QDir::separator()))+entries.first();
         else
             filename = curdir.absPath() + QString(QChar(QDir::separator()))+curdir.dirName()+".pro";
@@ -1231,7 +1231,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
 void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
 {
     QString myRelPath = getRelativePath( projectDirectory, projectDir() );
-    if( !variableValues("TEMPLATE").contains("subdirs") )
+    if( variableValues("TEMPLATE").findIndex("subdirs") == -1 )
     {
         QStringList values = variableValues( "INSTALLS" );
         QStringList::const_iterator it;

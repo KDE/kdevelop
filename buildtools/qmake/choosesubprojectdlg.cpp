@@ -39,7 +39,7 @@ void ChooseSubprojectDlg::accept()
     ChooseItem *item = dynamic_cast<ChooseItem*>(subprojects_view->currentItem());
     if (!item)
         return;
-    if (item->subproject()->scope->variableValues("TEMPLATE").contains("subdirs"))
+    if ( item->subproject()->scope->variableValues("TEMPLATE").findIndex("subdirs") != -1 )
         return;
 
     QDialog::accept();
@@ -87,7 +87,7 @@ void ChooseSubprojectDlg::itemSelected( QListViewItem * it )
     ChooseItem *item = dynamic_cast<ChooseItem*>(it);
     if (!item)
         return;
-    if (item->subproject()->scope->variableValues("TEMPLATE").contains("subdirs"))
+    if ( item->subproject()->scope->variableValues("TEMPLATE").findIndex("subdirs") != -1 )
         buttonOk->setEnabled(false);
     else
         buttonOk->setEnabled(true);

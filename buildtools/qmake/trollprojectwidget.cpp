@@ -327,7 +327,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
     QStringList l = dir.entryList( "*.pro" );
 
     QString profile;
-    if( !l.count() || (l.count() && l.contains( fi.baseName() + ".pro") ) )
+    if( !l.count() || (l.count() && l.findIndex( fi.baseName() + ".pro") != -1  ) )
         profile = fi.baseName()+".pro";
     else
       profile = l[0];
@@ -346,7 +346,7 @@ void TrollProjectWidget::createQMakeScopeItems()
     m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
 
     m_rootSubproject->setOpen( true );
-    if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).contains("subdirs") )
+    if ( m_rootSubproject->firstChild() && m_rootSubproject->scope->variableValues( "TEMPLATE" ).findIndex("subdirs") != -1 )
     {
         overview->setSelected( m_rootSubproject->firstChild(), true );
     }
@@ -408,11 +408,11 @@ void TrollProjectWidget::setupContext()
 
     QStringList tmpl = m_shownSubproject->scope->variableValues( "TEMPLATE" );
 
-    if ( tmpl.contains( "lib" ) )
+    if ( tmpl.findIndex( "lib" ) != -1 )
     {
         runable = false;
     }
-    else if ( tmpl.contains( "subdirs" ) )
+    else if ( tmpl.findIndex( "subdirs" ) != -1 )
     {
         hasSubdirs = true;
         runable = false;
@@ -527,7 +527,7 @@ void TrollProjectWidget::buildProjectDetailTree( QMakeScopeItem *item, KListView
 {
 
     // Insert all GroupItems and all of their children into the view
-    if ( !listviewControl || item->scope->variableValues( "TEMPLATE" ).contains("subdirs") )
+    if ( !listviewControl || item->scope->variableValues( "TEMPLATE" ).findIndex("subdirs") != -1 )
         return ;
 
     QMapIterator<GroupItem::GroupType, GroupItem*> it2 = item->groups.begin();
@@ -630,7 +630,7 @@ void TrollProjectWidget::slotExecuteTarget()
 
 
     // Only run application projects
-    if ( !m_shownSubproject->scope->variableValues( "TEMPLATE" ).contains( "app" ) )
+    if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).findIndex( "app" ) == -1 )
         return ;
 
     QString dircmd = "cd " + KProcess::quote( subprojectDirectory() + QString( QChar( QDir::separator() ) ) + getCurrentDestDir() ) + " && ";
@@ -801,7 +801,7 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
                 {
                     spitem->scope->removeFromMinusOp( "SUBDIRS", subdirname );
                     delete item;
-                    if( spitem->scope->variableValues( "SUBDIRS" ).contains( subdirname ) )
+                    if( spitem->scope->variableValues( "SUBDIRS" ).findIndex( subdirname ) != -1 )
                         return;
                 }
             }
@@ -910,7 +910,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
         popup.setWhatsThis( idAddSubproject, i18n( "<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
                             "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
                             "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
-        if ( !spitem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+        if ( spitem->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) == -1 )
             popup.setItemEnabled( idAddSubproject, false );
         idRemoveSubproject = popup.insertItem( SmallIcon( "remove_subdir" ), i18n( "Remove Subproject..." ) );
         popup.setWhatsThis( idRemoveSubproject, i18n( "<b>Remove subproject</b><p>Removes currently selected subproject. Does not delete any file from disk. Deleted subproject can be later added by calling 'Add Subproject' action." ) );
@@ -935,11 +935,11 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
         popup.setWhatsThis( idAddSubproject, i18n( "<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to the currently selected scope. "
                             "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
                             "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
-        if ( !spitem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+        if ( spitem->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) == -1 )
             popup.setItemEnabled( idAddSubproject, false );
         idDisableSubproject = popup.insertItem( SmallIcon( "remove_subdir" ), i18n( "Disable Subproject..." ) );
         popup.setWhatsThis( idRemoveSubproject, i18n( "<b>Disable subproject</b><p>Disables the currently selected subproject when this scope is active. Does not delete the directory from disk. Deleted subproject can be later added by calling 'Add Subproject' action." ) );
-        if( !spitem->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) && !spitem->scope->parent()->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+        if( spitem->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) == -1 && spitem->scope->parent()->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) == -1 )
             popup.setItemEnabled( idDisableSubproject, false );
         popup.insertSeparator();
         idProjectConfiguration = popup.insertItem( SmallIcon( "configure" ), i18n( "Scope Settings" ) );
@@ -1049,12 +1049,12 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
         QString fileName = *it;
         kdDebug(9024) << "Adding file:" << fileName << " " << relativeToProjectRoot << endl;
 
-        if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).contains( "subdirs" ) )
+        if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) != -1 )
         {
             ChooseSubprojectDlg dlg( this, false );
             if ( dlg.exec() == QDialog::Accepted )
             {
-                if ( dlg.selectedSubproject() || dlg.selectedSubproject()->scope->variableValues("TEMPLATE").contains( "subdirs" ) )
+                if ( dlg.selectedSubproject() || dlg.selectedSubproject()->scope->variableValues("TEMPLATE").findIndex( "subdirs" ) != -1 )
                 {
                     fileName = getRelativePath( dlg.selectedSubproject()->scope->projectDir() ,
                                                 QDir::cleanDirPath(
@@ -2297,7 +2297,7 @@ void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
     m_filesCached = false;
     m_allFilesCache.clear();
 
-    if( spitem->scope->variableValues("TEMPLATE").contains("subdirs") )
+    if( spitem->scope->variableValues("TEMPLATE").findIndex("subdirs") != -1 )
     {
         QStringList subdirs = spitem->scope->variableValues( "SUBDIRS" );
         DisableSubprojectDlg dlg( subdirs );
@@ -2307,7 +2307,7 @@ void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
             QListViewItem* item = spitem->firstChild();
             while( item )
             {
-                if( values.contains( item->text(0) ) )
+                if( values.findIndex( item->text(0) ) != -1  )
                     delete item;
                 item = item->nextSibling();
             }
