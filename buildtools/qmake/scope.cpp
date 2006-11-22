@@ -1248,7 +1248,22 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             for ( ;filesit != files.end(); ++filesit )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *filesit;
-                res.insert( file );
+                if( file.contains("*") )
+                {
+                    QFileInfo fi( projectDirectory + QString( QChar( QDir::separator() ) ) + file );
+                    QDir absDir = fi.dir( true );
+                    absDir.setNameFilter( fi.fileName() );
+                    absDir.setFilter( QDir::Files | QDir::Readable | QDir::NoSymLinks );
+                    QStringList list = absDir.entryList();
+                    for( QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
+                    {
+                        res.insert( getRelativePath( projectDirectory, absDir.path()+QString( QChar( QDir::separator() ) )+*it ) );
+                    }
+                }
+                else
+                {
+                    res.insert( file );
+                }
             }
         }
 
@@ -1270,7 +1285,22 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
-            res.insert( file );
+            if( file.contains("*") )
+            {
+                QFileInfo fi( projectDirectory + QString( QChar( QDir::separator() ) ) + file );
+                QDir absDir = fi.dir( true );
+                absDir.setNameFilter( fi.fileName() );
+                absDir.setFilter( QDir::Files | QDir::Readable | QDir::NoSymLinks );
+                QStringList list = absDir.entryList();
+                for( QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
+                {
+                    res.insert( getRelativePath( projectDirectory, absDir.path()+QString( QChar( QDir::separator() ) )+*it ) );
+                }
+            }
+            else
+            {
+                res.insert( file );
+            }
         }
 
         if ( isQt4Project() )
@@ -1313,6 +1343,8 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
                 res.insert( file );
+                if( QFileInfo(projectDir()+QString(QChar(QDir::separator())) + *it+".h").exists() )
+                    res.insert( file+".h" );
             }
         }
         else
@@ -1322,6 +1354,8 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
                 res.insert( file );
+                if( QFileInfo(projectDir()+QString(QChar(QDir::separator())) + *it+".h").exists() )
+                    res.insert( file+".h" );
             }
         }
 
