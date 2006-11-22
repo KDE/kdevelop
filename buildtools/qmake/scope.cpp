@@ -879,6 +879,7 @@ void Scope::init()
                         continue;
                     QDir subproject;
                     QString projectfile;
+                    kdDebug(9024) << "reading subproject: " << str << endl;
                     if( str.startsWith("$") )
                         str = resolveVariables(str, *it);
                     if( str.endsWith(".pro") )
@@ -1195,7 +1196,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
     QMap<QString, QStringList> variables;
     for( QStringList::iterator it = result.begin(); it != result.end(); ++it )
     {
-        QRegExp re("\\$\\$([^\\) /]*)( |\\)|/)");
+        QRegExp re("\\$\\$([^\\) /]*)( |\\)|/|$)");
         int pos = 0;
         while( pos >= 0 )
         {
