@@ -700,8 +700,8 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             }else if ( origValues.isEmpty() )
                 origValues.append(" ");
             QString newval = *it;
-            QRegExp re("\\$([^$\\{\\) /]*)( |\\)|/)");
-            newval.replace(re, "${\\1}\\2");
+            QRegExp re("\\$([^$\\(\\)\\{\\} /]*)( |\\)|/)");
+            newval.replace(re, "$(\\1)\\2");
             if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains("\n") )
                 origValues.append( "\""+newval+"\"" );
             else
