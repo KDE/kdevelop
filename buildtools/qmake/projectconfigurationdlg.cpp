@@ -159,10 +159,10 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
                 removeStaticLibDeps();
             }
             myProjectItem->scope->setEqualOp( "TEMPLATE", "app" );
-            if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
-                myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
             if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "staticlib" );
+            if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
+                myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
         }
         else if ( radioLibrary->isChecked() )
@@ -614,7 +614,7 @@ void ProjectConfigurationDlg::updateControls()
         }
         else
             staticRadio->setChecked( false );
-        if ( configValues.findIndex( "dll" ) != -1 && configValues.findIndex( "staticlib" ) == -1 )
+        if ( configValues.findIndex( "dll" ) != -1 )
         {
             sharedRadio->setChecked( true );
             checkPlugin->setEnabled( true );
