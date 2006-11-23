@@ -1128,6 +1128,8 @@ void Scope::reloadProject()
 
     m_customVariables.clear();
 
+    m_varCache.clear();
+
     if ( m_root->isProject() )
         delete m_root;
     if ( !loadFromFile( filename ) && !QFileInfo( filename ).exists() )
