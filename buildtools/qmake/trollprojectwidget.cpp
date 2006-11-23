@@ -788,7 +788,14 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
             }
         }
 
-        QListViewItem* item = spitem->firstChild();
+        addSubprojectToItem( spitem, subdirname );
+
+    }
+}
+
+void TrollProjectWidget::addSubprojectToItem( QMakeScopeItem* spitem, const QString& subdirname )
+{
+    QListViewItem* item = spitem->firstChild();
         while( item )
         {
             QMakeScopeItem* sitem = static_cast<QMakeScopeItem*>(item);
@@ -824,7 +831,6 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
         }
         spitem->scope->saveToFile();
         spitem->sortChildItems( 0, true );
-    }
 }
 
 void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
@@ -1040,7 +1046,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
 {
     if ( !m_shownSubproject )
         return ;
-
+    kdDebug(9024) << "Files to add:"<<files<<endl;
     m_filesCached = false;
     m_allFilesCache.clear();
 
@@ -1049,7 +1055,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
         QString fileName = *it;
         kdDebug(9024) << "Adding file:" << fileName << " " << relativeToProjectRoot << endl;
 
-        if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) != -1 )
+        if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) != -1 && !fileName.endsWith(".pro") )
         {
             ChooseSubprojectDlg dlg( this, false );
             if ( dlg.exec() == QDialog::Accepted )
@@ -1081,15 +1087,21 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
             noPathFileName = getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(m_shownSubproject->scope->projectDir()+QString(QChar(QDir::separator()))+fileName ) );
 
         kdDebug(9024) << "calc filename:" << noPathFileName << endl;
-        GroupItem *gitem = 0;
-        GroupItem::GroupType gtype = GroupItem::groupTypeForExtension( ext );
-        if ( m_shownSubproject->groups.contains( gtype ) )
-            gitem = m_shownSubproject->groups[ gtype ];
+//         GroupItem *gitem = 0;
+//         GroupItem::GroupType gtype = GroupItem::groupTypeForExtension( ext );
+//         if ( m_shownSubproject->groups.contains( gtype ) )
+//             gitem = m_shownSubproject->groups[ gtype ];
 
 
-        addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
-        slotOverviewSelectionChanged( m_shownSubproject );
-        emitAddedFile ( fileName.mid( m_part->projectDirectory().length() + 1) );
+        if( ext == "pro" )
+        {
+            addSubprojectToItem( findSubprojectForPath( QFileInfo( fileName ).dirPath() ), QFileInfo( fileName ).fileName() );
+        }else
+        {
+            addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
+            slotOverviewSelectionChanged( m_shownSubproject );
+            emitAddedFile ( fileName.mid( m_part->projectDirectory().length() + 1) );
+        }
     }
 
 }
@@ -2092,6 +2104,26 @@ void TrollProjectWidget::createMakefileIfMissing( const QString &dir, QMakeScope
             return ;
         m_part->startQMakeCommand( dir );
     }
+}
+
+QMakeScopeItem* TrollProjectWidget::findSubprojectForPath( const QString& relPath )
+{
+    QStringList dirs = QStringList::split("/", relPath);
+    QMakeScopeItem* pitem = static_cast<QMakeScopeItem*>(m_rootSubproject);
+    for( QStringList::iterator it = dirs.begin(); it != dirs.end(); ++it)
+    {
+        QListViewItem* item = pitem->firstChild();
+        while( item )
+        {
+            QMakeScopeItem* sitem = static_cast<QMakeScopeItem*>(item);
+            if( QFileInfo( sitem->scope->projectDir() ).fileName() == *it )
+            {
+                pitem = sitem;
+                break;
+            }
+        }
+    }
+    return pitem;
 }
 
 QPtrList<QMakeScopeItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )

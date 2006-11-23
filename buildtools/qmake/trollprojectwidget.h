@@ -139,6 +139,7 @@ private:
     void runClean( QMakeScopeItem*, const QString& );
     void buildProjectDetailTree( QMakeScopeItem *item, KListView *listviewControl );
     void removeFile( QMakeScopeItem *spitem, FileItem *fitem );
+    void addSubprojectToItem( QMakeScopeItem*, const QString& );
     void setupContext();
     //     void parseScope(QMakeScopeItem *item,QString scopeString, Scope *scope);
     GroupItem* getInstallRoot( QMakeScopeItem *item );
@@ -153,6 +154,7 @@ private:
     /*fileName: full base file name like QFileInfo::baseName ( true )*/
     QPtrList<QMakeScopeItem> findSubprojectForFile( QFileInfo fi );
     void findSubprojectForFile( QPtrList<QMakeScopeItem> &list, QMakeScopeItem * item, QString absFilePath );
+    QMakeScopeItem* findSubprojectForPath( const QString& );
     //    QString makeEnvironment();
 
     TrollProjectWidget::SaveType dialogSaveBehaviour() const;
