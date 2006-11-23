@@ -1172,6 +1172,12 @@ Scope* Scope::disableSubproject( const QString& dir)
     return 0;
 }
 
+QString Scope::resolveVariables( const QString& value ) const
+{
+    return resolveVariables(QStringList(value),  0).front();
+}
+
+
 QString Scope::resolveVariables( const QString& value, QMake::AST* stopHere ) const
 {
     return resolveVariables(QStringList(value),  stopHere).front();

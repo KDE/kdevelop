@@ -166,6 +166,8 @@ public:
 
     bool isInitializationFinished() const { return m_initFinished; }
 
+    QString resolveVariables( const QString& ) const;
+
 #ifdef DEBUG
     void printTree();
 #endif
@@ -243,7 +245,7 @@ private:
 
     QStringList resolveVariables( const QStringList&, QMake::AST* = 0 ) const;
     QStringList variableValues( const QString& variable, QMake::AST* ) const;
-    QString resolveVariables( const QString& , QMake::AST* = 0 ) const;
+    QString resolveVariables( const QString& , QMake::AST* ) const;
 
     void allFiles( const QString&, std::set<QString>& );
 

@@ -606,7 +606,7 @@ void TrollProjectWidget::slotDetailsExecuted( QListViewItem *item )
 
     }
     else
-        m_part->partController() ->editDocument( KURL( dirName + QString( QChar( QDir::separator() ) ) + QString( fitem->text( 0 ) ) ) );
+        m_part->partController() ->editDocument( KURL( dirName + QString( QChar( QDir::separator() ) ) + QString( m_shownSubproject->scope->resolveVariables( fitem->text( 0 ) ) ) ) );
 }
 
 
