@@ -67,7 +67,7 @@ Scope::~Scope()
 
     m_customVariables.clear();
 
-    if( !m_parent && m_root->isProject() )
+    if( !m_parent && m_root && m_root->isProject() )
         delete m_defaultopts;
 
     if ( m_root && m_root->isProject() )
