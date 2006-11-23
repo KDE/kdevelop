@@ -167,14 +167,19 @@ void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context
             bool isOpen = true;
             for (KURL::List::const_iterator it = m_splitURLs.begin(); it != m_splitURLs.end(); ++it)
             {
-                if (!PartController::getInstance()->openURLs().contains(*it))
+                if (!PartController::getInstance()->openURLs().contains(*it) && (*it).isValid())
                 {
                     isOpen = false;
                     break;
                 }
             }
-            if (isOpen && PartController::getInstance()->openURLs().count() == 1)
+            
+            if ( (isOpen && PartController::getInstance()->openURLs().count() == 1) || 
+                 (m_splitURLs.count() == 1 && !(*m_splitURLs.begin()).isValid() ) )
+            {
                 return;
+            }
+                 
             popupMenu->insertSeparator();
             if (isOpen)
             {
