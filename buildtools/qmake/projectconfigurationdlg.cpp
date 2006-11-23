@@ -647,12 +647,10 @@ void ProjectConfigurationDlg::updateControls()
             checkPkgconf->setChecked( true );
         else
             checkPkgconf->setChecked( false );
-        groupTemplateChanged(1);
     }
     else if ( templateValues.findIndex( "subdirs" ) != -1 )
     {
         radioSubdirs->setChecked( true );
-        groupTemplateChanged(2);
     }else
     {
         //Default is app mode
@@ -661,7 +659,6 @@ void ProjectConfigurationDlg::updateControls()
         {
             checkConsole->setChecked( true );
         }
-        groupTemplateChanged(0);
     }
 
     // Buildmode
@@ -853,6 +850,7 @@ void ProjectConfigurationDlg::updateControls()
         item->setMultiLinesEnabled(true);
     }
 
+    groupTemplateChanged(0);
 }
 
 QPtrList<QMakeScopeItem> ProjectConfigurationDlg::getAllProjects()
@@ -1587,6 +1585,7 @@ void ProjectConfigurationDlg::groupTemplateChanged( int )
         TabBuild->setTabEnabled( incaddTab, false );
         TabBuild->setTabEnabled( buildOptsTab, false );
         TabBuild->setTabEnabled( configTab, false );
+        TabBuild->setTabEnabled( depTab, true );
         intDeps_view->setEnabled( false );
         intMoveUp_button->setEnabled( false );
         intMoveDown_button->setEnabled( false );
