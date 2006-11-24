@@ -495,7 +495,7 @@ void KDevFileSelector::showEvent( QShowEvent * )
 class ActionLBItem : public Q3ListBoxPixmap
 {
 public:
-    ActionLBItem( Q3ListBox *lb=0,
+    ActionLBItem( QListWidget *lb=0,
                   const QPixmap &pm = QPixmap(),
                   const QString &text=QString::null,
                   const QString &str=QString::null ) :
@@ -536,10 +536,10 @@ KFSConfigPage::KFSConfigPage( QWidget *parent, const char *name, KDevFileSelecto
     acSel->setAvailableLabel( i18n("A&vailable actions:") );
     acSel->setSelectedLabel( i18n("S&elected actions:") );
     lo->addWidget( gbToolbar );
-    connect( acSel, SIGNAL( added( Q3ListBoxItem * ) ), this, SLOT( slotChanged() ) );
-    connect( acSel, SIGNAL( removed( Q3ListBoxItem * ) ), this, SLOT( slotChanged() ) );
-    connect( acSel, SIGNAL( movedUp( Q3ListBoxItem * ) ), this, SLOT( slotChanged() ) );
-    connect( acSel, SIGNAL( movedDown( Q3ListBoxItem * ) ), this, SLOT( slotChanged() ) );
+    connect( acSel, SIGNAL( added( QListWidgetItem * ) ), this, SLOT( slotChanged() ) );
+    connect( acSel, SIGNAL( removed( QListWidgetItem * ) ), this, SLOT( slotChanged() ) );
+    connect( acSel, SIGNAL( movedUp( QListWidgetItem * ) ), this, SLOT( slotChanged() ) );
+    connect( acSel, SIGNAL( movedDown( QListWidgetItem * ) ), this, SLOT( slotChanged() ) );
 
     // Sync
     Q3GroupBox *gbSync = new Q3GroupBox( 1, Qt::Horizontal, i18n("Auto Synchronization"), this );
@@ -636,7 +636,7 @@ void KFSConfigPage::apply()
     config->setGroup( "fileselector" );
     // toolbar
     QStringList l;
-    Q3ListBoxItem *item = acSel->selectedListBox()->firstItem();
+    QListWidgetItem *item = acSel->selectedListWidget()->firstItem();
     ActionLBItem *aItem;
     while ( item )
     {
@@ -705,10 +705,10 @@ void KFSConfigPage::init()
     "bookmarks" << "sync_dir";
     QRegExp re("&(?=[^&])");
     KAction *ac;
-    Q3ListBox *lb;
+    QListWidget *lb;
     for ( QStringList::Iterator it=allActions.begin(); it != allActions.end(); ++it )
     {
-        lb = l.contains( *it ) ? acSel->selectedListBox() : acSel->availableListBox();
+        lb = l.contains( *it ) ? acSel->selectedListWidget() : acSel->availableListWidget();
         if ( *it == "bookmarks" || *it == "sync_dir" )
             ac = fileSelector->actionCollection()->action( *it );
         else

@@ -8,7 +8,6 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util
 set(kdevfileselector_PART_SRCS
     fileselector_part.cpp
     fileselector_widget.cpp
-    kactionselector.cpp
     kbookmarkhandler.cpp
 )
 
