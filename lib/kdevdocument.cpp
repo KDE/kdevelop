@@ -69,8 +69,11 @@ bool KDevDocument::isActive() const
 bool KDevDocument::isInitialized() const
 {
     Q_ASSERT(m_part);
-    KParts::ReadWritePart *rw = qobject_cast<KParts::ReadWritePart*>( m_part );
-    return rw->url().isValid();
+    if ( KParts::ReadWritePart *rw = qobject_cast<KParts::ReadWritePart*>( m_part ) )
+    {
+        return rw->url().isValid();
+    }
+    return false;
 }
 
 bool KDevDocument::isReadWrite() const

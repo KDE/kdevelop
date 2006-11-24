@@ -112,8 +112,10 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
     {
         if ( !existingDoc->isInitialized() )
         {
-            KParts::ReadWritePart * rw = readWrite( existingDoc->part() );
-            rw->openUrl( url );
+            if ( KParts::ReadOnlyPart * ro = readOnly( existingDoc->part() ) )
+            {
+                ro->openUrl( url );
+            }
         }
 
         addHistoryEntry();
