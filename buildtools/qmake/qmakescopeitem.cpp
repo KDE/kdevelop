@@ -157,7 +157,7 @@ void GroupItem::addFileToScope( const QString& filename )
 
     FileItem *fitem = owner->createFileItem( filename );
 
-    fitem->uiFileLink = owner->m_widget->getUiFileLink( owner->relativePath() + QString( QChar( QDir::separator() ) ), filename );
+    fitem->uiFileLink = owner->m_widget->getUiFileLink( owner->relativePath() + QString( QChar( QDir::separator() ) ), owner->scope->resolveVariables( filename ) );
     files.append( fitem );
     switch ( groupType )
     {
@@ -660,7 +660,7 @@ void QMakeScopeItem::buildGroups()
     for ( it = values.begin(); it != values.end(); ++it )
     {
         FileItem* fitem = createFileItem( *it );
-        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QString( QChar( QDir::separator() ) ), *it );
+        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QString( QChar( QDir::separator() ) ), scope->resolveVariables( *it ) );
         item->files.append( fitem );
     }
 
@@ -670,7 +670,7 @@ void QMakeScopeItem::buildGroups()
     for ( it = values.begin(); it != values.end(); ++it )
     {
         FileItem* fitem = createFileItem( *it );
-        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QString( QChar( QDir::separator() ) ), *it );
+        fitem->uiFileLink = m_widget->getUiFileLink( relativePath() + QString( QChar( QDir::separator() ) ), scope->resolveVariables( *it ) );
         item->files.append( fitem );
     }
 

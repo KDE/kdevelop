@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>508</width>
-            <height>205</height>
+            <width>500</width>
+            <height>280</height>
         </rect>
     </property>
     <property name="caption">
@@ -83,10 +83,10 @@
                         <cstring>radioAsk</cstring>
                     </property>
                     <property name="text">
-                        <string>A&amp;sk</string>
+                        <string>As&amp;k</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+S</string>
+                        <string>Alt+K</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -100,6 +100,45 @@
                 </widget>
             </vbox>
         </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>checkReplacePaths</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Replace File Paths with matching Variables</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>This replaces the relative paths of added files with existing custom variables if the value assigned to it is the same as the path.</string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>61</height>
+                </size>
+            </property>
+        </spacer>
     </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>

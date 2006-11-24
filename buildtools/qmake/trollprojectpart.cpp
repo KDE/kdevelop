@@ -480,7 +480,7 @@ void TrollProjectPart::addFile(const QString &fileName)
 	QStringList fileList;
 	fileList.append ( fileName );
 
-	this->addFiles ( fileList );
+    this->addFiles ( QStringList( fileName ) );
 }
 
 void TrollProjectPart::addFiles ( const QStringList &fileList )

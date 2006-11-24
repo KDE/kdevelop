@@ -92,10 +92,6 @@ public:
     Scope* parent() const { return m_parent; }
 
     // Fetching sub-scopes
-//     const QValueList<Scope*> functionScopes() const;
-//     const QValueList<Scope*> simpleScopes() const;
-//     const QValueList<Scope*> includeScopes() const;
-//     const QValueList<Scope*> subProjectScopes() const;
     const QValueList<Scope*> scopesInOrder() const { return m_scopes.values(); }
     // Working on SubScopes
     /*
@@ -167,6 +163,8 @@ public:
     bool isInitializationFinished() const { return m_initFinished; }
 
     QString resolveVariables( const QString& ) const;
+
+    QString findCustomVarForPath( const QString& );
 
 #ifdef DEBUG
     void printTree();

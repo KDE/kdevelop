@@ -700,8 +700,8 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             }else if ( origValues.isEmpty() )
                 origValues.append(" ");
             QString newval = *it;
-            QRegExp re("\\$([^$\\(\\)\\{\\} /]*)( |\\)|/)");
-            newval.replace(re, "$(\\1)\\2");
+            QRegExp re("([^$])\\$([^$\\(\\)\\{\\} /]*)( |\\)|/)");
+            newval.replace(re, "\1$(\\2)\\3");
             if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains("\n") )
                 origValues.append( "\""+newval+"\"" );
             else
@@ -1399,6 +1399,28 @@ QStringList Scope::allFiles( const QString& projectDir )
     allFiles( projectDir, files );
     for( std::set<QString>::const_iterator it = files.begin(); it != files.end() ; ++it )
         result.append( *it );
+    return result;
+}
+
+QString Scope::findCustomVarForPath( const QString& path )
+{
+    QString result;
+    if( !m_root )
+        return result;
+
+    QMap<unsigned int, QMake::AssignmentAST*>::const_iterator it = m_customVariables.begin();
+    for( ; it != m_customVariables.end(); ++it )
+    {
+        kdDebug(9024) << "Checking " << path << " against " << removeWhiteSpace(it.data()->values) << endl;
+        if( !it.data()->values.isEmpty() && removeWhiteSpace(it.data()->values).front() == path )
+        {
+            return it.data()->scopedID;
+        }
+    }
+    if( scopeType() != ProjectScope )
+    {
+        return parent()->findCustomVarForPath( path );
+    }
     return result;
 }
 

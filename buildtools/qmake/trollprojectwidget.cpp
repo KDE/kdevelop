@@ -470,18 +470,18 @@ QString TrollProjectWidget::getCurrentTarget()
 {
     if ( !m_shownSubproject )
         return "";
-    QString destdir = m_shownSubproject->scope->variableValues( "DESTDIR" ).front();
+    QString destdir = m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "DESTDIR" ).front());
     if ( destdir.isEmpty() )
-        return destdir + m_shownSubproject->scope->variableValues( "TARGET" ).front();
+        return destdir + m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET" ).front());
     else
-        return destdir + QString( QChar( QDir::separator() ) ) + m_shownSubproject->scope->variableValues( "TARGET" ).front();
+        return destdir + QString( QChar( QDir::separator() ) ) + m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET" ).front());
 }
 
 QString TrollProjectWidget::getCurrentDestDir()
 {
     if ( !m_shownSubproject )
         return "";
-    return m_shownSubproject->scope->variableValues( "DESTDIR" ).front();
+    return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "DESTDIR" ).front());
 }
 
 QString TrollProjectWidget::getCurrentOutputFilename()
@@ -490,11 +490,11 @@ QString TrollProjectWidget::getCurrentOutputFilename()
         return "";
     if ( m_shownSubproject->scope->variableValues( "TARGET" ).isEmpty() )
     {
-        QString exe = m_shownSubproject->scope->fileName();
+        QString exe = m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->fileName());
         return exe.replace( QRegExp( "\\.pro$" ), "" );
     }
     else
-        return m_shownSubproject->scope->variableValues( "TARGET" ).front();
+        return m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET" ).front());
 }
 
 void TrollProjectWidget::cleanDetailView( QMakeScopeItem *item )
@@ -597,6 +597,7 @@ void TrollProjectWidget::slotDetailsExecuted( QListViewItem *item )
     FileItem *fitem = static_cast<FileItem*>( pvitem );
 
     bool isUiFile = QFileInfo( fitem->text( 0 ) ).extension() == "ui";
+    kdDebug(9024) << "Opening file: " << dirName + "/" + m_shownSubproject->scope->resolveVariables( fitem->text( 0 ) ) << endl;
     if ( isTMakeProject() && isUiFile )
     {
         // start designer in your PATH
@@ -776,9 +777,10 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
         {
             kdDebug(9024) << "Cleaned subdirname: " << subdirname << endl;
             QDir dir( projectdir );
-            if ( !dir.exists( subdirname ) )
+            QString realdir = spitem->scope->resolveVariables( subdirname );
+            if ( !dir.exists( realdir ) )
             {
-                if ( !dir.mkdir( subdirname ) )
+                if ( !dir.mkdir( realdir ) )
                 {
                     KMessageBox::error( this, i18n( "Failed to create subdirectory. "
                                                 "Do you have write permission "
@@ -796,41 +798,41 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
 void TrollProjectWidget::addSubprojectToItem( QMakeScopeItem* spitem, const QString& subdirname )
 {
     QListViewItem* item = spitem->firstChild();
-        while( item )
+    while( item )
+    {
+        QMakeScopeItem* sitem = static_cast<QMakeScopeItem*>(item);
+        if( sitem->scope->scopeName() == subdirname )
         {
-            QMakeScopeItem* sitem = static_cast<QMakeScopeItem*>(item);
-            if( sitem->scope->scopeName() == subdirname )
+            if( sitem->scope->isEnabled() )
             {
-                if( sitem->scope->isEnabled() )
-                {
+                return;
+            }else
+            {
+                spitem->scope->removeFromMinusOp( "SUBDIRS", subdirname );
+                delete item;
+                if( spitem->scope->variableValues( "SUBDIRS" ).findIndex( subdirname ) != -1 )
                     return;
-                }else
-                {
-                    spitem->scope->removeFromMinusOp( "SUBDIRS", subdirname );
-                    delete item;
-                    if( spitem->scope->variableValues( "SUBDIRS" ).findIndex( subdirname ) != -1 )
-                        return;
-                }
             }
-            item = item->nextSibling();
         }
+        item = item->nextSibling();
+    }
 
-        Scope* subproject = spitem->scope->createSubProject( subdirname );
-        if( subproject )
-        {
-            new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
+    Scope* subproject = spitem->scope->createSubProject( subdirname );
+    if( subproject )
+    {
+        new QMakeScopeItem( spitem, subproject->scopeName(), subproject );
 //             QListViewItem* lastitem = spitem->firstChild();
 //             while( lastitem->nextSibling() != 0 )
 //                 lastitem = lastitem->nextSibling();
 //             newitem->moveItem( lastitem );
-        }else
-        {
-            KMessageBox::error(this, i18n("Couldn't create subproject. This means that either the project you wanted"
-                                          " to add a subproject isn't parsed correctly or it's not a"
-                                          " subdirs-project."), i18n("Subproject creation failed") );
-        }
-        spitem->scope->saveToFile();
-        spitem->sortChildItems( 0, true );
+    }else
+    {
+        KMessageBox::error(this, i18n("Couldn't create subproject. This means that either the project you wanted"
+                                      " to add a subproject isn't parsed correctly or it's not a"
+                                      " subdirs-project."), i18n("Subproject creation failed") );
+    }
+    spitem->scope->saveToFile();
+    spitem->sortChildItems( 0, true );
 }
 
 void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
@@ -1046,7 +1048,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
 {
     if ( !m_shownSubproject )
         return ;
-    kdDebug(9024) << "Files to add:"<<files<<endl;
+    kdDebug(9024) << "Files to add:"<<files << " " << relativeToProjectRoot <<endl;
     m_filesCached = false;
     m_allFilesCache.clear();
 
@@ -1060,7 +1062,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
             ChooseSubprojectDlg dlg( this, false );
             if ( dlg.exec() == QDialog::Accepted )
             {
-                if ( dlg.selectedSubproject() || dlg.selectedSubproject()->scope->variableValues("TEMPLATE").findIndex( "subdirs" ) != -1 )
+                if ( dlg.selectedSubproject() && dlg.selectedSubproject()->scope->variableValues("TEMPLATE").findIndex( "subdirs" ) != -1 )
                 {
                     fileName = getRelativePath( dlg.selectedSubproject()->scope->projectDir() ,
                                                 QDir::cleanDirPath(
@@ -1086,6 +1088,15 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
         else
             noPathFileName = getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(m_shownSubproject->scope->projectDir()+QString(QChar(QDir::separator()))+fileName ) );
 
+        if( DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/replacePaths", false ) )
+        {
+            QString var = m_shownSubproject->scope->findCustomVarForPath( QFileInfo( noPathFileName ).dirPath() );
+            if( !var.isEmpty() )
+            {
+                noPathFileName = "$${"+var+"}"+QString( QChar( QDir::separator() ) )+QFileInfo( noPathFileName ).fileName();
+            }
+        }
+
         kdDebug(9024) << "calc filename:" << noPathFileName << endl;
 //         GroupItem *gitem = 0;
 //         GroupItem::GroupType gtype = GroupItem::groupTypeForExtension( ext );
@@ -1100,7 +1111,11 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
         {
             addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
             slotOverviewSelectionChanged( m_shownSubproject );
-            emitAddedFile ( fileName.mid( m_part->projectDirectory().length() + 1) );
+            kdDebug(9024) << "emitting" << relativeToProjectRoot << " " << fileName << endl;
+            if( relativeToProjectRoot )
+                emitAddedFile ( projectDirectory()+QString( QChar( QDir::separator() ) ) + fileName );
+            else
+                emitAddedFile ( m_shownSubproject->scope->projectDir()+QString( QChar( QDir::separator() ) ) + fileName );
         }
     }
 
@@ -1133,19 +1148,12 @@ void TrollProjectWidget::slotAddFiles()
 
     filter += "\n*|" + i18n( "All Files" );
 
-#if KDE_VERSION >= 310
     AddFilesDialog *dialog = new AddFilesDialog( cleanSubprojectDir,
                              filter,
                              this,
                              "Insert existing files",
                              true, new QComboBox( false ) );
-#else
-    AddFilesDialog *dialog = new AddFilesDialog( cleanSubprojectDir,
-                             filter,
-                             this,
-                             i18n( "Insert Existing Files" ).ascii(),
-                             true );
-#endif
+
     dialog->setMode( KFile::Files | KFile::ExistingOnly | KFile::LocalOnly );
 
     if ( !lastVisited.isEmpty() )
@@ -1489,19 +1497,11 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         }
         else if ( r == idInsExistingFile )
         {
-#if KDE_VERSION >= 310
             AddFilesDialog * dialog = new AddFilesDialog( cleanSubprojectPath,
                                       ext + "|" + title + " (" + ext + ")",
                                       this,
                                       "Add existing files",
                                       true, new QComboBox( false ) );
-#else
-            AddFilesDialog *dialog = new AddFilesDialog( cleanSubprojectPath,
-                                     ext + "|" + title + " (" + ext + ")",
-                                     this,
-                                     "Add existing files",
-                                     true );
-#endif
             dialog->setMode( KFile::Files | KFile::ExistingOnly | KFile::LocalOnly );
             if ( dialog->exec() == QDialog::Rejected )
                 return ;
@@ -1513,16 +1513,16 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                     case AddFilesDialog::Copy:
                         {
                             // Copy selected files to current subproject folder
+                            // and add them to the filelist
                             QString filename = KURL( files[ i ] ).fileName();
                             KIO::NetAccess::file_copy( files[ i ], cleanSubprojectPath + QString( QChar( QDir::separator() ) ) + filename, -1, false, false, this );
-                            // and add them to the filelist
-                            addFileToCurrentSubProject( titem, filename );
+                            QFile testExist( cleanSubprojectPath + QString( QChar( QDir::separator() ) ) + filename );
 
-                            QString fileNameToAdd = m_shownSubproject->relativePath() + QString( QChar( QDir::separator() ) ) + filename;
-                            if ( fileNameToAdd.startsWith( QDir::rootDirPath() ) )
-                                fileNameToAdd = fileNameToAdd.mid( 1 );
-                            QStringList fileList( fileNameToAdd );
-                            emit m_part->addedFilesToProject( fileList );
+                            if ( testExist.exists() )
+                            {
+                                QStringList files( filename );
+                                addFiles( files, false );
+                            }
                         }
                         break;
 
@@ -1535,31 +1535,25 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                             proc->addArgument( files[ i ] );
                             proc->addArgument( cleanSubprojectPath );
                             proc->start();
-                            QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( QString( QChar( QDir::separator() ) ) ) - 1 );
+                            QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( '/' ) - 1 );
                             // and add them to the filelist
-                            addFileToCurrentSubProject( titem, filename );
-
-                            QString fileNameToAdd = m_shownSubproject->relativePath() + QString( QChar( QDir::separator() ) ) + filename;
-                            if ( fileNameToAdd.startsWith( QDir::rootDirPath() ) )
-                                fileNameToAdd = fileNameToAdd.mid( 1 );
-                            QStringList fileList( fileNameToAdd );
-                            emit m_part->addedFilesToProject( fileList );
+                            QFile testExist( cleanSubprojectPath + QString( QChar( QDir::separator() ) ) + filename );
+                            if ( testExist.exists() )
+                            {
+                                QStringList files( filename );
+                                addFiles( files, false );
+                            }
                         }
                         break;
 
                     case AddFilesDialog::Relative:
-                        // Form relative path to current subproject folder
-                        addFileToCurrentSubProject( titem, URLUtil::relativePathToFile(
-                            cleanSubprojectPath , files[ i ] ) );
-
-                        QString fileNameToAdd = URLUtil::canonicalPath( m_shownSubproject->scope->projectDir() +
-                                                QString( QChar( QDir::separator() ) ) +
-                                                URLUtil::relativePathToFile( cleanSubprojectPath , files[ i ] ) );
-                        fileNameToAdd = fileNameToAdd.mid( m_part->projectDirectory().length() + 1 );
-                        if ( fileNameToAdd.startsWith( QDir::rootDirPath() ) )
-                            fileNameToAdd = fileNameToAdd.mid( 1 );
-                        QStringList fileList( fileNameToAdd );
-                        emit m_part->addedFilesToProject( fileList );
+                        {
+                            // Form relative path to current subproject folder
+                            QString theFile = files[ i ];
+                            QStringList files( URLUtil::relativePathToFile( cleanSubprojectPath, theFile )
+                                             );
+                            addFiles( files, false );
+                        }
                         break;
                 }
             }
@@ -1828,7 +1822,7 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 
     m_filesCached = false;
     m_allFilesCache.clear();
-
+    QString realfilename = spitem->scope->resolveVariables( fitem->text( 0 ) );
     if ( KMessageBox::warningYesNo( this,
                                     "<qt>" +
                                     i18n( "Are you sure you wish to remove <strong>%1</strong> from this subproject/scope?" )
@@ -1848,7 +1842,7 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 
     if ( gitem->groupType != GroupItem::InstallObject )
     {
-        QString removedFileName = spitem->relativePath() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 );
+        QString removedFileName = spitem->relativePath() + QString( QChar( QDir::separator() ) ) + realfilename;
         if ( removedFileName.startsWith( QDir::rootDirPath() ) )
             removedFileName = removedFileName.mid( 1 );
         emitRemovedFile( removedFileName );
@@ -1861,7 +1855,7 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
                              "subclass", "sourcefile", "uifile" );
     QPtrList<DomUtil::Pair> pairsToRemove;
     DomUtil::PairList::iterator it;
-    QString file = QString( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ) ).remove( 0, projectDirectory().length() );
+    QString file = QString( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename ).remove( 0, projectDirectory().length() );
     for ( it = list.begin(); it != list.end(); ++it )
     {
         if ( ( ( *it ).first == file ) || ( ( *it ).second == file ) )
@@ -1887,17 +1881,13 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 
 void TrollProjectWidget::emitAddedFile( const QString &fileName )
 {
-    QStringList fileList;
-    fileList.append ( fileName );
-    emit m_part->addedFilesToProject( fileList );
+    emit m_part->addedFilesToProject( QStringList( fileName ) );
 }
 
 
 void TrollProjectWidget::emitRemovedFile( const QString &fileName )
 {
-    QStringList fileList;
-    fileList.append ( fileName );
-    emit m_part->removedFilesFromProject( fileList );
+    emit m_part->removedFilesFromProject( QStringList( fileName ) );
 }
 
 
@@ -2030,7 +2020,7 @@ QString TrollProjectWidget::constructMakeCommandLine( Scope* s )
 {
     QString makeFileName;
     if ( s )
-        makeFileName = s->variableValues( "MAKEFILE" ).front();
+        makeFileName = s->resolveVariables( s->variableValues( "MAKEFILE" ).front() );
 
     QDomDocument & dom = *( m_part->projectDom() );
 
@@ -2094,8 +2084,9 @@ void TrollProjectWidget::createMakefileIfMissing( const QString &dir, QMakeScope
     }
     else
     {
-        fi.setFile( item->scope->variableValues( "MAKEFILE" ).front() );
-        fi2.setFile( dir + QString( QChar( QDir::separator() ) ) + item->scope->variableValues( "MAKEFILE" ).front() );
+        QString realmf = item->scope->resolveVariables( item->scope->variableValues( "MAKEFILE" ).front() );
+        fi.setFile( realmf );
+        fi2.setFile( dir + QString( QChar( QDir::separator() ) ) + realmf );
     }
     if ( !fi.exists() && !fi2.exists() )
     {
@@ -2140,7 +2131,7 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, 
     QStringList vars = item->scope->variableValues( "SOURCES" );
     for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it )
     {
-        QFileInfo fi2( d, *it );
+        QFileInfo fi2( d, item->scope->resolveVariables( *it ) );
         if ( absFilePath == fi2.absFilePath() )
             list.append( item );
     }
@@ -2148,7 +2139,7 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<QMakeScopeItem> &list, 
     vars = item->scope->variableValues( "HEADERS" );
     for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it )
     {
-        QFileInfo fi2( d, *it );
+        QFileInfo fi2( d, item->scope->resolveVariables( *it ) );
         if ( absFilePath == fi2.absFilePath() )
             list.append( item );
     }
@@ -2278,17 +2269,17 @@ void TrollProjectWidget::slotBuildSelectedFile()
 
 void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
 {
-    QFileInfo fi( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ) );
+    QFileInfo fi( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + spitem->scope->resolveVariables( fitem->text( 0 ) ) );
     QString sourceDir = fi.dirPath();
     QString baseName = fi.baseName( true );
-    kdDebug( 9024 ) << "Compiling " << fitem->text( 0 )
+    kdDebug( 9024 ) << "Compiling " << spitem->scope->resolveVariables( fitem->text( 0 ) )
     << "in dir " << sourceDir
     << " with baseName " << baseName << endl;
 
     QString buildDir = sourceDir;
     QString target = baseName + ".o";
     if( !spitem->scope->variableValues("OBJECTS_DIR").isEmpty() )
-        target = spitem->scope->variableValues("OBJECTS_DIR").first()+ QString( QChar( QDir::separator() ) )+target;
+        target = spitem->scope->resolveVariables( spitem->scope->variableValues("OBJECTS_DIR").first() )+ QString( QChar( QDir::separator() ) )+target;
     kdDebug( 9024 ) << "builddir " << buildDir << ", target " << target << endl;
 
     m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
@@ -2306,7 +2297,7 @@ void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
 
 TrollProjectWidget::SaveType TrollProjectWidget::dialogSaveBehaviour() const
 {
-    switch ( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/savebehaviour", 2 ) )
+    switch ( DomUtil::readIntEntry( *m_part->projectDom(), "savebehaviour", 2 ) )
     {
         case 0:
             return AlwaysSave;
