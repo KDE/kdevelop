@@ -1,3 +1,4 @@
+add_subdirectory(parser)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib 
     ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/project
@@ -12,7 +13,7 @@ set(kdevqmakeimporter_PART_SRCS
 
 kde4_automoc(${kdevqmakeimporter_PART_SRCS})
 kde4_add_plugin(kdevqmakeimporter ${kdevqmakeimporter_PART_SRCS})
-target_link_libraries(kdevqmakeimporter ${KDE4_KDECORE_LIBS} kdevplatform)
+target_link_libraries(kdevqmakeimporter ${KDE4_KDECORE_LIBS} kdevplatform kdevqmakeparser)
 
 install(TARGETS kdevqmakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 
