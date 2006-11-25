@@ -187,7 +187,11 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
     m_openRecentAction->saveEntries( KDevConfig::localProject(), "RecentDocuments" );
 
     if ( activate )
+    {
+        activateDocument( document );
         setCursorPosition( part, cursor );
+        emit documentActivated( document );
+    }
 
     emit documentLoaded( document );
 
@@ -842,18 +846,14 @@ bool KDevDocumentController::openAsDialog( const KUrl &url, KMimeType::Ptr mimeT
 
 KDevDocument * KDevDocumentController::addDocument( KParts::Part * part, bool setActive )
 {
+    kDebug(9000) << k_funcinfo << endl;
     KDevDocument * document =
         new KDevDocument( static_cast<KParts::ReadOnlyPart*>( part ), this );
     m_partHash.insert( static_cast<KParts::ReadOnlyPart*>( part ), document );
 
-    if ( setActive )
-    {
-        KDevCore::mainWindow() ->guiFactory() ->removeClient(
-                KDevCore::partController() ->activePart() );
-        KDevCore::mainWindow() ->guiFactory() ->addClient( part );
-    }
-
     KDevCore::partController() ->addPart( part, setActive );
+    if ( setActive )
+        setActiveDocument( document );
 
 //     updateDocumentUrl( document );
     updateMenuItems();
@@ -888,6 +888,7 @@ void KDevDocumentController::replaceDocument( KDevDocument * oldDocument,
 
 void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget *widget )
 {
+    kDebug(9000) << k_funcinfo << endl;
     //Remove the current part from the xmlgui
     KDevCore::mainWindow() ->guiFactory() ->removeClient(
             KDevCore::partController() ->activePart() );
@@ -895,16 +896,13 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
     KDevCore::partController() ->setActivePart( document->part(), widget );
 
     KDevCore::mainWindow() ->guiFactory() ->addClient(
-            KDevCore::partController() ->activePart() );
+            document->part() );
 
-    //     kDebug( 9000 ) << k_funcinfo
-    //     << KDevCore::partController()->activePart()
-    //     << " " << activeDocument() << endl;
+    kDebug( 9000 ) << k_funcinfo << "active part: "
+        << KDevCore::partController()->activePart() << " active document: "
+        << " " << activeDocument() << " document: " << document << endl;
 
     updateMenuItems();
-
-    if ( activeDocument() )
-        emit documentActivated( activeDocument() );
 }
 
 void KDevDocumentController::loadSettings( bool projectIsLoaded )
@@ -1092,6 +1090,7 @@ KParts::Factory *KDevDocumentController::findPartFactory( const QString &mimeTyp
 KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool activate )
 {
     // tell the parts we loaded a document
+    kDebug(9000) << k_funcinfo << "part: " << part << "activate: " << activate << endl;
     KParts::ReadOnlyPart * ro = readOnly( part );
     if ( !ro )
     {
