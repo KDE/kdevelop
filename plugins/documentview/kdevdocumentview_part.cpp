@@ -156,6 +156,7 @@ void KDevDocumentViewPart::closed( KDevDocument* document )
         return ;
 
     m_documentModel->removeItem( mimeItem );
+    m_documentView->doItemsLayout();
 }
 
 void KDevDocumentViewPart::externallyModified( KDevDocument* )
@@ -174,13 +175,9 @@ void KDevDocumentViewPart::stateChanged( KDevDocument* document )
     KDevDocumentItem * documentItem =
         m_documentModel->item( m_doc2index[ document ] );
 
-    if ( !documentItem )
-        return ;
+    if ( documentItem && documentItem->documentState() != document->state() )
+        documentItem->setDocumentState( document->state() );
 
-    if ( documentItem->documentState() == document->state() )
-        return ;
-
-    documentItem->setDocumentState( document->state() );
     m_documentView->doItemsLayout();
 }
 
