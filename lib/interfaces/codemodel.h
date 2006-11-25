@@ -69,125 +69,191 @@ class EnumModel;
 class EnumeratorModel;
 class TypeAliasModel;
 
-/**@class ItemDom
+/**
+@class ItemDom
 Safe pointer to the @ref CodeModelItem.
 This is a type definition: @code typedef KSharedPtr<CodeModelItem> ItemDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<CodeModelItem> ItemDom;
-/**@class FileDom
+
+/**
+@class FileDom
 Safe pointer to the @ref FileModel.
 This is a type definition: @code typedef KSharedPtr<FileModel> FileDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<FileModel> FileDom;
-/**@class NamespaceDom
+
+/**
+@class NamespaceDom
 Safe pointer to the @ref NamespaceModel.
 This is a type definition: @code typedef KSharedPtr<NamespaceModel> NamespaceDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<NamespaceModel> NamespaceDom;
-/**@class ClassDom
+
+/**
+@class ClassDom
 Safe pointer to the @ref ClassModel.
 This is a type definition: @code typedef KSharedPtr<ClassModel> ClassDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<ClassModel> ClassDom;
-/**@class FunctionDom
+
+/**
+@class FunctionDom
 Safe pointer to the @ref FunctionModel.
 This is a type definition: @code typedef KSharedPtr<FunctionModel> FunctionDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<FunctionModel> FunctionDom;
-/**@class FunctionDefinitionDom
+
+/**
+@class FunctionDefinitionDom
 Safe pointer to the @ref FunctionDefinitionModel.
 This is a type definition: @code typedef KSharedPtr<FunctionDefinitionModel> FunctionDefinitionDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<FunctionDefinitionModel> FunctionDefinitionDom;
-/**@class VariableDom
+
+/**
+@class VariableDom
 Safe pointer to the @ref VariableModel.
 This is a type definition: @code typedef KSharedPtr<VariableModel> VariableDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<VariableModel> VariableDom;
-/**@class ArgumentDom
+
+/**
+@class ArgumentDom
 Safe pointer to the @ref ArgumentModel.
 This is a type definition: @code typedef KSharedPtr<ArgumentModel> ArgumentDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<ArgumentModel> ArgumentDom;
-/**@class EnumDom
+
+/**
+@class EnumDom
 Safe pointer to the @ref EnumModel.
 This is a type definition: @code typedef KSharedPtr<EnumModel> EnumDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<EnumModel> EnumDom;
-/**@class TypeAliasDom
+
+/**
+@class TypeAliasDom
 Safe pointer to the @ref TypeAliasModel.
 This is a type definition: @code typedef KSharedPtr<TypeAliasModel> TypeAliasDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<TypeAliasModel> TypeAliasDom;
-/**@class EnumeratorDom
+
+/**
+@class EnumeratorDom
 Safe pointer to the @ref EnumeratorModel.
 This is a type definition: @code typedef KSharedPtr<EnumeratorModel> EnumeratorDom; @endcode
-@sa KSharedPtr*/
+@sa KSharedPtr
+*/
 typedef KSharedPtr<EnumeratorModel> EnumeratorDom;
 
-/**@class ItemList
+/**
+@class ItemList
 The list of code model items.
 This is a type definition: @code typedef QValueList<ItemDom> ItemList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<ItemDom> ItemList;
-/**@class FileList
+
+/**
+@class FileList
 The list of code model files.
 This is a type definition: @code typedef QValueList<FileDom> FileList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<FileDom> FileList;
-/**@class NamespaceList
+
+/**
+@class NamespaceList
 The list of code model namespaces.
 This is a type definition: @code typedef QValueList<NamespaceDom> NamespaceList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<NamespaceDom> NamespaceList;
-/**@class ClassList
+
+/**
+@class ClassList
 The list of code model classes.
 This is a type definition: @code typedef QValueList<ClassDom> ClassList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<ClassDom> ClassList;
-/**@class FunctionList
+
+/**
+@class FunctionList
 The list of code model functions.
 This is a type definition: @code typedef QValueList<FunctionDom> FunctionList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<FunctionDom> FunctionList;
-/**@class FunctionDefinitionList
+
+/**
+@class FunctionDefinitionList
 The list of code model function definitions.
 This is a type definition: @code typedef QValueList<FunctionDefinitionDom> FunctionDefinitionList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
+
 typedef QValueList<FunctionDefinitionDom> FunctionDefinitionList;
-/**@class VariableList
+/**
+@class VariableList
 The list of code model variables.
 This is a type definition: @code typedef QValueList<VariableDom> VariableList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<VariableDom> VariableList;
-/**@class ArgumentList
+
+/**
+@class ArgumentList
 The list of code model arguments.
 This is a type definition: @code typedef QValueList<ArgumentDom> ArgumentList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<ArgumentDom> ArgumentList;
-/**@class EnumList
+
+/**
+@class EnumList
 The list of code model enums.
 This is a type definition: @code typedef QValueList<EnumDom> EnumList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<EnumDom> EnumList;
-/**@class TypeAliasList
+
+/**
+@class TypeAliasList
 The list of code model type aliases.
 This is a type definition: @code typedef QValueList<TypeAliasDom> TypeAliasList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<TypeAliasDom> TypeAliasList;
-/**@class EnumeratorList
+
+/**
+@class EnumeratorList
 The list of code model enumerators.
 This is a type definition: @code typedef QValueList<EnumeratorDom> EnumeratorList; @endcode
-@sa QValueList*/
+@sa QValueList
+*/
 typedef QValueList<EnumeratorDom> EnumeratorList;
 
-/**Iterates through @p lst and creates sorted list of code model item names.
+/**
+Iterates through @p lst and creates sorted list of code model item names.
 Can be used, for example, to get the list of classes in the store:
 @code
 QStringList classList = sortedNameList(codeModel()->globalNamespace()->classList());
 @endcode
 @param lst The list to iterate.
-@return Sorted list of code model item names.*/
+@return Sorted list of code model item names.
+*/
 template <class ItemList>
 QStringList sortedNameList( const ItemList& lst )
 {
@@ -204,7 +270,8 @@ QStringList sortedNameList( const ItemList& lst )
     return nameList;
 }
 
-/**Casts safe code model pointers (@p KSharedPtr<T> objects like
+/**
+Casts safe code model pointers (@p KSharedPtr<T> objects like
 FileDom, NamespaceDom, etc.) to the @p Result type.
 
 Example:
@@ -212,7 +279,8 @@ Example:
 //ns is of type NamespaceDom
 ClassDom cl = model_cast<ClassDom>(ns);
 @endcode
-@param x Object to cast.*/
+@param x Object to cast.
+*/
 template <class Result, class T>
 Result model_cast( KSharedPtr<T> x )
 {
@@ -220,7 +288,8 @@ Result model_cast( KSharedPtr<T> x )
     return r;
 }
 
-/**Casts code model pointers (objects like
+/**
+Casts code model pointers (objects like
 FileModel, NamespaceModel, etc.) to the @p Result type.
 
 Example:
@@ -228,7 +297,8 @@ Example:
 //ns is of type NamespaceModel*
 ClassDom cl = model_cast<ClassDom>(ns);
 @endcode
-@param x Object to cast.*/
+@param x Object to cast.
+*/
 template <class Result, class T>
 Result model_cast( T* x )
 {
@@ -385,7 +455,7 @@ Item is a symbol in a store. Code model provides several predefined classes
 for predefined item types (files, namespaces, classes, functions and function definitions,
 variables, arguments, enums and enumerators, type aliases.
 
-Instanses of this class should be created using @ref CodeModel::create method but usually
+Instances of this class should be created using @ref CodeModel::create method but usually
 it is better to create instances of derived classes like ClassModel, NamespaceModel, FileModel, etc.
 */
 class CodeModelItem: public KShared
@@ -620,7 +690,7 @@ class TemplateModelItem {
 Class model.
 Represents a class in the code model.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class ClassModel: public CodeModelItem, public TemplateModelItem
 {
@@ -960,7 +1030,7 @@ Represents a namespace in the code model.
 Namespace model can represent either usual c++ namespaces
 and packages or modules from other languages.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class NamespaceModel: public ClassModel
 {
@@ -1052,7 +1122,7 @@ Represents a file in the code model.
 Files in general contain classes, namespaces, functions,
 types, etc. Therefore FileModel is derived from NamespaceModel.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class FileModel: public NamespaceModel
 {
@@ -1103,7 +1173,7 @@ private:
 Function (procedure) argument model.
 Represents an argument in the function.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class ArgumentModel: public CodeModelItem
 {
@@ -1157,7 +1227,7 @@ In languages that have separate function declarations and definitions (c++)
 this represents only function declarations. @see FunctionDefinitionModel 
 for a model of function definitions.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class FunctionModel: public CodeModelItem, public TemplateModelItem
 {
@@ -1292,7 +1362,7 @@ private:
 Function model.
 Represents function definition for languages that have such.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class FunctionDefinitionModel: public FunctionModel
 {
@@ -1318,7 +1388,7 @@ private:
 Variable model.
 Represents variables and class attributes.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class VariableModel: public CodeModelItem
 {
@@ -1380,7 +1450,7 @@ private:
 Enum model.
 Represents enums.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class EnumModel: public CodeModelItem
 {
@@ -1440,7 +1510,7 @@ enum Type { A, B, C};
 Type is represented as EnumModel;\n
 A, B, C are represented with EnumeratorModel.
 
-Instanses of this class should be created using @ref CodeModel::create method.
+Instances of this class should be created using @ref CodeModel::create method.
 */
 class EnumeratorModel: public CodeModelItem
 {
@@ -1478,7 +1548,7 @@ private:
 
 /**
 Type alias model.
-Represents type aliases (like aliases in Ada and typedefs in c++).
+Represents type aliases (like subtypes/derived types in Ada and typedefs in c++).
 */
 class TypeAliasModel: public CodeModelItem
 {
