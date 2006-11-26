@@ -34,10 +34,6 @@ const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "releas
 Scope::Scope( const QString &filename, TrollProjectPart* part )
     : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0), m_initFinished(false)
 {
-    m_defaultopts = new QMakeDefaultOpts();
-    connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
-    m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
-                                 QFileInfo( filename ).dirPath( true ) );
 
     if ( !loadFromFile( filename ) )
     {
@@ -52,7 +48,10 @@ Scope::Scope( const QString &filename, TrollProjectPart* part )
         }
     }
     if( m_root )
+    {
         m_part->dirWatch()->addFile(filename);
+        loadDefaultOpts();
+    }
 }
 
 Scope::~Scope()
@@ -73,6 +72,8 @@ Scope::~Scope()
     if ( m_root && m_root->isProject() )
         delete m_root;
     m_root = 0;
+    delete m_unfinishedScopes;
+    m_unfinishedScopes = 0;
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope,
@@ -84,14 +85,10 @@ Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope,
 }
 
 Scope::Scope( unsigned int num, Scope* parent, const QString& filename,
-              TrollProjectPart* part, QMakeDefaultOpts* defaultopts, bool isEnabled )
+              TrollProjectPart* part, bool isEnabled )
     : m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ),
     m_part(part), m_defaultopts(0), m_initFinished(false)
 {
-    m_defaultopts = new QMakeDefaultOpts();
-    connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
-    m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
-                                 QFileInfo( filename ).dirPath( true ) );
     if ( !loadFromFile( filename ) )
     {
         if( !QFileInfo( filename ).exists() && QFileInfo( QFileInfo( filename ).dirPath( true ) ).exists() )
@@ -547,7 +544,8 @@ Scope* Scope::createSubProject( const QString& projname )
 
         kdDebug( 9024 ) << "Creating subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, m_defaultopts );
+        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part );
+        s->loadDefaultOpts();
         if ( s->scopeType() != InvalidScope )
         {
             if( s->variableValues("TEMPLATE").isEmpty() )
@@ -848,8 +846,9 @@ void Scope::init()
     if( !m_root )
         return;
 
-    kdDebug(9024) << "Initializing Scope: " << scopeName() << endl;
+    kdDebug(9024) << "Initializing Scope: " << scopeName() << this << endl;
     m_maxCustomVarNum = 1;
+    m_unfinishedScopes = new QValueList<Scope*>();
 
     QValueList<QMake::AST*>::const_iterator it;
     for ( it = m_root->m_children.begin(); it != m_root->m_children.end(); ++it )
@@ -857,7 +856,8 @@ void Scope::init()
         if ( ( *it ) ->nodeType() == QMake::AST::ProjectAST )
         {
             QMake::ProjectAST * p = static_cast<QMake::ProjectAST*>( *it );
-            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, p, m_defaultopts, m_part ) );
+            Scope* s = new Scope( getNextScopeNum(), this, p, m_defaultopts, m_part );
+            m_scopes.insert( getNextScopeNum(), s );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::IncludeAST )
         {
@@ -867,7 +867,8 @@ void Scope::init()
             {
                 filename = resolveVariables(i->projectName, *it);
             }
-            m_scopes.insert( getNextScopeNum(), new Scope( getNextScopeNum(), this, i, projectDir(), filename, m_defaultopts, m_part ) );
+            Scope* s = new Scope( getNextScopeNum(), this, i, projectDir(), filename, m_defaultopts, m_part );
+            m_scopes.insert( getNextScopeNum(), s );
         }
         else if ( ( *it ) ->nodeType() == QMake::AST::AssignmentAST )
         {
@@ -912,10 +913,14 @@ void Scope::init()
 
                     }
                     kdDebug( 9024 ) << "Parsing subproject: " << projectfile << endl;
-                    m_scopes.insert( getNextScopeNum(),
-                                     new Scope( getNextScopeNum(), this,
+                    Scope* s = new Scope( getNextScopeNum(), this,
                                                 subproject.absFilePath( projectfile ),
-                                                m_part, m_defaultopts, ( m->op != "-=" )) );
+                                         m_part, ( m->op != "-=" ));
+                    m_unfinishedScopes->append( s );
+                    connect( s, SIGNAL( initializationFinished( Scope* ) ),
+                             this, SLOT( emitInitFinished( Scope * ) ) );
+                    m_scopes.insert( getNextScopeNum(), s );
+                    s->loadDefaultOpts();
                 }
             }
             else
@@ -940,7 +945,7 @@ void Scope::init()
         }
     }
     m_initFinished = true;
-    emit initializationFinished();
+    emitInitFinished( 0 );
 }
 
 QString Scope::projectName() const
@@ -1168,7 +1173,7 @@ Scope* Scope::disableSubproject( const QString& dir)
 
         kdDebug( 9024 ) << "Disabling subproject with filename:" << filename << endl;
 
-        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, m_defaultopts, false );
+        Scope* s = new Scope( getNextScopeNum(), this, filename, m_part, false );
         addToMinusOp( "SUBDIRS", QStringList( dir ) );
         m_scopes.insert( getNextScopeNum(), s );
         return s;
@@ -1425,6 +1430,38 @@ QString Scope::findCustomVarForPath( const QString& path )
         return parent()->findCustomVarForPath( path );
     }
     return result;
+}
+
+void Scope::emitInitFinished( Scope* s )
+{
+    kdDebug( 9024 ) << "Emitting from " << this << " for " << s << endl;
+    if( s )
+    {
+        m_unfinishedScopes->remove( s );
+        disconnect( s, SIGNAL( initializationFinished( Scope* ) ) );
+    }
+    if( m_unfinishedScopes->isEmpty() )
+    {
+        kdDebug( 9024 ) << "All subscopes done, emitting" << endl;
+        delete m_unfinishedScopes;
+        m_unfinishedScopes = 0;
+        if( parent() )
+            emit initializationFinished( this );
+        else
+            emit initializationFinished();
+    }
+}
+
+void Scope::loadDefaultOpts()
+{
+    if( !m_defaultopts && m_root )
+    {
+        m_defaultopts = new QMakeDefaultOpts();
+        connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
+        m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
+                                      QFileInfo( m_root->fileName() ).dirPath( true ) );
+
+    }
 }
 
 #ifdef DEBUG

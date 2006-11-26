@@ -172,10 +172,12 @@ public:
 
 signals:
     void initializationFinished();
+    void initializationFinished( Scope* );
 
 private slots:
     // Builds the scope-lists and the customVariables list
     void init();
+    void emitInitFinished( Scope* );
 
 private:
     /*
@@ -213,7 +215,7 @@ private:
      * reads the given filename and parses it. If it doesn't exist creates an empty
      * ProjectAST with the given filename
      */
-    Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, QMakeDefaultOpts*, bool isEnabled = true );
+    Scope( unsigned int num, Scope* parent, const QString& filename, TrollProjectPart* part, bool isEnabled = true );
     /*
      * Creates a scope for an include statement, parses the file and initializes the Scope
      * Create an empty ProjectAST if the file cannot be found or parsed.
@@ -247,6 +249,8 @@ private:
 
     void allFiles( const QString&, std::set<QString>& );
 
+    void loadDefaultOpts();
+
     QMake::ProjectAST* m_root;
     QMake::IncludeAST* m_incast;
     QMap<unsigned int, QMake::AssignmentAST*> m_customVariables;
@@ -264,6 +268,7 @@ private:
     QMakeDefaultOpts* m_defaultopts;
     bool m_initFinished;
     QMap<QString, QStringList> m_varCache;
+    QValueList<Scope*>* m_unfinishedScopes;
 
 #ifdef DEBUG
     class PrintAST : QMake::ASTVisitor
