@@ -86,8 +86,12 @@ Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope,
 Scope::Scope( unsigned int num, Scope* parent, const QString& filename,
               TrollProjectPart* part, QMakeDefaultOpts* defaultopts, bool isEnabled )
     : m_root( 0 ), m_incast( 0 ), m_parent( parent ), m_num(num), m_isEnabled( isEnabled ),
-    m_part(part), m_defaultopts(defaultopts), m_initFinished(false)
+    m_part(part), m_defaultopts(0), m_initFinished(false)
 {
+    m_defaultopts = new QMakeDefaultOpts();
+    connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
+    m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
+                                 QFileInfo( filename ).dirPath( true ) );
     if ( !loadFromFile( filename ) )
     {
         if( !QFileInfo( filename ).exists() && QFileInfo( QFileInfo( filename ).dirPath( true ) ).exists() )
@@ -103,7 +107,6 @@ Scope::Scope( unsigned int num, Scope* parent, const QString& filename,
     }
     if( m_root )
         m_part->dirWatch()->addFile(filename);
-    init();
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const QString& path,
