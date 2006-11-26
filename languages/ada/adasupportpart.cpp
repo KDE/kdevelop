@@ -238,7 +238,8 @@ void AdaSupportPart::parse (const QString &fileName)
 
         parser.compilation_unit ();
         int errors = lexer.numberOfErrors () + parser.numberOfErrors ();
-        RefAdaAST ast = parser.getAST ();
+        antlr::RefAST antlrAst = parser.getAST ();
+        RefAdaAST ast = static_cast<RefAdaAST>(antlrAst);
 
         if (errors == 0 && ast != antlr::nullAST) {
             kdDebug () << "-------------------> start StoreWalker" << endl;
