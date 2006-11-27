@@ -21,6 +21,7 @@
 #ifndef PARSETEST_H
 #define PARSETEST_H
 
+#include <QtCore/QObject>
 #include <QtTest/QtTest>
 
 class ParseTest : public QObject

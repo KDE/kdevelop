@@ -19,6 +19,7 @@
  */
 
 #include "parsetest.h"
+#include "qmakeparser.h"
 
 QTEST_MAIN( ParseTest );
 
@@ -32,7 +33,8 @@ ParseTest::~ParseTest()
 void ParseTest::successSimpleProject()
 {
     QFETCH( QString, project );
-    bool ret = QMake::Driver::parseString( project );
+    QMake::ProjectAST* a;
+    bool ret = QMake::Parser::parseString( project, &a );
     QVERIFY( ret );
 }
 
@@ -45,8 +47,9 @@ void ParseTest::successSimpleProject_data()
 void ParseTest::failSimpleProject()
 {
     QFETCH( QString, project );
-    bool ret = QMake::Driver::parseString( project );
-    QVERIFY( ret );
+    QMake::ProjectAST* a;
+    bool ret = QMake::Parser::parseString( project, &a );
+    QVERIFY( !ret );
 }
 
 void ParseTest::failSimpleProject_data()
@@ -58,7 +61,8 @@ void ParseTest::failSimpleProject_data()
 void ParseTest::successFullProject()
 {
     QFETCH( QString, project );
-    bool ret = QMake::Driver::parseString( project );
+    QMake::ProjectAST* a;
+    bool ret = QMake::Parser::parseString( project, &a );
     QVERIFY( ret );
 }
 
@@ -72,8 +76,9 @@ void ParseTest::successFullProject_data()
 void ParseTest::failFullProject()
 {
     QFETCH( QString, project );
-    bool ret = QMake::Driver::parseString( project );
-    QVERIFY( ret );
+    QMake::ProjectAST* a;
+    bool ret = QMake::Parser::parseString( project, &a );
+    QVERIFY( !ret );
 }
 
 void ParseTest::failFullProject_data()
@@ -82,6 +87,8 @@ void ParseTest::failFullProject_data()
     QTest::newRow( "row1" ) << "foo()";
     QTest::newRow( "row2" ) << "{";
 }
+
+#include "parsetest.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 
