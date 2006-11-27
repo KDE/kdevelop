@@ -137,6 +137,7 @@ class LexerCache : public CacheManager {
         return str;
       }
     }
+    virtual void saveMemory();
   private:
     ///before this can be called, initFileModificationCache should be called once
     QDateTime fileModificationTimeCached( const HashedString& fileName );

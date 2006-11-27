@@ -290,7 +290,7 @@ class Driver::ParseHelper {
       else
         m_driver->findOrInsertProblemList( m_driver->m_currentMasterFileName )  += m_driver->m_currentLexerCache->problems();
       
-      if( !lexedFileP ) //only add the new cache-instance if a fitting isn't already stored
+      if( !lexedFileP && m_previousParsedFile ) //only add the new cache-instance if a fitting isn't already stored, and if this file was included by another one.
         m_driver->m_lexerCache.addLexedFile( m_driver->m_currentLexerCache );
       }
 

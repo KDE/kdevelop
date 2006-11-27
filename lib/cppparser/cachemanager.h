@@ -78,6 +78,8 @@ class CacheManager {
     ///Can be used on a regular basis(time-triggered) to save memory: Removes half of all triggered 
     void removeLowerHalf();
 
+    virtual void saveMemory();
+
     int currentMax() const {
       return m_currentMax;
     }

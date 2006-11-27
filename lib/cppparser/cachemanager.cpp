@@ -71,8 +71,7 @@ void CacheManager::increaseFrame() {
     int mustErase = m_set.size() - m_maxNodes;
     while( !m_set.empty() && mustErase != 0 ) {
       --mustErase;
-      SetType::iterator it = m_set.end();
-      --it;
+      SetType::iterator it = m_set.begin();
       erase( *it );
     }
     kdDebug( 9007 ) << "CacheManager: Have " << m_set.size() << " nodes after erasing." << endl;
@@ -83,4 +82,8 @@ void CacheManager::removeLowerHalf() {
   int maxNodes = m_maxNodes;
   setMaxNodes( m_set.size() / 2 );
   setMaxNodes( maxNodes );
+}
+
+void CacheManager::saveMemory() {
+  removeLowerHalf();
 }

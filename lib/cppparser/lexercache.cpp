@@ -106,7 +106,6 @@ QDateTime LexerCache::fileModificationTimeCached( const HashedString& fileName )
     ///Use the cache for 10 seconds
     if( (*it).second.m_readTime.secsTo( m_currentDateTime ) < 10 ) {
       return (*it).second.m_modificationTime;
-      
     }
   }
   
@@ -234,4 +233,10 @@ size_t CachedLexedFile::hash() const {
 
 void LexerCache::initFileModificationCache() {
   m_currentDateTime = QDateTime::currentDateTime();
+}
+
+void LexerCache::saveMemory() {
+  m_fileModificationCache.clear();
+
+  m_totalStringSet.clear(); ///it's unclear how often this should be emptied. It may happen that completely unused strings end up in this set, then deleting it will save us memory.
 }

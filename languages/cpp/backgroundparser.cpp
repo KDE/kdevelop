@@ -458,7 +458,7 @@ void BackgroundParser::run()
 		{
 			if( m_saveMemory ) {
 				m_saveMemory = false;
-				m_driver->lexerCache()->removeLowerHalf();
+				m_driver->lexerCache()->saveMemory();
 			}
 
 			m_canParse.wait();
