@@ -34,8 +34,8 @@ void ParseTest::successSimpleProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    bool ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( ret );
+    int ret = QMake::Parser::parseString( project, &a );
+    QVERIFY( ret == 0 );
 }
 
 void ParseTest::successSimpleProject_data()
@@ -48,44 +48,55 @@ void ParseTest::failSimpleProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    bool ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( !ret );
+    int ret = QMake::Parser::parseString( project, &a );
+    QVERIFY( ret != 0 );
 }
 
 void ParseTest::failSimpleProject_data()
 {
     QTest::addColumn<QString>( "project" );
-    QTest::newRow( "row1" ) << "";
+    QTest::newRow( "row1" ) << "VAR = ";
 }
 
 void ParseTest::successFullProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    bool ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( ret );
+    int ret = QMake::Parser::parseString( project, &a );
+    QVERIFY( ret == 0 );
 }
 
 void ParseTest::successFullProject_data()
 {
     QTest::addColumn<QString>( "project" );
-    QTest::newRow( "row1" ) << "#Comment\n";
-    QTest::newRow( "row2" ) << "\n";
+    QTest::newRow( "row1" ) << "#Comment\n"
+        "VARIABLE1 = Value1 Value2\n"
+        "VARIABLE2= Value1 Value2\n"
+        "VARIABLE3 =Value1 Value2\n"
+        "VARIABLE4=Value1 Value2\n"
+        "VARIABLE = Value1 Value2 #some comment\n";
 }
 
 void ParseTest::failFullProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    bool ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( !ret );
+    int ret = QMake::Parser::parseString( project, &a );
+    QVERIFY( ret != 0);
 }
 
 void ParseTest::failFullProject_data()
 {
     QTest::addColumn<QString>( "project" );
-    QTest::newRow( "row1" ) << "foo()";
-    QTest::newRow( "row2" ) << "{";
+    QTest::newRow( "row1" ) << "#Comment\n"
+        "VARIABLE1 = Value1 Value2\n"
+        "VARIABLE2= Value1 Value2\n"
+        "VARIABLE3 =Value1 Value2\n"
+        "VARIABLE4=Value1 Value2\n"
+        "VARIABLE4=Value1 Value2 \\\n"
+        "  Value3 Value4\n"
+        "VARIABLE = Value1 Value2 #some comment\n"
+        "\n";
 }
 
 #include "parsetest.moc"
