@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>500</width>
-            <height>280</height>
+            <width>534</width>
+            <height>349</height>
         </rect>
     </property>
     <property name="caption">
@@ -113,13 +113,23 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Replace File Paths with matching Variables</string>
+                <string>Repla&amp;ce File Paths with matching Variables</string>
             </property>
             <property name="accel">
-                <string></string>
+                <string>Alt+C</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>This replaces the relative paths of added files with existing custom variables if the value assigned to it is the same as the path.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>checkDisableDefaultOpts</cstring>
+            </property>
+            <property name="text">
+                <string>Don't &amp;use the default Options
+This disables the reading of any .qmake.cache files or mkspecs.
+If you change this setting the project needs to be closed and re-opened.</string>
             </property>
         </widget>
         <spacer>
@@ -135,7 +145,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>61</height>
+                    <height>30</height>
                 </size>
             </property>
         </spacer>

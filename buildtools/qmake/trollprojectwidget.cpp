@@ -2297,7 +2297,7 @@ void TrollProjectWidget::buildFile( QMakeScopeItem* spitem, FileItem* fitem )
 
 TrollProjectWidget::SaveType TrollProjectWidget::dialogSaveBehaviour() const
 {
-    switch ( DomUtil::readIntEntry( *m_part->projectDom(), "savebehaviour", 2 ) )
+    switch ( DomUtil::readIntEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/savebehaviour", 2 ) )
     {
         case 0:
             return AlwaysSave;

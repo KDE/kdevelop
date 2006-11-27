@@ -19,6 +19,7 @@
 #include <qpair.h>
 #include <qmakedriver.h>
 #include <qregexp.h>
+#include <qtimer.h>
 
 #include <kdirwatch.h>
 
@@ -74,6 +75,8 @@ Scope::~Scope()
     m_root = 0;
     delete m_unfinishedScopes;
     m_unfinishedScopes = 0;
+    delete m_defaultopts;
+    m_defaultopts = 0;
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope,
@@ -916,10 +919,10 @@ void Scope::init()
                     Scope* s = new Scope( getNextScopeNum(), this,
                                                 subproject.absFilePath( projectfile ),
                                          m_part, ( m->op != "-=" ));
+                    m_scopes.insert( getNextScopeNum(), s );
                     m_unfinishedScopes->append( s );
                     connect( s, SIGNAL( initializationFinished( Scope* ) ),
                              this, SLOT( emitInitFinished( Scope * ) ) );
-                    m_scopes.insert( getNextScopeNum(), s );
                     s->loadDefaultOpts();
                 }
             }
@@ -1457,9 +1460,15 @@ void Scope::loadDefaultOpts()
     if( !m_defaultopts && m_root )
     {
         m_defaultopts = new QMakeDefaultOpts();
-        connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
-        m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
-                                      QFileInfo( m_root->fileName() ).dirPath( true ) );
+        if( DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/disableDefaultOpts", true ) )
+        {
+            connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
+            m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
+                                          QFileInfo( m_root->fileName() ).dirPath( true ) );
+        }else
+        {
+            QTimer::singleShot( 0, this, SLOT( init() ) );
+        }
 
     }
 }

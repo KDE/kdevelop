@@ -25,6 +25,7 @@ QMakeOptionsWidget::QMakeOptionsWidget( QDomDocument &dom, const QString &config
 {
     groupBehaviour->setButton( DomUtil::readIntEntry( dom, configGroup+"/qmake/savebehaviour", 2) );
     checkReplacePaths->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/replacePaths", false ) );
+    checkDisableDefaultOpts->setChecked( DomUtil::readBoolEntry( dom, configGroup+"/qmake/disableDefaultOpts", true ) );
 }
 
 
@@ -36,6 +37,7 @@ void QMakeOptionsWidget::accept()
 {
     DomUtil::writeIntEntry( m_dom, m_configGroup + "/qmake/savebehaviour", groupBehaviour->selectedId() );
     DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/replacePaths", checkReplacePaths->isChecked() );
+    DomUtil::writeBoolEntry( m_dom, m_configGroup + "/qmake/disableDefaultOpts", checkDisableDefaultOpts->isChecked() );
 }
 
 #include "qmakeoptionswidget.moc"
