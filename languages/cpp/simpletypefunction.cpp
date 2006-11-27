@@ -141,7 +141,7 @@ void SimpleTypeFunctionInterface::resolveImplicitTypes( QValueList<TypeDesc>& ar
 }
 
 void SimpleTypeFunctionInterface::appendNextFunction( SimpleType func ) {
-  if ( !func ) return;
+  if ( !func || !safetyCounter ) return;
   if (( SimpleTypeImpl* ) func.get() == ( SimpleTypeImpl* ) this ) return;
   if ( m_nextFunction && m_nextFunction->asFunction() ) {
     m_nextFunction->asFunction()->appendNextFunction( func );
@@ -149,7 +149,6 @@ void SimpleTypeFunctionInterface::appendNextFunction( SimpleType func ) {
     m_nextFunction = func;
   }
 }
-
 
 //SimpleTypeCodeModel implementation
 

@@ -196,6 +196,7 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, Membe
         ///Search all bases and append all functions with the same name to it.
         QValueList<LocateResult> bases = getBases();
         for ( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
+          if( !safetyCounter ) break;
           if ( ( *it ) ->resolved() ) {
             TypeOfResult rt = ( *it ) ->resolved() ->typeOf( name );
             if ( rt->resolved() )
