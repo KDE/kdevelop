@@ -40,9 +40,10 @@ using namespace QMake;
 */
 
 struct Result {
-Result() : node(0) {}
-QString value;
-AST* node;
+    Result() : node(0) {}
+    QString value;
+    AST* node;
+    QList<AST*> nodelist;
 };
 
 typedef Result YYSTYPE;
@@ -59,11 +60,21 @@ QStack<ProjectAST*> projects;
 int depth = 0;
 
 %}
-
+%debug
 %token WORD
 %token WS
 %token NEWLINE
 %token COMMENT
+%token CONT
+%token QUOTE
+%token LBRACE
+%token RBRACE
+%token LBRACKET
+%token RBRACKET
+%token COMMA
+%token OP
+%token DOLLAR
+%token COMMENTLINE
 
 %%
 
@@ -83,25 +94,97 @@ statements: statements statement
     |
     ;
 
-statement: comment
+statement:  variable_assignment
         {
             $<node>$ = $<node>1;
         }
-    | newline
-        {
-            $<node>$ = $<node>1;
-        }
-    ;
-
-comment: COMMENT
+    | COMMENT
         {
             $<node>$ = new CommentAST( $<value>1 );
         }
-    ;
-
-newline: NEWLINE
+    | NEWLINE
         {
             $<node>$ = new NewlineAST();
+        }
+    | WS
+        {
+            $<node>$ = new WhitespaceAST( $<value>1 );
+        }
+    ;
+
+variable_assignment: WORD WS OP WS values NEWLINE
+        {
+            AssignmentAST* a = new AssignmentAST( $<value>1 );
+            a->addChild( new WhitespaceAST( $<value>2 ) );
+            a->addChild( new OpAST( $<value>3 ) );
+            a->addChild( new WhitespaceAST( $<value>4 ) );
+            a->addValues( $<nodelist>5 );
+            a->addChild( new NewlineAST() );
+            $<node>$ = a;
+        }
+    | WORD OP WS values NEWLINE
+        {
+            AssignmentAST* a = new AssignmentAST( $<value>1 );
+            a->addChild( new OpAST( $<value>2 ) );
+            a->addChild( new WhitespaceAST( $<value>3 ) );
+            a->addValues( $<nodelist>4 );
+            a->addChild( new NewlineAST() );
+            $<node>$ = a;
+        }
+    | WORD WS OP values NEWLINE
+        {
+            AssignmentAST* a = new AssignmentAST( $<value>1 );
+            a->addChild( new WhitespaceAST( $<value>2 ) );
+            a->addChild( new OpAST( $<value>3 ) );
+            a->addValues( $<nodelist>4 );
+            a->addChild( new NewlineAST() );
+            $<node>$ = a;
+        }
+    | WORD OP values NEWLINE
+        {
+            AssignmentAST* a = new AssignmentAST( $<value>1 );
+            a->addChild( new OpAST( $<value>2 ) );
+            a->addValues( $<nodelist>3 );
+            a->addChild( new NewlineAST() );
+            $<node>$ = a;
+        }
+    ;
+
+values: values value
+        {
+            $<nodelist>$.append( $<node>2 );
+        }
+    |
+        values value COMMENT
+        {
+            $<nodelist>$.append( $<node>2 );
+            $<nodelist>$.append( new CommentAST( $<value>3 ) );
+        }
+    |
+        {
+            $<nodelist>$.clear();
+        }
+    ;
+
+value: WORD
+        {
+            $<node>$ = new LiteralValueAST( $<value>1 );
+        }
+    | DOLLAR DOLLAR WORD
+        {
+            $<node>$ = new QMakeVariableAST( $<value>3, false );
+        }
+    | DOLLAR DOLLAR RBRACKET WORD LBRACKET
+        {
+            $<node>$ = new QMakeVariableAST( $<value>4, true );
+        }
+    | DOLLAR LBRACE WORD RBRACE
+        {
+            $<node>$ = new EnvironmentVariableAST( $<value>3 );
+        }
+    | WS
+        {
+            $<node>$ = new WhitespaceAST( $<value>1 );
         }
     ;
 

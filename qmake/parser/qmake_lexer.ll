@@ -31,6 +31,7 @@
 
 single_ws              [ \t]
 multi_ws               {single_ws}+
+ws                     {single_ws}*
 quote                  "\""
 newline                \n
 continuation           \\
@@ -40,14 +41,26 @@ lbracket               {
 rbracket               }
 letter                 [a-zA-Z]
 digit                  [0-9]
-word                   ({digit}|{letter}|_)({letter}|{digit}|_|-|\*|\.)*
+word                   ({digit}|{letter}|_)({letter}|{digit}|_|\-|\*|\.)*
 comma                  ,
 commentstart           #
-
+op                     (=|\+=|\-=|\*=|~=|\^=)
+dollar                 \$
 %%
 
-{commentstart}.*{newline}             { yylval.value = QString::fromUtf8( yytext ); yyless(yyleng-1); return COMMENT; }
-{newline}                             { return NEWLINE; }
+{commentstart}.*{newline}   {
+            yylval.value = QString::fromUtf8( yytext );
+            yylval.value = yylval.value.left( yylval.value.length() - 1 );
+            unput('\n');
+            return COMMENT;
+    }
+{newline}                   { return NEWLINE; }
+{continuation}              { yylval.value = QString::fromUtf8( yytext ); return CONT; }
+{op}                        { yylval.value = yytext; return OP; }
+{dollar}                    { yylval.value = yytext; return DOLLAR; }
+{word}                      { yylval.value = yytext; return WORD; }
+{single_ws}+                { yylval.value = yytext; return WS; }
+{quote}                     { yylval.value = yytext; return QUOTE; }
 
 %%
 
