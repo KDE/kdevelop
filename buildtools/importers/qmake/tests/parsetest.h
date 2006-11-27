@@ -22,9 +22,8 @@
 #define PARSETEST_H
 
 #include <QtTest/QtTest>
-#include "qmakeparser.h"
 
-class ParserTest : public QObject
+class ParseTest : public QObject
 {
         Q_OBJECT
     public:
