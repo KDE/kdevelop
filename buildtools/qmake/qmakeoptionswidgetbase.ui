@@ -127,7 +127,7 @@
                 <cstring>checkDisableDefaultOpts</cstring>
             </property>
             <property name="text">
-                <string>Don't &amp;use the default Options
+                <string>Use the QMake Default Options
 This disables the reading of any .qmake.cache files or mkspecs.
 If you change this setting the project needs to be closed and re-opened.</string>
             </property>
