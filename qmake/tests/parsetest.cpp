@@ -21,7 +21,7 @@
 #include "parsetest.h"
 #include "qmakeparser.h"
 
-QTEST_MAIN( ParseTest );
+QTEST_MAIN( ParseTest )
 
 ParseTest::ParseTest( QObject* parent )
         : QObject( parent )
