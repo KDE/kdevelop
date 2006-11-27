@@ -42,7 +42,17 @@
      WORD = 258,
      WS = 259,
      NEWLINE = 260,
-     COMMENT = 261
+     COMMENT = 261,
+     CONT = 262,
+     QUOTE = 263,
+     LBRACE = 264,
+     RBRACE = 265,
+     LBRACKET = 266,
+     RBRACKET = 267,
+     COMMA = 268,
+     OP = 269,
+     DOLLAR = 270,
+     COMMENTLINE = 271
    };
 #endif
 /* Tokens.  */
@@ -50,6 +60,16 @@
 #define WS 259
 #define NEWLINE 260
 #define COMMENT 261
+#define CONT 262
+#define QUOTE 263
+#define LBRACE 264
+#define RBRACE 265
+#define LBRACKET 266
+#define RBRACKET 267
+#define COMMA 268
+#define OP 269
+#define DOLLAR 270
+#define COMMENTLINE 271
 
 
 

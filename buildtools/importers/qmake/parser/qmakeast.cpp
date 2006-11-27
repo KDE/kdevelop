@@ -49,8 +49,38 @@ namespace QMake
         return m_depth;
     }
 
-    ProjectAST::ProjectAST( AST* parent )
+    ChildAST::ChildAST( AST* parent )
             : AST( parent )
+    {}
+
+    ChildAST::~ChildAST()
+    {
+        for ( QList<AST*>::const_iterator it( m_childs.begin() ); it != m_childs.end(); ++it )
+            delete( *it );
+        m_childs.clear();
+    }
+
+    void ChildAST::addChild( AST* a )
+    {
+        m_childs.append( a );
+        a->setParent( this );
+    }
+
+    QList<AST*> ChildAST::childs() const
+    {
+        return m_childs;
+    }
+
+    void ChildAST::writeToString( QString& buf ) const
+    {
+        for ( QList<AST*>::const_iterator it = m_childs.begin(); it != m_childs.end() ; ++it )
+        {
+            ( *it )->writeToString( buf );
+        }
+    }
+
+    ProjectAST::ProjectAST( AST* parent )
+            : ChildAST( parent )
     {}
 
     ProjectAST::~ProjectAST()
@@ -61,27 +91,39 @@ namespace QMake
         m_filename = filename;
     }
 
-    void ProjectAST::writeToString( QString& buf ) const
-    {
-        for ( QList<AST*>::const_iterator it = childs().begin(); it != childs().end() ; ++it ) {
-            ( *it )->writeToString( buf );
-        }
-    }
-
-    void ProjectAST::addChild( AST* a )
-    {
-        m_childs.append( a );
-        a->setParent( this );
-    }
-
-    QList<AST*> ProjectAST::childs() const
-    {
-        return m_childs;
-    }
-
     QString ProjectAST::filename() const
     {
         return m_filename;
+    }
+
+    AssignmentAST::AssignmentAST( const QString& variable, AST* parent )
+            : ChildAST( parent ), m_variable( variable )
+    {}
+
+    AssignmentAST::~AssignmentAST()
+    {}
+
+    void AssignmentAST::addValues( QList<AST*> values )
+    {
+        for ( QList<AST*>::const_iterator it = values.begin(); it != values.end(); ++it )
+            addChild( *it );
+    }
+
+
+    QString AssignmentAST::variable() const
+    {
+        return m_variable;
+    }
+
+    void AssignmentAST::setVariable( const QString& variable )
+    {
+        m_variable = variable;
+    }
+
+    void AssignmentAST::writeToString( QString& buf) const
+    {
+        buf += m_variable;
+        ChildAST::writeToString( buf );
     }
 
     CommentAST::CommentAST( const QString& comment, AST* parent )
@@ -121,7 +163,74 @@ namespace QMake
         buf += "\n";
     }
 
-}
+    LiteralValueAST::LiteralValueAST( const QString& value, AST* parent )
+            : AST( parent ), m_value( value )
+    {}
+
+    LiteralValueAST::~LiteralValueAST()
+    {}
+
+    QString LiteralValueAST::value() const
+    {
+        return m_value;
+    }
+
+    void LiteralValueAST::setValue( const QString& value )
+    {
+        m_value = value;
+    }
+
+    void LiteralValueAST::writeToString( QString& buf ) const
+    {
+        buf += m_value;
+    }
+
+
+    EnvironmentVariableAST::EnvironmentVariableAST( const QString& value, AST* parent )
+            : LiteralValueAST( value, parent )
+    {}
+
+    EnvironmentVariableAST::~EnvironmentVariableAST()
+    {}
+
+    void EnvironmentVariableAST::writeToString( QString& buf ) const
+    {
+        buf += "$(" + value() + ")";
+    }
+
+    QMakeVariableAST::QMakeVariableAST( const QString& value, bool useBrackets, AST* parent )
+            : LiteralValueAST( value, parent ), m_useBrackets( useBrackets )
+    {}
+
+    QMakeVariableAST::~QMakeVariableAST()
+    {}
+
+    bool QMakeVariableAST::usesBrackets() const
+    {
+        return m_useBrackets;
+    }
+
+    void QMakeVariableAST::writeToString( QString& buf ) const
+    {
+        if ( usesBrackets() )
+            buf += "$${" + value() + "}";
+        else
+            buf += "$$" + value();
+    }
+
+    WhitespaceAST::WhitespaceAST( const QString& value, AST* parent )
+            : LiteralValueAST( value, parent )
+{}
+
+    WhitespaceAST::~WhitespaceAST()
+    {}
+
+    OpAST::OpAST( const QString& value, AST* parent )
+            : LiteralValueAST( value, parent )
+    {}
+
+    OpAST::~OpAST()
+{}}
 
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

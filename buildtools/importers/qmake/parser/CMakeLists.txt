@@ -12,7 +12,6 @@ if(FLEX_EXECUTABLE)
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.cpp"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
-        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.hpp"
         COMMAND ${FLEX_EXECUTABLE}
         ARGS    -d -o"${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.cpp"
                 "qmake_lexer.ll"
@@ -28,17 +27,16 @@ else(FLEX_EXECUTABLE)
 #     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
 endif(FLEX_EXECUTABLE)
 
-
-
 if(BISON_EXECUTABLE)
     # Add command to generate the parser.
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.cpp"
         OUTPUT  "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.hpp"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.yy"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.cpp"
         COMMAND ${BISON_EXECUTABLE}
-        ARGS    -d -o"${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.cpp"
-                "qmake_parser.yy"
+        ARGS    -r all -k -t -o"${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.cpp"
+                -d "qmake_parser.yy"
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
 #    ADD_CUSTOM_COMMAND(
