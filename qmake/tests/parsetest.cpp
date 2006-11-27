@@ -22,11 +22,11 @@
 
 QTEST_MAIN( ParseTest );
 
-ParseTest::ParseTest( QObject* parent = 0 )
+ParseTest::ParseTest( QObject* parent )
         : QObject( parent )
 {}
 
-ParseTest~ParseTest()
+ParseTest::~ParseTest()
 {}
 
 void ParseTest::successSimpleProject()
