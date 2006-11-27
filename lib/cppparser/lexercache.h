@@ -144,7 +144,8 @@ class LexerCache : public CacheManager {
     void initFileModificationCache();
     virtual void erase( const CacheNode* node );
     bool sourceChanged( const CachedLexedFile& file );///Returns true if the file itself, or any of its dependencies was modified.
-    typedef __gnu_cxx::hash_multimap<HashedString, CachedLexedFilePointer> CachedLexedFileMap;
+    //typedef __gnu_cxx::hash_multimap<HashedString, CachedLexedFilePointer> CachedLexedFileMap;
+    typedef std::multimap<HashedString, CachedLexedFilePointer> CachedLexedFileMap;
     CachedLexedFileMap m_files;
     __gnu_cxx::hash_set<HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
     struct FileModificationCache {

@@ -20,8 +20,16 @@ LexerCache::LexerCache( Driver* d ) : m_driver( d ) {}
 
 void LexerCache::addLexedFile( const CachedLexedFilePointer& file ) {
   kdDebug( 9007 ) << "LexerCache: adding an instance of " << file->fileName().str() << endl;
-  m_files.insert( std::make_pair( file->fileName(), file ) );
+
   std::pair< CachedLexedFileMap::iterator, CachedLexedFileMap::iterator> files = m_files.equal_range( file->fileName() );
+
+  if ( files.first == files.second ) {
+    m_files.insert( std::make_pair( file->fileName(), file ) );
+  } else {
+      //Make sure newer files appear first
+      m_files.insert( files.first, std::make_pair( file->fileName(), file ) );
+  }
+
   int cnt = 0;
   while ( files.first != files.second ) {
     if ( sourceChanged( *( *( files.first ) ).second ) ) {
