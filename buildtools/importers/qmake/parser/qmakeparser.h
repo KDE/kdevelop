@@ -1,4 +1,3 @@
-%{
 /* KDevelop QMake Support
  *
  * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
@@ -19,35 +18,31 @@
  * 02110-1301, USA.
  */
 
-#include "qmake_parser.hpp"
-#include <stdlib.h>
+#ifndef QMAKEPARSER_H
+#define QMAKEPARSER_H
+
 #include <QtCore/QString>
 
-%}
+namespace QMake
+{
+    class ProjectAST;
+    class Parser
+    {
+        public:
+            /**
+             * Parses the given filename and returns success or failure
+             */
+            static int parseFile( char const* filename, QMake::ProjectAST** ast );
+            static int parseFile( const QString& filename, QMake::ProjectAST** ast );
 
-%option noyywrap
-%option debug
-%option yylineno
+            /** Parses the given string and returns success or failure
+             */
+            static int parseString( char const* content, QMake::ProjectAST** ast );
+            static int parseString( const QString& content, QMake::ProjectAST** ast );
+    };
+}
 
-single_ws              [ \t]
-multi_ws               {single_ws}+
-quote                  "\""
-newline                \n
-continuation           \\
-lbrace                 (
-rbrace                 )
-lbracket               {
-rbracket               }
-letter                 [a-zA-Z]
-digit                  [0-9]
-word                   ({digit}|{letter}|_)({letter}|{digit}|_|-|\*|\.)*
-comma                  ,
-commentstart           #
+#endif
 
-%%
-
-{commentstart}.*{newline}             { yylval.value = QString::fromUtf8( yytext ); yyless(yyleng-1); return COMMENT; }
-{newline}                             { return NEWLINE; }
-
-%%
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 

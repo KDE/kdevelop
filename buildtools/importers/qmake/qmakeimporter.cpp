@@ -1,6 +1,6 @@
 /* KDevelop QMake Support
  *
- * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,15 +39,15 @@ K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
 
 QMakeImporter::QMakeImporter( QObject* parent,
                               const QStringList& )
-    : KDevBuildManager( QMakeSupportFactory::instance(), parent ), m_rootItem(0L)
+        : KDevBuildManager( QMakeSupportFactory::instance(), parent ), m_rootItem( 0L )
 {
     m_project = 0;
-/*    QMakeSettings* settings = QMakeSettings::self();
+    /*    QMakeSettings* settings = QMakeSettings::self();
 
-    //what do the settings say about our generator?
-    QString generator = settings->generator();
-    if ( generator.contains( "Unix" ) ) //use make
-        m_builder = new KDevMakeBuilder()*/
+        //what do the settings say about our generator?
+        QString generator = settings->generator();
+        if ( generator.contains( "Unix" ) ) //use make
+            m_builder = new KDevMakeBuilder()*/
 }
 
 QMakeImporter::~QMakeImporter()
@@ -62,66 +62,66 @@ KDevProject* QMakeImporter::project() const
 
 KUrl QMakeImporter::buildDirectory() const
 {
-     return project()->folder();
+    return project()->folder();
 }
 
 QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item )
 {
     QList<KDevProjectFolderItem*> folderList;
-/*
-    QMakeFolderItem* folder = dynamic_cast<QMakeFolderItem*>( item );
-    if ( !folder )
-        return folderList;
+    /*
+        QMakeFolderItem* folder = dynamic_cast<QMakeFolderItem*>( item );
+        if ( !folder )
+            return folderList;
 
-    FolderInfo fi = folder->folderInfo();
-    for ( QStringList::iterator it = fi.includes.begin();
-          it != fi.includes.end(); ++it )
-    {
-        KUrl urlCandidate = KUrl( ( *it ) );
-        if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
-            m_includeDirList.append( urlCandidate );
-    }
-
-    foreach ( FolderInfo sfi, fi.subFolders )
-        folderList.append( new QMakeFolderItem( sfi, folder ) );
-
-    foreach ( TargetInfo ti, fi.targets )
-    {
-        QMakeTargetItem* targetItem = new QMakeTargetItem( ti, folder );
-        foreach( QString sFile, ti.sources )
+        FolderInfo fi = folder->folderInfo();
+        for ( QStringList::iterator it = fi.includes.begin();
+              it != fi.includes.end(); ++it )
         {
-            KUrl sourceFile = folder->url();
-            sourceFile.adjustPath( KUrl::AddTrailingSlash );
-            sourceFile.addPath( sFile );
-            new KDevProjectFileItem( sourceFile, targetItem );
+            KUrl urlCandidate = KUrl( ( *it ) );
+            if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
+                m_includeDirList.append( urlCandidate );
         }
-    }
 
-*/
+        foreach ( FolderInfo sfi, fi.subFolders )
+            folderList.append( new QMakeFolderItem( sfi, folder ) );
+
+        foreach ( TargetInfo ti, fi.targets )
+        {
+            QMakeTargetItem* targetItem = new QMakeTargetItem( ti, folder );
+            foreach( QString sFile, ti.sources )
+            {
+                KUrl sourceFile = folder->url();
+                sourceFile.adjustPath( KUrl::AddTrailingSlash );
+                sourceFile.addPath( sFile );
+                new KDevProjectFileItem( sourceFile, targetItem );
+            }
+        }
+
+    */
     return folderList;
 }
 
 KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
-                                           const KUrl& fileName )
+                                        const KUrl& fileName )
 {
-/*    QString buildDir = QMakeSettings::self()->buildFolder();
-    kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
-    KUrl qmakeInfoFile(buildDir);
-    qmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
-    qmakeInfoFile.addPath("qmakeinfo.xml");
-    kDebug(9025) << k_funcinfo << "file is " << qmakeInfoFile.path() << endl;
-    if ( !qmakeInfoFile.isLocalFile() )
-    {
-        //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" << endl;
-    }
-    else
-    {
-        m_projectInfo = m_xmlParser.parse( qmakeInfoFile );
-        FolderInfo rootFolder = m_projectInfo.rootFolder;
-        m_rootItem = new QMakeFolderItem( rootFolder, 0 );
-        m_rootItem->setText( KDevCore::activeProject()->name() );
-    }*/
+    /*    QString buildDir = QMakeSettings::self()->buildFolder();
+        kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
+        KUrl qmakeInfoFile(buildDir);
+        qmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
+        qmakeInfoFile.addPath("qmakeinfo.xml");
+        kDebug(9025) << k_funcinfo << "file is " << qmakeInfoFile.path() << endl;
+        if ( !qmakeInfoFile.isLocalFile() )
+        {
+            //FIXME turn this into a real warning
+            kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" << endl;
+        }
+        else
+        {
+            m_projectInfo = m_xmlParser.parse( qmakeInfoFile );
+            FolderInfo rootFolder = m_projectInfo.rootFolder;
+            m_rootItem = new QMakeFolderItem( rootFolder, 0 );
+            m_rootItem->setText( KDevCore::activeProject()->name() );
+        }*/
     return m_rootItem;
 }
 

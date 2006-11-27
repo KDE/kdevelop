@@ -463,9 +463,9 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[11] =
+static yyconst flex_int16_t yy_accept[10] =
     {   0,
-        0,    0,    4,    3,    3,    3,    0,    1,    2,    0
+        0,    0,    4,    3,    2,    3,    0,    1,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -502,31 +502,29 @@ static yyconst flex_int32_t yy_ec[256] =
 
 static yyconst flex_int32_t yy_meta[4] =
     {   0,
-        1,    2,    1
+        1,    1,    1
     } ;
 
-static yyconst flex_int16_t yy_base[14] =
+static yyconst flex_int16_t yy_base[11] =
     {   0,
-        9,    0,   11,   13,    8,    0,    7,   13,   13,   13,
-        3,    5,    6
+        0,    0,    7,    8,    8,    4,    3,    8,    8,    3
     } ;
 
-static yyconst flex_int16_t yy_def[14] =
+static yyconst flex_int16_t yy_def[11] =
     {   0,
-       11,   10,   10,   10,   12,   13,   12,   10,   10,    0,
-       10,   10,   10
+        9,    1,    9,    9,    9,   10,   10,    9,    0,    9
     } ;
 
-static yyconst flex_int16_t yy_nxt[17] =
+static yyconst flex_int16_t yy_nxt[12] =
     {   0,
-        4,    6,    5,    4,    4,    7,    7,    9,    8,    8,
-       10,    5,    3,   10,   10,   10
+        4,    5,    6,    7,    8,    8,    9,    3,    9,    9,
+        9
     } ;
 
-static yyconst flex_int16_t yy_chk[17] =
+static yyconst flex_int16_t yy_chk[12] =
     {   0,
-        2,    2,    2,   11,   11,   12,   12,   13,    7,    5,
-        3,    1,   10,   10,   10,   10
+        1,    1,    1,   10,    7,    6,    3,    9,    9,    9,
+        9
     } ;
 
 /* Table of booleans, true if rule could match eol. */
@@ -542,7 +540,7 @@ int yy_flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[3] =
     {   0,
-       46,   47
+       51,   52
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -555,28 +553,33 @@ static yyconst flex_int16_t yy_rule_linenum[3] =
 char *yytext;
 #line 1 "qmake_lexer.ll"
 #line 2 "qmake_lexer.ll"
-/***************************************************************************
- *   Copyright (C) 2006 by Andreas Pakulat apaku@gmx.de                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+/* KDevelop QMake Support
+ *
+ * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #include "qmake_parser.hpp"
+#include <stdlib.h>
+#include <QtCore/QString>
 
-#line 580 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+using namespace QMake;
+
+#line 583 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 #define INITIAL 0
 
@@ -775,9 +778,6 @@ extern int yylex (void);
 
 /* %% [6.0] YY_RULE_SETUP definition goes here */
 #define YY_RULE_SETUP \
-	if ( yyleng > 0 ) \
-		YY_CURRENT_BUFFER_LVALUE->yy_at_bol = \
-				(yytext[yyleng - 1] == '\n'); \
 	YY_USER_ACTION
 
 /* %not-for-header */
@@ -791,7 +791,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 44 "qmake_lexer.ll"
+#line 49 "qmake_lexer.ll"
 
 
 #line 798 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
@@ -845,7 +845,6 @@ YY_DECL
 
 /* %% [9.0] code to set up and find next match goes here */
 		yy_current_state = (yy_start);
-		yy_current_state += YY_AT_BOL();
 yy_match:
 		do
 			{
@@ -858,13 +857,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 11 )
+				if ( yy_current_state >= 10 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 13 );
+		while ( yy_base[yy_current_state] != 8 );
 
 yy_find_action:
 /* %% [10.0] code to find the action number goes here */
@@ -922,24 +921,21 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 46 "qmake_lexer.ll"
-{ return COMMENT; }
+#line 51 "qmake_lexer.ll"
+{ yylval.value = QString::fromUtf8( yytext ); yyless(yyleng-1); return COMMENT; }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
-*yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
-(yy_c_buf_p) = yy_cp -= 1;
-YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 47 "qmake_lexer.ll"
+#line 52 "qmake_lexer.ll"
 { return NEWLINE; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 49 "qmake_lexer.ll"
+#line 54 "qmake_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 943 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 939 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1231,7 +1227,6 @@ static int yy_get_next_buffer (void)
     
 /* %% [15.0] code to get the start state into yy_current_state goes here */
 	yy_current_state = (yy_start);
-	yy_current_state += YY_AT_BOL();
 
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
 		{
@@ -1245,7 +1240,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 11 )
+			if ( yy_current_state >= 10 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1278,11 +1273,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 11 )
+		if ( yy_current_state >= 10 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 10);
+	yy_is_jam = (yy_current_state == 9);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1413,8 +1408,7 @@ static int yy_get_next_buffer (void)
 	(yy_hold_char) = *++(yy_c_buf_p);
 
 /* %% [19.0] update BOL and yylineno */
-	YY_CURRENT_BUFFER_LVALUE->yy_at_bol = (c == '\n');
-	if ( YY_CURRENT_BUFFER_LVALUE->yy_at_bol )
+	if ( c == '\n' )
 		   
     yylineno++;
 ;
@@ -2085,7 +2079,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 49 "qmake_lexer.ll"
+#line 54 "qmake_lexer.ll"
 
 
 
