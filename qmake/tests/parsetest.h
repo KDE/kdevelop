@@ -1,4 +1,3 @@
-%{
 /* KDevelop QMake Support
  *
  * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
@@ -19,35 +18,30 @@
  * 02110-1301, USA.
  */
 
-#include "qmake_parser.hpp"
-#include <stdlib.h>
-#include <QtCore/QString>
+#ifndef PARSETEST_H
+#define PARSETEST_H
 
-%}
+#include <QtTest/QtTest>
+#include "qmakeparser.h"
 
-%option noyywrap
-%option debug
-%option yylineno
+class ParserTest : public QObject
+{
+        Q_OBJECT
+    public:
+        ParseTest( QObject* parent = 0 );
+        ~ParseTest();
+    private slots:
+        void successSimpleProject();
+        void successSimpleProject_data();
+        void failSimpleProject();
+        void failSimpleProject_data();
+        void successFullProject();
+        void successFullProject_data();
+        void failFullProject();
+        void failFullProject_data();
+};
 
-single_ws              [ \t]
-multi_ws               {single_ws}+
-quote                  "\""
-newline                \n
-continuation           \\
-lbrace                 (
-rbrace                 )
-lbracket               {
-rbracket               }
-letter                 [a-zA-Z]
-digit                  [0-9]
-word                   ({digit}|{letter}|_)({letter}|{digit}|_|-|\*|\.)*
-comma                  ,
-commentstart           #
+#endif
 
-%%
-
-{commentstart}.*{newline}             { yylval.value = QString::fromUtf8( yytext ); yyless(yyleng-1); return COMMENT; }
-{newline}                             { return NEWLINE; }
-
-%%
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 

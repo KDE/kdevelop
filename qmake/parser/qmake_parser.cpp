@@ -84,25 +84,25 @@
 /* Copy the first part of user declarations.  */
 #line 1 "qmake_parser.yy"
 
-/***************************************************************************
- *   Copyright (C) 2006 by Andreas Pakulat                                 *
- *   adymo@kdevelop.org                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+/* KDevelop QMake Support
+ *
+ * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /**
 @file qmake.yy
@@ -112,6 +112,25 @@ Simple LALR parser which builds the syntax tree (see @ref QMake::AST).
 */
 
 #include <stdio.h>
+#include "qmakeast.h"
+#include <QtCore/QStack>
+#include <QtCore/QString>
+
+#define YYSTYPE_IS_DECLARED
+
+using namespace QMake;
+
+/**
+ The yylval type
+*/
+
+struct Result {
+Result() : node(0) {}
+QString value;
+AST* node;
+};
+
+typedef Result YYSTYPE;
 
 void yyerror(const char* str)
 {
@@ -119,6 +138,10 @@ void yyerror(const char* str)
 }
 
 int yylex();
+
+QStack<ProjectAST*> projects;
+
+int depth = 0;
 
 
 
@@ -153,7 +176,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 157 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
+#line 180 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
 
 #ifdef short
 # undef short
@@ -366,18 +389,18 @@ union yyalloc
 #endif
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  6
+#define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
 #define YYLAST   2
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  7
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  6
+#define YYNRULES  9
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  7
+#define YYNSTATES  10
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -423,20 +446,20 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     5,     7,     8,    10
+       0,     0,     3,     4,     7,    10,    11,    13,    15,    17
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-       8,     0,    -1,     9,    -1,    10,    -1,    -1,     6,    -1,
-       5,    -1
+       8,     0,    -1,    -1,     9,    10,    -1,    10,    11,    -1,
+      -1,    12,    -1,    13,    -1,     6,    -1,     5,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    47,    47,    48,    49,    52,    55
+       0,    71,    71,    71,    78,    83,    86,    90,    96,   102
 };
 #endif
 
@@ -446,7 +469,8 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "WORD", "WS", "NEWLINE", "COMMENT",
-  "$accept", "project", "comment", "emptyline", 0
+  "$accept", "project", "@1", "statements", "statement", "comment",
+  "newline", 0
 };
 #endif
 
@@ -462,13 +486,13 @@ static const yytype_uint16 yytoknum[] =
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     7,     8,     8,     8,     9,    10
+       0,     7,     9,     8,    10,    10,    11,    11,    12,    13
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     1,     0,     1,     1
+       0,     2,     0,     2,     2,     0,     1,     1,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -476,13 +500,13 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       4,     6,     5,     0,     2,     3,     1
+       2,     0,     5,     1,     3,     9,     8,     4,     6,     7
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     4,     5
+      -1,     1,     2,     4,     7,     8,     9
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -490,13 +514,13 @@ static const yytype_int8 yydefgoto[] =
 #define YYPACT_NINF -6
 static const yytype_int8 yypact[] =
 {
-      -5,    -6,    -6,     2,    -6,    -6,    -6
+      -6,     2,    -6,    -6,    -5,    -6,    -6,    -6,    -6,    -6
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -6,    -6,    -6,    -6
+      -6,    -6,    -6,    -6,    -6,    -6,    -6
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -506,7 +530,7 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       1,     2,     6
+       5,     6,     3
 };
 
 static const yytype_uint8 yycheck[] =
@@ -518,7 +542,7 @@ static const yytype_uint8 yycheck[] =
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     5,     6,     8,     9,    10,     0
+       0,     8,     9,     0,    10,     5,     6,    11,    12,    13
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1332,9 +1356,53 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-      
+        case 2:
+#line 71 "qmake_parser.yy"
+    {
+        ProjectAST* projectAST = new ProjectAST();
+        projects.push( projectAST );
+    ;}
+    break;
+
+  case 4:
+#line 79 "qmake_parser.yy"
+    {
+            projects.top()->addChild((yyvsp[(2) - (2)].node));
+            (yyvsp[(2) - (2)].node)->setDepth( depth );
+        ;}
+    break;
+
+  case 6:
+#line 87 "qmake_parser.yy"
+    {
+            (yyval.node) = (yyvsp[(1) - (1)].node);
+        ;}
+    break;
+
+  case 7:
+#line 91 "qmake_parser.yy"
+    {
+            (yyval.node) = (yyvsp[(1) - (1)].node);
+        ;}
+    break;
+
+  case 8:
+#line 97 "qmake_parser.yy"
+    {
+            (yyval.node) = new CommentAST( (yyvsp[(1) - (1)].value) );
+        ;}
+    break;
+
+  case 9:
+#line 103 "qmake_parser.yy"
+    {
+            (yyval.node) = new NewlineAST();
+        ;}
+    break;
+
+
 /* Line 1267 of yacc.c.  */
-#line 1338 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
+#line 1406 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1548,7 +1616,7 @@ yyreturn:
 }
 
 
-#line 58 "qmake_parser.yy"
+#line 108 "qmake_parser.yy"
 
 
 #include "qmake_lexer.cpp"
