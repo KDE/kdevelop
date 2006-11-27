@@ -278,6 +278,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	readIdentifier();
 	HashedString ide = m_source.mid( start, currentPosition() - start );
 	int k = Lookup::find( ide );
+    if( k == -1 && m_preprocessorEnabled ) m_driver->usingString( ide );
+            
 	if( m_preprocessorEnabled && m_driver->hasMacro(ide) &&
 	    (k == -1 || !m_driver->macro(ide).body().isEmpty()) ){
 
@@ -292,8 +294,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
 //	    Macro& m = m_driver->macro( ide );
 	    Macro m = m_driver->macro( ide );
-
-	    m_driver->usingMacro( m, m_currentLine, m_currentColumn );
+            m_driver->usingMacro( m, m_currentLine, m_currentColumn );
 
             QString ellipsisArg;
 
@@ -627,6 +628,7 @@ int Lexer::macroDefined()
     int startWord = currentPosition();
     readIdentifier();
     HashedString word = m_source.mid( startWord, currentPosition() - startWord );
+    m_driver->usingString( word );
     bool r = m_driver->hasMacro( word );
 
     if( r ) m_driver->usingMacro( m_driver->macro( word ), m_currentLine, m_currentColumn );
@@ -856,6 +858,7 @@ int Lexer::macroPrimary()
 		/// @todo implement
                 {
                 HashedString h( tk.text() );
+                m_driver->usingString( h );
                 if( m_driver->hasMacro( h ) ) {
                     m_driver->usingMacro( m_driver->macro( h ), m_currentLine, m_currentColumn );
                     return true;

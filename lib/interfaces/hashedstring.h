@@ -1,3 +1,17 @@
+/***************************************************************************
+   copyright            : (C) 2006 by David Nolden
+   email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef HASHED_STRING_H
 #define HASHED_STRING_H
 
@@ -81,10 +95,12 @@ class HashedStringSet {
 
     void insert( const HashedString& str );
 
-    ///Returns true if all files that are part of this set are also part of the given set
     HashedStringSet& operator +=( const HashedStringSet& );
+    
+    HashedStringSet& operator -=( const HashedStringSet& );
 
     ///intersection-test
+    ///Returns true if all files that are part of this set are also part of the given set
     bool operator <= ( const HashedStringSet& rhs ) const;
 
     bool operator == ( const HashedStringSet& rhs ) const;

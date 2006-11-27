@@ -1,6 +1,29 @@
+/***************************************************************************
+   copyright            : (C) 2006 by David Nolden
+   email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "hashedstring.h"
 #include <kdatastream.h>
 #include <sstream>
+#include <algorithm>
+#include <iterator>
+#include<ext/hash_set>
+#include<set>
+#include<algorithm>
+
+//It needs to be measured whether this flag should be turned on or off. It seems just to move the complexity from one position to the other, without any variant being really better.
+#define USE_HASHMAP
+    
 size_t fastHashString( const QString& str );
 
 size_t hashStringSafe( const QString& str ) {
@@ -36,14 +59,14 @@ void HashedString::initHash() {
     m_hash = hashString( m_str );
 }
 
-#include<ext/hash_set>
-#include<set>
-#include<algorithm>
 
 class HashedStringSetData : public KShared {
   public:
-      //typedef __gnu_cxx::hash_set<HashedString> StringSet;
+#ifdef USE_HASHMAP
+      typedef __gnu_cxx::hash_set<HashedString> StringSet;
+#else
       typedef std::set<HashedString> StringSet; //must be a set, so the set-algorithms work
+#endif
       StringSet m_files;
   mutable bool m_hashValid;
       mutable size_t m_hash;
@@ -97,11 +120,44 @@ HashedStringSet& HashedStringSet::operator +=( const HashedStringSet& rhs ) {
   if ( !rhs.m_data )
     return * this;
 
+#ifndef USE_HASHMAP
+  KSharedPtr<HashedStringSetData> oldData = m_data;
+  if( !oldData ) oldData = new HashedStringSetData();
+  m_data = new HashedStringSetData();
+  std::set_union( oldData->m_files.begin(), oldData->m_files.end(), rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), std::insert_iterator<HashedStringSetData::StringSet>( m_data->m_files, m_data->m_files.end() ) );
+#else
   makeDataPrivate();
   m_data->m_files.insert( rhs.m_data->m_files.begin(), rhs.m_data->m_files.end() );
-  m_data->invalidateHash();
+  /*HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
+  HashedStringSetData::StringSet& mySet( m_data->m_files );
+  for( HashedStringSetData::StringSet::const_iterator it = rhs.m_data->m_files.begin(); it != end; ++it ) {
+    mySet.insert( *it );
+  }*/
+  
+#endif
   return *this;
 }
+
+HashedStringSet& HashedStringSet::operator -=( const HashedStringSet& rhs ) {
+  if( !m_data ) return *this;
+  if( !rhs.m_data ) return *this;
+#ifndef USE_HASHMAP
+  KSharedPtr<HashedStringSetData> oldData = m_data;
+  m_data = new HashedStringSetData();
+  std::set_difference( oldData->m_files.begin(), oldData->m_files.end(), rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), std::insert_iterator<HashedStringSetData::StringSet>( m_data->m_files, m_data->m_files.end() ) );
+#else
+  makeDataPrivate();
+  HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
+  HashedStringSetData::StringSet::const_iterator myEnd = m_data->m_files.end();
+  HashedStringSetData::StringSet& mySet( m_data->m_files );
+  for( HashedStringSetData::StringSet::const_iterator it = rhs.m_data->m_files.begin(); it != end; ++it ) {
+    mySet.erase( *it );
+  }
+  
+#endif
+  return *this;
+}
+
 
 void HashedStringSet::makeDataPrivate() {
   if ( !m_data ) {
@@ -113,8 +169,8 @@ void HashedStringSet::makeDataPrivate() {
 }
 
 bool HashedStringSet::operator[] ( const HashedString& rhs ) const {
-  if ( rhs.str() == "*" )
-    return true; /// * stands for "any file"
+  //if ( rhs.str() == "*" )
+    //return true; /// * stands for "any file"
   if ( !m_data )
     return false;
   return m_data->m_files.find( rhs ) != m_data->m_files.end();
@@ -133,7 +189,19 @@ bool HashedStringSet::operator <= ( const HashedStringSet& rhs ) const {
     return true;
   if ( !rhs.m_data )
     return false;
+#ifndef USE_HASHMAP
   return std::includes( rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), m_data->m_files.begin(), m_data->m_files.end() );
+#esle
+  HashedStringSetData::StringSet& otherSet( rhs.m_data->m_files );
+  HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
+  HashedStringSetData::StringSet::const_iterator myEnd = m_data->m_files.end();
+
+  for( HashedStringSetData::StringSet::const_iterator it = m_data->m_files.begin(); it != myEnd; ++it ) {
+    HashedStringSetData::StringSet::const_iterator i = otherSet.find( *it );
+    if( i == end ) return false;
+  }
+  return true;
+#endif
 }
 
 bool HashedStringSet::operator == ( const HashedStringSet& rhs ) const {
@@ -214,4 +282,3 @@ QDataStream& operator >> ( QDataStream& stream, HashedString& str ) {
     stream >> str.m_hash;
     return stream;
 }
-

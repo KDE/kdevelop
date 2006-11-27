@@ -86,6 +86,9 @@ public:
 	QValueList<Problem> problems( const QString& fileName , bool readFromDisk = false, bool forceParse = false );
 	void updateParserConfiguration();
 
+    ///Should be run on a regular basis(every X minutes). It reduces some caches etc. BackgroundParser must be locked before.
+    void saveMemory();
+  
 	void close();
 
 	virtual void run();
@@ -106,6 +109,7 @@ private:
 	CppSupportPart* m_cppSupport;
 	bool m_close;
 	QMap<QString, Unit*> m_unitDict;
+    bool m_saveMemory; //used to prevent blocking
 };
 
 #endif 

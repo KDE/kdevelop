@@ -108,8 +108,17 @@ public:
 	
 	virtual bool isModified( const QString& fileName )
 	{
-		Q_UNUSED( fileName );
-		return true;
+		bool ret = false;
+		kapp->lock ();
+
+		KParts::ReadOnlyPart *part = m_cppSupport->partController()->partForURL( KURL(fileName) );
+		KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part );
+
+		if ( doc )
+			ret = doc->isModified();
+
+		kapp->unlock();
+		return ret;
 	}
 	
 private:
@@ -227,7 +236,7 @@ private:
 };
 
 BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consumed )
-: m_consumed( consumed ), m_cppSupport( part ), m_close( false )
+: m_consumed( consumed ), m_cppSupport( part ), m_close( false ), m_saveMemory( false )
 {
 	m_fileList = new SynchronizedFileList();
 	m_driver = new KDevDriver( m_cppSupport );
@@ -447,6 +456,11 @@ void BackgroundParser::run()
 		
 		while ( m_fileList->isEmpty() )
 		{
+			if( m_saveMemory ) {
+				m_saveMemory = false;
+				m_driver->lexerCache()->removeLowerHalf();
+			}
+
 			m_canParse.wait();
 			
 			if ( m_close )
@@ -471,6 +485,11 @@ void BackgroundParser::run()
 	
 //	adymo: commented to fix #88091
 //	QThread::exit();
+}
+
+void BackgroundParser::saveMemory() {
+	m_saveMemory = true; //Delay the operation
+	m_canParse.wakeAll();
 }
 
 //kate: indent-mode csands; tab-width 4; space-indent off;

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
    Copyright (C) 2002,2003 Roberto Raggi <roberto@kdevelop.org>
+   Copyright (C) 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,6 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#define CACHELEXER
+
 #include "driver.h"
 #include "lexer.h"
 #include "parser.h"
@@ -29,7 +32,7 @@
 #include <qdatastream.h>
 #include <qbuffer.h>
 #include <assert.h>
-
+    
 
 //     void Macro::read( QDataStream& stream ) {
 //         stream >> m_idHashValid;
@@ -96,7 +99,7 @@ class DefaultSourceProvider: public SourceProvider {
 
 
 Driver::Driver()
-    : depresolv( FALSE ), lexer( 0 ), m_maxDependenceDepth( 20 ), m_dependenceDepth( 0 ) {
+    : depresolv( FALSE ), lexer( 0 ), m_maxDependenceDepth( 20 ), m_dependenceDepth( 0 ), m_lexerCache( this ) {
   m_sourceProvider = new DefaultSourceProvider();
 }
 
@@ -119,6 +122,7 @@ void Driver::setSourceProvider( SourceProvider* sourceProvider ) {
 }
 
 void Driver::reset( ) {
+  m_lexerCache.clear();
   m_dependences.clear();
   m_macros.clear();
   m_problems.clear();
@@ -161,7 +165,15 @@ void Driver::removeAllMacrosInFile( const QString& fileName ) {
   }
 }
 
-bool Driver::hasMacro( const HashedString& name ) const {
+void Driver::usingString( const HashedString& str ) {
+  #ifdef CACHELEXER
+  if( m_currentLexerCache ) {
+    m_currentLexerCache->addString( m_lexerCache.unifyString( str ) );
+  }
+  #endif
+}
+
+bool Driver::hasMacro( const HashedString& name ) {
   std::pair< MacroMap::const_iterator, MacroMap::const_iterator > range = m_macros.equal_range( name );
   if ( range.first == range.second ) {
     return false;
@@ -208,6 +220,11 @@ void Driver::addMacro( const Macro & macro ) {
     Macro cp = this->macro( macro.name() );
     assert( macro == cp );
   }
+
+#ifdef CACHELEXER
+  if( m_currentLexerCache )
+    m_currentLexerCache->addDefinedMacro( macro );
+#endif
 }
 
 void Driver::removeMacro( const HashedString& macroName ) {
@@ -237,9 +254,12 @@ ParsedFilePointer Driver::translationUnit( const QString& fileName ) const {
 
 class Driver::ParseHelper {
   public:
-      ParseHelper( const QString& fileName, bool force, Driver* driver, bool reportMessages = true ) : m_wasReset( false ), m_fileName( fileName ), m_force( force ), m_previousParsedFile( driver->m_currentParsedFile ), m_driver( driver ), m_previousFileName( driver->m_currentFileName ), m_previousLexer( driver->lexer ), m_lex( m_driver ) {
+      ParseHelper( const QString& fileName, bool force, Driver* driver, bool reportMessages = true ) : m_wasReset( false ), m_fileName( fileName ), m_force( force ), m_previousParsedFile( driver->m_currentParsedFile ), m_previousCachedLexedFile( driver->m_currentLexerCache ), m_driver( driver ), m_previousFileName( driver->m_currentFileName ), m_previousLexer( driver->lexer ), m_lex( m_driver ) {
       QFileInfo fileInfo( fileName );
-      m_driver->m_currentParsedFile = new ParsedFile( fileName, fileInfo.lastModified() ); ///@todo what if the file was modified in the editor?
+      m_driver->m_currentParsedFile = new ParsedFile( fileName, fileInfo.lastModified() );
+#ifdef CACHELEXER
+      m_driver->m_currentLexerCache = new CachedLexedFile( fileName, &m_driver->m_lexerCache );
+#endif
       m_absFilePath = fileInfo.absFilePath();
 
       QMap<QString, ParsedFilePointer>::Iterator it = m_driver->m_parsedUnits.find( m_absFilePath );
@@ -251,6 +271,8 @@ class Driver::ParseHelper {
         return ;
       }
 
+      CachedLexedFilePointer lexedFileP = m_driver->m_lexerCache.lexedFile(  HashedString( fileName ) );
+      
       m_driver->m_dependences.remove( fileName );
       m_driver->m_problems.remove( fileName );
 
@@ -261,11 +283,22 @@ class Driver::ParseHelper {
 
       m_lex.setReportMessages( reportMessages );
       
+      kdDebug( 9007 ) << "lexing file " << fileName << endl;
       m_lex.setSource( m_driver->sourceProvider() ->contents( fileName ) );
-    }
+      if(m_previousCachedLexedFile)
+        m_previousCachedLexedFile->merge( *m_driver->m_currentLexerCache );
+      else
+        m_driver->findOrInsertProblemList( m_driver->m_currentMasterFileName )  += m_driver->m_currentLexerCache->problems();
+      
+      if( !lexedFileP ) //only add the new cache-instance if a fitting isn't already stored
+        m_driver->m_lexerCache.addLexedFile( m_driver->m_currentLexerCache );
+      }
 
   
     void parse() {
+      CachedLexedFilePointer lf = m_driver->m_currentLexerCache; //Set the lexer-cache to zero, so the problems registered through addProblem go directly into the file
+      m_driver->m_currentLexerCache = 0;
+      
       Parser parser( m_driver, m_driver->lexer );
       m_driver->setupParser( &parser );
 
@@ -274,6 +307,8 @@ class Driver::ParseHelper {
       m_driver->m_currentParsedFile->setTranslationUnit( unit );
       m_driver->m_parsedUnits.insert( m_fileName, m_driver->m_currentParsedFile );
       m_driver->fileParsed( *m_driver->m_currentParsedFile );
+
+      m_driver->m_currentLexerCache = lf;
     }
 
     ParsedFilePointer parsedFile() const {
@@ -285,6 +320,11 @@ class Driver::ParseHelper {
         m_driver->m_currentFileName = m_previousFileName;
         m_driver->lexer = m_previousLexer;
         m_driver->m_currentParsedFile = m_previousParsedFile;
+        m_driver->m_currentLexerCache = m_previousCachedLexedFile;
+        if( m_driver->m_currentLexerCache == 0 ) {
+
+        }
+          
         m_wasReset = true;
       }
     }
@@ -301,6 +341,7 @@ class Driver::ParseHelper {
     QString m_previousFileName;
     Lexer* m_previousLexer;
     ParsedFilePointer m_previousParsedFile;
+    CachedLexedFilePointer m_previousCachedLexedFile;
     bool m_force;
     Driver* m_driver;
     Lexer m_lex;
@@ -311,6 +352,11 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
   //@todo prevent cyclic dependency-loops
   QFileInfo fileInfo( dep.first );
   QString fn = fileInfo.absFilePath();
+    
+#ifdef LEXERCACHE
+      if( m_currentLexerCache )
+        m_currentLexerCache->addIncludeFile( file, QDateTime() ); ///The time will be overwritten in CachedLexedFile::merge(...)
+    #endif
 
   if ( !depresolv ) {
     findOrInsertDependenceList( fileName ).insert( fn, dep );
@@ -345,6 +391,17 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
       return;
   }
 
+  CachedLexedFilePointer lexedFileP = m_lexerCache.lexedFile(  HashedString( file ) );
+  if( lexedFileP ) {
+    CachedLexedFile& lexedFile( *lexedFileP );
+    m_currentLexerCache->merge( lexedFile );
+    for( MacroSet::Macros::const_iterator it = lexedFile.definedMacros().macros().begin(); it != lexedFile.definedMacros().macros().end(); ++it ) {
+      addMacro( (*it) );
+    }
+    ///@todo fill usingMacro(...)
+    return;
+  }
+
   ParseHelper h( file, true, this, false );
 
   /*if ( m_parsedUnits.find(file) != m_parsedUnits.end() )
@@ -354,9 +411,13 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
 }
 
 void Driver::addProblem( const QString & fileName, const Problem & problem ) {
-    Problem p( problem );
-    p.setFileName( fileName );
-  findOrInsertProblemList( m_currentMasterFileName ).append( problem );
+  Problem p( problem );
+  p.setFileName( fileName );
+  
+  if( m_currentLexerCache )
+    m_currentLexerCache->addProblem( p );
+  else
+    findOrInsertProblemList( m_currentMasterFileName ).append( problem );
 }
 
 QMap< QString, Dependence >& Driver::findOrInsertDependenceList( const QString & fileName ) {
@@ -386,7 +447,7 @@ QMap< QString, Dependence > Driver::dependences( const QString & fileName ) cons
   return QMap<QString, Dependence>();
 }
 
-Driver::MacroMap Driver::macros() const {
+const Driver::MacroMap& Driver::macros() const {
   return m_macros;
 }
 
@@ -394,9 +455,8 @@ void Driver::insertMacros( const MacroSet& macros ) {
     for( MacroSet::Macros::const_iterator it = macros.m_usedMacros.begin(); it != macros.m_usedMacros.end(); ++it ) {
         addMacro( *it );
     }
-    
 }
-        
+
 QValueList < Problem > Driver::problems( const QString & fileName ) const {
   QMap<QString, QValueList<Problem> >::ConstIterator it = m_problems.find( fileName );
   if ( it != m_problems.end() )
@@ -420,9 +480,10 @@ void Driver::clearParsedMacros() {
 }
 
 void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force , bool macrosGlobal ) {
-   if( isResolveDependencesEnabled() )
-       clearParsedMacros(); ///Since everything will be re-lexed, we do not need any old macros
-   
+   //if( isResolveDependencesEnabled() )
+    clearParsedMacros(); ///Since everything will be re-lexed, we do not need any old macros
+
+    m_lexerCache.increaseFrame();
   m_currentMasterFileName = fileName;
   
   updateIncludePath( fileName );
@@ -616,6 +677,10 @@ void Driver::fileParsed( const ParsedFile & fileName ) {
 void Driver::usingMacro( const Macro& macro, int line, int column ) {
     if( m_currentParsedFile )
         m_currentParsedFile->usedMacros().addMacro( macro, line, column );
+#ifdef CACHELEXER
+    if( m_currentLexerCache )
+      m_currentLexerCache->addUsedMacro( macro, line, column );
+#endif
 }
 
 // void Macro::computeHash() const {
@@ -637,9 +702,23 @@ void Driver::usingMacro( const Macro& macro, int line, int column ) {
 // }
 
 void MacroSet::addMacro( const Macro& macro, int line, int column ) {
-  m_usedMacros.insert( macro );
+  std::pair<Macros::const_iterator, bool> r = m_usedMacros.insert( macro );
+  if( !r.second ) {
+    //Make sure the macro added later will be used
+    m_usedMacros.erase( r.first );
+    m_usedMacros.insert( macro );
+  }
+    
   m_idHashValid = m_valueHashValid = false;
 }
+
+void MacroSet::merge( const MacroSet& macros ) {
+  Macros m = macros.m_usedMacros; //Swap is needed so the merged macros take precedence
+  m.insert( m_usedMacros.begin(), m_usedMacros.end() ); 
+  m_usedMacros = m;
+  m_idHashValid = m_valueHashValid = false;
+}
+
 
 size_t MacroSet::idHash() const {
     if( !m_idHashValid ) computeHash();
@@ -785,11 +864,26 @@ bool MacroSet::hasMacro( const QString& name ) const {
     }
 }
 
+bool MacroSet::hasMacro( const HashedString& name ) const {
+    Macros::const_iterator it = m_usedMacros.find( Macro( name.str(), "" ) );
+    if( it != m_usedMacros.end() ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 Macro MacroSet::macro( const QString& name ) const {
     Macros::const_iterator it = m_usedMacros.find( Macro( name, "" ) );
+    
     if( it != m_usedMacros.end() ) {
         return *it;
     } else {
         return Macro();
     }
 }
+
+LexerCache* Driver::lexerCache() {
+  return &m_lexerCache;
+}
+

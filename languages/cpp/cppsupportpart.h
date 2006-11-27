@@ -222,6 +222,7 @@ private slots:
 	void slotCreateSubclass();
 	void slotCreateAccessMethods();
 	void slotDeleteParserStore();
+    void slotSaveMemory();
 
 	void slotNeedTextHint( int, int, QString& );
 
@@ -339,6 +340,7 @@ private:
 
 	QTimer* m_functionHintTimer;
 	QTimer* m_deleteParserStoreTimer;
+	QTimer* m_saveMemoryTimer;
     
     class ParseEmitWaiting {
     public:

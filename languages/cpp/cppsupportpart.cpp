@@ -188,9 +188,12 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	m_problemReporter = 0;
 
 	m_deleteParserStoreTimer = new QTimer( this );
+	m_saveMemoryTimer = new QTimer( this );
 	m_functionHintTimer = new QTimer( this );
+	connect( m_saveMemoryTimer, SIGNAL(timeout()), this, SLOT(slotSaveMemory()) );
 	connect( m_deleteParserStoreTimer, SIGNAL(timeout()), this, SLOT(slotDeleteParserStore()) );
 	resetParserStoreTimer();
+	m_saveMemoryTimer->start( 240000, false ); //Free some memory every 4 minutes
 	//    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
 
 	setXMLFile( "kdevcppsupport.rc" );
@@ -1018,6 +1021,15 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 	return QString::null;
 }
 
+void CppSupportPart::slotSaveMemory() {
+	if( m_backgroundParser ) {
+		///This is done so the caches are completely empty after kdevelop was idle for some time(else it would be waste of memory). The background-parsers internal lexer-cache-manager just cares about keeping the count of cached files under a specific count, but doesn't decrease that count when kdevelop is idle.
+		m_backgroundParser->lock();
+		m_backgroundParser->saveMemory();
+		m_backgroundParser->unlock();
+	}
+}
+
 void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 {
 	QString candidate = sourceOrHeaderCandidate();
@@ -1327,6 +1339,7 @@ bool CppSupportPart::parseProject( bool force )
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 5" << endl;
 	QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
 
+	m_saveMemoryTimer->stop(); //Do not regularly remove cached files that may still be needed while parsing(the cache anyway be full for the whole parsing-process)
 	return true;
 }
 
@@ -1428,6 +1441,7 @@ void CppSupportPart::slotParseFiles()
 
 			delete _jd;
 			_jd = 0;
+			m_saveMemoryTimer->start( 240000, false );
 		} else {
 			_jd->progressBar->setProgress( _jd->backgroundState ); ///restart
 			_jd->progressBar->setTotalSteps( _jd->backgroundCount );
