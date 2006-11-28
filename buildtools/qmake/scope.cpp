@@ -74,12 +74,15 @@ Scope::~Scope()
     }
 
     if ( m_root && m_root->isProject() )
+    {
         delete m_root;
+        delete m_defaultopts;
+        m_defaultopts = 0;
+    }
     m_root = 0;
     delete m_unfinishedScopes;
     m_unfinishedScopes = 0;
-    delete m_defaultopts;
-    m_defaultopts = 0;
+
 }
 
 Scope::Scope( unsigned int num, Scope* parent, QMake::ProjectAST* scope,

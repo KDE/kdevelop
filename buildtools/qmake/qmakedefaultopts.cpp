@@ -18,7 +18,7 @@
 #include <qprocess.h>
 
 QMakeDefaultOpts::QMakeDefaultOpts( QObject* parent, const char* name )
-        : QObject(parent, name), makefile(0), qmakefile(0),proc(0)
+        : QObject(parent, name), makefile(0), qmakefile(0), proc(0)
 {
 
 }
