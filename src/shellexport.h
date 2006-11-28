@@ -30,13 +30,21 @@
 #endif
 
 
-/*#if defined Q_OS_WIN
-# include <kdelibs_export_win.h>
+#if defined Q_OS_WIN
+#ifndef KDEVSHELL_EXPORT
+# ifdef MAKE_KDEVSHELL_LIB
+#  define KDEVSHELL_EXPORT KDE_EXPORT
+# else
+#  define KDEVSHELL_EXPORT KDE_IMPORT
+# endif
+#endif
+
 #else //UNIX
-*/
 
 /* export statements for unix */
 #define KDEVSHELL_EXPORT KDE_EXPORT
+
+#endif
 
 #endif /* SHELLEXPORT_H*/
 

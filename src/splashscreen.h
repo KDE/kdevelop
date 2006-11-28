@@ -3,11 +3,11 @@
 #define _SPLASHSCREEN_H_
 
 #include <QSplashScreen>
-
+#include <shellexport.h>
 class QPixmap;
 class QPainter;
 
-class SplashScreen : public QSplashScreen
+class KDEVSHELL_EXPORT SplashScreen : public QSplashScreen
 {
     Q_OBJECT
 
