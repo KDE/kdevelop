@@ -22,6 +22,7 @@
 #include <QMultiHash>
 #include <QMultiMap>
 #include <QReadWriteLock>
+#include <kdevexport.h>
 
 #include "identifier.h"
 
@@ -35,7 +36,7 @@ class DUContext;
  *
  * \todo profiling, map vs hash etc...
  */
-class SymbolTable
+class KDEVCPPLANGUAGE_EXPORT SymbolTable
 {
 public:
   static SymbolTable* self();

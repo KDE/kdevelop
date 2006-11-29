@@ -21,6 +21,7 @@
 
 #include <QHash>
 #include <QReadWriteLock>
+#include <kdevexport.h>
 
 #include "kdevdocumentcursorobject.h"
 #include "identifier.h"
@@ -60,7 +61,7 @@ Q_ASSERT(!_ensure_chain_locked);
  *
  * \todo change child relationships to a linked list within the context?
  */
-class DUContext : public DUChainBase
+class KDEVCPPLANGUAGE_EXPORT DUContext : public DUChainBase
 {
   friend class Use;
   friend class Declaration;

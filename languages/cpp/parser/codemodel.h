@@ -33,7 +33,7 @@
 #include <QtCore/QVector>
 
 #include <kurl.h>
-
+#include <kdevexport.h>
 #include <ktexteditor/cursor.h>
 
 #define DECLARE_MODEL_NODE(k) \
@@ -459,7 +459,7 @@ private:
   uint _M_isMutable: 1;
 };
 
-class _FunctionModelItem: public _MemberModelItem
+class KDEVCPPPARSER_EXPORT _FunctionModelItem: public _MemberModelItem
 {
 public:
   DECLARE_MODEL_NODE(Function)

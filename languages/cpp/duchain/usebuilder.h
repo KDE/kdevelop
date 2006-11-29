@@ -20,13 +20,14 @@
 #define USEBUILDER_H
 
 #include "contextbuilder.h"
+#include <kdevexport.h>
 
 typedef ContextBuilder UseBuilderBase;
 
 /**
  * A class which iterates the AST to extract uses of definitions.
  */
-class UseBuilder: public UseBuilderBase
+class KDEVCPPLANGUAGE_EXPORT UseBuilder: public UseBuilderBase
 {
 public:
   UseBuilder(ParseSession* session);

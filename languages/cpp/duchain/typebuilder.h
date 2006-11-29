@@ -22,6 +22,7 @@
 #include "contextbuilder.h"
 #include "typesystem.h"
 #include "cppnamespace.h"
+#include <kdevexport.h>
 
 typedef ContextBuilder TypeBuilderBase;
 
@@ -32,7 +33,7 @@ typedef ContextBuilder TypeBuilderBase;
  * array types; parent classes will not have
  * their visitDeclarator function called.
  */
-class TypeBuilder: public TypeBuilderBase
+class KDEVCPPLANGUAGE_EXPORT TypeBuilder: public TypeBuilderBase
 {
 public:
   TypeBuilder(ParseSession* session);

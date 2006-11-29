@@ -22,6 +22,7 @@
 #include <QObject>
 
 #include <kurl.h>
+#include <kdevexport.h>
 
 #include "duchainobserver.h"
 
@@ -34,7 +35,7 @@ class QReadWriteLock;
  * \todo to pull the sorting off properly, will need to know the location of
  *       the defines used to pull in URLs other than the source file URL.
  */
-class DUChain : public QObject
+class KDEVCPPLANGUAGE_EXPORT DUChain : public QObject
 {
   Q_OBJECT
 

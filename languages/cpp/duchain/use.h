@@ -19,6 +19,7 @@
 #ifndef DEFINITIONUSE_H
 #define DEFINITIONUSE_H
 
+#include <kdevexport.h>
 #include "kdevdocumentrangeobject.h"
 #include "duchainbase.h"
 
@@ -30,7 +31,7 @@ class Declaration;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class Use : public DUChainBase
+class KDEVCPPLANGUAGE_EXPORT Use : public DUChainBase
 {
   friend class Declaration;
   friend class ForwardDeclaration;

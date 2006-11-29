@@ -20,7 +20,7 @@
 #define CPPEDITORINTEGRATOR_H
 
 #include "kdeveditorintegrator.h"
-
+#include <kdevexport.h>
 #include "lexer.h"
 
 class AST;
@@ -33,7 +33,7 @@ class AST;
  *
  * \todo introduce stacks for the state?
  */
-class CppEditorIntegrator : public KDevEditorIntegrator
+class KDEVCPPLANGUAGE_EXPORT CppEditorIntegrator : public KDevEditorIntegrator
 {
 public:
   CppEditorIntegrator(ParseSession* session);

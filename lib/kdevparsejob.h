@@ -24,7 +24,7 @@
 
 #include <JobSequence.h>
 #include <kurl.h>
-
+#include <kdevexport.h>
 class KDevDocument;
 
 class QByteArray;
@@ -42,7 +42,7 @@ class KDevBackgroundParser;
 /**
  * The base class for background parser jobs.
  */
-class KDevParseJob : public ThreadWeaver::JobSequence
+class KDEVPLATFORM_EXPORT KDevParseJob : public ThreadWeaver::JobSequence
 {
     Q_OBJECT
 public:
