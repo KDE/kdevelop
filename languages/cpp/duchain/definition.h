@@ -21,7 +21,7 @@
 
 #include "kdevdocumentrangeobject.h"
 #include "duchainbase.h"
-
+#include <kdevexport.h>
 #include <QReadWriteLock>
 
 class Declaration;
@@ -30,7 +30,7 @@ class DUContext;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
  */
-class Definition : public DUChainBase
+class KDEVCPPLANGUAGE_EXPORT Definition : public DUChainBase
 {
   friend class Declaration;
 

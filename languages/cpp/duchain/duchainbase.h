@@ -24,11 +24,11 @@ class QReadWriteLock;
 class DUChainModel;
 
 #include "kdevdocumentrangeobject.h"
-
+#include <kdevexport.h>
 /**
  * Base class for definition-use chain objects.
  */
-class DUChainBase : public KDevDocumentRangeObject
+class KDEVCPPLANGUAGE_EXPORT DUChainBase : public KDevDocumentRangeObject
 {
   friend class ProxyObject;
 

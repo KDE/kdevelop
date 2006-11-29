@@ -24,6 +24,7 @@
 
 #include "identifier.h"
 #include "ducontext.h"
+#include <kdevexport.h>
 
 class ParseSession;
 class DUChain;
@@ -41,7 +42,7 @@ namespace KTextEditor { class Range; }
  *
  * \sa Binder
  */
-class ContextBuilder: protected DefaultVisitor
+class KDEVCPPLANGUAGE_EXPORT ContextBuilder: protected DefaultVisitor
 {
   friend class IdentifierVerifier;
 

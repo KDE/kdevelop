@@ -24,7 +24,7 @@
 #include "name_compiler.h"
 #include "declarator_compiler.h"
 #include "lexer.h"
-
+#include <kdevexport.h>
 #include <QtCore/QSet>
 
 #include <kurl.h>
@@ -42,7 +42,7 @@ struct NameSymbol;
  *
  * \sa DUBuilder
  */
-class Binder: protected DefaultVisitor
+class KDEVCPPPARSER_EXPORT Binder: protected DefaultVisitor
 {
 public:
   Binder(CodeModel *model, ParseSession* session);

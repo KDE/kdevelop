@@ -35,6 +35,7 @@
 #include <kurl.h>
 #include <kdevexport.h>
 #include <ktexteditor/cursor.h>
+#include <kdevexport.h>
 
 #define DECLARE_MODEL_NODE(k) \
     enum { __node_kind = Kind_##k }; \
@@ -49,7 +50,7 @@ _Target model_static_cast(_Source item)
   return ptr;
 }
 
-class CodeModel : public KDevCodeModel
+class KDEVCPPLANGUAGE_EXPORT CodeModel : public KDevCodeModel
 {
 public:
   enum AccessPolicy
@@ -132,7 +133,7 @@ private:
     uint m_indirections : 6;
 };
 
-class _CodeModelItem: public KDevCodeItem
+class KDEVCPPLANGUAGE_EXPORT _CodeModelItem: public KDevCodeItem
 {
 public:
   enum Kind

@@ -22,6 +22,7 @@
 #include "typebuilder.h"
 #include "cppnamespace.h"
 #include "classfunctiondeclaration.h"
+#include <kdevexport.h>
 
 class Declaration;
 
@@ -30,7 +31,7 @@ typedef TypeBuilder DeclarationBuilderBase;
 /**
  * A class which iterates the AST to extract definitions of types.
  */
-class DeclarationBuilder: public DeclarationBuilderBase
+class KDEVCPPLANGUAGE_EXPORT DeclarationBuilder: public DeclarationBuilderBase
 {
 public:
   DeclarationBuilder(ParseSession* session);

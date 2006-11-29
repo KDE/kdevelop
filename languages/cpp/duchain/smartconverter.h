@@ -25,7 +25,7 @@ class DUContext;
 class KDevEditorIntegrator;
 class KDevCodeHighlighting;
 
-class SmartConverter
+class KDEVCPPLANGUAGE_EXPORT SmartConverter
 {
 public:
   SmartConverter(KDevEditorIntegrator* editor, KDevCodeHighlighting* hl);

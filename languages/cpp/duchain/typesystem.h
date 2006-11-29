@@ -21,7 +21,7 @@
 #define TYPESYSTEM_H
 
 #include "identifier.h"
-
+#include <kdevexport.h>
 #include <QSet>
 #include <QString>
 #include <QList>
@@ -62,7 +62,7 @@ public:
   virtual void endVisit (const ArrayType *) {}
 };
 
-class AbstractType : public KShared
+class KDEVCPPLANGUAGE_EXPORT AbstractType : public KShared
 {
 public:
   typedef KSharedPtr<AbstractType> Ptr;

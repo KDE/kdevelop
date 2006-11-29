@@ -26,6 +26,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QPair>
 
+#include <kdevexport.h>
 #include "typesystem.h"
 #include "cppnamespace.h"
 
@@ -33,7 +34,7 @@ class DUContext;
 class Declaration;
 class ClassFunctionDeclaration;
 
-class CppCVType
+class KDEVCPPLANGUAGE_EXPORT CppCVType
 {
   friend class TypeRepository;
   friend class TypeBuilder;
@@ -126,7 +127,7 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
-class CppFunctionType : public FunctionType, public CppIdentifiedType, public CppCVType
+class KDEVCPPLANGUAGE_EXPORT CppFunctionType : public FunctionType, public CppIdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
@@ -171,7 +172,7 @@ public:
 
 class CppClassType;
 
-class CppClassType : public StructureType, public CppIdentifiedType, public CppCVType
+class KDEVCPPLANGUAGE_EXPORT CppClassType : public StructureType, public CppIdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
@@ -277,7 +278,7 @@ private:
   QString m_value;
 };*/
 
-class CppEnumerationType : public CppIntegralType, public CppIdentifiedType
+class KDEVCPPLANGUAGE_EXPORT CppEnumerationType : public CppIntegralType, public CppIdentifiedType
 {
 public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
