@@ -105,6 +105,15 @@
 # endif
 #endif
 
+#ifndef KDEVCMAKECOMMON_EXPORT
+# ifdef MAKE_KDEVCMAKECOMMON_LIB
+#  define KDEVCMAKECOMMON_EXPORT KDE_EXPORT
+# else
+#  define KDEVCMAKECOMMON_EXPORT KDE_IMPORT
+# endif
+#endif
+
+
 #else //UNIX
 
 /* export statements for unix */
@@ -117,6 +126,7 @@
 #define KDEVCPPPARSER_EXPORT KDE_EXPORT
 #define KDEVCPPRPP_EXPORT KDE_EXPORT
 #define KDEVCPPLANGUAGE_EXPORT KDE_EXPORT
+#define KDEVCMAKECOMMON_EXPORT KDE_EXPORT
 #endif /* KDEVEXPORT_H*/
 #endif
 

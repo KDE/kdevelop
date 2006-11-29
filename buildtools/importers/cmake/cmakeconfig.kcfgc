@@ -2,4 +2,5 @@ File=cmakeconfig.kcfg
 ClassName=CMakeSettings
 Singleton=true
 Inherits=KDevConfigSkeleton
-IncludeFiles="kdevconfigskeleton.h"
+IncludeFiles=kdevconfigskeleton.h,kdevexport.h
+Visibility=KDEVCMAKECOMMON_EXPORT

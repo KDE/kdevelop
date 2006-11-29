@@ -23,13 +23,13 @@
 
 #include <kdevprojectmodel.h>
 #include "cmakexmlparser.h"
-
+#include <kdevexport.h>
 /**
  * The project model item for CMake folders.
  *
  * @author Matt Rogers <mattr@kde.org>
  */
-class CMakeFolderItem : public KDevProjectBuildFolderItem
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevProjectBuildFolderItem
 {
 public:
     CMakeFolderItem( const FolderInfo& fi,  KDevProjectItem* item = 0 );
@@ -47,7 +47,7 @@ private:
  *
  * @author Matt Rogers <mattr@kde.org>
  */
-class CMakeTargetItem : public KDevProjectTargetItem
+class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public KDevProjectTargetItem
 {
 public:
     CMakeTargetItem( const TargetInfo& target, CMakeFolderItem* item );
