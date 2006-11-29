@@ -1406,6 +1406,24 @@ void PartController::slotDocumentDirtyStepTwo( void * payload )
 
 	ModificationData * p = reinterpret_cast<ModificationData*>( payload );
 	KTextEditor::Document * doc = p->doc;
+	
+	// let's make sure the document is still loaded
+	bool haveDocument = false;
+	if( const QPtrList<KParts::Part> * partlist = parts() )
+	{
+		QPtrListIterator<KParts::Part> it( *partlist );
+		while ( KParts::Part * part = it.current() )
+		{
+			if ( p->doc == dynamic_cast<KTextEditor::Document*>( part ) )
+			{
+				haveDocument = true;
+				break;
+			}
+			++it;
+		}
+	}
+	if ( !haveDocument ) return;
+	
 	bool isModified = p->isModified;
 	unsigned char reason = p->reason;
 	delete p;
