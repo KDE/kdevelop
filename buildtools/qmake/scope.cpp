@@ -1469,7 +1469,7 @@ void Scope::loadDefaultOpts()
         if( DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/disableDefaultOpts", true ) )
         {
             connect( m_defaultopts, SIGNAL( variablesRead() ), this, SLOT( init() ) );
-            m_defaultopts->readVariables( DomUtil::readEntry( *m_part->projectDom(), "/kdevcppsupport/qt/root", "" ),
+            m_defaultopts->readVariables( m_part->qmakePath(),
                                           QFileInfo( m_root->fileName() ).dirPath( true ) );
         }else
         {

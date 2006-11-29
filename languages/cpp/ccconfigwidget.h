@@ -39,21 +39,25 @@ private slots:
 	void catalogRegistered( Catalog* c );
 	void catalogUnregistered( Catalog* c );
 	void isValidQtDir( const QString & );
+    void isDesignerExecutable( const QString& );
+    void isQMakeExecutable( const QString& );
 	void toggleQtVersion( bool );
 
 private:
+    bool isExecutable( const QString & );
+
 	void initGeneralTab();
 	void saveFileTemplatesTab();
 
 	void initQtTab();
 	void saveQtTab();
-    
+
 	void initCodeCompletionTab();
 	void saveCodeCompletionTab();
 
 	void initGetterSetterTab();
 	void saveGetterSetterTab();
-    
+
     void initSplitTab();
     void saveSplitTab();
 
@@ -62,6 +66,6 @@ private:
 	QMap<QCheckListItem*, Catalog*> m_catalogs;
 };
 
-#endif 
+#endif
 // kate: indent-mode csands; tab-width 4;
 

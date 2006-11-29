@@ -40,12 +40,16 @@ public:
 	inline int version() const { return m_version; }
 	inline int includeStyle() const { return m_includeStyle; }
 	inline const QString& root() const { return m_root; }
+    inline const QString& qmakePath() const { return m_qmakePath; }
+    inline const QString& designerPath() const { return m_designerPath; }
 	inline const QString& designerIntegration() const { return m_designerIntegration; }
 
 	void setUsed( bool used );
 	void setVersion( int version );
 	void setIncludeStyle( int style );
 	void setRoot( const QString& root );
+    void setDesignerPath( const QString& path );
+    void setQMakePath( const QString& path );
 	void setDesignerIntegration( const QString& designerIntegration );
 	void init();
 
@@ -58,7 +62,10 @@ signals:
 private:
 
     bool isValidQtDir( const QString& ) const;
-    QStringList availableQtDirList() const;
+    void findQtDir();
+    QString findExecutable( const QString& ) const;
+    void buildBinDirs( QStringList& ) const;
+    bool isExecutable( const QString& ) const;
 
 	CppSupportPart* m_part; ///< The cpp support part
 	QDomDocument* m_dom; ///< The project configuration
@@ -66,7 +73,9 @@ private:
 	bool m_used; ///< Flag if qt is used in this project.
 	int m_version; ///< The major version of the qt library (3 or 4)
 	int m_includeStyle; ///< The type of include style used (qt 3 or 4)
-	QString m_root; ///< The root directory of the used qt installation
+	QString m_root; ///< The root directory of the used qt installation for Qt3
+    QString m_designerPath; ///< The path including the binary name of Qt Designer
+    QString m_qmakePath; ///< The path including the binary name of QMake
 	QString m_designerIntegration; ///< The type of designer used, kdevdesigner or qt designer
 
 	static const QString m_configRoot; ///< The root path of the configuration

@@ -183,14 +183,20 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
              this, SLOT(slotCommandFinished(const QString&)) );
 
-    m_availableQtDirList = availableQtDirList();
     m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
+    m_qmakePath = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "");
 
-    if( ( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) ) && !m_availableQtDirList.isEmpty() )
+    if( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) )
     {
-        m_defaultQtDir = m_availableQtDirList.front();
+        findQtDir();
         kdDebug(9024) << "Setting default dir to: " << m_defaultQtDir << endl;
         DomUtil::writeEntry(*projectDom(), "/kdevcppsupport/qt/root", m_defaultQtDir );
+    }
+    if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
+    {
+        m_qmakePath = findExecutable( "qmake" );
+        kdDebug(9024) << "Setting qmake binary to: " << m_qmakePath << endl;
+        DomUtil::writeEntry(*projectDom(), "/kdevcppsupport/qt/qmake", m_qmakePath );
     }
 }
 
@@ -262,16 +268,14 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
 {
     mainWindow()->statusBar()->message( i18n("Loading Project...") );
 
-    if( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) )
+    if( !isQt4Project() && ( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) ) )
     {
         bool doask = true;
         while( doask )
         {
-            KURLRequesterDlg dlg( i18n("Choose Qt%1 directory").arg(DomUtil::readEntry(*projectDom(),
-                "/kdevcppsupport/qt/version")),
-                i18n("Choose the Qt%1 directory to use. This directory needs to have a bin subdirectory "
-                     "containing the qmake binary and for Qt3 projects it also needs to contain the include directory containing qt.h.").arg(
-                        DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version", "3")), m_widget, 0);
+            KURLRequesterDlg dlg( i18n("Choose Qt3 directory"),
+                i18n("Choose the Qt3 directory to use. This directory needs to have an include directory containing qt.h.")
+                                  , m_widget, 0);
             dlg.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
             dlg.urlRequester() ->setURL( QString::null );
             dlg.urlRequester() ->completionObject() ->setDir( "/" );
@@ -315,7 +319,56 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
             }
         }
     }
+    if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
+    {
+        bool doask = true;
+        while( doask )
+        {
+            KURLRequesterDlg dlg( i18n("Choose QMake executable"),
+                i18n("Choose the QMake binary to use. QMake is used to generate Makefiles from the project files."), m_widget, 0);
+            dlg.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
+            dlg.urlRequester() ->setURL( QString::null );
+            dlg.urlRequester() ->completionObject() ->setDir( "/" );
+
+            if ( dlg.exec() == QDialog::Accepted && !dlg.urlRequester() ->url().isEmpty() )
+            {
+                QString qmake = dlg.urlRequester()->url();
+                if( !isExecutable( qmake ) )
+                {
+                    if( KMessageBox::warningYesNo( m_widget,
+                                                i18n("The binary you gave is not executable, the "
+                                                    "project might not work properly.\nPlease make "
+                                                    "sure you give a qmake binary that is executable.\nDo you want to try "
+                                                    "setting the QMake binary again?"),
+                                                i18n("Wrong QMake binary given"))
+                        == KMessageBox::Yes
+                    )
+                    doask = true;
+                else
+                    doask = false;
+                }else
+                {
+                    m_qmakePath = qmake;
+                    doask = false;
+                }
+
+            }else
+            {
+                if( KMessageBox::warningYesNo( m_widget,
+                                               i18n("You didn't specify a QMake binary, the project might not "
+                                                   "work properly without one.\nDo you want to try setting a QMake"
+                                                   " binary again?"),
+                                               i18n("No QMake binary given"))
+                        == KMessageBox::Yes
+                    )
+                    doask = true;
+                else
+                    doask = false;
+            }
+        }
+    }
     DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/root", m_defaultQtDir );
+    DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/qmake", m_qmakePath );
 
     m_widget->openProject(dirName);
 
@@ -583,8 +636,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
     	cmdline = "tmake ";
     }else
     {
-      cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "")+QString( QChar( QDir::separator() ) )+"bin"+QString( QChar( QDir::separator() ) );
-	cmdline += "qmake ";
+      cmdline = m_qmakePath;
     }
 
     //QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
@@ -661,39 +713,75 @@ KDevProject::Options TrollProjectPart::options( ) const
 
 bool TrollProjectPart::isValidQtDir( const QString& path ) const
 {
-    QFileInfo qm(  path + QString( QChar( QDir::separator() ) )+
-                   "bin"+QString( QChar( QDir::separator() ) )+
-                   "qmake" );
     QFileInfo inc( path + QString( QChar( QDir::separator() ) )+
                    "include"+QString( QChar( QDir::separator() ) )+
                    "qt.h" );
-    return ( ( isQt4Project() && qm.exists() && qm.isExecutable() ) || ( !isQt4Project() && inc.exists() ) );
+    return ( isQt4Project() || ( !isQt4Project() && inc.exists() ) );
 }
 
-QStringList TrollProjectPart::availableQtDirList() const
+void TrollProjectPart::buildBinDirs( QStringList & dirs ) const
 {
-    QStringList qtdirs, lst;
+    if( !isQt4Project() )
+        dirs << ::getenv("QTDIR");
+    QStringList paths = QStringList::split(":",::getenv("PATH"));
+    dirs += paths;
+    QString binpath = QDir::rootDirPath() + "bin";
+    if( dirs.findIndex( binpath ) != -1 )
+        dirs << binpath;
+
+    binpath = QDir::rootDirPath() + "usr" + QString( QChar( QDir::separator() ) ) + "bin";
+    if( dirs.findIndex( binpath ) != -1 )
+        dirs << binpath;
+    binpath = QDir::rootDirPath() + "usr" + QString( QChar( QDir::separator() ) ) + "local" + QString( QChar( QDir::separator() ) ) + "bin";
+    if( dirs.findIndex( binpath ) != -1 )
+        dirs << binpath;
+}
+
+
+QString TrollProjectPart::findExecutable( const QString& execname ) const
+{
+    QStringList dirs;
+    buildBinDirs( dirs );
+
+    for( QStringList::Iterator it=dirs.begin(); it!=dirs.end(); ++it )
+    {
+        QString designer = *it + QString( QChar( QDir::separator() ) ) + execname;
+        if( !designer.isEmpty() && isExecutable( designer ) )
+        {
+            return designer;
+        }
+    }
+    return "";
+}
+
+bool TrollProjectPart::isExecutable( const QString& path ) const
+{
+    QFileInfo fi(path);
+    return( fi.exists() && fi.isExecutable() );
+}
+
+void TrollProjectPart::findQtDir()
+{
+    QStringList qtdirs;
     if( !isQt4Project() )
         qtdirs.push_back( ::getenv("QTDIR") );
-    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version", "3") );
-    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString( QChar( QDir::separator() ) )+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version", "3") );
-    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"share"+QString( QChar( QDir::separator() ) )+"qt"+DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version", "3") );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString("%1").arg( DomUtil::readEntry( *projectDom(), "/kdevcppsupport/qt/version", "3") ) );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString( QChar( QDir::separator() ) )+QString("%1").arg( DomUtil::readEntry( *projectDom(), "/kdevcppsupport/qt/version", "3") ) );
+    qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"share"+QString( QChar( QDir::separator() ) )+"qt"+QString("%1").arg( DomUtil::readEntry( *projectDom(), "/kdevcppsupport/qt/version", "3") ) );
     qtdirs.push_back( QDir::rootDirPath()+"usr" );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt" );
-
-    kdDebug(9024) << "Searching for Qt in: " << qtdirs << endl;
 
     for( QStringList::Iterator it=qtdirs.begin(); it!=qtdirs.end(); ++it )
     {
         QString qtdir = *it;
         if( !qtdir.isEmpty() && isValidQtDir(qtdir) )
         {
-            lst.push_back( qtdir );
-            kdDebug(9024) << "Found dir: " << qtdir << endl;
+            m_defaultQtDir = qtdir;
+            return;
         }
     }
-    return lst;
 }
+
 
 QStringList recursiveProFind( const QString &currDir, const QString &baseDir )
 {

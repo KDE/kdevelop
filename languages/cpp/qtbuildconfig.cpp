@@ -50,13 +50,23 @@ void QtBuildConfig::init( )
 	{
 		m_includeStyle = m_version;
 	}
-	m_root = DomUtil::readEntry( *m_dom, m_configRoot + "/root" );
+	m_root = DomUtil::readEntry( *m_dom, m_configRoot + "/root", "" );
+    m_qmakePath = DomUtil::readEntry(*m_dom, m_configRoot + "/qmake", "");
+    m_designerPath = DomUtil::readEntry(*m_dom, m_configRoot + "/designer", "");
 
-    QStringList qtdirs = availableQtDirList();
-    if( ( m_root.isEmpty() || !isValidQtDir( m_root ) ) && !qtdirs.isEmpty() )
+    if( m_root.isEmpty() || !isValidQtDir( m_root ) )
     {
-        m_root = qtdirs.front();
+        findQtDir();
     }
+    if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
+    {
+        m_qmakePath = findExecutable( "qmake" );
+    }
+    if( m_designerPath.isEmpty() || !isExecutable( m_designerPath ) )
+    {
+        m_designerPath = findExecutable( "designer" );
+    }
+
 	m_designerIntegration = DomUtil::readEntry( *m_dom, m_configRoot + "/designerintegration" );
 	if( m_designerIntegration.isEmpty() )
 	{
@@ -69,20 +79,57 @@ void QtBuildConfig::init( )
 
 bool QtBuildConfig::isValidQtDir( const QString& path ) const
 {
-    QFileInfo qm(  path + QString( QChar( QDir::separator() ) )+
-                   "bin"+QString( QChar( QDir::separator() ) )+
-                   "qmake" );
     QFileInfo inc( path + QString( QChar( QDir::separator() ) )+
                    "include"+QString( QChar( QDir::separator() ) )+
                    "qt.h" );
-    return ( ( m_version == 4 && qm.exists() && qm.isExecutable() ) || ( m_version != 4 && inc.exists() ) );
+    return ( m_version == 4 || ( m_version != 4 && inc.exists() ) );
+}
+
+void QtBuildConfig::buildBinDirs( QStringList & dirs ) const
+{
+    if( m_version == 3 )
+        dirs << ::getenv("QTDIR");
+    QStringList paths = QStringList::split(":",::getenv("PATH"));
+    dirs += paths;
+    QString binpath = QDir::rootDirPath() + "bin";
+    if( dirs.findIndex( binpath ) != -1 )
+        dirs << binpath;
+
+    binpath = QDir::rootDirPath() + "usr" + QString( QChar( QDir::separator() ) ) + "bin";
+    if( dirs.findIndex( binpath ) != -1 )
+        dirs << binpath;
+    binpath = QDir::rootDirPath() + "usr" + QString( QChar( QDir::separator() ) ) + "local" + QString( QChar( QDir::separator() ) ) + "bin";
+    if( dirs.findIndex( binpath ) != -1 )
+        dirs << binpath;
 }
 
 
-QStringList QtBuildConfig::availableQtDirList() const
+QString QtBuildConfig::findExecutable( const QString& execname ) const
 {
-    QStringList qtdirs, lst;
-    if( !m_version == 3 )
+    QStringList dirs;
+    buildBinDirs( dirs );
+
+    for( QStringList::Iterator it=dirs.begin(); it!=dirs.end(); ++it )
+    {
+        QString designer = *it + QString( QChar( QDir::separator() ) ) + execname;
+        if( !designer.isEmpty() && isExecutable( designer ) )
+        {
+            return designer;
+        }
+    }
+    return "";
+}
+
+bool QtBuildConfig::isExecutable( const QString& path ) const
+{
+    QFileInfo fi(path);
+    return( fi.exists() && fi.isExecutable() );
+}
+
+void QtBuildConfig::findQtDir()
+{
+    QStringList qtdirs;
+    if( m_version == 3 )
         qtdirs.push_back( ::getenv("QTDIR") );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString("%1").arg( m_version ) );
     qtdirs.push_back( QDir::rootDirPath()+"usr"+QString( QChar( QDir::separator() ) )+"lib"+QString( QChar( QDir::separator() ) )+"qt"+QString( QChar( QDir::separator() ) )+QString("%1").arg( m_version ) );
@@ -95,10 +142,10 @@ QStringList QtBuildConfig::availableQtDirList() const
         QString qtdir = *it;
         if( !qtdir.isEmpty() && isValidQtDir(qtdir) )
         {
-            lst.push_back( qtdir );
+            m_root = qtdir;
+            return;
         }
     }
-    return lst;
 }
 
 void QtBuildConfig::store( )
@@ -108,6 +155,8 @@ void QtBuildConfig::store( )
 	DomUtil::writeIntEntry( *m_dom, m_configRoot + "/includestyle", m_includeStyle );
 	DomUtil::writeEntry( *m_dom, m_configRoot + "/root", m_root );
 	DomUtil::writeEntry( *m_dom, m_configRoot + "/designerintegration", m_designerIntegration );
+    DomUtil::writeEntry(*m_dom, m_configRoot + "/qmake", m_qmakePath );
+    DomUtil::writeEntry(*m_dom, m_configRoot + "/designer", m_designerPath );
 
 	emit stored();
 }
@@ -132,10 +181,20 @@ void QtBuildConfig::setRoot( const QString& root )
 	m_root = root;
 }
 
+void QtBuildConfig::setQMakePath( const QString& path )
+{
+    m_qmakePath = path;
+}
+
+void QtBuildConfig::setDesignerPath( const QString& path )
+{
+    m_designerPath = path;
+}
+
 void QtBuildConfig::setDesignerIntegration( const QString& designerIntegration )
 {
 	m_designerIntegration = designerIntegration;
 }
 #include "qtbuildconfig.moc"
 
-// kate: indent-mode csands; tab-width 4; space-indent off;
+//kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

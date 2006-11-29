@@ -72,6 +72,16 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 	connect( m_qtDir, SIGNAL(textChanged(const QString &)),
 		 this, SLOT(isValidQtDir(const QString &)));
 
+    connect( m_designerPath, SIGNAL(urlSelected(const QString &)),
+         this, SLOT(isExecutable(const QString &)));
+    connect( m_designerPath, SIGNAL(textChanged(const QString &)),
+         this, SLOT(isExecutable(const QString &)));
+
+    connect( m_qmakePath, SIGNAL(urlSelected(const QString &)),
+         this, SLOT(isExecutable(const QString &)));
+    connect( m_qmakePath, SIGNAL(textChanged(const QString &)),
+         this, SLOT(isExecutable(const QString &)));
+
 	initGeneralTab( );
 	initQtTab();
 	initCodeCompletionTab( );
@@ -415,6 +425,11 @@ void CCConfigWidget::initQtTab()
 		m_kdevembedded->setEnabled( false );
 		m_kdevexternal->setEnabled( false );
 		m_qtStyleVersion4->setEnabled( true );
+        m_designerPath->setEnabled( true );
+        m_qmakePath->setEnabled( true );
+        m_qtDir->setEnabled( false );
+        m_txtQtDir->setEnabled( false );
+        m_txtDesigner->setEnabled( true );
 	}
 	else
 	{
@@ -422,6 +437,11 @@ void CCConfigWidget::initQtTab()
 		m_kdevembedded->setEnabled( true );
 		m_kdevexternal->setEnabled( true );
 		m_qtStyleVersion4->setEnabled( false );
+        m_designerPath->setEnabled( true );
+        m_qmakePath->setEnabled( true );
+        m_qtDir->setEnabled( true );
+        m_txtQtDir->setEnabled( true );
+        m_txtDesigner->setEnabled( true );
 	}
 	if( c->includeStyle() == 4 )
 	{
@@ -432,6 +452,10 @@ void CCConfigWidget::initQtTab()
 	}
 	m_qtDir->setURL( c->root() );
 	isValidQtDir(m_qtDir->url());
+    m_qmakePath->setURL( c->qmakePath() );
+    isExecutable( m_qmakePath->url() );
+    m_designerPath->setURL( c->designerPath() );
+    isExecutable( m_designerPath->url() );
 	if ( c->designerIntegration() == "EmbeddedKDevDesigner" )
 	{
 		m_kdevembedded->setChecked( true );
@@ -443,6 +467,35 @@ void CCConfigWidget::initQtTab()
 	{
 		m_qtdesigner->setChecked( true );
 	}
+}
+
+bool CCConfigWidget::isExecutable( const QString& path )
+{
+    QFileInfo fi(path);
+
+    return ( fi.exists() && fi.isExecutable()  );
+}
+
+void CCConfigWidget::isQMakeExecutable( const QString& path )
+{
+    if( isExecutable( path ) )
+    {
+        m_qmakePath->lineEdit()->setPaletteForegroundColor(QColor("#ff0000"));
+    }else
+    {
+        m_qmakePath->lineEdit()->unsetPalette();
+    }
+}
+
+void CCConfigWidget::isDesignerExecutable( const QString& path )
+{
+    if( isExecutable( path ) )
+    {
+        m_designerPath->lineEdit()->setPaletteForegroundColor(QColor("#ff0000"));
+    }else
+    {
+        m_designerPath->lineEdit()->unsetPalette();
+    }
 }
 
 void CCConfigWidget::saveQtTab()
@@ -466,6 +519,8 @@ void CCConfigWidget::saveQtTab()
 		c->setIncludeStyle( 3 );
 	}
 	c->setRoot( m_qtDir->url() );
+    c->setQMakePath( m_qmakePath->url() );
+    c->setDesignerPath( m_designerPath->url() );
 	if( m_kdevembedded->isChecked() )
 	{
 		c->setDesignerIntegration( "EmbeddedKDevDesigner" );
@@ -482,14 +537,10 @@ void CCConfigWidget::saveQtTab()
 
 void CCConfigWidget::isValidQtDir( const QString &dir )
 {
-	QFileInfo qm(  dir + QString( QChar( QDir::separator() ) )+
-			"bin"+QString( QChar( QDir::separator() ) )+
-			"qmake" );
 	QFileInfo inc( dir + QString( QChar( QDir::separator() ) )+
 			"include"+QString( QChar( QDir::separator() ) )+
 			"qt.h" );
-
-	if ( !qm.exists() || !qm.isExecutable() || ( !m_versionQt4->isChecked() && !inc.exists() )  )
+	if ( !m_versionQt4->isChecked() && !inc.exists() )
 	{
 		m_qtDir->lineEdit()->setPaletteForegroundColor(QColor("#ff0000"));
 	}else

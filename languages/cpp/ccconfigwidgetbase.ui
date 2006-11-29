@@ -1258,7 +1258,7 @@ you right click on a variable in a header file.</string>
                                     </property>
                                     <widget class="QLabel">
                                         <property name="name">
-                                            <cstring>textLabel1_4</cstring>
+                                            <cstring>m_txtQtDir</cstring>
                                         </property>
                                         <property name="text">
                                             <string>Qt Directory:</string>
@@ -1277,16 +1277,28 @@ you right click on a variable in a header file.</string>
                                     </widget>
                                 </hbox>
                             </widget>
-                            <widget class="QLabel">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>textLabel1_7</cstring>
+                                    <cstring>layout8</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>For autotools the directory setting only affects the place where an external Qt designer is searched, not the build process.</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>WordBreak|AlignVCenter</set>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>m_txtQMake</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>QMake Binary:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KURLRequester">
+                                        <property name="name">
+                                            <cstring>m_qmakePath</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
                         </vbox>
                     </widget>
@@ -1414,6 +1426,29 @@ you right click on a variable in a header file.</string>
                                     <string>Check this button if you wish to use Qt Designer rather than KDevelop's integrated designer.</string>
                                 </property>
                             </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout9</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>m_txtDesigner</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Designer Binary:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KURLRequester">
+                                        <property name="name">
+                                            <cstring>m_designerPath</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
                         </vbox>
                     </widget>
                     <spacer>
@@ -1438,6 +1473,8 @@ you right click on a variable in a header file.</string>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
@@ -1541,6 +1578,66 @@ you right click on a variable in a header file.</string>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>toggleQtVersion(bool)</slot>
     </connection>
+    <connection>
+        <sender>m_qtdesigner</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_txtDesigner</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_qtdesigner</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_designerPath</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_kdevexternal</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_txtDesigner</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_kdevembedded</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_txtDesigner</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_kdevexternal</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_designerPath</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_kdevembedded</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_designerPath</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt4</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtDir</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt4</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_txtQtDir</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt3</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_txtQtDir</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_versionQt3</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_qtDir</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>cpp_options</tabstop>
@@ -1591,6 +1688,12 @@ you right click on a variable in a header file.</string>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

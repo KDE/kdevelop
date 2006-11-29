@@ -42,6 +42,7 @@ public:
     KDirWatch* dirWatch();
     virtual Options options() const;
     QStringList distFiles() const;
+    inline QString qmakePath() const { return m_qmakePath; }
 
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);
@@ -77,8 +78,11 @@ private:
     void queueCmd(const QString &dir, const QString &cmd);
     QString makeEnvironment();
 
+    void findQtDir();
+    QString findExecutable( const QString& path ) const;
+    void buildBinDirs( QStringList& ) const;
     bool isValidQtDir( const QString& path ) const;
-    QStringList availableQtDirList() const;
+    bool isExecutable( const QString& path ) const;
 
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_projectName;
@@ -88,7 +92,7 @@ private:
     bool m_executeAfterBuild;
     QString m_buildCommand;
     QString m_defaultQtDir;
-    QStringList m_availableQtDirList;
+    QString m_qmakePath;
 
     KDirWatch* m_dirWatch;
 

@@ -16,6 +16,8 @@
 #include <qdir.h>
 #include <qregexp.h>
 #include <qprocess.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 QMakeDefaultOpts::QMakeDefaultOpts( QObject* parent, const char* name )
         : QObject(parent, name), makefile(0), qmakefile(0), proc(0)
@@ -23,7 +25,7 @@ QMakeDefaultOpts::QMakeDefaultOpts( QObject* parent, const char* name )
 
 }
 
-void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projdir )
+void QMakeDefaultOpts::readVariables( const QString& qmake, const QString& projdir )
 {
     makefile = new KTempFile(projdir+"/", ".mf");
     qmakefile = new KTempFile(projdir+"/", ".pro");
@@ -31,12 +33,11 @@ void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projd
     {
         makefile->close();
         qmakefile->close();
-        QString qmakebin = qtdir + QString( QChar( QDir::separator() ) ) + "bin" + QString( QChar( QDir::separator() ) ) + "qmake";
 
         proc = new QProcess();
         kdDebug(9024) << "Working dir:" << projdir << endl;
         proc->setWorkingDirectory( projdir );
-        proc->addArgument( qmakebin );
+        proc->addArgument( qmake );
         proc->addArgument( "-d" );
         proc->addArgument( "-o" );
         proc->addArgument( makefile->name() );
@@ -49,7 +50,9 @@ void QMakeDefaultOpts::readVariables( const QString& qtdir, const QString& projd
         proc->start();
         if( !proc->isRunning() && !proc->normalExit() )
         {
-            kdDebug(9024) << "Couldn't execute qmake" << endl;
+            kdDebug(9024) << "Couldn't execute qmake: " << proc->arguments() << endl;
+//             kdDebug(9024) << "message box" << endl;
+//             KMessageBox::error( 0, i18n("Error running QMake.\nTried to execute:\n%1\n\nPlease check the path to Qt under Project Options->C++ Support->Qt tab.").arg(proc->arguments().join(" ")), i18n("Couldn't execute qmake") );
             makefile->unlink();
             delete makefile;
             makefile = 0;
