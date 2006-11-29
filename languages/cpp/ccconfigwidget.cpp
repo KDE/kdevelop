@@ -514,6 +514,7 @@ void CCConfigWidget::toggleQtVersion( bool )
     m_kdevembedded->setEnabled( false );
     m_kdevexternal->setEnabled( false );
   }
+  isValidQtDir( m_qtDir->url() );
 }
 
 #include "ccconfigwidget.moc"
