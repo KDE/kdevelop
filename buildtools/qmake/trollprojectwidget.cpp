@@ -354,6 +354,7 @@ void TrollProjectWidget::createQMakeScopeItems()
     {
         overview->setSelected( m_rootSubproject, true );
     }
+    disconnect( m_rootScope, SIGNAL( initializationFinished() ), this, SLOT( createQMakeScopeItems() ) );
 //     kdDebug(9024) << "Adding " << allFiles().count() << " Files" << endl;
 //     kdDebug(9024) << allFiles() << endl;
     emit m_part->addedFilesToProject(allFiles());

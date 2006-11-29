@@ -1446,10 +1446,11 @@ void Scope::emitInitFinished( Scope* s )
     kdDebug( 9024 ) << "Emitting from " << this << " for " << s << endl;
     if( s )
     {
-        m_unfinishedScopes->remove( s );
-        disconnect( s, SIGNAL( initializationFinished( Scope* ) ) );
+        if( m_unfinishedScopes )
+            m_unfinishedScopes->remove( s );
+        disconnect( s, SIGNAL( initializationFinished( Scope* ) ), this, SLOT( emitFinished( Scope* ) ) );
     }
-    if( m_unfinishedScopes->isEmpty() )
+    if( !m_unfinishedScopes || m_unfinishedScopes->isEmpty() )
     {
         kdDebug( 9024 ) << "All subscopes done, emitting" << endl;
         delete m_unfinishedScopes;
