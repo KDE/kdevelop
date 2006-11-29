@@ -25,13 +25,14 @@
 #include <QMap>
 #include <QString>
 #include <QStack>
+#include <kdevexport.h>
 
 namespace rpp {
 
 class pp_macro;
 class pp;
 
-class MacroBlock
+class KDEVCPPRPP_EXPORT MacroBlock
 {
 public:
   MacroBlock(int _sourceLine);
@@ -53,7 +54,7 @@ public:
   QList<pp_macro*> macros;
 };
 
-class Environment
+class KDEVCPPRPP_EXPORT Environment
 {
 public:
   Environment(pp* preprocessor);

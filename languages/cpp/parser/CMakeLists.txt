@@ -1,9 +1,9 @@
+include_directories( ${CMAKE_SOURCE_DIR}/lib )
 
 add_subdirectory(rpp)
 add_subdirectory(tests)
 add_subdirectory(headergen)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib )
 
 add_definitions(-fPIC)
 

@@ -22,10 +22,11 @@
 #define PP_MACRO_H
 
 #include <QStringList>
+#include <kdevexport.h>
 
 namespace rpp {
 
-class pp_macro
+class KDEVCPPRPP_EXPORT pp_macro
 {
 public:
   pp_macro();

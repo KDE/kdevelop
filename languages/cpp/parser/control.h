@@ -22,6 +22,7 @@
 #include "symbol.h"
 #include "memorypool.h"
 #include "problem.h"
+#include <kdevexport.h>
 
 #include <QtCore/QHash>
 
@@ -31,7 +32,7 @@ struct Type;
 /**Parser control information.
 Provides problem tracking, context(visibility)-aware symbol name tables,
 typedef table and other information about the parsing process.*/
-class Control
+class KDEVCPPPARSER_EXPORT Control
 {
 public:
   Control();

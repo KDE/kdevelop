@@ -25,11 +25,12 @@
 #include <QVarLengthArray>
 
 #include <kdebug.h>
+#include <kdevexport.h>
 
 class QualifiedIdentifier;
 
 /// Represents a single unqualified identifier
-class Identifier
+class KDEVCPPPARSER_EXPORT Identifier
 {
   friend class QualifiedIdentifier;
 
@@ -81,7 +82,7 @@ private:
 };
 
 /// Represents a qualified identifier
-class QualifiedIdentifier
+class KDEVCPPPARSER_EXPORT QualifiedIdentifier
 {
 public:
   explicit QualifiedIdentifier(const QString id);
@@ -148,7 +149,7 @@ private:
   bool m_explicitlyGlobal;
 };
 
-uint qHash(const QualifiedIdentifier& id);
+KDEVCPPPARSER_EXPORT uint qHash(const QualifiedIdentifier& id);
 
 #endif // IDENTIFIER_H
 

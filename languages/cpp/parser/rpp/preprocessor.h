@@ -23,12 +23,12 @@
 #define PREPROCESSOR_H
 
 #include <QtCore/QString>
-
+#include <kdevexport.h>
 namespace rpp {
 
 class Stream;
 
-class Preprocessor
+class KDEVCPPRPP_EXPORT Preprocessor
 {
 public:
     enum IncludeType {

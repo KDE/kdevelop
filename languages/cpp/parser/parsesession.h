@@ -24,6 +24,8 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
+#include <kdevexport.h>
+
 class pool;
 class TokenStream;
 class LocationTable;
@@ -32,7 +34,7 @@ namespace rpp { class MacroBlock; }
 
 /// Contains everything needed to keep an AST useful once the rest of the parser
 /// has gone away.
-class ParseSession
+class KDEVCPPPARSER_EXPORT ParseSession
 {
 public:
   ParseSession();

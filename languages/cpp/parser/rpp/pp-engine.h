@@ -24,6 +24,7 @@
 #include <QHash>
 #include <QString>
 #include <QStack>
+#include <kdevexport.h>
 
 #include "pp-macro.h"
 #include "pp-macro-expander.h"
@@ -109,7 +110,7 @@ struct Value
 #undef PP_DEFINE_BIN_OP
 };
 
-class pp
+class KDEVCPPRPP_EXPORT pp
 {
   Environment* m_environment;
   pp_macro_expander expand;

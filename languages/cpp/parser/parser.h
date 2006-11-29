@@ -23,6 +23,7 @@
 #include "lexer.h"
 
 #include <QtCore/QString>
+#include <kdevexport.h>
 
 class FileSymbol;
 class TokenStream;
@@ -32,7 +33,7 @@ class Control;
 The Parser.
 LL(k) parser for c++ code.
 */
-class Parser
+class KDEVCPPPARSER_EXPORT Parser
 {
 public:
   Parser(Control *control);

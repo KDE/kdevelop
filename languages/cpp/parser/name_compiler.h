@@ -21,10 +21,11 @@
 
 #include "default_visitor.h"
 #include "identifier.h"
+#include <kdevexport.h>
 
 class ParseSession;
 
-class NameCompiler: protected DefaultVisitor
+class KDEVCPPPARSER_EXPORT NameCompiler: protected DefaultVisitor
 {
 public:
   NameCompiler(ParseSession* session);
