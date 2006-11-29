@@ -111,7 +111,7 @@ struct ParserPrivateData
 
 Parser::Parser( Driver* driver, Lexer* lexer )
     : m_driver( driver ),
-      lex( lexer )
+      lex( lexer ), m_problems(0)
 {
     d = new ParserPrivateData();
 
