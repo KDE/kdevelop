@@ -264,6 +264,7 @@ void MakeWidget::startNextJob()
 
 	it = dirList.begin();
 	QString dir = *it;
+	m_lastBuildDir = dir;
 	dirList.remove(it);
 
 	clear(); // clear the widget
@@ -467,7 +468,8 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
         // now it gets tricky - no directory navigation messages,
         // no absolute path - let's guess.
         name = fName;
-        if ( !checkFileExists( m_part->project()->projectDirectory() + "/" + fName, name ) &&
+        if ( !checkFileExists( m_lastBuildDir + "/" + fName, name) &&
+            !checkFileExists( m_part->project()->projectDirectory() + "/" + fName, name ) &&
             !checkFileExists( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" + fName, name ) &&
             !checkFileExists( m_part->project()->buildDirectory() + "/" + fName, name ) )
             specialCheck(fName, name);

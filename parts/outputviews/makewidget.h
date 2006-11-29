@@ -103,6 +103,7 @@ private:
 
     QStringList commandList;
     QStringList dirList;
+    QString m_lastBuildDir; //stores directory of last build, for the case we don't have proper path information
     QString currentCommand;
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
