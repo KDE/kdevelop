@@ -1,7 +1,8 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include "antlr/CommonToken.hpp"
@@ -15,16 +16,22 @@ CommonToken::CommonToken() : Token(), line(1), col(1), text("")
 {}
 
 CommonToken::CommonToken(int t, const ANTLR_USE_NAMESPACE(std)string& txt)
-	: Token(t), line(1), col(1), text(txt)
+: Token(t)
+, line(1)
+, col(1)
+, text(txt)
 {}
 
 CommonToken::CommonToken(const ANTLR_USE_NAMESPACE(std)string& s)
-	: Token(), line(1), col(1), text(s)
+: Token()
+, line(1)
+, col(1)
+, text(s)
 {}
 
 ANTLR_USE_NAMESPACE(std)string CommonToken::toString() const
 {
-	return "[\""+getText()+"\",<"+type+">,line="+line+",column="+col+"]";
+	return "[\""+getText()+"\",<"+getType()+">,line="+getLine()+",column="+getColumn()+"]";
 }
 
 RefToken CommonToken::factory()

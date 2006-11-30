@@ -1,7 +1,8 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id:$
  */
 
 #include "antlr/config.hpp"
@@ -21,41 +22,46 @@ RefAST ASTNULLType::clone( void ) const
 	return RefAST(this);
 }
 
-void ASTNULLType::addChild(RefAST /*c*/)
+void ASTNULLType::addChild( RefAST )
 {
 }
 
-bool ASTNULLType::equals(RefAST /*t*/) const
+size_t ASTNULLType::getNumberOfChildren() const
 {
-	return false;
+	return 0;
 }
 
-bool ASTNULLType::equalsList(RefAST /*t*/) const
-{
-	return false;
-}
-
-bool ASTNULLType::equalsListPartial(RefAST /*t*/) const
+bool ASTNULLType::equals( RefAST ) const
 {
 	return false;
 }
 
-bool ASTNULLType::equalsTree(RefAST /*t*/) const
+bool ASTNULLType::equalsList( RefAST ) const
 {
 	return false;
 }
 
-bool ASTNULLType::equalsTreePartial(RefAST /*t*/) const
+bool ASTNULLType::equalsListPartial( RefAST ) const
 {
 	return false;
 }
 
-vector<RefAST> ASTNULLType::findAll(RefAST /*tree*/)
+bool ASTNULLType::equalsTree( RefAST ) const
+{
+	return false;
+}
+
+bool ASTNULLType::equalsTreePartial( RefAST ) const
+{
+	return false;
+}
+
+vector<RefAST> ASTNULLType::findAll( RefAST )
 {
 	return vector<RefAST>();
 }
 
-vector<RefAST> ASTNULLType::findAllPartial(RefAST /*subtree*/)
+vector<RefAST> ASTNULLType::findAllPartial( RefAST )
 {
 	return vector<RefAST>();
 }
@@ -80,15 +86,15 @@ int ASTNULLType::getType() const
 	return Token::NULL_TREE_LOOKAHEAD;
 }
 
-void ASTNULLType::initialize(int /*t*/, const ANTLR_USE_NAMESPACE(std)string& /*txt*/)
+void ASTNULLType::initialize( int, const string& )
 {
 }
 
-void ASTNULLType::initialize(RefAST /*t*/)
+void ASTNULLType::initialize( RefAST )
 {
 }
 
-void ASTNULLType::initialize(RefToken /*t*/)
+void ASTNULLType::initialize( RefToken )
 {
 }
 
@@ -98,19 +104,19 @@ void ASTNULLType::initialize( istream& )
 }
 #endif
 
-void ASTNULLType::setFirstChild(RefAST /*c*/)
+void ASTNULLType::setFirstChild( RefAST )
 {
 }
 
-void ASTNULLType::setNextSibling(RefAST /*n*/)
+void ASTNULLType::setNextSibling( RefAST )
 {
 }
 
-void ASTNULLType::setText(const ANTLR_USE_NAMESPACE(std)string& /*text*/)
+void ASTNULLType::setText( const string& )
 {
 }
 
-void ASTNULLType::setType(int /*ttype*/)
+void ASTNULLType::setType( int )
 {
 }
 
@@ -130,14 +136,14 @@ string ASTNULLType::toStringTree() const
 }
 
 #ifdef ANTLR_SUPPORT_XML
-bool ASTNULLType::attributesToStream( ostream & /*out*/ ) const
+bool ASTNULLType::attributesToStream( ostream& ) const
 {
 	return false;
 }
 
-void ASTNULLType::toStream( ostream & /*out*/ ) const
+void ASTNULLType::toStream( ostream& out ) const
 {
-	out << "<ASTNULL/>" << endl;
+	out << "</ASTNULL>" << endl;
 }
 #endif
 

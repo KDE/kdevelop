@@ -1,8 +1,15 @@
 #ifndef INC_PascalTokenTypes_hpp_
 #define INC_PascalTokenTypes_hpp_
 
-/* $ANTLR 2.7.2: "pascal.g" -> "PascalTokenTypes.hpp"$ */
-struct PascalTokenTypes {
+/* $ANTLR 2.7.7 (20061129): "pascal.g" -> "PascalTokenTypes.hpp"$ */
+
+#ifndef CUSTOM_API
+# define CUSTOM_API
+#endif
+
+#ifdef __cplusplus
+struct CUSTOM_API PascalTokenTypes {
+#endif
 	enum {
 		EOF_ = 1,
 		BLOCK = 4,
@@ -193,5 +200,7 @@ struct PascalTokenTypes {
 		EXPONENT = 189,
 		NULL_TREE_LOOKAHEAD = 3
 	};
+#ifdef __cplusplus
 };
+#endif
 #endif /*INC_PascalTokenTypes_hpp_*/

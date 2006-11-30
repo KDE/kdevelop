@@ -1,4 +1,4 @@
-// $ANTLR 2.7.2: ada.tree.g -> AdaTreeParserSuperTokenTypes.txt$
+// $ANTLR 2.7.7 (20061129): ada.tree.g -> AdaTreeParserSuperTokenTypes.txt$
 AdaTreeParserSuper    // output token vocab name
 PRAGMA="pragma"=4
 IDENTIFIER=5

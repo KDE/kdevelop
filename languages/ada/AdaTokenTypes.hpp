@@ -1,8 +1,15 @@
 #ifndef INC_AdaTokenTypes_hpp_
 #define INC_AdaTokenTypes_hpp_
 
-/* $ANTLR 2.7.2: "ada.g" -> "AdaTokenTypes.hpp"$ */
-struct AdaTokenTypes {
+/* $ANTLR 2.7.7 (20061129): "ada.g" -> "AdaTokenTypes.hpp"$ */
+
+#ifndef CUSTOM_API
+# define CUSTOM_API
+#endif
+
+#ifdef __cplusplus
+struct CUSTOM_API AdaTokenTypes {
+#endif
 	enum {
 		EOF_ = 1,
 		PRAGMA = 4,
@@ -307,5 +314,7 @@ struct AdaTokenTypes {
 		COMMENT = 303,
 		NULL_TREE_LOOKAHEAD = 3
 	};
+#ifdef __cplusplus
 };
+#endif
 #endif /*INC_AdaTokenTypes_hpp_*/

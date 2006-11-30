@@ -3,8 +3,9 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -40,12 +41,12 @@ public:
 		inputState->getInput().consume();
 	}
 
-	virtual inline int LA(int i)
+	virtual inline int LA(unsigned int i)
 	{
 		return inputState->getInput().LA(i);
 	}
 
-	virtual inline RefToken LT(int i)
+	virtual inline RefToken LT(unsigned int i)
 	{
 		return inputState->getInput().LT(i);
 	}

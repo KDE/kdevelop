@@ -1,4 +1,4 @@
-// $ANTLR 2.7.2: ada.g -> AdaTokenTypes.txt$
+// $ANTLR 2.7.7 (20061129): ada.g -> AdaTokenTypes.txt$
 Ada    // output token vocab name
 PRAGMA="pragma"=4
 IDENTIFIER=5

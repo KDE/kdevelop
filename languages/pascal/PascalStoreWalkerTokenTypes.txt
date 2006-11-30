@@ -1,4 +1,4 @@
-// $ANTLR 2.7.2: pascal.tree.g -> PascalStoreWalkerTokenTypes.txt$
+// $ANTLR 2.7.7 (20061129): pascal.tree.g -> PascalStoreWalkerTokenTypes.txt$
 PascalStoreWalker    // output token vocab name
 BLOCK=4
 IDLIST=5

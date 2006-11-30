@@ -1,63 +1,37 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include "antlr/config.hpp"
+
+#include <iostream>
+
 #include "antlr/AST.hpp"
 #include "antlr/BaseAST.hpp"
-
-#include <typeinfo>
-#include <iostream>
 
 ANTLR_USING_NAMESPACE(std)
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 namespace antlr {
 #endif
 
-//bool BaseAST::verboseStringConversion;
-//ANTLR_USE_NAMESPACE(std)vector<ANTLR_USE_NAMESPACE(std)string> BaseAST::tokenNames;
-
-BaseAST::BaseAST() : AST()
+size_t BaseAST::getNumberOfChildren() const
 {
-}
-
-BaseAST::~BaseAST()
-{
-}
-
-BaseAST::BaseAST(const BaseAST& other)
-: AST(other) // RK: don't copy links! , down(other.down), right(other.right)
-{
-}
-
-const char* BaseAST::typeName( void ) const
-{
-	return "BaseAST";
-}
-
-RefAST BaseAST::clone( void ) const
-{
-	cerr << "BaseAST::clone()" << endl;
-	return nullAST;
-}
-
-void BaseAST::addChild( RefAST c )
-{
-	if( !c )
-		return;
-
-	RefBaseAST tmp = down;
-
-	if (tmp)
+	RefBaseAST t = this->down;
+	size_t n = 0;
+	if( t )
 	{
-		while (tmp->right)
-			tmp = tmp->right;
-		tmp->right = c;
+		n = 1;
+		while( t->right )
+		{
+			t = t->right;
+			n++;
+		}
+		return n;
 	}
-	else
-		down = c;
+	return n;
 }
 
 void BaseAST::doWorkForFindAll(
@@ -214,19 +188,6 @@ ANTLR_USE_NAMESPACE(std)vector<RefAST> BaseAST::findAllPartial(RefAST target)
 	return roots;
 }
 
-void BaseAST::setText(const ANTLR_USE_NAMESPACE(std)string& /*txt*/)
-{
-}
-
-void BaseAST::setType(int /*type*/)
-{
-}
-
-ANTLR_USE_NAMESPACE(std)string BaseAST::toString() const
-{
-	return getText();
-}
-
 ANTLR_USE_NAMESPACE(std)string BaseAST::toStringList() const
 {
 	ANTLR_USE_NAMESPACE(std)string ts="";
@@ -308,7 +269,12 @@ void BaseAST::toStream( ANTLR_USE_NAMESPACE(std)ostream& out ) const
 
 // this is nasty, but it makes the code generation easier
 ANTLR_API RefAST nullAST;
-ANTLR_API AST* const nullASTptr=0;
+
+#if defined(_MSC_VER) && !defined(__ICL) // Microsoft Visual C++
+extern ANTLR_API AST* const nullASTptr = 0;
+#else
+ANTLR_API AST* const nullASTptr = 0;
+#endif
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 }

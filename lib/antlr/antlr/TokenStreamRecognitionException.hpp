@@ -3,8 +3,9 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -14,6 +15,10 @@
 namespace antlr {
 #endif
 
+/** Exception thrown from generated lexers when there's no default error
+ * handler specified.
+ * @see TokenStream
+ */
 class TokenStreamRecognitionException : public TokenStreamException {
 public:
 	TokenStreamRecognitionException(RecognitionException& re)
@@ -21,12 +26,25 @@ public:
 	, recog(re)
 	{
 	}
-	~TokenStreamRecognitionException() throw()
+	virtual ~TokenStreamRecognitionException() throw()
 	{
 	}
-	ANTLR_USE_NAMESPACE(std)string toString() const
+	virtual ANTLR_USE_NAMESPACE(std)string toString() const
 	{
 		return recog.getFileLineColumnString()+getMessage();
+	}
+
+	virtual ANTLR_USE_NAMESPACE(std)string getFilename() const throw()
+	{
+		return recog.getFilename();
+	}
+	virtual int getLine() const throw()
+	{
+		return recog.getLine();
+	}
+	virtual int getColumn() const throw()
+	{
+		return recog.getColumn();
 	}
 private:
 	RecognitionException recog;

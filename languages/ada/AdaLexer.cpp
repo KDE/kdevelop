@@ -1,4 +1,4 @@
-/* $ANTLR 2.7.2: "ada.g" -> "AdaLexer.cpp"$ */
+/* $ANTLR 2.7.7 (20061129): "ada.g" -> "AdaLexer.cpp"$ */
 #include "AdaLexer.hpp"
 #include <antlr/CharBuffer.hpp>
 #include <antlr/TokenStreamException.hpp>
@@ -113,196 +113,196 @@ ANTLR_USE_NAMESPACE(antlr)RefToken AdaLexer::nextToken()
 		resetText();
 		try {   // for lexical and char stream error handling
 			switch ( LA(1)) {
-			case static_cast<unsigned char>('|'):
+			case 0x7c /* '|' */ :
 			{
 				mPIPE(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>('&'):
+			case 0x26 /* '&' */ :
 			{
 				mCONCAT(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>('+'):
+			case 0x2b /* '+' */ :
 			{
 				mPLUS(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>('('):
+			case 0x28 /* '(' */ :
 			{
 				mLPAREN(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>(')'):
+			case 0x29 /* ')' */ :
 			{
 				mRPAREN(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>(','):
+			case 0x2c /* ',' */ :
 			{
 				mCOMMA(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>(';'):
+			case 0x3b /* ';' */ :
 			{
 				mSEMI(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>('a'):
-			case static_cast<unsigned char>('b'):
-			case static_cast<unsigned char>('c'):
-			case static_cast<unsigned char>('d'):
-			case static_cast<unsigned char>('e'):
-			case static_cast<unsigned char>('f'):
-			case static_cast<unsigned char>('g'):
-			case static_cast<unsigned char>('h'):
-			case static_cast<unsigned char>('i'):
-			case static_cast<unsigned char>('j'):
-			case static_cast<unsigned char>('k'):
-			case static_cast<unsigned char>('l'):
-			case static_cast<unsigned char>('m'):
-			case static_cast<unsigned char>('n'):
-			case static_cast<unsigned char>('o'):
-			case static_cast<unsigned char>('p'):
-			case static_cast<unsigned char>('q'):
-			case static_cast<unsigned char>('r'):
-			case static_cast<unsigned char>('s'):
-			case static_cast<unsigned char>('t'):
-			case static_cast<unsigned char>('u'):
-			case static_cast<unsigned char>('v'):
-			case static_cast<unsigned char>('w'):
-			case static_cast<unsigned char>('x'):
-			case static_cast<unsigned char>('y'):
-			case static_cast<unsigned char>('z'):
+			case 0x61 /* 'a' */ :
+			case 0x62 /* 'b' */ :
+			case 0x63 /* 'c' */ :
+			case 0x64 /* 'd' */ :
+			case 0x65 /* 'e' */ :
+			case 0x66 /* 'f' */ :
+			case 0x67 /* 'g' */ :
+			case 0x68 /* 'h' */ :
+			case 0x69 /* 'i' */ :
+			case 0x6a /* 'j' */ :
+			case 0x6b /* 'k' */ :
+			case 0x6c /* 'l' */ :
+			case 0x6d /* 'm' */ :
+			case 0x6e /* 'n' */ :
+			case 0x6f /* 'o' */ :
+			case 0x70 /* 'p' */ :
+			case 0x71 /* 'q' */ :
+			case 0x72 /* 'r' */ :
+			case 0x73 /* 's' */ :
+			case 0x74 /* 't' */ :
+			case 0x75 /* 'u' */ :
+			case 0x76 /* 'v' */ :
+			case 0x77 /* 'w' */ :
+			case 0x78 /* 'x' */ :
+			case 0x79 /* 'y' */ :
+			case 0x7a /* 'z' */ :
 			{
 				mIDENTIFIER(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>('"'):
+			case 0x22 /* '\"' */ :
 			{
 				mCHAR_STRING(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>('0'):
-			case static_cast<unsigned char>('1'):
-			case static_cast<unsigned char>('2'):
-			case static_cast<unsigned char>('3'):
-			case static_cast<unsigned char>('4'):
-			case static_cast<unsigned char>('5'):
-			case static_cast<unsigned char>('6'):
-			case static_cast<unsigned char>('7'):
-			case static_cast<unsigned char>('8'):
-			case static_cast<unsigned char>('9'):
+			case 0x30 /* '0' */ :
+			case 0x31 /* '1' */ :
+			case 0x32 /* '2' */ :
+			case 0x33 /* '3' */ :
+			case 0x34 /* '4' */ :
+			case 0x35 /* '5' */ :
+			case 0x36 /* '6' */ :
+			case 0x37 /* '7' */ :
+			case 0x38 /* '8' */ :
+			case 0x39 /* '9' */ :
 			{
 				mNUMERIC_LIT(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case static_cast<unsigned char>('\t'):
-			case static_cast<unsigned char>('\n'):
-			case static_cast<unsigned char>('\14'):
-			case static_cast<unsigned char>('\r'):
-			case static_cast<unsigned char>(' '):
+			case 0x9 /* '\t' */ :
+			case 0xa /* '\n' */ :
+			case 0xc /* '\14' */ :
+			case 0xd /* '\r' */ :
+			case 0x20 /* ' ' */ :
 			{
 				mWS_(true);
 				theRetToken=_returnToken;
 				break;
 			}
 			default:
-				if ((LA(1) == static_cast<unsigned char>('-')) && (LA(2) == static_cast<unsigned char>('-')) && ((LA(3) >= static_cast<unsigned char>('\3') && LA(3) <= static_cast<unsigned char>('\377')))) {
+				if ((LA(1) == 0x2d /* '-' */ ) && (LA(2) == 0x2d /* '-' */ ) && ((LA(3) >= 0x3 /* '\3' */  && LA(3) <= 0xff))) {
 					mCOMMENT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('-')) && (LA(2) == static_cast<unsigned char>('-')) && (true)) {
+				else if ((LA(1) == 0x2d /* '-' */ ) && (LA(2) == 0x2d /* '-' */ ) && (true)) {
 					mCOMMENT_INTRO(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('.')) && (LA(2) == static_cast<unsigned char>('.'))) {
+				else if ((LA(1) == 0x2e /* '.' */ ) && (LA(2) == 0x2e /* '.' */ )) {
 					mDOT_DOT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('<'))) {
+				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3c /* '<' */ )) {
 					mLT_LT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('>'))) {
+				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3e /* '>' */ )) {
 					mBOX(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('>'))) {
+				else if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3e /* '>' */ )) {
 					mGT_GT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>(':')) && (LA(2) == static_cast<unsigned char>('='))) {
+				else if ((LA(1) == 0x3a /* ':' */ ) && (LA(2) == 0x3d /* '=' */ )) {
 					mASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('=')) && (LA(2) == static_cast<unsigned char>('>'))) {
+				else if ((LA(1) == 0x3d /* '=' */ ) && (LA(2) == 0x3e /* '>' */ )) {
 					mRIGHT_SHAFT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('/')) && (LA(2) == static_cast<unsigned char>('='))) {
+				else if ((LA(1) == 0x2f /* '/' */ ) && (LA(2) == 0x3d /* '=' */ )) {
 					mNE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('='))) {
+				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3d /* '=' */ )) {
 					mLE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('='))) {
+				else if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3d /* '=' */ )) {
 					mGE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('*')) && (LA(2) == static_cast<unsigned char>('*'))) {
+				else if ((LA(1) == 0x2a /* '*' */ ) && (LA(2) == 0x2a /* '*' */ )) {
 					mEXPON(true);
 					theRetToken=_returnToken;
 				}
-				else if (((LA(1) == static_cast<unsigned char>('\'')) && ((LA(2) >= static_cast<unsigned char>('\3') && LA(2) <= static_cast<unsigned char>('\377'))))&&( LA(3)=='\'' )) {
+				else if (((LA(1) == 0x27 /* '\'' */ ) && ((LA(2) >= 0x3 /* '\3' */  && LA(2) <= 0xff)))&&( LA(3)=='\'' )) {
 					mCHARACTER_LITERAL(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('.')) && (true)) {
+				else if ((LA(1) == 0x2e /* '.' */ ) && (true)) {
 					mDOT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('=')) && (true)) {
+				else if ((LA(1) == 0x3d /* '=' */ ) && (true)) {
 					mEQ(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('<')) && (true)) {
+				else if ((LA(1) == 0x3c /* '<' */ ) && (true)) {
 					mLT_(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('>')) && (true)) {
+				else if ((LA(1) == 0x3e /* '>' */ ) && (true)) {
 					mGT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('-')) && (true)) {
+				else if ((LA(1) == 0x2d /* '-' */ ) && (true)) {
 					mMINUS(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('*')) && (true)) {
+				else if ((LA(1) == 0x2a /* '*' */ ) && (true)) {
 					mSTAR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>('/')) && (true)) {
+				else if ((LA(1) == 0x2f /* '/' */ ) && (true)) {
 					mDIV(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == static_cast<unsigned char>(':')) && (true)) {
+				else if ((LA(1) == 0x3a /* ':' */ ) && (true)) {
 					mCOLON(true);
 					theRetToken=_returnToken;
 				}
-				else if (((LA(1) == static_cast<unsigned char>('\'')) && (true))&&( LA(3)!='\'' )) {
+				else if (((LA(1) == 0x27 /* '\'' */ ) && (true))&&( LA(3)!='\'' )) {
 					mTIC(true);
 					theRetToken=_returnToken;
 				}
@@ -339,17 +339,16 @@ tryAgain:;
 }
 
 void AdaLexer::mCOMMENT_INTRO(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = COMMENT_INTRO;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("--");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_0);
+		recover(ex,_tokenSet_0);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -360,17 +359,16 @@ void AdaLexer::mCOMMENT_INTRO(bool _createToken) {
 }
 
 void AdaLexer::mDOT_DOT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = DOT_DOT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("..");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -381,17 +379,16 @@ void AdaLexer::mDOT_DOT(bool _createToken) {
 }
 
 void AdaLexer::mLT_LT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = LT_LT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("<<");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -402,17 +399,16 @@ void AdaLexer::mLT_LT(bool _createToken) {
 }
 
 void AdaLexer::mBOX(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = BOX;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("<>");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -423,17 +419,16 @@ void AdaLexer::mBOX(bool _createToken) {
 }
 
 void AdaLexer::mGT_GT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = GT_GT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match(">>");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -444,17 +439,16 @@ void AdaLexer::mGT_GT(bool _createToken) {
 }
 
 void AdaLexer::mASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = ASSIGN;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match(":=");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -465,17 +459,16 @@ void AdaLexer::mASSIGN(bool _createToken) {
 }
 
 void AdaLexer::mRIGHT_SHAFT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = RIGHT_SHAFT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("=>");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -486,17 +479,16 @@ void AdaLexer::mRIGHT_SHAFT(bool _createToken) {
 }
 
 void AdaLexer::mNE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = NE;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("/=");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -507,17 +499,16 @@ void AdaLexer::mNE(bool _createToken) {
 }
 
 void AdaLexer::mLE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = LE;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("<=");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -528,17 +519,16 @@ void AdaLexer::mLE(bool _createToken) {
 }
 
 void AdaLexer::mGE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = GE;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match(">=");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -549,17 +539,16 @@ void AdaLexer::mGE(bool _createToken) {
 }
 
 void AdaLexer::mEXPON(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = EXPON;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		match("**");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -570,17 +559,16 @@ void AdaLexer::mEXPON(bool _createToken) {
 }
 
 void AdaLexer::mPIPE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = PIPE;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('|'));
+		match('|' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -591,17 +579,16 @@ void AdaLexer::mPIPE(bool _createToken) {
 }
 
 void AdaLexer::mCONCAT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = CONCAT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('&'));
+		match('&' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -612,17 +599,16 @@ void AdaLexer::mCONCAT(bool _createToken) {
 }
 
 void AdaLexer::mDOT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = DOT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('.'));
+		match('.' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -633,17 +619,16 @@ void AdaLexer::mDOT(bool _createToken) {
 }
 
 void AdaLexer::mEQ(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = EQ;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('='));
+		match('=' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -654,17 +639,16 @@ void AdaLexer::mEQ(bool _createToken) {
 }
 
 void AdaLexer::mLT_(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = LT_;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('<'));
+		match('<' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -675,17 +659,16 @@ void AdaLexer::mLT_(bool _createToken) {
 }
 
 void AdaLexer::mGT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = GT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('>'));
+		match('>' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -696,17 +679,16 @@ void AdaLexer::mGT(bool _createToken) {
 }
 
 void AdaLexer::mPLUS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = PLUS;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('+'));
+		match('+' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -717,17 +699,16 @@ void AdaLexer::mPLUS(bool _createToken) {
 }
 
 void AdaLexer::mMINUS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = MINUS;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('-'));
+		match('-' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -738,17 +719,16 @@ void AdaLexer::mMINUS(bool _createToken) {
 }
 
 void AdaLexer::mSTAR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = STAR;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('*'));
+		match('*' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -759,17 +739,16 @@ void AdaLexer::mSTAR(bool _createToken) {
 }
 
 void AdaLexer::mDIV(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = DIV;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('/'));
+		match('/' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -780,17 +759,16 @@ void AdaLexer::mDIV(bool _createToken) {
 }
 
 void AdaLexer::mLPAREN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = LPAREN;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('('));
+		match('(' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -801,17 +779,16 @@ void AdaLexer::mLPAREN(bool _createToken) {
 }
 
 void AdaLexer::mRPAREN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = RPAREN;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>(')'));
+		match(')' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -822,17 +799,16 @@ void AdaLexer::mRPAREN(bool _createToken) {
 }
 
 void AdaLexer::mCOLON(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = COLON;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>(':'));
+		match(':' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -843,17 +819,16 @@ void AdaLexer::mCOLON(bool _createToken) {
 }
 
 void AdaLexer::mCOMMA(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = COMMA;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>(','));
+		match(',' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -864,17 +839,16 @@ void AdaLexer::mCOMMA(bool _createToken) {
 }
 
 void AdaLexer::mSEMI(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = SEMI;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>(';'));
+		match(';' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -885,19 +859,18 @@ void AdaLexer::mSEMI(bool _createToken) {
 }
 
 void AdaLexer::mTIC(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = TIC;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		if (!( LA(3)!='\'' ))
-			throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" LA(3)!='\\'' ");
-		match(static_cast<unsigned char>('\''));
+			throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" LA(3)!=\'\\\'\' ");
+		match('\'' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -908,60 +881,60 @@ void AdaLexer::mTIC(bool _createToken) {
 }
 
 void AdaLexer::mIDENTIFIER(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = IDENTIFIER;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{
-		matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('z'));
+		matchRange('a','z');
 		}
 		{ // ( ... )*
 		for (;;) {
 			if ((_tokenSet_2.member(LA(1)))) {
 				{
 				switch ( LA(1)) {
-				case static_cast<unsigned char>('_'):
+				case 0x5f /* '_' */ :
 				{
-					match(static_cast<unsigned char>('_'));
+					match('_' /* charlit */ );
 					break;
 				}
-				case static_cast<unsigned char>('0'):
-				case static_cast<unsigned char>('1'):
-				case static_cast<unsigned char>('2'):
-				case static_cast<unsigned char>('3'):
-				case static_cast<unsigned char>('4'):
-				case static_cast<unsigned char>('5'):
-				case static_cast<unsigned char>('6'):
-				case static_cast<unsigned char>('7'):
-				case static_cast<unsigned char>('8'):
-				case static_cast<unsigned char>('9'):
-				case static_cast<unsigned char>('a'):
-				case static_cast<unsigned char>('b'):
-				case static_cast<unsigned char>('c'):
-				case static_cast<unsigned char>('d'):
-				case static_cast<unsigned char>('e'):
-				case static_cast<unsigned char>('f'):
-				case static_cast<unsigned char>('g'):
-				case static_cast<unsigned char>('h'):
-				case static_cast<unsigned char>('i'):
-				case static_cast<unsigned char>('j'):
-				case static_cast<unsigned char>('k'):
-				case static_cast<unsigned char>('l'):
-				case static_cast<unsigned char>('m'):
-				case static_cast<unsigned char>('n'):
-				case static_cast<unsigned char>('o'):
-				case static_cast<unsigned char>('p'):
-				case static_cast<unsigned char>('q'):
-				case static_cast<unsigned char>('r'):
-				case static_cast<unsigned char>('s'):
-				case static_cast<unsigned char>('t'):
-				case static_cast<unsigned char>('u'):
-				case static_cast<unsigned char>('v'):
-				case static_cast<unsigned char>('w'):
-				case static_cast<unsigned char>('x'):
-				case static_cast<unsigned char>('y'):
-				case static_cast<unsigned char>('z'):
+				case 0x30 /* '0' */ :
+				case 0x31 /* '1' */ :
+				case 0x32 /* '2' */ :
+				case 0x33 /* '3' */ :
+				case 0x34 /* '4' */ :
+				case 0x35 /* '5' */ :
+				case 0x36 /* '6' */ :
+				case 0x37 /* '7' */ :
+				case 0x38 /* '8' */ :
+				case 0x39 /* '9' */ :
+				case 0x61 /* 'a' */ :
+				case 0x62 /* 'b' */ :
+				case 0x63 /* 'c' */ :
+				case 0x64 /* 'd' */ :
+				case 0x65 /* 'e' */ :
+				case 0x66 /* 'f' */ :
+				case 0x67 /* 'g' */ :
+				case 0x68 /* 'h' */ :
+				case 0x69 /* 'i' */ :
+				case 0x6a /* 'j' */ :
+				case 0x6b /* 'k' */ :
+				case 0x6c /* 'l' */ :
+				case 0x6d /* 'm' */ :
+				case 0x6e /* 'n' */ :
+				case 0x6f /* 'o' */ :
+				case 0x70 /* 'p' */ :
+				case 0x71 /* 'q' */ :
+				case 0x72 /* 'r' */ :
+				case 0x73 /* 's' */ :
+				case 0x74 /* 't' */ :
+				case 0x75 /* 'u' */ :
+				case 0x76 /* 'v' */ :
+				case 0x77 /* 'w' */ :
+				case 0x78 /* 'x' */ :
+				case 0x79 /* 'y' */ :
+				case 0x7a /* 'z' */ :
 				{
 					break;
 				}
@@ -973,48 +946,48 @@ void AdaLexer::mIDENTIFIER(bool _createToken) {
 				}
 				{
 				switch ( LA(1)) {
-				case static_cast<unsigned char>('a'):
-				case static_cast<unsigned char>('b'):
-				case static_cast<unsigned char>('c'):
-				case static_cast<unsigned char>('d'):
-				case static_cast<unsigned char>('e'):
-				case static_cast<unsigned char>('f'):
-				case static_cast<unsigned char>('g'):
-				case static_cast<unsigned char>('h'):
-				case static_cast<unsigned char>('i'):
-				case static_cast<unsigned char>('j'):
-				case static_cast<unsigned char>('k'):
-				case static_cast<unsigned char>('l'):
-				case static_cast<unsigned char>('m'):
-				case static_cast<unsigned char>('n'):
-				case static_cast<unsigned char>('o'):
-				case static_cast<unsigned char>('p'):
-				case static_cast<unsigned char>('q'):
-				case static_cast<unsigned char>('r'):
-				case static_cast<unsigned char>('s'):
-				case static_cast<unsigned char>('t'):
-				case static_cast<unsigned char>('u'):
-				case static_cast<unsigned char>('v'):
-				case static_cast<unsigned char>('w'):
-				case static_cast<unsigned char>('x'):
-				case static_cast<unsigned char>('y'):
-				case static_cast<unsigned char>('z'):
+				case 0x61 /* 'a' */ :
+				case 0x62 /* 'b' */ :
+				case 0x63 /* 'c' */ :
+				case 0x64 /* 'd' */ :
+				case 0x65 /* 'e' */ :
+				case 0x66 /* 'f' */ :
+				case 0x67 /* 'g' */ :
+				case 0x68 /* 'h' */ :
+				case 0x69 /* 'i' */ :
+				case 0x6a /* 'j' */ :
+				case 0x6b /* 'k' */ :
+				case 0x6c /* 'l' */ :
+				case 0x6d /* 'm' */ :
+				case 0x6e /* 'n' */ :
+				case 0x6f /* 'o' */ :
+				case 0x70 /* 'p' */ :
+				case 0x71 /* 'q' */ :
+				case 0x72 /* 'r' */ :
+				case 0x73 /* 's' */ :
+				case 0x74 /* 't' */ :
+				case 0x75 /* 'u' */ :
+				case 0x76 /* 'v' */ :
+				case 0x77 /* 'w' */ :
+				case 0x78 /* 'x' */ :
+				case 0x79 /* 'y' */ :
+				case 0x7a /* 'z' */ :
 				{
-					matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('z'));
+					matchRange('a','z');
 					break;
 				}
-				case static_cast<unsigned char>('0'):
-				case static_cast<unsigned char>('1'):
-				case static_cast<unsigned char>('2'):
-				case static_cast<unsigned char>('3'):
-				case static_cast<unsigned char>('4'):
-				case static_cast<unsigned char>('5'):
-				case static_cast<unsigned char>('6'):
-				case static_cast<unsigned char>('7'):
-				case static_cast<unsigned char>('8'):
-				case static_cast<unsigned char>('9'):
+				case 0x30 /* '0' */ :
+				case 0x31 /* '1' */ :
+				case 0x32 /* '2' */ :
+				case 0x33 /* '3' */ :
+				case 0x34 /* '4' */ :
+				case 0x35 /* '5' */ :
+				case 0x36 /* '6' */ :
+				case 0x37 /* '7' */ :
+				case 0x38 /* '8' */ :
+				case 0x39 /* '9' */ :
 				{
-					matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
+					matchRange('0','9');
 					break;
 				}
 				default:
@@ -1034,8 +1007,7 @@ void AdaLexer::mIDENTIFIER(bool _createToken) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	_ttype = testLiteralsTable(_ttype);
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1047,21 +1019,20 @@ void AdaLexer::mIDENTIFIER(bool _createToken) {
 }
 
 void AdaLexer::mCHARACTER_LITERAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = CHARACTER_LITERAL;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		if (!( LA(3)=='\'' ))
-			throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" LA(3)=='\\'' ");
-		match("'");
+			throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" LA(3)==\'\\\'\' ");
+		match("\'");
 		matchNot(EOF/*_CHAR*/);
-		match("'");
+		match("\'");
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1072,15 +1043,15 @@ void AdaLexer::mCHARACTER_LITERAL(bool _createToken) {
 }
 
 void AdaLexer::mCHAR_STRING(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = CHAR_STRING;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
-		match(static_cast<unsigned char>('"'));
+		match('\"' /* charlit */ );
 		{ // ( ... )*
 		for (;;) {
-			if ((LA(1) == static_cast<unsigned char>('"')) && (LA(2) == static_cast<unsigned char>('"'))) {
+			if ((LA(1) == 0x22 /* '\"' */ ) && (LA(2) == 0x22 /* '\"' */ )) {
 				match("\"\"");
 			}
 			else if ((_tokenSet_3.member(LA(1)))) {
@@ -1095,12 +1066,11 @@ void AdaLexer::mCHAR_STRING(bool _createToken) {
 		}
 		_loop513:;
 		} // ( ... )*
-		match(static_cast<unsigned char>('"'));
+		match('\"' /* charlit */ );
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1111,15 +1081,15 @@ void AdaLexer::mCHAR_STRING(bool _createToken) {
 }
 
 void AdaLexer::mNUMERIC_LIT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = NUMERIC_LIT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{ // ( ... )+
 		int _cnt516=0;
 		for (;;) {
-			if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+			if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
 				mDIGIT(false);
 			}
 			else {
@@ -1132,19 +1102,19 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 		}  // ( ... )+
 		{
 		switch ( LA(1)) {
-		case static_cast<unsigned char>('#'):
+		case 0x23 /* '#' */ :
 		{
-			match(static_cast<unsigned char>('#'));
+			match('#' /* charlit */ );
 			mBASED_INTEGER(false);
 			{
 			switch ( LA(1)) {
-			case static_cast<unsigned char>('.'):
+			case 0x2e /* '.' */ :
 			{
-				match(static_cast<unsigned char>('.'));
+				match('.' /* charlit */ );
 				mBASED_INTEGER(false);
 				break;
 			}
-			case static_cast<unsigned char>('#'):
+			case 0x23 /* '#' */ :
 			{
 				break;
 			}
@@ -1154,20 +1124,20 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 			}
 			}
 			}
-			match(static_cast<unsigned char>('#'));
+			match('#' /* charlit */ );
 			break;
 		}
-		case static_cast<unsigned char>('_'):
+		case 0x5f /* '_' */ :
 		{
 			{ // ( ... )+
 			int _cnt522=0;
 			for (;;) {
-				if ((LA(1) == static_cast<unsigned char>('_'))) {
-					match(static_cast<unsigned char>('_'));
+				if ((LA(1) == 0x5f /* '_' */ )) {
+					match('_' /* charlit */ );
 					{ // ( ... )+
 					int _cnt521=0;
 					for (;;) {
-						if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+						if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
 							mDIGIT(false);
 						}
 						else {
@@ -1195,16 +1165,16 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 		}
 		}
 		{
-		if (((LA(1) == static_cast<unsigned char>('.') || LA(1) == static_cast<unsigned char>('e')))&&( LA(2)!='.' )) {
+		if (((LA(1) == 0x2e /* '.' */  || LA(1) == 0x65 /* 'e' */ ))&&( LA(2)!='.' )) {
 			{
 			switch ( LA(1)) {
-			case static_cast<unsigned char>('.'):
+			case 0x2e /* '.' */ :
 			{
-				match(static_cast<unsigned char>('.'));
+				match('.' /* charlit */ );
 				{ // ( ... )+
 				int _cnt526=0;
 				for (;;) {
-					if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+					if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
 						mDIGIT(false);
 					}
 					else {
@@ -1217,12 +1187,12 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 				}  // ( ... )+
 				{ // ( ... )*
 				for (;;) {
-					if ((LA(1) == static_cast<unsigned char>('_'))) {
-						match(static_cast<unsigned char>('_'));
+					if ((LA(1) == 0x5f /* '_' */ )) {
+						match('_' /* charlit */ );
 						{ // ( ... )+
 						int _cnt529=0;
 						for (;;) {
-							if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+							if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
 								mDIGIT(false);
 							}
 							else {
@@ -1242,7 +1212,7 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 				_loop530:;
 				} // ( ... )*
 				{
-				if ((LA(1) == static_cast<unsigned char>('e'))) {
+				if ((LA(1) == 0x65 /* 'e' */ )) {
 					mEXPONENT(false);
 				}
 				else {
@@ -1251,7 +1221,7 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 				}
 				break;
 			}
-			case static_cast<unsigned char>('e'):
+			case 0x65 /* 'e' */ :
 			{
 				mEXPONENT(false);
 				break;
@@ -1270,8 +1240,7 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1282,19 +1251,18 @@ void AdaLexer::mNUMERIC_LIT(bool _createToken) {
 }
 
 void AdaLexer::mDIGIT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = DIGIT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{
-		matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
+		matchRange('0','9');
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_4);
+		recover(ex,_tokenSet_4);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1305,9 +1273,9 @@ void AdaLexer::mDIGIT(bool _createToken) {
 }
 
 void AdaLexer::mBASED_INTEGER(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = BASED_INTEGER;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{
@@ -1318,27 +1286,27 @@ void AdaLexer::mBASED_INTEGER(bool _createToken) {
 			if ((_tokenSet_5.member(LA(1)))) {
 				{
 				switch ( LA(1)) {
-				case static_cast<unsigned char>('_'):
+				case 0x5f /* '_' */ :
 				{
-					match(static_cast<unsigned char>('_'));
+					match('_' /* charlit */ );
 					break;
 				}
-				case static_cast<unsigned char>('0'):
-				case static_cast<unsigned char>('1'):
-				case static_cast<unsigned char>('2'):
-				case static_cast<unsigned char>('3'):
-				case static_cast<unsigned char>('4'):
-				case static_cast<unsigned char>('5'):
-				case static_cast<unsigned char>('6'):
-				case static_cast<unsigned char>('7'):
-				case static_cast<unsigned char>('8'):
-				case static_cast<unsigned char>('9'):
-				case static_cast<unsigned char>('a'):
-				case static_cast<unsigned char>('b'):
-				case static_cast<unsigned char>('c'):
-				case static_cast<unsigned char>('d'):
-				case static_cast<unsigned char>('e'):
-				case static_cast<unsigned char>('f'):
+				case 0x30 /* '0' */ :
+				case 0x31 /* '1' */ :
+				case 0x32 /* '2' */ :
+				case 0x33 /* '3' */ :
+				case 0x34 /* '4' */ :
+				case 0x35 /* '5' */ :
+				case 0x36 /* '6' */ :
+				case 0x37 /* '7' */ :
+				case 0x38 /* '8' */ :
+				case 0x39 /* '9' */ :
+				case 0x61 /* 'a' */ :
+				case 0x62 /* 'b' */ :
+				case 0x63 /* 'c' */ :
+				case 0x64 /* 'd' */ :
+				case 0x65 /* 'e' */ :
+				case 0x66 /* 'f' */ :
 				{
 					break;
 				}
@@ -1360,8 +1328,7 @@ void AdaLexer::mBASED_INTEGER(bool _createToken) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_6);
+		recover(ex,_tokenSet_6);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1372,36 +1339,36 @@ void AdaLexer::mBASED_INTEGER(bool _createToken) {
 }
 
 void AdaLexer::mEXPONENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = EXPONENT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{
-		match(static_cast<unsigned char>('e'));
+		match('e' /* charlit */ );
 		}
 		{
 		switch ( LA(1)) {
-		case static_cast<unsigned char>('+'):
+		case 0x2b /* '+' */ :
 		{
-			match(static_cast<unsigned char>('+'));
+			match('+' /* charlit */ );
 			break;
 		}
-		case static_cast<unsigned char>('-'):
+		case 0x2d /* '-' */ :
 		{
-			match(static_cast<unsigned char>('-'));
+			match('-' /* charlit */ );
 			break;
 		}
-		case static_cast<unsigned char>('0'):
-		case static_cast<unsigned char>('1'):
-		case static_cast<unsigned char>('2'):
-		case static_cast<unsigned char>('3'):
-		case static_cast<unsigned char>('4'):
-		case static_cast<unsigned char>('5'):
-		case static_cast<unsigned char>('6'):
-		case static_cast<unsigned char>('7'):
-		case static_cast<unsigned char>('8'):
-		case static_cast<unsigned char>('9'):
+		case 0x30 /* '0' */ :
+		case 0x31 /* '1' */ :
+		case 0x32 /* '2' */ :
+		case 0x33 /* '3' */ :
+		case 0x34 /* '4' */ :
+		case 0x35 /* '5' */ :
+		case 0x36 /* '6' */ :
+		case 0x37 /* '7' */ :
+		case 0x38 /* '8' */ :
+		case 0x39 /* '9' */ :
 		{
 			break;
 		}
@@ -1414,7 +1381,7 @@ void AdaLexer::mEXPONENT(bool _createToken) {
 		{ // ( ... )+
 		int _cnt538=0;
 		for (;;) {
-			if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+			if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
 				mDIGIT(false);
 			}
 			else {
@@ -1428,8 +1395,7 @@ void AdaLexer::mEXPONENT(bool _createToken) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1440,35 +1406,35 @@ void AdaLexer::mEXPONENT(bool _createToken) {
 }
 
 void AdaLexer::mEXTENDED_DIGIT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = EXTENDED_DIGIT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
-		case static_cast<unsigned char>('0'):
-		case static_cast<unsigned char>('1'):
-		case static_cast<unsigned char>('2'):
-		case static_cast<unsigned char>('3'):
-		case static_cast<unsigned char>('4'):
-		case static_cast<unsigned char>('5'):
-		case static_cast<unsigned char>('6'):
-		case static_cast<unsigned char>('7'):
-		case static_cast<unsigned char>('8'):
-		case static_cast<unsigned char>('9'):
+		case 0x30 /* '0' */ :
+		case 0x31 /* '1' */ :
+		case 0x32 /* '2' */ :
+		case 0x33 /* '3' */ :
+		case 0x34 /* '4' */ :
+		case 0x35 /* '5' */ :
+		case 0x36 /* '6' */ :
+		case 0x37 /* '7' */ :
+		case 0x38 /* '8' */ :
+		case 0x39 /* '9' */ :
 		{
 			mDIGIT(false);
 			break;
 		}
-		case static_cast<unsigned char>('a'):
-		case static_cast<unsigned char>('b'):
-		case static_cast<unsigned char>('c'):
-		case static_cast<unsigned char>('d'):
-		case static_cast<unsigned char>('e'):
-		case static_cast<unsigned char>('f'):
+		case 0x61 /* 'a' */ :
+		case 0x62 /* 'b' */ :
+		case 0x63 /* 'c' */ :
+		case 0x64 /* 'd' */ :
+		case 0x65 /* 'e' */ :
+		case 0x66 /* 'f' */ :
 		{
-			matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('f'));
+			matchRange('a','f');
 			break;
 		}
 		default:
@@ -1480,8 +1446,7 @@ void AdaLexer::mEXTENDED_DIGIT(bool _createToken) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_4);
+		recover(ex,_tokenSet_4);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1492,40 +1457,40 @@ void AdaLexer::mEXTENDED_DIGIT(bool _createToken) {
 }
 
 void AdaLexer::mWS_(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = WS_;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
-		case static_cast<unsigned char>(' '):
+		case 0x20 /* ' ' */ :
 		{
-			match(static_cast<unsigned char>(' '));
+			match(' ' /* charlit */ );
 			break;
 		}
-		case static_cast<unsigned char>('\t'):
+		case 0x9 /* '\t' */ :
 		{
-			match(static_cast<unsigned char>('\t'));
+			match('\t' /* charlit */ );
 			break;
 		}
-		case static_cast<unsigned char>('\14'):
+		case 0xc /* '\14' */ :
 		{
-			match(static_cast<unsigned char>('\14'));
+			match('\14' /* charlit */ );
 			break;
 		}
-		case static_cast<unsigned char>('\n'):
-		case static_cast<unsigned char>('\r'):
+		case 0xa /* '\n' */ :
+		case 0xd /* '\r' */ :
 		{
 			{
-			if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n'))) {
+			if ((LA(1) == 0xd /* '\r' */ ) && (LA(2) == 0xa /* '\n' */ )) {
 				match("\r\n");
 			}
-			else if ((LA(1) == static_cast<unsigned char>('\r')) && (true)) {
-				match(static_cast<unsigned char>('\r'));
+			else if ((LA(1) == 0xd /* '\r' */ ) && (true)) {
+				match('\r' /* charlit */ );
 			}
-			else if ((LA(1) == static_cast<unsigned char>('\n'))) {
-				match(static_cast<unsigned char>('\n'));
+			else if ((LA(1) == 0xa /* '\n' */ )) {
+				match('\n' /* charlit */ );
 			}
 			else {
 				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());
@@ -1534,7 +1499,7 @@ void AdaLexer::mWS_(bool _createToken) {
 			}
 #line 1939 "ada.g"
 			newline();
-#line 1538 "AdaLexer.cpp"
+#line 1503 "AdaLexer.cpp"
 			break;
 		}
 		default:
@@ -1545,12 +1510,11 @@ void AdaLexer::mWS_(bool _createToken) {
 		}
 #line 1941 "ada.g"
 		_ttype = antlr::Token::SKIP;
-#line 1549 "AdaLexer.cpp"
+#line 1514 "AdaLexer.cpp"
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1561,9 +1525,9 @@ void AdaLexer::mWS_(bool _createToken) {
 }
 
 void AdaLexer::mCOMMENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
 	_ttype = COMMENT;
-	int _saveIndex;
+	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
 	
 	try {      // for error handling
 		{
@@ -1584,17 +1548,17 @@ void AdaLexer::mCOMMENT(bool _createToken) {
 		} // ( ... )*
 		{
 		switch ( LA(1)) {
-		case static_cast<unsigned char>('\n'):
+		case 0xa /* '\n' */ :
 		{
-			match(static_cast<unsigned char>('\n'));
+			match('\n' /* charlit */ );
 			break;
 		}
-		case static_cast<unsigned char>('\r'):
+		case 0xd /* '\r' */ :
 		{
-			match(static_cast<unsigned char>('\r'));
+			match('\r' /* charlit */ );
 			{
-			if ((LA(1) == static_cast<unsigned char>('\n'))) {
-				match(static_cast<unsigned char>('\n'));
+			if ((LA(1) == 0xa /* '\n' */ )) {
+				match('\n' /* charlit */ );
 			}
 			else {
 			}
@@ -1611,12 +1575,11 @@ void AdaLexer::mCOMMENT(bool _createToken) {
 		}
 #line 1946 "ada.g"
 		_ttype = antlr::Token::SKIP; newline();
-#line 1615 "AdaLexer.cpp"
+#line 1579 "AdaLexer.cpp"
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		consume();
-		consumeUntil(_tokenSet_1);
+		recover(ex,_tokenSet_1);
 	}
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1628,181 +1591,66 @@ void AdaLexer::mCOMMENT(bool _createToken) {
 
 
 const unsigned long AdaLexer::_tokenSet_0_data_[] = { 4294967288UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// NULL_TREE_LOOKAHEAD "pragma" IDENTIFIER SEMI LPAREN COMMA RPAREN RIGHT_SHAFT 
-// "with" DOT "use" "type" TIC "range" "digits" "delta" "access" "private" 
-// "package" "body" "is" "procedure" "function" "new" "others" PIPE DOT_DOT 
-// "all" COLON "in" "out" "renames" CHARACTER_LITERAL CHAR_STRING "null" 
-// "record" "separate" "abstract" "return" "task" "protected" BOX ASSIGN 
-// "entry" "for" "end" "at" "mod" "subtype" "exception" "constant" "array" 
-// "of" "aliased" "case" "when" "tagged" "limited" "generic" "begin" LT_LT 
-// GT_GT "if" "then" "elsif" "else" "loop" "while" "reverse" "declare" 
-// "exit" "goto" "accept" "do" "delay" "until" "select" "abort" "or" "terminate" 
-// "raise" "requeue" "and" "xor" "not" EQ NE LT_ LE GT GE PLUS MINUS CONCAT 
-// STAR DIV "rem" "abs" EXPON NUMERIC_LIT ABORTABLE_PART ABORT_STATEMENT 
-// ABSTRACT_SUBPROGRAM_DECLARATION ACCEPT_ALTERNATIVE ACCEPT_STATEMENT 
-// ALLOCATOR ASSIGNMENT_STATEMENT ASYNCHRONOUS_SELECT ATTRIBUTE_DEFINITION_CLAUSE 
-// AT_CLAUSE BLOCK_STATEMENT CASE_STATEMENT CASE_STATEMENT_ALTERNATIVE 
-// CODE_STATEMENT COMPONENT_DECLARATION COMPONENT_LIST CONDITION CONDITIONAL_ENTRY_CALL 
-// CONTEXT_CLAUSE DECLARATIVE_ITEM DECLARATIVE_PART DEFINING_IDENTIFIER_LIST 
-// DELAY_ALTERNATIVE DELAY_STATEMENT DELTA_CONSTRAINT DIGITS_CONSTRAINT 
-// DISCRETE_RANGE DISCRIMINANT_ASSOCIATION DISCRIMINANT_CONSTRAINT DISCRIMINANT_SPECIFICATION 
-// ENTRY_BODY ENTRY_CALL_ALTERNATIVE ENTRY_CALL_STATEMENT ENTRY_DECLARATION 
-// ENTRY_INDEX_SPECIFICATION ENUMERATION_REPESENTATION_CLAUSE EXCEPTION_DECLARATION 
-// EXCEPTION_HANDLER EXCEPTION_RENAMING_DECLARATION EXIT_STATEMENT FORMAL_PACKAGE_DECLARATION 
-// FORMAL_TYPE_DECLARATION FULL_TYPE_DECLARATION GENERIC_FORMAL_PART GENERIC_INSTANTIATION 
-// GENERIC_PACKAGE_DECLARATION GENERIC_RENAMING_DECLARATION GENERIC_SUBPROGRAM_DECLARATION 
-// GOTO_STATEMENT HANDLED_SEQUENCE_OF_STATEMENTS IF_STATEMENT INCOMPLETE_TYPE_DECLARATION 
-// INDEXED_COMPONENT INDEX_CONSTRAINT LIBRARY_ITEM LOOP_STATEMENT NAME 
-// NULL_STATEMENT NUMBER_DECLARATION OBJECT_DECLARATION OBJECT_RENAMING_DECLARATION 
-// OPERATOR_SYMBOL PACKAGE_BODY PACKAGE_BODY_STUB PACKAGE_RENAMING_DECLARATION 
-// PACKAGE_SPECIFICATION PARAMETER_SPECIFICATION PREFIX PRIMARY PRIVATE_EXTENSION_DECLARATION 
-// PRIVATE_TYPE_DECLARATION PROCEDURE_CALL_STATEMENT PROTECTED_BODY PROTECTED_BODY_STUB 
-// PROTECTED_TYPE_DECLARATION RAISE_STATEMENT RANGE_ATTRIBUTE_REFERENCE 
-// RECORD_REPRESENTATION_CLAUSE REQUEUE_STATEMENT RETURN_STATEMENT SELECTIVE_ACCEPT 
-// SELECT_ALTERNATIVE SELECT_STATEMENT SEQUENCE_OF_STATEMENTS SINGLE_PROTECTED_DECLARATION 
-// SINGLE_TASK_DECLARATION STATEMENT SUBPROGRAM_BODY SUBPROGRAM_BODY_STUB 
-// SUBPROGRAM_DECLARATION SUBPROGRAM_RENAMING_DECLARATION SUBTYPE_DECLARATION 
-// SUBTYPE_INDICATION SUBTYPE_MARK SUBUNIT TASK_BODY TASK_BODY_STUB TASK_TYPE_DECLARATION 
-// TERMINATE_ALTERNATIVE TIMED_ENTRY_CALL TRIGGERING_ALTERNATIVE TYPE_DECLARATION 
-// USE_CLAUSE USE_TYPE_CLAUSE VARIANT VARIANT_PART WITH_CLAUSE ABSTRACT_FUNCTION_DECLARATION 
-// ABSTRACT_PROCEDURE_DECLARATION ACCESS_TO_FUNCTION_DECLARATION ACCESS_TO_OBJECT_DECLARATION 
-// ACCESS_TO_PROCEDURE_DECLARATION ACCESS_TYPE_DECLARATION ARRAY_OBJECT_DECLARATION 
-// ARRAY_TYPE_DECLARATION AND_THEN BASIC_DECLARATIVE_ITEMS_OPT BLOCK_BODY 
-// BLOCK_BODY_OPT CALL_STATEMENT COMPONENT_CLAUSES_OPT COMPONENT_ITEMS 
-// COND_CLAUSE DECIMAL_FIXED_POINT_DECLARATION DECLARE_OPT DERIVED_RECORD_EXTENSION 
-// DERIVED_TYPE_DECLARATION DISCRETE_SUBTYPE_DEF_OPT DISCRIMINANT_SPECIFICATIONS 
-// DISCRIM_PART_OPT ELSE_OPT ELSIFS_OPT ENTRY_INDEX_OPT ENUMERATION_TYPE_DECLARATION 
-// EXCEPT_HANDLER_PART_OPT EXTENSION_OPT FLOATING_POINT_DECLARATION FORMAL_DECIMAL_FIXED_POINT_DECLARATION 
-// FORMAL_DISCRETE_TYPE_DECLARATION FORMAL_FLOATING_POINT_DECLARATION FORMAL_FUNCTION_DECLARATION 
-// FORMAL_MODULAR_TYPE_DECLARATION FORMAL_ORDINARY_DERIVED_TYPE_DECLARATION 
-// FORMAL_ORDINARY_FIXED_POINT_DECLARATION FORMAL_PART_OPT FORMAL_PRIVATE_EXTENSION_DECLARATION 
-// FORMAL_PRIVATE_TYPE_DECLARATION FORMAL_PROCEDURE_DECLARATION FORMAL_SIGNED_INTEGER_TYPE_DECLARATION 
-// FUNCTION_BODY FUNCTION_BODY_STUB FUNCTION_DECLARATION FUNCTION_RENAMING_DECLARATION 
+// 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 
+// 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! \" # 
+// $ % & \' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E 
+// F G H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a b c d e f 
+// g h i j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 
+// 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 
+// 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 
+// 0x9f 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 
+// 0xad 0xae 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 
+// 0xbb 0xbc 0xbd 0xbe 0xbf 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 
+// 0xc9 0xca 0xcb 0xcc 0xcd 0xce 0xcf 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 
+// 0xd7 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf 0xe0 0xe1 0xe2 0xe3 0xe4 
+// 0xe5 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef 0xf0 0xf1 0xf2 
+// 0xf3 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff 
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_0(_tokenSet_0_data_,16);
 const unsigned long AdaLexer::_tokenSet_1_data_[] = { 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_1(_tokenSet_1_data_,10);
 const unsigned long AdaLexer::_tokenSet_2_data_[] = { 0UL, 67043328UL, 2147483648UL, 134217726UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "at" "mod" "subtype" "exception" "constant" "array" "of" "aliased" 
-// "case" MINUS STAR DIV "rem" "abs" EXPON NUMERIC_LIT ABORTABLE_PART ABORT_STATEMENT 
-// ABSTRACT_SUBPROGRAM_DECLARATION ACCEPT_ALTERNATIVE ACCEPT_STATEMENT 
-// ALLOCATOR ASSIGNMENT_STATEMENT ASYNCHRONOUS_SELECT ATTRIBUTE_DEFINITION_CLAUSE 
-// AT_CLAUSE BLOCK_STATEMENT CASE_STATEMENT CASE_STATEMENT_ALTERNATIVE 
-// CODE_STATEMENT COMPONENT_DECLARATION COMPONENT_LIST CONDITION CONDITIONAL_ENTRY_CALL 
-// CONTEXT_CLAUSE DECLARATIVE_ITEM 
+// 0 1 2 3 4 5 6 7 8 9 _ a b c d e f g h i j k l m n o p q r s t u v w 
+// x y z 
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_2(_tokenSet_2_data_,10);
 const unsigned long AdaLexer::_tokenSet_3_data_[] = { 4294967288UL, 4294967291UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// NULL_TREE_LOOKAHEAD "pragma" IDENTIFIER SEMI LPAREN COMMA RPAREN RIGHT_SHAFT 
-// "with" DOT "use" "type" TIC "range" "digits" "delta" "access" "private" 
-// "package" "body" "is" "procedure" "function" "new" "others" PIPE DOT_DOT 
-// "all" COLON "in" "out" CHARACTER_LITERAL CHAR_STRING "null" "record" 
-// "separate" "abstract" "return" "task" "protected" BOX ASSIGN "entry" 
-// "for" "end" "at" "mod" "subtype" "exception" "constant" "array" "of" 
-// "aliased" "case" "when" "tagged" "limited" "generic" "begin" LT_LT GT_GT 
-// "if" "then" "elsif" "else" "loop" "while" "reverse" "declare" "exit" 
-// "goto" "accept" "do" "delay" "until" "select" "abort" "or" "terminate" 
-// "raise" "requeue" "and" "xor" "not" EQ NE LT_ LE GT GE PLUS MINUS CONCAT 
-// STAR DIV "rem" "abs" EXPON NUMERIC_LIT ABORTABLE_PART ABORT_STATEMENT 
-// ABSTRACT_SUBPROGRAM_DECLARATION ACCEPT_ALTERNATIVE ACCEPT_STATEMENT 
-// ALLOCATOR ASSIGNMENT_STATEMENT ASYNCHRONOUS_SELECT ATTRIBUTE_DEFINITION_CLAUSE 
-// AT_CLAUSE BLOCK_STATEMENT CASE_STATEMENT CASE_STATEMENT_ALTERNATIVE 
-// CODE_STATEMENT COMPONENT_DECLARATION COMPONENT_LIST CONDITION CONDITIONAL_ENTRY_CALL 
-// CONTEXT_CLAUSE DECLARATIVE_ITEM DECLARATIVE_PART DEFINING_IDENTIFIER_LIST 
-// DELAY_ALTERNATIVE DELAY_STATEMENT DELTA_CONSTRAINT DIGITS_CONSTRAINT 
-// DISCRETE_RANGE DISCRIMINANT_ASSOCIATION DISCRIMINANT_CONSTRAINT DISCRIMINANT_SPECIFICATION 
-// ENTRY_BODY ENTRY_CALL_ALTERNATIVE ENTRY_CALL_STATEMENT ENTRY_DECLARATION 
-// ENTRY_INDEX_SPECIFICATION ENUMERATION_REPESENTATION_CLAUSE EXCEPTION_DECLARATION 
-// EXCEPTION_HANDLER EXCEPTION_RENAMING_DECLARATION EXIT_STATEMENT FORMAL_PACKAGE_DECLARATION 
-// FORMAL_TYPE_DECLARATION FULL_TYPE_DECLARATION GENERIC_FORMAL_PART GENERIC_INSTANTIATION 
-// GENERIC_PACKAGE_DECLARATION GENERIC_RENAMING_DECLARATION GENERIC_SUBPROGRAM_DECLARATION 
-// GOTO_STATEMENT HANDLED_SEQUENCE_OF_STATEMENTS IF_STATEMENT INCOMPLETE_TYPE_DECLARATION 
-// INDEXED_COMPONENT INDEX_CONSTRAINT LIBRARY_ITEM LOOP_STATEMENT NAME 
-// NULL_STATEMENT NUMBER_DECLARATION OBJECT_DECLARATION OBJECT_RENAMING_DECLARATION 
-// OPERATOR_SYMBOL PACKAGE_BODY PACKAGE_BODY_STUB PACKAGE_RENAMING_DECLARATION 
-// PACKAGE_SPECIFICATION PARAMETER_SPECIFICATION PREFIX PRIMARY PRIVATE_EXTENSION_DECLARATION 
-// PRIVATE_TYPE_DECLARATION PROCEDURE_CALL_STATEMENT PROTECTED_BODY PROTECTED_BODY_STUB 
-// PROTECTED_TYPE_DECLARATION RAISE_STATEMENT RANGE_ATTRIBUTE_REFERENCE 
-// RECORD_REPRESENTATION_CLAUSE REQUEUE_STATEMENT RETURN_STATEMENT SELECTIVE_ACCEPT 
-// SELECT_ALTERNATIVE SELECT_STATEMENT SEQUENCE_OF_STATEMENTS SINGLE_PROTECTED_DECLARATION 
-// SINGLE_TASK_DECLARATION STATEMENT SUBPROGRAM_BODY SUBPROGRAM_BODY_STUB 
-// SUBPROGRAM_DECLARATION SUBPROGRAM_RENAMING_DECLARATION SUBTYPE_DECLARATION 
-// SUBTYPE_INDICATION SUBTYPE_MARK SUBUNIT TASK_BODY TASK_BODY_STUB TASK_TYPE_DECLARATION 
-// TERMINATE_ALTERNATIVE TIMED_ENTRY_CALL TRIGGERING_ALTERNATIVE TYPE_DECLARATION 
-// USE_CLAUSE USE_TYPE_CLAUSE VARIANT VARIANT_PART WITH_CLAUSE ABSTRACT_FUNCTION_DECLARATION 
-// ABSTRACT_PROCEDURE_DECLARATION ACCESS_TO_FUNCTION_DECLARATION ACCESS_TO_OBJECT_DECLARATION 
-// ACCESS_TO_PROCEDURE_DECLARATION ACCESS_TYPE_DECLARATION ARRAY_OBJECT_DECLARATION 
-// ARRAY_TYPE_DECLARATION AND_THEN BASIC_DECLARATIVE_ITEMS_OPT BLOCK_BODY 
-// BLOCK_BODY_OPT CALL_STATEMENT COMPONENT_CLAUSES_OPT COMPONENT_ITEMS 
-// COND_CLAUSE DECIMAL_FIXED_POINT_DECLARATION DECLARE_OPT DERIVED_RECORD_EXTENSION 
-// DERIVED_TYPE_DECLARATION DISCRETE_SUBTYPE_DEF_OPT DISCRIMINANT_SPECIFICATIONS 
-// DISCRIM_PART_OPT ELSE_OPT ELSIFS_OPT ENTRY_INDEX_OPT ENUMERATION_TYPE_DECLARATION 
-// EXCEPT_HANDLER_PART_OPT EXTENSION_OPT FLOATING_POINT_DECLARATION FORMAL_DECIMAL_FIXED_POINT_DECLARATION 
-// FORMAL_DISCRETE_TYPE_DECLARATION FORMAL_FLOATING_POINT_DECLARATION FORMAL_FUNCTION_DECLARATION 
-// FORMAL_MODULAR_TYPE_DECLARATION FORMAL_ORDINARY_DERIVED_TYPE_DECLARATION 
-// FORMAL_ORDINARY_FIXED_POINT_DECLARATION FORMAL_PART_OPT FORMAL_PRIVATE_EXTENSION_DECLARATION 
-// FORMAL_PRIVATE_TYPE_DECLARATION FORMAL_PROCEDURE_DECLARATION FORMAL_SIGNED_INTEGER_TYPE_DECLARATION 
-// FUNCTION_BODY FUNCTION_BODY_STUB FUNCTION_DECLARATION FUNCTION_RENAMING_DECLARATION 
+// 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 
+// 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! # $ 
+// % & \' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F 
+// G H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a b c d e f g 
+// h i j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 0x83 
+// 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 0x91 
+// 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f 
+// 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 
+// 0xae 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 
+// 0xbc 0xbd 0xbe 0xbf 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 0xc9 
+// 0xca 0xcb 0xcc 0xcd 0xce 0xcf 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 
+// 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 
+// 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef 0xf0 0xf1 0xf2 0xf3 
+// 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff 
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_3(_tokenSet_3_data_,16);
 const unsigned long AdaLexer::_tokenSet_4_data_[] = { 0UL, 67059720UL, 2147483648UL, 126UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// CHARACTER_LITERAL "entry" "end" "at" "mod" "subtype" "exception" "constant" 
-// "array" "of" "aliased" "case" MINUS STAR DIV "rem" "abs" EXPON NUMERIC_LIT 
+// # . 0 1 2 3 4 5 6 7 8 9 _ a b c d e f 
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_4(_tokenSet_4_data_,10);
 const unsigned long AdaLexer::_tokenSet_5_data_[] = { 0UL, 67043328UL, 2147483648UL, 126UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "at" "mod" "subtype" "exception" "constant" "array" "of" "aliased" 
-// "case" MINUS STAR DIV "rem" "abs" EXPON NUMERIC_LIT 
+// 0 1 2 3 4 5 6 7 8 9 _ a b c d e f 
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_5(_tokenSet_5_data_,10);
 const unsigned long AdaLexer::_tokenSet_6_data_[] = { 0UL, 16392UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// CHARACTER_LITERAL "entry" 
+// # . 
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_6(_tokenSet_6_data_,10);
 const unsigned long AdaLexer::_tokenSet_7_data_[] = { 4294958072UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// NULL_TREE_LOOKAHEAD "pragma" IDENTIFIER SEMI LPAREN COMMA RPAREN "with" 
-// DOT "type" TIC "range" "digits" "delta" "access" "private" "package" 
-// "body" "is" "procedure" "function" "new" "others" PIPE DOT_DOT "all" 
-// COLON "in" "out" "renames" CHARACTER_LITERAL CHAR_STRING "null" "record" 
-// "separate" "abstract" "return" "task" "protected" BOX ASSIGN "entry" 
-// "for" "end" "at" "mod" "subtype" "exception" "constant" "array" "of" 
-// "aliased" "case" "when" "tagged" "limited" "generic" "begin" LT_LT GT_GT 
-// "if" "then" "elsif" "else" "loop" "while" "reverse" "declare" "exit" 
-// "goto" "accept" "do" "delay" "until" "select" "abort" "or" "terminate" 
-// "raise" "requeue" "and" "xor" "not" EQ NE LT_ LE GT GE PLUS MINUS CONCAT 
-// STAR DIV "rem" "abs" EXPON NUMERIC_LIT ABORTABLE_PART ABORT_STATEMENT 
-// ABSTRACT_SUBPROGRAM_DECLARATION ACCEPT_ALTERNATIVE ACCEPT_STATEMENT 
-// ALLOCATOR ASSIGNMENT_STATEMENT ASYNCHRONOUS_SELECT ATTRIBUTE_DEFINITION_CLAUSE 
-// AT_CLAUSE BLOCK_STATEMENT CASE_STATEMENT CASE_STATEMENT_ALTERNATIVE 
-// CODE_STATEMENT COMPONENT_DECLARATION COMPONENT_LIST CONDITION CONDITIONAL_ENTRY_CALL 
-// CONTEXT_CLAUSE DECLARATIVE_ITEM DECLARATIVE_PART DEFINING_IDENTIFIER_LIST 
-// DELAY_ALTERNATIVE DELAY_STATEMENT DELTA_CONSTRAINT DIGITS_CONSTRAINT 
-// DISCRETE_RANGE DISCRIMINANT_ASSOCIATION DISCRIMINANT_CONSTRAINT DISCRIMINANT_SPECIFICATION 
-// ENTRY_BODY ENTRY_CALL_ALTERNATIVE ENTRY_CALL_STATEMENT ENTRY_DECLARATION 
-// ENTRY_INDEX_SPECIFICATION ENUMERATION_REPESENTATION_CLAUSE EXCEPTION_DECLARATION 
-// EXCEPTION_HANDLER EXCEPTION_RENAMING_DECLARATION EXIT_STATEMENT FORMAL_PACKAGE_DECLARATION 
-// FORMAL_TYPE_DECLARATION FULL_TYPE_DECLARATION GENERIC_FORMAL_PART GENERIC_INSTANTIATION 
-// GENERIC_PACKAGE_DECLARATION GENERIC_RENAMING_DECLARATION GENERIC_SUBPROGRAM_DECLARATION 
-// GOTO_STATEMENT HANDLED_SEQUENCE_OF_STATEMENTS IF_STATEMENT INCOMPLETE_TYPE_DECLARATION 
-// INDEXED_COMPONENT INDEX_CONSTRAINT LIBRARY_ITEM LOOP_STATEMENT NAME 
-// NULL_STATEMENT NUMBER_DECLARATION OBJECT_DECLARATION OBJECT_RENAMING_DECLARATION 
-// OPERATOR_SYMBOL PACKAGE_BODY PACKAGE_BODY_STUB PACKAGE_RENAMING_DECLARATION 
-// PACKAGE_SPECIFICATION PARAMETER_SPECIFICATION PREFIX PRIMARY PRIVATE_EXTENSION_DECLARATION 
-// PRIVATE_TYPE_DECLARATION PROCEDURE_CALL_STATEMENT PROTECTED_BODY PROTECTED_BODY_STUB 
-// PROTECTED_TYPE_DECLARATION RAISE_STATEMENT RANGE_ATTRIBUTE_REFERENCE 
-// RECORD_REPRESENTATION_CLAUSE REQUEUE_STATEMENT RETURN_STATEMENT SELECTIVE_ACCEPT 
-// SELECT_ALTERNATIVE SELECT_STATEMENT SEQUENCE_OF_STATEMENTS SINGLE_PROTECTED_DECLARATION 
-// SINGLE_TASK_DECLARATION STATEMENT SUBPROGRAM_BODY SUBPROGRAM_BODY_STUB 
-// SUBPROGRAM_DECLARATION SUBPROGRAM_RENAMING_DECLARATION SUBTYPE_DECLARATION 
-// SUBTYPE_INDICATION SUBTYPE_MARK SUBUNIT TASK_BODY TASK_BODY_STUB TASK_TYPE_DECLARATION 
-// TERMINATE_ALTERNATIVE TIMED_ENTRY_CALL TRIGGERING_ALTERNATIVE TYPE_DECLARATION 
-// USE_CLAUSE USE_TYPE_CLAUSE VARIANT VARIANT_PART WITH_CLAUSE ABSTRACT_FUNCTION_DECLARATION 
-// ABSTRACT_PROCEDURE_DECLARATION ACCESS_TO_FUNCTION_DECLARATION ACCESS_TO_OBJECT_DECLARATION 
-// ACCESS_TO_PROCEDURE_DECLARATION ACCESS_TYPE_DECLARATION ARRAY_OBJECT_DECLARATION 
-// ARRAY_TYPE_DECLARATION AND_THEN BASIC_DECLARATIVE_ITEMS_OPT BLOCK_BODY 
-// BLOCK_BODY_OPT CALL_STATEMENT COMPONENT_CLAUSES_OPT COMPONENT_ITEMS 
-// COND_CLAUSE DECIMAL_FIXED_POINT_DECLARATION DECLARE_OPT DERIVED_RECORD_EXTENSION 
-// DERIVED_TYPE_DECLARATION DISCRETE_SUBTYPE_DEF_OPT DISCRIMINANT_SPECIFICATIONS 
-// DISCRIM_PART_OPT ELSE_OPT ELSIFS_OPT ENTRY_INDEX_OPT ENUMERATION_TYPE_DECLARATION 
-// EXCEPT_HANDLER_PART_OPT EXTENSION_OPT FLOATING_POINT_DECLARATION FORMAL_DECIMAL_FIXED_POINT_DECLARATION 
-// FORMAL_DISCRETE_TYPE_DECLARATION FORMAL_FLOATING_POINT_DECLARATION FORMAL_FUNCTION_DECLARATION 
-// FORMAL_MODULAR_TYPE_DECLARATION FORMAL_ORDINARY_DERIVED_TYPE_DECLARATION 
-// FORMAL_ORDINARY_FIXED_POINT_DECLARATION FORMAL_PART_OPT FORMAL_PRIVATE_EXTENSION_DECLARATION 
-// FORMAL_PRIVATE_TYPE_DECLARATION FORMAL_PROCEDURE_DECLARATION FORMAL_SIGNED_INTEGER_TYPE_DECLARATION 
-// FUNCTION_BODY FUNCTION_BODY_STUB FUNCTION_DECLARATION FUNCTION_RENAMING_DECLARATION 
+// 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xb 0xc 0xe 0xf 0x10 0x11 0x12 0x13 0x14 
+// 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! \" # $ % 
+// & \' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F G 
+// H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a b c d e f g h 
+// i j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 0x83 
+// 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 0x91 
+// 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 0x9f 
+// 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 0xad 
+// 0xae 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 0xbb 
+// 0xbc 0xbd 0xbe 0xbf 0xc0 0xc1 0xc2 0xc3 0xc4 0xc5 0xc6 0xc7 0xc8 0xc9 
+// 0xca 0xcb 0xcc 0xcd 0xce 0xcf 0xd0 0xd1 0xd2 0xd3 0xd4 0xd5 0xd6 0xd7 
+// 0xd8 0xd9 0xda 0xdb 0xdc 0xdd 0xde 0xdf 0xe0 0xe1 0xe2 0xe3 0xe4 0xe5 
+// 0xe6 0xe7 0xe8 0xe9 0xea 0xeb 0xec 0xed 0xee 0xef 0xf0 0xf1 0xf2 0xf3 
+// 0xf4 0xf5 0xf6 0xf7 0xf8 0xf9 0xfa 0xfb 0xfc 0xfd 0xfe 0xff 
 const ANTLR_USE_NAMESPACE(antlr)BitSet AdaLexer::_tokenSet_7(_tokenSet_7_data_,16);
 
