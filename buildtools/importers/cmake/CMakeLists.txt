@@ -1,4 +1,3 @@
-add_subdirectory(tests)
 
 include_directories(
  ${CMAKE_SOURCE_DIR}/lib 
@@ -7,6 +6,7 @@ include_directories(
  ${CMAKE_SOURCE_DIR}/lib/util
  ${CMAKE_CURRENT_SOURCE_DIR}/parser
 )
+add_subdirectory(tests)
 
 set( cmakecommon_SRCS 
   cmakemodelitems.cpp
