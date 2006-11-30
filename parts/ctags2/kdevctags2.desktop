@@ -64,5 +64,5 @@ GenericName[zh_CN]=CTags前端
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Project
 X-KDE-Library=libkdevctags2
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=CodeNavigation

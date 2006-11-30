@@ -68,6 +68,6 @@ GenericName[zh_CN]=文件分类
 ServiceTypes=KDevelop/Plugin
 Icon=attach
 X-KDE-Library=libkdevfilegroups
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=ProjectFileGroupsManagement

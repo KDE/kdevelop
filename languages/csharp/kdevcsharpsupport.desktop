@@ -69,6 +69,6 @@ GenericName[xx]=xxCSharp Supportxx
 GenericName[zh_CN]=CSharp 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevcsharpsupport
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=CSharp
 

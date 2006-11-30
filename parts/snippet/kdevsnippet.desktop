@@ -79,5 +79,5 @@ Icon=editcut
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
 X-KDE-Library=libkdevsnippet
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=CodeEditing

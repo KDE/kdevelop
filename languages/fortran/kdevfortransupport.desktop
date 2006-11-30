@@ -65,5 +65,5 @@ GenericName[xx]=xxFortran 77 Supportxx
 GenericName[zh_CN]=Fortran 77 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevfortransupport
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=Fortran77

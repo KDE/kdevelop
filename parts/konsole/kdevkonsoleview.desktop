@@ -67,6 +67,6 @@ GenericName[zh_CN]=嵌入的KDE终端
 Icon=konsole
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevkonsoleview
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=Console

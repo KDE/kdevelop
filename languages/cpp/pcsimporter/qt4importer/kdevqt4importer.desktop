@@ -37,4 +37,4 @@ Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqt4importer
 X-KDevelop-PCSImporter=
-X-KDevelop-Version=3
+X-KDevelop-Version=4

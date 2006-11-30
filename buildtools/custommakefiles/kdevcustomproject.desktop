@@ -76,5 +76,5 @@ GenericName[xx]=xxCustom Projectxx
 GenericName[zh_CN]=自定义工程
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevcustomproject
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Args=

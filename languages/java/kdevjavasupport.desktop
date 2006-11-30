@@ -71,6 +71,6 @@ GenericName[xx]=xxJava Supportxx
 GenericName[zh_CN]=Java 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevjavasupport
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=Java
 X-KDevelop-Args=Java

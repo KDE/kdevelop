@@ -61,6 +61,6 @@ GenericName[zh_CN]=最终打包支持
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdistpart
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=ProjectPackaging

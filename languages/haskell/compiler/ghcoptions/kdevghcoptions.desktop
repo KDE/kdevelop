@@ -46,4 +46,4 @@ X-KDE-Library=libkdevghcoptions
 X-KDevelop-Language=Haskell
 X-KDevelop-Args=ghc --make
 X-KDevelop-Default=true
-X-KDevelop-Version=3
+X-KDevelop-Version=4

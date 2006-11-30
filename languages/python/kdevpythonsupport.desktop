@@ -70,5 +70,5 @@ GenericName[xx]=xxPython Supportxx
 GenericName[zh_CN]=Python 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevpythonsupport
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=Python

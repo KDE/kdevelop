@@ -64,6 +64,6 @@ GenericName[xx]=xxText Structurexx
 GenericName[zh_CN]=文件结构
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtexttools
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=CodeNavigation

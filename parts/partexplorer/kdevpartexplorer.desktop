@@ -58,6 +58,6 @@ GenericName[xx]=xxPart Explorer Toolxx
 GenericName[zh_CN]=模块浏览器工具
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevpartexplorer
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=KDEDevelopment

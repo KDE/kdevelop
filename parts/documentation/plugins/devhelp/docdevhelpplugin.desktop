@@ -33,5 +33,5 @@ Comment[xx]=xxDocumentation plugin for DevHelp documentationxx
 Comment[zh_CN]=DevHelp 文档的文档插件
 Exec=blubb
 ServiceTypes=KDevelop/DocumentationPlugins
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDE-Library=libdocdevhelpplugin

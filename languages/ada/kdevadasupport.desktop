@@ -69,5 +69,5 @@ GenericName[xx]=xxAda Language Supportxx
 GenericName[zh_CN]=Ada 语言支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevadasupport
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=Ada

@@ -67,6 +67,6 @@ GenericName[zh_CN]=文件树
 ServiceTypes=KDevelop/Plugin
 Icon=folder
 X-KDE-Library=libkdevfileview
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Project
 X-KDevelop-Properties=ProjectFileManagement

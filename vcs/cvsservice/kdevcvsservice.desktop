@@ -53,5 +53,5 @@ GenericName[zh_CN]=CVS 集成(Cervisia)
 Icon=cervisia
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevcvsservice
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=VCS,CVSService

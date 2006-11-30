@@ -69,4 +69,4 @@ GenericName[zh_CN]=脚本语言工程
 ServiceTypes=KDevelop/Project
 Icon=kdevelop
 X-KDE-Library=libkdevscriptproject
-X-KDevelop-Version=3
+X-KDevelop-Version=4

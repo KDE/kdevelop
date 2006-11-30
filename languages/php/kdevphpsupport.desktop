@@ -70,6 +70,6 @@ GenericName[xx]=xxPHP Supportxx
 GenericName[zh_CN]=PHP 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevphpsupport
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=PHP
 

@@ -26,4 +26,4 @@ Icon=gear
 ServiceTypes=KDevelop/ProjectBuilder
 X-KDE-Library=libkdevmakebuilder
 X-KDevelop-ProjectBuilder=
-X-KDevelop-Version=3
+X-KDevelop-Version=4

@@ -67,6 +67,6 @@ GenericName[zh_CN]=编译器前端
 Icon=konsole
 ServiceTypes=KDevelop/MakeFrontend
 X-KDE-Library=libkdevmakeview
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Core
 X-KDevelop-Properties=OutputTool

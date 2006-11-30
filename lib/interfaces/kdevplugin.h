@@ -41,9 +41,9 @@ KDevelop plugin interface.
 */
 
 /**Current KDevelop plugin interface version. Interfaces declare plugin version to make sure
-old source (or binary) incompatible plugins are not loaded. Increase this if 
+old source (or binary) incompatible plugins are not loaded. Increase this if
 it is necessary that old plugins stop working.*/
-#define KDEVELOP_PLUGIN_VERSION 3
+#define KDEVELOP_PLUGIN_VERSION 4
 
 /**
 The base class for all KDevelop plugins.
@@ -133,13 +133,13 @@ public:
     /**@return A reference to the application core - an object which provides
     basic functionalities for inter-parts communications / cooperation.*/
     KDevCore *core() const;
-    
+
     /**@return A reference to the current project component or 0 if no project is loaded.*/
     KDevProject *project() const;
-    
+
     /**@return A reference to the language support component or 0 if no support available.*/
     KDevLanguageSupport *languageSupport() const;
-        
+
     /**@return A reference to the memory symbol store.*/
     CodeModel *codeModel() const;
 
@@ -151,13 +151,13 @@ public:
 
     /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
     virtual KDevPluginController *pluginController() const;
-    
+
     /**@return A reference to the code repository (accessor to persistant symbol stores).*/
     KDevCodeRepository* codeRepository() const;
 
     /**Queries for the plugin which supports given service type (such plugins are called extensions in KDevelop).
     All already loaded plugins will be queried and the <b>first loaded one</b> to support
-    the service type will be returned. Any plugin can be an extension, only "ServiceTypes=..." 
+    the service type will be returned. Any plugin can be an extension, only "ServiceTypes=..."
     entry is required in .desktop file for that plugin.
 
     Template argument is used as a type to cast the result to. This is done because extension
@@ -191,7 +191,7 @@ public:
 
 private:
     KDevPlugin *extension_internal(const QString &serviceType, const QString &constraint = "");
-    
+
     KDevApi *m_api;
     class Private;
     Private *d;

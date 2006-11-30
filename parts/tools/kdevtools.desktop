@@ -63,6 +63,6 @@ GenericName[zh_CN]=工具菜单附加
 Icon=configure
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtools
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Global
 X-KDevelop-Properties=AdditionalTools

@@ -39,6 +39,6 @@ Name[tg]=PghpfИнтихобҳо
 Name[xx]=xxPghpfOptionsxx
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevpgioptions
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=Fortran
 X-KDevelop-Args=pghpf

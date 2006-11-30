@@ -75,4 +75,4 @@ GenericName[xx]=xxHaskell Projectxx
 GenericName[zh_CN]=Haskell 工程
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevhaskellproject
-X-KDevelop-Version=3
+X-KDevelop-Version=4

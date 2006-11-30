@@ -62,5 +62,5 @@ GenericName[xx]=xxClearCase Integrationxx
 GenericName[zh_CN]=ClearCase集成
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevclearcase
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=VCS,ClearcaseVCS

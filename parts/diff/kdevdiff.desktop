@@ -66,6 +66,6 @@ GenericName[xx]=xxDifference Viewerxx
 GenericName[zh_CN]=差别查看器
 ServiceTypes=KDevelop/DiffFrontend
 X-KDE-Library=libkdevdiff
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=CodeEditing
 X-KDevelop-Scope=Core

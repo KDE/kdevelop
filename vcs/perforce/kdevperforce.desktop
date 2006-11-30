@@ -63,5 +63,5 @@ GenericName[xx]=xxPerforce Integrationxx
 GenericName[zh_CN]=Perforce 集成
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevperforce
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=VCS,PerforceVCS

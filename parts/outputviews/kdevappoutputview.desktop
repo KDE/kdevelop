@@ -67,6 +67,6 @@ GenericName[zh_CN]=应用程序输出查看器
 Icon=exec
 ServiceTypes=KDevelop/AppFrontend
 X-KDE-Library=libkdevappview
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Scope=Core
 X-KDevelop-Properties=OutputTool
