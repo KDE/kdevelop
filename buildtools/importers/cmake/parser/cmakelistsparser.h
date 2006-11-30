@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QMetaType>
 #include "cmListFileLexer.h"
+#include <kdevexport.h>
 
 class CMakeAst;
 struct CMakeFunctionArgument;
@@ -77,7 +78,7 @@ Q_DECLARE_METATYPE( CMakeFunctionArgument )
  * Recursive descent parser for CMakeLists.txt files
  * @author Matt Rogers <mattr@kde.org>
  */
-class CMakeListsParser : public QObject
+class KDEVCMAKECOMMON_EXPORT CMakeListsParser : public QObject
 {
 public:
     CMakeListsParser(QObject *parent = 0);
