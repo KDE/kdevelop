@@ -22,12 +22,12 @@
 #define ASTFACTORY_H
 
 #include <QtCore/QMap>
-
+#include <kdevexport.h>
 
 class QString;
 class CMakeAst;
 
-class AstFactory
+class KDEVCMAKECOMMON_EXPORT AstFactory
 {
 public:
     //We are a singleton. Fuckin' act like it

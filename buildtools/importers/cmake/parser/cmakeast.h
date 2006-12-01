@@ -24,10 +24,10 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-
+#include <kdevexport.h>
 #include "cmakelistsparser.h"
 
-class CMakeAst
+class KDEVCMAKECOMMON_EXPORT CMakeAst
 {
 public:
     CMakeAst() { }
@@ -67,7 +67,7 @@ protected:
 
 };
 
-class CustomCommandAst : public CMakeAst
+class KDEVCMAKECOMMON_EXPORT CustomCommandAst : public CMakeAst
 {
 public:
     CustomCommandAst();
@@ -130,7 +130,7 @@ private:
         CMakeAst* Create##klassName() { return new klassName; }            \
         bool astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
 
-#define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName : public CMakeAst {  \
+#define CMAKE_BEGIN_AST_CLASS( klassName ) class KDEVCMAKECOMMON_EXPORT klassName : public CMakeAst {  \
     public:                                                  \
         klassName();                                         \
        ~klassName();                                         \

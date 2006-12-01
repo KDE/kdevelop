@@ -30,7 +30,7 @@
 class CMakeAst;
 struct CMakeFunctionArgument;
 
-struct CMakeFunctionDesc
+struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
 {
     QString name;
     QList<CMakeFunctionArgument> arguments;
