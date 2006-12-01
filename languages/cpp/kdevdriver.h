@@ -8,8 +8,6 @@
 #include <kdevproject.h>
 #include <kdeversion.h>
 
-#include <qprocess.h>
-
 #include <cstdlib>
 #include <unistd.h>
 

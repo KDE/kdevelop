@@ -5,12 +5,13 @@
 #include "ast.h"
 #include "lexer.h"
 #include "tag_creator.h"
+#include "setuphelper.h"
 
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include <qprocess.h>
 
 #include <catalog.h>
 #include <kdebug.h>
@@ -102,50 +103,27 @@ public:
 			addIncludePath( "/include" );
 			addIncludePath( "/usr/include" );
 			addIncludePath( "/ust/local/include" );
-			QProcess proc;
-			proc.addArgument( "gcc" );
-			proc.addArgument( "-print-file-name=include" );
-			if ( !proc.start() )
-			{
-				std::cerr << "*error* Couldn't start gcc" << std::endl;
-				return ;
-			}
-			while ( proc.isRunning() )
-				usleep( 1 );
-			
-			QString gccLibPath = proc.readStdout();
+            bool ok;    
+            QString gccLibPath = SetupHelper::getGccIncludePath(&ok);
+            if (!ok) 
+                return;  			
 			gccLibPath = gccLibPath.replace( QRegExp( "[\r\n]" ), "" );
 			addIncludePath( gccLibPath );
 			addIncludePath( "/usr/include/g++-3" );
 			addIncludePath( "/usr/include/g++" );
-			proc.clearArguments();
-			proc.addArgument( "gcc" );
-			proc.addArgument( "-E" );
-			proc.addArgument( "-dM" );
-			proc.addArgument( "-ansi" );
-			proc.addArgument( "-" );
-			if ( !proc.start() )
-			{
-				std::cerr << "*error* Couldn't start gcc" << std::endl;
-				return ;
-			}
-			while ( !proc.isRunning() )
-				usleep( 1 );
-			proc.closeStdin();
-			while ( proc.isRunning() )
-				usleep( 1 );
-			while ( proc.canReadLineStdout() )
-			{
-				QString l = proc.readLineStdout();
-				QStringList lst = QStringList::split( ' ', l );
-				if ( lst.count() != 3 )
-					continue;
-				addMacro( Macro( lst[ 1 ], lst[ 2 ] ) );
-			}
+            QStringList lines = SetupHelper::getGccMacros(&ok);
+            if (!ok) 
+                return;  
+            for (QStringList::ConstIterator it = lines.constBegin(); it != lines.constEnd(); ++it) {
+                QStringList lst = QStringList::split( ' ', *it );
+                if ( lst.count() != 3 )
+                    continue;
+                addMacro( Macro( lst[1], lst[2] ) );
+            }
 			addMacro( Macro( "__cplusplus", "1" ) );
 			
 			QString incl = getenv( "INCLUDE" );
-		QStringList includePaths = QStringList::split( ':', incl );
+		    QStringList includePaths = QStringList::split( ':', incl );
 			QStringList::Iterator it = includePaths.begin();
 			while ( it != includePaths.end() )
 			{

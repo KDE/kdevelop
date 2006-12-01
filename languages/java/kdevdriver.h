@@ -8,7 +8,6 @@
 #include <kdeversion.h>
 
 #include "driver.h"
-#include <qprocess.h>
 
 #include <cstdlib>
 #include <unistd.h>

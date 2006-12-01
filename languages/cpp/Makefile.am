@@ -28,9 +28,9 @@ libkdevcppsupport_la_SOURCES = KDevCppSupportIface.cpp KDevCppSupportIface.skel 
 	creategettersetterconfiguration.cpp creategettersetterconfiguration.h creategettersetterdialog.cpp \
 	creategettersetterdialog.h createpcsdialog.cpp createpcsdialogbase.ui doxydoc.cpp includefiles.cpp \
 	kdevdriver.cpp problemreporter.cpp qtbuildconfig.cpp qtdesignercppintegration.cpp \
-	simplecontext.cpp simpletype.cpp simpletypecatalog.cpp simpletypefunction.cpp \
-	simpletypenamespace.cpp store_walker.cpp storeconverter.cpp stringhelpers.cpp \
-	subclassingdlg.cpp subclassingdlgbase.ui tag_creator.cpp typedesc.cpp
+	setuphelper.cpp simplecontext.cpp simpletype.cpp simpletypecatalog.cpp \
+	simpletypefunction.cpp simpletypenamespace.cpp store_walker.cpp storeconverter.cpp \
+	stringhelpers.cpp subclassingdlg.cpp subclassingdlgbase.ui tag_creator.cpp typedesc.cpp
 
 METASOURCES = AUTO
 
@@ -55,5 +55,5 @@ r___DEPENDENCIES = libkdevcppsupport.la
 r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 noinst_HEADERS = blockingkprocess.h cppevaluation.h cppimplementationwidget.h \
 	cppsplitheadersourceconfig.h declarationinfo.h expressioninfo.h includefiles.h \
-	qtdesignercppintegration.h simplecontext.h simpletypecatalog.h simpletypefunction.h \
+	qtdesignercppintegration.h setuphelper.h simplecontext.h simpletypecatalog.h simpletypefunction.h \
 	simpletypenamespace.h storeconverter.h

@@ -2,8 +2,9 @@
 
 #include "kdevdriver.h"
 #include "cppcodecompletionconfig.h"
+#include "setuphelper.h"
 #include <unistd.h>
-#include <blockingkprocess.h>
+
 
 
 KDevDriver::KDevDriver( CppSupportPart* cppSupport )
@@ -73,40 +74,24 @@ void KDevDriver::setup()
 		addIncludePath( "/include" );
 		addIncludePath( "/usr/include" );
 		addIncludePath( "/usr/local/include" );
-        
-    BlockingKProcess proc;
-		proc << "gcc" ;
-		proc << "-print-file-name=include" ;
-        QString processStdout; 
-        if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
-			qWarning( "Couldn't start gcc" );
-			return;
-		}
-        processStdout = proc.stdOut();    
 
-		QStringList ls = QStringList::split( "\n", processStdout );
-		for( QStringList::const_iterator it = ls.begin(); it != ls.end(); ++it ) {
-			if( !(*it).isEmpty() )
-				addIncludePath( *it );
-		}
-		
-		addIncludePath( processStdout );
+        bool ok;
+        QString includePath = SetupHelper::getGccIncludePath(&ok);
+        if (!ok) 
+          return;  
+        QStringList ls = QStringList::split( "\n", includePath );
+        for( QStringList::const_iterator it = ls.begin(); it != ls.end(); ++it ) {
+        if( !(*it).isEmpty() )
+            addIncludePath( *it );
+        }
+    
+        addIncludePath( includePath );
 		addIncludePath( "/usr/include/g++-3" );
 		addIncludePath( "/usr/include/g++" );
-		proc.clearArguments();
-        proc.clearStdOut(); 
-		proc << "gcc";
-		proc << "-E";
-		proc << "-dM";
-		proc << "-ansi" ;
-		proc << "-";
-        if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
-			qWarning( "Couldn't start gcc" );
-			return;
-		}
-		proc.closeStdin();
-        processStdout = proc.stdOut(); 
-        QStringList lines = QStringList::split('\n', processStdout);
+        QStringList lines = SetupHelper::getGccMacros(&ok);
+        if (!ok) 
+            return;  
+                 
         for (QStringList::ConstIterator it = lines.constBegin(); it != lines.constEnd(); ++it) {
 			QStringList lst = QStringList::split( ' ', *it );
 			if ( lst.count() != 3 )
@@ -156,4 +141,3 @@ void KDevDriver::setup()
 }
 
 //kate: indent-mode csands; tab-width 4; space-indent off;
-

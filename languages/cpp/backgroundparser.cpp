@@ -35,7 +35,6 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <qprocess.h>
 #include <list>
 
 

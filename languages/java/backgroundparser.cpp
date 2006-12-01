@@ -37,7 +37,6 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <qprocess.h>
 
 class KDevSourceProvider: public SourceProvider
 {
