@@ -2,6 +2,7 @@
 #include "kdevdriver.h"
 #include "JavaLexer.hpp"
 #include <unistd.h>
+#include <qfileinfo.h>
 
 KDevDriver::KDevDriver( JavaSupportPart* javaSupport )
 	: m_javaSupport( javaSupport )
