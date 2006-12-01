@@ -26,41 +26,35 @@
 %}
 
 %option noyywrap
-%option debug
 %option yylineno
 
-single_ws              [ \t]
-multi_ws               {single_ws}+
-ws                     {single_ws}*
-quote                  "\""
-newline                \n
-continuation           \\
-lbrace                 (
-rbrace                 )
-lbracket               {
-rbracket               }
-letter                 [a-zA-Z]
-digit                  [0-9]
-word                   ({digit}|{letter}|_)({letter}|{digit}|_|\-|\*|\.)*
-comma                  ,
-commentstart           #
-op                     (=|\+=|\-=|\*=|~=|\^=)
-dollar                 \$
+ws            [ \t]
+letter        [a-zA-Z]
+digit         [0-9]
+simpleval     [^\n\\{(})=$,#{letter}{digit}{ws}]
+
 %%
 
-{commentstart}.*{newline}   {
-            yylval.value = QString::fromUtf8( yytext );
-            yylval.value = yylval.value.left( yylval.value.length() - 1 );
-            unput('\n');
-            return COMMENT;
-    }
-{newline}                   { return NEWLINE; }
-{continuation}              { yylval.value = QString::fromUtf8( yytext ); return CONT; }
-{op}                        { yylval.value = yytext; return OP; }
-{dollar}                    { yylval.value = yytext; return DOLLAR; }
-{word}                      { yylval.value = yytext; return WORD; }
-{single_ws}+                { yylval.value = yytext; return WS; }
-{quote}                     { yylval.value = yytext; return QUOTE; }
-
+{ws}                { yylval.value = yytext; return WS; }
+{letter}            { yylval.value = yytext; return LETTER; }
+{digit}             { yylval.value = yytext; return DIGIT; }
+"_"                 { yylval.value = yytext; return UNDERSCORE; }
+"."                 { yylval.value = yytext; return DOT; }
+","                 { yylval.value = yytext; return COMMA; }
+"+="                { yylval.value = yytext; return PLUSEQ; }
+"-="                { yylval.value = yytext; return MINUSEQ; }
+"="                 { yylval.value = yytext; return EQUAL; }
+"*="                { yylval.value = yytext; return STAREQ; }
+"~="                { yylval.value = yytext; return TILDEEQ; }
+"{"                 { yylval.value = yytext; return LCURLY; }
+"}"                 { yylval.value = yytext; return RCURLY; }
+"("                 { yylval.value = yytext; return LBRACE; }
+")"                 { yylval.value = yytext; return RBRACE; }
+"$"                 { yylval.value = yytext; return DOLLAR; }
+"\""                { yylval.value = yytext; return QUOTE; }
+"\n"                { yylval.value = yytext; return NEWLINE; }
+"\\"                { yylval.value = yytext; return CONT; }
+{simpleval}         { yylval.value = yytext; return SIMPLEVAL; }
+"#"[^\n]*           { yylval.value = yytext; return COMMENT; }
 %%
 

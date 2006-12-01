@@ -39,37 +39,53 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     WORD = 258,
-     WS = 259,
-     NEWLINE = 260,
-     COMMENT = 261,
-     CONT = 262,
-     QUOTE = 263,
-     LBRACE = 264,
-     RBRACE = 265,
-     LBRACKET = 266,
-     RBRACKET = 267,
-     COMMA = 268,
-     OP = 269,
-     DOLLAR = 270,
-     COMMENTLINE = 271
+     WS = 258,
+     LETTER = 259,
+     DIGIT = 260,
+     COMMA = 261,
+     UNDERSCORE = 262,
+     DOT = 263,
+     EQUAL = 264,
+     PLUSEQ = 265,
+     MINUSEQ = 266,
+     TILDEEQ = 267,
+     STAREQ = 268,
+     LCURLY = 269,
+     RCURLY = 270,
+     LBRACE = 271,
+     RBRACE = 272,
+     DOLLAR = 273,
+     QUOTE = 274,
+     SLASH = 275,
+     CONT = 276,
+     COMMENT = 277,
+     SIMPLEVAL = 278,
+     NEWLINE = 279
    };
 #endif
 /* Tokens.  */
-#define WORD 258
-#define WS 259
-#define NEWLINE 260
-#define COMMENT 261
-#define CONT 262
-#define QUOTE 263
-#define LBRACE 264
-#define RBRACE 265
-#define LBRACKET 266
-#define RBRACKET 267
-#define COMMA 268
-#define OP 269
-#define DOLLAR 270
-#define COMMENTLINE 271
+#define WS 258
+#define LETTER 259
+#define DIGIT 260
+#define COMMA 261
+#define UNDERSCORE 262
+#define DOT 263
+#define EQUAL 264
+#define PLUSEQ 265
+#define MINUSEQ 266
+#define TILDEEQ 267
+#define STAREQ 268
+#define LCURLY 269
+#define RCURLY 270
+#define LBRACE 271
+#define RBRACE 272
+#define DOLLAR 273
+#define QUOTE 274
+#define SLASH 275
+#define CONT 276
+#define COMMENT 277
+#define SIMPLEVAL 278
+#define NEWLINE 279
 
 
 

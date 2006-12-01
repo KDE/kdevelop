@@ -95,6 +95,7 @@ void ParseTest::failFullProject_data()
         "VARIABLE4=Value1 Value2\n"
         "VARIABLE4=Value1 Value2 \\\n"
         "  Value3 Value4\n"
+        "fo()\n"
         "VARIABLE = Value1 Value2 #some comment\n"
         "\n";
 }

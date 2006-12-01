@@ -23,6 +23,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QList>
+#include <QtCore/QStringList>
 
 namespace QMake
 {
@@ -47,124 +48,109 @@ namespace QMake
             friend class ChildAST;
     };
 
-    class ChildAST : public AST
+
+    class StatementAST : public AST
     {
         public:
-            ChildAST( AST* parent = 0 );
-            virtual ~ChildAST();
-            QList<AST*> childs() const;
-            void addChild( AST* );
-            virtual void writeToString( QString& ) const;
-        private:
-            QList<AST*> m_childs;
-
+            StatementAST( AST* parent ) : AST( parent ) {}
+//             virtual ~StatementAST( ) {}
+//             virtual void writeToString( QString& ) const {}
     };
 
-    class ProjectAST : public ChildAST
+    class ProjectAST : public AST
     {
         public:
             ProjectAST( AST* parent = 0 );
             ~ProjectAST();
 
             QString filename() const;
+            void addStatement( StatementAST* );
+            QList<StatementAST*> statements() const;
+            void removeStatement( StatementAST* );
 
+            void writeToString( QString& ) const;
         protected:
             void setFilename( const QString& );
 
         private:
             QString m_filename;
+            QList<StatementAST*> m_statements;
 
             friend class QMake::Parser;
     };
 
-    class AssignmentAST : public ChildAST
+
+
+    class OpAST : public AST
     {
         public:
-            AssignmentAST( const QString& variable, AST* parent = 0 );
+            OpAST( const QString& , const QString&, const QString&, AST* parent = 0 );
+            ~OpAST();
+
+            QString rightWhitespace() const;
+            QString leftWhitespace() const;
+            QString op() const;
+
+            void setRightWhitespace( const QString& );
+            void setLeftWhitespace( const QString& );
+            void setOp( const QString& );
+            void writeToString( QString& ) const;
+        private:
+            QString m_op;
+            QString m_lWs;
+            QString m_rWs;
+    };
+
+    class AssignmentAST : public StatementAST
+    {
+        public:
+            AssignmentAST( const QString& variable, OpAST* op, const QStringList& values, AST* parent = 0 );
             ~AssignmentAST();
 
-            void addValues( QList<AST*> );
+            void addValue( const QString& );
+            QStringList values() const;
+            void removeValue( const QString& );
             QString variable() const;
             void setVariable( const QString& );
-        void writeToString( QString& ) const;
+            OpAST* op() const;
+            void setOp( OpAST* );
+            void writeToString( QString& ) const;
         private:
             QString m_variable;
+            OpAST* m_op;
+            QStringList m_values;
 
     };
 
-    class CommentAST : public AST
+    class NewlineAST : public StatementAST
+    {
+        public:
+            NewlineAST( AST* parent = 0 ) : StatementAST( parent ) {}
+            void writeToString( QString& buf ) const { buf += "\n"; }
+    };
+
+    class CommentAST : public StatementAST
     {
         public:
             CommentAST( const QString& comment, AST* parent = 0 );
-            ~CommentAST();
-
             QString comment() const;
-            void setComment( const QString& comment ) ;
-
+            void setComment( const QString& );
             void writeToString( QString& ) const;
-
         private:
             QString m_comment;
     };
 
-    class NewlineAST : public AST
+    class WhitespaceAST : public StatementAST
     {
         public:
-            NewlineAST( AST* parent = 0 );
-            ~NewlineAST();
-
+            WhitespaceAST( const QString& comment, AST* parent = 0 );
+            QString whitespace() const;
+            void setWhitespace( const QString& );
             void writeToString( QString& ) const;
-    };
-
-    class LiteralValueAST : public AST
-    {
-        public:
-            LiteralValueAST( const QString& value, AST* parent = 0 );
-            virtual ~LiteralValueAST();
-
-            QString value() const;
-            void setValue( const QString& );
-            virtual void writeToString( QString& ) const;
         private:
-            QString m_value;
+            QString m_ws;
     };
 
-    class EnvironmentVariableAST : public LiteralValueAST
-    {
-        public:
-            EnvironmentVariableAST( const QString& value, AST* parent = 0 );
-            ~EnvironmentVariableAST();
-
-            void writeToString( QString& ) const;
-    };
-
-    class QMakeVariableAST : public LiteralValueAST
-    {
-        public:
-            QMakeVariableAST( const QString& value, bool useBrackets, AST* parent = 0 );
-            ~QMakeVariableAST();
-
-            bool usesBrackets() const;
-
-            void writeToString( QString& ) const;
-
-        private:
-            bool m_useBrackets;
-
-    };
-    class WhitespaceAST : public LiteralValueAST
-    {
-        public:
-            WhitespaceAST( const QString& value, AST* parent = 0 );
-            ~WhitespaceAST();
-    };
-
-class OpAST : public LiteralValueAST
-{
-public:
-    OpAST( const QString& value, AST* parent = 0 );
-    ~OpAST();
-};
 }
 
 #endif
