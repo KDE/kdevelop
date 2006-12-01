@@ -3,15 +3,12 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
 #include <antlr/AST.hpp>
-
-#include <iostream>
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 namespace antlr {
@@ -22,22 +19,16 @@ typedef ASTRefCount<BaseAST> RefBaseAST;
 
 class ANTLR_API BaseAST : public AST {
 public:
-	BaseAST() : AST()
-	{
-	}
-	BaseAST(const BaseAST& other)
-	: AST(other)
-	{
-	}
-	virtual ~BaseAST()
-	{
-	}
+	BaseAST();
+	BaseAST(const BaseAST& other);
+
+	virtual ~BaseAST();
 
 	/// Return the class name
-	virtual const char* typeName( void ) const = 0;
+	virtual const char* typeName( void ) const;
 
 	/// Clone this AST node.
-	virtual RefAST clone( void ) const = 0;
+	virtual RefAST clone( void ) const;
 
    /// Is node t equal to this in terms of token type and text?
 	virtual bool equals(RefAST t) const;
@@ -74,28 +65,7 @@ public:
 	virtual ANTLR_USE_NAMESPACE(std)vector<RefAST> findAllPartial(RefAST t);
 
    /// Add a node to the end of the child list for this node
-	virtual void addChild(RefAST c)
-	{
-		if( !c )
-			return;
-
-		RefBaseAST tmp = down;
-
-		if (tmp)
-		{
-			while (tmp->right)
-				tmp = tmp->right;
-			tmp->right = c;
-		}
-		else
-			down = c;
-	}
-
-	/** Get the number of child nodes of this node (shallow e.g. not of the
-	 * whole tree it spans).
-	 */
-	virtual size_t getNumberOfChildren() const;
-
+	virtual void addChild(RefAST c);
 	/// Get the first child of this node; null if no children
 	virtual RefAST getFirstChild() const
 	{
@@ -131,20 +101,16 @@ public:
 	}
 
 	/// Set the next sibling after this one.
-	virtual void setNextSibling(RefAST n)
+	void setNextSibling(RefAST n)
 	{
 		right = static_cast<BaseAST*>(static_cast<AST*>(n));
 	}
 
 	/// Set the token text for this node
-	virtual void setText(const ANTLR_USE_NAMESPACE(std)string& txt)
-	{
-	}
+	virtual void setText(const ANTLR_USE_NAMESPACE(std)string& txt);
 
 	/// Set the token type for this node
-	virtual void setType(int type)
-	{
-	}
+	virtual void setType(int type);
 
 #ifdef ANTLR_SUPPORT_XML
 	/** print attributes of this node to 'out'. Override to customize XML
@@ -160,14 +126,12 @@ public:
 #endif
 
 	/// Return string representation for the AST
-	virtual ANTLR_USE_NAMESPACE(std)string toString() const
-	{
-		return getText();
-	}
+	virtual ANTLR_USE_NAMESPACE(std)string toString() const;
 
 	/// Print out a child sibling tree in LISP notation
 	virtual ANTLR_USE_NAMESPACE(std)string toStringList() const;
 	virtual ANTLR_USE_NAMESPACE(std)string toStringTree() const;
+
 protected:
 	RefBaseAST down;
 	RefBaseAST right;

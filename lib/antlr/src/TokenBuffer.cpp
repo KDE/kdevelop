@@ -1,8 +1,7 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include "antlr/TokenBuffer.hpp"
@@ -27,39 +26,31 @@ namespace antlr {
  */
 
 /** Create a token buffer */
-TokenBuffer::TokenBuffer( TokenStream& inp )
-: input(inp)
-, nMarkers(0)
-, markerOffset(0)
-, numToConsume(0)
-{
-}
-
-TokenBuffer::~TokenBuffer( void )
+TokenBuffer::TokenBuffer( TokenStream& input_ )
+: input(input_), nMarkers(0), markerOffset(0), numToConsume(0)
 {
 }
 
 /** Ensure that the token buffer is sufficiently full */
-void TokenBuffer::fill(unsigned int amount)
+void TokenBuffer::fill(int amount)
 {
 	syncConsume();
 	// Fill the buffer sufficiently to hold needed tokens
-	while (queue.entries() < (amount + markerOffset))
-	{
+	while (queue.entries() < amount + markerOffset) {
 		// Append the next token
 		queue.append(input.nextToken());
 	}
 }
 
 /** Get a lookahead token value */
-int TokenBuffer::LA(unsigned int i)
+int TokenBuffer::LA(int i)
 {
 	fill(i);
-	return queue.elementAt(markerOffset+i-1)->getType();
+	return queue.elementAt(markerOffset+i-1)->type;
 }
 
 /** Get a lookahead token */
-RefToken TokenBuffer::LT(unsigned int i)
+RefToken TokenBuffer::LT(int i)
 {
 	fill(i);
 	return queue.elementAt(markerOffset+i-1);
@@ -68,7 +59,7 @@ RefToken TokenBuffer::LT(unsigned int i)
 /** Return an integer marker that can be used to rewind the buffer to
  * its current state.
  */
-unsigned int TokenBuffer::mark()
+int TokenBuffer::mark()
 {
 	syncConsume();
 	nMarkers++;
@@ -78,19 +69,14 @@ unsigned int TokenBuffer::mark()
 /**Rewind the token buffer to a marker.
  * @param mark Marker returned previously from mark()
  */
-void TokenBuffer::rewind(unsigned int mark)
+void TokenBuffer::rewind(int mark)
 {
 	syncConsume();
 	markerOffset=mark;
 	nMarkers--;
 }
 
-/// Get number of non-consumed tokens
-unsigned int TokenBuffer::entries() const
-{
-	return queue.entries() - markerOffset;
-}
-
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 	}
 #endif
+

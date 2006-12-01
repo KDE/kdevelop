@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -26,7 +25,7 @@ namespace antlr {
  * token is not done by conume(), but deferred until needed by LA or LT.
  * <p>
  *
- * @todo: see if we can integrate this one with InputBuffer into one template
+ * @todo see if we can integrate this one with InputBuffer into one template
  * or so.
  *
  * @see antlr.Token
@@ -37,7 +36,6 @@ class ANTLR_API TokenBuffer {
 public:
 	/** Create a token buffer */
 	TokenBuffer(TokenStream& input_);
-	virtual ~TokenBuffer();
 
 	/// Reset the input buffer to empty state
 	inline void reset( void )
@@ -49,50 +47,47 @@ public:
 	}
 
 	/** Get a lookahead token value */
-	int LA( unsigned int i );
+	int LA(int i);
 
 	/** Get a lookahead token */
-	RefToken LT( unsigned int i );
+	RefToken LT(int i);
 
 	/** Return an integer marker that can be used to rewind the buffer to
 	 * its current state.
 	 */
-	unsigned int mark();
+	int mark();
 
 	/**Rewind the token buffer to a marker.
 	 * @param mark Marker returned previously from mark()
 	 */
-	void rewind(unsigned int mark);
+	void rewind(int mark);
 
 	/** Mark another token for deferred consumption */
 	inline void consume()
 	{
 		numToConsume++;
 	}
-
-	/// Return the number of entries in the TokenBuffer
-	virtual unsigned int entries() const;
-
 private:
 	/** Ensure that the token buffer is sufficiently full */
-	void fill(unsigned int amount);
+	void fill(int amount);
 	/** Sync up deferred consumption */
 	void syncConsume();
 
 protected:
-	/// Token source
+	// Token source
 	TokenStream& input;
 
-	/// Number of active markers
-	unsigned int nMarkers;
+private:
+	// Number of active markers
+	int nMarkers;
 
-	/// Additional offset used when markers are active
-	unsigned int markerOffset;
+	// Additional offset used when markers are active
+	int markerOffset;
 
-	/// Number of calls to consume() since last LA() or LT() call
-	unsigned int numToConsume;
+	// Number of calls to consume() since last LA() or LT() call
+	int numToConsume;
 
-	/// Circular queue with Tokens
+	// Circular queue
 	CircularQueue<RefToken> queue;
 
 private:

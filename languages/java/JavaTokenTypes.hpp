@@ -1,15 +1,8 @@
 #ifndef INC_JavaTokenTypes_hpp_
 #define INC_JavaTokenTypes_hpp_
 
-/* $ANTLR 2.7.7 (20061129): "java.g" -> "JavaTokenTypes.hpp"$ */
-
-#ifndef CUSTOM_API
-# define CUSTOM_API
-#endif
-
-#ifdef __cplusplus
-struct CUSTOM_API JavaTokenTypes {
-#endif
+/* $ANTLR 2.7.2: "java.g" -> "JavaTokenTypes.hpp"$ */
+struct JavaTokenTypes {
 	enum {
 		EOF_ = 1,
 		BLOCK = 4,
@@ -162,7 +155,5 @@ struct CUSTOM_API JavaTokenTypes {
 		FLOAT_SUFFIX = 151,
 		NULL_TREE_LOOKAHEAD = 3
 	};
-#ifdef __cplusplus
 };
-#endif
 #endif /*INC_JavaTokenTypes_hpp_*/

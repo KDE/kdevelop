@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 /*
@@ -20,9 +19,6 @@
 #define ANTLR_CXX_SUPPORTS_NAMESPACE 1
 #define ANTLR_C_USING(_x_)
 #define ANTLR_API
-#ifndef CUSTOM_API
-# define CUSTOM_API
-#endif
 #define ANTLR_IOS_BASE ios_base
 /** define if cctype functions/macros need a std:: prefix. A lot of compilers
  * define these as macros, in which case something barfs.
@@ -32,80 +28,46 @@
 /// Define if C++ compiler supports std::uncaught_exception
 #define ANTLR_CXX_SUPPORTS_UNCAUGHT_EXCEPTION
 
-#define ANTLR_ATOI_IN_STD
-
 /******************************************************************************/
 /*{{{ Microsoft Visual C++ */
-// NOTE: If you provide patches for a specific MSVC version guard them for
-// the specific version!!!!
-// _MSC_VER == 1100 for Microsoft Visual C++ 5.0
-// _MSC_VER == 1200 for Microsoft Visual C++ 6.0
-// _MSC_VER == 1300 for Microsoft Visual C++ 7.0
-#if defined(_MSC_VER)
-
-# if _MSC_VER < 1300
-#	define NOMINMAX
-#	pragma warning(disable : 4786)
-#	define min _cpp_min
-# endif
+#if defined(_MSC_VER) && !defined(__ICL)
 
 // This warning really gets on my nerves.
 // It's the one about symbol longer than 256 chars, and it happens
 // all the time with STL.
-# pragma warning( disable : 4786 4231 )
-// this shuts up some DLL interface warnings for STL
-# pragma warning( disable : 4251 )
+# pragma warning( disable : 4786 )
 
-# ifdef ANTLR_CXX_USE_STLPORT
-#	undef ANTLR_CXX_SUPPORTS_UNCAUGHT_EXCEPTION
-# endif
-
-# if ( _MSC_VER < 1300 ) && ( defined(ANTLR_EXPORTS) || defined(ANTLR_IMPORTS) )
-#	error "DLL Build not supported on these MSVC versions."
-// see comment in lib/cpp/src/dll.cpp
-# endif
-
-// For the DLL support originally contributed by Stephen Naughton
-// If you are building statically leave ANTLR_EXPORTS/ANTLR_IMPORTS undefined
-// If you are building the DLL define ANTLR_EXPORTS
-// If you are compiling code to be used with the DLL define ANTLR_IMPORTS
+// For the DLL support contributed by Stephen Naughton
 # ifdef ANTLR_EXPORTS
 #	undef ANTLR_API
 #	define ANTLR_API __declspec(dllexport)
-# endif
-
-# ifdef ANTLR_IMPORTS
+# else
 #	undef ANTLR_API
 #	define ANTLR_API __declspec(dllimport)
 # endif
 
-# if ( _MSC_VER < 1200 )
-// supposedly only for MSVC5 and before...
-// Using vector<XXX> requires operator<(X,X) to be defined
-#	define NEEDS_OPERATOR_LESS_THAN
-# endif
-
-// VC6
-# if ( _MSC_VER == 1200 )
-#	undef ANTLR_ATOI_IN_STD
-# endif
-
-# if ( _MSC_VER < 1310 )
-// Supposedly only for MSVC7 and before...
+// Now, some defines for shortcomings in the MS compiler:
+//
 // Not allowed to put 'static const int XXX=20;' in a class definition
-#	define NO_STATIC_CONSTS
-#	define NO_TEMPLATE_PARTS
-# endif
-
+# define NO_STATIC_CONSTS
+// Using vector<XXX> requires operator<(X,X) to be defined
+# define NEEDS_OPERATOR_LESS_THAN
 // No strcasecmp in the C library (so use stricmp instead)
 // - Anyone know which is in which standard?
 # define NO_STRCASECMP
 # undef ANTLR_CCTYPE_NEEDS_STD
-#	define NO_STATIC_CONSTS
+
 #endif	// End of Microsoft Visual C++
 
 /*}}}*/
 /******************************************************************************/
+
+// RK: belongs to what compiler?
+#if defined(__ICL)
+# define NO_STRCASECMP
+#endif
+
+/*****************************************************************************/
 /*{{{ SunPro Compiler (Using OBJECTSPACE STL)
  *****************************************************************************/
 #ifdef __SUNPRO_CC
@@ -184,12 +146,8 @@
 
 // No strcasecmp in the C library (so use stricmp instead)
 // - Anyone know which is in which standard?
-#if (defined(_AIX) && (__IBMCPP__ >= 600))
-# define NO_STATIC_CONSTS
-#else
 # define NO_STRCASECMP
 # undef ANTLR_CCTYPE_NEEDS_STD
-#endif
 
 #endif	// end IBM VisualAge C++
 /*}}}*/
@@ -265,15 +223,6 @@
 #endif
 /*}}}*/
 /*****************************************************************************/
-#ifdef __BORLANDC__
-# if  __BORLANDC__ >= 560
-#	include <ctype>
-#	include <stdlib>
-#	define ANTLR_CCTYPE_NEEDS_STD
-# else
-#	error "sorry, compiler is too old - consider an update."
-# endif
-#endif
 
 // Redefine these for backwards compatability..
 #undef ANTLR_BEGIN_NAMESPACE

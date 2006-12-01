@@ -1,8 +1,7 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 #include "antlr/TokenStreamSelector.hpp"
 #include "antlr/TokenStreamRetryException.hpp"
@@ -55,7 +54,7 @@ RefToken TokenStreamSelector::nextToken()
 		try {
 			return input->nextToken();
 		}
-		catch (TokenStreamRetryException&) {
+		catch (TokenStreamRetryException& r) {
 			// just retry "forever"
 		}
 	}

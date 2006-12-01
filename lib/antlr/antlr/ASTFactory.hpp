@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -13,17 +12,11 @@
 #include <antlr/ASTArray.hpp>
 #include <antlr/ASTPair.hpp>
 
-#include <istream>
 #include <utility>
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 namespace antlr {
 #endif
-
-// Using these extra types to appease MSVC
-typedef RefAST (*factory_type_)();
-typedef ANTLR_USE_NAMESPACE(std)pair< const char*, factory_type_ >  factory_descriptor_;
-typedef ANTLR_USE_NAMESPACE(std)vector< factory_descriptor_* >      factory_descriptor_list_;
 
 /** AST Super Factory shared by TreeParser and Parser.
  * This super factory maintains a map of all AST node types to their respective
@@ -35,9 +28,9 @@ typedef ANTLR_USE_NAMESPACE(std)vector< factory_descriptor_* >      factory_desc
  */
 class ANTLR_API ASTFactory {
 public:
-	typedef factory_type_             factory_type;
-	typedef factory_descriptor_       factory_descriptor;
-	typedef factory_descriptor_list_  factory_descriptor_list;
+	typedef RefAST (*factory_type)();
+	typedef ANTLR_USE_NAMESPACE(std)pair< const char*, factory_type > factory_descriptor;
+	typedef ANTLR_USE_NAMESPACE(std)vector< factory_descriptor* > factory_descriptor_list;
 protected:
 	/* The mapping of AST node type to factory..
 	 */
@@ -93,7 +86,7 @@ public:
 	RefAST make(ANTLR_USE_NAMESPACE(std)vector<RefAST>& nodes);
 	/** Make a tree from a list of nodes, where the nodes are contained
 	 * in an ASTArray object. The ASTArray is deleted after use.
-	 * @todo FIXME! I have a feeling we can get rid of this ugly ASTArray thing
+	 * \FIXME I have a feeling we can get rid of this ugly ASTArray thing
 	 */
 	RefAST make(ASTArray* nodes);
 	/// Make an AST the root of current AST

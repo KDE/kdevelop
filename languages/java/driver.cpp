@@ -192,7 +192,7 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
 
         parser.compilationUnit();
 
-        RefJavaAST translationUnit = RefJavaAST( parser.getAST() );
+        RefJavaAST translationUnit = parser.getAST();
         m_parsedUnits.insert( fileName, translationUnit );
 
     } catch( ANTLR_USE_NAMESPACE(antlr)ANTLRException& ex ){}

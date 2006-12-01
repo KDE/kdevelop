@@ -1,4 +1,4 @@
-/* $ANTLR 2.7.7 (20061129): "pascal.g" -> "PascalLexer.cpp"$ */
+/* $ANTLR 2.7.2: "pascal.g" -> "PascalLexer.cpp"$ */
 #include "PascalLexer.hpp"
 #include <antlr/CharBuffer.hpp>
 #include <antlr/TokenStreamException.hpp>
@@ -158,212 +158,212 @@ ANTLR_USE_NAMESPACE(antlr)RefToken PascalLexer::nextToken()
 		resetText();
 		try {   // for lexical and char stream error handling
 			switch ( LA(1)) {
-			case 0x2c /* ',' */ :
+			case static_cast<unsigned char>(','):
 			{
 				mCOMMA(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x3b /* ';' */ :
+			case static_cast<unsigned char>(';'):
 			{
 				mSEMI(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x3d /* '=' */ :
+			case static_cast<unsigned char>('='):
 			{
 				mEQUAL(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x29 /* ')' */ :
+			case static_cast<unsigned char>(')'):
 			{
 				mRPAREN(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x5b /* '[' */ :
+			case static_cast<unsigned char>('['):
 			{
 				mLBRACK(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x5d /* ']' */ :
+			case static_cast<unsigned char>(']'):
 			{
 				mRBRACK(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x5e /* '^' */ :
+			case static_cast<unsigned char>('^'):
 			{
 				mPOINTER(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x40 /* '@' */ :
+			case static_cast<unsigned char>('@'):
 			{
 				mAT(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x7d /* '}' */ :
+			case static_cast<unsigned char>('}'):
 			{
 				mRCURLY(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x9 /* '\t' */ :
-			case 0xa /* '\n' */ :
-			case 0xc /* '\14' */ :
-			case 0xd /* '\r' */ :
-			case 0x20 /* ' ' */ :
+			case static_cast<unsigned char>('\t'):
+			case static_cast<unsigned char>('\n'):
+			case static_cast<unsigned char>('\14'):
+			case static_cast<unsigned char>('\r'):
+			case static_cast<unsigned char>(' '):
 			{
 				mWS(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x61 /* 'a' */ :
-			case 0x62 /* 'b' */ :
-			case 0x63 /* 'c' */ :
-			case 0x64 /* 'd' */ :
-			case 0x65 /* 'e' */ :
-			case 0x66 /* 'f' */ :
-			case 0x67 /* 'g' */ :
-			case 0x68 /* 'h' */ :
-			case 0x69 /* 'i' */ :
-			case 0x6a /* 'j' */ :
-			case 0x6b /* 'k' */ :
-			case 0x6c /* 'l' */ :
-			case 0x6d /* 'm' */ :
-			case 0x6e /* 'n' */ :
-			case 0x6f /* 'o' */ :
-			case 0x70 /* 'p' */ :
-			case 0x71 /* 'q' */ :
-			case 0x72 /* 'r' */ :
-			case 0x73 /* 's' */ :
-			case 0x74 /* 't' */ :
-			case 0x75 /* 'u' */ :
-			case 0x76 /* 'v' */ :
-			case 0x77 /* 'w' */ :
-			case 0x78 /* 'x' */ :
-			case 0x79 /* 'y' */ :
-			case 0x7a /* 'z' */ :
+			case static_cast<unsigned char>('a'):
+			case static_cast<unsigned char>('b'):
+			case static_cast<unsigned char>('c'):
+			case static_cast<unsigned char>('d'):
+			case static_cast<unsigned char>('e'):
+			case static_cast<unsigned char>('f'):
+			case static_cast<unsigned char>('g'):
+			case static_cast<unsigned char>('h'):
+			case static_cast<unsigned char>('i'):
+			case static_cast<unsigned char>('j'):
+			case static_cast<unsigned char>('k'):
+			case static_cast<unsigned char>('l'):
+			case static_cast<unsigned char>('m'):
+			case static_cast<unsigned char>('n'):
+			case static_cast<unsigned char>('o'):
+			case static_cast<unsigned char>('p'):
+			case static_cast<unsigned char>('q'):
+			case static_cast<unsigned char>('r'):
+			case static_cast<unsigned char>('s'):
+			case static_cast<unsigned char>('t'):
+			case static_cast<unsigned char>('u'):
+			case static_cast<unsigned char>('v'):
+			case static_cast<unsigned char>('w'):
+			case static_cast<unsigned char>('x'):
+			case static_cast<unsigned char>('y'):
+			case static_cast<unsigned char>('z'):
 			{
 				mIDENT(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x27 /* '\'' */ :
+			case static_cast<unsigned char>('\''):
 			{
 				mSTRING_LITERAL(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x30 /* '0' */ :
-			case 0x31 /* '1' */ :
-			case 0x32 /* '2' */ :
-			case 0x33 /* '3' */ :
-			case 0x34 /* '4' */ :
-			case 0x35 /* '5' */ :
-			case 0x36 /* '6' */ :
-			case 0x37 /* '7' */ :
-			case 0x38 /* '8' */ :
-			case 0x39 /* '9' */ :
+			case static_cast<unsigned char>('0'):
+			case static_cast<unsigned char>('1'):
+			case static_cast<unsigned char>('2'):
+			case static_cast<unsigned char>('3'):
+			case static_cast<unsigned char>('4'):
+			case static_cast<unsigned char>('5'):
+			case static_cast<unsigned char>('6'):
+			case static_cast<unsigned char>('7'):
+			case static_cast<unsigned char>('8'):
+			case static_cast<unsigned char>('9'):
 			{
 				mNUM_INT(true);
 				theRetToken=_returnToken;
 				break;
 			}
 			default:
-				if ((LA(1) == 0x3a /* ':' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				if ((LA(1) == static_cast<unsigned char>(':')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3e /* '>' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('>'))) {
 					mNOT_EQUAL(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mLE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mGE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x28 /* '(' */ ) && (LA(2) == 0x2e /* '.' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('(')) && (LA(2) == static_cast<unsigned char>('.'))) {
 					mLBRACK2(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2e /* '.' */ ) && (LA(2) == 0x29 /* ')' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('.')) && (LA(2) == static_cast<unsigned char>(')'))) {
 					mRBRACK2(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2b /* '+' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('+')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mPLUSEQ(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2d /* '-' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('-')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mMINUSEQ(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2a /* '*' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('*')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mSTAREQ(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2f /* '/' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mSLASHQE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x28 /* '(' */ ) && (LA(2) == 0x2a /* '*' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('(')) && (LA(2) == static_cast<unsigned char>('*'))) {
 					mCOMMENT_1(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x7b /* '{' */ ) && ((LA(2) >= 0x0 /* '\0' */  && LA(2) <= 0xff))) {
+				else if ((LA(1) == static_cast<unsigned char>('{')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377')))) {
 					mCOMMENT_2(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2f /* '/' */ ) && (LA(2) == 0x2f /* '/' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (LA(2) == static_cast<unsigned char>('/'))) {
 					mCOMMENT_3(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2b /* '+' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('+')) && (true)) {
 					mPLUS(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2d /* '-' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('-')) && (true)) {
 					mMINUS(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2a /* '*' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('*')) && (true)) {
 					mSTAR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2f /* '/' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (true)) {
 					mSLASH(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3a /* ':' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>(':')) && (true)) {
 					mCOLON(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3c /* '<' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('<')) && (true)) {
 					mLTH(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3e /* '>' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('>')) && (true)) {
 					mGT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x28 /* '(' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('(')) && (true)) {
 					mLPAREN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2e /* '.' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('.')) && (true)) {
 					mDOT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x7b /* '{' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('{')) && (true)) {
 					mLCURLY(true);
 					theRetToken=_returnToken;
 				}
@@ -397,11 +397,11 @@ tryAgain:;
 }
 
 void PascalLexer::mPLUS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = PLUS;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('+' /* charlit */ );
+	match(static_cast<unsigned char>('+'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -411,11 +411,11 @@ void PascalLexer::mPLUS(bool _createToken) {
 }
 
 void PascalLexer::mMINUS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = MINUS;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('-' /* charlit */ );
+	match(static_cast<unsigned char>('-'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -425,11 +425,11 @@ void PascalLexer::mMINUS(bool _createToken) {
 }
 
 void PascalLexer::mSTAR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = STAR;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('*' /* charlit */ );
+	match(static_cast<unsigned char>('*'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -439,11 +439,11 @@ void PascalLexer::mSTAR(bool _createToken) {
 }
 
 void PascalLexer::mSLASH(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SLASH;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('/' /* charlit */ );
+	match(static_cast<unsigned char>('/'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -453,9 +453,9 @@ void PascalLexer::mSLASH(bool _createToken) {
 }
 
 void PascalLexer::mASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(":=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -467,11 +467,11 @@ void PascalLexer::mASSIGN(bool _createToken) {
 }
 
 void PascalLexer::mCOMMA(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = COMMA;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(',' /* charlit */ );
+	match(static_cast<unsigned char>(','));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -481,11 +481,11 @@ void PascalLexer::mCOMMA(bool _createToken) {
 }
 
 void PascalLexer::mSEMI(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SEMI;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(';' /* charlit */ );
+	match(static_cast<unsigned char>(';'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -495,11 +495,11 @@ void PascalLexer::mSEMI(bool _createToken) {
 }
 
 void PascalLexer::mCOLON(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = COLON;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(':' /* charlit */ );
+	match(static_cast<unsigned char>(':'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -509,11 +509,11 @@ void PascalLexer::mCOLON(bool _createToken) {
 }
 
 void PascalLexer::mEQUAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = EQUAL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('=' /* charlit */ );
+	match(static_cast<unsigned char>('='));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -523,9 +523,9 @@ void PascalLexer::mEQUAL(bool _createToken) {
 }
 
 void PascalLexer::mNOT_EQUAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = NOT_EQUAL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("<>");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -537,11 +537,11 @@ void PascalLexer::mNOT_EQUAL(bool _createToken) {
 }
 
 void PascalLexer::mLTH(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LTH;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('<' /* charlit */ );
+	match(static_cast<unsigned char>('<'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -551,9 +551,9 @@ void PascalLexer::mLTH(bool _createToken) {
 }
 
 void PascalLexer::mLE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LE;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("<=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -565,9 +565,9 @@ void PascalLexer::mLE(bool _createToken) {
 }
 
 void PascalLexer::mGE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = GE;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(">=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -579,11 +579,11 @@ void PascalLexer::mGE(bool _createToken) {
 }
 
 void PascalLexer::mGT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = GT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('>' /* charlit */ );
+	match(static_cast<unsigned char>('>'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -593,11 +593,11 @@ void PascalLexer::mGT(bool _createToken) {
 }
 
 void PascalLexer::mLPAREN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LPAREN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('(' /* charlit */ );
+	match(static_cast<unsigned char>('('));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -607,11 +607,11 @@ void PascalLexer::mLPAREN(bool _createToken) {
 }
 
 void PascalLexer::mRPAREN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = RPAREN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(')' /* charlit */ );
+	match(static_cast<unsigned char>(')'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -621,11 +621,11 @@ void PascalLexer::mRPAREN(bool _createToken) {
 }
 
 void PascalLexer::mLBRACK(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LBRACK;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('[' /* charlit */ );
+	match(static_cast<unsigned char>('['));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -635,9 +635,9 @@ void PascalLexer::mLBRACK(bool _createToken) {
 }
 
 void PascalLexer::mLBRACK2(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LBRACK2;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("(.");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -649,11 +649,11 @@ void PascalLexer::mLBRACK2(bool _createToken) {
 }
 
 void PascalLexer::mRBRACK(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = RBRACK;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(']' /* charlit */ );
+	match(static_cast<unsigned char>(']'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -663,9 +663,9 @@ void PascalLexer::mRBRACK(bool _createToken) {
 }
 
 void PascalLexer::mRBRACK2(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = RBRACK2;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(".)");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -677,11 +677,11 @@ void PascalLexer::mRBRACK2(bool _createToken) {
 }
 
 void PascalLexer::mPOINTER(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = POINTER;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('^' /* charlit */ );
+	match(static_cast<unsigned char>('^'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -691,11 +691,11 @@ void PascalLexer::mPOINTER(bool _createToken) {
 }
 
 void PascalLexer::mAT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = AT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('@' /* charlit */ );
+	match(static_cast<unsigned char>('@'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -705,14 +705,14 @@ void PascalLexer::mAT(bool _createToken) {
 }
 
 void PascalLexer::mDOT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = DOT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('.' /* charlit */ );
+	match(static_cast<unsigned char>('.'));
 	{
-	if ((LA(1) == 0x2e /* '.' */ )) {
-		match('.' /* charlit */ );
+	if ((LA(1) == static_cast<unsigned char>('.'))) {
+		match(static_cast<unsigned char>('.'));
 #line 1124 "pascal.g"
 		_ttype = DOTDOT;
 #line 719 "PascalLexer.cpp"
@@ -730,9 +730,9 @@ void PascalLexer::mDOT(bool _createToken) {
 }
 
 void PascalLexer::mLCURLY(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LCURLY;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("{");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -744,9 +744,9 @@ void PascalLexer::mLCURLY(bool _createToken) {
 }
 
 void PascalLexer::mRCURLY(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = RCURLY;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("}");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -758,9 +758,9 @@ void PascalLexer::mRCURLY(bool _createToken) {
 }
 
 void PascalLexer::mPLUSEQ(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = PLUSEQ;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("+=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -772,9 +772,9 @@ void PascalLexer::mPLUSEQ(bool _createToken) {
 }
 
 void PascalLexer::mMINUSEQ(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = MINUSEQ;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("-=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -786,9 +786,9 @@ void PascalLexer::mMINUSEQ(bool _createToken) {
 }
 
 void PascalLexer::mSTAREQ(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = STAREQ;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("*=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -800,9 +800,9 @@ void PascalLexer::mSTAREQ(bool _createToken) {
 }
 
 void PascalLexer::mSLASHQE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SLASHQE;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("/=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -814,39 +814,39 @@ void PascalLexer::mSLASHQE(bool _createToken) {
 }
 
 void PascalLexer::mWS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = WS;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{
 	switch ( LA(1)) {
-	case 0x20 /* ' ' */ :
+	case static_cast<unsigned char>(' '):
 	{
-		match(' ' /* charlit */ );
+		match(static_cast<unsigned char>(' '));
 		break;
 	}
-	case 0x9 /* '\t' */ :
+	case static_cast<unsigned char>('\t'):
 	{
-		match('\t' /* charlit */ );
+		match(static_cast<unsigned char>('\t'));
 		break;
 	}
-	case 0xc /* '\14' */ :
+	case static_cast<unsigned char>('\14'):
 	{
-		match('\14' /* charlit */ );
+		match(static_cast<unsigned char>('\14'));
 		break;
 	}
-	case 0xa /* '\n' */ :
-	case 0xd /* '\r' */ :
+	case static_cast<unsigned char>('\n'):
+	case static_cast<unsigned char>('\r'):
 	{
 		{
-		if ((LA(1) == 0xd /* '\r' */ ) && (LA(2) == 0xa /* '\n' */ )) {
+		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n'))) {
 			match("\r\n");
 		}
-		else if ((LA(1) == 0xd /* '\r' */ ) && (true)) {
-			match('\r' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\r')) && (true)) {
+			match(static_cast<unsigned char>('\r'));
 		}
-		else if ((LA(1) == 0xa /* '\n' */ )) {
-			match('\n' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
+			match(static_cast<unsigned char>('\n'));
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());
@@ -876,31 +876,31 @@ void PascalLexer::mWS(bool _createToken) {
 }
 
 void PascalLexer::mCOMMENT_1(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = COMMENT_1;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("(*");
 	{ // ( ... )*
 	for (;;) {
-		if ((LA(1) == 0xd /* '\r' */ ) && (LA(2) == 0xa /* '\n' */ ) && ((LA(3) >= 0x0 /* '\0' */  && LA(3) <= 0xff)) && ((LA(4) >= 0x0 /* '\0' */  && LA(4) <= 0xff))) {
-			match('\r' /* charlit */ );
-			match('\n' /* charlit */ );
+		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && ((LA(4) >= static_cast<unsigned char>('\0') && LA(4) <= static_cast<unsigned char>('\377')))) {
+			match(static_cast<unsigned char>('\r'));
+			match(static_cast<unsigned char>('\n'));
 #line 1152 "pascal.g"
 			newline();
 #line 892 "PascalLexer.cpp"
 		}
-		else if (((LA(1) == 0x2a /* '*' */ ) && ((LA(2) >= 0x0 /* '\0' */  && LA(2) <= 0xff)) && ((LA(3) >= 0x0 /* '\0' */  && LA(3) <= 0xff)))&&( LA(2) != ')' )) {
-			match('*' /* charlit */ );
+		else if (((LA(1) == static_cast<unsigned char>('*')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))))&&( LA(2) != ')' )) {
+			match(static_cast<unsigned char>('*'));
 		}
-		else if ((LA(1) == 0xd /* '\r' */ ) && ((LA(2) >= 0x0 /* '\0' */  && LA(2) <= 0xff)) && ((LA(3) >= 0x0 /* '\0' */  && LA(3) <= 0xff)) && (true)) {
-			match('\r' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
+			match(static_cast<unsigned char>('\r'));
 #line 1153 "pascal.g"
 			newline();
 #line 901 "PascalLexer.cpp"
 		}
-		else if ((LA(1) == 0xa /* '\n' */ )) {
-			match('\n' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
+			match(static_cast<unsigned char>('\n'));
 #line 1154 "pascal.g"
 			newline();
 #line 907 "PascalLexer.cpp"
@@ -930,28 +930,28 @@ void PascalLexer::mCOMMENT_1(bool _createToken) {
 }
 
 void PascalLexer::mCOMMENT_2(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = COMMENT_2;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('{' /* charlit */ );
+	match(static_cast<unsigned char>('{'));
 	{ // ( ... )*
 	for (;;) {
-		if ((LA(1) == 0xd /* '\r' */ ) && (LA(2) == 0xa /* '\n' */ ) && ((LA(3) >= 0x0 /* '\0' */  && LA(3) <= 0xff)) && (true)) {
-			match('\r' /* charlit */ );
-			match('\n' /* charlit */ );
+		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
+			match(static_cast<unsigned char>('\r'));
+			match(static_cast<unsigned char>('\n'));
 #line 1164 "pascal.g"
 			newline();
 #line 946 "PascalLexer.cpp"
 		}
-		else if ((LA(1) == 0xd /* '\r' */ ) && ((LA(2) >= 0x0 /* '\0' */  && LA(2) <= 0xff)) && (true) && (true)) {
-			match('\r' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && (true) && (true)) {
+			match(static_cast<unsigned char>('\r'));
 #line 1165 "pascal.g"
 			newline();
 #line 952 "PascalLexer.cpp"
 		}
-		else if ((LA(1) == 0xa /* '\n' */ )) {
-			match('\n' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
+			match(static_cast<unsigned char>('\n'));
 #line 1166 "pascal.g"
 			newline();
 #line 958 "PascalLexer.cpp"
@@ -968,7 +968,7 @@ void PascalLexer::mCOMMENT_2(bool _createToken) {
 	}
 	_loop431:;
 	} // ( ... )*
-	match('}' /* charlit */ );
+	match(static_cast<unsigned char>('}'));
 #line 1170 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 975 "PascalLexer.cpp"
@@ -981,15 +981,15 @@ void PascalLexer::mCOMMENT_2(bool _createToken) {
 }
 
 void PascalLexer::mCOMMENT_3(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = COMMENT_3;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("//");
 	{ // ( ... )*
 	for (;;) {
 		if ((_tokenSet_2.member(LA(1)))) {
-			matchNot('\n' /* charlit */ );
+			matchNot(static_cast<unsigned char>('\n'));
 		}
 		else {
 			goto _loop434;
@@ -998,7 +998,7 @@ void PascalLexer::mCOMMENT_3(bool _createToken) {
 	}
 	_loop434:;
 	} // ( ... )*
-	match('\n' /* charlit */ );
+	match(static_cast<unsigned char>('\n'));
 #line 1175 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 1005 "PascalLexer.cpp"
@@ -1011,63 +1011,63 @@ void PascalLexer::mCOMMENT_3(bool _createToken) {
 }
 
 void PascalLexer::mIDENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = IDENT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{
-	matchRange('a','z');
+	matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('z'));
 	}
 	{ // ( ... )*
 	for (;;) {
 		switch ( LA(1)) {
-		case 0x61 /* 'a' */ :
-		case 0x62 /* 'b' */ :
-		case 0x63 /* 'c' */ :
-		case 0x64 /* 'd' */ :
-		case 0x65 /* 'e' */ :
-		case 0x66 /* 'f' */ :
-		case 0x67 /* 'g' */ :
-		case 0x68 /* 'h' */ :
-		case 0x69 /* 'i' */ :
-		case 0x6a /* 'j' */ :
-		case 0x6b /* 'k' */ :
-		case 0x6c /* 'l' */ :
-		case 0x6d /* 'm' */ :
-		case 0x6e /* 'n' */ :
-		case 0x6f /* 'o' */ :
-		case 0x70 /* 'p' */ :
-		case 0x71 /* 'q' */ :
-		case 0x72 /* 'r' */ :
-		case 0x73 /* 's' */ :
-		case 0x74 /* 't' */ :
-		case 0x75 /* 'u' */ :
-		case 0x76 /* 'v' */ :
-		case 0x77 /* 'w' */ :
-		case 0x78 /* 'x' */ :
-		case 0x79 /* 'y' */ :
-		case 0x7a /* 'z' */ :
+		case static_cast<unsigned char>('a'):
+		case static_cast<unsigned char>('b'):
+		case static_cast<unsigned char>('c'):
+		case static_cast<unsigned char>('d'):
+		case static_cast<unsigned char>('e'):
+		case static_cast<unsigned char>('f'):
+		case static_cast<unsigned char>('g'):
+		case static_cast<unsigned char>('h'):
+		case static_cast<unsigned char>('i'):
+		case static_cast<unsigned char>('j'):
+		case static_cast<unsigned char>('k'):
+		case static_cast<unsigned char>('l'):
+		case static_cast<unsigned char>('m'):
+		case static_cast<unsigned char>('n'):
+		case static_cast<unsigned char>('o'):
+		case static_cast<unsigned char>('p'):
+		case static_cast<unsigned char>('q'):
+		case static_cast<unsigned char>('r'):
+		case static_cast<unsigned char>('s'):
+		case static_cast<unsigned char>('t'):
+		case static_cast<unsigned char>('u'):
+		case static_cast<unsigned char>('v'):
+		case static_cast<unsigned char>('w'):
+		case static_cast<unsigned char>('x'):
+		case static_cast<unsigned char>('y'):
+		case static_cast<unsigned char>('z'):
 		{
-			matchRange('a','z');
+			matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('z'));
 			break;
 		}
-		case 0x30 /* '0' */ :
-		case 0x31 /* '1' */ :
-		case 0x32 /* '2' */ :
-		case 0x33 /* '3' */ :
-		case 0x34 /* '4' */ :
-		case 0x35 /* '5' */ :
-		case 0x36 /* '6' */ :
-		case 0x37 /* '7' */ :
-		case 0x38 /* '8' */ :
-		case 0x39 /* '9' */ :
+		case static_cast<unsigned char>('0'):
+		case static_cast<unsigned char>('1'):
+		case static_cast<unsigned char>('2'):
+		case static_cast<unsigned char>('3'):
+		case static_cast<unsigned char>('4'):
+		case static_cast<unsigned char>('5'):
+		case static_cast<unsigned char>('6'):
+		case static_cast<unsigned char>('7'):
+		case static_cast<unsigned char>('8'):
+		case static_cast<unsigned char>('9'):
 		{
-			matchRange('0','9');
+			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 			break;
 		}
-		case 0x5f /* '_' */ :
+		case static_cast<unsigned char>('_'):
 		{
-			match('_' /* charlit */ );
+			match(static_cast<unsigned char>('_'));
 			break;
 		}
 		default:
@@ -1088,14 +1088,14 @@ void PascalLexer::mIDENT(bool _createToken) {
 }
 
 void PascalLexer::mSTRING_LITERAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = STRING_LITERAL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('\'' /* charlit */ );
+	match(static_cast<unsigned char>('\''));
 	{ // ( ... )*
 	for (;;) {
-		if ((LA(1) == 0x27 /* '\'' */ ) && (LA(2) == 0x27 /* '\'' */ )) {
+		if ((LA(1) == static_cast<unsigned char>('\'')) && (LA(2) == static_cast<unsigned char>('\''))) {
 			match("\'\'");
 		}
 		else if ((_tokenSet_3.member(LA(1)))) {
@@ -1110,7 +1110,7 @@ void PascalLexer::mSTRING_LITERAL(bool _createToken) {
 	}
 	_loop442:;
 	} // ( ... )*
-	match('\'' /* charlit */ );
+	match(static_cast<unsigned char>('\''));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -1126,15 +1126,15 @@ void PascalLexer::mSTRING_LITERAL(bool _createToken) {
  *  digits exponent
  */
 void PascalLexer::mNUM_INT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = NUM_INT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{ // ( ... )+
 	int _cnt445=0;
 	for (;;) {
-		if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
-			matchRange('0','9');
+		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		}
 		else {
 			if ( _cnt445>=1 ) { goto _loop445; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
@@ -1145,7 +1145,7 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 	_loop445:;
 	}  // ( ... )+
 	{
-	if ((LA(1) == 0x65 /* 'e' */ )) {
+	if ((LA(1) == static_cast<unsigned char>('e'))) {
 		mEXPONENT(false);
 #line 1204 "pascal.g"
 		_ttype = NUM_REAL;
@@ -1153,16 +1153,16 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 	}
 	else {
 		{
-		if (((LA(1) == 0x2e /* '.' */ ))&&((LA(2)!='.')&&(LA(2)!=')'))) {
-			match('.' /* charlit */ );
+		if (((LA(1) == static_cast<unsigned char>('.')))&&((LA(2)!='.')&&(LA(2)!=')'))) {
+			match(static_cast<unsigned char>('.'));
 #line 1201 "pascal.g"
 			_ttype = NUM_REAL;
 #line 1161 "PascalLexer.cpp"
 			{ // ( ... )+
 			int _cnt449=0;
 			for (;;) {
-				if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
-					matchRange('0','9');
+				if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+					matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 				}
 				else {
 					if ( _cnt449>=1 ) { goto _loop449; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
@@ -1173,7 +1173,7 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 			_loop449:;
 			}  // ( ... )+
 			{
-			if ((LA(1) == 0x65 /* 'e' */ )) {
+			if ((LA(1) == static_cast<unsigned char>('e'))) {
 				mEXPONENT(false);
 			}
 			else {
@@ -1197,35 +1197,35 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 }
 
 void PascalLexer::mEXPONENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = EXPONENT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{
-	match('e' /* charlit */ );
+	match(static_cast<unsigned char>('e'));
 	}
 	{
 	switch ( LA(1)) {
-	case 0x2b /* '+' */ :
+	case static_cast<unsigned char>('+'):
 	{
-		match('+' /* charlit */ );
+		match(static_cast<unsigned char>('+'));
 		break;
 	}
-	case 0x2d /* '-' */ :
+	case static_cast<unsigned char>('-'):
 	{
-		match('-' /* charlit */ );
+		match(static_cast<unsigned char>('-'));
 		break;
 	}
-	case 0x30 /* '0' */ :
-	case 0x31 /* '1' */ :
-	case 0x32 /* '2' */ :
-	case 0x33 /* '3' */ :
-	case 0x34 /* '4' */ :
-	case 0x35 /* '5' */ :
-	case 0x36 /* '6' */ :
-	case 0x37 /* '7' */ :
-	case 0x38 /* '8' */ :
-	case 0x39 /* '9' */ :
+	case static_cast<unsigned char>('0'):
+	case static_cast<unsigned char>('1'):
+	case static_cast<unsigned char>('2'):
+	case static_cast<unsigned char>('3'):
+	case static_cast<unsigned char>('4'):
+	case static_cast<unsigned char>('5'):
+	case static_cast<unsigned char>('6'):
+	case static_cast<unsigned char>('7'):
+	case static_cast<unsigned char>('8'):
+	case static_cast<unsigned char>('9'):
 	{
 		break;
 	}
@@ -1238,8 +1238,8 @@ void PascalLexer::mEXPONENT(bool _createToken) {
 	{ // ( ... )+
 	int _cnt455=0;
 	for (;;) {
-		if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
-			matchRange('0','9');
+		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		}
 		else {
 			if ( _cnt455>=1 ) { goto _loop455; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
@@ -1259,51 +1259,99 @@ void PascalLexer::mEXPONENT(bool _createToken) {
 
 
 const unsigned long PascalLexer::_tokenSet_0_data_[] = { 4294958079UL, 4294966271UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xb 0xc 0xe 0xf 0x10 0x11 0x12 
-// 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! 
-// \" # $ % & \' ( ) + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C 
-// D E F G H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a b c d 
-// e f g h i j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 
-// 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 
-// 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 
-// 0x9f 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 
-// 0xad 0xae 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 
-// 0xbb 0xbc 0xbd 
+// null EOF null NULL_TREE_LOOKAHEAD BLOCK IDLIST ELIST FUNC_CALL PROC_CALL 
+// SCALARTYPE VARIANT_TAG VARIANT_TAG_NO_ID CONSTLIST FIELDLIST ARGDECLS 
+// VARDECL ARGDECL ARGLIST TYPEDECL FIELD DOT "library" SEMI "end" "exports" 
+// COMMA "index" "name" "uses" "unit" "interface" "implementation" "begin" 
+// "program" LPAREN RPAREN "initialization" "finalization" "label" "const" 
+// EQUAL "type" "var" COLON "procedure" "forward" "function" "array" "of" 
+// "external" "public" "alias" INTERRUPT "export" "register" "pascal" "cdecl" 
+// "stdcall" "popstack" "saveregisters" "inline" "safecall" "near" "far" 
+// NUM_INT "integer" "shortint" "smallint" "longint" "int64" "byte" "word" 
+// "cardinal" "qword" "boolean" BYTEBOOL LONGBOOL "char" DOTDOT ASSIGN 
+// "real" "single" "double" "extended" "comp" "string" LBRACK RBRACK "packed" 
+// "record" "case" "set" "file" POINTER "object" "virtual" "abstract" "private" 
+// "protected" "constructor" "destructor" "class" "override" MESSAGE "published" 
+// "property" "read" "write" "default" "nodefault" LE GE LTH GT NOT_EQUAL 
+// "in" "is" PLUS MINUS "or" "xor" STAR SLASH "div" "mod" "and" "shl" "shr" 
+// "not" "true" "false" AT PLUSEQ MINUSEQ STAREQ SLASHQE "goto" "if" "then" 
+// "else" "while" "do" "repeat" "until" "for" "to" "downto" "with" LBRACK2 
+// RBRACK2 "operator" "raise" "try" "except" "finally" "on" STRING_LITERAL 
+// "chr" "nil" NUM_REAL IDENT "absolute" "as" "asm" "assembler" "break" 
+// "continue" "dispose" "exit" "inherited" "new" "self" METHOD ADDSUBOR 
+// ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR LF LCURLY RCURLY WS COMMENT_1 
+// COMMENT_2 COMMENT_3 EXPONENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalLexer::_tokenSet_0(_tokenSet_0_data_,16);
 const unsigned long PascalLexer::_tokenSet_1_data_[] = { 4294958079UL, 4294967295UL, 4294967295UL, 3758096383UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xb 0xc 0xe 0xf 0x10 0x11 0x12 
-// 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! 
-// \" # $ % & \' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B 
-// C D E F G H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a b c 
-// d e f g h i j k l m n o p q r s t u v w x y z { | ~ 0x7f 0x80 0x81 0x82 
-// 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 
-// 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 0x9d 0x9e 
-// 0x9f 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 0xab 0xac 
-// 0xad 0xae 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 0xb9 0xba 
-// 0xbb 0xbc 0xbd 
+// null EOF null NULL_TREE_LOOKAHEAD BLOCK IDLIST ELIST FUNC_CALL PROC_CALL 
+// SCALARTYPE VARIANT_TAG VARIANT_TAG_NO_ID CONSTLIST FIELDLIST ARGDECLS 
+// VARDECL ARGDECL ARGLIST TYPEDECL FIELD DOT "library" SEMI "end" "exports" 
+// COMMA "index" "name" "uses" "unit" "interface" "implementation" "begin" 
+// "program" LPAREN RPAREN "initialization" "finalization" "label" "const" 
+// "resourcestring" EQUAL "type" "var" COLON "procedure" "forward" "function" 
+// "array" "of" "external" "public" "alias" INTERRUPT "export" "register" 
+// "pascal" "cdecl" "stdcall" "popstack" "saveregisters" "inline" "safecall" 
+// "near" "far" NUM_INT "integer" "shortint" "smallint" "longint" "int64" 
+// "byte" "word" "cardinal" "qword" "boolean" BYTEBOOL LONGBOOL "char" 
+// DOTDOT ASSIGN "real" "single" "double" "extended" "comp" "string" LBRACK 
+// RBRACK "packed" "record" "case" "set" "file" POINTER "object" "virtual" 
+// "abstract" "private" "protected" "constructor" "destructor" "class" 
+// "override" MESSAGE "published" "property" "read" "write" "default" "nodefault" 
+// LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR "div" "mod" 
+// "and" "shl" "shr" "not" "true" "false" AT PLUSEQ MINUSEQ STAREQ SLASHQE 
+// "goto" "if" "then" "else" "while" "do" "repeat" "until" "for" "to" "downto" 
+// "with" LBRACK2 RBRACK2 "operator" "raise" "try" "except" "finally" "on" 
+// STRING_LITERAL "chr" "nil" NUM_REAL IDENT "absolute" "as" "asm" "assembler" 
+// "break" "continue" "dispose" "exit" "inherited" "new" "self" METHOD 
+// ADDSUBOR ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR LF LCURLY RCURLY 
+// WS COMMENT_1 COMMENT_2 COMMENT_3 EXPONENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalLexer::_tokenSet_1(_tokenSet_1_data_,16);
 const unsigned long PascalLexer::_tokenSet_2_data_[] = { 4294966271UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xb 0xc 0xd 0xe 0xf 0x10 0x11 
-// 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f 
-//   ! \" # $ % & \' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ 
-// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a 
-// b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 
-// 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 
-// 0x8f 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 
-// 0x9d 0x9e 0x9f 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 
-// 0xab 0xac 0xad 0xae 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 
-// 0xb9 0xba 0xbb 0xbc 0xbd 
+// null EOF null NULL_TREE_LOOKAHEAD BLOCK IDLIST ELIST FUNC_CALL PROC_CALL 
+// SCALARTYPE VARIANT_TAG VARIANT_TAG_NO_ID VARIANT_CASE CONSTLIST FIELDLIST 
+// ARGDECLS VARDECL ARGDECL ARGLIST TYPEDECL FIELD DOT "library" SEMI "end" 
+// "exports" COMMA "index" "name" "uses" "unit" "interface" "implementation" 
+// "begin" "program" LPAREN RPAREN "initialization" "finalization" "label" 
+// "const" "resourcestring" EQUAL "type" "var" COLON "procedure" "forward" 
+// "function" "array" "of" "external" "public" "alias" INTERRUPT "export" 
+// "register" "pascal" "cdecl" "stdcall" "popstack" "saveregisters" "inline" 
+// "safecall" "near" "far" NUM_INT "integer" "shortint" "smallint" "longint" 
+// "int64" "byte" "word" "cardinal" "qword" "boolean" BYTEBOOL LONGBOOL 
+// "char" DOTDOT ASSIGN "real" "single" "double" "extended" "comp" "string" 
+// LBRACK RBRACK "packed" "record" "case" "set" "file" POINTER "object" 
+// "virtual" "abstract" "private" "protected" "constructor" "destructor" 
+// "class" "override" MESSAGE "published" "property" "read" "write" "default" 
+// "nodefault" LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR 
+// SLASH "div" "mod" "and" "shl" "shr" "not" "true" "false" AT PLUSEQ MINUSEQ 
+// STAREQ SLASHQE "goto" "if" "then" "else" "while" "do" "repeat" "until" 
+// "for" "to" "downto" "with" LBRACK2 RBRACK2 "operator" "raise" "try" 
+// "except" "finally" "on" STRING_LITERAL "chr" "nil" NUM_REAL IDENT "absolute" 
+// "as" "asm" "assembler" "break" "continue" "dispose" "exit" "inherited" 
+// "new" "self" METHOD ADDSUBOR ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR 
+// LF LCURLY RCURLY WS COMMENT_1 COMMENT_2 COMMENT_3 EXPONENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalLexer::_tokenSet_2(_tokenSet_2_data_,16);
 const unsigned long PascalLexer::_tokenSet_3_data_[] = { 4294967295UL, 4294967167UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 
-// 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 
-// 0x1f   ! \" # $ % & ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? 
-// @ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` 
-// a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 
-// 0x81 0x82 0x83 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 
-// 0x8f 0x90 0x91 0x92 0x93 0x94 0x95 0x96 0x97 0x98 0x99 0x9a 0x9b 0x9c 
-// 0x9d 0x9e 0x9f 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7 0xa8 0xa9 0xaa 
-// 0xab 0xac 0xad 0xae 0xaf 0xb0 0xb1 0xb2 0xb3 0xb4 0xb5 0xb6 0xb7 0xb8 
-// 0xb9 0xba 0xbb 0xbc 0xbd 
+// null EOF null NULL_TREE_LOOKAHEAD BLOCK IDLIST ELIST FUNC_CALL PROC_CALL 
+// SCALARTYPE TYPELIST VARIANT_TAG VARIANT_TAG_NO_ID VARIANT_CASE CONSTLIST 
+// FIELDLIST ARGDECLS VARDECL ARGDECL ARGLIST TYPEDECL FIELD DOT "library" 
+// SEMI "end" "exports" COMMA "index" "name" "uses" "unit" "interface" 
+// "implementation" "begin" "program" LPAREN RPAREN "initialization" "label" 
+// "const" "resourcestring" EQUAL "type" "var" COLON "procedure" "forward" 
+// "function" "array" "of" "external" "public" "alias" INTERRUPT "export" 
+// "register" "pascal" "cdecl" "stdcall" "popstack" "saveregisters" "inline" 
+// "safecall" "near" "far" NUM_INT "integer" "shortint" "smallint" "longint" 
+// "int64" "byte" "word" "cardinal" "qword" "boolean" BYTEBOOL LONGBOOL 
+// "char" DOTDOT ASSIGN "real" "single" "double" "extended" "comp" "string" 
+// LBRACK RBRACK "packed" "record" "case" "set" "file" POINTER "object" 
+// "virtual" "abstract" "private" "protected" "constructor" "destructor" 
+// "class" "override" MESSAGE "published" "property" "read" "write" "default" 
+// "nodefault" LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR 
+// SLASH "div" "mod" "and" "shl" "shr" "not" "true" "false" AT PLUSEQ MINUSEQ 
+// STAREQ SLASHQE "goto" "if" "then" "else" "while" "do" "repeat" "until" 
+// "for" "to" "downto" "with" LBRACK2 RBRACK2 "operator" "raise" "try" 
+// "except" "finally" "on" STRING_LITERAL "chr" "nil" NUM_REAL IDENT "absolute" 
+// "as" "asm" "assembler" "break" "continue" "dispose" "exit" "inherited" 
+// "new" "self" METHOD ADDSUBOR ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR 
+// LF LCURLY RCURLY WS COMMENT_1 COMMENT_2 COMMENT_3 EXPONENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalLexer::_tokenSet_3(_tokenSet_3_data_,16);
 

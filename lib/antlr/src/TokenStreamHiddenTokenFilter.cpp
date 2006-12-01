@@ -1,8 +1,7 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 #include "antlr/TokenStreamHiddenTokenFilter.hpp"
 #include "antlr/CommonHiddenStreamToken.hpp"
@@ -99,7 +98,7 @@ void TokenStreamHiddenTokenFilter::hide(const BitSet& mask)
 	hideMask = mask;
 }
 
-RefToken TokenStreamHiddenTokenFilter::LA(int)
+RefToken TokenStreamHiddenTokenFilter::LA(int /*i*/)
 {
 	return nextMonitoredToken;
 }

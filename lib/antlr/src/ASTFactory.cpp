@@ -1,8 +1,7 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include "antlr/CommonAST.hpp"
@@ -12,7 +11,6 @@
 #include "antlr/ANTLRUtil.hpp"
 
 #include <iostream>
-#include <istream>
 
 using namespace std;
 
@@ -37,7 +35,7 @@ namespace antlr {
 
 /// Initialize factory
 ASTFactory::ASTFactory()
-: default_factory_descriptor(ANTLR_USE_NAMESPACE(std)make_pair(CommonAST::TYPE_NAME,&CommonAST::factory))
+: default_factory_descriptor(ANTLR_USE_NAMESPACE(std)make_pair(static_cast<const char*>("CommonAST"),&CommonAST::factory))
 {
 	nodeFactories.resize( Token::MIN_USER_TYPE, &default_factory_descriptor );
 }

@@ -1,15 +1,8 @@
 #ifndef INC_JavaStoreWalkerTokenTypes_hpp_
 #define INC_JavaStoreWalkerTokenTypes_hpp_
 
-/* $ANTLR 2.7.7 (20061129): "java.store.g" -> "JavaStoreWalkerTokenTypes.hpp"$ */
-
-#ifndef CUSTOM_API
-# define CUSTOM_API
-#endif
-
-#ifdef __cplusplus
-struct CUSTOM_API JavaStoreWalkerTokenTypes {
-#endif
+/* $ANTLR 2.7.2: "java.store.g" -> "JavaStoreWalkerTokenTypes.hpp"$ */
+struct JavaStoreWalkerTokenTypes {
 	enum {
 		EOF_ = 1,
 		BLOCK = 4,
@@ -163,7 +156,5 @@ struct CUSTOM_API JavaStoreWalkerTokenTypes {
 		LITERAL_const = 152,
 		NULL_TREE_LOOKAHEAD = 3
 	};
-#ifdef __cplusplus
 };
-#endif
 #endif /*INC_JavaStoreWalkerTokenTypes_hpp_*/

@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 # include <antlr/config.hpp>
@@ -83,11 +82,17 @@ public:
 		}
 		return *this;
 	}
+	
+	ASTRefCount<AST> toRefAST() { return ASTRefCount<AST>( static_cast<AST*>(ref->ptr) ); }
 
 	operator T* ()  const { return ref ? static_cast<T*>(ref->ptr) : 0; }
 	T* operator->() const { return ref ? static_cast<T*>(ref->ptr) : 0; }
 	T* get()        const { return ref ? static_cast<T*>(ref->ptr) : 0; }
 };
+
+#if defined(_MSC_VER) && !defined(__ICL) // Microsoft Visual C++
+extern template class ANTLR_API ASTRefCount<AST>;
+#endif
 
 typedef ASTRefCount<AST> RefAST;
 

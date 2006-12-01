@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -13,7 +12,6 @@
 #include <antlr/ASTFactory.hpp>
 #include <antlr/BitSet.hpp>
 #include <antlr/RecognitionException.hpp>
-#include <antlr/MismatchedTokenException.hpp>
 #include <antlr/TreeParserSharedInputState.hpp>
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
@@ -22,37 +20,21 @@ namespace antlr {
 
 class ANTLR_API TreeParser {
 public:
-	TreeParser()
-	: astFactory(0)
-	, inputState(new TreeParserInputState())
-	, traceDepth(0)
-	{
-	}
-
-	TreeParser(const TreeParserSharedInputState& state)
-	: astFactory(0)
-	, inputState(state)
-	, traceDepth(0)
-	{
-	}
-
-	virtual ~TreeParser()
-	{
-	}
+	TreeParser();
+	TreeParser(const TreeParserSharedInputState& state);
+	virtual ~TreeParser();
 
 	/// Get the AST return value squirreled away in the parser
-	virtual RefAST getAST() = 0;
+	RefAST getAST() const
+	{
+		return returnAST;
+	}
 
 	/** Make sure current lookahead symbol matches the given set
-	 * Throw an exception upon mismatch, which is caught by either the
-	 * error handler or by a syntactic predicate.
+	 * Throw an exception upon mismatch, which is catch by either the
+	 * error handler or by the syntactic predicate.
 	 */
-	virtual void match(RefAST t, const BitSet& b)
-	{
-		if ( !t || t==ASTNULL || !b.member(t->getType()) )
-			throw MismatchedTokenException( getTokenNames(), getNumTokens(),
-													  t, b, false );
-	}
+	virtual void match(RefAST t, const BitSet& b);
 
 	/** Specify the AST factory to be used during tree building. (Compulsory)
 	 * Setting the factory is compulsory (if you intend to modify
@@ -71,10 +53,7 @@ public:
 	}
 	/// Get the name for token 'num'
 	virtual const char* getTokenName(int num) const = 0;
-	/// Return the number of tokens defined
 	virtual int getNumTokens() const = 0;
-	/// Return an array of getNumTokens() token names
-	virtual const char* const* getTokenNames() const = 0;
 
 	/// Parser error-reporting function can be overridden in subclass
 	virtual void reportError(const RecognitionException& ex);
@@ -82,6 +61,8 @@ public:
 	virtual void reportError(const ANTLR_USE_NAMESPACE(std)string& s);
 	/// Parser warning-reporting function can be overridden in subclass
 	virtual void reportWarning(const ANTLR_USE_NAMESPACE(std)string& s);
+	/// Give panic message and exit the program. can be overridden in subclass
+	static void panic();
 
 	/// These are used during when traceTreeParser commandline option is passed.
 	virtual void traceIndent();
@@ -96,20 +77,13 @@ public:
 	static RefAST ASTNULL;
 
 protected:
-	virtual void match(RefAST t, int ttype)
-	{
-		if (!t || t == ASTNULL || t->getType() != ttype )
-			throw MismatchedTokenException( getTokenNames(), getNumTokens(),
-													  t, ttype, false );
-	}
+	virtual void match(RefAST t, int ttype);
+	virtual void matchNot(RefAST t, int ttype);
 
-	virtual void matchNot(RefAST t, int ttype)
-	{
-		if ( !t || t == ASTNULL || t->getType() == ttype )
-			throw MismatchedTokenException( getTokenNames(), getNumTokens(),
-													  t, ttype, true );
-	}
-
+	/** Where did this rule leave off parsing; avoids a return parameter */
+	RefAST _retTree;
+	/** AST return value for a rule is squirreled away here */
+	RefAST returnAST;
 	/** AST support code; parser and treeparser delegate to this object */
 	ASTFactory* astFactory;
 

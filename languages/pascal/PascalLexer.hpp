@@ -17,13 +17,13 @@
 
 #line 19 "PascalLexer.hpp"
 #include <antlr/config.hpp>
-/* $ANTLR 2.7.7 (20061129): "pascal.g" -> "PascalLexer.hpp"$ */
+/* $ANTLR 2.7.2: "pascal.g" -> "PascalLexer.hpp"$ */
 #include <antlr/CommonToken.hpp>
 #include <antlr/InputBuffer.hpp>
 #include <antlr/BitSet.hpp>
 #include "PascalTokenTypes.hpp"
 #include <antlr/CharScanner.hpp>
-class CUSTOM_API PascalLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public PascalTokenTypes
+class PascalLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public PascalTokenTypes
 {
 #line 1067 "pascal.g"
 

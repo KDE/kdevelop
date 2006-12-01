@@ -1,4 +1,4 @@
-/* $ANTLR 2.7.7 (20061129): "java.g" -> "JavaLexer.cpp"$ */
+/* $ANTLR 2.7.2: "java.g" -> "JavaLexer.cpp"$ */
 #include "JavaLexer.hpp"
 #include <antlr/CharBuffer.hpp>
 #include <antlr/TokenStreamException.hpp>
@@ -94,311 +94,311 @@ ANTLR_USE_NAMESPACE(antlr)RefToken JavaLexer::nextToken()
 		resetText();
 		try {   // for lexical and char stream error handling
 			switch ( LA(1)) {
-			case 0x3f /* '?' */ :
+			case static_cast<unsigned char>('?'):
 			{
 				mQUESTION(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x28 /* '(' */ :
+			case static_cast<unsigned char>('('):
 			{
 				mLPAREN(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x29 /* ')' */ :
+			case static_cast<unsigned char>(')'):
 			{
 				mRPAREN(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x5b /* '[' */ :
+			case static_cast<unsigned char>('['):
 			{
 				mLBRACK(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x5d /* ']' */ :
+			case static_cast<unsigned char>(']'):
 			{
 				mRBRACK(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x7b /* '{' */ :
+			case static_cast<unsigned char>('{'):
 			{
 				mLCURLY(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x7d /* '}' */ :
+			case static_cast<unsigned char>('}'):
 			{
 				mRCURLY(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x3a /* ':' */ :
+			case static_cast<unsigned char>(':'):
 			{
 				mCOLON(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x2c /* ',' */ :
+			case static_cast<unsigned char>(','):
 			{
 				mCOMMA(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x7e /* '~' */ :
+			case static_cast<unsigned char>('~'):
 			{
 				mBNOT(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x3b /* ';' */ :
+			case static_cast<unsigned char>(';'):
 			{
 				mSEMI(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x9 /* '\t' */ :
-			case 0xa /* '\n' */ :
-			case 0xc /* '\14' */ :
-			case 0xd /* '\r' */ :
-			case 0x20 /* ' ' */ :
+			case static_cast<unsigned char>('\t'):
+			case static_cast<unsigned char>('\n'):
+			case static_cast<unsigned char>('\14'):
+			case static_cast<unsigned char>('\r'):
+			case static_cast<unsigned char>(' '):
 			{
 				mWS(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x27 /* '\'' */ :
+			case static_cast<unsigned char>('\''):
 			{
 				mCHAR_LITERAL(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x22 /* '\"' */ :
+			case static_cast<unsigned char>('"'):
 			{
 				mSTRING_LITERAL(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x24 /* '$' */ :
-			case 0x41 /* 'A' */ :
-			case 0x42 /* 'B' */ :
-			case 0x43 /* 'C' */ :
-			case 0x44 /* 'D' */ :
-			case 0x45 /* 'E' */ :
-			case 0x46 /* 'F' */ :
-			case 0x47 /* 'G' */ :
-			case 0x48 /* 'H' */ :
-			case 0x49 /* 'I' */ :
-			case 0x4a /* 'J' */ :
-			case 0x4b /* 'K' */ :
-			case 0x4c /* 'L' */ :
-			case 0x4d /* 'M' */ :
-			case 0x4e /* 'N' */ :
-			case 0x4f /* 'O' */ :
-			case 0x50 /* 'P' */ :
-			case 0x51 /* 'Q' */ :
-			case 0x52 /* 'R' */ :
-			case 0x53 /* 'S' */ :
-			case 0x54 /* 'T' */ :
-			case 0x55 /* 'U' */ :
-			case 0x56 /* 'V' */ :
-			case 0x57 /* 'W' */ :
-			case 0x58 /* 'X' */ :
-			case 0x59 /* 'Y' */ :
-			case 0x5a /* 'Z' */ :
-			case 0x5f /* '_' */ :
-			case 0x61 /* 'a' */ :
-			case 0x62 /* 'b' */ :
-			case 0x63 /* 'c' */ :
-			case 0x64 /* 'd' */ :
-			case 0x65 /* 'e' */ :
-			case 0x66 /* 'f' */ :
-			case 0x67 /* 'g' */ :
-			case 0x68 /* 'h' */ :
-			case 0x69 /* 'i' */ :
-			case 0x6a /* 'j' */ :
-			case 0x6b /* 'k' */ :
-			case 0x6c /* 'l' */ :
-			case 0x6d /* 'm' */ :
-			case 0x6e /* 'n' */ :
-			case 0x6f /* 'o' */ :
-			case 0x70 /* 'p' */ :
-			case 0x71 /* 'q' */ :
-			case 0x72 /* 'r' */ :
-			case 0x73 /* 's' */ :
-			case 0x74 /* 't' */ :
-			case 0x75 /* 'u' */ :
-			case 0x76 /* 'v' */ :
-			case 0x77 /* 'w' */ :
-			case 0x78 /* 'x' */ :
-			case 0x79 /* 'y' */ :
-			case 0x7a /* 'z' */ :
+			case static_cast<unsigned char>('$'):
+			case static_cast<unsigned char>('A'):
+			case static_cast<unsigned char>('B'):
+			case static_cast<unsigned char>('C'):
+			case static_cast<unsigned char>('D'):
+			case static_cast<unsigned char>('E'):
+			case static_cast<unsigned char>('F'):
+			case static_cast<unsigned char>('G'):
+			case static_cast<unsigned char>('H'):
+			case static_cast<unsigned char>('I'):
+			case static_cast<unsigned char>('J'):
+			case static_cast<unsigned char>('K'):
+			case static_cast<unsigned char>('L'):
+			case static_cast<unsigned char>('M'):
+			case static_cast<unsigned char>('N'):
+			case static_cast<unsigned char>('O'):
+			case static_cast<unsigned char>('P'):
+			case static_cast<unsigned char>('Q'):
+			case static_cast<unsigned char>('R'):
+			case static_cast<unsigned char>('S'):
+			case static_cast<unsigned char>('T'):
+			case static_cast<unsigned char>('U'):
+			case static_cast<unsigned char>('V'):
+			case static_cast<unsigned char>('W'):
+			case static_cast<unsigned char>('X'):
+			case static_cast<unsigned char>('Y'):
+			case static_cast<unsigned char>('Z'):
+			case static_cast<unsigned char>('_'):
+			case static_cast<unsigned char>('a'):
+			case static_cast<unsigned char>('b'):
+			case static_cast<unsigned char>('c'):
+			case static_cast<unsigned char>('d'):
+			case static_cast<unsigned char>('e'):
+			case static_cast<unsigned char>('f'):
+			case static_cast<unsigned char>('g'):
+			case static_cast<unsigned char>('h'):
+			case static_cast<unsigned char>('i'):
+			case static_cast<unsigned char>('j'):
+			case static_cast<unsigned char>('k'):
+			case static_cast<unsigned char>('l'):
+			case static_cast<unsigned char>('m'):
+			case static_cast<unsigned char>('n'):
+			case static_cast<unsigned char>('o'):
+			case static_cast<unsigned char>('p'):
+			case static_cast<unsigned char>('q'):
+			case static_cast<unsigned char>('r'):
+			case static_cast<unsigned char>('s'):
+			case static_cast<unsigned char>('t'):
+			case static_cast<unsigned char>('u'):
+			case static_cast<unsigned char>('v'):
+			case static_cast<unsigned char>('w'):
+			case static_cast<unsigned char>('x'):
+			case static_cast<unsigned char>('y'):
+			case static_cast<unsigned char>('z'):
 			{
 				mIDENT(true);
 				theRetToken=_returnToken;
 				break;
 			}
-			case 0x2e /* '.' */ :
-			case 0x30 /* '0' */ :
-			case 0x31 /* '1' */ :
-			case 0x32 /* '2' */ :
-			case 0x33 /* '3' */ :
-			case 0x34 /* '4' */ :
-			case 0x35 /* '5' */ :
-			case 0x36 /* '6' */ :
-			case 0x37 /* '7' */ :
-			case 0x38 /* '8' */ :
-			case 0x39 /* '9' */ :
+			case static_cast<unsigned char>('.'):
+			case static_cast<unsigned char>('0'):
+			case static_cast<unsigned char>('1'):
+			case static_cast<unsigned char>('2'):
+			case static_cast<unsigned char>('3'):
+			case static_cast<unsigned char>('4'):
+			case static_cast<unsigned char>('5'):
+			case static_cast<unsigned char>('6'):
+			case static_cast<unsigned char>('7'):
+			case static_cast<unsigned char>('8'):
+			case static_cast<unsigned char>('9'):
 			{
 				mNUM_INT(true);
 				theRetToken=_returnToken;
 				break;
 			}
 			default:
-				if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3e /* '>' */ ) && (LA(3) == 0x3e /* '>' */ ) && (LA(4) == 0x3d /* '=' */ )) {
+				if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('>')) && (LA(3) == static_cast<unsigned char>('>')) && (LA(4) == static_cast<unsigned char>('='))) {
 					mBSR_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3e /* '>' */ ) && (LA(3) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('>')) && (LA(3) == static_cast<unsigned char>('='))) {
 					mSR_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3e /* '>' */ ) && (LA(3) == 0x3e /* '>' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('>')) && (LA(3) == static_cast<unsigned char>('>')) && (true)) {
 					mBSR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3c /* '<' */ ) && (LA(3) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('<')) && (LA(3) == static_cast<unsigned char>('='))) {
 					mSL_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3d /* '=' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('=')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mEQUAL(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x21 /* '!' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('!')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mNOT_EQUAL(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2f /* '/' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mDIV_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2b /* '+' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('+')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mPLUS_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2b /* '+' */ ) && (LA(2) == 0x2b /* '+' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('+')) && (LA(2) == static_cast<unsigned char>('+'))) {
 					mINC(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2d /* '-' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('-')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mMINUS_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2d /* '-' */ ) && (LA(2) == 0x2d /* '-' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('-')) && (LA(2) == static_cast<unsigned char>('-'))) {
 					mDEC(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2a /* '*' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('*')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mSTAR_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x25 /* '%' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('%')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mMOD_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3e /* '>' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('>')) && (true)) {
 					mSR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3e /* '>' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('>')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mGE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3c /* '<' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('<')) && (true)) {
 					mSL(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3c /* '<' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('<')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mLE(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x5e /* '^' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('^')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mBXOR_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x7c /* '|' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('|')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mBOR_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x7c /* '|' */ ) && (LA(2) == 0x7c /* '|' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('|')) && (LA(2) == static_cast<unsigned char>('|'))) {
 					mLOR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x26 /* '&' */ ) && (LA(2) == 0x3d /* '=' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('&')) && (LA(2) == static_cast<unsigned char>('='))) {
 					mBAND_ASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x26 /* '&' */ ) && (LA(2) == 0x26 /* '&' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('&')) && (LA(2) == static_cast<unsigned char>('&'))) {
 					mLAND(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2f /* '/' */ ) && (LA(2) == 0x2f /* '/' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (LA(2) == static_cast<unsigned char>('/'))) {
 					mSL_COMMENT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2f /* '/' */ ) && (LA(2) == 0x2a /* '*' */ )) {
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (LA(2) == static_cast<unsigned char>('*'))) {
 					mML_COMMENT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3d /* '=' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('=')) && (true)) {
 					mASSIGN(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x21 /* '!' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('!')) && (true)) {
 					mLNOT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2f /* '/' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (true)) {
 					mDIV(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2b /* '+' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('+')) && (true)) {
 					mPLUS(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2d /* '-' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('-')) && (true)) {
 					mMINUS(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x2a /* '*' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('*')) && (true)) {
 					mSTAR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x25 /* '%' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('%')) && (true)) {
 					mMOD(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3e /* '>' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('>')) && (true)) {
 					mGT(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x3c /* '<' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('<')) && (true)) {
 					mLT_(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x5e /* '^' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('^')) && (true)) {
 					mBXOR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x7c /* '|' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('|')) && (true)) {
 					mBOR(true);
 					theRetToken=_returnToken;
 				}
-				else if ((LA(1) == 0x26 /* '&' */ ) && (true)) {
+				else if ((LA(1) == static_cast<unsigned char>('&')) && (true)) {
 					mBAND(true);
 					theRetToken=_returnToken;
 				}
@@ -432,11 +432,11 @@ tryAgain:;
 }
 
 void JavaLexer::mQUESTION(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = QUESTION;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('?' /* charlit */ );
+	match(static_cast<unsigned char>('?'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -446,11 +446,11 @@ void JavaLexer::mQUESTION(bool _createToken) {
 }
 
 void JavaLexer::mLPAREN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LPAREN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('(' /* charlit */ );
+	match(static_cast<unsigned char>('('));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -460,11 +460,11 @@ void JavaLexer::mLPAREN(bool _createToken) {
 }
 
 void JavaLexer::mRPAREN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = RPAREN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(')' /* charlit */ );
+	match(static_cast<unsigned char>(')'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -474,11 +474,11 @@ void JavaLexer::mRPAREN(bool _createToken) {
 }
 
 void JavaLexer::mLBRACK(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LBRACK;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('[' /* charlit */ );
+	match(static_cast<unsigned char>('['));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -488,11 +488,11 @@ void JavaLexer::mLBRACK(bool _createToken) {
 }
 
 void JavaLexer::mRBRACK(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = RBRACK;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(']' /* charlit */ );
+	match(static_cast<unsigned char>(']'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -502,11 +502,11 @@ void JavaLexer::mRBRACK(bool _createToken) {
 }
 
 void JavaLexer::mLCURLY(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LCURLY;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('{' /* charlit */ );
+	match(static_cast<unsigned char>('{'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -516,11 +516,11 @@ void JavaLexer::mLCURLY(bool _createToken) {
 }
 
 void JavaLexer::mRCURLY(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = RCURLY;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('}' /* charlit */ );
+	match(static_cast<unsigned char>('}'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -530,11 +530,11 @@ void JavaLexer::mRCURLY(bool _createToken) {
 }
 
 void JavaLexer::mCOLON(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = COLON;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(':' /* charlit */ );
+	match(static_cast<unsigned char>(':'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -544,11 +544,11 @@ void JavaLexer::mCOLON(bool _createToken) {
 }
 
 void JavaLexer::mCOMMA(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = COMMA;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(',' /* charlit */ );
+	match(static_cast<unsigned char>(','));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -558,11 +558,11 @@ void JavaLexer::mCOMMA(bool _createToken) {
 }
 
 void JavaLexer::mASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('=' /* charlit */ );
+	match(static_cast<unsigned char>('='));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -572,9 +572,9 @@ void JavaLexer::mASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mEQUAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = EQUAL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("==");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -586,11 +586,11 @@ void JavaLexer::mEQUAL(bool _createToken) {
 }
 
 void JavaLexer::mLNOT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LNOT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('!' /* charlit */ );
+	match(static_cast<unsigned char>('!'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -600,11 +600,11 @@ void JavaLexer::mLNOT(bool _createToken) {
 }
 
 void JavaLexer::mBNOT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BNOT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('~' /* charlit */ );
+	match(static_cast<unsigned char>('~'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -614,9 +614,9 @@ void JavaLexer::mBNOT(bool _createToken) {
 }
 
 void JavaLexer::mNOT_EQUAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = NOT_EQUAL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("!=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -628,11 +628,11 @@ void JavaLexer::mNOT_EQUAL(bool _createToken) {
 }
 
 void JavaLexer::mDIV(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = DIV;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('/' /* charlit */ );
+	match(static_cast<unsigned char>('/'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -642,9 +642,9 @@ void JavaLexer::mDIV(bool _createToken) {
 }
 
 void JavaLexer::mDIV_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = DIV_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("/=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -656,11 +656,11 @@ void JavaLexer::mDIV_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mPLUS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = PLUS;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('+' /* charlit */ );
+	match(static_cast<unsigned char>('+'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -670,9 +670,9 @@ void JavaLexer::mPLUS(bool _createToken) {
 }
 
 void JavaLexer::mPLUS_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = PLUS_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("+=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -684,9 +684,9 @@ void JavaLexer::mPLUS_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mINC(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = INC;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("++");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -698,11 +698,11 @@ void JavaLexer::mINC(bool _createToken) {
 }
 
 void JavaLexer::mMINUS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = MINUS;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('-' /* charlit */ );
+	match(static_cast<unsigned char>('-'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -712,9 +712,9 @@ void JavaLexer::mMINUS(bool _createToken) {
 }
 
 void JavaLexer::mMINUS_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = MINUS_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("-=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -726,9 +726,9 @@ void JavaLexer::mMINUS_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mDEC(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = DEC;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("--");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -740,11 +740,11 @@ void JavaLexer::mDEC(bool _createToken) {
 }
 
 void JavaLexer::mSTAR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = STAR;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('*' /* charlit */ );
+	match(static_cast<unsigned char>('*'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -754,9 +754,9 @@ void JavaLexer::mSTAR(bool _createToken) {
 }
 
 void JavaLexer::mSTAR_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = STAR_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("*=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -768,11 +768,11 @@ void JavaLexer::mSTAR_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mMOD(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = MOD;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('%' /* charlit */ );
+	match(static_cast<unsigned char>('%'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -782,9 +782,9 @@ void JavaLexer::mMOD(bool _createToken) {
 }
 
 void JavaLexer::mMOD_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = MOD_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("%=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -796,9 +796,9 @@ void JavaLexer::mMOD_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mSR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SR;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(">>");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -810,9 +810,9 @@ void JavaLexer::mSR(bool _createToken) {
 }
 
 void JavaLexer::mSR_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SR_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(">>=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -824,9 +824,9 @@ void JavaLexer::mSR_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mBSR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BSR;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(">>>");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -838,9 +838,9 @@ void JavaLexer::mBSR(bool _createToken) {
 }
 
 void JavaLexer::mBSR_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BSR_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(">>>=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -852,9 +852,9 @@ void JavaLexer::mBSR_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mGE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = GE;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(">=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -866,9 +866,9 @@ void JavaLexer::mGE(bool _createToken) {
 }
 
 void JavaLexer::mGT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = GT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match(">");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -880,9 +880,9 @@ void JavaLexer::mGT(bool _createToken) {
 }
 
 void JavaLexer::mSL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("<<");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -894,9 +894,9 @@ void JavaLexer::mSL(bool _createToken) {
 }
 
 void JavaLexer::mSL_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SL_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("<<=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -908,9 +908,9 @@ void JavaLexer::mSL_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mLE(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LE;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("<=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -922,11 +922,11 @@ void JavaLexer::mLE(bool _createToken) {
 }
 
 void JavaLexer::mLT_(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LT_;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('<' /* charlit */ );
+	match(static_cast<unsigned char>('<'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -936,11 +936,11 @@ void JavaLexer::mLT_(bool _createToken) {
 }
 
 void JavaLexer::mBXOR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BXOR;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('^' /* charlit */ );
+	match(static_cast<unsigned char>('^'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -950,9 +950,9 @@ void JavaLexer::mBXOR(bool _createToken) {
 }
 
 void JavaLexer::mBXOR_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BXOR_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("^=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -964,11 +964,11 @@ void JavaLexer::mBXOR_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mBOR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BOR;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('|' /* charlit */ );
+	match(static_cast<unsigned char>('|'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -978,9 +978,9 @@ void JavaLexer::mBOR(bool _createToken) {
 }
 
 void JavaLexer::mBOR_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BOR_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("|=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -992,9 +992,9 @@ void JavaLexer::mBOR_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mLOR(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LOR;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("||");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1006,11 +1006,11 @@ void JavaLexer::mLOR(bool _createToken) {
 }
 
 void JavaLexer::mBAND(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BAND;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('&' /* charlit */ );
+	match(static_cast<unsigned char>('&'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -1020,9 +1020,9 @@ void JavaLexer::mBAND(bool _createToken) {
 }
 
 void JavaLexer::mBAND_ASSIGN(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = BAND_ASSIGN;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("&=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1034,9 +1034,9 @@ void JavaLexer::mBAND_ASSIGN(bool _createToken) {
 }
 
 void JavaLexer::mLAND(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = LAND;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("&&");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1048,11 +1048,11 @@ void JavaLexer::mLAND(bool _createToken) {
 }
 
 void JavaLexer::mSEMI(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SEMI;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match(';' /* charlit */ );
+	match(static_cast<unsigned char>(';'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -1062,41 +1062,41 @@ void JavaLexer::mSEMI(bool _createToken) {
 }
 
 void JavaLexer::mWS(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = WS;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{ // ( ... )+
 	int _cnt245=0;
 	for (;;) {
 		switch ( LA(1)) {
-		case 0x20 /* ' ' */ :
+		case static_cast<unsigned char>(' '):
 		{
-			match(' ' /* charlit */ );
+			match(static_cast<unsigned char>(' '));
 			break;
 		}
-		case 0x9 /* '\t' */ :
+		case static_cast<unsigned char>('\t'):
 		{
-			match('\t' /* charlit */ );
+			match(static_cast<unsigned char>('\t'));
 			break;
 		}
-		case 0xc /* '\14' */ :
+		case static_cast<unsigned char>('\14'):
 		{
-			match('\14' /* charlit */ );
+			match(static_cast<unsigned char>('\14'));
 			break;
 		}
-		case 0xa /* '\n' */ :
-		case 0xd /* '\r' */ :
+		case static_cast<unsigned char>('\n'):
+		case static_cast<unsigned char>('\r'):
 		{
 			{
-			if ((LA(1) == 0xd /* '\r' */ ) && (LA(2) == 0xa /* '\n' */ ) && (true) && (true)) {
+			if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && (true) && (true)) {
 				match("\r\n");
 			}
-			else if ((LA(1) == 0xd /* '\r' */ ) && (true) && (true) && (true)) {
-				match('\r' /* charlit */ );
+			else if ((LA(1) == static_cast<unsigned char>('\r')) && (true) && (true) && (true)) {
+				match(static_cast<unsigned char>('\r'));
 			}
-			else if ((LA(1) == 0xa /* '\n' */ )) {
-				match('\n' /* charlit */ );
+			else if ((LA(1) == static_cast<unsigned char>('\n'))) {
+				match(static_cast<unsigned char>('\n'));
 			}
 			else {
 				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());
@@ -1129,9 +1129,9 @@ void JavaLexer::mWS(bool _createToken) {
 }
 
 void JavaLexer::mSL_COMMENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = SL_COMMENT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("//");
 	{ // ( ... )*
@@ -1150,17 +1150,17 @@ void JavaLexer::mSL_COMMENT(bool _createToken) {
 	} // ( ... )*
 	{
 	switch ( LA(1)) {
-	case 0xa /* '\n' */ :
+	case static_cast<unsigned char>('\n'):
 	{
-		match('\n' /* charlit */ );
+		match(static_cast<unsigned char>('\n'));
 		break;
 	}
-	case 0xd /* '\r' */ :
+	case static_cast<unsigned char>('\r'):
 	{
-		match('\r' /* charlit */ );
+		match(static_cast<unsigned char>('\r'));
 		{
-		if ((LA(1) == 0xa /* '\n' */ )) {
-			match('\n' /* charlit */ );
+		if ((LA(1) == static_cast<unsigned char>('\n'))) {
+			match(static_cast<unsigned char>('\n'));
 		}
 		else {
 		}
@@ -1189,31 +1189,31 @@ void JavaLexer::mSL_COMMENT(bool _createToken) {
 }
 
 void JavaLexer::mML_COMMENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = ML_COMMENT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	match("/*");
 	{ // ( ... )*
 	for (;;) {
-		if ((LA(1) == 0xd /* '\r' */ ) && (LA(2) == 0xa /* '\n' */ ) && ((LA(3) >= 0x3 /* '\3' */  && LA(3) <= 0xff)) && ((LA(4) >= 0x3 /* '\3' */  && LA(4) <= 0xff))) {
-			match('\r' /* charlit */ );
-			match('\n' /* charlit */ );
+		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\3') && LA(3) <= static_cast<unsigned char>('\377'))) && ((LA(4) >= static_cast<unsigned char>('\3') && LA(4) <= static_cast<unsigned char>('\377')))) {
+			match(static_cast<unsigned char>('\r'));
+			match(static_cast<unsigned char>('\n'));
 #line 1167 "java.g"
 			newline();
 #line 1205 "JavaLexer.cpp"
 		}
-		else if (((LA(1) == 0x2a /* '*' */ ) && ((LA(2) >= 0x3 /* '\3' */  && LA(2) <= 0xff)) && ((LA(3) >= 0x3 /* '\3' */  && LA(3) <= 0xff)))&&( LA(2)!='/' )) {
-			match('*' /* charlit */ );
+		else if (((LA(1) == static_cast<unsigned char>('*')) && ((LA(2) >= static_cast<unsigned char>('\3') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\3') && LA(3) <= static_cast<unsigned char>('\377'))))&&( LA(2)!='/' )) {
+			match(static_cast<unsigned char>('*'));
 		}
-		else if ((LA(1) == 0xd /* '\r' */ ) && ((LA(2) >= 0x3 /* '\3' */  && LA(2) <= 0xff)) && ((LA(3) >= 0x3 /* '\3' */  && LA(3) <= 0xff)) && (true)) {
-			match('\r' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\3') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\3') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
+			match(static_cast<unsigned char>('\r'));
 #line 1168 "java.g"
 			newline();
 #line 1214 "JavaLexer.cpp"
 		}
-		else if ((LA(1) == 0xa /* '\n' */ )) {
-			match('\n' /* charlit */ );
+		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
+			match(static_cast<unsigned char>('\n'));
 #line 1169 "java.g"
 			newline();
 #line 1220 "JavaLexer.cpp"
@@ -1243,24 +1243,24 @@ void JavaLexer::mML_COMMENT(bool _createToken) {
 }
 
 void JavaLexer::mCHAR_LITERAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = CHAR_LITERAL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('\'' /* charlit */ );
+	match(static_cast<unsigned char>('\''));
 	{
-	if ((LA(1) == 0x5c /* '\\' */ )) {
+	if ((LA(1) == static_cast<unsigned char>('\\'))) {
 		mESC(false);
 	}
 	else if ((_tokenSet_2.member(LA(1)))) {
-		matchNot('\'' /* charlit */ );
+		matchNot(static_cast<unsigned char>('\''));
 	}
 	else {
 		throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());
 	}
 	
 	}
-	match('\'' /* charlit */ );
+	match(static_cast<unsigned char>('\''));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -1270,60 +1270,60 @@ void JavaLexer::mCHAR_LITERAL(bool _createToken) {
 }
 
 void JavaLexer::mESC(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = ESC;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('\\' /* charlit */ );
+	match(static_cast<unsigned char>('\\'));
 	{
 	switch ( LA(1)) {
-	case 0x6e /* 'n' */ :
+	case static_cast<unsigned char>('n'):
 	{
-		match('n' /* charlit */ );
+		match(static_cast<unsigned char>('n'));
 		break;
 	}
-	case 0x72 /* 'r' */ :
+	case static_cast<unsigned char>('r'):
 	{
-		match('r' /* charlit */ );
+		match(static_cast<unsigned char>('r'));
 		break;
 	}
-	case 0x74 /* 't' */ :
+	case static_cast<unsigned char>('t'):
 	{
-		match('t' /* charlit */ );
+		match(static_cast<unsigned char>('t'));
 		break;
 	}
-	case 0x62 /* 'b' */ :
+	case static_cast<unsigned char>('b'):
 	{
-		match('b' /* charlit */ );
+		match(static_cast<unsigned char>('b'));
 		break;
 	}
-	case 0x66 /* 'f' */ :
+	case static_cast<unsigned char>('f'):
 	{
-		match('f' /* charlit */ );
+		match(static_cast<unsigned char>('f'));
 		break;
 	}
-	case 0x22 /* '\"' */ :
+	case static_cast<unsigned char>('"'):
 	{
-		match('\"' /* charlit */ );
+		match(static_cast<unsigned char>('"'));
 		break;
 	}
-	case 0x27 /* '\'' */ :
+	case static_cast<unsigned char>('\''):
 	{
-		match('\'' /* charlit */ );
+		match(static_cast<unsigned char>('\''));
 		break;
 	}
-	case 0x5c /* '\\' */ :
+	case static_cast<unsigned char>('\\'):
 	{
-		match('\\' /* charlit */ );
+		match(static_cast<unsigned char>('\\'));
 		break;
 	}
-	case 0x75 /* 'u' */ :
+	case static_cast<unsigned char>('u'):
 	{
 		{ // ( ... )+
 		int _cnt265=0;
 		for (;;) {
-			if ((LA(1) == 0x75 /* 'u' */ )) {
-				match('u' /* charlit */ );
+			if ((LA(1) == static_cast<unsigned char>('u'))) {
+				match(static_cast<unsigned char>('u'));
 			}
 			else {
 				if ( _cnt265>=1 ) { goto _loop265; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
@@ -1339,20 +1339,20 @@ void JavaLexer::mESC(bool _createToken) {
 		mHEX_DIGIT(false);
 		break;
 	}
-	case 0x30 /* '0' */ :
-	case 0x31 /* '1' */ :
-	case 0x32 /* '2' */ :
-	case 0x33 /* '3' */ :
+	case static_cast<unsigned char>('0'):
+	case static_cast<unsigned char>('1'):
+	case static_cast<unsigned char>('2'):
+	case static_cast<unsigned char>('3'):
 	{
-		matchRange('0','3');
+		matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('3'));
 		{
-		if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x37 /* '7' */ )) && ((LA(2) >= 0x3 /* '\3' */  && LA(2) <= 0xff)) && (true) && (true)) {
-			matchRange('0','7');
+		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('7'))) && ((LA(2) >= static_cast<unsigned char>('\3') && LA(2) <= static_cast<unsigned char>('\377'))) && (true) && (true)) {
+			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('7'));
 			{
-			if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x37 /* '7' */ )) && ((LA(2) >= 0x3 /* '\3' */  && LA(2) <= 0xff)) && (true) && (true)) {
-				matchRange('0','7');
+			if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('7'))) && ((LA(2) >= static_cast<unsigned char>('\3') && LA(2) <= static_cast<unsigned char>('\377'))) && (true) && (true)) {
+				matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('7'));
 			}
-			else if (((LA(1) >= 0x3 /* '\3' */  && LA(1) <= 0xff)) && (true) && (true) && (true)) {
+			else if (((LA(1) >= static_cast<unsigned char>('\3') && LA(1) <= static_cast<unsigned char>('\377'))) && (true) && (true) && (true)) {
 			}
 			else {
 				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());
@@ -1360,7 +1360,7 @@ void JavaLexer::mESC(bool _createToken) {
 			
 			}
 		}
-		else if (((LA(1) >= 0x3 /* '\3' */  && LA(1) <= 0xff)) && (true) && (true) && (true)) {
+		else if (((LA(1) >= static_cast<unsigned char>('\3') && LA(1) <= static_cast<unsigned char>('\377'))) && (true) && (true) && (true)) {
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());
@@ -1369,17 +1369,17 @@ void JavaLexer::mESC(bool _createToken) {
 		}
 		break;
 	}
-	case 0x34 /* '4' */ :
-	case 0x35 /* '5' */ :
-	case 0x36 /* '6' */ :
-	case 0x37 /* '7' */ :
+	case static_cast<unsigned char>('4'):
+	case static_cast<unsigned char>('5'):
+	case static_cast<unsigned char>('6'):
+	case static_cast<unsigned char>('7'):
 	{
-		matchRange('4','7');
+		matchRange(static_cast<unsigned char>('4'),static_cast<unsigned char>('7'));
 		{
-		if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x37 /* '7' */ )) && ((LA(2) >= 0x3 /* '\3' */  && LA(2) <= 0xff)) && (true) && (true)) {
-			matchRange('0','7');
+		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('7'))) && ((LA(2) >= static_cast<unsigned char>('\3') && LA(2) <= static_cast<unsigned char>('\377'))) && (true) && (true)) {
+			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('7'));
 		}
-		else if (((LA(1) >= 0x3 /* '\3' */  && LA(1) <= 0xff)) && (true) && (true) && (true)) {
+		else if (((LA(1) >= static_cast<unsigned char>('\3') && LA(1) <= static_cast<unsigned char>('\377'))) && (true) && (true) && (true)) {
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());
@@ -1403,14 +1403,14 @@ void JavaLexer::mESC(bool _createToken) {
 }
 
 void JavaLexer::mSTRING_LITERAL(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = STRING_LITERAL;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	match('\"' /* charlit */ );
+	match(static_cast<unsigned char>('"'));
 	{ // ( ... )*
 	for (;;) {
-		if ((LA(1) == 0x5c /* '\\' */ )) {
+		if ((LA(1) == static_cast<unsigned char>('\\'))) {
 			mESC(false);
 		}
 		else if ((_tokenSet_3.member(LA(1)))) {
@@ -1425,7 +1425,7 @@ void JavaLexer::mSTRING_LITERAL(bool _createToken) {
 	}
 	_loop261:;
 	} // ( ... )*
-	match('\"' /* charlit */ );
+	match(static_cast<unsigned char>('"'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -1435,44 +1435,44 @@ void JavaLexer::mSTRING_LITERAL(bool _createToken) {
 }
 
 void JavaLexer::mHEX_DIGIT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = HEX_DIGIT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{
 	switch ( LA(1)) {
-	case 0x30 /* '0' */ :
-	case 0x31 /* '1' */ :
-	case 0x32 /* '2' */ :
-	case 0x33 /* '3' */ :
-	case 0x34 /* '4' */ :
-	case 0x35 /* '5' */ :
-	case 0x36 /* '6' */ :
-	case 0x37 /* '7' */ :
-	case 0x38 /* '8' */ :
-	case 0x39 /* '9' */ :
+	case static_cast<unsigned char>('0'):
+	case static_cast<unsigned char>('1'):
+	case static_cast<unsigned char>('2'):
+	case static_cast<unsigned char>('3'):
+	case static_cast<unsigned char>('4'):
+	case static_cast<unsigned char>('5'):
+	case static_cast<unsigned char>('6'):
+	case static_cast<unsigned char>('7'):
+	case static_cast<unsigned char>('8'):
+	case static_cast<unsigned char>('9'):
 	{
-		matchRange('0','9');
+		matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		break;
 	}
-	case 0x41 /* 'A' */ :
-	case 0x42 /* 'B' */ :
-	case 0x43 /* 'C' */ :
-	case 0x44 /* 'D' */ :
-	case 0x45 /* 'E' */ :
-	case 0x46 /* 'F' */ :
+	case static_cast<unsigned char>('A'):
+	case static_cast<unsigned char>('B'):
+	case static_cast<unsigned char>('C'):
+	case static_cast<unsigned char>('D'):
+	case static_cast<unsigned char>('E'):
+	case static_cast<unsigned char>('F'):
 	{
-		matchRange('A','F');
+		matchRange(static_cast<unsigned char>('A'),static_cast<unsigned char>('F'));
 		break;
 	}
-	case 0x61 /* 'a' */ :
-	case 0x62 /* 'b' */ :
-	case 0x63 /* 'c' */ :
-	case 0x64 /* 'd' */ :
-	case 0x65 /* 'e' */ :
-	case 0x66 /* 'f' */ :
+	case static_cast<unsigned char>('a'):
+	case static_cast<unsigned char>('b'):
+	case static_cast<unsigned char>('c'):
+	case static_cast<unsigned char>('d'):
+	case static_cast<unsigned char>('e'):
+	case static_cast<unsigned char>('f'):
 	{
-		matchRange('a','f');
+		matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('f'));
 		break;
 	}
 	default:
@@ -1490,11 +1490,11 @@ void JavaLexer::mHEX_DIGIT(bool _createToken) {
 }
 
 void JavaLexer::mVOCAB(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = VOCAB;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
-	matchRange('\3',static_cast<unsigned char>('\377'));
+	matchRange(static_cast<unsigned char>('\3'),static_cast<unsigned char>('\377'));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -1504,80 +1504,80 @@ void JavaLexer::mVOCAB(bool _createToken) {
 }
 
 void JavaLexer::mIDENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = IDENT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{
 	switch ( LA(1)) {
-	case 0x61 /* 'a' */ :
-	case 0x62 /* 'b' */ :
-	case 0x63 /* 'c' */ :
-	case 0x64 /* 'd' */ :
-	case 0x65 /* 'e' */ :
-	case 0x66 /* 'f' */ :
-	case 0x67 /* 'g' */ :
-	case 0x68 /* 'h' */ :
-	case 0x69 /* 'i' */ :
-	case 0x6a /* 'j' */ :
-	case 0x6b /* 'k' */ :
-	case 0x6c /* 'l' */ :
-	case 0x6d /* 'm' */ :
-	case 0x6e /* 'n' */ :
-	case 0x6f /* 'o' */ :
-	case 0x70 /* 'p' */ :
-	case 0x71 /* 'q' */ :
-	case 0x72 /* 'r' */ :
-	case 0x73 /* 's' */ :
-	case 0x74 /* 't' */ :
-	case 0x75 /* 'u' */ :
-	case 0x76 /* 'v' */ :
-	case 0x77 /* 'w' */ :
-	case 0x78 /* 'x' */ :
-	case 0x79 /* 'y' */ :
-	case 0x7a /* 'z' */ :
+	case static_cast<unsigned char>('a'):
+	case static_cast<unsigned char>('b'):
+	case static_cast<unsigned char>('c'):
+	case static_cast<unsigned char>('d'):
+	case static_cast<unsigned char>('e'):
+	case static_cast<unsigned char>('f'):
+	case static_cast<unsigned char>('g'):
+	case static_cast<unsigned char>('h'):
+	case static_cast<unsigned char>('i'):
+	case static_cast<unsigned char>('j'):
+	case static_cast<unsigned char>('k'):
+	case static_cast<unsigned char>('l'):
+	case static_cast<unsigned char>('m'):
+	case static_cast<unsigned char>('n'):
+	case static_cast<unsigned char>('o'):
+	case static_cast<unsigned char>('p'):
+	case static_cast<unsigned char>('q'):
+	case static_cast<unsigned char>('r'):
+	case static_cast<unsigned char>('s'):
+	case static_cast<unsigned char>('t'):
+	case static_cast<unsigned char>('u'):
+	case static_cast<unsigned char>('v'):
+	case static_cast<unsigned char>('w'):
+	case static_cast<unsigned char>('x'):
+	case static_cast<unsigned char>('y'):
+	case static_cast<unsigned char>('z'):
 	{
-		matchRange('a','z');
+		matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('z'));
 		break;
 	}
-	case 0x41 /* 'A' */ :
-	case 0x42 /* 'B' */ :
-	case 0x43 /* 'C' */ :
-	case 0x44 /* 'D' */ :
-	case 0x45 /* 'E' */ :
-	case 0x46 /* 'F' */ :
-	case 0x47 /* 'G' */ :
-	case 0x48 /* 'H' */ :
-	case 0x49 /* 'I' */ :
-	case 0x4a /* 'J' */ :
-	case 0x4b /* 'K' */ :
-	case 0x4c /* 'L' */ :
-	case 0x4d /* 'M' */ :
-	case 0x4e /* 'N' */ :
-	case 0x4f /* 'O' */ :
-	case 0x50 /* 'P' */ :
-	case 0x51 /* 'Q' */ :
-	case 0x52 /* 'R' */ :
-	case 0x53 /* 'S' */ :
-	case 0x54 /* 'T' */ :
-	case 0x55 /* 'U' */ :
-	case 0x56 /* 'V' */ :
-	case 0x57 /* 'W' */ :
-	case 0x58 /* 'X' */ :
-	case 0x59 /* 'Y' */ :
-	case 0x5a /* 'Z' */ :
+	case static_cast<unsigned char>('A'):
+	case static_cast<unsigned char>('B'):
+	case static_cast<unsigned char>('C'):
+	case static_cast<unsigned char>('D'):
+	case static_cast<unsigned char>('E'):
+	case static_cast<unsigned char>('F'):
+	case static_cast<unsigned char>('G'):
+	case static_cast<unsigned char>('H'):
+	case static_cast<unsigned char>('I'):
+	case static_cast<unsigned char>('J'):
+	case static_cast<unsigned char>('K'):
+	case static_cast<unsigned char>('L'):
+	case static_cast<unsigned char>('M'):
+	case static_cast<unsigned char>('N'):
+	case static_cast<unsigned char>('O'):
+	case static_cast<unsigned char>('P'):
+	case static_cast<unsigned char>('Q'):
+	case static_cast<unsigned char>('R'):
+	case static_cast<unsigned char>('S'):
+	case static_cast<unsigned char>('T'):
+	case static_cast<unsigned char>('U'):
+	case static_cast<unsigned char>('V'):
+	case static_cast<unsigned char>('W'):
+	case static_cast<unsigned char>('X'):
+	case static_cast<unsigned char>('Y'):
+	case static_cast<unsigned char>('Z'):
 	{
-		matchRange('A','Z');
+		matchRange(static_cast<unsigned char>('A'),static_cast<unsigned char>('Z'));
 		break;
 	}
-	case 0x5f /* '_' */ :
+	case static_cast<unsigned char>('_'):
 	{
-		match('_' /* charlit */ );
+		match(static_cast<unsigned char>('_'));
 		break;
 	}
-	case 0x24 /* '$' */ :
+	case static_cast<unsigned char>('$'):
 	{
-		match('$' /* charlit */ );
+		match(static_cast<unsigned char>('$'));
 		break;
 	}
 	default:
@@ -1589,88 +1589,88 @@ void JavaLexer::mIDENT(bool _createToken) {
 	{ // ( ... )*
 	for (;;) {
 		switch ( LA(1)) {
-		case 0x61 /* 'a' */ :
-		case 0x62 /* 'b' */ :
-		case 0x63 /* 'c' */ :
-		case 0x64 /* 'd' */ :
-		case 0x65 /* 'e' */ :
-		case 0x66 /* 'f' */ :
-		case 0x67 /* 'g' */ :
-		case 0x68 /* 'h' */ :
-		case 0x69 /* 'i' */ :
-		case 0x6a /* 'j' */ :
-		case 0x6b /* 'k' */ :
-		case 0x6c /* 'l' */ :
-		case 0x6d /* 'm' */ :
-		case 0x6e /* 'n' */ :
-		case 0x6f /* 'o' */ :
-		case 0x70 /* 'p' */ :
-		case 0x71 /* 'q' */ :
-		case 0x72 /* 'r' */ :
-		case 0x73 /* 's' */ :
-		case 0x74 /* 't' */ :
-		case 0x75 /* 'u' */ :
-		case 0x76 /* 'v' */ :
-		case 0x77 /* 'w' */ :
-		case 0x78 /* 'x' */ :
-		case 0x79 /* 'y' */ :
-		case 0x7a /* 'z' */ :
+		case static_cast<unsigned char>('a'):
+		case static_cast<unsigned char>('b'):
+		case static_cast<unsigned char>('c'):
+		case static_cast<unsigned char>('d'):
+		case static_cast<unsigned char>('e'):
+		case static_cast<unsigned char>('f'):
+		case static_cast<unsigned char>('g'):
+		case static_cast<unsigned char>('h'):
+		case static_cast<unsigned char>('i'):
+		case static_cast<unsigned char>('j'):
+		case static_cast<unsigned char>('k'):
+		case static_cast<unsigned char>('l'):
+		case static_cast<unsigned char>('m'):
+		case static_cast<unsigned char>('n'):
+		case static_cast<unsigned char>('o'):
+		case static_cast<unsigned char>('p'):
+		case static_cast<unsigned char>('q'):
+		case static_cast<unsigned char>('r'):
+		case static_cast<unsigned char>('s'):
+		case static_cast<unsigned char>('t'):
+		case static_cast<unsigned char>('u'):
+		case static_cast<unsigned char>('v'):
+		case static_cast<unsigned char>('w'):
+		case static_cast<unsigned char>('x'):
+		case static_cast<unsigned char>('y'):
+		case static_cast<unsigned char>('z'):
 		{
-			matchRange('a','z');
+			matchRange(static_cast<unsigned char>('a'),static_cast<unsigned char>('z'));
 			break;
 		}
-		case 0x41 /* 'A' */ :
-		case 0x42 /* 'B' */ :
-		case 0x43 /* 'C' */ :
-		case 0x44 /* 'D' */ :
-		case 0x45 /* 'E' */ :
-		case 0x46 /* 'F' */ :
-		case 0x47 /* 'G' */ :
-		case 0x48 /* 'H' */ :
-		case 0x49 /* 'I' */ :
-		case 0x4a /* 'J' */ :
-		case 0x4b /* 'K' */ :
-		case 0x4c /* 'L' */ :
-		case 0x4d /* 'M' */ :
-		case 0x4e /* 'N' */ :
-		case 0x4f /* 'O' */ :
-		case 0x50 /* 'P' */ :
-		case 0x51 /* 'Q' */ :
-		case 0x52 /* 'R' */ :
-		case 0x53 /* 'S' */ :
-		case 0x54 /* 'T' */ :
-		case 0x55 /* 'U' */ :
-		case 0x56 /* 'V' */ :
-		case 0x57 /* 'W' */ :
-		case 0x58 /* 'X' */ :
-		case 0x59 /* 'Y' */ :
-		case 0x5a /* 'Z' */ :
+		case static_cast<unsigned char>('A'):
+		case static_cast<unsigned char>('B'):
+		case static_cast<unsigned char>('C'):
+		case static_cast<unsigned char>('D'):
+		case static_cast<unsigned char>('E'):
+		case static_cast<unsigned char>('F'):
+		case static_cast<unsigned char>('G'):
+		case static_cast<unsigned char>('H'):
+		case static_cast<unsigned char>('I'):
+		case static_cast<unsigned char>('J'):
+		case static_cast<unsigned char>('K'):
+		case static_cast<unsigned char>('L'):
+		case static_cast<unsigned char>('M'):
+		case static_cast<unsigned char>('N'):
+		case static_cast<unsigned char>('O'):
+		case static_cast<unsigned char>('P'):
+		case static_cast<unsigned char>('Q'):
+		case static_cast<unsigned char>('R'):
+		case static_cast<unsigned char>('S'):
+		case static_cast<unsigned char>('T'):
+		case static_cast<unsigned char>('U'):
+		case static_cast<unsigned char>('V'):
+		case static_cast<unsigned char>('W'):
+		case static_cast<unsigned char>('X'):
+		case static_cast<unsigned char>('Y'):
+		case static_cast<unsigned char>('Z'):
 		{
-			matchRange('A','Z');
+			matchRange(static_cast<unsigned char>('A'),static_cast<unsigned char>('Z'));
 			break;
 		}
-		case 0x5f /* '_' */ :
+		case static_cast<unsigned char>('_'):
 		{
-			match('_' /* charlit */ );
+			match(static_cast<unsigned char>('_'));
 			break;
 		}
-		case 0x30 /* '0' */ :
-		case 0x31 /* '1' */ :
-		case 0x32 /* '2' */ :
-		case 0x33 /* '3' */ :
-		case 0x34 /* '4' */ :
-		case 0x35 /* '5' */ :
-		case 0x36 /* '6' */ :
-		case 0x37 /* '7' */ :
-		case 0x38 /* '8' */ :
-		case 0x39 /* '9' */ :
+		case static_cast<unsigned char>('0'):
+		case static_cast<unsigned char>('1'):
+		case static_cast<unsigned char>('2'):
+		case static_cast<unsigned char>('3'):
+		case static_cast<unsigned char>('4'):
+		case static_cast<unsigned char>('5'):
+		case static_cast<unsigned char>('6'):
+		case static_cast<unsigned char>('7'):
+		case static_cast<unsigned char>('8'):
+		case static_cast<unsigned char>('9'):
 		{
-			matchRange('0','9');
+			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 			break;
 		}
-		case 0x24 /* '$' */ :
+		case static_cast<unsigned char>('$'):
 		{
-			match('$' /* charlit */ );
+			match(static_cast<unsigned char>('$'));
 			break;
 		}
 		default:
@@ -1691,9 +1691,9 @@ void JavaLexer::mIDENT(bool _createToken) {
 }
 
 void JavaLexer::mNUM_INT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = NUM_INT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	ANTLR_USE_NAMESPACE(antlr)RefToken f1;
 	ANTLR_USE_NAMESPACE(antlr)RefToken f2;
 	ANTLR_USE_NAMESPACE(antlr)RefToken f3;
@@ -1706,19 +1706,19 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 #line 1707 "JavaLexer.cpp"
 	
 	switch ( LA(1)) {
-	case 0x2e /* '.' */ :
+	case static_cast<unsigned char>('.'):
 	{
-		match('.' /* charlit */ );
+		match(static_cast<unsigned char>('.'));
 #line 1256 "java.g"
 		_ttype = DOT;
 #line 1715 "JavaLexer.cpp"
 		{
-		if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
+		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
 			{ // ( ... )+
 			int _cnt279=0;
 			for (;;) {
-				if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
-					matchRange('0','9');
+				if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+					matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 				}
 				else {
 					if ( _cnt279>=1 ) { goto _loop279; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
@@ -1729,7 +1729,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 			_loop279:;
 			}  // ( ... )+
 			{
-			if ((LA(1) == 0x45 /* 'E' */  || LA(1) == 0x65 /* 'e' */ )) {
+			if ((LA(1) == static_cast<unsigned char>('E') || LA(1) == static_cast<unsigned char>('e'))) {
 				mEXPONENT(false);
 			}
 			else {
@@ -1737,7 +1737,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 			
 			}
 			{
-			if ((LA(1) == 0x44 /* 'D' */  || LA(1) == 0x46 /* 'F' */  || LA(1) == 0x64 /* 'd' */  || LA(1) == 0x66 /* 'f' */ )) {
+			if ((LA(1) == static_cast<unsigned char>('D') || LA(1) == static_cast<unsigned char>('F') || LA(1) == static_cast<unsigned char>('d') || LA(1) == static_cast<unsigned char>('f'))) {
 				mFLOAT_SUFFIX(true);
 				f1=_returnToken;
 #line 1257 "java.g"
@@ -1767,40 +1767,40 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 		}
 		break;
 	}
-	case 0x30 /* '0' */ :
-	case 0x31 /* '1' */ :
-	case 0x32 /* '2' */ :
-	case 0x33 /* '3' */ :
-	case 0x34 /* '4' */ :
-	case 0x35 /* '5' */ :
-	case 0x36 /* '6' */ :
-	case 0x37 /* '7' */ :
-	case 0x38 /* '8' */ :
-	case 0x39 /* '9' */ :
+	case static_cast<unsigned char>('0'):
+	case static_cast<unsigned char>('1'):
+	case static_cast<unsigned char>('2'):
+	case static_cast<unsigned char>('3'):
+	case static_cast<unsigned char>('4'):
+	case static_cast<unsigned char>('5'):
+	case static_cast<unsigned char>('6'):
+	case static_cast<unsigned char>('7'):
+	case static_cast<unsigned char>('8'):
+	case static_cast<unsigned char>('9'):
 	{
 		{
 		switch ( LA(1)) {
-		case 0x30 /* '0' */ :
+		case static_cast<unsigned char>('0'):
 		{
-			match('0' /* charlit */ );
+			match(static_cast<unsigned char>('0'));
 #line 1270 "java.g"
 			isDecimal = true;
 #line 1789 "JavaLexer.cpp"
 			{
 			switch ( LA(1)) {
-			case 0x58 /* 'X' */ :
-			case 0x78 /* 'x' */ :
+			case static_cast<unsigned char>('X'):
+			case static_cast<unsigned char>('x'):
 			{
 				{
 				switch ( LA(1)) {
-				case 0x78 /* 'x' */ :
+				case static_cast<unsigned char>('x'):
 				{
-					match('x' /* charlit */ );
+					match(static_cast<unsigned char>('x'));
 					break;
 				}
-				case 0x58 /* 'X' */ :
+				case static_cast<unsigned char>('X'):
 				{
-					match('X' /* charlit */ );
+					match(static_cast<unsigned char>('X'));
 					break;
 				}
 				default:
@@ -1825,20 +1825,20 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 				}  // ( ... )+
 				break;
 			}
-			case 0x30 /* '0' */ :
-			case 0x31 /* '1' */ :
-			case 0x32 /* '2' */ :
-			case 0x33 /* '3' */ :
-			case 0x34 /* '4' */ :
-			case 0x35 /* '5' */ :
-			case 0x36 /* '6' */ :
-			case 0x37 /* '7' */ :
+			case static_cast<unsigned char>('0'):
+			case static_cast<unsigned char>('1'):
+			case static_cast<unsigned char>('2'):
+			case static_cast<unsigned char>('3'):
+			case static_cast<unsigned char>('4'):
+			case static_cast<unsigned char>('5'):
+			case static_cast<unsigned char>('6'):
+			case static_cast<unsigned char>('7'):
 			{
 				{ // ( ... )+
 				int _cnt288=0;
 				for (;;) {
-					if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x37 /* '7' */ ))) {
-						matchRange('0','7');
+					if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('7')))) {
+						matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('7'));
 					}
 					else {
 						if ( _cnt288>=1 ) { goto _loop288; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
@@ -1857,23 +1857,23 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 			}
 			break;
 		}
-		case 0x31 /* '1' */ :
-		case 0x32 /* '2' */ :
-		case 0x33 /* '3' */ :
-		case 0x34 /* '4' */ :
-		case 0x35 /* '5' */ :
-		case 0x36 /* '6' */ :
-		case 0x37 /* '7' */ :
-		case 0x38 /* '8' */ :
-		case 0x39 /* '9' */ :
+		case static_cast<unsigned char>('1'):
+		case static_cast<unsigned char>('2'):
+		case static_cast<unsigned char>('3'):
+		case static_cast<unsigned char>('4'):
+		case static_cast<unsigned char>('5'):
+		case static_cast<unsigned char>('6'):
+		case static_cast<unsigned char>('7'):
+		case static_cast<unsigned char>('8'):
+		case static_cast<unsigned char>('9'):
 		{
 			{
-			matchRange('1','9');
+			matchRange(static_cast<unsigned char>('1'),static_cast<unsigned char>('9'));
 			}
 			{ // ( ... )*
 			for (;;) {
-				if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
-					matchRange('0','9');
+				if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+					matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 				}
 				else {
 					goto _loop291;
@@ -1894,17 +1894,17 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 		}
 		}
 		{
-		if ((LA(1) == 0x4c /* 'L' */  || LA(1) == 0x6c /* 'l' */ )) {
+		if ((LA(1) == static_cast<unsigned char>('L') || LA(1) == static_cast<unsigned char>('l'))) {
 			{
 			switch ( LA(1)) {
-			case 0x6c /* 'l' */ :
+			case static_cast<unsigned char>('l'):
 			{
-				match('l' /* charlit */ );
+				match(static_cast<unsigned char>('l'));
 				break;
 			}
-			case 0x4c /* 'L' */ :
+			case static_cast<unsigned char>('L'):
 			{
-				match('L' /* charlit */ );
+				match(static_cast<unsigned char>('L'));
 				break;
 			}
 			default:
@@ -1917,16 +1917,16 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 			_ttype = NUM_LONG;
 #line 1919 "JavaLexer.cpp"
 		}
-		else if (((LA(1) == 0x2e /* '.' */  || LA(1) == 0x44 /* 'D' */  || LA(1) == 0x45 /* 'E' */  || LA(1) == 0x46 /* 'F' */  || LA(1) == 0x64 /* 'd' */  || LA(1) == 0x65 /* 'e' */  || LA(1) == 0x66 /* 'f' */ ))&&(isDecimal)) {
+		else if (((LA(1) == static_cast<unsigned char>('.') || LA(1) == static_cast<unsigned char>('D') || LA(1) == static_cast<unsigned char>('E') || LA(1) == static_cast<unsigned char>('F') || LA(1) == static_cast<unsigned char>('d') || LA(1) == static_cast<unsigned char>('e') || LA(1) == static_cast<unsigned char>('f')))&&(isDecimal)) {
 			{
 			switch ( LA(1)) {
-			case 0x2e /* '.' */ :
+			case static_cast<unsigned char>('.'):
 			{
-				match('.' /* charlit */ );
+				match(static_cast<unsigned char>('.'));
 				{ // ( ... )*
 				for (;;) {
-					if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
-						matchRange('0','9');
+					if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+						matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 					}
 					else {
 						goto _loop296;
@@ -1936,7 +1936,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 				_loop296:;
 				} // ( ... )*
 				{
-				if ((LA(1) == 0x45 /* 'E' */  || LA(1) == 0x65 /* 'e' */ )) {
+				if ((LA(1) == static_cast<unsigned char>('E') || LA(1) == static_cast<unsigned char>('e'))) {
 					mEXPONENT(false);
 				}
 				else {
@@ -1944,7 +1944,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 				
 				}
 				{
-				if ((LA(1) == 0x44 /* 'D' */  || LA(1) == 0x46 /* 'F' */  || LA(1) == 0x64 /* 'd' */  || LA(1) == 0x66 /* 'f' */ )) {
+				if ((LA(1) == static_cast<unsigned char>('D') || LA(1) == static_cast<unsigned char>('F') || LA(1) == static_cast<unsigned char>('d') || LA(1) == static_cast<unsigned char>('f'))) {
 					mFLOAT_SUFFIX(true);
 					f2=_returnToken;
 #line 1291 "java.g"
@@ -1957,12 +1957,12 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 				}
 				break;
 			}
-			case 0x45 /* 'E' */ :
-			case 0x65 /* 'e' */ :
+			case static_cast<unsigned char>('E'):
+			case static_cast<unsigned char>('e'):
 			{
 				mEXPONENT(false);
 				{
-				if ((LA(1) == 0x44 /* 'D' */  || LA(1) == 0x46 /* 'F' */  || LA(1) == 0x64 /* 'd' */  || LA(1) == 0x66 /* 'f' */ )) {
+				if ((LA(1) == static_cast<unsigned char>('D') || LA(1) == static_cast<unsigned char>('F') || LA(1) == static_cast<unsigned char>('d') || LA(1) == static_cast<unsigned char>('f'))) {
 					mFLOAT_SUFFIX(true);
 					f3=_returnToken;
 #line 1292 "java.g"
@@ -1975,10 +1975,10 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 				}
 				break;
 			}
-			case 0x44 /* 'D' */ :
-			case 0x46 /* 'F' */ :
-			case 0x64 /* 'd' */ :
-			case 0x66 /* 'f' */ :
+			case static_cast<unsigned char>('D'):
+			case static_cast<unsigned char>('F'):
+			case static_cast<unsigned char>('d'):
+			case static_cast<unsigned char>('f'):
 			{
 				mFLOAT_SUFFIX(true);
 				f4=_returnToken;
@@ -2026,20 +2026,20 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 }
 
 void JavaLexer::mEXPONENT(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = EXPONENT;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	{
 	switch ( LA(1)) {
-	case 0x65 /* 'e' */ :
+	case static_cast<unsigned char>('e'):
 	{
-		match('e' /* charlit */ );
+		match(static_cast<unsigned char>('e'));
 		break;
 	}
-	case 0x45 /* 'E' */ :
+	case static_cast<unsigned char>('E'):
 	{
-		match('E' /* charlit */ );
+		match(static_cast<unsigned char>('E'));
 		break;
 	}
 	default:
@@ -2050,26 +2050,26 @@ void JavaLexer::mEXPONENT(bool _createToken) {
 	}
 	{
 	switch ( LA(1)) {
-	case 0x2b /* '+' */ :
+	case static_cast<unsigned char>('+'):
 	{
-		match('+' /* charlit */ );
+		match(static_cast<unsigned char>('+'));
 		break;
 	}
-	case 0x2d /* '-' */ :
+	case static_cast<unsigned char>('-'):
 	{
-		match('-' /* charlit */ );
+		match(static_cast<unsigned char>('-'));
 		break;
 	}
-	case 0x30 /* '0' */ :
-	case 0x31 /* '1' */ :
-	case 0x32 /* '2' */ :
-	case 0x33 /* '3' */ :
-	case 0x34 /* '4' */ :
-	case 0x35 /* '5' */ :
-	case 0x36 /* '6' */ :
-	case 0x37 /* '7' */ :
-	case 0x38 /* '8' */ :
-	case 0x39 /* '9' */ :
+	case static_cast<unsigned char>('0'):
+	case static_cast<unsigned char>('1'):
+	case static_cast<unsigned char>('2'):
+	case static_cast<unsigned char>('3'):
+	case static_cast<unsigned char>('4'):
+	case static_cast<unsigned char>('5'):
+	case static_cast<unsigned char>('6'):
+	case static_cast<unsigned char>('7'):
+	case static_cast<unsigned char>('8'):
+	case static_cast<unsigned char>('9'):
 	{
 		break;
 	}
@@ -2082,8 +2082,8 @@ void JavaLexer::mEXPONENT(bool _createToken) {
 	{ // ( ... )+
 	int _cnt304=0;
 	for (;;) {
-		if (((LA(1) >= 0x30 /* '0' */  && LA(1) <= 0x39 /* '9' */ ))) {
-			matchRange('0','9');
+		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
+			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		}
 		else {
 			if ( _cnt304>=1 ) { goto _loop304; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
@@ -2102,29 +2102,29 @@ void JavaLexer::mEXPONENT(bool _createToken) {
 }
 
 void JavaLexer::mFLOAT_SUFFIX(bool _createToken) {
-	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; ANTLR_USE_NAMESPACE(std)string::size_type _begin = text.length();
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = FLOAT_SUFFIX;
-	ANTLR_USE_NAMESPACE(std)string::size_type _saveIndex;
+	int _saveIndex;
 	
 	switch ( LA(1)) {
-	case 0x66 /* 'f' */ :
+	case static_cast<unsigned char>('f'):
 	{
-		match('f' /* charlit */ );
+		match(static_cast<unsigned char>('f'));
 		break;
 	}
-	case 0x46 /* 'F' */ :
+	case static_cast<unsigned char>('F'):
 	{
-		match('F' /* charlit */ );
+		match(static_cast<unsigned char>('F'));
 		break;
 	}
-	case 0x64 /* 'd' */ :
+	case static_cast<unsigned char>('d'):
 	{
-		match('d' /* charlit */ );
+		match(static_cast<unsigned char>('d'));
 		break;
 	}
-	case 0x44 /* 'D' */ :
+	case static_cast<unsigned char>('D'):
 	{
-		match('D' /* charlit */ );
+		match(static_cast<unsigned char>('D'));
 		break;
 	}
 	default:
@@ -2142,42 +2142,88 @@ void JavaLexer::mFLOAT_SUFFIX(bool _createToken) {
 
 
 const unsigned long JavaLexer::_tokenSet_0_data_[] = { 4294958072UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xb 0xc 0xe 0xf 0x10 0x11 0x12 0x13 0x14 
-// 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! \" # $ % 
-// & \' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F G 
-// H I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a b c d e f g h 
-// i j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 0x83 
-// 0x84 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 0x91 
-// 0x92 0x93 0x94 0x95 0x96 0x97 
+// NULL_TREE_LOOKAHEAD BLOCK MODIFIERS OBJBLOCK SLIST CTOR_DEF METHOD_DEF 
+// INSTANCE_INIT STATIC_INIT CLASS_DEF INTERFACE_DEF PACKAGE_DEF ARRAY_DECLARATOR 
+// EXTENDS_CLAUSE IMPLEMENTS_CLAUSE PARAMETERS PARAMETER_DEF LABELED_STAT 
+// TYPECAST INDEX_OP POST_INC POST_DEC METHOD_CALL EXPR ARRAY_INIT IMPORT 
+// UNARY_MINUS UNARY_PLUS CASE_GROUP ELIST FOR_INIT FOR_CONDITION FOR_ITERATOR 
+// EMPTY_STAT "final" "abstract" "strictfp" SUPER_CTOR_CALL CTOR_CALL "package" 
+// SEMI "import" LBRACK RBRACK "void" "boolean" "byte" "char" "short" "int" 
+// "float" "long" "double" IDENT DOT STAR "private" "public" "protected" 
+// "static" "transient" "native" "threadsafe" "synchronized" "volatile" 
+// "class" "extends" "interface" LCURLY RCURLY COMMA "implements" LPAREN 
+// RPAREN "this" "super" ASSIGN "throws" COLON "if" "else" "for" "while" 
+// "do" "break" "continue" "return" "switch" "throw" "case" "default" "try" 
+// "finally" "catch" PLUS_ASSIGN MINUS_ASSIGN STAR_ASSIGN DIV_ASSIGN MOD_ASSIGN 
+// SR_ASSIGN BSR_ASSIGN SL_ASSIGN BAND_ASSIGN BXOR_ASSIGN BOR_ASSIGN QUESTION 
+// LOR LAND BOR BXOR BAND NOT_EQUAL EQUAL LT_ GT LE GE "instanceof" SL 
+// SR BSR PLUS MINUS DIV MOD INC DEC BNOT LNOT "true" "false" "null" "new" 
+// NUM_INT CHAR_LITERAL STRING_LITERAL NUM_FLOAT NUM_LONG NUM_DOUBLE WS 
+// SL_COMMENT ML_COMMENT ESC HEX_DIGIT VOCAB EXPONENT FLOAT_SUFFIX 
 const ANTLR_USE_NAMESPACE(antlr)BitSet JavaLexer::_tokenSet_0(_tokenSet_0_data_,16);
 const unsigned long JavaLexer::_tokenSet_1_data_[] = { 4294958072UL, 4294966271UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xb 0xc 0xe 0xf 0x10 0x11 0x12 0x13 0x14 
-// 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! \" # $ % 
-// & \' ( ) + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F G H 
-// I J K L M N O P Q R S T U V W X Y Z [ 0x5c ] ^ _ ` a b c d e f g h i 
-// j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 0x83 0x84 
-// 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 0x91 0x92 
-// 0x93 0x94 0x95 0x96 0x97 
+// NULL_TREE_LOOKAHEAD BLOCK MODIFIERS OBJBLOCK SLIST CTOR_DEF METHOD_DEF 
+// INSTANCE_INIT STATIC_INIT CLASS_DEF INTERFACE_DEF PACKAGE_DEF ARRAY_DECLARATOR 
+// EXTENDS_CLAUSE IMPLEMENTS_CLAUSE PARAMETERS PARAMETER_DEF LABELED_STAT 
+// TYPECAST INDEX_OP POST_INC POST_DEC METHOD_CALL EXPR ARRAY_INIT IMPORT 
+// UNARY_MINUS UNARY_PLUS CASE_GROUP ELIST FOR_INIT FOR_CONDITION FOR_ITERATOR 
+// EMPTY_STAT "final" "abstract" "strictfp" CTOR_CALL "package" SEMI "import" 
+// LBRACK RBRACK "void" "boolean" "byte" "char" "short" "int" "float" "long" 
+// "double" IDENT DOT STAR "private" "public" "protected" "static" "transient" 
+// "native" "threadsafe" "synchronized" "volatile" "class" "extends" "interface" 
+// LCURLY RCURLY COMMA "implements" LPAREN RPAREN "this" "super" ASSIGN 
+// "throws" COLON "if" "else" "for" "while" "do" "break" "continue" "return" 
+// "switch" "throw" "case" "default" "try" "finally" "catch" PLUS_ASSIGN 
+// MINUS_ASSIGN STAR_ASSIGN DIV_ASSIGN MOD_ASSIGN SR_ASSIGN BSR_ASSIGN 
+// SL_ASSIGN BAND_ASSIGN BXOR_ASSIGN BOR_ASSIGN QUESTION LOR LAND BOR BXOR 
+// BAND NOT_EQUAL EQUAL LT_ GT LE GE "instanceof" SL SR BSR PLUS MINUS 
+// DIV MOD INC DEC BNOT LNOT "true" "false" "null" "new" NUM_INT CHAR_LITERAL 
+// STRING_LITERAL NUM_FLOAT NUM_LONG NUM_DOUBLE WS SL_COMMENT ML_COMMENT 
+// ESC HEX_DIGIT VOCAB EXPONENT FLOAT_SUFFIX 
 const ANTLR_USE_NAMESPACE(antlr)BitSet JavaLexer::_tokenSet_1(_tokenSet_1_data_,16);
 const unsigned long JavaLexer::_tokenSet_2_data_[] = { 4294967288UL, 4294967167UL, 4026531839UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 
-// 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! \" # 
-// $ % & ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F 
-// G H I J K L M N O P Q R S T U V W X Y Z [ ] ^ _ ` a b c d e f g h i 
-// j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 0x83 0x84 
-// 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 0x91 0x92 
-// 0x93 0x94 0x95 0x96 0x97 
+// NULL_TREE_LOOKAHEAD BLOCK MODIFIERS OBJBLOCK SLIST CTOR_DEF METHOD_DEF 
+// VARIABLE_DEF INSTANCE_INIT STATIC_INIT TYPE CLASS_DEF INTERFACE_DEF 
+// PACKAGE_DEF ARRAY_DECLARATOR EXTENDS_CLAUSE IMPLEMENTS_CLAUSE PARAMETERS 
+// PARAMETER_DEF LABELED_STAT TYPECAST INDEX_OP POST_INC POST_DEC METHOD_CALL 
+// EXPR ARRAY_INIT IMPORT UNARY_MINUS UNARY_PLUS CASE_GROUP ELIST FOR_INIT 
+// FOR_CONDITION FOR_ITERATOR EMPTY_STAT "abstract" "strictfp" SUPER_CTOR_CALL 
+// CTOR_CALL "package" SEMI "import" LBRACK RBRACK "void" "boolean" "byte" 
+// "char" "short" "int" "float" "long" "double" IDENT DOT STAR "private" 
+// "public" "protected" "static" "transient" "native" "threadsafe" "synchronized" 
+// "volatile" "class" "extends" "interface" LCURLY RCURLY COMMA "implements" 
+// LPAREN RPAREN "this" "super" ASSIGN "throws" COLON "if" "else" "for" 
+// "while" "do" "break" "continue" "return" "throw" "case" "default" "try" 
+// "finally" "catch" PLUS_ASSIGN MINUS_ASSIGN STAR_ASSIGN DIV_ASSIGN MOD_ASSIGN 
+// SR_ASSIGN BSR_ASSIGN SL_ASSIGN BAND_ASSIGN BXOR_ASSIGN BOR_ASSIGN QUESTION 
+// LOR LAND BOR BXOR BAND NOT_EQUAL EQUAL LT_ GT LE GE "instanceof" SL 
+// SR BSR PLUS MINUS DIV MOD INC DEC BNOT LNOT "true" "false" "null" "new" 
+// NUM_INT CHAR_LITERAL STRING_LITERAL NUM_FLOAT NUM_LONG NUM_DOUBLE WS 
+// SL_COMMENT ML_COMMENT ESC HEX_DIGIT VOCAB EXPONENT FLOAT_SUFFIX 
 const ANTLR_USE_NAMESPACE(antlr)BitSet JavaLexer::_tokenSet_2(_tokenSet_2_data_,16);
 const unsigned long JavaLexer::_tokenSet_3_data_[] = { 4294967288UL, 4294967291UL, 4026531839UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11 0x12 0x13 
-// 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f   ! # $ 
-// % & \' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F 
-// G H I J K L M N O P Q R S T U V W X Y Z [ ] ^ _ ` a b c d e f g h i 
-// j k l m n o p q r s t u v w x y z { | } ~ 0x7f 0x80 0x81 0x82 0x83 0x84 
-// 0x85 0x86 0x87 0x88 0x89 0x8a 0x8b 0x8c 0x8d 0x8e 0x8f 0x90 0x91 0x92 
-// 0x93 0x94 0x95 0x96 0x97 
+// NULL_TREE_LOOKAHEAD BLOCK MODIFIERS OBJBLOCK SLIST CTOR_DEF METHOD_DEF 
+// VARIABLE_DEF INSTANCE_INIT STATIC_INIT TYPE CLASS_DEF INTERFACE_DEF 
+// PACKAGE_DEF ARRAY_DECLARATOR EXTENDS_CLAUSE IMPLEMENTS_CLAUSE PARAMETERS 
+// PARAMETER_DEF LABELED_STAT TYPECAST INDEX_OP POST_INC POST_DEC METHOD_CALL 
+// EXPR ARRAY_INIT IMPORT UNARY_MINUS UNARY_PLUS CASE_GROUP FOR_INIT FOR_CONDITION 
+// FOR_ITERATOR EMPTY_STAT "final" "abstract" "strictfp" SUPER_CTOR_CALL 
+// CTOR_CALL "package" SEMI "import" LBRACK RBRACK "void" "boolean" "byte" 
+// "char" "short" "int" "float" "long" "double" IDENT DOT STAR "private" 
+// "public" "protected" "static" "transient" "native" "threadsafe" "synchronized" 
+// "volatile" "class" "extends" "interface" LCURLY RCURLY COMMA "implements" 
+// LPAREN RPAREN "this" "super" ASSIGN "throws" COLON "if" "else" "for" 
+// "while" "do" "break" "continue" "return" "throw" "case" "default" "try" 
+// "finally" "catch" PLUS_ASSIGN MINUS_ASSIGN STAR_ASSIGN DIV_ASSIGN MOD_ASSIGN 
+// SR_ASSIGN BSR_ASSIGN SL_ASSIGN BAND_ASSIGN BXOR_ASSIGN BOR_ASSIGN QUESTION 
+// LOR LAND BOR BXOR BAND NOT_EQUAL EQUAL LT_ GT LE GE "instanceof" SL 
+// SR BSR PLUS MINUS DIV MOD INC DEC BNOT LNOT "true" "false" "null" "new" 
+// NUM_INT CHAR_LITERAL STRING_LITERAL NUM_FLOAT NUM_LONG NUM_DOUBLE WS 
+// SL_COMMENT ML_COMMENT ESC HEX_DIGIT VOCAB EXPONENT FLOAT_SUFFIX 
 const ANTLR_USE_NAMESPACE(antlr)BitSet JavaLexer::_tokenSet_3(_tokenSet_3_data_,16);
 const unsigned long JavaLexer::_tokenSet_4_data_[] = { 0UL, 67043328UL, 126UL, 126UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// 0 1 2 3 4 5 6 7 8 9 A B C D E F a b c d e f 
+// RBRACK "void" "boolean" "byte" "char" "short" "int" "float" "long" "double" 
+// "transient" "native" "threadsafe" "synchronized" "volatile" "class" 
+// "finally" "catch" PLUS_ASSIGN MINUS_ASSIGN STAR_ASSIGN DIV_ASSIGN 
 const ANTLR_USE_NAMESPACE(antlr)BitSet JavaLexer::_tokenSet_4(_tokenSet_4_data_,10);
 

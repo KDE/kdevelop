@@ -1,15 +1,8 @@
 #ifndef INC_PascalStoreWalkerTokenTypes_hpp_
 #define INC_PascalStoreWalkerTokenTypes_hpp_
 
-/* $ANTLR 2.7.7 (20061129): "pascal.tree.g" -> "PascalStoreWalkerTokenTypes.hpp"$ */
-
-#ifndef CUSTOM_API
-# define CUSTOM_API
-#endif
-
-#ifdef __cplusplus
-struct CUSTOM_API PascalStoreWalkerTokenTypes {
-#endif
+/* $ANTLR 2.7.2: "pascal.tree.g" -> "PascalStoreWalkerTokenTypes.hpp"$ */
+struct PascalStoreWalkerTokenTypes {
 	enum {
 		EOF_ = 1,
 		BLOCK = 4,
@@ -200,7 +193,5 @@ struct CUSTOM_API PascalStoreWalkerTokenTypes {
 		EXPONENT = 189,
 		NULL_TREE_LOOKAHEAD = 3
 	};
-#ifdef __cplusplus
 };
-#endif
 #endif /*INC_PascalStoreWalkerTokenTypes_hpp_*/

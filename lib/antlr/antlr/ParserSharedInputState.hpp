@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -38,7 +37,7 @@ public:
 	/** Construct a new ParserInputState
 	 * @param in the TokenBuffer to read from.
 	 */
-	ParserInputState( TokenBuffer& in )
+	ParserInputState(TokenBuffer& in )
 	: guessing(0)
 	, filename("")
 	, input(&in)
@@ -46,7 +45,7 @@ public:
 	{
 	}
 
-	virtual ~ParserInputState()
+	~ParserInputState()
 	{
 		if (inputResponsible)
 			delete input;

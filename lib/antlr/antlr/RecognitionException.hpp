@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 # include <antlr/config.hpp>
@@ -21,32 +20,41 @@ namespace antlr
 		RecognitionException();
 		RecognitionException(const ANTLR_USE_NAMESPACE(std)string& s);
 		RecognitionException(const ANTLR_USE_NAMESPACE(std)string& s,
-									const ANTLR_USE_NAMESPACE(std)string& fileName,
-									int line, int column );
+									const ANTLR_USE_NAMESPACE(std)string& fileName_,
+									int line_,int column_);
 
 		virtual ~RecognitionException() throw()
 		{
 		}
 
 		/// Return file where mishap occurred.
-		virtual ANTLR_USE_NAMESPACE(std)string getFilename() const throw()
+		virtual ANTLR_USE_NAMESPACE(std)string getFilename() const
 		{
 			return fileName;
 		}
 		/**
 		 * @return the line number that this exception happened on.
 		 */
-		virtual int getLine() const throw()
+		virtual int getLine() const
 		{
 			return line;
 		}
 		/**
 		 * @return the column number that this exception happened on.
 		 */
-		virtual int getColumn() const throw()
+		virtual int getColumn() const
 		{
 			return column;
 		}
+#if 0
+		/**
+		 * @deprecated As of ANTLR 2.7.0
+		 */
+		virtual ANTLR_USE_NAMESPACE(std)string getErrorMessage() const
+		{
+			return getMessage();
+		}
+#endif
 
 		/// Return complete error message with line/column number info (if present)
 		virtual ANTLR_USE_NAMESPACE(std)string toString() const;

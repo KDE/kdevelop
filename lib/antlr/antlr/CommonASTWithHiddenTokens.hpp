@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -24,7 +23,7 @@ public:
 	virtual ~CommonASTWithHiddenTokens();
 	virtual const char* typeName( void ) const
 	{
-		return CommonASTWithHiddenTokens::TYPE_NAME;
+		return "CommonASTWithHiddenTokens";
 	}
 	/// Clone this AST node.
 	virtual RefAST clone( void ) const;
@@ -46,7 +45,6 @@ public:
 
 	static RefAST factory();
 
-	static const char* const TYPE_NAME;
 protected:
 	RefToken hiddenBefore,hiddenAfter; // references to hidden tokens
 };

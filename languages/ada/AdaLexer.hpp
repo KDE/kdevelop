@@ -9,13 +9,13 @@
 
 #line 11 "AdaLexer.hpp"
 #include <antlr/config.hpp>
-/* $ANTLR 2.7.7 (20061129): "ada.g" -> "AdaLexer.hpp"$ */
+/* $ANTLR 2.7.2: "ada.g" -> "AdaLexer.hpp"$ */
 #include <antlr/CommonToken.hpp>
 #include <antlr/InputBuffer.hpp>
 #include <antlr/BitSet.hpp>
 #include "AdaTokenTypes.hpp"
 #include <antlr/CharScanner.hpp>
-class CUSTOM_API AdaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public AdaTokenTypes
+class AdaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public AdaTokenTypes
 {
 #line 1848 "ada.g"
 

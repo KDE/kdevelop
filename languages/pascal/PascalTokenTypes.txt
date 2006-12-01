@@ -1,4 +1,4 @@
-// $ANTLR 2.7.7 (20061129): pascal.g -> PascalTokenTypes.txt$
+// $ANTLR 2.7.2: pascal.g -> PascalTokenTypes.txt$
 Pascal    // output token vocab name
 BLOCK=4
 IDLIST=5

@@ -13,7 +13,7 @@
 #line 14 "PascalStoreWalker.hpp"
 #include <antlr/config.hpp>
 #include "PascalStoreWalkerTokenTypes.hpp"
-/* $ANTLR 2.7.7 (20061129): "pascal.tree.g" -> "PascalStoreWalker.hpp"$ */
+/* $ANTLR 2.7.2: "pascal.tree.g" -> "PascalStoreWalker.hpp"$ */
 #include <antlr/TreeParser.hpp>
 
 #line 29 "pascal.tree.g"
@@ -22,7 +22,7 @@
         #include <kdebug.h>
 
 #line 25 "PascalStoreWalker.hpp"
-class CUSTOM_API PascalStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public PascalStoreWalkerTokenTypes
+class PascalStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public PascalStoreWalkerTokenTypes
 {
 #line 47 "pascal.tree.g"
 
@@ -51,7 +51,7 @@ public:
 #line 29 "PascalStoreWalker.hpp"
 public:
 	PascalStoreWalker();
-	static void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
+	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
 	int getNumTokens() const
 	{
 		return PascalStoreWalker::NUM_TOKENS;
@@ -60,10 +60,6 @@ public:
 	{
 		if( type > getNumTokens() ) return 0;
 		return PascalStoreWalker::tokenNames[type];
-	}
-	const char* const* getTokenNames() const
-	{
-		return PascalStoreWalker::tokenNames;
 	}
 	public: void program(RefPascalAST _t);
 	public: void programHeading(RefPascalAST _t);
@@ -135,10 +131,7 @@ public:
 	public: void finalValue(RefPascalAST _t);
 	public: void recordVariableList(RefPascalAST _t);
 public:
-	ANTLR_USE_NAMESPACE(antlr)RefAST getAST()
-	{
-		return ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST);
-	}
+	RefPascalAST getAST();
 	
 protected:
 	RefPascalAST returnAST;

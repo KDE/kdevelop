@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -16,7 +15,12 @@
 namespace antlr {
 #endif
 
-/** A BitSet to replace java.util.BitSet.
+#if defined(_MSC_VER) && !defined(__ICL) // Microsoft Visual C++
+extern template class ANTLR_API ANTLR_USE_NAMESPACE(std)vector<unsigned int>;
+extern template class ANTLR_API ANTLR_USE_NAMESPACE(std)vector<bool>;
+#endif
+
+/**A BitSet to replace java.util.BitSet.
  * Primary differences are that most set operators return new sets
  * as opposed to oring and anding "in place".  Further, a number of
  * operations were added.  I cannot contain a BitSet because there

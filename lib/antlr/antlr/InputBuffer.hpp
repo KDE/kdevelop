@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -32,9 +31,7 @@ class ANTLR_API InputBuffer {
 public:
 	/** Create a character buffer */
 	InputBuffer()
-	: nMarkers(0)
-	, markerOffset(0)
-	, numToConsume(0)
+	: nMarkers(0), markerOffset(0), numToConsume(0)
 	{
 	}
 
@@ -69,13 +66,13 @@ public:
 	}
 
 	/** Ensure that the character buffer is sufficiently full */
-	virtual void fill(unsigned int amount);
+	virtual void fill(int amount);
 
 	/** Override this in subclasses to get the next character */
 	virtual int getChar()=0;
 
 	/** Get a lookahead character */
-	virtual inline int LA(unsigned int i)
+	virtual inline int LA(int i)
 	{
 		fill(i);
 		return queue.elementAt(markerOffset + i - 1);
@@ -84,7 +81,7 @@ public:
 	/** Return an integer marker that can be used to rewind the buffer to
 	 * its current state.
 	 */
-	virtual unsigned int mark();
+	virtual int mark();
 	/// Are there any marks active in the InputBuffer
 	virtual inline bool isMarked() const
 	{
@@ -93,11 +90,7 @@ public:
 	/** Rewind the character buffer to a marker.
 	 * @param mark Marker returned previously from mark()
 	 */
-	virtual void rewind(unsigned int mark);
-
-	/** Get the number of non-consumed characters
-	 */
-	virtual unsigned int entries() const;
+	virtual void rewind(int mark);
 
 	ANTLR_USE_NAMESPACE(std)string getLAChars() const;
 
@@ -108,13 +101,13 @@ protected:
 	// leave to subclasses
 
 	// Number of active markers
-	unsigned int nMarkers; // = 0;
+	int nMarkers; // = 0;
 
 	// Additional offset used when markers are active
-	unsigned int markerOffset; // = 0;
+	int markerOffset; // = 0;
 
 	// Number of calls to consume() since last LA() or LT() call
-	unsigned int numToConsume; // = 0;
+	int numToConsume; // = 0;
 
 	// Circular queue
 	CircularQueue<int> queue;

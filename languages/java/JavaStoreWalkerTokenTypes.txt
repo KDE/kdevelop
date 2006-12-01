@@ -1,4 +1,4 @@
-// $ANTLR 2.7.7 (20061129): java.store.g -> JavaStoreWalkerTokenTypes.txt$
+// $ANTLR 2.7.2: java.store.g -> JavaStoreWalkerTokenTypes.txt$
 JavaStoreWalker    // output token vocab name
 BLOCK=4
 MODIFIERS=5

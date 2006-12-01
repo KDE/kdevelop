@@ -3,9 +3,8 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -15,10 +14,9 @@
 namespace antlr {
 #endif
 
-ANTLR_API ANTLR_USE_NAMESPACE(std)string operator+( const ANTLR_USE_NAMESPACE(std)string& lhs, const int rhs );
-ANTLR_API ANTLR_USE_NAMESPACE(std)string operator+( const ANTLR_USE_NAMESPACE(std)string& lhs, size_t rhs );
+ANTLR_USE_NAMESPACE(std)string operator+(const ANTLR_USE_NAMESPACE(std)string& lhs,const int rhs);
 
-ANTLR_API ANTLR_USE_NAMESPACE(std)string charName( int ch );
+ANTLR_USE_NAMESPACE(std)string charName(int ch);
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 }

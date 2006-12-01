@@ -17,7 +17,7 @@
 
 #line 19 "JavaRecognizer.hpp"
 #include <antlr/config.hpp>
-/* $ANTLR 2.7.7 (20061129): "java.g" -> "JavaRecognizer.hpp"$ */
+/* $ANTLR 2.7.2: "java.g" -> "JavaRecognizer.hpp"$ */
 #include <antlr/TokenStream.hpp>
 #include <antlr/TokenBuffer.hpp>
 #include "JavaTokenTypes.hpp"
@@ -25,12 +25,16 @@
 
 /** Java 1.3 Recognizer
  *
+ * \verbatim
  * Run 'java Main [-showtree] directory-full-of-java-files'
+ * \endverbatim
  *
  * [The -showtree option pops up a Swing frame that shows
  *  the AST constructed from the parser.]
  *
+ * \verbatim
  * Run 'java Main <directory full of java files>'
+ * \endverbatim
  *
  * Contributing authors:
  *		John Mitchell		johnm@non.net
@@ -131,11 +135,10 @@
  *
  * Version tracking now done with following ID:
  *
- * $Id$
  *
  * This grammar is in the PUBLIC DOMAIN
  */
-class CUSTOM_API JavaRecognizer : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public JavaTokenTypes
+class JavaRecognizer : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public JavaTokenTypes
 {
 #line 154 "java.g"
 
@@ -267,10 +270,7 @@ public:
 	public: void constant();
 	public: void newArrayDeclarator();
 public:
-	ANTLR_USE_NAMESPACE(antlr)RefAST getAST()
-	{
-		return ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST);
-	}
+	RefJavaAST getAST();
 	
 protected:
 	RefJavaAST returnAST;

@@ -14,7 +14,7 @@
 #line 15 "AdaStoreWalker.hpp"
 #include <antlr/config.hpp>
 #include "AdaStoreWalkerTokenTypes.hpp"
-/* $ANTLR 2.7.7 (20061129): "expandedada.store.g" -> "AdaStoreWalker.hpp"$ */
+/* $ANTLR 2.7.2: "expandedada.store.g" -> "AdaStoreWalker.hpp"$ */
 #include <antlr/TreeParser.hpp>
 
 #line 10 "expandedada.store.g"
@@ -23,7 +23,7 @@
 #include <kdebug.h>
 
 #line 26 "AdaStoreWalker.hpp"
-class CUSTOM_API AdaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaStoreWalkerTokenTypes
+class AdaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaStoreWalkerTokenTypes
 {
 #line 25 "expandedada.store.g"
 
@@ -119,7 +119,7 @@ public:
 #line 30 "AdaStoreWalker.hpp"
 public:
 	AdaStoreWalker();
-	static void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
+	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
 	int getNumTokens() const
 	{
 		return AdaStoreWalker::NUM_TOKENS;
@@ -128,10 +128,6 @@ public:
 	{
 		if( type > getNumTokens() ) return 0;
 		return AdaStoreWalker::tokenNames[type];
-	}
-	const char* const* getTokenNames() const
-	{
-		return AdaStoreWalker::tokenNames;
 	}
 	public: void compilation_unit(RefAdaAST _t);
 	public: void context_items_opt(RefAdaAST _t);
@@ -312,10 +308,7 @@ public:
 	public: void task_body(RefAdaAST _t);
 	public: void protected_body(RefAdaAST _t);
 public:
-	ANTLR_USE_NAMESPACE(antlr)RefAST getAST()
-	{
-		return ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST);
-	}
+	RefAdaAST getAST();
 	
 protected:
 	RefAdaAST returnAST;

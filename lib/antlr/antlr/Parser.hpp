@@ -3,22 +3,18 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include <antlr/config.hpp>
-
-#include <iostream>
-#include <exception>
-
 #include <antlr/BitSet.hpp>
 #include <antlr/TokenBuffer.hpp>
 #include <antlr/RecognitionException.hpp>
-#include <antlr/MismatchedTokenException.hpp>
 #include <antlr/ASTFactory.hpp>
 #include <antlr/ParserSharedInputState.hpp>
+
+#include <exception>
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 namespace antlr {
@@ -63,31 +59,21 @@ extern bool DEBUG_PARSER;
  */
 class ANTLR_API Parser {
 protected:
-	Parser(TokenBuffer& input)
-	: inputState(new ParserInputState(input)), astFactory(0), traceDepth(0)
-	{
-	}
-	Parser(TokenBuffer* input)
-	: inputState(new ParserInputState(input)), astFactory(0), traceDepth(0)
-	{
-	}
-	Parser(const ParserSharedInputState& state)
-	: inputState(state), astFactory(0), traceDepth(0)
-	{
-	}
+	Parser(TokenBuffer& input_);
+	Parser(TokenBuffer* input_);
+
+	Parser(const ParserSharedInputState& state);
 public:
-	virtual ~Parser()
-	{
-	}
+	virtual ~Parser();
 
 	/** Return the token type of the ith token of lookahead where i=1
 	 * is the current token being examined by the parser (i.e., it
 	 * has not been matched yet).
 	 */
-	virtual int LA(unsigned int i)=0;
+	virtual int LA(int i)=0;
 
 	/// Return the i-th token of lookahead
-	virtual RefToken LT(unsigned int i)=0;
+	virtual RefToken LT(int i)=0;
 
 	/** DEPRECATED! Specify the factory to be used during tree building. (Compulsory)
 	 * Setting the factory is nowadays compulsory.
@@ -112,11 +98,11 @@ public:
 	{
 		return astFactory;
 	}
-	/** Get the root AST node of the generated AST. When using a custom AST type
-	 * or heterogenous AST's, you'll have to convert it to the right type
-	 * yourself.
-	 */
-	virtual RefAST getAST() = 0;
+	/// Get the root AST node of the generated AST.
+	inline RefAST getAST()
+	{
+		return returnAST;
+	}
 
 	/// Return the filename of the input file.
 	virtual inline ANTLR_USE_NAMESPACE(std)string getFilename() const
@@ -141,108 +127,33 @@ public:
 	/// Get another token object from the token stream
 	virtual void consume()=0;
 	/// Consume tokens until one matches the given token
-	virtual void consumeUntil(int tokenType)
-	{
-		while (LA(1) != Token::EOF_TYPE && LA(1) != tokenType)
-			consume();
-	}
-
+	virtual void consumeUntil(int tokenType);
 	/// Consume tokens until one matches the given token set
-	virtual void consumeUntil(const BitSet& set)
-	{
-		while (LA(1) != Token::EOF_TYPE && !set.member(LA(1)))
-			consume();
-	}
+	virtual void consumeUntil(const BitSet& set);
 
 	/** Make sure current lookahead symbol matches token type <tt>t</tt>.
 	 * Throw an exception upon mismatch, which is catch by either the
 	 * error handler or by the syntactic predicate.
 	 */
-	virtual void match(int t)
-	{
-		if ( DEBUG_PARSER )
-		{
-			traceIndent();
-			ANTLR_USE_NAMESPACE(std)cout << "enter match(" << t << ") with LA(1)=" << LA(1) << ANTLR_USE_NAMESPACE(std)endl;
-		}
-		if ( LA(1) != t )
-		{
-			if ( DEBUG_PARSER )
-			{
-				traceIndent();
-				ANTLR_USE_NAMESPACE(std)cout << "token mismatch: " << LA(1) << "!=" << t << ANTLR_USE_NAMESPACE(std)endl;
-			}
-			throw MismatchedTokenException(getTokenNames(), getNumTokens(), LT(1), t, false, getFilename());
-		}
-		else
-		{
-			// mark token as consumed -- fetch next token deferred until LA/LT
-			consume();
-		}
-	}
-
-	virtual void matchNot(int t)
-	{
-		if ( LA(1)==t )
-		{
-			// Throws inverted-sense exception
-			throw MismatchedTokenException(getTokenNames(), getNumTokens(), LT(1), t, true, getFilename());
-		}
-		else
-		{
-			// mark token as consumed -- fetch next token deferred until LA/LT
-			consume();
-		}
-	}
-
+	virtual void match(int t);
+	virtual void matchNot(int t);
 	/** Make sure current lookahead symbol matches the given set
 	 * Throw an exception upon mismatch, which is catch by either the
 	 * error handler or by the syntactic predicate.
 	 */
-	virtual void match(const BitSet& b)
-	{
-		if ( DEBUG_PARSER )
-		{
-			traceIndent();
-			ANTLR_USE_NAMESPACE(std)cout << "enter match(" << "bitset" /*b.toString()*/
-				<< ") with LA(1)=" << LA(1) << ANTLR_USE_NAMESPACE(std)endl;
-		}
-		if ( !b.member(LA(1)) )
-		{
-			if ( DEBUG_PARSER )
-			{
-				traceIndent();
-				ANTLR_USE_NAMESPACE(std)cout << "token mismatch: " << LA(1) << " not member of "
-					<< "bitset" /*b.toString()*/ << ANTLR_USE_NAMESPACE(std)endl;
-			}
-			throw MismatchedTokenException(getTokenNames(), getNumTokens(), LT(1), b, false, getFilename());
-		}
-		else
-		{
-			// mark token as consumed -- fetch next token deferred until LA/LT
-			consume();
-		}
-	}
+	virtual void match(const BitSet& b);
 
 	/** Mark a spot in the input and return the position.
 	 * Forwarded to TokenBuffer.
 	 */
-	virtual inline unsigned int mark()
+	virtual inline int mark()
 	{
 		return inputState->getInput().mark();
 	}
 	/// rewind to a previously marked position
-	virtual inline void rewind(unsigned int pos)
+	virtual inline void rewind(int pos)
 	{
 		inputState->getInput().rewind(pos);
-	}
-	/** called by the generated parser to do error recovery, override to
-	 * customize the behaviour.
-	 */
-	virtual void recover(const RecognitionException& ex, const BitSet& tokenSet)
-	{
-		consume();
-		consumeUntil(tokenSet);
 	}
 
 	/// Parser error-reporting function can be overridden in subclass
@@ -252,11 +163,14 @@ public:
 	/// Parser warning-reporting function can be overridden in subclass
 	virtual void reportWarning(const ANTLR_USE_NAMESPACE(std)string& s);
 
+	static void panic();
+
 	/// get the token name for the token number 'num'
 	virtual const char* getTokenName(int num) const = 0;
 	/// get a vector with all token names
 	virtual const char* const* getTokenNames() const = 0;
-	/** Get the number of tokens defined.
+	/// get the number of tokens defined
+	/** get the max token number
 	 * This one should be overridden in subclasses.
 	 */
 	virtual int getNumTokens(void) const = 0;
@@ -272,8 +186,8 @@ protected:
 
 	ParserSharedInputState inputState;
 
-//	/// AST return value for a rule is squirreled away here
-//	RefAST returnAST;
+	/// AST return value for a rule is squirreled away here
+	RefAST returnAST;
 
 	/// AST support code; parser and treeparser delegate to this object
 	ASTFactory *astFactory;
@@ -299,7 +213,7 @@ protected:
 #ifdef ANTLR_CXX_SUPPORTS_UNCAUGHT_EXCEPTION
 			// Only give trace if there's no uncaught exception..
 			if(!ANTLR_USE_NAMESPACE(std)uncaught_exception())
-#endif
+#endif				
 				parser->traceOut(text);
 		}
 	private:

@@ -3,16 +3,16 @@
 
 #include <antlr/config.hpp>
 #include "AdaTreeParserSuperTokenTypes.hpp"
-/* $ANTLR 2.7.7 (20061129): "ada.tree.g" -> "AdaTreeParserSuper.hpp"$ */
+/* $ANTLR 2.7.2: "ada.tree.g" -> "AdaTreeParserSuper.hpp"$ */
 #include <antlr/TreeParser.hpp>
 
-class CUSTOM_API AdaTreeParserSuper : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaTreeParserSuperTokenTypes
+class AdaTreeParserSuper : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaTreeParserSuperTokenTypes
 {
 #line 1 "ada.tree.g"
 #line 13 "AdaTreeParserSuper.hpp"
 public:
 	AdaTreeParserSuper();
-	static void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
+	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
 	int getNumTokens() const
 	{
 		return AdaTreeParserSuper::NUM_TOKENS;
@@ -21,10 +21,6 @@ public:
 	{
 		if( type > getNumTokens() ) return 0;
 		return AdaTreeParserSuper::tokenNames[type];
-	}
-	const char* const* getTokenNames() const
-	{
-		return AdaTreeParserSuper::tokenNames;
 	}
 	public: void compilation_unit(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void context_items_opt(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
@@ -202,15 +198,6 @@ public:
 	public: void package_body(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void task_body(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
 	public: void protected_body(ANTLR_USE_NAMESPACE(antlr)RefAST _t);
-public:
-	ANTLR_USE_NAMESPACE(antlr)RefAST getAST()
-	{
-		return returnAST;
-	}
-	
-protected:
-	ANTLR_USE_NAMESPACE(antlr)RefAST returnAST;
-	ANTLR_USE_NAMESPACE(antlr)RefAST _retTree;
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS

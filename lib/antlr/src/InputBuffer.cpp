@@ -1,8 +1,7 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
+ * Software rights: http://www.antlr.org/RIGHTS.html
  *
- * $Id$
  */
 
 #include "antlr/config.hpp"
@@ -13,7 +12,7 @@ namespace antlr {
 #endif
 
 /** Ensure that the character buffer is sufficiently full */
-void InputBuffer::fill(unsigned int amount)
+void InputBuffer::fill(int amount)
 {
 	syncConsume();
 	// Fill the buffer sufficiently to hold needed characters
@@ -31,7 +30,7 @@ ANTLR_USE_NAMESPACE(std)string InputBuffer::getLAChars( void ) const
 {
 	ANTLR_USE_NAMESPACE(std)string ret;
 
-	for(unsigned int i = markerOffset; i < queue.entries(); i++)
+	for(int i = markerOffset; i < queue.entries(); i++)
 		ret += queue.elementAt(i);
 
 	return ret;
@@ -44,7 +43,7 @@ ANTLR_USE_NAMESPACE(std)string InputBuffer::getMarkedChars( void ) const
 {
 	ANTLR_USE_NAMESPACE(std)string ret;
 
-	for(unsigned int i = 0; i < markerOffset; i++)
+	for(int i = 0; i < markerOffset; i++)
 		ret += queue.elementAt(i);
 
 	return ret;
@@ -53,7 +52,7 @@ ANTLR_USE_NAMESPACE(std)string InputBuffer::getMarkedChars( void ) const
 /** Return an integer marker that can be used to rewind the buffer to
  * its current state.
  */
-unsigned int InputBuffer::mark()
+int InputBuffer::mark()
 {
 	syncConsume();
 	nMarkers++;
@@ -63,17 +62,11 @@ unsigned int InputBuffer::mark()
 /** Rewind the character buffer to a marker.
  * @param mark Marker returned previously from mark()
  */
-void InputBuffer::rewind(unsigned int mark)
+void InputBuffer::rewind(int mark)
 {
 	syncConsume();
 	markerOffset = mark;
 	nMarkers--;
-}
-
-unsigned int InputBuffer::entries() const
-{
-	//assert(queue.entries() >= markerOffset);
-	return queue.entries() - markerOffset;
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
