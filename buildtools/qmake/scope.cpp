@@ -73,7 +73,7 @@ Scope::~Scope()
         m_defaultopts = 0;
     }
 
-    if ( m_root && m_root->isProject() )
+    if ( m_root && m_root->isProject() && !m_incast )
     {
         delete m_root;
         delete m_defaultopts;
