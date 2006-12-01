@@ -17,20 +17,20 @@ libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/languages/lib/interfaces/liblang_interfaces.la \
 	$(top_builddir)/languages/lib/designer_integration/libdesignerintegration.la $(top_builddir)/lib/interfaces/libkdevinterfaces.la
 
-libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
-							ccconfigwidgetbase.ui kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp \
-							configproblemreporter.ui backgroundparser.cpp ast_utils.cpp store_walker.cpp \
-							KDevCppSupportIface.cpp KDevCppSupportIface.skel cppsupportfactory.cpp tag_creator.cpp \
-							codeinformationrepository.cpp doxydoc.cpp cppcodecompletionconfig.cpp cppnewclassdlgbase.ui \
-							cppnewclassdlg.cpp classgeneratorconfig.cpp classgeneratorconfigbase.ui subclassingdlg.cpp \
-							subclassingdlgbase.ui addattributedialogbase.ui addmethoddialogbase.ui addattributedialog.cpp \
-							addmethoddialog.cpp cppsupport_utils.cpp createpcsdialogbase.ui createpcsdialog.cpp \
-							cppimplementationwidget.cpp qtdesignercppintegration.cpp creategettersetterconfiguration.cpp \
-							creategettersetterconfiguration.h creategettersetterdialog.cpp creategettersetterdialog.h \
-							creategettersetter.ui storeconverter.cpp qtbuildconfig.cpp cppsplitheadersourceconfig.cpp \
-				typedesc.cpp simpletype.cpp stringhelpers.cpp completiondebug.cpp cppevaluation.cpp \
-			simplecontext.cpp simpletypefunction.cpp simpletypenamespace.cpp simpletypecatalog.cpp \
-	includefiles.cpp
+libkdevcppsupport_la_SOURCES = KDevCppSupportIface.cpp KDevCppSupportIface.skel \
+	addattributedialog.cpp addattributedialogbase.ui addmethoddialog.cpp addmethoddialogbase.ui \
+	ast_utils.cpp backgroundparser.cpp blockingkprocess.cpp ccconfigwidget.cpp \
+	ccconfigwidgetbase.ui classgeneratorconfig.cpp classgeneratorconfigbase.ui \
+	codeinformationrepository.cpp completiondebug.cpp configproblemreporter.ui cppcodecompletion.cpp \
+	cppcodecompletionconfig.cpp cppevaluation.cpp cppimplementationwidget.cpp cppnewclassdlg.cpp \
+	cppnewclassdlgbase.ui cppsplitheadersourceconfig.cpp cppsupport_utils.cpp \
+	cppsupportfactory.cpp cppsupportpart.cpp creategettersetter.ui \
+	creategettersetterconfiguration.cpp creategettersetterconfiguration.h creategettersetterdialog.cpp \
+	creategettersetterdialog.h createpcsdialog.cpp createpcsdialogbase.ui doxydoc.cpp includefiles.cpp \
+	kdevdriver.cpp problemreporter.cpp qtbuildconfig.cpp qtdesignercppintegration.cpp \
+	simplecontext.cpp simpletype.cpp simpletypecatalog.cpp simpletypefunction.cpp \
+	simpletypenamespace.cpp store_walker.cpp storeconverter.cpp stringhelpers.cpp \
+	subclassingdlg.cpp subclassingdlgbase.ui tag_creator.cpp typedesc.cpp
 
 METASOURCES = AUTO
 
@@ -53,7 +53,7 @@ r___LDFLAGS = $(all_libraries)
 r___SOURCES = main.cpp
 r___DEPENDENCIES = libkdevcppsupport.la
 r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
-noinst_HEADERS = cppimplementationwidget.h qtdesignercppintegration.h \
-		storeconverter.h cppsplitheadersourceconfig.h cppevaluation.h expressioninfo.h \
-		declarationinfo.h simplecontext.h simpletypefunction.h simpletypenamespace.h \
-		simpletypecatalog.h includefiles.h
+noinst_HEADERS = blockingkprocess.h cppevaluation.h cppimplementationwidget.h \
+	cppsplitheadersourceconfig.h declarationinfo.h expressioninfo.h includefiles.h \
+	qtdesignercppintegration.h simplecontext.h simpletypecatalog.h simpletypefunction.h \
+	simpletypenamespace.h storeconverter.h

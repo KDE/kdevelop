@@ -3,6 +3,7 @@
 #include "kdevdriver.h"
 #include "cppcodecompletionconfig.h"
 #include <unistd.h>
+#include <blockingkprocess.h>
 
 
 KDevDriver::KDevDriver( CppSupportPart* cppSupport )
@@ -73,49 +74,46 @@ void KDevDriver::setup()
 		addIncludePath( "/usr/include" );
 		addIncludePath( "/usr/local/include" );
 #if KDE_VERSION <= 305
-		return; /// \FIXME Roberto, please review! ;-)
+    //		return; /// \FIXME Roberto, please review! ;-)
 	// If the QProcess from below is executed,
 	// it somehow breaks the gcc call in parts/outputviews/makewidget.cpp. :-(
 	// It then has the effect that KProcess will never exit, at least on KDE-3.0
 #endif // KDE_VERSION
-		QProcess proc;
-		proc.addArgument( "gcc" );
-		proc.addArgument( "-print-file-name=include" );
-		if ( !proc.start() ) {
+        BlockingKProcess proc;
+		proc << "gcc" ;
+		proc << "-print-file-name=include" ;
+        QString processStdout; 
+        if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
 			qWarning( "Couldn't start gcc" );
 			return;
 		}
-		while ( proc.isRunning() )
-			usleep( 1 );
+        processStdout = proc.stdOut();    
 
-
-		QStringList ls = QStringList::split( "\n", proc.readStdout() );
+		QStringList ls = QStringList::split( "\n", processStdout );
 		for( QStringList::const_iterator it = ls.begin(); it != ls.end(); ++it ) {
 			if( !(*it).isEmpty() )
 				addIncludePath( *it );
 		}
 		
-		addIncludePath( proc.readStdout() );
+		addIncludePath( processStdout );
 		addIncludePath( "/usr/include/g++-3" );
 		addIncludePath( "/usr/include/g++" );
 		proc.clearArguments();
-		proc.addArgument( "gcc" );
-		proc.addArgument( "-E" );
-		proc.addArgument( "-dM" );
-		proc.addArgument( "-ansi" );
-		proc.addArgument( "-" );
-		if ( !proc.start() ) {
+        proc.clearStdOut(); 
+		proc << "gcc";
+		proc << "-E";
+		proc << "-dM";
+		proc << "-ansi" ;
+		proc << "-";
+        if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
 			qWarning( "Couldn't start gcc" );
 			return;
 		}
-		while ( !proc.isRunning() )
-			usleep( 1 );
 		proc.closeStdin();
-		while ( proc.isRunning() )
-			usleep( 1 );
-		while ( proc.canReadLineStdout() ) {
-			QString l = proc.readLineStdout();
-			QStringList lst = QStringList::split( ' ', l );
+        processStdout = proc.stdOut(); 
+        QStringList lines = QStringList::split('\n', processStdout);
+        for (QStringList::ConstIterator it = lines.constBegin(); it != lines.constEnd(); ++it) {
+			QStringList lst = QStringList::split( ' ', *it );
 			if ( lst.count() != 3 )
 				continue;
 			addMacro( Macro( lst[1], lst[2] ) );

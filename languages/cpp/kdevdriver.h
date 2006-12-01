@@ -13,6 +13,8 @@
 #include <cstdlib>
 #include <unistd.h>
 
+class KProcess;
+
 class KDevDriver: public Driver
 {
 public:
@@ -32,7 +34,7 @@ public:
 
 protected:
 	void setupLexer( Lexer* lexer );
-
+  
 private:
 	CppSupportPart* m_cppSupport;
 };
