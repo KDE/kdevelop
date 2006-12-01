@@ -20,12 +20,13 @@
 #include "find_documentation.h"
 
 #include <stdlib.h>
-#include <qprocess.h>
 #include <qcheckbox.h>
 #include <qheader.h>
 #include <qapplication.h>
+#include <qstringlist.h>
 
 #include <klineedit.h>
+#include <kprocess.h>
 #include <klistbox.h>
 
 #include <kdevpartcontroller.h>
@@ -47,14 +48,18 @@ FindDocumentation::FindDocumentation(DocumentationWidget* parent, const char* na
 {
     QWidget* tmp = QApplication::desktop();
     setGeometry(tmp->width()/2 - width()/2, tmp->height()/2 - height()/2, width(), height());
-    proc_man = new QProcess( this );
-    proc_info = new QProcess( this );
+    proc_man = new KProcess( this );
+    proc_info = new KProcess( this );
 
-    connect( proc_man, SIGNAL(processExited()),
-                this, SLOT(procManReadFromStdout()) );
+    connect( proc_man, SIGNAL(processExited( KProcess* )),
+                this, SLOT(procManExited( KProcess* )) );
+    connect( proc_man, SIGNAL(receivedStdout( KProcess*, char*, int)),
+		this, SLOT(procManStdout( KProcess*, char*, int)) );
 
-    connect( proc_info, SIGNAL(processExited()),
-                this, SLOT(procInfoReadFromStdout()) );
+    connect( proc_info, SIGNAL(processExited( KProcess* )),
+                this, SLOT(procInfoExited( KProcess* )) );
+    connect( proc_info, SIGNAL(receivedStdout( KProcess*, char*, int)),
+		this, SLOT(procInfoStdout( KProcess*, char*, int)) );
 
     result_list->header()->hide();
     result_list->setSorting(-1);
@@ -97,24 +102,23 @@ void FindDocumentation::clickOnItem( QListViewItem * item )
         m_widget->part()->partController()->showDocument(doc_item->url());
 }
 
-void FindDocumentation::procInfoReadFromStdout()
+void FindDocumentation::procInfoExited( KProcess* )
 {
     // Read and process the data.
     // Bear in mind that the data might be output in chunks.
     if(proc_info->exitStatus() != 0 || !proc_info->normalExit())
     {
-        proc_info->readStdout();
-        proc_info->readStderr();
+        proc_info_out = "";
     }
     else
     {
-        QString tmp;
-        while(!(tmp = proc_info->readLineStdout()).isNull())
+        QStringList lines = QStringList::split("\n", proc_info_out);
+        for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
         {
-            if(tmp[0] == '*')
+            if( (*it) == "*")
                 break;
 
-            DocumentationItem* newitem = new DocumentationItem(DocumentationItem::Document, info_item, tmp);
+            DocumentationItem* newitem = new DocumentationItem(DocumentationItem::Document, info_item, *it);
             newitem->setURL(KURL("info:/" + search_term->text()));
         }
     }
@@ -126,22 +130,21 @@ void FindDocumentation::procInfoReadFromStdout()
     }
 }
 
-void FindDocumentation::procManReadFromStdout()
+void FindDocumentation::procManExited( KProcess* )
 {
     // Read and process the data.
     // Bear in mind that the data might be output in chunks.
     if (proc_man->exitStatus() != 0 || !proc_man->normalExit())
     {
-        proc_man->readStdout();
-        proc_man->readStderr();
+        proc_man_out = "";
     }
     else
     {
-        QString tmp;
-        while(!(tmp = proc_man->readLineStdout()).isNull())
+        QStringList lines = QStringList::split("\n", proc_man_out);
+        for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
         {
             DocumentationItem* newitem = new DocumentationItem(DocumentationItem::Document, man_item, search_term->text());
-            newitem->setURL(KURL("man://" + tmp));
+            newitem->setURL(KURL("man://" + *it));
         }
     }
 
@@ -152,6 +155,16 @@ void FindDocumentation::procManReadFromStdout()
     }
 }
 
+void FindDocumentation::procInfoReadStdout( KProcess*, char* buf, int len)
+{
+    proc_info_out += QString::fromLatin1( buf, len );
+}
+
+void FindDocumentation::procManReadStdout( KProcess*, char* buf, int len)
+{
+    proc_man_out += QString::fromLatin1( buf, len );
+}
+
 void FindDocumentation::searchInInfo()
 {
     info_item = new KListViewItem(result_list, last_item, "Info");
@@ -160,11 +173,11 @@ void FindDocumentation::searchInInfo()
 
     proc_info->clearArguments();
     //Search Manpages
-    proc_info->addArgument( "info" );
-    proc_info->addArgument( "-w" );
-    proc_info->addArgument( search_term->text() );
+    *proc_info << "info";
+    *proc_info << "-w";
+    *proc_info << search_term->text();
 
-    if ( !proc_info->start() )
+    if ( !proc_info->start( KProcess::NotifyOnExit, KProcess::Stdout ) )
     {
         // error handling
     }
@@ -178,11 +191,11 @@ void FindDocumentation::searchInMan()
 
     proc_man->clearArguments();
     //Search Manpages
-    proc_man->addArgument( "man" );
-    proc_man->addArgument( "-w" );
-    proc_man->addArgument( search_term->text() );
+    *proc_man << "man";
+    *proc_man << "-w";
+    *proc_man << search_term->text();
 
-    if ( !proc_man->start() )
+    if ( !proc_man->start( KProcess::NotifyOnExit, KProcess::Stdout ) )
     {
         // error handling
     }

@@ -26,7 +26,7 @@
 class DocumentationWidget;
 class KListViewItem;
 class FindDocumentationOptions;
-class QProcess;
+class KProcess;
 
 class FindDocumentation : public FindDocumentationBase
 {
@@ -40,8 +40,10 @@ public slots:
     /*$PUBLIC_SLOTS$*/
     virtual void buttonPressedOnItem( int button, QListViewItem * item, const QPoint & pos, int c );
     virtual void clickOnItem( QListViewItem * item );
-    virtual void procInfoReadFromStdout();
-    virtual void procManReadFromStdout();
+    virtual void procInfoExited( KProcess* );
+    virtual void procManExited( KProcess* );
+    virtual void procManReadStdout( KProcess*, char*, int );
+    virtual void procInfoReadStdout( KProcess*, char*, int );
     virtual void searchInInfo();
     virtual void searchInMan();
     virtual void searchInGoogle();
@@ -59,8 +61,10 @@ protected slots:
   /*$PROTECTED_SLOTS$*/
 
 private:
-    QProcess* proc_man;
-    QProcess* proc_info;
+    KProcess* proc_man;
+    KProcess* proc_info;
+    QString proc_man_out;
+    QString proc_info_out;
     KListViewItem* man_item;
     KListViewItem* info_item;
     KListViewItem* index_item;
