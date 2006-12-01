@@ -49,38 +49,8 @@ namespace QMake
         return m_depth;
     }
 
-    ChildAST::ChildAST( AST* parent )
-            : AST( parent )
-    {}
-
-    ChildAST::~ChildAST()
-    {
-        for ( QList<AST*>::const_iterator it( m_childs.begin() ); it != m_childs.end(); ++it )
-            delete( *it );
-        m_childs.clear();
-    }
-
-    void ChildAST::addChild( AST* a )
-    {
-        m_childs.append( a );
-        a->setParent( this );
-    }
-
-    QList<AST*> ChildAST::childs() const
-    {
-        return m_childs;
-    }
-
-    void ChildAST::writeToString( QString& buf ) const
-    {
-        for ( QList<AST*>::const_iterator it = m_childs.begin(); it != m_childs.end() ; ++it )
-        {
-            ( *it )->writeToString( buf );
-        }
-    }
-
     ProjectAST::ProjectAST( AST* parent )
-            : ChildAST( parent )
+            : AST( parent )
     {}
 
     ProjectAST::~ProjectAST()
@@ -96,17 +66,47 @@ namespace QMake
         return m_filename;
     }
 
-    AssignmentAST::AssignmentAST( const QString& variable, AST* parent )
-            : ChildAST( parent ), m_variable( variable )
+    void ProjectAST::writeToString( QString& buf ) const
+    {
+        for ( QList<StatementAST*>::const_iterator it = m_statements.begin(); it != m_statements.end(); ++it )
+        {
+            ( *it )->writeToString( buf );
+        }
+    }
+
+    void ProjectAST::addStatement( StatementAST* a )
+    {
+        m_statements.append( a );
+    }
+
+    QList<StatementAST*> ProjectAST::statements() const
+    {
+        return m_statements;
+    }
+
+    void ProjectAST::removeStatement( StatementAST* a )
+    {
+        m_statements.removeAll( a );
+    }
+
+    AssignmentAST::AssignmentAST( const QString& variable, OpAST* op, const QStringList& values, AST* parent )
+            : StatementAST( parent ), m_variable( variable ), m_op( op ), m_values( values )
     {}
 
     AssignmentAST::~AssignmentAST()
-    {}
-
-    void AssignmentAST::addValues( QList<AST*> values )
     {
-        for ( QList<AST*>::const_iterator it = values.begin(); it != values.end(); ++it )
-            addChild( *it );
+        delete m_op;
+        m_op = 0;
+    }
+
+    void AssignmentAST::addValue( const QString& value )
+    {
+        m_values.append( value );
+    }
+
+    void AssignmentAST::removeValue( const QString& value )
+    {
+        m_values.removeAll( value );
     }
 
 
@@ -120,20 +120,76 @@ namespace QMake
         m_variable = variable;
     }
 
-    void AssignmentAST::writeToString( QString& buf) const
+    OpAST* AssignmentAST::op() const
     {
-        buf += m_variable;
-        ChildAST::writeToString( buf );
+        return m_op;
     }
 
+    void AssignmentAST::setOp( OpAST* op )
+    {
+        m_op = op;
+    }
+
+    void AssignmentAST::writeToString( QString& buf ) const
+    {
+        buf += m_variable;
+        m_op->writeToString( buf );
+        buf += m_values.join( "" );
+    }
+
+    OpAST::OpAST( const QString& lws , const QString& op, const QString& rws, AST* parent )
+            : AST( parent ), m_op( op ), m_lWs( lws ), m_rWs( rws )
+    {
+
+    }
+
+    OpAST::~OpAST()
+    {}
+
+    QString OpAST::rightWhitespace() const
+    {
+        return m_rWs;
+    }
+
+    QString OpAST::leftWhitespace() const
+    {
+        return m_lWs;
+    }
+
+    QString OpAST::op() const
+    {
+        return m_op;
+    }
+
+    void OpAST::setRightWhitespace( const QString& rws )
+    {
+        m_rWs = rws;
+    }
+
+    void OpAST::setLeftWhitespace( const QString& lws )
+    {
+        m_lWs = lws;
+    }
+
+    void OpAST::setOp( const QString& op )
+    {
+        m_op = op;
+    }
+
+    void OpAST::writeToString( QString& buf ) const
+    {
+        buf += m_lWs;
+        buf += m_op;
+        buf += m_rWs;
+    }
+
+
     CommentAST::CommentAST( const QString& comment, AST* parent )
-            : AST( parent ), m_comment( comment )
-    {}
+            : StatementAST( parent ), m_comment( comment )
+    {
+    }
 
-    CommentAST::~CommentAST()
-    {}
-
-    QString CommentAST::comment( ) const
+    QString CommentAST::comment() const
     {
         return m_comment;
     }
@@ -145,92 +201,33 @@ namespace QMake
 
     void CommentAST::writeToString( QString& buf ) const
     {
-        if ( m_comment.startsWith( "#" ) )
-            buf += m_comment;
-        else
-            buf += "#" + m_comment;
+        if( !m_comment.startsWith("#") )
+            buf += "#";
+        buf += m_comment;
     }
 
-    NewlineAST::NewlineAST( AST* parent )
-            : AST( parent )
-{}
 
-    NewlineAST::~NewlineAST()
-    {}
-
-    void NewlineAST::writeToString( QString& buf ) const
+    WhitespaceAST::WhitespaceAST( const QString& ws, AST* parent )
+            : StatementAST( parent ), m_ws( ws )
     {
-        buf += "\n";
     }
 
-    LiteralValueAST::LiteralValueAST( const QString& value, AST* parent )
-            : AST( parent ), m_value( value )
-    {}
-
-    LiteralValueAST::~LiteralValueAST()
-    {}
-
-    QString LiteralValueAST::value() const
+    QString WhitespaceAST::whitespace() const
     {
-        return m_value;
+        return m_ws;
     }
 
-    void LiteralValueAST::setValue( const QString& value )
+    void WhitespaceAST::setWhitespace( const QString& ws )
     {
-        m_value = value;
+        m_ws = ws;
     }
 
-    void LiteralValueAST::writeToString( QString& buf ) const
+    void WhitespaceAST::writeToString( QString& buf ) const
     {
-        buf += m_value;
+        buf += m_ws;
     }
 
-
-    EnvironmentVariableAST::EnvironmentVariableAST( const QString& value, AST* parent )
-            : LiteralValueAST( value, parent )
-    {}
-
-    EnvironmentVariableAST::~EnvironmentVariableAST()
-    {}
-
-    void EnvironmentVariableAST::writeToString( QString& buf ) const
-    {
-        buf += "$(" + value() + ")";
-    }
-
-    QMakeVariableAST::QMakeVariableAST( const QString& value, bool useBrackets, AST* parent )
-            : LiteralValueAST( value, parent ), m_useBrackets( useBrackets )
-    {}
-
-    QMakeVariableAST::~QMakeVariableAST()
-    {}
-
-    bool QMakeVariableAST::usesBrackets() const
-    {
-        return m_useBrackets;
-    }
-
-    void QMakeVariableAST::writeToString( QString& buf ) const
-    {
-        if ( usesBrackets() )
-            buf += "$${" + value() + "}";
-        else
-            buf += "$$" + value();
-    }
-
-    WhitespaceAST::WhitespaceAST( const QString& value, AST* parent )
-            : LiteralValueAST( value, parent )
-{}
-
-    WhitespaceAST::~WhitespaceAST()
-    {}
-
-    OpAST::OpAST( const QString& value, AST* parent )
-            : LiteralValueAST( value, parent )
-    {}
-
-    OpAST::~OpAST()
-{}}
+}
 
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

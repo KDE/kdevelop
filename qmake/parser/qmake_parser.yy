@@ -43,7 +43,8 @@ struct Result {
     Result() : node(0) {}
     QString value;
     AST* node;
-    QList<AST*> nodelist;
+    StatementAST* stmtnode;
+    QStringList valuelist;
 };
 
 typedef Result YYSTYPE;
@@ -61,21 +62,29 @@ int depth = 0;
 
 %}
 %debug
-%token WORD
+
 %token WS
-%token NEWLINE
-%token COMMENT
-%token CONT
-%token QUOTE
+%token LETTER
+%token DIGIT
+%token COMMA
+%token UNDERSCORE
+%token DOT
+%token EQUAL
+%token PLUSEQ
+%token MINUSEQ
+%token TILDEEQ
+%token STAREQ
+%token LCURLY
+%token RCURLY
 %token LBRACE
 %token RBRACE
-%token LBRACKET
-%token RBRACKET
-%token COMMA
-%token OP
 %token DOLLAR
-%token COMMENTLINE
-
+%token QUOTE
+%token SLASH
+%token CONT
+%token COMMENT
+%token SIMPLEVAL
+%token NEWLINE
 %%
 
 project:
@@ -88,103 +97,233 @@ project:
 
 statements: statements statement
         {
-            projects.top()->addChild($<node>2);
-            $<node>2->setDepth( depth );
+            projects.top()->addStatement($<stmtnode>2);
+            $<stmtnode>2->setDepth( depth );
         }
     |
     ;
 
 statement:  variable_assignment
         {
-            $<node>$ = $<node>1;
-        }
-    | COMMENT
-        {
-            $<node>$ = new CommentAST( $<value>1 );
+            $<stmtnode>$ = $<stmtnode>1;
         }
     | NEWLINE
         {
-            $<node>$ = new NewlineAST();
+            $<stmtnode>$ = new NewlineAST();
         }
-    | WS
+    | COMMENT
         {
-            $<node>$ = new WhitespaceAST( $<value>1 );
+            $<stmtnode>$ = new CommentAST( $<value>1 );
+        }
+    | ws
+        {
+            $<stmtnode>$ = new WhitespaceAST( $<value>1 );
         }
     ;
 
-variable_assignment: WORD WS OP WS values NEWLINE
+variable_assignment: variablename op_ws values
         {
-            AssignmentAST* a = new AssignmentAST( $<value>1 );
-            a->addChild( new WhitespaceAST( $<value>2 ) );
-            a->addChild( new OpAST( $<value>3 ) );
-            a->addChild( new WhitespaceAST( $<value>4 ) );
-            a->addValues( $<nodelist>5 );
-            a->addChild( new NewlineAST() );
-            $<node>$ = a;
+            $<stmtnode>$ = new AssignmentAST( $<value>1, dynamic_cast<OpAST*>($<node>2), $<valuelist>3 );
+            $<valuelist>3.clear();
         }
-    | WORD OP WS values NEWLINE
+    ;
+
+variablename: variablename variablechar
         {
-            AssignmentAST* a = new AssignmentAST( $<value>1 );
-            a->addChild( new OpAST( $<value>2 ) );
-            a->addChild( new WhitespaceAST( $<value>3 ) );
-            a->addValues( $<nodelist>4 );
-            a->addChild( new NewlineAST() );
-            $<node>$ = a;
+            $<value>$ += $<value>2;
         }
-    | WORD WS OP values NEWLINE
+    | variablebegin
         {
-            AssignmentAST* a = new AssignmentAST( $<value>1 );
-            a->addChild( new WhitespaceAST( $<value>2 ) );
-            a->addChild( new OpAST( $<value>3 ) );
-            a->addValues( $<nodelist>4 );
-            a->addChild( new NewlineAST() );
-            $<node>$ = a;
+            $<value>$ = $<value>1;
         }
-    | WORD OP values NEWLINE
+    ;
+
+variablebegin: LETTER
         {
-            AssignmentAST* a = new AssignmentAST( $<value>1 );
-            a->addChild( new OpAST( $<value>2 ) );
-            a->addValues( $<nodelist>3 );
-            a->addChild( new NewlineAST() );
-            $<node>$ = a;
+            $<value>$ = $<value>1;
+        }
+    | DIGIT
+        {
+            $<value>$ = $<value>1;
+        }
+    | UNDERSCORE
+        {
+            $<value>$ = $<value>1;
+        }
+    ;
+
+variablechar:  LETTER
+        {
+            $<value>$ = $<value>1;
+        }
+    | DIGIT
+        {
+            $<value>$ = $<value>1;
+        }
+    | UNDERSCORE
+        {
+            $<value>$ = $<value>1;
+        }
+    | DOT
+        {
+            $<value>$ = $<value>1;
         }
     ;
 
 values: values value
         {
-            $<nodelist>$.append( $<node>2 );
+            $<valuelist>$.append( $<value>2 );
         }
-    |
-        values value COMMENT
+    | values CONT ws NEWLINE
         {
-            $<nodelist>$.append( $<node>2 );
-            $<nodelist>$.append( new CommentAST( $<value>3 ) );
+            $<valuelist>$.append( $<value>2 );
+            $<valuelist>$.append( $<value>3 );
+            $<valuelist>$.append( $<value>4 );
         }
-    |
+    | value
         {
-            $<nodelist>$.clear();
+            $<valuelist>$.append( $<value>1 );
         }
     ;
 
-value: WORD
+value: DOLLAR DOLLAR LCURLY simpleval RCURLY
         {
-            $<node>$ = new LiteralValueAST( $<value>1 );
+            $<value>$ = $<value>1+$<value>2+$<value>3+$<value>4+$<value>5;
         }
-    | DOLLAR DOLLAR WORD
+    | DOLLAR DOLLAR simpleval
         {
-            $<node>$ = new QMakeVariableAST( $<value>3, false );
+            $<value>$ = $<value>1+$<value>2+$<value>3;
         }
-    | DOLLAR DOLLAR RBRACKET WORD LBRACKET
+    | DOLLAR LBRACE simpleval RBRACE
         {
-            $<node>$ = new QMakeVariableAST( $<value>4, true );
+            $<value>$ = $<value>1+$<value>2+$<value>3+$<value>4;
         }
-    | DOLLAR LBRACE WORD RBRACE
+    | simpleval
         {
-            $<node>$ = new EnvironmentVariableAST( $<value>3 );
+            $<value>$ = $<value>1;
+        }
+    | QUOTE quotedval QUOTE
+        {
+            $<value>$ = $<value>1+$<value>2+$<value>3;
+        }
+    | ws
+        {
+            $<value>$ = $<value>1;
+        }
+    ;
+
+simpleval: simpleval LETTER
+        {
+            $<value>$ += $<value>2;
+        }
+    | simpleval DOT
+        {
+            $<value>$ += $<value>2;
+        }
+    | simpleval COMMA
+        {
+            $<value>$ += $<value>2;
+        }
+    | simpleval UNDERSCORE
+        {
+            $<value>$ += $<value>2;
+        }
+    | simpleval DIGIT
+        {
+            $<value>$ += $<value>2;
+        }
+    | simpleval SIMPLEVAL
+        {
+            $<value>$ += $<value>2;
+        }
+    | UNDERSCORE
+        {
+            $<value>$ = $<value>1;
+        }
+    | COMMA
+        {
+            $<value>$ = $<value>1;
+        }
+    | DOT
+        {
+            $<value>$ = $<value>1;
+        }
+    | LETTER
+        {
+            $<value>$ = $<value>1;
+        }
+    | DIGIT
+        {
+            $<value>$ = $<value>1;
+        }
+    | SIMPLEVAL
+        {
+            $<value>$ = $<value>1;
+        }
+    ;
+
+quotedval: quotedval simpleval
+        {
+            $<value>$ += $<value>2;
+        }
+    | quotedval ws
+        {
+            $<value>$ += $<value>2;
+        }
+    |
+        {
+            $<value>$ = "";
+        }
+    ;
+
+op_ws: ws op ws
+        {
+            $<node>$ = new OpAST( $<value>1, $<value>2, $<value>3 );
+        }
+    | ws op
+        {
+            $<node>$ = new OpAST( $<value>1, $<value>2, "" );
+        }
+    | op ws
+        {
+            $<node>$ = new OpAST( "", $<value>1, $<value>2 );
+        }
+    | op
+        {
+            $<node>$ = new OpAST( "", $<value>1, "" );
+        }
+    ;
+
+ws: ws WS
+        {
+            $<value>$ += $<value>1;
         }
     | WS
         {
-            $<node>$ = new WhitespaceAST( $<value>1 );
+            $<value>$ = $<value>1;
+        }
+    ;
+
+
+op: EQUAL
+        {
+            $<value>$ = $<value>1;
+        }
+    | MINUSEQ
+        {
+            $<value>$ = $<value>1;
+        }
+    | PLUSEQ
+        {
+            $<value>$ = $<value>1;
+        }
+    | TILDEEQ
+        {
+            $<value>$ = $<value>1;
+        }
+    | STAREQ
+        {
+            $<value>$ = $<value>1;
         }
     ;
 

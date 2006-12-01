@@ -49,7 +49,7 @@ int main( int argc, char** argv )
         {
             QString buf;
             ast->writeToString( buf );
-            qWarning() << "Project Read: "<< ast->childs().count() << "\n-------------\n" << buf << "\n-------------\n";
+            qWarning() << "Project Read: "<< ast->statements().count() << "\n-------------\n" << buf << "\n-------------\n";
         }
     }
 
