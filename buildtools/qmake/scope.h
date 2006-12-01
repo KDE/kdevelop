@@ -15,7 +15,6 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
-#include <qobject.h>
 #include <set>
 
 #include "qmakeast.h"

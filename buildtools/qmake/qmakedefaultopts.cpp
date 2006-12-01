@@ -87,6 +87,4 @@ const QStringList& QMakeDefaultOpts::variables() const
     return m_keys;
 }
 
-#include "qmakedefaultopts.moc"
-
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
