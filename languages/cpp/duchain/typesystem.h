@@ -312,7 +312,7 @@ private:
   QList<AbstractType::Ptr> m_elements;
 };
 
-class ArrayType : public AbstractType
+class KDEVCPPLANGUAGE_EXPORT ArrayType : public AbstractType
 {
 public:
   typedef KSharedPtr<ArrayType> Ptr;

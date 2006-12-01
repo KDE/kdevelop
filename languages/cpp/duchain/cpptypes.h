@@ -79,7 +79,7 @@ private:
   Declaration* m_declaration;
 };
 
-class CppIntegralType : public IntegralType, public CppCVType
+class KDEVCPPLANGUAGE_EXPORT CppIntegralType : public IntegralType, public CppCVType
 {
   friend class TypeRepository;
 
@@ -142,7 +142,7 @@ public:
   virtual QString mangled() const;
 };
 
-class CppPointerType : public PointerType, public CppCVType
+class KDEVCPPLANGUAGE_EXPORT CppPointerType : public PointerType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppPointerType> Ptr;
@@ -156,7 +156,7 @@ public:
   //virtual uint hash() const;
 };
 
-class CppReferenceType : public ReferenceType, public CppCVType
+class KDEVCPPLANGUAGE_EXPORT CppReferenceType : public ReferenceType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppReferenceType> Ptr;

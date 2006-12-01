@@ -21,11 +21,12 @@
 #define DUMPCHAIN_H
 
 #include "default_visitor.h"
+#include <kdevexport.h>
 
 class ParseSession;
 class DUContext;
 
-class DumpChain: protected DefaultVisitor
+class KDEVCPPLANGUAGE_EXPORT DumpChain: protected DefaultVisitor
 {
 public:
   DumpChain();
