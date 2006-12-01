@@ -182,7 +182,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	connect( m_pCompletionConfig, SIGNAL( stored() ),
 	         this, SLOT( codeCompletionConfigStored() ) );
 	m_qtBuildConfig = new QtBuildConfig( this, projectDom() );
-        m_qtBuildConfig->store();
+    m_qtBuildConfig->store();
 
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;

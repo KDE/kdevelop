@@ -4,7 +4,7 @@ noinst_LTLIBRARIES = libkdevutil.la
 
 libkdevutil_la_SOURCES = configwidgetproxy.cpp domutil.cpp execcommand.cpp \
 	filetemplate.cpp kdevjobtimer.cpp kdevshellwidget.cpp kscriptactionmanager.cpp rurl.cpp \
-	settings.cpp urlutil.cpp
+	settings.cpp urlutil.cpp blockingkprocess.cpp
 
 METASOURCES = AUTO
 
@@ -17,4 +17,4 @@ DOXYGEN_PROJECTNAME = KDevelop Utility Library
 DOXYGEN_DOCDIRPREFIX = kdev
 include ../../Doxyfile.am
 
-noinst_HEADERS = kdevjobtimer.h kdevshellwidget.h settings.h
+noinst_HEADERS = kdevjobtimer.h kdevshellwidget.h settings.h blockingkprocess.h

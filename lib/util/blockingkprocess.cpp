@@ -18,11 +18,14 @@ BlockingKProcess::BlockingKProcess(QObject *parent, const char *name)
   : KProcess(parent, name)
 {
   m_stdOut = "";
+  m_stdErr = "";
   m_timeoutValue = 60;
   m_timer = 0L;
   
   connect(this, SIGNAL(receivedStdout(KProcess *, char *, int)),
           this, SLOT(slotReceivedStdOut(KProcess *, char *, int)));
+  connect(this, SIGNAL(receivedSterr(KProcess *, char *, int)),
+          this, SLOT(slotReceivedStdErr(KProcess *, char *, int)));
   connect(this, SIGNAL(processExited(KProcess *)),
           this, SLOT(slotProcessExited(KProcess *)));  
 }
@@ -63,6 +66,11 @@ bool BlockingKProcess::start(RunMode runmode, Communication comm)
 void BlockingKProcess::slotReceivedStdOut(KProcess *, char *buffer, int buflen)
 {
   m_stdOut += QString::fromLatin1(buffer, buflen);
+}
+
+void BlockingKProcess::slotReceivedStdErr(KProcess *, char *buffer, int buflen)
+{
+  m_stdErr += QString::fromLatin1(buffer, buflen);
 }
 
 void BlockingKProcess::slotProcessExited(KProcess *)

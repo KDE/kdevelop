@@ -40,7 +40,8 @@ public:
     
     /**
      * Start the process. It waits until the process exits or the timeout is hit.
-     * @param runmode @see KProcess
+     * @param runmode @see KProcess, use KProcess::NotifyOnExit to get proper behaviour,
+     * not KProcess::Block
      * @param comm if Stdout is passed, it catches the output. For the rest @see KProcess
      * @return true in case of success, false if there are problems to start the process
      *        or it was killed because of the timeout.
@@ -57,6 +58,16 @@ public:
      */
     void clearStdOut() { m_stdOut = "";}
     /**
+     * Get the error output of the run process
+     * @return the output
+     */
+    QString stdErr() { return m_stdErr;}
+    /**
+     * Clear the internal stderr buffer. Useful in case the class is reused.
+     */
+    void clearStdErr() { m_stdErr = "";}
+
+    /**
      * Sets the timeout
      * @param timeout seconds after which the process is considered hung and killed. 0 disables the timeout.
      */
@@ -64,6 +75,7 @@ public:
     
 private slots:
     void slotReceivedStdOut(KProcess *proc, char *buffer, int buflen);
+    void slotReceivedStdErr(KProcess *proc, char *buffer, int buflen);
     void slotProcessExited(KProcess *proc);
     void slotTimeOut();
             
@@ -71,6 +83,7 @@ private:
     void enter_loop();
         
     QString m_stdOut;   
+    QString m_stdErr;   
     bool m_timeout;     
     int m_timeoutValue;
     QTimer *m_timer;

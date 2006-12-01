@@ -19,7 +19,7 @@ libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 
 libkdevcppsupport_la_SOURCES = KDevCppSupportIface.cpp KDevCppSupportIface.skel \
 	addattributedialog.cpp addattributedialogbase.ui addmethoddialog.cpp addmethoddialogbase.ui \
-	ast_utils.cpp backgroundparser.cpp blockingkprocess.cpp ccconfigwidget.cpp \
+	ast_utils.cpp backgroundparser.cpp ccconfigwidget.cpp \
 	ccconfigwidgetbase.ui classgeneratorconfig.cpp classgeneratorconfigbase.ui \
 	codeinformationrepository.cpp completiondebug.cpp configproblemreporter.ui cppcodecompletion.cpp \
 	cppcodecompletionconfig.cpp cppevaluation.cpp cppimplementationwidget.cpp cppnewclassdlg.cpp \
@@ -53,7 +53,7 @@ r___LDFLAGS = $(all_libraries)
 r___SOURCES = main.cpp
 r___DEPENDENCIES = libkdevcppsupport.la
 r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
-noinst_HEADERS = blockingkprocess.h cppevaluation.h cppimplementationwidget.h \
+noinst_HEADERS = cppevaluation.h cppimplementationwidget.h \
 	cppsplitheadersourceconfig.h declarationinfo.h expressioninfo.h includefiles.h \
 	qtdesignercppintegration.h setuphelper.h simplecontext.h simpletypecatalog.h simpletypefunction.h \
 	simpletypenamespace.h storeconverter.h
