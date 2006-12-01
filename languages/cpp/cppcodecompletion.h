@@ -40,7 +40,7 @@
 #include <qguardedptr.h>
 #include <qregexp.h>
 
-#include <driver.h>
+#include "driver.h"
 ///A little debugging class
 #include <qpopupmenu.h>
 class PopupTracker : public QObject {

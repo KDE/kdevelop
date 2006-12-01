@@ -18,9 +18,9 @@
 */
 
 #include "codemodel.h"
+#include "driver.h"
 #include <kdebug.h>
 #include <kdatastream.h>
-#include "driver.h" //Not a nice solution
 
 CodeModel::CodeModel()
 {

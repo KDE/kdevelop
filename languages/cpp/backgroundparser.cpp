@@ -14,7 +14,6 @@
 #include "cppsupport_events.h"
 #include "codeinformationrepository.h"
 #include "cppcodecompletion.h"
-#include "driver.h"
 #include "ast_utils.h"
 #include "kdevdeepcopy.h"
 #include "kdevdriver.h"
@@ -400,6 +399,7 @@ ParsedFilePointer BackgroundParser::translationUnit( const QString& fileName )
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName, bool readFromDisk, bool forceParse )
 {
+    Q_UNUSED(readFromDisk);
 	Unit * u = findUnit( fileName );
 	if ( u == 0 || forceParse )
 	{

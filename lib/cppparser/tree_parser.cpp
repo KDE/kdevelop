@@ -18,8 +18,8 @@
 */
 
 #include "tree_parser.h"
-#include <kdebug.h>
 #include "driver.h"
+#include <kdebug.h>
 
 TreeParser::TreeParser()
 {

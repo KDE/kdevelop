@@ -29,7 +29,7 @@
 #include <qdir.h>
 #include <qprogressbar.h>
 #include <kdebug.h>
-#include <driver.h>
+#include "driver.h"
 
 class Context;
 class CppCodeCompletion;

@@ -28,7 +28,6 @@
 #include "simpletype.h"
 #include "declarationinfo.h"
 #include <hashedstring.h>
-#include <driver.h>
 
 class SimpleContext;
 

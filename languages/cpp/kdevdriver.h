@@ -3,11 +3,11 @@
 #define __kdevdriver_h
 
 #include "cppsupportpart.h"
+#include "driver.h"
 
 #include <kdevproject.h>
 #include <kdeversion.h>
 
-#include <driver.h>
 #include <qprocess.h>
 
 #include <cstdlib>

@@ -99,7 +99,7 @@ class DefaultSourceProvider: public SourceProvider {
 
 
 Driver::Driver()
-    : depresolv( FALSE ), lexer( 0 ), m_maxDependenceDepth( 20 ), m_dependenceDepth( 0 ), m_lexerCache( this ) {
+  : depresolv( FALSE ), lexer( 0 ), m_lexerCache( this ), m_dependenceDepth( 0 ), m_maxDependenceDepth( 20 ) {
   m_sourceProvider = new DefaultSourceProvider();
 }
 
@@ -254,7 +254,7 @@ ParsedFilePointer Driver::translationUnit( const QString& fileName ) const {
 
 class Driver::ParseHelper {
   public:
-      ParseHelper( const QString& fileName, bool force, Driver* driver, bool reportMessages = true ) : m_wasReset( false ), m_fileName( fileName ), m_force( force ), m_previousParsedFile( driver->m_currentParsedFile ), m_previousCachedLexedFile( driver->m_currentLexerCache ), m_driver( driver ), m_previousFileName( driver->m_currentFileName ), m_previousLexer( driver->lexer ), m_lex( m_driver ) {
+    ParseHelper( const QString& fileName, bool force, Driver* driver, bool reportMessages = true ) : m_wasReset( false ), m_fileName( fileName ), m_previousFileName( driver->m_currentFileName ),  m_previousLexer( driver->lexer ), m_previousParsedFile( driver->m_currentParsedFile ), m_previousCachedLexedFile( driver->m_currentLexerCache ), m_force( force ), m_driver( driver ), m_lex( m_driver ) {
       QFileInfo fileInfo( fileName );
       m_driver->m_currentParsedFile = new ParsedFile( fileName, fileInfo.lastModified() );
 #ifdef CACHELEXER

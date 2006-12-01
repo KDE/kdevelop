@@ -12,7 +12,6 @@
 #ifndef __cppsupport_events_h
 #define __cppsupport_events_h
 
-#include "driver.h"
 #include "kdevdeepcopy.h"
 
 #include <qevent.h>

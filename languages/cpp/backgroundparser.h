@@ -12,8 +12,8 @@
 #ifndef BACKGROUNDPARSER_H
 #define BACKGROUNDPARSER_H
 
-#include "driver.h"
 #include "ast.h"
+#include "driver.h"
 
 #include <qthread.h>
 #include <qwaitcondition.h>

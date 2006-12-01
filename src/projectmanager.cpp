@@ -571,8 +571,8 @@ void ProjectManager::loadLocalParts()
 	// Make sure to refresh load/ignore lists
 	getGeneralInfo();
 
-	PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
-	PluginController::getInstance()->loadProjectPlugins( m_info->m_ignoreParts );
+  PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
+  PluginController::getInstance()->loadProjectPlugins( m_info->m_ignoreParts );
 	PluginController::getInstance()->loadGlobalPlugins( m_info->m_ignoreParts );
 }
 

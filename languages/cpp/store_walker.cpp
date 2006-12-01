@@ -12,11 +12,11 @@
 #include "store_walker.h"
 #include "ast_utils.h"
 #include "urlutil.h"
+#include "driver.h"
 
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <driver.h>
 
 StoreWalker::StoreWalker( const QString& fileName, CodeModel* store )
 : m_store( store ), m_anon( 0 )

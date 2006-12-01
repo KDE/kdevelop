@@ -55,7 +55,7 @@ void KDevShellWidget::activate( )
  	if ( m_konsolePart->widget()->inherits("QFrame") )
  		((QFrame*)m_konsolePart->widget())->setFrameStyle( QFrame::Panel | QFrame::Sunken );
 
-	m_konsolePart->widget()->show();
+	//m_konsolePart->widget()->show();
 
 	TerminalInterface* ti = static_cast<TerminalInterface*>( m_konsolePart->qt_cast( "TerminalInterface" ) );
 	if( !ti ) return;

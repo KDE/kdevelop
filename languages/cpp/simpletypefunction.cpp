@@ -15,7 +15,6 @@
 #include "simpletypefunction.h"
 #include "safetycounter.h"
 #include "simpletypenamespace.h"
-#include <driver.h>
 
 extern SafetyCounter safetyCounter;
 extern CppCodeCompletion* cppCompletionInstance;
