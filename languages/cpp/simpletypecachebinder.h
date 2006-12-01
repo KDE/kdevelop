@@ -27,7 +27,7 @@ template <class Base>
 class SimpleTypeCacheBinder : public Base {
  public:
 
-  SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCache( b->m_locateCache ), m_memberCache( b->m_memberCache ), m_basesCache( b->m_basesCache ), secondaryActive( b->secondaryActive ), primaryActive( b->primaryActive ), m_classListCache( b->m_classListCache ), m_haveBasesCache( b->m_haveBasesCache ) {}
+  SimpleTypeCacheBinder( SimpleTypeCacheBinder<Base>* b ) : Base( b ), m_locateCache( b->m_locateCache ), m_memberCache( b->m_memberCache ), m_basesCache( b->m_basesCache ), secondaryActive( b->secondaryActive ), m_classListCache( b->m_classListCache ), primaryActive( b->primaryActive ), m_haveBasesCache( b->m_haveBasesCache ) {}
 
   SimpleTypeCacheBinder() : Base(), m_haveBasesCache( false ), secondaryActive( true ), primaryActive( true ) {}
 

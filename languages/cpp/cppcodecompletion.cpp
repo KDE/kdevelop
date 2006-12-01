@@ -136,7 +136,7 @@ PopupTracker* PopupTracker::pt = 0;
 */
 QStringList maximumLength( const QStringList& in, int length ) {
   QStringList ret;
-  int firstNonSpace = 50000;
+  uint firstNonSpace = 50000;
   for ( QStringList::const_iterator it = in.begin(); it != in.end(); ++it )
     for ( uint a = 0; a < ( *it ).length(); a++ )
       if ( !( *it ) [ a ].isSpace() ) {
@@ -157,7 +157,7 @@ QStringList maximumLength( const QStringList& in, int length ) {
       hadEmptyLine = false;
       QString str = ( *it ).mid( firstNonSpace );
       while ( !str.isEmpty() ) {
-        if ( str.length() < length ) {
+        if ( (int)str.length() < length ) {
           ret << str;
           break;
         } else {
@@ -175,7 +175,7 @@ QStringList prepareTextForMenu( const QString& comment, int maxLines, int maxLen
   QStringList out;
   for ( QStringList::iterator it = in.begin(); it != in.end(); ++it ) {
     out << cleanForMenu( *it );
-    if ( out.count() >= maxLines ) {
+    if ( (int)out.count() >= maxLines ) {
       out << "[...]";
       break;
     }
@@ -312,6 +312,8 @@ struct PopupFillerHelpStruct {
 	QMap<QString, QPopupMenu*> m_namespacePopupCache;
 
   void insertItem( QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix ) {
+    Q_UNUSED(prefix);
+    
     QString memType = d.memberTypeToString();
 
     if ( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type->fullName() == "const int" )
@@ -471,6 +473,7 @@ struct PopupClassViewFillerHelpStruct {
   }
 
   void insertItem( QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix ) {
+    Q_UNUSED(prefix);
     FileDom f = receiver->m_pSupport->codeModel() ->fileByName( d.decl.file );
     if ( !f )
       return ;
@@ -577,7 +580,7 @@ class PopupFiller {
 
         if ( !sourceVariable.comment.isEmpty() ) {
           QPopupMenu * m = PopupTracker::createPopup( parent );
-          int gid = parent->insertItem( i18n( "Comment on %1" ).arg( sourceVariable.name ), m );
+          parent->insertItem( i18n( "Comment on %1" ).arg( sourceVariable.name ), m );
           QStringList ls = prepareTextForMenu( sourceVariable.comment, 15, 100 );
           for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
             m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
@@ -593,7 +596,7 @@ class PopupFiller {
 		    LocateResult r = p->locateDecType( d->name() );
 		    if( r ) {
 			    QPopupMenu * m = PopupTracker::createPopup( parent );
-			    int gid = parent->insertItem( i18n( "Specialized from \"%1\"" ).arg( cleanForMenu( r->fullNameChain() ) ), m );
+			    parent->insertItem( i18n( "Specialized from \"%1\"" ).arg( cleanForMenu( r->fullNameChain() ) ), m );
 					fill( m, r );
 		    }
 	    }
@@ -602,7 +605,7 @@ class PopupFiller {
       for ( TypeDesc::TemplateParams::iterator it = p.begin(); it != p.end(); ++it ) {
         //if( (*it)->resolved() ) {
         QPopupMenu * m = PopupTracker::createPopup( parent );
-        int gid = parent->insertItem( i18n( "Template-param \"%1\"" ).arg( cleanForMenu( ( *it ) ->fullNameChain() ) ), m );
+        parent->insertItem( i18n( "Template-param \"%1\"" ).arg( cleanForMenu( ( *it ) ->fullNameChain() ) ), m );
         fill( m, **it );
         /*} else {
            fill( parent, **it, prefix + depthAdd );
@@ -614,7 +617,7 @@ class PopupFiller {
           LocateResult rt = d->resolved() ->locateDecType( d->resolved() ->asFunction() ->getReturnType() );
           if ( rt ) {
             QPopupMenu * m = PopupTracker::createPopup( parent );
-            int gid = parent->insertItem( i18n( "Return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
+            parent->insertItem( i18n( "Return-type \"%1\"" ).arg( cleanForMenu( rt->fullNameChain() ) ), m );
             fill( m, rt );
           }
 
@@ -622,7 +625,7 @@ class PopupFiller {
           QStringList argNames = d->resolved() ->asFunction() ->getArgumentNames();
           if ( !args.isEmpty() ) {
             QPopupMenu * m = PopupTracker::createPopup( parent );
-            int gid = parent->insertItem( i18n( "Argument-types" ), m );
+            parent->insertItem( i18n( "Argument-types" ), m );
             QStringList::iterator it2 = argNames.begin();
             for ( QValueList<TypeDesc>::iterator it = args.begin(); it != args.end(); ++it ) {
               LocateResult at = d->resolved() ->locateDecType( *it );
@@ -632,7 +635,7 @@ class PopupFiller {
                 ++it2;
               }
               QPopupMenu * mo = PopupTracker::createPopup( m );
-              int gid = m->insertItem( i18n( "Argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
+              m->insertItem( i18n( "Argument \"%1\"" ).arg( cleanForMenu( at->fullNameChain() + " " + name ) ), mo );
               fill( mo, at );
 
             }
@@ -644,21 +647,21 @@ class PopupFiller {
         QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> > trace = d.trace() ->trace();
         if ( !trace.isEmpty() ) {
           QPopupMenu * m = PopupTracker::createPopup( parent );
-          int gid = parent->insertItem( i18n( "Trace" ), m );
+          parent->insertItem( i18n( "Trace" ), m );
 
           for ( QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> >::iterator it = trace.begin(); it != trace.end(); ++it ) {
             QPopupMenu * mo = PopupTracker::createPopup( m );
             QString tail = ( *it ).second.fullNameChain();
             if ( !tail.isEmpty() )
               tail = "::" + tail;
-            int gid = m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( ( *it ).first.name + tail ) ).arg( cleanForMenu( ( *it ).first.type->fullNameChain() + tail ) ), mo );
+            m->insertItem( i18n( "%1 -> %2" ).arg( cleanForMenu( ( *it ).first.name + tail ) ).arg( cleanForMenu( ( *it ).first.type->fullNameChain() + tail ) ), mo );
 
             struk.insertItem( mo, ( *it ).first, prefix );
 
             if ( !( *it ).first.decl.comment.isEmpty() ) {
               mo->insertSeparator();
               QPopupMenu * m = PopupTracker::createPopup( mo );
-              int gid = mo->insertItem( i18n( "Comment" ), m );
+              mo->insertItem( i18n( "Comment" ), m );
               QStringList ls = prepareTextForMenu( ( *it ).first.decl.comment, 15, 100 );
               for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
                 m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
@@ -673,20 +676,20 @@ class PopupFiller {
         QValueList<LocateResult> bases = d->resolved() ->getBases();
         for ( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
           QPopupMenu * m = PopupTracker::createPopup( parent );
-          int gid = parent->insertItem( i18n( "Base-class \"%1\"" ).arg( cleanForMenu( ( *it ) ->fullNameChain() ) ), m );
+          parent->insertItem( i18n( "Base-class \"%1\"" ).arg( cleanForMenu( ( *it ) ->fullNameChain() ) ), m );
           fill( m, *it );
         }
 
         if ( d->resolved() ->parent() && d->resolved() ->parent() ->desc() ) {
           QPopupMenu * m = PopupTracker::createPopup( parent );
-          int gid = parent->insertItem( i18n( "Nested in \"%1\"" ).arg( cleanForMenu( d->resolved() ->parent() ->fullTypeResolved() ) ), m );
+          parent->insertItem( i18n( "Nested in \"%1\"" ).arg( cleanForMenu( d->resolved() ->parent() ->fullTypeResolved() ) ), m );
           fill( m, d->resolved() ->parent() ->desc() );
         }
 
         if ( !d->resolved() ->comment().isEmpty() ) {
           parent->insertSeparator();
           QPopupMenu * m = PopupTracker::createPopup( parent );
-          int gid = parent->insertItem( i18n( "Comment on %1" ).arg( cleanForMenu( d->name() ) ), m );
+          parent->insertItem( i18n( "Comment on %1" ).arg( cleanForMenu( d->name() ) ), m );
           QStringList ls = prepareTextForMenu( d->resolved() ->comment(), 15, 100 );
           for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
             m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
@@ -1356,6 +1359,7 @@ void CppCodeCompletion::popupClassViewAction( int number ) {
 }
 
 void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int column ) {
+  Q_UNUSED(context);
   if ( !m_pSupport->codeCompletionConfig() ->showEvaluationContextMenu() )
     return ;
 
@@ -1399,7 +1403,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 
 		int id = m->insertItem( i18n( "Jump to %1" ).arg( cleanForMenu( type.macro.name() ) ), this, SLOT( popupAction( int ) ) );
 		QPopupMenu * b = PopupTracker::createPopup( m );
-		int bid = m->insertItem( i18n( "Body" ), b );
+		m->insertItem( i18n( "Body" ), b );
 
 		DeclarationInfo i;
 		i.file = type.macro.fileName();
@@ -1596,7 +1600,6 @@ bool CppCodeCompletion::mayBeTypeTail( int line, int column, QString& append, bo
 
 bool CppCodeCompletion::canBeTypePrefix( const QString& prefix, bool inFunction ) {
 
-  bool hadSpace = false;
   for ( int p = prefix.length() - 1 ; p >= 0; --p ) {
     if ( prefix[ p ].isSpace() ) {
       continue;
@@ -1673,6 +1676,7 @@ void macrosToDriver( Driver& d, FileDom file ) {
 }
 
 SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int line, int col, SimpleTypeConfiguration& conf ) {
+  Q_UNUSED(conf);
   if ( !f )
     return 0;
   int modelStartLine, modelStartColumn;
@@ -1832,7 +1836,7 @@ void CppCodeCompletion::getFunctionBody( FunctionDom f , int& line, int& col ) {
 	if ( i == -1 )
 		return;
 	i++;
-	if( i >= t.length() )
+  if( (uint)i >= t.length() )
 		return;
 	int lineCols = 0;
 	for ( int a = 0; a < i; a++ ) {
@@ -2476,7 +2480,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
       /*			kdDebug(9007) << "recoveredDecl = " << recoveredTypeSpec.get() << endl;*/
       if ( recoveredTypeSpec.get() ) {
 
-        ClassSpecifierAST * clazz = static_cast<ClassSpecifierAST*>( recoveredTypeSpec.get() );
+        //ClassSpecifierAST * clazz = static_cast<ClassSpecifierAST*>( recoveredTypeSpec.get() );
 
         QString keyword = getText( line, 0, line, column ).simplifyWhiteSpace();
 
@@ -3399,7 +3403,6 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
   Debug d( "#cel#" );
   if ( !safetyCounter || !d )
     return ;
-  CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
   SimpleTypeImpl* m = &( *typeR ) ;
 
   if ( SimpleTypeNamespace * ns = dynamic_cast<SimpleTypeNamespace*>( m ) ) {
@@ -3753,7 +3756,6 @@ void CppCodeCompletion::computeCompletionEntryList( QString parent, SimpleType t
   if ( !safetyCounter || !d )
     return ;
 
-  CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
   ClassList::ConstIterator it = lst.begin();
   while ( it != lst.end() ) {
@@ -3785,7 +3787,6 @@ void CppCodeCompletion::computeCompletionEntryList( QString parent, SimpleType t
   if ( !safetyCounter || !d )
     return ;
 
-  CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
   TypeAliasList::ConstIterator it = lst.begin();
   while ( it != lst.end() ) {
