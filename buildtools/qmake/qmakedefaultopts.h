@@ -14,16 +14,15 @@
 
 #include <qmap.h>
 #include <qstringlist.h>
-#include <qobject.h>
+// #include <qobject.h>
 
-class KTempFile;
-class KProcess;
+// class KTempFile;
+// class BlockingKProcess;
 
-class QMakeDefaultOpts : public QObject
+class QMakeDefaultOpts
 {
-    Q_OBJECT
 public:
-    QMakeDefaultOpts( QObject* parent = 0, const char* name = 0 );
+    QMakeDefaultOpts( );
 
     ~QMakeDefaultOpts();
 
@@ -32,18 +31,15 @@ public:
     const QStringList variableValues( const QString& ) const;
     const QStringList& variables() const;
 
-signals:
-    void variablesRead();
+// signals:
+//     void variablesRead();
 
-private slots:
-    void slotReadStderr( KProcess*, char*, int );
-    void slotFinished( KProcess* );
+// private slots:
+//     void slotReadStderr( KProcess*, char*, int );
+//     void slotFinished( KProcess* );
 
 private:
     QMap<QString, QStringList> m_variables;
-    KTempFile* makefile;
-    KTempFile* qmakefile;
-    KProcess* proc;
     QStringList m_keys;
 };
 

@@ -32,7 +32,7 @@
 #include <qptrstack.h>
 #include <qtextstream.h>
 #include <qcombobox.h>
-#include <qprocess.h>
+#include <kprocess.h>
 #include <qtimer.h>
 #include <qdir.h>
 #include <qregexp.h>
@@ -337,12 +337,7 @@ void TrollProjectWidget::openProject( const QString &dirName )
     kdDebug( 9024 ) << "Parsing " << proname << endl;
 
     m_rootScope = new Scope( proname, m_part );
-    connect( m_rootScope, SIGNAL( initializationFinished() ), this, SLOT( createQMakeScopeItems() ) );
 
-}
-
-void TrollProjectWidget::createQMakeScopeItems()
-{
     m_rootSubproject = new QMakeScopeItem( overview, m_rootScope->scopeName(), m_rootScope, this );
 
     m_rootSubproject->setOpen( true );
@@ -354,10 +349,14 @@ void TrollProjectWidget::createQMakeScopeItems()
     {
         overview->setSelected( m_rootSubproject, true );
     }
-    disconnect( m_rootScope, SIGNAL( initializationFinished() ), this, SLOT( createQMakeScopeItems() ) );
 //     kdDebug(9024) << "Adding " << allFiles().count() << " Files" << endl;
 //     kdDebug(9024) << allFiles() << endl;
-    emit m_part->addedFilesToProject(allFiles());
+
+}
+
+void TrollProjectWidget::createQMakeScopeItems()
+{
+
 }
 
 void TrollProjectWidget::closeProject()
@@ -370,9 +369,6 @@ void TrollProjectWidget::closeProject()
 
 QStringList TrollProjectWidget::allFiles()
 {
-    if( !m_rootScope->isInitializationFinished() )
-        return QStringList();
-
     if( m_filesCached )
         return m_allFilesCache;
     m_allFilesCache = m_rootScope->allFiles( m_rootScope->projectDir() );
@@ -1189,11 +1185,11 @@ void TrollProjectWidget::slotAddFiles()
             case AddFilesDialog::Link:
                 {
                     // Link selected files to current subproject folder
-                    QProcess *proc = new QProcess( this );
-                    proc->addArgument( "ln" );
-                    proc->addArgument( "-s" );
-                    proc->addArgument( files[ i ] );
-                    proc->addArgument( cleanSubprojectDir );
+                    KProcess *proc = new KProcess( this );
+                    *proc << "ln";
+                    *proc << "-s";
+                    *proc << files[ i ];
+                    *proc << cleanSubprojectDir;
                     proc->start();
                     QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( '/' ) - 1 );
                     // and add them to the filelist
@@ -1530,11 +1526,11 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                     case AddFilesDialog::Link:
                         {
                             // Link selected files to current subproject folder
-                            QProcess *proc = new QProcess( this );
-                            proc->addArgument( "ln" );
-                            proc->addArgument( "-s" );
-                            proc->addArgument( files[ i ] );
-                            proc->addArgument( cleanSubprojectPath );
+                            KProcess *proc = new KProcess( this );
+                            *proc << "ln";
+                            *proc << "-s";
+                            *proc << files[ i ];
+                            *proc << cleanSubprojectPath;
                             proc->start();
                             QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( '/' ) - 1 );
                             // and add them to the filelist

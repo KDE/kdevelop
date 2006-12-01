@@ -28,9 +28,8 @@
 class Scope;
 class TrollProjectPart;
 
-class Scope : public QObject
+class Scope
 {
-    Q_OBJECT
 public:
 
     enum ScopeType {
@@ -160,8 +159,6 @@ public:
 
     QStringList allFiles( const QString& );
 
-    bool isInitializationFinished() const { return m_initFinished; }
-
     QString resolveVariables( const QString& ) const;
 
     QString findCustomVarForPath( const QString& );
@@ -170,16 +167,11 @@ public:
     void printTree();
 #endif
 
-signals:
-    void initializationFinished();
-    void initializationFinished( Scope* );
+private:
 
-private slots:
     // Builds the scope-lists and the customVariables list
     void init();
-    void emitInitFinished( Scope* );
 
-private:
     /*
      * Updates the given Variable+op with the values, if removeFromOp is true it removes the values, else it adds them
      * this works it's way back through the current scope and changes the last occurence of op to
@@ -266,7 +258,6 @@ private:
     bool m_isEnabled;
     TrollProjectPart* m_part;
     QMakeDefaultOpts* m_defaultopts;
-    bool m_initFinished;
     QMap<QString, QStringList> m_varCache;
     QValueList<Scope*>* m_unfinishedScopes;
 
