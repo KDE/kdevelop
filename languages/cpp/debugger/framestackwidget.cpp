@@ -106,9 +106,10 @@ void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
             if (frame->text(0) == "...")
             {
                // Switch to the target thread.
-               controller_->addCommand(
-               new GDBCommand(QString("-thread-select %1")
-                           .arg(frame->threadNo()).ascii()));
+                if (frame->threadNo() != -1)
+                    controller_->addCommand(
+                        new GDBCommand(QString("-thread-select %1")
+                                       .arg(frame->threadNo()).ascii()));
 
                viewedThread_ = findThread(frame->threadNo());
                getBacktrace(frame->frameNo(), frame->frameNo() + frameChunk_);
