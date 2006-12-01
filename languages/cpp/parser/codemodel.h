@@ -50,7 +50,7 @@ _Target model_static_cast(_Source item)
   return ptr;
 }
 
-class KDEVCPPLANGUAGE_EXPORT CodeModel : public KDevCodeModel
+class KDEVCPPPARSER_EXPORT CodeModel : public KDevCodeModel
 {
 public:
   enum AccessPolicy
@@ -133,7 +133,7 @@ private:
     uint m_indirections : 6;
 };
 
-class KDEVCPPLANGUAGE_EXPORT _CodeModelItem: public KDevCodeItem
+class KDEVCPPPARSER_EXPORT _CodeModelItem: public KDevCodeItem
 {
 public:
   enum Kind
