@@ -21,12 +21,11 @@
 #define KDEVIDEEXTENSION_H
 
 #include <shellextension.h>
-#include "shellexport.h"
 
 class KDialog;
 class QWidget;
 
-class KDEVSHELL_EXPORT KDevIDEExtension : public ShellExtension {
+class KDevIDEExtension : public ShellExtension {
 public:
     static void init();
 
