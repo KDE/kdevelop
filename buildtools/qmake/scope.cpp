@@ -1448,7 +1448,7 @@ void Scope::emitInitFinished( Scope* s )
     {
         if( m_unfinishedScopes )
             m_unfinishedScopes->remove( s );
-        disconnect( s, SIGNAL( initializationFinished( Scope* ) ), this, SLOT( emitFinished( Scope* ) ) );
+        disconnect( s, SIGNAL( initializationFinished( Scope* ) ), this, SLOT( emitInitFinished( Scope* ) ) );
     }
     if( !m_unfinishedScopes || m_unfinishedScopes->isEmpty() )
     {

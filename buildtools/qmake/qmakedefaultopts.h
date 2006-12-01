@@ -17,7 +17,7 @@
 #include <qobject.h>
 
 class KTempFile;
-class QProcess;
+class KProcess;
 
 class QMakeDefaultOpts : public QObject
 {
@@ -36,14 +36,14 @@ signals:
     void variablesRead();
 
 private slots:
-    void slotReadStderr( );
-    void slotFinished( );
+    void slotReadStderr( KProcess*, char*, int );
+    void slotFinished( KProcess* );
 
 private:
     QMap<QString, QStringList> m_variables;
     KTempFile* makefile;
     KTempFile* qmakefile;
-    QProcess* proc;
+    KProcess* proc;
     QStringList m_keys;
 };
 
