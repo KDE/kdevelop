@@ -12,6 +12,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+#include<qcheckbox.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -700,12 +701,13 @@ void CvsServicePartImpl::unTag( const KURL::List& urlList )
     if (!prepareOperation( urlList, opUnTag ))
         return;
 
-    TagDialog dlg( i18n("Removing Tag/Branch from files ..."),
+    TagDialog dlg( i18n("Removing Tag from files ..."),
         mainWindow()->main()->centralWidget() );
+    dlg.tagAsBranchCheck->hide();
     if (dlg.exec() != QDialog::Accepted)
         return;
 
-    DCOPRef cvsJob = m_cvsService->createTag( fileList(), dlg.tagName(),
+    DCOPRef cvsJob = m_cvsService->deleteTag( fileList(), dlg.tagName(),
         dlg.isBranch(), dlg.force() );
 
     m_scheduler->schedule( cvsJob );

@@ -208,10 +208,10 @@ void CvsServicePart::setupActions()
     actionTag->setToolTip( i18n("Make tag/branch") );
     actionTag->setWhatsThis( i18n("<b>Make tag/branch</b><p>Tags/branches selected file(s).") );
 
-    actionUnTag = new KAction( i18n("&Delete Tag/Branch"), 0,
+    actionUnTag = new KAction( i18n("&Delete Tag"), 0,
         this, SLOT(slotActionUnTag()), actionCollection(), "cvsservice_untag" );
-    actionUnTag->setToolTip( i18n("Delete tag/branch") );
-    actionUnTag->setWhatsThis( i18n("<b>Delete tag/branch</b><p>Delete tag/branches from selected file(s).") );
+    actionUnTag->setToolTip( i18n("Delete tag") );
+    actionUnTag->setWhatsThis( i18n("<b>Delete tag</b><p>Delete tag from selected file(s).") );
 
     actionAddToIgnoreList = new KAction( i18n("&Ignore in CVS Operations"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "cvsservice_ignore" );
@@ -349,7 +349,7 @@ void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
         id = subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
         subMenu->setWhatsThis(id, i18n("<b>Make tag/branch</b><p>Tags/branches selected file(s)."));
         id = subMenu->insertItem( actionUnTag->text(), this, SLOT(slotUnTag()) );
-        subMenu->setWhatsThis(id, i18n("<b>Delete tag/branch</b><p>Delete tag/branches from selected file(s)."));
+        subMenu->setWhatsThis(id, i18n("<b>Delete tag</b><p>Delete tag from selected file(s)."));
         id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
         subMenu->setWhatsThis(id, i18n("<b>Update/revert to another release</b><p>Updates/reverts file(s) to another release."));
         id = subMenu->insertItem( actionRemoveSticky->text(), this, SLOT(slotRemoveSticky()) );
