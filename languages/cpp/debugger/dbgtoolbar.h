@@ -12,7 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef Q_OS_MACX
+#ifndef QT_MAC
 #ifndef _DBGTOOLBAR_H_
 #define _DBGTOOLBAR_H_
 

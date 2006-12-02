@@ -12,7 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef Q_OS_MACX
+#ifndef QT_MAC
 #include "dbgtoolbar.h"
 #include "debuggerpart.h"
 #include "dbgcontroller.h"

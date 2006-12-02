@@ -704,7 +704,7 @@ bool DebuggerPart::startDebugger()
 
         if (DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar", false))
         {
-#ifndef Q_OS_MACX
+#ifndef QT_MAC
             floatingToolBar = new DbgToolBar(this, mainWindow()->main());
             floatingToolBar->show();
 #endif
