@@ -113,7 +113,7 @@ VCSFileInfoMap* ClearcaseManipulator::retreiveFilesInfos(const QString& director
 	state = VCSFileInfo::Uptodate;
       }
       else {
-	VCSFileInfo::Unknown;
+	state = VCSFileInfo::Unknown;
       }
 
 
