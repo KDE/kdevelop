@@ -41,11 +41,16 @@ public:
 
 TagItem::TagItem( QListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern )
 	: QListViewItem( lv, tag, type, file ), tag(tag), type(type), file(file), pattern(pattern)
-{}
+{
+}
 
 CTags2Widget::CTags2Widget( CTags2Part * part, const char* name, WFlags fl)
 : CTags2WidgetBase(0,name,fl), _part(part)
 {
+    output_view->setColumnWidthMode(0,QListView::Maximum);
+	output_view->setColumnWidthMode(1,QListView::Maximum);
+	output_view->setColumnWidthMode(2,QListView::Maximum);
+
 	_typeTimeout = new QTimer( this );
 	connect( _typeTimeout, SIGNAL(timeout()), this, SLOT(line_edit_changed()) );
 
@@ -70,6 +75,11 @@ void CTags2Widget::displayHits( Tags::TagList const & list )
 		new TagItem( output_view, (*it).tag, (*it).type, (*it).file, (*it).pattern );
 		++it;
 	}
+
+	output_view->adjustColumn(0);
+	output_view->adjustColumn(1);
+	output_view->adjustColumn(2);
+
 }
 
 void CTags2Widget::displayHitsAndClear( Tags::TagList const & list )
@@ -175,7 +185,6 @@ void CTags2Widget::goToNext( )
 		}
 		item = item->nextSibling();
 	}
-	
 	// use the first
 	if ( (item = output_view->firstChild()) != NULL )
 	{
