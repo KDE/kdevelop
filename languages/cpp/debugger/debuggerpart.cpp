@@ -78,7 +78,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
-    controller(0), previousDebuggerState_(s_dbgNotStarted), 
+    controller(0), previousDebuggerState_(s_dbgNotStarted),
     justRestarted_(false), needRebuild_(true),
     running_(false)
 {
@@ -88,7 +88,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     setXMLFile("kdevdebugger.rc");
 
     m_debugger = new Debugger( partController() );
-    
+
     statusBarIndicator = new LabelWithDoubleClick(
         " ", mainWindow()->statusBar());
     statusBarIndicator->setFixedWidth(15);
@@ -114,10 +114,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbBreakpointWidget->setIcon( SmallIcon("stop") );
     mainWindow()->embedOutputView(gdbBreakpointWidget, i18n("Breakpoints"), i18n("Debugger breakpoints"));
 
-    variableWidget = new VariableWidget( controller, 
+    variableWidget = new VariableWidget( controller,
                                          gdbBreakpointWidget,
                                          0, "variablewidget");
-    mainWindow()->embedSelectView(variableWidget, i18n("Variables"), 
+    mainWindow()->embedSelectView(variableWidget, i18n("Variables"),
                                   i18n("Debugger variable-view"));
 
 
@@ -175,8 +175,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
 
     viewerWidget = new ViewerWidget( controller, 0, "view");
-    mainWindow()->embedSelectView(viewerWidget, 
-                                  i18n("Debug views"), 
+    mainWindow()->embedSelectView(viewerWidget,
+                                  i18n("Debug views"),
                                   i18n("Special debugger views"));
     mainWindow()->setViewAvailable(viewerWidget, false);
     connect(viewerWidget, SIGNAL(setViewShown(bool)),
@@ -491,7 +491,7 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     bool running = !(previousDebuggerState_ & s_dbgNotStarted);
 
-    // If debugger is running, we insert items at the top. 
+    // If debugger is running, we insert items at the top.
     // The reason is user has explicitly run the debugger, so he's
     // surely debugging, not editing code or something. So, first
     // menu items should be about debugging, not some copy/paste/cut
@@ -499,7 +499,7 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (!running)
         popup->insertSeparator();
 
-    int index = running ? 0 : -1;        
+    int index = running ? 0 : -1;
     if (running)
     {
         // Too bad we can't add QAction to popup menu in Qt3.
@@ -517,7 +517,7 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     }
     if (econtext->url().isLocalFile())
     {
-        int id = popup->insertItem( i18n("Toggle Breakpoint"), 
+        int id = popup->insertItem( i18n("Toggle Breakpoint"),
                                     this, SLOT(toggleBreakpoint()),
                                     0, -1, index);
         index += running;
@@ -526,12 +526,12 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (!m_contextIdent.isEmpty())
     {
         QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
-        int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed), 
+        int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed),
                                     this, SLOT(contextEvaluate()),
                                     0, -1, index);
         index += running;
         popup->setWhatsThis(id, i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor."));
-        int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed), 
+        int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed),
                                      this, SLOT(contextWatch()),
                                     0, -1, index);
         index += running;
@@ -591,7 +591,7 @@ void DebuggerPart::setupController()
              controller,            SLOT(slotUserGDBCmd(const QString&)));
     connect( gdbOutputWidget,       SIGNAL(breakInto()),
              controller,            SLOT(slotBreakInto()));
-  
+
     connect( controller,            SIGNAL(breakpointHit(int)),
              gdbBreakpointWidget,   SLOT(slotBreakpointHit(int)));
 
@@ -673,39 +673,41 @@ bool DebuggerPart::startDebugger()
         }
     }
 
-    if (controller->start(shell, run_envvars, run_directory, 
+    if (controller->start(shell, run_envvars, run_directory,
                           program, run_arguments))
     {
         core()->running(this, true);
 
         stateChanged( QString("active") );
-        
+
         KActionCollection *ac = actionCollection();
         ac->action("debug_run")->setText( i18n("&Continue") );
-        
-        ac->action("debug_run")->setToolTip( 
+
+        ac->action("debug_run")->setToolTip(
             i18n("Continues the application execution") );
-        ac->action("debug_run")->setWhatsThis( 
+        ac->action("debug_run")->setWhatsThis(
             i18n("Continue application execution\n\n"
                  "Continues the execution of your application in the "
                  "debugger. This only takes effect when the application "
                  "has been halted by the debugger (i.e. a breakpoint has "
                  "been activated or the interrupt was pressed).") );
-        
+
         mainWindow()->setViewAvailable(framestackWidget, true);
         mainWindow()->setViewAvailable(disassembleWidget, true);
         mainWindow()->setViewAvailable(gdbOutputWidget, true);
-        
+
         framestackWidget->setEnabled(true);
         disassembleWidget->setEnabled(true);
 
         gdbOutputWidget->setEnabled(true);
-     
+
 
         if (DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar", false))
         {
+#ifndef Q_OS_MACX
             floatingToolBar = new DbgToolBar(this, mainWindow()->main());
             floatingToolBar->show();
+#endif
         }
 
         running_ = true;
@@ -735,7 +737,7 @@ void DebuggerPart::slotStopDebugger()
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
     gdbOutputWidget->setEnabled(false);
-    
+
 
 //    mainWindow()->setViewAvailable(variableWidget, false);
     mainWindow()->setViewAvailable(framestackWidget, false);
@@ -761,7 +763,7 @@ void DebuggerPart::slotStopDebugger()
 void DebuggerPart::slotShowView(bool show)
 {
     const QWidget* s = static_cast<const QWidget*>(sender());
-    QWidget* ncs = const_cast<QWidget*>(s);    
+    QWidget* ncs = const_cast<QWidget*>(s);
     mainWindow()->setViewAvailable(ncs, show);
     if (show)
         mainWindow()->raiseView(ncs);
@@ -772,7 +774,7 @@ void DebuggerPart::slotDebuggerAbnormalExit()
     mainWindow()->raiseView(gdbOutputWidget);
 
     KMessageBox::error(
-        mainWindow()->main(), 
+        mainWindow()->main(),
         i18n("<b>GDB exited abnormally</b>"
              "<p>This is likely a bug in GDB. "
              "Examine the gdb output window and then stop the debugger"),
@@ -820,7 +822,7 @@ void DebuggerPart::slotRun()
         // Note that this logic somewhat duplicates the
         // isDirty method present in a number of project plugins.
         // But there, it's a private method we can't conveniently
-        // access. Besides, the custom makefiles project manager won't 
+        // access. Besides, the custom makefiles project manager won't
         // care about a file unless it's explicitly added, so it can
         // miss dependencies.
 
@@ -835,7 +837,7 @@ void DebuggerPart::slotRun()
             // debugging with modified code, and because it's not clear
             // how user can reset this "don't ask again" setting.
             int r = KMessageBox::questionYesNoCancel(
-                0, 
+                0,
                 "<b>" + i18n("Rebuild the project?") + "</b>" +
                 i18n("<p>The project is out of date. Rebuild it?"),
                 i18n("Rebuild the project?"));
@@ -846,35 +848,35 @@ void DebuggerPart::slotRun()
             if (r == KMessageBox::Yes)
             {
                 rebuild = true;
-            }                
+            }
             else
             {
                 // If the user said don't rebuild, try to avoid
-                // asking the same question again. 
+                // asking the same question again.
                 // Note that this only affects 'were any files changed'
                 // check, if a file is changed but not saved we'll
                 // still ask the user again. That's bad, but I don't know
-                // a better solution -- it's hard to check that 
+                // a better solution -- it's hard to check that
                 // the file has the same content as it had when the user
                 // last answered 'no, don't rebuild'.
                 needRebuild_ = false;
             }
 
             if (rebuild)
-            {                 
+            {
                 disconnect(SIGNAL(buildProject()));
                 // The KDevProject has no method to build the project,
                 // so try connecting to a slot has is present to all
                 // existing project managers.
                 // Note: this assumes that 'slotBuild' will save
                 // modified files.
-                
+
                 if (connect(this, SIGNAL(buildProject()),
                             project(), SLOT(slotBuild())))
                 {
-                    connect(project(), SIGNAL(projectCompiled()), 
+                    connect(project(), SIGNAL(projectCompiled()),
                             this, SLOT(slotRun_part2()));
-                    
+
                     emit buildProject();
                     rebuild = true;
                 }
@@ -896,10 +898,10 @@ void DebuggerPart::slotRun()
 }
 
 void DebuggerPart::slotRun_part2()
-{        
+{
     needRebuild_ = false;
 
-    disconnect(project(), SIGNAL(projectCompiled()), 
+    disconnect(project(), SIGNAL(projectCompiled()),
                this, SLOT(slotRun_part2()));
 
     if (controller->stateIsOn( s_dbgNotStarted ))
@@ -1103,11 +1105,11 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
 
         // If the view is undocked, don't hide it. User has explicitly
         // undocked it and moved into a convenient position. Don't
-        // force him to undock the widget and move it again next 
+        // force him to undock the widget and move it again next
         // time the debugger starts.
         bool undocked = false;
 
-        if (KDockWidget* dockWidget = 
+        if (KDockWidget* dockWidget =
             static_cast<KDockWidget*>(
                 variableWidget->parentWidget()->qt_cast("KDockWidget")))
         {
@@ -1169,10 +1171,10 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
 
 
     // As soon as debugger clears 's_appNotStarted' flag, we
-    // set 'justRestarted' variable. 
+    // set 'justRestarted' variable.
     // The other approach would be to set justRestarted in slotRun, slotCore
     // and slotAttach.
-    // Note that setting this var in startDebugger is not OK, because the 
+    // Note that setting this var in startDebugger is not OK, because the
     // initial state of debugger is exactly the same as state after pause,
     // so we'll always show varaibles view.
     if ((previousDebuggerState_ & s_appNotStarted) &&
@@ -1193,7 +1195,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     QToolTip::add(statusBarIndicator, stateIndicatorFull);
     if (!msg.isEmpty())
         mainWindow()->statusBar()->message(msg, 3000);
-    
+
 
     previousDebuggerState_ = state;
 }
@@ -1204,7 +1206,7 @@ void DebuggerPart::slotEvent(GDBController::event_t e)
         e == GDBController::program_exited ||
         e == GDBController::debugger_exited)
     {
-        debugger()->clearExecutionPoint();        
+        debugger()->clearExecutionPoint();
     }
 }
 

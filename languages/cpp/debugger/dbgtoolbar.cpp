@@ -12,7 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
+#ifndef Q_OS_MACX
 #include "dbgtoolbar.h"
 #include "debuggerpart.h"
 #include "dbgcontroller.h"
@@ -488,3 +488,4 @@ void DbgToolBar::slotActivateAndUndock()
 
 // **************************************************************************
 #include "dbgtoolbar.moc"
+#endif
