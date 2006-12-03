@@ -38,6 +38,7 @@ public:
     void slotexportSPECPushButtonPressed();
     void slotimportSPECPushButtonPressed();
     void slotsrcPackagePushButtonPressed();
+	void slotAddFileButtonPressed();
 
 private:
     void parseDotRpmmacros();

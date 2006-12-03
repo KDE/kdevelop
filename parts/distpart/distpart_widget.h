@@ -51,7 +51,7 @@ public:
 
     DistpartDialog(DistpartPart *part, QWidget *parent);
     ~DistpartDialog();
-    
+
 signals:
     void okay();
     void cancel();
@@ -109,6 +109,8 @@ public slots:
     void slotexportSPECPushButtonPressed();
     void slotimportSPECPushButtonPressed();
     void slotsrcPackagePushButtonPressed();
+	void slotAddFileButtonPressed();
+	void slotRemoveFile(QListBoxItem *item);
 
 public:
     bool getcustomProjectCheckBoxState();
@@ -192,7 +194,7 @@ public:
     void setprojectChangelogMultilineEditText(QString text);
 
     QString getSourceName();
-    
+
 private:
     void loadSettings();
     void storeSettings();

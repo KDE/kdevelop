@@ -83,6 +83,7 @@ DistpartDialog::DistpartDialog(DistpartPart *part, QWidget *parent)
             this, SLOT(slotuploadAddFileToolButtonPressed()));
     connect( uploadRemoveToolButton, SIGNAL(clicked()),
             this, SLOT(slotuploadRemoveToolButtonPressed()));
+	connect ( srcDistFileListBox, SIGNAL(clicked(QListBoxItem *item)), this, SLOT(slotRemoveFile(QListBoxItem *item)));
 //	connect(  buildAllPushButton, SIGNAL( clicked() ), this, SLOT( slotbuildAllPushButtonPressed() ));
 //	connect(  exportSPECPushButton, SIGNAL( clicked() ), this, SLOT( slotexportSPECPushButtonPressed( ) ) );
 //	connect(  srcPackagePushButton, SIGNAL( clicked() ), this, SLOT( slotsrcPackagePushButtonPressed() ) );
@@ -124,27 +125,25 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
     kdDebug() << "Starting archive..." << endl;
     QString dist = (getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? "application/x-bzip2" : "application/x-gzip";
 
-    QString filename = m_part->project()->projectDirectory() + "/" + getappNameFormatLineEditText() +
-		       "-" +
-		       getversionLineEditText() +
-		       ((getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz");
+    QString filename = m_part->project()->projectDirectory() + "/" + getSourceName();
 
     KTar tar(filename, dist);
     if ( tar.open(IO_WriteOnly) )
     {
-    	QStringList files = m_part->project()->distFiles();
+    	//QStringList files = m_part->project()->distFiles();
 	KProgressDialog *prog = new KProgressDialog( 0, "dialog", i18n("Building Package"), "", true );
 	prog->show();
-	for( uint idx = 0; idx < files.count(); ++idx)
+	for( uint idx = 0; idx < srcDistFileListBox->numRows(); ++idx)
 	{
-		if ( !tar.addLocalFile( m_part->project()->projectDirectory() + "/" + files[idx], getappNameFormatLineEditText() + "/" + files[idx]) )
+		QString file = srcDistFileListBox->text(idx);
+		if ( !tar.addLocalFile( m_part->project()->projectDirectory() + "/" + file, getappNameFormatLineEditText() + "/" + file) )
 		{
-			kdDebug() << "Failed to write file " << files[idx] << endl;
+			kdDebug() << "Failed to write file " << file << endl;
 		}
 		else
 		{
-			prog->setLabel(i18n("Adding file: %1").arg( files[idx]) );
-			prog->progressBar()->setValue( (idx*100)/files.count() );
+			prog->setLabel(i18n("Adding file: %1").arg( file) );
+			prog->progressBar()->setValue( (idx*100)/srcDistFileListBox->numRows() );
 		}
 	}
     	tar.close( );
@@ -161,7 +160,10 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
 }
 
 //    QPushButton* resetSrcPushButton;
-void DistpartDialog::slotresetSrcPushButtonPressed() {}
+void DistpartDialog::slotresetSrcPushButtonPressed() {
+	srcDistFileListBox->clear();
+	loadSettings();
+}
 
 
 
@@ -580,5 +582,24 @@ void DistpartDialog::slotsrcPackagePushButtonPressed( )
 	m_spec->slotsrcPackagePushButtonPressed();
 }
 
+
+void DistpartDialog::slotAddFileButtonPressed(){
+	QStringList filenames = KFileDialog::getOpenFileNames();
+	for(uint count =0; count< filenames.size(); count++){
+		QString base = m_part->project()->projectDirectory() +"/";
+		srcDistFileListBox->insertItem(filenames[count].remove(base));
+	}
+}
+
+void DistpartDialog::slotRemoveFile(QListBoxItem *item){
+	if ( KMessageBox::Yes == KMessageBox::warningYesNo( this, i18n("Remove %1").arg( item->text() ), i18n("Remove File") )){
+	for(uint count =0; count< srcDistFileListBox->numRows(); count++){
+		if ( item == srcDistFileListBox->item(count)){
+			srcDistFileListBox->removeItem(count);
+			break;
+		}
+	}
+	}
+}
 
 #include "distpart_widget.moc"

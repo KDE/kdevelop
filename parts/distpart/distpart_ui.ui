@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>distpart_ui</class>
 <author>Ian Reinhart Geiser &lt;geiseri@yahoo.com&gt;</author>
 <widget class="QWidget">
@@ -132,7 +132,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Source Distribution</string>
+                    <string>Source &amp;Distribution</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -149,6 +149,12 @@
                         </property>
                         <property name="text">
                             <string>&amp;Use custom options</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+U</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Default is: %n-%v.tar.gz</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget" row="2" column="0">
@@ -210,6 +216,9 @@
                                                 <property name="text">
                                                     <string>%n-%v</string>
                                                 </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>Enter the filename using the format options. </string>
+                                                </property>
                                             </widget>
                                         </vbox>
                                     </widget>
@@ -232,6 +241,25 @@
                                     </size>
                                 </property>
                             </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>addFile</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add Files</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
+                            </widget>
                             <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>createSrcArchPushButton</cstring>
@@ -245,7 +273,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Create Source &amp;Archive</string>
+                                    <string>&amp;Create Source Archive</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -284,7 +312,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Package Information</string>
+                    <string>Package &amp;Information</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -354,6 +382,9 @@
                                                 <horstretch>2</horstretch>
                                                 <verstretch>0</verstretch>
                                             </sizepolicy>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Application name</string>
                                         </property>
                                     </widget>
                                     <widget class="KLineEdit" row="3" column="1">
@@ -462,6 +493,11 @@
                                                 <verstretch>0</verstretch>
                                             </sizepolicy>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Version of the file package.
+Menu item: Project/Project Options/General/Version
+changes project compiled version number</string>
+                                        </property>
                                     </widget>
                                     <widget class="QLabel" row="6" column="0">
                                         <property name="name">
@@ -516,7 +552,7 @@
                                             <cstring>devPackageCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Create development package</string>
+                                            <string>&amp;Create development package</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox">
@@ -635,7 +671,7 @@
                                             <cstring>srcPackagePushButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Build Source 
+                                            <string>&amp;Build Source 
 Package</string>
                                         </property>
                                     </widget>
@@ -644,7 +680,7 @@ Package</string>
                                             <cstring>buildAllPushButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Build Binary 
+                                            <string>Build Binar&amp;y 
 Package</string>
                                         </property>
                                     </widget>
@@ -653,7 +689,7 @@ Package</string>
                                             <cstring>exportSPECPushButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Export 
+                                            <string>E&amp;xport 
 Build Files</string>
                                         </property>
                                     </widget>
@@ -662,7 +698,7 @@ Build Files</string>
                                             <cstring>importSPECPushButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Import 
+                                            <string>I&amp;mport 
 Build Files</string>
                                         </property>
                                     </widget>
@@ -774,7 +810,7 @@ Build Files</string>
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>P&amp;roject Publishing</string>
+                    <string>Pr&amp;oject Publishing</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -815,7 +851,7 @@ Build Files</string>
                                             <cstring>genHTMLCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Generate &amp;HTML information page</string>
+                                            <string>Ge&amp;nerate HTML information page</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox" row="1" column="1">
@@ -1020,7 +1056,7 @@ Build Files</string>
                                             <cstring>uploadCustomCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Upload to custom FTP site</string>
+                                            <string>Upload to &amp;custom FTP site</string>
                                         </property>
                                     </widget>
                                     <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
@@ -1028,7 +1064,7 @@ Build Files</string>
                                             <cstring>uploadftpkdeorgCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Upload files to ftp.kde.org</string>
+                                            <string>Upload files to ftp.&amp;kde.org</string>
                                         </property>
                                     </widget>
                                     <spacer row="4" column="0">
@@ -1053,7 +1089,7 @@ Build Files</string>
                                             <cstring>uploadSubmitPushButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Submit</string>
+                                            <string>Sub&amp;mit</string>
                                         </property>
                                     </widget>
                                     <widget class="KLineEdit" row="3" column="0" rowspan="1" colspan="2">
@@ -1077,7 +1113,7 @@ Build Files</string>
                                             <cstring>uploadAppsKDEcomCheckBox</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Upload to apps.kde.com</string>
+                                            <string>Upload to &amp;apps.kde.com</string>
                                         </property>
                                     </widget>
                                 </grid>
@@ -1113,6 +1149,18 @@ Build Files</string>
         <signal>clicked()</signal>
         <receiver>packaging_dialog</receiver>
         <slot>slotimportSPECPushButtonPressed()</slot>
+    </connection>
+    <connection>
+        <sender>addFile</sender>
+        <signal>clicked()</signal>
+        <receiver>packaging_dialog</receiver>
+        <slot>slotAddFileButtonPressed()</slot>
+    </connection>
+    <connection>
+        <sender>srcDistFileListBox</sender>
+        <signal>clicked(QListBoxItem*)</signal>
+        <receiver>packaging_dialog</receiver>
+        <slot>slotRemoveFile(QListBoxItem*)</slot>
     </connection>
 </connections>
 <tabstops>
@@ -1164,6 +1212,8 @@ Build Files</string>
     <slot>slotexportSPECPushButtonPressed()</slot>
     <slot>slotimportSPECPushButtonPressed()</slot>
     <slot>slotsrcPackagePushButtonPressed()</slot>
+    <slot>slotAddFileButtonPressed()</slot>
+    <slot>slotRemoveFile(QListBoxItem *item)</slot>
 </slots>
 <pixmapfunction>DesktopIcon</pixmapfunction>
 <layoutdefaults spacing="6" margin="11"/>

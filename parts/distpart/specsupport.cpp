@@ -64,9 +64,9 @@ SpecSupport::SpecSupport(DistpartPart *part) : packageBase(), m_part(part) {
 //     buildAllPushButton = new QPushButton(i18n("Src/Binary Packages"),area());
 //     exportSPECPushButton = new QPushButton(i18n("Export SPEC File"),area());
 //     importSPECPushButton = new QPushButton(i18n("Import SPEC File"),area());
-// 
-// 
-// 
+//
+//
+//
 //     connect(buildAllPushButton, SIGNAL(clicked()),
 //             this, SLOT(slotbuildAllPushButtonPressed()));
 //     connect(exportSPECPushButton, SIGNAL(clicked()),
@@ -94,7 +94,7 @@ void SpecSupport::slotbuildAllPushButtonPressed() {
 	}
 	else
             if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
-                makeFrontend->queueCommand(dir,"cd " + KProcess::quote(dir) + 
+                makeFrontend->queueCommand(dir,"cd " + KProcess::quote(dir) +
 		" && cp " + KProcess::quote(getAppSource()) + " " + KProcess::quote(*(map.find("_sourcedir"))));
     }
     if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
@@ -131,7 +131,7 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
        if( fileName.isEmpty())
                return;
     QFile file(fileName);
- 
+
     if(file.open(IO_ReadOnly)) {
         QTextStream stream(&file);
 
@@ -176,6 +176,10 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
     }
 }
 
+void SpecSupport::slotAddFileButtonPressed(){
+QString filename = KFileDialog::getOpenFileName ();
+}
+
 //    QPushButton* srcPackagePushButton;
 void SpecSupport::slotsrcPackagePushButtonPressed() {
     QMap<QString,QString>::Iterator it;
@@ -189,7 +193,7 @@ void SpecSupport::slotsrcPackagePushButtonPressed() {
 	}
 	else
             if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
-	        makeFrontend->queueCommand(dir,"cd " + KProcess::quote(dir) + 
+	        makeFrontend->queueCommand(dir,"cd " + KProcess::quote(dir) +
 		" && cp " + KProcess::quote(getAppSource()) + " " + KProcess::quote(*(map.find("_sourcedir"))));
     }
     if (KDevMakeFrontend *makeFrontend = m_part->extension<KDevMakeFrontend>("KDevelop/MakeFrontend"))
@@ -306,6 +310,6 @@ QString SpecSupport::generatePackage( )
 
         spec += "%changelog\n";
         spec += getAppChangelog() + "\n";
-	
+
 	return spec;
 }
