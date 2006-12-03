@@ -82,7 +82,7 @@ void ParseTest::successFullProject_data()
         "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) {  \n"
         "FOO = bar\n"
         "}\n"
-        "do()";
+        "!do()";
 }
 
 void ParseTest::failFullProject()

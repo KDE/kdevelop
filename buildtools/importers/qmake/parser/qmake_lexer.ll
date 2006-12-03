@@ -53,7 +53,7 @@ funcargval [^\n\"\\{(})=$# \t|:,]
                 return VARIABLENAME;
             }
 
-<INITIAL>({letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
+<INITIAL>("!"|{letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
                 yylval.value = yytext;
                 yylval.value = yylval.value.left( yylval.value.length()-1 );
                 unput('(');
@@ -62,7 +62,7 @@ funcargval [^\n\"\\{(})=$# \t|:,]
                 return FUNCTIONNAME;
             }
 
-<funcargs>({letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
+<funcargs>("!"|{letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
                 yylval.value = yytext;
                 yylval.value = yylval.value.left( yylval.value.length()-1 );
                 unput('(');
