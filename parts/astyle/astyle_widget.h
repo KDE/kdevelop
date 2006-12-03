@@ -13,7 +13,7 @@ class AStyleWidget : public AStyleConfig
 
 public:
 
-  AStyleWidget( AStylePart * part, QWidget *parent=0, const char *name=0 );
+  AStyleWidget( AStylePart * part, bool global, QWidget *parent=0, const char *name=0 );
   ~AStyleWidget();
 
 
@@ -30,7 +30,7 @@ private slots:
 private:
 
 	AStylePart * m_part;
-
+	bool isGlobal;
 };
 
 

@@ -133,6 +133,9 @@ Indent NameSpace=false</string>
                                 <property name="text">
                                     <string>&amp;JAVA</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+J</string>
+                                </property>
                                 <property name="buttonGroupId">
                                     <number>5</number>
                                 </property>
@@ -186,6 +189,24 @@ Indent Class=false
 Indent Switch=false
 Indent Namespaces=false
 </string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="6" column="0">
+                                <property name="name">
+                                    <cstring>Style_Global</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Use &amp;Global Options</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>6</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Use the global defaults. See the menu:
+Settings/Configure Kdevelop/Formatting.</string>
                                 </property>
                             </widget>
                         </grid>

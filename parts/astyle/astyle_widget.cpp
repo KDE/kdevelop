@@ -7,16 +7,13 @@
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
-
-#include <kconfig.h>
 #include <kapplication.h>
 #include <kdebug.h>
-
 #include <kdevcore.h>
 
 
-AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name )
- : AStyleConfig(parent, name), m_part ( part )
+AStyleWidget::AStyleWidget(AStylePart * part, bool global, QWidget *parent, const char *name)
+    : AStyleConfig(parent, name), m_part(part), isGlobal(global)
 {
 	// which style changed - disable the other pages.
 	connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
@@ -54,13 +51,20 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
   connect(Keep_Statements, SIGNAL(clicked()), this, SLOT(styleChanged()));
   connect(Keep_Blocks, SIGNAL(clicked()), this, SLOT(styleChanged()));
 
-
-  // load settings
-  KConfig *config = kapp->config();
-  config->setGroup("AStyle");
+  QMap<QString, QVariant> option;
+  if ( isGlobal){
+	Style_Global->setEnabled(false);
+	Style_Global->hide();
+	option = m_part->getGlobalOptions();
+  }
+  else{
+	Style_Global->setEnabled(true);
+	Style_Global->show();
+	option = m_part->getProjectOptions();
+  }
 
   // style
-  QString s = config->readEntry("FStyle");
+  QString s = option["FStyle"].toString();
   // fake the id so we disable the other pages.
   int id=0;
   if (s == "ANSI") id=1;
@@ -68,47 +72,47 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
   if (s == "Linux") id=3;
   if (s == "GNU") id=4;
   if (s == "JAVA") id=5;
+  if (s == "GLOBAL") id = 6;
   StyleGroup->setButton(id);
 
-  if ( s == "UserDefined" ){
-
-	  int wsCount = config->readNumEntry("FillCount",2);
-	  if (config->readEntry("Fill", "Tabs") == "Tabs")
+  if (s == "UserDefined" || s =="GLOBAL" )
+  {
+    int wsCount = option["FillCount"].toInt();
+    if (option["Fill"].toString() == "Tabs")
 	  {
 		  Fill_Tabs->setChecked(true);
 		  Fill_TabCount->setValue(wsCount);
 		  Fill_TabCount->setEnabled(true);
-		  Fill_ForceTabs->setChecked(config->readBoolEntry("FillForce",false));
+      Fill_ForceTabs->setChecked(option["FillForce"].toBool());
 		  Fill_ForceTabs->setEnabled(true);
-
-	  } else
+    }
+    else
 	  {
 		  Fill_Spaces->setChecked(true);
 		  Fill_SpaceCount->setValue(wsCount);
 		  Fill_SpaceCount->setEnabled(true);
-		  Fill_ConvertTabs->setChecked(config->readBoolEntry("FillForce",false));
+      Fill_ConvertTabs->setChecked(option["FillForce"].toBool());
 		  Fill_ConvertTabs->setEnabled(true);
 	  }
 
-	  Fill_EmptyLines->setChecked(config->readBoolEntry("FillEmptyLines",false));
+    Fill_EmptyLines->setChecked(option["FillEmptyLines"].toBool());
 
 	// indent
-	Indent_Switches->setChecked(config->readBoolEntry("IndentSwitches", false));
-	Indent_Cases->setChecked(config->readBoolEntry("IndentCases", false));
-	Indent_Classes->setChecked(config->readBoolEntry("IndentClasses", false));
-	Indent_Brackets->setChecked(config->readBoolEntry("IndentBrackets", false));
-	Indent_Namespaces->setChecked(config->readBoolEntry("IndentNamespaces", true));
-	Indent_Labels->setChecked(config->readBoolEntry("IndentLabels", true));
-	Indent_Blocks->setChecked(config->readBoolEntry("IndentBlocks", true));
-	Indent_Preprocessors->setChecked(config->readBoolEntry("IndentPreprocessors", true));
+    Indent_Switches->setChecked(option["IndentSwitches"].toBool());
+    Indent_Cases->setChecked(option["IndentCases"].toBool());
+    Indent_Classes->setChecked(option["IndentClasses"].toBool());
+    Indent_Brackets->setChecked(option["IndentBrackets"].toBool());
+    Indent_Namespaces->setChecked(option["IndentNamespaces"].toBool());
+    Indent_Labels->setChecked(option["IndentLabels"].toBool());
+    Indent_Blocks->setChecked(option["IndentBlocks"].toBool());
+    Indent_Preprocessors->setChecked(option["IndentPreprocessors"].toBool());
 
 	// contiuation
-	Continue_MaxStatement->setValue(config->readNumEntry("MaxStatement", 40));
-	Continue_MinConditional->setValue(config->readNumEntry("MinConditional", -1));
+    Continue_MaxStatement->setValue(option["MaxStatement"].toInt());
+    Continue_MinConditional->setValue(option["MinConditional"].toInt());
 
 	// brackets
-	 // brackets
-	s = config->readEntry("Brackets", "None");
+    s = option["Brackets"].toString();
 	if (s == "Break")
 		Brackets_Break->setChecked(true);
 	else if (s == "Attach")
@@ -118,22 +122,22 @@ AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name
 	else
 		Brackets_None->setChecked(true);
 
-	Brackets_CloseHeaders->setChecked(config->readBoolEntry("BracketsCloseHeaders",false));
+    Brackets_CloseHeaders->setChecked(option["BracketsCloseHeaders"].toBool());
 
-	Block_Break->setChecked(config->readBoolEntry("BlockBreak",false));
-	Block_BreakAll->setChecked(config->readBoolEntry("BlockBreakAll",false));
-	Block_IfElse->setChecked(config->readBoolEntry("BlockIfElse",false));
+    Block_Break->setChecked(option["BlockBreak"].toBool());
+    Block_BreakAll->setChecked(option["BlockBreakAll"].toBool());
+    Block_IfElse->setChecked(option["BlockIfElse"].toBool());
 
 	// padding
-	Pad_ParenthesesIn->setChecked(config->readBoolEntry("PadParenthesesIn", false));
-	Pad_ParenthesesOut->setChecked(config->readBoolEntry("PadParenthesesOut", false));
-	Pad_ParenthesesUn->setChecked(config->readBoolEntry("PadParenthesesUn", false));
+    Pad_ParenthesesIn->setChecked(option["PadParenthesesIn"].toBool());
+    Pad_ParenthesesOut->setChecked(option["PadParenthesesOut"].toBool());
+    Pad_ParenthesesUn->setChecked(option["PadParenthesesUn"].toBool());
 
-	Pad_Operators->setChecked(config->readBoolEntry("PadOperators", false));
+    Pad_Operators->setChecked(option["PadOperators"].toBool());
 
 	// oneliner
-	Keep_Statements->setChecked(config->readBoolEntry("KeepStatements", false));
-	Keep_Blocks->setChecked(config->readBoolEntry("KeepBlocks", false));
+    Keep_Statements->setChecked(option["KeepStatements"].toBool());
+    Keep_Blocks->setChecked(option["KeepBlocks"].toBool());
   }
 
 
@@ -148,81 +152,103 @@ AStyleWidget::~AStyleWidget()
 
 void AStyleWidget::accept()
 {
-  // save settings
-  KConfig *config = kapp->config();
-  config->setGroup("AStyle");
+  QMap<QString, QVariant>* m_option;
+  if ( isGlobal){
+	m_option = &(m_part->getGlobalOptions());
+  }
+  else{
+	m_option = &(m_part->getProjectOptions());
+  }
 
   // style
   if (Style_ANSI->isChecked())
-	config->writeEntry("FStyle", "ANSI");
+    (*m_option)["FStyle"] = "ANSI";
   else if (Style_KR->isChecked())
-    config->writeEntry("FStyle", "KR");
+    (*m_option)["FStyle"] = "KR";
   else if (Style_Linux->isChecked())
-	config->writeEntry("FStyle", "Linux");
+    (*m_option)["FStyle"] = "Linux";
   else if (Style_GNU->isChecked())
-    config->writeEntry("FStyle", "GNU");
+    (*m_option)["FStyle"] = "GNU";
   else if (Style_JAVA->isChecked())
-    config->writeEntry("FStyle", "JAVA");
-  else if (Style_UserDefined->isChecked()){
-	config->writeEntry("FStyle", "UserDefined");
+    (*m_option)["FStyle"] = "JAVA";
+  else if (Style_Global->isChecked()){
+	  QMap<QString,QVariant>& global = m_part->getGlobalOptions();
+	  QMap<QString,QVariant>& project = m_part->getProjectOptions();
+	  project=global;
+	  project["FStyle"]="GLOBAL";
+  }
+  else if (Style_UserDefined->isChecked())
+  {
+    (*m_option)["FStyle"] = "UserDefined";
 
 	// fill
-	if ( Fill_Tabs->isChecked()){
-		config->writeEntry("Fill", "Tabs");
-		config->writeEntry("FillCount", Fill_TabCount->value());
-		config->writeEntry("FillForce", Fill_ForceTabs->isChecked());
+    if (Fill_Tabs->isChecked())
+    {
+      (*m_option)["Fill"] = "Tabs";
+      (*m_option)["FillCount"] = Fill_TabCount->value();
+      (*m_option)["FillForce"] = Fill_ForceTabs->isChecked();
 	}
-	else{
-		config->writeEntry("Fill", "Spaces");
-		config->writeEntry("FillCount", Fill_SpaceCount->value());
-		config->writeEntry("FillForce", Fill_ConvertTabs->isChecked());
+    else
+    {
+      (*m_option)["Fill"] = "Spaces";
+      (*m_option)["FillCount"] = Fill_SpaceCount->value();
+      (*m_option)["FillForce"] = Fill_ConvertTabs->isChecked();
 	}
 
-	config->writeEntry("FillEmptyLines", Fill_EmptyLines->isChecked());
+    (*m_option)["FillEmptyLines"] = Fill_EmptyLines->isChecked();
 
 	// indent
-	config->writeEntry("IndentSwitches", Indent_Switches->isChecked());
-	config->writeEntry("IndentCases", Indent_Cases->isChecked());
-	config->writeEntry("IndentClasses", Indent_Classes->isChecked());
-	config->writeEntry("IndentBrackets", Indent_Brackets->isChecked());
-	config->writeEntry("IndentNamespaces", Indent_Namespaces->isChecked());
-	config->writeEntry("IndentLabels", Indent_Labels->isChecked());
-	config->writeEntry("IndentBlocks", Indent_Blocks->isChecked());
-	config->writeEntry("IndentPreprocessors", Indent_Preprocessors->isChecked());
+    (*m_option)["IndentSwitches"] = Indent_Switches->isChecked();
+    (*m_option)["IndentCases"] = Indent_Cases->isChecked();
+    (*m_option)["IndentClasses"] = Indent_Classes->isChecked();
+    (*m_option)["IndentBrackets"] = Indent_Brackets->isChecked();
+    (*m_option)["IndentNamespaces"] = Indent_Namespaces->isChecked();
+    (*m_option)["IndentLabels"] = Indent_Labels->isChecked();
+    (*m_option)["IndentBlocks"] = Indent_Blocks->isChecked();
+    (*m_option)["IndentPreprocessors"] = Indent_Preprocessors->isChecked();
 
 	// continuation
-	config->writeEntry("MaxStatement", Continue_MaxStatement->value());
-	config->writeEntry("MinConditional", Continue_MinConditional->value());
+    (*m_option)["MaxStatement"] = Continue_MaxStatement->value();
+    (*m_option)["MinConditional"] = Continue_MinConditional->value();
 
 	// brackets
 	if ( Brackets_None->isChecked())
-		config->writeEntry("Brackets", "None");
+      (*m_option)["Brackets"] = "None";
 	else if (Brackets_Break->isChecked())
-		config->writeEntry("Brackets","Break" );
+      (*m_option)["Brackets"] = "Break";
 	else if (Brackets_Attach->isChecked())
-		config->writeEntry("Brackets", "Attach" );
+      (*m_option)["Brackets"] = "Attach";
 	else if (Brackets_Linux->isChecked())
-		config->writeEntry("Brackets","Linux");
+      (*m_option)["Brackets"] = "Linux";
 
-	config->writeEntry("BracketsCloseHeaders", Brackets_CloseHeaders->isChecked());
+    (*m_option)["BracketsCloseHeaders"] = Brackets_CloseHeaders->isChecked();
 
 	// blocks
-	config->writeEntry("BlockBreak", Block_Break->isChecked());
-	config->writeEntry("BlockBreakAll", Block_BreakAll->isChecked());
-	config->writeEntry("BlockIfElse", Block_IfElse->isChecked());
+    (*m_option)["BlockBreak"] = Block_Break->isChecked();
+    (*m_option)["BlockBreakAll"] = Block_BreakAll->isChecked();
+    (*m_option)["BlockIfElse"] = Block_IfElse->isChecked();
 
 	// padding
-	config->writeEntry("PadParenthesesIn", Pad_ParenthesesIn->isChecked());
-	config->writeEntry("PadParenthesesOut", Pad_ParenthesesOut->isChecked());
-	config->writeEntry("PadParenthesesUn", Pad_ParenthesesUn->isChecked());
+    (*m_option)["PadParenthesesIn"] = Pad_ParenthesesIn->isChecked();
+    (*m_option)["PadParenthesesOut"] = Pad_ParenthesesOut->isChecked();
+    (*m_option)["PadParenthesesUn"] = Pad_ParenthesesUn->isChecked();
 
-	config->writeEntry("PadOperators", Pad_Operators->isChecked());
+    (*m_option)["PadOperators"] = Pad_Operators->isChecked();
 
 	// oneliner
-	config->writeEntry("KeepStatements", Keep_Statements->isChecked());
-	config->writeEntry("KeepBlocks", Keep_Blocks->isChecked());
+    (*m_option)["KeepStatements"] = Keep_Statements->isChecked();
+    (*m_option)["KeepBlocks"] = Keep_Blocks->isChecked();
   }
-  config->sync();
+
+  if ( isGlobal){
+	  QMap<QString, QVariant>& project = m_part->getProjectOptions();
+	  if ( project["FStyle"] == "GLOBAL"){
+		  project = m_part->getGlobalOptions();
+		  project["FStyle"] = "GLOBAL";
+	  }
+	  m_part->saveGlobal();
+  }
+
 }
 
 
@@ -254,18 +280,26 @@ void AStyleWidget::styleChanged(  )
 	QString styleSample = "\t//Tabs & Brackets\nnamespace foo{\n" + bracketSample + "}\n\t// Indentation\n" + indentSample + "\t// Formatting\n" + formattingSample;
 
 
+
 	switch(id){
 		case 1:
-			StyleExample->setText( m_part->formatSource( bracketSample, this ) );
+			StyleExample->setText( m_part->formatSource( bracketSample, this,m_part->getProjectOptions() ) );
 			break;
 		case 2:
-			StyleExample->setText( m_part->formatSource( indentSample, this ) );
+			StyleExample->setText( m_part->formatSource( indentSample, this,m_part->getProjectOptions() ) );
 			break;
 		case 3:
-			StyleExample->setText( m_part->formatSource( formattingSample, this ) );
+			StyleExample->setText( m_part->formatSource( formattingSample, this,m_part->getProjectOptions() ) );
 			break;
 		default:
-		StyleExample->setText( m_part->formatSource( styleSample, this ) );
+		{
+			if ( Style_Global->isChecked())
+				StyleExample->setText( m_part->formatSource( styleSample, 0, m_part->getGlobalOptions()) );
+			else
+			{
+				StyleExample->setText( m_part->formatSource( styleSample, this, m_part->getProjectOptions() ) );
+			}
+		}
 	}
 }
 

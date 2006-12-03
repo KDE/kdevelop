@@ -4,9 +4,13 @@
 
 #include <qstring.h>
 #include <qtextstream.h>
-
+#include <qmap.h>
+#include <qvariant.h>
 
 #include "astyle.h"
+
+#define GLOBALDOC_OPTIONS 1
+#define PROJECTDOC_OPTIONS 2
 
 
 class ASStringIterator : public astyle::ASSourceIterator
@@ -33,7 +37,7 @@ class KDevFormatter : public astyle::ASFormatter
 {
 public:
 
-  KDevFormatter();
+  KDevFormatter(const QMap<QString, QVariant>& options);
   KDevFormatter( AStyleWidget * widget );
   QString indentString() const
   {

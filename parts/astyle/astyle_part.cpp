@@ -21,7 +21,7 @@
 #include <kdevapi.h>
 #include <kdevpartcontroller.h>
 #include <kdevplugininfo.h>
-
+#include <configwidgetproxy.h>
 #include <kapplication.h>
 #include <kconfig.h>
 
@@ -48,7 +48,12 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   _action->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting functionality using <b>astyle</b> library. "
                              "Also available in <b>New Class</b> and <b>Subclassing</b> wizards."));
 
-  connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
+  m_configProxy = new ConfigWidgetProxy(core());
+    m_configProxy->createGlobalConfigPage(i18n("Formatting"), GLOBALDOC_OPTIONS, info()->icon());
+    m_configProxy->createProjectConfigPage(i18n("Formatting"), PROJECTDOC_OPTIONS, info()->icon());
+
+
+  connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase* ,QWidget*,unsigned int)), this, SLOT(insertConfigWidget(const KDialogBase*,QWidget*,unsigned int)));
 
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 
@@ -56,13 +61,69 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
 
   // maybe there is a file open already
   activePartChanged( partController()->activePart() );
+
+  loadGlobal();
+  //use the globals first, project level will override later..
+  m_project=m_global;
+
 }
 
+void AStylePart::loadGlobal()
+{
+//   kdDebug(9009) << "Load global"<<endl;
+  KConfig *config = kapp->config();
+  config->setGroup("AStyle");
+  QString options = config->readEntry("Options","BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,Brackets=Break,BracketsCloseHeaders=0,FStyle=UserDefined,Fill=Tabs,FillCount=4,FillEmptyLines=0,FillForce=0,IndentBlocks=0,IndentBrackets=0,IndentCases=1,IndentClasses=1,IndentLabels=1,IndentNamespaces=1,IndentPreprocessors=0,IndentSwitches=0,KeepBlocks=0,KeepStatements=0,MaxStatement=40,MinConditional=-1,PadOperators=1,PadParenthesesIn=1,PadParenthesesOut=0,PadParenthesesUn=1,");
+
+ QStringList pairs = QStringList::split( ",", options);
+ QStringList::Iterator it;
+ for ( it = pairs.begin(); it != pairs.end(); ++it ) {
+	QStringList bits = QStringList::split( "=", (*it) );
+	m_global[bits[0]] = bits[1];
+ }
+
+//   for (QMap<QString, QVariant>::iterator iter = m_global.begin();iter != m_global.end();iter++)
+//         {
+//               kdDebug(9009) << "load: " <<iter.key() << "="<< iter.data()  << endl;
+// 		}
+}
+
+void AStylePart::saveGlobal()
+{
+	QString options;
+	 for (QMap<QString, QVariant>::iterator iter = m_global.begin();iter != m_global.end();iter++)
+        {
+//               kdDebug(9009) <<"saveGlobal" <<iter.key() << "="<< iter.data()  << endl;
+			  options += iter.key();
+			  options += "=";
+			  options += iter.data().toString();
+			  options += ",";
+		}
+// 		for (QMap<QString, QVariant>::iterator iter = m_project.begin();iter != m_project.end();iter++)
+//         {
+//               kdDebug(9009) << "project before: "  <<iter.key() << "="<< iter.data()  << endl;
+// 		}
+
+  KConfig *config = kapp->config();
+  config->setGroup("AStyle");
+  config->writeEntry("Options",options);
+
+  config->sync();
+//   	 for (QMap<QString, QVariant>::iterator iter = m_global.begin();iter != m_global.end();iter++)
+//         {
+//               kdDebug(9009) << "global after: "  <<iter.key() << "="<< iter.data()  << endl;
+// 		}
+// 		for (QMap<QString, QVariant>::iterator iter = m_project.begin();iter != m_project.end();iter++)
+//         {
+//               kdDebug(9009) << "project after: "  <<iter.key() << "="<< iter.data()  << endl;
+// 		}
+}
 
 AStylePart::~AStylePart()
 {
+  saveGlobal();
+  delete m_configProxy;
 }
-
 
 void AStylePart::beautifySource()
 {
@@ -80,7 +141,7 @@ void AStylePart::beautifySource()
 
   //if there is a selection, we only format it.
   ASStringIterator is(has_selection ? sel_iface->selection() : iface->text());
-  KDevFormatter formatter;
+  KDevFormatter formatter(m_project);
 
   formatter.init(&is);
 
@@ -108,10 +169,8 @@ void AStylePart::beautifySource()
 		}
 	}
 
-	KConfig *config = kapp->config();
-	config->setGroup("AStyle");
-	int wsCount = config->readNumEntry("FillCount",2);
-	if (config->readEntry("Fill", "Tabs") == "Tabs")
+	int wsCount = m_project["FillCount"].toInt();
+	if (m_project["Fill"].toString() == "Tabs")
 	{
 		// tabs and wsCount spaces to be a tab
 		QString replace;
@@ -122,7 +181,7 @@ void AStylePart::beautifySource()
 		indentWith=indentWith.remove(' ');
 	} else
 	{
-		if ( config->readBoolEntry("FillForce",false)){
+		if ( m_project["FillForce"].toBool()){
 			//convert tabs to spaces
 			QString replace;
 			for (int i =0;i<wsCount;i++)
@@ -164,11 +223,23 @@ void AStylePart::beautifySource()
 }
 
 
-void AStylePart::configWidget(KDialogBase *dlg)
+void AStylePart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Formatting"), i18n("Formatting"), BarIcon( info()->icon(), KIcon::SizeMedium));
-  AStyleWidget *w = new AStyleWidget(this, vbox, "astyle config widget");
-  connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+	switch (pageNo)
+	{
+		case GLOBALDOC_OPTIONS:
+		{
+			AStyleWidget *w = new AStyleWidget(this, true, page, "astyle config widget");
+			connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+			break;
+		}
+		case PROJECTDOC_OPTIONS:
+		{
+			AStyleWidget *w = new AStyleWidget(this, false, page, "astyle config widget");
+			connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+			break;
+		}
+	}
 }
 
 
@@ -205,10 +276,10 @@ void AStylePart::activePartChanged(KParts::Part *part)
   _action->setEnabled(enabled);
 }
 
-QString AStylePart::formatSource( const QString text, AStyleWidget * widget )
+QString AStylePart::formatSource( const QString text, AStyleWidget * widget, const QMap<QString, QVariant>& options  )
 {
 	ASStringIterator is(text);
-	KDevFormatter * formatter = ( widget ? new KDevFormatter( widget ) : new KDevFormatter );
+	KDevFormatter * formatter = ( widget)? new KDevFormatter( widget ) : new KDevFormatter(options);
 
 	formatter->init(&is);
 
@@ -247,12 +318,12 @@ void AStylePart::setCursorPos( KParts::Part *part, uint line, uint col )
 
 QString AStylePart::formatSource( const QString text )
 {
-    return formatSource(text, 0);
+    return formatSource(text, 0, m_project);
 }
 
 QString AStylePart::indentString( ) const
 {
-  KDevFormatter formatter;
+  KDevFormatter formatter(m_project);
   return formatter.indentString();
 }
 
@@ -264,7 +335,46 @@ void AStylePart::contextMenu(QPopupMenu *popup, const Context *context)
 	popup->insertSeparator();
 	int id = popup->insertItem( i18n("Format selection"), this, SLOT(beautifySource()) );
 	popup->setWhatsThis(id, i18n("<b>Format</b><p>Formats the current selection, if possible"));
-
 }
+
+void AStylePart::restorePartialProjectSession(const QDomElement * el)
+{
+	kdDebug(9009) << "Load project" << endl;
+	QDomElement style = el->namedItem("AStyle").toElement();
+
+	if (style.attribute("FStyle", "GLOBAL") == "GLOBAL")
+	{
+		m_project = m_global;
+		m_project["FStyle"] = "GLOBAL";
+	}
+	else
+	{
+		for (QMap<QString, QVariant>::iterator iter = m_global.begin();iter != m_global.end();iter++)
+        {
+              m_project[iter.key()] = style.attribute(iter.key(),iter.data().toString());
+		}
+	}
+}
+
+
+void AStylePart::savePartialProjectSession(QDomElement * el)
+{
+	QDomDocument domDoc = el->ownerDocument();
+	if (domDoc.isNull())
+		return;
+
+	QDomElement style = domDoc.createElement("AStyle");
+	style.setAttribute("FStyle", m_project["FStyle"].toString());
+	if (m_project["FStyle"] != "GLOBAL")
+	{
+		 for (QMap<QString, QVariant>::iterator iter = m_project.begin();iter != m_project.end();iter++)
+        {
+              style.setAttribute(iter.key(),iter.data().toString());
+		}
+	}
+
+	el->appendChild(style);
+}
+
 
 #include "astyle_part.moc"

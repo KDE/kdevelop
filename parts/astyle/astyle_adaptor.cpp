@@ -38,50 +38,43 @@ string ASStringIterator::nextLine()
 }
 
 
-
-
-KDevFormatter::KDevFormatter()
+KDevFormatter::KDevFormatter(const QMap<QString, QVariant>& options)
 {
-	KConfig *config = kapp->config();
-	config->setGroup("AStyle");
-
 	// style
-	QString s = config->readEntry("FStyle");
-
+	QString s = options["FStyle"].toString();
 	if ( predefinedStyle( s ) )
 	{
 		return;
 	}
-
   // fill
-	int wsCount = config->readNumEntry("FillCount",2);
-  if (config->readEntry("Fill", "Tabs") == "Tabs")
+	int wsCount = options["FillCount"].toInt();
+  if (options["Fill"].toString() == "Tabs")
   {
-	  setTabIndentation(wsCount, config->readBoolEntry("FillForce",false) );
+	  setTabIndentation(wsCount, options["FillForce"].toBool() );
 	  m_indentString = "\t";
   } else
   {
 	  setSpaceIndentation(wsCount);
 	  m_indentString = "";
 	  m_indentString.fill(' ', wsCount);
-	  setTabSpaceConversionMode(config->readBoolEntry("FillForce",true));
+	  setTabSpaceConversionMode(options["FillForce"].toBool());
   }
 
   // indent
-  setSwitchIndent(config->readBoolEntry("IndentSwitches", false));
-  setClassIndent(config->readBoolEntry("IndentClasses", false));
-  setCaseIndent(config->readBoolEntry("IndentCases", false));
-  setBracketIndent(config->readBoolEntry("IndentBrackets", false));
-  setNamespaceIndent(config->readBoolEntry("IndentNamespaces", true));
-  setLabelIndent(config->readBoolEntry("IndentLabels", true));
+  setSwitchIndent(options["IndentSwitches"].toBool());
+  setClassIndent(options["IndentClasses"].toBool());
+  setCaseIndent(options["IndentCases"].toBool());
+  setBracketIndent(options["IndentBrackets"].toBool());
+  setNamespaceIndent(options["IndentNamespaces"].toBool());
+  setLabelIndent(options["IndentLabels"].toBool());
 
   // continuation
-  setMaxInStatementIndentLength(config->readNumEntry("MaxStatement", 40));
-  if (config->readNumEntry("MinConditional", -1) != -1)
-    setMinConditionalIndentLength(config->readNumEntry("MinConditional"));
+  setMaxInStatementIndentLength(options["MaxStatement"].toInt());
+  if (options["MinConditional"].toInt() != -1)
+    setMinConditionalIndentLength(options["MinConditional"].toInt());
 
   // brackets
-  s = config->readEntry("Brackets", "None");
+  s = options["Brackets"].toString();
   if (s == "Break")
 	  setBracketFormatMode(astyle::BREAK_MODE);
   else if (s == "Attach")
@@ -92,22 +85,22 @@ KDevFormatter::KDevFormatter()
 	  setBracketFormatMode(astyle::NONE_MODE);
 
   // padding
-  setOperatorPaddingMode(config->readBoolEntry("PadOperators", false));
-  setParensInsidePaddingMode(config->readBoolEntry("PadParenthesesIn", false));
-  setParensOutsidePaddingMode(config->readBoolEntry("PadParenthesesOut", false));
-  setParensUnPaddingMode(config->readBoolEntry("PadParenthesesUn", false));
+  setOperatorPaddingMode(options["PadOperators"].toBool());
+  setParensInsidePaddingMode(options["PadParenthesesIn"].toBool());
+  setParensOutsidePaddingMode(options["PadParenthesesOut"].toBool());
+  setParensUnPaddingMode(options["PadParenthesesUn"].toBool());
 
   // oneliner
-  setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false));
-  setSingleStatementsMode(config->readBoolEntry("KeepStatements", false));
+  setBreakOneLineBlocksMode(options["KeepBlocks"].toBool());
+  setSingleStatementsMode(options["KeepStatements"].toBool());
 
   // blocks
-  setBreakBlocksMode(config->readBoolEntry("BlockBreak",false));
-  if (config->readBoolEntry("BlockBreakAll",false)){
+  setBreakBlocksMode(options["BlockBreak"].toBool());
+  if (options["BlockBreakAll"].toBool()){
 	  setBreakBlocksMode(true);
 	  setBreakClosingHeaderBlocksMode(true);
   }
-  setBreakElseIfsMode(config->readBoolEntry("BlockIfElse",false));
+  setBreakElseIfsMode(options["BlockIfElse"].toBool());
 
 }
 

@@ -1,5 +1,5 @@
 INCLUDES = -I$(top_srcdir)/lib/astyle -I$(top_srcdir)/lib/interfaces \
-	-I$(top_srcdir)/lib/interfaces/extensions $(all_includes)
+	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevastyle.la
 libkdevastyle_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
