@@ -41,6 +41,7 @@ using namespace KIO;
 SvnIntegratorDlg::SvnIntegratorDlg(QWidget *parent, const char *name)
     :SvnIntegratorDlgBase(parent, name)
 {
+	repos1->setMode( KFile::Directory);
 }
 
 void SvnIntegratorDlg::accept()
