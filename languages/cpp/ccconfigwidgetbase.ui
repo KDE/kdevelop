@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>729</width>
+            <width>773</width>
             <height>690</height>
         </rect>
     </property>
@@ -1153,7 +1153,7 @@ you right click on a variable in a header file.</string>
                             <cstring>m_qtUsed</cstring>
                         </property>
                         <property name="text">
-                            <string>Ena&amp;ble Qt options</string>
+                            <string>Ena&amp;ble Qt options (For project types other than qmake only the designer setting and the include style have an effect.)</string>
                         </property>
                         <property name="accel">
                             <string>Alt+B</string>
