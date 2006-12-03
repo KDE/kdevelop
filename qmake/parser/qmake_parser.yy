@@ -43,8 +43,9 @@ struct Result {
     Result() : node(0) {}
     QString value;
     AST* node;
-    StatementAST* stmtnode;
-    QStringList valuelist;
+    QStringList values;
+    QList<StatementAST*> stmtlist;
+    QList<FunctionArgAST*> fnargs;
 };
 
 typedef Result YYSTYPE;
@@ -56,219 +57,160 @@ void yyerror(const char* str)
 
 int yylex();
 
-QStack<ProjectAST*> projects;
-
-int depth = 0;
+ProjectAST* project;
 
 %}
-%debug
 
 %token WS
-%token LETTER
-%token DIGIT
+%token VARIABLENAME
+%token FUNCTIONNAME
+%token VARVAL
+%token DOLLAR
+%token COLON
 %token COMMA
-%token UNDERSCORE
-%token DOT
+%token LCURLY
+%token RCURLY
+%token LBRACE
+%token RBRACE
+%token QUOTE
 %token EQUAL
 %token PLUSEQ
 %token MINUSEQ
 %token TILDEEQ
 %token STAREQ
-%token LCURLY
-%token RCURLY
-%token LBRACE
-%token RBRACE
-%token DOLLAR
-%token QUOTE
-%token SLASH
+%token NEWLINE
 %token CONT
 %token COMMENT
-%token SIMPLEVAL
-%token NEWLINE
+%token FUNCARGVAL
 %%
 
 project:
     {
-        ProjectAST* projectAST = new ProjectAST();
-        projects.push( projectAST );
+        project = new ProjectAST();
     }
     statements
     ;
 
 statements: statements statement
         {
-            projects.top()->addStatement($<stmtnode>2);
-            $<stmtnode>2->setDepth( depth );
+            project->addStatement( static_cast<StatementAST*>($<node>2) );
         }
     |
     ;
 
-statement:  variable_assignment
+statement: variable_assignment
         {
-            $<stmtnode>$ = $<stmtnode>1;
+            $<node>$ = $<node>1;
+        }
+    | function
+        {
+            $<node>$ = $<node>1;
         }
     | NEWLINE
         {
-            $<stmtnode>$ = new NewlineAST();
+            $<node>$ = new NewlineAST();
+        }
+    | WS NEWLINE
+        {
+            $<node>$ = new NewlineAST( $<value>1 );
         }
     | COMMENT
         {
-            $<stmtnode>$ = new CommentAST( $<value>1 );
+            $<node>$ = new CommentAST( $<value>1 );
         }
-    | ws
+    | WS COMMENT
         {
-            $<stmtnode>$ = new WhitespaceAST( $<value>1 );
-        }
-    ;
-
-variable_assignment: variablename op_ws values
-        {
-            $<stmtnode>$ = new AssignmentAST( $<value>1, dynamic_cast<OpAST*>($<node>2), $<valuelist>3 );
-            $<valuelist>3.clear();
+            $<node>$ = new CommentAST( $<value>2, $<value>1 );
         }
     ;
 
-variablename: variablename variablechar
+function: functioncall LCURLY substatements RCURLY
         {
-            $<value>$ += $<value>2;
+            static_cast<FunctionCallAST*>($<node>1)->setAsFunctionArg( false );
+            $<node>$ = new FunctionAST( static_cast<FunctionCallAST*>($<node>1), $<value>2, $<stmtlist>3, $<value>4 )
         }
-    | variablebegin
+    | functioncall COLON statement
         {
-            $<value>$ = $<value>1;
+            static_cast<FunctionCallAST*>($<node>1)->setAsFunctionArg( false );
+            $<node>$ = new FunctionAST( static_cast<FunctionCallAST*>($<node>1), $<value>2, static_cast<StatementAST*>($<node>3) );
+        }
+    | functioncall
+        {
+            static_cast<FunctionCallAST*>($<node>1)->setAsFunctionArg( false );
+            $<node>$ = new FunctionAST( static_cast<FunctionCallAST*>($<node>1) )
+        }
+;
+
+functioncall: FUNCTIONNAME LBRACE funcargs RBRACE
+        {
+            $<node>$ = new FunctionCallAST( $<value>1, $<value>2, $<fnargs>3, $<value>4 );
         }
     ;
 
-variablebegin: LETTER
+funcargs: funcargs COMMA funcarg
         {
-            $<value>$ = $<value>1;
+            $<fnargs>$.append( static_cast<FunctionArgAST*>($<node>3));
         }
-    | DIGIT
+    | funcargs COMMA funcarg WS
         {
-            $<value>$ = $<value>1;
+            $<fnargs>$.append( static_cast<FunctionArgAST*>($<node>3));
         }
-    | UNDERSCORE
+    | funcarg
         {
-            $<value>$ = $<value>1;
+            $<fnargs>$.append( static_cast<FunctionArgAST*>($<node>1));
         }
-    ;
-
-variablechar:  LETTER
+    | WS funcarg WS
         {
-            $<value>$ = $<value>1;
+            $<fnargs>$.append( static_cast<FunctionArgAST*>($<node>2));
         }
-    | DIGIT
+    | funcarg WS
         {
-            $<value>$ = $<value>1;
+            $<fnargs>$.append( static_cast<FunctionArgAST*>($<node>1));
         }
-    | UNDERSCORE
+    | WS funcarg
         {
-            $<value>$ = $<value>1;
+            $<fnargs>$.append( static_cast<FunctionArgAST*>($<node>2));
         }
-    | DOT
+    |
         {
-            $<value>$ = $<value>1;
+            $<fnargs>$.clear();
         }
     ;
 
-values: values value
+funcarg: DOLLAR DOLLAR functioncall
         {
-            $<valuelist>$.append( $<value>2 );
+            static_cast<FunctionCallAST*>($<node>3)->setAsFunctionArg( true );
+            $<node>$ = $<node>3;
         }
-    | values CONT ws NEWLINE
+    | FUNCARGVAL
         {
-            $<valuelist>$.append( $<value>2 );
-            $<valuelist>$.append( $<value>3 );
-            $<valuelist>$.append( $<value>4 );
+            $<node>$ = new SimpleFunctionArgAST($<value>1);
         }
-    | value
+    | QUOTE funcwsvalue QUOTE
         {
-            $<valuelist>$.append( $<value>1 );
+            $<node>$ = new SimpleFunctionArgAST($<value>1+$<value>2+$<value>3);
         }
-    ;
-
-value: DOLLAR DOLLAR LCURLY simpleval RCURLY
+    | DOLLAR DOLLAR LCURLY FUNCARGVAL RCURLY
         {
-            $<value>$ = $<value>1+$<value>2+$<value>3+$<value>4+$<value>5;
+            $<node>$ = new SimpleFunctionArgAST($<value>1+$<value>2+$<value>3+$<value>4+$<value>5);
         }
-    | DOLLAR DOLLAR simpleval
+    | DOLLAR DOLLAR FUNCARGVAL
         {
-            $<value>$ = $<value>1+$<value>2+$<value>3;
+            $<node>$ = new SimpleFunctionArgAST($<value>1+$<value>2+$<value>3);
         }
-    | DOLLAR LBRACE simpleval RBRACE
+    | DOLLAR LBRACE FUNCARGVAL RBRACE
         {
-            $<value>$ = $<value>1+$<value>2+$<value>3+$<value>4;
-        }
-    | simpleval
-        {
-            $<value>$ = $<value>1;
-        }
-    | QUOTE quotedval QUOTE
-        {
-            $<value>$ = $<value>1+$<value>2+$<value>3;
-        }
-    | ws
-        {
-            $<value>$ = $<value>1;
+            $<node>$ = new SimpleFunctionArgAST($<value>1+$<value>2+$<value>3+$<value>4);
         }
     ;
 
-simpleval: simpleval LETTER
+funcwsvalue: funcwsvalue FUNCARGVAL
         {
-            $<value>$ += $<value>2;
+            $<value>$ += $<value>1;
         }
-    | simpleval DOT
+    | funcwsvalue WS
         {
-            $<value>$ += $<value>2;
-        }
-    | simpleval COMMA
-        {
-            $<value>$ += $<value>2;
-        }
-    | simpleval UNDERSCORE
-        {
-            $<value>$ += $<value>2;
-        }
-    | simpleval DIGIT
-        {
-            $<value>$ += $<value>2;
-        }
-    | simpleval SIMPLEVAL
-        {
-            $<value>$ += $<value>2;
-        }
-    | UNDERSCORE
-        {
-            $<value>$ = $<value>1;
-        }
-    | COMMA
-        {
-            $<value>$ = $<value>1;
-        }
-    | DOT
-        {
-            $<value>$ = $<value>1;
-        }
-    | LETTER
-        {
-            $<value>$ = $<value>1;
-        }
-    | DIGIT
-        {
-            $<value>$ = $<value>1;
-        }
-    | SIMPLEVAL
-        {
-            $<value>$ = $<value>1;
-        }
-    ;
-
-quotedval: quotedval simpleval
-        {
-            $<value>$ += $<value>2;
-        }
-    | quotedval ws
-        {
-            $<value>$ += $<value>2;
+            $<value>$ += $<value>1;
         }
     |
         {
@@ -276,44 +218,36 @@ quotedval: quotedval simpleval
         }
     ;
 
-op_ws: ws op ws
+
+substatements: substatements statement
         {
-            $<node>$ = new OpAST( $<value>1, $<value>2, $<value>3 );
+            $<stmtlist>$.append( static_cast<StatementAST*>($<node>2));
         }
-    | ws op
+    |
         {
-            $<node>$ = new OpAST( $<value>1, $<value>2, "" );
+            $<stmtlist>$.clear();
         }
-    | op ws
+;
+
+variable_assignment: WS VARIABLENAME op values
         {
-            $<node>$ = new OpAST( "", $<value>1, $<value>2 );
+            $<node>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>1 );
         }
-    | op
+    | VARIABLENAME op values
         {
-            $<node>$ = new OpAST( "", $<value>1, "" );
+            $<node>$ = new AssignmentAST( $<value>1, $<value>2, $<values>3 );
         }
     ;
-
-ws: ws WS
-        {
-            $<value>$ += $<value>1;
-        }
-    | WS
-        {
-            $<value>$ = $<value>1;
-        }
-    ;
-
 
 op: EQUAL
         {
             $<value>$ = $<value>1;
         }
-    | MINUSEQ
+    | PLUSEQ
         {
             $<value>$ = $<value>1;
         }
-    | PLUSEQ
+    | MINUSEQ
         {
             $<value>$ = $<value>1;
         }
@@ -324,6 +258,58 @@ op: EQUAL
     | STAREQ
         {
             $<value>$ = $<value>1;
+        }
+    ;
+
+values: values VARVAL
+        {
+            $<values>$.append($<value>2);
+        }
+    | values QUOTE wsvalue QUOTE
+        {
+            $<values>$.append($<value>2+$<value>3+$<value>4);
+        }
+    | values DOLLAR DOLLAR LCURLY VARVAL RCURLY
+        {
+            $<values>$.append($<value>2+$<value>3+$<value>4+$<value>5+$<value>6);
+        }
+    | values DOLLAR DOLLAR VARVAL
+        {
+            $<values>$.append($<value>2+$<value>3+$<value>4);
+        }
+    | values DOLLAR LBRACE VARVAL RBRACE
+        {
+            $<values>$.append($<value>2+$<value>3+$<value>4+$<value>5);
+        }
+    | values WS
+        {
+            $<values>$.append($<value>2);
+        }
+    | values COMMA
+        {
+            $<values>$.append($<value>2);
+        }
+    | values CONT
+        {
+            $<values>$.append($<value>2);
+        }
+    |
+        {
+            $<values>$.clear();
+        }
+    ;
+
+wsvalue: wsvalue VARVAL
+        {
+            $<value>$ += $<value>2;
+        }
+    | wsvalue WS
+        {
+            $<value>$ += $<value>2;
+        }
+    |
+        {
+            $<value>$ = "";
         }
     ;
 

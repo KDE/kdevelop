@@ -32,7 +32,7 @@ extern int yydebug;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 extern YY_BUFFER_STATE yy_scan_string( const char* );
 extern void yy_delete_buffer( YY_BUFFER_STATE );
-extern QStack<QMake::ProjectAST *> projects;
+extern QMake::ProjectAST* project;
 
 namespace QMake
 {
@@ -46,10 +46,10 @@ namespace QMake
             return 1;
         }
         printf("Parsing\n");
-        yydebug = 1;
+//         yydebug = 1;
         int ret = yyparse();
         printf("Parsed: %d\n", ret);
-        *ast = projects.top();
+        *ast = project;
         (*ast)->setFilename(QString::fromUtf8( filename ));
         return ret;
     }
@@ -64,7 +64,7 @@ namespace QMake
         YY_BUFFER_STATE state = yy_scan_string( content );
 //         yydebug = 1;
         int ret = yyparse();
-        *ast = projects.top();
+        *ast = project;
         (*ast)->setFilename( "" );
         yy_delete_buffer( state );
         return ret;
