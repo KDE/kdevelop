@@ -105,7 +105,8 @@ void ParseTest::failFullProject_data()
         "  Value3 Value4\n"
         "fo()\n{\n"
         "VARIABLE = Value1 Value2 \\#some comment\n"
-        "win32 : FOOBAR=Value1\n";
+        "win32 : FOOBAR=Value1\n"
+        "fun1()|!fun2(): FOOBAR=Value1\n";
 }
 
 #include "parsetest.moc"

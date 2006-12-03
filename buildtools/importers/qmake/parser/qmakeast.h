@@ -188,8 +188,12 @@ namespace QMake
     class OrAST : public StatementAST
     {
         public:
-            OrAST( FunctionCallAST* lcall, FunctionCallAST* rcall, const QString& begin, QList<StatementAST*> stmts,
-                   const QString& end = "", const QString& ws = "", AST* parent = 0 );
+            OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall,
+                   const QString& begin, QList<StatementAST*> stmts, const QString& end = "",
+                   const QString& ws = "", AST* parent = 0 );
+            OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall,
+                   const QString& begin, StatementAST* stmt,
+                   const QString& ws = "", AST* parent = 0 );
             ~OrAST();
             void writeToString( QString& ) const;
         private:
@@ -198,6 +202,7 @@ namespace QMake
             QList<StatementAST*> m_statements;
             QString m_begin;
             QString m_end;
+            QString m_orop;
     };
 
 }
