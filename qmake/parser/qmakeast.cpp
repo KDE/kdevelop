@@ -210,11 +210,19 @@ namespace QMake
         buf += m_end;
     }
 
-    OrAST::OrAST( FunctionCallAST* lcall, FunctionCallAST* rcall, const QString& begin,
+    OrAST::OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall, const QString& begin,
                   QList<StatementAST*> stmts, const QString& end, const QString& ws, AST* parent )
             : StatementAST( ws, parent ), m_lCall( lcall ), m_rCall( rcall ),
-            m_statements( stmts ), m_begin( begin ), m_end( end )
+            m_statements( stmts ), m_begin( begin ), m_end( end ), m_orop(orop)
     {
+    }
+
+    OrAST::OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall, const QString& begin,
+                  StatementAST* stmt, const QString& ws, AST* parent )
+            : StatementAST( ws, parent ), m_lCall( lcall ), m_rCall( rcall ),
+            m_begin( begin ), m_orop(orop)
+    {
+        m_statements.append(stmt);
     }
 
     OrAST::~OrAST()
@@ -234,7 +242,7 @@ namespace QMake
     {
         m_lCall->writeToString( buf );
         buf += whitespace();
-        buf += "|";
+        buf += m_orop;
         m_rCall->writeToString( buf );
 
         buf += m_begin;

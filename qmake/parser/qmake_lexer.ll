@@ -119,6 +119,7 @@ funcargval [^\n\"\\{(})=$# \t|:,]
 <funcargs,INITIAL>{ws}"}" { yylval.value = yytext; return RCURLY; }
 <funcargs,INITIAL>{ws}"{" { yylval.value = yytext; return LCURLY; }
 
+"|"         { yylval.value = yytext; return OR; }
 
 %%
 

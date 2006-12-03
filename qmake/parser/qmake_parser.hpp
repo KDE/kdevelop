@@ -53,14 +53,15 @@
      RBRACE = 269,
      QUOTE = 270,
      EQUAL = 271,
-     PLUSEQ = 272,
-     MINUSEQ = 273,
-     TILDEEQ = 274,
-     STAREQ = 275,
-     NEWLINE = 276,
-     CONT = 277,
-     COMMENT = 278,
-     FUNCARGVAL = 279
+     OR = 272,
+     PLUSEQ = 273,
+     MINUSEQ = 274,
+     TILDEEQ = 275,
+     STAREQ = 276,
+     NEWLINE = 277,
+     CONT = 278,
+     COMMENT = 279,
+     FUNCARGVAL = 280
    };
 #endif
 /* Tokens.  */
@@ -78,14 +79,15 @@
 #define RBRACE 269
 #define QUOTE 270
 #define EQUAL 271
-#define PLUSEQ 272
-#define MINUSEQ 273
-#define TILDEEQ 274
-#define STAREQ 275
-#define NEWLINE 276
-#define CONT 277
-#define COMMENT 278
-#define FUNCARGVAL 279
+#define OR 272
+#define PLUSEQ 273
+#define MINUSEQ 274
+#define TILDEEQ 275
+#define STAREQ 276
+#define NEWLINE 277
+#define CONT 278
+#define COMMENT 279
+#define FUNCARGVAL 280
 
 
 

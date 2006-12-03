@@ -75,6 +75,7 @@ ProjectAST* project;
 %token RBRACE
 %token QUOTE
 %token EQUAL
+%token OR
 %token PLUSEQ
 %token MINUSEQ
 %token TILDEEQ
@@ -111,6 +112,10 @@ statement: variable_assignment
         {
             $<node>$ = $<node>1;
         }
+    | or
+        {
+            $<node>$ = $<node>1;
+        }
     | NEWLINE
         {
             $<node>$ = new NewlineAST();
@@ -128,6 +133,37 @@ statement: variable_assignment
             $<node>$ = new CommentAST( $<value>2, $<value>1 );
         }
     ;
+
+or: functioncall or_op functioncall LCURLY substatements RCURLY
+        {
+            $<node>$ = new OrAST( static_cast<FunctionCallAST*>($<node>1), $<value>2, static_cast<FunctionCallAST*>($<node>3),
+                                  $<value>4, $<stmtlist>5, $<value>6);
+        }
+    | functioncall or_op functioncall COLON statement
+        {
+            $<node>$ = new OrAST( static_cast<FunctionCallAST*>($<node>1), $<value>2, static_cast<FunctionCallAST*>($<node>3),
+                                  $<value>4, static_cast<StatementAST*>($<node>5) );
+        }
+    ;
+
+or_op: WS OR WS
+        {
+            $<value>$ = $<value>1+$<value>2+$<value>3;
+        }
+    | WS OR
+        {
+            $<value>$ = $<value>1+$<value>2;
+        }
+    | OR WS
+        {
+            $<value>$ = $<value>1+$<value>2;
+        }
+    | OR
+        {
+            $<value>$ = $<value>1;
+        }
+    ;
+
 
 scope: SCOPENAME COLON statement
         {
