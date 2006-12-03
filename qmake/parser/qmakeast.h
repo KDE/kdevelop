@@ -174,10 +174,12 @@ namespace QMake
         public:
             ScopeAST( const QString& name, const QString& begin, QList<StatementAST*> stmts,
                       const QString& end = "", const QString& ws = "", AST* parent = 0 );
+            ScopeAST( const QString& name, const QString& begin, StatementAST* stmt,
+                      const QString& ws = "", AST* parent = 0 );
             ~ScopeAST();
             void writeToString( QString& ) const;
         private:
-            const QString& m_scopeName;
+            QString m_scopeName;
             QList<StatementAST*> m_statements;
             QString m_begin;
             QString m_end;
