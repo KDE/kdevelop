@@ -45,7 +45,7 @@ if(FLEX_EXECUTABLE)
         GENERATED
         )
 else(FLEX_EXECUTABLE)
-    message("Assuming existence of the generated lexer file ruby_lexer.cpp")
+    message("--- Assuming existence of the generated lexer file ruby_lexer.cpp")
     set(kdevrubyparser_STAT_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.cpp ${kdevrubyparser_STAT_SRCS})
 endif(FLEX_EXECUTABLE)
 
