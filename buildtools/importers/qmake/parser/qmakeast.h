@@ -32,19 +32,18 @@ namespace QMake
     class AST
     {
         public:
-            AST( AST* parent = 0 );
+            AST( const QString ws = "", AST* parent = 0 );
             virtual ~AST() = 0;
 
             AST* parent() const;
-
+            QString whitespace() const;
+            void setWhitespace( const QString& );
             virtual void writeToString( QString& ) const = 0 ;
-            void setDepth( unsigned int );
-            unsigned int depth() const;
         protected:
             void setParent( AST* );
         private:
             AST* m_parent;
-            unsigned int m_depth;
+            QString m_ws;
             friend class ChildAST;
     };
 
@@ -52,9 +51,7 @@ namespace QMake
     class StatementAST : public AST
     {
         public:
-            StatementAST( AST* parent ) : AST( parent ) {}
-//             virtual ~StatementAST( ) {}
-//             virtual void writeToString( QString& ) const {}
+            StatementAST( const QString& ws = "", AST* parent = 0 ) : AST( ws, parent ) {}
     };
 
     class ProjectAST : public AST
@@ -79,32 +76,10 @@ namespace QMake
             friend class QMake::Parser;
     };
 
-
-
-    class OpAST : public AST
-    {
-        public:
-            OpAST( const QString& , const QString&, const QString&, AST* parent = 0 );
-            ~OpAST();
-
-            QString rightWhitespace() const;
-            QString leftWhitespace() const;
-            QString op() const;
-
-            void setRightWhitespace( const QString& );
-            void setLeftWhitespace( const QString& );
-            void setOp( const QString& );
-            void writeToString( QString& ) const;
-        private:
-            QString m_op;
-            QString m_lWs;
-            QString m_rWs;
-    };
-
     class AssignmentAST : public StatementAST
     {
         public:
-            AssignmentAST( const QString& variable, OpAST* op, const QStringList& values, AST* parent = 0 );
+            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& = "", AST* parent = 0 );
             ~AssignmentAST();
 
             void addValue( const QString& );
@@ -112,12 +87,12 @@ namespace QMake
             void removeValue( const QString& );
             QString variable() const;
             void setVariable( const QString& );
-            OpAST* op() const;
-            void setOp( OpAST* );
+            QString op() const;
+            void setOp( const QString& );
             void writeToString( QString& ) const;
         private:
             QString m_variable;
-            OpAST* m_op;
+            QString m_op;
             QStringList m_values;
 
     };
@@ -125,14 +100,14 @@ namespace QMake
     class NewlineAST : public StatementAST
     {
         public:
-            NewlineAST( AST* parent = 0 ) : StatementAST( parent ) {}
-            void writeToString( QString& buf ) const { buf += "\n"; }
+            NewlineAST( const QString& ws = "", AST* parent = 0 ) : StatementAST( ws, parent ) {}
+            void writeToString( QString& buf ) const { buf += whitespace()+"\n"; }
     };
 
     class CommentAST : public StatementAST
     {
         public:
-            CommentAST( const QString& comment, AST* parent = 0 );
+            CommentAST( const QString& comment, const QString& ws = "", AST* parent = 0 );
             QString comment() const;
             void setComment( const QString& );
             void writeToString( QString& ) const;
@@ -140,15 +115,87 @@ namespace QMake
             QString m_comment;
     };
 
-    class WhitespaceAST : public StatementAST
+    class FunctionArgAST : public AST
     {
         public:
-            WhitespaceAST( const QString& comment, AST* parent = 0 );
-            QString whitespace() const;
-            void setWhitespace( const QString& );
+            FunctionArgAST( const QString& ws = "", AST* parent = 0 );
+            virtual ~FunctionArgAST();
+            virtual void writeToString( QString& ) const;
+        private:
+    };
+
+    class FunctionCallAST : public FunctionArgAST
+    {
+        public:
+            FunctionCallAST( const QString& name, const QString& begin, QList<FunctionArgAST*> args,
+                             const QString& end = "", const QString& ws = "", AST* parent = 0 );
+            ~FunctionCallAST();
+            void setAsFunctionArg( bool );
+            bool asFunctionArg() const;
             void writeToString( QString& ) const;
         private:
-            QString m_ws;
+            QList<FunctionArgAST*> m_args;
+            bool m_asFunctionArg;
+            QString m_functionName;
+            QString m_begin;
+            QString m_end;
+    };
+
+    class SimpleFunctionArgAST : public FunctionArgAST
+    {
+        public:
+            SimpleFunctionArgAST( const QString& arg, const QString& ws = "", AST* parent = 0 );
+            ~SimpleFunctionArgAST();
+            void writeToString( QString& ) const;
+        private:
+            QString m_value;
+    };
+
+
+    class FunctionAST : public StatementAST
+    {
+        public:
+            FunctionAST( FunctionCallAST* call, const QString& begin, QList<StatementAST*> stmts,
+                         const QString& end = "", const QString& ws = "", AST* parent = 0 );
+        FunctionAST( FunctionCallAST* call, const QString& begin, StatementAST* stmt,
+                         const QString& ws = "", AST* parent = 0 );
+            FunctionAST( FunctionCallAST* call, const QString& ws = "", AST* parent = 0 );
+            ~FunctionAST();
+            void writeToString( QString& ) const;
+        private:
+            FunctionCallAST* m_call;
+            QList<StatementAST*> m_statements;
+            QString m_begin;
+            QString m_end;
+    };
+
+    class ScopeAST : public StatementAST
+    {
+        public:
+            ScopeAST( const QString& name, const QString& begin, QList<StatementAST*> stmts,
+                      const QString& end = "", const QString& ws = "", AST* parent = 0 );
+            ~ScopeAST();
+            void writeToString( QString& ) const;
+        private:
+            const QString& m_scopeName;
+            QList<StatementAST*> m_statements;
+            QString m_begin;
+            QString m_end;
+    };
+
+    class OrAST : public StatementAST
+    {
+        public:
+            OrAST( FunctionCallAST* lcall, FunctionCallAST* rcall, const QString& begin, QList<StatementAST*> stmts,
+                   const QString& end = "", const QString& ws = "", AST* parent = 0 );
+            ~OrAST();
+            void writeToString( QString& ) const;
+        private:
+            FunctionCallAST* m_lCall;
+            FunctionCallAST* m_rCall;
+            QList<StatementAST*> m_statements;
+            QString m_begin;
+            QString m_end;
     };
 
 }

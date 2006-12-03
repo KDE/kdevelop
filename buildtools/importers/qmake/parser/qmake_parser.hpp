@@ -40,52 +40,50 @@
       know about them.  */
    enum yytokentype {
      WS = 258,
-     LETTER = 259,
-     DIGIT = 260,
-     COMMA = 261,
-     UNDERSCORE = 262,
-     DOT = 263,
-     EQUAL = 264,
-     PLUSEQ = 265,
-     MINUSEQ = 266,
-     TILDEEQ = 267,
-     STAREQ = 268,
-     LCURLY = 269,
-     RCURLY = 270,
-     LBRACE = 271,
-     RBRACE = 272,
-     DOLLAR = 273,
-     QUOTE = 274,
-     SLASH = 275,
+     VARIABLENAME = 259,
+     FUNCTIONNAME = 260,
+     VARVAL = 261,
+     DOLLAR = 262,
+     COLON = 263,
+     COMMA = 264,
+     LCURLY = 265,
+     RCURLY = 266,
+     LBRACE = 267,
+     RBRACE = 268,
+     QUOTE = 269,
+     EQUAL = 270,
+     PLUSEQ = 271,
+     MINUSEQ = 272,
+     TILDEEQ = 273,
+     STAREQ = 274,
+     NEWLINE = 275,
      CONT = 276,
      COMMENT = 277,
-     SIMPLEVAL = 278,
-     NEWLINE = 279
+     FUNCARGVAL = 278
    };
 #endif
 /* Tokens.  */
 #define WS 258
-#define LETTER 259
-#define DIGIT 260
-#define COMMA 261
-#define UNDERSCORE 262
-#define DOT 263
-#define EQUAL 264
-#define PLUSEQ 265
-#define MINUSEQ 266
-#define TILDEEQ 267
-#define STAREQ 268
-#define LCURLY 269
-#define RCURLY 270
-#define LBRACE 271
-#define RBRACE 272
-#define DOLLAR 273
-#define QUOTE 274
-#define SLASH 275
+#define VARIABLENAME 259
+#define FUNCTIONNAME 260
+#define VARVAL 261
+#define DOLLAR 262
+#define COLON 263
+#define COMMA 264
+#define LCURLY 265
+#define RCURLY 266
+#define LBRACE 267
+#define RBRACE 268
+#define QUOTE 269
+#define EQUAL 270
+#define PLUSEQ 271
+#define MINUSEQ 272
+#define TILDEEQ 273
+#define STAREQ 274
+#define NEWLINE 275
 #define CONT 276
 #define COMMENT 277
-#define SIMPLEVAL 278
-#define NEWLINE 279
+#define FUNCARGVAL 278
 
 
 

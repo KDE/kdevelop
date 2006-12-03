@@ -22,39 +22,96 @@
 #include "qmake_parser.hpp"
 #include <stdlib.h>
 #include <QtCore/QString>
+#include <iostream>
+
+int openbrace;
 
 %}
 
 %option noyywrap
 %option yylineno
+%option debug
 
-ws            [ \t]
+%x varvalue
+%x funcargs
+ws            [ \t]*
 letter        [a-zA-Z]
 digit         [0-9]
-simpleval     [^\n\\{(})=$,#{letter}{digit}{ws}]
+varval     [^\n\"\\{(})=$# \t|:]
+funcargval [^\n\"\\{(})=$# \t|:,]
 
 %%
 
-{ws}                { yylval.value = yytext; return WS; }
-{letter}            { yylval.value = yytext; return LETTER; }
-{digit}             { yylval.value = yytext; return DIGIT; }
-"_"                 { yylval.value = yytext; return UNDERSCORE; }
-"."                 { yylval.value = yytext; return DOT; }
-","                 { yylval.value = yytext; return COMMA; }
-"+="                { yylval.value = yytext; return PLUSEQ; }
-"-="                { yylval.value = yytext; return MINUSEQ; }
-"="                 { yylval.value = yytext; return EQUAL; }
-"*="                { yylval.value = yytext; return STAREQ; }
-"~="                { yylval.value = yytext; return TILDEEQ; }
-"{"                 { yylval.value = yytext; return LCURLY; }
-"}"                 { yylval.value = yytext; return RCURLY; }
-"("                 { yylval.value = yytext; return LBRACE; }
-")"                 { yylval.value = yytext; return RBRACE; }
-"$"                 { yylval.value = yytext; return DOLLAR; }
-"\""                { yylval.value = yytext; return QUOTE; }
-"\n"                { yylval.value = yytext; return NEWLINE; }
-"\\"                { yylval.value = yytext; return CONT; }
-{simpleval}         { yylval.value = yytext; return SIMPLEVAL; }
-"#"[^\n]*           { yylval.value = yytext; return COMMENT; }
+<varvalue,funcargs,INITIAL>{ws}        {
+                yylval.value = yytext; return WS;
+            }
+
+({letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}("+"|"="|"-"|"*"|"~") {
+                yylval.value = yytext;
+                yylval.value = yylval.value.left( yylval.value.length()-1 );
+                yyless( yylval.value.length() );
+                return VARIABLENAME;
+            }
+
+<INITIAL>({letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
+                yylval.value = yytext;
+                yylval.value = yylval.value.left( yylval.value.length()-1 );
+                unput('(');
+                openbrace = 0;
+                BEGIN(funcargs);
+                return FUNCTIONNAME;
+            }
+
+<funcargs>({letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
+                yylval.value = yytext;
+                yylval.value = yylval.value.left( yylval.value.length()-1 );
+                unput('(');
+                BEGIN(funcargs);
+                return FUNCTIONNAME;
+            }
+
+"+="        { BEGIN(varvalue); yylval.value = yytext; return PLUSEQ; }
+"-="        { BEGIN(varvalue); yylval.value = yytext; return MINUSEQ; }
+"="         { BEGIN(varvalue); yylval.value = yytext; return EQUAL; }
+"*="        { BEGIN(varvalue); yylval.value = yytext; return STAREQ; }
+"~="        { BEGIN(varvalue); yylval.value = yytext; return TILDEEQ; }
+
+<varvalue,INITIAL>"\n"  { BEGIN(INITIAL); yylval.value = yytext; return NEWLINE; }
+
+<varvalue>"\\"{ws}"\n"  {yylval.value = yytext; return CONT;}
+<varvalue>{varval}+     { yylval.value = yytext; return VARVAL; }
+<varvalue,funcargs>"$"  { yylval.value = yytext; return DOLLAR; }
+
+<varvalue>"(" { yylval.value = yytext; return LBRACE; }
+<varvalue>")" { yylval.value = yytext; return RBRACE; }
+<varvalue>"}" { yylval.value = yytext; return RCURLY; }
+<varvalue>"{" { yylval.value = yytext; return LCURLY; }
+
+<varvalue,funcargs>"\""     { yylval.value = yytext; return QUOTE; }
+<varvalue,INITIAL>"#"[^\n]* { yylval.value = yytext; return COMMENT;}
+
+<varvalue,funcargs>{ws}","{ws}  { yylval.value = yytext; return COMMA; }
+<funcargs>{funcargval}+         { yylval.value = yytext; return FUNCARGVAL; }
+
+<funcargs>{ws}"("       {
+                            openbrace++;
+                            yylval.value = yytext;
+                            return LBRACE;
+                        }
+<funcargs>{ws}")"       {
+                            openbrace--;
+                            if( openbrace <= 0 )
+                                BEGIN(INITIAL);
+                            yylval.value = yytext;
+                            return RBRACE;
+                        }
+
+<varvalue>":"       { yylval.value = yytext; return COLON; }
+<INITIAL>{ws}":"    { BEGIN(INITIAL); yylval.value = yytext; return COLON; }
+
+{ws}"}" { yylval.value = yytext; return RCURLY; }
+{ws}"{" { yylval.value = yytext; return LCURLY; }
+
+
 %%
 
