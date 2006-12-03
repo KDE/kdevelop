@@ -112,6 +112,16 @@ namespace csharp
             return  Nullable<QString >(model_static_cast<MethodDeclarationModelItem>(_M_item)->name());
           }
 
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<QString >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->name());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<QString >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->name());
+          }
+
         case _CodeModelItem::Kind_VariableDeclaration:
           {
             return  Nullable<QString >(model_static_cast<VariableDeclarationModelItem>(_M_item)->name());
@@ -284,6 +294,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setName(name);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setName(name);
+          return ;
+        }
+
       case _CodeModelItem::Kind_VariableDeclaration:
         {
           model_static_cast<VariableDeclarationModelItem>(_M_item)->setName(name);
@@ -443,6 +465,16 @@ namespace csharp
         case _CodeModelItem::Kind_MethodDeclaration:
           {
             return  Nullable<QStringList >(model_static_cast<MethodDeclarationModelItem>(_M_item)->scope());
+          }
+
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<QStringList >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->scope());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<QStringList >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->scope());
           }
 
         case _CodeModelItem::Kind_VariableDeclaration:
@@ -617,6 +649,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setScope(scope);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setScope(scope);
+          return ;
+        }
+
       case _CodeModelItem::Kind_VariableDeclaration:
         {
           model_static_cast<VariableDeclarationModelItem>(_M_item)->setScope(scope);
@@ -776,6 +820,16 @@ namespace csharp
         case _CodeModelItem::Kind_MethodDeclaration:
           {
             return  Nullable<QString >(model_static_cast<MethodDeclarationModelItem>(_M_item)->fileName());
+          }
+
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<QString >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->fileName());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<QString >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->fileName());
           }
 
         case _CodeModelItem::Kind_VariableDeclaration:
@@ -947,6 +1001,18 @@ namespace csharp
       case _CodeModelItem::Kind_MethodDeclaration:
         {
           model_static_cast<MethodDeclarationModelItem>(_M_item)->setFileName(fileName);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setFileName(fileName);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setFileName(fileName);
           return ;
         }
 
@@ -2398,6 +2464,16 @@ namespace csharp
             return  Nullable<access_policy::access_policy_enum >(model_static_cast<MethodDeclarationModelItem>(_M_item)->accessPolicy());
           }
 
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<access_policy::access_policy_enum >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->accessPolicy());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<access_policy::access_policy_enum >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->accessPolicy());
+          }
+
         case _CodeModelItem::Kind_VariableDeclaration:
           {
             return  Nullable<access_policy::access_policy_enum >(model_static_cast<VariableDeclarationModelItem>(_M_item)->accessPolicy());
@@ -2487,6 +2563,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setAccessPolicy(accessPolicy);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setAccessPolicy(accessPolicy);
+          return ;
+        }
+
       case _CodeModelItem::Kind_VariableDeclaration:
         {
           model_static_cast<VariableDeclarationModelItem>(_M_item)->setAccessPolicy(accessPolicy);
@@ -2559,6 +2647,16 @@ namespace csharp
         case _CodeModelItem::Kind_MethodDeclaration:
           {
             return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isNew());
+          }
+
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isNew());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isNew());
           }
 
         case _CodeModelItem::Kind_VariableDeclaration:
@@ -2641,6 +2739,18 @@ namespace csharp
       case _CodeModelItem::Kind_MethodDeclaration:
         {
           model_static_cast<MethodDeclarationModelItem>(_M_item)->setNew(isNew);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setNew(isNew);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setNew(isNew);
           return ;
         }
 
@@ -3278,6 +3388,16 @@ namespace csharp
             return  Nullable<TypeParameterList >(model_static_cast<MethodDeclarationModelItem>(_M_item)->typeParameters());
           }
 
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<TypeParameterList >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->typeParameters());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<TypeParameterList >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->typeParameters());
+          }
+
         default:
           break;
         }
@@ -3323,6 +3443,18 @@ namespace csharp
       case _CodeModelItem::Kind_MethodDeclaration:
         {
           model_static_cast<MethodDeclarationModelItem>(_M_item)->addTypeParameter(item);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->addTypeParameter(item);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->addTypeParameter(item);
           return ;
         }
 
@@ -3374,6 +3506,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->removeTypeParameter(item);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->removeTypeParameter(item);
+          return ;
+        }
+
       default:
         break;
       }
@@ -3415,6 +3559,16 @@ namespace csharp
         case _CodeModelItem::Kind_MethodDeclaration:
           {
             return  Nullable<TypeParameterConstraintList >(model_static_cast<MethodDeclarationModelItem>(_M_item)->typeParameterConstraints());
+          }
+
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<TypeParameterConstraintList >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->typeParameterConstraints());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<TypeParameterConstraintList >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->typeParameterConstraints());
           }
 
         default:
@@ -3465,6 +3619,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->addTypeParameterConstraint(item);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->addTypeParameterConstraint(item);
+          return ;
+        }
+
       default:
         break;
       }
@@ -3510,6 +3676,18 @@ namespace csharp
       case _CodeModelItem::Kind_MethodDeclaration:
         {
           model_static_cast<MethodDeclarationModelItem>(_M_item)->removeTypeParameterConstraint(item);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->removeTypeParameterConstraint(item);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->removeTypeParameterConstraint(item);
           return ;
         }
 
@@ -3569,6 +3747,16 @@ namespace csharp
         case _CodeModelItem::Kind_MethodDeclaration:
           {
             return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isUnsafe());
+          }
+
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isUnsafe());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isUnsafe());
           }
 
         case _CodeModelItem::Kind_VariableDeclaration:
@@ -3639,6 +3827,18 @@ namespace csharp
       case _CodeModelItem::Kind_MethodDeclaration:
         {
           model_static_cast<MethodDeclarationModelItem>(_M_item)->setUnsafe(isUnsafe);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setUnsafe(isUnsafe);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setUnsafe(isUnsafe);
           return ;
         }
 
@@ -3823,6 +4023,16 @@ namespace csharp
             return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isSealed());
           }
 
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isSealed());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isSealed());
+          }
+
         default:
           break;
         }
@@ -3865,6 +4075,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setSealed(isSealed);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setSealed(isSealed);
+          return ;
+        }
+
       default:
         break;
       }
@@ -3901,6 +4123,16 @@ namespace csharp
         case _CodeModelItem::Kind_MethodDeclaration:
           {
             return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isAbstract());
+          }
+
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isAbstract());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isAbstract());
           }
 
         default:
@@ -3945,6 +4177,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setAbstract(isAbstract);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setAbstract(isAbstract);
+          return ;
+        }
+
       default:
         break;
       }
@@ -3976,6 +4220,16 @@ namespace csharp
         case _CodeModelItem::Kind_MethodDeclaration:
           {
             return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isStatic());
+          }
+
+        case _CodeModelItem::Kind_ConstructorDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isStatic());
+          }
+
+        case _CodeModelItem::Kind_FinalizerDeclaration:
+          {
+            return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isStatic());
           }
 
         case _CodeModelItem::Kind_VariableDeclaration:
@@ -4019,6 +4273,18 @@ namespace csharp
           return ;
         }
 
+      case _CodeModelItem::Kind_ConstructorDeclaration:
+        {
+          model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setStatic(isStatic);
+          return ;
+        }
+
+      case _CodeModelItem::Kind_FinalizerDeclaration:
+        {
+          model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setStatic(isStatic);
+          return ;
+        }
+
       case _CodeModelItem::Kind_VariableDeclaration:
         {
           model_static_cast<VariableDeclarationModelItem>(_M_item)->setStatic(isStatic);
@@ -4048,6 +4314,16 @@ namespace csharp
                 return  Nullable<TypeModelItem >(model_static_cast<MethodDeclarationModelItem>(_M_item)->returnType());
               }
 
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<TypeModelItem >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->returnType());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<TypeModelItem >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->returnType());
+              }
+
             default:
               break;
             }
@@ -4069,6 +4345,18 @@ namespace csharp
           case _CodeModelItem::Kind_MethodDeclaration:
             {
               model_static_cast<MethodDeclarationModelItem>(_M_item)->setReturnType(returnType);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setReturnType(returnType);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setReturnType(returnType);
               return ;
             }
 
@@ -4098,6 +4386,16 @@ namespace csharp
             case _CodeModelItem::Kind_MethodDeclaration:
               {
                 return  Nullable<ParameterList >(model_static_cast<MethodDeclarationModelItem>(_M_item)->parameters());
+              }
+
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<ParameterList >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->parameters());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<ParameterList >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->parameters());
               }
 
             default:
@@ -4130,6 +4428,18 @@ namespace csharp
               return ;
             }
 
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->addParameter(item);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->addParameter(item);
+              return ;
+            }
+
           default:
             break;
           }
@@ -4157,6 +4467,18 @@ namespace csharp
           case _CodeModelItem::Kind_MethodDeclaration:
             {
               model_static_cast<MethodDeclarationModelItem>(_M_item)->removeParameter(item);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->removeParameter(item);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->removeParameter(item);
               return ;
             }
 
@@ -4399,6 +4721,16 @@ namespace csharp
                 return  Nullable<TypeModelItem >(model_static_cast<MethodDeclarationModelItem>(_M_item)->fromInterface());
               }
 
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<TypeModelItem >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->fromInterface());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<TypeModelItem >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->fromInterface());
+              }
+
             default:
               break;
             }
@@ -4432,6 +4764,18 @@ namespace csharp
           case _CodeModelItem::Kind_MethodDeclaration:
             {
               model_static_cast<MethodDeclarationModelItem>(_M_item)->setFromInterface(fromInterface);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setFromInterface(fromInterface);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setFromInterface(fromInterface);
               return ;
             }
 
@@ -4540,6 +4884,16 @@ namespace csharp
                 return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isVirtual());
               }
 
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isVirtual());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isVirtual());
+              }
+
             default:
               break;
             }
@@ -4576,6 +4930,18 @@ namespace csharp
               return ;
             }
 
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setVirtual(isVirtual);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setVirtual(isVirtual);
+              return ;
+            }
+
           default:
             break;
           }
@@ -4607,6 +4973,16 @@ namespace csharp
             case _CodeModelItem::Kind_MethodDeclaration:
               {
                 return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isOverride());
+              }
+
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isOverride());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isOverride());
               }
 
             default:
@@ -4645,6 +5021,18 @@ namespace csharp
               return ;
             }
 
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setOverride(isOverride);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setOverride(isOverride);
+              return ;
+            }
+
           default:
             break;
           }
@@ -4676,6 +5064,16 @@ namespace csharp
             case _CodeModelItem::Kind_MethodDeclaration:
               {
                 return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isExtern());
+              }
+
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isExtern());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isExtern());
               }
 
             default:
@@ -4711,6 +5109,18 @@ namespace csharp
           case _CodeModelItem::Kind_MethodDeclaration:
             {
               model_static_cast<MethodDeclarationModelItem>(_M_item)->setExtern(isExtern);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setExtern(isExtern);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setExtern(isExtern);
               return ;
             }
 
@@ -4848,78 +5258,6 @@ namespace csharp
       }
 
 
-      Nullable<bool > _ModelItemChameleon::isConstructor( ) const
-        {
-          switch  (_M_item->kind())
-            {
-
-            case _CodeModelItem::Kind_MethodDeclaration:
-              {
-                return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isConstructor());
-              }
-
-            default:
-              break;
-            }
-
-          return  Nullable<bool>();
-        }
-
-      void _ModelItemChameleon::setConstructor(bool isConstructor)
-      {
-        switch  (_M_item->kind())
-          {
-
-          case _CodeModelItem::Kind_MethodDeclaration:
-            {
-              model_static_cast<MethodDeclarationModelItem>(_M_item)->setConstructor(isConstructor);
-              return ;
-            }
-
-          default:
-            break;
-          }
-
-        return ;
-      }
-
-
-      Nullable<bool > _ModelItemChameleon::isFinalizer( ) const
-        {
-          switch  (_M_item->kind())
-            {
-
-            case _CodeModelItem::Kind_MethodDeclaration:
-              {
-                return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isFinalizer());
-              }
-
-            default:
-              break;
-            }
-
-          return  Nullable<bool>();
-        }
-
-      void _ModelItemChameleon::setFinalizer(bool isFinalizer)
-      {
-        switch  (_M_item->kind())
-          {
-
-          case _CodeModelItem::Kind_MethodDeclaration:
-            {
-              model_static_cast<MethodDeclarationModelItem>(_M_item)->setFinalizer(isFinalizer);
-              return ;
-            }
-
-          default:
-            break;
-          }
-
-        return ;
-      }
-
-
       Nullable<bool > _ModelItemChameleon::isInterfaceMethodDeclaration( ) const
         {
           switch  (_M_item->kind())
@@ -4928,6 +5266,16 @@ namespace csharp
             case _CodeModelItem::Kind_MethodDeclaration:
               {
                 return  Nullable<bool >(model_static_cast<MethodDeclarationModelItem>(_M_item)->isInterfaceMethodDeclaration());
+              }
+
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->isInterfaceMethodDeclaration());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<bool >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->isInterfaceMethodDeclaration());
               }
 
             default:
@@ -4945,6 +5293,18 @@ namespace csharp
           case _CodeModelItem::Kind_MethodDeclaration:
             {
               model_static_cast<MethodDeclarationModelItem>(_M_item)->setInterfaceMethodDeclaration(isInterfaceMethodDeclaration);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->setInterfaceMethodDeclaration(isInterfaceMethodDeclaration);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->setInterfaceMethodDeclaration(isInterfaceMethodDeclaration);
               return ;
             }
 
@@ -4966,6 +5326,16 @@ namespace csharp
                 return  Nullable<VariableDeclarationList >(model_static_cast<MethodDeclarationModelItem>(_M_item)->localVariables());
               }
 
+            case _CodeModelItem::Kind_ConstructorDeclaration:
+              {
+                return  Nullable<VariableDeclarationList >(model_static_cast<ConstructorDeclarationModelItem>(_M_item)->localVariables());
+              }
+
+            case _CodeModelItem::Kind_FinalizerDeclaration:
+              {
+                return  Nullable<VariableDeclarationList >(model_static_cast<FinalizerDeclarationModelItem>(_M_item)->localVariables());
+              }
+
             default:
               break;
             }
@@ -4984,6 +5354,18 @@ namespace csharp
               return ;
             }
 
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->addLocalVariable(item);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->addLocalVariable(item);
+              return ;
+            }
+
           default:
             break;
           }
@@ -4999,6 +5381,18 @@ namespace csharp
           case _CodeModelItem::Kind_MethodDeclaration:
             {
               model_static_cast<MethodDeclarationModelItem>(_M_item)->removeLocalVariable(item);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_ConstructorDeclaration:
+            {
+              model_static_cast<ConstructorDeclarationModelItem>(_M_item)->removeLocalVariable(item);
+              return ;
+            }
+
+          case _CodeModelItem::Kind_FinalizerDeclaration:
+            {
+              model_static_cast<FinalizerDeclarationModelItem>(_M_item)->removeLocalVariable(item);
               return ;
             }
 

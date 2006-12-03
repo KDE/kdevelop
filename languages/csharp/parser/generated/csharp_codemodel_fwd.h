@@ -57,6 +57,10 @@ namespace csharp
 
   class _MethodDeclarationModelItem;
 
+  class _ConstructorDeclarationModelItem;
+
+  class _FinalizerDeclarationModelItem;
+
   class _VariableDeclarationModelItem;
 
   class _TypePartModelItem;
@@ -94,6 +98,8 @@ namespace csharp
   typedef KDevSharedPtr<_PropertyDeclarationModelItem> PropertyDeclarationModelItem;
   typedef KDevSharedPtr<_AccessorDeclarationModelItem> AccessorDeclarationModelItem;
   typedef KDevSharedPtr<_MethodDeclarationModelItem> MethodDeclarationModelItem;
+  typedef KDevSharedPtr<_ConstructorDeclarationModelItem> ConstructorDeclarationModelItem;
+  typedef KDevSharedPtr<_FinalizerDeclarationModelItem> FinalizerDeclarationModelItem;
   typedef KDevSharedPtr<_VariableDeclarationModelItem> VariableDeclarationModelItem;
   typedef KDevSharedPtr<_TypePartModelItem> TypePartModelItem;
   typedef KDevSharedPtr<_TypeModelItem> TypeModelItem;
@@ -125,6 +131,8 @@ namespace csharp
   typedef QList<PropertyDeclarationModelItem> PropertyDeclarationList;
   typedef QList<AccessorDeclarationModelItem> AccessorDeclarationList;
   typedef QList<MethodDeclarationModelItem> MethodDeclarationList;
+  typedef QList<ConstructorDeclarationModelItem> ConstructorDeclarationList;
+  typedef QList<FinalizerDeclarationModelItem> FinalizerDeclarationList;
   typedef QList<VariableDeclarationModelItem> VariableDeclarationList;
   typedef QList<TypePartModelItem> TypePartList;
   typedef QList<TypeModelItem> TypeList;

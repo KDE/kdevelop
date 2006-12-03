@@ -1,8 +1,10 @@
 
 add_subdirectory(parser)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib 
+include_directories( ${CMAKE_SOURCE_DIR}/lib
     ${CMAKE_SOURCE_DIR}/lib/project
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser
+    ${CMAKE_CURRENT_BINARY_DIR}/parser
     )
 
 

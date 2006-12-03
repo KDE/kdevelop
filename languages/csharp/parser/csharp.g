@@ -1096,7 +1096,7 @@ namespace csharp_pp
 -- Only allowed inside classes.
 
    TILDE class_name=identifier LPAREN RPAREN
-   (finalizer_body=block | SEMICOLON)
+   (body=block | SEMICOLON)
 -> finalizer_declaration [
      argument member node attributes: optional_attribute_sections;
      argument member node modifiers:  optional_modifiers;
@@ -1198,7 +1198,7 @@ namespace csharp_pp
     | EXPLICIT [: (*yynode)->conversion = conversion_operator_declaration::conversion_explicit; :]
    )
    OPERATOR target_type=type
-   LPAREN source_type=type source_name=identifier RPAREN
+   LPAREN source_parameter=operator_declaration_parameter RPAREN
    (body=block | SEMICOLON)
 -> conversion_operator_declaration [
      argument member node attributes: optional_attribute_sections;
@@ -1208,21 +1208,25 @@ namespace csharp_pp
 
    OPERATOR
    (   unary_op:overloadable_unary_only_operator[&(*yynode)->overloadable_operator_type]
-       LPAREN source1_type=type source1_name=identifier RPAREN
-         [: (*yynode)->unary_or_binary = overloadable_operator::type_unary;     :]
+       LPAREN source_parameter1=operator_declaration_parameter RPAREN
+         [: (*yynode)->unary_or_binary = overloadable_operator::type_unary;
+            (*yynode)->overloadable_operator_token = unary_op->token;  :]
      |
        binary_op:overloadable_binary_only_operator[&(*yynode)->overloadable_operator_type]
-       LPAREN source1_type=type source1_name=identifier
-       COMMA  source2_type=type source2_name=identifier RPAREN
-         [: (*yynode)->unary_or_binary = overloadable_operator::type_binary;    :]
+       LPAREN source_parameter1=operator_declaration_parameter
+       COMMA  source_parameter2=operator_declaration_parameter RPAREN
+         [: (*yynode)->unary_or_binary = overloadable_operator::type_binary;
+            (*yynode)->overloadable_operator_token = binary_op->token; :]
      |
        unary_or_binary_op:overloadable_unary_or_binary_operator[&(*yynode)->overloadable_operator_type]
-       LPAREN source1_type=type source1_name=identifier
+       LPAREN source_parameter1=operator_declaration_parameter
        (
-          COMMA source2_type=type source2_name=identifier
-            [: (*yynode)->unary_or_binary = overloadable_operator::type_binary; :]
+          COMMA source_parameter2=operator_declaration_parameter
+            [: (*yynode)->unary_or_binary = overloadable_operator::type_binary;
+               (*yynode)->overloadable_operator_token = unary_or_binary_op->token; :]
         |
-          0 [: (*yynode)->unary_or_binary = overloadable_operator::type_unary;  :]
+          0 [: (*yynode)->unary_or_binary = overloadable_operator::type_unary;
+               (*yynode)->overloadable_operator_token = unary_or_binary_op->token; :]
        )
        RPAREN
    )
@@ -1231,48 +1235,52 @@ namespace csharp_pp
      argument member node attributes:            optional_attribute_sections;
      argument member node modifiers:             optional_modifiers;
      argument member node return_type:           type;
-     member variable overloadable_operator_type: overloadable_operator::overloadable_operator_enum;
      member variable unary_or_binary:            overloadable_operator::unary_or_binary_enum;
+     member variable overloadable_operator_type: overloadable_operator::overloadable_operator_enum;
+     member token    overloadable_operator_token;
 ] ;;
+
+   type=type name=identifier
+-> operator_declaration_parameter ;;
 
 
 -- OVERLOADABLE OPERATORS for operator declarations.
 
  (
-   BANG          [: *op = overloadable_operator::op_bang;          :]
- | TILDE         [: *op = overloadable_operator::op_tilde;         :]
- | INCREMENT     [: *op = overloadable_operator::op_increment;     :]
- | DECREMENT     [: *op = overloadable_operator::op_decrement;     :]
- | TRUE          [: *op = overloadable_operator::op_true;          :]
- | FALSE         [: *op = overloadable_operator::op_false;         :]
+   token=BANG          [: *op = overloadable_operator::op_bang;          :]
+ | token=TILDE         [: *op = overloadable_operator::op_tilde;         :]
+ | token=INCREMENT     [: *op = overloadable_operator::op_increment;     :]
+ | token=DECREMENT     [: *op = overloadable_operator::op_decrement;     :]
+ | token=TRUE          [: *op = overloadable_operator::op_true;          :]
+ | token=FALSE         [: *op = overloadable_operator::op_false;         :]
  )
 -> overloadable_unary_only_operator [
      argument temporary variable op: overloadable_operator::overloadable_operator_enum*;
 ] ;;
 
  (
-   STAR          [: *op = overloadable_operator::op_star;          :]
- | SLASH         [: *op = overloadable_operator::op_slash;         :]
- | REMAINDER     [: *op = overloadable_operator::op_remainder;     :]
- | BIT_AND       [: *op = overloadable_operator::op_bit_and;       :]
- | BIT_OR        [: *op = overloadable_operator::op_bit_or;        :]
- | BIT_XOR       [: *op = overloadable_operator::op_bit_xor;       :]
- | LSHIFT        [: *op = overloadable_operator::op_lshift;        :]
- | RSHIFT        [: *op = overloadable_operator::op_rshift;        :]
- | EQUAL         [: *op = overloadable_operator::op_equal;         :]
- | NOT_EQUAL     [: *op = overloadable_operator::op_not_equal;     :]
- | GREATER_THAN  [: *op = overloadable_operator::op_greater_than;  :]
- | LESS_THAN     [: *op = overloadable_operator::op_less_than;     :]
- | GREATER_EQUAL [: *op = overloadable_operator::op_greater_equal; :]
- | LESS_EQUAL    [: *op = overloadable_operator::op_less_equal;    :]
+   token=STAR          [: *op = overloadable_operator::op_star;          :]
+ | token=SLASH         [: *op = overloadable_operator::op_slash;         :]
+ | token=REMAINDER     [: *op = overloadable_operator::op_remainder;     :]
+ | token=BIT_AND       [: *op = overloadable_operator::op_bit_and;       :]
+ | token=BIT_OR        [: *op = overloadable_operator::op_bit_or;        :]
+ | token=BIT_XOR       [: *op = overloadable_operator::op_bit_xor;       :]
+ | token=LSHIFT        [: *op = overloadable_operator::op_lshift;        :]
+ | token=RSHIFT        [: *op = overloadable_operator::op_rshift;        :]
+ | token=EQUAL         [: *op = overloadable_operator::op_equal;         :]
+ | token=NOT_EQUAL     [: *op = overloadable_operator::op_not_equal;     :]
+ | token=GREATER_THAN  [: *op = overloadable_operator::op_greater_than;  :]
+ | token=LESS_THAN     [: *op = overloadable_operator::op_less_than;     :]
+ | token=GREATER_EQUAL [: *op = overloadable_operator::op_greater_equal; :]
+ | token=LESS_EQUAL    [: *op = overloadable_operator::op_less_equal;    :]
  )
 -> overloadable_binary_only_operator [
      argument temporary variable op: overloadable_operator::overloadable_operator_enum*;
 ] ;;
 
  (
-   PLUS          [: *op = overloadable_operator::op_plus;          :]
- | MINUS         [: *op = overloadable_operator::op_minus;         :]
+   token=PLUS          [: *op = overloadable_operator::op_plus;          :]
+ | token=MINUS         [: *op = overloadable_operator::op_minus;         :]
  )
 -> overloadable_unary_or_binary_operator [
      argument temporary variable op: overloadable_operator::overloadable_operator_enum*;
@@ -1361,7 +1369,7 @@ namespace csharp_pp
       try/recover(#type_parameter_constraints=type_parameter_constraints_clause)+
     | 0
    )
-   (method_body=block | SEMICOLON)
+   (body=block | SEMICOLON)
 -> method_declaration [
      argument member node attributes:     optional_attribute_sections;
      argument member node modifiers:      optional_modifiers;

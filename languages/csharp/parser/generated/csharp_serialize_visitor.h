@@ -536,8 +536,7 @@ namespace csharp
         handle_ast_node(node->modifiers);
         handle_variable(&node->conversion);
         handle_ast_node(node->target_type);
-        handle_ast_node(node->source_type);
-        handle_ast_node(node->source_name);
+        handle_ast_node(node->source_parameter);
         handle_ast_node(node->body);
         default_visitor::visit_conversion_operator_declaration(node);
       }
@@ -687,7 +686,7 @@ namespace csharp
         handle_ast_node(node->attributes);
         handle_ast_node(node->modifiers);
         handle_ast_node(node->class_name);
-        handle_ast_node(node->finalizer_body);
+        handle_ast_node(node->body);
         default_visitor::visit_finalizer_declaration(node);
       }
 
@@ -1005,7 +1004,7 @@ namespace csharp
           type_parameter_constraints_clause_ast *e = 0;
           handle_list_node(node->type_parameter_constraints_sequence, e);
         }
-        handle_ast_node(node->method_body);
+        handle_ast_node(node->body);
         default_visitor::visit_method_declaration(node);
       }
 
@@ -1142,6 +1141,13 @@ namespace csharp
         default_visitor::visit_object_or_delegate_creation_expression_rest(node);
       }
 
+      virtual void visit_operator_declaration_parameter(operator_declaration_parameter_ast *node)
+      {
+        handle_ast_node(node->type);
+        handle_ast_node(node->name);
+        default_visitor::visit_operator_declaration_parameter(node);
+      }
+
       virtual void visit_optional_argument_list(optional_argument_list_ast *node)
       {
         {
@@ -1182,16 +1188,19 @@ namespace csharp
 
       virtual void visit_overloadable_binary_only_operator(overloadable_binary_only_operator_ast *node)
       {
+        handle_variable(&node->token);
         default_visitor::visit_overloadable_binary_only_operator(node);
       }
 
       virtual void visit_overloadable_unary_only_operator(overloadable_unary_only_operator_ast *node)
       {
+        handle_variable(&node->token);
         default_visitor::visit_overloadable_unary_only_operator(node);
       }
 
       virtual void visit_overloadable_unary_or_binary_operator(overloadable_unary_or_binary_operator_ast *node)
       {
+        handle_variable(&node->token);
         default_visitor::visit_overloadable_unary_or_binary_operator(node);
       }
 
@@ -1568,12 +1577,11 @@ namespace csharp
                                                           handle_ast_node(node->attributes);
                                                           handle_ast_node(node->modifiers);
                                                           handle_ast_node(node->return_type);
-                                                          handle_variable(&node->overloadable_operator_type);
                                                           handle_variable(&node->unary_or_binary);
-                                                          handle_ast_node(node->source1_type);
-                                                          handle_ast_node(node->source1_name);
-                                                          handle_ast_node(node->source2_type);
-                                                          handle_ast_node(node->source2_name);
+                                                          handle_variable(&node->overloadable_operator_type);
+                                                          handle_variable(&node->overloadable_operator_token);
+                                                          handle_ast_node(node->source_parameter1);
+                                                          handle_ast_node(node->source_parameter2);
                                                           handle_ast_node(node->body);
                                                           default_visitor::visit_unary_or_binary_operator_declaration(node);
                                                         }

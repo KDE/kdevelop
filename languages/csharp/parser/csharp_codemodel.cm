@@ -311,8 +311,6 @@ MethodDeclaration: Scope
   #typeParameterConstraint: TypeParameterConstraint;
   #parameter:       Parameter;
 
-  isConstructor:    bool { init[: false :] };
-  isFinalizer:      bool { init[: false :] };
   isInterfaceMethodDeclaration: bool { init[: false :] };
 
   accessPolicy:     access_policy::access_policy_enum
@@ -327,6 +325,14 @@ MethodDeclaration: Scope
   isUnsafe:         bool { init[: false :] };
 
   #localVariable:   VariableDeclaration;
+}
+
+ConstructorDeclaration: MethodDeclaration
+{
+}
+
+FinalizerDeclaration: MethodDeclaration
+{
 }
 
 VariableDeclaration: Code

@@ -118,6 +118,7 @@ namespace csharp
         reinterpret_cast<parser_fun_t>(&visitor::visit_null_coalescing_expression),
         reinterpret_cast<parser_fun_t>(&visitor::visit_numeric_type),
         reinterpret_cast<parser_fun_t>(&visitor::visit_object_or_delegate_creation_expression_rest),
+        reinterpret_cast<parser_fun_t>(&visitor::visit_operator_declaration_parameter),
         reinterpret_cast<parser_fun_t>(&visitor::visit_optional_argument_list),
         reinterpret_cast<parser_fun_t>(&visitor::visit_optional_attribute_sections),
         reinterpret_cast<parser_fun_t>(&visitor::visit_optional_modifiers),

@@ -205,12 +205,6 @@ namespace csharp
       Nullable<bool > hasAccessPolicy( ) const;
       void setHasAccessPolicy(bool hasAccessPolicy);
 
-      Nullable<bool > isConstructor( ) const;
-      void setConstructor(bool isConstructor);
-
-      Nullable<bool > isFinalizer( ) const;
-      void setFinalizer(bool isFinalizer);
-
       Nullable<bool > isInterfaceMethodDeclaration( ) const;
       void setInterfaceMethodDeclaration(bool isInterfaceMethodDeclaration);
 
@@ -359,6 +353,16 @@ namespace csharp
       {}
 
       ModelItemChameleon(MethodDeclarationModelItem item)
+          :  KDevSharedPtr<_ModelItemChameleon>(
+            new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
+      {}
+
+      ModelItemChameleon(ConstructorDeclarationModelItem item)
+          :  KDevSharedPtr<_ModelItemChameleon>(
+            new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
+      {}
+
+      ModelItemChameleon(FinalizerDeclarationModelItem item)
           :  KDevSharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}

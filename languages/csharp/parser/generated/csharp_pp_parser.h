@@ -5,9 +5,9 @@
 #define csharp_pp_H_INCLUDED
 
 #include "csharp_pp_ast.h"
-#include "kdev-pg-memory-pool.h"
-#include "kdev-pg-allocator.h"
-#include "kdev-pg-token-stream.h"
+#include <kdev-pg-memory-pool.h>
+#include <kdev-pg-allocator.h>
+#include <kdev-pg-token-stream.h>
 
 namespace csharp_pp
   {

@@ -123,6 +123,7 @@ namespace csharp
       virtual void visit_null_coalescing_expression(null_coalescing_expression_ast *node);
       virtual void visit_numeric_type(numeric_type_ast *node);
       virtual void visit_object_or_delegate_creation_expression_rest(object_or_delegate_creation_expression_rest_ast *node);
+      virtual void visit_operator_declaration_parameter(operator_declaration_parameter_ast *node);
       virtual void visit_optional_argument_list(optional_argument_list_ast *node);
       virtual void visit_optional_attribute_sections(optional_attribute_sections_ast *node);
       virtual void visit_optional_modifiers(optional_modifiers_ast *node);

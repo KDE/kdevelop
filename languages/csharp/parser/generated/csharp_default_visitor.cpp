@@ -489,8 +489,7 @@ namespace csharp
     visit_node(node->attributes);
     visit_node(node->modifiers);
     visit_node(node->target_type);
-    visit_node(node->source_type);
-    visit_node(node->source_name);
+    visit_node(node->source_parameter);
     visit_node(node->body);
   }
 
@@ -647,7 +646,7 @@ namespace csharp
     visit_node(node->attributes);
     visit_node(node->modifiers);
     visit_node(node->class_name);
-    visit_node(node->finalizer_body);
+    visit_node(node->body);
   }
 
   void default_visitor::visit_fixed_pointer_declarator(fixed_pointer_declarator_ast *node)
@@ -977,7 +976,7 @@ namespace csharp
           }
         while (__it != __end);
       }
-    visit_node(node->method_body);
+    visit_node(node->body);
   }
 
   void default_visitor::visit_multiplicative_expression(multiplicative_expression_ast *node)
@@ -1135,6 +1134,12 @@ namespace csharp
   {
     visit_node(node->type);
     visit_node(node->argument_list_or_expression);
+  }
+
+  void default_visitor::visit_operator_declaration_parameter(operator_declaration_parameter_ast *node)
+  {
+    visit_node(node->type);
+    visit_node(node->name);
   }
 
   void default_visitor::visit_optional_argument_list(optional_argument_list_ast *node)
@@ -1586,10 +1591,8 @@ namespace csharp
                                                                         visit_node(node->attributes);
                                                                         visit_node(node->modifiers);
                                                                         visit_node(node->return_type);
-                                                                        visit_node(node->source1_type);
-                                                                        visit_node(node->source1_name);
-                                                                        visit_node(node->source2_type);
-                                                                        visit_node(node->source2_name);
+                                                                        visit_node(node->source_parameter1);
+                                                                        visit_node(node->source_parameter2);
                                                                         visit_node(node->body);
                                                                       }
 

@@ -82,8 +82,8 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
         if ( MethodDeclarationModelItem modelItem =
                 model_dynamic_cast<MethodDeclarationModelItem>(item->toItem()) )
         {
-            if ( modelItem->isConstructor() || modelItem->isFinalizer()
-                || modelItem->isInterfaceMethodDeclaration() )
+            if ( model_dynamic_cast<FinalizerDeclarationModelItem>(modelItem)
+                 || modelItem->isInterfaceMethodDeclaration() )
             {
                 showAccessPolicy = false;
             }
@@ -153,14 +153,21 @@ QString CodeDisplay::toolTip( const _CodeModelItem *item )
         break;
     case _CodeModelItem::Kind_DelegateDeclaration:
     case _CodeModelItem::Kind_MethodDeclaration:
+    case _CodeModelItem::Kind_ConstructorDeclaration:
+    case _CodeModelItem::Kind_FinalizerDeclaration:
         {
             bool initial = true;
 
             if ( item->kind() == _CodeModelItem::Kind_DelegateDeclaration )
+            {
                 tooltip += "delegate ";
-
-            tooltip += chameleon->returnType().item->toString() + " "
-                       + item->name() + " (";
+            }
+            else if ( item->kind() == _CodeModelItem::Kind_DelegateDeclaration
+                      || item->kind() == _CodeModelItem::Kind_MethodDeclaration )
+            {
+                tooltip += chameleon->returnType().item->toString() + " ";
+            }
+            tooltip += item->name() + " (";
 
             foreach ( ParameterModelItem param, chameleon->parameters().item )
             {
@@ -202,6 +209,8 @@ QIcon CodeDisplay::decoration( const _CodeModelItem *item )
         return loadIcon( "enum" );
     case _CodeModelItem::Kind_DelegateDeclaration:
     case _CodeModelItem::Kind_MethodDeclaration:
+    case _CodeModelItem::Kind_ConstructorDeclaration:
+    case _CodeModelItem::Kind_FinalizerDeclaration:
         return loadIcon( "function" );
     case _CodeModelItem::Kind_VariableDeclaration:
     case _CodeModelItem::Kind_EnumValue:

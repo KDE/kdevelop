@@ -1760,8 +1760,6 @@ namespace csharp
 
       _MethodDeclarationModelItem::_MethodDeclarationModelItem(CodeModel *model,  int kind)
           :  _ScopeModelItem(model,  kind)
-          ,  _M_isConstructor( false )
-          ,  _M_isFinalizer( false )
           ,  _M_isInterfaceMethodDeclaration( false )
           ,  _M_accessPolicy( access_policy::access_private )
           ,  _M_isNew( false )
@@ -1846,26 +1844,6 @@ namespace csharp
           void _MethodDeclarationModelItem::removeParameter(ParameterModelItem item)
           {
             _M_parameters.removeAt(_M_parameters.indexOf(item));
-          }
-
-          bool _MethodDeclarationModelItem::isConstructor() const
-            {
-              return  _M_isConstructor;
-            }
-
-          void _MethodDeclarationModelItem::setConstructor(bool isConstructor)
-          {
-            _M_isConstructor =  isConstructor;
-          }
-
-          bool _MethodDeclarationModelItem::isFinalizer() const
-            {
-              return  _M_isFinalizer;
-            }
-
-          void _MethodDeclarationModelItem::setFinalizer(bool isFinalizer)
-          {
-            _M_isFinalizer =  isFinalizer;
           }
 
           bool _MethodDeclarationModelItem::isInterfaceMethodDeclaration() const
@@ -1981,6 +1959,46 @@ namespace csharp
           void _MethodDeclarationModelItem::removeLocalVariable(VariableDeclarationModelItem item)
           {
             _M_localVariables.removeAt(_M_localVariables.indexOf(item));
+          }
+
+#undef CLASS
+#undef BASECLASS
+
+          // ---------------------------------------------------------------------------
+#define CLASS _ConstructorDeclarationModelItem
+#define BASECLASS _MethodDeclarationModelItem
+
+          _ConstructorDeclarationModelItem::_ConstructorDeclarationModelItem(CodeModel *model,  int kind)
+              :  _MethodDeclarationModelItem(model,  kind)
+          {}
+
+          _ConstructorDeclarationModelItem::~_ConstructorDeclarationModelItem()
+          {}
+
+          ConstructorDeclarationModelItem _ConstructorDeclarationModelItem::create(CodeModel *model)
+          {
+            ConstructorDeclarationModelItem item(new _ConstructorDeclarationModelItem(model));
+            return  item;
+          }
+
+#undef CLASS
+#undef BASECLASS
+
+          // ---------------------------------------------------------------------------
+#define CLASS _FinalizerDeclarationModelItem
+#define BASECLASS _MethodDeclarationModelItem
+
+          _FinalizerDeclarationModelItem::_FinalizerDeclarationModelItem(CodeModel *model,  int kind)
+              :  _MethodDeclarationModelItem(model,  kind)
+          {}
+
+          _FinalizerDeclarationModelItem::~_FinalizerDeclarationModelItem()
+          {}
+
+          FinalizerDeclarationModelItem _FinalizerDeclarationModelItem::create(CodeModel *model)
+          {
+            FinalizerDeclarationModelItem item(new _FinalizerDeclarationModelItem(model));
+            return  item;
           }
 
 #undef CLASS

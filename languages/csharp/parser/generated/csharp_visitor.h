@@ -244,6 +244,8 @@ namespace csharp
       {}
       virtual void visit_object_or_delegate_creation_expression_rest(object_or_delegate_creation_expression_rest_ast *)
       {}
+      virtual void visit_operator_declaration_parameter(operator_declaration_parameter_ast *)
+      {}
       virtual void visit_optional_argument_list(optional_argument_list_ast *)
       {}
       virtual void visit_optional_attribute_sections(optional_attribute_sections_ast *)

@@ -4,7 +4,7 @@
 #ifndef csharp_pp_AST_H_INCLUDED
 #define csharp_pp_AST_H_INCLUDED
 
-#include "kdev-pg-list.h"
+#include <kdev-pg-list.h>
 
 #include <kdevast.h>
 

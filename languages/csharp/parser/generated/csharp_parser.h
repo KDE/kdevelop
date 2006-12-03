@@ -5,9 +5,9 @@
 #define csharp_H_INCLUDED
 
 #include "csharp_ast.h"
-#include "kdev-pg-memory-pool.h"
-#include "kdev-pg-allocator.h"
-#include "kdev-pg-token-stream.h"
+#include <kdev-pg-memory-pool.h>
+#include <kdev-pg-allocator.h>
+#include <kdev-pg-token-stream.h>
 
 namespace csharp
   {
@@ -426,6 +426,7 @@ namespace csharp
       bool parse_null_coalescing_expression(null_coalescing_expression_ast **yynode);
       bool parse_numeric_type(numeric_type_ast **yynode);
       bool parse_object_or_delegate_creation_expression_rest(object_or_delegate_creation_expression_rest_ast **yynode, type_ast *type);
+      bool parse_operator_declaration_parameter(operator_declaration_parameter_ast **yynode);
       bool parse_optional_argument_list(optional_argument_list_ast **yynode);
       bool parse_optional_attribute_sections(optional_attribute_sections_ast **yynode);
       bool parse_optional_modifiers(optional_modifiers_ast **yynode);

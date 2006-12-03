@@ -24,23 +24,23 @@ namespace csharp
 {
 
 Binder::Binder( CodeModel *model, parser::token_stream_type *tokenStream )
-    : _M_model( model ), _M_tokenStream( tokenStream ),
-      _M_typeBinder( new TypeBinder(_M_model, _M_tokenStream) ),
-      _M_decoder( _M_tokenStream )
+    : m_model( model ), m_tokenStream( tokenStream ),
+      m_typeBinder( new TypeBinder(m_model, m_tokenStream) ),
+      m_decoder( m_tokenStream )
 {
 }
 
 Binder::~Binder()
 {
-    delete _M_typeBinder;
+    delete m_typeBinder;
 }
 
 void Binder::run( const KUrl &url, compilation_unit_ast *node )
 {
-    _M_currentFile = url.url();
+    m_currentFile = url.url();
 
-    _M_currentAccessPolicy = access_policy::access_private;
-    _M_currentModifiers = 0;
+    m_currentAccessPolicy = access_policy::access_private;
+    m_currentModifiers = 0;
 
     changeCurrentScope( model_static_cast<ScopeModelItem>(model()->globalNamespace()) );
     visit_node(node);
@@ -49,8 +49,8 @@ void Binder::run( const KUrl &url, compilation_unit_ast *node )
 
 ScopeModelItem Binder::changeCurrentScope( ScopeModelItem item )
 {
-    ScopeModelItem old = _M_currentScope;
-    _M_currentScope = item;
+    ScopeModelItem old = m_currentScope;
+    m_currentScope = item;
     return old;
 }
 
@@ -59,18 +59,18 @@ void Binder::visit_namespace_declaration( namespace_declaration_ast *node )
 {
     NamespaceDeclarationModelItem newNamespaceDeclaration =
             model()->create<NamespaceDeclarationModelItem>();
-    newNamespaceDeclaration->setScope( _M_currentScope->context() );
+    newNamespaceDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newNamespaceDeclaration, node );
 
-    _M_additionalContext.clear();
+    m_additionalContext.clear();
     visit_node( node->name );
 
     NamespaceDeclarationModelItem parentNamespace =
-            model_static_cast<NamespaceDeclarationModelItem>( _M_currentScope );
+            model_static_cast<NamespaceDeclarationModelItem>( m_currentScope );
 
-    while (_M_additionalContext.count() > 1)
+    while (m_additionalContext.count() > 1)
     {
-        QString firstName = _M_additionalContext.takeFirst();
+        QString firstName = m_additionalContext.takeFirst();
         NamespaceDeclarationModelItem currentNamespace =
                 parentNamespace->findNamespace( firstName );
 
@@ -87,7 +87,7 @@ void Binder::visit_namespace_declaration( namespace_declaration_ast *node )
 
     // set up the originally created namespace with the last remaining context name
     newNamespaceDeclaration->setScope( parentNamespace->context() );
-    newNamespaceDeclaration->setName( _M_additionalContext.takeFirst() );
+    newNamespaceDeclaration->setName( m_additionalContext.takeFirst() );
     parentNamespace->addNamespace( newNamespaceDeclaration );
 
     ScopeModelItem oldScope =
@@ -106,7 +106,7 @@ void Binder::visit_qualified_identifier( qualified_identifier_ast *node )
             visit_node( __it->element );
 
             identifier_ast *name = __it->element;
-            _M_additionalContext.append( decode_string(name->ident).c_str() );
+            m_additionalContext.append( decode_string(name->ident).c_str() );
 
             __it = __it->next;
         }
@@ -118,7 +118,7 @@ void Binder::visit_class_declaration( class_declaration_ast *node )
 {
     ClassDeclarationModelItem newClassDeclaration =
             model()->create<ClassDeclarationModelItem>();
-    newClassDeclaration->setScope( _M_currentScope->context() );
+    newClassDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newClassDeclaration, node );
 
     visit_node( node->attributes );
@@ -141,7 +141,7 @@ void Binder::visit_class_declaration( class_declaration_ast *node )
 
     newClassDeclaration->setName( decode_string(node->class_name->ident).c_str() );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
+    ModelItemChameleon scopeChameleon( m_currentScope );
 
     if ( node->partial )
     {
@@ -153,8 +153,8 @@ void Binder::visit_class_declaration( class_declaration_ast *node )
     }
 
     ModelItemChameleon itemChameleon( newClassDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
     // TODO: class_base
     // TODO: type parameters and constraints
 
@@ -170,7 +170,7 @@ void Binder::visit_struct_declaration( struct_declaration_ast *node )
 {
     StructDeclarationModelItem newStructDeclaration =
             model()->create<StructDeclarationModelItem>();
-    newStructDeclaration->setScope( _M_currentScope->context() );
+    newStructDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newStructDeclaration, node );
 
     visit_node( node->attributes );
@@ -192,7 +192,7 @@ void Binder::visit_struct_declaration( struct_declaration_ast *node )
 
     newStructDeclaration->setName( decode_string(node->struct_name->ident).c_str() );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
+    ModelItemChameleon scopeChameleon( m_currentScope );
 
     if ( node->partial )
     {
@@ -204,8 +204,8 @@ void Binder::visit_struct_declaration( struct_declaration_ast *node )
     }
 
     ModelItemChameleon itemChameleon( newStructDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
     // TODO: struct_interfaces
     // TODO: type parameters and constraints
 
@@ -221,7 +221,7 @@ void Binder::visit_interface_declaration( interface_declaration_ast *node )
 {
     InterfaceDeclarationModelItem newInterfaceDeclaration =
             model()->create<InterfaceDeclarationModelItem>();
-    newInterfaceDeclaration->setScope( _M_currentScope->context() );
+    newInterfaceDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newInterfaceDeclaration, node );
 
     visit_node( node->attributes );
@@ -243,7 +243,7 @@ void Binder::visit_interface_declaration( interface_declaration_ast *node )
 
     newInterfaceDeclaration->setName( decode_string(node->interface_name->ident).c_str() );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
+    ModelItemChameleon scopeChameleon( m_currentScope );
 
     if ( node->partial )
     {
@@ -255,8 +255,8 @@ void Binder::visit_interface_declaration( interface_declaration_ast *node )
     }
 
     ModelItemChameleon itemChameleon( newInterfaceDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
     // TODO: interface_base
     // TODO: type parameters and constraints
 
@@ -272,10 +272,10 @@ void Binder::visit_delegate_declaration( delegate_declaration_ast *node )
 {
     DelegateDeclarationModelItem newDelegateDeclaration =
             model()->create<DelegateDeclarationModelItem>();
-    newDelegateDeclaration->setScope( _M_currentScope->context() );
+    newDelegateDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newDelegateDeclaration, node );
 
-    _M_currentParameters.clear();
+    m_currentParameters.clear();
 
     visit_node(node->attributes);
     visit_node(node->modifiers);
@@ -298,16 +298,16 @@ void Binder::visit_delegate_declaration( delegate_declaration_ast *node )
     newDelegateDeclaration->setName( decode_string(node->delegate_name->ident).c_str() );
 
     ModelItemChameleon itemChameleon( newDelegateDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
     newDelegateDeclaration->setReturnType( createType(node->return_type) );
 
-    foreach ( ParameterModelItem param, _M_currentParameters )
+    foreach ( ParameterModelItem param, m_currentParameters )
         newDelegateDeclaration->addParameter( param );
 
     // TODO: type parameters and constraints
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
+    ModelItemChameleon scopeChameleon( m_currentScope );
     scopeChameleon->addDelegate( newDelegateDeclaration );
 }
 
@@ -315,7 +315,7 @@ void Binder::visit_enum_declaration( enum_declaration_ast *node )
 {
     EnumDeclarationModelItem newEnumDeclaration =
             model()->create<EnumDeclarationModelItem>();
-    newEnumDeclaration->setScope( _M_currentScope->context() );
+    newEnumDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newEnumDeclaration, node );
 
     visit_node(node->attributes);
@@ -326,13 +326,13 @@ void Binder::visit_enum_declaration( enum_declaration_ast *node )
     newEnumDeclaration->setName( decode_string(node->enum_name->ident).c_str() );
 
     ModelItemChameleon itemChameleon( newEnumDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
 
     if ( node->enum_base )
         newEnumDeclaration->setBaseIntegralType( createType(node->enum_base->integral_type) );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
+    ModelItemChameleon scopeChameleon( m_currentScope );
     scopeChameleon->addEnum( newEnumDeclaration );
 
     ScopeModelItem oldScope =
@@ -341,14 +341,30 @@ void Binder::visit_enum_declaration( enum_declaration_ast *node )
     changeCurrentScope( oldScope );
 }
 
+void Binder::visit_enum_member_declaration( enum_member_declaration_ast *node )
+{
+    EnumValueModelItem newEnumValue =
+            model()->create<EnumValueModelItem>();
+    newEnumValue->setScope( m_currentScope->context() );
+    setPositionAt( newEnumValue, node );
+
+    default_visitor::visit_enum_member_declaration( node );
+
+    newEnumValue->setName( decode_string(node->member_name->ident).c_str() );
+    // TODO: setValue out of the node->value constant_expression
+
+    ModelItemChameleon scopeChameleon( m_currentScope );
+    scopeChameleon->addEnumValue( newEnumValue );
+}
+
 void Binder::visit_method_declaration( method_declaration_ast *node )
 {
     MethodDeclarationModelItem newMethodDeclaration =
             model()->create<MethodDeclarationModelItem>();
-    newMethodDeclaration->setScope( _M_currentScope->context() );
+    newMethodDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newMethodDeclaration, node );
 
-    _M_currentParameters.clear();
+    m_currentParameters.clear();
 
     visit_node(node->attributes);
     visit_node(node->modifiers);
@@ -374,21 +390,21 @@ void Binder::visit_method_declaration( method_declaration_ast *node )
     );
 
     ModelItemChameleon itemChameleon( newMethodDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
     newMethodDeclaration->setReturnType( createType(node->return_type) );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
-    scopeChameleon->addMethod( newMethodDeclaration );
-
-    foreach ( ParameterModelItem param, _M_currentParameters )
+    foreach ( ParameterModelItem param, m_currentParameters )
         newMethodDeclaration->addParameter( param );
 
     // TODO: type parameters and constraints
 
+    ModelItemChameleon scopeChameleon( m_currentScope );
+    scopeChameleon->addMethod( newMethodDeclaration );
+
     ScopeModelItem oldScope =
             changeCurrentScope( model_static_cast<ScopeModelItem>(newMethodDeclaration) );
-    visit_node( node->method_body );
+    visit_node( node->body );
     changeCurrentScope( oldScope );
 }
 
@@ -396,10 +412,10 @@ void Binder::visit_interface_method_declaration( interface_method_declaration_as
 {
     MethodDeclarationModelItem newMethodDeclaration =
             model()->create<MethodDeclarationModelItem>();
-    newMethodDeclaration->setScope( _M_currentScope->context() );
+    newMethodDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newMethodDeclaration, node );
 
-    _M_currentParameters.clear();
+    m_currentParameters.clear();
 
     visit_node(node->attributes);
     visit_node(node->return_type);
@@ -426,20 +442,153 @@ void Binder::visit_interface_method_declaration( interface_method_declaration_as
     newMethodDeclaration->setNew( node->decl_new );
     newMethodDeclaration->setReturnType( createType(node->return_type) );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
-    scopeChameleon->addMethod( newMethodDeclaration );
-
-    foreach ( ParameterModelItem param, _M_currentParameters )
+    foreach ( ParameterModelItem param, m_currentParameters )
         newMethodDeclaration->addParameter( param );
 
     // TODO: type parameters and constraints
+
+    ModelItemChameleon scopeChameleon( m_currentScope );
+    scopeChameleon->addMethod( newMethodDeclaration );
+}
+
+void Binder::visit_constructor_declaration( constructor_declaration_ast *node )
+{
+    ConstructorDeclarationModelItem newConstructorDeclaration =
+            model()->create<ConstructorDeclarationModelItem>();
+    newConstructorDeclaration->setScope( m_currentScope->context() );
+    setPositionAt( newConstructorDeclaration, node );
+
+    m_currentParameters.clear();
+
+    visit_node(node->attributes);
+    visit_node(node->modifiers);
+    visit_node(node->class_name);
+    visit_node(node->formal_parameters);
+    visit_node(node->constructor_initializer);
+
+    newConstructorDeclaration->setName( decode_string(node->class_name->ident).c_str() );
+
+    ModelItemChameleon itemChameleon( newConstructorDeclaration );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
+
+    foreach ( ParameterModelItem param, m_currentParameters )
+        newConstructorDeclaration->addParameter( param );
+
+    ModelItemChameleon scopeChameleon( m_currentScope );
+    scopeChameleon->addMethod(
+            model_static_cast<MethodDeclarationModelItem>(newConstructorDeclaration) );
+
+    ScopeModelItem oldScope =
+            changeCurrentScope( model_static_cast<ScopeModelItem>(newConstructorDeclaration) );
+    visit_node( node->body );
+    changeCurrentScope( oldScope );
+}
+
+void Binder::visit_finalizer_declaration( finalizer_declaration_ast *node )
+{
+    FinalizerDeclarationModelItem newFinalizerDeclaration =
+            model()->create<FinalizerDeclarationModelItem>();
+    newFinalizerDeclaration->setScope( m_currentScope->context() );
+    setPositionAt( newFinalizerDeclaration, node );
+
+    m_currentParameters.clear();
+
+    visit_node(node->attributes);
+    visit_node(node->modifiers);
+    visit_node(node->class_name);
+
+    QString name = "~";
+    newFinalizerDeclaration->setName( name + decode_string(node->class_name->ident).c_str() );
+
+    ModelItemChameleon itemChameleon( newFinalizerDeclaration );
+    setModifiers( itemChameleon, m_currentModifiers );
+
+    ModelItemChameleon scopeChameleon( m_currentScope );
+    scopeChameleon->addMethod(
+            model_static_cast<MethodDeclarationModelItem>(newFinalizerDeclaration) );
+
+    ScopeModelItem oldScope =
+            changeCurrentScope( model_static_cast<ScopeModelItem>(newFinalizerDeclaration) );
+    visit_node( node->body );
+    changeCurrentScope( oldScope );
+}
+
+void Binder::visit_conversion_operator_declaration( conversion_operator_declaration_ast *node )
+{
+    MethodDeclarationModelItem newMethodDeclaration =
+            model()->create<MethodDeclarationModelItem>();
+    newMethodDeclaration->setScope( m_currentScope->context() );
+    setPositionAt( newMethodDeclaration, node );
+
+    m_currentParameters.clear();
+
+    visit_node(node->attributes);
+    visit_node(node->modifiers);
+    visit_node(node->target_type);
+    visit_node(node->source_parameter);
+
+    newMethodDeclaration->setReturnType( createType(node->target_type) );
+
+    QString name = "operator ";
+    name += newMethodDeclaration->returnType()->toString();
+
+    newMethodDeclaration->setName( name );
+    newMethodDeclaration->setAccessPolicy( access_policy::access_public );
+    newMethodDeclaration->setStatic( true );
+    newMethodDeclaration->setExtern( m_currentModifiers & modifiers::mod_extern );
+
+    foreach ( ParameterModelItem param, m_currentParameters )
+        newMethodDeclaration->addParameter( param );
+
+    ModelItemChameleon scopeChameleon( m_currentScope );
+    scopeChameleon->addMethod( newMethodDeclaration );
+
+    ScopeModelItem oldScope =
+            changeCurrentScope( model_static_cast<ScopeModelItem>(newMethodDeclaration) );
+    visit_node( node->body );
+    changeCurrentScope( oldScope );
+}
+
+void Binder::visit_unary_or_binary_operator_declaration( unary_or_binary_operator_declaration_ast *node )
+{
+    MethodDeclarationModelItem newMethodDeclaration =
+            model()->create<MethodDeclarationModelItem>();
+    newMethodDeclaration->setScope( m_currentScope->context() );
+    setPositionAt( newMethodDeclaration, node );
+
+    m_currentParameters.clear();
+
+    visit_node(node->attributes);
+    visit_node(node->modifiers);
+    visit_node(node->return_type);
+    visit_node(node->source_parameter1);
+    visit_node(node->source_parameter2);
+
+    QString name = "operator";
+    name + decode_string(node->overloadable_operator_token).c_str();
+
+    newMethodDeclaration->setName( name );
+    newMethodDeclaration->setReturnType( createType(node->return_type) );
+    newMethodDeclaration->setAccessPolicy( access_policy::access_public );
+    newMethodDeclaration->setStatic( true );
+    newMethodDeclaration->setExtern( m_currentModifiers & modifiers::mod_extern );
+    newMethodDeclaration->addParameter( m_currentParameters.first() );
+
+    ModelItemChameleon scopeChameleon( m_currentScope );
+    scopeChameleon->addMethod( newMethodDeclaration );
+
+    ScopeModelItem oldScope =
+            changeCurrentScope( model_static_cast<ScopeModelItem>(newMethodDeclaration) );
+    visit_node( node->body );
+    changeCurrentScope( oldScope );
 }
 
 void Binder::visit_formal_parameter( formal_parameter_ast *node )
 {
     ParameterModelItem newParameter =
             model()->create<ParameterModelItem>();
-    newParameter->setScope( _M_currentScope->context() );
+    newParameter->setScope( m_currentScope->context() );
     setPositionAt( newParameter, node );
 
     default_visitor::visit_formal_parameter( node );
@@ -459,28 +608,27 @@ void Binder::visit_formal_parameter( formal_parameter_ast *node )
         newParameter->setParameterType( parameter::value_parameter );
     }
 
-    _M_currentParameters.append( newParameter );
+    m_currentParameters.append( newParameter );
 }
 
-void Binder::visit_enum_member_declaration( enum_member_declaration_ast *node )
+void Binder::visit_operator_declaration_parameter( operator_declaration_parameter_ast *node )
 {
-    EnumValueModelItem newEnumValue =
-            model()->create<EnumValueModelItem>();
-    newEnumValue->setScope( _M_currentScope->context() );
-    setPositionAt( newEnumValue, node );
+    ParameterModelItem newParameter =
+            model()->create<ParameterModelItem>();
+    newParameter->setScope( m_currentScope->context() );
+    setPositionAt( newParameter, node );
 
-    default_visitor::visit_enum_member_declaration( node );
+    default_visitor::visit_operator_declaration_parameter( node );
 
-    newEnumValue->setName( decode_string(node->member_name->ident).c_str() );
-    // TODO: setValue out of the node->value constant_expression
+    newParameter->setName( decode_string(node->name->ident).c_str() );
+    newParameter->setType( createType(node->type) );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
-    scopeChameleon->addEnumValue( newEnumValue );
+    m_currentParameters.append( newParameter );
 }
 
 void Binder::visit_variable_declaration_data( variable_declaration_data_ast *node )
 {
-    _M_currentType = createType( node->type );
+    m_currentType = createType( node->type );
 
     default_visitor::visit_variable_declaration_data( node );
 }
@@ -489,7 +637,7 @@ void Binder::visit_variable_declarator( variable_declarator_ast *node )
 {
     VariableDeclarationModelItem newVariableDeclaration =
             model()->create<VariableDeclarationModelItem>();
-    newVariableDeclaration->setScope( _M_currentScope->context() );
+    newVariableDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newVariableDeclaration, node );
 
     default_visitor::visit_variable_declarator( node );
@@ -497,18 +645,18 @@ void Binder::visit_variable_declarator( variable_declarator_ast *node )
     newVariableDeclaration->setName( decode_string(node->variable_name->ident).c_str() );
 
     ModelItemChameleon itemChameleon( newVariableDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
-    newVariableDeclaration->setType( _M_currentType );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
+    newVariableDeclaration->setType( m_currentType );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
+    ModelItemChameleon scopeChameleon( m_currentScope );
     scopeChameleon->addVariable( newVariableDeclaration ); // for member variables
     scopeChameleon->addLocalVariable( newVariableDeclaration ); // for local variables
 }
 
 void Binder::visit_constant_declaration_data( constant_declaration_data_ast *node )
 {
-    _M_currentType = createType( node->type );
+    m_currentType = createType( node->type );
 
     default_visitor::visit_constant_declaration_data( node );
 }
@@ -517,7 +665,7 @@ void Binder::visit_constant_declarator( constant_declarator_ast *node )
 {
     VariableDeclarationModelItem newVariableDeclaration =
             model()->create<VariableDeclarationModelItem>();
-    newVariableDeclaration->setScope( _M_currentScope->context() );
+    newVariableDeclaration->setScope( m_currentScope->context() );
     setPositionAt( newVariableDeclaration, node );
 
     default_visitor::visit_constant_declarator( node );
@@ -525,20 +673,20 @@ void Binder::visit_constant_declarator( constant_declarator_ast *node )
     newVariableDeclaration->setName( decode_string(node->constant_name->ident).c_str() );
 
     ModelItemChameleon itemChameleon( newVariableDeclaration );
-    setAccessPolicy( itemChameleon, _M_currentAccessPolicy );
-    setModifiers( itemChameleon, _M_currentModifiers );
-    newVariableDeclaration->setType( _M_currentType );
+    setAccessPolicy( itemChameleon, m_currentAccessPolicy );
+    setModifiers( itemChameleon, m_currentModifiers );
+    newVariableDeclaration->setType( m_currentType );
     newVariableDeclaration->setConstant( true );
 
-    ModelItemChameleon scopeChameleon( _M_currentScope );
+    ModelItemChameleon scopeChameleon( m_currentScope );
     scopeChameleon->addVariable( newVariableDeclaration ); // for member variables
     scopeChameleon->addLocalVariable( newVariableDeclaration ); // for local variables
 }
 
 void Binder::visit_optional_modifiers(optional_modifiers_ast *node)
 {
-    _M_currentAccessPolicy = node->access_policy;
-    _M_currentModifiers = node->modifiers;
+    m_currentAccessPolicy = node->access_policy;
+    m_currentModifiers = node->modifiers;
 
     default_visitor::visit_optional_modifiers( node );
 }
@@ -572,12 +720,12 @@ void Binder::setModifiers( ModelItemChameleon item, uint mods )
 
 TypeModelItem Binder::createType( ast_node *node )
 {
-    return typeBinder()->createType( _M_currentFile, _M_currentScope, node );
+    return typeBinder()->createType( m_currentFile, m_currentScope, node );
 }
 
 std::string Binder::decode_string( std::size_t index ) const
 {
-    return _M_decoder.decode_string( index );
+    return m_decoder.decode_string( index );
 }
 
 void Binder::setPositionAt( _CodeModelItem *item, ast_node *node )
@@ -585,10 +733,10 @@ void Binder::setPositionAt( _CodeModelItem *item, ast_node *node )
     int startLine, startColumn;
     int endLine, endColumn;
 
-    _M_tokenStream->start_position( node->start_token, &startLine, &startColumn );
-    _M_tokenStream->end_position( node->end_token, &endLine, &endColumn );
+    m_tokenStream->start_position( node->start_token, &startLine, &startColumn );
+    m_tokenStream->end_position( node->end_token, &endLine, &endColumn );
 
-    item->setFileName( _M_currentFile );
+    item->setFileName( m_currentFile );
     item->setStartPosition( KTextEditor::Cursor(startLine, startColumn) );
     item->setEndPosition( KTextEditor::Cursor(endLine, endColumn) );
 }

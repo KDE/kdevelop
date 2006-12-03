@@ -24,7 +24,7 @@
 
 #include <QtCore/QByteArray>
 
-#include "csharp_parser.h"
+#include <csharp_parser.h>
 
 
 namespace csharp

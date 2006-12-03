@@ -85,34 +85,36 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
         Kind_NamespaceDeclaration =  1 << 1 /*| Kind_Scope*/,
         Kind_TypeDeclaration =  1 << 2 /*| Kind_Scope*/,
         Kind_ClassLikeDeclaration =  1 << 3 /*| Kind_TypeDeclaration*/,
-        Kind_TypeParameterConstraint =  1 << 4,
-        KindMask =  (1 << 5) -  1,
+        Kind_MethodDeclaration =  1 << 4 /*| Kind_Scope*/,
+        Kind_TypeParameterConstraint =  1 << 5,
+        KindMask =  (1 << 6) -  1,
 
         /* These are for classes that are not inherited from */
-        FirstKind =  1 << 5,
-        Kind_GlobalNamespaceDeclaration =  1 << 6 /*| Kind_NamespaceDeclaration*/,
-        Kind_ExternAliasDirective =  1 << 7,
-        Kind_UsingAliasDirective =  1 << 8,
-        Kind_UsingNamespaceDirective =  1 << 9,
-        Kind_ClassDeclaration =  1 << 10 /*| Kind_ClassLikeDeclaration*/,
-        Kind_StructDeclaration =  1 << 11 /*| Kind_ClassLikeDeclaration*/,
-        Kind_InterfaceDeclaration =  1 << 12 /*| Kind_ClassLikeDeclaration*/,
-        Kind_DelegateDeclaration =  1 << 13 /*| Kind_TypeDeclaration*/,
-        Kind_EnumDeclaration =  1 << 14 /*| Kind_TypeDeclaration*/,
-        Kind_EnumValue =  1 << 15,
-        Kind_EventDeclaration =  1 << 16 /*| Kind_Scope*/,
-        Kind_EventAccessorDeclaration =  1 << 17,
-        Kind_IndexerDeclaration =  1 << 18 /*| Kind_Scope*/,
-        Kind_PropertyDeclaration =  1 << 19 /*| Kind_Scope*/,
-        Kind_AccessorDeclaration =  1 << 20,
-        Kind_MethodDeclaration =  1 << 21 /*| Kind_Scope*/,
-        Kind_VariableDeclaration =  1 << 22,
-        Kind_TypePart =  1 << 23,
-        Kind_Type =  1 << 24,
-        Kind_Parameter =  1 << 25,
-        Kind_TypeParameter =  1 << 26,
-        Kind_PrimaryOrSecondaryConstraint =  1 << 27 /*| Kind_TypeParameterConstraint*/,
-        Kind_ConstructorConstraint =  1 << 28 /*| Kind_TypeParameterConstraint*/
+        FirstKind =  1 << 6,
+        Kind_GlobalNamespaceDeclaration =  1 << 7 /*| Kind_NamespaceDeclaration*/,
+        Kind_ExternAliasDirective =  1 << 8,
+        Kind_UsingAliasDirective =  1 << 9,
+        Kind_UsingNamespaceDirective =  1 << 10,
+        Kind_ClassDeclaration =  1 << 11 /*| Kind_ClassLikeDeclaration*/,
+        Kind_StructDeclaration =  1 << 12 /*| Kind_ClassLikeDeclaration*/,
+        Kind_InterfaceDeclaration =  1 << 13 /*| Kind_ClassLikeDeclaration*/,
+        Kind_DelegateDeclaration =  1 << 14 /*| Kind_TypeDeclaration*/,
+        Kind_EnumDeclaration =  1 << 15 /*| Kind_TypeDeclaration*/,
+        Kind_EnumValue =  1 << 16,
+        Kind_EventDeclaration =  1 << 17 /*| Kind_Scope*/,
+        Kind_EventAccessorDeclaration =  1 << 18,
+        Kind_IndexerDeclaration =  1 << 19 /*| Kind_Scope*/,
+        Kind_PropertyDeclaration =  1 << 20 /*| Kind_Scope*/,
+        Kind_AccessorDeclaration =  1 << 21,
+        Kind_ConstructorDeclaration =  1 << 22 /*| Kind_MethodDeclaration*/,
+        Kind_FinalizerDeclaration =  1 << 23 /*| Kind_MethodDeclaration*/,
+        Kind_VariableDeclaration =  1 << 24,
+        Kind_TypePart =  1 << 25,
+        Kind_Type =  1 << 26,
+        Kind_Parameter =  1 << 27,
+        Kind_TypeParameter =  1 << 28,
+        Kind_PrimaryOrSecondaryConstraint =  1 << 29 /*| Kind_TypeParameterConstraint*/,
+        Kind_ConstructorConstraint =  1 << 30 /*| Kind_TypeParameterConstraint*/,
       };
 
     public:
@@ -1049,12 +1051,6 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void addParameter(ParameterModelItem item);
       void removeParameter(ParameterModelItem item);
 
-      bool isConstructor() const;
-      void setConstructor(bool isConstructor);
-
-      bool isFinalizer() const;
-      void setFinalizer(bool isFinalizer);
-
       bool isInterfaceMethodDeclaration() const;
       void setInterfaceMethodDeclaration(bool isInterfaceMethodDeclaration);
 
@@ -1095,8 +1091,6 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       TypeParameterList _M_typeParameters;
       TypeParameterConstraintList _M_typeParameterConstraints;
       ParameterList _M_parameters;
-      bool _M_isConstructor;
-      bool _M_isFinalizer;
       bool _M_isInterfaceMethodDeclaration;
       access_policy::access_policy_enum _M_accessPolicy;
       bool _M_isNew;
@@ -1115,6 +1109,48 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
     private:
       _MethodDeclarationModelItem(const _MethodDeclarationModelItem &other);
       void operator=(const _MethodDeclarationModelItem &other);
+    };
+
+  class _ConstructorDeclarationModelItem :  public _MethodDeclarationModelItem
+    {
+
+    public:
+      DECLARE_MODEL_NODE(ConstructorDeclaration)
+
+      static ConstructorDeclarationModelItem create(CodeModel *model);
+      virtual ~_ConstructorDeclarationModelItem();
+
+    public:
+
+    private:
+
+    protected:
+      _ConstructorDeclarationModelItem(CodeModel *model,  int kind =  __node_kind);
+
+    private:
+      _ConstructorDeclarationModelItem(const _ConstructorDeclarationModelItem &other);
+      void operator=(const _ConstructorDeclarationModelItem &other);
+    };
+
+  class _FinalizerDeclarationModelItem :  public _MethodDeclarationModelItem
+    {
+
+    public:
+      DECLARE_MODEL_NODE(FinalizerDeclaration)
+
+      static FinalizerDeclarationModelItem create(CodeModel *model);
+      virtual ~_FinalizerDeclarationModelItem();
+
+    public:
+
+    private:
+
+    protected:
+      _FinalizerDeclarationModelItem(CodeModel *model,  int kind =  __node_kind);
+
+    private:
+      _FinalizerDeclarationModelItem(const _FinalizerDeclarationModelItem &other);
+      void operator=(const _FinalizerDeclarationModelItem &other);
     };
 
   class _VariableDeclarationModelItem :  public _CodeModelItem
