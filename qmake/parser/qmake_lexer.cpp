@@ -515,13 +515,13 @@ static yyconst flex_int32_t yy_meta[25] =
 
 static yyconst flex_int16_t yy_base[71] =
     {   0,
-        0,    0,   24,    0,   48,    0,   99,  198,   71,  198,
-       93,    0,   81,   80,   79,  112,  198,  198,  198,  198,
-       76,    0,   72,  198,  198,  198,  198,   88,  198,   73,
-      198,  198,    0,  135,  146,  198,  198,   87,    0,  198,
-      198,  198,   75,  198,    0,    0,  198,  198,  198,  165,
-      198,    0,  198,    0,   76,   84,   80,   77,  198,    0,
-        0,  198,  198,   83,  198,    0,  198,  189,  193,   80
+        0,    0,   24,    0,   48,    0,   99,  209,   71,  209,
+       93,    0,   81,   80,   79,  112,  209,  209,  209,  209,
+       76,    0,   72,  209,  209,  209,  209,   88,  209,   73,
+      209,  209,    0,  135,  157,  209,  209,   87,    0,  209,
+      209,  209,   75,  209,    0,    0,  209,  209,  209,  176,
+      209,    0,  209,    0,   76,   84,   80,   77,  209,    0,
+        0,  209,  209,   83,  209,    0,  209,  200,  204,   80
     } ;
 
 static yyconst flex_int16_t yy_def[71] =
@@ -535,7 +535,7 @@ static yyconst flex_int16_t yy_def[71] =
        34,   67,   67,   67,   67,   35,    0,   67,   67,   67
     } ;
 
-static yyconst flex_int16_t yy_nxt[223] =
+static yyconst flex_int16_t yy_nxt[234] =
     {   0,
         8,    9,   10,   11,    8,   12,    8,    8,    8,   13,
        14,    8,   15,    8,   16,   17,   18,   16,    8,   16,
@@ -543,8 +543,8 @@ static yyconst flex_int16_t yy_nxt[223] =
        25,   26,   27,   22,   22,   28,   22,   22,   22,   29,
         8,   22,   30,   22,   31,    8,   32,   22,   33,   34,
         8,   35,   24,    8,   25,   36,   37,   33,   33,   38,
-       33,   33,   35,    8,    8,   35,    8,   35,    8,    8,
-        8,   33,   39,   55,   58,   59,   43,   55,   58,   59,
+       33,   33,   35,    8,    8,   35,    8,   35,   19,    8,
+       20,   33,   39,   55,   58,   59,   43,   55,   58,   59,
        60,   57,   44,   56,   64,   57,   40,   56,   57,   57,
        65,   41,   53,   42,   43,   49,   48,   47,   67,   67,
 
@@ -552,19 +552,20 @@ static yyconst flex_int16_t yy_nxt[223] =
        45,   67,   45,   50,   67,   67,   67,   67,   67,   44,
        67,   51,   51,   67,   51,   52,   52,   67,   51,   52,
        67,   52,   67,   67,   67,   51,   61,   67,   67,   67,
-       67,   67,   62,   63,   67,   67,   56,   64,   67,   67,
-       67,   67,   67,   65,   67,   67,   67,   67,   67,   66,
-       66,   67,   67,   66,   67,   66,   50,   67,   67,   67,
-       67,   67,   44,   67,   51,   51,   67,   51,   67,   67,
-       67,   51,   67,   67,   67,   67,   67,   67,   51,   46,
-       46,   67,   46,   54,   67,   67,   54,    7,   67,   67,
+       67,   67,   62,   63,   67,   67,   56,   67,   67,   67,
+       67,   67,   67,   67,   67,   41,   67,   42,   64,   67,
+       67,   67,   67,   67,   65,   67,   67,   67,   67,   67,
+       66,   66,   67,   67,   66,   67,   66,   50,   67,   67,
+       67,   67,   67,   44,   67,   51,   51,   67,   51,   67,
+       67,   67,   51,   67,   67,   67,   67,   67,   67,   51,
 
+       46,   46,   67,   46,   54,   67,   67,   54,    7,   67,
        67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
        67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
-       67,   67
+       67,   67,   67
     } ;
 
-static yyconst flex_int16_t yy_chk[223] =
+static yyconst flex_int16_t yy_chk[234] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -581,16 +582,17 @@ static yyconst flex_int16_t yy_chk[223] =
        11,    0,   11,   16,    0,    0,    0,    0,    0,   16,
         0,   16,   16,    0,   16,   16,   16,    0,   16,   16,
         0,   16,    0,    0,    0,   16,   34,    0,    0,    0,
-        0,    0,   34,   34,    0,    0,   34,   35,    0,    0,
-        0,    0,    0,   35,    0,    0,    0,    0,    0,   35,
-       35,    0,    0,   35,    0,   35,   50,    0,    0,    0,
-        0,    0,   50,    0,   50,   50,    0,   50,    0,    0,
-        0,   50,    0,    0,    0,    0,    0,    0,   50,   68,
-       68,    0,   68,   69,    0,    0,   69,   67,   67,   67,
+        0,    0,   34,   34,    0,    0,   34,    0,    0,    0,
+        0,    0,    0,    0,    0,   34,    0,   34,   35,    0,
+        0,    0,    0,    0,   35,    0,    0,    0,    0,    0,
+       35,   35,    0,    0,   35,    0,   35,   50,    0,    0,
+        0,    0,    0,   50,    0,   50,   50,    0,   50,    0,
+        0,    0,   50,    0,    0,    0,    0,    0,    0,   50,
 
+       68,   68,    0,   68,   69,    0,    0,   69,   67,   67,
        67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
        67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
-       67,   67
+       67,   67,   67
     } ;
 
 /* Table of booleans, true if rule could match eol. */
@@ -651,7 +653,7 @@ int openbrace;
 
 
 
-#line 655 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 657 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 #define INITIAL 0
 #define varvalue 1
@@ -868,7 +870,7 @@ YY_DECL
 #line 43 "qmake_lexer.ll"
 
 
-#line 872 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 874 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -937,7 +939,7 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 198 );
+		while ( yy_base[yy_current_state] != 209 );
 
 yy_find_action:
 /* %% [10.0] code to find the action number goes here */
@@ -1164,7 +1166,7 @@ YY_RULE_SETUP
 #line 116 "qmake_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 1168 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 1170 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(varvalue):
 case YY_STATE_EOF(funcargs):

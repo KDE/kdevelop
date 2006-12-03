@@ -109,8 +109,8 @@ funcargval [^\n\"\\{(})=$# \t|:,]
 <varvalue>":"       { yylval.value = yytext; return COLON; }
 <INITIAL>{ws}":"    { BEGIN(INITIAL); yylval.value = yytext; return COLON; }
 
-{ws}"}" { yylval.value = yytext; return RCURLY; }
-{ws}"{" { yylval.value = yytext; return LCURLY; }
+<funcargs,INITIAL>{ws}"}" { yylval.value = yytext; return RCURLY; }
+<funcargs,INITIAL>{ws}"{" { yylval.value = yytext; return LCURLY; }
 
 
 %%
