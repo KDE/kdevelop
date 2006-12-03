@@ -321,6 +321,14 @@ namespace QMake
     {
     }
 
+    ScopeAST::ScopeAST( const QString& scopename, const QString& begin, StatementAST* stmt,
+                        const QString& ws, AST* parent )
+            : StatementAST( ws, parent ), m_scopeName( scopename ),
+            m_begin( begin ), m_end( "" )
+    {
+        m_statements.append( stmt );
+    }
+
     ScopeAST::~ScopeAST()
     {
         for ( QList<StatementAST*>::const_iterator it = m_statements.begin(); it != m_statements.end(); ++it )

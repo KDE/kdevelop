@@ -42,48 +42,50 @@
      WS = 258,
      VARIABLENAME = 259,
      FUNCTIONNAME = 260,
-     VARVAL = 261,
-     DOLLAR = 262,
-     COLON = 263,
-     COMMA = 264,
-     LCURLY = 265,
-     RCURLY = 266,
-     LBRACE = 267,
-     RBRACE = 268,
-     QUOTE = 269,
-     EQUAL = 270,
-     PLUSEQ = 271,
-     MINUSEQ = 272,
-     TILDEEQ = 273,
-     STAREQ = 274,
-     NEWLINE = 275,
-     CONT = 276,
-     COMMENT = 277,
-     FUNCARGVAL = 278
+     SCOPENAME = 261,
+     VARVAL = 262,
+     DOLLAR = 263,
+     COLON = 264,
+     COMMA = 265,
+     LCURLY = 266,
+     RCURLY = 267,
+     LBRACE = 268,
+     RBRACE = 269,
+     QUOTE = 270,
+     EQUAL = 271,
+     PLUSEQ = 272,
+     MINUSEQ = 273,
+     TILDEEQ = 274,
+     STAREQ = 275,
+     NEWLINE = 276,
+     CONT = 277,
+     COMMENT = 278,
+     FUNCARGVAL = 279
    };
 #endif
 /* Tokens.  */
 #define WS 258
 #define VARIABLENAME 259
 #define FUNCTIONNAME 260
-#define VARVAL 261
-#define DOLLAR 262
-#define COLON 263
-#define COMMA 264
-#define LCURLY 265
-#define RCURLY 266
-#define LBRACE 267
-#define RBRACE 268
-#define QUOTE 269
-#define EQUAL 270
-#define PLUSEQ 271
-#define MINUSEQ 272
-#define TILDEEQ 273
-#define STAREQ 274
-#define NEWLINE 275
-#define CONT 276
-#define COMMENT 277
-#define FUNCARGVAL 278
+#define SCOPENAME 261
+#define VARVAL 262
+#define DOLLAR 263
+#define COLON 264
+#define COMMA 265
+#define LCURLY 266
+#define RCURLY 267
+#define LBRACE 268
+#define RBRACE 269
+#define QUOTE 270
+#define EQUAL 271
+#define PLUSEQ 272
+#define MINUSEQ 273
+#define TILDEEQ 274
+#define STAREQ 275
+#define NEWLINE 276
+#define CONT 277
+#define COMMENT 278
+#define FUNCARGVAL 279
 
 
 

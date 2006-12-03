@@ -64,6 +64,7 @@ ProjectAST* project;
 %token WS
 %token VARIABLENAME
 %token FUNCTIONNAME
+%token SCOPENAME
 %token VARVAL
 %token DOLLAR
 %token COLON
@@ -106,6 +107,10 @@ statement: variable_assignment
         {
             $<node>$ = $<node>1;
         }
+    | scope
+        {
+            $<node>$ = $<node>1;
+        }
     | NEWLINE
         {
             $<node>$ = new NewlineAST();
@@ -121,6 +126,16 @@ statement: variable_assignment
     | WS COMMENT
         {
             $<node>$ = new CommentAST( $<value>2, $<value>1 );
+        }
+    ;
+
+scope: SCOPENAME COLON statement
+        {
+            $<node>$ = new ScopeAST( $<value>1, $<value>2, static_cast<StatementAST*>($<node>3) );
+        }
+    | SCOPENAME LCURLY substatements RCURLY
+        {
+            $<node>$ = new ScopeAST( $<value>1, $<value>2, $<stmtlist>3, $<value>4 )
         }
     ;
 
