@@ -453,7 +453,8 @@ The number of spaces per tab is controled by the editor.</string>
                                     <string>&amp;Attach</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Attach brackets to pre-block code (i.e. Java/K&amp;R style).</string>
+                                    <string>Attach brackets to pre-block code (i.e. Java/K&amp;R style).
+See also Formatting/Blocks/Break if-else</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="5" column="0">
@@ -467,7 +468,8 @@ The number of spaces per tab is controled by the editor.</string>
                                     <string>Break &amp;closing headers</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Break brackets before closing headers (e.g. 'else', 'catch', ...).</string>
+                                    <string>Break brackets before closing headers (e.g. 'else', 'catch', ...)
+from their immediately preceding closing brackets.</string>
                                 </property>
                             </widget>
                             <widget class="QRadioButton" row="3" column="0">
@@ -478,7 +480,8 @@ The number of spaces per tab is controled by the editor.</string>
                                     <string>Linu&amp;x style</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Break definition-block brackets and attach command-block brackets.</string>
+                                    <string>Break brackets from class/function declarations, 
+but attach brackets to pre-block command statements.</string>
                                 </property>
                             </widget>
                             <spacer row="4" column="0">
@@ -857,7 +860,9 @@ correctly.
                                     <string>&amp;Add spaces around operators</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Insert space paddings around operators.</string>
+                                    <string>Insert space padding around operators.
+Once padded, operators stay padded.
+There is no unpad operator option.</string>
                                 </property>
                             </widget>
                         </vbox>

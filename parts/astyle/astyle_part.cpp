@@ -73,7 +73,8 @@ void AStylePart::loadGlobal()
 //   kdDebug(9009) << "Load global"<<endl;
   KConfig *config = kapp->config();
   config->setGroup("AStyle");
-  QString options = config->readEntry("Options","BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,Brackets=Break,BracketsCloseHeaders=0,FStyle=UserDefined,Fill=Tabs,FillCount=4,FillEmptyLines=0,FillForce=0,IndentBlocks=0,IndentBrackets=0,IndentCases=1,IndentClasses=1,IndentLabels=1,IndentNamespaces=1,IndentPreprocessors=0,IndentSwitches=0,KeepBlocks=0,KeepStatements=0,MaxStatement=40,MinConditional=-1,PadOperators=1,PadParenthesesIn=1,PadParenthesesOut=0,PadParenthesesUn=1,");
+  QString options = config->readEntry("Options","BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,Brackets=Break,BracketsCloseHeaders=0,FStyle=UserDefined,Fill=Tabs,FillCount=4,FillEmptyLines=0,FillForce=0,IndentBlocks=0,IndentBrackets=0,IndentCases=0,IndentClasses=1,IndentLabels=1,IndentNamespaces=1,IndentPreprocessors=0,IndentSwitches=1,KeepBlocks=1,KeepStatements=1,MaxStatement=40,MinConditional=-1,PadOperators=0,PadParenthesesIn=1,PadParenthesesOut=1,PadParenthesesUn=1,");
+
 
  QStringList pairs = QStringList::split( ",", options);
  QStringList::Iterator it;

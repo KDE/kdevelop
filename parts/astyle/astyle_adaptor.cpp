@@ -7,7 +7,7 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
-
+#include <kdebug.h>
 #include <kapplication.h>
 #include <kconfig.h>
 
@@ -40,12 +40,20 @@ string ASStringIterator::nextLine()
 
 KDevFormatter::KDevFormatter(const QMap<QString, QVariant>& options)
 {
+// 	for ( QMap<QString, QVariant>::ConstIterator iter = options.begin();iter != options.end();iter++ )
+// 	{
+// 		kdDebug ( 9009 ) << "format: " << iter.key() << "=" << iter.data()  << endl;
+// 	}
+
+	setCStyle();
+
 	// style
 	QString s = options["FStyle"].toString();
 	if ( predefinedStyle( s ) )
 	{
 		return;
 	}
+
   // fill
 	int wsCount = options["FillCount"].toInt();
   if (options["Fill"].toString() == "Tabs")
@@ -57,8 +65,10 @@ KDevFormatter::KDevFormatter(const QMap<QString, QVariant>& options)
 	  setSpaceIndentation(wsCount);
 	  m_indentString = "";
 	  m_indentString.fill(' ', wsCount);
-	  setTabSpaceConversionMode(options["FillForce"].toBool());
   }
+
+  setTabSpaceConversionMode(options["FillForce"].toBool());
+  setEmptyLineFill(options["Fill_EmptyLines"].toBool());
 
   // indent
   setSwitchIndent(options["IndentSwitches"].toBool());
@@ -67,6 +77,8 @@ KDevFormatter::KDevFormatter(const QMap<QString, QVariant>& options)
   setBracketIndent(options["IndentBrackets"].toBool());
   setNamespaceIndent(options["IndentNamespaces"].toBool());
   setLabelIndent(options["IndentLabels"].toBool());
+  setBlockIndent(options["IndentBlocks"].toBool());
+  setPreprocessorIndent(options["IndentPreprocessors"].toBool());
 
   // continuation
   setMaxInStatementIndentLength(options["MaxStatement"].toInt());
@@ -84,16 +96,7 @@ KDevFormatter::KDevFormatter(const QMap<QString, QVariant>& options)
   else
 	  setBracketFormatMode(astyle::NONE_MODE);
 
-  // padding
-  setOperatorPaddingMode(options["PadOperators"].toBool());
-  setParensInsidePaddingMode(options["PadParenthesesIn"].toBool());
-  setParensOutsidePaddingMode(options["PadParenthesesOut"].toBool());
-  setParensUnPaddingMode(options["PadParenthesesUn"].toBool());
-
-  // oneliner
-  setBreakOneLineBlocksMode(options["KeepBlocks"].toBool());
-  setSingleStatementsMode(options["KeepStatements"].toBool());
-
+  setBreakClosingHeaderBracketsMode(options["BracketsCloseHeaders"].toBool());
   // blocks
   setBreakBlocksMode(options["BlockBreak"].toBool());
   if (options["BlockBreakAll"].toBool()){
@@ -102,6 +105,15 @@ KDevFormatter::KDevFormatter(const QMap<QString, QVariant>& options)
   }
   setBreakElseIfsMode(options["BlockIfElse"].toBool());
 
+  // padding
+  setOperatorPaddingMode(options["PadOperators"].toBool());
+  setParensInsidePaddingMode(options["PadParenthesesIn"].toBool());
+  setParensOutsidePaddingMode(options["PadParenthesesOut"].toBool());
+  setParensUnPaddingMode(options["PadParenthesesUn"].toBool());
+
+  // oneliner
+  setBreakOneLineBlocksMode(!options["KeepBlocks"].toBool());
+  setSingleStatementsMode(!options["KeepStatements"].toBool());
 }
 
 KDevFormatter::KDevFormatter( AStyleWidget * widget )
