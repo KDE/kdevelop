@@ -124,8 +124,8 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
   popup.addAction(printAction);
   popup.addSeparator();
 
-  KAction * incFontAction = this->action("incFontSizes");
-  KAction * decFontAction = this->action("decFontSizes");
+  QAction * incFontAction = this->action("incFontSizes");
+  QAction * decFontAction = this->action("decFontSizes");
   if ( incFontAction && decFontAction )
   {
     popup.addAction(incFontAction);
@@ -133,7 +133,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
     popup.addSeparator();
   }
 
-  KAction *ac = action("setEncoding");
+  QAction *ac = action("setEncoding");
   if (ac)
     popup.addAction(ac);
 

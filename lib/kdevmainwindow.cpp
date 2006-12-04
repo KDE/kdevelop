@@ -265,7 +265,7 @@ void KDevMainWindow::fillContextMenu( KMenu *menu, const Context *context )
     emit contextMenu( menu, context );
 
     //Put this in every context menu so that plugins will be encouraged to allow shortcuts
-    KAction * action = actionCollection() ->action( "settings_configure_shortcuts" );
+    QAction * action = actionCollection() ->action( "settings_configure_shortcuts" );
     menu->addAction( action );
 }
 
@@ -510,7 +510,7 @@ void KDevMainWindow::projectOpened()
 {
     QString app = i18n( "Project" );
     QString text = i18n( "Configure %1", app );
-    KAction *action = actionCollection() ->action( "settings_configure" );
+    QAction *action = actionCollection() ->action( "settings_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
@@ -520,7 +520,7 @@ void KDevMainWindow::projectClosed()
 {
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1", app );
-    KAction *action = actionCollection() ->action( "settings_configure" );
+    QAction *action = actionCollection() ->action( "settings_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
@@ -634,7 +634,7 @@ void KDevMainWindow::keyBindings()
 
 void KDevMainWindow::documentActivated( KDevDocument *document )
 {
-    KAction * action = actionCollection() ->action( "settings_configure_editors" );
+    QAction * action = actionCollection() ->action( "settings_configure_editors" );
     action->setEnabled( document->textDocument() );
 }
 

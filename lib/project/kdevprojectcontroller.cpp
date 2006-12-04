@@ -202,7 +202,7 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
         return false;
 
     KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
-    KAction * action;
+    QAction * action;
 
     action = ac->action( "project_close" );
     action->setEnabled( true );
@@ -243,7 +243,7 @@ bool KDevProjectController::closeProject()
     KDevCore::saveSettings();
 
     KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
-    KAction * action;
+    QAction * action;
 
     action = ac->action( "project_close" );
     action->setEnabled( false );
@@ -269,8 +269,8 @@ bool KDevProjectController::loadProjectPart()
 
     QString projectManager =
             config->readPathEntry( "Project Management", "KDevProjectManager" );
-    
-    QString constraint = 
+
+    QString constraint =
             QString::fromLatin1("[X-KDE-PluginInfo-Name] == '%1'")
             .arg(projectManager);
 
