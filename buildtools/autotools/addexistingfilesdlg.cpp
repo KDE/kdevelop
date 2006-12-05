@@ -325,7 +325,7 @@ void AddExistingFilesDialog::slotOk()
 
 	m_widget->emitAddedFiles ( fileList );
 
-	AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
+	AutoProjectTool::addToMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
 
 	QDialog::accept();
 

@@ -288,7 +288,7 @@ void ChooseTargetDialog::slotOk()
 				QMap<QString, QString> replaceMap;
 				replaceMap.insert( varname, d->chosenSubproject->variables[ varname ] );
 				
-				AutoProjectTool::modifyMakefileam( d->chosenSubproject->path + "/Makefile.am", replaceMap );
+				AutoProjectTool::addToMakefileam( d->chosenSubproject->path + "/Makefile.am", replaceMap );
 			}
 			else
 			{
@@ -303,7 +303,7 @@ void ChooseTargetDialog::slotOk()
 				QMap<QString, QString> replaceMap;
 				replaceMap.insert( varname, d->chosenSubproject->variables[ varname ] );
 				
-				AutoProjectTool::modifyMakefileam( d->chosenSubproject->path + "/Makefile.am", replaceMap );
+				AutoProjectTool::addToMakefileam( d->chosenSubproject->path + "/Makefile.am", replaceMap );
 			}
 			newFileList.append ( d->chosenSubproject->path.mid ( d->part->projectDirectory().length() + 1 ) + "/" + fileName );
 		}

@@ -169,7 +169,7 @@ void FileItem::changeMakefileEntry(const QString& new_name)
 	subProject->variables[varname] = sources.join(" ");
 	replaceMap.insert(varname, subProject->variables[varname]);
 
-	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+	AutoProjectTool::addToMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
 	if(new_name == "")
 		target->sources.remove(this);

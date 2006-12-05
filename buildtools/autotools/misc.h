@@ -40,8 +40,10 @@ public:
 	 * in a map.
 	 */
 	static void parseMakefileam( const QString &filename, QMap<QString, QString> *variables );
-	static void modifyMakefileam( const QString &filename, QMap<QString, QString> variables );
+
+	static void addToMakefileam( const QString &filename, QMap<QString, QString> variables );
 	static void removeFromMakefileam( const QString &filename, QMap<QString, QString> variables );
+	static void setMakefileam ( const QString &fileName, QMap<QString, QString> variables );
 
 	static void addRemoveMakefileam(const QString &fileName, QMap<QString, QString> variables,  bool add);
 

@@ -22,7 +22,7 @@
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <knotifyclient.h>
-
+#include <kfiledialog.h>
 #include "autolistviewitems.h"
 
 #include "misc.h"
@@ -100,6 +100,8 @@ void TargetOptionsDialog::readConfig()
 
     QString addstr = (target->primary == "PROGRAMS")? target->ldadd : target->libadd;
     QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr);
+
+    kdDebug(9020) << "ls=: " << addstr << endl;
 
     bool inlistItem;
     QListViewItem *lastItem = 0;
@@ -198,7 +200,7 @@ void TargetOptionsDialog::storeConfig()
     }
 
     // We can safely assume that this target is in the active sub project
-    AutoProjectTool::modifyMakefileam(m_widget->subprojectDirectory() + "/Makefile.am", replaceMap);
+    AutoProjectTool::setMakefileam(m_widget->subprojectDirectory() + "/Makefile.am", replaceMap);
 
     if (target->primary == "PROGRAMS")
         DomUtil::writeEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name, run_arguments_edit->text());
@@ -266,9 +268,8 @@ void TargetOptionsDialog::outsideMoveDownClicked()
 
 void TargetOptionsDialog::outsideAddClicked()
 {
-    bool ok;
-    QString dir = KInputDialog::getText(i18n("Add Library"), i18n("Add library:"), "-l", &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-l")
+    QString dir = KFileDialog::getOpenFileName();
+    if (!dir.isEmpty())
         new QListViewItem(outsidelib_listview, dir);
 }
 

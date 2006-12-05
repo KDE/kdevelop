@@ -420,7 +420,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 //			QMap<QString, QString> replaceMap;
 //			replaceMap.insert( varname, m_activeSubproject->variables[ varname ] );
 //
-//			AutoProjectTool::modifyMakefileam( m_activeSubproject->path + "/Makefile.am", replaceMap );
+//			AutoProjectTool::addToMakefileam( m_activeSubproject->path + "/Makefile.am", replaceMap );
 		}
 
 		emitAddedFiles ( list );
@@ -491,7 +491,7 @@ void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* sp
 	QMap<QString, QString> replaceMap;
 	replaceMap.insert( varname, spitem->variables[ varname ] );
 
-	AutoProjectTool::modifyMakefileam( spitem->path + "/Makefile.am", replaceMap );
+	AutoProjectTool::addToMakefileam( spitem->path + "/Makefile.am", replaceMap );
 
 	m_detailView->slotSelectionChanged( spitem );
 }

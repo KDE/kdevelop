@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <knotifyclient.h>
 #include <kservice.h>
-
+#include <kfiledialog.h>
 #include "domutil.h"
 #include "misc.h"
 #include "addprefixdlg.h"
@@ -220,7 +220,7 @@ void SubprojectOptionsDialog::storeConfig()
     subProject->variables["SUBDIRS"] = subdirs;
     replaceMap.insert("SUBDIRS", subdirs);
 
-    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+    AutoProjectTool::setMakefileam(subProject->path + "/Makefile.am", replaceMap);
 }
 
 
@@ -297,12 +297,10 @@ void SubprojectOptionsDialog::outsideMoveDownClicked()
    outsideinc_listview->currentItem()->moveItem(outsideinc_listview->currentItem()->nextSibling());
 }
 
-
 void SubprojectOptionsDialog::outsideAddClicked()
 {
-    bool ok;
-    QString dir = KInputDialog::getText(i18n("Add Include Directory"), i18n("Add include directory:"), "-I", &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-I")
+    QString dir = KFileDialog::getExistingDirectory();
+    if (!dir.isEmpty())
         new QListViewItem(outsideinc_listview, dir);
 }
 

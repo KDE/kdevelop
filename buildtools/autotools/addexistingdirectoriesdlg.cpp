@@ -204,7 +204,7 @@ void AddExistingDirectoriesDialog::slotOk()
             m_spitem->variables["SUBDIRS"] += (" " + name);
             QMap<QString,QString> replaceMap;
             replaceMap.insert("SUBDIRS", m_spitem->variables["SUBDIRS"]);
-            AutoProjectTool::modifyMakefileam(m_spitem->path + "/Makefile.am", replaceMap);
+            AutoProjectTool::addToMakefileam(m_spitem->path + "/Makefile.am", replaceMap);
         }
 
         // Create new item in tree view

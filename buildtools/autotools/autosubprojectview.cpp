@@ -215,9 +215,9 @@ void AutoSubprojectView::initActions()
 	addApplicationAction->setWhatsThis(i18n("<qt><b>Add application</b><p>Creates an application .desktop file.</qt>"));
 	addApplicationAction->plug( m_button4 );
 
-	QToolTip::add( m_button5, tr2i18n( "Add Build"));
+	QToolTip::add( m_button5, tr2i18n( "Build"));
 	buildSubprojectAction = new AutoToolsAction( i18n( "Build" ), "launch", 0, this,
-	                                     SLOT( slotBuildSubproject() ), actions, "add build subproject" );
+	                                     SLOT( slotBuildSubproject() ), actions, "build subproject" );
 	buildSubprojectAction->setWhatsThis(i18n("<qt><b>Build</b><p>Runs <b>make</b> from the directory of "
 	                                         "the selected subproject.<br> Environment variables and "
 	                                         "make arguments can be specified in the project settings "

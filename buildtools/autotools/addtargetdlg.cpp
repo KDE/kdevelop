@@ -213,7 +213,7 @@ void AddTargetDialog::accept()
 	if (primary == "LTLIBRARIES" || primary == "PROGRAMS")
             replaceMap.insert(canonname + "_LDFLAGS", ldflags);
 
-	AutoProjectTool::modifyMakefileam(m_subproject->path + "/Makefile.am", replaceMap);
+	AutoProjectTool::addToMakefileam(m_subproject->path + "/Makefile.am", replaceMap);
 
 	QDialog::accept();
 }

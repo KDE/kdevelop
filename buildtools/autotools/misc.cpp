@@ -182,10 +182,208 @@ void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString, QSt
 	*variables = list;
 }
 
-void AutoProjectTool::modifyMakefileam(const QString &fileName, QMap<QString, QString> variables)
+/**
+ * Add entries to a variable. Will just add the variables to the existing line, removing duplicates
+ * Will preserve += constructs and make sure that the variable only has one copy of the value across
+ * all += constructs
+ * @param fileName
+ * @param variables key=value string of entries to add
+ */
+void AutoProjectTool::addToMakefileam(const QString &fileName, QMap<QString, QString> variables)
 {
 	AutoProjectTool::addRemoveMakefileam(fileName,  variables,  true);
 }
+
+/**
+ * Set entries to a variable. Will set the variables to the existing line, removing duplicates
+ * Will preserve += constructs and make sure that the variable only has one copy of the value across
+ * all += constructs
+ * Adds line if it does not exist.
+ * @param fileName
+ * @param variables key=value string of entries to add
+ */
+void AutoProjectTool::setMakefileam ( const QString &fileName, QMap<QString, QString> variables )
+{
+	for ( QMap<QString, QString>::Iterator it0 = variables.begin(); it0 != variables.end(); ++it0 )
+	{
+		kdDebug ( 9020 ) << "key (set): " << it0.key() << "=" << it0.data() << endl;
+	}
+
+	// input file reading
+	QFile fin ( fileName );
+	if ( !fin.open ( IO_ReadOnly ) )
+	{
+		return ;
+	}
+	QTextStream ins ( &fin );
+
+	// output file writing.
+	QFile fout ( fileName + "#" );
+	if ( !fout.open ( IO_WriteOnly ) )
+	{
+		fin.close();
+		return ;
+	}
+	QTextStream outs ( &fout );
+
+	// variables
+	QRegExp re ( "^(#kdevelop:[ \t]*)?([A-Za-z][@A-Za-z0-9_]*)[ \t]*([:\\+]?=)[ \t]*(.*)$" );
+
+	bool multiLine = false;
+	QString lastLhs;
+	QMap<QString, QString> seenLhs;
+	while ( !fin.atEnd() )
+	{
+		QString s = ins.readLine();
+		if ( re.exactMatch ( s ) )
+		{
+			QString lhs = re.cap ( 2 );
+			bool notFound = ( variables.find ( lhs ) == variables.end() );
+
+			if ( notFound )
+			{
+				if ( seenLhs.find ( lhs ) == seenLhs.end() )
+				{
+					// not interested in this line at all
+					// write it out as is..
+					outs << s << endl;
+				}
+				// we have seen this variable, but since we are setting the
+				// whole line - we skip this as it will be a += line.
+			}
+			else
+			{
+				// we are interested in this line..
+				QString rhs = re.cap ( 4 ).stripWhiteSpace();
+				if ( rhs[ rhs.length() - 1 ] == '\\' )
+				{
+					// save it for when we have the whole line..
+					multiLine = true;
+					lastLhs = lhs;
+				}
+				else
+				{
+					// deal with it now - a single line
+					// we are adding our interested values to this line and writing it
+					// now write the line out if it is not going to be empty.
+					QString newLine ( lhs );
+					newLine += " = ";
+					bool added = false;
+					int len = newLine.length();
+					QStringList variableList = QStringList::split ( ' ', variables[lhs] );
+					for ( uint count = 0; count < variableList.size(); count++ )
+					{
+						len += variableList[count].length() + 1;
+						if ( len > 80 )
+						{
+							newLine += "\\\n\t";
+							len = 8;
+						}
+						newLine += variableList[count];
+						newLine += ' ';
+						added = true;
+
+					}
+					// only print it out if there was a value to add..
+					if ( added )
+					{
+						newLine.setLength ( newLine.length() - 1 );
+						outs << newLine << endl;
+					}
+					seenLhs[lhs] = "done";
+					variables.erase ( lhs );
+				}
+			}
+		}
+		else if ( multiLine )
+		{
+			s = s.stripWhiteSpace();
+			// we are only here if were interested in this line..
+			if ( s[s.length()-1] == '\\' )
+			{
+				s.setLength ( s.length() - 1 );
+				// still more multi line we wait for..
+			}
+			else
+			{
+				// end of the multi line..
+				multiLine = false;
+			}
+
+			if ( !multiLine )
+			{
+				// we are adding our interested values to this line and writing it
+				// now write the line out if it is not going to be empty.
+				QString newLine ( lastLhs );
+				newLine += " = ";
+				bool added = false;
+				int len = newLine.length();
+				QStringList variableList = QStringList::split ( ' ', variables[lastLhs] );
+				for ( uint count = 0; count < variableList.size(); count++ )
+				{
+					len += variableList[count].length() + 1;
+					if ( len > 80 )
+					{
+						newLine += "\\\n\t";
+						len = 8;
+					}
+					newLine += variableList[count];
+					newLine += ' ';
+					added = true;
+				}
+				// only print it out if there was a value to add..
+				if ( added )
+				{
+					newLine.setLength ( newLine.length() - 1 );
+					outs << newLine << endl;
+				}
+				seenLhs[lastLhs] = "done";
+				variables.erase ( lastLhs );
+				lastLhs.setLength ( 0 );
+			}
+		}
+		else
+		{
+			// can write this line out..
+			// not a match, not a multi line,
+			outs << s << endl;
+		}
+	}
+
+	for ( QMap<QString, QString>::Iterator it0 = variables.begin(); it0 != variables.end(); ++it0 )
+	{
+		QString newLine ( it0.key() );
+		newLine += " = ";
+		bool added = false;
+		int len = newLine.length();
+		QStringList variableList = QStringList::split ( ' ', it0.data() );
+		for ( uint count = 0; count < variableList.size(); count++ )
+		{
+			len += variableList[count].length() + 1;
+			if ( len > 80 )
+			{
+				newLine += "\\\n\t";
+				len = 8;
+			}
+			newLine += variableList[count];
+			newLine += ' ';
+			added = true;
+
+		}
+		// only print it out if there was a value to add..
+		if ( added )
+		{
+			newLine.setLength ( newLine.length() - 1 );
+			outs << newLine << endl;
+		}
+	}
+
+	fin.close();
+	fout.close();
+
+	QDir().rename ( fileName + "#", fileName );
+}
+
 
 /**
  * Add entries to a variable. Will just add the variables to the existing line, removing duplicates
@@ -223,6 +421,8 @@ void AutoProjectTool::addRemoveMakefileam(const QString &fileName, QMap<QString,
 	QDict< QMap<QString, bool> > interest;
 	for (QMap<QString, QString>::Iterator it0 = variables.begin(); it0 != variables.end(); ++it0)
 	{
+		kdDebug(9020) << "key (" << add<<"): " << it0.key() << "="<< it0.data() << endl;
+
 		QMap<QString, bool>* set = new QMap<QString, bool>();
 		if (!it0.data().stripWhiteSpace().isEmpty())
 		{
@@ -570,6 +770,12 @@ void AutoProjectTool::addRemoveMakefileam(const QString &fileName, QMap<QString,
 	QDir().rename(fileName + "#", fileName);
 }
 
+/**
+ * Any items in the map will be removed from the Makefile.am
+ * Empty lines are removed. eg. foo_LDDADD if empty is removed.
+ * @param fileName full path to Makefile.am
+ * @param variables lines to remove items from.
+ */
 void AutoProjectTool::removeFromMakefileam(const QString &fileName, QMap <QString, QString> variables)
 {
 	AutoProjectTool::addRemoveMakefileam(fileName, variables,  false);

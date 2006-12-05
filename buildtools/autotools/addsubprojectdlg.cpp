@@ -124,7 +124,7 @@ void AddSubprojectDialog::accept()
         m_subProject->variables["SUBDIRS"] += (" " + name);
         QMap<QString,QString> replaceMap;
         replaceMap.insert("SUBDIRS", m_subProject->variables["SUBDIRS"]);
-        AutoProjectTool::modifyMakefileam(m_subProject->path + "/Makefile.am", replaceMap);
+        AutoProjectTool::addToMakefileam(m_subProject->path + "/Makefile.am", replaceMap);
     }
 
     // Create new item in tree view

@@ -199,7 +199,7 @@ void AddApplicationDialog::accept()
 
     subProject->variables[varname] += (" " + fileName);
     replaceMap.insert(varname, subProject->variables[varname]);
-    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+    AutoProjectTool::addToMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
     QDialog::accept();
 }

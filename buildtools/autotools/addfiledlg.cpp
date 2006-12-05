@@ -124,7 +124,7 @@ void AddFileDialog::accept()
 	QMap<QString,QString> replaceMap;
 	replaceMap.insert(varname, subProject->variables[varname]);
 
-	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+	AutoProjectTool::addToMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
 	m_widget->emitAddedFile( subProject->path.mid ( m_part->project()->projectDirectory().length() + 1 ) + "/" + name );
 	m_part->partController()->editDocument ( KURL ( subProject->path + "/" + name ) );
