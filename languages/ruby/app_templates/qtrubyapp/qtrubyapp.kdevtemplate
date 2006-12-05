@@ -21,7 +21,7 @@ Comment[it]=Genera un'applicazione basata su QtRuby (compatibile multipiattaform
 Comment[sv]=Skapa ett program baserat på QtRuby (fungerar på andra plattformar)
 Comment[tr]=QtRuby tabanlı bir uygulama yarat (platformlararası geçimli)
 FileTemplates=rb,ShellStyle
-ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb,%{dest}/README
 Archive=qtrubyapp.tar.gz
 
 [FILE1]
@@ -63,6 +63,11 @@ Dest=%{dest}/Makefile
 Type=install
 Source=%{src}/app.filelist
 Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
+
+[FILE9]
+Type=install
+Source=%{src}/README
+Dest=%{dest}/README
 
 [MSG]
 Type=message

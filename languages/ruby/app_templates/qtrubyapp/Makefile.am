@@ -1,5 +1,5 @@
 dataFiles = main.rb qtrubyapp.rb qtrubyapp.png qtrubyapp.kdevelop \
-	filesave.xpm fileopen.xpm fileprint.xpm app.filelist app-Makefile
+	filesave.xpm fileopen.xpm fileprint.xpm app.filelist app-Makefile README
 
 templateName = qtrubyapp
 
