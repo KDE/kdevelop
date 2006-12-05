@@ -48,11 +48,11 @@ configuration_DATA = configuration
 
 AM_CXXFLAGS = -DAST_DEBUG
 
-bin_PROGRAMS = r++
-r___LDFLAGS = $(all_libraries)
-r___SOURCES = main.cpp
-r___DEPENDENCIES = libkdevcppsupport.la
-r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
+#bin_PROGRAMS = r++
+#r___LDFLAGS = $(all_libraries)
+#r___SOURCES = main.cpp
+#r___DEPENDENCIES = libkdevcppsupport.la
+#r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 noinst_HEADERS = cppevaluation.h cppimplementationwidget.h \
 	cppsplitheadersourceconfig.h declarationinfo.h expressioninfo.h includefiles.h \
 	qtdesignercppintegration.h setuphelper.h simplecontext.h simpletypecatalog.h simpletypefunction.h \
