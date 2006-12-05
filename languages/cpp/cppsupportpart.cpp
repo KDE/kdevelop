@@ -473,7 +473,7 @@ void CppSupportPart::projectOpened( )
 
 	setupCatalog();
 
-	m_problemReporter = new ProblemReporter( this );
+	m_problemReporter = new ProblemReporter( this, 0, "problemReporterWidget" );
 	m_problemReporter->setIcon( SmallIcon( "info" ) );
 	m_problemReporter->setCaption( i18n( "Problem Reporter" ) );
 	mainWindow( ) ->embedOutputView( m_problemReporter, i18n( "Problems" ), i18n( "Problem reporter" ) );

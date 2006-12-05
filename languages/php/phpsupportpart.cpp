@@ -100,7 +100,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
    action->setToolTip(i18n("New class"));
    action->setWhatsThis(i18n("<b>New class</b><p>Runs New Class wizard."));
 
-   m_phpErrorView = new PHPErrorView(this);
+   m_phpErrorView = new PHPErrorView(this, 0, "phpErrorWidget");
    m_phpErrorView->setIcon( SmallIcon("info") );
 
    QWhatsThis::add(m_phpErrorView, i18n("<b>PHP problems</b><p>This view shows PHP parser warnings, errors, and fatal errors."));

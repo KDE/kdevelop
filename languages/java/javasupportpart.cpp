@@ -154,7 +154,7 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     connect( partController(), SIGNAL(partRemoved(KParts::Part*)),
              this, SLOT(partRemoved(KParts::Part*)));
 
-    m_problemReporter = new ProblemReporter( this );
+    m_problemReporter = new ProblemReporter( this, 0, "problemReporterWidget" );
     m_problemReporter->setIcon( SmallIcon("info") );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("Problem reporter"));
 

@@ -174,7 +174,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              this,             SLOT(slotGotoSource(const QString&, int)) );
 
 
-    viewerWidget = new ViewerWidget( controller, 0, "view");
+    viewerWidget = new ViewerWidget( controller, 0, "viewerWidget");
     mainWindow()->embedSelectView(viewerWidget,
                                   i18n("Debug views"),
                                   i18n("Special debugger views"));
