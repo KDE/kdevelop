@@ -114,7 +114,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
         Kind_Parameter =  1 << 27,
         Kind_TypeParameter =  1 << 28,
         Kind_PrimaryOrSecondaryConstraint =  1 << 29 /*| Kind_TypeParameterConstraint*/,
-        Kind_ConstructorConstraint =  1 << 30 /*| Kind_TypeParameterConstraint*/,
+        Kind_ConstructorConstraint =  1 << 30 /*| Kind_TypeParameterConstraint*/
       };
 
     public:
