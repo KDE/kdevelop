@@ -42,7 +42,7 @@ public:
     KDirWatch* dirWatch();
     virtual Options options() const;
     QStringList distFiles() const;
-    inline QString qmakePath() const { return m_qmakePath; }
+    inline QString qmakePath() const { return DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "");; }
 
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);
@@ -78,7 +78,7 @@ private:
     void queueCmd(const QString &dir, const QString &cmd);
     QString makeEnvironment();
 
-    void findQtDir();
+    QString findQtDir();
     QString findExecutable( const QString& path ) const;
     void buildBinDirs( QStringList& ) const;
     bool isValidQtDir( const QString& path ) const;
@@ -91,8 +91,6 @@ private:
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;
     QString m_buildCommand;
-    QString m_defaultQtDir;
-    QString m_qmakePath;
 
     KDirWatch* m_dirWatch;
 

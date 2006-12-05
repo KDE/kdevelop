@@ -183,12 +183,12 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
              this, SLOT(slotCommandFinished(const QString&)) );
 
-    m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
-    m_qmakePath = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "");
+    QString m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
+    QString m_qmakePath = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "");
 
     if( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) )
     {
-        findQtDir();
+        m_defaultQtDir = findQtDir();
         kdDebug(9024) << "Setting default dir to: " << m_defaultQtDir << endl;
         DomUtil::writeEntry(*projectDom(), "/kdevcppsupport/qt/root", m_defaultQtDir );
     }
@@ -237,9 +237,9 @@ QString TrollProjectPart::makeEnvironment()
         environstr += " ";
     }
 
-    if( !hasQtDir && !isQt4Project() && !m_defaultQtDir.isEmpty() )
+    if( !hasQtDir && !isQt4Project() && !DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "").isEmpty() )
     {
-         environstr += QString( "QTDIR=" ) + EnvVarTools::quote( m_defaultQtDir ) + QString( " " );
+         environstr += QString( "QTDIR=" ) + EnvVarTools::quote( DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "") ) + QString( " " );
     }
 
     return environstr;
@@ -268,7 +268,8 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
 {
     mainWindow()->statusBar()->message( i18n("Loading Project...") );
 
-    if( !isQt4Project() && ( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) ) )
+    QString defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
+    if( !isQt4Project() && ( defaultQtDir.isEmpty() || !isValidQtDir( defaultQtDir ) ) )
     {
         bool doask = true;
         while( doask )
@@ -300,7 +301,7 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
                     doask = false;
                 }else
                 {
-                    m_defaultQtDir = qtdir;
+                    defaultQtDir = qtdir;
                     doask = false;
                 }
 
@@ -319,7 +320,8 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
             }
         }
     }
-    if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
+    QString qmakePath = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "");
+    if( qmakePath.isEmpty() || !isExecutable( qmakePath ) )
     {
         bool doask = true;
         while( doask )
@@ -348,7 +350,7 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
                     doask = false;
                 }else
                 {
-                    m_qmakePath = qmake;
+                    qmakePath = qmake;
                     doask = false;
                 }
 
@@ -367,8 +369,8 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
             }
         }
     }
-    DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/root", m_defaultQtDir );
-    DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/qmake", m_qmakePath );
+    DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/root", defaultQtDir );
+    DomUtil::writeEntry( *projectDom(), "/kdevcppsupport/qt/qmake", qmakePath );
 
     m_widget->openProject(dirName);
 
@@ -636,7 +638,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
     	cmdline = "tmake ";
     }else
     {
-      cmdline = m_qmakePath+" ";
+      cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "")+" ";
     }
 
     //QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
@@ -760,7 +762,7 @@ bool TrollProjectPart::isExecutable( const QString& path ) const
     return( fi.exists() && fi.isExecutable() );
 }
 
-void TrollProjectPart::findQtDir()
+QString TrollProjectPart::findQtDir()
 {
     QStringList qtdirs;
     if( !isQt4Project() )
@@ -776,10 +778,10 @@ void TrollProjectPart::findQtDir()
         QString qtdir = *it;
         if( !qtdir.isEmpty() && isValidQtDir(qtdir) )
         {
-            m_defaultQtDir = qtdir;
-            return;
+            return qtdir;
         }
     }
+    return "";
 }
 
 
