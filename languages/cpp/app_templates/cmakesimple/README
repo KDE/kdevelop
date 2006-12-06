@@ -1,5 +1,6 @@
 -----------------------------------------------
-Kde templates quickstart
+Simple C++ Hello World template based on cmake
+QStart
 Author: Anne-Marie Mahfouf
 Date: 2006-12-06
 -----------------------------------------------
@@ -15,9 +16,15 @@ this application template.
 -----------------------------------------------
 
 -----------------------------------------------
-* Building and installing *
-
+* Building and running *
+- cmake will run after the template is loaded provided cmake is in your PATH. If not, you will see an error message in the terminal
+and you will need to install cmake in your PATH.
+- In the Build menu in KDevelop, click on Build Project (or use the F8 shortcut) in order to build your project.
+- Run your project using the Build menu -> Execute Program. Note that default makes your program run in KDevelop integrated terminal. You can run your program in an external terminal by changing the project options (Project -> Project Options -> Run options and check at the bottom "Start in external terminal")
 -----------------------------------------------
 
+-----------------------------------------------
+* Useful link *
 
+CMake Documentation: http://www.cmake.org/HTML/Documentation.html
 
