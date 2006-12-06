@@ -1,4 +1,4 @@
-dataFiles = app.rb app.kdevelop app-Makefile app.filelist
+dataFiles = app.rb app.kdevelop app-Makefile app.filelist README
 templateName = qtruby
 
 ### no need to change below:

@@ -18,7 +18,7 @@ Comment[it]=Genera una semplice applicazione di "Hello World" con QtRuby
 Comment[sv]=Detta skapar ett enkelt Hello World-program i QtRuby
 Comment[tr]=Bu basit bir QtRuby Merhaba Dünya uygulaması yaratır.
 FileTemplates=rb,ShellStyle
-ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb,%{dest}/README
 Icon=qtruby.png
 Archive=qtruby.tar.gz
 
@@ -42,6 +42,11 @@ Dest=%{dest}/Makefile
 Type=install
 Source=%{src}/app.filelist
 Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
+
+[FILE5]
+Type=install
+Source=%{src}/README
+Dest=%{dest}/README
 
 [MSG]
 Type=message
