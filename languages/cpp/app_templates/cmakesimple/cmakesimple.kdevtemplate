@@ -11,7 +11,7 @@ Name[tr]=Merhaba Dünya Programı
 Name[zh_CN]=Hello world 程序
 Icon=cmakesimple.png
 Category=C++/CMake based projects
-Comment=Generates a simple Hello world program in C++ using the CMake build tool instead of the automake/autoconf/libtool combination. It requires cmake 2.1 (available from cmake cvs) or the upcoming cmake 2.2 release.
+Comment=Generates a simple Hello world program in C++ using the CMake build tool instead of the automake/autoconf/libtool combination. It requires cmake 2.1 or cmake 2.2.
 Comment[da]=Genererer et simpelt Goddag verden program i C++ ved brug af CMake byggeværktøjet i stedet for automake/autoconf/libtool kombinationen. Det kræver cmake 2.1 (tilgængelig fra cmake cvs) eller den fremtidige cmake 2.2 udgivelse.
 Comment[de]=Erstellt ein einfaches Hello-World-Programm in C++. Der Kompiliervorgang wird mit CMake anstelle der Kombination automake/autoconf/libtool durchgeführt und erfordert  cmake 2.1 (das über das CVS-Archiv von cmake verfügbar ist) oder die kommende Version cmake 2.2.
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s. See kompileeritakse CMake'i ehitamistööriistaga, mitte automake/autoconf/libtool'i kombinatsiooniga. Selleks on vajalik CMake 2.1 (saadaval CMake'i CVSis) või peatne CMake'i versioon 2.2.
@@ -21,7 +21,7 @@ Comment[sv]=Skapar ett enkelt Hello world-program i C++ med användning av byggv
 Comment[tr]=automake/autoconf/libtool birleşimi yerine CMake aracını kullanarak C++'da basit bir Merhaba Dünya programı yaratır. cmake 2.1( cmake cvs'inden edinilebilir) veya yakında gelecek olan 2.2 sürümüne ihtiyaç duyar.
 Comment[zh_CN]=生成一个 C++ 的 Hello world 程序。该程序使用 CMake 编译工具编译，而不是使用 automake/autoconf/libtool 的组合。该程序需要 cmake 2.1 (可从 cmake cvs 中获得)或即将发布的 cmake 2.2 版本。
 #FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=%{dest}/main.cpp
+ShowFilesAfterGeneration=%{dest}/main.cpp,%{dest}/README
 Archive=cmakesimple.tar.gz
 
 [FILE1]
@@ -34,6 +34,11 @@ Dest=%{dest}/CMakeLists.txt
 Type=install
 Source=%{src}/main.cpp
 Dest=%{dest}/main.cpp
+
+[FILE3]
+Type=install
+Source=%{src}/README
+Dest=%{dest}/README
 
 [CMAKE]
 Type=finishcmd

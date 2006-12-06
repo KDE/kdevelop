@@ -1,0 +1,23 @@
+-----------------------------------------------
+Kde templates quickstart
+Author: Anne-Marie Mahfouf
+Date: 2006-12-06
+-----------------------------------------------
+
+This README file explains you basic things for starting with
+this application template.
+
+-----------------------------------------------
+* REQUIREMENTS *
+- Qt version might be 3.3.4 or 3.3.5
+-  kdelibs 3.5 and kdelibs headers 3.5 (devel package) in order to build this template.
+- cmake (http://www.cmake.org/) version 2.1 or 2.2 in your PATH
+-----------------------------------------------
+
+-----------------------------------------------
+* Building and installing *
+
+-----------------------------------------------
+
+
+

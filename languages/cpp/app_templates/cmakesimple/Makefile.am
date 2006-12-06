@@ -1,4 +1,4 @@
-dataFiles = main.cpp cmakesimple.png CMakeLists.txt
+dataFiles = main.cpp cmakesimple.png CMakeLists.txt README
 templateName = cmakesimple
 
 ### no need to change below:
