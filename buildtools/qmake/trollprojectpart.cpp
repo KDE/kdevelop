@@ -727,8 +727,8 @@ void TrollProjectPart::buildBinDirs( QStringList & dirs ) const
     {
         QString m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
         if( !m_defaultQtDir.isEmpty() )
-            dirs << m_defaultQtDir;
-        dirs << ::getenv("QTDIR");
+            dirs << (m_defaultQtDir + QString( QChar( QDir::separator() ) ) + "bin" );
+        dirs << ( ::getenv("QTDIR") + QString( QChar( QDir::separator() ) ) + "bin" );
     }
     QStringList paths = QStringList::split(":",::getenv("PATH"));
     dirs += paths;

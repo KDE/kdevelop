@@ -90,8 +90,9 @@ void QtBuildConfig::buildBinDirs( QStringList & dirs ) const
     if( m_version == 3 )
     {
         if( !m_root.isEmpty() )
-            dirs << m_root;
-        dirs << ::getenv("QTDIR");
+            dirs << (m_root + QString( QChar( QDir::separator() ) ) + "bin");
+        dirs << (::getenv("QTDIR") + QString( QChar( QDir::separator() ) ) + "bin");
+    }
     QStringList paths = QStringList::split(":",::getenv("PATH"));
     dirs += paths;
     QString binpath = QDir::rootDirPath() + "bin";
