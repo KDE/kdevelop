@@ -28,7 +28,8 @@
       <version>4</version>
       <includestyle>4</includestyle>
       <designerintegration>ExternalDesigner</designerintegration>
-      <root>%{QTDIR}</root>
+      <qmake>%{QMAKE}</qmake>
+      <designer>%{DESIGNER}</designer>
     </qt>
   </kdevcppsupport>
   <kdevdoctreeview>

@@ -88,6 +88,9 @@ bool QtBuildConfig::isValidQtDir( const QString& path ) const
 void QtBuildConfig::buildBinDirs( QStringList & dirs ) const
 {
     if( m_version == 3 )
+    {
+        if( !m_root.isEmpty() )
+            dirs << m_root;
         dirs << ::getenv("QTDIR");
     QStringList paths = QStringList::split(":",::getenv("PATH"));
     dirs += paths;

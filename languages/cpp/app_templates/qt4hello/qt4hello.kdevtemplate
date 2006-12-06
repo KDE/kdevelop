@@ -41,9 +41,16 @@ Dest=%{dest}/src/ReadMe
 Type=message
 Comment=A Qt4/Qmake based application was created in %{dest}
 
-[QTDIR]
+[QMAKE]
 Type=value
 ValueType=QString
-Value=QTDIR
-Comment=Directory where Qt4 is installed.
+Value=QMAKE
+Comment=Absolute Path for QMake (Qt4).
+Default=
+
+[DESIGNER]
+Type=value
+ValueType=QString
+Value=DESIGNER
+Comment=Absolute Path for Designer (Qt4).
 Default=

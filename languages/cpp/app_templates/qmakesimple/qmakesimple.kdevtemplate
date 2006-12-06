@@ -67,3 +67,9 @@ ValueType=QString
 Value=QTDIR
 Comment=Directory where Qt3 is installed.
 Default=
+[QMAKE]
+Type=value
+ValueType=QString
+Value=QMAKE
+Comment=Absolute Path for QMake (Qt3).
+Default=

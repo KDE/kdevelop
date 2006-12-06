@@ -29,6 +29,7 @@
       <includestyle>3</includestyle>
       <designerintegration>KDevEmbeddedDesigner</designerintegration>
       <root>%{QTDIR}</root>
+      <qmake>%{QMAKE}</qmake>
     </qt>
   </kdevcppsupport>
   <kdevdoctreeview>
