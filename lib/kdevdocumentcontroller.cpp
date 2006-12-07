@@ -334,7 +334,7 @@ void KDevDocumentController::reloadDocument( KDevDocument* document )
 
         int i = 0;
         foreach ( KTextEditor::View * view, document->textDocument() ->textViews() )
-        view->setCursorPosition( cursors[ i++ ] );
+            view->setCursorPosition( cursors[ i++ ] );
     }
 }
 
@@ -890,6 +890,9 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
 {
     kDebug(9000) << k_funcinfo << endl;
     //Remove the current part from the xmlgui
+    kDebug( 9000 ) << k_funcinfo << "BEFORE" << "active part: "
+            << KDevCore::partController()->activePart() << " active document: "
+            << " " << activeDocument() << " document: " << document << endl;
     KDevCore::mainWindow() ->guiFactory() ->removeClient(
             KDevCore::partController() ->activePart() );
 
@@ -898,7 +901,7 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
     KDevCore::mainWindow() ->guiFactory() ->addClient(
             document->part() );
 
-    kDebug( 9000 ) << k_funcinfo << "active part: "
+    kDebug( 9000 ) << k_funcinfo << "AFTER" << "active part: "
         << KDevCore::partController()->activePart() << " active document: "
         << " " << activeDocument() << " document: " << document << endl;
 
