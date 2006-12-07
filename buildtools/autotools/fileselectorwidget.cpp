@@ -119,6 +119,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 	lo->addWidget(filterBox);
 
 	// slots and signals
+	connect( filter, SIGNAL( textChanged(const QString&) ), SLOT( slotFilterChanged(const QString&) ) );
 	connect( filter, SIGNAL( activated(const QString&) ), SLOT( slotFilterChanged(const QString&) ) );
 	connect( filter, SIGNAL( returnPressed(const QString&) ), SLOT( filterReturnPressed(const QString&) ) );
 
@@ -128,7 +129,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 	connect( forward, SIGNAL( clicked() ), dir, SLOT( forward() ) );
 
 	connect( cmbPath, SIGNAL( urlActivated( const KURL&  )), this,  SLOT( cmbPathActivated( const KURL& ) ));
-	connect( cmbPath, SIGNAL( returnPressed( const QString&  )), this,  SLOT( cmbPathReturnPressed( const QString& ) ));
+	//connect( cmbPath, SIGNAL( returnPressed( const QString&  )), this,  SLOT( cmbPathReturnPressed( const QString& ) ));
 	connect( dir, SIGNAL(urlEntered(const KURL&)), this, SLOT(dirUrlEntered(const KURL&)) );
 
 	connect( dir, SIGNAL(finishedLoading()), this, SLOT(dirFinishedLoading()) );
@@ -154,7 +155,6 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 
     filter->setHistoryItems ( list );
 
-//    dir->rereadDir();
 }
 
 
@@ -185,7 +185,7 @@ void FileSelectorWidget::filterReturnPressed ( const QString& nf )
 void FileSelectorWidget::slotFilterChanged( const QString & nf )
 {
   dir->setNameFilter( nf );
-  dir->rereadDir();
+  dir->updateDir();
 }
 
 void FileSelectorWidget::cmbPathActivated( const KURL& u )
