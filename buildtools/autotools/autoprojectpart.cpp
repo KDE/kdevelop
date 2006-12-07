@@ -231,6 +231,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
              this, SLOT(slotCommandFailed(const QString&)) );
 
     setWantautotools();
+
+
 }
 
 
@@ -663,7 +665,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 {
     if (partController()->saveAllFiles()==false)
        return; //user cancelled
-
+    kdDebug(9020) << "startMakeCommand:" << dir << ": "<< target << endl;
     m_buildCommand = constructMakeCommandLine(dir, target);
 
     if (withKdesu)
@@ -728,6 +730,7 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
                 while (ti);
             }
 
+            kdDebug(9020) << "queueInternalLibDependenciesBuild:" << tdir << ": "<< tname << endl;
             tcmd = constructMakeCommandLine(tdir, tname);
             if (!tcmd.isNull())
             {
@@ -783,6 +786,10 @@ void AutoProjectPart::buildTarget(QString relpath, TargetItem* titem)
     queueInternalLibDependenciesBuild(titem);
 
     // Calculate the "make" command line for the target
+    //QString relpath = dir.path().mid( projectDirectory().length() );
+    m_runProg=buildDirectory() + "/" + relpath+"/"+name;
+    kdDebug(9020) << "buildTarget:" << buildDirectory()<< endl;
+    kdDebug(9020) << "buildTarget:" << relpath << "  " << path << ": "<< name << " : " << m_runProg << endl;
     QString tcmd = constructMakeCommandLine( path, name );
 
     // Call make
@@ -914,6 +921,12 @@ void AutoProjectPart::slotConfigure()
 
 QString AutoProjectPart::makefileCvsCommand() const
 {
+    kdDebug(9020) << "makefileCvsCommand: runDirectory       :" << runDirectory() << ":" <<endl;
+    kdDebug(9020) << "makefileCvsCommand: topsourceDirectory :" << topsourceDirectory() << ":" <<endl;
+    kdDebug(9020) << "makefileCvsCommand: makeEnvironment    :" << makeEnvironment() << ":" <<endl;
+    kdDebug(9020) << "makefileCvsCommand: currentBuildConfig :" << currentBuildConfig() << ":" <<endl;
+
+
     QString cmdline = DomUtil::readEntry(*projectDom(), "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
@@ -1003,31 +1016,43 @@ void AutoProjectPart::slotExecute()
     partController()->saveAllFiles();
     QDomDocument &dom = *projectDom();
 
+    m_runProg=m_runProg.isEmpty()?mainProgram(false):m_runProg;
+
     bool _auto = false;
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
-        if ( DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram").isEmpty() )
+        if ( DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram").isEmpty() ){
         // If no Main Program was specified, build the active target
+            kdDebug(9020) << "slotExecute: before slotBuildActiveTarget" << endl;
             slotBuildActiveTarget();
-        else
+        }
+        else{
         // A Main Program was specified, build all targets because we don't know which is it
+            kdDebug(9020) << "slotExecute: before slotBuild" << endl;
             slotBuild();
+        }
         _auto = true;
     }
 
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autoinstall", false) && isDirty() ){
         m_executeAfterBuild = true;
         // Use kdesu??
-        if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autokdesu", false) )
+        if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autokdesu", false) ){
             //slotInstallWithKdesu assumes that it hasn't just been build...
+            kdDebug(9020) << "slotExecute: before startMakeCommand" << endl;
             _auto ? slotInstallWithKdesu() : startMakeCommand(buildDirectory(), QString::fromLatin1("install"), true);
-        else
+        }
+        else{
+            kdDebug(9020) << "slotExecute: before slotInstall" << endl;
             slotInstall();
+        }
         _auto = true;
     }
 
-    if ( _auto )
+    if ( _auto ){
+        m_runProg.truncate(0);
         return;
+    }
 
     if (appFrontend()->isRunning()) {
         if (KMessageBox::questionYesNo(m_widget, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application Already Running"), i18n("&Restart Application"), i18n("Do &Nothing")) == KMessageBox::No)
@@ -1036,12 +1061,13 @@ void AutoProjectPart::slotExecute()
         appFrontend()->stopApplication();
         return;
     }
-
+    kdDebug(9020) << "slotExecute: before slotExecute2" << endl;
     slotExecute2();
 }
 
 void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
 {
+    m_executeAfterBuild=true;
     partController()->saveAllFiles();
 
     bool is_dirty = false;
@@ -1053,15 +1079,17 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
             is_dirty = true;
     }
 
-
     if( DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && is_dirty )
     {
         connect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild(const QString&)) );
         connect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed(const QString&)) );
+
+        m_runProg=titem->name;
         m_executeTargetAfterBuild.first = dir;
         m_executeTargetAfterBuild.second = const_cast<TargetItem*>(titem);
 
         QString relpath = dir.path().mid( projectDirectory().length() );
+        kdDebug(9020) << "executeTarget: before buildTarget " << relpath << endl;
         buildTarget(relpath, const_cast<TargetItem*>(titem));
         return;
     }
@@ -1077,32 +1105,34 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
     QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
 
     program += " " + args;
-
+    kdDebug(9020) << "executeTarget:cmd=" << dir.path() << " " << program << endl;
     appFrontend()->startAppCommand(dir.path(), program ,inTerminal);
+    m_executeAfterBuild=false;
 
 }
 
 void AutoProjectPart::slotExecuteTargetAfterBuild(const QString& command)
 {
-
-if ( constructMakeCommandLine(m_executeTargetAfterBuild.first.path(), m_executeTargetAfterBuild.second->name) == command )
-{
-	disconnect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteAfterTargetBuild()) );
-	disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotExecuteAfterTargetBuildFailed()) );
-	executeTarget(m_executeTargetAfterBuild.first, m_executeTargetAfterBuild.second);
-}
+    kdDebug(9020) << "slotExecuteTargetAfterBuild " << command << endl;
+    if ( m_executeAfterBuild && constructMakeCommandLine(m_executeTargetAfterBuild.first.path(), m_executeTargetAfterBuild.second->name) == command )
+    {
+        disconnect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteAfterTargetBuild()) );
+        disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotExecuteAfterTargetBuildFailed()) );
+        kdDebug(9020) << "slotExecuteTargetAfterBuild " << endl;
+        executeTarget(m_executeTargetAfterBuild.first, m_executeTargetAfterBuild.second);
+    }
 
 }
 
 void AutoProjectPart::slotNotExecuteTargetAfterBuildFailed(const QString& command)
 {
-
-if ( constructMakeCommandLine(m_executeTargetAfterBuild.first.path(), m_executeTargetAfterBuild.second->name) == command )
-{
-	disconnect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild()) );
-	disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed()) );
-}
-
+    kdDebug(9020) << "executeTargetAfterBuildFailed" << endl;
+    if ( constructMakeCommandLine(m_executeTargetAfterBuild.first.path(), m_executeTargetAfterBuild.second->name) == command )
+    {
+        m_executeAfterBuild=false;
+        disconnect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild()) );
+        disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed()) );
+    }
 }
 
 
@@ -1132,25 +1162,30 @@ void AutoProjectPart::slotExecute2()
 {
     disconnect(appFrontend(), SIGNAL(processExited()), this, SLOT(slotExecute2()));
 
-    if (mainProgram(true).isEmpty())
-    // Do not execute non executable targets
+    if (m_runProg.isEmpty()){
+        // Do not execute non executable targets
         return;
+    }
 
     QString program = environString();
     // Adds the ./ that is necessary to execute the program in bash shells
-    if (!mainProgram(true).startsWith("/"))
+    if (!m_runProg.startsWith("/")){
         program += "./";
-    program += mainProgram(true);
+    }
+    program += m_runProg;
     program += " " + runArguments();
 
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
 
-    kdDebug(9020) << "runDirectory: <" << runDirectory() << ">" <<endl;
-    kdDebug(9020) << "environstr  : <" << environString() << ">" <<endl;
-    kdDebug(9020) << "mainProgram : <" << mainProgram(true) << ">" <<endl;
-    kdDebug(9020) << "runArguments: <" << runArguments() << ">" <<endl;
+    kdDebug(9020) << "slotExecute2: runDirectory: <" << runDirectory() << ">" <<endl;
+    kdDebug(9020) << "slotExecute2: environstr  : <" << environString() << ">" <<endl;
+    kdDebug(9020) << "slotExecute2: mainProgram : <" << mainProgram(true) << ">" <<endl;
+    kdDebug(9020) << "slotExecute2: runArguments: <" << runArguments() << ">" <<endl;
+    kdDebug(9020) << "slotExecute2: program     : <" << program << ">" <<endl;
 
     appFrontend()->startAppCommand(runDirectory(), program, inTerminal);
+    m_executeAfterBuild=false;
+    m_runProg.truncate(0);
 }
 
 
@@ -1225,13 +1260,12 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
 
     if( m_executeAfterBuild ){
         slotExecute();
-        m_executeAfterBuild = false;
     }
 }
 
 void AutoProjectPart::slotCommandFailed( const QString& /*command*/ )
 {
-    kdDebug(9020) << k_funcinfo << endl;
+    kdDebug(9020) << "slotCommandFinished " << k_funcinfo << endl;
 
     m_lastCompilationFailed = true;
     m_executeAfterBuild=false;

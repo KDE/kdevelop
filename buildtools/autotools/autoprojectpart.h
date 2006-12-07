@@ -132,6 +132,7 @@ private:
 	bool m_lastCompilationFailed;
 	bool m_isKDE;
 	QPair<QDir, TargetItem*> m_executeTargetAfterBuild;
+	QString m_runProg;
 
 	ConfigWidgetProxy * _configProxy;
 
