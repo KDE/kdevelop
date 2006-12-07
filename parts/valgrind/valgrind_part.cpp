@@ -47,7 +47,7 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
   m_widget = new ValgrindWidget( this );
   m_widget->setIcon( SmallIcon("fork") );
   m_widget->setCaption(i18n("Valgrind Output"));
-  
+
   QWhatsThis::add( m_widget, i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
     "use of uninitialized memory<br>"
     "reading/writing memory after it has been free'd<br>"
@@ -67,7 +67,7 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
 	       SLOT(slotExecCalltree()), actionCollection(), "tools_calltree" );
   action->setToolTip(i18n("Profile with KCachegrind"));
   action->setWhatsThis(i18n("<b>Profile with KCachegrind</b><p>Runs your program in calltree and then displays profiler information in KCachegrind."));
-  
+
   mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
 }
 
@@ -226,7 +226,9 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
 //  proc->setWorkingDirectory(KURL(exec).directory());
   proc->clearArguments();
 
-  DomUtil::PairList run_envvars = project()->runEnvironmentVars();
+  DomUtil::PairList run_envvars;
+  if (project())
+    run_envvars = project()->runEnvironmentVars();
 
   QStringList envVarList;
   DomUtil::PairList::ConstIterator it;
@@ -304,7 +306,7 @@ void ValgrindPart::processExited( KProcess* p )
     currentMessage = QString::null;
     lastPiece = QString::null;
     core()->running( this, false );
-    
+
     if (kcInfo.runKc)
     {
         KProcess *kcProc = new KProcess;
@@ -354,7 +356,7 @@ void ValgrindPart::savePartialProjectSession( QDomElement* el )
 
   QDomElement kcElem = domDoc.createElement( "kcachegrind" );
   kcElem.setAttribute( "path", _lastKcExec );
-    
+
   el->appendChild( execElem );
   el->appendChild( valElem );
   el->appendChild( ctElem );
