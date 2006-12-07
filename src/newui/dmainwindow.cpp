@@ -95,6 +95,8 @@ void DMainWindow::addWidget(QWidget *widget, const QString &title)
 
 void DMainWindow::addWidget(DTabWidget *tab, QWidget *widget, const QString &title)
 {
+    static QPixmap emptyPixmap;
+
     int idx = -1;
     if (m_openTabAfterCurrent && (tab->count() > 0))
         idx = tab->currentPageIndex() + 1;
@@ -105,7 +107,7 @@ void DMainWindow::addWidget(DTabWidget *tab, QWidget *widget, const QString &tit
         tab->insertTab(widget, icons, title, idx);
     }
     else
-        tab->insertTab(widget, title, idx);
+        tab->insertTab(widget, emptyPixmap, title, idx);
     m_widgets.append(widget);
     m_widgetTabs[widget] = tab;
     widget->installEventFilter(this);
