@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>364</width>
-            <height>283</height>
+            <width>346</width>
+            <height>276</height>
         </rect>
     </property>
     <property name="caption">
@@ -82,13 +82,18 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>A&amp;dd</string>
+                <string>&amp;Add</string>
             </property>
             <property name="accel">
-                <string>Alt+D</string>
+                <string>Alt+A</string>
             </property>
         </widget>
-        <spacer row="3" column="1" rowspan="1" colspan="2">
+        <widget class="KURLRequester" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>qtUrl</cstring>
+            </property>
+        </widget>
+        <spacer row="3" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>spacer2</cstring>
             </property>
@@ -100,17 +105,31 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>193</width>
+                    <width>300</width>
                     <height>21</height>
                 </size>
             </property>
         </spacer>
-        <widget class="KURLRequester" row="2" column="0" rowspan="1" colspan="2">
+        <widget class="QPushButton" row="2" column="3">
             <property name="name">
-                <cstring>qtUrl</cstring>
+                <cstring>removeUrlButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Remove</string>
+            </property>
+            <property name="accel">
+                <string>Alt+R</string>
             </property>
         </widget>
-        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="3">
+        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>qtListBox</cstring>
             </property>

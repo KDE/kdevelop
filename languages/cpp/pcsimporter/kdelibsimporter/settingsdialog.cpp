@@ -14,8 +14,8 @@
 
 #include <klistbox.h>
 #include <kcombobox.h>
-#include <kapplication.h> 
-#include <kstandarddirs.h> 
+#include <kapplication.h>
+#include <kstandarddirs.h>
 #include <kurlrequester.h>
 #include <kdebug.h>
 #include <klineedit.h>
@@ -41,21 +41,21 @@ QListBoxItem* QListBox_selectedItem( QListBox* cpQListBox )
 SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
 : SettingsDialogBase( parent, name, fl )
 {
-	KApplication::kApplication()->dirs()->addResourceType("include","include"); 
+	KApplication::kApplication()->dirs()->addResourceType("include","include");
 	QStringList kdedirs=KApplication::kApplication()->dirs()->findDirs("include","");
-	for( QStringList::Iterator it=kdedirs.begin(); it!=kdedirs.end();    ++it ) 
-	{ 
+	for( QStringList::Iterator it=kdedirs.begin(); it!=kdedirs.end();    ++it )
+	{
 		QString kdedir = *it;
 		if ( !kdedir.isEmpty() && isValidKDELibsDir( kdedir ) )
 			if ( !kdeListBox->findItem( kdedir, ExactMatch ) )
 				kdeListBox->insertItem( kdedir );
 	}
-	
+
 	kdeUrl->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-	
+
 	connect( addUrlButton, SIGNAL(clicked()), this, SLOT(addUrlButton_clicked()) );
 }
-	
+
 SettingsDialog::~SettingsDialog()
 {}
 
@@ -77,7 +77,7 @@ QString SettingsDialog::kdeDir( ) const
 void SettingsDialog::addUrlButton_clicked()
 {
 	kdDebug(9000) << k_funcinfo << endl;
-	
+
 	if ( isValidKDELibsDir( kdeUrl->url() ) )
 	{
 		kdeListBox->insertItem( kdeUrl->url() );
@@ -90,7 +90,19 @@ void SettingsDialog::addUrlButton_clicked()
 	else
 	{
 		KMessageBox::error( this, i18n("This doesn't appear to be a valid KDE include directory.\nPlease select a different directory."), i18n("Invalid Directory") );
-	}	
+	}
+}
+
+void SettingsDialog::removeUrlButton_clicked( )
+{
+    kdeListBox->removeItem( kdeListBox->currentItem() );
+    if( kdeListBox->count() > 0 )
+    {
+        kdeListBox->setSelected( kdeListBox->firstItem(), true );
+    }else
+    {
+        emit enabled( false );
+    }
 }
 
 

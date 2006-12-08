@@ -45,7 +45,7 @@ SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
 	qtdirs.push_back( "/usr/lib/qt/include" );
 	qtdirs.push_back( "/usr/share/qt3/include" );
 	qtdirs.push_back( "/usr/qt/3/include" );	// gentoo style
-	
+
 	for ( QStringList::Iterator it = qtdirs.begin(); it != qtdirs.end(); ++it )
 	{
 		QString qtdir = *it;
@@ -53,10 +53,11 @@ SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
 			if ( !qtListBox->findItem( qtdir, ExactMatch ) )
 				qtListBox->insertItem( qtdir );
 	}
-	
+
 	qtUrl->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-	
+
 	connect( addUrlButton, SIGNAL(clicked()), this, SLOT(addUrlButton_clicked()) );
+    connect( removeUrlButton, SIGNAL(clicked()), this, SLOT(removeUrlButton_clicked()) );
 }
 
 SettingsDialog::~SettingsDialog()
@@ -98,10 +99,22 @@ QString SettingsDialog::configuration( ) const
 	return qtConfiguration->currentText();
 }
 
+void SettingsDialog::removeUrlButton_clicked( )
+{
+    qtListBox->removeItem( qtListBox->currentItem() );
+    if( qtListBox->count() > 0 )
+    {
+        qtListBox->setSelected( qtListBox->firstItem(), true );
+    }else
+    {
+        emit enabled( false );
+    }
+}
+
 void SettingsDialog::addUrlButton_clicked( )
 {
 	kdDebug(9000) << k_funcinfo << endl;
-	
+
 	if ( isValidQtDir( qtUrl->url() ) )
 	{
 		qtListBox->insertItem( qtUrl->url() );
@@ -115,9 +128,9 @@ void SettingsDialog::addUrlButton_clicked( )
 	{
 		KMessageBox::error( this, i18n("This doesn't appear to be a valid Qt3 include directory.\nPlease select a different directory."), i18n("Invalid Directory") );
 	}
-	
+
 }
 
-#include "settingsdialog.moc" 
+#include "settingsdialog.moc"
 //kate: indent-mode csands; tab-width 4; space-indent off;
 

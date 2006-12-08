@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>352</width>
+            <width>403</width>
             <height>266</height>
         </rect>
     </property>
@@ -25,11 +25,6 @@
             </property>
             <property name="text">
                 <string>KDE include directories:</string>
-            </property>
-        </widget>
-        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>kdeListBox</cstring>
             </property>
         </widget>
         <widget class="QComboBox" row="3" column="1">
@@ -53,23 +48,6 @@
                 <string>Decide if you want to restrict the Code Completion database to only the base kdelibs API or the entire KDE include structure</string>
             </property>
         </widget>
-        <spacer row="3" column="2" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>120</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLabel" row="3" column="0">
             <property name="name">
                 <cstring>textLabel1</cstring>
@@ -108,6 +86,47 @@
                 <string>Alt+A</string>
             </property>
         </widget>
+        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>kdeListBox</cstring>
+            </property>
+        </widget>
+        <spacer row="3" column="2" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>220</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="2" column="4">
+            <property name="name">
+                <cstring>removeUrlButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Remove</string>
+            </property>
+            <property name="accel">
+                <string>Alt+R</string>
+            </property>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -128,9 +147,9 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistbox.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klistbox.h</includehint>
 </includehints>
 </UI>
