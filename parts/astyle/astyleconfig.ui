@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>771</width>
-            <height>470</height>
+            <width>711</width>
+            <height>722</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -30,6 +30,14 @@
         <widget class="QTabWidget" row="0" column="0">
             <property name="name">
                 <cstring>ConfigTabs</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -241,6 +249,9 @@ Settings/Configure Kdevelop/Formatting.</string>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
+                            <property name="spacing">
+                                <number>20</number>
+                            </property>
                             <widget class="QCheckBox" row="2" column="0">
                                 <property name="name">
                                     <cstring>Fill_EmptyLines</cstring>
@@ -252,23 +263,6 @@ Settings/Configure Kdevelop/Formatting.</string>
                                     <string>Fill empty lines with the white space of their previous lines.</string>
                                 </property>
                             </widget>
-                            <spacer row="1" column="0">
-                                <property name="name">
-                                    <cstring>spacer5</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>240</width>
-                                        <height>21</height>
-                                    </size>
-                                </property>
-                            </spacer>
                             <widget class="QLayoutWidget" row="0" column="0">
                                 <property name="name">
                                     <cstring>layout2</cstring>
@@ -413,51 +407,88 @@ The number of spaces per tab is controled by the editor.</string>
                         <property name="title">
                             <string>Brackets</string>
                         </property>
-                        <grid>
+                        <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QRadioButton" row="0" column="0">
+                            <property name="spacing">
+                                <number>20</number>
+                            </property>
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>Brackets_None</cstring>
+                                    <cstring>layout2</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>&amp;No Change</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>The brackets will not be changed.</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>Brackets_Break</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Break</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Break brackets from pre-block code (i.e. ANSI C/C++ style).</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="2" column="0">
-                                <property name="name">
-                                    <cstring>Brackets_Attach</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Attach</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Attach brackets to pre-block code (i.e. Java/K&amp;R style).
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>Brackets_None</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;No Change</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+N</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>The brackets will not be changed.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>Brackets_Break</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Break</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+B</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Break brackets from pre-block code (i.e. ANSI C/C++ style).</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>Brackets_Attach</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Attach</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Attach brackets to pre-block code (i.e. Java/K&amp;R style).
 See also Formatting/Blocks/Break if-else</string>
-                                </property>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>Brackets_Linux</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Linu&amp;x style</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+X</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Break brackets from class/function declarations, 
+but attach brackets to pre-block command statements.</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
                             </widget>
-                            <widget class="QCheckBox" row="5" column="0">
+                            <widget class="QCheckBox">
                                 <property name="name">
                                     <cstring>Brackets_CloseHeaders</cstring>
                                 </property>
@@ -472,36 +503,7 @@ See also Formatting/Blocks/Break if-else</string>
 from their immediately preceding closing brackets.</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton" row="3" column="0">
-                                <property name="name">
-                                    <cstring>Brackets_Linux</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Linu&amp;x style</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Break brackets from class/function declarations, 
-but attach brackets to pre-block command statements.</string>
-                                </property>
-                            </widget>
-                            <spacer row="4" column="0">
-                                <property name="name">
-                                    <cstring>spacer6</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>183</width>
-                                        <height>31</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </grid>
+                        </vbox>
                     </widget>
                 </grid>
             </widget>
@@ -918,8 +920,8 @@ multiple single-statement lines.</string>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>5</vsizetype>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
