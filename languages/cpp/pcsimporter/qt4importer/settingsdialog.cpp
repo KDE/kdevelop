@@ -56,7 +56,6 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
 	qtUrl->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
 	connect( addUrlButton, SIGNAL(clicked()), this, SLOT(addUrlButton_clicked()) );
-    connect( removeUrlButton, SIGNAL(clicked()), this, SLOT(removeUrlButton_clicked()) );
 }
 
 SettingsDialog::~SettingsDialog()
@@ -71,15 +70,6 @@ void SettingsDialog::slotSelectionChanged(QListBoxItem* item)
         return;
     }
 
-    QDir dir( qtDir() );
-    QStringList qconfigFileList = dir.entryList( "qconfig-*.h" );
-    qtConfiguration->clear();
-    QRegExp rx( "qconfig-(\\w+)\\.h" );
-    for( QStringList::Iterator it=qconfigFileList.begin(); it!=qconfigFileList.end(); ++it )
-    {
-        (void) rx.exactMatch( *it );
-        qtConfiguration->insertItem( rx.cap(1) );
-    }
 
     emit enabled( true );
 }
@@ -96,7 +86,7 @@ QString SettingsDialog::qtDir( ) const
 
 QString SettingsDialog::configuration( ) const
 {
-    return qtConfiguration->currentText();
+    return "";
 }
 
 void SettingsDialog::addUrlButton_clicked( )
@@ -116,18 +106,6 @@ void SettingsDialog::addUrlButton_clicked( )
 	{
 		KMessageBox::error( this, i18n("This doesn't appear to be a valid Qt4 include directory.\nPlease select a different directory."), i18n("Invalid Directory") );
 	}
-}
-
-void SettingsDialog::removeUrlButton_clicked( )
-{
-    qtListBox->removeItem( qtListBox->currentItem() );
-    if( qtListBox->count() > 0 )
-    {
-        qtListBox->setSelected( qtListBox->firstItem(), true );
-    }else
-    {
-        emit enabled( false );
-    }
 }
 
 

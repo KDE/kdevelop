@@ -57,7 +57,6 @@ SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
 	qtUrl->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
 	connect( addUrlButton, SIGNAL(clicked()), this, SLOT(addUrlButton_clicked()) );
-    connect( removeUrlButton, SIGNAL(clicked()), this, SLOT(removeUrlButton_clicked()) );
 }
 
 SettingsDialog::~SettingsDialog()
@@ -98,19 +97,6 @@ QString SettingsDialog::configuration( ) const
 {
 	return qtConfiguration->currentText();
 }
-
-void SettingsDialog::removeUrlButton_clicked( )
-{
-    qtListBox->removeItem( qtListBox->currentItem() );
-    if( qtListBox->count() > 0 )
-    {
-        qtListBox->setSelected( qtListBox->firstItem(), true );
-    }else
-    {
-        emit enabled( false );
-    }
-}
-
 void SettingsDialog::addUrlButton_clicked( )
 {
 	kdDebug(9000) << k_funcinfo << endl;

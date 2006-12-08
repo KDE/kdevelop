@@ -37,7 +37,6 @@ protected:
 protected slots:
   /*$PROTECTED_SLOTS$*/
 	void addUrlButton_clicked();
-    void removeUrlButton_clicked();
 };
 
 #endif

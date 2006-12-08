@@ -24,7 +24,8 @@
                 <cstring>textLabel1_2</cstring>
             </property>
             <property name="text">
-                <string>KDE include directories:</string>
+                <string>KDE include directories:
+Only the selected entry will be used</string>
             </property>
         </widget>
         <widget class="QComboBox" row="3" column="1">
@@ -86,12 +87,12 @@
                 <string>Alt+A</string>
             </property>
         </widget>
-        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="5">
+        <widget class="KListBox" row="1" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>kdeListBox</cstring>
             </property>
         </widget>
-        <spacer row="3" column="2" rowspan="1" colspan="3">
+        <spacer row="3" column="2" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -108,25 +109,6 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="2" column="4">
-            <property name="name">
-                <cstring>removeUrlButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Remove</string>
-            </property>
-            <property name="accel">
-                <string>Alt+R</string>
-            </property>
-        </widget>
     </grid>
 </widget>
 <customwidgets>

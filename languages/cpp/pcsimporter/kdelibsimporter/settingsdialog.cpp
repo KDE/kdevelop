@@ -93,18 +93,6 @@ void SettingsDialog::addUrlButton_clicked()
 	}
 }
 
-void SettingsDialog::removeUrlButton_clicked( )
-{
-    kdeListBox->removeItem( kdeListBox->currentItem() );
-    if( kdeListBox->count() > 0 )
-    {
-        kdeListBox->setSelected( kdeListBox->firstItem(), true );
-    }else
-    {
-        emit enabled( false );
-    }
-}
-
 
 #include "settingsdialog.moc"
 //kate: indent-mode csands; tab-width 4; space-indent off;
