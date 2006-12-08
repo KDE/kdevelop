@@ -1,7 +1,6 @@
 # KDE Config File
 [General]
 Name=Ruby On Rails
-Name[it]=Ruby su Rails
 Name[sv]=Ruby on Rails
 Icon=rails.png
 Category=Ruby
@@ -15,7 +14,7 @@ Comment[eu]=Ruby On Rails proiektu bat sortzen du.
 Comment[fa]=یک پروژۀ Ruby On Rails تولید می‌کند
 Comment[fr]=Génère un projet Ruby On Rails
 Comment[hu]=Létrehoz egy Ruby On Rails-projektet
-Comment[it]=Genera un progetto Ruby su Rails
+Comment[it]=Genera un progetto Ruby On Rails
 Comment[ja]=Ruby On Rails プロジェクトを作製します
 Comment[nds]=Stellt en eenfach "Ruby-On-Rails"-Projekt op
 Comment[nl]=Genereert een Ruby On Rails-project.
@@ -49,7 +48,7 @@ Comment[eu]=Ruby On Rails proiektu bat sortu da hemen: %{dest}.
 Comment[fa]=یک پروژۀ Ruby On Rails در %{dest} ایجاد شد
 Comment[fr]=Un projet Ruby On Rails a été créé dans %{dest}
 Comment[hu]=Létrejött egy Ruby On Rails-projekt itt: %{dest}
-Comment[it]=È stato creato un progetto Ruby su Rails in %{dest}
+Comment[it]=È stato creato un progetto Ruby On Rails in %{dest}
 Comment[ja]=Ruby On Rails プロジェクトを %{dest} に生成しました
 Comment[nds]=In %{dest} wöör en eenfach "Ruby-On-Rails"-Projekt opstellt.
 Comment[nl]=Een eenvoudig Ruby On Rails-project is aangemaakt in %{dest}.
