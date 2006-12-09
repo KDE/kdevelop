@@ -30,6 +30,7 @@ Simple LALR parser which builds the syntax tree (see @ref QMake::AST).
 #include "qmakeast.h"
 #include <QtCore/QStack>
 #include <QtCore/QString>
+#include <kdebug.h>
 
 #define YYSTYPE_IS_DECLARED
 
@@ -52,7 +53,7 @@ typedef Result YYSTYPE;
 
 void yyerror(const char* str)
 {
-    printf("%s\n", str);
+    kDebug() << str << endl;
 }
 
 int yylex();
@@ -93,26 +94,35 @@ statement: comment
     ;
 
 function_scope: ws functioncall ws LCURLY ws newline statements ws RCURLY ws NEWLINE
-    | ws functioncall ws COLON ws statement ws NEWLINE
+    | ws functioncall ws COLON ws statement
+    | ws functioncall ws NEWLINE
     ;
 
 newline: NEWLINE
     |
     ;
 
-variable_assignment: ws IDENTIFIER ws op values comment NEWLINE
+variable_assignment: ws IDENTIFIER ws op values WS COMMENT NEWLINE
+    | ws IDENTIFIER ws op values COMMENT NEWLINE
     | ws IDENTIFIER ws op values NEWLINE
     ;
 
 values: values WS value
-    | values WS CONT
-    | values CONT
     | values WS braceenclosedval
     | values WS quotedval
+    | values WS cont
+    | values cont
+    | values quotedval
     | ws braceenclosedval
     | ws quotedval
     | ws value
     | ws CONT
+    ;
+
+cont: CONT
+    | CONT value
+    | CONT braceenclosedval
+    | CONT quotedval
     ;
 
 braceenclosedval: LBRACE wsvalues RBRACE SEMICOLON
@@ -120,6 +130,7 @@ braceenclosedval: LBRACE wsvalues RBRACE SEMICOLON
     ;
 
 quotedval: QUOTE wsvalues QUOTE
+    ;
 
 value: value IDENTIFIER
     | value SPECIALCHAR

@@ -35,7 +35,7 @@ void ParseTest::successSimpleProject()
     QFETCH( QString, project );
     QMake::ProjectAST* a;
     int ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( 0 == 0 );
+    QVERIFY( ret == 0 );
 }
 
 void ParseTest::successSimpleProject_data()
@@ -50,7 +50,7 @@ void ParseTest::failSimpleProject()
     QFETCH( QString, project );
     QMake::ProjectAST* a;
     int ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( 1 != 0 );
+    QVERIFY( ret != 0 );
 }
 
 void ParseTest::failSimpleProject_data()
@@ -64,7 +64,7 @@ void ParseTest::successFullProject()
     QFETCH( QString, project );
     QMake::ProjectAST* a;
     int ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( 0 == 0 );
+    QVERIFY( ret == 0 );
 }
 
 void ParseTest::successFullProject_data()
@@ -82,7 +82,7 @@ void ParseTest::successFullProject_data()
         "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) {  \n"
         "FOO = bar\n"
         "}\n"
-        "!do()";
+        "!do()\n";
 }
 
 void ParseTest::failFullProject()
@@ -90,7 +90,7 @@ void ParseTest::failFullProject()
     QFETCH( QString, project );
     QMake::ProjectAST* a;
     int ret = QMake::Parser::parseString( project, &a );
-    QVERIFY( 1 != 0);
+    QVERIFY( ret != 0);
 }
 
 void ParseTest::failFullProject_data()
