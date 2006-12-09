@@ -32,94 +32,41 @@ int openbrace;
 %option yylineno
 %option debug
 
-%x varvalue
-%x funcargs
-ws            [ \t]*
+ws            [ \t\f]*
 letter        [a-zA-Z]
 digit         [0-9]
-varval     [^\n\"\\{(})=$# \t|:]
-funcargval [^\n\"\\{(})=$# \t|:,]
+newline       ("\n"|"\r\n"|"\r")
+specialchar   ("@"|"%"|"&"|"^"|"\'"|"<"|"?"|">"|"/"|"+"|"-"|"*"|"~"|".")
+identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 
 %%
 
-<varvalue,funcargs,INITIAL>{ws}        {
-                yylval.value = yytext; return WS;
-            }
-
-({letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}("+"|"="|"-"|"*"|"~") {
-                yylval.value = yytext;
-                yylval.value = yylval.value.left( yylval.value.length()-1 );
-                yyless( yylval.value.length() );
-                return VARIABLENAME;
-            }
-
-("!"|{letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}(":"|"{") {
-                yylval.value = yytext;
-                yylval.value = yylval.value.left( yylval.value.length()-1 );
-                yyless( yylval.value.length() );
-                return SCOPENAME;
-            }
-
-("!"|{letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
-                yylval.value = yytext;
-                yylval.value = yylval.value.left( yylval.value.length()-1 );
-                unput('(');
-                openbrace = 0;
-                BEGIN(funcargs);
-                return FUNCTIONNAME;
-            }
-
-<funcargs>("!"|{letter}|{digit}|"_")({letter}|{digit}|"_"|".")*{ws}"(" {
-                yylval.value = yytext;
-                yylval.value = yylval.value.left( yylval.value.length()-1 );
-                unput('(');
-                BEGIN(funcargs);
-                return FUNCTIONNAME;
-            }
-
-"+="        { BEGIN(varvalue); yylval.value = yytext; return PLUSEQ; }
-"-="        { BEGIN(varvalue); yylval.value = yytext; return MINUSEQ; }
-"="         { BEGIN(varvalue); yylval.value = yytext; return EQUAL; }
-"*="        { BEGIN(varvalue); yylval.value = yytext; return STAREQ; }
-"~="        { BEGIN(varvalue); yylval.value = yytext; return TILDEEQ; }
-
-<varvalue,INITIAL>"\n"  { BEGIN(INITIAL); yylval.value = yytext; return NEWLINE; }
-
-<varvalue>"\\"{ws}"\n"  {yylval.value = yytext; return CONT;}
-<varvalue>{varval}+     { yylval.value = yytext; return VARVAL; }
-<varvalue,funcargs>"$"  { yylval.value = yytext; return DOLLAR; }
-
-<varvalue>"(" { yylval.value = yytext; return LBRACE; }
-<varvalue>")" { yylval.value = yytext; return RBRACE; }
-<varvalue>"}" { yylval.value = yytext; return RCURLY; }
-<varvalue>"{" { yylval.value = yytext; return LCURLY; }
-
-<varvalue,funcargs>"\""     { yylval.value = yytext; return QUOTE; }
-<varvalue,INITIAL>"#"[^\n]* { yylval.value = yytext; return COMMENT;}
-
-<varvalue,funcargs>{ws}","{ws}  { yylval.value = yytext; return COMMA; }
-<funcargs>{funcargval}+         { yylval.value = yytext; return FUNCARGVAL; }
-
-<funcargs>{ws}"("       {
-                            openbrace++;
-                            yylval.value = yytext;
-                            return LBRACE;
-                        }
-<funcargs>{ws}")"       {
-                            openbrace--;
-                            if( openbrace <= 0 )
-                                BEGIN(INITIAL);
-                            yylval.value = yytext;
-                            return RBRACE;
-                        }
-
-<varvalue>":"       { yylval.value = yytext; return COLON; }
-<INITIAL>{ws}":"    { BEGIN(INITIAL); yylval.value = yytext; return COLON; }
-
-<funcargs,INITIAL>{ws}"}" { yylval.value = yytext; return RCURLY; }
-<funcargs,INITIAL>{ws}"{" { yylval.value = yytext; return LCURLY; }
-
-"|"         { yylval.value = yytext; return OR; }
+{ws}            { yylval.value = yytext; return WS; }
+"$"             { yylval.value = yytext; return DOLLAR; }
+"{"             { yylval.value = yytext; return LCURLY; }
+"}"             { yylval.value = yytext; return RCURLY; }
+"("             { yylval.value = yytext; return LBRACE; }
+")"             { yylval.value = yytext; return RBRACE; }
+"["             { yylval.value = yytext; return LBRACKET; }
+"]"             { yylval.value = yytext; return RBRACKET; }
+"+="            { yylval.value = yytext; return PLUSEQ; }
+"~="            { yylval.value = yytext; return TILDEEQ; }
+"-="            { yylval.value = yytext; return MINUSEQ; }
+"*="            { yylval.value = yytext; return STAREQ; }
+"="             { yylval.value = yytext; return EQUAL; }
+":"             { yylval.value = yytext; return COLON; }
+","             { yylval.value = yytext; return COMMA; }
+"!"             { yylval.value = yytext; return EXCLAM; }
+{specialchar}   { yylval.value = yytext; return SPECIALCHAR; }
+"_"             { yylval.value = yytext; return UNDERSCORE; }
+"|"             { yylval.value = yytext; return OR; }
+{identifier}    { yylval.value = yytext; return IDENTIFIER; }
+"\\"{newline}   { yylval.value = yytext; return CONT; }
+"#"[^\n]*       { yylval.value = yytext; return COMMENT; }
+"\""            { yylval.value = yytext; return QUOTE; }
+^{ws}*{newline} { yylval.value = yytext; return EMPTYLINE; }
+{newline}       { yylval.value = yytext; return NEWLINE; }
+";"             { yylval.value = yytext; return SEMICOLON; }
 
 %%
 
