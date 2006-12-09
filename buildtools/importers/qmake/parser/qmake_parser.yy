@@ -112,7 +112,6 @@ values: values WS value
     | values WS quotedval
     | values WS cont
     | values cont
-    | values quotedval
     | ws braceenclosedval
     | ws quotedval
     | ws value
