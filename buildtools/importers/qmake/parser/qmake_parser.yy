@@ -53,7 +53,7 @@ typedef Result YYSTYPE;
 
 void yyerror(const char* str)
 {
-    kDebug() << str << endl;
+   printf("%s\n", str); 
 }
 
 int yylex();
