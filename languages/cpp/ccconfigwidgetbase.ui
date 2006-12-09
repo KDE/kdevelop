@@ -398,7 +398,9 @@ and create a significant delay.</string>
                                     <string>Alt+I</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Try to locate all included files and preprocess them. This makes macros work correctly.</string>
+                                    <string>Try to locate all included files and preprocess them. This makes macros work correctly.
+Note: Having all the system directories listed here may cause Kdevelop to be
+slow.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
@@ -499,7 +501,7 @@ and create a significant delay.</string>
                                             <cstring>removePCSButton</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Remove</string>
+                                            <string>&amp;Delete</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1473,8 +1475,6 @@ you right click on a variable in a header file.</string>
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
