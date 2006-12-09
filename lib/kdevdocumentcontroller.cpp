@@ -620,7 +620,11 @@ void KDevDocumentController::slotForwardAboutToShow( )
     if ( m_forwardHistory.isEmpty() )
         return ;
 
-    for ( int i = 0; i < 10 || i < m_forwardHistory.count(); ++i )
+    int maxCount = 10;
+    if( m_forwardHistory.count() < maxCount )
+        maxCount = m_forwardHistory.count();
+
+    for ( int i = 0; i < maxCount; ++i )
     {
         HistoryEntry entry = m_forwardHistory.at( i );
         QAction* action = popup->addAction( entry.url.fileName()
