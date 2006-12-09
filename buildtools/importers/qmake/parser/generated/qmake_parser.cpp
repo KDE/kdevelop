@@ -215,7 +215,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 219 "/d/kde/src/trunk/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
+#line 219 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
 
 #ifdef short
 # undef short
@@ -1916,7 +1916,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1920 "/d/kde/src/trunk/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
+#line 1920 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

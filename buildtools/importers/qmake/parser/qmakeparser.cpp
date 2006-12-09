@@ -46,7 +46,7 @@ namespace QMake
             return 1;
         }
         printf("Parsing\n");
-//         yydebug = 1;
+        yydebug = 1;
         int ret = yyparse();
         printf("Parsed: %d\n", ret);
         *ast = project;
