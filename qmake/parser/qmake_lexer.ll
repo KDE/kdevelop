@@ -32,7 +32,7 @@ int openbrace;
 %option yylineno
 %option debug
 
-ws            [ \t\f]*
+ws            [ \t\f]
 letter        [a-zA-Z]
 digit         [0-9]
 newline       ("\n"|"\r\n"|"\r")
@@ -41,7 +41,7 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 
 %%
 
-{ws}            { yylval.value = yytext; return WS; }
+{ws}+           { yylval.value = yytext; return WS; }
 "$"             { yylval.value = yytext; return DOLLAR; }
 "{"             { yylval.value = yytext; return LCURLY; }
 "}"             { yylval.value = yytext; return RCURLY; }

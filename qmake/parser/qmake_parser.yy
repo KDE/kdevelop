@@ -93,18 +93,18 @@ statement: comment
     | function_scope
     ;
 
-function_scope: ws functioncall ws LCURLY ws newline statements ws RCURLY ws NEWLINE
-    | ws functioncall ws COLON ws statement
-    | ws functioncall ws NEWLINE
+function_scope: WS functioncall WS LCURLY WS newline statements WS RCURLY WS NEWLINE
+    | WS functioncall WS COLON WS statement
+    | WS functioncall WS NEWLINE
     ;
 
 newline: NEWLINE
     |
     ;
 
-variable_assignment: ws IDENTIFIER ws op values WS COMMENT NEWLINE
-    | ws IDENTIFIER ws op values COMMENT NEWLINE
-    | ws IDENTIFIER ws op values NEWLINE
+variable_assignment: WS IDENTIFIER WS op values WS COMMENT NEWLINE
+    | WS IDENTIFIER WS op values COMMENT NEWLINE
+    | WS IDENTIFIER WS op values NEWLINE
     ;
 
 values: values WS value
@@ -112,10 +112,10 @@ values: values WS value
     | values WS quotedval
     | values WS cont
     | values cont
-    | ws braceenclosedval
-    | ws quotedval
-    | ws value
-    | ws CONT
+    | WS braceenclosedval
+    | WS quotedval
+    | WS value
+    | WS CONT
     ;
 
 cont: CONT
@@ -147,8 +147,8 @@ value: value IDENTIFIER
     | DOLLAR LBRACE IDENTIFIER RBRACE
     ;
 
-functioncall: IDENTIFIER ws LBRACE functionargs RBRACE
-    | EXCLAM IDENTIFIER ws LBRACE functionargs RBRACE
+functioncall: IDENTIFIER WS LBRACE functionargs RBRACE
+    | EXCLAM IDENTIFIER WS LBRACE functionargs RBRACE
     ;
 
 functionargs: functionargs COMMA functionarg
@@ -156,8 +156,8 @@ functionargs: functionargs COMMA functionarg
     |
     ;
 
-functionarg: ws fnvalue ws
-    | ws DOLLAR DOLLAR functioncall ws
+functionarg: WS fnvalue WS
+    | WS DOLLAR DOLLAR functioncall WS
     ;
 
 fnvalue: fnvalue value
@@ -166,7 +166,7 @@ fnvalue: fnvalue value
 
 
 wsvalues: wsvalues WS value
-    | ws value
+    | WS value
     ;
 
 op: EQUAL
@@ -176,11 +176,7 @@ op: EQUAL
     | TILDEEQ
     ;
 
-ws: ws WS
-    |
-    ;
-
-comment: ws COMMENT NEWLINE
+comment: WS COMMENT NEWLINE
     ;
 
 %%
