@@ -5,12 +5,17 @@
 #include <qtabwidget.h>
 #include <qmultilineedit.h>
 #include <qbuttongroup.h>
+#include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdevcore.h>
-
+#include <kprogress.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <qlineedit.h>
 
 AStyleWidget::AStyleWidget(AStylePart * part, bool global, QWidget *parent, const char *name)
     : AStyleConfig(parent, name), m_part(part), isGlobal(global)
@@ -51,16 +56,28 @@ AStyleWidget::AStyleWidget(AStylePart * part, bool global, QWidget *parent, cons
   connect(Keep_Statements, SIGNAL(clicked()), this, SLOT(styleChanged()));
   connect(Keep_Blocks, SIGNAL(clicked()), this, SLOT(styleChanged()));
 
+
   QMap<QString, QVariant> option;
   if ( isGlobal){
 	Style_Global->setEnabled(false);
 	Style_Global->hide();
+	GeneralExtension->hide();
+	GeneralFormatFiles->hide();
+	FrameSelect->hide();
+	FrameFilesFormat->hide();
 	option = m_part->getGlobalOptions();
   }
   else{
 	Style_Global->setEnabled(true);
 	Style_Global->show();
+	GeneralExtension->show();
+	GeneralFormatFiles->show();
+	FrameSelect->show();
+	FrameFilesFormat->show();
 	option = m_part->getProjectOptions();
+    QString ext = m_part->getExtensions();
+	  if ( !ext.isEmpty())
+  			GeneralExtension->setText(m_part->getExtensions());
   }
 
   // style
@@ -158,7 +175,9 @@ void AStyleWidget::accept()
   }
   else{
 	m_option = &(m_part->getProjectOptions());
+	m_part->setExtensions(GeneralExtension->text().simplifyWhiteSpace());
   }
+
 
   // style
   if (Style_ANSI->isChecked())
@@ -256,6 +275,65 @@ void AStyleWidget::accept()
 
 }
 
+
+/**
+ * Format the selected files with the current style.
+ */
+void AStyleWidget::allFiles()
+{
+	QString filter = GeneralExtension->text().simplifyWhiteSpace();
+	QStringList filenames = KFileDialog::getOpenFileNames (  QString::null, filter,0,   "Select files" );
+	KProgressDialog *prog = new KProgressDialog ( 0, "dialog", i18n ( "Formatting files.." ), "", true );
+	prog->show();
+	for ( uint fileCount = 0; fileCount < filenames.size(); fileCount++ )
+	{
+		QString fileName = filenames[fileCount];
+		QString backup = fileName+ (GeneralBackupText->text().isEmpty()?"#":GeneralBackupText->text());
+		prog->setLabel ( i18n ( "Processing file: %1" ).arg ( fileName ) );
+		prog->progressBar()->setValue ( fileCount / filenames.size() );
+
+		QFile fin ( fileName );
+		QFile fout ( backup );
+		if ( fin.open ( IO_ReadOnly ) )
+		{
+			if ( fout.open ( IO_WriteOnly ) )
+			{
+				QString fileContents(fin.readAll());
+				fin.close();
+				QTextStream outstream ( &fout );
+				outstream << m_part->formatSource ( fileContents,this,m_part->getProjectOptions() );
+				fout.close();
+
+				QDir().rename ( backup, fileName );
+
+				if ( GeneralBackup->isChecked()){
+					QFile copy(backup);
+					if ( copy.open(IO_WriteOnly)){
+						QTextStream overwrite ( &copy );
+						overwrite<<fileContents	;
+						copy.close();
+					}
+					else{
+						KMessageBox::sorry ( this, i18n ( "Not able to write %1" ).arg ( backup ) );
+					}
+				}
+			}
+			else
+			{
+				KMessageBox::sorry ( this, i18n ( "Not able to write %1" ).arg ( backup ) );
+			}
+		}
+		else
+		{
+			KMessageBox::sorry ( this, i18n ( "Not able to read %1" ).arg ( fileName ) );
+		}
+	}
+	prog->hide();
+	delete prog;
+	if ( filenames.size() != 0){
+		KMessageBox::information(this, i18n ( "Processed %1 files" ).arg ( filenames.size() ) );
+	}
+}
 
 /**
  * Change the sample formatting text depending on what tab is selected.

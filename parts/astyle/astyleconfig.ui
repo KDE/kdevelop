@@ -44,87 +44,94 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>St&amp;yles</string>
+                    <string>&amp;General</string>
                 </attribute>
-                <grid>
+                <widget class="QButtonGroup">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>StyleGroup</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>11</y>
+                            <width>370</width>
+                            <height>240</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>350</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>400</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="title">
+                        <string>&amp;Style</string>
+                    </property>
+                    <grid>
                         <property name="name">
-                            <cstring>StyleGroup</cstring>
+                            <cstring>unnamed</cstring>
                         </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>400</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>400</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="title">
-                            <string>&amp;Style</string>
-                        </property>
-                        <grid>
+                        <widget class="QRadioButton" row="1" column="0">
                             <property name="name">
-                                <cstring>unnamed</cstring>
+                                <cstring>Style_ANSI</cstring>
                             </property>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>Style_ANSI</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;ANSI</string>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>1</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>ANSI style formatting/indenting.
+                            <property name="text">
+                                <string>&amp;ANSI</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>1</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>ANSI style formatting/indenting.
 Brackets Break
 Use 4 spaces
 Indent Bracket=false
 Indent Class=false
 Indent Switch=false
 Indent NameSpace=false</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="3" column="0">
-                                <property name="name">
-                                    <cstring>Style_Linux</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Linu&amp;x</string>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>3</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Linux mode (8 spaces per indent, break definition-block brackets but attach command-block brackets).
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="3" column="0">
+                            <property name="name">
+                                <cstring>Style_Linux</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Linu&amp;x</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>3</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Linux mode (8 spaces per indent, break definition-block brackets but attach command-block brackets).
 Brackets Linux
 Use 8 spaces
 Indent Bracket=false
 Indent Class=false
 Indent Switch=false
 Indent NameSpace=false</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="4" column="0">
-                                <property name="name">
-                                    <cstring>Style_GNU</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>G&amp;NU</string>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>4</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>GNU style formatting/indenting.
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="4" column="0">
+                            <property name="name">
+                                <cstring>Style_GNU</cstring>
+                            </property>
+                            <property name="text">
+                                <string>G&amp;NU</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>4</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>GNU style formatting/indenting.
 Brackets Break
 Use 2 spaces
 Indent Block=true
@@ -132,101 +139,287 @@ Indent Bracket=false
 Indent Class=false
 Indent Switch=false
 Indent NameSpace=false</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="5" column="0">
-                                <property name="name">
-                                    <cstring>Style_JAVA</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;JAVA</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+J</string>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>5</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Java mode, with standard java style formatting/indenting.
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="5" column="0">
+                            <property name="name">
+                                <cstring>Style_JAVA</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;JAVA</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+J</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>5</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Java mode, with standard java style formatting/indenting.
 Java Style
 Use 4 spaces
 Brackets Attach
 Indent Bracket=false
 Indent Switch=false</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>Style_UserDefined</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;User defined</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>0</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Select options from other tabs.</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="2" column="0">
-                                <property name="name">
-                                    <cstring>Style_KR</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Kernighan &amp;&amp; Ritchie</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+K</string>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>2</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Kernighan &amp; Ritchie style formatting/indenting.
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>Style_UserDefined</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;User defined</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+U</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>0</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select options from other tabs.</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="2" column="0">
+                            <property name="name">
+                                <cstring>Style_KR</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Kernighan &amp;&amp; Ritchie</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+K</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>2</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Kernighan &amp; Ritchie style formatting/indenting.
 Brackets Attach
 Use 4 spaces
 Indent Class=false
 Indent Switch=false
 Indent Namespaces=false
 </string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="6" column="0">
-                                <property name="name">
-                                    <cstring>Style_Global</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Use &amp;Global Options</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+G</string>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>6</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Use the global defaults. See the menu:
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="6" column="0">
+                            <property name="name">
+                                <cstring>Style_Global</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Use Global &amp;Options</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+O</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>6</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Use the global defaults. See the menu:
 Settings/Configure Kdevelop/Formatting.</string>
-                                </property>
-                            </widget>
-                        </grid>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>FrameFilesFormat</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>260</y>
+                            <width>370</width>
+                            <height>170</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="title">
+                        <string>Files to format</string>
+                    </property>
+                    <widget class="QTextEdit">
+                        <property name="name">
+                            <cstring>GeneralExtension</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>20</y>
+                                <width>350</width>
+                                <height>140</height>
+                            </rect>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>*.c *.h
+*.cpp *.hpp 
+*.C *.H 
+*.cxx *.hxx 
+*.cc *.hh 
+*.c++ *.h++
+*.inl *.tlh
+*.moc *.xpm
+*.diff *.patch
+*.java</string>
+                        </property>
+                        <property name="wordWrap">
+                            <enum>WidgetWidth</enum>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Set the file extensions that the editor
+will allow you to format. Use a space
+seperated list.eg. *.cpp *.hpp
+Can use * on its own for any file.</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Set the file extensions that the editor
+will allow you to format. Use a space
+seperated list.eg. *.cpp *.hpp
+Can use * on its own for any file.</string>
+                        </property>
                     </widget>
-                </grid>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>FrameSelect</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>440</y>
+                            <width>366</width>
+                            <height>110</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Format a selection of files</string>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>110</x>
+                                <y>80</y>
+                                <width>80</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Backup tag</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit">
+                        <property name="name">
+                            <cstring>GeneralBackupText</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>201</x>
+                                <y>80</y>
+                                <width>150</width>
+                                <height>22</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>.orig</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>The tag to add to the backup file. eg. foo.cpp.orig</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>The tag to add to the backup file. eg. foo.cpp.orig</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>GeneralBackup</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>60</y>
+                                <width>130</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Keep &amp;Backup</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+B</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Keep a backup copy the files.
+This option is only for the 
+"Select and Format" button.
+</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Keep a backup copy the files.
+This option is only for the 
+"Select and Format" button.
+</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>GeneralFormatFiles</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>70</x>
+                                <y>20</y>
+                                <width>210</width>
+                                <height>30</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Sele&amp;ct and Format</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+C</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Select a group of files to reformat 
+with the current settings.</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Select a group of files to reformat 
+with the current settings.</string>
+                        </property>
+                    </widget>
+                </widget>
             </widget>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Tab &amp;&amp; &amp;Brackets</string>
+                    <string>Tab &amp;&amp; B&amp;rackets</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -257,7 +450,7 @@ Settings/Configure Kdevelop/Formatting.</string>
                                     <cstring>Fill_EmptyLines</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Fill &amp;empty lines</string>
+                                    <string>Fill empt&amp;y lines</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Fill empty lines with the white space of their previous lines.</string>
@@ -277,6 +470,9 @@ Settings/Configure Kdevelop/Formatting.</string>
                                         </property>
                                         <property name="text">
                                             <string>U&amp;se tabs</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+S</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -1252,6 +1448,18 @@ multiple single-statement lines.</string>
         <receiver>Brackets_CloseHeaders</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>GeneralFormatFiles</sender>
+        <signal>clicked()</signal>
+        <receiver>AStyleConfig</receiver>
+        <slot>allFiles()</slot>
+    </connection>
+    <connection>
+        <sender>GeneralBackup</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GeneralBackupText</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>ConfigTabs</tabstop>
@@ -1288,6 +1496,9 @@ multiple single-statement lines.</string>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<slots>
+    <slot>allFiles()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

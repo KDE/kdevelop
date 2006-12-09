@@ -223,7 +223,6 @@ void AStylePart::beautifySource()
   setCursorPos( partController()->activePart(), col, line );
 }
 
-
 void AStylePart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo)
 {
 	switch (pageNo)
@@ -243,38 +242,80 @@ void AStylePart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsig
 	}
 }
 
+QString AStylePart::getExtensions(){
+	QString values;
+	int count=0;
+	 for (QMap<QString, QString>::iterator iter = m_extensions.begin();iter != m_extensions.end();iter++)
+     {
+		QString ext = iter.data();
+		values.append(ext);
+		values.append(" ");
+		if ( count++ == 1){
+			values.append('\n');
+			count=0;
+		}
+	}
+	values += " ";
+	kdDebug(9009) << "getExtensions " << values<<endl;
+	return values.stripWhiteSpace();
+}
 
-void AStylePart::activePartChanged(KParts::Part *part)
+void AStylePart::setExtensions ( QString ext )
 {
-  bool enabled = false;
+	kdDebug(9009) << "setExtensions " << ext<<endl;
+	m_extensions.clear();
+	QStringList extensions = QStringList::split ( " ", ext );
+	for ( QStringList::Iterator iter = extensions.begin(); iter != extensions.end(); iter++ )
+	{
+		QString ending=*iter;
+		if ( ending.startsWith ( "*" ) )
+		{
+			if (ending.length() ==1 ){
+				// special case.. any file.
+				m_extensions.insert(ending, ending);
+			}
+			else{
+				m_extensions.insert( ending.mid( 1 ), ending);
+			}
+		}
+		else
+		{
+			m_extensions.insert(ending, ending);
+		}
+	}
+}
 
-  KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(part);
+void AStylePart::activePartChanged ( KParts::Part *part )
+{
+	bool enabled = false;
 
-  if (rw_part)
-  {
-    KTextEditor::EditInterface *iface = dynamic_cast<KTextEditor::EditInterface*>(rw_part);
+	KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*> ( part );
 
-    if (iface)
-    {
-      QString extension = rw_part->url().path();
+	if ( rw_part )
+	{
+		KTextEditor::EditInterface *iface = dynamic_cast<KTextEditor::EditInterface*> ( rw_part );
 
-      int pos = extension.findRev('.');
-      if (pos >= 0)
-        extension = extension.mid(pos);
-      if (extension == ".h"   || extension == ".c" || extension == ".java"
-       || extension == ".cpp" || extension == ".hpp"
-       || extension == ".C"   || extension == ".H"
-       || extension == ".cxx" || extension == ".hxx"
-       || extension == ".inl" || extension == ".tlh"
-       || extension == ".moc" || extension == ".xpm"
-       || extension == ".diff"|| extension == ".patch"
-       || extension == ".hh"  || extension == ".cc"
-       || extension == ".c++" || extension == ".h++")
-	enabled = true;
-    }
-  }
+		if ( iface )
+		{
+			// check for the everything case..
+			if ( m_extensions.find ( "*" ) == m_extensions.end() )
+			{
+				QString extension = rw_part->url().path();
+				int pos = extension.findRev ( '.' );
+				if ( pos >= 0 )
+				{
+					extension = extension.mid ( pos );
+					enabled = ( m_extensions.find ( extension ) != m_extensions.end() );
+				}
+			}
+			else
+			{
+				enabled = true;
+			}
+		}
+	}
 
-  _action->setEnabled(enabled);
+	_action->setEnabled ( enabled );
 }
 
 QString AStylePart::formatSource( const QString text, AStyleWidget * widget, const QMap<QString, QVariant>& options  )
@@ -355,6 +396,12 @@ void AStylePart::restorePartialProjectSession(const QDomElement * el)
               m_project[iter.key()] = style.attribute(iter.key(),iter.data().toString());
 		}
 	}
+	QDomElement exten = el->namedItem("Extensions").toElement();
+	QString ext = exten.attribute("ext");
+	if ( ext.isEmpty() || ext.stripWhiteSpace().isEmpty()){
+		ext="*.C *.H *.c *.c++ *.cc *.cpp *.cxx *.diff *.h *.h++ *.hh *.hpp *.hxx *.inl *.java *.moc *.patch *.tlh *.xpm";
+	}
+	setExtensions(ext);
 }
 
 
@@ -373,8 +420,16 @@ void AStylePart::savePartialProjectSession(QDomElement * el)
               style.setAttribute(iter.key(),iter.data().toString());
 		}
 	}
+	QDomElement exten = domDoc.createElement ( "Extensions" );
+	QString values;
+	for ( QMap<QString, QString>::iterator iter = m_extensions.begin();iter != m_extensions.end();iter++ )
+	{
+		values += ( iter.data() ) + " ";
+	}
+	exten.setAttribute ( "ext", values );
 
 	el->appendChild(style);
+	el->appendChild(exten);
 }
 
 
