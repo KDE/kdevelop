@@ -449,6 +449,7 @@ void DoxygenPart::slotRunPreview( )
     QTextStream ts_file(&file);
 
     config->writeTemplate(ts_file, false, false);
+    file.close();
 
     if (inputVal.count() == 0) //pInput is always != 0
         *pInput->valueRef() = QStrList();
@@ -545,7 +546,7 @@ void DoxygenPart::slotDocumentFunction(){
             }
             for( ArgumentList::ConstIterator ci = args.begin(); ci != args.end(); ++ci)
                 text += indentChars + " * @param " + (*ci)->name() +" \n";
-            if (resultType != "void")
+            if (resultType != "void" && !resultType.isEmpty())
                 text += indentChars + " * @return \n";
             text += indentChars + " */\n";
             m_activeEditor->insertText(line, 0, text);
