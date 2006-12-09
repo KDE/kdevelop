@@ -170,13 +170,15 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
 
     addHistoryEntry();
 
+    //remove the current active document
+    KDevDocument *oldDocument = activeDocument();
+    if ( oldDocument )
+        KDevCore::mainWindow() ->guiFactory() ->removeClient( oldDocument->part() );
+
     // we can have ended up with a texteditor,
     // in which case need to treat it as such
-    KDevDocument *document = 0;
-    if ( qobject_cast<KTextEditor::Document*>( part ) )
-        document = integratePart( part, activate );
-    else
-        document = integratePart( part );
+    KDevDocument *document = addDocument( part );
+    integrateDocument( document );
 
     document->setUrl( url );
     document->setMimeType( mimeType );
@@ -188,9 +190,15 @@ KDevDocument* KDevDocumentController::editDocument( const KUrl & inputUrl,
 
     if ( activate )
     {
+        if ( !part->widget() )
+        {
+            kDebug( 9000 ) << k_funcinfo << "no widget for this part!!" << endl;
+            return 0L; // to avoid later crash
+        }
+
         activateDocument( document );
+        KDevCore::mainWindow() ->addDocument( document );
         setCursorPosition( part, cursor );
-        emit documentActivated( document );
     }
 
     emit documentLoaded( document );
@@ -410,9 +418,9 @@ void KDevDocumentController::activateDocument( KDevDocument * document )
         KDevCore::mainWindow() ->addDocument( document );
     }
 
+    setActiveDocument( document );
     KDevCore::mainWindow() ->setCurrentDocument( document );
 
-    setActiveDocument( document );
 }
 
 KDevDocument* KDevDocumentController::activeDocument() const
@@ -851,9 +859,9 @@ KDevDocument * KDevDocumentController::addDocument( KParts::Part * part, bool se
         new KDevDocument( static_cast<KParts::ReadOnlyPart*>( part ), this );
     m_partHash.insert( static_cast<KParts::ReadOnlyPart*>( part ), document );
 
-    KDevCore::partController() ->addPart( part, setActive );
-    if ( setActive )
-        setActiveDocument( document );
+    KDevCore::partController() ->addPart( part, false );
+//     if ( setActive )
+//          setActiveDocument( document );
 
 //     updateDocumentUrl( document );
     updateMenuItems();
@@ -898,8 +906,8 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
 
     KDevCore::partController() ->setActivePart( document->part(), widget );
 
-    KDevCore::mainWindow() ->guiFactory() ->addClient(
-            document->part() );
+    kDebug(9000) << k_funcinfo << "adding " << document->part() << endl;
+    KDevCore::mainWindow() ->guiFactory() ->addClient( document->part() );
 
     kDebug( 9000 ) << k_funcinfo << "AFTER" << "active part: "
         << KDevCore::partController()->activePart() << " active document: "
@@ -1090,28 +1098,16 @@ KParts::Factory *KDevDocumentController::findPartFactory( const QString &mimeTyp
     return 0;
 }
 
-KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool activate )
+bool KDevDocumentController::integrateDocument( KDevDocument* doc )
 {
     // tell the parts we loaded a document
-    kDebug(9000) << k_funcinfo << "part: " << part << "activate: " << activate << endl;
+    KParts::Part* part = doc->part();
+    kDebug(9000) << k_funcinfo << "part: " << part << endl;
     KParts::ReadOnlyPart * ro = readOnly( part );
     if ( !ro )
     {
         kDebug( 9000 ) << k_funcinfo << "no part!!" << endl;
-        return 0L;
-    }
-
-    KDevDocument* doc = addDocument( part, activate );
-
-    if ( activate )
-    {
-        if ( !part->widget() )
-        {
-            kDebug( 9000 ) << k_funcinfo << "no widget for this part!!" << endl;
-            return 0L; // to avoid later crash
-        }
-
-        KDevCore::mainWindow() ->addDocument( doc );
+        return false;
     }
 
     KTextEditor::ModificationInterface* iface =
@@ -1137,7 +1133,7 @@ KDevDocument* KDevDocumentController::integratePart( KParts::Part *part, bool ac
                  this, SLOT( newDocumentStatus( KTextEditor::Document* ) ) );
     }
 
-    return doc;
+    return true;
 }
 
 KUrl KDevDocumentController::storedUrlForDocument( KDevDocument* document ) const

@@ -245,8 +245,7 @@ private:
                                       const QString &preferredName
                                       = QString::null );
 
-    KDevDocument* integratePart( KParts::Part *part,
-                                 bool activate = true );
+    bool integrateDocument( KDevDocument* );
 
     KUrl storedUrlForDocument( KDevDocument* ) const;
     void updateDocumentUrl( KDevDocument* );
