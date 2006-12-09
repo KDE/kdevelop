@@ -898,9 +898,7 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
 {
     kDebug(9000) << k_funcinfo << endl;
     //Remove the current part from the xmlgui
-    kDebug( 9000 ) << k_funcinfo << "BEFORE" << "active part: "
-            << KDevCore::partController()->activePart() << " active document: "
-            << " " << activeDocument() << " document: " << document << endl;
+    kDebug(9000) << k_funcinfo << "removing " << KDevCore::partController()->activePart() << endl;
     KDevCore::mainWindow() ->guiFactory() ->removeClient(
             KDevCore::partController() ->activePart() );
 
@@ -909,10 +907,7 @@ void KDevDocumentController::setActiveDocument( KDevDocument *document, QWidget 
     kDebug(9000) << k_funcinfo << "adding " << document->part() << endl;
     KDevCore::mainWindow() ->guiFactory() ->addClient( document->part() );
 
-    kDebug( 9000 ) << k_funcinfo << "AFTER" << "active part: "
-        << KDevCore::partController()->activePart() << " active document: "
-        << " " << activeDocument() << " document: " << document << endl;
-
+    emit documentActivated( document );
     updateMenuItems();
 }
 
