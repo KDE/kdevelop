@@ -24,7 +24,6 @@
 #include <QtCore/QString>
 #include <iostream>
 
-int openbrace;
 
 %}
 
@@ -67,6 +66,7 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 ^{ws}*{newline} { yylval.value = yytext; return EMPTYLINE; }
 {newline}       { yylval.value = yytext; return NEWLINE; }
 ";"             { yylval.value = yytext; return SEMICOLON; }
+
 
 %%
 
