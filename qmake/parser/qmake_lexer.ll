@@ -65,11 +65,11 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 "$${"{identifier}"}"    { yylval.value = yytext; return VARIABLE; }
 "$("{identifier}")"    { yylval.value = yytext; return VARIABLE; }
 "$$["{identifier}"]"    { yylval.value = yytext; return VARIABLE; }
-"\\"{newline}   { yylval.value = yytext; return CONT; }
-"#"[^\n]*       { yylval.value = yytext; return COMMENT; }
+{ws}*"\\"{newline}      { yylval.value = yytext; return CONT; }
+{ws}*"#"[^\n]*  { yylval.value = yytext; return COMMENT; }
 "\""            { yylval.value = yytext; return QUOTE; }
 ^{ws}*{newline} { yylval.value = yytext; return EMPTYLINE; }
-{newline}       { yylval.value = yytext; return NEWLINE; }
+{ws}*{newline}  { yylval.value = yytext; return NEWLINE; }
 ";"             { yylval.value = yytext; return SEMICOLON; }
 
 
