@@ -23,6 +23,17 @@
 @file qmake.yy
 QMake Parser
 
+The simple_scope stuff doesn't work quite well. Basically we can have
+
+scope1:scope2:scope3 {
+}
+
+or
+
+scope1:scope2:scope3 : STATEMENT
+
+where scopei may be either simplescopes or function calls. So we probably need a "scope" rule.
+
 Simple LALR parser which builds the syntax tree (see @ref QMake::AST).
 */
 
@@ -66,7 +77,7 @@ ProjectAST* project;
 %token WS IDENTIFIER SPECIALCHAR DOLLAR COLON COMMA LCURLY RCURLY
 %token LPAREN RPAREN QUOTE EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
 %token NEWLINE CONT COMMENT EXCLAM UNDERSCORE DOT EMPTYLINE
-%token SEMICOLON LBRACKET RBRACKET VARIABLE FUNCTIONNAME
+%token SEMICOLON LBRACKET RBRACKET VARIABLE FUNCTIONNAME ELSE
 
 %right PLUSEQ
 %right MINUSEQ
@@ -91,16 +102,29 @@ statement: comment
     | EMPTYLINE
     | variable_assignment
     | function_scope
+    | simple_scope
+    | else_statement
     ;
 
-function_scope: ws functioncall ws LCURLY newline statements ws RCURLY NEWLINE
-    | ws functioncall COLON statement
-    | ws functioncall NEWLINE
+simple_scope: ws scope_name ws LCURLY ws NEWLINE statements ws RCURLY ws NEWLINE
+    | ws scope_name ws LCURLY ws NEWLINE statements ws RCURLY else_statement
+    | ws scope_name ws COLON ws statement
     ;
 
-newline: NEWLINE
-    |
+else_statement: ELSE ws LCURLY ws NEWLINE statements ws RCURLY ws NEWLINE
+    | ELSE ws COLON ws statement
     ;
+
+scope_name: IDENTIFIER
+    | EXCLAM IDENTIFIER
+    ;
+
+function_scope: ws functioncall ws LCURLY NEWLINE statements ws RCURLY NEWLINE
+    | ws functioncall ws LCURLY ws NEWLINE statements ws RCURLY else_statement
+    | ws functioncall ws COLON ws statement
+    | ws functioncall ws NEWLINE
+    ;
+
 
 variable_assignment: ws IDENTIFIER ws op values COMMENT NEWLINE
     | ws IDENTIFIER ws op values NEWLINE
@@ -130,30 +154,29 @@ quotedval: QUOTE wsvalues QUOTE
     ;
 
 value: value IDENTIFIER
+    | value COLON
     | value SPECIALCHAR
     | value VARIABLE
     | value DOLLAR DOLLAR LCURLY functioncall RCURLY
     | IDENTIFIER
+    | COLON
     | SPECIALCHAR
     | VARIABLE
     | DOLLAR DOLLAR LCURLY functioncall RCURLY
     ;
 
 functioncall: IDENTIFIER LPAREN functionargs RPAREN
+    | IDENTIFIER LPAREN ws RPAREN
     | EXCLAM IDENTIFIER ws LPAREN functionargs RPAREN
+    | EXCLAM IDENTIFIER ws LPAREN ws RPAREN
     ;
 
 functionargs: functionargs COMMA functionarg
     | functionarg
-    |
     ;
 
-functionarg: ws fnvalue ws
+functionarg: ws value ws
     | ws FUNCTIONNAME ws LPAREN functionargs RPAREN ws
-    ;
-
-fnvalue: fnvalue value
-    | value
     ;
 
 

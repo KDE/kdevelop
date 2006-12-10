@@ -40,37 +40,38 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 
 %%
 
-{ws}+           { yylval.value = yytext; return WS; }
-"$"             { yylval.value = yytext; return DOLLAR; }
-"{"             { yylval.value = yytext; return LCURLY; }
-"}"             { yylval.value = yytext; return RCURLY; }
-"("             { yylval.value = yytext; return LPAREN; }
-")"             { yylval.value = yytext; return RPAREN; }
-"["             { yylval.value = yytext; return LBRACKET; }
-"]"             { yylval.value = yytext; return RBRACKET; }
-"+="            { yylval.value = yytext; return PLUSEQ; }
-"~="            { yylval.value = yytext; return TILDEEQ; }
-"-="            { yylval.value = yytext; return MINUSEQ; }
-"*="            { yylval.value = yytext; return STAREQ; }
-"="             { yylval.value = yytext; return EQUAL; }
+{ws}*"else"                  { yylval.value = yytext; return ELSE; }
+{ws}+                   { yylval.value = yytext; return WS; }
+"$"                     { yylval.value = yytext; return DOLLAR; }
+"{"                     { yylval.value = yytext; return LCURLY; }
+"}"                     { yylval.value = yytext; return RCURLY; }
+"("                     { yylval.value = yytext; return LPAREN; }
+")"                     { yylval.value = yytext; return RPAREN; }
+"["                     { yylval.value = yytext; return LBRACKET; }
+"]"                     { yylval.value = yytext; return RBRACKET; }
+"+="                    { yylval.value = yytext; return PLUSEQ; }
+"~="                    { yylval.value = yytext; return TILDEEQ; }
+"-="                    { yylval.value = yytext; return MINUSEQ; }
+"*="                    { yylval.value = yytext; return STAREQ; }
+"="                     { yylval.value = yytext; return EQUAL; }
 {ws}*":"{ws}*   { yylval.value = yytext; return COLON; }
-","             { yylval.value = yytext; return COMMA; }
-"!"             { yylval.value = yytext; return EXCLAM; }
-{specialchar}   { yylval.value = yytext; return SPECIALCHAR; }
-"_"             { yylval.value = yytext; return UNDERSCORE; }
-"|"             { yylval.value = yytext; return OR; }
+","                     { yylval.value = yytext; return COMMA; }
+"!"                     { yylval.value = yytext; return EXCLAM; }
+{specialchar}           { yylval.value = yytext; return SPECIALCHAR; }
+"_"                     { yylval.value = yytext; return UNDERSCORE; }
+"|"                     { yylval.value = yytext; return OR; }
 "$$"{identifier}/{ws}*"("    { yylval.value = yytext; return FUNCTIONNAME; }
-{identifier}    { yylval.value = yytext; return IDENTIFIER; }
-"$$"{identifier}    { yylval.value = yytext; return VARIABLE; }
+{identifier}            { yylval.value = yytext; return IDENTIFIER; }
+"$$"{identifier}        { yylval.value = yytext; return VARIABLE; }
 "$${"{identifier}"}"    { yylval.value = yytext; return VARIABLE; }
-"$("{identifier}")"    { yylval.value = yytext; return VARIABLE; }
+"$("{identifier}")"     { yylval.value = yytext; return VARIABLE; }
 "$$["{identifier}"]"    { yylval.value = yytext; return VARIABLE; }
-{ws}*"\\"{newline}      { yylval.value = yytext; return CONT; }
-{ws}*"#"[^\n]*  { yylval.value = yytext; return COMMENT; }
-"\""            { yylval.value = yytext; return QUOTE; }
-^{ws}*{newline} { yylval.value = yytext; return EMPTYLINE; }
-{ws}*{newline}  { yylval.value = yytext; return NEWLINE; }
-";"             { yylval.value = yytext; return SEMICOLON; }
+{ws}*"\\"{newline}           { yylval.value = yytext; return CONT; }
+{ws}*"#"[^\n]*               { yylval.value = yytext; return COMMENT; }
+"\""                    { yylval.value = yytext; return QUOTE; }
+^{ws}*{newline}         { yylval.value = yytext; return EMPTYLINE; }
+{ws}*{newline}          { yylval.value = yytext; return NEWLINE; }
+";"                     { yylval.value = yytext; return SEMICOLON; }
 
 
 %%
