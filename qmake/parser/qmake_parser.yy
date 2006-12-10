@@ -125,7 +125,6 @@ function_scope: ws functioncall ws LCURLY NEWLINE statements ws RCURLY NEWLINE
     | ws functioncall ws NEWLINE
     ;
 
-
 variable_assignment: ws IDENTIFIER ws op values COMMENT NEWLINE
     | ws IDENTIFIER ws op values NEWLINE
     ;
@@ -178,7 +177,6 @@ functionargs: functionargs COMMA functionarg
 functionarg: ws value ws
     | ws FUNCTIONNAME ws LPAREN functionargs RPAREN ws
     ;
-
 
 wsvalues: wsvalues WS value
     | ws value
