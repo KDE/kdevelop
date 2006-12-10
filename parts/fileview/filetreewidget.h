@@ -60,8 +60,8 @@ public:
     FileViewPart *part() const { return m_part; }
 
     //KDevVCSFileInfoProvider *vcsFileInfoProvider() const;
-    void applyHidePatterns( const QString &hidePatterns );
-    QString hidePatterns() const;
+    void applyShowPatterns( const QString &showPatterns );
+    QString showPatterns() const;
 
     bool showNonProjectFiles() const;
 
@@ -80,10 +80,10 @@ private slots:
     void slotImplementationInvalidated();
 
 private:
-    bool matchesHidePattern(const QString &fileName);
+    bool matchesShowPattern(const QString &fileName);
     KDevVersionControl *versionControl() const;
 
-    QStringList m_hidePatterns;
+    QStringList m_showPatterns;
     QStringList m_projectFiles;
 
     FileViewPart *m_part;

@@ -32,7 +32,6 @@ void FileTreeViewItem::hideOrShow()
 {
     kdDebug( 9017 ) << "MyFileTreeViewItem::hideOrShow(): " + path() << endl;
     setVisible( listView()->shouldBeShown( this ) );
-
     FileTreeViewItem* item = static_cast<FileTreeViewItem*>( firstChild() );
     while (item)
     {

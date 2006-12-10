@@ -88,9 +88,9 @@ FileTreeWidget::FileTreeWidget( FileViewPart *part, QWidget *parent, KDevVCSFile
 
     // Hide pattern for files
     QDomDocument &dom = *m_part->projectDom();
-    QString defaultHidePattern = "*.o,*.lo,CVS";
-    QString hidePattern = DomUtil::readEntry( dom, "/kdevfileview/tree/hidepatterns", defaultHidePattern );
-    m_hidePatterns = QStringList::split( ",", hidePattern );
+    QString defaultShowPattern = "*.h,*.cpp";
+    QString showPattern = DomUtil::readEntry( dom, "/kdevfileview/tree/showpatterns", defaultShowPattern );
+    m_showPatterns = QStringList::split( " ", showPattern );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ FileTreeWidget::~FileTreeWidget()
     kdDebug(9017) << "FileTreeWidget::~FileTreeWidget()" << endl;
 
     QDomDocument &dom = *m_part->projectDom();
-    DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", hidePatterns() );
+    DomUtil::writeEntry( dom, "/kdevfileview/tree/showpatterns", showPatterns() );
 
 //    delete m_impl;
 }
@@ -137,20 +137,20 @@ bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
 {
     FileTreeViewItem * i = static_cast<FileTreeViewItem *>( item );
     return ( i->isDir() || ( (m_impl->showNonProjectFiles() || i->isProjectFile() )
-             && !matchesHidePattern( i->url().fileName() ) ) ) ;
+             && matchesShowPattern( i->url().fileName() ) ) ) ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool FileTreeWidget::matchesHidePattern(const QString &fileName)
+bool FileTreeWidget::matchesShowPattern(const QString &fileName)
 {
     QStringList::ConstIterator it;
-    for (it = m_hidePatterns.begin(); it != m_hidePatterns.end(); ++it) {
+    for (it = m_showPatterns.begin(); it != m_showPatterns.end(); ++it) {
         QRegExp re(*it, true, true);
-        if (re.search(fileName) == 0 && (uint)re.matchedLength() == fileName.length())
-            return true;
+        if (re.search(fileName) == 0 && (uint)re.matchedLength() == fileName.length()){
+             return true;
+        }
     }
-
     return false;
 }
 
@@ -272,17 +272,17 @@ void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeWidget::applyHidePatterns( const QString &hidePatterns )
+void FileTreeWidget::applyShowPatterns( const QString &showPatterns )
 {
-    m_hidePatterns = QStringList::split( ",", hidePatterns );
+    m_showPatterns = QStringList::split( " ", showPatterns );
     hideOrShow();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString FileTreeWidget::hidePatterns() const
+QString FileTreeWidget::showPatterns() const
 {
-    return m_hidePatterns.join( "," );
+    return m_showPatterns.join( " " );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
