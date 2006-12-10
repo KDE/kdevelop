@@ -25,8 +25,6 @@ public slots:
 private slots:
 
   void styleChanged();
-  void allFiles();
-
 
 private:
 

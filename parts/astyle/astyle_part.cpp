@@ -16,7 +16,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/selectioninterface.h>
-
+#include <kprogress.h>
 #include <kdevcore.h>
 #include <kdevapi.h>
 #include <kdevpartcontroller.h>
@@ -24,7 +24,11 @@
 #include <configwidgetproxy.h>
 #include <kapplication.h>
 #include <kconfig.h>
-
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <qlineedit.h>
+#include <qregexp.h>
 
 #include "astyle_widget.h"
 #include "astyle_adaptor.h"
@@ -41,12 +45,18 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
 
   setXMLFile("kdevpart_astyle.rc");
 
-  _action = new KAction(i18n("&Reformat Source"), 0,
-			  this, SLOT(beautifySource()), actionCollection(), "edit_astyle");
-  _action->setEnabled(false);
-  _action->setToolTip(i18n("Reformat source"));
-  _action->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting functionality using <b>astyle</b> library. "
+  formatTextAction = new KAction(i18n("&Reformat Source"), 0, this, SLOT(beautifySource()), actionCollection(), "edit_astyle");
+  formatTextAction->setEnabled(false);
+  formatTextAction->setToolTip(i18n("Reformat source"));
+  formatTextAction->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting functionality using <b>astyle</b> library. "
                              "Also available in <b>New Class</b> and <b>Subclassing</b> wizards."));
+
+  formatFileAction = new KAction(i18n("&Format files"), 0, this, SLOT(formatFilesSelect()), actionCollection(), "tools_astyle");
+  formatFileAction->setEnabled(false);
+  formatFileAction->setToolTip(i18n("Format files"));
+  formatFileAction->setWhatsThis(i18n("<b>Fomat files</b><p>Formatting functionality using <b>astyle</b> library. "
+                             "Also available in <b>New Class</b> and <b>Subclassing</b> wizards."));
+  formatFileAction->setEnabled ( true );
 
   m_configProxy = new ConfigWidgetProxy(core());
     m_configProxy->createGlobalConfigPage(i18n("Formatting"), GLOBALDOC_OPTIONS, info()->icon());
@@ -315,7 +325,7 @@ void AStylePart::activePartChanged ( KParts::Part *part )
 		}
 	}
 
-	_action->setEnabled ( enabled );
+	formatTextAction->setEnabled ( enabled );
 }
 
 QString AStylePart::formatSource( const QString text, AStyleWidget * widget, const QMap<QString, QVariant>& options  )
@@ -371,12 +381,21 @@ QString AStylePart::indentString( ) const
 
 void AStylePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-	if (!context->hasType( Context::EditorContext ))
-		return;
+	if (context->hasType( Context::EditorContext ))
+	{
+		popup->insertSeparator();
+		int id = popup->insertItem( i18n("Format selection"), this, SLOT(beautifySource()) );
+		popup->setWhatsThis(id, i18n("<b>Format</b><p>Formats the current selection, if possible"));
+	}
+	else if ( context->hasType( Context::FileContext )){
+		const FileContext *ctx = static_cast<const FileContext*>(context);
+		m_urls = ctx->urls();
 
-	popup->insertSeparator();
-	int id = popup->insertItem( i18n("Format selection"), this, SLOT(beautifySource()) );
-	popup->setWhatsThis(id, i18n("<b>Format</b><p>Formats the current selection, if possible"));
+		popup->insertSeparator();
+		int id = popup->insertItem( i18n("Format files"), this, SLOT(formatFiles()) );
+		popup->setWhatsThis(id, i18n("<b>Format files</b><p>Formats selected files if possible"));
+
+	}
 }
 
 void AStylePart::restorePartialProjectSession(const QDomElement * el)
@@ -430,6 +449,89 @@ void AStylePart::savePartialProjectSession(QDomElement * el)
 
 	el->appendChild(style);
 	el->appendChild(exten);
+}
+
+void AStylePart::formatFilesSelect(){
+	m_urls.clear();
+	QStringList filenames = KFileDialog::getOpenFileNames (  QString::null, getExtensions(),0,"Select files to format" );
+
+	for(QStringList::Iterator it = filenames.begin(); it != filenames.end();it++){
+		m_urls << *it;
+	}
+	formatFiles();
+}
+
+
+/**
+ * Format the selected files with the current style.
+ */
+void AStylePart::formatFiles()
+{
+	KURL::List::iterator it = m_urls.begin();
+	while ( it != m_urls.end() )
+	{
+		kdDebug ( 9009 ) << "Selected " << ( *it ).pathOrURL() << endl;
+		++it;
+	}
+
+	uint processed = 0;
+	KProgressDialog *prog = new KProgressDialog ( 0, "dialog", i18n ( "Formatting files.." ), "", true );
+	prog->setMinimumDuration(100);
+	prog->show();
+	for ( uint fileCount = 0; fileCount < m_urls.size(); fileCount++ )
+	{
+		QString fileName = m_urls[fileCount].pathOrURL();
+
+		bool found = false;
+		for ( QMap<QString, QString>::Iterator it = m_extensions.begin(); it != m_extensions.end(); ++it )
+		{
+			QRegExp re ( it.data(), true, true );
+			if ( re.search ( fileName ) == 0 && ( uint ) re.matchedLength() == fileName.length() )
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if ( found )
+		{
+			QString backup = fileName + "#";
+			prog->setLabel ( i18n ( "Processing file: %1" ).arg ( fileName ) );
+			prog->progressBar()->setValue ( (fileCount+1 / m_urls.size()-1)*100 );
+
+			QFile fin ( fileName );
+			QFile fout ( backup );
+			if ( fin.open ( IO_ReadOnly ) )
+			{
+				if ( fout.open ( IO_WriteOnly ) )
+				{
+					QString fileContents ( fin.readAll() );
+					fin.close();
+					QTextStream outstream ( &fout );
+					outstream << formatSource ( fileContents );
+					fout.close();
+					QDir().rename ( backup, fileName );
+					processed++;
+				}
+				else
+				{
+					KMessageBox::sorry ( 0, i18n ( "Not able to write %1" ).arg ( backup ) );
+				}
+			}
+			else
+			{
+				KMessageBox::sorry ( 0, i18n ( "Not able to read %1" ).arg ( fileName ) );
+			}
+		}
+	}
+	prog->hide();
+	delete prog;
+	if ( processed != 0 )
+	{
+		KMessageBox::information ( 0, i18n ( "Processed %1 files ending with extensions %2" ).arg ( processed ).arg(getExtensions().stripWhiteSpace()) );
+	}
+	m_urls.clear();
+
 }
 
 

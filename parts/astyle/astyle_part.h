@@ -29,24 +29,26 @@ public:
   AStylePart(QObject *parent, const char *name, const QStringList &);
   ~AStylePart();
 
-		QString formatSource(const QString text, AStyleWidget * widget, const QMap<QString, QVariant>& options);
+  QString formatSource(const QString text, AStyleWidget * widget, const QMap<QString, QVariant>& options);
   virtual QString formatSource(const QString text);
   QString indentString() const;
-	void saveGlobal();
-	void setExtensions(QString ext);
-	QString getExtensions();
-		void restorePartialProjectSession(const QDomElement * el);
-		void savePartialProjectSession(QDomElement * el);
+  void saveGlobal();
+  void setExtensions(QString ext);
+  QString getExtensions();
+  void restorePartialProjectSession(const QDomElement * el);
+  void savePartialProjectSession(QDomElement * el);
 
-		QMap<QString, QVariant>& getProjectOptions(){return m_project;}
-		QMap<QString, QVariant>& getGlobalOptions(){return m_global;}
+  QMap<QString, QVariant>& getProjectOptions(){return m_project;}
+  QMap<QString, QVariant>& getGlobalOptions(){return m_global;}
 
 
 private slots:
 
   void activePartChanged(KParts::Part *part);
   void beautifySource();
-		void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
+  void formatFiles();
+  void formatFilesSelect();
+  void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
   void contextMenu(QPopupMenu *popup, const Context *context);
 
 private:
@@ -54,15 +56,17 @@ private:
   void cursorPos( KParts::Part *part, uint * col, uint * line );
   void setCursorPos( KParts::Part *part, uint col, uint line );
 
-		void loadGlobal();
+  void loadGlobal();
 
-		ConfigWidgetProxy *m_configProxy;
-  KAction *_action;
+  ConfigWidgetProxy *m_configProxy;
+  KAction *formatTextAction;
+  KAction *formatFileAction;
 
-		// the configurable options.
-        QMap<QString, QVariant>  m_project;
-		QMap<QString, QVariant> m_global;
-		QMap<QString, QString> m_extensions;
+  // the configurable options.
+  QMap<QString, QVariant>  m_project;
+  QMap<QString, QVariant> m_global;
+  QMap<QString, QString> m_extensions;
+  KURL::List m_urls;
 
 
 };

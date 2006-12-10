@@ -235,7 +235,7 @@ Settings/Configure Kdevelop/Formatting.</string>
                             <x>10</x>
                             <y>260</y>
                             <width>370</width>
-                            <height>170</height>
+                            <height>340</height>
                         </rect>
                     </property>
                     <property name="sizePolicy">
@@ -258,7 +258,7 @@ Settings/Configure Kdevelop/Formatting.</string>
                                 <x>10</x>
                                 <y>20</y>
                                 <width>350</width>
-                                <height>140</height>
+                                <height>300</height>
                             </rect>
                         </property>
                         <property name="sizePolicy">
@@ -285,131 +285,16 @@ Settings/Configure Kdevelop/Formatting.</string>
                             <enum>WidgetWidth</enum>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string>Set the file extensions that the editor
-will allow you to format. Use a space
-seperated list.eg. *.cpp *.hpp
+                            <string>Set the file extensions for what the
+formatter will try to reformat. Use a
+space seperated list. eg. *.cpp *.hpp
 Can use * on its own for any file.</string>
                         </property>
                         <property name="whatsThis" stdset="0">
-                            <string>Set the file extensions that the editor
-will allow you to format. Use a space
-seperated list.eg. *.cpp *.hpp
+                            <string>Set the file extensions for what the
+formatter will try to reformat. Use a
+space seperated list. eg. *.cpp *.hpp
 Can use * on its own for any file.</string>
-                        </property>
-                    </widget>
-                </widget>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>FrameSelect</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>440</y>
-                            <width>366</width>
-                            <height>110</height>
-                        </rect>
-                    </property>
-                    <property name="title">
-                        <string>Format a selection of files</string>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>110</x>
-                                <y>80</y>
-                                <width>80</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Backup tag</string>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit">
-                        <property name="name">
-                            <cstring>GeneralBackupText</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>201</x>
-                                <y>80</y>
-                                <width>150</width>
-                                <height>22</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>.orig</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>The tag to add to the backup file. eg. foo.cpp.orig</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>The tag to add to the backup file. eg. foo.cpp.orig</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>GeneralBackup</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>60</y>
-                                <width>130</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Keep &amp;Backup</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+B</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Keep a backup copy the files.
-This option is only for the 
-"Select and Format" button.
-</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>Keep a backup copy the files.
-This option is only for the 
-"Select and Format" button.
-</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>GeneralFormatFiles</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>70</x>
-                                <y>20</y>
-                                <width>210</width>
-                                <height>30</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Sele&amp;ct and Format</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+C</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Select a group of files to reformat 
-with the current settings.</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>Select a group of files to reformat 
-with the current settings.</string>
                         </property>
                     </widget>
                 </widget>
@@ -419,7 +304,7 @@ with the current settings.</string>
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Tab &amp;&amp; B&amp;rackets</string>
+                    <string>Tab &amp;&amp; &amp;Brackets</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -692,7 +577,7 @@ but attach brackets to pre-block command statements.</string>
                                     <bool>false</bool>
                                 </property>
                                 <property name="text">
-                                    <string>Break &amp;closing headers</string>
+                                    <string>Brea&amp;k closing headers</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Break brackets before closing headers (e.g. 'else', 'catch', ...)
@@ -1446,18 +1331,6 @@ multiple single-statement lines.</string>
         <sender>Brackets_Linux</sender>
         <signal>toggled(bool)</signal>
         <receiver>Brackets_CloseHeaders</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>GeneralFormatFiles</sender>
-        <signal>clicked()</signal>
-        <receiver>AStyleConfig</receiver>
-        <slot>allFiles()</slot>
-    </connection>
-    <connection>
-        <sender>GeneralBackup</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>GeneralBackupText</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
