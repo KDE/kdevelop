@@ -106,6 +106,11 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
 
 CvsServicePart::~CvsServicePart()
 {
+    // it may happen, that this part gets destroyed before the projectClosed() signal
+    // reaches it. By calling slotProjectClosed() we ensure, that the configuration always
+    // gets written.
+    slotProjectClosed();
+
     delete m_cvsConfigurationForm;
     delete m_impl;
 }
