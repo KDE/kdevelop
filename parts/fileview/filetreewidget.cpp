@@ -88,7 +88,7 @@ FileTreeWidget::FileTreeWidget( FileViewPart *part, QWidget *parent, KDevVCSFile
 
     // Hide pattern for files
     QDomDocument &dom = *m_part->projectDom();
-    QString defaultShowPattern = "*.h,*.cpp";
+    QString defaultShowPattern = "*.h *.cpp";
     QString showPattern = DomUtil::readEntry( dom, "/kdevfileview/tree/showpatterns", defaultShowPattern );
     m_showPatterns = QStringList::split( " ", showPattern );
 }
