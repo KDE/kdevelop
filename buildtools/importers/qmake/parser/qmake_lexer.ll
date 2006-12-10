@@ -44,8 +44,8 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 "$"             { yylval.value = yytext; return DOLLAR; }
 "{"             { yylval.value = yytext; return LCURLY; }
 "}"             { yylval.value = yytext; return RCURLY; }
-"("             { yylval.value = yytext; return LBRACE; }
-")"             { yylval.value = yytext; return RBRACE; }
+"("             { yylval.value = yytext; return LPAREN; }
+")"             { yylval.value = yytext; return RPAREN; }
 "["             { yylval.value = yytext; return LBRACKET; }
 "]"             { yylval.value = yytext; return RBRACKET; }
 "+="            { yylval.value = yytext; return PLUSEQ; }
