@@ -64,7 +64,7 @@ ProjectAST* project;
 %debug
 
 %token WS IDENTIFIER SPECIALCHAR DOLLAR COLON COMMA LCURLY RCURLY
-%token LBRACE RBRACE QUOTE EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
+%token LPAREN RPAREN QUOTE EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
 %token NEWLINE CONT COMMENT EXCLAM UNDERSCORE DOT EMPTYLINE
 %token SEMICOLON LBRACKET RBRACKET VARIABLE FUNCTIONNAME
 
@@ -124,8 +124,8 @@ cont: CONT
     | CONT quotedval
     ;
 
-braceenclosedval: LBRACE wsvalues RBRACE SEMICOLON
-    | LBRACE wsvalues RBRACE
+braceenclosedval: LPAREN wsvalues RPAREN SEMICOLON
+    | LPAREN wsvalues RPAREN
     ;
 
 quotedval: QUOTE wsvalues QUOTE
@@ -141,8 +141,8 @@ value: value IDENTIFIER
     | DOLLAR DOLLAR LCURLY functioncall RCURLY
     ;
 
-functioncall: IDENTIFIER LBRACE functionargs RBRACE
-    | EXCLAM IDENTIFIER ws LBRACE functionargs RBRACE
+functioncall: IDENTIFIER LPAREN functionargs RPAREN
+    | EXCLAM IDENTIFIER ws LPAREN functionargs RPAREN
     ;
 
 functionargs: functionargs COMMA functionarg
@@ -151,7 +151,7 @@ functionargs: functionargs COMMA functionarg
     ;
 
 functionarg: ws fnvalue ws
-    | ws FUNCTIONNAME ws LBRACE functionargs RBRACE ws
+    | ws FUNCTIONNAME ws LPAREN functionargs RPAREN ws
     ;
 
 fnvalue: fnvalue value
