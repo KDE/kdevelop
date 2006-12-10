@@ -117,9 +117,13 @@ KURL::List FileTreeViewWidgetImpl::selectedPathUrls()
 	QValueList<QListViewItem*>::Iterator it = list.begin();
 	while( it != list.end() )
 	{
-		KURL url;
-		url.setPath( static_cast<FileTreeViewItem*>( *it )->path() );
-		urlList << url;
+		FileTreeViewItem * item = static_cast<FileTreeViewItem*>( *it );
+		if ( fileTree()->shouldBeShown( item ) )
+		{
+			KURL url;
+			url.setPath( item->path() );
+			urlList << url;
+		}
 		++it;
 	}
 
