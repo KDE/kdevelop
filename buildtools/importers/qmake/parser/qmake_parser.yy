@@ -94,7 +94,7 @@ statement: comment
     ;
 
 function_scope: ws functioncall ws LCURLY ws newline statements ws RCURLY ws NEWLINE
-    | ws functioncall ws COLON ws statement
+    | ws functioncall COLON statement
     | ws functioncall ws NEWLINE
     ;
 

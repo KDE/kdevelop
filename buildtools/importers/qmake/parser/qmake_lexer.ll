@@ -53,7 +53,7 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 "-="            { yylval.value = yytext; return MINUSEQ; }
 "*="            { yylval.value = yytext; return STAREQ; }
 "="             { yylval.value = yytext; return EQUAL; }
-":"             { yylval.value = yytext; return COLON; }
+{ws}*":"{ws}*   { yylval.value = yytext; return COLON; }
 ","             { yylval.value = yytext; return COMMA; }
 "!"             { yylval.value = yytext; return EXCLAM; }
 {specialchar}   { yylval.value = yytext; return SPECIALCHAR; }
