@@ -49,11 +49,11 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 ")"                     { yylval.value = yytext; return RPAREN; }
 "["                     { yylval.value = yytext; return LBRACKET; }
 "]"                     { yylval.value = yytext; return RBRACKET; }
-"+="                    { yylval.value = yytext; return PLUSEQ; }
-"~="                    { yylval.value = yytext; return TILDEEQ; }
-"-="                    { yylval.value = yytext; return MINUSEQ; }
-"*="                    { yylval.value = yytext; return STAREQ; }
-"="                     { yylval.value = yytext; return EQUAL; }
+{ws}*"+="{ws}*          { yylval.value = yytext; return PLUSEQ; }
+{ws}*"~="{ws}*          { yylval.value = yytext; return TILDEEQ; }
+{ws}*"-="{ws}*          { yylval.value = yytext; return MINUSEQ; }
+{ws}*"*="{ws}*          { yylval.value = yytext; return STAREQ; }
+{ws}*"="{ws}*           { yylval.value = yytext; return EQUAL; }
 ":"                     { yylval.value = yytext; return COLON; }
 ","                     { yylval.value = yytext; return COMMA; }
 "!"                     { yylval.value = yytext; return EXCLAM; }
