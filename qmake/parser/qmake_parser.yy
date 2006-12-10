@@ -53,7 +53,7 @@ typedef Result YYSTYPE;
 
 void yyerror(const char* str)
 {
-   printf("%s\n", str); 
+   printf("%s\n", str);
 }
 
 int yylex();
@@ -66,7 +66,7 @@ ProjectAST* project;
 %token WS IDENTIFIER SPECIALCHAR DOLLAR COLON COMMA LCURLY RCURLY
 %token LBRACE RBRACE QUOTE EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
 %token NEWLINE CONT COMMENT EXCLAM UNDERSCORE DOT EMPTYLINE
-%token SEMICOLON LBRACKET RBRACKET
+%token SEMICOLON LBRACKET RBRACKET VARIABLE FUNCTIONNAME
 
 %right PLUSEQ
 %right MINUSEQ
@@ -133,21 +133,15 @@ quotedval: QUOTE wsvalues QUOTE
 
 value: value IDENTIFIER
     | value SPECIALCHAR
-    | value DOLLAR DOLLAR LCURLY IDENTIFIER RCURLY
-    | value DOLLAR DOLLAR LBRACKET IDENTIFIER RBRACKET
+    | value VARIABLE
     | value DOLLAR DOLLAR LCURLY functioncall RCURLY
-    | value DOLLAR DOLLAR IDENTIFIER
-    | value DOLLAR LBRACE IDENTIFIER RBRACE
     | IDENTIFIER
     | SPECIALCHAR
-    | DOLLAR DOLLAR LCURLY IDENTIFIER RCURLY
-    | DOLLAR DOLLAR LBRACKET IDENTIFIER RBRACKET
+    | VARIABLE
     | DOLLAR DOLLAR LCURLY functioncall RCURLY
-    | DOLLAR DOLLAR IDENTIFIER
-    | DOLLAR LBRACE IDENTIFIER RBRACE
     ;
 
-functioncall: IDENTIFIER ws LBRACE functionargs RBRACE
+functioncall: IDENTIFIER LBRACE functionargs RBRACE
     | EXCLAM IDENTIFIER ws LBRACE functionargs RBRACE
     ;
 
@@ -157,7 +151,7 @@ functionargs: functionargs COMMA functionarg
     ;
 
 functionarg: ws fnvalue ws
-    | ws DOLLAR DOLLAR functioncall ws
+    | ws FUNCTIONNAME ws LBRACE functionargs RBRACE ws
     ;
 
 fnvalue: fnvalue value

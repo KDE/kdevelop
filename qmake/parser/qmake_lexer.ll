@@ -59,7 +59,12 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 {specialchar}   { yylval.value = yytext; return SPECIALCHAR; }
 "_"             { yylval.value = yytext; return UNDERSCORE; }
 "|"             { yylval.value = yytext; return OR; }
+"$$"{identifier}"("    { yylval.value = yytext; unput('('); return FUNCTIONNAME; }
 {identifier}    { yylval.value = yytext; return IDENTIFIER; }
+"$$"{identifier}    { yylval.value = yytext; return VARIABLE; }
+"$${"{identifier}"}"    { yylval.value = yytext; return VARIABLE; }
+"$("{identifier}")"    { yylval.value = yytext; return VARIABLE; }
+"$$["{identifier}"]"    { yylval.value = yytext; return VARIABLE; }
 "\\"{newline}   { yylval.value = yytext; return CONT; }
 "#"[^\n]*       { yylval.value = yytext; return COMMENT; }
 "\""            { yylval.value = yytext; return QUOTE; }
