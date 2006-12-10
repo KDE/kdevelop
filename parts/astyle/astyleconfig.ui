@@ -46,92 +46,139 @@
                 <attribute name="title">
                     <string>&amp;General</string>
                 </attribute>
-                <widget class="QButtonGroup">
+                <vbox>
                     <property name="name">
-                        <cstring>StyleGroup</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>11</x>
-                            <y>11</y>
-                            <width>370</width>
-                            <height>240</height>
-                        </rect>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>350</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>400</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="title">
-                        <string>&amp;Style</string>
-                    </property>
-                    <grid>
+                    <widget class="QButtonGroup">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>StyleGroup</cstring>
                         </property>
-                        <widget class="QRadioButton" row="1" column="0">
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>350</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>400</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="title">
+                            <string>&amp;Style</string>
+                        </property>
+                        <vbox>
                             <property name="name">
-                                <cstring>Style_ANSI</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>&amp;ANSI</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>1</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>ANSI style formatting/indenting.
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>Style_UserDefined</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;User defined</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Select options from other tabs.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>Style_ANSI</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;ANSI</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>1</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>ANSI style formatting/indenting.
 Brackets Break
 Use 4 spaces
 Indent Bracket=false
 Indent Class=false
 Indent Switch=false
 Indent NameSpace=false</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="3" column="0">
-                            <property name="name">
-                                <cstring>Style_Linux</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Linu&amp;x</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>3</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Linux mode (8 spaces per indent, break definition-block brackets but attach command-block brackets).
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>Style_KR</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Kernighan &amp;&amp; Ritchie</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>2</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Kernighan &amp; Ritchie style formatting/indenting.
+Brackets Attach
+Use 4 spaces
+Indent Class=false
+Indent Switch=false
+Indent Namespaces=false
+</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>Style_Linux</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Linu&amp;x</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>3</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Linux mode (8 spaces per indent, break definition-block brackets but attach command-block brackets).
 Brackets Linux
 Use 8 spaces
 Indent Bracket=false
 Indent Class=false
 Indent Switch=false
 Indent NameSpace=false</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="4" column="0">
-                            <property name="name">
-                                <cstring>Style_GNU</cstring>
-                            </property>
-                            <property name="text">
-                                <string>G&amp;NU</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>4</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>GNU style formatting/indenting.
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>Style_GNU</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>G&amp;NU</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>4</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>GNU style formatting/indenting.
 Brackets Break
 Use 2 spaces
 Indent Block=true
@@ -139,138 +186,83 @@ Indent Bracket=false
 Indent Class=false
 Indent Switch=false
 Indent NameSpace=false</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="5" column="0">
-                            <property name="name">
-                                <cstring>Style_JAVA</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;JAVA</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+J</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>5</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Java mode, with standard java style formatting/indenting.
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>Style_JAVA</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;JAVA</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+J</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>5</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Java mode, with standard java style formatting/indenting.
 Java Style
 Use 4 spaces
 Brackets Attach
 Indent Bracket=false
 Indent Switch=false</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>Style_UserDefined</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;User defined</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+U</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>0</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Select options from other tabs.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="2" column="0">
-                            <property name="name">
-                                <cstring>Style_KR</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Kernighan &amp;&amp; Ritchie</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+K</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>2</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Kernighan &amp; Ritchie style formatting/indenting.
-Brackets Attach
-Use 4 spaces
-Indent Class=false
-Indent Switch=false
-Indent Namespaces=false
-</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="6" column="0">
-                            <property name="name">
-                                <cstring>Style_Global</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Use Global &amp;Options</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+O</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>6</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Use the global defaults. See the menu:
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>Style_Global</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Use Global &amp;Options</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+O</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>6</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Use the global defaults. See the menu:
 Settings/Configure Kdevelop/Formatting.</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>FrameFilesFormat</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>260</y>
-                            <width>370</width>
-                            <height>340</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="title">
-                        <string>Files to format</string>
-                    </property>
-                    <widget class="QTextEdit">
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QButtonGroup">
                         <property name="name">
-                            <cstring>GeneralExtension</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>20</y>
-                                <width>350</width>
-                                <height>300</height>
-                            </rect>
+                            <cstring>FrameFilesFormat</cstring>
                         </property>
                         <property name="sizePolicy">
                             <sizepolicy>
-                                <hsizetype>3</hsizetype>
+                                <hsizetype>5</hsizetype>
                                 <vsizetype>5</vsizetype>
                                 <horstretch>0</horstretch>
                                 <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
-                        <property name="text">
-                            <string>*.c *.h
+                        <property name="title">
+                            <string>Files to format</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QTextEdit">
+                                <property name="name">
+                                    <cstring>GeneralExtension</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>*.c *.h
 *.cpp *.hpp 
 *.C *.H 
 *.cxx *.hxx 
@@ -280,31 +272,33 @@ Settings/Configure Kdevelop/Formatting.</string>
 *.moc *.xpm
 *.diff *.patch
 *.java</string>
-                        </property>
-                        <property name="wordWrap">
-                            <enum>WidgetWidth</enum>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Set the file extensions for what the
+                                </property>
+                                <property name="wordWrap">
+                                    <enum>WidgetWidth</enum>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set the file extensions for what the
 formatter will try to reformat. Use a
 space seperated list. eg. *.cpp *.hpp
 Can use * on its own for any file.</string>
-                        </property>
-                        <property name="whatsThis" stdset="0">
-                            <string>Set the file extensions for what the
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Set the file extensions for what the
 formatter will try to reformat. Use a
 space seperated list. eg. *.cpp *.hpp
 Can use * on its own for any file.</string>
-                        </property>
+                                </property>
+                            </widget>
+                        </vbox>
                     </widget>
-                </widget>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Tab &amp;&amp; &amp;Brackets</string>
+                    <string>Tab &amp;&amp; Bra&amp;ckets</string>
                 </attribute>
                 <grid>
                     <property name="name">
