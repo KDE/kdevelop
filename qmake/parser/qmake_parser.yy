@@ -106,12 +106,12 @@ statement: comment
     | else_statement
     ;
 
-simple_scope: ws scope_name ws LCURLY ws NEWLINE statements ws RCURLY ws NEWLINE
-    | ws scope_name ws LCURLY ws NEWLINE statements ws RCURLY else_statement
+simple_scope: ws scope_name ws LCURLY NEWLINE statements ws RCURLY NEWLINE
+    | ws scope_name ws LCURLY NEWLINE statements ws RCURLY else_statement
     | ws scope_name ws COLON ws statement
     ;
 
-else_statement: ELSE ws LCURLY ws NEWLINE statements ws RCURLY ws NEWLINE
+else_statement: ELSE ws LCURLY NEWLINE statements ws RCURLY NEWLINE
     | ELSE ws COLON ws statement
     ;
 
@@ -120,9 +120,9 @@ scope_name: IDENTIFIER
     ;
 
 function_scope: ws functioncall ws LCURLY NEWLINE statements ws RCURLY NEWLINE
-    | ws functioncall ws LCURLY ws NEWLINE statements ws RCURLY else_statement
+    | ws functioncall ws LCURLY NEWLINE statements ws RCURLY else_statement
     | ws functioncall ws COLON ws statement
-    | ws functioncall ws NEWLINE
+    | ws functioncall NEWLINE
     ;
 
 variable_assignment: ws IDENTIFIER ws op values COMMENT NEWLINE
