@@ -78,12 +78,7 @@ ProjectAST* project;
 %token LPAREN RPAREN QUOTE EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
 %token NEWLINE CONT COMMENT EXCLAM UNDERSCORE DOT EMPTYLINE
 %token SEMICOLON LBRACKET RBRACKET VARIABLE FUNCTIONNAME ELSE
-
-%right PLUSEQ
-%right MINUSEQ
-%right EQUAL
-%right STAREQ
-%right TILDEEQ
+%token FUNCTIONCALL
 
 %%
 
@@ -103,14 +98,19 @@ statement: comment
     | variable_assignment
     | scope
     | ws functioncall NEWLINE
+    | or_op
     ;
 
 scope: scope_head scope_body
+    | ws ELSE scope_body
+    ;
+
+or_op: scope_head OR scope_head scope_body
+    | ws ELSE OR scope_head scope_body
     ;
 
 scope_head: ws scope_name
     | ws functioncall
-    | ws ELSE
     ;
 
 scope_body: ws LCURLY COMMENT NEWLINE statements ws RCURLY NEWLINE
@@ -125,7 +125,9 @@ scope_name: IDENTIFIER
     ;
 
 variable_assignment: ws IDENTIFIER op values COMMENT NEWLINE
+    | ws IDENTIFIER op COMMENT NEWLINE
     | ws IDENTIFIER op values NEWLINE
+    | ws IDENTIFIER op NEWLINE
     ;
 
 values: values WS value
@@ -157,20 +159,22 @@ value: value IDENTIFIER
     | value VARIABLE
     | value SEMICOLON
     | value DOLLAR DOLLAR LCURLY functioncall RCURLY
-    | value FUNCTIONNAME LPAREN functionargs RPAREN
+    | value FUNCTIONCALL LPAREN functionargs RPAREN
+    | value OR
     | IDENTIFIER
     | COLON
+    | OR
     | SPECIALCHAR
     | VARIABLE
     | SEMICOLON
-    | FUNCTIONNAME LPAREN functionargs RPAREN
+    | FUNCTIONCALL LPAREN functionargs RPAREN
     | DOLLAR DOLLAR LCURLY functioncall RCURLY
     ;
 
-functioncall: IDENTIFIER LPAREN functionargs RPAREN
-    | IDENTIFIER LPAREN ws RPAREN
-    | EXCLAM IDENTIFIER ws LPAREN functionargs RPAREN
-    | EXCLAM IDENTIFIER ws LPAREN ws RPAREN
+functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
+    | FUNCTIONNAME LPAREN ws RPAREN
+    | EXCLAM FUNCTIONNAME LPAREN functionargs RPAREN
+    | EXCLAM FUNCTIONNAME LPAREN ws RPAREN
     ;
 
 functionargs: functionargs COMMA functionarg
@@ -182,7 +186,9 @@ functionarg: wsvalues ws
     ;
 
 wsvalues: wsvalues WS value
+    | wsvalues WS op
     | ws value
+    | ws op
     ;
 
 op: EQUAL

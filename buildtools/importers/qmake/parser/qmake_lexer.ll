@@ -60,7 +60,8 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 {specialchar}           { yylval.value = yytext; return SPECIALCHAR; }
 "_"                     { yylval.value = yytext; return UNDERSCORE; }
 "|"                     { yylval.value = yytext; return OR; }
-"$$"{identifier}/{ws}*"("    { yylval.value = yytext; return FUNCTIONNAME; }
+{identifier}/{ws}*"("    { yylval.value = yytext; return FUNCTIONNAME; }
+"$$"{identifier}/{ws}*"("    { yylval.value = yytext; return FUNCTIONCALL; }
 {identifier}            { yylval.value = yytext; return IDENTIFIER; }
 "$$"{identifier}        { yylval.value = yytext; return VARIABLE; }
 "$${"{identifier}"}"    { yylval.value = yytext; return VARIABLE; }
