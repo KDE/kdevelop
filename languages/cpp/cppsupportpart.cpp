@@ -515,7 +515,7 @@ void CppSupportPart::projectClosed( )
 	{
 		Catalog* c = *it;
 		if ( c->enabled() )
-			enabledPCSs.push_back( QFileInfo( c->dbName() ).baseName() );
+			enabledPCSs.push_back( QFileInfo( c->dbName() ).baseName(true) );
 	}
 	DomUtil::writeListEntry( *project() ->projectDom(), "kdevcppsupport/references", "pcs", enabledPCSs );
 
@@ -1745,7 +1745,8 @@ void CppSupportPart::setupCatalog( )
 	{
 		for ( QStringList::Iterator it = pcsList.begin(); it != pcsList.end(); ++it )
 		{
-			enabledPCSs.push_back( QFileInfo( *it ).baseName() );
+			kdDebug( 9007 ) << "CppSupportPart::setupCatalog()1 " << *it << endl;
+			enabledPCSs.push_back( QFileInfo( *it ).baseName(true) );
 		}
 	}
 	else
@@ -1785,9 +1786,10 @@ void CppSupportPart::setupCatalog( )
 	QStringList::Iterator it = pcsList.begin();
 	while ( it != pcsList.end() )
 	{
+		kdDebug( 9007 ) << "CppSupportPart::setupCatalog()2 " << *it << endl;
 		Catalog * catalog = new Catalog();
 		catalog->open( *it );
-		catalog->setEnabled( enabledPCSs.contains( QFileInfo( *it ).baseName() ) );
+		catalog->setEnabled( enabledPCSs.contains( QFileInfo( *it ).baseName(true) ) );
 		++it;
 
 		for ( QStringList::Iterator idxIt = indexList.begin(); idxIt != indexList.end(); ++idxIt )
@@ -2404,14 +2406,17 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 
 	QFileInfo fileInfo( dbName );
 	QDir dir( fileInfo.dir( true ) );
-	QStringList fileList = dir.entryList( fileInfo.baseName() + "*.idx" );
-	for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it )
+	QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName" << "prefix";
+	for(QStringList::Iterator iter = indexList.begin(); iter != indexList.end(); iter++)
 	{
-		QString idxName = fileInfo.dirPath( true ) + "/" + *it;
-	kdDebug( 9007 ) << "=========> remove db index: " << idxName << endl;
-		dir.remove( *it );
+		QStringList fileList = dir.entryList( fileInfo.baseName(true) +"." +(*iter) + ".idx" );
+		for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it )
+		{
+			QString idxName = fileInfo.dirPath( true ) + "/" + *it;
+		kdDebug( 9007 ) << "=========> remove db index: " << idxName << endl;
+			dir.remove( *it );
+		}
 	}
-
 	dir.remove( fileInfo.fileName() );
 }
 

@@ -79,19 +79,6 @@
                     <cstring>filename_edit</cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel2</cstring>
-                </property>
-                <property name="text">
-                    <string>Description:</string>
-                </property>
-            </widget>
-            <widget class="KLineEdit">
-                <property name="name">
-                    <cstring>description_edit</cstring>
-                </property>
-            </widget>
             <spacer>
                 <property name="name">
                     <cstring>spacer2</cstring>
@@ -155,8 +142,6 @@
         </vbox>
     </widget>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>CreatePCSDialogBase</sender>
@@ -178,5 +163,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

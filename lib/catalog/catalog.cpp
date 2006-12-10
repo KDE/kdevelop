@@ -190,7 +190,7 @@ void  Catalog::setEnabled( bool isEnabled )
         }
 
 	QFileInfo fileInfo( d->dbName );
-	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
+	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName(true) + "." + QString(name) + ".idx";
 
 	if( (ret = dbp->set_cachesize( dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
 	    kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
@@ -210,7 +210,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::close()
  */
- 
+
  void  Catalog::close()
 {
     d->dbName = QString::null;
@@ -233,7 +233,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::open( const QString& dbName )
  */
- 
+
  void  Catalog::open( const QString& dbName )
 {
     Q_ASSERT( d->dbp == 0 );
@@ -268,7 +268,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::dbName() const
  */
- 
+
  QString  Catalog::dbName() const
 {
     return d->dbName;
@@ -277,7 +277,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::isValid() const
  */
- 
+
  bool  Catalog::isValid() const
 {
     return d->dbp != 0;
@@ -286,7 +286,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::addItem( Tag& tag )
  */
- 
+
  void  Catalog::addItem( Tag& tag )
 {
     if( tag.name().isEmpty() )
@@ -308,7 +308,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::getItemById( const QString& id )
  */
- 
+
  Tag  Catalog::getItemById( const QCString& id )
 {
     Q_ASSERT( d->dbp != 0 );
@@ -344,7 +344,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::sync()
 */
- 
+
  void  Catalog::sync()
 {
     Q_ASSERT( d->dbp != 0 );
@@ -360,7 +360,7 @@ void  Catalog::setEnabled( bool isEnabled )
 /*!
     \fn  Catalog::query( const QValueList<QueryArgument>& args )
 */
- 
+
  QValueList<Tag>  Catalog::query( const QValueList<QueryArgument>& args )
 {
     QValueList<Tag> tags;

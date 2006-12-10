@@ -170,7 +170,7 @@ void CCConfigWidget::initCodeCompletionTab( )
 	{
 		Catalog* c = *it;
 		QFileInfo dbInfo( c->dbName() );
-		QCheckListItem* item = new QCheckListItem( advancedOptions, KURL::decode_string( dbInfo.baseName() ), QCheckListItem::CheckBox );
+		QCheckListItem* item = new QCheckListItem( advancedOptions, KURL::decode_string( dbInfo.baseName(true) ), QCheckListItem::CheckBox );
 		item->setOn( c->enabled() );
 
 		m_catalogs[ item ] = c;
@@ -262,7 +262,7 @@ void CCConfigWidget::slotRemovePCS()
 void CCConfigWidget::catalogRegistered( Catalog * c )
 {
 	QFileInfo dbInfo( c->dbName() );
-	QCheckListItem* item = new QCheckListItem( advancedOptions, KURL::decode_string( dbInfo.baseName() ), QCheckListItem::CheckBox );
+	QCheckListItem* item = new QCheckListItem( advancedOptions, KURL::decode_string( dbInfo.baseName(true) ), QCheckListItem::CheckBox );
 	item->setOn( c->enabled() );
 
 	m_catalogs[ item ] = c;
