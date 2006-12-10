@@ -101,28 +101,27 @@ statements: statements statement
 statement: comment
     | EMPTYLINE
     | variable_assignment
-    | function_scope
-    | simple_scope
-    | else_statement
+    | scope
+    | ws functioncall NEWLINE
     ;
 
-simple_scope: ws scope_name ws LCURLY NEWLINE statements ws RCURLY NEWLINE
-    | ws scope_name ws LCURLY NEWLINE statements ws RCURLY else_statement
-    | ws scope_name ws COLON statement
+scope: scope_head scope_body
     ;
 
-else_statement: ws ELSE ws LCURLY NEWLINE statements ws RCURLY NEWLINE
-    | ws ELSE ws COLON statement
+scope_head: ws scope_name
+    | ws functioncall
+    | ws ELSE
+    ;
+
+scope_body: ws LCURLY COMMENT NEWLINE statements ws RCURLY NEWLINE
+    | ws LCURLY NEWLINE statements ws RCURLY NEWLINE
+    | ws LCURLY NEWLINE statements ws RCURLY
+    | ws LCURLY COMMENT NEWLINE statements ws RCURLY
+    | ws COLON statement
     ;
 
 scope_name: IDENTIFIER
     | EXCLAM IDENTIFIER
-    ;
-
-function_scope: ws functioncall ws LCURLY NEWLINE statements ws RCURLY NEWLINE
-    | ws functioncall ws LCURLY NEWLINE statements ws RCURLY else_statement
-    | ws functioncall ws COLON statement
-    | ws functioncall NEWLINE
     ;
 
 variable_assignment: ws IDENTIFIER op values COMMENT NEWLINE
@@ -156,11 +155,15 @@ value: value IDENTIFIER
     | value COLON
     | value SPECIALCHAR
     | value VARIABLE
+    | value SEMICOLON
     | value DOLLAR DOLLAR LCURLY functioncall RCURLY
+    | value FUNCTIONNAME LPAREN functionargs RPAREN
     | IDENTIFIER
     | COLON
     | SPECIALCHAR
     | VARIABLE
+    | SEMICOLON
+    | FUNCTIONNAME LPAREN functionargs RPAREN
     | DOLLAR DOLLAR LCURLY functioncall RCURLY
     ;
 
@@ -174,7 +177,7 @@ functionargs: functionargs COMMA functionarg
     | functionarg
     ;
 
-functionarg: ws value ws
+functionarg: wsvalues ws
     | ws FUNCTIONNAME ws LPAREN functionargs RPAREN ws
     ;
 
