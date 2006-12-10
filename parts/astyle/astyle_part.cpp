@@ -59,8 +59,8 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   formatFileAction->setEnabled ( true );
 
   m_configProxy = new ConfigWidgetProxy(core());
-    m_configProxy->createGlobalConfigPage(i18n("Formatting"), GLOBALDOC_OPTIONS, info()->icon());
-    m_configProxy->createProjectConfigPage(i18n("Formatting"), PROJECTDOC_OPTIONS, info()->icon());
+  m_configProxy->createGlobalConfigPage(i18n("Formatting"), GLOBALDOC_OPTIONS, info()->icon());
+  m_configProxy->createProjectConfigPage(i18n("Formatting"), PROJECTDOC_OPTIONS, info()->icon());
 
 
   connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase* ,QWidget*,unsigned int)), this, SLOT(insertConfigWidget(const KDialogBase*,QWidget*,unsigned int)));
@@ -69,12 +69,13 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
 
   connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
-  // maybe there is a file open already
-  activePartChanged( partController()->activePart() );
-
   loadGlobal();
   //use the globals first, project level will override later..
   m_project=m_global;
+
+  setExtensions("*.C *.H *.c *.c++ *.cc *.cpp *.cxx *.diff *.h *.h++ *.hh *.hpp *.hxx *.inl *.java *.moc *.patch *.tlh *.xpm");
+  // maybe there is a file open already
+  activePartChanged( partController()->activePart() );
 
 }
 

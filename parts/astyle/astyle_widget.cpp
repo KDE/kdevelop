@@ -16,8 +16,8 @@
 AStyleWidget::AStyleWidget(AStylePart * part, bool global, QWidget *parent, const char *name)
     : AStyleConfig(parent, name), m_part(part), isGlobal(global)
 {
-	// which style changed - disable the other pages.
-	connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
+  // which style changed - disable the other pages.
+  connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
   connect(ConfigTabs, SIGNAL(currentChanged(QWidget*)), this, SLOT(styleChanged()) );
 
   connect(FillingGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
