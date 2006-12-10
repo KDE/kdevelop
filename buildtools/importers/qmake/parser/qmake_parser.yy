@@ -93,29 +93,27 @@ statement: comment
     | function_scope
     ;
 
-function_scope: ws functioncall ws LCURLY ws newline statements ws RCURLY ws NEWLINE
+function_scope: ws functioncall ws LCURLY newline statements ws RCURLY NEWLINE
     | ws functioncall COLON statement
-    | ws functioncall ws NEWLINE
+    | ws functioncall NEWLINE
     ;
 
 newline: NEWLINE
     |
     ;
 
-variable_assignment: ws IDENTIFIER ws op values WS COMMENT NEWLINE
-    | ws IDENTIFIER ws op values COMMENT NEWLINE
+variable_assignment: ws IDENTIFIER ws op values COMMENT NEWLINE
     | ws IDENTIFIER ws op values NEWLINE
     ;
 
 values: values WS value
     | values WS braceenclosedval
     | values WS quotedval
-    | values WS cont
     | values cont
     | ws braceenclosedval
     | ws quotedval
     | ws value
-    | ws CONT
+    | CONT
     ;
 
 cont: CONT
@@ -174,7 +172,7 @@ ws: WS
     |
     ;
 
-comment: ws COMMENT NEWLINE
+comment: COMMENT NEWLINE
     ;
 
 %%
