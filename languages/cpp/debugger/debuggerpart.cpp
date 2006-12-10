@@ -1116,11 +1116,6 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
             if (dockWidget->currentDockPosition() == KDockWidget::DockDesktop)
                 undocked = true;
         }
-
-        if (!undocked)
-        {
-            mainWindow()->lowerView(variableWidget);
-        }
     }
     else if (state & s_dbgBusy)
     {
