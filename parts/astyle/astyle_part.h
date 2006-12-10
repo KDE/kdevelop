@@ -65,7 +65,8 @@ private:
   // the configurable options.
   QMap<QString, QVariant>  m_project;
   QMap<QString, QVariant> m_global;
-  QMap<QString, QString> m_extensions;
+  QMap<QString, QString> m_searchExtensions;
+  QStringList m_displayExtensions;
   KURL::List m_urls;
 
 

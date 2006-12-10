@@ -73,7 +73,8 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   //use the globals first, project level will override later..
   m_project=m_global;
 
-  setExtensions("*.C *.H *.c *.c++ *.cc *.cpp *.cxx *.diff *.h *.h++ *.hh *.hpp *.hxx *.inl *.java *.moc *.patch *.tlh *.xpm");
+  QString defaultExt="*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
+  setExtensions(defaultExt);
   // maybe there is a file open already
   activePartChanged( partController()->activePart() );
 
@@ -254,44 +255,40 @@ void AStylePart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsig
 }
 
 QString AStylePart::getExtensions(){
-	QString values;
-	int count=0;
-	 for (QMap<QString, QString>::iterator iter = m_extensions.begin();iter != m_extensions.end();iter++)
-     {
-		QString ext = iter.data();
-		values.append(ext);
-		values.append(" ");
-		if ( count++ == 1){
-			values.append('\n');
-			count=0;
-		}
-	}
-	values += " ";
+	QString values = m_displayExtensions.join("\n");
 	kdDebug(9009) << "getExtensions " << values<<endl;
 	return values.stripWhiteSpace();
 }
 
+/**
+ * Extensions from the widget passed in.
+ * We preserve the order, so common extensions will
+ * end up at the top
+ * @param ext
+ */
 void AStylePart::setExtensions ( QString ext )
 {
 	kdDebug(9009) << "setExtensions " << ext<<endl;
-	m_extensions.clear();
-	QStringList extensions = QStringList::split ( " ", ext );
-	for ( QStringList::Iterator iter = extensions.begin(); iter != extensions.end(); iter++ )
+	m_searchExtensions.clear();
+	m_displayExtensions.clear();
+	m_displayExtensions = QStringList::split ( QRegExp("\n"), ext );
+	QStringList bits = QStringList::split(QRegExp("\\s+"),ext);
+	for ( QStringList::Iterator iter = bits.begin(); iter != bits.end(); iter++ )
 	{
 		QString ending=*iter;
 		if ( ending.startsWith ( "*" ) )
 		{
 			if (ending.length() ==1 ){
 				// special case.. any file.
-				m_extensions.insert(ending, ending);
+				m_searchExtensions.insert(ending, ending);
 			}
 			else{
-				m_extensions.insert( ending.mid( 1 ), ending);
+				m_searchExtensions.insert( ending.mid( 1 ), ending);
 			}
 		}
 		else
 		{
-			m_extensions.insert(ending, ending);
+			m_searchExtensions.insert(ending, ending);
 		}
 	}
 }
@@ -309,14 +306,14 @@ void AStylePart::activePartChanged ( KParts::Part *part )
 		if ( iface )
 		{
 			// check for the everything case..
-			if ( m_extensions.find ( "*" ) == m_extensions.end() )
+			if ( m_searchExtensions.find ( "*" ) == m_searchExtensions.end() )
 			{
 				QString extension = rw_part->url().path();
 				int pos = extension.findRev ( '.' );
 				if ( pos >= 0 )
 				{
 					extension = extension.mid ( pos );
-					enabled = ( m_extensions.find ( extension ) != m_extensions.end() );
+					enabled = ( m_searchExtensions.find ( extension ) != m_searchExtensions.end() );
 				}
 			}
 			else
@@ -417,11 +414,11 @@ void AStylePart::restorePartialProjectSession(const QDomElement * el)
 		}
 	}
 	QDomElement exten = el->namedItem("Extensions").toElement();
-	QString ext = exten.attribute("ext");
-	if ( ext.isEmpty() || ext.stripWhiteSpace().isEmpty()){
-		ext="*.C *.H *.c *.c++ *.cc *.cpp *.cxx *.diff *.h *.h++ *.hh *.hpp *.hxx *.inl *.java *.moc *.patch *.tlh *.xpm";
+	QString ext = exten.attribute("ext").simplifyWhiteSpace();
+	if ( ext.isEmpty()){
+		ext="*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
 	}
-	setExtensions(ext);
+	setExtensions(ext.replace(QChar(','), QChar('\n')));
 }
 
 
@@ -441,12 +438,7 @@ void AStylePart::savePartialProjectSession(QDomElement * el)
 		}
 	}
 	QDomElement exten = domDoc.createElement ( "Extensions" );
-	QString values;
-	for ( QMap<QString, QString>::iterator iter = m_extensions.begin();iter != m_extensions.end();iter++ )
-	{
-		values += ( iter.data() ) + " ";
-	}
-	exten.setAttribute ( "ext", values );
+	exten.setAttribute ( "ext", m_displayExtensions.join(",").simplifyWhiteSpace() );
 
 	el->appendChild(style);
 	el->appendChild(exten);
@@ -476,15 +468,12 @@ void AStylePart::formatFiles()
 	}
 
 	uint processed = 0;
-	KProgressDialog *prog = new KProgressDialog ( 0, "dialog", i18n ( "Formatting files.." ), "", true );
-	prog->setMinimumDuration(100);
-	prog->show();
 	for ( uint fileCount = 0; fileCount < m_urls.size(); fileCount++ )
 	{
 		QString fileName = m_urls[fileCount].pathOrURL();
 
 		bool found = false;
-		for ( QMap<QString, QString>::Iterator it = m_extensions.begin(); it != m_extensions.end(); ++it )
+		for ( QMap<QString, QString>::Iterator it = m_searchExtensions.begin(); it != m_searchExtensions.end(); ++it )
 		{
 			QRegExp re ( it.data(), true, true );
 			if ( re.search ( fileName ) == 0 && ( uint ) re.matchedLength() == fileName.length() )
@@ -497,9 +486,6 @@ void AStylePart::formatFiles()
 		if ( found )
 		{
 			QString backup = fileName + "#";
-			prog->setLabel ( i18n ( "Processing file: %1" ).arg ( fileName ) );
-			prog->progressBar()->setValue ( (fileCount+1 / m_urls.size()-1)*100 );
-
 			QFile fin ( fileName );
 			QFile fout ( backup );
 			if ( fin.open ( IO_ReadOnly ) )
@@ -525,8 +511,6 @@ void AStylePart::formatFiles()
 			}
 		}
 	}
-	prog->hide();
-	delete prog;
 	if ( processed != 0 )
 	{
 		KMessageBox::information ( 0, i18n ( "Processed %1 files ending with extensions %2" ).arg ( processed ).arg(getExtensions().stripWhiteSpace()) );

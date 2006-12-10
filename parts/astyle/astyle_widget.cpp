@@ -167,7 +167,7 @@ void AStyleWidget::accept()
   }
   else{
 	m_option = &(m_part->getProjectOptions());
-	m_part->setExtensions(GeneralExtension->text().simplifyWhiteSpace());
+	m_part->setExtensions(GeneralExtension->text());
   }
 
 
