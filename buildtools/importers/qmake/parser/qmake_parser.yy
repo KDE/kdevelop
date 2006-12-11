@@ -76,8 +76,8 @@ ProjectAST* project;
 
 %token WS IDENTIFIER SPECIALCHAR DOLLAR COLON COMMA LCURLY RCURLY
 %token LPAREN RPAREN QUOTE EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
-%token NEWLINE CONT COMMENT EXCLAM UNDERSCORE DOT EMPTYLINE
-%token SEMICOLON LBRACKET RBRACKET VARIABLE FUNCTIONNAME ELSE
+%token NEWLINE CONT COMMENT EXCLAM EMPTYLINE
+%token SEMICOLON VARIABLE FUNCTIONNAME ELSE
 %token FUNCTIONCALL
 
 %%
@@ -134,9 +134,9 @@ values: values WS value
     | values WS braceenclosedval
     | values WS quotedval
     | values cont
-    | ws braceenclosedval
-    | ws quotedval
-    | ws value
+    | braceenclosedval
+    | quotedval
+    | value
     | CONT
     ;
 
@@ -181,14 +181,19 @@ functionargs: functionargs COMMA functionarg
     | functionarg
     ;
 
-functionarg: wsvalues ws
+functionarg: wsvalues
     | ws FUNCTIONNAME ws LPAREN functionargs RPAREN ws
     ;
 
 wsvalues: wsvalues WS value
-    | wsvalues WS op
+    | wsvalues WS braceenclosedval
+    | wsvalues WS quotedval
+    | wsvalues op value
+    | wsvalues op braceenclosedval
+    | wsvalues op quotedval
+    | braceenclosedval
+    | quotedval
     | ws value
-    | ws op
     ;
 
 op: EQUAL
