@@ -153,15 +153,11 @@ braceenclosedval: LPAREN wsvalues RPAREN SEMICOLON
 quotedval: QUOTE wsvalues QUOTE
     ;
 
-value: value IDENTIFIER
-    | value COLON
-    | value SPECIALCHAR
-    | value VARIABLE
-    | value SEMICOLON
-    | value DOLLAR DOLLAR LCURLY functioncall RCURLY
-    | value FUNCTIONCALL LPAREN functionargs RPAREN
-    | value OR
-    | IDENTIFIER
+value: value valuepart
+    | valuepart
+    ;
+
+valuepart: IDENTIFIER
     | COLON
     | OR
     | SPECIALCHAR
