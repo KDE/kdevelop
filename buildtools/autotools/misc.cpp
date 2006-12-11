@@ -866,13 +866,13 @@ QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
 }
 
 /**
- * Write the addition items to the AC_OUTPUT line.
+ * Write the items to the AC_OUTPUT line. This replaces the exiting line.
  * @param configureinpath
  * @param makefiles
  */
 void AutoProjectTool::configureinSaveMakefiles(QString fileName, QStringList makefiles)
 {
-// input file reading
+	// input file reading
 	QFile fin(fileName);
 	if (!fin.open(IO_ReadOnly))
 	{
@@ -889,6 +889,7 @@ void AutoProjectTool::configureinSaveMakefiles(QString fileName, QStringList mak
 	}
 	QTextStream outs(&fout);
 
+	// remove duplicates if any..
 	QMap<QString, QString> toAdd;
 	for (uint i = 0; i < makefiles.size();i++)
 	{
@@ -916,13 +917,6 @@ void AutoProjectTool::configureinSaveMakefiles(QString fileName, QStringList mak
 				line = line.stripWhiteSpace();
 				if (close.search(line) >= 0)
 				{
-					line = line.replace(close.search(line), 1, "");
-					QStringList list = QStringList::split(" ", line);
-					// remove dups if any..
-					for (uint i = 0; i < list.size();i++)
-					{
-						toAdd.insert(list[i], "");
-					}
 					int len = 10;
 					QString acline("AC_OUTPUT(");
 					for (QMap<QString, QString>::iterator iter = toAdd.begin();iter != toAdd.end();iter++)
@@ -947,13 +941,6 @@ void AutoProjectTool::configureinSaveMakefiles(QString fileName, QStringList mak
 					{
 						line.setLength(line.length() - 1);
 					}
-
-					QStringList list = QStringList::split(" ", line);
-					// remove dups if any..
-					for (uint i = 0; i < list.size();i++)
-					{
-						toAdd.insert(list[i], "");
-					}
 				}
 			}
 			else if (ac_regex.search(line) >= 0)
@@ -972,13 +959,6 @@ void AutoProjectTool::configureinSaveMakefiles(QString fileName, QStringList mak
 				if (close.search(line) >= 0)
 				{
 					line = line.replace(close.search(line), 1, "");
-				}
-
-				QStringList list = QStringList::split(" ", line);
-				// remove dups if any..
-				for (uint i = 0; i < list.size();i++)
-				{
-					toAdd.insert(list[i], "");
 				}
 
 				if (!multiLine)
