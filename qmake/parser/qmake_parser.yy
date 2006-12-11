@@ -19,24 +19,6 @@
  * 02110-1301, USA.
  */
 
-/**
-@file qmake.yy
-QMake Parser
-
-The simple_scope stuff doesn't work quite well. Basically we can have
-
-scope1:scope2:scope3 {
-}
-
-or
-
-scope1:scope2:scope3 : STATEMENT
-
-where scopei may be either simplescopes or function calls. So we probably need a "scope" rule.
-
-Simple LALR parser which builds the syntax tree (see @ref QMake::AST).
-*/
-
 #include <stdio.h>
 #include "qmakeast.h"
 #include <QtCore/QStack>
