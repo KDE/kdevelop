@@ -23,14 +23,24 @@
 Some notes for special cases to test:
 
 VARIABLE += " value "
+
 VARIABLE += " value ( " -> Only 1 parenthesis
+
 eval($${subdir}.depends = $$basename($${subdir})/$(MAKEFILE)
+
 somescope:anotherscope {
 }
+
 scope | scope : SOMEVAR = foo
+
 eval( $$somefunc( $$VAR, else ) ) {
 } else {
 }
+
+scopename:  (no statement, is accepted by qmake)
+
+VARIABLE = value1=value++
+
 */
 
 #include "parsetest.h"
