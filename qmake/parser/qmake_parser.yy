@@ -181,7 +181,7 @@ functionargs: functionargs COMMA functionarg
     | functionarg
     ;
 
-functionarg: wsvalues
+functionarg: wsvalues ws
     | ws FUNCTIONNAME ws LPAREN functionargs RPAREN ws
     ;
 
