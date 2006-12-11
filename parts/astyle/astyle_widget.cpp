@@ -14,7 +14,7 @@
 
 
 AStyleWidget::AStyleWidget(AStylePart * part, bool global, QWidget *parent, const char *name)
-    : AStyleConfig(parent, name), m_part(part), isGlobal(global)
+    : AStyleConfig(parent, name), m_part(part), isGlobalWidget(global)
 {
   // which style changed - disable the other pages.
   connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged()));
@@ -54,22 +54,13 @@ AStyleWidget::AStyleWidget(AStylePart * part, bool global, QWidget *parent, cons
 
 
   QMap<QString, QVariant> option;
-  if ( isGlobal){
-	Style_Global->setEnabled(false);
+  if ( isGlobalWidget){
 	Style_Global->hide();
-	GeneralExtension->hide();
-	FrameFilesFormat->hide();
 	option = m_part->getGlobalOptions();
   }
   else{
-	Style_Global->setEnabled(true);
 	Style_Global->show();
-	GeneralExtension->show();
-	FrameFilesFormat->show();
 	option = m_part->getProjectOptions();
-    QString ext = m_part->getExtensions();
-	  if ( !ext.isEmpty())
-  			GeneralExtension->setText(m_part->getExtensions());
   }
 
   // style
@@ -83,6 +74,26 @@ AStyleWidget::AStyleWidget(AStylePart * part, bool global, QWidget *parent, cons
   if (s == "JAVA") id=5;
   if (s == "GLOBAL") id = 6;
   StyleGroup->setButton(id);
+
+  	  if ( isGlobalWidget ){
+			GeneralExtension->setText(m_part->getGlobalExtensions());
+			GeneralExtension->setEnabled(true);
+			globalOptions=true;
+	  }
+	  else{
+		  if ( id == 6){
+			GeneralExtension->setText(m_part->getGlobalExtensions());
+			GeneralExtension->setEnabled(false);
+			globalOptions=true;
+		  }
+		 else{
+			GeneralExtension->setText(m_part->getProjectExtensions());
+			GeneralExtension->setEnabled(true);
+			globalOptions=false;
+		 }
+	  }
+
+	m_lastExt=GeneralExtension->text();
 
   if (s == "UserDefined" || s =="GLOBAL" )
   {
@@ -162,12 +173,13 @@ AStyleWidget::~AStyleWidget()
 void AStyleWidget::accept()
 {
   QMap<QString, QVariant>* m_option;
-  if ( isGlobal){
+  if ( isGlobalWidget){
 	m_option = &(m_part->getGlobalOptions());
+	m_part->setExtensions(GeneralExtension->text(),true);
   }
   else{
 	m_option = &(m_part->getProjectOptions());
-	m_part->setExtensions(GeneralExtension->text());
+	m_part->setExtensions(GeneralExtension->text(),false);
   }
 
 
@@ -251,7 +263,7 @@ void AStyleWidget::accept()
     (*m_option)["KeepBlocks"] = Keep_Blocks->isChecked();
   }
 
-  if ( isGlobal){
+  if ( isGlobalWidget){
 	  QMap<QString, QVariant>& project = m_part->getProjectOptions();
 	  if ( project["FStyle"] == "GLOBAL"){
 		  project = m_part->getGlobalOptions();
@@ -267,7 +279,6 @@ void AStyleWidget::accept()
 
 }
 
-
 /**
  * Change the sample formatting text depending on what tab is selected.
  *
@@ -275,15 +286,13 @@ void AStyleWidget::accept()
  */
 void AStyleWidget::styleChanged(  )
 {
-
-	// diable the tabs for predefined sample
+	// disable the tabs for predefined sample
 	// only user define id==0, enables the other tabs
 	ConfigTabs->setTabEnabled(tab_2, Style_UserDefined->isChecked());
 	ConfigTabs->setTabEnabled(tab_3, Style_UserDefined->isChecked());
 	ConfigTabs->setTabEnabled(tab_4, Style_UserDefined->isChecked());
 
 	int id = ConfigTabs->currentPageIndex();
-
 
 	StyleExample->clear();
 
@@ -294,8 +303,6 @@ void AStyleWidget::styleChanged(  )
 	QString formattingSample = "void func(){\n\tif(isFoo(a,b))\n\tbar(a,b);\nif(isFoo)\n\ta=bar((b-c)*a,*d--);\nif(  isFoo( a,b ) )\n\tbar(a, b);\nif (isFoo) {isFoo=false;cat << isFoo <<endl;}\nif(isFoo)DoBar();if (isFoo){\n\tbar();\n}\n\telse if(isBar()){\n\tannotherBar();\n}\n}\n";
 
 	QString styleSample = "\t//Tabs & Brackets\nnamespace foo{\n" + bracketSample + "}\n\t// Indentation\n" + indentSample + "\t// Formatting\n" + formattingSample;
-
-
 
 	switch(id){
 		case 1:
@@ -309,12 +316,29 @@ void AStyleWidget::styleChanged(  )
 			break;
 		default:
 		{
-			if ( Style_Global->isChecked())
-				StyleExample->setText( m_part->formatSource( styleSample, 0, m_part->getGlobalOptions()) );
+			if ( Style_Global->isChecked() ){
+					StyleExample->setText( m_part->formatSource( styleSample, 0, m_part->getGlobalOptions()) );
+			}
 			else
 			{
 				StyleExample->setText( m_part->formatSource( styleSample, this, m_part->getProjectOptions() ) );
 			}
+		}
+	}
+
+	if ( Style_Global->isChecked()){
+		if ( !globalOptions){
+			m_lastExt = GeneralExtension->text();
+			GeneralExtension->setEnabled ( false );
+			GeneralExtension->setText ( m_part->getGlobalExtensions() );
+			globalOptions=!globalOptions;
+		}
+	}
+	else{
+		if ( globalOptions){
+			GeneralExtension->setEnabled ( true );
+			GeneralExtension->setText ( m_lastExt );
+			globalOptions=!globalOptions;
 		}
 	}
 }

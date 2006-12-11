@@ -33,8 +33,9 @@ public:
   virtual QString formatSource(const QString text);
   QString indentString() const;
   void saveGlobal();
-  void setExtensions(QString ext);
-  QString getExtensions();
+  void setExtensions(QString ext, bool global);
+  QString getProjectExtensions();
+  QString getGlobalExtensions();
   void restorePartialProjectSession(const QDomElement * el);
   void savePartialProjectSession(QDomElement * el);
 
@@ -65,11 +66,10 @@ private:
   // the configurable options.
   QMap<QString, QVariant>  m_project;
   QMap<QString, QVariant> m_global;
+  QStringList m_projectExtensions;
+  QStringList m_globalExtensions;
   QMap<QString, QString> m_searchExtensions;
-  QStringList m_displayExtensions;
   KURL::List m_urls;
-
-
 };
 
 

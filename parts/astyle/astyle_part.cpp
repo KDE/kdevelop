@@ -72,9 +72,8 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   loadGlobal();
   //use the globals first, project level will override later..
   m_project=m_global;
+  m_projectExtensions = m_globalExtensions;
 
-  QString defaultExt="*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
-  setExtensions(defaultExt);
   // maybe there is a file open already
   activePartChanged( partController()->activePart() );
 
@@ -86,7 +85,7 @@ void AStylePart::loadGlobal()
   KConfig *config = kapp->config();
   config->setGroup("AStyle");
   QString options = config->readEntry("Options","BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,Brackets=Break,BracketsCloseHeaders=0,FStyle=UserDefined,Fill=Tabs,FillCount=4,FillEmptyLines=0,FillForce=0,IndentBlocks=0,IndentBrackets=0,IndentCases=0,IndentClasses=1,IndentLabels=1,IndentNamespaces=1,IndentPreprocessors=0,IndentSwitches=1,KeepBlocks=1,KeepStatements=1,MaxStatement=40,MinConditional=-1,PadOperators=0,PadParenthesesIn=1,PadParenthesesOut=1,PadParenthesesUn=1,");
-
+  m_globalExtensions=QStringList::split(",",config->readEntry("Extensions","*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm"));
 
  QStringList pairs = QStringList::split( ",", options);
  QStringList::Iterator it;
@@ -94,6 +93,7 @@ void AStylePart::loadGlobal()
 	QStringList bits = QStringList::split( "=", (*it) );
 	m_global[bits[0]] = bits[1];
  }
+
 
 //   for (QMap<QString, QVariant>::iterator iter = m_global.begin();iter != m_global.end();iter++)
 //         {
@@ -120,6 +120,7 @@ void AStylePart::saveGlobal()
   KConfig *config = kapp->config();
   config->setGroup("AStyle");
   config->writeEntry("Options",options);
+  config->writeEntry("Extensions",m_globalExtensions.join(","));
 
   config->sync();
 //   	 for (QMap<QString, QVariant>::iterator iter = m_global.begin();iter != m_global.end();iter++)
@@ -254,11 +255,15 @@ void AStylePart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsig
 	}
 }
 
-QString AStylePart::getExtensions(){
-	QString values = m_displayExtensions.join("\n");
-	kdDebug(9009) << "getExtensions " << values<<endl;
+QString AStylePart::getGlobalExtensions(){
+	QString values = m_globalExtensions.join("\n");
 	return values.stripWhiteSpace();
 }
+QString AStylePart::getProjectExtensions(){
+	QString values = m_projectExtensions.join("\n");
+	return values.stripWhiteSpace();
+}
+
 
 /**
  * Extensions from the widget passed in.
@@ -266,12 +271,17 @@ QString AStylePart::getExtensions(){
  * end up at the top
  * @param ext
  */
-void AStylePart::setExtensions ( QString ext )
+void AStylePart::setExtensions ( QString ext, bool global )
 {
 	kdDebug(9009) << "setExtensions " << ext<<endl;
+	if ( global){
+		m_globalExtensions.clear();
+		m_globalExtensions=QStringList::split ( QRegExp("\n"), ext );
+	}
+	else{
 	m_searchExtensions.clear();
-	m_displayExtensions.clear();
-	m_displayExtensions = QStringList::split ( QRegExp("\n"), ext );
+	m_projectExtensions.clear();
+	m_projectExtensions = QStringList::split ( QRegExp("\n"), ext );
 	QStringList bits = QStringList::split(QRegExp("\\s+"),ext);
 	for ( QStringList::Iterator iter = bits.begin(); iter != bits.end(); iter++ )
 	{
@@ -290,6 +300,7 @@ void AStylePart::setExtensions ( QString ext )
 		{
 			m_searchExtensions.insert(ending, ending);
 		}
+	}
 	}
 }
 
@@ -405,6 +416,7 @@ void AStylePart::restorePartialProjectSession(const QDomElement * el)
 	{
 		m_project = m_global;
 		m_project["FStyle"] = "GLOBAL";
+		m_projectExtensions=m_globalExtensions;
 	}
 	else
 	{
@@ -412,13 +424,14 @@ void AStylePart::restorePartialProjectSession(const QDomElement * el)
         {
               m_project[iter.key()] = style.attribute(iter.key(),iter.data().toString());
 		}
+
+		QDomElement exten = el->namedItem("Extensions").toElement();
+		QString ext = exten.attribute("ext").simplifyWhiteSpace();
+		if ( ext.isEmpty()){
+			ext="*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
+		}
+		setExtensions(ext.replace(QChar(','), QChar('\n')),false);
 	}
-	QDomElement exten = el->namedItem("Extensions").toElement();
-	QString ext = exten.attribute("ext").simplifyWhiteSpace();
-	if ( ext.isEmpty()){
-		ext="*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
-	}
-	setExtensions(ext.replace(QChar(','), QChar('\n')));
 }
 
 
@@ -436,17 +449,16 @@ void AStylePart::savePartialProjectSession(QDomElement * el)
         {
               style.setAttribute(iter.key(),iter.data().toString());
 		}
+		QDomElement exten = domDoc.createElement ( "Extensions" );
+		exten.setAttribute ( "ext", m_projectExtensions.join(",").simplifyWhiteSpace() );
+		el->appendChild(exten);
 	}
-	QDomElement exten = domDoc.createElement ( "Extensions" );
-	exten.setAttribute ( "ext", m_displayExtensions.join(",").simplifyWhiteSpace() );
-
 	el->appendChild(style);
-	el->appendChild(exten);
 }
 
 void AStylePart::formatFilesSelect(){
 	m_urls.clear();
-	QStringList filenames = KFileDialog::getOpenFileNames (  QString::null, getExtensions(),0,"Select files to format" );
+	QStringList filenames = KFileDialog::getOpenFileNames (  QString::null, getProjectExtensions(),0,"Select files to format" );
 
 	for(QStringList::Iterator it = filenames.begin(); it != filenames.end();it++){
 		m_urls << *it;
@@ -513,7 +525,7 @@ void AStylePart::formatFiles()
 	}
 	if ( processed != 0 )
 	{
-		KMessageBox::information ( 0, i18n ( "Processed %1 files ending with extensions %2" ).arg ( processed ).arg(getExtensions().stripWhiteSpace()) );
+		KMessageBox::information ( 0, i18n ( "Processed %1 files ending with extensions %2" ).arg ( processed ).arg(getProjectExtensions().stripWhiteSpace()) );
 	}
 	m_urls.clear();
 

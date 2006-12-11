@@ -23,13 +23,13 @@ public slots:
 
 
 private slots:
-
   void styleChanged();
 
 private:
-
 	AStylePart * m_part;
-	bool isGlobal;
+	bool isGlobalWidget;
+	QString m_lastExt;
+	bool globalOptions;
 };
 
 
