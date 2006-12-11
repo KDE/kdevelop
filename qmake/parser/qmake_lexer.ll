@@ -35,7 +35,7 @@ ws            [ \t\f]
 letter        [a-zA-Z]
 digit         [0-9]
 newline       ("\n"|"\r\n"|"\r")
-specialchar   ("@"|"%"|"&"|"^"|"\'"|"<"|"?"|">"|"/"|"+"|"-"|"*"|"~"|".")
+specialchar   ("@"|"%"|"&"|"^"|"\'"|"["|"]"|"<"|"?"|">"|"/"|"+"|"-"|"*"|"~"|"."|"_")
 identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 
 %%
@@ -47,8 +47,6 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 "}"                     { yylval.value = yytext; return RCURLY; }
 "("                     { yylval.value = yytext; return LPAREN; }
 ")"                     { yylval.value = yytext; return RPAREN; }
-"["                     { yylval.value = yytext; return LBRACKET; }
-"]"                     { yylval.value = yytext; return RBRACKET; }
 {ws}*"+="{ws}*          { yylval.value = yytext; return PLUSEQ; }
 {ws}*"~="{ws}*          { yylval.value = yytext; return TILDEEQ; }
 {ws}*"-="{ws}*          { yylval.value = yytext; return MINUSEQ; }
@@ -58,7 +56,6 @@ identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
 ","                     { yylval.value = yytext; return COMMA; }
 "!"                     { yylval.value = yytext; return EXCLAM; }
 {specialchar}           { yylval.value = yytext; return SPECIALCHAR; }
-"_"                     { yylval.value = yytext; return UNDERSCORE; }
 "|"                     { yylval.value = yytext; return OR; }
 {identifier}/{ws}*"("    { yylval.value = yytext; return FUNCTIONNAME; }
 "$$"{identifier}/{ws}*"("    { yylval.value = yytext; return FUNCTIONCALL; }
