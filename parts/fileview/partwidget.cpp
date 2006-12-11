@@ -67,7 +67,7 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
 
     QWhatsThis::add
         ( m_filter,
-                i18n("<p>Here you can enter a name filter to limit which files are displayed."
+                i18n("<p>Here you can enter a name filter to limit which files are <b>not displayed</b>."
                      "<p>To clear the filter, toggle off the filter button to the left."
                      "<p>To reapply the last filter used, toggle on the filter button." ) );
     QWhatsThis::add
@@ -75,8 +75,7 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
                 i18n("<p>This button clears the name filter when toggled off, or "
                      "reapplies the last filter used when toggled on.") );
 
-    m_filter->insertItem( m_filetree->showPatterns() );
-	m_lastFilter=m_filetree->showPatterns();
+    m_filter->insertItem( m_filetree->hidePatterns() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,7 +89,7 @@ PartWidget::~PartWidget()
 void PartWidget::showProjectFiles()
 {
     m_filetree->openDirectory( m_part->project()->projectDirectory() );
-    m_filetree->applyShowPatterns( m_filetree->showPatterns() );
+    m_filetree->applyHidePatterns( m_filetree->hidePatterns() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,7 +100,6 @@ void PartWidget::slotFilterChange( const QString & nf )
     bool empty = f.isEmpty() || f == "*";
     if ( empty )
     {
-		f="*";
         m_filter->lineEdit()->setText( QString::null );
         QToolTip::add( m_btnFilter, i18n("Apply last filter (\"%1\")").arg( m_lastFilter ) );
     }
@@ -110,9 +108,11 @@ void PartWidget::slotFilterChange( const QString & nf )
         m_lastFilter = f;
         QToolTip::add( m_btnFilter, i18n("Clear filter") );
     }
-
     m_btnFilter->setOn( !empty );
-    m_filetree->applyShowPatterns( f );
+    // this will be never true after the m_filter has been used;)
+    m_btnFilter->setEnabled( !( empty && m_lastFilter.isEmpty() ) );
+
+    m_filetree->applyHidePatterns( f );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
