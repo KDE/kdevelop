@@ -18,12 +18,7 @@
  </general>
  <kdevscriptproject>
   <general>
-		<includepatterns>*.rb</includepatterns>
-		<includepatterns>*.rhtml</includepatterns>
-		<includepatterns>*.rxml</includepatterns>
-		<includepatterns>*.rjs</includepatterns>
-		<includepatterns>*.css</includepatterns>
-		<includepatterns>*.js</includepatterns>
+		<includepatterns>*.rb,*.rhtml,*.rxml,*.rjs,*.css,*.js</includepatterns>
 		<excludepatterns>*~</excludepatterns>
   </general>
  </kdevscriptproject>
