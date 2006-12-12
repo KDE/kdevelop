@@ -1,86 +1,38 @@
+KConfig XT Ruby template quick start
+Author: Anne-Marie Mahfouf
+Date: 2006-12-12
 -----------------------------------------------
-Kde templates quickstart
-Author: Thomas Nagy
-Date: 2004-03-22
+
+This README file explains you some basic things for starting with
+this application template, a KConfig XT Ruby template.
 -----------------------------------------------
 
-This README file explains you basic things for starting with
-this application template.
+-- REQUIREMENTS --
+you need 
+- Qt version might be 3.3.4 or 3.3.5.
+- kdelibs 3.5 and kdelibs headers 3.5 (devel package) in order to build this template.
+- Korundum either from your distribution or from the kdebindings module or also
+from
+http://rubyforge.org/projects/korundum/.
 
+-----------------------------------------------
 
-** Building and installing **
+-- BUILD --
+In KDevelop Build menu choose:
+Run automake & friends
+Run Configure
+Build Project
+Install (or Install as root)
+-----------------------------------------------
 
-* Build the configure script by "make -f Makefile.cvs"
+-- RUN --
+You will see that the Build menu in KDevelop is now adapted to Ruby.
+In the Build menu, choose
+Run or use Shift + F9 to see your project running.
 
-* To clean, use "make clean", and to clean everything 
-(remove the makefiles, etc), use "make distclean"
+-----------------------------------------------
 
-* To distribute your program, try "make dist".
-This will make a compact tarball archive of your release with the
-necessary scripts inside.
+-- RELEVANT LINK --
+http://developer.kde.org/language-bindings/ruby/index.html
 
-* Modifying the auto-tools scripts
-for automake scripts there is an excellent tutorial there :
-http://developer.kde.org/documentation/other/makefile_am_howto.html
-
-* Simplify your life : install the project in your home directory for
-testing purposes.
-./configure --prefix=/home/user/dummyfolder/
-In the end when you finished the development you can
-rm -rf /home/user/dummyfolder/
-without fear.
-
-
-** Technologies **
-
-* Build the menus of your application easily
-kde applications now use an xml file (*ui.rc file) to build the menus.
-This allow a great customization of the application. However, when
-programming the menu is shown only after a "make install"
-
-For more details, consult :
-http://devel-home.kde.org/~larrosa/tutorial/p9.html
-http://developer.kde.org/documentation/tutorials/xmlui/preface.html
-
-* Use KConfig XT to create your configuration dialogs and make 
-them more maintainable.
-
-For that, you will need to write two simple configuration files 
-in the src directory : <myproject>.kcfg and a <settings>.kcfgc
-The configure.in.in will need to be modified : change the line #MIN_CONFIG(3.0.0) 
-into #MIN_CONFIG(3.2.0)
-
-Take an example on the many apps found in the kdegames source package and consult :
-http://developer.kde.org/documentation/tutorials/kconfigxt/kconfigxt.html
-
-* With KParts, you can embed other kde components in your program, or make your program
-embeddable in other apps. For example, the kmplayer kpart can be called to play videos
-in your app.
-
-For more details, consult :
-http://www-106.ibm.com/developerworks/library/l-kparts/
-http://developer.kde.org/documentation/tutorials/dot/writing-plugins.html
-http://developer.kde.org/documentation/tutorials/developing-a-plugin-structure/index.html
-
-* With dcop, you can control your app from other applications
-Make sure to include K_DCOP and a kdcop: section in your .h file
-http://developer.kde.org/documentation/tutorials/dot/dcopiface/dcop-interface.html
-
-
-** Documentation **
-
-* For the translations :
-1. Download a patched gettext which can be found at:
- http://public.kde.planetmirror.com/pub/kde/devel/gettext-kde/
-2. Install that gettext in ~/bin/
-3. cd ~/yourproject, export PATH=~/bin:$PATH, export
-KDEDIR=/where_your_KDE3_is
-4. make -f admin/Makefile.common package-messages
-5. make package-messages
-6. Translate the po files (not the pot!!) with kbabel or xemacs
-
-* Do not forget to write the documentation for your kde app 
-edit the documentation template index.docbook in doc/
-
-
-
+In KDevelop Documentation, you can find a Ruby tutorial.

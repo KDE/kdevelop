@@ -12,7 +12,7 @@ Name[sv]=KConfig XT-program
 Name[tr]=KConfig XT uygulaması
 Name[zh_CN]=KConfig XT 应用程序
 Category=Ruby/KDE
-Icon=previewruby.png
+Icon=kxtruby.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
 Comment[da]=Genererer et simpelt KDE-program med en kontrol og en indstillingsdialog
 Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Widget und einem Einstellungsdialog.
@@ -23,7 +23,7 @@ Comment[it]=Genera una semplice applicazione KDE con un elemento grafico e una f
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta
 Comment[tr]=Bir parçacığı ve ayar penceresi olan basit bir KDE uygulaması yaratır.
 Comment[zh_CN]=生成带一个部件和一个配置对话框的简单 KDE 应用程序
-ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb,%{dest}/src/README
 Archive=kxtruby.tar.gz
 
 [ADMIN]
