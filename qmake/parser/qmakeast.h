@@ -62,9 +62,10 @@ namespace QMake
             ~ProjectAST();
 
             QString filename() const;
+            void insertStatement( int i, StatementAST* );
             void addStatement( StatementAST* );
             QList<StatementAST*> statements() const;
-            void removeStatement( StatementAST* );
+            void removeStatement( int i );
 
             void writeToString( QString& ) const;
         protected:
@@ -126,6 +127,7 @@ namespace QMake
         public:
             FunctionArgAST( const QString& ws = "", AST* parent = 0 );
             virtual ~FunctionArgAST();
+            virtual QString value() const = 0;
             virtual void writeToString( QString& ) const;
         private:
     };
@@ -136,6 +138,10 @@ namespace QMake
             FunctionCallAST( const QString& name, const QString& begin, QList<FunctionArgAST*> args,
                              const QString& end = "", const QString& ws = "", AST* parent = 0 );
             ~FunctionCallAST();
+            QString value() const;
+            QList<FunctionArgAST*> arguments() const;
+            void insertArgument( int i, FunctionArgAST* );
+            void removeArgument( int i );
             void writeToString( QString& ) const;
         private:
             QList<FunctionArgAST*> m_args;
@@ -149,6 +155,8 @@ namespace QMake
         public:
             SimpleFunctionArgAST( const QString& arg, const QString& ws = "", AST* parent = 0 );
             ~SimpleFunctionArgAST();
+            QString value() const;
+            void setValue( const QString& );
             void writeToString( QString& ) const;
         private:
             QString m_value;
@@ -162,6 +170,10 @@ namespace QMake
                           const QString& end = "", AST* parent = 0 );
             ScopeBodyAST( const QString& begin, StatementAST* stmt, AST* parent = 0 );
             ~ScopeBodyAST();
+            void insertStatement( int i, StatementAST* );
+            void addStatement( StatementAST* );
+            QList<StatementAST*> statements() const;
+            void removeStatement( int i );
             void writeToString( QString& ) const;
         private:
             QList<StatementAST*> m_statements;
@@ -178,6 +190,11 @@ namespace QMake
             ~ScopeAST();
             void writeToString( QString& ) const;
             void setScopeBody( ScopeBodyAST* );
+            ScopeBodyAST* scopeBody() const;
+            void setScopeName( const QString& );
+            QString scopeName( ) const;
+            void setFunctionCall( FunctionCallAST* );
+            FunctionCallAST* functionCall() const;
         private:
             FunctionCallAST* m_call;
             QString m_scopeName;
@@ -193,6 +210,12 @@ namespace QMake
                    const QString& ws = "", AST* parent = 0 );
             ~OrAST();
             void writeToString( QString& ) const;
+            FunctionCallAST* leftCall() const;
+            FunctionCallAST* rightCall() const;
+            ScopeBodyAST* scopeBody() const;
+            void setLeftCall( FunctionCallAST* );
+            void setRightCall( FunctionCallAST* );
+            void setScopeBody( ScopeBodyAST* );
         private:
             FunctionCallAST* m_lCall;
             FunctionCallAST* m_rCall;
