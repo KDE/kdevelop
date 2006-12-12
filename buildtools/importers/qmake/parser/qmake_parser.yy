@@ -73,7 +73,7 @@ project:
 
 statements: statements statement
         {
-project->addStatement( static_cast<StatementAST*>( $<node>2 ) );
+            project->addStatement( static_cast<StatementAST*>( $<node>2 ) );
         }
     |
     ;

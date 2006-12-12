@@ -82,6 +82,11 @@ namespace QMake
         }
     }
 
+    void ProjectAST::insertStatement( int i, StatementAST* a )
+    {
+        m_statements.insert( i, a );
+    }
+
     void ProjectAST::addStatement( StatementAST* a )
     {
         m_statements.append( a );
@@ -92,9 +97,9 @@ namespace QMake
         return m_statements;
     }
 
-    void ProjectAST::removeStatement( StatementAST* a )
+    void ProjectAST::removeStatement( int i )
     {
-        m_statements.removeAll( a );
+        m_statements.removeAt( i );
     }
 
     AssignmentAST::AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& comment, const QString& ws, AST* parent )
@@ -185,6 +190,34 @@ namespace QMake
 
     }
 
+    ScopeBodyAST* ScopeAST::scopeBody() const
+    {
+        return m_body;
+    }
+
+    void ScopeAST::setScopeName( const QString& name )
+    {
+        m_scopeName = name;
+        delete m_call;
+        m_call = 0;
+    }
+
+    QString ScopeAST::scopeName( ) const
+    {
+        return m_scopeName;
+    }
+
+    void ScopeAST::setFunctionCall( FunctionCallAST* call )
+    {
+        m_call = call;
+        m_scopeName = "";
+    }
+
+    FunctionCallAST* ScopeAST::functionCall() const
+    {
+        return m_call;
+    }
+
     void ScopeAST::writeToString( QString& buf ) const
     {
         buf += whitespace();
@@ -234,10 +267,30 @@ namespace QMake
     }
 
 
+    void ScopeBodyAST::insertStatement( int i, StatementAST* a )
+    {
+        m_statements.insert( i, a );
+    }
+
+    void ScopeBodyAST::addStatement( StatementAST* a )
+    {
+        m_statements.append( a );
+    }
+
+    QList<StatementAST*> ScopeBodyAST::statements() const
+    {
+        return m_statements;
+    }
+
+    void ScopeBodyAST::removeStatement( int i )
+    {
+        m_statements.removeAt( i );
+    }
+
     OrAST::OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall, ScopeBodyAST* body
                   , const QString& ws, AST* parent )
             : StatementAST( ws, parent ), m_lCall( lcall ), m_rCall( rcall ), m_body( body ), m_orop( orop )
-{}
+    {}
 
     OrAST::~OrAST()
     {
@@ -259,6 +312,37 @@ namespace QMake
 
     }
 
+
+    FunctionCallAST* OrAST::leftCall() const
+        {
+            return m_lCall;
+        }
+
+    FunctionCallAST* OrAST::rightCall() const
+        {
+            return m_rCall;
+        }
+
+    ScopeBodyAST* OrAST::scopeBody() const
+        {
+            return m_body;
+        }
+
+    void OrAST::setLeftCall( FunctionCallAST* call )
+    {
+        m_lCall = call;
+    }
+
+    void OrAST::setRightCall( FunctionCallAST* call )
+    {
+        m_rCall = call;
+    }
+
+    void OrAST::setScopeBody( ScopeBodyAST* body )
+    {
+        m_body = body;
+    }
+
     FunctionArgAST::FunctionArgAST( const QString& ws, AST* parent )
             : AST( ws, parent )
     {}
@@ -275,8 +359,7 @@ namespace QMake
                                       QList<FunctionArgAST*> args, const QString& end, const QString& ws, AST* parent )
             : FunctionArgAST( ws, parent ), m_args( args ),
             m_functionName( functionname ), m_begin( begin ), m_end( end )
-    {
-    }
+    {}
 
 
     FunctionCallAST::~FunctionCallAST()
@@ -286,6 +369,13 @@ namespace QMake
             delete( *it );
         }
         m_args.clear();
+    }
+
+    QString FunctionCallAST::value() const
+    {
+        QString val;
+        writeToString( val );
+        return val;
     }
 
     void FunctionCallAST::writeToString( QString& buf ) const
@@ -303,12 +393,38 @@ namespace QMake
         buf += m_end;
     }
 
+
+    QList<FunctionArgAST*> FunctionCallAST::arguments() const
+    {
+        return m_args;
+    }
+
+    void FunctionCallAST::insertArgument( int i, FunctionArgAST* arg )
+    {
+        m_args.insert( i, arg );
+    }
+
+    void FunctionCallAST::removeArgument( int i )
+    {
+        m_args.removeAt( i );
+    }
+
     SimpleFunctionArgAST::SimpleFunctionArgAST( const QString& value, const QString& ws, AST* parent )
             : FunctionArgAST( ws, parent ), m_value( value )
-{}
+    {}
 
     SimpleFunctionArgAST::~SimpleFunctionArgAST()
     {}
+
+    QString SimpleFunctionArgAST::value() const
+    {
+        return m_value;
+    }
+
+    void SimpleFunctionArgAST::setValue( const QString& val )
+    {
+        m_value = val;
+    }
 
     void SimpleFunctionArgAST::writeToString( QString& buf ) const
     {
