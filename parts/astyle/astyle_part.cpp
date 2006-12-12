@@ -73,6 +73,7 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   //use the globals first, project level will override later..
   m_project=m_global;
   m_projectExtensions = m_globalExtensions;
+  setExtensions(m_globalExtensions.join("\n"),false);
 
   // maybe there is a file open already
   activePartChanged( partController()->activePart() );
