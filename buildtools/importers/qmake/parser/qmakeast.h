@@ -51,7 +51,8 @@ namespace QMake
     class StatementAST : public AST
     {
         public:
-            StatementAST( const QString& ws = "", AST* parent = 0 ) : AST( ws, parent ) {}
+            StatementAST( const QString& ws = "", AST* parent = 0 ) : AST( ws, parent )
+            {}
     };
 
     class ProjectAST : public AST
@@ -79,7 +80,7 @@ namespace QMake
     class AssignmentAST : public StatementAST
     {
         public:
-            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& = "", AST* parent = 0 );
+            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& comment, const QString& = "", AST* parent = 0 );
             ~AssignmentAST();
 
             void addValue( const QString& );
@@ -94,14 +95,19 @@ namespace QMake
             QString m_variable;
             QString m_op;
             QStringList m_values;
+            QString m_comment;
 
     };
 
     class NewlineAST : public StatementAST
     {
         public:
-            NewlineAST( const QString& ws = "", AST* parent = 0 ) : StatementAST( ws, parent ) {}
-            void writeToString( QString& buf ) const { buf += whitespace()+"\n"; }
+            NewlineAST( const QString& ws = "", AST* parent = 0 ) : StatementAST( ws, parent )
+            {}
+            void writeToString( QString& buf ) const
+            {
+                buf += whitespace() + "\n";
+            }
     };
 
     class CommentAST : public StatementAST
@@ -130,12 +136,9 @@ namespace QMake
             FunctionCallAST( const QString& name, const QString& begin, QList<FunctionArgAST*> args,
                              const QString& end = "", const QString& ws = "", AST* parent = 0 );
             ~FunctionCallAST();
-            void setAsFunctionArg( bool );
-            bool asFunctionArg() const;
             void writeToString( QString& ) const;
         private:
             QList<FunctionArgAST*> m_args;
-            bool m_asFunctionArg;
             QString m_functionName;
             QString m_begin;
             QString m_end;
@@ -152,18 +155,15 @@ namespace QMake
     };
 
 
-    class FunctionAST : public StatementAST
+    class ScopeBodyAST: public AST
     {
         public:
-            FunctionAST( FunctionCallAST* call, const QString& begin, QList<StatementAST*> stmts,
-                         const QString& end = "", const QString& ws = "", AST* parent = 0 );
-        FunctionAST( FunctionCallAST* call, const QString& begin, StatementAST* stmt,
-                         const QString& ws = "", AST* parent = 0 );
-            FunctionAST( FunctionCallAST* call, const QString& ws = "", AST* parent = 0 );
-            ~FunctionAST();
+            ScopeBodyAST( const QString& begin, QList<StatementAST*> stmts,
+                          const QString& end = "", AST* parent = 0 );
+            ScopeBodyAST( const QString& begin, StatementAST* stmt, AST* parent = 0 );
+            ~ScopeBodyAST();
             void writeToString( QString& ) const;
         private:
-            FunctionCallAST* m_call;
             QList<StatementAST*> m_statements;
             QString m_begin;
             QString m_end;
@@ -172,34 +172,31 @@ namespace QMake
     class ScopeAST : public StatementAST
     {
         public:
-            ScopeAST( const QString& name, const QString& begin, QList<StatementAST*> stmts,
-                      const QString& end = "", const QString& ws = "", AST* parent = 0 );
-            ScopeAST( const QString& name, const QString& begin, StatementAST* stmt,
-                      const QString& ws = "", AST* parent = 0 );
+            enum ScopeType { Function, Simple };
+            ScopeAST( FunctionCallAST* call, const QString& ws = "", AST* parent = 0 );
+            ScopeAST( const QString& name, const QString& ws = "", AST* parent = 0 );
             ~ScopeAST();
             void writeToString( QString& ) const;
+            void setScopeBody( ScopeBodyAST* );
         private:
+            FunctionCallAST* m_call;
             QString m_scopeName;
-            QList<StatementAST*> m_statements;
-            QString m_begin;
-            QString m_end;
+            ScopeType m_type;
+            ScopeBodyAST* m_body;
     };
 
     class OrAST : public StatementAST
     {
         public:
             OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall,
-                   const QString& begin, QList<StatementAST*> stmts, const QString& end = "",
-                   const QString& ws = "", AST* parent = 0 );
-            OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall,
-                   const QString& begin, StatementAST* stmt,
+                   ScopeBodyAST* body,
                    const QString& ws = "", AST* parent = 0 );
             ~OrAST();
             void writeToString( QString& ) const;
         private:
             FunctionCallAST* m_lCall;
             FunctionCallAST* m_rCall;
-            QList<StatementAST*> m_statements;
+            ScopeBodyAST* m_body;
             QString m_begin;
             QString m_end;
             QString m_orop;
