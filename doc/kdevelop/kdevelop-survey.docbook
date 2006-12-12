@@ -371,6 +371,32 @@ For more information on the QMake project manager see the <quote>qmake User Guid
 </para>
 </sect2> <!-- qmake-project -->
 
+<sect2 id="cmake-project">
+<title>CMake Projects</title>
+
+<indexterm zone="cmake-project">
+  <primary>projects</primary>
+  <secondary>cmake</secondary></indexterm>
+<indexterm zone="cmake-project">
+  <primary>cmake</primary>
+  <secondary>projects</secondary></indexterm>
+
+<para>
+CMake will be the &kde; build system for &kde; 4 and &kdevelop; already
+provides you some CMake based templates in C and C++. You only need the cmake
+program in your $<envar>PATH</envar> to build them.
+</para>
+<para>
+To set up a new C or C++ project in &kdevelop; select
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>New Project...</guimenuitem>
+<guimenuitem>C or C++</guimenuitem> 
+<guimenuitem>CMake based projects</guimenuitem>
+<guimenuitem>A shared library template or Hello world program</guimenuitem> 
+</menuchoice>.
+</para>
+</sect2> <!-- cmake-project -->
+
 <sect2 id="ant-project">
 <title>ANT Projects (&Java; Projects)</title>
 
