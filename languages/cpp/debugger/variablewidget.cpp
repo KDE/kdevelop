@@ -1708,21 +1708,23 @@ bool VarItem::handleSpecialTypes()
         VariableTree* varTree = static_cast<VariableTree*>(listView());
 
         varTree->controller()->addCommand(
-            new GDBCommand(QString("print $kdev_d=%1.d")
-                           .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
+            new ResultlessCommand(QString("print $kdev_d=%1.d")
+                                  .arg(gdbExpression()), 
+                                  true /* ignore error */));
 
         if (varTree->controller()->qtVersion() >= 4)
             varTree->controller()->addCommand(
-                new GDBCommand(QString("print $kdev_s=$kdev_d.size")
-                               .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
+                new ResultlessCommand(QString("print $kdev_s=$kdev_d.size")
+                               .arg(gdbExpression()), true));
         else
             varTree->controller()->addCommand(
-                new GDBCommand(QString("print $kdev_s=$kdev_d.len")
-                               .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
+                new ResultlessCommand(QString("print $kdev_s=$kdev_d.len")
+                                      .arg(gdbExpression()), true));
 
         varTree->controller()->addCommand(
-            new GDBCommand(QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0")
-                           .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
+            new ResultlessCommand(
+                QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0")
+                .arg(gdbExpression()), true));
         
         varTree->controller()->addCommand(
             new ValueSpecialRepresentationCommand(

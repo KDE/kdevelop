@@ -213,6 +213,18 @@ private:
 
 };
 
+/* Command for which we don't want any reply.  */
+class ResultlessCommand : public QObject, public GDBCommand
+{
+public:
+    ResultlessCommand(const QString& command, bool handlesError = false)
+    : GDBCommand(command, this, &ResultlessCommand::handle, handlesError)
+    {}
+
+private:
+    void handle(const GDBMI::ResultRecord&)
+    {}
+};
 
 class ExpressionValueCommand : public QObject, public GDBCommand
 {
