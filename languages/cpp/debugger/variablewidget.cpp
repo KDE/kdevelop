@@ -258,6 +258,8 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         int idCharacter = -2;
         int idBinary = -2;
 
+#define MAYBE_DISABLE(id) if (!var->isAlive()) popup.setItemEnabled(id, false)
+
         VarItem* var;
         if ((var = dynamic_cast<VarItem*>(item))) 
         {
@@ -284,7 +286,8 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
             format.setItemChecked((int)(var->format()), true);
 
-            popup.insertItem(i18n("Format"), &format);
+            int id = popup.insertItem(i18n("Format"), &format);
+            MAYBE_DISABLE(id);
         }
         
 
@@ -294,6 +297,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         {
             idRemember = popup.insertItem(
                 SmallIcon("pencil"), i18n("Remember Value"));
+            MAYBE_DISABLE(idRemember);
         }
 
         if (dynamic_cast<WatchRoot*>(root)) {
@@ -303,10 +307,12 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         } else if (root != recentExpressions_) {
             idWatch = popup.insertItem(
                 i18n("Watch Variable"));
+            MAYBE_DISABLE(idWatch);
         }
         if (root == recentExpressions_) {
             idReevaluate = popup.insertItem( 
                 SmallIcon("reload"), i18n("Reevaluate Expression") );
+            MAYBE_DISABLE(idReevaluate);
             idRemove = popup.insertItem( 
                 SmallIcon("editdelete"), i18n("Remove Expression") );
             popup.setAccel(Qt::Key_Delete, idRemove);
@@ -318,12 +324,15 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             popup.setItemEnabled(idToggleWatch, false);
         }
 
-        int	idCopyToClipboard = popup.insertItem( 
+        int     idCopyToClipboard = popup.insertItem( 
             SmallIcon("editcopy"), i18n("Copy Value") );
         popup.setAccel(Qt::CTRL + Qt::Key_C, idCopyToClipboard);
 
         activePopup_ = &popup;
-        if (var)
+        /* This code can be executed when debugger is stopped,
+           and we invoke popup menu on a var under "recent expressions"
+           just to delete it. */
+        if (var && var->isAlive() && !controller()->stateIsOn(s_dbgNotStarted))
             controller_->addCommand(
                 new GDBCommand(
                     QString("-data-evaluate-expression &%1")
@@ -388,6 +397,8 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             SmallIcon("editdelete"), i18n("Remove All"));
         int idReevaluate = popup.insertItem(
             SmallIcon("reload"), i18n("Reevaluate All"));
+        if (controller()->stateIsOn(s_dbgNotStarted))
+            popup.setItemEnabled(idReevaluate, false);
         int res = popup.exec(QCursor::pos());
         
         if (res == idRemove)
@@ -1071,7 +1082,8 @@ VarItem::VarItem(TrimmableItem *parent,
       childrenFetched_(false),
       updateUnconditionally_(false),
       frozen_(frozen),
-      initialCreation_(true)
+      initialCreation_(true),
+      alive_(true)
 {
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1114,7 +1126,8 @@ VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
   childrenFetched_(false),
   updateUnconditionally_(false),
   frozen_(false),
-  initialCreation_(false)
+  initialCreation_(false),
+  alive_(true)
 { 
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1188,7 +1201,7 @@ void VarItem::varobjCreated(const GDBMI::ResultRecord& r)
         varobjName_ = "";
         return;
     }
-    setEnabledRecursively(true);
+    setAliveRecursively(true);
 
     QString oldType = originalValueType_;
     originalValueType_ = r["type"].literal();
@@ -1466,13 +1479,13 @@ QString VarItem::displayName() const
     }
 }
 
-void VarItem::setEnabledRecursively(bool enable)
+void VarItem::setAliveRecursively(bool enable)
 {
     setEnabled(enable);
     for(QListViewItem* child = firstChild();
         child; child = child->nextSibling())
     {
-        static_cast<VarItem*>(child)->setEnabledRecursively(enable);
+        static_cast<VarItem*>(child)->setAliveRecursively(enable);
     }
 }
 
@@ -1816,12 +1829,22 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
         p->setFont(KGlobalSettings::fixedFont());
     }
 
-    if (column == ValueCol && highlight_) {
-        QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
-                           cg.dark(), cg.mid(), red, cg.base());
-        QListViewItem::paintCell( p, hl_cg, column, width, align );
-    } else
-        QListViewItem::paintCell( p, cg, column, width, align );
+    if (!alive_)
+    {
+        /* Draw this as disabled. */
+        QListViewItem::paintCell(p, varTree()->QWidget::palette().disabled(), 
+                                 column, width, align);
+    }
+    else
+    {
+        if (column == ValueCol && highlight_) 
+        {
+            QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
+                               cg.dark(), cg.mid(), red, cg.base());
+            QListViewItem::paintCell( p, hl_cg, column, width, align );
+        } else
+            QListViewItem::paintCell( p, cg, column, width, align );
+    }
 }
 
 
@@ -1841,7 +1864,7 @@ void VarItem::unhookFromGdb()
         static_cast<VarItem*>(child)->unhookFromGdb();
     }
 
-    setEnabled(false);
+    alive_ = false;
     childrenFetched_ = false;
 
     emit varobjNameChange(varobjName_, "");
@@ -1876,6 +1899,11 @@ QString VarItem::tipText() const
 bool VarItem::updateUnconditionally() const
 {
     return updateUnconditionally_;
+}
+
+bool VarItem::isAlive() const
+{
+    return alive_;
 }
 
 

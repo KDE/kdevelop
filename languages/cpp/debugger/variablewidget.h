@@ -275,8 +275,11 @@ public:
     void setOpen(bool open);
     void setText (int column, const QString& text);
 
-    /** sets enabled flag recursively */
-    void setEnabledRecursively(bool enable);
+    /** Mark the variable as alive, or not alive.
+        Variables that are not alive a shown as "gray",
+        and nothing can be done about them except for
+        removing. */
+    void setAliveRecursively(bool enable);
 
     /** Recursively clears the varobjName_ field, making
        *this completely disconnected from gdb.
@@ -300,6 +303,8 @@ public:
     /** Sets new top-level textual value of this variable.
     */
     void setValue(const QString& new_value);
+
+    bool isAlive() const;
 
 signals:
     /** Emitted whenever the name of varobj associated with *this changes:
@@ -397,6 +402,8 @@ private:
 
     /* Set if this VarItem corresponds to base class suboject.  */
     bool baseClassMember_;
+
+    bool alive_;
 };
 
 
