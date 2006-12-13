@@ -1083,7 +1083,8 @@ VarItem::VarItem(TrimmableItem *parent,
       updateUnconditionally_(false),
       frozen_(frozen),
       initialCreation_(true),
-      alive_(true)
+      alive_(true),
+      baseClassMember_(false)
 {
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1117,7 +1118,7 @@ VarItem::VarItem(TrimmableItem *parent,
 }
 
 VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
-                 format_t format)
+                 format_t format, bool baseClassMember)
 : TrimmableItem (parent),
   highlight_(false),
   oldSpecialRepresentationSet_(false),
@@ -1127,7 +1128,8 @@ VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
   updateUnconditionally_(false),
   frozen_(false),
   initialCreation_(false),
-  alive_(true)
+  alive_(true),
+  baseClassMember_(baseClassMember)
 { 
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1395,8 +1397,7 @@ void VarItem::createChildren(const GDBMI::ResultRecord& r,
                               << exp << " " << baseObject << "\n";
                 // Propagate format from parent.
                 VarItem* v = 0;
-                v = new VarItem(this, children[i], format_);
-                v->baseClassMember_ = baseObject;
+                v = new VarItem(this, children[i], format_, baseObject);
             }
         }
     }
@@ -1706,15 +1707,26 @@ bool VarItem::handleSpecialTypes()
 
         VariableTree* varTree = static_cast<VariableTree*>(listView());
 
-        QString command;
+        varTree->controller()->addCommand(
+            new GDBCommand(QString("print $kdev_d=%1.d")
+                           .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
+
         if (varTree->controller()->qtVersion() >= 4)
-            command = "print (($len=($data=%1.d).size)>0?*((char*)&$data.data[0])@($len>100?200:$len*2):\"\")";
+            varTree->controller()->addCommand(
+                new GDBCommand(QString("print $kdev_s=$kdev_d.size")
+                               .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
         else
-            command = "print (($len=($data=%1.d).len)>0?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")";
+            varTree->controller()->addCommand(
+                new GDBCommand(QString("print $kdev_s=$kdev_d.len")
+                               .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
 
         varTree->controller()->addCommand(
+            new GDBCommand(QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0")
+                           .arg(gdbExpression()), NOTRUNCMD, NOTINFOCMD));
+        
+        varTree->controller()->addCommand(
             new ValueSpecialRepresentationCommand(
-                this, command.arg(gdbExpression())));
+                this, "print ($kdev_s>0) ? (*((char*)&$kdev_d.unicode[0])@$kdev_s) : \"\""));
 
         return true;
     }

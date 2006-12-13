@@ -237,7 +237,7 @@ public:
              bool frozen = false);
 
     VarItem( TrimmableItem *parent, const GDBMI::Value& varobj,
-             format_t format);
+             format_t format, bool baseClassMember);
 
     virtual ~VarItem();
     
