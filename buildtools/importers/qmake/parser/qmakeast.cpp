@@ -120,6 +120,10 @@ namespace QMake
         m_values.removeAll( value );
     }
 
+    QStringList AssignmentAST::values() const
+    {
+        return m_values;
+    }
 
     QString AssignmentAST::variable() const
     {
@@ -314,19 +318,19 @@ namespace QMake
 
 
     FunctionCallAST* OrAST::leftCall() const
-        {
-            return m_lCall;
-        }
+    {
+        return m_lCall;
+    }
 
     FunctionCallAST* OrAST::rightCall() const
-        {
-            return m_rCall;
-        }
+    {
+        return m_rCall;
+    }
 
     ScopeBodyAST* OrAST::scopeBody() const
-        {
-            return m_body;
-        }
+    {
+        return m_body;
+    }
 
     void OrAST::setLeftCall( FunctionCallAST* call )
     {
@@ -433,6 +437,5 @@ namespace QMake
     }
 
 }
-
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

@@ -33,6 +33,9 @@
 #include "kgenericfactory.h"
 #include "kdevprojectmodel.h"
 
+#include "qmakemodelitems.h"
+#include "qmakeprojectscope.h"
+
 typedef KGenericFactory<QMakeImporter> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
                             QMakeSupportFactory( "kdevqmakeimporter" ) )
@@ -68,41 +71,21 @@ KUrl QMakeImporter::buildDirectory() const
 QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item )
 {
     QList<KDevProjectFolderItem*> folderList;
-    /*
-        QMakeFolderItem* folder = dynamic_cast<QMakeFolderItem*>( item );
-        if ( !folder )
-            return folderList;
 
-        FolderInfo fi = folder->folderInfo();
-        for ( QStringList::iterator it = fi.includes.begin();
-              it != fi.includes.end(); ++it )
-        {
-            KUrl urlCandidate = KUrl( ( *it ) );
-            if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
-                m_includeDirList.append( urlCandidate );
-        }
+    QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
+    if( !folderitem )
+        return folderList;
 
-        foreach ( FolderInfo sfi, fi.subFolders )
-            folderList.append( new QMakeFolderItem( sfi, folder ) );
+    foreach( QMakeProjectScope* subproject, folderitem->projectScope()->subProjects() )
+    {
+        folderList.append( new QMakeFolderItem( subproject, subproject->absoluteDirUrl() ) );
+    }
 
-        foreach ( TargetInfo ti, fi.targets )
-        {
-            QMakeTargetItem* targetItem = new QMakeTargetItem( ti, folder );
-            foreach( QString sFile, ti.sources )
-            {
-                KUrl sourceFile = folder->url();
-                sourceFile.adjustPath( KUrl::AddTrailingSlash );
-                sourceFile.addPath( sFile );
-                new KDevProjectFileItem( sourceFile, targetItem );
-            }
-        }
-
-    */
     return folderList;
 }
 
 KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
-                                        const KUrl& fileName )
+                                        const KUrl& dirName )
 {
     /*    QString buildDir = QMakeSettings::self()->buildFolder();
         kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
@@ -122,6 +105,32 @@ KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
             m_rootItem = new QMakeFolderItem( rootFolder, 0 );
             m_rootItem->setText( KDevCore::activeProject()->name() );
         }*/
+
+    if( !dirName.isLocalFile() )
+    {
+        //FIXME turn this into a real warning
+        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" << endl;
+    }else
+    {
+        QFileInfo fi( dirName.path() );
+        QDir dir( dirName.path() );
+        QStringList l = dir.entryList( QStringList() << "*.pro" );
+
+        QString projectfile;
+
+        if( !l.count() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
+        {
+            projectfile = fi.baseName() + ".pro";
+        }else
+        {
+            projectfile = l.first();
+        }
+
+        KUrl projecturl = dirName;
+        projecturl.setFileName( projectfile );
+        m_rootItem = new QMakeFolderItem( new QMakeProjectScope( projecturl ), dirName );
+    }
+
     return m_rootItem;
 }
 
@@ -147,7 +156,4 @@ KUrl::List QMakeImporter::includeDirectories() const
     return m_includeDirList;
 }
 
-
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
-
-

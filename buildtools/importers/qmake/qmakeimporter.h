@@ -74,7 +74,7 @@ class QMakeImporter : public KDevBuildManager
 
         virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
         virtual KDevProjectItem* import( KDevProjectModel* model,
-                                         const KUrl& fileName );
+                                         const KUrl& dirName );
         virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
         virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
 
