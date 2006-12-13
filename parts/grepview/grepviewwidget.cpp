@@ -69,19 +69,45 @@ bool GrepListBoxItem::isCustomItem()
 
 void GrepListBoxItem::paint(QPainter *p)
 {
+	QColor base, dim, result, bkground;
+	if (listBox()) {
+		const QColorGroup& group = listBox()->palette().active();
+		if (isSelected()) {
+			bkground = group.button();
+			base = group.buttonText();
+		}
+		else
+		{
+			bkground = group.base();
+			base = group.text();
+		}
+		dim = blend(base, bkground);
+		result = group.link();
+	}
+	else
+	{
+		base = Qt::black;
+		dim = Qt::darkGreen;
+		result = Qt::blue;
+		if (isSelected())
+			bkground = Qt::lightGray;
+		else
+			bkground = Qt::white;
+	}
 	QFontMetrics fm = p->fontMetrics();
 	QString stx = lineNumber + ":  ";
 	int y = fm.ascent()+fm.leading()/2;
 	int x = 3;
+	p->fillRect(p->window(), QBrush(bkground));
 	if (show)
 	{
-		p->setPen(Qt::darkGreen);
+		p->setPen(dim);
 		p->drawText(x, y, fileName);
 		x += fm.width(fileName);
 	}
 	else
 	{
-		p->setPen(Qt::black);
+		p->setPen(dim);
 		QFont font1(p->font());
 		QFont font2(font1);
 		font2.setBold(true);

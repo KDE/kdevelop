@@ -41,7 +41,10 @@ public:
     ProcessListBoxItem(const QString &s, Type type);
 
     virtual bool isCustomItem();
-    
+ 
+protected:
+    QColor blend(const QColor &c1, const QColor &c2, double k = 0.5) const;
+
 private:
     virtual void paint(QPainter *p);
     Type t;

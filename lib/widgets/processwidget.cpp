@@ -31,7 +31,9 @@
 
 ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
     : QListBoxText(s), t(type)
-{}
+{
+    setCustomHighlighting(true);
+}
 
 
 bool ProcessListBoxItem::isCustomItem()
@@ -39,11 +41,58 @@ bool ProcessListBoxItem::isCustomItem()
     return false;
 }
 
+static inline unsigned char normalize(int a)
+{
+    return (a < 0 ? 0 : a > 255 ? 255 : a);
+}
+
+static inline double blend1(double a, double b, double k)
+{
+    return a + (b - a) * k;
+}
+
+QColor ProcessListBoxItem::blend(const QColor &c1, const QColor &c2, double k) const
+{
+    if (k < 0.0) return c1;
+    if (k > 1.0) return c2;
+
+    int r = normalize((int)blend1((double)c1.red(),   (double)c2.red(),   k));
+    int g = normalize((int)blend1((double)c1.green(), (double)c2.green(), k));
+    int b = normalize((int)blend1((double)c1.blue(),  (double)c2.blue(),  k));
+
+    return QColor(qRgb(r, g, b));
+}
 
 void ProcessListBoxItem::paint(QPainter *p)
 {
-    p->setPen((t==Error)? Qt::darkRed :
-              (t==Diagnostic)? Qt::black : Qt::darkBlue);
+    QColor dim, warn, err, back;
+    if (listBox()) {
+        const QColorGroup& group = listBox()->palette().active();
+        if (isSelected()) {
+            back = group.button();
+            warn = group.buttonText();
+        }
+        else
+        {
+            back = group.base();
+            warn = group.text();
+        }
+        err = group.linkVisited();
+        dim = blend(warn, back);
+    }
+    else
+    {
+        warn = Qt::black;
+        dim = Qt::darkBlue;
+        err = Qt::darkRed;
+        if (isSelected())
+            back = Qt::lightGray;
+        else
+            back = Qt::white;
+    }
+    p->fillRect(p->window(), QBrush(back));
+    p->setPen((t==Error)? err :
+              (t==Diagnostic)? warn : dim);
     QListBoxText::paint(p);
 }
 
@@ -52,12 +101,10 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
     : KListBox(parent, name)
 {
     setFocusPolicy(QWidget::NoFocus);
-    QPalette pal = palette();
-    pal.setColor(QColorGroup::HighlightedText,
-                 pal.color(QPalette::Normal, QColorGroup::Text));
-    pal.setColor(QColorGroup::Highlight,
-                 pal.color(QPalette::Normal, QColorGroup::Mid));
-    setPalette(pal);
+
+    // Don't override the palette, as that can mess up styles. Instead, draw
+    // the background ourselves (see ProcessListBoxItem::paint).
+
 
     childproc = new KProcess();
     childproc->setUseShell(true);
