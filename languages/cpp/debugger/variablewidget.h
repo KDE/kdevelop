@@ -341,8 +341,11 @@ private:
     void varobjCreated(const GDBMI::ResultRecord& r);
     void valueDone(const GDBMI::ResultRecord& r);
     void childrenDone(const GDBMI::ResultRecord& r);    
+    void childrenOfFakesDone(const GDBMI::ResultRecord& r);    
     void handleCurrentAddress(const QValueVector<QString>& lines);
     void handleType(const QValueVector<QString>& lines);
+
+    void createChildren(const GDBMI::ResultRecord& r, bool children_of_fake);
 
     /** Called to handle the output of the cli print command.
      */
@@ -391,6 +394,9 @@ private:
     /* Set to true whan calling createVarobj for the
        first time, and to false other time. */
     bool initialCreation_;
+
+    /* Set if this VarItem corresponds to base class suboject.  */
+    bool baseClassMember_;
 };
 
 

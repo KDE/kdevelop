@@ -1318,10 +1318,27 @@ void VarItem::valueDone(const GDBMI::ResultRecord& r)
     }
 }
 
-void VarItem::childrenDone(const GDBMI::ResultRecord& r)
+void VarItem::createChildren(const GDBMI::ResultRecord& r, 
+                             bool children_of_fake)
 {
     const GDBMI::Value& children = r["children"];
 
+    /* In order to figure out which variable objects correspond
+       to base class subobject, we first must detect if *this
+       is a structure type. We use present of 'public'/'private'/'protected'
+       fake child as an indicator. */
+    bool structureType = false;
+    if (!children_of_fake && children.size() > 0)
+    {
+        QString exp = children[0]["exp"].literal();
+        bool ok = false;
+        exp.toInt(&ok);
+        if (!ok || exp[0] != '*')
+        {
+            structureType = true;
+        } 
+    }
+                                         
     for (unsigned i = 0; i < children.size(); ++i)
     {
         QString exp = children[i]["exp"].literal();
@@ -1334,10 +1351,14 @@ void VarItem::childrenDone(const GDBMI::ResultRecord& r)
                                         "-var-list-children \"" + 
                                         name + "\"",
                                         this,
-                                        &VarItem::childrenDone));            
+                                        &VarItem::childrenOfFakesDone));
         }
         else
         {
+            /* All children of structures that are not artifical
+               are base subobjects. */
+            bool baseObject = structureType;
+
             VarItem* existing = 0;
             for(QListViewItem* child = firstChild();
                 child; child = child->nextSibling())
@@ -1357,14 +1378,27 @@ void VarItem::childrenDone(const GDBMI::ResultRecord& r)
             }
             else
             {
+                kdDebug(9012) << "Creating new varobj " 
+                              << exp << " " << baseObject << "\n";
                 // Propagate format from parent.
                 VarItem* v = 0;
                 v = new VarItem(this, children[i], format_);
+                v->baseClassMember_ = baseObject;
             }
         }
     }
+}
 
+
+void VarItem::childrenDone(const GDBMI::ResultRecord& r)
+{
+    createChildren(r, false);
     childrenFetched_ = true;
+}
+
+void VarItem::childrenOfFakesDone(const GDBMI::ResultRecord& r)
+{
+    createChildren(r, true);
 }
 
 void VarItem::handleCurrentAddress(const QValueVector<QString>& lines)
@@ -1483,7 +1517,13 @@ QString VarItem::gdbExpression() const
     else
     {        
         if (parent)
-            return parent->gdbExpression() + "." + expression_;
+            /* This is varitem corresponds to a base suboject, 
+               the expression should cast parent to the base's
+               type. */
+            if (baseClassMember_)
+                return "((" + expression_ + ")" + parent->gdbExpression() + ")";
+            else
+                return parent->gdbExpression() + "." + expression_;
         else
             return expression_;                
     }
