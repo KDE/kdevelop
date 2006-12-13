@@ -130,6 +130,9 @@ private:
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
     QValueVector<QString> lines;
+
+protected: // FIXME: should be private, after I kill the first ctor
+    // that is obsolete and no longer necessary.
     bool handlesError_;
 
 };
@@ -167,7 +170,8 @@ public:
     template<class Handler>
     CliCommand(const QString& command,
                Handler* handler_this, 
-               void (Handler::* handler_method)(const QValueVector<QString>&));
+               void (Handler::* handler_method)(const QValueVector<QString>&),
+               bool handlesError = false);
 
 
 
@@ -271,11 +275,13 @@ template<class Handler>
 CliCommand::CliCommand(
     const QString& command,
     Handler* handler_this,
-    void (Handler::* handler_method)(const QValueVector<QString>&))
+    void (Handler::* handler_method)(const QValueVector<QString>&),
+    bool handlesError)
 : GDBCommand(command.latin1(), INFOCMD, WAIT),
   cli_handler_this(handler_this), 
   cli_handler_method(static_cast<cli_handler_t>(handler_method))
 {
+    handlesError_ = handlesError;
 }
 
 

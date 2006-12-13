@@ -617,7 +617,8 @@ public:
     ValueSpecialRepresentationCommand(VarItem* item, const QString& command)
     : CliCommand(command.ascii(),
                  this,
-                 &ValueSpecialRepresentationCommand::handleReply),
+                 &ValueSpecialRepresentationCommand::handleReply,
+                 true),
       item_(item)
     {}
 

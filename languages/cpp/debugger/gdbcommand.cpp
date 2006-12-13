@@ -89,8 +89,12 @@ ModifyBreakpointCommand::cmdToSend()
 }
 
 
-bool CliCommand::invokeHandler(const GDBMI::ResultRecord&)
+bool CliCommand::invokeHandler(const GDBMI::ResultRecord& r)
 {
+    // On error, do nothing.
+    if (r.reason != "done")
+        return true;
+
     if (cli_handler_this) {
         (cli_handler_this->*cli_handler_method)(allStreamOutput());
         return true;
