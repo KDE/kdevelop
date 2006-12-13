@@ -259,4 +259,51 @@ void DMainWindow::closeTab(QWidget *)
     //nothing to do here, should be reimplemented
 }
 
+void DMainWindow::moveWidget(DDockWindow::Position position, QWidget * view, const QString & title)
+{
+    if (m_docks.contains(view))
+    {
+        toolWindow(m_docks[view])->removeWidget(view);
+
+        toolWindow(position)->addWidget( title, view, true );
+        m_docks[view] = position;
+    }
+}
+
+void DMainWindow::addDockWidget(DDockWindow::Position position, QWidget *view, const QString &title)
+{
+    toolWindow(position)->addWidget(title, view);
+    m_docks[view] = position;
+    connect(view, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+}
+
+void DMainWindow::removeDockWidget(QWidget *view)
+{
+    toolWindow(m_docks[view])->removeWidget(view);
+    m_docks.remove(view);
+}
+
+bool DMainWindow::hasDockWidget(QWidget *view)
+{
+    return m_docks.contains(view);
+}
+
+DDockWindow::Position DMainWindow::dockWidgetPosition(QWidget *view)
+{
+    return m_docks[view];
+}
+
+void DMainWindow::widgetDestroyed()
+{
+    QWidget *w = static_cast<QWidget*>(const_cast<QObject*>(sender()));
+
+    if (m_docks.contains(w))
+    {
+        kdError() << "Widget destroyed before being removed from UI!" << endl;
+        m_docks.remove(w);
+    }
+}
+
 #include "dmainwindow.moc"
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

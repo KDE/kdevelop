@@ -25,6 +25,7 @@
 #include <qwidgetstack.h>
 #include <qimage.h>
 #include <qapplication.h>
+#include <qpopupmenu.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -40,7 +41,7 @@
 
 DDockWindow::DDockWindow(DMainWindow *parent, Position position)
     :QDockWindow(QDockWindow::InDock, parent), m_position(position), m_visible(false),
-    m_mainWindow(parent), m_toggledButton(0), m_doNotCloseActiveWidget(false)
+    m_mainWindow(parent), m_doNotCloseActiveWidget(false), m_toggledButton(0), m_lastContextMenuButton(0)
 {
     setMovingEnabled(false);
     setResizeEnabled(true);
@@ -83,6 +84,10 @@ DDockWindow::DDockWindow(DMainWindow *parent, Position position)
 
     m_widgetStack = new QWidgetStack(this);
     m_internalLayout->addWidget(m_widgetStack);
+
+    m_moveToDockLeft = new KAction( i18n("Move to left dock"), 0, this, SLOT(moveToDockLeft()), this );
+    m_moveToDockRight = new KAction( i18n("Move to right dock"), 0, this, SLOT(moveToDockRight()), this );
+    m_moveToDockBottom = new KAction( i18n("Move to bottom dock"), 0, this, SLOT(moveToDockBottom()), this );
 
     setVisible(m_visible);
 
@@ -162,7 +167,7 @@ QWidget *DDockWindow::currentWidget() const
     return m_widgetStack->visibleWidget();
 }
 
-void DDockWindow::addWidget(const QString &title, QWidget *widget)
+void DDockWindow::addWidget(const QString &title, QWidget *widget, bool skipActivation)
 {
     kdDebug(9000) << k_funcinfo << endl;
     QPixmap *pm = const_cast<QPixmap*>(widget->icon());
@@ -186,17 +191,21 @@ void DDockWindow::addWidget(const QString &title, QWidget *widget)
 
     m_widgetStack->addWidget(widget);
     connect(button, SIGNAL(clicked()), this, SLOT(selectWidget()));
+    connect(button, SIGNAL(contextMenu(QPopupMenu*)), this, SLOT(contextMenu(QPopupMenu*)) );
 
-    //if the widget was selected last time the dock is deleted
-    //we need to show it
-    KConfig *config = kapp->config();
-    QString group = QString("%1").arg(m_name);
-    config->setGroup(group);
-    if (config->readEntry("ViewLastWidget") == title)
+    if (!skipActivation)
     {
-        kdDebug(9000) << k_funcinfo << " : activating last widget " << title << endl;
-        button->setOn(true);
-        selectWidget(button);
+        //if the widget was selected last time the dock is deleted
+        //we need to show it
+        KConfig *config = kapp->config();
+        QString group = QString("%1").arg(m_name);
+        config->setGroup(group);
+        if (config->readEntry("ViewLastWidget") == title)
+        {
+            kdDebug(9000) << k_funcinfo << " : activating last widget " << title << endl;
+            button->setOn(true);
+            selectWidget(button);
+        }
     }
 }
 
@@ -307,7 +316,7 @@ void DDockWindow::showWidget(QWidget *widget)
 //     widget->show();
 }
 
-void DDockWindow::setMovingEnabled(bool b)
+void DDockWindow::setMovingEnabled(bool)
 {
     //some operations on KMainWindow cause moving to be enabled
     //but we always don't want DDockWindow instances to be movable
@@ -358,6 +367,43 @@ void DDockWindow::selectPrevWidget()
     Ideal::Button *b = m_bar->prevTo(m_toggledButton);
     if (b)
         b->animateClick();
+}
+
+void DDockWindow::contextMenu(QPopupMenu * menu)
+{
+    m_lastContextMenuButton = static_cast<Ideal::Button*>( const_cast<QObject*>( sender() ) );
+
+    menu->insertSeparator();
+
+    if ( position() != DDockWindow::Left )
+        m_moveToDockLeft->plug( menu );
+    if ( position()!= DDockWindow::Right )
+        m_moveToDockRight->plug( menu );
+    if ( position() != DDockWindow::Bottom )
+        m_moveToDockBottom->plug( menu );
+}
+
+void DDockWindow::moveToDockLeft()
+{
+    moveToDock( DDockWindow::Left );
+}
+
+void DDockWindow::moveToDockRight()
+{
+    moveToDock( DDockWindow::Right );
+}
+
+void DDockWindow::moveToDockBottom()
+{
+    moveToDock( DDockWindow::Bottom );
+}
+
+void DDockWindow::moveToDock(DDockWindow::Position position )
+{
+    if (  m_widgets.contains( m_lastContextMenuButton ) )
+    {
+        mainWindow()->moveWidget( position, m_widgets[ m_lastContextMenuButton ], m_lastContextMenuButton->realTextWithoutAccel() );
+    }
 }
 
 #include "ddockwindow.moc"

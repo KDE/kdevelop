@@ -26,7 +26,10 @@
 class QBoxLayout;
 class QToolButton;
 class QWidgetStack;
+class QPopupMenu;
+
 class KComboBox;
+class KAction;
 
 class DMainWindow;
 
@@ -47,7 +50,7 @@ public:
     bool visible() const { return m_visible; }
     Position position() const { return m_position; }
 
-    virtual void addWidget(const QString &title, QWidget *widget);
+    virtual void addWidget(const QString &title, QWidget *widget, bool skipActivation = false);
     virtual void raiseWidget(QWidget *widget);
     virtual void lowerWidget(QWidget *widget);
     /**Removes the widget from dock. Does not delete it.*/
@@ -76,6 +79,11 @@ signals:
 private slots:
     void selectWidget();
     void selectWidget(Ideal::Button *button);
+    void contextMenu(QPopupMenu*);
+    void moveToDockLeft();
+    void moveToDockRight();
+    void moveToDockBottom();
+    void moveToDock(DDockWindow::Position);
 
 protected:
     virtual void loadSettings();
@@ -94,7 +102,13 @@ private:
     bool m_doNotCloseActiveWidget;
 
     Ideal::Button *m_toggledButton;
+    Ideal::Button *m_lastContextMenuButton;
     QBoxLayout *m_internalLayout;
+
+
+    KAction * m_moveToDockLeft;
+    KAction * m_moveToDockRight;
+    KAction * m_moveToDockBottom;
 };
 
 #endif

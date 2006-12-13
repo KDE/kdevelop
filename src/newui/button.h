@@ -76,6 +76,9 @@ protected slots:
     void assignAccel();
     void clearAccel();
 
+signals:
+    void contextMenu(QPopupMenu*);
+
 private:
     virtual ~Button();
 

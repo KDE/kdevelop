@@ -34,6 +34,7 @@
 #include <ktexteditor/document.h>
 #include <kapplication.h>
 #include <kurldrag.h>
+#include <kconfig.h>
 
 #include <ddockwindow.h>
 #include <dtabwidget.h>
@@ -173,13 +174,13 @@ void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context
                     break;
                 }
             }
-            
-            if ( (isOpen && PartController::getInstance()->openURLs().count() == 1) || 
+
+            if ( (isOpen && PartController::getInstance()->openURLs().count() == 1) ||
                  (m_splitURLs.count() == 1 && !(*m_splitURLs.begin()).isValid() ) )
             {
                 return;
             }
-                 
+
             popupMenu->insertSeparator();
             if (isOpen)
             {
@@ -210,21 +211,76 @@ void SimpleMainWindow::embedPartView(QWidget *view, const QString &title, const 
 
 void SimpleMainWindow::embedSelectView(QWidget *view, const QString &title, const QString &/*toolTip*/)
 {
-    toolWindow(DDockWindow::Left)->addWidget(title, view);
-    m_docks[view] = DDockWindow::Left;
+    embedView( DDockWindow::Left, view, title );
 }
 
 void SimpleMainWindow::embedOutputView(QWidget *view, const QString &title, const QString &/*toolTip*/)
 {
-    toolWindow(DDockWindow::Bottom)->addWidget(title, view);
-    m_docks[view] = DDockWindow::Bottom;
+    embedView( DDockWindow::Bottom, view, title );
 }
 
 void SimpleMainWindow::embedSelectViewRight(QWidget *view, const QString &title, const QString &/*toolTip*/)
 {
-    toolWindow(DDockWindow::Right)->addWidget(title, view);
-    m_docks[view] = DDockWindow::Right;
+    embedView( DDockWindow::Right, view, title );
 }
+
+void SimpleMainWindow::embedView( DDockWindow::Position pos, QWidget * view, const QString & title )
+{
+    if ( !hasDockWidget( view ) )
+    {
+        DDockWindow::Position position = recallToolViewPosition( view->name(), pos );
+        addDockWidget(position, view, title);
+    }
+}
+
+DDockWindow::Position SimpleMainWindow::recallToolViewPosition( const QString & name, DDockWindow::Position defaultPos )
+{
+    KConfig * config = kapp->config();
+    config->setGroup( "DToolDockPosition" );
+
+    QString position = config->readEntry( name );
+
+    if ( name == "unknown" )
+    {
+        kdDebug() << name << endl;
+    }
+
+    if ( position == "DockLeft" ) return DDockWindow::Left;
+    if ( position == "DockRight" ) return DDockWindow::Right;
+    if ( position == "DockBottom" ) return DDockWindow::Bottom;
+
+    return defaultPos;
+}
+
+void SimpleMainWindow::rememberToolViewPosition( const QString & name, DDockWindow::Position pos )
+{
+    KConfig * config = kapp->config();
+    config->setGroup( "DToolDockPosition" );
+
+    if ( name == "unknown" )
+    {
+        kdDebug() << name << endl;
+    }
+
+    QString position = "unknown";
+
+    switch( pos )
+    {
+        case DDockWindow::Left:
+            position = "DockLeft";
+            break;
+        case DDockWindow::Right:
+            position = "DockRight";
+            break;
+        case DDockWindow::Bottom:
+            position = "DockBottom";
+            break;
+        default: ;
+    }
+
+    config->writeEntry( name, position );
+}
+
 
 void SimpleMainWindow::removeView(QWidget *view)
 {
@@ -233,8 +289,11 @@ void SimpleMainWindow::removeView(QWidget *view)
 
     //try to remove it from all parts of main window
     //@fixme This method needs to be divided in two - one for docks and one for part views
-    if (m_docks.contains(view))
-        toolWindow(m_docks[view])->removeWidget(view);
+    if (hasDockWidget(view))
+    {
+        rememberToolViewPosition( view->name(), dockWidgetPosition(view) );
+        removeDockWidget(view);
+    }
     else
         removeWidget(view);
 }
@@ -242,8 +301,8 @@ void SimpleMainWindow::removeView(QWidget *view)
 void SimpleMainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
 {
     DDockWindow *dock;
-    if (m_docks.contains(pView))
-        dock = toolWindow(m_docks[pView]);
+    if (hasDockWidget(pView))
+        dock = toolWindow(dockWidgetPosition(pView));
     else
         return;
 
@@ -265,18 +324,22 @@ void SimpleMainWindow::raiseView(QWidget *view)
         view = (QWidget*)view->parent();
     }
 
-    if (m_docks.contains(view))
+    if (hasDockWidget(view))
     {
-        DDockWindow *dock = toolWindow(m_docks[view]);
+        DDockWindow *dock = toolWindow(dockWidgetPosition(view));
         dock->raiseWidget(view);
     }
     else if (m_widgets.contains(view) && m_widgetTabs.contains(view))
         m_widgetTabs[view]->showPage(view);
 }
 
-void SimpleMainWindow::lowerView(QWidget */*view*/)
+void SimpleMainWindow::lowerView(QWidget * view)
 {
-    //nothing to do
+    if (!hasDockWidget(view))
+        return;
+
+    DDockWindow *dock = toolWindow(dockWidgetPosition(view));
+    dock->lowerWidget(view);
 }
 
 void SimpleMainWindow::loadSettings()
@@ -295,6 +358,13 @@ void SimpleMainWindow::saveSettings( )
 
     ProjectManager::getInstance()->saveSettings();
     saveMainWindowSettings(config, "SimpleMainWindow");
+
+    QMap<QWidget*, DDockWindow::Position>::iterator it = m_docks.begin();
+    while ( it != m_docks.end() )
+    {
+        rememberToolViewPosition( it.key()->name(), it.data() );
+        ++it;
+    }
 
     DMainWindow::saveSettings();
 }

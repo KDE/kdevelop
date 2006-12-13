@@ -36,25 +36,35 @@ class DMainWindow: public KParts::MainWindow {
 public:
     DMainWindow(QWidget *parent = 0, const char *name = 0);
     virtual ~DMainWindow();
-    
+
     /**@return The tool window in given @p position.*/
     DDockWindow *toolWindow(DDockWindow::Position position) const;
-    
-    /**Adds a tabbed widget into the active (focused) tab widget. 
+
+    /**Adds a tabbed widget into the active (focused) tab widget.
     If @p widget is null then only tab is created.*/
     virtual void addWidget(QWidget *widget, const QString &title);
     virtual void addWidget(DTabWidget *tab, QWidget *widget, const QString &title);
     /**Removes widget. Does not delete it.*/
     virtual void removeWidget(QWidget *widget);
-    
+   /**Moves a widget from an existing dockposition to a new position**/
+    virtual void moveWidget(DDockWindow::Position newPosition, QWidget *widget, const QString & title);
+
+    /**Adds a dock widget into given position.*/
+    virtual void addDockWidget(DDockWindow::Position position, QWidget *view, const QString &title);
+    /**Removes a dock widget.*/
+    virtual void removeDockWidget(QWidget *view);
+
     virtual void saveSettings();
-    
+
+    bool hasDockWidget(QWidget *view);
+    DDockWindow::Position dockWidgetPosition(QWidget *view);
+
 public slots:
     DTabWidget *splitHorizontal();
     DTabWidget *splitVertical();
-    
+
 protected slots:
-    /**This does nothing. Reimplement in subclass to close the tab 
+    /**This does nothing. Reimplement in subclass to close the tab
     when corner close button is pressed.*/
     virtual void closeTab();
     /**This does nothing. Reimplement in subclass to close the tab
@@ -63,30 +73,34 @@ protected slots:
     /**This does nothing. Reimplement in subclass to show tab context menu.*/
     virtual void tabContext(QWidget*,const QPoint &);
 
+    void widgetDestroyed();
+
 signals:
     void widgetChanged(QWidget *);
-    
+
 protected:
     bool eventFilter(QObject *obj, QEvent *ev);
-    
+
     virtual void loadSettings();
-        
+
     virtual void createToolWindows();
     virtual DTabWidget *createTab();
-    
+
     DDockWindow *m_leftDock;
     DDockWindow *m_rightDock;
     DDockWindow *m_bottomDock;
 
+    QMap<QWidget*, DDockWindow::Position> m_docks;
+
     Ideal::DockSplitter *m_central;
     DTabWidget *m_activeTabWidget;
-    
+
     QValueList<DTabWidget*> m_tabs;
-    
+
     bool m_openTabAfterCurrent;
     bool m_showIconsOnTabs;
     bool m_firstRemoved;
-    
+
     QValueList<QWidget*> m_widgets;
     QMap<QWidget*, DTabWidget*> m_widgetTabs;
     QWidget *m_currentWidget;

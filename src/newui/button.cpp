@@ -300,6 +300,9 @@ void Button::contextMenuEvent(QContextMenuEvent *e)
     m_assignAccelAction->plug(&menu);
     if (m_realText.contains(QRegExp("^&[0-9]\\s")))
         m_clearAccelAction->plug(&menu);
+
+    emit contextMenu( &menu );
+
     menu.exec(e->globalPos());
 }
 

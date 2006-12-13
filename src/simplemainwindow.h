@@ -111,11 +111,13 @@ private:
     QWidget *widgetForURL(KURL url);
     QWidget *widgetInTab(QWidget *w);
     KParts::ReadOnlyPart *activePartForSplitting();
+    void embedView( DDockWindow::Position position, QWidget *view, const QString & title );
+    DDockWindow::Position recallToolViewPosition( const QString & name, DDockWindow::Position defaultPos );
+    void rememberToolViewPosition( const QString & name, DDockWindow::Position pos );
 
     MainWindowShare *m_mainWindowShare;
 
     KURL m_currentTabURL;
-    QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
     KAction *m_lowerAllDocks;
     KAction *m_splitHor;
@@ -132,5 +134,7 @@ private:
 
     KURL::List m_splitURLs;
 };
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
 
 #endif
