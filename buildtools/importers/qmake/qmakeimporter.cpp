@@ -72,14 +72,23 @@ QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item 
 {
     QList<KDevProjectFolderItem*> folderList;
 
+    kDebug(9024) << k_funcinfo << "Parsing item: " << endl;
+
     QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
     if( !folderitem )
         return folderList;
 
+    kDebug(9024) << k_funcinfo << "Item is a qmakefolder: " << endl;
+
     foreach( QMakeProjectScope* subproject, folderitem->projectScope()->subProjects() )
     {
-        folderList.append( new QMakeFolderItem( subproject, subproject->absoluteDirUrl() ) );
+        folderList.append( new QMakeFolderItem( subproject, subproject->absoluteDirUrl(), item ) );
     }
+    foreach( KUrl u, folderitem->projectScope()->files() )
+    {
+        new KDevProjectFileItem( u, item );
+    }
+    kDebug(9024) << k_funcinfo << "Added " << folderList.count() << " Elements" << endl;
 
     return folderList;
 }
@@ -127,6 +136,7 @@ KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
         }
 
         KUrl projecturl = dirName;
+        projecturl.adjustPath( KUrl::AddTrailingSlash );
         projecturl.setFileName( projectfile );
         m_rootItem = new QMakeFolderItem( new QMakeProjectScope( projecturl ), dirName );
     }
