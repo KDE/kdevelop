@@ -283,7 +283,7 @@ class Driver::ParseHelper {
 
       m_lex.setReportMessages( reportMessages );
       
-      kdDebug( 9007 ) << "lexing file " << fileName << endl;
+      //kdDebug( 9007 ) << "lexing file " << fileName << endl;
       m_lex.setSource( m_driver->sourceProvider() ->contents( fileName ) );
       if(m_previousCachedLexedFile)
         m_previousCachedLexedFile->merge( *m_driver->m_currentLexerCache );
@@ -387,7 +387,7 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
 
   IntIncreaser i( m_dependenceDepth );
   if( m_dependenceDepth > m_maxDependenceDepth ) {
-      kdDebug( 9007 ) << "maximum dependence-depth of " << m_maxDependenceDepth << " was reached, " << fileName << " will not be processed" << endl;
+      //kdDebug( 9007 ) << "maximum dependence-depth of " << m_maxDependenceDepth << " was reached, " << fileName << " will not be processed" << endl;
       return;
   }
 

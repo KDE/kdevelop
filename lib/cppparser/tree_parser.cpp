@@ -31,13 +31,13 @@ TreeParser::~TreeParser()
 
 void TreeParser::parseTranslationUnit( const ParsedFile& translationUnit )
 {
-    //kdDebug(9007) << "TreeParser::parseTranslationUnit()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseTranslationUnit()" << endl;
 
     QPtrList<DeclarationAST> declarations = translationUnit->declarationList();
     QPtrListIterator<DeclarationAST> it( declarations );
     while( it.current() ){
 			if( (it.current() == 0 ) ) {
-				kdDebug( 9007 ) << "declaration is zero" << endl;
+				//kdDebug( 9007 ) << "declaration is zero" << endl;
 				continue;
 			}
 	parseDeclaration( it.current() );
@@ -47,7 +47,7 @@ void TreeParser::parseTranslationUnit( const ParsedFile& translationUnit )
 
 void TreeParser::parseDeclaration( DeclarationAST* declaration )
 {
-    //kdDebug(9007) << "TreeParser::parseDeclaration()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseDeclaration()" << endl;
 
     if( !declaration )
         return;
@@ -98,7 +98,7 @@ void TreeParser::parseDeclaration( DeclarationAST* declaration )
 
 void TreeParser::parseLinkageSpecification( LinkageSpecificationAST* ast )
 {
-    //kdDebug(9007) << "TreeParser::parseLinkageSpecification()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseLinkageSpecification()" << endl;
     if( ast->linkageBody() )
 	parseLinkageBody( ast->linkageBody() );
     else if( ast->declaration() )
@@ -107,57 +107,57 @@ void TreeParser::parseLinkageSpecification( LinkageSpecificationAST* ast )
 
 void TreeParser::parseNamespace( NamespaceAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseNamespace()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseNamespace()" << endl;
     if( decl->linkageBody() )
 	parseLinkageBody( decl->linkageBody() );
 }
 
 void TreeParser::parseNamespaceAlias( NamespaceAliasAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseNamespaceAlias()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseNamespaceAlias()" << endl;
     Q_UNUSED( decl );
 }
 
 void TreeParser::parseUsing( UsingAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseUsing()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseUsing()" << endl;
     Q_UNUSED( decl );
 }
 
 void TreeParser::parseUsingDirective( UsingDirectiveAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseUsingDirective()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseUsingDirective()" << endl;
     Q_UNUSED( decl );
 }
 
 void TreeParser::parseTypedef( TypedefAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseTypedef()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseTypedef()" << endl;
     if( decl->typeSpec() )
 	parseTypeSpecifier( decl->typeSpec() );
 }
 
 void TreeParser::parseTemplateDeclaration( TemplateDeclarationAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseTemplateDeclaration()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseTemplateDeclaration()" << endl;
     Q_UNUSED( decl );
 }
 
 void TreeParser::parseSimpleDeclaration( SimpleDeclarationAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseSimpleDeclaration()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseSimpleDeclaration()" << endl;
     Q_UNUSED( decl );
 }
 
 void TreeParser::parseFunctionDefinition( FunctionDefinitionAST* def )
 {
-    //kdDebug(9007) << "TreeParser::parseFunctionDefinition()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseFunctionDefinition()" << endl;
     Q_UNUSED( def );
 }
 
 void TreeParser::parseLinkageBody( LinkageBodyAST* linkageBody )
 {
-    //kdDebug(9007) << "TreeParser::parseLinkageBody()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseLinkageBody()" << endl;
     QPtrList<DeclarationAST> declarations = linkageBody->declarationList();
     for( QPtrListIterator<DeclarationAST> it(declarations); it.current(); ++it ){
 	parseDeclaration( it.current() );
@@ -166,7 +166,7 @@ void TreeParser::parseLinkageBody( LinkageBodyAST* linkageBody )
 
 void TreeParser::parseTypeSpecifier( TypeSpecifierAST* typeSpec )
 {
-    //kdDebug(9007) << "TreeParser::parseTypeSpecifier()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseTypeSpecifier()" << endl;
     switch( typeSpec->nodeType() )
     {
     case NodeType_ClassSpecifier:
@@ -185,7 +185,7 @@ void TreeParser::parseTypeSpecifier( TypeSpecifierAST* typeSpec )
 
 void TreeParser::parseClassSpecifier( ClassSpecifierAST* classSpec )
 {
-    //kdDebug(9007) << "TreeParser::parseClassSpecifier()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseClassSpecifier()" << endl;
     QPtrList<DeclarationAST> declarations = classSpec->declarationList();
     for( QPtrListIterator<DeclarationAST> it(declarations); it.current(); ++it ){
 	parseDeclaration( it.current() );
@@ -194,19 +194,19 @@ void TreeParser::parseClassSpecifier( ClassSpecifierAST* classSpec )
 
 void TreeParser::parseEnumSpecifier( EnumSpecifierAST* enumSpec )
 {
-    //kdDebug(9007) << "TreeParser::parseEnumSpecifier()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseEnumSpecifier()" << endl;
     Q_UNUSED( enumSpec );
 }
 
 void TreeParser::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* typeSpec )
 {
-    //kdDebug(9007) << "TreeParser::parseElaboratedTypeSpecifier()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseElaboratedTypeSpecifier()" << endl;
     Q_UNUSED( typeSpec );
 }
 
 void TreeParser::parseAccessDeclaration ( AccessDeclarationAST * access )
 {
-    //kdDebug(9007) << "TreeParser::parseAccessDeclaration()" << endl;
+    ////kdDebug(9007) << "TreeParser::parseAccessDeclaration()" << endl;
     Q_UNUSED( access );
 }
 
