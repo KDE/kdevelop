@@ -40,7 +40,9 @@ class QMakeProjectScope
 
         QList<QMakeProjectScope*> subProjects() const;
 
-        QList<KUrl> files() const;
+        KUrl::List files() const;
+
+        QStringList targets() const;
 
         KUrl absoluteDirUrl() const;
 

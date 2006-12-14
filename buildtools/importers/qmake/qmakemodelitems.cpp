@@ -36,4 +36,28 @@ QMakeFolderItem::~QMakeFolderItem()
 {
 }
 
+QMakeTargetItem::QMakeTargetItem( const QString& s, QStandardItem* parent )
+    : KDevProjectTargetItem( s, parent )
+{
+}
+
+QMakeTargetItem::~QMakeTargetItem()
+{
+}
+
+const KUrl::List& QMakeTargetItem::includeDirectories() const
+{
+    return m_includes;
+}
+
+const QHash<QString, QString>& QMakeTargetItem::environment() const
+{
+    return m_env;
+}
+
+const DomUtil::PairList& QMakeTargetItem::defines() const
+{
+    return m_defs;
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;

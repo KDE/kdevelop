@@ -99,15 +99,15 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
     return list;
 }
 
-QList<KUrl> QMakeProjectScope::files() const
+KUrl::List QMakeProjectScope::files() const
 {
     kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
     if( !m_ast )
-        return QList<KUrl>();
+        return KUrl::List();
 
     kDebug(9024) << k_funcinfo << "I have " << m_ast->statements().count() << " statements" << endl;
 
-    QList<KUrl> list;
+    KUrl::List list;
     foreach( QMake::StatementAST* stmt, m_ast->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
@@ -128,6 +128,35 @@ QList<KUrl> QMakeProjectScope::files() const
         }
     }
     list.append( m_projectFileUrl );
+    kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
+    return list;
+}
+
+QStringList QMakeProjectScope::targets() const
+{
+    kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
+    if( !m_ast )
+        return QStringList();
+
+    kDebug(9024) << k_funcinfo << "I have " << m_ast->statements().count() << " statements" << endl;
+
+    QStringList list;
+    foreach( QMake::StatementAST* stmt, m_ast->statements() )
+    {
+        QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
+        if( ast && ast->variable() == "INSTALLS" )
+        {
+            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable() << endl;
+            foreach( QString value, ast->values() )
+            {
+                kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
+                if( value.trimmed() != "" && value.trimmed() != "\\" && value.trimmed() != "target" )
+                {
+                    list << value;
+                }
+            }
+        }
+    }
     kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
     return list;
 }
