@@ -88,6 +88,10 @@ QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item 
     {
         new KDevProjectFileItem( u, item );
     }
+    foreach( QString s, folderitem->projectScope()->targets() )
+    {
+        new QMakeTargetItem( s,  item );
+    }
     kDebug(9024) << k_funcinfo << "Added " << folderList.count() << " Elements" << endl;
 
     return folderList;

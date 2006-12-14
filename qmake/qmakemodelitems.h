@@ -36,6 +36,20 @@ private:
     QMakeProjectScope* m_projectScope;
 };
 
+class QMakeTargetItem : public KDevProjectTargetItem
+{
+  public:
+    QMakeTargetItem( const QString& s, QStandardItem* parent );
+    ~QMakeTargetItem();
+    const KUrl::List& includeDirectories() const;
+    const QHash<QString, QString>& environment() const;
+    const DomUtil::PairList& defines() const;
+    private:
+        KUrl::List m_includes;
+        QHash<QString, QString> m_env;
+        DomUtil::PairList m_defs;
+};
+
 
 #endif
 
