@@ -30,11 +30,17 @@
 #include "qmakeparser.h"
 #include "qmakeast.h"
 
+const QStringList QMakeProjectScope::FileVariables = QStringList() << "IDLS"
+        << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
+        << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES"
+        << "INTERFACES" << "FORMS" ;
+
 QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
     : m_ast(0)
 {
     m_projectFileUrl = projectfile;
     QFileInfo fi( projectfile.path() );
+    kDebug(9024) << k_funcinfo << "Is " << projectfile << " a dir?" << fi.isDir() << endl;
     if( fi.isDir() )
     {
         QDir dir( m_projectFileUrl.path() );
@@ -49,9 +55,10 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
         {
             projectfile = l.first();
         }
+        m_projectFileUrl.adjustPath( KUrl::AddTrailingSlash );
         m_projectFileUrl.setFileName( projectfile );
     }
-    if( !QMake::Parser::parseFile( m_projectFileUrl.pathOrUrl(), &m_ast ) )
+    if( QMake::Parser::parseFile( m_projectFileUrl.pathOrUrl(), &m_ast ) != 0 )
     {
         kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.pathOrUrl() << endl;
         m_ast = 0;
@@ -61,26 +68,67 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
 
 QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
 {
+    kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
     if( !m_ast )
         return QList<QMakeProjectScope*>();
+
+    kDebug(9024) << k_funcinfo << "I have " << m_ast->statements().count() << " statements" << endl;
 
     QList<QMakeProjectScope*> list;
     foreach( QMake::StatementAST* stmt, m_ast->statements() )
     {
         QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
+
         if( ast && ast->variable().contains("SUBDIRS") )
         {
+            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable() << endl;
             foreach( QString value, ast->values() )
             {
+                kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
                 if( value.trimmed() != "" && value.trimmed() != "\\" )
                 {
                     KUrl u = absoluteDirUrl();
+                    u.adjustPath( KUrl::AddTrailingSlash );
                     u.setFileName( value.trimmed() );
                     list.append( new QMakeProjectScope( u ) );
                 }
             }
         }
     }
+    kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
+    return list;
+}
+
+QList<KUrl> QMakeProjectScope::files() const
+{
+    kDebug(9024) << k_funcinfo << "Fetching subprojects" << endl;
+    if( !m_ast )
+        return QList<KUrl>();
+
+    kDebug(9024) << k_funcinfo << "I have " << m_ast->statements().count() << " statements" << endl;
+
+    QList<KUrl> list;
+    foreach( QMake::StatementAST* stmt, m_ast->statements() )
+    {
+        QMake::AssignmentAST* ast = dynamic_cast<QMake::AssignmentAST*>( stmt );
+        if( ast && QMakeProjectScope::FileVariables.indexOf( ast->variable()  ) != -1 )
+        {
+            kDebug(9024) << k_funcinfo << "Found assignment: " << ast->variable() << endl;
+            foreach( QString value, ast->values() )
+            {
+                kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
+                if( value.trimmed() != "" && value.trimmed() != "\\" )
+                {
+                    KUrl u = absoluteDirUrl();
+                    u.adjustPath( KUrl::AddTrailingSlash );
+                    u.setFileName( value.trimmed() );
+                    list.append( u );
+                }
+            }
+        }
+    }
+    list.append( m_projectFileUrl );
+    kDebug(9024) << k_funcinfo << "found " << list.size() << " subprojects" << endl;
     return list;
 }
 

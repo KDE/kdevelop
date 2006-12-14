@@ -32,10 +32,15 @@ namespace QMake{
 class QMakeProjectScope
 {
     public:
+
+        static const QStringList FileVariables;
+
         QMakeProjectScope( const KUrl& projectfile );
         ~QMakeProjectScope();
 
         QList<QMakeProjectScope*> subProjects() const;
+
+        QList<KUrl> files() const;
 
         KUrl absoluteDirUrl() const;
 
