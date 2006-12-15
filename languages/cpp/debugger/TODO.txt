@@ -33,20 +33,11 @@ TODO:
 
       - Hiding of static members.
 
-      - Catch errors on showing QString.
-
-      - Watches that are out of scope cannot be
-        disabled.
-
       - No horizonal scrollbar in the variables widget.
 
       - Debugging optimized binaries
 
       - Debugged application somtimes not killed.
-
-
-
-      - Don't diable step button while stepping.
 
       - Fix moving breakpoints on editing files
 

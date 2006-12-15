@@ -1181,7 +1181,8 @@ void VarItem::createVarobj()
             new CliCommand(
                 QString("print /x &%1").arg(expression_),
                 this,
-                &VarItem::handleCurrentAddress));
+                &VarItem::handleCurrentAddress,
+                true));
         
         controller_->addCommand(
             // Need to quote expression, otherwise gdb won't like 
@@ -1417,6 +1418,7 @@ void VarItem::childrenOfFakesDone(const GDBMI::ResultRecord& r)
 
 void VarItem::handleCurrentAddress(const QValueVector<QString>& lines)
 {
+    lastObtainedAddress_ = "";
     if (lines.count() > 1)
     {
         static QRegExp r("\\$\\d+ = ([^\n]*)");
@@ -1661,7 +1663,8 @@ void VarItem::recreateLocallyMaybe()
         new CliCommand(
             QString("print /x &%1").arg(expression_),
             this,
-            &VarItem::handleCurrentAddress));
+            &VarItem::handleCurrentAddress,
+            true));
 
     controller_->addCommand(
         new CliCommand(
