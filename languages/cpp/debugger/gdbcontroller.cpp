@@ -43,6 +43,7 @@
 #include <iostream>
 #include <ctype.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <typeinfo>
 using namespace std;
 
