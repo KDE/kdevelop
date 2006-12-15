@@ -43,8 +43,6 @@ class DbgCommand;
 class GDBCommand;
 class VarItem;
 class STTY;
-class MemoryCallback;
-class ValueCallback;
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -81,6 +79,10 @@ public:
         computing the exact command to send.
     */
     void addCommand(GDBCommand* cmd);
+
+    /** Same as above, but internally constructs new GDBCommand
+       instance from the string. */
+    void addCommand(const QString& cmd);
 
     /** Adds command to the front of the commands queue. It will be executed
         next.
@@ -221,11 +223,6 @@ public slots:
 
     void slotBreakInto();
 
-    void slotMemoryDump(MemoryCallback* callback,
-                        const QString &start, const QString &amount);
-    void slotRegisters();
-    void slotLibraries();
-
     void slotUserGDBCmd(const QString&);
 
     // Pops up a dialog box with some hopefully
@@ -277,7 +274,6 @@ private:
 
     QPtrList<GDBCommand> cmdList_;
     GDBCommand*       currentCmd_;
-    MemoryCallback*   currentMemoryCallback_;
 
     STTY*             tty_;
     QString           badCore_;

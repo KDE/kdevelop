@@ -330,9 +330,7 @@ namespace GDBDebugger
                     QString("set *(char*)(%1 + %2) = %3")
                         .arg(start_)
                         .arg(i)
-                        .arg(QString::number(data_[i])), 
-                    NOTRUNCMD, 
-                    NOTINFOCMD));
+                        .arg(QString::number(data_[i]))));
         }
     }
     
@@ -478,97 +476,6 @@ namespace GDBDebugger
         if (toolBox_->count() == 0)
             setShown(false);
     }
-
-MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
-    : KDialog(parent, name, true),      // modal
-      start_(new KLineEdit(this)),
-      end_(new KLineEdit(this)),
-      output_(new QMultiLineEdit(this))
-{
-    setCaption(i18n("Memory/Misc Viewer"));
-    // Make the top-level layout; a vertical box to contain all widgets
-    // and sub-layouts.
-    QBoxLayout *topLayout = new QVBoxLayout(this, 5);
-
-    QGridLayout *grid = new QGridLayout(2, 2, 5);
-    topLayout->addLayout(grid);
-
-    QLabel *label = new QLabel(start_, i18n("&Start:"), this);
-    label->setBuddy(start_);
-    grid->addWidget(label, 0, 0);
-    grid->setRowStretch(0, 0);
-    grid->addWidget(start_, 1, 0);
-    grid->setRowStretch(1, 0);
-
-    label = new QLabel(end_, i18n("Amount/&End address (memory/disassemble):"), this);
-    label->setBuddy(end_);
-    grid->addWidget(label, 0, 1);
-    grid->addWidget(end_, 1, 1);
-
-    label = new QLabel(i18n("Memory&View:"), this);
-    label->setBuddy(output_);
-    topLayout->addWidget(label, 0);
-    topLayout->addWidget(output_, 5);
-    output_->setFont(KGlobalSettings::fixedFont());
-
-    KButtonBox *buttonbox = new KButtonBox(this, Horizontal, 5);
-    QPushButton *memoryDump = buttonbox->addButton(i18n("&Memory"));
-    QPushButton *disassemble = buttonbox->addButton(i18n("&Disassemble"));
-    QPushButton *registers = buttonbox->addButton(i18n("&Registers"));
-    QPushButton *libraries = buttonbox->addButton(i18n("&Libraries"));
-#if KDE_IS_VERSION( 3, 2, 90 )
-    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel());
-#else
-    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
-#endif
-    memoryDump->setDefault(true);
-    buttonbox->layout();
-    topLayout->addWidget(buttonbox);
-
-    start_->setFocus();
-
-    connect(memoryDump, SIGNAL(clicked()), SLOT(slotMemoryDump()));
-    connect(disassemble, SIGNAL(clicked()), SLOT(slotDisassemble()));
-    connect(registers, SIGNAL(clicked()), SIGNAL(registers()));
-    connect(libraries, SIGNAL(clicked()), SIGNAL(libraries()));
-    connect(cancel, SIGNAL(clicked()), SLOT(reject()));
-}
-
-// **************************************************************************
-
-MemoryViewDialog::~MemoryViewDialog()
-{
-}
-
-// **************************************************************************
-
-void MemoryViewDialog::slotRawGDBMemoryView(char *buf)
-{
-    // just display the resultant output from GDB in the edit box
-    output_->clear();
-    output_->insertLine(buf);
-    output_->setCursorPosition(0,0);
-}
-
-// **************************************************************************
-
-// get gdb to supply the disassembled data.
-void MemoryViewDialog::slotDisassemble()
-{
-    QString start(start_->text());
-    QString end(end_->text());
-    emit disassemble(start, end);
-}
-
-// **************************************************************************
-
-void MemoryViewDialog::slotMemoryDump()
-{ 
-    QString start(start_->text());
-    QString size(end_->text());
-    emit memoryDump(start, size);
-}
-
 
 // **************************************************************************
 // **************************************************************************

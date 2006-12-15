@@ -143,6 +143,13 @@
       <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx&lt;&lt;std</namespaceAliases>
       <processPrimaryTypes>true</processPrimaryTypes>
       <processFunctionArguments>false</processFunctionArguments>
+      <preProcessAllHeaders>false</preProcessAllHeaders>
+      <parseMissingHeaders>false</parseMissingHeaders>
+      <resolveIncludePaths>true</resolveIncludePaths>
+      <alwaysParseInBackground>true</alwaysParseInBackground>
+      <usePermanentCaching>true</usePermanentCaching>
+      <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
+      <includePaths>.;</includePaths>
     </codecompletion>
     <creategettersetter>
       <prefixGet/>
@@ -157,6 +164,8 @@
       <used>false</used>
       <version>3</version>
       <root>/usr/share/qt3</root>
+      <includestyle>3</includestyle>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
     </qt>
     <splitheadersource>
       <enabled>false</enabled>

@@ -134,7 +134,6 @@ GDBController::GDBController(QDomDocument &projectDom)
         viewedThread_(-1),
         holdingZone_(),
         currentCmd_(0),
-        currentMemoryCallback_(0),
         tty_(0),
         badCore_(QString()),
         state_(s_dbgNotStarted|s_appNotStarted),
@@ -216,20 +215,16 @@ void GDBController::configure()
         if (old_displayStatic != config_displayStaticMembers_)
         {
             if (config_displayStaticMembers_)
-                queueCmd(new GDBCommand("set print static-members on", NOTRUNCMD,
-                                        NOTINFOCMD));
+                queueCmd(new GDBCommand("set print static-members on"));
             else
-                queueCmd(new GDBCommand("set print static-members off", NOTRUNCMD,
-                                        NOTINFOCMD));
+                queueCmd(new GDBCommand("set print static-members off"));
         }
         if (old_asmDemangle != config_asmDemangle_)
         {
             if (config_asmDemangle_)
-                queueCmd(new GDBCommand("set print asm-demangle on", NOTRUNCMD,
-                                        NOTINFOCMD));
+                queueCmd(new GDBCommand("set print asm-demangle on"));
             else
-                queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD,
-                                        NOTINFOCMD));
+                queueCmd(new GDBCommand("set print asm-demangle off"));
         }
 
         // Disabled for MI port.
@@ -237,16 +232,16 @@ void GDBController::configure()
         if (old_breakOnLoadingLibrary_ != config_breakOnLoadingLibrary_)
         {
             if (config_breakOnLoadingLibrary_)
-                queueCmd(new GDBCommand("set stop-on 1", NOTRUNCMD, NOTINFOCMD));
+                queueCmd(new GDBCommand("set stop-on 1"));
             else
-                queueCmd(new GDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
+                queueCmd(new GDBCommand("set stop-on 0"));
         }
 #endif
 
         if (old_outputRadix != config_outputRadix_)
         {
             queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",
-                                config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
+                                config_outputRadix_)));
 
             // FIXME: should do this in variable widget anyway.
             // After changing output radix, need to refresh variables view.
@@ -255,10 +250,10 @@ void GDBController::configure()
         }
         
         if (!config_configGdbScript_.isEmpty())
-          queueCmd(new GDBCommand("source " + config_configGdbScript_, NOTINFOCMD, 0));
+          queueCmd(new GDBCommand("source " + config_configGdbScript_));
 
         if (restart)
-            queueCmd(new GDBCommand("-exec-continue", NOTINFOCMD, 0));
+            queueCmd(new GDBCommand("-exec-continue"));
     }
 }
 
@@ -267,6 +262,11 @@ void GDBController::configure()
 void GDBController::addCommand(GDBCommand* cmd)
 {
     queueCmd(cmd);
+}
+
+void GDBController::addCommand(const QString& str)
+{
+    queueCmd(new GDBCommand(str));
 }
 
 void GDBController::addCommandToFront(GDBCommand* cmd)
@@ -297,7 +297,7 @@ void GDBController::queueCmd(GDBCommand *cmd, bool executeNext)
         KMessageBox::error(
             0, 
             i18n("<b>Gdb command sent when debugger is not running</b><br>"
-            "The command was:<br> %1").arg(cmd->rawDbgCommand()),
+            "The command was:<br> %1").arg(cmd->initialString()),
             i18n("Internal error"));
         return;                    
     }
@@ -310,7 +310,7 @@ void GDBController::queueCmd(GDBCommand *cmd, bool executeNext)
     else
         cmdList_.append (cmd);
 
-    kdDebug(9012) << "QUEUE: " << cmd->rawDbgCommand() 
+    kdDebug(9012) << "QUEUE: " << cmd->initialString() 
                   << (stateReloadInProgress_ ? " (state reloading)\n" : "\n");
 
     setStateOn(s_dbgBusy);
@@ -363,7 +363,7 @@ void GDBController::executeCmd()
         }
         else
         {
-            kdDebug(9012) << "SEND: command " << currentCmd_->rawDbgCommand()
+            kdDebug(9012) << "SEND: command " << currentCmd_->initialString()
                           << " changed its mind, not sending\n";
         }
 
@@ -398,7 +398,7 @@ void GDBController::executeCmd()
     prettyCmd.replace( QRegExp("set prompt \032.\n"), "" );
     prettyCmd = "(gdb) " + prettyCmd;
 
-    if (currentCmd_->typeMatch(USERCMD))
+    if (currentCmd_->isUserCommand())
         emit gdbUserCommandStdout( prettyCmd.latin1() );
     else
         emit gdbInternalCommandStdout( prettyCmd.latin1() );
@@ -426,6 +426,9 @@ void GDBController::pauseApp()
 {
     setStateOn(s_explicitBreakInto);
 
+    /* FIXME: need to decide if we really
+       need this, and the consistenly mark
+       info commands as such.
     int i = cmdList_.count();
     while (i)
     {
@@ -434,6 +437,7 @@ void GDBController::pauseApp()
         if (cmd->isAnInfoCmd())
             delete cmdList_.take(i);
     }
+    */
 
     if (dbgProcess_)
         dbgProcess_->kill(SIGINT);
@@ -460,7 +464,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
     if (shared_library_load)
     {
         raiseEvent(shared_library_loaded);
-        queueCmd(new GDBCommand("-exec-continue", RUNCMD, NOTINFOCMD));        
+        queueCmd(new GDBCommand("-exec-continue"));        
         return;
     }
 
@@ -506,8 +510,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
         // watchpoinst on program exit is the right thing to
         // do.
 
-        queueCmd(new GDBCommand("-exec-continue",
-                               RUNCMD, NOTINFOCMD));
+        queueCmd(new GDBCommand("-exec-continue"));
 
         state_reload_needed = false;
         return;
@@ -853,14 +856,13 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     // queueCmd(new GDBCommand("set confirm off", NOTRUNCMD, NOTINFOCMD));
 
     if (config_displayStaticMembers_)
-        queueCmd(new GDBCommand("set print static-members on", NOTRUNCMD,
-                                    NOTINFOCMD));
+        queueCmd(new GDBCommand("set print static-members on"));
     else
-        queueCmd(new GDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
+        queueCmd(new GDBCommand("set print static-members off"));
 
     // This makes gdb pump a variable out on one line.
-    queueCmd(new GDBCommand("set width 0", NOTRUNCMD, NOTINFOCMD));
-    queueCmd(new GDBCommand("set height 0", NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand("set width 0"));
+    queueCmd(new GDBCommand("set height 0"));
 
     // Get gdb to notify us of shared library events. This allows us to
     // set breakpoints in shared libraries that are not loaded yet. On each
@@ -871,36 +873,32 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     // - This is broken for MI -break-insert command (the breakpoint is
     //   not inserted at all, and no error is produced)
     // - MI does not contains notification that pending breakpoint is resolved.
-    queueCmd(new GDBCommand("set stop-on-solib-events 1", 
-                            NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand("set stop-on-solib-events 1"));
 
 
-    queueCmd(new GDBCommand("handle SIG32 pass nostop noprint", NOTRUNCMD,
-                            NOTINFOCMD));
-    queueCmd(new GDBCommand("handle SIG41 pass nostop noprint", NOTRUNCMD,
-                            NOTINFOCMD));
-    queueCmd(new GDBCommand("handle SIG42 pass nostop noprint", NOTRUNCMD,
-                            NOTINFOCMD));
-    queueCmd(new GDBCommand("handle SIG43 pass nostop noprint", NOTRUNCMD,
-                            NOTINFOCMD));
+    queueCmd(new GDBCommand("handle SIG32 pass nostop noprint"));
+    queueCmd(new GDBCommand("handle SIG41 pass nostop noprint"));
+    queueCmd(new GDBCommand("handle SIG42 pass nostop noprint"));
+    queueCmd(new GDBCommand("handle SIG43 pass nostop noprint"));
 
     // Print some nicer names in disassembly output. Although for an assembler
     // person this may actually be wrong and the mangled name could be better.
     if (config_asmDemangle_)
-        queueCmd(new GDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
+        queueCmd(new GDBCommand("set print asm-demangle on"));
     else
-        queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
+        queueCmd(new GDBCommand("set print asm-demangle off"));
 
     // make sure output radix is always set to users view.
-    queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",  config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",  config_outputRadix_)));
        
     // Change the "Working directory" to the correct one
     QCString tmp( "cd " + QFile::encodeName( run_directory ));
-    queueCmd(new GDBCommand(tmp, NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand(tmp));
 
     // Set the run arguments
     if (!run_arguments.isEmpty())
-        queueCmd(new GDBCommand(QCString("set args ") + run_arguments.latin1(), NOTRUNCMD, NOTINFOCMD));
+        queueCmd(
+            new GDBCommand(QCString("set args ") + run_arguments.latin1()));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -915,7 +913,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
         environstr += (*it).first;
         environstr += "=";
         environstr += (*it).second;
-        queueCmd(new GDBCommand(environstr.latin1(), NOTRUNCMD, NOTINFOCMD));
+        queueCmd(new GDBCommand(environstr.latin1()));
     }
 
     // Needed so that breakpoint widget has a chance to insert breakpoints.
@@ -1026,8 +1024,7 @@ void GDBController::slotCoreFile(const QString &coreFile)
     setStateOff(s_programExited|s_appNotStarted);
     setStateOn(s_core);
 
-    queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), 
-                                NOTINFOCMD, 0));
+    queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1()));
    
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -1046,18 +1043,18 @@ void GDBController::slotAttachTo(int pid)
     // We can't omit application name from gdb invocation
     // because for libtool binaries, we have no way to guess
     // real binary name.
-    queueCmd(new GDBCommand(QString("file"), NOTINFOCMD, 0));
+    queueCmd(new GDBCommand(QString("file")));
 
     // The MI interface does not implements -target-attach yet,
     // and we don't recognize whatever gibberish 'attach' pours out, so...
     queueCmd(new GDBCommand(
-        QCString().sprintf("attach %d", pid), NOTINFOCMD, 0));
+        QCString().sprintf("attach %d", pid)));
 
     raiseEvent(connected_to_program);
     
     // ...emit a separate MI command to step one instruction more. We'll 
     // notice the '*stopped' response from it and proceed as usual.
-    queueCmd(new GDBCommand("-exec-step-instruction", NOTINFOCMD, 0));
+    queueCmd(new GDBCommand("-exec-step-instruction"));
 }
 
 // **************************************************************************
@@ -1091,7 +1088,7 @@ void GDBController::slotRun()
             return;
         }
         
-        queueCmd(new GDBCommand(QCString("tty ")+tty.latin1(), NOTINFOCMD));        
+        queueCmd(new GDBCommand(QCString("tty ")+tty.latin1()));        
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
@@ -1114,8 +1111,7 @@ void GDBController::slotRun()
             // Future: the shell script should be able to pass info (like pid)
             // to the gdb script...
 
-            queueCmd(new GDBCommand("source " + config_runGdbScript_,
-                                    NOTINFOCMD, 0));
+            queueCmd(new GDBCommand("source " + config_runGdbScript_));
 
             // Note: script could contain "run" or "continue"
         }
@@ -1155,14 +1151,14 @@ void GDBController::slotRun()
             }
             else
             {
-                queueCmd(new GDBCommand("-exec-run", NOTINFOCMD, 0));
+                queueCmd(new GDBCommand("-exec-run"));
             }
         }
     }
     else {
         removeStateReloadingCommands();
 
-        queueCmd(new GDBCommand("-exec-continue", NOTINFOCMD, 0));
+        queueCmd(new GDBCommand("-exec-continue"));
     }
     setStateOff(s_appNotStarted|s_programExited);
 }
@@ -1178,7 +1174,7 @@ void GDBController::slotKill()
         pauseApp();
     }
 
-    queueCmd(new GDBCommand("kill", NOTINFOCMD, 0));
+    queueCmd(new GDBCommand("kill"));
 
     setStateOn(s_appNotStarted);
 }
@@ -1193,12 +1189,12 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
     removeStateReloadingCommands();
 
     if (fileName.isEmpty())
-        queueCmd(new GDBCommand( QCString().sprintf("-exec-until %d", lineNum),
-                                NOTINFOCMD, 0));
+        queueCmd(new GDBCommand(
+                     QCString().sprintf("-exec-until %d", lineNum)));
     else
         queueCmd(new GDBCommand(
-                QCString().sprintf("-exec-until %s:%d", fileName.latin1(), lineNum),
-                                NOTINFOCMD, 0));
+                QCString().
+                sprintf("-exec-until %s:%d", fileName.latin1(), lineNum)));
 }
 
 // **************************************************************************
@@ -1209,8 +1205,8 @@ void GDBController::slotJumpTo(const QString &fileName, int lineNum)
         return;
 
     if (!fileName.isEmpty()) {
-        queueCmd(new GDBCommand(QCString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum), NOTINFOCMD, 0));
-        queueCmd(new GDBCommand(QCString().sprintf("jump %s:%d", fileName.latin1(), lineNum), NOTINFOCMD, 0));
+        queueCmd(new GDBCommand(QCString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum)));
+        queueCmd(new GDBCommand(QCString().sprintf("jump %s:%d", fileName.latin1(), lineNum)));
     }
 }
 
@@ -1223,7 +1219,7 @@ void GDBController::slotStepInto()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-step", this));
+    queueCmd(new GDBCommand("-exec-step"));
 }
 
 // **************************************************************************
@@ -1235,7 +1231,7 @@ void GDBController::slotStepIntoIns()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-step-instruction", this));
+    queueCmd(new GDBCommand("-exec-step-instruction"));
 }
 
 // **************************************************************************
@@ -1247,7 +1243,7 @@ void GDBController::slotStepOver()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-next", this));
+    queueCmd(new GDBCommand("-exec-next"));
 }
 
 // **************************************************************************
@@ -1259,7 +1255,7 @@ void GDBController::slotStepOverIns()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-next-instruction", this));
+    queueCmd(new GDBCommand("-exec-next-instruction"));
 }
 
 // **************************************************************************
@@ -1271,7 +1267,7 @@ void GDBController::slotStepOutOff()
 
     removeStateReloadingCommands();
 
-    queueCmd(new GDBCommand("-exec-finish", NOTINFOCMD, 0));
+    queueCmd(new GDBCommand("-exec-finish"));
 }
 
 // **************************************************************************
@@ -1280,42 +1276,6 @@ void GDBController::slotStepOutOff()
 void GDBController::slotBreakInto()
 {
     pauseApp();
-}
-
-// **************************************************************************
-
-void GDBController::slotMemoryDump(
-    MemoryCallback* callback,
-    const QString &address, const QString &amount)
-{
-    if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    QCString cmd = QCString().sprintf("x/%sb %s", 
-                                      amount.stripWhiteSpace().latin1(),
-                                      address.latin1());
-    currentMemoryCallback_ = callback;
-    queueCmd(new GDBCommand(cmd, INFOCMD, MEMDUMP));
-}
-
-// **************************************************************************
-
-void GDBController::slotRegisters()
-{
-    if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new GDBCommand("info all-registers", INFOCMD, REGISTERS));
-}
-
-// **************************************************************************
-
-void GDBController::slotLibraries()
-{
-    if (stateIsOn(s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new GDBCommand("info sharedlibrary", INFOCMD, LIBRARIES));
 }
 
 // **************************************************************************
@@ -1331,13 +1291,11 @@ void GDBController::selectFrame(int frameNo, int threadNo)
     {
         if (viewedThread_ != threadNo)
             queueCmd(new GDBCommand(
-                         QString("-thread-select %1").arg(threadNo).ascii(),
-                         INFOCMD));
+                         QString("-thread-select %1").arg(threadNo).ascii()));
     }
 
     queueCmd(new GDBCommand(
-                 QString("-stack-select-frame %1").arg(frameNo).ascii(),
-                 INFOCMD));
+                 QString("-stack-select-frame %1").arg(frameNo).ascii()));
 
     // Will emit the 'thread_or_frame_changed' event.
     queueCmd(new GDBCommand("-stack-info-frame",
@@ -1492,7 +1450,8 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                                   << commandExecutionTime.elapsed() << " ms.\n";
                 }
 
-                if (!currentCmd_ || currentCmd_->typeMatch(USERCMD))
+                assert(currentCmd_);
+                if (currentCmd_->isUserCommand())
                     emit gdbUserCommandStdout(reply);
                 else
                     emit gdbInternalCommandStdout(reply + "\n");
@@ -1546,7 +1505,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
             case GDBMI::Record::Stream: {            
 
                 GDBMI::StreamRecord& s = dynamic_cast<GDBMI::StreamRecord&>(*r);
-                if (!currentCmd_ || currentCmd_->typeMatch(USERCMD))
+                if (!currentCmd_ || currentCmd_->isUserCommand())
                     emit gdbUserCommandStdout(s.message.ascii());
                 else
                     emit gdbInternalCommandStdout(s.message.ascii());
@@ -1640,7 +1599,7 @@ void GDBController::removeStateReloadingCommands()
         GDBCommand* cmd = cmdList_.at(i);
         if (stateReloadingCommands_.count(cmd));
         {
-            kdDebug(9012) << "UNQUEUE: " << cmd->rawDbgCommand() << "\n";
+            kdDebug(9012) << "UNQUEUE: " << cmd->initialString() << "\n";
             delete cmdList_.take(i);
         }
     }
@@ -1721,7 +1680,7 @@ void GDBController::slotDbgProcessExited(KProcess* process)
 
 void GDBController::slotUserGDBCmd(const QString& cmd)
 {
-    queueCmd(new GDBCommand(cmd.latin1(), INFOCMD, USERCMD));
+    queueCmd(new UserCommand(cmd.latin1()));
 
     // User command can theoreticall modify absolutely everything,
     // so need to force a reload. 
@@ -1750,7 +1709,7 @@ void GDBController::explainDebuggerStatus()
 
         extra = extra.arg(
             typeid(*currentCmd_).name()).arg(currentCmd_->cmdToSend()).
-            arg(currentCmd_->rawDbgCommand());
+            arg(currentCmd_->initialString());
         information += extra;
     }
 

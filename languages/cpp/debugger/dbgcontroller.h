@@ -97,9 +97,6 @@ public slots:
 
     virtual void slotBreakInto()                                            = 0;
 
-    virtual void slotRegisters()                                            = 0;
-    virtual void slotLibraries()                                            = 0;
-
     // jw - for optional additional commands and initialization
     virtual void slotVarItemConstructed(VarItem */*item*/) {}
 

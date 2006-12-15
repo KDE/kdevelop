@@ -1084,8 +1084,8 @@ VarItem::VarItem(TrimmableItem *parent,
       updateUnconditionally_(false),
       frozen_(frozen),
       initialCreation_(true),
-      alive_(true),
-      baseClassMember_(false)
+      baseClassMember_(false),
+      alive_(true)
 {
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1129,8 +1129,8 @@ VarItem::VarItem(TrimmableItem *parent, const GDBMI::Value& varobj,
   updateUnconditionally_(false),
   frozen_(false),
   initialCreation_(false),
-  alive_(true),
-  baseClassMember_(baseClassMember)
+  baseClassMember_(baseClassMember),
+  alive_(true)
 { 
     connect(this, SIGNAL(varobjNameChange(const QString&, const QString&)),
             varTree(), 
@@ -1240,8 +1240,7 @@ void VarItem::setVarobjName(const QString& name)
     {
         controller_->addCommand(
             new GDBCommand(QString("-var-set-format \"%1\" %2")
-                           .arg(varobjName_).arg(varobjFormatName()),
-                           NOTRUNCMD, NOTINFOCMD));
+                           .arg(varobjName_).arg(varobjFormatName())));
     }
 
     // Get the initial value.
@@ -1603,8 +1602,7 @@ void VarItem::setValue(const QString& new_value)
 {
     controller_->addCommand(
         new GDBCommand(QString("-var-assign \"%1\" %2").arg(varobjName_)
-                       .arg(new_value),
-                       NOTRUNCMD, NOTINFOCMD));
+                       .arg(new_value)));
 
     // And immediately reload it from gdb, 
     // so that it's display format is the one gdb uses,
@@ -1768,8 +1766,7 @@ void VarItem::setFormat(format_t f)
     {
          controller_->addCommand(
             new GDBCommand(QString("-var-set-format \"%1\" %2")
-                           .arg(varobjName_).arg(varobjFormatName()),
-                           NOTRUNCMD, NOTINFOCMD));
+                           .arg(varobjName_).arg(varobjFormatName())));
         
         updateValue();
     }
@@ -1888,8 +1885,7 @@ void VarItem::unhookFromGdb()
     {
         controller_->addCommand(
             new GDBCommand(
-                QString("-var-delete \"%1\"").arg(varobjName_),
-                NOTRUNCMD, NOTINFOCMD));
+                QString("-var-delete \"%1\"").arg(varobjName_)));
     }
 
     varobjName_ = "";    
@@ -1931,8 +1927,8 @@ VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
       needLocals_(false),
       frameNo_(frameNo),
       threadNo_(threadNo),
-      currentFrameBase(-1),
-      currentFrameCodeAddress(-1)
+      currentFrameBase((unsigned long long)-1),
+      currentFrameCodeAddress((unsigned long long)-1)
 {
     setExpandable(true);
 }

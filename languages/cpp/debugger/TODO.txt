@@ -1,4 +1,26 @@
 
+KDEV4 Debugger:
+
+      - Launch framework
+
+        - On fly launch types -- "dbus call to connect to a given app"
+
+      - Advanced data visualization
+
+        - Customizable by the user
+
+      - Assembler display that's good
+
+      - Hex display that's good
+
+      - Register display that is good.
+
+      - Debugger scripts? Remembering and replaying a set of
+      commands?
+
+      - Debugger as a visualizer tool?
+
+
 TODO:
 
    - Check gdb version at startup.

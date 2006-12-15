@@ -14,7 +14,7 @@ libkdevdebugger_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/l
 	$(top_builddir)/languages/cpp/debugger/mi/libgdbmi_parser.la
 
 libkdevdebugger_la_SOURCES = debuggerdcopinterface.skel debuggerpart.cpp \
-    dbgcontroller.cpp gdbcontroller.cpp dbgcommand.cpp gdbcommand.cpp \
+    dbgcontroller.cpp gdbcontroller.cpp gdbcommand.cpp \
     gdbparser.cpp stty.cpp breakpoint.cpp variablewidget.cpp \
     gdbbreakpointwidget.cpp framestackwidget.cpp disassemblewidget.cpp \
     memviewdlg.cpp dbgpsdlg.cpp dbgtoolbar.cpp debuggerconfigwidget.cpp \

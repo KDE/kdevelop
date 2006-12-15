@@ -20,14 +20,25 @@
 namespace GDBDebugger
 {
 
-/***************************************************************************/
-
-GDBCommand::GDBCommand(const QString &setCommand, bool isInfoCmd, char setPrompt)
-: DbgCommand(setCommand, isInfoCmd, setPrompt),
-  handler_this(0)
+GDBCommand::GDBCommand(const QString &command)
+: command_(command), handler_this(0)
 {
 }
 
+QString GDBCommand::cmdToSend()
+{
+    return initialString() + "\n";
+}
+
+QString GDBCommand::initialString() const
+{
+    return command_;
+}
+
+bool GDBCommand::isUserCommand() const
+{
+    return false;
+}
 
 bool
 GDBCommand::invokeHandler(const GDBMI::ResultRecord& r)
@@ -56,17 +67,24 @@ bool GDBCommand::handlesError() const
     return handlesError_;
 }
 
-
-/***************************************************************************/
-
 GDBCommand::~GDBCommand()
 {
+}
+
+UserCommand::UserCommand(const QString& s)
+: GDBCommand(s)
+{
+}
+
+bool UserCommand::isUserCommand() const
+{
+    return true;
 }
 
 
 ModifyBreakpointCommand::ModifyBreakpointCommand(
     const QString& command, const Breakpoint* bp)
-: GDBCommand(command.local8Bit(), false, false),
+: GDBCommand(command.local8Bit()),
   bp_(bp)
 {}
 
@@ -75,7 +93,7 @@ ModifyBreakpointCommand::cmdToSend()
 {
     if (bp_->dbgId() > 0)
     {
-        QString s(rawDbgCommand());
+        QString s(initialString());
         s = s.arg(bp_->dbgId()) + "\n";
         return s.local8Bit();
     }

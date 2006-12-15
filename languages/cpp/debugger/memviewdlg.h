@@ -113,35 +113,6 @@ namespace GDBDebugger
         
         int debuggerState_;
     };
-
-
-
-class MemoryViewDialog : public KDialog
-{
-    Q_OBJECT
-
-public:
-    MemoryViewDialog( QWidget *parent=0, const char *name=0 );
-    ~MemoryViewDialog();
-
-signals:
-    void disassemble(const QString &start, const QString &end);
-    void memoryDump(const QString &start, const QString &end);
-    void registers();
-    void libraries();
-
-public slots:
-    void slotRawGDBMemoryView(char *buf);
-
-private slots:
-    void slotDisassemble();
-    void slotMemoryDump();
-
-private:
-    KLineEdit *start_, *end_;
-    QMultiLineEdit *output_;
-};
-
 }
 
 #endif

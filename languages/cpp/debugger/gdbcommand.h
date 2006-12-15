@@ -20,10 +20,8 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-#include "dbgcommand.h"
 #include "mi/gdbmi.h"
 #include <qguardedptr.h>
-
 
 namespace GDBDebugger
 {
@@ -33,80 +31,39 @@ class Breakpoint;
 class VarItem;
 class ValueCallback;
 
-// sigh - namespace's don't work on some of the older compilers
-enum GDBCmd
-{
-  BLOCK_START     = '\32',
-  SRC_POSITION    = '\32',    // Hmmm, same value may not work for all compilers
-
-  ARGS            = 'a',
-  ALL_ARGS        = 'A',
-
-  BPLIST          = 'B',
-  SET_BREAKPT     = 'b',
-
-  DATAREQUEST     = 'D',
-  DISASSEMBLE     = 'd',
-
-  FRAME           = 'F',
-  FILE_START      = 'f',
-
-  WHATIS          = 'H',
-
-  INITIALISE      = 'I',
-  IDLE            = 'i',
-
-  BACKTRACE       = 'K',
-
-  LOCALS          = 'L',
-  LIBRARIES       = 'l',
-
-  MEMDUMP         = 'M',
-
-  WAIT            = '0',
-
-  TRACING_PRINTF  = 'P',
-
-  RUN             = 'R',
-  REGISTERS       = 'r',
-
-  PROGRAM_STOP    = 'S',
-  SHARED_CONT     = 's',
-
-  INFOTHREAD      = 'T',
-  SWITCHTHREAD    = 't',
-
-  USERCMD         = 'U',
-
-  SETVALUE        = 'V',
-
-  SETWATCH        = 'W',
-  UNSETWATCH      = 'w',
-
-  DETACH          = 'z'
- 
-};
-
-#define RUNCMD      (true)
-#define NOTRUNCMD   (false)
-#define INFOCMD     (true)
-#define NOTINFOCMD  (false)
-
 /**
  * @author John Birch
  */
 
-class GDBCommand : public DbgCommand
+class GDBCommand
 {
 public:
-    GDBCommand(const QString& command, bool isInfoCmd=true,
-               char prompt=WAIT);
+    GDBCommand(const QString& command);
 
     template<class Handler>
-    GDBCommand(const QString& command, // bool isInfoCmd,
+    GDBCommand(const QString& command,
                Handler* handler_this, 
                void (Handler::* handler_method)(const GDBMI::ResultRecord&),
                bool handlesError = false);
+
+    /* The command that should be sent to gdb.  
+       This method is virtual so the command can compute this
+       dynamically, possibly using results of the previous
+       commands.
+       If the empty string is returned, nothing is sent. */
+    virtual QString cmdToSend();
+
+    /* Returns the initial string that was specified in
+       ctor invocation. The actual command will be
+       determined by cmdToSend above and the return
+       value of this method is only used in various
+       diagnostic messages emitted before actually
+       sending the command. */
+    QString initialString() const;
+
+    /* Returns true if this is command entered by the user
+       and so should be always shown in the gdb output window. */
+    virtual bool isUserCommand() const;
 
     // If there's a handler for this command, invokes it and returns true.
     // Otherwise, returns false.
@@ -126,6 +83,7 @@ public:
     const QValueVector<QString>& allStreamOutput() const;
 
 private:
+    QString command_;
     QGuardedPtr<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
@@ -135,6 +93,14 @@ protected: // FIXME: should be private, after I kill the first ctor
     // that is obsolete and no longer necessary.
     bool handlesError_;
 
+};
+
+class UserCommand : public GDBCommand
+{
+public:
+    UserCommand(const QString& s);
+
+    bool isUserCommand() const;
 };
 
 /** This command is used to change some property of breakpoint.
@@ -196,7 +162,7 @@ public:
     template<class Handler>
     SentinelCommand(Handler* handler_this,
                     void (Handler::* handler_method)())
-    : GDBCommand("", NOTRUNCMD, NOTINFOCMD),
+    : GDBCommand(""),
       handler_this(handler_this),
       handler_method(static_cast<handler_method_t>(handler_method))
     {}
@@ -264,7 +230,7 @@ GDBCommand::GDBCommand(
     Handler* handler_this,
     void (Handler::* handler_method)(const GDBMI::ResultRecord&),
     bool handlesError)
-: DbgCommand(command, INFOCMD, WAIT),
+: command_(command),
   handler_this(handler_this), 
   handler_method(static_cast<handler_t>(handler_method)),
   handlesError_(handlesError)
@@ -277,7 +243,7 @@ CliCommand::CliCommand(
     Handler* handler_this,
     void (Handler::* handler_method)(const QValueVector<QString>&),
     bool handlesError)
-: GDBCommand(command.latin1(), INFOCMD, WAIT),
+: GDBCommand(command.latin1()),
   cli_handler_this(handler_this), 
   cli_handler_method(static_cast<cli_handler_t>(handler_method))
 {
