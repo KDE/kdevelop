@@ -169,9 +169,7 @@ public:
 };
 
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
-: KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ),
-	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
-	m_activeViewCursor( 0 ), m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
+: KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ), m_backgroundParser(0), m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ), m_activeViewCursor( 0 ), m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
 {
 	setInstance( CppSupportFactory::instance() );
 
