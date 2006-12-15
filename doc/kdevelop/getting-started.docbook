@@ -3146,9 +3146,35 @@ change them later.</para></caution>
 
 
 <sect1 id="gettingstarted-doc">
-<title>A Note on Documentation</title>
+<title>A Note on Your Project Documentation</title>
 
-<para>(- to be written -)</para>
+<para>The &kde; project uses <ulink
+url="http://www.docbook.org/tdg5/en/html/docbook.html">docbook</ulink> for
+generating your project handbook (&ie; the user manual). The user manual is
+available through your application menubar by choosing
+<menuchoice><guimenu>Help</guimenu>
+<guimenuitem><replaceable>YourApplication</replaceable>
+Handbook</guimenuitem></menuchoice > when your &kde; GUI application is running.
+After building your project, the user manual is displayed in &kde;
+&khelpcenter;. It should explain to the user how your application works, what
+are the main features and how to configure it. It should also explain the
+advanced features if any.
+</para>
+<para>All &kde; based templates in &kdevelop; have a doc subdir which contains
+a <filename>index.docbook</filename> template in the en folder to get you
+started in writing the user manual. You should edit this
+<filename>index.docbook</filename> in &kdevelop; and start changing personal
+details such as name, email, &etc;. Look at the comments in this file and try
+following these indications to start your application documentation. Rebuild
+your project to see the changes in &khelpcenter;.</para>
+<note><para>You need to install your project using
+<menuchoice><guimenu>Build</guimenu>
+<guimenuitem>Install</guimenuitem></menuchoice > or <guimenuitem>Install (as
+root user)</guimenuitem> in &kdevelop; to see the user manual in
+&khelpcenter;.</para></note>
+<para>You can find more about the docbook syntax on <ulink
+url="http://l10n.kde.org/docs/markup/index.html">the &kde; documentation
+website</ulink>.</para>
 </sect1>
 
 <sect1 id="gettingstarted-keys">
