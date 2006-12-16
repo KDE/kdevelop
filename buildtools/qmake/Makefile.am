@@ -1,11 +1,11 @@
 # Here resides the troll project part for tmake or qmake
 
 
-INCLUDES = -I$(top_srcdir)/buildtools/lib/base \
+INCLUDES = $(all_includes) -I$(top_builddir)/buildtools/lib/widgets \
+	-I$(top_srcdir)/buildtools/lib/base -I$(top_srcdir)/buildtools/lib/parsers/qmake \
 	-I$(top_srcdir)/buildtools/lib/widgets -I$(top_srcdir)/lib/interfaces \
-	-I$(top_srcdir)/buildtools/lib/parsers/qmake \
 	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
-	-I$(top_builddir)/buildtools/lib/widgets $(all_includes)
+	-I/usr/include/GL
 
 
 kde_module_LTLIBRARIES = libkdevtrollproject.la

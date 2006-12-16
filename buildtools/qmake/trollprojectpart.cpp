@@ -185,6 +185,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     QString m_defaultQtDir = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "");
     QString m_qmakePath = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "");
+    QString qtversion = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/version", "3");
 
     if( m_defaultQtDir.isEmpty() || !isValidQtDir( m_defaultQtDir ) )
     {
@@ -194,7 +195,9 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     }
     if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
     {
-        m_qmakePath = findExecutable( "qmake" );
+        m_qmakePath = findExecutable( "qmake-qt"+qtversion );
+        if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
+            m_qmakePath = findExecutable( "qmake" );
         kdDebug(9024) << "Setting qmake binary to: " << m_qmakePath << endl;
         DomUtil::writeEntry(*projectDom(), "/kdevcppsupport/qt/qmake", m_qmakePath );
     }

@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>773</width>
+            <width>863</width>
             <height>690</height>
         </rect>
     </property>
@@ -1169,7 +1169,7 @@ you right click on a variable in a header file.</string>
                             <bool>false</bool>
                         </property>
                         <property name="title">
-                            <string>Qt Version and Directory</string>
+                            <string>Qt Version, Directory and QMake Binary</string>
                         </property>
                         <property name="exclusive">
                             <bool>true</bool>
@@ -1200,7 +1200,7 @@ you right click on a variable in a header file.</string>
                                             <bool>true</bool>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Use Qt version 3(When this is changed the project needs to be closed and re-opened.)</string>
+                                            <string>Use Qt version 3 (When this is changed the project needs to be closed and re-opened.)</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Select this if your project is using Qt version 3.x.&lt;br&gt;When this is changed the project needs to be closed and re-opened.</string>
@@ -1214,7 +1214,7 @@ you right click on a variable in a header file.</string>
                                             <string>Qt 4</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Use Qt version 4(When this is changed the project needs to be closed and re-opened.)</string>
+                                            <string>Use Qt version 4 (When this is changed the project needs to be closed and re-opened.)</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Select this if your project is using Qt version 4.x.&lt;br&gt;When this is changed the project needs to be closed and re-opened.</string>
@@ -1263,7 +1263,10 @@ you right click on a variable in a header file.</string>
                                             <cstring>m_txtQtDir</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Qt Directory:</string>
+                                            <string>Qt3 Directory:</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>This setting is only needed for Qt3 programs, for Qt4 just make sure the QMake Binary is set properly</string>
                                         </property>
                                     </widget>
                                     <widget class="KURLRequester">
@@ -1271,7 +1274,7 @@ you right click on a variable in a header file.</string>
                                             <cstring>m_qtDir</cstring>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>The Qt directory, will be red if it is not a valid Qt directory.</string>
+                                            <string>The Qt directory, will be red if it is not a valid Qt directory. This setting is only needed for Qt3 programs.</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Choose the directory that Qt was installed to. If this is shown in red the directory is not a valid Qt directory.</string>
@@ -1298,6 +1301,9 @@ you right click on a variable in a header file.</string>
                                     <widget class="KURLRequester">
                                         <property name="name">
                                             <cstring>m_qmakePath</cstring>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>The full path to the QMake executable to be used</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -1448,6 +1454,9 @@ you right click on a variable in a header file.</string>
                                         <property name="name">
                                             <cstring>m_designerPath</cstring>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>The full path to the Designer executable to be used</string>
+                                        </property>
                                     </widget>
                                 </hbox>
                             </widget>
@@ -1475,6 +1484,8 @@ you right click on a variable in a header file.</string>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
