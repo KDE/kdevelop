@@ -155,7 +155,7 @@ void SearchView::search()
     QString exe = config->readPathEntry("htsearchbin", kapp->dirs()->findExe("htsearch"));
     if (exe.isEmpty())
     {
-        KMessageBox::error(this, i18n("Cannot find the htsearch executable."));
+        KMessageBox::error(this, i18n("Cannot find the htsearch executable.\nIt is part of the ht://Dig package that is used by KDevelop to perform full text search. Please install ht://Dig and use Documentation page in Configure KDevelop dialog to set the htsearch location."));
         kdDebug() << "Can not find htsearch" << endl;
         return;
     }
