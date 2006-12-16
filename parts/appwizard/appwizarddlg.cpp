@@ -1046,6 +1046,9 @@ void AppWizardDialog::pageChanged()
 {
 	kdDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
 	projectLocationChanged();
+	if (currentPage() == m_lastPage)
+		finishButton()->setDefault(true);
+
 
 	//it is possible that project name was changed - we need to update all vcs integrator dialogs
 	for (QMap<int, VCSDialog*>::iterator it = m_integratorDialogs.begin();
