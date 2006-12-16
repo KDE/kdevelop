@@ -16,6 +16,7 @@
 #include "abbrevconfigwidget.h"
 
 #include <kconfig.h>
+#include <kiconloader.h>
 
 #include <qlistview.h>
 #include <qmultilineedit.h>
@@ -35,11 +36,13 @@ AbbrevConfigWidget::AbbrevConfigWidget(AbbrevPart *part, QWidget *parent, const 
     for (templ = templates.first(); templ; templ = templates.next())
     {
         qWarning("creating item for code template ");
-        new QListViewItem( listTemplates,
+        QListViewItem *it = new QListViewItem( listTemplates,
                            templ->name,
                            templ->description,
                            templ->suffixes,
+                           templ->code,
                            templ->code );
+        it->setPixmap( 0, SmallIcon("template_source"));
     }
 
     checkWordCompletion->setChecked( part->autoWordCompletionEnabled() );
@@ -91,6 +94,10 @@ void AbbrevConfigWidget::codeChanged()
     QListViewItem* item = listTemplates->selectedItem();
     if( item ){
         item->setText( 3, editCode->text() );
+        if (item->text(3) == item->text(4))
+            item->setPixmap( 0, SmallIcon("template_source") );
+        else
+            item->setPixmap( 0, SmallIcon("filesave") );
     }
 }
 
