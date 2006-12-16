@@ -8,17 +8,24 @@
 #include "uichooser.h"
 
 class UIChooserPart;
-    
+
 class UIChooserWidget : public UIChooser
 {
   Q_OBJECT
 
 public:
+
+  enum TabWidgetVisibility {
+    _AlwaysShowTabs         = 0,
+    _ShowWhenMoreThanOneTab = 1,
+    _NeverShowTabs          = 2
+  };
+
   UIChooserWidget( UIChooserPart * part, QWidget *parent=0, const char *name=0 );
 
 public slots:
   void accept();
-  
+
 protected slots:
   void maybeEnableCloseOnHover( bool );
 

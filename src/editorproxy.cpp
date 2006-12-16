@@ -6,7 +6,6 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <kmdidefines.h>
 
 #include <kparts/part.h>
 
@@ -27,7 +26,6 @@
 #include "toplevel.h"
 #include "partcontroller.h"
 #include "core.h"
-#include "newmainwindow.h"
 #include "multibuffer.h"
 
 #include "editorproxy.h"
@@ -43,10 +41,8 @@ EditorProxy::EditorProxy()
 	m_delayedLineTimer = new QTimer( this );
 	connect( m_delayedLineTimer,  SIGNAL( timeout() ), this, SLOT(setLineNumberDelayed()) );
 	KConfig *config = kapp->config();
-	config->setGroup("UI");
-	int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
 
-	m_delayedViewCreationCompatibleUI = (mdimode == KMdi::IDEAlMode || mdimode == KMdi::TabPageMode);
+	m_delayedViewCreationCompatibleUI = true;
 
 	KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
 		SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
@@ -127,18 +123,11 @@ void EditorProxy::installPopup( KParts::Part * part )
 
 			KAction * action = NULL;
 			//If there is a tab for this file, we don't need to plug the closing menu entries here
-			NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance());
-			if (mw) {
-			switch (mw->getTabWidgetVisibility())
+			KConfig *config = KGlobal::config();
+			config->setGroup("UI");
+			bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
+			if (!m_tabBarShown)
 			{
-			case KMdi::AlwaysShowTabs:
-				break;
-			case KMdi::ShowWhenMoreThanOneTab:
-				if(PartController::getInstance()->parts()->count() > 1)
-					break;
-			case KMdi::NeverShowTabs:
-				// I'm not sure if this is papering over a bug in xmlgui or not, but this test is
-				// needed in order to avoid multiple close actions in the popup menu in some cases
 				action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
 				if ( action && !action->isPlugged( popup ) )
 				{
@@ -148,27 +137,6 @@ void EditorProxy::installPopup( KParts::Part * part )
 				action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
 				if ( action && !action->isPlugged( popup ) )
 					action->plug( popup, 1 );
-				break;
-			default:
-				break;
-			}
-			}
-			else {
-				KConfig *config = KGlobal::config();
-				config->setGroup("UI");
-				bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
-				if (!m_tabBarShown)
-				{
-					action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
-					if ( action && !action->isPlugged( popup ) )
-					{
-						popup->insertSeparator( 0 );
-						action->plug( popup, 0 );
-					}
-					action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
-					if ( action && !action->isPlugged( popup ) )
-						action->plug( popup, 1 );
-				}
 			}
 
 			iface->installPopup( popup );

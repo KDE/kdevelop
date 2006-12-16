@@ -1,6 +1,6 @@
 INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/external_interfaces \
 	-I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets \
-	-I$(top_srcdir)/src/profileengine/lib $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/structure $(all_includes)
+	-I$(top_srcdir)/src/profileengine/lib -I$(top_srcdir)/lib/structure $(all_includes)
 METASOURCES = AUTO
 
 libprofileeditor_la_LDFLAGS = $(all_libraries)

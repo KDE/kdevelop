@@ -437,53 +437,6 @@ AC_SUBST(DB3LDFLAGS)
 ])
 
 dnl  **********
-dnl  check whether we need the qextmdi lib
-dnl  **********
-
-AC_DEFUN([KDEV_CHECK_MDI],
-[
-  AC_MSG_CHECKING(whether to use kmdi lib from kdelibs)
-  AC_CACHE_VAL(ac_cv_mdi_setup,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -I$ac_qt_includes -I$ac_kde_includes"
-
-    AC_TRY_COMPILE([
-      #include <kdeversion.h>
-    ],
-    [
-      #if !KDE_IS_VERSION(3,2,90)
-         KDE_choke me
-      #endif
-    ],
-      ac_cv_mdi_setup=yes,
-      ac_cv_mdi_setup=no
-    )
-    CXXFLAGS="$save_CXXFLAGS"
-    AC_LANG_RESTORE
-   ])
-
-  if test "$ac_cv_mdi_setup" = "yes"; then
-    LIB_KDEVMDI="-lkmdi"
-    QEXTMDIR=""
-    KDEVMDI_INCLUDES=""
-    AC_MSG_RESULT(yes)
-  else
-    LIB_KDEVMDI='$(top_builddir)/lib/qextmdi/libkdevelopqextmdi.la'
-    QEXTMDIR="qextmdi"
-    KDEVMDI_INCLUDES='-I$(top_srcdir)/lib/qextmdi'
-    AC_MSG_RESULT(no)
-  fi
-
-  AC_SUBST(LIB_KDEVMDI)
-  AC_SUBST(KDEVMDI_INCLUDES)
-  AC_SUBST(QEXTMDIR)
-  AM_CONDITIONAL(include_qextmdi, test -n "$QEXTMDIR")
-])
-
-dnl  **********
 dnl  check whether we need the compat lib
 dnl  **********
 

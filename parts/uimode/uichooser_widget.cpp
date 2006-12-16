@@ -18,7 +18,6 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
-#include <kmdidefines.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -40,33 +39,6 @@ void UIChooserWidget::load()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  int mdi = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
-  
-  switch (mdi)
-  {
-  case KMdi::ChildframeMode:
-    modeMDI->setChecked(true);
-    _lastMode = modeMDI;
-    break;
-  case KMdi::TabPageMode:
-    modeTab->setChecked(true);
-    _lastMode = modeTab;
-    break;
-  case KMdi::ToplevelMode:
-    modeToplevel->setChecked(true);
-    _lastMode = modeToplevel;
-    break;
-  case KMdi::IDEAlMode:
-    modeIDEAl->setChecked(true);
-    _lastMode = modeIDEAl;
-    break;
-  default:
-    break;
-  }
-  
-  if (config->readBoolEntry("UseSimpleMainWindow", true))
-      modeSimple->setChecked(true);
-  
 	int mdistyle = config->readNumEntry( "MDIStyle", 1 );
 	switch( mdistyle )
 	{
@@ -82,24 +54,24 @@ void UIChooserWidget::load()
 		default:
 			TextOnly->setChecked( true );
 	}
-	
-	int tabVisibility = config->readNumEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
+
+	int tabVisibility = config->readNumEntry( "TabWidgetVisibility", _AlwaysShowTabs );
 	switch( tabVisibility )
 	{
-		case KMdi::AlwaysShowTabs:
+		case _AlwaysShowTabs:
 			AlwaysShowTabs->setChecked( true );
 			break;
-		case KMdi::ShowWhenMoreThanOneTab:
+		case _ShowWhenMoreThanOneTab:
 			ShowWhenMoreThanOneTab->setChecked( true );
 			break;
-		case KMdi::NeverShowTabs:
+		case _NeverShowTabs:
 			NeverShowTabs->setChecked( true );
 			break;
 	}
-	
+
 	bool CloseOnHover = config->readBoolEntry( "CloseOnHover", false );
 	bool CloseOnHoverDelay = config->readBoolEntry( "CloseOnHoverDelay", false );
-	
+
 	if ( CloseOnHover && CloseOnHoverDelay )
 	{
 		DoDelayedCloseOnHover->setChecked( true );
@@ -108,13 +80,15 @@ void UIChooserWidget::load()
 	{
 		DoCloseOnHover->setChecked( true );
 	}
-	else 
+	else
 	{
 		DoNotCloseOnHover->setChecked( true );
 	}
 	OpenNewTabAfterCurrent->setChecked(config->readBoolEntry( "OpenNewTabAfterCurrent", false ));
 	ShowTabIcons->setChecked(config->readBoolEntry( "ShowTabIcons", true ));
 	ShowCloseTabsButton->setChecked(config->readBoolEntry( "ShowCloseTabsButton", true ));
+
+	maybeEnableCloseOnHover(false);
 }
 
 
@@ -123,29 +97,19 @@ void UIChooserWidget::save()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  config->writeEntry("UseSimpleMainWindow", modeSimple->isChecked());
-  if (modeTab->isChecked())
-    config->writeEntry("MDIMode", KMdi::TabPageMode);
-  else if (modeToplevel->isChecked())
-    config->writeEntry("MDIMode", KMdi::ToplevelMode);
-  else if (modeMDI->isChecked())
-    config->writeEntry("MDIMode", KMdi::ChildframeMode);
-  else
-    config->writeEntry("MDIMode", KMdi::IDEAlMode); // KMdi-IDEA
-
 	if ( AlwaysShowTabs->isChecked() )
 	{
-		config->writeEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
+		config->writeEntry( "TabWidgetVisibility", _AlwaysShowTabs );
 	}
 	else if ( ShowWhenMoreThanOneTab->isChecked() )
 	{
-		config->writeEntry( "TabWidgetVisibility", KMdi::ShowWhenMoreThanOneTab );
+		config->writeEntry( "TabWidgetVisibility", _ShowWhenMoreThanOneTab );
 	}
 	else if ( NeverShowTabs->isChecked() )
 	{
-		config->writeEntry( "TabWidgetVisibility", KMdi::NeverShowTabs );
+		config->writeEntry( "TabWidgetVisibility", _NeverShowTabs );
 	}
-	
+
 	if ( DoNotCloseOnHover->isChecked() )
 	{
 		config->writeEntry( "CloseOnHover", false );
@@ -161,7 +125,7 @@ void UIChooserWidget::save()
 		config->writeEntry( "CloseOnHover", true );
 		config->writeEntry( "CloseOnHoverDelay", true );
 	}
-	
+
 	// using magic numbers for now.. where are these values defined??
 	if ( IconsOnly->isChecked() )
 	{
@@ -190,11 +154,10 @@ void UIChooserWidget::accept()
 
 void UIChooserWidget::maybeEnableCloseOnHover( bool )
 {
-	if ( sender() == modeMDI || sender() == modeToplevel )
+	if (!ShowTabIcons->isChecked())
 	{
-		HoverCloseGroup->setEnabled( false );
-	}
-	else if ( !NeverShowTabs->isChecked() )
+		HoverCloseGroup->setEnabled(false);
+	} else if ( !NeverShowTabs->isChecked() )
 	{
 		HoverCloseGroup->setEnabled( true );
 	}
