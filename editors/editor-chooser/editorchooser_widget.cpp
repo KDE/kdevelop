@@ -22,7 +22,8 @@ EditorChooserWidget::EditorChooserWidget(QWidget *parent, const char *name)
 	KTrader::OfferList::Iterator it = m_offers.begin();
 	while( it != m_offers.end() )
 	{
-		if ( (*it)->desktopEntryName() == "vimpart" )
+		if ( ((*it)->desktopEntryName() == "vimpart")
+		    || ((*it)->desktopEntryName() == "qeditor_part") )
 		{
 			m_offers.remove( it );
 			break;
@@ -59,7 +60,7 @@ void EditorChooserWidget::load()
         EditorPart->setCurrentItem(index);
 
 	QString dirtyAction = config->readEntry( "DirtyAction" );
-	
+
 	if ( dirtyAction == "reload" )
 	{
 		reload->setChecked( true );
@@ -95,7 +96,7 @@ void EditorChooserWidget::save()
 	{
 		config->writeEntry( "DirtyAction", "alert" );
 	}
-	else 
+	else
 	{
 		config->writeEntry( "DirtyAction", "nothing" );
 	}
