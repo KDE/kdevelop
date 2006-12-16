@@ -474,7 +474,7 @@ namespace GDBDebugger
         }
 
         if (toolBox_->count() == 0)
-            setShown(false);
+            setViewShown(false);
     }
 
 // **************************************************************************
