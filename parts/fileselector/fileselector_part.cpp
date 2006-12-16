@@ -16,6 +16,7 @@
 #include <kdevgenericfactory.h>
 #include <kdiroperator.h>
 #include <kdialogbase.h>
+#include <kmessagebox.h>
 
 #include <kdevapi.h>
 #include <kdevcore.h>
@@ -94,8 +95,13 @@ void FileSelectorPart::newFile()
     {
         KDevCreateFile::CreatedFile file = creator->createNewFile("",
             m_filetree->dirOperator()->url().path());
-        if (file.status == KDevCreateFile::CreatedFile::STATUS_OK)
-            partController()->editDocument(KURL::fromPathOrURL(file.dir + "/" + file.filename));
+        if (file.status == KDevCreateFile::CreatedFile::STATUS_NOTCREATED)
+            KMessageBox::error(0, i18n("Cannot create file. Check whether the directory and filename are valid."));
+        else
+        {
+            partController()->editDocument(KURL::fromPathOrURL(
+                file.dir + "/" + file.filename));
+        }
     }
 }
 

@@ -28,6 +28,7 @@
 #include <kapplication.h>
 #include <kactionclasses.h>
 #include <kpopupmenu.h>
+#include <kmessagebox.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -177,7 +178,10 @@ void FileCreatePart::slotNewFilePopup( int pFileType )
 
 void FileCreatePart::slotNewFile() {
   KDevCreateFile::CreatedFile createdFile = createNewFile();
-  openCreatedFile(createdFile);
+  if (createdFile.status == KDevCreateFile::CreatedFile::STATUS_NOTCREATED)
+    KMessageBox::error(0, i18n("Cannot create file. Check whether the directory and filename are valid."));
+  else
+    openCreatedFile(createdFile);
 }
 
 void FileCreatePart::slotProjectOpened() {
@@ -399,13 +403,21 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
       ext += "-" + subtype;
 
   // create file from template
-  if (!FileTemplate::exists(this, ext) ||
-      !FileTemplate::copy(this, ext, fullPath) ) {
+  bool created = false;
+  if (FileTemplate::exists(this, ext))
+      created = FileTemplate::copy(this, ext, fullPath);
+  else {
       // no template, create a blank file instead
       QFile f(fullPath);
-      f.open( IO_WriteOnly );
+      created = f.open( IO_WriteOnly );
       f.close();
   }
+  if (!created)
+  {
+      result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
+      return result;
+  }
+
   if (dialog.addToProject())
   {
     // work out the path relative to the project directory
