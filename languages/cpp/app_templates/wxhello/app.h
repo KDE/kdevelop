@@ -19,7 +19,7 @@ class
 %{APPNAME}Frame : public wxFrame
 {
 	public:
-		%{APPNAME}Frame( const wxString& title, const wxPoint& pos, const wxSize& pos );
+		%{APPNAME}Frame( const wxString& title, const wxPoint& pos, const wxSize& size );
 		void OnQuit( wxCommandEvent& event );
 		void OnAbout( wxCommandEvent& event );
 
