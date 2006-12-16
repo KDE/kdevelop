@@ -61,9 +61,6 @@ void UIChooserWidget::load()
 		case _AlwaysShowTabs:
 			AlwaysShowTabs->setChecked( true );
 			break;
-		case _ShowWhenMoreThanOneTab:
-			ShowWhenMoreThanOneTab->setChecked( true );
-			break;
 		case _NeverShowTabs:
 			NeverShowTabs->setChecked( true );
 			break;
@@ -100,10 +97,6 @@ void UIChooserWidget::save()
 	if ( AlwaysShowTabs->isChecked() )
 	{
 		config->writeEntry( "TabWidgetVisibility", _AlwaysShowTabs );
-	}
-	else if ( ShowWhenMoreThanOneTab->isChecked() )
-	{
-		config->writeEntry( "TabWidgetVisibility", _ShowWhenMoreThanOneTab );
 	}
 	else if ( NeverShowTabs->isChecked() )
 	{

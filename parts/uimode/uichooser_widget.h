@@ -17,7 +17,6 @@ public:
 
   enum TabWidgetVisibility {
     _AlwaysShowTabs         = 0,
-    _ShowWhenMoreThanOneTab = 1,
     _NeverShowTabs          = 2
   };
 

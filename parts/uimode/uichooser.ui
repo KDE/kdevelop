@@ -46,18 +46,10 @@
                                 <cstring>AlwaysShowTabs</cstring>
                             </property>
                             <property name="text">
-                                <string>Always</string>
+                                <string>Al&amp;ways</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>ShowWhenMoreThanOneTab</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;When more than one</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
@@ -235,12 +227,6 @@
 <connections>
     <connection>
         <sender>AlwaysShowTabs</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>UIChooser</receiver>
-        <slot>maybeEnableCloseOnHover(bool)</slot>
-    </connection>
-    <connection>
-        <sender>ShowWhenMoreThanOneTab</sender>
         <signal>toggled(bool)</signal>
         <receiver>UIChooser</receiver>
         <slot>maybeEnableCloseOnHover(bool)</slot>
