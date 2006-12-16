@@ -4,7 +4,7 @@
   <author>%{AUTHOR}</author>
   <email>%{EMAIL}</email>
   <version>%{VERSION}</version>
-  <projectmanagement>KDevKDEAutoProject</projectmanagement>
+  <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
    <keyword>C++</keyword>
