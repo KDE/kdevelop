@@ -1202,7 +1202,7 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 			ArgumentList::ConstIterator it( list.begin() );
 			while ( it != list.end() )
 			{
-				arguments << (*it)->type();
+				arguments << ((*it)->type() + " " + (*it)->name());
 				++it;
 			}
 			
