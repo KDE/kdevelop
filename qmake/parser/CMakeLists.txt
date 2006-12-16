@@ -2,6 +2,8 @@ project(kdevqmakeparser)
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface )
 
+add_definitions(-fPIC)
+
 set(kdevqmakeparser_SRCS qmakeast.cpp qmakeparser.cpp)
 
 include(FindFlex)
