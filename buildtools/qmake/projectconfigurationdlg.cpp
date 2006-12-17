@@ -1161,7 +1161,10 @@ void ProjectConfigurationDlg::outsideIncMoveDownClicked()
 void ProjectConfigurationDlg::outsideIncAddClicked()
 {
     KURLRequesterDlg dialog( "", i18n( "Add include directory:" ), 0, 0 );
-    dialog.urlRequester() ->setMode( KFile::Directory );
+    dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
+    dialog.urlRequester() ->setURL( QString::null );
+    dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+    dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir() ) );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
@@ -1243,7 +1246,7 @@ void ProjectConfigurationDlg::outsideLibAddClicked()
     dialog.urlRequester() ->setFilter( "*.so|"+i18n("Shared Library (*.so)")+"\n*.a|"+i18n("Static Library (*.a)") );
     dialog.urlRequester() ->setURL( QString::null );
     dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
-
+    dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir() ) );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString file = dialog.urlRequester() ->url();
@@ -1315,7 +1318,10 @@ void ProjectConfigurationDlg::outsideLibDirMoveDownClicked()
 void ProjectConfigurationDlg::outsideLibDirAddClicked()
 {
     KURLRequesterDlg dialog( "", i18n( "Add library directory:" ), 0, 0 );
-    dialog.urlRequester() ->setMode( KFile::Directory );
+    dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
+    dialog.urlRequester() ->setURL( QString::null );
+    dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+    dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir() ) );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
@@ -1338,7 +1344,18 @@ void ProjectConfigurationDlg::outsideIncEditClicked()
     QString text = item->text( 0 );
 
     KURLRequesterDlg dialog( text, i18n( "Change include directory:" ), 0, 0 );
-    dialog.urlRequester() ->setMode( KFile::Directory );
+    dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
+    dialog.urlRequester() ->setURL( QString::null );
+    if( !text.startsWith( "/" ) )
+    {
+        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
+    }
+    else
+    {
+        dialog.urlRequester() ->completionObject() ->setDir( text );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
+    }
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
@@ -1367,7 +1384,18 @@ void ProjectConfigurationDlg::outsideLibDirEditClicked()
     QString text = item->text( 0 );
 
     KURLRequesterDlg dialog( text, i18n( "Change library directory:" ), 0, 0 );
-    dialog.urlRequester() ->setMode( KFile::Directory );
+    dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
+    dialog.urlRequester() ->setURL( QString::null );
+    if( !text.startsWith( "/" ) )
+    {
+        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
+    }
+    else
+    {
+        dialog.urlRequester() ->completionObject() ->setDir( text );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
+    }
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
@@ -1380,7 +1408,10 @@ void ProjectConfigurationDlg::outsideLibDirEditClicked()
 void ProjectConfigurationDlg::extAdd_button_clicked( )
 {
     KURLRequesterDlg dialog( "", i18n( "Add target:" ), 0, 0 );
-    dialog.urlRequester() ->setMode( KFile::File );
+    dialog.urlRequester() ->setMode( KFile::File | KFile::LocalOnly );
+    dialog.urlRequester() ->setURL( QString::null );
+    dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+    dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir() ) );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString path = dialog.urlRequester() ->url();
@@ -1396,7 +1427,18 @@ void ProjectConfigurationDlg::extEdit_button_clicked( )
     QString text = item->text( 0 );
 
     KURLRequesterDlg dialog( text, i18n( "Change target:" ), 0, 0 );
-    dialog.urlRequester() ->setMode( KFile::File );
+    dialog.urlRequester() ->setMode( KFile::File | KFile::LocalOnly );
+    dialog.urlRequester() ->setURL( QString::null );
+    if( !text.startsWith( "/" ) )
+    {
+        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
+    }
+    else
+    {
+        dialog.urlRequester() ->completionObject() ->setDir( text );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
+    }
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString path = dialog.urlRequester() ->url();
