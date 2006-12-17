@@ -1275,6 +1275,14 @@ void PartController::slotOpenFile()
 		DefaultEncoding = DomUtil::readEntry( *projectDom, "/general/defaultencoding", QString::null );
 	}
 
+	if ( DefaultEncoding.isEmpty() )
+	{
+		// have a peek at katepart's settings:
+		KConfig * config = kapp->config();
+		config->setGroup("Kate Document Defaults");
+		DefaultEncoding = config->readEntry("Encoding", QString::null );
+	}
+
 	KEncodingFileDialog::Result result = KEncodingFileDialog::getOpenURLsAndEncoding( DefaultEncoding, QString::null,
 		QString::null, TopLevel::getInstance()->main(), QString::null );
 
