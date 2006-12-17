@@ -28,12 +28,10 @@
 #include "tag.h"
 #include "kdevexport.h"
 
-/**
-   @file catalog.h
-   KDevCatalog database - the persistant symbol store database.
-*/
+class KDevCatalogBackend;
 
 /**
+   KDevCatalog database - the persistant symbol store database.
    KDevCatalog objects represent separate symbol databases.
    KDevCatalogs can be created/loaded/unloaded dynamically.
    To find a symbol in the repository each catalog should be queried.
@@ -47,7 +45,7 @@ class KDEVPLATFORM_EXPORT KDevCatalog
   typedef QPair<QByteArray, QVariant> QueryArgument;
 
  public:
-  KDevCatalog();
+  KDevCatalog(KDevCatalogBackend*);
   virtual ~KDevCatalog();
 
   bool isValid() const;
