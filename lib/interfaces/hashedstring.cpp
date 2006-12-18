@@ -191,7 +191,7 @@ bool HashedStringSet::operator <= ( const HashedStringSet& rhs ) const {
     return false;
 #ifndef USE_HASHMAP
   return std::includes( rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), m_data->m_files.begin(), m_data->m_files.end() );
-#esle
+#else
   HashedStringSetData::StringSet& otherSet( rhs.m_data->m_files );
   HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
   HashedStringSetData::StringSet::const_iterator myEnd = m_data->m_files.end();
