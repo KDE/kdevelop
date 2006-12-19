@@ -389,7 +389,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
 	{
 		QString DesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
-        QString designerExec = "designer";
+		QString designerExec = "designer";
 		QDomDocument* dom = API::getInstance()->projectDom();
 		if ( dom != 0 )
 		{
@@ -414,28 +414,28 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 				designerExec = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designer");;
 			}
 		}
-        if ( DesignerSetting == "EmbeddedKDevDesigner" )
-        {
-            if ( KParts::ReadOnlyPart *designerPart = qtDesignerPart() )
-            {
-                addHistoryEntry();
-                activatePart(designerPart);
-                designerPart->openURL(url);
-                return;
-            }
-            else if ( KParts::Factory * KDevDesignerFactory = static_cast<KParts::Factory*>( KLibLoader::self()->factory( QFile::encodeName( "libkdevdesignerpart" ) ) ) )
-            {
-                KParts::ReadWritePart * kdevpart = static_cast<KParts::ReadWritePart*>( KDevDesignerFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart"  ) );
-                kdevpart->openURL( url );
-                addHistoryEntry();
-                integratePart( kdevpart, url );
-                m_openRecentAction->addURL( url );
-                m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
-                return;
-            }
-        }
-        KRun::run( designerExec, url );
-        return;
+		if ( DesignerSetting == "EmbeddedKDevDesigner" )
+		{
+			if ( KParts::ReadOnlyPart *designerPart = qtDesignerPart() )
+			{
+				addHistoryEntry();
+				activatePart(designerPart);
+				designerPart->openURL(url);
+				return;
+			}
+			else if ( KParts::Factory * KDevDesignerFactory = static_cast<KParts::Factory*>( KLibLoader::self()->factory( QFile::encodeName( "libkdevdesignerpart" ) ) ) )
+			{
+				KParts::ReadWritePart * kdevpart = static_cast<KParts::ReadWritePart*>( KDevDesignerFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart"  ) );
+				kdevpart->openURL( url );
+				addHistoryEntry();
+				integratePart( kdevpart, url );
+				m_openRecentAction->addURL( url );
+				m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+				return;
+			}
+		}
+		KRun::run( designerExec, url );
+		return;
 	}
 
 	config->setGroup("General");
