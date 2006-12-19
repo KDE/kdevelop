@@ -71,7 +71,7 @@ PartController *PartController::s_instance = 0;
 
 using namespace MainWindowUtils;
 
-struct HistoryEntry 
+struct HistoryEntry
 {
     KURL url;
     QString context;
@@ -388,92 +388,54 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 	// we don't trust KDE with designer files, let's handle it ourselves
 	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
 	{
-		QString DefaultDesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
+		QString DesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
+        QString designerExec = "designer";
 		QDomDocument* dom = API::getInstance()->projectDom();
 		if ( dom != 0 )
 		{
 
-			// Short explanation for the following: 
+			// Short explanation for the following:
 			// The global option specifies a fallback if the project
 			// has no setting or no project is open. However for Qt4
 			// projects we want to use ExternalDesigner in any case.
 
 			if ( DomUtil::readIntEntry( *dom, "/kdevcppsupport/qt/version", 3 ) == 4 )
-				DefaultDesignerSetting = "ExternalDesigner";
+				DesignerSetting = "ExternalDesigner";
 
-			QString DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration", DefaultDesignerSetting );
+			QString DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration", DesignerSetting  );
 
-			if ( DesignerSetting == "EmbeddedKDevDesigner" )
-			{
-				if ( KParts::ReadOnlyPart *designerPart = qtDesignerPart() )
-				{
-					addHistoryEntry();
-					activatePart(designerPart);
-					designerPart->openURL(url);
-					return;
-				}
-				else if ( KParts::Factory * KDevDesignerFactory = static_cast<KParts::Factory*>( KLibLoader::self()->factory( QFile::encodeName( "libkdevdesignerpart" ) ) ) )
-				{
-					KParts::ReadWritePart * kdevpart = static_cast<KParts::ReadWritePart*>( KDevDesignerFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart"  ) );
-					kdevpart->openURL( url );
-					addHistoryEntry();
-					integratePart( kdevpart, url );
-					m_openRecentAction->addURL( url );
-					m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
-					return;
-				}
-			}
-	
-			QString designerDesktopName;
-	
+
 			if ( DesignerSetting == "ExternalKDevDesigner" )
 			{
-				designerDesktopName = "kdevdesigner";
+				designerExec = "kdevdesigner";
 			}
-			else
+			else if ( DesignerSetting == "ExternalDesigner" )
 			{
-				designerDesktopName = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designer");;
+				designerExec = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designer");;
 			}
-	
-			KRun::run( designerDesktopName, url );
-			return;
-		}else
-		{
-			if ( DefaultDesignerSetting == "EmbeddedKDevDesigner" )
-			{
-				if ( KParts::ReadOnlyPart *designerPart = qtDesignerPart() )
-				{
-					addHistoryEntry();
-					activatePart(designerPart);
-					designerPart->openURL(url);
-					return;
-				}
-				else if ( KParts::Factory * KDevDesignerFactory = static_cast<KParts::Factory*>( KLibLoader::self()->factory( QFile::encodeName( "libkdevdesignerpart" ) ) ) )
-				{
-					KParts::ReadWritePart * kdevpart = static_cast<KParts::ReadWritePart*>( KDevDesignerFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart"  ) );
-					kdevpart->openURL( url );
-					addHistoryEntry();
-					integratePart( kdevpart, url );
-					m_openRecentAction->addURL( url );
-					m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
-					return;
-				}
-			}
-	
-			QString designerDesktopName;
-	
-			if ( DefaultDesignerSetting == "ExternalKDevDesigner" )
-			{
-				designerDesktopName = "kdevdesigner";
-			}
-			else
-			{
-				designerDesktopName = "designer";
-			}
-	
-			KRun::run( designerDesktopName, url );
-			return;
 		}
+        if ( DesignerSetting == "EmbeddedKDevDesigner" )
+        {
+            if ( KParts::ReadOnlyPart *designerPart = qtDesignerPart() )
+            {
+                addHistoryEntry();
+                activatePart(designerPart);
+                designerPart->openURL(url);
+                return;
+            }
+            else if ( KParts::Factory * KDevDesignerFactory = static_cast<KParts::Factory*>( KLibLoader::self()->factory( QFile::encodeName( "libkdevdesignerpart" ) ) ) )
+            {
+                KParts::ReadWritePart * kdevpart = static_cast<KParts::ReadWritePart*>( KDevDesignerFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart"  ) );
+                kdevpart->openURL( url );
+                addHistoryEntry();
+                integratePart( kdevpart, url );
+                m_openRecentAction->addURL( url );
+                m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+                return;
+            }
+        }
+        KRun::run( designerExec, url );
+        return;
 	}
 
 	config->setGroup("General");
@@ -1350,7 +1312,7 @@ void PartController::slotActivePartChanged( KParts::Part *part )
         KXMLGUIClient* client = dynamic_cast<KXMLGUIClient*>(part->widget());
         if (client) Core::setupShourtcutTips(client);
     }
-    
+
     updateMenuItems();
     QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
 }
@@ -1428,10 +1390,10 @@ void PartController::slotDocumentDirty( Kate::Document * d, bool isModified, uns
 		++it;
 	}
 
-	// this is a bit strange, but in order to avoid weird crashes 
-	// down in KDirWatcher, we want to step off the call chain before 
-	// opening any messageboxes 
-	if ( doc ) 
+	// this is a bit strange, but in order to avoid weird crashes
+	// down in KDirWatcher, we want to step off the call chain before
+	// opening any messageboxes
+	if ( doc )
 	{
 		ModificationData * p = new ModificationData;
 		p->doc = doc;
@@ -1447,7 +1409,7 @@ void PartController::slotDocumentDirtyStepTwo( void * payload )
 
 	ModificationData * p = reinterpret_cast<ModificationData*>( payload );
 	KTextEditor::Document * doc = p->doc;
-	
+
 	// let's make sure the document is still loaded
 	bool haveDocument = false;
 	if( const QPtrList<KParts::Part> * partlist = parts() )
@@ -1464,7 +1426,7 @@ void PartController::slotDocumentDirtyStepTwo( void * payload )
 		}
 	}
 	if ( !haveDocument ) return;
-	
+
 	bool isModified = p->isModified;
 	unsigned char reason = p->reason;
 	delete p;
@@ -1761,9 +1723,9 @@ void PartController::jumpTo( const HistoryEntry & entry )
 
 
 PartController::HistoryEntry PartController::createHistoryEntry( KParts::ReadOnlyPart * ro_part ) {
-    if( ro_part == 0 ) 
+    if( ro_part == 0 )
         ro_part = dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
-    
+
     if ( !ro_part ) return HistoryEntry();
     KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
     if ( !cursorIface ) return HistoryEntry();
