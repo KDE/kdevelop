@@ -22,7 +22,7 @@
 
 #include <kstdaccel.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 
 %{APPNAMELC}::%{APPNAMELC}()
     : KMainWindow( 0, "%{APPNAMELC}" ),
@@ -60,15 +60,15 @@
 
 void %{APPNAMELC}::setupActions()
 {
-    KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
-    KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+    KStandardAction::openNew(this, SLOT(fileNew()), actionCollection());
+    KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 
-    m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
-    m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()), actionCollection());
+    m_toolbarAction = KStandardAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
+    m_statusbarAction = KStandardAction::showStatusbar(this, SLOT(optionsShowStatusbar()), actionCollection());
 
-    KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
-    KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
-    KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
+    KStandardAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
+    KStandardAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
+    KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     // custom menu and menu item - the slot is in the class %{APPNAMELC}View
     KAction *custom = new KAction(i18n("Swi&tch Colors"), 0,

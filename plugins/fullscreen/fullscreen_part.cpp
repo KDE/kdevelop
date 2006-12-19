@@ -12,7 +12,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kmainwindow.h>
 #include <kmenubar.h>
 
@@ -40,7 +40,7 @@ FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringL
 
   m_bFullScreen = false;
 
-  m_pFullScreen = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()), actionCollection(), mainWindow()->main());
+  m_pFullScreen = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), actionCollection(), mainWindow()->main());
 }
 
 FullScreenPart::~FullScreenPart()

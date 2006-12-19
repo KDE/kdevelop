@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <kconfig.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kfiledialog.h>
@@ -95,7 +95,7 @@ void KDevProjectController::initialize()
     config->setGroup( "General Options" );
 
     m_recentAction =
-        KStdAction::openRecent( this, SLOT( openProject( const KUrl& ) ),
+        KStandardAction::openRecent( this, SLOT( openProject( const KUrl& ) ),
                                 ac, "project_open_recent" );
     m_recentAction->setToolTip( i18n( "Open recent project" ) );
     m_recentAction->setWhatsThis(

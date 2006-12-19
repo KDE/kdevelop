@@ -9,7 +9,7 @@
 #include <qpainter.h>
 #include <qiconset.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -18,8 +18,8 @@
 {
     setInstance( %{APPNAME}Factory::global() );
     setXMLFile( "%{APPNAMELC}.rc" );
-    KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
-    // Note: Prefer KStdAction::* to any custom action if possible.
+    KStandardAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
+    // Note: Prefer KStandardAction::* to any custom action if possible.
     //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
     //                   actionCollection(), "cut");
 }

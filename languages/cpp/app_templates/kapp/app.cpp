@@ -23,7 +23,7 @@
 
 #include <kstdaccel.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 
 %{APPNAME}::%{APPNAME}()
     : KMainWindow( 0, "%{APPNAME}" ),
@@ -88,14 +88,14 @@ void %{APPNAME}::load(const KURL& url)
 
 void %{APPNAME}::setupActions()
 {
-    KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
-    KStdAction::open(this, SLOT(fileOpen()), actionCollection());
-    KStdAction::save(this, SLOT(fileSave()), actionCollection());
-    KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
-    KStdAction::print(this, SLOT(filePrint()), actionCollection());
-    KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+    KStandardAction::openNew(this, SLOT(fileNew()), actionCollection());
+    KStandardAction::open(this, SLOT(fileOpen()), actionCollection());
+    KStandardAction::save(this, SLOT(fileSave()), actionCollection());
+    KStandardAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
+    KStandardAction::print(this, SLOT(filePrint()), actionCollection());
+    KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 
-    KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
+    KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     // this doesn't do anything useful.  it's just here to illustrate
     // how to insert a custom menu and menu item

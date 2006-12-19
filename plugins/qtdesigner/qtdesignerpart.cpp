@@ -16,7 +16,7 @@
 #include <kparts/genericfactory.h>
 #include <kparts/partmanager.h>
 #include <ksavefile.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kicon.h>
 
 #include "kdevcore.h"
@@ -119,7 +119,7 @@ QDesignerFormEditorInterface *QtDesignerPart::designer() const
 
 void QtDesignerPart::setupActions()
 {
-    KStdAction::save( this, SLOT( save() ), actionCollection(), "file_save" );
+    KStandardAction::save( this, SLOT( save() ), actionCollection(), "file_save" );
     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
 
     QAction* designerAction = 0;

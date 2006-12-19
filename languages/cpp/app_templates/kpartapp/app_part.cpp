@@ -3,7 +3,7 @@
 
 #include <kinstance.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -26,9 +26,9 @@
     setWidget(m_widget);
 
     // create our actions
-    KStdAction::open(this, SLOT(fileOpen()), actionCollection());
-    KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
-    KStdAction::save(this, SLOT(save()), actionCollection());
+    KStandardAction::open(this, SLOT(fileOpen()), actionCollection());
+    KStandardAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
+    KStandardAction::save(this, SLOT(save()), actionCollection());
 
     // set our XML-UI resource file
     setXMLFile("%{APPNAMELC}_part.rc");
@@ -63,7 +63,7 @@ void %{APPNAME}Part::setReadWrite(bool rw)
 void %{APPNAME}Part::setModified(bool modified)
 {
     // get a handle on our Save action and make sure it is valid
-    KAction *save = actionCollection()->action(KStdAction::stdName(KStdAction::Save));
+    KAction *save = actionCollection()->action(KStandardAction::stdName(KStandardAction::Save));
     if (!save)
         return;
 

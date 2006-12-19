@@ -5,7 +5,7 @@
 #include <QTextStream>
 
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -47,8 +47,8 @@ KDevHTMLPart::KDevHTMLPart()
   duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
   connect(duplicateAction, SIGNAL(triggered(bool)), SLOT( slotDuplicate() ));
 
-  printAction = KStdAction::print(this, SLOT(slotPrint()), actions, "print_doc");
-  copyAction = KStdAction::copy(this, SLOT(slotCopy()), actions, "copy_doc_selection");
+  printAction = KStandardAction::print(this, SLOT(slotPrint()), actions, "print_doc");
+  copyAction = KStandardAction::copy(this, SLOT(slotCopy()), actions, "copy_doc_selection");
 
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));

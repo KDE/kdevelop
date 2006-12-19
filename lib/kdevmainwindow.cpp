@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/document.h>
 #include <ktexteditor/editor.h>
 
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
 #include <kxmlguiclient.h>
@@ -119,13 +119,13 @@ void KDevMainWindow::setUIMode( UIMode mode )
 
 void KDevMainWindow::setupActions()
 {
-    KStdAction::quit( this, SLOT( close() ), actionCollection() );
+    KStandardAction::quit( this, SLOT( close() ), actionCollection() );
 
     KAction *action;
 
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1", app );
-    action = KStdAction::preferences( this, SLOT( settingsDialog() ),
+    action = KStandardAction::preferences( this, SLOT( settingsDialog() ),
                                       actionCollection(), "settings_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
@@ -138,7 +138,7 @@ void KDevMainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog." ) );
     action->setEnabled( false );
 
-    action = KStdAction::showStatusbar( this, SLOT( toggleStatusbar() ),
+    action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
                                         actionCollection(), "settings_show_statusbar" );
     action->setText( i18n( "Show &Statusbar" ) );
     action->setToolTip( i18n( "Show statusbar" ) );
@@ -165,25 +165,25 @@ void KDevMainWindow::setupActions()
     /*connect( KDevCore::getInstance(), SIGNAL( activeProcessChanged( KDevPlugin*, bool ) ),
     this, SLOT( activeProcessChanged( KDevPlugin*, bool ) ) );*/
 
-    action = KStdAction::showMenubar(
+    action = KStandardAction::showMenubar(
                  this, SLOT( showMenuBar() ),
                  actionCollection(), "settings_show_menubar" );
     action->setToolTip( beautifyToolTip( action->text() ) );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
-    action = KStdAction::keyBindings(
+    action = KStandardAction::keyBindings(
                  this, SLOT( keyBindings() ),
                  actionCollection(), "settings_configure_shortcuts" );
     action->setToolTip( beautifyToolTip( action->text() ) );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure shortcut keys." ) ) );
 
-    action = KStdAction::configureToolbars(
+    action = KStandardAction::configureToolbars(
                  this, SLOT( configureToolbars() ),
                  actionCollection(), "settings_configure_toolbars" );
     action->setToolTip( beautifyToolTip( action->text() ) );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure toolbars." ) ) );
 
-    action = KStdAction::configureNotifications(
+    action = KStandardAction::configureNotifications(
                  this, SLOT( configureNotifications() ),
                  actionCollection(), "settings_configure_notifications" );
     action->setToolTip( beautifyToolTip( action->text() ) );

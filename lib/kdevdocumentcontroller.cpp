@@ -56,7 +56,7 @@ Boston, MA 02110-1301, USA.
 #include <kencodingfiledialog.h>
 #include <krecentfilesaction.h>
 #include <ktoolbarpopupaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kseparatoraction.h>
 
 #include <kio/netaccess.h>
@@ -972,7 +972,7 @@ void KDevDocumentController::initialize()
         KDevCore::mainWindow() ->actionCollection();
 
     KAction* newAction =
-        KStdAction::open( this,
+        KStandardAction::open( this,
                           SLOT( slotOpenDocument() ),
                           ac, "file_open" );
     newAction->setToolTip( i18n( "Open file" ) );
@@ -980,7 +980,7 @@ void KDevDocumentController::initialize()
                                    "without adding it to the project.</p>" ) );
 
     m_openRecentAction =
-        KStdAction::openRecent( this, SLOT( slotOpenRecent( const KUrl& ) ),
+        KStandardAction::openRecent( this, SLOT( slotOpenRecent( const KUrl& ) ),
                                 ac, "file_open_recent" );
     m_openRecentAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_openRecentAction->text() ) ).arg( i18n( "Opens recently opened file." ) ) );
     m_openRecentAction->loadEntries( KDevConfig::localProject(), "RecentDocuments" );
@@ -1000,7 +1000,7 @@ void KDevDocumentController::initialize()
             "the reload can be canceled for each modified file." ) );
     m_reloadAllDocumentsAction->setEnabled( false );
 
-    m_closeWindowAction = KStdAction::close(
+    m_closeWindowAction = KStandardAction::close(
                               this, SLOT( closeActiveDocument() ),
                               ac, "file_close" );
     m_closeWindowAction->setToolTip( i18n( "Close current file" ) );
