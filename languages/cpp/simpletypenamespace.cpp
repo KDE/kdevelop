@@ -163,7 +163,7 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
         }
 #else
         TypePointer b = mem.build();
-        if( b->parent()->masterProxy().data() == this )
+        if( b && b->parent() && b->parent()->masterProxy().data() == this )
           b->setParent( this );
 #endif
         return mem;
