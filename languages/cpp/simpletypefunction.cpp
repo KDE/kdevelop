@@ -570,8 +570,13 @@ TypePointer SimpleTypeCodeModel::CodeModelBuildInfo::build() {
 //SimpleTypeCodeModelFunction implementation
 TypeDesc SimpleTypeCodeModelFunction::getReturnType() {
   if ( item() ) {
+    IncludeFiles files;
+    if( parent() )
+      files = parent()->getFindIncludeFiles();
     if ( FunctionModel* m = dynamic_cast<FunctionModel*>( & ( *item() ) ) ) {
-      return m->resultType();
+      TypeDesc d = m->resultType();
+      d.setIncludeFiles( files );
+      return d;
     }
   }
 
@@ -590,10 +595,15 @@ QValueList<TypeDesc> SimpleTypeCodeModelFunction::getArgumentTypes() {
   QValueList<TypeDesc> ret;
 
   if ( item() ) {
+    IncludeFiles files;
+    if( parent() )
+      files = parent()->getFindIncludeFiles();
     if ( FunctionModel* m = dynamic_cast<FunctionModel*>( & ( *item() ) ) ) {
       ArgumentList l = m->argumentList();
-      for ( ArgumentList::iterator it = l.begin(); it != l.end(); ++it )
+      for ( ArgumentList::iterator it = l.begin(); it != l.end(); ++it ) {
         ret << TypeDesc(( *it )->type() );
+        ret.back().setIncludeFiles( files );
+      }
     }
   }
 

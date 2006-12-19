@@ -17,6 +17,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "safetycounter.h"
 
+
 extern SafetyCounter safetyCounter;
 
 //SimpleTypeNamespace implementation
@@ -152,14 +153,19 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
 
     if ( mem ) {
       if ( mem.memberType != MemberInfo::Namespace ) {
+#ifdef PHYSICAL_IMPORT
         TypePointer b = mem.build();
-        if ( b && !( b->parent().get().data() == this ) ) {
+        if ( b && !( b->parent()->masterProxy().data() == this ) ) {
           b = b ->clone(); //expensive, cache is not shared
           b->setParent( this );
 
           mem.setBuilt( b );
         }
-
+#else
+        TypePointer b = mem.build();
+        if( b->parent()->masterProxy().data() == this )
+          b->setParent( this );
+#endif
         return mem;
       } else {
         TypePointer b = mem.build();
@@ -266,11 +272,12 @@ void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
             break;
           }
         }
-
+#ifdef PHYSICAL_IMPORT
         if ( desc.resolved()->masterProxy().data() != this ) {
           desc.setResolved( desc.resolved()->clone() ); //expensive, cache is not shared
           desc.resolved()->setMasterProxy( this ); //Possible solution: don't use this, simply set the parents of all found members correctly
         }
+#endif
         tempList.erase( tempList.begin() );
         m_activeSlaves.push_back( std::make_pair( std::make_pair( desc, importIncludeFiles ), p ) );
         desc.resolved()->addAliasesTo( this );
@@ -317,10 +324,13 @@ void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles&
   invalidateCache();
   TypeDesc d = import;
   if ( d.resolved() ) {
+    #ifdef PHYSICAL_IMPORT
+
     if( d.resolved()->masterProxy().data() != this ) {
       d.setResolved( d.resolved()->clone() ); //Expensive because of lost caching, think about how necessary this is
       d.resolved()->setMasterProxy( this );
     }
+    #endif
   }
   
   m_activeSlaves.push_back( std::make_pair( std::make_pair( d, files ) , perspective ) );

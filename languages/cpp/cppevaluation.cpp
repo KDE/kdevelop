@@ -342,7 +342,7 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
 
   TypeDesc exp = m_ctx->container()->resolveTemplateParams( TypeDesc(expr) );
 
-	ifVerboseMajor( dbgMajor() << "after template-parameter resolution: \"" << exp << "\"" << endl );
+	ifVerboseMajor( dbgMajor() << "after template-parameter resolution: \"" << exp.fullNameChain() << "\"" << endl );
 	
 	EvaluationResult res = evaluateAtomicExpression( exp, scope, ctx, canBeTypeExpression );
   return res;

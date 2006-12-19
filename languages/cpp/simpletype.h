@@ -42,6 +42,9 @@ class SimpleTypeFunctionInterface;
 
 typedef KSharedPtr<SimpleTypeImpl> TypePointer;
 
+///if this is set, imported items will get their parent set to the node they were acquired through(which may increase the overall count of items, decrease the caching-performance, and may create other problems in locating stuff)
+//#define PHYSICAL_IMPORT
+
 enum Repository {
   CodeModel,
   Catalog,
@@ -737,6 +740,9 @@ class SimpleTypeImpl : public KShared {
 	virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) {
 		return QValueList<TypePointer>();
 	}
+
+    ///Returns the include-file-set used for resolving this type
+    IncludeFiles getFindIncludeFiles();
 	
   private:
     QStringList m_scope;
@@ -760,7 +766,7 @@ class SimpleTypeImpl : public KShared {
 
     ///Used to set the include-files that were used to find this type(needed for lazy evaluation of the base-classes)
     void setFindIncludeFiles( const IncludeFiles& files );
-  
+
 		///Should be called within the parent-namespace/class
 	virtual void chooseSpecialization( MemberInfo& member );
 	

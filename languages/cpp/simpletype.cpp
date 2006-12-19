@@ -187,6 +187,10 @@ void SimpleTypeImpl::setFindIncludeFiles( const IncludeFiles& files ) {
   m_findIncludeFiles = files;
 }
 
+IncludeFiles SimpleTypeImpl::getFindIncludeFiles() {
+  return m_findIncludeFiles;
+}
+
 /**
 Searches for a member called "name", considering all types selected through "typ"*/
 SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, MemberInfo::MemberType typ ) {
@@ -195,7 +199,7 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, Membe
     ifVerbose( dbg() << "stopping typeOf-evaluation because the recursion-depth is too high" << endl );
     return TypeOfResult( LocateResult( TypeDesc( "CompletionError::too_much_recursion" ) ) );
   }
-  ifVerbose( dbg() << "\"" << str() << "\"------------>: searching for type of member \"" << name << "\"" << endl );
+  ifVerbose( dbg() << "\"" << str() << "\"------------>: searching for type of member \"" << name.fullNameChain() << "\"" << endl );
 
   TypeDesc td = resolveTemplateParams( name );
 
@@ -204,7 +208,7 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, Membe
   if ( mem ) {
     mem.type = resolveTemplateParams( mem.type );
 
-    ifVerbose( dbg() << "\"" << str() << "\": found member " << name << ", type: " << mem.type->fullNameChain() << endl );
+    ifVerbose( dbg() << "\"" << str() << "\": found member " << name.fullNameChain() << ", type: " << mem.type->fullNameChain() << endl );
     if ( mem.memberType == MemberInfo::Function ) {
       ///For functions, find all functions with the same name, so that overloaded functions can be identified correctly
       TypePointer ret = mem.build();
@@ -222,21 +226,34 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, Membe
         return TypeOfResult( LocateResult( ret->desc() ) );
       } else {
         ifVerbose( dbg() << "error, using old function-type-evaluation" << endl );
-        return TypeOfResult( locateDecType( mem.type ), mem.decl );
+
+        TypeDesc d( mem.type );
+        if( m_findIncludeFiles.size() != 0 )
+          d.setIncludeFiles( m_findIncludeFiles );
+        else
+          d.setIncludeFiles( name.includeFiles() );
+
+        return TypeOfResult( locateDecType( d ), mem.decl );
       }
     } else if ( mem.memberType == MemberInfo::Variable ) {
-      return TypeOfResult( locateDecType( mem.type ), mem.decl );
+        TypeDesc d( mem.type );
+        if( m_findIncludeFiles.size() != 0 )
+          d.setIncludeFiles( m_findIncludeFiles );
+        else
+          d.setIncludeFiles( name.includeFiles() );
+      
+      return TypeOfResult( locateDecType( d ), mem.decl );
     } else {
-      ifVerbose( dbg() << "while searching for the type of \"" << name << "\" in \"" << str() << "\": member has wrong type: \"" << mem.memberTypeToString() << "\"" << endl );
+      ifVerbose( dbg() << "while searching for the type of \"" << name.fullNameChain() << "\" in \"" << str() << "\": member has wrong type: \"" << mem.memberTypeToString() << "\"" << endl );
       return TypeOfResult();
     }
   }
 
   TypeOfResult ret = searchBases( td );
   if ( !ret ) {
-    ifVerbose( dbg() << "\"" << str() << "\"------------>: failed to resolve the type of member \"" << name << "\"" << endl );
+    ifVerbose( dbg() << "\"" << str() << "\"------------>: failed to resolve the type of member \"" << name.fullNameChain() << "\"" << endl );
   } else {
-    ifVerbose( dbg() << "\"" << str() << "\"------------>: successfully resolved the type of the member \"" << name << "\"" << endl );
+    ifVerbose( dbg() << "\"" << str() << "\"------------>: successfully resolved the type of the member \"" << name.fullNameChain() << "\"" << endl );
   }
   return ret;
 }
@@ -574,7 +591,7 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
     ifVerbose( dbg() << "stopping location because the recursion-depth is too high" << endl );
     return TypeDesc( "CompletionError::too_much_recursion" );
   }
-    ifVerbose( dbg() << "\(" << uint(this) << ")\"" << desc().fullName() << "\": locating type \"" << name.fullNameChain() << "\"" << endl );
+    ifVerbose( dbg() << "\(" << uint(this) << ")\"" << str() << "\": locating type \"" << name.fullNameChain() << "\"" << endl );
   if ( name.resolved() && !name.next() ) {
     ifVerbose( dbg() << "\"" << desc().fullName() << "\": type \"" << name.fullNameChain() << "\" is already resolved, returning stored instance" << endl );
     return name;
@@ -621,7 +638,9 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
       SimpleType sub;
       if ( TypePointer t = mem.build() ) {
         sub = SimpleType( t );
+#ifdef PHYSICAL_IMPORT
         setSlaveParent( *sub );
+#endif
       } else {
         ///Should not happen..
         kdDebug( 9007 ) << "\"" << str() << "\": Warning: the nested-type " << name.name() << " was found, but has no build-info" << endl;
