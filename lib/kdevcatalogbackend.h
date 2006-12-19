@@ -35,35 +35,38 @@
 class KDEVPLATFORM_EXPORT KDevCatalogBackend
 {
 public:
-    KDevCatalogBackend();
-    virtual ~KDevCatalogBackend();
+    typedef QPair<QByteArray, QVariant> QueryArgument;
+
+public:
+    KDevCatalogBackend() {};
+    virtual ~KDevCatalogBackend() {};
 
     //! Open the catalog backend
-    virtual void open();
+    virtual void open( const QString& dbName ) = 0;
 
     //! Close the catalog backend
-    virtual void close();
+    virtual void close() = 0;
 
     //! Commit any unsaved changes to the backend
-    virtual void sync();
+    virtual void sync() = 0;
 
     //! Check if the backend is open
-    virtual void isOpen();
+    virtual bool isOpen() = 0;
 
     //! Add an item to the backend
-    virtual void addItem( Tag& );
+    virtual void addItem( Tag& ) = 0;
 
     //! Get an item from the backend using the id for the id
-    virtual Tag getItemById( int id );
+    virtual Tag getItemById( int id ) = 0;
 
     //! Query the catalog for a list of items
-    virtual QList<Tag> query( const QList<QueryArgument>& args );
+    virtual QList<Tag> query( const QList<QueryArgument>& args ) = 0;
 
     //! Get a list of the indexes
-    virtual QList<QByteArray> indexList() const;
+    virtual QList<QByteArray> indexList() const = 0;
 
     //! Add an index to the backend
-    virtual void addIndex( const QByteArray& name );
+    virtual void addIndex( const QByteArray& name ) = 0;
 
 };
 

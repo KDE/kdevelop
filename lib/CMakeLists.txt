@@ -7,12 +7,15 @@ add_subdirectory(settings)
 
 include_directories(
  ${CMAKE_SOURCE_DIR}/lib/util
- ${CMAKE_SOURCE_DIR}/lib/widgets 
+ ${CMAKE_SOURCE_DIR}/lib/widgets
  ${CMAKE_SOURCE_DIR}/lib/editor
  ${CMAKE_SOURCE_DIR}/lib/backgroundparser
  ${CMAKE_SOURCE_DIR}/lib/interfaces
  ${CMAKE_SOURCE_DIR}/lib/project
  )
+if (BERKELEY_DB_FOUND)
+    include_directories(${BERKELEY_DB_INCLUDE_DIR})
+endif (BERKELEY_DB_FOUND)
 
 
 ########### next target ###############
@@ -68,6 +71,14 @@ set(kdevplatform_LIB_SRCS
     project/importprojectjob.cpp
 )
 
+if (BERKELEY_DB_FOUND)
+    set(kdevplatform_LIB_SRCS
+        ${kdevplatform_LIB_SRCS}
+        tag.cpp
+        kdevbdbcatalogbackend.cpp
+       )
+endif (BERKELEY_DB_FOUND)
+
 set(kdevplatform_UI
     mimewarningdialog.ui
 )
@@ -76,7 +87,7 @@ kde4_automoc(${kdevplatform_LIB_SRCS})
 
 kde4_add_ui_files(kdevplatform_LIB_SRCS ${kdevplatform_UI})
 kde4_add_library(kdevplatform SHARED ${kdevplatform_LIB_SRCS})
-target_link_libraries(kdevplatform ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kdevplatform ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} )
 set_target_properties(kdevplatform PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevplatform DESTINATION ${LIB_INSTALL_DIR} )
 

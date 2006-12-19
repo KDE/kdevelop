@@ -20,6 +20,10 @@
 
 #include "kdevbdbcatalogbackend.h"
 
+#include <QFileInfo>
+#include <kdebug.h>
+
+#include <cstring>
 
 
 KDevBDBCatalogBackend::KDevBDBCatalogBackend()
@@ -32,7 +36,7 @@ KDevBDBCatalogBackend::~KDevBDBCatalogBackend()
 
 }
 
-void KDevBDBCatalogBackend::open()
+void KDevBDBCatalogBackend::open( const QString& dbName )
 {
     Q_ASSERT( m_db == 0 );
     int ret;
@@ -56,7 +60,7 @@ void KDevBDBCatalogBackend::open()
     if ( ret != 0 )
         kDebug(9000) << k_funcinfo << "set_cachesize: " << db_strerror( ret ) << endl;
 
-    ret = m_db->open( m_db, 0, d->dbName.toLocal8Bit(), 0, DB_BTREE,
+    ret = m_db->open( m_db, 0, dbName.toLocal8Bit(), 0, DB_BTREE,
                       DB_CREATE, 0664 );
     if ( ret != 0 )
     {
@@ -64,7 +68,6 @@ void KDevBDBCatalogBackend::open()
         close();
         return;
     }
-
 }
 
 void KDevBDBCatalogBackend::close()
@@ -79,10 +82,10 @@ void KDevBDBCatalogBackend::close()
 
     m_indexList.clear();
 
-    if ( m_dbp != 0 )
+    if ( m_db != 0 )
     {
-        m_dbp->close( m_dbp, 0 );
-        m_dbp = 0;
+        m_db->close( m_db, 0 );
+        m_db = 0;
     }
 }
 
@@ -92,7 +95,7 @@ void KDevBDBCatalogBackend::sync()
     m_db->sync( m_db, 0 );
 
     QMap<QByteArray, DB*>::Iterator it = m_indexList.begin();
-    while( it != d->indexList.end() )
+    while( it != m_indexList.end() )
     {
         it.value()->sync( it.value(), 0 );
         ++it;
@@ -100,13 +103,18 @@ void KDevBDBCatalogBackend::sync()
 
 }
 
-void KDevBDBCatalogBackend::isOpen()
+bool KDevBDBCatalogBackend::isOpen()
 {
-    return ( m_dbp != 0 );
+    return ( m_db != 0 );
 }
 
-void KDevBDBCatalogBackend::addItem( Tag& )
+void KDevBDBCatalogBackend::addItem( Tag& tag )
 {
+    if( tag.name().isEmpty() )
+        return;
+
+    QByteArray id = generateId();
+
     if( addItem( m_db, id, tag ) )
     {
         QMap<QByteArray, DB*>::Iterator it = m_indexList.begin();
@@ -121,7 +129,7 @@ void KDevBDBCatalogBackend::addItem( Tag& )
 
 Tag KDevBDBCatalogBackend::getItemById( int id )
 {
-    Q_ASSERT( m_dbp != 0 );
+    Q_ASSERT( m_db != 0 );
 
     DBT key, data;
     std::memset( &key, 0, sizeof( key ) );
@@ -233,7 +241,7 @@ QList<Tag> KDevBDBCatalogBackend::query( const QList<QueryArgument>& args )
 QList<QByteArray> KDevBDBCatalogBackend::indexList() const
 {
     QList<QByteArray> l;
-    QMap<QByteArray, DB*>::Iterator it = m_indexList.begin();
+    QMap<QByteArray, DB*>::ConstIterator it = m_indexList.begin();
     while( it != m_indexList.end() )
     {
         l << it.key();
@@ -251,8 +259,17 @@ void KDevBDBCatalogBackend::addIndex( const QByteArray& name )
     if( it == m_indexList.end() )
     {
         DB* dbp = 0;
+        const char *fname;
 
         int ret;
+
+        ret = m_db->get_dbname(m_db, &fname, NULL);
+        if ( ret != 0 )
+        {
+            kDebug() << "get_dbname: " << db_strerror(ret) << endl;
+            dbp->close( dbp, 0 );
+            return;
+        }
 
         ret = db_create(&dbp, 0, 0);
         if ( ret != 0 )
@@ -269,13 +286,14 @@ void KDevBDBCatalogBackend::addIndex( const QByteArray& name )
             return;
         }
 
-        QFileInfo fileInfo( d->dbName );
+        QByteArray fileName( fname );
+        QFileInfo fileInfo( fileName );
         QString indexName = QString( "%1/%2.%3.idx" )
                             .arg( fileInfo.absolutePath() )
                             .arg( fileInfo.baseName() )
                             .arg( QString( name ) );
 
-        ret = dbp->set_cachesize( dbp, 0, 2 * 1024 * 1024, 0 )
+        ret = dbp->set_cachesize( dbp, 0, 2 * 1024 * 1024, 0 );
         if( ret != 0 )
             kDebug() << "set_cachesize: " << db_strerror(ret) << endl;
 
@@ -302,7 +320,7 @@ DB* KDevBDBCatalogBackend::index( const QByteArray& name )
     return m_indexList[ name ];
 }
 
-bool KDevBDBCatalogBackend::addItem( DB* dbp, const QByteArray& id, const Tag& )
+bool KDevBDBCatalogBackend::addItem( DB* dbp, const QByteArray& id, const Tag& tag )
 {
     Q_ASSERT( dbp != 0 );
 
@@ -333,7 +351,7 @@ bool KDevBDBCatalogBackend::addItem( DB* dbp, const QByteArray& id, const Tag& )
     return ( ret == 0 );
 }
 
-bool addItem( DB& dbp, const QVariant& id, const QByteArray& v )
+bool KDevBDBCatalogBackend::addItem( DB* dbp, const QVariant& id, const QByteArray& v )
 {
     Q_ASSERT( dbp != 0 );
 
@@ -362,6 +380,14 @@ bool addItem( DB& dbp, const QVariant& id, const QByteArray& v )
     ret = dbp->put( dbp, 0, &key, &data, 0 );
 
     return ( ret == 0 );
+}
+
+QByteArray KDevBDBCatalogBackend::generateId()
+{
+    static int n = 1;
+    QString asStr;
+    asStr.sprintf( "%05d", n++ );
+    return asStr.toLatin1();
 }
 
 //kate: indent-spaces on; indent-width 4; replace-tabs on;

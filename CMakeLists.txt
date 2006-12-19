@@ -3,10 +3,15 @@ project(kdevelop)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 find_package(KDE4 REQUIRED)
+find_package(BerkeleyDB)
 include (KDE4Defaults)
 include (MacroLibrary)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
+if (BERKELEY_DB_FOUND)
+    add_definitions (${BERKELEY_DB_DEFINITIONS})
+endif (BERKELEY_DB_FOUND)
+
 link_directories (${KDE4_LIB_DIR})
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver )
 

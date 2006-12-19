@@ -21,6 +21,8 @@
 #ifndef KDEVBDBCATALOGBACKEND_H
 #define KDEVBDBCATALOGBACKEND_H
 
+#include "kdevcatalogbackend.h"
+
 #include <QMap>
 #include <QList>
 #include <QPair>
@@ -29,19 +31,19 @@
 #include "tag.h"
 #include "kdevexport.h"
 
-struct DB;
+#include <db.h>
 
 /**
  * Catalog backend using the bdb
  */
-class KDEVPLATFORM_EXPORT KDevBDBCatalogBackend
+class KDEVPLATFORM_EXPORT KDevBDBCatalogBackend : public KDevCatalogBackend
 {
 public:
     KDevBDBCatalogBackend();
     virtual ~KDevBDBCatalogBackend();
 
     //! Open the catalog backend
-    virtual void open();
+    virtual void open( const QString& dbName );
 
     //! Close the catalog backend
     virtual void close();
@@ -50,7 +52,7 @@ public:
     virtual void sync();
 
     //! Check if the backend is open
-    virtual void isOpen();
+    virtual bool isOpen();
 
     //! Add an item to the backend
     virtual void addItem( Tag& );
@@ -68,10 +70,11 @@ public:
     virtual void addIndex( const QByteArray& name );
 
 private:
-    bool hasIndex( const QByteArray& name ) const { return m_indexList.contains( name ); }
-    DB* index( const QByteArray& name ) { return m_indexList[name]; }
+    bool hasIndex( const QByteArray& name ) const;
+    DB* index( const QByteArray& name );
     bool addItem( DB* dbp, const QByteArray& id, const Tag& tag );
     bool addItem( DB* dbp, const QVariant& id, const QByteArray& v );
+    QByteArray generateId();
 
 private:
     DB* m_db;
