@@ -53,6 +53,18 @@ enum Repository {
   Undefined
 };
 
+class BuiltinTypes {
+  public:
+    ///This should be used for checking whether a type is builtin
+    static bool isBuiltin( const TypeDesc& desc );
+    ///If it is a builtin type this returns a short description of the type
+    static QString comment( const TypeDesc& desc );
+    BuiltinTypes();
+  private:
+    static QMap<QString, QString> m_types;
+};
+
+
 /**
     A Type can be invalid( hasNode() returns false ) but still have a desc. In that case, the desc is the
     nearest point reached in the resolution of the type.

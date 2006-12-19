@@ -15,6 +15,40 @@
 #include "simpletype.h"
 #include "safetycounter.h"
 #include "simpletypefunction.h"
+#include <klocale.h>
+
+QMap<QString, QString> BuiltinTypes::m_types;
+BuiltinTypes builtin; //Needed so BuiltinTypes::BuiltinTypes is called and the types are initialized
+
+BuiltinTypes::BuiltinTypes() {
+  m_types[ "void" ] = i18n( "typeless" );
+  m_types[ "bool" ] = i18n("boolean value, 1 byte, ( \"true\" or \"false\" )");
+  m_types["char" ] = i18n("signed/unsigned character, 1 byte");
+  m_types["signed char" ] =  i18n("signed character, 1 byte, ranged -128 to 127");
+  m_types["unsigned char"] = i18n("unsigned character, 1 byte, ranged 0 to 255");
+  m_types["wchar_t"] = i18n("wide character, 2 bytes, ranged 0 to 65.535");
+  m_types["long"] = m_types["long int"] = m_types["int"] = m_types["signed int"] = i18n("signed interger, 4 bytes, ranged -2.147.483.648 to 2.147.483.647");
+  m_types["unsigned int"] = i18n("unsigned integer, 4 bytes, ranged 0 to 4.294.967.295");
+  m_types["short"] = m_types["short int"] = i18n("short integer, 2 bytes, ranged -32.768 to 32.768");
+  m_types["unsigned short int"] = i18n("unsigned short integer, 2 bytes, ranged 0 to 65.535");
+  m_types["float"] = i18n("floating point value, 4 bytes, ranged ca. -3,4E+38 to 3.4E+38");
+  m_types["double"] = i18n("double floating point value, 8 bytes, ranged ca. -1.8E+308 to 1.8E+308");
+  m_types["long double"] = i18n("double long floating point value, 10 bytes, ranged ca. -3.4E+4932 to 3.4E+4932");
+   
+}
+
+bool BuiltinTypes::isBuiltin( const TypeDesc& desc ) {
+  return m_types.find( desc.name() ) != m_types.end();
+}
+
+QString BuiltinTypes::comment( const TypeDesc& desc ) {
+  QMap<QString, QString>::iterator it = m_types.find( desc.name() );
+  if( it != m_types.end() ) {
+    return *it;
+  } else {
+    return QString::null;
+  }
+}
 
 extern SafetyCounter safetyCounter;
 
@@ -584,6 +618,9 @@ void SimpleTypeImpl::chooseSpecialization( MemberInfo& member ) {
 
 LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int dir , MemberInfo::MemberType typeMask ) {
   Debug d( "#lo#" );
+  if( BuiltinTypes::isBuiltin( name ) )
+    return name;
+
   if ( !name || !safetyCounter || !d ) {
     return desc();
   }

@@ -403,7 +403,11 @@ struct PopupFillerHelpStruct {
 
       txt = prefix + i18n( "Jump to %1" ).arg( cleanForMenu( n ) );
     } else {
-      txt = prefix + d.name() + i18n( " is unresolved" );
+			if( !BuiltinTypes::isBuiltin( d ) ) {
+	      txt = prefix + d.name() + i18n( " is unresolved" );
+			} else {
+				txt = prefix + d.name() + i18n( "  (builtin " ) + BuiltinTypes::comment( d ) + ")";
+			}
     }
 
     int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
@@ -538,7 +542,11 @@ struct PopupClassViewFillerHelpStruct {
         }
       }
     } else {
-      txt = prefix + d.name() + i18n( " is unresolved" );
+			if( !BuiltinTypes::isBuiltin( d ) ) {
+	      txt = prefix + d.name() + i18n( " is unresolved" );
+			} else {
+				txt = prefix + d.name() + i18n( "  (builtin " ) + BuiltinTypes::comment( d ) + ")";
+			}
     }
 
     int id = parent->insertItem( txt, receiver, SLOT( popupClassViewAction( int ) ) );
@@ -1420,7 +1428,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		
 	}
 	
-  if ( !type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) )
+	if ( !type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) && !BuiltinTypes::isBuiltin( type.resultType ) )
     return ;
 
   QString name = type->fullNameChain();
@@ -1543,7 +1551,13 @@ void CppCodeCompletion::slotTextHint( int line, int column, QString &text ) {
     }
   } else {
     if ( type ) {
-      addStatusText( i18n( "Type of \"%1\" is unresolved, name: \"%2\"" ).arg( type.expr.expr() ).arg( type->fullNameChain() ), 2 * timeout );
+			if( !BuiltinTypes::isBuiltin( type.resultType ) ) {
+				addStatusText( i18n( "Type of \"%1\" is unresolved, name: \"%2\"" ).arg( type.expr.expr() ).arg( type->fullNameChain() ), 2 * timeout );
+			} else {
+				addStatusText( i18n( "\"%1\" is of builtin type \"%2\", a %3" ).arg( type.expr.expr() ).arg( type->fullNameChain() ).arg(BuiltinTypes::comment( type.resultType )), 2 * timeout );
+			}
+
+      
     } else {
       addStatusText( i18n( "Type of \"%1\" could not be evaluated! Tried to evaluate expression as \"%2\"" ).arg( type.expr.expr() ).arg( type.expr.typeAsString() ), 2 * timeout );
     }
@@ -2591,7 +2605,16 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
       isInstance = false;
   }
 
-  kdDebug( 9007 ) << "===========================> type is: " << type->fullNameChain() << ( type->resolved() ? " (resolved)" : " (unresolved)" ) << endl;
+	QString resolutionType = "(resolved)";
+	if( !type->resolved() ) {
+		if( BuiltinTypes::isBuiltin( type.resultType ) ) {
+			resolutionType = "(builtin " + BuiltinTypes::comment( type.resultType ) +  ")";
+		} else {
+			resolutionType = "(unresolved)";
+		}
+	}
+
+  kdDebug( 9007 ) << "===========================> type is: " << type->fullNameChain() << resolutionType << endl;
   kdDebug( 9007 ) << "===========================> word is: " << word << endl;
 
   if ( !showArguments ) {
@@ -4041,7 +4064,16 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
   EvaluationResult res;
   res = obj.evaluate();
 
-  m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2 (%3)" ).arg( expr.expr() ).arg( res->fullNameChain() ).arg( res->resolved() ? "resolved" : "unresolved" ), 1000 );
+	QString resolutionType = "(resolved)";
+	if( !res->resolved() ) {
+		if( BuiltinTypes::isBuiltin( res.resultType ) ) {
+			resolutionType = "(builtin " + BuiltinTypes::comment( res.resultType ) +  ")";
+		} else {
+			resolutionType = "(unresolved)";
+		}
+	}
+
+  m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2 %3" ).arg( expr.expr() ).arg( res->fullNameChain() ).arg( resolutionType ), 1000 );
 
   return res;
 }
