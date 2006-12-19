@@ -107,7 +107,7 @@ void GrepListBoxItem::paint(QPainter *p)
 	}
 	else
 	{
-		p->setPen(dim);
+		p->setPen(base);
 		QFont font1(p->font());
 		QFont font2(font1);
 		font2.setBold(true);
@@ -116,7 +116,7 @@ void GrepListBoxItem::paint(QPainter *p)
 		p->setFont(font1);
 		x += fm.width(stx);
 
-		p->setPen(Qt::blue);
+		p->setPen(result);
 		p->drawText(x, y, text);
 	}
 }
