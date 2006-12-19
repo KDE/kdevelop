@@ -539,14 +539,14 @@ const LocateResult SimpleTypeCodeModel::findTemplateParam( const QString& name )
   return LocateResult();
 }
 
-QValueList<LocateResult> SimpleTypeCodeModel::getBases() {
+QStringList SimpleTypeCodeModel::getBaseStrings() {
   Debug d( "#getbases#" );
   if ( !d || !safetyCounter ) {
     //ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
-    return QValueList<LocateResult>();
+    return QStringList();
   }
 
-  QValueList<LocateResult> ret;
+  QStringList ret;
 
   ClassModel* klass;
 
@@ -554,7 +554,7 @@ QValueList<LocateResult> SimpleTypeCodeModel::getBases() {
 
   QStringList parents = klass->baseClassList();
   for ( QStringList::Iterator it = parents.begin(); it != parents.end(); ++it ) {
-    ret << locateDecType( *it , LocateBase );
+    ret << *it;
   }
 
   return ret;

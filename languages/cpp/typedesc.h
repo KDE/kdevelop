@@ -38,6 +38,15 @@ enum ResolutionFlags {
 };
 
 class LocateResult {
+  public:
+    struct NewLocateMode { ///This is a helper that saves the influence on the behavior of locateType(..)
+      NewLocateMode() : mode(0), dir(0), valid(false) {
+      }
+      uint mode;
+      int dir;
+      bool valid;
+    };
+  private:
     struct D;
     D* d;
     int m_resolutionCount;
@@ -45,6 +54,7 @@ class LocateResult {
     TypeTrace* m_trace; ///pointer to the previous type in the trace-chain
     int m_locateDepth; ///How far away from the beginning the type was found(counting steps upwards and steps into base-classes. Counter is stopped on the first typedef.)
 
+    NewLocateMode m_locateMode;
   public:
     LocateResult();
     LocateResult( const TypeDesc& desc );
@@ -58,6 +68,11 @@ class LocateResult {
     	m_desc = new rhs;
     	return *this;
     }*/
+
+  ///Returns the locate-flags that would have been used for locating a sub-item of this one(given the flags this was located with)
+  NewLocateMode& locateMode() { 
+      return m_locateMode;
+    }
 
 	LocateResult& operator = ( const TypeDesc& rhs );
 

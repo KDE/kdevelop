@@ -643,9 +643,11 @@ class SimpleTypeImpl : public KShared {
 
 
     /** In case of a class, returns all base-types */
-    virtual QValueList<LocateResult> getBases() {
-      return QValueList<LocateResult>();
-    }
+    virtual QValueList<LocateResult> getBases();
+
+  virtual QStringList getBaseStrings() {
+      return QStringList();
+    };
 
     ///This pair contains the found type, and additionally the member-information that helped finding the type
     struct TypeOfResult {
@@ -681,6 +683,7 @@ class SimpleTypeImpl : public KShared {
     virtual TypeOfResult typeOf( const TypeDesc& name, MemberInfo::MemberType typ = addFlag( MemberInfo::Function, MemberInfo::Variable ) );
 
 
+    ///From outside this should only be called for members like functions/variables etc. Classes will not have their bases resolved when acquired using this function.
     virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type = ( MemberInfo::MemberType ) 0xffffffff ) {
       Q_UNUSED( name );
       Q_UNUSED( type );
@@ -738,12 +741,13 @@ class SimpleTypeImpl : public KShared {
   private:
     QStringList m_scope;
     TypePointer m_parent;
+    IncludeFiles m_findIncludeFiles; //Set of include-files used for finding this object
 
   protected:
-    SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ) /*, m_trace( rhs->m_trace )*/, m_desc( rhs->m_desc ) {
+    SimpleTypeImpl( SimpleTypeImpl* rhs ) : m_masterProxy( rhs->m_masterProxy ), m_resolutionCount( rhs->m_resolutionCount ), m_resolutionFlags( rhs->m_resolutionFlags ), m_scope( rhs->m_scope ), m_parent( rhs->m_parent ), m_findIncludeFiles( rhs->m_findIncludeFiles ), m_desc( rhs->m_desc ) {
       reg();
     }
-
+  
     TypeDesc m_desc;  ///descibes the local type(so next() must be null)
 
     /** Tries to extract template-parameters from the scope, resets the params-list */
@@ -751,8 +755,12 @@ class SimpleTypeImpl : public KShared {
 
     void setScope( const QStringList& scope );
 
+    ///Searches the item IN the bases
     TypeOfResult searchBases ( const TypeDesc& name );
 
+    ///Used to set the include-files that were used to find this type(needed for lazy evaluation of the base-classes)
+    void setFindIncludeFiles( const IncludeFiles& files );
+  
 		///Should be called within the parent-namespace/class
 	virtual void chooseSpecialization( MemberInfo& member );
 	

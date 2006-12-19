@@ -177,6 +177,7 @@ bool HashedStringSet::operator[] ( const HashedString& rhs ) const {
 }
 
 void HashedStringSet::insert( const HashedString& str ) {
+  if( str.str().isEmpty() ) return;
   makeDataPrivate();
   m_data->m_files.insert( str );
   m_data->invalidateHash();
@@ -192,7 +193,7 @@ bool HashedStringSet::operator <= ( const HashedStringSet& rhs ) const {
 #ifndef USE_HASHMAP
   return std::includes( rhs.m_data->m_files.begin(), rhs.m_data->m_files.end(), m_data->m_files.begin(), m_data->m_files.end() );
 #else
-  HashedStringSetData::StringSet otherSet( rhs.m_data->m_files );
+  const HashedStringSetData::StringSet& otherSet( rhs.m_data->m_files );
   HashedStringSetData::StringSet::const_iterator end = rhs.m_data->m_files.end();
   HashedStringSetData::StringSet::const_iterator myEnd = m_data->m_files.end();
 

@@ -3476,7 +3476,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
     args << Catalog::QueryArgument( "name", fullname );
 
 
-    QValueList<LocateResult> parents = typeR->getBases();
+	  QValueList<LocateResult> parents = typeR->getBases( );
     for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
       if ( !( *it ) ->resolved() )
         continue;
@@ -3719,7 +3719,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
     computeCompletionEntryList( klass->name(), type, entryList, klass->typeAliasList(), isInstance, depth );
   }
 	
-  QValueList<LocateResult> parents = type->getBases();
+	QValueList<LocateResult> parents = type->getBases( );
 	
 	for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
     if ( !( *it ) ->resolved() )

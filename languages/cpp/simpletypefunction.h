@@ -212,7 +212,7 @@ public:
   virtual const LocateResult findTemplateParam( const QString& name );
   
     /** In case of a class, returns all base-types */
-  virtual QValueList<LocateResult> getBases();
+  virtual QStringList getBaseStrings();
   
   ItemDom locateModelContainer( class CodeModel* m, TypeDesc t, ClassDom cnt = ClassDom() );
 

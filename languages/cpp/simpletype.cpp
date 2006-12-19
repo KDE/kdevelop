@@ -170,9 +170,25 @@ SimpleType::SimpleType( Tag tag ) : m_resolved(true) {
 //
 //SimpleTypeImpl implementation
 
+QValueList<LocateResult> SimpleTypeImpl::getBases() {
+QValueList<LocateResult> ret;
+  QStringList bases = getBaseStrings();
+  for( QStringList::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
+    TypeDesc d( *it );
+    d.setIncludeFiles( m_findIncludeFiles );
+    LocateResult res = locateDecType( d, LocateBase );
+    //if( res )
+      ret << res;
+  }
+  return ret;
+}
+
+void SimpleTypeImpl::setFindIncludeFiles( const IncludeFiles& files ) {
+  m_findIncludeFiles = files;
+}
+
 /**
-Searches for a member called "name", considering all types selected through "typ"
-TODO: cache this too */
+Searches for a member called "name", considering all types selected through "typ"*/
 SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, MemberInfo::MemberType typ ) {
   Debug d( "#to#" );
   if ( !d ) {
@@ -575,6 +591,17 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
        
        return ret;
      }*/
+  if( name.next() ) {
+    //This is an optimization for better use of the cache: Find the elements separately, so searches
+    //For elements that start with the same scope will be speeded up.
+    LocateResult r = locateType( name.firstType(), mode, dir, typeMask );
+    if( r && r->resolved() && r.locateMode().valid ) {
+      ifVerbose( dbg() << "splitting location" );
+      TypeDesc d( *name.next() );
+      d.setIncludeFiles( name.includeFiles() );
+      return r->resolved()->locateType( d, (LocateMode)r.locateMode().mode, r.locateMode().dir );
+    }
+  }
 
   LocateResult ret = name; ///In case the type cannot be located, this helps to find at least the best match
   //LocateResult ret;
@@ -602,15 +629,21 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
       }
 
       TypeDesc rest;
+      LocateMode newMode = addFlag( mode, ExcludeTemplates );
+      int newDir = 1;
       if ( name.next() ) {
         ifVerbose( dbg() << "\"" << str() << "\": found nested type \"" << name.name() << "\", passing control to it\n" );
-        ret = sub->locateType( resolveTemplateParams( *name.next(), Normal ), addFlag( mode, ExcludeTemplates ), 1 ); ///since template-names cannot be referenced from outside, exclude them for the first cycle
+        ret = sub->locateType( resolveTemplateParams( *name.next(), Normal ), newMode, newDir ); ///since template-names cannot be referenced from outside, exclude them for the first cycle
         ret.increaseResolutionCount();
         if ( ret->resolved() )
           return ret.resetDepth();
       } else {
         ifVerbose( dbg() << "\"" << str() << "\": successfully located searched type \"" << name.fullNameChain() << "\"\n" );
         ret->setResolved( sub.get() );
+        ret->resolved()->setFindIncludeFiles( name.includeFiles() );
+        ret.locateMode().valid = true;
+        ret.locateMode().mode = (uint)newMode;
+        ret.locateMode().dir = newDir;
         return ret.resetDepth();
       }
       break;

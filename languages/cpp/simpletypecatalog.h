@@ -62,7 +62,7 @@ public:
     return (bool)m_tag;
   };
   
-  virtual QValueList<LocateResult> getBases();
+  virtual QStringList getBaseStrings();
   
   virtual TemplateParamInfo getTemplateParamInfo();
   

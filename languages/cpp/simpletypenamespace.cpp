@@ -278,7 +278,9 @@ void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
 
       updateAliases( files );
       break;
-    } else {}
+    } else {
+      dbg() << "took \"" << tempList.front().first.first.fullNameChain() << "\" from the slave-list" << endl;
+    }
   }
   m_activeSlaves.splice( m_activeSlaves.end(), tempList );
 }
@@ -314,12 +316,16 @@ void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles&
   if ( !perspective ) perspective = this;
   invalidateCache();
   TypeDesc d = import;
-  if ( d.resolved() && d.resolved()->masterProxy().data() != this ) {
-    d.setResolved( d.resolved()->clone() ); //Expensive because of lost caching, think about how necessary this is
-    d.resolved()->setMasterProxy( this );
-    d.resolved()->addAliasesTo( this );
+  if ( d.resolved() ) {
+    if( d.resolved()->masterProxy().data() != this ) {
+      d.setResolved( d.resolved()->clone() ); //Expensive because of lost caching, think about how necessary this is
+      d.resolved()->setMasterProxy( this );
+    }
   }
+  
   m_activeSlaves.push_back( std::make_pair( std::make_pair( d, files ) , perspective ) );
+  if( d.resolved() ) ///Must be called after the above, because it may insert new slaves, and the order in m_activeSlaves MUST be preserved
+    d.resolved()->addAliasesTo( this );
 }
 
 bool SimpleTypeNamespace::hasNode() const {
@@ -330,7 +336,12 @@ SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves( const IncludeFile
   updateAliases( files );
   SlaveList ret;
   for ( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
-    if ( !(( *it ).first.second <= files ) ) continue;
+    ifVerbose( dbg() << "\"" << str() << "\": Checking whether \"" << (*it).first.first.fullNameChain() << "\" should be imported, current include-files: " << files.print().c_str() << "\nNeeded include-files: " << (*it).first.second.print().c_str() << "\n"; )
+    if ( !(( *it ).first.second <= files ) ) {
+      ifVerbose( dbg() << "not imported." );
+      continue;
+    }
+    ifVerbose( dbg() << "imported." << endl );
     ret.push_back( *it );
   }
   return ret;

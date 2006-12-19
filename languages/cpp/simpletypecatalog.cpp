@@ -270,14 +270,14 @@ DeclarationInfo SimpleTypeCatalog::getDeclarationInfo() {
  return ret;
 }
 
-QValueList<LocateResult> SimpleTypeCatalog::getBases() {
+QStringList SimpleTypeCatalog::getBaseStrings() {
  Debug d( "#getbases#" );
  if ( !d || !safetyCounter ) {
   //ifVerbose( dbg() << "\"" << str() << "\": recursion to deep while getting bases" << endl );
-  return QValueList<LocateResult>();
+  return QStringList();
  }
 
- QValueList<LocateResult> ret;
+ QStringList ret;
 // try with parentsc
  QTime t;
  t.restart();
@@ -290,7 +290,7 @@ QValueList<LocateResult> SimpleTypeCatalog::getBases() {
 
   CppBaseClass<Tag> info( tag );
 
-  ret << locateDecType( info.baseClass() , LocateBase );
+   ret << info.baseClass();
  }
  return ret;
 }

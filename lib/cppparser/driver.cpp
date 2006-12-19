@@ -353,11 +353,6 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
   QFileInfo fileInfo( dep.first );
   QString fn = fileInfo.absFilePath();
     
-#ifdef LEXERCACHE
-      if( m_currentLexerCache )
-        m_currentLexerCache->addIncludeFile( file, QDateTime() ); ///The time will be overwritten in CachedLexedFile::merge(...)
-    #endif
-
   if ( !depresolv ) {
     findOrInsertDependenceList( fileName ).insert( fn, dep );
     m_currentParsedFile->addIncludeFile( dep.first, 0, dep.second == Dep_Local );
@@ -365,6 +360,7 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
   }
 
   QString file = findIncludeFile( dep );
+  
   findOrInsertDependenceList( fileName ).insert( file, dep );
   m_currentParsedFile->addIncludeFile( file, 0, dep.second == Dep_Local );
   
@@ -375,6 +371,9 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
     addProblem( fileName, p );
     return ;
   }
+  
+  if( m_currentLexerCache )
+     m_currentLexerCache->addIncludeFile( file, QDateTime() ); ///The time will be overwritten in CachedLexedFile::merge(...)
 
   /**What should be done:
    * 1. Lex the file to get all the macros etc.

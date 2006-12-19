@@ -263,6 +263,7 @@ class SimpleTypeCacheBinder : public Base {
    }
 
    virtual QValueList<LocateResult> getBases() {
+     ///@todo this needs a lookup for different includeFiles.. 
     if ( m_haveBasesCache ) {
      ifVerbose( dbg() << "\"" << Base::str() << "\" took base-info from the cache" << endl );
      return m_basesCache;
@@ -305,6 +306,7 @@ class SimpleTypeCacheBinder : public Base {
     //if( !m_locateCache.isEmpty() ) dbg() << "\"" << Base::str() << "\" secondary caches cleared" << endl;
     m_locateCache.clear();
     m_haveBasesCache = false;
+    m_basesCache.clear();
    }
 
    virtual void setSecondaryCacheActive( bool active ) {
