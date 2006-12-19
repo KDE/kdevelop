@@ -1263,6 +1263,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             for ( ;filesit != files.end(); ++filesit )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *filesit;
+                file = resolveVariables( file );
                 if( file.contains("*") )
                 {
                     QFileInfo fi( projectDirectory + QString( QChar( QDir::separator() ) ) + file );
@@ -1286,6 +1287,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
             res.insert( file );
         }
 
@@ -1293,6 +1295,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
             res.insert( file );
         }
 
@@ -1300,6 +1303,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
             if( file.contains("*") )
             {
                 QFileInfo fi( projectDirectory + QString( QChar( QDir::separator() ) ) + file );
@@ -1324,6 +1328,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             for ( it = values.begin(); it != values.end(); ++it )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                file = resolveVariables( file );
                 res.insert( file );
             }
         }
@@ -1333,6 +1338,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             for ( it = values.begin(); it != values.end(); ++it )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                file = resolveVariables( file );
                 res.insert( file );
             }
         }
@@ -1341,6 +1347,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
             res.insert( file );
         }
 
@@ -1348,6 +1355,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
             res.insert( file );
         }
 
@@ -1357,6 +1365,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             for ( it = values.begin(); it != values.end(); ++it )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                file = resolveVariables( file );
                 res.insert( file );
                 if( QFileInfo(projectDir()+QString(QChar(QDir::separator())) + *it+".h").exists() )
                     res.insert( file+".h" );
@@ -1368,6 +1377,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
             for ( it = values.begin(); it != values.end(); ++it )
             {
                 QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+                file = resolveVariables( file );
                 res.insert( file );
                 if( QFileInfo(projectDir()+QString(QChar(QDir::separator())) + *it+".h").exists() )
                     res.insert( file+".h" );
@@ -1378,6 +1388,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
             res.insert( file );
         }
 
@@ -1385,6 +1396,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         for ( it = values.begin(); it != values.end(); ++it )
         {
             QString file = myRelPath + QString(QChar(QDir::separator())) + *it;
+            file = resolveVariables( file );
             res.insert( file );
         }
     }
