@@ -132,6 +132,16 @@ class SimpleContext
     {
       m_vars += vars;
     }
+
+    //First the new name, aka "" for real imports, second the name to be imported
+    void addImport( const QPair<QString, QString>& import ) {
+      m_imports << import;
+    }
+
+    //Key the new name, aka "" for real imports, second the name to be imported
+    QValueList<QPair<QString, QString> > imports() {
+      return m_imports;
+    }
   
     void offset( int lineOffset, int colOffset );
 
@@ -152,6 +162,7 @@ class SimpleContext
 
   private:
     QValueList<SimpleVariable> m_vars;
+    QValueList<QPair<QString, QString> > m_imports;
     SimpleContext* m_prev;
     SimpleType m_container;
 };

@@ -1755,7 +1755,14 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
       }
 
       SimpleType global = ctx->global();
-
+	    
+	    if( !m_cachedFromNamespace && dynamic_cast<SimpleTypeNamespace*>( &(*global) ) ) {
+				QValueList<QPair<QString, QString> > localImports = ctx->imports();
+				for( QValueList<QPair<QString, QString> >::const_iterator it = localImports.begin(); it != localImports.end(); ++it ) {
+					dynamic_cast<SimpleTypeNamespace*>( &(*global) )->addAliasMap( (*it).first, (*it).second );
+				}
+	    }
+	    
 	    /* //Should not be necessary any more
 				if( !getParsedFile( f->file().data() ) || getParsedFile( f->file().data() )->includeFiles().size() <= 1 ) {
 				if ( !m_cachedFromContext ) {
@@ -3001,6 +3008,27 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementAST* 
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatementAST* ast, int line, int col ) {
+	///@todo respect NodeType_Typedef
+	if( ast->declaration() && ast->declaration() ->nodeType() == NodeType_UsingDirective ) {
+	  UsingDirectiveAST* usingDecl = static_cast<UsingDirectiveAST*>( ast->declaration() );
+		  QString name;
+		if( usingDecl->name() ) {
+			name = usingDecl->name()->text();
+  
+  		if( !name.isNull() )
+	  		ctx->addImport( QPair<QString, QString>( "", name ) );
+		}
+	}
+
+	if( ast->declaration() && ast->declaration() ->nodeType() == NodeType_NamespaceAlias ) {
+	  NamespaceAliasAST* namespaceAlias = static_cast<NamespaceAliasAST*>( ast->declaration() );
+		QString name;
+		
+		if( namespaceAlias ->namespaceName() && namespaceAlias->aliasName() ) {
+			ctx->addImport( QPair<QString, QString>( namespaceAlias->namespaceName()->text(), namespaceAlias->aliasName()->text() ) );
+		}
+	}
+
   if ( !ast->declaration() || ast->declaration() ->nodeType() != NodeType_SimpleDeclaration )
     return ;
 
