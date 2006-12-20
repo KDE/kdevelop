@@ -34,6 +34,7 @@ BuiltinTypes::BuiltinTypes() {
   m_types["float"] = i18n("floating point value, 4 bytes, ranged ca. -3,4E+38 to 3.4E+38");
   m_types["double"] = i18n("double floating point value, 8 bytes, ranged ca. -1.8E+308 to 1.8E+308");
   m_types["long double"] = i18n("double long floating point value, 10 bytes, ranged ca. -3.4E+4932 to 3.4E+4932");
+  m_types["size_t"] = i18n("builtin unsigned integer, byte-count depending on operating-system" );
    
 }
 
