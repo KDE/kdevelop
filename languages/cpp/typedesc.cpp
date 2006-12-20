@@ -659,11 +659,39 @@ void TypeDesc::init( QString stri ) {
     m_data->m_functionDepth++;
     str = str.mid( strlen( functionMark ) ).stripWhiteSpace();
   }
-	bool isFunction = false;
+	bool isFunction = false, shorten = true;
 
-	if( str.startsWith( "operator " ) ) isFunction = true;
+        //Little hack done for performance-reasons, to do less comparing
+        if( str.length() >= 4 ) {
+          QChar c = str[0];
+          switch( c.latin1() ) {
+          case 's':
+            if( str[1] == 'h' ) {
+              if( str.startsWith( "short" ) )
+                shorten = false;
+            } else if( str[1] == 'i' ) {
+              if( str.startsWith( "signed" ) )
+                shorten = false;
+            }
+            break;
+          case 'l':
+            if( str.startsWith( "long" ) )
+              shorten = false;
+            break;
+          case 'u':
+            if( str.startsWith( "unsigned" ) )
+              shorten = false;
+            break;
+          case 'o':
+            if( str.startsWith( "operator " ) ) {
+              isFunction = true;
+              shorten = false;
+            }
+          }
+        }
+        
 	///Since function-names are also processed by this function, this check has to be done
-	if( !isFunction ) {
+	if( shorten ) {
   ///Remove any prefixes like const or typename(very limited algorithm)
 		int len = str.find( "<" );
 		if ( len == -1 )
@@ -674,10 +702,8 @@ void TypeDesc::init( QString stri ) {
 			if ( str[ a ] == ' ' ) {
 				wasEmpty = true;
 			} else if( wasEmpty && isValidIdentifierSign( str[a] ) ){
-				//if ( wasEmpty ) {
-					currentStart = a;
-					wasEmpty = false;
-				//}
+                                currentStart = a;
+                                wasEmpty = false;
 			}
 		}
 		str = str.mid( currentStart );
