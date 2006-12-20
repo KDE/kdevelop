@@ -296,6 +296,10 @@ void PythonSupportPart::parse(const QString &fileName)
             if (lastClass && rawline.left(3) != "def") {
 	        if( !lastClass->hasFunction(method->name()) )
                     lastClass->addFunction( method );
+                QStringList scope;
+                scope << lastClass->name();
+                method->setScope( scope );
+
             } else if( !m_file->hasFunction(method->name()) ){
                 m_file->addFunction( method );
                 lastClass = 0;
