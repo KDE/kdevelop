@@ -69,6 +69,9 @@ Button::Button(ButtonBar *parent, const QString text, const QIconSet &icon,
 Button::~Button()
 {
 //     m_buttonBar->removeButton(this);
+    KConfig *config = kapp->config();
+    config->setGroup("UI");
+
     QRegExp r("^&([0-9])\\s.*");
     QRegExp r2("^&[0-9]\\s");
     if (r.search(m_realText) > -1)
@@ -76,9 +79,11 @@ Button::~Button()
         QString text = m_realText;
         if (text.contains(r2))
             text.remove(r2);
-        KConfig *config = kapp->config();
-        config->setGroup("UI");
         config->writeEntry(QString("button_%1").arg(text), r.cap(1));
+    }
+    else
+    {
+        config->writeEntry(QString("button_%1").arg(m_realText), "");
     }
 }
 
