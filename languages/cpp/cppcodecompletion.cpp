@@ -1756,7 +1756,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 
       SimpleType global = ctx->global();
 	    
-	    if( !m_cachedFromNamespace && dynamic_cast<SimpleTypeNamespace*>( &(*global) ) ) {
+	    if( !m_cachedFromContext && dynamic_cast<SimpleTypeNamespace*>( &(*global) ) ) {
 				QValueList<QPair<QString, QString> > localImports = ctx->imports();
 				for( QValueList<QPair<QString, QString> >::const_iterator it = localImports.begin(); it != localImports.end(); ++it ) {
 					dynamic_cast<SimpleTypeNamespace*>( &(*global) )->addAliasMap( (*it).first, (*it).second );
