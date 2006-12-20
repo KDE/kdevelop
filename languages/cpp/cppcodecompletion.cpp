@@ -313,7 +313,7 @@ struct PopupFillerHelpStruct {
 
   void insertItem( QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix ) {
     Q_UNUSED(prefix);
-    
+
     QString memType = d.memberTypeToString();
 
     if ( d.memberType == SimpleTypeImpl::MemberInfo::Typedef && d.type->fullName() == "const int" )
@@ -345,7 +345,7 @@ struct PopupFillerHelpStruct {
 		          delete m;
 	          } else {
 		          parent->insertItem( "Imported Namespace " +  scope, m );
- 						
+
 							insertItem( m, ( new SimpleTypeCachedCodeModel( cm->item() ) ) ->desc(), prefix );
 		          m_namespacePopupCache.insert( scope, m );
 	          }
@@ -1374,7 +1374,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
   kdDebug( 9007 ) << "CppCodeCompletion::contextEvaluationMenu()" << endl;
 
 	PopupTracker::print();
-	
+
   m_popupActions.clear();
   m_popupClassViewActions.clear();
 
@@ -1420,14 +1420,14 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		i.endCol = 0;
 		i.endLine = 0;
 		m_popupActions.insert( id, i );
-		
+
 		QStringList ls = prepareTextForMenu( type.macro.body(), 20, 100 );
 		for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
 			b->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
 		}
-		
+
 	}
-	
+
 	if ( !type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) && !BuiltinTypes::isBuiltin( type.resultType ) )
     return ;
 
@@ -1557,7 +1557,7 @@ void CppCodeCompletion::slotTextHint( int line, int column, QString &text ) {
 				addStatusText( i18n( "\"%1\" is of builtin type \"%2\", a %3" ).arg( type.expr.expr() ).arg( type->fullNameChain() ).arg(BuiltinTypes::comment( type.resultType )), 2 * timeout );
 			}
 
-      
+
     } else {
       addStatusText( i18n( "Type of \"%1\" could not be evaluated! Tried to evaluate expression as \"%2\"" ).arg( type.expr.expr() ).arg( type.expr.typeAsString() ), 2 * timeout );
     }
@@ -1738,7 +1738,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 
       QStringList scope = f->scope();
 
-      
+
       if ( !scope.isEmpty() ) {
         SimpleType parentType;
         /* if( !m_cachedFromContext ) {
@@ -1755,14 +1755,14 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
       }
 
       SimpleType global = ctx->global();
-	    
-	    if( !m_cachedFromContext && dynamic_cast<SimpleTypeNamespace*>( &(*global) ) ) {
+
+	    if( dynamic_cast<SimpleTypeNamespace*>( &(*global) ) ) {
         SimpleTypeNamespace* globalNs = static_cast <SimpleTypeNamespace*>( &(*global) );
 				QValueList<QPair<QString, QString> > localImports = ctx->imports();
 				for( QValueList<QPair<QString, QString> >::const_iterator it = localImports.begin(); it != localImports.end(); ++it )
 					globalNs->addAliasMap( (*it).first, (*it).second );
 	    }
-	    
+
 	    /* //Should not be necessary any more
 				if( !getParsedFile( f->file().data() ) || getParsedFile( f->file().data() )->includeFiles().size() <= 1 ) {
 				if ( !m_cachedFromContext ) {
@@ -1781,7 +1781,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
           TypeDesc td = ctx->container() ->desc();
 	        td.setIncludeFiles( getIncludeFiles() );
           td.makePrivate();
-          
+
           td.resetResolved( );
           TypePointer tt = ctx->container() ->locateDecType( td, SimpleTypeImpl::LocateBase ) ->resolved();
           if ( tt ) {
@@ -1852,7 +1852,7 @@ void CppCodeCompletion::getFunctionBody( FunctionDom f , int& line, int& col ) {
 	QString t = clearComments( getText( sl, sc, el, ec ) );
 	if ( t.isEmpty() )
 		return;
-	
+
 	int i = t.find( '{' );
 	if ( i == -1 )
 		return;
@@ -1868,7 +1868,7 @@ void CppCodeCompletion::getFunctionBody( FunctionDom f , int& line, int& col ) {
 			lineCols++;
 		}
 	}
-	
+
 	sc += lineCols;
 
 	line = sl;
@@ -1889,7 +1889,7 @@ void CppCodeCompletion::needRecoveryPoints() {
     ;
 
     std::vector<CppCodeCompletion> vec;
-    
+
 	  TranslationUnitAST * ast = *m_pSupport->backgroundParser() ->translationUnit( m_activeFileName );
     m_pSupport->backgroundParser() ->unlock();
     if ( !ast ) {
@@ -1912,7 +1912,7 @@ void CppCodeCompletion::needRecoveryPoints() {
 EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt ) {
   EvaluationResult ret;
 	safetyCounter.init();
-	
+
   FileDom file = m_pSupport->codeModel() ->fileByName( m_activeFileName );
 
   if ( !file ) {
@@ -1983,7 +1983,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 
 	if ( !m_cachedFromContext )
 		conf.setGlobalNamespace( createGlobalNamespace() );
-	
+
   ItemLocker<BackgroundParser> block( *m_pSupport->backgroundParser() );
 
   FunctionDom currentFunction = fileModel.functionAt( line, column );
@@ -2001,7 +2001,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
 			  realLine = line;
 			  realColumn = column;
 		  }
-			  
+
       SimpleContext * ctx = computeFunctionContext( currentFunction, realLine, realColumn, conf );
       contextItem = currentFunction.data();
 
@@ -2113,7 +2113,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
       }
     }
   }
-  
+
   CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
   if( cfg->usePermanentCaching() && contextItem ) {
     conf.invalidate();
@@ -2172,7 +2172,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
     return ;
 
 	setMaxComments( 1000 );
-	
+
   needRecoveryPoints();
 
   CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
@@ -2326,7 +2326,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
       Driver d;
       Lexer lexer( &d );
-	    
+
       macrosToDriver( d, file );
 
       lexer.setSource( textToReparse );
@@ -2411,6 +2411,12 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
             } else {
               kdDebug( 9007 ) << "scope is empty" << endl;
             }
+						if( dynamic_cast<SimpleTypeNamespace*>( SimpleType::globalNamespace().data() ) ) {
+							SimpleTypeNamespace* globalNs = static_cast <SimpleTypeNamespace*>( SimpleType::globalNamespace().data() );
+							QValueList<QPair<QString, QString> > localImports = ctx->imports();
+							for( QValueList<QPair<QString, QString> >::const_iterator it = localImports.begin(); it != localImports.end(); ++it )
+								globalNs->addAliasMap( (*it).first, (*it).second );
+						}
           } else {
             scope += nested;
           }
@@ -2513,15 +2519,15 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
                                                                       					{
                                                                       						QPtrList<BaseSpecifierAST> baseList = baseClause->baseSpecifierList();
                                                                       						QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
-                                                                       
+
                                                                       						for ( ; it != baseList.end(); ++it )
                                                                       							type.append( ( *it )->name()->text() );
-                                                                       
+
                                                                       						ctx = new SimpleContext();
-                                                                       
+
                                                                       						showArguments = false;
                                                                       						m_completionMode = VirtualDeclCompletion;
-                                                                       
+
                                                                       						kdDebug(9007) << "------> found virtual keyword for class specifier '"
                                                                       									<< clazz->text() << "'" << endl;
                                                                       					}*/
@@ -2592,7 +2598,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
                                                                       					SimpleVariable var;
                                                                       					var.type = scope;
                                                                       					var.name = "this";
-                                                                      					ctx->add( var );*/ 
+                                                                      					ctx->add( var );*/
           //kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
         }
 
@@ -2602,7 +2608,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
       }
     }
   }
-  
+
   if ( !ctx )
     return ;
 
@@ -2825,7 +2831,7 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName ) {
     return ;
 
 	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed" ).arg( m_activeFileName ), 1000 );
-	
+
   emptyCache(); ///The cache has to be emptied, because the code-model changed. @todo Better: Only refresh the code-model(tell all code-model-types to refresh themselves on demand)
 
   computeRecoveryPointsLocked();
@@ -3014,7 +3020,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 		  QString name;
 		if( usingDecl->name() ) {
 			name = usingDecl->name()->text();
-  
+
   		if( !name.isNull() )
 	  		ctx->addImport( QPair<QString, QString>( "", name ) );
 		}
@@ -3023,7 +3029,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 	if( ast->declaration() && ast->declaration() ->nodeType() == NodeType_NamespaceAlias ) {
 	  NamespaceAliasAST* namespaceAlias = static_cast<NamespaceAliasAST*>( ast->declaration() );
 		QString name;
-		
+
 		if( namespaceAlias ->namespaceName() && namespaceAlias->aliasName() ) {
 			ctx->addImport( QPair<QString, QString>( namespaceAlias->namespaceName()->text(), namespaceAlias->aliasName()->text() ) );
 		}
@@ -3315,7 +3321,7 @@ QString CppCodeCompletion::commentFromTag( const SimpleType& parent, Tag& tag ) 
 	if( m_maxComments < 0 ) {
 		return maxReached;
 	}
-	
+
   int line, col;
   tag.getStartPosition( &line, &col );
   QString ret; // = tag.comment();
@@ -3474,7 +3480,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType typeR, QValueList
 		  ts.pop_back();
 		  ts.push_back( s );
 	  }
-	  
+
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
     << Catalog::QueryArgument( "scope", ts );
@@ -3720,7 +3726,7 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
 
 	QStringList classScope = klass->scope();
 	classScope << klass->name();
-	
+
   for ( FunctionDefinitionList::iterator it = definitions.begin(); it != definitions.end(); ++it ) {
     FunctionList fl = klass->functionByName( ( *it ) ->name() );
 
@@ -3769,9 +3775,9 @@ void CppCodeCompletion::computeCompletionEntryList( SimpleType type, QValueList<
     computeCompletionEntryList( klass->name(), type, entryList, klass->classList(), isInstance, depth );
     computeCompletionEntryList( klass->name(), type, entryList, klass->typeAliasList(), isInstance, depth );
   }
-	
+
 	QValueList<LocateResult> parents = type->getBases( );
-	
+
 	for ( QValueList<LocateResult>::Iterator it = parents.begin(); it != parents.end(); ++it ) {
     if ( !( *it ) ->resolved() )
       continue;
@@ -4126,7 +4132,7 @@ HashedStringSet CppCodeCompletion::getIncludeFiles( const QString& fi ) {
 	QString file = fi;
 	if( file.isEmpty() )
 		file = m_activeFileName;
-	
+
 	FileDom f = m_pSupport->codeModel() ->fileByName( file );
 	if( f ) {
 		ParseResultPointer p = f->parseResult();
@@ -4141,5 +4147,5 @@ HashedStringSet CppCodeCompletion::getIncludeFiles( const QString& fi ) {
 }
 
 
-#include "cppcodecompletion.moc" 
+#include "cppcodecompletion.moc"
 //kate: indent-mode csands; tab-width 2; space-indent off;
