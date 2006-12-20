@@ -1451,8 +1451,13 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                                   << commandExecutionTime.elapsed() << " ms.\n";
                 }
 
-                assert(currentCmd_);
-                if (currentCmd_->isUserCommand())
+                /* The currentCmd_ may be NULL here, because when detaching
+                   from debugger, we directly write "detach" to gdb and
+                   busy-wait for a reply.  Uisng the commands mechanism
+                   won't work there, because command result are
+                   communicated asynchronously. 
+                   This is will be fixed in KDevelop4.  */
+                if (currentCmd_ && currentCmd_->isUserCommand())
                     emit gdbUserCommandStdout(reply);
                 else
                     emit gdbInternalCommandStdout(reply + "\n");
