@@ -54,6 +54,7 @@
 #include "toplevel.h"
 #include "projectmanager.h"
 #include "editorproxy.h"
+#include "multibuffer.h"
 
 SimpleMainWindow::SimpleMainWindow(QWidget* parent, const char *name)
     :DMainWindow(parent, name)
@@ -847,7 +848,16 @@ void SimpleMainWindow::closeTab(QWidget *w)
         QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part);
         if (widget && widget == w)
         {
-            PartController::getInstance()->closePart(part);
+            // weirdness beyond weirdness.. sometimes the active view is an embedded splitter with two files
+            // so we check if the widget is a multibuffer, in which case we let it decide what part to close
+            if (MultiBuffer * mb = dynamic_cast<MultiBuffer*>( widget ) )
+            {
+                PartController::getInstance()->closePart( mb->activeBuffer() );
+            }
+            else
+            {
+                PartController::getInstance()->closePart(part);
+            }
             return;
         }
         ++it;
