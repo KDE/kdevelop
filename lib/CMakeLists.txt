@@ -16,6 +16,9 @@ include_directories(
 if (BERKELEY_DB_FOUND)
     include_directories(${BERKELEY_DB_INCLUDE_DIR})
 endif (BERKELEY_DB_FOUND)
+if (TDB_FOUND)
+    include_directories(${TDB_INCLUDE_DIR})
+endif (TDB_FOUND)
 
 
 ########### next target ###############
@@ -55,6 +58,7 @@ set(kdevplatform_LIB_SRCS
     kdevparsejob.cpp
     kdevpersistenthash.cpp
     kdevcodehighlighting.cpp
+    tag.cpp
     editor/kdeveditorintegrator.cpp
     editor/kdevdocumentrangeobject.cpp
     editor/kdevdocumentcursorobject.cpp
@@ -74,10 +78,16 @@ set(kdevplatform_LIB_SRCS
 if (BERKELEY_DB_FOUND)
     set(kdevplatform_LIB_SRCS
         ${kdevplatform_LIB_SRCS}
-        tag.cpp
         kdevbdbcatalogbackend.cpp
        )
 endif (BERKELEY_DB_FOUND)
+
+if (TDB_FOUND)
+    set(kdevplatform_LIB_SRCS
+        ${kdevplatform_LIB_SRCS}
+        kdevtdbcatalogbackend.cpp
+       )
+endif (TDB_FOUND)
 
 set(kdevplatform_UI
     mimewarningdialog.ui
@@ -87,7 +97,7 @@ kde4_automoc(${kdevplatform_LIB_SRCS})
 
 kde4_add_ui_files(kdevplatform_LIB_SRCS ${kdevplatform_UI})
 kde4_add_library(kdevplatform SHARED ${kdevplatform_LIB_SRCS})
-target_link_libraries(kdevplatform ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} )
+target_link_libraries(kdevplatform ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} ${TDB_LIBRARIES} )
 set_target_properties(kdevplatform PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevplatform DESTINATION ${LIB_INSTALL_DIR} )
 

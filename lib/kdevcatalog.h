@@ -20,8 +20,8 @@
 #ifndef KDEVCATALOG_H
 #define KDEVCATALOG_H
 
-#include <qlist.h>
-#include <qpair.h>
+#include <QList>
+#include <QPair>
 #include <QVariant>
 #include <QByteArray>
 

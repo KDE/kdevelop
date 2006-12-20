@@ -167,7 +167,7 @@ QList<Tag> KDevBDBCatalogBackend::query( const QList<QueryArgument>& args )
 
     DBC** cursors = new DBC*[args.size() + 1];
 
-    QList< QPair<QByteArray,QVariant> >::ConstIterator it = args.begin();
+    QList<QueryArgument>::ConstIterator it = args.begin();
     int current = 0;
     while( it != args.end() )
     {
@@ -191,14 +191,14 @@ QList<Tag> KDevBDBCatalogBackend::query( const QList<QueryArgument>& args )
             }
 
             DBC* cursor = 0;
-            int rtn = dbp->cursor( dbp, 0, &cursor, 0 );
-            Q_ASSERT( rtn == 0 );
+            int ret = dbp->cursor( dbp, 0, &cursor, 0 );
+            Q_ASSERT( ret == 0 );
 
-            rtn = cursor->c_get( cursor, &key, &data, DB_SET );
-            if( rtn == DB_NOTFOUND )
-                rtn = 0;
+            ret = cursor->c_get( cursor, &key, &data, DB_SET );
+            if( ret == DB_NOTFOUND )
+                ret = 0;
 
-            Q_ASSERT( rtn == 0 );
+            Q_ASSERT( ret == 0 );
 
             cursors[current++] = cursor;
         }
@@ -208,8 +208,8 @@ QList<Tag> KDevBDBCatalogBackend::query( const QList<QueryArgument>& args )
     cursors[ current ] = 0;
 
     DBC* join_curs = 0;
-    int rtn = m_db->join( m_db, cursors, &join_curs, 0 );
-    Q_ASSERT( rtn == 0 );
+    int ret = m_db->join( m_db, cursors, &join_curs, 0 );
+    Q_ASSERT( ret == 0 );
 
     std::memset( &key, 0, sizeof( key ) );
     std::memset( &data, 0, sizeof( data ) );
@@ -235,7 +235,6 @@ QList<Tag> KDevBDBCatalogBackend::query( const QList<QueryArgument>& args )
     delete[] cursors;
 
     return tags;
-
 }
 
 QList<QByteArray> KDevBDBCatalogBackend::indexList() const
