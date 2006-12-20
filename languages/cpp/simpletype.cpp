@@ -404,7 +404,10 @@ TypeDesc SimpleTypeImpl::resolveTemplateParams( LocateResult desc, LocateMode mo
     TypeDesc::TemplateParams & params = ret->templateParams();
     for ( TypeDesc::TemplateParams::iterator it = params.begin(); it != params.end(); ++it ) {
       if ( !( *it ) ->resolved() && !( *it ) ->hasFlag( ResolutionTried ) ) {
-        *it = locateDecType( **it, mode );
+        TypeDesc d( **it );
+        if( d.includeFiles().size() == 0 )
+          d.setIncludeFiles( this->getFindIncludeFiles() );
+        *it = locateDecType( d, mode );
         ( *it ) ->setFlag( ResolutionTried );
       }
     }
