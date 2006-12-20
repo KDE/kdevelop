@@ -109,7 +109,9 @@ void DDockWindow::setVisible(bool v)
 
     if (m_visible)
         config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width() );
-
+    setResizeEnabled(v);
+    setVerticallyStretchable(true);
+    setHorizontallyStretchable(true);
     v ? m_widgetStack->show() : m_widgetStack->hide();
     m_visible = v;
 
