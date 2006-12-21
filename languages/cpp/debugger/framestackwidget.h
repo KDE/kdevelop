@@ -33,15 +33,13 @@ class FramestackWidget;
 class ThreadStackItem : public QListViewItem
 {
 public:
-    ThreadStackItem(FramestackWidget *parent, 
+    ThreadStackItem(FramestackWidget *parent,
                     unsigned threadNo);
     virtual ~ThreadStackItem();
 
     void setOpen(bool open);
     QListViewItem *lastChild() const;
 
-    void paintCell(QPainter * p, const QColorGroup & cg, 
-                   int column, int width, int align );
 
     int threadNo()
     { return threadNo_; }
@@ -59,10 +57,10 @@ private:
 class FrameStackItem : public QListViewItem
 {
 public:
-    FrameStackItem(FramestackWidget *parent, 
+    FrameStackItem(FramestackWidget *parent,
                    unsigned frameNo,
                    const QString &name);
-    FrameStackItem(ThreadStackItem *parent, 
+    FrameStackItem(ThreadStackItem *parent,
                    unsigned frameNo,
                    const QString &name);
     virtual ~FrameStackItem();
@@ -70,8 +68,6 @@ public:
     void setOpen(bool open);
     QListViewItem *lastChild() const;
 
-    void paintCell(QPainter * p, const QColorGroup & cg, 
-                   int column, int width, int align );
 
     int frameNo()
     { return frameNo_; }
@@ -95,22 +91,17 @@ class FramestackWidget : public QListView
 
 public:
     FramestackWidget( GDBController* controller,
-                      QWidget *parent=0,                       
+                      QWidget *parent=0,
                       const char *name=0, WFlags f=0 );
     virtual ~FramestackWidget();
 
     QListViewItem *lastChild() const;
-   
+
     ThreadStackItem *findThread(int threadNo);
     FrameStackItem *findFrame(int frameNo, int threadNo);
 
     int viewedThread()
     { return viewedThread_ ? viewedThread_->threadNo() : -1; }
-
-protected:
-
-    void drawContentsOffset( QPainter * p, int ox, int oy,
-                             int cx, int cy, int cw, int ch );
 
 
 
@@ -124,7 +115,7 @@ private:
                      QString& func_column,
                      QString& source_column);
 
-    /** Cause gdb to produce backtrace for the current thread. 
+    /** Cause gdb to produce backtrace for the current thread.
 
         GDB reply will be route to parseArg and parseGDBBacktraceList,
         and will show up under viewedThread_ (if there are threads), or
@@ -137,7 +128,7 @@ private:
 
         Switches viewedThread_ to the specified thread, switches gdb thread,
         call getBacktrace(), and switches the current thread back.
-    */        
+    */
     void getBacktraceForThread(int threadNo);
     friend class ThreadStackItem;
 
