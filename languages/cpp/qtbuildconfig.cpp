@@ -60,11 +60,15 @@ void QtBuildConfig::init( )
     }
     if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
     {
-        m_qmakePath = findExecutable( "qmake" );
+        m_qmakePath = findExecutable( "qmake-qt"+ QString::number( m_version ) );
+        if( m_qmakePath.isEmpty() || !isExecutable( m_qmakePath ) )
+            m_qmakePath = findExecutable( "qmake" );
     }
     if( m_designerPath.isEmpty() || !isExecutable( m_designerPath ) )
     {
-        m_designerPath = findExecutable( "designer" );
+        m_designerPath = findExecutable( "designer-qt"+QString::number( m_version ) );
+        if( m_designerPath.isEmpty() || !isExecutable( m_designerPath ) )
+            m_designerPath = findExecutable( "designer" );
     }
 
 	m_designerIntegration = DomUtil::readEntry( *m_dom, m_configRoot + "/designerintegration" );

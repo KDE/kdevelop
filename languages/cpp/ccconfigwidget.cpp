@@ -478,7 +478,7 @@ bool CCConfigWidget::isExecutable( const QString& path )
 
 void CCConfigWidget::isQMakeExecutable( const QString& path )
 {
-    if( isExecutable( path ) )
+    if( !isExecutable( path ) )
     {
         m_qmakePath->lineEdit()->setPaletteForegroundColor(QColor("#ff0000"));
     }else
@@ -489,7 +489,7 @@ void CCConfigWidget::isQMakeExecutable( const QString& path )
 
 void CCConfigWidget::isDesignerExecutable( const QString& path )
 {
-    if( isExecutable( path ) )
+    if( !isExecutable( path ) )
     {
         m_designerPath->lineEdit()->setPaletteForegroundColor(QColor("#ff0000"));
     }else
@@ -566,6 +566,8 @@ void CCConfigWidget::toggleQtVersion( bool )
     m_kdevexternal->setEnabled( false );
   }
   isValidQtDir( m_qtDir->url() );
+  isQMakeExecutable( m_qmakePath->url() );
+  isDesignerExecutable( m_designerPath->url() );
 }
 
 #include "ccconfigwidget.moc"

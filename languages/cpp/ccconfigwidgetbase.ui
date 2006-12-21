@@ -1155,10 +1155,10 @@ you right click on a variable in a header file.</string>
                             <cstring>m_qtUsed</cstring>
                         </property>
                         <property name="text">
-                            <string>Ena&amp;ble Qt options (For project types other than qmake only the designer setting and the include style have an effect.)</string>
+                            <string>Enable Qt options (For pro&amp;ject types other than qmake only the designer setting and the include style have an effect.)</string>
                         </property>
                         <property name="accel">
-                            <string>Alt+B</string>
+                            <string>Alt+J</string>
                         </property>
                     </widget>
                     <widget class="QButtonGroup">
@@ -1649,6 +1649,42 @@ you right click on a variable in a header file.</string>
         <receiver>m_qtDir</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>m_qtDir</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>isValidQtDir(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_qmakePath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>isQMakeExecutable(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_qmakePath</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>isQMakeExecutable(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_qtDir</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>isValidQtDir(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_designerPath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>isDesignerExecutable(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_designerPath</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>isDesignerExecutable(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>cpp_options</tabstop>
@@ -1680,6 +1716,9 @@ you right click on a variable in a header file.</string>
     <slot access="protected">slotRemovePCS()</slot>
     <slot access="protected">slotEnableSplit( bool )</slot>
     <slot>toggleQtVersion(bool)</slot>
+    <slot>isDesignerExecutable(const QString&amp;)</slot>
+    <slot>isQMakeExecutable(const QString&amp;)</slot>
+    <slot>isValidQtDir(const QString&amp;)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
