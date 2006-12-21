@@ -2,6 +2,7 @@
 #ifndef $NEWFILENAMEUC$_H
 #define $NEWFILENAMEUC$_H
 
+#include <$QTBASECLASS$>
 #include "ui_$BASEFILENAME$.h"
 
 class $NEWCLASS$ : public $QTBASECLASS$, private Ui::$BASECLASS$
