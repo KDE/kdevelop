@@ -1238,8 +1238,8 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
         {
             for( QStringList::const_iterator it3 = it2.data().begin(); it3 != it2.data().end(); ++it3 )
             {
-                (*it).replace(QRegExp( "\\$\\$"+it2.key() ), *it3 );
-                (*it).replace(QRegExp( "\\$\\$\\{"+it2.key()+"\\}" ), *it3 );
+                (*it).replace("$$"+it2.key(), *it3 );
+                (*it).replace("$${"+it2.key()+"}", *it3 );
             }
         }
     }
@@ -1248,7 +1248,9 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
 
 void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
 {
+
     QString myRelPath = getRelativePath( projectDirectory, projectDir() );
+//     kdDebug(9024) << scopeName() << " " << projectDir() << " " << myRelPath << endl;
     QString file;
     QStringList values;
     QString header = "";
@@ -1407,6 +1409,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
         {
             file = myRelPath + QString(QChar(QDir::separator())) + *it;
             file = resolveVariables( file );
+//             kdDebug(9024) << scopeName() << " adding file: " << file << endl;
             res.insert( QDir::cleanDirPath( file ) );
         }
 
