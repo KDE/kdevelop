@@ -298,7 +298,7 @@ void AStyleWidget::styleChanged(  )
 
 	QString bracketSample = "namespace foospace {\n\tint Foo(){\n\tif (isBar)\n{\nbar(); \n\treturn 1; } else \nreturn 0;}}\n\nvoid test(){\n\tif (isFoo){\n\tbar();\n} else\n{\n\tbar();\n}\n}\n";
 
-	QString indentSample = "#define foobar(A)\\\n{Foo();Bar();}\n#define anotherFoo(B)\\\nreturn Bar()\n\nnamespace Bar\n{\nclass Foo\n{public:\nFoo();\nvirtual !Foo();\n};\nswitch (foo)\n{\ncase 1:\na+=1;\nbreak;\ncase 2:\n{\na += 2;\n break;\n}\n}\nif (isFoo)\n{\nbar();\n}\nelse\n{\nanotherBar();\n}\nint foo()\n\twhile(isFoo)\n\t\t{\n\t\t\t...\n\t\t\tgoto error;\n\t\t....\n\t\terror:\n\t\t\t...\n\t\t}\n\t}\nfooArray[]={ red,\n\tgreen,\n\tdarkblue};\nfooFunction(barArg1,\n\tbarArg2,\n\tbarArg3);\n";
+	QString indentSample = "#define foobar(A)\\\n{Foo();Bar();}\n#define anotherFoo(B)\\\nreturn Bar()\n\nnamespace Bar\n{\nclass Foo\n{public:\nFoo();\nvirtual ~Foo();\n};\nswitch (foo)\n{\ncase 1:\na+=1;\nbreak;\ncase 2:\n{\na += 2;\n break;\n}\n}\nif (isFoo)\n{\nbar();\n}\nelse\n{\nanotherBar();\n}\nint foo()\n\twhile(isFoo)\n\t\t{\n\t\t\t...\n\t\t\tgoto error;\n\t\t....\n\t\terror:\n\t\t\t...\n\t\t}\n\t}\nfooArray[]={ red,\n\tgreen,\n\tdarkblue};\nfooFunction(barArg1,\n\tbarArg2,\n\tbarArg3);\n";
 
 	QString formattingSample = "void func(){\n\tif(isFoo(a,b))\n\tbar(a,b);\nif(isFoo)\n\ta=bar((b-c)*a,*d--);\nif(  isFoo( a,b ) )\n\tbar(a, b);\nif (isFoo) {isFoo=false;cat << isFoo <<endl;}\nif(isFoo)DoBar();if (isFoo){\n\tbar();\n}\n\telse if(isBar()){\n\tannotherBar();\n}\n}\n";
 
