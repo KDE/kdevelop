@@ -81,6 +81,7 @@ endif(BISON_EXECUTABLE)
 kde4_automoc(${kdevqmakeparser_SRCS})
 kde4_add_library(kdevqmakeparser SHARED ${kdevqmakeparser_SRCS})
 target_link_libraries(kdevqmakeparser ${QT_QTCORE_LIBRARY})
+install(TARGETS kdevqmakeparser DESTINATION ${LIB_INSTALL_DIR} )
 
 add_executable(qmake-parser main.cpp)
 target_link_libraries(qmake-parser kdevqmakeparser)
