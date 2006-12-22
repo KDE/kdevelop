@@ -1852,7 +1852,7 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
                              "subclass", "sourcefile", "uifile" );
     QPtrList<DomUtil::Pair> pairsToRemove;
     DomUtil::PairList::iterator it;
-    QString file = QString( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename ).remove( 0, projectDirectory().length() );
+  QString file = QString( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename.mid(1, realfilename.length()-2)  ).remove( 0, projectDirectory().length() );
     for ( it = list.begin(); it != list.end(); ++it )
     {
         if ( ( ( *it ).first == file ) || ( ( *it ).second == file ) )

@@ -14,6 +14,7 @@
 #include "qmakescopeitem.h"
 
 #include <qdir.h>
+#include <qregexp.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -147,52 +148,56 @@ void GroupItem::paintCell( QPainter* p, const QColorGroup& c, int column, int wi
 
 void GroupItem::addFileToScope( const QString& filename )
 {
+    QString file = filename;
+    if( filename.find(QRegExp("[ \t]") ) != -1 )
+        file = "\""+file+"\"";
+
     QPtrListIterator<FileItem> it( files );
     while ( it.current() != 0 )
     {
-        if ( it.current() ->text( 0 ) == filename )      //File already exists in this subproject
+        if ( it.current() ->text( 0 ) == file )      //File already exists in this subproject
             return ;
         ++it;
     }
 
-    FileItem *fitem = owner->createFileItem( filename );
+    FileItem *fitem = owner->createFileItem( file );
 
     fitem->uiFileLink = owner->m_widget->getUiFileLink( owner->relativePath() + QString( QChar( QDir::separator() ) ), owner->scope->resolveVariables( filename ) );
     files.append( fitem );
     switch ( groupType )
     {
         case GroupItem::Sources:
-            owner->addValue( "SOURCES", filename );
+            owner->addValue( "SOURCES", file );
             break;
         case GroupItem::Headers:
-            owner->addValue( "HEADERS", filename );
+            owner->addValue( "HEADERS", file );
             break;
         case GroupItem::Forms:
-            owner->addValue( "FORMS", filename );
+            owner->addValue( "FORMS", file );
             break;
         case GroupItem::IDLs:
-            owner->addValue( "IDLS", filename );
+            owner->addValue( "IDLS", file );
             break;
         case GroupItem::Lexsources:
-            owner->addValue( "LEXSOURCES", filename );
+            owner->addValue( "LEXSOURCES", file );
             break;
         case GroupItem::Yaccsources:
-            owner->addValue( "YACCSOURCES", filename );
+            owner->addValue( "YACCSOURCES", file );
             break;
         case GroupItem::Images:
-            owner->addValue( "IMAGES", filename );
+            owner->addValue( "IMAGES", file );
             break;
         case GroupItem::Resources:
-            owner->addValue( "RESOURCES", filename );
+            owner->addValue( "RESOURCES", file );
             break;
         case GroupItem::Distfiles:
-            owner->addValue( "DISTFILES", filename );
+            owner->addValue( "DISTFILES", file );
             break;
         case GroupItem::Translations:
-            owner->addValue( "TRANSLATIONS", filename );
+            owner->addValue( "TRANSLATIONS", file );
             break;
         case GroupItem::InstallObject:
-            owner->addValue( text( 0 ) + ".files", filename );
+            owner->addValue( text( 0 ) + ".files", file );
             break;
         default:
             break;
