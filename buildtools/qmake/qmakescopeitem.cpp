@@ -73,7 +73,7 @@ GroupItem::GroupType GroupItem::groupTypeForExtension( const QString &ext )
     else if ( ext == "qrc" )
         return Resources;
     else
-        return NoType;
+        return Distfiles;
 }
 
 void GroupItem::groupTypeMeanings( GroupItem::GroupType type, QString& title, QString& ext )
