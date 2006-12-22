@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>636</width>
+            <width>536</width>
             <height>694</height>
         </rect>
     </property>
@@ -34,6 +34,48 @@
             </property>
             <property name="text">
                 <string>&amp;Cancel</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>buttonOk</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;OK</string>
+            </property>
+            <property name="accel">
+                <string>Alt+O</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>Spacer1_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>260</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>buttonApply</cstring>
+            </property>
+            <property name="text">
+                <string>Appl&amp;y</string>
+            </property>
+            <property name="accel">
+                <string>Alt+Y</string>
             </property>
         </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="4">
@@ -690,15 +732,15 @@ e</string>
                         <property name="exclusive">
                             <bool>false</bool>
                         </property>
-                        <vbox>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout59</cstring>
+                                    <cstring>layout69</cstring>
                                 </property>
-                                <hbox>
+                                <vbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
@@ -716,27 +758,6 @@ e</string>
                                             <bool>true</bool>
                                         </property>
                                     </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>sharedRadio</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Build as s&amp;hared library</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+H</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout60</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
                                     <widget class="QCheckBox">
                                         <property name="name">
                                             <cstring>checkPlugin</cstring>
@@ -751,30 +772,6 @@ e</string>
                                             <string>Alt+U</string>
                                         </property>
                                     </widget>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>checkDesigner</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>Designer Plugin</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string></string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout27</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
                                     <widget class="QCheckBox">
                                         <property name="name">
                                             <cstring>checkLibtool</cstring>
@@ -792,66 +789,87 @@ e</string>
                                             <string>Support required for X11 application or library</string>
                                         </property>
                                     </widget>
-                                    <widget class="QCheckBox">
+                                </vbox>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer34</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>41</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout68</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
                                         <property name="name">
-                                            <cstring>checkPkgconf</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>true</bool>
+                                            <cstring>sharedRadio</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Create pkgconf file</string>
+                                            <string>Build as s&amp;hared library</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+H</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkDesigner</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Designer Plugin</string>
                                         </property>
                                         <property name="accel">
                                             <string></string>
                                         </property>
                                     </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout32</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QLabel">
+                                    <widget class="QLayoutWidget">
                                         <property name="name">
-                                            <cstring>textLabel1</cstring>
+                                            <cstring>layout67</cstring>
                                         </property>
-                                        <property name="text">
-                                            <string>Librar&amp;y version:</string>
-                                        </property>
-                                        <property name="buddy" stdset="0">
-                                            <cstring>m_targetLibraryVersion</cstring>
-                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel1</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Librar&amp;y version:</string>
+                                                </property>
+                                                <property name="buddy" stdset="0">
+                                                    <cstring>m_targetLibraryVersion</cstring>
+                                                </property>
+                                            </widget>
+                                            <widget class="KLineEdit">
+                                                <property name="name">
+                                                    <cstring>m_targetLibraryVersion</cstring>
+                                                </property>
+                                            </widget>
+                                        </hbox>
                                     </widget>
-                                    <widget class="KLineEdit">
-                                        <property name="name">
-                                            <cstring>m_targetLibraryVersion</cstring>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer20</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>231</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </hbox>
+                                </vbox>
                             </widget>
-                        </vbox>
+                        </hbox>
                     </widget>
                     <spacer>
                         <property name="name">
@@ -866,7 +884,7 @@ e</string>
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>20</height>
+                                <height>16</height>
                             </size>
                         </property>
                     </spacer>
@@ -2199,48 +2217,6 @@ e</string>
                 </vbox>
             </widget>
         </widget>
-        <widget class="KPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>buttonOk</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;OK</string>
-            </property>
-            <property name="accel">
-                <string>Alt+O</string>
-            </property>
-            <property name="default">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>Spacer1_2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>260</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="KPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>buttonApply</cstring>
-            </property>
-            <property name="text">
-                <string>Appl&amp;y</string>
-            </property>
-            <property name="accel">
-                <string>Alt+Y</string>
-            </property>
-        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -2729,7 +2705,6 @@ e</string>
     <tabstop>staticRadio</tabstop>
     <tabstop>sharedRadio</tabstop>
     <tabstop>checkLibtool</tabstop>
-    <tabstop>checkPkgconf</tabstop>
     <tabstop>m_targetLibraryVersion</tabstop>
     <tabstop>insideinc_listview</tabstop>
     <tabstop>insideIncMoveUpBtn</tabstop>
@@ -2836,6 +2811,8 @@ e</string>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
@@ -2900,7 +2877,5 @@ e</string>
     <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>ktextedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

@@ -275,10 +275,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     else
         myProjectItem->removeValue( "CONFIG", "compile_libtool" );
 
-    if ( checkPkgconf->isChecked() )
-        myProjectItem->addValue( "CONFIG", "create_pc" );
-    else
-        myProjectItem->removeValue( "CONFIG", "create_pc" );
     if ( checkConsole->isChecked() )
         myProjectItem->addValue( "CONFIG", "console" );
     else
