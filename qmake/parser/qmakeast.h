@@ -25,11 +25,13 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 
+#include "qmakeexport.h"
+
 namespace QMake
 {
     class Parser;
 
-    class AST
+    class QMAKEPARSER_EXPORT AST
     {
         public:
             AST( const QString ws = "", AST* parent = 0 );
@@ -48,14 +50,14 @@ namespace QMake
     };
 
 
-    class StatementAST : public AST
+    class QMAKEPARSER_EXPORT StatementAST : public AST
     {
         public:
             StatementAST( const QString& ws = "", AST* parent = 0 ) : AST( ws, parent )
             {}
     };
 
-    class ProjectAST : public AST
+    class QMAKEPARSER_EXPORT ProjectAST : public AST
     {
         public:
             ProjectAST( AST* parent = 0 );
@@ -78,7 +80,7 @@ namespace QMake
             friend class QMake::Parser;
     };
 
-    class AssignmentAST : public StatementAST
+    class QMAKEPARSER_EXPORT AssignmentAST : public StatementAST
     {
         public:
             AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& comment, const QString& = "", AST* parent = 0 );
@@ -100,7 +102,7 @@ namespace QMake
 
     };
 
-    class NewlineAST : public StatementAST
+    class QMAKEPARSER_EXPORT NewlineAST : public StatementAST
     {
         public:
             NewlineAST( const QString& ws = "", AST* parent = 0 ) : StatementAST( ws, parent )
@@ -111,7 +113,7 @@ namespace QMake
             }
     };
 
-    class CommentAST : public StatementAST
+    class QMAKEPARSER_EXPORT CommentAST : public StatementAST
     {
         public:
             CommentAST( const QString& comment, const QString& ws = "", AST* parent = 0 );
@@ -122,7 +124,7 @@ namespace QMake
             QString m_comment;
     };
 
-    class FunctionArgAST : public AST
+    class QMAKEPARSER_EXPORT FunctionArgAST : public AST
     {
         public:
             FunctionArgAST( const QString& ws = "", AST* parent = 0 );
@@ -132,7 +134,7 @@ namespace QMake
         private:
     };
 
-    class FunctionCallAST : public FunctionArgAST
+    class QMAKEPARSER_EXPORT FunctionCallAST : public FunctionArgAST
     {
         public:
             FunctionCallAST( const QString& name, const QString& begin, QList<FunctionArgAST*> args,
@@ -150,7 +152,7 @@ namespace QMake
             QString m_end;
     };
 
-    class SimpleFunctionArgAST : public FunctionArgAST
+    class QMAKEPARSER_EXPORT SimpleFunctionArgAST : public FunctionArgAST
     {
         public:
             SimpleFunctionArgAST( const QString& arg, const QString& ws = "", AST* parent = 0 );
@@ -163,7 +165,7 @@ namespace QMake
     };
 
 
-    class ScopeBodyAST: public AST
+    class QMAKEPARSER_EXPORT ScopeBodyAST: public AST
     {
         public:
             ScopeBodyAST( const QString& begin, QList<StatementAST*> stmts,
@@ -181,7 +183,7 @@ namespace QMake
             QString m_end;
     };
 
-    class ScopeAST : public StatementAST
+    class QMAKEPARSER_EXPORT ScopeAST : public StatementAST
     {
         public:
             enum ScopeType { Function, Simple };
@@ -202,7 +204,7 @@ namespace QMake
             ScopeBodyAST* m_body;
     };
 
-    class OrAST : public StatementAST
+    class QMAKEPARSER_EXPORT OrAST : public StatementAST
     {
         public:
             OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall,

@@ -1,6 +1,7 @@
 if(KDE4_BUILD_TESTS)
 
-include_directories(${CMAKE_SOURCE_DIR}/buildtools/importers/qmake/parser)
+include_directories(${CMAKE_SOURCE_DIR}/buildtools/importers/qmake/parser
+                    ${CMAKE_SOURCE_DIR}/buildtools/importers/qmake)
 
 set(parsetest_SRCS parsetest.cpp)
 kde4_automoc(qmake-parsetest ${parsetest_SRCS})

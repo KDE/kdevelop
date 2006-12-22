@@ -1,6 +1,8 @@
 project(kdevqmakeparser)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface )
+include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
+                     ${CMAKE_SOURCE_DIR}/buildtools/importers/qmake 
+                   )
 
 add_definitions(-fPIC)
 
