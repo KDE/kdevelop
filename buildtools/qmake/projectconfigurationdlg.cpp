@@ -270,24 +270,15 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         myProjectItem->addValue( "CONFIG", "ordered" );
     else
         myProjectItem->removeValue( "CONFIG", "ordered" );
-    QString libtoolconf;
-    if ( prjWidget->m_part->isQt4Project() )
-        libtoolconf = "create_libtool";
-    else
-        libtoolconf = "compile_libtool";
     if ( checkLibtool->isChecked() )
-        myProjectItem->addValue( "CONFIG", libtoolconf );
+        myProjectItem->addValue( "CONFIG", "compile_libtool" );
     else
-        myProjectItem->removeValue( "CONFIG", libtoolconf );
-    QString pkgconfenable;
-    if ( prjWidget->m_part->isQt4Project() )
-        pkgconfenable = "create_pkgconf";
-    else
-        pkgconfenable = "create_pc";
+        myProjectItem->removeValue( "CONFIG", "compile_libtool" );
+
     if ( checkPkgconf->isChecked() )
-        myProjectItem->addValue( "CONFIG", pkgconfenable );
+        myProjectItem->addValue( "CONFIG", "create_pc" );
     else
-        myProjectItem->removeValue( "CONFIG", pkgconfenable );
+        myProjectItem->removeValue( "CONFIG", "create_pc" );
     if ( checkConsole->isChecked() )
         myProjectItem->addValue( "CONFIG", "console" );
     else
@@ -567,6 +558,13 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     //CORBA
     myProjectItem->scope->setEqualOp( "IDL_COMPILER", QStringList( idlCmdEdit->url() ) );
     myProjectItem->updateValues( "IDL_OPTIONS", QStringList::split( " ", idlCmdOptionsEdit->text() ) );
+
+    QListViewItemIterator iter(customVariables);
+    for( ; iter.current() ; iter++ )
+    {
+        QListViewItem* item = iter.current();
+        myProjectItem->scope->updateCustomVariable( item->key(0, true).toUInt(), item->text(0), item->text(1), item->text(2) );
+    }
 }
 
 void ProjectConfigurationDlg::accept()
@@ -1544,18 +1542,7 @@ void ProjectConfigurationDlg::removeCustomValueClicked()
 
     activateApply( 0 );
 }
-void ProjectConfigurationDlg::editCustomValueClicked()
-{
-    QListViewItem * item = customVariables->currentItem();
-    if ( item )
-    {
-        item->setText( 0, customVariableName->text() );
-        item->setText( 1, customVariableOp->currentText() );
-        item->setText( 2, customVariableData->text() );
-        myProjectItem->scope->updateCustomVariable( item->key(0, true).toUInt(), item->text(0), item->text(1), item->text(2) );
-    }
-    activateApply( 0 );
-}
+
 void ProjectConfigurationDlg::upCustomValueClicked()
 {
     // custom vars
@@ -1584,6 +1571,9 @@ void ProjectConfigurationDlg::downCustomValueClicked()
 
 void ProjectConfigurationDlg::newCustomVariableActive( )
 {
+    customVariableOp->blockSignals(true);
+    customVariableName->blockSignals(true);
+    customVariableData->blockSignals(true);
     QListViewItem * item = customVariables->currentItem();
     if ( item )
     {
@@ -1592,6 +1582,9 @@ void ProjectConfigurationDlg::newCustomVariableActive( )
         customVariableOp->setCurrentText( item->text( 1 ) );
         customVariableName->setFocus();
     }
+    customVariableOp->blockSignals(false);
+    customVariableName->blockSignals(false);
+    customVariableData->blockSignals(false);
 }
 
 void ProjectConfigurationDlg::groupLibrariesChanged( int )
@@ -1876,6 +1869,18 @@ void ProjectConfigurationDlg::addAppDeps()
 
         prjItem->scope->saveToFile();
     }
+}
+
+void ProjectConfigurationDlg::customVarChanged()
+{
+    QListViewItem * item = customVariables->currentItem();
+    if ( item )
+    {
+        item->setText( 0, customVariableName->text() );
+        item->setText( 1, customVariableOp->currentText() );
+        item->setText( 2, customVariableData->text() );
+    }
+    activateApply( 0 );
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

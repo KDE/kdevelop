@@ -102,7 +102,6 @@ public slots:
 
     virtual void addCustomValueClicked();
     virtual void removeCustomValueClicked();
-    virtual void editCustomValueClicked();
     virtual void upCustomValueClicked();
     virtual void downCustomValueClicked();
 
@@ -124,6 +123,7 @@ public slots:
     void updateBuildOrderControl();
     void updateDependenciesControl();
     virtual void activateApply(QListViewItem*);
+    virtual void customVarChanged();
 
 protected:
     QListView *prjList;

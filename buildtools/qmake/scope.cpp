@@ -465,8 +465,10 @@ Scope* Scope::createSimpleScope( const QString& scopename )
     ast->setDepth( m_root->depth() );
     m_root->addChildAST( ast );
     m_root->addChildAST( new QMake::NewLineAST() );
+    /* We can't unconditionally add the scope name to CONFIG, scope might be win32 which may only be in CONFIG under windows.
     if ( m_part->isQt4Project() )
         addToPlusOp( "CONFIG", QStringList( scopename ) );
+    */
     Scope* simpleScope = new Scope( getNextScopeNum(), this, ast, m_defaultopts, m_part );
 
     if( simpleScope->scopeType() != Scope::InvalidScope )
