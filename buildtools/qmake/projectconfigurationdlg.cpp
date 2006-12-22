@@ -623,7 +623,11 @@ void ProjectConfigurationDlg::updateControls()
         }
 
         if( !staticRadio->isChecked() && !sharedRadio->isChecked() )
+	{
             staticRadio->setChecked( true );
+            checkPlugin->setEnabled( false );
+            checkDesigner->setEnabled( false );
+	}
 
         if ( configValues.findIndex( "plugin" ) != -1 )
             checkPlugin->setChecked( true );
@@ -633,14 +637,10 @@ void ProjectConfigurationDlg::updateControls()
             checkDesigner->setChecked( true );
         else
             checkDesigner->setChecked( false );
-        if ( configValues.findIndex( "create_libtool" ) != -1 )
+        if ( configValues.findIndex( "compile_libtool" ) != -1 )
             checkLibtool->setChecked( true );
         else
             checkLibtool->setChecked( false );
-        if ( configValues.findIndex( "create_pkgconf" ) != -1 )
-            checkPkgconf->setChecked( true );
-        else
-            checkPkgconf->setChecked( false );
     }
     else if ( templateValues.findIndex( "subdirs" ) != -1 )
     {

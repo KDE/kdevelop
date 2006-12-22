@@ -35,6 +35,9 @@
             <property name="text">
                 <string>&amp;Cancel</string>
             </property>
+            <property name="accel">
+                <string>Alt+C</string>
+            </property>
         </widget>
         <widget class="KPushButton" row="1" column="1">
             <property name="name">
@@ -72,10 +75,10 @@
                 <cstring>buttonApply</cstring>
             </property>
             <property name="text">
-                <string>Appl&amp;y</string>
+                <string>&amp;Apply</string>
             </property>
             <property name="accel">
-                <string>Alt+Y</string>
+                <string>Alt+A</string>
             </property>
         </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="4">
@@ -93,7 +96,7 @@
                     <cstring>buildTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Basics</string>
+                    <string>Basics</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -115,10 +118,10 @@
                                     <cstring>radioLibrary</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Librar&amp;y</string>
+                                    <string>&amp;Library</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+Y</string>
+                                    <string>Alt+L</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create a library</string>
@@ -129,10 +132,10 @@
                                     <cstring>radioSubdirs</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>S&amp;ubdirectories</string>
+                                    <string>&amp;Subdirectories</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+U</string>
+                                    <string>Alt+S</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>This project holds subdirectories</string>
@@ -146,10 +149,7 @@
                                     <bool>false</bool>
                                 </property>
                                 <property name="text">
-                                    <string>Ord&amp;ered</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
+                                    <string>Ordered</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Build the subprojects in the order they are listed in the .pro file</string>
@@ -176,11 +176,14 @@
                                 <property name="name">
                                     <cstring>radioApplication</cstring>
                                 </property>
+                                <property name="backgroundOrigin">
+                                    <enum>WidgetOrigin</enum>
+                                </property>
                                 <property name="text">
-                                    <string>Applicati&amp;on</string>
+                                    <string>A&amp;pplication</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+O</string>
+                                    <string>Alt+P</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create an application</string>
@@ -204,7 +207,7 @@
                                     <cstring>TextLabel1_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Path:</string>
+                                    <string>Path:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>m_targetPath</cstring>
@@ -215,7 +218,7 @@
                                     <cstring>TextLabel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Output &amp;file:</string>
+                                    <string>Output file:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>m_targetOutputFile</cstring>
@@ -244,10 +247,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Browse...</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+B</string>
+                                    <string>Browse...</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Browse</string>
@@ -276,10 +276,10 @@
                                     <cstring>checkInstallTarget</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>I&amp;nstall</string>
+                                    <string>Install</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+N</string>
+                                    <string></string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="1">
@@ -287,7 +287,7 @@
                                     <cstring>textLabel1_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Installation path:</string>
+                                    <string>Installation path:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>m_InstallTargetPath</cstring>
@@ -300,7 +300,7 @@
                             <cstring>groupBox6</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Makefile</string>
+                            <string>Makefile</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -373,7 +373,7 @@
                                             <cstring>radioDebugMode</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Debug</string>
+                                            <string>Debug</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+D</string>
@@ -387,7 +387,7 @@
                                             <cstring>radioReleaseMode</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Release</string>
+                                            <string>Release</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+R</string>
@@ -429,7 +429,7 @@ e</string>
                                             <cstring>checkWarning</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Enable &amp;warnings</string>
+                                            <string>Enable warnings</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+W</string>
@@ -472,7 +472,7 @@ e</string>
                                     <cstring>checkOpenGL</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Open&amp;GL</string>
+                                    <string>OpenGL</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+G</string>
@@ -486,7 +486,7 @@ e</string>
                                     <cstring>stlCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;STL</string>
+                                    <string>STL</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+S</string>
@@ -497,7 +497,7 @@ e</string>
                                     <cstring>checkThread</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Thread</string>
+                                    <string>Thread</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+T</string>
@@ -511,7 +511,7 @@ e</string>
                                     <cstring>checkQt</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Qt</string>
+                                    <string>Qt</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+Q</string>
@@ -525,7 +525,7 @@ e</string>
                                     <cstring>checkX11</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>X&amp;11</string>
+                                    <string>X11</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+1</string>
@@ -547,7 +547,7 @@ e</string>
                                     <cstring>rttiCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>RTT&amp;I</string>
+                                    <string>RTTI</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+I</string>
@@ -574,7 +574,7 @@ e</string>
                                     <cstring>exceptionCheck</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>E&amp;xceptions </string>
+                                    <string>Eceptions </string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+X</string>
@@ -677,7 +677,7 @@ e</string>
                                     <cstring>checkQt3Support</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Qt&amp;3 Support</string>
+                                    <string>Qt3 Support</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="3">
@@ -685,7 +685,7 @@ e</string>
                                     <cstring>checkQDBus</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>QDBus (Qt4.&amp;2)</string>
+                                    <string>QDBus (Qt4.2)</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="2">
@@ -749,7 +749,7 @@ e</string>
                                             <cstring>staticRadio</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Build as st&amp;atic library</string>
+                                            <string>Build as static library</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+A</string>
@@ -766,7 +766,7 @@ e</string>
                                             <bool>false</bool>
                                         </property>
                                         <property name="text">
-                                            <string>Pl&amp;ugin</string>
+                                            <string>Plugin</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+U</string>
@@ -780,7 +780,7 @@ e</string>
                                             <bool>true</bool>
                                         </property>
                                         <property name="text">
-                                            <string>Ma&amp;ke libtool archive</string>
+                                            <string>Make libtool archive</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+K</string>
@@ -821,7 +821,7 @@ e</string>
                                             <cstring>sharedRadio</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Build as s&amp;hared library</string>
+                                            <string>Build as shared library</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+H</string>
@@ -854,7 +854,7 @@ e</string>
                                                     <cstring>textLabel1</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Librar&amp;y version:</string>
+                                                    <string>Library version:</string>
                                                 </property>
                                                 <property name="buddy" stdset="0">
                                                     <cstring>m_targetLibraryVersion</cstring>
@@ -895,7 +895,7 @@ e</string>
                     <cstring>incaddTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>I&amp;ncludes</string>
+                    <string>Includes</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -917,7 +917,7 @@ e</string>
                                     <cstring>insideIncMoveUpBtn</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Move &amp;Up</string>
+                                    <string>Move Up</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+U</string>
@@ -928,7 +928,7 @@ e</string>
                                     <cstring>insideIncMoveDownBtn</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Move &amp;Down</string>
+                                    <string>Move Down</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+D</string>
@@ -1004,7 +1004,7 @@ e</string>
                                     <cstring>outsideIncAddBtn</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Add...</string>
+                                    <string>Add...</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+A</string>
@@ -1015,7 +1015,7 @@ e</string>
                                     <cstring>outsideIncRemoveBtn</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Remove</string>
+                                    <string>Remove</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+R</string>
@@ -1026,7 +1026,7 @@ e</string>
                                     <cstring>outsideIncEditBtn</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Edit</string>
+                                    <string>Edit</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+E</string>
@@ -1037,7 +1037,7 @@ e</string>
                                     <cstring>outsideIncMoveUpBtn</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Move U&amp;p</string>
+                                    <string>Move Up</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+P</string>
@@ -1048,7 +1048,7 @@ e</string>
                                     <cstring>outsideIncMoveDownBtn</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Move Dow&amp;n</string>
+                                    <string>Move Down</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+N</string>
@@ -1080,7 +1080,7 @@ e</string>
                     <cstring>libAddTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Libr&amp;aries</string>
+                    <string>Libraries</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1126,7 +1126,7 @@ e</string>
                                             <cstring>outsideLibDirAddBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Add...</string>
+                                            <string>Add...</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1134,7 +1134,7 @@ e</string>
                                             <cstring>outsideLibDirRemoveBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Remove</string>
+                                            <string>Remove</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1142,7 +1142,7 @@ e</string>
                                             <cstring>outsideLibDirEditBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Edit</string>
+                                            <string>Edit</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1150,7 +1150,7 @@ e</string>
                                             <cstring>outsideLibDirMoveUpBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move U&amp;p</string>
+                                            <string>Move Up</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1158,7 +1158,7 @@ e</string>
                                             <cstring>outsideLibDirMoveDownBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move Dow&amp;n</string>
+                                            <string>Move Down</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1222,7 +1222,7 @@ e</string>
                                             <cstring>outsideLibAddBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Add...</string>
+                                            <string>Add...</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1230,7 +1230,7 @@ e</string>
                                             <cstring>outsideLibRemoveBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Remove</string>
+                                            <string>Remove</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1238,7 +1238,7 @@ e</string>
                                             <cstring>outsideLibEditBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Edit</string>
+                                            <string>Edit</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1246,7 +1246,7 @@ e</string>
                                             <cstring>outsideLibMoveUpBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move U&amp;p</string>
+                                            <string>Move Up</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1254,7 +1254,7 @@ e</string>
                                             <cstring>outsideLibMoveDownBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move Dow&amp;n</string>
+                                            <string>Move Down</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1318,7 +1318,7 @@ e</string>
                                             <cstring>insideLibMoveUpBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move &amp;Up</string>
+                                            <string>Move Up</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1326,7 +1326,7 @@ e</string>
                                             <cstring>insideLibMoveDownBtn</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move &amp;Down</string>
+                                            <string>Move Down</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1357,7 +1357,7 @@ e</string>
                     <cstring>depTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Dependencies</string>
+                    <string>Dependencies</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -1406,7 +1406,7 @@ e</string>
                                             <cstring>intMoveUp_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move &amp;Up</string>
+                                            <string>Move Up</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+U</string>
@@ -1417,7 +1417,7 @@ e</string>
                                             <cstring>intMoveDown_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move &amp;Down</string>
+                                            <string>Move Down</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+D</string>
@@ -1484,7 +1484,7 @@ e</string>
                                             <cstring>extAdd_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Add...</string>
+                                            <string>Add...</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+A</string>
@@ -1495,7 +1495,7 @@ e</string>
                                             <cstring>extRemove_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Remove</string>
+                                            <string>Remove</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+R</string>
@@ -1506,7 +1506,7 @@ e</string>
                                             <cstring>extEdit_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Edit</string>
+                                            <string>Edit</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1514,7 +1514,7 @@ e</string>
                                             <cstring>extMoveUp_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move U&amp;p</string>
+                                            <string>Move Up</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1522,7 +1522,7 @@ e</string>
                                             <cstring>extMoveDown_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move Dow&amp;n</string>
+                                            <string>Move Down</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1589,7 +1589,7 @@ e</string>
                                             <cstring>buildmoveup_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move &amp;Up</string>
+                                            <string>Move Up</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+U</string>
@@ -1600,7 +1600,7 @@ e</string>
                                             <cstring>buildmovedown_button</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Move &amp;Down</string>
+                                            <string>Move Down</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+D</string>
@@ -1634,7 +1634,7 @@ e</string>
                     <cstring>buildOptsTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Bu&amp;ild Options</string>
+                    <string>Build Options</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -1680,7 +1680,7 @@ e</string>
                                                     <cstring>TextLabel2_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>&amp;Debug flags:</string>
+                                                    <string>Debug flags:</string>
                                                 </property>
                                                 <property name="buddy" stdset="0">
                                                     <cstring>m_debugFlags</cstring>
@@ -1691,7 +1691,7 @@ e</string>
                                                     <cstring>TextLabel2_2_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>&amp;Release flags:</string>
+                                                    <string>Release flags:</string>
                                                 </property>
                                                 <property name="buddy" stdset="0">
                                                     <cstring>m_releaseFlags</cstring>
@@ -1760,7 +1760,7 @@ e</string>
                                             <cstring>mocdir_label</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;MOC files:</string>
+                                            <string>MOC files:</string>
                                         </property>
                                         <property name="buddy" stdset="0">
                                             <cstring>mocdir_url</cstring>
@@ -1771,7 +1771,7 @@ e</string>
                                             <cstring>uidir_label</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;UI files:</string>
+                                            <string>UI files:</string>
                                         </property>
                                         <property name="buddy" stdset="0">
                                             <cstring>uidir_url</cstring>
@@ -1782,7 +1782,7 @@ e</string>
                                             <cstring>objdir_label</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Ob&amp;ject files:</string>
+                                            <string>Object files:</string>
                                         </property>
                                         <property name="buddy" stdset="0">
                                             <cstring>objdir_url</cstring>
@@ -1855,7 +1855,7 @@ e</string>
                                     <cstring>TextLabel2_3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Compiler o&amp;ptions:</string>
+                                    <string>Compiler options:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>idlCmdOptionsEdit</cstring>
@@ -1876,7 +1876,7 @@ e</string>
                                     <cstring>TextLabel1_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;IDL compiler:</string>
+                                    <string>IDL compiler:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>idlCmdEdit</cstring>
@@ -1908,7 +1908,7 @@ e</string>
                     <cstring>custVarsTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Custom &amp;Variables</string>
+                    <string>Custom Variables</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -1998,7 +1998,7 @@ e</string>
                                                     <cstring>varAdd_button</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>&amp;New</string>
+                                                    <string>New</string>
                                                 </property>
                                                 <property name="accel">
                                                     <string>Alt+N</string>
@@ -2009,7 +2009,7 @@ e</string>
                                                     <cstring>varRemove_button</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>&amp;Remove</string>
+                                                    <string>Remove</string>
                                                 </property>
                                                 <property name="accel">
                                                     <string>Alt+R</string>
@@ -2020,7 +2020,7 @@ e</string>
                                                     <cstring>varMoveUp_button</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Move &amp;Up</string>
+                                                    <string>Move Up</string>
                                                 </property>
                                             </widget>
                                             <widget class="KPushButton">
@@ -2028,7 +2028,7 @@ e</string>
                                                     <cstring>varMoveDown_button</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Move Dow&amp;n</string>
+                                                    <string>Move Down</string>
                                                 </property>
                                             </widget>
                                         </vbox>
@@ -2680,31 +2680,50 @@ e</string>
     </connection>
 </connections>
 <tabstops>
+    <tabstop>TabBuild</tabstop>
     <tabstop>radioApplication</tabstop>
     <tabstop>radioLibrary</tabstop>
     <tabstop>radioSubdirs</tabstop>
+    <tabstop>checkOrdered</tabstop>
     <tabstop>m_targetPath</tabstop>
     <tabstop>Browse</tabstop>
     <tabstop>m_targetOutputFile</tabstop>
     <tabstop>checkInstallTarget</tabstop>
     <tabstop>m_InstallTargetPath</tabstop>
     <tabstop>makefile_url</tabstop>
-    <tabstop>TabBuild</tabstop>
     <tabstop>radioDebugMode</tabstop>
     <tabstop>radioReleaseMode</tabstop>
+    <tabstop>radioDebugReleaseMode</tabstop>
     <tabstop>checkWarning</tabstop>
-    <tabstop>checkQt</tabstop>
+    <tabstop>checkBuildAll</tabstop>
     <tabstop>checkOpenGL</tabstop>
     <tabstop>stlCheck</tabstop>
     <tabstop>checkThread</tabstop>
+    <tabstop>checkQt</tabstop>
     <tabstop>checkX11</tabstop>
-    <tabstop>rttiCheck</tabstop>
-    <tabstop>exceptionCheck</tabstop>
-    <tabstop>checkConsole</tabstop>
     <tabstop>checkPCH</tabstop>
+    <tabstop>rttiCheck</tabstop>
+    <tabstop>checkWindows</tabstop>
+    <tabstop>exceptionCheck</tabstop>
+    <tabstop>editConfigExtra</tabstop>
+    <tabstop>checkConsole</tabstop>
+    <tabstop>checkQt4OpenGL</tabstop>
+    <tabstop>checkQt4Gui</tabstop>
+    <tabstop>checkQt4Core</tabstop>
+    <tabstop>checkQt4SQL</tabstop>
+    <tabstop>checkQt4SVG</tabstop>
+    <tabstop>checkQt4XML</tabstop>
+    <tabstop>checkQt3Support</tabstop>
+    <tabstop>checkQDBus</tabstop>
+    <tabstop>checkTestlib</tabstop>
+    <tabstop>checkAssistant</tabstop>
+    <tabstop>checkUiTools</tabstop>
+    <tabstop>checkQt4Network</tabstop>
     <tabstop>staticRadio</tabstop>
-    <tabstop>sharedRadio</tabstop>
+    <tabstop>checkPlugin</tabstop>
     <tabstop>checkLibtool</tabstop>
+    <tabstop>sharedRadio</tabstop>
+    <tabstop>checkDesigner</tabstop>
     <tabstop>m_targetLibraryVersion</tabstop>
     <tabstop>insideinc_listview</tabstop>
     <tabstop>insideIncMoveUpBtn</tabstop>
@@ -2739,12 +2758,16 @@ e</string>
     <tabstop>extEdit_button</tabstop>
     <tabstop>extMoveUp_button</tabstop>
     <tabstop>extMoveDown_button</tabstop>
+    <tabstop>buildorder_listview</tabstop>
+    <tabstop>buildmoveup_button</tabstop>
+    <tabstop>buildmovedown_button</tabstop>
     <tabstop>m_debugFlags</tabstop>
     <tabstop>m_releaseFlags</tabstop>
     <tabstop>m_defines</tabstop>
     <tabstop>mocdir_url</tabstop>
     <tabstop>uidir_url</tabstop>
     <tabstop>objdir_url</tabstop>
+    <tabstop>rccdir_url</tabstop>
     <tabstop>idlCmdEdit</tabstop>
     <tabstop>idlCmdOptionsEdit</tabstop>
     <tabstop>customVariables</tabstop>
@@ -2753,7 +2776,10 @@ e</string>
     <tabstop>varMoveUp_button</tabstop>
     <tabstop>varMoveDown_button</tabstop>
     <tabstop>customVariableName</tabstop>
+    <tabstop>customVariableOp</tabstop>
+    <tabstop>customVariableData</tabstop>
     <tabstop>buttonOk</tabstop>
+    <tabstop>buttonApply</tabstop>
     <tabstop>buttonCancel</tabstop>
 </tabstops>
 <includes>
