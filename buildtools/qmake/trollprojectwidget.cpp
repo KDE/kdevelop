@@ -1646,7 +1646,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         int idViewUIH = -2;
         int idFileProperties = -2;
         int idEditInstallPattern = -2;
-	
+
         if ( !fitem->uiFileLink.isEmpty() )
         {
             idUpdateWidgetclass = popup.insertItem( SmallIconSet( "qmake_subclass" ), i18n( "Edit ui-Subclass..." ) );
