@@ -23,10 +23,12 @@
 
 #include <QtCore/QString>
 
+#include "qmakeexport.h"
+
 namespace QMake
 {
     class ProjectAST;
-    class Parser
+    class QMAKEPARSER_EXPORT Parser
     {
         public:
             /**
