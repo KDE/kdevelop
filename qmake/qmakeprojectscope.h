@@ -46,6 +46,8 @@ class QMakeProjectScope
 
         KUrl absoluteDirUrl() const;
 
+        KUrl absoluteFileUrl() const { return m_projectFileUrl; }
+
     private:
         QMake::ProjectAST* m_ast;
         KUrl m_projectFileUrl;

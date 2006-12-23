@@ -39,11 +39,11 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
     : m_ast(0)
 {
     m_projectFileUrl = projectfile;
-    QFileInfo fi( projectfile.path() );
+    QFileInfo fi( projectfile.toLocalFile() );
     kDebug(9024) << k_funcinfo << "Is " << projectfile << " a dir?" << fi.isDir() << endl;
     if( fi.isDir() )
     {
-        QDir dir( m_projectFileUrl.path() );
+        QDir dir( m_projectFileUrl.toLocalFile() );
         QStringList l = dir.entryList( QStringList() << "*.pro" );
 
         QString projectfile;
@@ -58,9 +58,9 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
         m_projectFileUrl.adjustPath( KUrl::AddTrailingSlash );
         m_projectFileUrl.setFileName( projectfile );
     }
-    if( QMake::Parser::parseFile( m_projectFileUrl.pathOrUrl(), &m_ast ) != 0 )
+    if( QMake::Parser::parseFile( m_projectFileUrl.toLocalFile(), &m_ast ) != 0 )
     {
-        kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.pathOrUrl() << endl;
+        kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.toLocalFile() << endl;
         m_ast = 0;
         m_projectFileUrl = KUrl();
     }
