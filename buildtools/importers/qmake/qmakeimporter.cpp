@@ -45,6 +45,7 @@ QMakeImporter::QMakeImporter( QObject* parent,
         : KDevBuildManager( QMakeSupportFactory::instance(), parent ), m_rootItem( 0L )
 {
     m_project = 0;
+
     /*    QMakeSettings* settings = QMakeSettings::self();
 
         //what do the settings say about our generator?
@@ -55,7 +56,7 @@ QMakeImporter::QMakeImporter( QObject* parent,
 
 QMakeImporter::~QMakeImporter()
 {
-    //delete m_rootItem;
+    delete m_rootItem;
 }
 
 KDevProject* QMakeImporter::project() const
@@ -100,33 +101,14 @@ QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item 
 KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
                                         const KUrl& dirName )
 {
-    /*    QString buildDir = QMakeSettings::self()->buildFolder();
-        kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
-        KUrl qmakeInfoFile(buildDir);
-        qmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
-        qmakeInfoFile.addPath("qmakeinfo.xml");
-        kDebug(9025) << k_funcinfo << "file is " << qmakeInfoFile.path() << endl;
-        if ( !qmakeInfoFile.isLocalFile() )
-        {
-            //FIXME turn this into a real warning
-            kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" << endl;
-        }
-        else
-        {
-            m_projectInfo = m_xmlParser.parse( qmakeInfoFile );
-            FolderInfo rootFolder = m_projectInfo.rootFolder;
-            m_rootItem = new QMakeFolderItem( rootFolder, 0 );
-            m_rootItem->setText( KDevCore::activeProject()->name() );
-        }*/
-
     if( !dirName.isLocalFile() )
     {
         //FIXME turn this into a real warning
         kWarning(9025) << "not a local file. QMake support doesn't handle remote projects" << endl;
     }else
     {
-        QFileInfo fi( dirName.path() );
-        QDir dir( dirName.path() );
+        QFileInfo fi( dirName.toLocalFile() );
+        QDir dir( dirName.toLocalFile() );
         QStringList l = dir.entryList( QStringList() << "*.pro" );
 
         QString projectfile;
@@ -148,16 +130,28 @@ KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
     return m_rootItem;
 }
 
-KUrl QMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
+KUrl QMakeImporter::findMakefile( KDevProjectFolderItem* folder ) const
 {
-    Q_UNUSED( dom );
-    return KUrl();
+
+    QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
+    if( !qmitem )
+    {
+        return KUrl();
+    }
+    return qmitem->projectScope()->absoluteFileUrl();
 }
 
-KUrl::List QMakeImporter::findMakefiles( KDevProjectFolderItem* dom ) const
+KUrl::List QMakeImporter::findMakefiles( KDevProjectFolderItem* folder ) const
 {
-    Q_UNUSED( dom );
-    return KUrl::List();
+    QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
+    if( !qmitem )
+    {
+        return KUrl::List();
+    }
+    KUrl::List l;
+
+    l.append( qmitem->projectScope()->absoluteFileUrl() );
+    return l;
 }
 
 QList<KDevProjectTargetItem*> QMakeImporter::targets() const
