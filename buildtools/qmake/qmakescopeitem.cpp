@@ -173,7 +173,10 @@ void GroupItem::addFileToScope( const QString& filename )
             owner->addValue( "HEADERS", file );
             break;
         case GroupItem::Forms:
-            owner->addValue( "FORMS", file );
+        if( owner->m_widget->isTMakeProject() )
+                owner->addValue( "INTERFACES", file );
+            else
+                owner->addValue( "FORMS", file );
             break;
         case GroupItem::IDLs:
             owner->addValue( "IDLS", file );
