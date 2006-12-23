@@ -2352,7 +2352,7 @@ void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
 void TrollProjectWidget::slotProjectDirty(const QString& path)
 {
     kdDebug(9024) << "File is dirty:" << path << " using method " << endl;
-    if( KMessageBox::warningYesNo(this, i18n("The project file \"%1\" has changed on disk.\n\nDo you want to reload the it?").arg(path), i18n("Project File Changed"), i18n("Reload"), i18n("Do Not Reload"), "trollproject_reload_project_file" ) != KMessageBox::No )
+    if( KMessageBox::warningYesNo(this, i18n("The project file \"%1\" has changed on disk\n(Or you have \"%2\" opened in the editor, which also triggers a reload when you change something in the QMake Manager).\n\nDo you want to reload the it?").arg(path).arg(path), i18n("Project File Changed"), i18n("Reload"), i18n("Do Not Reload"), "trollproject_reload_project_file" ) != KMessageBox::No )
     {
         m_part->dirWatch()->stopScan();
         QListViewItemIterator it(m_rootSubproject);
