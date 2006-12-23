@@ -15,6 +15,7 @@
 #include "doxygenconfigwidget.h"
 #include "configwidgetproxy.h"
 #include "config.h"
+#include "kdevappfrontend.h"
 
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
@@ -82,7 +83,6 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     m_actionDocumentFunction->setWhatsThis(i18n("<b>Document Current Function</b><p>Creates a documentation template according to a function's signature above a function definition/declaration."));
 
     m_tmpDir.setAutoDelete(true);
-    connect(&m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotPreviewProcessExited()));
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )));
     m_actionPreview = new KAction(i18n("Preview Doxygen Output"), 0, CTRL+ALT+Key_P, this, SLOT(slotRunPreview()), actionCollection(), "show_preview_doxygen_output");
     m_actionPreview->setToolTip( i18n("Show a preview of the Doxygen output of this file") );
@@ -348,7 +348,10 @@ void DoxygenPart::slotDoxClean()
 
 void DoxygenPart::slotPreviewProcessExited( )
 {
-	partController()->showDocument(KURL(m_tmpDir.name()+"html/index.html"));
+    KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend");
+    if ( appFrontend != 0 )
+        disconnect(appFrontend, 0, this, 0);
+    partController()->showDocument(KURL(m_tmpDir.name()+"html/index.html"));
 }
 
 void DoxygenPart::slotRunPreview( )
@@ -356,14 +359,15 @@ void DoxygenPart::slotRunPreview( )
     if (m_file.isNull())
         return;
 
-    if (m_process.isRunning()) {
-        if ( KMessageBox::warningYesNo(mainWindow()->main(), i18n("Previous Doxygen process is still running.\nDo you want to cancel that process?"))  == KMessageBox::Yes )
-            m_process.kill();
-	else
-            return;
-    }
+    KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend");
+    if ( appFrontend == 0 )
+        return;
 
-    m_process.clearArguments();
+    if ( appFrontend->isRunning() ) {
+        KMessageBox::information( mainWindow()->main(),
+            i18n("Another process is still running. Please wait until it's finished."));
+        return;
+    }
 
     m_tmpDir.unlink();
     m_tmpDir = KTempDir();
@@ -468,9 +472,8 @@ void DoxygenPart::slotRunPreview( )
     if (pStyle != 0 && !stylesheet.isNull())
         *pStyle->valueRef() = stylesheet;
 
-	m_process << "doxygen" << file.name().ascii();
-	m_process.start(KProcess::NotifyOnExit, KProcess::NoCommunication);
-
+    connect(appFrontend, SIGNAL(processExited()), this, SLOT(slotPreviewProcessExited()));
+    appFrontend->startAppCommand("", "doxygen \"" + file.name() + "\"", false);
 }
 
 void DoxygenPart::slotActivePartChanged( KParts::Part * part )

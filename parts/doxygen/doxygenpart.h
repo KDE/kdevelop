@@ -99,7 +99,6 @@ private:
 	ConfigWidgetProxy * _configProxy;
 
     //needed for doxygen preview
-    KProcess m_process;
     QString m_file;
     KTempDir m_tmpDir;
     KAction* m_action;
