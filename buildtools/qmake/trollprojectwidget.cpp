@@ -1106,7 +1106,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
             addSubprojectToItem( findSubprojectForPath( QFileInfo( fileName ).dirPath() ), QFileInfo( fileName ).fileName() );
         }else
         {
-            addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext ), noPathFileName );
+            addFileToCurrentSubProject( GroupItem::groupTypeForExtension( ext, m_part->isQt4Project() ), noPathFileName );
             slotOverviewSelectionChanged( m_shownSubproject );
             kdDebug(9024) << "emitting" << relativeToProjectRoot << " " << fileName << endl;
             if( relativeToProjectRoot )

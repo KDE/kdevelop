@@ -52,7 +52,7 @@ GroupItem::GroupItem( QListView *lv, GroupType type, const QString &text, QMakeS
     setPixmap( 0, SmallIcon( "tar" ) );
 }
 
-GroupItem::GroupType GroupItem::groupTypeForExtension( const QString &ext )
+GroupItem::GroupType GroupItem::groupTypeForExtension( const QString &ext, bool qt4project )
 {
     if ( ext == "cpp" || ext == "cc" || ext == "c" || ext == "C" || ext == "c++" || ext == "cxx" || ext == "ocl" )
         return Sources;
@@ -60,7 +60,7 @@ GroupItem::GroupType GroupItem::groupTypeForExtension( const QString &ext )
         return Headers;
     else if ( ext == "ui" )
         return Forms;
-    else if ( ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "xpm" || ext == "gif" || ext == "bmp" )
+    else if ( qt4project && ( ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "xpm" || ext == "gif" || ext == "bmp" ) )
         return Images;
     else if ( ext == "idl" )
         return IDLs;
