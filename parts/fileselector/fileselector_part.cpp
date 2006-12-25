@@ -97,7 +97,7 @@ void FileSelectorPart::newFile()
             m_filetree->dirOperator()->url().path());
         if (file.status == KDevCreateFile::CreatedFile::STATUS_NOTCREATED)
             KMessageBox::error(0, i18n("Cannot create file. Check whether the directory and filename are valid."));
-        else
+        else if (file.status != KDevCreateFile::CreatedFile::STATUS_CANCELED)
         {
             partController()->editDocument(KURL::fromPathOrURL(
                 file.dir + "/" + file.filename));

@@ -54,9 +54,10 @@ public:
 
   public:
     /**The status of a file.*/
-    enum Status { 
+    enum Status {
         STATUS_OK                /**<File was successfuly created.*/,
-        STATUS_NOTCREATED        /**<File was not created due to an error or user intervention.*/,
+        STATUS_CANCELED          /**<File was not created due to user intervention.*/,
+        STATUS_NOTCREATED        /**<File was not created due to error.*/,
         STATUS_NOTWITHINPROJECT  /**<File was successfuly created but not added to a project.*/
     };
 
@@ -97,7 +98,7 @@ public:
     QString dir;
     /**The name (without directory path).*/
     QString filename;
-    /**The extension of a file. Extension defines a "type" of the file template 
+    /**The extension of a file. Extension defines a "type" of the file template
     to use during file creation.*/
     QString ext;
     /**The subtype of a file. "Subtype" defines a file template to use when
@@ -124,7 +125,7 @@ public:
   KDevCreateFile(const KDevPluginInfo *info, QObject * parent = 0, const char * name = 0)
       :KDevPlugin(info, parent, name) {}
 
-  /**Creates a new file, within or without the project. 
+  /**Creates a new file, within or without the project.
   Supply as much information as you know. Leave what you don't know as QString::null.
   The user will be prompted as necessary for the missing information, and the
   file created, and added to the project as necessary.

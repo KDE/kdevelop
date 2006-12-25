@@ -180,7 +180,7 @@ void FileCreatePart::slotNewFile() {
   KDevCreateFile::CreatedFile createdFile = createNewFile();
   if (createdFile.status == KDevCreateFile::CreatedFile::STATUS_NOTCREATED)
     KMessageBox::error(0, i18n("Cannot create file. Check whether the directory and filename are valid."));
-  else
+  else if (createdFile.status != KDevCreateFile::CreatedFile::STATUS_CANCELED)
     openCreatedFile(createdFile);
 }
 
@@ -371,7 +371,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   int dialogResult = dialog.exec();
 
   if (dialogResult == KDialogBase::Rejected) {
-    result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
+    result.status = KDevCreateFile::CreatedFile::STATUS_CANCELED;
     return result;
   }
 
