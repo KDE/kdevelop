@@ -11,6 +11,7 @@
 
 #include <qdir.h>
 #include <qwidget.h>
+#include <qtimer.h>
 
 #include "appwizardpart.h"
 
@@ -30,6 +31,7 @@
 #include <kdevmakefrontend.h>
 #include <kdevpartcontroller.h>
 #include <kdevlanguagesupport.h>
+#include <kdevcore.h>
 #include <codemodel.h>
 
 AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringList &)
@@ -75,6 +77,20 @@ void AppWizardPart::slotImportProject()
 {
     ImportDialog dlg(this, 0, "import dialog");
     dlg.exec();
+}
+
+void AppWizardPart::openFilesAfterGeneration(const KURL::List urlsToOpen)
+{
+	m_urlsToOpen = urlsToOpen;
+	connect( core(), SIGNAL( projectOpened() ), this, SLOT( openFilesAfterGeneration() ) );
+}
+
+void AppWizardPart::openFilesAfterGeneration()
+{
+	for (KURL::List::const_iterator it = m_urlsToOpen.begin(); it != m_urlsToOpen.end(); ++it)
+		partController()->editDocument(*it);
+	m_urlsToOpen.clear();
+	disconnect( core(), SIGNAL( projectOpened() ), this, SLOT( openFilesAfterGeneration() ) );
 }
 
 #include "appwizardpart.moc"

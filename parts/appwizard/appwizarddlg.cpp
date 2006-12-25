@@ -32,6 +32,7 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qvalidator.h>
+#include <qtimer.h>
 #include <klistview.h>
 #include <kiconview.h>
 #include <kconfig.h>
@@ -1029,7 +1030,10 @@ void AppWizardDialog::openAfterGeneration()
 	// open the new project
 	m_part->core()->openProject( projectFile );
 
-	// open files to open
+	// calculate the list of files to open after generation and use
+	// timer to queue opening (so that files will not be opened before the project
+	// which is also queued by ProjectManager )
+	KURL::List urlsToOpen;
 	QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
 	for( ; it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it )
 	{
@@ -1037,9 +1041,10 @@ void AppWizardDialog::openAfterGeneration()
 		if ( !fileName.isNull() )
 		{
 			fileName = KMacroExpander::expandMacros(fileName, m_pCurrentAppInfo->subMap);
-			m_part->partController()->editDocument( fileName );
+			urlsToOpen.append(KURL::fromPathOrURL(fileName));
 		}
 	}
+	m_part->openFilesAfterGeneration(urlsToOpen);
 }
 
 void AppWizardDialog::pageChanged()

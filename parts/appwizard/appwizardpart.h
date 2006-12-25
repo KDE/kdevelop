@@ -16,6 +16,7 @@
 #include "kdevplugin.h"
 #include <qstring.h>
 #include <qstringlist.h>
+#include <kurl.h>
 
 class AppWizardDialog;
 
@@ -28,9 +29,17 @@ public:
     AppWizardPart( QObject *parent, const char *name, const QStringList & );
     ~AppWizardPart();
 
+    void openFilesAfterGeneration(const KURL::List urlsToOpen);
+
+public slots:
+    void openFilesAfterGeneration();
+
 private slots:
     void slotNewProject();
     void slotImportProject();
+
+private:
+    KURL::List m_urlsToOpen;
 };
 
 #endif

@@ -82,10 +82,10 @@ struct ApplicationInfo
     QMap<QString,QString> subMap;
 	QMap<QString,QString> subMapXML;
     QStringList includes;
-    
+
 	//QMap<autoKey,QVariant> subValues;
 	PropertyLib::PropertyList *propValues;
-	
+
     QValueList<installFile> fileList;
     QValueList<installArchive> archList;
     QValueList<installDir> dirList;
@@ -97,9 +97,9 @@ struct ApplicationInfo
 
     //! item pointer to the listview
     QListViewItem *item;
-	
+
 	//! pointer to favourite icon (NULL if there isn't one)
-	QIconViewItem *favourite;	
+	QIconViewItem *favourite;
 
     ApplicationInfo()
     : item( 0 ), favourite( 0 )
@@ -148,7 +148,7 @@ protected slots:
 	virtual void done(int r);
 	virtual void removeFavourite();
 	virtual void pageChanged();
-	
+
 private: //methods
 
     ApplicationInfo *templateForItem(QListViewItem *item);
@@ -159,19 +159,19 @@ private: //methods
 	void populateFavourites();
 	void addFavourite(QListViewItem* item, QString favouriteName="");
 	ApplicationInfo* findFavouriteInfo(QIconViewItem* item);
-	
+
 	void unpackArchive( const KArchiveDirectory *dir, const QString &dest, bool process );
 	bool copyFile( const installFile& file );
 	bool copyFile( const QString &source, const QString &dest, bool isXML, bool process );
 	QString kdevRoot(const QString &templateName ) const;
 	void openAfterGeneration();
-	
+
 	void setPermissions(const KArchiveFile *source, QString dest);
 	void setPermissions(const installFile &file);
-	
+
 	void checkAndHideItems(QListView *view);
 	bool checkAndHideItems(QListViewItem *item);
-	
+
 private: //data
 
     QPtrList<ApplicationInfo> m_appsInfo;
@@ -181,7 +181,7 @@ private: //data
 	QValueList<QListViewItem*> m_categoryItems;
     //! A list of currently available version control systems
 //    QDict<KDevVersionControl> m_availVcs;
-	
+
     QHBoxLayout *m_custom_options_layout;
 	PropertyLib::PropertyEditor *m_customOptions;
     AppWizardPart *m_part;
@@ -193,11 +193,11 @@ private: //data
     bool m_pathIsValid;
 	KPopupMenu* m_favouritesMenu;
 	KPopupMenu* m_templatesMenu;
-	
+
 	QDict<KDevLicense> m_licenses;
 	QDict<KDevVCSIntegrator> m_integrators;
 	QMap<int, VCSDialog*> m_integratorDialogs;
-	
+
 	ProfileSupport *m_profileSupport;
 
 public slots:
