@@ -54,12 +54,12 @@ FindDocumentation::FindDocumentation(DocumentationWidget* parent, const char* na
     connect( proc_man, SIGNAL(processExited( KProcess* )),
                 this, SLOT(procManExited( KProcess* )) );
     connect( proc_man, SIGNAL(receivedStdout( KProcess*, char*, int)),
-		this, SLOT(procManStdout( KProcess*, char*, int)) );
+		this, SLOT(procManReadStdout( KProcess*, char*, int)) );
 
     connect( proc_info, SIGNAL(processExited( KProcess* )),
                 this, SLOT(procInfoExited( KProcess* )) );
     connect( proc_info, SIGNAL(receivedStdout( KProcess*, char*, int)),
-		this, SLOT(procInfoStdout( KProcess*, char*, int)) );
+		this, SLOT(procInfoReadStdout( KProcess*, char*, int)) );
 
     result_list->header()->hide();
     result_list->setSorting(-1);
@@ -104,13 +104,7 @@ void FindDocumentation::clickOnItem( QListViewItem * item )
 
 void FindDocumentation::procInfoExited( KProcess* )
 {
-    // Read and process the data.
-    // Bear in mind that the data might be output in chunks.
-    if(proc_info->exitStatus() != 0 || !proc_info->normalExit())
-    {
-        proc_info_out = "";
-    }
-    else
+    if (proc_info->normalExit() && proc_info->exitStatus() == 0)
     {
         QStringList lines = QStringList::split("\n", proc_info_out);
         for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
@@ -122,6 +116,7 @@ void FindDocumentation::procInfoExited( KProcess* )
             newitem->setURL(KURL("info:/" + search_term->text()));
         }
     }
+    proc_info_out = "";
 
     if(info_item->firstChild() && m_options->goto_first_match->isOn())
     {
@@ -132,13 +127,7 @@ void FindDocumentation::procInfoExited( KProcess* )
 
 void FindDocumentation::procManExited( KProcess* )
 {
-    // Read and process the data.
-    // Bear in mind that the data might be output in chunks.
-    if (proc_man->exitStatus() != 0 || !proc_man->normalExit())
-    {
-        proc_man_out = "";
-    }
-    else
+    if (proc_man->normalExit() && proc_man->exitStatus() == 0)
     {
         QStringList lines = QStringList::split("\n", proc_man_out);
         for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
@@ -147,6 +136,7 @@ void FindDocumentation::procManExited( KProcess* )
             newitem->setURL(KURL("man://" + *it));
         }
     }
+    proc_man_out = "";
 
     if(man_item->firstChild() && m_options->goto_first_match->isOn())
     {
@@ -172,7 +162,7 @@ void FindDocumentation::searchInInfo()
     last_item = info_item;
 
     proc_info->clearArguments();
-    //Search Manpages
+    //Search Info documents
     *proc_info << "info";
     *proc_info << "-w";
     *proc_info << search_term->text();
