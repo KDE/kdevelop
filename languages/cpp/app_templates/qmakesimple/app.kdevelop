@@ -69,6 +69,11 @@
  </kdevdoctreeview>
  <kdevdebugger>
   <general>
+   <programargs></programargs>
+   <gdbpath>/usr/bin/gdb</gdbpath>
+   <breakonloadinglibs>true</breakonloadinglibs>
+   <separatetty>false</separatetty>
+   <floatingtoolbar>false</floatingtoolbar>  
    <dbgshell/>
   </general>
  </kdevdebugger>

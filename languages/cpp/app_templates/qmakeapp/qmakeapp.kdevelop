@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+xml version="1.0"?>
 <kdevelop>
   <general>
     <author>%{AUTHOR}</author>
@@ -75,7 +75,7 @@
       <dbgshell/>
       <breakpoints/>
       <programargs></programargs>
-      <gdbpath>/usr/bin/</gdbpath>
+      <gdbpath>/usr/bin/gdb</gdbpath>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>  
