@@ -31,7 +31,14 @@
 #include "tag.h"
 #include "kdevexport.h"
 
+#ifdef __MINGW32__
+// berkeley db 4.3 win32 redefines ssize_t 
+#define ssize_t ___ssize_t
+#endif
 #include <db.h>
+#ifdef __MINGW32__
+#undef ssize_t
+#endif
 
 /**
  * Catalog backend using the bdb

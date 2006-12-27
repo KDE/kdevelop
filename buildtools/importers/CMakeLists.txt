@@ -1,5 +1,6 @@
 add_subdirectory(cmake)
 add_subdirectory(generic) 
 add_subdirectory(automake) 
-add_subdirectory(qmake) 
-
+if (FLEX_EXECUTABLE OR CP_EXECUTABLE)
+  add_subdirectory(qmake) 
+endif (FLEX_EXECUTABLE OR CP_EXECUTABLE)
