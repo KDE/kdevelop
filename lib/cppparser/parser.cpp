@@ -4197,7 +4197,7 @@ bool Parser::parseIdentifierList( GroupAST::Node & node )
 	if( lex->lookAhead(0) == Token_identifier ){
 	    AST_FROM_TOKEN( tk, lex->index() );
 	    ast->addNode( tk );
-	    nextToken();
+// 	    nextToken();
 	}
 	ADVANCE( Token_identifier, "identifier" );
     }
