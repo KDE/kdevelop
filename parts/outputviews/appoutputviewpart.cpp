@@ -121,6 +121,7 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
     core()->running( this, true );
 
     mainWindow()->raiseView(m_widget);
+    mainWindow()->setViewAvailable( m_widget, true );
 }
 
 

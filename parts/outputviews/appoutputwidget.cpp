@@ -119,6 +119,9 @@ void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
 	int idFilter = popup.insertItem( i18n("Filter Output") );
 	popup.setItemChecked(idFilter, iFilterType == eFilterStr || iFilterType == eFilterRegExp);
 
+	popup.insertSeparator();
+	popup.insertItem( i18n("Hide view"), this, SLOT(hideView()) );
+
 	//pop it up
 	int res = popup.exec(p);
 
@@ -181,6 +184,11 @@ void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
 	} else if (res == idNoFilter) {
 		iFilterType = eNoFilter;
 	}
+}
+
+void AppOutputWidget::hideView()
+{
+	m_part->mainWindow()->setViewAvailable( this , false );
 }
 
 

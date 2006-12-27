@@ -40,6 +40,7 @@ public slots:
 	void insertStdoutLine(const QString &line);
 	void insertStderrLine(const QString &line);
 	void slotContextMenu(QListBoxItem *, const QPoint &);
+	void hideView();
 
 private:
 	virtual void childFinished(bool normal, int status);
