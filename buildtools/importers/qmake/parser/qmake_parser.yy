@@ -19,95 +19,105 @@
  * 02110-1301, USA.
  */
 
-#include <stdio.h>
-#include "qmakeast.h"
 #include <QtCore/QStack>
 #include <QtCore/QString>
 #include <kdebug.h>
-
-#define YYSTYPE_IS_DECLARED
-
-using namespace QMake;
+#include "qmakeast.h"
 
 /**
  The yylval type
 */
 
-struct Result {
-    Result() : node(0) {}
-    QString value;
-    AST* node;
-    QStringList values;
-    QList<StatementAST*> stmtlist;
-    QList<FunctionArgAST*> arglist;
-};
-
-typedef Result YYSTYPE;
-
-void yyerror(const char* str)
+namespace QMake
 {
-   printf("%s\n", str);
+    class Lexer;
+
+    struct Result {
+        Result() : node(0) {}
+        QString value;
+        QMake::AST* node;
+        QStringList values;
+        QList<QMake::StatementAST*> stmtlist;
+        QList<QMake::FunctionArgAST*> arglist;
+    };
+
+    #define YYSTYPE Result
+    typedef Result YYSTYPE;
 }
 
-int yylex();
-
-ProjectAST* project;
+extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 
 %}
 %debug
 
-%token WS IDENTIFIER SPECIALCHAR DOLLAR COLON COMMA LCURLY RCURLY
-%token LPAREN RPAREN QUOTE EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
-%token NEWLINE CONT COMMENT EXCLAM EMPTYLINE
-%token SEMICOLON VARIABLE FUNCTIONNAME ELSE
-%token FUNCTIONCALL
+%skeleton "lalr1.cc"
+%define "parser_class_name" "Parser"
+%name-prefix="QMake"
+%parse-param { QMake::Lexer* lexer }
+%parse-param { QMake::ProjectAST** project }
+%lex-param   { QMake::Lexer* lexer }
+
+%token WS VARIABLE DOLLAR COLON COMMA LCURLY RCURLY
+%token LPAREN RPAREN EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
+%token NEWLINE CONT COMMENT EXCLAM EMPTYLINE VAR_VALUE
+%token QMVARIABLE SHELLVARIABLE FUNCTIONNAME ELSE
+%token FUNCTIONCALL SCOPENAME QUOTED_VAR_VALUE FNVALUE
 
 %%
 
 project:
     {
-        project = new ProjectAST();
+        *project = new ProjectAST();
     }
     statements
+    {
+        foreach( StatementAST* s, $<stmtlist>1)
+        {
+            (*project)->addStatement( s );
+        }
+    }
     ;
 
 statements: statements statement
         {
-            project->addStatement( static_cast<StatementAST*>( $<node>2 ) );
+            $<stmtlist>$.append( static_cast<StatementAST*>( $<node>2 ) );
         }
     |
+        {
+            $<stmtlist>$.clear();
+        }
     ;
 
 statement: comment
         {
-$<node>$ = new CommentAST( $<value>1 );
+            $<node>$ = new CommentAST( $<value>1 );
         }
     | EMPTYLINE
 {
-$<node>$ = new NewlineAST( $<value>1 );
+    $<node>$ = new NewlineAST( $<value>1 );
 }
     | variable_assignment
 {
-$<node>$ = $<node>1;
+    $<node>$ = $<node>1;
 }
     | scope
 {
-$<node>$ = $<node>1;
+    $<node>$ = $<node>1;
 }
     | ws functioncall NEWLINE
 {
-$<node>$ = new ScopeAST( static_cast<FunctionCallAST*>( $<node>2 ), $<value>1 );
+    $<node>$ = new ScopeAST( static_cast<FunctionCallAST*>( $<node>2 ), $<value>1 );
 }
     | or_op
 {
-$<node>$ = $<node>1;
+    $<node>$ = $<node>1;
 }
     ;
 
 scope: scope_head scope_body
 {
-ScopeAST* node = static_cast<ScopeAST*>( $<node>1 );
-node->setScopeBody( static_cast<ScopeBodyAST*>( $<node>2 ) );
+    ScopeAST* node = static_cast<ScopeAST*>( $<node>1 );
+    node->setScopeBody( static_cast<ScopeBodyAST*>( $<node>2 ) );
     $<node>$ = node;
 }
     | ws ELSE scope_body
@@ -129,332 +139,223 @@ or_op: scope_head OR scope_head scope_body
 
 scope_head: ws scope_name
 {
-$<node>$ = new ScopeAST( $<value>2, $<value>1 );
-
+    $<node>$ = new ScopeAST( $<value>2, $<value>1 );
 }
     | ws functioncall
 {
-AST* node = $<node>2;
-node->setWhitespace( $<value>1 );
-$<node>$ = node;
+    AST* node = $<node>2;
+    node->setWhitespace( $<value>1 );
+    $<node>$ = node;
 }
     ;
 
 scope_body: ws LCURLY COMMENT NEWLINE statements ws RCURLY NEWLINE
 {
-ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7+$<value>8 );
-$<node>$ = node;
+    ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7+$<value>8 );
+    $<node>$ = node;
 }
     | ws LCURLY NEWLINE statements ws RCURLY NEWLINE
 {
-ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6+$<value>7 );
-$<node>$ = node;
+    ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6+$<value>7 );
+    $<node>$ = node;
 }
     | ws LCURLY NEWLINE statements ws RCURLY
 {
-ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6 );
-$<node>$ = node;
+    ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6 );
+    $<node>$ = node;
 }
     | ws LCURLY COMMENT NEWLINE statements ws RCURLY
 {
-ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7 );
-$<node>$ = node;
+    ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7 );
+    $<node>$ = node;
 }
     | ws COLON statement
 {
-ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, static_cast<StatementAST*>( $<node>3 ) );
-$<node>$ = node;
+    ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, static_cast<StatementAST*>( $<node>3 ) );
+    $<node>$ = node;
 }
     ;
 
-scope_name: IDENTIFIER
+scope_name: SCOPENAME
 {
-$<value>$ = $<value>1;
+    $<value>$ = $<value>1;
 }
-    | EXCLAM IDENTIFIER
+    | EXCLAM SCOPENAME
 {
-$<value>$ = $<value>1+$<value>2;
-}
-    ;
-
-variable_assignment: ws IDENTIFIER op values COMMENT NEWLINE
-{
-    $<node>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>5, $<value>1 );
-}
-    | ws IDENTIFIER op COMMENT NEWLINE
-{
-    $<node>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), $<value>4, $<value>1 );
-}
-    | ws IDENTIFIER op values NEWLINE
-{
-    $<node>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, "", $<value>1 );
-}
-    | ws IDENTIFIER op NEWLINE
-{
-    $<node>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), "", $<value>1 );
-}
-    ;
-
-values: values WS value
-{
-$<values>$.append( $<value>2 );
-$<values>$.append( $<value>3 );
-}
-    | values WS braceenclosedval
-{
-$<values>$.append( $<value>2 );
-$<values>$.append( $<value>3 );
-}
-    | values WS quotedval
-{
-$<values>$.append( $<value>2 );
-$<values>$.append( $<value>3 );
-}
-    | values cont
-{
-for( QStringList::const_iterator it = $<values>2.begin(); it != $<values>2.end(); ++it )
-    $<values>$.append( *it );
-}
-    | braceenclosedval
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-}
-    | quotedval
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-}
-    | value
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-}
-    | CONT
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-}
-    ;
-
-cont: CONT
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-}
-    | CONT value
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-$<values>$.append( $<value>2 );
-}
-    | CONT braceenclosedval
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-$<values>$.append( $<value>2 );
-}
-    | CONT quotedval
-{
-$<values>$ = QStringList();
-$<values>$.append( $<value>1 );
-$<values>$.append( $<value>2 );
-}
-    ;
-
-braceenclosedval: LPAREN wsvalues RPAREN SEMICOLON
-{
-$<value>$ = $<value>1+$<value>2+$<value>3+$<value>4;
-}
-    | LPAREN wsvalues RPAREN
-{
-$<value>$ = $<value>1+$<value>2+$<value>3;
-}
-    ;
-
-quotedval: QUOTE wsvalues QUOTE
-{
-$<value>$ = $<value>1+$<value>2+$<value>3;
-}
-    ;
-
-value: value valuepart
-{
-$<value>$ += $<value>2;
-}
-    | valuepart
-{
-$<value>$ = $<value>1;
-}
-    ;
-
-valuepart: IDENTIFIER
-{
-$<value>$ = $<value>1;
-}
-    | COLON
-{
-$<value>$ = $<value>1;
-}
-    | OR
-{
-$<value>$ = $<value>1;
-}
-    | op
-{
-$<value>$ = $<value>1;
-}
-    | SPECIALCHAR
-{
-$<value>$ = $<value>1;
-}
-    | VARIABLE
-{
-$<value>$ = $<value>1;
-}
-    | SEMICOLON
-{
-$<value>$ = $<value>1;
-}
-    | FUNCTIONCALL LPAREN functionargs RPAREN
-{
-    QString value = $<value>1+$<value>2;
-    for( QList<FunctionArgAST*>::const_iterator it = $<arglist>3.begin(); it != $<arglist>3.end(); ++it )
-    {
-        (*it)->writeToString( value );
-    }
-    for( QList<FunctionArgAST*>::const_iterator it = $<arglist>3.begin(); it != $<arglist>3.end(); ++it )
-    {
-        delete (*it);
-    }
-    $<arglist>3.clear();
-    $<value>$ = value+$<value>4;
-}
-    | DOLLAR DOLLAR LCURLY functioncall RCURLY
-{
-    QString value = $<value>1+$<value>2+$<value>3;
-    static_cast<FunctionCallAST*>( $<node>4 )->writeToString( value );
-    delete $<node>4;
-    $<value>$ = value+$<value>5;
+    $<value>$ = $<value>1+$<value>2;
 }
     ;
 
 functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
 {
-$<node>$ = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, $<value>4 );
+    $<node>$ = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, $<value>4 );
 }
     | FUNCTIONNAME LPAREN ws RPAREN
 {
-$<node>$ = new FunctionCallAST( $<value>1, $<value>2, QList<FunctionArgAST*>(), $<value>4 );
+    $<node>$ = new FunctionCallAST( $<value>1, $<value>2, QList<FunctionArgAST*>(), $<value>4 );
 }
     | EXCLAM FUNCTIONNAME LPAREN functionargs RPAREN
 {
-$<node>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, $<arglist>4, $<value>5 );
+    $<node>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, $<arglist>4, $<value>5 );
 }
     | EXCLAM FUNCTIONNAME LPAREN ws RPAREN
 {
-$<node>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, QList<FunctionArgAST*>(), $<value>5 );
+    $<node>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, QList<FunctionArgAST*>(), $<value>5 );
 }
     ;
 
 functionargs: functionargs COMMA functionarg
 {
-$<arglist>$.append( static_cast<FunctionArgAST*>( $<node>3 ) );
+    $<arglist>$.append( static_cast<FunctionArgAST*>( $<node>3 ) );
 }
     | functionarg
 {
-$<arglist>$.clear();
-$<arglist>$.append( static_cast<FunctionArgAST*>( $<node>1 ) );
+    $<arglist>$.clear();
+    $<arglist>$.append( static_cast<FunctionArgAST*>( $<node>1 ) );
 }
     ;
 
-functionarg: wsvalues ws
+functionarg: ws fnvalue
 {
-$<node>$ = new SimpleFunctionArgAST( $<value>1+$<value>2 );
+    $<node>$ = new SimpleFunctionArgAST( $<value>1 );
 }
     | ws FUNCTIONCALL ws LPAREN functionargs RPAREN ws
 {
-$<node>$ = new FunctionCallAST( $<value>2, $<value>3+$<value>4, $<arglist>5, $<value>6+$<value>7, $<value>1 );
+    $<node>$ = new FunctionCallAST( $<value>2, $<value>3+$<value>4, $<arglist>5, $<value>6+$<value>7, $<value>1 );
 }
     ;
 
-wsvalues: wsvalues WS value
+fnvalue: fnvalue FNVALUE
+    | fnvalue QMVARIABLE
+    | fnvalue SHELLVARIABLE
+    | fnvalue WS
+    | fnvalue TILDEEQ
+    | fnvalue PLUSEQ
+    | fnvalue MINUSEQ
+    | fnvalue STAREQ
+    | fnvalue EQUAL
+    | fnvalue COLON
+    | fnvalue OR
+    | fnvalue EXCLAM
+    | fnvalue DOLLAR
+    | fnvalue LPAREN fnvalue RPAREN
+    | DOLLAR
+    | LPAREN fnvalue RPAREN
+    | FNVALUE
+    | QMVARIABLE
+    | SHELLVARIABLE
+    | TILDEEQ
+    | PLUSEQ
+    | MINUSEQ
+    | STAREQ
+    | EQUAL
+    | COLON
+    | OR
+    | EXCLAM
+    ;
+
+variable_assignment: ws VARIABLE op values COMMENT NEWLINE
 {
-$<value>$ += $<value>1+$<value>2;
+    $<node>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>5, $<value>1 );
 }
-    | wsvalues WS braceenclosedval
+    | ws VARIABLE op COMMENT NEWLINE
 {
-$<value>$ += $<value>1+$<value>2;
+    $<node>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), $<value>4, $<value>1 );
 }
-    | wsvalues WS quotedval
+    | ws VARIABLE op values NEWLINE
 {
-$<value>$ += $<value>1+$<value>2;
+    $<node>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, "", $<value>1 );
 }
-    | wsvalues op value
+    | ws VARIABLE op NEWLINE
 {
-$<value>$ += $<value>1+$<value>2;
+    $<node>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), "", $<value>1 );
 }
-    | wsvalues op braceenclosedval
+    ;
+
+values: values WS VAR_VALUE
 {
-$<value>$ += $<value>1+$<value>2;
+    $<values>$.append( $<value>2 );
+    $<values>$.append( $<value>3 );
 }
-    | wsvalues op quotedval
+    | values WS QUOTED_VAR_VALUE
 {
-$<value>$ += $<value>1+$<value>2;
+    $<values>$.append( $<value>2 );
+    $<values>$.append( $<value>3 );
 }
-    | braceenclosedval
+    | values CONT ws VAR_VALUE
 {
-$<value>$ = $<value>1;
+    $<values>$.append( $<value>2 );
+    $<values>$.append( $<value>3 );
+    $<values>$.append( $<value>4 );
 }
-    | quotedval
+    | values CONT ws QUOTED_VAR_VALUE
 {
-$<value>$ = $<value>1;
+
+    $<values>$.append( $<value>2 );
+    $<values>$.append( $<value>3 );
+    $<values>$.append( $<value>4 );
 }
-    | ws value
+    | QUOTED_VAR_VALUE
 {
-$<value>$ = $<value>1;
+    $<values>$ = QStringList();
+    $<values>$.append( $<value>1 );
+}
+    | VAR_VALUE
+{
+    $<values>$ = QStringList();
+    $<values>$.append( $<value>1 );
+}
+    | CONT
+{
+    $<values>$ = QStringList();
+    $<values>$.append( $<value>1 );
 }
     ;
 
 op: EQUAL
 {
-$<value>$ = $<value>1;
+    $<value>$ = $<value>1;
 }
     | PLUSEQ
 {
-$<value>$ = $<value>1;
+    $<value>$ = $<value>1;
 }
     | MINUSEQ
 {
-$<value>$ = $<value>1;
+    $<value>$ = $<value>1;
 }
     | STAREQ
 {
-$<value>$ = $<value>1;
+    $<value>$ = $<value>1;
 }
     | TILDEEQ
 {
-$<value>$ = $<value>1;
+    $<value>$ = $<value>1;
 }
     ;
 
 ws: WS
 {
-$<value>$ = $<value>1;
+    $<value>$ = $<value>1;
 }
     |
 {
-$<value>$ = "";
+    $<value>$ = "";
 }
     ;
 
 comment: COMMENT NEWLINE
 {
-$<value>$ = $<value>1+$<value>2;
+    $<value>$ = $<value>1+$<value>2;
 }
     ;
 
 %%
 
-#include "qmake_lexer.cpp"
-
+namespace QMake
+{
+void Parser::error(const location_type& /*l*/, const std::string& m)
+    {
+        std::cerr << m << std::endl;
+    }
+}

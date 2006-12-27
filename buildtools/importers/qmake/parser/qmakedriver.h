@@ -28,19 +28,19 @@
 namespace QMake
 {
     class ProjectAST;
-    class QMAKEPARSER_EXPORT Parser
+    class QMAKEPARSER_EXPORT Driver
     {
         public:
             /**
              * Parses the given filename and returns success or failure
              */
-            static int parseFile( char const* filename, QMake::ProjectAST** ast );
-            static int parseFile( const QString& filename, QMake::ProjectAST** ast );
+            static int parseFile( char const* filename, QMake::ProjectAST** ast, int debug = 0 );
+            static int parseFile( const QString& filename, QMake::ProjectAST** ast, int debug = 0 );
 
             /** Parses the given string and returns success or failure
              */
-            static int parseString( char const* content, QMake::ProjectAST** ast );
-            static int parseString( const QString& content, QMake::ProjectAST** ast );
+            static int parseString( char const* content, QMake::ProjectAST** ast, int debug = 0 );
+            static int parseString( const QString& content, QMake::ProjectAST** ast, int debug = 0 );
     };
 }
 

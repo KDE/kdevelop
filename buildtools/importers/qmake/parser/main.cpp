@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdio.h>
-#include "qmakeparser.h"
+#include "qmakedriver.h"
 #include "qmakeast.h"
 
 #include <QtGlobal>
@@ -43,7 +43,7 @@ int main( int argc, char** argv )
             std::cerr << "Unknown option: " << arg << std::endl;
             usage( argv[0] );
             exit( EXIT_FAILURE );
-        } else if ( QMake::Parser::parseFile( arg, &ast ) != 0 ) {
+        } else if ( QMake::Driver::parseFile( arg, &ast, 1 ) != 0 ) {
             exit( EXIT_FAILURE );
         }else
         {

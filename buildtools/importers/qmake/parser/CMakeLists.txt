@@ -1,12 +1,12 @@
 project(kdevqmakeparser)
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
-                     ${CMAKE_SOURCE_DIR}/buildtools/importers/qmake 
+                     ${CMAKE_SOURCE_DIR}/buildtools/importers/qmake
                    )
 
 add_definitions(-fPIC)
 
-set(kdevqmakeparser_SRCS qmakeast.cpp qmakeparser.cpp)
+set(kdevqmakeparser_SRCS qmakeast.cpp qmakedriver.cpp)
 
 include(FindFlex)
 include(FindBison)
@@ -16,16 +16,17 @@ if(FLEX_EXECUTABLE)
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
+                "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.h"
         COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -d -o"${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
+        ARGS    -d -s -o"${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
                 "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
-#     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
-#     set_source_files_properties(
-#         ${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.cpp
-#         GENERATED
-#         )
+     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
+     set_source_files_properties(
+         ${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp
+         GENERATED
+         )
 else(FLEX_EXECUTABLE)
     message("Assuming existence of the generated lexer file qmake_lexer.cpp")
 	add_custom_command(
