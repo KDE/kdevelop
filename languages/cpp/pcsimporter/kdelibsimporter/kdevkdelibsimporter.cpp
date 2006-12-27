@@ -77,6 +77,7 @@ QStringList KDevKDELibsImporter::fileList()
 			dir.setPath( s.pop() );
 			kdDebug( 9015 ) << "Examining: " << dir.path() << endl;
 			const QFileInfoList *dirEntries = dir.entryInfoList();
+			if ( !dirEntries ) continue;
 			QPtrListIterator<QFileInfo> it( *dirEntries );
 			for ( ; it.current(); ++it )
 			{
