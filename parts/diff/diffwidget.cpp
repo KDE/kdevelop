@@ -31,6 +31,9 @@
 #include <kio/jobclasses.h>
 #include <kio/job.h>
 
+#include <kdevmainwindow.h>
+
+#include "diffpart.h"
 #include "diffwidget.h"
 
 // yup, magic value for the popupmenu-id
@@ -85,6 +88,9 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
   popup->insertItem( i18n( "Highlight Syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 2 );
   popup->setItemChecked( POPUP_BASE - 1, _highlight );
   popup->insertSeparator( 3 );
+
+  popup->insertSeparator();
+  popup->insertItem( i18n("Hide view"), parent(), SLOT(hideView()) );
 
   return popup;
 }
@@ -174,8 +180,8 @@ void KDiffTextEdit::popupActivated( int id )
   emit externalPartRequested( extParts[ id ] );
 }
 
-DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
-    QWidget( parent, name, f ), tempFile( 0 )
+DiffWidget::DiffWidget( DiffPart * part, QWidget *parent, const char *name, WFlags f ):
+    QWidget( parent, name, f ), m_part( part ), tempFile( 0 )
 {
   job = 0;
   extPart = 0;
@@ -192,6 +198,7 @@ DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
 
 DiffWidget::~DiffWidget()
 {
+    m_part = 0;
     delete tempFile;
 }
 
@@ -313,7 +320,11 @@ void DiffWidget::contextMenuEvent( QContextMenuEvent* /* e */ )
   QPopupMenu* popup = new QPopupMenu( this );
 
   if ( !te->isVisible() )
+  {
     popup->insertItem( i18n("Display &Raw Output"), this, SLOT(showTextEdit()) );
+    popup->insertSeparator();
+    popup->insertItem( i18n("Hide view"), this, SLOT(hideView()) );
+  }
 
   popup->exec( QCursor::pos() );
   delete popup;
@@ -327,6 +338,11 @@ void DiffWidget::showExtPart()
 void DiffWidget::showTextEdit()
 {
   setExtPartVisible( false );
+}
+
+void DiffWidget::hideView()
+{
+  m_part->mainWindow()->setViewAvailable( this, false );
 }
 
 #include "diffwidget.moc"

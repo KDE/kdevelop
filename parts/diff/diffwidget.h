@@ -19,6 +19,7 @@
 #include <kurl.h>
 
 class KTempFile;
+class DiffPart;
 
 namespace KIO {
   class Job;
@@ -62,7 +63,7 @@ class DiffWidget : public QWidget
     Q_OBJECT
 
 public:
-    DiffWidget( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+    DiffWidget( DiffPart * part, QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
     virtual ~DiffWidget();
 
 public slots:
@@ -85,6 +86,7 @@ private slots:
     void showExtPart();
     void showTextEdit();
     void loadExtPart( const QString& partName );
+    void hideView();
 
 protected:
     void contextMenuEvent( QContextMenuEvent* e );
@@ -94,6 +96,7 @@ private:
     void populateExtPart();
 
 private:
+    DiffPart * m_part;
     KDiffTextEdit* te;
     KIO::Job* job;
     KParts::ReadOnlyPart* extPart;

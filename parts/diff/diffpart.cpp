@@ -47,7 +47,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");
 
-  diffWidget = new DiffWidget();
+  diffWidget = new DiffWidget(this);
   diffWidget->setIcon( SmallIcon("editcopy") );
   QString nm( i18n( "Diff" ) );
   diffWidget->setCaption( i18n( "Diff Output" ) );
@@ -55,6 +55,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
     "Can utilize every installed component that is able to show diff output. "
     "For example if you have Kompare installed, Difference Viewer can use its graphical diff view."));
   mainWindow()->embedOutputView( diffWidget, nm, i18n("Output of the diff command") );
+  mainWindow()->setViewAvailable( diffWidget, false );
 
   KAction *action = new KAction( i18n("Difference Viewer..."), 0,
 	       this, SLOT(slotExecDiff()),
@@ -223,6 +224,7 @@ void DiffPart::showDiff( const QString& diff )
 {
   diffWidget->slotClear();
   diffWidget->setDiff( diff );
+  mainWindow()->setViewAvailable( diffWidget, true );
   mainWindow()->raiseView( diffWidget );
 /*
   DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );

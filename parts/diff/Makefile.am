@@ -7,7 +7,7 @@ kde_module_LTLIBRARIES = libkdevdiff.la
 libkdevdiff_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdiff_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevdiff_la_SOURCES = diffpart.cpp diffdlg.cpp diffwidget.cpp
+libkdevdiff_la_SOURCES = diffpart.cpp diffwidget.cpp
 
 METASOURCES = AUTO
 
