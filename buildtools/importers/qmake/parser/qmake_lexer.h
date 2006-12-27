@@ -39,8 +39,7 @@ namespace QMake
             unsigned int bracecount;
             QMake::Result* mylval;
     };
-};
-
+}
 
 #endif
 
