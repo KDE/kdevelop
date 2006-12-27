@@ -540,7 +540,7 @@ void HeaderGenerator::run()
   QTextStream ts(&cmakelist);
 
   // Phony starting directory
-  QString directory = "/";
+  QString directory = QDir::rootPath();
 
   QMapIterator<QString, QString> it = filesToInstall;
   while (it.hasNext()) {
