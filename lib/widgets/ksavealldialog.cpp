@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 #include <kpushbutton.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 
 #include <kvbox.h>
 
@@ -77,7 +77,7 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<KDevDocument*>& filelist, cons
 
 	setButtonGuiItem( Ok, KGuiItem(i18n("Save &Selected"), QString::null, i18n("Saves all selected files")) );
 	setButtonText( User1, i18n("Save &None") );
-	setButtonText( Close, KStdGuiItem::cancel().text() );
+	setButtonText( Close, KStandardGuiItem::cancel().text() );
 	
 	foreach (KDevDocument* document, filelist )
 	{
@@ -160,7 +160,7 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
 
   setButtonGuiItem( Ok, KGuiItem(i18n("Save &All"), QString::null, i18n("Saves all modified files")) );
   setButtonText( User1, i18n("Save &None") );
-  setButtonText( Close, KStdGuiItem::cancel().text() );
+  setButtonText( Close, KStandardGuiItem::cancel().text() );
 
   connect( this, SIGNAL(closeClicked()), this, SLOT(cancel()) );
   connect( this, SIGNAL(okClicked()), this, SLOT(saveAll()) );
