@@ -347,6 +347,11 @@ Warnings1Tab::Warnings1Tab( GccOptionsPlugin::Type type, QWidget *parent, const 
 	                                    "to the format string specified, and that the conversions specified\n"
 	                                    "in the format string make sense</qt>" ) );
 	new FlagListItem( wallBox,
+	                  "-Wformat=2", i18n( "<qt>Enable -Wformat plus format checks not \n"
+				              "included in -Wformat. Currently equivalent to \n"
+					      "`-Wformat -Wformat-nonliteral -Wformat-security \n"
+					      "-Wformat-y2k'.</qt>" ) );
+	new FlagListItem( wallBox,
 	                  "-Wimplicit-int", i18n( "<qt>Warn when a declaration does not specify a type</qt>" ) );
 	new FlagListItem( wallBox,
 	                  "-Wimplicit-funtion-declaration",
