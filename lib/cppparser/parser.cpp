@@ -4314,6 +4314,8 @@ bool Parser::parseWinDeclSpec( GroupAST::Node & node )
 	nextToken();
 	nextToken(); // skip '('
 
+	if ( !parseIdentifierList( node ) )
+		return false;
 
 	ADVANCE( ')', ")" );
 
