@@ -18,63 +18,64 @@
  * 02110-1301, USA.
  */
 
-#include "qmakeparser.h"
+#include "qmakedriver.h"
 #include "qmakeast.h"
 #include <iostream>
-#include <stdio.h>
+#include <fstream>
+#include <sstream>
 
 #include <QtCore/QByteArray>
 #include <QtCore/QStack>
 
-extern FILE* yyin, *yyout;
-extern int yyparse();
-extern int yydebug;
-typedef struct yy_buffer_state *YY_BUFFER_STATE;
-extern YY_BUFFER_STATE yy_scan_string( const char* );
-extern void yy_delete_buffer( YY_BUFFER_STATE );
-extern QMake::ProjectAST* project;
+#include "qmake_lexer.h"
+#include "qmake_parser.hpp"
 
 namespace QMake
 {
-    int Parser::parseFile( char const *filename, ProjectAST** ast )
+    int Driver::parseFile( char const *filename, ProjectAST** ast, int debug )
     {
-        yyin = fopen( filename, "r" );
-        if ( yyin == 0 )
+        std::ifstream inf( filename, std::ios::in );
+        if ( !inf.is_open() )
         {
             std::cerr << filename << ": file not found" << std::endl;
             *ast = 0;
             return 1;
         }
         printf("Parsing\n");
-        yydebug = 1;
-        int ret = yyparse();
+        Lexer l(&inf);
+        l.set_debug(debug);
+        Parser p(&l, ast);
+        p.set_debug_level(debug);
+        int ret = p.parse();
         printf("Parsed: %d\n", ret);
-        *ast = project;
         (*ast)->setFilename(QString::fromUtf8( filename ));
         return ret;
     }
 
-    int Parser::parseFile( const QString& filename, ProjectAST** ast )
+    int Driver::parseFile( const QString& filename, ProjectAST** ast, int debug )
     {
-        return parseFile( filename.toUtf8().constData(), ast );
+        return parseFile( filename.toUtf8().constData(), ast, debug );
     }
 
-    int Parser::parseString( char const *content, ProjectAST** ast )
+    int Driver::parseString( char const *content, ProjectAST** ast, int debug )
     {
-        YY_BUFFER_STATE state = yy_scan_string( content );
-//         yydebug = 1;
-        int ret = yyparse();
-        *ast = project;
+        std::istringstream ins;
+        ins.str(content);
+        Lexer l(&ins);
+        l.set_debug(debug);
+        Parser p(&l, ast);
+        p.set_debug_level(debug);
+        int ret = p.parse();
+        printf("Parsed: %d\n", ret);
         (*ast)->setFilename( "" );
-        yy_delete_buffer( state );
         return ret;
     }
 
-    int Parser::parseString( const QString& content, ProjectAST** ast )
+    int Driver::parseString( const QString& content, ProjectAST** ast, int debug )
     {
         QByteArray qb = content.toUtf8();
         const char* data = qb.data();
-        return QMake::Parser::parseString( data, ast );
+        return QMake::Driver::parseString( data, ast, debug );
     }
 
 }

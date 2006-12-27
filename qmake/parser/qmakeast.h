@@ -29,7 +29,7 @@
 
 namespace QMake
 {
-    class Parser;
+    class Driver;
 
     class QMAKEPARSER_EXPORT AST
     {
@@ -46,7 +46,6 @@ namespace QMake
         private:
             AST* m_parent;
             QString m_ws;
-            friend class ChildAST;
     };
 
 
@@ -77,7 +76,7 @@ namespace QMake
             QString m_filename;
             QList<StatementAST*> m_statements;
 
-            friend class QMake::Parser;
+            friend class QMake::Driver;
     };
 
     class QMAKEPARSER_EXPORT AssignmentAST : public StatementAST
