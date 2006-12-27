@@ -145,7 +145,8 @@ void ReplaceWidget::showDialog()
 void ReplaceWidget::find()
 {
     _listview->clear();
-    m_part->mainWindow()->raiseView(this);
+    m_part->mainWindow()->raiseView( this );
+    m_part->mainWindow()->setViewAvailable( this, true );
 
     _listview->setReplacementData( m_dialog->expressionPattern(), m_dialog->replacementString() );
 
@@ -157,6 +158,7 @@ void ReplaceWidget::find()
     else
     {
         clear();
+        m_part->mainWindow()->setViewAvailable( this, false );
     }
 }
 
@@ -164,6 +166,7 @@ void ReplaceWidget::replace()
 {
     makeReplacements();
     clear();
+    m_part->mainWindow()->setViewAvailable( this, false );
 }
 
 void ReplaceWidget::clear()
@@ -172,6 +175,8 @@ void ReplaceWidget::clear()
 
     _cancel->setEnabled( false );
     _replace->setEnabled( false );
+
+    m_part->mainWindow()->setViewAvailable( this, false );
 }
 
 void ReplaceWidget::editDocument( QString const & file, int line )

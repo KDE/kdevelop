@@ -50,6 +50,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
                         "cursor to the line with the match." ));
 
     mainWindow()->embedOutputView( m_widget, i18n("Replace"), i18n("Project wide string replacement") );
+    mainWindow()->setViewAvailable( m_widget, false );
 
     KAction * action = new KAction(i18n("Find-Select-Replace..."), 0,
                                    CTRL+SHIFT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");

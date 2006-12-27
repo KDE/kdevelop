@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ReplaceDlg</class>
 <widget class="QDialog">
     <property name="name">
@@ -88,7 +88,7 @@
                                 <cstring>strings_wholewords_radio</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Whole words only</string>
+                                <string>Whole words onl&amp;y</string>
                             </property>
                         </widget>
                         <widget class="QLayoutWidget">
@@ -118,7 +118,7 @@
                                         <bool>false</bool>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Edit</string>
+                                        <string>E&amp;dit</string>
                                     </property>
                                     <property name="toolTip" stdset="0">
                                         <string>Opens the regexp editor. Only enabled if installed.</string>
@@ -241,7 +241,10 @@
                         <cstring>find_button</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Find &amp;&amp; Replace</string>
+                        <string>Fi&amp;nd</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
                     </property>
                     <property name="default">
                         <bool>true</bool>
