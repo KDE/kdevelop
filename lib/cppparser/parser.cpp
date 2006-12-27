@@ -4257,7 +4257,9 @@ bool Parser::parseObjcClassDecl( DeclarationAST::Node & node )
     ADVANCE( OBJC_CLASS, "@class" );
 
     GroupAST::Node idList;
-    parseIdentifierList( idList );
+    if ( !parseIdentifierList( idList ) )
+        return false;
+
     ADVANCE( ';', ";" );
 
     return true;
@@ -4270,7 +4272,9 @@ bool Parser::parseObjcProtocolDecl( DeclarationAST::Node & node )
     ADVANCE( OBJC_PROTOCOL, "@protocol" );
 
     GroupAST::Node idList;
-    parseIdentifierList( idList );
+    if ( !parseIdentifierList( idList ) )
+        return false;
+
     ADVANCE( ';', ";" );
 
     return true;
@@ -4283,7 +4287,9 @@ bool Parser::parseObjcAliasDecl( DeclarationAST::Node & node )
     ADVANCE( OBJC_ALIAS, "@alias" );
 
     GroupAST::Node idList;
-    parseIdentifierList( idList );
+    if ( !parseIdentifierList( idList ) )
+        return false;
+
     ADVANCE( ';', ";" );
 
     return true;
@@ -4308,7 +4314,7 @@ bool Parser::parseWinDeclSpec( GroupAST::Node & node )
 	nextToken();
 	nextToken(); // skip '('
 
-	parseIdentifierList( node );
+
 	ADVANCE( ')', ")" );
 
 	UPDATE_POS( node, start, lex->index() );
