@@ -20,6 +20,9 @@
 #include <kbuttonbox.h>
 #include <kdialog.h>
 #include <kinputdialog.h>
+#include <kurlrequesterdlg.h>
+#include <kurlrequester.h>
+#include <kurlcompletion.h>
 #include <klocale.h>
 #include <knotifyclient.h>
 #include <kfiledialog.h>
@@ -268,9 +271,19 @@ void TargetOptionsDialog::outsideMoveDownClicked()
 
 void TargetOptionsDialog::outsideAddClicked()
 {
-    QString dir = KFileDialog::getOpenFileName();
-    if (!dir.isEmpty())
-        new QListViewItem(outsidelib_listview, dir);
+    KURLRequesterDlg dialog( "", i18n( "Add Library: Choose the .a/.so file, give -l<libname> or use a variable with $(FOOBAR)" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
+    dialog.urlRequester() ->setFilter( "*.so|"+i18n("Shared Library (*.so)")+"\n*.a|"+i18n("Static Library (*.a)") );
+    dialog.urlRequester() ->setURL( QString::null );
+    dialog.urlRequester() ->completionObject() ->setDir( m_widget->selectedSubproject()->path );
+    dialog.urlRequester() ->fileDialog() ->setURL( KURL::fromPathOrURL( m_widget->selectedSubproject()->path ) );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString file = dialog.urlRequester() ->url();
+    if ( !file.isEmpty() )
+    {
+        new QListViewItem( outsidelib_listview, file );
+    }
 }
 
 
