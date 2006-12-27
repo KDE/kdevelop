@@ -195,6 +195,7 @@ void DocDevHelpPlugin::autoSetupPlugin()
         scanList << dir.path();
 
         const QFileInfoList *dirEntries = dir.entryInfoList();
+        if ( !dirEntries ) continue;
         QPtrListIterator<QFileInfo> it(*dirEntries);
         for (; it.current(); ++it) 
         {
