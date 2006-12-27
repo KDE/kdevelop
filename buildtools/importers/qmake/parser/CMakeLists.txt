@@ -75,8 +75,8 @@ else(BISON_EXECUTABLE)
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp"
                 "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.hpp"
         COMMAND ${CP_EXECUTABLE}
-        ARGS    "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_lexer.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_lexer.hpp"
+        ARGS    "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.hpp"
                 "${CMAKE_CURRENT_BINARY_DIR}"
     )
 endif(BISON_EXECUTABLE)
