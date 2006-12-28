@@ -32,20 +32,30 @@ static void usage( char const* argv0 );
 
 int main( int argc, char** argv )
 {
-    if ( argc == 1 ) {
+    if ( argc < 1 ) {
         usage( argv[0] );
         exit( EXIT_FAILURE );
     }
 
-    while ( char const *arg = *++argv ) {
+    int begin = 1;
+    int debug = 0;
+
+    if( strcmp( argv[begin], "--debug" ) == 0 )
+    {
+        std::cerr << "found dbg" << std::endl;
+        begin = 2;
+        debug = 1;
+    }
+    for( ; begin < argc ; begin++ ) {
+        char const* arg = argv[begin];
         QMake::ProjectAST* ast;
         if ( !strncmp( arg, "--", 2 ) ) {
             std::cerr << "Unknown option: " << arg << std::endl;
             usage( argv[0] );
             exit( EXIT_FAILURE );
-        } else if ( QMake::Driver::parseFile( arg, &ast, 1 ) != 0 ) {
+        } else if ( QMake::Driver::parseFile( arg, &ast, debug ) != 0 ) {
             exit( EXIT_FAILURE );
-        }else
+        }else if( debug )
         {
             QString buf;
             ast->writeToString( buf );
@@ -60,7 +70,7 @@ static void usage( char const* argv0 )
     std::cerr << "usage: " << argv0 << " [options] file.pro [file2.pro ...]"
     << std::endl << std::endl
     << "Options:" << std::endl
-    << "  none so far" << std::endl;
+    << "  --debug" << std::endl;
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
