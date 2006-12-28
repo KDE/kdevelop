@@ -46,6 +46,8 @@
 #include <kstringhandler.h>
 #include <kconfig.h>
 #include <kwin.h>
+#include <ktexteditor/editinterface.h>
+#include <ktexteditor/viewcursorinterface.h>
 
 #include "kdevplugininfo.h"
 #include "kdevcore.h"
@@ -217,6 +219,7 @@ void DocumentationPart::setupActions()
                               "the documentation. For this to work, a "
                               "full text index must be created first, which can be done in the "
                               "configuration dialog of the documentation plugin."));    
+
     action = new KAction(i18n("&Look in Documentation Index..."), CTRL+ALT+Key_I,
                          this, SLOT(lookInDocumentationIndex()),
                          actionCollection(), "help_look_in_index" );
@@ -225,15 +228,28 @@ void DocumentationPart::setupActions()
                               "Opens the documentation index tab. It allows "
                               "a term to be entered which will be looked for in "
                               "the documentation index."));    
+
     action = new KAction(i18n("Man Page..."), 0,
                          this, SLOT(manPage()),
                          actionCollection(), "help_manpage" );
     action->setToolTip(i18n("Show a manpage"));
     action->setWhatsThis(i18n("<b>Show a manpage</b><p>Opens a man page using embedded viewer."));
+
     action = new KAction(i18n("Info Page..."), 0,
                          this, SLOT(infoPage()),
                          actionCollection(), "help_infopage");
     action->setToolTip(i18n("Show an infopage"));
+    action->setWhatsThis(i18n("<b>Show an infopage</b><p>Opens an info page using embedded viewer."));
+
+    action = new KAction(i18n("Find Documentation..."), 0,
+                         this, SLOT(findInDocumentation()),
+                         actionCollection(), "help_find_documentation");
+    action->setToolTip(i18n("Find Documentation"));
+    action->setWhatsThis(i18n("<b>Find documentation</b><p>"
+                                    "Opens the documentation finder tab and searches "
+                                    "all possible sources of documentation like "
+                                    "table of contents, index, man and info databases, "
+                                    "Google, etc."));
     action->setWhatsThis(i18n("<b>Show an infopage</b><p>Opens an info page using embedded viewer."));
 }
 
@@ -244,12 +260,27 @@ void DocumentationPart::emitBookmarkLocation(const QString &title, const KURL &u
 
 void DocumentationPart::searchInDocumentation()
 {
-    if (isAssistantUsed())
-        callAssistant("KDevDocumentation", "searchInDocumentation()");
-    else    
+    QString word = currentWord();
+
+    if ( word.isEmpty() )
     {
-        mainWindow()->raiseView(m_widget);
-        m_widget->searchInDocumentation();
+        if ( isAssistantUsed() )
+            callAssistant ( "KDevDocumentation", "searchInDocumentation()" );
+        else
+        {
+            mainWindow()->raiseView ( m_widget );
+            m_widget->searchInDocumentation();
+        }
+    }
+    else
+    {
+        if ( isAssistantUsed() )
+            callAssistant ( "KDevDocumentation", "searchInDocumentation(QString)", word );
+        else
+        {
+            mainWindow()->raiseView ( m_widget );
+            m_widget->searchInDocumentation ( word );
+        }
     }
 }
 
@@ -269,27 +300,49 @@ void DocumentationPart::contextSearchInDocumentation()
 
 void DocumentationPart::manPage()
 {
-    if (isAssistantUsed())
-        callAssistant("KDevDocumentation", "manPage()");
-    else    
+    QString word = currentWord();
+
+    if ( isAssistantUsed() )
+    {
+        if ( word.isEmpty() )
+        {
+            callAssistant ( "KDevDocumentation", "manPage()" );
+        }
+        else
+        {
+            callAssistant ( "KDevDocumentation", "manPage(QString)", word );
+        }
+    }
+    else
     {
         bool ok;
-        QString manpage = KInputDialog::getText(i18n("Show Manual Page"), i18n("Show manpage on:"), "", &ok, 0);
-        if (ok && !manpage.isEmpty())
-            manPage(manpage);
+        QString manpage = KInputDialog::getText ( i18n ( "Show Manual Page" ), i18n ( "Show manpage on:" ), word, &ok, 0 );
+        if ( ok && !manpage.isEmpty() )
+            manPage ( manpage );
     }
 }
 
 void DocumentationPart::infoPage()
 {
-    if (isAssistantUsed())
-        callAssistant("KDevDocumentation", "infoPage()");
-    else    
+    QString word = currentWord();
+    
+    if ( isAssistantUsed() )
+    {
+        if ( word.isEmpty() )
+        {
+            callAssistant ( "KDevDocumentation", "infoPage()" );
+        }
+        else
+        {
+            callAssistant ( "KDevDocumentation", "infoPage(QString)", word );
+        }
+    }
+    else
     {
         bool ok;
-        QString infopage = KInputDialog::getText(i18n("Show Info Page"), i18n("Show infopage on:"), "", &ok, 0);
-        if (ok && !infopage.isEmpty())
-            infoPage(infopage);
+        QString infopage = KInputDialog::getText ( i18n ( "Show Info Page" ), i18n ( "Show infopage on:" ), word, &ok, 0 );
+        if ( ok && !infopage.isEmpty() )
+            infoPage ( infopage );
     }
 }
 
@@ -331,12 +384,27 @@ void DocumentationPart::contextFindDocumentation()
 
 void DocumentationPart::findInDocumentation()
 {
-    if (isAssistantUsed())
-        callAssistant("KDevDocumentation", "findInFinder()");
+    QString word = currentWord();
+    
+    if ( word.isEmpty() )
+    {
+        if ( isAssistantUsed() )
+            callAssistant ( "KDevDocumentation", "findInFinder()" );
+        else
+        {
+            mainWindow()->raiseView ( m_widget );
+            m_widget->findInDocumentation();
+        }
+    }
     else
     {
-        mainWindow()->raiseView(m_widget);
-        m_widget->findInDocumentation();
+        if ( isAssistantUsed() )
+            callAssistant ( "KDevDocumentation", "findInFinder(QString)", word );
+        else
+        {
+            mainWindow()->raiseView ( m_widget );
+            m_widget->findInDocumentation ( word );
+        }
     }
 }
 
@@ -344,6 +412,46 @@ void DocumentationPart::findInDocumentation(const QString &term)
 {
     mainWindow()->raiseView(m_widget);
     m_widget->findInDocumentation(term);
+}
+
+void DocumentationPart::lookInDocumentationIndex()
+{
+    QString word = currentWord();
+    
+    if ( word.isEmpty() )
+    {
+        if ( isAssistantUsed() )
+            callAssistant ( "KDevDocumentation", "lookupInIndex()" );
+        else
+        {
+            mainWindow()->raiseView ( m_widget );
+            m_widget->lookInDocumentationIndex();
+        }
+    }
+    else
+    {
+        if ( isAssistantUsed() )
+            callAssistant ( "KDevDocumentation", "lookupInIndex(QString)", word );
+        else
+        {
+            mainWindow()->raiseView ( m_widget );
+            m_widget->lookInDocumentationIndex ( word );
+        }
+    }
+}
+
+void DocumentationPart::lookInDocumentationIndex(const QString &term)
+{
+    mainWindow()->raiseView(m_widget);
+    m_widget->lookInDocumentationIndex(term);
+}
+
+void DocumentationPart::contextLookInDocumentationIndex()
+{
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "lookupInIndex(QString)", m_contextStr);
+    else
+        lookInDocumentationIndex(m_contextStr);
 }
 
 void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
@@ -453,31 +561,6 @@ void DocumentationPart::setContextFeature(ContextFeature feature, bool b)
     if (!key.isEmpty())
         config->writeEntry(key, b);
     config->setGroup(group);
-}
-
-void DocumentationPart::lookInDocumentationIndex()
-{
-    if (isAssistantUsed())
-        callAssistant("KDevDocumentation", "lookupInIndex()");
-    else    
-    {
-        mainWindow()->raiseView(m_widget);
-        m_widget->lookInDocumentationIndex();
-    }
-}
-
-void DocumentationPart::lookInDocumentationIndex(const QString &term)
-{
-    mainWindow()->raiseView(m_widget);
-    m_widget->lookInDocumentationIndex(term);
-}
-
-void DocumentationPart::contextLookInDocumentationIndex()
-{
-    if (isAssistantUsed())
-        callAssistant("KDevDocumentation", "lookupInIndex(QString)", m_contextStr);
-    else
-        lookInDocumentationIndex(m_contextStr);
 }
 
 void DocumentationPart::projectOpened()
@@ -679,6 +762,34 @@ void DocumentationPart::init( )
 {
     loadDocumentationPlugins();
     loadSettings();
+}
+
+///@todo - duplicated from ctags part, which came from editorproxy. we also have a shorter version in other places..
+QString DocumentationPart::currentWord()
+{
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*> ( partController()->activePart() );
+    if ( !ro_part || !ro_part->widget() ) return QString::null;
+
+    KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*> ( ro_part->widget() );
+    KTextEditor::EditInterface * editIface = dynamic_cast<KTextEditor::EditInterface*> ( ro_part );
+
+    QString wordstr, linestr;
+    if ( cursorIface && editIface )
+    {
+        uint line, col;
+        line = col = 0;
+        cursorIface->cursorPositionReal ( &line, &col );
+        linestr = editIface->textLine ( line );
+        int startPos = QMAX ( QMIN ( ( int ) col, ( int ) linestr.length()-1 ), 0 );
+        int endPos = startPos;
+        while ( startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~' ) )
+            startPos--;
+        while ( endPos < ( int ) linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
+            endPos++;
+
+        return ( ( startPos == endPos ) ? QString::null : linestr.mid ( startPos+1, endPos-startPos-1 ) );
+    }
+    return QString::null;
 }
 
 #include "documentation_part.moc"

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="documentation" library="libdocumentationplugin" version="3">
+<kpartplugin name="documentation" library="libdocumentationplugin" version="4">
 <MenuBar>
 <!--  <Action name="doc_bookmarks"/> -->
 <!-- <Menu name="tools"><Text>&amp;Tools</Text>
@@ -10,6 +10,7 @@
   <Action name="help_search_in_doc"/>
   <Action name="help_manpage"/>
   <Action name="help_infopage"/>
+  <Action name="help_find_documentation" />
  </Menu>
 </MenuBar>
 <!--<ToolBar name="extraToolBar">
