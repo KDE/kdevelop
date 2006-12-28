@@ -20,7 +20,7 @@
 
 #include "cmakeparsertest.h"
 
-#include <QtCore/QTemporaryFile>
+#include <KTemporaryFile>
 #include "cmListFileLexer.h"
 #include "cmakelistsparser.h"
 #include "cmakeast.h"
@@ -47,7 +47,7 @@ void CMakeParserTest::testLexerCreation()
 
 void CMakeParserTest::testLexerWithFile()
 {
-    QTemporaryFile tempFile;
+    KTemporaryFile tempFile;
     tempFile.setAutoRemove( false );
     tempFile.open();
     if ( !QFile::exists( tempFile.fileName() ) )
