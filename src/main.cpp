@@ -137,7 +137,7 @@ int main( int argc, char *argv[] )
     QByteArray projectName = args->getOption("project");
     if ( !projectName.isEmpty() )
     { 
-        KDevCore::projectController()->openProject( url );
+        KDevCore::projectController()->openProject( KUrl(projectName) );
         openProject = true;
     } 
     else if( args->count() > 0 )
