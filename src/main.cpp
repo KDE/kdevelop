@@ -133,11 +133,31 @@ int main( int argc, char *argv[] )
 
     KDevCore::initialize();
     
-
-    for ( int a = 0; a < args->count(); ++a )
+		bool openProject = false;
+    QByteArray projectName = args->getOption("project");
+    if ( !projectName.isEmpty() )
+    { 
+        KDevCore::projectController()->openProject( url );
+        openProject = true;
+    } 
+    else if( args->count() > 0 )
+	  {
+	      KUrl url = args->url( 0 );
+	      QString ext = QFileInfo( url.fileName() ).suffix();
+	      if( ext == "kdev4" )
+	      {
+   	        KDevCore::projectController()->openProject( url );
+		        openProject = true;
+	      }
+	  }
+	
+    if( !openProject ) 
     {
-        KDevCore::documentController()->editDocument( KUrl( args->url( a ) ) );
-    }
+	     for( int a=0; a<args->count(); ++a )
+	     {
+	        KDevCore::documentController()->editDocument( KUrl( args->url( a ) ) );
+	     }
+	  }
 
     return app.exec();
 }
