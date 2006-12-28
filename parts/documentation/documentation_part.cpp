@@ -250,7 +250,6 @@ void DocumentationPart::setupActions()
                                     "all possible sources of documentation like "
                                     "table of contents, index, man and info databases, "
                                     "Google, etc."));
-    action->setWhatsThis(i18n("<b>Show an infopage</b><p>Opens an info page using embedded viewer."));
 }
 
 void DocumentationPart::emitBookmarkLocation(const QString &title, const KURL &url)
