@@ -189,7 +189,8 @@ scope_name: SCOPENAME
 
 functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            $<node>$ = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, $<value>4 );
+            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, $<value>4 );
+            $<node>$ = node;
         }
     | FUNCTIONNAME LPAREN ws RPAREN
         {
@@ -218,7 +219,7 @@ functionargs: functionargs COMMA functionarg
 
 functionarg: ws fnvalue
         {
-            $<node>$ = new SimpleFunctionArgAST( $<value>1 );
+            $<node>$ = new SimpleFunctionArgAST( $<value>2, $<value>1 );
         }
     | ws FUNCTIONCALL ws LPAREN functionargs RPAREN ws
         {
@@ -284,55 +285,55 @@ fnvalue: fnvalue FNVALUE
         }
     | DOLLAR
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | LPAREN fnvalue RPAREN
         {
-            $<value>$ = $<value>2+$<value>3+$<value>4;
+            $<value>$ = $<value>1+$<value>2+$<value>3;
         }
     | FNVALUE
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | QMVARIABLE
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | SHELLVARIABLE
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | TILDEEQ
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | PLUSEQ
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | MINUSEQ
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | STAREQ
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | EQUAL
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | COLON
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | OR
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     | EXCLAM
         {
-            $<value>$ = $<value>2;
+            $<value>$ = $<value>1;
         }
     ;
 
