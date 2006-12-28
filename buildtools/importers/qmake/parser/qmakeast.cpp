@@ -19,7 +19,7 @@
  */
 
 #include "qmakeast.h"
-#include <QDebug>
+#include <kdebug.h>
 
 namespace QMake
 {

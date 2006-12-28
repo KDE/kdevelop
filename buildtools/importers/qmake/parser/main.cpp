@@ -25,8 +25,9 @@
 #include "qmakeast.h"
 
 #include <QtGlobal>
-#include <QtCore/QDebug>
 #include <QtCore/QString>
+
+#include <kdebug.h>
 
 static void usage( char const* argv0 );
 
@@ -37,29 +38,36 @@ int main( int argc, char** argv )
         exit( EXIT_FAILURE );
     }
 
-    int begin = 1;
     int debug = 0;
-
-    if( strcmp( argv[begin], "--debug" ) == 0 )
-    {
-        std::cerr << "found dbg" << std::endl;
-        begin = 2;
-        debug = 1;
-    }
-    for( ; begin < argc ; begin++ ) {
+    bool silent = false;
+    QStringList files;
+    for( int begin = 1 ; begin < argc ; begin++ ) {
         char const* arg = argv[begin];
-        QMake::ProjectAST* ast;
+        if( strcmp( arg, "--debug" ) == 0 )
+        {
+            debug = 1;
+        }
+        if( strcmp( arg, "--silent" ) == 0 )
+        {
+            silent = true;
+        }
         if ( !strncmp( arg, "--", 2 ) ) {
             std::cerr << "Unknown option: " << arg << std::endl;
             usage( argv[0] );
             exit( EXIT_FAILURE );
-        } else if ( QMake::Driver::parseFile( arg, &ast, debug ) != 0 ) {
+        }
+        files.append(QString::fromLocal8Bit(arg));
+    }
+    foreach( QString arg, files )
+    {
+        QMake::ProjectAST* ast;
+        if ( QMake::Driver::parseFile( arg, &ast, debug ) != 0 ) {
             exit( EXIT_FAILURE );
-        }else if( debug )
+        }else if( !silent )
         {
             QString buf;
             ast->writeToString( buf );
-            qWarning() << "Project Read: "<< ast->statements().count() << "\n-------------\n" << buf << "\n-------------\n";
+            kDebug(9024) << "Project Read: "<< ast->statements().count() << "\n-------------\n" << buf << "\n-------------\n";
         }
     }
 
@@ -70,7 +78,8 @@ static void usage( char const* argv0 )
     std::cerr << "usage: " << argv0 << " [options] file.pro [file2.pro ...]"
     << std::endl << std::endl
     << "Options:" << std::endl
-    << "  --debug" << std::endl;
+    << "  --debug\tEnable Parser debug output" << std::endl
+    << "  --silent\tDisable output of the generated AST" << std::endl;
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

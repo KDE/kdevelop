@@ -4,8 +4,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
                      ${CMAKE_SOURCE_DIR}/buildtools/importers/qmake
                    )
 
-add_definitions(-fPIC)
-
 set(kdevqmakeparser_SRCS qmakeast.cpp qmakedriver.cpp)
 
 include(FindFlex)
@@ -102,7 +100,7 @@ endif(BISON_EXECUTABLE)
 
 kde4_automoc(${kdevqmakeparser_SRCS})
 kde4_add_library(kdevqmakeparser SHARED ${kdevqmakeparser_SRCS})
-target_link_libraries(kdevqmakeparser ${QT_QTCORE_LIBRARY})
+target_link_libraries(kdevqmakeparser ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBS})
 install(TARGETS kdevqmakeparser DESTINATION ${LIB_INSTALL_DIR} )
 
 add_executable(qmake-parser main.cpp)
