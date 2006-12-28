@@ -49,6 +49,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
                                    "applications use this instead of a terminal window."));
 
     mainWindow()->embedOutputView(m_widget, i18n("Application"), i18n("Output of the executed user program"));
+    mainWindow()->setViewAvailable( m_widget, false );
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
