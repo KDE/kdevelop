@@ -61,7 +61,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 %token WS VARIABLE DOLLAR COLON COMMA LCURLY RCURLY
 %token LPAREN RPAREN EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
 %token NEWLINE CONT COMMENT EXCLAM EMPTYLINE VAR_VALUE
-%token QMVARIABLE SHELLVARIABLE FUNCTIONNAME ELSE
+%token QMVARIABLE SHELLVARIABLE FUNCTIONNAME
 %token FUNCTIONCALL SCOPENAME QUOTED_VAR_VALUE FNVALUE
 
 %%
@@ -121,12 +121,6 @@ scope: scope_head scope_body
             node->setScopeBody( static_cast<ScopeBodyAST*>( $<node>2 ) );
             $<node>$ = node;
         }
-    | ws ELSE scope_body
-        {
-            ScopeAST* node = new ScopeAST("else", $<value>1 );
-            node->setScopeBody( static_cast<ScopeBodyAST*>( $<node>2 ) );
-            $<node>$ = node;
-        }
     ;
 
 or_op: scope_head OR scope_head scope_body
@@ -140,12 +134,12 @@ or_op: scope_head OR scope_head scope_body
 
 scope_head: ws scope_name
         {
-            $<node>$ = new ScopeAST( $<value>2, $<value>1 );
+            ScopeAST* node = new ScopeAST( $<value>2, $<value>1 );
+            $<node>$ = node;
         }
     | ws functioncall
         {
-            AST* node = $<node>2;
-            node->setWhitespace( $<value>1 );
+            ScopeAST* node = new ScopeAST( static_cast<FunctionCallAST*>($<node>2), $<value>1 );
             $<node>$ = node;
         }
     ;
@@ -189,12 +183,12 @@ scope_name: SCOPENAME
 
 functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, $<value>4 );
+            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, QString($<value>4) );
             $<node>$ = node;
         }
     | FUNCTIONNAME LPAREN ws RPAREN
         {
-            $<node>$ = new FunctionCallAST( $<value>1, $<value>2, QList<FunctionArgAST*>(), $<value>4 );
+            $<node>$ = new FunctionCallAST( $<value>1, $<value>2, QList<FunctionArgAST*>(), QString($<value>4) );
         }
     | EXCLAM FUNCTIONNAME LPAREN functionargs RPAREN
         {

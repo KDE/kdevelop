@@ -28,58 +28,52 @@
 #include <QtCore/QString>
 
 #include <kdebug.h>
+#include <kcmdlineargs.h>
+#include <kurl.h>
+#include <klocale.h>
 
-static void usage( char const* argv0 );
-
-int main( int argc, char** argv )
+static const KCmdLineOptions options[] =
 {
-    if ( argc < 1 ) {
-        usage( argv[0] );
-        exit( EXIT_FAILURE );
+    {"silent", I18N_NOOP("Enable Parser debug output"), 0},
+    {"!debug", I18N_NOOP("Disable output of the generated AST"), 0},
+    {"!+files", I18N_NOOP("QMake project files"), 0}
+};
+
+int main( int argc, char* argv[] )
+{
+    KCmdLineArgs::init( argc, argv, "QMake Parser", "qmake-parser", I18N_NOOP("Parse QMake project files"), "4.0.0");
+    KCmdLineArgs::addCmdLineOptions(options);
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+    if( args->count() < 1 )
+    {
+        KCmdLineArgs::usage(0);
     }
 
     int debug = 0;
     bool silent = false;
-    QStringList files;
-    for( int begin = 1 ; begin < argc ; begin++ ) {
-        char const* arg = argv[begin];
-        if( strcmp( arg, "--debug" ) == 0 )
-        {
-            debug = 1;
-        }
-        if( strcmp( arg, "--silent" ) == 0 )
-        {
-            silent = true;
-        }
-        if ( !strncmp( arg, "--", 2 ) ) {
-            std::cerr << "Unknown option: " << arg << std::endl;
-            usage( argv[0] );
-            exit( EXIT_FAILURE );
-        }
-        files.append(QString::fromLocal8Bit(arg));
-    }
-    foreach( QString arg, files )
+
+    if( args->isSet("silent") )
+        silent = true;
+    if( args->isSet("debug") )
+        debug = 1;
+    for( int i = 0 ; i < args->count() ; i++ )
     {
         QMake::ProjectAST* ast;
-        if ( QMake::Driver::parseFile( arg, &ast, debug ) != 0 ) {
+        if ( QMake::Driver::parseFile( args->url(i).toLocalFile(), &ast, debug ) != 0 ) {
             exit( EXIT_FAILURE );
-        }else if( !silent )
+        }else
         {
             QString buf;
-            ast->writeToString( buf );
-            kDebug(9024) << "Project Read: "<< ast->statements().count() << "\n-------------\n" << buf << "\n-------------\n";
+            if( !silent )
+                ast->writeToString( buf );
+            kDebug(9024) << "Project Read: "<< ast->statements().count() << " Top-Level Statements" << endl;
+            if( !silent )
+                kDebug(9024) << "-------------\n" << buf << "\n-------------\n";
         }
     }
 
-}
-
-static void usage( char const* argv0 )
-{
-    std::cerr << "usage: " << argv0 << " [options] file.pro [file2.pro ...]"
-    << std::endl << std::endl
-    << "Options:" << std::endl
-    << "  --debug\tEnable Parser debug output" << std::endl
-    << "  --silent\tDisable output of the generated AST" << std::endl;
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
