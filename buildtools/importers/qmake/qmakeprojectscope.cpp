@@ -27,7 +27,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 
-#include "qmakeparser.h"
+#include "qmakedriver.h"
 #include "qmakeast.h"
 
 const QStringList QMakeProjectScope::FileVariables = QStringList() << "IDLS"
@@ -58,7 +58,7 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
         m_projectFileUrl.adjustPath( KUrl::AddTrailingSlash );
         m_projectFileUrl.setFileName( projectfile );
     }
-    if( QMake::Parser::parseFile( m_projectFileUrl.toLocalFile(), &m_ast ) != 0 )
+    if( QMake::Driver::parseFile( m_projectFileUrl.toLocalFile(), &m_ast ) != 0 )
     {
         kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.toLocalFile() << endl;
         m_ast = 0;

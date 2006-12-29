@@ -179,12 +179,14 @@ namespace QMake
 
     ScopeAST::ScopeAST( FunctionCallAST* call, const QString& ws, AST* parent )
             : StatementAST( ws, parent ), m_call( call ), m_type( Function ), m_body( 0 )
-{}
+    {
+    }
 
 
     ScopeAST::ScopeAST( const QString& scopename, const QString& ws, AST* parent )
             : StatementAST( ws, parent ), m_call( 0 ), m_scopeName( scopename ), m_type( Simple ), m_body( 0 )
-    {}
+    {
+    }
 
 
     ScopeAST::~ScopeAST()
@@ -363,7 +365,8 @@ namespace QMake
                                       QList<FunctionArgAST*> args, const QString& end, const QString& ws, AST* parent )
             : FunctionArgAST( ws, parent ), m_args( args ),
             m_functionName( functionname ), m_begin( begin ), m_end( end )
-    {}
+    {
+    }
 
 
     FunctionCallAST::~FunctionCallAST()

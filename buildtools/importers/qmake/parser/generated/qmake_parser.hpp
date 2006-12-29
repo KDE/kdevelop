@@ -186,11 +186,10 @@ namespace QMake
      QMVARIABLE = 279,
      SHELLVARIABLE = 280,
      FUNCTIONNAME = 281,
-     ELSE = 282,
-     FUNCTIONCALL = 283,
-     SCOPENAME = 284,
-     QUOTED_VAR_VALUE = 285,
-     FNVALUE = 286
+     FUNCTIONCALL = 282,
+     SCOPENAME = 283,
+     QUOTED_VAR_VALUE = 284,
+     FNVALUE = 285
    };
 
     };
@@ -311,7 +310,7 @@ namespace QMake
     /// A `-1'-separated list of the rules' RHS.
     static const rhs_number_type yyrhs_[];
     /// For each rule, the index of the first RHS symbol in \a yyrhs_.
-    static const unsigned short int yyprhs_[];
+    static const unsigned char yyprhs_[];
     /// For each rule, its source line number.
     static const unsigned short int yyrline_[];
     /// For each scanner token number, its symbol number.

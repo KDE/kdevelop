@@ -44,7 +44,7 @@ VARIABLE = value1=value++
 */
 
 #include "parsetest.h"
-#include "qmakeparser.h"
+#include "qmakedriver.h"
 
 QTEST_MAIN( ParseTest )
 
@@ -59,7 +59,7 @@ void ParseTest::successSimpleProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    int ret = QMake::Parser::parseString( project, &a );
+    int ret = QMake::Driver::parseString( project, &a );
     QVERIFY( ret == 0 );
 }
 
@@ -74,7 +74,7 @@ void ParseTest::failSimpleProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    int ret = QMake::Parser::parseString( project, &a );
+    int ret = QMake::Driver::parseString( project, &a );
     QVERIFY( ret != 0 );
 }
 
@@ -88,7 +88,7 @@ void ParseTest::successFullProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    int ret = QMake::Parser::parseString( project, &a );
+    int ret = QMake::Driver::parseString( project, &a );
     QVERIFY( ret == 0 );
 }
 
@@ -114,7 +114,7 @@ void ParseTest::failFullProject()
 {
     QFETCH( QString, project );
     QMake::ProjectAST* a;
-    int ret = QMake::Parser::parseString( project, &a );
+    int ret = QMake::Driver::parseString( project, &a );
     QVERIFY( ret != 0);
 }
 
@@ -137,4 +137,3 @@ void ParseTest::failFullProject_data()
 #include "parsetest.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
-
