@@ -170,7 +170,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     layout->addLayout(dir_checks_layout, 5, 1);
 
     regexp_box = new QCheckBox(i18n("Regular &Expression"), this);
-    regexp_box->setChecked(true);
+    regexp_box->setChecked(config->readBoolEntry("regexp", false ));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(regexp_box);
 
@@ -268,6 +268,7 @@ GrepDialog::~GrepDialog()
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
     config->writePathEntry("LastSearchPaths", qCombo2StringList(dir_combo));
+	config->writeEntry("regexp", regexp_box->isChecked());
 	config->writeEntry("recursive", recursive_box->isChecked());
 	config->writeEntry("case_sens", case_sens_box->isChecked());
 	config->writeEntry("new_view", keep_output_box->isChecked());
