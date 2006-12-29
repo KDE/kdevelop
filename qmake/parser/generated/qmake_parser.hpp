@@ -84,9 +84,13 @@ namespace QMake
     class Lexer;
 
     struct Result {
-        Result() : node(0) {}
+        Result() : stmt(0), scopebody(0), scope(0), fnarg(0), funccall(0) {}
         QString value;
-        QMake::AST* node;
+        QMake::StatementAST* stmt;
+        QMake::ScopeBodyAST* scopebody;
+        QMake::ScopeAST* scope;
+        QMake::FunctionArgAST* fnarg;
+        QMake::FunctionCallAST* funccall;
         QStringList values;
         QList<QMake::StatementAST*> stmtlist;
         QList<QMake::FunctionArgAST*> arglist;
@@ -101,7 +105,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 
 
 /* Line 35 of lalr1.cc.  */
-#line 105 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_parser.hpp"
+#line 109 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_parser.hpp"
 
 #include "location.hh"
 
