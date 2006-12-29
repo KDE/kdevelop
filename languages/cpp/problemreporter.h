@@ -106,21 +106,15 @@ public:
 	bool hasErrors(const QString& file);
 
 public slots:
-	void reparse();
 	void configure();
 	void configWidget( KDialogBase* );
 
 private slots:
 	void slotPartAdded( KParts::Part* );
-	void slotPartRemoved( KParts::Part* );
 	void slotActivePartChanged( KParts::Part* );
-	void slotTextChanged();
 	void slotSelected( QListViewItem* );
-	void slotFileParsed( const QString& fileName );
 	void slotTabSelected( int tabindex );
 	void slotFilter();
-	void closedFile( const KURL &fileName );
-	void slotParseCheck();
 
 private:
 	QString levelToString( int level ) const;
@@ -135,24 +129,21 @@ private:
 	QGridLayout* m_gridLayout;
 	QTabBar* m_tabBar;
 	QWidgetStack* m_widgetStack;
-    KListView* m_currentList;
-    EfficientKListView m_errorList;
-    EfficientKListView m_fixmeList;
-    KListView* m_warningList;
-    EfficientKListView m_todoList;
+	KListView* m_currentList;
+	EfficientKListView m_errorList;
+	EfficientKListView m_fixmeList;
+	KListView* m_warningList;
+	EfficientKListView m_todoList;
 	KListView* m_filteredList;
 	KLineEdit* m_filterEdit;
 
 	CppSupportPart* m_cppSupport;
-	QGuardedPtr<KTextEditor::Document> m_document;
 	KTextEditor::MarkInterface* m_markIface;
-	QTimer* m_timer;
-	QTimer* m_parseCheckTimeout;
-	QTime m_timeout;
 	QString m_fileName;
+	
+	///@todo move these to cppsupportpart
 	int m_active;
 	int m_delay;
-	int m_canParseFile;
 };
 
 #endif 

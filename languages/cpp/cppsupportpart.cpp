@@ -185,11 +185,18 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;
 
-	m_deleteParserStoreTimer = new QTimer( this );
+	m_textChangedTimer = new QTimer( this );
+	connect( m_textChangedTimer, SIGNAL(timeout()), this, SLOT(slotParseCurrentFile()) );
+	
+	m_cursorMovedTimer = new QTimer( this );
+	connect( m_cursorMovedTimer, SIGNAL(timeout()), this, SLOT(slotCursorPositionChanged()) );
+	
+	
+// 	m_deleteParserStoreTimer = new QTimer( this );
 	m_saveMemoryTimer = new QTimer( this );
-	m_functionHintTimer = new QTimer( this );
+// 	m_functionHintTimer = new QTimer( this );
 	connect( m_saveMemoryTimer, SIGNAL(timeout()), this, SLOT(slotSaveMemory()) );
-	connect( m_deleteParserStoreTimer, SIGNAL(timeout()), this, SLOT(slotDeleteParserStore()) );
+// 	connect( m_deleteParserStoreTimer, SIGNAL(timeout()), this, SLOT(slotDeleteParserStore()) );
 	resetParserStoreTimer();
 	m_saveMemoryTimer->start( 240000, false ); //Free some memory every 4 minutes
 	//    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
@@ -391,20 +398,24 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 
 	bool enabled = false;
 
-	m_functionHintTimer->stop();
+// 	m_functionHintTimer->stop();
 
 	if ( m_activeView )
 	{
-		disconnect( m_activeView, SIGNAL( cursorPositionChanged() ), this, SLOT( slotCursorPositionChanged() ) );
+		disconnect( m_activeView, SIGNAL( cursorPositionChanged() ), this, 0 );
 	}
-
+	if ( m_activeDocument )
+	{
+		disconnect( m_activeDocument, SIGNAL(textChanged()), this, 0 );
+	}
+	
 	m_isTyping = false;
 	m_hadErrors = true;
 	m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
 	m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
 	m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
 	m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
-	m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( m_activeView ) : 0;
+	m_activeViewCursor = dynamic_cast<KTextEditor::ViewCursorInterface*>( m_activeView );
 
 	m_activeFileName = QString::null;
 
@@ -421,17 +432,21 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 	actionCollection() ->action( "edit_complete_text" ) ->setEnabled( enabled );
 	actionCollection() ->action( "edit_make_member" ) ->setEnabled( enabled );
 
-	if ( !part )
+	if ( !part || !part->widget() )
 		return ;
 
-	if ( !m_activeView )
-		return ;
-
+	if ( m_activeDocument )
+	{
+		connect( m_activeDocument, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+		slotTextChanged();	// kick the parse timer, we might want to parse the current file
+	}
+	
 	if ( m_activeViewCursor )
 	{
-		connect( m_activeView, SIGNAL( cursorPositionChanged() ),
-		         this, SLOT( slotCursorPositionChanged() ) );
+		connect( m_activeView, SIGNAL( cursorPositionChanged() ), this, SLOT(slotCursorMoved()) );
+// 		         this, SLOT( slotCursorPositionChanged() ) );
 	}
+
 
 #if 0
 	KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
@@ -2457,10 +2472,11 @@ void CppSupportPart::slotCursorPositionChanged()
 		slotSwitchHeader( true );
 }
 
+/*
 void CppSupportPart::slotFunctionHint( )
 {
 	kdDebug( 9007 ) << "=======> compute current function definition" << endl;
-	m_functionHintTimer->stop();
+// 	m_functionHintTimer->stop();
 	if ( FunctionDefinitionDom fun = currentFunctionDefinition() )
 	{
 		QStringList scope = fun->scope();
@@ -2473,6 +2489,7 @@ void CppSupportPart::slotFunctionHint( )
 		mainWindow() ->statusBar() ->message( funName, 2000 );
 	}
 }
+*/
 
 void CppSupportPart::createIgnorePCSFile( )
 {
@@ -2712,5 +2729,27 @@ void CppSupportPart::createAccessMethods( ClassDom theClass, VariableDom theVari
 	slotCreateAccessMethods();
 }
 
+void CppSupportPart::slotCursorMoved()
+{
+	m_cursorMovedTimer->start( 250, true );
+}
+
+void CppSupportPart::slotTextChanged()
+{
+	setTyping( true );	///@todo check if this is really needed
+	
+	///@todo use user setting (see problemreporter)
+	m_textChangedTimer->start( 250, true );
+}
+
+void CppSupportPart::slotParseCurrentFile()
+{
+	if( !isQueued( m_activeFileName ) ) 
+	{
+		parseFileAndDependencies( m_activeFileName, true, true );
+	}
+}
+
 #include "cppsupportpart.moc"
 //kate: indent-mode csands; tab-width 4; space-indent off;
+

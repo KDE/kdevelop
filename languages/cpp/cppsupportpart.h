@@ -85,7 +85,7 @@ public:
 	// is currently a great slowdown for large projects (see bug #73671)
     ProblemReporter* problemReporter() const
 	{
-		return isValid() ? static_cast<ProblemReporter *>( m_problemReporter ) : 0;
+ 		return isValid() ? static_cast<ProblemReporter *>( m_problemReporter ) : 0;
 	}
 
     /** parses the file and all files that belong to it using the background-parser */
@@ -214,7 +214,7 @@ private slots:
 	void slotMakeMember();
 	void slotExtractInterface();
 	void slotCursorPositionChanged();
-	void slotFunctionHint();
+// 	void slotFunctionHint();
 	void gotoLine( int line );
 	void gotoDeclarationLine( int line );
     void emitFileParsed( QStringList l );
@@ -223,6 +223,9 @@ private slots:
 	void slotCreateAccessMethods();
 	void slotDeleteParserStore();
     void slotSaveMemory();
+	void slotTextChanged();
+	void slotCursorMoved();
+	void slotParseCurrentFile();
 
 	void slotNeedTextHint( int, int, QString& );
 
@@ -338,9 +341,11 @@ private:
 
 	QGuardedPtr<KPopupMenu> m_navigationMenu;
 
-	QTimer* m_functionHintTimer;
-	QTimer* m_deleteParserStoreTimer;
+// 	QTimer* m_functionHintTimer;
+// 	QTimer* m_deleteParserStoreTimer;
 	QTimer* m_saveMemoryTimer;
+	QTimer * m_textChangedTimer;
+	QTimer * m_cursorMovedTimer;
     
     class ParseEmitWaiting {
     public:

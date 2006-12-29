@@ -69,7 +69,7 @@ public:
 
 	int compare( QListViewItem* item, int column, bool ascending ) const
 	{
-		if ( column == 2 || column == 3 )
+		if ( column == 1 || column == 2 )
 		{
 			int a = text( column ).toInt();
 			int b = item->text( column ).toInt();
@@ -85,7 +85,7 @@ public:
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
 : QWidget( parent, name ? name : "problemreporter" ),
 m_cppSupport( part ),
-m_document( 0 ),
+// m_document( 0 ),
 m_markIface( 0 )
 {
 	QWhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
@@ -94,8 +94,6 @@ m_markIface( 0 )
 	                           "<tt>//@todo my todo</tt><br>"
 	                           "<tt>//TODO: my todo</tt><br>"
 	                           "<tt>//FIXME fix this</tt>"));
-
-	m_canParseFile = true;
 
 	m_gridLayout = new QGridLayout(this,2,3);
 
@@ -132,9 +130,6 @@ m_markIface( 0 )
 	m_tabBar->setTabEnabled(0,false);
 	m_tabBar->setTabEnabled(4,false);
 
-	m_timer = new QTimer( this );
-	m_parseCheckTimeout = new QTimer( this );
-
 	m_filterEdit = new KLineEdit(this);
 
 	QLabel* m_filterLabel = new QLabel(i18n("Lookup:"),this);
@@ -154,19 +149,20 @@ m_markIface( 0 )
 	         this, SLOT(slotActivePartChanged(KParts::Part*)) );
 	connect( part->partController(), SIGNAL(partAdded(KParts::Part*)),
 	         this, SLOT(slotPartAdded(KParts::Part*)) );
-	connect( part->partController(), SIGNAL(partRemoved(KParts::Part*)),
-	         this, SLOT(slotPartRemoved(KParts::Part*)) );
-
-	connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
-
-    connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
-    connect( m_parseCheckTimeout, SIGNAL(timeout()), this, SLOT(slotParseCheck()) );
-    
-	connect( part->partController(), SIGNAL(closedFile(const KURL&)),
-	         this, SLOT(closedFile(const KURL&)) );
 
 	configure();
 
+	// any editors that were open when we loaded the project needs to have their markType07 icon set too..
+	QPtrListIterator<KParts::Part> it( *m_cppSupport->partController()->parts() );
+	while( it.current() )
+	{
+		if ( KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( it.current() ) )
+		{
+			iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
+		}
+		++it;
+	}
+	
 	slotActivePartChanged( part->partController()->activePart() );
 }
 
@@ -180,6 +176,12 @@ void ProblemReporter::slotFilter()
 
 	m_filteredList->clear();
 
+	if ( m_filterEdit->text().isEmpty() )
+	{
+		m_tabBar->setTabEnabled( 4, false );
+		return;
+	}
+	
 	filterList(m_errorList,i18n("Error"));
 	filterList(m_fixmeList,i18n("Fixme"));
 	filterList(m_todoList,i18n("Todo"));
@@ -228,66 +230,20 @@ ProblemReporter::~ProblemReporter()
 
 void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 {
-	m_fileName = QString::null;
-
-	m_tabBar->setTabEnabled(0,false);
-
-	m_timer->stop();
-
-	if( m_document )
-		disconnect( m_document, 0, this, 0 );
-
-	m_document = dynamic_cast<KTextEditor::Document*>( part );
-	m_markIface = 0;
-
-	if( !m_document )
+	m_currentList->clear();
+	
+	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
+	m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
+		
+	if ( !ro_part )
 	{
+		m_tabBar->setTabEnabled(0,false);
 		return;
 	}
-
-	m_fileName = m_document->url().path();
-
-	initCurrentList();
-
-	if( !m_cppSupport->isValidSource(m_fileName) )
-		return;
-
-	connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
-	m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
-
-	if( !m_cppSupport->backgroundParser() )
-		return;
-
-	m_tabBar->setTabEnabled(0,true);
-
-    m_parseCheckTimeout->start( 300 );
-}
-
-void ProblemReporter::slotParseCheck() {
-	m_parseCheckTimeout->stop();
-	m_cppSupport->backgroundParser()->lock();
-	bool needReparse = false;
-	//if( !m_cppSupport->backgroundParser()->hasTranslationUnit(m_fileName) ) ///with this, the background-parser is used, and it may crash.
-	if( !m_cppSupport->backgroundParser()->translationUnit(m_fileName) )
-		needReparse = true;
-	m_cppSupport->backgroundParser()->unlock();
 	
-	if( needReparse )
-		reparse();
-}
-
-void ProblemReporter::closedFile(const KURL &fileName)
-{
-    //QValueList<Problem> problems = m_cppSupport->backgroundParser()->problems( fileName.path() , true , true);
-}
-
-void ProblemReporter::slotTextChanged()
-{
-	if( !m_active )
-		return;
-
-	m_cppSupport->setTyping(true);
-	m_timer->changeInterval( m_delay );
+	m_fileName = ro_part->url().path();
+	
+	initCurrentList();
 }
 
 void ProblemReporter::removeAllItems( QListView* listview, const QString& filename )
@@ -308,15 +264,17 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	
 	kdDebug(9007) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
 
-    //removeAllItems(m_errorList,relFileName);
-    //removeAllItems(m_fixmeList,relFileName);
-    //removeAllItems(m_todoList,relFileName);
-    m_errorList.removeAllItems( relFileName );
-    m_fixmeList.removeAllItems( relFileName );
-    m_todoList.removeAllItems( relFileName );
+	removeAllItems( m_errorList, relFileName );
+	removeAllItems( m_fixmeList, relFileName );
+	removeAllItems( m_todoList, relFileName );
+	m_errorList.removeAllItems( relFileName );
+	m_fixmeList.removeAllItems( relFileName );
+	m_todoList.removeAllItems( relFileName );
     
+	if ( filename == m_fileName )
+		m_currentList->clear();
 	
-	if( m_document && m_markIface )
+	if( m_markIface )
 	{
 		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
 		QPtrListIterator<KTextEditor::Mark> it( marks );
@@ -328,60 +286,26 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	}
 }
 
-void ProblemReporter::reparse()
-{
-	m_timer->stop();
-	if( m_fileName.isEmpty() ) return;
-
-	if( !m_cppSupport->isValid() )
-		return;
-
-	m_currentList->clear();
-
-    /*if( m_canParseFile )
-    {*/
-
-	if( !m_cppSupport->isQueued( m_fileName ) ) {
-	
-        m_cppSupport->parseFileAndDependencies( m_fileName, true, true );
-    //        m_canParseFile = false;
-        kdDebug(9007) << m_fileName << "---> file added to background-parser by problem-reporter" << endl;
-	}
-    /*}else{
-        if(m_timeout.isNull()) {
-            m_timeout = QTime::currentTime();
-            kdDebug(9007) << "cannot parse, parser seems to be busy" << endl;
-        }
-        if(m_timeout.msecsTo(QTime::currentTime()) > 200) {
-            kdDebug(9007) << "parsing was reset" << endl;
-            m_timeout = QTime();
-            m_canParseFile = true;
-        }else{
-            m_timer->changeInterval( m_delay );
-        }
-    }*/
-}
-
 void ProblemReporter::initCurrentList()
 {
 	m_tabBar->setTabEnabled(0,true);
 
 	QString relFileName = m_cppSupport->project()->relativeProjectFile(m_fileName);
 
-	m_currentList->clear();
+ 	m_currentList->clear();
 
 	updateCurrentWith(m_errorList, i18n("Error"),relFileName);
 	updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
 	updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
 
-	m_tabBar->setCurrentTab(0);
+// 	m_tabBar->setCurrentTab(0);
 }
 
 void ProblemReporter::updateCurrentWith(EfficientKListView& listview, const QString& level, const QString& filename)
 {
     EfficientKListView::Range r = listview.getRange( filename );
     for( ; r.first != r.second; ++r.first )
-        new QListViewItem(m_currentList,level,(*r.first).second->text(1),(*r.first).second->text(2),(*r.first).second->text(3));
+	    new ProblemItem(m_currentList,level,(*r.first).second->text(1),(*r.first).second->text(2),(*r.first).second->text(3));
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -398,7 +322,6 @@ void ProblemReporter::slotSelected( QListViewItem* item )
 	int line = item->text( 1 + is_filtered).toInt();
     // int column = item->text( 3 ).toInt();
 	m_cppSupport->partController()->editDocument( url, line-1 );
-//    m_cppSupport->mainWindow()->lowerView( this );
 }
 
 bool ProblemReporter::hasErrors( const QString& fileName ) {
@@ -408,7 +331,7 @@ bool ProblemReporter::hasErrors( const QString& fileName ) {
 void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 {
 	int markType = levelToMarkType( p.level() );
-	if( markType != -1 && m_document && m_markIface && m_fileName == fileName )
+	if( markType != -1 && m_markIface && m_fileName == fileName )
 		m_markIface->addMark( p.line(), markType );
 
 	QString msg = p.text();
@@ -445,14 +368,8 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
                                                      msg ) );
         
 	}
-
-	if(fileName == m_fileName)
-	{
-		new QListViewItem(m_currentList,levelToString(p.level()),
-		                  QString::number( p.line() + 1 ),
-		                  QString::number( p.column() + 1 ),
-		                  msg);
-	}
+	
+	initCurrentList();
 }
 
 void ProblemReporter::configure()
@@ -482,16 +399,6 @@ void ProblemReporter::slotPartAdded( KParts::Part* part )
 		return;
 
 	iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
-}
-
-void ProblemReporter::slotPartRemoved( KParts::Part* part )
-{
-	kdDebug(9007) << "ProblemReporter::slotPartRemoved()" << endl;
-	if( part == m_document )
-	{
-		m_document = 0;
-		m_timer->stop();
-	}
 }
 
 QString ProblemReporter::levelToString( int level ) const
@@ -525,13 +432,6 @@ int ProblemReporter::levelToMarkType( int level ) const
 		return -1;
 	default:
 		return -1;
-	}
-}
-
-void ProblemReporter::slotFileParsed( const QString& fileName )
-{
-	if( m_active && fileName == m_fileName ){
-		m_canParseFile = true;
 	}
 }
 
