@@ -33,9 +33,13 @@ namespace QMake
     class Lexer;
 
     struct Result {
-        Result() : node(0) {}
+        Result() : stmt(0), scopebody(0), scope(0), fnarg(0), funccall(0) {}
         QString value;
-        QMake::AST* node;
+        QMake::StatementAST* stmt;
+        QMake::ScopeBodyAST* scopebody;
+        QMake::ScopeAST* scope;
+        QMake::FunctionArgAST* fnarg;
+        QMake::FunctionCallAST* funccall;
         QStringList values;
         QList<QMake::StatementAST*> stmtlist;
         QList<QMake::FunctionArgAST*> arglist;
@@ -81,7 +85,7 @@ project:
 
 statements: statements statement
         {
-            $<stmtlist>$.append( static_cast<StatementAST*>( $<node>2 ) );
+            $<stmtlist>$.append( $<stmt>2 );
         }
     |
         {
@@ -91,83 +95,83 @@ statements: statements statement
 
 statement: comment
         {
-            $<node>$ = new CommentAST( $<value>1 );
+            $<stmt>$ = new CommentAST( $<value>1 );
         }
     | EMPTYLINE
         {
-            $<node>$ = new NewlineAST( $<value>1 );
+            $<stmt>$ = new NewlineAST( $<value>1 );
         }
     | variable_assignment
         {
-            $<node>$ = $<node>1;
+            $<stmt>$ = $<stmt>1;
         }
     | scope
         {
-            $<node>$ = $<node>1;
+            $<stmt>$ = $<stmt>1;
         }
     | ws functioncall NEWLINE
         {
-            $<node>$ = new ScopeAST( static_cast<FunctionCallAST*>( $<node>2 ), $<value>1 );
+            $<stmt>$ = new ScopeAST( $<funccall>2, $<value>1 );
         }
     | or_op
         {
-            $<node>$ = $<node>1;
+            $<stmt>$ = $<stmt>1;
         }
     ;
 
 scope: scope_head scope_body
         {
-            ScopeAST* node = static_cast<ScopeAST*>( $<node>1 );
-            node->setScopeBody( static_cast<ScopeBodyAST*>( $<node>2 ) );
-            $<node>$ = node;
+            ScopeAST* node = $<scope>1;
+            node->setScopeBody( $<scopebody>2 );
+            $<stmt>$ = node;
         }
     ;
 
-or_op: scope_head OR scope_head scope_body
+or_op: ws functioncall OR ws functioncall scope_body
         {
-            OrAST* node = new OrAST( static_cast<FunctionCallAST*>( $<node>1 ), $<value>2,
-                                     static_cast<FunctionCallAST*>( $<node>3 ),
-                                     static_cast<ScopeBodyAST*>( $<node>4 ) );
-            $<node>$ = node;
+            $<funccall>2->setWhitespace($<value>1);
+            $<funccall>5->setWhitespace($<value>4);
+            OrAST* node = new OrAST( $<funccall>2, $<value>3, $<funccall>5, $<scopebody>6 );
+            $<stmt>$ = node;
         }
     ;
 
 scope_head: ws scope_name
         {
             ScopeAST* node = new ScopeAST( $<value>2, $<value>1 );
-            $<node>$ = node;
+            $<scope>$ = node;
         }
     | ws functioncall
         {
-            ScopeAST* node = new ScopeAST( static_cast<FunctionCallAST*>($<node>2), $<value>1 );
-            $<node>$ = node;
+            ScopeAST* node = new ScopeAST( $<funccall>2, $<value>1 );
+            $<scope>$ = node;
         }
     ;
 
 scope_body: ws LCURLY COMMENT NEWLINE statements ws RCURLY NEWLINE
         {
             ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7+$<value>8 );
-            $<node>$ = node;
+            $<scopebody>$ = node;
         }
     | ws LCURLY NEWLINE statements ws RCURLY NEWLINE
         {
             ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6+$<value>7 );
-            $<node>$ = node;
+            $<scopebody>$ = node;
         }
     | ws LCURLY NEWLINE statements ws RCURLY
         {
             ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6 );
-            $<node>$ = node;
+            $<scopebody>$ = node;
         }
     | ws LCURLY COMMENT NEWLINE statements ws RCURLY
         {
             ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7 );
-            $<node>$ = node;
+            $<scopebody>$ = node;
         }
     | ws COLON statement
         {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, static_cast<StatementAST*>( $<node>3 ) );
-            $<node>$ = node;
+            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, $<stmt>3 );
+            $<scopebody>$ = node;
         }
     ;
 
@@ -183,41 +187,41 @@ scope_name: SCOPENAME
 
 functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, QString($<value>4) );
-            $<node>$ = node;
+            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, $<value>4 );
+            $<funccall>$ = node;
         }
-    | FUNCTIONNAME LPAREN ws RPAREN
+    | FUNCTIONNAME LPAREN RPAREN
         {
-            $<node>$ = new FunctionCallAST( $<value>1, $<value>2, QList<FunctionArgAST*>(), QString($<value>4) );
+            $<funccall>$ = new FunctionCallAST( $<value>1, $<value>2, QList<FunctionArgAST*>(), $<value>3 );
         }
     | EXCLAM FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            $<node>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, $<arglist>4, $<value>5 );
+            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, $<arglist>4, $<value>5 );
         }
-    | EXCLAM FUNCTIONNAME LPAREN ws RPAREN
+    | EXCLAM FUNCTIONNAME LPAREN RPAREN
         {
-            $<node>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, QList<FunctionArgAST*>(), $<value>5 );
+            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, QList<FunctionArgAST*>(), $<value>4 );
         }
     ;
 
 functionargs: functionargs COMMA functionarg
         {
-            $<arglist>$.append( static_cast<FunctionArgAST*>( $<node>3 ) );
+            $<arglist>$.append( $<fnarg>3 );
         }
     | functionarg
         {
             $<arglist>$.clear();
-            $<arglist>$.append( static_cast<FunctionArgAST*>( $<node>1 ) );
+            $<arglist>$.append( $<fnarg>1 );
         }
     ;
 
 functionarg: ws fnvalue
         {
-            $<node>$ = new SimpleFunctionArgAST( $<value>2, $<value>1 );
+            $<fnarg>$ = new SimpleFunctionArgAST( $<value>2, $<value>1 );
         }
     | ws FUNCTIONCALL ws LPAREN functionargs RPAREN ws
         {
-            $<node>$ = new FunctionCallAST( $<value>2, $<value>3+$<value>4, $<arglist>5, $<value>6+$<value>7, $<value>1 );
+            $<fnarg>$ = new FunctionCallAST( $<value>2, $<value>3+$<value>4, $<arglist>5, $<value>6+$<value>7, $<value>1 );
         }
     ;
 
@@ -333,19 +337,19 @@ fnvalue: fnvalue FNVALUE
 
 variable_assignment: ws VARIABLE op values COMMENT NEWLINE
         {
-            $<node>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>5, $<value>1 );
+            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>5, $<value>1 );
         }
     | ws VARIABLE op COMMENT NEWLINE
         {
-            $<node>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), $<value>4, $<value>1 );
+            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), $<value>4, $<value>1 );
         }
     | ws VARIABLE op values NEWLINE
         {
-            $<node>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, "", $<value>1 );
+            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, "", $<value>1 );
         }
     | ws VARIABLE op NEWLINE
         {
-            $<node>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), "", $<value>1 );
+            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), "", $<value>1 );
         }
     ;
 
