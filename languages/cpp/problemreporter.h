@@ -106,8 +106,6 @@ public:
 	bool hasErrors(const QString& file);
 
 public slots:
-	void configure();
-	void configWidget( KDialogBase* );
 
 private slots:
 	void slotPartAdded( KParts::Part* );

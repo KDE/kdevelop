@@ -49,6 +49,7 @@ class QTimer;
 class KListView;
 class Driver;
 class KPopupMenu;
+class BackgroundParserConfig;
 
 
 namespace KParts
@@ -79,7 +80,8 @@ public:
 
 	QString specialHeaderName( bool local = false ) const;
 	void updateParserConfiguration();
-
+	void updateBackgroundParserConfig();
+	
 	// @fixme - isValid is used to avoid using the problem reporter
 	// when a project is first parsed. This because the problem reporter
 	// is currently a great slowdown for large projects (see bug #73671)
@@ -226,6 +228,9 @@ private slots:
 	void slotTextChanged();
 	void slotCursorMoved();
 	void slotParseCurrentFile();
+	void embedProblemReporter( bool force = false );
+	void removeProblemReporter();
+	
 
 	void slotNeedTextHint( int, int, QString& );
 
@@ -495,6 +500,8 @@ private:
 private slots:
 	void parseEmit( ParseEmitWaiting::Processed files );
 private:
+	
+	BackgroundParserConfig * m_backgroundParserConfig;
 	
 	static QStringList m_sourceMimeTypes;
 	static QStringList m_headerMimeTypes;

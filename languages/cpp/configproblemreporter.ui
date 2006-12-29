@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigureProblemReporter</class>
 <widget class="QWidget">
     <property name="name">
@@ -12,10 +12,41 @@
             <height>492</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>ConfigureProblemReporter</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox3_2</cstring>
+            </property>
+            <property name="title">
+                <string>Problem Reporter</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If enabled, the C++ parser will report any syntax errors it detects. 
+They will be displayed in the 'Problems' output view and as markers in the editor.</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>problemReporterCheckbox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Use Problem Reporter</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+U</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox1</cstring>
@@ -25,6 +56,11 @@
             </property>
             <property name="title">
                 <string>Parsing</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If enabled, the C++ parser will run on the active file after the stated timeout, after there has been any changes to the text.
+
+If disabled, the parser will typically only run when the file is saved.</string>
             </property>
             <vbox>
                 <property name="name">
@@ -43,7 +79,10 @@
                                 <cstring>bgParserCheckbox</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Enable background parsing</string>
+                                <string>Enable &amp;background parsing</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+B</string>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -70,6 +109,9 @@
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>delaySlider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>250</number>
                     </property>
                     <property name="maxValue">
                         <number>2000</number>
@@ -98,6 +140,9 @@
             </property>
             <property name="title">
                 <string>Special &amp;Headers</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Often a macro that the C++ parser must understand in order to correctly parse a piece of code is defined somewhere in some far off header file that the parser doesn't look at. This textbox can be used to define those macros locally so that the C++ parser to understand them.</string>
             </property>
             <vbox>
                 <property name="name">

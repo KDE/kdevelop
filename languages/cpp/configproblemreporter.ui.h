@@ -23,6 +23,7 @@ void ConfigureProblemReporter::init()
 	m_part = 0;
 	KConfig* config = kapp->config();
 	config->setGroup( "General Options" );
+	problemReporterCheckbox->setChecked( config->readBoolEntry( "EnableProblemReporter", true ) );
 	bgParserCheckbox->setChecked( config->readBoolEntry( "EnableCppBgParser", true ) );
 	delaySlider->setEnabled( bgParserCheckbox->isChecked() );
 	delaySlider->setValue( config->readNumEntry( "CppBgParserDelay", 500 ) );
@@ -55,11 +56,15 @@ void ConfigureProblemReporter::accept()
 {
 	KConfig * config = kapp->config();
 	config->setGroup( "General Options" );
+	config->writeEntry( "EnableProblemReporter", problemReporterCheckbox->isChecked() );
 	config->writeEntry( "EnableCppBgParser", bgParserCheckbox->isChecked() );
 	if ( bgParserCheckbox->isChecked() )
 		config->writeEntry( "CppBgParserDelay", delaySlider->value() );
 	config->sync();
 
+	m_part->updateBackgroundParserConfig();
+	
+	
 	if ( m_part && specialHeader->isModified() )
 	{
 		QString conf_file_name = m_part->specialHeaderName( true );

@@ -51,6 +51,7 @@
 // designer integration
 #include "qtdesignercppintegration.h"
 #include "cppimplementationwidget.h"
+#include "configproblemreporter.h"
 
 #include <qeventloop.h>
 #include <qheader.h>
@@ -168,8 +169,33 @@ public:
 	}
 };
 
+// ProblemReporter doesn't really depend on background parsing, so it's a bit of a mixup to 
+// handle them together, but it's the same config widget so...
+class BackgroundParserConfig
+{
+	bool m_useProblemReporter;
+	bool m_useBackgroundParser;
+	int m_backgroundParseDelay;
+public:
+	void readConfig()
+	{
+		KConfig* config = kapp->config();
+		config->setGroup( "General Options" );
+		m_useProblemReporter = config->readBoolEntry( "EnableProblemReporter", true );
+		m_useBackgroundParser = config->readBoolEntry( "EnableCppBgParser", true );
+		m_backgroundParseDelay = config->readNumEntry( "BgParserDelay", 500 );
+	}
+	
+	bool useProblemReporter() { return m_useProblemReporter; }
+	bool useBackgroundParser() { return m_useBackgroundParser; }
+	int backgroudParseDelay() { return m_backgroundParseDelay; }
+};
+
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
-: KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ), m_backgroundParser(0), m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ), m_activeViewCursor( 0 ), m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), _jd(0), m_isTyping( false ), m_hadErrors( false )
+: KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ), m_backgroundParser(0), 
+	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ), m_activeViewCursor( 0 ), 
+	m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), m_isTyping( false ), m_hadErrors( false ), 
+	_jd(0)
 {
 	setInstance( CppSupportFactory::instance() );
 
@@ -182,6 +208,9 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	m_qtBuildConfig = new QtBuildConfig( this, projectDom() );
     m_qtBuildConfig->store();
 
+	m_backgroundParserConfig = new BackgroundParserConfig;
+	m_backgroundParserConfig->readConfig();
+	
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;
 
@@ -308,14 +337,17 @@ CppSupportPart::~CppSupportPart()
 		codeRepository() ->unregisterCatalog( catalog );
 	}
 
-	mainWindow( ) ->removeView( m_problemReporter );
 
+	delete m_backgroundParserConfig;
+	m_backgroundParserConfig = 0;
+	
 	delete m_pCompletion;
-	delete m_problemReporter;
-
 	m_pCompletion = 0;
+	
+/*	mainWindow()->removeView( m_problemReporter );
+	delete m_problemReporter;
 	m_problemReporter = 0;
-
+*/
 	delete _jd;
 	_jd = 0;
 
@@ -390,6 +422,12 @@ void CppSupportPart::configWidget( KDialogBase *dlg )
 	                                 BarIcon( info() ->icon(), KIcon::SizeMedium ) );
 	ClassGeneratorConfig *w = new ClassGeneratorConfig( vbox, "classgenerator config widget" );
 	connect( dlg, SIGNAL( okClicked() ), w, SLOT( storeConfig() ) );
+	
+	vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"),
+	                               BarIcon( "source_cpp", KIcon::SizeMedium) );
+	ConfigureProblemReporter* ww = new ConfigureProblemReporter( vbox );
+	ww->setPart( this );
+	connect(dlg, SIGNAL(okClicked()), ww, SLOT(accept()));	
 }
 
 void CppSupportPart::activePartChanged( KParts::Part *part )
@@ -486,10 +524,7 @@ void CppSupportPart::projectOpened( )
 
 	setupCatalog();
 
-	m_problemReporter = new ProblemReporter( this, 0, "problemReporterWidget" );
-	m_problemReporter->setIcon( SmallIcon( "info" ) );
-	m_problemReporter->setCaption( i18n( "Problem Reporter" ) );
-	mainWindow( ) ->embedOutputView( m_problemReporter, i18n( "Problems" ), i18n( "Problem reporter" ) );
+	embedProblemReporter();
 
 	connect( core(), SIGNAL( configWidget( KDialogBase* ) ),
 	         m_problemReporter, SLOT( configWidget( KDialogBase* ) ) );
@@ -513,6 +548,24 @@ void CppSupportPart::projectOpened( )
 	m_projectClosed = false;
 
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
+}
+
+void CppSupportPart::embedProblemReporter( bool force )
+{
+	if ( force || m_backgroundParserConfig->useProblemReporter() )
+	{
+		m_problemReporter = new ProblemReporter( this, 0, "problemReporterWidget" );
+		m_problemReporter->setIcon( SmallIcon( "info" ) );
+		m_problemReporter->setCaption( i18n( "Problem Reporter" ) );
+		mainWindow( ) ->embedOutputView( m_problemReporter, i18n( "Problems" ), i18n( "Problem reporter" ) );
+	}
+}
+
+void CppSupportPart::removeProblemReporter()
+{
+	mainWindow()->removeView( m_problemReporter );
+	delete m_problemReporter;
+	m_problemReporter = 0;
 }
 
 
@@ -546,6 +599,8 @@ void CppSupportPart::projectClosed( )
 	delete _jd;
 	_jd = 0;
 
+	removeProblemReporter();
+	
 	delete m_pCompletion;
 	m_parseEmitWaiting.clear();
 	m_fileParsedEmitWaiting.clear();
@@ -2733,18 +2788,39 @@ void CppSupportPart::slotTextChanged()
 {
 	setTyping( true );	///@todo check if this is really needed
 	
-	///@todo use user setting (see problemreporter)
-	m_textChangedTimer->start( 250, true );
+	if ( m_backgroundParserConfig->useBackgroundParser() )
+	{
+		m_textChangedTimer->start( m_backgroundParserConfig->backgroudParseDelay(), true );
+	}
 }
 
 void CppSupportPart::slotParseCurrentFile()
 {
+// 	if( isValid() && !isQueued( m_activeFileName ) ) 
 	if( !isQueued( m_activeFileName ) ) 
 	{
 		parseFileAndDependencies( m_activeFileName, true, true );
 	}
 }
 
+void CppSupportPart::updateBackgroundParserConfig()
+{
+	BackgroundParserConfig config;
+	config.readConfig();
+	
+	if ( m_backgroundParserConfig->useProblemReporter() && !config.useProblemReporter() )
+	{
+		removeProblemReporter();
+	}
+	else if ( !m_backgroundParserConfig->useProblemReporter() && config.useProblemReporter() )
+	{
+		embedProblemReporter( true );
+	}
+	
+	*m_backgroundParserConfig = config;
+}
+
 #include "cppsupportpart.moc"
 //kate: indent-mode csands; tab-width 4; space-indent off;
+
 

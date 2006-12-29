@@ -150,8 +150,6 @@ m_markIface( 0 )
 	connect( part->partController(), SIGNAL(partAdded(KParts::Part*)),
 	         this, SLOT(slotPartAdded(KParts::Part*)) );
 
-	configure();
-
 	// any editors that were open when we loaded the project needs to have their markType07 icon set too..
 	QPtrListIterator<KParts::Part> it( *m_cppSupport->partController()->parts() );
 	while( it.current() )
@@ -370,25 +368,6 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 	}
 	
 	initCurrentList();
-}
-
-void ProblemReporter::configure()
-{
-	kdDebug(9007) << "ProblemReporter::configure()" << endl;
-	KConfig* config = kapp->config();
-	config->setGroup( "General Options" );
-	m_active = config->readBoolEntry( "EnableCppBgParser", TRUE );
-	m_delay = config->readNumEntry( "BgParserDelay", 250 );
-}
-
-void ProblemReporter::configWidget( KDialogBase* dlg )
-{
-	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"),
-	                               BarIcon( "source_cpp", KIcon::SizeMedium) );
-	ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
-	w->setPart( m_cppSupport );
-	connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
-	connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));
 }
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )
