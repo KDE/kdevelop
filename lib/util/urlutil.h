@@ -168,7 +168,7 @@ namespace URLUtil
    * had this broken, so it's reproduced here.
    * Deprecated, use QDir::canonicalPath instead.    
    */
-  QString canonicalPath( const QString & path ) KDE_DEPRECATED; 
+  QString canonicalPath( const QString & path );
 
     /**
      * Performs environment variable expansion on @p variable.
