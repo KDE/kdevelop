@@ -72,16 +72,6 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 	connect( m_qtDir, SIGNAL(textChanged(const QString &)),
 		 this, SLOT(isValidQtDir(const QString &)));
 
-    connect( m_designerPath, SIGNAL(urlSelected(const QString &)),
-         this, SLOT(isExecutable(const QString &)));
-    connect( m_designerPath, SIGNAL(textChanged(const QString &)),
-         this, SLOT(isExecutable(const QString &)));
-
-    connect( m_qmakePath, SIGNAL(urlSelected(const QString &)),
-         this, SLOT(isExecutable(const QString &)));
-    connect( m_qmakePath, SIGNAL(textChanged(const QString &)),
-         this, SLOT(isExecutable(const QString &)));
-
 	initGeneralTab( );
 	initQtTab();
 	initCodeCompletionTab( );
