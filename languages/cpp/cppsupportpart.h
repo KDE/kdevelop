@@ -430,9 +430,15 @@ private:
 			    return flag & HadQueueProblem;
 		    }
 
+		    bool hasFlag( Flags f ) const {
+			    return f & flag;
+		    }
+		    // surely a copy paste implementation?
+/*		    
     	    bool hasFlag( Flags flag ) const {
         	    return flag & HadQueueProblem;
     	    }
+*/
 	    };
 
 
