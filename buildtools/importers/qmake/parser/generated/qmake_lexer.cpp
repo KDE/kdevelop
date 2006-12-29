@@ -1019,12 +1019,12 @@ case 5:
 YY_RULE_SETUP
 #line 56 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 {
-                                    bracecount--;
-                                    if( bracecount == 0 )
-                                        BEGIN(INITIAL);
-                                    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-                                    return Parser::token::RPAREN;
-                                }
+                                        bracecount--;
+                                        if( bracecount == 0 )
+                                            BEGIN(INITIAL);
+                                        mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+                                        return Parser::token::RPAREN;
+                                    }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
