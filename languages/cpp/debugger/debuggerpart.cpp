@@ -119,7 +119,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                          0, "variablewidget");
     mainWindow()->embedSelectView(variableWidget, i18n("Variables"),
                                   i18n("Debugger variable-view"));
-
+    mainWindow()->setViewAvailable(variableWidget, false);
 
     framestackWidget = new FramestackWidget( controller, 0, "framestackWidget" );
     framestackWidget->setEnabled(false);
@@ -695,6 +695,7 @@ bool DebuggerPart::startDebugger()
         mainWindow()->setViewAvailable(framestackWidget, true);
         mainWindow()->setViewAvailable(disassembleWidget, true);
         mainWindow()->setViewAvailable(gdbOutputWidget, true);
+        mainWindow()->setViewAvailable(variableWidget, true);
 
         framestackWidget->setEnabled(true);
         disassembleWidget->setEnabled(true);
@@ -739,7 +740,7 @@ void DebuggerPart::slotStopDebugger()
     gdbOutputWidget->setEnabled(false);
 
 
-//    mainWindow()->setViewAvailable(variableWidget, false);
+    mainWindow()->setViewAvailable(variableWidget, false);
     mainWindow()->setViewAvailable(framestackWidget, false);
     mainWindow()->setViewAvailable(disassembleWidget, false);
     mainWindow()->setViewAvailable(gdbOutputWidget, false);
@@ -1102,20 +1103,6 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         stateIndicator = " ";
         stateIndicatorFull = "Debugger not started";
         stateChanged( QString("stopped") );
-
-        // If the view is undocked, don't hide it. User has explicitly
-        // undocked it and moved into a convenient position. Don't
-        // force him to undock the widget and move it again next
-        // time the debugger starts.
-        bool undocked = false;
-
-        if (KDockWidget* dockWidget =
-            static_cast<KDockWidget*>(
-                variableWidget->parentWidget()->qt_cast("KDockWidget")))
-        {
-            if (dockWidget->currentDockPosition() == KDockWidget::DockDesktop)
-                undocked = true;
-        }
     }
     else if (state & s_dbgBusy)
     {
@@ -1143,6 +1130,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         if (justRestarted_)
         {
             justRestarted_ = false;
+            mainWindow()->setViewAvailable(variableWidget, true);
             mainWindow()->raiseView(variableWidget);
         }
     }
