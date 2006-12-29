@@ -2211,6 +2211,9 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 
 		kdDebug() << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";
 		if( background ) {
+			
+			m_backgroundParser->lock();
+			
 			if( !group.isEmpty() ) {
 				if( !parseFirst )
 					m_parseEmitWaiting.addGroup( group, silent ? ParseEmitWaiting::Silent : ParseEmitWaiting::None  );
@@ -2240,6 +2243,9 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 					backgroundParser()->addFile(*it);
 				}
 			}
+			
+			m_backgroundParser->unlock();
+			
 		} else {
 			for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
 				if( !silent && _jd ) //If this this file is not silent and thus not part of the initial parse, increase the background-count so the progress-bar does not get confused
