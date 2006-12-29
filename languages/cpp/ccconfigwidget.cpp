@@ -245,15 +245,7 @@ void CCConfigWidget::slotRemovePCS()
 	KStandardDirs *dirs = m_pPart->instance() ->dirs();
 	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + KURL::encode_string_no_slash( db ) + ".db";
 
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
-
 	if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n( "Delete Database" ), KStdGuiItem::del() ) )
-#else
-
-	if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n( "Delete Database" ),
-			KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) ) ) )
-#endif
-
 	{
 		m_pPart->removeCatalog( dbName );
 	}
