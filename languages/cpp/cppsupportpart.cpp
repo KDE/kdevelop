@@ -2796,8 +2796,7 @@ void CppSupportPart::slotTextChanged()
 
 void CppSupportPart::slotParseCurrentFile()
 {
-// 	if( isValid() && !isQueued( m_activeFileName ) ) 
-	if( !isQueued( m_activeFileName ) ) 
+ 	if( isValid() && !isQueued( m_activeFileName ) ) 
 	{
 		parseFileAndDependencies( m_activeFileName, true, true );
 	}
