@@ -552,6 +552,7 @@ void SimpleMainWindow::documentChangedState(const KURL &url, DocumentState state
                 break;
         }
     }
+    setCaption(url.url());
 }
 
 void SimpleMainWindow::closeTab()
@@ -953,6 +954,16 @@ void SimpleMainWindow::switchToNextTabWidget()
 
 void SimpleMainWindow::setCaption(const QString &caption)
 {
+    kdDebug(9000) << k_funcinfo << endl;
+
+    bool modified = false;
+    if ( !caption.isEmpty() )
+    {
+        KURL url( caption );
+        DocumentState const state = PartController::getInstance()->documentState( url );
+        modified = ( state == Modified || state == DirtyAndModified );
+    }
+
     KDevProject *project = API::getInstance()->project();
     if (project)
     {
@@ -963,12 +974,12 @@ void SimpleMainWindow::setCaption(const QString &caption)
             projectname.truncate(projectname.length() - suffix.length());
 
         if (!caption.isEmpty())
-            DMainWindow::setCaption(projectname + " - " + caption);
+            DMainWindow::setCaption(projectname + " - " + caption, modified);
         else
-            DMainWindow::setCaption(projectname);
+            DMainWindow::setCaption(projectname, modified);
     }
     else
-        DMainWindow::setCaption(caption);
+        DMainWindow::setCaption(caption, modified);
 }
 
 void SimpleMainWindow::projectClosed()
