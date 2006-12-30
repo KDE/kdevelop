@@ -1485,6 +1485,8 @@ QString VarItem::displayName() const
 void VarItem::setAliveRecursively(bool enable)
 {
     setEnabled(enable);
+    alive_ = true;
+
     for(QListViewItem* child = firstChild();
         child; child = child->nextSibling())
     {
