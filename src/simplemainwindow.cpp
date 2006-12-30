@@ -258,11 +258,6 @@ void SimpleMainWindow::rememberToolViewPosition( const QString & name, DDockWind
     KConfig * config = kapp->config();
     config->setGroup( "DToolDockPosition" );
 
-    if ( name == "unknown" )
-    {
-        kdDebug() << name << endl;
-    }
-
     QString position = "unknown";
 
     switch( pos )
@@ -363,6 +358,11 @@ void SimpleMainWindow::saveSettings( )
     QMap<QWidget*, DDockWindow::Position>::iterator it = m_docks.begin();
     while ( it != m_docks.end() )
     {
+        if ( it.key()->name() == "unnamed" )
+        {
+            kdError() << "Toolviews must have a name : " << it.key() << endl;
+        }
+
         rememberToolViewPosition( it.key()->name(), it.data() );
         ++it;
     }
