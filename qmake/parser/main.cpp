@@ -60,8 +60,8 @@ int main( int argc, char* argv[] )
         debug = 1;
     for( int i = 0 ; i < args->count() ; i++ )
     {
-        QMake::ProjectAST* ast;
-        if ( QMake::Driver::parseFile( args->url(i).toLocalFile(), &ast, debug ) != 0 ) {
+        QMake::ProjectAST* ast = new QMake::ProjectAST();
+        if ( QMake::Driver::parseFile( args->url(i).toLocalFile(), ast, debug ) != 0 ) {
             exit( EXIT_FAILURE );
         }else
         {

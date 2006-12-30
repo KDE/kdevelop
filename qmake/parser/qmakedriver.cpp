@@ -32,7 +32,7 @@
 
 namespace QMake
 {
-    int Driver::parseFile( char const *filename, ProjectAST** ast, int debug )
+    int Driver::parseFile( char const *filename, ProjectAST* ast, int debug )
     {
         std::ifstream inf( filename, std::ios::in );
         if ( !inf.is_open() )
@@ -48,16 +48,16 @@ namespace QMake
         p.set_debug_level(debug);
         int ret = p.parse();
         printf("Parsed: %d\n", ret);
-        (*ast)->setFilename(QString::fromUtf8( filename ));
+        ast->setFilename(QString::fromUtf8( filename ));
         return ret;
     }
 
-    int Driver::parseFile( const QString& filename, ProjectAST** ast, int debug )
+    int Driver::parseFile( const QString& filename, ProjectAST* ast, int debug )
     {
         return parseFile( filename.toUtf8().constData(), ast, debug );
     }
 
-    int Driver::parseString( char const *content, ProjectAST** ast, int debug )
+    int Driver::parseString( char const *content, ProjectAST* ast, int debug )
     {
         std::istringstream ins;
         ins.str(content);
@@ -67,11 +67,11 @@ namespace QMake
         p.set_debug_level(debug);
         int ret = p.parse();
         printf("Parsed: %d\n", ret);
-        (*ast)->setFilename( "" );
+        ast->setFilename( "" );
         return ret;
     }
 
-    int Driver::parseString( const QString& content, ProjectAST** ast, int debug )
+    int Driver::parseString( const QString& content, ProjectAST* ast, int debug )
     {
         QByteArray qb = content.toUtf8();
         const char* data = qb.data();

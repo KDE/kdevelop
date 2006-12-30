@@ -13,6 +13,17 @@ target_link_libraries(qmake-parsetest
 	kdevqmakeparser
 	)
 
+set(assignmenttest_SRCS assignmenttest.cpp)
+kde4_automoc(qmake-assignmenttest ${assignmenttest_SRCS})
+kde4_add_executable(qmake-assignmenttest NOGUI RUN_UNINSTALLED ${assignmenttest_SRCS})
+target_link_libraries(qmake-assignmenttest
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatform
+    kdevqmakeparser
+    )
+
 add_test(qmake-parsetest ${EXECUTABLE_OUTPUT_PATH}/qmake-parsetest)
+add_test(qmake-assignmenttest ${EXECUTABLE_OUTPUT_PATH}/qmake-assignmenttest)
 
 endif(KDE4_BUILD_TESTS)
