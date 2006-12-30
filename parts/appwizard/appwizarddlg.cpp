@@ -684,7 +684,6 @@ void AppWizardDialog::accept()
            if (KDevAppFrontend *appFrontend = m_part->extension<KDevAppFrontend>("KDevelop/AppFrontend"))
               appFrontend->startAppCommand(KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmdDir, m_pCurrentAppInfo->subMap), KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmd, m_pCurrentAppInfo->subMap), false);
 
-	openAfterGeneration();
 
 	int id = m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget());
 	if (id)
@@ -701,6 +700,7 @@ void AppWizardDialog::accept()
 	else
 		kdDebug(9010) << "vcs integrator wasn't selected" << endl;
 
+	openAfterGeneration();
 	QWizard::accept();
 }
 
