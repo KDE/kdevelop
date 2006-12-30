@@ -19,6 +19,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 #include <qheader.h>
 #include <qlistbox.h>
@@ -38,7 +39,7 @@ namespace GDBDebugger
 {
 
 FramestackWidget::FramestackWidget(GDBController* controller,
-                                   QWidget *parent,
+                                   QWidget *parent, 
                                    const char *name, WFlags f)
         : QListView(parent, name, f),
           viewedThread_(0),
@@ -129,7 +130,7 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
 {
     switch(e)
     {
-        case GDBController::program_state_changed:
+        case GDBController::program_state_changed: 
 
             kdDebug(9012) << "Clearning framestack\n";
             clear();
@@ -139,17 +140,17 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
                                this, &FramestackWidget::handleThreadList));
 
             break;
+            
 
-
-         case GDBController::thread_or_frame_changed:
+         case GDBController::thread_or_frame_changed: 
 
              if (viewedThread_)
              {
                  // For non-threaded programs frame switch is no-op
                  // as far as framestack is concerned.
                  // FIXME: but need to highlight the current frame.
-
-                 if (ThreadStackItem* item
+                 
+                 if (ThreadStackItem* item 
                      = findThread(controller_->currentThread()))
                  {
                      viewedThread_ = item;
@@ -164,12 +165,12 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
 
             break;
 
-        case GDBController::program_exited:
-        case GDBController::debugger_exited:
+        case GDBController::program_exited: 
+        case GDBController::debugger_exited: 
         {
             clear();
             break;
-        }
+        }        
         case GDBController::debugger_busy:
         case GDBController::debugger_ready:
         case GDBController::shared_library_loaded:
@@ -186,8 +187,8 @@ void FramestackWidget::getBacktrace(int min_frame, int max_frame)
 
     controller_->addCommand(
         new GDBCommand(QString("-stack-info-depth %1").arg(max_frame+1),
-                       this,
-                       &FramestackWidget::handleStackDepth));
+                       this, 
+                       &FramestackWidget::handleStackDepth));        
 }
 
 void FramestackWidget::handleStackDepth(const GDBMI::ResultRecord& r)
@@ -202,7 +203,7 @@ void FramestackWidget::handleStackDepth(const GDBMI::ResultRecord& r)
     controller_->addCommandToFront(
         new GDBCommand(QString("-stack-list-frames %1 %2")
                        .arg(minFrame_).arg(maxFrame_),
-                       this, &FramestackWidget::parseGDBBacktraceList));
+                       this, &FramestackWidget::parseGDBBacktraceList));    
 }
 
 void FramestackWidget::getBacktraceForThread(int threadNo)
@@ -217,7 +218,7 @@ void FramestackWidget::getBacktraceForThread(int threadNo)
 
         viewedThread_ = findThread(threadNo);
     }
-
+    
     getBacktrace();
 
     if (viewedThread_)
@@ -231,11 +232,11 @@ void FramestackWidget::getBacktraceForThread(int threadNo)
 
 void FramestackWidget::handleThreadList(const GDBMI::ResultRecord& r)
 {
-    // Gdb reply is:
+    // Gdb reply is: 
     //  ^done,thread-ids={thread-id="3",thread-id="2",thread-id="1"},
     // which syntactically is a tuple, but one has to access it
     // by index anyway.
-    const GDBMI::TupleValue& ids =
+    const GDBMI::TupleValue& ids = 
         dynamic_cast<const GDBMI::TupleValue&>(r["thread-ids"]);
 
     if (ids.results.size() > 1)
@@ -244,14 +245,14 @@ void FramestackWidget::handleThreadList(const GDBMI::ResultRecord& r)
         // Note that this sequence of command will be executed in strict
         // sequences, so no other view can add its command in between and
         // get state for a wrong thread.
-
+                        
         // Really threaded program.
         for(unsigned i = 0, e = ids.results.size(); i != e; ++i)
         {
             QString id = ids.results[i]->value->literal();
 
             controller_->addCommand(
-                new GDBCommand(QString("-thread-select %1").arg(id).ascii(),
+                new GDBCommand(QString("-thread-select %1").arg(id).ascii(), 
                                this, &FramestackWidget::handleThread));
         }
 
@@ -261,7 +262,7 @@ void FramestackWidget::handleThreadList(const GDBMI::ResultRecord& r)
     }
 
     // Get backtrace for the current thread. We need to do this
-    // here, and not in event handler for program_state_changed,
+    // here, and not in event handler for program_state_changed, 
     // viewedThread_ is initialized by 'handleThread' before
     // backtrace handler is called.
     getBacktrace();
@@ -276,7 +277,7 @@ void FramestackWidget::handleThread(const GDBMI::ResultRecord& r)
     QString func_column;
     QString args_column;
     QString source_column;
-
+    
     formatFrame(r["frame"], func_column, source_column);
 
     ThreadStackItem* thread = new ThreadStackItem(this, id_num);
@@ -298,7 +299,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
     if (!r.hasField("stack"))
         return;
 
-    const GDBMI::Value& frames = r["stack"];
+    const GDBMI::Value& frames = r["stack"];    
 
     if (frames.empty())
         return;
@@ -306,7 +307,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
     Q_ASSERT(dynamic_cast<const GDBMI::ListValue*>(&frames));
 
     // Remove "..." item, if there's one.
-    QListViewItem* last;
+    QListViewItem* last;    
     if (viewedThread_)
     {
         last = viewedThread_->firstChild();
@@ -314,7 +315,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
             while(last->nextSibling())
                 last = last->nextSibling();
     }
-    else
+    else 
     {
         last = lastItem();
     }
@@ -325,7 +326,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
     for(unsigned i = 0, e = frames.size(); i != e; ++i)
     {
         const GDBMI::Value& frame = frames[i];
-
+      
         // For now, just produce string simular to gdb
         // console output. In future we might have a table,
         // or something better.
@@ -341,7 +342,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
         name_column = "#" + level_s;
 
         formatFrame(frame, func_column, source_column);
-
+        
         FrameStackItem* item;
         if (viewedThread_)
             item = new FrameStackItem(viewedThread_, level, name_column);
@@ -350,7 +351,7 @@ void FramestackWidget::parseGDBBacktraceList(const GDBMI::ResultRecord& r)
         lastLevel = level;
 
         item->setText(1, func_column);
-        item->setText(2, source_column);
+        item->setText(2, source_column);        
     }
     if (has_more_frames)
     {
@@ -452,11 +453,25 @@ void FramestackWidget::formatFrame(const GDBMI::Value& frame,
     }
 }
 
+
+void FramestackWidget::drawContentsOffset( QPainter * p, int ox, int oy,
+                                           int cx, int cy, int cw, int ch )
+{
+    QListView::drawContentsOffset(p, ox, oy, cx, cy, cw, ch);
+
+    int s1_x = header()->sectionPos(1);
+    int s1_w = header()->sectionSize(1);
+
+    QRect section1(s1_x, contentsHeight(), s1_w, viewport()->height());
+
+    p->fillRect(section1, KGlobalSettings::alternateBackgroundColor());
+}
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
 
-FrameStackItem::FrameStackItem(FramestackWidget *parent,
+FrameStackItem::FrameStackItem(FramestackWidget *parent, 
                                unsigned frameNo,
                                const QString &name)
         : QListViewItem(parent, parent->lastChild()),
@@ -468,7 +483,7 @@ FrameStackItem::FrameStackItem(FramestackWidget *parent,
 
 // **************************************************************************
 
-FrameStackItem::FrameStackItem(ThreadStackItem *parent,
+FrameStackItem::FrameStackItem(ThreadStackItem *parent, 
                                unsigned frameNo,
                                const QString &name)
         : QListViewItem(parent, parent->lastChild()),
@@ -498,7 +513,7 @@ QListViewItem *FrameStackItem::lastChild() const
 // **************************************************************************
 
 void FrameStackItem::setOpen(bool open)
-{
+{    
 #if 0
     if (open)
     {
@@ -555,7 +570,7 @@ void ThreadStackItem::setOpen(bool open)
 
         // Imagine you have 20 frames and you want to find one blocked on
         // mutex. You don't want a new source file to be opened for each
-        // thread you open to find if that's the one you want to debug.
+        // thread you open to find if that's the one you want to debug.        
         ((FramestackWidget*)listView())->getBacktraceForThread(threadNo());
     }
 
@@ -574,6 +589,31 @@ void ThreadStackItem::setOpen(bool open)
 
     QListViewItem::setOpen(open);
 }
+
+void FrameStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
+                               int column, int width, int align )
+{
+    QColorGroup cg2(cg);
+    if (column % 2)
+    {
+        cg2.setColor(QColorGroup::Base, 
+                     KGlobalSettings::alternateBackgroundColor());
+    }
+    QListViewItem::paintCell(p, cg2, column, width, align);
+}
+
+void ThreadStackItem::paintCell(QPainter * p, const QColorGroup & cg, 
+                               int column, int width, int align )
+{
+    QColorGroup cg2(cg);
+    if (column % 2)
+    {
+        cg2.setColor(QColorGroup::Base, 
+                     KGlobalSettings::alternateBackgroundColor());
+    }
+    QListViewItem::paintCell(p, cg2, column, width, align);
+}
+
 
 }
 
