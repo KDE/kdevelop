@@ -27,6 +27,10 @@ extern SafetyCounter safetyCounter;
 
 namespace CppEvaluation {
 
+void statusLog( const QString& str ) {
+  ifVerboseMajor( dbgMajor() << str << endl );
+  statusBarText( str, 2000 );
+}
 OperatorSet AllOperators;
 
 ///These lines register the operators to the list of all operators
@@ -51,7 +55,6 @@ QString nameFromType( SimpleType t ) {
   return t->fullTypeResolved();
 }
 
-
 QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
 {
   QString ret;
@@ -63,7 +66,8 @@ QString Operator::printTypeList( QValueList<EvaluationResult>& lst )
 }
 
 void Operator::log( const QString& msg ) {
-  ifVerboseMajor( dbgMajor() << "\"" << name() << "\": " << msg << endl );
+  statusLog( "\"" + name() + "\": " + msg );
+  //ifVerboseMajor( dbgMajor() << "\"" << name() << "\": " << msg << endl );
 }
 
 OperatorSet::~OperatorSet() {
@@ -116,36 +120,51 @@ EvaluationResult NestedTypeOperator::unaryApply( EvaluationResult param, const Q
   return param;
 }
 
+EvaluationResult DotOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
+  if( param->totalPointerDepth() == 0 ) {
+    return param;
+  } else {
+    log( "failed to apply dot-operator to " + param->fullNameChain() + " because the pointer-depth is wrong" );
+    return EvaluationResult();
+  }
+}
+
+
 EvaluationResult ArrowOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
-  if( param->pointerDepth() > 0 ) {
-    param->decreasePointerDepth();
+  if( param->totalPointerDepth() == 1 ) {
+    param->setTotalPointerDepth( param->totalPointerDepth() - 1 );
     return param;
   } else {
     if( param->resolved() ) {
-      return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<LocateResult, EvaluationResult>(innerParams) );
+      if( param->totalPointerDepth() == 0 ) {
+          return param->resolved()->applyOperator( SimpleTypeImpl::ArrowOp , convertList<LocateResult, EvaluationResult>(innerParams) );
+      } else {
+          log("failed to apply arrow-operator to " + param->fullNameChain() + " because the pointer-depth is wrong" );
+          return EvaluationResult();
+      }
     } else {
-      ifVerboseMajor( dbgMajor() << "failed to apply arrow-operator to unresolved type" << endl );
+      log( "failed to apply arrow-operator to unresolved type" );
       return EvaluationResult();
     }
   };
 }
 
 EvaluationResult StarOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
-  if( param->pointerDepth() > 0 ) {
-    param->decreasePointerDepth();
+  if( param->totalPointerDepth() > 0 ) {
+    param->setTotalPointerDepth( param->totalPointerDepth() - 1 );
     return param;
   } else {
     if( param->resolved() ) {
       return param->resolved()->applyOperator( SimpleTypeImpl::StarOp );
     } else {
-      ifVerboseMajor( dbgMajor() << "failed to apply star-operator to unresolved type" << endl );
+      log( "failed to apply star-operator to unresolved type" );
       return EvaluationResult();
     }
   };
 }
 
 EvaluationResult AddressOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
-  param->setPointerDepth( param->pointerDepth() + 1 );
+  param->setTotalPointerDepth( param->totalPointerDepth() + 1 );
   return param;
 }
 
@@ -182,14 +201,14 @@ OperatorIdentification UnaryParenOperator::identify( QString& str ) {
 
 
 EvaluationResult IndexOperator::unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& innerParams ) {
-  if( param->pointerDepth() > 0 ) {
-    param->decreasePointerDepth();
+  if( param->totalPointerDepth() > 0 ) {
+    param->setTotalPointerDepth( param->totalPointerDepth() - 1 );
     return param;
   } else {
     if( param->resolved() ) {
       return param->resolved()->applyOperator( SimpleTypeImpl::IndexOp, convertList<LocateResult>( innerParams ) );
     } else {
-      ifVerboseMajor( dbgMajor() << "failed to apply index-operator to unresolved type" << endl );
+      log( "failed to apply index-operator to unresolved type" );
       return EvaluationResult();
     }
   };
@@ -200,7 +219,7 @@ EvaluationResult ParenOperator::unaryApply( EvaluationResult param, const QValue
     if( param->resolved() ) {
       return param->resolved()->applyOperator( SimpleTypeImpl::ParenOp, convertList<LocateResult>(innerParams) );
     } else {
-      ifVerboseMajor( dbgMajor() << "failed to apply paren-operator to unresolved type" << endl );
+      log( "failed to apply paren-operator to unresolved type" );
       return EvaluationResult();
     }
     
@@ -310,18 +329,18 @@ EvaluationResult ExpressionEvaluation::evaluateExpressionInternal( QString expr,
       if( lowest.op->binding() & Operator::Right ) params << right;
       
       for( QValueList<QString>::iterator it = lowest.innerParams.begin(); it != lowest.innerParams.end(); ++it ) {
-        ifVerboseMajor( dbgMajor() << "evaluating inner parameter \"" << *it << "\"" << endl );
+        ifVerboseMajor(dbgMajor() << "evaluating inner parameter \"" + *it + "\"" );
 	      innerParams << evaluateExpressionInternal( (*it), SimpleType(), innerCtx, innerCtx, lowest.op->canBeType( Operator::Neutral ) );
       }
       
       EvaluationResult applied = lowest.op->apply( params, innerParams );
       if( !applied ) {
-        ifVerboseMajor( dbgMajor() << "\"" << expr << "\": failed to apply the operator \"" << lowest.op->name() << "\"" << endl );
+        statusLog( "\"" + expr + "\": failed to apply the operator \"" + lowest.op->name() + "\"" );
       }
       
       if( ! (lowest.op->binding() & Operator::Left) &&  !leftSide.isEmpty() ) {
                     ///When the operator has no binding to the left, the left side should be empty.
-        ifVerboseMajor( dbgMajor() << "\"" << expr << "\": problem with the operator \"" << lowest.op->name() << ", it has no binding to the left side, but the left side is \""<< leftSide << "\"" << endl );
+        statusLog( "\"" + expr + "\": problem with the operator \"" + lowest.op->name() + ", it has no binding to the left side, but the left side is \""+ leftSide + "\"" );
       }
       
       if( ! (lowest.op->binding() & Operator::Right) && !rightSide.isEmpty() ) {
@@ -373,7 +392,7 @@ EvaluationResult ExpressionEvaluation::evaluateAtomicExpression( TypeDesc expr, 
   
   TypePointer searchIn = scope->resolved();
   if( !searchIn ) {
-    ifVerboseMajor( dbgMajor() << "scope-type is not resolved" << endl );
+    statusLog( "scope-type is not resolved" );
     return EvaluationResult();
   }
 

@@ -80,6 +80,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 //#define DISABLE_TRACING
 
+CppCodeCompletion* CppCodeCompletion::m_instance = 0;
 
 const bool disableVerboseForCompletionList = false;
 const bool disableVerboseForContextMenu = false;
@@ -95,6 +96,12 @@ const char* destructorPrefix = "<destructor>";
 -- TODO: Does not yet correctly search for overloaded functions and select the right one
 -- TODO: The documentation shown in the calltips looks very bad, a better solution must be found(maybe an additional tooltip)
 */
+
+ void statusBarText( const QString& str, int time ) {
+   CppCodeCompletion* c = CppCodeCompletion::instance();
+   if( c )
+     c->addStatusText( str, time );
+ }
 
 TypePointer CppCodeCompletion::createGlobalNamespace() {
   KSharedPtr<SimpleTypeCachedNamespace> n = new SimpleTypeCachedNamespace( QStringList(), QStringList() );
@@ -774,6 +781,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     m_codeCompleteChRx( "([A-Z])|([a-z])|(\\.)" ),
     //Matches on "->" and "::"
 m_codeCompleteCh2Rx( "(->)|(\\:\\:)" ) {
+  m_instance = this;
   cppCompletionInstance = this;
   m_cppCodeCommentsRx.setMinimal( true );
 
@@ -1367,6 +1375,7 @@ void CppCodeCompletion::popupClassViewAction( int number ) {
 }
 
 void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Context *context, int line, int column ) {
+  clearStatusText();
   Q_UNUSED(context);
   if ( !m_pSupport->codeCompletionConfig() ->showEvaluationContextMenu() )
     return ;
@@ -1750,7 +1759,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
         } else {*/
 	      parentType = SimpleType( scope, getIncludeFiles() );
         //}
-        parentType->setPointerDepth( 1 );
+        parentType->descForEdit().setTotalPointerDepth( 1 );
         ctx->setContainer( parentType );
       }
 
@@ -1793,7 +1802,7 @@ SimpleContext* CppCodeCompletion::computeFunctionContext( FunctionDom f, int lin
 
         SimpleType this_type = ctx->container();
 
-        this_type->setPointerDepth( 1 );
+        this_type->descForEdit().setTotalPointerDepth( 1 );
 
         SimpleVariable var;
         var.type = this_type->desc();
@@ -2167,6 +2176,7 @@ void CppCodeCompletion::setMaxComments( int count ) {
 ///TODO: make this use findExpressionAt etc. (like the other expression-evaluation-stuff)
 void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
   kdDebug( 9007 ) << "CppCodeCompletion::completeText()" << endl;
+  clearStatusText();
 
   if ( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
     return ;
@@ -2450,7 +2460,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 	            parentType = SimpleType( scope, getIncludeFiles() );
             }
             this_type = parentType;
-            this_type->setPointerDepth( 1 );
+            this_type->descForEdit().setTotalPointerDepth( 1 );
             ctx->setContainer( this_type );
           }
 
@@ -2471,7 +2481,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
 
             SimpleType this_type = ctx->container();
 
-            this_type->setPointerDepth( 1 );
+            this_type->descForEdit().setTotalPointerDepth( 1 );
 
             SimpleVariable var;
             var.type = this_type->desc();
@@ -3063,6 +3073,9 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
       for ( ; it != ptrOpList.end(); ++it ) {
         ptrList.append( ( *it ) ->text() );
       }
+
+      for( int a = 0; a < d->arrayDimensionList().count(); a++ )
+        ptrList.append("*");
 
       var.ptrList = ptrList;
       var.type = typeSpec->text() + ptrList.join( "" );
@@ -4107,7 +4120,7 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
 		}
 	}
 
-  m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2 %3" ).arg( expr.expr() ).arg( res->fullNameChain() ).arg( resolutionType ), 1000 );
+  addStatusText( i18n( "Type of %1 is %2 %3" ).arg( expr.expr() ).arg( res->fullNameChain() ).arg( resolutionType ), 5000 );
 
   return res;
 }

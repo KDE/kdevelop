@@ -682,13 +682,12 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec,
 		kdDebug( 9007 ) << "skip declaration of " << QStringList(scopeOfDeclarator( d, QStringList() )).join("::") << "::" << id << endl;
 		return ;
 	}
-	
+
 	VariableDom attr = m_store->create<VariableModel>();
 	attr->setName( id );
 	attr->setFileName( m_fileName );
 	attr->setComment( comment() );
-	
-	
+		
 	if ( m_currentClass.top() )
 		m_currentClass.top() ->addVariable( attr );
 	else if ( m_currentNamespace.top() )
@@ -699,8 +698,9 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec,
 	attr->setAccess( m_currentAccess );
 	
 	QString text = typeOfDeclaration( typeSpec, d );
-	if ( !text.isEmpty() )
-		attr->setType( text );
+  if ( !text.isEmpty() ) {
+        attr->setType( text );
+  }
 	
 	bool isFriend = false;
 	//bool isVirtual = false;
@@ -913,6 +913,10 @@ QString StoreWalker::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAS
 	{
 		text += it.current() ->text();
 	}
+
+    for( int a = 0; a < declarator->arrayDimensionList().count(); a++ )
+        text += "*";
+
 	
 	return text;
 }

@@ -31,6 +31,8 @@
 
 class SimpleContext;
 
+void statusBarText( const QString& str, int time = 1000 );
+
 namespace CppEvaluation {
 
 template <class To, class From>
@@ -247,9 +249,7 @@ class DotOperator : public UnaryOperator {
   public:
     DotOperator() : UnaryOperator( 17, ".", "dot-operator", Operator::Left ) {}
 
-    virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ ) {
-      return param;
-    }
+    virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ );
 
     virtual bool canBeType( BindingSide side ) {
       return false;
@@ -270,7 +270,7 @@ class ArrowOperator : public UnaryOperator {
 
 class StarOperator : public UnaryOperator {
   public:
-    StarOperator() : UnaryOperator( 15, "*", "star-operator", Operator::Right ) { ///Normally this should have a priority of 16, but that would need changes to the expression-parsing-loop
+    StarOperator() : UnaryOperator( 15, "*", "star-operator", Operator::Right ) { ///Normally this should have a priority of 16, but that would need changes to the expression-parsin g-loop
     }
 
     virtual EvaluationResult unaryApply( EvaluationResult param, const QValueList<EvaluationResult>& /*innerParams*/ );

@@ -137,7 +137,15 @@ public:
 	CppSupportPart* cppSupport() const;
 
     HashedStringSet getIncludeFiles( const QString& file = QString() );
-    
+
+    static CppCodeCompletion* instance() {
+      return m_instance;
+    }
+
+    ///Adds a string that will be ticked through the status-bar
+    void addStatusText( QString text, int timeout );
+    void clearStatusText();
+
 public slots:
 	/**
 	 * @param invokedOnDemand if true and there is exactly one matching entry
@@ -250,8 +258,6 @@ private:
 
     void fitContextItem( int nLine, int nColumn );
 	void needRecoveryPoints();
-	void addStatusText( QString text, int timeout );
-    void clearStatusText();
     
 	QString m_activeFileName;
 	KTextEditor::ViewCursorInterface* m_activeCursor;
@@ -267,6 +273,7 @@ private:
 
 	unsigned int m_ccLine;
 	unsigned int m_ccColumn;
+    static CppCodeCompletion* m_instance;
 
 	CodeInformationRepository* m_repository;
 	CppCodeCompletionData* d;

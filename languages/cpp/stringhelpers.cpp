@@ -226,7 +226,7 @@ int countExtract( QChar c, const QString& str ) {
       case '[':
         case '{':
         case '<':
-        a = findCommaOrEnd( str, a );
+        a = findClose( str, a );
     }
   }
   return ret;

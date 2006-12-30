@@ -445,7 +445,7 @@ class SimpleTypeImpl : public KShared {
     }
 
     void decreaseFunctionDepth() {
-      m_desc.decreaseFunctionDepth();
+      m_desc.setPointerDepth( m_desc.pointerDepth() - 1 );
     }
 
     int pointerDepth() const {

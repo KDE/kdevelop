@@ -613,6 +613,21 @@ TypeDesc& TypeDesc::makePrivate() {
   return *this;
 }
 
+int TypeDesc::totalPointerDepth() const {
+  if( next() )
+    return next()->totalPointerDepth();
+  else
+    return pointerDepth();
+}
+
+void TypeDesc::setTotalPointerDepth( int d ) {
+  makePrivate();
+  if( next() )
+    next()->setTotalPointerDepth( d );
+  else
+    setPointerDepth( d );
+}
+
 void TypeDesc::maybeInit() {
   if ( m_data )
     return ;
@@ -742,7 +757,7 @@ void TypeDesc::init( QString stri ) {
 #else
 	if( !isFunction ) {
   	takeData( str );
-  	m_data->m_pointerDepth = countExtract( '*', str );
+    m_data->m_pointerDepth = countExtract( '*', str );
 	} else {
 		m_data->m_cleanName = str;
 	}

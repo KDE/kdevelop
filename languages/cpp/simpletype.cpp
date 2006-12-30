@@ -346,8 +346,8 @@ LocateResult SimpleTypeImpl::applyOperator( Operator op , QValueList<LocateResul
     case ArrowOp:
     /** Dereference one more because the type must be a pointer */
     ret = getFunctionReturnType( "operator ->", params );
-    if ( ret->pointerDepth() ) {
-      ret->setPointerDepth( ret->pointerDepth() - 1 );
+    if ( ret->totalPointerDepth() ) {
+      ret->setTotalPointerDepth( ret->totalPointerDepth() - 1 );
     } else {
       ifVerbose( dbg() << "\"" << str() << "\": " << " \"operator ->\" returns a type with the wrong pointer-depth" << endl );
     }
@@ -379,7 +379,7 @@ TypeDesc SimpleTypeImpl::replaceTemplateParams( TypeDesc desc, TemplateParamInfo
         ret = t.def;
 
       if ( ret.name() != desc.name() )
-        ret.setPointerDepth( ret.pointerDepth() + desc.pointerDepth() );
+        ret.setTotalPointerDepth( ret.totalPointerDepth() + desc.totalPointerDepth() );
     }
   } else {
     TypeDesc::TemplateParams& params = ret.templateParams();
@@ -464,10 +464,10 @@ class TemplateParamMatch {
 
 					//Check if the decoration of the specialization matches the decoration of the arguments, if not we have a mismatch.
 
-					if( specialization.pointerDepth() > params->pointerDepth() ) {
+					if( specialization.totalPointerDepth() > params->totalPointerDepth() ) {
 						return false; //The decoration does not match the given argument
 					} else {
-						depth += specialization.pointerDepth();
+						depth += specialization.totalPointerDepth();
 						if( depth > m_maxDepth ) m_maxDepth = depth;
 					}
 					
@@ -479,7 +479,7 @@ class TemplateParamMatch {
 						val = params;  //No more parameters have to be checked, so take the value and return later
 					}
 
-					val->setPointerDepth( val->pointerDepth() - specialization.pointerDepth() );
+					val->setTotalPointerDepth( val->totalPointerDepth() - specialization.totalPointerDepth() );
 					
 					t.value = val;
 					

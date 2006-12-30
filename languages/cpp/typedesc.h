@@ -256,7 +256,12 @@ class TypeDesc {
     QString fullTypeStructure() const;
 
 	void prependDecoration( const QString& str );
-	
+
+    ///Since the pointer-depth of a resolved type is always stored in the last element of its chain, this gives fast access to that depth
+    int totalPointerDepth() const;
+
+    void setTotalPointerDepth( int d );
+  
     int pointerDepth() const {
 	    if( !m_data ) return 0;
 	    
@@ -268,14 +273,14 @@ class TypeDesc {
       m_data->m_pointerDepth = d;
     }
 
-    void decreasePointerDepth() {
+  /*void decreasePointerDepth() {
 	    maybeInit();
 	    
       if ( m_data->m_pointerDepth > 0 ) {
         makeDataPrivate();
         m_data->m_pointerDepth--;
       }
-    }
+    }*/
 
     ///returns a list include the full name of this type, and all subtypes
     QStringList fullNameList( ) const;

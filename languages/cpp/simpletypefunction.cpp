@@ -106,8 +106,8 @@ void SimpleTypeFunctionInterface::resolveImplicitTypes( TypeDesc& argType, TypeD
       ifVerbose( dbg() << "choosing \"" << gottenArgType.fullNameChain() << "\" as implicit template-parameter for \"" << argType.name() << "\"" << endl );
       p.value = gottenArgType;
       p.value.makePrivate();
-      for ( int d = 0; d < argType.pointerDepth(); d++ )
-        p.value.decreasePointerDepth();
+      for ( int d = 0; d < argType.totalPointerDepth(); d++ )
+        p.value.setTotalPointerDepth( p.value.totalPointerDepth() - 1 );
 
       paramInfo.addParam( p );
     }

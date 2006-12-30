@@ -762,7 +762,10 @@ QString TagCreator::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST
 	for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it )
 		text += it.current()->text();
 	
-	return text;
+    for( int a = 0; a < declarator->arrayDimensionList().count(); a++ )
+        text += "*";
+	
+  return text;
 }
 
 void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * baseClause )
