@@ -47,7 +47,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");
 
-  diffWidget = new DiffWidget(this);
+  diffWidget = new DiffWidget(this, 0, "diffWidget");
   diffWidget->setIcon( SmallIcon("editcopy") );
   QString nm( i18n( "Diff" ) );
   diffWidget->setCaption( i18n( "Diff Output" ) );
