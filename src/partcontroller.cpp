@@ -396,10 +396,10 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 			// The global option specifies a fallback if the project
 			// has no setting or no project is open. However for Qt4
 			// projects we want to use ExternalDesigner in any case.
-			DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration", DesignerSetting  );
 			if ( DomUtil::readIntEntry( *dom, "/kdevcppsupport/qt/version", 3 ) == 4 )
 				DesignerSetting = "ExternalDesigner";
 
+			DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration", DesignerSetting  );
 			designerExec = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designer", designerExec );
 		}
 		if ( DesignerSetting == "ExternalKDevDesigner" )
