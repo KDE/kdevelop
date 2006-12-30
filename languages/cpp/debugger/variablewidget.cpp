@@ -1716,17 +1716,17 @@ bool VarItem::handleSpecialTypes()
 
         if (varTree->controller()->qtVersion() >= 4)
             varTree->controller()->addCommand(
-                new ResultlessCommand(QString("print $kdev_s=$kdev_d.size")
-                               .arg(gdbExpression()), true));
+                new ResultlessCommand(QString("print $kdev_s=$kdev_d.size"),
+                                      true));
         else
             varTree->controller()->addCommand(
-                new ResultlessCommand(QString("print $kdev_s=$kdev_d.len")
-                                      .arg(gdbExpression()), true));
+                new ResultlessCommand(QString("print $kdev_s=$kdev_d.len"),
+                                      true));
 
         varTree->controller()->addCommand(
             new ResultlessCommand(
-                QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0")
-                .arg(gdbExpression()), true));
+                QString("print $kdev_s= ($kdev_s > 0)? ($kdev_s > 100 ? 200 : 2*$kdev_s) : 0"),
+                true));
         
         varTree->controller()->addCommand(
             new ValueSpecialRepresentationCommand(
