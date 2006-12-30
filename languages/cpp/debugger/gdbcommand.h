@@ -82,12 +82,20 @@ public:
 
     const QValueVector<QString>& allStreamOutput() const;
 
+    // True if this command run then target for
+    // unspecified period of time -- that is either 'run' or
+    // 'continue'. 
+    bool isRun() const;
+
+    void setRun(bool run);
+
 private:
     QString command_;
     QGuardedPtr<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
     QValueVector<QString> lines;
+    bool run;
 
 protected: // FIXME: should be private, after I kill the first ctor
     // that is obsolete and no longer necessary.
@@ -233,6 +241,7 @@ GDBCommand::GDBCommand(
 : command_(command),
   handler_this(handler_this), 
   handler_method(static_cast<handler_t>(handler_method)),
+  run(false),
   handlesError_(handlesError)
 {
 }

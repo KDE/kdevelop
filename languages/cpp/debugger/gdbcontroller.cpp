@@ -272,7 +272,12 @@ void GDBController::addCommand(const QString& str)
 
 void GDBController::addCommandToFront(GDBCommand* cmd)
 {
-    queueCmd(cmd, true);
+    queueCmd(cmd, queue_at_front);
+}
+
+void GDBController::addCommandBeforeRun(GDBCommand* cmd)
+{
+    queueCmd(cmd, queue_before_run);
 }
 
 int  GDBController::currentThread() const
@@ -291,7 +296,7 @@ int GDBController::currentFrame() const
 // information requests become redundent and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
-void GDBController::queueCmd(GDBCommand *cmd, bool executeNext)
+void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
 {
     if (stateIsOn(s_dbgNotStarted))
     {
@@ -306,11 +311,20 @@ void GDBController::queueCmd(GDBCommand *cmd, bool executeNext)
     if (stateReloadInProgress_)
         stateReloadingCommands_.insert(cmd);
 
-    if (executeNext)
+    if (queue_where == queue_at_front)
         cmdList_.insert(0, cmd);
-    else
+    else if (queue_where == queue_at_end)
         cmdList_.append (cmd);
+    else if (queue_where == queue_before_run) 
+    {
+        unsigned i;
+        for (i = 0; i < cmdList_.count(); ++i)
+            if (cmdList_.at(i)->isRun())
+                break;
 
+        cmdList_.insert(i, cmd);            
+    }
+        
     kdDebug(9012) << "QUEUE: " << cmd->initialString() 
                   << (stateReloadInProgress_ ? " (state reloading)\n" : "\n");
 

@@ -107,6 +107,12 @@ public:
     */
     void addCommandToFront(GDBCommand* cmd);
 
+    /* If current command queue has any command
+       for which isRun is true, inserts 'cmd'
+       before the first such command. Otherwise,
+       works the same as addCommand. */
+    void addCommandBeforeRun(GDBCommand* cmd);
+
     /** Selects the specified thread/frame. Immediately emits
         thread_or_frame_changed event.
     */
@@ -132,7 +138,9 @@ public:
     void pauseApp();
 
 protected:
-    void queueCmd(GDBCommand *cmd, bool executeNext=false);
+    enum queue_where { queue_at_end, queue_at_front, queue_before_run };
+
+    void queueCmd(GDBCommand *cmd, enum queue_where queue_where = queue_at_end);
 
 private:
     void parseLocals          (char type, char *buf);

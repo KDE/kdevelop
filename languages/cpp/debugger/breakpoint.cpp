@@ -91,7 +91,8 @@ void Breakpoint::sendToGdb(GDBController* controller)
     // produces the "^running" marker.
     // FIXME: this probably won't work if there are other
     // run commands in the thread already.
-    if (controller->stateIsOn(s_appRunning))
+    if (controller->stateIsOn(s_appRunning)
+        && !controller->stateIsOn(s_explicitBreakInto))
     {
         kdDebug(9012) << "PAUSING APP\n";
         controller->pauseApp();
@@ -129,13 +130,15 @@ void Breakpoint::sendToGdb(GDBController* controller)
 
     if (restart) {
         kdDebug(9012) << "RESTARING APP\n";
-        controller->addCommand(new GDBCommand("-exec-continue"));
+        GDBCommand *cmd = new GDBCommand("-exec-continue");
+        cmd->setRun(true);
+        controller->addCommand(cmd);
     }
 }
 
 void Breakpoint::clearBreakpoint(GDBController* /*c*/)
 {
-    controller()->addCommand(
+    controller()->addCommandBeforeRun(
         new GDBCommand(dbgRemoveCommand(), 
                        this,
                        &Breakpoint::handleDeleted)); 
@@ -160,7 +163,7 @@ void Breakpoint::setBreakpoint(GDBController* controller)
     //
     // When this command is finished, slotParseGDBBreakpointSet
     // will be called by the controller.
-    controller->addCommand(
+    controller->addCommandBeforeRun(
         new GDBCommand(dbgSetCommand(),                        
                        this,
                        &Breakpoint::handleSet));
@@ -170,16 +173,16 @@ void Breakpoint::setBreakpoint(GDBController* controller)
 void Breakpoint::modifyBreakpoint(GDBController* controller)
 {
     controller->
-        addCommand(
+        addCommandBeforeRun(
             new ModifyBreakpointCommand(QString("-break-condition %1 ") +
                                         conditional(), this));
     controller->
-        addCommand(
+        addCommandBeforeRun(
             new ModifyBreakpointCommand(QString("-break-after %1 ") +
                                         QString::number(ignoreCount()), this));
 
     controller->
-        addCommand(
+        addCommandBeforeRun(
             new ModifyBreakpointCommand(isEnabled() ? 
                                         QString("-break-enable %1") 
                                         : QString("-break-disable %1"), this));
@@ -529,7 +532,7 @@ void Watchpoint::setBreakpoint(GDBController* controller)
     {
         setDbgProcessing(true);
 
-        controller->addCommand(
+        controller->addCommandBeforeRun(
             new GDBCommand(
                 QString("-data-evaluate-expression &%1").arg(varName_),
                 this,
@@ -540,7 +543,7 @@ void Watchpoint::setBreakpoint(GDBController* controller)
 void Watchpoint::handleAddressComputed(const GDBMI::ResultRecord& r)
 {
     address_ = r["value"].literal().toULongLong(0, 16);
-    controller()->addCommand(
+    controller()->addCommandBeforeRun(
         new GDBCommand(
             QString("-break-watch *%1").arg(r["value"].literal()),
             static_cast<Breakpoint*>(this),

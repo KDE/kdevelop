@@ -21,7 +21,7 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(const QString &command)
-: command_(command), handler_this(0)
+: command_(command), run(false), handler_this(0)
 {
 }
 
@@ -70,6 +70,17 @@ bool GDBCommand::handlesError() const
 GDBCommand::~GDBCommand()
 {
 }
+
+bool GDBCommand::isRun() const
+{
+    return run;
+}
+
+void GDBCommand::setRun(bool run)
+{
+    this->run = run;
+}
+
 
 UserCommand::UserCommand(const QString& s)
 : GDBCommand(s)
