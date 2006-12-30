@@ -45,6 +45,7 @@ VARIABLE = value1=value++
 
 #include "parsetest.h"
 #include "qmakedriver.h"
+#include "qmakeast.h"
 
 QTEST_MAIN( ParseTest )
 
@@ -58,8 +59,9 @@ ParseTest::~ParseTest()
 void ParseTest::successSimpleProject()
 {
     QFETCH( QString, project );
-    QMake::ProjectAST* a;
-    int ret = QMake::Driver::parseString( project, &a );
+    QMake::ProjectAST* a = new QMake::ProjectAST();
+    int ret = QMake::Driver::parseString( project, a );
+    delete a;
     QVERIFY( ret == 0 );
 }
 
@@ -73,8 +75,9 @@ void ParseTest::successSimpleProject_data()
 void ParseTest::failSimpleProject()
 {
     QFETCH( QString, project );
-    QMake::ProjectAST* a;
-    int ret = QMake::Driver::parseString( project, &a );
+    QMake::ProjectAST* a = new QMake::ProjectAST();
+    int ret = QMake::Driver::parseString( project, a );
+    delete a;
     QVERIFY( ret != 0 );
 }
 
@@ -87,8 +90,9 @@ void ParseTest::failSimpleProject_data()
 void ParseTest::successFullProject()
 {
     QFETCH( QString, project );
-    QMake::ProjectAST* a;
-    int ret = QMake::Driver::parseString( project, &a );
+    QMake::ProjectAST* a = new QMake::ProjectAST();
+    int ret = QMake::Driver::parseString( project, a );
+    delete a;
     QVERIFY( ret == 0 );
 }
 
@@ -113,8 +117,9 @@ void ParseTest::successFullProject_data()
 void ParseTest::failFullProject()
 {
     QFETCH( QString, project );
-    QMake::ProjectAST* a;
-    int ret = QMake::Driver::parseString( project, &a );
+    QMake::ProjectAST* a = new QMake::ProjectAST();
+    int ret = QMake::Driver::parseString( project, a );
+    delete a;
     QVERIFY( ret != 0);
 }
 

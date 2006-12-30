@@ -58,7 +58,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 %define "parser_class_name" "Parser"
 %name-prefix="QMake"
 %parse-param { QMake::Lexer* lexer }
-%parse-param { QMake::ProjectAST** project }
+%parse-param { QMake::ProjectAST* project }
 %lex-param   { QMake::Lexer* lexer }
 %start project
 
@@ -71,14 +71,11 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 %%
 
 project:
-        {
-            *project = new ProjectAST();
-        }
     statements
         {
-            foreach( StatementAST* s, $<stmtlist>2)
+            foreach( StatementAST* s, $<stmtlist>1)
             {
-                (*project)->addStatement( s );
+                project->addStatement( s );
             }
         }
     ;

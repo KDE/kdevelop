@@ -69,14 +69,12 @@ namespace QMake
             void removeStatement( int i );
 
             void writeToString( QString& ) const;
-        protected:
             void setFilename( const QString& );
 
         private:
             QString m_filename;
             QList<StatementAST*> m_statements;
 
-            friend class QMake::Driver;
     };
 
     class QMAKEPARSER_EXPORT AssignmentAST : public StatementAST
