@@ -21,6 +21,7 @@ KDEV_PATH_QTDOC
 KDEV_PATH_KDELIBSDOXY
 KDEV_PATH_KDELIBSDOC
 
+AC_CHECK_FUNCS([mkfifo], [HAVE_MKFIFO=1], [HAVE_MKFIFO=0])
 
 dnl  **********
 dnl  Check which programming languages support should be compiled
