@@ -408,21 +408,27 @@ void SimpleMainWindow::createActions()
 
     m_splitHor = new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
         this, SLOT(slotSplitHorizontalBase()), actionCollection(), "split_h");
+    m_splitHor->setIcon("view_top_bottom");
 
     m_splitVer = new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
         this, SLOT(slotSplitVerticalBase()), actionCollection(), "split_v");
+    m_splitVer->setIcon("view_left_right");
 
     m_splitHor1 = new KAction(i18n("Split &Horizontal"), 0,
         this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h1");
+    m_splitHor1->setIcon("view_top_bottom");
 
     m_splitVer1 = new KAction(i18n("Split &Vertical"), 0,
         this, SLOT(slotSplitVertical()), actionCollection(), "split_v1");
+    m_splitVer1->setIcon("view_left_right");
 
     m_splitHor2 = new KAction(i18n("Split &Horizontal and Open"), 0,
         this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h2");
+    m_splitHor2->setIcon("view_top_bottom");
 
     m_splitVer2 = new KAction(i18n("Split &Vertical and Open"), 0,
         this, SLOT(slotSplitVertical()), actionCollection(), "split_v2");
+    m_splitVer2->setIcon("view_left_right");
 
     m_raiseLeftDock = new KAction(i18n("Switch Left Dock"), CTRL+SHIFT+ALT+Key_L,
         this, SLOT(raiseLeftDock()), actionCollection(), "switch_left_dock");
