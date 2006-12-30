@@ -1190,7 +1190,7 @@ void TrollProjectWidget::slotAddFiles()
                     *proc << "-s";
                     *proc << files[ i ];
                     *proc << cleanSubprojectDir;
-                    proc->start();
+                    proc->start(KProcess::Block);
                     QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( '/' ) - 1 );
                     // and add them to the filelist
                     QFile testExist( cleanSubprojectDir + QString( QChar( QDir::separator() ) ) + filename );
@@ -1531,7 +1531,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                             *proc << "-s";
                             *proc << files[ i ];
                             *proc << cleanSubprojectPath;
-                            proc->start();
+                            proc->start(KProcess::Block);
                             QString filename = files[ i ].right( files[ i ].length() - files[ i ].findRev( '/' ) - 1 );
                             // and add them to the filelist
                             QFile testExist( cleanSubprojectPath + QString( QChar( QDir::separator() ) ) + filename );
