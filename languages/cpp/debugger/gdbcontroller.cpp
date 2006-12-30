@@ -229,16 +229,6 @@ void GDBController::configure()
         }
 
         // Disabled for MI port.
-#if 0
-        if (old_breakOnLoadingLibrary_ != config_breakOnLoadingLibrary_)
-        {
-            if (config_breakOnLoadingLibrary_)
-                queueCmd(new GDBCommand("set stop-on 1"));
-            else
-                queueCmd(new GDBCommand("set stop-on 0"));
-        }
-#endif
-
         if (old_outputRadix != config_outputRadix_)
         {
             queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",
