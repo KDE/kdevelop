@@ -61,6 +61,7 @@ public:
 		{ return keep_output_box->isChecked(); }
 
 	void show();
+	void hide();
 
 signals:
     void searchClicked();

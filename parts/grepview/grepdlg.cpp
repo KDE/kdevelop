@@ -335,9 +335,16 @@ void GrepDialog::show()
     // not beautiful, but works with all window
     // managers and Qt versions
     if (isVisible())
-        QDialog::hide();
+        hide();
+//         QDialog::hide();
     QDialog::show();
     pattern_combo->setFocus();
+}
+
+void GrepDialog::hide()
+{
+	pattern_combo->setFocus();
+	QDialog::hide();
 }
 
 void GrepDialog::slotSynchDirectory( )
