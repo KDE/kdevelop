@@ -302,7 +302,7 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
     if (m_filelistDir.isEmpty())
        m_filelistDir=dirName;
 
-    QFile f(m_filelistDir + "/" + projectName + ".filelist");
+    QFile f(m_filelistDir + "/" + projectName.lower() + ".kdevelop.filelist");
     if (f.open(IO_ReadOnly)) {
         QTextStream stream(&f);
         while (!stream.atEnd()) {
@@ -393,7 +393,7 @@ void CustomProjectPart::closeProject()
 
 void CustomProjectPart::saveProject()
 {
-    QFile f(m_filelistDir + "/" + m_projectName + ".filelist");
+    QFile f(m_filelistDir + "/" + m_projectName.lower() + ".kdevelop.filelist");
     if (!f.open(IO_WriteOnly))
         return;
 

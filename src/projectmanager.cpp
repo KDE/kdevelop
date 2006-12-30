@@ -451,6 +451,15 @@ void ProjectManager::getGeneralInfo()
   m_info->m_projectPlugin = getAttribute(generalEl, "projectmanagement");
   m_info->m_vcsPlugin = getAttribute(generalEl, "versioncontrol");
   m_info->m_language = getAttribute(generalEl, "primarylanguage");
+  m_info->m_projectName = getAttribute(generalEl, "projectname");
+  if( m_info->m_projectName.isEmpty() )
+  {
+    m_info->m_projectName = m_info->m_projectURL.filename();
+    m_info->m_projectName = m_info->m_projectName.left(m_info->m_projectName.length()-QString(".kdevelop").length());
+    QDomElement prjname = m_info->m_document.createElement("projectname");
+    prjname.appendChild( m_info->m_document.createTextNode( m_info->m_projectName) );
+    generalEl.appendChild( prjname );
+  }
 
   getAttributeList(generalEl, "ignoreparts", "part", m_info->m_ignoreParts);
   getAttributeList(generalEl, "keywords", "keyword", m_info->m_keywords);
@@ -495,9 +504,9 @@ bool ProjectManager::loadProjectPart()
   QString path = DomUtil::readEntry(dom,"/general/projectdirectory", ".");
   bool absolute = DomUtil::readBoolEntry(dom,"/general/absoluteprojectpath",false);
   QString projectDir = projectDirectory( path, absolute );
-  kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << m_info->m_projectURL.fileName() << endl;
+  kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << m_info->m_projectName << endl;
 
-  projectPart->openProject(projectDir, m_info->m_projectURL.fileName());
+  projectPart->openProject(projectDir, m_info->m_projectName);
 
   PluginController::getInstance()->integratePart( projectPart );
 

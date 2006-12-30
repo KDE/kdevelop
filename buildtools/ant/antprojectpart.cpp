@@ -97,21 +97,21 @@ void AntProjectPart::openProject(const QString &dirName, const QString &projectN
 
   fillMenu();
 
-  QFile f(dirName + "/" + projectName + ".filelist");
-  if (f.open(IO_ReadOnly)) 
+  QFile f(dirName + "/" + projectName.lower() + ".kdevelop" + ".filelist");
+  if (f.open(IO_ReadOnly))
   {
     QTextStream stream(&f);
-    while (!stream.atEnd()) 
+    while (!stream.atEnd())
     {
       QString s = stream.readLine();
       if (!s.startsWith("#"))
         m_sourceFiles << s;
     }
-  } 
-  else 
+  }
+  else
     populateProject();
-  
-  KDevProject::openProject( dirName, projectName );  
+
+  KDevProject::openProject( dirName, projectName );
 }
 
 
@@ -124,30 +124,30 @@ void AntProjectPart::populateProject()
   s.push(m_projectDirectory);
 
   QDir dir;
-  do 
+  do
   {
     dir.setPath(s.pop());
     kdDebug() << "Examining: " << dir.path() << endl;
     const QFileInfoList *dirEntries = dir.entryInfoList();
     QPtrListIterator<QFileInfo> it(*dirEntries);
-    for (; it.current(); ++it) 
+    for (; it.current(); ++it)
     {
       QString fileName = it.current()->fileName();
       if (fileName == "." || fileName == "..")
         continue;
       QString path = it.current()->absFilePath();
-      if (it.current()->isDir()) 
+      if (it.current()->isDir())
       {
         kdDebug() << "Pushing: " << path << endl;
         s.push(path);
       }
-      else 
+      else
       {
         kdDebug() << "Adding: " << path << endl;
         m_sourceFiles.append(path.mid(prefixlen));
       }
     }
-  } 
+  }
   while (!s.isEmpty());
 
   QApplication::restoreOverrideCursor();
@@ -163,8 +163,8 @@ void AntProjectPart::closeProject()
   m_targetMenu->clear();
 
   m_antOptions = AntOptions();
-  
-  QFile f(m_projectDirectory + "/" + m_projectName + ".filelist");
+
+  QFile f(m_projectDirectory + "/" + m_projectName.lower() + ".kdevelop" + ".filelist");
   if (!f.open(IO_WriteOnly))
     return;
 
@@ -286,7 +286,7 @@ QString AntProjectPart::runArguments() const
 QString AntProjectPart::activeDirectory() const
 {
   /// \FIXME
-  
+
 //  return m_projectDirectory;
 
 	// returning m_projectDirectory is wrong, the path returned should be _relative_ to the project dir
@@ -300,10 +300,10 @@ QStringList AntProjectPart::allFiles() const
 /* QStringList res;
 
   QStringList::ConstIterator it;
-  for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it) 
+  for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it)
   {
     QString fileName = *it;
-    if (!fileName.startsWith("/")) 
+    if (!fileName.startsWith("/"))
     {
       fileName.prepend("/");
       fileName.prepend(m_projectDirectory);
@@ -312,7 +312,7 @@ QStringList AntProjectPart::allFiles() const
   }
 
   return res;*/
-  
+
 	// return all files relative to the project directory!
 	return m_sourceFiles;
 }
@@ -322,19 +322,19 @@ void AntProjectPart::addFile(const QString &fileName)
 {
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->addFiles ( fileList );
 }
 
 void AntProjectPart::addFiles ( const QStringList& fileList )
 {
-	QStringList::ConstIterator it;	
-	
+	QStringList::ConstIterator it;
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.append (*it );
 	}
-	
+
 	kdDebug() << "Emitting addedFilesToProject" << endl;
 	emit addedFilesToProject(fileList);
 }
@@ -343,7 +343,7 @@ void AntProjectPart::removeFile(const QString &fileName)
 {
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->removeFiles ( fileList );
 }
 
@@ -457,7 +457,7 @@ void AntProjectPart::ant(const QString &target)
   QString cp;
   if (!m_classPath.count() == 0)
     cp = "CLASSPATH="+m_classPath.join(":");
-  
+
   makeFrontend()->queueCommand(m_projectDirectory, cmd.arg(cp).arg(m_projectDirectory).arg(target).arg(m_antOptions.m_buildXML).arg(verb).arg(options));
 }
 
@@ -577,7 +577,7 @@ void AntProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 void AntProjectPart::slotAddToProject()
 {
-	QStringList fileList;	
+	QStringList fileList;
 	fileList.append ( m_contextFileName );
 	addFiles ( fileList );
 }
@@ -585,7 +585,7 @@ void AntProjectPart::slotAddToProject()
 
 void AntProjectPart::slotRemoveFromProject()
 {
-	QStringList fileList;	
+	QStringList fileList;
 	fileList.append ( m_contextFileName );
 	removeFiles ( fileList );
 }

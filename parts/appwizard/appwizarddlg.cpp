@@ -903,9 +903,9 @@ void AppWizardDialog::projectLocationChanged()
 {
   // Jakob Simon-Gaarde: Got tired of the anoying bug with the appname/location confussion.
   // This version insures WYSIWYG and checks pathvalidity
-  finalLoc_label->setText(dest_edit->url() + (dest_edit->url().right(1)=="/" ? "":"/") + appname_edit->text().lower());
+  finalLoc_label->setText(dest_edit->url() + (dest_edit->url().right(1)=="/" ? "":"/") + appname_edit->text());
   QDir qd(dest_edit->url());
-  QFileInfo fi(dest_edit->url() + "/" + appname_edit->text().lower());
+  QFileInfo fi(dest_edit->url() + "/" + appname_edit->text());
   if (!qd.exists() || appname_edit->displayText().isEmpty()||fi.exists())
   {
     if (!fi.exists() || appname_edit->displayText().isEmpty()) {
@@ -984,6 +984,8 @@ void AppWizardDialog::openAfterGeneration()
 
 	// DOM Modifications go here
 	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
+
+	DomUtil::writeEntry( projectDOM, "/general/name", appname_edit->text() );
 
 	//save the selected vcs
 	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VCSIntegrator", QString("[X-KDevelop-VCS]=='%1'").arg(m_vcsForm->combo->currentText()));

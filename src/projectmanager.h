@@ -26,6 +26,7 @@ public:
   KURL         m_projectURL;
   QDomDocument m_document;
   QString      m_profileName;
+  QString      m_projectName;
   QString      m_projectPlugin, m_language, m_activeLanguage, m_vcsPlugin;
   QStringList  m_ignoreParts, m_keywords;
 

@@ -169,7 +169,7 @@ public:
 	}
 };
 
-// ProblemReporter doesn't really depend on background parsing, so it's a bit of a mixup to 
+// ProblemReporter doesn't really depend on background parsing, so it's a bit of a mixup to
 // handle them together, but it's the same config widget so...
 class BackgroundParserConfig
 {
@@ -185,16 +185,16 @@ public:
 		m_useBackgroundParser = config->readBoolEntry( "EnableCppBgParser", true );
 		m_backgroundParseDelay = config->readNumEntry( "BgParserDelay", 500 );
 	}
-	
+
 	bool useProblemReporter() { return m_useProblemReporter; }
 	bool useBackgroundParser() { return m_useBackgroundParser; }
 	int backgroudParseDelay() { return m_backgroundParseDelay; }
 };
 
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
-: KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ), m_backgroundParser(0), 
-	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ), m_activeViewCursor( 0 ), 
-	m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), m_isTyping( false ), m_hadErrors( false ), 
+: KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ), m_backgroundParser(0),
+	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ), m_activeViewCursor( 0 ),
+	m_projectClosed( true ), m_projectClosing( false ), m_valid( false ), m_isTyping( false ), m_hadErrors( false ),
 	_jd(0)
 {
 	setInstance( CppSupportFactory::instance() );
@@ -210,17 +210,17 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 
 	m_backgroundParserConfig = new BackgroundParserConfig;
 	m_backgroundParserConfig->readConfig();
-	
+
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;
 
 	m_textChangedTimer = new QTimer( this );
 	connect( m_textChangedTimer, SIGNAL(timeout()), this, SLOT(slotParseCurrentFile()) );
-	
+
 	m_cursorMovedTimer = new QTimer( this );
 	connect( m_cursorMovedTimer, SIGNAL(timeout()), this, SLOT(slotCursorPositionChanged()) );
-	
-	
+
+
 // 	m_deleteParserStoreTimer = new QTimer( this );
 	m_saveMemoryTimer = new QTimer( this );
 // 	m_functionHintTimer = new QTimer( this );
@@ -340,10 +340,10 @@ CppSupportPart::~CppSupportPart()
 
 	delete m_backgroundParserConfig;
 	m_backgroundParserConfig = 0;
-	
+
 	delete m_pCompletion;
 	m_pCompletion = 0;
-	
+
 /*	mainWindow()->removeView( m_problemReporter );
 	delete m_problemReporter;
 	m_problemReporter = 0;
@@ -422,12 +422,12 @@ void CppSupportPart::configWidget( KDialogBase *dlg )
 	                                 BarIcon( info() ->icon(), KIcon::SizeMedium ) );
 	ClassGeneratorConfig *w = new ClassGeneratorConfig( vbox, "classgenerator config widget" );
 	connect( dlg, SIGNAL( okClicked() ), w, SLOT( storeConfig() ) );
-	
+
 	vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"),
 	                               BarIcon( "source_cpp", KIcon::SizeMedium) );
 	ConfigureProblemReporter* ww = new ConfigureProblemReporter( vbox );
 	ww->setPart( this );
-	connect(dlg, SIGNAL(okClicked()), ww, SLOT(accept()));	
+	connect(dlg, SIGNAL(okClicked()), ww, SLOT(accept()));
 }
 
 void CppSupportPart::activePartChanged( KParts::Part *part )
@@ -446,7 +446,7 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 	{
 		disconnect( m_activeDocument, SIGNAL(textChanged()), this, 0 );
 	}
-	
+
 	m_isTyping = false;
 	m_hadErrors = true;
 	m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
@@ -478,7 +478,7 @@ void CppSupportPart::activePartChanged( KParts::Part *part )
 		connect( m_activeDocument, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 		m_textChangedTimer->start( 250, true ); // kick the parse timer, we might want to parse the current file
 	}
-	
+
 	if ( m_activeViewCursor )
 	{
 		connect( m_activeView, SIGNAL( cursorPositionChanged() ), this, SLOT(slotCursorMoved()) );
@@ -600,7 +600,7 @@ void CppSupportPart::projectClosed( )
 	_jd = 0;
 
 	removeProblemReporter();
-	
+
 	delete m_pCompletion;
 	m_parseEmitWaiting.clear();
 	m_fileParsedEmitWaiting.clear();
@@ -1354,9 +1354,9 @@ bool CppSupportPart::parseProject( bool force )
 	kapp->setOverrideCursor( waitCursor );
 
 	_jd = new JobData;
-	_jd->file.setName( project() ->projectDirectory() + "/" + project() ->projectName() + ".pcs" );
+	_jd->file.setName( project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".pcs" );
 
-	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
+	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs";
 
 	if ( !force && !QFile::exists( skip_file_name ) && _jd->file.open( IO_ReadOnly ) )
 	{
@@ -1500,7 +1500,7 @@ void CppSupportPart::slotParseFiles()
 				emit updatedSourceInfo();
 				mainWindow( ) ->statusBar( ) ->message( i18n( "Done" ), 2000 );
 				QFile::remove
-					( project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs" );
+					( project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs" );
 			}
 			else
 			{
@@ -2028,7 +2028,7 @@ void CppSupportPart::saveProjectSourceInfo()
 	if ( !project() || fileList.isEmpty() )
 		return ;
 
-	QFile f( project() ->projectDirectory() + "/" + project() ->projectName() + ".pcs" );
+	QFile f( project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".pcs" );
 	if ( !f.open( IO_WriteOnly ) )
 		return ;
 
@@ -2068,7 +2068,7 @@ void CppSupportPart::saveProjectSourceInfo()
 		stream.device() ->at( end );
 	}
 
-	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
+	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs";
 	QFile::remove
 		( skip_file_name );
 
@@ -2211,9 +2211,9 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 
 		kdDebug() << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";
 		if( background ) {
-			
+
 			m_backgroundParser->lock();
-			
+
 			if( !group.isEmpty() ) {
 				if( !parseFirst )
 					m_parseEmitWaiting.addGroup( group, silent ? ParseEmitWaiting::Silent : ParseEmitWaiting::None  );
@@ -2243,9 +2243,9 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 					backgroundParser()->addFile(*it);
 				}
 			}
-			
+
 			m_backgroundParser->unlock();
-			
+
 		} else {
 			for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
 				if( !silent && _jd ) //If this this file is not silent and thus not part of the initial parse, increase the background-count so the progress-bar does not get confused
@@ -2551,7 +2551,7 @@ void CppSupportPart::createIgnorePCSFile( )
 {
 	static QCString skip_me( "ignore me\n" );
 
-	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
+	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs";
 	QFile skip_pcs_file( skip_file_name );
 	if ( skip_pcs_file.open( IO_WriteOnly ) )
 	{
@@ -2793,7 +2793,7 @@ void CppSupportPart::slotCursorMoved()
 void CppSupportPart::slotTextChanged()
 {
 	setTyping( true );	///@todo check if this is really needed
-	
+
 	if ( m_backgroundParserConfig->useBackgroundParser() )
 	{
 		m_textChangedTimer->start( m_backgroundParserConfig->backgroudParseDelay(), true );
@@ -2802,7 +2802,7 @@ void CppSupportPart::slotTextChanged()
 
 void CppSupportPart::slotParseCurrentFile()
 {
- 	if( isValid() && !isQueued( m_activeFileName ) ) 
+ 	if( isValid() && !isQueued( m_activeFileName ) )
 	{
 		parseFileAndDependencies( m_activeFileName, true, true );
 	}
@@ -2812,7 +2812,7 @@ void CppSupportPart::updateBackgroundParserConfig()
 {
 	BackgroundParserConfig config;
 	config.readConfig();
-	
+
 	if ( m_backgroundParserConfig->useProblemReporter() && !config.useProblemReporter() )
 	{
 		removeProblemReporter();
@@ -2821,7 +2821,7 @@ void CppSupportPart::updateBackgroundParserConfig()
 	{
 		embedProblemReporter( true );
 	}
-	
+
 	*m_backgroundParserConfig = config;
 }
 

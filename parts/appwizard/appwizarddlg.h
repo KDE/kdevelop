@@ -125,7 +125,7 @@ class AppWizardDialog : public AppWizardDialogBase
 public:
     AppWizardDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
     ~AppWizardDialog();
-    QString getProjectName() { return appname_edit->text().lower(); }
+    QString getProjectName() { return appname_edit->text(); }
     QString getProjectLocation() { return finalLoc_label->text(); }
 
 protected:
