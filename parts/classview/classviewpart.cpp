@@ -166,7 +166,6 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     connect( core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
         this, SLOT(activePartChanged(KParts::Part*)));
-    connect( m_widget, SIGNAL(removedNamespace(const QString&)), this, SLOT(removeNamespace(const QString& )));
 }
 
 bool ClassViewPart::jumpedToItem( ItemDom item ) {

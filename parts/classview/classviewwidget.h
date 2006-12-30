@@ -67,8 +67,6 @@ public:
     inline TextPaintStyleStore& paintStyles() {
         return m_paintStyles;
     }
-signals:
-    void removedNamespace(const QString &name);
 
 private slots:
     void slotNewClass();

@@ -534,7 +534,6 @@ void FolderBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 	    listView()->removedText << ns->name();
 	}
 	delete( item );
-    emit m_widget->removedNamespace(ns->name());
 	item = 0;
     }
 }
