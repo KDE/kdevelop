@@ -291,7 +291,7 @@ void ProjectManager::slotLoadProject( )
 		}
 	}
 
-  m_openRecentProjectAction->addURL(projectFile());
+  m_openRecentProjectAction->addURL(projectFile(), projectName());
 
   m_closeProjectAction->setEnabled(true);
   m_projectOptionsAction->setEnabled(true);
@@ -590,6 +590,13 @@ KURL ProjectManager::projectFile() const
   if (!m_info)
     return KURL();
   return m_info->m_projectURL;
+}
+
+QString ProjectManager::projectName() const
+{
+  if (!m_info) return QString();
+
+  return m_info->m_projectName;
 }
 
 bool ProjectManager::projectLoaded() const

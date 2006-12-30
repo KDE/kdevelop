@@ -56,6 +56,7 @@ public:
   bool projectLoaded() const;
 
   KURL projectFile() const;
+  QString projectName() const;
 
   void createActions( KActionCollection* ac );
 
