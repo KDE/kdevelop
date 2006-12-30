@@ -219,7 +219,7 @@ VariableTree::VariableTree(VariableWidget *parent,
     // columns will get roughly equal width.
     addColumn(i18n("Variable"));
     addColumn(i18n("Value"));
-    setResizeMode(AllColumns);
+//     setResizeMode(AllColumns);
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
