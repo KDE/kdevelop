@@ -168,7 +168,7 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
 
     // Project tree
     overview = new TrollListView( this, overviewContainer, SubprojectView, "project overview widget" );
-    overview->setResizeMode( QListView::LastColumn );
+//     overview->setResizeMode( QListView::LastColumn );
     overview->setSorting( -1 );
     overview->header() ->hide();
     overview->addColumn( QString::null );
