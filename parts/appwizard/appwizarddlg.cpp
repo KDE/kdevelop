@@ -985,8 +985,6 @@ void AppWizardDialog::openAfterGeneration()
 	// DOM Modifications go here
 	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
 
-	DomUtil::writeEntry( projectDOM, "/general/name", appname_edit->text() );
-
 	//save the selected vcs
 	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VCSIntegrator", QString("[X-KDevelop-VCS]=='%1'").arg(m_vcsForm->combo->currentText()));
 	if (offers.count() == 1)
