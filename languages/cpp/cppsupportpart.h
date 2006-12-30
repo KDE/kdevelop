@@ -50,6 +50,7 @@ class KListView;
 class Driver;
 class KPopupMenu;
 class BackgroundParserConfig;
+class KAction;
 
 
 namespace KParts
@@ -305,7 +306,8 @@ private:
     CppSplitHeaderSourceConfig* m_pSplitHeaderSourceConfig;
 
 	CreateGetterSetterConfiguration* m_pCreateGetterSetterConfiguration;
-	class KAction* m_createGetterSetterAction;
+	KAction * m_createGetterSetterAction;
+	KAction * m_switchHeaderSourceAction;
 	
 	QtBuildConfig* m_qtBuildConfig;
 

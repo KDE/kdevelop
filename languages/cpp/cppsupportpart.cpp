@@ -249,19 +249,19 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	connect( core(), SIGNAL( configWidget( KDialogBase* ) ),
 	         this, SLOT( configWidget( KDialogBase* ) ) );
 
-	KAction *action;
-
-	action = new KAction( i18n( "Switch Header/Implementation" ), SHIFT + Key_F12,
+	m_switchHeaderSourceAction = new KAction( i18n( "Switch Header/Implementation" ), SHIFT + Key_F12,
 	                      this, SLOT( slotSwitchHeader() ),
 	                      actionCollection(), "edit_switchheader" );
-	action->setToolTip( i18n( "Switch between header and implementation files" ) );
-	action->setWhatsThis( i18n( "<b>Switch Header/Implementation</b><p>"
+	m_switchHeaderSourceAction->setToolTip( i18n( "Switch between header and implementation files" ) );
+	m_switchHeaderSourceAction->setWhatsThis( i18n( "<b>Switch Header/Implementation</b><p>"
 	                            "If you are currently looking at a header file, this "
 	                            "brings you to the corresponding implementation file. "
 	                            "If you are looking at an implementation file (.cpp etc.), "
 	                            "this brings you to the corresponding header file." ) );
-	action->setEnabled( false );
+	m_switchHeaderSourceAction->setEnabled( false );
 
+	KAction *action;
+	
 	action = new KAction( i18n( "Complete Text" ), CTRL + Key_Space,
 	                      this, SLOT( slotCompleteText() ),
 	                      actionCollection(), "edit_complete_text" );
@@ -655,12 +655,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 	{
 		int id;
 
-		id = popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
-		popup->setWhatsThis( id, i18n( "<b>Switch Header/Implementation</b><p>"
-		                               "If you are currently looking at a header file, this "
-		                               "brings you to the corresponding implementation file. "
-		                               "If you are looking at an implementation file (.cpp etc.), "
-		                               "this brings you to the corresponding header file." ) );
+		m_switchHeaderSourceAction->plug( popup );
 
 		// 	CodeModelItemContext
 		if ( context->type() == Context::EditorContext )
