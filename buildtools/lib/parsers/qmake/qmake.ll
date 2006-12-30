@@ -58,7 +58,7 @@ ws                {delim}+
 begin_ws          ^{delim}+[^\n\t ]
 quote             "\""
 var_value         [^\n\t ]*[^\n\t \\]
-quoted_var_value  {quote}{var_value}({var_value}|"\t"|" ")*{quote}
+quoted_var_value  {quote}({var_value}|[\t ])({var_value}|[\t ])*{quote}
 letter            [A-Za-z]
 digit             [0-9]
 id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.|\+|\-)*
