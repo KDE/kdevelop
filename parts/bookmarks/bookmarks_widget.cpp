@@ -148,7 +148,7 @@ BookmarksWidget::BookmarksWidget(BookmarksPart *part)
 	setRootIsDecorated( true );
 	setResizeMode( QListView::LastColumn );
 	setAllColumnsShowFocus( true );
-	setSortColumn( -1 );
+// 	setSortColumn( -1 );
 
 	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 	connect( this, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
