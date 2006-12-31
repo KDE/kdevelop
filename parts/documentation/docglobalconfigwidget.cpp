@@ -142,7 +142,10 @@ void DocGlobalConfigWidget::editCollectionButtonClicked()
     dlg.setURL(item->url());
     dlg.setTitle(item->title());
     if (dlg.exec())
+    {
+        item->docPlugin()->deleteCatalogConfiguration(item);	// this removes the old entry by name
         item->docPlugin()->editCatalogConfiguration(item, dlg.title(), dlg.url());
+    }
 }
 
 void DocGlobalConfigWidget::addCollectionButtonClicked()
