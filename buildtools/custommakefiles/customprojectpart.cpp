@@ -190,7 +190,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     KURL url = fcontext->urls().first();
     if (URLUtil::isDirectory(url)) {
         // remember the name of the directory
-        m_contextDirName = url.fileName();
+        m_contextDirName = url.path();
         m_contextDirName = m_contextDirName.mid ( project()->projectDirectory().length() + 1 );
         popup->insertSeparator();
         int id = popup->insertItem( i18n("Make Active Directory"),
