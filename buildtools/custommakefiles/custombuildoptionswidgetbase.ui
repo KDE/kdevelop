@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CustomBuildOptionsWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,7 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buildtool_group</cstring>
@@ -31,7 +30,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QRadioButton">
                     <property name="name">
                         <cstring>make_button</cstring>
@@ -63,13 +61,19 @@
             <property name="sizeType">
                 <enum>Minimum</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <widget class="QLabel">
             <property name="name">
                 <cstring>builddir_label</cstring>
             </property>
             <property name="text">
-                <string>Run the build tool in the following &amp;directory:</string>
+                <string>Run the &amp;build tool in the following directory:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>builddir_edit</cstring>
@@ -77,16 +81,12 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout1</cstring>
+                <cstring>layout2</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>Spacer38</cstring>
@@ -104,7 +104,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="KLineEdit">
+                <widget class="KURLRequester">
                     <property name="name">
                         <cstring>builddir_edit</cstring>
                     </property>
@@ -121,18 +121,28 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
     </vbox>
 </widget>
-<connections>
-</connections>
-<slots>
-    <slot access="protected">makeToggled(bool)</slot>
-</slots>
+<customwidgets>
+</customwidgets>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<slots>
+    <slot access="protected">makeToggled(bool)</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>
