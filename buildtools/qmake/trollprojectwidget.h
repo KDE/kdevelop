@@ -93,6 +93,7 @@ public:
     enum TrollProjectView { SubprojectView, DetailsView };
     void setLastFocusedView( TrollProjectView view );
     enum SaveType { AlwaysSave, NeverSave, Ask };
+    QMakeScopeItem* currentSubproject();
 
 public slots:
     void slotBuildTarget();

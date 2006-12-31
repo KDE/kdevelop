@@ -2394,6 +2394,12 @@ void TrollProjectWidget::slotProjectDirty(const QString& path)
 }
 
 
+QMakeScopeItem* TrollProjectWidget::currentSubproject()
+{
+    return m_shownSubproject;
+}
+
+
 #include "trollprojectwidget.moc"
 
 //kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
