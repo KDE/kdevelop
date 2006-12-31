@@ -38,10 +38,12 @@ class AssignmentTest : public QObject
         AssignmentTest( QObject* parent = 0 );
         ~AssignmentTest();
     private slots:
+        void init();
+        void cleanup();
         void simpleParsed();
         void simpleParsed_data();
     private:
-        QMake::ProjectAST* project;
+        QMake::ProjectAST* ast;
 };
 
 #endif

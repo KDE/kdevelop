@@ -35,14 +35,13 @@ void AssignmentTest::simpleParsed()
 {
     QFETCH( QString, project );
     QFETCH( QString, output );
-    QMake::ProjectAST* a = new QMake::ProjectAST();
-    int ret = QMake::Driver::parseString( project, a );
+    int ret = QMake::Driver::parseString( project, ast );
     QVERIFY( ret == 0 );
-    QVERIFY( a->statements().count() == 1 );
+    QVERIFY( ast->statements().count() == 1 );
     QString result;
-    a->writeToString(result);
+    ast->writeToString(result);
     QVERIFY( result == output );
-    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( a->statements().first() );
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
     QVERIFY( assignment != 0 );
     QVERIFY( assignment->variable() == "VAR" );
     QVERIFY( assignment->op() == " = " );
@@ -55,6 +54,19 @@ void AssignmentTest::simpleParsed_data()
     QTest::addColumn<QString>( "project" );
     QTest::addColumn<QString>( "output" );
     QTest::newRow( "row1" ) << "VAR = VALUE\n" << "VAR = VALUE\n";
+}
+
+void AssignmentTest::init()
+{
+    ast = new QMake::ProjectAST();
+    QVERIFY( ast != 0 );
+}
+
+void AssignmentTest::cleanup()
+{
+    delete ast;
+    ast = 0;
+    QVERIFY( ast == 0 );
 }
 
 #include "assignmenttest.moc"
