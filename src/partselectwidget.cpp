@@ -152,7 +152,7 @@ void PartSelectWidget::init()
 	layout->addWidget( hbox );
 
     connect( _pluginList, SIGNAL( selectionChanged( Q3ListViewItem * ) ), this, SLOT( itemSelected( Q3ListViewItem * ) ) );
-	connect( _urlLabel, SIGNAL( leftClickedURL( const QString & ) ), this, SLOT( openURL( const QString & ) ) );
+	connect( _urlLabel, SIGNAL( leftClickedUrl( const QString & ) ), this, SLOT( openURL( const QString & ) ) );
 	connect( setAsDefaultButton, SIGNAL(clicked()), this, SLOT(setAsDefault()) );
 
 	readProjectConfig();
