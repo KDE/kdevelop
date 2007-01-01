@@ -265,7 +265,6 @@ void AutoProjectPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page
             {
                 //ok we handle the execute in this kpart
                 RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), page );
-                w3->programGroupBox->setTitle(i18n("Program (if empty automatically uses active target and active target's arguments)"));
                 connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
             }
         }
