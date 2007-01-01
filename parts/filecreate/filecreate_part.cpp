@@ -433,12 +433,10 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
         project()->addFile(relToProj.mid(1));
 	  }
   }
-  else
-  {
-    KURL url;
-    url.setPath(fullPath);
-    partController()->editDocument(url);
-  }
+
+  KURL url;
+  url.setPath(fullPath);
+  partController()->editDocument(url);
 
   QString fileName = URLUtil::filename(fullPath);
   kdDebug(9034) << "file name = " << filename << endl;
