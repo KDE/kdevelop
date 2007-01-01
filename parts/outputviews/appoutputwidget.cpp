@@ -34,8 +34,7 @@
 #include "kdevproject.h"
 
 AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
-    : ProcessWidget(0, "app output widget"), iFilterType(eNoFilter)
-	, m_part(part)
+    : ProcessWidget(0, "app output widget"), m_part(part)
 {
 	connect(this, SIGNAL(executed(QListBoxItem*)), SLOT(slotRowSelected(QListBoxItem*)));
 	connect(this, SIGNAL(rightButtonClicked( QListBoxItem *, const QPoint & )), 
@@ -45,9 +44,9 @@ AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
 	setFont(config->readFontEntry("OutputViewFont"));
 }
 
-void AppOutputWidget::clearView()
+void AppOutputWidget::clearViewAndContents()
 {
-	strList.clear();
+	m_contentList.clear();
 	clear();
 }
 
@@ -95,101 +94,138 @@ void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 void AppOutputWidget::insertStdoutLine(const QString &line)
 {
 	kdDebug(9004) << k_funcinfo << line << endl;
-	strList.append(QString("o-")+line);
-	ProcessWidget::insertStdoutLine(line);
+	m_contentList.append(QString("o-")+line);
+	if ( filterSingleLine( line ) )
+	{
+		ProcessWidget::insertStdoutLine(line);
+	}
 }
 
 
 void AppOutputWidget::insertStderrLine(const QString &line)
 {
 	kdDebug(9004) << k_funcinfo << line << endl;
-	strList.append(QString("e-")+line);
-	ProcessWidget::insertStderrLine(line);
+	m_contentList.append(QString("e-")+line);
+	if ( filterSingleLine( line ) )
+	{
+		ProcessWidget::insertStderrLine(line);
+	}
 }
 
+void AppOutputWidget::editFilter()
+{
+	FilterDlg dlg( this );
+	dlg.caseSensitive->setChecked( m_filter.m_caseSensitive );
+	dlg.regularExpression->setChecked( m_filter.m_isRegExp );
+	dlg.filterString->setText( m_filter.m_filterString );
+
+	if ( dlg.exec() == QDialog::Accepted )
+	{
+		m_filter.m_caseSensitive = dlg.caseSensitive->isChecked();
+		m_filter.m_isRegExp = dlg.regularExpression->isChecked();
+		m_filter.m_filterString = dlg.filterString->text();
+
+		m_filter.m_isActive = !m_filter.m_filterString.isEmpty();
+
+		reinsertAndFilter();
+	}
+	
+}
+bool AppOutputWidget::filterSingleLine(const QString & line)
+{
+	if ( !m_filter.m_isActive ) return true;
+
+	if ( m_filter.m_isRegExp )
+	{
+		return ( line.find( QRegExp( m_filter.m_filterString, m_filter.m_caseSensitive, false ) ) != -1 );
+	}
+	else
+	{
+		return ( line.find( m_filter.m_filterString, 0, m_filter.m_caseSensitive ) != -1 );
+	}	
+}
+
+void AppOutputWidget::reinsertAndFilter()
+{
+	//copy the first item from the listbox
+	//if a programm was started, this contains the issued command
+	QString issuedCommand;
+	if ( count() > 0 ) 
+	{
+		setTopItem(0);
+		issuedCommand = item(topItem())->text();
+	}
+
+	clear();
+
+	//write back the issued command
+	if ( !issuedCommand.isEmpty() )
+	{
+		insertItem( new ProcessListBoxItem( issuedCommand, ProcessListBoxItem::Diagnostic ) );
+	}
+
+	//grep through the list for items matching the filter...
+	QStringList strListFound;
+	if ( m_filter.m_isActive )
+	{	
+		if ( m_filter.m_isRegExp )
+		{
+			strListFound = m_contentList.grep( QRegExp(m_filter.m_filterString, m_filter.m_caseSensitive, false ) );
+		}
+		else
+		{
+			strListFound = m_contentList.grep( m_filter.m_filterString, m_filter.m_caseSensitive );
+		}
+	}
+	else
+	{
+		strListFound = m_contentList;
+	}
+
+	//... and reinsert the found items into the listbox
+	for ( QStringList::Iterator it = strListFound.begin(); it != strListFound.end(); ++it ) 
+	{
+		if ((*it).startsWith("o-"))
+		 {
+			(*it).remove(0,2);
+			insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Normal));
+		} 
+		else if ((*it).startsWith("e")) 
+		{
+			(*it).remove(0,2);
+			insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Error));
+		}
+	}
+}
+
+void AppOutputWidget::clearFilter()
+{
+	m_filter.m_isActive = false;
+	reinsertAndFilter();
+}
 
 void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
 {
-	//generate the popupmenu first
 	KPopupMenu popup(this, "filter output");
 
-	int idNoFilter = popup.insertItem( i18n("Do Not Filter Output") );
-	popup.setItemChecked(idNoFilter, iFilterType == eNoFilter);
+	int id = popup.insertItem( i18n("Clear output"), this, SLOT(clearViewAndContents()) );
+	popup.setItemEnabled( id, m_contentList.size() > 0 );
+	popup.insertSeparator();
 
-	int idFilter = popup.insertItem( i18n("Filter Output") );
-	popup.setItemChecked(idFilter, iFilterType == eFilterStr || iFilterType == eFilterRegExp);
+	id = popup.insertItem( i18n("Clear filter"), this, SLOT(clearFilter()) );
+	popup.setItemEnabled( id, m_filter.m_isActive );
+
+	popup.insertItem( i18n("Edit Filter"), this, SLOT(editFilter() ) );
 
 	popup.insertSeparator();
 	popup.insertItem( i18n("Hide view"), this, SLOT(hideView()) );
 
-	//pop it up
-	int res = popup.exec(p);
-
-	//init the query dialog with current data
-	FilterDlg dlg(this, "filter output settings");
-	dlg.filtergroup->setButton((int)iFilterType);
-	dlg.cbCase->setChecked(bCS);
-	dlg.leFilterStr->setText(strFilterStr);
-
-	//did user select the filter item from the popup
-	//and did he accept the filter-dialog
-	if (res == idFilter || res == idNoFilter) {
-		if (res == idFilter) {
-			if ( dlg.exec() != QDialog::Accepted ) 
-				return;
-			//get back data from the dialog
-			if (dlg.rNoFilter->isChecked())
-				iFilterType = eNoFilter;
-			else if (dlg.rFilterStr->isChecked())
-				iFilterType = eFilterStr;
-			else if (dlg.rFilterRegExp->isChecked())
-				iFilterType = eFilterRegExp;
-			strFilterStr = dlg.leFilterStr->text();
-			bCS = dlg.cbCase->isChecked();
-		} else {
-			iFilterType = eNoFilter;
-		}
-		
-		//copy the first item from the listbox
-		//if a programm was started, this contains the issued command
-		QString strFirst=QString::null;
-		if (count()) {
-			setTopItem(0);
-			strFirst = item(topItem())->text();
-		}
-		//clear the listbox and write back the issued command
-		clear();
-		if (strFirst != QString::null)
-			insertItem(new ProcessListBoxItem(strFirst, ProcessListBoxItem::Diagnostic));
-
-		//grep through the QList for items matching the filter...
-		QStringList strListFound;
-		if (iFilterType == eFilterStr)
-			strListFound = strList.grep(strFilterStr, bCS);
-		else if (iFilterType == eFilterRegExp)
-			strListFound = strList.grep(QRegExp(strFilterStr, bCS, false));
-		else if (iFilterType == eNoFilter)
-			strListFound = strList;
-
-		//... and reinsert the found items into the listbox
-		for ( QStringList::Iterator it = strListFound.begin(); it != strListFound.end(); ++it ) {
-			if ((*it).startsWith("o-")) {
-				(*it).remove(0,2);
-				insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Normal));
-			} else if ((*it).startsWith("e")) {
-				(*it).remove(0,2);
-				insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Error));
-			}
-		}
-	} else if (res == idNoFilter) {
-		iFilterType = eNoFilter;
-	}
+	popup.exec(p);
 }
 
 void AppOutputWidget::hideView()
 {
 	m_part->mainWindow()->setViewAvailable( this , false );
 }
-
 
 #include "appoutputwidget.moc"

@@ -110,7 +110,7 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
     } else
         cmd = program;
 
-    m_widget->strList.clear();
+    m_widget->clearViewAndContents();
 
     if ( directory.isNull() )
       // use the user's home directory
@@ -145,7 +145,7 @@ void AppOutputViewPart::insertStderrLine(const QString &line)
 
 void AppOutputViewPart::clearView()
 {
-    m_widget->clearView();
+    m_widget->clearViewAndContents();
 }
 
 #include "appoutputviewpart.moc"

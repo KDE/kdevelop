@@ -19,12 +19,6 @@
 
 class AppOutputViewPart;
 
-enum FilterType {
-  eNoFilter=0,
-  eFilterStr=1,
-  eFilterRegExp=2
-};
-
 class AppOutputWidget : public ProcessWidget
 {
     Q_OBJECT
@@ -33,7 +27,6 @@ public:
     AppOutputWidget(AppOutputViewPart* part);
     ~AppOutputWidget();
     // clears our own store and the one of our base ProcessWidget
-    void clearView();
 
 public slots:
 	void slotRowSelected(QListBoxItem* row);
@@ -41,16 +34,31 @@ public slots:
 	void insertStderrLine(const QString &line);
 	void slotContextMenu(QListBoxItem *, const QPoint &);
 	void hideView();
+	void clearViewAndContents();
+	void clearFilter();
+	void editFilter();
 
 private:
 	virtual void childFinished(bool normal, int status);
+	void reinsertAndFilter();
+	bool filterSingleLine( const QString & line );
 
-	QStringList strList;
-	FilterType iFilterType;
-	QString strFilterStr;
-	bool bCS;
+	QStringList m_contentList;
+// 	FilterType iFilterType;
+// 	QString strFilterStr;
+// 	bool bCS;
+
+	struct OutputFilter
+	{
+		OutputFilter() : m_isActive(false), m_isRegExp(false), m_caseSensitive(false) {}
+		bool m_isActive;
+		bool m_isRegExp;
+		bool m_caseSensitive;
+		QString m_filterString;
+	};
 
 	AppOutputViewPart* m_part;
+	OutputFilter m_filter;
 };
 
 #endif

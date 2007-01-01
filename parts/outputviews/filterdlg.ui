@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>FilterDlg</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>459</width>
-            <height>173</height>
+            <width>326</width>
+            <height>184</height>
         </rect>
     </property>
     <property name="caption">
@@ -91,7 +91,7 @@
                 <cstring>filtergroup</cstring>
             </property>
             <property name="title">
-                <string>Filter Options</string>
+                <string>Filter</string>
             </property>
             <property name="checkable">
                 <bool>false</bool>
@@ -99,76 +99,52 @@
             <property name="selectedId" stdset="0">
                 <number>0</number>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QRadioButton" row="0" column="0">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>rNoFilter</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>No filter</string>
+                        <string>Only show lines matching:</string>
                     </property>
-                    <property name="checked">
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>filterString</cstring>
+                    </property>
+                    <property name="enabled">
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="0" column="1">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>rFilterStr</cstring>
+                        <cstring>caseSensitive</cstring>
                     </property>
                     <property name="text">
-                        <string>Filter for string</string>
+                        <string>C&amp;ase sensitive</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                 </widget>
-                <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="3">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>leFilterStr</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="0" column="2">
-                    <property name="name">
-                        <cstring>rFilterRegExp</cstring>
+                        <cstring>regularExpression</cstring>
                     </property>
                     <property name="text">
-                        <string>Filter with regular expression</string>
+                        <string>Re&amp;gular expression</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+G</string>
                     </property>
                 </widget>
-                <spacer row="0" column="3">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>40</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QCheckBox" row="2" column="1" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>cbCase</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Match case-sensitve</string>
-                    </property>
-                </widget>
-            </grid>
+            </vbox>
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>buttonOk</sender>
@@ -181,12 +157,6 @@
         <signal>clicked()</signal>
         <receiver>FilterDlg</receiver>
         <slot>reject()</slot>
-    </connection>
-    <connection>
-        <sender>rNoFilter</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>leFilterStr</receiver>
-        <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
