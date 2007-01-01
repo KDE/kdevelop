@@ -40,6 +40,7 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
 {
     m_projectFileUrl = projectfile;
     QFileInfo fi( projectfile.toLocalFile() );
+    m_ast = new QMake::ProjectAST();
     kDebug(9024) << k_funcinfo << "Is " << projectfile << " a dir?" << fi.isDir() << endl;
     if( fi.isDir() )
     {
@@ -58,9 +59,10 @@ QMakeProjectScope::QMakeProjectScope( const KUrl& projectfile )
         m_projectFileUrl.adjustPath( KUrl::AddTrailingSlash );
         m_projectFileUrl.setFileName( projectfile );
     }
-    if( QMake::Driver::parseFile( m_projectFileUrl.toLocalFile(), &m_ast ) != 0 )
+    if( QMake::Driver::parseFile( m_projectFileUrl.toLocalFile(), m_ast ) != 0 )
     {
         kDebug( 9024 ) << "Couldn't parse project: " << m_projectFileUrl.toLocalFile() << endl;
+	delete m_ast;
         m_ast = 0;
         m_projectFileUrl = KUrl();
     }
