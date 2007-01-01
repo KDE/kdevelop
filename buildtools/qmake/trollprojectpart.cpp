@@ -483,6 +483,8 @@ QString TrollProjectPart::runDirectory() const
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
+
+
 QString TrollProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
@@ -490,27 +492,28 @@ QString TrollProjectPart::mainProgram(bool relative) const
     QString directoryRadioString = DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio");
     QString DomMainProgram = DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
 
+    if ( DomMainProgram.isEmpty() )
+    {
+        return m_widget->subprojectDirectory() + QString( QChar( QDir::separator() ) ) + m_widget->getCurrentOutputFilename();
+    }
+
     if ( directoryRadioString == "custom" )
         return DomMainProgram;
 
-    if ( relative == false && !DomMainProgram.isEmpty() )
+    if ( relative == false )
         return buildDirectory() + QString( QChar( QDir::separator() ) ) + DomMainProgram;
 
-    if ( directoryRadioString == "executable" ) {
+    if ( directoryRadioString == "executable" ) 
+    {
         int pos = DomMainProgram.findRev(QString( QChar( QDir::separator() ) ));
         if (pos != -1)
             return DomMainProgram.mid(pos+1);
 
-        if ( DomMainProgram.isEmpty() )
-        {
-            return runDirectory() + QString( QChar( QDir::separator() ) ) + m_widget->getCurrentOutputFilename();
-        }
         return DomMainProgram;
     }
-    else
-        return DomMainProgram;
-}
 
+    return DomMainProgram;
+}
 
 /** Retuns a QString with the run command line arguments */
 QString TrollProjectPart::runArguments() const
