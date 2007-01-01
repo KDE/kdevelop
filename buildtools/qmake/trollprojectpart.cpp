@@ -49,6 +49,8 @@
 #include "config.h"
 #include "envvartools.h"
 #include "qmakeoptionswidget.h"
+#include "pathutil.h"
+#include "scope.h"
 
 #include <kdevplugininfo.h>
 
@@ -452,25 +454,21 @@ QString TrollProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(dom, "/kdevtrollproject/run/customdirectory");
-
-    int pos = DomMainProgram.findRev(QString( QChar( QDir::separator() ) ));
-    if (pos != -1)
-        return buildDirectory() + QString( QChar( QDir::separator() ) ) + DomMainProgram.left(pos);
-
-    if ( DomMainProgram.isEmpty() )
+    if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", true) )
     {
-        return m_widget->subprojectDirectory();
+        return defaultRunDirectory("kdevtrollproject");
+    }else
+    {
+        QString destpath = m_widget->getCurrentDestDir();
+        if( destpath.isEmpty() )
+        {
+            return m_widget->subprojectDirectory();
+        }else if( QDir::isRelativePath( destpath ) )
+        {
+            return m_widget->subprojectDirectory() + QString( QChar( QDir::separator() ) ) + destpath;
+        }else
+            return destpath;
     }
-    return buildDirectory() + QString( QChar( QDir::separator() ) ) + DomMainProgram;
-
 }
 
 
@@ -489,30 +487,52 @@ QString TrollProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
 
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
-
-    if ( DomMainProgram.isEmpty() )
+    if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", true) )
     {
-        return m_widget->subprojectDirectory() + QString( QChar( QDir::separator() ) ) + m_widget->getCurrentOutputFilename();
-    }
+        QString directoryRadioString = DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio");
+        QString DomMainProgram = DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
 
-    if ( directoryRadioString == "custom" )
+        if ( directoryRadioString == "custom" )
+            return DomMainProgram;
+
+        if ( relative == false )
+            return buildDirectory() + QString( QChar( QDir::separator() ) ) + DomMainProgram;
+
+        if ( directoryRadioString == "executable" )
+        {
+            int pos = DomMainProgram.findRev(QString( QChar( QDir::separator() ) ));
+            if (pos != -1)
+                return DomMainProgram.mid(pos+1);
+
+            return DomMainProgram;
+        }
+
         return DomMainProgram;
-
-    if ( relative == false )
-        return buildDirectory() + QString( QChar( QDir::separator() ) ) + DomMainProgram;
-
-    if ( directoryRadioString == "executable" ) 
+    }else
     {
-        int pos = DomMainProgram.findRev(QString( QChar( QDir::separator() ) ));
-        if (pos != -1)
-            return DomMainProgram.mid(pos+1);
+        if( !m_widget->currentSubproject())
+        {
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in TrollProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
 
-        return DomMainProgram;
+        if ( m_widget->currentSubproject()->scope->variableValues("TEMPLATE").findIndex("app") == -1 )
+        {
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << m_widget->currentSubproject()->scope->variableValues("TEMPLATE").join(" ") << ") ! -> Unable to determine the main program in TrollProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
+
+        QString destpath = m_widget->getCurrentTarget();
+        if( QDir::isRelativePath( destpath ) )
+        {
+            destpath = m_widget->subprojectDirectory() + QString( QChar( QDir::separator() ) ) + destpath;
+        }
+        if( relative )
+        {
+            return getRelativePath( projectDirectory(), destpath );
+        }
+        return destpath;
     }
-
-    return DomMainProgram;
 }
 
 /** Retuns a QString with the run command line arguments */

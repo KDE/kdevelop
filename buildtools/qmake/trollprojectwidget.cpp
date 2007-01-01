@@ -467,11 +467,11 @@ QString TrollProjectWidget::getCurrentTarget()
 {
     if ( !m_shownSubproject )
         return "";
-    QString destdir = m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "DESTDIR" ).front());
+    QString destdir = getCurrentDestDir();
     if ( destdir.isEmpty() )
-        return destdir + m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET" ).front());
+        return getCurrentOutputFilename();
     else
-        return destdir + QString( QChar( QDir::separator() ) ) + m_shownSubproject->scope->resolveVariables(m_shownSubproject->scope->variableValues( "TARGET" ).front());
+        return destdir + QString( QChar( QDir::separator() ) ) + getCurrentOutputFilename();
 }
 
 QString TrollProjectWidget::getCurrentDestDir()
@@ -1939,15 +1939,16 @@ void TrollProjectWidget::slotBuildOpenFile()
 void TrollProjectWidget::slotExecuteProject()
 {
     QString program = m_part->mainProgram();
-    if ( !program.startsWith( QDir::rootDirPath() ) )
-        program.prepend( "." + QString( QChar( QDir::separator() ) ) );
-
     if ( program.isEmpty() )
     {
         KMessageBox::sorry( this, i18n( "Please specify the executable name in the "
-                                        "project options dialog first." ), i18n( "No Executable Name Given" ) );
+                                        "project options dialog or select an application subproject in the QMake Manager." ), i18n( "No Executable Found" ) );
         return ;
     }
+
+    if ( !program.startsWith( QDir::rootDirPath() ) )
+        program.prepend( "." + QString( QChar( QDir::separator() ) ) );
+
 
     // Build environment variables to prepend to the executable path
     QString runEnvVars = QString::null;

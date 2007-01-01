@@ -33,7 +33,7 @@ Run options widget.
 class RunOptionsWidget : public RunOptionsWidgetBase
 {
     Q_OBJECT
-    
+
 public:
     RunOptionsWidget( QDomDocument &dom,             //!< document DOM
                       const QString &configGroup,    //!< configuration group
@@ -50,6 +50,7 @@ private:
     virtual void directoryRadioChanged();
     virtual void browseCustomDirectory();
     virtual void browseMainProgram();
+    virtual void mainProgramChanged( const QString& );
 
     QDomDocument &m_dom;
     QString m_configGroup;

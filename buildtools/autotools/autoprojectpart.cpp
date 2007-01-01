@@ -340,7 +340,16 @@ DomUtil::PairList AutoProjectPart::runEnvironmentVars() const
   */
 QString AutoProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevautoproject");
+
+    QDomDocument &dom = *projectDom();
+
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", true) )
+    {
+        return defaultRunDirectory("kdevautoproject");
+    }else
+    {
+        return buildDirectory() + "/" + activeDirectory();
+    }
 }
 
 
@@ -359,36 +368,12 @@ QString AutoProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
 
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", true) )
+    {
+        QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
+        QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
 
-    if ( DomMainProgram.isEmpty() ) {
-    // If no Main Program was specified, return the active target
-
-        // Get a pointer to the active target
-        TargetItem* titem = m_widget->activeTarget();
-
-        if ( !titem ) {
-            kdDebug ( 9020 ) << k_funcinfo << "Error! : No Main Program was specified and there's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
-            return QString::null;
-        }
-
-        if ( titem->primary != "PROGRAMS" ) {
-            kdDebug ( 9020 ) << k_funcinfo << "Error! : No Main Program was specified and active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
-            return QString::null;
-        }
-
-        if (relative == false || directoryRadioString == "custom")
-            return buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
-
-        if ( directoryRadioString == "executable" )
-            return titem->name;
-
-        return activeDirectory() + "/" + titem->name;
-
-    }
-    else {
-    // A Main Program was specified, return it
+        // A Main Program was specified, return it
         if ( directoryRadioString == "custom" )
             return DomMainProgram;
 
@@ -402,6 +387,33 @@ QString AutoProjectPart::mainProgram(bool relative) const
         if (pos != -1)
             return DomMainProgram.mid(pos+1);
         return DomMainProgram;
+
+
+    } else {
+        // If no Main Program was specified, return the active target
+
+        QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
+        // Get a pointer to the active target
+        TargetItem* titem = m_widget->activeTarget();
+
+        if ( !titem ) {
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
+
+        if ( titem->primary != "PROGRAMS" ) {
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
+
+        if (relative == false || directoryRadioString == "custom")
+            return buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
+
+        if ( directoryRadioString == "executable" )
+            return titem->name;
+
+        return activeDirectory() + "/" + titem->name;
+
     }
 }
 
@@ -411,17 +423,31 @@ QString AutoProjectPart::runArguments() const
 {
     QDomDocument &dom = *projectDom();
 
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
-    QString DomProgramArguments = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", true) )
+    {
+        QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+        QString DomProgramArguments = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 
-    if ( DomMainProgram.isEmpty() && DomProgramArguments.isEmpty() )
-    // If no "Main Program" and no "Program Arguments" were specified, return the active target's run arguments
-        if (m_widget->activeTarget())
-            return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name);
-        else
+        if ( DomMainProgram.isEmpty() && DomProgramArguments.isEmpty() )
             return QString::null;
-    else
-        return DomProgramArguments;
+        else
+            return DomProgramArguments;
+    }else
+    {
+        TargetItem* titem = m_widget->activeTarget();
+        if( DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name).isEmpty() )
+        {
+            QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+            QString DomProgramArguments = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
+
+            if ( DomMainProgram.isEmpty() && DomProgramArguments.isEmpty() )
+                return QString::null;
+            else
+                return DomProgramArguments;
+        }
+        else
+            return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name);
+    }
 }
 
 

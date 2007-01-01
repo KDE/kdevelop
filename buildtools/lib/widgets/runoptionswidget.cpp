@@ -30,6 +30,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
+#include <qbuttongroup.h>
 #include <qlabel.h>
 
 #include "domutil.h"
@@ -88,6 +89,16 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     else
         mainprogram_edit->setText(URLUtil::relativePath(m_buildDirectory.directory(false, false), m_mainProgramAbsolutePath.path(), false));
 
+    if( configGroup == "/kdevcustomproject" )
+    {
+        directoryButtonGroup->setChecked(true);
+        directoryButtonGroup->setCheckable(false);
+        delete notelabel;
+    }else
+    {
+        directoryButtonGroup->setChecked( DomUtil::readBoolEntry(dom, configGroup+"/run/useglobalprogram", true ) );
+    }
+
     // Read the main program command line arguments and store them in the edit box
     progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
 
@@ -118,6 +129,7 @@ void RunOptionsWidget::accept()
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/customdirectory", customDir);
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
+    DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/useglobalprogram", directoryButtonGroup->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autocompile", autocompile_box->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autoinstall", autoinstall_box->isChecked());
@@ -229,6 +241,19 @@ void RunOptionsWidget::browseMainProgram()
         }
     }
     delete dlg;
+}
+
+void RunOptionsWidget::mainProgramChanged( const QString& newtext )
+{
+
+    if( directoryButtonGroup->isChecked() && newtext.isEmpty() )
+    {
+        mainprogram_label->setPaletteForegroundColor(QColor("#ff0000"));
+    }
+    else
+    {
+        mainprogram_label->unsetPalette();
+    }
 }
 
 #include "runoptionswidget.moc"
