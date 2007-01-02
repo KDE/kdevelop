@@ -648,7 +648,7 @@ void TrollProjectWidget::slotExecuteTarget()
     }
     program.prepend( runEnvVars );
 
-    program.append( " " + DomUtil::readEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/programargs" ) + " " );
+    program.append( " " + m_part->runArguments() + " " );
     //  std::cerr<<dircmd + "./"+program<<std::endl;
     //  m_part->execute(dircmd + "./"+program);
     //  m_part->appFrontend()->startAppCommand(dircmd +"./"+program,true);
@@ -1963,7 +1963,7 @@ void TrollProjectWidget::slotExecuteProject()
             runEnvVars += pair.first + "=" + pair.second + " ";
     }
     program.prepend( runEnvVars );
-    program.append( " " + DomUtil::readEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/programargs" ) + " " );
+    program.append( " " + m_part->runArguments() + " " );
 
     QString dircmd = "cd " + KProcess::quote( this->projectDirectory() ) + " && " ;
 

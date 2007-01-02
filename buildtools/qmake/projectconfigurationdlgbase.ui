@@ -118,10 +118,10 @@
                                     <cstring>radioLibrary</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Library</string>
+                                    <string>Librar&amp;y</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+L</string>
+                                    <string>Alt+Y</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create a library</string>
@@ -247,7 +247,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Browse...</string>
+                                    <string>&amp;Browse...</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Browse</string>
@@ -276,10 +276,10 @@
                                     <cstring>checkInstallTarget</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Install</string>
+                                    <string>I&amp;nstall</string>
                                 </property>
                                 <property name="accel">
-                                    <string></string>
+                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="1">
@@ -312,6 +312,27 @@
                                 </property>
                             </widget>
                         </grid>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>argumentsGroupBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Program arguments</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KLineEdit">
+                                <property name="name">
+                                    <cstring>m_editArguments</cstring>
+                                </property>
+                            </widget>
+                        </vbox>
                     </widget>
                     <spacer>
                         <property name="name">
@@ -2678,6 +2699,18 @@ e</string>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>customVarChanged()</slot>
     </connection>
+    <connection>
+        <sender>radioApplication</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>argumentsGroupBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_editArguments</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>TabBuild</tabstop>
@@ -2846,6 +2879,7 @@ e</string>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

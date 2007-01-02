@@ -164,6 +164,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
+            kdDebug(9024) << "Setting runarguments to " << m_editArguments->text() << endl;
+            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+prjWidget->getCurrentOutputFilename(), m_editArguments->text() );
+            kdDebug(9024) << "Have runarguments " << DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+prjWidget->getCurrentOutputFilename() ) << endl;
         }
         else if ( radioLibrary->isChecked() )
         {
@@ -653,6 +656,7 @@ void ProjectConfigurationDlg::updateControls()
         {
             checkConsole->setChecked( true );
         }
+        m_editArguments->setText( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+prjWidget->getCurrentOutputFilename(), "" ) );
     }
 
     // Buildmode
