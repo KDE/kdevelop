@@ -436,10 +436,9 @@ QString AutoProjectPart::runArguments() const
         TargetItem* titem = m_widget->activeTarget();
         if( DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name).isEmpty() )
         {
-            QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
             QString DomProgramArguments = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 
-            if ( DomMainProgram.isEmpty() && DomProgramArguments.isEmpty() )
+            if ( DomProgramArguments.isEmpty() )
                 return QString::null;
             else
                 return DomProgramArguments;
