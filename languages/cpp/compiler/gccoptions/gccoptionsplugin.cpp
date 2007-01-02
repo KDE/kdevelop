@@ -195,11 +195,11 @@ OptimizationTab::OptimizationTab( GccOptionsPlugin::Type type, QWidget *parent, 
 	                                        "doing arithmetic on them</qt>" ),
 	                  "-fno-force-addr" );
 	new FlagListItem( optBox,
-	                  "-omit-frame-pointer", i18n( "<qt>Do not keep the frame pointer in a register for functions that "
+	                  "-fomit-frame-pointer", i18n( "<qt>Do not keep the frame pointer in a register for functions that "
 	                                               "do not need one</qt>" ),
 	                  "-fno-omit-frame-pointer" );
 	new FlagListItem( optBox,
-	                  "-no-inline", i18n( "<qt>Ignore the <i>inline</i> keyword</qt>" ),
+	                  "-fno-inline", i18n( "<qt>Ignore the <i>inline</i> keyword</qt>" ),
 	                  "-finline" );
 
 	if ( type == GccOptionsPlugin::GPP )
