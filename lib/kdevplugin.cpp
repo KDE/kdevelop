@@ -31,7 +31,7 @@
 #include <kglobal.h>
 #include <kinstance.h>
 #include <kiconloader.h>
-
+#include <kapplication.h>
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "kdevplugincontroller.h"
@@ -41,7 +41,7 @@ KDevPlugin::KDevPlugin( KInstance *instance, QObject *parent )
         KXMLGUIClient()
 {
     setInstance( instance );
-    KGlobal::iconLoader() ->addAppDir( "kdevelop" );
+    kapp->iconLoader() ->addAppDir( "kdevelop" );
 }
 
 KDevPlugin::~KDevPlugin()
