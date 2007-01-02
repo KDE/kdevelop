@@ -19,7 +19,7 @@
 #include <kconfig.h>
 #include <kurl.h>
 #include <kurldrag.h>
-#include <kurlrequesterdlg.h>
+#include <kurlrequesterdialog.h>
 
 #include <kstdaccel.h>
 #include <kaction.h>
