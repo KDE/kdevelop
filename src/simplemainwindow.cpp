@@ -42,6 +42,7 @@
 #include <profileengine.h>
 #include <designer.h>
 #include <kdevproject.h>
+#include <urlutil.h>
 
 #include "api.h"
 #include "core.h"
@@ -165,7 +166,19 @@ void SimpleMainWindow::contextMenu(QPopupMenu *popupMenu, const Context *context
     {
         if (PartController::getInstance()->openURLs().count() > 0)
         {
-            m_splitURLs = static_cast<const FileContext*>(context)->urls();
+            KURL::List urls = static_cast<const FileContext*>(context)->urls();
+            KURL::List::ConstIterator it = urls.begin();
+            while ( it != urls.end() )
+            {
+                if ( !URLUtil::isDirectory( *it ) )
+                {
+                    m_splitURLs.append( *it );
+                }
+                ++it;
+            }
+
+            if ( m_splitURLs.isEmpty() ) return;
+
             bool isOpen = true;
             for (KURL::List::const_iterator it = m_splitURLs.begin(); it != m_splitURLs.end(); ++it)
             {
