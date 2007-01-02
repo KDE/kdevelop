@@ -203,7 +203,9 @@ void ClassViewPart::setupActions( )
     m_functionsnav->setWhatsThis(i18n("<b>Function navigator</b><p>Navigates over functions contained in the file."));
 //    m_functionsnav->view()->setCurrentText(NAV_NODEFINITION);
     m_functionsnav->view()->setDefaultText(NAV_NODEFINITION);
-    
+
+    new KAction( i18n("Focus Navigator"), 0, this, SLOT(slotFocusNavbar()), actionCollection(), "focus_navigator" );
+
     if (langHasFeature(KDevLanguageSupport::Classes))
     {
         KAction *ac = new KAction(i18n("Class Inheritance Diagram"), "view_tree", 0, this, SLOT(graphicalClassView()), actionCollection(), "inheritance_dia");
@@ -265,6 +267,10 @@ void ClassViewPart::activePartChanged( KParts::Part * part)
         connect(m_activeView, SIGNAL(cursorPositionChanged()),
             navigator, SLOT(slotCursorPositionChanged()) );
     }
+}
+void ClassViewPart::slotFocusNavbar()
+{
+    m_functionsnav->view()->setFocus();
 }
 
 #include "classviewpart.moc"
