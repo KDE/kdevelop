@@ -132,8 +132,7 @@ CppCodeCompletion* cppCompletionInstance = 0;
 
 //file global functions, must be before any "using namespace"
 QString cleanForMenu( QString txt ) {
-  //  return txt.replace( "&", "§" );
-  return txt.replace( "&", "$" ).replace( "	", "    " );
+  return txt.replace( "&", "&&" ).replace( "	", "    " );
 }
 
 uint PopupTracker::pendingPopups = 0;
