@@ -278,6 +278,14 @@ void GroupItem::addInstallObject( const QString& objectname )
     installs.append( objitem );
 }
 
+void GroupItem::removeInstallObject( GroupItem* item )
+{
+    owner->removeValue( "INSTALLS", item->text(0) );
+    owner->scope->saveToFile();
+    installs.remove( item );
+    delete item;
+}
+
 /*
  * Class FileItem
  */

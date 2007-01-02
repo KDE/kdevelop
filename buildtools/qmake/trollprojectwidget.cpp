@@ -1422,6 +1422,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         int idSetInstObjPath = -2;
         int idLUpdate = -2;
         int idLRelease = -2;
+        int idRemoveFile = -2;
 
         //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         if ( titem->groupType == GroupItem::InstallRoot )
@@ -1438,6 +1439,8 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
             idInsNewFilepatternItem = popup.insertItem( SmallIconSet( "fileopen" ), i18n( "Add Pattern of Files to Install..." ) );
             popup.setWhatsThis( idInsNewFilepatternItem, i18n( "<b>Add pattern of files to install</b><p>Defines the pattern to match files which will be installed. "
                                 "It is possible to use wildcards and relative paths like <i>docs/*</i>." ) );
+            idRemoveFile = popup.insertItem( SmallIconSet( "editdelete" ), i18n( "Remove Install Object" ) );
+            popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove install object</b><p>Removes the install object the current group." ) );
         }
         else if ( titem->groupType == GroupItem::Translations )
         {
@@ -1623,6 +1626,10 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
             QString cmd = "lrelease ";
             cmd += m_shownSubproject->scope->fileName();
             m_part->appFrontend() ->startAppCommand( m_shownSubproject->scope->projectDir(), cmd, false );
+        }else if( r == idRemoveFile )
+        {
+            static_cast<GroupItem*>(titem->parent())->removeInstallObject( titem );
+            slotOverviewSelectionChanged( m_shownSubproject );
         }
     }
     else if ( pvitem->type() == qProjectItem::File )
@@ -1630,10 +1637,10 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
 
         removefileButton->setEnabled( true );
         FileItem *fitem = static_cast<FileItem*>( pvitem );
-        GroupItem::GroupType gtype = static_cast<GroupItem*>( item->parent() ) ->groupType;
+        GroupItem* gitem = static_cast<GroupItem*>( item->parent() );
 
         KPopupMenu popup( this );
-        if ( !( gtype == GroupItem::InstallObject ) )
+        if ( !( gitem->groupType == GroupItem::InstallObject ) )
             popup.insertTitle( i18n( "File: %1" ).arg( fitem->text( 0 ) ) );
         else
             popup.insertTitle( i18n( "Pattern: %1" ).arg( fitem->text( 0 ) ) );
@@ -1668,12 +1675,12 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
             popup.setWhatsThis( idUISubclasses, i18n( "<b>List of subclasses</b><p>Shows subclasses list editor. "
                                 "There is possibility to add or remove subclasses from the list." ) );
         }
-        if ( !( gtype == GroupItem::InstallObject ) )
+        if ( !( gitem->groupType == GroupItem::InstallObject ) )
         {
             idRemoveFile = popup.insertItem( SmallIconSet( "editdelete" ), i18n( "Remove File" ) );
-            popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk." ) );
+            popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove file</b><p>Removes file from a current group. For sources also removes the subclassing information." ) );
             idFileProperties = popup.insertItem( SmallIconSet( "configure_file" ), i18n( "Exclude File" ) );
-            popup.setWhatsThis( idFileProperties, i18n( "<b>Exclude File</b><p>Excludes the file from this Scope." ) );
+            popup.setWhatsThis( idFileProperties, i18n( "<b>Exclude File</b><p>Excludes the file from this Scope. Does not touch subclassing information" ) );
         }
         else
         {
@@ -1682,14 +1689,14 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
             idRemoveFile = popup.insertItem( SmallIconSet( "editdelete" ), i18n( "Remove Pattern" ) );
             popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove pattern</b><p>Removes install files pattern from the current install object." ) );
         }
-        if ( !( gtype == GroupItem::InstallObject ) )
+        if ( !( gitem->groupType == GroupItem::InstallObject ) )
         {
             KURL::List urls;
             urls.append( m_shownSubproject->scope->projectDir() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 ) );
             FileContext context( urls );
             m_part->core() ->fillContextMenu( &popup, &context );
         }
-        if ( gtype == GroupItem::Sources )
+        if ( gitem->groupType == GroupItem::Sources )
         {
             idBuildFile = popup.insertItem( SmallIconSet( "make_kdevelop" ), i18n( "Build File" ) );
             popup.setWhatsThis( idBuildFile, i18n( "<b>Build File</b><p>Builds the object file for this source file." ) );
@@ -1698,24 +1705,8 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         int r = popup.exec( p );
         if ( r == idRemoveFile )
             removeFile( m_shownSubproject, fitem );
-        // Fileproperties
         else if ( r == idFileProperties )
         {
-            /*
-              GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
-              if (!gitem)
-                return;
-              QStringList dirtyScopes;
-              FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
-              QMakeScopeItem *scope;
-              propdlg->exec();
-              for (uint i=0; i<dirtyScopes.count();i++)
-              {
-                scope = getScope(m_shownSubproject,dirtyScopes[i]);
-                if (scope)
-                   updateProjectFile(scope);
-              }
-            */
             slotExcludeFileFromScopeButton();
         }
         else if ( r == idViewUIH )
@@ -1819,22 +1810,24 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
 
     m_filesCached = false;
     m_allFilesCache.clear();
+
     QString realfilename = spitem->scope->resolveVariables( fitem->text( 0 ) );
+    QString file = QString( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename.mid(1, realfilename.length()-2)  ).remove( 0, projectDirectory().length() );
     if ( KMessageBox::warningYesNo( this,
                                     "<qt>" +
-                                    i18n( "Are you sure you wish to remove <strong>%1</strong> from this subproject/scope?" )
+                                    i18n( "Do you want to delete the file <strong>%1</strong> from the project and your disk?" )
                                     .arg( fitem->text( 0 ) ) +
                                     "</qt>",
                                     i18n( "Remove File" ),
-#if KDE_IS_VERSION(3,3,90)
                                     KStdGuiItem::remove(),
-#else
-                                    i18n( "&Remove" ),
-#endif
                                         KStdGuiItem::no(),
-                                        "removeFileFromQMakeProject" ) == KMessageBox::No )
+                                        "deleteFileFromQMakeProject" ) == KMessageBox::No )
     {
-        return ;
+        return;
+    }else
+    {
+        kdDebug(9024) << "Deleting file as the user wished: " << file << endl;
+        KIO::NetAccess::del( KURL::fromPathOrURL( file ), 0 );
     }
 
     if ( gitem->groupType != GroupItem::InstallObject )
@@ -1852,7 +1845,6 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
                              "subclass", "sourcefile", "uifile" );
     QPtrList<DomUtil::Pair> pairsToRemove;
     DomUtil::PairList::iterator it;
-  QString file = QString( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename.mid(1, realfilename.length()-2)  ).remove( 0, projectDirectory().length() );
     for ( it = list.begin(); it != list.end(); ++it )
     {
         if ( ( ( *it ).first == file ) || ( ( *it ).second == file ) )

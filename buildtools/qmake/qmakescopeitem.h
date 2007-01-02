@@ -55,6 +55,7 @@ public:
     void removeFileFromScope( const QString& filename);
     void addFileToScope( const QString& filename);
     void addInstallObject( const QString& objectname);
+    void removeInstallObject( GroupItem* item );
 
     // qmake INSTALLS support
     QPtrList<GroupItem> installs;
