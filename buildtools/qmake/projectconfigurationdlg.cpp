@@ -109,6 +109,14 @@ ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProj
                                               QRegExp( "\\d+(\\.\\d+)?(\\.\\d+)" ), this ) );
     customVariables->setSortColumn(0);
     customVariables->setSortOrder(Qt::Ascending);
+    mocdir_url->completionObject()->setMode(KURLCompletion::DirCompletion);
+    mocdir_url->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    objdir_url->completionObject()->setMode(KURLCompletion::DirCompletion);
+    objdir_url->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    rccdir_url->completionObject()->setMode(KURLCompletion::DirCompletion);
+    rccdir_url->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    uidir_url->completionObject()->setMode(KURLCompletion::DirCompletion);
+    uidir_url->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 }
 
 void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
