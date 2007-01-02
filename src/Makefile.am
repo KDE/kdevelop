@@ -13,11 +13,11 @@ libkdevshell_la_LIBADD = \
 	$(top_builddir)/lib/widgets/libkdevwidgets.la $(top_builddir)/lib/interfaces/extras/libkdevextras.la \
 	$(top_builddir)/src/newui/libd.la $(LIB_KHTML) -lktexteditor
 libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
-	editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
-	partcontroller.cpp plugincontroller.cpp projectmanager.cpp \
-	projectsession.cpp splashscreen.cpp statusbar.cpp toplevel.cpp generalinfowidgetbase.ui \
-	mimewarningdialog.ui shellextension.cpp simplemainwindow.cpp multibuffer.cpp \
-	pluginselectdialogbase.ui pluginselectdialog.cpp pluginselectdialog.h
+	editorproxy.cpp generalinfowidget.cpp generalinfowidgetbase.ui languageselectwidget.cpp \
+	mainwindowshare.cpp mimewarningdialog.ui multibuffer.cpp partcontroller.cpp \
+	plugincontroller.cpp pluginselectdialog.cpp pluginselectdialog.h pluginselectdialogbase.ui \
+	projectmanager.cpp projectsession.cpp shellextension.cpp simplemainwindow.cpp \
+	splashscreen.cpp statusbar.cpp switchtodialog.cpp switchtodialogbase.ui toplevel.cpp
 
 bin_PROGRAMS = kdevelop kdevassistant
 
@@ -46,7 +46,7 @@ shellinclude_HEADERS = api.h core.h documentationpart.h editorproxy.h \
 	generalinfowidget.h languageselectwidget.h mainwindowshare.h \
 	partcontroller.h plugincontroller.h projectmanager.h projectsession.h shellextension.h \
 	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h mimewarningdialog.h \
-	settingswidget.h simplemainwindow.h multibuffer.h
+	settingswidget.h simplemainwindow.h multibuffer.h switchtodialog.h
 
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces kdevextensions
 DOXYGEN_PROJECTNAME = KDevelop Generic Shell
@@ -55,3 +55,4 @@ include ../Doxyfile.am
 profilesdatadir = $(kde_datadir)/kdevelop/profiles
 profilesdata_DATA = projectprofiles
 AM_CXXFLAGS = -w
+

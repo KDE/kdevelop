@@ -65,6 +65,8 @@
 #include "multibuffer.h"
 #include "partcontroller.h"
 
+#include "switchtodialog.h"
+
 class QDomDocument;
 
 PartController *PartController::s_instance = 0;
@@ -316,7 +318,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 			}
 		}
 
-		if ( !done && ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ))
+ 		if ( !done && ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ))
 		{
 			// Not found - prompt the user to find it?
 			kdDebug(9000) << "cannot find URL: " << url.url() << endl;
@@ -1311,35 +1313,11 @@ void PartController::slotActivePartChanged( KParts::Part *part )
 
 void PartController::slotSwitchTo()
 {
-    QMap<QString,KParts::ReadOnlyPart*> parts_map;
-    QStringList part_list;
-    QPtrList<KParts::Part> pl = *parts();
-    KParts::Part *part;
-    for(part=pl.first();part;part=pl.next()) {
-        kdDebug(9000) << "Part..." << endl;
-	if (part->inherits("KParts::ReadOnlyPart")) {
-	    KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(part);
-            QString name = ro_part->url().fileName();
-	    part_list.append(name);
-            parts_map[name] = ro_part;
-            kdDebug(9000) << "Found part for URL " << ro_part->url().prettyURL() << endl;
+	SwitchToDialog dlg( openURLs() );
+	if ( dlg.exec() == QDialog::Accepted )
+	{
+		editDocument( dlg.selectedUrl() );
 	}
-    }
-
-    KDialogBase dialog(KDialogBase::Plain, i18n("Switch To"), KDialogBase::Ok|KDialogBase::Cancel,
-		       KDialogBase::Ok, 0, "Switch to", true);
-    QGridLayout *grid = new QGridLayout( dialog.plainPage(), 2, 1, 10, 10);
-    KLineEdit *editbox = new KLineEdit(dialog.plainPage());
-    grid->addWidget(new QLabel( i18n("Switch to buffer:"), dialog.plainPage() ), 0, 0);
-    grid->addWidget(editbox, 1, 0);
-    editbox->completionObject()->setItems( part_list );
-    editbox->setFocus();
-    int result = dialog.exec();
-    if (result==KDialogBase::KDialogBase::Accepted) {
-        if (parts_map.contains(editbox->text())) {
-            activatePart(parts_map[editbox->text()]);
-        }
-    }
 }
 
 void PartController::showPart( KParts::Part* part, const QString& name, const QString& shortDescription )
