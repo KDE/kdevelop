@@ -14,6 +14,7 @@
 #include <qcheckbox.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
+#include <kurlcompletion.h>
 #include <qradiobutton.h>
 #include <qtabwidget.h>
 #include "domutil.h"
@@ -26,6 +27,8 @@ CustomBuildOptionsWidget::CustomBuildOptionsWidget(QDomDocument &dom,
 {
     ant_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant");
     builddir_edit->setURL(DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir"));
+    builddir_edit->completionObject()->setMode(KURLCompletion::DirCompletion);
+    builddir_edit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     // This connection must not be made before the ant->setChecked() line,
     // because at this time makeToggled() would crash
