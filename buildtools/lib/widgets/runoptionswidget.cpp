@@ -96,7 +96,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
         delete notelabel;
     }else
     {
-        directoryButtonGroup->setChecked( DomUtil::readBoolEntry(dom, configGroup+"/run/useglobalprogram", true ) );
+        directoryButtonGroup->setChecked( DomUtil::readBoolEntry(dom, configGroup+"/run/useglobalprogram", false ) );
     }
 
     // Read the main program command line arguments and store them in the edit box

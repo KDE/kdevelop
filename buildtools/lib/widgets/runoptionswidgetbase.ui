@@ -15,11 +15,11 @@
     <property name="caption">
         <string>Run Options</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup">
+        <widget class="QButtonGroup" row="0" column="0">
             <property name="name">
                 <cstring>directoryButtonGroup</cstring>
             </property>
@@ -30,7 +30,7 @@
                 <bool>true</bool>
             </property>
             <property name="checked">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
             <grid>
                 <property name="name">
@@ -169,7 +169,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>programGroupBox</cstring>
             </property>
@@ -180,7 +180,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Program &amp;arguments</string>
+                <string>Program arguments</string>
             </property>
             <vbox>
                 <property name="name">
@@ -213,7 +213,7 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="2" column="0">
             <property name="name">
                 <cstring>env_var_group</cstring>
             </property>
@@ -221,7 +221,7 @@
                 <string>Environment &amp;Variables</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="3" column="0">
             <property name="name">
                 <cstring>layout3</cstring>
             </property>
@@ -287,7 +287,7 @@
                 </widget>
             </vbox>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <customwidgets>
 </customwidgets>
