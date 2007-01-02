@@ -259,7 +259,7 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
     vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", KIcon::SizeMedium ));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
 
-    vbox = dlg->addVBoxPage(i18n("QMake Manager Options"), i18n("QMake Manager Options"), BarIcon( "make", KIcon::SizeMedium ));
+    vbox = dlg->addVBoxPage(i18n("QMake Manager"), i18n("QMake Manager"), BarIcon( "make", KIcon::SizeMedium ));
     QMakeOptionsWidget *qm = new QMakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
 
 
