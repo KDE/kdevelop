@@ -34,6 +34,9 @@ public:
     virtual void insertStdoutLine(const QString &line);
     virtual void insertStderrLine(const QString &line);
     virtual void clearView();
+    void hideView();
+    void showView();
+    bool isViewVisible();
 
 signals:
     void processExited();
@@ -45,7 +48,7 @@ private slots:
 private:
     QGuardedPtr<AppOutputWidget> m_widget;
     KDevAppFrontendIface *m_dcop;
-    friend class AppOutputWidget;
+    bool m_viewIsVisible;
 };
 
 #endif

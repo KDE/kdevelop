@@ -49,7 +49,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
                                    "applications use this instead of a terminal window."));
 
     mainWindow()->embedOutputView(m_widget, i18n("Application"), i18n("Output of the executed user program"));
-    mainWindow()->setViewAvailable( m_widget, false );
+    hideView();
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
@@ -60,8 +60,8 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
 
 AppOutputViewPart::~AppOutputViewPart()
 {
-	if ( m_widget )
-    	mainWindow()->removeView( m_widget );
+    if ( m_widget )
+        mainWindow()->removeView( m_widget );
     delete m_widget;
     delete m_dcop;
 }
@@ -121,8 +121,8 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
 
     core()->running( this, true );
 
+    showView();
     mainWindow()->raiseView(m_widget);
-    mainWindow()->setViewAvailable( m_widget, true );
 }
 
 
@@ -146,6 +146,23 @@ void AppOutputViewPart::insertStderrLine(const QString &line)
 void AppOutputViewPart::clearView()
 {
     m_widget->clearViewAndContents();
+}
+
+void AppOutputViewPart::hideView()
+{
+    m_viewIsVisible = false;
+    mainWindow()->setViewAvailable( m_widget, m_viewIsVisible );
+}
+
+void AppOutputViewPart::showView()
+{
+    m_viewIsVisible = true;
+    mainWindow()->setViewAvailable( m_widget, m_viewIsVisible );
+}
+
+bool AppOutputViewPart::isViewVisible()
+{
+    return m_viewIsVisible;
 }
 
 #include "appoutputviewpart.moc"

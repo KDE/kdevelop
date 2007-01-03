@@ -93,7 +93,13 @@ void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 
 void AppOutputWidget::insertStdoutLine(const QString &line)
 {
-	kdDebug(9004) << k_funcinfo << line << endl;
+// 	kdDebug(9004) << k_funcinfo << line << endl;
+
+	if ( !m_part->isViewVisible() )
+	{
+		m_part->showView();
+	}
+
 	m_contentList.append(QString("o-")+line);
 	if ( filterSingleLine( line ) )
 	{
@@ -104,7 +110,13 @@ void AppOutputWidget::insertStdoutLine(const QString &line)
 
 void AppOutputWidget::insertStderrLine(const QString &line)
 {
-	kdDebug(9004) << k_funcinfo << line << endl;
+// 	kdDebug(9004) << k_funcinfo << line << endl;
+
+	if ( !m_part->isViewVisible() )
+	{
+		m_part->showView();
+	}
+
 	m_contentList.append(QString("e-")+line);
 	if ( filterSingleLine( line ) )
 	{
@@ -225,7 +237,7 @@ void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
 
 void AppOutputWidget::hideView()
 {
-	m_part->mainWindow()->setViewAvailable( this , false );
+	m_part->hideView();
 }
 
 #include "appoutputwidget.moc"
