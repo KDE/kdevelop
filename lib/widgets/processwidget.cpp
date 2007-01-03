@@ -32,6 +32,12 @@
 ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
     : QListBoxText(s), t(type)
 {
+    QString clean = s;
+    clean.replace( QChar('\t'), QString("  ") );
+    clean.replace( QChar('\n'), QString() );
+    clean.replace( QChar('\r'), QString() );
+    setText( clean );
+
     setCustomHighlighting(true);
 }
 
