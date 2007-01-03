@@ -24,6 +24,8 @@
 #include "quickopendialog.h"
 #include <qstringlist.h>
 
+#include <kurl.h>
+
 class QuickOpenPart;
 class KCompletion;
 
@@ -32,6 +34,7 @@ class QuickOpenFileDialog : public QuickOpenDialog
     Q_OBJECT
 public:
     QuickOpenFileDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
+    QuickOpenFileDialog(QuickOpenPart* part, const KURL::List &, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
     virtual ~QuickOpenFileDialog();
 
 public slots:
@@ -39,7 +42,7 @@ public slots:
     virtual void slotReturnPressed();
 
 private:
-    QStringList m_fileList;
+    bool m_hasFullPaths;
 };
 
 #endif

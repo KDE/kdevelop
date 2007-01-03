@@ -131,8 +131,6 @@ private slots:
   void slotBackPopupActivated( int id );
   void slotForwardPopupActivated( int id );
 
-  void slotSwitchTo();
-
   void slotPartAdded( KParts::Part* );
   void slotPartRemoved( KParts::Part* );
 
@@ -180,7 +178,7 @@ private:
   static PartController *s_instance;
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
-  KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction, *m_switchToAction;
+  KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
   KRecentFilesAction *m_openRecentAction;
   QString m_presetEncoding;
 

@@ -72,6 +72,10 @@ QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringLis
     m_actionFunctionOpen = new KAction( i18n("Quick Open Method..."), CTRL + ALT + Key_M, this, SLOT(slotQuickOpenFunction()), actionCollection(), "quick_open_function" );
     m_actionFunctionOpen->setToolTip(i18n("Quick open function in project"));
 
+    m_switchToAction = new KAction(i18n("Switch To..."), KShortcut("CTRL+/"), this, SLOT(slotSwitchTo()), actionCollection(), "file_switchto");
+    m_switchToAction->setToolTip(i18n("Switch to"));
+    m_switchToAction->setWhatsThis(i18n("<b>Switch to</b><p>Prompts to enter the name of previously opened file to switch to."));
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 }
@@ -108,6 +112,13 @@ void QuickOpenPart::slotQuickOpenFunction()
     dlg.nameEdit->setText(getWordInEditor());
     dlg.exec();
 }
+
+void QuickOpenPart::slotSwitchTo()
+{
+    QuickOpenFileDialog dlg( this, partController()->openURLs(), mainWindow()->main() );
+    dlg.exec();
+}
+
 
 QString QuickOpenPart::getWordInEditor()
 {

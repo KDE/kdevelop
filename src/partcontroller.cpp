@@ -159,10 +159,6 @@ void PartController::setupActions()
   m_closeOtherWindowsAction->setWhatsThis(i18n("<b>Close all others</b><p>Close all opened files except current."));
   m_closeOtherWindowsAction->setEnabled(false);
 
-  m_switchToAction = new KAction(i18n("Switch To..."), KShortcut("CTRL+/"), this, SLOT(slotSwitchTo()), ac, "file_switchto");
-  m_switchToAction->setToolTip(i18n("Switch to"));
-  m_switchToAction->setWhatsThis(i18n("<b>Switch to</b><p>Prompts to enter the name of previously opened file to switch to."));
-
   new KActionSeparator(ac, "dummy_separator");
 
   m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0, this, SLOT(slotBack()), ac, "history_back");
@@ -1309,15 +1305,6 @@ void PartController::slotActivePartChanged( KParts::Part *part )
 
     updateMenuItems();
     QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
-}
-
-void PartController::slotSwitchTo()
-{
-	SwitchToDialog dlg( openURLs() );
-	if ( dlg.exec() == QDialog::Accepted )
-	{
-		editDocument( dlg.selectedUrl() );
-	}
 }
 
 void PartController::showPart( KParts::Part* part, const QString& name, const QString& shortDescription )

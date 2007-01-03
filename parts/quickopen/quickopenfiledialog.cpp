@@ -36,20 +36,38 @@
 #include "quickopen_part.h"
 
 QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
-    : QuickOpenDialog( part, parent, name, modal, fl )
+    : QuickOpenDialog( part, parent, name, modal, fl ), m_hasFullPaths( false )
 {
     nameLabel->setText( i18n("File &name:") );
     itemListLabel->setText( i18n("File &list:") );
 
-    m_fileList = m_part->project()->allFiles();
+    QStringList fileList = m_part->project()->allFiles();
 
     m_completion = new KCompletion();
-    m_completion->insertItems( m_fileList );
+    m_completion->insertItems( fileList );
     m_completion->setIgnoreCase( true );
 
     nameEdit->setFocus();
 
-    itemList->insertStringList( m_fileList );
+    itemList->insertStringList( fileList );
+    itemList->setCurrentItem(0);
+}
+
+QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, const KURL::List & urls, QWidget* parent, const char* name, bool modal, WFlags fl)
+    : QuickOpenDialog( part, parent, name, modal, fl ), m_hasFullPaths( true )
+{
+    nameLabel->setText( i18n("File &name:") );
+    itemListLabel->setText( i18n("File &list:") );
+
+    QStringList fileList = urls.toStringList();
+
+    m_completion = new KCompletion();
+    m_completion->insertItems( fileList );
+    m_completion->setIgnoreCase( true );
+
+    nameEdit->setFocus();
+
+    itemList->insertStringList( fileList );
     itemList->setCurrentItem(0);
 }
 
@@ -61,20 +79,22 @@ QuickOpenFileDialog::~QuickOpenFileDialog()
 
 void QuickOpenFileDialog::slotExecuted( QListBoxItem* item )
 {
-    m_part->partController()->editDocument( KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + item->text() ) );
+    if ( !item ) return;
+
+    if ( m_hasFullPaths )
+    {
+        m_part->partController()->editDocument( KURL::fromPathOrURL( item->text() ) );
+    }
+    else
+    {
+        m_part->partController()->editDocument( KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + item->text() ) );
+    }
     accept();
 }
 
 void QuickOpenFileDialog::slotReturnPressed( )
 {
-/*    if( m_fileList.contains(nameEdit->text()) ) {
-        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + nameEdit->text() );
-        accept();
-    }*/
-    if( itemList->currentItem() != -1 ) {
-        m_part->partController()->editDocument( KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + itemList->currentText() ) );
-        accept();
-    }
+    slotExecuted( itemList->selectedItem() );
 }
 
 #include "quickopenfiledialog.moc"

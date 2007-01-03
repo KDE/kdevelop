@@ -1,8 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="quickopen" library="libquickopenplugin" version="3">
+<kpartplugin name="quickopen" library="libquickopenplugin" version="4">
 <MenuBar>
  <Menu name="file">
   <Action name="quick_open" group="open_merge"/>
+ </Menu>
+ <Menu name="view">
+  <Action name="file_switchto"/>
  </Menu>
  <Menu name="tools">
   <Action name="quick_open_class"/>

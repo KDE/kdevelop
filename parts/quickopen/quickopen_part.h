@@ -42,6 +42,7 @@ private slots:
     void slotQuickFileOpen();
     void slotQuickOpenClass();
     void slotQuickOpenFunction();
+    void slotSwitchTo();
 
 private:
     QString getWordInEditor();
@@ -49,6 +50,7 @@ private:
     KAction* m_actionQuickOpen;
     KAction* m_actionQuickOpenClass;
     KAction* m_actionFunctionOpen;
+    KAction* m_switchToAction;
 };
 
 
