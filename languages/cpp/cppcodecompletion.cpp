@@ -2839,7 +2839,7 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName ) {
   if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
     return ;
 
-	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed" ).arg( m_activeFileName ), 1000 );
+	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed %1" ).arg( m_activeFileName ), 1000 );
 
   emptyCache(); ///The cache has to be emptied, because the code-model changed. @todo Better: Only refresh the code-model(tell all code-model-types to refresh themselves on demand)
 
