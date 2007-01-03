@@ -62,19 +62,11 @@ VCSManagerPart::VCSManagerPart(QObject *parent, const char *name, const QStringL
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
 
 	connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
-	connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
-
-//	QTimer::singleShot(0, this, SLOT(init()));
 }
 
 VCSManagerPart::~VCSManagerPart()
 {
 	delete m_configProxy;
-}
-
-void VCSManagerPart::init()
-{
-// delayed initialization stuff goes here
 }
 
 void VCSManagerPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo)
@@ -93,12 +85,6 @@ void VCSManagerPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, u
 void VCSManagerPart::projectOpened()
 {
 	loadVCSPlugin();
-}
-
-void VCSManagerPart::projectClosed()
-{
-	unloadVCSPlugin();
-	m_vcsPluginName = "";
 }
 
 void VCSManagerPart::loadVCSPlugin()

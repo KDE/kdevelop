@@ -46,10 +46,8 @@ public:
 	void unloadVCSPlugin();
 
 private slots:
-	void init();
 	void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
 	void projectOpened();
-	void projectClosed();
 	
 private:
 	QString m_vcsPluginName;

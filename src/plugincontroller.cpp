@@ -168,13 +168,18 @@ void PluginController::unloadPlugins()
 
 void PluginController::unloadProjectPlugins( )
 {
-	KTrader::OfferList offers = m_engine.offers(m_profile, ProfileEngine::Project);
+	// this is nasty, but we need to unload the version control plugin too, and the 
+	// right moment to do this is here
+	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl", "");	
+
+ 	offers += m_engine.offers(m_profile, ProfileEngine::Project);
 	for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
 	{
 		QString name = (*it)->desktopEntryName();
 
 		if ( KDevPlugin * plugin = m_parts[ name ] )
 		{
+			kdDebug(9000) << " *** Removing: " << name << endl;
 			removeAndForgetPart( name, plugin );
 			delete plugin;
 		}
