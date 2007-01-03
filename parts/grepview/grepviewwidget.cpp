@@ -58,7 +58,9 @@ GrepListBoxItem::GrepListBoxItem(const QString &fileName, const QString &lineNum
 		: ProcessListBoxItem( QString::null, Normal),
 		fileName(fileName), lineNumber(lineNumber), text(text.stripWhiteSpace()),
 		show(showFilename)
-{}
+{
+	this->text.replace( QChar('\t'), QString("  ") );
+}
 
 
 bool GrepListBoxItem::isCustomItem()
