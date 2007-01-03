@@ -1,0 +1,77 @@
+Definition-Use Chain (duchain) design document
+==============================================
+
+Hamish Rodda
+rodda@kde.org
+
+This document's purpose is to outline the design of the definition-use chain as currently implemented for the c++ language support in KDevelop 4.x.
+
+Overview
+========
+The duchain is a sequence of contexts in a code file, and the associated definitions which occur in those contexts.  A simplified way of thinking about it is that for each set of brackets (curly {} or not ()), there is a separate context.  Each context is represented by a DUContext.  Each context will have one parent context (except in the case of the top level context which has none), and any number of child contexts (including none).  Additionally, each context can import any number of other contexts.  The reason for this will become clear later.  Thus, the DUContext structure resembles a directed acyclic graph, for those familiar with the concept.
+
+Parsing
+=======
+These DUContexts are created on the first pass after parsing the code to an AST (abstract syntax tree), which is accomplished by Roberto's c++ parser.  Also, in this stage the data types are parsed, and any declarations which are encountered are recorded against the context in which they are encountered in.  Each declaration is represented by a Declaration.
+
+Parsing code is arranged into Builder classes, which subclass the AST visitor pattern.  They are designed to be able to subclass each other, thus achieving multiple goals with each pass (as described in the above paragraph).
+
+The first pass is accomplished by the ContextBuilder, which is subclassed by the TypeBuilder, which is subclassed by the DeclarationBuilder.  Thus, in the first pass, the ContextBuilder creates the DUContext tree, the TypeBuilder records which types are encountered, and the DeclarationBuilder creates Declaration instances which are associated with the current type and context.
+
+The second pass is accomplished by the ContextBuilder, which is subclassed by the UseBuilder.  On the second pass, we only iterate previously parsed contexts (as they are already created).  Then, as variable uses are encountered, a Use is created for each.  A Declaration is searched for in the current context, and if one is found, they are associated with each other.
+
+Classes and their purposes
+==========================
+DUChain - an object global to a language plugin which keeps track of all loaded source files and the top level context of their definition-use chains.
+
+DUContext - an object which represents a single context in a source file, and stores information about parent and child DUContexts, and Declarations, Definitions and Uses which occur in them.  Also provides convenience methods for searching the chain.
+
+Declaration - an object which represents a single declaration.  Has several subclasses (ClassFunctionDeclaration, ClassMemberDeclaration, and ForwardDeclaration) which store more information specific to the type of declaration which is being represented.  Uses of the Declaration are stored here for convenience [note: perhaps this should be looked up on request instead...? may be better performing and much less error prone, eg when updating duchains].
+
+Definition - an object which represents a definition corresponding to a Declaration.
+
+Use - an object which represents a use of a particular declaration.
+
+SymbolTable - a hash which stores identifiers available in the top level context of a source file and their respective Declarations.
+
+*Builder - objects whose purpose is to iterate the parsed AST and produce instances of the duchain objects.
+
+Type* - a type system.  Not particularly advanced at this point.
+
+Definition-use chain searching
+==============================
+Because iterating a complete definition-use chain can become expensive when they are large, when a search is being performed (eg. for a declaration corresponding to a certain identifier) it is first performed up to the top level context, then the symbol table is consulted.  The symbol table is a hash of all identifiers which are known to the entire duchain.  All potential matches are evaluated to see if they are visible from the location of the use.  This is a considerable performance gain.
+
+Locking
+=======
+The duchain is designed to operate in a multithreaded environment.  This means that multiple parse jobs may be operating simultaneously, reading from and writing to the duchain.  Thus, locking is required.
+
+A single read-write lock per DUChain (ie. per language plugin) is used to serialise writes to the chain and allow concurrent reads.  Thus, to call non-const methods, you must hold a write lock, and for const methods, a read lock.  This can be fairly simply accomplished with QReadLocker and QWriteLocker.  Refer to function documentation for exceptions to this general rule.
+
+Also, when manipulating text editor ranges, the KTextEditor's smart interface must be locked.  See code in ContextBuilder::openContextInternal and DUChainBase.
+
+Interface for plugins
+=====================
+As plugins will be accessing the DUChain from the main thread, they will need to hold a read lock.  In order to be notified of changes to the duchain, an observer interface is offered.  See DUChainObserver.
+
+Text editor integration
+=======================
+The main classes are subclasses of a base class, DUChainBase.  This object holds a reference to the text range.  When the source file is opened in an editor, the CppEditorIntegrator will create smart text ranges, which are bound to the editor's copy of the document.  From there, highlighting can be applied to these ranges, as well as other advanced functions (see the KTextEditor documentation for possibilities).  The c++ language support will convert these ranges to smart ranges when the corresponding document is loaded into an editor.
+
+Generalisation to other languages
+=================================
+In order to expand the utility of the definition-use chain, it would be preferable to have a duchain available for each language with a common API.  This is potentially achievable.
+
+In order to do this, the DUContext, Declaration, Definition, and Use classes need to be evaluated for c++ specific code, and that code separated out into a subclass of each of those classes.  Then, the base classes can be moved to the KDevelop platform interface code.  Other classes may also be able to be generalised, such as the SymbolTable, and Type* classes.  Then, other languages can subclass the interface classes if they need specific features.  At least then the basic structure will be available to any plugins which are interested in the information.
+
+An editor integrator will need to be created for each language (to adapt to the parser), but this should be a trivial task (see the Cpp version for code).
+
+TODO list
+=========
+* Incremental parsing needs work.  It is designed for it from the start, but hasn't been implemented on the lower layers (parser in particular needs to have the code for this written)
+* Multithreaded testing
+* Chain viewer plugin is broken - the port to an observer design is not working properly yet
+
+Future features - ideas
+=======================
+The completed duchain should allow for code refactoring, intelligent navigation, improved automatic code generation (eg. "create switch statement"), context-sensitive code completion, integration of documentation, debugger integration, a code structure view, call graph, static code analysis etc.

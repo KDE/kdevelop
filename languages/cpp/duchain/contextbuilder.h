@@ -36,11 +36,7 @@ class NameCompiler;
 namespace KTextEditor { class Range; }
 
 /**
- * A class which iterates the AST to extract definitions of types and their uses.
- *
- * This is the second pass of processing an AST.  The first is the type binder.
- *
- * \sa Binder
+ * A class which iterates the AST to identify contexts.
  */
 class KDEVCPPLANGUAGE_EXPORT ContextBuilder: protected DefaultVisitor
 {

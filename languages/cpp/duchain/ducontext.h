@@ -160,7 +160,7 @@ public:
   void clearImportedParentContexts();
 
   /**
-   * Returns the list of imported parent contexts for this context.
+   * Returns the list of contexts importing this context.
    */
   const QList<DUContext*>& importedChildContexts() const;
 
@@ -175,6 +175,9 @@ public:
    */
   void deleteChildContextsRecursively();
 
+  /**
+   * A class which represents a "using namespace" statement.
+   */
   class UsingNS : public KDevDocumentCursorObject
   {
   public:
@@ -182,8 +185,12 @@ public:
 
     QualifiedIdentifier nsIdentifier;
   };
+
+  /// Register a using namespace statement with this context.
   void addUsingNamespace(KTextEditor::Cursor* cursor, const QualifiedIdentifier& nsIdentifier);
+  /// Return a list of using namespace statements for this context.
   const QList<UsingNS*>& usingNamespaces() const;
+  /// Clear using namespace statements for this context.
   void clearUsingNamespaces();
 
   /**
