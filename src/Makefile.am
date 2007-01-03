@@ -17,7 +17,7 @@ libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 	mainwindowshare.cpp mimewarningdialog.ui multibuffer.cpp partcontroller.cpp \
 	plugincontroller.cpp pluginselectdialog.cpp pluginselectdialog.h pluginselectdialogbase.ui \
 	projectmanager.cpp projectsession.cpp shellextension.cpp simplemainwindow.cpp \
-	splashscreen.cpp statusbar.cpp switchtodialog.cpp switchtodialogbase.ui toplevel.cpp
+	splashscreen.cpp statusbar.cpp toplevel.cpp
 
 bin_PROGRAMS = kdevelop kdevassistant
 
@@ -43,10 +43,10 @@ rc_assistantdir = $(kde_datadir)/kdevassistant
 rc_assistant_DATA =  kdevassistantui.rc
 shellincludedir = $(includedir)/kdevelop/shell
 shellinclude_HEADERS = api.h core.h documentationpart.h editorproxy.h \
-	generalinfowidget.h languageselectwidget.h mainwindowshare.h \
-	partcontroller.h plugincontroller.h projectmanager.h projectsession.h shellextension.h \
-	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h mimewarningdialog.h \
-	settingswidget.h simplemainwindow.h multibuffer.h switchtodialog.h
+	generalinfowidget.h languageselectwidget.h mainwindowshare.h partcontroller.h \
+	plugincontroller.h projectmanager.h projectsession.h shellextension.h splashscreen.h \
+	statusbar.h toplevel.h generalinfowidgetbase.h mimewarningdialog.h settingswidget.h \
+	simplemainwindow.h multibuffer.h
 
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces kdevextensions
 DOXYGEN_PROJECTNAME = KDevelop Generic Shell
