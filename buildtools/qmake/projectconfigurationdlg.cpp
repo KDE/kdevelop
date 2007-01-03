@@ -172,9 +172,10 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
-            kdDebug(9024) << "Setting runarguments to " << m_editArguments->text() << endl;
-            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+prjWidget->getCurrentOutputFilename(), m_editArguments->text() );
-            kdDebug(9024) << "Have runarguments " << DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+prjWidget->getCurrentOutputFilename() ) << endl;
+            QString targetname = prjWidget->getCurrentOutputFilename();
+            targetname = targetname.right( targetname.length() - targetname.findRev("/", -1) - 1 );
+            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+targetname, m_editArguments->text() );
+
         }
         else if ( radioLibrary->isChecked() )
         {
