@@ -65,7 +65,6 @@
 #include "multibuffer.h"
 #include "partcontroller.h"
 
-#include "switchtodialog.h"
 
 class QDomDocument;
 
