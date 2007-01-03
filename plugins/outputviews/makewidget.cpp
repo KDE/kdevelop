@@ -24,7 +24,6 @@
 #include <knotification.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <knotifyclient.h>
 #include <kprocess.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -376,13 +375,8 @@ void MakeWidget::prevError()
         if ( m_lastErrorSelected != -1 )
         {
             m_lastErrorSelected = -1;
-#if QT_VERSION >= 0x030100
 
             parag = ( int ) m_items.count();
-#else
-
-            parag = m_items.size();
-#endif
 
             if ( !scanErrorBackward( parag ) )
                 KNotification::beep();
