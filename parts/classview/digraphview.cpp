@@ -328,15 +328,8 @@ QSize DigraphView::sizeHint() const
     if (width == -1)
         return QSize(100, 100); // arbitrary
 
-#if defined(KDE_IS_VERSION)
-#if (KDE_IS_VERSION(3,1,90))
     QSize dsize = KGlobalSettings::desktopGeometry(viewport()).size();
-#else
-    QSize dsize = QApplication::desktop()->size();
-#endif
-#else
-    QSize dsize = QApplication::desktop()->size();
-#endif
+
     return QSize(width, height).boundedTo(QSize(dsize.width()*2/3, dsize.height()*2/3));
 }
 

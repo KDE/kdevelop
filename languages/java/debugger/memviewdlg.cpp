@@ -87,11 +87,7 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     QPushButton *disassemble = buttonbox->addButton(i18n("Disassemble"));
     QPushButton *registers = buttonbox->addButton(i18n("Registers"));
     QPushButton *libraries = buttonbox->addButton(i18n("Libraries"));
-#if KDE_IS_VERSION( 3, 2, 90 )
     QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel());
-#else
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-#endif
     memoryDump->setDefault(true);
     buttonbox->layout();
     topLayout->addWidget(buttonbox);

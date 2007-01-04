@@ -205,9 +205,7 @@ VCSFileTreeWidgetImpl::VCSFileTreeWidgetImpl( FileTreeWidget *parent, KDevVCSFil
 
     m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS Fields"), KShortcut(),
         this, "actiontoggleshowvcsfieldstoggleaction" );
-#if KDE_IS_VERSION(3,2,90)
     m_actionToggleShowVCSFields->setCheckedState(i18n("Hide VCS Fields"));
-#endif
     QString aboutAction = i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository.");
     m_actionToggleShowVCSFields->setWhatsThis( aboutAction );
     connect( m_actionToggleShowVCSFields, SIGNAL(toggled(bool)), this, SLOT(slotToggleShowVCSFields(bool)) );

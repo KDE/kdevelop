@@ -51,13 +51,8 @@ AddTranslationDialog::AddTranslationDialog(AutoProjectPart *part, QWidget *paren
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-#if KDE_IS_VERSION( 3, 2, 90 )
     QPushButton *ok_button = buttonbox->addButton(KStdGuiItem::ok());
     QPushButton *cancel_button = buttonbox->addButton(KStdGuiItem::cancel());
-#else
-    QPushButton *ok_button = buttonbox->addButton(KStdGuiItem::ok().text());
-    QPushButton *cancel_button = buttonbox->addButton(KStdGuiItem::cancel().text());
-#endif
     ok_button->setDefault(true);
     connect( ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );

@@ -39,9 +39,7 @@ FileTreeViewWidgetImpl::FileTreeViewWidgetImpl( FileTreeWidget *parent, const ch
     // Actions
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
-#if KDE_IS_VERSION(3,2,90)
     m_actionToggleShowNonProjectFiles->setCheckedState(i18n("Hide Non Project Files"));
-#endif
     m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
 
     // Reload good ol' settings

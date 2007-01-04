@@ -58,11 +58,7 @@ QString FancyListViewItem::text(int column) const {
 
 QColor FancyListViewItem::backgroundColor(int col) {
 
-#if KDE_IS_VERSION(3,4,0)
     return KListViewItem::backgroundColor(col);
-#else
-    return KListViewItem::backgroundColor();
-#endif
 }
 
 

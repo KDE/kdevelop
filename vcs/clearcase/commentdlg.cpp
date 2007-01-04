@@ -44,13 +44,8 @@ CcaseCommentDlg::CcaseCommentDlg(bool bCheckin)
 
   KButtonBox *buttonbox = new KButtonBox(this);
   buttonbox->addStretch();
-#if KDE_IS_VERSION( 3, 2, 90 )
   QPushButton *ok = buttonbox->addButton(KStdGuiItem::ok());
   QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel());
-#else
-  QPushButton *ok = buttonbox->addButton(i18n("OK"));
-  QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-#endif
   connect(ok, SIGNAL(clicked()), SLOT(accept()) );
   connect(cancel, SIGNAL(clicked()), SLOT(reject()) );
   ok->setDefault(true);

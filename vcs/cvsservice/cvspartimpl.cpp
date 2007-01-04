@@ -363,15 +363,9 @@ bool CvsServicePartImpl::checkout()
 
     if ( dlg.exec() == QDialog::Accepted )
     {
-#if KDE_IS_VERSION(3,2,90)
         DCOPRef job = m_cvsService->checkout( dlg.workDir(), dlg.serverPath(),
             dlg.module(), dlg.tag(), dlg.pruneDirs(), "", false
         );
-#else
-        DCOPRef job = m_cvsService->checkout( dlg.workDir(), dlg.serverPath(),
-            dlg.module(), dlg.tag(), dlg.pruneDirs()
-        );
-#endif
         if (!m_cvsService->ok()) {
             KMessageBox::sorry( mainWindow()->main(), i18n( "Unable to checkout" ) );
         } else {

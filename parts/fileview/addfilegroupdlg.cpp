@@ -50,13 +50,8 @@ AddFileGroupDialog::AddFileGroupDialog(const QString& old_title, const QString& 
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-#if KDE_IS_VERSION( 3, 2, 90 )
     m_pOk = buttonbox->addButton(KStdGuiItem::ok());
     QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel());
-#else
-    m_pOk = buttonbox->addButton(KStdGuiItem::ok().text());
-    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
-#endif
 
     m_pOk->setDefault(true);
     connect( m_pOk, SIGNAL(clicked()), this, SLOT(accept()) );
