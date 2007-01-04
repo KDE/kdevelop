@@ -29,6 +29,7 @@
 
 #include <kaction.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kinstance.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -36,12 +37,27 @@
 #include "kdevmainwindow.h"
 #include "kdevplugincontroller.h"
 
+class KDevPlugin::Private
+{
+public:
+    Private()
+        : iconLoader(0)
+    {}
+
+    ~Private()
+    {
+        delete iconLoader;
+    }
+
+    KIconLoader* iconLoader;
+};
+
 KDevPlugin::KDevPlugin( KInstance *instance, QObject *parent )
         : QObject( parent ),
         KXMLGUIClient()
 {
+    d = new Private;
     setInstance( instance );
-    kapp->iconLoader() ->addAppDir( "kdevelop" );
 }
 
 KDevPlugin::~KDevPlugin()
@@ -67,6 +83,25 @@ void KDevPlugin::prepareForUnload()
 {
     KDevCore::mainWindow()->removePlugin( this );
     emit readyToUnload( this );
+}
+
+KIconLoader *KDevPlugin::iconLoader() const
+{
+    if ( d->iconLoader == 0 ) {
+        d->iconLoader = new KIconLoader( instance()->instanceName(), instance()->dirs() );
+        d->iconLoader->addAppDir( "kdevelop" );
+        connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
+                this, SLOT(newIconLoader()));
+    }
+
+    return d->iconLoader;
+}
+
+void KDevPlugin::newIconLoader() const
+{
+    if (d->iconLoader) {
+        d->iconLoader->reconfigure( instance()->instanceName(), instance()->dirs() );
+    }
 }
 
 #include "kdevplugin.moc"

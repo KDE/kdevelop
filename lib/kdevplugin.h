@@ -31,6 +31,7 @@
 
 class QWidget;
 class KInstance;
+class KIconLoader;
 
 /**
 @file kdevplugin.h
@@ -143,12 +144,28 @@ public:
      */
     virtual void prepareForUnload();
 
+    /**
+     * Provides access to the global icon loader
+     * @return the plugin's icon loader
+     */
+    KIconLoader* iconLoader() const;
+
+public Q_SLOTS:
+    /**
+     * Re-initialize the global icon loader
+     */
+    void newIconLoader() const;
+
 Q_SIGNALS:
     /**
      * emitted when the plugin is ready to be unloaded by the plugin controller
      * @param me The KDevPlugin to unload. It should always be the this pointer
      */
     void readyToUnload( KDevPlugin* me );
+
+private:
+    class Private;
+    Private* d;
 };
 
 #endif
