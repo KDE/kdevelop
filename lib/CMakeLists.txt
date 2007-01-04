@@ -1,4 +1,4 @@
-
+add_subdirectory(sublime)
 add_subdirectory(util)
 add_subdirectory(widgets)
 add_subdirectory(debugger)
