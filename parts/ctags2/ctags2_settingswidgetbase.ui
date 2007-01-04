@@ -193,7 +193,7 @@
                                     <cstring>textLabel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Path to project tagfile:</string>
+                                    <string>Path to project tag file:</string>
                                 </property>
                             </widget>
                             <widget class="KURLRequester" row="1" column="0">
@@ -303,8 +303,6 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>addButton</sender>
