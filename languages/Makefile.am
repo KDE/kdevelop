@@ -21,10 +21,6 @@ if include_fortran
 FORTRAN_LANGUAGE = fortran
 endif
 
-if include_haskell
-HASKELL_LANGUAGE = haskell
-endif
-
 if include_java
 JAVA_LANGUAGE = java
 endif
@@ -61,7 +57,6 @@ endif
 #kdevelop: BASH_LANGUAGE = bash
 #kdevelop: CPP_LANGUAGE = cpp
 #kdevelop: FORTRAN_LANGUAGE = fortran
-#kdevelop: HASKELL_LANGUAGE = haskell
 #kdevelop: JAVA_LANGUAGE = java
 #kdevelop: CSHARP_LANGUAGE = csharp
 #kdevelop: PASCAL_LANGUAGE = pascal
@@ -72,7 +67,7 @@ endif
 #kdevelop: SQL_LANGUAGE = sql
 
 SUBDIRS = lib $(ADA_LANGUAGE) $(BASH_LANGUAGE) $(CPP_LANGUAGE) $(CSHARP_LANGUAGE) \
-	$(FORTRAN_LANGUAGE) $(HASKELL_LANGUAGE) $(JAVA_LANGUAGE) $(PASCAL_LANGUAGE) \
+	$(FORTRAN_LANGUAGE) $(JAVA_LANGUAGE) $(PASCAL_LANGUAGE) \
 	$(PERL_LANGUAGE) $(PHP_LANGUAGE) $(PYTHON_LANGUAGE) $(RUBY_LANGUAGE) $(SQL_LANGUAGE)
 
 DOXYGEN_EMPTY = YES
