@@ -37,9 +37,6 @@ AM_CONDITIONAL(include_cpp, test "$cpp" = "yes")
 AC_ARG_ENABLE(fortran, AC_HELP_STRING([--disable-fortran], [disable programming language support for Fortran]), [fortran=${enableval}], [fortran=yes])
 AM_CONDITIONAL(include_fortran, test "$fortran" = "yes")
 
-AC_ARG_ENABLE(haskell, AC_HELP_STRING([--disable-haskell], [disable programming language support for haskell]), [haskell=${enableval}], [haskell=yes])
-AM_CONDITIONAL(include_haskell, test "$haskell" = "yes")
-
 AC_ARG_ENABLE(java, AC_HELP_STRING([--disable-java], [disable programming language support for Java]), [java=${enableval}], [java=yes])
 AM_CONDITIONAL(include_java, test "$java" = "yes")
 
