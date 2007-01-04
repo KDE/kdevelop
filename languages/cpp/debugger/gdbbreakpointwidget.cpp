@@ -349,6 +349,10 @@ void GDBBreakpointWidget::slotBreakpointHit(int id)
                             GDBCommand("-exec-continue"));
         
     }
+    else
+    {
+        controller_->demandAttention();
+    }
 }
 
 void GDBBreakpointWidget::slotWatchpointHit(int id,

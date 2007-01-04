@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
+#include <kwin.h>
 
 #include <qdatetime.h>
 #include <qfileinfo.h>
@@ -1797,9 +1798,18 @@ int GDBController::qtVersion( ) const
   return DomUtil::readIntEntry( dom, "/kdevcppsupport/qt/version", 3 );
 }
 
+void GDBController::demandAttention() const
+{
+    if ( QWidget * w = kapp->mainWidget() )
+    {
+        KWin::demandAttention( w->winId(), true );
+    }
+}
+
 }
 
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
+
 #include "gdbcontroller.moc"
