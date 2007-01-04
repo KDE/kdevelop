@@ -339,6 +339,8 @@ bool DDockWindow::isActive()
     if (m_toggledButton)
     {
         QWidget *w = qApp->focusWidget();
+        if (!w)
+            return false;
         QWidget *toolWidget = m_widgets[m_toggledButton];
         if (toolWidget == w)
             return true;
