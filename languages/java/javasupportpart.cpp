@@ -737,7 +737,7 @@ void JavaSupportPart::setupCatalog( )
 
     if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
         int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KStdGuiItem::remove(), i18n("Keep Them") );
 #else
         int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KGuiItem( i18n( "&Remove" ), "editdelete", i18n( "Remove item(s)" )), i18n("Keep Them") );
