@@ -73,6 +73,9 @@ public:
     QList<View*> &toolViews() const;
     Position toolViewPosition(View *toolView) const;
 
+    /**@return the controller for this area.*/
+    Controller *controller() const;
+
     /**Walks the tree of area indices and executes the operator. It will always walk the
     tree of views from top to bottom from left to right.
 

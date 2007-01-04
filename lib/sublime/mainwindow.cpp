@@ -133,12 +133,13 @@ struct MainWindowPrivate {
             case Sublime::Right: return Qt::RightDockWidgetArea;
             case Sublime::Bottom: return Qt::BottomDockWidgetArea;
             case Sublime::Top: return Qt::TopDockWidgetArea;
+            default: return Qt::LeftDockWidgetArea;
         }
     }
 
     MainWindow *mainWindow;
-    Area *area;
     Controller *controller;
+    Area *area;
     QMap<AreaIndex*, QSplitter*> indexSplitters;
 
     QMap<Area*, QAction*> areaActions;

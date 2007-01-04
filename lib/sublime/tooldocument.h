@@ -29,6 +29,7 @@ class ToolDocument;
 
 class SUBLIME_EXPORT ToolFactory {
 public:
+    virtual ~ToolFactory() {}
     virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0) = 0;
 };
 

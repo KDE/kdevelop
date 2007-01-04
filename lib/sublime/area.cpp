@@ -83,7 +83,7 @@ Area::Area(Controller *controller, const QString &name)
     d->controller->addArea(this);
 }
 
-Area::Area(const Area &area)
+Area::Area(const Area &area): QObject(area.controller())
 {
     static QMap<QString, int> nums;
     d = new AreaPrivate(*(area.d));
@@ -155,6 +155,11 @@ QList<View*> &Area::toolViews() const
 Position Area::toolViewPosition(View *toolView) const
 {
     return d->toolViewPositions[toolView];
+}
+
+Controller *Area::controller() const
+{
+    return d->controller;
 }
 
 }

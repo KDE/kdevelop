@@ -40,7 +40,7 @@ AreaToolViewsPrinter::AreaToolViewsPrinter()
     result = "\n";
 }
 
-bool AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position position)
+bool AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position /*position*/)
 {
     result += view->objectName() + "\n";
     return false;
