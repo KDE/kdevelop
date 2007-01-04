@@ -453,7 +453,7 @@ QString AutoProjectPart::mainProgram() const
             return QString::null;
         }
 
-        return activeDirectory() + "/" + titem->name;
+        return buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
     }
 }
 
