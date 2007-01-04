@@ -15,16 +15,16 @@
     <property name="caption">
         <string>Run Options</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup" row="0" column="0">
+        <widget class="QButtonGroup">
             <property name="name">
                 <cstring>directoryButtonGroup</cstring>
             </property>
             <property name="title">
-                <string>Program &amp;&amp; Directory</string>
+                <string>Main Program</string>
             </property>
             <property name="checkable">
                 <bool>true</bool>
@@ -36,7 +36,31 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="4">
+                <widget class="KLineEdit" row="2" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The path to the main program, defined relative to the above currently selected run directory</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="3">
+                    <property name="name">
+                        <cstring>browseMainButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse...</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>mainProgram_relativeness_label</cstring>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>layout2</cstring>
                     </property>
@@ -68,7 +92,29 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="KLineEdit" row="5" column="2">
+                <widget class="QRadioButton" row="7" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>customDirectory_radio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ustom directory:</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>2</number>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="7" column="3">
+                    <property name="name">
+                        <cstring>browseCustomButton</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>Browse...</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="7" column="2">
                     <property name="name">
                         <cstring>customRunDirectory_edit</cstring>
                     </property>
@@ -82,26 +128,7 @@
                         <string>A relative to the project root directory path or an absolute path</string>
                     </property>
                 </widget>
-                <widget class="KLineEdit" row="2" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The path to the main program, defined relative to the above currently selected run directory</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="5" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>customDirectory_radio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>C&amp;ustom directory:</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>2</number>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="3" column="0" rowspan="1" colspan="4">
+                <widget class="QRadioButton" row="5" column="0" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>executableDirectory_radio</cstring>
                     </property>
@@ -118,23 +145,15 @@
                         <number>0</number>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="5" column="3">
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
                     <property name="name">
-                        <cstring>browseCustomButton</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
+                        <cstring>notelabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Browse...</string>
+                        <string>Enabling this will disable subproject/target execution via Execute Project</string>
                     </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="3">
-                    <property name="name">
-                        <cstring>browseMainButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Browse...</string>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -142,68 +161,24 @@
                         <cstring>mainprogram_label</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Main program:</string>
+                        <string>Executable</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="1" rowspan="1" colspan="2">
+                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>mainProgram_relativeness_label</cstring>
+                        <cstring>mainprogram_label_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Arguments</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
-                    <property name="name">
-                        <cstring>notelabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Note: Disabling this group enables running and debugging the active target or subproject. If the group is enabled only the main program can be run or debugged</string>
-                    </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignVCenter</set>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="1" column="0">
-            <property name="name">
-                <cstring>programGroupBox</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>Box</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="title">
-                <string>Program arguments</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>progargs_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Program arguments are given to the main program &amp;or the target/subproject that is being executed.For Autotools projects the arguments specified via the target options override this.</string>
-                    </property>
-                    <property name="scaledContents">
-                        <bool>false</bool>
-                    </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignVCenter</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>progargs_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="KLineEdit">
+                <widget class="KLineEdit" row="4" column="0" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>progargs_edit</cstring>
                     </property>
@@ -211,9 +186,9 @@
                         <string>The command line arguments to pass to the main program</string>
                     </property>
                 </widget>
-            </vbox>
+            </grid>
         </widget>
-        <widget class="QGroupBox" row="2" column="0">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>env_var_group</cstring>
             </property>
@@ -221,7 +196,7 @@
                 <string>Environment &amp;Variables</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="3" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout3</cstring>
             </property>
@@ -287,7 +262,7 @@
                 </widget>
             </vbox>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <customwidgets>
 </customwidgets>
@@ -317,7 +292,6 @@
     <tabstop>customDirectory_radio</tabstop>
     <tabstop>customRunDirectory_edit</tabstop>
     <tabstop>browseCustomButton</tabstop>
-    <tabstop>progargs_edit</tabstop>
     <tabstop>startinterminal_box</tabstop>
     <tabstop>autocompile_box</tabstop>
 </tabstops>
@@ -334,8 +308,8 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>

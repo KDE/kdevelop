@@ -89,7 +89,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     else
         mainprogram_edit->setText(URLUtil::relativePath(m_buildDirectory.directory(false, false), m_mainProgramAbsolutePath.path(), false));
 
-    if( configGroup == "/kdevcustomproject" )
+    if( configGroup != "/kdevautoproject" && configGroup != "/kdevtrollproject" )
     {
         directoryButtonGroup->setChecked(true);
         directoryButtonGroup->setCheckable(false);

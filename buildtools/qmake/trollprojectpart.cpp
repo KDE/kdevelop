@@ -133,7 +133,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                           this, SLOT(slotBuildAndExecuteProject()),
                           actionCollection(), "build_execute_project" );
     action->setToolTip(i18n("Execute main program"));
-    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
+    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently selected subproject if its an application or the program specified in project settings, <b>Run Options</b> tab."));
 
     action = new KAction( i18n("&Build Subproject"), "make_kdevelop", Key_F7,
                           m_widget, SLOT(slotBuildTarget()),
@@ -543,11 +543,7 @@ QString TrollProjectPart::runArguments() const
         return DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/programargs");
     }else
     {
-        kdDebug(9024) << "Run Arguments" << DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/runarguments/"+m_widget->getCurrentOutputFilename() ) << endl;
-        if( DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/runarguments/"+m_widget->getCurrentOutputFilename() ).isEmpty() )
-            return DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/programargs");
-        else
-            return DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/runarguments/"+m_widget->getCurrentOutputFilename() );
+        return DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/runarguments/"+m_widget->getCurrentOutputFilename() );
     }
 }
 

@@ -205,8 +205,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
         action->setToolTip(i18n("Execute program"));
-        action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab. "
-                                  "If it is not specified then the active target is used to determine the application to run."));
+        action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently active target or the main program specified in project settings, <b>Run Options</b> tab."));
         action->setGroup("autotools");
     }
 
@@ -433,18 +432,7 @@ QString AutoProjectPart::runArguments() const
             return DomProgramArguments;
     }else
     {
-        TargetItem* titem = m_widget->activeTarget();
-        if( DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name).isEmpty() )
-        {
-            QString DomProgramArguments = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
-
-            if ( DomProgramArguments.isEmpty() )
-                return QString::null;
-            else
-                return DomProgramArguments;
-        }
-        else
-            return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name);
+        return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name);
     }
 }
 
