@@ -71,6 +71,12 @@
             <property name="buddy" stdset="0">
                 <cstring>debuggingShell_edit</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Run gdb in a special shell (mainly for automake projects)</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.</string>
+            </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
             <property name="name">
@@ -107,10 +113,10 @@
                 <cstring>debuggingShell_edit</cstring>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Run gdb in a special shell</string>
+                <string>Run gdb in a special shell (mainly for automake projects)</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If you want gdb to be executed by a special shell or tool insert it here.</string>
+                <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.</string>
             </property>
         </widget>
         <widget class="KURLRequester" row="2" column="1" rowspan="1" colspan="2">
@@ -349,6 +355,8 @@ or if your executable contains the gdb stub
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>programArgs_edit</tabstop>
     <tabstop>debuggingShell_edit</tabstop>
