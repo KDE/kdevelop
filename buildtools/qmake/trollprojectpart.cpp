@@ -476,8 +476,10 @@ QString TrollProjectPart::runDirectory() const
   */
 
 
-QString TrollProjectPart::mainProgram(bool relative) const
+QString TrollProjectPart::mainProgram() const
 {
+    bool relative = false; // dummy, remove!
+
     QDomDocument &dom = *projectDom();
 
     if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", true) )

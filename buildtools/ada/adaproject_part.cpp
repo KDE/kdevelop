@@ -203,31 +203,26 @@ QString AdaProjectPart::runDirectory() const
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AdaProjectPart::mainProgram(bool relative) const
+QString AdaProjectPart::mainProgram() const
 {
-    QFileInfo fi(mainSource());
-    return buildDirectory() + "/" + fi.baseName();
+    QDomDocument * dom = projectDom();
 
-    /// \FIXME put the code below into use!
-    QDomDocument &dom = *projectDom();
+    if ( !dom ) return QString();
 
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevadaproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevadaproject/run/mainprogram");
+    QString DomMainProgram = DomUtil::readEntry( *dom, "/kdevadaproject/run/mainprogram");
 
-    if ( directoryRadioString == "custom" )
-        return DomMainProgram;
+    if ( DomMainProgram.isEmpty() ) return QString();
 
-    if ( relative == false )
-        return buildDirectory() + "/" + DomMainProgram;
-
-    if ( directoryRadioString == "executable" ) {
-        int pos = DomMainProgram.findRev('/');
-        if (pos != -1)
-            return DomMainProgram.mid(pos+1);
-        return DomMainProgram;
+    if ( DomMainProgram.startsWith("/") )   // assume absolute path
+    {
+        return DomMainProgram;    
     }
-    else
-        return DomMainProgram;
+    else // assume project relative path
+    {
+        return projectDirectory() + "/" + DomMainProgram;
+    }
+
+    return QString();
 }
 
 

@@ -247,31 +247,26 @@ QString AntProjectPart::runDirectory() const
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AntProjectPart::mainProgram(bool relative) const
+QString AntProjectPart::mainProgram() const
 {
-	return QString::null;
+    QDomDocument * dom = projectDom();
 
-    /// \FIXME put the code below into use!
-    QDomDocument &dom = *projectDom();
+    if ( !dom ) return QString();
 
-    /// \FIXME there is no kdevantproject so this will not work !
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevantproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevantproject/run/mainprogram");
+    QString DomMainProgram = DomUtil::readEntry( *dom, "/kdevantproject/run/mainprogram");
 
-    if ( directoryRadioString == "custom" )
-        return DomMainProgram;
+    if ( DomMainProgram.isEmpty() ) return QString();
 
-    if ( relative == false )
-        return buildDirectory() + "/" + DomMainProgram;
-
-    if ( directoryRadioString == "executable" ) {
-        int pos = DomMainProgram.findRev('/');
-        if (pos != -1)
-            return DomMainProgram.mid(pos+1);
-        return DomMainProgram;
+    if ( DomMainProgram.startsWith("/") )   // assume absolute path
+    {
+        return DomMainProgram;    
     }
-    else
-        return DomMainProgram;
+    else // assume project relative path
+    {
+        return projectDirectory() + "/" + DomMainProgram;
+    }
+
+    return QString();
 }
 
 

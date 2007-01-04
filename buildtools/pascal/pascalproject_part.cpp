@@ -210,36 +210,26 @@ QString PascalProjectPart::runDirectory() const
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString PascalProjectPart::mainProgram(bool relative) const
+QString PascalProjectPart::mainProgram() const
 {
-    QDomDocument &dom = *projectDom();
-    QString configMainProg = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram", "");
-    if (configMainProg.isEmpty())
+    QDomDocument * dom = projectDom();
+
+    if ( !dom ) return QString();
+
+    QString DomMainProgram = DomUtil::readEntry( *dom, "/kdevpascalproject/run/mainprogram");
+
+    if ( DomMainProgram.isEmpty() ) return QString();
+
+    if ( DomMainProgram.startsWith("/") )   // assume absolute path
     {
-        QFileInfo fi(mainSource());
-        return buildDirectory() + "/" + fi.baseName();
+        return DomMainProgram;    
     }
-    else
-        return QDir::cleanDirPath(projectDirectory() + "/" + configMainProg);
-
-    /// \FIXME put the code below into use!
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevpascalproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram");
-
-    if ( directoryRadioString == "custom" )
-        return DomMainProgram;
-
-    if ( relative == false )
-        return buildDirectory() + "/" + DomMainProgram;
-
-    if ( directoryRadioString == "executable" ) {
-        int pos = DomMainProgram.findRev('/');
-        if (pos != -1)
-            return DomMainProgram.mid(pos+1);
-        return DomMainProgram;
+    else // assume project relative path
+    {
+        return projectDirectory() + "/" + DomMainProgram;
     }
-    else
-        return DomMainProgram;
+
+    return QString();
 }
 
 

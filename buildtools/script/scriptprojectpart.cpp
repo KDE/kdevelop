@@ -227,27 +227,26 @@ QString ScriptProjectPart::runDirectory() const
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString ScriptProjectPart::mainProgram(bool relative) const
+QString ScriptProjectPart::mainProgram() const
 {
-    QDomDocument &dom = *projectDom();
+    QDomDocument * dom = projectDom();
 
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevscriptproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevscriptproject/run/mainprogram");
+    if ( !dom ) return QString();
 
-    if ( directoryRadioString == "custom" )
-        return DomMainProgram;
+    QString DomMainProgram = DomUtil::readEntry( *dom, "/kdevscriptproject/run/mainprogram");
 
-    if ( relative == false )
-        return buildDirectory() + "/" + DomMainProgram;
+    if ( DomMainProgram.isEmpty() ) return QString();
 
-    if ( directoryRadioString == "executable" ) {
-        int pos = DomMainProgram.findRev('/');
-        if (pos != -1)
-            return DomMainProgram.mid(pos+1);
-        return DomMainProgram;
+    if ( DomMainProgram.startsWith("/") )   // assume absolute path
+    {
+        return DomMainProgram;    
     }
-    else
-        return DomMainProgram;
+    else // assume project relative path
+    {
+        return projectDirectory() + "/" + DomMainProgram;
+    }
+
+    return QString();
 }
 
 

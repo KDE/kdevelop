@@ -58,7 +58,7 @@ protected:
 
   virtual QString projectDirectory() const;
   virtual QString projectName() const;
-  virtual QString mainProgram(bool relative = false) const;
+  virtual QString mainProgram() const;
   virtual QString activeDirectory() const;
   virtual QStringList allFiles() const;
   virtual QString buildDirectory() const;

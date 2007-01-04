@@ -362,6 +362,7 @@ QString AutoProjectPart::runDirectory() const
   *   if /kdevautoproject/run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
+/*
 QString AutoProjectPart::mainProgram(bool relative) const
 {
     QDomDocument &dom = *projectDom();
@@ -412,6 +413,47 @@ QString AutoProjectPart::mainProgram(bool relative) const
 
         return activeDirectory() + "/" + titem->name;
 
+    }
+}
+*/
+
+QString AutoProjectPart::mainProgram() const
+{
+    QDomDocument * dom = projectDom();
+
+    if ( !dom ) return QString();
+
+    if( DomUtil::readBoolEntry(*dom, "/kdevautoproject/run/useglobalprogram", false) )
+    {
+        QString DomMainProgram = DomUtil::readEntry(*dom, "/kdevautoproject/run/mainprogram");
+
+        if ( DomMainProgram.isEmpty() ) return QString();
+
+        if ( DomMainProgram.startsWith("/") )   // assume absolute path
+        {
+            return DomMainProgram;
+        }
+        else // assume project relative path
+        {
+            return projectDirectory() + "/" + DomMainProgram;
+        }
+
+    } 
+    else // If no Main Program was specified, return the active target
+    {
+        TargetItem* titem = m_widget->activeTarget();
+
+        if ( !titem ) {
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
+
+        if ( titem->primary != "PROGRAMS" ) {
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
+
+        return activeDirectory() + "/" + titem->name;
     }
 }
 
@@ -1028,7 +1070,7 @@ void AutoProjectPart::slotExecute()
     partController()->saveAllFiles();
     QDomDocument &dom = *projectDom();
 
-    m_runProg=m_runProg.isEmpty()?mainProgram(false):m_runProg;
+    m_runProg=m_runProg.isEmpty()?mainProgram():m_runProg;
 
     bool _auto = false;
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autocompile", true) && isDirty() ){
@@ -1191,7 +1233,7 @@ void AutoProjectPart::slotExecute2()
 
     kdDebug(9020) << "slotExecute2: runDirectory: <" << runDirectory() << ">" <<endl;
     kdDebug(9020) << "slotExecute2: environstr  : <" << environString() << ">" <<endl;
-    kdDebug(9020) << "slotExecute2: mainProgram : <" << mainProgram(true) << ">" <<endl;
+    kdDebug(9020) << "slotExecute2: mainProgram : <" << mainProgram() << ">" <<endl;
     kdDebug(9020) << "slotExecute2: runArguments: <" << runArguments() << ">" <<endl;
     kdDebug(9020) << "slotExecute2: program     : <" << program << ">" <<endl;
 

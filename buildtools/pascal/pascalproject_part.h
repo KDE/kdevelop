@@ -31,7 +31,7 @@ public:
 
     /**Returns the name of the main source file without extension.
     All pascal compilers call the binary by that way*/
-    virtual QString mainProgram(bool relative = false) const;
+    virtual QString mainProgram() const;
     /**Main source file (like src/main.pp)*/
     virtual QString mainSource() const;
     virtual void setMainSource(QString fullPath);

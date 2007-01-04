@@ -450,27 +450,26 @@ QString CustomProjectPart::runDirectory() const
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString CustomProjectPart::mainProgram(bool relative) const
+QString CustomProjectPart::mainProgram() const
 {
-    QDomDocument &dom = *projectDom();
+    QDomDocument * dom = projectDom();
 
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevcustomproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevcustomproject/run/mainprogram");
+    if ( !dom ) return QString();
 
-    if ( directoryRadioString == "custom" )
-        return DomMainProgram;
+    QString DomMainProgram = DomUtil::readEntry( *dom, "/kdevcustomproject/run/mainprogram");
 
-    if ( relative == false )
-        return buildDirectory() + "/" + DomMainProgram;
+    if ( DomMainProgram.isEmpty() ) return QString();
 
-    if ( directoryRadioString == "executable" ) {
-        int pos = DomMainProgram.findRev('/');
-        if (pos != -1)
-            return DomMainProgram.mid(pos+1);
-        return DomMainProgram;
+    if ( DomMainProgram.startsWith("/") )   // assume absolute path
+    {
+        return DomMainProgram;    
     }
-    else
-        return DomMainProgram;
+    else // assume project relative path
+    {
+        return projectDirectory() + "/" + DomMainProgram;
+    }
+
+    return QString();
 }
 
 /** Retuns a QString with the run command line arguments */
@@ -737,22 +736,19 @@ void CustomProjectPart::slotExecute()
         environstr += " ";
     }
 
-    if (mainProgram(true).isEmpty())
+    if (mainProgram().isEmpty())
     // Do not execute non executable targets
         return;
 
     QString program = environstr;
-    // Adds the ./ that is necessary to execute the program in bash shells
-    if (!mainProgram(true).startsWith("/"))
-        program += "./";
-    program += mainProgram(true);
+    program += mainProgram();
     program += " " + runArguments();
 
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/terminal");
 
     kdDebug(9025) << "runDirectory: <" << runDirectory() << ">" <<endl;
     kdDebug(9025) << "environstr  : <" << environstr << ">" <<endl;
-    kdDebug(9025) << "mainProgram : <" << mainProgram(true) << ">" <<endl;
+    kdDebug(9025) << "mainProgram : <" << mainProgram() << ">" <<endl;
     kdDebug(9025) << "runArguments: <" << runArguments() << ">" <<endl;
 
     appFrontend()->startAppCommand(runDirectory(), program, inTerminal);

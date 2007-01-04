@@ -97,7 +97,7 @@ public:
     
     /**@return The path to main binary program of the project.
     @param relative if true then the path returned is relative to the project directory.*/
-    virtual QString mainProgram(bool relative = false) const = 0;
+    virtual QString mainProgram() const = 0;
     
     /**Absolute path (directory) from where the mainProgram() should be run.*/
     virtual QString runDirectory() const = 0;

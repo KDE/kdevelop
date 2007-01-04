@@ -58,9 +58,9 @@ QString KDevProjectIface::projectName( ) const
   return m_prj->projectName();
 }
 
-QString KDevProjectIface::mainProgram( bool relative ) const
+QString KDevProjectIface::mainProgram() const
 {
-  return m_prj->mainProgram(relative);
+  return m_prj->mainProgram();
 }
 
 QString KDevProjectIface::runDirectory( ) const

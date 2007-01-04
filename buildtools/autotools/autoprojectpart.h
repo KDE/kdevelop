@@ -46,7 +46,7 @@ public:
 	virtual QString projectName() const;
 	virtual DomUtil::PairList runEnvironmentVars() const;
 	virtual QString runDirectory() const;
-	virtual QString mainProgram( bool relative = false ) const;
+	virtual QString mainProgram() const;
 	virtual QString runArguments() const;
 	virtual QString environString() const;
 	virtual QString activeDirectory() const;

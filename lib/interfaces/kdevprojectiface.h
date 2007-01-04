@@ -45,7 +45,7 @@ k_dcop:
     uint options() const;
     QString projectDirectory() const;
     QString projectName() const;
-    QString mainProgram(bool relative = false) const;
+    QString mainProgram() const;
     QString runDirectory() const;
     QString activeDirectory() const;
     QString buildDirectory() const;
