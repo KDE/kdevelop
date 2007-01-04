@@ -989,11 +989,7 @@ void VariableTree::copyToClipboard(QListViewItem* item)
     QClipboard *qb = KApplication::clipboard();
     QString text = item->text( 1 );
 
-#if KDE_VERSION > 305
     qb->setText( text, QClipboard::Clipboard );
-#else
-    qb->setText( text );
-#endif
 }
 
 void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)

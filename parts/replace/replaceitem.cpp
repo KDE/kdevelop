@@ -69,7 +69,6 @@ void ReplaceItem::setChecked( bool checked )
     }
 }
 
-#if KDE_VERSION > 305
 // code mostly lifted from QCheckListItem::paintCell()
 void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
 {
@@ -134,7 +133,6 @@ void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, i
 
     QListViewItem::paintCell( p, mcg, column, width - r, align );
 }
-#endif
 
 void ReplaceItem::activate( int, QPoint const & localPos )
 {

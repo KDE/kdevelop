@@ -22,11 +22,7 @@
 #include <ktexteditor/viewcursorinterface.h>
 #include <kdeversion.h>
 
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
 #include <ktexteditor/viewstatusmsginterface.h>
-# endif
-#endif
 
 #include "statusbar.h"
 #include "partcontroller.h"

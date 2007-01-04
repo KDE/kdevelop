@@ -24,9 +24,7 @@ public:
     // the file item
     ReplaceItem( ReplaceView * parent, ReplaceItem * after, QString file ) :
             QCheckListItem( parent,
-#if KDE_VERSION > 305
                             after,
-#endif
                             file, QCheckListItem::CheckBox ),
             _file( file ), _string( file ), _line( 0 ), _isfile( true ),
             _lineclicked( false ), _clicked( true )
@@ -38,9 +36,7 @@ public:
     // the line item
     ReplaceItem( ReplaceItem * parent, ReplaceItem * after, QString file, QString string, int line ) :
             QCheckListItem( parent,
-#if KDE_VERSION > 305
                             after,
-#endif
                             QString::number( line + 1 ) + ": " + string, QCheckListItem::CheckBox ),
             _file( file ), _string( string ), _line( line ), _isfile( false ),
             _lineclicked( false ), _clicked( true )
@@ -102,9 +98,7 @@ public:
     static bool s_listview_done;
 
 private:
-#if KDE_VERSION > 305
     void paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align );
-#endif    
     void setChecked( bool checked );
 
     QString _file;

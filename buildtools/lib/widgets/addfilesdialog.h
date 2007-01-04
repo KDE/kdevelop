@@ -39,10 +39,10 @@ public:
 
     AddFilesDialog(const QString& startDir, const QString& filter,
                QWidget *parent, const char *name, bool modal);
-#if KDE_VERSION >= 310
+
     AddFilesDialog(const QString& startDir, const QString& filter,
                QWidget *parent, const char *name, bool modal, QComboBox *extraWidget);
-#endif
+
     virtual ~AddFilesDialog();
 
     virtual AddFilesDialog::Mode mode();

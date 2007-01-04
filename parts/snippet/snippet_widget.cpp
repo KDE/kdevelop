@@ -161,15 +161,8 @@ void SnippetWidget::slotRemove()
 
   if (group) {
     if (group->childCount() > 0 &&
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
         KMessageBox::warningContinueCancel(this, i18n("Do you really want to remove this group and all its snippets?"),QString::null,KStdGuiItem::del())
         == KMessageBox::Cancel)
-#else
-        KMessageBox::warningContinueCancel(this, i18n("Do you really want to remove this group and all its snippets?"),
-		QString::null,KGuiItem( i18n( "&Delete" ), "editdelete",
-                   i18n( "Delete item(s)" )))
-        == KMessageBox::Cancel)
-#endif
       return;
 
     for (SnippetItem *it=_list.first(); it; it=_list.next()) {

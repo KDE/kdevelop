@@ -33,12 +33,6 @@
 #include <qregexp.h>
 #include <qspinbox.h>
 
-// only for KDE < 3.1
-#if KDE_VERSION <= 305
-#include "../compat/kdeveditlistbox.h"
-using namespace KDevCompat;
-#endif
-
 #include "flagboxes.h"
 
 // partial copy of Qt-3.1 for back-compatibility to KDE-3.0
@@ -347,15 +341,7 @@ void FlagPathEdit::showPathDetails( )
     KURLRequester *req = new KURLRequester( dia );
     req->setMode(KFile::Directory);
     KEditListBox::CustomEditor pCustomEditor;
-#if KDE_VERSION > 305
     pCustomEditor = req->customEditor();
-#else
-    QObjectList* pOL = req->queryList("KLineEdit"); // dirty hack :)
-    KLineEdit* pEdit = dynamic_cast<KLineEdit*>(pOL->first());
-    assert(pEdit);
-    KEditListBox::CustomEditor editor(req, pEdit);
-    pCustomEditor = editor;
-#endif
     KEditListBox *elb = new KEditListBox( "", pCustomEditor, dia );
     dia->setMainWidget(elb);
 

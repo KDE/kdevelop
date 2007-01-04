@@ -730,11 +730,7 @@ void QComboView::popup()
 //    int w = lb->variableWidth() ? lb->sizeHint().width() : width();
     int w = width();
     int h = listHeight( lb, d->sizeLimit );
-#if KDE_VERSION > 305
     QRect screen = QApplication::desktop()->availableGeometry( const_cast<QComboView*>(this) );
-#else
-    QRect screen = geometry();
-#endif
 
     int sx = screen.x();        // screen pos
     int sy = screen.y();
@@ -752,17 +748,12 @@ void QComboView::popup()
         x = sx;
     if (y + h > sy+sh && y - h - height() >= 0 )
         y = y - h - height();
-#if KDE_VERSION >= 310
     QRect rect =
     style().querySubControlMetrics( QStyle::CC_ComboBox, this,
                     QStyle::SC_ComboBoxListBoxPopup,
                     QStyleOption( x, y, w, h ) );
     if ( rect.isNull() )
         rect.setRect( x, y, w, h );
-#else
-    QRect rect;
-    rect.setRect( x, y, w, h );
-#endif
     lb->setGeometry( rect );
 
     lb->raise();

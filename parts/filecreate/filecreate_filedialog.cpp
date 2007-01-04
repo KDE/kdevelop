@@ -23,12 +23,7 @@ namespace FileCreate {
   FileDialog::FileDialog(const QString& startDir, const QString& filter,
                          QWidget *parent, const char *name,
                          bool modal, QWidget * extraWidget) :
-#if KDE_VERSION >= 310
     KFileDialog(startDir, filter, parent, name, modal, extraWidget) {
-#else
-    KFileDialog(startDir, filter, parent, name, modal) {
-      if (extraWidget) setPreviewWidget(extraWidget);
-#endif
 
     setOperationMode(Saving);
 

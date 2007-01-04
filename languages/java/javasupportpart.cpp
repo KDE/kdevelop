@@ -61,15 +61,7 @@
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/clipboardinterface.h>
 
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
-#  include <ktexteditor/texthintinterface.h>
-# else
-#  include <kde30x_texthintinterface.h>
-# endif
-#else
-#  include <kde30x_texthintinterface.h>
-#endif
+#include <ktexteditor/texthintinterface.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>
@@ -737,11 +729,7 @@ void JavaSupportPart::setupCatalog( )
 
     if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
         int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KStdGuiItem::remove(), i18n("Keep Them") );
-#else
-        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KGuiItem( i18n( "&Remove" ), "editdelete", i18n( "Remove item(s)" )), i18n("Keep Them") );
-#endif
         if( rtn == KMessageBox::Yes ){
             QStringList::Iterator it = l.begin();
             while( it != l.end() ){

@@ -88,11 +88,8 @@ void AddIconDialog::accept()
     QString destpath = destdir + "/" + name;
 
     QString size = size_combo->currentText();
-#if KDE_VERSION < 310
-    QString unknown = "unknown"; // fix me!
-#else    
     QString unknown = KIconTheme::defaultThemeName()+ "/" + size + "x" + size + "/mimetypes/unknown.png";
-#endif    
+
     QString templateFileName = locate("icon", unknown);
     kdDebug(9020) << "Unknown: " << unknown << ", template: " << templateFileName << endl;
 

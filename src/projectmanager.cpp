@@ -290,10 +290,10 @@ void ProjectManager::slotLoadProject( )
 			kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
 		}
 	}
-#if KDE_VERSION > 350
-  m_openRecentProjectAction->addURL(projectFile(), projectName());
+#if KDE_IS_VERSION(3,5,0)
+  m_openRecentProjectAction->addURL(projectFile(), projectName());  // KDE >= 3.5.x
 #else
-  m_openRecentProjectAction->addURL(projectFile());
+  m_openRecentProjectAction->addURL(projectFile());                 // KDE 3.4.x
 #endif 
   m_closeProjectAction->setEnabled(true);
   m_projectOptionsAction->setEnabled(true);

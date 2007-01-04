@@ -251,13 +251,8 @@ void ProfileEditor::addProfile()
 
 void ProfileEditor::removeProfile()
 {
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
     if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
         i18n("Remove Profile"),KStdGuiItem::del()) == KMessageBox::Continue)
-#else
-    if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
-        i18n("Remove Profile"),KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ))) == KMessageBox::Continue)
-#endif
     {
         Profile *profile = currentProfile();
         if (profile->remove())

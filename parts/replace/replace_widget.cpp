@@ -302,17 +302,7 @@ bool ReplaceWidget::makeReplacements()
                     _listview->makeReplacementsForFile( istream, ostream, fileitem );
 
                     // pre 3.1.3 katepart clears undo history on setText()
-                    #if defined(KDE_MAKE_VERSION)
-                    # if KDE_VERSION > KDE_MAKE_VERSION(3,1,2)
                     ei->setText( obuffer );
-                    # else
-                    ei->removeText( 0, 0, ei->numLines()-1, UINT_MAX );
-                    ei->insertText( 0, 0, obuffer );
-                    # endif
-                    #else
-                    ei->removeText( 0, 0, ei->numLines()-1, UINT_MAX );
-                    ei->insertText( 0, 0, obuffer );
-                    #endif
                 }
             }
             else

@@ -65,14 +65,6 @@
 
 #include "shellextension.h"
 
-#ifdef KDE_MAKE_VERSION
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-#  define NEED_CONFIGHACK
-# endif
-#else
-# define NEED_CONFIGHACK
-#endif
-
 using namespace MainWindowUtils;
 
 MainWindowShare::MainWindowShare(QObject* pParent, const char* name)

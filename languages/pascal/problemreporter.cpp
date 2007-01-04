@@ -29,11 +29,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/markinterface.h>
 
-#if (KDE_VERSION > 305)
 # include <ktexteditor/markinterfaceextension.h>
-#else
-# include "kde30x_markinterfaceextension.h"
-#endif
 
 #include <kdebug.h>
 #include <klocale.h>

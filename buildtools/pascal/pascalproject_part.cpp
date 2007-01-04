@@ -371,11 +371,7 @@ void PascalProjectPart::slotExecute()
         environstr += (*it).first;
         environstr += "=";
 /*
-#if (KDE_VERSION > 305)
         environstr += KProcess::quote((*it).second);
-#else
-        environstr += KShellProcess::quote((*it).second);
-#endif
 */
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";

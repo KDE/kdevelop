@@ -206,11 +206,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             QString text = "{ \"" + item->text( VAR_NAME_COLUMN ) + "\", " +
                             "\"" + item->text( VALUE_COLUMN ) + "\" }";
 
-#if KDE_VERSION > 305
             qb->setText( text, QClipboard::Clipboard );
-#else
-            qb->setText( text );
-#endif
         }
     }
 }

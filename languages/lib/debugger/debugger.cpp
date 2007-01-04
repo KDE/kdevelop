@@ -117,15 +117,7 @@ void Debugger::marksChanged()
     if(sender()->inherits("KTextEditor::Document") )
     {
         KTextEditor::Document* doc = (KTextEditor::Document*) sender();
-#if (KDE_VERSION > 305)
         MarkInterface* iface = KTextEditor::markInterface( doc );
-#else
-        KParts::Part *part = m_partController->partForURL(doc->url());
-        if( !part )
-            return;
-
-        MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
-#endif
 
         if (iface)
         {

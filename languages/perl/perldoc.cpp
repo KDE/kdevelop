@@ -37,18 +37,10 @@ void PerldocProtocol::get(const KURL& url)
     if (l[0] == "functions") {
         plain = true;
         cmd += "-t -f ";
-#if (KDE_VERSION > 305)
         cmd += KProcess::quote(l[1]);
-#else
-        cmd += KShellProcess::quote(l[1]);
-#endif
     } else if (l[0] == "faq") {
         cmd += "-u -q ";
-#if (KDE_VERSION > 305)
         cmd += KProcess::quote(l[1]);
-#else
-        cmd += KShellProcess::quote(l[1]);
-#endif
         cmd += " | pod2html";
     } else {
         QCString errstr(i18n("The only existing directories are functions and faq.").local8Bit());

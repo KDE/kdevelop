@@ -43,7 +43,7 @@ AddFilesDialog::AddFilesDialog(const QString& startDir, const QString& filter,
     setOperationMode(Opening);
 }
 
-#if KDE_VERSION >= 310
+
 AddFilesDialog::AddFilesDialog(const QString& startDir, const QString& filter,
     QWidget *parent, const char *name, bool modal, QComboBox *extraWidget):
     KFileDialog(startDir, filter, parent, name, modal, extraWidget), m_extraWidget(extraWidget)
@@ -59,7 +59,7 @@ AddFilesDialog::AddFilesDialog(const QString& startDir, const QString& filter,
 
     setOperationMode(Opening);
 }
-#endif
+
 
 AddFilesDialog::~AddFilesDialog()
 {
