@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <kdevexport.h>
+
 namespace Sublime {
 
 class Document;
@@ -29,7 +31,7 @@ class Document;
 
 Views are the convenient way to manage a widget. It is specifically designed to be
 light and fast. Call @ref View::widget to create and get the actual widget.*/
-class View: public QObject {
+class SUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
     View(Document *doc);

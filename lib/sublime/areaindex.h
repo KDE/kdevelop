@@ -22,6 +22,8 @@
 #include <Qt>
 #include <QList>
 
+#include <kdevexport.h>
+
 namespace Sublime {
 
 class View;
@@ -99,7 +101,7 @@ is visible at the time.
         root_index (view1, view2, view3, view4)
 @endcode
 */
-class AreaIndex {
+class SUBLIME_EXPORT AreaIndex {
 public:
     ~AreaIndex();
     AreaIndex(const AreaIndex &index);
@@ -160,7 +162,7 @@ private:
 /**
 @short Root Area Index
 */
-class RootAreaIndex: public AreaIndex {
+class SUBLIME_EXPORT RootAreaIndex: public AreaIndex {
 public:
     RootAreaIndex();
 };

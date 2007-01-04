@@ -21,13 +21,15 @@
 
 #include <kparts/mainwindow.h>
 
+#include <kdevexport.h>
+
 namespace Sublime {
 
 class Area;
 class Controller;
 class MainWindowOperator;
 
-class MainWindow: public KParts::MainWindow {
+class SUBLIME_EXPORT MainWindow: public KParts::MainWindow {
 Q_OBJECT
 public:
     MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);

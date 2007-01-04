@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <kdevexport.h>
+
 #include "areaindex.h"
 #include "sublimedefs.h"
 
@@ -41,7 +43,7 @@ Area takes care of all placement/configuration details so that
 in order for @ref MainWindow to show the area it just needs to
 reconstruct itself according to the area's rules.
 */
-class Area: public QObject {
+class SUBLIME_EXPORT Area: public QObject {
     Q_OBJECT
 public:
     Area(Controller *controller, const QString &name);

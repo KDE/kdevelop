@@ -21,11 +21,13 @@
 
 #include "document.h"
 
+#include <kdevexport.h>
+
 namespace Sublime {
 
 class ToolDocument;
 
-class ToolFactory {
+class SUBLIME_EXPORT ToolFactory {
 public:
     virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0) = 0;
 };
@@ -39,7 +41,7 @@ public:
     }
 };
 
-class ToolDocument: public Document {
+class SUBLIME_EXPORT ToolDocument: public Document {
 public:
     /**Initialized tool document with given @p factory. Document takes
     ownership over the factory and deletes it together with itself*/

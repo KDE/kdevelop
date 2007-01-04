@@ -113,6 +113,14 @@
 # endif
 #endif
 
+#ifndef SUBLIME_EXPORT
+# ifdef MAKE_SUBLIME_LIB
+#  define SUBLIME_EXPORT KDE_EXPORT
+# else
+#  define SUBLIME_EXPORT KDE_IMPORT
+# endif
+#endif
+
 
 #else //UNIX
 
@@ -127,6 +135,7 @@
 #define KDEVCPPRPP_EXPORT KDE_EXPORT
 #define KDEVCPPLANGUAGE_EXPORT KDE_EXPORT
 #define KDEVCMAKECOMMON_EXPORT KDE_EXPORT
+#define SUBLIME_EXPORT KDE_EXPORT
 #endif /* KDEVEXPORT_H*/
 #endif
 

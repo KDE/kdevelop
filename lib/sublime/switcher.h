@@ -21,9 +21,11 @@
 
 #include <QStatusBar>
 
+#include <kdevexport.h>
+
 namespace Sublime {
 
-class Switcher: public QStatusBar {
+class SUBLIME_EXPORT Switcher: public QStatusBar {
 Q_OBJECT
 public:
     Switcher(QWidget *parent = 0);

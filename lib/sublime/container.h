@@ -21,11 +21,13 @@
 
 #include <QWidget>
 
+#include <kdevexport.h>
+
 class QStackedLayout;
 
 namespace Sublime {
 
-class Container: public QWidget {
+class SUBLIME_EXPORT Container: public QWidget {
 Q_OBJECT
 public:
     Container(QWidget *parent = 0);

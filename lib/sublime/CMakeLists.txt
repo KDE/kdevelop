@@ -1,4 +1,4 @@
-#include_directories(${CMAKE_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/lib)
 
 add_subdirectory(examples)
 add_subdirectory(test)
@@ -6,17 +6,17 @@ add_subdirectory(test)
 ########### next target ###############
 
 set(sublime_LIB_SRCS
-	area.cpp
-	areaindex.cpp
-	container.cpp
-	controller.cpp
-	document.cpp
-	mainwindow.cpp
-	mainwindowoperator.cpp
-	partdocument.cpp
-	switcher.cpp
-	tooldocument.cpp
-	view.cpp
+    area.cpp
+    areaindex.cpp
+    container.cpp
+    controller.cpp
+    document.cpp
+    mainwindow.cpp
+    mainwindowoperator.cpp
+    partdocument.cpp
+    switcher.cpp
+    tooldocument.cpp
+    view.cpp
 )
 
 # set(sublime_UI
@@ -33,16 +33,16 @@ install(TARGETS sublime DESTINATION ${LIB_INSTALL_DIR} )
 ########### install files ###############
 
 install(FILES
-	area.h
-	areaindex.h
-	container.h
-	controller.h
-	document.h
-	mainwindow.h
-	mainwindowoperator.h
-	partdocument.h
-	sublimedefs.h
-	switcher.h
-	tooldocument.h
-	view.h
+    area.h
+    areaindex.h
+    container.h
+    controller.h
+    document.h
+    mainwindow.h
+    mainwindowoperator.h
+    partdocument.h
+    sublimedefs.h
+    switcher.h
+    tooldocument.h
+    view.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/sublime )

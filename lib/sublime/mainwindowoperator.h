@@ -19,6 +19,8 @@
 #ifndef SUBLIMEMAINWINDOWOPERATOR_H
 #define SUBLIMEMAINWINDOWOPERATOR_H
 
+#include <kdevexport.h>
+
 namespace Sublime {
 
 class Area;
@@ -26,7 +28,7 @@ class MainWindow;
 
 /**Proxy class to give descedants access to MainWindow::setArea
 and MainWindow::hideArea methods. Just inherit it and use the methods.*/
-class MainWindowOperator {
+class SUBLIME_EXPORT MainWindowOperator {
 protected:
     void setArea(MainWindow *w, Area *area);
     void clearArea(MainWindow *w);

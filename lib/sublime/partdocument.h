@@ -21,11 +21,13 @@
 
 #include <kurl.h>
 
+#include <kdevexport.h>
+
 #include "document.h"
 
 namespace Sublime {
 
-class PartDocument: public Document {
+class SUBLIME_EXPORT PartDocument: public Document {
 public:
     PartDocument(Controller *controller, const KUrl &url);
     ~PartDocument();

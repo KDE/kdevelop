@@ -20,6 +20,9 @@
 #define SUBLIMECONTROLLER_H
 
 #include <QObject>
+
+#include <kdevexport.h>
+
 #include "mainwindowoperator.h"
 
 class QChildEvent;
@@ -30,7 +33,7 @@ class Area;
 class Document;
 class MainWindow;
 
-class Controller: public QObject, public MainWindowOperator {
+class SUBLIME_EXPORT Controller: public QObject, public MainWindowOperator {
 Q_OBJECT
 public:
     Controller(QObject *parent = 0);

@@ -23,6 +23,8 @@
 #include <QList>
 #include <QString>
 
+#include <kdevexport.h>
+
 class QWidget;
 
 namespace Sublime {
@@ -30,7 +32,7 @@ namespace Sublime {
 class View;
 class Controller;
 
-class Document: public QObject {
+class SUBLIME_EXPORT Document: public QObject {
     Q_OBJECT
 public:
     Document(Controller *controller);
