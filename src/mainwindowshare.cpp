@@ -339,21 +339,6 @@ void MainWindowShare::slotConfigureEditors()
     conf->configDialog();
     conf->writeConfig();
 
-#ifdef NEED_CONFIGHACK
-    // iterate over other instances of this part type and apply configuration
-    if( const QPtrList<KParts::Part> * partlist = partController->parts() )
-    {
-        QPtrListIterator<KParts::Part> it( *partlist );
-        while ( KParts::Part* p = it.current() )
-        {
-            if ( KTextEditor::ConfigInterface * ci = dynamic_cast<KTextEditor::ConfigInterface *>( p ) )
-            {
-                ci->readConfig();
-            }
-            ++it;
-        }
-    }
-#endif
 }
 
 void MainWindowShare::slotGUICreated( KParts::Part * part )

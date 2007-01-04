@@ -437,277 +437,43 @@ AC_SUBST(DB3LDFLAGS)
 ])
 
 dnl  **********
-dnl  check whether we need the compat lib
+dnl  check wether KDE is at least version 3.4.0
 dnl  **********
-
-AC_DEFUN([KDEV_CHECK_COMPAT],
+AC_DEFUN([KDEV_CHECK_KDE_VERSION],
 [
-  AC_MSG_CHECKING(whether to build the compat lib)
+    AC_MSG_CHECKING(for KDE >= 3.4.0)
 
-  AC_CACHE_VAL(ac_cv_qt31_setup,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
 
-    save_CXXFLAGS="$CXXFLAGS"
-
-    CXXFLAGS="$CXXFLAGS $QT_INCLUDES -I$ac_kde_includes"
-
-    AC_TRY_COMPILE([
-      #include <qglobal.h>
-      #include <kdeversion.h>
-    ],
+    AC_CACHE_VAL(ac_cv_kde_version_check,
     [
-      #if QT_VERSION < 0x030100
-         choke me
-      #endif
-      #if KDE_VERSION < 0x030100
-         KDE_choke me
-      #endif
-    ],
-      ac_cv_qt31_setup=yes,
-      ac_cv_qt31_setup=no
-    )
-    CXXFLAGS="$save_CXXFLAGS"
-    AC_LANG_RESTORE
-  ])
+        AC_LANG_SAVE
+        AC_LANG_CPLUSPLUS
 
-  if test "$ac_cv_qt31_setup" = "yes"; then
-    AC_MSG_RESULT(no)
-  else
-    AC_MSG_RESULT(yes)
-    COMPAT=compat
-  fi
-AC_SUBST(COMPAT)
-AM_CONDITIONAL(include_compat, test -n "$COMPAT")
-])
+        save_CXXFLAGS="$CXXFLAGS"
 
+        CXXFLAGS="$CXXFLAGS $QT_INCLUDES -I$ac_kde_includes"
 
-dnl  **********
-dnl  check whether we have necessary svn libraries to compile vcs compat lib
-dnl  **********
-
-AC_DEFUN([KDEV_CHECK_SVN],
-[
-    AC_MSG_CHECKING(for svn libraries)
-
-    APR_CONFIGS="apr-config /usr/local/apr/bin/apr-config"
-    SVN_SUBDIR="svn"
-    AC_ARG_WITH(apr-config,
-    [[  --with-apr-config=FILE    Use the given path to apr-config when determining
-                                APR configuration; defaults to "apr-config"]],
-    [
-        if test "$withval" != "yes" -a "$withval" != ""; then
-            APR_CONFIGS=$withval
-        fi
+        AC_TRY_COMPILE([
+            #include <kdeversion.h>
+          ],
+          [
+            #if KDE_IS_VERSION(3,4,0)
+	    #else
+            KDE_choke me
+            #endif
+          ],
+          ac_cv_kde_version_check=yes,
+          ac_cv_kde_version_check=no
+        )
+        CXXFLAGS="$save_CXXFLAGS"
+        AC_LANG_RESTORE
     ])
-    AC_MSG_CHECKING([for APR])
-    APR_CONFIG=""
-    for VALUE in $APR_CONFIGS ; do
-            if $VALUE --cflags > /dev/null; then
-                    APR_CONFIG=$VALUE
-                    break
-            fi
-    done
-    test $VALUE && APR_CONFIG=$VALUE
-    if test $APR_CONFIG ; then
-        AC_MSG_RESULT([found])
+
+    if test "$ac_cv_kde_version_check" = "yes"; then
+        AC_MSG_RESULT(yes)
     else
-        AC_MSG_RESULT([not found])
-            SVN_SUBDIR=
-    dnl    AC_MSG_ERROR([APR is required. Try --with-apr-config.])
+        AC_MSG_ERROR(Installed KDE needs to be version 3.4.0 or later)
     fi
-
-    APR_CPPFLAGS="`$APR_CONFIG --cppflags`"
-    APR_INCLUDE="`$APR_CONFIG --includes`"
-    APR_LIBS="`$APR_CONFIG --link-ld --libs`"
-
-    dnl
-    dnl APR util
-    dnl
-
-    APU_CONFIGS="apu-config /usr/local/apr/bin/apu-config"
-    AC_ARG_WITH(apu-config,
-    [[  --with-apu-config=FILE    Use the given path to apu-config when determining
-                                APR util configuration; defaults to "apu-config"]],
-    [
-        if test "$withval" != "yes" -a "$withval" != ""; then
-            APU_CONFIGS=$withval
-        fi
-    ])
-    AC_MSG_CHECKING([for APR util])
-    APU_CONFIG=""
-    for VALUE in $APU_CONFIGS ; do
-            if $VALUE --includes > /dev/null; then
-                    APU_CONFIG=$VALUE
-                    break
-            fi
-    done
-    if test $APU_CONFIG ; then
-        AC_MSG_RESULT([found])
-    else
-        AC_MSG_RESULT([not found])
-            SVN_SUBDIR=
-    dnl    AC_MSG_ERROR([APR util is required. Try --with-apu-config.])
-    fi
-    dnl APR_CPPFLAGS="$APR_CPPFLAGS `$APU_CONFIG --includes`"
-    APR_INCLUDE="$APR_INCLUDE `$APU_CONFIG --includes`"
-    APR_LIBS="$APR_LIBS `$APU_CONFIG --link-ld --libs`"
-
-    AC_MSG_CHECKING(for Subversion svn-config)
-    AC_ARG_WITH(subversion-dir,
-            [  --with-subversion-dir=DIR           where Subversion is installed ],
-            [
-                    SVNCONFIG="$withval/bin/svn-config"
-            ])
-
-    if test -z "$SVNCONFIG"; then
-            _SVNCONFIG="`svn-config --prefix 2> /dev/null`"
-            if test -n "$_SVNCONFIG"; then
-                    SVNCONFIG="$_SVNCONFIG/bin/svn-config"
-            fi
-    fi
-
-    AC_SUBST(SVNCONFIG)
-    if test -x "$SVNCONFIG"; then
-            SVNLD="`$SVNCONFIG --ldflags`"
-            SVN_LIB="`$SVNCONFIG --libs --cppflags` -lsvn_client-1"
-            dnl ugly hack for subversion svn-config problems in 0.14.x, to be removed when svn-config is fixed
-            SVN_INCLUDE="`$SVNCONFIG --includes` -I$_SVNCONFIG/include/subversion-1/"
-            AC_MSG_RESULT(yes)
-    else
-            AC_MSG_RESULT(not found)
-            dnl just a fallback to debian's config so that it works for me :)
-            AC_ARG_WITH(svn-include,
-                                    [[  --with-svn-include=DIR   Use the given path to the subversion headers.]],
-                                    [
-                                    if test "$withval" != "yes" -a "$withval" != ""; then
-                                            SVN_INCLUDES=$withval
-                                    fi
-                                    ])
-            if test -z "$SVN_INCLUDES"; then
-                SVN_INCLUDES="/usr/local/include /usr/include"
-            fi
-            AC_MSG_CHECKING([for Subversion headers])
-            SVN_INCLUDE=""
-            for VALUE in $SVN_INCLUDES ; do
-                    if test -f $VALUE/subversion-1/svn_types.h ; then
-                            SVN_INCLUDE=$VALUE
-                            break
-                    fi
-            done
-            if test $SVN_INCLUDE ; then
-                    AC_MSG_RESULT([found])
-            else
-                    AC_MSG_RESULT([not found])
-                    SVN_SUBDIR=
-    dnl		AC_MSG_ERROR([Subversion headers are required. Try --with-svn-include.])
-            fi
-            SVN_LIBS="/usr/local/lib$kdelibsuff /usr/lib$kdelibsuff"
-            AC_ARG_WITH(svn-lib,
-                            [[  --with-svn-lib=DIR  Use the given path to the subversion libraries.]],
-                            [
-                                if test "$withval" != "yes" -a "$withval" != ""; then
-                                    SVN_LIBS=$withval
-                                fi
-                            ])
-            AC_MSG_CHECKING([for Subversion libraries])
-            SVN_LIB=""
-            for VALUE in $SVN_LIBS ; do
-                    if ls $VALUE/libsvn_client-1.* 1>/dev/null 2>&1; then
-                            SVN_LIB=$VALUE
-                            break
-                    fi
-            done
-            if test $SVN_LIB ; then
-                    AC_MSG_RESULT([found])
-            else
-                    AC_MSG_RESULT([not found])
-                    SVN_SUBDIR=
-            fi
-    fi
-
-
-    NEON_CONFIGS="neon-config"
-    AC_ARG_WITH(neon-config,
-    [[  --with-neon-config=FILE    Use the given path to neon-config when determining
-                                Neon configuration; defaults to "neon-config"]],
-    [
-        if test "$withval" != "yes" -a "$withval" != ""; then
-            NEON_CONFIGS=$withval
-        fi
-    ])
-    AC_MSG_CHECKING([for Neon])
-    NEON_CONFIG=""
-    for VALUE in $NEON_CONFIGS ; do
-            if $VALUE --cflags > /dev/null; then
-                    NEON_CONFIG=$VALUE
-                    break
-            fi
-    done
-    if test $NEON_CONFIG ; then
-        AC_MSG_RESULT([found])
-    else
-        AC_MSG_RESULT([not found])
-            SVN_SUBDIR=
-    dnl    AC_MSG_ERROR([Neon is required. Try --with-neon-config.])
-    fi
-
-    SVN_LIB="-L$SVN_LIB $APR_LIBS -lsvn_client-1"
-    SVN_INCLUDE="-I$SVN_INCLUDE $APR_INCLUDE"
-    SVN_CPPFLAGS="$APR_CPPFLAGS"
-
-    AC_SUBST(SVN_INCLUDE)
-    AC_SUBST(SVN_LIB)
-    AC_SUBST(SVN_CPPFLAGS)
-    AM_CONDITIONAL(include_kioslave_svn, test -n "$SVN_SUBDIR")
-])
-
-
-
-dnl  **********
-dnl  check whether we need the vcs compat lib
-dnl  **********
-
-AC_DEFUN([KDEV_CHECK_VCSCOMPAT],
-[
-  AC_MSG_CHECKING(whether to build the vcs compat lib)
-
-  AC_CACHE_VAL(ac_cv_vcs_compat,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-    save_CXXFLAGS="$CXXFLAGS"
-    CXXFLAGS="$CXXFLAGS -I$ac_qt_includes -I$ac_kde_includes"
-
-    AC_TRY_COMPILE([
-      #include <kdeversion.h>
-    ],
-    [
-      #if !KDE_IS_VERSION(3,3,90)
-         KDE_choke me
-      #endif
-    ],
-      ac_cv_vcs_compat=yes,
-      ac_cv_vcs_compat=no
-    )
-    CXXFLAGS="$save_CXXFLAGS"
-    AC_LANG_RESTORE
-   ])
-
-  if test "$ac_cv_vcs_compat" = "yes"; then
-    AC_MSG_RESULT(no)
-  else
-    if test -n "$SVN_SUBDIR"; then
-      VCSCOMPAT=vcscompat
-      AC_MSG_RESULT(yes)
-    else
-      DISABLE_SUBVERSION="yes"
-      AC_MSG_RESULT(no)
-    fi
-  fi
-
-  AM_CONDITIONAL(include_vcscompat, test -n "$VCSCOMPAT")
 ])
 
 

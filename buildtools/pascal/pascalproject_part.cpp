@@ -370,9 +370,6 @@ void PascalProjectPart::slotExecute()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
-/*
-        environstr += KProcess::quote((*it).second);
-*/
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }

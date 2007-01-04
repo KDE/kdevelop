@@ -29,7 +29,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/markinterface.h>
 
-# include <ktexteditor/markinterfaceextension.h>
+#include <ktexteditor/markinterfaceextension.h>
 
 #include <kdebug.h>
 #include <klocale.h>

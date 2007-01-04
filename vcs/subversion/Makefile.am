@@ -1,12 +1,8 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/interfaces/extensions $(all_includes)
 
-if include_vcscompat
-NETACCESS_LIB = $(top_builddir)/vcs/compat/netaccess/libnetaccess.la
-endif
-
 kde_module_LTLIBRARIES = libkdevsubversion.la
 libkdevsubversion_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevsubversion_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/extensions/libkdevextensions.la $(NETACCESS_LIB)
+libkdevsubversion_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/extensions/libkdevextensions.la
 
 libkdevsubversion_la_SOURCES = subversion_core.skel subversion_part.cpp subversion_widget.cpp subversion_core.cpp svn_co.ui subversionprojectwidget.ui subversion_fileinfo.cpp subversion_fileinfo.skel subversiondiff.ui
 

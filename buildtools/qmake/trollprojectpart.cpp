@@ -231,9 +231,6 @@ QString TrollProjectPart::makeEnvironment()
 
         environstr += (*it).first;
         environstr += "=";
-/*
-        environstr += KProcess::quote((*it).second);
-*/
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }

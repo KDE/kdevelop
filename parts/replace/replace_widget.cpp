@@ -301,7 +301,6 @@ bool ReplaceWidget::makeReplacements()
 
                     _listview->makeReplacementsForFile( istream, ostream, fileitem );
 
-                    // pre 3.1.3 katepart clears undo history on setText()
                     ei->setText( obuffer );
                 }
             }
