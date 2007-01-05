@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>460</width>
-            <height>395</height>
+            <height>456</height>
         </rect>
     </property>
     <property name="caption">
@@ -37,6 +37,14 @@
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>groupBox1</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <property name="title">
                             <string>Editor Context Menu</string>
@@ -83,6 +91,14 @@
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>groupBox3_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <property name="title">
                             <string>Options</string>
@@ -139,6 +155,14 @@
                         <property name="name">
                             <cstring>groupBox3</cstring>
                         </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
                         <property name="title">
                             <string>Paths</string>
                         </property>
@@ -167,6 +191,23 @@
                             </widget>
                         </vbox>
                     </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>31</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </vbox>
             </widget>
             <widget class="QWidget">
