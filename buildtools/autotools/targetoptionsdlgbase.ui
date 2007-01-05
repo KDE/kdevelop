@@ -486,31 +486,21 @@
                         <property name="title">
                             <string>Program Arguments (only valid for executable targets)</string>
                         </property>
-                        <vbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>arguments_label_1</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Run arguments:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>run_arguments_edit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit">
+                            <widget class="KLineEdit" row="0" column="1">
                                 <property name="name">
                                     <cstring>run_arguments_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLabel">
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>debug_arguments_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
                                 <property name="name">
                                     <cstring>arguments_label_2</cstring>
                                 </property>
@@ -525,12 +515,22 @@
                                     <cstring>run_arguments_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit">
+                            <widget class="QLabel" row="0" column="0">
                                 <property name="name">
-                                    <cstring>debug_arguments_edit</cstring>
+                                    <cstring>arguments_label_1</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Run arguments:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>run_arguments_edit</cstring>
                                 </property>
                             </widget>
-                        </vbox>
+                        </grid>
                     </widget>
                     <spacer row="1" column="0">
                         <property name="name">
@@ -609,6 +609,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>okbutton</sender>

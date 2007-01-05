@@ -321,18 +321,39 @@
                             <bool>false</bool>
                         </property>
                         <property name="title">
-                            <string>Program arguments</string>
+                            <string>Arguments</string>
                         </property>
-                        <vbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="KLineEdit">
+                            <widget class="QLabel" row="0" column="0">
                                 <property name="name">
-                                    <cstring>m_editArguments</cstring>
+                                    <cstring>textLabel1_6</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Run arguments</string>
                                 </property>
                             </widget>
-                        </vbox>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_editRunArguments</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_editDebugArguments</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Debug Arguments</string>
+                                </property>
+                            </widget>
+                        </grid>
                     </widget>
                     <spacer>
                         <property name="name">
@@ -2706,7 +2727,13 @@ e</string>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
-        <sender>m_editArguments</sender>
+        <sender>m_editRunArguments</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_editDebugArguments</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>activateApply(const QString&amp;)</slot>
@@ -2879,6 +2906,7 @@ e</string>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>

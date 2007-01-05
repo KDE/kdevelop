@@ -173,8 +173,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
             QString targetname = prjWidget->getCurrentOutputFilename();
-            targetname = targetname.right( targetname.length() - targetname.findRev("/", -1) - 1 );
-            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+targetname, m_editArguments->text() );
+            targetname = targetname.right( targetname.length() - targetname.findRev("/") - 1 );
+            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+targetname, m_editRunArguments->text() );
+            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/debugarguments/"+targetname, m_editDebugArguments->text() );
 
         }
         else if ( radioLibrary->isChecked() )
@@ -665,7 +666,10 @@ void ProjectConfigurationDlg::updateControls()
         {
             checkConsole->setChecked( true );
         }
-        m_editArguments->setText( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+prjWidget->getCurrentOutputFilename(), "" ) );
+        QString targetname = prjWidget->getCurrentOutputFilename();
+        targetname = targetname.right( targetname.length() - targetname.findRev("/") - 1 );
+        m_editRunArguments->setText( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+targetname, "" ) );
+        m_editDebugArguments->setText( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/debugarguments/"+targetname, "" ) );
     }
 
     // Buildmode
