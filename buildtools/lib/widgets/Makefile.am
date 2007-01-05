@@ -7,10 +7,11 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
 
 lib_LTLIBRARIES = libkdevbuildtoolswidgets.la
 
-libkdevbuildtoolswidgets_la_SOURCES = runoptionswidget.cpp runoptionswidgetbase.ui \
-	makeoptionswidget.cpp makeoptionswidgetbase.ui addenvvardlg.cpp subclassesdlgbase.ui \
-	subclassesdlg.cpp environmentvariableswidgetbase.ui environmentvariableswidget.cpp \
-	addfilesdialog.cpp envvartools.cpp removesubprojectdialog.cpp removesubprojectdlgbase.ui
+libkdevbuildtoolswidgets_la_SOURCES = addenvvardlg.cpp addfilesdialog.cpp \
+	environmentdisplaydialog.cpp environmentdisplaydialogbase.ui environmentvariableswidget.cpp \
+	environmentvariableswidgetbase.ui envvartools.cpp makeoptionswidget.cpp makeoptionswidgetbase.ui \
+	removesubprojectdialog.cpp removesubprojectdlgbase.ui runoptionswidget.cpp runoptionswidgetbase.ui \
+	subclassesdlg.cpp subclassesdlgbase.ui
 
 METASOURCES = AUTO
 
@@ -24,3 +25,4 @@ DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kpar
 DOXYGEN_PROJECTNAME = KDevelop Buildtool Widgets Library
 DOXYGEN_DOCDIRPREFIX = kdevbt
 include ../../../Doxyfile.am
+noinst_HEADERS = environmentdisplaydialog.h

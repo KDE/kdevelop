@@ -19,6 +19,7 @@
 */
 
 #include "environmentvariableswidget.h"
+#include "environmentdisplaydialog.h"
 
 #include <qcheckbox.h>
 #include <qlineedit.h>
@@ -114,6 +115,12 @@ void EnvironmentVariablesWidget::accept()
     }
 
     DomUtil::writePairListEntry(m_dom, m_configGroup, "envvar", "name", "value", list);
+}
+
+void EnvironmentVariablesWidget::environmentClicked()
+{
+    EnvironmentDisplayDialog dlg;
+    dlg.exec();
 }
 
 #include "environmentvariableswidget.moc"

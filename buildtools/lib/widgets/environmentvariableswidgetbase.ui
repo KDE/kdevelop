@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>EnvironmentVariablesWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>566</width>
-            <height>399</height>
+            <height>451</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,7 +22,7 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QListView" row="0" column="0" rowspan="4" colspan="1">
+        <widget class="QListView" row="0" column="0" rowspan="6" colspan="1">
             <column>
                 <property name="text">
                     <string>Name</string>
@@ -79,23 +79,6 @@
                 <string>&amp;Remove</string>
             </property>
         </widget>
-        <spacer row="3" column="1">
-            <property name="name">
-                <cstring>Spacer12</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>410</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QPushButton" row="1" column="1">
             <property name="name">
                 <cstring>editvar_button</cstring>
@@ -128,6 +111,51 @@
                 <string>A&amp;dd / Copy</string>
             </property>
         </widget>
+        <spacer row="3" column="1">
+            <property name="name">
+                <cstring>Spacer12</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>60</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="4" column="1">
+            <property name="name">
+                <cstring>environmentButton</cstring>
+            </property>
+            <property name="text">
+                <string>E&amp;nvironment</string>
+            </property>
+            <property name="accel">
+                <string>Alt+N</string>
+            </property>
+        </widget>
+        <spacer row="5" column="1">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>171</height>
+                </size>
+            </property>
+        </spacer>
     </grid>
 </widget>
 <connections>
@@ -149,6 +177,12 @@
         <receiver>EnvironmentVariablesWidgetBase</receiver>
         <slot>editVarClicked()</slot>
     </connection>
+    <connection>
+        <sender>environmentButton</sender>
+        <signal>clicked()</signal>
+        <receiver>EnvironmentVariablesWidgetBase</receiver>
+        <slot>environmentClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>listview</tabstop>
@@ -162,6 +196,7 @@
     <slot>addVarClicked()</slot>
     <slot>removeVarClicked()</slot>
     <slot>editVarClicked()</slot>
+    <slot>environmentClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>

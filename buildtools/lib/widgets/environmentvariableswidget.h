@@ -50,6 +50,7 @@ private:
     virtual void addVarClicked();
     virtual void removeVarClicked();
     virtual void editVarClicked();
+    virtual void environmentClicked();
 
     QDomDocument &m_dom;
     QString m_configGroup;
