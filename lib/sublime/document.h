@@ -43,10 +43,8 @@ public:
 
     virtual QString title() const;
 
-    //@todo adymo: make protected
-    virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
-
 protected:
+    virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
     const QList<View*> &views() const;
 
 private slots:
@@ -54,6 +52,8 @@ private slots:
 
 private:
     struct DocumentPrivate *d;
+
+    friend class View;
 };
 
 }
