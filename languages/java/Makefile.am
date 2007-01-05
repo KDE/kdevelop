@@ -3,7 +3,7 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 # SUBDIRS = templates subclassing_template newclass_templates file_templates
-SUBDIRS = file_templates app_templates debugger doc
+SUBDIRS = file_templates app_templates doc
 
 INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/catalog \
 	-I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/interfaces \
