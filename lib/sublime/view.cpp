@@ -21,27 +21,9 @@
 #include <QWidget>
 
 #include "document.h"
+#include "view_p.h"
 
 namespace Sublime {
-
-// struct ViewPrivate
-
-struct ViewPrivate {
-    ViewPrivate(View *v) :view(v), doc(0), widget(0) {}
-
-    void initializeWidget()
-    {
-        view->connect(widget, SIGNAL(destroyed()), view, SLOT(unsetWidget()));
-    }
-
-    View *view;
-    Document *doc;
-    QWidget *widget;
-};
-
-
-
-// class View
 
 View::View(Document *doc)
     :QObject(doc)
@@ -68,11 +50,6 @@ QWidget *View::widget(QWidget *parent)
         d->initializeWidget();
     }
     return d->widget;
-}
-
-void View::unsetWidget()
-{
-    d->widget = 0;
 }
 
 }

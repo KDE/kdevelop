@@ -16,39 +16,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEVIEW_H
-#define SUBLIMEVIEW_H
+#ifndef SUBLIMEVIEW_P_H
+#define SUBLIMEVIEW_P_H
 
 #include <QObject>
 
-#include <kdevexport.h>
+class QWidget;
 
 namespace Sublime {
 
+class View;
 class Document;
 
-/**
-@short View - the wrapper to the widget that knows about its document
-
-Views are the convenient way to manage a widget. It is specifically designed to be
-light and fast. Use @ref Document::createView() to get the new view for the document
-and call @ref View::widget() to create and get the actual widget.*/
-class SUBLIME_EXPORT View: public QObject {
+class ViewPrivate: public QObject {
     Q_OBJECT
 public:
-    //@todo adymo: make protected or private
-    View(Document *doc);
-    ~View();
+    ViewPrivate(View *v);
 
-    /**@return the document for this view.*/
-    Document *document() const;
-    /**@return widget for this view (creates it if it's not yet created).*/
-    virtual QWidget *widget(QWidget *parent = 0);
+    void initializeWidget();
+
+    Document *doc;
+    QWidget *widget;
+
+private slots:
+    void unsetWidget();
 
 private:
-    //copy is not allowed, create a new view from the document instead
-    View(const View &v);
-    struct ViewPrivate *d;
+    View *view;
 
 };
 

@@ -18,6 +18,7 @@ set(sublime_LIB_SRCS
     switcher.cpp
     tooldocument.cpp
     view.cpp
+    view_p.cpp
 )
 
 # set(sublime_UI
