@@ -17,7 +17,7 @@ libkdevelop_la_SOURCES = dummy.cpp
 
 
 SUBDIRS = util interfaces widgets antlr catalog \
-	cppparser $(COMPAT_SUBDIR) astyle 
+	cppparser astyle 
 
 DOXYGEN_EMPTY = YES
 include ../Doxyfile.am
