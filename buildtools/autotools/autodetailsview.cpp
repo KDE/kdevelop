@@ -384,7 +384,7 @@ void AutoDetailsView::slotExecuteTarget()
 		titem = static_cast <TargetItem*> ( m_listView->selectedItem() );
 
 
-  m_part->executeTarget(m_part->buildDirectory()+m_widget->selectedSubproject()->path.mid(m_part->projectDirectory().length()+1), titem);
+    m_part->executeTarget(m_part->buildDirectory()+"/"+m_widget->selectedSubproject()->path.mid(m_part->projectDirectory().length()+1), titem);
 }
 
 void AutoDetailsView::slotRemoveDetail()
