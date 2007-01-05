@@ -9,4 +9,4 @@ set(example1_SRCS
 
 kde4_automoc(${example1_SRCS})
 kde4_add_executable(example1 ${example1_SRCS})
-target_link_libraries(example1 ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} sublime)
+target_link_libraries(example1 ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} sublime)
