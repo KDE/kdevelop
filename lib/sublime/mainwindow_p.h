@@ -60,7 +60,9 @@ public:
         MainWindowPrivate *d;
     };
 
+    /**Reconstructs the mainwindow according to the current area.*/
     void reconstruct();
+    /**Clears the area leaving mainwindow empty.*/
     void clearArea();
     QMenu *areaSwitcherMenu();
 

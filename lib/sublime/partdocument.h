@@ -27,6 +27,9 @@
 
 namespace Sublime {
 
+/**
+@short Document to represent and manage KParts
+*/
 class SUBLIME_EXPORT PartDocument: public Document {
 public:
     PartDocument(Controller *controller, const KUrl &url);

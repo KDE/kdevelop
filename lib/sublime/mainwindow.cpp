@@ -49,10 +49,7 @@ MainWindow::~MainWindow()
 void MainWindow::setArea(Area *area)
 {
     if (d->area)
-    {
-        emit areaCleared(d->area);
         clearArea();
-    }
     d->area = area;
     d->reconstruct();
     emit areaChanged(area);
@@ -60,6 +57,7 @@ void MainWindow::setArea(Area *area)
 
 void MainWindow::clearArea()
 {
+    emit areaCleared(d->area);
     d->clearArea();
     kDebug() << "area cleared" << endl;
 }

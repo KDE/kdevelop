@@ -32,19 +32,36 @@ class Area;
 class Controller;
 class MainWindowOperator;
 
+/**
+@short Sublime Main Window
+
+The area-enabled mainwindow to show Sublime views and toolviews.
+
+To use, a controller and constructed areas are necessary:
+@code
+MainWindow w(controller);
+controller->showArea(area, &w);
+@endcode
+*/
 class SUBLIME_EXPORT MainWindow: public KParts::MainWindow {
 Q_OBJECT
 public:
+    /**Creates a mainwindow and adds it to the controller.*/
     MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
     ~MainWindow();
 
+    /**@return the menu to switch area within this mainwindow.*/
     QMenu *areaSwitcherMenu();
 
+    /**@return the list of dockwidgets that contain area's toolviews.*/
     QList<QDockWidget*> toolDocks() const;
+    /**@return area which mainwindow currently shows or 0 if no area has been set.*/
     Area *area() const;
 
 signals:
+    /**Emitted before the area is cleared from this mainwindow.*/
     void areaCleared(Sublime::Area*);
+    /**Emitted after the new area has been shown in this mainwindow.*/
     void areaChanged(Sublime::Area*);
 
 private:

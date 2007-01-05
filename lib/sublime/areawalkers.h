@@ -21,6 +21,8 @@
 
 namespace Sublime {
 
+//area walkers implementations
+
 template <typename Operator>
 void Area::walkViews(Operator &op, AreaIndex *index)
 {

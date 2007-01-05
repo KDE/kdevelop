@@ -137,6 +137,7 @@ public:
     int viewCount() const;
     /**@return true if there's a stacked @p view at this index.*/
     bool hasView(View *view) const;
+    /**@return the list of views at this index.*/
     QList<View*> &views() const;
 
 
@@ -148,6 +149,8 @@ private:
     /**Constructor for indices other than root.*/
     AreaIndex(AreaIndex *parent);
     void init();
+
+    //@todo adymo: move methods below to AreaIndexPrivate class where possible
     /**Copies the data from this index to @p target.*/
     void copyTo(AreaIndex *target);
     void setViews(const QList<View*> &views);
@@ -161,6 +164,9 @@ private:
 
 /**
 @short Root Area Index
+
+This is the special index class returned by @ref Area::rootIndex().
+Doesn't provide any additional functionality beyond AreaIndex.
 */
 class SUBLIME_EXPORT RootAreaIndex: public AreaIndex {
 public:

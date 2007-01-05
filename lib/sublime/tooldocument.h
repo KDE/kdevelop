@@ -27,12 +27,18 @@ namespace Sublime {
 
 class ToolDocument;
 
+/**
+@short Factory to create widgets for toolviews
+*/
 class SUBLIME_EXPORT ToolFactory {
 public:
     virtual ~ToolFactory() {}
     virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0) = 0;
 };
 
+/**
+@short Simple factory that just creates a new widget of given type
+*/
 template <class Widget>
 class SimpleToolWidgetFactory: public ToolFactory {
 public:
@@ -42,9 +48,12 @@ public:
     }
 };
 
+/**
+@short Document to represent and manage widgets as toolviews
+*/
 class SUBLIME_EXPORT ToolDocument: public Document {
 public:
-    /**Initialized tool document with given @p factory. Document takes
+    /**Initializes tool document with given @p factory. Document takes
     ownership over the factory and deletes it together with itself*/
     ToolDocument(Controller *controller, ToolFactory *factory);
     ~ToolDocument();

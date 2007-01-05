@@ -32,27 +32,46 @@ namespace Sublime {
 class View;
 class Controller;
 
+/**
+@short Abstract base class for all Sublime documents
+
+Subclass from Document and implement createViewWidget() method
+to return a new widget for a view.
+*/
 class SUBLIME_EXPORT Document: public QObject {
     Q_OBJECT
 public:
+    /**Creates a document and adds it to a @p controller.*/
     Document(Controller *controller);
-    virtual ~Document();
+    ~Document();
 
+    /**@return the new view for this document.
+    @note it will not create a widget, just return a view object.*/
     View *createView();
+
+    /**@return the controller for this document.*/
     Controller *controller() const;
 
+    /**@return the document title*/
     virtual QString title() const;
 
 protected:
+    /**Reimplement this to create and return the new widget to display
+    this document in the view. This method is used by View class when it
+    is asked for its widget.*/
     virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
+
+    /**@return the list of all views in all areas for this document.*/
     const QList<View*> &views() const;
 
 private slots:
+    //@todo adymo: move to DocumentPrivate class
     void removeView();
 
 private:
     struct DocumentPrivate *d;
 
+    //@todo adymo: View needs only createViewWidget method, need to refactor
     friend class View;
 };
 

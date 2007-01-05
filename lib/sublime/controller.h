@@ -33,28 +33,48 @@ class Area;
 class Document;
 class MainWindow;
 
+/**
+@short Sublime controller to manage areas, views, documents and mainwindows
+
+Controller has to exist before any area, document or mainwindow can be created.
+There's no point in having two controllers for one application unless they
+need to show completely different sets of areas.
+*/
 class SUBLIME_EXPORT Controller: public QObject, public MainWindowOperator {
-Q_OBJECT
+    Q_OBJECT
 public:
     Controller(QObject *parent = 0);
     ~Controller();
 
+    /**Shows an @p area in @p mainWindow.*/
     void showArea(Area *area, MainWindow *mainWindow);
 
+    /**@return the list of areas available for use in this controller.
+    This list does not include area clones.*/
     QList<Area*> &areas() const;
+    /**@return the list of documents created in this controller.*/
     QList<Document*> &documents() const;
 
 public slots:
+    //@todo adymo: this should not be a part of public API
+    /**Area can connect to this slot to release itself from its mainwindow.*/
     void areaReleased();
+    /**Releases @p area from its mainwindow.*/
     void areaReleased(Sublime::Area *area);
 
 protected:
-    /**Reimplemented to catch document and area additions and removals.*/
+    /**Reimplemented to catch document and area removals.
+    @todo adymo: refactor to use QObject::destroyed*/
     virtual void childEvent(QChildEvent *ev);
 
 private:
     void init();
+
+    /**Adds an area to the controller, used by Area class.
+    @todo adymo: refactor*/
     void addArea(Area *area);
+    /**Adds a document to the controller, used by Document class.
+    @todo adymo: refactor*/
     void addDocument(Document *document);
 
     struct ControllerPrivate *d;

@@ -30,7 +30,9 @@ class MainWindow;
 and MainWindow::hideArea methods. Just inherit it and use the methods.*/
 class SUBLIME_EXPORT MainWindowOperator {
 protected:
+    /**Sets the area of main window and fills it with views.*/
     void setArea(MainWindow *w, Area *area);
+    /**Unsets the area clearing main window.*/
     void clearArea(MainWindow *w);
 
 };

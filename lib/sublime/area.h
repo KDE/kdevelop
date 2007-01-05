@@ -42,10 +42,21 @@ and provides functionality to add new (tool)views and remove existing.
 Area takes care of all placement/configuration details so that
 in order for @ref MainWindow to show the area it just needs to
 reconstruct itself according to the area's rules.
+
+Usual way of creating an area is:
+@code
+Controller *controller = new Controller();
+... //document creation code here
+Area *area = new Area(controller, "My Area");
+area->addView(document->createView());
+MainWindow *mw = new MainWindow(controller);
+controller->show(area, mw);
+@endcode
 */
 class SUBLIME_EXPORT Area: public QObject {
     Q_OBJECT
 public:
+    /**Creates and area with given @p name and adds it to the @p controller.*/
     Area(Controller *controller, const QString &name);
     Area(const Area &area);
     ~Area();
@@ -68,9 +79,11 @@ public:
     the proper position for the toolview when necessary. If it has no configuration
     for this view, it will use @p defaultPosition.*/
     void addToolView(View *toolView, Position defaultPosition);
-    /**Removes the toolview from the area. Also deletes the toolview*/
+    /**Removes the toolview from the area. Also deletes the toolview.*/
     void removeToolView(View *toolView);
+    /**@return the list of toolviews in the area. No particular sort order is guaranteed.*/
     QList<View*> &toolViews() const;
+    /**@return the current position of @p toolView in the area.*/
     Position toolViewPosition(View *toolView) const;
 
     /**@return the controller for this area.*/
@@ -83,7 +96,7 @@ public:
     method. That method should return true if the walker has to stop at current index
     or false to continue.
 
-    Example (operator to print the indices):
+    Example (operator to print the indices, assumes hypothetical operator <<()):
     @code
     struct MyOperator {
         bool operator()(AreaIndex *index) {

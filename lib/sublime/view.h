@@ -27,25 +27,26 @@ namespace Sublime {
 
 class Document;
 
-/**@short View - the wrapper to the widget that knows about its document
+/**
+@short View - the wrapper to the widget that knows about its document
 
 Views are the convenient way to manage a widget. It is specifically designed to be
-light and fast. Call @ref View::widget to create and get the actual widget.*/
+light and fast. Use @ref Document::createView() to get the new view for the document
+and call @ref View::widget() to create and get the actual widget.*/
 class SUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
+    //@todo adymo: make protected or private
     View(Document *doc);
     ~View();
 
+    /**@return the document for this view.*/
     Document *document() const;
-    /**@return widget for this view (creates it if it's not yet created)*/
+    /**@return widget for this view (creates it if it's not yet created).*/
     virtual QWidget *widget(QWidget *parent = 0);
-    /**@return widget for this view or @p widgetHint reparented to the new parent.
-    Default implementation always uses the @p widgetHint and sets it to be a widget for
-    this view. If the view already has the widget it ignores the hint and just returns the widget.*/
-    virtual QWidget *widget(QWidget *widgetHint, QWidget *parent);
 
 private slots:
+    //@todo adymo: move to ViewPrivate class
     void unsetWidget();
 
 private:

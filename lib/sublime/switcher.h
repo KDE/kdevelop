@@ -25,6 +25,9 @@
 
 namespace Sublime {
 
+/**
+@short Switcher for views inside the one container.
+*/
 class SUBLIME_EXPORT Switcher: public QStatusBar {
 Q_OBJECT
 public:

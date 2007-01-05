@@ -27,16 +27,26 @@ class QStackedLayout;
 
 namespace Sublime {
 
+/**
+@short Container for the widgets.
+
+This container is placed inside mainwindow splitters to show widgets
+for views in the area.
+*/
 class SUBLIME_EXPORT Container: public QWidget {
 Q_OBJECT
 public:
     Container(QWidget *parent = 0);
     ~Container();
 
+    /**Adds the widget to the container.*/
     void addWidget(QWidget *w);
+    /**Removes the widget from the container.*/
     void removeWidget(QWidget *w);
 
+    /**@return the number of widgets in the container.*/
     int count() const;
+    /**@return the widget at given @p index.*/
     QWidget *widget(int index) const;
 
 private:

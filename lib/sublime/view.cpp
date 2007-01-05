@@ -70,17 +70,6 @@ QWidget *View::widget(QWidget *parent)
     return d->widget;
 }
 
-QWidget *View::widget(QWidget *widgetHint, QWidget *parent)
-{
-    if (!d->widget)
-    {
-        d->widget = widgetHint;
-        d->widget->setParent(parent);
-        d->initializeWidget();
-    }
-    return d->widget;
-}
-
 void View::unsetWidget()
 {
     d->widget = 0;

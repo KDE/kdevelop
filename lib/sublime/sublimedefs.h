@@ -21,9 +21,15 @@
 
 #include <QFlags>
 
+/**
+@file sublimedefs.h
+@brief Sublime UI enums and other common definitions
+*/
+
 namespace Sublime {
 
-    enum SplitMode { None, Horizontal, Vertical };
+    /**Positions for toolviews in Sublime UI. To combine them, use
+    Positions class (QFlags based).*/
     enum Position { Left = 1, Right = 2, Top = 4, Bottom = 8, AllPositions = Left|Right|Top|Bottom };
     Q_DECLARE_FLAGS(Positions, Position)
 
