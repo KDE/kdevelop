@@ -1075,7 +1075,7 @@ void AutoProjectPart::slotExecute()
     bool _auto = false;
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
-        if ( DomUtil::readEntry(dom, "/kdevautoproject/run/useglobalprogram", false) ){
+        if ( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) ){
           // A Main Program was specified, build all targets because we don't know which is it
             kdDebug(9020) << "slotExecute: before slotBuild" << endl;
             slotBuild();
