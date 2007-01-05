@@ -158,7 +158,7 @@
                         <string>Alt+A</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>If the program is not up-to-date with the source code, compile it before starting its execution</string>
+                        <string></string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -172,7 +172,7 @@
                         <string>Alt+K</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>If the program is not up-to-date with the source code, compile it before starting its execution</string>
+                        <string></string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
