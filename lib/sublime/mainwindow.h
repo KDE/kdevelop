@@ -41,6 +41,7 @@ public:
     QMenu *areaSwitcherMenu();
 
     QList<QDockWidget*> toolDocks() const;
+    Area *area() const;
 
 signals:
     void areaCleared(Sublime::Area*);

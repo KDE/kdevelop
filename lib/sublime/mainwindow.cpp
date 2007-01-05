@@ -232,6 +232,11 @@ QList<QDockWidget*> MainWindow::toolDocks() const
     return d->docks;
 }
 
+Area *Sublime::MainWindow::area() const
+{
+    return d->area;
+}
+
 }
 
 #include "mainwindow.moc"

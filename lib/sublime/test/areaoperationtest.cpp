@@ -195,10 +195,11 @@ void AreaOperationTest::testMainWindowConstruction()
 
 void AreaOperationTest::checkArea1(MainWindow *mw)
 {
+    Area *area = mw->area();
     //check that all docks have their widgets
     foreach (QDockWidget *dock, mw->toolDocks())
         QVERIFY(dock->widget() != 0);
-    QCOMPARE(mw->toolDocks().count(), m_area1->toolViews().count());
+    QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
@@ -209,7 +210,7 @@ void AreaOperationTest::checkArea1(MainWindow *mw)
     Container *container = central->findChild<Sublime::Container*>();
     QVERIFY(container);
     ViewCounter c;
-    m_area1->walkViews(c, m_area1->rootIndex());
+    area->walkViews(c, area->rootIndex());
     QCOMPARE(container->count(), c.count);
     for (int i = 0; i < container->count(); ++i)
         QVERIFY(container->widget(i) != 0);
@@ -217,10 +218,11 @@ void AreaOperationTest::checkArea1(MainWindow *mw)
 
 void AreaOperationTest::checkArea2(MainWindow *mw)
 {
+    Area *area = mw->area();
     //check that all docks have their widgets
     foreach (QDockWidget *dock, mw->toolDocks())
         QVERIFY(dock->widget() != 0);
-    QCOMPARE(mw->toolDocks().count(), m_area2->toolViews().count());
+    QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
@@ -240,7 +242,7 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
     }
 
     ViewCounter c;
-    m_area2->walkViews(c, m_area2->rootIndex());
+    area->walkViews(c, area->rootIndex());
     QCOMPARE(widgetCount, c.count);
 
     //check that we have 7 splitters: 2 vertical and 1 horizontal, rest is not splitted
@@ -264,6 +266,23 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
 
 void AreaOperationTest::testAreaCloning()
 {
+    //show m_area1 in MainWindow1
+    MainWindow mw1(m_controller);
+    m_controller->showArea(m_area1, &mw1);
+    checkArea1(&mw1);
+
+    //now try to show the same area in MainWindow2 and check that we get a clone
+    MainWindow mw2(m_controller);
+    m_controller->showArea(m_area1, &mw2);
+
+    //two mainwindows have different areas
+    QVERIFY(mw1.area() != mw2.area());
+    //the area for the second mainwindow is a clone
+    QVERIFY(mw2.area()->objectName().contains("copy"));
+
+    //check mainwindow layouts - original and copy
+    checkArea1(&mw1);
+    checkArea1(&mw2);
 }
 
 void AreaOperationTest::testAreaSwitchingInSameMainwindow()
