@@ -51,7 +51,7 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   formatTextAction->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting functionality using <b>astyle</b> library. "
                              "Also available in <b>New Class</b> and <b>Subclassing</b> wizards."));
 
-  formatFileAction = new KAction(i18n("&Format files"), 0, this, SLOT(formatFilesSelect()), actionCollection(), "tools_astyle");
+  formatFileAction = new KAction(i18n("Format files"), 0, this, SLOT(formatFilesSelect()), actionCollection(), "tools_astyle");
   formatFileAction->setEnabled(false);
   formatFileAction->setToolTip(i18n("Format files"));
   formatFileAction->setWhatsThis(i18n("<b>Fomat files</b><p>Formatting functionality using <b>astyle</b> library. "
