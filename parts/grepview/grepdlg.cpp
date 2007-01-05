@@ -162,19 +162,21 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
     dir_layout->addWidget( url_requester, 10 );
 
-	synch_button = new QPushButton(".", this );
-	QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
-	dir_layout->addWidget( synch_button );
+    synch_button = new QPushButton("S&ync", this );
+    synch_button->setPixmap( SmallIcon("dirsynch") );
+    synch_button->setAccel( QKeySequence( "Alt+y") );
+    QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
+    dir_layout->addWidget( synch_button );
 
     QBoxLayout *dir_checks_layout = new QHBoxLayout(5);
     layout->addLayout(dir_checks_layout, 5, 1);
 
-    regexp_box = new QCheckBox(i18n("Regular &Expression"), this);
+    regexp_box = new QCheckBox(i18n("&Regular Expression"), this);
     regexp_box->setChecked(config->readBoolEntry("regexp", false ));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(regexp_box);
 
-    recursive_box = new QCheckBox(i18n("&Recursive"), this);
+    recursive_box = new QCheckBox(i18n("Rec&ursive"), this);
     recursive_box->setChecked(config->readBoolEntry("recursive", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(recursive_box);
@@ -196,7 +198,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 6, 1);
-    search_button = new KPushButton(KGuiItem(i18n("&Search"),"grep"), this);
+    search_button = new KPushButton(KGuiItem(i18n("Sea&rch"),"grep"), this);
     search_button->setDefault(true);
     KPushButton *done_button = new KPushButton(KStdGuiItem::cancel(), this);
     button_layout->addStretch();
