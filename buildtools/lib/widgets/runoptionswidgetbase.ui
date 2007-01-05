@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>625</width>
-            <height>514</height>
+            <width>594</width>
+            <height>517</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,6 +22,14 @@
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>mainProgramGroupBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="title">
                 <string>Main Program</string>
@@ -41,10 +49,13 @@
                         <cstring>notelabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Enabling this will disable subproject/target execution via Execute Project</string>
+                        <string>&lt;b&gt;Note: These options override target specific settings.&lt;/b&gt;</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>For Automake and QMake type projects, the proper way to set these options are per target in the &lt;b&gt;Automake Manager&lt;/b&gt; and &lt;b&gt;QMake Manager&lt;/b&gt;, respectively.</string>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -52,7 +63,7 @@
                         <cstring>mainprogram_label</cstring>
                     </property>
                     <property name="text">
-                        <string>Executa&amp;ble</string>
+                        <string>Executa&amp;ble:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
@@ -68,7 +79,7 @@
                         <cstring>mainprogram_label_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Arg&amp;uments</string>
+                        <string>Run Arg&amp;uments:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
@@ -76,7 +87,26 @@
                 </widget>
                 <widget class="KLineEdit">
                     <property name="name">
-                        <cstring>progargs_edit</cstring>
+                        <cstring>runargs_edit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The command line arguments to pass to the main program</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>mainprogram_label_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Debug Ar&amp;guments:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>debugargs_edit</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>The command line arguments to pass to the main program</string>
@@ -86,15 +116,18 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>env_var_group</cstring>
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="title">
-                <string>Environment &amp;Variables</string>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout3</cstring>
+                <string>Options</string>
             </property>
             <vbox>
                 <property name="name">
@@ -158,10 +191,16 @@
                 </widget>
             </vbox>
         </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>env_var_group</cstring>
+            </property>
+            <property name="title">
+                <string>Environment &amp;Variables</string>
+            </property>
+        </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>mainprogram_edit</sender>
@@ -199,6 +238,7 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

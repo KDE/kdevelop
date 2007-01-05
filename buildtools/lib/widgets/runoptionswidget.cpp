@@ -72,7 +72,8 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
 
     // Read the main program command line arguments and store them in the edit box
 
-    progargs_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
+    runargs_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
+    debugargs_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/globaldebugarguments"));
 
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
     autocompile_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autocompile", false));
@@ -88,7 +89,8 @@ RunOptionsWidget::~RunOptionsWidget()
 void RunOptionsWidget::accept()
 {
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->url());
-    DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", runargs_edit->text());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/run/globaldebugarguments", debugargs_edit->text());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/useglobalprogram", mainProgramGroupBox->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autocompile", autocompile_box->isChecked());
