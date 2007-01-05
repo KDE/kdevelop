@@ -55,11 +55,21 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
         mainprogram_edit->fileDialog()->setURL( KURL::fromPathOrURL(buildDirectory) );
     }else
     {
-      mainprogram_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
+        mainprogram_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
+        mainprogram_edit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry(dom, configGroup + "/run/mainprogram") ) );
     }
 
-    // Read the main program path, store it in a KURL and update it's edit box
-    QString mainProgramPath = DomUtil::readEntry(dom, configGroup + "/run/mainprogram");
+    cwd_edit->completionObject()->setMode(KURLCompletion::DirCompletion);
+    cwd_edit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    if( DomUtil::readEntry(dom, configGroup + "/run/globalcwd").isEmpty())
+    {
+        cwd_edit->setURL( buildDirectory );
+        cwd_edit->fileDialog()->setURL( KURL::fromPathOrURL(buildDirectory) );
+    }else
+    {
+        cwd_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/globalcwd"));
+        cwd_edit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry(dom, configGroup + "/run/globalcwd") ) );
+    }
 
     if( configGroup == "/kdevautoproject" || configGroup == "/kdevtrollproject" )
     {
@@ -91,6 +101,7 @@ void RunOptionsWidget::accept()
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->url());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", runargs_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/globaldebugarguments", debugargs_edit->text());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/run/globalcwd", cwd_edit->url());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/useglobalprogram", mainProgramGroupBox->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/autocompile", autocompile_box->isChecked());

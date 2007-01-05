@@ -332,7 +332,7 @@
                                     <cstring>textLabel1_6</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Run arguments</string>
+                                    <string>Run arguments:</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
@@ -350,7 +350,20 @@
                                     <cstring>textLabel2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Debug Arguments</string>
+                                    <string>Debug Arguments:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>textLabel2_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Working Directory:</string>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="2" column="1">
+                                <property name="name">
+                                    <cstring>m_CWDEdit</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -2908,6 +2921,9 @@ e</string>
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

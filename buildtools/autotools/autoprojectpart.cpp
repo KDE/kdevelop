@@ -346,7 +346,7 @@ QString AutoProjectPart::runDirectory() const
         return defaultRunDirectory("kdevautoproject");
     }else
     {
-        return buildDirectory() + "/" + activeDirectory();
+        return DomUtil::readEntry( dom, "/kdevautoproject/run/cwd/"+m_widget->activeTarget()->name );
     }
 }
 

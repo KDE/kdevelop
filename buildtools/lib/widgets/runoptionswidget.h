@@ -51,8 +51,6 @@ private:
 
     QDomDocument &m_dom;
     QString m_configGroup;
-    KURL m_buildDirectory;
-    KURL m_customRunDirectory;
     EnvironmentVariablesWidget* m_environmentVariablesWidget;
 };
 

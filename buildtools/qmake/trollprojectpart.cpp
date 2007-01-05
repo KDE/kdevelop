@@ -452,15 +452,10 @@ QString TrollProjectPart::runDirectory() const
         return defaultRunDirectory("kdevtrollproject");
     }else
     {
-        QString destpath = m_widget->getCurrentDestDir();
-        if( destpath.isEmpty() )
-        {
-            return m_widget->subprojectDirectory();
-        }else if( QDir::isRelativePath( destpath ) )
-        {
-            return m_widget->subprojectDirectory() + QString( QChar( QDir::separator() ) ) + destpath;
-        }else
-            return destpath;
+        QString name = m_widget->getCurrentOutputFilename();
+        if( name.findRev("/") != -1 )
+            name = name.right( name.length()-name.findRev("/")-1 );
+        return DomUtil::readEntry( dom, "/kdevtrollproject/run/cwd/" + name );
     }
 }
 

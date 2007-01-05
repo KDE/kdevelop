@@ -495,9 +495,32 @@
                                     <cstring>run_arguments_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit" row="1" column="1">
+                            <widget class="QLabel" row="0" column="0">
                                 <property name="name">
-                                    <cstring>debug_arguments_edit</cstring>
+                                    <cstring>arguments_label_1</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Run arguments:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>run_arguments_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="3" column="1">
+                                <property name="name">
+                                    <cstring>m_cwdEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0" rowspan="2" colspan="1">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Working Directory:</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
@@ -515,19 +538,9 @@
                                     <cstring>run_arguments_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="0" column="0">
+                            <widget class="KLineEdit" row="1" column="1" rowspan="2" colspan="1">
                                 <property name="name">
-                                    <cstring>arguments_label_1</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Run arguments:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>run_arguments_edit</cstring>
+                                    <cstring>debug_arguments_edit</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -705,6 +718,9 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

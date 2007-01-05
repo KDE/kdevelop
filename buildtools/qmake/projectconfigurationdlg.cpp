@@ -117,6 +117,8 @@ ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProj
     rccdir_url->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     uidir_url->completionObject()->setMode(KURLCompletion::DirCompletion);
     uidir_url->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    m_CWDEdit->completionObject()->setMode(KURLCompletion::DirCompletion);
+    m_CWDEdit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 }
 
 void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
@@ -173,9 +175,14 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "dll" );
             myProjectItem->setPixmap( 0, SmallIcon( "qmake_app" ) );
             QString targetname = prjWidget->getCurrentOutputFilename();
-            targetname = targetname.right( targetname.length() - targetname.findRev("/") - 1 );
-            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+targetname, m_editRunArguments->text() );
-            DomUtil::writeEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/debugarguments/"+targetname, m_editDebugArguments->text() );
+            if( targetname.findRev("/") != -1 )
+                targetname = targetname.right( targetname.length() - targetname.findRev("/") - 1 );
+            DomUtil::writeEntry( *prjWidget->m_part->projectDom(),
+                                 "/kdevtrollproject/run/runarguments/"+targetname, m_editRunArguments->text() );
+            DomUtil::writeEntry( *prjWidget->m_part->projectDom(),
+                                 "/kdevtrollproject/run/cwd/"+targetname, m_CWDEdit->url() );
+            DomUtil::writeEntry( *prjWidget->m_part->projectDom(),
+                                 "/kdevtrollproject/run/debugarguments/"+targetname, m_editDebugArguments->text() );
 
         }
         else if ( radioLibrary->isChecked() )
@@ -667,8 +674,19 @@ void ProjectConfigurationDlg::updateControls()
             checkConsole->setChecked( true );
         }
         QString targetname = prjWidget->getCurrentOutputFilename();
-        targetname = targetname.right( targetname.length() - targetname.findRev("/") - 1 );
+        if( targetname.findRev("/") != -1 )
+            targetname = targetname.right( targetname.length() - targetname.findRev("/") - 1 );
         m_editRunArguments->setText( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+targetname, "" ) );
+        m_CWDEdit->setURL( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/cwd/"+targetname, "" ) );
+        m_CWDEdit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/cwd/"+targetname, "" ) ) );
+        if( m_CWDEdit->url().isEmpty() )
+        {
+            QString destdir = myProjectItem->m_widget->getCurrentDestDir();
+            if( !destdir.startsWith( "/" ) )
+                destdir = myProjectItem->m_widget->projectDirectory()+"/"+destdir;
+            m_CWDEdit->setURL( destdir.left( destdir.findRev("/") ) );
+            m_CWDEdit->fileDialog()->setURL( KURL::fromPathOrURL( destdir.left( destdir.findRev("/") ) ) );
+        }
         m_editDebugArguments->setText( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/debugarguments/"+targetname, "" ) );
     }
 

@@ -56,6 +56,10 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     insidelib_listview->setSorting(-1);
     outsidelib_listview->setSorting(-1);
 
+
+    m_cwdEdit->completionObject()->setMode(KURLCompletion::DirCompletion);
+    m_cwdEdit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+
     // Insert all convenience libraries as possible linked libraries
     QStringList l = widget->allLibraries();
     QStringList::ConstIterator it;
@@ -140,6 +144,15 @@ void TargetOptionsDialog::readConfig()
     if (target->primary == "PROGRAMS")
     {
         run_arguments_edit->setText(DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name));
+        if( DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/cwd/" + target->name).isEmpty() )
+        {
+            m_cwdEdit->setURL( m_widget->m_part->buildDirectory()+"/"+m_widget->activeDirectory() );
+            m_cwdEdit->fileDialog()->setURL( KURL::fromPathOrURL( m_widget->m_part->buildDirectory()+"/"+m_widget->activeDirectory() ) );
+        }else
+        {
+            m_cwdEdit->setURL( DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/cwd/" + target->name) );
+            m_cwdEdit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/cwd/" + target->name) ) );
+        }
         debug_arguments_edit->setText(DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/debugarguments/" + target->name));
     }
 }
@@ -213,6 +226,7 @@ void TargetOptionsDialog::storeConfig()
     {
         DomUtil::writeEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name, run_arguments_edit->text());
         DomUtil::writeEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/debugarguments/" + target->name, debug_arguments_edit->text());
+        DomUtil::writeEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/cwd/" + target->name, m_cwdEdit->url());
     }
 }
 

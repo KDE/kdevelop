@@ -19,7 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>mainProgramGroupBox</cstring>
             </property>
@@ -66,25 +66,6 @@
                         <string>The command line arguments to pass to the main program</string>
                     </property>
                 </widget>
-                <widget class="KLineEdit" row="3" column="1">
-                    <property name="name">
-                        <cstring>debugargs_edit</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The command line arguments to pass to the main program</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>mainprogram_label_3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Debug Ar&amp;guments:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="2" column="0">
                     <property name="name">
                         <cstring>mainprogram_label_2</cstring>
@@ -110,6 +91,44 @@
                 <widget class="KURLRequester" row="1" column="1">
                     <property name="name">
                         <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>mainprogram_label_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Debug Ar&amp;guments:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="3" column="1">
+                    <property name="name">
+                        <cstring>debugargs_edit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The command line arguments to pass to the main program</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>mainprogram_label_3_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Working Directory:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="4" column="1">
+                    <property name="name">
+                        <cstring>cwd_edit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The command line arguments to pass to the main program</string>
                     </property>
                 </widget>
             </grid>
@@ -201,6 +220,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>mainprogram_edit</sender>
@@ -236,6 +257,9 @@
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>

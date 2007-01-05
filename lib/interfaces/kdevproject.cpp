@@ -43,9 +43,9 @@ KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(buildFileMap()) );
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(buildFileMap()) );
 
-    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotAddFilesToFileMap(const QStringList& )) ); 
-    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotRemoveFilesFromFileMap(const QStringList& )) ); 
-    
+    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotAddFilesToFileMap(const QStringList& )) );
+    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotRemoveFilesFromFileMap(const QStringList& )) );
+
     d->m_timer = new QTimer(this);
     connect(d->m_timer, SIGNAL(timeout()), this, SLOT(slotBuildFileMap()));
     d->m_iface = new KDevProjectIface(this);
@@ -103,7 +103,7 @@ void KDevProject::slotBuildFileMap()
     {
 	QFileInfo fileInfo( projectDirectory() + "/" + *it );
 	d->m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
-	
+
         if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
         {
             d->m_symlinkList << *it;
@@ -123,12 +123,7 @@ QStringList KDevProject::symlinkProjectFiles( )
 
 QString KDevProject::defaultRunDirectory(const QString& projectPluginName) const
 {
-    QDomDocument &dom = *projectDom();
-
-    QString DomMainProgram = DomUtil::readEntry(dom, "/" + projectPluginName + "/run/mainprogram");
-    int pos = DomMainProgram.findRev('/');
-
-    return DomMainProgram.left(pos);
+    return DomUtil::readEntry(*projectDom(), "/" + projectPluginName + "/run/globalcwd");
 }
 
 void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
@@ -138,7 +133,7 @@ void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
 	{
 		QFileInfo fileInfo( projectDirectory() + "/" + *it );
 		d->m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
-		
+
 		if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
 		{
 			d->m_symlinkList << *it;
@@ -155,7 +150,7 @@ void KDevProject::slotRemoveFilesFromFileMap( const QStringList & fileList )
 	{
 		QFileInfo fileInfo( projectDirectory() + "/" + *it );
 		d->m_absToRel.remove( URLUtil::canonicalPath(fileInfo.absFilePath()) );
-		
+
 		d->m_symlinkList.remove( *it );
 
 		++it;
