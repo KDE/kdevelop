@@ -133,10 +133,7 @@ void AreaOperationTest::testAreaConstruction()
     AreaViewsPrinter viewsPrinter1;
     m_area1->walkViews(viewsPrinter1, m_area1->rootIndex());
     QCOMPARE(viewsPrinter1.result, QString("\n\
-view1.1.1\n\
-view1.2.1\n\
-view1.2.2\n\
-view1.3.1\n\
+[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n\
 "));
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
@@ -150,11 +147,13 @@ toolview1.2.2\n\
     AreaViewsPrinter viewsPrinter2;
     m_area2->walkViews(viewsPrinter2, m_area2->rootIndex());
     QCOMPARE(viewsPrinter2.result, QString("\n\
-view2.1.1\n\
-view2.1.2\n\
-view2.4.1\n\
-view2.2.1\n\
-view2.3.1\n\
+[ vertical splitter]\n\
+    [ vertical splitter]\n\
+        [ view2.1.1 view2.1.2 ]\n\
+        [ view2.4.1 ]\n\
+    [ horizontal splitter]\n\
+        [ view2.2.1 ]\n\
+        [ view2.3.1 ]\n\
 "));
     AreaToolViewsPrinter toolViewsPrinter2;
     m_area2->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);

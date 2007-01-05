@@ -23,6 +23,8 @@
 
 using namespace Sublime;
 
+// class AreaViewsPrinter
+
 AreaViewsPrinter::AreaViewsPrinter()
 {
     result = "\n";
@@ -30,10 +32,37 @@ AreaViewsPrinter::AreaViewsPrinter()
 
 bool AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
 {
-    foreach (View *view, index->views())
-        result += view->objectName() + "\n";
+    result += printIndentation(index) + "[ ";
+    if (index->views().isEmpty())
+        result += printOrientation(index->orientation());
+    else
+    {
+        foreach (View *view, index->views())
+            result += view->objectName() + " ";
+    }
+    result += "]\n";
     return false;
 }
+
+QString AreaViewsPrinter::printIndentation(Sublime::AreaIndex *index) const
+{
+    QString i = "";
+    while (index = index->parent())
+        i += "    ";
+    return i;
+}
+
+QString AreaViewsPrinter::printOrientation(Qt::Orientation o) const
+{
+    if (o == Qt::Vertical)
+        return "vertical splitter";
+    else
+        return "horizontal splitter";
+}
+
+
+
+// struct AreaToolViewsPrinter
 
 AreaToolViewsPrinter::AreaToolViewsPrinter()
 {

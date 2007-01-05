@@ -30,10 +30,15 @@ namespace Sublime {
 //those two classes will pretty-print area views and toolviews
 //make sure you provided object names for your views (with setObjectName())
 
-struct AreaViewsPrinter {
+class AreaViewsPrinter {
+public:
     AreaViewsPrinter();
     bool operator()(Sublime::AreaIndex *index);
     QString result;
+
+private:
+    QString printIndentation(Sublime::AreaIndex *index) const;
+    QString printOrientation(Qt::Orientation o) const;
 };
 
 struct AreaToolViewsPrinter {
