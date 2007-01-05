@@ -40,6 +40,7 @@ public:
     /**The location of the main source file*/
     virtual QString buildDirectory() const;
     virtual QString runDirectory() const;
+    virtual QString debugArguments() const;
     virtual QString runArguments() const;
     virtual DomUtil::PairList runEnvironmentVars() const;
 

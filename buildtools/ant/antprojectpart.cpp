@@ -270,6 +270,11 @@ QString AntProjectPart::mainProgram() const
 }
 
 
+QString AntProjectPart::debugArguments() const
+{
+    return QString("");
+}
+
 /** Retuns a QString with the run command line arguments */
 QString AntProjectPart::runArguments() const
 {

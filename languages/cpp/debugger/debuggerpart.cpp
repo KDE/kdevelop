@@ -635,7 +635,7 @@ bool DebuggerPart::startDebugger()
         run_envvars   = project()->runEnvironmentVars();
         run_directory = project()->runDirectory();
         program       = project()->mainProgram();
-        run_arguments = DomUtil::readEntry(*projectDom(), "/kdevdebugger/general/programargs");
+        run_arguments = project()->debugArguments();
     }
 
     QString shell = DomUtil::readEntry(*projectDom(), "/kdevdebugger/general/dbgshell");

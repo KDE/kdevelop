@@ -472,6 +472,13 @@ QString CustomProjectPart::mainProgram() const
     return QString();
 }
 
+/** Retuns a QString with the debug command line arguments */
+QString CustomProjectPart::debugArguments() const
+{
+    return DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/globaldebugarguments");
+}
+
+
 /** Retuns a QString with the run command line arguments */
 QString CustomProjectPart::runArguments() const
 {

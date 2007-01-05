@@ -225,6 +225,12 @@ QString AdaProjectPart::mainProgram() const
     return QString();
 }
 
+/** Retuns a QString with the run command line arguments */
+QString AdaProjectPart::debugArguments() const
+{
+    return DomUtil::readEntry(*projectDom(), "/kdevadaproject/run/globaldebugarguments");
+}
+
 
 /** Retuns a QString with the run command line arguments */
 QString AdaProjectPart::runArguments() const

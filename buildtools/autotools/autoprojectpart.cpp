@@ -458,6 +458,21 @@ QString AutoProjectPart::mainProgram() const
 }
 
 
+/** Retuns a QString with the debug command line arguments */
+QString AutoProjectPart::debugArguments() const
+{
+    QDomDocument &dom = *projectDom();
+
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) )
+    {
+        return DomUtil::readEntry(dom, "/kdevautoproject/run/globaldebugarguments");
+    }else
+    {
+        return DomUtil::readEntry(dom, "/kdevautoproject/run/debugarguments/" + m_widget->activeTarget()->name);
+    }
+}
+
+
 /** Retuns a QString with the run command line arguments */
 QString AutoProjectPart::runArguments() const
 {
@@ -465,13 +480,7 @@ QString AutoProjectPart::runArguments() const
 
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) )
     {
-        QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
-        QString DomProgramArguments = DomUtil::readEntry(dom, "/kdevautoproject/run/programargs");
-
-        if ( DomMainProgram.isEmpty() && DomProgramArguments.isEmpty() )
-            return QString::null;
-        else
-            return DomProgramArguments;
+        return DomUtil::readEntry(dom, "/kdevautoproject/run/programargs");
     }else
     {
         return DomUtil::readEntry(dom, "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name);

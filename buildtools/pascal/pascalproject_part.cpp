@@ -232,6 +232,12 @@ QString PascalProjectPart::mainProgram() const
     return QString();
 }
 
+/** Retuns a QString with the debug command line arguments */
+QString PascalProjectPart::debugArguments() const
+{
+    return DomUtil::readEntry(*projectDom(), "/kdevpascalproject/run/globaldebugarguments");
+}
+
 
 /** Retuns a QString with the run command line arguments */
 QString PascalProjectPart::runArguments() const

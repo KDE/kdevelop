@@ -518,6 +518,17 @@ QString TrollProjectPart::mainProgram() const
     }
 }
 
+QString TrollProjectPart::debugArguments() const
+{
+    if( DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/useglobalprogram", true ) )
+    {
+        return DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/globaldebugarguments");
+    }else
+    {
+        return DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/debugarguments/"+m_widget->getCurrentOutputFilename() );
+    }
+}
+
 /** Retuns a QString with the run command line arguments */
 QString TrollProjectPart::runArguments() const
 {

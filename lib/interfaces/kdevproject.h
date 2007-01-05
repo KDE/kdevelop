@@ -104,7 +104,10 @@ public:
     
     /**The command line arguments that the mainProgram() should be run with.*/
     virtual QString runArguments() const = 0;
-    
+ 
+    /**The command line arguments that the mainProgram() should be debugged with.*/
+    virtual QString debugArguments() const = 0;
+
     /**Returns the path (relative to the project directory)
     of the active directory. All newly automatically generated 
     classes and files are usually added here.*/

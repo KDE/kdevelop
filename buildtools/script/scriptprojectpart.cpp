@@ -249,6 +249,12 @@ QString ScriptProjectPart::mainProgram() const
     return QString();
 }
 
+/** Retuns a QString with the debug command line arguments */
+QString ScriptProjectPart::debugArguments() const
+{
+    return DomUtil::readEntry(*projectDom(), "/kdevscriptproject/run/globaldebugarguments");
+}
+
 
 /** Retuns a QString with the run command line arguments */
 QString ScriptProjectPart::runArguments() const

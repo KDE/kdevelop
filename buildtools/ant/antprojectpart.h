@@ -64,6 +64,7 @@ protected:
   virtual QString buildDirectory() const;
   virtual QString runDirectory() const;
   virtual QString runArguments() const;
+  virtual QString debugArguments() const;
   virtual DomUtil::PairList runEnvironmentVars() const;
 
   virtual void addFile(const QString &fileName);
