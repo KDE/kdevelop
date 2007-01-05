@@ -94,7 +94,7 @@ void AreaOperationTest::init()
     view221->setObjectName("view2.2.1");
     m_area2->addView(view221, view211, Qt::Vertical);
     View *view231 = doc3->createView();
-    view->setObjectName("view2.3.1");
+    view231->setObjectName("view2.3.1");
     m_area2->addView(view231, view221, Qt::Horizontal);
     View *view241 = doc4->createView();
     view241->setObjectName("view2.4.1");
@@ -152,9 +152,9 @@ toolview1.2.2\n\
     QCOMPARE(viewsPrinter2.result, QString("\n\
 view2.1.1\n\
 view2.1.2\n\
+view2.4.1\n\
 view2.2.1\n\
 view2.3.1\n\
-view2.4.1\n\
 "));
     AreaToolViewsPrinter toolViewsPrinter2;
     m_area2->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
