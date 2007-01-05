@@ -1,6 +1,5 @@
 
 add_subdirectory(profiles)
-add_subdirectory(ideal)
 # add_subdirectory(profileengine)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/project
