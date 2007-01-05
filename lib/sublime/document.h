@@ -25,6 +25,8 @@
 
 #include <kdevexport.h>
 
+#include "viewcreator.h"
+
 class QWidget;
 
 namespace Sublime {
@@ -38,7 +40,7 @@ class Controller;
 Subclass from Document and implement createViewWidget() method
 to return a new widget for a view.
 */
-class SUBLIME_EXPORT Document: public QObject {
+class SUBLIME_EXPORT Document: public QObject, public ViewCreator {
     Q_OBJECT
 public:
     /**Creates a document and adds it to a @p controller.*/
@@ -64,15 +66,12 @@ protected:
     /**@return the list of all views in all areas for this document.*/
     const QList<View*> &views() const;
 
-private slots:
-    //@todo adymo: move to DocumentPrivate class
-    void removeView();
-
 private:
+    Q_PRIVATE_SLOT(d, void removeView(QObject*));
+
     struct DocumentPrivate *d;
 
-    //@todo adymo: View needs only createViewWidget method, need to refactor
-    friend class View;
+    friend class ViewWidgetCreator;
 };
 
 }

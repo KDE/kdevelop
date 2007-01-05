@@ -26,7 +26,7 @@ namespace Sublime {
 class Area;
 class MainWindow;
 
-/**Proxy class to give descedants access to MainWindow::setArea
+/**Proxy class to give descendants access to MainWindow::setArea
 and MainWindow::hideArea methods. Just inherit it and use the methods.*/
 class SUBLIME_EXPORT MainWindowOperator {
 protected:

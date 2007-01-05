@@ -16,68 +16,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "document.h"
+#include "viewwidgetcreator.h"
 
-#include "view.h"
-#include "controller.h"
+#include "document.h"
 
 namespace Sublime {
 
-// struct DocumentPrivate
-
-struct DocumentPrivate {
-    void removeView(QObject *obj)
-    {
-        View *view = qobject_cast<Sublime::View*>(obj);
-        views.removeAll(view);
-    }
-
-    Controller *controller;
-    QList<View*> views;
-};
-
-
-
-//class Document
-
-Document::Document(Controller *controller)
-    :QObject(controller), ViewCreator()
+QWidget *ViewWidgetCreator::createViewWidget(Document *doc, QWidget *parent)
 {
-    d = new DocumentPrivate();
-    d->controller = controller;
-    d->controller->addDocument(this);
-}
-
-Document::~Document()
-{
-    delete d;
-}
-
-Controller *Document::controller() const
-{
-    return d->controller;
-}
-
-View *Document::createView()
-{
-    View *view = newView(this);
-    connect(view, SIGNAL(destroyed(QObject*)), this, SLOT(removeView(QObject*)));
-    d->views.append(view);
-    return view;
-}
-
-const QList<View*> &Document::views() const
-{
-    return d->views;
-}
-
-QString Document::title() const
-{
-    return "Document";
+    return doc->createViewWidget(parent);
 }
 
 }
-
-#include "document.moc"
-
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

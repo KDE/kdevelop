@@ -44,12 +44,7 @@ Document *View::document() const
 
 QWidget *View::widget(QWidget *parent)
 {
-    if (!d->widget)
-    {
-        d->widget = d->doc->createViewWidget(parent);
-        d->initializeWidget();
-    }
-    return d->widget;
+    return d->initializeWidget(parent);
 }
 
 }

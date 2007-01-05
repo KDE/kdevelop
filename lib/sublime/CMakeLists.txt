@@ -19,6 +19,8 @@ set(sublime_LIB_SRCS
     tooldocument.cpp
     view.cpp
     view_p.cpp
+    viewcreator.cpp
+    viewwidgetcreator.cpp
 )
 
 # set(sublime_UI

@@ -20,6 +20,9 @@
 
 #include <QWidget>
 
+#include "view.h"
+#include "document.h"
+
 namespace Sublime {
 
 ViewPrivate::ViewPrivate(View * v)
@@ -27,9 +30,14 @@ ViewPrivate::ViewPrivate(View * v)
 {
 }
 
-void ViewPrivate::initializeWidget()
+QWidget *ViewPrivate::initializeWidget(QWidget *parent)
 {
-    connect(widget, SIGNAL(destroyed()), this, SLOT(unsetWidget()));
+    if (!widget)
+    {
+        widget = createViewWidget(doc, parent);
+        view->connect(widget, SIGNAL(destroyed()), view, SLOT(unsetWidget()));
+    }
+    return widget;
 }
 
 void ViewPrivate::unsetWidget()
@@ -38,5 +46,3 @@ void ViewPrivate::unsetWidget()
 }
 
 }
-
-#include "view_p.moc"

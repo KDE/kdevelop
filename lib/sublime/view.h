@@ -32,12 +32,12 @@ class Document;
 
 Views are the convenient way to manage a widget. It is specifically designed to be
 light and fast. Use @ref Document::createView() to get the new view for the document
-and call @ref View::widget() to create and get the actual widget.*/
+and call @ref View::widget() to create and get the actual widget.
+
+It is not possible to create a view by hand. You need either subclass it or use a Document.*/
 class SUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
-    //@todo adymo: make protected or private
-    View(Document *doc);
     ~View();
 
     /**@return the document for this view.*/
@@ -45,11 +45,17 @@ public:
     /**@return widget for this view (creates it if it's not yet created).*/
     virtual QWidget *widget(QWidget *parent = 0);
 
+protected:
+    View(Document *doc);
+
 private:
+    Q_PRIVATE_SLOT(d, void unsetWidget())
+
     //copy is not allowed, create a new view from the document instead
     View(const View &v);
     struct ViewPrivate *d;
 
+    friend class ViewCreator;
 };
 
 }

@@ -19,7 +19,7 @@
 #ifndef SUBLIMEVIEW_P_H
 #define SUBLIMEVIEW_P_H
 
-#include <QObject>
+#include "viewwidgetcreator.h"
 
 class QWidget;
 
@@ -28,17 +28,15 @@ namespace Sublime {
 class View;
 class Document;
 
-class ViewPrivate: public QObject {
-    Q_OBJECT
+class ViewPrivate: public ViewWidgetCreator {
 public:
     ViewPrivate(View *v);
 
-    void initializeWidget();
+    QWidget *initializeWidget(QWidget *parent);
 
     Document *doc;
     QWidget *widget;
 
-private slots:
     void unsetWidget();
 
 private:

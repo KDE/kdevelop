@@ -16,68 +16,23 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "document.h"
+#ifndef SUBLIMEVIEWCREATOR_H
+#define SUBLIMEVIEWCREATOR_H
 
-#include "view.h"
-#include "controller.h"
+#include <kdevexport.h>
 
 namespace Sublime {
 
-// struct DocumentPrivate
+class View;
+class Document;
 
-struct DocumentPrivate {
-    void removeView(QObject *obj)
-    {
-        View *view = qobject_cast<Sublime::View*>(obj);
-        views.removeAll(view);
-    }
-
-    Controller *controller;
-    QList<View*> views;
+/**Proxy class to allow descendants to create instances of View class.*/
+class SUBLIME_EXPORT ViewCreator {
+protected:
+    /**Creates and returns the new view.*/
+    View *newView(Document *doc);
 };
 
-
-
-//class Document
-
-Document::Document(Controller *controller)
-    :QObject(controller), ViewCreator()
-{
-    d = new DocumentPrivate();
-    d->controller = controller;
-    d->controller->addDocument(this);
 }
 
-Document::~Document()
-{
-    delete d;
-}
-
-Controller *Document::controller() const
-{
-    return d->controller;
-}
-
-View *Document::createView()
-{
-    View *view = newView(this);
-    connect(view, SIGNAL(destroyed(QObject*)), this, SLOT(removeView(QObject*)));
-    d->views.append(view);
-    return view;
-}
-
-const QList<View*> &Document::views() const
-{
-    return d->views;
-}
-
-QString Document::title() const
-{
-    return "Document";
-}
-
-}
-
-#include "document.moc"
-
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+#endif
