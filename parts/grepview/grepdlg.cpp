@@ -162,8 +162,11 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
     dir_layout->addWidget( url_requester, 10 );
 
-    synch_button = new QPushButton("S&ync", this );
-    synch_button->setPixmap( SmallIcon("dirsynch") );
+    synch_button = new KPushButton( this );
+    QIconSet set = SmallIconSet( "dirsynch" );
+    QPixmap pix = set.pixmap( QIconSet::Small, QIconSet::Normal );
+    synch_button->setFixedSize( pix.width()+8, pix.height()+8 );
+    synch_button->setIconSet( set );
     synch_button->setAccel( QKeySequence( "Alt+y") );
     QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
     dir_layout->addWidget( synch_button );
