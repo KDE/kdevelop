@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>625</width>
-            <height>614</height>
+            <height>514</height>
         </rect>
     </property>
     <property name="caption">
@@ -27,7 +27,7 @@
                 <string>Main Program</string>
             </property>
             <property name="checkable">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
             <property name="checked">
                 <bool>false</bool>
@@ -49,100 +49,7 @@
                         <cstring>browseMainButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Browse...</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>mainProgram_relativeness_label</cstring>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="4">
-                    <property name="name">
-                        <cstring>layout2</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>buildDirectory_radio</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Run from the &amp;BUILD directory:</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>-1</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>The build directory depends on the currenty selected configuration (in Configure Options page)</string>
-                            </property>
-                        </widget>
-                        <widget class="KSqueezedTextLabel">
-                            <property name="name">
-                                <cstring>buildDirectory_label</cstring>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>buildDirectory_radio</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QRadioButton" row="7" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>customDirectory_radio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>C&amp;ustom directory:</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>2</number>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="7" column="3">
-                    <property name="name">
-                        <cstring>browseCustomButton</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="text">
-                        <string>Browse...</string>
-                    </property>
-                </widget>
-                <widget class="KLineEdit" row="7" column="2">
-                    <property name="name">
-                        <cstring>customRunDirectory_edit</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="readOnly">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>A relative to the project root directory path or an absolute path</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="5" column="0" rowspan="1" colspan="4">
-                    <property name="name">
-                        <cstring>executableDirectory_radio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Ru&amp;n from the directory where the executable is</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>0</number>
+                        <string>&amp;Browse...</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
@@ -161,7 +68,7 @@
                         <cstring>mainprogram_label</cstring>
                     </property>
                     <property name="text">
-                        <string>Executable</string>
+                        <string>Exe&amp;cutable</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
@@ -172,7 +79,7 @@
                         <cstring>mainprogram_label_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Arguments</string>
+                        <string>Arg&amp;uments</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
@@ -274,12 +181,6 @@
         <slot>directoryRadioChanged()</slot>
     </connection>
     <connection>
-        <sender>browseCustomButton</sender>
-        <signal>clicked()</signal>
-        <receiver>run_options_widget</receiver>
-        <slot>browseCustomDirectory()</slot>
-    </connection>
-    <connection>
         <sender>mainprogram_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>run_options_widget</receiver>
@@ -287,11 +188,6 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>executableDirectory_radio</tabstop>
-    <tabstop>buildDirectory_radio</tabstop>
-    <tabstop>customDirectory_radio</tabstop>
-    <tabstop>customRunDirectory_edit</tabstop>
-    <tabstop>browseCustomButton</tabstop>
     <tabstop>startinterminal_box</tabstop>
     <tabstop>autocompile_box</tabstop>
 </tabstops>
@@ -308,8 +204,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>

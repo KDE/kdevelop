@@ -89,14 +89,13 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     else
         mainprogram_edit->setText(URLUtil::relativePath(m_buildDirectory.directory(false, false), m_mainProgramAbsolutePath.path(), false));
 
-    if( configGroup != "/kdevautoproject" && configGroup != "/kdevtrollproject" )
+    if( configGroup == "/kdevautoproject" || configGroup == "/kdevtrollproject" )
     {
-        directoryButtonGroup->setChecked(true);
-        directoryButtonGroup->setCheckable(false);
-        delete notelabel;
+        directoryButtonGroup->setCheckable(true);
+        directoryButtonGroup->setChecked( DomUtil::readBoolEntry(dom, configGroup+"/run/useglobalprogram", false ) );
     }else
     {
-        directoryButtonGroup->setChecked( DomUtil::readBoolEntry(dom, configGroup+"/run/useglobalprogram", false ) );
+        delete notelabel;
     }
 
     // Read the main program command line arguments and store them in the edit box
