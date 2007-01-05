@@ -12,6 +12,7 @@ set(sublime_LIB_SRCS
     controller.cpp
     document.cpp
     mainwindow.cpp
+    mainwindow_p.cpp
     mainwindowoperator.cpp
     partdocument.cpp
     switcher.cpp

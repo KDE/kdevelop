@@ -47,10 +47,6 @@ signals:
     void areaCleared(Sublime::Area*);
     void areaChanged(Sublime::Area*);
 
-private slots:
-    void switchToArea(QAction *action);
-    void updateAreaSwitcher(Sublime::Area *area);
-
 private:
     void init();
 

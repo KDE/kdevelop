@@ -16,71 +16,75 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "mainwindow.h"
+#ifndef SUBLIMEMAINWINDOW_P_H
+#define SUBLIMEMAINWINDOW_P_H
 
-#include <kdebug.h>
+#include <QMap>
+#include <QObject>
 
-#include "area.h"
-#include "controller.h"
-#include "mainwindow_p.h"
+#include "sublimedefs.h"
+
+class QMenu;
+class QAction;
+class QSplitter;
+class QDockWidget;
 
 namespace Sublime {
 
-MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
-    :KParts::MainWindow(0, flags)
-{
-    init();
-    d->controller = controller;
-    connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
-    connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
+class View;
+class Area;
+class Controller;
+class AreaIndex;
+class MainWindow;
+
+class MainWindowPrivate: public QObject {
+    Q_OBJECT
+public:
+    MainWindowPrivate(MainWindow *w);
+
+    /**Use this to create toolviews for an area.*/
+    class ToolViewCreator {
+    public:
+        ToolViewCreator(MainWindowPrivate *_d): d(_d) {}
+        bool operator() (View *view, Sublime::Position position);
+    private:
+        MainWindowPrivate *d;
+    };
+
+    /**Use this to create views for an area.*/
+    class ViewCreator {
+    public:
+        ViewCreator(MainWindowPrivate *_d): d(_d) {}
+        bool operator() (AreaIndex *index);
+    private:
+        MainWindowPrivate *d;
+    };
+
+    void reconstruct();
+    void clearArea();
+    QMenu *areaSwitcherMenu();
+
+    Controller *controller;
+    Area *area;
+    QList<QDockWidget*> docks;
+
+private slots:
+    void switchToArea(QAction *action);
+    void updateAreaSwitcher(Sublime::Area *area);
+
+private:
+    Qt::DockWidgetArea positionToDockArea(Position position);
+
+    MainWindow *m_mainWindow;
+    QMap<AreaIndex*, QSplitter*> m_indexSplitters;
+    QMenu *m_areaSwitcherMenu;
+
+    QMap<Area*, QAction*> m_areaActions;
+    QMap<QAction*, Area*> m_actionAreas;
+};
+
 }
 
-void MainWindow::init()
-{
-    d = new MainWindowPrivate(this);
-}
-
-MainWindow::~MainWindow()
-{
-    kDebug() << "destroying mainwindow" << endl;
-    delete d;
-}
-
-void MainWindow::setArea(Area *area)
-{
-    if (d->area)
-    {
-        emit areaCleared(d->area);
-        clearArea();
-    }
-    d->area = area;
-    d->reconstruct();
-    emit areaChanged(area);
-}
-
-void MainWindow::clearArea()
-{
-    d->clearArea();
-    kDebug() << "area cleared" << endl;
-}
-
-QMenu *MainWindow::areaSwitcherMenu()
-{
-    return d->areaSwitcherMenu();
-}
-
-QList<QDockWidget*> MainWindow::toolDocks() const
-{
-    return d->docks;
-}
-
-Area *Sublime::MainWindow::area() const
-{
-    return d->area;
-}
-
-}
-
-#include "mainwindow.moc"
+#endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
