@@ -154,7 +154,7 @@ void AreaIndex::unsplit(AreaIndex *childToRemove)
 
 void AreaIndex::copyTo(AreaIndex *target)
 {
-    target->setViews(d->views);
+    target->d->views = d->views;
     d->views.clear();
 }
 
@@ -201,11 +201,6 @@ AreaIndex *AreaIndex::second() const
 Qt::Orientation AreaIndex::orientation() const
 {
     return d->orientation;
-}
-
-void AreaIndex::setViews(const QList<View*> &views)
-{
-    d->views = views;
 }
 
 

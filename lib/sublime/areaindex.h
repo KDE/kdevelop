@@ -108,8 +108,6 @@ public:
 
     /**@return the parent index, returns 0 for root index.*/
     AreaIndex *parent() const;
-    //@todo adymo: make private (or so)
-    void setParent(AreaIndex *parent);
 
     /**@return the first child index if there're any.*/
     AreaIndex *first() const;
@@ -150,10 +148,11 @@ private:
     AreaIndex(AreaIndex *parent);
     void init();
 
-    //@todo adymo: move methods below to AreaIndexPrivate class where possible
+    /**Sets the parent for this index.*/
+    void setParent(AreaIndex *parent);
+
     /**Copies the data from this index to @p target.*/
     void copyTo(AreaIndex *target);
-    void setViews(const QList<View*> &views);
     /**Unsplits the index removing the given @p child and moving the contents
     of another child to this index.*/
     void unsplit(AreaIndex *childToRemove);
