@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>594</width>
-            <height>517</height>
+            <width>500</width>
+            <height>506</height>
         </rect>
     </property>
     <property name="caption">
@@ -40,16 +40,16 @@
             <property name="checked">
                 <bool>false</bool>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>notelabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Note: These options override target specific settings.&lt;/b&gt;</string>
+                        <string>Note: These options override target specific settings.</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>
@@ -58,34 +58,7 @@
                         <string>For Automake and QMake type projects, the proper way to set these options are per target in the &lt;b&gt;Automake Manager&lt;/b&gt; and &lt;b&gt;QMake Manager&lt;/b&gt;, respectively.</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>mainprogram_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Executa&amp;ble:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="KURLRequester">
-                    <property name="name">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>mainprogram_label_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Run Arg&amp;uments:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="KLineEdit">
+                <widget class="KLineEdit" row="2" column="1">
                     <property name="name">
                         <cstring>runargs_edit</cstring>
                     </property>
@@ -93,7 +66,15 @@
                         <string>The command line arguments to pass to the main program</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="KLineEdit" row="3" column="1">
+                    <property name="name">
+                        <cstring>debugargs_edit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The command line arguments to pass to the main program</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
                     <property name="name">
                         <cstring>mainprogram_label_3</cstring>
                     </property>
@@ -104,15 +85,34 @@
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="KLineEdit">
+                <widget class="QLabel" row="2" column="0">
                     <property name="name">
-                        <cstring>debugargs_edit</cstring>
+                        <cstring>mainprogram_label_2</cstring>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The command line arguments to pass to the main program</string>
+                    <property name="text">
+                        <string>Run Arg&amp;uments:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-            </vbox>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>mainprogram_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Executa&amp;ble:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="1" column="1">
+                    <property name="name">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
@@ -235,10 +235,10 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>
