@@ -20,8 +20,10 @@
 
 #include <QtTest/QtTest>
 
+#include <QDockWidget>
 #include <QListView>
 #include <QTextEdit>
+#include <QSplitter>
 
 #include <kdebug.h>
 
@@ -32,10 +34,22 @@
 #include <sublime/partdocument.h>
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
+#include <sublime/container.h>
 
+#include "kdevtest.h"
 #include "areaprinter.h"
 
 using namespace Sublime;
+
+struct ViewCounter {
+    ViewCounter(): count(0) {}
+    bool operator()(AreaIndex *index)
+    {
+        count += index->views().count();
+        return false;
+    }
+    int count;
+};
 
 void AreaOperationTest::init()
 {
@@ -165,9 +179,91 @@ toolview2.3.2 [ top ]\n\
 "));
 }
 
+void AreaOperationTest::testMainWindowConstruction()
+{
+    //====== check for m_area1 ======
+    MainWindow mw1(m_controller);
+    m_controller->showArea(m_area1, &mw1);
+    checkArea1(&mw1);
+
+
+    //====== check for m_area2 ======
+    MainWindow mw2(m_controller);
+    m_controller->showArea(m_area2, &mw2);
+    checkArea2(&mw2);
+}
+
+void AreaOperationTest::checkArea1(MainWindow *mw)
+{
+    //check that all docks have their widgets
+    foreach (QDockWidget *dock, mw->toolDocks())
+        QVERIFY(dock->widget() != 0);
+    QCOMPARE(mw->toolDocks().count(), m_area1->toolViews().count());
+
+    //check that mainwindow have all splitters and widgets in splitters inside centralWidget
+    QWidget *central = mw->centralWidget();
+    QVERIFY(central != 0);
+    QVERIFY(central->inherits("QSplitter"));
+
+    //check that we have a container and 4 views inside
+    Container *container = central->findChild<Sublime::Container*>();
+    QVERIFY(container);
+    ViewCounter c;
+    m_area1->walkViews(c, m_area1->rootIndex());
+    QCOMPARE(container->count(), c.count);
+    for (int i = 0; i < container->count(); ++i)
+        QVERIFY(container->widget(i) != 0);
+}
+
+void AreaOperationTest::checkArea2(MainWindow *mw)
+{
+    //check that all docks have their widgets
+    foreach (QDockWidget *dock, mw->toolDocks())
+        QVERIFY(dock->widget() != 0);
+    QCOMPARE(mw->toolDocks().count(), m_area2->toolViews().count());
+
+    //check that mainwindow have all splitters and widgets in splitters inside centralWidget
+    QWidget *central = mw->centralWidget();
+    QVERIFY(central != 0);
+    QVERIFY(central->inherits("QSplitter"));
+
+    //check that we have 4 properly initialized containers
+    QList<Container*> containers = central->findChildren<Sublime::Container*>();
+    QCOMPARE(containers.count(), 4);
+
+    int widgetCount = 0;
+    foreach (Container *c, containers)
+    {
+        for (int i = 0; i < c->count(); ++i)
+            QVERIFY(c->widget(i) != 0);
+        widgetCount += c->count();
+    }
+
+    ViewCounter c;
+    m_area2->walkViews(c, m_area2->rootIndex());
+    QCOMPARE(widgetCount, c.count);
+
+    //check that we have 7 splitters: 2 vertical and 1 horizontal, rest is not splitted
+    QList<QSplitter*> splitters = central->findChildren<QSplitter*>();
+    splitters.append(qobject_cast<QSplitter*>(central));
+    QCOMPARE(splitters.count(), 6+1); //6 child splitters + 1 central itself = 7 splitters
+    int verticalSplitterCount = 0;
+    int horizontalSplitterCount = 0;
+    foreach (QSplitter *s, splitters)
+    {
+        if (s->count() == 1)
+            continue;   //this is a splitter with container inside, its orientation is not relevant
+        if (s->orientation() == Qt::Vertical)
+            verticalSplitterCount += 1;
+        else
+            horizontalSplitterCount += 1;
+    }
+    QCOMPARE(verticalSplitterCount, 2);
+    QCOMPARE(horizontalSplitterCount, 1);
+}
+
 void AreaOperationTest::testAreaCloning()
 {
-
 }
 
 void AreaOperationTest::testAreaSwitchingInSameMainwindow()
@@ -176,7 +272,7 @@ void AreaOperationTest::testAreaSwitchingInSameMainwindow()
 }
 
 
-QTEST_MAIN(AreaOperationTest)
+KDEVTEST_MAIN(AreaOperationTest)
 #include "areaoperationtest.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

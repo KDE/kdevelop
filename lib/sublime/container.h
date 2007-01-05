@@ -34,6 +34,10 @@ public:
     ~Container();
 
     void addWidget(QWidget *w);
+    void removeWidget(QWidget *w);
+
+    int count() const;
+    QWidget *widget(int index) const;
 
 private:
     struct ContainerPrivate *d;

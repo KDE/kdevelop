@@ -36,7 +36,7 @@ class SUBLIME_EXPORT Document: public QObject {
     Q_OBJECT
 public:
     Document(Controller *controller);
-    ~Document();
+    virtual ~Document();
 
     View *createView();
     Controller *controller() const;

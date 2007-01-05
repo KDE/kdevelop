@@ -20,6 +20,8 @@
 
 #include <QWidget>
 
+#include <kdebug.h>
+
 namespace Sublime {
 
 // struct ToolDocumentPrivate

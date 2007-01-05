@@ -227,6 +227,11 @@ void MainWindow::updateAreaSwitcher(Sublime::Area *area)
         d->areaActions[area]->setChecked(true);
 }
 
+QList<QDockWidget*> MainWindow::toolDocks() const
+{
+    return d->docks;
+}
+
 }
 
 #include "mainwindow.moc"

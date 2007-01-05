@@ -67,6 +67,16 @@ void Container::addWidget(QWidget *w)
     d->tab->addTab(w, "Tab");
 }
 
+int Container::count() const
+{
+    return d->tab->count();
+}
+
+QWidget *Container::widget(int index) const
+{
+    return d->tab->widget(index);
+}
+
 }
 
 #include "container.moc"

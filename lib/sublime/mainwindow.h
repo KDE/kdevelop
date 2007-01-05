@@ -19,9 +19,12 @@
 #ifndef SUBLIMEMAINWINDOW_H
 #define SUBLIMEMAINWINDOW_H
 
+#include <QList>
 #include <kparts/mainwindow.h>
 
 #include <kdevexport.h>
+
+class QDockWidget;
 
 namespace Sublime {
 
@@ -36,6 +39,8 @@ public:
     ~MainWindow();
 
     QMenu *areaSwitcherMenu();
+
+    QList<QDockWidget*> toolDocks() const;
 
 signals:
     void areaCleared(Sublime::Area*);

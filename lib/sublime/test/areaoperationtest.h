@@ -24,6 +24,7 @@
 namespace Sublime {
     class Area;
     class Controller;
+    class MainWindow;
 }
 
 class AreaOperationTest: public QObject {
@@ -33,10 +34,13 @@ private slots:
     void cleanup();
 
     void testAreaConstruction();
+    void testMainWindowConstruction();
     void testAreaCloning();
     void testAreaSwitchingInSameMainwindow();
 
 private:
+    void checkArea1(Sublime::MainWindow *mw);
+    void checkArea2(Sublime::MainWindow *mw);
     Sublime::Controller *m_controller;
 
     Sublime::Area *m_area1;
