@@ -478,31 +478,23 @@ QString TrollProjectPart::runDirectory() const
 
 QString TrollProjectPart::mainProgram() const
 {
-    bool relative = false; // dummy, remove!
 
     QDomDocument &dom = *projectDom();
 
     if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", true) )
     {
-        QString directoryRadioString = DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio");
-        QString DomMainProgram = DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
+        QString DomMainProgram = DomUtil::readEntry(*dom, "/kdevtrollproject/run/mainprogram");
 
-        if ( directoryRadioString == "custom" )
-            return DomMainProgram;
+        if ( DomMainProgram.isEmpty() ) return QString();
 
-        if ( relative == false )
-            return buildDirectory() + QString( QChar( QDir::separator() ) ) + DomMainProgram;
-
-        if ( directoryRadioString == "executable" )
+        if ( DomMainProgram.startsWith("/") )   // assume absolute path
         {
-            int pos = DomMainProgram.findRev(QString( QChar( QDir::separator() ) ));
-            if (pos != -1)
-                return DomMainProgram.mid(pos+1);
-
             return DomMainProgram;
         }
-
-        return DomMainProgram;
+        else // assume project relative path
+        {
+            return projectDirectory() + "/" + DomMainProgram;
+        }
     }else
     {
         if( !m_widget->currentSubproject())
