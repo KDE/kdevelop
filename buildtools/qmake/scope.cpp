@@ -981,7 +981,7 @@ const QMap<unsigned int, QMap<QString, QString> > Scope::customVariables() const
         QMap<QString,QString> temp;
         temp[ "var" ] = it.data()->scopedID;
         temp[ "op" ] = it.data()->op;
-        temp[ "values" ] = it.data()->values.join("");
+        temp[ "values" ] = it.data()->values.join("").stripWhiteSpace();
         result[ it.key() ] = temp;
     }
     return result;
@@ -994,7 +994,7 @@ void Scope::updateCustomVariable( unsigned int id, const QString& name, const QS
     if ( id > 0 && m_customVariables.contains( id ) )
     {
         m_customVariables[ id ] ->values.clear();
-        updateValues( m_customVariables[ id ] ->values, newvalues );
+        updateValues( m_customVariables[ id ] ->values, newvalues.stripWhiteSpace() );
         if( m_varCache.contains( m_customVariables[ id ]->scopedID ) )
             m_varCache.erase( m_customVariables[ id ]->scopedID );
         m_customVariables[ id ] ->op = newop;
@@ -1007,7 +1007,7 @@ unsigned int Scope::addCustomVariable( const QString& var, const QString& op, co
     QMake::AssignmentAST* newast = new QMake::AssignmentAST();
     newast->scopedID = var;
     newast->op = op;
-    newast->values.append(values);
+    newast->values.append(values.stripWhiteSpace());
     if( scopeType() == ProjectScope )
         newast->setDepth( m_root->depth() );
     else
