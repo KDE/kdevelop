@@ -49,8 +49,14 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
 
     mainprogram_edit->completionObject()->setMode(KURLCompletion::FileCompletion);
     mainprogram_edit->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
-    mainprogram_edit->completionObject()->setDir( buildDirectory );
-    mainprogram_edit->fileDialog()->setURL( KURL::fromPathOrURL(buildDirectory) );
+    if( DomUtil::readEntry(dom, configGroup + "/run/mainprogram").isEmpty())
+    {
+        mainprogram_edit->setURL( buildDirectory );
+        mainprogram_edit->fileDialog()->setURL( KURL::fromPathOrURL(buildDirectory) );
+    }else
+    {
+      mainprogram_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
+    }
 
     // Read the main program path, store it in a KURL and update it's edit box
     QString mainProgramPath = DomUtil::readEntry(dom, configGroup + "/run/mainprogram");
@@ -65,7 +71,8 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     }
 
     // Read the main program command line arguments and store them in the edit box
-    progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
+
+    progargs_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
 
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
     autocompile_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autocompile", false));
