@@ -138,9 +138,9 @@ void AreaOperationTest::testAreaConstruction()
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
     QCOMPARE(toolViewsPrinter1.result, QString("\n\
-toolview1.1.1\n\
-toolview1.2.1\n\
-toolview1.2.2\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+toolview1.2.2 [ bottom ]\n\
 "));
 
     //check that area2 contents is properly initialised
@@ -158,10 +158,10 @@ toolview1.2.2\n\
     AreaToolViewsPrinter toolViewsPrinter2;
     m_area2->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
     QCOMPARE(toolViewsPrinter2.result, QString("\n\
-toolview2.1.1\n\
-toolview2.2.1\n\
-toolview2.3.1\n\
-toolview2.3.2\n\
+toolview2.1.1 [ bottom ]\n\
+toolview2.2.1 [ right ]\n\
+toolview2.3.1 [ top ]\n\
+toolview2.3.2 [ top ]\n\
 "));
 }
 

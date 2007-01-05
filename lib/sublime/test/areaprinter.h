@@ -41,10 +41,14 @@ private:
     QString printOrientation(Qt::Orientation o) const;
 };
 
-struct AreaToolViewsPrinter {
+class AreaToolViewsPrinter {
+public:
     AreaToolViewsPrinter();
     bool operator()(Sublime::View *view, Sublime::Position position);
     QString result;
+
+private:
+    QString printPosition(Sublime::Position position);
 };
 
 #endif

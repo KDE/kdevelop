@@ -62,17 +62,29 @@ QString AreaViewsPrinter::printOrientation(Qt::Orientation o) const
 
 
 
-// struct AreaToolViewsPrinter
+// class AreaToolViewsPrinter
 
 AreaToolViewsPrinter::AreaToolViewsPrinter()
 {
     result = "\n";
 }
 
-bool AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position /*position*/)
+bool AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position position)
 {
-    result += view->objectName() + "\n";
+    result += view->objectName() + " [ " + printPosition(position) + " ]" + "\n";
     return false;
+}
+
+QString AreaToolViewsPrinter::printPosition(Sublime::Position position)
+{
+    switch (position)
+    {
+        case Sublime::Left: return "left";
+        case Sublime::Right: return "right";
+        case Sublime::Bottom: return "bottom";
+        case Sublime::Top: return "top";
+        default: return "wrong position";
+    }
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
