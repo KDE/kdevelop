@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>TargetOptionsDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -31,7 +31,7 @@
                     <cstring>Widget5</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Flags</string>
+                    <string>Fl&amp;ags</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -68,7 +68,7 @@
                                     <cstring>allstatic_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Do not link against shared libraries (-all-static)</string>
+                                    <string>&amp;Do not link against shared libraries (-all-static)</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -76,7 +76,7 @@
                                     <cstring>avoidversion_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Do not assign version numbers to libraries (-avoid-version)</string>
+                                    <string>Do not &amp;assign version numbers to libraries (-avoid-version)</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -84,7 +84,7 @@
                                     <cstring>module_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Create a library that can be dynamically loaded (-module)</string>
+                                    <string>Create a library that can &amp;be dynamically loaded (-module)</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -92,7 +92,7 @@
                                     <cstring>noundefined_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Library does not depend on external symbols (-no-undefined)</string>
+                                    <string>Library does not depend on external symbols (-no-&amp;undefined)</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
@@ -178,7 +178,7 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>&amp;Explicit dependencies (DEPENDENCIES):</string>
+                            <string>E&amp;xplicit dependencies (DEPENDENCIES):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>dependencies_edit</cstring>
@@ -225,7 +225,7 @@
                     <cstring>Widget6</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Libraries</string>
+                    <string>Li&amp;braries</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -240,7 +240,7 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>Link convenience libraries in&amp;side project (LIBADD):</string>
+                            <string>Lin&amp;k convenience libraries inside project (LIBADD):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>insidelib_listview</cstring>
@@ -436,7 +436,7 @@
                                     <cstring>outsidemoveup_button</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Move U&amp;p</string>
+                                    <string>Mo&amp;ve Up</string>
                                 </property>
                             </widget>
                             <widget class="QPushButton">
@@ -479,41 +479,60 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="2" column="0">
+                    <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
-                            <cstring>Spacer3_2</cstring>
+                            <cstring>argumentBox</cstring>
                         </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
+                        <property name="title">
+                            <string>Program Arguments (only valid for executable targets)</string>
                         </property>
-                        <property name="sizeType">
-                            <enum>Fixed</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="0" column="1">
-                        <property name="name">
-                            <cstring>Spacer1_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Preferred</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>50</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="3" column="1">
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>arguments_label_1</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Run arguments:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>run_arguments_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit">
+                                <property name="name">
+                                    <cstring>run_arguments_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>arguments_label_2</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Debug arguments:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>run_arguments_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit">
+                                <property name="name">
+                                    <cstring>debug_arguments_edit</cstring>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer row="1" column="0">
                         <property name="name">
                             <cstring>Spacer4_2</cstring>
                         </property>
@@ -526,30 +545,10 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>270</height>
+                                <height>120</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>arguments_label_1</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Run arguments (only valid for executable targets):</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>run_arguments_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KLineEdit" row="2" column="1">
-                        <property name="name">
-                            <cstring>run_arguments_edit</cstring>
-                        </property>
-                    </widget>
                 </grid>
             </widget>
         </widget>
@@ -700,4 +699,10 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

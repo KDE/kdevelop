@@ -48,7 +48,8 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
         outsidelib_label->setText(i18n("Link libraries outside project (LDADD)"));
     }
     else
-        run_arguments_edit->setEnabled(false);
+        argumentBox->setEnabled( false );
+//         run_arguments_edit->setEnabled(false);
 
     insidelib_listview->header()->hide();
     outsidelib_listview->header()->hide();
@@ -137,7 +138,10 @@ void TargetOptionsDialog::readConfig()
     }
 
     if (target->primary == "PROGRAMS")
+    {
         run_arguments_edit->setText(DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name));
+        debug_arguments_edit->setText(DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/debugarguments/" + target->name));
+    }
 }
 
 
@@ -206,7 +210,10 @@ void TargetOptionsDialog::storeConfig()
     AutoProjectTool::setMakefileam(m_widget->subprojectDirectory() + "/Makefile.am", replaceMap);
 
     if (target->primary == "PROGRAMS")
+    {
         DomUtil::writeEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name, run_arguments_edit->text());
+        DomUtil::writeEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/debugarguments/" + target->name, debug_arguments_edit->text());
+    }
 }
 
 
