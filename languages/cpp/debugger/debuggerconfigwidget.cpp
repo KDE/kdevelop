@@ -30,12 +30,8 @@ namespace GDBDebugger
 DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, const char *name)
     : DebuggerConfigWidgetBase(parent, name), dom(*part->projectDom())
 {
-    QFontMetrics fm(programArgs_edit->fontMetrics());
-    programArgs_edit->setMinimumWidth(fm.width('X')*30);
-
     gdbPath_edit->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
-    programArgs_edit->setText(  DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
     gdbPath_edit->setURL(      DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
 
     QString shell =             DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
@@ -96,7 +92,6 @@ DebuggerConfigWidget::~DebuggerConfigWidget()
 
 void DebuggerConfigWidget::accept()
 {
-    DomUtil::writeEntry(dom, "/kdevdebugger/general/programargs", programArgs_edit->text());
     DomUtil::writeEntry(dom, "/kdevdebugger/general/gdbpath", gdbPath_edit->url());
     DomUtil::writeEntry(dom, "/kdevdebugger/general/dbgshell", debuggingShell_edit->url());
 
