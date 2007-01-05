@@ -483,7 +483,7 @@ QString TrollProjectPart::mainProgram() const
 
     if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", true) )
     {
-        QString DomMainProgram = DomUtil::readEntry(*dom, "/kdevtrollproject/run/mainprogram");
+        QString DomMainProgram = DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
 
         if ( DomMainProgram.isEmpty() ) return QString();
 
@@ -513,10 +513,6 @@ QString TrollProjectPart::mainProgram() const
         if( QDir::isRelativePath( destpath ) )
         {
             destpath = m_widget->subprojectDirectory() + QString( QChar( QDir::separator() ) ) + destpath;
-        }
-        if( relative )
-        {
-            return getRelativePath( projectDirectory(), destpath );
         }
         return destpath;
     }
