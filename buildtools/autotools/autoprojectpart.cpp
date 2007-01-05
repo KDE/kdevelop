@@ -438,7 +438,7 @@ QString AutoProjectPart::mainProgram() const
             return projectDirectory() + "/" + DomMainProgram;
         }
 
-    } 
+    }
     else // If no Main Program was specified, return the active target
     {
         TargetItem* titem = m_widget->activeTarget();
@@ -1075,15 +1075,16 @@ void AutoProjectPart::slotExecute()
     bool _auto = false;
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
-        if ( DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram").isEmpty() ){
-        // If no Main Program was specified, build the active target
-            kdDebug(9020) << "slotExecute: before slotBuildActiveTarget" << endl;
-            slotBuildActiveTarget();
-        }
-        else{
-        // A Main Program was specified, build all targets because we don't know which is it
+        if ( DomUtil::readEntry(dom, "/kdevautoproject/run/useglobalprogram", false) ){
+          // A Main Program was specified, build all targets because we don't know which is it
             kdDebug(9020) << "slotExecute: before slotBuild" << endl;
             slotBuild();
+
+        }
+        else{
+          // If no Main Program was specified, build the active target
+            kdDebug(9020) << "slotExecute: before slotBuildActiveTarget" << endl;
+            slotBuildActiveTarget();
         }
         _auto = true;
     }
