@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>502</width>
-            <height>445</height>
+            <width>555</width>
+            <height>590</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,11 +21,11 @@
     <property name="whatsThis" stdset="0">
         <string></string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel">
+        <widget class="QLabel" row="1" column="0">
             <property name="name">
                 <cstring>gdbPath_label</cstring>
             </property>
@@ -44,7 +44,7 @@
                 <cstring>gdbPath_edit</cstring>
             </property>
         </widget>
-        <widget class="KURLRequester">
+        <widget class="KURLRequester" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>gdbPath_edit</cstring>
             </property>
@@ -55,7 +55,7 @@
                 <string>To run "gdb" binary from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, "arm-gdb"), by typing the name here, or specify full path to the gdb executable.</string>
             </property>
         </widget>
-        <widget class="QLabel">
+        <widget class="QLabel" row="3" column="0">
             <property name="name">
                 <cstring>debuggingShell_label</cstring>
             </property>
@@ -80,7 +80,7 @@
                 <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.</string>
             </property>
         </widget>
-        <widget class="KURLRequester">
+        <widget class="KURLRequester" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>debuggingShell_edit</cstring>
             </property>
@@ -91,7 +91,7 @@
                 <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and &lt;b&gt;libtool&lt;/b&gt; is needed to get it to run inside gdb.</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>layout2</cstring>
             </property>
@@ -245,7 +245,7 @@ Otherwise leave it unchecked.</string>
                 </widget>
             </hbox>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="6" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
@@ -355,7 +355,7 @@ or if your executable contains the gdb stub
                 </widget>
             </vbox>
         </widget>
-        <spacer>
+        <spacer row="7" column="1">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -368,12 +368,23 @@ or if your executable contains the gdb stub
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>41</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
-    </vbox>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Debug arguments can be set on the Run Options page
+ or directly in the project manager</string>
+            </property>
+        </widget>
+    </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>debuggingShell_edit</tabstop>
     <tabstop>gdbPath_edit</tabstop>
