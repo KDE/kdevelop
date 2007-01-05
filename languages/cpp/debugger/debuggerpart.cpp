@@ -641,17 +641,20 @@ bool DebuggerPart::startDebugger()
     QString shell = DomUtil::readEntry(*projectDom(), "/kdevdebugger/general/dbgshell");
     if( !shell.isEmpty() )
     {
-        QFileInfo info( shell );
+        shell = shell.simplifyWhiteSpace();
+        QString shell_without_args = QStringList::split(QChar(' '), shell ).first();
+
+        QFileInfo info( shell_without_args );
         if( info.isRelative() )
         {
-            shell = build_dir + "/" + shell;
-            info.setFile( shell );
+            shell_without_args = build_dir + "/" + shell_without_args;
+            info.setFile( shell_without_args );
         }
         if( !info.exists() )
         {
             KMessageBox::error(
                 mainWindow()->main(),
-                i18n("Could not locate the debugging shell '%1'.").arg( shell ),
+                i18n("Could not locate the debugging shell '%1'.").arg( shell_without_args ),
                 i18n("Debugging Shell Not Found") );
             return false;
         }
