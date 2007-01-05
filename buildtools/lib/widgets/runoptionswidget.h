@@ -47,16 +47,12 @@ public slots:
     void accept();
 
 private:
-    virtual void directoryRadioChanged();
-    virtual void browseCustomDirectory();
-    virtual void browseMainProgram();
-    virtual void mainProgramChanged( const QString& );
+    virtual void mainProgramChanged( );
 
     QDomDocument &m_dom;
     QString m_configGroup;
     KURL m_buildDirectory;
     KURL m_customRunDirectory;
-    KURL m_mainProgramAbsolutePath;
     EnvironmentVariablesWidget* m_environmentVariablesWidget;
 };
 

@@ -21,7 +21,7 @@
         </property>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>directoryButtonGroup</cstring>
+                <cstring>mainProgramGroupBox</cstring>
             </property>
             <property name="title">
                 <string>Main Program</string>
@@ -32,27 +32,11 @@
             <property name="checked">
                 <bool>false</bool>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KLineEdit" row="2" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The path to the main program, defined relative to the above currently selected run directory</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="3">
-                    <property name="name">
-                        <cstring>browseMainButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Browse...</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
+                <widget class="QLabel">
                     <property name="name">
                         <cstring>notelabel</cstring>
                     </property>
@@ -63,18 +47,23 @@
                         <set>AlignVCenter</set>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QLabel">
                     <property name="name">
                         <cstring>mainprogram_label</cstring>
                     </property>
                     <property name="text">
-                        <string>Exe&amp;cutable</string>
+                        <string>Executa&amp;ble</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel">
                     <property name="name">
                         <cstring>mainprogram_label_2</cstring>
                     </property>
@@ -85,7 +74,7 @@
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="KLineEdit" row="4" column="0" rowspan="1" colspan="4">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>progargs_edit</cstring>
                     </property>
@@ -93,7 +82,7 @@
                         <string>The command line arguments to pass to the main program</string>
                     </property>
                 </widget>
-            </grid>
+            </vbox>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
@@ -175,16 +164,22 @@
 </customwidgets>
 <connections>
     <connection>
-        <sender>directoryButtonGroup</sender>
-        <signal>clicked(int)</signal>
-        <receiver>run_options_widget</receiver>
-        <slot>directoryRadioChanged()</slot>
-    </connection>
-    <connection>
         <sender>mainprogram_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>run_options_widget</receiver>
-        <slot>mainProgramChanged(const QString&amp;)</slot>
+        <slot>mainProgramChanged()</slot>
+    </connection>
+    <connection>
+        <sender>mainprogram_edit</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>run_options_widget</receiver>
+        <slot>mainProgramChanged()</slot>
+    </connection>
+    <connection>
+        <sender>mainProgramGroupBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>run_options_widget</receiver>
+        <slot>mainProgramChanged()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -196,15 +191,14 @@
     <include location="global" impldecl="in declaration">ksqueezedtextlabel.h</include>
 </includes>
 <slots>
-    <slot>directoryRadioChanged()</slot>
-    <slot>browseCustomDirectory()</slot>
-    <slot>browseMainProgram()</slot>
-    <slot>mainProgramChanged(const QString&amp;)</slot>
+    <slot>mainProgramChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
 </UI>
