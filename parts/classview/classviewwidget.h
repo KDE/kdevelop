@@ -41,6 +41,7 @@ class TypeAliasDomBrowserItem;
 class FunctionDomBrowserItem;
 class VariableDomBrowserItem;
 class KSelectAction;
+class KToggleAction;
 
 class ClassViewWidget : public KListView, public QToolTip
 {
@@ -63,6 +64,7 @@ public:
     void clear();
 
     bool selectItem(ItemDom item);
+    bool doFollowEditor();
     
     inline TextPaintStyleStore& paintStyles() {
         return m_paintStyles;
@@ -75,6 +77,7 @@ private slots:
     void slotOpenDeclaration();
     void slotOpenImplementation();
 	void slotCreateAccessMethods();
+    void slotFollowEditor();
 
 protected:
     void contentsContextMenuEvent( QContextMenuEvent* );
@@ -101,6 +104,8 @@ private:
     KAction* m_actionOpenDeclaration;
     KAction* m_actionOpenImplementation;
 	KAction* m_actionCreateAccessMethods;
+    KToggleAction * m_actionFollowEditor;
+    bool m_doFollowEditor;
     friend class ClassViewItem;
     friend class FolderBrowserItem;
     friend class NamespaceDomBrowserItem;

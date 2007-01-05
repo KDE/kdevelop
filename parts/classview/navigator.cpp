@@ -33,8 +33,10 @@
 #include <klistviewaction.h>
 #include <kdevpartcontroller.h>
 #include <kdevlanguagesupport.h>
+#include <kdevmainwindow.h>
 #include <codemodel_utils.h>
 #include "classviewpart.h"
+#include "classviewwidget.h"
 
 //using namespace Widgets;
 
@@ -91,6 +93,8 @@ Navigator::Navigator(ClassViewPart *parent, const char *name)
 {
     m_state = GoToDefinitions;
     m_navNoDefinition = true;
+
+    m_actionSyncWithEditor = new KAction( i18n("Sync ClassView"), "view_tree", KShortcut(), this, SLOT(slotSyncWithEditor()), m_part->actionCollection(), "classview_sync_with_editor" );
 
     m_syncTimer = new QTimer(this);
     connect(m_syncTimer, SIGNAL(timeout()), this, SLOT(syncFunctionNav()));
@@ -192,6 +196,12 @@ void Navigator::syncFunctionNav()
 
     if (FunctionDom fun = currentFunction())
     {
+        if ( m_part->widget()->doFollowEditor() )
+        {
+            ItemDom dom(fun);
+            m_part->jumpedToItem( dom );
+        }
+
         if( !fun->isFunctionDefinition() ) {
         if (m_functionNavDecls[fullFunctionDeclarationName(fun)])
         {
@@ -416,6 +426,19 @@ QString Navigator::fullFunctionDeclarationName(FunctionDom fun)
     funName = m_part->languageSupport()->formatClassName(funName);
 
     return funName;
+}
+
+void Navigator::slotSyncWithEditor()
+{
+	kdDebug(9003) << k_funcinfo << endl;
+
+    if (FunctionDom fun = currentFunction())
+    {
+        m_part->mainWindow()->raiseView( m_part->widget() );
+
+        ItemDom dom(fun);
+        m_part->jumpedToItem( dom );
+    }
 }
 
 #include "navigator.moc"

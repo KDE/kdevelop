@@ -29,6 +29,7 @@ class TextPaintStyleStore;
 class QTimer;
 class ClassViewPart;
 class QListViewItem;
+class KAction;
 
 #define NAV_NODEFINITION "(no function)"
 
@@ -62,6 +63,8 @@ public slots:
     void slotCursorPositionChanged();
     void refresh();
     void addFile(const QString &file);
+    void slotSyncWithEditor();
+
 
 protected:
 
@@ -71,6 +74,8 @@ private:
     ClassViewPart *m_part;
     QTimer *m_syncTimer;
     NavigationState m_state;
+
+    KAction* m_actionSyncWithEditor;
 
     bool m_navNoDefinition;
 

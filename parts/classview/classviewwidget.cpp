@@ -26,6 +26,7 @@
 #include <kinstance.h>
 #include <kurl.h>
 #include <kaction.h>
+#include <kactionclasses.h>
 #include <kpopupmenu.h>
 #include <kconfig.h>
 
@@ -64,8 +65,6 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
     connect( m_part->core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
     connect( m_part->core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
 
-    setTreeStepSize( treeStepSize() / 2 ); ///a smaller tree-step-size saves you from horizontal scrolling :)
-    
     QStringList lst;
     lst << i18n( "Group by Directories" ) << i18n( "Plain List" ) << i18n( "Java Like Mode" );
     m_actionViewMode = new KSelectAction( i18n("View Mode"), KShortcut(), m_part->actionCollection(), "classview_mode" );
@@ -93,9 +92,12 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
 				    m_part->actionCollection(), "classview_open_implementation" );
     m_actionOpenImplementation->setWhatsThis(i18n("<b>Open implementation</b><p>Opens a file where the selected item is defined (implemented) and jumps to the definition line."));
 
+	m_actionFollowEditor = new KToggleAction( i18n("Follow Editor"), KShortcut(), this, SLOT(slotFollowEditor()), m_part->actionCollection(), "classview_follow_editor" );
+
     KConfig* config = m_part->instance()->config();
     config->setGroup( "General" );
     setViewMode( config->readNumEntry( "ViewMode", KDevelop3ViewMode ) );
+    m_doFollowEditor = config->readBoolEntry( "FollowEditor", false );
 }
 
 ClassViewWidget::~ClassViewWidget( )
@@ -103,6 +105,7 @@ ClassViewWidget::~ClassViewWidget( )
     KConfig* config = m_part->instance()->config();
     config->setGroup( "General" );
     config->writeEntry( "ViewMode", viewMode() );
+    config->writeEntry( "FollowEditor", m_doFollowEditor );
     config->sync();
 }
 
@@ -315,6 +318,10 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
     KPopupMenu menu( this );
 
     ClassViewItem* item = dynamic_cast<ClassViewItem*>( selectedItem() );
+
+    m_actionFollowEditor->plug( &menu );
+    m_actionFollowEditor->setChecked( m_doFollowEditor );
+    menu.insertSeparator();
 
     m_actionOpenDeclaration->setEnabled( item && item->hasDeclaration() );
     m_actionOpenImplementation->setEnabled( item && item->hasImplementation() );
@@ -1272,6 +1279,16 @@ void ClassViewWidget::slotCreateAccessMethods( )
 		
 		m_part->languageSupport()->createAccessMethods(static_cast<ClassModel*>(static_cast<ClassDomBrowserItem*>(item->parent())->dom()),static_cast<VariableModel*>(item->dom()));
 	}
+}
+
+void ClassViewWidget::slotFollowEditor()
+{
+	m_doFollowEditor = m_actionFollowEditor->isChecked();
+}
+
+bool ClassViewWidget::doFollowEditor()
+{
+	return m_doFollowEditor;
 }
 
 
