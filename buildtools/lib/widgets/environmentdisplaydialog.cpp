@@ -23,6 +23,8 @@
 
 #include "environmentdisplaydialog.h"
 
+extern char **environ;
+
 EnvironmentDisplayDialog::EnvironmentDisplayDialog(QWidget* parent, const char* name, bool modal, WFlags fl)
 : EnvironmentDisplayDialogBase(parent,name, modal,fl)
 {
