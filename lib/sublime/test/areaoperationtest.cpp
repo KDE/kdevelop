@@ -51,6 +51,20 @@ struct ViewCounter {
     int count;
 };
 
+struct AreaWidgetChecker {
+    AreaWidgetChecker(): hasWidgets(true) {}
+    bool operator()(AreaIndex *index)
+    {
+        foreach (View *view, index->views())
+            hasWidgets = hasWidgets && view->hasWidget();
+    }
+    bool operator()(View *view, Sublime::Position)
+    {
+        hasWidgets = hasWidgets && view->hasWidget();
+    }
+    bool hasWidgets;
+};
+
 void AreaOperationTest::init()
 {
     m_controller = new Controller(this);
@@ -287,7 +301,18 @@ void AreaOperationTest::testAreaCloning()
 
 void AreaOperationTest::testAreaSwitchingInSameMainwindow()
 {
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    checkArea1(&mw);
 
+    m_controller->showArea(m_area2, &mw);
+    checkArea2(&mw);
+
+    //check what happened to area1 widgets
+    AreaWidgetChecker checker;
+    m_area1->walkViews(checker, m_area1->rootIndex());
+    m_area1->walkToolViews(checker, Sublime::AllPositions);
+    QVERIFY(checker.hasWidgets);
 }
 
 

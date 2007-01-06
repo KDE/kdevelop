@@ -47,6 +47,11 @@ QWidget *View::widget(QWidget *parent)
     return d->initializeWidget(parent);
 }
 
+bool View::hasWidget() const
+{
+    return d->widget != 0;
+}
+
 }
 
 #include "view.moc"

@@ -44,6 +44,8 @@ public:
     Document *document() const;
     /**@return widget for this view (creates it if it's not yet created).*/
     virtual QWidget *widget(QWidget *parent = 0);
+    /**@return true if this view has an initialized widget.*/
+    bool hasWidget() const;
 
 protected:
     View(Document *doc);
