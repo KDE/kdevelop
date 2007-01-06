@@ -1492,7 +1492,9 @@ This option only applies to QMake projects.</string>
                                             <string>Prefix the call for external designer with this</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
-                                            <string>Anything written here will be put in front of the designer executable when running the external Qt designer. This can be useful to set Environment variables for running the Qt4 designer so it picks up KDE4 widgets</string>
+                                            <string>Anything written here will be put in front of the designer executable when running the external Qt designer. This can be useful to set Environment variables for running the Qt4 designer so it picks up KDE4 widgets.
+Example:
+QT_PLUGIN_PATH=/where/kde4/is/lib/kde4/plugins</string>
                                         </property>
                                     </widget>
                                 </hbox>
