@@ -54,5 +54,4 @@ DOXYGEN_DOCDIRPREFIX = kdevshell
 include ../Doxyfile.am
 profilesdatadir = $(kde_datadir)/kdevelop/profiles
 profilesdata_DATA = projectprofiles
-AM_CXXFLAGS = -w
 
