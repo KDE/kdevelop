@@ -63,7 +63,7 @@
                         <cstring>runargs_edit</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>The command line arguments to pass to the main program</string>
+                        <string>The command line arguments passed to the main program when run</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="2" column="0">
@@ -92,6 +92,9 @@
                     <property name="name">
                         <cstring>mainprogram_edit</cstring>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Full path to the executable</string>
+                    </property>
                 </widget>
                 <widget class="QLabel" row="3" column="0">
                     <property name="name">
@@ -109,7 +112,7 @@
                         <cstring>debugargs_edit</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>The command line arguments to pass to the main program</string>
+                        <string>The command line arguments passed to the main program when debugged</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="4" column="0">
@@ -117,7 +120,7 @@
                         <cstring>mainprogram_label_3_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Working Directory:</string>
+                        <string>Working &amp;Directory:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
@@ -128,7 +131,7 @@
                         <cstring>cwd_edit</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>The command line arguments to pass to the main program</string>
+                        <string>Sets the current working directory for the launched process</string>
                     </property>
                 </widget>
             </grid>
@@ -205,7 +208,7 @@
                         <string>Alt+X</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Start the main program in an external terminal (konsole)</string>
+                        <string>Start the main program in an external terminal</string>
                     </property>
                 </widget>
             </vbox>
@@ -220,8 +223,6 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>mainprogram_edit</sender>
