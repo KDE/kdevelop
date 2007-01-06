@@ -30,6 +30,7 @@
 #include <qregexp.h>
 #include <qgroupbox.h>
 
+
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -1162,9 +1163,15 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
 
     QString program = environString();
-    if(!titem->name.startsWith("/"))
-        program += "./";
-    program += titem->name;
+
+    if ( !titem ) {
+        kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+        program += titem->name;
+    }else if ( titem->primary != "PROGRAMS" ) {
+        kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+        program += titem->name;
+    }else
+        program += buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
 
     QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
 
