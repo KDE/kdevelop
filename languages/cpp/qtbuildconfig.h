@@ -42,6 +42,7 @@ public:
 	inline const QString& root() const { return m_root; }
     inline const QString& qmakePath() const { return m_qmakePath; }
     inline const QString& designerPath() const { return m_designerPath; }
+    inline const QString& designerPrefix() const { return m_designerPrefix; }
 	inline const QString& designerIntegration() const { return m_designerIntegration; }
 
 	void setUsed( bool used );
@@ -49,6 +50,7 @@ public:
 	void setIncludeStyle( int style );
 	void setRoot( const QString& root );
     void setDesignerPath( const QString& path );
+    void setDesignerPrefix( const QString& pfx );
     void setQMakePath( const QString& path );
 	void setDesignerIntegration( const QString& designerIntegration );
 	void init();
@@ -76,6 +78,7 @@ private:
 	QString m_root; ///< The root directory of the used qt installation for Qt3
     QString m_designerPath; ///< The path including the binary name of Qt Designer
     QString m_qmakePath; ///< The path including the binary name of QMake
+    QString m_designerPrefix; ///< The Prefix for Designer
 	QString m_designerIntegration; ///< The type of designer used, kdevdesigner or qt designer
 
 	static const QString m_configRoot; ///< The root path of the configuration

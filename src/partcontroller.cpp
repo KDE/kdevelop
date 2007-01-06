@@ -387,6 +387,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 	{
 		QString DesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
 		QString designerExec = "designer";
+		QString designerPrefix = "";
 		QDomDocument* dom = API::getInstance()->projectDom();
 		if ( dom != 0 )
 		{
@@ -398,6 +399,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 
 			DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration", DesignerSetting  );
 			designerExec = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designer", designerExec );
+			designerPrefix = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerprefix", designerPrefix );
 		}
 		if ( DesignerSetting == "ExternalKDevDesigner" )
 		{
@@ -423,7 +425,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 				return;
 			}
 		}
-		KRun::run( designerExec, url );
+		KRun::runCommand( designerPrefix+" "+designerExec+" "+url.pathOrURL() );
 		return;
 	}
 

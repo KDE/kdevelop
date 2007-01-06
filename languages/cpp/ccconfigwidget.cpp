@@ -408,6 +408,7 @@ void CCConfigWidget::initQtTab()
 		m_kdevexternal->setEnabled( false );
 		m_qtStyleVersion4->setEnabled( true );
         m_designerPath->setEnabled( true );
+        m_designerPrefix->setEnabled( true );
         m_qmakePath->setEnabled( true );
         m_qtDir->setEnabled( false );
         m_txtQtDir->setEnabled( false );
@@ -420,6 +421,7 @@ void CCConfigWidget::initQtTab()
 		m_kdevexternal->setEnabled( true );
 		m_qtStyleVersion4->setEnabled( false );
         m_designerPath->setEnabled( true );
+        m_designerPrefix->setEnabled( false );
         m_qmakePath->setEnabled( true );
         m_qtDir->setEnabled( true );
         m_txtQtDir->setEnabled( true );
@@ -448,6 +450,7 @@ void CCConfigWidget::initQtTab()
 	}else
 	{
 		m_qtdesigner->setChecked( true );
+        m_designerPrefix->setText( c->designerPrefix() );
 	}
 }
 
@@ -503,6 +506,7 @@ void CCConfigWidget::saveQtTab()
 	c->setRoot( m_qtDir->url() );
     c->setQMakePath( m_qmakePath->url() );
     c->setDesignerPath( m_designerPath->url() );
+    c->setDesignerPrefix( m_designerPrefix->text() );
 	if( m_kdevembedded->isChecked() )
 	{
 		c->setDesignerIntegration( "EmbeddedKDevDesigner" );
@@ -539,6 +543,7 @@ void CCConfigWidget::toggleQtVersion( bool )
     m_qtStyleVersion3->setChecked( true );
     m_kdevembedded->setEnabled( true );
     m_kdevexternal->setEnabled( true );
+    m_designerPrefix->setEnabled( false );
   }
   if ( m_versionQt4->isChecked() )
   {
@@ -546,6 +551,7 @@ void CCConfigWidget::toggleQtVersion( bool )
     m_qtdesigner->setChecked( true );
     m_kdevembedded->setEnabled( false );
     m_kdevexternal->setEnabled( false );
+    m_designerPrefix->setEnabled( true );
   }
   isValidQtDir( m_qtDir->url() );
   isQMakeExecutable( m_qmakePath->url() );

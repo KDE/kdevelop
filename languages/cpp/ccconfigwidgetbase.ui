@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>519</width>
-            <height>640</height>
+            <width>544</width>
+            <height>659</height>
         </rect>
     </property>
     <property name="caption">
@@ -1451,6 +1451,9 @@ This option only applies to QMake projects.</string>
                                         <property name="text">
                                             <string>Designer Binary:</string>
                                         </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>m_designerPath</cstring>
+                                        </property>
                                     </widget>
                                     <widget class="KURLRequester">
                                         <property name="name">
@@ -1458,6 +1461,38 @@ This option only applies to QMake projects.</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>The full path to the Designer executable to be used</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout10</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_4</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Prefix to Designer</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>m_designerPrefix</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit">
+                                        <property name="name">
+                                            <cstring>m_designerPrefix</cstring>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Prefix the call for external designer with this</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Anything written here will be put in front of the designer executable when running the external Qt designer. This can be useful to set Environment variables for running the Qt4 designer so it picks up KDE4 widgets</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -1486,6 +1521,8 @@ This option only applies to QMake projects.</string>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
@@ -1747,5 +1784,6 @@ This option only applies to QMake projects.</string>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

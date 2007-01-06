@@ -53,6 +53,7 @@ void QtBuildConfig::init( )
 	m_root = DomUtil::readEntry( *m_dom, m_configRoot + "/root", "" );
     m_qmakePath = DomUtil::readEntry(*m_dom, m_configRoot + "/qmake", "");
     m_designerPath = DomUtil::readEntry(*m_dom, m_configRoot + "/designer", "");
+    m_designerPrefix = DomUtil::readEntry(*m_dom, m_configRoot + "/designerprefix", "");
 
     if( m_root.isEmpty() || !isValidQtDir( m_root ) )
     {
@@ -70,6 +71,7 @@ void QtBuildConfig::init( )
         if( m_designerPath.isEmpty() || !isExecutable( m_designerPath ) )
             m_designerPath = findExecutable( "designer" );
     }
+
 
 	m_designerIntegration = DomUtil::readEntry( *m_dom, m_configRoot + "/designerintegration" );
 	if( m_designerIntegration.isEmpty() )
@@ -165,6 +167,7 @@ void QtBuildConfig::store( )
 	DomUtil::writeEntry( *m_dom, m_configRoot + "/designerintegration", m_designerIntegration );
     DomUtil::writeEntry(*m_dom, m_configRoot + "/qmake", m_qmakePath );
     DomUtil::writeEntry(*m_dom, m_configRoot + "/designer", m_designerPath );
+    DomUtil::writeEntry(*m_dom, m_configRoot + "/designerprefix", m_designerPrefix );
 
 	emit stored();
 }
@@ -192,6 +195,11 @@ void QtBuildConfig::setRoot( const QString& root )
 void QtBuildConfig::setQMakePath( const QString& path )
 {
     m_qmakePath = path;
+}
+
+void QtBuildConfig::setDesignerPrefix( const QString& pfx )
+{
+    m_designerPrefix = pfx;
 }
 
 void QtBuildConfig::setDesignerPath( const QString& path )
