@@ -2,10 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Aids in building and publishing the final project. Only RPM package format is supported for now.
+Comment=Aids in building and publishing the final project. Supports creation of RPM packages or source packages.
 Comment[ca]=Ajuda en la construcció i publicació del projecte final. Per ara tan sols estan suportats els paquets RPM.
 Comment[da]=Hjælper med at bygge og publicere det endelige projekt. Kun RPM-pakke formatet er understøttet indtil videre.
-Comment[de]=Unterstützt beim Erstellen und Ausliefern des fertigen Projekts. Derzeit wird nur das RPM-Format unterstützt.
+Comment[de]=Unterstützt beim Erstellen und Ausliefern des fertigen Projekts. Unterstützt Pakete im RPM-Format und Quellpakete.
 Comment[es]=Ayuda en la construcción y publicación del proyecto final. De momento únicamente están soportados los paquetes RPM.
 Comment[et]=Abi valmisprojekti ehitamisel ja avaldamisel. Hetkel on toetatud ainult RPM-pakettide vorming.
 Comment[eu]=Azken proiektua eraikitzen eta argitaratzen laguntzen du. Oraingoz RPM pakete formatua bakarrik onartzen du.
