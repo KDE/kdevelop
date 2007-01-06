@@ -1599,10 +1599,16 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 	if ( !m_activeViewCursor || !m_valid )
 		return ;
 
+	atLine = -2;
+	atColumn = 0;
+	
+	QString implFile = findSourceFile();
+	
 	m_backgroundParser->lock();
 	TranslationUnitAST* translationUnit = *m_backgroundParser->translationUnit( m_activeFileName );
 	if ( translationUnit )
 	{
+		bool fail = false;
 		unsigned int line, column;
 		m_activeViewCursor->cursorPositionReal( &line, &column );
 
@@ -1615,14 +1621,21 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 			currentNode = currentNode->parent();
 		}
 		SimpleDeclarationAST* decl = currentNode ? ( SimpleDeclarationAST* ) currentNode : 0;
-		if ( decl && decl->initDeclaratorList() && !declarator )
+		
+		if ( decl && decl->storageSpecifier() && decl->storageSpecifier()->text().contains("friend") )
+		{
+			kdDebug(9007) << "this is a friend declaration, don't create any definition" << endl;
+			fail = true;
+		}
+		
+		if ( !fail && decl && decl->initDeclaratorList() && !declarator )
 		{
 			InitDeclaratorAST * i = decl->initDeclaratorList() ->initDeclaratorList().at( 0 );
 			if ( i )
 				declarator = i->declarator();
 		}
 
-		if ( decl && declarator && declarator->parameterDeclarationClause() )
+		if ( !fail && decl && declarator && declarator->parameterDeclarationClause() )
 		{
 
 			QStringList scope;
@@ -1659,19 +1672,13 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 			text += declStr + "\n{\n}";
 		}
 
-		m_backgroundParser->unlock();
-
-		QString implFile = findSourceFile();
-
-		m_backgroundParser->lock();
-		translationUnit = *m_backgroundParser->translationUnit( implFile );
-		if ( translationUnit )
-			translationUnit->getEndPosition( &atLine, &atColumn );
-		else
+		if ( !fail )
 		{
-			atLine = -2;
-			atColumn = 0;
+			translationUnit = *m_backgroundParser->translationUnit( implFile );
+			if ( translationUnit )
+				translationUnit->getEndPosition( &atLine, &atColumn );
 		}
+		
 		kdDebug() << "at line in mm: " << atLine << endl;
 	}
 	m_backgroundParser->unlock();
