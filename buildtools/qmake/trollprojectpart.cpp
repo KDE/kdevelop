@@ -49,7 +49,6 @@
 #include "config.h"
 #include "envvartools.h"
 #include "qmakeoptionswidget.h"
-#include "pathutil.h"
 #include "scope.h"
 
 #include <kdevplugininfo.h>
