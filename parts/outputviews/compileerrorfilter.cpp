@@ -84,13 +84,13 @@ void CompileErrorFilter::processLine( const QString& line )
 		QRegExp& regExp = format->expression;
 
 		if ( regExp.search( line ) != -1 ) {
-	                hasmatch = true;
-        	        file    = regExp.cap( format->fileGroup );
-	                lineNum = regExp.cap( format->lineGroup ).toInt() - 1;
-	                text    = regExp.cap( format->textGroup );
+			hasmatch = true;
+			file    = regExp.cap( format->fileGroup );
+			lineNum = regExp.cap( format->lineGroup ).toInt() - 1;
+			text    = regExp.cap( format->textGroup );
 			compiler = format->compiler;
 			QString cap = regExp.cap(3);
-			if (cap.contains("warning", false) || cap.contains("Warnung", false))
+			if (cap.contains("warning:", false) || cap.contains("Warnung:", false))
 				isWarning = true;
 			if (regExp.cap(3).contains("instantiated from", false)) {
 				isInstantiationInfo = true;
