@@ -37,16 +37,16 @@ public slots:
 	void clearViewAndContents();
 	void clearFilter();
 	void editFilter();
+	void saveAll();
+	void saveFiltered();
 
 private:
 	virtual void childFinished(bool normal, int status);
+	void saveOutputToFile( bool useFilter );
 	void reinsertAndFilter();
 	bool filterSingleLine( const QString & line );
 
 	QStringList m_contentList;
-// 	FilterType iFilterType;
-// 	QString strFilterStr;
-// 	bool bCS;
 
 	struct OutputFilter
 	{

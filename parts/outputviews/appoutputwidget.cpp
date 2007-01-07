@@ -15,6 +15,11 @@
 #include "appoutputwidget.h"
 
 #include <qregexp.h>
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qradiobutton.h>
+#include <qfile.h>
+#include <qtextstream.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -22,10 +27,8 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kpopupmenu.h>
-#include <qbuttongroup.h>
 #include <klineedit.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
+#include <kfiledialog.h>
 
 #include "appoutputviewpart.h"
 #include "filterdlg.h"
@@ -202,7 +205,7 @@ void AppOutputWidget::reinsertAndFilter()
 			(*it).remove(0,2);
 			insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Normal));
 		} 
-		else if ((*it).startsWith("e")) 
+		else if ((*it).startsWith("e-")) 
 		{
 			(*it).remove(0,2);
 			insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Error));
@@ -224,10 +227,15 @@ void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
 	popup.setItemEnabled( id, m_contentList.size() > 0 );
 	popup.insertSeparator();
 
+	popup.insertItem( i18n("Save unfiltered"), this, SLOT(saveAll()) );
+	id = popup.insertItem( i18n("Save filtered output"), this, SLOT(saveFiltered()) );
+	popup.setItemEnabled( id, m_filter.m_isActive );
+	popup.insertSeparator();
+
 	id = popup.insertItem( i18n("Clear filter"), this, SLOT(clearFilter()) );
 	popup.setItemEnabled( id, m_filter.m_isActive );
 
-	popup.insertItem( i18n("Edit Filter"), this, SLOT(editFilter() ) );
+	popup.insertItem( i18n("Edit filter"), this, SLOT(editFilter() ) );
 
 	popup.insertSeparator();
 	popup.insertItem( i18n("Hide view"), this, SLOT(hideView()) );
@@ -238,6 +246,58 @@ void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
 void AppOutputWidget::hideView()
 {
 	m_part->hideView();
+}
+
+void AppOutputWidget::saveAll()
+{
+	saveOutputToFile( false );
+}
+
+void AppOutputWidget::saveFiltered()
+{
+	saveOutputToFile( true );
+}
+
+void AppOutputWidget::saveOutputToFile(bool useFilter)
+{
+	QString filename = KFileDialog::getSaveFileName();
+
+	if ( filename.isEmpty() ) return;
+
+	QStringList contents;
+	if ( useFilter && m_filter.m_isActive )
+	{	
+		if ( m_filter.m_isRegExp )
+		{
+			contents = m_contentList.grep( QRegExp(m_filter.m_filterString, m_filter.m_caseSensitive, false ) );
+		}
+		else
+		{
+			contents = m_contentList.grep( m_filter.m_filterString, m_filter.m_caseSensitive );
+		}
+	}
+	else
+	{
+		contents = m_contentList;
+	}
+
+	QFile file( filename );
+	if ( file.open( IO_WriteOnly ) )
+	{
+		QTextStream ostream( &file );
+		QStringList::ConstIterator it = contents.begin();
+		while( it != contents.end() )
+		{
+			QString line = *it;
+			if ( line.startsWith("o-") || line.startsWith("e-") )
+			{
+				line.remove( 0, 2 );
+			}
+			ostream << line << endl;
+			++it;
+		}
+		file.close();
+	}
 }
 
 #include "appoutputwidget.moc"
