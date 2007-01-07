@@ -390,7 +390,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                     textToInsert.append( QString::fromLatin1("\"") + str.str() + QString::fromLatin1("\" ") );
                 } else if( merge ){
                     textToInsert.truncate( textToInsert.length() - 1 );
-                    textToInsert.append( str.str() );
+                    textToInsert.append( str.str()  + QString::fromLatin1(" ") );
                 } else if( tok == Token_ellipsis && d->hasBind("...") ){
                     textToInsert.append( ellipsisArg );
                 } else {
