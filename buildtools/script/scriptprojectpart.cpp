@@ -214,7 +214,10 @@ DomUtil::PairList ScriptProjectPart::runEnvironmentVars() const
   */
 QString ScriptProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevscriptproject");
+    QString cwd = defaultRunDirectory("kdevscriptproject");
+    if (cwd.isEmpty())
+      cwd = buildDirectory();
+    return cwd;
 }
 
 
@@ -239,7 +242,7 @@ QString ScriptProjectPart::mainProgram() const
 
     if ( DomMainProgram.startsWith("/") )   // assume absolute path
     {
-        return DomMainProgram;    
+        return DomMainProgram;
     }
     else // assume project relative path
     {

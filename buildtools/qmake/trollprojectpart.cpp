@@ -52,6 +52,7 @@
 #include "scope.h"
 
 #include <kdevplugininfo.h>
+#include <urlutil.h>
 
 typedef KDevGenericFactory<TrollProjectPart> TrollProjectFactory;
 static const KDevPluginInfo data("kdevtrollproject");
@@ -446,16 +447,29 @@ QString TrollProjectPart::runDirectory() const
 {
     QDomDocument &dom = *projectDom();
 
+    QString cwd;
     if( DomUtil::readBoolEntry(dom, "/kdevtrollproject/run/useglobalprogram", true) )
     {
-        return defaultRunDirectory("kdevtrollproject");
+        cwd = defaultRunDirectory("kdevtrollproject");
     }else
     {
         QString name = m_widget->getCurrentOutputFilename();
         if( name.findRev("/") != -1 )
             name = name.right( name.length()-name.findRev("/")-1 );
-        return DomUtil::readEntry( dom, "/kdevtrollproject/run/cwd/" + name );
+        cwd = DomUtil::readEntry( dom, "/kdevtrollproject/run/cwd/" + name );
     }
+    if( cwd.isEmpty() )
+    {
+        QString destpath = m_widget->getCurrentTarget();
+        if( QDir::isRelativePath( destpath ) )
+        {
+            destpath = m_widget->subprojectDirectory() + QString( QChar( QDir::separator() ) ) + destpath;
+        }
+        destpath = destpath.left( destpath.findRev("/") );
+        cwd = destpath;
+    }
+
+    return cwd;
 }
 
 

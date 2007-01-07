@@ -345,13 +345,18 @@ QString AutoProjectPart::runDirectory() const
 
     QDomDocument &dom = *projectDom();
 
+    QString cwd;
     if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) )
     {
-        return defaultRunDirectory("kdevautoproject");
+        cwd = defaultRunDirectory("kdevautoproject");
     }else
     {
-        return DomUtil::readEntry( dom, "/kdevautoproject/run/cwd/"+m_widget->activeTarget()->name );
+        cwd = DomUtil::readEntry( dom, "/kdevautoproject/run/cwd/"+m_widget->activeTarget()->name );
     }
+    if( cwd.isEmpty() )
+        cwd = buildDirectory() +"/"+ URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) +"/"+m_widget->activeDirectory();
+
+    return cwd;
 }
 
 
