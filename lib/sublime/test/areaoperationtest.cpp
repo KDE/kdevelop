@@ -56,10 +56,16 @@ struct AreaWidgetChecker {
     bool operator()(AreaIndex *index)
     {
         foreach (View *view, index->views())
+        {
+            if (!view->hasWidget())
+                kDebug() << "   view " << view << " has no widget" << endl;
             hasWidgets = hasWidgets && view->hasWidget();
+        }
     }
     bool operator()(View *view, Sublime::Position)
     {
+        if (!view->hasWidget())
+            kDebug() << "   view " << view << " has no widget" << endl;
         hasWidgets = hasWidgets && view->hasWidget();
     }
     bool hasWidgets;

@@ -62,6 +62,13 @@ struct AreaPrivate {
         AreaIndex *index;
     };
 
+    struct ViewLister {
+        bool operator()(AreaIndex *idx) {
+            views += idx->views();
+        }
+        QList<View*> views;
+    };
+
     RootAreaIndex *rootIndex;
     AreaIndex *currentIndex;
     Controller *controller;
@@ -160,6 +167,13 @@ Position Area::toolViewPosition(View *toolView) const
 Controller *Area::controller() const
 {
     return d->controller;
+}
+
+QList<View*> Sublime::Area::views()
+{
+    AreaPrivate::ViewLister lister;
+    walkViews(lister, d->rootIndex);
+    return lister.views;
 }
 
 }

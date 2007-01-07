@@ -68,6 +68,10 @@ public:
     void addView(View *view, View *viewToSplit, Qt::Orientation orientation);
     /**Removes the @p view from the area. Also deletes the view.*/
     void removeView(View *view);
+    /**@return the list of all views in this area in no particular order. To
+    process the views in ordered manner (tree walk) use @ref walkViews method.
+    This method is added only for convenience.*/
+    QList<View*> views();
 
     /**@return the index of view or 0 if it can not be found.*/
     AreaIndex *indexOf(View *view);

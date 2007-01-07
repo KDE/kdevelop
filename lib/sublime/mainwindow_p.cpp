@@ -96,13 +96,24 @@ void MainWindowPrivate::reconstruct()
 
 void MainWindowPrivate::clearArea()
 {
+    //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
+    foreach (View *view, area->toolViews())
+    {
+        if (view->hasWidget())
+            view->widget()->setParent(0);
+    }
     foreach (QDockWidget *dock, docks)
     {
         m_mainWindow->removeDockWidget(dock);
-        //@todo adymo: we might need to delete dock
-        // delete dock;
+        delete dock;
     }
-    //@todo adymo: we need to prevent view widgets deletion together with central widget
+    //reparent all view widgets to 0 to prevent their deletion together with central
+    //widget. this reparenting is necessary when switching areas inside the same mainwindow
+    foreach (View *view, area->views())
+    {
+        if (view->hasWidget())
+            view->widget()->setParent(0);
+    }
     m_mainWindow->setCentralWidget(0);
     docks.clear();
     m_indexSplitters.clear();
