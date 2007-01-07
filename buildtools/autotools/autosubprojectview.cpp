@@ -37,6 +37,7 @@
 #include <kdevmainwindow.h>
 #include <kdevmakefrontend.h>
 #include <kdevappfrontend.h>
+#include <urlutil.h>
 
 /** AutoProject */
 #include "subprojectoptionsdlg.h"
@@ -413,7 +414,7 @@ void AutoSubprojectView::slotBuildSubproject()
 	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
-	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+	QString relpath = "/" + URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, QString::fromLatin1( "" ) );
 }
@@ -942,7 +943,7 @@ void AutoSubprojectView::slotForceReeditSubproject( )
 	SubprojectItem* spitem = dynamic_cast <SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
-	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+	QString relpath = "/" + URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "force-reedit" );
 }
@@ -952,7 +953,7 @@ void AutoSubprojectView::slotInstallSubproject( )
 	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
-	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+	QString relpath = "/" + URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "install" );
 }
@@ -962,7 +963,7 @@ void AutoSubprojectView::slotInstallSuSubproject( )
 	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
-	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+	QString relpath = "/" + URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "install", true );
 }
@@ -994,7 +995,7 @@ void AutoSubprojectView::slotCleanSubproject( )
 	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
-	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+	QString relpath = "/" + URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "clean" );
 }
@@ -1054,7 +1055,7 @@ void AutoSubprojectView::slotCustomBuildCommand(int val)
 	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
-	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+	QString relpath = "/" + URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + spitem->path.mid( m_part->projectDirectory().length() );
 	switch (type)
 	{
 		case 0: //make target

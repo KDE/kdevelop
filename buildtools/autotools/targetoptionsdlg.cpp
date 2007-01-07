@@ -31,7 +31,7 @@
 #include "misc.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
-
+#include "urlutil.h"
 
 TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *item,
                                          QWidget *parent, const char *name)
@@ -146,8 +146,8 @@ void TargetOptionsDialog::readConfig()
         run_arguments_edit->setText(DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/runarguments/" + target->name));
         if( DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/cwd/" + target->name).isEmpty() )
         {
-            m_cwdEdit->setURL( m_widget->m_part->buildDirectory()+"/"+m_widget->activeDirectory() );
-            m_cwdEdit->fileDialog()->setURL( KURL::fromPathOrURL( m_widget->m_part->buildDirectory()+"/"+m_widget->activeDirectory() ) );
+            m_cwdEdit->setURL( m_widget->m_part->buildDirectory()+"/"+URLUtil::getRelativePath(m_widget->m_part->topsourceDirectory(), m_widget->m_part->projectDirectory())+"/"+m_widget->activeDirectory() );
+            m_cwdEdit->fileDialog()->setURL( KURL::fromPathOrURL( m_widget->m_part->buildDirectory()+"/"+URLUtil::getRelativePath(m_widget->m_part->topsourceDirectory(), m_widget->m_part->projectDirectory())+"/"+m_widget->activeDirectory() ) );
         }else
         {
             m_cwdEdit->setURL( DomUtil::readEntry(*m_widget->m_part->projectDom(), "/kdevautoproject/run/cwd/" + target->name) );

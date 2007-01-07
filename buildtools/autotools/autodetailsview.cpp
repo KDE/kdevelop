@@ -367,7 +367,7 @@ void AutoDetailsView::slotBuildTarget()
 	else
 		titem = static_cast <TargetItem*> ( m_listView->selectedItem() );
 
-	QString relpath = URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + m_part->activeDirectory();
+	QString relpath = URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + m_widget->selectedSubproject()->subdir;
 
 	m_part->buildTarget(relpath, titem);
 }

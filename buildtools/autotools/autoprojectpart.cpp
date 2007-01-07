@@ -835,7 +835,7 @@ void AutoProjectPart::slotBuildActiveTarget()
     return;
 
   // build it
-  buildTarget( URLUtil::getRelativePath( this->topsourceDirectory(), projectDirectory() ) + "/" + activeDirectory(), titem);
+  buildTarget( URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) + "/" + activeDirectory(), titem);
 }
 
 
@@ -1114,7 +1114,7 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
         m_executeTargetAfterBuild.first = dir;
         m_executeTargetAfterBuild.second = const_cast<TargetItem*>(titem);
 
-        QString relpath = dir.path().mid( projectDirectory().length() );
+        QString relpath = "/" + URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) + "/" + m_widget->selectedSubproject()->subdir;
         kdDebug(9020) << "executeTarget: before buildTarget " << relpath << endl;
         buildTarget(relpath, const_cast<TargetItem*>(titem));
         return;
@@ -1138,7 +1138,7 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
         kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else
-        program += buildDirectory() + "/" + URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) + "/" + activeDirectory() + "/" + titem->name;
+        program += buildDirectory() + "/" + URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) + "/" + m_widget->selectedSubproject()->subdir + "/" + titem->name;
 
     QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
 
