@@ -199,7 +199,7 @@ void GDBController::configure()
     config_outputRadix_   = DomUtil::readIntEntry(dom, "/kdevdebugger/display/outputradix", 10);
     varTree_->setRadix(config_outputRadix_);
 #endif
-    
+
 
     if (( old_displayStatic             != config_displayStaticMembers_   ||
             old_asmDemangle             != config_asmDemangle_            ||
@@ -240,7 +240,7 @@ void GDBController::configure()
             raiseEvent(program_state_changed);
 
         }
-        
+
         if (!config_configGdbScript_.isEmpty())
           queueCmd(new GDBCommand("source " + config_configGdbScript_));
 
@@ -292,11 +292,11 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
     if (stateIsOn(s_dbgNotStarted))
     {
         KMessageBox::error(
-            0, 
+            0,
             i18n("<b>Gdb command sent when debugger is not running</b><br>"
             "The command was:<br> %1").arg(cmd->initialString()),
             i18n("Internal error"));
-        return;                    
+        return;
     }
 
     if (stateReloadInProgress_)
@@ -306,17 +306,17 @@ void GDBController::queueCmd(GDBCommand *cmd, enum queue_where queue_where)
         cmdList_.insert(0, cmd);
     else if (queue_where == queue_at_end)
         cmdList_.append (cmd);
-    else if (queue_where == queue_before_run) 
+    else if (queue_where == queue_before_run)
     {
         unsigned i;
         for (i = 0; i < cmdList_.count(); ++i)
             if (cmdList_.at(i)->isRun())
                 break;
 
-        cmdList_.insert(i, cmd);            
+        cmdList_.insert(i, cmd);
     }
-        
-    kdDebug(9012) << "QUEUE: " << cmd->initialString() 
+
+    kdDebug(9012) << "QUEUE: " << cmd->initialString()
                   << (stateReloadInProgress_ ? " (state reloading)\n" : "\n");
 
     setStateOn(s_dbgBusy);
@@ -361,7 +361,7 @@ void GDBController::executeCmd()
     if (length == 0)
     {
         // The command might decide it's no longer necessary to send
-        // it. 
+        // it.
         if (SentinelCommand* sc = dynamic_cast<SentinelCommand*>(currentCmd_))
         {
             kdDebug(9012) << "SEND: sentinel command, not sending\n";
@@ -378,7 +378,7 @@ void GDBController::executeCmd()
         commandDone();
         return;
     }
-    else 
+    else
     {
         if (commandText[length-1] != '\n')
         {
@@ -470,7 +470,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
     if (shared_library_load)
     {
         raiseEvent(shared_library_loaded);
-        queueCmd(new GDBCommand("-exec-continue"));        
+        queueCmd(new GDBCommand("-exec-continue"));
         return;
     }
 
@@ -480,7 +480,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
         // caller. Show message box in the caller, not here.
         // FIXME: remove this 'bla-bla-bla'.
         KMessageBox::detailedSorry(
-            0, 
+            0,
             i18n("<b>Invalid gdb reply</b>"
                  "<p>The 'stopped' packet does not include the 'reason' field'."),
             i18n("The gdb reply is: bla-bla-bla"),
@@ -541,7 +541,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
 
             setStateOff(s_explicitBreakInto);
             emit dbgStatus("Application interrupted", state_);
-            // Will show the source line in the code 
+            // Will show the source line in the code
             // handling non-special stop kinds, below.
         }
 
@@ -552,10 +552,10 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
             // program has a signal that's caused the prog to stop.
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
             // that'll end the program.
-            KMessageBox::information(0, 
+            KMessageBox::information(0,
                                      i18n("Program received signal %1 (%2)")
                                      .arg(name).arg(user_name),
-                                     i18n("Received signal"));   
+                                     i18n("Received signal"));
         }
     }
 
@@ -565,7 +565,7 @@ void GDBController::actOnProgramPauseMI(const GDBMI::ResultRecord& r)
         emit breakpointHit(id);
     }
 
-    
+
 }
 
 
@@ -579,7 +579,7 @@ void GDBController::reloadProgramState()
     // The command has a bug that makes it always returns some file/line,
     // even if we're not in one.
     //
-    // FIXME: For gdb 6.4, should not send extra commands. 
+    // FIXME: For gdb 6.4, should not send extra commands.
     // That's for later, so that I verify that this three-command
     // approach works fine.
     if (r.hasField("frame") && r["frame"].hasField("line"))
@@ -593,7 +593,7 @@ void GDBController::reloadProgramState()
     }
 
     emit dbgStatus ("", state_);
-    
+
     // We're always at frame zero when the program stops
     // and we must reset the active flag
     if (r.hasField("thread-id"))
@@ -601,7 +601,7 @@ void GDBController::reloadProgramState()
     else
         viewedThread_ = -1;
     currentFrame_ = 0;
-    
+
     raiseEvent(program_state_changed);
     state_reload_needed = false;
 }
@@ -630,7 +630,7 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     // output, so "exited" message from gdb might have arrived before
     // last application output. Get this last bit.
 
-    // Note: this method can be called when we open an invalid 
+    // Note: this method can be called when we open an invalid
     // core file. In that case, tty_ won't be set.
     if (tty_)
         tty_->readRemaining();
@@ -680,7 +680,7 @@ void GDBController::parseCliLine(const QString& line)
 #endif
 
 #if 0
-    
+
     /// @todo - Only do this at start up
     if (
         strstr(buf, "not in executable format:")                ||
@@ -708,22 +708,22 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
         // to the caller, who knows the gdb output.
 #if 0
         KMessageBox::error(
-            0, 
+            0,
             i18n("Invalid gdb reply\n"
                  "Command was: %1\n"
                  "Response is: %2\n"
                  "Invalid response kind: \"%3\"")
             .arg(currentCmd_->rawDbgCommand())
             .arg(buf)
-            .arg(r.reason), 
+            .arg(r.reason),
             i18n("Invalid gdb reply"));
 #endif
     }
-    
+
     QString fullname = "";
     if (r.hasField("fullname"))
         fullname = r["fullname"].literal();
-    
+
     showStepInSource(fullname,
                      r["line"].literal().toInt(),
                      (*last_stop_result)["frame"]["addr"].literal());
@@ -731,7 +731,7 @@ void GDBController::handleMiFileListExecSourceFile(const GDBMI::ResultRecord& r)
     /* Watchpoint hit is announced only after we've highlighted
        the current line. */
     maybeAnnounceWatchpointHit();
- 
+
     last_stop_result.reset();
 }
 
@@ -742,17 +742,17 @@ void GDBController::maybeAnnounceWatchpointHit()
     if ((*last_stop_result).hasField("reason"))
     {
         QString last_stop_reason = (*last_stop_result)["reason"].literal();
-        
+
         if (last_stop_reason == "watchpoint-trigger")
         {
             emit watchpointHit((*last_stop_result)["wpt"]["number"]
                                .literal().toInt(),
                                (*last_stop_result)["value"]["old"].literal(),
                                (*last_stop_result)["value"]["new"].literal());
-        }    
+        }
         else if (last_stop_reason == "read-watchpoint-trigger")
         {
-            emit dbgStatus ("Read watchpoint triggered", state_);        
+            emit dbgStatus ("Read watchpoint triggered", state_);
         }
     }
 }
@@ -772,7 +772,7 @@ void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
     int line = -1;
     if (frame.hasField("line"))
         line = frame["line"].literal().toInt();
-                
+
     showStepInSource(file,
                      line,
                      frame["addr"].literal());
@@ -819,11 +819,11 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
 
     if (!shell.isEmpty())
     {
-        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " + gdb + 
+        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " + gdb +
                       + " " + application + " --interpreter=mi2 -quiet";
         emit gdbUserCommandStdout(
             QString( "/bin/sh -c " + shell + " " + gdb
-                     + " " + application 
+                     + " " + application
                      + " --interpreter=mi2 -quiet" ).latin1());
     }
     else
@@ -839,7 +839,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
                              KProcess::Communication(KProcess::All)))
     {
         KMessageBox::error(
-            0, 
+            0,
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly."
@@ -896,7 +896,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
 
     // make sure output radix is always set to users view.
     queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",  config_outputRadix_)));
-       
+
     // Change the "Working directory" to the correct one
     QCString tmp( "cd " + QFile::encodeName( run_directory ));
     queueCmd(new GDBCommand(tmp));
@@ -904,7 +904,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     // Set the run arguments
     if (!run_arguments.isEmpty())
         queueCmd(
-            new GDBCommand(QCString("set args ") + run_arguments.latin1()));
+            new GDBCommand(QCString("set args ") + run_arguments.local8Bit()));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -927,7 +927,7 @@ bool GDBController::start(const QString& shell, const DomUtil::PairList& run_env
     setStateOn(s_dbgBusy);
     raiseEvent(debugger_ready);
     raiseEvent(connected_to_program);
-   
+
     // Now gdb has been started and the application has been loaded,
     // BUT the app hasn't been started yet! A run command is about to be issued
     // by whoever is controlling us. Or we might be asked to load a core, or
@@ -1014,7 +1014,7 @@ void GDBController::slotStopDebugger()
     // previously issued command that crashed gdb (so there's no end marker)
     // If we don't clear this, then after restart, we'll be trying to search
     // for the end marker of the command issued in previous gdb session,
-    // and never succeed. 
+    // and never succeed.
     gdbOutput_ = "";
 
     setState(s_dbgNotStarted | s_appNotStarted);
@@ -1031,7 +1031,7 @@ void GDBController::slotCoreFile(const QString &coreFile)
     setStateOn(s_core);
 
     queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1()));
-   
+
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
 }
@@ -1057,8 +1057,8 @@ void GDBController::slotAttachTo(int pid)
         QCString().sprintf("attach %d", pid)));
 
     raiseEvent(connected_to_program);
-    
-    // ...emit a separate MI command to step one instruction more. We'll 
+
+    // ...emit a separate MI command to step one instruction more. We'll
     // notice the '*stopped' response from it and proceed as usual.
     queueCmd(new GDBCommand("-exec-step-instruction"));
 }
@@ -1072,14 +1072,14 @@ void GDBController::slotRun()
 
     if (stateIsOn(s_appNotStarted)) {
 
-        delete tty_;        
+        delete tty_;
         tty_ = new STTY(config_dbgTerminal_, Settings::terminalEmulatorName( *kapp->config() ));
         if (!config_dbgTerminal_)
         {
             connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
             connect( tty_, SIGNAL(ErrOutput(const char*)), SIGNAL(ttyStderr(const char*)) );
         }
-        
+
         QString tty(tty_->getSlave());
         if (tty.isEmpty())
         {
@@ -1088,13 +1088,13 @@ void GDBController::slotRun()
                                        "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
                                        "and/or add the user to the tty group using "
                                        "\"usermod -G tty username\"."));
-            
+
             delete tty_;
             tty_ = 0;
             return;
         }
-        
-        queueCmd(new GDBCommand(QCString("tty ")+tty.latin1()));        
+
+        queueCmd(new GDBCommand(QCString("tty ")+tty.latin1()));
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
@@ -1124,11 +1124,11 @@ void GDBController::slotRun()
         else {
 
             QFileInfo app(application_);
-    
+
             if (!app.exists())
             {
                 KMessageBox::error(
-                    0, 
+                    0,
                     i18n("<b>Application does not exist</b>"
                          "<p>The application you're trying to debug,<br>"
                          "    %1\n"
@@ -1140,13 +1140,13 @@ void GDBController::slotRun()
                 // FIXME: after this, KDevelop will still show that debugger
                 // is running, because DebuggerPart::slotStopDebugger won't be
                 // called, and core()->running(this, false) won't be called too.
-                slotStopDebugger();                
+                slotStopDebugger();
                 return;
             }
             if (!app.isExecutable())
             {
                 KMessageBox::error(
-                    0, 
+                    0,
                     i18n("<b>Could not run application '%1'.</b>"
                          "<p>The application does not have the executable bit set. "
                          "Try rebuilding the project, or change permissions "
@@ -1309,7 +1309,7 @@ void GDBController::selectFrame(int frameNo, int threadNo)
 
 
     // FIXME: the above commands might not be the first in queue, and
-    // previous commands might using values of 'viewedThread_' or 
+    // previous commands might using values of 'viewedThread_' or
     // 'currentFrame_'. Ideally, should change the values only after
     // response from gdb.
     viewedThread_ = threadNo;
@@ -1331,12 +1331,12 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
     }
 
     KMessageBox::error(
-        0, 
-        i18n("<b>Debugger error</b>" 
+        0,
+        i18n("<b>Debugger error</b>"
              "<p>Debugger reported the following error:"
              "<p><tt>") + result["msg"].literal(),
-        i18n("Debugger error"));                         
-    
+        i18n("Debugger error"));
+
     // Error most likely means that some change made in GUI
     // was not communicated to the gdb, so GUI is now not
     // in sync with gdb. Resync it.
@@ -1350,7 +1350,7 @@ void GDBController::defaultErrorHandler(const GDBMI::ResultRecord& result)
     // Also, don't reload state on errors appeared during state
     // reloading!
     if (stateReloadingCommands_.count(currentCmd_) == 0)
-        raiseEvent(program_state_changed);    
+        raiseEvent(program_state_changed);
 }
 
 void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
@@ -1377,7 +1377,7 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
             currentCmd_->invokeHandler(result);
             stateReloadInProgress_ = false;
         }
-    }    
+    }
     else if (result.reason == "error")
     {
         // Some commands want to handle errors themself.
@@ -1416,7 +1416,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     }
 
     bool ready_for_next_command = false;
-    
+
     int i;
     bool got_any_command = false;
     // For each gdb reply. In MI mode, each reply is one string.
@@ -1452,7 +1452,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
                 if (result.reason != "running")
                 {
-                    kdDebug(9012) << "Command execution time " 
+                    kdDebug(9012) << "Command execution time "
                                   << commandExecutionTime.elapsed() << " ms.\n";
                 }
 
@@ -1460,7 +1460,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                    from debugger, we directly write "detach" to gdb and
                    busy-wait for a reply.  Uisng the commands mechanism
                    won't work there, because command result are
-                   communicated asynchronously. 
+                   communicated asynchronously.
                    This is will be fixed in KDevelop4.  */
                 if (currentCmd_ && currentCmd_->isUserCommand())
                     emit gdbUserCommandStdout(reply);
@@ -1470,7 +1470,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                 if (result.reason == "stopped")
                 {
                     // Transfers ownership.
-                    // Needed so that in 
+                    // Needed so that in
                     //   handleMiFileListExecSourceFile(GDBMI::ResultRecord& r);
                     // we can use the last stop reason.
                     last_stop_result.reset(static_cast<GDBMI::ResultRecord*>(r.get()));
@@ -1496,7 +1496,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                 if (ready_for_next_command)
                 {
                     // Need to do this before procesing response,
-                    // so that when processing response we don't 
+                    // so that when processing response we don't
                     // think that application is running.
                     setStateOff(s_appRunning);
                 }
@@ -1513,7 +1513,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                 break;
             }
 
-            case GDBMI::Record::Stream: {            
+            case GDBMI::Record::Stream: {
 
                 GDBMI::StreamRecord& s = dynamic_cast<GDBMI::StreamRecord&>(*r);
                 if (!currentCmd_ || currentCmd_->isUserCommand())
@@ -1531,21 +1531,21 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
                 if (print_output.search(s.message) != -1)
                 {
                     kdDebug(9012) << "Found 'print' output: " << s.message << "\n";
-                    print_command_result = s.message.ascii(); 
+                    print_command_result = s.message.ascii();
                 }
 
                 break;
             }
-            
 
-            case GDBMI::Record::Prompt: 
+
+            case GDBMI::Record::Prompt:
                 break;
             }
         }
         catch(const std::exception& e)
         {
             KMessageBox::detailedSorry(
-                0, 
+                0,
                 i18n("<b>Internal debugger error</b>",
                      "<p>The debugger component encountered internal error while "
                      "processing reply from gdb. Please submit a bug report."),
@@ -1557,7 +1557,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
             ready_for_next_command = true;
         }
     }
-          
+
     // check the queue for any commands to send
     if (ready_for_next_command)
     {
@@ -1568,7 +1568,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         kdDebug(9012) << "COMMANDS: " << cmdList_.count() << " in queue, "
                       << int(bool(currentCmd_)) << " executing\n";
 
-    commandDone(); 
+    commandDone();
 }
 
 void GDBController::commandDone()
@@ -1620,7 +1620,7 @@ void GDBController::removeStateReloadingCommands()
         // This effectively prevents handler for this command
         // to be ever invoked.
         destroyCurrentCommand();
-    }    
+    }
 }
 
 void GDBController::raiseEvent(event_t e)
@@ -1672,7 +1672,7 @@ void GDBController::slotDbgProcessExited(KProcess* process)
     bool abnormal = !process->normalExit();
     delete dbgProcess_;
     dbgProcess_ = 0;
-    delete tty_;           
+    delete tty_;
     tty_ = 0;
 
     if (abnormal)
@@ -1694,8 +1694,8 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
     queueCmd(new UserCommand(cmd.latin1()));
 
     // User command can theoreticall modify absolutely everything,
-    // so need to force a reload. 
-    
+    // so need to force a reload.
+
     // We can do it right now, and don't wait for user command to finish
     // since commands used to reload all view will be executed after
     // user command anyway.
@@ -1708,7 +1708,7 @@ void GDBController::explainDebuggerStatus()
     QString information("%1 commands in queue\n"
                         "%2 commands being processed by gdb\n"
                         "Debugger state: %3\n");
-    information = 
+    information =
         information.arg(cmdList_.count()).arg(currentCmd_ ? 1 : 0)
         .arg(state_);
 
@@ -1727,21 +1727,21 @@ void GDBController::explainDebuggerStatus()
     KMessageBox::information(0, information, "Debugger status");
 }
 
-bool GDBController::stateIsOn(int state) 
+bool GDBController::stateIsOn(int state)
 {
     return state_ & state;
 }
 
-void GDBController::setStateOn(int stateOn)    
+void GDBController::setStateOn(int stateOn)
 {
     debugStateChange(state_, state_ | stateOn);
-    state_ |= stateOn; 
+    state_ |= stateOn;
 }
 
-void GDBController::setStateOff(int stateOff)  
-{ 
+void GDBController::setStateOff(int stateOff)
+{
     debugStateChange(state_, state_ & ~stateOff);
-    state_ &= ~stateOff; 
+    state_ &= ~stateOff;
 }
 
 void GDBController::setState(int newState)
