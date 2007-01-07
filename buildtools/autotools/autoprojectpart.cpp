@@ -291,10 +291,12 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
     kdDebug(9020) << k_funcinfo << "activeTarget " << activeTarget << endl;
     if (!activeTarget.isEmpty())
         m_widget->setActiveTarget(activeTarget);
-
-    // Set the default directory radio to "executable"
-    if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default") && DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio") == "" ) {
-        DomUtil::writeEntry(dom, "/kdevautoproject/run/directoryradio", "executable");
+    else
+    {
+        KMessageBox::information( m_widget, "No active target specified, running the application will\n"
+                                   "not work until you make a target active in the Automake Manager\n"
+                                   "on the right side or use the Main Program options under\n"
+                                   "Project -> Project Options -> Run Options", "No active target specified",  "kdevelop_open_project_no_active_target");
     }
 
     KDevProject::openProject( dirName, projectName );
@@ -363,60 +365,6 @@ QString AutoProjectPart::runDirectory() const
   *   if /kdevautoproject/run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-/*
-QString AutoProjectPart::mainProgram(bool relative) const
-{
-    QDomDocument &dom = *projectDom();
-
-    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", true) )
-    {
-        QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
-        QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
-
-        // A Main Program was specified, return it
-        if ( directoryRadioString == "custom" )
-            return DomMainProgram;
-
-        if ( relative == false )
-            return buildDirectory() + "/" + DomMainProgram;
-
-        if ( directoryRadioString != "executable" )
-            return DomMainProgram;
-
-        int pos = DomMainProgram.findRev('/');
-        if (pos != -1)
-            return DomMainProgram.mid(pos+1);
-        return DomMainProgram;
-
-
-    } else {
-        // If no Main Program was specified, return the active target
-
-        QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
-        // Get a pointer to the active target
-        TargetItem* titem = m_widget->activeTarget();
-
-        if ( !titem ) {
-            kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
-            return QString::null;
-        }
-
-        if ( titem->primary != "PROGRAMS" ) {
-            kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
-            return QString::null;
-        }
-
-        if (relative == false || directoryRadioString == "custom")
-            return buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
-
-        if ( directoryRadioString == "executable" )
-            return titem->name;
-
-        return activeDirectory() + "/" + titem->name;
-
-    }
-}
-*/
 
 QString AutoProjectPart::mainProgram() const
 {
@@ -445,11 +393,17 @@ QString AutoProjectPart::mainProgram() const
         TargetItem* titem = m_widget->activeTarget();
 
         if ( !titem ) {
+            KMessageBox::error( m_widget, "There's no active target!\n"
+                                "Unable to determine the main program", "No active target found" );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
 
         if ( titem->primary != "PROGRAMS" ) {
+            KMessageBox::error( m_widget, "Active target \""+titem->name+"\"isn't binary ( " + titem->primary + " ) !\n"
+                                "Unable to determine the main program. If you want this\n"
+                                "to be the active target, set a main program under\n"
+                                "Project -> Project Options -> Run Options", "Active target is not a library" );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
@@ -1165,9 +1119,15 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
     QString program = environString();
 
     if ( !titem ) {
+        KMessageBox::error( m_widget, "There's no active target!\n"
+                                "Unable to determine the main program", "No active target found" );
         kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else if ( titem->primary != "PROGRAMS" ) {
+        KMessageBox::error( m_widget, "Active target \""+titem->name+"\"isn't binary ( " + titem->primary + " ) !\n"
+                                "Unable to determine the main program. If you want this\n"
+                                "to be the active target, set a main program under\n"
+                                "Project -> Project Options -> Run Options", "Active target is not a library" );
         kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else

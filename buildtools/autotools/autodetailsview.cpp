@@ -439,6 +439,7 @@ void AutoDetailsView::slotRemoveDetail()
 
 		if ( !titem )	return;
 
+		bool isactive = ( titem == m_widget->activeTarget() );
 		RemoveTargetDialog dlg ( m_widget, m_part, m_widget->selectedSubproject(),
 		                         titem, this, "remove target dialog" );
 
@@ -450,6 +451,8 @@ void AutoDetailsView::slotRemoveDetail()
 
 			m_widget->slotOverviewSelectionChanged ( m_widget->selectedSubproject() );
 
+			if( isactive )
+				m_widget->setActiveTarget("");
 			if ( sibling)
 			{
 				m_listView->setSelected ( sibling, true );
