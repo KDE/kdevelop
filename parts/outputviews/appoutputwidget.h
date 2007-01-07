@@ -39,6 +39,7 @@ public slots:
 	void editFilter();
 	void saveAll();
 	void saveFiltered();
+  void copySelected();
 
 private:
 	virtual void childFinished(bool normal, int status);

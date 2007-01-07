@@ -20,6 +20,7 @@
 #include <qradiobutton.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qclipboard.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,6 +46,7 @@ AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
 	KConfig *config = kapp->config();
 	config->setGroup("General Options");
 	setFont(config->readFontEntry("OutputViewFont"));
+  setSelectionMode(QListBox::Extended);
 }
 
 void AppOutputWidget::clearViewAndContents()
@@ -225,7 +227,9 @@ void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
 
 	int id = popup.insertItem( i18n("Clear output"), this, SLOT(clearViewAndContents()) );
 	popup.setItemEnabled( id, m_contentList.size() > 0 );
-	popup.insertSeparator();
+
+  popup.insertItem( i18n("Copy selected lines"), this, SLOT(copySelected()) );
+  popup.insertSeparator();
 
 	popup.insertItem( i18n("Save unfiltered"), this, SLOT(saveAll()) );
 	id = popup.insertItem( i18n("Save filtered output"), this, SLOT(saveFiltered()) );
@@ -298,6 +302,18 @@ void AppOutputWidget::saveOutputToFile(bool useFilter)
 		}
 		file.close();
 	}
+}
+
+void AppOutputWidget::copySelected()
+{
+  uint n = count();
+  QString buffer;
+  for (uint i = 0; i < n; i++)
+  {
+    if (isSelected(i))
+      buffer += item(i)->text() + "\n";
+  }
+  kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
 }
 
 #include "appoutputwidget.moc"
