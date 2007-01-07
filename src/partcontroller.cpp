@@ -26,6 +26,7 @@
 #include <kfiledialog.h>
 #include <kmainwindow.h>
 #include <kaction.h>
+#include <kmessagebox.h>
 #include <kstatusbar.h>
 #include <khtml_part.h>
 #include <kpopupmenu.h>
@@ -387,7 +388,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 	{
 		QString DesignerSetting = config->readEntry( "DesignerSetting", "ExternalDesigner" );
 		QString designerExec = "designer";
-		QString designerPrefix = "";
+		QStringList designerPluginPaths;
 		QDomDocument* dom = API::getInstance()->projectDom();
 		if ( dom != 0 )
 		{
@@ -395,11 +396,13 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 			// has no setting or no project is open. However for Qt4
 			// projects we want to use ExternalDesigner in any case.
 			if ( DomUtil::readIntEntry( *dom, "/kdevcppsupport/qt/version", 3 ) == 4 )
+			{
+				designerPluginPaths = DomUtil::readListEntry(*dom, "/kdevcppsupport/qt/designerpluginpaths", "path" );
 				DesignerSetting = "ExternalDesigner";
+			}
 
 			DesignerSetting = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerintegration", DesignerSetting  );
 			designerExec = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designer", designerExec );
-			designerPrefix = DomUtil::readEntry(*dom, "/kdevcppsupport/qt/designerprefix", designerPrefix );
 		}
 		if ( DesignerSetting == "ExternalKDevDesigner" )
 		{
@@ -425,7 +428,12 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 				return;
 			}
 		}
-		KRun::runCommand( designerPrefix+" "+designerExec+" "+url.pathOrURL() );
+    KMessageBox::warningYesNo(0, "QT_PLUGIN_PATH=\""+designerPluginPaths.join(":")+"\" "+designerExec, designerPluginPaths.join(" ") );
+		if( designerPluginPaths.isEmpty() )
+			KRun::runCommand( designerExec+" "+url.pathOrURL() );
+		else
+			KRun::runCommand( "QT_PLUGIN_PATH=\""+designerPluginPaths.join(":")+"\" "+designerExec+" "+url.pathOrURL() );
+
 		return;
 	}
 

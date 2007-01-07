@@ -18,6 +18,7 @@
 class CppSupportPart;
 class Catalog;
 class QCheckListItem;
+class KEditListBox;
 
 class CCConfigWidget : public CCConfigWidgetBase
 {
@@ -64,6 +65,7 @@ private:
 private:
 	CppSupportPart* m_pPart;
 	QMap<QCheckListItem*, Catalog*> m_catalogs;
+    KEditListBox* m_designerPluginPaths;
 };
 
 #endif

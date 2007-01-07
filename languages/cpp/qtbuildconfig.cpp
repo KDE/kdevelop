@@ -53,7 +53,7 @@ void QtBuildConfig::init( )
 	m_root = DomUtil::readEntry( *m_dom, m_configRoot + "/root", "" );
     m_qmakePath = DomUtil::readEntry(*m_dom, m_configRoot + "/qmake", "");
     m_designerPath = DomUtil::readEntry(*m_dom, m_configRoot + "/designer", "");
-    m_designerPrefix = DomUtil::readEntry(*m_dom, m_configRoot + "/designerprefix", "");
+    m_designerPluginPaths = DomUtil::readListEntry(*m_dom, m_configRoot + "/designerpluginpaths", "path" );
 
     if( m_root.isEmpty() || !isValidQtDir( m_root ) )
     {
@@ -167,7 +167,7 @@ void QtBuildConfig::store( )
 	DomUtil::writeEntry( *m_dom, m_configRoot + "/designerintegration", m_designerIntegration );
     DomUtil::writeEntry(*m_dom, m_configRoot + "/qmake", m_qmakePath );
     DomUtil::writeEntry(*m_dom, m_configRoot + "/designer", m_designerPath );
-    DomUtil::writeEntry(*m_dom, m_configRoot + "/designerprefix", m_designerPrefix );
+    DomUtil::writeListEntry(*m_dom, m_configRoot + "/designerpluginpaths", "path",  m_designerPluginPaths );
 
 	emit stored();
 }
@@ -197,9 +197,9 @@ void QtBuildConfig::setQMakePath( const QString& path )
     m_qmakePath = path;
 }
 
-void QtBuildConfig::setDesignerPrefix( const QString& pfx )
+void QtBuildConfig::setDesignerPluginPaths( const QStringList& pfx )
 {
-    m_designerPrefix = pfx;
+    m_designerPluginPaths = pfx;
 }
 
 void QtBuildConfig::setDesignerPath( const QString& path )
