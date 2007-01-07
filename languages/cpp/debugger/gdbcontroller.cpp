@@ -1381,7 +1381,7 @@ void GDBController::processMICommandResponse(const GDBMI::ResultRecord& result)
     else if (result.reason == "error")
     {
         // Some commands want to handle errors themself.
-        if (currentCmd_->handlesError() &&
+        if (currentCmd_ && currentCmd_->handlesError() &&
             currentCmd_->invokeHandler(result))
         {
             // Done, nothing more needed
