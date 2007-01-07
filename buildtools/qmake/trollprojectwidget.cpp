@@ -71,7 +71,6 @@
 #include "subclassesdlg.h"
 #include "addfilesdialog.h"
 #include "urlutil.h"
-#include "pathutil.h"
 #include "trolllistview.h"
 #include "projectconfigurationdlg.h"
 #include "qmakescopeitem.h"
@@ -764,7 +763,7 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
     {
         QString subdirname;
         if ( !QDir::isRelativePath( dialog.urlRequester() ->url() ) )
-            subdirname = getRelativePath( projectdir, dialog.urlRequester()->url() );
+            subdirname = URLUtil::getRelativePath( projectdir, dialog.urlRequester()->url() );
         else
             subdirname = dialog.urlRequester()->url();
 
@@ -1061,7 +1060,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
             {
                 if ( dlg.selectedSubproject() && dlg.selectedSubproject()->scope->variableValues("TEMPLATE").findIndex( "subdirs" ) != -1 )
                 {
-                    fileName = getRelativePath( dlg.selectedSubproject()->scope->projectDir() ,
+                    fileName = URLUtil::getRelativePath( dlg.selectedSubproject()->scope->projectDir() ,
                                                 QDir::cleanDirPath(
                                                     m_shownSubproject->scope->projectDir()+
                                                     QString(QChar(QDir::separator()))+
@@ -1081,9 +1080,9 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
 
         QString noPathFileName;
         if( relativeToProjectRoot )
-            noPathFileName = getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(projectDirectory()+QString(QChar(QDir::separator()))+fileName ) );
+            noPathFileName = URLUtil::getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(projectDirectory()+QString(QChar(QDir::separator()))+fileName ) );
         else
-            noPathFileName = getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(m_shownSubproject->scope->projectDir()+QString(QChar(QDir::separator()))+fileName ) );
+            noPathFileName = URLUtil::getRelativePath( m_shownSubproject->scope->projectDir(), QDir::cleanDirPath(m_shownSubproject->scope->projectDir()+QString(QChar(QDir::separator()))+fileName ) );
 
         if( DomUtil::readBoolEntry( *m_part->projectDom(), "/kdevtrollproject/qmake/replacePaths", false ) )
         {
@@ -1725,8 +1724,8 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
                 QDomDocument & dom = *( m_part->projectDom() );
                 for ( uint i = 0; i < newFileNames.count(); ++i )
                 {
-                    QString srcfile_relpath = getRelativePath( m_shownSubproject->scope->projectDir(), newFileNames[ i ] ) ;
-                    newFileNames[i] = getRelativePath( projectDirectory(), newFileNames[ i ] ) ;
+                    QString srcfile_relpath = URLUtil::getRelativePath( m_shownSubproject->scope->projectDir(), newFileNames[ i ] ) ;
+                    newFileNames[i] = URLUtil::getRelativePath( projectDirectory(), newFileNames[ i ] ) ;
                     QString uifile_relpath = m_shownSubproject->relativePath() + QString( QChar( QDir::separator() ) ) + fitem->text( 0 );
                     DomUtil::PairList list = DomUtil::readPairListEntry( dom, "/kdevtrollproject/subclassing" ,
                                              "subclass", "sourcefile", "uifile" );

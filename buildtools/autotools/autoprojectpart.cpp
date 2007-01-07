@@ -53,6 +53,7 @@
 
 #include <configwidgetproxy.h>
 #include <kdevplugininfo.h>
+#include <urlutil.h>
 
 #define CONFIGURE_OPTIONS 1
 #define RUN_OPTIONS 2
@@ -382,9 +383,12 @@ QString AutoProjectPart::mainProgram() const
         {
             return DomMainProgram;
         }
-        else // assume project relative path
+        else // assume builddir relative path
         {
-            return projectDirectory() + "/" + DomMainProgram;
+            QString relprojectpath = URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() );
+            if( !relprojectpath.isEmpty() )
+                relprojectpath = "/" + relprojectpath;
+            return buildDirectory() + relprojectpath + "/" + DomMainProgram;
         }
 
     }
@@ -408,7 +412,10 @@ QString AutoProjectPart::mainProgram() const
             return QString::null;
         }
 
-        return buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
+        QString relprojectpath = URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() );
+        if( !relprojectpath.isEmpty() )
+            relprojectpath = "/" + relprojectpath;
+        return buildDirectory() + relprojectpath + "/" + activeDirectory() + "/" + titem->name;
     }
 }
 
@@ -622,9 +629,9 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     {
         if (!QFile::exists(buildDirectory() + "/configure"))
         {
-            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
+            int r = KMessageBox::questionYesNo(m_widget, i18n("%1\nThere is no Makefile in this directory\n"
                                                "and no configure script for this project.\n"
-                                               "Run automake & friends and configure first?"), QString::null, i18n("Run Them"), i18n("Do Not Run"));
+                                               "Run automake & friends and configure first?").arg(buildDirectory()), QString::null, i18n("Run Them"), i18n("Do Not Run"));
             if (r == KMessageBox::No)
                 return QString::null;
             preCommand = makefileCvsCommand();
@@ -635,7 +642,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
         }
         else
         {
-            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"), QString::null, i18n("Run configure"), i18n("Do Not Run"));
+            int r = KMessageBox::questionYesNo(m_widget, i18n("%1\nThere is no Makefile in this directory. Run 'configure' first?").arg(dir), QString::null, i18n("Run configure"), i18n("Do Not Run"));
             if (r == KMessageBox::No)
                 return QString::null;
             preCommand = configureCommand() + " && ";
@@ -828,7 +835,7 @@ void AutoProjectPart::slotBuildActiveTarget()
     return;
 
   // build it
-  buildTarget(activeDirectory(), titem);
+  buildTarget( URLUtil::getRelativePath( this->topsourceDirectory(), projectDirectory() ) + "/" + activeDirectory(), titem);
 }
 
 
@@ -1131,7 +1138,7 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
         kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else
-        program += buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
+        program += buildDirectory() + "/" + URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) + "/" + activeDirectory() + "/" + titem->name;
 
     QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
 

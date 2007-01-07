@@ -50,6 +50,38 @@ QString URLUtil::directory(const QString & name) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+QString URLUtil::getRelativePath(const QString& basepath, const QString& destpath)
+{
+  QString relpath = ".";
+  if (!QFile::exists(basepath) ||
+      !QFile::exists(destpath))
+    return "";
+  QStringList basedirs = QStringList::split(QString( QChar( QDir::separator() ) ),basepath);
+  QStringList destdirs = QStringList::split(QString( QChar( QDir::separator() ) ),destpath);
+
+  int maxCompare=0;
+  if (basedirs.count()>=destdirs.count())
+    maxCompare=destdirs.count();
+  else
+    maxCompare=basedirs.count();
+  int lastCommonDir=-1;
+  for (int i=0; i<maxCompare; i++)
+  {
+    if (basedirs[i] != destdirs[i])
+      break;
+    lastCommonDir=i;
+  }
+  for (uint i=0;i<basedirs.count()-(lastCommonDir+1); i++)
+    relpath += QString( QChar( QDir::separator() ) )+QString("..");
+  for (int i=0; i<lastCommonDir+1; i++)
+    destdirs.pop_front();
+  if (destdirs.count())
+    relpath += QString( QChar( QDir::separator() ) )+destdirs.join( QChar( QDir::separator() ) );
+  return QDir::cleanDirPath(relpath);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slashPolicy) {
   bool slashPrefix = slashPolicy & SLASH_PREFIX;
   bool slashSuffix = slashPolicy & SLASH_SUFFIX;

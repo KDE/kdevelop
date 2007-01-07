@@ -17,7 +17,7 @@ libkdevtrollproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 
 libkdevtrollproject_la_SOURCES = choosesubprojectdlg.cpp \
 	choosesubprojectdlgbase.ui createscopedlg.cpp createscopedlgbase.ui disablesubprojectdlg.cpp \
-	disablesubprojectdlgbase.ui newwidgetdlg.cpp newwidgetdlgbase.ui pathutil.cpp \
+	disablesubprojectdlgbase.ui newwidgetdlg.cpp newwidgetdlgbase.ui \
 	projectconfigurationdlg.cpp projectconfigurationdlgbase.ui qmakedefaultopts.cpp \
 	qmakeoptionswidget.cpp qmakeoptionswidgetbase.ui qmakescopeitem.cpp scope.cpp \
 	trolllistview.cpp trollprojectpart.cpp trollprojectwidget.cpp

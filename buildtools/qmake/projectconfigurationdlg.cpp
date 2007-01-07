@@ -40,7 +40,6 @@
 #include <qregexp.h>
 #include <qvalidator.h>
 #include <qtabwidget.h>
-#include <pathutil.h>
 #include <kpushbutton.h>
 #include <kcombobox.h>
 #include <klocale.h>
@@ -50,6 +49,7 @@
 #include "trollprojectpart.h"
 #include "qmakescopeitem.h"
 #include "scope.h"
+#include "urlutil.h"
 
 InsideCheckListItem::InsideCheckListItem( QListView *parent, QMakeScopeItem *item, ProjectConfigurationDlg *config ) :
         QCheckListItem( parent, item->relativePath().right( item->relativePath().length() - 1 ), QCheckListItem::CheckBox )
@@ -151,7 +151,7 @@ ProjectConfigurationDlg::~ProjectConfigurationDlg()
 
 void ProjectConfigurationDlg::browseTargetPath()
 {
-    m_targetPath->setText( getRelativePath( myProjectItem->scope->projectDir(), KFileDialog::getExistingDirectory() ) );
+    m_targetPath->setText( URLUtil::getRelativePath( myProjectItem->scope->projectDir(), KFileDialog::getExistingDirectory() ) );
     buttonApply->setEnabled( false );
 }
 

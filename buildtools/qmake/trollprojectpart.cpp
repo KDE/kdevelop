@@ -494,12 +494,18 @@ QString TrollProjectPart::mainProgram() const
     {
         if( !m_widget->currentSubproject())
         {
+            KMessageBox::error( m_widget, "There's no selected subproject!\n"
+                                "Unable to determine the main program", "No selected subproject found" );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in TrollProjectPart::mainProgram()" << endl;
             return QString::null;
         }
 
         if ( m_widget->currentSubproject()->scope->variableValues("TEMPLATE").findIndex("app") == -1 )
         {
+            KMessageBox::error( m_widget, "Selected Subproject \""+m_widget->currentSubproject()->scope->projectName()+"\"isn't binary ( " + m_widget->currentSubproject()->scope->variableValues("TEMPLATE").join(" ") + " ) !\n"
+                                "Unable to determine the main program. If you want this\n"
+                                "to be the selected subproject, set a main program under\n"
+                                "Project -> Project Options -> Run Options", "Selected subproject is not a library" );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << m_widget->currentSubproject()->scope->variableValues("TEMPLATE").join(" ") << ") ! -> Unable to determine the main program in TrollProjectPart::mainProgram()" << endl;
             return QString::null;
         }

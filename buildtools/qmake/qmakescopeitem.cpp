@@ -22,7 +22,7 @@
 #include <kdirwatch.h>
 
 #include "scope.h"
-#include "pathutil.h"
+#include "urlutil.h"
 #include "trollprojectwidget.h"
 /*
  * Class qProjectItem
@@ -335,7 +335,7 @@ QString QMakeScopeItem::relativePath()
     if( !scope || !scope->parent() )
         return "";
     if( scope->scopeType() == Scope::ProjectScope )
-        return getRelativePath( m_widget->projectDirectory(), scope->projectDir() );
+        return URLUtil::getRelativePath( m_widget->projectDirectory(), scope->projectDir() );
     else
         return static_cast<QMakeScopeItem*>( parent() ) ->relativePath();
 //     if( !scope->parent() )
@@ -353,7 +353,7 @@ QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
 {
     if ( scope->variableValues( "CONFIG" ).findIndex( "dll" ) != -1 )
     {
-        QString tmpPath = getRelativePath(basePath, scope->projectDir() );
+        QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
         if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
@@ -386,7 +386,7 @@ QString QMakeScopeItem::getSharedLibAddObject( QString basePath )
 
 QString QMakeScopeItem::getApplicationObject( QString basePath )
 {
-    QString tmpPath = getRelativePath(basePath, scope->projectDir() );
+    QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
     if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
@@ -423,7 +423,7 @@ QString QMakeScopeItem::getLibAddObject( QString basePath )
     else if ( scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1
             || scope->variableValues("TEMPLATE").findIndex("lib") != -1 )
     {
-        QString tmpPath = getRelativePath(basePath, scope->projectDir() );
+        QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
         if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
         {
             if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
@@ -460,7 +460,7 @@ QString QMakeScopeItem::getLibAddPath( QString basePath )
     //PATH only add if shared lib
     if ( scope->variableValues( "CONFIG" ).findIndex( "dll" ) == -1 ) return ( "" );
 
-    QString tmpPath = getRelativePath(basePath, scope->projectDir() );
+    QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
     if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )
@@ -481,7 +481,7 @@ QString QMakeScopeItem::getLibAddPath( QString basePath )
 
 QString QMakeScopeItem::getIncAddPath( QString basePath )
 {
-    QString tmpPath = getRelativePath( basePath, scope->projectDir() );
+    QString tmpPath = URLUtil::getRelativePath( basePath, scope->projectDir() );
     tmpPath = QDir::cleanDirPath( tmpPath );
 
     return ( tmpPath );
@@ -840,7 +840,7 @@ QMap<QString, QString> QMakeScopeItem::getLibInfos( QString basePath )
     else
         result["shared_lib"] = "-l"+scope->variableValues( "TARGET" ).front();
 
-    QString tmpPath = getRelativePath(basePath, scope->projectDir() );
+    QString tmpPath = URLUtil::getRelativePath(basePath, scope->projectDir() );
     if ( !scope->variableValues( "DESTDIR" ).front().isEmpty() )
     {
         if ( QDir::isRelativePath( scope->variableValues( "DESTDIR" ).front() ) )

@@ -23,7 +23,7 @@
 
 #include <kdirwatch.h>
 
-#include "pathutil.h"
+#include "urlutil.h"
 #include "trollprojectpart.h"
 #include "qmakedefaultopts.h"
 #include "pathutil.h"
@@ -410,7 +410,7 @@ QString Scope::scopeName() const
     {
         if( m_parent && QDir::cleanDirPath( m_parent->projectDir() ) != QDir::cleanDirPath( projectDir() ) )
         {
-            return getRelativePath( m_parent->projectDir(), projectDir() );
+            return URLUtil::getRelativePath( m_parent->projectDir(), projectDir() );
         }else if ( m_parent && QDir::cleanDirPath( m_parent->projectDir() ) == QDir::cleanDirPath( projectDir() ) )
         {
             return fileName();
@@ -1251,7 +1251,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
 void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
 {
 
-    QString myRelPath = getRelativePath( projectDirectory, projectDir() );
+    QString myRelPath = URLUtil::getRelativePath( projectDirectory, projectDir() );
     QString file;
     QStringList values;
     QString header = "";
@@ -1279,7 +1279,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
                     QStringList list = absDir.entryList();
                     for( QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
                     {
-                        res.insert( QDir::cleanDirPath( getRelativePath( projectDirectory, absDir.path()+QString( QChar( QDir::separator() ) )+*it ) ) );
+                        res.insert( QDir::cleanDirPath( URLUtil::getRelativePath( projectDirectory, absDir.path()+QString( QChar( QDir::separator() ) )+*it ) ) );
                     }
                 }
                 else
@@ -1319,7 +1319,7 @@ void Scope::allFiles( const QString& projectDirectory, std::set<QString>& res )
                 QStringList list = absDir.entryList();
                 for( QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
                 {
-                    res.insert( QDir::cleanDirPath( getRelativePath( projectDirectory, absDir.path()+QString( QChar( QDir::separator() ) )+*it ) ) );
+                    res.insert( QDir::cleanDirPath( URLUtil::getRelativePath( projectDirectory, absDir.path()+QString( QChar( QDir::separator() ) )+*it ) ) );
                 }
             }
             else

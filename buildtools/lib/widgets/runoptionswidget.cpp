@@ -55,8 +55,11 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
         mainprogram_edit->fileDialog()->setURL( KURL::fromPathOrURL(buildDirectory) );
     }else
     {
-        mainprogram_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
-        mainprogram_edit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry(dom, configGroup + "/run/mainprogram") ) );
+        QString program = DomUtil::readEntry(dom, configGroup + "/run/mainprogram");
+        if( QDir::isRelativePath(program) )
+            program = buildDirectory + "/" + program;
+        mainprogram_edit->setURL(program);
+        mainprogram_edit->fileDialog()->setURL( program );
     }
 
     cwd_edit->completionObject()->setMode(KURLCompletion::DirCompletion);

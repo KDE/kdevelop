@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <kurlcompletion.h>
 
-#include "pathutil.h"
+#include "urlutil.h"
 #include "qmakescopeitem.h"
 #include "scope.h"
 #include "trollprojectwidget.h"
@@ -64,7 +64,7 @@ void CreateScopeDlg::accept()
                     if( temp.open(IO_WriteOnly) )
                         temp.close();
                 }
-                file = getRelativePath( m_item->scope->projectDir(), file );
+                file = URLUtil::getRelativePath( m_item->scope->projectDir(), file );
                 s = m_item->scope->createIncludeScope( file );
             }
             break;

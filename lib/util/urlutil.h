@@ -72,6 +72,12 @@ namespace URLUtil
    */
   QString relativePath(const QString & parent, const QString & child, uint slashPolicy = SLASH_PREFIX);
   /**
+   * @return The relative path between a base path and destination path or.
+   * @param base The base Path.
+   * @param dest The destination path.
+   */
+  QString getRelativePath( const QString& base, const QString& dest );
+  /**
    * @param dirUrl An URL of a directory.
    * @param fileUrl An URL of a file.
    * @return The relative path between a directory and file. Should never return empty path.\n

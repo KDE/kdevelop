@@ -39,6 +39,7 @@
 #include "kdevcreatefile.h"
 #include "kdevlanguagesupport.h"
 #include "kdevmakefrontend.h"
+#include "urlutil.h"
 
 #include "domutil.h"
 
@@ -366,7 +367,8 @@ void AutoDetailsView::slotBuildTarget()
 	else
 		titem = static_cast <TargetItem*> ( m_listView->selectedItem() );
 
-	QString relpath = m_widget->selectedSubproject()->path.mid( m_part->projectDirectory().length() );
+	QString relpath = URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + m_part->activeDirectory();
+
 	m_part->buildTarget(relpath, titem);
 }
 
@@ -383,8 +385,8 @@ void AutoDetailsView::slotExecuteTarget()
 	else
 		titem = static_cast <TargetItem*> ( m_listView->selectedItem() );
 
-
-    m_part->executeTarget(QDir( DomUtil::readEntry( *m_part->projectDom(), "/kdevautoproject/run/cwd/"+titem->name )), titem);
+	QString relpath = URLUtil::getRelativePath( m_part->topsourceDirectory(), m_part->projectDirectory() ) + "/" + m_part->activeDirectory();
+	m_part->executeTarget(QDir( DomUtil::readEntry( *m_part->projectDom(), "/kdevautoproject/run/cwd/"+titem->name )), titem);
 }
 
 void AutoDetailsView::slotRemoveDetail()
