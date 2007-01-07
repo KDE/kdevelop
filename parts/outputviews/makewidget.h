@@ -74,8 +74,6 @@ private slots:
     void slotEnteredDirectory( EnteringDirectoryItem* );
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
-    void slotDocumentOpened(const KURL& filename);
-    void slotDocumentClosed(QObject* doc);
 
 private:
     void specialCheck( const QString& file, QString& fName ) const;

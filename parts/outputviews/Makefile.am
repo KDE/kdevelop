@@ -23,14 +23,13 @@ libkdevmakeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevmakeview_la_LIBADD = $(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/interfaces/extensions/dcop/libkdevdcopextensions.la $(top_builddir)/lib/libkdevelop.la \
 	$(LIB_KHTML) $(top_builddir)/lib/interfaces/extensions/libkdevextensions.la
-libkdevmakeview_la_SOURCES = makeviewpart.cpp makewidget.cpp directorystatusmessagefilter.cpp \
-	outputfilter.cpp compileerrorfilter.cpp commandcontinuationfilter.cpp makeitem.cpp \
-	makeactionfilter.cpp otherfilter.cpp filterdlg.ui
+libkdevmakeview_la_SOURCES = makeviewpart.cpp makewidget.cpp \
+	directorystatusmessagefilter.cpp outputfilter.cpp compileerrorfilter.cpp commandcontinuationfilter.cpp \
+	makeitem.cpp makeactionfilter.cpp otherfilter.cpp
 
 libkdevappview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevappview_la_LIBADD = $(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/interfaces/extensions/dcop/libkdevdcopextensions.la $(top_builddir)/lib/libkdevelop.la \
 	$(LIB_KHTML) $(top_builddir)/lib/interfaces/extensions/libkdevextensions.la
-libkdevappview_la_SOURCES = appoutputviewpart.cpp appoutputwidget.cpp directorystatusmessagefilter.cpp \
-	outputfilter.cpp compileerrorfilter.cpp commandcontinuationfilter.cpp makeitem.cpp \
-	makeactionfilter.cpp otherfilter.cpp filterdlg.ui
+libkdevappview_la_SOURCES = appoutputviewpart.cpp appoutputwidget.cpp \
+	filterdlg.ui

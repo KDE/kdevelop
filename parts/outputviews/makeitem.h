@@ -138,8 +138,6 @@ public:
 	QString fileName;
 	int lineNum;
 	QString m_error;
-	KTextEditor::Cursor* m_cursor;
-	KTextEditor::Document* m_doc;
 	bool m_isWarning;
 	bool m_isInstatiationInfo; ///this also implies isWarning
 	QString m_compiler;

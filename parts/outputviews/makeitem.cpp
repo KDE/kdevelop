@@ -98,8 +98,6 @@ ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QStrin
 	, fileName(fn)
 	, lineNum(ln)
 	, m_error(tx)
-	, m_cursor(0L)
-	, m_doc(0L)
 	, m_isWarning(isWarning | isInstatiationInfo)
 	, m_isInstatiationInfo( isInstatiationInfo )
 	, m_compiler(compiler)
@@ -107,7 +105,6 @@ ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QStrin
 
 ErrorItem::~ErrorItem()
 {
-	if (m_cursor) m_cursor->setPosition(uint(-2), uint(-2));
 }
 
 bool ErrorItem::append( const QString& text )
