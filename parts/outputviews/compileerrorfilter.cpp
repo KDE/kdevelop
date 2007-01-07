@@ -50,6 +50,13 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 		ErrorFormat( "([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" ),
 		//libtool link
 		ErrorFormat( "(libtool):( link):( warning): ", 0, 0, 0 ),
+		// ld 
+		ErrorFormat( "undefined reference", 0, 0, 0 ),
+		ErrorFormat( "undefined symbol", 0, 0, 0 ),
+		ErrorFormat( "ld: cannot find", 0, 0, 0 ),
+		ErrorFormat( "No such file", 0, 0, 0 ),
+		// make
+ 		ErrorFormat( "No rule to make target", 0, 0, 0 ),
 		// Fortran
 		ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
 		// Jade
@@ -65,6 +72,7 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 	};
 
 	return formats;
+
 }
 
 void CompileErrorFilter::processLine( const QString& line )

@@ -72,9 +72,9 @@ MakeActionFilter::MakeActionFilter( OutputFilter& next )
 MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 {
 	static ActionFormat formats[] = {
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)"),
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)"),
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)"),
+		ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)"),
+		ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)"),
+		ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)"),
 		ActionFormat( i18n("compiling"), 1, 1, "^compiling (.*)" ), //unsermake
 		ActionFormat( i18n("compiling"), 1, 1, "\\[.+%\\] Building .* object (.*)" ), //cmake
 
