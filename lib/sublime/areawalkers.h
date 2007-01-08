@@ -26,8 +26,8 @@ namespace Sublime {
 template <typename Operator>
 void Area::walkViews(Operator &op, AreaIndex *index)
 {
-    bool result = op(index);
-    if (result)
+    Area::WalkerMode mode = op(index);
+    if (mode == Area::StopWalker)
         return;
     else if (index->first() && index->second())
     {
@@ -43,7 +43,7 @@ void Area::walkToolViews(Operator &op, Positions positions)
     {
         Sublime::Position position = toolViewPosition(view);
         if (position & positions)
-            if (op(view, position))
+            if (op(view, position) == Area::StopWalker)
                 break;
     }
 }

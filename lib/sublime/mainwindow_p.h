@@ -22,6 +22,7 @@
 #include <QMap>
 #include <QObject>
 
+#include "area.h"
 #include "sublimedefs.h"
 
 class QMenu;
@@ -32,7 +33,6 @@ class QDockWidget;
 namespace Sublime {
 
 class View;
-class Area;
 class Controller;
 class AreaIndex;
 class MainWindow;
@@ -46,7 +46,7 @@ public:
     class ToolViewCreator {
     public:
         ToolViewCreator(MainWindowPrivate *_d): d(_d) {}
-        bool operator() (View *view, Sublime::Position position);
+        Area::WalkerMode operator() (View *view, Sublime::Position position);
     private:
         MainWindowPrivate *d;
     };
@@ -55,7 +55,7 @@ public:
     class ViewCreator {
     public:
         ViewCreator(MainWindowPrivate *_d): d(_d) {}
-        bool operator() (AreaIndex *index);
+        Area::WalkerMode operator() (AreaIndex *index);
     private:
         MainWindowPrivate *d;
     };

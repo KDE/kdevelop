@@ -93,19 +93,25 @@ public:
     /**@return the controller for this area.*/
     Controller *controller() const;
 
+    /**Walker mode to determine the behavior of area walkers.*/
+    enum WalkerMode {
+        StopWalker,       ///Stop after processing this area index or toolview
+        ContinueWalker    ///Continue walking
+    };
+
     /**Walks the tree of area indices and executes the operator. It will always walk the
     tree of views from top to bottom from left to right.
 
-    Operator should be the class with <i>bool operator()(AreaIndex *index)</i>
-    method. That method should return true if the walker has to stop at current index
-    or false to continue.
+    Operator should be the class with <i>WalkerResult operator()(AreaIndex *index)</i>
+    method. That method should return Area::StopWalker if the walker has to stop at current index
+    or Area::ContinueWalker to continue.
 
     Example (operator to print the indices, assumes hypothetical operator <<()):
     @code
     struct MyOperator {
-        bool operator()(AreaIndex *index) {
+        WalkerMode operator()(AreaIndex *index) {
             std::cerr << index << std::endl;
-            return false;
+            return Area::ContinueWalker;
         }
     };
     ...
@@ -118,15 +124,15 @@ public:
     /**Walks the list of toolviews. The order in which toolviews are walked is not specified.
 
     Operator should be the class with <i>bool operator()(View *view, Sublime::Position position)</i> method.
-    That method should return true if the walker has to stop at current toolview
-    or falst to continue.
+    That method should return Area::StopWalker if the walker has to stop at current index
+    or Area::ContinueWalker to continue.
 
     Example (operator to print the list of views):
     @code
     struct MyOperator {
-        bool operator()(View *view, Sublime::Position position) {
+        WalkerMode operator()(View *view, Sublime::Position position) {
             std::cerr << view << " at position " << position << std::endl;
-            return false;
+            return Area::ContiueWalker;
         }
     };
     ...

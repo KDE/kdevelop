@@ -43,17 +43,17 @@ using namespace Sublime;
 
 struct ViewCounter {
     ViewCounter(): count(0) {}
-    bool operator()(AreaIndex *index)
+    Area::WalkerMode operator()(AreaIndex *index)
     {
         count += index->views().count();
-        return false;
+        return Area::ContinueWalker;
     }
     int count;
 };
 
 struct AreaWidgetChecker {
     AreaWidgetChecker(): hasWidgets(true) {}
-    bool operator()(AreaIndex *index)
+    Area::WalkerMode operator()(AreaIndex *index)
     {
         foreach (View *view, index->views())
         {
@@ -61,14 +61,14 @@ struct AreaWidgetChecker {
                 kDebug() << "   view " << view << " has no widget" << endl;
             hasWidgets = hasWidgets && view->hasWidget();
         }
-        return false;
+        return Area::ContinueWalker;
     }
-    bool operator()(View *view, Sublime::Position)
+    Area::WalkerMode operator()(View *view, Sublime::Position)
     {
         if (!view->hasWidget())
             kDebug() << "   view " << view << " has no widget" << endl;
         hasWidgets = hasWidgets && view->hasWidget();
-        return false;
+        return Area::ContinueWalker;
     }
     bool hasWidgets;
 };

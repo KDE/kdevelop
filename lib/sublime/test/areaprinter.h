@@ -20,6 +20,7 @@
 #define SUBLIMEAREAPRINTER_H
 
 #include <QString>
+#include <sublime/area.h>
 #include <sublime/sublimedefs.h>
 
 namespace Sublime {
@@ -33,7 +34,7 @@ namespace Sublime {
 class AreaViewsPrinter {
 public:
     AreaViewsPrinter();
-    bool operator()(Sublime::AreaIndex *index);
+    Sublime::Area::WalkerMode operator()(Sublime::AreaIndex *index);
     QString result;
 
 private:
@@ -44,7 +45,7 @@ private:
 class AreaToolViewsPrinter {
 public:
     AreaToolViewsPrinter();
-    bool operator()(Sublime::View *view, Sublime::Position position);
+    Sublime::Area::WalkerMode operator()(Sublime::View *view, Sublime::Position position);
     QString result;
 
 private:

@@ -50,22 +50,22 @@ struct AreaPrivate {
 
     struct ViewFinder {
         ViewFinder(View *_view): view(_view), index(0) {}
-        bool operator() (AreaIndex *idx) {
+        Area::WalkerMode operator() (AreaIndex *idx) {
             if (idx->hasView(view))
             {
                 index = idx;
-                return true;
+                return Area::StopWalker;
             }
-            return false;
+            return Area::ContinueWalker;
         }
         View *view;
         AreaIndex *index;
     };
 
     struct ViewLister {
-        bool operator()(AreaIndex *idx) {
+        Area::WalkerMode operator()(AreaIndex *idx) {
             views += idx->views();
-            return false;
+            return Area::ContinueWalker;
         }
         QList<View*> views;
     };

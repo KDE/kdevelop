@@ -40,7 +40,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w)
 {
 }
 
-bool MainWindowPrivate::ToolViewCreator::operator() (View *view, Sublime::Position position)
+Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sublime::Position position)
 {
     QDockWidget *dock = new QDockWidget(view->document()->title(), d->m_mainWindow);
     d->docks.append(dock);
@@ -48,10 +48,10 @@ bool MainWindowPrivate::ToolViewCreator::operator() (View *view, Sublime::Positi
 
     dock->setWidget(view->widget());
     d->m_mainWindow->addDockWidget(d->positionToDockArea(position), dock);
-    return false;
+    return Area::ContinueWalker;
 }
 
-bool MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
+Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
     kDebug() << "  reconstructing views for area index " << index << endl;
     QSplitter *parent = 0;
@@ -83,7 +83,7 @@ bool MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         foreach (View *view, index->views())
             container->addWidget(view->widget());
     }
-    return false;
+    return Area::ContinueWalker;
 }
 
 void MainWindowPrivate::reconstruct()

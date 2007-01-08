@@ -30,7 +30,7 @@ AreaViewsPrinter::AreaViewsPrinter()
     result = "\n";
 }
 
-bool AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
+Area::WalkerMode AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
 {
     result += printIndentation(index) + "[ ";
     if (index->views().isEmpty())
@@ -41,7 +41,7 @@ bool AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
             result += view->objectName() + " ";
     }
     result += "]\n";
-    return false;
+    return Area::ContinueWalker;
 }
 
 QString AreaViewsPrinter::printIndentation(Sublime::AreaIndex *index) const
@@ -69,10 +69,10 @@ AreaToolViewsPrinter::AreaToolViewsPrinter()
     result = "\n";
 }
 
-bool AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position position)
+Area::WalkerMode AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position position)
 {
     result += view->objectName() + " [ " + printPosition(position) + " ]" + "\n";
-    return false;
+    return Area::ContinueWalker;
 }
 
 QString AreaToolViewsPrinter::printPosition(Sublime::Position position)
