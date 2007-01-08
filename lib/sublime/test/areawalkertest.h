@@ -16,49 +16,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEAREAWALKERS_H
-#define SUBLIMEAREAWALKERS_H
+#ifndef SUBLIMEAREAWALKERTEST_H
+#define SUBLIMEAREAWALKERTEST_H
+#include <QObject>
 
-namespace Sublime {
-
-//area walkers implementations
-
-template <typename Operator>
-Area::WalkerMode Area::walkViewsInternal(Operator &op, AreaIndex *index)
-{
-    Area::WalkerMode mode = op(index);
-    if (mode == Area::StopWalker)
-        return mode;
-    else if (index->first() && index->second())
-    {
-        mode = walkViewsInternal(op, index->first());
-        if (mode == Area::StopWalker)
-            return mode;
-        mode = walkViewsInternal(op, index->second());
-    }
-    return mode;
-}
-
-template <typename Operator>
-void Area::walkViews(Operator &op, AreaIndex *index)
-{
-    walkViewsInternal(op, index);
-}
-
-template <typename Operator>
-void Area::walkToolViews(Operator &op, Positions positions)
-{
-    foreach (View *view, toolViews())
-    {
-        Sublime::Position position = toolViewPosition(view);
-        if (position & positions)
-            if (op(view, position) == Area::StopWalker)
-                break;
-    }
-}
-
-}
+class AreaWalkerTest: public QObject {
+    Q_OBJECT
+private slots:
+    void testWalkerModes();
+};
 
 #endif
-
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

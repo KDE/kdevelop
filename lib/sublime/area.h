@@ -143,6 +143,9 @@ public:
     void walkToolViews(Operator &op, Positions positions);
 
 private:
+    template <typename Operator>
+    WalkerMode walkViewsInternal(Operator &op, AreaIndex *index);
+
     struct AreaPrivate *d;
 
 };

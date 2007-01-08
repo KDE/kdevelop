@@ -8,4 +8,10 @@ kde4_add_executable(sublime-areaoperationtest NOGUI RUN_UNINSTALLED ${areaoperat
 target_link_libraries(sublime-areaoperationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
 add_test(sublime-areaoperationtest ${EXECUTABLE_OUTPUT_PATH}/sublime-areaoperationtest)
 
+set( areawalkertest_SRCS areawalkertest.cpp areaprinter.cpp )
+kde4_automoc(${areawalkertest_SRCS})
+kde4_add_executable(sublime-areawalkertest NOGUI RUN_UNINSTALLED ${areawalkertest_SRCS})
+target_link_libraries(sublime-areawalkertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
+add_test(sublime-areawalkertest ${EXECUTABLE_OUTPUT_PATH}/sublime-areawalkertest)
+
 endif(KDE4_BUILD_TESTS)
