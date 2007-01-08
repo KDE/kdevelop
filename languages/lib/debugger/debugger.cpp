@@ -29,7 +29,7 @@ Debugger::~Debugger()
 // {
 //     if (!s_instance)
 //         s_instance = new Debugger;
-// 
+//
 //     return s_instance;
 // }
 
@@ -170,6 +170,9 @@ void Debugger::marksChanged()
                 if (m->type & Breakpoint)
                     emit toggledBreakpoint( doc->url().path(), m->line );
             }
+
+            //bring focus back to the editor
+            m_partController->activatePart(m_partController->partForURL( doc->url() ));
         }
     }
 }
