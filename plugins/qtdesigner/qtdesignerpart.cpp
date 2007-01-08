@@ -24,7 +24,7 @@
 #include "internals/qdesigner_integration_p.h"
 
 typedef KParts::GenericFactory<QtDesignerPart> QtDesignerPartFactory;
-K_EXPORT_COMPONENT_FACTORY(kdevguibuilder, QtDesignerPartFactory)
+K_EXPORT_COMPONENT_FACTORY(kdevqtdesigner, QtDesignerPartFactory)
 
 QtDesignerPart::QtDesignerPart(QWidget* parentWidget,
                                QObject *parent,
