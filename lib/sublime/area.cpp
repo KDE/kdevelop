@@ -65,7 +65,7 @@ struct AreaPrivate {
     struct ViewLister {
         bool operator()(AreaIndex *idx) {
             views += idx->views();
-            return true;
+            return false;
         }
         QList<View*> views;
     };
