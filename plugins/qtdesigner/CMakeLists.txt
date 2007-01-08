@@ -20,4 +20,4 @@ install(TARGETS kdevqtdesigner DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install(FILES kdevqtdesigner.desktop DESTINATION  ${SHARE_INSTALL_PREFIX}/services )
-install(FILES qtdesignerpart.rc DESTINATION  ${DATA_INSTALL_DIR}/kdevelop )
+install(FILES kdevqtdesigner.rc DESTINATION  ${DATA_INSTALL_DIR}/kdevqtdesigner )
