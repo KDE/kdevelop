@@ -43,11 +43,18 @@ struct AreaStopper {
         }
         return Area::ContinueWalker;
     }
+    Area::WalkerMode operator()(View *view, Sublime::Position)
+    {
+        list << view->objectName();
+        if (view->objectName() == m_stopAt)
+            return Area::StopWalker;
+        return Area::ContinueWalker;
+    }
     QStringList list;
     QString m_stopAt;
 };
 
-void AreaWalkerTest::testWalkerModes()
+void AreaWalkerTest::testViewWalkerModes()
 {
     Controller *controller = new Controller(this);
     Document *doc = new PartDocument(controller, KUrl::fromPath("~/foo.cpp"));
@@ -92,6 +99,42 @@ void AreaWalkerTest::testWalkerModes()
     AreaStopper noStopper("X");
     area->walkViews(noStopper, area->rootIndex());
     QCOMPARE(noStopper.list.join(" "), QString("1 4 3 2"));
+
+    delete area;
+    delete doc;
+    delete controller;
+}
+
+void AreaWalkerTest::testToolViewWalkerModes()
+{
+    Controller *controller = new Controller(this);
+    Document *doc = new PartDocument(controller, KUrl::fromPath("~/foo.cpp"));
+    Area *area = new Area(controller, "Area");
+    View *view = doc->createView();
+    view->setObjectName("1");
+    area->addToolView(view, Sublime::Left);
+    view = doc->createView();
+    view->setObjectName("2");
+    area->addToolView(view, Sublime::Left);
+    view = doc->createView();
+    view->setObjectName("3");
+    area->addToolView(view, Sublime::Bottom);
+
+    AreaStopper stopper1("1");
+    area->walkToolViews(stopper1, Sublime::AllPositions);
+    QCOMPARE(stopper1.list.join(" "), QString("1"));
+
+    AreaStopper stopper2("2");
+    area->walkToolViews(stopper2, Sublime::AllPositions);
+    QCOMPARE(stopper2.list.join(" "), QString("1 2"));
+
+    AreaStopper stopper3("3");
+    area->walkToolViews(stopper3, Sublime::AllPositions);
+    QCOMPARE(stopper3.list.join(" "), QString("1 2 3"));
+
+    AreaStopper noStopper("X");
+    area->walkToolViews(noStopper, Sublime::AllPositions);
+    QCOMPARE(noStopper.list.join(" "), QString("1 2 3"));
 
     delete area;
     delete doc;

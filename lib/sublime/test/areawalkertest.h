@@ -23,7 +23,8 @@
 class AreaWalkerTest: public QObject {
     Q_OBJECT
 private slots:
-    void testWalkerModes();
+    void testViewWalkerModes();
+    void testToolViewWalkerModes();
 };
 
 #endif
