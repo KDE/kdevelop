@@ -14,7 +14,6 @@
 Customized KHTML part for KDevelop.
 */
 
-class KAction;
 class KToolBarPopupAction;
 class KDevDocument;
 
@@ -103,11 +102,11 @@ private:
     bool m_restoring;
 
     QString m_context;
-    KAction *stopAction;
-    KAction *reloadAction;
-    KAction *duplicateAction;
-    KAction *printAction;
-    KAction *copyAction;
+    QAction *stopAction;
+    QAction *reloadAction;
+    QAction *duplicateAction;
+    QAction *printAction;
+    QAction *copyAction;
 
     int m_options;
 };

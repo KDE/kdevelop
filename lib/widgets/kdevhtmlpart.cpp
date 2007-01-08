@@ -3,7 +3,7 @@
 #include <qapplication.h>
 //Added by qt3to4:
 #include <QTextStream>
-
+#include <kactioncollection.h>
 #include <kaction.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
@@ -35,27 +35,37 @@ KDevHTMLPart::KDevHTMLPart()
   connect(this, SIGNAL(canceled(const QString &)), this, SLOT(slotCancelled(const QString &)));
 
   KActionCollection * actions = actionCollection();// new KActionCollection( this );
-  reloadAction = new KAction( KIcon("reload"), i18n( "Reload" ), actions, "doc_reload" );
+  reloadAction = actions->addAction( "doc_reload" );
+  reloadAction->setText( i18n( "Reload" ) );
+  reloadAction->setIcon( KIcon("reload") );
   reloadAction->setWhatsThis(i18n("<b>Reload</b><p>Reloads the current document."));
   connect(reloadAction, SIGNAL(triggered(bool)), SLOT( slotReload() ));
 
-  stopAction = new KAction( KIcon("stop"), i18n( "Stop" ), actions, "doc_stop" );
+  stopAction = actions->addAction( "doc_stop" );
+  stopAction->setText(i18n( "Stop" ) );
+  stopAction->setIcon( KIcon("stop") );
   stopAction->setWhatsThis(i18n("<b>Stop</b><p>Stops the loading of current document."));
   connect(stopAction, SIGNAL(triggered(bool)), SLOT( slotStop() ));
 
-  duplicateAction = new KAction( KIcon("window_new"), i18n( "Duplicate Tab" ), actions, "doc_dup" );
+  duplicateAction = actions->addAction( "doc_dup" );
+  duplicateAction->setText( i18n( "Duplicate Tab" ) );
+  duplicateAction->setIcon( KIcon("window_new") );
   duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
   connect(duplicateAction, SIGNAL(triggered(bool)), SLOT( slotDuplicate() ));
 
-  printAction = KStandardAction::print(this, SLOT(slotPrint()), actions, "print_doc");
-  copyAction = KStandardAction::copy(this, SLOT(slotCopy()), actions, "copy_doc_selection");
+  printAction = KStandardAction::print(this, SLOT(slotPrint()), actions);
+  actions->addAction( "print_doc", printAction );
+  copyAction = KStandardAction::copy(this, SLOT(slotCopy()), actions);
+  actions->addAction( "copy_doc_selection", copyAction );
+
 
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 
 //BEGIN documentation history stuff
 
-  m_backAction = new KToolBarPopupAction(KIcon("back"), i18n("Back"), actions, "browser_back");
+  m_backAction = new KToolBarPopupAction(KIcon("back"), i18n("Back"), actions);
+  actions->addAction( "browser_back", m_backAction );
   m_backAction->setEnabled( false );
   m_backAction->setToolTip(i18n("Back"));
   m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the <b>documentation</b> browsing history."));
@@ -66,7 +76,8 @@ KDevHTMLPart::KDevHTMLPart()
   connect(m_backAction->menu(), SIGNAL(activated(int)),
          this, SLOT(slotPopupActivated(int)));
 
-  m_forwardAction = new KToolBarPopupAction(KIcon("forward"), i18n("Forward"), actions, "browser_forward");
+  m_forwardAction = new KToolBarPopupAction(KIcon("forward"), i18n("Forward"), actions);
+  actions->addAction( "browser_forward", m_forwardAction );
   m_forwardAction->setEnabled( false );
   m_forwardAction->setToolTip(i18n("Forward"));
   m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the <b>documentation</b> browsing history."));

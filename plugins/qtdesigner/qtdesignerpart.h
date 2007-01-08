@@ -17,7 +17,7 @@ class KAction;
 
 template<class T> class QList;
 
-typedef QHash<KAction*, QAction*> DesignerActionHash;
+typedef QHash<QAction*, QAction*> DesignerActionHash;
 
 
 class QtDesignerPart: public KParts::ReadWritePart
@@ -42,8 +42,8 @@ protected:
 private:
   //wrap the actions provided by QDesignerFormWindowManagerInterface in
   //KActions
-  KAction* wrapDesignerAction( QAction*, KActionCollection*, const char* );
-  void updateDesignerAction( KAction*, QAction* );
+  QAction* wrapDesignerAction( QAction*, KActionCollection*, const char* );
+  void updateDesignerAction( QAction*, QAction* );
 
 private Q_SLOTS:
   void updateDesignerActions();

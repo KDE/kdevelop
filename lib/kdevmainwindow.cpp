@@ -121,25 +121,27 @@ void KDevMainWindow::setupActions()
 {
     KStandardAction::quit( this, SLOT( close() ), actionCollection() );
 
-    KAction *action;
+    QAction *action;
 
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1", app );
     action = KStandardAction::preferences( this, SLOT( settingsDialog() ),
-                                      actionCollection(), "settings_configure" );
+                                      actionCollection());
+    actionCollection()->addAction( "settings_configure", action );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
 
-    action = new KAction( i18n( "Configure &Editor..." ), actionCollection(),
-                          "settings_configure_editors" );
+    action = actionCollection()->addAction( "settings_configure_editors" );
+    action->setText( i18n( "Configure &Editor..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( configureEditors() ) );
     action->setToolTip( i18n( "Configure editor settings" ) );
     action->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog." ) );
     action->setEnabled( false );
 
     action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
-                                        actionCollection(), "settings_show_statusbar" );
+                                        actionCollection());
+    actionCollection()->addAction( "settings_show_statusbar", action );
     action->setText( i18n( "Show &Statusbar" ) );
     action->setToolTip( i18n( "Show statusbar" ) );
     action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
@@ -147,8 +149,9 @@ void KDevMainWindow::setupActions()
     KToolBarPopupAction *popupAction;
     popupAction = new KToolBarPopupAction( KIcon( "stop" ),
                                            i18n( "&Stop" ),
-                                           actionCollection(),
-                                           "stop_processes" );
+                                           actionCollection()
+                                           );
+    actionCollection()->addAction( "stop_processes",popupAction );
 
     popupAction->setShortcut( Qt::Key_Escape );
     popupAction->setToolTip( i18n( "Stop" ) );
@@ -167,47 +170,55 @@ void KDevMainWindow::setupActions()
 
     action = KStandardAction::showMenubar(
                  this, SLOT( showMenuBar() ),
-                 actionCollection(), "settings_show_menubar" );
+                 actionCollection());
+    actionCollection()->addAction( "settings_show_menubar", action );
     action->setToolTip( beautifyToolTip( action->text() ) );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
     action = KStandardAction::keyBindings(
                  this, SLOT( keyBindings() ),
-                 actionCollection(), "settings_configure_shortcuts" );
+                 actionCollection());
+    actionCollection()->addAction( "settings_configure_shortcuts", action );
     action->setToolTip( beautifyToolTip( action->text() ) );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure shortcut keys." ) ) );
 
     action = KStandardAction::configureToolbars(
                  this, SLOT( configureToolbars() ),
-                 actionCollection(), "settings_configure_toolbars" );
+                 actionCollection() );
+    actionCollection()->addAction( "settings_configure_toolbars", action );
     action->setToolTip( beautifyToolTip( action->text() ) );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure toolbars." ) ) );
 
     action = KStandardAction::configureNotifications(
                  this, SLOT( configureNotifications() ),
-                 actionCollection(), "settings_configure_notifications" );
+                 actionCollection());
+    actionCollection()->addAction( "settings_configure_notifications" );
     action->setToolTip( beautifyToolTip( action->text() ) );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( action->text() ) ).arg( i18n( "Lets you configure system notifications." ) ) );
 
-    action = new KAction( i18n( "&Next Window" ), actionCollection(), "view_next_window" );
+    action = actionCollection()->addAction( "view_next_window" );
+    action->setText( i18n( "&Next Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Right );
     action->setToolTip( i18n( "Next window" ) );
     action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window." ) );
 
-    action = new KAction( i18n( "&Previous Window" ), actionCollection(), "view_previous_window" );
+    action = actionCollection()->addAction( "view_previous_window" );
+    action->setText( i18n( "&Previous Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Left );
     action->setToolTip( i18n( "Previous window" ) );
     action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window." ) );
 
-    action = new KAction( i18n( "&Last Accessed Window" ), actionCollection(), "view_last_window" );
+    action = actionCollection()->addAction( "view_last_window" );
+    action->setText( i18n( "&Last Accessed Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoLastWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Up );
     action->setToolTip( i18n( "Last accessed window" ) );
     action->setWhatsThis( i18n( "<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key)." ) );
 
-    action = new KAction( i18n( "&First Accessed Window" ), actionCollection(), "view_first_window" );
+    action = actionCollection()->addAction( "view_first_window" );
+    action->setText( i18n( "&First Accessed Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoFirstWindow() ) );
     action->setShortcut( Qt::ALT + Qt::Key_Down );
     action->setToolTip( i18n( "First accessed window" ) );

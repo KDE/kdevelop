@@ -18,6 +18,7 @@
 #include <ksavefile.h>
 #include <kstandardaction.h>
 #include <kicon.h>
+#include <kactioncollection.h>
 
 #include "kdevcore.h"
 #include <kdevmainwindow.h>
@@ -119,11 +120,12 @@ QDesignerFormEditorInterface *QtDesignerPart::designer() const
 
 void QtDesignerPart::setupActions()
 {
-    KStandardAction::save( this, SLOT( save() ), actionCollection(), "file_save" );
+    QAction *a = KStandardAction::save( this, SLOT( save() ), actionCollection());
+    actionCollection()->addAction( "file_save", a );
     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
 
     QAction* designerAction = 0;
-    KAction* designerKAction = 0;
+    QAction* designerKAction = 0;
     designerAction = manager->actionAdjustSize();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "adjust_size" );
@@ -239,12 +241,13 @@ bool QtDesignerPart::eventFilter( QObject* obj, QEvent* event )
     return false;
 }
 
-KAction* QtDesignerPart::wrapDesignerAction( QAction* dAction,
+QAction* QtDesignerPart::wrapDesignerAction( QAction* dAction,
                                          KActionCollection* parent,
                                          const char* name )
 {
-    KAction* a = new KAction( KIcon( dAction->icon() ), dAction->text(),
-                              parent, name );
+    QAction *a = parent->addAction( name );
+    a->setText( dAction->text() );
+    a->setIcon(  KIcon( dAction->icon() ) );
     a->setShortcut( dAction->shortcut() );
     a->setShortcutContext( dAction->shortcutContext() );
     connect( a, SIGNAL( triggered() ), dAction, SIGNAL( triggered() ) );
@@ -254,7 +257,7 @@ KAction* QtDesignerPart::wrapDesignerAction( QAction* dAction,
     return a;
 }
 
-void QtDesignerPart::updateDesignerAction( KAction* a, QAction* dAction )
+void QtDesignerPart::updateDesignerAction( QAction* a, QAction* dAction )
 {
     a->setActionGroup( dAction->actionGroup() );
     a->setCheckable( dAction->isCheckable() );

@@ -36,6 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <klineedit.h>
@@ -57,7 +58,6 @@ Boston, MA 02110-1301, USA.
 #include <krecentfilesaction.h>
 #include <ktoolbarpopupaction.h>
 #include <kstandardaction.h>
-#include <kseparatoraction.h>
 
 #include <kio/netaccess.h>
 
@@ -971,28 +971,32 @@ void KDevDocumentController::initialize()
     KActionCollection * ac =
         KDevCore::mainWindow() ->actionCollection();
 
-    KAction* newAction =
+    QAction* newAction =
         KStandardAction::open( this,
                           SLOT( slotOpenDocument() ),
-                          ac, "file_open" );
+                          ac );
+    ac->addAction( "file_open", newAction );
     newAction->setToolTip( i18n( "Open file" ) );
     newAction->setWhatsThis( i18n( "<b>Open file</b><p>Opens an existing file "
                                    "without adding it to the project.</p>" ) );
 
     m_openRecentAction =
         KStandardAction::openRecent( this, SLOT( slotOpenRecent( const KUrl& ) ),
-                                ac, "file_open_recent" );
+                                ac );
+    ac->addAction( "file_open_recent", m_openRecentAction );
     m_openRecentAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_openRecentAction->text() ) ).arg( i18n( "Opens recently opened file." ) ) );
     m_openRecentAction->loadEntries( KDevConfig::localProject(), "RecentDocuments" );
 
-    m_saveAllDocumentsAction = new KAction( i18n( "Save Al&l" ), ac, "file_save_all" );
+    m_saveAllDocumentsAction = ac->addAction( "file_save_all" );
+    m_saveAllDocumentsAction->setText( i18n( "Save Al&l" ) );
     connect( m_saveAllDocumentsAction, SIGNAL( triggered( bool ) ), SLOT( saveAllDocuments() ) );
     m_saveAllDocumentsAction->setToolTip( i18n( "Save all modified files" ) );
     m_saveAllDocumentsAction->setWhatsThis( i18n( "<b>Save all</b><p>Saves all "
                                             "modified files." ) );
     m_saveAllDocumentsAction->setEnabled( false );
 
-    m_reloadAllDocumentsAction = new KAction( i18n( "Reloa&d All" ), ac, "file_revert_all" );
+    m_reloadAllDocumentsAction = ac->addAction( "file_revert_all" );
+    m_reloadAllDocumentsAction->setText( i18n( "Reloa&d All" ) );
     connect( m_reloadAllDocumentsAction, SIGNAL( triggered() ), SLOT( reloadAllDocuments() ) );
     m_reloadAllDocumentsAction->setToolTip( i18n( "Reload all changes" ) );
     m_reloadAllDocumentsAction->setWhatsThis( i18n( "<b>Reload all</b>"
@@ -1002,37 +1006,41 @@ void KDevDocumentController::initialize()
 
     m_closeWindowAction = KStandardAction::close(
                               this, SLOT( closeActiveDocument() ),
-                              ac, "file_close" );
+                              ac);
+    ac->addAction( "file_close", m_closeWindowAction );
     m_closeWindowAction->setToolTip( i18n( "Close current file" ) );
     m_closeWindowAction->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( beautifyToolTip( m_closeWindowAction->text() ) ).arg( i18n( "Closes current file." ) ) );
     m_closeWindowAction->setEnabled( false );
 
-    m_closeAllWindowsAction = new KAction( i18n( "Close All" ), ac, "file_close_all" );
+    m_closeAllWindowsAction = ac->addAction( "file_close_all" );
+    m_closeAllWindowsAction->setText( i18n( "Close All" ) );
     connect( m_closeAllWindowsAction, SIGNAL( triggered() ), SLOT( closeAllDocuments() ) );
     m_closeAllWindowsAction->setToolTip( i18n( "Close all files" ) );
     m_closeAllWindowsAction->setWhatsThis( i18n( "<b>Close all</b><p>Close all "
                                            "opened files." ) );
     m_closeAllWindowsAction->setEnabled( false );
 
-    m_closeOtherWindowsAction = new KAction( i18n( "Close All Others" ), ac, "file_closeother" );
+    m_closeOtherWindowsAction = ac->addAction( "file_closeother" );
+    m_closeOtherWindowsAction->setText( i18n( "Close All Others" ) );
     connect( m_closeOtherWindowsAction, SIGNAL( triggered() ), SLOT( closeAllExceptActiveDocument() ) );
     m_closeOtherWindowsAction->setToolTip( i18n( "Close other files" ) );
     m_closeOtherWindowsAction->setWhatsThis( i18n( "<b>Close all others</b>"
             "<p>Close all opened files except current." ) );
     m_closeOtherWindowsAction->setEnabled( false );
 
-    m_switchToAction = new KAction( i18n( "Switch To..." ), ac, "file_switchto" );
-    m_switchToAction->setShortcut( KShortcut( "CTRL+/" ) );
+    m_switchToAction = ac->addAction( "file_switchto" );
+    m_switchToAction->setText( i18n( "Switch To..." ) );
+     qobject_cast<KAction*>( m_switchToAction )->setShortcut( KShortcut( "CTRL+/" ) );
     connect( m_switchToAction, SIGNAL( triggered() ), SLOT( slotSwitchTo() ) );
     m_switchToAction->setToolTip( i18n( "Switch to" ) );
     m_switchToAction->setWhatsThis( i18n( "<b>Switch to</b><p>Prompts to enter "
                                           "the name of previously opened file "
                                           "to switch to." ) );
+#warning "port kseparatoraction"
+    //new KSeparatorAction( ac, "dummy_separator" );
 
-    new KSeparatorAction( ac, "dummy_separator" );
-
-    m_backAction = new KToolBarPopupAction( KIcon("back"), i18n( "Back" ), ac,
-                                            "history_back" );
+    m_backAction = new KToolBarPopupAction( KIcon("back"), i18n( "Back" ), ac                                          );
+    ac->addAction( "history_back", m_backAction );
     m_backAction->setEnabled( false );
     m_backAction->setToolTip( i18n( "Back" ) );
     m_backAction->setWhatsThis( i18n( "<b>Back</b><p>Moves backwards one step "
@@ -1043,8 +1051,8 @@ void KDevDocumentController::initialize()
     connect( m_backAction->menu(), SIGNAL( triggered( QAction* ) ),
              this, SLOT( slotBackMenuTriggered( QAction* ) ) );
 
-    m_forwardAction = new KToolBarPopupAction( KIcon("forward"), i18n( "Forward" ), ac,
-                      "history_forward" );
+    m_forwardAction = new KToolBarPopupAction( KIcon("forward"), i18n( "Forward" ), ac);
+    ac->addAction( "history_forward", m_forwardAction );
     m_forwardAction->setEnabled( false );
     m_forwardAction->setToolTip( i18n( "Forward" ) );
     m_forwardAction->setWhatsThis( i18n( "<b>Forward</b><p>Moves forward one "

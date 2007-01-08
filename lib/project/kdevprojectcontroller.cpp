@@ -78,14 +78,16 @@ void KDevProjectController::initialize()
     KActionCollection * ac =
         KDevCore::mainWindow() ->actionCollection();
 
-    KAction *action;
+    QAction *action;
 
-    action = new KAction( i18n( "&Open Project..." ), ac, "project_open" );
+    action = ac->addAction( "project_open" );
+    action->setText(i18n( "&Open Project..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open project" ) );
     action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project." ) );
 
-    action = new KAction( i18n( "C&lose Project" ), ac, "project_close" );
+    action = ac->addAction( "project_close" );
+    action->setText( i18n( "C&lose Project" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( closeProject() ) );
     action->setToolTip( i18n( "Close project" ) );
     action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
@@ -96,7 +98,8 @@ void KDevProjectController::initialize()
 
     m_recentAction =
         KStandardAction::openRecent( this, SLOT( openProject( const KUrl& ) ),
-                                ac, "project_open_recent" );
+                                ac);
+    ac->addAction( "project_open_recent", m_recentAction );
     m_recentAction->setToolTip( i18n( "Open recent project" ) );
     m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project." ) );

@@ -257,12 +257,12 @@ private:
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
     KDevDocument* documentForPart( KParts::Part* part ) const;
 
-    KAction *m_closeWindowAction;
-    KAction *m_saveAllDocumentsAction;
-    KAction *m_reloadAllDocumentsAction;
-    KAction *m_closeAllWindowsAction;
-    KAction *m_closeOtherWindowsAction;
-    KAction *m_switchToAction;
+    QAction *m_closeWindowAction;
+    QAction *m_saveAllDocumentsAction;
+    QAction *m_reloadAllDocumentsAction;
+    QAction *m_closeAllWindowsAction;
+    QAction *m_closeOtherWindowsAction;
+    QAction *m_switchToAction;
     KRecentFilesAction *m_openRecentAction;
     QString m_presetEncoding;
 
