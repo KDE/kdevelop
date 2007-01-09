@@ -1,6 +1,6 @@
-#line 2 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 2 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
-#line 4 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 4 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -678,7 +678,7 @@ goto find_rule; \
 
 
 
-#line 682 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 682 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 #define INITIAL 0
 #define assignment 1
@@ -844,7 +844,7 @@ YY_DECL
 #line 50 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 
 
-#line 848 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 848 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -1174,7 +1174,7 @@ YY_RULE_SETUP
 #line 101 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1178 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 1178 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(assignment):
 			case YY_STATE_EOF(fnarg):
