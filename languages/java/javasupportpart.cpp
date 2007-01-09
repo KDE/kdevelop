@@ -526,7 +526,7 @@ JavaSupportPart::parseProject( )
     QDir d( m_projectDirectory );
 
     QDataStream stream;
-    QMap< QString, QPair<uint, Q_LONG> > pcs;
+    QMap< QString, QPair<uint, uint> > pcs;
 
     QFile f( project()->projectDirectory() + "/" + project()->projectName().lower() + ".kdevelop" + ".pcs" );
     if( f.open(IO_ReadOnly) ){
@@ -543,7 +543,7 @@ JavaSupportPart::parseProject( )
 	    for( int i=0; i<numFiles; ++i ){
 		QString fn;
 		uint ts;
-		Q_LONG offset;
+		uint offset;
 
 		stream >> fn >> ts >> offset;
 		pcs[ fn ] = qMakePair( ts, offset );
@@ -869,7 +869,7 @@ void JavaSupportPart::saveProjectSourceInfo( )
 	return;
 
     QDataStream stream( &f );
-    QMap<QString, Q_ULONG> offsets;
+    QMap<QString, uint> offsets;
 
     QString pcs( "PCS" );
     stream << pcs << KDEV_PCS_VERSION;
@@ -883,7 +883,7 @@ void JavaSupportPart::saveProjectSourceInfo( )
   stream << dom->name() << toTime_t(m_timestamp[ dom->name() ]);
 #endif
 	offsets.insert( dom->name(), stream.device()->at() );
-	stream << (Q_ULONG)0; // dummy offset
+	stream << (uint)0; // dummy offset
     }
 
     for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
