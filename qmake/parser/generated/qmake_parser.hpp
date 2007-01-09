@@ -105,7 +105,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 
 
 /* Line 35 of lalr1.cc.  */
-#line 109 "/home/andreas/KDE-work/4.0/kdevelop/build/buildtools/importers/qmake/parser/qmake_parser.hpp"
+#line 109 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_parser.hpp"
 
 #include "location.hh"
 
@@ -201,7 +201,7 @@ namespace QMake
     typedef token::yytokentype token_type;
 
     /// Build a parser object.
-    Parser (QMake::Lexer* lexer_yyarg, QMake::ProjectAST** project_yyarg);
+    Parser (QMake::Lexer* lexer_yyarg, QMake::ProjectAST* project_yyarg);
     virtual ~Parser ();
 
     /// Parse.
@@ -361,7 +361,7 @@ namespace QMake
 
     /* User arguments.  */
     QMake::Lexer* lexer;
-    QMake::ProjectAST** project;
+    QMake::ProjectAST* project;
   };
 }
 
