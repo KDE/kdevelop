@@ -1,9 +1,7 @@
 
 #add_subdirectory(fake)
 add_subdirectory(cpp)
-if (CP_EXECUTABLE)
-  add_subdirectory(csharp)
-endif (CP_EXECUTABLE)
+add_subdirectory(csharp)
 add_subdirectory(java)
 if (NOT WIN32)
   add_subdirectory(ruby)
