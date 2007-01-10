@@ -457,7 +457,7 @@ bool RubyDebuggerPart::startDebugger()
 		}
 	}
 	
-    run_arguments = project()->debugArguments();
+    run_arguments = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/programargs");
 
     QString shell = DomUtil::readEntry(*projectDom(), "/kdevrbdebugger/general/dbgshell");
     if( !shell.isEmpty() )
