@@ -428,7 +428,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum,
 				return;
 			}
 		}
-    KMessageBox::warningYesNo(0, "QT_PLUGIN_PATH=\""+designerPluginPaths.join(":")+"\" "+designerExec, designerPluginPaths.join(" ") );
+
 		if( designerPluginPaths.isEmpty() )
 			KRun::runCommand( designerExec+" "+url.pathOrURL() );
 		else
