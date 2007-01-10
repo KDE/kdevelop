@@ -42,11 +42,6 @@ FIND_PROGRAM(KDEVCMG_EXECUTABLE
     PATHS /usr/bin
     DOC "kdev-cmg executable")
 
-FIND_PROGRAM(CP_EXECUTABLE
-    NAMES cp
-    PATHS /bin
-    DOC "cp executable")
-
 
 IF(KDEVPG_EXECUTABLE)
     # Add commands to generate the parsers.
@@ -84,75 +79,47 @@ IF(KDEVPG_EXECUTABLE)
                 "${CMAKE_CURRENT_SOURCE_DIR}/csharp_pp.g"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+
+    SET(kdevcsharpparser_STAT_SRCS
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
+        ${kdevcsharpparser_STAT_SRCS}
+        )
+    SET_SOURCE_FILES_PROPERTIES(
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_ast.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_serialize_visitor.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_ast.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
+        GENERATED
+        )
 ELSE(KDEVPG_EXECUTABLE)
-    # Add commands to copy the generated parser files over to the builddir.
     MESSAGE("--- kdev-pg is not installed to generate csharp parser files: using the ones in SVN")
-    ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/csharp_ast.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_serialize_visitor.h"
-        COMMAND ${CP_EXECUTABLE}
-        ARGS    "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_ast.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_parser.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_parser.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_visitor.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_visitor.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_default_visitor.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_default_visitor.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_serialize_visitor.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/"
+    SET(kdevcsharpparser_STAT_SRCS
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_parser.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_visitor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_default_visitor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_parser.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_visitor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_default_visitor.cpp"
+        ${kdevcsharpparser_STAT_SRCS}
         )
-    ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_ast.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
-        COMMAND ${CP_EXECUTABLE}
-        ARGS    "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_ast.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_parser.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_parser.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_visitor.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_visitor.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_default_visitor.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_default_visitor.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/"
-        )
+    include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/generated )
 ENDIF(KDEVPG_EXECUTABLE)
-
-SET(kdevcsharpparser_STAT_SRCS
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
-    ${kdevcsharpparser_STAT_SRCS})
-
-SET_SOURCE_FILES_PROPERTIES(
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_ast.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_serialize_visitor.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_ast.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
-    GENERATED)
 
 
 IF(KDEVCMG_EXECUTABLE)
@@ -169,37 +136,86 @@ IF(KDEVCMG_EXECUTABLE)
                 "${CMAKE_CURRENT_SOURCE_DIR}/csharp_codemodel.cm"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+
+    SET(kdevcsharpparser_STAT_SRCS
+        ${kdevcsharpparser_STAT_SRCS}
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.cpp"
+        )
+    SET_SOURCE_FILES_PROPERTIES(
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_fwd.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.cpp"
+        GENERATED
+        )
 ELSE(KDEVCMG_EXECUTABLE)
     MESSAGE("--- kdev-cmg is not installed to generate csharp codemodel files: using the ones in SVN")
-    ADD_CUSTOM_COMMAND(
-        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_fwd.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.cpp"
-        COMMAND ${CP_EXECUTABLE}
-        ARGS    "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel_fwd.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel_chameleon.h"
-                "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel_chameleon.cpp"
-                "${CMAKE_CURRENT_BINARY_DIR}/"
+    SET(kdevcsharpparser_STAT_SRCS
+        ${kdevcsharpparser_STAT_SRCS}
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel_chameleon.cpp"
         )
+    include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/generated )
 ENDIF(KDEVCMG_EXECUTABLE)
-
-SET(kdevcsharpparser_STAT_SRCS
-    ${kdevcsharpparser_STAT_SRCS}
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.cpp")
-
-SET_SOURCE_FILES_PROPERTIES(
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_fwd.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.cpp"
-    GENERATED)
 
 
 kde4_automoc(${kdevcsharpparser_STAT_SRCS})
 kde4_add_library(kdevcsharpparser STATIC ${kdevcsharpparser_STAT_SRCS})
+
+
+add_custom_target( copy-generated
+
+# 1. copy actions
+    # kdev-pg generated files for the csharp parser
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_ast.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_ast.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_parser.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_parser.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_visitor.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_visitor.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_default_visitor.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_default_visitor.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_serialize_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_serialize_visitor.h"
+
+    # kdev-pg generated files for the csharp pre-processor parser
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_ast.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_ast.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_parser.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_parser.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_visitor.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_visitor.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_default_visitor.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_default_visitor.cpp"
+
+    # kdev-cmg generated files
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel.cpp"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_fwd.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel_fwd.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel_chameleon.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_codemodel_chameleon.cpp"
+
+# 2. depend on the files being copied
+    # kdev-pg generated files for the csharp parser
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_ast.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_visitor.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_default_visitor.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_serialize_visitor.h"
+    # kdev-pg generated files for the csharp pre-processor parser
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_ast.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_parser.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
+    # kdev-cmg generated files
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_fwd.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.h"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel_chameleon.cpp"
+)
