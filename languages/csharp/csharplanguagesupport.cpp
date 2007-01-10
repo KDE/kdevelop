@@ -23,8 +23,10 @@ Boston, MA 02110-1301, USA.
 #include <kgenericfactory.h>
 
 #include <kdevast.h>
-#include "parser/csharp_parser.h"
-#include "parser/csharp_serialize_visitor.h"
+
+// from the parser subdirectory
+#include <csharp_parser.h>
+#include <csharp_serialize_visitor.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>

@@ -21,7 +21,8 @@
 
 #include "codedelegate.h"
 
-#include "parser/csharp_codemodel.h"
+// from the parser subdirectory
+#include <csharp_codemodel.h>
 
 namespace csharp
 {

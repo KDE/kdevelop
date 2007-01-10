@@ -26,8 +26,9 @@
 #include <kurl.h>
 #include <kdevparsejob.h>
 
-#include "parser/csharp_ast.h"
-#include "parser/csharp_codemodel.h"
+// from the parser subdirectory
+#include <csharp_ast.h>
+#include <csharp_codemodel.h>
 
 class KDevCodeModel;
 class CSharpLanguageSupport;

@@ -37,9 +37,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "parser/parsesession.h"
-#include "parser/csharp_parser.h"
-#include "parser/csharp_binder.h"
+// from the parser subdirectory
+#include <parsesession.h>
+#include <csharp_parser.h>
+#include <csharp_binder.h>
 
 #include "csharplanguagesupport.h"
 

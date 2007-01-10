@@ -22,7 +22,9 @@
 #include "codeproxy.h"
 
 #include "csharplanguagesupport.h"
-#include "parser/csharp_codemodel.h"
+
+// from the parser subdirectory
+#include <csharp_codemodel.h>
 
 #include <kdebug.h>
 
