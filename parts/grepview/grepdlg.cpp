@@ -168,7 +168,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     synch_button->setFixedSize( pix.width()+8, pix.height()+8 );
     synch_button->setIconSet( set );
     synch_button->setAccel( QKeySequence( "Alt+y") );
-    QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
+    QToolTip::add( synch_button, i18n("Set directory to that of the current file (Alt+Y)") );
     dir_layout->addWidget( synch_button );
 
     QBoxLayout *dir_checks_layout = new QHBoxLayout(5);
