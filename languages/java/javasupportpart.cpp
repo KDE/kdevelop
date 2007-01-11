@@ -528,7 +528,14 @@ JavaSupportPart::parseProject( )
     QDataStream stream;
     QMap< QString, QPair<uint, uint> > pcs;
 
-    QFile f( project()->projectDirectory() + "/" + project()->projectName().lower() + ".kdevelop" + ".pcs" );
+    if( QFileInfo( project()->projectDirectory() + "/" + 
+			    project()->projectName().lower() + ".kdevelop.pcs" ).exists() )
+    {
+        QDir(project()->projectDirectory()).rename( 
+			project()->projectName().lower() + ".kdevelop.pcs",  
+			project()->projectName() + ".kdevelop.pcs");
+    }
+    QFile f(project()->projectDirectory() + "/" + project()->projectName() + ".kdevelop.pcs");
     if( f.open(IO_ReadOnly) ){
 	stream.setDevice( &f );
 
@@ -864,7 +871,8 @@ void JavaSupportPart::saveProjectSourceInfo( )
     if( !project() || fileList.isEmpty() )
 	return;
 
-    QFile f( project()->projectDirectory() + "/" + project()->projectName().lower() + ".kdevelop" + ".pcs" );
+    QFile f( project()->projectDirectory() + "/" + 
+		    project()->projectName() + ".kdevelop.pcs" );
     if( !f.open( IO_WriteOnly ) )
 	return;
 

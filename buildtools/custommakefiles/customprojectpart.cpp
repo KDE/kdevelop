@@ -302,7 +302,14 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
     if (m_filelistDir.isEmpty())
        m_filelistDir=dirName;
 
-    QFile f(m_filelistDir + "/" + projectName.lower() + ".kdevelop.filelist");
+    if( QFileInfo(m_filelistDir + "/" + projectName.lower() + 
+			    ".kdevelop.filelist").exists() )
+    {
+        QDir( m_filelistDir ).rename(
+			projectName.lower()+".kdevelop.filelist", 
+			projectName+".kdevelop.filelist");
+    }
+    QFile f( m_filelistDir + "/" + projectName + ".kdevelop.filelist" );
     if (f.open(IO_ReadOnly)) {
         QTextStream stream(&f);
         while (!stream.atEnd()) {

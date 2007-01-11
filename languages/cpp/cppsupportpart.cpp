@@ -1349,11 +1349,23 @@ bool CppSupportPart::parseProject( bool force )
 	kapp->setOverrideCursor( waitCursor );
 
 	_jd = new JobData;
-	_jd->file.setName( project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".pcs" );
+	if( QFileInfo( project() ->projectDirectory() + "/" + project()->projectName().lower() 
+				+ ".kdevelop.pcs" ).exists())
+	{
+		QDir d(project()->projectDirectory()).rename( 
+				project()->projectName().lower() + ".kdevelop.pcs", 
+				project()->projectName() +".kdevelop.pcs");
+	}
+	_jd->file.setName( project() ->projectDirectory() + "/" + project()->projectName() 
+			+ ".kdevelop.pcs" );
+	
+	QString skip_file_name = project() ->projectDirectory() + "/" + 
+		project() ->projectName() + ".kdevelop.ignore_pcs";
+	QString skip_lower_file_name = project() ->projectDirectory() + "/" + 
+		project() ->projectName().lower() + ".kdevelop.ignore_pcs";
 
-	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs";
-
-	if ( !force && !QFile::exists( skip_file_name ) && _jd->file.open( IO_ReadOnly ) )
+	if ( !force && !QFile::exists( skip_file_name ) && 
+			!QFile::exists( skip_lower_file_name ) && _jd->file.open( IO_ReadOnly ) )
 	{
 		_jd->stream.setDevice( &( _jd->file ) );
 
@@ -1494,8 +1506,13 @@ void CppSupportPart::slotParseFiles()
 				kapp->restoreOverrideCursor( );
 				emit updatedSourceInfo();
 				mainWindow( ) ->statusBar( ) ->message( i18n( "Done" ), 2000 );
-				QFile::remove
-					( project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs" );
+				QFile::remove( project() ->projectDirectory() 
+						+ "/" + project() ->projectName() 
+						+ ".kdevelop.ignore_pcs" );
+				QFile::remove( project() ->projectDirectory() 
+						+ "/" + project() ->projectName().lower() 
+						+ ".kdevelop.ignore_pcs" );
+
 			}
 			else
 			{
@@ -2030,7 +2047,8 @@ void CppSupportPart::saveProjectSourceInfo()
 	if ( !project() || fileList.isEmpty() )
 		return ;
 
-	QFile f( project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".pcs" );
+	QFile f( project() ->projectDirectory() + "/" 
+			+ project() ->projectName() + ".kdevelop.pcs" );
 	if ( !f.open( IO_WriteOnly ) )
 		return ;
 
@@ -2070,9 +2088,10 @@ void CppSupportPart::saveProjectSourceInfo()
 		stream.device() ->at( end );
 	}
 
-	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs";
-	QFile::remove
-		( skip_file_name );
+	QFile::remove(  project() ->projectDirectory() + "/" 
+			+ project() ->projectName() + ".kdevelop.ignore_pcs" );
+	QFile::remove(  project() ->projectDirectory() + "/" 
+			+ project() ->projectName().lower() + ".kdevelop.ignore_pcs" );
 
 	m_backgroundParser->unlock();
 }
@@ -2553,7 +2572,8 @@ void CppSupportPart::createIgnorePCSFile( )
 {
 	static QCString skip_me( "ignore me\n" );
 
-	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName().lower() + ".kdevelop" + ".ignore_pcs";
+	QString skip_file_name = project() ->projectDirectory() + "/" 
+		+ project() ->projectName() + ".kdevelop.ignore_pcs";
 	QFile skip_pcs_file( skip_file_name );
 	if ( skip_pcs_file.open( IO_WriteOnly ) )
 	{
