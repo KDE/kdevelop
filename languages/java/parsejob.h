@@ -26,7 +26,8 @@
 #include <kurl.h>
 #include <kdevparsejob.h>
 
-#include "parser/java_ast.h"
+// from the parser subdirectory
+#include <java_ast.h>
 
 class KDevCodeModel;
 class JavaLanguageSupport;

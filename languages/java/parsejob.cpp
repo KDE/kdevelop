@@ -39,9 +39,10 @@
 
 #include "javalanguagesupport.h"
 
-#include "parser/parsesession.h"
-#include "parser/java_parser.h"
-#include "parser/java_default_visitor.h"
+// from the parser subdirectory
+#include <parsesession.h>
+#include <java_parser.h>
+#include <java_default_visitor.h>
 
 namespace java
 {
