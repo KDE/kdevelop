@@ -45,7 +45,6 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kapplication.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kconfig.h>

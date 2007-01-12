@@ -24,7 +24,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <kapplication.h>
 #include <kdevplugin.h>
 #include "domutil.h"
 #include <kservicetypetrader.h>

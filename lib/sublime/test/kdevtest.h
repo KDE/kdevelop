@@ -3,7 +3,6 @@
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kapplication.h>
 
 #define KDEVTEST_MAIN(TestObject) \
 int main(int argc, char *argv[]) \

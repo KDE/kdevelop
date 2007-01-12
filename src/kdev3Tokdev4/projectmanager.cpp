@@ -23,7 +23,6 @@ class QDomDocument;
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>
 #include <kaction.h>
-#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kprocess.h>
 #include <kglobal.h>
@@ -197,13 +196,13 @@ bool ProjectManager::loadProject(const KUrl &url)
   }
 
   TopLevel::getInstance()->main()->menuBar()->setEnabled( false );
-  kapp->setOverrideCursor( Qt::WaitCursor );
+  QApplication::setOverrideCursor( Qt::WaitCursor );
 
   if( projectLoaded() && !closeProject() )
   {
     m_openRecentProjectAction->setCurrentItem( -1 );
     TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     return false;
   }
 
@@ -224,7 +223,7 @@ void ProjectManager::slotLoadProject( )
     delete m_info; m_info = 0;
     saveSettings();
     TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     return;
   }
 
@@ -233,7 +232,7 @@ void ProjectManager::slotLoadProject( )
   if( !loadLanguageSupport(m_info->m_language) ) {
     delete m_info; m_info = 0;
     TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     return;
   }
 
@@ -241,7 +240,7 @@ void ProjectManager::slotLoadProject( )
     unloadLanguageSupport();
     delete m_info; m_info = 0;
     TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     return;
   }
 
@@ -268,7 +267,7 @@ void ProjectManager::slotLoadProject( )
   m_projectOptionsAction->setEnabled(true);
 
   TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
-  kapp->restoreOverrideCursor();
+  QApplication::restoreOverrideCursor();
 
   TopLevel::getInstance()->statusBar()->message( i18n("Project loaded."), 3000 );
 

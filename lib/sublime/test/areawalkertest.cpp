@@ -26,6 +26,8 @@
 #include <sublime/controller.h>
 #include <sublime/partdocument.h>
 
+#include <kapplication.h>
+
 #include "kdevtest.h"
 #include "areaprinter.h"
 

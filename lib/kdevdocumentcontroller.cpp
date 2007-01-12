@@ -50,7 +50,6 @@ Boston, MA 02110-1301, USA.
 #include <kdialog.h>
 #include <kcompletion.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 #include <ksqueezedtextlabel.h>

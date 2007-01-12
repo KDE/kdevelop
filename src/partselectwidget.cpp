@@ -30,7 +30,6 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kurllabel.h>
-#include <kapplication.h>
 #include <ktoolinvocation.h>
 #include "domutil.h"
 

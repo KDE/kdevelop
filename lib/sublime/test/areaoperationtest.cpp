@@ -26,6 +26,7 @@
 #include <QSplitter>
 
 #include <kdebug.h>
+#include <kapplication.h>
 
 #include <sublime/view.h>
 #include <sublime/area.h>

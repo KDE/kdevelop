@@ -24,9 +24,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QFile>
 #include <QTimer>
-
+#include <QApplication>
 #include <kcmdlineargs.h>
-#include <kapplication.h>
 #include <klibloader.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>

@@ -28,7 +28,6 @@
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kurlrequester.h>
-#include <kapplication.h>
 #include <kpagedialog.h>
 #include <kpagewidgetmodel.h>
 #include <kicon.h>

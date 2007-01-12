@@ -32,7 +32,6 @@
 #include <kglobalsettings.h>
 #include <kinstance.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "kdevplugincontroller.h"

@@ -22,7 +22,6 @@
 #include "kdevfilemanager.h"
 
 #include <kglobal.h>
-#include <kapplication.h>
 #include <kdebug.h>
 
 ImportProjectJob::ImportProjectJob(QStandardItem *folder, KDevFileManager *importer)
