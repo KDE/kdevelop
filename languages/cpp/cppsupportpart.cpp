@@ -1352,7 +1352,7 @@ bool CppSupportPart::parseProject( bool force )
 	if( QFileInfo( project() ->projectDirectory() + "/" + project()->projectName().lower() 
 				+ ".kdevelop.pcs" ).exists())
 	{
-		QDir d(project()->projectDirectory()).rename( 
+		QDir(project()->projectDirectory()).rename( 
 				project()->projectName().lower() + ".kdevelop.pcs", 
 				project()->projectName() +".kdevelop.pcs");
 	}
