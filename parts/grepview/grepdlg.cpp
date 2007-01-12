@@ -163,7 +163,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_layout->addWidget( url_requester, 10 );
 
     synch_button = new KPushButton( this );
-    QIconSet set = SmallIconSet( "dirsynch" );
+    QIconSet set = SmallIconSet( "folder_sent_mail" );
     QPixmap pix = set.pixmap( QIconSet::Small, QIconSet::Normal );
     synch_button->setFixedSize( pix.width()+8, pix.height()+8 );
     synch_button->setIconSet( set );
