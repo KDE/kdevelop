@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCustomProject" version="2">
+<kpartgui name="KDevCustomProject" version="3">
 <MenuBar>
   <Menu name="build" >
     <Action name="build_build" />
     <Action name="build_compilefile" />
     <Action name="build_target" />
+    <Action name="build_install" />
     <Action name="build_make_environment" />
     <Action name="build_clean" />
     <Separator/>
@@ -15,6 +16,7 @@
     <Action name="build_build" group="build_operations" />
     <Action name="build_compilefile" group="build_operations" />
     <Separator group="build_operations"/>
+    <Action name="build_install" group="build_operations" />
     <Action name="build_execute" group="build_operations" />
 </ToolBar>
 </kpartgui>
