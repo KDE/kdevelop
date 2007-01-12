@@ -182,7 +182,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
              filter, SLOT( addToHistory(const QString&) ) );
 
     // kaction for the dir sync method
-    acSyncDir = new KAction( i18n("Current Document Directory"), "folder_sent_mail", 0,
+    acSyncDir = new KAction( i18n("Current Document Directory"), "dirsynch", 0,
                              this, SLOT( setActiveDocumentDir() ), mActionCollection, "sync_dir" );
     toolbar->setIconText( KToolBar::IconOnly );
     toolbar->setIconSize( 16 );
