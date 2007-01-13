@@ -138,6 +138,8 @@ void Debugger::marksChanged()
             // nothing has happened to them. We can just ignore these and to
             // do that we must remove them from the new list.
 
+            bool bpchanged = false;
+
             for (uint i = 0; i < oldBPList.count(); i++)
             {
                 if (oldBPList[i].fileName() != doc->url().path())
@@ -158,7 +160,10 @@ void Debugger::marksChanged()
                 }
 
                 if (!found)
+                {
                     emit toggledBreakpoint( doc->url().path(), oldBPList[i].lineNum() );
+                    bpchanged = true;
+                }
             }
 
             // Any breakpoints left in the new list are the _new_ position of
@@ -168,11 +173,17 @@ void Debugger::marksChanged()
             {
                 m = newMarks.at(i);
                 if (m->type & Breakpoint)
+                {
                     emit toggledBreakpoint( doc->url().path(), m->line );
+                    bpchanged = true;
+                }
             }
 
-            //bring focus back to the editor
-            m_partController->activatePart(m_partController->partForURL( doc->url() ));
+            if ( bpchanged )
+            {
+                //bring focus back to the editor
+                m_partController->activatePart( doc );
+            }
         }
     }
 }
