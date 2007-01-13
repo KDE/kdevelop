@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,28 +16,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVTEST
-#define KDEVTEST
+#ifndef SUBLIMEVIEWTEST_H
+#define SUBLIMEVIEWTEST_H
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
+#include <QObject>
 
-#define KDEVTEST_MAIN(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    static const char description[] = "Sublime Library Test"; \
-    KAboutData aboutData("test", "Test", \
-                         "1.0", description, KAboutData::License_LGPL, \
-                         "(c) 2007, KDevelop Developers", "", "http://www.kdevelop.org" ); \
- \
-    KCmdLineArgs::init(argc, argv, &aboutData); \
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs(); \
-    KApplication app; \
- \
-    TestObject tc; \
-    return QTest::qExec(&tc, argc, argv); \
-}
+class ViewTest: public QObject {
+    Q_OBJECT
+private slots:
+    void testWidgetDeletion();
+};
 
 #endif
 

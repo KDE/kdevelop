@@ -14,4 +14,10 @@ kde4_add_executable(sublime-areawalkertest NOGUI RUN_UNINSTALLED ${areawalkertes
 target_link_libraries(sublime-areawalkertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
 add_test(sublime-areawalkertest ${EXECUTABLE_OUTPUT_PATH}/sublime-areawalkertest)
 
+set( viewtest_SRCS viewtest.cpp )
+kde4_automoc(${viewtest_SRCS})
+kde4_add_executable(sublime-viewtest NOGUI RUN_UNINSTALLED ${viewtest_SRCS})
+target_link_libraries(sublime-viewtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
+add_test(sublime-viewtest ${EXECUTABLE_OUTPUT_PATH}/sublime-viewtest)
+
 endif(KDE4_BUILD_TESTS)
