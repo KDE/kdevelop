@@ -77,9 +77,10 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->embeddedDesignerRadioButton->setChecked( DesignerSetting == "EmbeddedKDevDesigner" );
 
     config->setGroup("TerminalEmulator");
-    gsw->terminalButtonGroup->setButton( config->readNumEntry( "UseKDESetting", 0 ) );
     gsw->terminalEdit->setText( config->readEntry( "TerminalApplication", QString::fromLatin1("konsole") ) );
-
+    bool useKDESetting = config->readBoolEntry( "UseKDESetting", true );
+    gsw->useKDETerminal->setChecked( useKDESetting );
+    gsw->useOtherTerminal->setChecked( !useKDESetting );
 }
 
 void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
