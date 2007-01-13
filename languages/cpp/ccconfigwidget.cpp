@@ -63,17 +63,6 @@ using namespace std;
 CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const char* name )
 		: CCConfigWidgetBase( parent, name )
 {
-    KURLRequester * req = new KURLRequester( this );
-    req->setMode( KFile::Directory );
-    KEditListBox::CustomEditor pCustomEditor;
-    pCustomEditor = req->customEditor();
-    m_designerPluginPaths = new KEditListBox( i18n( "Qt4 Designer Plugin Paths" ), pCustomEditor, m_designerBox );
-
-    m_designerBox->layout()->add( m_designerPluginPaths );
-    m_designerPluginPaths->show();
-
-    connect( m_versionQt4, SIGNAL( toggled( bool ) ), m_designerPluginPaths, SLOT(  setEnabled( bool ) ) );
-
 	m_pPart = part;
 	connect( m_pPart->codeRepository(), SIGNAL( catalogRegistered( Catalog* ) ),
 	         this, SLOT( catalogRegistered( Catalog* ) ) );
@@ -421,11 +410,11 @@ void CCConfigWidget::initQtTab()
 		m_kdevexternal->setEnabled( false );
 		m_qtStyleVersion4->setEnabled( true );
         m_designerPath->setEnabled( true );
-        m_designerPluginPaths->setEnabled( true );
         m_qmakePath->setEnabled( true );
         m_qtDir->setEnabled( false );
         m_txtQtDir->setEnabled( false );
         m_txtDesigner->setEnabled( true );
+        pluginPaths->setEnabled( true );
 	}
 	else
 	{
@@ -434,11 +423,11 @@ void CCConfigWidget::initQtTab()
 		m_kdevexternal->setEnabled( true );
 		m_qtStyleVersion4->setEnabled( false );
         m_designerPath->setEnabled( true );
-        m_designerPluginPaths->setEnabled( false );
         m_qmakePath->setEnabled( true );
         m_qtDir->setEnabled( true );
         m_txtQtDir->setEnabled( true );
         m_txtDesigner->setEnabled( true );
+        pluginPaths->setEnabled( false );
 	}
 	if( c->includeStyle() == 4 )
 	{
@@ -463,7 +452,6 @@ void CCConfigWidget::initQtTab()
 	}else
 	{
 		m_qtdesigner->setChecked( true );
-        m_designerPluginPaths->insertStringList( c->designerPluginPaths() );
 	}
 }
 
@@ -519,7 +507,6 @@ void CCConfigWidget::saveQtTab()
 	c->setRoot( m_qtDir->url() );
     c->setQMakePath( m_qmakePath->url() );
     c->setDesignerPath( m_designerPath->url() );
-    c->setDesignerPluginPaths( m_designerPluginPaths->items() );
 	if( m_kdevembedded->isChecked() )
 	{
 		c->setDesignerIntegration( "EmbeddedKDevDesigner" );
@@ -556,6 +543,7 @@ void CCConfigWidget::toggleQtVersion( bool )
     m_qtStyleVersion3->setChecked( true );
     m_kdevembedded->setEnabled( true );
     m_kdevexternal->setEnabled( true );
+    pluginPaths->setEnabled( false );
   }
   if ( m_versionQt4->isChecked() )
   {
@@ -563,10 +551,40 @@ void CCConfigWidget::toggleQtVersion( bool )
     m_qtdesigner->setChecked( true );
     m_kdevembedded->setEnabled( false );
     m_kdevexternal->setEnabled( false );
+    pluginPaths->setEnabled( true );
   }
   isValidQtDir( m_qtDir->url() );
   isQMakeExecutable( m_qmakePath->url() );
   isDesignerExecutable( m_designerPath->url() );
+}
+
+void CCConfigWidget::openPluginPaths()
+{
+    kdDebug(9024) << "Plugin paths opened" << endl;
+    QtBuildConfig* c = m_pPart->qtBuildConfig();
+    KDialog d( this );
+    QVBoxLayout* mainlayout = new QVBoxLayout( &d );
+    KPushButton* ok = new KPushButton( KStdGuiItem::ok(), &d );
+    connect( ok, SIGNAL(clicked()), &d, SLOT(accept()));
+    KPushButton* cancel = new KPushButton( KStdGuiItem::cancel(), &d );
+    connect( cancel, SIGNAL(clicked()), &d, SLOT(reject()));
+    QHBoxLayout* btns = new QHBoxLayout( &d );
+    btns->addItem( new QSpacerItem(10,10,QSizePolicy::Expanding) );
+    btns->addWidget(ok);
+    btns->addWidget(cancel);
+
+    d.setCaption( i18n( "Edit Qt4 Designer Plugin Paths" ) );
+    KURLRequester * req = new KURLRequester( &d );
+    req->setMode( KFile::Directory );
+    KEditListBox* p = new KEditListBox( i18n( "Plugin Paths" ), req->customEditor(), &d );
+    p->insertStringList( c->designerPluginPaths() );
+    mainlayout->addWidget( p );
+    mainlayout->addLayout( btns );
+    d.resize( 450, 250 );
+    if( d.exec() == QDialog::Accepted)
+    {
+        c->setDesignerPluginPaths( p->items() );
+    }
 }
 
 #include "ccconfigwidget.moc"

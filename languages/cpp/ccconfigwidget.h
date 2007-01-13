@@ -42,7 +42,8 @@ private slots:
 	void isValidQtDir( const QString & );
     void isDesignerExecutable( const QString& );
     void isQMakeExecutable( const QString& );
-	void toggleQtVersion( bool );
+    void toggleQtVersion( bool );
+    void openPluginPaths( );
 
 private:
     bool isExecutable( const QString & );
