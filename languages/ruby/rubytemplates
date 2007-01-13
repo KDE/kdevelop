@@ -1,0 +1,13 @@
+<!DOCTYPE Templates>
+<Templates>
+ <Template code="if |
+else
+end" name="ife" description="if else" suffixes="Ruby (rb,rhtml,rjs,rxml)"/>
+ <Template suffixes="Ruby (rb,rhtml,rjs,rxml)" code="&lt;% | %>" name="e" description="embedded ruby code" />
+ <Template suffixes="Ruby (rb,rhtml,rjs,rxml)" code="&lt;% | -%>" name="en" description="embedded ruby code with newlines stripped" />
+ <Template suffixes="Ruby (rb,rhtml,rjs,rxml)" code="&lt;%= | %>" name="p" description="embedded ruby code that prints a result" />
+ <Template suffixes="Ruby (rb,rhtml,rjs,rxml)" code="&lt;%= | -%>" name="pn" description="embedded ruby code that prints a result with newlines stripped" />
+ <Template suffixes="Ruby (rb,rhtml,rjs,rxml)" code="class |
+
+end" name="classd" description="class declaration" />
+</Templates>

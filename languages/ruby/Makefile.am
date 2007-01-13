@@ -20,6 +20,9 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevrubysupport.desktop
 
+templatedir = ${kde_datadir}/kdevabbrev/templates
+template_DATA = rubytemplates
+
 rcdir = $(kde_datadir)/kdevrubysupport
 rc_DATA = kdevrubysupport.rc
 
