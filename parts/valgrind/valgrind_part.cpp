@@ -312,7 +312,7 @@ void ValgrindPart::processExited( KProcess* p )
         KProcess *kcProc = new KProcess;
 //        kcProc->setWorkingDirectory(kcInfo.kcWorkDir);
         *kcProc << kcInfo.kcPath;
-        *kcProc << QString("cachegrind.out.%1").arg(p->pid());
+        *kcProc << QString("callgrind.out.%1").arg(p->pid());
         kcProc->start(KProcess::DontCare);
     }
   }

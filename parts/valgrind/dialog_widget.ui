@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DialogWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -215,7 +215,7 @@
                             <cstring>groupBox3</cstring>
                         </property>
                         <property name="title">
-                            <string>Calltree</string>
+                            <string>Valgrind</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -297,7 +297,7 @@
                                     <cstring>textLabel4_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Executable:</string>
+                                    <string>Exe&amp;cutable:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>valExecutableEdit</cstring>
@@ -310,8 +310,6 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>memleakBox</sender>

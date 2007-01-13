@@ -86,7 +86,7 @@ void ValgrindDialog::setValExecutable( const QString& ve )
   }
 }
 
-static const QString memCheckParam( "--tool=memcheck" ); 
+static const QString memCheckParam( "--tool=memcheck" );
 static const QString leakCheckParam( "--leak-check=yes" );
 static const QString reachableParam( "--show-reachable=yes" );
 static const QString childrenParam( "--trace-children=yes" );
@@ -134,13 +134,13 @@ void ValgrindDialog::setCtExecutable( const QString& ce )
 {
   QString vUrl = ce;
   if ( vUrl.isEmpty() ) {
-    vUrl = KStandardDirs::findExe( "calltree" );
+    vUrl = KStandardDirs::findExe( "valgrind" );
   }
   if ( vUrl.isEmpty() ) {
-    KMessageBox::sorry( this, i18n( "Could not find calltree in your $PATH. Please make "
+    KMessageBox::sorry( this, i18n( "Could not find valgrind in your $PATH. Please make "
                                     "sure it is installed properly." ),
-                        i18n( "Calltree Not Found" ) );
-    w->ctExecutableEdit->setURL( "calltree" );
+                        i18n( "Valgrind Not Found" ) );
+    w->ctExecutableEdit->setURL( "valgrind" );
   } else {
     w->ctExecutableEdit->setURL( vUrl );
   }
@@ -158,6 +158,9 @@ QString ValgrindDialog::ctParams() const
 void ValgrindDialog::setCtParams( const QString& params )
 {
   QString myParams = params;
+  //force --tool=callgrind if no params are given
+  if (myParams.isEmpty())
+    myParams = "--tool=callgrind";
   if ( myParams.contains( childrenParam ) )
     w->ctChildrenBox->setChecked( true );
   w->init();
