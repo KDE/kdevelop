@@ -6,6 +6,7 @@ METASOURCES = AUTO
 libprofileeditor_la_LDFLAGS = $(all_libraries)
 libprofileeditor_la_LIBADD = $(top_builddir)/src/profileengine/lib/libprofileengine.la
 noinst_LTLIBRARIES = libprofileeditor.la
+libprofileeditor_COMPILE_FIRST = profileeditorbase.h
 libprofileeditor_la_SOURCES = profileeditorbase.ui profileeditor.cpp \
 	addprofilewidget.ui
 noinst_HEADERS = profileeditor.h
