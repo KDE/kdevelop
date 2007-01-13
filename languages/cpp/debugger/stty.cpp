@@ -285,6 +285,11 @@ bool STTY::findExternalTTY(const QString &termApp)
 {
     QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
 
+    if ( KStandardDirs::findExe( termApp ).isEmpty() )
+    {
+        return false;
+    }
+
     char fifo[] = FIFO_FILE;
     int fifo_fd;
     if ((fifo_fd = mkstemp(fifo)) == -1)
