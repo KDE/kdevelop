@@ -145,3 +145,5 @@ void AreaWalkerTest::testToolViewWalkerModes()
 
 KDEVTEST_MAIN(AreaWalkerTest)
 #include "areawalkertest.moc"
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

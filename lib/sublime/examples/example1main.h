@@ -40,10 +40,12 @@ private slots:
 
 private:
     Sublime::Controller *m_controller;
-    
+
     Sublime::Area *m_area1;
     Sublime::Area *m_area2;
 
 };
 
 #endif
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
