@@ -61,8 +61,8 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     pids_->addColumn("PID");
     pids_->addColumn("TTY");
     pids_->addColumn("STAT");
-    pids_->addColumn("COMMAND");
     pids_->addColumn("TIME");
+    pids_->addColumn("COMMAND");
 
 
     QBoxLayout *topLayout = new QVBoxLayout(this, 5);
