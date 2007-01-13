@@ -216,6 +216,8 @@ void DoxygenPart::adjustDoxyfile()
 
 void DoxygenPart::slotDoxygen()
 {
+    if ( !partController()->saveAllFiles() ) return;
+
     bool searchDatabase = false;
     QString outputDirectory;
     QString htmlDirectory;
