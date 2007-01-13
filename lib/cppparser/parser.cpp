@@ -2150,6 +2150,8 @@ bool Parser::parseExceptionSpecification( GroupAST::Node& node )
         nextToken();
         UPDATE_POS( ast, start, lex->index() );
         node = ast;
+    } else if( lex->lookAhead(0) == ')' ) {
+        node = CreateNode<GroupAST>();
     } else {
         parseTypeIdList( node );
     }
