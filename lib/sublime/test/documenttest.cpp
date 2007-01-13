@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,70 +16,35 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "document.h"
+#include "documenttest.h"
 
-#include <kdebug.h>
+#include <QTextEdit>
+#include <QtTest/QtTest>
 
-#include "view.h"
-#include "controller.h"
+#include <kurl.h>
 
-namespace Sublime {
+#include <sublime/controller.h>
+#include <sublime/tooldocument.h>
+#include <sublime/view.h>
 
-// struct DocumentPrivate
+#include "kdevtest.h"
 
-struct DocumentPrivate {
-    void removeView(QObject *obj)
-    {
-        View *view = reinterpret_cast<Sublime::View*>(obj);
-        views.removeAll(view);
-    }
+using namespace Sublime;
 
-    Controller *controller;
-    QList<View*> views;
-};
-
-
-
-//class Document
-
-Document::Document(Controller *controller)
-    :QObject(controller), ViewCreator()
+void DocumentTest::testViewDeletion()
 {
-    d = new DocumentPrivate();
-    d->controller = controller;
-    d->controller->addDocument(this);
+    Controller controller;
+    Document *doc = new ToolDocument(&controller, new SimpleToolWidgetFactory<QTextEdit>());
+
+    View *view = doc->createView();
+    view->widget();
+    QCOMPARE(doc->views().count(), 1);
+
+    delete view;
+    QCOMPARE(doc->views().count(), 0);
 }
 
-Document::~Document()
-{
-    delete d;
-}
-
-Controller *Document::controller() const
-{
-    return d->controller;
-}
-
-View *Document::createView()
-{
-    View *view = newView(this);
-    connect(view, SIGNAL(destroyed(QObject*)), this, SLOT(removeView(QObject*)));
-    d->views.append(view);
-    return view;
-}
-
-const QList<View*> &Document::views() const
-{
-    return d->views;
-}
-
-QString Document::title() const
-{
-    return "Document";
-}
-
-}
-
-#include "document.moc"
+#include "documenttest.moc"
+KDEVTEST_MAIN(DocumentTest)
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

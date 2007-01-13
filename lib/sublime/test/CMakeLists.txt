@@ -20,4 +20,10 @@ kde4_add_executable(sublime-viewtest NOGUI RUN_UNINSTALLED ${viewtest_SRCS})
 target_link_libraries(sublime-viewtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
 add_test(sublime-viewtest ${EXECUTABLE_OUTPUT_PATH}/sublime-viewtest)
 
+set( documenttest_SRCS documenttest.cpp )
+kde4_automoc(${documenttest_SRCS})
+kde4_add_executable(sublime-documenttest NOGUI RUN_UNINSTALLED ${documenttest_SRCS})
+target_link_libraries(sublime-documenttest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
+add_test(sublime-documenttest ${EXECUTABLE_OUTPUT_PATH}/sublime-documenttest)
+
 endif(KDE4_BUILD_TESTS)
