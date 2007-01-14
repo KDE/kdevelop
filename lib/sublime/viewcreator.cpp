@@ -22,6 +22,10 @@
 
 namespace Sublime {
 
+ViewCreator::~ViewCreator()
+{
+}
+
 View *ViewCreator::newView(Document *doc)
 {
     return new View(doc);
@@ -30,4 +34,3 @@ View *ViewCreator::newView(Document *doc)
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
-
