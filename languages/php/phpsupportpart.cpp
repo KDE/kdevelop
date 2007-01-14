@@ -115,7 +115,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
             this, SLOT(slotPHPExeExited(KProcess*)));
 
    m_htmlView = new PHPHTMLView(this);
-   mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"), i18n("PHP"));
+   mainWindow()->embedOutputView(m_htmlView->view(), i18n("PHP"), i18n("PHP"));
    connect( m_htmlView,  SIGNAL(started(KIO::Job*)),
             this, SLOT(slotWebJobStarted(KIO::Job*)));
 
@@ -222,7 +222,6 @@ void PHPSupportPart::slotNewClass() {
 void PHPSupportPart::slotRun() {
    configData = new PHPConfigData(projectDom());
    if (validateConfig()) {
-      mainWindow()->raiseView(m_phpErrorView);
       mainWindow()->raiseView(m_htmlView->view());
       PHPConfigData::InvocationMode mode = configData->getInvocationMode() ;
       if (mode == PHPConfigData::Web) {
@@ -328,7 +327,7 @@ void PHPSupportPart::executeInTerminal() {
 
    if (m_htmlView == 0) {
       m_htmlView = new PHPHTMLView(this);
-      mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
+      mainWindow()->embedOutputView(m_htmlView->view(), i18n("PHP"), i18n("PHP") );
    }
 
    m_htmlView->show();
