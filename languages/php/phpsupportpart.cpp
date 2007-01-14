@@ -662,7 +662,7 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
                LastMethod->setAccess(FunctionModel::Protected);
             else if ( event->name() == "result" ) {
                QString ret = "";
-               if (event->arguments().lower() == "$this") {
+               if (event->arguments().lower() == "$this" && LastClass ) {
                   ret = LastClass->name();
                }
                LastMethod->setResultType(ret);
