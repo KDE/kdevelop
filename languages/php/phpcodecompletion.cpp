@@ -36,7 +36,7 @@
 
 using namespace std;
 
-PHPCodeCompletion::PHPCodeCompletion(PHPSupportPart *phpSupport, PHPConfigData *config) {
+PHPCodeCompletion::PHPCodeCompletion(PHPSupportPart *phpSupport, PHPConfigData *config) : QObject(), m_cursorInterface(0), m_codeInterface(0), m_editInterface(0), m_selectionInterface(0) {
 
    m_phpSupport = phpSupport;
    m_config = config;
@@ -128,6 +128,8 @@ void PHPCodeCompletion::setActiveEditorPart(KParts::Part *part)
 
 void PHPCodeCompletion::cursorPositionChanged(){
    uint line, col;
+   if( !m_cursorInterface || !m_selectionInterface || !m_codeInterface || !m_editInterface )
+      return;
    m_cursorInterface->cursorPositionReal(&line, &col);
 
    kdDebug(9018) << "cursorPositionChanged:" << line << ":" << col  << endl;
@@ -237,7 +239,7 @@ bool PHPCodeCompletion::checkForStaticFunction(QString line, int col) {
                e.prefix = nClass->name() + " ::";
                e.text = nFunc->name();
                ArgumentDom pArg = (*funcIt)->argumentList().first();
-               if (pArg) 
+               if (pArg)
                   e.postfix = "(" + pArg->type() +")";
                else
                   e.postfix = "()";
@@ -305,7 +307,7 @@ bool PHPCodeCompletion::checkForExtends(QString line, int col){
       list = getClasses(extends.cap(1));
       return showCompletionBox(list, extends.cap(1).length());
    }
-  
+
    return false;
 }
 
@@ -653,7 +655,7 @@ bool PHPCodeCompletion::checkForArgHint(QString line, int col) {
             m_codeInterface->showArgHint ( argsList, "()", "," );
             return true;
          }
-      }   
+      }
    }
 
    if (line.findRev("->") != -1) {
