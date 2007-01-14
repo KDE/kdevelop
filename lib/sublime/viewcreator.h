@@ -30,7 +30,7 @@ class Document;
 class SUBLIME_EXPORT ViewCreator {
 protected:
     /**Creates and returns the new view.*/
-    View *newView(Document *doc);
+    virtual View *newView(Document *doc);
 };
 
 }

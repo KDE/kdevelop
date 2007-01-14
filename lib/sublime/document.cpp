@@ -30,8 +30,7 @@ namespace Sublime {
 struct DocumentPrivate {
     void removeView(QObject *obj)
     {
-        View *view = reinterpret_cast<Sublime::View*>(obj);
-        views.removeAll(view);
+        views.removeAll(reinterpret_cast<Sublime::View*>(obj));
     }
 
     Controller *controller;
