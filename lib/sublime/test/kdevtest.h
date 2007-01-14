@@ -32,7 +32,6 @@ int main(int argc, char *argv[]) \
                          "(c) 2007, KDevelop Developers", "", "http://www.kdevelop.org" ); \
  \
     KCmdLineArgs::init(argc, argv, &aboutData); \
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs(); \
     KApplication app; \
  \
     TestObject tc; \

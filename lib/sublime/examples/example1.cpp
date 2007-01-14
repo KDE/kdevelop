@@ -30,7 +30,6 @@ int main(int argc, char **argv)
                          "(c) 2007, Alexander Dymo", "", "http://www.kdevelop.org" );
 
     KCmdLineArgs::init(argc, argv, &aboutData);
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     KApplication app;
 
     Example1Main *m = new Example1Main();

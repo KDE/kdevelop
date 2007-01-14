@@ -47,7 +47,7 @@ Area::WalkerMode AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
 QString AreaViewsPrinter::printIndentation(Sublime::AreaIndex *index) const
 {
     QString i = "";
-    while (index = index->parent())
+    while ((index = index->parent()))
         i += "    ";
     return i;
 }

@@ -26,7 +26,7 @@
 namespace Sublime {
 
 ViewPrivate::ViewPrivate(View * v)
-    :view(v), doc(0), widget(0)
+    :doc(0), widget(0), view(v)
 {
 }
 
