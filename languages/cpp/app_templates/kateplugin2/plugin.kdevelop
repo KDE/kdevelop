@@ -23,7 +23,8 @@
   </kdevcppsupport>
 <kdevautoproject>
   <general>
-   <activetarget>src/lib%{APPNAMELC}.la</activetarget>
+   <activetarget>src/lib%{APPNAMELC}plugin.la</activetarget>
+
    <useconfiguration>debug</useconfiguration>
   </general>
     <configurations>
