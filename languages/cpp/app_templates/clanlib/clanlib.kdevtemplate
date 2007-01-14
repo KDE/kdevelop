@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple ClanLib application
+Name[ca]=Una simple aplicació de ClanLib
 Name[da]=Simpelt ClanLib program
 Name[de]=Eine einfache ClanLib-Anwendung
 Name[el]=Μια απλή εφαρμογή ClanLib
