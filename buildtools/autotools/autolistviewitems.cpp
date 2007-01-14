@@ -162,16 +162,20 @@ void FileItem::changeMakefileEntry(const QString& new_name)
 		varname = canontargetname + "_SOURCES";
 	else
 		varname = target->prefix + "_" + target->primary;
-	SubprojectItem* subProject = dynamic_cast<AutoDetailsView*>(listView())->m_part->m_widget->selectedSubproject();
-	QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
-	QStringList::iterator it = sources.find(name);
-	(*it) = new_name;
-	subProject->variables[varname] = sources.join(" ");
-	replaceMap.insert(varname, subProject->variables[varname]);
-
-	AutoProjectTool::addToMakefileam(subProject->path + "/Makefile.am", replaceMap);
-
-	if(new_name == "")
-		target->sources.remove(this);
-
+	if( AutoDetailsView* lv = dynamic_cast<AutoDetailsView*>(listView()) )
+	{
+ 		if ( SubprojectItem* subProject = lv->m_part->m_widget->selectedSubproject() )
+		{
+			QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
+			QStringList::iterator it = sources.find(name);
+			(*it) = new_name;
+			subProject->variables[varname] = sources.join(" ");
+			replaceMap.insert(varname, subProject->variables[varname]);
+		
+			AutoProjectTool::addToMakefileam(subProject->path + "/Makefile.am", replaceMap);
+		
+			if(new_name == "")
+				target->sources.remove(this);
+		}
+	}
 }
