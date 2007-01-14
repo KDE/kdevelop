@@ -346,7 +346,7 @@ QString AutoProjectPart::runDirectory() const
     QDomDocument &dom = *projectDom();
 
     QString cwd;
-    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) )
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) || !m_widget->activeTarget() )
     {
         cwd = defaultRunDirectory("kdevautoproject");
     }else
@@ -430,7 +430,7 @@ QString AutoProjectPart::debugArguments() const
 {
     QDomDocument &dom = *projectDom();
 
-    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) )
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) || !m_widget->activeTarget() )
     {
         return DomUtil::readEntry(dom, "/kdevautoproject/run/globaldebugarguments");
     }else
@@ -445,7 +445,7 @@ QString AutoProjectPart::runArguments() const
 {
     QDomDocument &dom = *projectDom();
 
-    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) )
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/useglobalprogram", false) || !m_widget->activeTarget() )
     {
         return DomUtil::readEntry(dom, "/kdevautoproject/run/programargs");
     }else
