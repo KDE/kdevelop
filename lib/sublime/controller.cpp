@@ -36,6 +36,16 @@ struct ControllerPrivate {
     {
     }
 
+    void removeArea(QObject *obj)
+    {
+        areas.removeAll(reinterpret_cast<Area*>(obj));
+    }
+
+    void removeDocument(QObject *obj)
+    {
+        documents.removeAll(reinterpret_cast<Document*>(obj));
+    }
+
     QList<Document*> documents;
     QList<Area*> areas;
     QMap<Area*, MainWindow*> shownAreas;
@@ -71,17 +81,6 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
         areaToShow = area;
     d->shownAreas[areaToShow] = mainWindow;
     MainWindowOperator::setArea(mainWindow, areaToShow);
-}
-
-void Controller::childEvent(QChildEvent *ev)
-{
-    if (ev->removed())
-    {
-        if (ev->child()->inherits("Document"))
-            d->documents.removeAll((Document*)ev->child());
-        else if (ev->child()->inherits("Area"))
-            d->areas.removeAll((Area*)ev->child());
-    }
 }
 
 QList<Area*> &Controller::areas() const

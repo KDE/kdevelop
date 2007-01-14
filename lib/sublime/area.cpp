@@ -47,6 +47,10 @@ struct AreaPrivate {
         controller = p.controller;
         toolViewPositions.clear();
     }
+    ~AreaPrivate()
+    {
+        delete rootIndex;
+    }
 
     struct ViewFinder {
         ViewFinder(View *_view): view(_view), index(0) {}
@@ -89,6 +93,7 @@ Area::Area(Controller *controller, const QString &name)
     d = new AreaPrivate();
     d->controller = controller;
     d->controller->addArea(this);
+    connect(this, SIGNAL(destroyed(QObject*)), d->controller, SLOT(removeArea(QObject*)));
 }
 
 Area::Area(const Area &area): QObject(area.controller())
@@ -114,12 +119,14 @@ Area::~Area()
 void Area::addView(View *view)
 {
     d->currentIndex->add(view);
+    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
 void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
 {
     AreaIndex *indexToSplit = indexOf(viewToSplit);
     indexToSplit->split(view, orientation);
+    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
 void Area::removeView(View *view)

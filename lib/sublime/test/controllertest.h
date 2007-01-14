@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,46 +16,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "view.h"
+#ifndef SUBLIMECONTROLLERTEST_H
+#define SUBLIMECONTROLLERTEST_H
 
-#include <QWidget>
+#include <QObject>
 
-#include <kdebug.h>
+class ControllerTest: public QObject {
+    Q_OBJECT
+private slots:
+    void testDocumentDeletion();
+    void testAreaDeletion();
+};
 
-#include "document.h"
-#include "view_p.h"
-
-namespace Sublime {
-
-View::View(Document *doc)
-    :QObject(doc)
-{
-    d = new ViewPrivate(this);
-    d->doc = doc;
-}
-
-View::~View()
-{
-    delete d;
-}
-
-Document *View::document() const
-{
-    return d->doc;
-}
-
-QWidget *View::widget(QWidget *parent)
-{
-    return d->initializeWidget(parent);
-}
-
-bool View::hasWidget() const
-{
-    return d->widget != 0;
-}
-
-}
-
-#include "view.moc"
+#endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

@@ -26,4 +26,10 @@ kde4_add_executable(sublime-documenttest NOGUI RUN_UNINSTALLED ${documenttest_SR
 target_link_libraries(sublime-documenttest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
 add_test(sublime-documenttest ${EXECUTABLE_OUTPUT_PATH}/sublime-documenttest)
 
+set( controllertest_SRCS controllertest.cpp )
+kde4_automoc(${controllertest_SRCS})
+kde4_add_executable(sublime-controllertest NOGUI RUN_UNINSTALLED ${controllertest_SRCS})
+target_link_libraries(sublime-controllertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
+add_test(sublime-controllertest ${EXECUTABLE_OUTPUT_PATH}/sublime-controllertest)
+
 endif(KDE4_BUILD_TESTS)

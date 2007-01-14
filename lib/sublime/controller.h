@@ -62,18 +62,15 @@ public slots:
     /**Releases @p area from its mainwindow.*/
     void areaReleased(Sublime::Area *area);
 
-protected:
-    /**Reimplemented to catch document and area removals.
-    @todo adymo: refactor to use QObject::destroyed*/
-    virtual void childEvent(QChildEvent *ev);
-
 private:
     void init();
+    Q_PRIVATE_SLOT(d, void removeArea(QObject*))
+    Q_PRIVATE_SLOT(d, void removeDocument(QObject*))
 
-    /**Adds an area to the controller, used by Area class.
+    /**Adds the area to the controller, used by Area class.
     @todo adymo: refactor*/
     void addArea(Area *area);
-    /**Adds a document to the controller, used by Document class.
+    /**Adds the document to the controller, used by Document class.
     @todo adymo: refactor*/
     void addDocument(Document *document);
 

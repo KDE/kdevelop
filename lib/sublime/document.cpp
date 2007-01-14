@@ -48,6 +48,7 @@ Document::Document(Controller *controller)
     d = new DocumentPrivate();
     d->controller = controller;
     d->controller->addDocument(this);
+    connect(this, SIGNAL(destroyed(QObject*)), d->controller, SLOT(removeDocument(QObject*)));
 }
 
 Document::~Document()
