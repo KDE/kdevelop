@@ -101,7 +101,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::slotProjectNameChanged( const QString &_text )
 {
-    ok_button->setEnabled( !_text.isEmpty() );
+    ok_button->setEnabled( !_text.isEmpty() && !urlinput_edit->url().contains( QRegExp("\\s") ) );
 }
 
 void ImportDialog::accept()
@@ -257,6 +257,15 @@ void ImportDialog::dirChanged()
     QDir dir(dirName);
     if (!dir.exists())
         return;
+
+    if ( dirName.contains( QRegExp("\\s") ) )
+    {
+        ok_button->setEnabled( false );
+        return;
+    }else
+    {
+        ok_button->setEnabled( true );
+    }
 
     // KDevelop legacy project?
     QStringList files = dir.entryList("*.kdevprj");
