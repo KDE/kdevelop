@@ -60,7 +60,8 @@ void ControllerTest::testAreaDeletion()
     delete area;
     //now we should have only one view remaining view that did not belong to the area
     //but we still have 3 because deleteLater only queues the deletion
-    QCOMPARE(doc->views().count(), 3);
+    QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
+    QCOMPARE(doc->views().count(), 1);
     QCOMPARE(controller.areas().count(), 0);
 }
 
