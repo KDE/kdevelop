@@ -283,7 +283,7 @@ QString PHPSupportPart::getExecuteFile() {
       KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
       if (ro_part) {
          if ( configData->getInvocationMode() == PHPConfigData::Web )
-            file = ro_part->url().fileName();
+            file = URLUtil::relativePath( project()->projectDirectory(), ro_part->url().path() );
          else
             file = ro_part->url().path();
       }
