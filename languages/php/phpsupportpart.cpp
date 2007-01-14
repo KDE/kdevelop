@@ -282,7 +282,10 @@ QString PHPSupportPart::getExecuteFile() {
    if (mode == PHPConfigData::Current) {
       KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
       if (ro_part) {
-         file = QFileInfo(ro_part->url().url()).fileName();
+         if ( configData->getInvocationMode() == PHPConfigData::Web )
+            file = ro_part->url().fileName();
+         else
+            file = ro_part->url().path();
       }
    }
    if (mode == PHPConfigData::Default) {
