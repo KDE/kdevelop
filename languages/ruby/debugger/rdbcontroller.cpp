@@ -747,7 +747,7 @@ void RDBController::slotStart(const QString& ruby_interpreter, const QString& ch
 		*dbgProcess_ << run_arguments;
 	}
 
-    emit rdbStdout(QString( ruby_interpreter + character_coding
+    emit rdbStdout(QString( ruby_interpreter + " " + character_coding
 							+ " -C " + QString(QFile::encodeName( run_directory ))
 							+ " -r " + debuggee_path + " " 
 							+ application + " " + run_arguments ).latin1() );
