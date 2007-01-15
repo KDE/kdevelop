@@ -12,9 +12,6 @@
             <height>429</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>SvnIntegratorDlgBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -57,9 +54,6 @@
                     <property name="text">
                         <string>&amp;Do not do anything</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -84,9 +78,6 @@ to perform any subversion operations.</string>
                     </property>
                     <property name="text">
                         <string>&amp;Create a project tree and import new project into trunk</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Creates project, imports it into the subversion

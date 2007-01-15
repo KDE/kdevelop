@@ -58,9 +58,6 @@
                             <property name="text">
                                 <string>Save &amp;as Default</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
-                            </property>
                             <property name="toolTip" stdset="0">
                                 <string></string>
                             </property>
@@ -139,9 +136,6 @@
                     <property name="text">
                         <string>O&amp;K</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
@@ -149,9 +143,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Cancel</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                 </widget>
             </hbox>

@@ -91,9 +91,6 @@
                     <property name="text">
                         <string>&amp;Close</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
                 </widget>
             </hbox>
         </widget>

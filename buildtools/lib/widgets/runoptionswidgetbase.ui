@@ -162,9 +162,6 @@
                     <property name="text">
                         <string>Automaticall&amp;y compile before execution</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+Y</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>If the program is not up-to-date with the source code, compile it before starting its execution</string>
                     </property>
@@ -175,9 +172,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Automatically install before execution</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string></string>
@@ -190,9 +184,6 @@
                     <property name="text">
                         <string>Use &amp;kdesu when installing</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string></string>
                     </property>
@@ -203,9 +194,6 @@
                     </property>
                     <property name="text">
                         <string>Start in e&amp;xternal terminal</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+X</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Start the main program in an external terminal</string>

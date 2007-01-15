@@ -243,9 +243,6 @@
                     <property name="text">
                         <string>Fi&amp;nd</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
                     <property name="default">
                         <bool>true</bool>
                     </property>

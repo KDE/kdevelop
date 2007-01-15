@@ -12,9 +12,6 @@
             <height>502</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form2</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -28,9 +25,6 @@
             </property>
             <property name="text">
                 <string>Lo&amp;ad last project on startup</string>
-            </property>
-            <property name="accel">
-                <string>Alt+A</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Check this if you want KDevelop to load the last opened project on startup</string>
@@ -70,9 +64,6 @@
             </property>
             <property name="text">
                 <string>Directory &amp;navigation messages</string>
-            </property>
-            <property name="accel">
-                <string>Alt+N</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Check this if you want to know what directory make is in</string>
@@ -194,9 +185,6 @@
                     <property name="text">
                         <string>&amp;Use KDevelop's embedded designer</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Start KDevelop own designer embedded within KDevelop</string>
                     </property>
@@ -211,9 +199,6 @@
                     <property name="text">
                         <string>Run KDevelop's &amp;designer as a separate application</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Start KDevelop own designer externally</string>
                     </property>
@@ -227,9 +212,6 @@
                     </property>
                     <property name="text">
                         <string>Run &amp;Qt Designer</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+Q</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Use Qt Designer externally</string>
@@ -299,9 +281,6 @@
                 <property name="text">
                     <string>Use &amp;KDE setting</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+K</string>
-                </property>
                 <property name="checked">
                     <bool>true</bool>
                 </property>
@@ -342,9 +321,6 @@
                 </property>
                 <property name="text">
                     <string>&amp;Other:</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+O</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Set a different terminal than the KDE default one</string>

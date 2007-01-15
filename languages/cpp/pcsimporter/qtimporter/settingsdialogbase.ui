@@ -12,9 +12,6 @@
             <height>283</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>SettingsDialogBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -92,9 +89,6 @@
             </property>
             <property name="text">
                 <string>&amp;Add</string>
-            </property>
-            <property name="accel">
-                <string>Alt+A</string>
             </property>
         </widget>
         <widget class="KURLRequester" row="2" column="0" rowspan="1" colspan="2">

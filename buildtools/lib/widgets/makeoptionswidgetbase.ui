@@ -26,9 +26,6 @@
             <property name="text">
                 <string>&amp;Abort on first error</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="6">
             <property name="name">
@@ -138,9 +135,6 @@
             </property>
             <property name="text">
                 <string>Run more than one &amp;job at a time</string>
-            </property>
-            <property name="accel">
-                <string>Alt+J</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">

@@ -135,9 +135,6 @@
             <property name="text">
                 <string>E&amp;nvironment</string>
             </property>
-            <property name="accel">
-                <string>Alt+N</string>
-            </property>
         </widget>
         <spacer row="5" column="1">
             <property name="name">

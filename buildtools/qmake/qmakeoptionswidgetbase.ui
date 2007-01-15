@@ -51,9 +51,6 @@
                     <property name="text">
                         <string>&amp;Always Save</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Always save the configuration when changing the project.</string>
                     </property>
@@ -68,9 +65,6 @@
                     <property name="text">
                         <string>&amp;Never Save (!Warning: This can lead to loss of setting changes)</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Never save the configuration when changing the project.</string>
                     </property>
@@ -84,9 +78,6 @@
                     </property>
                     <property name="text">
                         <string>As&amp;k</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -114,9 +105,6 @@
             </property>
             <property name="text">
                 <string>Repla&amp;ce File Paths with matching Variables</string>
-            </property>
-            <property name="accel">
-                <string>Alt+C</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>This replaces the relative paths of added files with existing custom variables if the value assigned to it is the same as the path.</string>

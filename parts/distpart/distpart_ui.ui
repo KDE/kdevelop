@@ -150,9 +150,6 @@
                         <property name="text">
                             <string>&amp;Use custom options</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+U</string>
-                        </property>
                         <property name="toolTip" stdset="0">
                             <string>Default is: %n-%v.tar.gz</string>
                         </property>
@@ -255,9 +252,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Add Files</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">

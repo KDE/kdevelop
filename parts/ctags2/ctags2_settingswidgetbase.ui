@@ -12,9 +12,6 @@
             <height>456</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>CTags2SettingsWidgetBase</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -114,9 +111,6 @@
                                 <property name="text">
                                     <string>When more than one hit, go directl&amp;y to the first</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+Y</string>
-                                </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>If more than one hit was produced from an attempt to find an exact match, go to the first match in the list. Note: the &lt;i&gt;Go To Next Match&lt;/i&gt; shortcut can be used to step between the matches.</string>
                                 </property>
@@ -127,9 +121,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Use custom tagfile generation arguments</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>The default arguments should be fine, but if needed a custom generation arguments string can be used.</string>
@@ -270,9 +261,6 @@
                                 <property name="text">
                                     <string>&amp;Create...</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+C</string>
-                                </property>
                             </widget>
                             <widget class="QPushButton" row="1" column="0">
                                 <property name="name">
@@ -280,9 +268,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Add...</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
                                 </property>
                             </widget>
                             <widget class="QPushButton" row="2" column="0">

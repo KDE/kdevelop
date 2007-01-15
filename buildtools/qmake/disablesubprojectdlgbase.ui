@@ -76,9 +76,6 @@
                     <property name="text">
                         <string>O&amp;K</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
                     <property name="autoDefault">
                         <bool>true</bool>
                     </property>

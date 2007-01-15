@@ -12,9 +12,6 @@
             <height>502</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>RubyConfigWidgetBase</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -181,9 +178,6 @@ def cd(dir) Dir.chdir dir end</string>
                     <property name="text">
                         <string>Main pr&amp;ogram</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
@@ -202,9 +196,6 @@ def cd(dir) Dir.chdir dir end</string>
             <property name="text">
                 <string>R&amp;un applications in terminal</string>
             </property>
-            <property name="accel">
-                <string>Alt+U</string>
-            </property>
             <property name="whatsThis" stdset="0">
                 <string>Check this if you want your applications to be opened in terminal window.</string>
             </property>
@@ -215,9 +206,6 @@ def cd(dir) Dir.chdir dir end</string>
             </property>
             <property name="text">
                 <string>Enable &amp;debugger floating toolbar</string>
-            </property>
-            <property name="accel">
-                <string>Alt+D</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Check this if you want to control the debugger via a floating toolbar.</string>
@@ -230,9 +218,6 @@ def cd(dir) Dir.chdir dir end</string>
             <property name="text">
                 <string>Show &amp;constants in the debugger</string>
             </property>
-            <property name="accel">
-                <string>Alt+C</string>
-            </property>
             <property name="whatsThis" stdset="0">
                 <string>Check this if you want the debugger to show constants (with many constants this may be slow).</string>
             </property>
@@ -243,9 +228,6 @@ def cd(dir) Dir.chdir dir end</string>
             </property>
             <property name="text">
                 <string>Trace &amp;into Ruby libraries</string>
-            </property>
-            <property name="accel">
-                <string>Alt+I</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Trace through the Ruby code installed under sitedir in the debugger</string>
@@ -298,9 +280,6 @@ def cd(dir) Dir.chdir dir end</string>
                     </property>
                     <property name="text">
                         <string>S&amp;JIS</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+J</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>2</number>

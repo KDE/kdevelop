@@ -117,9 +117,6 @@
                             <property name="text">
                                 <string>Display static &amp;members</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+M</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Displaying static members makes GDB slower in
 producing data within KDE and Qt.
@@ -136,9 +133,6 @@ check this option.</string>
                             <property name="text">
                                 <string>Display &amp;demangled names</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>When displaying the disassembled code you
 can select to see the methods' mangled names.
@@ -151,9 +145,6 @@ However, non-mangled names are easier to read.</string>
                             </property>
                             <property name="text">
                                 <string>Try settings &amp;breakpoints on library loading</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+B</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>If GDB has not seen a library that will be loaded via
@@ -172,9 +163,6 @@ If you are not "dlopen"ing libs then leave this unchecked.</string>
                             <property name="text">
                                 <string>E&amp;nable floating toolbar</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+N</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Use the floating toolbar. This toolbar always stays
 on top of all windows so that if the app covers KDevelop
@@ -190,9 +178,6 @@ This toolbar is in addition to the toolbar in KDevelop.</string>
                             </property>
                             <property name="text">
                                 <string>Enable separate terminal for application &amp;IO</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+I</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>This allows you to enter terminal input when your
@@ -220,9 +205,6 @@ Otherwise leave it unchecked.</string>
                             </property>
                             <property name="text">
                                 <string>Oct&amp;al</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
