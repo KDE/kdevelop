@@ -1825,8 +1825,8 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
         return;
     }else
     {
-        kdDebug(9024) << "Deleting file as the user wished: " << file << endl;
-        KIO::NetAccess::del( KURL::fromPathOrURL( file ), 0 );
+        kdDebug(9024) << "Deleting file as the user wished: " << spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename << endl;
+        KIO::NetAccess::del( KURL::fromPathOrURL( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename ), 0 );
     }
 
     if ( gitem->groupType != GroupItem::InstallObject )
