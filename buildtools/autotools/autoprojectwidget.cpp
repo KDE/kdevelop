@@ -512,21 +512,12 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 		// Remove all TargetItems and all of their children from the view
 		kdDebug ( 9020 ) << "m_shownSubproject (before takeItem()): " << m_shownSubproject->subdir << endl;
 
-		QPtrListIterator<TargetItem> it1( m_shownSubproject->targets );
-		for ( ; it1.current(); ++it1 )
+		QListViewItem* i = m_detailView->listView()->firstChild();
+		while( i )
 		{
-			// After AddTargetDialog, it can happen that an
-			// item is not yet in the list view, so better check...
-			kdDebug ( 9020 ) << "take child items of  " << ( *it1 )->name << endl;
-			if ( it1.current() ->parent() )
-			{
-				while ( ( *it1 ) ->firstChild() )
-				{
-					kdDebug ( 9020 ) << "take FileItem " << ( *it1 ) ->firstChild()->text(0) << endl;
-					( *it1 ) ->takeItem( ( *it1 ) ->firstChild() );
-				}
-			}
-			m_detailView->listView()->takeItem( *it1 );
+			QListViewItem* o = i;
+			i = i->nextSibling();
+			m_detailView->listView()->takeItem(o);
 		}
 	}
 
