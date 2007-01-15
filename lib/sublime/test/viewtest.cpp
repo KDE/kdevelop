@@ -22,6 +22,7 @@
 #include <QtTest/QtTest>
 
 #include <kurl.h>
+#include <kdebug.h>
 
 #include <sublime/controller.h>
 #include <sublime/tooldocument.h>
@@ -45,6 +46,27 @@ void ViewTest::testWidgetDeletion()
     //delete the widget and check that view knows about that
     delete view->widget();
     QVERIFY(!view->hasWidget());
+}
+
+class TestView: public View {
+public:
+    TestView(Document *doc): View(doc) {}
+};
+
+class TestDocument: public Document {
+public:
+    TestDocument(Controller *controller): Document(controller) {}
+protected:
+    virtual QWidget *createViewWidget(QWidget *parent = 0) { return new QWidget(parent); }
+    virtual View *newView(Document *doc) { return new TestView(doc); }
+};
+
+void ViewTest::testViewReimplementation()
+{
+    Controller controller;
+    Document *doc = new TestDocument(&controller);
+    View *view = doc->createView();
+    QVERIFY(dynamic_cast<TestView*>(view) != 0);
 }
 
 #include "viewtest.moc"
