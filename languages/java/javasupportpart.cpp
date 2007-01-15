@@ -531,8 +531,7 @@ JavaSupportPart::parseProject( )
     if( QFileInfo( project()->projectDirectory() + "/" + 
 			    project()->projectName().lower() + ".kdevelop.pcs" ).exists() )
     {
-        QDir(project()->projectDirectory()).rename( 
-			project()->projectName().lower() + ".kdevelop.pcs",
+        d.rename(project()->projectName().lower() + ".kdevelop.pcs", 
 			project()->projectName() + ".kdevelop.pcs");
     }
     QFile f(project()->projectDirectory() + "/" + project()->projectName() + ".kdevelop.pcs");
