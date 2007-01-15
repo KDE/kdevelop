@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3">
+<!DOCTYPE UI><UI>
 <class>FilePropsPageBase</class>
 <widget>
     <class>QWidget</class>
