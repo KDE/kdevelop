@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Simple ClanLib application
+Name[el]=Μια απλή εφαρμογή ClanLib
 Name[fr]=Simple application ClanLib
 Name[x-test]=xxSimple ClanLib applicationxx
 Category=C++
 Icon=clanlib.png
 Comment=Generates a simple ClanLib application.
+Comment[el]=Δημιουργεί μια απλή εφαρμογή ClanLib.
 Comment[fr]=Génère une application ClanLib simple.
 Comment[x-test]=xxGenerates a simple ClanLib application.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -54,5 +56,6 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A simple clanlib application was created in %{dest}
+Comment[el]=Μια απλή εφαρμογή clanlib δημιουργήθηκε στο %{dest}
 Comment[fr]=Une application clanlib simple a été créée dans %{dest}
 Comment[x-test]=xxA simple clanlib application was created in %{dest}xx

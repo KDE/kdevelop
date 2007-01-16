@@ -11,6 +11,7 @@ Name[x-test]=xx%{APPNAME}xx
 [Desktop Action Setup]
 Exec=%{APPNAMELC}.kss -setup
 Name=Setup...
+Name[el]=Ρύθμιση...
 Name[fr]=Configuration...
 Name[x-test]=xxSetup...xx
 Icon=kscreensaver
@@ -18,6 +19,7 @@ Icon=kscreensaver
 [Desktop Action InWindow]
 Exec=%{APPNAMELC}.kss -window-id %w
 Name=Display in Specified Window
+Name[el]=Προβολή στο ορισμένο παράθυρο
 Name[fr]=Afficher dans la fenêtre spécifiée
 Name[x-test]=xxDisplay in Specified Windowxx
 NoDisplay=true
@@ -25,6 +27,7 @@ NoDisplay=true
 [Desktop Action Root]
 Exec=%{APPNAMELC}.kss -root
 Name=Display in Root Window
+Name[el]=Προβολή στο βασικό παράθυρο
 Name[fr]=Afficher dans la fenêtre racine
 Name[x-test]=xxDisplay in Root Windowxx
 NoDisplay=true

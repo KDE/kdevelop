@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KOffice Part
+Name[el]=Τμήμα KOffice
 Name[fr]=Composant KOffice
 Name[x-test]=xxKOffice Partxx
 Icon=kopart.png
 Category=C++/KDE 3.x/KOffice
 Comment=Generates a framework for a full KOffice Application.
+Comment[el]=Δημιουργεί ένα πλαίσιο για μια πλήρης εφαρμογή του KOffice.
 Comment[fr]=Génère une infrastructure pour une application KOffice complète.
 Comment[x-test]=xxGenerates a framework for a full KOffice Application.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -152,5 +154,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A KOffice part was created in %{dest}
+Comment[el]=Ένα τμήμα του KOffice δημιουργήθηκε στο %{dest}
 Comment[fr]=Un composant KOffice a été créé dans %{dest}
 Comment[x-test]=xxA KOffice part was created in %{dest}xx

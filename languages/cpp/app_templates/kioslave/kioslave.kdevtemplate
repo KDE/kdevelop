@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KIO slave
+Name[el]=Υπηρέτης KIO
 Name[fr]=Module d'entrée / sortie
 Name[x-test]=xxKIO slavexx
 Icon=kioslave.png
 Category=C++/KDE 3.x/KIO
 Comment=Generates a framework for an IO slave
+Comment[el]=Δημιουργεί ένα πλαίσιο για έναν υπηρέτη IO
 Comment[fr]=Génère une infrastructure pour un module d'entrée / sortie
 Comment[x-test]=xxGenerates a framework for an IO slavexx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -111,5 +113,6 @@ Dest=%{dest}/src/%{APPNAMELC}.protocol
 [MSG]
 Type=message
 Comment=A KIO slave was created in %{dest}
+Comment[el]=Ένας υπηρέτης KIO δημιουργήθηκε στο %{dest}
 Comment[fr]=Un module d'entrée / sortie a été créé dans %{dest}
 Comment[x-test]=xxA KIO slave was created in %{dest}xx

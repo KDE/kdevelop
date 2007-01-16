@@ -7,6 +7,7 @@ Comment[x-test]=xxJava Language Supportxx
 Name=KDevJavaSupport
 Name[x-test]=xxKDevJavaSupportxx
 GenericName=Java Support
+GenericName[el]=Υποστήριξη Java
 GenericName[fr]=Langage JAVA
 GenericName[x-test]=xxJava Supportxx
 ServiceTypes=KDevelop/LanguageSupport

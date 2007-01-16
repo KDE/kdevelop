@@ -7,6 +7,7 @@ Comment[x-test]=xxValgrind is a tool that helps you find memory management probl
 Name=KDevValgrind
 Name[x-test]=xxKDevValgrindxx
 GenericName=Valgrind Frontend
+GenericName[el]=Πρόγραμμα Valgrind
 GenericName[fr]=Interface de Valgrind
 GenericName[x-test]=xxValgrind Frontendxx
 ServiceTypes=KDevelop/Plugin

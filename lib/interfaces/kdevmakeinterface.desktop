@@ -4,5 +4,6 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/MakeFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Make Frontend Interface
+Name[el]=Διασύνδεση προγράμματος Make
 Name[fr]=Interface du programme « make »
 Name[x-test]=xxMake Frontend Interfacexx

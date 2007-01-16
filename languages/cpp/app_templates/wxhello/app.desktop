@@ -6,5 +6,6 @@ Exec=%{APPNAMELC}
 Icon=%{APPNAMELC}
 Type=Application
 Comment=A simple wxWidgets Application
+Comment[el]=Μια απλή εφαρμογή wxWidgets
 Comment[fr]=Une application wxWidgets simple
 Comment[x-test]=xxA simple wxWidgets Applicationxx

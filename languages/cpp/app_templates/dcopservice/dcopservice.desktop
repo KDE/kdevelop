@@ -6,6 +6,7 @@ Exec=%{APPNAMELC}
 X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false
 Comment=Template for dcop services
+Comment[el]=Πρότυπο για υπηρεσίες dcop
 Comment[fr]=Un modèle pour les services DCOP.
 Comment[x-test]=xxTemplate for dcop servicesxx
 

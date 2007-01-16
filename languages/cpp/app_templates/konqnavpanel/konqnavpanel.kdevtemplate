@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Konqueror Navigation Panel Plugin
+Name[el]=Πρόσθετο πίνακα πλοήγησης του Konqueror
 Name[fr]=Module pour le panneau de navigation de Konqueror
 Name[x-test]=xxKonqueror Navigation Panel Pluginxx
 Icon=konqnavpanel.png
 Category=C++/KDE 3.x
 Comment=Generates a framework for a plugin  that embeds into Konqueror's navigation panel
+Comment[el]=Δημιουργεί ένα πλαίσιο για ένα πρόσθετο που ενσωματώνεται στον πίνακα πλοήγησης του Konqueror
 Comment[fr]=Génère une infrastructure pour un module s'intégrant au panneau de navigation de Konqueror
 Comment[x-test]=xxGenerates a framework for a plugin  that embeds into Konqueror's navigation panelxx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -111,5 +113,6 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A konqueror navigation panel plugin was created in %{dest}
+Comment[el]=Ένα πρόσθετο του πίνακα πλοήγησης του konqueror δημιουργήθηκε στο %{dest}
 Comment[fr]=Un module pour le panneau de navigation de Konqueror a été créé dans %{dest}
 Comment[x-test]=xxA konqueror navigation panel plugin was created in %{dest}xx

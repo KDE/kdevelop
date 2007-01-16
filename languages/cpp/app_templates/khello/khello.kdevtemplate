@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Simple KDE Application
+Name[el]=Απλή εφαρμογή του KDE
 Name[fr]=Application KDE simple
 Name[x-test]=xxSimple KDE Applicationxx
 Category=C++/KDE 3.x
 Icon=khello.png
 Comment=Generates a simple KDE application with one widget.
+Comment[el]=Δημιουργεί μια απλή εφαρμογή KDE με ένα γραφικό συστατικό.
 Comment[fr]=Génère une application KDE simple avec un élément graphique.
 Comment[x-test]=xxGenerates a simple KDE application with one widget.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -134,6 +136,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A KDE Hello world program was created in %{dest}
+Comment[el]=Ένα πρόγραμμα Γεια σου Κόσμε του KDE δημιουργήθηκε στο %{dest}
 Comment[fr]=Un programme KDE « Hello world » a été créé dans %{dest}
 Comment[x-test]=xxA KDE Hello world program was created in %{dest}xx
 

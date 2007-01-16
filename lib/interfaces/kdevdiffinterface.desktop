@@ -4,5 +4,6 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/DiffFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Diff Frontend Interface
+Name[el]=Διασύνδεση προγράμματος Diff
 Name[fr]=Interface du programme « Diff »
 Name[x-test]=xxDiff Frontend Interfacexx

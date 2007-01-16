@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Opie Application
+Name[el]=Εφαρμογή Opie
 Name[fr]=Application Opie
 Name[x-test]=xxOpie Applicationxx
 Icon=qmakeapp.png
 Category=C++/Embedded/Opie
 Comment=Generate an Opie application.
+Comment[el]=Δημιουργία μιας εφαρμογής Opie.
 Comment[fr]=Génèrer une application Opie.
 Comment[x-test]=xxGenerate an Opie application.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -64,5 +66,6 @@ Dest=%{dest}/apps/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=An opie application was created in %{dest}
+Comment[el]=Μια εφαρμογή opie δημιουργήθηκε στο %{dest}
 Comment[fr]=Une application Opie a été créée dans %{dest}
 Comment[x-test]=xxAn opie application was created in %{dest}xx

@@ -6,5 +6,6 @@ Exec=%{APPNAMELC}
 Icon=%{APPNAMELC}
 Type=Application
 Comment=A simple KDE Application
+Comment[el]=Μια απλή εφαρμογή του KDE
 Comment[fr]=Une application simple pour KDE
 Comment[x-test]=xxA simple KDE Applicationxx

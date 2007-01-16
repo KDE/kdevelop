@@ -3,6 +3,7 @@ Type=Service
 Name=KDevMakeBuilder
 Name[x-test]=xxKDevMakeBuilderxx
 Comment=KDevelop Automake Importer
+Comment[el]=Εισαγωγέας Automake του KDevelop
 Comment[fr]=Importation d'Automake pour KDevelop
 Comment[x-test]=xxKDevelop Automake Importerxx
 Icon=gear

@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 X-KDE-Derived=KPluginInfo
 Name=KDevelop Plugin
+Name[el]=Πρόσθετο KDevelop
 Name[fr]=Module externe de KDevelop
 Name[x-test]=xxKDevelop Pluginxx
 

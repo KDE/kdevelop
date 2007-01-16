@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KConfig XT application
+Name[el]=Εφαρμογή KConfig XT
 Name[fr]=Application KConfig XT
 Name[x-test]=xxKConfig XT applicationxx
 Category=C++/KDE 3.x
 Icon=kxt.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
+Comment[el]=Δημιουργεί μια απλή εφαρμογή KDE με ένα γραφικό συστατικό, ένα διάλογο ρύθμισης
 Comment[fr]=Génère une application KDE simple, avec un élément graphique et une fenêtre de configuration
 Comment[x-test]=xxGenerates a simple KDE application with one widget and a configuration dialogxx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -186,5 +188,6 @@ Dest=%{dest}/configure.in.in
 [MSG]
 Type=message
 Comment=A KConfig XT application was created in %{dest}
+Comment[el]=Μια εφαρμογή KConfig XT δημιουργήθηκε στο %{dest}
 Comment[fr]=Une application KConfig XT a été créée dans %{dest}
 Comment[x-test]=xxA KConfig XT application was created in %{dest}xx

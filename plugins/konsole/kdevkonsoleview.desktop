@@ -7,6 +7,7 @@ Comment[x-test]=xxThis plugin provides KDevelop with an embedded konsole for qui
 Name=KDevKonsoleView
 Name[x-test]=xxKDevKonsoleViewxx
 GenericName=Embedded Konsole
+GenericName[el]=Ενσωματωμένη Konsole
 GenericName[fr]=Konsole embarquée
 GenericName[x-test]=xxEmbedded Konsolexx
 Icon=konsole

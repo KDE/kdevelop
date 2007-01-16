@@ -3,6 +3,7 @@ Type = value
 ValueType=bool
 Value=INSTALL_DOCS
 Comment= Install Docbook documentation templates.
+Comment[el]= Εγκατάσταση προτύπων τεκμηρίωσης Docbook.
 Comment[fr]=Installer les modèles de documentation Docbook.
 Comment[x-test]=xx Install Docbook documentation templates.xx
 Default=true

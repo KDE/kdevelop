@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/VCSIntegrator
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop VCS Integrator
+Name[el]=Ενσωματωτής VCS του KDevelop
 Name[fr]=Intégrateur VCS de KDevelop
 Name[x-test]=xxKDevelop VCS Integratorxx
 

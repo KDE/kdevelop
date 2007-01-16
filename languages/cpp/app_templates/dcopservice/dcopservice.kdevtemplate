@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KDE DCOP Service
+Name[el]=Υπηρεσία KDE DCOP
 Name[fr]=Service DCOP KDE
 Name[x-test]=xxKDE DCOP Servicexx
 Icon=kdcop.png
 Category=C++/KDE 3.x
 Comment=Generates a framework for a KDE DCOP service and client access library.
+Comment[el]=Δημιουργεί ένα πλαίσιο για μια υπηρεσία KDE DCOP και μια βιβλιοθήκη πρόσβασης πελάτη.
 Comment[fr]=Génère une infrastructure pour un service DCOP KDE et une bibliothèque d'accès client.
 Comment[x-test]=xxGenerates a framework for a KDE DCOP service and client access library.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -116,5 +118,6 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
+Comment[el]=Μια υπηρεσία KDE DCOP δημιουργήθηκε στο %{dest}
 Comment[fr]=Un service DCOP KDE a été créé dans %{dest}
 Comment[x-test]=xxA KDE DCOP Service was created in %{dest}xx

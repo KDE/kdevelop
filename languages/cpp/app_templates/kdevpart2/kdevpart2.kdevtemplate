@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=KDevelop Plugin (Standalone build)
+Name[el]=Πρόσθετο KDevelop (Αυτόνομη κατασκευή)
 Name[fr]=Module de KDevelop (autonome)
 Name[x-test]=xxKDevelop Plugin (Standalone build)xx
 Category=C++/KDE 3.x/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
+Comment[el]=Αυτό δημιουργεί ένα KPart για το KDevelop, για κατασκευή του έξω από το δέντρο πηγαίου κώδικα του KDevelop.
 Comment[fr]=Ceci génère un composant pour KDevelop, qui sera construit en dehors de l'arborescence des sources de KDevelop.
 Comment[x-test]=xxThis generates a KPart for KDevelop, to be built outside of the KDevelop source tree.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -16,6 +18,7 @@ Type = value
 ValueType=QString
 Value= SCOPE
 Comment= The scope of a plugin (Global, Project, Core)
+Comment[el]= Η εμβέλεια ενός πρόσθετου (Καθολική, Έργο, Πυρήνας)
 Comment[fr]= La portée d'un module (globale, projet, cœur)
 Comment[x-test]=xx The scope of a plugin (Global, Project, Core)xx
 Default= Global
@@ -25,6 +28,7 @@ Type = value
 ValueType=QString
 Value= PROPS
 Comment= The list of supported KDevelop properties
+Comment[el]= Η λίστα των υποστηριζόμενων ιδιοτήτων του KDevelop
 Comment[fr]= La liste des propriétés KDevelop prises en charge
 Comment[x-test]=xx The list of supported KDevelop propertiesxx
 Default=
@@ -143,5 +147,6 @@ Dest=%{dest}/src/README.dox
 [MSG]
 Type=message
 Comment=A KDevelop plugin was created in %{dest}
+Comment[el]=Ένα πρόσθετο του KDevelop δημιουργήθηκε στο %{dest}
 Comment[fr]=Un module KDevelop a été créé dans %{dest}
 Comment[x-test]=xxA KDevelop plugin was created in %{dest}xx

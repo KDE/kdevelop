@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=An %{APPNAME} Program
+Comment[el]=Ένα πρόγραμμα %{APPNAME}
 Comment[fr]=Un programme %{APPNAME}
 Comment[x-test]=xxAn %{APPNAME} Programxx
 Exec=%{APPNAMELC}

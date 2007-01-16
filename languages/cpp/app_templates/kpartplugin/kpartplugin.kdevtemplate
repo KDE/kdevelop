@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
+Name[el]=Πρόσθετο KHTMLPart
 Name[fr]=Module pour le composant KHTML
 Name[x-test]=xxKHTMLPart pluginxx
 Icon=kpartplugin.png
 Category=C++/KDE 3.x
 Comment=Generates a plugin for the KHTML part.
+Comment[el]=Δημιουργεί ένα πρόσθετο για το τμήμα KHTML.
 Comment[fr]=Génère un module pour le composant KHTML.
 Comment[x-test]=xxGenerates a plugin for the KHTML part.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -124,5 +126,6 @@ Process=false
 [MSG]
 Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
+Comment[el]=Ένα πρόσθετο τμήμα KHTML δημιουργήθηκε στο %{dest}
 Comment[fr]=Un module pour le composant KHTML a été créé dans %{dest}
 Comment[x-test]=xxA KHTMLPart plugin was created in %{dest}xx

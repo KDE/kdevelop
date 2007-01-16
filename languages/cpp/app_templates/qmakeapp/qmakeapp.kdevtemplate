@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Application
+Name[el]=Εφαρμογή
 Name[x-test]=xxApplicationxx
 Icon=qmakeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt based application (crossplatform compatible)
+Comment[el]=Δημιουργία μια εφαρμογής βασισμένης στα QMake/Qt (συμβατή με πολλαπλές πλατφόρμες)
 Comment[fr]=Générer une application basée sur QMake / Qt (compatible multiplateforme)
 Comment[x-test]=xxGenerate a QMake/Qt based application (crossplatform compatible)xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -64,5 +66,6 @@ Dest=%{dest}/src/fileprint.xpm
 [MSG]
 Type=message
 Comment=A Qt/Qmake based application was created in %{dest}
+Comment[el]=Μια εφαρμογή βασισμένη στα Qt/Qmake δημιουργήθηκε στο %{dest}
 Comment[fr]=Une application basée sur Qt / Qmake a été créée dans %{dest}
 Comment[x-test]=xxA Qt/Qmake based application was created in %{dest}xx

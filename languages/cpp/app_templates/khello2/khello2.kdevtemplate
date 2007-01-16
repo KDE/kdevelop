@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Simple Designer based KDE Application
+Name[el]=Απλή εφαρμογή KDE βασισμένη στο σχεδιαστή
 Name[fr]=Simple application KDE basée sur Designer
 Name[x-test]=xxSimple Designer based KDE Applicationxx
 Category=C++/KDE 3.x
 Icon=khello2.png
 Comment=Generates a simple KDE application with one Qt-designer based widget.
+Comment[el]=Δημιουργεί μια απλή εφαρμογή KDE με ένα γραφικό συστατικό βασισμένο στο σχεδιαστή Qt.
 Comment[fr]=Génère une application KDE simple avec un élément graphique basé sur Qt-designer.
 Comment[x-test]=xxGenerates a simple KDE application with one Qt-designer based widget.xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -150,5 +152,6 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A simple designer based KDE application was created in %{dest}
+Comment[el]=Μια απλή εφαρμογή KDE βασισμένη στο σχεδιαστή δημιουργήθηκε στο %{dest}
 Comment[fr]=Une application KDE simple basée sur Designer a été créée dans %{dest}
 Comment[x-test]=xxA simple designer based KDE application was created in %{dest}xx

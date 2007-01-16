@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KFile plugin
+Name[el]=Πρόσθετο KFile
 Name[fr]=Module KFile
 Name[x-test]=xxKFile pluginxx
 Icon=kfileplugin.png
 Category=C++/KDE 3.x
 Comment=Generates a KFile plugin for konqueror to display meta information.
+Comment[el]=Δημιουργεί ένα πρόσθετο KFile για την εμφάνιση μεταπληροφοριών στον konqueror.
 Comment[fr]=Génère un module KFile pour Konqueror afin d'afficher des méta-informations.
 Comment[x-test]=xxGenerates a KFile plugin for konqueror to display meta information.xx
 FileTemplates=h,CStyle,cpp,CStyle

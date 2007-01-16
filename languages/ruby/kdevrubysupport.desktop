@@ -5,6 +5,7 @@ Exec=blubb
 Comment=Ruby Language Support
 Name=KDevRubySupport
 GenericName=Ruby Support
+GenericName[el]=Υποστήριξη Ruby
 GenericName[fr]=Langage RUBY
 ServiceTypes=KDevelop/LanguageSupport
 Icon=source

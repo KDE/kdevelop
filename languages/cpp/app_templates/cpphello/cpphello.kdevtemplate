@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[el]=Απλό πρόγραμμα Γεια σου Κόσμε
 Name[fr]=Simple programme « Hello world »
 Name[x-test]=xxSimple Hello world programxx
 Icon=cpphello.png
 Category=C++
 Comment=Generates a simple Hello world program in C++
+Comment[el]=Δημιουργεί ένα απλό πρόγραμμα Γεια σου Κόσμε σε C++
 Comment[fr]=Génère un simple programme « Hello world » en C++
 Comment[x-test]=xxGenerates a simple Hello world program in C++xx
 FileTemplates=h,CStyle,cpp,CStyle
@@ -58,6 +60,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A Simple Hello World program was created in %{dest}
+Comment[el]=Ένα απλό πρόγραμμα Γεια σου Κόσμε δημιουργήθηκε στο %{dest}
 Comment[fr]=Un simple programme « Hello world » a été créé dans %{dest}.
 Comment[x-test]=xxA Simple Hello World program was created in %{dest}xx
 
