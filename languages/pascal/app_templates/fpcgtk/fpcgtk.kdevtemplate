@@ -96,6 +96,7 @@ Comment[nl]=Een GTK+-toepassing geschreven in Pascal is aangemaakt in %{dest}
 Comment[pl]=Program GTK+ napisany w Pascalu został utworzony w %{dest}
 Comment[pt]=Foi criada uma aplicação GTK+, escrita em Pascal, em %{dest}
 Comment[pt_BR]=Foi criada uma aplicação GTK+, escrita em Pascal, em %{dest}
+Comment[ru]=Приложение GTK+ на Pascal создано в %{dest}
 Comment[sk]=GTK+ aplikácia v Pascal bola vytvorená v %{dest}
 Comment[sr]=GTK+ програм у Pascal-у направљен је у %{dest}
 Comment[sr@Latn]=GTK+ program u Pascal-u napravljen je u %{dest}
