@@ -49,6 +49,7 @@ private:
     QString interpreter();
     QString shell();
     QString mainProgram();
+    QString runDirectory();
     QString programArgs();
     QString characterCoding();
 

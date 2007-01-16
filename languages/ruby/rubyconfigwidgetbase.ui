@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>485</width>
-            <height>502</height>
+            <height>582</height>
         </rect>
     </property>
     <vbox>
@@ -18,81 +18,20 @@
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>layout3</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>textLabel1_2_3_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Program &amp;arguments:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>programArgsEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>These are the arguments passed to the Ruby interpreter</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>textLabel1_2_3</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Main program:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>programArgsEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This is the name of the main program source file</string>
-                    </property>
-                </widget>
                 <widget class="KLineEdit" row="3" column="1">
                     <property name="name">
                         <cstring>programArgsEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="KLineEdit" row="2" column="1">
                     <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Ruby interpreter:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>interpreterEdit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This is the path (or just name, if in $PATH) to the Ruby interpreter. Defaults to "ruby"</string>
+                        <cstring>mainProgramEdit</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -118,19 +57,93 @@
 def cd(dir) Dir.chdir dir end</string>
                     </property>
                 </widget>
+                <widget class="KLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>interpreterEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2_3_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Program &amp;arguments:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>programArgsEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>These are the arguments passed to the Ruby interpreter</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Ruby interpreter:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>interpreterEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This is the path (or just name, if in $PATH) to the Ruby interpreter. Defaults to "ruby"</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Main program:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>programArgsEdit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This is the name of the main program source file</string>
+                    </property>
+                </widget>
                 <widget class="KLineEdit" row="1" column="1">
                     <property name="name">
                         <cstring>shellEdit</cstring>
                     </property>
                 </widget>
-                <widget class="KLineEdit" row="2" column="1">
+                <widget class="QLabel" row="4" column="0">
                     <property name="name">
-                        <cstring>mainProgramEdit</cstring>
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Working Directory:</string>
                     </property>
                 </widget>
-                <widget class="KLineEdit" row="0" column="1">
+                <widget class="KURLRequester" row="4" column="1">
                     <property name="name">
-                        <cstring>interpreterEdit</cstring>
+                        <cstring>workingDir</cstring>
                     </property>
                 </widget>
             </grid>
@@ -340,5 +353,11 @@ def cd(dir) Dir.chdir dir end</string>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

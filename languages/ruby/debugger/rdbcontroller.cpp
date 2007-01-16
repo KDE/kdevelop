@@ -1195,7 +1195,7 @@ void RDBController::slotAcceptConnection(int masterSocket)
 	
 	socket_ = accept(masterSocket, &sockaddr, &fromlen);
 	if (fcntl(socket_, F_SETFL, O_NONBLOCK) == -1) {
-    	kdDebug(9012) << "RDBController::slotAcceptConnection can't set nonblocking socket" << errno << endl;
+    	kdDebug(9012) << "RDBController::slotAcceptConnection can't set nonblocking socket " << errno << endl;
 	}
 	
 	socketNotifier_ = new QSocketNotifier(socket_, QSocketNotifier::Read, 0);

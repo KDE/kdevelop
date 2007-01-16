@@ -7,7 +7,8 @@
 #include <klineedit.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
-
+#include <kurlrequester.h>
+#include <kurlcompletion.h>
 #include <kdebug.h>
 
 RubyConfigWidget::RubyConfigWidget(QDomDocument &projectDom, QWidget* parent, const char* name)
@@ -29,6 +30,9 @@ RubyConfigWidget::RubyConfigWidget(QDomDocument &projectDom, QWidget* parent, co
     enableFloatingToolBarBox->setChecked( DomUtil::readBoolEntry(dom, "/kdevrbdebugger/general/floatingtoolbar", false));
     showConstants->setChecked( DomUtil::readBoolEntry(dom, "/kdevrbdebugger/general/showconstants", false));
     traceIntoRuby->setChecked( DomUtil::readBoolEntry(dom, "/kdevrbdebugger/general/traceintoruby", false));
+    workingDir->completionObject()->setMode(KURLCompletion::DirCompletion);
+    workingDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    workingDir->setURL(DomUtil::readEntry(dom, "/kdevscriptproject/run/globalcwd", "") );
 }
 
 void RubyConfigWidget::accept() {
@@ -42,6 +46,7 @@ void RubyConfigWidget::accept() {
     DomUtil::writeBoolEntry(dom, "/kdevrbdebugger/general/floatingtoolbar", enableFloatingToolBarBox->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevrbdebugger/general/showconstants", showConstants->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevrbdebugger/general/traceintoruby", traceIntoRuby->isChecked());
+    DomUtil::writeEntry(dom, "/kdevscriptproject/run/globalcwd", workingDir->url() );
 }
 
 #include "rubyconfigwidget.moc"

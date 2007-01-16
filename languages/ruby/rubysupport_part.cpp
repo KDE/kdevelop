@@ -502,7 +502,7 @@ void RubySupportPart::slotRun ()
         QString cmd = QString("%1 -K%2 -C\"%3\" -I\"%4\" \"%5\" %6")
                           .arg(interpreter())
                           .arg(characterCoding())
-                          .arg(program.dirPath())
+                          .arg(runDirectory())
                           .arg(program.dirPath())
                           .arg(program.fileName())
                           .arg(programArgs());
@@ -536,6 +536,13 @@ QString RubySupportPart::mainProgram() {
 	}
 
     return prog;
+}
+
+QString RubySupportPart::runDirectory() {
+    QString cwd = DomUtil::readEntry(*projectDom(), "/kdevscriptproject/run/globalcwd");
+    if (cwd.isEmpty())
+      cwd = project()->buildDirectory();
+    return cwd;
 }
 
 QString RubySupportPart::programArgs() {

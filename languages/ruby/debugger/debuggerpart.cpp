@@ -443,7 +443,9 @@ bool RubyDebuggerPart::startDebugger()
 
     if (project()) {
         build_dir     = project()->buildDirectory();
-        run_directory = project()->runDirectory();
+        run_directory = DomUtil::readEntry(*projectDom(), "/kdevscriptproject/run/globalcwd");
+        if (run_directory.isEmpty())
+            run_directory = project()->buildDirectory();
     }
 	
 	int runMainProgram = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/runmainprogram");
