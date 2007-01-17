@@ -204,9 +204,9 @@ namespace ruby
 -> terminal ;;
 
 
-    statementBody=statementWithoutModifier (
+    statementBody=statementWithoutModifier [: std::cout << "stmt" << std::endl; :] (
         IF expression
-        | UNLESS expression
+        | UNLESS [: std::cout << "unless here" << std::endl; :] expression
         | WHILE expression
         | UNTIL expression
         | RESCUE_MODIFIER expression    -- FIXME: statement after rescue
@@ -445,9 +445,11 @@ namespace ruby
 
 -- see line break ignore rules in original grammar
 
-    normalMethodInvocationArgument (COMMA
-            [: if ((yytoken == Token_REST_ARG_PREFIX) || (yytoken == Token_BLOCK_ARG_PREFIX)) break; :]
+    normalMethodInvocationArgument [: std::cout << "normal" << std::endl; :] (COMMA
+            [: std::cout << "asking for another arg" << std::endl; :]
+            [: if ((yytoken == Token_STAR) || (yytoken == Token_BAND)) break; :]
             normalMethodInvocationArgument
+            [: std::cout << "arg is done" << std::endl; :]
             )*
         (restMethodInvocationArgument | blockMethodInvocationArgument | 0)
     | restMethodInvocationArgument

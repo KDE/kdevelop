@@ -8205,6 +8205,7 @@ namespace ruby
                   }
                 return false;
               }
+            std::cout << "normal" << std::endl;
             while (yytoken == Token_COMMA)
               {
                 if (yytoken != Token_COMMA)
@@ -8217,7 +8218,8 @@ namespace ruby
                   }
                 yylex();
 
-                if ((yytoken == Token_REST_ARG_PREFIX) || (yytoken == Token_BLOCK_ARG_PREFIX))
+                std::cout << "asking for another arg" << std::endl;
+                if ((yytoken == Token_STAR) || (yytoken == Token_BAND))
                   break;
                 normalMethodInvocationArgument_ast *__node_138 = 0;
                 if (!parse_normalMethodInvocationArgument(&__node_138))
@@ -8228,6 +8230,7 @@ namespace ruby
                       }
                     return false;
                   }
+                std::cout << "arg is done" << std::endl;
               }
             if (yytoken == Token_REST_ARG_PREFIX)
               {
@@ -14438,6 +14441,7 @@ namespace ruby
           }
         (*yynode)->statementBody = __node_220;
 
+        std::cout << "stmt" << std::endl;
         while (yytoken == Token_RESCUE_MODIFIER
                || yytoken == Token_IF
                || yytoken == Token_UNTIL
@@ -14478,6 +14482,7 @@ namespace ruby
                   }
                 yylex();
 
+                std::cout << "unless here" << std::endl;
                 expression_ast *__node_222 = 0;
                 if (!parse_expression(&__node_222))
                   {
