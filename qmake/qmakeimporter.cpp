@@ -42,7 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
 
 QMakeImporter::QMakeImporter( QObject* parent,
                               const QStringList& )
-        : KDevBuildManager( QMakeSupportFactory::instance(), parent ), m_rootItem( 0L )
+        : Koncrete::BuildManager( QMakeSupportFactory::instance(), parent ), m_rootItem( 0L )
 {
     m_project = 0;
 
@@ -51,7 +51,7 @@ QMakeImporter::QMakeImporter( QObject* parent,
         //what do the settings say about our generator?
         QString generator = settings->generator();
         if ( generator.contains( "Unix" ) ) //use make
-            m_builder = new KDevMakeBuilder()*/
+            m_builder = new Koncrete::MakeBuilder()*/
 }
 
 QMakeImporter::~QMakeImporter()
@@ -59,7 +59,7 @@ QMakeImporter::~QMakeImporter()
     delete m_rootItem;
 }
 
-KDevProject* QMakeImporter::project() const
+Koncrete::Project* QMakeImporter::project() const
 {
     return m_project;
 }
@@ -69,9 +69,9 @@ KUrl QMakeImporter::buildDirectory() const
     return project()->folder();
 }
 
-QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item )
+QList<Koncrete::ProjectFolderItem*> QMakeImporter::parse( Koncrete::ProjectFolderItem* item )
 {
-    QList<KDevProjectFolderItem*> folderList;
+    QList<Koncrete::ProjectFolderItem*> folderList;
 
     kDebug(9024) << k_funcinfo << "Parsing item: " << endl;
 
@@ -87,7 +87,7 @@ QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item 
     }
     foreach( KUrl u, folderitem->projectScope()->files() )
     {
-        new KDevProjectFileItem( u, item );
+        new Koncrete::ProjectFileItem( u, item );
     }
     foreach( QString s, folderitem->projectScope()->targets() )
     {
@@ -98,7 +98,7 @@ QList<KDevProjectFolderItem*> QMakeImporter::parse( KDevProjectFolderItem* item 
     return folderList;
 }
 
-KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
+Koncrete::ProjectItem* QMakeImporter::import( Koncrete::ProjectModel* model,
                                         const KUrl& dirName )
 {
     if( !dirName.isLocalFile() )
@@ -130,7 +130,7 @@ KDevProjectItem* QMakeImporter::import( KDevProjectModel* model,
     return m_rootItem;
 }
 
-KUrl QMakeImporter::findMakefile( KDevProjectFolderItem* folder ) const
+KUrl QMakeImporter::findMakefile( Koncrete::ProjectFolderItem* folder ) const
 {
 
     QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
@@ -141,7 +141,7 @@ KUrl QMakeImporter::findMakefile( KDevProjectFolderItem* folder ) const
     return qmitem->projectScope()->absoluteFileUrl();
 }
 
-KUrl::List QMakeImporter::findMakefiles( KDevProjectFolderItem* folder ) const
+KUrl::List QMakeImporter::findMakefiles( Koncrete::ProjectFolderItem* folder ) const
 {
     QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
     if( !qmitem )
@@ -154,9 +154,9 @@ KUrl::List QMakeImporter::findMakefiles( KDevProjectFolderItem* folder ) const
     return l;
 }
 
-QList<KDevProjectTargetItem*> QMakeImporter::targets() const
+QList<Koncrete::ProjectTargetItem*> QMakeImporter::targets() const
 {
-    return QList<KDevProjectTargetItem*>();
+    return QList<Koncrete::ProjectTargetItem*>();
 }
 
 KUrl::List QMakeImporter::includeDirectories() const

@@ -25,7 +25,7 @@
 
 class QMakeProjectScope;
 
-class QMakeFolderItem : public KDevProjectFolderItem
+class QMakeFolderItem : public Koncrete::ProjectFolderItem
 {
 public:
     QMakeFolderItem( QMakeProjectScope*, const KUrl&, QStandardItem* parent = 0 );
@@ -36,18 +36,18 @@ private:
     QMakeProjectScope* m_projectScope;
 };
 
-class QMakeTargetItem : public KDevProjectTargetItem
+class QMakeTargetItem : public Koncrete::ProjectTargetItem
 {
-  public:
+public:
     QMakeTargetItem( const QString& s, QStandardItem* parent );
     ~QMakeTargetItem();
     const KUrl::List& includeDirectories() const;
     const QHash<QString, QString>& environment() const;
-    const DomUtil::PairList& defines() const;
-    private:
-        KUrl::List m_includes;
-        QHash<QString, QString> m_env;
-        DomUtil::PairList m_defs;
+    const Koncrete::DomUtil::PairList& defines() const;
+private:
+    KUrl::List m_includes;
+    QHash<QString, QString> m_env;
+    Koncrete::DomUtil::PairList m_defs;
 };
 
 
