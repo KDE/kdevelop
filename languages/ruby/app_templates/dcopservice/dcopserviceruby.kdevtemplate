@@ -39,6 +39,7 @@ Comment[et]=KDE DCOP-teenuse raamistiku ja kliendi ligipääsu teegi loomine.
 Comment[eu]=KDE-ren DCOP zerbitzu baterako lan-marko bat eta bezero liburutegi bat sortzen ditu.
 Comment[fa]=چارچوبی برای خدمت KDE DCOP و کتابخانۀ دستیابی کارخواه تولید می‌کند.
 Comment[fr]=Génère une infrastructure pour un service DCOP KDE et une bibliothèque d'accès client.
+Comment[ga]=Cruthaigh creatlach do sheirbhís DCOP KDE agus leabharlann rochtana cliaint.
 Comment[hu]=Létrehoz egy alap KDE DCOP-szolgáltatást és klienselérési programkönyvtárat.
 Comment[it]=Genera l'infrastruttura per un servizio DCOP di KDE e una libreria per l'accesso da client.
 Comment[ja]=KDE DCOP サービスとクライアントアクセスライブラリのためのフレームワークを作製します
