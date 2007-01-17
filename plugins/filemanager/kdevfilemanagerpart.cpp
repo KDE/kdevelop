@@ -33,7 +33,7 @@ typedef KGenericFactory<KDevFileManagerPart> KDevFileManagerFactory;
 K_EXPORT_COMPONENT_FACTORY(kdevfilemanager, KDevFileManagerFactory("kdevfilemanager"))
 
 KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QStringList &/*args*/)
-    :KDevPlugin(KDevFileManagerFactory::instance(), parent)
+    :Koncrete::Plugin(KDevFileManagerFactory::instance(), parent)
 {
     setXMLFile("kdevfilemanager.rc");
 

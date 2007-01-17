@@ -25,7 +25,7 @@
 #include <JobSequence.h>
 #include <kurl.h>
 #include <kdevexport.h>
-class KDevDocument;
+
 
 class QByteArray;
 
@@ -34,27 +34,32 @@ namespace KTextEditor
 class SmartRange;
 }
 
-class KDevAST;
-class KDevCodeModel;
 class TopDUContext;
-class KDevBackgroundParser;
+
+namespace Koncrete
+{
+
+class Document;
+class AST;
+class CodeModel;
+class BackgroundParser;
 
 /**
  * The base class for background parser jobs.
  */
-class KDEVPLATFORM_EXPORT KDevParseJob : public ThreadWeaver::JobSequence
+class KDEVPLATFORM_EXPORT ParseJob : public ThreadWeaver::JobSequence
 {
     Q_OBJECT
 public:
-    KDevParseJob( const KUrl &url, QObject *parent );
+    ParseJob( const KUrl &url, QObject *parent );
 
-    KDevParseJob( KDevDocument *document,
+    ParseJob( Document *document,
                   QObject* parent );
 
-    virtual ~KDevParseJob();
+    virtual ~ParseJob();
 
-    KDevBackgroundParser* backgroundParser() const;
-    void setBackgroundParser(KDevBackgroundParser* parser);
+    BackgroundParser* backgroundParser() const;
+    void setBackgroundParser(BackgroundParser* parser);
 
     void setActiveDocument();
     virtual int priority() const;
@@ -71,13 +76,13 @@ public:
     int revisionToken() const;
 
     const KUrl& document() const;
-    KDevDocument* openDocument() const;
+    Document* openDocument() const;
 
     void setErrorMessage(const QString& message);
     const QString& errorMessage() const;
 
-    virtual KDevAST *AST() const = 0;
-    virtual KDevCodeModel *codeModel() const = 0;
+    virtual ::Koncrete::AST *AST() const = 0;
+    virtual CodeModel *codeModel() const = 0;
     virtual TopDUContext *duChain() const;
 
     /// Overriden to allow jobs to determine if they've been requested to abort
@@ -99,13 +104,13 @@ public:
      * to this job).  If a circular dependency is detected, the dependency will
      * not be added and the method will return false.
      */
-    bool addDependency(KDevParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
+    bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
 
 protected:
     KUrl m_document;
-    KDevDocument* m_openDocument;
+    Document* m_openDocument;
     QString m_errorMessage;
-    KDevBackgroundParser* m_backgroundParser;
+    BackgroundParser* m_backgroundParser;
 
     QMutex* m_abortMutex;
     volatile bool m_abortRequested : 1;
@@ -113,6 +118,7 @@ protected:
     int m_revisionToken;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

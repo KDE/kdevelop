@@ -27,20 +27,23 @@
 
 #include "kdevcodemodel.h"
 
-typedef QList<KDevCodeModel*> CodeModelList;
-typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
+namespace Koncrete
+{
 
-class KDevCodeAggregate;
+typedef QList<CodeModel*> CodeModelList;
+typedef QList< QPair<KUrl, CodeModel* > > CodeModelCache;
+
+class CodeAggregate;
 
 /**
  * \short A model which assembles multiple CodeModel%s into a global model and filters them as requested.
  *
  * This proxy is used to combine together the results of parsing multiple source
- * files into one coherent model.  It allows you to add a KDevCodeModel for each
+ * files into one coherent model.  It allows you to add a CodeModel for each
  * url that the project encompasses.  These models are then joined together in
  * the manner specified by mode(), and filtered if requested.
  */
-class KDEVPLATFORM_EXPORT KDevCodeProxy : public QSortFilterProxyModel
+class KDEVPLATFORM_EXPORT CodeProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
 
@@ -52,18 +55,18 @@ public:
         Document = 2
     };
 
-    KDevCodeProxy( QObject *parent = 0 );
-    virtual ~KDevCodeProxy();
+    CodeProxy( QObject *parent = 0 );
+    virtual ~CodeProxy();
 
     CodeModelList codeModels() const;
-    KDevCodeModel *codeModel( const KUrl &url ) const;
+    CodeModel *codeModel( const KUrl &url ) const;
     void insertModel( const KUrl &url,
-                      KDevCodeModel *model );
+                      CodeModel *model );
     void insertModelCache( const CodeModelCache &list );
     void deleteModel( const KUrl &url );
 
-    KDevCodeProxy::Mode mode() const;
-    void setMode( KDevCodeProxy::Mode mode = Normalize );
+    CodeProxy::Mode mode() const;
+    void setMode( CodeProxy::Mode mode = Normalize );
     void setFilterDocument( const KUrl &url = KUrl() );
 
     QMap<QString, int> kindFilterList() const;
@@ -73,15 +76,15 @@ public:
         nothing. Note: The filter should be exclusive.*/
     virtual void setKindFilter( int kind = 0 ) = 0;
 
-    KDevCodeItem *proxyToItem( const QModelIndex &proxy_index ) const;
-    KDevCodeItem *sourceToItem( const QModelIndex &source_index ) const;
+    CodeItem *proxyToItem( const QModelIndex &proxy_index ) const;
+    CodeItem *sourceToItem( const QModelIndex &source_index ) const;
 
 protected:
     void setKindFilterList( const QMap<QString, int> list );
 
 private:
     virtual void setSourceModel( QAbstractItemModel *sourceModel );
-    KDevCodeAggregate *codeAggregate() const;
+    CodeAggregate *codeAggregate() const;
 
 private slots:
     void forceReset();
@@ -91,6 +94,7 @@ private:
     QMap<QString, int> m_kindFilterList;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

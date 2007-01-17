@@ -22,97 +22,101 @@
 
 #include "kdevcodeaggregate_p.h"
 
-KDevCodeProxy::KDevCodeProxy( QObject* parent )
+namespace Koncrete
+{
+
+CodeProxy::CodeProxy( QObject* parent )
         : QSortFilterProxyModel( parent )
 {
-    setSourceModel( new KDevCodeAggregate( this ) );
+    setSourceModel( new CodeAggregate( this ) );
     sort( 0 );
 }
 
-KDevCodeProxy::~KDevCodeProxy()
+CodeProxy::~CodeProxy()
 {}
 
-CodeModelList KDevCodeProxy::codeModels() const
+CodeModelList CodeProxy::codeModels() const
 {
     return codeAggregate() ->codeModels();
 }
 
-KDevCodeModel *KDevCodeProxy::codeModel( const KUrl &url ) const
+CodeModel *CodeProxy::codeModel( const KUrl &url ) const
 {
     return codeAggregate() ->codeModel( url );
 }
 
-void KDevCodeProxy::insertModel( const KUrl &url,
-                                 KDevCodeModel *model )
+void CodeProxy::insertModel( const KUrl &url,
+                                 CodeModel *model )
 {
     codeAggregate() ->insertModel( url, model );
 }
 
-void KDevCodeProxy::insertModelCache( const CodeModelCache &list )
+void CodeProxy::insertModelCache( const CodeModelCache &list )
 {
     codeAggregate() ->insertModelCache( list );
 }
 
-void KDevCodeProxy::deleteModel( const KUrl &url )
+void CodeProxy::deleteModel( const KUrl &url )
 {
     codeAggregate() ->deleteModel( url );
 }
 
-void KDevCodeProxy::setMode( KDevCodeProxy::Mode mode )
+void CodeProxy::setMode( CodeProxy::Mode mode )
 {
     codeAggregate() ->setMode( mode );
 }
 
-void KDevCodeProxy::setFilterDocument( const KUrl & url )
+void CodeProxy::setFilterDocument( const KUrl & url )
 {
     codeAggregate() ->setFilterDocument( url );
 }
 
-QMap<QString, int> KDevCodeProxy::kindFilterList() const
+QMap<QString, int> CodeProxy::kindFilterList() const
 {
     return m_kindFilterList;
 }
 
-void KDevCodeProxy::setKindFilterList( const QMap<QString, int> list )
+void CodeProxy::setKindFilterList( const QMap<QString, int> list )
 {
     m_kindFilterList = list;
 }
 
-KDevCodeItem *KDevCodeProxy::proxyToItem( const QModelIndex &proxy_index ) const
+CodeItem *CodeProxy::proxyToItem( const QModelIndex &proxy_index ) const
 {
     return codeAggregate() ->proxyToItem( mapToSource( proxy_index ) );
 }
 
-KDevCodeItem *KDevCodeProxy::sourceToItem( const QModelIndex &source_index ) const
+CodeItem *CodeProxy::sourceToItem( const QModelIndex &source_index ) const
 {
     return codeAggregate() ->sourceToItem( source_index );
 }
 
-void KDevCodeProxy::setSourceModel( QAbstractItemModel * sourceModel )
+void CodeProxy::setSourceModel( QAbstractItemModel * sourceModel )
 {
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 
-KDevCodeAggregate *KDevCodeProxy::codeAggregate() const
+CodeAggregate *CodeProxy::codeAggregate() const
 {
-    return qobject_cast<KDevCodeAggregate*>( sourceModel() );
+    return qobject_cast<CodeAggregate*>( sourceModel() );
 }
 
-void KDevCodeProxy::forceReset()
+void CodeProxy::forceReset()
 {
     reset();
 }
 
-void KDevCodeProxy::forceClear()
+void CodeProxy::forceClear()
 {
     clear();
 }
 
-KDevCodeProxy::Mode KDevCodeProxy::mode( ) const
+CodeProxy::Mode CodeProxy::mode( ) const
 {
     return codeAggregate() ->mode();
 }
 
+}
 #include "kdevcodeproxy.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

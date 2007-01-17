@@ -20,84 +20,89 @@
 
 #include "kdevexport.h"
 
+namespace Koncrete
+{
+
 /**
  * Reference counting for shared objects.  If you derive your object
  * from this class, then you may use it in conjunction with
- * KDevSharedPtr to control the lifetime of your object.
+ * SharedPtr to control the lifetime of your object.
  *
- * Specifically, all classes that derive from KDevShared have an internal
+ * Specifically, all classes that derive from Shared have an internal
  * counter keeping track of how many other objects have a reference to
- * their object.  If used with KDevSharedPtr, then your object will
+ * their object.  If used with SharedPtr, then your object will
  * not be deleted until all references to the object have been
  * released.
  *
  * You should probably not ever use any of the methods in this class
- * directly -- let the KDevSharedPtr take care of that.  Just derive
- * your class from KDevShared and forget about it.
+ * directly -- let the SharedPtr take care of that.  Just derive
+ * your class from Shared and forget about it.
  *
  * @author Waldo Bastian <bastian@kde.org>
  */
-class KDEVPLATFORM_EXPORT KDevShared {
+//FIXME this class needs to be removed in favor of the new KSharedPtr stuff
+// in kdelibs.
+class KDEVPLATFORM_EXPORT Shared {
 public:
    /**
     * Standard constructor.  This will initialize the reference count
     * on this object to 0.
     */
-   KDevShared() : count(0) { }
+   Shared() : count(0) { }
 
    /**
     * Copy constructor.  This will @em not actually copy the objects
     * but it will initialize the reference count on this object to 0.
     */
-   KDevShared( const KDevShared & ) : count(0) { }
+   Shared( const Shared & ) : count(0) { }
 
    /**
     * Overloaded assignment operator.
     */
-   KDevShared &operator=(const KDevShared & ) { return *this; }
+   Shared &operator=(const Shared & ) { return *this; }
 
    /**
     * Increases the reference count by one.
     */
-   void _KDevShared_ref() const { count++; }
+   void _Shared_ref() const { count++; }
 
    /**
     * Releases a reference (decreases the reference count by one).  If
     * the count goes to 0, this object will delete itself.
     */
-   void _KDevShared_unref() const { if (!--count) delete this; }
+   void _Shared_unref() const { if (!--count) delete this; }
 
    /**
     * Return the current number of references held.
     *
     * @return Number of references
     */
-   int _KDevShared_count() const { return count; }
+   int _Shared_count() const { return count; }
 
 protected:
-   virtual ~KDevShared() { }
+   virtual ~Shared() { }
 private:
    mutable int count;
 };
 
 /**
  * Can be used to control the lifetime of an object that has derived
- * KDevShared. As long a someone holds a KDevSharedPtr on some KDevShared
+ * Shared. As long a someone holds a SharedPtr on some Shared
  * object it won't become deleted but is deleted once its reference
  * count is 0.  This struct emulates C++ pointers virtually perfectly.
  * So just use it like a simple C++ pointer.
  *
- * KDevShared and KDevSharedPtr are preferred over QShared / QSharedPtr
+ * Shared and SharedPtr are preferred over QShared / QSharedPtr
  * since they are more safe.
  *
  * WARNING: Please note that this class template provides an implicit
  * conversion to T*. Do *not* change this pointer or the pointee (don't
- * call delete on it, for instance) behind KDevSharedPtr's back.
+ * call delete on it, for instance) behind SharedPtr's back.
  *
  * @author Waldo Bastian <bastian@kde.org>
  */
 template< class T >
-class KDevSharedPtr
+class SharedPtr
 {
 public:
 
@@ -106,44 +111,44 @@ public:
 /**
  * Creates a null pointer.
  */
-  KDevSharedPtr()
+  SharedPtr()
     : ptr(0) { }
   /**
    * Creates a new pointer.
    * @param t the pointer
    */
-  KDevSharedPtr( T* t )
-    : ptr(t) { if ( ptr ) ptr->_KDevShared_ref(); }
+  SharedPtr( T* t )
+    : ptr(t) { if ( ptr ) ptr->_Shared_ref(); }
 
   /**
    * Copies a pointer.
    * @param p the pointer to copy
    */
-  KDevSharedPtr( const KDevSharedPtr& p )
-    : ptr(p.ptr) { if ( ptr ) ptr->_KDevShared_ref(); }
+  SharedPtr( const SharedPtr& p )
+    : ptr(p.ptr) { if ( ptr ) ptr->_Shared_ref(); }
 
   /**
    * Unreferences the object that this pointer points to. If it was
    * the last reference, the object will be deleted.
    */
-  ~KDevSharedPtr() { if ( ptr ) ptr->_KDevShared_unref(); }
+  ~SharedPtr() { if ( ptr ) ptr->_Shared_unref(); }
 
-  KDevSharedPtr<T>& operator= ( const KDevSharedPtr<T>& p ) {
+  SharedPtr<T>& operator= ( const SharedPtr<T>& p ) {
     if ( ptr == p.ptr ) return *this;
-    if ( ptr ) ptr->_KDevShared_unref();
+    if ( ptr ) ptr->_Shared_unref();
     ptr = p.ptr;
-    if ( ptr ) ptr->_KDevShared_ref();
+    if ( ptr ) ptr->_Shared_ref();
     return *this;
   }
-  KDevSharedPtr<T>& operator= ( T* p ) {
+  SharedPtr<T>& operator= ( T* p ) {
     if ( ptr == p ) return *this;
-    if ( ptr ) ptr->_KDevShared_unref();
+    if ( ptr ) ptr->_Shared_unref();
     ptr = p;
-    if ( ptr ) ptr->_KDevShared_ref();
+    if ( ptr ) ptr->_Shared_ref();
     return *this;
   }
-  bool operator== ( const KDevSharedPtr<T>& p ) const { return ( ptr == p.ptr ); }
-  bool operator!= ( const KDevSharedPtr<T>& p ) const { return ( ptr != p.ptr ); }
+  bool operator== ( const SharedPtr<T>& p ) const { return ( ptr == p.ptr ); }
+  bool operator!= ( const SharedPtr<T>& p ) const { return ( ptr != p.ptr ); }
   bool operator== ( const T* p ) const { return ( ptr == p ); }
   bool operator!= ( const T* p ) const { return ( ptr != p ); }
   bool operator!() const { return ( ptr == 0 ); }
@@ -170,9 +175,10 @@ public:
    * Returns the number of references.
    * @return the number of references
    */
-  int count() const { return ptr->_KDevShared_count(); } // for debugging purposes
+  int count() const { return ptr->_Shared_count(); } // for debugging purposes
 private:
   T* ptr;
 };
 
+}
 #endif

@@ -48,26 +48,28 @@ class QProgressBar;
 class QMutex;
 class QWaitCondition;
 
-class KDevAST;
-class KDevDocument;
-class KDevCodeModel;
-class KDevLanguageSupport;
-class KDevPersistentHash;
-class KDevParseJob;
-class KDevParserDependencyPolicy;
+namespace Koncrete
+{
+class AST;
+class Document;
+class CodeModel;
+class LanguageSupport;
+class PersistentHash;
+class ParseJob;
+class ParserDependencyPolicy;
 
-typedef QList< QPair<KUrl, KDevCodeModel* > > CodeModelCache;
+typedef QList< QPair<KUrl, CodeModel* > > CodeModelCache;
 
 using namespace ThreadWeaver;
 
-class KDEVPLATFORM_EXPORT KDevBackgroundParser : public QObject, protected KDevCoreInterface
+class KDEVPLATFORM_EXPORT BackgroundParser : public QObject, protected CoreInterface
 {
-    friend class KDevCore;
+    friend class Core;
 
     Q_OBJECT
 public:
-    KDevBackgroundParser( QObject* parent = 0 );
-    virtual ~KDevBackgroundParser();
+    BackgroundParser( QObject* parent = 0 );
+    virtual ~BackgroundParser();
 
     void cacheModels( uint modelsToCache );
 
@@ -84,13 +86,13 @@ public:
      * unless you call in from your job's ThreadWeaver::Job::aboutToBeQueued()
      * function.
      */
-    KDevParseJob* parseJobForDocument(const KUrl& document) const;
+    ParseJob* parseJobForDocument(const KUrl& document) const;
 
     /**
      * The dependency policy which applies to all jobs (it is
      * applied automatically).
      */
-    KDevParserDependencyPolicy* dependencyPolicy() const;
+    ParserDependencyPolicy* dependencyPolicy() const;
 
 public Q_SLOTS:
     void suspend();
@@ -99,10 +101,10 @@ public Q_SLOTS:
     void setThreads( int threads );
 
     void addDocument( const KUrl &url );
-    void addDocument( KDevDocument *document );
+    void addDocument( Document *document );
     void addDocumentList( const KUrl::List &urls );
     void removeDocument( const KUrl &url );
-    void removeDocument( KDevDocument *document );
+    void removeDocument( Document *document );
 
     void parseDocuments();
 
@@ -135,9 +137,9 @@ private:
     // A list of known documents, and whether they are due to be parsed or not
     QMap<KUrl, bool> m_documents;
     // A list of open documents
-    QMap<KUrl, KDevDocument*> m_openDocuments;
+    QMap<KUrl, Document*> m_openDocuments;
     // Current parse jobs
-    QHash<KUrl, KDevParseJob*> m_parseJobs;
+    QHash<KUrl, ParseJob*> m_parseJobs;
     // A list of cached models when parsing a large amount of files.
     CodeModelCache m_modelCache;
 
@@ -145,12 +147,13 @@ private:
 
     ThreadWeaver::Weaver* m_weaver;
 
-    KDevParserDependencyPolicy* m_dependencyPolicy;
+    ParserDependencyPolicy* m_dependencyPolicy;
 
     QMutex* m_mutex;
     QWaitCondition* m_waitForJobCreation;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

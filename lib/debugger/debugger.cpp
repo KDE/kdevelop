@@ -13,9 +13,12 @@
 
 using namespace KTextEditor;
 
+namespace Koncrete
+{
+
 Debugger *Debugger::s_instance = 0;
 
-Debugger::Debugger(KDevDocumentController *partController)
+Debugger::Debugger(DocumentController *partController)
     :m_partController(partController)
 {
     connect( m_partController, SIGNAL(partAdded(KParts::Part*)),
@@ -180,6 +183,8 @@ void Debugger::partAdded( KParts::Part* part )
 //     iface->setEditableMarks( Bookmark | Breakpoint );
 // 
 //     connect( part, SIGNAL(marksChanged(KTextEditor::Document*)), this, SLOT(marksChanged()) );
+}
+
 }
 
 #include "debugger.moc"

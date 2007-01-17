@@ -29,13 +29,15 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
+namespace Koncrete
+{
 /**
 The interface to KDevelop's config objects.
 Developers using the KDevelop API should use these config objects instead of
 the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
 it can cause unexpected syncing issues.
 */
-class KDEVPLATFORM_EXPORT KDevConfig
+class KDEVPLATFORM_EXPORT Config
 {
 public:
     enum Mode
@@ -46,8 +48,8 @@ public:
     };
     Q_DECLARE_FLAGS(Modes, Mode)
 
-    KDevConfig();
-    virtual ~KDevConfig();
+    Config();
+    virtual ~Config();
 
     /**
      * Used by KCM dialogs to determine which file to save settings to.
@@ -112,17 +114,17 @@ public:
     static KSharedConfig::Ptr sharedGlobalProject();
 };
 
-class KDevConfigPrivate: public QObject
+class ConfigPrivate: public QObject
 {
     Q_OBJECT
-    friend class KStaticDeleter<KDevConfigPrivate>;
+    friend class KStaticDeleter<ConfigPrivate>;
 public:
-    static KDevConfigPrivate *self();
-    static KDevConfigPrivate *s_private;
-    KDevConfig::Mode mode;
+    static ConfigPrivate *self();
+    static ConfigPrivate *s_private;
+    Config::Mode mode;
     KSettings::Dialog *settingsDialog;
 
-    void setMode( KDevConfig::Mode m );
+    void setMode( Config::Mode m );
 
 public Q_SLOTS:
     void local();
@@ -130,10 +132,11 @@ public Q_SLOTS:
     void global();
 
 private:
-    KDevConfigPrivate();
-    ~KDevConfigPrivate();
+    ConfigPrivate();
+    ~ConfigPrivate();
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

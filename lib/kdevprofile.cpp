@@ -26,6 +26,9 @@
 #include <kconfig.h>
 #include <kio/netaccess.h>
 
+namespace Koncrete
+{
+
 Profile::Profile(Profile *parent, const QString &name)
     :m_parent(parent), m_name(name)
 {
@@ -188,4 +191,6 @@ void Profile::addResource(const KUrl &url)
 {
     QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevelop/profiles"+dirName(), true);
     KIO::NetAccess::file_copy(url, KUrl(saveLocation), -1, true);
+}
+
 }

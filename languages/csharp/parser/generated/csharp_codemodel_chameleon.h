@@ -30,7 +30,7 @@ namespace csharp
    * which provides shared pointer abilities.
    */
 
-  class _ModelItemChameleon :  public KDevShared
+  class _ModelItemChameleon :  public Koncrete::Shared
     {
       CodeModelItem _M_item;
 
@@ -249,161 +249,161 @@ namespace csharp
       void operator=(const _ModelItemChameleon &other);
     };
 
-  class ModelItemChameleon :  public KDevSharedPtr<_ModelItemChameleon>
+  class ModelItemChameleon :  public Koncrete::SharedPtr<_ModelItemChameleon>
     {
 
     public:
       ModelItemChameleon(CodeModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(new _ModelItemChameleon(item))
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(new _ModelItemChameleon(item))
       {}
 
       ModelItemChameleon(ScopeModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(NamespaceDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(GlobalNamespaceDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(ExternAliasDirectiveModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(UsingAliasDirectiveModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(UsingNamespaceDirectiveModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(TypeDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(ClassLikeDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(ClassDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(StructDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(InterfaceDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(DelegateDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(EnumDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(EnumValueModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(EventDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(EventAccessorDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(IndexerDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(PropertyDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(AccessorDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(MethodDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(ConstructorDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(FinalizerDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(VariableDeclarationModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(TypePartModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(TypeModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(ParameterModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(TypeParameterModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(TypeParameterConstraintModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(PrimaryOrSecondaryConstraintModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 
       ModelItemChameleon(ConstructorConstraintModelItem item)
-          :  KDevSharedPtr<_ModelItemChameleon>(
+          :  Koncrete::SharedPtr<_ModelItemChameleon>(
             new _ModelItemChameleon(model_static_cast<CodeModelItem>(item)) )
       {}
 

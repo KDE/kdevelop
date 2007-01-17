@@ -19,6 +19,9 @@
 #include <QFile>
 #include <QTextStream>
 
+namespace Koncrete
+{
+    
 void DomUtil::makeEmpty( QDomElement& e )
 {
     while( !e.firstChild().isNull() )
@@ -392,4 +395,6 @@ bool DomUtil::replaceText(QDomDocument doc, QString pathExt, QString text)
     return true;
   else
     return false;
+}
+
 }

@@ -29,6 +29,9 @@
 
 class QDataStream;
 
+namespace Koncrete
+{
+
 class Tag
 {
 public:
@@ -238,5 +241,7 @@ private:
 
 QDataStream& operator << ( QDataStream&, const Tag& );
 QDataStream& operator >> ( QDataStream&, Tag& );
+
+}
 
 #endif

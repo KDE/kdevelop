@@ -28,18 +28,20 @@
 #include <fcntl.h>
 #include <errno.h>
 
+namespace Koncrete
+{
 
-KDevTDBCatalogBackend::KDevTDBCatalogBackend()
+TDBCatalogBackend::TDBCatalogBackend()
 {
     m_tdb = 0;
 }
 
-KDevTDBCatalogBackend::~KDevTDBCatalogBackend()
+TDBCatalogBackend::~TDBCatalogBackend()
 {
 
 }
 
-void KDevTDBCatalogBackend::open( const QString& dbName )
+void TDBCatalogBackend::open( const QString& dbName )
 {
     Q_ASSERT( m_tdb == 0 );
 
@@ -55,7 +57,7 @@ void KDevTDBCatalogBackend::open( const QString& dbName )
     m_dbName = dbName;
 }
 
-void KDevTDBCatalogBackend::close()
+void TDBCatalogBackend::close()
 {
     QMap<QByteArray, TDB_CONTEXT*>::Iterator it = m_indexList.begin();
     while ( it != m_indexList.end() )
@@ -75,18 +77,18 @@ void KDevTDBCatalogBackend::close()
     }
 }
 
-void KDevTDBCatalogBackend::sync()
+void TDBCatalogBackend::sync()
 {
     // TDB's README says:
     // no tdbm_sync() function. No operations are cached in the library anyway
 }
 
-bool KDevTDBCatalogBackend::isOpen()
+bool TDBCatalogBackend::isOpen()
 {
     return ( m_tdb != 0 );
 }
 
-void KDevTDBCatalogBackend::addItem( Tag& tag )
+void TDBCatalogBackend::addItem( Tag& tag )
 {
     if( tag.name().isEmpty() )
         return;
@@ -105,7 +107,7 @@ void KDevTDBCatalogBackend::addItem( Tag& tag )
     }
 }
 
-Tag KDevTDBCatalogBackend::getItemById( int id )
+Tag TDBCatalogBackend::getItemById( int id )
 {
     Q_ASSERT( m_tdb != 0 );
 
@@ -138,7 +140,7 @@ Tag KDevTDBCatalogBackend::getItemById( int id )
     return tag;
 }
 
-QList<Tag> KDevTDBCatalogBackend::query( const QList<QueryArgument>& args )
+QList<Tag> TDBCatalogBackend::query( const QList<QueryArgument>& args )
 {
     QList<Tag> tags;
 
@@ -187,7 +189,7 @@ QList<Tag> KDevTDBCatalogBackend::query( const QList<QueryArgument>& args )
     return tags;
 }
 
-QList<QByteArray> KDevTDBCatalogBackend::indexList() const
+QList<QByteArray> TDBCatalogBackend::indexList() const
 {
     QList<QByteArray> l;
     QMap<QByteArray, TDB_CONTEXT*>::ConstIterator it = m_indexList.begin();
@@ -200,7 +202,7 @@ QList<QByteArray> KDevTDBCatalogBackend::indexList() const
     return l;
 }
 
-void KDevTDBCatalogBackend::addIndex( const QByteArray& name )
+void TDBCatalogBackend::addIndex( const QByteArray& name )
 {
     Q_ASSERT( m_tdb != 0 );
 
@@ -230,17 +232,17 @@ void KDevTDBCatalogBackend::addIndex( const QByteArray& name )
     }
 }
 
-bool KDevTDBCatalogBackend::hasIndex( const QByteArray& name ) const
+bool TDBCatalogBackend::hasIndex( const QByteArray& name ) const
 {
     return m_indexList.contains( name );
 }
 
-TDB_CONTEXT* KDevTDBCatalogBackend::index( const QByteArray& name )
+TDB_CONTEXT* TDBCatalogBackend::index( const QByteArray& name )
 {
     return m_indexList[ name ];
 }
 
-bool KDevTDBCatalogBackend::addItem( TDB_CONTEXT* tdb, const QByteArray& id, const Tag& tag )
+bool TDBCatalogBackend::addItem( TDB_CONTEXT* tdb, const QByteArray& id, const Tag& tag )
 {
     Q_ASSERT( tdb != 0 );
 
@@ -271,7 +273,7 @@ bool KDevTDBCatalogBackend::addItem( TDB_CONTEXT* tdb, const QByteArray& id, con
     return ( ret == 0 );
 }
 
-bool KDevTDBCatalogBackend::addItem( TDB_CONTEXT* tdb, const QVariant& id, const QByteArray& v )
+bool TDBCatalogBackend::addItem( TDB_CONTEXT* tdb, const QVariant& id, const QByteArray& v )
 {
     Q_ASSERT( tdb != 0 );
 
@@ -302,7 +304,7 @@ bool KDevTDBCatalogBackend::addItem( TDB_CONTEXT* tdb, const QVariant& id, const
     return ( ret == 0 );
 }
 
-QByteArray KDevTDBCatalogBackend::generateId()
+QByteArray TDBCatalogBackend::generateId()
 {
     static int n = 1;
     QString asStr;
@@ -310,4 +312,5 @@ QByteArray KDevTDBCatalogBackend::generateId()
     return asStr.toLatin1();
 }
 
+}
 //kate: indent-spaces on; indent-width 4; replace-tabs on;

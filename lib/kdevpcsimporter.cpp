@@ -20,17 +20,21 @@
 #include "kdevpcsimporter.h"
 #include "kdevpcsimporter.moc"
 
-KDevPCSImporter::KDevPCSImporter( QObject * parent )
+namespace Koncrete
+{
+
+PCSImporter::PCSImporter( QObject * parent )
     : QObject( parent )
 {
 }
 
-KDevPCSImporter::~ KDevPCSImporter( )
+PCSImporter::~ PCSImporter( )
 {
 }
 
-QWidget * KDevPCSImporter::createSettingsPage( QWidget * /*parent*/, const char * /*name*/ )
+QWidget * PCSImporter::createSettingsPage( QWidget * /*parent*/, const char * /*name*/ )
 {
     return 0;
 }
 
+}

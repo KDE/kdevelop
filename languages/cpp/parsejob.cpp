@@ -53,7 +53,7 @@
 
 CPPParseJob::CPPParseJob( const KUrl &url,
                     CppLanguageSupport *parent )
-        : KDevParseJob( url, parent ),
+        : Koncrete::ParseJob( url, parent ),
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
@@ -62,7 +62,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
 {
     PreprocessJob* ppj;
     addJob(ppj = new PreprocessJob(this));
-    addJob(m_parseJob = new ParseJob(this));
+    addJob(m_parseJob = new ::ParseJob(this));
 
     // Higher priority means it will be preferred over other waiting preprocess jobs
     m_parseJob->setPriority(1);
@@ -70,9 +70,9 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
-CPPParseJob::CPPParseJob( KDevDocument *document,
+CPPParseJob::CPPParseJob( Koncrete::Document *document,
                     CppLanguageSupport *parent )
-        : KDevParseJob( document, parent ),
+        : Koncrete::ParseJob( document, parent ),
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
@@ -81,7 +81,7 @@ CPPParseJob::CPPParseJob( KDevDocument *document,
 {
     PreprocessJob* ppj;
     addJob(ppj = new PreprocessJob(this));
-    addJob(m_parseJob = new ParseJob(this));
+    addJob(m_parseJob = new ::ParseJob(this));
 
     //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
@@ -89,13 +89,13 @@ CPPParseJob::CPPParseJob( KDevDocument *document,
 CPPParseJob::~CPPParseJob()
 {}
 
-KDevAST *CPPParseJob::AST() const
+Koncrete::AST *CPPParseJob::AST() const
 {
     Q_ASSERT ( isFinished () && m_AST );
     return m_AST;
 }
 
-KDevCodeModel *CPPParseJob::codeModel() const
+Koncrete::CodeModel *CPPParseJob::codeModel() const
 {
     Q_ASSERT ( isFinished () && m_model );
     return m_model;
@@ -177,9 +177,9 @@ void ParseJob::run()
 
         QList<DUContext*> chains;
 
-        if (KDevCore::activeProject()) {
+        if (Koncrete::Core::activeProject()) {
             foreach (const QString& include, parentJob()->includedFiles()) {
-                KDevAST* ast = KDevCore::activeProject()->persistentHash()->retrieveAST(include);
+                Koncrete::AST* ast = Koncrete::Core::activeProject()->persistentHash()->retrieveAST(include);
                 if (ast) {
                     TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
                     if (t->ducontext)

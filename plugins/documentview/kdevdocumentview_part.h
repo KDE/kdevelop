@@ -32,7 +32,7 @@ class KDevDocumentView;
 class KDevDocumentModel;
 class KDevDocumentItem;
 
-class KDevDocumentViewPart: public KDevPlugin
+class KDevDocumentViewPart: public Koncrete::Plugin
 {
     Q_OBJECT
 public:
@@ -47,25 +47,25 @@ public:
     KDevDocumentViewPart( QObject *parent, const QStringList & );
     virtual ~KDevDocumentViewPart();
 
-    // KDevPlugin methods
+    // Koncrete::Plugin methods
     virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
     virtual bool isCentralPlugin() const;
 
 private slots:
-    void activated( KDevDocument* document );
-    void saved( KDevDocument* document );
-    void loaded( KDevDocument* document );
-    void closed( KDevDocument* document );
-    void externallyModified( KDevDocument* document );
-    void urlChanged( KDevDocument* document, const KUrl &oldurl, const KUrl &newurl );
-    void stateChanged( KDevDocument* document );
+    void activated( Koncrete::Document* document );
+    void saved( Koncrete::Document* document );
+    void loaded( Koncrete::Document* document );
+    void closed( Koncrete::Document* document );
+    void externallyModified( Koncrete::Document* document );
+    void urlChanged( Koncrete::Document* document, const KUrl &oldurl, const KUrl &newurl );
+    void stateChanged( Koncrete::Document* document );
 
 private:
     KDevDocumentModel *m_documentModel;
     KDevDocumentItem *m_documentItem;
     QPointer<KDevDocumentView> m_documentView;
-    QHash< KDevDocument*, QModelIndex > m_doc2index;
+    QHash< Koncrete::Document*, QModelIndex > m_doc2index;
 };
 
 #endif

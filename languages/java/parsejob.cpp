@@ -48,15 +48,15 @@ namespace java
 {
 
 ParseJob::ParseJob( const KUrl &url, JavaLanguageSupport *parent )
-        : KDevParseJob( url, parent )
+        : Koncrete::ParseJob( url, parent )
         , m_session( new ParseSession )
         , m_AST( 0 )
         , m_model( 0 )
         , m_readFromDisk( false )
 {}
 
-ParseJob::ParseJob( KDevDocument *document, JavaLanguageSupport *parent )
-        : KDevParseJob( document, parent )
+ParseJob::ParseJob( Koncrete::Document *document, JavaLanguageSupport *parent )
+        : Koncrete::ParseJob( document, parent )
         , m_session( new ParseSession )
         , m_AST( 0 )
         , m_model( 0 )
@@ -71,18 +71,18 @@ JavaLanguageSupport* ParseJob::java() const
     return static_cast<JavaLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
-KDevAST *ParseJob::AST() const
+Koncrete::AST *ParseJob::AST() const
 {
     return 0;
 //     Q_ASSERT ( isFinished () && m_AST );
 //     return m_AST;
 }
 
-KDevCodeModel *ParseJob::codeModel() const
+Koncrete::CodeModel *ParseJob::codeModel() const
 {
     return 0;
 //     Q_ASSERT ( isFinished () && m_model );
-//     return new KDevCodeModel;
+//     return new Koncrete::CodeModel;
 }
 
 ParseSession *ParseJob::parseSession() const

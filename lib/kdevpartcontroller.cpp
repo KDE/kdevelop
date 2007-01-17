@@ -28,13 +28,16 @@
 
 #include "kdevpartcontroller.h"
 
-KDevPartController::KDevPartController()
-        : KParts::PartManager( KDevCore::mainWindow() ),
+namespace Koncrete
+{
+
+PartController::PartController()
+        : KParts::PartManager( Core::mainWindow() ),
         m_editor( QString::null ),
         m_textTypes( QStringList() )
 {
     //Cache this as it is too expensive when creating parts
-    //     KConfig * config = KDevConfig::standard();
+    //     KConfig * config = Config::standard();
     //     config->setGroup( "General" );
     //
     //     m_textTypes = config->readEntry( "TextTypes", QStringList() );
@@ -43,11 +46,11 @@ KDevPartController::KDevPartController()
     //     m_editor = config->readPathEntry( "EmbeddedKTextEditor" );
 }
 
-KDevPartController::~KDevPartController()
+PartController::~PartController()
 {}
 
 //MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY
-bool KDevPartController::isTextType( KMimeType::Ptr mimeType )
+bool PartController::isTextType( KMimeType::Ptr mimeType )
 {
     bool isTextType = false;
     if ( m_textTypes.contains( mimeType->name() ) )
@@ -67,7 +70,7 @@ bool KDevPartController::isTextType( KMimeType::Ptr mimeType )
              || mimeType->is( "application/x-zerosize" ) );
 }
 
-KTextEditor::Document* KDevPartController::createTextPart(
+KTextEditor::Document* PartController::createTextPart(
     const KUrl &url,
     const QString &encoding,
     bool activate )
@@ -79,7 +82,7 @@ KTextEditor::Document* KDevPartController::createTextPart(
                                                    "KTextEditor::Editor",
                                                    m_editor ) );
 
-    KDevEditorIntegrator::addDocument( doc );
+    EditorIntegrator::addDocument( doc );
 
     if ( !encoding.isNull() )
     {
@@ -102,7 +105,7 @@ KTextEditor::Document* KDevPartController::createTextPart(
     return doc;
 }
 
-void KDevPartController::removePart( KParts::Part *part )
+void PartController::removePart( KParts::Part *part )
 {
     if ( KTextEditor::Document * doc = qobject_cast<KTextEditor::Document *>( part ) )
     {
@@ -120,7 +123,7 @@ void KDevPartController::removePart( KParts::Part *part )
     KParts::PartManager::removePart( part );
 }
 
-KParts::Part* KDevPartController::createPart( const QString & mimeType,
+KParts::Part* PartController::createPart( const QString & mimeType,
         const QString & partType,
         const QString & className,
         const QString & preferredName )
@@ -133,15 +136,15 @@ KParts::Part* KDevPartController::createPart( const QString & mimeType,
     if ( !className.isEmpty() && editorFactory )
     {
         return editorFactory->createPart(
-                   /*KDevCore::mainWindow() ->centralWidget()*/0,
-                   KDevCore::mainWindow() ->centralWidget(),
+                   /*Core::mainWindow() ->centralWidget()*/0,
+                   Core::mainWindow() ->centralWidget(),
                    className.toLatin1() );
     }
 
     return 0;
 }
 
-KParts::Part* KDevPartController::createPart( const KUrl & url )
+KParts::Part* PartController::createPart( const KUrl & url )
 {
     if ( !url.isValid() )
         return 0;
@@ -151,7 +154,7 @@ KParts::Part* KDevPartController::createPart( const KUrl & url )
     QString className;
     QString services[] =
         {
-            "KDevelop/ReadWritePart", "KDevelop/ReadOnlyPart",
+            "elop/ReadWritePart", "elop/ReadOnlyPart",
             "KParts/ReadWritePart", "KParts/ReadOnlyPart"
         };
 
@@ -174,8 +177,8 @@ KParts::Part* KDevPartController::createPart( const KUrl & url )
     if ( !className.isEmpty() && editorFactory )
     {
         KParts::Part * part = editorFactory->createPart(
-                                  KDevCore::mainWindow() ->centralWidget(),
-                                  KDevCore::mainWindow() ->centralWidget(),
+                                  Core::mainWindow() ->centralWidget(),
+                                  Core::mainWindow() ->centralWidget(),
                                   className.toLatin1() );
         readOnly( part ) ->openUrl( url );
         return part;
@@ -184,7 +187,7 @@ KParts::Part* KDevPartController::createPart( const KUrl & url )
     return 0;
 }
 
-KParts::Factory *KDevPartController::findPartFactory(
+KParts::Factory *PartController::findPartFactory(
     const QString & mimeType,
     const QString & partType,
     const QString & preferredName )
@@ -223,42 +226,43 @@ KParts::Factory *KDevPartController::findPartFactory(
     return 0;
 }
 
-KParts::ReadOnlyPart* KDevPartController::activeReadOnly() const
+KParts::ReadOnlyPart* PartController::activeReadOnly() const
 {
     return readOnly( activePart() );
 }
 
-KParts::ReadWritePart* KDevPartController::activeReadWrite() const
+KParts::ReadWritePart* PartController::activeReadWrite() const
 {
     return readWrite( activePart() );
 }
 
-KParts::ReadOnlyPart* KDevPartController::readOnly( KParts::Part * part ) const
+KParts::ReadOnlyPart* PartController::readOnly( KParts::Part * part ) const
 {
     return qobject_cast<KParts::ReadOnlyPart*>( part );
 }
 
-KParts::ReadWritePart* KDevPartController::readWrite( KParts::Part * part ) const
+KParts::ReadWritePart* PartController::readWrite( KParts::Part * part ) const
 {
     return qobject_cast<KParts::ReadWritePart*>( part );
 }
 
-void KDevPartController::loadSettings( bool projectIsLoaded )
+void PartController::loadSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
 }
 
-void KDevPartController::saveSettings( bool projectIsLoaded )
+void PartController::saveSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
 }
 
-void KDevPartController::initialize()
+void PartController::initialize()
 {}
 
-void KDevPartController::cleanup()
+void PartController::cleanup()
 {}
 
+}
 #include "kdevpartcontroller.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

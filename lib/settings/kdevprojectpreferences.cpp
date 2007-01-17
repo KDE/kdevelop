@@ -27,12 +27,15 @@
 
 #include "ui_projectsettings.h"
 
-typedef KGenericFactory<KDevProjectPreferences> KDevProjectPreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdevproject_settings, KDevProjectPreferencesFactory( "kcm_kdevproject_settings" ) )
+namespace Koncrete
+{
 
-KDevProjectPreferences::KDevProjectPreferences( QWidget *parent, const QStringList &args )
-        : KDevCModule( KDevProjectSettings::self(),
-                       KDevProjectPreferencesFactory::instance(), parent, args )
+typedef KGenericFactory<ProjectPreferences> ProjectPreferencesFactory;
+K_EXPORT_COMPONENT_FACTORY( kcm_kdevproject_settings, ProjectPreferencesFactory( "kcm_kdevproject_settings" ) )
+
+ProjectPreferences::ProjectPreferences( QWidget *parent, const QStringList &args )
+        : ConfigModule( ProjectSettings::self(),
+                       ProjectPreferencesFactory::instance(), parent, args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -41,33 +44,35 @@ KDevProjectPreferences::KDevProjectPreferences( QWidget *parent, const QStringLi
     preferencesDialog->setupUi( w );
     l->addWidget( w );
 
-    addConfig( KDevProjectSettings::self(), w );
+    addConfig( ProjectSettings::self(), w );
 
     load();
 }
 
-KDevProjectPreferences::~KDevProjectPreferences( )
+ProjectPreferences::~ProjectPreferences( )
 {
     delete preferencesDialog;
 }
 
-void KDevProjectPreferences::save()
+void ProjectPreferences::save()
 {
-    KDevCModule::save();
+    ConfigModule::save();
 }
 
-void KDevProjectPreferences::load()
+void ProjectPreferences::load()
 {
-    KDevCModule::load();
+    ConfigModule::load();
 }
 
-void KDevProjectPreferences::slotSettingsChanged()
+void ProjectPreferences::slotSettingsChanged()
 {
     emit changed( true );
 }
 
-void KDevProjectPreferences::defaults()
-{}
+void ProjectPreferences::defaults()
+{
+}
 
+}
 #include "kdevprojectpreferences.moc"
 

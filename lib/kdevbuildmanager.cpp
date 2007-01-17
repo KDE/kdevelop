@@ -20,34 +20,39 @@
 
 #include "kdevbuildmanager.h"
 
-KDevBuildManager::KDevBuildManager(KInstance* instance, QObject* parent)
-: KDevFileManager(instance, parent)
+namespace Koncrete
+{
+
+BuildManager::BuildManager(KInstance* instance, QObject* parent)
+: FileManager(instance, parent)
 {
 }
 
 
-KDevBuildManager::~KDevBuildManager()
+BuildManager::~BuildManager()
 {
 }
 
-KUrl::List KDevBuildManager::includeDirectories() const
-{
-  return KUrl::List();
-}
-
-KUrl::List KDevBuildManager::preprocessorDefines() const
+KUrl::List BuildManager::includeDirectories() const
 {
   return KUrl::List();
 }
 
-KUrl::List KDevBuildManager::findMakefiles( KDevProjectFolderItem * ) const
+KUrl::List BuildManager::preprocessorDefines() const
 {
   return KUrl::List();
 }
 
-KUrl KDevBuildManager::findMakefile( KDevProjectFolderItem * ) const
+KUrl::List BuildManager::findMakefiles( ProjectFolderItem * ) const
+{
+  return KUrl::List();
+}
+
+KUrl BuildManager::findMakefile( ProjectFolderItem * ) const
 {
   return KUrl();
+}
+
 }
 
 #include "kdevbuildmanager.moc"

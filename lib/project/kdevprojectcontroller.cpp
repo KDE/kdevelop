@@ -41,7 +41,10 @@ Boston, MA 02110-1301, USA.
 #include "kdevplugincontroller.h"
 #include "kdevdocumentcontroller.h"
 
-KDevProjectController::KDevProjectController( QObject *parent )
+namespace Koncrete
+{
+
+ProjectController::ProjectController( QObject *parent )
         : QObject( parent ),
         m_localFile( KUrl() ),
         m_globalFile( KUrl() ),
@@ -54,29 +57,29 @@ KDevProjectController::KDevProjectController( QObject *parent )
 
 {}
 
-KDevProjectController::~KDevProjectController()
+ProjectController::~ProjectController()
 {}
 
-void KDevProjectController::loadSettings( bool projectIsLoaded )
+void ProjectController::loadSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
 }
 
-void KDevProjectController::saveSettings( bool projectIsLoaded )
+void ProjectController::saveSettings( bool projectIsLoaded )
 {
     // Do not save if a project is loaded as this doesn't make sense inside a project file...
     if ( !projectIsLoaded )
     {
-        KConfig* standard = KDevConfig::standard();
+        KConfig* standard = Config::standard();
         standard->setGroup( "General Options" );
         standard->writePathEntry( "Last Project", m_lastProject.path() );
     }
 }
 
-void KDevProjectController::initialize()
+void ProjectController::initialize()
 {
     KActionCollection * ac =
-        KDevCore::mainWindow() ->actionCollection();
+        Core::mainWindow() ->actionCollection();
 
     QAction *action;
 
@@ -84,7 +87,7 @@ void KDevProjectController::initialize()
     action->setText(i18n( "&Open Project..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open project" ) );
-    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project." ) );
+    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a elop 4 project." ) );
 
     action = ac->addAction( "project_close" );
     action->setText( i18n( "C&lose Project" ) );
@@ -93,7 +96,7 @@ void KDevProjectController::initialize()
     action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
     action->setEnabled( false );
 
-    KConfig * config = KDevConfig::standard();
+    KConfig * config = Config::standard();
     config->setGroup( "General Options" );
 
     m_recentAction =
@@ -106,69 +109,69 @@ void KDevProjectController::initialize()
     m_recentAction->loadEntries( config, "RecentProjects" );
 }
 
-void KDevProjectController::cleanup()
+void ProjectController::cleanup()
 {
     closeProject();
 }
 
-bool KDevProjectController::isLoaded() const
+bool ProjectController::isLoaded() const
 {
     return m_isLoaded;
 }
 
-KUrl KDevProjectController::localFile() const
+KUrl ProjectController::localFile() const
 {
     return m_localFile;
 }
 
-void KDevProjectController::setLocalFile( const KUrl &localFile )
+void ProjectController::setLocalFile( const KUrl &localFile )
 {
     m_localFile = localFile;
 }
 
-KUrl KDevProjectController::globalFile() const
+KUrl ProjectController::globalFile() const
 {
     return m_globalFile;
 }
 
-void KDevProjectController::setGlobalFile( const KUrl &globalFile )
+void ProjectController::setGlobalFile( const KUrl &globalFile )
 {
     m_globalFile = globalFile;
 }
 
-KUrl KDevProjectController::projectDirectory() const
+KUrl ProjectController::projectDirectory() const
 {
     return KUrl::fromPath( m_globalFile.directory() );
 }
 
-KUrl KDevProjectController::projectsDirectory() const
+KUrl ProjectController::projectsDirectory() const
 {
     return m_projectsDir;
 }
 
-void KDevProjectController::setProjectsDirectory( const KUrl &projectsDir )
+void ProjectController::setProjectsDirectory( const KUrl &projectsDir )
 {
     m_projectsDir = projectsDir;
 }
 
-KDevProject* KDevProjectController::activeProject() const
+Project* ProjectController::activeProject() const
 {
     return m_project;
 }
 
-bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
+bool ProjectController::openProject( const KUrl &projectFile )
 {
-    KUrl url = KDev4ProjectFile;
+    KUrl url = projectFile;
 
     if ( url.isEmpty() )
     {
-        KConfig * config = KDevConfig::standard();
+        KConfig * config = Config::standard();
         config->setGroup( "General Options" );
         QString dir = config->readPathEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
 
         url = KFileDialog::getOpenUrl( dir, i18n( "*.kdev4|KDevelop 4 Project Files\n" ),
-                                       KDevCore::mainWindow(),
+                                       Core::mainWindow(),
                                        i18n( "Open Project" ) );
     }
 
@@ -177,7 +180,7 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
 
     if ( url == m_globalFile )
     {
-        if ( KMessageBox::questionYesNo( KDevCore::mainWindow(),
+        if ( KMessageBox::questionYesNo( Core::mainWindow(),
                                          i18n( "Reopen the current project?" ) )
                 == KMessageBox::No )
             return false;
@@ -197,29 +200,29 @@ bool KDevProjectController::openProject( const KUrl &KDev4ProjectFile )
     {
         m_isLoaded = true;
         //The project file has been opened.
-        //Now we can load settings for all of the KDevCore objects including this one!!
-        KDevCore::loadSettings();
-        KDevPluginController::self() ->loadPlugins( KDevPluginController::Project );
+        //Now we can load settings for all of the Core objects including this one!!
+        Core::loadSettings();
+        PluginController::self() ->loadPlugins( PluginController::Project );
     }
     else
         return false;
 
-    KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
+    KActionCollection * ac = Core::mainWindow() ->actionCollection();
     QAction * action;
 
     action = ac->action( "project_close" );
     action->setEnabled( true );
 
     m_recentAction->addUrl( url );
-    m_recentAction->saveEntries( KDevConfig::standard(), "RecentProjects" );
+    m_recentAction->saveEntries( Config::standard(), "RecentProjects" );
 
-    KDevConfig::standard() ->sync();
+    Config::standard() ->sync();
     emit projectOpened();
 
     return true;
 }
 
-bool KDevProjectController::closeProject()
+bool ProjectController::closeProject()
 {
     if ( !m_isLoaded )
         return false;
@@ -227,10 +230,10 @@ bool KDevProjectController::closeProject()
     emit projectClosing();
 
     //The project file is being closed.
-    //Now we can save settings for all of the KDevCore objects including this one!!
-    KDevCore::saveSettings();
+    //Now we can save settings for all of the Core objects including this one!!
+    Core::saveSettings();
 
-    KDevCore::documentController() ->closeAllDocuments();
+    Core::documentController() ->closeAllDocuments();
 
     // save the the project to open it automaticly on startup if needed
     m_lastProject = m_globalFile;
@@ -242,20 +245,20 @@ bool KDevProjectController::closeProject()
 
 
     //The project file has been closed.
-    //Now we can save settings for all of the KDevCore objects including this one!!
-    KDevCore::saveSettings();
+    //Now we can save settings for all of the Core objects including this one!!
+    Core::saveSettings();
 
-    KActionCollection * ac = KDevCore::mainWindow() ->actionCollection();
+    KActionCollection * ac = Core::mainWindow() ->actionCollection();
     QAction * action;
 
     action = ac->action( "project_close" );
     action->setEnabled( false );
 
     emit projectClosed();
-    KDevPluginController::self() ->unloadPlugins( KDevPluginController::Project );
+    PluginController::self() ->unloadPlugins( PluginController::Project );
 
     //FIXME
-    //     KDevPluginController::self() ->changeProfile( m_oldProfileName );
+    //     PluginController::self() ->changeProfile( m_oldProfileName );
 
     m_project->close();
     m_project->deleteLater(); //be safe when deleting
@@ -265,28 +268,28 @@ bool KDevProjectController::closeProject()
     return true;
 }
 
-bool KDevProjectController::loadProjectPart()
+bool ProjectController::loadProjectPart()
 {
-    KConfig * config = KDevConfig::standard();
+    KConfig * config = Config::standard();
     config->setGroup( "General Options" );
 
     QString projectManager =
-            config->readPathEntry( "Project Management", "KDevProjectManager" );
+            config->readPathEntry( "Project Management", "ProjectManager" );
 
     QString constraint =
             QString::fromLatin1("[X-KDE-PluginInfo-Name] == '%1'")
             .arg(projectManager);
 
-    KPluginInfo::List projectList = KDevPluginController::query("KDevelop/Plugin", constraint);
+    KPluginInfo::List projectList = PluginController::query("KDevelop/Plugin", constraint);
     if ( projectList.isEmpty() )
     {
-        KMessageBox::sorry( KDevCore::mainWindow(),
+        KMessageBox::sorry( Core::mainWindow(),
                             i18n( "No project management plugin %1 found.",
                                   projectManager ) );
         return false;
     }
 
-    m_project = new KDevProject();
+    m_project = new Project();
     if ( !m_project->open( m_globalFile ) )
     {
         delete m_project;
@@ -295,11 +298,11 @@ bool KDevProjectController::loadProjectPart()
     }
 
     KPluginInfo* projectPluginInfo = *projectList.begin();
-    KDevPluginController *pc = KDevPluginController::self();
+    PluginController *pc = PluginController::self();
     m_projectPart = pc->loadPlugin( projectPluginInfo->pluginName() );
     if ( !m_projectPart )
     {
-        KMessageBox::sorry( KDevCore::mainWindow(),
+        KMessageBox::sorry( Core::mainWindow(),
                             i18n( "Could not create project management plugin %1.",
                                   projectManager ) );
         m_project->close();
@@ -311,6 +314,7 @@ bool KDevProjectController::loadProjectPart()
     return true;
 }
 
+}
 #include "kdevprojectcontroller.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

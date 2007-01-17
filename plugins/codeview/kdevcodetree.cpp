@@ -34,7 +34,7 @@
 #include <kdevdocumentcontroller.h>
 
 KDevCodeTree::KDevCodeTree( QWidget *parent )
-        : KDevTreeView( parent ),
+    : Koncrete::TreeView( parent ),
         m_trackCurrent( true ),
         m_kindFilter( 0 )
 {
@@ -46,33 +46,33 @@ KDevCodeTree::KDevCodeTree( QWidget *parent )
              this, SLOT( activated( QModelIndex ) ) );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ),
              this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( KDevCore::documentController(),
-             SIGNAL( documentActivated( KDevDocument* ) ),
-             this, SLOT( documentActivated( KDevDocument* ) ) );
+    connect( Koncrete::Core::documentController(),
+             SIGNAL( documentActivated( Koncrete::Document* ) ),
+             this, SLOT( documentActivated( Koncrete::Document* ) ) );
 }
 
 KDevCodeTree::~KDevCodeTree()
 {}
 
-KDevCodeProxy *KDevCodeTree::codeProxy() const
+Koncrete::CodeProxy *KDevCodeTree::codeProxy() const
 {
-    return qobject_cast<KDevCodeProxy*>( model() );
+    return qobject_cast<Koncrete::CodeProxy*>( model() );
 }
 
-void KDevCodeTree::documentActivated( KDevDocument* file )
+void KDevCodeTree::documentActivated( Koncrete::Document* file )
 {
     if ( m_trackCurrent &&
-            KDevCore::activeLanguage() ->supportsDocument( file ) )
+         Koncrete::Core::activeLanguage() ->supportsDocument( file ) )
         codeProxy() ->setFilterDocument( file->url() );
 }
 
 void KDevCodeTree::activated( const QModelIndex &index )
 {
-    if ( KDevCodeItem * item = codeProxy() ->proxyToItem( index ) )
+    if ( Koncrete::CodeItem * item = codeProxy() ->proxyToItem( index ) )
     {
         KUrl document( item->fileName() );
         if ( document.isValid() )
-            KDevCore::documentController() ->editDocument( document,
+            Koncrete::Core::documentController() ->editDocument( document,
                     item->startPosition() );
     }
 }
@@ -81,19 +81,19 @@ void KDevCodeTree::modeCurrent()
 {
     m_trackCurrent = true;
     codeProxy() ->setFilterDocument(
-        KDevCore::documentController() ->activeDocumentUrl() );
+            Koncrete::Core::documentController() ->activeDocumentUrl() );
 }
 
 void KDevCodeTree::modeNormalize()
 {
     m_trackCurrent = false;
-    codeProxy() ->setMode( KDevCodeProxy::Normalize );
+    codeProxy() ->setMode( Koncrete::CodeProxy::Normalize );
 }
 
 void KDevCodeTree::modeAggregate()
 {
     m_trackCurrent = false;
-    codeProxy() ->setMode( KDevCodeProxy::Aggregate );
+    codeProxy() ->setMode( Koncrete::CodeProxy::Aggregate );
 }
 
 void KDevCodeTree::popupContextMenu( const QPoint &pos )

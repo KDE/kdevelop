@@ -29,18 +29,21 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevconfig.h"
 
-KDevConfigSkeleton::KDevConfigSkeleton( const QString & configname )
+namespace Koncrete
+{
+
+ConfigSkeleton::ConfigSkeleton( const QString & configname )
         : KConfigSkeleton( configname ), m_parsed( false )
 {}
 
-KDevConfigSkeleton::KDevConfigSkeleton( KSharedConfig::Ptr config )
+ConfigSkeleton::ConfigSkeleton( KSharedConfig::Ptr config )
         : KConfigSkeleton( config ), m_parsed( false )
 {}
 
-KDevConfigSkeleton::~KDevConfigSkeleton()
+ConfigSkeleton::~ConfigSkeleton()
 {}
 
-void KDevConfigSkeleton::usrWriteConfig()
+void ConfigSkeleton::usrWriteConfig()
 {
     //FIXME need to see receive the projectOpened, otherwise return right here..
     if ( m_nonShareable.empty() )
@@ -50,7 +53,7 @@ void KDevConfigSkeleton::usrWriteConfig()
 
     // We iterate twice so that we're not changing the config object too much
 
-    KSharedConfig::Ptr localProjectConfig = KDevConfig::sharedLocalProject();
+    KSharedConfig::Ptr localProjectConfig = Config::sharedLocalProject();
     QString origLocalProjectGroup = localProjectConfig->group();
     KConfigSkeletonItem::List _items = items();
     KConfigSkeletonItem::List::ConstIterator it;
@@ -65,7 +68,7 @@ void KDevConfigSkeleton::usrWriteConfig()
     localProjectConfig->sync();
     localProjectConfig->setGroup( origLocalProjectGroup );
 
-    KSharedConfig::Ptr standardConfig = KDevConfig::sharedStandard();
+    KSharedConfig::Ptr standardConfig = Config::sharedStandard();
     QString origStandardGroup = standardConfig->group();
     KConfigSkeletonItem::List _items2 = items();
     KConfigSkeletonItem::List::ConstIterator it2;
@@ -85,7 +88,7 @@ void KDevConfigSkeleton::usrWriteConfig()
     emit configChanged();
 }
 
-void KDevConfigSkeleton::parseNonShareableFile( const KUrl &url )
+void ConfigSkeleton::parseNonShareableFile( const KUrl &url )
 {
     //Don't need to parse the file more than once?
     if ( m_parsed )
@@ -108,6 +111,7 @@ void KDevConfigSkeleton::parseNonShareableFile( const KUrl &url )
 
 }
 
+}
 #include "kdevconfigskeleton.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

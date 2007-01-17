@@ -21,7 +21,7 @@
 
 // ---------------------------------------------------------------------------
 CodeModel::CodeModel( QObject *parent )
-  : KDevCodeModel( parent )
+  : Koncrete::CodeModel( parent )
 {
   _M_globalNamespace = create<NamespaceModelItem>();
   _M_globalNamespace->setName(QString::null);
@@ -41,7 +41,7 @@ NamespaceModelItem CodeModel::globalNamespace() const
   return _M_globalNamespace;
 }
 
-KDevItemCollection *CodeModel::root() const
+Koncrete::ItemCollection *CodeModel::root() const
 {
   return _M_globalNamespace;
 }
@@ -110,7 +110,7 @@ bool TypeInfo::operator==(const TypeInfo &other)
 
 // ---------------------------------------------------------------------------
 _CodeModelItem::_CodeModelItem(CodeModel *model, int kind)
-  : KDevCodeItem( QString::null, 0 ),
+  : Koncrete::CodeItem( QString::null, 0 ),
     _M_model(model),
     _M_kind(kind),
     _M_startLine(-1),
@@ -126,7 +126,7 @@ _CodeModelItem::~_CodeModelItem()
 
 _CodeModelItem *_CodeModelItem::itemAt(int index) const
 {
-  return static_cast<_CodeModelItem*>(KDevItemCollection::itemAt(index));
+  return static_cast<_CodeModelItem*>(Koncrete::ItemCollection::itemAt(index));
 }
 
 CodeModelItem _CodeModelItem::toItem() const
@@ -516,7 +516,7 @@ void _ArgumentModelItem::setDefaultValue(bool defaultValue)
 }
 
 // ---------------------------------------------------------------------------
-bool _FunctionModelItem::isSimilar(KDevCodeItem *other, bool strict ) const
+bool _FunctionModelItem::isSimilar(Koncrete::CodeItem *other, bool strict ) const
 {
   if (!_MemberModelItem::isSimilar(other,strict))
     return false;

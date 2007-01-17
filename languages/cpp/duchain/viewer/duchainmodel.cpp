@@ -51,14 +51,14 @@ DUChainModel::DUChainModel(DUChainViewPart* parent)
   : QAbstractItemModel(parent)
   , m_chain(0)
 {
-  connect (KDevCore::documentController(), SIGNAL(documentActivated(KDevDocument*)), SLOT(documentActivated(KDevDocument*)));
+  connect (Koncrete::Core::documentController(), SIGNAL(documentActivated(Koncrete::Document*)), SLOT(documentActivated(Koncrete::Document*)));
 }
 
 DUChainModel::~DUChainModel()
 {
 }
 
-void DUChainModel::documentActivated( KDevDocument* document )
+void DUChainModel::documentActivated( Koncrete::Document* document )
 {
   if (document) {
     TopDUContext* chain = DUChain::self()->chainForDocument(document->url());

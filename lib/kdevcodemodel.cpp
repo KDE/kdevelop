@@ -26,34 +26,37 @@
 
 #include <ktexteditor/smartrange.h>
 
-KDevCodeItem::KDevCodeItem( const QString &name, KDevItemGroup *parent )
-        : KDevItemCollection( name, parent )
+namespace Koncrete
+{
+
+CodeItem::CodeItem( const QString &name, ItemGroup *parent )
+        : ItemCollection( name, parent )
         , m_declaration(0L)
         , m_definition(0L)
 {}
 
-KDevCodeItem::~KDevCodeItem()
+CodeItem::~CodeItem()
 {
     qDeleteAll(m_references);
     delete m_declaration;
     delete m_definition;
 }
 
-KDevCodeItem *KDevCodeItem::itemAt( int index ) const
+CodeItem *CodeItem::itemAt( int index ) const
 {
-    return static_cast<KDevCodeItem*>( KDevItemCollection::itemAt( index ) );
+    return static_cast<CodeItem*>( ItemCollection::itemAt( index ) );
 }
 
-KDevCodeModel::KDevCodeModel( QObject *parent )
-        : KDevItemModel( parent )
+CodeModel::CodeModel( QObject *parent )
+        : ItemModel( parent )
 {}
 
-KDevCodeModel::~KDevCodeModel()
+CodeModel::~CodeModel()
 {}
 
-QVariant KDevCodeModel::data( const QModelIndex &index, int role ) const
+QVariant CodeModel::data( const QModelIndex &index, int role ) const
 {
-    if ( KDevCodeItem * code_item = item( index ) )
+    if ( CodeItem * code_item = item( index ) )
     {
         switch ( role )
         {
@@ -75,8 +78,8 @@ QVariant KDevCodeModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
-void KDevCodeModel::beginAppendItem( KDevCodeItem *item,
-                                     KDevItemCollection *collection )
+void CodeModel::beginAppendItem( CodeItem *item,
+                                     ItemCollection *collection )
 {
     QMutexLocker locker( &m_mutex );
     Q_ASSERT( item != root() );
@@ -94,19 +97,19 @@ void KDevCodeModel::beginAppendItem( KDevCodeItem *item,
     ( item );
 }
 
-void KDevCodeModel::endAppendItem()
+void CodeModel::endAppendItem()
 {
     QMutexLocker locker( &m_mutex );
     endInsertRows();
 }
 
-void KDevCodeModel::beginRemoveItem( KDevCodeItem *item )
+void CodeModel::beginRemoveItem( CodeItem *item )
 {
     QMutexLocker locker( &m_mutex );
     Q_ASSERT( item != 0 && item->parent() != 0 );
     Q_ASSERT( item->parent() ->collection() != 0 );
 
-    KDevItemCollection *parent_collection = item->parent() ->collection();
+    ItemCollection *parent_collection = item->parent() ->collection();
 
     int row = positionOf( item );
 
@@ -115,55 +118,56 @@ void KDevCodeModel::beginRemoveItem( KDevCodeItem *item )
     ( row );
 }
 
-void KDevCodeModel::endRemoveItem()
+void CodeModel::endRemoveItem()
 {
     QMutexLocker locker( &m_mutex );
     endRemoveRows();
 }
 
-KDevCodeItem *KDevCodeModel::item( const QModelIndex &index ) const
+CodeItem *CodeModel::item( const QModelIndex &index ) const
 {
-    return reinterpret_cast<KDevCodeItem*>( KDevItemModel::item( index ) );
+    return reinterpret_cast<CodeItem*>( ItemModel::item( index ) );
 }
 
-const QList< KTextEditor::SmartRange * > & KDevCodeItem::references( ) const
+const QList< KTextEditor::SmartRange * > & CodeItem::references( ) const
 {
     return m_references;
 }
 
-void KDevCodeItem::addReference( KTextEditor::SmartRange * range )
+void CodeItem::addReference( KTextEditor::SmartRange * range )
 {
     m_references.append(range);
     range->addWatcher(this);
 }
 
-void KDevCodeItem::deleted( KTextEditor::SmartRange * range )
+void CodeItem::deleted( KTextEditor::SmartRange * range )
 {
     m_references.removeAll(range);
 }
 
-KTextEditor::SmartRange * KDevCodeItem::declaration( ) const
+KTextEditor::SmartRange * CodeItem::declaration( ) const
 {
     return m_declaration;
 }
 
-void KDevCodeItem::setDeclaration( KTextEditor::SmartRange * range )
+void CodeItem::setDeclaration( KTextEditor::SmartRange * range )
 {
     m_declaration = range;
     range->addWatcher(this);
 }
 
-KTextEditor::SmartRange * KDevCodeItem::definition( ) const
+KTextEditor::SmartRange * CodeItem::definition( ) const
 {
     return m_definition;
 }
 
-void KDevCodeItem::setDefinition( KTextEditor::SmartRange * range )
+void CodeItem::setDefinition( KTextEditor::SmartRange * range )
 {
     m_definition = range;
     range->addWatcher(this);
 }
 
+}
 #include "kdevcodemodel.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

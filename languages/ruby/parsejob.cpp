@@ -47,15 +47,15 @@ namespace ruby
 {
 
 ParseJob::ParseJob( const KUrl &url, RubyLanguageSupport *parent )
-        : KDevParseJob( url, parent )
+        : Koncrete::ParseJob( url, parent )
         , m_session( new ParseSession )
         , m_AST( 0 )
         , m_model( 0 )
         , m_readFromDisk( false )
 {}
 
-ParseJob::ParseJob( KDevDocument *document, RubyLanguageSupport *parent )
-        : KDevParseJob( document, parent )
+ParseJob::ParseJob( Koncrete::Document *document, RubyLanguageSupport *parent )
+        : Koncrete::ParseJob( document, parent )
         , m_session( new ParseSession )
         , m_AST( 0 )
         , m_model( 0 )
@@ -70,13 +70,13 @@ RubyLanguageSupport *ParseJob::ruby() const
     return static_cast<RubyLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
-KDevAST *ParseJob::AST() const
+Koncrete::AST *ParseJob::AST() const
 {
     Q_ASSERT(isFinished() && m_AST);
     return m_AST;
 }
 
-KDevCodeModel *ParseJob::codeModel() const
+Koncrete::CodeModel *ParseJob::codeModel() const
 {
     Q_ASSERT(isFinished() && m_model);
     return m_model;

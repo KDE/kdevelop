@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the KDevelop project
 Copyright (C) 2002 F@lk Brettschneider <falkbr@kdevelop.org>
 Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
 Copyright (C) 2006 Adam Treat <treat@kde.org>
@@ -55,27 +55,31 @@ Boston, MA 02110-1301, USA.
 #include "kdevprojectcontroller.h"
 #include "kdevdocumentcontroller.h"
 
-class KDevMainWindowPrivate
+namespace Koncrete
+{
+
+
+class MainWindowPrivate
 {
 public:
-    KDevMainWindowPrivate()
-            : mode( KDevMainWindow::DockedMode ),
+    MainWindowPrivate()
+            : mode( MainWindow::DockedMode ),
             center( 0 )
     {}
 
-    KDevMainWindow::UIMode mode;
+    MainWindow::UIMode mode;
 
     QStackedWidget *center;
     QPointer<QWidget> centralPlugin;
 
-    QList<KDevPlugin*> activeProcesses;
+    QList<Plugin*> activeProcesses;
 };
 
-KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
+MainWindow::MainWindow( QWidget *parent, Qt::WFlags flags )
         : KMainWindow( parent, flags )
 {
-    setObjectName( QLatin1String( "KDevMainWindow" ) );
-    d = new KDevMainWindowPrivate();
+    setObjectName( QLatin1String( "MainWindow" ) );
+    d = new MainWindowPrivate();
     d->center = new QStackedWidget( this );
     setCentralWidget( d->center );
 
@@ -86,23 +90,23 @@ KDevMainWindow::KDevMainWindow( QWidget *parent, Qt::WFlags flags )
 
     setStandardToolBarMenuEnabled( true );
     setupActions();
-    setStatusBar( new KDevStatusBar( this ) );
+    setStatusBar( new Koncrete::StatusBar( this ) );
 
-    connect( KDevPluginController::self(), SIGNAL(pluginLoaded(KDevPlugin*)),
-             this, SLOT(addPlugin(KDevPlugin*)));
+    connect( PluginController::self(), SIGNAL(pluginLoaded(Plugin*)),
+             this, SLOT(addPlugin(Plugin*)));
 
 /*    createGUI( ShellExtension::getInstance() ->xmlFile() );*/
 }
 
-KDevMainWindow::~ KDevMainWindow()
+MainWindow::~ MainWindow()
 {}
 
-KDevMainWindow::UIMode KDevMainWindow::mode() const
+MainWindow::UIMode MainWindow::mode() const
 {
     return d->mode;
 }
 
-void KDevMainWindow::setUIMode( UIMode mode )
+void MainWindow::setUIMode( UIMode mode )
 {
     switch ( mode )
     {
@@ -117,7 +121,7 @@ void KDevMainWindow::setUIMode( UIMode mode )
     }
 }
 
-void KDevMainWindow::setupActions()
+void MainWindow::setupActions()
 {
     KStandardAction::quit( this, SLOT( close() ), actionCollection() );
 
@@ -164,9 +168,9 @@ void KDevMainWindow::setupActions()
     connect( popupAction->menu(), SIGNAL( activated( int ) ),
              this, SLOT( stopPopupActivated( int ) ) );
 
-    //FIXME fix connection after gutting of KDevCore
-    /*connect( KDevCore::getInstance(), SIGNAL( activeProcessChanged( KDevPlugin*, bool ) ),
-    this, SLOT( activeProcessChanged( KDevPlugin*, bool ) ) );*/
+    //FIXME fix connection after gutting of Core
+    /*connect( Core::getInstance(), SIGNAL( activeProcessChanged( Plugin*, bool ) ),
+    this, SLOT( activeProcessChanged( Plugin*, bool ) ) );*/
 
     action = KStandardAction::showMenubar(
                  this, SLOT( showMenuBar() ),
@@ -225,10 +229,10 @@ void KDevMainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)." ) );
 }
 
-void KDevMainWindow::loadSettings( bool projectIsLoaded )
+void MainWindow::loadSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
-    KConfig * config = KDevConfig::standard();
+    KConfig * config = Config::standard();
 
     config->setGroup( "UI" );
     bool docked = config->readEntry( "Docked Window", true );
@@ -240,39 +244,39 @@ void KDevMainWindow::loadSettings( bool projectIsLoaded )
     if ( toplevel )
         setUIMode( TopLevelMode );
 
-    applyMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
+    applyMainWindowSettings( config, QLatin1String( "MainWindow" ) );
 }
 
-void KDevMainWindow::saveSettings( bool projectIsLoaded )
+void MainWindow::saveSettings( bool projectIsLoaded )
 {
     if ( projectIsLoaded )
         return;
 
-    KConfig * config = KDevConfig::standard();
+    KConfig * config = Config::standard();
 
-    saveMainWindowSettings( config, QLatin1String( "KDevMainWindow" ) );
+    saveMainWindowSettings( config, QLatin1String( "MainWindow" ) );
 }
 
-void KDevMainWindow::initialize()
+void MainWindow::initialize()
 {
     createGUI( ShellExtension::getInstance() ->xmlFile() );
-    connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
-             this, SLOT( documentActivated( KDevDocument* ) ) );
-    connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
+    connect( Core::documentController(), SIGNAL( documentActivated( Document* ) ),
+             this, SLOT( documentActivated( Document* ) ) );
+    connect( Core::projectController(), SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
-    connect( KDevCore::projectController(), SIGNAL( projectClosed() ),
+    connect( Core::projectController(), SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
 }
 
-void KDevMainWindow::cleanup()
+void MainWindow::cleanup()
 {
 }
 
-void KDevMainWindow::fillContextMenu( KMenu *menu, const Context *context )
+void MainWindow::fillContextMenu( KMenu *menu, const Context *context )
 {
     //Perhaps we get rid of this framework and instead have every Context contains
     //a kactioncollection.  Plugins could add their actions directly to the context
-    //object retrieved from KDevCore... ??
+    //object retrieved from Core... ??
     emit contextMenu( menu, context );
 
     //Put this in every context menu so that plugins will be encouraged to allow shortcuts
@@ -280,7 +284,7 @@ void KDevMainWindow::fillContextMenu( KMenu *menu, const Context *context )
     menu->addAction( action );
 }
 
-void KDevMainWindow::addDocument( KDevDocument *document )
+void MainWindow::addDocument( Document *document )
 {
     Q_ASSERT( document );
     Q_ASSERT( document->part() );
@@ -312,7 +316,7 @@ void KDevMainWindow::addDocument( KDevDocument *document )
     }
 }
 
-bool KDevMainWindow::containsDocument( KDevDocument *document ) const
+bool MainWindow::containsDocument( Document *document ) const
 {
     Q_ASSERT( document );
     Q_ASSERT( document->part() );
@@ -331,7 +335,7 @@ bool KDevMainWindow::containsDocument( KDevDocument *document ) const
     }
 }
 
-void KDevMainWindow::setCurrentDocument( KDevDocument *document )
+void MainWindow::setCurrentDocument( Document *document )
 {
     Q_ASSERT( document );
     Q_ASSERT( document->part() );
@@ -360,7 +364,7 @@ void KDevMainWindow::setCurrentDocument( KDevDocument *document )
     }
 }
 
-void KDevMainWindow::removeDocument( KDevDocument *document )
+void MainWindow::removeDocument( Document *document )
 {
     Q_ASSERT( document );
     Q_ASSERT( document->part() );
@@ -380,7 +384,7 @@ void KDevMainWindow::removeDocument( KDevDocument *document )
     }
 }
 
-void KDevMainWindow::addPlugin( KDevPlugin *plugin )
+void MainWindow::addPlugin( Plugin *plugin )
 {
     Q_ASSERT( plugin );
 
@@ -392,9 +396,9 @@ void KDevMainWindow::addPlugin( KDevPlugin *plugin )
             || plugin->dockWidgetAreaHint() == Qt::NoDockWidgetArea )
         return ;
 
-    // This is required as documented in KDevPlugin
+    // This is required as documented in Plugin
     Q_ASSERT( !view->objectName().isEmpty() );
-    // This is required as documented in KDevPlugin
+    // This is required as documented in Plugin
     Q_ASSERT( !view->windowTitle().isEmpty() );
 
     switch ( d->mode )
@@ -451,7 +455,7 @@ void KDevMainWindow::addPlugin( KDevPlugin *plugin )
     }
 }
 
-void KDevMainWindow::removePlugin( KDevPlugin *plugin )
+void MainWindow::removePlugin( Plugin *plugin )
 {
     Q_ASSERT( plugin );
 
@@ -484,14 +488,14 @@ void KDevMainWindow::removePlugin( KDevPlugin *plugin )
     }
 }
 
-void KDevMainWindow::setVisible( bool visible )
+void MainWindow::setVisible( bool visible )
 {
     KMainWindow::setVisible( visible );
 
     emit finishedLoading();
 }
 
-void KDevMainWindow::gotoNextWindow()
+void MainWindow::gotoNextWindow()
 {
     if ( ( d->center->currentIndex() + 1 ) < d->center->count() )
         d->center->setCurrentIndex( d->center->currentIndex() + 1 );
@@ -499,7 +503,7 @@ void KDevMainWindow::gotoNextWindow()
         d->center->setCurrentIndex( 0 );
 }
 
-void KDevMainWindow::gotoPreviousWindow()
+void MainWindow::gotoPreviousWindow()
 {
     if ( ( d->center->currentIndex() - 1 ) >= 0 )
         d->center->setCurrentIndex( d->center->currentIndex() - 1 );
@@ -507,17 +511,17 @@ void KDevMainWindow::gotoPreviousWindow()
         d->center->setCurrentIndex( d->center->count() - 1 );
 }
 
-void KDevMainWindow::gotoFirstWindow()
+void MainWindow::gotoFirstWindow()
 {
     d->center->setCurrentIndex( 0 );
 }
 
-void KDevMainWindow::gotoLastWindow()
+void MainWindow::gotoLastWindow()
 {
     d->center->setCurrentIndex( d->center->count() - 1 );
 }
 
-void KDevMainWindow::projectOpened()
+void MainWindow::projectOpened()
 {
     QString app = i18n( "Project" );
     QString text = i18n( "Configure %1", app );
@@ -527,7 +531,7 @@ void KDevMainWindow::projectOpened()
                               i18n( "Lets you customize %1.", app ) ) );
 }
 
-void KDevMainWindow::projectClosed()
+void MainWindow::projectClosed()
 {
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1", app );
@@ -537,40 +541,40 @@ void KDevMainWindow::projectClosed()
                               i18n( "Lets you customize %1.", app ) ) );
 }
 
-void KDevMainWindow::configureToolbars()
+void MainWindow::configureToolbars()
 {}
 
-void KDevMainWindow::newToolbarConfig()
+void MainWindow::newToolbarConfig()
 {
     applyMainWindowSettings( KGlobal::config(),
-                             QLatin1String( "KDevMainWindow" ) );
+                             QLatin1String( "MainWindow" ) );
 }
 
-bool KDevMainWindow::queryClose()
+bool MainWindow::queryClose()
 {
-    KDevPluginController::self()->shutdown();
-    //All KDevCore API objects must release all resources which
+    PluginController::self()->shutdown();
+    //All Core API objects must release all resources which
     //depend upon one another.
-    KDevCore::cleanup();
+    Core::cleanup();
 
     return true;
 }
 
-void KDevMainWindow::setupWindowMenu()
+void MainWindow::setupWindowMenu()
 {
     //FIXME This should setup a window menu or perhaps dialog instead.
     // Either way, we need one with a scroll bar.  I'm tired of menus that take
     // up the entire screen.
 }
 
-void KDevMainWindow::fillWindowMenu()
+void MainWindow::fillWindowMenu()
 {
     //FIXME This should fill a window menu or perhaps dialog instead.
     // Either way, we need one with a scroll bar.  I'm tired of menus that take
     // up the entire screen.
 }
 
-QString KDevMainWindow::beautifyToolTip( const QString& text ) const
+QString MainWindow::beautifyToolTip( const QString& text ) const
 {
     QString temp = text;
     temp.replace( QRegExp( "&" ), "" );
@@ -578,53 +582,53 @@ QString KDevMainWindow::beautifyToolTip( const QString& text ) const
     return temp;
 }
 
-void KDevMainWindow::reportBug()
+void MainWindow::reportBug()
 {}
 
-void KDevMainWindow::toggleStatusbar()
+void MainWindow::toggleStatusbar()
 {
     KToggleAction * action =
         qobject_cast< KToggleAction*>( actionCollection() ->action( "settings_show_statusbar" ) );
     statusBar() ->setHidden( !action->isChecked() );
 }
 
-void KDevMainWindow::stopButtonPressed()
+void MainWindow::stopButtonPressed()
 {}
 
-void KDevMainWindow::activeProcessChanged( KDevPlugin* plugin, bool active )
+void MainWindow::activeProcessChanged( Plugin* plugin, bool active )
 {
     Q_UNUSED( plugin );
     Q_UNUSED( active );
 }
 
-void KDevMainWindow::stopPopupActivated( int id )
+void MainWindow::stopPopupActivated( int id )
 {
     Q_UNUSED( id );
 }
 
-void KDevMainWindow::stopMenuAboutToShow()
+void MainWindow::stopMenuAboutToShow()
 {}
 
-void KDevMainWindow::showMenuBar()
+void MainWindow::showMenuBar()
 {}
 
-void KDevMainWindow::configureNotifications()
+void MainWindow::configureNotifications()
 {
     KNotifyConfigWidget::configure( this, "Notification Configuration Dialog" );
 }
 
 
-void KDevMainWindow::settingsDialog()
+void MainWindow::settingsDialog()
 {
-    KDevConfig::settingsDialog();
+    Config::settingsDialog();
 }
 
-void KDevMainWindow::configureEditors()
+void MainWindow::configureEditors()
 {
     //FIXME Change this so that it is embedded in our config dialog.
     //Perhaps this will require a change to the KTextEditor interface too...
     KTextEditor::Document * doc =
-        KDevCore::documentController() ->activeDocument() ->textDocument();
+        Core::documentController() ->activeDocument() ->textDocument();
     KTextEditor::Editor *editor = doc ? doc->editor() : 0;
     if ( !editor )
     {
@@ -640,23 +644,23 @@ void KDevMainWindow::configureEditors()
     editor->configDialog( this );
 }
 
-void KDevMainWindow::keyBindings()
+void MainWindow::keyBindings()
 {}
 
-void KDevMainWindow::documentActivated( KDevDocument *document )
+void MainWindow::documentActivated( Document *document )
 {
     QAction * action = actionCollection() ->action( "settings_configure_editors" );
     action->setEnabled( document->textDocument() );
 }
 
-QWidget *KDevMainWindow::magicalParent() const
+QWidget *MainWindow::magicalParent() const
 {
     switch ( d->mode )
     {
     case TopLevelMode:
         return 0;
     case DockedMode:
-        return const_cast<KDevMainWindow*>( this );
+        return const_cast<MainWindow*>( this );
     case NeutralMode:
         return 0;
     default:
@@ -664,7 +668,7 @@ QWidget *KDevMainWindow::magicalParent() const
     }
 }
 
-QWidget *KDevMainWindow::magicalWidget( QDockWidget *dockWidget ) const
+QWidget *MainWindow::magicalWidget( QDockWidget *dockWidget ) const
 {
     QString name = dockWidget->objectName();
     name.chop( 5 ); //remove the "_dock"
@@ -698,7 +702,7 @@ QWidget *KDevMainWindow::magicalWidget( QDockWidget *dockWidget ) const
     }
 }
 
-QDockWidget *KDevMainWindow::magicalDockWidget( QWidget *widget ) const
+QDockWidget *MainWindow::magicalDockWidget( QWidget *widget ) const
 {
     QDockWidget * dockWidget = qFindChild<QDockWidget*>( this,
                                widget->objectName() + QLatin1String( "_dock" ) );
@@ -709,7 +713,7 @@ QDockWidget *KDevMainWindow::magicalDockWidget( QWidget *widget ) const
         return 0;
 }
 
-Qt::WindowFlags KDevMainWindow::magicalWindowFlags( const QWidget *widgetForFlags ) const
+Qt::WindowFlags MainWindow::magicalWindowFlags( const QWidget *widgetForFlags ) const
 {
     switch ( d->mode )
     {
@@ -732,7 +736,7 @@ Qt::WindowFlags KDevMainWindow::magicalWindowFlags( const QWidget *widgetForFlag
     }
 }
 
-void KDevMainWindow::switchToNeutralMode()
+void MainWindow::switchToNeutralMode()
 {
     if ( d->mode == NeutralMode )
         return ;
@@ -742,7 +746,7 @@ void KDevMainWindow::switchToNeutralMode()
     //FIXME hide everything...
 }
 
-void KDevMainWindow::switchToDockedMode()
+void MainWindow::switchToDockedMode()
 {
     if ( d->mode == DockedMode )
         return ;
@@ -753,8 +757,8 @@ void KDevMainWindow::switchToDockedMode()
 
     d->mode = DockedMode;
 
-    QList<KDevDocument* > openDocs = KDevCore::documentController() ->openDocuments();
-    QList<KDevDocument* >::const_iterator it = openDocs.begin();
+    QList<Document* > openDocs = Core::documentController() ->openDocuments();
+    QList<Document* >::const_iterator it = openDocs.begin();
     for ( ; it != openDocs.end(); ++it )
     {
         if ( !( *it ) ->isInitialized() )
@@ -799,7 +803,7 @@ void KDevMainWindow::switchToDockedMode()
     //     setUpdatesEnabled( true );
 }
 
-void KDevMainWindow::switchToTopLevelMode()
+void MainWindow::switchToTopLevelMode()
 {
     if ( d->mode == TopLevelMode )
         return ;
@@ -810,8 +814,8 @@ void KDevMainWindow::switchToTopLevelMode()
 
     d->mode = TopLevelMode;
 
-    QList<KDevDocument* > openDocs = KDevCore::documentController() ->openDocuments();
-    QList<KDevDocument* >::const_iterator it = openDocs.begin();
+    QList<Document* > openDocs = Core::documentController() ->openDocuments();
+    QList<Document* >::const_iterator it = openDocs.begin();
     for ( ; it != openDocs.end(); ++it )
     {
         if ( !( *it ) ->isInitialized() )
@@ -860,6 +864,8 @@ void KDevMainWindow::switchToTopLevelMode()
     //     flags |= Qt::WindowStaysOnTopHint;
     //     setWindowFlags( flags );
     //     show();
+}
+
 }
 
 #include "kdevmainwindow.moc"

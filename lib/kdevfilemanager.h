@@ -28,21 +28,24 @@
 
 #include <kurl.h>
 
-class KDevProjectEditor;
-class KDevProjectModel;
-class KDevProject;
-class KDevProjectItem;
-class KDevProjectFolderItem;
-class KDevProjectTargetItem;
-class KDevProjectFileItem;
+namespace Koncrete
+{
+
+class ProjectEditor;
+class ProjectModel;
+class Project;
+class ProjectItem;
+class ProjectFolderItem;
+class ProjectTargetItem;
+class ProjectFileItem;
 class KDialogBase;
 
 /**
  * @short An interface to project file management
  *
- * KDevFileManager is the class you want to implement for integrating
+ * FileManager is the class you want to implement for integrating
  * a project manager in KDevelop.  For build systems, implement its
- * child class, KDevBuildManager.
+ * child class, BuildManager.
  *
  * These classes \e do \e not cause files, folders etc. to be created
  * or removed on disk.  They simply read from and write to the file(s)
@@ -50,7 +53,7 @@ class KDialogBase;
  *
  * @author Roberto Raggi, Matt Rogers, Hamish Rodda
  */
-class KDEVPLATFORM_EXPORT KDevFileManager: public KDevPlugin
+class KDEVPLATFORM_EXPORT FileManager: public Plugin
 {
     Q_OBJECT
 
@@ -65,8 +68,8 @@ public:
      * @todo should forced refresh function exist?
      * @todo add error reporting mechanism
      */
-    KDevFileManager(KInstance* instance, QObject *parent = 0);
-    virtual ~KDevFileManager();
+    FileManager(KInstance* instance, QObject *parent = 0);
+    virtual ~FileManager();
 
     /** Features the file manager supports */
     enum Feature
@@ -79,26 +82,26 @@ public:
     Q_DECLARE_FLAGS( Features, Feature )
 
     /** @return The current project. */
-    virtual KDevProject *project() const;
+    virtual Project *project() const;
 
     /**
      * This method initialize the model item @arg dom
      * @return The list of the sub folders
      */
-    virtual QList<KDevProjectFolderItem*> parse(KDevProjectFolderItem *dom);
+    virtual QList<ProjectFolderItem*> parse(ProjectFolderItem *dom);
 
     /**
      * This method creates the root item from the file @arg fileName
      * @return The created item
      */
-    virtual KDevProjectItem *import(KDevProjectModel *model, const KUrl &fileName);
+    virtual ProjectItem *import(ProjectModel *model, const KUrl &fileName);
 
     /**
      * Return the top item in this heirachy, which represents the root folder of the source
      * hierarchy.
      *
      */
-    virtual KDevProjectFolderItem* top();
+    virtual ProjectFolderItem* top();
 
     /**
      * Add a folder to the project
@@ -106,7 +109,7 @@ public:
      * Adds the folder specified by @p folder to @p parent and modifies the
      * underlying build system if needed
      */
-    virtual KDevProjectFolderItem* addFolder(const KUrl& folder, KDevProjectFolderItem *parent);
+    virtual ProjectFolderItem* addFolder(const KUrl& folder, ProjectFolderItem *parent);
     
 
     /**
@@ -115,7 +118,7 @@ public:
      * Adds the file specified by @p file to the folder @p parent and modifies
      * the underlying build system if needed. The file is not added to a target
      */
-    virtual KDevProjectFileItem* addFile(const KUrl& folder, KDevProjectFolderItem *parent);
+    virtual ProjectFileItem* addFile(const KUrl& folder, ProjectFolderItem *parent);
 
     /**
      * Remove a folder from the project
@@ -123,7 +126,7 @@ public:
      * Removes the folder specified by @p folder from folder @p parent and
      * modifies the underlying build system if needed.
      */
-    virtual bool removeFolder(KDevProjectFolderItem *folder); 
+    virtual bool removeFolder(ProjectFolderItem *folder); 
 
     /**
      * Remove a file from the project
@@ -132,7 +135,7 @@ public:
      * modifies the underlying build system if needed. If the file being 
      * removed is also part of a target, it should be removed from the target as well
      */
-    virtual bool removeFile(KDevProjectFileItem *file);
+    virtual bool removeFile(ProjectFileItem *file);
 
     /**
      * Rename a file in the project
@@ -140,35 +143,37 @@ public:
      * Renames the file specified by @p oldFile to @p newFile
      * 
      */
-    virtual bool renameFile(KDevProjectFileItem* oldFile,
+    virtual bool renameFile(ProjectFileItem* oldFile,
                             const KUrl& newFile);
     /**
      * Rename a folder in the project
      * 
      * Renames the folder specified by @p oldFile to @p newFile
      */
-    virtual bool renameFolder(KDevProjectFolderItem* oldFolder,
+    virtual bool renameFolder(ProjectFolderItem* oldFolder,
                               const KUrl& newFolder );
 
 signals:
-    void projectItemConfigWidget(const QList<KDevProjectItem*> &dom, KDialogBase *dialog);
+    void projectItemConfigWidget(const QList<ProjectItem*> &dom, KDialogBase *dialog);
 
-    void folderAdded( KDevProjectFolderItem* folder );
-    void folderRemoved( KDevProjectFolderItem* folder );
+    void folderAdded( ProjectFolderItem* folder );
+    void folderRemoved( ProjectFolderItem* folder );
     void folderRenamed( const KUrl& oldFolder,
-                        KDevProjectFolderItem* newFolder );
+                        ProjectFolderItem* newFolder );
 
-    void fileAdded(KDevProjectFileItem* file);
-    void fileRemoved(KDevProjectFileItem* file);
+    void fileAdded(ProjectFileItem* file);
+    void fileRemoved(ProjectFileItem* file);
     void fileRenamed(const KUrl& oldFile,
-                     KDevProjectFileItem* newFile);
+                     ProjectFileItem* newFile);
 
 private:
     class Private;
     Private* d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevFileManager::Features )
+}
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( Koncrete::FileManager::Features )
 
 #endif
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

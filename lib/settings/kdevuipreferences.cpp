@@ -30,12 +30,15 @@
 
 #include "ui_uisettings.h"
 
-typedef KGenericFactory<KDevUIPreferences> KDevUIPreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdevui_settings, KDevUIPreferencesFactory( "kcm_kdevui_settings" ) )
+namespace Koncrete
+{
 
-KDevUIPreferences::KDevUIPreferences( QWidget *parent, const QStringList &args )
-        : KDevCModule( KDevUISettings::self(),
-                       KDevUIPreferencesFactory::instance(), parent, args )
+typedef KGenericFactory<UIPreferences> UIPreferencesFactory;
+K_EXPORT_COMPONENT_FACTORY( kcm_kdevui_settings, UIPreferencesFactory( "kcm_kdevui_settings" ) )
+
+UIPreferences::UIPreferences( QWidget *parent, const QStringList &args )
+        : ConfigModule( UISettings::self(),
+                       UIPreferencesFactory::instance(), parent, args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -44,25 +47,26 @@ KDevUIPreferences::KDevUIPreferences( QWidget *parent, const QStringList &args )
     preferencesDialog->setupUi( w );
     l->addWidget( w );
 
-    addConfig( KDevUISettings::self(), w );
+    addConfig( UISettings::self(), w );
 
     load();
 }
 
-KDevUIPreferences::~KDevUIPreferences( )
+UIPreferences::~UIPreferences( )
 {
     delete preferencesDialog;
 }
 
-void KDevUIPreferences::save()
+void UIPreferences::save()
 {
-    KDevCModule::save();
+    ConfigModule::save();
 
-    if ( KDevUISettings::self()->docked() )
-        KDevCore::mainWindow()->setUIMode( KDevMainWindow::DockedMode );
-    if ( KDevUISettings::self()->toplevel() )
-        KDevCore::mainWindow()->setUIMode( KDevMainWindow::TopLevelMode );
+    if ( UISettings::self()->docked() )
+        Core::mainWindow()->setUIMode( MainWindow::DockedMode );
+    if ( UISettings::self()->toplevel() )
+        Core::mainWindow()->setUIMode( MainWindow::TopLevelMode );
 }
 
+}
 #include "kdevuipreferences.moc"
 

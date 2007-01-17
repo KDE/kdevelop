@@ -29,29 +29,27 @@ Boston, MA 02110-1301, USA.
 class QProcess;
 class KProcess;
 
+namespace Koncrete
+{
+
 typedef QMap<QString, QString> EnvironmentMap;
 
 /**
-@file kdevenvironment.h
-KDevelop Environment Variable interface.
-*/
-
-/**
 The interface to KDevelop's environment.
-This class is used by any @ref KDevPlugin that needs to sync or interact with
+This class is used by any @ref Plugin that needs to sync or interact with
 environment variables.  The user can set all environment variables by way of a
 KCM module.  All plugins should respect the environment variables set by the user
 and sync any spawned QProcess/KProcess with the environment variables found in
 this class.
 */
-class KDEVPLATFORM_EXPORT KDevEnvironment: public QObject, protected KDevCoreInterface
+class KDEVPLATFORM_EXPORT Environment: public QObject, protected CoreInterface
 {
-    friend class KDevCore;
-    friend class KDevEnvWidget;
+    friend class Core;
+    friend class EnvWidget;
     Q_OBJECT
 public:
-    KDevEnvironment( QObject *parent = 0 );
-    virtual ~KDevEnvironment();
+    Environment( QObject *parent = 0 );
+    virtual ~Environment();
 
     /**
      * Get the value of an environment variable or QString::null if no
@@ -144,6 +142,7 @@ private:
     EnvironmentMap m_processDefaults;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

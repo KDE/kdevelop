@@ -26,6 +26,9 @@
 
 class QWidget;
 
+namespace Koncrete
+{
+
 /**
 KDevelop persistant class store importer plugin.
 
@@ -33,12 +36,12 @@ These plugins are used by language support plugins to fill symbol stores
 with symbol information from certain files. The purpose of the importer
 is to provide file selection wizard.
 */
-class KDEVPLATFORM_EXPORT KDevPCSImporter: public QObject
+class KDEVPLATFORM_EXPORT PCSImporter: public QObject
 {
     Q_OBJECT
 public:
-    KDevPCSImporter( QObject* parent=0 );
-    virtual ~KDevPCSImporter();
+    PCSImporter( QObject* parent=0 );
+    virtual ~PCSImporter();
 
     virtual QString dbName() const = 0;
     virtual QStringList includePaths() = 0;
@@ -47,4 +50,5 @@ public:
     virtual QWidget* createSettingsPage( QWidget* parent, const char* name=0 );
 };
 
+}
 #endif // KDEVPCSIMPORTER_H

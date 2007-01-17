@@ -26,10 +26,12 @@
 
 #include <QMultiMap>
 
-class KDevParseJob;
+namespace Koncrete
+{
+class ParseJob;
 
 /// Internal class to manage dependencies between parse jobs.  Thus, not exported.
-class KDevParserDependencyPolicy : public ThreadWeaver::DependencyPolicy
+class ParserDependencyPolicy : public ThreadWeaver::DependencyPolicy
 {
 public:
   /**
@@ -38,14 +40,15 @@ public:
     * to \a primaryDependee).  If a circular dependency
     * is detected, the dependency will not be added and the method will return false.
     */
-  bool addDependency(KDevParseJob* dependency, KDevParseJob* primaryDependee, ThreadWeaver::Job* actualDependee = 0);
+  bool addDependency(ParseJob* dependency, ParseJob* primaryDependee, ThreadWeaver::Job* actualDependee = 0);
 
   virtual void destructed(ThreadWeaver::Job *job);
 
 private:
-  void gatherDependencies(KDevParseJob* job, QSet<KDevParseJob*>& encountered) const;
+  void gatherDependencies(ParseJob* job, QSet<ParseJob*>& encountered) const;
 
-  QMultiMap<KDevParseJob*, KDevParseJob*> m_dependencies;
+  QMultiMap<ParseJob*, ParseJob*> m_dependencies;
 };
 
+}
 #endif // KDEV_PARSER_DEPENDENCYPOLICY_H

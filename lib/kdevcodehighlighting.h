@@ -21,25 +21,23 @@
 
 #include "kdevexport.h"
 
-/**
-@file kdevcodehighlighting.h
-Interface to text editor highlighting of parsed code.
-*/
-
 class TopDUContext;
 class Definition;
 class Declaration;
 class Use;
+
+namespace Koncrete
+{
 
 /**
 KDevelop text highlighting support interface - the base class for
 language support text highlighting routines. Languages can apply highlighting
 to parsed code here.
 */
-class KDEVPLATFORM_EXPORT KDevCodeHighlighting
+class KDEVPLATFORM_EXPORT CodeHighlighting
 {
 public:
-    virtual ~KDevCodeHighlighting();
+    virtual ~CodeHighlighting();
 
     /**@return Whether the given url is supported by the language part.*/
     virtual void highlightDUChain(TopDUContext* context) const = 0;
@@ -49,4 +47,5 @@ public:
     virtual void highlightUse(Use* use) const = 0;
 };
 
+}
 #endif

@@ -20,7 +20,10 @@
 #ifndef KDEVPROBLEMREPORTINGINTERFACE_H
 #define KDEVPROBLEMREPORTINGINTERFACE_H
 
-struct KDevProblemReport
+namespace Koncrete
+{
+
+struct ProblemReport
 {
     enum ProblemType { Warning, Error, UserType = 0x1000 };
      
@@ -45,21 +48,22 @@ struct KDevProblemReport
  * An interface for reporting issues
  * @author Matt Rogers <mattr@kde.org>
  */
-class KDevProblemReportingInterface
+class ProblemReportingInterface
 {
 public:
-    KDevProblemReportingInterface();
-    ~KDevProblemReportingInterface();
+    ProblemReportingInterface();
+    ~ProblemReportingInterface();
 
     /**
      * Add a problem to the problem reporter.
      */
-    void addProblem( const KDevProblemReport&  ) = 0;
+    void addProblem( const ProblemReport&  ) = 0;
 
     /**
      * Remove a problem from the problem reporter.
      */
-    void removeProblem( const KDevProblemReport& ) = 0;
+    void removeProblem( const ProblemReport& ) = 0;
 };
 
+}
 #endif

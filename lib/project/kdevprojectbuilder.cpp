@@ -18,15 +18,18 @@
 */
 #include "kdevprojectbuilder.h"
 
-KDevProjectBuilder::KDevProjectBuilder(QObject *parent)
+namespace Koncrete
+{
+
+ProjectBuilder::ProjectBuilder(QObject *parent)
     : QObject(parent)
 {
 }
 
 
-KDevProjectBuilder::~KDevProjectBuilder()
+ProjectBuilder::~ProjectBuilder()
 {
 }
 
-
+}
 #include "kdevprojectbuilder.moc"

@@ -25,26 +25,29 @@
 
 #include "kdevcodeproxy.h"
 
-class KDevCodeAggregate : public QAbstractProxyModel
+namespace Koncrete
+{
+
+class CodeAggregate : public QAbstractProxyModel
 {
     Q_OBJECT
 public:
-    KDevCodeAggregate( QObject *parent = 0 );
-    virtual ~KDevCodeAggregate();
+    CodeAggregate( QObject *parent = 0 );
+    virtual ~CodeAggregate();
 
     CodeModelList codeModels() const;
-    KDevCodeModel *codeModel( const KUrl &url ) const;
+    CodeModel *codeModel( const KUrl &url ) const;
     void insertModel( const KUrl &url,
-                      KDevCodeModel *model );
+                      CodeModel *model );
     void insertModelCache( const CodeModelCache &list );
     void deleteModel( const KUrl &url );
 
-    KDevCodeProxy::Mode mode() const;
-    void setMode( KDevCodeProxy::Mode mode = KDevCodeProxy::Normalize );
+    CodeProxy::Mode mode() const;
+    void setMode( CodeProxy::Mode mode = CodeProxy::Normalize );
     void setFilterDocument( const KUrl &url = KUrl() );
 
-    KDevCodeItem *proxyToItem( const QModelIndex &proxy_index ) const;
-    KDevCodeItem *sourceToItem( const QModelIndex &source_index ) const;
+    CodeItem *proxyToItem( const QModelIndex &proxy_index ) const;
+    CodeItem *sourceToItem( const QModelIndex &source_index ) const;
 
     QModelIndex index( int row, int column,
                        const QModelIndex &parent = QModelIndex() ) const;
@@ -60,33 +63,34 @@ private:
     QAbstractItemModel *sourceModel() const;
 
 private:
-    int positionOf( KDevCodeItem *item ) const;
-    const KDevCodeModel* model( const QModelIndex &index ) const;
+    int positionOf( CodeItem *item ) const;
+    const CodeModel* model( const QModelIndex &index ) const;
     void mapCodeModels();
     void createModelMap();
     void normalizeModels();
-    bool normalizeItem( KDevCodeItem *item );
+    bool normalizeItem( CodeItem *item );
 
 private:
     bool m_updatingMap;
 
-    KDevCodeProxy::Mode m_mode;
+    CodeProxy::Mode m_mode;
     KUrl m_filter;
-    QMap<KUrl, KDevCodeModel*> m_codeModels;
+    QMap<KUrl, CodeModel*> m_codeModels;
 
     struct ModelMap
     {
-        KDevCodeModel* source_model;
+        CodeModel* source_model;
         QModelIndex source_index;
     };
     QHash<int, ModelMap*> m_modelHash;
-    QHash<int, KDevCodeItem*> m_normalizeRoot;
-    QHash<uint, KDevCodeItem*> m_normalizeHash;
-    QHash<KDevCodeItem*, int> m_normalizeRowCount;
-    QHash<KDevCodeItem*, KDevCodeItem*> m_substituteHash;
-    QHash<KDevCodeItem*, QHash<int, KDevCodeItem*> > m_stepchildHash;
+    QHash<int, CodeItem*> m_normalizeRoot;
+    QHash<uint, CodeItem*> m_normalizeHash;
+    QHash<CodeItem*, int> m_normalizeRowCount;
+    QHash<CodeItem*, CodeItem*> m_substituteHash;
+    QHash<CodeItem*, QHash<int, CodeItem*> > m_stepchildHash;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

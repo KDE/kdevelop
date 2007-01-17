@@ -31,12 +31,15 @@ namespace Ui
 class ProjectSettings;
 }
 
-class KDevProjectPreferences : public KDevCModule
+namespace Koncrete
+{
+
+class ProjectPreferences : public ConfigModule
 {
     Q_OBJECT
 public:
-    KDevProjectPreferences( QWidget *parent, const QStringList &args );
-    virtual ~KDevProjectPreferences();
+    ProjectPreferences( QWidget *parent, const QStringList &args );
+    virtual ~ProjectPreferences();
 
     virtual void save();
     virtual void load();
@@ -56,4 +59,5 @@ private:
 
 };
 
+}
 #endif

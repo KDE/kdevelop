@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the KDevelop project
 Copyright (C) 2003 F@lk Brettschneider <falkbr@kdevelop.org>
 Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
 Copyright (C) 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
@@ -28,25 +28,23 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
+namespace Koncrete
+{
+
 class Context;
 
-class KDevPlugin;
-class KDevDocument;
+class Plugin;
+class Document;
 
-class KDevMainWindowPrivate;
-
-/**
-@file kdevmainwindow.h
-KDevelop main window interface.
-*/
+class MainWindowPrivate;
 
 /**
 KDevelop main window interface.
 Provides methods to control the main window of an application.
 */
-class KDEVPLATFORM_EXPORT KDevMainWindow : public KMainWindow, protected KDevCoreInterface
+class KDEVPLATFORM_EXPORT MainWindow : public KMainWindow, protected CoreInterface
 {
-    friend class KDevCore;
+    friend class Core;
     Q_OBJECT
 
 public:
@@ -58,26 +56,26 @@ public:
     };
 
 public:
-    KDevMainWindow( QWidget *parent = 0, Qt::WFlags flags = 0 );
-    virtual ~KDevMainWindow();
+    MainWindow( QWidget *parent = 0, Qt::WFlags flags = 0 );
+    virtual ~MainWindow();
 
     UIMode mode() const;
 
     //FIXME document this
     virtual void fillContextMenu( KMenu *menu, const Context *context );
 
-    virtual void addDocument( KDevDocument *document );
+    virtual void addDocument( Document *document );
 
-    virtual void removeDocument( KDevDocument *document );
+    virtual void removeDocument( Document *document );
 
-    virtual bool containsDocument( KDevDocument *document ) const;
+    virtual bool containsDocument( Document *document ) const;
 
-    virtual void setCurrentDocument( KDevDocument *document );
+    virtual void setCurrentDocument( Document *document );
 
 public Q_SLOTS:
-    virtual void addPlugin( KDevPlugin *plugin );
+    virtual void addPlugin( Plugin *plugin );
 
-    virtual void removePlugin( KDevPlugin *plugin );
+    virtual void removePlugin( Plugin *plugin );
 
     virtual void setVisible( bool visible );
 
@@ -89,7 +87,7 @@ Q_SIGNALS:
     void contextMenu( KMenu *menu, const Context *context );
 
 protected:
-    //FIXME DOCUMENT!!!  queryClose() must call all of the KDevCore cleanup() methods!
+    //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
     virtual bool queryClose();
 
 private Q_SLOTS:
@@ -109,8 +107,8 @@ private Q_SLOTS:
     void configureNotifications();
     void configureEditors();
     void settingsDialog();
-    void activeProcessChanged( KDevPlugin *plugin, bool b );
-    void documentActivated( KDevDocument *document );
+    void activeProcessChanged( Plugin *plugin, bool b );
+    void documentActivated( Document *document );
     void stopPopupActivated( int );
     void stopMenuAboutToShow();
     void stopButtonPressed();
@@ -138,7 +136,8 @@ private:
     void setupWindowMenu();
 
     QString beautifyToolTip( const QString& text ) const;
-    KDevMainWindowPrivate *d;
+    MainWindowPrivate *d;
 };
 
+}
 #endif

@@ -27,19 +27,19 @@ class QModelIndex;
 
 class KUrl;
 
-class KDevProjectItem;
-class KDevProjectModel;
-class KDevProjectManager;
-class KDevProjectBuilder;
-class KDevProjectImporter;
-class KDevProjectFileItem;
-class KDevProjectFolderItem;
-class KDevProjectTargetItem;
+namespace Koncrete
+{
 
-/*
- Please read the README.dox file for more info about this part
- */
-class KDevProjectManagerPart: public KDevPlugin
+class ProjectItem;
+class ProjectModel;
+class ProjectManager;
+class ProjectBuilder;
+class ProjectImporter;
+class ProjectFileItem;
+class ProjectFolderItem;
+class ProjectTargetItem;
+
+class ProjectManagerPart: public Plugin
 {
     Q_OBJECT
 public:
@@ -51,25 +51,25 @@ public:
     };
 
 public:
-    KDevProjectManagerPart(QObject *parent, const QStringList &);
-    virtual ~KDevProjectManagerPart();
+    ProjectManagerPart(QObject *parent, const QStringList &);
+    virtual ~ProjectManagerPart();
 
-    KDevProjectFolderItem *activeFolder();
-    KDevProjectTargetItem *activeTarget();
-    KDevProjectFileItem *activeFile();
+    ProjectFolderItem *activeFolder();
+    ProjectTargetItem *activeTarget();
+    ProjectFileItem *activeFile();
 
-    // KDevPlugin methods
+    // Plugin methods
     virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
 signals:
     void refresh();
-    void addedProjectItem(KDevProjectItem *dom);
-    void aboutToRemoveProjectItem(KDevProjectItem *dom);
+    void addedProjectItem(ProjectItem *dom);
+    void aboutToRemoveProjectItem(ProjectItem *dom);
 
 public slots:
     void openURL(const KUrl &url);
-    void updateDetails(KDevProjectItem *item);
+    void updateDetails(ProjectItem *item);
 
 private slots:
     void fileDirty(const QString &fileName);
@@ -82,11 +82,12 @@ protected:
 
 private:
     QPointer<QWidget> m_widget;
-    KDevProjectManager *m_projectOverview;
-    KDevProjectManager *m_projectDetails;
+    ProjectManager *m_projectOverview;
+    ProjectManager *m_projectDetails;
     QStringList m_cachedFileList;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

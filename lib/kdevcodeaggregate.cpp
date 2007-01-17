@@ -20,22 +20,26 @@
  */
 
 #include "kdevcodeaggregate_p.h"
+#include "kdevcodemodel.h"
 
-KDevCodeAggregate::KDevCodeAggregate( QObject *parent )
+namespace Koncrete
+{
+
+CodeAggregate::CodeAggregate( QObject *parent )
         : QAbstractProxyModel( parent ),
-        m_mode( KDevCodeProxy::Document ),
+        m_mode( CodeProxy::Document ),
         m_filter( KUrl() )
 {}
 
-KDevCodeAggregate::~KDevCodeAggregate()
+CodeAggregate::~CodeAggregate()
 {}
 
-CodeModelList KDevCodeAggregate::codeModels() const
+CodeModelList CodeAggregate::codeModels() const
 {
     return m_codeModels.values();
 }
 
-KDevCodeModel *KDevCodeAggregate::codeModel( const KUrl &url ) const
+CodeModel *CodeAggregate::codeModel( const KUrl &url ) const
 {
     if ( m_codeModels.contains( url ) )
         return m_codeModels[ url ];
@@ -43,8 +47,8 @@ KDevCodeModel *KDevCodeAggregate::codeModel( const KUrl &url ) const
         return 0;
 }
 
-void KDevCodeAggregate::insertModel( const KUrl &url,
-                                     KDevCodeModel *model )
+void CodeAggregate::insertModel( const KUrl &url,
+                                     CodeModel *model )
 {
     if ( m_codeModels.contains( url ) )
         deleteModel( url );
@@ -53,13 +57,13 @@ void KDevCodeAggregate::insertModel( const KUrl &url,
     mapCodeModels();
 }
 
-void KDevCodeAggregate::insertModelCache( const CodeModelCache &list )
+void CodeAggregate::insertModelCache( const CodeModelCache &list )
 {
     CodeModelCache::const_iterator it = list.begin();
     for ( ; it != list.end(); it++ )
     {
         KUrl url = ( *it ).first;
-        KDevCodeModel *model = ( *it ).second;
+        CodeModel *model = ( *it ).second;
 
         if ( m_codeModels.contains( url ) )
             deleteModel( url );
@@ -69,34 +73,34 @@ void KDevCodeAggregate::insertModelCache( const CodeModelCache &list )
     mapCodeModels();
 }
 
-void KDevCodeAggregate::deleteModel( const KUrl &url )
+void CodeAggregate::deleteModel( const KUrl &url )
 {
-    KDevCodeModel * model = m_codeModels.take( url );
+    CodeModel * model = m_codeModels.take( url );
     model->deleteLater();
 }
 
-KDevCodeProxy::Mode KDevCodeAggregate::mode( ) const
+CodeProxy::Mode CodeAggregate::mode( ) const
 {
     return m_mode;
 }
 
-void KDevCodeAggregate::setMode( KDevCodeProxy::Mode mode )
+void CodeAggregate::setMode( CodeProxy::Mode mode )
 {
     m_mode = mode;
     mapCodeModels();
 }
 
-void KDevCodeAggregate::setFilterDocument( const KUrl & url )
+void CodeAggregate::setFilterDocument( const KUrl & url )
 {
     m_filter = url;
-    setMode( KDevCodeProxy::Document );
+    setMode( CodeProxy::Document );
 }
 
-KDevCodeItem *KDevCodeAggregate::proxyToItem( const QModelIndex &proxy_index ) const
+CodeItem *CodeAggregate::proxyToItem( const QModelIndex &proxy_index ) const
 {
     if ( !proxy_index.parent().isValid() )
     {
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
             return m_normalizeRoot[ proxy_index.row() ];
         else
         {
@@ -105,9 +109,9 @@ KDevCodeItem *KDevCodeAggregate::proxyToItem( const QModelIndex &proxy_index ) c
             return sourceToItem( source_index );
         }
     }
-    else if ( KDevCodeItem * codeItem = sourceToItem( proxy_index ) )
+    else if ( CodeItem * codeItem = sourceToItem( proxy_index ) )
     {
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
             if ( m_substituteHash.contains( codeItem ) )
                 return m_substituteHash[ codeItem ];
 
@@ -116,49 +120,49 @@ KDevCodeItem *KDevCodeAggregate::proxyToItem( const QModelIndex &proxy_index ) c
     return 0;
 }
 
-KDevCodeItem *KDevCodeAggregate::sourceToItem( const QModelIndex &source_index ) const
+CodeItem *CodeAggregate::sourceToItem( const QModelIndex &source_index ) const
 {
-    return reinterpret_cast<KDevCodeItem*>( source_index.internalPointer() );
+    return reinterpret_cast<CodeItem*>( source_index.internalPointer() );
 }
 
-QModelIndex KDevCodeAggregate::index( int row, int column,
+QModelIndex CodeAggregate::index( int row, int column,
                                       const QModelIndex &parent ) const
 {
     if ( !parent.isValid() )
     {
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
         {
-            KDevCodeItem * codeItem = m_normalizeRoot[ row ];
+            CodeItem * codeItem = m_normalizeRoot[ row ];
             return createIndex( row, column, codeItem );
         }
         else
         {
             if ( m_modelHash[ row ] )
             {
-                KDevCodeModel *source_model = m_modelHash[ row ] ->source_model;
+                CodeModel *source_model = m_modelHash[ row ] ->source_model;
                 QModelIndex source_index = m_modelHash[ row ] ->source_index;
-                KDevCodeItem *item = source_model->item( source_index );
+                CodeItem *item = source_model->item( source_index );
 
                 return createIndex( row, column, item );
             }
         }
     }
-    else if ( KDevCodeItem * codeItem = sourceToItem( parent ) )
+    else if ( CodeItem * codeItem = sourceToItem( parent ) )
     {
         if ( row >= codeItem->itemCount()
-             && m_mode == KDevCodeProxy::Normalize )
+             && m_mode == CodeProxy::Normalize )
         {
-            KDevCodeItem * childItem = m_stepchildHash[ codeItem ][ row ];
+            CodeItem * childItem = m_stepchildHash[ codeItem ][ row ];
             return createIndex( row, column, childItem );
         }
 
-        KDevCodeModel *model = codeItem->model();
+        CodeModel *model = codeItem->model();
         Q_ASSERT( model );
         QModelIndex child = model->index( row, column,
                                           model->indexOf( codeItem ) );
-        KDevCodeItem *childItem = sourceToItem( child );
+        CodeItem *childItem = sourceToItem( child );
 
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
         {
             if ( m_substituteHash.contains( childItem ) )
                 childItem = m_substituteHash[ childItem ];
@@ -169,20 +173,20 @@ QModelIndex KDevCodeAggregate::index( int row, int column,
     return QModelIndex();
 }
 
-QModelIndex KDevCodeAggregate::parent( const QModelIndex &child ) const
+QModelIndex CodeAggregate::parent( const QModelIndex &child ) const
 {
     if ( !child.isValid() )
         return QModelIndex();
-    else if ( KDevCodeItem * codeItem = sourceToItem( child ) )
+    else if ( CodeItem * codeItem = sourceToItem( child ) )
     {
         if ( codeItem->parent() == codeItem->model() ->root() )
         {
             return QModelIndex();
         }
-        else if ( KDevCodeItem * parentItem =
-                      dynamic_cast<KDevCodeItem*>( codeItem->parent() ) )
+        else if ( CodeItem * parentItem =
+                      dynamic_cast<CodeItem*>( codeItem->parent() ) )
         {
-            if ( m_mode == KDevCodeProxy::Normalize )
+            if ( m_mode == CodeProxy::Normalize )
             {
                 if ( m_substituteHash.contains( parentItem ) )
                     parentItem = m_substituteHash[ parentItem ];
@@ -193,37 +197,37 @@ QModelIndex KDevCodeAggregate::parent( const QModelIndex &child ) const
     return QModelIndex();
 }
 
-QVariant KDevCodeAggregate::data( const QModelIndex &index, int role ) const
+QVariant CodeAggregate::data( const QModelIndex &index, int role ) const
 {
     if (!index.isValid())
         return QVariant();
 
     if ( !index.parent().isValid() )
     {
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
         {
-            KDevCodeItem * codeItem = m_normalizeRoot[ index.row() ];
+            CodeItem * codeItem = m_normalizeRoot[ index.row() ];
             return codeItem->model() ->data(
                        codeItem->model() ->indexOf( codeItem ), role );
         }
         else
         {
-            KDevCodeModel *source_model =
+            CodeModel *source_model =
                 m_modelHash[ index.row() ] ->source_model;
             QModelIndex source_index =
                 m_modelHash[ index.row() ] ->source_index;
             return source_model->data( source_index, role );
         }
     }
-    else if ( KDevCodeItem * codeItem = sourceToItem( index ) )
+    else if ( CodeItem * codeItem = sourceToItem( index ) )
     {
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
         {
             if ( m_substituteHash.contains( codeItem ) )
                 codeItem = m_substituteHash[ codeItem ];
         }
 
-        KDevCodeModel *model = codeItem->model();
+        CodeModel *model = codeItem->model();
         Q_ASSERT( model );
         return model->data( model ->indexOf( codeItem ), role );
     }
@@ -231,18 +235,18 @@ QVariant KDevCodeAggregate::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
-int KDevCodeAggregate::rowCount( const QModelIndex &parent ) const
+int CodeAggregate::rowCount( const QModelIndex &parent ) const
 {
     if ( !parent.isValid() )
     {
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
             return m_normalizeRoot.count();
         else
             return m_modelHash.count();
     }
-    else if ( KDevCodeItem * codeItem = sourceToItem( parent ) )
+    else if ( CodeItem * codeItem = sourceToItem( parent ) )
     {
-        if ( m_mode == KDevCodeProxy::Normalize )
+        if ( m_mode == CodeProxy::Normalize )
         {
             if ( m_substituteHash.contains( codeItem ) )
                 codeItem = m_substituteHash[ codeItem ];
@@ -255,45 +259,45 @@ int KDevCodeAggregate::rowCount( const QModelIndex &parent ) const
     return 0;
 }
 
-int KDevCodeAggregate::columnCount( const QModelIndex &parent ) const
+int CodeAggregate::columnCount( const QModelIndex &parent ) const
 {
     Q_UNUSED( parent );
     return 1;
 }
 
-QModelIndex KDevCodeAggregate::mapToSource( const QModelIndex &proxyIndex ) const
+QModelIndex CodeAggregate::mapToSource( const QModelIndex &proxyIndex ) const
 {
     Q_UNUSED( proxyIndex );
     return QModelIndex();
 }
 
-QModelIndex KDevCodeAggregate::mapFromSource( const QModelIndex &sourceIndex ) const
+QModelIndex CodeAggregate::mapFromSource( const QModelIndex &sourceIndex ) const
 {
     Q_UNUSED( sourceIndex );
     return QModelIndex();
 }
 
-void KDevCodeAggregate::setSourceModel( QAbstractItemModel *sourceModel )
+void CodeAggregate::setSourceModel( QAbstractItemModel *sourceModel )
 {
     Q_UNUSED( sourceModel );
 }
 
-QAbstractItemModel *KDevCodeAggregate::sourceModel() const
+QAbstractItemModel *CodeAggregate::sourceModel() const
 {
     return 0;
 }
 
-void KDevCodeAggregate::mapCodeModels()
+void CodeAggregate::mapCodeModels()
 {
-    if ( m_mode != KDevCodeProxy::Normalize )
+    if ( m_mode != CodeProxy::Normalize )
         createModelMap();
     else
         normalizeModels();
 }
 
-void KDevCodeAggregate::createModelMap()
+void CodeAggregate::createModelMap()
 {
-    CodeModelList codeModelList = m_mode != KDevCodeProxy::Document ?
+    CodeModelList codeModelList = m_mode != CodeProxy::Document ?
                                   m_codeModels.values() :
                                   m_codeModels.values( m_filter );
 
@@ -330,18 +334,18 @@ void KDevCodeAggregate::createModelMap()
     emit layoutChanged();
 }
 
-int KDevCodeAggregate::positionOf( KDevCodeItem *item ) const
+int CodeAggregate::positionOf( CodeItem *item ) const
 {
     return item->parent() ->indexOf( item );
 }
 
-const KDevCodeModel *KDevCodeAggregate::model( const QModelIndex &index ) const
+const CodeModel *CodeAggregate::model( const QModelIndex &index ) const
 {
     Q_ASSERT( index.isValid() && index.model() );
-    return qobject_cast<const KDevCodeModel*>( index.model() );
+    return qobject_cast<const CodeModel*>( index.model() );
 }
 
-void KDevCodeAggregate::normalizeModels()
+void CodeAggregate::normalizeModels()
 {
     m_normalizeHash.clear();
     m_normalizeRowCount.clear();
@@ -349,17 +353,17 @@ void KDevCodeAggregate::normalizeModels()
     m_stepchildHash.clear();
 
     int rowCount = 0;
-    QHash<int, KDevCodeItem*> normalizeRoot;
+    QHash<int, CodeItem*> normalizeRoot;
     CodeModelList codeModelList = m_codeModels.values();
     CodeModelList::ConstIterator it = codeModelList.begin();
     for ( ; it != codeModelList.end(); ++it )
     {
-        QList<KDevItem *> children = ( *it ) ->root() ->items();
-        QList<KDevItem *>::ConstIterator child = children.begin();
+        QList<Item *> children = ( *it ) ->root() ->items();
+        QList<Item *>::ConstIterator child = children.begin();
         for ( ; child != children.end(); ++child )
         {
-            KDevCodeItem* childItem =
-                static_cast<KDevCodeItem*>( *child );
+            CodeItem* childItem =
+                static_cast<CodeItem*>( *child );
             if ( normalizeItem( childItem ) )
             {
                 normalizeRoot.insert( rowCount, childItem );
@@ -374,7 +378,7 @@ void KDevCodeAggregate::normalizeModels()
     emit layoutChanged();
 }
 
-bool KDevCodeAggregate::normalizeItem( KDevCodeItem *item )
+bool CodeAggregate::normalizeItem( CodeItem *item )
 {
     bool isDuplicate = false;
 
@@ -385,17 +389,17 @@ bool KDevCodeAggregate::normalizeItem( KDevCodeItem *item )
         m_normalizeHash.insert( hash, item );
 
     int rowCount = 0;
-    QList<KDevItem *> children = item->items();
-    QList<KDevItem *>::ConstIterator child = children.begin();
+    QList<Item *> children = item->items();
+    QList<Item *>::ConstIterator child = children.begin();
     for ( ; child != children.end(); ++child )
     {
-        KDevCodeItem* childItem =
-            dynamic_cast<KDevCodeItem*>( *child );
+        CodeItem* childItem =
+            dynamic_cast<CodeItem*>( *child );
         if ( normalizeItem( childItem ) )
         {
             if ( isDuplicate )
             {
-                KDevCodeItem * step_parent = m_substituteHash[ item ];
+                CodeItem * step_parent = m_substituteHash[ item ];
                 int step_row = m_normalizeRowCount[ step_parent ];
                 m_normalizeRowCount[ step_parent ] = step_row + 1;
                 m_stepchildHash[ step_parent ][ step_row ] = childItem;
@@ -409,6 +413,8 @@ bool KDevCodeAggregate::normalizeItem( KDevCodeItem *item )
         m_normalizeRowCount.insert( item, rowCount );
 
     return !isDuplicate;
+}
+
 }
 
 #include "kdevcodeaggregate_p.moc"

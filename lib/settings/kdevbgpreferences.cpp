@@ -30,12 +30,17 @@
 
 #include "ui_bgsettings.h"
 
-typedef KGenericFactory<KDevBGPreferences> KDevBGPreferencesFactory;
-K_EXPORT_COMPONENT_FACTORY( kcm_kdevbg_settings, KDevBGPreferencesFactory( "kcm_kdevbg_settings" ) )
+namespace Koncrete
+{
 
-KDevBGPreferences::KDevBGPreferences( QWidget *parent, const QStringList &args )
-        : KDevCModule( KDevBGSettings::self(),
-                       KDevBGPreferencesFactory::instance(), parent, args )
+typedef KGenericFactory<BGPreferences> BGPreferencesFactory;
+K_EXPORT_COMPONENT_FACTORY( kcm_kdevbg_settings, 
+                            BGPreferencesFactory( "kcm_kdevbg_settings" ) )
+
+BGPreferences::BGPreferences( QWidget *parent, const QStringList &args )
+ : Koncrete::ConfigModule( BGSettings::self(),
+                           BGPreferencesFactory::instance(),
+                           parent, args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -48,27 +53,30 @@ KDevBGPreferences::KDevBGPreferences( QWidget *parent, const QStringList &args )
 
     l->addWidget( w );
 
-    addConfig( KDevBGSettings::self(), w );
+    addConfig( BGSettings::self(), w );
 
     load();
 }
 
-KDevBGPreferences::~KDevBGPreferences( )
+BGPreferences::~BGPreferences( )
 {
     delete preferencesDialog;
 }
 
-void KDevBGPreferences::save()
+void BGPreferences::save()
 {
-    KDevCModule::save();
+    ConfigModule::save();
 
     if ( preferencesDialog->kcfg_enable->isChecked() )
-        KDevCore::backgroundParser()->resume();
+        Core::backgroundParser()->resume();
     else
-        KDevCore::backgroundParser()->suspend();
+        Core::backgroundParser()->suspend();
 
-    KDevCore::backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
-    KDevCore::backgroundParser()->setThreads( preferencesDialog->kcfg_threads->value() );
+    Core::backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
+    Core::backgroundParser()->setThreads( preferencesDialog->kcfg_threads->value() );
+
+}
+
 }
 
 #include "kdevbgpreferences.moc"

@@ -23,15 +23,18 @@
 #include <kiconloader.h>
 #include <kio/global.h>
 
-QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
+namespace Koncrete
 {
-  QList<KDevProjectFolderItem*> lst;
+
+QList<ProjectFolderItem*> ProjectItem::folderList() const
+{
+  QList<ProjectFolderItem*> lst;
   for (int i = 0; i < rowCount(); ++i)
   {
     QStandardItem* item = child(i);
     if ( item->type() == Folder || item->type() == BuildFolder )
     {
-      KDevProjectFolderItem *kdevitem = dynamic_cast<KDevProjectFolderItem*>( item );
+      ProjectFolderItem *kdevitem = dynamic_cast<ProjectFolderItem*>( item );
       if ( kdevitem )
         lst.append(kdevitem);
     }
@@ -40,15 +43,15 @@ QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
   return lst;
 }
 
-QList<KDevProjectTargetItem*> KDevProjectItem::targetList() const
+QList<ProjectTargetItem*> ProjectItem::targetList() const
 {
-  QList<KDevProjectTargetItem*> lst;
+  QList<ProjectTargetItem*> lst;
   for (int i = 0; i < rowCount(); ++i)
   {
     QStandardItem* item = child(i);
     if ( item->type() == Target )
     {
-      KDevProjectTargetItem *kdevitem = dynamic_cast<KDevProjectTargetItem*>( item );
+      ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
       if ( kdevitem )
         lst.append(kdevitem);
     }
@@ -57,15 +60,15 @@ QList<KDevProjectTargetItem*> KDevProjectItem::targetList() const
   return lst;
 }
 
-QList<KDevProjectFileItem*> KDevProjectItem::fileList() const
+QList<ProjectFileItem*> ProjectItem::fileList() const
 {
-  QList<KDevProjectFileItem*> lst;
+  QList<ProjectFileItem*> lst;
   for (int i = 0; i < rowCount(); ++i)
   {
     QStandardItem* item = child(i);
     if ( item->type() == File )
     {
-      KDevProjectFileItem *kdevitem = dynamic_cast<KDevProjectFileItem*>( item );
+      ProjectFileItem *kdevitem = dynamic_cast<ProjectFileItem*>( item );
       if ( kdevitem )
         lst.append(kdevitem);
     }
@@ -75,76 +78,78 @@ QList<KDevProjectFileItem*> KDevProjectItem::fileList() const
   return lst;
 }
 
-KDevProjectModel::KDevProjectModel(QObject *parent)
+ProjectModel::ProjectModel(QObject *parent)
   : QStandardItemModel(parent)
 {
 }
 
-KDevProjectModel::~KDevProjectModel()
+ProjectModel::~ProjectModel()
 {
 }
 
 
-KDevProjectItem *KDevProjectModel::item(const QModelIndex &index) const
+ProjectItem *ProjectModel::item(const QModelIndex &index) const
 {
-  return reinterpret_cast<KDevProjectItem*>(itemFromIndex(index));
+  return reinterpret_cast<ProjectItem*>(itemFromIndex(index));
 }
 
-void KDevProjectModel::resetModel()
+void ProjectModel::resetModel()
 {
   reset();
 }
 
-void KDevProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
+void ProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
 {
   m_includeDirs = dirList;
 }
 
-const KUrl::List& KDevProjectBuildFolderItem::includeDirectories() const
+const KUrl::List& ProjectBuildFolderItem::includeDirectories() const
 {
   return m_includeDirs;
 }
 
-const QHash<QString, QString>& KDevProjectBuildFolderItem::environment() const
+const QHash<QString, QString>& ProjectBuildFolderItem::environment() const
 {
   return m_env;
 }
 
 
-KDevProjectFolderItem::KDevProjectFolderItem( const KUrl & dir, QStandardItem * parent )
-  : KDevProjectItem(dir.directory(), parent)
+ProjectFolderItem::ProjectFolderItem( const KUrl & dir, QStandardItem * parent )
+  : ProjectItem(dir.directory(), parent)
   , m_url(dir)
 {
   setText( dir.fileName() );
   setIcon( KIO::pixmapForUrl(url(), 0, K3Icon::Small) );
 }
 
-const KUrl& KDevProjectFolderItem::url( ) const
+const KUrl& ProjectFolderItem::url( ) const
 {
   return m_url;
 }
 
-void KDevProjectFolderItem::setUrl( const KUrl& url )
+void ProjectFolderItem::setUrl( const KUrl& url )
 {
   m_url = url;
   setText( url.fileName() );
 }
 
-KDevProjectFileItem::KDevProjectFileItem( const KUrl & file, QStandardItem * parent )
-  : KDevProjectItem(file.fileName(), parent)
+ProjectFileItem::ProjectFileItem( const KUrl & file, QStandardItem * parent )
+  : ProjectItem(file.fileName(), parent)
   , m_url(file)
 {
   setIcon( KIO::pixmapForUrl(url(), 0, K3Icon::Small) );
 }
 
-const KUrl & KDevProjectFileItem::url( ) const
+const KUrl & ProjectFileItem::url( ) const
 {
   return m_url;
 }
 
-void KDevProjectFileItem::setUrl( const KUrl& url )
+void ProjectFileItem::setUrl( const KUrl& url )
 {
   m_url = url;
+}
+
 }
 
 #include "kdevprojectmodel.moc"

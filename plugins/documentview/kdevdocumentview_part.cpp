@@ -42,7 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevdocumentview, KDevDocumentViewFactory( "kdevdocu
 
 KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
         const QStringList& )
-        : KDevPlugin( KDevDocumentViewFactory::instance(), parent )
+        : Koncrete::Plugin( KDevDocumentViewFactory::instance(), parent )
 {
     m_documentModel = new KDevDocumentModel( this );
 
@@ -60,25 +60,25 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
 
     m_documentView->setItemDelegate( delegate );
 
-    KDevDocumentController* docController = KDevCore::documentController();
+    Koncrete::DocumentController* docController = Koncrete::Core::documentController();
 
-    connect( docController, SIGNAL( documentActivated( KDevDocument* ) ),
-             this, SLOT( activated( KDevDocument* ) ) );
-    connect( docController, SIGNAL( documentSaved( KDevDocument* ) ),
-             this, SLOT( saved( KDevDocument* ) ) );
-    connect( docController, SIGNAL( documentLoaded( KDevDocument* ) ),
-             this, SLOT( loaded( KDevDocument* ) ) );
-    connect( docController, SIGNAL( documentClosed( KDevDocument* ) ),
-             this, SLOT( closed( KDevDocument* ) ) );
+    connect( docController, SIGNAL( documentActivated( Koncrete::Document* ) ),
+             this, SLOT( activated( Koncrete::Document* ) ) );
+    connect( docController, SIGNAL( documentSaved( Koncrete::Document* ) ),
+             this, SLOT( saved( Koncrete::Document* ) ) );
+    connect( docController, SIGNAL( documentLoaded( Koncrete::Document* ) ),
+             this, SLOT( loaded( Koncrete::Document* ) ) );
+    connect( docController, SIGNAL( documentClosed( Koncrete::Document* ) ),
+             this, SLOT( closed( Koncrete::Document* ) ) );
     connect( docController,
-             SIGNAL( documentExternallyModified( KDevDocument* ) ),
-             this, SLOT( externallyModified( KDevDocument* ) ) );
+             SIGNAL( documentExternallyModified( Koncrete::Document* ) ),
+             this, SLOT( externallyModified( Koncrete::Document* ) ) );
     connect( docController,
-             SIGNAL( documentUrlChanged( KDevDocument*, const KUrl &, const KUrl & ) ),
-             this, SLOT( urlChanged( KDevDocument*, const KUrl &, const KUrl & ) ) );
+             SIGNAL( documentUrlChanged( Koncrete::Document*, const KUrl &, const KUrl & ) ),
+             this, SLOT( urlChanged( Koncrete::Document*, const KUrl &, const KUrl & ) ) );
     connect( docController,
-             SIGNAL( documentStateChanged( KDevDocument* ) ),
-             this, SLOT( stateChanged( KDevDocument* ) ) );
+             SIGNAL( documentStateChanged( Koncrete::Document* ) ),
+             this, SLOT( stateChanged( Koncrete::Document* ) ) );
 
     setXMLFile( "kdevdocumentview.rc" );
 }
@@ -106,17 +106,17 @@ bool KDevDocumentViewPart::isCentralPlugin() const
     return true;
 }
 
-void KDevDocumentViewPart::activated( KDevDocument* document )
+void KDevDocumentViewPart::activated( Koncrete::Document* document )
 {
     m_documentView->setCurrentIndex( m_doc2index[ document ] );
 }
 
-void KDevDocumentViewPart::saved( KDevDocument* )
+void KDevDocumentViewPart::saved( Koncrete::Document* )
 {
     kDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::loaded( KDevDocument* document )
+void KDevDocumentViewPart::loaded( Koncrete::Document* document )
 {
     QString mimeType = document->mimeType() ->comment();
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
@@ -136,7 +136,7 @@ void KDevDocumentViewPart::loaded( KDevDocument* document )
     }
 }
 
-void KDevDocumentViewPart::closed( KDevDocument* document )
+void KDevDocumentViewPart::closed( Koncrete::Document* document )
 {
     QModelIndex fileIndex = m_doc2index[ document ];
     KDevDocumentItem *fileItem = m_documentModel->item( fileIndex );
@@ -159,18 +159,18 @@ void KDevDocumentViewPart::closed( KDevDocument* document )
     m_documentView->doItemsLayout();
 }
 
-void KDevDocumentViewPart::externallyModified( KDevDocument* )
+void KDevDocumentViewPart::externallyModified( Koncrete::Document* )
 {
     kDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::urlChanged( KDevDocument*, const KUrl & /*oldurl*/,
+void KDevDocumentViewPart::urlChanged( Koncrete::Document*, const KUrl & /*oldurl*/,
                                        const KUrl & /*newurl*/ )
 {
     kDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::stateChanged( KDevDocument* document )
+void KDevDocumentViewPart::stateChanged( Koncrete::Document* document )
 {
     KDevDocumentItem * documentItem =
         m_documentModel->item( m_doc2index[ document ] );

@@ -73,7 +73,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdev
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
-        : KDevLanguageSupport( KDevCppSupportFactory::instance(), parent )
+        : Koncrete::LanguageSupport( KDevCppSupportFactory::instance(), parent )
 {
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
@@ -86,19 +86,19 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
     SymbolTable::self();
 
-    connect( KDevCore::documentController(),
-             SIGNAL( documentLoaded( KDevDocument* ) ),
-             this, SLOT( documentLoaded( KDevDocument* ) ) );
-    connect( KDevCore::documentController(),
-             SIGNAL( documentClosed( KDevDocument* ) ),
-             this, SLOT( documentClosed( KDevDocument* ) ) );
-    connect( KDevCore::documentController(),
-             SIGNAL( documentActivated( KDevDocument* ) ),
-             this, SLOT( documentActivated( KDevDocument* ) ) );
-    connect( KDevCore::projectController(),
+    connect( Koncrete::Core::documentController(),
+             SIGNAL( documentLoaded( Koncrete::Document* ) ),
+             this, SLOT( documentLoaded( Koncrete::Document* ) ) );
+    connect( Koncrete::Core::documentController(),
+             SIGNAL( documentClosed( Koncrete::Document* ) ),
+             this, SLOT( documentClosed( Koncrete::Document* ) ) );
+    connect( Koncrete::Core::documentController(),
+             SIGNAL( documentActivated( Koncrete::Document* ) ),
+             this, SLOT( documentActivated( Koncrete::Document* ) ) );
+    connect( Koncrete::Core::projectController(),
              SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
-    connect( KDevCore::projectController(),
+    connect( Koncrete::Core::projectController(),
              SIGNAL( projectClosing() ),
              this, SLOT( projectClosing() ) );
 
@@ -114,35 +114,35 @@ CppLanguageSupport::~CppLanguageSupport()
     unlockAllParseMutexes();
 }
 
-KDevCodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
+Koncrete::CodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
 {
     if ( url.isValid() )
         return m_codeProxy->codeModel( url );
     else
-        return m_codeProxy->codeModel( KDevCore::documentController() ->activeDocumentUrl() );
+        return m_codeProxy->codeModel( Koncrete::Core::documentController() ->activeDocumentUrl() );
 }
 
-KDevCodeProxy *CppLanguageSupport::codeProxy() const
+Koncrete::CodeProxy *CppLanguageSupport::codeProxy() const
 {
     return m_codeProxy;
 }
 
-KDevCodeDelegate *CppLanguageSupport::codeDelegate() const
+Koncrete::CodeDelegate *CppLanguageSupport::codeDelegate() const
 {
     return m_codeDelegate;
 }
 
-KDevCodeRepository *CppLanguageSupport::codeRepository() const
+Koncrete::CodeRepository *CppLanguageSupport::codeRepository() const
 {
     return 0;
 }
 
-KDevParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
+Koncrete::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
     return new CPPParseJob( url, this );
 }
 
-KDevParseJob *CppLanguageSupport::createParseJob( KDevDocument *document )
+Koncrete::ParseJob *CppLanguageSupport::createParseJob( Koncrete::Document *document )
 {
     return new CPPParseJob( document, this );
 }
@@ -152,24 +152,24 @@ QStringList CppLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void CppLanguageSupport::documentLoaded( KDevDocument *document )
+void CppLanguageSupport::documentLoaded( Koncrete::Document *document )
 {
     if ( supportsDocument( document ) )
-        KDevCore::backgroundParser() ->addDocument( document );
+        Koncrete::Core::backgroundParser() ->addDocument( document );
 }
 
-void CppLanguageSupport::documentClosed( KDevDocument *document )
+void CppLanguageSupport::documentClosed( Koncrete::Document *document )
 {
     if ( supportsDocument( document ) )
-        KDevCore::backgroundParser() ->removeDocument( document );
+        Koncrete::Core::backgroundParser() ->removeDocument( document );
 }
 
-void CppLanguageSupport::documentActivated( KDevDocument *document )
+void CppLanguageSupport::documentActivated( Koncrete::Document *document )
 {
     Q_UNUSED( document );
 }
 
-KDevCodeHighlighting *CppLanguageSupport::codeHighlighting() const
+Koncrete::CodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }
@@ -189,31 +189,31 @@ void CppLanguageSupport::projectOpened()
 
     // FIXME this should be moved to the project itself
     KUrl::List documentList;
-    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
-    foreach ( KDevProjectFileItem * file, files )
+    QList<Koncrete::ProjectFileItem*> files = Koncrete::Core::activeProject()->allFiles();
+    foreach ( Koncrete::ProjectFileItem * file, files )
     {
         if ( supportsDocument( file->url() ) )
         {
             documentList.append( file->url() );
         }
     }
-    KDevCore::backgroundParser() ->addDocumentList( documentList );
+    Koncrete::Core::backgroundParser() ->addDocumentList( documentList );
 }
 
 void CppLanguageSupport::projectClosing()
 {
-    KDevCore::backgroundParser()->clear(this);
+    Koncrete::Core::backgroundParser()->clear(this);
 
     // FIXME I think this only happens on kdevelop close, but it would be good to figure it out
     // and fix it
-    if (KDevCore::activeProject()) {
+    if (Koncrete::Core::activeProject()) {
         KUrl::List documentList;
-        QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
-        foreach ( KDevProjectFileItem * file, files )
+        QList<Koncrete::ProjectFileItem*> files = Koncrete::Core::activeProject()->allFiles();
+        foreach ( Koncrete::ProjectFileItem * file, files )
         {
             if ( supportsDocument( file->url() ) )
             {
-                KDevCore::backgroundParser() ->removeDocument( file->url() );
+                Koncrete::Core::backgroundParser() ->removeDocument( file->url() );
             }
         }
     }
@@ -224,12 +224,12 @@ void CppLanguageSupport::projectClosing()
 
     DUChain::self()->clear();
 
-    KDevCore::activeProject()->persistentHash()->clearASTs(this);
+    Koncrete::Core::activeProject()->persistentHash()->clearASTs(this);
 
     unlockAllParseMutexes();
 }
 
-void CppLanguageSupport::releaseAST( KDevAST *ast)
+void CppLanguageSupport::releaseAST( Koncrete::AST *ast)
 {
     TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
     delete t->session;
@@ -242,8 +242,8 @@ KUrl CppLanguageSupport::findInclude( const QString& fileName )
 
     KUrl ret;
 
-    if (KDevProject* project = KDevCore::activeProject()) {
-        if (KDevBuildManager* buildManager = dynamic_cast<KDevBuildManager*>( project->fileManager() )) {
+    if (Koncrete::Project* project = Koncrete::Core::activeProject()) {
+        if (Koncrete::BuildManager* buildManager = dynamic_cast<Koncrete::BuildManager*>( project->fileManager() )) {
             foreach (KUrl u, buildManager->includeDirectories()) {
                 u.adjustPath( KUrl::AddTrailingSlash );
 
@@ -263,7 +263,7 @@ KUrl CppLanguageSupport::findInclude( const QString& fileName )
     return ret;
 }
 
-void CppLanguageSupport::documentLoaded(KDevAST * ast, const KUrl & document)
+void CppLanguageSupport::documentLoaded(Koncrete::AST * ast, const KUrl & document)
 {
     // Pretty heavy handed - find another way?
     // TODO: use the definition-use chain locking here, rather than in the builders?

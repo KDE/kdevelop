@@ -21,6 +21,9 @@
 #include <QHash>
 #include "kdevexport.h"
 
+namespace Koncrete
+{
+
 /**
 @file domutil.h
 Utility functions to operate on %DOM.
@@ -234,4 +237,5 @@ private:
     static QString readEntryAux(const QDomDocument &doc, const QString &path);
 };
 
+}
 #endif

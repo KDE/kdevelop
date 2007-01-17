@@ -22,21 +22,24 @@
 
 #include <kdevexport.h>
 class DUContext;
-class KDevEditorIntegrator;
-class KDevCodeHighlighting;
+namespace Koncrete
+{
+class EditorIntegrator;
+class CodeHighlighting;
+}
 
 class KDEVCPPLANGUAGE_EXPORT SmartConverter
 {
 public:
-  SmartConverter(KDevEditorIntegrator* editor, KDevCodeHighlighting* hl);
+  SmartConverter(Koncrete::EditorIntegrator* editor, Koncrete::CodeHighlighting* hl);
 
   void convertDUChain(DUContext* context) const;
 
 private:
   void convertDUChainInternal(DUContext* context, bool first = false) const;
 
-  KDevEditorIntegrator* m_editor;
-  KDevCodeHighlighting* m_hl;
+  Koncrete::EditorIntegrator* m_editor;
+  Koncrete::CodeHighlighting* m_hl;
 };
 
 #endif

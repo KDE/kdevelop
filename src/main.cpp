@@ -40,6 +40,7 @@ int main( int argc, char *argv[] )
     KAboutData aboutData( "kdevelop", I18N_NOOP( "KDevelop" ),
                           VERSION, description, KAboutData::License_GPL,
                           I18N_NOOP( "(c) 1999-2005, The KDevelop developers" ), "", "http://www.kdevelop.org" );
+    aboutData.addAuthor( "Matt Rogers", I18N_NOOP( "Maintainer" ), "mattr@kde.org");
     aboutData.addAuthor( "Alexander Dymo", I18N_NOOP( "Release coordinator, Overall improvements, Pascal support, C++ support, New File and Documentation parts" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( "Amilcar do Carmo Lucas", I18N_NOOP( "Release coordinator, API documentation, Doxygen and autoproject patches" ), "amilcar@ida.ing.tu-bs.de" );
     aboutData.addAuthor( "Bernd Gehrmann", I18N_NOOP( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
@@ -103,41 +104,42 @@ int main( int argc, char *argv[] )
         splash->repaint();
     }
 
+    using namespace Koncrete;
     // initialize the editor integrator - it needs a qobject on the main thread
-    KDevEditorIntegrator::initialise();
+    EditorIntegrator::initialise();
 
     //initialize the api object
     //WARNING! the order is important
-    KDevCore::setMainWindow( new KDevMainWindow );
-    KDevCore::setPartController( new KDevPartController );
-    KDevCore::setDocumentController( new KDevDocumentController );
-    KDevPluginController::self()->loadPlugins( KDevPluginController::Global );
-    KDevCore::setLanguageController( new KDevLanguageController );
-    KDevCore::setProjectController( new KDevProjectController );
-    KDevCore::setBackgroundParser( new KDevBackgroundParser );
-    KDevCore::setEnvironment( new KDevEnvironment );
+    Core::setMainWindow( new MainWindow );
+    Core::setPartController( new PartController );
+    Core::setDocumentController( new DocumentController );
+    PluginController::self()->loadPlugins( PluginController::Global );
+    Core::setLanguageController( new LanguageController );
+    Core::setProjectController( new ProjectController );
+    Core::setBackgroundParser( new BackgroundParser );
+    Core::setEnvironment( new Environment );
 
     if ( splash )
     {
-        QObject::connect(KDevPluginController::self(), SIGNAL(loadingPlugin(const QString&)),
+        QObject::connect(PluginController::self(), SIGNAL(loadingPlugin(const QString&)),
                          splash, SLOT(showMessage(const QString&)));
-        QObject::connect( KDevCore::documentController(),
+        QObject::connect( Core::documentController(),
                           SIGNAL( openingDocument( const QString & ) ),
                           splash, SLOT( showMessage( const QString & ) ) );
 
         splash->showMessage( i18n( "Starting GUI" ) );
     }
 
-    QObject::connect( KDevCore::mainWindow(), SIGNAL( finishedLoading() ),
+    QObject::connect( Core::mainWindow(), SIGNAL( finishedLoading() ),
                       splash, SLOT( deleteLater() ) );
 
-    KDevCore::initialize();
+    Core::initialize();
 
     bool openProject = false;
     QByteArray projectName = args->getOption("project");
     if ( !projectName.isEmpty() )
     {
-        KDevCore::projectController()->openProject( KUrl(projectName) );
+        Core::projectController()->openProject( KUrl(projectName) );
         openProject = true;
     }
     else if( args->count() > 0 )
@@ -146,7 +148,7 @@ int main( int argc, char *argv[] )
         QString ext = QFileInfo( url.fileName() ).suffix();
         if( ext == "kdev4" )
         {
-            KDevCore::projectController()->openProject( url );
+            Core::projectController()->openProject( url );
             openProject = true;
         }
     }
@@ -155,7 +157,7 @@ int main( int argc, char *argv[] )
     {
         for( int a=0; a<args->count(); ++a )
         {
-            KDevCore::documentController()->editDocument( KUrl( args->url( a ) ) );
+            Core::documentController()->editDocument( KUrl( args->url( a ) ) );
         }
     }
 

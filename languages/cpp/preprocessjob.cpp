@@ -132,7 +132,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
     includedFile = parentJob()->cpp()->findInclude(fileName);
     if (includedFile.isValid()) {
-        if (KDevParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile)) {
+        if (Koncrete::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile)) {
             /*if (job == parentJob())
                 // Trying to include self
                 goto done;
@@ -154,12 +154,12 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         kWarning() << k_funcinfo << "Parent job disappeared!!" << endl;
     }*/
 
-    if (KDevCore::activeProject()) {
-        KDevAST* ast = 0;
+    if (Koncrete::Core::activeProject()) {
+        Koncrete::AST* ast = 0;
         if (includedFile.isValid())
-            ast = KDevCore::activeProject()->persistentHash()->retrieveAST(includedFile);
+            ast = Koncrete::Core::activeProject()->persistentHash()->retrieveAST(includedFile);
         if (!ast)
-            ast = KDevCore::activeProject()->persistentHash()->retrieveAST(fileName);
+            ast = Koncrete::Core::activeProject()->persistentHash()->retrieveAST(fileName);
 
         if (ast) {
             TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
@@ -168,7 +168,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
         } else if (!dependencyAdded && dependencyAllowed && includedFile.isValid()) {
             parentJob()->backgroundParser()->addDocument(includedFile);
-            KDevParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile);
+            Koncrete::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile);
             /*if (job == parentJob())
                 // Trying to include self
                 goto done;

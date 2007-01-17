@@ -28,25 +28,28 @@
 #include "tag.h"
 #include "kdevexport.h"
 
-class KDevCatalogBackend;
+namespace Koncrete
+{
+
+class CatalogBackend;
 
 /**
-   KDevCatalog database - the persistant symbol store database.
-   KDevCatalog objects represent separate symbol databases.
-   KDevCatalogs can be created/loaded/unloaded dynamically.
+   Catalog database - the persistant symbol store database.
+   Catalog objects represent separate symbol databases.
+   Catalogs can be created/loaded/unloaded dynamically.
    To find a symbol in the repository each catalog should be queried.
 
    Persistant symbol store is useful to keep information about code that
    never or rarely changes. System libraries are perfect examples of such code.
 */
-class KDEVPLATFORM_EXPORT KDevCatalog
+class KDEVPLATFORM_EXPORT Catalog
 {
  public:
   typedef QPair<QByteArray, QVariant> QueryArgument;
 
  public:
-  KDevCatalog(KDevCatalogBackend*);
-  virtual ~KDevCatalog();
+  Catalog(CatalogBackend*);
+  virtual ~Catalog();
 
   bool isValid() const;
   QString dbName() const;
@@ -69,12 +72,14 @@ class KDEVPLATFORM_EXPORT KDevCatalog
   QByteArray generateId();
 
  private:
-  class _KDevCatalog_Private* d;
+  class _Catalog_Private* d;
 
  private:
-  KDevCatalog( const KDevCatalog& source );
-  void operator = ( const KDevCatalog& source );
+  Catalog( const Catalog& source );
+  void operator = ( const Catalog& source );
 };
+
+}
 
 #endif // KDEVCATALOG_H
 

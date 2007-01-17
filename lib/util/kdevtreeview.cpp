@@ -20,21 +20,24 @@
 #include "kdevtreeview.h"
 #include "kdevitemmodel.h"
 
-KDevTreeView::KDevTreeView(QWidget *parent)
+namespace Koncrete
+{
+
+TreeView::TreeView(QWidget *parent)
   : QTreeView(parent)
 {
 }
 
-KDevTreeView::~KDevTreeView()
+TreeView::~TreeView()
 {
 }
 
-KDevItemModel *KDevTreeView::itemModel() const
+ItemModel *TreeView::itemModel() const
 {
-  return qobject_cast<KDevItemModel*>(model());
+  return qobject_cast<ItemModel*>(model());
 }
 
-KDevItemCollection *KDevTreeView::currentCollection() const
+ItemCollection *TreeView::currentCollection() const
 {
   Q_ASSERT(itemModel() != 0);
 
@@ -43,7 +46,7 @@ KDevItemCollection *KDevTreeView::currentCollection() const
 
   while (current.isValid())
     {
-      if (KDevItemCollection *collection = itemModel()->item(current)->collection())
+      if (ItemCollection *collection = itemModel()->item(current)->collection())
         return collection;
 
       current = itemModel()->parent(current);
@@ -52,7 +55,7 @@ KDevItemCollection *KDevTreeView::currentCollection() const
   return 0;
 }
 
-KDevItemGroup *KDevTreeView::currentGroup() const
+ItemGroup *TreeView::currentGroup() const
 {
   Q_ASSERT(itemModel() != 0);
 
@@ -61,7 +64,7 @@ KDevItemGroup *KDevTreeView::currentGroup() const
 
   while (current.isValid())
     {
-      if (KDevItemGroup *group = itemModel()->item(current)->group())
+      if (ItemGroup *group = itemModel()->item(current)->group())
         return group;
 
       current = itemModel()->parent(current);
@@ -70,7 +73,7 @@ KDevItemGroup *KDevTreeView::currentGroup() const
   return 0;
 }
 
-KDevItem *KDevTreeView::currentItem() const
+Item *TreeView::currentItem() const
 {
   Q_ASSERT(itemModel() != 0);
 
@@ -79,7 +82,7 @@ KDevItem *KDevTreeView::currentItem() const
 
   while (current.isValid())
     {
-      if (KDevItem *item = itemModel()->item(current))
+      if (Item *item = itemModel()->item(current))
         return item;
 
       current = itemModel()->parent(current);
@@ -88,4 +91,5 @@ KDevItem *KDevTreeView::currentItem() const
   return 0;
 }
 
+}
 #include "kdevtreeview.moc"

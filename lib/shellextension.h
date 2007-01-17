@@ -25,6 +25,8 @@
 
 class KPageDialog;
 
+namespace Koncrete
+{
 /**
 Shell extension.
 Provides application-dependent and shell-independent functionality.
@@ -56,6 +58,7 @@ protected:
     static ShellExtension *s_instance;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

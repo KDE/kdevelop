@@ -23,12 +23,9 @@
 #include <qlist.h>
 #include "kdevexport.h"
 
-/**
-@file kdevcoderepository.h
-Code repository - the persistant symbol store accessor.
-*/
-
-class KDevCodeRepositoryData;
+namespace Koncrete
+{
+class CodeRepositoryData;
 class Catalog;
 
 /**
@@ -46,14 +43,14 @@ never or rarely changes. System libraries are perfect examples of such code.
 Symbols from code contained in project files are better stored in memory
 symbol store like @ref CodeModel.
 */
-class KDEVPLATFORM_EXPORT KDevCodeRepository : public QObject
+class KDEVPLATFORM_EXPORT CodeRepository : public QObject
 {
     Q_OBJECT
 public:
     /**Constructor.*/
-    KDevCodeRepository();
+    CodeRepository();
     /**Destructor.*/
-    virtual ~KDevCodeRepository();
+    virtual ~CodeRepository();
 
     /**@return The main catalog. Each catalog can be marked is main
     to provide easy access to it.*/
@@ -89,7 +86,8 @@ signals:
     void catalogChanged( Catalog* catalog );
 
 private:
-    KDevCodeRepositoryData* d;
+    CodeRepositoryData* d;
 };
 
+}
 #endif

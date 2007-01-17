@@ -45,7 +45,10 @@
 
 using namespace KTextEditor;
 
-KDevParseJob::KDevParseJob( const KUrl &url,
+namespace Koncrete
+{
+
+ParseJob::ParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
         m_document( url ),
@@ -57,7 +60,7 @@ KDevParseJob::KDevParseJob( const KUrl &url,
         m_revisionToken(-1)
 {}
 
-KDevParseJob::KDevParseJob( KDevDocument *document,
+ParseJob::ParseJob( Document *document,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
         m_document( document->url() ),
@@ -69,7 +72,7 @@ KDevParseJob::KDevParseJob( KDevDocument *document,
         m_revisionToken(-1)
 {}
 
-KDevParseJob::~KDevParseJob()
+ParseJob::~ParseJob()
 {
     if (m_revisionToken != -1) {
         Q_ASSERT(m_openDocument);
@@ -79,43 +82,43 @@ KDevParseJob::~KDevParseJob()
     }
 }
 
-const KUrl& KDevParseJob::document() const
+const KUrl& ParseJob::document() const
 {
     return m_document;
 }
 
-KDevDocument* KDevParseJob::openDocument() const
+Document* ParseJob::openDocument() const
 {
     return m_openDocument;
 }
 
-bool KDevParseJob::success() const
+bool ParseJob::success() const
 {
     return !m_aborted;
 }
 
-const QString & KDevParseJob::errorMessage() const
+const QString & ParseJob::errorMessage() const
 {
     return m_errorMessage;
 }
 
-TopDUContext* KDevParseJob::duChain() const
+TopDUContext* ParseJob::duChain() const
 {
     // No definition-use chain available by default
     return 0L;
 }
 
-bool KDevParseJob::contentsAvailableFromEditor() const
+bool ParseJob::contentsAvailableFromEditor() const
 {
-    return m_openDocument && m_openDocument->textDocument() && KDevEditorIntegrator::documentLoaded(m_openDocument->textDocument());
+    return m_openDocument && m_openDocument->textDocument() && EditorIntegrator::documentLoaded(m_openDocument->textDocument());
 }
 
-int KDevParseJob::revisionToken() const
+int ParseJob::revisionToken() const
 {
     return m_revisionToken;
 }
 
-QString KDevParseJob::contentsFromEditor(bool saveRevisionToken)
+QString ParseJob::contentsFromEditor(bool saveRevisionToken)
 {
     SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
 
@@ -128,12 +131,12 @@ QString KDevParseJob::contentsFromEditor(bool saveRevisionToken)
     return m_openDocument->textDocument()->text();
 }
 
-void KDevParseJob::setErrorMessage(const QString& message)
+void ParseJob::setErrorMessage(const QString& message)
 {
     m_errorMessage = message;
 }
 
-int KDevParseJob::priority() const
+int ParseJob::priority() const
 {
     if (m_openDocument)
         if (m_openDocument->isActive())
@@ -144,7 +147,7 @@ int KDevParseJob::priority() const
         return 0;
 }
 
-void KDevParseJob::addJob(Job* job)
+void ParseJob::addJob(Job* job)
 {
     if (backgroundParser())
         job->assignQueuePolicy(backgroundParser()->dependencyPolicy());
@@ -152,12 +155,12 @@ void KDevParseJob::addJob(Job* job)
     JobSequence::addJob(job);
 }
 
-KDevBackgroundParser* KDevParseJob::backgroundParser() const
+BackgroundParser* ParseJob::backgroundParser() const
 {
     return m_backgroundParser;
 }
 
-void KDevParseJob::setBackgroundParser(KDevBackgroundParser* parser)
+void ParseJob::setBackgroundParser(BackgroundParser* parser)
 {
     if (parser) {
         assignQueuePolicy(parser->dependencyPolicy());
@@ -176,7 +179,7 @@ void KDevParseJob::setBackgroundParser(KDevBackgroundParser* parser)
     m_backgroundParser = parser;
 }
 
-bool KDevParseJob::addDependency(KDevParseJob* dependency, ThreadWeaver::Job* actualDependee)
+bool ParseJob::addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee)
 {
     if (!backgroundParser())
         return false;
@@ -184,26 +187,27 @@ bool KDevParseJob::addDependency(KDevParseJob* dependency, ThreadWeaver::Job* ac
     return backgroundParser()->dependencyPolicy()->addDependency(dependency, this, actualDependee);
 }
 
-bool KDevParseJob::abortRequested() const
+bool ParseJob::abortRequested() const
 {
     QMutexLocker lock(m_abortMutex);
 
     return m_abortRequested;
 }
 
-void KDevParseJob::requestAbort()
+void ParseJob::requestAbort()
 {
     QMutexLocker lock(m_abortMutex);
 
     m_abortRequested = true;
 }
 
-void KDevParseJob::abortJob()
+void ParseJob::abortJob()
 {
     m_aborted = true;
     setFinished(true);
 }
 
+}
 #include "kdevparsejob.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

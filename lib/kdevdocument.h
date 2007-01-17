@@ -34,7 +34,10 @@ class Part;
 
 namespace KTextEditor { class Document; }
 
-class KDevDocumentController;
+namespace Koncrete
+{
+
+class DocumentController;
 
 /**
  * \short An object which represents a single document being edited by the IDE.
@@ -48,7 +51,7 @@ class KDevDocumentController;
  * - clearer distinction in the code between an open document and a url
  *   (which may or may not be open)
  */
-class KDEVPLATFORM_EXPORT KDevDocument : public QObject
+class KDEVPLATFORM_EXPORT Document : public QObject
 {
   Q_OBJECT
 
@@ -65,12 +68,12 @@ class KDEVPLATFORM_EXPORT KDevDocument : public QObject
     /**
      * Constructor.
      */
-    KDevDocument(KParts::Part* part, KDevDocumentController* parent);
+    Document(KParts::Part* part, DocumentController* parent);
 
     /**
      * Returns the document controller.
      */
-    KDevDocumentController* parent() const;
+    DocumentController* parent() const;
 
     /**
      * Returns the URL of this document.
@@ -103,7 +106,7 @@ class KDEVPLATFORM_EXPORT KDevDocument : public QObject
     /**
      * Returns the gui builder, if this is a gui document.
      */
-//     KDevGuiBuilder* guiDocument() const;
+//     GuiBuilder* guiDocument() const;
 
     /**
      * Enquires whether this document is currently the active part in the editor.
@@ -154,5 +157,7 @@ class KDEVPLATFORM_EXPORT KDevDocument : public QObject
     DocumentState m_state;
     QPointer<KParts::Part> m_part;
 };
+
+}
 
 #endif

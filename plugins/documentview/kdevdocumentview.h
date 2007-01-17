@@ -25,7 +25,7 @@
 class KUrl;
 class KDevDocumentViewPart;
 
-class KDevDocumentView: public KDevTreeView
+class KDevDocumentView: public Koncrete::TreeView
 {
     Q_OBJECT
 public:

@@ -23,13 +23,16 @@
 
 using namespace KTextEditor;
 
-KDevDocumentCursorObject::KDevDocumentCursorObject(Cursor* cursor)
+namespace Koncrete
+{
+
+DocumentCursorObject::DocumentCursorObject(Cursor* cursor)
   : m_cursor(0)
 {
   setTextCursor(cursor);
 }
 
-KDevDocumentCursorObject::~ KDevDocumentCursorObject( )
+DocumentCursorObject::~ DocumentCursorObject( )
 {
   if (m_cursor->isSmartCursor())
     m_cursor->toSmartCursor()->setWatcher(0);
@@ -37,7 +40,7 @@ KDevDocumentCursorObject::~ KDevDocumentCursorObject( )
   delete m_cursor;
 }
 
-void KDevDocumentCursorObject::setTextCursor( Cursor * cursor )
+void DocumentCursorObject::setTextCursor( Cursor * cursor )
 {
   Q_ASSERT(cursor);
 
@@ -60,35 +63,35 @@ void KDevDocumentCursorObject::setTextCursor( Cursor * cursor )
   }
 }
 
-const Cursor& KDevDocumentCursorObject::textCursor( ) const
+const Cursor& DocumentCursorObject::textCursor( ) const
 {
   return *m_cursor;
 }
 
-Cursor& KDevDocumentCursorObject::textCursor( )
+Cursor& DocumentCursorObject::textCursor( )
 {
   return *m_cursor;
 }
 
-const KDevDocumentCursor& KDevDocumentCursorObject::textDocCursor() const
+const DocumentCursor& DocumentCursorObject::textDocCursor() const
 {
-  return *static_cast<KDevDocumentCursor*>(m_cursor);
+  return *static_cast<DocumentCursor*>(m_cursor);
 }
 
-KUrl KDevDocumentCursorObject::url() const
+KUrl DocumentCursorObject::url() const
 {
   return url(m_cursor);
 }
 
-KUrl KDevDocumentCursorObject::url( const Cursor * cursor )
+KUrl DocumentCursorObject::url( const Cursor * cursor )
 {
   if (cursor->isSmartCursor())
     return static_cast<const SmartCursor*>(cursor)->document()->url();
   else
-    return static_cast<const KDevDocumentCursor*>(cursor)->document();
+    return static_cast<const DocumentCursor*>(cursor)->document();
 }
 
-SmartCursor* KDevDocumentCursorObject::smartCursor() const
+SmartCursor* DocumentCursorObject::smartCursor() const
 {
   if (m_cursor->isSmartCursor())
     return static_cast<SmartCursor*>(m_cursor);
@@ -96,16 +99,18 @@ SmartCursor* KDevDocumentCursorObject::smartCursor() const
   return 0L;
 }
 
-Cursor* KDevDocumentCursorObject::textCursorPtr() const
+Cursor* DocumentCursorObject::textCursorPtr() const
 {
   return m_cursor;
 }
 
 // kate: indent-width 2;
 
-void KDevDocumentCursorObject::deleted(KTextEditor::SmartCursor * cursor)
+void DocumentCursorObject::deleted(KTextEditor::SmartCursor * cursor)
 {
   Q_ASSERT(cursor == m_cursor);
   //Q_ASSERT(false);
-  m_cursor = new KDevDocumentCursor(m_url, *m_cursor);
+  m_cursor = new DocumentCursor(m_url, *m_cursor);
+}
+
 }

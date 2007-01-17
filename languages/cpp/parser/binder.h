@@ -103,7 +103,7 @@ private:
   TemplateModelItem _M_current_template;
   EnumModelItem _M_current_enum;
 
-  //QStack<KDevCodeItem*> _M_current_item;
+  //QStack<Koncrete::CodeItem*> _M_current_item;
 
   QStringList _M_context;
   QSet<QString> _M_qualified_types;

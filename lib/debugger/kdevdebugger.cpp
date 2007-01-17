@@ -18,20 +18,23 @@
    Boston, MA 02110-1301, USA.
 */
 #include "kdevdebugger.h"
-//Added by qt3to4:
+
 #include <QPixmap>
 
-KDevDebugger::KDevDebugger(QObject *parent)
+namespace Koncrete
+{
+
+DebuggerBase::DebuggerBase(QObject *parent)
   : QObject(parent)
 {
 }
 
 
-KDevDebugger::~KDevDebugger()
+DebuggerBase::~DebuggerBase()
 {
 }
 
-const QPixmap* KDevDebugger::inactiveBreakpointPixmap()
+const QPixmap* DebuggerBase::inactiveBreakpointPixmap()
 {
   const char*breakpoint_gr_xpm[]={
   "11 16 6 1",
@@ -61,7 +64,7 @@ const QPixmap* KDevDebugger::inactiveBreakpointPixmap()
   return &pixmap;
 }
 
-const QPixmap* KDevDebugger::activeBreakpointPixmap()
+const QPixmap* DebuggerBase::activeBreakpointPixmap()
 {
   const char* breakpoint_xpm[]={
   "11 16 6 1",
@@ -91,7 +94,7 @@ const QPixmap* KDevDebugger::activeBreakpointPixmap()
   return &pixmap;
 }
 
-const QPixmap* KDevDebugger::reachedBreakpointPixmap()
+const QPixmap* DebuggerBase::reachedBreakpointPixmap()
 {
   const char*breakpoint_bl_xpm[]={
   "11 16 7 1",
@@ -122,7 +125,7 @@ const QPixmap* KDevDebugger::reachedBreakpointPixmap()
   return &pixmap;
 }
 
-const QPixmap* KDevDebugger::disabledBreakpointPixmap()
+const QPixmap* DebuggerBase::disabledBreakpointPixmap()
 {
   const char*breakpoint_wh_xpm[]={
   "11 16 7 1",
@@ -153,7 +156,7 @@ const QPixmap* KDevDebugger::disabledBreakpointPixmap()
   return &pixmap;
 }
 
-const QPixmap* KDevDebugger::executionPointPixmap()
+const QPixmap* DebuggerBase::executionPointPixmap()
 {
   const char*exec_xpm[]={
   "11 16 4 1",
@@ -179,6 +182,8 @@ const QPixmap* KDevDebugger::executionPointPixmap()
   "..........."};
   static QPixmap pixmap( exec_xpm );
   return &pixmap;
+}
+
 }
 
 #include "kdevdebugger.moc"

@@ -35,13 +35,16 @@
 
 #include <config.h>
 
-struct _KDevCatalog_Private
+namespace Koncrete
+{
+
+struct _Catalog_Private
 {
   QString dbName;
-  KDevCatalogBackend* backend;
+  CatalogBackend* backend;
   bool enabled;
 
-  _KDevCatalog_Private( KDevCatalogBackend* bkend)
+  _Catalog_Private( CatalogBackend* bkend)
     : backend( bkend )
   {
   }
@@ -50,17 +53,17 @@ struct _KDevCatalog_Private
 
 
 /*!
-  \fn  KDevCatalog::KDevCatalog
+  \fn  Catalog::Catalog
 */
-KDevCatalog::KDevCatalog( KDevCatalogBackend* bkend)
-  : d( new _KDevCatalog_Private( bkend ) )
+Catalog::Catalog( CatalogBackend* bkend)
+  : d( new _Catalog_Private( bkend ) )
 {
 }
 
 /*!
-  \fn  KDevCatalog::~KDevCatalog
+  \fn  Catalog::~Catalog
 */
-KDevCatalog::~KDevCatalog()
+Catalog::~Catalog()
 {
   close();
   delete( d );
@@ -68,75 +71,75 @@ KDevCatalog::~KDevCatalog()
 }
 
 /*!
-  \fn  KDevCatalog::indexList() const
+  \fn  Catalog::indexList() const
 */
-QList<QByteArray>  KDevCatalog::indexList() const
+QList<QByteArray>  Catalog::indexList() const
 {
   return d->backend->indexList();
 }
 
-bool  KDevCatalog::enabled() const
+bool  Catalog::enabled() const
 {
   return d->enabled;
 }
 
-void  KDevCatalog::setEnabled( bool isEnabled )
+void  Catalog::setEnabled( bool isEnabled )
 {
   d->enabled = isEnabled;
 }
 
 /*!
-  \fn  KDevCatalog::addIndex( const QString& name )
+  \fn  Catalog::addIndex( const QString& name )
   @todo document these functions
 */
-void  KDevCatalog::addIndex( const QByteArray& name )
+void  Catalog::addIndex( const QByteArray& name )
 {
   d->backend->addIndex( name );
 }
 
 /*!
-  \fn  KDevCatalog::close()
+  \fn  Catalog::close()
 */
  
-void  KDevCatalog::close()
+void  Catalog::close()
 {
   d->backend->close();
   d->dbName = QString();
 }
 
 /*!
-  \fn  KDevCatalog::open( const QString& dbName )
+  \fn  Catalog::open( const QString& dbName )
 */
  
-void  KDevCatalog::open( const QString& dbName )
+void  Catalog::open( const QString& dbName )
 {
   if ( d->backend->open( dbName )
     d->dbName = dbName;
 }
 
 /*!
-  \fn  KDevCatalog::dbName() const
+  \fn  Catalog::dbName() const
 */
  
-QString  KDevCatalog::dbName() const
+QString  Catalog::dbName() const
 {
   return d->dbName;
 }
 
 /*!
-  \fn  KDevCatalog::isValid() const
+  \fn  Catalog::isValid() const
 */
  
-bool  KDevCatalog::isValid() const
+bool  Catalog::isValid() const
 {
   return d->backend->isOpen();
 }
 
 /*!
-  \fn  KDevCatalog::addItem( Tag& tag )
+  \fn  Catalog::addItem( Tag& tag )
 */
  
-void  KDevCatalog::addItem( Tag& tag )
+void  Catalog::addItem( Tag& tag )
 {
   if( tag.name().isEmpty() )
     return;
@@ -148,10 +151,10 @@ void  KDevCatalog::addItem( Tag& tag )
 }
 
 /*!
-  \fn  KDevCatalog::getItemById( const QString& id )
+  \fn  Catalog::getItemById( const QString& id )
 */
  
-Tag  KDevCatalog::getItemById( const QByteArray& id )
+Tag  Catalog::getItemById( const QByteArray& id )
 {
 
   return d->backend->getItemById( id );
@@ -159,30 +162,32 @@ Tag  KDevCatalog::getItemById( const QByteArray& id )
 }
 
 /*!
-  \fn  KDevCatalog::sync()
+  \fn  Catalog::sync()
 */
  
-void  KDevCatalog::sync()
+void  Catalog::sync()
 {
   d->backend->sync();
 }
 
 /*!
-  \fn  KDevCatalog::query( const QValueList<QueryArgument>& args )
+  \fn  Catalog::query( const QValueList<QueryArgument>& args )
 */
  
-QList<Tag>  KDevCatalog::query( const QList<QueryArgument>& args )
+QList<Tag>  Catalog::query( const QList<QueryArgument>& args )
 {
   return d->backend->query( args );
   
 }
 
-QByteArray KDevCatalog::generateId()
+QByteArray Catalog::generateId()
 {
   static int n = 1;
   static char buffer[1024];
   qsnprintf(buffer, 1024, "%05d", n++ );
   return buffer;
+}
+
 }
 
 //kate: space-indent on; indent-width 2; replace-tabs on;

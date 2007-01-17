@@ -18,7 +18,10 @@
 
 class QVBoxLayout;
 
-class KDevDocument;
+namespace Koncrete
+{
+class Document;
+}
 
 namespace KParts
 {
@@ -38,7 +41,7 @@ public slots:
 private slots:
     void projectOpened();
     void projectClosed();
-    void documentActivated( KDevDocument *document );
+    void documentActivated( Koncrete::Document *document );
     void partDestroyed();
 
 private:

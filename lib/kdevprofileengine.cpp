@@ -28,11 +28,14 @@
 #include "kdevplugin.h"
 #include "kdevplugincontroller.h"
 
+namespace Koncrete
+{
+
 ProfileEngine::ProfileEngine()
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles");
 
-    m_rootProfile = new Profile(0, "KDevelop");
+    m_rootProfile = new Profile(0, "elop");
 
     QString currPath = "/";
     QMap<QString, Profile*> passedPaths;
@@ -70,7 +73,7 @@ void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap
     }
 }
 
-KPluginInfo::List ProfileEngine::offers(const QString &profileName, KDevPluginController::PluginType offerType)
+KPluginInfo::List ProfileEngine::offers(const QString &profileName, PluginController::PluginType offerType)
 {
     ProfileListing listing;
     Profile *profile = 0;
@@ -81,11 +84,11 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, KDevPluginCo
 
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
-        case KDevPluginController::Global:
+        case PluginController::Global:
             constraint += QString::fromLatin1(" and ( [X-KDevelop-Category] == 'Global'");
             constraint += QString::fromLatin1(" or [X-KDevelop-Category] == 'Core')");
             break;
-        case KDevPluginController::Project:
+        case PluginController::Project:
             constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Project'");
             break;
     }
@@ -144,15 +147,15 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, KDevPluginCo
     return pluginList;
 }
 
-KPluginInfo::List ProfileEngine::allOffers(KDevPluginController::PluginType offerType)
+KPluginInfo::List ProfileEngine::allOffers(PluginController::PluginType offerType)
 {
     QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
     switch (offerType) {
-        case KDevPluginController::Global: //core and global have been combined
+        case PluginController::Global: //core and global have been combined
             constraint += QLatin1String(" and ( [X-KDevelop-Category] == 'Global'");
             constraint += QLatin1String(" or [X-KDevelop-Category] == 'Core' )");
             break;
-        case KDevPluginController::Project:
+        case PluginController::Project:
             constraint += QString::fromLatin1(" and [X-KDevelop-Category] == 'Project'");
             break;
     }
@@ -204,7 +207,7 @@ KUrl::List ProfileEngine::resourcesRecursive(const QString &profileName, const Q
     return resources;
 }
 
-void ProfileEngine::diffProfiles(KDevPluginController::PluginType offerType, const QString &profile1,
+void ProfileEngine::diffProfiles(PluginController::PluginType offerType, const QString &profile1,
     const QString &profile2, QStringList &unload, KPluginInfo::List &load)
 {
     KPluginInfo::List offers1 = offers(profile1, offerType);
@@ -259,4 +262,6 @@ void ProfileEngine::addResource(const QString &profileName, const KUrl &url)
         return;
 
     profile->addResource(url);
+}
+
 }

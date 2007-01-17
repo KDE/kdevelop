@@ -6,7 +6,7 @@
 
 K_EXPORT_COMPONENT_FACTORY( libkdevfakesupport, FakeSupportFactory )
 
-static const KDevPluginInfo data( "kdevfakesupport" );
+static const Koncrete::PluginInfo data( "kdevfakesupport" );
 
 FakeSupportFactory::FakeSupportFactory()
         : KDevGenericFactory<FakeLanguageSupport>( data )
@@ -22,7 +22,7 @@ KInstance *FakeSupportFactory::createInstance()
     return instance;
 }
 
-const KDevPluginInfo * FakeSupportFactory::info()
+const Koncrete::PluginInfo * FakeSupportFactory::info()
 {
     return & data;
 }

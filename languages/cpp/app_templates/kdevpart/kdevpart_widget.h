@@ -5,7 +5,7 @@
 #include <qwidget.h>
 #include <qstring.h>
 
-class KDevProject;
+class Koncrete::Project;
 class %{APPNAME}Part;
 
 class %{APPNAME}Widget: public QWidget

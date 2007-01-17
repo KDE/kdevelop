@@ -1,5 +1,5 @@
 File=config.kcfg
 ClassName=DocumentViewSettings
 Singleton=true
-Inherits=KDevConfigSkeleton
+Inherits=Koncrete::ConfigSkeleton
 IncludeFiles="kdevconfigskeleton.h"

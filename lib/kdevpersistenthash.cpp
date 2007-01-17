@@ -31,7 +31,10 @@ Boston, MA 02110-1301, USA.
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
 
-KDevPersistentHash::KDevPersistentHash( QObject *parent )
+namespace Koncrete
+{
+
+PersistentHash::PersistentHash( QObject *parent )
         : QObject( parent )
 {
 #ifndef NO_GOOGLE_SPARSEHASH
@@ -39,11 +42,11 @@ KDevPersistentHash::KDevPersistentHash( QObject *parent )
 #endif
 }
 
-KDevPersistentHash::~KDevPersistentHash()
+PersistentHash::~PersistentHash()
 {
 #ifndef NO_GOOGLE_SPARSEHASH
 #else
-    QHashIterator<KUrl, KDevAST*> it = m_astHash;
+    QHashIterator<KUrl, AST*> it = m_astHash;
     while (it.hasNext()) {
         it.next();
         it.value()->release();
@@ -51,7 +54,7 @@ KDevPersistentHash::~KDevPersistentHash()
 #endif
 }
 
-void KDevPersistentHash::insertAST( const KUrl &url, KDevAST *ast )
+void PersistentHash::insertAST( const KUrl &url, AST *ast )
 {
     QWriteLocker lock(&m_mutex);
 
@@ -60,7 +63,7 @@ void KDevPersistentHash::insertAST( const KUrl &url, KDevAST *ast )
 #else
     if (m_astHash.contains(url)) {
         m_astHash[url]->release();
-        for (QMultiHash<QString, KDevAST*>::Iterator it = m_filenameAstHash.find(url.fileName()); it != m_filenameAstHash.end() && it.key() == url.fileName(); ++it)
+        for (QMultiHash<QString, AST*>::Iterator it = m_filenameAstHash.find(url.fileName()); it != m_filenameAstHash.end() && it.key() == url.fileName(); ++it)
             if (it.value() == ast) {
                 m_filenameAstHash.erase(it);
                 break;
@@ -72,7 +75,7 @@ void KDevPersistentHash::insertAST( const KUrl &url, KDevAST *ast )
 #endif
 }
 
-KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
+AST * PersistentHash::retrieveAST(const KUrl & url)
 {
     QReadLocker lock(&m_mutex);
 
@@ -85,11 +88,11 @@ KDevAST * KDevPersistentHash::retrieveAST(const KUrl & url)
 #endif
 }
 
-void KDevPersistentHash::clearASTs(KDevLanguageSupport* language)
+void PersistentHash::clearASTs(LanguageSupport* language)
 {
 #ifndef NO_GOOGLE_SPARSEHASH
 #else
-    QMutableHashIterator<KUrl, KDevAST*> it = m_astHash;
+    QMutableHashIterator<KUrl, AST*> it = m_astHash;
     while (it.hasNext()) {
         it.next();
         if (it.value()->language == language) {
@@ -100,7 +103,7 @@ void KDevPersistentHash::clearASTs(KDevLanguageSupport* language)
 #endif
 }
 
-KDevAST* KDevPersistentHash::retrieveAST( const QString &filename )
+AST* PersistentHash::retrieveAST( const QString &filename )
 {
     QReadLocker lock(&m_mutex);
 
@@ -114,7 +117,7 @@ KDevAST* KDevPersistentHash::retrieveAST( const QString &filename )
 #endif
 }
 
-void KDevPersistentHash::load()
+void PersistentHash::load()
 {
     QWriteLocker lock(&m_mutex);
 
@@ -162,7 +165,7 @@ void KDevPersistentHash::load()
 #endif
 }
 
-void KDevPersistentHash::save()
+void PersistentHash::save()
 {
     QReadLocker lock(&m_mutex);
 
@@ -184,7 +187,7 @@ void KDevPersistentHash::save()
         {
             char *s = it->first.toLatin1().data();
             out.write( reinterpret_cast<char*>(s), sizeof(s) );
-            KDevCore::activeLanguage()->write( it->second, out );
+            Core::activeLanguage()->write( it->second, out );
         }
 
         out.flush();
@@ -193,6 +196,7 @@ void KDevPersistentHash::save()
 #endif
 }
 
+}
 #include "kdevpersistenthash.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

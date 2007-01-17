@@ -31,6 +31,9 @@ Boston, MA 02110-1301, USA.
 
 #include <QDir>
 
+namespace Koncrete
+{
+
 Context::Context()
 {}
 
@@ -125,13 +128,13 @@ const KUrl::List &FileContext::urls() const
 class CodeItemContext::Private
 {
 public:
-    Private( const KDevCodeItem* item ) : m_item( item )
+    Private( const CodeItem* item ) : m_item( item )
     {}
 
-    const KDevCodeItem* m_item;
+    const CodeItem* m_item;
 };
 
-CodeItemContext::CodeItemContext( const KDevCodeItem* item )
+CodeItemContext::CodeItemContext( const CodeItem* item )
         : Context(), d( new Private( item ) )
 {}
 
@@ -146,7 +149,7 @@ int CodeItemContext::type() const
     return Context::CodeItemContext;
 }
 
-const KDevCodeItem* CodeItemContext::item() const
+const CodeItem* CodeItemContext::item() const
 {
     return d->m_item;
 }
@@ -154,13 +157,13 @@ const KDevCodeItem* CodeItemContext::item() const
 class ProjectItemContext::Private
 {
 public:
-    Private( const KDevProjectItem* item ) : m_item( item )
+    Private( const ProjectItem* item ) : m_item( item )
     {}
 
-    const KDevProjectItem* m_item;
+    const ProjectItem* m_item;
 };
 
-ProjectItemContext::ProjectItemContext( const KDevProjectItem* item )
+ProjectItemContext::ProjectItemContext( const ProjectItem* item )
         : Context(), d( new Private( item ) )
 {}
 
@@ -175,9 +178,11 @@ int ProjectItemContext::type() const
     return Context::ProjectItemContext;
 }
 
-const KDevProjectItem* ProjectItemContext::item() const
+const ProjectItem* ProjectItemContext::item() const
 {
     return d->m_item;
+}
+
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

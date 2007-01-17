@@ -19,14 +19,14 @@
 #include "duchainbase.h"
 
 DUChainBase::DUChainBase(KTextEditor::Range* range)
-  : KDevDocumentRangeObject(range)
+  : Koncrete::DocumentRangeObject(range)
   , modelRow(0)
   , m_encountered(0)
 {
 }
 
 DUChainBase::DUChainBase()
-  : KDevDocumentRangeObject(0)
+  : Koncrete::DocumentRangeObject(0)
   , modelRow(0)
   , m_encountered(0)
 {

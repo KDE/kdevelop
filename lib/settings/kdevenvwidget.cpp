@@ -31,7 +31,10 @@ Boston, MA 02110-1301, USA.
 #include "kdevcore.h"
 #include "kdevconfig.h"
 
-KDevEnvWidget::KDevEnvWidget( QWidget *parent )
+namespace Koncrete
+{
+
+EnvWidget::EnvWidget( QWidget *parent )
         : QDialog( parent )
 {
     setupUi( parent );
@@ -57,27 +60,27 @@ KDevEnvWidget::KDevEnvWidget( QWidget *parent )
     processDefaultButton->setEnabled( false );
 }
 
-KDevEnvWidget::~KDevEnvWidget()
+EnvWidget::~EnvWidget()
 {}
 
-void KDevEnvWidget::loadSettings()
+void EnvWidget::loadSettings()
 {
     load( false );
 }
 
-void KDevEnvWidget::saveSettings()
+void EnvWidget::saveSettings()
 {
     //make sure the maps are set
     generateCurrentMaps();
-    KDevCore::environment() ->saveSettings( m_currentOverrides );
+    Core::environment() ->saveSettings( m_currentOverrides );
 }
 
-void KDevEnvWidget::defaults()
+void EnvWidget::defaults()
 {
     load( true );
 }
 
-void KDevEnvWidget::load( bool defaults )
+void EnvWidget::load( bool defaults )
 {
     variableTable->blockSignals( true );
 
@@ -97,7 +100,7 @@ void KDevEnvWidget::load( bool defaults )
     if ( !defaults )  //Don't use overrides if only showing defaults
     {
         int i = 0;
-        EnvironmentMap ovrMap = KDevCore::environment() ->overrideMap();
+        EnvironmentMap ovrMap = Core::environment() ->overrideMap();
         EnvironmentMap::const_iterator it = ovrMap.constBegin();
         for ( ; it != ovrMap.constEnd(); ++it )
         {
@@ -119,11 +122,11 @@ void KDevEnvWidget::load( bool defaults )
     }
 
     int i2 = 0;
-    EnvironmentMap proMap = KDevCore::environment() ->processDefaultMap();
+    EnvironmentMap proMap = Core::environment() ->processDefaultMap();
     EnvironmentMap::const_iterator it2 = proMap.constBegin();
     for ( ; it2 != proMap.constEnd(); ++it2 )
     {
-        if ( KDevCore::environment() ->isOverride( it2.key() ) )
+        if ( Core::environment() ->isOverride( it2.key() ) )
             continue;
 
         variableTable->insertRow( i2 );
@@ -153,7 +156,7 @@ void KDevEnvWidget::load( bool defaults )
     }
 }
 
-void KDevEnvWidget::newButtonClicked()
+void EnvWidget::newButtonClicked()
 {
     KDialog * dialog = new KDialog( this );
     dialog->setCaption( i18n( "New Environment Variable" ) );
@@ -209,21 +212,21 @@ void KDevEnvWidget::newButtonClicked()
     }
 }
 
-void KDevEnvWidget::deleteButtonClicked()
+void EnvWidget::deleteButtonClicked()
 {
     variableTable->removeRow( variableTable->currentRow() );
     processDefaultButton->setEnabled( false );
     emit changed( diff() );
 }
 
-void KDevEnvWidget::processDefaultButtonClicked()
+void EnvWidget::processDefaultButtonClicked()
 {
     int row = variableTable->currentRow();
     QTableWidgetItem * name = variableTable->item( row, 0 );
     QTableWidgetItem * value = variableTable->item( row, 1 );
     QString _name = name->text();
 
-    QString pValue = KDevCore::environment() ->processDefault( _name );
+    QString pValue = Core::environment() ->processDefault( _name );
 
     value->setText( pValue );
     setProcessDefault( name );
@@ -231,7 +234,7 @@ void KDevEnvWidget::processDefaultButtonClicked()
     processDefaultButton->setEnabled( false );
 }
 
-void KDevEnvWidget::settingsChanged( int row, int /*column*/ )
+void EnvWidget::settingsChanged( int row, int /*column*/ )
 {
     QTableWidgetItem * name = variableTable->item( row, 0 );
     QTableWidgetItem * value = variableTable->item( row, 1 );
@@ -240,8 +243,8 @@ void KDevEnvWidget::settingsChanged( int row, int /*column*/ )
 
     bool o = isOverride( name );
     bool p = isProcessDefault( name );
-    QString oValue = KDevCore::environment() ->override( _name );
-    QString pValue = KDevCore::environment() ->processDefault( _name );
+    QString oValue = Core::environment() ->override( _name );
+    QString pValue = Core::environment() ->processDefault( _name );
 
     // 1. Process default is changed to override
     if ( p && _value != pValue )
@@ -258,13 +261,13 @@ void KDevEnvWidget::settingsChanged( int row, int /*column*/ )
     emit changed( diff() );
 }
 
-void KDevEnvWidget::focusChanged( int row, int, int, int )
+void EnvWidget::focusChanged( int row, int, int, int )
 {
     QString name = variableTable->item( row, 0 ) ->text();
     QString value = variableTable->item( row, 1 ) ->text();
 
-    bool pDefault = KDevCore::environment() ->isProcessDefault( name );
-    QString pValue = KDevCore::environment() ->processDefault( name );
+    bool pDefault = Core::environment() ->isProcessDefault( name );
+    QString pValue = Core::environment() ->processDefault( name );
 
     // Var is not processDefault?
     deleteButton->setEnabled( !pDefault );
@@ -273,27 +276,27 @@ void KDevEnvWidget::focusChanged( int row, int, int, int )
     processDefaultButton->setEnabled( pDefault && pValue != value );
 }
 
-bool KDevEnvWidget::isOverride( QTableWidgetItem *item ) const
+bool EnvWidget::isOverride( QTableWidgetItem *item ) const
 {
     return ( item->textColor() == Qt::red );
 }
 
-bool KDevEnvWidget::isProcessDefault( QTableWidgetItem *item ) const
+bool EnvWidget::isProcessDefault( QTableWidgetItem *item ) const
 {
     return ( item->textColor() == Qt::black );
 }
 
-void KDevEnvWidget::setOverride( QTableWidgetItem *item )
+void EnvWidget::setOverride( QTableWidgetItem *item )
 {
     item->setTextColor( Qt::red );
 }
 
-void KDevEnvWidget::setProcessDefault( QTableWidgetItem * item )
+void EnvWidget::setProcessDefault( QTableWidgetItem * item )
 {
     item->setTextColor( Qt::black );
 }
 
-void KDevEnvWidget::generateCurrentMaps()
+void EnvWidget::generateCurrentMaps()
 {
     //create maps of current settings to compare
     m_currentOverrides.clear();
@@ -312,13 +315,14 @@ void KDevEnvWidget::generateCurrentMaps()
     }
 }
 
-bool KDevEnvWidget::diff()
+bool EnvWidget::diff()
 {
     generateCurrentMaps();
     return ( m_currentOverrides != m_overrides
              || m_currentProcessDefaults != m_processDefaults );
 }
 
+}
 #include "kdevenvwidget.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

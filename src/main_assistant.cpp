@@ -92,17 +92,18 @@ int main(int argc, char *argv[])
 
   app.processEvents(); //FIXME UGLY BEYOND WORDS!
 
-  QObject::connect(KDevPluginController::self(), SIGNAL(loadingPlugin(const QString &)),
+  using namespace Koncrete;
+  QObject::connect(PluginController::self(), SIGNAL(loadingPlugin(const QString &)),
            splash, SLOT(showMessage(const QString &)));
 
   if (splash) splash->showMessage( i18n( "Loading Settings" ) );
-  KDevCore::mainWindow()->loadSettings();
+  Core::mainWindow()->loadSettings();
 
-  KDevPluginController::self()->loadPlugins( Global );
+  PluginController::self()->loadPlugins( Global );
 
   if (splash) splash->showMessage( i18n( "Starting GUI" ) );
 
-  KDevCore::mainWindow()->show();
+  Core::mainWindow()->show();
 
   if (splash) delete splash;
 

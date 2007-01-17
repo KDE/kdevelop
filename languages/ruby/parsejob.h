@@ -30,7 +30,7 @@
 #include "parser/ruby_ast.h"
 #include "parser/ruby_codemodel.h"
 
-class KDevCodeModel;
+class Koncrete::CodeModel;
 class RubyLanguageSupport;
 
 namespace ruby
@@ -39,13 +39,13 @@ namespace ruby
 class ParseSession;
 
 
-class ParseJob : public KDevParseJob
+class ParseJob : public Koncrete::ParseJob
 {
     Q_OBJECT
 
 public:
     ParseJob( const KUrl &url, RubyLanguageSupport* parent );
-    ParseJob( KDevDocument* document, RubyLanguageSupport* parent );
+    ParseJob( Koncrete::Document* document, RubyLanguageSupport* parent );
 
     virtual ~ParseJob();
 
@@ -55,8 +55,8 @@ public:
 
     bool wasReadFromDisk() const;
 
-    virtual KDevAST *AST() const;
-    virtual KDevCodeModel *codeModel() const;
+    virtual Koncrete::AST *AST() const;
+    virtual Koncrete::CodeModel *codeModel() const;
 
 protected:
     virtual void run();

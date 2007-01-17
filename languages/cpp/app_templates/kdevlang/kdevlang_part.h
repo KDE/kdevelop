@@ -15,7 +15,7 @@ class KAction;
 /*
  Please read the README.dox file for more info about this part
  */
-class %{APPNAME}Part : public KDevLanguageSupport
+class %{APPNAME}Part : public Koncrete::LanguageSupport
 {
 	Q_OBJECT
 	public:

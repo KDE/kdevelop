@@ -19,6 +19,11 @@
 
 #include "kdevcodehighlighting.h"
 
-KDevCodeHighlighting::~KDevCodeHighlighting()
+namespace Koncrete
 {
+    
+CodeHighlighting::~CodeHighlighting()
+{
+}
+
 }

@@ -20,9 +20,9 @@
 #include "kdevdocumentmodel.h"
 #include <QtCore/qdebug.h>
 
-KDevDocumentItem::KDevDocumentItem( const QString &name, KDevItemGroup *parent )
-        : KDevItemCollection( name, parent ),
-        m_documentState( KDevDocument::Clean )
+KDevDocumentItem::KDevDocumentItem( const QString &name, Koncrete::ItemGroup *parent )
+    : Koncrete::ItemCollection( name, parent ),
+        m_documentState( Koncrete::Document::Clean )
 {}
 
 KDevDocumentItem::~KDevDocumentItem()
@@ -30,10 +30,10 @@ KDevDocumentItem::~KDevDocumentItem()
 
 KDevDocumentItem *KDevDocumentItem::itemAt( int index ) const
 {
-    return static_cast<KDevDocumentItem*>( KDevItemCollection::itemAt( index ) );
+    return static_cast<KDevDocumentItem*>( Koncrete::ItemCollection::itemAt( index ) );
 }
 
-KDevMimeTypeItem::KDevMimeTypeItem( const QString &name, KDevItemGroup *parent )
+KDevMimeTypeItem::KDevMimeTypeItem( const QString &name, Koncrete::ItemGroup *parent )
         : KDevDocumentItem( name, parent )
 {}
 
@@ -64,7 +64,7 @@ KDevFileItem* KDevMimeTypeItem::file( const KUrl &url ) const
     return 0;
 }
 
-KDevFileItem::KDevFileItem( const KUrl &url, KDevItemGroup *parent )
+KDevFileItem::KDevFileItem( const KUrl &url, Koncrete::ItemGroup *parent )
         : KDevDocumentItem( url.fileName(), parent ),
         m_url( url )
 {}
@@ -73,7 +73,7 @@ KDevFileItem::~KDevFileItem()
 {}
 
 KDevDocumentModel::KDevDocumentModel( QObject *parent )
-        : KDevItemModel( parent )
+    : Koncrete::ItemModel( parent )
 {}
 
 KDevDocumentModel::~KDevDocumentModel()
@@ -81,17 +81,17 @@ KDevDocumentModel::~KDevDocumentModel()
 
 KDevDocumentItem *KDevDocumentModel::item( const QModelIndex &index ) const
 {
-    return reinterpret_cast<KDevDocumentItem*>( KDevItemModel::item( index ) );
+    return reinterpret_cast<KDevDocumentItem*>( Koncrete::ItemModel::item( index ) );
 }
 
 QModelIndex KDevDocumentModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    return KDevItemModel::index( row, column, parent );
+    return Koncrete::ItemModel::index( row, column, parent );
 }
 
 int KDevDocumentModel::rowCount( const QModelIndex &parent ) const
 {
-    return KDevItemModel::rowCount( parent );
+    return Koncrete::ItemModel::rowCount( parent );
 }
 
 QList<KDevMimeTypeItem*> KDevDocumentModel::mimeTypeList() const

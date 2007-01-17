@@ -24,6 +24,9 @@
 
 #include "kdevexport.h"
 
+namespace Koncrete
+{
+
 /**
 @short KDevelop profile
 
@@ -94,4 +97,5 @@ private:
     QStringList m_explicitDisable;
 };
 
+}
 #endif

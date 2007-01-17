@@ -85,7 +85,7 @@ void FileManager::openFile(KFileItem *fileItem)
     if (!fileItem)
         return;
 
-    KDevCore::documentController()->editDocument(fileItem->url());
+    Koncrete::Core::documentController()->editDocument(fileItem->url());
 }
 
 #include "filemanager.moc"

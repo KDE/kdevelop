@@ -31,12 +31,15 @@ namespace Ui
 class BGSettings;
 }
 
-class KDevBGPreferences : public KDevCModule
+namespace Koncrete
+{
+
+class BGPreferences : public ConfigModule
 {
     Q_OBJECT
 public:
-    KDevBGPreferences( QWidget *parent, const QStringList &args );
-    virtual ~KDevBGPreferences();
+    BGPreferences( QWidget *parent, const QStringList &args );
+    virtual ~BGPreferences();
 
     virtual void save();
 
@@ -51,4 +54,5 @@ private:
 
 };
 
+}
 #endif

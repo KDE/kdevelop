@@ -30,7 +30,7 @@
 #include <csharp_ast.h>
 #include <csharp_codemodel.h>
 
-class KDevCodeModel;
+class Koncrete::CodeModel;
 class CSharpLanguageSupport;
 
 namespace csharp
@@ -39,13 +39,13 @@ namespace csharp
 class ParseSession;
 
 
-class ParseJob : public KDevParseJob
+class ParseJob : public Koncrete::ParseJob
 {
     Q_OBJECT
 
 public:
     ParseJob( const KUrl &url, CSharpLanguageSupport* parent );
-    ParseJob( KDevDocument* document, CSharpLanguageSupport* parent );
+    ParseJob( Koncrete::Document* document, CSharpLanguageSupport* parent );
 
     virtual ~ParseJob();
 
@@ -55,8 +55,8 @@ public:
 
     bool wasReadFromDisk() const;
 
-    virtual KDevAST *AST() const;
-    virtual KDevCodeModel *codeModel() const;
+    virtual Koncrete::AST *AST() const;
+    virtual Koncrete::CodeModel *codeModel() const;
 
 protected:
     virtual void run();

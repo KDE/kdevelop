@@ -29,64 +29,68 @@
 #include "kdevbuildmanager.h"
 #include "cmakexmlparser.h"
 
-class QObject;
-class KDevProject;
-class KDevProjectItem;
 class QDir;
-class KDevProjectFolderItem;
-class KDevProjectFileItem;
-class KDevProjectTargetItem;
-class KDevProjectBuilder;
+class QObject;
+
+namespace Koncrete
+{
+class Project;
+class ProjectItem;
+class ProjectFolderItem;
+class ProjectFileItem;
+class ProjectTargetItem;
+class ProjectBuilder;
+}
 
 class cmLocalGenerator;
 
-class CMakeImporter : public KDevBuildManager
+class CMakeImporter : public Koncrete::BuildManager
 {
 public:
     CMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
 
     virtual ~CMakeImporter();
 
-    virtual KDevProject* project() const;
-    virtual KDevProjectBuilder* builder() const { return 0; }
+    virtual Koncrete::Project* project() const;
+    virtual Koncrete::ProjectBuilder* builder() const { return 0; }
     virtual KUrl buildDirectory() const;
     virtual KUrl::List includeDirectories() const;
     virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
 
-    virtual KDevProjectFolderItem* addFolder( const KUrl& /*folder */,
-                                              KDevProject* /*parent*/ ) { return false; }
+    virtual Koncrete::ProjectFolderItem* addFolder( const KUrl& /*folder */,
+            Koncrete::Project* /*parent*/ ) { return false; }
 
-    virtual KDevProjectTargetItem* createTarget( const QString&,
-                                                 KDevProjectFolderItem* ) { return false; }
+    virtual Koncrete::ProjectTargetItem* createTarget( const QString&,
+            Koncrete::ProjectFolderItem* ) { return false; }
 
-    virtual KDevProjectFileItem* addFile( const KUrl&,
-                                          KDevProjectFolderItem* ) { return false; }
+    virtual Koncrete::ProjectFileItem* addFile( const KUrl&,
+                                          Koncrete::ProjectFolderItem* ) { return false; }
 
-    virtual bool addFileToTarget( KDevProjectFileItem*, KDevProjectTargetItem* ) { return false; }
+    virtual bool addFileToTarget( Koncrete::ProjectFileItem*, Koncrete::ProjectTargetItem* ) { return false; }
 
-    virtual bool removeFolder( KDevProjectFolderItem* ) { return false; }
+    virtual bool removeFolder( Koncrete::ProjectFolderItem* ) { return false; }
 
-    virtual bool removeTarget( KDevProjectTargetItem* ) { return false; }
+    virtual bool removeTarget( Koncrete::ProjectTargetItem* ) { return false; }
 
-    virtual bool removeFile( KDevProjectFileItem*,
-                             KDevProjectFolderItem* ) { return false; }
-    virtual bool removeFileFromTarget( KDevProjectFileItem*,
-                                       KDevProjectTargetItem* ) { return false; }
+    virtual bool removeFile( Koncrete::ProjectFileItem*,
+                             Koncrete::ProjectFolderItem* ) { return false; }
+    virtual bool removeFileFromTarget( Koncrete::ProjectFileItem*,
+                                       Koncrete::ProjectTargetItem* ) { return false; }
 
-    QList<KDevProjectTargetItem*> targets() const;
+    QList<Koncrete::ProjectTargetItem*> targets() const;
 
-    virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
-    virtual KDevProjectItem* import( KDevProjectModel* model,
+    virtual QList<Koncrete::ProjectFolderItem*> parse( Koncrete::ProjectFolderItem* dom );
+    virtual Koncrete::ProjectItem* import( Koncrete::ProjectModel* model,
                                      const KUrl& fileName );
-    virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
-    virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
+    virtual KUrl findMakefile( Koncrete::ProjectFolderItem* dom ) const;
+    virtual KUrl::List findMakefiles( Koncrete::ProjectFolderItem* dom ) const;
 
 
 private:
 
-    KDevProject* m_project;
-    KDevProjectItem* m_rootItem;
-    KDevProjectBuilder* m_builder;
+    Koncrete::Project* m_project;
+    Koncrete::ProjectItem* m_rootItem;
+    Koncrete::ProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
     CMakeXmlParser m_xmlParser;

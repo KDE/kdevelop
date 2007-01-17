@@ -27,16 +27,19 @@
 
 namespace KTextEditor { class SmartCursor; }
 
+namespace Koncrete
+{
+
 /**
  * Extends KTextEditor::Range with information about the URL to which the range
  * refers.
  *
  * \todo override comparison operators and take them into account
  */
-class KDEVPLATFORM_EXPORT KDevDocumentCursor : public KTextEditor::Cursor
+class KDEVPLATFORM_EXPORT DocumentCursor : public KTextEditor::Cursor
 {
 public:
-  KDevDocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
+  DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
 
   enum Position {
     Start,
@@ -44,14 +47,14 @@ public:
   };
 
   /// Constructor for information extraction only, does not take ownership of the cursor.
-  /// \a range must be either a KDevDocumentRange or a KTextEditor::SmartRange.
-  KDevDocumentCursor(KTextEditor::Range* range, Position position);
+  /// \a range must be either a DocumentRange or a KTextEditor::SmartRange.
+  DocumentCursor(KTextEditor::Range* range, Position position);
 
   /// Constructor for information extraction only, does not take ownership of the cursor.
-  /// \a cursor must be either a KDevDocumentCursor or a KTextEditor::SmartCursor.
-  KDevDocumentCursor(KTextEditor::Cursor* cursor);
+  /// \a cursor must be either a DocumentCursor or a KTextEditor::SmartCursor.
+  DocumentCursor(KTextEditor::Cursor* cursor);
 
-  KDevDocumentCursor(const KDevDocumentCursor& copy);
+  DocumentCursor(const DocumentCursor& copy);
 
   /// Returns the associated document.
   const KUrl& document() const;
@@ -63,6 +66,7 @@ private:
   KUrl m_document;
 };
 
+}
 #endif // DOCUMENTRANGE_H
 
 // kate: indent-width 2;

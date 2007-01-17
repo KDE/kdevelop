@@ -32,14 +32,14 @@ class CppLanguageSupport;
 class ParseSession;
 class ParseJob;
 
-class CPPParseJob : public KDevParseJob
+class CPPParseJob : public Koncrete::ParseJob
 {
     Q_OBJECT
 public:
     CPPParseJob( const KUrl &url,
               CppLanguageSupport* parent );
 
-    CPPParseJob( KDevDocument* document,
+    CPPParseJob( Koncrete::Document* document,
               CppLanguageSupport* parent );
 
     virtual ~CPPParseJob();
@@ -49,10 +49,10 @@ public:
     ParseSession* parseSession() const;
 
     void setAST(TranslationUnitAST* ast);
-    virtual KDevAST *AST() const;
+    virtual Koncrete::AST *AST() const;
 
     void setCodeModel(CodeModel* model);
-    virtual KDevCodeModel *codeModel() const;
+    virtual Koncrete::CodeModel *codeModel() const;
 
     void setDUChain(TopDUContext* duChain);
     virtual TopDUContext* duChain() const;
@@ -64,7 +64,7 @@ public:
     const QStringList& includedFiles() const;
     void requestDependancies();
 
-    ParseJob* parseJob() const;
+    ::ParseJob* parseJob() const;
 
 private:
     ParseSession* m_session;
@@ -73,7 +73,7 @@ private:
     QStringList m_includedFiles;
     TopDUContext* m_duContext;
     bool m_readFromDisk;
-    ParseJob* m_parseJob;
+    ::ParseJob* m_parseJob;
 };
 
 class ParseJob : public ThreadWeaver::Job

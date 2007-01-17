@@ -32,43 +32,46 @@ Boston, MA 02110-1301, USA.
 #include "kdevmainwindow.h"
 #include "kdevplugincontroller.h"
 
-KDevLanguageController::KDevLanguageController( QObject *parent )
+namespace Koncrete
+{
+
+LanguageController::LanguageController( QObject *parent )
         : QObject( parent ),
         m_activeLanguage( 0 )
 {}
 
-KDevLanguageController::~KDevLanguageController()
+LanguageController::~LanguageController()
 {}
 
-void KDevLanguageController::loadSettings( bool projectIsLoaded )
+void LanguageController::loadSettings( bool projectIsLoaded )
 {
     if ( projectIsLoaded )
     {
-        KConfig * config = KDevConfig::standard();
+        KConfig * config = Config::standard();
         config->setGroup( "General Options" );
     
         QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
-        KDevCore::languageController() ->languageSupport( language );
+        Core::languageController() ->languageSupport( language );
     }
 }
 
-void KDevLanguageController::saveSettings( bool projectIsLoaded )
+void LanguageController::saveSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
 }
 
-void KDevLanguageController::initialize()
+void LanguageController::initialize()
 {}
 
-void KDevLanguageController::cleanup()
+void LanguageController::cleanup()
 {}
 
-KDevLanguageSupport *KDevLanguageController::activeLanguage() const
+LanguageSupport *LanguageController::activeLanguage() const
 {
     return m_activeLanguage;
 }
 
-KDevLanguageSupport *KDevLanguageController::languageSupport( const QString &language )
+LanguageSupport *LanguageController::languageSupport( const QString &language )
 {
     if ( language.isEmpty() )
         return 0;
@@ -81,29 +84,29 @@ KDevLanguageSupport *KDevLanguageController::languageSupport( const QString &lan
         return 0;
 }
 
-bool KDevLanguageController::loadLanguageSupport( const QString &language )
+bool LanguageController::loadLanguageSupport( const QString &language )
 {
-    const QString constraint = QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg( language );
+    const QString constraint = QString::fromLatin1("[X-elop-Language] == '%1'").arg( language );
 
-    KPluginInfo::List languageSupportOffers = KDevPluginController::query( "KDevelop/LanguageSupport",
+    KPluginInfo::List languageSupportOffers = PluginController::query( "elop/LanguageSupport",
                                                                            constraint );
 
     if ( languageSupportOffers.isEmpty() )
     {
-        KMessageBox::sorry( KDevCore::mainWindow(),
+        KMessageBox::sorry( Core::mainWindow(),
                             i18n( "No language plugin for %1 found.", language ) );
         return false;
     }
 
     KPluginInfo* languageSupportService = *languageSupportOffers.begin();
 
-    KDevPluginController *pc = KDevPluginController::self();
-    KDevPlugin* plugin = pc->loadPlugin( languageSupportService->pluginName() );
-    KDevLanguageSupport *langSupport = dynamic_cast<KDevLanguageSupport*>( plugin );
+    PluginController *pc = PluginController::self();
+    Plugin* plugin = pc->loadPlugin( languageSupportService->pluginName() );
+    LanguageSupport *langSupport = dynamic_cast<LanguageSupport*>( plugin );
 
     if ( !langSupport )
     {
-        KMessageBox::sorry( KDevCore::mainWindow(),
+        KMessageBox::sorry( Core::mainWindow(),
                             i18n( "Could not create language plugin for %1.", language ) );
         return false;
     }
@@ -114,6 +117,7 @@ bool KDevLanguageController::loadLanguageSupport( const QString &language )
     return true;
 }
 
+}
 #include "kdevlanguagecontroller.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

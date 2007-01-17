@@ -19,13 +19,18 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevcodedelegate.h"
 
-KDevCodeDelegate::KDevCodeDelegate( QObject *parent )
+namespace Koncrete
+{
+CodeDelegate::CodeDelegate( QObject *parent )
         : QItemDelegate( parent )
-{}
+{
+}
 
-KDevCodeDelegate::~KDevCodeDelegate()
-{}
+CodeDelegate::~CodeDelegate()
+{
+}
 
+}
 #include "kdevcodedelegate.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

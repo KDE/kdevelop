@@ -33,8 +33,11 @@
 
 #include <QtCore/qdebug.h>
 
-KDevProjectManager::KDevProjectManager(KDevProjectManagerPart *part, QWidget *parent)
-  : KDevTreeView(parent),
+namespace Koncrete
+{
+
+ProjectManager::ProjectManager(ProjectManagerPart *part, QWidget *parent)
+  : TreeView(parent),
     m_part(part)
 {
   header()->hide();
@@ -45,21 +48,21 @@ KDevProjectManager::KDevProjectManager(KDevProjectManagerPart *part, QWidget *pa
   connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotActivated(QModelIndex)));
 }
 
-KDevProjectManager::~KDevProjectManager()
+ProjectManager::~ProjectManager()
 {
 }
 
-KDevProjectManagerPart *KDevProjectManager::part() const
+ProjectManagerPart *ProjectManager::part() const
 {
   return m_part;
 }
 
-void KDevProjectManager::reset()
+void ProjectManager::reset()
 {
-  KDevTreeView::reset();
+  TreeView::reset();
 }
 
-KDevProjectFolderItem *KDevProjectManager::currentFolderItem() const
+ProjectFolderItem *ProjectManager::currentFolderItem() const
 {
   Q_ASSERT(projectModel() != 0);
 
@@ -68,7 +71,7 @@ KDevProjectFolderItem *KDevProjectManager::currentFolderItem() const
 
   while (current.isValid())
     {
-      if (KDevProjectFolderItem *folderItem = dynamic_cast<KDevProjectFolderItem*>(projectModel()->item(current)))
+      if (ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>(projectModel()->item(current)))
         return folderItem;
 
       current = projectModel()->parent(current);
@@ -77,7 +80,7 @@ KDevProjectFolderItem *KDevProjectManager::currentFolderItem() const
   return 0;
 }
 
-KDevProjectFileItem *KDevProjectManager::currentFileItem() const
+ProjectFileItem *ProjectManager::currentFileItem() const
 {
   Q_ASSERT(projectModel() != 0);
 
@@ -86,7 +89,7 @@ KDevProjectFileItem *KDevProjectManager::currentFileItem() const
 
   while (current.isValid())
     {
-      if (KDevProjectFileItem *fileItem = dynamic_cast<KDevProjectFileItem*>(projectModel()->item(current)))
+      if (ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>(projectModel()->item(current)))
         return fileItem;
 
       current = projectModel()->parent(current);
@@ -95,7 +98,7 @@ KDevProjectFileItem *KDevProjectManager::currentFileItem() const
   return 0;
 }
 
-KDevProjectTargetItem *KDevProjectManager::currentTargetItem() const
+ProjectTargetItem *ProjectManager::currentTargetItem() const
 {
   Q_ASSERT(projectModel() != 0);
 
@@ -104,7 +107,7 @@ KDevProjectTargetItem *KDevProjectManager::currentTargetItem() const
 
   while (current.isValid())
     {
-      if (KDevProjectTargetItem *targetItem = dynamic_cast<KDevProjectTargetItem*>(projectModel()->item(current)))
+      if (ProjectTargetItem *targetItem = dynamic_cast<ProjectTargetItem*>(projectModel()->item(current)))
         return targetItem;
 
       current = projectModel()->parent(current);
@@ -113,14 +116,14 @@ KDevProjectTargetItem *KDevProjectManager::currentTargetItem() const
   return 0;
 }
 
-KDevProjectModel *KDevProjectManager::projectModel() const
+ProjectModel *ProjectManager::projectModel() const
 {
-  return qobject_cast<KDevProjectModel*>(model());
+  return qobject_cast<ProjectModel*>(model());
 }
 
-void KDevProjectManager::slotActivated(const QModelIndex &index)
+void ProjectManager::slotActivated(const QModelIndex &index)
 {
-  KDevProjectItem *item = projectModel()->item(index);
+  ProjectItem *item = projectModel()->item(index);
 
   if (item && item->file())
     {
@@ -128,42 +131,43 @@ void KDevProjectManager::slotActivated(const QModelIndex &index)
     }
 }
 
-void KDevProjectManager::popupContextMenu(const QPoint &pos)
+void ProjectManager::popupContextMenu(const QPoint &pos)
 {
   QModelIndex index = indexAt(pos);
 
-  if (KDevProjectItem *item = projectModel()->item(index))
+  if (ProjectItem *item = projectModel()->item(index))
     {
       KMenu menu(this);
 
-      if (KDevProjectFolderItem *folder = item->folder())
+      if (ProjectFolderItem *folder = item->folder())
         {
           menu.addTitle(i18n("Folder: %1", folder->url().directory()));
         }
-      else if (KDevProjectFileItem *file = item->file())
+      else if (ProjectFileItem *file = item->file())
         {
           menu.addTitle(i18n("File: %1", file->url().fileName()));
         }
-      else if (KDevProjectTargetItem *target = item->target())
+      else if (ProjectTargetItem *target = item->target())
         {
           menu.addTitle(i18n("Target: %1", target->text()));
         }
 
       ProjectItemContext context(item);
-      KDevCore::mainWindow()->fillContextMenu(&menu, &context);
+      Core::mainWindow()->fillContextMenu(&menu, &context);
 
       menu.exec(mapToGlobal(pos));
     }
 }
 
-void KDevProjectManager::slotCurrentChanged(const QModelIndex &index)
+void ProjectManager::slotCurrentChanged(const QModelIndex &index)
 {
-  if (KDevProjectItem *item = projectModel()->item(index))
+  if (ProjectItem *item = projectModel()->item(index))
     {
       emit currentChanged(item);
     }
 }
 
+}
 #include "kdevprojectmanager.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

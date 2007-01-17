@@ -446,7 +446,7 @@ const QualifiedIdentifier & DUContext::localScopeIdentifier() const
 }
 
 DUContext::UsingNS::UsingNS(KTextEditor::Cursor* cursor)
-  : KDevDocumentCursorObject(cursor)
+  : Koncrete::DocumentCursorObject(cursor)
 {
 }
 

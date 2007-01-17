@@ -36,19 +36,23 @@ template<typename T> class QList;
 
 class KJob;
 class KInstance;
-class KDevFileManager;
-class KDevProjectModel;
-class KDevProjectItem;
-class KDevProjectFileItem;
-class KDevProjectFolderItem;
-class KDevPersistentHash;
+
+namespace Koncrete
+{
+
+class FileManager;
+class ProjectModel;
+class ProjectItem;
+class ProjectFileItem;
+class ProjectFolderItem;
+class PersistentHash;
 
 /**
  * \brief Object which represents a KDevelop project
  *
  * Provide better descriptions
  */
-class KDEVPLATFORM_EXPORT KDevProject : public QObject
+class KDEVPLATFORM_EXPORT Project : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")
@@ -58,13 +62,13 @@ public:
      *
      * @param parent The parent object for the plugin.
      */
-    KDevProject(QObject *parent = 0);
+    Project(QObject *parent = 0);
 
     /// Destructor.
-    virtual ~KDevProject();
+    virtual ~Project();
 
     /** Project model accessor */
-    KDevProjectModel* model() const;
+    ProjectModel* model() const;
 
 
 public Q_SLOTS:
@@ -92,19 +96,19 @@ public Q_SLOTS:
     virtual Q_SCRIPTABLE QString name() const;
 
     /** Get a list of all files in the project */
-    virtual QList<KDevProjectFileItem*> allFiles();
+    virtual QList<ProjectFileItem*> allFiles();
 
     /**
      * Get the file manager for the project
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    KDevFileManager* fileManager() const;
+    FileManager* fileManager() const;
 
     /**
      * Set the file manager for the project.
      */
-    void setFileManager( KDevFileManager* fileManager );
+    void setFileManager( FileManager* fileManager );
 
     /**
      * Find the url relative to the project directory equivalent to @a absoluteUrl.
@@ -141,18 +145,19 @@ public Q_SLOTS:
     /**
      * The persistent AST storage for this project.
      */
-    KDevPersistentHash *persistentHash() const;
+    PersistentHash *persistentHash() const;
 
 private Q_SLOTS:
     void importDone(KJob*);
 
 private:
-    QList<KDevProjectFileItem*> recurseFiles( KDevProjectItem* projectItem );
+    QList<ProjectFileItem*> recurseFiles( ProjectItem* projectItem );
 
 private:
     class Private;
     Private* const d;
 };
 
+}
 #endif
 //kate: indent-mode cstyle; auto-insert-doxygen on; indent-width 4; space-indent on;

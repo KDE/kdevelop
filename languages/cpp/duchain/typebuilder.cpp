@@ -223,7 +223,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
   } else if (node->name) {
     /*QualifiedIdentifier id = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevEditorIntegrator::FrontEdge);
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, Koncrete::EditorIntegrator::FrontEdge);
     Declaration* dec = currentContext()->findDeclarations(id, pos);
     if (dec && dec->abstractType()) {
       openedType = true;

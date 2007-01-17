@@ -52,7 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport,
 
 CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
         const QStringList& /*args*/ )
-        : KDevLanguageSupport( KDevCSharpSupportFactory::instance(), parent )
+        : Koncrete::LanguageSupport( KDevCSharpSupportFactory::instance(), parent )
 {
     QString types = QLatin1String( "text/x-csharp" );
     m_mimetypes = types.split( "," );
@@ -61,19 +61,19 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
     m_codeDelegate = new csharp::CodeDelegate( this );
     //     m_highlights = new CSharpHighlighting( this );
 
-    connect( KDevCore::documentController(),
-             SIGNAL( documentLoaded( KDevDocument* ) ),
-             this, SLOT( documentLoaded( KDevDocument* ) ) );
-    connect( KDevCore::documentController(),
-             SIGNAL( documentClosed( KDevDocument* ) ),
-             this, SLOT( documentClosed( KDevDocument* ) ) );
-    connect( KDevCore::documentController(),
-             SIGNAL( documentActivated( KDevDocument* ) ),
-             this, SLOT( documentActivated( KDevDocument* ) ) );
-    connect( KDevCore::projectController(),
+    connect( Koncrete::Core::documentController(),
+             SIGNAL( documentLoaded( Koncrete::Document* ) ),
+             this, SLOT( documentLoaded( Koncrete::Document* ) ) );
+    connect( Koncrete::Core::documentController(),
+             SIGNAL( documentClosed( Koncrete::Document* ) ),
+             this, SLOT( documentClosed( Koncrete::Document* ) ) );
+    connect( Koncrete::Core::documentController(),
+             SIGNAL( documentActivated( Koncrete::Document* ) ),
+             this, SLOT( documentActivated( Koncrete::Document* ) ) );
+    connect( Koncrete::Core::projectController(),
              SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
-    connect( KDevCore::projectController(),
+    connect( Koncrete::Core::projectController(),
              SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
 }
@@ -81,35 +81,35 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
 CSharpLanguageSupport::~CSharpLanguageSupport()
 {}
 
-KDevCodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
+Koncrete::CodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
 {
     if ( url.isValid() )
         return m_codeProxy->codeModel( url );
     else
-        return m_codeProxy->codeModel( KDevCore::documentController() ->activeDocumentUrl() );
+        return m_codeProxy->codeModel( Koncrete::Core::documentController() ->activeDocumentUrl() );
 }
 
-KDevCodeProxy *CSharpLanguageSupport::codeProxy() const
+Koncrete::CodeProxy *CSharpLanguageSupport::codeProxy() const
 {
     return m_codeProxy;
 }
 
-KDevCodeDelegate *CSharpLanguageSupport::codeDelegate() const
+Koncrete::CodeDelegate *CSharpLanguageSupport::codeDelegate() const
 {
     return m_codeDelegate;
 }
 
-KDevCodeRepository *CSharpLanguageSupport::codeRepository() const
+Koncrete::CodeRepository *CSharpLanguageSupport::codeRepository() const
 {
     return 0;
 }
 
-KDevParseJob *CSharpLanguageSupport::createParseJob( const KUrl &url )
+Koncrete::ParseJob *CSharpLanguageSupport::createParseJob( const KUrl &url )
 {
     return new ParseJob( url, this );
 }
 
-KDevParseJob *CSharpLanguageSupport::createParseJob( KDevDocument *document )
+Koncrete::ParseJob *CSharpLanguageSupport::createParseJob( Koncrete::Document *document )
 {
     return new ParseJob( document, this );
 }
@@ -119,7 +119,7 @@ QStringList CSharpLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void CSharpLanguageSupport::read( KDevAST * ast, std::ifstream &in )
+void CSharpLanguageSupport::read( Koncrete::AST * ast, std::ifstream &in )
 {
     //FIXME Need to attach the memory pool to the ast somehow so it is saved
     parser::memory_pool_type memory_pool;
@@ -131,7 +131,7 @@ void CSharpLanguageSupport::read( KDevAST * ast, std::ifstream &in )
     }
 }
 
-void CSharpLanguageSupport::write( KDevAST * ast, std::ofstream &out )
+void CSharpLanguageSupport::write( Koncrete::AST * ast, std::ofstream &out )
 {
     // This is how we save the AST to a file
     if ( out.is_open() )
@@ -140,19 +140,19 @@ void CSharpLanguageSupport::write( KDevAST * ast, std::ofstream &out )
     }
 }
 
-void CSharpLanguageSupport::documentLoaded( KDevDocument *document )
+void CSharpLanguageSupport::documentLoaded( Koncrete::Document *document )
 {
     if ( supportsDocument( document ) )
-        KDevCore::backgroundParser() ->addDocument( document );
+        Koncrete::Core::backgroundParser() ->addDocument( document );
 }
 
-void CSharpLanguageSupport::documentClosed( KDevDocument *document )
+void CSharpLanguageSupport::documentClosed( Koncrete::Document *document )
 {
     if ( supportsDocument( document ) )
-        KDevCore::backgroundParser() ->removeDocument( document );
+        Koncrete::Core::backgroundParser() ->removeDocument( document );
 }
 
-void CSharpLanguageSupport::documentActivated( KDevDocument *document )
+void CSharpLanguageSupport::documentActivated( Koncrete::Document *document )
 {
     Q_UNUSED( document );
 }
@@ -160,15 +160,15 @@ void CSharpLanguageSupport::documentActivated( KDevDocument *document )
 void CSharpLanguageSupport::projectOpened()
 {
     KUrl::List documentList;
-    QList<KDevProjectFileItem*> files = KDevCore::activeProject() ->allFiles();
-    foreach ( KDevProjectFileItem * file, files )
+    QList<Koncrete::ProjectFileItem*> files = Koncrete::Core::activeProject() ->allFiles();
+    foreach ( Koncrete::ProjectFileItem * file, files )
     {
         if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".cs" )*/ )
         {
             documentList.append( file->url() );
         }
     }
-    KDevCore::backgroundParser() ->addDocumentList( documentList );
+    Koncrete::Core::backgroundParser() ->addDocumentList( documentList );
 }
 
 void CSharpLanguageSupport::projectClosed()

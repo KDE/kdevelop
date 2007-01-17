@@ -25,41 +25,45 @@
 
 using namespace KTextEditor;
 
-KDevDocumentCursor::KDevDocumentCursor(const KUrl& document, const Cursor& cursor)
+namespace Koncrete
+{
+
+DocumentCursor::DocumentCursor(const KUrl& document, const Cursor& cursor)
   : Cursor(cursor)
   , m_document(document)
 {
 }
 
-KDevDocumentCursor::KDevDocumentCursor(KTextEditor::Range* range, Position position )
+DocumentCursor::DocumentCursor(KTextEditor::Range* range, Position position )
   : Cursor(position == Start ? range->start() : range->end())
-  , m_document(KDevDocumentRangeObject::url(range))
+  , m_document(DocumentRangeObject::url(range))
 {
 }
 
-KDevDocumentCursor::KDevDocumentCursor(Cursor* cursor)
+DocumentCursor::DocumentCursor(Cursor* cursor)
   : Cursor(*cursor)
 {
   if (cursor->isSmartCursor())
     m_document = cursor->toSmartCursor()->document()->url();
   else
-    m_document = static_cast<KDevDocumentCursor*>(cursor)->document();
+    m_document = static_cast<DocumentCursor*>(cursor)->document();
 }
 
-KDevDocumentCursor::KDevDocumentCursor(const KDevDocumentCursor& copy)
+DocumentCursor::DocumentCursor(const DocumentCursor& copy)
   : Cursor(copy)
   , m_document(copy.document())
 {
 }
 
-const KUrl& KDevDocumentCursor::document() const
+const KUrl& DocumentCursor::document() const
 {
   return m_document;
 }
 
-void KDevDocumentCursor::setDocument(const KUrl& document)
+void DocumentCursor::setDocument(const KUrl& document)
 {
   m_document = document;
 }
 
+}
 // kate: indent-width 2;

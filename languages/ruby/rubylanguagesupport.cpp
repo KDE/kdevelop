@@ -50,20 +50,20 @@ K_EXPORT_COMPONENT_FACTORY(kdevrubylanguagesupport,
                            KDevRubySupportFactory( "kdevrubysupport" ))
 
 RubyLanguageSupport::RubyLanguageSupport(QObject *parent, const QStringList& /*args*/)
-    :KDevLanguageSupport(KDevRubySupportFactory::instance(), parent)
+    :Koncrete::LanguageSupport(KDevRubySupportFactory::instance(), parent)
 {
     QString types = QLatin1String("application/x-ruby");
     m_mimetypes = types.split(",");
 
-    connect(KDevCore::documentController(), SIGNAL(documentLoaded(KDevDocument*)),
-        this, SLOT(documentLoaded(KDevDocument*)));
-    connect(KDevCore::documentController(), SIGNAL(documentClosed(KDevDocument*)),
-        this, SLOT(documentClosed(KDevDocument*)));
-    connect(KDevCore::documentController(), SIGNAL(documentActivated(KDevDocument*)),
-        this, SLOT(documentActivated(KDevDocument*)));
-    connect(KDevCore::projectController(), SIGNAL(projectOpened()),
+    connect(Koncrete::Core::documentController(), SIGNAL(documentLoaded(Koncrete::Document*)),
+        this, SLOT(documentLoaded(Koncrete::Document*)));
+    connect(Koncrete::Core::documentController(), SIGNAL(documentClosed(Koncrete::Document*)),
+        this, SLOT(documentClosed(Koncrete::Document*)));
+    connect(Koncrete::Core::documentController(), SIGNAL(documentActivated(Koncrete::Document*)),
+        this, SLOT(documentActivated(Koncrete::Document*)));
+    connect(Koncrete::Core::projectController(), SIGNAL(projectOpened()),
         this, SLOT(projectOpened()));
-    connect(KDevCore::projectController(), SIGNAL(projectClosed()),
+    connect(Koncrete::Core::projectController(), SIGNAL(projectClosed()),
         this, SLOT(projectClosed()));
 }
 
@@ -71,33 +71,33 @@ RubyLanguageSupport::~RubyLanguageSupport()
 {
 }
 
-KDevCodeModel *RubyLanguageSupport::codeModel(const KUrl &url) const
+Koncrete::CodeModel *RubyLanguageSupport::codeModel(const KUrl &url) const
 {
     Q_UNUSED( url );
     return 0;
 }
 
-KDevCodeProxy *RubyLanguageSupport::codeProxy() const
+Koncrete::CodeProxy *RubyLanguageSupport::codeProxy() const
 {
     return 0;
 }
 
-KDevCodeDelegate *RubyLanguageSupport::codeDelegate() const
+Koncrete::CodeDelegate *RubyLanguageSupport::codeDelegate() const
 {
     return 0;
 }
 
-KDevCodeRepository *RubyLanguageSupport::codeRepository() const
+Koncrete::CodeRepository *RubyLanguageSupport::codeRepository() const
 {
     return 0;
 }
 
-KDevParseJob *RubyLanguageSupport::createParseJob(const KUrl &url)
+Koncrete::ParseJob *RubyLanguageSupport::createParseJob(const KUrl &url)
 {
     return new ParseJob(url, this);
 }
 
-KDevParseJob *RubyLanguageSupport::createParseJob(KDevDocument *document)
+Koncrete::ParseJob *RubyLanguageSupport::createParseJob(Koncrete::Document *document)
 {
     return new ParseJob(document, this);
 }
@@ -107,7 +107,7 @@ QStringList RubyLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void RubyLanguageSupport::read(KDevAST *ast, std::ifstream &in)
+void RubyLanguageSupport::read(Koncrete::AST *ast, std::ifstream &in)
 {
     //FIXME Need to attach the memory pool to the ast somehow so it is saved
     parser::memory_pool_type memory_pool;
@@ -119,7 +119,7 @@ void RubyLanguageSupport::read(KDevAST *ast, std::ifstream &in)
     }
 }
 
-void RubyLanguageSupport::write(KDevAST *ast, std::ofstream &out)
+void RubyLanguageSupport::write(Koncrete::AST *ast, std::ofstream &out)
 {
     // This is how we save the AST to a file
     if (out.is_open())
@@ -128,19 +128,19 @@ void RubyLanguageSupport::write(KDevAST *ast, std::ofstream &out)
     }
 }
 
-void RubyLanguageSupport::documentLoaded(KDevDocument *document)
+void RubyLanguageSupport::documentLoaded(Koncrete::Document *document)
 {
     if (supportsDocument(document))
-        KDevCore::backgroundParser()->addDocument(document);
+        Koncrete::Core::backgroundParser()->addDocument(document);
 }
 
-void RubyLanguageSupport::documentClosed(KDevDocument *document)
+void RubyLanguageSupport::documentClosed(Koncrete::Document *document)
 {
     if (supportsDocument(document))
-        KDevCore::backgroundParser()->removeDocument(document);
+        Koncrete::Core::backgroundParser()->removeDocument(document);
 }
 
-void RubyLanguageSupport::documentActivated(KDevDocument *document)
+void RubyLanguageSupport::documentActivated(Koncrete::Document *document)
 {
     Q_UNUSED(document);
 }
@@ -148,15 +148,15 @@ void RubyLanguageSupport::documentActivated(KDevDocument *document)
 void RubyLanguageSupport::projectOpened()
 {
     KUrl::List documentList;
-    QList<KDevProjectFileItem*> files = KDevCore::activeProject()->allFiles();
-    foreach (KDevProjectFileItem *file, files)
+    QList<Koncrete::ProjectFileItem*> files = Koncrete::Core::activeProject()->allFiles();
+    foreach (Koncrete::ProjectFileItem *file, files)
     {
         if (file->url().fileName().endsWith( ".rb" ))
         {
             documentList.append(file->url());
         }
     }
-    KDevCore::backgroundParser()->addDocumentList(documentList);
+    Koncrete::Core::backgroundParser()->addDocumentList(documentList);
 }
 
 void RubyLanguageSupport::projectClosed()

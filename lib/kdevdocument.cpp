@@ -24,49 +24,52 @@
 
 #include "kdevdocumentcontroller.h"
 
-KDevDocument::KDevDocument(KParts::Part* part, KDevDocumentController* parent)
+namespace Koncrete
+{
+
+Document::Document(KParts::Part* part, DocumentController* parent)
   : QObject(parent)
   , m_part(part)
 {
 }
 
-KUrl KDevDocument::url() const
+KUrl Document::url() const
 {
     return m_url;
 }
 
-void KDevDocument::setUrl( const KUrl &url )
+void Document::setUrl( const KUrl &url )
 {
     m_url = url;
 }
 
-KParts::Part * KDevDocument::part() const
+KParts::Part * Document::part() const
 {
   Q_ASSERT(m_part);
   return m_part;
 }
 
-KMimeType::Ptr KDevDocument::mimeType() const
+KMimeType::Ptr Document::mimeType() const
 {
     return m_mimeType;
 }
 
-void KDevDocument::setMimeType( KMimeType::Ptr mimeType )
+void Document::setMimeType( KMimeType::Ptr mimeType )
 {
     m_mimeType = mimeType;
 }
 
-KDevDocumentController * KDevDocument::parent() const
+DocumentController * Document::parent() const
 {
-  return static_cast<KDevDocumentController*>(const_cast<QObject*>(QObject::parent()));
+  return static_cast<DocumentController*>(const_cast<QObject*>(QObject::parent()));
 }
 
-bool KDevDocument::isActive() const
+bool Document::isActive() const
 {
   return parent()->activeDocument() == this;
 }
 
-bool KDevDocument::isInitialized() const
+bool Document::isInitialized() const
 {
     Q_ASSERT(m_part);
     if ( KParts::ReadWritePart *rw = qobject_cast<KParts::ReadWritePart*>( m_part ) )
@@ -76,46 +79,48 @@ bool KDevDocument::isInitialized() const
     return false;
 }
 
-bool KDevDocument::isReadWrite() const
+bool Document::isReadWrite() const
 {
     Q_ASSERT(m_part);
     return (qobject_cast<KParts::ReadWritePart*>( m_part ) != 0L);
 }
 
-void KDevDocument::save()
+void Document::save()
 {
-  parent()->saveDocuments(QList<KDevDocument*>() << this);
+  parent()->saveDocuments(QList<Document*>() << this);
 }
 
-void KDevDocument::reload()
+void Document::reload()
 {
   parent()->reloadDocument(this);
 }
 
-void KDevDocument::close()
+void Document::close()
 {
   parent()->closeDocument(this);
 }
 
-KDevDocument::DocumentState KDevDocument::state() const
+Document::DocumentState Document::state() const
 {
   return m_state;
 }
 
-void KDevDocument::setState( KDevDocument::DocumentState state )
+void Document::setState( Document::DocumentState state )
 {
     m_state = state;
 }
 
-KTextEditor::Document * KDevDocument::textDocument() const
+KTextEditor::Document * Document::textDocument() const
 {
   Q_ASSERT(m_part);
   return qobject_cast<KTextEditor::Document*>(m_part);
 }
 
-void KDevDocument::activate()
+void Document::activate()
 {
   parent()->activateDocument(this);
+}
+
 }
 
 #include "kdevdocument.moc"

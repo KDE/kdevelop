@@ -30,11 +30,6 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVCONTEXT_H
 #define KDEVCONTEXT_H
 
-/**
-@file kdevcontext.h
-The context menu classes.
- */
-
 #include "kdevexport.h"
 
 #include <QStringList>
@@ -42,33 +37,33 @@ The context menu classes.
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
 
-#include "kdevexport.h"
-
-class KDevCodeItem;
-class KDevProjectItem;
+namespace Koncrete
+{
+class CodeItem;
+class ProjectItem;
 
 /**
 Base class for every context.
 Think of a Context-based class as "useful information associated with a context menu".
  
 When a context menu with a certain "context" associated appears, the platform's
-KDevMainWindow sends a notification signal and all plugins which receive this signal have
+MainWindow sends a notification signal and all plugins which receive this signal have
 the ability to add their own actions to the menu. For example, a SVN plugin could
 add "commit" and "update" actions to the context menu of a document.
  
 <b>How to use show a context menu from a plugin:</b>
 -# Create a KMenu in context menu event handler: @code KMenu menu(this); @endcode
 -# Create a context: @code FileContext context(list). @endcode
--# Ask KDevMainWindow to fill the menu:
-@code KDevCore::mainWindow()->fillContextMenu(&menu, &context); @endcode
+-# Ask MainWindow to fill the menu:
+@code Core::mainWindow()->fillContextMenu(&menu, &context); @endcode
 -# Show the popup menu: @code menu.exec(mapToGlobal(pos)); @endcode
  
 <b>How to fill a context menu from a plugin:</b>
 -# Create a @code contextMenu(KMenu *, const Context *) @endcode slot in your plugin class.
--# Connect KDevMainWindow::contextMenu(KMenu *, const Context *) signal to that slot in
+-# Connect MainWindow::contextMenu(KMenu *, const Context *) signal to that slot in
 the constructor of your plugin:\n
 @code
-connect(KDevCore::mainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
+connect(Core::mainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
         this, SLOT(contextMenu(KMenu *, const Context *)));
 @endcode
 -# Fill the menu in the slot you created, for example:\n
@@ -180,14 +175,14 @@ private:
 };
 
 /**
-A context for KDevCodeItem's.
+A context for CodeItem's.
  */
 class KDEVPLATFORM_EXPORT CodeItemContext: public Context
 {
 public:
     /**Builds the context.
     @param item The item to build the context from.*/
-    CodeItemContext( const KDevCodeItem* item );
+    CodeItemContext( const CodeItem* item );
 
     /**Destructor.*/
     virtual ~CodeItemContext();
@@ -195,7 +190,7 @@ public:
     virtual int type() const;
 
     /**@return The code model item for the selected item.*/
-    const KDevCodeItem* item() const;
+    const CodeItem* item() const;
 
 private:
     class Private;
@@ -206,14 +201,14 @@ private:
 };
 
 /**
-A context for KDevProjectItem's.
+A context for ProjectItem's.
  */
 class KDEVPLATFORM_EXPORT ProjectItemContext : public Context
 {
 public:
     /**Builds the context.
         @param item The item to build the context from.*/
-    ProjectItemContext( const KDevProjectItem* item );
+    ProjectItemContext( const ProjectItem* item );
 
     /**Destructor.*/
     virtual ~ProjectItemContext();
@@ -221,7 +216,7 @@ public:
     virtual int type() const;
 
     /**@return The project model item for the selected item.*/
-    const KDevProjectItem* item() const;
+    const ProjectItem* item() const;
 
 private:
     class Private;
@@ -231,6 +226,7 @@ private:
     ProjectItemContext &operator=( const ProjectItemContext & );
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

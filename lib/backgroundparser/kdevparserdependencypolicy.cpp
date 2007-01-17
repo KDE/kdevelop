@@ -27,9 +27,12 @@
 
 using namespace ThreadWeaver;
 
-bool KDevParserDependencyPolicy::addDependency(KDevParseJob* dependency, KDevParseJob* primaryDependee, Job* actualDependee)
+namespace Koncrete
 {
-  QSet<KDevParseJob*> encountered;
+
+bool ParserDependencyPolicy::addDependency(ParseJob* dependency, ParseJob* primaryDependee, Job* actualDependee)
+{
+  QSet<ParseJob*> encountered;
 
   gatherDependencies(dependency, encountered);
 
@@ -43,17 +46,19 @@ bool KDevParserDependencyPolicy::addDependency(KDevParseJob* dependency, KDevPar
   return true;
 }
 
-void KDevParserDependencyPolicy::destructed(Job *job)
+void ParserDependencyPolicy::destructed(Job *job)
 {
   DependencyPolicy::destructed(job);
 
-  m_dependencies.remove(static_cast<KDevParseJob*>(job));
+  m_dependencies.remove(static_cast<ParseJob*>(job));
 }
 
-void KDevParserDependencyPolicy::gatherDependencies(KDevParseJob* job, QSet<KDevParseJob*>& encountered) const
+void ParserDependencyPolicy::gatherDependencies(ParseJob* job, QSet<ParseJob*>& encountered) const
 {
   encountered.insert(job);
 
-  foreach (KDevParseJob* dependency, m_dependencies.values(job))
+  foreach (ParseJob* dependency, m_dependencies.values(job))
     gatherDependencies(dependency, encountered);
+}
+
 }

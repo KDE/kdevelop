@@ -26,12 +26,11 @@
 #include "kdevexport.h"
 
 class QTreeWidget;
-class KDevDocument;
 
-/**
-@file ksavealldialog.h
-Dialogs to save multiple files.
-*/
+namespace Koncrete
+{
+class Document;
+}
 
 /**
 Dialog to save selected files.
@@ -41,11 +40,13 @@ class KDEVWIDGETS_EXPORT KSaveSelectDialog : public KDialog
 	Q_OBJECT
 	
 public:
-	KSaveSelectDialog( const QList<KDevDocument*>& filelist, const QList<KDevDocument*>& ignorelist, QWidget * parent );
+	KSaveSelectDialog( const QList<Koncrete::Document*>& filelist,
+	                   const QList<Koncrete::Document*>& ignorelist,
+	                   QWidget * parent );
 	virtual ~KSaveSelectDialog();
 	
-	QList<KDevDocument*> filesToSave();
-	QList<KDevDocument*> filesNotToSave();
+	QList<Koncrete::Document*> filesToSave();
+        QList<Koncrete::Document*> filesNotToSave();
 	
 private slots:
 	void saveNone();
@@ -83,3 +84,5 @@ private:
 };
 
 #endif
+
+//kate: space-indent off; replace-tabs off;

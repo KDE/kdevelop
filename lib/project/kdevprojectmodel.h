@@ -29,11 +29,14 @@
 
 #include "domutil.h"
 
-class KDevProject;
-class KDevBuildProject;
-class KDevProjectFolderItem;
-class KDevProjectFileItem;
-class KDevProjectTargetItem;
+namespace Koncrete
+{
+
+class Project;
+class BuildProject;
+class ProjectFolderItem;
+class ProjectFileItem;
+class ProjectTargetItem;
 
 /**
  * Interface that allows a developer to implement the three basic types of
@@ -42,10 +45,10 @@ class KDevProjectTargetItem;
  * \li Build Target
  * \li File
  */
-class KDEVPLATFORM_EXPORT KDevProjectItem: public QStandardItem
+class KDEVPLATFORM_EXPORT ProjectItem: public QStandardItem
 {
 public:
-  KDevProjectItem(const QString &name, QStandardItem *parent = 0)
+  ProjectItem(const QString &name, QStandardItem *parent = 0)
     : QStandardItem(name)
   {
     if ( parent )
@@ -57,7 +60,7 @@ public:
    * do not use this function if you gave the item a parent when you
    * created it
    */
-  void add( KDevProjectItem* item ) { setChild( rowCount(), item ); }
+  void add( ProjectItem* item ) { setChild( rowCount(), item ); }
 
   enum ProjectItemType {
     Folder = QStandardItem::UserType,
@@ -67,31 +70,31 @@ public:
   };
 
   // Convenience function to return the current project
-  KDevProject* project() const;
+  Project* project() const;
 
-  virtual KDevProjectFolderItem *folder() const { return 0; }
-  virtual KDevProjectTargetItem *target() const { return 0; }
-  virtual KDevProjectFileItem *file() const { return 0; }
+  virtual ProjectFolderItem *folder() const { return 0; }
+  virtual ProjectTargetItem *target() const { return 0; }
+  virtual ProjectFileItem *file() const { return 0; }
 
-  QList<KDevProjectFolderItem*> folderList() const;
-  QList<KDevProjectTargetItem*> targetList() const;
-  QList<KDevProjectFileItem*> fileList() const;
+  QList<ProjectFolderItem*> folderList() const;
+  QList<ProjectTargetItem*> targetList() const;
+  QList<ProjectFileItem*> fileList() const;
 };
 
 /**
- * Implementation of the KDevProjectItem interface that is specific to a 
+ * Implementation of the ProjectItem interface that is specific to a 
  * folder
  */
-class KDEVPLATFORM_EXPORT KDevProjectFolderItem: public KDevProjectItem
+class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectItem
 {
 public:
-  KDevProjectFolderItem(const KUrl &dir, QStandardItem *parent = 0);
+  ProjectFolderItem(const KUrl &dir, QStandardItem *parent = 0);
 
-  virtual KDevProjectFolderItem *folder() const
-  { return const_cast<KDevProjectFolderItem*>(this); }
+  virtual ProjectFolderItem *folder() const
+  { return const_cast<ProjectFolderItem*>(this); }
 
   ///Reimplemented from QStandardItem
-  virtual int type() const { return KDevProjectItem::Folder; }
+  virtual int type() const { return ProjectItem::Folder; }
 
   /** Get the url of this folder */
   const KUrl& url() const;
@@ -106,14 +109,14 @@ private:
 /**
  * Folder which contains buildable targets as part of a buildable project
  */
-class KDEVPLATFORM_EXPORT KDevProjectBuildFolderItem: public KDevProjectFolderItem
+class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
 public:
-  KDevProjectBuildFolderItem(const KUrl &dir, QStandardItem *parent = 0)
-  : KDevProjectFolderItem(dir, parent) {}
+  ProjectBuildFolderItem(const KUrl &dir, QStandardItem *parent = 0)
+  : ProjectFolderItem(dir, parent) {}
 
   ///Reimplemented from QStandardItem
-  virtual int type() const { return KDevProjectItem::BuildFolder; }
+  virtual int type() const { return ProjectItem::BuildFolder; }
   
   void setIncludeDirectories( const KUrl::List& includeList );
   
@@ -139,17 +142,17 @@ private:
  *
  * This object contains all properties specific to a target.
  */
-class KDEVPLATFORM_EXPORT KDevProjectTargetItem: public KDevProjectItem
+class KDEVPLATFORM_EXPORT ProjectTargetItem: public ProjectItem
 {
 public:
-  KDevProjectTargetItem(const QString &name, QStandardItem *parent = 0)
-    : KDevProjectItem(name, parent) {}
+  ProjectTargetItem(const QString &name, QStandardItem *parent = 0)
+    : ProjectItem(name, parent) {}
 
   ///Reimplemented from QStandardItem
-  virtual int type() const { return KDevProjectItem::Target; }
+  virtual int type() const { return ProjectItem::Target; }
   
-  virtual KDevProjectTargetItem *target() const
-  { return const_cast<KDevProjectTargetItem*>(this); }
+  virtual ProjectTargetItem *target() const
+  { return const_cast<ProjectTargetItem*>(this); }
 
   /**
    * Return a list of directories that are used as additional include directories
@@ -172,16 +175,16 @@ public:
 /**
  * Object which represents a file.
  */
-class KDEVPLATFORM_EXPORT KDevProjectFileItem: public KDevProjectItem
+class KDEVPLATFORM_EXPORT ProjectFileItem: public ProjectItem
 {
 public:
-  KDevProjectFileItem(const KUrl& file, QStandardItem *parent = 0);
+  ProjectFileItem(const KUrl& file, QStandardItem *parent = 0);
 
   ///Reimplemented from QStandardItem
-  virtual int type() const { return KDevProjectItem::File; }
+  virtual int type() const { return ProjectItem::File; }
 
-  virtual KDevProjectFileItem *file() const
-  { return const_cast<KDevProjectFileItem*>(this); }
+  virtual ProjectFileItem *file() const
+  { return const_cast<ProjectFileItem*>(this); }
 
   /** Get the url of this file. */
   const KUrl& url() const;
@@ -191,19 +194,21 @@ private:
   KUrl m_url;
 };
 
-class KDEVPLATFORM_EXPORT KDevProjectModel: public QStandardItemModel
+class KDEVPLATFORM_EXPORT ProjectModel: public QStandardItemModel
 {
   Q_OBJECT
 public:
-  KDevProjectModel(QObject *parent = 0);
-  virtual ~KDevProjectModel();
+  ProjectModel(QObject *parent = 0);
+  virtual ~ProjectModel();
 
   using QStandardItemModel::item;
-  KDevProjectItem *item(const QModelIndex &index) const;
+  ProjectItem *item(const QModelIndex &index) const;
 
   void resetModel();
 
 };
+
+}
 
 #endif // KDEVPROJECTMODEL_H
 //kate: space-indent on; indent-width 2; indent-mode cstyle; replace-tabs on;

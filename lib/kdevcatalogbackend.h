@@ -28,18 +28,21 @@
 #include "tag.h"
 #include "kdevexport.h"
 
+namespace Koncrete
+{
+
 /**
  * Abstract class to define the interface to be used when accessing the PCS
  * catalog via a database
  */
-class KDEVPLATFORM_EXPORT KDevCatalogBackend
+class KDEVPLATFORM_EXPORT CatalogBackend
 {
 public:
     typedef QPair<QByteArray, QVariant> QueryArgument;
 
 public:
-    KDevCatalogBackend() {};
-    virtual ~KDevCatalogBackend() {};
+    CatalogBackend() {};
+    virtual ~CatalogBackend() {};
 
     //! Open the catalog backend
     virtual void open( const QString& dbName ) = 0;
@@ -70,6 +73,7 @@ public:
 
 };
 
+}
 #endif
 
 //kate: indent-spaces on; indent-width 4; replace-tabs on;

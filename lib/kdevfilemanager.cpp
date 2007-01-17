@@ -25,35 +25,38 @@
 #include "kdevproject.h"
 #include "kdevprojectmodel.h"
 
-class KDevFileManager::Private
+namespace Koncrete
+{
+    
+class FileManager::Private
 {
 public:
-	KDevProject* parent;
+	Project* parent;
 };
 
-KDevFileManager::KDevFileManager(KInstance* instance, QObject *parent)
-    : KDevPlugin(instance, parent), d(new Private)
+FileManager::FileManager(KInstance* instance, QObject *parent)
+    : Plugin(instance, parent), d(new Private)
 {
-    KDevProject* project = qobject_cast<KDevProject*>( parent );
+    Project* project = qobject_cast<Project*>( parent );
     d->parent = project;
 }
 
-KDevFileManager::~KDevFileManager()
+FileManager::~FileManager()
 {
 }
 
-KDevProject * KDevFileManager::project( ) const
+Project * FileManager::project( ) const
 {
     return d->parent;
 }
 
-KDevProjectFolderItem * KDevFileManager::top( )
+ProjectFolderItem * FileManager::top( )
 {
-/*    return dynamic_cast<KDevProjectFolderItem*>(root());*/
+/*    return dynamic_cast<ProjectFolderItem*>(root());*/
     return 0;
 }
 
-bool KDevFileManager::renameFile( KDevProjectFileItem* oldFile,
+bool FileManager::renameFile( ProjectFileItem* oldFile,
                                   const KUrl& newFile )
 {
     KIO::Job* renameJob = KIO::rename( oldFile->url(), newFile, 0 );
@@ -64,42 +67,42 @@ bool KDevFileManager::renameFile( KDevProjectFileItem* oldFile,
     return true;
 }
 
-KDevProjectFolderItem * KDevFileManager::addFolder( const KUrl & folder, KDevProjectFolderItem * parent )
+ProjectFolderItem * FileManager::addFolder( const KUrl & folder, ProjectFolderItem * parent )
 {
     Q_UNUSED( folder );
     Q_UNUSED( parent );
     return 0;
 }
 
-KDevProjectFileItem * KDevFileManager::addFile( const KUrl & file, KDevProjectFolderItem * parent )
+ProjectFileItem * FileManager::addFile( const KUrl & file, ProjectFolderItem * parent )
 {
     Q_UNUSED( file );
     Q_UNUSED( parent );
     return 0;
 }
 
-bool KDevFileManager::removeFolder( KDevProjectFolderItem * folder )
+bool FileManager::removeFolder( ProjectFolderItem * folder )
 {
     Q_UNUSED( folder ); return false;
 }
 
-bool KDevFileManager::removeFile( KDevProjectFileItem * file )
+bool FileManager::removeFile( ProjectFileItem * file )
 {
     Q_UNUSED( file ); return false;
 }
 
-QList<KDevProjectFolderItem*> KDevFileManager::parse( KDevProjectFolderItem * dom )
+QList<ProjectFolderItem*> FileManager::parse( ProjectFolderItem * dom )
 {
     Q_UNUSED( dom );
-    return QList<KDevProjectFolderItem*>();
+    return QList<ProjectFolderItem*>();
 }
 
-KDevProjectItem* KDevFileManager::import( KDevProjectModel * model, const KUrl &fileName )
+ProjectItem* FileManager::import( ProjectModel * model, const KUrl &fileName )
 {
     Q_UNUSED( model ); Q_UNUSED( fileName ); return 0;
 }
 
-bool KDevFileManager::renameFolder( KDevProjectFolderItem* oldFolder,
+bool FileManager::renameFolder( ProjectFolderItem* oldFolder,
                                     const KUrl& newFolder )
 {
     KIO::Job* renameJob = KIO::rename( oldFolder->url(), newFolder, 0 );
@@ -110,6 +113,7 @@ bool KDevFileManager::renameFolder( KDevProjectFolderItem* oldFolder,
     return true;
 }
 
+}
 #include "kdevfilemanager.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; indent-mode cstyle;
 

@@ -24,23 +24,26 @@
 
 #include <kdebug.h>
 
-KDevProjectManagerDelegate::KDevProjectManagerDelegate(QObject *parent)
+namespace Koncrete
+{
+  
+ProjectManagerDelegate::ProjectManagerDelegate(QObject *parent)
   : QItemDelegate(parent)
 {
 }
 
-KDevProjectManagerDelegate::~KDevProjectManagerDelegate()
+ProjectManagerDelegate::~ProjectManagerDelegate()
 {
 }
 
-void KDevProjectManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void ProjectManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
   QStyleOptionViewItem opt = option;
 
-  const KDevProjectModel *projectModel = qobject_cast<const KDevProjectModel*>(index.model());
+  const ProjectModel *projectModel = qobject_cast<const ProjectModel*>(index.model());
   if ( projectModel )
   {
-    KDevProjectItem *item = projectModel->item(index);
+    ProjectItem *item = projectModel->item(index);
     if ( item )
     {
       if ( item->folder() )
@@ -59,6 +62,7 @@ void KDevProjectManagerDelegate::paint(QPainter *painter, const QStyleOptionView
   QItemDelegate::paint(painter, opt, index);
 }
 
+}
 #include "kdevprojectmanagerdelegate.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

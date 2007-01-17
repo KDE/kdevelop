@@ -27,37 +27,40 @@
 #include "kdevsharedptr.h"
 #include "kdevexport.h"
 
-class KDevItem;
-class KDevItemGroup;
-class KDevItemCollection;
-class KDevItemModel;
+namespace Koncrete
+{
 
-class KDEVPLATFORM_EXPORT KDevItem : public KDevShared
+class Item;
+class ItemGroup;
+class ItemCollection;
+class ItemModel;
+
+class KDEVPLATFORM_EXPORT Item : public Shared
 {
 public:
-  KDevItem(KDevItemGroup *parent)
+  Item(ItemGroup *parent)
     : m_parent(parent) {}
 
-  virtual ~KDevItem() {}
+  virtual ~Item() {}
 
   /**
    * Retrieve this item's parent.
    * @return the parent of this item.
    */
-  KDevItemGroup *parent() const { return m_parent; }
+  ItemGroup *parent() const { return m_parent; }
 
   /**
    * Set the parent of this item. The new parent is specified by
    * @p parent
    */
-  void setParent(KDevItemGroup *parent) { m_parent = parent; }
+  void setParent(ItemGroup *parent) { m_parent = parent; }
 
   /**
    * Retrieve the group this item belongs to. If a null pointer
    * is returned, then this item does not have a group.
    * @return the group this item is a member of.
    */
-  virtual KDevItemGroup *group() const { return 0; }
+  virtual ItemGroup *group() const { return 0; }
 
   /**
    * Retrieve the collection this item belongs to. If a null pointer
@@ -65,7 +68,7 @@ public:
    * @return the collection this item belongs to
    * @todo describe the difference between a collection and a group
    */
-  virtual KDevItemCollection *collection() const { return 0; }
+  virtual ItemCollection *collection() const { return 0; }
 
   /**
    * Set the name of the item to the name specified by @p newName
@@ -88,20 +91,20 @@ public:
   virtual QString whatsThis() const = 0;
 
 private:
-  KDevItemGroup *m_parent;
+  ItemGroup *m_parent;
 };
 
 /**
- * The KDevItemGroup class holds a group of KDevItems.
+ * The ItemGroup class holds a group of Items.
  */
-class KDEVPLATFORM_EXPORT KDevItemGroup: public KDevItem
+class KDEVPLATFORM_EXPORT ItemGroup: public Item
 {
 public:
-  KDevItemGroup(KDevItemGroup *parent)
-    : KDevItem(parent) {}
+  ItemGroup(ItemGroup *parent)
+    : Item(parent) {}
 
-  virtual KDevItemGroup *group() const
-  { return const_cast<KDevItemGroup*>(this); }
+  virtual ItemGroup *group() const
+  { return const_cast<ItemGroup*>(this); }
 
   /**
    * Get the number of items in this group
@@ -111,10 +114,10 @@ public:
   /**
    * Get the index of the item described by @p item
    *
-   * Subclasses that implement KDevItemGroup should return -1 if the item is
+   * Subclasses that implement ItemGroup should return -1 if the item is
    * not in this item group.
    */
-  virtual int indexOf(KDevItem *item) const = 0;
+  virtual int indexOf(Item *item) const = 0;
 
   /**
    * Get the item at the index specified by @p index
@@ -123,64 +126,64 @@ public:
    * zero.
    * @return the item specified by @p index
    */
-  virtual KDevItem *itemAt(int index) const = 0;
+  virtual Item *itemAt(int index) const = 0;
 };
 
 /**
- * Implements the KDevItemGroup interface and provides the KDevItemModel
+ * Implements the ItemGroup interface and provides the ItemModel
  * with access to the group of items.
  */
-class KDEVPLATFORM_EXPORT KDevItemCollection: public KDevItemGroup
+class KDEVPLATFORM_EXPORT ItemCollection: public ItemGroup
 {
 public:
-  explicit KDevItemCollection(const QString &name, KDevItemGroup *parent = 0)
-    : KDevItemGroup(parent), m_name(name) {}
+  explicit ItemCollection(const QString &name, ItemGroup *parent = 0)
+    : ItemGroup(parent), m_name(name) {}
 
-  virtual ~KDevItemCollection() {}
+  virtual ~ItemCollection() {}
 
-  virtual KDevItemCollection *collection() const { return const_cast<KDevItemCollection*>(this); }
+  virtual ItemCollection *collection() const { return const_cast<ItemCollection*>(this); }
 
-  /** @copydoc KDevItem::setName( const QString& ) */
+  /** @copydoc Item::setName( const QString& ) */
   virtual void setName( const QString& newName  )
   {
     Q_ASSERT( !newName.isEmpty() );
     m_name = newName;
   }
 
-  /** @copydoc KDevItem::name() */
+  /** @copydoc Item::name() */
   virtual QString name() const { return m_name; }
 
-  /** @copydoc KDevItem::icon() */
+  /** @copydoc Item::icon() */
   virtual QIcon icon() const { return QIcon(); }
 
-  /** @copydoc KDevItem::toolTip() */
+  /** @copydoc Item::toolTip() */
   virtual QString toolTip() const { return QString(); }
 
-  /** @copydoc KDevItem::whatsThis() */
+  /** @copydoc Item::whatsThis() */
   virtual QString whatsThis() const { return QString(); }
 
   /** Get the list of items in this collection */
-  virtual const QList<KDevItem *> &items() const { return m_items; };
+  virtual const QList<Item *> &items() const { return m_items; };
 
-  /** @copydoc KDevItemGroup::itemCount */
+  /** @copydoc ItemGroup::itemCount */
   virtual int itemCount() const { return m_items.count(); }
 
-  /** @copydoc KDevItemGroup::indexOf */
-  virtual int indexOf(KDevItem *item) const { return m_items.indexOf(item); }
+  /** @copydoc ItemGroup::indexOf */
+  virtual int indexOf(Item *item) const { return m_items.indexOf(item); }
 
-  /** @copydoc KDevItemGroup::itemAt */
-  virtual KDevItem *itemAt(int index) const { return m_items.at(index); }
+  /** @copydoc ItemGroup::itemAt */
+  virtual Item *itemAt(int index) const { return m_items.at(index); }
 
   /** Remove all items from the collection */
   virtual void clear() { m_items.clear(); }
 
   /**
-   * Adds a KDevItem specified by @p item to the collection.
+   * Adds a Item specified by @p item to the collection.
    *
    * The collection will become the parent of this item. Items that are added
    * should not already have a parent.
    */
-  virtual void add(KDevItem *item)
+  virtual void add(Item *item)
   {
     Q_ASSERT(item != 0);
     Q_ASSERT(item->parent() == this || item->parent() == 0);
@@ -192,7 +195,7 @@ public:
   }
 
   /**
-   * Removes a KDevItem from the collection.
+   * Removes a Item from the collection.
    *
    * The item at the index position @p index is removed from the collection.
    * @p index must be a valid index position.
@@ -210,7 +213,7 @@ public:
    * The item at the index position @p index is replaced with @p item. The
    * index specifed by @p index must be a valid index position.
    */
-  virtual void replace(int index, KDevItem *item)
+  virtual void replace(int index, Item *item)
   {
     Q_ASSERT(index >= 0);
     Q_ASSERT(index < m_items.count());
@@ -219,27 +222,27 @@ public:
 
 private:
   QString m_name;
-  QList<KDevItem *> m_items;
+  QList<Item *> m_items;
 };
 
 /**
  * The generic KDevelop Model.
  *
  * If you need a model anywhere in KDevelop, then your model can inherit
- * from KDevItemModel and you can store your items in classes derived from
- * KDevItem to get some nice features.
+ * from ItemModel and you can store your items in classes derived from
+ * Item to get some nice features.
  */
-class KDEVPLATFORM_EXPORT KDevItemModel: public QAbstractItemModel
+class KDEVPLATFORM_EXPORT ItemModel: public QAbstractItemModel
 {
   Q_OBJECT
 public:
-  explicit KDevItemModel(QObject *parent = 0);
-  virtual ~KDevItemModel();
+  explicit ItemModel(QObject *parent = 0);
+  virtual ~ItemModel();
 
-  virtual KDevItemCollection *root() const;
+  virtual ItemCollection *root() const;
 
-  void appendItem(KDevItem *item, KDevItemCollection *collection = 0);
-  void removeItem(KDevItem *item);
+  void appendItem(Item *item, ItemCollection *collection = 0);
+  void removeItem(Item *item);
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &index) const;
@@ -250,19 +253,20 @@ public:
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-  virtual KDevItem *item(const QModelIndex &index) const;
-  virtual QModelIndex indexOf(KDevItem *item) const;
+  virtual Item *item(const QModelIndex &index) const;
+  virtual QModelIndex indexOf(Item *item) const;
 
 public slots:
   void refresh();
 
 protected:
-  int positionOf(KDevItem *item) const;
+  int positionOf(Item *item) const;
 
 private:
-  mutable KDevItemCollection *m_collection;
+  mutable ItemCollection *m_collection;
 };
 
+}
 #endif // KDEVITEMMODEL_H
 
 // kate: space-indent on; indent-width 2; indent-mode cstyle; replace-tabs on; auto-insert-doxygen on;

@@ -21,34 +21,38 @@
 #include "kdevprojectfilter.h"
 #include <kdevprojectmodel.h>
 
-KDevProjectOverviewFilter::KDevProjectOverviewFilter(KDevProjectModel *model, QObject *parent)
+namespace Koncrete
+{
+
+ProjectOverviewFilter::ProjectOverviewFilter(ProjectModel *model, QObject *parent)
   : KFilterModel(model, parent)
 {
 }
 
-KDevProjectOverviewFilter::~KDevProjectOverviewFilter()
+ProjectOverviewFilter::~ProjectOverviewFilter()
 {
 }
 
-bool KDevProjectOverviewFilter::matches(const QModelIndex &index) const
+bool ProjectOverviewFilter::matches(const QModelIndex &index) const
 {
   return true;
 }
 
-KDevProjectDetailsFilter::KDevProjectDetailsFilter(KDevProjectModel *model, QObject *parent)
+ProjectDetailsFilter::ProjectDetailsFilter(ProjectModel *model, QObject *parent)
   : KFilterModel(model, parent)
 {
 }
 
-KDevProjectDetailsFilter::~KDevProjectDetailsFilter()
+ProjectDetailsFilter::~ProjectDetailsFilter()
 {
 }
 
-bool KDevProjectDetailsFilter::matches(const QModelIndex &index) const
+bool ProjectDetailsFilter::matches(const QModelIndex &index) const
 {
   return true;
 }
 
+}
 #include "kdevprojectfilter.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

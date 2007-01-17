@@ -20,6 +20,9 @@
 #include "tag.h"
 #include <QDataStream>
 
+namespace Koncrete
+{
+
 Tag::Tag()
 {
     data = new TagData();
@@ -91,3 +94,4 @@ QDataStream& operator >> ( QDataStream& s, Tag& t )
   return s;
 }
 
+}

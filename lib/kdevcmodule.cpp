@@ -23,14 +23,16 @@ Boston, MA 02110-1301, USA.
 #include <kglobal.h>
 #include <kurl.h>
 
-KDevCModule::KDevCModule( KInstance *instance,
+namespace Koncrete
+{
+ConfigModule::ConfigModule( KInstance *instance,
                           QWidget *parent,
                           const QStringList &args )
 : KCModule( instance, parent, args ), m_config( 0 )
 {
 }
 
-KDevCModule::KDevCModule( KDevConfigSkeleton *config,
+ConfigModule::ConfigModule( ConfigSkeleton *config,
                           KInstance *instance,
                           QWidget *parent,
                           const QStringList &args )
@@ -38,12 +40,12 @@ KDevCModule::KDevCModule( KDevConfigSkeleton *config,
 {
 }
 
-KDevCModule::~KDevCModule()
+ConfigModule::~ConfigModule()
 {}
 
-void KDevCModule::save()
+void ConfigModule::save()
 {
-    //Calls the KDevConfigSkeleton file with the return value of the pure
+    //Calls the ConfigSkeleton file with the return value of the pure
     //virtual function localNonShareableFile() which must be implemented
     //by every kcm that inherits this class.
     if ( m_config )
@@ -52,11 +54,12 @@ void KDevCModule::save()
     KCModule::save();
 }
 
-void KDevCModule::load()
+void ConfigModule::load()
 {
     KCModule::load();
 }
 
+}
 #include "kdevcmodule.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

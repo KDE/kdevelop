@@ -17,7 +17,7 @@ namespace ruby
 
   class _CodeModelItem;
 
-  typedef KDevSharedPtr<_CodeModelItem> CodeModelItem;
+  typedef Koncrete::SharedPtr<_CodeModelItem> CodeModelItem;
 
   typedef QList<CodeModelItem> CodeList;
   typedef QList<CodeModelItem> ItemList;

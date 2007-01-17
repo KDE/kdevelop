@@ -5,14 +5,14 @@
 #include <kdevgenericfactory.h>
 #include "fakesupport_part.h"
 
-class KDevPluginInfo;
+class Koncrete::PluginInfo;
 
 class FakeSupportFactory : public KDevGenericFactory<FakeLanguageSupport>
 {
 public:
     FakeSupportFactory();
 
-    static const KDevPluginInfo *info();
+    static const Koncrete::PluginInfo *info();
 
 protected:
     virtual KInstance *createInstance();

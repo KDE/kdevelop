@@ -28,24 +28,27 @@ Boston, MA 02110-1301, USA.
 
 class KUrl;
 
+namespace Koncrete
+{
+
 /**
  * \short The base class for all KCModule's used by the platform.
  *
  * The base class settings.
  */
-class KDEVPLATFORM_EXPORT KDevCModule: public KCModule
+class KDEVPLATFORM_EXPORT ConfigModule: public KCModule
 {
     Q_OBJECT
 public:
-    KDevCModule( KInstance *instance,
+    ConfigModule( KInstance *instance,
                  QWidget *parent = 0,
                  const QStringList &args = QStringList() );
 
-    KDevCModule( KDevConfigSkeleton *config,
+    ConfigModule( ConfigSkeleton *config,
                  KInstance *instance,
                  QWidget *parent = 0,
                  const QStringList &args = QStringList() );
-    virtual ~KDevCModule();
+    virtual ~ConfigModule();
 
     virtual void save();
     virtual void load();
@@ -59,9 +62,10 @@ public:
     virtual KUrl localNonShareableFile() const = 0;
 
 private:
-    QPointer<KDevConfigSkeleton> m_config;
+    QPointer<ConfigSkeleton> m_config;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

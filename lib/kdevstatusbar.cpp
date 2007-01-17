@@ -24,7 +24,10 @@ Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <klocale.h>
 
-KDevStatusBar::KDevStatusBar( QWidget *parent )
+namespace Koncrete
+{
+
+StatusBar::StatusBar( QWidget *parent )
         : KStatusBar( parent )
 {
     QFrame *frame = new QFrame( this );
@@ -33,8 +36,10 @@ KDevStatusBar::KDevStatusBar( QWidget *parent )
     addPermanentWidget( frame, 1 );
 }
 
-KDevStatusBar::~KDevStatusBar()
+StatusBar::~StatusBar()
 {}
+
+}
 
 #include "kdevstatusbar.moc"
 

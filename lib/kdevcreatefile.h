@@ -24,10 +24,8 @@
 
 #include <kdevplugin.h>
 
-/**
-@file kdevcreatefile.h
-File creation facility interface.
-*/
+namespace Koncrete
+{
 
 /**
 File creation facility interface.
@@ -36,20 +34,20 @@ An abstract class for all extensions that are responsible for file creation.
 
 Instances that implement this interface are available through extension architecture:
 @code
-KDevCreateFile *cf = extension<KDevCreateFile>("KDevelop/CreateFile");
+CreateFile *cf = extension<CreateFile>("KDevelop/CreateFile");
 if (cf) {
     // do something
 } else {
     // fail
 }
 @endcode
-@sa KDevPlugin::extension method documentation.
+@sa Plugin::extension method documentation.
 */
-class KDEVPLATFORM_EXPORT KDevCreateFile : public KDevPlugin
+class KDEVPLATFORM_EXPORT CreateFile : public Plugin
 {
 
 public:
-  /**File created with @ref KDevCreateFile implementation.*/
+  /**File created with @ref CreateFile implementation.*/
   class CreatedFile {
 
   public:
@@ -120,8 +118,8 @@ public:
   be equal to the lifetime of the plugin.
   @param parent The parent object for the plugin.
   @param name The internal name which identifies the plugin.*/
-  KDevCreateFile(KInstance* instance, QObject * parent = 0, const char * = 0)
-      :KDevPlugin(instance, parent) {}
+  CreateFile(KInstance* instance, QObject * parent = 0, const char * = 0)
+      :Plugin(instance, parent) {}
 
   /**Creates a new file, within or without the project. 
   Supply as much information as you know. Leave what you don't know as QString().
@@ -140,5 +138,7 @@ public:
 
 
 };
+
+}
 
 #endif

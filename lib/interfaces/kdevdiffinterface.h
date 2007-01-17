@@ -24,10 +24,8 @@
 #include <kurl.h>
 #include <kdevplugin.h>
 
-/**
-@file kdevdifffrontend.h
-Diff frontend interface.
-*/
+namespace Koncrete
+{
 
 /**
 KDevelop diff frontend interface.
@@ -36,16 +34,16 @@ files.
 
 Instances that implement this interface are available through extension architecture:
 @code
-KDevDiffFrontend *df = extension<KDevDiffFrontend>("KDevelop/DiffFrontend");
+DiffFrontend *df = extension<DiffFrontend>("KDevelop/DiffFrontend");
 if (df) {
     // do something
 } else {
     // fail
 }
 @endcode
-@sa KDevPlugin::extension method documentation.
+@sa Plugin::extension method documentation.
 */
-class KDEVPLATFORM_EXPORT KDevDiffFrontend : public KDevPlugin
+class KDEVPLATFORM_EXPORT DiffFrontend : public Plugin
 {
   Q_OBJECT
 public:
@@ -56,8 +54,8 @@ public:
     dialog, etc. Plugin does not take ownership on info object, also its lifetime should
     be equal to the lifetime of the plugin.
     @param parent The parent object for the plugin. */
-    KDevDiffFrontend( KInstance *instance, QObject *parent = 0);
-    virtual ~KDevDiffFrontend();
+    DiffFrontend( KInstance *instance, QObject *parent = 0);
+    virtual ~DiffFrontend();
 
     /**Displays the patch.
     @param diff A string which contains a patch in unified format.*/
@@ -74,4 +72,5 @@ public:
 
 };
 
+}
 #endif

@@ -23,7 +23,7 @@
 #include "qmakeprojectscope.h"
 
 QMakeFolderItem::QMakeFolderItem( QMakeProjectScope* scope, const KUrl& url, QStandardItem* parent )
-: KDevProjectFolderItem( url, parent ), m_projectScope( scope )
+: Koncrete::ProjectFolderItem( url, parent ), m_projectScope( scope )
 {
 }
 
@@ -37,7 +37,7 @@ QMakeFolderItem::~QMakeFolderItem()
 }
 
 QMakeTargetItem::QMakeTargetItem( const QString& s, QStandardItem* parent )
-    : KDevProjectTargetItem( s, parent )
+    : Koncrete::ProjectTargetItem( s, parent )
 {
 }
 
@@ -55,7 +55,7 @@ const QHash<QString, QString>& QMakeTargetItem::environment() const
     return m_env;
 }
 
-const DomUtil::PairList& QMakeTargetItem::defines() const
+const Koncrete::DomUtil::PairList& QMakeTargetItem::defines() const
 {
     return m_defs;
 }

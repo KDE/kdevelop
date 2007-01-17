@@ -29,28 +29,28 @@ class KDialog;
 /**
 @author Roberto Raggi
 */
-class KDevMakeBuilder: public KDevProjectBuilder
+class KDevMakeBuilder: public Koncrete::ProjectBuilder
 {
     Q_OBJECT
 public:
     KDevMakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~KDevMakeBuilder();
 
-    virtual KDevProject *project() const;
+    virtual Koncrete::Project *project() const;
 
-    virtual bool build(KDevProjectItem *dom);
-    virtual bool clean(KDevProjectItem *dom);
+    virtual bool build(Koncrete::ProjectItem *dom);
+    virtual bool clean(Koncrete::ProjectItem *dom);
 
 private slots:
     void commandFinished(const QString &command);
     void commandFailed(const QString &command);
 
 private:
-    QString buildCommand(KDevProjectItem *dom, const QString &target = QString::null);
+    QString buildCommand(Koncrete::ProjectItem *dom, const QString &target = QString::null);
 
 private:
-    KDevProject *m_project;
-    QList< QPair<QString, KDevProjectItem *> > m_commands;
+    Koncrete::Project *m_project;
+    QList< QPair<QString, Koncrete::ProjectItem *> > m_commands;
 };
 
 #endif // KDEVMAKEBUILDER_H

@@ -22,6 +22,8 @@
 
 #include "kdevcore.h"
 #include <kdevmainwindow.h>
+#include <kdevdocumentcontroller.h>
+#include <kdevdocument.h>
 #include "internals/qdesigner_integration_p.h"
 
 typedef KParts::GenericFactory<QtDesignerPart> QtDesignerPartFactory;
@@ -41,7 +43,7 @@ QtDesignerPart::QtDesignerPart(QWidget* parentWidget,
   setXMLFile( "kdevqtdesigner.rc" );
 
   m_designer = QDesignerComponents::createFormEditor(this);
-  m_designer->setTopLevel( KDevCore::mainWindow());
+  m_designer->setTopLevel( Koncrete::Core::mainWindow());
 
   m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
   Q_ASSERT(m_designer->widgetBox() != 0);
@@ -60,8 +62,8 @@ QtDesignerPart::QtDesignerPart(QWidget* parentWidget,
 
   setupActions();
 
-  connect( KDevCore::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
-           this, SLOT( activated( KDevDocument* ) ) );
+  connect( Koncrete::Core::documentController(), SIGNAL( documentActivated( Koncrete::Document* ) ),
+           this, SLOT( activated( Koncrete::Document* ) ) );
 }
 
 QtDesignerPart::~QtDesignerPart()
@@ -80,7 +82,7 @@ QtDesignerPart::~QtDesignerPart()
         m_workspace->deleteLater();
 }
 
-void QtDesignerPart::activated( KDevDocument *document )
+void QtDesignerPart::activated( Koncrete::Document *document )
 {
     //FIXME
 //     if ( document->url() == url() )

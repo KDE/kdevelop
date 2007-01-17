@@ -21,8 +21,11 @@
 
 #include <QObject>
 #include "kdevexport.h"
-class KDevProject;
-class KDevProjectItem;
+
+namespace Koncrete
+{
+class Project;
+class ProjectItem;
 
 /**
 @author Roberto Raggi
@@ -31,21 +34,22 @@ class KDevProjectItem;
 
 Describes a <b>Project Builder</b> to KDevelop's Project Manager.
 */
-class KDEVPLATFORM_EXPORT KDevProjectBuilder: public QObject
+class KDEVPLATFORM_EXPORT ProjectBuilder: public QObject
 {
     Q_OBJECT
 public:
-    KDevProjectBuilder(QObject *parent = 0);
-    virtual ~KDevProjectBuilder();
+    ProjectBuilder(QObject *parent = 0);
+    virtual ~ProjectBuilder();
 
-    virtual KDevProject *project() const = 0;
+    virtual Project *project() const = 0;
 
-    virtual bool build(KDevProjectItem *dom) = 0;
-    virtual bool clean(KDevProjectItem *dom) = 0;
+    virtual bool build(ProjectItem *dom) = 0;
+    virtual bool clean(ProjectItem *dom) = 0;
 
 signals:
-    void built(KDevProjectItem *dom);
+    void built(ProjectItem *dom);
     void failed();
 };
 
+}
 #endif

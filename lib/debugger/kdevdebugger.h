@@ -27,18 +27,21 @@
 
 #include <kurl.h>
 
+namespace Koncrete
+{
+
 /**
 * Base class to handle signals from the editor that relate to breakpoints 
 * and the execution point of the debugger.
 */
-class KDevDebugger : public QObject
+class DebuggerBase : public QObject
 {
   Q_OBJECT
     
 public:
     
-  KDevDebugger(QObject *parent=0);
-  ~KDevDebugger();
+  DebuggerBase(QObject *parent=0);
+  ~DebuggerBase();
 
   /**
    * Sets a breakpoint in the editor document belong to fileName.
@@ -84,5 +87,6 @@ signals:
     
 };
 
+}
 
 #endif

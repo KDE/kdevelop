@@ -29,31 +29,34 @@
 #include <kdevast.h>
 #include <kdevdocument.h>
 
-KDevLanguageSupport::KDevLanguageSupport(KInstance *instance,
+namespace Koncrete
+{
+
+LanguageSupport::LanguageSupport(KInstance *instance,
                                          QObject *parent)
-    : KDevPlugin(instance, parent)
+    : Plugin(instance, parent)
     , m_mutexMutex(new QMutex)
 {
 }
 
-KDevLanguageSupport::~KDevLanguageSupport()
+LanguageSupport::~LanguageSupport()
 {
     delete m_mutexMutex;
 }
 
-bool KDevLanguageSupport::supportsDocument( KDevDocument *document )
+bool LanguageSupport::supportsDocument( Document *document )
 {
     KMimeType::Ptr mimetype = document->mimeType();
     return supportsDocumentInternal( mimetype );
 }
 
-bool KDevLanguageSupport::supportsDocument( const KUrl &url )
+bool LanguageSupport::supportsDocument( const KUrl &url )
 {
     KMimeType::Ptr mimetype = KMimeType::findByUrl( url );
     return supportsDocumentInternal( mimetype );
 }
 
-bool KDevLanguageSupport::supportsDocumentInternal( KMimeType::Ptr mimetype )
+bool LanguageSupport::supportsDocumentInternal( KMimeType::Ptr mimetype )
 {
     QStringList mimeList = mimeTypes();
     QStringList::const_iterator it = mimeList.begin();
@@ -65,32 +68,32 @@ bool KDevLanguageSupport::supportsDocumentInternal( KMimeType::Ptr mimetype )
     return false;
 }
 
-void KDevLanguageSupport::read( KDevAST *ast, std::ifstream &in )
+void LanguageSupport::read( AST *ast, std::ifstream &in )
 {
     Q_UNUSED( ast );
     Q_UNUSED( in );
     //Do Nothing
 }
 
-void KDevLanguageSupport::write( KDevAST *ast, std::ofstream &out )
+void LanguageSupport::write( AST *ast, std::ofstream &out )
 {
     Q_UNUSED( ast );
     Q_UNUSED( out );
     //Do Nothing
 }
 
-KDevCodeHighlighting *KDevLanguageSupport::codeHighlighting() const
+CodeHighlighting *LanguageSupport::codeHighlighting() const
 {
   // No default highlighting support
   return 0L;
 }
 
-void KDevLanguageSupport::releaseAST( KDevAST *)
+void LanguageSupport::releaseAST( AST *)
 {
   // FIXME make pure + implement in the kdev-pg parsers
 }
 
-QMutex * KDevLanguageSupport::parseMutex(QThread * thread) const
+QMutex * LanguageSupport::parseMutex(QThread * thread) const
 {
   QMutexLocker lock(m_mutexMutex);
 
@@ -102,7 +105,7 @@ QMutex * KDevLanguageSupport::parseMutex(QThread * thread) const
   return m_parseMutexes[thread];
 }
 
-void KDevLanguageSupport::lockAllParseMutexes()
+void LanguageSupport::lockAllParseMutexes()
 {
   m_mutexMutex->lock();
 
@@ -121,7 +124,7 @@ void KDevLanguageSupport::lockAllParseMutexes()
     mutex->lock();
 }
 
-void KDevLanguageSupport::unlockAllParseMutexes()
+void LanguageSupport::unlockAllParseMutexes()
 {
   QHashIterator<QThread*, QMutex*> it = m_parseMutexes;
   while (it.hasNext()) {
@@ -132,7 +135,7 @@ void KDevLanguageSupport::unlockAllParseMutexes()
   m_mutexMutex->unlock();
 }
 
-void KDevLanguageSupport::threadFinished()
+void LanguageSupport::threadFinished()
 {
   Q_ASSERT(sender());
 
@@ -148,10 +151,12 @@ void KDevLanguageSupport::threadFinished()
   m_parseMutexes.remove(thread);
 }
 
-void KDevLanguageSupport::documentLoaded( KDevAST *ast, const KUrl& document )
+void LanguageSupport::documentLoaded( AST *ast, const KUrl& document )
 {
   Q_UNUSED(ast);
   Q_UNUSED(document);
+}
+
 }
 
 #include "kdevlanguagesupport.moc"

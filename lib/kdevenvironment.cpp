@@ -40,38 +40,41 @@ Boston, MA 02110-1301, USA.
 extern char **environ;
 #endif
 
-KDevEnvironment::KDevEnvironment( QObject *parent )
+namespace Koncrete
+{
+
+Environment::Environment( QObject *parent )
         : QObject( parent )
 {
     populate();
 
     //repopulate when the project is opened
-    connect( KDevCore::projectController(), SIGNAL( projectOpened() ),
+    connect( Core::projectController(), SIGNAL( projectOpened() ),
              this, SLOT( populate() ) );
 }
 
-KDevEnvironment::~KDevEnvironment()
+Environment::~Environment()
 {}
 
-void KDevEnvironment::loadSettings( bool projectIsLoaded )
+void Environment::loadSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
 }
 
-void KDevEnvironment::saveSettings( bool projectIsLoaded )
+void Environment::saveSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
 }
 
-void KDevEnvironment::initialize()
+void Environment::initialize()
 {
 }
 
-void KDevEnvironment::cleanup()
+void Environment::cleanup()
 {
 }
 
-QString KDevEnvironment::variable( const QString &name ) const
+QString Environment::variable( const QString &name ) const
 {
     Q_ASSERT( !name.isEmpty() );
     //Get the override if the user has specified it
@@ -85,7 +88,7 @@ QString KDevEnvironment::variable( const QString &name ) const
     return QString::null;
 }
 
-void KDevEnvironment::setVariable( const QString &name, const QString &value )
+void Environment::setVariable( const QString &name, const QString &value )
 {
     Q_ASSERT( !name.isEmpty() );
     if ( m_processDefaults.value( name ) != value )
@@ -97,7 +100,7 @@ void KDevEnvironment::setVariable( const QString &name, const QString &value )
     setenv( name.toLatin1().data(), value.toLatin1().data(), 1 );
 }
 
-void KDevEnvironment::unsetVariable( const QString &name )
+void Environment::unsetVariable( const QString &name )
 {
     Q_ASSERT( !name.isEmpty() );
     if ( isOverride( name ) )
@@ -106,7 +109,7 @@ void KDevEnvironment::unsetVariable( const QString &name )
         removeProcessDefault( name, true );
 }
 
-bool KDevEnvironment::revertToProcessDefault( const QString &name )
+bool Environment::revertToProcessDefault( const QString &name )
 {
     Q_ASSERT( !name.isEmpty() );
     bool revert = m_processDefaults.contains( name );
@@ -115,7 +118,7 @@ bool KDevEnvironment::revertToProcessDefault( const QString &name )
     return revert;
 }
 
-void KDevEnvironment::saveSettings()
+void Environment::saveSettings()
 {
     QStringList pairs;
     EnvironmentMap::const_iterator it = m_overrides.constBegin();
@@ -124,7 +127,7 @@ void KDevEnvironment::saveSettings()
         pairs.append( it.key() + "=" + it.value() );
     }
 
-    KConfig *local = KDevConfig::localProject();
+    KConfig *local = Config::localProject();
     local->setGroup( "Environment" );
     if ( !pairs.isEmpty() )
         local->writeEntry( "Variables", pairs );
@@ -134,7 +137,7 @@ void KDevEnvironment::saveSettings()
     local->sync();
 }
 
-void KDevEnvironment::syncProcess( QProcess *process )
+void Environment::syncProcess( QProcess *process )
 {
     QStringList pairs;
     EnvironmentMap::const_iterator it = m_overrides.constBegin();
@@ -151,7 +154,7 @@ void KDevEnvironment::syncProcess( QProcess *process )
     process->setEnvironment( pairs );
 }
 
-void KDevEnvironment::syncProcess( KProcess *process )
+void Environment::syncProcess( KProcess *process )
 {
     EnvironmentMap::const_iterator it = m_overrides.constBegin();
     for ( ; it != m_overrides.constEnd(); ++it )
@@ -166,13 +169,13 @@ void KDevEnvironment::syncProcess( KProcess *process )
     }
 }
 
-void KDevEnvironment::populate()
+void Environment::populate()
 {
     populateProcessDefaults();
     populateOverrides();
 }
 
-void KDevEnvironment::saveSettings( EnvironmentMap overrides )
+void Environment::saveSettings( EnvironmentMap overrides )
 {
     if ( overrides != m_overrides )
     {
@@ -203,10 +206,10 @@ void KDevEnvironment::saveSettings( EnvironmentMap overrides )
     }
 }
 
-void KDevEnvironment::populateOverrides()
+void Environment::populateOverrides()
 {
     m_overrides.clear();
-    KConfig *config = KDevConfig::standard();
+    KConfig *config = Config::standard();
     config->setGroup( "Environment" );
     QStringList pairs = config->readEntry( "Variables", QStringList() );
     foreach ( QString v, pairs )
@@ -217,7 +220,7 @@ void KDevEnvironment::populateOverrides()
     }
 }
 
-void KDevEnvironment::populateProcessDefaults()
+void Environment::populateProcessDefaults()
 {
     m_processDefaults.clear();
 
@@ -233,19 +236,19 @@ void KDevEnvironment::populateProcessDefaults()
     }
 }
 
-bool KDevEnvironment::isOverride( const QString &name ) const
+bool Environment::isOverride( const QString &name ) const
 {
     return m_overrides.contains( name );
 }
 
-QString KDevEnvironment::override( const QString &name ) const
+QString Environment::override( const QString &name ) const
 {
     if ( m_overrides.contains( name ) )
         return m_overrides.value( name );
     return QString::null;
 }
 
-bool KDevEnvironment::removeOverride( const QString &name, bool unset )
+bool Environment::removeOverride( const QString &name, bool unset )
 {
     bool c = m_overrides.contains( name );
     if ( c )
@@ -259,7 +262,7 @@ bool KDevEnvironment::removeOverride( const QString &name, bool unset )
     return c;
 }
 
-void KDevEnvironment::clearOverrides()
+void Environment::clearOverrides()
 {
     foreach( QString v, m_overrides.keys() )
     {
@@ -269,19 +272,19 @@ void KDevEnvironment::clearOverrides()
     m_overrides.clear();
 }
 
-bool KDevEnvironment::isProcessDefault( const QString &name ) const
+bool Environment::isProcessDefault( const QString &name ) const
 {
     return m_processDefaults.contains( name );
 }
 
-QString KDevEnvironment::processDefault( const QString &name ) const
+QString Environment::processDefault( const QString &name ) const
 {
     if ( m_processDefaults.contains( name ) )
         return m_processDefaults.value( name );
     return QString::null;
 }
 
-bool KDevEnvironment::removeProcessDefault( const QString &name, bool unset )
+bool Environment::removeProcessDefault( const QString &name, bool unset )
 {
     bool c = m_processDefaults.contains( name );
     if ( c )
@@ -294,7 +297,7 @@ bool KDevEnvironment::removeProcessDefault( const QString &name, bool unset )
     return c;
 }
 
-void KDevEnvironment::clearProcessDefaults()
+void Environment::clearProcessDefaults()
 {
     foreach( QString v, m_processDefaults.keys() )
     {
@@ -304,6 +307,7 @@ void KDevEnvironment::clearProcessDefaults()
     m_processDefaults.clear();
 }
 
+}
 #include "kdevenvironment.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

@@ -37,7 +37,7 @@ Boston, MA 02110-1301, USA.
 #include <kdevdocumentcontroller.h>
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPart *part, QWidget *parent )
-        : KDevTreeView( parent ),
+    : Koncrete::TreeView( parent ),
         m_part( part )
 {
     setObjectName( i18n( "Documents" ) );
@@ -72,7 +72,7 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     if ( event->button() == Qt::LeftButton && index.parent().isValid() &&
             event->modifiers() == Qt::NoModifier )
     {
-        KDevCore::documentController() ->editDocument(
+        Koncrete::Core::documentController() ->editDocument(
             docModel->item( index ) ->fileItem() ->URL() );
 
     }
@@ -82,7 +82,7 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
         setExpanded( index, !isExpanded( index ) );
     }
 
-    KDevTreeView::mousePressEvent( event );
+    Koncrete::TreeView::mousePressEvent( event );
 }
 
 void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
@@ -100,11 +100,11 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     }
 
     KMenu menu( this );
-    FileContext context( list ); //FIXME change filecontext to documentcontext
-    KDevCore::mainWindow() ->fillContextMenu( &menu, &context );
+    Koncrete::FileContext context( list ); //FIXME change filecontext to documentcontext
+    Koncrete::Core::mainWindow() ->fillContextMenu( &menu, &context );
     menu.exec( event->globalPos() );
 
-    KDevTreeView::contextMenuEvent( event );
+    Koncrete::TreeView::contextMenuEvent( event );
 }
 
 #include "kdevdocumentview.moc"

@@ -44,7 +44,9 @@ GeneralInfoWidget::~GeneralInfoWidget()
     delete m_baseUi;
 }
 
-void GeneralInfoWidget::readConfig() {
+void GeneralInfoWidget::readConfig()
+{
+    using namespace Koncrete;
     if(DomUtil::readBoolEntry(m_projectDom,"/general/absoluteprojectpath",false))
         m_baseUi->project_directory_combo->setCurrentIndex(0);
     else
@@ -56,7 +58,9 @@ void GeneralInfoWidget::readConfig() {
     m_baseUi->description_edit->setText(DomUtil::readEntry(m_projectDom,"/general/description"));
 }
 
-void GeneralInfoWidget::writeConfig() {
+void GeneralInfoWidget::writeConfig() 
+{
+    using namespace Koncrete;
     DomUtil::writeEntry(m_projectDom,"/general/projectdirectory", m_baseUi->project_directory_edit->text());
     DomUtil::writeBoolEntry(m_projectDom,"/general/absoluteprojectpath",isProjectDirectoryAbsolute());
     DomUtil::writeEntry(m_projectDom,"/general/email", m_baseUi->email_edit->text());

@@ -178,7 +178,7 @@ public:
   /**
    * A class which represents a "using namespace" statement.
    */
-  class UsingNS : public KDevDocumentCursorObject
+  class UsingNS : public Koncrete::DocumentCursorObject
   {
   public:
     UsingNS(KTextEditor::Cursor* cursor);

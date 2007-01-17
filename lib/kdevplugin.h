@@ -34,75 +34,85 @@ class KInstance;
 class KIconLoader;
 
 /**
-@file kdevplugin.h
-KDevelop plugin interface.
-*/
-
-/**Current KDevelop plugin interface version. Interfaces declare plugin version to make sure
-old source (or binary) incompatible plugins are not loaded. Increase this if
-it is necessary that old plugins stop working.*/
+ * Current KDevelop plugin interface version. Interfaces declare plugin version
+ * to make sure old source (or binary) incompatible plugins are not loaded.
+ * Increase this if it is necessary that old plugins stop working.
+ */
 #define KDEVELOP_PLUGIN_VERSION 4
 
+namespace Koncrete
+{
+
 /**
-The base class for all KDevelop plugins.
-Plugin is a component which is loaded into KDevelop shell at startup or by request.
-Each plugin should have corresponding .desktop file with a description.
-.desktop file template looks like:
-@code
-[Desktop Entry]
-Encoding=UTF-8
-Type=Service
-Name=
-GenericName=
-Comment=
-Icon=
-X-KDevelop-Plugin-Version=
-X-KDevelop-Plugin-Homepage=
-X-KDevelop-Plugin-BugsEmailAddress=
-X-KDevelop-Plugin-Copyright=
-X-KDE-Library=
-X-KDevelop-Version=
-X-KDevelop-Category=
-X-KDevelop-Properties=
-X-KDevelop-Args=
-@endcode
-<b>Description of parameters in .desktop file:</b>
-- <i>Name</i> is a non-translatable name of a plugin, it is used in KTrader queries
-to search for a plugin (required);
-- <i>GenericName</i> is a translatable name of a plugin, it is used to show
-plugin names in GUI (required);
-- <i>Comment</i> is a short description about the plugin (optional);
-- <i>Icon</i> is a plugin icon (preferred);
-- <i>X-KDevelop-Plugin-Version</i> is a version of a plugin (optional);
-- <i>X-KDevelop-Plugin-Homepage</i> is a home page of a plugin (optional);
-- <i>X-KDevelop-Plugin-License</i> is a license (optional). can be: GPL, LGPL, BSD, Artistic,
-QPL or Custom. If this property is not set, license is considered as unknown;
-- <i>X-KDevelop-Plugin-BugsEmailAddress</i> is an email address for bug reports (optional);
-- <i>X-KDevelop-Plugin-Copyright</i> is a copyright statement (optional);
-- <i>X-KDE-Library</i> is a name of library which contains the plugin (required);
-- <i>X-KDevelop-Version</i> is a version of KDevelop interfaces which is supported by the plugin (required);
-- <i>X-KDevelop-Category</i> is a scope of a plugin (see below for explanation) (required);
-- <i>X-KDevelop-Args</i> is a list of additional arguments passed to plugins constructor (optional);
-- <i>X-KDevelop-Properties</i> is a list of properties which this plugin supports, see @ref Profile class documentation for explanation (required to work with shells that support profiles).
-.
-Plugin scope can be either:
-- Core
-- Global
-- Project
-.
-Global plugins are plugins which require only the shell to be loaded and do not operate on the @ref KDevProject interface and/or do not use project wide information.\n
-Core plugins are global plugins which offer some important "core" functionality and thus
-are not selectable by user in plugin configuration pages.\n
-Project plugins require a project to be loaded and are usually loaded/unloaded along with the project.
-If your plugin uses the @ref KDevProject interface and/or operates on project-related information then this is a project plugin.
-
-@sa KDevGenericFactory class documentation for an information about plugin instantiation
-and writing factories for plugins.
-
-@sa KDevCore class documentation for an information about features which are available to plugins
-from shell applications.
-*/
-class KDEVPLATFORM_EXPORT KDevPlugin: public QObject, public KXMLGUIClient
+ * The base class for all KDevelop plugins.
+ *
+ * Plugin is a component which is loaded into KDevelop shell at startup or by
+ * request. Each plugin should have corresponding .desktop file with a 
+ * description. The .desktop file template looks like:
+ * @code
+ * [Desktop Entry]
+ * Encoding=UTF-8
+ * Type=Service
+ * Name=
+ * GenericName=
+ * Comment=
+ * Icon=
+ * X-KDevelop-Plugin-Version=
+ * X-KDevelop-Plugin-Homepage=
+ * X-KDevelop-Plugin-BugsEmailAddress=
+ * X-KDevelop-Plugin-Copyright=
+ * X-KDE-Library=
+ * X-KDevelop-Version=
+ * X-KDevelop-Category=
+ * X-KDevelop-Properties=
+ * X-KDevelop-Args=
+ * @endcode
+ * <b>Description of parameters in .desktop file:</b>
+ * - <i>Name</i> is a non-translatable name of a plugin, it is used in KTrader
+ * queries to search for a plugin (required);
+ * - <i>GenericName</i> is a translatable name of a plugin, it is used to show
+ * plugin names in GUI (required);
+ * - <i>Comment</i> is a short description about the plugin (optional);
+ * - <i>Icon</i> is a plugin icon (preferred);
+ * - <i>X-KDevelop-Plugin-Version</i> is a version of a plugin (optional);
+ * - <i>X-KDevelop-Plugin-Homepage</i> is a home page of a plugin (optional);
+ * - <i>X-KDevelop-Plugin-License</i> is a license (optional). can be: GPL, 
+ * LGPL, BSD, Artistic, QPL or Custom. If this property is not set, license is
+ * considered as unknown;
+ * - <i>X-KDevelop-Plugin-BugsEmailAddress</i> is an email address for bug 
+ * reports (optional);
+ * - <i>X-KDevelop-Plugin-Copyright</i> is a copyright statement (optional);
+ * - <i>X-KDE-Library</i> is a name of library which contains the plugin 
+ * (required);
+ * - <i>X-KDevelop-Version</i> is a version of KDevelop interfaces which is
+ * supported by the plugin (required);
+ * - <i>X-KDevelop-Category</i> is a scope of a plugin (see below for 
+ * explanation) (required);
+ * - <i>X-KDevelop-Args</i> is a list of additional arguments passed to plugins
+ * constructor (optional);
+ * - <i>X-KDevelop-Properties</i> is a list of properties which this plugin
+ * supports, see the Profile documentation for an explanation (required to work
+ * with shells that support profiles).
+ *
+ * Plugin scope can be either:
+ * - Core
+ * - Global
+ * - Project
+ * .
+ * Global plugins are plugins which require only the shell to be loaded and do not operate on
+ * the Project interface and/or do not use project wide information.\n
+ * Core plugins are global plugins which offer some important "core" functionality and thus
+ * are not selectable by user in plugin configuration pages.\n
+ * Project plugins require a project to be loaded and are usually loaded/unloaded along with
+ * the project.
+ * If your plugin uses the Project interface and/or operates on project-related
+ * information then this is a project plugin.
+ *
+ *
+ * @sa Core class documentation for an information about features which are available to
+ * plugins from shell applications.
+ */
+class KDEVPLATFORM_EXPORT Plugin: public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -111,10 +121,10 @@ public:
      * @param instance The instance for this plugin.
      * @param parent The parent object for the plugin.
      */
-    KDevPlugin(KInstance *instance, QObject *parent);
+    Plugin(KInstance *instance, QObject *parent);
 
     /**Destructs a plugin.*/
-    virtual ~KDevPlugin();
+    virtual ~Plugin();
 
     /**
      * The display widget for this plugin. The widget <b>must</b> specify
@@ -133,7 +143,7 @@ public:
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
     /**
-     * Tells @ref KDevMainWindow whether to display this plugin as the central widget when
+     * Tells @ref MainWindow whether to display this plugin as the central widget when
      * in top-level UI mode. The default implementation returns false.
      * @return true if this plugin should be the central widget, false if it should not.
      */
@@ -159,13 +169,16 @@ public Q_SLOTS:
 Q_SIGNALS:
     /**
      * emitted when the plugin is ready to be unloaded by the plugin controller
-     * @param me The KDevPlugin to unload. It should always be the this pointer
+     * @param me The Plugin to unload. It should always be the this pointer
      */
-    void readyToUnload( KDevPlugin* me );
+    void readyToUnload( Plugin* me );
 
 private:
     class Private;
     Private* d;
 };
 
+}
 #endif
+
+//kate: auto-insert-doxygen on;

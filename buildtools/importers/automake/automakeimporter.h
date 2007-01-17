@@ -26,63 +26,69 @@
 #include "kdevbuildmanager.h"
 
 class QObject;
-class KDevProject;
-class KDevProjectItem;
+
 class AutoMakeItem;
 class MakefileInterface;
 class QDir;
-class KDevProjectFolderItem;
-class KDevProjectFileItem;
-class KDevProjectTargetItem;
-class KDevProjectBuilder;
 
 
-class AutoMakeImporter : public KDevBuildManager
+namespace Koncrete
+{
+    class Project;
+    class ProjectItem;
+    class ProjectBuilder;
+    class ProjectFileItem;
+    class ProjectFolderItem;
+    class ProjectTargetItem;
+}
+
+
+class AutoMakeImporter : public Koncrete::BuildManager
 {
 public:
 	AutoMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
 
 	virtual ~AutoMakeImporter();
 
-	virtual KDevProject* project() const;
-    virtual KDevProjectBuilder* builder() const { return 0; }
+	virtual Koncrete::Project* project() const;
+    virtual Koncrete::ProjectBuilder* builder() const { return 0; }
     virtual KUrl buildDirectory() const;
     virtual KUrl::List includeDirectories() const { return KUrl::List(); }
     virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
 
-	virtual KDevProjectFolderItem* addFolder( const KUrl& /*folder */,
-	                        KDevProject* /*parent*/ ) { return false; }
+	virtual Koncrete::ProjectFolderItem* addFolder( const KUrl& /*folder */,
+	                        Koncrete::Project* /*parent*/ ) { return false; }
 
-    virtual KDevProjectTargetItem* createTarget( const QString&,
-                                                 KDevProjectFolderItem* ) { return false; }
+    virtual Koncrete::ProjectTargetItem* createTarget( const QString&,
+                                                 Koncrete::ProjectFolderItem* ) { return false; }
 
-    virtual KDevProjectFileItem* addFile( const KUrl&,
-	                                     KDevProjectFolderItem* ) { return false; }
+    virtual Koncrete::ProjectFileItem* addFile( const KUrl&,
+	                                     Koncrete::ProjectFolderItem* ) { return false; }
 
-    virtual bool addFileToTarget( KDevProjectFileItem*, KDevProjectTargetItem* ) { return false; }
+    virtual bool addFileToTarget( Koncrete::ProjectFileItem*, Koncrete::ProjectTargetItem* ) { return false; }
 
-	virtual bool removeFolder( KDevProjectFolderItem* ) { return false; }
+	virtual bool removeFolder( Koncrete::ProjectFolderItem* ) { return false; }
 
-    virtual bool removeTarget( KDevProjectTargetItem* ) { return false; }
+    virtual bool removeTarget( Koncrete::ProjectTargetItem* ) { return false; }
 
-    virtual bool removeFile( KDevProjectFileItem*,
-	                         KDevProjectFolderItem* ) { return false; }
-	virtual bool removeFileFromTarget( KDevProjectFileItem*,
-	                                   KDevProjectTargetItem* ) { return false; }
+    virtual bool removeFile( Koncrete::ProjectFileItem*,
+	                         Koncrete::ProjectFolderItem* ) { return false; }
+	virtual bool removeFileFromTarget( Koncrete::ProjectFileItem*,
+	                                   Koncrete::ProjectTargetItem* ) { return false; }
 
-    QList<KDevProjectTargetItem*> targets() const;
+    QList<Koncrete::ProjectTargetItem*> targets() const;
 
-	virtual QList<KDevProjectFolderItem*> parse( KDevProjectFolderItem* dom );
-	virtual KDevProjectItem* import( KDevProjectModel* model,
+	virtual QList<Koncrete::ProjectFolderItem*> parse( Koncrete::ProjectFolderItem* dom );
+	virtual Koncrete::ProjectItem* import( Koncrete::ProjectModel* model,
 	                                 const KUrl& fileName );
-	virtual KUrl findMakefile( KDevProjectFolderItem* dom ) const;
-    virtual KUrl::List findMakefiles( KDevProjectFolderItem* dom ) const;
+	virtual KUrl findMakefile( Koncrete::ProjectFolderItem* dom ) const;
+    virtual KUrl::List findMakefiles( Koncrete::ProjectFolderItem* dom ) const;
 
-	void createProjectItems( const KUrl&, KDevProjectItem* );
+	void createProjectItems( const KUrl&, Koncrete::ProjectItem* );
 
 private:
-	KDevProject* m_project;
-	KDevProjectItem* m_rootItem;
+	Koncrete::Project* m_project;
+	Koncrete::ProjectItem* m_rootItem;
 
 	MakefileInterface* m_interface;
 };

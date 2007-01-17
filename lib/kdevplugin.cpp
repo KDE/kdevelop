@@ -36,7 +36,10 @@
 #include "kdevmainwindow.h"
 #include "kdevplugincontroller.h"
 
-class KDevPlugin::Private
+namespace Koncrete
+{
+
+class Plugin::Private
 {
 public:
     Private()
@@ -51,7 +54,7 @@ public:
     KIconLoader* iconLoader;
 };
 
-KDevPlugin::KDevPlugin( KInstance *instance, QObject *parent )
+Plugin::Plugin( KInstance *instance, QObject *parent )
         : QObject( parent ),
         KXMLGUIClient()
 {
@@ -59,32 +62,32 @@ KDevPlugin::KDevPlugin( KInstance *instance, QObject *parent )
     setInstance( instance );
 }
 
-KDevPlugin::~KDevPlugin()
+Plugin::~Plugin()
 {
 }
 
-QWidget *KDevPlugin::pluginView() const
+QWidget *Plugin::pluginView() const
 {
     return 0;
 }
 
-Qt::DockWidgetArea KDevPlugin::dockWidgetAreaHint() const
+Qt::DockWidgetArea Plugin::dockWidgetAreaHint() const
 {
     return Qt::NoDockWidgetArea;
 }
 
-bool KDevPlugin::isCentralPlugin() const
+bool Plugin::isCentralPlugin() const
 {
     return false;
 }
 
-void KDevPlugin::prepareForUnload()
+void Plugin::prepareForUnload()
 {
-    KDevCore::mainWindow()->removePlugin( this );
+    Core::mainWindow()->removePlugin( this );
     emit readyToUnload( this );
 }
 
-KIconLoader *KDevPlugin::iconLoader() const
+KIconLoader *Plugin::iconLoader() const
 {
     if ( d->iconLoader == 0 ) {
         d->iconLoader = new KIconLoader( instance()->instanceName(), instance()->dirs() );
@@ -96,11 +99,12 @@ KIconLoader *KDevPlugin::iconLoader() const
     return d->iconLoader;
 }
 
-void KDevPlugin::newIconLoader() const
+void Plugin::newIconLoader() const
 {
     if (d->iconLoader) {
         d->iconLoader->reconfigure( instance()->instanceName(), instance()->dirs() );
     }
 }
 
+}
 #include "kdevplugin.moc"

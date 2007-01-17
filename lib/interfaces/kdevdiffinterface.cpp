@@ -20,14 +20,18 @@
 */
 #include "kdevdiffinterface.h"
 
-KDevDiffFrontend::KDevDiffFrontend(KInstance *instance, QObject *parent)
-    : KDevPlugin(instance, parent)
+namespace Koncrete
+{
+
+DiffFrontend::DiffFrontend(KInstance *instance, QObject *parent)
+    : Plugin(instance, parent)
 {
 }
 
-KDevDiffFrontend::~KDevDiffFrontend()
+DiffFrontend::~DiffFrontend()
 {
 }
 
+}
 #include "kdevdiffinterface.moc"
 

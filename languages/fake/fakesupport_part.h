@@ -24,7 +24,7 @@
 
 #include <kdevlanguagesupport.h>
 
-class FakeLanguageSupport: public KDevLanguageSupport
+class FakeLanguageSupport: public Koncrete::LanguageSupport
 {
     Q_OBJECT
 public:
@@ -32,12 +32,12 @@ public:
                          const QStringList &args = QStringList() );
     virtual ~FakeLanguageSupport();
 
-    virtual KDevCodeModel *codeModel( const KUrl &url = KUrl() ) const;
-    virtual KDevCodeProxy *codeProxy() const;
-    virtual KDevCodeDelegate *codeDelegate() const;
-    virtual KDevCodeRepository *codeRepository() const;
-    virtual KDevParseJob *createParseJob( const KUrl &url );
-    virtual KDevParseJob *createParseJob( KDevDocument *document,
+    virtual Koncrete::CodeModel *codeModel( const KUrl &url = KUrl() ) const;
+    virtual Koncrete::CodeProxy *codeProxy() const;
+    virtual Koncrete::CodeDelegate *codeDelegate() const;
+    virtual Koncrete::CodeRepository *codeRepository() const;
+    virtual Koncrete::ParseJob *createParseJob( const KUrl &url );
+    virtual Koncrete::ParseJob *createParseJob( Koncrete::Document *document,
                                           KTextEditor::SmartRange *highlight );
 
     virtual QStringList mimeTypes() const;

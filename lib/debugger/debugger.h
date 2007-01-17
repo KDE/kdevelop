@@ -8,7 +8,10 @@
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
 
-class KDevDocumentController;
+namespace Koncrete
+{
+
+class DocumentController;
 
 /**
 * Describes a single breakpoint in the system
@@ -51,7 +54,7 @@ private:
 * point of the debugger.
 * We may change, add or remove breakpoints in this class.
 */
-class Debugger : public KDevDebugger
+class Debugger : public DebuggerBase
 {
     Q_OBJECT
 
@@ -85,7 +88,7 @@ public:
 
 // protected:
 
-    Debugger(KDevDocumentController *partController);
+    Debugger(DocumentController *partController);
     ~Debugger();
 
 private slots:
@@ -117,8 +120,9 @@ private:
     };
 
     static Debugger *s_instance;
-    KDevDocumentController *m_partController;
+    DocumentController *m_partController;
     QList<BPItem> BPList;
 };
 
+}
 #endif

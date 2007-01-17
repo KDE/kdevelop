@@ -35,15 +35,18 @@
 #include "tag.h"
 #include "kdevexport.h"
 
+namespace Koncrete
+{
+
 
 /**
  * Catalog backend using Samba's TDB
  */
-class KDEVPLATFORM_EXPORT KDevTDBCatalogBackend : public KDevCatalogBackend
+class KDEVPLATFORM_EXPORT TDBCatalogBackend : public CatalogBackend
 {
 public:
-    KDevTDBCatalogBackend();
-    virtual ~KDevTDBCatalogBackend();
+    TDBCatalogBackend();
+    virtual ~TDBCatalogBackend();
 
     //! Open the catalog backend
     virtual void open( const QString& dbName );
@@ -85,4 +88,5 @@ private:
     QString m_dbName;
 };
 
+}
 #endif

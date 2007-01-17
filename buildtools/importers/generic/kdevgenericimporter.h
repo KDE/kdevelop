@@ -24,7 +24,7 @@
 
 class QFileInfo;
 
-class KDevGenericImporter: public KDevFileManager
+class KDevGenericImporter: public Koncrete::FileManager
 {
     Q_OBJECT
 public:
@@ -38,20 +38,20 @@ public:
     virtual Features features() const
     { return Features(Folders | Files); }
 
-    virtual KDevProjectFolderItem* addFolder(const KUrl& folder, KDevProjectFolderItem *parent);
-    virtual KDevProjectFileItem* addFile(const KUrl& file, KDevProjectFolderItem *parent);
-    virtual bool removeFolder(KDevProjectFolderItem *folder);
-    virtual bool removeFile(KDevProjectFileItem *file);
+    virtual Koncrete::ProjectFolderItem* addFolder(const KUrl& folder, Koncrete::ProjectFolderItem *parent);
+    virtual Koncrete::ProjectFileItem* addFile(const KUrl& file, Koncrete::ProjectFolderItem *parent);
+    virtual bool removeFolder(Koncrete::ProjectFolderItem *folder);
+    virtual bool removeFile(Koncrete::ProjectFileItem *file);
 
-    virtual KDevProject *project() const;
-    virtual QList<KDevProjectFolderItem*> parse(KDevProjectFolderItem *item);
-    virtual KDevProjectItem *import(KDevProjectModel *model, const KUrl &fileName);
+    virtual Koncrete::Project *project() const;
+    virtual QList<Koncrete::ProjectFolderItem*> parse(Koncrete::ProjectFolderItem *item);
+    virtual Koncrete::ProjectItem *import(Koncrete::ProjectModel *model, const KUrl &fileName);
 
 private:
     bool isValid(const QFileInfo &fileName) const;
 
 private:
-    KDevProject *m_project;
+    Koncrete::Project *m_project;
 
     QStringList includes;
     QStringList excludes;

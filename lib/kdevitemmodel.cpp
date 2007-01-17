@@ -21,17 +21,20 @@
 
 #include <QtCore/QVector>
 
-KDevItemModel::KDevItemModel(QObject *parent)
+namespace Koncrete
+{
+
+ItemModel::ItemModel(QObject *parent)
   : QAbstractItemModel(parent),
   m_collection( 0L )
 {
 }
 
-KDevItemModel::~KDevItemModel()
+ItemModel::~ItemModel()
 {
 }
 
-void KDevItemModel::appendItem(KDevItem *item, KDevItemCollection *collection)
+void ItemModel::appendItem(Item *item, ItemCollection *collection)
 {
   QModelIndex parent;
 
@@ -46,12 +49,12 @@ void KDevItemModel::appendItem(KDevItem *item, KDevItemCollection *collection)
   endInsertRows();
 }
 
-void KDevItemModel::removeItem(KDevItem *item)
+void ItemModel::removeItem(Item *item)
 {
   Q_ASSERT(item != 0 && item->parent() != 0);
   Q_ASSERT(item->parent()->collection() != 0);
 
-  KDevItemCollection *parent_collection = item->parent()->collection();
+  ItemCollection *parent_collection = item->parent()->collection();
 
   int row = positionOf(item);
   beginRemoveRows(indexOf(parent_collection), row, row);
@@ -59,7 +62,7 @@ void KDevItemModel::removeItem(KDevItem *item)
   endRemoveRows();
 }
 
-QModelIndex KDevItemModel::indexOf(KDevItem *item) const
+QModelIndex ItemModel::indexOf(Item *item) const
 {
   Q_ASSERT(item != 0);
 
@@ -69,28 +72,28 @@ QModelIndex KDevItemModel::indexOf(KDevItem *item) const
   return createIndex(positionOf(item), 0, item);
 }
 
-int KDevItemModel::positionOf(KDevItem *item) const
+int ItemModel::positionOf(Item *item) const
 {
   Q_ASSERT(item->parent() != 0);
 
   return item->parent()->indexOf(item);
 }
 
-KDevItem *KDevItemModel::item(const QModelIndex &index) const
+Item *ItemModel::item(const QModelIndex &index) const
 {
-  return reinterpret_cast<KDevItem*>(index.internalPointer());
+  return reinterpret_cast<Item*>(index.internalPointer());
 }
 
-KDevItemCollection *KDevItemModel::root() const
+ItemCollection *ItemModel::root() const
 {
   if (!m_collection)
-    m_collection = new KDevItemCollection( QString::fromUtf8("<root>"), 0 );
-  return const_cast<KDevItemCollection*>(m_collection);
+    m_collection = new ItemCollection( QString::fromUtf8("<root>"), 0 );
+  return const_cast<ItemCollection*>(m_collection);
 }
 
-QModelIndex KDevItemModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex ItemModel::index(int row, int column, const QModelIndex &parent) const
 {
-  KDevItem *parent_item = item(parent);
+  Item *parent_item = item(parent);
   if (!parent_item)
     parent_item = root();
 
@@ -103,9 +106,9 @@ QModelIndex KDevItemModel::index(int row, int column, const QModelIndex &parent)
   return createIndex(row, column, parent_item->group()->itemAt(row));
 }
 
-QModelIndex KDevItemModel::parent(const QModelIndex &index) const
+QModelIndex ItemModel::parent(const QModelIndex &index) const
 {
-  if (KDevItem *kdev_item = item(index))
+  if (Item *kdev_item = item(index))
     {
       if (kdev_item->parent())
         if (kdev_item->parent()->parent())
@@ -116,29 +119,29 @@ QModelIndex KDevItemModel::parent(const QModelIndex &index) const
   return QModelIndex();
 }
 
-int KDevItemModel::rowCount(const QModelIndex &parent) const
+int ItemModel::rowCount(const QModelIndex &parent) const
 {
-  KDevItem *parent_item = item(parent);
+  Item *parent_item = item(parent);
   if (!parent_item)
     parent_item = root();
 
   Q_ASSERT(parent_item != 0);
 
-  if (KDevItemGroup *group = parent_item->group())
+  if (ItemGroup *group = parent_item->group())
     return group->itemCount();
 
   return 0;
 }
 
-int KDevItemModel::columnCount(const QModelIndex &parent) const
+int ItemModel::columnCount(const QModelIndex &parent) const
 {
   Q_UNUSED(parent);
   return 1;
 }
 
-QVariant KDevItemModel::data(const QModelIndex &index, int role) const
+QVariant ItemModel::data(const QModelIndex &index, int role) const
 {
-  if (KDevItem *kdev_item = item(index))
+  if (Item *kdev_item = item(index))
     {
       switch (role)
         {
@@ -153,7 +156,7 @@ QVariant KDevItemModel::data(const QModelIndex &index, int role) const
   return QVariant();
 }
 
-bool KDevItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool ItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
   Q_UNUSED(index);
   Q_UNUSED(value);
@@ -161,11 +164,12 @@ bool KDevItemModel::setData(const QModelIndex &index, const QVariant &value, int
   return false;
 }
 
-void KDevItemModel::refresh()
+void ItemModel::refresh()
 {
   emit reset();
 }
 
+}
 #include "kdevitemmodel.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

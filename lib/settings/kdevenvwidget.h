@@ -25,14 +25,17 @@ Boston, MA 02110-1301, USA.
 #include "kdevenvironment.h"
 #include "ui_envsettings.h"
 
-class KDevConfigSkeleton;
+namespace Koncrete
+{
 
-class KDevEnvWidget: public QDialog, private Ui::EnvironmentWidget
+class ConfigSkeleton;
+
+class EnvWidget: public QDialog, private Ui::EnvironmentWidget
 {
     Q_OBJECT
 public:
-    KDevEnvWidget( QWidget *parent = 0 );
-    virtual ~KDevEnvWidget();
+    EnvWidget( QWidget *parent = 0 );
+    virtual ~EnvWidget();
 
     void loadSettings();
     void saveSettings();
@@ -65,6 +68,7 @@ private:
 
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

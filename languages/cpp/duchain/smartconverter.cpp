@@ -35,7 +35,7 @@
 
 using namespace KTextEditor;
 
-SmartConverter::SmartConverter(KDevEditorIntegrator* editor, KDevCodeHighlighting* hl)
+SmartConverter::SmartConverter(Koncrete::EditorIntegrator* editor, Koncrete::CodeHighlighting* hl)
   : m_editor(editor)
   , m_hl(hl)
 {
@@ -48,7 +48,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
   m_editor->setCurrentUrl(context->url());
 
   if (m_editor->smart()) {
-    context->setTextRange(m_editor->topRange(KDevEditorIntegrator::DefinitionUseChain));
+    context->setTextRange(m_editor->topRange(Koncrete::EditorIntegrator::DefinitionUseChain));
 
     convertDUChainInternal(context, true);
   }

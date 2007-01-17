@@ -24,14 +24,17 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-ImportProjectJob::ImportProjectJob(QStandardItem *folder, KDevFileManager *importer)
+namespace Koncrete
+{
+
+ImportProjectJob::ImportProjectJob(QStandardItem *folder, FileManager *importer)
     : KJob(0),
       m_importer(importer)
 {
-    if ( folder->type() == KDevProjectItem::Folder || 
-         folder->type() == KDevProjectItem::BuildFolder )
+    if ( folder->type() == ProjectItem::Folder || 
+         folder->type() == ProjectItem::BuildFolder )
     {
-        m_folder = dynamic_cast<KDevProjectFolderItem*>( folder );
+        m_folder = dynamic_cast<ProjectFolderItem*>( folder );
     }
 }
 
@@ -47,12 +50,12 @@ void ImportProjectJob::start()
     emitResult();
 }
 
-void ImportProjectJob::startNextJob(KDevProjectFolderItem *dom)
+void ImportProjectJob::startNextJob(ProjectFolderItem *dom)
 {
   m_workingList += m_importer->parse(dom);
     while ( !m_workingList.isEmpty() )
     {
-      KDevProjectFolderItem *folder = m_workingList.first();
+      ProjectFolderItem *folder = m_workingList.first();
       m_workingList.pop_front();
       
       startNextJob(folder);
@@ -63,6 +66,7 @@ void ImportProjectJob::processList()
 {
 }
 
+}
 #include "importprojectjob.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

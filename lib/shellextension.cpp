@@ -19,10 +19,13 @@
  ***************************************************************************/
 #include "shellextension.h"
 
+namespace Koncrete
+{
 ShellExtension *ShellExtension::s_instance = 0;
 
 ShellExtension::ShellExtension()
 {
 }
 
+}
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

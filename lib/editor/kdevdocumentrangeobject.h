@@ -27,16 +27,19 @@
 #include "kdevdocumentcursor.h"
 #include "kdevdocumentrange.h"
 
+namespace Koncrete
+{
+  
 /**
  * Base class for any object which has an associated range of text.
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVPLATFORM_EXPORT KDevDocumentRangeObject : public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORM_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
-  KDevDocumentRangeObject(KTextEditor::Range* range);
-  virtual ~KDevDocumentRangeObject();
+  DocumentRangeObject(KTextEditor::Range* range);
+  virtual ~DocumentRangeObject();
 
   /**
    * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
@@ -46,14 +49,14 @@ public:
 
   void setRange(const KTextEditor::Range& range);
   const KTextEditor::Range textRange() const;
-  const KDevDocumentRange textDocRange() const;
+  const DocumentRange textDocRange() const;
   KTextEditor::Range* textRangePtr() const;
   KTextEditor::SmartRange* smartRange() const;
 
   KUrl url() const;
   static KUrl url(const KTextEditor::Range* range);
 
-  bool contains(const KDevDocumentCursor& cursor) const;
+  bool contains(const DocumentCursor& cursor) const;
 
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
@@ -62,7 +65,7 @@ public:
   KTextEditor::Range* takeRange();
 
 private:
-  Q_DISABLE_COPY(KDevDocumentRangeObject)
+  Q_DISABLE_COPY(DocumentRangeObject)
 
   mutable QMutex m_rangeMutex;
   KTextEditor::Range* m_range;
@@ -70,6 +73,7 @@ private:
   KUrl* m_url;
 };
 
+}
 #endif // RANGEOBJECT_H
 
 // kate: indent-width 2;

@@ -23,23 +23,27 @@
 #include <QtGui/QTreeView>
 #include "kdevexport.h"
 
-class KDevItem;
-class KDevItemGroup;
-class KDevItemCollection;
-class KDevItemModel;
+namespace Koncrete
+{
 
-class KDEVUTIL_EXPORT KDevTreeView: public QTreeView
+class Item;
+class ItemGroup;
+class ItemCollection;
+class ItemModel;
+
+class KDEVUTIL_EXPORT TreeView: public QTreeView
 {
   Q_OBJECT
 public:
-  KDevTreeView(QWidget *parent = 0);
-  virtual ~KDevTreeView();
+  TreeView(QWidget *parent = 0);
+  virtual ~TreeView();
 
-  KDevItemModel *itemModel() const;
+  ItemModel *itemModel() const;
 
-  KDevItem *currentItem() const;
-  KDevItemGroup *currentGroup() const;
-  KDevItemCollection *currentCollection() const;
+  Item *currentItem() const;
+  ItemGroup *currentGroup() const;
+  ItemCollection *currentCollection() const;
 };
 
+}
 #endif // KDEVTREEVIEW_H

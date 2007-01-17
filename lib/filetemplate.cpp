@@ -35,10 +35,12 @@
 #include "domutil.h"
 #include "kdevmainwindow.h"
 
+namespace Koncrete
+{
 
 bool FileTemplate::exists(const QString &name, Policy p)
 {
-    return KIO::NetAccess::exists( fullPathForName(name,p), true, KDevCore::mainWindow() );
+    return KIO::NetAccess::exists( fullPathForName(name,p), true, Core::mainWindow() );
 }
 
 QString FileTemplate::read(const QString &name, Policy p)
@@ -50,7 +52,7 @@ QString FileTemplate::readFile(const KUrl &fileName)
 {
     Q_UNUSED( fileName );
     //FIXME
-//     QDomDocument* dom = KDevApi::self()->projectDom();
+//     QDomDocument* dom = Api::self()->projectDom();
 //     Q_ASSERT(dom);
 // 
 //     QFile f(fileName.path());
@@ -111,12 +113,12 @@ KUrl FileTemplate::fullPathForName(const QString &name, Policy p)
 
     KUrl url;
     // first try project-specific
-    if (KDevCore::activeProject())
+    if (Core::activeProject())
     {
-        QString projectDir = KDevCore::activeProject()->folder().path();
+        QString projectDir = Core::activeProject()->folder().path();
         projectDir += "/templates/" + name;
         url = KUrl(projectDir);
-        if (KIO::NetAccess::exists(url, true, KDevCore::mainWindow()))
+        if (KIO::NetAccess::exists(url, true, Core::mainWindow()))
             return url;
     }
 
@@ -157,4 +159,6 @@ const QHash<QString, QString>& FileTemplate::substMap( SubstitutionMapTypes type
     case XMLFile:
         return m_templExpandMapXML;
     }
+}
+
 }

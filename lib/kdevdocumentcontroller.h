@@ -42,11 +42,6 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevdocument.h"
 
-/**
-@document kdevdocumentcontroller.h
-KDevelop document controller interface.
-*/
-
 namespace KParts
 {
 class Part;
@@ -70,6 +65,9 @@ class KToolBarPopupAction;
 class KRecentFilesAction;
 class KDirWatch;
 
+namespace Koncrete
+{
+
 class Context;
 
 /**
@@ -77,16 +75,16 @@ class Context;
  * The document controller manages open documents in the IDE.
  * Open documents are usually editors, GUI designers, html documentation etc.
 */
-class KDEVPLATFORM_EXPORT KDevDocumentController: public QObject, public KDevCoreInterface
+class KDEVPLATFORM_EXPORT DocumentController: public QObject, public CoreInterface
 {
-    friend class KDevCore;
+    friend class Core;
     Q_OBJECT
     Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.DocumentController" )
 public:
     /**Constructor.
     @param parent The parent object.*/
-    KDevDocumentController( QObject *parent = 0 );
-    virtual ~KDevDocumentController();
+    DocumentController( QObject *parent = 0 );
+    virtual ~DocumentController();
 
     /**Call this before a call to @ref editDocument to set the encoding of the
     document to be opened.
@@ -95,54 +93,54 @@ public:
 
     /**Shows a read-only document in the documentation viewer.
     @param url The Url of the document to view.*/
-    KDevDocument* showDocumentation( const KUrl &url, bool newWin );
+    Document* showDocumentation( const KUrl &url, bool newWin );
 
     /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/
-    KDevDocument* documentForUrl( const KUrl & url ) const;
+    Document* documentForUrl( const KUrl & url ) const;
 
     /**@return The list of open documents*/
-    QList<KDevDocument*> openDocuments() const;
+    QList<Document*> openDocuments() const;
 
     /**Saves a single document.
     @param doc the document to save
     @param force if true, force save even if the file was not modified.
     @return false if it was cancelled by the user, true otherwise */
-    bool saveDocument( KDevDocument* document, bool force = false );
+    bool saveDocument( Document* document, bool force = false );
 
     /**Saves a list of documents.
     @param list The list of Urls to save.
     @return false if it was cancelled by the user, true otherwise */
-    bool saveDocuments( const QList<KDevDocument*> &list );
+    bool saveDocuments( const QList<Document*> &list );
 
     /**Reloads a document.
     * @param url The document to reload.*/
-    void reloadDocument( KDevDocument* document );
+    void reloadDocument( Document* document );
 
     /**Reloads a list of documents.
     * @param list The documents to reload.*/
-    void reloadDocuments( const QList<KDevDocument*> &list );
+    void reloadDocuments( const QList<Document*> &list );
 
     /**Closes a document.
     * @param url The document to close.*/
-    bool closeDocument( KDevDocument* document );
+    bool closeDocument( Document* document );
 
     /**Closes a list of documents.
     @param list The list of documents to close.*/
-    bool closeDocuments( const QList<KDevDocument*> &list );
+    bool closeDocuments( const QList<Document*> &list );
 
     /**Closes all other open documents.
     @param document The document not to close.*/
-    bool closeAllOthers( const QList<KDevDocument*> &list );
+    bool closeAllOthers( const QList<Document*> &list );
 
     /**Activate this part.
     @param part The part to activate.*/
-    void activateDocument( KDevDocument* document );
+    void activateDocument( Document* document );
 
     /**Refers to the document currently active or focused.
     @return The Url of the active document.*/
-    KDevDocument* activeDocument() const;
+    Document* activeDocument() const;
 
     /** Convenience function to proved the url of the currently active document, if one exists.
     @return The Url of the active document.*/
@@ -153,7 +151,7 @@ public Q_SLOTS:
     @param url The full Url of the document to open.
     @param range The location information, if applicable.
     @param activate Indicates whether to fully activate the document.*/
-    Q_SCRIPTABLE KDevDocument* editDocument( const KUrl &url,
+    Q_SCRIPTABLE Document* editDocument( const KUrl &url,
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
             bool activate = true );
 
@@ -175,27 +173,27 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**Emitted when the document is given focus or activated.*/
-    void documentActivated( KDevDocument* document );
+    void documentActivated( Document* document );
 
     /**Emitted when a document has been saved.*/
-    void documentSaved( KDevDocument* document );
+    void documentSaved( Document* document );
 
     /**Emitted when a document has been loaded.*/
-    void documentLoaded( KDevDocument* document );
+    void documentLoaded( Document* document );
 
     /**Emitted when a document has been closed.*/
-    void documentClosed( KDevDocument* document );
+    void documentClosed( Document* document );
 
     /**Emitted when a document has been modified outside of KDevelop.*/
-    void documentExternallyModified( KDevDocument* document );
+    void documentExternallyModified( Document* document );
 
     /**This is typically emitted when an editorpart does "save as"
     which will change the document's Url from 'old' to 'new'*/
-    void documentUrlChanged( KDevDocument* document, const KUrl &oldUrl, const KUrl &newUrl );
+    void documentUrlChanged( Document* document, const KUrl &oldUrl, const KUrl &newUrl );
 
     /**This is emitted when the document changes, either internally
     or on disc.*/
-    void documentStateChanged( KDevDocument* document );
+    void documentStateChanged( Document* document );
 
     //FIXME figure out if these need to be public and/or use friend classes/document them
     void openingDocument( const QString &document );
@@ -234,28 +232,28 @@ private:
     void setCursorPosition( KParts::Part *part,
                             const KTextEditor::Cursor& cursor );
     bool openAsDialog( const KUrl &url, KMimeType::Ptr mimeType );
-    KDevDocument *addDocument( KParts::Part * part, bool setActive = true );
-    void removeDocument( KDevDocument* document );
-    void replaceDocument( KDevDocument* newDocument,
-                          KDevDocument* oldDocument, bool setActive = true );
-    void setActiveDocument( KDevDocument* document, QWidget *widget = 0L );
+    Document *addDocument( KParts::Part * part, bool setActive = true );
+    void removeDocument( Document* document );
+    void replaceDocument( Document* newDocument,
+                          Document* oldDocument, bool setActive = true );
+    void setActiveDocument( Document* document, QWidget *widget = 0L );
 
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
                                       const QString &preferredName
                                       = QString::null );
 
-    bool integrateDocument( KDevDocument* );
+    bool integrateDocument( Document* );
 
-    KUrl storedUrlForDocument( KDevDocument* ) const;
-    void updateDocumentUrl( KDevDocument* );
-    bool documentUrlHasChanged( KDevDocument* );
+    KUrl storedUrlForDocument( Document* ) const;
+    void updateDocumentUrl( Document* );
+    bool documentUrlHasChanged( Document* );
 
     KParts::ReadOnlyPart* activeReadOnly() const;
     KParts::ReadWritePart* activeReadWrite() const;
     KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
-    KDevDocument* documentForPart( KParts::Part* part ) const;
+    Document* documentForPart( KParts::Part* part ) const;
 
     QAction *m_closeWindowAction;
     QAction *m_saveAllDocumentsAction;
@@ -271,12 +269,12 @@ private:
 
     bool m_openNextAsText;
 
-    QHash<KParts::ReadOnlyPart*, KDevDocument*> m_partHash;
+    QHash<KParts::ReadOnlyPart*, Document*> m_partHash;
 
     // used to note when a URL changes (a document changes url)
-    QHash< KDevDocument*, KUrl > m_documentUrls;
+    QHash< Document*, KUrl > m_documentUrls;
     // used to map urls to open docs
-    QHash< KUrl, KDevDocument* > m_url2Document;
+    QHash< KUrl, Document* > m_url2Document;
     // used to fill the context menu
     KUrl::List m_selectedURLs;
 
@@ -299,6 +297,8 @@ private:
     void addHistoryEntry();
     void jumpTo( const HistoryEntry & );
 };
+
+}
 
 #endif
 

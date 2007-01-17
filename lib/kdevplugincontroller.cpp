@@ -59,14 +59,16 @@ Boston, MA 02110-1301, USA.
 /*#include "partselectwidget.h"*/
 #include "shellextension.h"
 
+namespace Koncrete
+{
 
-class KDevPluginController::Private
+class PluginController::Private
 {
 public:
     QList<KPluginInfo*> plugins;
 
     //map plugin infos to currently loaded plugins
-    typedef QMap<KPluginInfo*, KDevPlugin*> InfoToPluginMap;
+    typedef QMap<KPluginInfo*, Plugin*> InfoToPluginMap;
     InfoToPluginMap loadedPlugins;
 
     // The plugin manager's mode. The mode is StartingUp until loadAllPlugins()
@@ -79,32 +81,32 @@ public:
     QString profile;
     ProfileEngine engine;
 
-    static KStaticDeleter<KDevPluginController> deleter;
+    static KStaticDeleter<PluginController> deleter;
 };
 
-KStaticDeleter<KDevPluginController> KDevPluginController::Private::deleter;
-KDevPluginController* KDevPluginController::s_self = 0L;
+KStaticDeleter<PluginController> PluginController::Private::deleter;
+PluginController* PluginController::s_self = 0L;
 
-KDevPluginController* KDevPluginController::self()
+PluginController* PluginController::self()
 {
     if ( !s_self )
-        Private::deleter.setObject( s_self, new KDevPluginController() );
+        Private::deleter.setObject( s_self, new PluginController() );
 
     return s_self;
 }
 
-KDevPluginController::KDevPluginController()
+PluginController::PluginController()
     : QObject( qApp )
 {
     d = new Private;
     d->profile = ShellExtension::getInstance() ->defaultProfile();
-    d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
+    d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "elop/Plugin" ),
         QLatin1String( "[X-KDevelop-Version] == 4" ) ) );
     d->shutdownMode = Private::Running;
     KGlobal::ref();
 }
 
-KDevPluginController::~KDevPluginController()
+PluginController::~PluginController()
 {
     if ( d->shutdownMode != Private::DoneShutdown )
         kWarning(9000) << k_funcinfo << "Destructing plugin controller without going through the shutdown process! Backtrace is: " << endl << kBacktrace() << endl;
@@ -123,17 +125,17 @@ KDevPluginController::~KDevPluginController()
     delete d;
 }
 
-QString KDevPluginController::currentProfile() const
+QString PluginController::currentProfile() const
 {
     return d->profile;
 }
 
-ProfileEngine& KDevPluginController::engine() const
+ProfileEngine& PluginController::engine() const
 {
     return d->engine;
 }
 
-KPluginInfo* KDevPluginController::pluginInfo( KDevPlugin* plugin ) const
+KPluginInfo* PluginController::pluginInfo( Plugin* plugin ) const
 {
     for ( Private::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
           it != d->loadedPlugins.end(); ++it )
@@ -144,7 +146,7 @@ KPluginInfo* KDevPluginController::pluginInfo( KDevPlugin* plugin ) const
     return 0;
 }
 
-void KDevPluginController::shutdown()
+void PluginController::shutdown()
 {
     if(d->shutdownMode != Private::Running)
     {
@@ -180,7 +182,7 @@ void KDevPluginController::shutdown()
     QTimer::singleShot( 3000, this, SLOT( shutdownTimeout() ) );
 }
 
-KPluginInfo::List KDevPluginController::query( const QString &serviceType,
+KPluginInfo::List PluginController::query( const QString &serviceType,
         const QString &constraint )
 {
     
@@ -192,17 +194,17 @@ KPluginInfo::List KDevPluginController::query( const QString &serviceType,
     return infoList;
 }
 
-KPluginInfo::List KDevPluginController::queryPlugins( const QString &constraint )
+KPluginInfo::List PluginController::queryPlugins( const QString &constraint )
 {
     return query( "KDevelop/Plugin", constraint );
 }
 
-KDevPlugin* KDevPluginController::loadPlugin( const QString& pluginId )
+Plugin* PluginController::loadPlugin( const QString& pluginId )
 {
     return loadPluginInternal( pluginId );
 }
 
-void KDevPluginController::loadPlugins( PluginType type )
+void PluginController::loadPlugins( PluginType type )
 {
     KPluginInfo::List offers = d->engine.offers( d->profile, type );
     foreach( KPluginInfo* pi, offers )
@@ -211,7 +213,7 @@ void KDevPluginController::loadPlugins( PluginType type )
     }
 }
 
-void KDevPluginController::unloadPlugins( PluginType type )
+void PluginController::unloadPlugins( PluginType type )
 {
     //TODO see if this can be optimized so it's not something like O(n^2)
     KPluginInfo::List offers = d->engine.offers( d->profile, type );
@@ -225,7 +227,7 @@ void KDevPluginController::unloadPlugins( PluginType type )
     }
 }
 
-QStringList KDevPluginController::argumentsFromService( const KService::Ptr &service )
+QStringList PluginController::argumentsFromService( const KService::Ptr &service )
 {
     QStringList args;
     if ( !service )
@@ -237,15 +239,15 @@ QStringList KDevPluginController::argumentsFromService( const KService::Ptr &ser
     return args;
 }
 
-QList<KDevPlugin *> KDevPluginController::loadedPlugins() const
+QList<Plugin *> PluginController::loadedPlugins() const
 {
     return d->loadedPlugins.values();
 }
 
-KDevPlugin * KDevPluginController::getExtension( const QString & serviceType, const QString & constraint )
+Plugin * PluginController::getExtension( const QString & serviceType, const QString & constraint )
 {
-    KPluginInfo::List offers = KDevPluginController::query( serviceType, constraint );
-    KDevPlugin* ext = 0;
+    KPluginInfo::List offers = PluginController::query( serviceType, constraint );
+    Plugin* ext = 0;
     for ( KPluginInfo::List::const_iterator it = offers.constBegin(); it != offers.constEnd(); ++it )
     {
         if  ( d->loadedPlugins.contains( (*it) ) )
@@ -258,25 +260,25 @@ KDevPlugin * KDevPluginController::getExtension( const QString & serviceType, co
 }
 
 
-void KDevPluginController::unloadPlugin( const QString & pluginId )
+void PluginController::unloadPlugin( const QString & pluginId )
 {
-    if( KDevPlugin *thePlugin = plugin( pluginId ) )
+    if( Plugin *thePlugin = plugin( pluginId ) )
     {
         thePlugin->prepareForUnload();
     }
 }
 
-KUrl::List KDevPluginController::profileResources( const QString &nameFilter )
+KUrl::List PluginController::profileResources( const QString &nameFilter )
 {
     return d->engine.resources( currentProfile(), nameFilter );
 }
 
-KUrl::List KDevPluginController::profileResourcesRecursive( const QString &nameFilter )
+KUrl::List PluginController::profileResourcesRecursive( const QString &nameFilter )
 {
     return d->engine.resourcesRecursive( currentProfile(), nameFilter );
 }
 
-QString KDevPluginController::changeProfile( const QString &newProfile )
+QString PluginController::changeProfile( const QString &newProfile )
 {
     /* FIXME disabled for now
     QStringList unload;
@@ -305,7 +307,7 @@ QString KDevPluginController::changeProfile( const QString &newProfile )
     return QString();
 }
 
-KPluginInfo * KDevPluginController::infoForPluginId( const QString &pluginId ) const
+KPluginInfo * PluginController::infoForPluginId( const QString &pluginId ) const
 {
     QList<KPluginInfo *>::ConstIterator it;
     for ( it = d->plugins.begin(); it != d->plugins.end(); ++it )
@@ -317,7 +319,7 @@ KPluginInfo * KDevPluginController::infoForPluginId( const QString &pluginId ) c
     return 0L;
 }
 
-KDevPlugin *KDevPluginController::loadPluginInternal( const QString &pluginId )
+Plugin *PluginController::loadPluginInternal( const QString &pluginId )
 {
     KPluginInfo *info = infoForPluginId( pluginId );
     if ( !info )
@@ -332,7 +334,7 @@ KDevPlugin *KDevPluginController::loadPluginInternal( const QString &pluginId )
     kDebug(9000) << k_funcinfo << "Attempting to load '" << pluginId << "'" << endl;
     emit loadingPlugin( info->name() );
     int error = 0;
-    KDevPlugin *plugin = KServiceTypeTrader::createInstanceFromQuery<KDevPlugin>( QLatin1String( "KDevelop/Plugin" ),
+    Plugin *plugin = KServiceTypeTrader::createInstanceFromQuery<Plugin>( QLatin1String( "KDevelop/Plugin" ),
             QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), this, QStringList(), &error );
 
     if ( plugin )
@@ -342,8 +344,8 @@ KDevPlugin *KDevPluginController::loadPluginInternal( const QString &pluginId )
 
         connect( plugin, SIGNAL( destroyed( QObject * ) ), 
                  this, SLOT( pluginDestroyed( QObject * ) ) );
-        connect( plugin, SIGNAL( readyToUnload( KDevPlugin*) ), 
-                 this, SLOT( pluginReadyForUnload( KDevPlugin* ) ) );
+        connect( plugin, SIGNAL( readyToUnload( Plugin*) ), 
+                 this, SLOT( pluginReadyForUnload( Plugin* ) ) );
 
         kDebug(9000) << k_funcinfo << "Successfully loaded plugin '" << pluginId << "'" << endl;
 
@@ -384,7 +386,7 @@ KDevPlugin *KDevPluginController::loadPluginInternal( const QString &pluginId )
 }
 
 
-KDevPlugin* KDevPluginController::plugin( const QString& pluginId )
+Plugin* PluginController::plugin( const QString& pluginId )
 {
     KPluginInfo *info = infoForPluginId( pluginId );
     if ( !info )
@@ -396,7 +398,7 @@ KDevPlugin* KDevPluginController::plugin( const QString& pluginId )
         return 0L;
 }
 
-void KDevPluginController::pluginDestroyed( QObject* deletedPlugin )
+void PluginController::pluginDestroyed( QObject* deletedPlugin )
 {
     for ( Private::InfoToPluginMap::Iterator it = d->loadedPlugins.begin();
           it != d->loadedPlugins.end(); ++it )
@@ -416,13 +418,13 @@ void KDevPluginController::pluginDestroyed( QObject* deletedPlugin )
     }
 }
 
-void KDevPluginController::pluginReadyForUnload( KDevPlugin* plugin ) 
+void PluginController::pluginReadyForUnload( Plugin* plugin ) 
 {
     kDebug(9000) << k_funcinfo << pluginInfo( plugin )->pluginName() << " ready for unload" << endl;
     delete plugin;
 }
 
-void KDevPluginController::shutdownTimeout()
+void PluginController::shutdownTimeout()
 {
     // When we were already done the timer might still fire.
     // Do nothing in that case.
@@ -443,10 +445,11 @@ void KDevPluginController::shutdownTimeout()
     shutdownDone();
 }
 
-void KDevPluginController::shutdownDone()
+void PluginController::shutdownDone()
 {
     d->shutdownMode = Private::DoneShutdown;
     KGlobal::deref();
 }
 
+}
 #include "kdevplugincontroller.moc"

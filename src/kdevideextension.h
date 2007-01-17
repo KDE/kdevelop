@@ -25,7 +25,7 @@
 class KDialog;
 class QWidget;
 
-class KDevIDEExtension : public ShellExtension {
+class KDevIDEExtension : public Koncrete::ShellExtension {
 public:
     static void init();
 

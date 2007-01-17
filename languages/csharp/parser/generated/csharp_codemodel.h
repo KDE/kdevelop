@@ -27,7 +27,7 @@ namespace csharp
 
 #define DECLARE_MODEL_NODE(k) \
 enum { __node_kind = Kind_##k }; \
-typedef KDevSharedPtr<k##ModelItem> Pointer;
+typedef Koncrete::SharedPtr<k##ModelItem> Pointer;
 
 #define ITEM(item) item##ModelItem
 #define LIST(item) item##List
@@ -41,7 +41,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
     return  ptr;
   }
 
-  class CodeModel :  public KDevCodeModel
+  class CodeModel :  public Koncrete::CodeModel
     {
 
     public:
@@ -64,7 +64,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
 
     public:
       GlobalNamespaceDeclarationModelItem globalNamespace() const;
-      KDevItemCollection *root() const;
+      Koncrete::ItemCollection *root() const;
 
     private:
       GlobalNamespaceDeclarationModelItem _M_globalNamespace;
@@ -74,7 +74,7 @@ typedef KDevSharedPtr<k##ModelItem> Pointer;
       void operator=(const CodeModel &other);
     };
 
-  class _CodeModelItem :  public KDevCodeItem
+  class _CodeModelItem :  public Koncrete::CodeItem
     {
 
     public:

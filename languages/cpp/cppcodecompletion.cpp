@@ -40,7 +40,7 @@ CppCodeCompletion::CppCodeCompletion( CppLanguageSupport * parent )
   : QObject(parent)
   , m_model(new CppCodeCompletionModel(this))
 {
-  connect (KDevCore::documentController(), SIGNAL(documentLoaded(KDevDocument*)), SLOT(documentLoaded(KDevDocument*)));
+  connect (Koncrete::Core::documentController(), SIGNAL(documentLoaded(Koncrete::Document*)), SLOT(documentLoaded(Koncrete::Document*)));
 }
 
 CppCodeCompletion::~CppCodeCompletion()
@@ -57,7 +57,7 @@ void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEdito
   }
 }
 
-void CppCodeCompletion::documentLoaded(KDevDocument* document)
+void CppCodeCompletion::documentLoaded(Koncrete::Document* document)
 {
   if (document->textDocument()) {
     foreach (KDocument::View* view, document->textDocument()->views())

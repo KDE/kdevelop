@@ -21,8 +21,8 @@
 #include <QString>
 #include "cmakemodelitems.h"
 
-CMakeFolderItem::CMakeFolderItem( const FolderInfo& fi, KDevProjectItem* item )
-    : KDevProjectBuildFolderItem( fi.name, item )
+CMakeFolderItem::CMakeFolderItem( const FolderInfo& fi, Koncrete::ProjectItem* item )
+    : Koncrete::ProjectBuildFolderItem( fi.name, item )
 {
     m_folderInfo = fi;
     KUrl::List includeList;
@@ -43,7 +43,7 @@ FolderInfo CMakeFolderItem::folderInfo() const
 }
 
 CMakeTargetItem::CMakeTargetItem( const TargetInfo& target, CMakeFolderItem* item)
-    : KDevProjectTargetItem( target.name, item )
+    : Koncrete::ProjectTargetItem( target.name, item )
 {
     m_includeList = item->includeDirectories();
     m_targetInfo = target;
@@ -59,7 +59,7 @@ TargetInfo CMakeTargetItem::targetInfo() const
     return m_targetInfo;
 }
 
-const DomUtil::PairList& CMakeTargetItem::defines() const
+const Koncrete::DomUtil::PairList& CMakeTargetItem::defines() const
 {
     return m_defines;
 }

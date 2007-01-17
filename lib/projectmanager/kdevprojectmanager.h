@@ -22,33 +22,37 @@
 
 #include "kdevtreeview.h"
 
-class KDevProjectManagerPart;
-class KDevProjectModel;
-class KDevProjectFolderItem;
-class KDevProjectFileItem;
-class KDevProjectTargetItem;
-class KDevProjectItem;
 class KUrl;
 
-class KDEVPROJECTMANAGER_EXPORT KDevProjectManager: public KDevTreeView
+namespace Koncrete
+{
+
+class ProjectManagerPart;
+class ProjectModel;
+class ProjectFolderItem;
+class ProjectFileItem;
+class ProjectTargetItem;
+class ProjectItem;
+
+class KDEVPROJECTMANAGER_EXPORT ProjectManager: public TreeView
 {
   Q_OBJECT
 public:
-  KDevProjectManager(KDevProjectManagerPart *part, QWidget *parent);
-  virtual ~KDevProjectManager();
+  ProjectManager(ProjectManagerPart *part, QWidget *parent);
+  virtual ~ProjectManager();
 
-  KDevProjectManagerPart *part() const;
-  KDevProjectModel *projectModel() const;
+  ProjectManagerPart *part() const;
+  ProjectModel *projectModel() const;
 
-  KDevProjectFolderItem *currentFolderItem() const;
-  KDevProjectFileItem *currentFileItem() const;
-  KDevProjectTargetItem *currentTargetItem() const;
+  ProjectFolderItem *currentFolderItem() const;
+  ProjectFileItem *currentFileItem() const;
+  ProjectTargetItem *currentTargetItem() const;
 
   virtual void reset();
 
 signals:
   void activateURL(const KUrl &url);
-  void currentChanged(KDevProjectItem *item);
+  void currentChanged(ProjectItem *item);
 
 protected slots:
   void slotActivated(const QModelIndex &index);
@@ -56,9 +60,10 @@ protected slots:
   void popupContextMenu(const QPoint &pos);
 
 private:
-  KDevProjectManagerPart *m_part;
+  ProjectManagerPart *m_part;
 };
 
+}
 #endif // KDEVPROJECTMANAGER_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

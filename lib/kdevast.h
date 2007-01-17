@@ -24,14 +24,16 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-class KDevLanguageSupport;
+namespace Koncrete
+{
+class LanguageSupport;
 
 /**The KDevAST is a simple base struct for the various Abstract Syntax Trees of the parsers.*/
-struct KDEVPLATFORM_EXPORT KDevAST
+struct KDEVPLATFORM_EXPORT AST
 {
 public:
     /// Language support part which generated the AST
-    KDevLanguageSupport* language;
+    LanguageSupport* language;
 
     /// Convenience function to request that the language support part delete this AST.
     /// \sa KDevLanguageSupport::releaseAST()
@@ -42,6 +44,7 @@ public:
     void documentLoaded(const KUrl& document);
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

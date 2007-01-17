@@ -19,10 +19,10 @@
 
 typedef KGenericFactory<%{APPNAME}Part> %{APPNAME}Factory;
 K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( "kdev%{APPNAMELC}" ) );
-static const KDevPluginInfo data("kdev%{APPNAMELC}");
+static const Koncrete::PluginInfo data("kdev%{APPNAMELC}");
 
 %{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList& )
-: KDevLanguageSupport(&data, parent, name ? name : "%{APPNAME}Part" )
+: Koncrete::LanguageSupport(&data, parent, name ? name : "%{APPNAME}Part" )
 {
 	setInstance(%{APPNAME}Factory::instance());
 	setXMLFile("kdevlang_%{APPNAMELC}.rc");
@@ -47,7 +47,7 @@ static const KDevPluginInfo data("kdev%{APPNAMELC}");
 	delete m_build;
 }
 
-KDevLanguageSupport::Features %{APPNAME}Part::features()
+Koncrete::LanguageSupport::Features %{APPNAME}Part::features()
 {
 	return Features(Variables | Functions);
 }

@@ -176,10 +176,10 @@ void CppHighlighting::highlightModel(CodeModel* model, const QModelIndex & paren
 
   for (int i = 0; i < rowCount; ++i) {
     QModelIndex index = model->index(i, 0, parent);
-    const KDevItem* item = static_cast<const KDevCodeModel*>(index.model())->item(index);
+    const Koncrete::Item* item = static_cast<const Koncrete::CodeModel*>(index.model())->item(index);
     Types type = UnknownType;
 
-    const KDevCodeItem* c = dynamic_cast<const KDevCodeItem*>(item);
+    const Koncrete::CodeItem* c = dynamic_cast<const Koncrete::CodeItem*>(item);
     if (!c)
       continue;
 

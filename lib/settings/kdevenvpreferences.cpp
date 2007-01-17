@@ -24,15 +24,18 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevenvwidget.h"
 
-typedef KGenericFactory<KDevEnvPreferences> PreferencesFactory;
+namespace Koncrete
+{
+
+typedef KGenericFactory<EnvPreferences> PreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevenv_settings, PreferencesFactory( "kcm_kdevenv_settings" ) )
 
-KDevEnvPreferences::KDevEnvPreferences( QWidget *parent, const QStringList &args )
-        : KDevCModule( PreferencesFactory::instance(), parent, args )
+EnvPreferences::EnvPreferences( QWidget *parent, const QStringList &args )
+        : ConfigModule( PreferencesFactory::instance(), parent, args )
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
-    preferencesDialog = new KDevEnvWidget( w );
+    preferencesDialog = new EnvWidget( w );
     l->addWidget( w );
 
     connect( preferencesDialog, SIGNAL( changed( bool ) ),
@@ -41,34 +44,35 @@ KDevEnvPreferences::KDevEnvPreferences( QWidget *parent, const QStringList &args
     load();
 }
 
-KDevEnvPreferences::~KDevEnvPreferences( )
+EnvPreferences::~EnvPreferences( )
 {
     delete preferencesDialog;
 }
 
-void KDevEnvPreferences::save()
+void EnvPreferences::save()
 {
     preferencesDialog->saveSettings();
-    KDevCModule::save();
+    ConfigModule::save();
 }
 
-void KDevEnvPreferences::load()
+void EnvPreferences::load()
 {
     preferencesDialog->loadSettings();
-    KDevCModule::load();
+    ConfigModule::load();
 }
 
-void KDevEnvPreferences::defaults()
+void EnvPreferences::defaults()
 {
     preferencesDialog->defaults();
-    KDevCModule::defaults();
+    ConfigModule::defaults();
 }
 
-void KDevEnvPreferences::settingsChanged( bool changed )
+void EnvPreferences::settingsChanged( bool changed )
 {
     unmanagedWidgetChangeState( changed );
 }
 
+}
 #include "kdevenvpreferences.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

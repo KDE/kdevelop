@@ -32,18 +32,21 @@
 #include <QMutex>
 #include "kdevexport.h"
 
-class KDevCodeItem;
-class KDevCodeModel;
-
 namespace KTextEditor { class SmartRange; }
 
-class KDEVPLATFORM_EXPORT KDevCodeItem: public KDevItemCollection, public KTextEditor::SmartRangeWatcher
+namespace Koncrete
+{
+
+class CodeItem;
+class CodeModel;
+
+class KDEVPLATFORM_EXPORT CodeItem: public ItemCollection, public KTextEditor::SmartRangeWatcher
 {
 public:
-    KDevCodeItem( const QString &name, KDevItemGroup *parent = 0 );
-    virtual ~KDevCodeItem();
+    CodeItem( const QString &name, ItemGroup *parent = 0 );
+    virtual ~CodeItem();
 
-    virtual KDevCodeItem *itemAt( int index ) const;
+    virtual CodeItem *itemAt( int index ) const;
 
     virtual int kind() const
     {
@@ -58,7 +61,7 @@ public:
         return QIcon();
     }
 
-    virtual bool isSimilar( KDevCodeItem *other, bool strict = true ) const
+    virtual bool isSimilar( CodeItem *other, bool strict = true ) const
     {
         if ( strict && kind() != other->kind() )
             return false;
@@ -99,7 +102,7 @@ public:
         return QTime();
     }
 
-    virtual KDevCodeModel *model() const
+    virtual CodeModel *model() const
     {
         return 0L;
     }
@@ -123,27 +126,28 @@ private:
     KTextEditor::SmartRange* m_definition;
 };
 
-class KDEVPLATFORM_EXPORT KDevCodeModel: public KDevItemModel
+class KDEVPLATFORM_EXPORT CodeModel: public ItemModel
 {
     Q_OBJECT
 public:
-    KDevCodeModel( QObject *parent = 0 );
-    virtual ~KDevCodeModel();
+    CodeModel( QObject *parent = 0 );
+    virtual ~CodeModel();
 
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
 
-    void beginAppendItem( KDevCodeItem *item,
-                          KDevItemCollection *collection = 0 );
+    void beginAppendItem( CodeItem *item,
+                          ItemCollection *collection = 0 );
     void endAppendItem();
-    void beginRemoveItem( KDevCodeItem *item );
+    void beginRemoveItem( CodeItem *item );
     void endRemoveItem();
 
-    virtual KDevCodeItem *item( const QModelIndex &index ) const;
+    virtual CodeItem *item( const QModelIndex &index ) const;
 
 private:
     mutable QMutex m_mutex;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

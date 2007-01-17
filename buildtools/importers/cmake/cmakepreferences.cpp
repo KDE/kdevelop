@@ -34,7 +34,7 @@ typedef KGenericFactory<CMakePreferences> CMakePreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevcmake_settings, CMakePreferencesFactory( "kcm_kdevcmake_settings" )  )
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QStringList& args)
-: KDevCModule(CMakeSettings::self(),CMakePreferencesFactory::instance(), parent, args)
+    : Koncrete::ConfigModule(CMakeSettings::self(),CMakePreferencesFactory::instance(), parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -54,17 +54,17 @@ CMakePreferences::~CMakePreferences()
 
 void CMakePreferences::load()
 {
-    KDevCModule::load();
+    Koncrete::ConfigModule::load();
 }
 
 void CMakePreferences::save()
 {
-    KDevCModule::save();
+    Koncrete::ConfigModule::save();
 }
 
 void CMakePreferences::defaults()
 {
-    KDevCModule::defaults();
+    Koncrete::ConfigModule::defaults();
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on;

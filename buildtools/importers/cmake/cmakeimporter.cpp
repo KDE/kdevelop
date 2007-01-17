@@ -42,7 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
 
 CMakeImporter::CMakeImporter( QObject* parent,
                               const QStringList& )
-    : KDevBuildManager( CMakeSupportFactory::instance(), parent ), m_rootItem(0L)
+    : Koncrete::BuildManager( CMakeSupportFactory::instance(), parent ), m_rootItem(0L)
 {
     m_project = 0;
 /*    CMakeSettings* settings = CMakeSettings::self();
@@ -58,7 +58,7 @@ CMakeImporter::~CMakeImporter()
     //delete m_rootItem;
 }
 
-KDevProject* CMakeImporter::project() const
+Koncrete::Project* CMakeImporter::project() const
 {
     return m_project;
 }
@@ -68,9 +68,9 @@ KUrl CMakeImporter::buildDirectory() const
      return project()->folder();
 }
 
-QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* item )
+QList<Koncrete::ProjectFolderItem*> CMakeImporter::parse( Koncrete::ProjectFolderItem* item )
 {
-    QList<KDevProjectFolderItem*> folderList;
+    QList<Koncrete::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
     if ( !folder )
         return folderList;
@@ -95,7 +95,7 @@ QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* item 
             KUrl sourceFile = folder->url();
             sourceFile.adjustPath( KUrl::AddTrailingSlash );
             sourceFile.addPath( sFile );
-            new KDevProjectFileItem( sourceFile, targetItem );
+            new Koncrete::ProjectFileItem( sourceFile, targetItem );
         }
     }
 
@@ -103,8 +103,8 @@ QList<KDevProjectFolderItem*> CMakeImporter::parse( KDevProjectFolderItem* item 
     return folderList;
 }
 
-KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
-                                           const KUrl& fileName )
+Koncrete::ProjectItem* CMakeImporter::import( Koncrete::ProjectModel* model,
+                                              const KUrl& fileName )
 {
     QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
@@ -122,26 +122,26 @@ KDevProjectItem* CMakeImporter::import( KDevProjectModel* model,
         m_projectInfo = m_xmlParser.parse( cmakeInfoFile );
         FolderInfo rootFolder = m_projectInfo.rootFolder;
         m_rootItem = new CMakeFolderItem( rootFolder, 0 );
-        m_rootItem->setText( KDevCore::activeProject()->name() );
+        m_rootItem->setText( Koncrete::Core::activeProject()->name() );
     }
     return m_rootItem;
 }
 
-KUrl CMakeImporter::findMakefile( KDevProjectFolderItem* dom ) const
+KUrl CMakeImporter::findMakefile( Koncrete::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl();
 }
 
-KUrl::List CMakeImporter::findMakefiles( KDevProjectFolderItem* dom ) const
+KUrl::List CMakeImporter::findMakefiles( Koncrete::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl::List();
 }
 
-QList<KDevProjectTargetItem*> CMakeImporter::targets() const
+QList<Koncrete::ProjectTargetItem*> CMakeImporter::targets() const
 {
-    return QList<KDevProjectTargetItem*>();
+    return QList<Koncrete::ProjectTargetItem*>();
 }
 
 KUrl::List CMakeImporter::includeDirectories() const

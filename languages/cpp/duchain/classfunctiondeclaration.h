@@ -63,7 +63,7 @@ public:
   bool isExplicit() const;
   void setExplicit(bool isExplicit);
 
-  //bool isSimilar(KDevCodeItem *other, bool strict = true) const;
+  //bool isSimilar(Koncrete::CodeItem *other, bool strict = true) const;
 
 private:
   QtFunctionType m_functionType;

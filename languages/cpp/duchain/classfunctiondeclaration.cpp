@@ -31,7 +31,7 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, D
 {
 }
 
-/*bool ClassFunctionDeclaration::isSimilar(KDevCodeItem *other, bool strict ) const
+/*bool ClassFunctionDeclaration::isSimilar(Koncrete::CodeItem *other, bool strict ) const
 {
   if (!CppClassMemberType::isSimilar(other,strict))
     return false;

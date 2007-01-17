@@ -29,10 +29,8 @@
 #include <qstringlist.h>
 #include <kdevplugin.h>
 
-/**
-@file kdevmakefrontend.h
-Make frontend interface.
-*/
+namespace Koncrete
+{
 
 /**
 KDevelop make frontend interface.
@@ -41,16 +39,16 @@ or similar commands to build a project, api documentation, etc.
 
 Instances that implement this interface are available through extension architecture:
 @code
-KDevMakeFrontend *mf = extension<KDevMakeFrontend>("KDevelop/MakeFrontend");
+MakeFrontend *mf = extension<MakeFrontend>("KDevelop/MakeFrontend");
 if (mf) {
     // do something
 } else {
     // fail
 }
 @endcode
-@sa KDevPlugin::extension method documentation.
+@sa Plugin::extension method documentation.
 */
-class KDEVPLATFORM_EXPORT KDevMakeFrontend : public KDevPlugin
+class KDEVPLATFORM_EXPORT MakeFrontend : public Plugin
 {
     Q_OBJECT
 
@@ -60,8 +58,8 @@ public:
      * @param instance The instance object created by the plugin factory
      * @param parent The parent object for the plugin.
      */
-    KDevMakeFrontend(KInstance *instance, QObject *parent=0)
-        :KDevPlugin(instance, parent) {}
+    MakeFrontend(KInstance *instance, QObject *parent=0)
+        :Plugin(instance, parent) {}
 
     /**@return The widget where the make output is shown.*/
     virtual QWidget* widget() { return 0L; }
@@ -98,4 +96,5 @@ signals:
     void commandFailed(const QString &command);
 };
 
+}
 #endif

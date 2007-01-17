@@ -33,13 +33,10 @@
 
 #include "ksavealldialog.h"
 
-namespace
-{
-
 class CheckURL : public QTreeWidgetItem
 {
 public:
-	CheckURL( QTreeWidget * lv, KDevDocument* document )
+	CheckURL( QTreeWidget * lv, Koncrete::Document* document )
 		: QTreeWidgetItem( lv),
 		_document( document )
 	{
@@ -47,7 +44,7 @@ public:
             setFlags(flags() | Qt::ItemIsUserCheckable);
         }
 
-	KDevDocument* document() const { return _document; }
+	Koncrete::Document* document() const { return _document; }
 
         bool isOn() const
         { return checkState(0) == Qt::Checked; }
@@ -56,14 +53,15 @@ public:
         { setCheckState(0, b ? Qt::Checked : Qt::Unchecked); }
 
 private:
-    KDevDocument* _document;
+    Koncrete::Document* _document;
 };
 
-}
 
 
-KSaveSelectDialog::KSaveSelectDialog( const QList<KDevDocument*>& filelist, const QList<KDevDocument*>& ignorelist, QWidget * parent ) :
-  KDialog( parent )
+KSaveSelectDialog::KSaveSelectDialog( const QList<Koncrete::Document*>& filelist,
+                                      const QList<Koncrete::Document*>& ignorelist,
+                                      QWidget * parent )
+ : KDialog( parent )
 {
   KVBox *top = new KVBox(this);
   setMainWidget(top);
@@ -79,7 +77,7 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<KDevDocument*>& filelist, cons
 	setButtonText( User1, i18n("Save &None") );
 	setButtonText( Close, KStandardGuiItem::cancel().text() );
 	
-	foreach (KDevDocument* document, filelist )
+	foreach (Koncrete::Document* document, filelist )
 	{
 		if ( !ignorelist.contains( document ) )
 		{
@@ -116,9 +114,9 @@ void KSaveSelectDialog::cancel( )
 	QDialog::reject();
 }
 
-QList<KDevDocument*> KSaveSelectDialog::filesToSave( )
+QList<Koncrete::Document*> KSaveSelectDialog::filesToSave( )
 {
-    QList<KDevDocument*> filelist;
+    QList<Koncrete::Document*> filelist;
 
     for (int i=0; i<_listview->topLevelItemCount(); ++i) {
         CheckURL * item = static_cast<CheckURL*>( _listview->topLevelItem(i) );
@@ -130,9 +128,9 @@ QList<KDevDocument*> KSaveSelectDialog::filesToSave( )
     return filelist;
 }
 
-QList<KDevDocument*> KSaveSelectDialog::filesNotToSave( )
+QList<Koncrete::Document*> KSaveSelectDialog::filesNotToSave( )
 {
-    QList<KDevDocument*> filelist;
+    QList<Koncrete::Document*> filelist;
 
     for (int i=0; i<_listview->topLevelItemCount(); ++i) {
         CheckURL * item = static_cast<CheckURL*>( _listview->topLevelItem(i) );

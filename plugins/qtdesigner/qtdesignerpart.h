@@ -5,7 +5,6 @@
 #include <QHash>
 #include <QtCore/QPointer>
 #include <kparts/part.h>
-#include <kdevdocumentcontroller.h>
 
 class QAction;
 class QDesignerFormEditorInterface;
@@ -14,6 +13,11 @@ class QWorkspace;
 
 class KAboutData;
 class KAction;
+
+namespace Koncrete
+{
+  class Document;
+}
 
 template<class T> class QList;
 
@@ -47,7 +51,7 @@ private:
 
 private Q_SLOTS:
   void updateDesignerActions();
-  void activated( KDevDocument* );
+  void activated( Koncrete::Document* );
 
 
 private:

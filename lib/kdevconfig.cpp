@@ -31,54 +31,57 @@ Boston, MA 02110-1301, USA.
 #include "kdevmainwindow.h"
 #include "kdevprojectcontroller.h"
 
-static KStaticDeleter<KDevConfigPrivate> s_deleter;
+namespace Koncrete
+{
 
-KDevConfigPrivate *KDevConfigPrivate::s_private = 0;
+static KStaticDeleter<ConfigPrivate> s_deleter;
 
-KDevConfigPrivate::KDevConfigPrivate()
+ConfigPrivate *ConfigPrivate::s_private = 0;
+
+ConfigPrivate::ConfigPrivate()
         : QObject( 0 ),
-        mode( KDevConfig::Standard ),
+        mode( Config::Standard ),
         settingsDialog( 0 )
 {}
 
-KDevConfigPrivate::~KDevConfigPrivate()
+ConfigPrivate::~ConfigPrivate()
 {
 }
 
-KDevConfigPrivate *KDevConfigPrivate::self()
+ConfigPrivate *ConfigPrivate::self()
 {
     if ( !s_private )
-        s_deleter.setObject( s_private, new KDevConfigPrivate );
+        s_deleter.setObject( s_private, new ConfigPrivate );
     return s_private;
 }
 
-void KDevConfigPrivate::local()
+void ConfigPrivate::local()
 {
-    setMode( KDevConfig::LocalProject );
+    setMode( Config::LocalProject );
 }
 
-void KDevConfigPrivate::shared()
+void ConfigPrivate::shared()
 {
-    setMode( KDevConfig::GlobalProject );
+    setMode( Config::GlobalProject );
 }
 
-void KDevConfigPrivate::global()
+void ConfigPrivate::global()
 {
-    setMode( KDevConfig::Standard );
+    setMode( Config::Standard );
 }
 
-void KDevConfigPrivate::setMode( KDevConfig::Mode m )
+void ConfigPrivate::setMode( Config::Mode m )
 {
     mode = m;
     switch ( mode )
     {
-    case KDevConfig::Standard:
+    case Config::Standard:
         settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Standard" ) );
         break;
-    case KDevConfig::LocalProject:
+    case Config::LocalProject:
         settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Local Project" ) );
         break;
-    case KDevConfig::GlobalProject:
+    case Config::GlobalProject:
         settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Global Project" ) );
         break;
     default:
@@ -86,38 +89,38 @@ void KDevConfigPrivate::setMode( KDevConfig::Mode m )
     }
 }
 
-#define d (KDevConfigPrivate::self())
+#define d (ConfigPrivate::self())
 
-KDevConfig::KDevConfig()
+Config::Config()
 {}
 
-KDevConfig::~KDevConfig()
+Config::~Config()
 {}
 
-KDevConfig::Mode KDevConfig::mode()
+Config::Mode Config::mode()
 {
     return d->mode;
 }
 
-// void KDevConfig::setMode( KDevConfig::Mode m )
+// void Config::setMode( Config::Mode m )
 // {
 //     d->setMode( m );
 // }
 
-// void KDevConfig::setAllowedModes( KDevConfig::Mode m )
+// void Config::setAllowedModes( Config::Mode m )
 // {
 // }
 
-void KDevConfig::settingsDialog()
+void Config::settingsDialog()
 {
     if ( !d->settingsDialog )
     {
-        if ( KDevCore::mainWindow() ->instance() ->instanceName() == "kdevelop" )
+        if ( Core::mainWindow() ->instance() ->instanceName() == "kdevelop" )
             d->settingsDialog = new KSettings::Dialog(
-                                    KSettings::Dialog::Static, KDevCore::mainWindow() );
+                                    KSettings::Dialog::Static, Core::mainWindow() );
         else
             d->settingsDialog = new KSettings::Dialog( QStringList( "kdevelop" ),
-                                KSettings::Dialog::Static, KDevCore::mainWindow() );
+                                KSettings::Dialog::Static, Core::mainWindow() );
 
         KCMultiDialog *dialog = d->settingsDialog->dialog();
         dialog->setButtons( KDialog::Help | KDialog::Default | KDialog::Cancel
@@ -138,28 +141,28 @@ void KDevConfig::settingsDialog()
     d->settingsDialog->show();
 }
 
-KConfig *KDevConfig::standard()
+KConfig *Config::standard()
 {
     return sharedStandard().data();
 }
 
-KConfig *KDevConfig::localProject()
+KConfig *Config::localProject()
 {
     return sharedLocalProject().data();
 }
 
-KConfig *KDevConfig::globalProject()
+KConfig *Config::globalProject()
 {
     return sharedGlobalProject().data();
 }
 
-KSharedConfig::Ptr KDevConfig::sharedStandard()
+KSharedConfig::Ptr Config::sharedStandard()
 {
     KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = KDevCore::projectController() ->localFile();
-    KUrl global = KDevCore::projectController() ->globalFile();
+    KUrl local = Core::projectController() ->localFile();
+    KUrl global = Core::projectController() ->globalFile();
     if ( local.isValid() )
         extraConfig.append( local.path() );
     if ( global.isValid() )
@@ -175,13 +178,13 @@ KSharedConfig::Ptr KDevConfig::sharedStandard()
     return config;
 }
 
-KSharedConfig::Ptr KDevConfig::sharedLocalProject()
+KSharedConfig::Ptr Config::sharedLocalProject()
 {
     KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = KDevCore::projectController() ->localFile();
-    KUrl global = KDevCore::projectController() ->globalFile();
+    KUrl local = Core::projectController() ->localFile();
+    KUrl global = Core::projectController() ->globalFile();
     if ( global.isValid() )
         extraConfig.append( global.path() );
     if ( local.isValid() )
@@ -197,13 +200,13 @@ KSharedConfig::Ptr KDevConfig::sharedLocalProject()
     return config;
 }
 
-KSharedConfig::Ptr KDevConfig::sharedGlobalProject()
+KSharedConfig::Ptr Config::sharedGlobalProject()
 {
     KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = KDevCore::projectController() ->localFile();
-    KUrl global = KDevCore::projectController() ->globalFile();
+    KUrl local = Core::projectController() ->localFile();
+    KUrl global = Core::projectController() ->globalFile();
     if ( local.isValid() )
         extraConfig.append( local.path() );
     if ( global.isValid() )
@@ -217,6 +220,8 @@ KSharedConfig::Ptr KDevConfig::sharedGlobalProject()
     }
 
     return config;
+}
+
 }
 
 #include "kdevconfig.moc"

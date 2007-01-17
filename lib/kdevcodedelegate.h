@@ -23,14 +23,18 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QItemDelegate>
 #include "kdevexport.h"
 
-class KDEVPLATFORM_EXPORT KDevCodeDelegate: public QItemDelegate
+namespace Koncrete
+{
+
+class KDEVPLATFORM_EXPORT CodeDelegate: public QItemDelegate
 {
     Q_OBJECT
 public:
-    KDevCodeDelegate( QObject *parent = 0 );
-    virtual ~KDevCodeDelegate();
+    CodeDelegate( QObject *parent = 0 );
+    virtual ~CodeDelegate();
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

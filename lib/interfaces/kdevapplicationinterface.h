@@ -29,11 +29,10 @@
 #include <qstringlist.h>
 #include <kdevplugin.h>
 #include "kdevexport.h"
-/**
-@file kdevappfrontend.h
-Application frontend interface.
-*/
 
+
+namespace Koncrete
+{
 /**
 Application frontend interface. 
 This interface is responsible for handling the running of an application in KDevelop.
@@ -45,16 +44,16 @@ Currently, this interface defines ways to do the following:
 
 Instances that implement this interface are available through extension architecture:
 @code
-KDevAppFrontend *apf = extension<KDevAppFrontend>("KDevelop/AppFrontend");
+AppFrontend *apf = extension<AppFrontend>("KDevelop/AppFrontend");
 if (apf) {
     // do something
 } else {
     // fail
 }
 @endcode
-@sa KDevPlugin::extension method documentation.
+@sa Plugin::extension method documentation.
 */
-class KDEVPLATFORM_EXPORT KDevAppFrontend : public KDevPlugin
+class KDEVPLATFORM_EXPORT AppFrontend : public Plugin
 {
     Q_OBJECT
 
@@ -66,8 +65,8 @@ public:
     dialog, etc. Plugin does not take ownership on info object, also its lifetime should
     be equal to the lifetime of the plugin.
     @param parent The parent object for the plugin. */
-    KDevAppFrontend(KInstance* instance, QObject *parent=0)
-        :KDevPlugin(instance, parent) {}
+    AppFrontend(KInstance* instance, QObject *parent=0)
+        :Plugin(instance, parent) {}
 
     /**@return Whether the application is currently running.*/
     virtual bool isRunning() = 0;
@@ -107,4 +106,5 @@ public slots:
     virtual void clearView() = 0;
 };
 
+}
 #endif

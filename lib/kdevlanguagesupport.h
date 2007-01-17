@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the KDevelop project
    Copyright (C) 2001 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright (C) 2001-2002 Bernd Gehrmann <bernd@kdevelop.org>
    Copyright (C) 2002-2003 Roberto Raggi <roberto@kdevelop.org>
@@ -42,87 +42,97 @@
 #include <kdevcodedelegate.h>
 #include <kdevcoderepository.h>
 
-class KDevAST;
-class KDevDocument;
-class KDevParseJob;
-class KDevCodeHighlighting;
+
+namespace Koncrete
+{
+
+class AST;
+class Document;
+class ParseJob;
+class CodeHighlighting;
 
 /**
-@file kdevlanguagesupport.h
-Interface to programming language specific features.
-*/
-
-/**
-KDevelop language support interface - the base class for all programming
-language support plugins. Language support is used to load facilities specific
-to certain programming language. Language supports are usually loaded among with
-a project. In this case project file defines which language support to load.
-
-Language support plugin is a good place for:
-- a language parser which fills memory and persistant symbol store
-(see @ref CodeModel and @ref KDevCodeRepository);
-- code wizards specific to a programming language (like new class wizard);
-- symbol (class, function, etc.) name formatting to a human-readable convention
-(pretty ormatted name).
-.
-*/
-class KDEVPLATFORM_EXPORT KDevLanguageSupport: public KDevPlugin
+ * KDevelop language support interface - the base class for all programming
+ * language support plugins. Language support is used to load facilities specific
+ * to certain programming language. Language supports are usually loaded among with
+ * a project. In this case project file defines which language support to load.
+ * 
+ * Language support plugin is a good place for:
+ * - a language parser which fills memory and persistant symbol store
+ * (see @ref CodeModel and @ref CodeRepository);
+ * - code wizards specific to a programming language (like new class wizard);
+ * - symbol (class, function, etc.) name formatting to a human-readable convention
+ * (pretty formatted name).
+ */
+class KDEVPLATFORM_EXPORT LanguageSupport: public Plugin
 {
     Q_OBJECT
 
 public:
-    /**Constructs a language support plugin.
-    @param info Important information about the plugin - plugin internal and
-    generic (GUI) name, description, a list of authors, etc. That information is
-    used to show plugin information in various places like "about application"
-    dialog, plugin selector dialog, etc. Plugin does not take ownership on info
-    object, also its lifetime should be equal to the lifetime of the plugin.
-    @param parent The parent object for the plugin.
-    */
-    KDevLanguageSupport(KInstance *instance, QObject *parent);
+    /**
+     * Constructs a language support plugin.
+     * @param info Important information about the plugin - plugin internal and
+     * generic (GUI) name, description, a list of authors, etc. That information is
+     * used to show plugin information in various places like "about application"
+     * dialog, plugin selector dialog, etc. Plugin does not take ownership on info
+     * object, also its lifetime should be equal to the lifetime of the plugin.
+     * @param parent The parent object for the plugin.
+     */
+    LanguageSupport(KInstance *instance, QObject *parent);
 
-    /**Destructor.*/
-    ~KDevLanguageSupport();
+    /** Destructor. */
+    ~LanguageSupport();
 
-    /**@return A codemodel for the specified url or the currently active document.*/
-    virtual KDevCodeModel *codeModel( const KUrl &url = KUrl() ) const = 0;
+    /**
+     * @return A codemodel for the specified url or the currently active document.
+     */
+    virtual CodeModel *codeModel( const KUrl &url = KUrl() ) const = 0;
 
-    /**@return A proxy model that can be used for sorting/filtering on the
-    aggregate of all codemodel's.*/
-    virtual KDevCodeProxy *codeProxy() const = 0;
+    /**
+     * @return A proxy model that can be used for sorting/filtering on the
+     * aggregate of all codemodel's.
+     */
+    virtual CodeProxy *codeProxy() const = 0;
 
-    /**@return A codemodel delegate for painting the model according to the
-    languages format.*/
-    virtual KDevCodeDelegate *codeDelegate() const = 0;
+    /**
+     * @return A codemodel delegate for painting the model according to the
+     * languages format.
+     */
+    virtual CodeDelegate *codeDelegate() const = 0;
 
-    /**@return A code repository (accessor to persistant symbol stores) for
-    codemodel's.*/
-    virtual KDevCodeRepository *codeRepository() const = 0;
+    /**
+     * @return A code repository (accessor to persistant symbol stores) for
+     * codemodel's.
+     */
+    virtual CodeRepository *codeRepository() const = 0;
 
-    /**@return A code highlighting object for highlighting text editor views, or null
-    if there is not one available.*/
-    virtual KDevCodeHighlighting *codeHighlighting() const;
+    /**
+     * @return A code highlighting object for highlighting text editor views, or null
+     * if there is not one available.
+     */
+    virtual CodeHighlighting *codeHighlighting() const;
 
-    virtual KDevParseJob *createParseJob( const KUrl &url ) = 0;
-    virtual KDevParseJob *createParseJob( KDevDocument *document ) = 0;
+    virtual ParseJob *createParseJob( const KUrl &url ) = 0;
+    virtual ParseJob *createParseJob( Document *document ) = 0;
 
     //FIXME Make these pure to force language parts to provide this.
     //Right now the cpp language part can't persist the AST...
-    virtual void read( KDevAST *ast, std::ifstream &in );
-    virtual void write( KDevAST *ast, std::ofstream &out );
+    virtual void read( AST *ast, std::ifstream &in );
+    virtual void write( AST *ast, std::ofstream &out );
 
     // FIXME make pure
-    virtual void releaseAST( KDevAST *ast);
+    virtual void releaseAST( AST *ast );
 
     /// A document which had an AST has just completed loading into an editor.
-    virtual void documentLoaded( KDevAST *ast, const KUrl& document );
+    virtual void documentLoaded( AST *ast, const KUrl& document );
 
-    /**@return A typical mimetype list for the support language, this list
-    should be configurable in the languagesupport dialog.*/
+    /**
+     * @return The list of mimetypes supported by the language
+     */
     virtual QStringList mimeTypes() const = 0;
 
     /**@return Whether the given document is supported by the language part.*/
-    virtual bool supportsDocument( KDevDocument *document );
+    virtual bool supportsDocument( Document *document );
 
     /**@return Whether the given url is supported by the language part.*/
     virtual bool supportsDocument( const KUrl &url );
@@ -153,4 +163,5 @@ private:
     QMutex* m_mutexMutex;
 };
 
+}
 #endif

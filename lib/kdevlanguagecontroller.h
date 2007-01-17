@@ -29,16 +29,19 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevlanguagesupport.h"
 
-class KDEVPLATFORM_EXPORT KDevLanguageController: public QObject, protected KDevCoreInterface
+namespace Koncrete
 {
-    friend class KDevCore;
+
+class KDEVPLATFORM_EXPORT LanguageController: public QObject, protected CoreInterface
+{
+    friend class Core;
     Q_OBJECT
 public:
-    KDevLanguageController( QObject *parent = 0 );
-    virtual ~KDevLanguageController();
+    LanguageController( QObject *parent = 0 );
+    virtual ~LanguageController();
 
-    KDevLanguageSupport *activeLanguage() const;
-    KDevLanguageSupport *languageSupport( const QString &language );
+    LanguageSupport *activeLanguage() const;
+    LanguageSupport *languageSupport( const QString &language );
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );
@@ -50,10 +53,11 @@ private:
     bool loadLanguageSupport( const QString &language );
 
 private:
-    KDevLanguageSupport *m_activeLanguage;
-    QHash<QString, KDevLanguageSupport *> m_languages;
+    LanguageSupport *m_activeLanguage;
+    QHash<QString, LanguageSupport *> m_languages;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

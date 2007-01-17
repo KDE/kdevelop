@@ -24,22 +24,25 @@
 
 #include "kdevdocumentcursor.h"
 
+namespace Koncrete
+{
+
 /**
  * Base class for any object which has an associated range of text.
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVPLATFORM_EXPORT KDevDocumentCursorObject : public KTextEditor::SmartCursorWatcher
+class KDEVPLATFORM_EXPORT DocumentCursorObject : public KTextEditor::SmartCursorWatcher
 {
 public:
-  KDevDocumentCursorObject(KTextEditor::Cursor* cursor);
-  virtual ~KDevDocumentCursorObject();
+  DocumentCursorObject(KTextEditor::Cursor* cursor);
+  virtual ~DocumentCursorObject();
 
   void setTextCursor(KTextEditor::Cursor* cursor);
 
   KTextEditor::Cursor& textCursor();
   const KTextEditor::Cursor& textCursor() const;
-  const KDevDocumentCursor& textDocCursor() const;
+  const DocumentCursor& textDocCursor() const;
   KTextEditor::Cursor* textCursorPtr() const;
   KTextEditor::SmartCursor* smartCursor() const;
 
@@ -53,6 +56,7 @@ private:
   KUrl m_url;
 };
 
+}
 #endif // KDEVDOCUMENTCURSOROBJECT_H
 
 // kate: indent-width 2;

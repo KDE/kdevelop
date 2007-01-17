@@ -165,7 +165,7 @@ namespace ruby
   struct whileExpression_ast;
 
 
-  struct ast_node: public KDevAST
+  struct ast_node: public Koncrete::AST
     {
       enum ast_node_kind_enum {
         Kind_additiveExpression = 1000,

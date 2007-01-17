@@ -31,12 +31,15 @@ namespace Ui
 class UISettings;
 }
 
-class KDevUIPreferences : public KDevCModule
+namespace Koncrete
+{
+
+class UIPreferences : public ConfigModule
 {
     Q_OBJECT
 public:
-    KDevUIPreferences( QWidget *parent, const QStringList &args );
-    virtual ~KDevUIPreferences();
+    UIPreferences( QWidget *parent, const QStringList &args );
+    virtual ~UIPreferences();
 
     virtual void save();
 
@@ -51,4 +54,5 @@ private:
 
 };
 
+}
 #endif

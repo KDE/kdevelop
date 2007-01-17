@@ -40,26 +40,29 @@
 
 using namespace KTextEditor;
 
-static KStaticDeleter<KDevEditorIntegratorPrivate> sd;
-KDevEditorIntegratorPrivate* KDevEditorIntegrator::s_data = 0;
+namespace Koncrete
+{
 
-KDevEditorIntegrator::KDevEditorIntegrator()
+static KStaticDeleter<EditorIntegratorPrivate> sd;
+EditorIntegratorPrivate* EditorIntegrator::s_data = 0;
+
+EditorIntegrator::EditorIntegrator()
   : m_currentDocument(0)
   , m_smart(0)
   , m_currentRange(0)
 {
 }
 
-KDevEditorIntegrator::~ KDevEditorIntegrator()
+EditorIntegrator::~ EditorIntegrator()
 {
 }
 
-KDevEditorIntegratorPrivate::KDevEditorIntegratorPrivate()
+EditorIntegratorPrivate::EditorIntegratorPrivate()
   : mutex(new QMutex)
 {
 }
 
-KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
+EditorIntegratorPrivate::~EditorIntegratorPrivate()
 {
   QHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
   while (it.hasNext()) {
@@ -72,7 +75,7 @@ KDevEditorIntegratorPrivate::~KDevEditorIntegratorPrivate()
   delete mutex;
 }
 
-void KDevEditorIntegrator::addDocument( Document * document )
+void EditorIntegrator::addDocument( Document * document )
 {
   Q_ASSERT(data()->thread() == document->thread());
   QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
@@ -80,7 +83,7 @@ void KDevEditorIntegrator::addDocument( Document * document )
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
 }
 
-void KDevEditorIntegratorPrivate::documentLoaded()
+void EditorIntegratorPrivate::documentLoaded()
 {
   Document* doc = qobject_cast<Document*>(sender());
   if (!doc) {
@@ -94,13 +97,13 @@ void KDevEditorIntegratorPrivate::documentLoaded()
     documents.insert(doc->url(), doc);
   }
 
-  if (KDevProject* project = KDevCore::activeProject())
-    if (KDevPersistentHash* hash = project->persistentHash())
-      if (KDevAST* ast = hash->retrieveAST(doc->url()))
+  if (Project* project = Core::activeProject())
+    if (PersistentHash* hash = project->persistentHash())
+      if (AST* ast = hash->retrieveAST(doc->url()))
         ast->documentLoaded(doc->url());
 }
 
-void KDevEditorIntegratorPrivate::documentUrlChanged(Document* document)
+void EditorIntegratorPrivate::documentUrlChanged(Document* document)
 {
   QMutexLocker lock(mutex);
 
@@ -123,7 +126,7 @@ void KDevEditorIntegratorPrivate::documentUrlChanged(Document* document)
   //kWarning() << k_funcinfo << "Document URL change - couldn't find corresponding document!" << endl;
 }
 
-Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
+Document * EditorIntegrator::documentForUrl(const KUrl& url)
 {
   QMutexLocker lock(data()->mutex);
 
@@ -133,12 +136,12 @@ Document * KDevEditorIntegrator::documentForUrl(const KUrl& url)
   return 0;
 }
 
-bool KDevEditorIntegrator::documentLoaded(KTextEditor::Document* document)
+bool EditorIntegrator::documentLoaded(KTextEditor::Document* document)
 {
   return data()->documents.values().contains(document);
 }
 
-void KDevEditorIntegratorPrivate::removeDocument( Document* document )
+void EditorIntegratorPrivate::removeDocument( Document* document )
 {
   QMutexLocker lock(mutex);
 
@@ -153,12 +156,12 @@ void KDevEditorIntegratorPrivate::removeDocument( Document* document )
   topRanges.remove(document->url());
 }
 
-SmartInterface* KDevEditorIntegrator::smart() const
+SmartInterface* EditorIntegrator::smart() const
 {
   return m_smart;
 }
 
-Cursor* KDevEditorIntegrator::createCursor(const Cursor& position)
+Cursor* EditorIntegrator::createCursor(const Cursor& position)
 {
   Cursor* ret = 0;
 
@@ -168,17 +171,17 @@ Cursor* KDevEditorIntegrator::createCursor(const Cursor& position)
   }
 
   if (!ret)
-    ret = new KDevDocumentCursor(m_currentUrl, position);
+    ret = new DocumentCursor(m_currentUrl, position);
 
   return ret;
 }
 
-Document* KDevEditorIntegrator::currentDocument() const
+Document* EditorIntegrator::currentDocument() const
 {
   return m_currentDocument;
 }
 
-Range* KDevEditorIntegrator::topRange( TopRangeType type )
+Range* EditorIntegrator::topRange( TopRangeType type )
 {
   QMutexLocker lock(data()->mutex);
 
@@ -210,7 +213,7 @@ Range* KDevEditorIntegrator::topRange( TopRangeType type )
   return m_currentRange;
 }
 
-void KDevEditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange * range)
+void EditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange * range)
 {
   QMutexLocker lock(mutex);
 
@@ -229,7 +232,7 @@ void KDevEditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange * range)
   kWarning() << k_funcinfo << "Could not find record of top level range " << range << "!" << endl;
 }
 
-Range* KDevEditorIntegrator::createRange( const Range & range )
+Range* EditorIntegrator::createRange( const Range & range )
 {
   Range* ret;
 
@@ -242,7 +245,7 @@ Range* KDevEditorIntegrator::createRange( const Range & range )
       ret = iface->newSmartRange(range);
 
   } else {
-    ret = new KDevDocumentRange(m_currentUrl, range, m_currentRange);
+    ret = new DocumentRange(m_currentUrl, range, m_currentRange);
   }
 
   m_currentRange = ret;
@@ -250,58 +253,58 @@ Range* KDevEditorIntegrator::createRange( const Range & range )
 }
 
 
-Range* KDevEditorIntegrator::createRange( const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
+Range* EditorIntegrator::createRange( const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
 {
   return createRange(Range(start, end));
 }
 
-Range* KDevEditorIntegrator::createRange()
+Range* EditorIntegrator::createRange()
 {
   return createRange(m_newRangeMarker);
 }
 
-void KDevEditorIntegrator::setNewRange(const Range& range)
+void EditorIntegrator::setNewRange(const Range& range)
 {
   m_newRangeMarker = range;
 }
 
-void KDevEditorIntegrator::setNewEnd( const Cursor & position )
+void EditorIntegrator::setNewEnd( const Cursor & position )
 {
   m_newRangeMarker.end() = position;
 }
 
-void KDevEditorIntegrator::setNewStart( const Cursor & position )
+void EditorIntegrator::setNewStart( const Cursor & position )
 {
   m_newRangeMarker.start() = position;
 }
 
-void KDevEditorIntegrator::setCurrentRange( Range* range )
+void EditorIntegrator::setCurrentRange( Range* range )
 {
   m_currentRange = range;
 }
 
-Range* KDevEditorIntegrator::currentRange( ) const
+Range* EditorIntegrator::currentRange( ) const
 {
   return m_currentRange;
 }
 
-const KUrl& KDevEditorIntegrator::currentUrl() const
+const KUrl& EditorIntegrator::currentUrl() const
 {
   return m_currentUrl;
 }
 
-void KDevEditorIntegrator::setCurrentUrl(const KUrl& url)
+void EditorIntegrator::setCurrentUrl(const KUrl& url)
 {
   m_currentUrl = url;
   m_currentDocument = documentForUrl(url);
   m_smart = dynamic_cast<KTextEditor::SmartInterface*>(m_currentDocument);
 }
 
-void KDevEditorIntegrator::releaseTopRange(KTextEditor::Range * range)
+void EditorIntegrator::releaseTopRange(KTextEditor::Range * range)
 {
   QMutexLocker lock(data()->mutex);
 
-  KUrl url = KDevDocumentRangeObject::url(range);
+  KUrl url = DocumentRangeObject::url(range);
 
   if (range->isSmartRange())
     range->toSmartRange()->removeWatcher(data());
@@ -318,7 +321,7 @@ void KDevEditorIntegrator::releaseTopRange(KTextEditor::Range * range)
   //kWarning() << k_funcinfo << "Could not find top range to delete." << endl;
 }
 
-void KDevEditorIntegrator::releaseRange(KTextEditor::Range* range)
+void EditorIntegrator::releaseRange(KTextEditor::Range* range)
 {
   if (range) {
     if (range->isSmartRange()) {
@@ -334,15 +337,15 @@ void KDevEditorIntegrator::releaseRange(KTextEditor::Range* range)
   }
 }
 
-KDevEditorIntegratorPrivate * KDevEditorIntegrator::data()
+EditorIntegratorPrivate * EditorIntegrator::data()
 {
   if (!s_data)
-    sd.setObject(s_data, new KDevEditorIntegratorPrivate());
+    sd.setObject(s_data, new EditorIntegratorPrivate());
 
   return s_data;
 }
 
-void KDevEditorIntegrator::exitCurrentRange()
+void EditorIntegrator::exitCurrentRange()
 {
   if (!m_currentRange)
     return;
@@ -350,14 +353,15 @@ void KDevEditorIntegrator::exitCurrentRange()
   if (m_currentRange->isSmartRange())
     m_currentRange = m_currentRange->toSmartRange()->parentRange();
   else
-    m_currentRange = static_cast<KDevDocumentRange*>(m_currentRange)->parentRange();
+    m_currentRange = static_cast<DocumentRange*>(m_currentRange)->parentRange();
 }
 
-void KDevEditorIntegrator::initialise()
+void EditorIntegrator::initialise()
 {
   data();
 }
 
+}
 #include "kdeveditorintegrator_p.moc"
 
 // kate: indent-width 2;

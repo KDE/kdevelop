@@ -30,10 +30,12 @@ Boston, MA 02110-1301, USA.
 
 /** This class is a stub at the moment.  It works when you have google sparsehash installed.*/
 
-struct KDevAST;
+namespace Koncrete
+{
+struct AST;
+}
 
 #define NO_GOOGLE_SPARSEHASH
-
 #ifndef NO_GOOGLE_SPARSEHASH
 
 #include <google/sparse_hash_map>
@@ -48,30 +50,33 @@ struct QStrHash
     }
 };
 
-typedef sparse_hash_map<QString, KDevAST*, QStrHash> PHASH;
+typedef sparse_hash_map<QString, Koncrete::AST*, QStrHash> PHASH;
 #else
 
 #include <QHash>
 
 #endif
 
-class KDevLanguageSupport;
+namespace Koncrete
+{
+    
+class LanguageSupport;
 
-class KDEVPLATFORM_EXPORT KDevPersistentHash: public QObject
+class KDEVPLATFORM_EXPORT PersistentHash: public QObject
 {
     Q_OBJECT
 public:
-    KDevPersistentHash( QObject *parent = 0 );
-    virtual ~KDevPersistentHash();
+    PersistentHash( QObject *parent = 0 );
+    virtual ~PersistentHash();
 
-    void insertAST( const KUrl &url, KDevAST* ast );
-    KDevAST* retrieveAST( const KUrl &url );
+    void insertAST( const KUrl &url, AST* ast );
+    AST* retrieveAST( const KUrl &url );
 
     // FIXME hack, returns the first AST with a matching filename...
     // remove when no longer needed
-    KDevAST* retrieveAST( const QString &filename );
+    AST* retrieveAST( const QString &filename );
 
-    void clearASTs(KDevLanguageSupport* language);
+    void clearASTs(LanguageSupport* language);
 
     void load();
     void save();
@@ -80,13 +85,14 @@ private:
 #ifndef NO_GOOGLE_SPARSEHASH
     PHASH m_astHash;
 #else
-    QHash<KUrl, KDevAST*> m_astHash;
-    QMultiHash<QString, KDevAST*> m_filenameAstHash;
+    QHash<KUrl, AST*> m_astHash;
+    QMultiHash<QString, AST*> m_filenameAstHash;
 #endif
 
     mutable QReadWriteLock m_mutex;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

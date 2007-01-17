@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevduchainview, KDevDUChainViewFactory( "kdevduchai
 
 DUChainViewPart::DUChainViewPart( QObject *parent,
                                     const QStringList& )
-    : KDevPlugin( KDevDUChainViewFactory::instance(), parent )
+    : Koncrete::Plugin( KDevDUChainViewFactory::instance(), parent )
     , m_model(new DUChainModel(this))
     , m_view(new QTreeView())
 {

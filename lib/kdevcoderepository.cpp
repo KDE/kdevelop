@@ -19,54 +19,58 @@
 #include "kdevcoderepository.h"
 #include <QList>
 
-struct KDevCodeRepositoryData
+namespace Koncrete
+{
+    
+struct CodeRepositoryData
 {
     Catalog* mainCatalog;
     QList<Catalog*> catalogs;
     
-    KDevCodeRepositoryData(): mainCatalog( 0 ) {}
+    CodeRepositoryData(): mainCatalog( 0 ) {}
 };
 
-KDevCodeRepository::KDevCodeRepository( )
-    : d( new KDevCodeRepositoryData )
+CodeRepository::CodeRepository( )
+    : d( new CodeRepositoryData )
 {
 }
 
-KDevCodeRepository::~KDevCodeRepository( )
+CodeRepository::~CodeRepository( )
 {
     delete( d );
 }
 
-Catalog* KDevCodeRepository::mainCatalog()
+Catalog* CodeRepository::mainCatalog()
 {
     return d->mainCatalog;
 }
 
-void KDevCodeRepository::setMainCatalog( Catalog * mainCatalog )
+void CodeRepository::setMainCatalog( Catalog * mainCatalog )
 {
     d->mainCatalog = mainCatalog;
 }
 
-void KDevCodeRepository::registerCatalog( Catalog * catalog )
+void CodeRepository::registerCatalog( Catalog * catalog )
 {
     d->catalogs.append( catalog );
     emit catalogRegistered( catalog );
 }
 
-void KDevCodeRepository::unregisterCatalog( Catalog * catalog )
+void CodeRepository::unregisterCatalog( Catalog * catalog )
 {
     d->catalogs.removeAll( catalog );
     emit catalogUnregistered( catalog );
 }
 
-void KDevCodeRepository::touchCatalog( Catalog * catalog )
+void CodeRepository::touchCatalog( Catalog * catalog )
 {
     emit catalogChanged( catalog );
 }
 
-QList< Catalog * > KDevCodeRepository::registeredCatalogs( )
+QList< Catalog * > CodeRepository::registeredCatalogs( )
 {
     return d->catalogs;
 }
 
+}
 #include "kdevcoderepository.moc"

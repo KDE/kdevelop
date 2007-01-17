@@ -40,14 +40,16 @@
 #undef ssize_t
 #endif
 
+namespace Koncrete
+{
 /**
  * Catalog backend using the bdb
  */
-class KDEVPLATFORM_EXPORT KDevBDBCatalogBackend : public KDevCatalogBackend
+class KDEVPLATFORM_EXPORT BDBCatalogBackend : public CatalogBackend
 {
 public:
-    KDevBDBCatalogBackend();
-    virtual ~KDevBDBCatalogBackend();
+    BDBCatalogBackend();
+    virtual ~BDBCatalogBackend();
 
     //! Open the catalog backend
     virtual void open( const QString& dbName );
@@ -88,4 +90,5 @@ private:
     QMap<QByteArray, DB*> m_indexList;
 };
 
+}
 #endif

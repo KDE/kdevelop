@@ -32,28 +32,27 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-class KDevEnvironment;
-class KDevProject;
-class KDevProjectController;
-class KDevLanguageSupport;
-class KDevLanguageController;
-class KDevPartController;
-class KDevDocumentController;
-class KDevPluginController;
-class KDevMainWindow;
-class KDevBackgroundParser;
-
-namespace MainWindowUtils
+namespace Koncrete
 {
-QString beautifyToolTip( const QString& text );
-}
+
+class Environment;
+class Project;
+class ProjectController;
+class LanguageSupport;
+class LanguageController;
+class PartController;
+class DocumentController;
+class PluginController;
+class MainWindow;
+class BackgroundParser;
+
 
 /**
  * KDevCore is the container class for all the various objects in use by
  * KDevelop. If access is needed to a particular controller, then this class
  * should be used.
  *
- * KDevCore can provide the user with instances of the following things:
+ * Core can provide the user with instances of the following things:
  * <li>the project controller
  * <li>the document controller
  * <li>the mainwindow
@@ -64,18 +63,18 @@ QString beautifyToolTip( const QString& text );
  * <li>the currently active language support
  * <li>the environment as used by processes started by KDevelop
  *
- * When an object is provided to KDevCore so it can be used later, KDevCore
+ * When an object is provided to Core so it can be used later, Core
  * will take ownership of the object and upon application shutdown will take
- * responsibility for deleting the objects stored by KDevCore.
+ * responsibility for deleting the objects stored by Core.
  */
-class KDEVPLATFORM_EXPORT KDevCore
+class KDEVPLATFORM_EXPORT Core
 {
 public:
     /** Constructor */
-    KDevCore() {};
+    Core() {};
 
     /** Destructor.*/
-    virtual ~KDevCore() {};
+    virtual ~Core() {};
 
     /**
      * @brief Get the current environment for child processes
@@ -83,7 +82,7 @@ public:
      * that will be used by processes started by KDevelop as part of an
      * operation requested by the user.
      */
-    static KDevEnvironment *environment();
+    static Environment *environment();
 
     /**
      * @brief Set the current environment for child processes
@@ -91,161 +90,162 @@ public:
      * environment that will be used by processes started by KDevelop as
      * part of an operation requested by the user.
      */
-    static void setEnvironment( KDevEnvironment *environment );
+    static void setEnvironment( Environment *environment );
 
     /**
      *
      * @return
      */
-    static KDevProjectController *projectController();
+    static ProjectController *projectController();
 
     /**
      *
      * @param project
      */
-    static void setProjectController( KDevProjectController *projectController );
+    static void setProjectController( ProjectController *projectController );
 
     /**
      * @brief Get the active project
-     * @return a KDevProject object representing the currently active project
+     * @return a Project object representing the currently active project
      */
-    static KDevProject* activeProject();
+    static Project* activeProject();
 
     /**
      *
      * @return
      */
-    static KDevMainWindow *mainWindow();
+    static MainWindow *mainWindow();
 
     /**
      *
      * @param mainWindow
      */
-    static void setMainWindow( KDevMainWindow *mainWindow );
+    static void setMainWindow( MainWindow *mainWindow );
 
     /**
      *
      * @return
      */
-    static KDevDocumentController *documentController();
+    static DocumentController *documentController();
 
     /**
      *
      * @param documentController
      */
-    static void setDocumentController( KDevDocumentController *documentController );
+    static void setDocumentController( DocumentController *documentController );
 
     /**
      *
      * @return
      */
-    static KDevPartController *partController();
+    static PartController *partController();
 
     /**
      *
      * @param partController
      */
-    static void setPartController( KDevPartController *partController );
+    static void setPartController( PartController *partController );
 
     /**
      * @brief Get the language controller
-     * @return the previously stored KDevLanguageController based object
+     * @return the previously stored LanguageController based object
      * @sa setLanguageController
      */
-    static KDevLanguageController *languageController();
+    static LanguageController *languageController();
 
     /**
      * @brief Set the language controller
-     * @param langController The KDevLanguageController based object to set as
+     * @param langController The LanguageController based object to set as
      * the language controller
      */
-    static void setLanguageController( KDevLanguageController *langController );
+    static void setLanguageController( LanguageController *langController );
 
     /**
      * @brief Get the active language support
-     * @return a KDevLanguageSupport object representing the currently active
+     * @return a LanguageSupport object representing the currently active
      * language support
      */
-    static KDevLanguageSupport *activeLanguage();
+    static LanguageSupport *activeLanguage();
 
     /**
      * @brief Get the background parser
-     * @return a KDevBackgroundParser object which controls the parser jobs
+     * @return a BackgroundParser object which controls the parser jobs
      */
-    static KDevBackgroundParser *backgroundParser();
+    static BackgroundParser *backgroundParser();
 
     /**
      * @brief Set the background parser
      * @param backgroundParser
      */
-    static void setBackgroundParser( KDevBackgroundParser *backgroundParser );
+    static void setBackgroundParser( BackgroundParser *backgroundParser );
 
     /**
-     * @brief Load the settings for the KDevCore objects
+     * @brief Load the settings for the Core objects
      */
     static void loadSettings();
 
     /**
-     * @brief Save the settings of the KDevCore objects
+     * @brief Save the settings of the Core objects
      */
     static void saveSettings();
 
     /**
-     * @brief Initialize the KDevCore objects
+     * @brief Initialize the Core objects
      */
     static void initialize();
 
    /**
-     * @brief Cleanup the KDevCore objects
+     * @brief Cleanup the Core objects
     */
     static void cleanup();
 };
 
 
 /**
- * KDevCoreInterface is a virtual base class for all objects which are provided by KDevCore.
+ * CoreInterface is a virtual base class for all objects which are provided by Core.
  * These objects need to inherit the various pure virtual functions which facilitate things like
  * project loading and inter-object initialization.
  */
-class KDEVPLATFORM_EXPORT KDevCoreInterface
+class KDEVPLATFORM_EXPORT CoreInterface
 {
 public:
    /**
-    * @brief Load the settings for this KDevCore object
+    * @brief Load the settings for this Core object
     */
     void load();
 
    /**
-    * @brief Save the settings of this KDevCore object
+    * @brief Save the settings of this Core object
     */
     void save();
 
 protected:
     /** Constructor */
-    KDevCoreInterface(){}
+    CoreInterface(){}
 
     /** Destructor */
-    virtual ~KDevCoreInterface(){}
+    virtual ~CoreInterface(){}
 
    /**
-    * @brief Load the settings for this KDevCore object
+    * @brief Load the settings for this Core object
     */
     virtual void loadSettings( bool projectIsLoaded ) = 0;
 
    /**
-    * @brief Save the settings of this KDevCore object
+    * @brief Save the settings of this Core object
     */
     virtual void saveSettings( bool projectIsLoaded ) = 0;
 
    /**
-    * @brief Initialize this KDevCore object
+    * @brief Initialize this Core object
     */
     virtual void initialize() = 0;
 
    /**
-    * @brief Cleanup this KDevCore object
+    * @brief Cleanup this Core object
     */
     virtual void cleanup() = 0;
 };
 
+}
 #endif

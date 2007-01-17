@@ -25,20 +25,23 @@
 #include "kdevtreeview.h"
 
 class KUrl;
-class KDevDocument;
-class KDevCodeProxy;
+namespace Koncrete
+{
+class Document;
+class CodeProxy;
+}
 
-class KDevCodeTree: public KDevTreeView
+class KDevCodeTree: public Koncrete::TreeView
 {
     Q_OBJECT
 public:
     KDevCodeTree( QWidget *parent );
     virtual ~KDevCodeTree();
 
-    KDevCodeProxy *codeProxy() const;
+    Koncrete::CodeProxy *codeProxy() const;
 
 private slots:
-    void documentActivated( KDevDocument* file );
+    void documentActivated( Koncrete::Document* file );
     void activated( const QModelIndex &index );
     void modeCurrent();
     void modeNormalize();

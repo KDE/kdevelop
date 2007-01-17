@@ -29,10 +29,10 @@
  *
  * @author Matt Rogers <mattr@kde.org>
  */
-class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevProjectBuildFolderItem
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public Koncrete::ProjectBuildFolderItem
 {
 public:
-    CMakeFolderItem( const FolderInfo& fi,  KDevProjectItem* item = 0 );
+    CMakeFolderItem( const FolderInfo& fi,  Koncrete::ProjectItem* item = 0 );
     ~CMakeFolderItem();
 
     FolderInfo folderInfo() const;
@@ -47,7 +47,7 @@ private:
  *
  * @author Matt Rogers <mattr@kde.org>
  */
-class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public KDevProjectTargetItem
+class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public Koncrete::ProjectTargetItem
 {
 public:
     CMakeTargetItem( const TargetInfo& target, CMakeFolderItem* item );
@@ -55,13 +55,13 @@ public:
 
     TargetInfo targetInfo() const;
 
-    virtual const DomUtil::PairList& defines() const;
+    virtual const Koncrete::DomUtil::PairList& defines() const;
     virtual const KUrl::List& includeDirectories() const;
     virtual const QHash< QString, QString >& environment() const;
 
 private:
     KUrl::List m_includeList;
-    DomUtil::PairList m_defines;
+    Koncrete::DomUtil::PairList m_defines;
     QHash<QString, QString> m_environment;
     TargetInfo m_targetInfo;
 };

@@ -22,14 +22,14 @@
 #include "%{APPNAMELC}projectconfig.h"
 
 typedef KDevGenericFactory<%{APPNAME}Part> %{APPNAME}Factory;
-KDevPluginInfo data("kdev%{APPNAMELC}");
+Koncrete::PluginInfo data("kdev%{APPNAMELC}");
 K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( data ) );
 
 #define GLOBALDOC_OPTIONS 1
 #define PROJECTDOC_OPTIONS 2
 
 %{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList &/*args*/)
-    : KDevPlugin(&data, parent, name ? name : "%{APPNAME}Part")
+    : Koncrete::Plugin(&data, parent, name ? name : "%{APPNAME}Part")
 {
     setInstance(%{APPNAME}Factory::instance());
     setXMLFile("kdev%{APPNAMELC}.rc");

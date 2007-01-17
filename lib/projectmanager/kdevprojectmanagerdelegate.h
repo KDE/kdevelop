@@ -23,16 +23,20 @@
 #include <QtGui/QItemDelegate>
 #include "kdevexport.h"
 
-class KDEVPROJECTMANAGER_EXPORT KDevProjectManagerDelegate: public QItemDelegate
+namespace Koncrete
+{
+  
+class KDEVPROJECTMANAGER_EXPORT ProjectManagerDelegate: public QItemDelegate
 {
   Q_OBJECT
 public:
-  KDevProjectManagerDelegate(QObject *parent = 0);
-  virtual ~KDevProjectManagerDelegate();
+  ProjectManagerDelegate(QObject *parent = 0);
+  virtual ~ProjectManagerDelegate();
 
   virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
+}
 #endif // KDEVPROJECTMANAGERDELEGATE_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

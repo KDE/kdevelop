@@ -23,20 +23,23 @@
 
 #include <kdevfilemanager.h>
 
-class KDevProjectBuilder;
-typedef QList<KDevProjectFileItem*> FileItemList;
+namespace Koncrete
+{
+
+class ProjectBuilder;
+typedef QList<ProjectFileItem*> FileItemList;
 
 /**
  * Manage the file and build system of the project.
  * @author Matt Rogers <mattr@kde.org>, Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORM_EXPORT KDevBuildManager : public KDevFileManager
+class KDEVPLATFORM_EXPORT BuildManager : public FileManager
 {
     Q_OBJECT
 
 public:
-    KDevBuildManager(KInstance*, QObject* parent);
-    ~KDevBuildManager();
+    BuildManager(KInstance*, QObject* parent);
+    ~BuildManager();
 
     enum BuildFeature
     {
@@ -50,7 +53,7 @@ public:
     /**
      * Provide access to the builder
      */
-    virtual KDevProjectBuilder* builder() const = 0;
+    virtual ProjectBuilder* builder() const = 0;
 
     /**
      * Provide a list of include directories.
@@ -71,11 +74,11 @@ public:
      * return dom->name() + "/Makefile.am";
      * @endcode
      */
-    virtual KUrl findMakefile(KDevProjectFolderItem* folder) const;
+    virtual KUrl findMakefile(ProjectFolderItem* folder) const;
 
     /** @return The list of the Makefiles from the @p folder.
     @note The Makefile list must contains absolute file names */
-    virtual KUrl::List findMakefiles(KDevProjectFolderItem* folder) const;
+    virtual KUrl::List findMakefiles(ProjectFolderItem* folder) const;
 
     /**
      * Create a new target
@@ -83,7 +86,7 @@ public:
      * Creates the target specified by @p target to the folder @p parent and
      * modifies the underlying build system if needed
      */
-    virtual KDevProjectTargetItem* createTarget(const QString& target, KDevProjectFolderItem *parent) = 0;
+    virtual ProjectTargetItem* createTarget(const QString& target, ProjectFolderItem *parent) = 0;
 
     /**
      * Add a file to a target
@@ -91,7 +94,7 @@ public:
      * Adds the file specified by @pfile to the target @p parent and modifies
      * the underlying build system if needed.
      */
-    virtual bool addFileToTarget(KDevProjectFileItem *file, KDevProjectTargetItem *parent) = 0;
+    virtual bool addFileToTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
 
     /**
      * Remove a target
@@ -99,7 +102,7 @@ public:
      * Removes the target specified by @p target and
      * modifies the underlying build system if needed.
      */
-    virtual bool removeTarget(KDevProjectTargetItem *target) = 0;
+    virtual bool removeTarget(ProjectTargetItem *target) = 0;
 
     /**
      * Remove a file from a target
@@ -108,7 +111,7 @@ public:
      * modifies the underlying build system if needed. The file is not removed
      * from the folder it is in
      */
-    virtual bool removeFileFromTarget(KDevProjectFileItem *file, KDevProjectTargetItem *parent) = 0;
+    virtual bool removeFileFromTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
 
     /**
      * Get the toplevel build directory for the project
@@ -124,12 +127,14 @@ public:
      * @return The list of targets for this project
      * @todo implement
      */
-    //QList<KDevProjectTargetItem*> targets() const;
+    //QList<ProjectTargetItem*> targets() const;
 
 
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevBuildManager::BuildFeatures )
+}
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( Koncrete::BuildManager::BuildFeatures )
 
 #endif
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

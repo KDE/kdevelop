@@ -38,20 +38,19 @@ Boston, MA 02110-1301, USA.
 
 class KDialog;
 class KXMLGUIClient;
-class KDevPlugin;
+
+namespace Koncrete
+{
+class Plugin;
 class ProjectInfo;
 class ProfileEngine;
 
 /**
-@file kdevplugincontroller.h
-KDevelop plugin controller interface.
-*/
-
-/**
- *The KDevelop plugin controller.
-* The Plugin controller is responsible for querying, loading and unloading available plugins.
-*/
-class KDEVPLATFORM_EXPORT KDevPluginController: public QObject
+ * The KDevelop plugin controller.
+ * The Plugin controller is responsible for querying, loading and unloading 
+ * available plugins.
+ */
+class KDEVPLATFORM_EXPORT PluginController: public QObject
 {
     
     Q_OBJECT
@@ -62,29 +61,29 @@ public:
         Project
     };
 
-    static KDevPluginController* self();
-    virtual ~KDevPluginController();
+    static PluginController* self();
+    virtual ~PluginController();
 
     /**
      * Get the plugin instance based on the ID. The ID should be whatever is
      * in X-KDE-PluginInfo-Name
      */
-    KDevPlugin* plugin( const QString& );
+    Plugin* plugin( const QString& );
 
     /**
      * Get the plugin info for a loaded plugin
      */
-    KPluginInfo* pluginInfo( KDevPlugin* ) const;
+    KPluginInfo* pluginInfo( Plugin* ) const;
 
     /**
      * Get a list of currently loaded plugins
      */
-    QList<KDevPlugin*> loadedPlugins() const;
+    QList<Plugin*> loadedPlugins() const;
 
     /**
      * Returns a uniquely specified plugin. If it isn't already loaded, it will be.
      */
-    KDevPlugin * loadPlugin( const QString & _pluginId );
+    Plugin * loadPlugin( const QString & _pluginId );
 
     /**
      * @brief Unloads the plugin specified by @p plugin
@@ -164,7 +163,7 @@ public:
 
 Q_SIGNALS:
     void loadingPlugin( const QString& );
-    void pluginLoaded( KDevPlugin* );
+    void pluginLoaded( Plugin* );
 
     /**
      * Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).
@@ -177,7 +176,7 @@ private Q_SLOTS:
     void pluginDestroyed( QObject* );
 
     ///A plugin is ready to unload. Unload it
-    void pluginReadyForUnload( KDevPlugin* );
+    void pluginReadyForUnload( Plugin* );
 
     ///Our timeout timer has expired
     void shutdownTimeout();
@@ -193,7 +192,7 @@ private:
      * Called by @ref loadPlugin directly or through the queue for async plugin
      * loading.
      */
-    KDevPlugin* loadPluginInternal( const QString &pluginId );
+    Plugin* loadPluginInternal( const QString &pluginId );
 
     /**
      * @internal
@@ -209,16 +208,17 @@ private:
      * 
      * Used for the extension template function
      */
-    KDevPlugin* getExtension( const QString&, const QString& );
+    Plugin* getExtension( const QString&, const QString& );
 
 private:
     class Private;
     Private* d;
 
-    KDevPluginController();
-    static KDevPluginController *s_self;
+    PluginController();
+    static PluginController *s_self;
 };
 
+}
 #endif
 
 //kate: auto-insert-doxygen on;

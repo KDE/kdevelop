@@ -20,7 +20,10 @@
 
 using namespace KTextEditor;
 
-KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, Range* parent)
+namespace Koncrete
+{
+    
+DocumentRange::DocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, Range* parent)
   : Range(start, end)
   , m_document(document)
   , m_parentRange(0)
@@ -28,7 +31,7 @@ KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Cursor& start, 
   setParentRange(parent);
 }
 
-KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Range& range, Range* parent)
+DocumentRange::DocumentRange(const KUrl& document, const Range& range, Range* parent)
   : Range(range)
   , m_document(document)
   , m_parentRange(0)
@@ -36,7 +39,7 @@ KDevDocumentRange::KDevDocumentRange(const KUrl& document, const Range& range, R
   setParentRange(parent);
 }
 
-KDevDocumentRange::KDevDocumentRange(const KDevDocumentRange& copy)
+DocumentRange::DocumentRange(const DocumentRange& copy)
   : Range(copy)
   , m_document(copy.document())
   , m_parentRange(0)
@@ -44,40 +47,40 @@ KDevDocumentRange::KDevDocumentRange(const KDevDocumentRange& copy)
   setParentRange(copy.parentRange());
 }
 
-KDevDocumentRange::~KDevDocumentRange()
+DocumentRange::~DocumentRange()
 {
   setParentRange(0);
 
-  foreach (KDevDocumentRange* child, m_childRanges)
+  foreach (DocumentRange* child, m_childRanges)
     child->setParentRange(0);
 }
 
-const KUrl& KDevDocumentRange::document() const
+const KUrl& DocumentRange::document() const
 {
   return m_document;
 }
 
-void KDevDocumentRange::setDocument(const KUrl& document)
+void DocumentRange::setDocument(const KUrl& document)
 {
   m_document = document;
 }
 
 // kate: indent-width 2;
 
-const QList< KDevDocumentRange * > & KDevDocumentRange::childRanges() const
+const QList< DocumentRange * > & DocumentRange::childRanges() const
 {
   return m_childRanges;
 }
 
-void KDevDocumentRange::setParentRange(Range* parent)
+void DocumentRange::setParentRange(Range* parent)
 {
   if (m_parentRange && !m_parentRange->isSmartRange())
-    static_cast<KDevDocumentRange*>(m_parentRange)->m_childRanges.removeAll(this);
+    static_cast<DocumentRange*>(m_parentRange)->m_childRanges.removeAll(this);
 
   m_parentRange = parent;
 
   if (m_parentRange && !m_parentRange->isSmartRange()) {
-    QMutableListIterator<KDevDocumentRange*> it = static_cast<KDevDocumentRange*>(m_parentRange)->m_childRanges;
+    QMutableListIterator<DocumentRange*> it = static_cast<DocumentRange*>(m_parentRange)->m_childRanges;
     it.toBack();
     while (it.hasPrevious()) {
       it.previous();
@@ -92,7 +95,9 @@ void KDevDocumentRange::setParentRange(Range* parent)
   }
 }
 
-Range* KDevDocumentRange::parentRange() const
+Range* DocumentRange::parentRange() const
 {
   return m_parentRange;
+}
+
 }

@@ -20,7 +20,7 @@
 #include "kdevassistantextension.h"
 
 KDevAssistantExtension::KDevAssistantExtension()
- : ShellExtension()
+    : Koncrete::ShellExtension()
 {
 }
 

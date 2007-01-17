@@ -32,7 +32,7 @@ namespace csharp
 {
 
 CodeProxy::CodeProxy( QObject* parent )
-        : KDevCodeProxy( parent ),
+        : Koncrete::CodeProxy( parent ),
         m_kindFilter( 0 )
 {
     QMap<QString, int> filter;
@@ -91,11 +91,11 @@ bool CodeProxy::filterAcceptsRow( int source_row,
             sourceModel() ->index( source_row, 0, source_parent );
         Q_ASSERT( source_index.isValid() );
 
-        KDevCodeItem *codeItem = sourceToItem( source_index );
+        Koncrete::CodeItem *codeItem = sourceToItem( source_index );
         exclude = ( ( m_kindFilter & codeItem->kind() ) == codeItem->kind() );
     }
 
-    exclude = KDevCodeProxy::filterAcceptsRow( source_row, source_parent ) ?
+    exclude = Koncrete::CodeProxy::filterAcceptsRow( source_row, source_parent ) ?
               exclude : false;
     return !exclude;
 }
@@ -103,15 +103,15 @@ bool CodeProxy::filterAcceptsRow( int source_row,
 bool CodeProxy::lessThan( const QModelIndex &left,
                           const QModelIndex &right ) const
 {
-    KDevCodeItem * leftItem = sourceToItem( left );
-    KDevCodeItem * rightItem = sourceToItem( right );
+    Koncrete::CodeItem * leftItem = sourceToItem( left );
+    Koncrete::CodeItem * rightItem = sourceToItem( right );
     Q_ASSERT( leftItem && rightItem );
 
     int leftKind = leftItem->kind();
     int rightKind = rightItem->kind();
 
     if ( leftKind == rightKind )
-        return KDevCodeProxy::lessThan( left, right );
+        return Koncrete::CodeProxy::lessThan( left, right );
     else
         return m_sortKind.indexOf( leftKind ) < m_sortKind.indexOf( rightKind );
 }

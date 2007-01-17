@@ -24,7 +24,7 @@
 
 #include "kdevcodedelegate.h"
 
-class CodeDelegate: public KDevCodeDelegate
+class CodeDelegate: public Koncrete::CodeDelegate
 {
     Q_OBJECT
 public:

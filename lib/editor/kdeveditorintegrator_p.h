@@ -29,18 +29,26 @@
 
 #include "kdevdocumentcursor.h"
 
-class KDevDocumentRange;
-class KDevDocumentCursor;
+namespace KTextEditor
+{
+   class SmartRange;
+   class SmartCursor;
+   class SmartInterface;
+}
 
-namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterface; }
+namespace Koncrete
+{
 
-class KDevEditorIntegratorPrivate : public QObject, public KTextEditor::SmartRangeWatcher
+class DocumentRange;
+class DocumentCursor;
+
+class EditorIntegratorPrivate : public QObject, public KTextEditor::SmartRangeWatcher
 {
   Q_OBJECT
 
 public:
-  KDevEditorIntegratorPrivate();
-  virtual ~KDevEditorIntegratorPrivate();
+  EditorIntegratorPrivate();
+  virtual ~EditorIntegratorPrivate();
 
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
@@ -70,6 +78,7 @@ public:
   QHash<KUrl, URLData*> urls;*/
 };
 
+}
 #endif // EDITORINTEGRATOR_H
 
 // kate: indent-width 2;

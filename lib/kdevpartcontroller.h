@@ -1,3 +1,5 @@
+/* Licensed under the GNU Lesser General Public License (LGPL) */
+
 #ifndef __KDEVPARTCONTROLLER_H__
 #define __KDEVPARTCONTROLLER_H__
 
@@ -28,13 +30,16 @@ class Document;
 class Editor;
 }
 
-class KDEVPLATFORM_EXPORT KDevPartController : public KParts::PartManager, protected KDevCoreInterface
+namespace Koncrete
 {
-    friend class KDevCore;
+
+class KDEVPLATFORM_EXPORT PartController : public KParts::PartManager, protected CoreInterface
+{
+    friend class Core;
     Q_OBJECT
 public:
-    KDevPartController();
-    virtual ~KDevPartController();
+    PartController();
+    virtual ~PartController();
 
     KTextEditor::Document* createTextPart( const KUrl &url,
                                            const QString &encoding,
@@ -70,6 +75,7 @@ private:
 
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

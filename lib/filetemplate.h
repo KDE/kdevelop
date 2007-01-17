@@ -28,14 +28,13 @@
 
 #include "kdevexport.h"
 
-class KDevPlugin;
+
 class QDomDocument;
 
-/**
-@file filetemplate.h
-FileTemplate class with utility methods to work with file templates.
-*/
+namespace Koncrete
+{
 
+class Plugin;
 /**
 Utilities to work with file templates in the current project.
 */
@@ -113,5 +112,7 @@ public:
     QHash<QString, QString> m_templExpandMap;
     QHash<QString, QString> m_templExpandMapXML;
 };
+
+}
 
 #endif

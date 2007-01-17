@@ -23,29 +23,33 @@
 #include "kdevprojectmodel.h"
 #include "kdevexport.h"
 
-class KDevFileManager;
+namespace Koncrete
+{
+
+class FileManager;
 
 class KDEVPLATFORM_EXPORT ImportProjectJob: public KJob
 {
     Q_OBJECT
 public:
-    ImportProjectJob(QStandardItem *folder, KDevFileManager *importer);
+    ImportProjectJob(QStandardItem *folder, FileManager *importer);
     virtual ~ImportProjectJob();
 
 public:
     void start();
 
 protected:
-    void startNextJob(KDevProjectFolderItem *folder);
+    void startNextJob(ProjectFolderItem *folder);
     void slotResult(KJob *job);
     void processList();
 
 private:
-    KDevProjectFolderItem *m_folder;
-    KDevFileManager *m_importer;
-    QList<KDevProjectFolderItem*> m_workingList;
+    ProjectFolderItem *m_folder;
+    FileManager *m_importer;
+    QList<ProjectFolderItem*> m_workingList;
 };
 
+}
 #endif // IMPORTPROJECTJOB_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

@@ -23,30 +23,34 @@
 
 #include <kfiltermodel.h>
 
-class KDevProjectModel;
+namespace Koncrete
+{
 
-class KDEVPROJECTMANAGER_EXPORT KDevProjectOverviewFilter: public KFilterModel
+class ProjectModel;
+
+class KDEVPROJECTMANAGER_EXPORT ProjectOverviewFilter: public KFilterModel
 {
   Q_OBJECT
 public:
-  explicit KDevProjectOverviewFilter(KDevProjectModel *model, QObject *parent = 0);
-  virtual ~KDevProjectOverviewFilter();
+  explicit ProjectOverviewFilter(ProjectModel *model, QObject *parent = 0);
+  virtual ~ProjectOverviewFilter();
 
 protected:
   virtual bool matches(const QModelIndex &index) const;
 };
 
-class KDEVPROJECTMANAGER_EXPORT KDevProjectDetailsFilter: public KFilterModel
+class KDEVPROJECTMANAGER_EXPORT ProjectDetailsFilter: public KFilterModel
 {
   Q_OBJECT
 public:
-  explicit KDevProjectDetailsFilter(KDevProjectModel *model, QObject *parent = 0);
-  virtual ~KDevProjectDetailsFilter();
+  explicit ProjectDetailsFilter(ProjectModel *model, QObject *parent = 0);
+  virtual ~ProjectDetailsFilter();
 
 protected:
   virtual bool matches(const QModelIndex &index) const;
 };
 
+}
 #endif // KDEVPROJECTFILTER_H
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

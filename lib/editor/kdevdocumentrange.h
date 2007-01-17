@@ -25,19 +25,22 @@
 
 #include <ktexteditor/range.h>
 
+namespace Koncrete
+{
+
 /**
  * Extends KTextEditor::Range with information about the URL to which the range
  * refers.
  *
  * \todo parent/child relationships here too?
  */
-class KDEVPLATFORM_EXPORT KDevDocumentRange : public KTextEditor::Range
+class KDEVPLATFORM_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
-  KDevDocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
-  KDevDocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
-  KDevDocumentRange(const KDevDocumentRange& copy);
-  virtual ~KDevDocumentRange();
+  DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
+  DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
+  DocumentRange(const DocumentRange& copy);
+  virtual ~DocumentRange();
 
   /// Returns the associated document.
   const KUrl& document() const;
@@ -48,14 +51,15 @@ public:
   KTextEditor::Range* parentRange() const;
   void setParentRange(KTextEditor::Range* parent);
 
-  const QList<KDevDocumentRange*>& childRanges() const;
+  const QList<DocumentRange*>& childRanges() const;
 
 private:
   KUrl m_document;
   KTextEditor::Range* m_parentRange;
-  QList<KDevDocumentRange*> m_childRanges;
+  QList<DocumentRange*> m_childRanges;
 };
 
+}
 #endif // DOCUMENTRANGE_H
 
 // kate: indent-width 2;

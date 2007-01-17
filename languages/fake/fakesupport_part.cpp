@@ -24,7 +24,7 @@
 
 FakeLanguageSupport::FakeLanguageSupport( QObject *parent, const char *name,
         const QStringList & )
-        : KDevLanguageSupport( FakeSupportFactory::info(), parent )
+        : Koncrete::LanguageSupport( FakeSupportFactory::info(), parent )
 {
     setObjectName( QString::fromUtf8( name ) );
 }
@@ -32,33 +32,33 @@ FakeLanguageSupport::FakeLanguageSupport( QObject *parent, const char *name,
 FakeLanguageSupport::~FakeLanguageSupport()
 {}
 
-KDevCodeModel *FakeLanguageSupport::codeModel( const KUrl &url ) const
+Koncrete::CodeModel *FakeLanguageSupport::codeModel( const KUrl &url ) const
 {
     Q_UNUSED( url );
     return 0;
 }
 
-KDevCodeProxy *FakeLanguageSupport::codeProxy() const
+Koncrete::CodeProxy *FakeLanguageSupport::codeProxy() const
 {
     return 0;
 }
 
-KDevCodeDelegate *FakeLanguageSupport::codeDelegate() const
+Koncrete::CodeDelegate *FakeLanguageSupport::codeDelegate() const
 {
     return 0;
 }
 
-KDevCodeRepository *FakeLanguageSupport::codeRepository() const
+Koncrete::CodeRepository *FakeLanguageSupport::codeRepository() const
 {
     return 0;
 }
 
-KDevParseJob *FakeLanguageSupport::createParseJob( const KUrl &url )
+Koncrete::ParseJob *FakeLanguageSupport::createParseJob( const KUrl &url )
 {
     return 0;
 }
 
-KDevParseJob *FakeLanguageSupport::createParseJob( KDevDocument *document,
+Koncrete::ParseJob *FakeLanguageSupport::createParseJob( Koncrete::Document *document,
         KTextEditor::SmartRange *highlight )
 {
     return 0;

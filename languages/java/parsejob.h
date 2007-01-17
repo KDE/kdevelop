@@ -29,7 +29,7 @@
 // from the parser subdirectory
 #include <java_ast.h>
 
-class KDevCodeModel;
+class Koncrete::CodeModel;
 class JavaLanguageSupport;
 
 namespace java
@@ -38,13 +38,13 @@ namespace java
 class ParseSession;
 
 
-class ParseJob : public KDevParseJob
+class ParseJob : public Koncrete::ParseJob
 {
     Q_OBJECT
 
 public:
     ParseJob( const KUrl &url, JavaLanguageSupport* parent );
-    ParseJob( KDevDocument* document, JavaLanguageSupport* parent );
+    ParseJob( Koncrete::Document* document, JavaLanguageSupport* parent );
 
     virtual ~ParseJob();
 
@@ -54,8 +54,8 @@ public:
 
     bool wasReadFromDisk() const;
 
-    virtual KDevAST *AST() const;
-    virtual KDevCodeModel *codeModel() const;
+    virtual Koncrete::AST *AST() const;
+    virtual Koncrete::CodeModel *codeModel() const;
 
 protected:
     virtual void run();
@@ -63,7 +63,7 @@ protected:
 private:
     ParseSession *m_session;
     compilation_unit_ast *m_AST;
-    KDevCodeModel *m_model;
+    Koncrete::CodeModel *m_model;
     bool m_readFromDisk;
 };
 

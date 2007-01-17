@@ -25,14 +25,17 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include <kstandarddirs.h>
 
-class KDevEnvWidget;
+namespace Koncrete
+{
+    
+class EnvWidget;
 
-class KDevEnvPreferences : public KDevCModule
+class EnvPreferences : public ConfigModule
 {
     Q_OBJECT
 public:
-    KDevEnvPreferences( QWidget *parent, const QStringList &args );
-    virtual ~KDevEnvPreferences();
+    EnvPreferences( QWidget *parent, const QStringList &args );
+    virtual ~EnvPreferences();
 
     virtual void save();
     virtual void load();
@@ -48,9 +51,11 @@ private slots:
     void settingsChanged( bool changed );
 
 private:
-    KDevEnvWidget *preferencesDialog;
+    EnvWidget *preferencesDialog;
 
 };
+
+}
 
 #endif
 

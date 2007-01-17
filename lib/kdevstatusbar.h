@@ -24,15 +24,19 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-class KDEVPLATFORM_EXPORT KDevStatusBar : public KStatusBar
+namespace Koncrete
+{
+
+class KDEVPLATFORM_EXPORT StatusBar : public KStatusBar
 {
     Q_OBJECT
 
 public:
-    KDevStatusBar( QWidget *parent = 0 );
-    ~KDevStatusBar();
+    StatusBar( QWidget *parent = 0 );
+    ~StatusBar();
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

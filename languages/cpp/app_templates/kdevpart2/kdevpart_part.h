@@ -16,7 +16,7 @@ class %{APPNAME}Widget;
 /**
 Please read the README.dox file for more info about this part
 */
-class %{APPNAME}Part: public KDevPlugin
+class %{APPNAME}Part: public Koncrete::Plugin
 {
     Q_OBJECT
 public:

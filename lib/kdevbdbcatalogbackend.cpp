@@ -25,18 +25,19 @@
 
 #include <cstring>
 
-
-KDevBDBCatalogBackend::KDevBDBCatalogBackend()
+namespace Koncrete
+{
+BDBCatalogBackend::BDBCatalogBackend()
 {
     m_db = 0;
 }
 
-KDevBDBCatalogBackend::~KDevBDBCatalogBackend()
+BDBCatalogBackend::~BDBCatalogBackend()
 {
 
 }
 
-void KDevBDBCatalogBackend::open( const QString& dbName )
+void BDBCatalogBackend::open( const QString& dbName )
 {
     Q_ASSERT( m_db == 0 );
     int ret;
@@ -70,7 +71,7 @@ void KDevBDBCatalogBackend::open( const QString& dbName )
     }
 }
 
-void KDevBDBCatalogBackend::close()
+void BDBCatalogBackend::close()
 {
     QMap<QByteArray, DB*>::Iterator it = m_indexList.begin();
     while ( it != m_indexList.end() )
@@ -89,7 +90,7 @@ void KDevBDBCatalogBackend::close()
     }
 }
 
-void KDevBDBCatalogBackend::sync()
+void BDBCatalogBackend::sync()
 {
     Q_ASSERT( m_db != 0 );
     m_db->sync( m_db, 0 );
@@ -103,12 +104,12 @@ void KDevBDBCatalogBackend::sync()
 
 }
 
-bool KDevBDBCatalogBackend::isOpen()
+bool BDBCatalogBackend::isOpen()
 {
     return ( m_db != 0 );
 }
 
-void KDevBDBCatalogBackend::addItem( Tag& tag )
+void BDBCatalogBackend::addItem( Tag& tag )
 {
     if( tag.name().isEmpty() )
         return;
@@ -127,7 +128,7 @@ void KDevBDBCatalogBackend::addItem( Tag& tag )
     }
 }
 
-Tag KDevBDBCatalogBackend::getItemById( int id )
+Tag BDBCatalogBackend::getItemById( int id )
 {
     Q_ASSERT( m_db != 0 );
 
@@ -159,7 +160,7 @@ Tag KDevBDBCatalogBackend::getItemById( int id )
     return tag;
 }
 
-QList<Tag> KDevBDBCatalogBackend::query( const QList<QueryArgument>& args )
+QList<Tag> BDBCatalogBackend::query( const QList<QueryArgument>& args )
 {
     QList<Tag> tags;
 
@@ -237,7 +238,7 @@ QList<Tag> KDevBDBCatalogBackend::query( const QList<QueryArgument>& args )
     return tags;
 }
 
-QList<QByteArray> KDevBDBCatalogBackend::indexList() const
+QList<QByteArray> BDBCatalogBackend::indexList() const
 {
     QList<QByteArray> l;
     QMap<QByteArray, DB*>::ConstIterator it = m_indexList.begin();
@@ -250,7 +251,7 @@ QList<QByteArray> KDevBDBCatalogBackend::indexList() const
     return l;
 }
 
-void KDevBDBCatalogBackend::addIndex( const QByteArray& name )
+void BDBCatalogBackend::addIndex( const QByteArray& name )
 {
     Q_ASSERT( m_db != 0 );
 
@@ -309,17 +310,17 @@ void KDevBDBCatalogBackend::addIndex( const QByteArray& name )
     }
 }
 
-bool KDevBDBCatalogBackend::hasIndex( const QByteArray& name ) const
+bool BDBCatalogBackend::hasIndex( const QByteArray& name ) const
 {
     return m_indexList.contains( name );
 }
 
-DB* KDevBDBCatalogBackend::index( const QByteArray& name )
+DB* BDBCatalogBackend::index( const QByteArray& name )
 {
     return m_indexList[ name ];
 }
 
-bool KDevBDBCatalogBackend::addItem( DB* dbp, const QByteArray& id, const Tag& tag )
+bool BDBCatalogBackend::addItem( DB* dbp, const QByteArray& id, const Tag& tag )
 {
     Q_ASSERT( dbp != 0 );
 
@@ -350,7 +351,7 @@ bool KDevBDBCatalogBackend::addItem( DB* dbp, const QByteArray& id, const Tag& t
     return ( ret == 0 );
 }
 
-bool KDevBDBCatalogBackend::addItem( DB* dbp, const QVariant& id, const QByteArray& v )
+bool BDBCatalogBackend::addItem( DB* dbp, const QVariant& id, const QByteArray& v )
 {
     Q_ASSERT( dbp != 0 );
 
@@ -381,7 +382,7 @@ bool KDevBDBCatalogBackend::addItem( DB* dbp, const QVariant& id, const QByteArr
     return ( ret == 0 );
 }
 
-QByteArray KDevBDBCatalogBackend::generateId()
+QByteArray BDBCatalogBackend::generateId()
 {
     static int n = 1;
     QString asStr;
@@ -389,4 +390,5 @@ QByteArray KDevBDBCatalogBackend::generateId()
     return asStr.toLatin1();
 }
 
+}
 //kate: indent-spaces on; indent-width 4; replace-tabs on;

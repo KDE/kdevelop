@@ -25,6 +25,9 @@
 #include "kdevprofile.h"
 #include "kdevplugincontroller.h"
 
+namespace Koncrete
+{
+
 /**
 Profile listing operation.
 Used to get a plain list of profiles
@@ -91,10 +94,10 @@ public:
     ~ProfileEngine();
 
     /** @return The list of plugin offers for given profile and type.*/
-    KPluginInfo::List offers(const QString &profileName, KDevPluginController::PluginType offerType);
+    KPluginInfo::List offers(const QString &profileName, PluginController::PluginType offerType);
 
     /** @return The list of all plugin offers for given type.*/
-    KPluginInfo::List allOffers(KDevPluginController::PluginType offerType);
+    KPluginInfo::List allOffers(PluginController::PluginType offerType);
 
     /**@return The list of URLs to the resources (files) with given @p extension.
     @param profileName A name of a profile to find resources in.
@@ -126,7 +129,7 @@ public:
     @param load Will be filled with a list of plugins to load.
     @note Resulting lists are not cleared. Pass only clean lists in the
     common case.*/
-    void diffProfiles(KDevPluginController::PluginType offerType, const QString &profile1, const QString &profile2,
+    void diffProfiles(PluginController::PluginType offerType, const QString &profile1, const QString &profile2,
         QStringList &unload, KPluginInfo::List &load);
 
     /**@return The root profile. Root profile is always named "KDevelop" and it
@@ -261,4 +264,5 @@ private:
     Profile *m_rootProfile;
 };
 
+}
 #endif

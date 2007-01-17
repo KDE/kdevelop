@@ -23,7 +23,9 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevlanguagesupport.h"
 
-void KDevAST::release()
+namespace Koncrete {
+
+void AST::release()
 {
     if (language)
         language->releaseAST(this);
@@ -31,7 +33,7 @@ void KDevAST::release()
         kWarning() << k_funcinfo << "No language associated with AST " << this << endl;
 }
 
-void KDevAST::documentLoaded(const KUrl& document)
+void AST::documentLoaded(const KUrl& document)
 {
     if (language)
         language->documentLoaded(this, document);
@@ -39,4 +41,5 @@ void KDevAST::documentLoaded(const KUrl& document)
         kWarning() << k_funcinfo << "No language associated with AST " << this << endl;
 }
 
+}
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

@@ -51,13 +51,16 @@
 #include <QtGui/QStandardItem>
 #include <QList>
 
-typedef KGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevprojectmanager, KDevProjectManagerFactory( "kdevprojectmanager" ) )
-
-KDevProjectManagerPart::KDevProjectManagerPart( QObject *parent, const QStringList& )
-        : KDevPlugin( KDevProjectManagerFactory::instance(), parent )
+namespace Koncrete
 {
-    setInstance( KDevProjectManagerFactory::instance() );
+
+typedef KGenericFactory<ProjectManagerPart> ProjectManagerFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevprojectmanager, ProjectManagerFactory( "kdevprojectmanager" ) )
+
+ProjectManagerPart::ProjectManagerPart( QObject *parent, const QStringList& )
+        : Plugin( ProjectManagerFactory::instance(), parent )
+{
+    setInstance( ProjectManagerFactory::instance() );
 
     m_widget = new QWidget( 0 );
     QVBoxLayout *vbox = new QVBoxLayout( m_widget );
@@ -69,14 +72,14 @@ KDevProjectManagerPart::KDevProjectManagerPart( QObject *parent, const QStringLi
     editor->hide();
 #endif
 
-    KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate( this );
+    ProjectManagerDelegate *delegate = new ProjectManagerDelegate( this );
 
-    QAbstractItemModel *overviewModel = KDevCore::activeProject()->model();
+    QAbstractItemModel *overviewModel = Core::activeProject()->model();
 #ifdef USE_KFILTER_MODEL
-    overviewModel = new KDevProjectOverviewFilter( m_projectModel, this );
+    overviewModel = new ProjectOverviewFilter( m_projectModel, this );
 #endif
 
-    m_projectOverview = new KDevProjectManager( this, m_widget );
+    m_projectOverview = new ProjectManager( this, m_widget );
     m_projectOverview->setModel( overviewModel );
     m_projectOverview->setItemDelegate( delegate );
     m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
@@ -91,10 +94,10 @@ KDevProjectManagerPart::KDevProjectManagerPart( QObject *parent, const QStringLi
 #ifdef WITH_PROJECT_DETAILS
     QAbstractItemModel *detailsModel = m_projectModel;
 #ifdef USE_KFILTER_MODEL
-    detailsModel = new KDevProjectDetailsFilter( m_projectModel, this );
+    detailsModel = new ProjectDetailsFilter( m_projectModel, this );
 #endif
 
-    m_projectDetails = new KDevProjectManager( this, m_widget );
+    m_projectDetails = new ProjectManager( this, m_widget );
     m_projectDetails->setModel( detailsModel );
     m_projectDetails->setItemDelegate( delegate );
     m_projectDetails->setWhatsThis( i18n( "Project Details" ) );
@@ -116,58 +119,58 @@ KDevProjectManagerPart::KDevProjectManagerPart( QObject *parent, const QStringLi
     setXMLFile( "kdevprojectmanager.rc" );
 }
 
-KDevProjectManagerPart::~KDevProjectManagerPart()
+ProjectManagerPart::~ProjectManagerPart()
 {
     delete m_widget;
     m_widget = 0;
 }
 
-void KDevProjectManagerPart::openURL( const KUrl &url )
+void ProjectManagerPart::openURL( const KUrl &url )
 {
-    KDevCore::documentController() ->editDocument( url );
+    Core::documentController() ->editDocument( url );
 }
 
-KDevProjectFolderItem *KDevProjectManagerPart::activeFolder()
+ProjectFolderItem *ProjectManagerPart::activeFolder()
 {
     return m_projectOverview->currentFolderItem();
 }
 
-KDevProjectTargetItem *KDevProjectManagerPart::activeTarget()
+ProjectTargetItem *ProjectManagerPart::activeTarget()
 {
     return m_projectOverview->currentTargetItem();
 }
 
-KDevProjectFileItem * KDevProjectManagerPart::activeFile()
+ProjectFileItem * ProjectManagerPart::activeFile()
 {
     return m_projectOverview->currentFileItem();
 }
 
-QWidget *KDevProjectManagerPart::pluginView() const
+QWidget *ProjectManagerPart::pluginView() const
 {
   return m_widget;
 }
 
-Qt::DockWidgetArea KDevProjectManagerPart::dockWidgetAreaHint() const
+Qt::DockWidgetArea ProjectManagerPart::dockWidgetAreaHint() const
 {
   return Qt::RightDockWidgetArea;
 }
 
-void KDevProjectManagerPart::fileDirty( const QString &fileName )
+void ProjectManagerPart::fileDirty( const QString &fileName )
 {
     Q_UNUSED( fileName );
 }
 
-void KDevProjectManagerPart::fileDeleted( const QString &fileName )
+void ProjectManagerPart::fileDeleted( const QString &fileName )
 {
     Q_UNUSED( fileName );
 }
 
-void KDevProjectManagerPart::fileCreated( const QString &fileName )
+void ProjectManagerPart::fileCreated( const QString &fileName )
 {
     Q_UNUSED( fileName );
 }
 
-bool KDevProjectManagerPart::computeChanges( const QStringList &oldFileList, const QStringList &newFileList )
+bool ProjectManagerPart::computeChanges( const QStringList &oldFileList, const QStringList &newFileList )
 {
     QMap<QString, bool> oldFiles, newFiles;
 
@@ -194,21 +197,22 @@ bool KDevProjectManagerPart::computeChanges( const QStringList &oldFileList, con
     return false; //FIXME
 }
 
-void KDevProjectManagerPart::updateDetails( KDevProjectItem * )
+void ProjectManagerPart::updateDetails( ProjectItem * )
 {}
 
-void KDevProjectManagerPart::pressed( const QModelIndex & index )
+void ProjectManagerPart::pressed( const QModelIndex & index )
 {
-  QStandardItem* item = KDevCore::activeProject()->model()->itemFromIndex( index );
-  if ( item->type() == KDevProjectItem::File )
+  QStandardItem* item = Core::activeProject()->model()->itemFromIndex( index );
+  if ( item->type() == ProjectItem::File )
   {
-    KDevProjectItem* projectItem = dynamic_cast<KDevProjectItem*>( item );
+    ProjectItem* projectItem = dynamic_cast<ProjectItem*>( item );
     if ( projectItem && projectItem->file() )
-      KDevCore::documentController() ->editDocument( projectItem->file()->url() );
+      Core::documentController() ->editDocument( projectItem->file()->url() );
   }
 
 }
 
+}
 #include "kdevprojectmanager_part.moc"
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

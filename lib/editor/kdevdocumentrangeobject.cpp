@@ -27,7 +27,10 @@
 
 using namespace KTextEditor;
 
-KDevDocumentRangeObject::KDevDocumentRangeObject(Range* range)
+namespace Koncrete
+{
+
+DocumentRangeObject::DocumentRangeObject(Range* range)
   : m_range(0)
   , m_ownsRange(true)
   , m_url(0)
@@ -35,18 +38,18 @@ KDevDocumentRangeObject::KDevDocumentRangeObject(Range* range)
   setTextRange(range);
 }
 
-KDevDocumentRangeObject::~ KDevDocumentRangeObject( )
+DocumentRangeObject::~ DocumentRangeObject( )
 {
   if (m_range && m_range->isSmartRange())
     m_range->toSmartRange()->removeWatcher(this);
 
   if (m_ownsRange)
-    KDevEditorIntegrator::releaseRange(m_range);
+    EditorIntegrator::releaseRange(m_range);
 
   delete m_url;
 }
 
-void KDevDocumentRangeObject::setTextRange( Range * range, bool ownsRange )
+void DocumentRangeObject::setTextRange( Range * range, bool ownsRange )
 {
   Q_ASSERT(range);
 
@@ -65,7 +68,7 @@ void KDevDocumentRangeObject::setTextRange( Range * range, bool ownsRange )
     }
 
     if (m_ownsRange)
-      KDevEditorIntegrator::releaseRange(m_range);
+      EditorIntegrator::releaseRange(m_range);
   }
 
   m_range = range;
@@ -77,39 +80,39 @@ void KDevDocumentRangeObject::setTextRange( Range * range, bool ownsRange )
   }
 }
 
-const Range KDevDocumentRangeObject::textRange( ) const
+const Range DocumentRangeObject::textRange( ) const
 {
   QMutexLocker lock(&m_rangeMutex);
   return *m_range;
 }
 
-void KDevDocumentRangeObject::setRange(const Range& range)
+void DocumentRangeObject::setRange(const Range& range)
 {
   QMutexLocker lock(&m_rangeMutex);
   *m_range = range;
 }
 
-const KDevDocumentRange KDevDocumentRangeObject::textDocRange() const
+const DocumentRange DocumentRangeObject::textDocRange() const
 {
   QMutexLocker lock(&m_rangeMutex);
-  return *static_cast<KDevDocumentRange*>(m_range);
+  return *static_cast<DocumentRange*>(m_range);
 }
 
-KUrl KDevDocumentRangeObject::url() const
+KUrl DocumentRangeObject::url() const
 {
   QMutexLocker lock(&m_rangeMutex);
   return url(m_range);
 }
 
-KUrl KDevDocumentRangeObject::url( const Range * range )
+KUrl DocumentRangeObject::url( const Range * range )
 {
   if (range->isSmartRange())
     return static_cast<const SmartRange*>(range)->document()->url();
   else
-    return static_cast<const KDevDocumentRange*>(range)->document();
+    return static_cast<const DocumentRange*>(range)->document();
 }
 
-SmartRange* KDevDocumentRangeObject::smartRange() const
+SmartRange* DocumentRangeObject::smartRange() const
 {
   QMutexLocker lock(&m_rangeMutex);
 
@@ -119,13 +122,13 @@ SmartRange* KDevDocumentRangeObject::smartRange() const
   return 0L;
 }
 
-bool KDevDocumentRangeObject::contains(const KDevDocumentCursor& cursor) const
+bool DocumentRangeObject::contains(const DocumentCursor& cursor) const
 {
   QMutexLocker lock(&m_rangeMutex);
   return url(m_range) == cursor.document() && m_range->contains(cursor);
 }
 
-Range* KDevDocumentRangeObject::textRangePtr() const
+Range* DocumentRangeObject::textRangePtr() const
 {
   QMutexLocker lock(&m_rangeMutex);
   return m_range;
@@ -133,16 +136,16 @@ Range* KDevDocumentRangeObject::textRangePtr() const
 
 // kate: indent-width 2;
 
-void KDevDocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
+void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 {
   QMutexLocker lock(&m_rangeMutex);
   Q_ASSERT(range == m_range);
   Q_ASSERT(m_url);
   //Q_ASSERT(false);
-  m_range = new KDevDocumentRange(*m_url, *m_range);
+  m_range = new DocumentRange(*m_url, *m_range);
 }
 
-KTextEditor::Range* KDevDocumentRangeObject::takeRange()
+KTextEditor::Range* DocumentRangeObject::takeRange()
 {
   QMutexLocker lock(&m_rangeMutex);
 
@@ -157,4 +160,6 @@ KTextEditor::Range* KDevDocumentRangeObject::takeRange()
   }
 
   return ret;
+}
+
 }

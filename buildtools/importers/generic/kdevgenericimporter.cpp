@@ -36,7 +36,7 @@ typedef KGenericFactory<KDevGenericImporter> GenericSupportFactory;
 K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, GenericSupportFactory("kdevgenericimporter"))
 
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
-    : KDevFileManager( GenericSupportFactory::instance(), parent)
+    : Koncrete::FileManager( GenericSupportFactory::instance(), parent)
 {
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << "*.cs" << "*.java";   // ### remove me
@@ -48,9 +48,9 @@ KDevGenericImporter::~KDevGenericImporter()
 {
 }
 
-KDevProject *KDevGenericImporter::project() const
+Koncrete::Project *KDevGenericImporter::project() const
 {
-    return KDevCore::activeProject();
+    return Koncrete::Core::activeProject();
 }
 
 bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
@@ -78,7 +78,7 @@ bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
     return true;
 }
 
-QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *item)
+QList<Koncrete::ProjectFolderItem*> KDevGenericImporter::parse(Koncrete::ProjectFolderItem *item)
 {
     QDir dir( item->url().toLocalFile() );
 
@@ -87,7 +87,7 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
     item->add(target);
 #endif
 
-    QList<KDevProjectFolderItem*> folder_list;
+    QList<Koncrete::ProjectFolderItem*> folder_list;
     QFileInfoList entries = dir.entryInfoList();
 
     for (int i=0; i<entries.count(); ++i) {
@@ -95,53 +95,55 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
 
         if (!isValid(fileInfo)) {
             //kDebug(9000) << "skip:" << fileInfo.absoluteFilePath() << endl;
-        } else if (fileInfo.isDir() && fileInfo.fileName() != QLatin1String(".")
-                   && fileInfo.fileName() != QLatin1String("..")) {
-            KDevProjectFolderItem *folder = new KDevProjectFolderItem(KUrl(fileInfo.absoluteFilePath()), item);
+        }
+        else if (fileInfo.isDir() && fileInfo.fileName() != QLatin1String(".")
+                   && fileInfo.fileName() != QLatin1String(".."))
+        {
+            Koncrete::ProjectFolderItem *folder = new Koncrete::ProjectFolderItem(KUrl(fileInfo.absoluteFilePath()), item);
             folder_list.append(folder);
-        } else if (fileInfo.isFile()) {
-            KDevProjectFileItem *file = new KDevProjectFileItem(KUrl( fileInfo.absoluteFilePath() ), item);
+        } else if (fileInfo.isFile())
+        {
+            Koncrete::ProjectFileItem *file = new Koncrete::ProjectFileItem(KUrl( fileInfo.absoluteFilePath() ), item);
         }
     }
 
     return folder_list;
 }
 
-KDevProjectItem *KDevGenericImporter::import(KDevProjectModel *model, const KUrl &fileName)
+Koncrete::ProjectItem *KDevGenericImporter::import(Koncrete::ProjectModel *model,
+                                                   const KUrl &fileName)
 {
     QFileInfo fileInfo( fileName.path() );
     if (fileInfo.isDir()) {
-        KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileName, 0);
+        Koncrete::ProjectFolderItem *folder = new Koncrete::ProjectFolderItem(fileName, 0);
         return folder;
     } else if (fileInfo.isFile()) {
-        KDevProjectFileItem *file = new KDevProjectFileItem(fileName,0);
+        Koncrete::ProjectFileItem *file = new Koncrete::ProjectFileItem(fileName,0);
         return file;
     }
 
     return 0;
 }
 
-KDevProjectFolderItem* KDevGenericImporter::addFolder(const KUrl&// folder
-                                   , KDevProjectFolderItem *// parent
-                                   )
+Koncrete::ProjectFolderItem* KDevGenericImporter::addFolder(const KUrl&,
+                                                            Koncrete::ProjectFolderItem *)
 {
     return 0;
 }
 
 
-KDevProjectFileItem* KDevGenericImporter::addFile(const KUrl&// file
-                                 , KDevProjectFolderItem *// parent
-                                 )
+Koncrete::ProjectFileItem* KDevGenericImporter::addFile(const KUrl&,
+                                                        Koncrete::ProjectFolderItem *)
 {
     return 0;
 }
 
-bool KDevGenericImporter::removeFolder(KDevProjectFolderItem *)
+bool KDevGenericImporter::removeFolder(Koncrete::ProjectFolderItem *)
 {
     return false;
 }
 
-bool KDevGenericImporter::removeFile(KDevProjectFileItem *)
+bool KDevGenericImporter::removeFile(Koncrete::ProjectFileItem *)
 {
     return false;
 }

@@ -27,17 +27,22 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 
-class KDevPlugin;
-class KDevProject;
 class KRecentFilesAction;
 
-class KDEVPLATFORM_EXPORT KDevProjectController : public QObject, protected KDevCoreInterface
+namespace Koncrete
 {
-    friend class KDevCore;
+
+class Plugin;
+class Project;
+
+
+class KDEVPLATFORM_EXPORT ProjectController : public QObject, protected CoreInterface
+{
+    friend class Core;
     Q_OBJECT
 public:
-    KDevProjectController( QObject *parent = 0 );
-    virtual ~KDevProjectController();
+    ProjectController( QObject *parent = 0 );
+    virtual ~ProjectController();
 
     KUrl localFile() const;
     void setLocalFile( const KUrl &localFile );
@@ -51,7 +56,7 @@ public:
     bool isLoaded() const;
     KUrl projectDirectory() const;
 
-    KDevProject* activeProject() const;
+    Project* activeProject() const;
 
 public Q_SLOTS:
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
@@ -80,11 +85,12 @@ private:
     KUrl m_projectsDir;
     KUrl m_lastProject;
     bool m_isLoaded;
-    KDevProject* m_project;
-    KDevPlugin* m_projectPart;
+    Project* m_project;
+    Plugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

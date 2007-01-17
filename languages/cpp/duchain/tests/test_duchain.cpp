@@ -108,7 +108,7 @@ void TestDUChain::initTestCase()
   file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-  topContext = new TopDUContext(new KDevDocumentRange(file1, Range(0,0,25,0)));
+  topContext = new TopDUContext(new Koncrete::DocumentRange(file1, Range(0,0,25,0)));
   DUChain::self()->addDocumentChain(file1, topContext);
 
   typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
@@ -121,7 +121,7 @@ void TestDUChain::cleanupTestCase()
   delete type2;
   delete type3;*/
 
-  KDevEditorIntegrator::releaseTopRange(topContext->textRangePtr());
+  Koncrete::EditorIntegrator::releaseTopRange(topContext->textRangePtr());
   delete topContext;
 }
 
@@ -182,19 +182,19 @@ void TestDUChain::testContextRelationships()
 
   QWriteLocker lock(DUChain::lock());
 
-  DUContext* firstChild = new DUContext(new KDevDocumentRange(file1, Range(4,4, 10,3)), topContext);
+  DUContext* firstChild = new DUContext(new Koncrete::DocumentRange(file1, Range(4,4, 10,3)), topContext);
 
   QCOMPARE(firstChild->parentContext(), topContext);
   QCOMPARE(firstChild->childContexts().count(), 0);
   QCOMPARE(topContext->childContexts().count(), 1);
   QCOMPARE(topContext->childContexts().last(), firstChild);
 
-  DUContext* secondChild = new DUContext(new KDevDocumentRange(file1, Range(14,4, 19,3)), topContext);
+  DUContext* secondChild = new DUContext(new Koncrete::DocumentRange(file1, Range(14,4, 19,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 2);
   QCOMPARE(topContext->childContexts()[1], secondChild);
 
-  DUContext* thirdChild = new DUContext(new KDevDocumentRange(file1, Range(10,4, 14,3)), topContext);
+  DUContext* thirdChild = new DUContext(new Koncrete::DocumentRange(file1, Range(10,4, 14,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 3);
   QCOMPARE(topContext->childContexts()[1], thirdChild);
@@ -654,7 +654,7 @@ void TestDUChain::testFileParse()
 
 void TestDUChain::release(DUContext* top)
 {
-  KDevEditorIntegrator::releaseTopRange(top->textRangePtr());
+  Koncrete::EditorIntegrator::releaseTopRange(top->textRangePtr());
   delete top;
 }
 

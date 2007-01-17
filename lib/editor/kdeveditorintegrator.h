@@ -27,11 +27,13 @@
 
 class QMutex;
 
-class KDevDocumentRange;
-class KDevDocumentCursor;
-class KDevEditorIntegratorPrivate;
-
 namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterface; }
+
+namespace Koncrete
+{
+  class DocumentRange;
+  class DocumentCursor;
+  class EditorIntegratorPrivate;
 
 /**
  * Provides facilities for easy integration of a text editor component with
@@ -43,11 +45,11 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
  *
  * \todo non-loaded documents don't trigger the removeDocument call...
  */
-class KDEVPLATFORM_EXPORT KDevEditorIntegrator
+class KDEVPLATFORM_EXPORT EditorIntegrator
 {
 public:
-  KDevEditorIntegrator();
-  virtual ~KDevEditorIntegrator();
+  EditorIntegrator();
+  virtual ~EditorIntegrator();
 
   /**
    * Initialise the editor integrator.
@@ -146,7 +148,7 @@ public:
    * The returned range will become the new currentRange().
    *
    * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a KDevDocumentRange.
+   * this will be a smart range, otherwise it will be a DocumentRange.
    *
    * \param range Range of text to cover.  If this is outside the parent's range, the
    * parent will be adjusted (standard behaviour of SmartRange%s).
@@ -160,7 +162,7 @@ public:
    * The returned range will become the new currentRange().
    *
    * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a KDevDocumentRange.
+   * this will be a smart range, otherwise it will be a DocumentRange.
    *
    * \param start start of the range of text to cover.  If this is outside the parent's range, the
    * parent will be adjusted (standard behaviour of SmartRange%s).
@@ -177,7 +179,7 @@ public:
    * The returned range will become the new currentRange().
    *
    * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a KDevDocumentRange.
+   * this will be a smart range, otherwise it will be a DocumentRange.
    *
    * \returns the newly created smart range.
    * \overload
@@ -205,9 +207,9 @@ public:
   void exitCurrentRange();
 
 protected:
-  static KDevEditorIntegratorPrivate* data();
+  static EditorIntegratorPrivate* data();
 
-  static KDevEditorIntegratorPrivate* s_data;
+  static EditorIntegratorPrivate* s_data;
 
   KUrl m_currentUrl;
   KTextEditor::Document* m_currentDocument;
@@ -216,6 +218,7 @@ protected:
   KTextEditor::Range m_newRangeMarker;
 };
 
+}
 #endif // EDITORINTEGRATOR_H
 
 // kate: indent-width 2;

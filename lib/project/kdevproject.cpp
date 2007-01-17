@@ -50,53 +50,55 @@
 #include "kdevplugincontroller.h"
 
 
+namespace Koncrete
+{
 
-class KDevProject::Private
+class Project::Private
 {
 public:
     KUrl folder;
-    KDevFileManager* manager;
-    KDevPersistentHash persistentHash;
-    KDevProjectModel* model;
+    FileManager* manager;
+    PersistentHash persistentHash;
+    ProjectModel* model;
     QString name;
 };
 
-KDevProject::KDevProject(QObject *parent)
+Project::Project(QObject *parent)
     : QObject(parent)
     , d(new Private())
 {
     QDBusConnection::sessionBus().registerObject("/org/kdevelop/Project", this, QDBusConnection::ExportScriptableSlots);
 
     d->manager = 0;
-    d->model = new KDevProjectModel( this );
+    d->model = new ProjectModel( this );
 }
 
-KDevProject::~KDevProject()
+Project::~Project()
 {
     delete d;
 }
 
-KDevProjectModel* KDevProject::model() const
+ProjectModel* Project::model() const
 {
     return d->model;
 }
 
-QString KDevProject::name() const
+QString Project::name() const
 {
     return d->name;
 }
 
-KUrl KDevProject::folder() const
+KUrl Project::folder() const
 {
     return d->folder;
 }
 
-bool KDevProject::open( const KUrl& projectFileUrl )
+bool Project::open( const KUrl& projectFileUrl )
 {
     KIO::StatJob* statJob = KIO::stat( projectFileUrl );
     if ( !statJob->exec() ) //be sync for right now
     {
-        KMessageBox::sorry( KDevCore::mainWindow(),
+        KMessageBox::sorry( Core::mainWindow(),
                             i18n( "Unable to load the project file %1",
                                   projectFileUrl.pathOrUrl() ) );
         return false;
@@ -107,11 +109,11 @@ bool KDevProject::open( const KUrl& projectFileUrl )
 
     d->name = projectGroup.readEntry("Name", projectFileUrl.fileName());
     d->folder = projectFileUrl.directory();
-    QString importerSetting = projectGroup.readEntry("Importer", "KDevGenericImporter");
+    QString importerSetting = projectGroup.readEntry("Importer", "GenericImporter");
 
     //Get our importer
-    KDevPluginController* pluginManager = KDevPluginController::self();
-    d->manager = qobject_cast<KDevFileManager*>( pluginManager->loadPlugin( importerSetting ) );
+    PluginController* pluginManager = PluginController::self();
+    d->manager = qobject_cast<FileManager*>( pluginManager->loadPlugin( importerSetting ) );
 
     if ( d->manager )
     {
@@ -125,12 +127,12 @@ bool KDevProject::open( const KUrl& projectFileUrl )
     return true;
 }
 
-void KDevProject::close()
+void Project::close()
 {
-    KPluginInfo* pluginInfo = KDevPluginController::self()->pluginInfo( d->manager );
+    KPluginInfo* pluginInfo = PluginController::self()->pluginInfo( d->manager );
     if ( pluginInfo )
     {
-        KDevPluginController::self()->unloadPlugin( pluginInfo->pluginName() );
+        PluginController::self()->unloadPlugin( pluginInfo->pluginName() );
     }
 
     //the manager plugin will be deleted in the plugin controller, so just set
@@ -140,9 +142,9 @@ void KDevProject::close()
     qDeleteAll(itemList);
 
 }
-bool KDevProject::inProject( const KUrl& url ) const
+bool Project::inProject( const KUrl& url ) const
 {
-  KDevProjectFolderItem *top = d->manager->top();
+  ProjectFolderItem *top = d->manager->top();
   KUrl u = top->url();
   if (u.protocol() != url.protocol() || u.host() != url.host())
     return false;
@@ -151,9 +153,9 @@ bool KDevProject::inProject( const KUrl& url ) const
     u = top->url();
     if (u.isParentOf(url))
     {
-      KDevProjectFolderItem *parent = 0L;
-      QList<KDevProjectFolderItem*> folder_list = top->folderList();
-      foreach (KDevProjectFolderItem *folder, folder_list)
+      ProjectFolderItem *parent = 0L;
+      QList<ProjectFolderItem*> folder_list = top->folderList();
+      foreach (ProjectFolderItem *folder, folder_list)
       {
         if (folder->url().isParentOf(url))
         {
@@ -163,8 +165,8 @@ bool KDevProject::inProject( const KUrl& url ) const
       }
       if (!parent) //the subfolders are not parent of url
       {
-        QList<KDevProjectFileItem*> file_list= top->fileList();
-        foreach (KDevProjectFileItem *file, file_list)
+        QList<ProjectFileItem*> file_list= top->fileList();
+        foreach (ProjectFileItem *file, file_list)
         {
           if (file->url() == url)
           {
@@ -181,23 +183,23 @@ bool KDevProject::inProject( const KUrl& url ) const
   return false;
 }
 
-QList<KDevProjectFileItem*> KDevProject::allFiles()
+QList<ProjectFileItem*> Project::allFiles()
 {
     QStandardItem* rootItem = d->model->item(0,0);
-    KDevProjectItem* projectItem = dynamic_cast<KDevProjectItem*>(rootItem);
-    QList<KDevProjectFileItem*> files;
+    ProjectItem* projectItem = dynamic_cast<ProjectItem*>(rootItem);
+    QList<ProjectFileItem*> files;
     if ( projectItem )
         files = recurseFiles( projectItem );
 
     return files;
 }
 
-KUrl KDevProject::relativeUrl( const KUrl& absolute ) const
+KUrl Project::relativeUrl( const KUrl& absolute ) const
 {
     return KUrl::relativeUrl(folder(), absolute);
 }
 
-KUrl KDevProject::urlRelativeToProject( const KUrl & relativeUrl ) const
+KUrl Project::urlRelativeToProject( const KUrl & relativeUrl ) const
 {
     if (KUrl::isRelativeUrl(relativeUrl.path()))
         return KUrl(folder(), relativeUrl.path());
@@ -205,56 +207,57 @@ KUrl KDevProject::urlRelativeToProject( const KUrl & relativeUrl ) const
     return relativeUrl;
 }
 
-KDevFileManager* KDevProject::fileManager() const
+FileManager* Project::fileManager() const
 {
     return d->manager;
 }
 
-void KDevProject::setFileManager( KDevFileManager* newManager )
+void Project::setFileManager( FileManager* newManager )
 {
     d->manager = newManager;
 }
 
-KDevPersistentHash * KDevProject::persistentHash() const
+PersistentHash * Project::persistentHash() const
 {
     return &d->persistentHash;
 }
 
-void KDevProject::importDone( KJob* job )
+void Project::importDone( KJob* job )
 {
     job->deleteLater();
     d->model->resetModel();
 }
 
-QList<KDevProjectFileItem*> KDevProject::recurseFiles(KDevProjectItem * projectItem)
+QList<ProjectFileItem*> Project::recurseFiles(ProjectItem * projectItem)
 {
-    QList<KDevProjectFileItem*> files;
-    if ( KDevProjectFolderItem * folder = projectItem->folder() )
+    QList<ProjectFileItem*> files;
+    if ( ProjectFolderItem * folder = projectItem->folder() )
     {
-        QList<KDevProjectFolderItem*> folder_list = folder->folderList();
-        for ( QList<KDevProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it )
+        QList<ProjectFolderItem*> folder_list = folder->folderList();
+        for ( QList<ProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it )
             files += recurseFiles( ( *it ) );
 
-        QList<KDevProjectTargetItem*> target_list = folder->targetList();
-        for ( QList<KDevProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
+        QList<ProjectTargetItem*> target_list = folder->targetList();
+        for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
             files += recurseFiles( ( *it ) );
 
-        QList<KDevProjectFileItem*> file_list = folder->fileList();
-        for ( QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it )
+        QList<ProjectFileItem*> file_list = folder->fileList();
+        for ( QList<ProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it )
             files += recurseFiles( ( *it ) );
     }
-    else if ( KDevProjectTargetItem * target = projectItem->target() )
+    else if ( ProjectTargetItem * target = projectItem->target() )
     {
-        QList<KDevProjectFileItem*> file_list = target->fileList();
-        for ( QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it )
+        QList<ProjectFileItem*> file_list = target->fileList();
+        for ( QList<ProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it )
             files += recurseFiles( ( *it ) );
     }
-    else if ( KDevProjectFileItem * file = projectItem->file() )
+    else if ( ProjectFileItem * file = projectItem->file() )
     {
         files.append( file );
     }
     return files;
 }
 
+}
 
 #include "kdevproject.moc"

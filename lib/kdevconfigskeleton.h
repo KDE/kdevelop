@@ -23,24 +23,27 @@ Boston, MA 02110-1301, USA.
 #include "kdevexport.h"
 #include <kconfigskeleton.h>
 
-class KDEVPLATFORM_EXPORT KDevConfigSkeleton: public KConfigSkeleton
+namespace Koncrete
+{
+
+class KDEVPLATFORM_EXPORT ConfigSkeleton: public KConfigSkeleton
 {
     Q_OBJECT
 public:
 
-    KDevConfigSkeleton( const QString & configname = QString() );
+    ConfigSkeleton( const QString & configname = QString() );
 
-    KDevConfigSkeleton( KSharedConfig::Ptr config );
+    ConfigSkeleton( KSharedConfig::Ptr config );
 
-    virtual ~KDevConfigSkeleton();
+    virtual ~ConfigSkeleton();
 
     virtual void usrWriteConfig();
 
   /**
-   * Every KDevCModule will call this function with the url of the data.kdev4 file
+   * Every ConfigModule will call this function with the url of the data.kdev4 file
    * installed with the plugin in the plugin's data directory.  The url is determined
    * by the reimplementation of the pure virtual function localNonShareableFile in
-   * KDevCModule.
+   * ConfigModule.
    * The format of the data.kdev4 file is a simple text file filled with a list of names
    * of the settings that are not safe for the global kdev4 project file with each setting
    * name on a different line.  The names are taken from the entry tags of the *.kcfg file.
@@ -53,6 +56,7 @@ private:
     QList<QString> m_nonShareable;
 };
 
+}
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

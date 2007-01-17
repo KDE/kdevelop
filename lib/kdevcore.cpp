@@ -44,45 +44,48 @@ Boston, MA 02110-1301, USA.
 #include "kdevlanguagecontroller.h"
 #include "kdevbackgroundparser.h"
 
-class KDevCorePrivate;
-static KStaticDeleter<KDevCorePrivate> s_deleter;
-
-class KDevCorePrivate
+namespace Koncrete
 {
-    friend class KStaticDeleter<KDevCorePrivate>;
+
+class CorePrivate;
+static KStaticDeleter<CorePrivate> s_deleter;
+
+class CorePrivate
+{
+    friend class KStaticDeleter<CorePrivate>;
 public:
-    static KDevCorePrivate *self()
+    static CorePrivate *self()
     {
         if ( !s_private )
-            s_deleter.setObject( s_private, new KDevCorePrivate );
+            s_deleter.setObject( s_private, new CorePrivate );
         return s_private;
     }
 
-    static KDevCorePrivate *s_private;
+    static CorePrivate *s_private;
     /* We hold these as QPointers in case some errant plugin
        decides to delete one of us.  This way we'll know.
      */
-    QPointer<KDevEnvironment> environment;
-    QPointer<KDevMainWindow> mainWindow;
-    QPointer<KDevPartController> partController;
-    QPointer<KDevProjectController> projectController;
-    QPointer<KDevLanguageController> languageController;
-    QPointer<KDevDocumentController> documentController;
-    QPointer<KDevBackgroundParser> backgroundParser;
+    QPointer<Environment> environment;
+    QPointer<MainWindow> mainWindow;
+    QPointer<PartController> partController;
+    QPointer<ProjectController> projectController;
+    QPointer<LanguageController> languageController;
+    QPointer<DocumentController> documentController;
+    QPointer<BackgroundParser> backgroundParser;
 
 private:
-    KDevCorePrivate()
+    CorePrivate()
     {}
 
-    ~KDevCorePrivate()
+    ~CorePrivate()
     {
         /* Check to make sure these objects haven't been deleted already.
            Some errant plugin might delete it or they might be deleted by
-           Qt in the case of KDevMainWindow.
+           Qt in the case of MainWindow.
         */
 
         /* WARNING!!! Any object that is deleted here should be cleaned up
-           in KDevMainWindow::queryClose()!  All data or objects that require
+           in MainWindow::queryClose()!  All data or objects that require
            one of these classes must be deleted or cleaned up there first.
         */
         if ( environment )
@@ -102,95 +105,95 @@ private:
     }
 };
 
-KDevCorePrivate *KDevCorePrivate::s_private = 0;
+CorePrivate *CorePrivate::s_private = 0;
 
-#define d (KDevCorePrivate::self())
+#define d (CorePrivate::self())
 
-KDevEnvironment *KDevCore::environment()
+Environment *Core::environment()
 {
     return d->environment;
 }
 
-void KDevCore::setEnvironment( KDevEnvironment *environment )
+void Core::setEnvironment( Environment *environment )
 {
     d->environment = environment;
 }
 
-KDevProjectController *KDevCore::projectController()
+ProjectController *Core::projectController()
 {
     return d->projectController;
 }
 
-void KDevCore::setProjectController( KDevProjectController *projectController )
+void Core::setProjectController( ProjectController *projectController )
 {
     d->projectController = projectController;
 }
 
-KDevProject* KDevCore::activeProject()
+Project* Core::activeProject()
 {
     Q_ASSERT( d->projectController );
     return d->projectController->activeProject();
 }
 
-KDevMainWindow *KDevCore::mainWindow()
+MainWindow *Core::mainWindow()
 {
     return d->mainWindow;
 }
 
-void KDevCore::setMainWindow( KDevMainWindow *mainWindow )
+void Core::setMainWindow( MainWindow *mainWindow )
 {
     d->mainWindow = mainWindow;
 }
 
-KDevDocumentController* KDevCore::documentController()
+DocumentController* Core::documentController()
 {
     return d->documentController;
 }
 
-void KDevCore::setDocumentController( KDevDocumentController* documentController )
+void Core::setDocumentController( DocumentController* documentController )
 {
     d->documentController = documentController;
 }
 
-KDevPartController* KDevCore::partController()
+PartController* Core::partController()
 {
     return d->partController;
 }
 
-void KDevCore::setPartController( KDevPartController* partController )
+void Core::setPartController( PartController* partController )
 {
     d->partController = partController;
 }
 
-KDevLanguageController* KDevCore::languageController()
+LanguageController* Core::languageController()
 {
     return d->languageController;
 }
 
-void KDevCore::setLanguageController( KDevLanguageController * langController )
+void Core::setLanguageController( LanguageController * langController )
 {
     d->languageController = langController;
 }
 
-KDevLanguageSupport *KDevCore::activeLanguage()
+LanguageSupport *Core::activeLanguage()
 {
     Q_ASSERT( d->languageController );
     return d->languageController->activeLanguage();
 }
 
-KDevBackgroundParser* KDevCore::backgroundParser()
+BackgroundParser* Core::backgroundParser()
 {
     return d->backgroundParser;
 }
 
-void KDevCore::setBackgroundParser( KDevBackgroundParser* backgroundParser )
+void Core::setBackgroundParser( BackgroundParser* backgroundParser )
 {
     d->backgroundParser = backgroundParser;
 }
 
-void KDevCore::initialize()
+void Core::initialize()
 {
-    //All KDevCore API objects can utilize resources which
+    //All Core API objects can utilize resources which
     //depend upon one another.  Can not do this in the constructor
     //as they might depend upon one another.
 
@@ -220,7 +223,7 @@ void KDevCore::initialize()
     }
     else
     {
-        KConfig * config = KDevConfig::standard();
+        KConfig * config = Config::standard();
         config->setGroup( "General Options" );
         QString project = config->readPathEntry( "Last Project" );
         bool readProject = config->readEntry( "Read Last Project On Startup", true );
@@ -231,7 +234,7 @@ void KDevCore::initialize()
         }
     }
 
-    //If the project opened successfully then projectController will call KDevCore::loadSettings
+    //If the project opened successfully then projectController will call Core::loadSettings
     //once the project file has been loaded.  Else we will do it here.
     if ( !success )
         loadSettings();
@@ -239,9 +242,9 @@ void KDevCore::initialize()
     d->mainWindow->setVisible( true ); //Done initializing
 }
 
-void KDevCore::cleanup()
+void Core::cleanup()
 {
-    //All KDevCore API objects can utilize resources which
+    //All Core API objects can utilize resources which
     //depend upon one another.  Can not do this in the destructor
     //as they might depend upon one another.
 
@@ -255,7 +258,7 @@ void KDevCore::cleanup()
 
     d->mainWindow->setVisible( false );
 
-    //If a project is open then projectController will call KDevCore::saveSettings
+    //If a project is open then projectController will call Core::saveSettings
     //both before the project is closed and then once after.  Else we will do it here.
     if ( !d->projectController->closeProject() )
         saveSettings();
@@ -271,7 +274,7 @@ void KDevCore::cleanup()
 
 /* This function should be called right after initialization of the objects and a project has
    been opened, or if no project is opened it should be called before the mainWindow is shown. */
-void KDevCore::loadSettings()
+void Core::loadSettings()
 {
     Q_ASSERT( d->environment );
     Q_ASSERT( d->partController );
@@ -281,7 +284,7 @@ void KDevCore::loadSettings()
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
 
-    bool projectIsLoaded = KDevCore::projectController()->isLoaded();
+    bool projectIsLoaded = Core::projectController()->isLoaded();
 
     d->environment->loadSettings( projectIsLoaded );
     d->partController->loadSettings( projectIsLoaded );
@@ -294,7 +297,7 @@ void KDevCore::loadSettings()
 
 /* This function should be called right before closing of the project and right after closing the
    project, or if no project is opened it should be called right before cleanup. */
-void KDevCore::saveSettings()
+void Core::saveSettings()
 {
     Q_ASSERT( d->environment );
     Q_ASSERT( d->partController );
@@ -304,7 +307,7 @@ void KDevCore::saveSettings()
     Q_ASSERT( d->mainWindow );
     Q_ASSERT( d->backgroundParser );
 
-    bool projectIsLoaded = KDevCore::projectController()->isLoaded();
+    bool projectIsLoaded = Core::projectController()->isLoaded();
 
     d->environment->saveSettings( projectIsLoaded );
     d->partController->saveSettings( projectIsLoaded );
@@ -315,26 +318,16 @@ void KDevCore::saveSettings()
     d->backgroundParser->saveSettings( projectIsLoaded );
 }
 
-void KDevCoreInterface::load()
+void CoreInterface::load()
 {
-    Q_ASSERT( KDevCore::projectController() );
-    loadSettings( KDevCore::projectController()->isLoaded() );
+    Q_ASSERT( Core::projectController() );
+    loadSettings( Core::projectController()->isLoaded() );
 }
 
-void KDevCoreInterface::save()
+void CoreInterface::save()
 {
-    Q_ASSERT( KDevCore::projectController() );
-    saveSettings( KDevCore::projectController()->isLoaded() );
+    Q_ASSERT( Core::projectController() );
+    saveSettings( Core::projectController()->isLoaded() );
 }
 
-//FIXME
-namespace MainWindowUtils
-{
-QString beautifyToolTip( const QString& text )
-{
-    QString temp = text;
-    temp.replace( QRegExp( "&" ), "" );
-    temp.replace( QRegExp( "\\.\\.\\." ), "" );
-    return temp;
-}
 }

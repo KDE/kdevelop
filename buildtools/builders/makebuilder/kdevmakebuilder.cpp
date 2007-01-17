@@ -12,10 +12,6 @@
 #include <kdevmakeinterface.h>
 #include <domutil.h>
 
-#if 0 // ### port me
-#include <makeoptionswidget.h>
-#endif
-
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <kprocess.h>
@@ -29,13 +25,13 @@
 K_EXPORT_COMPONENT_FACTORY(kdevmakebuilder, KGenericFactory<KDevMakeBuilder>("kdevmakebuilder"))
 
 KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const QStringList &)
-    : KDevProjectBuilder(parent)
+    : Koncrete::ProjectBuilder(parent)
 {
-    m_project = qobject_cast<KDevProject*>(parent);
+    m_project = qobject_cast<Koncrete::Project*>(parent);
     Q_ASSERT(m_project);
 
-    KDevPluginController* kdpc = KDevPluginController::self();
-    KDevMakeFrontend* make = kdpc->extension<KDevMakeFrontend>("KDevelop/MakeFrontend");
+    Koncrete::PluginController* kdpc = Koncrete::PluginController::self();
+    Koncrete::MakeFrontend* make = kdpc->extension<Koncrete::MakeFrontend>("KDevelop/MakeFrontend");
     if ( make )
     {
         connect(make, SIGNAL(commandFinished(const QString &)),
@@ -50,25 +46,27 @@ KDevMakeBuilder::~KDevMakeBuilder()
 {
 }
 
-KDevProject *KDevMakeBuilder::project() const
+Koncrete::Project *KDevMakeBuilder::project() const
 {
     return m_project;
 }
 
-bool KDevMakeBuilder::build(KDevProjectItem *dom)
+bool KDevMakeBuilder::build(Koncrete::ProjectItem *dom)
 {
-    KDevPluginController* kdpc = KDevPluginController::self();
-    if (KDevMakeFrontend *make = kdpc->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
-        if (KDevProjectFolderItem *folder = dom->folder()) {
+    Koncrete::PluginController* kdpc = Koncrete::PluginController::self();
+    if (Koncrete::MakeFrontend *make =
+        kdpc->extension<Koncrete::MakeFrontend>("KDevelop/MakeFrontend"))
+    {
+        if (Koncrete::ProjectFolderItem *folder = dom->folder()) {
             // ### compile the folder
             QString command = buildCommand(dom);
             make->queueCommand(folder->text(), command);
             m_commands.append(qMakePair(command, dom));
             return true;
-        } else if (KDevProjectTargetItem *target = dom->target()) {
+        } else if (Koncrete::ProjectTargetItem *target = dom->target()) {
             // ### compile the target
             Q_UNUSED(target);
-        } else if (KDevProjectFileItem *file = dom->file()) {
+        } else if (Koncrete::ProjectFileItem *file = dom->file()) {
             // ### compile the file
             Q_UNUSED(file);
         }
@@ -77,7 +75,7 @@ bool KDevMakeBuilder::build(KDevProjectItem *dom)
     return false;
 }
 
-bool KDevMakeBuilder::clean(KDevProjectItem *dom)
+bool KDevMakeBuilder::clean(Koncrete::ProjectItem *dom)
 {
     Q_UNUSED(dom);
     return false;
@@ -86,7 +84,7 @@ bool KDevMakeBuilder::clean(KDevProjectItem *dom)
 void KDevMakeBuilder::commandFinished(const QString &command)
 {
     if (!m_commands.isEmpty()) {
-        QPair<QString, KDevProjectItem *> item = m_commands.first();
+        QPair<QString, Koncrete::ProjectItem *> item = m_commands.first();
         if (item.first == command) {
             m_commands.pop_front();
             emit built(item.second);
@@ -105,7 +103,7 @@ void KDevMakeBuilder::commandFailed(const QString &command)
     }
 }
 
-QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &target)
+QString KDevMakeBuilder::buildCommand(Koncrete::ProjectItem *item, const QString &target)
 {
     //FIXME Get this from the new project file format
 //     QDomDocument &dom = *KDevApi::self()->projectDom();

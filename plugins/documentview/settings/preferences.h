@@ -31,7 +31,7 @@ namespace Ui
 class SettingsWidget;
 }
 
-class Preferences : public KDevCModule
+class Preferences : public Koncrete::ConfigModule
 {
     Q_OBJECT
 public:

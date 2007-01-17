@@ -30,26 +30,26 @@ using namespace java;
 // class CodeDelegate;
 // class CodeAggregate;
 
-class JavaLanguageSupport : public KDevLanguageSupport
+class JavaLanguageSupport : public Koncrete::LanguageSupport
 {
 Q_OBJECT
 public:
     JavaLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
     virtual ~JavaLanguageSupport();
 
-    //KDevLanguageSupport implementation
-    virtual KDevCodeModel *codeModel( const KUrl& url ) const;
-    virtual KDevCodeProxy *codeProxy() const;
-    virtual KDevCodeDelegate *codeDelegate() const;
-    virtual KDevCodeRepository *codeRepository() const;
-    virtual KDevParseJob *createParseJob( const KUrl &url );
-    virtual KDevParseJob *createParseJob( KDevDocument *document );
+    //Koncrete::LanguageSupport implementation
+    virtual Koncrete::CodeModel *codeModel( const KUrl& url ) const;
+    virtual Koncrete::CodeProxy *codeProxy() const;
+    virtual Koncrete::CodeDelegate *codeDelegate() const;
+    virtual Koncrete::CodeRepository *codeRepository() const;
+    virtual Koncrete::ParseJob *createParseJob( const KUrl &url );
+    virtual Koncrete::ParseJob *createParseJob( Koncrete::Document *document );
     virtual QStringList mimeTypes() const;
 
 private slots:
-    void documentLoaded( KDevDocument *document );
-    void documentClosed( KDevDocument *document );
-    void documentActivated( KDevDocument *document );
+    void documentLoaded( Koncrete::Document *document );
+    void documentClosed( Koncrete::Document *document );
+    void documentActivated( Koncrete::Document *document );
     void projectOpened();
     void projectClosed();
 
