@@ -21,7 +21,7 @@
 
 namespace Koncrete
 {
-    
+
 CodeHighlighting::~CodeHighlighting()
 {
 }

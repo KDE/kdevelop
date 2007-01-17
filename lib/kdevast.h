@@ -28,7 +28,7 @@ namespace Koncrete
 {
 class LanguageSupport;
 
-/**The KDevAST is a simple base struct for the various Abstract Syntax Trees of the parsers.*/
+/** Koncrete::AST is a simple base struct for the various Abstract Syntax Trees of the parsers. */
 struct KDEVPLATFORM_EXPORT AST
 {
 public:
