@@ -1,6 +1,6 @@
 #MIN_CONFIG(3.3.0)
 
-AM_INIT_AUTOMAKE(kdevelop, 3.3.94)
+AM_INIT_AUTOMAKE(kdevelop, 3.4.0)
 KDEV_CHECK_KDE_VERSION
 KDE_NEED_FLEX
 
@@ -60,7 +60,6 @@ AM_CONDITIONAL(include_ruby, test "$ruby" = "yes")
 
 AC_ARG_ENABLE(sql, AC_HELP_STRING([--disable-sql], [disable programming language support for SQL]), [sql=${enableval}], [sql=yes])
 AM_CONDITIONAL(include_sql, test "$sql" = "yes")
-
 
 dnl  **********
 dnl  Check which build tools support should be compiled
