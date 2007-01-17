@@ -2595,7 +2595,7 @@ http://www-com.physik.hu-berlin.de/~bernd/article.tgz#tar:/paper.tex
 In most cases, jobs are created by calling functions in the KIO namespace.
 These functions take one or two URLs as arguments, and possible other
 necessary parameters. When the job is finished, it emits the signal
-<literal>result(KIO::Job*)</literal>. After this signal has been emitted, the job
+<literal>result(KJob*)</literal>. After this signal has been emitted, the job
 deletes itself. Thus, a typical use case will look like this:
 </para>
 
@@ -2603,11 +2603,11 @@ deletes itself. Thus, a typical use case will look like this:
 void FooClass::makeDirectory()
 {
     SimpleJob *job = KIO::mkdir(KUrl("file:/home/bernd/kiodir"));
-    connect( job, SIGNAL(result(KIO::Job*)), 
-             this, SLOT(mkdirResult(KIO::Job*)) );
+    connect( job, SIGNAL(result(KJob*)), 
+             this, SLOT(mkdirResult(KJob*)) );
 }
 
-void FooClass::mkdirResult(KIO::Job *job)
+void FooClass::mkdirResult(KJob *job)
 {
     if (job->error())
         job->showErrorDialog();
