@@ -17,6 +17,8 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "safetycounter.h"
 
+//Whether additional output about imported and not imported namespaces should be printen
+//#define IMPORT_DEBUG
 
 extern SafetyCounter safetyCounter;
 
@@ -243,9 +245,8 @@ void SimpleTypeNamespace::addAliasMap( const TypeDesc& name, const TypeDesc& ali
 }
 
 void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
-  if ( !safetyCounter ) return;
   SlaveList tempList;
-  if ( m_activeSlaves.empty() ) return;
+  if ( m_activeSlaves.empty() || !safetyCounter.ok() ) return;
   while ( !m_activeSlaves.empty() ) {
     tempList.splice( tempList.begin(), m_activeSlaves, --m_activeSlaves.end() );
 
@@ -286,7 +287,7 @@ void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
       updateAliases( files );
       break;
     } else {
-      dbg() << "took \"" << tempList.front().first.first.fullNameChain() << "\" from the slave-list" << endl;
+      //      dbg() << "took \"" << tempList.front().first.first.fullNameChain() << "\" from the slave-list" << endl;
     }
   }
   m_activeSlaves.splice( m_activeSlaves.end(), tempList );
@@ -346,12 +347,18 @@ SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves( const IncludeFile
   updateAliases( files );
   SlaveList ret;
   for ( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
+#ifdef IMPORT_DEBUG    
     ifVerbose( dbg() << "\"" << str() << "\": Checking whether \"" << (*it).first.first.fullNameChain() << "\" should be imported, current include-files: " << files.print().c_str() << "\nNeeded include-files: " << (*it).first.second.print().c_str() << "\n"; )
+#endif
     if ( !(( *it ).first.second <= files ) ) {
+#ifdef IMPORT_DEBUG    
       ifVerbose( dbg() << "not imported." );
+#endif
       continue;
     }
+#ifdef IMPORT_DEBUG    
     ifVerbose( dbg() << "imported." << endl );
+#endif
     ret.push_back( *it );
   }
   return ret;

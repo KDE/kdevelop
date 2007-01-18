@@ -375,7 +375,7 @@ struct PopupFillerHelpStruct {
 	        QStringList wholeScope = ns->scope();
 	        wholeScope << ns->name();
 	        for( FileList::iterator it = files.begin(); it != files.end(); ++it ) {
-		        if( !safetyCounter ) break;
+		        //		        if( !safetyCounter ) break;
 		        NamespaceModel* ns = (*it).data();
 
 		        for( QStringList::iterator it2 = wholeScope.begin(); it2 != wholeScope.end(); ++it2 ) {

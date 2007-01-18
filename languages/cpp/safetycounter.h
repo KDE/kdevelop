@@ -33,6 +33,11 @@ struct SafetyCounter {
     safetyCounter++;
     return *this;
   }
+
+  ///Returns whether the counter is ok, but without increasing it
+  bool ok() const {
+    return safetyCounter < maxSafetyCounter;
+  }
   
   operator bool() {
     safetyCounter++;
