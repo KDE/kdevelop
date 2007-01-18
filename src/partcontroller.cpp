@@ -860,7 +860,7 @@ KParts::ReadOnlyPart *PartController::partForURL(const KURL &url)
 	for ( ; it.current(); ++it)
 	{
 		KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-		if (ro_part && url == ro_part->url())
+		if (ro_part && url.path() == ro_part->url().path())
 			return ro_part;
 	}
 	return 0;
@@ -1796,6 +1796,8 @@ KTextEditor::Editor *PartController::openTextDocument( bool activate )
 
         EditorProxy::getInstance()->setLineNumber(editorpart, 0, 0);
     }
+
+    return editorpart;
 }
 
 void PartController::textChanged()
