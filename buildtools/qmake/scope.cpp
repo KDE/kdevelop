@@ -639,7 +639,7 @@ bool Scope::deleteSubProject( unsigned int num, bool deleteSubdir )
     if ( it != m_root->m_children.end() )
     {
         QMake::AssignmentAST * tempast = static_cast<QMake::AssignmentAST*>( *it );
-        if ( tempast->values.findIndex( "subdirs" ) != -1 )
+        if ( tempast->values.findIndex( "subdirs" ) != -1 || findExistingVariable( "TEMPLATE" ) != m_root->m_children.end() )
         {
             Scope* project = m_scopes[ num ];
             if( !project )
