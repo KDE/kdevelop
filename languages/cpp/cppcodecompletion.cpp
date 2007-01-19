@@ -135,6 +135,28 @@ QString cleanForMenu( QString txt ) {
   return txt.replace( "&", "&&" ).replace( "	", "    " );
 }
 
+QString buildSignature( TypePointer currType ) {
+  SimpleTypeFunctionInterface * f = currType->asFunction();
+  if ( !f )
+    return "";
+
+  QString ret;
+  LocateResult rtt = currType->locateDecType( f->getReturnType() );
+  if ( rtt->resolved() || rtt.resolutionCount() > 1 )
+    ret = rtt->fullNameChain();
+  else
+    ret = f->getReturnType().fullNameChain();
+
+
+  TypeDesc desc = currType->desc();
+  desc.decreaseFunctionDepth();
+
+  QString sig = ret + " " + desc.fullNameChain() + f->signature();
+  if ( f->isConst() )
+    sig += " const";
+  return sig;
+}
+
 uint PopupTracker::pendingPopups = 0;
 PopupTracker* PopupTracker::pt = 0;
 
@@ -336,7 +358,7 @@ struct PopupFillerHelpStruct {
   void insertItem ( QPopupMenu* parent, TypeDesc d , QString prefix ) {
     Debug dbg( "#insert# ", 10 );
 
-    QString txt;
+    QString txt1, txt2;
 
     if ( d.resolved() && d.resolved() ->isNamespace() ) {
       SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( d.resolved().data() );
@@ -404,23 +426,29 @@ struct PopupFillerHelpStruct {
     }
 
     if ( d.resolved() ) {
-      QString n = d.resolved() ->scope().join( "::" );
-      if ( d.resolved() ->asFunction() )
-        n = receiver->buildSignature( d.resolved() );
-
-      txt = prefix + i18n( "Jump to %1" ).arg( cleanForMenu( n ) );
+      if ( d.resolved() ->asFunction() ) {
+	      txt1 = prefix + i18n( "Jump to declaration of %1(...)" ).arg( d.resolved() ->scope().join( "::" ) );
+	      txt2 = prefix + i18n( "Jump to definition of %1(...)" ).arg( d.resolved() ->scope().join( "::" ) );
+      } else {
+        txt1 = prefix + i18n( "Jump to %1" ).arg( cleanForMenu( d.resolved() ->scope().join( "::" ) ) );
+      }
     } else {
 			if( !BuiltinTypes::isBuiltin( d ) ) {
-	      txt = prefix + d.name() + i18n( " is unresolved" );
+	      txt1 = prefix + d.name() + i18n( " is unresolved" );
 			} else {
-				txt = prefix + d.name() + i18n( "  (builtin " ) + BuiltinTypes::comment( d ) + ")";
+				txt1 = prefix + d.name() + i18n( "  (builtin " ) + BuiltinTypes::comment( d ) + ")";
 			}
     }
 
-    int id = parent->insertItem( txt, receiver, SLOT( popupAction( int ) ) );
-
+    int id = parent->insertItem( txt1, receiver, SLOT( popupAction( int ) ) );
     if ( d.resolved() )
       receiver->m_popupActions.insert( id, d.resolved() ->getDeclarationInfo() );
+
+    if ( !txt2.isEmpty() ) {
+      int id2 = parent->insertItem( txt2, receiver, SLOT( popupDefinitionAction( int ) ) );
+      if ( d.resolved() )
+        receiver->m_popupDefinitionActions.insert( id2, d.resolved() ->getDeclarationInfo() );
+    }
   }
 };
 
@@ -541,7 +569,7 @@ struct PopupClassViewFillerHelpStruct {
           QString n = d.resolved() ->scope().join( "::" );
           //QString n = d.fullNameChain();
           if ( d.resolved() ->asFunction() ) {
-            n = receiver->buildSignature( d.resolved() );
+            n = buildSignature( d.resolved() );
           }
           txt = prefix + i18n( "Show %1" ).arg( cleanForMenu( n ) );
         } else {
@@ -1342,12 +1370,19 @@ EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column ,
 void CppCodeCompletion::popupAction( int number ) {
   PopupActions::iterator it = m_popupActions.find( number );
   if ( it != m_popupActions.end() ) {
-    KURL url;
-    if ( ( *it ).file != "current_file" )
-      url.setPath( ( *it ).file );
-    else
-      url.setPath( m_activeFileName );
-    m_pSupport->partController() ->editDocument( url, ( *it ).startLine );
+    QString fileName = ( *it ).file == "current_file" ? m_activeFileName : ( *it ).file.operator QString();
+    m_pSupport->partController() ->editDocument( fileName, ( *it ).startLine );
+  } else {
+    kdDebug( 9007 ) << "error" << endl;
+  }
+}
+
+void CppCodeCompletion::popupDefinitionAction( int number ) {
+  PopupActions::iterator it = m_popupDefinitionActions.find( number );
+  if ( it != m_popupDefinitionActions.end() ) {
+    QString fileName = ( *it ).file == "current_file" ? m_activeFileName : ( *it ).file.operator QString();
+    if ( !m_pSupport->switchHeaderImpl( fileName, ( *it ).startLine, ( *it ).startCol ) )
+      m_pSupport->partController() ->editDocument( fileName, ( *it ).startLine );
   } else {
     kdDebug( 9007 ) << "error" << endl;
   }
@@ -1385,6 +1420,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	PopupTracker::print();
 
   m_popupActions.clear();
+  m_popupDefinitionActions.clear();
   m_popupClassViewActions.clear();
 
   if ( !m_pSupport || !m_activeEditor )
@@ -2130,29 +2166,6 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
   }
 
   return ret;
-}
-
-
-QString CppCodeCompletion::buildSignature( TypePointer currType ) {
-  SimpleTypeFunctionInterface * f = currType->asFunction();
-  if ( !f )
-    return "";
-
-  QString ret;
-  LocateResult rtt = currType->locateDecType( f->getReturnType() );
-  if ( rtt->resolved() || rtt.resolutionCount() > 1 )
-    ret = rtt->fullNameChain();
-  else
-    ret = f->getReturnType().fullNameChain();
-
-
-  TypeDesc desc = currType->desc();
-  desc.decreaseFunctionDepth();
-
-  QString sig = ret + " " + desc.fullNameChain() + f->signature();
-  if ( f->isConst() )
-    sig += " const";
-  return sig;
 }
 
 bool isAfterKeyword( const QString& str, int column ) {

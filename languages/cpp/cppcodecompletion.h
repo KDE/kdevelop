@@ -169,6 +169,7 @@ private slots:
     bool isTypeExpression( const QString& expr );
 	void slotTextHint( int line, int col, QString &text );
     void popupAction( int number );
+	void popupDefinitionAction( int number );
     void popupClassViewAction( int number );
 	void synchronousParseReady( const QString& file, ParsedFilePointer unit );
 private:
@@ -209,7 +210,7 @@ private:
 	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );
     bool correctAccessOpAccurate( QStringList ptrList, MemberAccessOp accessOp );    
 
-    QString buildSignature( TypePointer currType );
+  //    QString buildSignature( TypePointer currType );
     SimpleType typeOf( QValueList<Tag>& tags, MemberAccessOp accessOp );
     
 	/// @todo remove isInstance
@@ -300,6 +301,7 @@ private:
     typedef QMap<int, DeclarationInfo> PopupActions;
     typedef QMap<int, ItemDom> PopupClassViewActions;
     PopupActions m_popupActions;
+    PopupActions m_popupDefinitionActions;
     PopupClassViewActions m_popupClassViewActions;
 };
 

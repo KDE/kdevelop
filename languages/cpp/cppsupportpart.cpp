@@ -1107,104 +1107,14 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 		attemptMatch = config->readBoolEntry( "SwitchShouldMatch", true );
 	}
 
-	static KURL lastSyncedUrl;
-	static int lastSyncedLine = -1;
-
 	// ok, both files exist. Do the codemodel have them?
-	if ( codeModel() ->hasFile( m_activeFileName ) &&
-	     m_activeViewCursor && attemptMatch )
+	if ( codeModel() ->hasFile( m_activeFileName ) && m_activeViewCursor && attemptMatch )
 	{
-		QValueList<FileDom> candidates;
-		if( codeModel()->hasFile( candidate ) ) candidates << codeModel()->fileByName( candidate );
-		FileDom activeFile = codeModel() ->fileByName( m_activeFileName );
-		candidates += activeFile->wholeGroup();
-
-
 		unsigned int currentline, column;
 		m_activeViewCursor->cursorPositionReal( &currentline, &column );
 
-		CodeModelUtils::CodeModelHelper h( codeModel(), activeFile );
-		FunctionDom d = h.functionAt( currentline, column );
-
-		if( d ) {
-			if( d->isFunctionDefinition() ) {
-				///Find the declaration in one of the other files
-				for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
-					FileDom source = *it;
-					// found it. can we find a matching declaration?
-					FunctionList functionList = CodeModelUtils::allFunctionsDetailed( source ).functionList;
-					for ( FunctionList::ConstIterator it_decl = functionList.begin();
-					      it_decl != functionList.end(); ++it_decl )
-					{
-						if( (void*)&(*it_decl) == (void*)d.data() || (scrollOnly && (*it_decl)->fileName() == m_activeFileName ) ) continue;
-						if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*)(d.data()) ) )
-						{
-							// found the declaration, let's jump!
-							int line, column;
-							( *it_decl ) ->getStartPosition( &line, &column );
-							KURL url;
-							url.setPath( (*it_decl)->fileName() );
-							if ( scrollOnly ) {
-								KParts::ReadOnlyPart* part = partController()->partForURL( url );
-								uint currentLine = lastSyncedLine;
-								if( part ) {
-									uint col;
-									KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
-									if( iface )
-										iface->cursorPosition(  &currentLine, &col );
-								}
-								partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
-							} else if ( !splitHeaderSourceConfig()->splitEnabled() )
-								partController() ->editDocument( url, line );
-							else
-								partController() ->splitCurrentDocument( url, line );
-							lastSyncedLine = line;
-							lastSyncedUrl = url;
-							return ;
-						}
-					}
-				}
-			} else {
-				///Find the definition in one of the other files
-				for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
-					FileDom source = *it;
-					FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( source ).functionList;
-					for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
-					      it_def != functionDefList.end(); ++it_def )
-					{
-						if( *it_def == d || (scrollOnly && (*it_def)->fileName() == m_activeFileName ) ) continue;
-
-						if ( CodeModelUtils::compareDeclarationToDefinition( d, *it_def ) )
-						{
-							// found the declaration, let's jump!
-							int line, column;
-							( *it_def ) ->getStartPosition( &line, &column );
-							KURL url;
-							url.setPath( (*it_def)->fileName() );
-							if ( scrollOnly ) {
-								KParts::ReadOnlyPart* part = partController()->partForURL( url );
-								uint currentLine = lastSyncedLine;
-								if( part ) {
-									uint col;
-									KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
-									if( iface )
-										iface->cursorPosition(  &currentLine, &col );
-								}
-								partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
-							} else if ( !splitHeaderSourceConfig()->splitEnabled() )
-								partController() ->editDocument( url, line );
-							else
-								partController() ->splitCurrentDocument( url, line );
-							lastSyncedLine = line;
-							lastSyncedUrl = url;
-							return ;
-						}
-					}
-				}
-			}
-		} else {
-			///No current function could be located, just open the other file
-		}
+		if ( switchHeaderImpl( m_activeFileName, currentline, column, candidate, scrollOnly ) )
+			return;
 	}
 
 	// last chance
@@ -1217,6 +1127,103 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 		partController() ->editDocument( url );
 	else
 		partController() ->splitCurrentDocument( url );
+}
+
+bool CppSupportPart::switchHeaderImpl( const QString& file, int line, int col, QString candidate, bool scrollOnly )
+{
+    bool handled = false;
+
+    if ( candidate == QString::null )
+        candidate = sourceOrHeaderCandidate( file );
+
+    if ( candidate != QString::null ) {
+
+        static KURL lastSyncedUrl;
+        static int lastSyncedLine = -1;
+
+        QValueList<FileDom> candidates;
+        if( codeModel()->hasFile( candidate ) ) candidates << codeModel()->fileByName( candidate );
+        FileDom activeFile = codeModel() ->fileByName( file );
+        candidates += activeFile->wholeGroup();
+
+        CodeModelUtils::CodeModelHelper h( codeModel(), activeFile );
+        FunctionDom d = h.functionAt( line, col );
+
+        if( d ) {
+            if( d->isFunctionDefinition() ) {
+                //Find the declaration in one of the other files
+                for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
+                    FileDom source = *it;
+                    // found it. can we find a matching declaration?
+                    FunctionList functionList = CodeModelUtils::allFunctionsDetailed( source ).functionList;
+                    for ( FunctionList::ConstIterator it_decl = functionList.begin();
+                          it_decl != functionList.end(); ++it_decl )
+                    {
+                        if( (void*)&(*it_decl) == (void*)d.data() || (scrollOnly && (*it_decl)->fileName() == file ) ) continue;
+                        if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*)(d.data()) ) )
+                        {
+                            // found the declaration, let's jump!
+                            ( *it_decl ) ->getStartPosition( &line, &col );
+                            KURL url;
+                            url.setPath( (*it_decl)->fileName() );
+                            if ( scrollOnly ) {
+                                KParts::ReadOnlyPart* part = partController()->partForURL( url );
+                                uint currentLine = lastSyncedLine;
+                                if( part ) {
+                                    KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+                                    if( iface )
+                                        iface->cursorPosition( &currentLine, (uint*) &col );
+                                }
+                                partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
+                            } else if ( !splitHeaderSourceConfig()->splitEnabled() )
+                                partController() ->editDocument( url, line );
+                            else
+                                partController() ->splitCurrentDocument( url, line );
+                            lastSyncedLine = line;
+                            lastSyncedUrl = url;
+                            handled= true;
+                        }
+                    }
+                }
+            } else {
+                //Find the definition in one of the other files
+                for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
+                    FileDom source = *it;
+                    FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( source ).functionList;
+                    for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
+                          it_def != functionDefList.end(); ++it_def )
+                    {
+                        if( *it_def == d || (scrollOnly && (*it_def)->fileName() == file ) ) continue;
+                        if ( CodeModelUtils::compareDeclarationToDefinition( d, *it_def ) )
+                        {
+                            // found the declaration, let's jump!
+                            ( *it_def ) ->getStartPosition( &line, &col );
+                            KURL url;
+                            url.setPath( (*it_def)->fileName() );
+                            if ( scrollOnly ) {
+                                KParts::ReadOnlyPart* part = partController()->partForURL( url );
+                                uint currentLine = lastSyncedLine;
+                                if( part ) {
+                                    KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+                                    if( iface )
+                                        iface->cursorPosition( &currentLine, (uint*) &col );
+                                }
+                                partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
+                            } else if ( !splitHeaderSourceConfig()->splitEnabled() )
+                                partController() ->editDocument( url, line );
+                            else
+                                partController() ->splitCurrentDocument( url, line );
+                            lastSyncedLine = line;
+                            lastSyncedUrl = url;
+                            handled= true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return handled;
 }
 
 void CppSupportPart::slotGotoIncludeFile()

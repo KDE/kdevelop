@@ -176,6 +176,7 @@ public:
 	void createAccessMethods( ClassDom theClass, VariableDom theVariable );
 
     bool isQueued( const QString& file ) const;
+    bool switchHeaderImpl( const QString& file, int line, int col, QString candidate = QString::null, bool scrollOnly = false );
 
 signals:
 	void fileParsed( const QString& fileName );
