@@ -303,7 +303,28 @@ void TargetOptionsDialog::outsideAddClicked()
     QString file = dialog.urlRequester() ->url();
     if ( !file.isEmpty() )
     {
-        new QListViewItem( outsidelib_listview, file );
+        if ( !file.isEmpty() )
+        {
+            if( file.startsWith("-l") )
+                new QListViewItem( outsidelib_listview, file );
+            else
+            {
+                QFileInfo fi(file);
+                if( !fi.exists() )
+                    new QListViewItem( outsidelib_listview, file );
+                if( fi.extension(false) == "a" )
+                {
+                    new QListViewItem( outsidelib_listview, file );
+                }else if ( fi.extension(false) == "so" )
+                {
+                    QString name = fi.fileName();
+                    if( name.startsWith( "lib" ) )
+                        name = name.mid(3);
+                    name = "-l"+name.left( name.length() - 3 );
+                    new QListViewItem( outsidelib_listview, name );
+                }
+            }
+        }
     }
 }
 
