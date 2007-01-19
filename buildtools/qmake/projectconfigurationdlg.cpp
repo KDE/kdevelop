@@ -435,6 +435,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         values << outsideItem->text( 0 );
         outsideItem = ( QCheckListItem* ) outsideItem->itemBelow();
     }
+    myProjectItem->removeValues( "INCLUDEPATH", values );
     myProjectItem->updateValues( "INCLUDEPATH", values );
 
     //target.install
@@ -499,6 +500,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
 
 
+    myProjectItem->removeValues( "LIBS", values );
     myProjectItem->updateValues( "LIBS", values );
 
     values.clear();
@@ -537,6 +539,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         }
         insideItem = dynamic_cast<InsideCheckListItem *>( insideItem->itemBelow() );
     }
+    myProjectItem->removeValues( "TARGETDEPS", values );
     myProjectItem->updateValues( "TARGETDEPS", values );
 
     values.clear();
@@ -1198,8 +1201,10 @@ void ProjectConfigurationDlg::outsideIncAddClicked()
         return ;
     QString dir = dialog.urlRequester() ->url();
     if ( !dir.isEmpty() )
+    {
         new QListViewItem( outsideinc_listview, dir );
-    activateApply( 0 );
+        activateApply( 0 );
+    }
 }
 
 
@@ -1282,15 +1287,22 @@ void ProjectConfigurationDlg::outsideLibAddClicked()
     if ( !file.isEmpty() )
     {
         if( file.startsWith("-l") )
+        {
             new QListViewItem( outsidelib_listview, file );
+            activateApply( 0 );
+        }
         else
         {
             QFileInfo fi(file);
             if( !fi.exists() )
+            {
                 new QListViewItem( outsidelib_listview, file );;
+                activateApply( 0 );
+            }
             if( fi.extension(false) == "a" )
             {
                 new QListViewItem( outsidelib_listview, file );
+                activateApply( 0 );
             }else if ( fi.extension(false) == "so" )
             {
                 QString path = fi.dirPath( true );
@@ -1300,10 +1312,11 @@ void ProjectConfigurationDlg::outsideLibAddClicked()
                 name = "-l"+name.left( name.length() - 3 );
                 new QListViewItem( outsidelib_listview, name );
                 new QListViewItem( outsidelibdir_listview, path );
+                activateApply( 0 );
             }else
                 return;
         }
-        activateApply( 0 );
+
     }
 }
 
@@ -1355,8 +1368,10 @@ void ProjectConfigurationDlg::outsideLibDirAddClicked()
         return ;
     QString dir = dialog.urlRequester() ->url();
     if ( !dir.isEmpty() )
+    {
         new QListViewItem( outsidelibdir_listview, dir );
-    activateApply( 0 );
+        activateApply( 0 );
+    }
 }
 
 
@@ -1374,36 +1389,75 @@ void ProjectConfigurationDlg::outsideIncEditClicked()
 
     KURLRequesterDlg dialog( text, i18n( "Change include directory:" ), 0, 0 );
     dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
-    dialog.urlRequester() ->setURL( QString::null );
     if( !text.startsWith( "/" ) )
     {
         dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
+        dialog.urlRequester() ->setURL( myProjectItem->scope->projectDir()+text );
     }
     else
     {
         dialog.urlRequester() ->completionObject() ->setDir( text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
+        dialog.urlRequester() ->setURL( text );
     }
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
     if ( !dir.isEmpty() )
+    {
         item->setText( 0, dir );
-    activateApply( 0 );
+        activateApply( 0 );
+    }
 }
 
 void ProjectConfigurationDlg::outsideLibEditClicked()
 {
-    bool ok;
     QListViewItem *item = outsidelib_listview->currentItem();
     if ( item == NULL ) return ;
     QString text = item->text( 0 );
 
-    QString dir = KInputDialog::getText( i18n( "Change Library" ), i18n( "Change library to link:" ), text, &ok, 0 );
-    if ( ok && !dir.isEmpty() && dir != "-l" )
-        item->setText( 0, dir );
-    activateApply( 0 );
+    KURLRequesterDlg dialog( text, i18n( "Change Library:" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
+        dialog.urlRequester() ->completionObject() ->setDir( text );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
+        dialog.urlRequester() ->setURL( text );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString file = dialog.urlRequester() ->url();
+    if ( !file.isEmpty() )
+    {
+        if( file.startsWith("-l") )
+        {
+            item->setText( 0, file );
+            activateApply( 0 );
+        }
+        else
+        {
+            QFileInfo fi(file);
+            if( !fi.exists() )
+            {
+                item->setText( 0, file );
+                activateApply( 0 );
+            }
+            if( fi.extension(false) == "a" )
+            {
+                item->setText( 0, file );
+                activateApply( 0 );
+            }else if ( fi.extension(false) == "so" )
+            {
+                QString path = fi.dirPath( true );
+                QString name = fi.fileName();
+                if( name.startsWith( "lib" ) )
+                    name = name.mid(3);
+                name = "-l"+name.left( name.length() - 3 );
+                item->setText( 0, name );
+                new QListViewItem( outsidelibdir_listview, path );
+                activateApply( 0 );
+            }else
+                return;
+        }
+    }
 }
 
 void ProjectConfigurationDlg::outsideLibDirEditClicked()
@@ -1414,23 +1468,27 @@ void ProjectConfigurationDlg::outsideLibDirEditClicked()
 
     KURLRequesterDlg dialog( text, i18n( "Change library directory:" ), 0, 0 );
     dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
-    dialog.urlRequester() ->setURL( QString::null );
+
     if( !text.startsWith( "/" ) )
     {
         dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
+        dialog.urlRequester() ->setURL( myProjectItem->scope->projectDir()+text );
     }
     else
     {
         dialog.urlRequester() ->completionObject() ->setDir( text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
+        dialog.urlRequester() ->setURL( text );
     }
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
     if ( !dir.isEmpty() )
+    {
         item->setText( 0, dir );
-    activateApply( 0 );
+        activateApply( 0 );
+    }
 }
 
 
@@ -1445,8 +1503,10 @@ void ProjectConfigurationDlg::extAdd_button_clicked( )
         return ;
     QString path = dialog.urlRequester() ->url();
     if ( !path.isEmpty() )
+    {
         new QListViewItem( extDeps_view, path );
-    activateApply( 0 );
+        activateApply( 0 );
+    }
 }
 
 void ProjectConfigurationDlg::extEdit_button_clicked( )
@@ -1472,8 +1532,10 @@ void ProjectConfigurationDlg::extEdit_button_clicked( )
         return ;
     QString path = dialog.urlRequester() ->url();
     if ( !path.isEmpty() )
+    {
         item->setText( 0, path );
-    activateApply( 0 );
+        activateApply( 0 );
+    }
 }
 
 void ProjectConfigurationDlg::extMoveDown_button_clicked( )
