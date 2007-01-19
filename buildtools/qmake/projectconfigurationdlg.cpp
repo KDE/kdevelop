@@ -965,8 +965,10 @@ void ProjectConfigurationDlg::updateLibControls()
 
     insidelib_listview->setSorting( -1, false );
     outsidelib_listview->setSorting( -1, false );
+    outsidelibdir_listview->setSorting( -1, false );
     insidelib_listview->clear();
     outsidelib_listview->clear();
+    outsidelibdir_listview->clear();
     //update librarys
     //temp strlist
     QStringList libList = myProjectItem->scope->variableValues( "LIBS" );
@@ -999,8 +1001,6 @@ void ProjectConfigurationDlg::updateLibControls()
     }
 
     //all other in libList are outside libs
-    outsidelib_listview->clear();
-    outsidelibdir_listview->clear();
     QStringList::Iterator it1 = libList.begin();
     for ( ;it1 != libList.end();++it1 )
     {
