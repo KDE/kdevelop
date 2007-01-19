@@ -87,7 +87,7 @@ void ProjectController::initialize()
     action->setText(i18n( "&Open Project..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open project" ) );
-    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a elop 4 project." ) );
+    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project." ) );
 
     action = ac->addAction( "project_close" );
     action->setText( i18n( "C&lose Project" ) );

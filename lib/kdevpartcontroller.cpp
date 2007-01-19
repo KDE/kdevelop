@@ -154,7 +154,7 @@ KParts::Part* PartController::createPart( const KUrl & url )
     QString className;
     QString services[] =
         {
-            "elop/ReadWritePart", "elop/ReadOnlyPart",
+            "KDevelop/ReadWritePart", "KDevelop/ReadOnlyPart",
             "KParts/ReadWritePart", "KParts/ReadOnlyPart"
         };
 

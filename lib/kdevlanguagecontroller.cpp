@@ -86,9 +86,9 @@ LanguageSupport *LanguageController::languageSupport( const QString &language )
 
 bool LanguageController::loadLanguageSupport( const QString &language )
 {
-    const QString constraint = QString::fromLatin1("[X-elop-Language] == '%1'").arg( language );
+    const QString constraint = QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg( language );
 
-    KPluginInfo::List languageSupportOffers = PluginController::query( "elop/LanguageSupport",
+    KPluginInfo::List languageSupportOffers = PluginController::query( "KDevelop/LanguageSupport",
                                                                            constraint );
 
     if ( languageSupportOffers.isEmpty() )

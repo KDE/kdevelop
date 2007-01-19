@@ -35,7 +35,7 @@ ProfileEngine::ProfileEngine()
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles");
 
-    m_rootProfile = new Profile(0, "elop");
+    m_rootProfile = new Profile(0, "KDevelop");
 
     QString currPath = "/";
     QMap<QString, Profile*> passedPaths;
