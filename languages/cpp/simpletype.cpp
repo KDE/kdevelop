@@ -248,16 +248,6 @@ SimpleTypeImpl::TypeOfResult SimpleTypeImpl::typeOf( const TypeDesc& name, Membe
       ///For functions, find all functions with the same name, so that overloaded functions can be identified correctly
       TypePointer ret = mem.build();
       if ( ret && ret->asFunction() ) {
-        ///Search all bases and append all functions with the same name to it.
-        QValueList<LocateResult> bases = getBases();
-        for ( QValueList<LocateResult>::iterator it = bases.begin(); it != bases.end(); ++it ) {
-          if( !safetyCounter ) break;
-          if ( ( *it ) ->resolved() ) {
-            TypeOfResult rt = ( *it ) ->resolved() ->typeOf( name );
-            if ( rt->resolved() )
-              ret->asFunction() ->appendNextFunction( SimpleType( rt->resolved() ) );
-          }
-        }
         return TypeOfResult( LocateResult( ret->desc() ) );
       } else {
         ifVerbose( dbg() << "error, using old function-type-evaluation" << endl );
