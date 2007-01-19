@@ -100,7 +100,7 @@ PluginController::PluginController()
 {
     d = new Private;
     d->profile = ShellExtension::getInstance() ->defaultProfile();
-    d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "elop/Plugin" ),
+    d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
         QLatin1String( "[X-KDevelop-Version] == 4" ) ) );
     d->shutdownMode = Private::Running;
     KGlobal::ref();
