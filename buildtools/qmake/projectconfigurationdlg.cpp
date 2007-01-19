@@ -1287,7 +1287,7 @@ void ProjectConfigurationDlg::outsideLibAddClicked()
         {
             QFileInfo fi(file);
             if( !fi.exists() )
-                return;
+                new QListViewItem( outsidelib_listview, file );;
             if( fi.extension(false) == "a" )
             {
                 new QListViewItem( outsidelib_listview, file );
