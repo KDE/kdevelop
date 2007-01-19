@@ -1811,7 +1811,6 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
     m_allFilesCache.clear();
 
     QString realfilename = spitem->scope->resolveVariables( fitem->text( 0 ) );
-    QString file = QString( spitem->scope->projectDir() + QString( QChar( QDir::separator() ) ) + realfilename.mid(1, realfilename.length()-2)  ).remove( 0, projectDirectory().length() );
     if ( KMessageBox::warningYesNo( this,
                                     "<qt>" +
                                     i18n( "Do you want to delete the file <strong>%1</strong> from the project and your disk?" )
@@ -1846,7 +1845,7 @@ void TrollProjectWidget::removeFile( QMakeScopeItem *spitem, FileItem *fitem )
     DomUtil::PairList::iterator it;
     for ( it = list.begin(); it != list.end(); ++it )
     {
-        if ( ( ( *it ).first == file ) || ( ( *it ).second == file ) )
+        if ( ( ( *it ).first == realfilename ) || ( ( *it ).second == realfilename ) )
         {
             pairsToRemove.append( &( *it ) );
         }
