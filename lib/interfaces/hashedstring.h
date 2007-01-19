@@ -18,6 +18,7 @@
 #include<qstring.h>
 #include<qdatastream.h>
 #include<ksharedptr.h>
+#include<set>
 #include <ext/hash_map>
 #include <string>
 
@@ -74,6 +75,7 @@ QDataStream& operator << ( QDataStream& stream, const HashedString& str );
 QDataStream& operator >> ( QDataStream& stream, HashedString& str );
 
 class HashedStringSetData;
+class HashedStringSetGroup;
 
 ///This is a reference-counting string-set optimized for fast lookup of hashed strings
 class HashedStringSet {
@@ -112,6 +114,7 @@ class HashedStringSet {
 
   size_t hash() const;
   private:
+    friend class HashedStringSetGroup;
     void makeDataPrivate();
     KSharedPtr<HashedStringSetData> m_data; //this implies some additional cost because KShared's destructor is virtual. Maybe change that by copying KShared without the virtual destructor.
     friend HashedStringSet operator + ( const HashedStringSet& lhs, const HashedStringSet& rhs );
@@ -128,4 +131,23 @@ struct hash<HashedString> {
 };
 }
 
+///Used to find all registered HashedStringSet's that contain all strings given to findGroups(..)
+class HashedStringSetGroup {
+  public:
+    typedef std::set<size_t> ItemSet;
+    void addSet( size_t id, const HashedStringSet& set, bool emptyMeansGlobal = true );
+    void enableSet( size_t id );
+    bool isDisabled( size_t id ) const;
+    void disableSet( size_t id );
+    void removeSet( size_t id );
+
+    //Writes the ids of all registered and not disabled HashedStringSet's that include the given HashedStringSet efficiently)
+    void findGroups( HashedStringSet strings, ItemSet& target ) const;
+
+  private:
+    typedef __gnu_cxx::hash_map<HashedString, ItemSet> GroupMap;
+    GroupMap m_map;
+    ItemSet m_disabled;
+    ItemSet m_global;
+};
 #endif

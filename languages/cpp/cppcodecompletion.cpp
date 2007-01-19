@@ -311,8 +311,10 @@ using namespace CppEvaluation;
 
 struct PopupFillerHelpStruct {
   CppCodeCompletion* receiver;
+	FileList files;
   PopupFillerHelpStruct( CppCodeCompletion* rec ) {
     receiver = rec;
+	  files = receiver->cppSupport()->codeModel()->fileList();
   }
 
 	QMap<QString, QPopupMenu*> m_namespacePopupCache;
@@ -371,7 +373,6 @@ struct PopupFillerHelpStruct {
 	    if ( SimpleTypeCachedCodeModel * item = dynamic_cast<SimpleTypeCachedCodeModel*>( d.resolved().data() ) ) {  ///(1)
         if ( item->item() && item->item() ->isNamespace() ) {
 	        NamespaceModel* ns = dynamic_cast<NamespaceModel*>( item->item().data() );
-          FileList files = receiver->cppSupport()->codeModel()->fileList();
 	        QStringList wholeScope = ns->scope();
 	        wholeScope << ns->name();
 	        for( FileList::iterator it = files.begin(); it != files.end(); ++it ) {

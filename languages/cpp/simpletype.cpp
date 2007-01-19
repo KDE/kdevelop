@@ -970,7 +970,7 @@ void SimpleTypeImpl::setScope( const QStringList& scope ) {
   invalidateCache();
   m_scope = scope;
   if ( m_scope.count() == 1 && m_scope.front().isEmpty() ) {
-    kdDebug() << "bad scope set " << kdBacktrace() << endl;
+    //kdDebug() << "bad scope set " << kdBacktrace() << endl;
     m_scope = QStringList();
   }
 }

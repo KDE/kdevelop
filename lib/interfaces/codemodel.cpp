@@ -314,12 +314,22 @@ bool CodeModel::hasFile( const QString & name ) const
 
 FileDom CodeModel::fileByName( const QString & name )
 {
-    return m_files.contains(name) ? m_files[ name ] : FileDom();
+    QMap<QString, FileDom>::const_iterator it = m_files.find( name );
+    if( it != m_files.end() ) {
+      return *it;
+    } else {
+      return FileDom();
+    }
 }
 
 const FileDom CodeModel::fileByName( const QString & name ) const
 {
-    return m_files.contains(name) ? m_files[ name ] : FileDom();
+    QMap<QString, FileDom>::const_iterator it = m_files.find( name );
+    if( it != m_files.end() ) {
+      return *it;
+    } else {
+      return FileDom();
+    }
 }
 
 void CodeModel::addNamespace( NamespaceDom target, NamespaceDom source )

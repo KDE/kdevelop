@@ -28,7 +28,7 @@ TypePointer SimpleTypeNamespace::clone() {
   return new SimpleTypeCachedNamespace( this );
 }
 
-SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope, const QStringList& realScope ) : SimpleTypeImpl( fakeScope ) {
+SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope, const QStringList& realScope ) : SimpleTypeImpl( fakeScope ), m_currentSlaveId(0) {
   ifVerbose( dbg() << "\"" << str() << "\": created namespace-proxy with real scope \"" << realScope.join( "::" ) << "\"" << endl );
   SimpleType cm = SimpleType( realScope, HashedStringSet(), CodeModel );
   SimpleType ct = SimpleType( realScope, HashedStringSet(), Catalog );
@@ -40,14 +40,15 @@ SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope, const QS
   addImport( cm->desc() );
 }
 
-SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope ) : SimpleTypeImpl( fakeScope ) {
+SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope ) : SimpleTypeImpl( fakeScope ), m_currentSlaveId(0) {
   ifVerbose( dbg() << "\"" << str() << "\": created namespace-proxy" << endl );
 }
 
-SimpleTypeNamespace::SimpleTypeNamespace( SimpleTypeNamespace* ns ) : SimpleTypeImpl( ns ) {
+SimpleTypeNamespace::SimpleTypeNamespace( SimpleTypeNamespace* ns ) : SimpleTypeImpl( ns ), m_currentSlaveId(0) {
   ifVerbose( dbg() << "\"" << str() << "\": cloning namespace" << endl );
   m_aliases = ns->m_aliases;
   m_activeSlaves = ns->m_activeSlaves;
+  m_activeSlaveGroups = ns->m_activeSlaveGroups;
 }
 
 void SimpleTypeNamespace::breakReferences() {
@@ -77,7 +78,6 @@ QValueList<TypePointer>  SimpleTypeNamespace::getMemberClasses( const TypeDesc& 
 
   ignore.insert( myName );
 
-  updateAliases( name.includeFiles() );
   QValueList<TypePointer> ret;
 
   SlaveList l = getSlaves( name.includeFiles() );
@@ -102,7 +102,6 @@ QValueList<TypePointer>  SimpleTypeNamespace::getMemberClasses( const TypeDesc& 
 
 SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, MemberInfo::MemberType type, std::set
       <HashedString>& ignore ) {
-  updateAliases( name.includeFiles() );
   MemberInfo mem;
   mem.name = "";
   mem.memberType = MemberInfo::NotFound;
@@ -110,6 +109,8 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
   if ( ignore.find( myName ) != ignore.end() || !safetyCounter )
     return mem;
   ignore.insert( myName );
+
+  SlaveList l = getSlaves( name.includeFiles() );
 
   ImportList m_aliasImports;
 
@@ -134,7 +135,6 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
     }
   }
 
-  SlaveList l = getSlaves( name.includeFiles() );
   for ( SlaveList::iterator it = l.begin(); it != l.end(); ++it ) {
     if ( !( *it ).first.first.resolved() )
       continue;
@@ -244,17 +244,38 @@ void SimpleTypeNamespace::addAliasMap( const TypeDesc& name, const TypeDesc& ali
   }
 }
 
-void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
-  SlaveList tempList;
-  if ( m_activeSlaves.empty() || !safetyCounter.ok() ) return;
-  while ( !m_activeSlaves.empty() ) {
-    tempList.splice( tempList.begin(), m_activeSlaves, --m_activeSlaves.end() );
+std::set<size_t> SimpleTypeNamespace::updateAliases( const IncludeFiles& files/*, bool isRecursion */) {
+  std::set<size_t> possibleSlaves;
+  if ( m_activeSlaves.empty() || !safetyCounter.ok() ) return possibleSlaves;
+//   if( !isRecursion ) {
+//     ///Test the cache
+//     SlavesCache::const_iterator it = m_slavesCache.find( files );
+//     if( it != m_slavesCache.end() && it->second.first == m_slavesCache.size() ) return; ///The cache already contains a valid entry, and the work is done
+//   }
 
-    if ( !tempList.front().first.first.resolved() && ( tempList.front().first.second <= files ) ) {
-      TypeDesc descS = tempList.front().first.first;
-      TypePointer p = tempList.front().second;
+  m_activeSlaveGroups.findGroups( files, possibleSlaves );
+  if( possibleSlaves.empty() ) return possibleSlaves;
 
-      HashedStringSet importIncludeFiles = tempList.front().first.second;
+  std::list<size_t> disabled;
+  for( std::set<size_t>::const_reverse_iterator it = possibleSlaves.rbegin(); it != possibleSlaves.rend(); ++it ) {
+    //Disable all slaves with higher ids
+    SlaveMap::iterator current = m_activeSlaves.find( *it );
+    
+      for( SlaveMap::const_iterator itr = current; itr != m_activeSlaves.end(); ++it ) {
+      if( m_activeSlaveGroups.isDisabled( itr->first ) ) break; //stop searching when hitting the first disabled one(assuming that all behind are disabled too)
+      disabled.push_back( itr->first );
+      m_activeSlaveGroups.disableSet( itr->first );
+    }
+
+
+    SlaveDesc& d( current->second );
+    
+    if ( !d.first.first.resolved() ) {
+      TypeDesc descS = d.first.first;
+      size_t id = current->first;
+      TypePointer p = d.second;
+
+      HashedStringSet importIncludeFiles = d.first.second;
 
       if ( !p ) p = this;
 
@@ -267,9 +288,9 @@ void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
       if ( desc.resolved() ) {
         ///If exactly the same namespace was already imported use the earlier imported instance, so they can share a single cache
         ///@todo make more efficient.
-        for ( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
-          if (( *it ).first.first.resolved() && ( *it ).first.first.resolved()->scope() == desc.resolved()->scope() && typeid( *( *it ).first.first.resolved().data() ) == typeid( desc.resolved().data() ) ) {
-            desc.setResolved(( *it ).first.first.resolved() );
+        for ( SlaveMap::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
+          if (( *it ).second.first.first.resolved() && ( *it ).second.first.first.resolved()->scope() == desc.resolved()->scope() && typeid( *( *it ).second.first.first.resolved().data() ) == typeid( desc.resolved().data() ) ) {
+            desc.setResolved(( *it ).second.first.first.resolved() );
             break;
           }
         }
@@ -279,18 +300,15 @@ void SimpleTypeNamespace::updateAliases( const IncludeFiles& files ) {
           desc.resolved()->setMasterProxy( this ); //Possible solution: don't use this, simply set the parents of all found members correctly
         }
 #endif
-        tempList.erase( tempList.begin() );
-        m_activeSlaves.push_back( std::make_pair( std::make_pair( desc, importIncludeFiles ), p ) );
-        desc.resolved()->addAliasesTo( this );
       }
-
-      updateAliases( files );
-      break;
-    } else {
-      //      dbg() << "took \"" << tempList.front().first.first.fullNameChain() << "\" from the slave-list" << endl;
     }
   }
-  m_activeSlaves.splice( m_activeSlaves.end(), tempList );
+
+  for( std::list<size_t>::const_iterator it = disabled.begin(); it != disabled.end(); ++it ) {
+    m_activeSlaveGroups.enableSet( *it );
+  }
+  
+  return possibleSlaves;
 }
 
 
@@ -320,6 +338,11 @@ void SimpleTypeNamespace::addAliases( QString map, const IncludeFiles& files ) {
   }
 }
 
+void SimpleTypeNamespace::invalidatePrimaryCache( bool onlyNegative ) {
+  //m_slavesCache.clear();
+  SimpleTypeImpl::invalidatePrimaryCache( onlyNegative );
+}
+
 void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles& files, TypePointer perspective ) {
   if ( !perspective ) perspective = this;
   invalidateCache();
@@ -334,7 +357,9 @@ void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles&
     #endif
   }
   
-  m_activeSlaves.push_back( std::make_pair( std::make_pair( d, files ) , perspective ) );
+  m_activeSlaves[ ++m_currentSlaveId ] =  std::make_pair( std::make_pair( d, files ) , perspective );
+  m_activeSlaveGroups.addSet( m_currentSlaveId, files );
+  
   if( d.resolved() ) ///Must be called after the above, because it may insert new slaves, and the order in m_activeSlaves MUST be preserved
     d.resolved()->addAliasesTo( this );
 }
@@ -344,13 +369,18 @@ bool SimpleTypeNamespace::hasNode() const {
 }
 
 SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves( const IncludeFiles& files ) {
-  updateAliases( files );
+  /*  ///Test the cache
+  SlavesCache::const_iterator it = m_slavesCache.find( files );
+  if( it != m_slavesCache.end() && it->second.first == m_activeSlaves.size() ) return it->second.second; ///The cache already contains a valid entry, and the work is done*/
+
+  std::set<size_t> allSlaves = updateAliases( files );
   SlaveList ret;
+#ifdef IMPORT_DEBUG    
   for ( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
 #ifdef IMPORT_DEBUG    
-    ifVerbose( dbg() << "\"" << str() << "\": Checking whether \"" << (*it).first.first.fullNameChain() << "\" should be imported, current include-files: " << files.print().c_str() << "\nNeeded include-files: " << (*it).first.second.print().c_str() << "\n"; )
+    ifVerbose( dbg() << "\"" << str() << "\": Checking whether \"" << (*it).second.first.first.fullNameChain() << "\" should be imported, current include-files: " << files.print().c_str() << "\nNeeded include-files: " << (*it).second.first.second.print().c_str() << "\n"; )
 #endif
-    if ( !(( *it ).first.second <= files ) ) {
+    if ( !(( *it ).second.first.second <= files ) ) {
 #ifdef IMPORT_DEBUG    
       ifVerbose( dbg() << "not imported." );
 #endif
@@ -359,8 +389,22 @@ SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves( const IncludeFile
 #ifdef IMPORT_DEBUG    
     ifVerbose( dbg() << "imported." << endl );
 #endif
-    ret.push_back( *it );
+    ret.push_back( *it.second );
   }
+#else
+  for( std::set<size_t>::const_iterator it = allSlaves.begin(); it != allSlaves.end(); ++it ) {
+    SlaveMap::const_iterator itr = m_activeSlaves.find( *it );
+    if( itr != m_activeSlaves.end() ) {
+      ret.push_back( (*itr).second );
+    } else {
+      kdDebug( 9007 ) << "ERROR in getSlaves()";
+    }
+  }
+#endif
+  /*if( it == m_slavesCache.end() || it->second.first < m_activeSlaves.size()
+    ) {
+    m_slavesCache.insert( std::make_pair( files, std::make_pair( m_activeSlaves.size(), ret ) ) );
+  }*/
   return ret;
 }
 

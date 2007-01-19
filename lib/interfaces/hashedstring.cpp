@@ -283,3 +283,71 @@ QDataStream& operator >> ( QDataStream& stream, HashedString& str ) {
     stream >> str.m_hash;
     return stream;
 }
+
+void HashedStringSetGroup::addSet( size_t id, const HashedStringSet& set, bool emptyMeansGlobal ) {
+  if( set.m_data && !set.m_data->m_files.empty() ) {
+    for( HashedStringSetData::StringSet::const_iterator it = set.m_data->m_files.begin(); it != set.m_data->m_files.end(); ++it ) {
+      GroupMap::iterator itr = m_map.find( *it );
+      if( itr == m_map.end() ) {
+        itr = m_map.insert( std::make_pair( *it, ItemSet() ) ).first;
+      }
+      itr->second.insert( id );
+    }
+  } else if( emptyMeansGlobal ) {
+    m_global.insert( id );
+  }
+}
+
+void HashedStringSetGroup::disableSet( size_t id ) {
+  m_disabled.insert( id );
+}
+
+void HashedStringSetGroup::enableSet( size_t id ) {
+  m_disabled.erase( id );
+}
+
+bool HashedStringSetGroup::isDisabled( size_t id ) const {
+  return m_disabled.find( id ) != m_disabled.end();
+}
+
+void HashedStringSetGroup::removeSet( size_t id ) {
+  m_disabled.erase( id );
+  m_global.erase( id );
+  for( GroupMap::iterator it = m_map.begin(); it != m_map.end(); ++it ) {
+    it->second.erase( id );
+  }
+}
+
+void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target ) const {
+  bool first = true;
+  target.clear();
+  if( !strings.m_data ) return;
+  ItemSet oldCut;
+  //This might yet be optimized by sorting the sets according to their size, and starting the intersectioning with the smallest ones.
+  
+  for( HashedStringSetData::StringSet::const_iterator it = strings.m_data->m_files.begin(); it != strings.m_data->m_files.end(); ++it ) {
+    GroupMap::const_iterator itr = m_map.find( *it );
+      if( itr == m_map.end() ) {
+        //There are no string-sets that include the currently searched for string
+        oldCut = m_global;
+        std::set_difference( oldCut.begin(), oldCut.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+        return;
+      }
+      target.swap( oldCut );
+      target.clear();
+      if( first ) {
+        first = false;
+        std::set_difference( itr->second.begin(), itr->second.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+      } else {
+        std::set_intersection( oldCut.begin(), oldCut.end(), itr->second.begin(), itr->second.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+      }
+  }
+
+  target.swap( oldCut );
+  target.clear();
+  std::set_union( oldCut.begin(), oldCut.end(), m_global.begin(), m_global.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+  
+  target.swap( oldCut );
+  target.clear();
+  std::set_difference( oldCut.begin(), oldCut.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+}

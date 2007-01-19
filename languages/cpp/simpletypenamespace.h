@@ -18,6 +18,7 @@
 #include "simpletype.h"
 #include "includefiles.h"
 #include <set>
+#include <ext/hash_map>
 #include <list>
 
 class SimpleTypeNamespace : public SimpleTypeImpl {
@@ -54,7 +55,10 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     };
 
     //First.first is the desc(including include-file-information for searching), first.second is the set of include-files that activate this import, second is the perspective in which to search
-    typedef std::list<std::pair<std::pair<TypeDesc, IncludeFiles>, TypePointer> > SlaveList;
+  typedef std::pair<std::pair<TypeDesc, IncludeFiles>, TypePointer> SlaveDesc;
+    typedef std::list<SlaveDesc> SlaveList;
+    //Maps IDs to slaves
+    typedef std::map<size_t, SlaveDesc> SlaveMap;
 
     typedef std::multiset<Import> ImportList;
 
@@ -86,12 +90,14 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
     void addAliases( QString map, const IncludeFiles& files = IncludeFiles() );
 
   private:
-    SlaveList m_activeSlaves;
+    SlaveMap m_activeSlaves;
+    size_t m_currentSlaveId;
+    HashedStringSetGroup m_activeSlaveGroups;
     typedef QMap<QString, ImportList> AliasMap;
     AliasMap m_aliases;
 
     //Inserts all aliases necessary fo handling a request using the given IncludeFiles
-    void updateAliases( const IncludeFiles& files );
+    std::set<size_t> updateAliases( const IncludeFiles& files/*, bool isRecursion = false */);
 
 //     LocateResult locateSlave( const SlaveList::const_iterator& it, const IncludeFiles& includeFiles );
 
@@ -129,11 +135,21 @@ class SimpleTypeNamespace : public SimpleTypeImpl {
       return true;
     }
 
+    virtual void invalidatePrimaryCache( bool onlyNegative = false );
+  
     virtual MemberInfo findMember( TypeDesc name, MemberInfo::MemberType type =  MemberInfo::AllTypes );
 
     virtual QValueList<TypePointer> getMemberClasses( const TypeDesc& name ) ;
 
   private:
+    struct HashedStringHasher {
+      size_t operator () ( const HashedStringSet& s ) const {
+        return s.hash();
+      }
+    };
+    //Maps from HashedStringSet to the count of slaves when the item was cached, and the SlaveList
+//     typedef __gnu_cxx::hash_map<HashedStringSet, std::pair<size_t, SlaveList>, HashedStringHasher> SlavesCache;
+  //SlavesCache m_slavesCache;
     QValueList<TypePointer> getMemberClasses( const TypeDesc& name, std::set<HashedString>& ignore ) ;
 
     MemberInfo setupMemberInfo( const QStringList& subName, const ImportList& imports );
