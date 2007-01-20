@@ -115,7 +115,7 @@ QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" <
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
 
 QStringList CppSupportPart::m_sourceExtensions = QStringList::split( ",", "c,C,cc,cpp,c++,cxx,m,mm,M" );
-QStringList CppSupportPart::m_headerExtensions = QStringList::split( ",", "h,H,hh,hxx,hpp,inl,tlh,diff,ui.h" );
+QStringList CppSupportPart::m_headerExtensions = QStringList::split( ",", "h,H,hh,h++,hxx,hpp,inl,tlh,diff,ui.h" );
 
 class CppDriver: public KDevDriver
 {
