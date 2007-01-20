@@ -997,27 +997,52 @@ ClassDom StoreWalker::findClassFromScope( const QStringList& scope )
 
 ClassDom StoreWalker::classFromScope(const QStringList& scope) {
 	if(scope.isEmpty())return ClassDom(0);
-	
-	NamespaceDom glob = m_store->globalNamespace();
-	if( !glob ) return ClassDom();
-	
-	ClassModel* curr =  glob ;
-	
-	QStringList::const_iterator mit = scope.begin();
-	
-	while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
-		curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
-		++mit;
+
+	{
+		NamespaceDom glob = m_store->globalNamespace();
+		if( !glob ) return ClassDom();
+		
+		ClassModel* curr =  glob ;
+		
+		QStringList::const_iterator mit = scope.begin();
+		
+		while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
+			curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
+			++mit;
+		}
+		
+		while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
+			ClassList cl = curr->classByName( *mit );
+			curr = &(**cl.begin() );
+			++mit;
+		}
+		
+		if(mit == scope.end()) {
+			return curr;
+		}
 	}
-	
-	while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
-		ClassList cl = curr->classByName( *mit );
-		curr = &(**cl.begin() );
-		++mit;
-	}
-	
-	if(mit == scope.end()) {
-		return curr;
+	{
+		FileDom glob = m_file;
+		if( !glob ) return ClassDom();
+		
+		ClassModel* curr =  glob ;
+		
+		QStringList::const_iterator mit = scope.begin();
+		
+		while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
+			curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
+			++mit;
+		}
+		
+		while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
+			ClassList cl = curr->classByName( *mit );
+			curr = &(**cl.begin() );
+			++mit;
+		}
+		
+		if(mit == scope.end()) {
+			return curr;
+		}
 	}
 	
 	return ClassDom(0);
