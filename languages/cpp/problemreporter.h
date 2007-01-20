@@ -70,9 +70,7 @@ public:
         return m_map.equal_range( str );
     }
     
-    void removeAllItems( const QString& str ) {
-        m_map.erase( str );
-    }
+    void removeAllItems( const QString& str );
     
     bool hasItem( const QString& str ) const {
         Map::const_iterator it = m_map.find( str );
@@ -118,7 +116,6 @@ private:
 	QString levelToString( int level ) const;
 	int levelToMarkType( int level ) const;
 	void InitListView( KListView* listview );
-	void removeAllItems( QListView* listview, const QString& filename );
 	void filterList( KListView* listview, const QString& level );
     void updateCurrentWith( EfficientKListView& listview, const QString& level, const QString& filename );
 	void initCurrentList();

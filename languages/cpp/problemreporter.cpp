@@ -244,16 +244,14 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 	initCurrentList();
 }
 
-void ProblemReporter::removeAllItems( QListView* listview, const QString& filename )
-{
-	QListViewItem* current = listview->firstChild();
-	while( current ){
-		QListViewItem* i = current;
-		current = current->nextSibling();
-
-		if( i->text(0) == filename )
-			delete( i );
+void EfficientKListView::removeAllItems( const QString& str ) {
+	std::pair<Map::iterator, Map::iterator> p = m_map.equal_range( str );
+	
+	for( Map::iterator it = p.first; it != p.second; ++it ) {
+		m_list->removeItem( (*p.first).second );
 	}
+
+	m_map.erase( p.first, p.second );
 }
 
 void ProblemReporter::removeAllProblems( const QString& filename )
@@ -262,9 +260,6 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	
 	kdDebug(9007) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
 
-	removeAllItems( m_errorList, relFileName );
-	removeAllItems( m_fixmeList, relFileName );
-	removeAllItems( m_todoList, relFileName );
 	m_errorList.removeAllItems( relFileName );
 	m_fixmeList.removeAllItems( relFileName );
 	m_todoList.removeAllItems( relFileName );
