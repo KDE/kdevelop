@@ -28,23 +28,50 @@
 namespace QMake
 {
     class ProjectAST;
+    /**
+     * Class to parse a QMake project file or a string containing a QMake project structure
+     */
     class QMAKEPARSER_EXPORT Driver
     {
         public:
             /**
              * Parses the given filename and returns success or failure
+             * @param filename QMake project filename to be parsed
+             * @param ast pointer to an AST structure that will contain the AST after parsing
+             * @param debug if set to 1 the parser prints debug information
+             * @return 0 if parsing succeeds
              */
             static int parseFile( char const* filename, QMake::ProjectAST* ast, int debug = 0 );
+
+            /**
+             * Parses the given filename and returns success or failure
+             * @param filename QMake project filename to be parsed
+             * @param ast pointer to an AST structure that will contain the AST after parsing
+             * @param debug if set to 1 the parser prints debug information
+             * @return 0 if parsing succeeds
+             */
             static int parseFile( const QString& filename, QMake::ProjectAST* ast, int debug = 0 );
 
-            /** Parses the given string and returns success or failure
+            /**
+             * Parses the given string and returns success or failure
+             * @param content QMake project file content to be parsed
+             * @param ast pointer to an AST structure that will contain the AST after parsing
+             * @param debug if set to 1 the parser prints debug information
+             * @return 0 if parsing succeeds
              */
             static int parseString( char const* content, QMake::ProjectAST* ast, int debug = 0 );
+
+            /**
+             * Parses the given string and returns success or failure
+             * @param content QMake project file content to be parsed
+             * @param ast pointer to an AST structure that will contain the AST after parsing
+             * @param debug if set to 1 the parser prints debug information
+             * @return 0 if parsing succeeds
+             */
             static int parseString( const QString& content, QMake::ProjectAST* ast, int debug = 0 );
     };
 }
 
 #endif
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
-
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
