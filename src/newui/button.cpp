@@ -327,6 +327,7 @@ void Button::setRealText(const QString &text)
 {
     m_realText = text;
     setText(text);
+    updateSize();
 }
 
 void Button::clearAccel()
