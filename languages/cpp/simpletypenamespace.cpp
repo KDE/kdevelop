@@ -236,7 +236,7 @@ void SimpleTypeNamespace::addAliasMap( const TypeDesc& name, const TypeDesc& ali
   }
 
   ( *it ).insert( a );
-  ifVerbose( dbg() << "\"" << str() << "\": adding namespace-alias \"" << name.name() << ( !symmetric ? "\" -> \"" : "\" = \"" ) << alias.name() << "\"" << endl );
+  ifVerbose( dbg() << "\"" << str() << "\": adding namespace-alias \"" << name.name() << ( !symmetric ? "\" -> \"" : "\" = \"" ) << alias.name() << "\" files:\n[ " << files.print().c_str() << "]\n" << endl );
   ifVerbose( if ( alias.resolved() ) dbg() << "Resolved type of the imported namespace: " << typeid( *alias.resolved() ).name() );
 
   if ( name.name().isEmpty() ) {
@@ -260,20 +260,22 @@ std::set<size_t> SimpleTypeNamespace::updateAliases( const IncludeFiles& files/*
   for( std::set<size_t>::const_reverse_iterator it = possibleSlaves.rbegin(); it != possibleSlaves.rend(); ++it ) {
     //Disable all slaves with higher ids
     SlaveMap::iterator current = m_activeSlaves.find( *it );
-    
-      for( SlaveMap::const_iterator itr = current; itr != m_activeSlaves.end(); ++it ) {
-      if( m_activeSlaveGroups.isDisabled( itr->first ) ) break; //stop searching when hitting the first disabled one(assuming that all behind are disabled too)
-      disabled.push_back( itr->first );
-      m_activeSlaveGroups.disableSet( itr->first );
+    if( current == m_activeSlaves.end() ) {
+      kdDebug( 9007 ) << "ERROR" << endl;
     }
 
-
     SlaveDesc& d( current->second );
-    
+
     if ( !d.first.first.resolved() ) {
+      for( SlaveMap::const_iterator itr = current; itr != m_activeSlaves.end(); ++it ) {
+        if( m_activeSlaveGroups.isDisabled( itr->first ) ) break; //stop searching when hitting the first disabled one(assuming that all behind are disabled too)
+        disabled.push_back( itr->first );
+        m_activeSlaveGroups.disableSet( itr->first );
+      }
+
       TypeDesc descS = d.first.first;
       size_t id = current->first;
-      TypePointer p = d.second;
+      TypePointer p = d.second; //perspective
 
       HashedStringSet importIncludeFiles = d.first.second;
 
@@ -300,6 +302,7 @@ std::set<size_t> SimpleTypeNamespace::updateAliases( const IncludeFiles& files/*
           desc.resolved()->setMasterProxy( this ); //Possible solution: don't use this, simply set the parents of all found members correctly
         }
 #endif
+        d.first.first = desc;
       }
     }
   }
@@ -307,7 +310,7 @@ std::set<size_t> SimpleTypeNamespace::updateAliases( const IncludeFiles& files/*
   for( std::list<size_t>::const_iterator it = disabled.begin(); it != disabled.end(); ++it ) {
     m_activeSlaveGroups.enableSet( *it );
   }
-  
+
   return possibleSlaves;
 }
 
@@ -344,6 +347,7 @@ void SimpleTypeNamespace::invalidatePrimaryCache( bool onlyNegative ) {
 }
 
 void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles& files, TypePointer perspective ) {
+  //ifVerbose( dbg() << "
   if ( !perspective ) perspective = this;
   invalidateCache();
   TypeDesc d = import;
@@ -356,10 +360,10 @@ void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles&
     }
     #endif
   }
-  
+
   m_activeSlaves[ ++m_currentSlaveId ] =  std::make_pair( std::make_pair( d, files ) , perspective );
   m_activeSlaveGroups.addSet( m_currentSlaveId, files );
-  
+
   if( d.resolved() ) ///Must be called after the above, because it may insert new slaves, and the order in m_activeSlaves MUST be preserved
     d.resolved()->addAliasesTo( this );
 }
@@ -375,26 +379,29 @@ SimpleTypeNamespace::SlaveList SimpleTypeNamespace::getSlaves( const IncludeFile
 
   std::set<size_t> allSlaves = updateAliases( files );
   SlaveList ret;
-#ifdef IMPORT_DEBUG    
+#ifdef IMPORT_DEBUG
   for ( SlaveList::const_iterator it = m_activeSlaves.begin(); it != m_activeSlaves.end(); ++it ) {
-#ifdef IMPORT_DEBUG    
+#ifdef IMPORT_DEBUG
     ifVerbose( dbg() << "\"" << str() << "\": Checking whether \"" << (*it).second.first.first.fullNameChain() << "\" should be imported, current include-files: " << files.print().c_str() << "\nNeeded include-files: " << (*it).second.first.second.print().c_str() << "\n"; )
 #endif
     if ( !(( *it ).second.first.second <= files ) ) {
-#ifdef IMPORT_DEBUG    
+#ifdef IMPORT_DEBUG
       ifVerbose( dbg() << "not imported." );
 #endif
       continue;
     }
-#ifdef IMPORT_DEBUG    
+#ifdef IMPORT_DEBUG
     ifVerbose( dbg() << "imported." << endl );
 #endif
     ret.push_back( *it.second );
   }
 #else
+  ifVerbose( dbg() << str() << " getSlaves() called for \n[ " << files.print().c_str() << endl );
+  
   for( std::set<size_t>::const_iterator it = allSlaves.begin(); it != allSlaves.end(); ++it ) {
     SlaveMap::const_iterator itr = m_activeSlaves.find( *it );
     if( itr != m_activeSlaves.end() ) {
+      ifVerbose( dbg() << str() << "getSlaves() returning " << (*itr).second.first.first.fullNameChain() << endl );
       ret.push_back( (*itr).second );
     } else {
       kdDebug( 9007 ) << "ERROR in getSlaves()";

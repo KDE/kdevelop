@@ -135,18 +135,20 @@ struct hash<HashedString> {
 class HashedStringSetGroup {
   public:
     typedef std::set<size_t> ItemSet;
-    void addSet( size_t id, const HashedStringSet& set, bool emptyMeansGlobal = true );
+    void addSet( size_t id, const HashedStringSet& set );
     void enableSet( size_t id );
     bool isDisabled( size_t id ) const;
     void disableSet( size_t id );
     void removeSet( size_t id );
 
-    //Writes the ids of all registered and not disabled HashedStringSet's that include the given HashedStringSet efficiently)
+    //Writes the ids of all registered and not disabled HashedStringSet's that are completely included in the given HashedStringSet efficiently)
     void findGroups( HashedStringSet strings, ItemSet& target ) const;
 
   private:
     typedef __gnu_cxx::hash_map<HashedString, ItemSet> GroupMap;
+    typedef __gnu_cxx::hash_map<size_t, size_t> SizeMap;
     GroupMap m_map;
+    SizeMap m_sizeMap;
     ItemSet m_disabled;
     ItemSet m_global;
 };

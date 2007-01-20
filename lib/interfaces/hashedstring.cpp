@@ -284,8 +284,9 @@ QDataStream& operator >> ( QDataStream& stream, HashedString& str ) {
     return stream;
 }
 
-void HashedStringSetGroup::addSet( size_t id, const HashedStringSet& set, bool emptyMeansGlobal ) {
+void HashedStringSetGroup::addSet( size_t id, const HashedStringSet& set ) {
   if( set.m_data && !set.m_data->m_files.empty() ) {
+    m_sizeMap[ id ] = set.size();
     for( HashedStringSetData::StringSet::const_iterator it = set.m_data->m_files.begin(); it != set.m_data->m_files.end(); ++it ) {
       GroupMap::iterator itr = m_map.find( *it );
       if( itr == m_map.end() ) {
@@ -293,7 +294,7 @@ void HashedStringSetGroup::addSet( size_t id, const HashedStringSet& set, bool e
       }
       itr->second.insert( id );
     }
-  } else if( emptyMeansGlobal ) {
+  } else {
     m_global.insert( id );
   }
 }
@@ -313,6 +314,7 @@ bool HashedStringSetGroup::isDisabled( size_t id ) const {
 void HashedStringSetGroup::removeSet( size_t id ) {
   m_disabled.erase( id );
   m_global.erase( id );
+  m_sizeMap.erase( id );
   for( GroupMap::iterator it = m_map.begin(); it != m_map.end(); ++it ) {
     it->second.erase( id );
   }
@@ -321,33 +323,41 @@ void HashedStringSetGroup::removeSet( size_t id ) {
 void HashedStringSetGroup::findGroups( HashedStringSet strings, ItemSet& target ) const {
   bool first = true;
   target.clear();
-  if( !strings.m_data ) return;
-  ItemSet oldCut;
+  if( !strings.m_data ) {
+    std::set_difference( m_global.begin(), m_global.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+    return;
+  }
   //This might yet be optimized by sorting the sets according to their size, and starting the intersectioning with the smallest ones.
+  __gnu_cxx::hash_map<size_t, int> hitCounts;
   
   for( HashedStringSetData::StringSet::const_iterator it = strings.m_data->m_files.begin(); it != strings.m_data->m_files.end(); ++it ) {
     GroupMap::const_iterator itr = m_map.find( *it );
       if( itr == m_map.end() ) {
         //There are no string-sets that include the currently searched for string
-        oldCut = m_global;
-        std::set_difference( oldCut.begin(), oldCut.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
-        return;
+        continue;
       }
-      target.swap( oldCut );
-      target.clear();
-      if( first ) {
-        first = false;
-        std::set_difference( itr->second.begin(), itr->second.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
-      } else {
-        std::set_intersection( oldCut.begin(), oldCut.end(), itr->second.begin(), itr->second.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+
+      for( ItemSet::const_iterator it2 = itr->second.begin(); it2 != itr->second.end(); ++it2 ) {
+        __gnu_cxx::hash_map<size_t, int>::iterator v = hitCounts.find( *it2 );
+        if( v != hitCounts.end() ) {
+          ++(*v).second;
+        } else {
+          hitCounts[*it2] = 1;
+        }
       }
   }
 
-  target.swap( oldCut );
-  target.clear();
-  std::set_union( oldCut.begin(), oldCut.end(), m_global.begin(), m_global.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+  //Now count together all groups that are completely within the given string-set(their hitCount equals their size)
+  ItemSet found;
+  for( __gnu_cxx::hash_map<size_t, int>::const_iterator it = hitCounts.begin(); it != hitCounts.end(); ++it ) {
+    if( (*it).second == (*m_sizeMap.find( (*it).first )).second )
+      found.insert( (*it).first );
+  }
+
   
-  target.swap( oldCut );
+  std::set_union( found.begin(), found.end(), m_global.begin(), m_global.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+  
+  target.swap( found );
   target.clear();
-  std::set_difference( oldCut.begin(), oldCut.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
+  std::set_difference( found.begin(), found.end(), m_disabled.begin(), m_disabled.end(), std::insert_iterator<ItemSet>( target, target.end() ) );
 }
