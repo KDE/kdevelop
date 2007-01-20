@@ -244,11 +244,28 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 	initCurrentList();
 }
 
-void EfficientKListView::removeAllItems( const QString& str ) {
-	std::pair<Map::iterator, Map::iterator> p = m_map.equal_range( str );
+void EfficientKListView::limitSize( int size )
+{
+	int safety = 0;
+	if( m_map.size() <= size + 50 ) return;
+	
+	QMap<int, HashedString> backMap;
+	for( InsertionMap::const_iterator it = m_insertionNumbers.begin(); it != m_insertionNumbers.end(); ++it )
+		backMap[ (*it).second ] = (*it).first;
+
+	for( QMap<int, HashedString>::const_iterator it = backMap.begin(); it != backMap.end() && m_map.size() > size; ++it )
+		removeAllItems( (*it).str() );
+}
+
+void EfficientKListView::removeAllItems( const QString& str )
+{
+	HashedString h(str);
+	m_insertionNumbers.erase( h ) ;
+	
+	std::pair<Map::iterator, Map::iterator> p = m_map.equal_range( h );
 	
 	for( Map::iterator it = p.first; it != p.second; ++it ) {
-		m_list->removeItem( (*p.first).second );
+		delete( (*it).second );
 	}
 
 	m_map.erase( p.first, p.second );
@@ -260,6 +277,10 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	
 	kdDebug(9007) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
 
+	m_errorList.limitSize( 300 );
+	m_fixmeList.limitSize( 300 );
+	m_todoList.limitSize( 300 );
+	
 	m_errorList.removeAllItems( relFileName );
 	m_fixmeList.removeAllItems( relFileName );
 	m_todoList.removeAllItems( relFileName );

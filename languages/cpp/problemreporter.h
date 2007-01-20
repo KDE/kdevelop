@@ -24,6 +24,8 @@
 #include <qguardedptr.h>
 #include <qdatetime.h>
 #include <map>
+#include <ext/hash_map>
+#include <lib/interfaces/hashedstring.h>
 
 class CppSupportPart;
 class QTimer;
@@ -36,9 +38,9 @@ class KURL;
 
 class EfficientKListView {
 public:
-    typedef std::multimap<QString, QListViewItem*> Map;
+    typedef __gnu_cxx::hash_multimap<HashedString, QListViewItem*> Map;
     typedef std::pair< Map::const_iterator, Map::const_iterator > Range;
-    EfficientKListView( KListView* list = 0 ) : m_list( list ) {
+    EfficientKListView( KListView* list = 0 ) : m_list( list ), m_insertionNumber( 0 ) {
     }
     
     EfficientKListView& operator = ( KListView* list ) {
@@ -63,21 +65,29 @@ public:
     }
     
     void addItem( const QString& str, QListViewItem* item ) {
-        m_map.insert( std::make_pair( str, item ) );
+        HashedString h( str );
+        m_insertionNumbers[h] = ++m_insertionNumber;
+        m_map.insert( std::make_pair( h, item ) );
     }
     
     Range getRange( const QString& str ) const {
-        return m_map.equal_range( str );
+        return m_map.equal_range( HashedString(str) );
     }
-    
+
+    ///If the list has more then size items, the first items are removed until the size fits.
+    void limitSize( int size );
+  
     void removeAllItems( const QString& str );
     
     bool hasItem( const QString& str ) const {
-        Map::const_iterator it = m_map.find( str );
+        Map::const_iterator it = m_map.find( HashedString(str) );
         return it != m_map.end();
     }
 private:
+    int m_insertionNumber;
     Map m_map;
+    typedef __gnu_cxx::hash_map<HashedString, int> InsertionMap;
+  InsertionMap m_insertionNumbers; //This is used to count which file was inserted first(higher insertion-number -> inserted later)
     KListView* m_list;
 };
 
