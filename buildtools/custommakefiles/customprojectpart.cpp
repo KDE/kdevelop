@@ -380,7 +380,8 @@ void CustomProjectPart::populateProject()
                         || (fileName.endsWith(".cpp"))
                         || (fileName.endsWith(".c++"))
                         || (fileName.endsWith(".cxx"))
-                        || (fileName.startsWith("Makefile"))))  //Makefile, Makefile.am, Makefile.in
+                        || (fileName.startsWith("Makefile"))
+			|| (fileName == "CMakeLists.txt")))  //Makefile, Makefile.am, Makefile.in
                 {
                     kdDebug(9025) << "Adding: " << path << endl;
                     m_sourceFiles.append(path.mid(prefixlen));
