@@ -28,7 +28,7 @@ BuiltinTypes::BuiltinTypes() {
   m_types["unsigned char"] = i18n("unsigned character, 1 byte, ranged 0 to 255");
   m_types["wchar_t"] = i18n("wide character, 2 bytes, ranged 0 to 65.535");
   m_types["long"] = m_types["long int"] = m_types["int"] = m_types["signed int"] = i18n("signed interger, 4 bytes, ranged -2.147.483.648 to 2.147.483.647");
-  m_types["unsigned int"] = i18n("unsigned integer, 4 bytes, ranged 0 to 4.294.967.295");
+  m_types["unsigned"] = m_types["unsigned int"] = i18n("unsigned integer, 4 bytes, ranged 0 to 4.294.967.295");
   m_types["short"] = m_types["short int"] = i18n("short integer, 2 bytes, ranged -32.768 to 32.768");
   m_types["unsigned short int"] = i18n("unsigned short integer, 2 bytes, ranged 0 to 65.535");
   m_types["float"] = i18n("floating point value, 4 bytes, ranged ca. -3,4E+38 to 3.4E+38");
