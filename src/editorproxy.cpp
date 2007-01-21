@@ -27,6 +27,7 @@
 #include "partcontroller.h"
 #include "core.h"
 #include "multibuffer.h"
+#include "kdeveditorutil.h"
 
 #include "editorproxy.h"
 
@@ -154,96 +155,64 @@ void EditorProxy::installPopup( KParts::Part * part )
 
 void EditorProxy::popupAboutToShow()
 {
-  QPopupMenu *popup = (QPopupMenu*)sender();
-  if (!popup)
-    return;
+	QPopupMenu *popup = (QPopupMenu*)sender();
+	if (!popup)
+	return;
+	
+	// ugly hack: remove all but the "original" items
+	for (int index=popup->count()-1; index >= 0; --index)
+	{
+		int id = popup->idAt(index);
+		if (m_popupIds.contains(id) == 0)
+		{
+			QMenuItem *item = popup->findItem(id);
+			if ( item && item->popup() )
+				delete item->popup();
+			else
+				popup->removeItemAt(index);
+		} 
+	}
 
-  // ugly hack: remove all but the "original" items
-  for (int index=popup->count()-1; index >= 0; --index)
-  {
-    int id = popup->idAt(index);
-    if (m_popupIds.contains(id) == 0)
-    {
-      QMenuItem *item = popup->findItem(id);
-      if (item->popup())
-	delete item->popup();
-      else
-          popup->removeItemAt(index);
-//      kdDebug(9000) << "removed id " << id << " at index " << index << endl;
-    } else {
-//        kdDebug(9000) << "leaving id " << id << endl;
-    }
-  }
-/*	// why twice !?!?
-  // ugly hack: mark the "original" items
-  m_popupIds.resize(popup->count());
-  for (uint index=0; index < popup->count(); ++index)
-    m_popupIds[index] = popup->idAt(index);
-*/
+	KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( PartController::getInstance()->activePart() );
+	if (!doc ) return;
 
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(PartController::getInstance()->activePart());
-  if (!ro_part)
-    return;
-/*	// I disagree.. the EditorContext shouldn't emit the filecontext event
-  // fill the menu in the file context
-  FileContext context(ro_part->url().path(), false);
-  Core::getInstance()->fillContextMenu(popup, &context);
-*/
-  // fill the menu in the editor context
-  if (!ro_part->widget())
-    return;
+	unsigned int line;
+	unsigned int col;
+	if ( !KDevEditorUtil::currentPositionReal( &line, &col, doc ) ) return;
 
-  SelectionInterface *selectIface = dynamic_cast<SelectionInterface*>(ro_part);
-  ViewCursorInterface *cursorIface = dynamic_cast<ViewCursorInterface*>(ro_part->widget());
-  EditInterface *editIface = dynamic_cast<EditInterface*>(ro_part);
+	QString wordstr;
+	QString selection = KDevEditorUtil::currentSelection( doc );
+	if ( !selection.isEmpty() && selection.contains('\n') != 0 )
+	{
+		wordstr = selection;
+	}
+	else
+	{
+		wordstr = KDevEditorUtil::currentWord( doc );
+	}
 
-  QString wordstr, linestr;
-  bool hasMultilineSelection = false;
-  if( selectIface && selectIface->hasSelection() )
-  {
-    hasMultilineSelection = ( selectIface->selection().contains('\n') != 0 );
-    if ( !hasMultilineSelection )
-    {
-      wordstr = selectIface->selection();
-    }
-  }
-  if( cursorIface && editIface )
-  {
-    uint line, col;
-    line = col = 0;
-    cursorIface->cursorPositionReal(&line, &col);
-    linestr = editIface->textLine(line);
-    if( wordstr.isEmpty() && !hasMultilineSelection ) {
-      int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
-      int endPos = startPos;
-      while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
-          startPos--;
-      while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
-          endPos++;
-      wordstr = (startPos==endPos)?
-          QString() : linestr.mid(startPos+1, endPos-startPos-1);
-    }
-    kdDebug(9000) << "Word:" << wordstr << ":" << endl;
-    EditorContext context(ro_part->url(), line, col, linestr, wordstr);
-    Core::getInstance()->fillContextMenu(popup, &context);
-  } else {
-    Core::getInstance()->fillContextMenu(popup, 0);
-  }
+	QString linestr = KDevEditorUtil::currentLine( doc );
+	
+	EditorContext context( doc->url(), line, col, linestr, wordstr );
+	Core::getInstance()->fillContextMenu( popup, &context );
 
-  // Remove redundant separators (any that are first, last, or doubled)
-  bool lastWasSeparator = true;
-  for( uint i = 0; i < popup->count(); ) {
-    int id = popup->idAt( i );
-    if( lastWasSeparator && popup->findItem( id )->isSeparator() ) {
-      popup->removeItem( id );
-      // Since we removed an item, don't increment i
-    } else {
-      lastWasSeparator = false;
-      i++;
-    }
-  }
-  if( lastWasSeparator && popup->count() > 0 )
-    popup->removeItem( popup->idAt( popup->count() - 1 ) );
+	// Remove redundant separators (any that are first, last, or doubled)
+	bool lastWasSeparator = true;
+	for( uint i = 0; i < popup->count(); ) 
+	{
+		int id = popup->idAt( i );
+		if( lastWasSeparator && popup->findItem( id )->isSeparator() ) 
+		{
+			popup->removeItem( id );
+			// Since we removed an item, don't increment i
+		} else 
+		{
+			lastWasSeparator = false;
+			i++;
+		}
+	}
+	if( lastWasSeparator && popup->count() > 0 )
+		popup->removeItem( popup->idAt( popup->count() - 1 ) );
 }
 
 void EditorProxy::showPopup( )

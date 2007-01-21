@@ -46,8 +46,7 @@
 #include <kstringhandler.h>
 #include <kconfig.h>
 #include <kwin.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/document.h>
 
 #include "kdevplugininfo.h"
 #include "kdevcore.h"
@@ -59,6 +58,7 @@
 #include "kdevpartcontroller.h"
 #include "domutil.h"
 #include "urlutil.h"
+#include "kdeveditorutil.h"
 
 #include "documentation_widget.h"
 #include "docglobalconfigwidget.h"
@@ -259,7 +259,7 @@ void DocumentationPart::emitBookmarkLocation(const QString &title, const KURL &u
 
 void DocumentationPart::searchInDocumentation()
 {
-    QString word = currentWord();
+     QString word = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
 
     if ( word.isEmpty() )
     {
@@ -299,7 +299,7 @@ void DocumentationPart::contextSearchInDocumentation()
 
 void DocumentationPart::manPage()
 {
-    QString word = currentWord();
+     QString word = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
 
     if ( isAssistantUsed() )
     {
@@ -323,8 +323,8 @@ void DocumentationPart::manPage()
 
 void DocumentationPart::infoPage()
 {
-    QString word = currentWord();
-    
+     QString word = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
+ 
     if ( isAssistantUsed() )
     {
         if ( word.isEmpty() )
@@ -383,7 +383,7 @@ void DocumentationPart::contextFindDocumentation()
 
 void DocumentationPart::findInDocumentation()
 {
-    QString word = currentWord();
+     QString word = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
     
     if ( word.isEmpty() )
     {
@@ -415,7 +415,7 @@ void DocumentationPart::findInDocumentation(const QString &term)
 
 void DocumentationPart::lookInDocumentationIndex()
 {
-    QString word = currentWord();
+     QString word = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
     
     if ( word.isEmpty() )
     {
@@ -761,34 +761,6 @@ void DocumentationPart::init( )
 {
     loadDocumentationPlugins();
     loadSettings();
-}
-
-///@todo - duplicated from ctags part, which came from editorproxy. we also have a shorter version in other places..
-QString DocumentationPart::currentWord()
-{
-    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*> ( partController()->activePart() );
-    if ( !ro_part || !ro_part->widget() ) return QString::null;
-
-    KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*> ( ro_part->widget() );
-    KTextEditor::EditInterface * editIface = dynamic_cast<KTextEditor::EditInterface*> ( ro_part );
-
-    QString wordstr, linestr;
-    if ( cursorIface && editIface )
-    {
-        uint line, col;
-        line = col = 0;
-        cursorIface->cursorPositionReal ( &line, &col );
-        linestr = editIface->textLine ( line );
-        int startPos = QMAX ( QMIN ( ( int ) col, ( int ) linestr.length()-1 ), 0 );
-        int endPos = startPos;
-        while ( startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~' ) )
-            startPos--;
-        while ( endPos < ( int ) linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
-            endPos++;
-
-        return ( ( startPos == endPos ) ? QString::null : linestr.mid ( startPos+1, endPos-startPos-1 ) );
-    }
-    return QString::null;
 }
 
 #include "documentation_part.moc"

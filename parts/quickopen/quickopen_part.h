@@ -45,8 +45,6 @@ private slots:
     void slotSwitchTo();
 
 private:
-    QString getWordInEditor();
-    
     KAction* m_actionQuickOpen;
     KAction* m_actionQuickOpenClass;
     KAction* m_actionFunctionOpen;

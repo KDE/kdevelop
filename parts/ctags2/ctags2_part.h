@@ -56,7 +56,6 @@ private:
 	int getFileLineFromStream( QTextStream & stream, QString const & pattern);
 	void gotoTagForTypes( QStringList const & types );
 	void showHits( Tags::TagList const & tags );
-	QString currentWord();
     
 	QGuardedPtr<CTags2Widget> m_widget;
 	QString m_contextString ;

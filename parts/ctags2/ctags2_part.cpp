@@ -20,6 +20,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kparts/part.h>
+#include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <kprocess.h>
@@ -39,6 +40,7 @@
 #include <kdevplugininfo.h>
 #include "configwidgetproxy.h"
 #include "domutil.h"
+#include "kdeveditorutil.h"
 
 #include "ctags2_settingswidget.h"
 #include "ctags2_widget.h"
@@ -324,7 +326,7 @@ int CTags2Part::getFileLineFromPattern( KURL const & url, QString const & patter
 
 void CTags2Part::slotLookupDeclaration( )
 {
-	m_contextString = currentWord();
+ 	m_contextString = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
 	if ( !m_contextString.isEmpty() )
 	{
 		slotGotoDeclaration();
@@ -333,7 +335,7 @@ void CTags2Part::slotLookupDeclaration( )
 
 void CTags2Part::slotLookupDefinition( )
 {
-	m_contextString = currentWord();
+ 	m_contextString = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
 	if ( !m_contextString.isEmpty() )
 	{
 		slotGotoDefinition();
@@ -342,7 +344,7 @@ void CTags2Part::slotLookupDefinition( )
 
 void CTags2Part::slotLookup( )
 {
-	m_contextString = currentWord();
+ 	m_contextString = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
 	if ( !m_contextString.isEmpty() )
 	{
 		slotGotoTag();
@@ -358,33 +360,6 @@ void CTags2Part::slotOpenLookup( )
 void CTags2Part::slotGoToNext( )
 {
 	m_widget->goToNext();
-}
-
-QString CTags2Part::currentWord( )
-{
-	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
-	if ( !ro_part || !ro_part->widget() ) return QString::null;
-
-	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
-	KTextEditor::EditInterface * editIface = dynamic_cast<KTextEditor::EditInterface*>( ro_part );
-
-	QString wordstr, linestr;
-	if( cursorIface && editIface )
-	{
-		uint line, col;
-		line = col = 0;
-		cursorIface->cursorPositionReal(&line, &col);
-		linestr = editIface->textLine(line);
-		int startPos = QMAX( QMIN( (int)col, (int)linestr.length()-1 ), 0 );
-		int endPos = startPos;
-		while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~') )
-			startPos--;
-		while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
-			endPos++;
-
-		return ( ( startPos == endPos ) ? QString::null : linestr.mid( startPos+1, endPos-startPos-1 ) );
-	}
-	return QString::null;
 }
 
 #include "ctags2_part.moc"
