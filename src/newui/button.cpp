@@ -27,6 +27,7 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kxmlguiclient.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <kinputdialog.h>
