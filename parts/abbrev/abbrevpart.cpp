@@ -39,6 +39,7 @@
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "abbrevconfigwidget.h"
+#include "kdeveditorutil.h"
 
 static const KDevPluginInfo data("kdevabbrev");
 
@@ -234,15 +235,7 @@ void AbbrevPart::save()
 
 QString AbbrevPart::currentWord() const
 {
-    uint line, col;
-    viewCursorIface->cursorPositionReal(&line, &col);
-    QString str = editIface->textLine(line);
-    int i;
-    for (i = col-1; i >= 0; --i)
-        if( ! (str[i].isLetter() || str[i] == '_') )
-            break;
-
-    return str.mid(i+1, col-i-1);
+    return KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
 }
 
 

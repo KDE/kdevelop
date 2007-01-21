@@ -17,9 +17,7 @@
 #include <klocale.h>
 #include <kparts/part.h>
 #include <kprocess.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/viewcursorinterface.h>
-#include <ktexteditor/selectioninterface.h>
+#include <ktexteditor/document.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -28,6 +26,7 @@
 #include "kdevplugininfo.h"
 #include "urlutil.h"
 #include "configwidgetproxy.h"
+#include "kdeveditorutil.h"
 
 #include "toolsconfig.h"
 #include "toolsconfigwidget.h"
@@ -116,50 +115,22 @@ void ToolsPart::slotToolActivated()
   kapp->startServiceByDesktopPath(df);
 }
 
-
-// Duplicated from abbrev part. This really should be in
-// the editor interface!
-static QString currentWord(KTextEditor::EditInterface *editiface,
-                           KTextEditor::ViewCursorInterface *cursoriface)
-{
-    uint line, col;
-    cursoriface->cursorPositionReal(&line, &col);
-    QString str = editiface->textLine(line);
-    int i;
-    for (i = col-1; i >= 0; --i)
-        if (!str[i].isLetter())
-            break;
-
-    return str.mid(i+1, col-i-1);
-}
-
-
 void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
 {
-    KParts::Part *part = partController()->activePart();
-    KParts::ReadWritePart *rwpart
-        = dynamic_cast<KParts::ReadWritePart*>(part);
-    KTextEditor::SelectionInterface *selectionIface
-        = dynamic_cast<KTextEditor::SelectionInterface*>(part);
-    KTextEditor::EditInterface *editIface
-        = dynamic_cast<KTextEditor::EditInterface*>(part);
-    KTextEditor::ViewCursorInterface *cursorIface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part);
+    KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( partController()->activePart() );
 
-    if (fileName.isNull() && rwpart)
-        fileName = rwpart->url().path();
+    if ( fileName.isNull() && doc )
+        fileName = doc->url().path();
     
     QString projectDirectory;
     if (project())
         projectDirectory = project()->projectDirectory();
     
-    QString selection;
-    if (selectionIface)
-        selection = KShellProcess::quote(selectionIface->selection());
+    QString selection = KDevEditorUtil::currentSelection( doc );
+    if ( !selection.isEmpty() )
+        selection = KShellProcess::quote( selection );
 
-    QString word;
-    if (editIface && cursorIface)
-        word = KShellProcess::quote(currentWord(editIface, cursorIface));
+    QString word = KDevEditorUtil::currentWord( doc );
     
     // This should really be checked before inserting into the popup
     if (cmdline.contains("%D") && projectDirectory.isNull())

@@ -1,6 +1,6 @@
 # Here resides the abbrev part
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevabbrev.la
 libkdevabbrev_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
