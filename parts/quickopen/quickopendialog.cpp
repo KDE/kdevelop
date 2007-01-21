@@ -23,7 +23,6 @@
  
 #include <klistbox.h>
 #include <klineedit.h>
-#include <kcompletion.h>
 
 #include "quickopendialog.h"
 #include "quickopen_part.h"
@@ -101,10 +100,14 @@ QStringList QuickOpenDialog::wildCardCompletion(const QString & text)
     {
         if ( (*it).find( re ) != -1 )
         {
-            matches << *it;
+            if ( !matches.contains( *it ) )
+            {
+                matches << *it;
+            }
         }
         ++it;
     }
+    matches.sort();
     return matches;
 }
 
