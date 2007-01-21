@@ -37,18 +37,6 @@
 #include "quickopenfunctionchooseform.h"
 #include "quickopenfunctiondialog.h"
 
-
-void QuickOpenFunctionDialog::fillFunctions() {
-    m_functionStrList->clear();
-    for( FunctionList::ConstIterator it = m_functionDefList->begin() ; it!=m_functionDefList->end(); ++it ){
-        const FunctionModel *fmodel = (*it).data();
-        m_functionStrList->append( fmodel->name() );
-    }
-    m_completion->setItems( *m_functionStrList );
-    itemList->clear();
-    itemList->insertStringList( m_completion->items() );
-}
-
 QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* parent, const char* name, bool modal, WFlags fl)
 : QuickOpenDialog(part, parent, name, modal, fl), spaces(0)
 {
@@ -56,8 +44,6 @@ QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* 
         itemListLabel->setText( i18n("Function &list:") );
 
         FileList fileList = m_part->codeModel()->fileList();
-        m_functionDefList = new FunctionList();
-        m_functionStrList = new QStringList();
 
         // for each one file, get all function list
         FileDom fileDom;
@@ -65,15 +51,12 @@ QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* 
                 fileDom = *it;
                 FunctionDefinitionList defs = CodeModelUtils::allFunctionDefinitionsDetailed( fileDom ).functionList;
                 if( defs.isEmpty() ) {
-                  *m_functionDefList += CodeModelUtils::allFunctionsDetailed( fileDom ).functionList;
+                  m_functionDefList += CodeModelUtils::allFunctionsDetailed( fileDom ).functionList;
                 } else {
                   for( FunctionDefinitionList::iterator it = defs.begin(); it != defs.end(); ++it )
-                    (*m_functionDefList).append( (*it).data() );
+                    (m_functionDefList).append( (*it).data() );
                 }
         }
-        m_completion = new KCompletion();
-        //m_functionStrList->sort();
-        m_completion->setOrder( KCompletion::Sorted );
 
         fillFunctions();
 
@@ -82,30 +65,34 @@ QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* 
 
 QuickOpenFunctionDialog::~QuickOpenFunctionDialog()
 {
-        delete m_completion;
-        delete m_functionDefList;
-        delete m_functionStrList;
-        m_completion = 0;
-        m_functionDefList = 0;
-        m_functionStrList = 0;
+}
+
+void QuickOpenFunctionDialog::fillFunctions() 
+{
+    m_items.clear();
+    for( FunctionList::ConstIterator it = m_functionDefList.begin() ; it!=m_functionDefList.end(); ++it ){
+        const FunctionModel *fmodel = (*it).data();
+        m_items.append( fmodel->name() );
+    }
+    itemList->clear();
+    itemList->insertStringList( m_items );
 }
 
 void QuickOpenFunctionDialog::gotoFile( QString name )
 {
         FunctionModel *fmodel;
-        //FunctionList *funcList = new FunctionList();
-        funcList = new FunctionList();
+        FunctionList funcList;
         FunctionDom fdom;
 
-        for( FunctionList::ConstIterator it = m_functionDefList->begin() ; it!=m_functionDefList->end() ; ++it ){
+        for( FunctionList::ConstIterator it = m_functionDefList.begin() ; it!=m_functionDefList.end() ; ++it ){
                 fdom = *it;
                 fmodel = fdom.data();
                 if( fmodel->name() == name ){
-                        funcList->append( fdom );
+                        funcList.append( fdom );
                 }
         }
-        if( funcList->count() == 1 ){
-                fdom = funcList->first();
+        if( funcList.count() == 1 ){
+                fdom = funcList.first();
                 fmodel = fdom.data();
                 QString fileNameStr = fmodel->fileName();
                 int startline, startcol;
@@ -113,12 +100,12 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
                 m_part->partController()->editDocument( KURL( fileNameStr), startline, startcol );
                 selectClassViewItem( ItemDom(&(*fmodel)) );
 
-        }else if( funcList->count() > 1 ){
+        }else if( funcList.count() > 1 ){
                 QString fileStr;
 
                 QuickOpenFunctionChooseForm fdlg( this, name.ascii() );
 
-                for( FunctionList::Iterator it = funcList->begin() ; it!=funcList->end() ; ++it ){
+                for( FunctionList::Iterator it = funcList.begin() ; it!=funcList.end() ; ++it ){
                         fmodel = (*it).data();
 
                         fdlg.argBox->insertItem( m_part->languageSupport()->formatModelItem(fmodel) +
@@ -132,8 +119,8 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
                 }
                 if( fdlg.exec() ){
                         int id = fdlg.argBox->currentItem();
-                        if( id>-1 && id < (int) funcList->count() ){
-                                FunctionModel *model = (*funcList)[id].data();
+                        if( id>-1 && id < (int) funcList.count() ){
+                                FunctionModel *model = funcList[id].data();
                                 int line, col;
                                 model->getStartPosition( &line, &col );
                                 selectClassViewItem( ItemDom(&(*model)) );
@@ -173,19 +160,19 @@ void QuickOpenFunctionDialog::slotTextChanged(const QString & text) {
 
         if(text.contains(':')/2 != spaces) {
             if(text.contains(':')/2 < spaces) { ///reload all function-definitions
-                m_functionDefList->clear();
+                m_functionDefList.clear();
                 FileList fileList = m_part->codeModel()->fileList();
                 FileDom fileDom;
                 for( FileList::Iterator it = fileList.begin() ; it!=fileList.end() ; ++it ){
                     fileDom = *it;
-                    *m_functionDefList += CodeModelUtils::allFunctionsDetailed( fileDom ).functionList;
+                    m_functionDefList += CodeModelUtils::allFunctionsDetailed( fileDom ).functionList;
                 }
             }
 
             if(!parts.isEmpty()) {
                 FunctionList accepted;
-                FunctionList::iterator it = m_functionDefList->begin();
-                while(it != m_functionDefList->end()) {
+                FunctionList::iterator it = m_functionDefList.begin();
+                while(it != m_functionDefList.end()) {
                     QStringList scope = (*it)->scope();
                     QStringList::iterator mit = parts.begin();
                     QStringList::iterator sit = scope.begin();
@@ -201,7 +188,7 @@ void QuickOpenFunctionDialog::slotTextChanged(const QString & text) {
                     if(!fail) accepted.append(*it);
                     ++it;
                 }
-                *m_functionDefList = accepted;
+                m_functionDefList = accepted;
             }
 
             fillFunctions();

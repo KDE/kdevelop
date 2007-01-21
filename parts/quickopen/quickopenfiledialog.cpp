@@ -41,15 +41,11 @@ QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, QWidget* parent, c
     nameLabel->setText( i18n("File &name:") );
     itemListLabel->setText( i18n("File &list:") );
 
-    QStringList fileList = m_part->project()->allFiles();
-
-    m_completion = new KCompletion();
-    m_completion->insertItems( fileList );
-    m_completion->setIgnoreCase( true );
+    m_items = m_part->project()->allFiles();
 
     nameEdit->setFocus();
 
-    itemList->insertStringList( fileList );
+    itemList->insertStringList( m_items );
     itemList->setCurrentItem(0);
 }
 
@@ -59,22 +55,16 @@ QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, const KURL::List &
     nameLabel->setText( i18n("File &name:") );
     itemListLabel->setText( i18n("File &list:") );
 
-    QStringList fileList = urls.toStringList();
-
-    m_completion = new KCompletion();
-    m_completion->insertItems( fileList );
-    m_completion->setIgnoreCase( true );
+     m_items = urls.toStringList();
 
     nameEdit->setFocus();
 
-    itemList->insertStringList( fileList );
+    itemList->insertStringList( m_items );
     itemList->setCurrentItem(0);
 }
 
 QuickOpenFileDialog::~QuickOpenFileDialog()
 {
-    delete( m_completion );
-    m_completion = 0;
 }
 
 void QuickOpenFileDialog::slotExecuted( QListBoxItem* item )

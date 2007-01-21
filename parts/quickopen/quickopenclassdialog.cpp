@@ -41,23 +41,17 @@ QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent,
     nameLabel->setText( i18n("Class &name:") );
     itemListLabel->setText( i18n("Class &list:") );
 
-    findAllClasses( m_classList );
-    qHeapSort( m_classList );
-
-    m_completion = new KCompletion();
-    m_completion->insertItems( m_classList );
-    m_completion->setIgnoreCase( true );
+    findAllClasses( m_items );
+    qHeapSort( m_items );
 
     nameEdit->setFocus();
 
-    itemList->insertStringList( m_classList );
+    itemList->insertStringList( m_items );
     itemList->setCurrentItem(0);
 }
 
 QuickOpenClassDialog::~QuickOpenClassDialog()
 {
-    delete( m_completion );
-    m_completion = 0;
 }
 
 void QuickOpenClassDialog::slotExecuted( QListBoxItem* /*item*/ )

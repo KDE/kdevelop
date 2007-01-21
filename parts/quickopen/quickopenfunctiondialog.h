@@ -39,7 +39,6 @@ public:
   
   void gotoFile( QString name );
   
-  FunctionList* matchingFuncList(){ return funcList; };
   QuickOpenPart* part(){ return m_part; };
   
 public slots:
@@ -51,9 +50,8 @@ public slots:
 protected:
     void fillFunctions();
     int spaces;
-    FunctionList *m_functionDefList;
-    QStringList *m_functionStrList;
-    FunctionList *funcList;
+    FunctionList m_functionDefList;
+    QStringList m_functionStrList;
 	
 };
 

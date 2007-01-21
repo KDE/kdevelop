@@ -21,7 +21,10 @@
 #ifndef QUICKOPENDIALOG_H
 #define QUICKOPENDIALOG_H
 
+#include <qstringlist.h>
+
 #include <codemodel.h>
+
 #include "quickopenbase.h"
 
 class QuickOpenPart;
@@ -43,8 +46,9 @@ public slots:
   virtual void slotTextChanged(const QString&);
 
 protected:
-	KCompletion* m_completion;
-	QuickOpenPart* m_part;
+    QStringList wildCardCompletion( const QString & text );
+    QStringList m_items;
+    QuickOpenPart* m_part;
 
 };
 

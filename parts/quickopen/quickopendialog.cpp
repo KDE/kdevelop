@@ -19,6 +19,7 @@
  */
 
 #include <qapplication.h>
+#include <qregexp.h>
  
 #include <klistbox.h>
 #include <klineedit.h>
@@ -40,7 +41,7 @@ QuickOpenDialog::~QuickOpenDialog()
 void QuickOpenDialog::slotTextChanged(const QString & text)
 {
     itemList->clear();
-    itemList->insertStringList( m_completion->substringCompletion(text) );
+    itemList->insertStringList( wildCardCompletion( text ) );
     itemList->setCurrentItem(0);
 }
 
@@ -89,6 +90,22 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
 void QuickOpenDialog::selectClassViewItem(ItemDom item)
 {
     m_part->selectItem( item );
+}
+
+QStringList QuickOpenDialog::wildCardCompletion(const QString & text)
+{
+    QRegExp re( text, false, true );
+    QStringList matches;
+    QStringList::const_iterator it = m_items.begin();
+    while( it != m_items.end() )
+    {
+        if ( (*it).find( re ) != -1 )
+        {
+            matches << *it;
+        }
+        ++it;
+    }
+    return matches;
 }
 
 #include "quickopendialog.moc"

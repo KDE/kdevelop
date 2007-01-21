@@ -50,9 +50,6 @@ protected:
 
 protected slots:
     virtual void accept();
-
-private:
-    QStringList m_classList;
 };
 
 #endif
