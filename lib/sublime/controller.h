@@ -49,6 +49,9 @@ public:
     /**Shows an @p area in @p mainWindow.*/
     void showArea(Area *area, MainWindow *mainWindow);
 
+    /**Returns the area with given @p areaName.*/
+    Area *area(const QString &areaName);
+
     /**@return the list of areas available for use in this controller.
     This list does not include area clones.*/
     QList<Area*> &areas() const;

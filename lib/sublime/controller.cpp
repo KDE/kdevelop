@@ -48,6 +48,7 @@ struct ControllerPrivate {
 
     QList<Document*> documents;
     QList<Area*> areas;
+    QMap<QString, Area*> namedAreas;
     QMap<Area*, MainWindow*> shownAreas;
 };
 
@@ -96,6 +97,7 @@ QList<Document*> &Controller::documents() const
 void Controller::addArea(Area *area)
 {
     d->areas.append(area);
+    d->namedAreas[area->objectName()] = area;
 }
 
 void Controller::addDocument(Document *document)
@@ -117,6 +119,12 @@ void Controller::areaReleased()
 void Controller::areaReleased(Sublime::Area *area)
 {
     d->shownAreas.remove(area);
+    d->namedAreas.remove(area->objectName());
+}
+
+Area *Controller::area(const QString &areaName)
+{
+    return d->namedAreas[areaName];
 }
 
 }

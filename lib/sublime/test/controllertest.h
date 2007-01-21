@@ -26,6 +26,7 @@ class ControllerTest: public QObject {
 private slots:
     void testDocumentDeletion();
     void testAreaDeletion();
+    void testNamedAreas();
 };
 
 #endif
