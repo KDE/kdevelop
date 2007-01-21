@@ -22,6 +22,77 @@
 #include <kdebug.h>
 #include <kdatastream.h>
 
+///Little helper-functions to save a lot of typing and possible errors
+template<class MapContainer>
+bool eachCanUpdate( const MapContainer& old, const MapContainer& newMap ) {
+  if( old.size() != newMap.size() ) return false;
+
+  typename MapContainer::const_iterator oldIt = old.begin();
+  typename MapContainer::const_iterator newIt = newMap.begin();
+  while( oldIt != old.end() ) {
+    typedef typename MapContainer::mapped_type ListType;
+    if( (*oldIt).size() != (*newIt).size() ) return false;
+    typename ListType::const_iterator it1 = (*oldIt).begin();
+    typename ListType::const_iterator it2 = (*newIt).begin();
+
+    while( it1 != (*oldIt).end() ) {
+      if( !(*it1)->canUpdate( *it2 ) ) return false;
+      ++it1;
+      ++it2;
+    }
+    ++oldIt;
+    ++newIt;
+  }
+  return true;
+}
+
+template<class MapContainer>
+void eachUpdate( MapContainer& old, const MapContainer& newMap  ) {
+  if( old.size() != newMap.size() ) kdError( 9007 ) << "error in eachUpdate(...) 1" << endl;
+  typename MapContainer::iterator oldIt = old.begin();
+  typename MapContainer::const_iterator newIt = newMap.begin();
+  while( oldIt != old.end() ) {
+    if( (*oldIt).size() != (*newIt).size() ) kdError( 9007 ) << "error in eachUpdate(...) 2" << endl;
+    typedef typename MapContainer::mapped_type ListType;
+    typename ListType::iterator it1 = (*oldIt).begin();
+    typename ListType::const_iterator it2 = (*newIt).begin();
+    while( it1 != (*oldIt).end() ) {
+      (*it1)->update( *it2 );
+      ++it1;
+      ++it2;
+    }
+    ++oldIt;
+    ++newIt;
+  }
+}
+
+///Versions for contains that do not contain maps again
+template<class MapContainer>
+bool eachCanUpdateSingle( const MapContainer& old, const MapContainer& newMap ) {
+  if( old.size() != newMap.size() ) return false;
+
+  typename MapContainer::const_iterator oldIt = old.begin();
+  typename MapContainer::const_iterator newIt = newMap.begin();
+  while( oldIt != old.end() ) {
+    if( !(*oldIt)->canUpdate( *newIt ) ) return false;
+    ++oldIt;
+    ++newIt;
+  }
+  return true;
+}
+
+template<class MapContainer>
+void eachUpdateSingle( MapContainer& old, const MapContainer& newMap  ) {
+  if( old.size() != newMap.size() ) kdError( 9007 ) << "error in eachUpdate(...) 1" << endl;
+  typename MapContainer::iterator oldIt = old.begin();
+  typename MapContainer::const_iterator newIt = newMap.begin();
+  while( oldIt != old.end() ) {
+    (*oldIt)->update( *oldIt );
+    ++oldIt;
+    ++newIt;
+  }
+}
+
 CodeModel::CodeModel()
 {
     wipeout();
@@ -575,6 +646,20 @@ void CodeModelItem::setEndPosition( int line, int column )
     m_endColumn = column;
 }
 
+void CodeModelItem::update( const CodeModelItem* i ) {
+  m_startLine = i->m_startLine;
+  m_startColumn = i->m_startColumn;
+  m_endLine = i->m_endLine;
+  m_endColumn = i->m_endColumn;
+}
+
+bool CodeModelItem::canUpdate( const CodeModelItem* i ) const {
+  if( i->m_kind != m_kind || i->m_name != m_name )
+    return false;
+  return true;
+}
+
+
 // ------------------------------------------------------------------------
 NamespaceModel::NamespaceModel( CodeModel* model )
     : ClassModel( model )
@@ -890,6 +975,28 @@ bool ClassModel::addEnum( EnumDom e )
     return true;
 }
 
+void ClassModel::update( const ClassModel* klass ) {
+  CodeModelItem::update( klass );
+  eachUpdate( m_classes, klass->m_classes ) ;
+  eachUpdate( m_functions, klass->m_functions ) ;
+  eachUpdate( m_functionDefinitions, klass->m_functionDefinitions ) ;
+  eachUpdateSingle( m_variables, klass->m_variables ) ;
+  eachUpdateSingle( m_enumerators, klass->m_enumerators ) ;
+  eachUpdate( m_typeAliases, klass->m_typeAliases );
+}
+
+bool ClassModel::canUpdate( const ClassModel* klass ) const {
+    if( !CodeModelItem::canUpdate( klass ) )
+      return false;
+    
+    return eachCanUpdate( m_classes, klass->m_classes ) &&
+        eachCanUpdate( m_functions, klass->m_functions ) &&
+        eachCanUpdate( m_functionDefinitions, klass->m_functionDefinitions ) &&
+        eachCanUpdateSingle( m_variables, klass->m_variables ) &&
+        eachCanUpdateSingle( m_enumerators, klass->m_enumerators ) &&
+        eachCanUpdate( m_typeAliases, klass->m_typeAliases );
+}
+
 void ClassModel::removeEnum( EnumDom e )
 {
     m_enumerators.remove( e->name() );
@@ -1073,6 +1180,19 @@ void FunctionModel::removeArgument( ArgumentDom arg )
 {
     m_arguments.remove( arg );
 }
+
+void FunctionModel::update( const FunctionModel* i ) {
+  CodeModelItem::update( i );
+}
+
+bool FunctionModel::canUpdate( const FunctionModel* i ) const {
+  if( !CodeModelItem::canUpdate( i ) )
+    return false;
+  if( m_resultType != i->m_resultType || m_arguments.count() != i->m_arguments.count() || m_scope != i->m_scope )
+    return false;
+  return true;
+}
+
 
 // ------------------------------------------------------------------------
 VariableModel::VariableModel( CodeModel* model )
@@ -1358,6 +1478,26 @@ void NamespaceModel::write( QDataStream & stream ) const
     (*it).write( stream );
 }
 
+bool NamespaceModel::canUpdate( const NamespaceModel* ns ) const {
+  if( !ClassModel::canUpdate( ns ) )
+    return false;
+    ///@todo check namespace-aliases and imports
+//     const NamespaceModel::NamespaceAliasModelList& namespaceAliases = file->namespaceAliases();
+//     const NamespaceModel::NamespaceImportModelList& namespaceImports = file->namespaceImports();
+
+    return eachCanUpdateSingle( m_namespaces, ns->m_namespaces );
+}
+
+void NamespaceModel::update( const NamespaceModel* ns )
+{
+  ClassModel::update( ns );
+    ///@todo update namespace-aliases and imports
+//     const NamespaceModel::NamespaceAliasModelList& namespaceAliases = file->namespaceAliases();
+//     const NamespaceModel::NamespaceImportModelList& namespaceImports = file->namespaceImports();
+
+    eachUpdateSingle( m_namespaces, ns->m_namespaces );
+}
+
 void FileModel::read( QDataStream & stream )
 {
     stream >> m_groupId;
@@ -1479,6 +1619,18 @@ void VariableModel::write( QDataStream & stream ) const
 		stream << m_access << m_static << m_type << m_isEnumeratorVariable;
 }
 
+void VariableModel::update( const VariableModel* i ) {
+  CodeModelItem::update( i );
+}
+
+bool VariableModel::canUpdate( const VariableModel* i ) const {
+  if( !CodeModelItem::canUpdate( i ) )
+    return false;
+  if( m_access != i->m_access || m_static != i->m_static || m_type != i->m_type || m_isEnumeratorVariable != i->m_isEnumeratorVariable )
+    return false;
+  return true;
+}
+
 // -------------------------------------------------------
 EnumModel::EnumModel( CodeModel * model )
     : CodeModelItem( Enum, model)
@@ -1567,6 +1719,19 @@ void EnumModel::removeEnumerator( EnumeratorDom e )
     m_enumerators.remove( e->name() );
 }
 
+void EnumModel::update( const EnumModel* i ) {
+  CodeModelItem::update( i );
+}
+
+bool EnumModel::canUpdate( const EnumModel* i ) const {
+  if( !CodeModelItem::canUpdate( i ) )
+    return false;
+  ///@todo check not complete
+  if( m_access != i->m_access || m_enumerators.count() != i->m_enumerators.count() )
+    return false;
+  return true;
+}
+
 // ---------------------------------------------------------------
 TypeAliasModel::TypeAliasModel( CodeModel * model )
     : CodeModelItem( TypeAlias, model )
@@ -1595,6 +1760,16 @@ QString TypeAliasModel::type( ) const
 void TypeAliasModel::setType( const QString & type )
 {
     m_type = type;
+}
+
+void TypeAliasModel::update( const TypeAliasModel* i ) {
+  CodeModelItem::update( i );
+}
+
+bool TypeAliasModel::canUpdate( const TypeAliasModel* i ) const {
+  if( !CodeModelItem::canUpdate( i ) )
+    return false;
+  return m_type == i->m_type;
 }
 
 FileList FileModel::wholeGroup() {

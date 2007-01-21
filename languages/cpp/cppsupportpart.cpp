@@ -395,8 +395,6 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		if( !project()->isProjectFile( fileName ) || !m_parseEmitWaiting.reject( fileName ) ) {
             ParseEmitWaiting::Processed p = m_parseEmitWaiting.processFile( fileName, ( !m_hadErrors && hasErrors && !fromDisk && m_isTyping && fileName == m_activeFileName ) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None );
 			parseEmit( p );
-			if( !p.hasFlag( ParseEmitWaiting::Silent ) )
-				emitFileParsed( p );
         } else {
 	        ParseEmitWaiting::Processed p = m_fileParsedEmitWaiting.processFile( fileName );
 	        if( !p.hasFlag( ParseEmitWaiting::Silent ) )
@@ -2334,35 +2332,15 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 		QStringList l = files.res;
 
-		//QValueList<FileDom> fileBackups;
-
-		while(!l.isEmpty() )
-		{
-			if ( codeModel() ->hasFile( l.back() ) && m_backgroundParser->hasTranslationUnit( l.back() ) )
-			{
-				//fileBackups << codeModel()->fileByName( l.back() );
-				removeWithReferences( l.back() );
-
-				///update timestamps
-				  QString& fileName = l.back();
-
-				  QFileInfo fileInfo( fileName );
-				  QString path = URLUtil::canonicalPath( fileName );
-
-				  m_timestamp[ path ] = fileInfo.lastModified();
-			}
-
-			l.pop_back();
-		}
-
-		l = files.res;
-
 		///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
 		int currentGroup = 0;
 
 		QMap<QString, bool> wholeResult;
 		QStringList missing;
 
+		bool updated = true; ///Could the current code-model be updated to reflect the changes?
+		QMap<QString, FileDom> newFiles;
+		
 		while(!l.isEmpty() ) {
 			QString fileName = l.front();
 
@@ -2374,9 +2352,25 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 				{
 					if ( true /*!hasErrors*/ )
 					{
+						FileDom oldFile = codeModel()->fileByName( fileName );
+						
 						StoreWalker walker( fileName, codeModel() );
+						walker.setOverrides( newFiles );
+						
 						walker.parseTranslationUnit( *ast );
-						codeModel() ->addFile( walker.file() );
+
+						if( oldFile ) {
+							newFiles[fileName] = walker.file();
+							
+							///update timestamps
+							QFileInfo fileInfo( fileName );
+							QString path = URLUtil::canonicalPath( fileName );
+
+							m_timestamp[ path ] = fileInfo.lastModified();
+						} else {
+							codeModel() ->addFile( walker.file() );
+						}
+						
 						if( walker.file() ) {
 							QStringList grp = walker.file()->wholeGroupStrings();
 							for( QStringList::const_iterator it = grp.begin(); it != grp.end(); ++it )
@@ -2404,11 +2398,35 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			l.pop_front();
 		}
 
+		bool canUpdate = true;
+		for( QMap<QString, FileDom>::const_iterator it = newFiles.begin(); it != newFiles.end(); ++it ) {
+			FileDom oldFile = codeModel()->fileByName( it.key() );
+
+			if( !oldFile->canUpdate( *it ) ) {
+				canUpdate = false;
+				break;
+			}
+		}
+
+		if( canUpdate ) {
+			///Update the code-model
+			for( QMap<QString, FileDom>::const_iterator it = newFiles.begin(); it != newFiles.end(); ++it ) {
+				FileDom oldFile = codeModel()->fileByName( it.key() );
+				oldFile->update( *it );
+			}
+		} else {
+			///Remove the current files and replace them with the new ones
+			for( QMap<QString, FileDom>::const_iterator it = newFiles.begin(); it != newFiles.end(); ++it ) {
+				removeWithReferences( it.key() );
+				codeModel()->addFile( *it );
+			}
+		}
+		/*
 		///make the list unique
 
 		l.clear();
 		for( QMap<QString, bool>::const_iterator it = wholeResult.begin(); it != wholeResult.end(); ++it )
-			l << it.key();
+			l << it.key();*/
 
 		m_backgroundParser->unlock();
 
@@ -2422,10 +2440,21 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			for( QStringList::iterator it = files.res.begin(); it != files.res.end(); ++it )
 				m_backgroundParser->removeFile( *it );
 		} else {
-			QStringList l = files.res;
-			while(!l.isEmpty() ) {
-				emit addedSourceInfo( l.front() );
-				l.pop_front();
+			if( !canUpdate ) {  ///If the current model could be updated, do not emit addedSourceInfo(..) and remove the units from the parser, because nobody will be using them
+				QStringList l = files.res;
+				while(!l.isEmpty() ) {
+					emit addedSourceInfo( l.front() );
+					l.pop_front();
+				}
+				
+				if( !files.hasFlag( ParseEmitWaiting::Silent ) )
+					emitFileParsed( files );
+			} else {
+				QStringList l = files.res;
+				while( !l.isEmpty() ) {
+					emit codeModelUpdated( l.front() );
+					l.pop_front();
+				}
 			}
 		}
 		kdDebug( 9007 ) << "files in code-model after parseEmit: " << codeModel()->fileList().count() << " before: " << oldFileCount << endl;

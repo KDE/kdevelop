@@ -977,7 +977,7 @@ ClassDom StoreWalker::findClassFromScope( const QStringList& scope )
 		if( !m_imports.isEmpty() ) m_imports.back().first[ scopeText ] = c;
 		return c;
 	}
-	
+
 	if(!m_imports.isEmpty() && !m_imports.back().second.isEmpty()) {
 			///try the same using one of the imports(performance-wise this is not good, but simple)
 		
@@ -995,56 +995,52 @@ ClassDom StoreWalker::findClassFromScope( const QStringList& scope )
 	return c;
 }
 
+ClassDom  findScopeInFile( const QStringList& scope, NamespaceModel* glob ) {
+		if( !glob ) return ClassDom();
+		
+		ClassModel* curr =  glob ;
+		
+		QStringList::const_iterator mit = scope.begin();
+		
+		while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
+			curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
+			++mit;
+		}
+		
+		while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
+			ClassList cl = curr->classByName( *mit );
+			curr = &(**cl.begin() );
+			++mit;
+		}
+		
+		if(mit == scope.end()) {
+			return curr;
+		} else {
+			return ClassDom(0);
+		}
+}
+
 ClassDom StoreWalker::classFromScope(const QStringList& scope) {
 	if(scope.isEmpty())return ClassDom(0);
 
-	{
-		NamespaceDom glob = m_store->globalNamespace();
-		if( !glob ) return ClassDom();
-		
-		ClassModel* curr =  glob ;
-		
-		QStringList::const_iterator mit = scope.begin();
-		
-		while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
-			curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
-			++mit;
-		}
-		
-		while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
-			ClassList cl = curr->classByName( *mit );
-			curr = &(**cl.begin() );
-			++mit;
-		}
-		
-		if(mit == scope.end()) {
-			return curr;
-		}
-	}
-	{
-		FileDom glob = m_file;
-		if( !glob ) return ClassDom();
-		
-		ClassModel* curr =  glob ;
-		
-		QStringList::const_iterator mit = scope.begin();
-		
-		while(curr->isNamespace() && mit != scope.end() && ((NamespaceModel*)curr)->hasNamespace( *mit )) {
-			curr = &(*( ((NamespaceModel*)curr)->namespaceByName( *mit ) ));
-			++mit;
-		}
-		
-		while((curr->isNamespace() || curr->isClass()) && mit != scope.end() && curr->hasClass( *mit )) {
-			ClassList cl = curr->classByName( *mit );
-			curr = &(**cl.begin() );
-			++mit;
-		}
-		
-		if(mit == scope.end()) {
-			return curr;
-		}
-	}
+	//Since another instance of the current file may still be in the code-model this must be testede BEFORE the code-model
+	ClassDom c = findScopeInFile( scope, m_file.data() );
+	if( c ) return c;
+
+	NamespaceDom glob = m_store->globalNamespace();
+	if( !glob ) return ClassDom();
+	c = findScopeInFile( scope, glob );
 	
+	if( c ) {
+		QMap<QString, FileDom>::const_iterator it = m_overrides.find( c->fileName() );
+		//Find the class within the file that is overriding the one in code-model.
+		if( it != m_overrides.end() ) {
+			return findScopeInFile( scope, *it );
+		} else {
+			return c;
+		}
+	}
+
 	return ClassDom(0);
 }
 

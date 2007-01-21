@@ -163,6 +163,7 @@ private slots:
 	void slotCompletionBoxHidden();
 	void slotTextChanged();
 	void slotFileParsed( const QString& fileName );
+	void slotCodeModelUpdated( const QString& fileName );
     void slotTimeout();
     void slotStatusTextTimeout();
     void computeFileEntryList();

@@ -99,7 +99,13 @@ public:
     void popComment() {
         m_comments.pop_front();
     }
+
+    void setOverrides( const QMap<QString, FileDom>& overrides ) {
+      m_overrides = overrides;
+    }
 private:
+
+    QMap<QString, FileDom> m_overrides;
     
 	FileDom m_file;
 	QString m_fileName;

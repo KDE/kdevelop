@@ -866,6 +866,8 @@ m_codeCompleteCh2Rx( "(->)|(\\:\\:)" ) {
 
   connect( part, SIGNAL( fileParsed( const QString& ) ),
            this, SLOT( slotFileParsed( const QString& ) ) );
+  connect( part, SIGNAL( codeModelUpdated( const QString& ) ),
+           this, SLOT( slotCodeModelUpdated( const QString& ) ) );
 }
 
 CppCodeCompletion::~CppCodeCompletion( ) {
@@ -2849,11 +2851,20 @@ void CppCodeCompletion::synchronousParseReady( const QString& file, ParsedFilePo
   }
 }
 
+void CppCodeCompletion::slotCodeModelUpdated( const QString& fileName ) {
+  if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
+    return ;
+
+	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file updated %1" ).arg( m_activeFileName ), 1000 );
+
+  computeRecoveryPointsLocked();
+}
+
 void CppCodeCompletion::slotFileParsed( const QString& fileName ) {
   if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
     return ;
 
-	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed %1" ).arg( m_activeFileName ), 1000 );
+	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed %1 (cache emptied)" ).arg( m_activeFileName ), 1000 );
 
   emptyCache(); ///The cache has to be emptied, because the code-model changed. @todo Better: Only refresh the code-model(tell all code-model-types to refresh themselves on demand)
 

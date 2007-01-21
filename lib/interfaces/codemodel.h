@@ -489,6 +489,8 @@ public:
         Protected,     /**<Protected.*/
         Private        /**<Private.*/
     };
+    void update( const CodeModelItem* i );
+    bool canUpdate( const CodeModelItem* i ) const;
 
 protected:
     /**Constructor.
@@ -496,7 +498,6 @@ protected:
     @param model Code model which stores this item.*/
     CodeModelItem( int kind, CodeModel* model );
 
-    
 public:
     /**Destructor.*/
     virtual ~CodeModelItem();
@@ -917,6 +918,9 @@ public:
     @param e The enum model to remove from the model.*/
     void removeEnum( EnumDom e );
 
+    void update( const ClassModel* i );
+    bool canUpdate( const ClassModel* i ) const;
+    
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
@@ -1083,6 +1087,12 @@ public:
     @param ns The namespace model to remove from the model.*/
     void removeNamespace( NamespaceDom ns );
 
+    /**Updates this model so it has the same content as the other one. Only the line/column is updated. canUpdate(..) must be tested before.
+     * @param ns the namespace to match
+    */
+    void update( const NamespaceModel* ns );
+    bool canUpdate( const NamespaceModel* ns ) const;
+    
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
@@ -1108,6 +1118,7 @@ private:
     NamespaceImportModelList m_namespaceImports;
 
 private:
+  
     NamespaceModel( const NamespaceModel& source );
     void operator = ( const NamespaceModel& source );
     friend class CodeModel;
@@ -1332,6 +1343,9 @@ public:
 
     virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
     
+    void update( const FunctionModel* i );
+    bool canUpdate( const FunctionModel* i ) const;
+    
 private:
     QStringList m_scope;
     int m_access;
@@ -1432,6 +1446,9 @@ public:
     virtual void write( QDataStream& stream ) const;
 
     virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+
+    void update( const VariableModel* i );
+    bool canUpdate( const VariableModel* i ) const;
     
 private:
     int m_access;
@@ -1489,6 +1506,9 @@ public:
 
     ///The dump-function is not ready yet
     virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
+
+    void update( const EnumModel* i );
+    bool canUpdate( const EnumModel* i ) const;
     
 private:
     int m_access;
@@ -1575,6 +1595,9 @@ public:
     
     virtual void dump( std::ostream& file, bool recurse=false, QString Info="" );
     
+    void update( const TypeAliasModel* i );
+    bool canUpdate( const TypeAliasModel* i ) const;
+
 private:
     QString m_type;
     

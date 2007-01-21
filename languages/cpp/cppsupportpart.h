@@ -180,6 +180,8 @@ public:
 
 signals:
 	void fileParsed( const QString& fileName );
+    ///Emitted whenever a file was parsed, but the code-model could be updated(the file in the code-model did not have to be replaced)
+	void codeModelUpdated( const QString& fileName );
 	///Emitted whenever a translation-unit was parsed in the main thread
 	void synchronousParseReady( const QString& file, ParsedFilePointer unit );
     
