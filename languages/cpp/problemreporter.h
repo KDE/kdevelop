@@ -25,7 +25,7 @@
 #include <qdatetime.h>
 #include <map>
 #include <ext/hash_map>
-#include <lib/interfaces/hashedstring.h>
+#include "hashedstring.h"
 
 class CppSupportPart;
 class QTimer;
