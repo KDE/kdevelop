@@ -366,8 +366,13 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	QString id = d->declaratorId() ->unqualifiedName() ->text().stripWhiteSpace();
 	
 	QStringList scope = scopeOfDeclarator( d, m_currentScope );
-	ClassDom c = findClassFromScope( scope );
-	if( c ){
+	ClassDom c; ///c should be nonzero if it is a function-definition for a function within another class
+	if( !m_currentClass.top() ) {
+		///It is not a local definition within a class, so search the scope so it can be corrected using imports
+		c = findClassFromScope( scope );
+	}
+	
+	if( c ) {
 		scope = c->scope();
 		scope << c->name();
 	}
@@ -406,7 +411,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 		method->setVirtual( isVirtual );
 		
 		if ( m_currentClass.top() )
-			m_currentClass.top() ->addFunction( model_cast<FunctionDom>( method ) );
+			m_currentClass.top() ->addFunction( model_cast<FunctionDom>( method ) ); 
 		else
 			m_file->addFunction( model_cast<FunctionDom>( method ) );
 	}
