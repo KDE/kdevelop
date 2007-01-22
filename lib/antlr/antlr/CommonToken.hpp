@@ -3,8 +3,9 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -22,13 +23,13 @@ public:
 	CommonToken(const ANTLR_USE_NAMESPACE(std)string& s);
 
 	/// return contents of token
-	ANTLR_USE_NAMESPACE(std)string getText() const
+	virtual ANTLR_USE_NAMESPACE(std)string getText() const
 	{
 		return text;
 	}
 
 	/// set contents of token
-	void setText(const ANTLR_USE_NAMESPACE(std)string& s)
+	virtual void setText(const ANTLR_USE_NAMESPACE(std)string& s)
 	{
 		text = s;
 	}
@@ -37,7 +38,7 @@ public:
 	 * @see CharScanner::newline()
 	 * @see CharScanner::tab()
 	 */
-	int getLine() const
+	virtual int getLine() const
 	{
 		return line;
 	}
@@ -45,28 +46,23 @@ public:
 	 * @see CharScanner::newline()
 	 * @see CharScanner::tab()
 	 */
-	int getColumn() const
+	virtual int getColumn() const
 	{
 		return col;
 	}
 
 	/// set line for token
-	void setLine(int l)
+	virtual void setLine(int l)
 	{
 		line = l;
 	}
 	/// set column for token
-	void setColumn(int c)
+	virtual void setColumn(int c)
 	{
 		col = c;
 	}
 
-	bool isInvalid() const
-	{
-		return type==INVALID_TYPE;
-	}
-
-	ANTLR_USE_NAMESPACE(std)string toString() const;
+	virtual ANTLR_USE_NAMESPACE(std)string toString() const;
 	static RefToken factory();
 
 protected:

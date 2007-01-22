@@ -1,4 +1,4 @@
-// $ANTLR 2.7.2: expandedada.store.g -> AdaStoreWalkerTokenTypes.txt$
+// $ANTLR 2.7.7 (20061129): expandedada.store.g -> AdaStoreWalkerTokenTypes.txt$
 AdaStoreWalker    // output token vocab name
 PRAGMA="pragma"=4
 IDENTIFIER=5

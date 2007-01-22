@@ -3,8 +3,9 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -22,6 +23,7 @@ public:
 	RefAST clone( void ) const;
 
 	void addChild(RefAST c);
+	size_t getNumberOfChildren() const;
 	void setFirstChild(RefAST c);
 	void setNextSibling(RefAST n);
 

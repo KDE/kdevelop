@@ -17,13 +17,13 @@
 
 #line 19 "PascalParser.hpp"
 #include <antlr/config.hpp>
-/* $ANTLR 2.7.2: "pascal.g" -> "PascalParser.hpp"$ */
+/* $ANTLR 2.7.7 (20061129): "pascal.g" -> "PascalParser.hpp"$ */
 #include <antlr/TokenStream.hpp>
 #include <antlr/TokenBuffer.hpp>
 #include "PascalTokenTypes.hpp"
 #include <antlr/LLkParser.hpp>
 
-class PascalParser : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public PascalTokenTypes
+class CUSTOM_API PascalParser : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public PascalTokenTypes
 {
 #line 90 "pascal.g"
 
@@ -246,7 +246,10 @@ public:
 	public: void unsignedNumber();
 	public: void unsignedReal();
 public:
-	RefPascalAST getAST();
+	ANTLR_USE_NAMESPACE(antlr)RefAST getAST()
+	{
+		return ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST);
+	}
 	
 protected:
 	RefPascalAST returnAST;

@@ -1,8 +1,15 @@
 #ifndef INC_AdaStoreWalkerTokenTypes_hpp_
 #define INC_AdaStoreWalkerTokenTypes_hpp_
 
-/* $ANTLR 2.7.2: "expandedada.store.g" -> "AdaStoreWalkerTokenTypes.hpp"$ */
-struct AdaStoreWalkerTokenTypes {
+/* $ANTLR 2.7.7 (20061129): "expandedada.store.g" -> "AdaStoreWalkerTokenTypes.hpp"$ */
+
+#ifndef CUSTOM_API
+# define CUSTOM_API
+#endif
+
+#ifdef __cplusplus
+struct CUSTOM_API AdaStoreWalkerTokenTypes {
+#endif
 	enum {
 		EOF_ = 1,
 		PRAGMA = 4,
@@ -308,5 +315,7 @@ struct AdaStoreWalkerTokenTypes {
 		CHARACTER_STRING = 304,
 		NULL_TREE_LOOKAHEAD = 3
 	};
+#ifdef __cplusplus
 };
+#endif
 #endif /*INC_AdaStoreWalkerTokenTypes_hpp_*/

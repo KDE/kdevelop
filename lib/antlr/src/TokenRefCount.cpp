@@ -2,35 +2,35 @@
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/license.html
  *
- * $Id$
+ * $Id:$
  */
-#include "antlr/ASTRefCount.hpp"
-#include "antlr/AST.hpp"
+#include "antlr/TokenRefCount.hpp"
+#include "antlr/Token.hpp"
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 namespace antlr {
 #endif
 
-ASTRef::ASTRef(AST* p)
+TokenRef::TokenRef(Token* p)
 : ptr(p), count(1)
 {
 	if (p && !p->ref)
 		p->ref = this;
 }
 
-ASTRef::~ASTRef()
+TokenRef::~TokenRef()
 {
 	delete ptr;
 }
 
-ASTRef* ASTRef::getRef(const AST* p)
+TokenRef* TokenRef::getRef(const Token* p)
 {
 	if (p) {
-		AST* pp = const_cast<AST*>(p);
+		Token* pp = const_cast<Token*>(p);
 		if (pp->ref)
 			return pp->ref->increment();
 		else
-			return new ASTRef(pp);
+			return new TokenRef(pp);
 	} else
 		return 0;
 }

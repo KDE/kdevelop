@@ -222,7 +222,7 @@ void PascalSupportPart::parse( const QString & fileName )
 
         parser.compilationUnit();
         int errors = lexer.numberOfErrors() + parser.numberOfErrors();
-        RefPascalAST ast = parser.getAST();
+        RefPascalAST ast = RefPascalAST( parser.getAST() );
 
         if( errors == 0 && ast != antlr::nullAST ){
             kdDebug(9013) << "-------------------> start StoreWalker" << endl;

@@ -3,8 +3,9 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -14,6 +15,10 @@
 namespace antlr {
 #endif
 
+/** Baseclass for exceptions thrown by classes implementing the TokenStream
+ * interface.
+ * @see TokenStream
+ */
 class ANTLR_API TokenStreamException : public ANTLRException {
 public:
 	TokenStreamException() 

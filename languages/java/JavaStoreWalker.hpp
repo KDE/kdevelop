@@ -14,7 +14,7 @@
 #line 15 "JavaStoreWalker.hpp"
 #include <antlr/config.hpp>
 #include "JavaStoreWalkerTokenTypes.hpp"
-/* $ANTLR 2.7.2: "java.store.g" -> "JavaStoreWalker.hpp"$ */
+/* $ANTLR 2.7.7 (20061129): "java.store.g" -> "JavaStoreWalker.hpp"$ */
 #include <antlr/TreeParser.hpp>
 
 #line 13 "java.store.g"
@@ -31,12 +31,13 @@
  *
  * Version tracking now done with following ID:
  *
+ * $Id$
  *
  * This grammar is in the PUBLIC DOMAIN
  *
  * BUGS
  */
-class JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public JavaStoreWalkerTokenTypes
+class CUSTOM_API JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public JavaStoreWalkerTokenTypes
 {
 #line 43 "java.store.g"
 
@@ -72,7 +73,7 @@ public:
 #line 44 "JavaStoreWalker.hpp"
 public:
 	JavaStoreWalker();
-	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
+	static void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
 	int getNumTokens() const
 	{
 		return JavaStoreWalker::NUM_TOKENS;
@@ -81,6 +82,10 @@ public:
 	{
 		if( type > getNumTokens() ) return 0;
 		return JavaStoreWalker::tokenNames[type];
+	}
+	const char* const* getTokenNames() const
+	{
+		return JavaStoreWalker::tokenNames;
 	}
 	public: void compilationUnit(RefJavaAST _t);
 	public:  QString  packageDefinition(RefJavaAST _t);
@@ -132,7 +137,10 @@ public:
 	public: void constant(RefJavaAST _t);
 	public: void newArrayDeclarator(RefJavaAST _t);
 public:
-	RefJavaAST getAST();
+	ANTLR_USE_NAMESPACE(antlr)RefAST getAST()
+	{
+		return ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST);
+	}
 	
 protected:
 	RefJavaAST returnAST;

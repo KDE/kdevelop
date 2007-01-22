@@ -1,7 +1,8 @@
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 #include "antlr/config.hpp"
 #include "antlr/AST.hpp"
@@ -14,6 +15,7 @@
 namespace antlr {
 #endif
 
+const char* const CommonASTWithHiddenTokens::TYPE_NAME = "CommonASTWithHiddenTokens";
 // RK: Do not put constructor and destructor into the header file here..
 // this triggers something very obscure in gcc 2.95.3 (and 3.0)
 // missing vtables and stuff.
@@ -35,6 +37,8 @@ void CommonASTWithHiddenTokens::initialize(int t,const ANTLR_USE_NAMESPACE(std)s
 void CommonASTWithHiddenTokens::initialize(RefAST t)
 {
 	CommonAST::initialize(t);
+	hiddenBefore = RefCommonASTWithHiddenTokens(t)->getHiddenBefore();
+	hiddenAfter = RefCommonASTWithHiddenTokens(t)->getHiddenAfter();
 }
 
 void CommonASTWithHiddenTokens::initialize(RefToken t)

@@ -3,8 +3,9 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -16,31 +17,85 @@ namespace antlr {
 
 class ANTLR_API CommonAST : public BaseAST {
 public:
-	CommonAST();
-	CommonAST( RefToken t );
-	CommonAST( const CommonAST& other );
+	CommonAST()
+	: BaseAST()
+	, ttype( Token::INVALID_TYPE )
+	, text()
+	{
+	}
 
-	virtual ~CommonAST();
+	CommonAST( RefToken t )
+	: BaseAST()
+	, ttype( t->getType() )
+	, text( t->getText() )
+	{
+	}
 
-	virtual const char* typeName( void ) const;
+	CommonAST( const CommonAST& other )
+	: BaseAST(other)
+	, ttype(other.ttype)
+	, text(other.text)
+	{
+	}
+
+	virtual ~CommonAST()
+	{
+	}
+
+	virtual const char* typeName( void ) const
+	{
+		return CommonAST::TYPE_NAME;
+	}
+
 	/// Clone this AST node.
-	virtual RefAST clone( void ) const;
+	virtual RefAST clone( void ) const
+	{
+		CommonAST *ast = new CommonAST( *this );
+		return RefAST(ast);
+	}
 
-	virtual ANTLR_USE_NAMESPACE(std)string getText() const;
-	virtual int getType() const;
+	virtual ANTLR_USE_NAMESPACE(std)string getText() const
+	{
+		return text;
+	}
+	virtual int getType() const
+	{
+		return ttype;
+	}
 
-	virtual void initialize( int t, const ANTLR_USE_NAMESPACE(std)string& txt );
-	virtual void initialize( RefAST t );
-	virtual void initialize( RefToken t );
+	virtual void initialize( int t, const ANTLR_USE_NAMESPACE(std)string& txt )
+	{
+		setType(t);
+		setText(txt);
+	}
+
+	virtual void initialize( RefAST t )
+	{
+		setType(t->getType());
+		setText(t->getText());
+	}
+	virtual void initialize( RefToken t )
+	{
+		setType(t->getType());
+		setText(t->getText());
+	}
+
 #ifdef ANTLR_SUPPORT_XML
 	virtual void initialize( ANTLR_USE_NAMESPACE(std)istream& in );
 #endif
 
-	virtual void setText( const ANTLR_USE_NAMESPACE(std)string& txt );
-	virtual void setType( int type );
+	virtual void setText( const ANTLR_USE_NAMESPACE(std)string& txt )
+	{
+		text = txt;
+	}
+	virtual void setType( int type )
+	{
+		ttype = type;
+	}
 
 	static RefAST factory();
 
+	static const char* const TYPE_NAME;
 protected:
 	int ttype;
 	ANTLR_USE_NAMESPACE(std)string text;

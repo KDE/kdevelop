@@ -17,13 +17,13 @@
 
 #line 19 "JavaLexer.hpp"
 #include <antlr/config.hpp>
-/* $ANTLR 2.7.2: "java.g" -> "JavaLexer.hpp"$ */
+/* $ANTLR 2.7.7 (20061129): "java.g" -> "JavaLexer.hpp"$ */
 #include <antlr/CommonToken.hpp>
 #include <antlr/InputBuffer.hpp>
 #include <antlr/BitSet.hpp>
 #include "JavaTokenTypes.hpp"
 #include <antlr/CharScanner.hpp>
-class JavaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public JavaTokenTypes
+class CUSTOM_API JavaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public JavaTokenTypes
 {
 #line 1058 "java.g"
 

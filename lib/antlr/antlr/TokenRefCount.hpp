@@ -1,11 +1,11 @@
-#ifndef INC_ASTRefCount_hpp__
-# define INC_ASTRefCount_hpp__
+#ifndef INC_TokenRefCount_hpp__
+# define INC_TokenRefCount_hpp__
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
  * Software rights: http://www.antlr.org/license.html
  *
- * $Id$
+ * $Id:$
  */
 
 # include <antlr/config.hpp>
@@ -14,16 +14,16 @@
 namespace antlr {
 #endif
 
-	class AST;
+class Token;
 
-struct ANTLR_API ASTRef
+struct ANTLR_API TokenRef
 {
-	AST* const ptr;
+	Token* const ptr;
 	unsigned int count;
 
-	ASTRef(AST* p);
-	~ASTRef();
-	ASTRef* increment()
+	TokenRef(Token* p);
+	~TokenRef();
+	TokenRef* increment()
 	{
 		++count;
 		return this;
@@ -33,35 +33,35 @@ struct ANTLR_API ASTRef
 		return (--count==0);
 	}
 
-	static ASTRef* getRef(const AST* p);
+	static TokenRef* getRef(const Token* p);
 private:
-	ASTRef( const ASTRef& );
-	ASTRef& operator=( const ASTRef& );
+	TokenRef( const TokenRef& );
+	TokenRef& operator=( const TokenRef& );
 };
 
 template<class T>
-	class ANTLR_API ASTRefCount
+	class ANTLR_API TokenRefCount
 {
 private:
-	ASTRef* ref;
+	TokenRef* ref;
 
 public:
-	ASTRefCount(const AST* p=0)
-	: ref(p ? ASTRef::getRef(p) : 0)
+	TokenRefCount(const Token* p=0)
+	: ref(p ? TokenRef::getRef(p) : 0)
 	{
 	}
-	ASTRefCount(const ASTRefCount<T>& other)
+	TokenRefCount(const TokenRefCount<T>& other)
 	: ref(other.ref ? other.ref->increment() : 0)
 	{
 	}
-	~ASTRefCount()
+	~TokenRefCount()
 	{
 		if (ref && ref->decrement())
 			delete ref;
 	}
-	ASTRefCount<T>& operator=(AST* other)
+	TokenRefCount<T>& operator=(Token* other)
 	{
-		ASTRef* tmp = ASTRef::getRef(other);
+		TokenRef* tmp = TokenRef::getRef(other);
 
 		if (ref && ref->decrement())
 			delete ref;
@@ -70,11 +70,11 @@ public:
 
 		return *this;
 	}
-	ASTRefCount<T>& operator=(const ASTRefCount<T>& other)
+	TokenRefCount<T>& operator=(const TokenRefCount<T>& other)
 	{
 		if( other.ref != ref )
 		{
-			ASTRef* tmp = other.ref ? other.ref->increment() : 0;
+			TokenRef* tmp = other.ref ? other.ref->increment() : 0;
 
 			if (ref && ref->decrement())
 				delete ref;
@@ -89,10 +89,10 @@ public:
 	T* get()        const { return ref ? static_cast<T*>(ref->ptr) : 0; }
 };
 
-typedef ASTRefCount<AST> RefAST;
+typedef TokenRefCount<Token> RefToken;
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
 }
 #endif
 
-#endif //INC_ASTRefCount_hpp__
+#endif //INC_TokenRefCount_hpp__

@@ -3,8 +3,9 @@
 
 /* ANTLR Translator Generator
  * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/RIGHTS.html
+ * Software rights: http://www.antlr.org/license.html
  *
+ * $Id$
  */
 
 #include <antlr/config.hpp>
@@ -22,7 +23,7 @@ struct ASTRef;
 class ANTLR_API AST {
 public:
 	AST() : ref(0) {}
-	AST(const AST& other) : ref(other.ref->increment()) {}
+	AST(const AST&) : ref(0) {}
 	virtual ~AST() {}
 
 	/// Return the type name for this AST node. (for XML output)
@@ -62,6 +63,9 @@ public:
 
    /// Add a node to the end of the child list for this node
 	virtual void addChild(RefAST c) = 0;
+	/// Get the number of children. Returns 0 if the node is a leaf
+	virtual size_t getNumberOfChildren() const = 0;
+
 	/// Get the first child of this node; null if no children
 	virtual RefAST getFirstChild() const = 0;
 	/// Get  the next sibling in line after this one
@@ -147,7 +151,12 @@ extern ANTLR_API RefAST nullAST;
 extern ANTLR_API AST* const nullASTptr;
 
 #ifdef NEEDS_OPERATOR_LESS_THAN
-inline operator<(RefAST l,RefAST r); // {return true;}
+// RK: apparently needed by MSVC and a SUN CC, up to and including
+// 2.7.2 this was undefined ?
+inline bool operator<( RefAST l, RefAST r )
+{
+	return nullAST == l ? ( nullAST == r ? false : true ) : l->getType() < r->getType();
+}
 #endif
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

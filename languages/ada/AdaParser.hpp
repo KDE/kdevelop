@@ -9,13 +9,13 @@
 
 #line 11 "AdaParser.hpp"
 #include <antlr/config.hpp>
-/* $ANTLR 2.7.2: "ada.g" -> "AdaParser.hpp"$ */
+/* $ANTLR 2.7.7 (20061129): "ada.g" -> "AdaParser.hpp"$ */
 #include <antlr/TokenStream.hpp>
 #include <antlr/TokenBuffer.hpp>
 #include "AdaTokenTypes.hpp"
 #include <antlr/LLkParser.hpp>
 
-class AdaParser : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public AdaTokenTypes
+class CUSTOM_API AdaParser : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public AdaTokenTypes
 {
 #line 53 "ada.g"
 
@@ -301,7 +301,10 @@ public:
 	public: void task_body();
 	public: void protected_body();
 public:
-	RefAdaAST getAST();
+	ANTLR_USE_NAMESPACE(antlr)RefAST getAST()
+	{
+		return ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST);
+	}
 	
 protected:
 	RefAdaAST returnAST;
