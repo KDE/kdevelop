@@ -129,7 +129,7 @@ FileListItem * FileListWidget::itemForURL( KURL const & url )
 
 void FileListWidget::refreshFileList( )
 {
-// 	kdDebug() << k_funcinfo << endl;
+	QStringList selections = storeSelections();
 
 	KListView::clear();
 
@@ -140,6 +140,13 @@ void FileListWidget::refreshFileList( )
 		FileListItem * item = new FileListItem( this, *it );
 		item->setState( _part->partController()->documentState( *it ) );
 		++it;
+	}
+
+	restoreSelections( selections );
+
+	if ( selections.isEmpty() && firstChild() )
+	{
+		firstChild()->setSelected( true );
 	}
 
 	activePartChanged( _part->partController()->activePart() );
@@ -255,6 +262,34 @@ void FileListWidget::saveSelectedFiles( )
 void FileListWidget::reloadSelectedFiles( )
 {
 	_part->partController()->revertFiles( getSelectedURLs() );
+}
+
+QStringList FileListWidget::storeSelections()
+{
+	QStringList list;
+	QListViewItem  * item = firstChild();
+	while ( item )
+	{
+		if ( item->isSelected()  )
+		{
+			list << item->text(0);
+		}
+		item = item->nextSibling();
+	}
+	return list;
+}
+
+void FileListWidget::restoreSelections(const QStringList & list)
+{
+	QListViewItem * item = firstChild();
+	while ( item )
+	{
+		if ( list.contains( item->text(0) ) )
+		{
+			item->setSelected( true );
+		}
+		item = item->nextSibling();
+	}
 }
 
 #include "filelist_widget.moc"

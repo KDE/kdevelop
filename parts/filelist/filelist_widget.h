@@ -54,6 +54,8 @@ private slots:
 	void documentChangedState( const KURL &, DocumentState );
 	void refreshFileList();
 	void startRefreshTimer();
+	QStringList storeSelections();
+	void restoreSelections( const QStringList & list );
 
 private:
 	KURL::List getSelectedURLs();
