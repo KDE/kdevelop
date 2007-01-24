@@ -302,11 +302,11 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
     if (m_filelistDir.isEmpty())
        m_filelistDir=dirName;
 
-    if( QFileInfo(m_filelistDir + "/" + projectName.lower() + 
+    if( QFileInfo(m_filelistDir + "/" + projectName.lower() +
 			    ".kdevelop.filelist").exists() )
     {
         QDir( m_filelistDir ).rename(
-			projectName.lower()+".kdevelop.filelist", 
+			projectName.lower()+".kdevelop.filelist",
 			projectName+".kdevelop.filelist");
     }
     QFile f( m_filelistDir + "/" + projectName + ".kdevelop.filelist" );
@@ -498,8 +498,16 @@ QString CustomProjectPart::runArguments() const
 
 QString CustomProjectPart::activeDirectory() const
 {
-    QDomDocument &dom = *projectDom();
-    return DomUtil::readEntry(dom, "/kdevcustomproject/general/activedir");
+	QDomDocument &dom = *projectDom();
+	KParts::ReadOnlyPart* p = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+	if( p )
+    {
+		QString relpath = URLUtil::relativePath( projectDirectory(), p->url().directory() );
+		if( relpath.startsWith("/") )
+			relpath = relpath.right( relpath.length()-1 );
+		return relpath;
+	}
+	return DomUtil::readEntry(dom, "/kdevcustomproject/general/activedir", ".");
 }
 
 
@@ -535,10 +543,17 @@ void CustomProjectPart::addFile(const QString &fileName)
 void CustomProjectPart::addFiles ( const QStringList& fileList )
 {
 	QStringList::ConstIterator it;
-
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
-   {
-      m_sourceFiles.append (*it);
+	{
+		kdDebug(9025) << "Add file: " << *it << endl;
+		if( QDir::isRelativePath( *it ) )
+		{
+			m_sourceFiles.append (*it);
+		}
+		else
+		{
+			m_sourceFiles.append ( URLUtil::getRelativePath(projectDirectory(), *it ) );
+		}
 	}
 
 	saveProject();
