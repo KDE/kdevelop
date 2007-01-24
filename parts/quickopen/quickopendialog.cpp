@@ -31,6 +31,7 @@ QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const cha
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
     nameEdit->installEventFilter(this);
+    connect( &m_typeTimeout, SIGNAL(timeout()), this, SLOT(slotTextChangedDelayed()) );
 }
 
 QuickOpenDialog::~QuickOpenDialog()
@@ -39,8 +40,13 @@ QuickOpenDialog::~QuickOpenDialog()
 
 void QuickOpenDialog::slotTextChanged(const QString & text)
 {
+    m_typeTimeout.start( 300, true );
+}
+
+void QuickOpenDialog::slotTextChangedDelayed()
+{
     itemList->clear();
-    itemList->insertStringList( wildCardCompletion( text ) );
+    itemList->insertStringList( wildCardCompletion( nameEdit->text() ) );
     itemList->setCurrentItem(0);
 }
 
@@ -93,6 +99,8 @@ void QuickOpenDialog::selectClassViewItem(ItemDom item)
 
 QStringList QuickOpenDialog::wildCardCompletion(const QString & text)
 {
+    if ( text.isEmpty() ) return m_items;
+
     QRegExp re( text, false, true );
     QStringList matches;
     QStringList::const_iterator it = m_items.begin();
@@ -107,7 +115,7 @@ QStringList QuickOpenDialog::wildCardCompletion(const QString & text)
         }
         ++it;
     }
-    matches.sort();
+
     return matches;
 }
 

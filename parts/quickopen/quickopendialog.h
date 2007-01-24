@@ -22,6 +22,7 @@
 #define QUICKOPENDIALOG_H
 
 #include <qstringlist.h>
+#include <qtimer.h>
 
 #include <codemodel.h>
 
@@ -44,11 +45,13 @@ public:
   
 public slots:
   virtual void slotTextChanged(const QString&);
+  virtual void slotTextChangedDelayed();
 
 protected:
     QStringList wildCardCompletion( const QString & text );
     QStringList m_items;
     QuickOpenPart* m_part;
+    QTimer m_typeTimeout;
 
 };
 

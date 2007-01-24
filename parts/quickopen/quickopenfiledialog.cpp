@@ -55,7 +55,8 @@ QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, const KURL::List &
     nameLabel->setText( i18n("File &name:") );
     itemListLabel->setText( i18n("File &list:") );
 
-     m_items = urls.toStringList();
+    m_items = urls.toStringList();
+    m_items.sort();
 
     nameEdit->setFocus();
 

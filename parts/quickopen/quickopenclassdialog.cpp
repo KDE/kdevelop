@@ -42,7 +42,7 @@ QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent,
     itemListLabel->setText( i18n("Class &list:") );
 
     findAllClasses( m_items );
-    qHeapSort( m_items );
+    m_items.sort();
 
     nameEdit->setFocus();
 
