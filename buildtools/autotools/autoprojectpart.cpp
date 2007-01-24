@@ -1143,7 +1143,7 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
         kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
         program += titem->name;
     }else
-        program += buildDirectory() + "/" + URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) + "/" + m_widget->selectedSubproject()->subdir + "/" + titem->name;
+        program += buildDirectory() + "/" + URLUtil::getRelativePath( topsourceDirectory(), projectDirectory() ) + "/" + m_widget->selectedSubproject()->relativePath()+ "/" + titem->name;
 
     QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
 
