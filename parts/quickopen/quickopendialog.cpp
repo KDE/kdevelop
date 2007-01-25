@@ -27,6 +27,28 @@
 #include "quickopendialog.h"
 #include "quickopen_part.h"
 
+namespace
+{
+    void QStringList_unique( QStringList & list )
+    {
+        if ( list.size() < 2 ) return;
+
+        list.sort();
+
+        QStringList::iterator it = list.begin();
+        QStringList::iterator it2 = it;
+        while ( it2 != list.end() )
+        {
+            ++it2;
+            while ( it2 != list.end() && *it2 == *it )
+            {
+                it2 = list.remove( it2 );
+            }
+            it = it2;
+        }
+    }
+}
+
 QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
@@ -40,7 +62,7 @@ QuickOpenDialog::~QuickOpenDialog()
 
 void QuickOpenDialog::slotTextChanged(const QString & text)
 {
-    m_typeTimeout.start( 300, true );
+    m_typeTimeout.start( 100, true );
 }
 
 void QuickOpenDialog::slotTextChangedDelayed()
@@ -108,16 +130,16 @@ QStringList QuickOpenDialog::wildCardCompletion(const QString & text)
     {
         if ( (*it).find( re ) != -1 )
         {
-            if ( !matches.contains( *it ) )
-            {
-                matches << *it;
-            }
+            matches << *it;
         }
         ++it;
     }
+
+    QStringList_unique( matches );
 
     return matches;
 }
 
 #include "quickopendialog.moc"
 
+// kate: space-indent on; indent-width 4; tab-width 4; show-tabs on;
