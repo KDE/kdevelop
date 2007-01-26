@@ -46,6 +46,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <kparts/part.h>
 #include <kstatusbar.h>
 #include <ktexteditor/document.h>
+#include <kaction.h>
 
 #include <qdatastream.h>
 #include <qfile.h>
@@ -868,6 +869,9 @@ m_codeCompleteCh2Rx( "(->)|(\\:\\:)" ) {
            this, SLOT( slotFileParsed( const QString& ) ) );
   connect( part, SIGNAL( codeModelUpdated( const QString& ) ),
            this, SLOT( slotCodeModelUpdated( const QString& ) ) );
+	
+	new KAction( i18n("Jump to declaration under cursor"), CTRL+Key_Comma, this, SLOT(slotJumpToDeclCursorContext()), part->actionCollection(), "jump_to_declaration_cursor_context" );
+	new KAction( i18n("Jump to definition under cursor"), CTRL+Key_Period, this, SLOT(slotJumpToDefCursorContext()), part->actionCollection(), "jump_to_defintion_cursor_context" );
 }
 
 CppCodeCompletion::~CppCodeCompletion( ) {
@@ -4183,6 +4187,49 @@ HashedStringSet CppCodeCompletion::getIncludeFiles( const QString& fi ) {
 	return HashedStringSet();
 }
 
+void CppCodeCompletion::slotJumpToDeclCursorContext()
+{
+	kdDebug(9007) << k_funcinfo << endl;
+	jumpCursorContext( Declaration );
+}
+
+void CppCodeCompletion::slotJumpToDefCursorContext()
+{
+	kdDebug(9007) << k_funcinfo << endl;
+	jumpCursorContext( Definition );
+}
+
+void CppCodeCompletion::jumpCursorContext( FunctionType f )
+{
+	if ( !m_activeCursor ) return;
+	
+	SimpleTypeConfiguration conf( m_activeFileName );	
+	
+	unsigned int line;
+	unsigned int column;
+	m_activeCursor->cursorPositionReal( &line, &column );
+	
+	EvaluationResult result = evaluateExpressionAt( line, column, conf );
+	
+	TypeDesc type = result.resultType;
+	
+	if ( type.resolved() ) 
+	{
+		if ( type.resolved()->asFunction() ) 
+		{
+			DeclarationInfo d = type.resolved()->getDeclarationInfo();
+			QString fileName = d.file == "current_file" ? m_activeFileName : d.file.operator QString();
+			
+			if ( f == Definition && m_pSupport->switchHeaderImpl( fileName, d.startLine, d.startCol ) )
+				return;
+			
+			m_pSupport->partController()->editDocument( fileName, d.startLine );
+		}
+	}
+}
+
 
 #include "cppcodecompletion.moc"
 //kate: indent-mode csands; tab-width 2; space-indent off;
+
+

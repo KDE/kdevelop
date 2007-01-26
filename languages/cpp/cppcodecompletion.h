@@ -173,7 +173,12 @@ private slots:
 	void popupDefinitionAction( int number );
     void popupClassViewAction( int number );
 	void synchronousParseReady( const QString& file, ParsedFilePointer unit );
+	void slotJumpToDefCursorContext();
+	void slotJumpToDeclCursorContext();
+	
 private:
+	enum FunctionType { Declaration, Definition };
+	
     TypePointer createGlobalNamespace();
 	bool functionContains( FunctionDom f , int line, int col );
 	void getFunctionBody( FunctionDom f , int& line, int& col );
@@ -186,6 +191,7 @@ private:
 	FunctionDefinitionAST* functionDefinition( AST* node );
 	void computeRecoveryPoints( ParsedFilePointer unit );
 	void computeRecoveryPointsLocked();
+	void jumpCursorContext( FunctionType );
 	
     enum EvaluateExpressionOptions {
         IncludeStandardExpressions = 1,
