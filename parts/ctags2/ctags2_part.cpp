@@ -88,9 +88,9 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
-	new KAction( i18n("Lookup Current Text"), 0, 0, this, SLOT(slotLookup()), actionCollection(), "ctags_lookup_shortcut");
-	new KAction( i18n("Lookup Current Text as Declaration"), 0, 0, this, SLOT(slotLookupDeclaration()), actionCollection(), "ctags_declaration_shortcut");
-	new KAction( i18n("Lookup Current Text as Definition"), 0, 0, this, SLOT(slotLookupDefinition()), actionCollection(), "ctags_definition_shortcut");
+	new KAction( i18n("Lookup Current Text"), 0, CTRL+Key_Underscore, this, SLOT(slotLookup()), actionCollection(), "ctags_lookup_shortcut");
+	new KAction( i18n("Lookup Current Text as Declaration"), 0, CTRL+Key_Semicolon, this, SLOT(slotLookupDeclaration()), actionCollection(), "ctags_declaration_shortcut");
+	new KAction( i18n("Lookup Current Text as Definition"), 0, CTRL+Key_Colon, this, SLOT(slotLookupDefinition()), actionCollection(), "ctags_definition_shortcut");
 	new KAction( i18n("Jump to Next Match"), 0, 0, this, SLOT(slotGoToNext()), actionCollection(), "ctags_jump_to_next");
 	new KAction( i18n("Open Lookup Dialog"), 0, 0, this, SLOT(slotOpenLookup()), actionCollection(), "ctags_input_shortcut");
 }
