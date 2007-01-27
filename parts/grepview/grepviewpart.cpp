@@ -21,10 +21,13 @@
 #include <kiconloader.h>
 #include <kprocess.h>
 #include <kstringhandler.h>
+#include <ktexteditor/document.h>
 
 #include "kdevcore.h"
+#include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
 #include "kdevplugininfo.h"
+#include "kdeveditorutil.h"
 #include "grepviewwidget.h"
 
 static const KDevPluginInfo data("kdevgrepview");
@@ -126,7 +129,8 @@ void GrepViewPart::slotGrep()
 {
 	if ( !m_widget->isRunning() )
 	{
-		m_widget->showDialog();
+		QString contextString = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
+		m_widget->showDialogWithPattern( contextString );
 	}
 }
 
