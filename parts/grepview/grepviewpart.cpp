@@ -129,7 +129,11 @@ void GrepViewPart::slotGrep()
 {
 	if ( !m_widget->isRunning() )
 	{
-		QString contextString = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
+		QString contextString = KDevEditorUtil::currentSelection( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
+		if ( contextString.isEmpty() )
+		{
+			contextString = KDevEditorUtil::currentWord( dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
+		}
 		m_widget->showDialogWithPattern( contextString );
 	}
 }
