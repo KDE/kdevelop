@@ -517,6 +517,10 @@ private:
 	friend class KDevCppSupportIface;
 	friend class CppDriver;
 
+	// we need something to plug actions that are not in any menu 
+	// into in order for their shortcuts to work
+	QWidget m_DummyActionWidget;
+	
 	void emitSynchronousParseReady( const QString& file, ParsedFilePointer unit );
 
 	struct JobData

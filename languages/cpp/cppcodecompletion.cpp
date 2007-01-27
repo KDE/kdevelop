@@ -869,9 +869,14 @@ m_codeCompleteCh2Rx( "(->)|(\\:\\:)" ) {
            this, SLOT( slotFileParsed( const QString& ) ) );
   connect( part, SIGNAL( codeModelUpdated( const QString& ) ),
            this, SLOT( slotCodeModelUpdated( const QString& ) ) );
-	
-	new KAction( i18n("Jump to declaration under cursor"), CTRL+Key_Comma, this, SLOT(slotJumpToDeclCursorContext()), part->actionCollection(), "jump_to_declaration_cursor_context" );
-	new KAction( i18n("Jump to definition under cursor"), CTRL+Key_Period, this, SLOT(slotJumpToDefCursorContext()), part->actionCollection(), "jump_to_defintion_cursor_context" );
+
+  KAction * action = new KAction( i18n("Jump to declaration under cursor"), 0, CTRL + Key_Comma,
+    this, SLOT(slotJumpToDeclCursorContext()), part->actionCollection(), "jump_to_declaration_cursor_context" );
+  action->plug( &m_DummyActionWidget );
+
+  action = new KAction( i18n("Jump to definition under cursor"), 0, CTRL + Key_Period, 
+    this, SLOT(slotJumpToDefCursorContext()), part->actionCollection(), "jump_to_defintion_cursor_context" );
+  action->plug( &m_DummyActionWidget );
 }
 
 CppCodeCompletion::~CppCodeCompletion( ) {

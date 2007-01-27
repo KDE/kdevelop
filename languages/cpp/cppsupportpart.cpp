@@ -281,15 +281,15 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	action->setToolTip( i18n( "Make member" ) );
 	action->setWhatsThis( i18n( "<b>Make member</b><p>Creates a class member function in implementation file "
 	                            "based on the member declaration at the current line." ) );
-	action->plug( new QWidget() );
-
+	action->plug( &m_DummyActionWidget );
+	
 	action = new KAction( i18n( "Navigation Menu" ), 0, CTRL + ALT + Key_Space,
 	                      this, SLOT( slotNavigate() ),
 	                      actionCollection(), "edit_navigate" );
 	action->setToolTip( i18n( "Show the navigation-menu" ) );
 	action->setWhatsThis( i18n( "<b>Navigate</b><p>Shows a navigation-menu based on the type-evaluation of the item under the cursor." ) );
-	action->plug( new QWidget() );
-
+	action->plug( &m_DummyActionWidget );
+	
 
 	action = new KAction( i18n( "New Class..." ), "classnew", 0,
 	                      this, SLOT( slotNewClass() ),
@@ -544,7 +544,7 @@ void CppSupportPart::projectOpened( )
 
 	m_pCompletion = new CppCodeCompletion( this );
 	m_projectClosed = false;
-
+	
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 

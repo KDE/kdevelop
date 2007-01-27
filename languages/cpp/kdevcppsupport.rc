@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCppSupport" version="8">
+<kpartgui name="KDevCppSupport" version="9">
 <MenuBar>
  <Menu name="edit">
   <Action name="edit_complete_text"/>
@@ -17,7 +17,12 @@
   <Action name="project_newclass" group="project_classes"/>
  </Menu>
 </MenuBar>
-
+ <Menu name="hidden">
+  <Action name="edit_create_getter_setter"/>
+  <Action name="edit_navigate"/>
+  <Action name="jump_to_declaration_cursor_context"/>
+  <Action name="jump_to_defintion_cursor_context"/>
+ </Menu> 
 <ToolBar name="browserToolBar" position="Top" iconText="IconOnly">
   <Action name="project_newclass"/>
 </ToolBar>

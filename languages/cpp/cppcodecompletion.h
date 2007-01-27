@@ -310,6 +310,10 @@ private:
     PopupActions m_popupActions;
     PopupActions m_popupDefinitionActions;
     PopupClassViewActions m_popupClassViewActions;
+	
+	// we need something to plug actions that are not in any menu 
+	// into in order for their shortcuts to work
+	QWidget m_DummyActionWidget;
 };
 
 #endif 
