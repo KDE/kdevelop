@@ -204,7 +204,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_contextRemoveFiles.clear();
 
     if( fcontext->urls().size() == 1 )
-   {
+    {
       QString canContextFileName =URLUtil::canonicalPath(fcontext->urls().first().path());
       QString relContextFileName =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canContextFileName);
       QString popupstr =fcontext->urls().first().fileName();
@@ -214,7 +214,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         popup->insertSeparator();
         if (inProject)
         {
-	    m_contextRemoveFiles << relContextFileName;
+            m_contextRemoveFiles << relContextFileName;
             int id = popup->insertItem( i18n("Remove %1 From Project").arg(popupstr),
                                this, SLOT(slotRemoveFromProject()) );
             popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the list of files in project. "
@@ -222,7 +222,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         }
         else
         {
-	    m_contextAddFiles << relContextFileName;
+            m_contextAddFiles << relContextFileName;
             int id = popup->insertItem( i18n("Add %1 to Project").arg(popupstr),
                                this, SLOT(slotAddToProject()) );
             popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file to the list of files in project. "
@@ -232,34 +232,34 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     else   // more than one file
     {
         const KURL::List urls = fcontext->urls();
-	for (KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it)
-	{
-	    if ((*it).isLocalFile())
-	    {
-	    	QString canPath(URLUtil::canonicalPath((*it).path()));
-         QString relPath =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canPath);
-         if (project()->isProjectFile(canPath))
-            m_contextRemoveFiles << relPath;
-         else
-            m_contextAddFiles << relPath;
-	    }
-	}
+        for (KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it)
+        {
+            if ((*it).isLocalFile())
+            {
+                QString canPath(URLUtil::canonicalPath((*it).path()));
+                QString relPath =URLUtil::extractPathNameRelative(URLUtil::canonicalPath(project()->projectDirectory()), canPath);
+                if (project()->isProjectFile(canPath))
+                    m_contextRemoveFiles << relPath;
+                else
+                    m_contextAddFiles << relPath;
+            }
+        }
 
         if (m_contextAddFiles.size() > 0)
-	{
+        {
             int id = popup->insertItem( i18n("Add Selected Files to Project"),
                                this, SLOT(slotAddToProject()) );
             popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds selected files to the list of files in project. "
                 "Note that the files should be manually added to corresponding makefile or build.xml."));
-	}
+        }
 
-	if (m_contextRemoveFiles.size() > 0)
-	{
+        if (m_contextRemoveFiles.size() > 0)
+        {
             int id = popup->insertItem( i18n("Remove Selected Files From Project"),
                                this, SLOT(slotRemoveFromProject()) );
             popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes selected files from the list of files in project. "
                 "Note that the files should be manually excluded from corresponding makefile or build.xml."));
-	}
+        }
     }
 }
 
