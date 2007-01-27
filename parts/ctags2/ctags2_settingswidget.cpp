@@ -79,7 +79,11 @@ void CTags2SettingsWidget::loadSettings()
 	showDefinitionBox->setChecked( config->readBoolEntry( "ShowDefinition", true ) );
 	showLookupBox->setChecked( config->readBoolEntry( "ShowLookup", true ) );
 	jumpToFirstBox->setChecked( config->readBoolEntry( "JumpToFirst", false ) );
-	binaryPath->setURL( config->readEntry( "ctags binary" ) );
+	QString ctagsBinary = config->readEntry( "ctags binary" ).stripWhiteSpace();
+	if ( !ctagsBinary.isEmpty() )
+	{
+		binaryPath->setURL( ctagsBinary );
+	}
 
 	config->setGroup( "CTAGS-tagsfiles" );
 	QMap<QString,QString> entryMap = config->entryMap( "CTAGS-tagsfiles" );

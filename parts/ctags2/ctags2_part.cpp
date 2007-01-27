@@ -149,7 +149,11 @@ bool CTags2Part::createTagsFile(const QString& tagFile, const QString& dir)
 	// get name of the ctags binary
 	KConfig * config = kapp->config();
 	config->setGroup( "CTAGS" );
-	QString ctagsBinary = config->readEntry( "ctags binary", "ctags" ).stripWhiteSpace();
+	QString ctagsBinary = config->readEntry( "ctags binary" ).stripWhiteSpace();
+	if ( ctagsBinary.isEmpty() )
+	{
+		ctagsBinary = "ctags";
+	}
 
 	// set a default argument list
 	QString argsDefault = "-R --c++-types=+px --excmd=pattern --exclude=Makefile --exclude=.";
