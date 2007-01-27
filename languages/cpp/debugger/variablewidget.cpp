@@ -42,6 +42,7 @@
 
 #include <set>
 #include <typeinfo>
+#include <cctype>
 
 /** The variables widget is passive, and is invoked by the rest of the
     code via two main slots:
@@ -1266,7 +1267,7 @@ void VarItem::valueDone(const GDBMI::ResultRecord& r)
             {
                 char c = (char)value;
                 encoded += " '";
-                if (isprint(c))
+                if (std::isprint(c))
                     encoded += c;
                 else {
                     // Try common escape characters.

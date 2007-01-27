@@ -30,6 +30,7 @@
 
 #include <string>
 #include <vector>
+#include <cctype>
 
 using namespace std;
 
@@ -291,7 +292,7 @@ class ASEnhancer
 	private:    // inline functions
 		// check if a specific character can be used in a legal variable/method/class name
 		inline bool isLegalNameCharX(char ch) const {
-			return (isalnum(ch) || ch == '.' || ch == '_' || (!isCStyle && ch == '$') || (isCStyle && ch == '~'));
+			return (std::isalnum(ch) || ch == '.' || ch == '_' || (!isCStyle && ch == '$') || (isCStyle && ch == '~'));
 		}
 
 		// check if a specific character is a whitespace character
