@@ -636,7 +636,10 @@ void CppSupportPart::slotNavigate() {
 		codeCompletion()->contextEvaluationMenus( m_navigationMenu, 0, curLine, curCol );
 
 		m_navigationMenu->move( m_activeView->mapToGlobal( m_activeViewCursor->cursorCoordinates() ) );
-		m_navigationMenu->show();
+		if ( m_navigationMenu->count() > 0 )
+		{
+			m_navigationMenu->show();
+		}
 	}
 }
 
