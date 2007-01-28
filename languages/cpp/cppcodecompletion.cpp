@@ -899,7 +899,7 @@ void CppCodeCompletion::clearStatusText() {
 void CppCodeCompletion::slotStatusTextTimeout() {
   if ( m_statusTextList.isEmpty() || !m_pSupport )
     return ;
-  m_pSupport->mainWindow() ->statusBar() ->message( m_statusTextList.front().second, m_statusTextList.front().first );
+//   m_pSupport->mainWindow() ->statusBar() ->message( m_statusTextList.front().second, m_statusTextList.front().first );
   m_showStatusTextTimer->start( m_statusTextList.front().first , true );
   m_statusTextList.pop_front();
 }
@@ -1951,14 +1951,14 @@ void CppCodeCompletion::needRecoveryPoints() {
     if ( !ast ) {
       kdDebug( 9007 ) << "background-parser is missing the translation-unit. The file needs to be reparsed." << endl;
 	    m_pSupport->parseFileAndDependencies( m_activeFileName, true );
-	    m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Background-parser is missing the necessary translation-unit. It will be computed, but this completion will fail." ).arg( m_activeFileName ), 2000 );
+// 	    m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Background-parser is missing the necessary translation-unit. It will be computed, but this completion will fail." ).arg( m_activeFileName ), 2000 );
 	    return;
     } else {
       computeRecoveryPointsLocked();
     }
 	  if ( this->d->recoveryPoints.isEmpty() ) {
 		  kdDebug( 9007 ) << "Failed to compute recovery-points for " << m_activeFileName << endl;
-		  m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Failed to compute recovery-points for %1" ).arg( m_activeFileName ), 1000 );
+// 		  m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Failed to compute recovery-points for %1" ).arg( m_activeFileName ), 1000 );
 	  } else {
 		  kdDebug( 9007 ) << "successfully computed recovery-points for " << m_activeFileName << endl;
 	  }
@@ -1972,7 +1972,7 @@ EvaluationResult CppCodeCompletion::evaluateExpressionType( int line, int column
   FileDom file = m_pSupport->codeModel() ->fileByName( m_activeFileName );
 
   if ( !file ) {
-    m_pSupport->mainWindow() ->statusBar() ->message( i18n( "File %1 does not exist in the code-model" ).arg( m_activeFileName ), 1000 );
+//     m_pSupport->mainWindow() ->statusBar() ->message( i18n( "File %1 does not exist in the code-model" ).arg( m_activeFileName ), 1000 );
     kdDebug( 9007 ) << "Error: file " << m_activeFileName << " could not be located in the code-model, code-completion stopped\n";
     return SimpleType();
   }
@@ -2215,7 +2215,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ ) {
   FileDom file = m_pSupport->codeModel() ->fileByName( m_activeFileName );
 
   if ( !file ) {
-    m_pSupport->mainWindow() ->statusBar() ->message( i18n( "File %1 does not exist in the code-model" ).arg( m_activeFileName ), 1000 );
+//     m_pSupport->mainWindow() ->statusBar() ->message( i18n( "File %1 does not exist in the code-model" ).arg( m_activeFileName ), 1000 );
     kdDebug( 9007 ) << "Error: file " << m_activeFileName << " could not be located in the code-model, code-completion stopped\n";
     return ;
   }
@@ -2864,7 +2864,7 @@ void CppCodeCompletion::slotCodeModelUpdated( const QString& fileName ) {
   if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
     return ;
 
-	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file updated %1" ).arg( m_activeFileName ), 1000 );
+// 	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file updated %1" ).arg( m_activeFileName ), 1000 );
 
   computeRecoveryPointsLocked();
 }
@@ -2873,7 +2873,7 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName ) {
   if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
     return ;
 
-	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed %1 (cache emptied)" ).arg( m_activeFileName ), 1000 );
+// 	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Current file parsed %1 (cache emptied)" ).arg( m_activeFileName ), 1000 );
 
   emptyCache(); ///The cache has to be emptied, because the code-model changed. @todo Better: Only refresh the code-model(tell all code-model-types to refresh themselves on demand)
 
@@ -4232,6 +4232,55 @@ void CppCodeCompletion::jumpCursorContext( FunctionType f )
 		}
 	}
 }
+
+QString CppCodeCompletion::createTypeInfoString( int line, int column ) 
+{
+	QString typeInfoString;
+	
+	SimpleTypeConfiguration conf( m_activeFileName );
+	EvaluationResult type = evaluateExpressionAt( line, column, conf );
+	
+	if ( type.expr.expr().stripWhiteSpace().isEmpty() )
+		return typeInfoString;
+	
+	typeInfoString += type.expr.expr() + QString(" : " );
+	
+	if ( type->resolved() ) 
+	{ 
+		QString scope = type->resolved()->scope().join("::");
+		int pos = scope.findRev("::");
+		if ( scope.isEmpty() || pos == -1 )
+		{
+			scope = "::";
+		}
+		else
+		{
+			scope.truncate( pos + 2 );
+		}
+		
+		typeInfoString += scope + type->fullNameChain()  + QString( i18n(" (resolved) ") );
+	}
+	else
+	{
+		if ( type ) 
+		{
+			if( !BuiltinTypes::isBuiltin( type.resultType ) ) 
+			{
+				typeInfoString += type->fullNameChain() + QString( i18n(" (unresolved) ") );
+			} 
+			else 
+			{
+				typeInfoString += type->fullNameChain() + ", " + BuiltinTypes::comment( type.resultType ) + QString( i18n(" (builtin type) ") );
+			}
+		}
+		else
+		{
+			typeInfoString += QString( i18n(" (unresolved) ") );
+		}
+	}
+	return typeInfoString;
+}
+
 
 
 #include "cppcodecompletion.moc"

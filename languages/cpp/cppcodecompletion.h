@@ -124,6 +124,8 @@ public:
 		return m_completionMode;
 	}
 
+	QString createTypeInfoString( int line, int column );
+	
     QString replaceCppComments( const QString& contents );
     int expressionAt( const QString& text, int index );
 	QStringList splitExpression( const QString& text );

@@ -40,6 +40,7 @@
 #include "kdevsourceformatter.h"
 #include "kdevcreatefile.h"
 #include "qtbuildconfig.h"
+#include "kdeveditorutil.h"
 #include <ktexteditor/viewcursorinterface.h>
 #include <kpopupmenu.h>
 // wizards
@@ -2582,6 +2583,15 @@ FunctionDefinitionDom CppSupportPart::currentFunctionDefinition( )
 
 void CppSupportPart::slotCursorPositionChanged()
 {
+	if ( codeCompletion() )
+	{
+		unsigned int line;
+		unsigned int column;
+		KDevEditorUtil::currentPositionReal( &line, &column, dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
+		QString typeInfoString = codeCompletion()->createTypeInfoString( line, column );
+		mainWindow()->statusBar()->message( typeInfoString );
+	}
+	
 	//    m_functionHintTimer->changeInterval( 1000 );
 	if ( splitHeaderSourceConfig()->splitEnabled()
 	     && splitHeaderSourceConfig()->autoSync() )
