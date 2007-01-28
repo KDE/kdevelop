@@ -179,7 +179,7 @@ void Debugger::marksChanged()
                 }
             }
 
-            if ( bpchanged )
+            if ( bpchanged && m_partController->activePart() == doc )
             {
                 //bring focus back to the editor
                 m_partController->activatePart( doc );
