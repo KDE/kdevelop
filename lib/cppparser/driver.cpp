@@ -349,6 +349,11 @@ class Driver::ParseHelper {
 
 
 void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
+
+  // this can happen if the parser was invoked on a snippet of text and not a file
+  if ( fileName.isEmpty() || !m_currentParsedFile ) 
+    return;
+
   //@todo prevent cyclic dependency-loops
   QFileInfo fileInfo( dep.first );
   QString fn = fileInfo.absFilePath();
