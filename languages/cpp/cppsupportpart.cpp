@@ -2585,11 +2585,13 @@ void CppSupportPart::slotCursorPositionChanged()
 {
 	if ( codeCompletion() )
 	{
-		unsigned int line;
-		unsigned int column;
-		KDevEditorUtil::currentPositionReal( &line, &column, dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) );
-		QString typeInfoString = codeCompletion()->createTypeInfoString( line, column );
-		mainWindow()->statusBar()->message( typeInfoString );
+		unsigned int line = 0;
+		unsigned int column = 0;
+		if ( KDevEditorUtil::currentPositionReal( &line, &column, dynamic_cast<KTextEditor::Document*>( partController()->activePart() ) ) )
+		{
+			QString typeInfoString = codeCompletion()->createTypeInfoString( line, column );
+			mainWindow()->statusBar()->message( typeInfoString );
+		}
 	}
 	
 	//    m_functionHintTimer->changeInterval( 1000 );

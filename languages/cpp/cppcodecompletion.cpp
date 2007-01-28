@@ -1344,12 +1344,11 @@ bool CppCodeCompletion::correctAccessOp( QStringList ptrList, MemberAccessOp acc
 EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf, bool ifUnknownSetType ) {
   kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
 
+  if ( !m_pSupport || !m_activeEditor )
+    return EvaluationResult();
   if ( line < 0 || line >= ( int ) m_activeEditor->numLines() )
     return EvaluationResult();
-  if ( column < 0 || column >= m_activeEditor->lineLength( line ) )
-    return EvaluationResult();
-
-  if ( !m_pSupport || !m_activeEditor )
+	if ( column < 0 || column >= m_activeEditor->lineLength( line ) )
     return EvaluationResult();
 
   {
