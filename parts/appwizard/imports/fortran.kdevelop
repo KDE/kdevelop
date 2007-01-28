@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevCustomProject</projectmanagement>
   <primarylanguage>Fortran77</primarylanguage>
   <ignoreparts>
@@ -11,11 +11,7 @@
  </general>
  <kdevautoproject>
   <general>
-   <activetarget>src/$APPNAMELC$</activetarget>
   </general>
-  <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
-  </run>
  </kdevautoproject>
  <kdevdoctreeview>
     <ignoretocs>

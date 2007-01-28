@@ -160,6 +160,8 @@ void ImportDialog::accept()
     DomUtil::writeEntry( projectDOM, "/general/projectname", name_edit->text() );
     if ( !projectVersion.isNull()){
         DomUtil::writeEntry( projectDOM, "/general/version", projectVersion );
+    } else {
+        DomUtil::writeEntry( projectDOM, "/general/version", "1" );
     }
 
     // figure out what plugins we should disable by default

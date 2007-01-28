@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevAdaProject</projectmanagement>
   <primarylanguage>Ada</primarylanguage>
   <keywords>
@@ -13,8 +13,6 @@
  </general>
  <kdevadaproject>
   <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
-   <mainsource>src/$APPNAMELC$.adb</mainsource>
    <terminal>true</terminal>
   </run>
  </kdevadaproject>

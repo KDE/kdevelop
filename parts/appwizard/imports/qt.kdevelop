@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevCustomProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
@@ -21,7 +21,6 @@
  </kdevfileview>
  <kdevcustomproject>
   <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
   </run>
  </kdevcustomproject>
  <kdevdebugger>

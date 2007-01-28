@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>Python</primarylanguage>
   <ignoreparts>
@@ -13,7 +13,6 @@
  </general>
  <kdevscriptproject>
   <run>
-   <mainprogram>./$APPNAMELC$.py</mainprogram>
   </run>
  </kdevscriptproject>
  <kdevdoctreeview>

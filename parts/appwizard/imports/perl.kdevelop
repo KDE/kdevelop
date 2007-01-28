@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>Perl</primarylanguage>
   <ignoreparts>
@@ -11,7 +11,6 @@
  </general>
  <kdevscriptproject>
   <run>
-   <mainprogram>./$APPNAMELC$.pl</mainprogram>
   </run>
  </kdevscriptproject>
  <kdevdoctreeview>
