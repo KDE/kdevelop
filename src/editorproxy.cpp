@@ -227,7 +227,10 @@ void EditorProxy::showPopup( )
 			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
 			QPopupMenu * popup = static_cast<QPopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
 
-			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
+			if ( popup )
+			{
+				popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
+			}
 		}
 	}
 }
