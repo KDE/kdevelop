@@ -6,7 +6,7 @@
 		<Action name="ctags_lookup_shortcut"/>
 		<Action name="ctags_declaration_shortcut"/>
 		<Action name="ctags_definition_shortcut"/>
-		<Action name="ctags_jump_to_next""/>
-		<Action name="ctags_input_shortcut""/>
+		<Action name="ctags_jump_to_next"/>
+		<Action name="ctags_input_shortcut"/>
 	</Menu>
 </kpartplugin>
