@@ -23,7 +23,7 @@
 namespace Koncrete
 {
 
-BuildManager::BuildManager(KInstance* instance, QObject* parent)
+BuildManager::BuildManager(const KComponentData &instance, QObject* parent)
 : FileManager(instance, parent)
 {
 }

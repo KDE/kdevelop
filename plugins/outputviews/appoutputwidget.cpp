@@ -41,7 +41,7 @@ AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
   setObjectName(QString::fromUtf8("app output widget"));
   setContextMenuPolicy(Qt::CustomContextMenu);
 
-  KConfig *config = KGlobal::config();
+  KSharedConfig::Ptr config = KGlobal::config();
   config->setGroup("General Options");
   setFont(config->readFontEntry("OutputViewFont"));
 

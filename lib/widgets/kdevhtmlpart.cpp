@@ -93,7 +93,7 @@ KDevHTMLPart::KDevHTMLPart()
 //END documentation history stuff
 
   //settings:
-  KConfig *appConfig = KGlobal::config();
+  KSharedConfig::Ptr appConfig = KGlobal::config();
   appConfig->setGroup("KHTMLPart");
   setStandardFont(appConfig->readEntry("StandardFont",
       settings()->stdFontName()));

@@ -34,7 +34,7 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     : KDevMakeFrontend(&data, parent)
 {
     setObjectName(QString::fromUtf8(name));
-    setInstance(MakeViewFactory::instance());
+    setComponentData(MakeViewFactory::componentData());
 
     setXMLFile("kdevmakeview.rc");
 

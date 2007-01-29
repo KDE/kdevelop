@@ -52,7 +52,7 @@ QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringLis
     : KDevPlugin(&data, parent)
 {
     setObjectName(QString::fromUtf8(name));
-    setInstance(QuickOpenFactory::instance());
+    setComponentData(QuickOpenFactory::componentData());
     setXMLFile("kdevpart_quickopen.rc");
 
     m_actionQuickOpen = new KAction( i18n("Quick Open..."), Qt::CTRL + Qt::ALT + Qt::Key_O,

@@ -67,7 +67,7 @@ ToolsConfigWidget::~ToolsConfigWidget()
 
 void ToolsConfigWidget::readGroup(const QString &group, Q3Dict<ToolsConfigEntry> *entryDict)
 {
-    KConfig *config = ToolsFactory::instance()->config();
+    KConfig *config = ToolsFactory::componentData().config();
     config->setGroup("External Tools");
     QStringList list = config->readListEntry(group);
 
@@ -89,7 +89,7 @@ void ToolsConfigWidget::readGroup(const QString &group, Q3Dict<ToolsConfigEntry>
 
 void ToolsConfigWidget::storeGroup(const QString &group, const Q3Dict<ToolsConfigEntry> &entryDict)
 {
-    KConfig *config = ToolsFactory::instance()->config();
+    KConfig *config = ToolsFactory::componentData().config();
 
     QStringList list;
 

@@ -58,7 +58,7 @@ public:
      * @param instance The instance object created by the plugin factory
      * @param parent The parent object for the plugin.
      */
-    MakeFrontend(KInstance *instance, QObject *parent=0)
+    MakeFrontend(const KComponentData &instance, QObject *parent=0)
         :Plugin(instance, parent) {}
 
     /**@return The widget where the make output is shown.*/

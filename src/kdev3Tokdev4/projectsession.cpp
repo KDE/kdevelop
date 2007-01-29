@@ -25,7 +25,7 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include "ktexteditor/document.h"
 #include "ktexteditor/view.h"
 
@@ -109,7 +109,7 @@ bool ProjectSession::restoreFromFile( const QString & sessionFileName, const Q3V
        while( it != plugins.end() )
        {
               KDevPlugin* pPlugin = (*it);
-              QString pluginName = pPlugin->instance()->instanceName();
+              QString pluginName = pPlugin->componentData().componentName();
               QDomElement pluginEl = pluginListEl.namedItem(pluginName).toElement();
               if (!pluginEl.isNull()) {
                      // now plugin, load what you find!
@@ -378,7 +378,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
        while( itt != plugins.end() )
        {
               KDevPlugin* pPlugin = (*itt);
-              QString pluginName = pPlugin->instance()->instanceName();
+              QString pluginName = pPlugin->componentData().componentName();
               QDomElement pluginEl = domdoc.createElement(pluginName);
 
               // now plugin, save what you have!

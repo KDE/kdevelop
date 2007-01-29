@@ -27,7 +27,7 @@
 #include <kprocess.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstatusbar.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -742,7 +742,7 @@ Q3PopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
 void MakeWidget::toggleLineWrapping()
 {
     m_bLineWrapping = !m_bLineWrapping;
-    KConfig *pConfig = KGlobal::config();
+    KSharedConfig::Ptr pConfig = KGlobal::config();
     pConfig->setGroup( "MakeOutputView" );
     pConfig->writeEntry( "LineWrapping", m_bLineWrapping );
     pConfig->sync();
@@ -790,7 +790,7 @@ void MakeWidget::slotFullCompilerOutput()
 void MakeWidget::setCompilerOutputLevel( EOutputLevel level )
 {
     m_compilerOutputLevel = level;
-    KConfig *pConfig = KGlobal::config();
+    KSharedConfig::Ptr pConfig = KGlobal::config();
     pConfig->setGroup( "MakeOutputView" );
     pConfig->writeEntry( "CompilerOutputLevel", ( int ) level );
     pConfig->sync();
@@ -800,7 +800,7 @@ void MakeWidget::setCompilerOutputLevel( EOutputLevel level )
 void MakeWidget::toggleShowDirNavigMessages()
 {
     DirectoryItem::setShowDirectoryMessages( !DirectoryItem::getShowDirectoryMessages() );
-    KConfig *pConfig = KGlobal::config();
+    KSharedConfig::Ptr pConfig = KGlobal::config();
     pConfig->setGroup( "MakeOutputView" );
     pConfig->writeEntry( "ShowDirNavigMsg", DirectoryItem::getShowDirectoryMessages() );
     pConfig->sync();
@@ -809,7 +809,7 @@ void MakeWidget::toggleShowDirNavigMessages()
 
 void MakeWidget::updateSettingsFromConfig()
 {
-    KConfig * pConfig = KGlobal::config();
+    KSharedConfig::Ptr pConfig = KGlobal::config();
     pConfig->setGroup( "General Options" );
     setFont( pConfig->readFontEntry( "Application Font" ) );
     pConfig->setGroup( "MakeOutputView" );

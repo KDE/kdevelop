@@ -26,7 +26,7 @@ public:
     static const KDevPluginInfo *info();
 
 protected:
-    virtual KInstance *createInstance();
+    virtual KComponentData createComponentData();
 };
 
 #endif

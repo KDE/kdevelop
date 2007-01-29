@@ -34,7 +34,7 @@ public:
 	Project* parent;
 };
 
-FileManager::FileManager(KInstance* instance, QObject *parent)
+FileManager::FileManager(const KComponentData &instance, QObject *parent)
     : Plugin(instance, parent), d(new Private)
 {
     Project* project = qobject_cast<Project*>( parent );

@@ -30,7 +30,7 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -54,12 +54,12 @@ public:
     KIconLoader* iconLoader;
 };
 
-Plugin::Plugin( KInstance *instance, QObject *parent )
+Plugin::Plugin( const KComponentData &instance, QObject *parent )
         : QObject( parent ),
         KXMLGUIClient()
 {
     d = new Private;
-    setInstance( instance );
+    setComponentData( instance );
 }
 
 Plugin::~Plugin()
@@ -90,7 +90,7 @@ void Plugin::prepareForUnload()
 KIconLoader *Plugin::iconLoader() const
 {
     if ( d->iconLoader == 0 ) {
-        d->iconLoader = new KIconLoader( instance()->instanceName(), instance()->dirs() );
+        d->iconLoader = new KIconLoader( componentData().componentName(), componentData().dirs() );
         d->iconLoader->addAppDir( "kdevelop" );
         connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
                 this, SLOT(newIconLoader()));
@@ -102,7 +102,7 @@ KIconLoader *Plugin::iconLoader() const
 void Plugin::newIconLoader() const
 {
     if (d->iconLoader) {
-        d->iconLoader->reconfigure( instance()->instanceName(), instance()->dirs() );
+        d->iconLoader->reconfigure( componentData().componentName(), componentData().dirs() );
     }
 }
 

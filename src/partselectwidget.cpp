@@ -288,7 +288,7 @@ void PartSelectWidget::setAsDefault( )
 	}
 
 	//@fixme: make this use ProfileEngine instead to store settings
-	KConfig * config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup("IgnorePerDefault");
 //	config->writeEntry( profile, ignoreparts );
 	config->writeEntry( "KDevelop", ignoreparts );

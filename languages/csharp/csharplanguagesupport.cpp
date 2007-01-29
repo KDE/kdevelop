@@ -18,7 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 
@@ -52,7 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport,
 
 CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
         const QStringList& /*args*/ )
-        : Koncrete::LanguageSupport( KDevCSharpSupportFactory::instance(), parent )
+        : Koncrete::LanguageSupport( KDevCSharpSupportFactory::componentData(), parent )
 {
     QString types = QLatin1String( "text/x-csharp" );
     m_mimetypes = types.split( "," );

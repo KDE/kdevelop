@@ -35,7 +35,7 @@
 template<typename T> class QList;
 
 class KJob;
-class KInstance;
+class KComponentData;
 
 namespace Koncrete
 {

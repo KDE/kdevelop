@@ -125,7 +125,7 @@ void ProjectManager::createActions( KActionCollection* ac )
 
 void ProjectManager::slotOpenProject()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/");
 
@@ -157,7 +157,7 @@ void ProjectManager::loadSettings()
 
 void ProjectManager::saveSettings()
 {
-  KConfig *config = KGlobal::config();
+  KSharedConfig::Ptr config = KGlobal::config();
 
   if (projectLoaded())
   {
@@ -170,7 +170,7 @@ void ProjectManager::saveSettings()
 
 bool ProjectManager::loadDefaultProject()
 {
-  KConfig *config = KGlobal::config();
+  KSharedConfig::Ptr config = KGlobal::config();
   config->setGroup("General Options");
   QString project = config->readPathEntry("Last Project");
   bool readProject = config->readEntry("Read Last Project On Startup", true);

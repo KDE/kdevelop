@@ -30,7 +30,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfullscreen, FullScreenFactory( data ) )
 FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin(&data, parent/*, name ? name : "FullScreenPart"*/ )
 {
-  setInstance(FullScreenFactory::instance());
+  setComponentData(FullScreenFactory::componentData());
 //  const KAboutData &abdata1 = *(info());
 //  kDebug() << abdata1.appName() << endl;
   const KDevPluginInfo &_info = *info();

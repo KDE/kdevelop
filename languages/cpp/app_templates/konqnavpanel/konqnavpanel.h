@@ -25,7 +25,7 @@ public:
      * @param desktopName The filename of the configuration file.
      * @param name A Qt object name for your plugin.
      **/
-     %{APPNAME}(KInstance *inst,QObject *parent,QWidget *widgetParent, QString &desktopName, const char* name=0);
+     %{APPNAME}(const KComponentData &inst,QObject *parent,QWidget *widgetParent, QString &desktopName, const char* name=0);
 
     /** destructor */
     ~%{APPNAME}();

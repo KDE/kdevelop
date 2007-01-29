@@ -45,7 +45,7 @@ QStringList KDiffTextEdit::extPartsTranslated;
 
 KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): Q3TextEdit( parent, name )
 {
-  KConfig* config = KGlobal::config();
+  KSharedConfig::Ptr config = KGlobal::config();
   config->setGroup( "Diff" );
   _highlight = config->readBoolEntry( "Highlight", true );
 
@@ -54,7 +54,7 @@ KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): Q3TextEdit( p
 
 KDiffTextEdit::~KDiffTextEdit()
 {
-  KConfig* config = KGlobal::config();
+  KSharedConfig::Ptr config = KGlobal::config();
 
   config->setGroup( "Diff" );
   config->writeEntry( "Highlight", _highlight );

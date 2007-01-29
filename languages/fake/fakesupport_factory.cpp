@@ -1,5 +1,5 @@
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kdevplugininfo.h>
 #include "fakesupport_factory.h"
@@ -12,14 +12,14 @@ FakeSupportFactory::FakeSupportFactory()
         : KDevGenericFactory<FakeLanguageSupport>( data )
 {}
 
-KInstance *FakeSupportFactory::createInstance()
+KComponentData *FakeSupportFactory::createComponentData()
 {
-    KInstance * instance = KDevGenericFactory<FakeLanguageSupport>::createInstance();
-    KStandardDirs *dirs = instance->dirs();
+    KComponentData *componentData = KDevGenericFactory<FakeLanguageSupport>::createComponentData();
+    KStandardDirs *dirs = componentData->dirs();
     dirs->addResourceType( "newclasstemplates", KStandardDirs::kde_default( "data" ) + "kdevfakesupport/newclass/" );
     dirs->addResourceType( "pcs", KStandardDirs::kde_default( "data" ) + "kdevfakesupport/pcs/" );
 
-    return instance;
+    return componentData;
 }
 
 const Koncrete::PluginInfo * FakeSupportFactory::info()

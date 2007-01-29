@@ -25,10 +25,10 @@ public:
 
   virtual QObject* createObject( QObject* parent = 0, const char* pname = 0, const char* name = "QObject", const QStringList &args = QStringList() );
 
-  static KInstance* instance();
+  static const KComponentData &componentData();
 
 private:
-  static KInstance* s_instance;
+  static KComponentData *s_instance;
 };
 
 #endif // _PLUGIN_%{APPNAMEUC}_H_

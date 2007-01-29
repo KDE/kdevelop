@@ -78,7 +78,7 @@ public:
      * object, also its lifetime should be equal to the lifetime of the plugin.
      * @param parent The parent object for the plugin.
      */
-    LanguageSupport(KInstance *instance, QObject *parent);
+    LanguageSupport(const KComponentData &instance, QObject *parent);
 
     /** Destructor. */
     ~LanguageSupport();

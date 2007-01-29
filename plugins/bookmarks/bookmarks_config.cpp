@@ -33,7 +33,7 @@ BookmarksConfig::~BookmarksConfig()
  */
 void BookmarksConfig::writeConfig()
 {
-	KConfig *config = KGlobal::config();   
+	KSharedConfig::Ptr config = KGlobal::config();   
 	config->setGroup("Bookmarks");
 	
 	config->writeEntry("Context", _context );
@@ -50,7 +50,7 @@ void BookmarksConfig::writeConfig()
  */
 void BookmarksConfig::readConfig()
 {
-	KConfig *config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup("Bookmarks");
 	
 	_context = config->readPropertyEntry( "Context", 5 ).toInt();

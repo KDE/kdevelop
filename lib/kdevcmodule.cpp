@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 
 namespace Koncrete
 {
-ConfigModule::ConfigModule( KInstance *instance,
+ConfigModule::ConfigModule( const KComponentData &instance,
                           QWidget *parent,
                           const QStringList &args )
 : KCModule( instance, parent, args ), m_config( 0 )
@@ -33,7 +33,7 @@ ConfigModule::ConfigModule( KInstance *instance,
 }
 
 ConfigModule::ConfigModule( ConfigSkeleton *config,
-                          KInstance *instance,
+                          const KComponentData &instance,
                           QWidget *parent,
                           const QStringList &args )
         : KCModule( instance, parent, args ), m_config( config )

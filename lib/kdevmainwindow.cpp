@@ -546,7 +546,7 @@ void MainWindow::configureToolbars()
 
 void MainWindow::newToolbarConfig()
 {
-    applyMainWindowSettings( KGlobal::config(),
+    applyMainWindowSettings( KGlobal::config().data(),
                              QLatin1String( "MainWindow" ) );
 }
 

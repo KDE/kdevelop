@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevautomakeimporter,
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent,
                                     const QStringList& )
-: Koncrete::BuildManager( AutotoolsSupportFactory::instance(), parent ), m_rootItem(0L)
+: Koncrete::BuildManager( AutotoolsSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
     m_project = qobject_cast<Koncrete::Project*>( parent );
     Q_ASSERT( m_project );

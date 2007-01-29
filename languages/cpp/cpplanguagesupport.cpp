@@ -31,7 +31,7 @@
 #include <QApplication>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 #include <kio/netaccess.h>
@@ -73,7 +73,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdev
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
-        : Koncrete::LanguageSupport( KDevCppSupportFactory::instance(), parent )
+        : Koncrete::LanguageSupport( KDevCppSupportFactory::componentData(), parent )
 {
     QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );

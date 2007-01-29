@@ -36,7 +36,7 @@ typedef KGenericFactory<KDevGenericImporter> GenericSupportFactory;
 K_EXPORT_COMPONENT_FACTORY(kdevgenericimporter, GenericSupportFactory("kdevgenericimporter"))
 
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const QStringList &)
-    : Koncrete::FileManager( GenericSupportFactory::instance(), parent)
+    : Koncrete::FileManager( GenericSupportFactory::componentData(), parent)
 {
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << "*.cs" << "*.java";   // ### remove me

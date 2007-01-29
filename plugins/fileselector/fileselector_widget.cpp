@@ -78,6 +78,7 @@
 #include <kicon.h>
 
 #include <kdebug.h>
+#include <kconfiggroup.h>
 //END Includes
 
 #if defined(KDE_IS_VERSION)
@@ -210,7 +211,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
 
 KDevFileSelector::~KDevFileSelector()
 {
-	writeConfig( m_part->instance()->config(), "fileselector" );
+	writeConfig( m_part->componentData().config(), "fileselector" );
 }
 //END Constroctor/Destrctor
 
@@ -632,7 +633,7 @@ KFSConfigPage::KFSConfigPage( QWidget *parent, const char *name, KDevFileSelecto
 
 void KFSConfigPage::apply()
 {
-    KConfig *config = fileSelector->m_part->instance()->config();
+    KConfig *config = fileSelector->m_part->componentData().config();
     config->setGroup( "fileselector" );
     // toolbar
     QStringList l;
@@ -687,7 +688,7 @@ void KFSConfigPage::reload()
 
 void KFSConfigPage::init()
 {
-    KConfig *config = fileSelector->m_part->instance()->config();
+    KConfig *config = fileSelector->m_part->componentData().config();
     config->setGroup( "fileselector" );
     // toolbar
     QStringList l = config->readEntry( "toolbar actions", QStringList() );

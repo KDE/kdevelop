@@ -1,7 +1,7 @@
 
 #include "%{APPNAMELC}_part.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kaction.h>
 #include <kstandardaction.h>
 #include <kfiledialog.h>
@@ -17,7 +17,7 @@
     : KParts::ReadWritePart(parent, name)
 {
     // we need an instance
-    setInstance( %{APPNAME}PartFactory::instance() );
+    setComponentData( %{APPNAME}PartFactory::componentData() );
 
     // this should be your custom internal widget
     m_widget = new QMultiLineEdit( parentWidget, widgetName );
@@ -148,7 +148,7 @@ void %{APPNAME}Part::fileSaveAs()
 #include <kaboutdata.h>
 #include <klocale.h>
 
-KInstance*  %{APPNAME}PartFactory::s_instance = 0L;
+KComponentData* %{APPNAME}PartFactory::s_componentData = 0L;
 KAboutData* %{APPNAME}PartFactory::s_about = 0L;
 
 %{APPNAME}PartFactory::%{APPNAME}PartFactory()
@@ -158,10 +158,10 @@ KAboutData* %{APPNAME}PartFactory::s_about = 0L;
 
 %{APPNAME}PartFactory::~%{APPNAME}PartFactory()
 {
-    delete s_instance;
+    delete s_componentData;
     delete s_about;
 
-    s_instance = 0L;
+    s_componentData = 0L;
 }
 
 KParts::Part* %{APPNAME}PartFactory::createPartObject( QWidget *parentWidget, const char *widgetName,
@@ -178,15 +178,15 @@ KParts::Part* %{APPNAME}PartFactory::createPartObject( QWidget *parentWidget, co
     return obj;
 }
 
-KInstance* %{APPNAME}PartFactory::instance()
+const KComponentData &%{APPNAME}PartFactory::componentData()
 {
-    if( !s_instance )
+    if( !s_componentData )
     {
         s_about = new KAboutData("%{APPNAMELC}part", I18N_NOOP("%{APPNAME}Part"), "%{VERSION}");
         s_about->addAuthor("%{AUTHOR}", 0, "%{EMAIL}");
-        s_instance = new KInstance(s_about);
+        s_componentData = new KComponentData(s_about);
     }
-    return s_instance;
+    return *s_componentData;
 }
 
 extern "C"

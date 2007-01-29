@@ -31,7 +31,7 @@ typedef KGenericFactory<FileSelectorPart> KDevFileSelectorFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevfileselector, KDevFileSelectorFactory( "kdevfileselector" ) )
 
 FileSelectorPart::FileSelectorPart( QObject *parent, const QStringList& )
-        : KDevPlugin( KDevFileSelectorFactory::instance(), parent )
+        : KDevPlugin( KDevFileSelectorFactory::componentData(), parent )
 {
     m_filetree = new KDevFileSelector( this, KDevCore::mainWindow(), KDevCore::documentController(), 0 );
 
@@ -48,7 +48,7 @@ FileSelectorPart::FileSelectorPart( QObject *parent, const QStringList& )
     //m_filetree->setWindowIcon( KIcon(info()->icon()) ); FIXME port
     m_filetree->setWhatsThis( i18n( "<b>File selector</b><p>This file selector lists directory contents and provides some file management functions." ) );
 
-    m_filetree->readConfig( instance() ->config(), "fileselector" );
+    m_filetree->readConfig( componentData() ->config(), "fileselector" );
 }
 
 FileSelectorPart::~FileSelectorPart()

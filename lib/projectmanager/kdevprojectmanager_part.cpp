@@ -58,9 +58,9 @@ typedef KGenericFactory<ProjectManagerPart> ProjectManagerFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevprojectmanager, ProjectManagerFactory( "kdevprojectmanager" ) )
 
 ProjectManagerPart::ProjectManagerPart( QObject *parent, const QStringList& )
-        : Plugin( ProjectManagerFactory::instance(), parent )
+        : Plugin( ProjectManagerFactory::componentData(), parent )
 {
-    setInstance( ProjectManagerFactory::instance() );
+    setComponentData( ProjectManagerFactory::componentData() );
 
     m_widget = new QWidget( 0 );
     QVBoxLayout *vbox = new QVBoxLayout( m_widget );

@@ -32,7 +32,7 @@
 namespace Koncrete
 {
 
-LanguageSupport::LanguageSupport(KInstance *instance,
+LanguageSupport::LanguageSupport(const KComponentData &instance,
                                          QObject *parent)
     : Plugin(instance, parent)
     , m_mutexMutex(new QMutex)

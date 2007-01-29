@@ -48,7 +48,7 @@ extern "C"
 //! read settings from config file
 void %{APPNAME}Setup::readSettings()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup( "Settings" );
     /// @todo
     // Add your config options here...
@@ -59,7 +59,7 @@ void %{APPNAME}Setup::readSettings()
 //! Ok pressed - save settings and exit
 void %{APPNAME}Setup::slotOkPressed()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup( "Settings" );
     /// @todo
     // Add your config options here.
@@ -89,7 +89,7 @@ void %{APPNAME}Setup::slotCancelPressed()
 //! read configuration settings from config file
 void %{APPNAME}::readSettings()
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup( "Settings" );
     /// @todo
     // Add your config options here...

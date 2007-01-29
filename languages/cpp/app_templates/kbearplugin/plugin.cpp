@@ -6,7 +6,7 @@
 //////////////////////////////////////////////////////////////////////
 // System specific include files
 #include <klocale.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <kstatusbar.h>
@@ -33,7 +33,7 @@ K_EXPORT_COMPONENT_FACTORY( libkbear%{APPNAMELC}, KBear%{APPNAME}PluginFactory( 
 KBear%{APPNAME}Plugin::KBear%{APPNAME}Plugin(QObject *parent, const char*, const QStringList& )
     : KBearPlugin( parent, "KBear%{APPNAME}Plugin" )
 {
-    setInstance(KBear%{APPNAME}PluginFactory::instance());
+    setComponentData(KBear%{APPNAME}PluginFactory::componentData());
     setXMLFile("kbear%{APPNAMELC}.rc");
 
     m_outputWidget = new KBear%{APPNAME}OutputWidget( 0L, "KBear%{APPNAME}OutputWidget" );

@@ -31,7 +31,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( data ) );
 %{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList &/*args*/)
     : Koncrete::Plugin(&data, parent, name ? name : "%{APPNAME}Part")
 {
-    setInstance(%{APPNAME}Factory::instance());
+    setComponentData(%{APPNAME}Factory::componentData());
     setXMLFile("kdev%{APPNAMELC}.rc");
 
     m_widget = new %{APPNAME}Widget(this);

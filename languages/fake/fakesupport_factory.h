@@ -15,7 +15,7 @@ public:
     static const Koncrete::PluginInfo *info();
 
 protected:
-    virtual KInstance *createInstance();
+    virtual KComponentData *createComponentData();
 };
 
 #endif // FAKESUPPORT_FACTORY_H

@@ -68,7 +68,7 @@ public:
      * @todo should forced refresh function exist?
      * @todo add error reporting mechanism
      */
-    FileManager(KInstance* instance, QObject *parent = 0);
+    FileManager(const KComponentData &instance, QObject *parent = 0);
     virtual ~FileManager();
 
     /** Features the file manager supports */

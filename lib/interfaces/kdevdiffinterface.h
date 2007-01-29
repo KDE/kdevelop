@@ -54,7 +54,7 @@ public:
     dialog, etc. Plugin does not take ownership on info object, also its lifetime should
     be equal to the lifetime of the plugin.
     @param parent The parent object for the plugin. */
-    DiffFrontend( KInstance *instance, QObject *parent = 0);
+    DiffFrontend( const KComponentData &instance, QObject *parent = 0);
     virtual ~DiffFrontend();
 
     /**Displays the patch.

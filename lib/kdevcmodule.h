@@ -40,12 +40,12 @@ class KDEVPLATFORM_EXPORT ConfigModule: public KCModule
 {
     Q_OBJECT
 public:
-    ConfigModule( KInstance *instance,
+    ConfigModule( const KComponentData &instance,
                  QWidget *parent = 0,
                  const QStringList &args = QStringList() );
 
     ConfigModule( ConfigSkeleton *config,
-                 KInstance *instance,
+                 const KComponentData &instance,
                  QWidget *parent = 0,
                  const QStringList &args = QStringList() );
     virtual ~ConfigModule();

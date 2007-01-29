@@ -25,12 +25,15 @@ extern "C"
 
 KatePluginFactory::KatePluginFactory()
 {
-  s_instance = new KInstance( "kate" );
+    if (!s_componentData) {
+        s_componentData = new KComponentData("kate");
+    }
 }
 
 KatePluginFactory::~KatePluginFactory()
 {
-  delete s_instance;
+    delete s_componentData;
+    s_componentData = 0;
 }
 
 QObject* KatePluginFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
@@ -38,7 +41,7 @@ QObject* KatePluginFactory::createObject( QObject* parent, const char* name, con
   return new KatePlugin%{APPNAME}( parent, name );
 }
 
-KInstance* KatePluginFactory::s_instance = 0L;
+KComponentData *KatePluginFactory::s_componentData = 0L;
 
 KatePlugin%{APPNAME}::KatePlugin%{APPNAME}( QObject* parent, const char* name )
     : Kate::Plugin ( (Kate::Application*)parent, name )
@@ -58,7 +61,7 @@ void KatePlugin%{APPNAME}::addView(Kate::MainWindow *win)
                       SLOT( slotInsertHello() ), view->actionCollection(),
                       "edit_insert_%{APPNAMELC}" );
 
-    view->setInstance (new KInstance("kate"));
+    view->setComponentData (KatePluginFactory::componentData());
     view->setXMLFile("plugins/%{APPNAMELC}/plugin_%{APPNAMELC}.rc");
     win->guiFactory()->addClient (view);
     view->win = win;

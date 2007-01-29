@@ -35,10 +35,11 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kio/job.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kio/global.h>
 #include <kmessagebox.h>
 #include <kio/jobclasses.h>
+#include <kconfiggroup.h>
 
 #include "kdevcore.h"
 #include "filetemplate.h"

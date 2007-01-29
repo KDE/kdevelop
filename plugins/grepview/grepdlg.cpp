@@ -88,7 +88,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 {
     setCaption(i18n("Find in Files"));
 
-    config = GrepViewFactory::instance()->config();
+    config = GrepViewFactory::componentData().config();
     config->setGroup("GrepDialog");
 
     QGridLayout *layout = new QGridLayout(this, 6, 2, 10, 4);

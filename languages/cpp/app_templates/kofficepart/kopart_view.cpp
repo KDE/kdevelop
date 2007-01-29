@@ -16,7 +16,7 @@
 %{APPNAME}View::%{APPNAME}View( %{APPNAME}Part* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
 {
-    setInstance( %{APPNAME}Factory::global() );
+    setComponentData( %{APPNAME}Factory::global() );
     setXMLFile( "%{APPNAMELC}.rc" );
     KStandardAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     // Note: Prefer KStandardAction::* to any custom action if possible.

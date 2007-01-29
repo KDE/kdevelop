@@ -32,7 +32,7 @@ K_EXPORT_COMPONENT_FACTORY(libkdevreplace, ReplaceFactory(data))
 ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
         : KDevPlugin( &data, parent, name ? name : "ReplacePart" )
 {
-    setInstance(ReplaceFactory::instance());
+    setComponentData(ReplaceFactory::componentData());
     setXMLFile("kdevpart_replace.rc");
 
     m_widget = new ReplaceWidget(this);

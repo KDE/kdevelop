@@ -43,7 +43,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
     : KDevDiffFrontend(&data, parent), proc(0)
 {
   setObjectName(name ? name : "DiffPart");
-  setInstance(DiffFactory::instance());
+  setComponentData(DiffFactory::componentData());
   setXMLFile("kdevdiff.rc");
 
   diffWidget = new DiffWidget();

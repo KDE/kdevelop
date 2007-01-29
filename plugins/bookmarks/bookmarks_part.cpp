@@ -49,7 +49,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( data ) )
 BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin(&data, parent, name ? name : "BookmarksPart" )
 {
-    setInstance(BookmarksFactory::instance());
+    setComponentData(BookmarksFactory::componentData());
 
     _widget = new BookmarksWidget(this);
 

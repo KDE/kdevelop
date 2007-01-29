@@ -24,7 +24,7 @@ static const Koncrete::PluginInfo data("kdev%{APPNAMELC}");
 %{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList& )
 : Koncrete::LanguageSupport(&data, parent, name ? name : "%{APPNAME}Part" )
 {
-	setInstance(%{APPNAME}Factory::instance());
+	setComponentData(%{APPNAME}Factory::componentData());
 	setXMLFile("kdevlang_%{APPNAMELC}.rc");
 
 

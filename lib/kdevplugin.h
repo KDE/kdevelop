@@ -30,7 +30,7 @@
 #include "kdevexport.h"
 
 class QWidget;
-class KInstance;
+class KComponentData;
 class KIconLoader;
 
 /**
@@ -121,7 +121,7 @@ public:
      * @param instance The instance for this plugin.
      * @param parent The parent object for the plugin.
      */
-    Plugin(KInstance *instance, QObject *parent);
+    Plugin(const KComponentData &instance, QObject *parent);
 
     /**Destructs a plugin.*/
     virtual ~Plugin();

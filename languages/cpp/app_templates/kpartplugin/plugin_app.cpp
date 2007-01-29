@@ -3,7 +3,7 @@
 
 #include <khtml_part.h>
 #include <kaction.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -88,11 +88,11 @@ QObject* %{APPNAME}Factory::createObject( QObject* parent, const char* name, con
   return new Plugin%{APPNAME}( parent, name );
 }
 
-KInstance *%{APPNAME}Factory::instance()
+const KComponentData &%{APPNAME}Factory::componentData()
 {
   if ( !s_instance )
-    s_instance = new KInstance( "%{APPNAMELC}" );
-  return s_instance;
+    s_instance = new KComponentData( "%{APPNAMELC}" );
+  return *s_instance;
 }
 
 extern "C"
@@ -104,6 +104,6 @@ extern "C"
   }
 }
 
-KInstance* %{APPNAME}Factory::s_instance = 0L;
+KComponentData* %{APPNAME}Factory::s_instance = 0L;
 
 #include "plugin_%{APPNAMELC}.moc"

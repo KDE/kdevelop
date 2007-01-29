@@ -23,10 +23,10 @@ AppWizardFactory::AppWizardFactory()
 {
 }
 
-KInstance *AppWizardFactory::createInstance()
+KComponentData AppWizardFactory::createComponentData()
 {
-    KInstance *instance = KDevGenericFactory<AppWizardPart>::createInstance();
-    KStandardDirs *dirs = instance->dirs();
+    KComponentData instance = KDevGenericFactory<AppWizardPart>::createComponentData();
+    KStandardDirs *dirs = componentData.dirs();
     dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
     dirs->addResourceType("appimports", KStandardDirs::kde_default("data") + "kdevappwizard/imports/");
     dirs->addResourceType("appimportfiles", KStandardDirs::kde_default("data") + "kdevappwizard/importfiles/");

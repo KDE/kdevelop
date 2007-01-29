@@ -31,7 +31,7 @@ typedef KGenericFactory<Preferences> PreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_documentview_settings, PreferencesFactory( "kcm_documentview_settings" ) )
 
 Preferences::Preferences(QWidget *parent, const QStringList &args)
-    : Koncrete::ConfigModule( DocumentViewSettings::self(), PreferencesFactory::instance(), parent, args )
+    : Koncrete::ConfigModule( DocumentViewSettings::self(), PreferencesFactory::componentData(), parent, args )
 {
 
     QVBoxLayout* l = new QVBoxLayout( this );

@@ -42,11 +42,11 @@ K_EXPORT_COMPONENT_FACTORY( kdevdocumentview, KDevDocumentViewFactory( "kdevdocu
 
 KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent,
         const QStringList& )
-        : Koncrete::Plugin( KDevDocumentViewFactory::instance(), parent )
+        : Koncrete::Plugin( KDevDocumentViewFactory::componentData(), parent )
 {
     m_documentModel = new KDevDocumentModel( this );
 
-    setInstance( KDevDocumentViewFactory::instance() );
+    setComponentData( KDevDocumentViewFactory::componentData() );
 
     m_documentView = new KDevDocumentView( this, 0 );
 

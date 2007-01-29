@@ -26,7 +26,7 @@ TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList 
   : KDevPlugin(&data, parent)
 {
   setObjectName(QString::fromUtf8(name));
-  setInstance(TipOfDayFactory::instance());
+  setComponentData(TipOfDayFactory::componentData());
 
   setXMLFile("kdevpart_tipofday.rc");
 

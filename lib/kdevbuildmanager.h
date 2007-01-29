@@ -38,7 +38,7 @@ class KDEVPLATFORM_EXPORT BuildManager : public FileManager
     Q_OBJECT
 
 public:
-    BuildManager(KInstance*, QObject* parent);
+    BuildManager(const KComponentData &, QObject* parent);
     ~BuildManager();
 
     enum BuildFeature

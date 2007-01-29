@@ -42,7 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
 
 QMakeImporter::QMakeImporter( QObject* parent,
                               const QStringList& )
-        : Koncrete::BuildManager( QMakeSupportFactory::instance(), parent ), m_rootItem( 0L )
+        : Koncrete::BuildManager( QMakeSupportFactory::componentData(), parent ), m_rootItem( 0L )
 {
     m_project = 0;
 

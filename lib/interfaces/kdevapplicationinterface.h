@@ -65,7 +65,7 @@ public:
     dialog, etc. Plugin does not take ownership on info object, also its lifetime should
     be equal to the lifetime of the plugin.
     @param parent The parent object for the plugin. */
-    AppFrontend(KInstance* instance, QObject *parent=0)
+    AppFrontend(const KComponentData &instance, QObject *parent=0)
         :Plugin(instance, parent) {}
 
     /**@return Whether the application is currently running.*/

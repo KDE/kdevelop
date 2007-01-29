@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kdevproject_settings, ProjectPreferencesFactory(
 
 ProjectPreferences::ProjectPreferences( QWidget *parent, const QStringList &args )
         : ConfigModule( ProjectSettings::self(),
-                       ProjectPreferencesFactory::instance(), parent, args )
+                       ProjectPreferencesFactory::componentData(), parent, args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );

@@ -9,13 +9,16 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 31
+#define YY_FLEX_SUBMINOR_VERSION 33
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
 
     /* The c++ scanner is a mess. The FlexLexer.h header file relies on the
-     * following macro.
+     * following macro. This is required in order to pass the c++-multiple-scanners
+     * test in the regression suite. We get reports that it breaks inheritance.
+     * We will address this in a future release of flex, or omit the C++ scanner
+     * altogether.
      */
     #define yyFlexLexer yyFlexLexer
 
@@ -32,7 +35,15 @@
 
 /* C99 systems have <inttypes.h>. Non-C99 systems may or may not. */
 
-#if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
+#if __STDC_VERSION__ >= 199901L
+
+/* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
+ * if you want the limit (max/min) macros for int types. 
+ */
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS 1
+#endif
+
 #include <inttypes.h>
 typedef int8_t flex_int8_t;
 typedef uint8_t flex_uint8_t;
@@ -297,7 +308,7 @@ void yyfree (void *  );
 
 /* Begin user sect3 */
 
-#define yywrap(n) 1
+#define yywrap() 1
 #define YY_SKIP_YYWRAP
 
 typedef unsigned char YY_CHAR;
@@ -1126,7 +1137,7 @@ static yyconst flex_int16_t yy_chk[2466] =
 /* 0x2028 and 0x2029, currently unused in this lexer
 for performance and convenience reasons. */
 /* used to add this: [\n \t\v\f]* - no longer needed since we allow terminals as statements */
-#line 1130 "ruby_lexer.cpp"
+#line 1141 "ruby_lexer.cpp"
 
 #define INITIAL 0
 #define expect_hash 1
@@ -1136,11 +1147,13 @@ for performance and convenience reasons. */
 #define expect_operator 5
 #define expect_array_arguments 6
 
+#ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
  * The user has a chance to override it with an option.
  */
 #include <unistd.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -1235,11 +1248,11 @@ YY_DECL
 
  /* keywords */
 
-#line 1239 "ruby_lexer.cpp"
+#line 1252 "ruby_lexer.cpp"
 
-	if ( (yy_init) )
+	if ( !(yy_init) )
 		{
-		(yy_init) = 0;
+		(yy_init) = 1;
 
 #ifdef YY_USER_INIT
 		YY_USER_INIT;
@@ -1912,7 +1925,7 @@ YY_RULE_SETUP
 #line 257 "ruby_lexer.ll"
 ECHO;
 	YY_BREAK
-#line 1916 "ruby_lexer.cpp"
+#line 1929 "ruby_lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(expect_hash):
 case YY_STATE_EOF(expect_array_access):
@@ -2056,7 +2069,7 @@ yyFlexLexer::yyFlexLexer( std::istream* arg_yyin, std::ostream* arg_yyout )
 	yyin = arg_yyin;
 	yyout = arg_yyout;
 	yy_c_buf_p = 0;
-	yy_init = 1;
+	yy_init = 0;
 	yy_start = 0;
 	yy_flex_debug = 0;
 	yylineno = 1;	// this will only get updated if %option yylineno
@@ -2069,7 +2082,7 @@ yyFlexLexer::yyFlexLexer( std::istream* arg_yyin, std::ostream* arg_yyout )
 	yy_more_offset = yy_prev_more_offset = 0;
 
 	yy_start_stack_ptr = yy_start_stack_depth = 0;
-	yy_start_stack = 0;
+	yy_start_stack = NULL;
 
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
@@ -2077,13 +2090,6 @@ yyFlexLexer::yyFlexLexer( std::istream* arg_yyin, std::ostream* arg_yyout )
 
 	yy_state_buf = 0;
 
-}
-
-yyFlexLexer::~yyFlexLexer()
-{
-	delete [] yy_state_buf;
-	yyfree(yy_start_stack  );
-	yy_delete_buffer( YY_CURRENT_BUFFER );
 }
 
 void yyFlexLexer::switch_streams( std::istream* new_in, std::ostream* new_out )
@@ -2186,7 +2192,7 @@ int yyFlexLexer::yy_get_next_buffer()
 
 	else
 		{
-			size_t num_to_read =
+			int num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -2752,6 +2758,25 @@ void yyFlexLexer::LexerError( yyconst char msg[] )
 
 /* Accessor  methods (get/set functions) to struct members. */
 
+yyFlexLexer::~yyFlexLexer()
+{
+    
+    /* Pop the buffer stack, destroying each element. */
+	while(YY_CURRENT_BUFFER){
+		yy_delete_buffer( YY_CURRENT_BUFFER  );
+		YY_CURRENT_BUFFER_LVALUE = NULL;
+		yypop_buffer_state();
+	}
+
+	/* Destroy the stack itself. */
+	yyfree((yy_buffer_stack) );
+	(yy_buffer_stack) = NULL;
+
+	delete [] (yy_state_buf);
+	yyfree((yy_start_stack)  );
+
+}
+
 /*
  * Internal utility routines.
  */
@@ -2760,7 +2785,7 @@ void yyFlexLexer::LexerError( yyconst char msg[] )
 static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 {
 	register int i;
-    	for ( i = 0; i < n; ++i )
+	for ( i = 0; i < n; ++i )
 		s1[i] = s2[i];
 }
 #endif
@@ -2769,7 +2794,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
 static int yy_flex_strlen (yyconst char * s )
 {
 	register int n;
-    	for ( n = 0; s[n]; ++n )
+	for ( n = 0; s[n]; ++n )
 		;
 
 	return n;

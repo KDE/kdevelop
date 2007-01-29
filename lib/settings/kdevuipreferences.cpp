@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kdevui_settings, UIPreferencesFactory( "kcm_kdev
 
 UIPreferences::UIPreferences( QWidget *parent, const QStringList &args )
         : ConfigModule( UISettings::self(),
-                       UIPreferencesFactory::instance(), parent, args )
+                       UIPreferencesFactory::componentData(), parent, args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );

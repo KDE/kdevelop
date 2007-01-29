@@ -36,7 +36,7 @@
 AppWizardPart::AppWizardPart(QObject *parent, const char */*name*/, const QStringList &)
     : KDevPlugin(AppWizardFactory::info(), parent)
 {
-    setInstance(AppWizardFactory::instance());
+    setComponentData(AppWizardFactory::componentData());
     setXMLFile("kdevappwizard.rc");
 
     KAction *action;

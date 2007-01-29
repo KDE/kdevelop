@@ -118,7 +118,7 @@ public:
   be equal to the lifetime of the plugin.
   @param parent The parent object for the plugin.
   @param name The internal name which identifies the plugin.*/
-  CreateFile(KInstance* instance, QObject * parent = 0, const char * = 0)
+  CreateFile(const KComponentData &instance, QObject * parent = 0, const char * = 0)
       :Plugin(instance, parent) {}
 
   /**Creates a new file, within or without the project. 

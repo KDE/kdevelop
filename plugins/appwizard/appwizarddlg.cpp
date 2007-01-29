@@ -135,7 +135,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *appwizardpart, QWidget *parent, 
     m_projectLocationWasChanged=false;
 //  populateFavourites();
 
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Options");
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/");
 
@@ -475,7 +475,7 @@ void AppWizardDialog::destButtonClicked(const QString& dir)
     if(dir.isEmpty())
         return;
 
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Options");
     QDir defPrjDir( config->readPathEntry("DefaultProjectsDir", QDir::homePath()) );
     QDir newDir(dir);
@@ -546,7 +546,7 @@ void AppWizardDialog::openAfterGeneration()
     }
     */
 
-    KConfig * config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("IgnorePerDefault");
     QStringList ignoreparts = config->readListEntry( "KDevelop" );
     DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreparts );
@@ -745,7 +745,7 @@ void AppWizardDialog::removeFavourite()
 
 void AppWizardDialog::populateFavourites()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("AppWizard");
 
     //favourites are stored in config as a list of templates and a seperate
@@ -791,7 +791,7 @@ void AppWizardDialog::saveFavourites()
         }
     }
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("AppWizard");
     config->writePathEntry("FavTemplates", templatesList);
     config->writeEntry("FavNames", iconNamesList);

@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kdev_makebuilder, MakeBuilderPreferencesFactory(
 
 MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringList& args)
     : Koncrete::ConfigModule(MakeBuilderSettings::self(),
-                             MakeBuilderPreferencesFactory::instance(),
+                             MakeBuilderPreferencesFactory::componentData(),
                              parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );

@@ -31,7 +31,7 @@ typedef KGenericFactory<EnvPreferences> PreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevenv_settings, PreferencesFactory( "kcm_kdevenv_settings" ) )
 
 EnvPreferences::EnvPreferences( QWidget *parent, const QStringList &args )
-        : ConfigModule( PreferencesFactory::instance(), parent, args )
+        : ConfigModule( PreferencesFactory::componentData(), parent, args )
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;

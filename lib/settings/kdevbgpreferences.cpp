@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kdevbg_settings,
 
 BGPreferences::BGPreferences( QWidget *parent, const QStringList &args )
  : Koncrete::ConfigModule( BGSettings::self(),
-                           BGPreferencesFactory::instance(),
+                           BGPreferencesFactory::componentData(),
                            parent, args )
 {
 

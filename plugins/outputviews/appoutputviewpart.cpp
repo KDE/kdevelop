@@ -37,7 +37,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
     : KDevAppFrontend(&data, parent)
 {
     setObjectName(QString::fromUtf8(name));
-    setInstance(AppViewFactory::instance());
+    setComponentData(AppViewFactory::componentData());
 
     m_widget = new AppOutputWidget(this);
     m_widget->setIcon( SmallIcon("openterm") );

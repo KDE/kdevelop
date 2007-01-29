@@ -22,7 +22,7 @@ Boston, MA 02110-1301, USA.
 #include <kmenu.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include <kcmultidialog.h>
 #include <ksettings/dialog.h>
@@ -115,7 +115,7 @@ void Config::settingsDialog()
 {
     if ( !d->settingsDialog )
     {
-        if ( Core::mainWindow() ->instance() ->instanceName() == "kdevelop" )
+        if ( Core::mainWindow() ->componentData() .componentName() == "kdevelop" )
             d->settingsDialog = new KSettings::Dialog(
                                     KSettings::Dialog::Static, Core::mainWindow() );
         else
@@ -158,7 +158,7 @@ KConfig *Config::globalProject()
 
 KSharedConfig::Ptr Config::sharedStandard()
 {
-    KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
+    KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
     KUrl local = Core::projectController() ->localFile();
@@ -180,7 +180,7 @@ KSharedConfig::Ptr Config::sharedStandard()
 
 KSharedConfig::Ptr Config::sharedLocalProject()
 {
-    KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
+    KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
     KUrl local = Core::projectController() ->localFile();
@@ -202,7 +202,7 @@ KSharedConfig::Ptr Config::sharedLocalProject()
 
 KSharedConfig::Ptr Config::sharedGlobalProject()
 {
-    KSharedConfig::Ptr config = KSharedPtr<KSharedConfig>( KGlobal::sharedConfig() );
+    KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
     KUrl local = Core::projectController() ->localFile();

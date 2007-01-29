@@ -459,10 +459,10 @@ void KDevAppTemplate::Archive::setPermissions(const KArchiveFile *source, QStrin
 KDevAppTemplateModel::KDevAppTemplateModel(QObject *parent)
         : KDevItemModel(parent), folderIcon( SmallIcon( "folder" ) )
 {
-    KConfig *config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Options");
 
-    KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
+    KStandardDirs *dirs = AppWizardFactory::componentData().dirs();
     QStringList templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
 
     kDebug(9010) << "Templates: " << endl;

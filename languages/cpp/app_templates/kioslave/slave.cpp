@@ -14,7 +14,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -70,7 +70,7 @@ extern "C"
 {
     int kdemain(int argc, char **argv)
     {
-        KInstance instance( "kio_%{APPNAMELC}" );
+        KComponentData componentData( "kio_%{APPNAMELC}" );
         
         kDebug(7101) << "*** Starting kio_%{APPNAMELC} " << endl;
         

@@ -23,7 +23,7 @@
 namespace Koncrete
 {
 
-DiffFrontend::DiffFrontend(KInstance *instance, QObject *parent)
+DiffFrontend::DiffFrontend(const KComponentData &instance, QObject *parent)
     : Plugin(instance, parent)
 {
 }

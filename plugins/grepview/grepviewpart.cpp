@@ -35,7 +35,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     : KDevPlugin( &data, parent )
 {
     setObjectName(QString::fromUtf8(name));
-    setInstance(GrepViewFactory::instance());
+    setComponentData(GrepViewFactory::componentData());
 
     setXMLFile("kdevgrepview.rc");
 

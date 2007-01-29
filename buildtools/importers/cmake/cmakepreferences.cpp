@@ -34,7 +34,7 @@ typedef KGenericFactory<CMakePreferences> CMakePreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdevcmake_settings, CMakePreferencesFactory( "kcm_kdevcmake_settings" )  )
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QStringList& args)
-    : Koncrete::ConfigModule(CMakeSettings::self(),CMakePreferencesFactory::instance(), parent, args)
+    : Koncrete::ConfigModule(CMakeSettings::self(),CMakePreferencesFactory::componentData(), parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;

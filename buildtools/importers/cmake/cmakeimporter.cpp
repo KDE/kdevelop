@@ -42,7 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
 
 CMakeImporter::CMakeImporter( QObject* parent,
                               const QStringList& )
-    : Koncrete::BuildManager( CMakeSupportFactory::instance(), parent ), m_rootItem(0L)
+    : Koncrete::BuildManager( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
     m_project = 0;
 /*    CMakeSettings* settings = CMakeSettings::self();

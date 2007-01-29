@@ -92,7 +92,7 @@ void ToolsConfig::fill()
 {
   _entries.clear();
 
-  KConfig *config = ToolsFactory::instance()->config();
+  KConfig *config = ToolsFactory::componentData().config();
   config->setGroup("Tools");
 
   QStringList list = config->readListEntry("Tools");
@@ -142,7 +142,7 @@ void ToolsConfig::toTree()
 
 void ToolsConfig::accept()
 {
-  KConfig *config = ToolsFactory::instance()->config();
+  KConfig *config = ToolsFactory::componentData().config();
   config->setGroup("Tools");
 
   QStringList l;

@@ -15,6 +15,7 @@
 
 #include <klibloader.h>
 #include <klocale.h>
+#include <kcomponentdata.h>
 
 class %{APPNAME}ConfigPage;
 
@@ -28,8 +29,10 @@ public:
 
     virtual QObject* createObject( QObject* parent = 0, const char* pname = 0, const char* name = "QObject", const QStringList &args = QStringList() );
 
+    static const KComponentData &componentData() { return *s_componentData; }
+
 private:
-    static KInstance* s_instance;
+    static KComponentData *s_componentData;
 };
 
 class KatePlugin%{APPNAME} : public Kate::Plugin, Kate::PluginViewInterface, Kate::PluginConfigInterfaceExtension

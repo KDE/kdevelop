@@ -11,7 +11,7 @@
 
 #include "partexplorer_plugin.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
 #include <kdebug.h>
@@ -33,7 +33,7 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
 {
     setObjectName(name ? name : "PartExplorerPlugin");
     // we need an instance
-    setInstance( PartExplorerPluginFactory::instance() );
+    setComponentData( PartExplorerPluginFactory::componentData() );
 
     setXMLFile( "kdevpartexplorer.rc" );
 

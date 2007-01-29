@@ -31,7 +31,7 @@ typedef KGenericFactory<ValgrindPart> ValgrindFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevvalgrind, ValgrindFactory( "kdevvalgrind" ) )
 
 ValgrindPart::ValgrindPart( QObject *parent, const QStringList& )
-  : KDevPlugin( ValgrindFactory::instance(), parent)
+  : KDevPlugin( ValgrindFactory::componentData(), parent)
   , m_model(new ValgrindModel())
   , m_control(new ValgrindControl(this))
 {
