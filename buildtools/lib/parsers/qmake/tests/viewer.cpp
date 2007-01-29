@@ -78,7 +78,7 @@ void Viewer::files_currentChanged(QListBoxItem* item)
     source->setText(str.read());
     f.close();
 
-    int result = QMake::Driver::parseFile(item->text().ascii(), &projectAST);
+    int result = QMake::Driver::parseFile(item->text().ascii(), &projectAST, 0);
     if (projectAST && (result == 0))
     {
         processAST(projectAST);

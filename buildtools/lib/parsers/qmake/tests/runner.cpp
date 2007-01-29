@@ -17,10 +17,26 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <qmakeast.h>
-#include <qmakeastvisitor.h>
-#include <qmakedriver.h>
+
+#include <cstdlib>
+#include <iostream>
+#include <stdio.h>
+#include "qmakedriver.h"
+#include "qmakeastvisitor.h"
+
+#include <qstring.h>
+
 #include <kdebug.h>
+#include <kcmdlineargs.h>
+#include <kurl.h>
+
+static const KCmdLineOptions options[] =
+{
+    {"silent", "Enable Parser debug output", 0},
+    {"!debug", "Disable output of the generated AST", 0},
+    {"!+files", "QMake project files", 0}
+};
+
 
 class PrintAST : QMake::ASTVisitor
 {
@@ -120,14 +136,30 @@ private:
 };
 int main(int argc, char *argv[])
 {
-    QMake::ProjectAST *projectAST;
-    int ret;
-    if (argc > 1)
+  KCmdLineArgs::init( argc, argv, "QMake Parser", "qmake-parser", "Parse QMake project files", "1.0.0");
+    KCmdLineArgs::addCmdLineOptions(options);
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+    if( args->count() < 1 )
     {
-        ret = QMake::Driver::parseFile(argv[1], &projectAST);
+        KCmdLineArgs::usage(0);
+    }
+
+    int debug = 0;
+    bool silent = false;
+
+    if( args->isSet("silent") )
+        silent = true;
+    if( args->isSet("debug") )
+        debug = 1;
+    for( int i = 0 ; i < args->count() ; i++ )
+    {
+        QMake::ProjectAST *projectAST;
+        int ret = QMake::Driver::parseFile(argv[1], &projectAST, debug);
         PrintAST pa;
         if ( ret == 0 )
-            if ((argc < 3) || ((argc == 3) && (strcmp(argv[2], "--silent") != 0)))
+            if ( !silent )
             {
                 pa.processProject(projectAST);
                 QString profile;
@@ -136,6 +168,5 @@ int main(int argc, char *argv[])
             }
         return ret;
     }
-    else
-        return 0;
+    return 0;
 }

@@ -149,7 +149,7 @@ Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const 
 
 bool Scope::loadFromFile( const QString& filename )
 {
-    if ( !QFileInfo(filename).exists() || QMake::Driver::parseFile( filename, &m_root ) != 0 )
+    if ( !QFileInfo(filename).exists() || QMake::Driver::parseFile( filename, &m_root, 0 ) != 0 )
     {
         kdDebug( 9024 ) << "Couldn't parse project: " << filename << endl;
         m_root = 0;

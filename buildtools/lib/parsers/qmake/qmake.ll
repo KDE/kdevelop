@@ -19,8 +19,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qmake_yacc.h>
 #include <stdlib.h>
+
+#define DONT_INCLUDE_FLEXLEXER
+
+#include "qmake_lex.h"
 
 /**
 @file qmake.ll
@@ -48,6 +51,9 @@ To debug this lexer, put the line below into the next flex file section.
 %}
 
 %option noyywrap
+%option yylineno
+%option c++
+%option yyclass="QMake::Lexer"
 
 %x list
 %x list_with_comment
@@ -55,69 +61,160 @@ To debug this lexer, put the line below into the next flex file section.
 
 delim             [ \t]
 ws                {delim}+
-begin_ws          ^{delim}+[^\n\t ]
+begin_ws          ^{delim}+[^\r\n\t ]
 quote             "\""
-var_value         [^\n\t ]*[^\n\t \\]
+var_value         [^\r\n\t ]*[^\r\n\t \\]
 quoted_var_value  {quote}({var_value}|[\t ])({var_value}|[\t ])*{quote}
 letter            [A-Za-z]
 digit             [0-9]
 id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.|\+|\-)*
-id_args           [^\n]*\)
+id_args           [^\r\n]*\)
 number            {digit}+
 comment           #.*
-comment_cont      {ws}*#.*\n
+comment_cont      {ws}*#.*(\n|\r|\r\n)
 comment_cont_nn   {ws}*#.*
-cont              \\{ws}*\n
+cont              \\{ws}*(\n|\r|\r\n)
 
 %%
-<INITIAL>{ws}  {}
-<list,list_with_comment>{ws}     { yylval.value = yytext; return LIST_WS; }
-<list,list_with_comment>{begin_ws}       { 
-    yylval.value = yytext;
-    unput(char(yylval.value.at(yylval.value.length()-1).latin1()));
-    yylval.value = yylval.value.mid(0, yylval.value.length()-1);
-    return INDENT;
+<INITIAL>{ws} {}
+
+<list,list_with_comment>{ws} {
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::LIST_WS;
 }
 
-<list,list_with_comment,INITIAL>{cont}   { BEGIN(list); return CONT; }
-{id_simple}            { yylval.value = yytext; return (ID_SIMPLE); }
+<list,list_with_comment>{begin_ws} {
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    unput(char(mylval->value.at(mylval->value.length()-1).latin1()));
+    mylval->value = mylval->value.mid(0, mylval->value.length()-1);
+    return Parser::token::token::INDENT;
+}
+
+<list,list_with_comment,INITIAL>{cont} {
+    BEGIN(list);
+    return Parser::token::token::CONT;
+}
+{id_simple} {
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return (Parser::token::token::ID_SIMPLE);
+}
 
 <list_with_comment>{comment_cont_nn} {
-    yylval.value = yytext;
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     BEGIN(list);
-    return (LIST_COMMENT_WITHOUT_NEWLINE);
+    return (Parser::token::token::LIST_COMMENT_WITHOUT_NEWLINE);
 }
 
 <list>{comment_cont} {
-    yylval.value = yytext;
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     BEGIN(list);
-    return (LIST_COMMENT);
+    return (Parser::token::token::LIST_COMMENT);
     }
 
 <funcargs>{id_args} {
-    yylval.value = yytext;
-    yylval.value = yylval.value.mid(0, yylval.value.length()-1);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    mylval->value = mylval->value.mid(0, mylval->value.length()-1);
     unput(')');
     BEGIN(INITIAL);
-    return (ID_ARGS);
+    return (Parser::token::token::ID_ARGS);
     }
 
-<list,list_with_comment>{var_value}        { BEGIN(list_with_comment); yylval.value = yytext; return VARIABLE_VALUE; }
-<list,list_with_comment>{quoted_var_value} { BEGIN(list_with_comment); yylval.value = yytext; return QUOTED_VARIABLE_VALUE; }
+<list,list_with_comment>{var_value} {
+    BEGIN(list_with_comment);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::VARIABLE_VALUE;
+}
 
-"="                      { BEGIN(list); yylval.value = yytext; return EQ; }
-"+="                     { BEGIN(list); yylval.value = yytext; return PLUSEQ; }
-"-="                     { BEGIN(list); yylval.value = yytext; return MINUSQE; }
-"*="                     { BEGIN(list); yylval.value = yytext; return STAREQ; }
-"~="                     { BEGIN(list); yylval.value = yytext; return TILDEEQ; }
-"{"                      { return LCURLY; }
-":"{delim}*"{"                      { return LCURLY; }
-"}"                      { return RCURLY; }
-"("                      { BEGIN(funcargs); return LBRACE; }
-<funcargs,INITIAL>")"    { BEGIN(INITIAL); return RBRACE; }
-":"                      { yylval.value = yytext; return COLON; }
-<list,list_with_comment,INITIAL>"\n"       { BEGIN(INITIAL); return NEWLINE; }
+<list,list_with_comment>{quoted_var_value} {
+    BEGIN(list_with_comment);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::QUOTED_VARIABLE_VALUE;
+}
 
-{comment}                { yylval.value = yytext; return (COMMENT); }
+"=" {
+BEGIN(list);
+mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+return Parser::token::token::EQ;
+}
+
+"+=" {
+    BEGIN(list);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::PLUSEQ;
+}
+
+"-=" {
+    BEGIN(list);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::MINUSEQ;
+}
+
+"*=" {
+    BEGIN(list);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::STAREQ;
+}
+
+"~=" {
+    BEGIN(list);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::TILDEEQ;
+}
+
+"{" {
+    return Parser::token::token::LCURLY;
+}
+
+":"{delim}*"{" {
+    return Parser::token::token::LCURLY;
+}
+
+"}" {
+    return Parser::token::token::RCURLY;
+}
+
+"(" {
+    BEGIN(funcargs);
+    return Parser::token::token::LBRACE;
+}
+
+<funcargs,INITIAL>")" {
+    BEGIN(INITIAL);
+    return Parser::token::token::RBRACE;
+}
+
+":" {
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::COLON;
+}
+
+<list,list_with_comment,INITIAL>"\n" {
+    BEGIN(INITIAL);
+    return Parser::token::token::NEWLINE;
+}
+
+{comment} {
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return (Parser::token::token::COMMENT);
+}
 
 %%
+namespace QMake
+{
+    Lexer::Lexer( std::istream* argin, std::ostream* argout )
+        : yyFlexLexer(argin, argout), mylval(0)
+    {
+    }
+
+    int Lexer::yylex( QMake::Parser::semantic_type* yylval )
+    {
+        mylval = yylval;
+        return yylex();
+    }
+}
+
+int QMakelex( QMake::Parser::semantic_type* yylval, QMake::Lexer* lexer)
+{
+    return lexer->yylex( yylval );
+}
+

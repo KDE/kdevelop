@@ -2,6 +2,8 @@
 /***************************************************************************
  *   Copyright (C) 2005 by Alexander Dymo                                  *
  *   adymo@kdevelop.org                                                    *
+ *   Copyright (C) 2006 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -38,7 +40,9 @@ SOURCES = foo #regognize me
 
 #define YYSTYPE_IS_DECLARED
 
-using namespace QMake;
+namespace QMake
+{
+    class Lexer;
 
 /**
 The yylval type.
@@ -70,13 +74,11 @@ struct Result {
     QString indent;
 };
 
+#define YYSTYPE Result
 typedef Result YYSTYPE;
-
-void yyerror(const char *str) {
-    printf("%s\n", str);
 }
 
-int yylex();
+extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer );
 
 /**
 The stack to store ProjectAST pointers when a new child
@@ -90,7 +92,7 @@ When a scope or function scope statement is parsed, the child ProjectAST is crea
 and pushed onto the stack. Therefore all statements which belong to the scope
 or function scope are added as childs to their direct parent (scope or function scope).
 */
-QValueStack<ProjectAST*> projects;
+//QValueStack<ProjectAST*> projects;
 
 /**
 The current depth of AST node is stored here.
@@ -98,7 +100,7 @@ AST depth is important to know because automatic indentation can
 be easily implemented (the parser itself looses all information
 about indentation).
 */
-int depth = 0;
+// int depth = 0;
 
 /*
 To debug this parser, put the line below into the next bison file section.
@@ -107,10 +109,19 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 */
 %}
 
+%skeleton "lalr1.cc"
+%define "parser_class_name" "Parser"
+%name-prefix="QMake"
+%parse-param { QMake::Lexer* lexer }
+%parse-param { QValueStack<ProjectAST*>& projects }
+%parse-param { int depth }
+%lex-param   { QMake::Lexer* lexer }
+%start project
+
 %token ID_SIMPLE
 %token EQ
 %token PLUSEQ
-%token MINUSQE
+%token MINUSEQ
 %token STAREQ
 %token TILDEEQ
 %token LBRACE
@@ -228,7 +239,7 @@ variable_value : VARIABLE_VALUE     { $<value>$ = $<value>1; }
     | QUOTED_VARIABLE_VALUE  { $<value>$ = $<value>1; }
     ;
 
-operator : EQ | PLUSEQ | MINUSQE | STAREQ | TILDEEQ
+operator : EQ | PLUSEQ | MINUSEQ | STAREQ | TILDEEQ
     ;
 
 scope : ID_SIMPLE
@@ -315,4 +326,11 @@ emptyline : NEWLINE
 
 %%
 
-#include "qmake_lex.cpp"
+
+namespace QMake
+{
+    void Parser::error(const location_type& /*l*/, const std::string& m)
+    {
+        std::cerr << m << std::endl;
+    }
+}

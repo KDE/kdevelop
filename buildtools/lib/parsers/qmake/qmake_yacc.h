@@ -1,9 +1,8 @@
 /* A Bison parser, made by GNU Bison 2.3.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
+/* Skeleton interface for Bison LALR(1) parsers in C++
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,11 +32,195 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Tokens.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
+/* C++ LALR(1) parser skeleton written by Akim Demaille.  */
+
+#ifndef PARSER_HEADER_H
+# define PARSER_HEADER_H
+
+#include <string>
+#include <iostream>
+#include "stack.hh"
+
+namespace QMake
+{
+  class position;
+  class location;
+}
+
+/* First part of user declarations.  */
+#line 1 "qmake.yy"
+
+/***************************************************************************
+ *   Copyright (C) 2005 by Alexander Dymo                                  *
+ *   adymo@kdevelop.org                                                    *
+ *   Copyright (C) 2006 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+/**
+@file qmake.yy
+QMake Parser
+
+Simple LALR parser which builds the syntax tree (see @ref QMake::AST).
+
+@todo Recognize comments after statements like:
+SOURCES = foo #regognize me
+
+@fixme Parser fails on files that do not end with a newline
+@fixme 1 shift/reduce conflict in "line_body" rule
+*/
+
+#include <qvaluestack.h>
+#include "qmakeast.h"
+#include <qregexp.h>
+
+#define YYSTYPE_IS_DECLARED
+
+namespace QMake
+{
+    class Lexer;
+
+/**
+The yylval type.
+*/
+struct Result {
+    Result(): node(0) {}
+
+    /**Type of semantic value for simple grammar rules.*/
+    QString value;
+    /**Type of semantic value for grammar rules which are parts of AST.*/
+    AST *node;
+    /**Type of semantic value for "multiline_values" grammar rule.
+    Each line of multiline value is stored as a string in the list.
+
+    For example we have in .pro file:
+    @code
+    SOURCE = foo1.cpp \
+        foo2.cpp \
+        foo3.cpp foo4.cpp
+    @endcode
+    The string list will be populated with three strings:
+    <pre>
+    foo1.cpp
+    foo2.cpp
+    foo3.cpp foo4.cpp
+    </pre>
+    */
+    QStringList values;
+    QString indent;
+};
+
+#define YYSTYPE Result
+typedef Result YYSTYPE;
+}
+
+extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer );
+
+/**
+The stack to store ProjectAST pointers when a new child
+ProjectAST is created and filled with statements.
+
+Parser creates root ProjectAST for a .pro file, pushes it onto the stack and starts
+adding statements. Each statement is added as a child StatementAST to the ProjectAST
+currently on the top in the stack.
+
+When a scope or function scope statement is parsed, the child ProjectAST is created
+and pushed onto the stack. Therefore all statements which belong to the scope
+or function scope are added as childs to their direct parent (scope or function scope).
+*/
+//QValueStack<ProjectAST*> projects;
+
+/**
+The current depth of AST node is stored here.
+AST depth is important to know because automatic indentation can
+be easily implemented (the parser itself looses all information
+about indentation).
+*/
+// int depth = 0;
+
+/*
+To debug this parser, put the line below into the next bison file section.
+Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
+%debug
+*/
+
+
+/* Line 35 of lalr1.cc.  */
+#line 165 "qmake_yacc.hpp"
+
+#include "location.hh"
+
+/* Enabling traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+
+/* Enabling verbose error messages.  */
+#ifdef YYERROR_VERBOSE
+# undef YYERROR_VERBOSE
+# define YYERROR_VERBOSE 1
+#else
+# define YYERROR_VERBOSE 0
+#endif
+
+/* Enabling the token table.  */
+#ifndef YYTOKEN_TABLE
+# define YYTOKEN_TABLE 0
+#endif
+
+/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
+   If N is 0, then set CURRENT to the empty location which ends
+   the previous symbol: RHS[0] (always defined).  */
+
+#ifndef YYLLOC_DEFAULT
+# define YYLLOC_DEFAULT(Current, Rhs, N)		\
+do {							\
+  if (N)						\
+    {							\
+      (Current).begin = (Rhs)[1].begin;			\
+      (Current).end   = (Rhs)[N].end;			\
+    }							\
+  else							\
+    {							\
+      (Current).begin = (Current).end = (Rhs)[0].end;	\
+    }							\
+} while (false)
+#endif
+
+namespace QMake
+{
+
+  /// A Bison parser.
+  class Parser
+  {
+  public:
+    /// Symbol semantic values.
+#ifndef YYSTYPE
+    typedef int semantic_type;
+#else
+    typedef YYSTYPE semantic_type;
+#endif
+    /// Symbol locations.
+    typedef location location_type;
+    /// Tokens.
+    struct token
+    {
+      /* Tokens.  */
    enum yytokentype {
      ID_SIMPLE = 258,
      EQ = 259,
@@ -63,41 +246,176 @@
      INDENT = 279,
      LIST_WS = 280
    };
+
+    };
+    /// Token type.
+    typedef token::yytokentype token_type;
+
+    /// Build a parser object.
+    Parser (QMake::Lexer* lexer_yyarg, QValueStack<ProjectAST*> projects_yyarg, int depth = 0_yyarg);
+    virtual ~Parser ();
+
+    /// Parse.
+    /// \returns  0 iff parsing succeeded.
+    virtual int parse ();
+
+    /// The current debugging stream.
+    std::ostream& debug_stream () const;
+    /// Set the current debugging stream.
+    void set_debug_stream (std::ostream &);
+
+    /// Type for debugging levels.
+    typedef int debug_level_type;
+    /// The current debugging level.
+    debug_level_type debug_level () const;
+    /// Set the current debugging level.
+    void set_debug_level (debug_level_type l);
+
+  private:
+    /// Report a syntax error.
+    /// \param loc    where the syntax error is found.
+    /// \param msg    a description of the syntax error.
+    virtual void error (const location_type& loc, const std::string& msg);
+
+    /// Generate an error message.
+    /// \param state   the state where the error occurred.
+    /// \param tok     the look-ahead token.
+    virtual std::string yysyntax_error_ (int yystate);
+
+#if YYDEBUG
+    /// \brief Report a symbol value on the debug stream.
+    /// \param yytype       The token type.
+    /// \param yyvaluep     Its semantic value.
+    /// \param yylocationp  Its location.
+    virtual void yy_symbol_value_print_ (int yytype,
+					 const semantic_type* yyvaluep,
+					 const location_type* yylocationp);
+    /// \brief Report a symbol on the debug stream.
+    /// \param yytype       The token type.
+    /// \param yyvaluep     Its semantic value.
+    /// \param yylocationp  Its location.
+    virtual void yy_symbol_print_ (int yytype,
+				   const semantic_type* yyvaluep,
+				   const location_type* yylocationp);
+#endif /* ! YYDEBUG */
+
+
+    /// State numbers.
+    typedef int state_type;
+    /// State stack type.
+    typedef stack<state_type>    state_stack_type;
+    /// Semantic value stack type.
+    typedef stack<semantic_type> semantic_stack_type;
+    /// location stack type.
+    typedef stack<location_type> location_stack_type;
+
+    /// The state stack.
+    state_stack_type yystate_stack_;
+    /// The semantic value stack.
+    semantic_stack_type yysemantic_stack_;
+    /// The location stack.
+    location_stack_type yylocation_stack_;
+
+    /// Internal symbol numbers.
+    typedef unsigned char token_number_type;
+    /* Tables.  */
+    /// For a state, the index in \a yytable_ of its portion.
+    static const signed char yypact_[];
+    static const signed char yypact_ninf_;
+
+    /// For a state, default rule to reduce.
+    /// Unless\a  yytable_ specifies something else to do.
+    /// Zero means the default is an error.
+    static const unsigned char yydefact_[];
+
+    static const signed char yypgoto_[];
+    static const signed char yydefgoto_[];
+
+    /// What to do in a state.
+    /// \a yytable_[yypact_[s]]: what to do in state \a s.
+    /// - if positive, shift that token.
+    /// - if negative, reduce the rule which number is the opposite.
+    /// - if zero, do what YYDEFACT says.
+    static const unsigned char yytable_[];
+    static const signed char yytable_ninf_;
+
+    static const unsigned char yycheck_[];
+
+    /// For a state, its accessing symbol.
+    static const unsigned char yystos_[];
+
+    /// For a rule, its LHS.
+    static const unsigned char yyr1_[];
+    /// For a rule, its RHS length.
+    static const unsigned char yyr2_[];
+
+#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
+    /// For a symbol, its name in clear.
+    static const char* const yytname_[];
 #endif
-/* Tokens.  */
-#define ID_SIMPLE 258
-#define EQ 259
-#define PLUSEQ 260
-#define MINUSQE 261
-#define STAREQ 262
-#define TILDEEQ 263
-#define LBRACE 264
-#define RBRACE 265
-#define COLON 266
-#define NUMSIGN 267
-#define NEWLINE 268
-#define NUMBER 269
-#define COMMENT 270
-#define CONT 271
-#define RCURLY 272
-#define LCURLY 273
-#define ID_ARGS 274
-#define LIST_COMMENT 275
-#define LIST_COMMENT_WITHOUT_NEWLINE 276
-#define QUOTED_VARIABLE_VALUE 277
-#define VARIABLE_VALUE 278
-#define INDENT 279
-#define LIST_WS 280
 
-
-
-
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
-# define YYSTYPE_IS_TRIVIAL 1
+#if YYERROR_VERBOSE
+    /// Convert the symbol name \a n to a form suitable for a diagnostic.
+    virtual std::string yytnamerr_ (const char *n);
 #endif
 
-extern YYSTYPE yylval;
+#if YYDEBUG
+    /// A type to store symbol numbers and -1.
+    typedef signed char rhs_number_type;
+    /// A `-1'-separated list of the rules' RHS.
+    static const rhs_number_type yyrhs_[];
+    /// For each rule, the index of the first RHS symbol in \a yyrhs_.
+    static const unsigned char yyprhs_[];
+    /// For each rule, its source line number.
+    static const unsigned short int yyrline_[];
+    /// For each scanner token number, its symbol number.
+    static const unsigned short int yytoken_number_[];
+    /// Report on the debug stream that the rule \a r is going to be reduced.
+    virtual void yy_reduce_print_ (int r);
+    /// Print the state stack on the debug stream.
+    virtual void yystack_print_ ();
+#endif
 
+    /// Convert a scanner token number \a t to a symbol number.
+    token_number_type yytranslate_ (int t);
+
+    /// \brief Reclaim the memory associated to a symbol.
+    /// \param yymsg        Why this token is reclaimed.
+    /// \param yytype       The symbol type.
+    /// \param yyvaluep     Its semantic value.
+    /// \param yylocationp  Its location.
+    inline void yydestruct_ (const char* yymsg,
+			     int yytype,
+			     semantic_type* yyvaluep,
+			     location_type* yylocationp);
+
+    /// Pop \a n symbols the three stacks.
+    inline void yypop_ (unsigned int n = 1);
+
+    /* Constants.  */
+    static const int yyeof_;
+    /* LAST_ -- Last index in TABLE_.  */
+    static const int yylast_;
+    static const int yynnts_;
+    static const int yyempty_;
+    static const int yyfinal_;
+    static const int yyterror_;
+    static const int yyerrcode_;
+    static const int yyntokens_;
+    static const unsigned int yyuser_token_number_max_;
+    static const token_number_type yyundef_token_;
+
+    /* Debugging.  */
+    int yydebug_;
+    std::ostream* yycdebug_;
+
+
+    /* User arguments.  */
+    QMake::Lexer* lexer;
+    QValueStack<ProjectAST*> projects;
+    int depth = 0;
+  };
+}
+
+
+#endif /* ! defined PARSER_HEADER_H */

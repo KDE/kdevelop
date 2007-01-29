@@ -20,57 +20,67 @@
 #include "qmakedriver.h"
 #include "qmakeast.h"
 
-#include <stdio.h>
 #include <qvaluestack.h>
 #include <kio/netaccess.h>
 
-extern FILE *yyin, *yyout;
-extern int yyparse();
-extern int yydebug;
-typedef struct yy_buffer_state *YY_BUFFER_STATE;
-extern YY_BUFFER_STATE yy_scan_string(const char*);
-extern void yy_delete_buffer(YY_BUFFER_STATE);
-extern QValueStack<QMake::ProjectAST *> projects;
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+#include "qmake_lex.h"
+#include "qmake_yacc.h"
 
 namespace QMake {
 
-int Driver::parseFile(const char *fileName, ProjectAST **ast)
+int Driver::parseFile(const char *fileName, ProjectAST **ast, int debug)
 {
-    yyin = fopen(fileName, "r");
-    if (yyin == 0)
+    std::ifstream inf( fileName, std::ios::in );
+    if ( !inf.is_open() )
     {
         *ast = 0;
         return 1;
     }
 //     yydebug = 1;
-    int ret = yyparse();
-    *ast = projects.top();
+    Lexer l(&inf);
+    l.set_debug(debug);
+    int depth = 0;
+    QValueStack<ProjectAST*> stack;
+    Parser p(&l, stack, depth);
+    p.set_debug_level(debug);
+    int ret = p.parse();
+    *ast = stack.top();
     (*ast)->setFileName(fileName);
     return ret;
 }
 
-int Driver::parseFile(QString fileName, ProjectAST **ast)
+int Driver::parseFile(QString fileName, ProjectAST **ast, int debug)
 {
-    return parseFile(fileName.ascii(), ast);
+    return parseFile(fileName.ascii(), ast, debug);
 }
 
-int Driver::parseFile(KURL fileName, ProjectAST **ast)
+int Driver::parseFile(KURL fileName, ProjectAST **ast, int debug)
 {
     QString tmpFile;
     int ret = 0;
     if (KIO::NetAccess::download(fileName, tmpFile, 0))
-        ret = parseFile(tmpFile, ast);
+        ret = parseFile(tmpFile, ast, debug);
     KIO::NetAccess::removeTempFile(tmpFile);
     return ret;
 }
 
-int Driver::parseString( const char* string, ProjectAST **ast )
+int Driver::parseString( const char* string, ProjectAST **ast, int debug )
 {
-    YY_BUFFER_STATE state = yy_scan_string( string );
-    int ret = yyparse();
-    *ast = projects.top();
+    std::istringstream ins;
+    ins.str(string);
+    Lexer l(&ins);
+    l.set_debug(debug);
+    int depth = 0;
+    QValueStack<ProjectAST*> stack;
+    Parser p(&l, stack, depth);
+    p.set_debug_level(debug);
+    int ret = p.parse();
+    *ast = stack.top();
     (*ast)->setFileName("");
-    yy_delete_buffer( state );
     return ret;
 }
 

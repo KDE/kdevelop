@@ -10,22 +10,20 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 METASOURCES = AUTO
 lib_LTLIBRARIES = libkdevqmakeparser.la
 libkdevqmakeparser_la_LDFLAGS = -no-undefined $(all_libraries) $(LIB_KIO)
-libkdevqmakeparser_la_SOURCES = qmakeast.cpp qmakedriver.cpp qmake_yacc.cpp \
-	qmakeastvisitor.cpp
+libkdevqmakeparser_la_SOURCES = qmake_lex.cpp qmake_yacc.cpp qmakeast.cpp \
+	qmakeastvisitor.cpp qmakedriver.cpp
 
 kdevelopbuildtoolsincludedir = $(includedir)/kdevelop/buildtools/parsers/qmake
 kdevelopbuildtoolsinclude_HEADERS = qmakeast.h qmakedriver.h qmakeastvisitor.h
 
 parser:
 	cd $(srcdir) ; \
-	bison -d qmake.yy -o qmake_yacc.cpp ; \
-	mv -f qmake_yacc.hpp qmake_yacc.h ; \
+	bison -d qmake.yy -oqmake_yacc.cpp ; \
 	flex -oqmake_lex.cpp qmake.ll
 
 parser_dbg:
 	cd $(srcdir) ; \
-	bison -d qmake.yy -r all -k -t -o qmake_yacc.cpp ; \
-	mv -f qmake_yacc.hpp qmake_yacc.h ; \
+	bison -d qmake.yy -r all -k -t -oqmake_yacc.cpp ; \
 	flex -d -oqmake_lex.cpp qmake.ll
 
 EXTRA_DIST = qmake.yy qmake.ll
@@ -35,3 +33,4 @@ DOXYGEN_PROJECTNAME = KDevelop QMake parser
 DOXYGEN_DOCDIRPREFIX = kdevparser
 include ../../../../Doxyfile.am
 
+noinst_HEADERS = qmake_lex.h
