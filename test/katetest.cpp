@@ -32,7 +32,7 @@
 #include <kio/netaccess.h>
 
 #include <kdeversion.h>
-#include <kaboutapplication.h>
+#include <kaboutapplicationdialog.h>
 #include <dcopclient.h>
 #include <kurl.h>
 #include <kencodingfiledialog.h>
@@ -551,11 +551,8 @@ void KWrite::restore()
 
 void KWrite::aboutEditor()
 {
-  KAboutApplication *ad = new KAboutApplication (m_view->document()->editor()->aboutData(), this);
-
-  ad->exec();
-
-  delete ad;
+  KAboutApplicationDialog dlg(m_view->document()->editor()->aboutData(), this);
+  dlg.exec();
 }
 
 void KWrite::updateStatus ()
