@@ -117,16 +117,18 @@ Scope::Scope( unsigned int num, Scope* parent, QMake::IncludeAST* incast, const 
     m_part(part), m_defaultopts(defaultopts)
 {
     QString absfilename;
-    QString tmp;
-    if( incfile.contains(")" ) )
-        tmp = incfile.mid(0, incfile.find(")") );
-    else
-        tmp = incfile;
+    QString tmp = incfile.stripWhiteSpace();
+    if( tmp.contains(")" ) )
+        tmp = tmp.mid(0, tmp.find(")") );
+
+    if( tmp.startsWith( "\"" ) )
+        tmp = tmp.mid( 1, tmp.length()-2 );
+
     if( QFileInfo(tmp).isRelative() )
     {
-        absfilename = path + QString( QChar( QDir::separator() ) ) + tmp;
+        absfilename = QDir::cleanDirPath( path + QString( QChar( QDir::separator() ) ) + tmp );
     }else
-        absfilename = tmp;
+        absfilename = QDir::cleanDirPath( tmp );
     if ( !loadFromFile( absfilename ) )
     {
         if( !QFileInfo( absfilename ).exists() && QFileInfo( QFileInfo( absfilename ).dirPath( true ) ).exists() )
