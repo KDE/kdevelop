@@ -225,7 +225,7 @@ namespace QMake
      ID_SIMPLE = 258,
      EQ = 259,
      PLUSEQ = 260,
-     MINUSQE = 261,
+     MINUSEQ = 261,
      STAREQ = 262,
      TILDEEQ = 263,
      LBRACE = 264,
@@ -252,7 +252,7 @@ namespace QMake
     typedef token::yytokentype token_type;
 
     /// Build a parser object.
-    Parser (QMake::Lexer* lexer_yyarg, QValueStack<ProjectAST*> projects_yyarg, int depth = 0_yyarg);
+    Parser (QMake::Lexer* lexer_yyarg, QValueStack<ProjectAST*>& projects_yyarg, int depth_yyarg);
     virtual ~Parser ();
 
     /// Parse.
@@ -412,8 +412,8 @@ namespace QMake
 
     /* User arguments.  */
     QMake::Lexer* lexer;
-    QValueStack<ProjectAST*> projects;
-    int depth = 0;
+    QValueStack<ProjectAST*>& projects;
+    int depth;
   };
 }
 
