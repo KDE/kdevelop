@@ -74,7 +74,7 @@ void QuickOpenFunctionDialog::fillFunctions()
         const FunctionModel *fmodel = (*it).data();
         m_items.append( fmodel->name() );
     }
-    m_items.sort();
+    QStringList_unique( m_items );
     itemList->clear();
     itemList->insertStringList( m_items );
 }

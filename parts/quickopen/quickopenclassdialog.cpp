@@ -42,7 +42,7 @@ QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent,
     itemListLabel->setText( i18n("Class &list:") );
 
     findAllClasses( m_items );
-    m_items.sort();
+    QStringList_unique( m_items );
 
     nameEdit->setFocus();
 

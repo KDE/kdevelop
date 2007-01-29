@@ -23,31 +23,10 @@
  
 #include <klistbox.h>
 #include <klineedit.h>
+#include <kdebug.h>
 
 #include "quickopendialog.h"
 #include "quickopen_part.h"
-
-namespace
-{
-    void QStringList_unique( QStringList & list )
-    {
-        if ( list.size() < 2 ) return;
-
-        list.sort();
-
-        QStringList::iterator it = list.begin();
-        QStringList::iterator it2 = it;
-        while ( it2 != list.end() )
-        {
-            ++it2;
-            while ( it2 != list.end() && *it2 == *it )
-            {
-                it2 = list.remove( it2 );
-            }
-            it = it2;
-        }
-    }
-}
 
 QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
@@ -135,9 +114,26 @@ QStringList QuickOpenDialog::wildCardCompletion(const QString & text)
         ++it;
     }
 
-    QStringList_unique( matches );
-
     return matches;
+}
+
+void QuickOpenDialog::QStringList_unique( QStringList & list )
+{
+    if ( list.size() < 2 ) return;
+
+    list.sort();
+
+    QStringList::iterator it = list.begin();
+    QStringList::iterator it2 = it;
+    while ( it2 != list.end() )
+    {
+        ++it2;
+        while ( it2 != list.end() && *it2 == *it )
+        {
+            it2 = list.remove( it2 );
+        }
+        it = it2;
+    }
 }
 
 #include "quickopendialog.moc"
