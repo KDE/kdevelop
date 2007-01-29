@@ -616,7 +616,6 @@ void TrollProjectWidget::slotConfigureProject()
 void TrollProjectWidget::slotExecuteTarget()
 {
     //m_part->slotExecute();
-
     // no subproject selected
     if ( !m_shownSubproject )
         return ;
@@ -626,9 +625,11 @@ void TrollProjectWidget::slotExecuteTarget()
         return ;
 
 
+
     // Only run application projects
-    if ( m_shownSubproject->scope->variableValues( "TEMPLATE" ).findIndex( "app" ) == -1 )
+    if ( !m_shownSubproject->scope->variableValues( "TEMPLATE" ).isEmpty() && m_shownSubproject->scope->variableValues( "TEMPLATE" ).findIndex( "app" ) == -1 )
         return ;
+
 
     QString dircmd = "cd " + KProcess::quote( subprojectDirectory() + QString( QChar( QDir::separator() ) ) + getCurrentDestDir() ) + " && ";
     QString program = KProcess::quote( "." + QString( QChar( QDir::separator() ) ) + getCurrentOutputFilename() );

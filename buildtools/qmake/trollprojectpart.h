@@ -90,7 +90,8 @@ private:
     bool m_tmakeProject;
 
     QMap<QString, QDateTime> m_timestamp;
-    bool m_executeAfterBuild;
+    bool m_executeProjectAfterBuild;
+    bool m_executeTargetAfterBuild;
     QString m_buildCommand;
 
     KDirWatch* m_dirWatch;

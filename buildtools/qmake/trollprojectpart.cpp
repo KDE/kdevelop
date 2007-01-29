@@ -70,7 +70,8 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     setXMLFile("kdevtrollproject.rc");
 
-    m_executeAfterBuild = false;
+    m_executeProjectAfterBuild = false;
+    m_executeTargetAfterBuild = false;
 
     m_dirWatch = new KDirWatch(this);
 
@@ -417,7 +418,7 @@ void TrollProjectPart::slotBuildAndExecuteProject()
 {
     partController()->saveAllFiles();
     if (isDirty()) {
-        m_executeAfterBuild = true;
+        m_executeProjectAfterBuild = true;
         m_widget->slotBuildProject();
     } else
         m_widget->slotExecuteProject();
@@ -427,7 +428,7 @@ void TrollProjectPart::slotBuildAndExecuteTarget()
 {
     partController()->saveAllFiles();
     if (isDirty()) {
-        m_executeAfterBuild = true;
+        m_executeTargetAfterBuild = true;
         m_widget->slotBuildTarget();
     } else
         m_widget->slotExecuteTarget();
@@ -724,10 +725,16 @@ void TrollProjectPart::slotCommandFinished( const QString& command )
 
     emit projectCompiled();
 
-    if( m_executeAfterBuild ){
+    if( m_executeProjectAfterBuild )
+    {
         m_widget->slotExecuteProject();
-        m_executeAfterBuild = false;
+        m_executeProjectAfterBuild = false;
+    }else if( m_executeTargetAfterBuild )
+        {
+        m_widget->slotExecuteTarget();
+        m_executeTargetAfterBuild = false;
     }
+
 }
 
 bool TrollProjectPart::isDirty()
