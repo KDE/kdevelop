@@ -67,7 +67,7 @@ var_value         [^\r\n\t ]*[^\r\n\t \\]
 quoted_var_value  {quote}({var_value}|[\t ])({var_value}|[\t ])*{quote}
 letter            [A-Za-z]
 digit             [0-9]
-id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.|\+|\-)*
+id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.)*
 id_args           [^\r\n]*\)
 number            {digit}+
 comment           #.*

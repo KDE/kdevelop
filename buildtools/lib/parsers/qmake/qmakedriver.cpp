@@ -28,7 +28,7 @@
 #include <sstream>
 
 #include "qmake_lex.h"
-#include "qmake_yacc.h"
+#include "qmake_yacc.hpp"
 
 namespace QMake {
 
