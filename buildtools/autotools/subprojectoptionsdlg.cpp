@@ -301,7 +301,11 @@ void SubprojectOptionsDialog::outsideAddClicked()
 {
     QString dir = KFileDialog::getExistingDirectory();
     if (!dir.isEmpty())
+    {
+        if( !dir.startsWith( "-I" ) )
+            dir = "-I"+dir;
         new QListViewItem(outsideinc_listview, dir);
+    }
 }
 
 
