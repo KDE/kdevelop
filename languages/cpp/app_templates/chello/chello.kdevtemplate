@@ -121,6 +121,7 @@ Comment[pt]= Localização opcional dos ficheiros de inclusão.
 Comment[pt_BR]= Localização opcional dos ficheiros de inclusão.
 Comment[ru]=Дополнительные пути для заголовочных файлов.
 Comment[sk]=Voliteľná cesta pre include.
+Comment[sl]=Neobvezna pot za vstavke.
 Comment[sr]=Опциона путања за укључивања.
 Comment[sr@Latn]=Opciona putanja za uključivanja.
 Comment[sv]= Valfri sökväg till deklarationsfiler.
