@@ -34,6 +34,8 @@ CustomMakeConfigWidget::CustomMakeConfigWidget(CustomProjectPart* part, const QS
 {
     abort_box->setChecked(DomUtil::readBoolEntry(m_dom, m_configGroup + "/make/abortonerror"));
     jobs_box->setValue(DomUtil::readIntEntry(m_dom, m_configGroup + "/make/numberofjobs"));
+    runMultiJobs->setChecked( (jobs_box->value() > 0 ) );
+
     prio_box->setValue(DomUtil::readIntEntry(m_dom, m_configGroup + "/make/prio"));
     dontact_box->setChecked(DomUtil::readBoolEntry(m_dom, m_configGroup + "/make/dontact"));
     makebin_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/makebin"));
@@ -115,7 +117,10 @@ void CustomMakeConfigWidget::envCopied()
 void CustomMakeConfigWidget::accept()
 {
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/abortonerror", abort_box->isChecked());
-    DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/numberofjobs", jobs_box->value());
+    if( runMultiJobs->isChecked() )
+        DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/numberofjobs", jobs_box->value());
+    else
+        DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/numberofjobs", 0);
     DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/prio", prio_box->value());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/dontact", dontact_box->isChecked());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/makebin", makebin_edit->text());

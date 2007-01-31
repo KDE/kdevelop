@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CustomMakeConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -95,15 +95,26 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>layout6</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>runMultiJobs</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Run multiple jobs</string>
+                    </property>
+                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>jobs_label</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
                     </property>
                     <property name="text">
                         <string>Number of simultaneous &amp;jobs:</string>
@@ -115,6 +126,9 @@
                 <widget class="QSpinBox">
                     <property name="name">
                         <cstring>jobs_box</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -139,15 +153,25 @@
                         <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
-                        <enum>Fixed</enum>
+                        <enum>Expanding</enum>
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>20</width>
+                            <width>200</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>prio_label</cstring>
@@ -193,7 +217,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>40</width>
+                            <width>192</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -327,6 +351,18 @@
         <receiver>CustomMakeConfigWidgetBase</receiver>
         <slot>envRemoved()</slot>
     </connection>
+    <connection>
+        <sender>runMultiJobs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>jobs_label</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>runMultiJobs</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>jobs_box</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>abort_box</tabstop>
@@ -351,4 +387,9 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>
