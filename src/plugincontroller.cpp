@@ -100,10 +100,13 @@ void PluginController::loadInitialPlugins()
 
 	QStringList disableList;
 	Profile * profile = engine().findProfile( currentProfile() );
-	Profile::EntryList disableEntryList = profile->list( Profile::ExplicitDisable );
-	for ( Profile::EntryList::const_iterator it = disableEntryList.constBegin(); it != disableEntryList.constEnd(); ++it )
+	if( profile )
 	{
-		disableList << (*it).name;
+		Profile::EntryList disableEntryList = profile->list( Profile::ExplicitDisable );
+		for ( Profile::EntryList::const_iterator it = disableEntryList.constBegin(); it != disableEntryList.constEnd(); ++it )
+		{
+			disableList << (*it).name;
+		}
 	}
 	loadGlobalPlugins( disableList );
 }

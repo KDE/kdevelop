@@ -71,7 +71,7 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
     connect( this, SIGNAL( dropped(QDropEvent *, QListViewItem *) ),
              this, SLOT( slotDropped(QDropEvent *, QListViewItem *) ) );
 
-    _cfg = NULL;
+    _cfg = 0;
 
     QTimer::singleShot(0, this, SLOT(initConfig()));
 }
@@ -309,6 +309,8 @@ void SnippetWidget::insertIntoActiveView(QString text)
  */
 void SnippetWidget::writeConfig()
 {
+  if( !_cfg )
+    return;
   _cfg->deleteGroup("SnippetPart");  //this is neccessary otherwise delete entries will stay in list until
                                      //they get overwritten by a more recent entry
   _cfg->setGroup("SnippetPart");
