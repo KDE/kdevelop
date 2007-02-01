@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>492</width>
-            <height>502</height>
+            <width>342</width>
+            <height>524</height>
         </rect>
     </property>
     <grid>
@@ -266,69 +266,68 @@
             <property name="title">
                 <string></string>
             </property>
-            <widget class="QRadioButton">
+            <grid>
                 <property name="name">
-                    <cstring>useKDETerminal</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>462</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Use &amp;KDE setting</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Use the terminal as set in KControl</string>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>If checked, KDevelop will use the default terminal as set in KControl in KDE components, Component Chooser.</string>
-                </property>
-            </widget>
-            <widget class="KLineEdit">
-                <property name="name">
-                    <cstring>terminalEdit</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>70</x>
-                        <y>20</y>
-                        <width>392</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>useOtherTerminal</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>0</x>
-                        <y>20</y>
-                        <width>64</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&amp;Other:</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Set a different terminal than the KDE default one</string>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>Choose some other terminal different from the default one.</string>
-                </property>
-            </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>useKDETerminal</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use &amp;KDE setting</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Use the terminal as set in KControl</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, KDevelop will use the default terminal as set in KControl in KDE components, Component Chooser.</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="0">
+                    <property name="name">
+                        <cstring>layout9</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>useOtherTerminal</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Other:</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Set a different terminal than the KDE default one</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Choose some other terminal different from the default one.</string>
+                            </property>
+                        </widget>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>terminalEdit</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
         </widget>
         <widget class="QLabel" row="10" column="0" rowspan="1" colspan="2">
             <property name="name">
@@ -341,23 +340,6 @@
                 <set>AlignTop</set>
             </property>
         </widget>
-        <spacer row="12" column="1">
-            <property name="name">
-                <cstring>spacer23</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>61</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>textLabel2_2</cstring>
@@ -461,10 +443,25 @@
                 </widget>
             </hbox>
         </widget>
+        <spacer row="12" column="1">
+            <property name="name">
+                <cstring>spacer23</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>MinimumExpanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>useOtherTerminal</sender>
