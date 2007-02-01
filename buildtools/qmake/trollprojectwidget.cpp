@@ -631,7 +631,6 @@ void TrollProjectWidget::slotExecuteTarget()
         return ;
 
 
-    QString dircmd = "cd " + KProcess::quote( subprojectDirectory() + QString( QChar( QDir::separator() ) ) + getCurrentDestDir() ) + " && ";
     QString program = KProcess::quote( "." + QString( QChar( QDir::separator() ) ) + getCurrentOutputFilename() );
 
     // Build environment variables to prepend to the executable path
@@ -1956,12 +1955,8 @@ void TrollProjectWidget::slotExecuteProject()
     program.prepend( runEnvVars );
     program.append( " " + m_part->runArguments() + " " );
 
-    QString dircmd = "cd " + KProcess::quote( this->projectDirectory() ) + " && " ;
-
     bool inTerminal = DomUtil::readBoolEntry( *( m_part->projectDom() ), "/kdevtrollproject/run/terminal" );
-    //    m_part->appFrontend()->startAppCommand(dircmd + program, inTerminal);
-    //    m_part->execute(this->projectDirectory(), "./"+program );
-    m_part->appFrontend() ->startAppCommand( this->projectDirectory(), program, inTerminal );
+    m_part->appFrontend() ->startAppCommand( m_part->runDirectory(), program, inTerminal );
 }
 
 
