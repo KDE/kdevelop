@@ -1,8 +1,0 @@
-# KDE Config File
-[General]
-Name=Noatun visualization plugin
-Icon=noatunvisual.png
-Category=C++/KDE
-Comment=Generates a visualization plugin for noatun using SDL
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/plugin_APPNAMELC_impl.cpp

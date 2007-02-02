@@ -1,8 +1,0 @@
-Filename=noatun_%{APPNAMELC}plugin.la
-Author=%{AUTHOR}
-Site=http://noatun.kde.org/
-Email=%{EMAIL}
-Type=userinterface
-License=$LICENSE$
-Name=%{APPNAME}
-Comment=A UI for Noatun

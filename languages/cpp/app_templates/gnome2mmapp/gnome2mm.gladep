@@ -1,8 +1,0 @@
-<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<!DOCTYPE glade-project SYSTEM "http://glade.gnome.org/glade-project-2.0.dtd">
-
-<glade-project>
-  <name>Gnome2mm</name>
-  <program_name>gnome2mm</program_name>
-  <language>C++</language>
-</glade-project>

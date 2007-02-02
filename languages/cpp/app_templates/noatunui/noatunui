@@ -1,8 +1,0 @@
-# KDE Config File
-[General]
-Name=Noatun UI plugin
-Icon=noatunui.png
-Category=C++/KDE
-Comment=Generates a simple user interface plugin for noatun.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/plugin_APPNAMELC_impl.cpp
