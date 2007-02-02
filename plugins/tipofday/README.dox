@@ -1,8 +1,0 @@
-/** \class TipOfDayPart
-Shows a random "tip of the day" at KDevelop startup.
-
-\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
-
-\feature Shows a random "tip of the day" at KDevelop startup
-
-*/

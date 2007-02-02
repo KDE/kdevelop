@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevMakeView" version="1">
-<MenuBar>
- <Menu name="view">
-   <Action name="view_next_error" group="error_operations"/>
-   <Action name="view_previous_error" group="error_operations"/>
- </Menu>
-</MenuBar>
-</kpartgui>
