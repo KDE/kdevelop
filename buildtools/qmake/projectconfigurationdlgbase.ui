@@ -2169,116 +2169,12 @@ e</string>
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
-    <connection>
-        <sender>Browse</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>browseTargetPath()</slot>
-    </connection>
-    <connection>
-        <sender>buildmovedown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>buildorderMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>buildmoveup_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>buildorderMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>buttonApply</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>apply()</slot>
-    </connection>
-    <connection>
-        <sender>buttonCancel</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>reject()</slot>
-    </connection>
     <connection>
         <sender>buttonOk</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>checkInstallTarget</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>targetInstallChanged(bool)</slot>
-    </connection>
-    <connection>
-        <sender>customVariables</sender>
-        <signal>selectionChanged()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>newCustomVariableActive()</slot>
-    </connection>
-    <connection>
-        <sender>extAdd_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extAdd_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extEdit_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extEdit_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extMoveDown_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extMoveUp_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extRemove_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extRemove_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>groupBuildMode</sender>
-        <signal>clicked(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(int)</slot>
-    </connection>
-    <connection>
-        <sender>groupLibraries</sender>
-        <signal>clicked(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>groupLibrariesChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>groupQt4Libs</sender>
-        <signal>clicked(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(int)</slot>
-    </connection>
-    <connection>
-        <sender>groupRequirements</sender>
-        <signal>clicked(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>groupRequirementsChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>groupTemplate</sender>
-        <signal>clicked(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>groupTemplateChanged(int)</slot>
     </connection>
     <connection>
         <sender>idlCmdEdit</sender>
@@ -2297,78 +2193,6 @@ e</string>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>insideinc_listview</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>insideinc_listview</sender>
-        <signal>spacePressed(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>insideIncMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideIncMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideIncMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideIncMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insidelib_listview</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>insidelib_listview</sender>
-        <signal>spacePressed(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>insideLibMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideLibMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideLibMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideLibMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>intDeps_view</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>intDeps_view</sender>
-        <signal>spacePressed(QListViewItem*)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>intMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>intMoveDown_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>intMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>intMoveUp_button_clicked()</slot>
     </connection>
     <connection>
         <sender>makefile_url</sender>
@@ -2447,6 +2271,240 @@ e</string>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>rccdir_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>rccdir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>uidir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>uidir_url</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>editConfigExtra</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_editRunArguments</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_editDebugArguments</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>groupBuildMode</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
+    </connection>
+    <connection>
+        <sender>groupQt4Libs</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(int)</slot>
+    </connection>
+    <connection>
+        <sender>insideinc_listview</sender>
+        <signal>clicked(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>insideinc_listview</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>insidelib_listview</sender>
+        <signal>clicked(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>insidelib_listview</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>intDeps_view</sender>
+        <signal>clicked(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>intDeps_view</sender>
+        <signal>spacePressed(QListViewItem*)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>varAdd_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>addCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buttonApply</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>apply()</slot>
+    </connection>
+    <connection>
+        <sender>Browse</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>browseTargetPath()</slot>
+    </connection>
+    <connection>
+        <sender>buildmovedown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>buildorderMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buildmoveup_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>buildorderMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>customVariableName</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>customVarChanged()</slot>
+    </connection>
+    <connection>
+        <sender>customVariableOp</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>customVarChanged()</slot>
+    </connection>
+    <connection>
+        <sender>customVariableData</sender>
+        <signal>textChanged()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>customVarChanged()</slot>
+    </connection>
+    <connection>
+        <sender>varMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>downCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>extAdd_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extAdd_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extEdit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extEdit_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveDown_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extRemove_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extRemove_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>groupLibraries</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>groupLibrariesChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>groupRequirements</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>groupRequirementsChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>groupTemplate</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>groupTemplateChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>intMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveDown_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>intMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>customVariables</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>newCustomVariableActive()</slot>
     </connection>
     <connection>
         <sender>outsideIncAddBtn</sender>
@@ -2539,46 +2597,10 @@ e</string>
         <slot>outsideLibRemoveClicked()</slot>
     </connection>
     <connection>
-        <sender>rccdir_url</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>rccdir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>uidir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>uidir_url</sender>
-        <signal>urlSelected(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>varAdd_button</sender>
+        <sender>buttonCancel</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>addCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>varMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>upCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>varMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>downCustomValueClicked()</slot>
+        <slot>reject()</slot>
     </connection>
     <connection>
         <sender>varRemove_button</sender>
@@ -2605,46 +2627,22 @@ e</string>
         <slot>setDisabled(bool)</slot>
     </connection>
     <connection>
-        <sender>editConfigExtra</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>customVariableName</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>customVarChanged()</slot>
-    </connection>
-    <connection>
-        <sender>customVariableOp</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>customVarChanged()</slot>
-    </connection>
-    <connection>
-        <sender>customVariableData</sender>
-        <signal>textChanged()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>customVarChanged()</slot>
-    </connection>
-    <connection>
         <sender>radioApplication</sender>
         <signal>toggled(bool)</signal>
         <receiver>argumentsGroupBox</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
-        <sender>m_editRunArguments</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <sender>checkInstallTarget</sender>
+        <signal>toggled(bool)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>targetInstallChanged(bool)</slot>
     </connection>
     <connection>
-        <sender>m_editDebugArguments</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <sender>varMoveDown_button</sender>
+        <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
+        <slot>upCustomValueClicked()</slot>
     </connection>
 </connections>
 <tabstops>
