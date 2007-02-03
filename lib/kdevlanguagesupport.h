@@ -26,7 +26,7 @@
 #ifndef KDEVLANGUAGESUPPORT_H
 #define KDEVLANGUAGESUPPORT_H
 
-#include "kdevplugin.h"
+#include "iplugin.h"
 
 #include <iostream> //Needed to serialize the AST
 #include <fstream> //Needed to serialize the AST
@@ -56,7 +56,7 @@ class CodeHighlighting;
  * language support plugins. Language support is used to load facilities specific
  * to certain programming language. Language supports are usually loaded among with
  * a project. In this case project file defines which language support to load.
- * 
+ *
  * Language support plugin is a good place for:
  * - a language parser which fills memory and persistant symbol store
  * (see @ref CodeModel and @ref CodeRepository);
@@ -64,7 +64,7 @@ class CodeHighlighting;
  * - symbol (class, function, etc.) name formatting to a human-readable convention
  * (pretty formatted name).
  */
-class KDEVPLATFORM_EXPORT LanguageSupport: public Plugin
+class KDEVPLATFORM_EXPORT LanguageSupport: public IPlugin
 {
     Q_OBJECT
 

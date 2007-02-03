@@ -62,7 +62,7 @@ typedef QList< QPair<KUrl, CodeModel* > > CodeModelCache;
 
 using namespace ThreadWeaver;
 
-class KDEVPLATFORM_EXPORT BackgroundParser : public QObject, protected CoreInterface
+class KDEVPLATFORM_EXPORT BackgroundParser : public QObject
 {
     friend class Core;
 

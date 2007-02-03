@@ -4,18 +4,19 @@ include_directories(${CMAKE_SOURCE_DIR}/lib )
 
 ########### next target ###############
 
-set(kdevutil_LIB_SRCS
-    execcommand.cpp
+set(koncreteutil_LIB_SRCS
+#     execcommand.cpp
     kfiltermodel.cpp
     kdevtreeview.cpp
-    settings.cpp
+#     settings.cpp
+    kdevitemmodel.cpp
 )
 
-kde4_automoc(${kdevutil_LIB_SRCS})
-kde4_add_library(kdevutil SHARED ${kdevutil_LIB_SRCS})
-target_link_libraries(kdevutil ${KDE4_KDEUI_LIBS} kdevplatform)
-set_target_properties(kdevutil PROPERTIES VERSION 4.0.0 SOVERSION 4)
-install(TARGETS kdevutil DESTINATION ${LIB_INSTALL_DIR} )
+kde4_automoc(${koncreteutil_LIB_SRCS})
+kde4_add_library(koncreteutil SHARED ${koncreteutil_LIB_SRCS})
+target_link_libraries(koncreteutil ${KDE4_KDEUI_LIBS} koncreteinterfaces)
+set_target_properties(koncreteutil PROPERTIES VERSION 4.0.0 SOVERSION 4)
+install(TARGETS koncreteutil DESTINATION ${LIB_INSTALL_DIR} )
 
 
 

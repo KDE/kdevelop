@@ -69,6 +69,11 @@ public:
     Controller *controller;
     Area *area;
     QList<QDockWidget*> docks;
+    QMap<View*, QDockWidget*> viewDocks;
+
+public slots:
+    void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
+    void toolViewAdded(Sublime::View *toolView, Sublime::Position position);
 
 private slots:
     void switchToArea(QAction *action);

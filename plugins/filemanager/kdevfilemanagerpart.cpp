@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Alexander Dymo                                  *
- *   adymo@kdevelop.org                                                    *
+ *   Copyright (C) 2006 by Alexander Dymo <adymo@kdevelop.org>             *
+ *   Copyright (C) 2007 by Andreas Pakulat <apaku@gmx.de>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,16 +24,28 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 
-#include <kdevcore.h>
-#include <kdevmainwindow.h>
+#include <icore.h>
+#include <iuicontroller.h>
+// #include <mainwindow.h>
 
 #include "filemanager.h"
 
 typedef KGenericFactory<KDevFileManagerPart> KDevFileManagerFactory;
 K_EXPORT_COMPONENT_FACTORY(kdevfilemanager, KDevFileManagerFactory("kdevfilemanager"))
 
+class KDevFileManagerViewFactory: public Koncrete::IToolViewFactory{
+public:
+    KDevFileManagerViewFactory(KDevFileManagerPart *part): m_part(part) {}
+    virtual QWidget* create(QWidget *parent = 0)
+    {
+        return new FileManager(m_part);
+    }
+private:
+    KDevFileManagerPart *m_part;
+};
+
 KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QStringList &/*args*/)
-    :Koncrete::Plugin(KDevFileManagerFactory::componentData(), parent)
+    :Koncrete::IPlugin(KDevFileManagerFactory::componentData(), parent)
 {
     setXMLFile("kdevfilemanager.rc");
 
@@ -43,12 +55,11 @@ KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QStringList &/*a
 
 void KDevFileManagerPart::init()
 {
-    m_view = new FileManager(this);
+    core()->uiController()->addToolView("File Manager", new KDevFileManagerViewFactory(this));
 }
 
 KDevFileManagerPart::~KDevFileManagerPart()
 {
-    delete m_view;
 }
 
 Qt::DockWidgetArea KDevFileManagerPart::dockWidgetAreaHint() const
@@ -56,9 +67,17 @@ Qt::DockWidgetArea KDevFileManagerPart::dockWidgetAreaHint() const
     return Qt::LeftDockWidgetArea;
 }
 
-QWidget *KDevFileManagerPart::pluginView() const
+void KDevFileManagerPart::registerExtensions()
 {
-    return m_view;
+}
+
+void KDevFileManagerPart::unregisterExtensions()
+{
+}
+
+QStringList KDevFileManagerPart::extensions()
+{
+    return QStringList();
 }
 
 #include "kdevfilemanagerpart.moc"

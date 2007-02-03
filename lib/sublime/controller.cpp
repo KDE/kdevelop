@@ -82,6 +82,10 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
         areaToShow = area;
     d->shownAreas[areaToShow] = mainWindow;
     MainWindowOperator::setArea(mainWindow, areaToShow);
+    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
+        mainWindow, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
+        mainWindow, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
 }
 
 QList<Area*> &Controller::areas() const
@@ -108,11 +112,12 @@ void Controller::addDocument(Document *document)
 void Controller::areaReleased()
 {
     MainWindow *w = reinterpret_cast<Sublime::MainWindow*>(sender());
-    kDebug() << "marking areas as mainwindow-free" << endl;
+    kDebug(9037) << "marking areas as mainwindow-free" << endl;
     foreach (Area *area, d->shownAreas.keys(w))
     {
-        kDebug() << "   " << area->objectName() << endl;
+        kDebug(9037) << "   " << area->objectName() << endl;
         areaReleased(area);
+        disconnect(area, 0, w, 0);
     }
 }
 

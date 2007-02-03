@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright (C) 2006 Adam Treat <treat@kde.org>
+Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -23,22 +24,22 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 
 #include <kconfig.h>
-#include <kstaticdeleter.h>
-#include <kcmultidialog.h>
-#include <ksettings/dialog.h>
 
 #include "kdevexport.h"
 
 namespace Koncrete
 {
+class Core;
+
 /**
 The interface to KDevelop's config objects.
 Developers using the KDevelop API should use these config objects instead of
 the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
 it can cause unexpected syncing issues.
 */
-class KDEVPLATFORM_EXPORT Config
+class KDEVPLATFORM_EXPORT Config : public QObject
 {
+    Q_OBJECT
 public:
     enum Mode
     {
@@ -48,16 +49,16 @@ public:
     };
     Q_DECLARE_FLAGS(Modes, Mode)
 
-    Config();
+    Config( Core* core );
     virtual ~Config();
 
     /**
      * Used by KCM dialogs to determine which file to save settings to.
      * @return the Mode describing the file to save settings to.
      */
-    static Mode mode();
+    Mode mode();
 
-    static void settingsDialog();
+    void settingsDialog();
 
     /**
      * @return A pointer to the standard config object.  This object will point
@@ -112,28 +113,12 @@ public:
      * @return A shared pointer to the global project config object.
      */
     static KSharedConfig::Ptr sharedGlobalProject();
-};
-
-class ConfigPrivate: public QObject
-{
-    Q_OBJECT
-    friend class KStaticDeleter<ConfigPrivate>;
-public:
-    static ConfigPrivate *self();
-    static ConfigPrivate *s_private;
-    Config::Mode mode;
-    KSettings::Dialog *settingsDialog;
-
-    void setMode( Config::Mode m );
-
-public Q_SLOTS:
-    void local();
-    void shared();
-    void global();
 
 private:
-    ConfigPrivate();
-    ~ConfigPrivate();
+    Q_PRIVATE_SLOT(d, void local() )
+    Q_PRIVATE_SLOT(d, void shared() )
+    Q_PRIVATE_SLOT(d, void global() )
+    class ConfigPrivate* const d;
 };
 
 }

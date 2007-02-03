@@ -37,7 +37,7 @@ using namespace Sublime;
 void ControllerTest::testDocumentDeletion()
 {
     Controller controller;
-    Document *doc = new ToolDocument(&controller, new SimpleToolWidgetFactory<QTextEdit>());
+    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>());
     QCOMPARE(controller.documents().count(), 1);
     delete doc;
     QCOMPARE(controller.documents().count(), 0);
@@ -46,7 +46,7 @@ void ControllerTest::testDocumentDeletion()
 void ControllerTest::testAreaDeletion()
 {
     Controller controller;
-    Document *doc = new ToolDocument(&controller, new SimpleToolWidgetFactory<QTextEdit>());
+    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>());
     //create a view which does not belong to an area
     doc->createView();
     //create an area and two views in it

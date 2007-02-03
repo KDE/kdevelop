@@ -41,9 +41,10 @@ struct DocumentPrivate {
 
 //class Document
 
-Document::Document(Controller *controller)
+Document::Document(const QString &title, Controller *controller)
     :QObject(controller), ViewCreator()
 {
+    setObjectName(title);
     d = new DocumentPrivate();
     d->controller = controller;
     d->controller->addDocument(this);
@@ -75,7 +76,7 @@ const QList<View*> &Document::views() const
 
 QString Document::title() const
 {
-    return "Document";
+    return objectName();
 }
 
 }

@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 namespace Koncrete
 {
 
-class KDEVPLATFORM_EXPORT LanguageController: public QObject, protected CoreInterface
+class KDEVPLATFORM_EXPORT LanguageController: public QObject
 {
     friend class Core;
     Q_OBJECT

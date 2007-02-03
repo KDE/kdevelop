@@ -47,8 +47,10 @@ Example1Main::Example1Main()
     Sublime::Document *doc3 = new Sublime::PartDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
 
     //documents for toolviews
-    Sublime::Document *tool1 = new Sublime::ToolDocument(m_controller, new Sublime::SimpleToolWidgetFactory<QListView>());
-    Sublime::Document *tool2 = new Sublime::ToolDocument(m_controller, new Sublime::SimpleToolWidgetFactory<QTextEdit>());
+    Sublime::Document *tool1 = new Sublime::ToolDocument("ListView", m_controller,
+        new Sublime::SimpleToolWidgetFactory<QListView>());
+    Sublime::Document *tool2 = new Sublime::ToolDocument("TextEdit", m_controller,
+        new Sublime::SimpleToolWidgetFactory<QTextEdit>());
 
     //areas (aka perspectives)
     kDebug() << "constructing area 1" << endl;

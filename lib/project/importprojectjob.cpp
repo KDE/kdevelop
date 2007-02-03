@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,7 +20,7 @@
 
 #include "importprojectjob.h"
 
-#include "kdevfilemanager.h"
+#include "interfaces/ifilemanager.h"
 
 #include <kglobal.h>
 #include <kdebug.h>
@@ -27,37 +28,47 @@
 namespace Koncrete
 {
 
-ImportProjectJob::ImportProjectJob(QStandardItem *folder, FileManager *importer)
-    : KJob(0),
-      m_importer(importer)
+struct ImportProjectJobPrivate
 {
-    if ( folder->type() == ProjectItem::Folder || 
+    ProjectFolderItem *m_folder;
+    IFileManager *m_importer;
+    QList<ProjectFolderItem*> m_workingList;
+};
+
+ImportProjectJob::ImportProjectJob(QStandardItem *folder, IFileManager *importer)
+    : KJob(0), d(new ImportProjectJobPrivate)
+
+{
+    d->m_importer = importer;
+    d->m_folder = 0;
+    if ( folder->type() == ProjectItem::Folder ||
          folder->type() == ProjectItem::BuildFolder )
     {
-        m_folder = dynamic_cast<ProjectFolderItem*>( folder );
+        d->m_folder = dynamic_cast<ProjectFolderItem*>( folder );
     }
 }
 
 ImportProjectJob::~ImportProjectJob()
 {
+    delete d;
 }
 
 void ImportProjectJob::start()
 {
-    if ( m_folder )
-        startNextJob(m_folder);
+    if ( d->m_folder )
+        startNextJob( d->m_folder );
 
     emitResult();
 }
 
 void ImportProjectJob::startNextJob(ProjectFolderItem *dom)
 {
-  m_workingList += m_importer->parse(dom);
-    while ( !m_workingList.isEmpty() )
+    d->m_workingList += d->m_importer->parse(dom);
+    while ( !d->m_workingList.isEmpty() )
     {
-      ProjectFolderItem *folder = m_workingList.first();
-      m_workingList.pop_front();
-      
+      ProjectFolderItem *folder = d->m_workingList.first();
+      d->m_workingList.pop_front();
+
       startNextJob(folder);
     }
 }
@@ -69,5 +80,4 @@ void ImportProjectJob::processList()
 }
 #include "importprojectjob.moc"
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
-
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

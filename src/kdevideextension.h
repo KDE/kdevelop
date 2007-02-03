@@ -30,8 +30,8 @@ public:
     static void init();
 
     virtual QString xmlFile();
-
     virtual QString defaultProfile();
+    virtual Koncrete::AreaParams defaultArea();
 
 protected:
     KDevIDEExtension();

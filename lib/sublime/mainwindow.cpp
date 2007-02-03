@@ -42,7 +42,7 @@ void MainWindow::init()
 
 MainWindow::~MainWindow()
 {
-    kDebug() << "destroying mainwindow" << endl;
+    kDebug(9037) << "destroying mainwindow" << endl;
     delete d;
 }
 
@@ -59,7 +59,7 @@ void MainWindow::clearArea()
 {
     emit areaCleared(d->area);
     d->clearArea();
-    kDebug() << "area cleared" << endl;
+    kDebug(9037) << "area cleared" << endl;
 }
 
 QMenu *MainWindow::areaSwitcherMenu()
@@ -75,6 +75,11 @@ QList<QDockWidget*> MainWindow::toolDocks() const
 Area *Sublime::MainWindow::area() const
 {
     return d->area;
+}
+
+Controller *MainWindow::controller() const
+{
+    return d->controller;
 }
 
 }

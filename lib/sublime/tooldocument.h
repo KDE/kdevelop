@@ -55,7 +55,7 @@ class SUBLIME_EXPORT ToolDocument: public Document {
 public:
     /**Initializes tool document with given @p factory. Document takes
     ownership over the factory and deletes it together with itself*/
-    ToolDocument(Controller *controller, ToolFactory *factory);
+    ToolDocument(const QString &title, Controller *controller, ToolFactory *factory);
     ~ToolDocument();
 
 protected:

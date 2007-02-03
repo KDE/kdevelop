@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,23 +17,23 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef IMPORTPROJECTJOB_H
-#define IMPORTPROJECTJOB_H
+#ifndef KDEVIMPORTPROJECTJOB_H
+#define KDEVIMPORTPROJECTJOB_H
 
 #include <kjob.h>
-#include "kdevprojectmodel.h"
+#include "projectmodel.h"
 #include "kdevexport.h"
 
 namespace Koncrete
 {
 
-class FileManager;
+class IFileManager;
 
 class KDEVPLATFORM_EXPORT ImportProjectJob: public KJob
 {
     Q_OBJECT
 public:
-    ImportProjectJob(QStandardItem *folder, FileManager *importer);
+    ImportProjectJob(QStandardItem *folder, IFileManager *importer);
     virtual ~ImportProjectJob();
 
 public:
@@ -44,12 +45,11 @@ protected:
     void processList();
 
 private:
-    ProjectFolderItem *m_folder;
-    FileManager *m_importer;
-    QList<ProjectFolderItem*> m_workingList;
+    struct ImportProjectJobPrivate* const d;
 };
 
 }
 #endif // IMPORTPROJECTJOB_H
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
+

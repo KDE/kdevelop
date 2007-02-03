@@ -44,7 +44,7 @@ class SUBLIME_EXPORT Document: public QObject, public ViewCreator {
     Q_OBJECT
 public:
     /**Creates a document and adds it to a @p controller.*/
-    Document(Controller *controller);
+    Document(const QString &title, Controller *controller);
     ~Document();
 
     /**@return the new view for this document.
@@ -56,8 +56,8 @@ public:
     /**@return the controller for this document.*/
     Controller *controller() const;
 
-    /**@return the document title*/
-    virtual QString title() const;
+    /**@return the document title.*/
+    QString title() const;
 
 protected:
     /**Reimplement this to create and return the new widget to display
@@ -66,7 +66,7 @@ protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
 
 private:
-    Q_PRIVATE_SLOT(d, void removeView(QObject*))
+    Q_PRIVATE_SLOT(d, void removeView(QObject*));
 
     struct DocumentPrivate *d;
 

@@ -77,7 +77,7 @@ AreaIndex::AreaIndex(AreaIndex *parent)
 
 AreaIndex::AreaIndex(const AreaIndex &index)
 {
-    kDebug() << "copying area index" << endl;
+    kDebug(9037) << "copying area index" << endl;
     d = new AreaIndexPrivate(*(index.d));
     if (d->first)
         d->first->setParent(this);

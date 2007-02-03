@@ -30,8 +30,8 @@
 // #include <kdirmodel.h>
 #include <kdirlister.h>
 
-#include "kdevcore.h"
-#include "kdevdocumentcontroller.h"
+#include "icore.h"
+#include "iuicontroller.h"
 
 #include "kdevfilemanagerpart.h"
 #include "drilldownview.h"
@@ -58,7 +58,7 @@ FileManager::FileManager(KDevFileManagerPart *part)
 void FileManager::init()
 {
     m_model = new KDevDirModel(this);
-    m_model->dirLister()->openUrl(KUrl::fromPath("/"));
+    m_model->dirLister()->openUrl(KUrl::fromPath(QDir::rootPath()));
     m_view->setModel(m_model);
 
     connect(m_view, SIGNAL(doubleClicked(const QModelIndex &)),
@@ -85,7 +85,7 @@ void FileManager::openFile(KFileItem *fileItem)
     if (!fileItem)
         return;
 
-    Koncrete::Core::documentController()->editDocument(fileItem->url());
+    m_part->core()->uiController()->openUrl(fileItem->url());
 }
 
 #include "filemanager.moc"

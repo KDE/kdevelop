@@ -50,13 +50,15 @@ public:
     MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
     ~MainWindow();
 
-    /**@return the menu to switch area within this mainwindow.*/
+    /**@return the menu to switch areas within this mainwindow.*/
     QMenu *areaSwitcherMenu();
 
     /**@return the list of dockwidgets that contain area's toolviews.*/
     QList<QDockWidget*> toolDocks() const;
     /**@return area which mainwindow currently shows or 0 if no area has been set.*/
     Area *area() const;
+    /**@return controller for this mainwindow.*/
+    Controller *controller() const;
 
 signals:
     /**Emitted before the area is cleared from this mainwindow.*/
@@ -66,6 +68,8 @@ signals:
 
 private:
     void init();
+    Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*));
+    Q_PRIVATE_SLOT(d, void toolViewAdded(Sublime::View*, Sublime::Position));
 
     //Inherit MainWindowOperator to access two methods below
     /**Sets the area of main window and fills it with views.*/

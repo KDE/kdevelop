@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=KDevProjectManager
+Comment[x-test]=xxKDevProjectManagerxx
+Name=Project Manager
+GenericName=Project Manager
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevprojectmanager
+X-KDE-PluginInfo-Name=KDevProjectManager
+X-KDE-PluginInfo-Author=Roberto Raggi
+X-KDE-PluginInfo-License=LGPL
+X-KDevelop-Version=4
+X-KDevelop-Category=Project
+X-KDevelop-Properties=ProjectFileManagement

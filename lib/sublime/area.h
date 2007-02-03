@@ -56,10 +56,18 @@ controller->show(area, mw);
 class SUBLIME_EXPORT Area: public QObject {
     Q_OBJECT
 public:
-    /**Creates and area with given @p name and adds it to the @p controller.*/
-    Area(Controller *controller, const QString &name);
+    /**Creates and area with given @p name and adds it to the @p controller.
+    @param name should identify this area and be unique for all areas in the controller.
+        @ref objectName shall be used to get this name after area creation.
+    @param title is the user-visible (translatable) title for the area.
+        Use @ref title and @ref setTitle to operate on the title.
+        This parameter can be omitted and then name will be used as title.*/
+    Area(Controller *controller, const QString &name, const QString &title = "");
     Area(const Area &area);
     ~Area();
+
+    QString title() const;
+    void setTitle(const QString &title);
 
     /**Adds the @p view to the list of views at the current area index.*/
     void addView(View *view);
@@ -123,8 +131,8 @@ public:
 
     /**Walks the list of toolviews. The order in which toolviews are walked is not specified.
 
-    Operator should be the class with <i>bool operator()(View *view, Sublime::Position position)</i> method.
-    That method should return Area::StopWalker if the walker has to stop at current index
+    Operator should be the class with <i>bool operator()(View *view, Sublime::Position position)</i>
+    method. That method should return Area::StopWalker if the walker has to stop at current index
     or Area::ContinueWalker to continue.
 
     Example (operator to print the list of views):
@@ -141,6 +149,12 @@ public:
     */
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
+
+signals:
+    /**Emitted when a new view is added to the area.*/
+    void viewAdded(Sublime::AreaIndex*, Sublime::View*);
+    /**Emitted when a new toolview is added to the area.*/
+    void toolViewAdded(Sublime::View*, Sublime::Position);
 
 private:
     template <typename Operator>

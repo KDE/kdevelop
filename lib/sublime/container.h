@@ -43,6 +43,8 @@ public:
     void addWidget(QWidget *w);
     /**Removes the widget from the container.*/
     void removeWidget(QWidget *w);
+    /** @return true if widget is placed inside this container.*/
+    bool hasWidget(QWidget *w);
 
     /**@return the number of widgets in the container.*/
     int count() const;

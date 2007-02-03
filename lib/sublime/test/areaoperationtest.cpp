@@ -78,21 +78,14 @@ void AreaOperationTest::init()
 {
     m_controller = new Controller(this);
     Document *doc1 = new PartDocument(m_controller, KUrl::fromPath("~/foo.cpp"));
-    doc1->setObjectName("doc1");
     Document *doc2 = new PartDocument(m_controller, KUrl::fromPath("~/boo.cpp"));
-    doc2->setObjectName("doc2");
     Document *doc3 = new PartDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
-    doc3->setObjectName("doc3");
     Document *doc4 = new PartDocument(m_controller, KUrl::fromPath("~/zoo.cpp"));
-    doc4->setObjectName("doc4");
 
     //documents for toolviews
-    Document *tool1 = new ToolDocument(m_controller, new SimpleToolWidgetFactory<QListView>());
-    tool1->setObjectName("tool1");
-    Document *tool2 = new ToolDocument(m_controller, new SimpleToolWidgetFactory<QTextEdit>());
-    tool2->setObjectName("tool2");
-    Document *tool3 = new ToolDocument(m_controller, new SimpleToolWidgetFactory<QTextEdit>());
-    tool2->setObjectName("tool3");
+    Document *tool1 = new ToolDocument("tool1", m_controller, new SimpleToolWidgetFactory<QListView>());
+    Document *tool2 = new ToolDocument("tool2", m_controller, new SimpleToolWidgetFactory<QTextEdit>());
+    Document *tool3 = new ToolDocument("tool3", m_controller, new SimpleToolWidgetFactory<QTextEdit>());
 
     //areas (aka perspectives)
     //view object names are in form AreaNumber.DocumentNumber.ViewNumber
@@ -324,6 +317,67 @@ void AreaOperationTest::testAreaSwitchingInSameMainwindow()
     QVERIFY(checker.hasWidgets);
 }
 
+void AreaOperationTest::testViewAddition()
+{
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    checkArea1(&mw);
+
+    Document *doc5 = new PartDocument(m_controller, KUrl::fromPath("~/new.cpp"));
+    View *view = doc5->createView();
+    view->setObjectName("view1.5.1");
+    m_area1->addView(view);
+
+    //check that area is in valid state
+    AreaViewsPrinter viewsPrinter1;
+    m_area1->walkViews(viewsPrinter1, m_area1->rootIndex());
+    QCOMPARE(viewsPrinter1.result, QString("\n\
+[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 view1.5.1 ]\n\
+"));
+
+    //check that new view added to area1 is shown in mainwindow
+    //and mainwindow layout is not broken
+    //check that mainwindow have all splitters and widgets in splitters inside centralWidget
+    QWidget *central = mw.centralWidget();
+    QVERIFY(central != 0);
+    QVERIFY(central->inherits("QSplitter"));
+
+    //check that we have a container and 5 views inside
+    Container *container = central->findChild<Sublime::Container*>();
+    QVERIFY(container);
+    ViewCounter c;
+    m_area1->walkViews(c, m_area1->rootIndex());
+    QCOMPARE(container->count(), c.count);
+    for (int i = 0; i < container->count(); ++i)
+        QVERIFY(container->widget(i) != 0);
+}
+
+void AreaOperationTest::testToolViewAddition()
+{
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    checkArea1(&mw);
+
+    Document *tool4 = new ToolDocument("tool4", m_controller, new SimpleToolWidgetFactory<QTextEdit>());
+    View *view = tool4->createView();
+    view->setObjectName("toolview1.4.1");
+    m_area1->addToolView(view, Sublime::Right);
+
+    //check that area is in valid state
+    AreaToolViewsPrinter toolViewsPrinter1;
+    m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
+    QCOMPARE(toolViewsPrinter1.result, QString("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+toolview1.2.2 [ bottom ]\n\
+toolview1.4.1 [ right ]\n\
+"));
+
+    //check that mainwindow has newly added toolview
+    foreach (QDockWidget *dock, mw.toolDocks())
+        QVERIFY(dock->widget() != 0);
+    QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
+}
 
 KDEVTEST_MAIN(AreaOperationTest)
 #include "areaoperationtest.moc"

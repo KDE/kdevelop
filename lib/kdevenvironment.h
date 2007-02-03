@@ -42,7 +42,7 @@ KCM module.  All plugins should respect the environment variables set by the use
 and sync any spawned QProcess/KProcess with the environment variables found in
 this class.
 */
-class KDEVPLATFORM_EXPORT Environment: public QObject, protected CoreInterface
+class KDEVPLATFORM_EXPORT Environment: public QObject
 {
     friend class Core;
     friend class EnvWidget;

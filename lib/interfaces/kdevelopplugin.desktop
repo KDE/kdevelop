@@ -1,0 +1,38 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/Plugin
+X-KDE-Derived=KPluginInfo
+Name=KDevelop Plugin
+Name[el]=Πρόσθετο KDevelop
+Name[fr]=Module externe de KDevelop
+Name[x-test]=xxKDevelop Pluginxx
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
+
+[PropertyDef::X-KDevelop-Category]
+Type=QString
+
+[PropertyDef::X-KDevelop-Mode]
+Type=QString
+
+# defines a list of properties which the plugin has
+# a profile will query all plugins for properties and will load only
+# those that have queried properties
+[PropertyDef::X-KDevelop-Properties]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-Args]
+Type=QString
+
+[PropertyDef::X-KDevelop-Interfaces]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-IRequired]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-IOptional]
+Type=QStringList
+

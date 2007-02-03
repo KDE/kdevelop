@@ -21,78 +21,65 @@ Boston, MA 02110-1301, USA.
 
 #include <kmenu.h>
 #include <klocale.h>
+#include <kconfig.h>
 #include <kglobal.h>
 #include <kcomponentdata.h>
 
 #include <kcmultidialog.h>
 #include <ksettings/dialog.h>
 
-#include "kdevcore.h"
-#include "kdevmainwindow.h"
-#include "kdevprojectcontroller.h"
+#include "core.h"
+#include "mainwindow.h"
+#include "projectcontroller.h"
 
 namespace Koncrete
 {
 
-static KStaticDeleter<ConfigPrivate> s_deleter;
-
-ConfigPrivate *ConfigPrivate::s_private = 0;
-
-ConfigPrivate::ConfigPrivate()
-        : QObject( 0 ),
-        mode( Config::Standard ),
-        settingsDialog( 0 )
-{}
-
-ConfigPrivate::~ConfigPrivate()
+class ConfigPrivate
 {
-}
-
-ConfigPrivate *ConfigPrivate::self()
-{
-    if ( !s_private )
-        s_deleter.setObject( s_private, new ConfigPrivate );
-    return s_private;
-}
-
-void ConfigPrivate::local()
-{
-    setMode( Config::LocalProject );
-}
-
-void ConfigPrivate::shared()
-{
-    setMode( Config::GlobalProject );
-}
-
-void ConfigPrivate::global()
-{
-    setMode( Config::Standard );
-}
-
-void ConfigPrivate::setMode( Config::Mode m )
-{
-    mode = m;
-    switch ( mode )
+public:
+    Config::Mode mode;
+    KSettings::Dialog *settingsDialog;
+    Core* m_core;
+    void setMode( Config::Mode m )
     {
-    case Config::Standard:
-        settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Standard" ) );
-        break;
-    case Config::LocalProject:
-        settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Local Project" ) );
-        break;
-    case Config::GlobalProject:
-        settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Global Project" ) );
-        break;
-    default:
-        break;
+        mode = m;
+        switch ( mode )
+        {
+        case Config::Standard:
+            settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Standard" ) );
+            break;
+        case Config::LocalProject:
+            settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Local Project" ) );
+            break;
+        case Config::GlobalProject:
+            settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Global Project" ) );
+            break;
+        default:
+            break;
+        }
     }
+
+    void local()
+    {
+        setMode( Config::LocalProject );
+    }
+    void shared()
+    {
+        setMode( Config::GlobalProject );
+    }
+    void global()
+    {
+        setMode( Config::Standard );
+    }
+};
+
+Config::Config( Core* core )
+    : d(new ConfigPrivate)
+{
+    d->m_core = core;
+    d->mode = Config::Standard;
 }
-
-#define d (ConfigPrivate::self())
-
-Config::Config()
-{}
 
 Config::~Config()
 {}
@@ -102,25 +89,12 @@ Config::Mode Config::mode()
     return d->mode;
 }
 
-// void Config::setMode( Config::Mode m )
-// {
-//     d->setMode( m );
-// }
-
-// void Config::setAllowedModes( Config::Mode m )
-// {
-// }
-
 void Config::settingsDialog()
 {
     if ( !d->settingsDialog )
     {
-        if ( Core::mainWindow() ->componentData() .componentName() == "kdevelop" )
-            d->settingsDialog = new KSettings::Dialog(
-                                    KSettings::Dialog::Static, Core::mainWindow() );
-        else
-            d->settingsDialog = new KSettings::Dialog( QStringList( "kdevelop" ),
-                                KSettings::Dialog::Static, Core::mainWindow() );
+        d->settingsDialog = new KSettings::Dialog( QStringList( "kdevelop" ),
+                                KSettings::Dialog::Static, 0 );
 
         KCMultiDialog *dialog = d->settingsDialog->dialog();
         dialog->setButtons( KDialog::Help | KDialog::Default | KDialog::Cancel
@@ -129,11 +103,11 @@ void Config::settingsDialog()
         KMenu *m = new KMenu;
         QAction *action;
         action = m->addAction( i18n( "Local Project" ) );
-        QObject::connect( action, SIGNAL( triggered() ), d, SLOT( local() ) );
+        QObject::connect( action, SIGNAL( triggered() ), this, SLOT( local() ) );
         action = m->addAction( i18n( "Global Project" ) );
-        QObject::connect( action, SIGNAL( triggered() ), d, SLOT( shared() ) );
+        QObject::connect( action, SIGNAL( triggered() ), this, SLOT( shared() ) );
         action = m->addAction( i18n( "Standard" ) );
-        QObject::connect( action, SIGNAL( triggered() ), d, SLOT( global() ) );
+        QObject::connect( action, SIGNAL( triggered() ), this, SLOT( global() ) );
         dialog->setButtonText( KDialog::User2, i18n( "Standard" ) );
         dialog->setButtonMenu( KDialog::User2, m );
     }
@@ -161,8 +135,13 @@ KSharedConfig::Ptr Config::sharedStandard()
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = Core::projectController() ->localFile();
-    KUrl global = Core::projectController() ->globalFile();
+    KUrl local;
+    KUrl global;
+    if( Core::self() && Core::self()->projectController() )
+    {
+        local = Core::self()->projectController() ->localFile();
+        global = Core::self()->projectController() ->globalFile();
+    }
     if ( local.isValid() )
         extraConfig.append( local.path() );
     if ( global.isValid() )
@@ -183,8 +162,8 @@ KSharedConfig::Ptr Config::sharedLocalProject()
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = Core::projectController() ->localFile();
-    KUrl global = Core::projectController() ->globalFile();
+    KUrl local = Core::self()->projectController() ->localFile();
+    KUrl global = Core::self()->projectController() ->globalFile();
     if ( global.isValid() )
         extraConfig.append( global.path() );
     if ( local.isValid() )
@@ -205,8 +184,8 @@ KSharedConfig::Ptr Config::sharedGlobalProject()
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
-    KUrl local = Core::projectController() ->localFile();
-    KUrl global = Core::projectController() ->globalFile();
+    KUrl local = Core::self()->projectController() ->localFile();
+    KUrl global = Core::self()->projectController() ->globalFile();
     if ( local.isValid() )
         extraConfig.append( local.path() );
     if ( global.isValid() )

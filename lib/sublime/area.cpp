@@ -22,7 +22,7 @@
 #include <QList>
 #include <QStringList>
 
-#include "kdebug.h"
+#include <kdebug.h>
 
 #include "view.h"
 #include "document.h"
@@ -46,6 +46,7 @@ struct AreaPrivate {
         currentIndex = rootIndex;
         controller = p.controller;
         toolViewPositions.clear();
+        title = p.title;
     }
     ~AreaPrivate()
     {
@@ -74,6 +75,8 @@ struct AreaPrivate {
         QList<View*> views;
     };
 
+    QString title;
+
     RootAreaIndex *rootIndex;
     AreaIndex *currentIndex;
     Controller *controller;
@@ -86,11 +89,12 @@ struct AreaPrivate {
 
 // class Area
 
-Area::Area(Controller *controller, const QString &name)
+Area::Area(Controller *controller, const QString &name, const QString &title)
     :QObject(controller)
 {
     setObjectName(name);
     d = new AreaPrivate();
+    d->title = title;
     d->controller = controller;
     d->controller->addArea(this);
     connect(this, SIGNAL(destroyed(QObject*)), d->controller, SLOT(removeArea(QObject*)));
@@ -102,6 +106,7 @@ Area::Area(const Area &area): QObject(area.controller())
     d = new AreaPrivate(*(area.d));
     QString areaBaseName = area.objectName().split("(").first();
     setObjectName(areaBaseName + QString("(copy %1)").arg(nums[areaBaseName]));
+    d->controller->addArea(this);
 
     //clone toolviews
     d->toolViews.clear();
@@ -119,6 +124,7 @@ Area::~Area()
 void Area::addView(View *view)
 {
     d->currentIndex->add(view);
+    emit viewAdded(d->currentIndex, view);
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
@@ -126,6 +132,7 @@ void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
 {
     AreaIndex *indexToSplit = indexOf(viewToSplit);
     indexToSplit->split(view, orientation);
+    emit viewAdded(indexToSplit, view);
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
@@ -153,6 +160,7 @@ void Area::addToolView(View *view, Position defaultPosition)
     ///@fixme adymo: read toolview position from config
     d->toolViews.append(view);
     d->toolViewPositions[view] = defaultPosition;
+    emit toolViewAdded(view, defaultPosition);
 }
 
 void Area::removeToolView(View *view)
@@ -182,6 +190,16 @@ QList<View*> Sublime::Area::views()
     AreaPrivate::ViewLister lister;
     walkViews(lister, d->rootIndex);
     return lister.views;
+}
+
+QString Area::title() const
+{
+    return d->title;
+}
+
+void Area::setTitle(const QString &title)
+{
+    d->title = title;
 }
 
 }

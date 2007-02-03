@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets )
+include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces )
 
 
 ########### next target ###############
@@ -12,7 +12,7 @@ set(kdevfilemanager_PART_SRCS
 
 kde4_automoc(${kdevfilemanager_PART_SRCS})
 kde4_add_plugin(kdevfilemanager ${kdevfilemanager_PART_SRCS})
-target_link_libraries(kdevfilemanager ${KDE4_KDECORE_LIBS} kdevplatform kdevutil)
+target_link_libraries(kdevfilemanager ${KDE4_KDECORE_LIBS} koncreteinterfaces)
 
 install(TARGETS kdevfilemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 

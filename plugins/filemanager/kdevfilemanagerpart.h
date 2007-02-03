@@ -20,25 +20,24 @@
 #ifndef KDEVFILEMANAGERPART_H
 #define KDEVFILEMANAGERPART_H
 
-#include <kdevplugin.h>
+#include <iplugin.h>
 
 class FileManager;
 
-class KDevFileManagerPart: public Koncrete::Plugin {
+class KDevFileManagerPart: public Koncrete::IPlugin {
     Q_OBJECT
 public:
     KDevFileManagerPart(QObject *parent, const QStringList &args);
     ~KDevFileManagerPart();
 
     // Koncrete::Plugin methods
-    virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+    virtual void registerExtensions();
+    virtual void unregisterExtensions();
+    virtual QStringList extensions();
 
 private slots:
     void init();
-
-private:
-    QPointer<FileManager> m_view;
 
 };
 

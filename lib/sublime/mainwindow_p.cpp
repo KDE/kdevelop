@@ -42,46 +42,69 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w)
 
 Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sublime::Position position)
 {
-    QDockWidget *dock = new QDockWidget(view->document()->title(), d->m_mainWindow);
-    d->docks.append(dock);
-    KAcceleratorManager::setNoAccel(dock);
+    if (!d->viewDocks.contains(view))
+    {
+        QDockWidget *dock = new QDockWidget(view->document()->title(), d->m_mainWindow);
+        d->docks.append(dock);
+        KAcceleratorManager::setNoAccel(dock);
 
-    dock->setWidget(view->widget());
-    d->m_mainWindow->addDockWidget(d->positionToDockArea(position), dock);
+        dock->setWidget(view->widget());
+        d->viewDocks[view] = dock;
+
+        d->m_mainWindow->addDockWidget(d->positionToDockArea(position), dock);
+    }
     return Area::ContinueWalker;
 }
 
 Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
-    kDebug() << "  reconstructing views for area index " << index << endl;
+    kDebug(9037) << "  reconstructing views for area index " << index << endl;
     QSplitter *parent = 0;
     QSplitter *splitter;
-    if (!index->parent())
+    if (d->m_indexSplitters.contains(index))
     {
-        kDebug() << "   reconstructing root area" << endl;
-        //this is root area
-        splitter = new QSplitter(d->m_mainWindow);
-        d->m_indexSplitters[index] = splitter;
-        d->m_mainWindow->setCentralWidget(splitter);
+        //splitter is already there, we just need to alter already constructed area
+        splitter = d->m_indexSplitters[index];
     }
     else
     {
-        parent = d->m_indexSplitters[index->parent()];
-        kDebug() << "adding new splitter to " << parent << endl;
-        splitter = new QSplitter(parent);
-        d->m_indexSplitters[index] = splitter;
-        parent->addWidget(splitter);
+        //no splitter - we shall create it and populate with views
+        if (!index->parent())
+        {
+            kDebug(9037) << "   reconstructing root area" << endl;
+            //this is root area
+            splitter = new QSplitter(d->m_mainWindow);
+            d->m_indexSplitters[index] = splitter;
+            d->m_mainWindow->setCentralWidget(splitter);
+        }
+        else
+        {
+            parent = d->m_indexSplitters[index->parent()];
+            kDebug(9037) << "adding new splitter to " << parent << endl;
+            splitter = new QSplitter(parent);
+            d->m_indexSplitters[index] = splitter;
+            parent->addWidget(splitter);
+        }
     }
 
     if (index->first() || index->second()) //this is a splitter with views
         splitter->setOrientation(index->orientation());
     else
     {
-        //this is a view container
-        Container *container = new Container(splitter);
-        splitter->addWidget(container);
+        Container *container = 0;
+        if (!splitter->widget(0))
+        {
+            //we need to create view container
+            container = new Container(splitter);
+            splitter->addWidget(container);
+        }
+        else
+            container = qobject_cast<Container*>(splitter->widget(0));
         foreach (View *view, index->views())
-            container->addWidget(view->widget());
+        {
+            if (!container->hasWidget(view->widget()))
+                container->addWidget(view->widget());
+        }
     }
     return Area::ContinueWalker;
 }
@@ -120,6 +143,18 @@ void MainWindowPrivate::clearArea()
     area = 0;
 }
 
+void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*view*/)
+{
+    ViewCreator viewCreator(this);
+    area->walkViews(viewCreator, index);
+}
+
+void Sublime::MainWindowPrivate::toolViewAdded(Sublime::View */*toolView*/, Sublime::Position position)
+{
+    ToolViewCreator toolViewCreator(this);
+    area->walkToolViews(toolViewCreator, position);
+}
+
 Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 {
     switch (position)
@@ -134,7 +169,7 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 
 void MainWindowPrivate::switchToArea(QAction *action)
 {
-    kDebug() << k_funcinfo << " for " << action << endl;
+    kDebug(9037) << k_funcinfo << " for " << action << endl;
     controller->showArea(m_actionAreas[action], m_mainWindow);
 }
 
@@ -151,10 +186,10 @@ QMenu *MainWindowPrivate::areaSwitcherMenu()
         m_areaSwitcherMenu = new QMenu("Areas", m_mainWindow);
         QActionGroup *group = new QActionGroup(m_mainWindow);
         group->setExclusive(true);
-        kDebug() << "preparing area switcher menu" << endl;
+        kDebug(9037) << "preparing area switcher menu" << endl;
         foreach (Area *a, controller->areas())
         {
-            kDebug() << "   creating action for area " << a->objectName() << endl;
+            kDebug(9037) << "   creating action for area " << a->objectName() << endl;
             QAction *action = m_areaSwitcherMenu->addAction(a->objectName());
             action->setCheckable(true);
             action->setActionGroup(group);

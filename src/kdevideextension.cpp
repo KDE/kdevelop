@@ -32,10 +32,6 @@
 #include <kpagewidgetmodel.h>
 #include <kicon.h>
 
-#include <kdevplugin.h>
-#include <kdevplugincontroller.h>
-#include <kglobal.h>
-
 KDevIDEExtension::KDevIDEExtension()
  : ShellExtension()
 {
@@ -54,6 +50,12 @@ QString KDevIDEExtension::xmlFile()
 QString KDevIDEExtension::defaultProfile()
 {
     return "IDE";
+}
+
+Koncrete::AreaParams KDevIDEExtension::defaultArea()
+{
+    Koncrete::AreaParams params = {"code", i18n("Code")};
+    return params;
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

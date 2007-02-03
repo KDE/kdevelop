@@ -2,7 +2,9 @@
 add_subdirectory(profiles)
 # add_subdirectory(profileengine)
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/lib/project
+include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/shell ${CMAKE_SOURCE_DIR}/lib/interfaces
+${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/editor
+${CMAKE_SOURCE_DIR}/lib/project
     )
 
 
@@ -23,8 +25,8 @@ set(kdevshell_UI
 kde4_automoc(${kdevshell_LIB_SRCS})
 kde4_add_ui_files(kdevshell_LIB_SRCS ${kdevshell_UI})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
-target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} kdevplatform kdevutil
-    kdevwidgets ${KDE4_KHTML_LIBS} ktexteditor knotifyconfig)
+target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} koncreteinterfaces
+    koncreteshell ${KDE4_KHTML_LIBS} ktexteditor knotifyconfig)
 set_target_properties(kdevshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevshell DESTINATION ${LIB_INSTALL_DIR} )
 

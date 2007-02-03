@@ -77,6 +77,11 @@ QWidget *Container::widget(int index) const
     return d->tab->widget(index);
 }
 
+bool Sublime::Container::hasWidget(QWidget *w)
+{
+    return d->tab->indexOf(w) != -1;
+}
+
 }
 
 #include "container.moc"

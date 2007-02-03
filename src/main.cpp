@@ -10,19 +10,20 @@
 
 #include <QFileInfo>
 #include <QPixmap>
+#include <QTimer>
 
-#include "kdevcore.h"
-#include "kdevconfig.h"
-#include "kdevmainwindow.h"
-#include "kdevenvironment.h"
-#include "kdevpartcontroller.h"
-#include "kdevlanguagecontroller.h"
+#include "core.h"
+// #include "kdevconfig.h"
+#include "mainwindow.h"
+// #include "kdevenvironment.h"
+// #include "kdevpartcontroller.h"
+// #include "kdevlanguagecontroller.h"
 #include "splashscreen.h"
-#include "kdevplugincontroller.h"
-#include "kdevprojectcontroller.h"
-#include "kdevdocumentcontroller.h"
-#include "kdevbackgroundparser.h"
-#include "kdeveditorintegrator.h"
+#include "plugincontroller.h"
+// #include "kdevprojectcontroller.h"
+// #include "kdevdocumentcontroller.h"
+// #include "kdevbackgroundparser.h"
+// #include "kdeveditorintegrator.h"
 
 #include "kdevideextension.h"
 
@@ -106,60 +107,56 @@ int main( int argc, char *argv[] )
 
     using namespace Koncrete;
     // initialize the editor integrator - it needs a qobject on the main thread
-    EditorIntegrator::initialise();
+//     EditorIntegrator::initialise();
 
     //initialize the api object
     //WARNING! the order is important
-    Core::setMainWindow( new MainWindow );
-    Core::setPartController( new PartController );
-    Core::setDocumentController( new DocumentController );
-    PluginController::self()->loadPlugins( PluginController::Global );
-    Core::setLanguageController( new LanguageController );
-    Core::setProjectController( new ProjectController );
-    Core::setBackgroundParser( new BackgroundParser );
-    Core::setEnvironment( new Environment );
+    Core::initialize();
+/*    Core::setPartController( new PartController );
+    Core::setDocumentController( new DocumentController );*/
+    Core::self()->pluginController()->loadPlugins( PluginController::Global );
+//     Core::setLanguageController( new LanguageController );
+//     Core::setProjectController( new ProjectController );
+//     Core::setBackgroundParser( new BackgroundParser );
+//     Core::setEnvironment( new Environment );
 
     if ( splash )
     {
-        QObject::connect(PluginController::self(), SIGNAL(loadingPlugin(const QString&)),
+        QObject::connect(Core::self()->pluginController(), SIGNAL(loadingPlugin(const QString&)),
                          splash, SLOT(showMessage(const QString&)));
-        QObject::connect( Core::documentController(),
-                          SIGNAL( openingDocument( const QString & ) ),
-                          splash, SLOT( showMessage( const QString & ) ) );
+        QTimer::singleShot(0, splash, SLOT(deleteLater()));
+//         QObject::connect( Core::documentController(),
+//                           SIGNAL( openingDocument( const QString & ) ),
+//                           splash, SLOT( showMessage( const QString & ) ) );
 
         splash->showMessage( i18n( "Starting GUI" ) );
     }
 
-    QObject::connect( Core::mainWindow(), SIGNAL( finishedLoading() ),
-                      splash, SLOT( deleteLater() ) );
-
-    Core::initialize();
-
-    bool openProject = false;
-    QByteArray projectName = args->getOption("project");
-    if ( !projectName.isEmpty() )
-    {
-        Core::projectController()->openProject( KUrl(projectName) );
-        openProject = true;
-    }
-    else if( args->count() > 0 )
-    {
-        KUrl url = args->url( 0 );
-        QString ext = QFileInfo( url.fileName() ).suffix();
-        if( ext == "kdev4" )
-        {
-            Core::projectController()->openProject( url );
-            openProject = true;
-        }
-    }
-
-    if( !openProject )
-    {
-        for( int a=0; a<args->count(); ++a )
-        {
-            Core::documentController()->editDocument( KUrl( args->url( a ) ) );
-        }
-    }
+//     bool openProject = false;
+//     QByteArray projectName = args->getOption("project");
+//     if ( !projectName.isEmpty() )
+//     {
+//         Core::projectController()->openProject( KUrl(projectName) );
+//         openProject = true;
+//     }
+//     else if( args->count() > 0 )
+//     {
+//         KUrl url = args->url( 0 );
+//         QString ext = QFileInfo( url.fileName() ).suffix();
+//         if( ext == "kdev4" )
+//         {
+//             Core::projectController()->openProject( url );
+//             openProject = true;
+//         }
+//     }
+//
+//     if( !openProject )
+//     {
+//         for( int a=0; a<args->count(); ++a )
+//         {
+//             Core::documentController()->editDocument( KUrl( args->url( a ) ) );
+//         }
+//     }
 
     return app.exec();
 }
