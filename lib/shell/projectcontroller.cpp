@@ -50,6 +50,11 @@ namespace Koncrete
 struct ProjectControllerPrivate
 {
 public:
+    ProjectControllerPrivate()
+        :m_isLoaded(false)
+    {
+    }
+
     QString m_name;
     KUrl m_localFile;
     KUrl m_globalFile;
