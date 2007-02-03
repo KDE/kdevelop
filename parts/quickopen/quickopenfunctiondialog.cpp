@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <klistbox.h>
 #include <kmessagebox.h>
+#include <klineedit.h>
 
 #include <kdevplugin.h>
 #include <codemodel_utils.h>
@@ -59,6 +60,8 @@ QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* 
         }
 
         fillFunctions();
+
+        nameEdit->setFocus();
 
         itemList->setCurrentItem( 0 );
 }
