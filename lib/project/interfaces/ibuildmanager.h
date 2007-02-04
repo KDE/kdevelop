@@ -38,6 +38,7 @@ typedef QList<ProjectFileItem*> FileItemList;
 class KDEVPLATFORM_EXPORT IBuildManager : public IFileManager
 {
 public:
+
     virtual ~IBuildManager() {}
 
     enum BuildFeature
@@ -57,13 +58,13 @@ public:
     /**
      * Provide a list of include directories.
      */
-    virtual KUrl::List includeDirectories() const;
+    virtual KUrl::List includeDirectories() const = 0;
 
     /**
      * Provide a list of files that contain the preprocessor defines for the
      * project
      */
-    virtual KUrl::List preprocessorDefines() const;
+    virtual KUrl::List preprocessorDefines() const = 0;
 
     /** @return The Makefile associated with the specified @p folder.
      *   @note The Makefile list must contain absolute file names
@@ -73,11 +74,11 @@ public:
      * return dom->name() + "/Makefile.am";
      * @endcode
      */
-    virtual KUrl findMakefile(ProjectFolderItem* folder) const;
+    virtual KUrl findMakefile(ProjectFolderItem* folder) const = 0;
 
     /** @return The list of the Makefiles from the @p folder.
     @note The Makefile list must contains absolute file names */
-    virtual KUrl::List findMakefiles(ProjectFolderItem* folder) const;
+    virtual KUrl::List findMakefiles(ProjectFolderItem* folder) const = 0;
 
     /**
      * Create a new target

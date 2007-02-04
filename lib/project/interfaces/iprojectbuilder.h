@@ -36,10 +36,11 @@ class ProjectItem;
 
 Describes a <b>Project Builder</b> to KDevelop's Project Manager.
 */
-class KDEVPLATFORM_EXPORT ProjectBuilder
+class KDEVPLATFORM_EXPORT IProjectBuilder
 {
 public:
-    virtual ~ProjectBuilder() {}
+
+    virtual ~IProjectBuilder() {}
 
     virtual IProject *project() const = 0;
 
