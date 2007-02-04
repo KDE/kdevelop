@@ -75,7 +75,7 @@ void KDevFileManagerPart::unregisterExtensions()
 {
 }
 
-QStringList KDevFileManagerPart::extensions()
+QStringList KDevFileManagerPart::extensions() const
 {
     return QStringList();
 }

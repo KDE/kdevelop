@@ -185,7 +185,7 @@ bool GenericImporter::removeFile( Koncrete::ProjectFileItem * file )
     return false;
 }
 
-QStringList GenericImporter::extensions()
+QStringList GenericImporter::extensions() const
 {
     return QStringList() << "IFileManager";
 }

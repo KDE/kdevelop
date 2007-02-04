@@ -42,11 +42,7 @@ class KIconLoader;
  */
 #define KDEVELOP_PLUGIN_VERSION 4
 
-/**
- * Use this macro for every extension you implement, it implements the
- * register/unregister functions and the Factory class that is needed
- */
-#define KDEV_USE_EXTENSION_INTERFACE( Extension, Plugin ) \
+#define KDEV_ADD_EXTENSION_FACTORY( Extension, Plugin ) \
 class Plugin##Extension##Factory: public QExtensionFactory { \
 public: \
     Plugin##Extension##Factory(QExtensionManager *parent = 0) \
@@ -56,14 +52,22 @@ public: \
     protected: \
     virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const \
     { \
-        if( iid != Q_TYPEID( Namespace::Extension ) ) \
+        if( iid != Q_TYPEID( Extension ) ) \
             return 0; \
         Plugin* p = qobject_cast<Plugin *>(object);\
         if( !p ) \
             return 0; \
         return object; \
     } \
-}; \
+};
+
+
+/**
+ * Use this macro for every extension you implement, it implements the
+ * register/unregister functions and the Factory class that is needed
+ */
+#define KDEV_USE_EXTENSION_INTERFACE( Extension, Plugin ) \
+KDEV_ADD_EXTENSION_FACTORY( Extension, Plugin ) \
 void Plugin::registerExtensions() \
 { \
     extensionManager()->registerExtensions( new Plugin##Extension##Factory( \
@@ -75,11 +79,7 @@ void Plugin::unregisterExtensions() \
     extensionManager() ), Q_TYPEID( Extension ) ); \
 }
 
-/**
- * This is the same macro as above, except it allows the extension interface
- * to be contained in a namespace
- */
-#define KDEV_USE_EXTENSION_INTERFACE_NS( Namespace, Extension, Plugin ) \
+#define KDEV_ADD_EXTENSION_FACTORY_NS( Namespace, Extension, Plugin ) \
 class Plugin##Extension##Factory: public QExtensionFactory { \
 public: \
     Plugin##Extension##Factory(QExtensionManager *parent = 0) \
@@ -96,7 +96,15 @@ public: \
             return 0; \
         return object; \
     } \
-}; \
+};
+
+
+/**
+ * This is the same macro as above, except it allows the extension interface
+ * to be contained in a namespace
+ */
+#define KDEV_USE_EXTENSION_INTERFACE_NS( Namespace, Extension, Plugin ) \
+KDEV_ADD_EXTENSION_FACTORY_NS( Namespace, Extension, Plugin ) \
 void Plugin::registerExtensions() \
 { \
     extensionManager()->registerExtensions( new Plugin##Extension##Factory( \
@@ -225,7 +233,7 @@ public:
     virtual void registerExtensions() = 0;
     virtual void unregisterExtensions() = 0;
 
-    virtual QStringList extensions() = 0;
+    virtual QStringList extensions() const = 0 ;
 
     template<class Extension> Extension* extension()
     {

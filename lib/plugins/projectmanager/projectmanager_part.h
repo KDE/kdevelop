@@ -62,7 +62,7 @@ public:
     // Plugin methods
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
-    QStringList extensions() { return QStringList(); }
+    QStringList extensions() const { return QStringList(); }
     void registerExtensions() {}
     void unregisterExtensions() {}
 

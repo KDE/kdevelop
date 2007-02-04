@@ -34,7 +34,7 @@ public:
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
     virtual void registerExtensions();
     virtual void unregisterExtensions();
-    virtual QStringList extensions();
+    virtual QStringList extensions() const;
 
 private slots:
     void init();

@@ -56,7 +56,7 @@ public:
 
     void registerExtensions();
     void unregisterExtensions();
-    QStringList extensions();
+    QStringList extensions() const;
 
 
 private:
