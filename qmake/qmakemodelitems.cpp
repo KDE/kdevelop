@@ -20,6 +20,10 @@
 
 #include "qmakemodelitems.h"
 
+#include <QtCore/QHash>
+#include <QtCore/QPair>
+#include <QtCore/QList>
+
 #include "qmakeprojectscope.h"
 
 QMakeFolderItem::QMakeFolderItem( QMakeProjectScope* scope, const KUrl& url, QStandardItem* parent )
@@ -36,28 +40,36 @@ QMakeFolderItem::~QMakeFolderItem()
 {
 }
 
+struct QMakeTargetItemPrivate
+{
+    KUrl::List m_includes;
+    QHash<QString, QString> m_env;
+    QList<QPair<QString,QString> > m_defs;
+};
+
 QMakeTargetItem::QMakeTargetItem( const QString& s, QStandardItem* parent )
-    : Koncrete::ProjectTargetItem( s, parent )
+    : Koncrete::ProjectTargetItem( s, parent ), d(new QMakeTargetItemPrivate)
 {
 }
 
 QMakeTargetItem::~QMakeTargetItem()
 {
+    delete d;
 }
 
 const KUrl::List& QMakeTargetItem::includeDirectories() const
 {
-    return m_includes;
+    return d->m_includes;
 }
 
 const QHash<QString, QString>& QMakeTargetItem::environment() const
 {
-    return m_env;
+    return d->m_env;
 }
 
-const Koncrete::DomUtil::PairList& QMakeTargetItem::defines() const
+const QList<QPair<QString, QString> >& QMakeTargetItem::defines() const
 {
-    return m_defs;
+    return d->m_defs;
 }
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

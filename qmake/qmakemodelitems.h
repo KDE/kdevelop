@@ -21,7 +21,8 @@
 #ifndef QMAKEMODELITEMS_H
 #define QMAKEMODELITEMS_H
 
-#include "kdevprojectmodel.h"
+#include "projectmodel.h"
+
 
 class QMakeProjectScope;
 
@@ -43,11 +44,9 @@ public:
     ~QMakeTargetItem();
     const KUrl::List& includeDirectories() const;
     const QHash<QString, QString>& environment() const;
-    const Koncrete::DomUtil::PairList& defines() const;
+    const QList<QPair<QString,QString> >& defines() const;
 private:
-    KUrl::List m_includes;
-    QHash<QString, QString> m_env;
-    Koncrete::DomUtil::PairList m_defs;
+    struct QMakeTargetItemPrivate* const d;
 };
 
 

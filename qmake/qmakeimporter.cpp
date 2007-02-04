@@ -22,16 +22,19 @@
 
 #include <QList>
 #include <QVector>
-#include <QDomDocument>
+// #include <QDomDocument>
 
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
+#include <QtDesigner/QExtensionFactory>
 
 #include <kurl.h>
 #include <kio/job.h>
 
-#include "kdevcore.h"
-#include "kdevproject.h"
+#include "icore.h"
+#include "iproject.h"
 #include "kgenericfactory.h"
-#include "kdevprojectmodel.h"
+#include "projectmodel.h"
 
 #include "qmakemodelitems.h"
 #include "qmakeprojectscope.h"
@@ -40,9 +43,12 @@ typedef KGenericFactory<QMakeImporter> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
                             QMakeSupportFactory( "kdevqmakeimporter" ) )
 
+KDEV_ADD_EXTENSION_FACTORY_NS( Koncrete, IBuildManager, QMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( Koncrete, IFileManager, QMakeImporter )
+
 QMakeImporter::QMakeImporter( QObject* parent,
                               const QStringList& )
-        : Koncrete::BuildManager( QMakeSupportFactory::componentData(), parent ), m_rootItem( 0L )
+        : Koncrete::IPlugin( QMakeSupportFactory::componentData(), parent ), Koncrete::IBuildManager(), m_rootItem( 0L )
 {
     m_project = 0;
 
@@ -57,9 +63,10 @@ QMakeImporter::QMakeImporter( QObject* parent,
 QMakeImporter::~QMakeImporter()
 {
     delete m_rootItem;
+    m_rootItem = 0;
 }
 
-Koncrete::Project* QMakeImporter::project() const
+Koncrete::IProject* QMakeImporter::project() const
 {
     return m_project;
 }
@@ -164,4 +171,51 @@ KUrl::List QMakeImporter::includeDirectories() const
     return m_includeDirList;
 }
 
+QStringList QMakeImporter::extensions() const
+{
+    return QStringList() << "IBuildManager" << "IFileManager";
+}
+
+Koncrete::ProjectFolderItem * QMakeImporter::top( )
+{
+    return m_rootItem;
+}
+
+Koncrete::ProjectFolderItem * QMakeImporter::addFolder( const KUrl &, Koncrete::ProjectFolderItem* )
+{
+    return 0;
+}
+
+bool QMakeImporter::removeFile( Koncrete::ProjectFileItem * )
+{
+    return false;
+}
+
+bool QMakeImporter::renameFile( Koncrete::ProjectFileItem *, const KUrl & )
+{
+    return false;
+}
+
+bool QMakeImporter::renameFolder( Koncrete::ProjectFolderItem *, const KUrl & )
+{
+    return false;
+}
+
+
+void QMakeImporter::registerExtensions()
+{
+    extensionManager()->registerExtensions( new QMakeImporterIFileManagerFactory(
+    extensionManager() ), Q_TYPEID( Koncrete::IFileManager ) );
+    extensionManager()->registerExtensions( new QMakeImporterIBuildManagerFactory(
+    extensionManager() ), Q_TYPEID( Koncrete::IBuildManager ) );
+}
+void QMakeImporter::unregisterExtensions()
+{
+    extensionManager()->unregisterExtensions( new QMakeImporterIFileManagerFactory(
+    extensionManager() ), Q_TYPEID( Koncrete::IFileManager ) );
+    extensionManager()->unregisterExtensions( new QMakeImporterIBuildManagerFactory(
+    extensionManager() ), Q_TYPEID( Koncrete::IBuildManager ) );
+}
+
+#include "qmakeimporter.moc"
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
