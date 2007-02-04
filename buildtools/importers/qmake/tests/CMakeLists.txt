@@ -9,7 +9,7 @@ kde4_add_executable(qmake-parsetest NOGUI RUN_UNINSTALLED ${parsetest_SRCS})
 target_link_libraries(qmake-parsetest
 	${QT_QTTEST_LIBRARY}
 	${KDE4_KDECORE_LIBS}
-	kdevplatform
+	koncreteinterfaces
 	kdevqmakeparser
 	)
 
@@ -19,7 +19,7 @@ kde4_add_executable(qmake-assignmenttest NOGUI RUN_UNINSTALLED ${assignmenttest_
 target_link_libraries(qmake-assignmenttest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
-    kdevplatform
+    koncreteinterfaces
     kdevqmakeparser
     )
 
