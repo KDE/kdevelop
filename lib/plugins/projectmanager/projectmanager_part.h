@@ -66,12 +66,12 @@ public:
     void registerExtensions() {}
     void unregisterExtensions() {}
 
-signals:
+Q_SIGNALS:
     void refresh();
     void addedProjectItem(ProjectItem *dom);
     void aboutToRemoveProjectItem(ProjectItem *dom);
 
-public slots:
+public Q_SLOTS:
     void openURL(const KUrl &url);
     void updateDetails(ProjectItem *item);
 

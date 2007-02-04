@@ -53,11 +53,11 @@ class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
 
         virtual void reset();
 
-    signals:
+    Q_SIGNALS:
         void activateURL( const KUrl &url );
         void currentChanged( ProjectItem *item );
 
-    protected slots:
+    protected Q_SLOTS:
         void slotActivated( const QModelIndex &index );
         void slotCurrentChanged( const QModelIndex &index );
         void popupContextMenu( const QPoint &pos );

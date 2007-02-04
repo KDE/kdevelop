@@ -30,11 +30,11 @@ public:
     DrillDownView(QWidget *parent = 0);
 //     QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
-public slots:
+public Q_SLOTS:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);
 
-signals:
+Q_SIGNALS:
     void returnPressed(const QModelIndex &index);
 
 protected:

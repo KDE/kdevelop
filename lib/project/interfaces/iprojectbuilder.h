@@ -47,7 +47,7 @@ public:
     virtual bool build(ProjectItem *dom) = 0;
     virtual bool clean(ProjectItem *dom) = 0;
 
-signals:
+Q_SIGNALS:
     void built(ProjectItem *dom);
     void failed();
 };

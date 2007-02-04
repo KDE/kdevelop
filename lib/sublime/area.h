@@ -150,7 +150,7 @@ public:
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
 
-signals:
+Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/
     void viewAdded(Sublime::AreaIndex*, Sublime::View*);
     /**Emitted when a new toolview is added to the area.*/

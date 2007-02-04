@@ -146,7 +146,7 @@ public:
     virtual bool renameFolder(ProjectFolderItem* oldFolder,
                               const KUrl& newFolder ) = 0;
 
-signals:
+Q_SIGNALS:
     void projectItemConfigWidget(const QList<ProjectItem*> &dom, KDialogBase *dialog);
 
     void folderAdded( ProjectFolderItem* folder );

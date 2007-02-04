@@ -60,7 +60,7 @@ public:
     /**@return controller for this mainwindow.*/
     Controller *controller() const;
 
-signals:
+Q_SIGNALS:
     /**Emitted before the area is cleared from this mainwindow.*/
     void areaCleared(Sublime::Area*);
     /**Emitted after the new area has been shown in this mainwindow.*/
