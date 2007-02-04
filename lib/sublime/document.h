@@ -66,7 +66,7 @@ protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
 
 private:
-    Q_PRIVATE_SLOT(d, void removeView(QObject*));
+    Q_PRIVATE_SLOT(d, void removeView(QObject*))
 
     struct DocumentPrivate *d;
 
