@@ -9,7 +9,7 @@ set(kdevqmakeparser_SRCS qmakeast.cpp qmakedriver.cpp)
 include(FindFlex)
 include(FindBison)
 
-if(BISON_EXECUTABLE AND FLEX_EXECUTABLE)
+if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_VERSION LESS 2.3 AND NOT FLEX_VERSION LESS 2.5.31)
     # Add command to generate the lexer.
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
@@ -50,13 +50,13 @@ if(BISON_EXECUTABLE AND FLEX_EXECUTABLE)
         "${CMAKE_CURRENT_BINARY_DIR}/stack.hh"
         GENERATED
     )
-else(BISON_EXECUTABLE AND FLEX_EXECUTABLE)
+else(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_VERSION LESS 2.3 AND NOT FLEX_VERSION LESS 2.5.31)
     message("Assuming existence of the generated lexer file qmake_lexer.cpp")
     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
     message("Assuming existence of the generated parser file qmake_parser.cpp")
     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp ${kdevqmakeparser_SRCS})
     include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/generated )
-endif(BISON_EXECUTABLE AND FLEX_EXECUTABLE)
+endif(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_VERSION LESS 2.3 AND NOT FLEX_VERSION LESS 2.5.31)
 
 kde4_automoc(${kdevqmakeparser_SRCS})
 kde4_add_library(kdevqmakeparser SHARED ${kdevqmakeparser_SRCS})
@@ -69,7 +69,7 @@ add_executable(qmake-parser main.cpp)
 target_link_libraries(qmake-parser kdevqmakeparser)
 #install(TARGETS qmake-parser DESTINATION ${BIN_INSTALL_DIR})
 
-add_custom_target( copy-generated 
+add_custom_target( copy-generated
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp"
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.hpp"
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/location.hh" "${CMAKE_CURRENT_SOURCE_DIR}/generated/location.hh"
