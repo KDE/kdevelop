@@ -491,26 +491,26 @@ static yyconst flex_int32_t yy_ec[256] =
 
 static yyconst flex_int32_t yy_meta[28] =
     {   0,
-        1,    2,    3,    4,    1,    1,    1,    5,    6,    6,
-        1,    1,    6,    1,    1,    1,    1,    1,    1,    1,
-        7,    1,    1,    1,    1,    1,    1
+        1,    2,    3,    3,    1,    1,    1,    4,    5,    5,
+        1,    1,    5,    1,    1,    1,    1,    1,    1,    1,
+        6,    1,    1,    1,    1,    1,    1
     } ;
 
 static yyconst flex_int16_t yy_base[119] =
     {   0,
-        0,   26,   29,   49,   69,   81,   93,  119,  184,  325,
-       36,  325,  178,  325,    0,   33,  325,  325,  325,  145,
-      325,  325,  325,  325,   42,  325,  177,    0,   59,  177,
+        0,   26,   29,   49,   69,   81,   93,  119,  184,  316,
+       36,  316,  178,  316,    0,   33,  316,  316,  316,  145,
+      316,  316,  316,  316,   42,  316,  177,    0,   59,  177,
         0,   44,  170,  175,   50,  171,  158,  157,  156,  169,
-      152,   62,  325,  164,    0,    0,  183,   77,   83,  325,
-      148,  147,  140,    0,  325,  325,  325,  137,  106,  325,
-      150,    0,  113,   64,   54,  146,  325,  148,  142,  140,
+      152,   62,  316,  164,    0,    0,  183,   77,   83,  316,
+      148,  147,  140,    0,  316,  316,  316,  137,  106,  316,
+      150,    0,  113,   64,   54,  146,  316,  148,  142,  140,
       143,  103,    0,    0,  111,  109,  105,  116,   96,  110,
       101,   99,   95,   85,  109,  119,  120,  198,   86,   80,
-      220,   66,   73,   52,   34,   32,  125,  229,  238,  325,
+      220,   66,   73,   52,   34,   32,  125,  229,  238,  316,
 
-        0,   72,  325,    0,    0,  325,    0,  325,  325,  264,
-      271,  278,  285,  292,  298,  304,  311,  317
+        0,   72,  316,    0,    0,  316,    0,  316,  316,  264,
+      270,  276,  282,  288,  293,  298,  304,  309
     } ;
 
 static yyconst flex_int16_t yy_def[119] =
@@ -530,7 +530,7 @@ static yyconst flex_int16_t yy_def[119] =
       109,  109,  109,  109,  109,  109,  109,  109
     } ;
 
-static yyconst flex_int16_t yy_nxt[353] =
+static yyconst flex_int16_t yy_nxt[344] =
     {   0,
        10,   11,   12,   13,   14,   10,   15,   16,   17,   18,
        10,   10,   19,   10,   10,   20,   21,   10,   20,   10,
@@ -561,19 +561,18 @@ static yyconst flex_int16_t yy_nxt[353] =
       109,  109,  104,  105,  105,  109,  109,  105,  109,  109,
       106,  105,  107,  107,  109,  109,  107,  109,  109,  109,
       107,  109,  109,  108,   28,   28,   28,   28,   28,   28,
-       28,   33,   33,   33,   33,   33,   33,   33,   10,   10,
-       10,   10,   10,   10,   10,   46,   46,  109,   46,   46,
-       46,   46,   62,  109,  109,  109,   62,   62,   65,   65,
+       33,   33,   33,   33,   33,   33,   10,   10,   10,   10,
+       10,   10,   46,   46,  109,   46,   46,   46,   62,  109,
+      109,   62,   62,   65,   65,  109,   65,   65,   69,  109,
 
-      109,  109,   65,   65,   69,  109,  109,  109,   69,  109,
-       69,   66,   66,  109,  109,   66,   66,   92,  109,  109,
-      109,  109,  109,   92,    9,  109,  109,  109,  109,  109,
+      109,   69,  109,   69,   66,   66,  109,   66,   66,   92,
+      109,  109,  109,  109,   92,    9,  109,  109,  109,  109,
       109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
       109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
-      109,  109
+      109,  109,  109
     } ;
 
-static yyconst flex_int16_t yy_chk[353] =
+static yyconst flex_int16_t yy_chk[344] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -604,16 +603,15 @@ static yyconst flex_int16_t yy_chk[353] =
         0,    0,   91,   98,   98,    0,    0,   98,    0,    0,
        98,   98,   99,   99,    0,    0,   99,    0,    0,    0,
        99,    0,    0,   99,  110,  110,  110,  110,  110,  110,
-      110,  111,  111,  111,  111,  111,  111,  111,  112,  112,
-      112,  112,  112,  112,  112,  113,  113,    0,  113,  113,
-      113,  113,  114,    0,    0,    0,  114,  114,  115,  115,
+      111,  111,  111,  111,  111,  111,  112,  112,  112,  112,
+      112,  112,  113,  113,    0,  113,  113,  113,  114,    0,
+        0,  114,  114,  115,  115,    0,  115,  115,  116,    0,
 
-        0,    0,  115,  115,  116,    0,    0,    0,  116,    0,
-      116,  117,  117,    0,    0,  117,  117,  118,    0,    0,
-        0,    0,    0,  118,  109,  109,  109,  109,  109,  109,
+        0,  116,    0,  116,  117,  117,    0,  117,  117,  118,
+        0,    0,    0,    0,  118,  109,  109,  109,  109,  109,
       109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
       109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
-      109,  109
+      109,  109,  109
     } ;
 
 /* Table of booleans, true if rule could match eol. */
@@ -624,10 +622,10 @@ static yyconst flex_int32_t yy_rule_can_match_eol[33] =
 
 static yyconst flex_int16_t yy_rule_linenum[32] =
     {   0,
-       52,   53,   54,   55,   56,   63,   64,   65,   66,   67,
-       68,   69,   70,   71,   72,   73,   74,   75,   79,   80,
-       81,   82,   83,   84,   85,   86,   87,   88,   94,   98,
-       99
+       52,   56,   60,   64,   70,   77,   82,   87,   92,   97,
+      102,  106,  110,  114,  118,  122,  126,  130,  134,  138,
+      142,  146,  150,  154,  159,  163,  167,  172,  179,  183,
+      187
     } ;
 
 #define YY_TRAILING_MASK 0x2000
@@ -678,7 +676,7 @@ goto find_rule; \
 
 
 
-#line 682 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 680 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 #define INITIAL 0
 #define assignment 1
@@ -844,7 +842,7 @@ YY_DECL
 #line 50 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 
 
-#line 848 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 846 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -918,7 +916,7 @@ yy_match:
 			*(yy_state_ptr)++ = yy_current_state;
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 325 );
+		while ( yy_base[yy_current_state] != 316 );
 
 yy_find_action:
 /* %% [10.0] code to find the action number goes here */
@@ -998,183 +996,274 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 52 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::token::DOLLAR; }
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::token::DOLLAR; 
+  }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 53 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::LCURLY; }
+#line 56 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::LCURLY; 
+  }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 54 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::RCURLY; }
+#line 60 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::RCURLY; 
+  }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 55 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ BEGIN(fnarg); bracecount++; mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::LPAREN; }
+#line 64 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    BEGIN(fnarg); 
+    bracecount++; 
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::LPAREN; 
+  }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 56 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+#line 70 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 {
-                                        bracecount--;
-                                        if( bracecount == 0 )
-                                            BEGIN(INITIAL);
-                                        mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-                                        return Parser::token::RPAREN;
-                                    }
+    bracecount--;
+    if( bracecount == 0 )
+        BEGIN(INITIAL);
+        mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+        return Parser::token::RPAREN;
+  }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 63 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ BEGIN(assignment);mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::PLUSEQ; }
+#line 77 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    BEGIN(assignment);
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::PLUSEQ; 
+  }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 64 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ BEGIN(assignment);mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::TILDEEQ; }
+#line 82 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    BEGIN(assignment);
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::TILDEEQ; 
+  }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 65 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ BEGIN(assignment);mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::MINUSEQ; }
+#line 87 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    BEGIN(assignment);
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::MINUSEQ; 
+  }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 66 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ BEGIN(assignment);mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::STAREQ; }
+#line 92 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    BEGIN(assignment);
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::STAREQ; 
+  }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 67 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ BEGIN(assignment);mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::EQUAL; }
+#line 97 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    BEGIN(assignment);
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::EQUAL; 
+  }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 68 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::COLON; }
+#line 102 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::COLON; 
+  }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 69 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::COMMA; }
+#line 106 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::COMMA;
+  }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 70 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::EXCLAM; }
+#line 110 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::EXCLAM;
+  }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 71 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::OR; }
+#line 114 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::OR;
+  }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 72 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::SCOPENAME; }
+#line 118 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::SCOPENAME; 
+  }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 73 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::SCOPENAME; }
+#line 122 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::SCOPENAME; 
+  }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 74 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::FUNCTIONNAME; }
+#line 126 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::FUNCTIONNAME; 
+  }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 75 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+#line 130 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 {
-                                        mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-                                        return Parser::token::FUNCTIONCALL;
-                                    }
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+    return Parser::token::FUNCTIONCALL;
+  }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 79 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ BEGIN(op); mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::VARIABLE; }
+#line 134 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    BEGIN(op); mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::VARIABLE; 
+  }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 80 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::QMVARIABLE; }
+#line 138 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::QMVARIABLE; 
+  }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 81 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::QMVARIABLE; }
+#line 142 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::QMVARIABLE; 
+  }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 82 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::SHELLVARIABLE; }
+#line 146 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::SHELLVARIABLE; 
+  }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 83 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::QMVARIABLE; }
+#line 150 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::QMVARIABLE; 
+  }
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 84 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::CONT; }
+#line 154 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    setLineEndingFromString( mylval->value ); 
+    return Parser::token::CONT; 
+  }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 85 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::VAR_VALUE; }
+#line 159 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::VAR_VALUE; 
+  }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 86 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::QUOTED_VAR_VALUE; }
+#line 163 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::QUOTED_VAR_VALUE; 
+  }
 	YY_BREAK
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 87 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::EMPTYLINE; }
+#line 167 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    setLineEndingFromString( mylval->value ); 
+    return Parser::token::EMPTYLINE; 
+  }
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 88 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+#line 172 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 {
-                                        BEGIN(INITIAL);
-                                        mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-                                        return Parser::token::NEWLINE;
-                                    }
+    BEGIN(INITIAL);
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+    setLineEndingFromString( mylval->value );
+    return Parser::token::NEWLINE;
+  }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 94 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+#line 179 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 {
-                                        mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-                                        return Parser::token::WS;
-                                    }
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+    return Parser::token::WS;
+  }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 98 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::COMMENT; }
+#line 183 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::COMMENT; 
+  }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 99 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
-{ mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); return Parser::token::FNVALUE; }
+#line 187 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+{
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng()); 
+    return Parser::token::FNVALUE; 
+  }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 101 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+#line 192 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1178 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
+#line 1267 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(assignment):
 			case YY_STATE_EOF(fnarg):
@@ -2202,14 +2291,14 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 101 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
+#line 192 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_lexer.ll"
 
 
 
 namespace QMake
 {
     Lexer::Lexer( std::istream* argin, std::ostream* argout )
-        : yyFlexLexer(argin, argout), bracecount(0)
+        : yyFlexLexer(argin, argout), bracecount(0), m_lineEnding(None)
     {
     }
 
@@ -2218,7 +2307,27 @@ namespace QMake
         mylval = yylval;
         return yylex();
     }
+
+    void Lexer::setLineEndingFromString( const QString& str )
+    {
+        if( str.endsWith("\r\n") && m_lineEnding == None )
+        {
+            m_lineEnding = Windows;
+        }else if( str.endsWith("\r") && m_lineEnding == None )
+        {
+            m_lineEnding = MacOS;
+        }else if( str.endsWith("\n") && m_lineEnding == None )
+        {
+            m_lineEnding = Unix;
+        }
+    }
+
+    int Lexer::lineending()
+    {
+        return m_lineEnding;
+    }
 }
+
 
 int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer)
 {
