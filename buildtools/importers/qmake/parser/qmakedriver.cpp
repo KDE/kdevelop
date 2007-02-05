@@ -48,7 +48,21 @@ namespace QMake
         p.set_debug_level(debug);
         int ret = p.parse();
         printf("Parsed: %d\n", ret);
+        switch( l.lineending() )
+        {
+           case QMake::Lexer::MacOS:
+                 ast->setLineEnding( QMake::ProjectAST::MacOS );
+                 break;
+             case QMake::Lexer::Windows:
+                 ast->setLineEnding( QMake::ProjectAST::Windows );
+                 break;
+             case QMake::Lexer::Unix:
+             default:
+                 ast->setLineEnding( QMake::ProjectAST::Unix );
+                 break;
+        }
         ast->setFilename(QString::fromUtf8( filename ));
+        printf("lineEnding: %d\n", ast->lineEnding());
         return ret;
     }
 
@@ -67,6 +81,20 @@ namespace QMake
         p.set_debug_level(debug);
         int ret = p.parse();
         printf("Parsed: %d\n", ret);
+        switch( l.lineending() )
+        {
+           case QMake::Lexer::MacOS:
+                 ast->setLineEnding( QMake::ProjectAST::MacOS );
+                 break;
+             case QMake::Lexer::Windows:
+                 ast->setLineEnding( QMake::ProjectAST::Windows );
+                 break;
+             case QMake::Lexer::Unix:
+             default:
+                 ast->setLineEnding( QMake::ProjectAST::Unix );
+                 break;
+        }
+        printf("lineEnding: %d\n", ast->lineEnding());
         ast->setFilename( "" );
         return ret;
     }

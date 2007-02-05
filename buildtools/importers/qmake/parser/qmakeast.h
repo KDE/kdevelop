@@ -59,6 +59,12 @@ namespace QMake
     class QMAKEPARSER_EXPORT ProjectAST : public AST
     {
         public:
+            enum LineEnding {
+                Unix = 1,
+		MacOS = 2,
+		Windows = 4
+            };
+
             ProjectAST( AST* parent = 0 );
             ~ProjectAST();
 
@@ -71,9 +77,13 @@ namespace QMake
             void writeToString( QString& ) const;
             void setFilename( const QString& );
 
+            void setLineEnding( LineEnding );   
+            LineEnding lineEnding();   
         private:
             QString m_filename;
             QList<StatementAST*> m_statements;
+            LineEnding m_lineEnding;
+	    
 
     };
 
@@ -225,6 +235,7 @@ namespace QMake
     };
 
 }
+
 
 #endif
 
