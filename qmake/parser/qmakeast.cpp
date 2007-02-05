@@ -51,7 +51,7 @@ namespace QMake
     }
 
     ProjectAST::ProjectAST( AST* parent )
-            : AST( "", parent )
+            : AST( "", parent ), m_lineEnding(Unix)
     {}
 
     ProjectAST::~ProjectAST()
@@ -71,6 +71,16 @@ namespace QMake
     QString ProjectAST::filename() const
     {
         return m_filename;
+    }
+
+    ProjectAST::LineEnding ProjectAST::lineEnding()
+    {
+        return m_lineEnding;
+    }
+
+    void ProjectAST::setLineEnding( ProjectAST::LineEnding l )
+    {
+        m_lineEnding = l;
     }
 
     void ProjectAST::writeToString( QString& buf ) const
