@@ -34,6 +34,7 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
+#include <ksimpleconfig.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
 #include <kio/job.h>
