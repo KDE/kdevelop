@@ -10,7 +10,6 @@ include (MacroLibrary)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${BERKELEY_DB_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
-link_directories (${KDE4_LIB_DIR})
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver )
 
 include(KDevelopMacros)
