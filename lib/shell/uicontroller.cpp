@@ -70,6 +70,8 @@ public:
     Core *core;
     MainWindow* defaultMainWindow;
 
+    QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
+
 private:
     UiController *m_controller;
 };
@@ -115,7 +117,23 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {
     kDebug() << k_funcinfo << endl;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
+    d->factoryDocuments[factory] = doc;
     d->defaultArea->addToolView(doc->createView(), Sublime::Left);
+}
+
+void Koncrete::UiController::removeToolView(IToolViewFactory *factory)
+{
+    kDebug() << k_funcinfo << endl;
+    //delete the tooldocument
+    Sublime::ToolDocument *doc = d->factoryDocuments[factory];
+
+    ///@todo adymo: on document deletion all its views shall be also deleted
+    foreach (Sublime::View *view, doc->views())
+        foreach (Sublime::Area *area, areas())
+            area->removeToolView(view);
+
+    d->factoryDocuments.remove(factory);
+    delete doc;
 }
 
 void UiController::openUrl(const KUrl &url)

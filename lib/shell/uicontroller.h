@@ -49,6 +49,7 @@ public:
     virtual void switchToArea(const QString &areaName, SwitchMode switchMode);
 
     virtual void addToolView(const QString &name, IToolViewFactory *factory);
+    virtual void removeToolView(IToolViewFactory *factory);
     virtual void openUrl(const KUrl &url);
 
     void initialize();

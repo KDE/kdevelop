@@ -66,14 +66,15 @@ class KDevProjectManagerViewFactory: public Koncrete::IToolViewFactory
 
 class ProjectManagerPartPrivate
 {
-    public:
-
+public:
+    KDevProjectManagerViewFactory *factory;
 };
 
 ProjectManagerPart::ProjectManagerPart( QObject *parent, const QStringList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerPartPrivate)
 {
-    core()->uiController()->addToolView( "Project Manager", new KDevProjectManagerViewFactory( this ) );
+    d->factory = new KDevProjectManagerViewFactory( this );
+    core()->uiController()->addToolView( "Project Manager", d->factory );
 
     setXMLFile( "kdevprojectmanager.rc" );
 }
@@ -138,6 +139,11 @@ bool ProjectManagerPart::computeChanges( const QStringList &oldFileList, const Q
 
 void ProjectManagerPart::updateDetails( ProjectItem * )
 {}
+
+void ProjectManagerPart::unload()
+{
+    core()->uiController()->removeToolView(d->factory);
+}
 
 }
 #include "projectmanager_part.moc"

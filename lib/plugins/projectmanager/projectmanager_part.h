@@ -60,6 +60,7 @@ public:
 //     ProjectFileItem *activeFile();
 
     // Plugin methods
+    virtual void unload();
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
     QStringList extensions() const { return QStringList(); }
