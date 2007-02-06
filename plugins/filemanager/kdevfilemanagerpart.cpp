@@ -55,7 +55,8 @@ KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QStringList &/*a
 
 void KDevFileManagerPart::init()
 {
-    core()->uiController()->addToolView("File Manager", new KDevFileManagerViewFactory(this));
+    m_factory = new KDevFileManagerViewFactory(this);
+    core()->uiController()->addToolView("File Manager", m_factory);
 }
 
 KDevFileManagerPart::~KDevFileManagerPart()
@@ -78,6 +79,11 @@ void KDevFileManagerPart::unregisterExtensions()
 QStringList KDevFileManagerPart::extensions() const
 {
     return QStringList();
+}
+
+void KDevFileManagerPart::unload()
+{
+    core()->uiController()->removeToolView(m_factory);
 }
 
 #include "kdevfilemanagerpart.moc"

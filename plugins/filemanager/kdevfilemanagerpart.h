@@ -35,9 +35,13 @@ public:
     virtual void registerExtensions();
     virtual void unregisterExtensions();
     virtual QStringList extensions() const;
+    virtual void unload();
 
 private slots:
     void init();
+
+private:
+    class KDevFileManagerViewFactory *m_factory;
 
 };
 
