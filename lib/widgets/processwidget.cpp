@@ -143,8 +143,7 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
     insertItem(new ProcessListBoxItem(command, ProcessListBoxItem::Diagnostic));
     childproc->clearArguments();
     if (!dir.isNull()) {
-        kdDebug(9000) << "Changing to dir " << dir << endl;
-        QDir::setCurrent(dir);
+        childproc->setWorkingDirectory( dir );
     }
 
     *childproc << command;

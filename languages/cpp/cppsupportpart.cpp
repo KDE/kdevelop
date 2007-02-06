@@ -537,8 +537,6 @@ void CppSupportPart::projectOpened( )
 	connect( project(), SIGNAL( projectCompiled() ),
 	         this, SLOT( slotProjectCompiled() ) );
 
-	QDir::setCurrent( m_projectDirectory );
-
 	m_timestamp.clear();
 	m_parseEmitWaiting.clear();
 	m_fileParsedEmitWaiting.clear();

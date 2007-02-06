@@ -96,7 +96,6 @@ void PascalSupportPart::projectOpened()
     connect(project(), SIGNAL(projectCompiled()),
         this, SLOT(slotProjectCompiled()) );
 
-    QDir::setCurrent(project()->projectDirectory());
     m_projectFileList = project()->allFiles();
     m_projectClosed = false;
 
