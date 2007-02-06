@@ -87,7 +87,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         }
     }
 
-    if (index->first() || index->second()) //this is a splitter with views
+    if (index->isSplitted()) //this is a visible splitter
         splitter->setOrientation(index->orientation());
     else
     {
@@ -146,6 +146,20 @@ void MainWindowPrivate::clearArea()
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*view*/)
 {
     ViewCreator viewCreator(this);
+    QSplitter *splitter = m_indexSplitters[index];
+    if (index->isSplitted() && (splitter->count() == 1) &&
+            qobject_cast<Sublime::Container*>(splitter->widget(0)))
+    {
+        Container *container = qobject_cast<Sublime::Container*>(splitter->widget(0));
+        //we need to remove extra container before reconstruction
+        //first reparent widgets in container so that they are not deleted
+        for (int i = 0; i < container->count(); ++i)
+        {
+            container->widget(i)->setParent(0);
+        }
+        //and then delete the container
+        delete container;
+    }
     area->walkViews(viewCreator, index);
 }
 

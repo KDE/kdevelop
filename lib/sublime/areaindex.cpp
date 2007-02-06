@@ -47,7 +47,7 @@ struct AreaIndexPrivate {
         second = p.second ? new AreaIndex(*(p.second)) : 0;
     }
 
-    bool isSplitted()
+    bool isSplitted() const
     {
         return first || second;
     }
@@ -201,6 +201,11 @@ AreaIndex *AreaIndex::second() const
 Qt::Orientation AreaIndex::orientation() const
 {
     return d->orientation;
+}
+
+bool Sublime::AreaIndex::isSplitted() const
+{
+    return d->isSplitted();
 }
 
 

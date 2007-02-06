@@ -113,6 +113,8 @@ public:
     AreaIndex *first() const;
     /**@return the second child index if there're any.*/
     AreaIndex *second() const;
+    /**@return true if the index is splitted.*/
+    bool isSplitted() const;
     /**@return the orientation of the splitter for this index.*/
     Qt::Orientation orientation() const;
 

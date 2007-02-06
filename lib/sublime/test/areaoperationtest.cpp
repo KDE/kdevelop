@@ -317,7 +317,7 @@ void AreaOperationTest::testAreaSwitchingInSameMainwindow()
     QVERIFY(checker.hasWidgets);
 }
 
-void AreaOperationTest::testSimpleViewAddition()
+void AreaOperationTest::testSimpleViewAdditionAndDeletion()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
@@ -401,6 +401,44 @@ void AreaOperationTest::testSimpleViewAddition()
     QCOMPARE(container->count(), c3.count);
     for (int i = 0; i < container->count(); ++i)
         QVERIFY(container->widget(i) != 0);
+}
+
+void AreaOperationTest::testComplexViewAdditionAndDeletion()
+{
+    Area *area = m_area2;
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area2, &mw);
+
+    Document *doc5 = new PartDocument(m_controller, KUrl::fromPath("~/new.cpp"));
+    View *view = doc5->createView();
+    view->setObjectName("view2.5.1");
+
+    View *view221 = area->views()[3];
+    QCOMPARE(view221->objectName(), QString("view2.2.1"));
+    area->addView(view, view221, Qt::Vertical);
+
+    //check that area has a view
+    AreaViewsPrinter viewsPrinter2;
+    m_area2->walkViews(viewsPrinter2, m_area2->rootIndex());
+    QCOMPARE(viewsPrinter2.result, QString("\n\
+[ vertical splitter ]\n\
+    [ vertical splitter ]\n\
+        [ view2.1.1 view2.1.2 ]\n\
+        [ view2.4.1 ]\n\
+    [ horizontal splitter ]\n\
+        [ vertical splitter ]\n\
+            [ view2.2.1 ]\n\
+            [ view2.5.1 ]\n\
+        [ view2.3.1 ]\n\
+"));
+
+    //check that mainwindow has the new widget
+    QWidget *central = mw.centralWidget();
+    QVERIFY(central != 0);
+    QVERIFY(central->inherits("QSplitter"));
+
+    QList<Container*> containers = central->findChildren<Sublime::Container*>();
+    QCOMPARE(containers.count(), 5);
 }
 
 ///@todo adymo: check what happens when we add a splitted view
