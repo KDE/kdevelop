@@ -1,5 +1,5 @@
 
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) $(all_includes)
 
 ## The part
 kde_module_LTLIBRARIES = lib%{APPNAMELC}part.la

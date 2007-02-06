@@ -16,10 +16,12 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
 
-    virtual bool initDoc();
+    virtual bool initDoc( InitDocFlags flags, QWidget* parentWidget = 0 );
 
+    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles, const QDomDocument & settings, KoStore* store );
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual QDomDocument saveXML();
+    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );

@@ -13,7 +13,7 @@
 {
 }
 
-bool %{APPNAME}Part::initDoc()
+bool %{APPNAME}Part::initDoc( InitDocFlags flags, QWidget* parentWidget )
 {
     // If nothing is loaded, do initialize here
     return TRUE;
@@ -22,6 +22,12 @@ bool %{APPNAME}Part::initDoc()
 KoView* %{APPNAME}Part::createViewInstance( QWidget* parent, const char* name )
 {
     return new %{APPNAME}View( this, parent, name );
+}
+
+bool %{APPNAME}Part::loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles, const QDomDocument & settings, KoStore* store )
+{
+    /// @todo load the document using the OASIS format
+    return true;
 }
 
 bool %{APPNAME}Part::loadXML( QIODevice *, const QDomDocument & )
@@ -34,6 +40,12 @@ QDomDocument %{APPNAME}Part::saveXML()
 {
     /// @todo save the document into a QDomDocument
     return QDomDocument();
+}
+
+bool %{APPNAME}Part::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    /// @todo save the document using the OASIS format
+    return true;
 }
 
 
