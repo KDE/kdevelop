@@ -439,6 +439,22 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
 
     QList<Container*> containers = central->findChildren<Sublime::Container*>();
     QCOMPARE(containers.count(), 5);
+
+    int widgetCount = 0;
+    foreach (Container *c, containers)
+    {
+        for (int i = 0; i < c->count(); ++i)
+            QVERIFY(c->widget(i) != 0);
+        widgetCount += c->count();
+    }
+
+    ViewCounter c;
+    area->walkViews(c, area->rootIndex());
+    QCOMPARE(widgetCount, c.count);
+
+    QList<QSplitter*> splitters = central->findChildren<QSplitter*>();
+    splitters.append(qobject_cast<QSplitter*>(central));
+    QCOMPARE(splitters.count(), 8+1); //8 child splitters + 1 central itself = 9 splitters
 }
 
 ///@todo adymo: check what happens when we add a splitted view
