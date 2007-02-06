@@ -139,6 +139,7 @@ void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
 void Area::removeView(View *view)
 {
     AreaIndex *index = indexOf(view);
+    emit aboutToRemoveView(index, view);
     index->remove(view);
     delete view;
 }
@@ -165,6 +166,7 @@ void Area::addToolView(View *view, Position defaultPosition)
 
 void Area::removeToolView(View *view)
 {
+    emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
     delete view;

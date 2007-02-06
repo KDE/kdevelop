@@ -352,7 +352,7 @@ void AreaOperationTest::testViewAddition()
         QVERIFY(container->widget(i) != 0);
 }
 
-void AreaOperationTest::testToolViewAddition()
+void AreaOperationTest::testToolViewAdditionAndDeletion()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
@@ -371,6 +371,23 @@ toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 toolview1.4.1 [ right ]\n\
+"));
+
+    //check that mainwindow has newly added toolview
+    foreach (QDockWidget *dock, mw.toolDocks())
+        QVERIFY(dock->widget() != 0);
+    QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
+
+    //now remove toolview
+    m_area1->removeToolView(view);
+
+    AreaToolViewsPrinter toolViewsPrinter2;
+    //check that area doesn't have it anymore
+    m_area1->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
+    QCOMPARE(toolViewsPrinter2.result, QString("\n\
+toolview1.1.1 [ left ]\n\
+toolview1.2.1 [ bottom ]\n\
+toolview1.2.2 [ bottom ]\n\
 "));
 
     //check that mainwindow has newly added toolview

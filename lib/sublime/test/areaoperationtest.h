@@ -38,7 +38,7 @@ private slots:
     void testAreaCloning();
     void testAreaSwitchingInSameMainwindow();
     void testViewAddition();
-    void testToolViewAddition();
+    void testToolViewAdditionAndDeletion();
 
 private:
     void checkArea1(Sublime::MainWindow *mw);

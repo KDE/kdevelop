@@ -69,7 +69,9 @@ Q_SIGNALS:
 private:
     void init();
     Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))
+    Q_PRIVATE_SLOT(d, void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void toolViewAdded(Sublime::View*, Sublime::Position))
+    Q_PRIVATE_SLOT(d, void aboutToRemoveToolView(Sublime::View*, Sublime::Position))
 
     //Inherit MainWindowOperator to access two methods below
     /**Sets the area of main window and fills it with views.*/

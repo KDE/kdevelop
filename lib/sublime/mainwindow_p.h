@@ -73,7 +73,9 @@ public:
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
+    void aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view);
     void toolViewAdded(Sublime::View *toolView, Sublime::Position position);
+    void aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position position);
 
 private slots:
     void switchToArea(QAction *action);

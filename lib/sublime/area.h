@@ -153,8 +153,12 @@ public:
 Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/
     void viewAdded(Sublime::AreaIndex*, Sublime::View*);
+    /**Emitted when a view is going to be removed from the area.*/
+    void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*);
     /**Emitted when a new toolview is added to the area.*/
     void toolViewAdded(Sublime::View*, Sublime::Position);
+    /**Emitted when a toolview is going to be removed from the area.*/
+    void aboutToRemoveToolView(Sublime::View*, Sublime::Position);
 
 private:
     template <typename Operator>

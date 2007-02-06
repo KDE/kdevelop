@@ -149,10 +149,26 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*vi
     area->walkViews(viewCreator, index);
 }
 
-void Sublime::MainWindowPrivate::toolViewAdded(Sublime::View */*toolView*/, Sublime::Position position)
+void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
+{
+}
+
+void MainWindowPrivate::toolViewAdded(Sublime::View */*toolView*/, Sublime::Position position)
 {
     ToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, position);
+}
+
+void MainWindowPrivate::aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position /*position*/)
+{
+    if (!viewDocks.contains(toolView))
+        return;
+
+    QDockWidget *dock = viewDocks[toolView];
+    docks.removeAll(dock);
+    viewDocks.remove(toolView);
+    m_mainWindow->removeDockWidget(dock);
+    delete dock;
 }
 
 Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
