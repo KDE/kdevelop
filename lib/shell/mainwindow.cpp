@@ -182,7 +182,7 @@ void MainWindow::setupActions()
     action = KStandardAction::configureNotifications(
                  this, SLOT( configureNotifications() ),
                  actionCollection());
-    actionCollection()->addAction( "settings_configure_notifications" );
+    actionCollection()->addAction( "settings_configure_notifications",action );
     action->setToolTip( action->text() );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( action->text() ).arg( i18n( "Lets you configure system notifications." ) ) );
 
