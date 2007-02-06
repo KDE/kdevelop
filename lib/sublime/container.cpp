@@ -63,8 +63,13 @@ Container::~Container()
 void Container::addWidget(QWidget *w)
 {
     // d->stack->addWidget(w);
-    //@todo adymo: remove tabwidget
+    ///@todo adymo: remove tabwidget
     d->tab->addTab(w, "Tab");
+}
+
+void Sublime::Container::removeWidget(QWidget *w)
+{
+    d->tab->removeTab(d->tab->indexOf(w));
 }
 
 int Container::count() const

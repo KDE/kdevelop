@@ -151,6 +151,24 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*vi
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
 {
+    if (!m_indexSplitters.contains(index))
+        return;
+
+    QSplitter *splitter = m_indexSplitters[index];
+    //find the container for the view and remove the widget
+    Container *container = qobject_cast<Container*>(splitter->widget(0));
+    if ((container->count() > 1) && (index->parent()))
+    {
+        //container is not empty or this is a root index
+        //just remove a widget
+        container->removeWidget(view->widget());
+    }
+    else
+    {
+        //conainer will be empty after widget removal so we need to delete it
+        container->removeWidget(view->widget());
+        delete container;
+    }
 }
 
 void MainWindowPrivate::toolViewAdded(Sublime::View */*toolView*/, Sublime::Position position)

@@ -350,6 +350,9 @@ void AreaOperationTest::testViewAddition()
     QCOMPARE(container->count(), c.count);
     for (int i = 0; i < container->count(); ++i)
         QVERIFY(container->widget(i) != 0);
+
+    ///@todo adymo: check what happens when we add a splitted view
+    ///@todo adymo: test view removal inside splitter
 }
 
 void AreaOperationTest::testToolViewAdditionAndDeletion()
