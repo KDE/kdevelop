@@ -37,7 +37,7 @@ private slots:
     void testMainWindowConstruction();
     void testAreaCloning();
     void testAreaSwitchingInSameMainwindow();
-    void testViewAddition();
+    void testSimpleViewAddition();
     void testToolViewAdditionAndDeletion();
 
 private:

@@ -317,7 +317,7 @@ void AreaOperationTest::testAreaSwitchingInSameMainwindow()
     QVERIFY(checker.hasWidgets);
 }
 
-void AreaOperationTest::testViewAddition()
+void AreaOperationTest::testSimpleViewAddition()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
@@ -351,9 +351,24 @@ void AreaOperationTest::testViewAddition()
     for (int i = 0; i < container->count(); ++i)
         QVERIFY(container->widget(i) != 0);
 
-    ///@todo adymo: check what happens when we add a splitted view
-    ///@todo adymo: test view removal inside splitter
+    //now remove view and check that area is valid
+    m_area1->removeView(view);
+    AreaViewsPrinter viewsPrinter2;
+    m_area1->walkViews(viewsPrinter2, m_area1->rootIndex());
+    QCOMPARE(viewsPrinter2.result, QString("\n\
+[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n\
+"));
+
+    //mainwindow should be valid as well
+    container = central->findChild<Sublime::Container*>();
+    ViewCounter c2;
+    m_area1->walkViews(c2, m_area1->rootIndex());
+    QCOMPARE(container->count(), c2.count);
+    for (int i = 0; i < container->count(); ++i)
+        QVERIFY(container->widget(i) != 0);
 }
+
+///@todo adymo: check what happens when we add a splitted view
 
 void AreaOperationTest::testToolViewAdditionAndDeletion()
 {

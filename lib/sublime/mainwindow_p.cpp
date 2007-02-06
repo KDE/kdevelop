@@ -157,7 +157,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     QSplitter *splitter = m_indexSplitters[index];
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
-    if ((container->count() > 1) && (index->parent()))
+    if ((container->count() > 1) || (index->parent()))
     {
         //container is not empty or this is a root index
         //just remove a widget
