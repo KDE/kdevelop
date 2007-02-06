@@ -276,11 +276,11 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     int error = 0;
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
-    if ( checkForDependecies( info, missingInterfaces ) )
+    if ( checkForDependencies( info, missingInterfaces ) )
     {
         plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
                 QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QStringList(), &error );
-        loadDependecies( info );
+        loadDependencies( info );
     }
 
     if ( plugin )
@@ -409,7 +409,7 @@ void PluginController::cleanupDone()
 }
 
 ///@todo plugin load operation should be O(n)
-bool PluginController::checkForDependecies( KPluginInfo* info, QStringList& missing ) const
+bool PluginController::checkForDependencies( KPluginInfo* info, QStringList& missing ) const
 {
     QVariant prop = info->property( "X-KDevelop-IRequired" );
     bool result = true;
@@ -429,7 +429,7 @@ bool PluginController::checkForDependecies( KPluginInfo* info, QStringList& miss
     return result;
 }
 
-void PluginController::loadDependecies( KPluginInfo* info )
+void PluginController::loadDependencies( KPluginInfo* info )
 {
     QVariant prop = info->property( "X-KDevelop-IRequired" );
     if( prop.canConvert<QStringList>() )

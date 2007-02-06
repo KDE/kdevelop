@@ -168,9 +168,9 @@ private:
      */
     KPluginInfo * infoForPluginId( const QString &pluginId ) const;
 
-    bool checkForDependecies( KPluginInfo* info, QStringList& missing ) const;
+    bool checkForDependencies( KPluginInfo* info, QStringList& missing ) const;
 
-    void loadDependecies( KPluginInfo* );
+    void loadDependencies( KPluginInfo* );
 
     void cleanup();
 
