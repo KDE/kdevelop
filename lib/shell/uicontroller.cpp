@@ -46,7 +46,7 @@ public:
 
     virtual QWidget *createViewWidget(QWidget *parent = 0)
     {
-    	Q_UNUSED( parent );
+        Q_UNUSED( parent );
         KParts::Part *part = m_partController->createPart(url());
         return part->widget();
     }
@@ -81,7 +81,7 @@ public:
     ~UiToolViewFactory() { delete m_factory; }
     virtual QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = 0)
     {
-    	Q_UNUSED( doc );
+        Q_UNUSED( doc );
         return m_factory->create(parent);
     }
 
