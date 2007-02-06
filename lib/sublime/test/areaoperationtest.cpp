@@ -177,11 +177,11 @@ toolview1.2.2 [ bottom ]\n\
     AreaViewsPrinter viewsPrinter2;
     m_area2->walkViews(viewsPrinter2, m_area2->rootIndex());
     QCOMPARE(viewsPrinter2.result, QString("\n\
-[ vertical splitter]\n\
-    [ vertical splitter]\n\
+[ vertical splitter ]\n\
+    [ vertical splitter ]\n\
         [ view2.1.1 view2.1.2 ]\n\
         [ view2.4.1 ]\n\
-    [ horizontal splitter]\n\
+    [ horizontal splitter ]\n\
         [ view2.2.1 ]\n\
         [ view2.3.1 ]\n\
 "));
@@ -364,6 +364,41 @@ void AreaOperationTest::testSimpleViewAddition()
     ViewCounter c2;
     m_area1->walkViews(c2, m_area1->rootIndex());
     QCOMPARE(container->count(), c2.count);
+    for (int i = 0; i < container->count(); ++i)
+        QVERIFY(container->widget(i) != 0);
+
+    //now remove all other views one by one and leave an empty container
+    QList<View*> list(m_area1->views());
+    foreach (View *view, list)
+        m_area1->removeView(view);
+    AreaViewsPrinter viewsPrinter3;
+    m_area1->walkViews(viewsPrinter3, m_area1->rootIndex());
+    QCOMPARE(viewsPrinter3.result, QString("\n\
+[ horizontal splitter ]\n\
+"));
+
+    //mainwindow should contain a splitter with nothing inside
+    QVERIFY(central->inherits("QSplitter"));
+    QCOMPARE(central->children().count(), 0);
+
+    //add a view again and check that mainwindow is correctly reconstructed
+    view = doc5->createView();
+    view->setObjectName("view1.5.1");
+    m_area1->addView(view);
+
+    //check that area is in valid with only one view inside
+    AreaViewsPrinter viewsPrinter4;
+    m_area1->walkViews(viewsPrinter4, m_area1->rootIndex());
+    QCOMPARE(viewsPrinter4.result, QString("\n\
+[ view1.5.1 ]\n\
+"));
+
+    //and mainwindow displays its widget
+    container = central->findChild<Sublime::Container*>();
+    QVERIFY(container);
+    ViewCounter c3;
+    m_area1->walkViews(c3, m_area1->rootIndex());
+    QCOMPARE(container->count(), c3.count);
     for (int i = 0; i < container->count(); ++i)
         QVERIFY(container->widget(i) != 0);
 }
