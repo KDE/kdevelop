@@ -169,6 +169,9 @@ void Area::addToolView(View *view, Position defaultPosition)
 
 void Area::removeToolView(View *view)
 {
+    if (!d->toolViews.contains(view))
+        return;
+
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
