@@ -80,9 +80,9 @@ bool IPlugin::isCentralPlugin() const
     return false;
 }
 
-void IPlugin::prepareForUnload()
+void IPlugin::unload()
 {
-    emit readyToUnload( this );
+    //do nothing
 }
 
 KIconLoader *IPlugin::iconLoader() const

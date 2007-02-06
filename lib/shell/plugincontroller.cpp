@@ -106,6 +106,7 @@ PluginController::~PluginController()
         delete it.value();
     }
     delete m_manager;
+    qDeleteAll(d->plugins);
     delete d;
 }
 
@@ -140,7 +141,6 @@ void PluginController::cleanup()
 
     d->cleanupMode = PluginControllerPrivate::CleaningUp;
 
-
     // Ask all plugins to unload
     for ( PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
           it != d->loadedPlugins.end(); /* EMPTY */ )
@@ -152,18 +152,12 @@ void PluginController::cleanup()
         ++it;
 
         //Let the plugin do some stuff before unloading
-        current.value()->prepareForUnload();
+        IPlugin* plugin = current.value();
+        plugin->unload();
+        delete plugin;
     }
 
-    // When running under valgrind, don't enable the timer because it will almost
-    // certainly fire due to valgrind's much slower processing
-#if defined(HAVE_VALGRIND_H) && !defined(NDEBUG)
-        if ( RUNNING_ON_VALGRIND )
-            kDebug(9000) << k_funcinfo << "Running under valgrind, disabling plugin unload timeout guard" << endl;
-        else
-#endif
-
-    QTimer::singleShot( 3000, this, SLOT( cleanupTimeout() ) );
+    d->cleanupMode = PluginControllerPrivate::CleanupDone;
 }
 
 IPlugin* PluginController::loadPlugin( const QString& pluginName )
@@ -203,7 +197,8 @@ void PluginController::unloadPlugin( const QString & pluginId )
 {
     if( IPlugin *thePlugin = plugin( pluginId ) )
     {
-        thePlugin->prepareForUnload();
+        thePlugin->unload();
+        delete thePlugin;
     }
 }
 
@@ -291,8 +286,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
         connect( plugin, SIGNAL( destroyed( QObject * ) ),
                  this, SLOT( pluginDestroyed( QObject * ) ) );
-        connect( plugin, SIGNAL( readyToUnload( IPlugin*) ),
-                 this, SLOT( pluginReadyForUnload( IPlugin* ) ) );
 
         kDebug(9000) << k_funcinfo << "Successfully loaded plugin '" << pluginId << "'" << endl;
 
@@ -367,45 +360,6 @@ void PluginController::pluginDestroyed( QObject* deletedPlugin )
             break;
         }
     }
-
-    if ( d->cleanupMode == PluginControllerPrivate::CleaningUp && d->loadedPlugins.isEmpty() )
-    {
-        // Use a timer to make sure any pending deleteLater() calls have
-        // been handled first
-        QTimer::singleShot( 0, this, SLOT( cleanupDone() ) );
-    }
-}
-
-void PluginController::pluginReadyForUnload( IPlugin* plugin )
-{
-    kDebug(9000) << k_funcinfo << pluginInfo( plugin )->pluginName() << " ready for unload" << endl;
-    delete plugin;
-}
-
-void PluginController::cleanupTimeout()
-{
-    // When we were already done the timer might still fire.
-    // Do nothing in that case.
-    if ( d->cleanupMode == PluginControllerPrivate::CleanupDone )
-        return;
-
-    QStringList remaining;
-    PluginControllerPrivate::InfoToPluginMap::ConstIterator it, itEnd;
-    it = d->loadedPlugins.begin();
-    itEnd = d->loadedPlugins.end();
-    for ( ; it != itEnd; ++it )
-        remaining.append( it.key()->pluginName() );
-
-    kWarning(9000) << k_funcinfo << "Some plugins didn't cleanup in time!" << endl
-            << "Remaining plugins: " << remaining << endl
-            << "Forcing cleanup now." << endl;
-
-    cleanupDone();
-}
-
-void PluginController::cleanupDone()
-{
-    d->cleanupMode = PluginControllerPrivate::CleanupDone;
 }
 
 ///@todo plugin load operation should be O(n)

@@ -220,7 +220,7 @@ public:
     /**
      * Signal the plugin that it should cleanup since it will be unloaded soon.
      */
-    virtual void prepareForUnload();
+    virtual void unload();
 
     /**
      * Provides access to the global icon loader
@@ -245,13 +245,6 @@ public Q_SLOTS:
      * Re-initialize the global icon loader
      */
     void newIconLoader() const;
-
-Q_SIGNALS:
-    /**
-     * emitted when the plugin is ready to be unloaded by the plugin controller
-     * @param me The Plugin to unload. It should always be the this pointer
-     */
-    void readyToUnload( IPlugin* me );
 
 protected:
     QExtensionManager* extensionManager();

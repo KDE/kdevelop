@@ -140,14 +140,6 @@ private Q_SLOTS:
     ///A plugin has been destroyed. Cleanup our data structures
     void pluginDestroyed( QObject* );
 
-    ///A plugin is ready to unload. Unload it
-    void pluginReadyForUnload( IPlugin* );
-
-    ///Our timeout timer has expired
-    void cleanupTimeout();
-
-    void cleanupDone();
-
 private:
 
     /**
