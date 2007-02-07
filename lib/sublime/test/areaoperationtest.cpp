@@ -328,79 +328,34 @@ void AreaOperationTest::testSimpleViewAdditionAndDeletion()
     view->setObjectName("view1.5.1");
     m_area1->addView(view);
 
-    //check that area is in valid state
-    AreaViewsPrinter viewsPrinter1;
-    m_area1->walkViews(viewsPrinter1, m_area1->rootIndex());
-    QCOMPARE(viewsPrinter1.result, QString("\n\
+    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
 [ view1.1.1 view1.2.1 view1.2.2 view1.3.1 view1.5.1 ]\n\
-"));
-
-    //check that new view added to area1 is shown in mainwindow
-    //and mainwindow layout is not broken
-    //check that mainwindow have all splitters and widgets in splitters inside centralWidget
-    QWidget *central = mw.centralWidget();
-    QVERIFY(central != 0);
-    QVERIFY(central->inherits("QSplitter"));
-
-    //check that we have a container and 5 views inside
-    Container *container = central->findChild<Sublime::Container*>();
-    QVERIFY(container);
-    ViewCounter c;
-    m_area1->walkViews(c, m_area1->rootIndex());
-    QCOMPARE(container->count(), c.count);
-    for (int i = 0; i < container->count(); ++i)
-        QVERIFY(container->widget(i) != 0);
+"), 1, 1);
 
     //now remove view and check that area is valid
     m_area1->removeView(view);
-    AreaViewsPrinter viewsPrinter2;
-    m_area1->walkViews(viewsPrinter2, m_area1->rootIndex());
-    QCOMPARE(viewsPrinter2.result, QString("\n\
-[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n\
-"));
 
-    //mainwindow should be valid as well
-    container = central->findChild<Sublime::Container*>();
-    ViewCounter c2;
-    m_area1->walkViews(c2, m_area1->rootIndex());
-    QCOMPARE(container->count(), c2.count);
-    for (int i = 0; i < container->count(); ++i)
-        QVERIFY(container->widget(i) != 0);
+    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
+[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n\
+"), 1, 1);
 
     //now remove all other views one by one and leave an empty container
     QList<View*> list(m_area1->views());
     foreach (View *view, list)
         m_area1->removeView(view);
-    AreaViewsPrinter viewsPrinter3;
-    m_area1->walkViews(viewsPrinter3, m_area1->rootIndex());
-    QCOMPARE(viewsPrinter3.result, QString("\n\
-[ horizontal splitter ]\n\
-"));
 
-    //mainwindow should contain a splitter with nothing inside
-    QVERIFY(central->inherits("QSplitter"));
-    QCOMPARE(central->children().count(), 0);
+    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
+[ horizontal splitter ]\n\
+"), 0, 1);
 
     //add a view again and check that mainwindow is correctly reconstructed
     view = doc5->createView();
     view->setObjectName("view1.5.1");
     m_area1->addView(view);
 
-    //check that area is in valid with only one view inside
-    AreaViewsPrinter viewsPrinter4;
-    m_area1->walkViews(viewsPrinter4, m_area1->rootIndex());
-    QCOMPARE(viewsPrinter4.result, QString("\n\
+    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
 [ view1.5.1 ]\n\
-"));
-
-    //and mainwindow displays its widget
-    container = central->findChild<Sublime::Container*>();
-    QVERIFY(container);
-    ViewCounter c3;
-    m_area1->walkViews(c3, m_area1->rootIndex());
-    QCOMPARE(container->count(), c3.count);
-    for (int i = 0; i < container->count(); ++i)
-        QVERIFY(container->widget(i) != 0);
+"), 1, 1);
 }
 
 void AreaOperationTest::testComplexViewAdditionAndDeletion()
@@ -413,14 +368,11 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
     View *view = doc5->createView();
     view->setObjectName("view2.5.1");
 
-    View *view221 = area->views()[3];
-    QCOMPARE(view221->objectName(), QString("view2.2.1"));
+    View *view221 = findNamedView(area, "view2.2.1");
+    QVERIFY(view221);
     area->addView(view, view221, Qt::Vertical);
 
-    //check that area has a view
-    AreaViewsPrinter viewsPrinter2;
-    m_area2->walkViews(viewsPrinter2, m_area2->rootIndex());
-    QCOMPARE(viewsPrinter2.result, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QString("\n\
 [ vertical splitter ]\n\
     [ vertical splitter ]\n\
         [ view2.1.1 view2.1.2 ]\n\
@@ -430,39 +382,12 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
             [ view2.2.1 ]\n\
             [ view2.5.1 ]\n\
         [ view2.3.1 ]\n\
-"));
-
-    //check that mainwindow has the new widget
-    QWidget *central = mw.centralWidget();
-    QVERIFY(central != 0);
-    QVERIFY(central->inherits("QSplitter"));
-
-    QList<Container*> containers = central->findChildren<Sublime::Container*>();
-    QCOMPARE(containers.count(), 5);
-
-    int widgetCount = 0;
-    foreach (Container *c, containers)
-    {
-        for (int i = 0; i < c->count(); ++i)
-            QVERIFY(c->widget(i) != 0);
-        widgetCount += c->count();
-    }
-
-    ViewCounter c;
-    area->walkViews(c, area->rootIndex());
-    QCOMPARE(widgetCount, c.count);
-
-    QList<QSplitter*> splitters = central->findChildren<QSplitter*>();
-    splitters.append(qobject_cast<QSplitter*>(central));
-    QCOMPARE(splitters.count(), 8+1); //8 child splitters + 1 central itself = 9 splitters
+"), 5, 8+1);
 
     //now delete view221
     area->removeView(view221);
 
-    //view shall not be in the area anymore
-    AreaViewsPrinter viewsPrinter3;
-    m_area2->walkViews(viewsPrinter3, m_area2->rootIndex());
-    QCOMPARE(viewsPrinter3.result, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QString("\n\
 [ vertical splitter ]\n\
     [ vertical splitter ]\n\
         [ view2.1.1 view2.1.2 ]\n\
@@ -470,27 +395,21 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
     [ horizontal splitter ]\n\
         [ view2.5.1 ]\n\
         [ view2.3.1 ]\n\
-"));
+"), 4, 6+1);
 
-    //and mainwindow shall not contain extra splitters, containers, etc.
-    containers = central->findChildren<Sublime::Container*>();
-    QCOMPARE(containers.count(), 4);
+    //remove one more view, this time the one inside non-empty container
+    View *view211 = findNamedView(area, "view2.1.1");
+    m_area2->removeView(view211);
 
-    widgetCount = 0;
-    foreach (Container *c, containers)
-    {
-        for (int i = 0; i < c->count(); ++i)
-            QVERIFY(c->widget(i) != 0);
-        widgetCount += c->count();
-    }
-
-    ViewCounter c2;
-    area->walkViews(c2, area->rootIndex());
-    QCOMPARE(widgetCount, c2.count);
-
-    splitters = central->findChildren<QSplitter*>();
-    splitters.append(qobject_cast<QSplitter*>(central));
-    QCOMPARE(splitters.count(), 6+1); //6 child splitters + 1 central itself = 7 splitters
+    checkAreaViewsDisplay(&mw, area, QString("\n\
+[ vertical splitter ]\n\
+    [ vertical splitter ]\n\
+        [ view2.1.2 ]\n\
+        [ view2.4.1 ]\n\
+    [ horizontal splitter ]\n\
+        [ view2.5.1 ]\n\
+        [ view2.3.1 ]\n\
+"), 4, 6+1);
 }
 
 void AreaOperationTest::testToolViewAdditionAndDeletion()
@@ -535,6 +454,48 @@ toolview1.2.2 [ bottom ]\n\
     foreach (QDockWidget *dock, mw.toolDocks())
         QVERIFY(dock->widget() != 0);
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
+}
+
+void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
+    const QString &printedAreas, int containerCount, int splitterCount)
+{
+    //check area
+    AreaViewsPrinter viewsPrinter;
+    area->walkViews(viewsPrinter, area->rootIndex());
+    QCOMPARE(viewsPrinter.result, printedAreas);
+
+    //check mainwindow
+    QWidget *central = mw->centralWidget();
+    QVERIFY(central != 0);
+    QVERIFY(central->inherits("QSplitter"));
+
+    //check containers
+    QList<Container*> containers = central->findChildren<Sublime::Container*>();
+    QCOMPARE(containers.count(), containerCount);
+
+    int widgetCount = 0;
+    foreach (Container *c, containers)
+    {
+        for (int i = 0; i < c->count(); ++i)
+            QVERIFY(c->widget(i) != 0);
+        widgetCount += c->count();
+    }
+
+    ViewCounter c;
+    area->walkViews(c, area->rootIndex());
+    QCOMPARE(widgetCount, c.count);
+
+    QList<QSplitter*> splitters = central->findChildren<QSplitter*>();
+    splitters.append(qobject_cast<QSplitter*>(central));
+    QCOMPARE(splitters.count(), splitterCount);
+}
+
+View *AreaOperationTest::findNamedView(Area *area, const QString &name)
+{
+    foreach (View *view, area->views())
+        if (view->objectName() == name)
+            return view;
+    return 0;
 }
 
 KDEVTEST_MAIN(AreaOperationTest)

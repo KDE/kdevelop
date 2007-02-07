@@ -23,6 +23,7 @@
 
 namespace Sublime {
     class Area;
+    class View;
     class Controller;
     class MainWindow;
 }
@@ -44,6 +45,11 @@ private slots:
 private:
     void checkArea1(Sublime::MainWindow *mw);
     void checkArea2(Sublime::MainWindow *mw);
+    void checkAreaViewsDisplay(Sublime::MainWindow *mw, Sublime::Area *area,
+        const QString &areas, int containers, int splitters);
+
+    Sublime::View *findNamedView(Sublime::Area *area, const QString &name);
+
     Sublime::Controller *m_controller;
 
     Sublime::Area *m_area1;
