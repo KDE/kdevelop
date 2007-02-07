@@ -143,12 +143,27 @@ void AreaIndex::unsplit(AreaIndex *childToRemove)
     if (!d->isSplitted())
         return;
 
-    AreaIndex *left = d->first == childToRemove ? d->second : d->first;
-    left->copyTo(this);
-
-    delete d->first;
+    AreaIndex *other = d->first == childToRemove ? d->second : d->first;
+    other->copyTo(this);
+    d->orientation = other->orientation();
     d->first = 0;
-    delete d->second;
+    d->second = 0;
+    other->copyChildrenTo(this);
+
+    delete other;
+    delete childToRemove;
+}
+
+void AreaIndex::copyChildrenTo(AreaIndex *target)
+{
+    if (!d->first || !d->second)
+        return;
+    target->d->first = d->first;
+    target->d->second = d->second;
+    target->d->first->setParent(target);
+    target->d->second->setParent(target);
+
+    d->first = 0;
     d->second = 0;
 }
 

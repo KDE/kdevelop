@@ -155,6 +155,8 @@ private:
 
     /**Copies the data from this index to @p target.*/
     void copyTo(AreaIndex *target);
+    /**Copies the children indices from this index to @p target.*/
+    void copyChildrenTo(AreaIndex *target);
     /**Unsplits the index removing the given @p child and moving the contents
     of another child to this index.*/
     void unsplit(AreaIndex *childToRemove);

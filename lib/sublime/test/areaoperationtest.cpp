@@ -410,6 +410,33 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
         [ view2.5.1 ]\n\
         [ view2.3.1 ]\n\
 "), 4, 6+1);
+
+    //and now remove all remaining views one by one
+    m_area2->removeView(findNamedView(area, "view2.1.2"));
+    checkAreaViewsDisplay(&mw, area, QString("\n\
+[ vertical splitter ]\n\
+    [ view2.4.1 ]\n\
+    [ horizontal splitter ]\n\
+        [ view2.5.1 ]\n\
+        [ view2.3.1 ]\n\
+"), 3, 4+1);
+
+    m_area2->removeView(findNamedView(area, "view2.4.1"));
+    checkAreaViewsDisplay(&mw, area, QString("\n\
+[ horizontal splitter ]\n\
+    [ view2.5.1 ]\n\
+    [ view2.3.1 ]\n\
+"), 2, 2+1);
+
+    m_area2->removeView(findNamedView(area, "view2.5.1"));
+    checkAreaViewsDisplay(&mw, area, QString("\n\
+[ view2.3.1 ]\n\
+"), 1, 1);
+
+    m_area2->removeView(findNamedView(area, "view2.3.1"));
+    checkAreaViewsDisplay(&mw, area, QString("\n\
+[ horizontal splitter ]\n\
+"), 0, 1);
 }
 
 void AreaOperationTest::testToolViewAdditionAndDeletion()

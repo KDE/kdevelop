@@ -191,11 +191,23 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             //and move the remaining child onto its place
             AreaIndex *parent = index->parent();
             QSplitter *parentSplitter = m_indexSplitters[parent];
+
             AreaIndex *sibling = parent->first() == index ? parent->second() : parent->first();
             QSplitter *siblingSplitter = m_indexSplitters[sibling];
-            QWidget *grandParent = parentSplitter->parentWidget();
-            siblingSplitter->setParent(grandParent);
-            delete parentSplitter;
+
+            if (parentSplitter != m_mainWindow->centralWidget())
+            {
+                QWidget *grandParent = parentSplitter->parentWidget();
+                siblingSplitter->setParent(grandParent);
+                delete parentSplitter;
+            }
+            else
+            {
+                siblingSplitter->setParent(0);
+                m_mainWindow->setCentralWidget(0);
+                m_mainWindow->setCentralWidget(siblingSplitter);
+            }
+            m_indexSplitters[parent] = siblingSplitter;
         }
     }
 }
