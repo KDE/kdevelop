@@ -455,9 +455,43 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
     QList<QSplitter*> splitters = central->findChildren<QSplitter*>();
     splitters.append(qobject_cast<QSplitter*>(central));
     QCOMPARE(splitters.count(), 8+1); //8 child splitters + 1 central itself = 9 splitters
-}
 
-///@todo adymo: check what happens when we add a splitted view
+    //now delete view221
+    area->removeView(view221);
+
+    //view shall not be in the area anymore
+    AreaViewsPrinter viewsPrinter3;
+    m_area2->walkViews(viewsPrinter3, m_area2->rootIndex());
+    QCOMPARE(viewsPrinter3.result, QString("\n\
+[ vertical splitter ]\n\
+    [ vertical splitter ]\n\
+        [ view2.1.1 view2.1.2 ]\n\
+        [ view2.4.1 ]\n\
+    [ horizontal splitter ]\n\
+        [ view2.5.1 ]\n\
+        [ view2.3.1 ]\n\
+"));
+
+    //and mainwindow shall not contain extra splitters, containers, etc.
+    containers = central->findChildren<Sublime::Container*>();
+    QCOMPARE(containers.count(), 4);
+
+    widgetCount = 0;
+    foreach (Container *c, containers)
+    {
+        for (int i = 0; i < c->count(); ++i)
+            QVERIFY(c->widget(i) != 0);
+        widgetCount += c->count();
+    }
+
+    ViewCounter c2;
+    area->walkViews(c2, area->rootIndex());
+    QCOMPARE(widgetCount, c2.count);
+
+    splitters = central->findChildren<QSplitter*>();
+    splitters.append(qobject_cast<QSplitter*>(central));
+    QCOMPARE(splitters.count(), 6+1); //6 child splitters + 1 central itself = 7 splitters
+}
 
 void AreaOperationTest::testToolViewAdditionAndDeletion()
 {

@@ -182,6 +182,21 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         //conainer will be empty after widget removal so we need to delete it
         container->removeWidget(view->widget());
         delete container;
+        if ((splitter->count() == 0) && (splitter != m_mainWindow->centralWidget()))
+        {
+            m_indexSplitters.remove(index);
+            delete splitter;
+
+            //when we delete splitter we need to remove extra parent splitter
+            //and move the remaining child onto its place
+            AreaIndex *parent = index->parent();
+            QSplitter *parentSplitter = m_indexSplitters[parent];
+            AreaIndex *sibling = parent->first() == index ? parent->second() : parent->first();
+            QSplitter *siblingSplitter = m_indexSplitters[sibling];
+            QWidget *grandParent = parentSplitter->parentWidget();
+            siblingSplitter->setParent(grandParent);
+            delete parentSplitter;
+        }
     }
 }
 
