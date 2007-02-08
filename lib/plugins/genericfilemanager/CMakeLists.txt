@@ -10,7 +10,7 @@ include_directories(
 ########### next target ###############
 
 set(kdevgenericimporter_PART_SRCS
-    kdevgenericimporter.cpp
+    genericimporter.cpp
 )
 
 kde4_automoc(${kdevgenericimporter_PART_SRCS})
