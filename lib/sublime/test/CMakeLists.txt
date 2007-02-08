@@ -32,4 +32,10 @@ kde4_add_executable(sublime-controllertest NOGUI RUN_UNINSTALLED ${controllertes
 target_link_libraries(sublime-controllertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
 add_test(sublime-controllertest ${EXECUTABLE_OUTPUT_PATH}/sublime-controllertest)
 
+set( viewactivationtest_SRCS viewactivationtest.cpp )
+kde4_automoc(${viewactivationtest_SRCS})
+kde4_add_executable(sublime-viewactivationtest NOGUI RUN_UNINSTALLED ${viewactivationtest_SRCS})
+target_link_libraries(sublime-viewactivationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
+add_test(sublime-viewactivationtest ${EXECUTABLE_OUTPUT_PATH}/sublime-viewactivationtest)
+
 endif(KDE4_BUILD_TESTS)
