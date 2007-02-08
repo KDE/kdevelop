@@ -53,47 +53,39 @@ class QMakeImporter : public Koncrete::IPlugin, public Koncrete::IBuildManager
 
         virtual ~QMakeImporter();
 
-        virtual Koncrete::IProject* project() const;
-        virtual Koncrete::IProjectBuilder* builder() const { return 0; }
-        virtual KUrl buildDirectory() const;
-        virtual KUrl::List includeDirectories() const;
-        virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
-
-        virtual Koncrete::ProjectFolderItem* addFolder( const KUrl& /*folder */,
-                Koncrete::IProject* /*parent*/ ) { return false; }
+        virtual Koncrete::IProjectBuilder* builder(Koncrete::ProjectItem*) const { return 0; }
+        virtual KUrl buildDirectory(Koncrete::ProjectItem*) const;
+        virtual KUrl::List includeDirectories(Koncrete::ProjectBaseItem*) const;
+        virtual KUrl::List preprocessorDefines(Koncrete::ProjectBaseItem*) const { return KUrl::List(); }
 
         virtual Koncrete::ProjectTargetItem* createTarget( const QString&,
-                Koncrete::ProjectFolderItem* ) { return false; }
-
-        virtual Koncrete::ProjectFileItem* addFile( const KUrl&,
                 Koncrete::ProjectFolderItem* ) { return false; }
 
         virtual bool addFileToTarget( Koncrete::ProjectFileItem*,
                                       Koncrete::ProjectTargetItem* ) { return false; }
 
-        virtual bool removeFolder( Koncrete::ProjectFolderItem* ) { return false; }
-
         virtual bool removeTarget( Koncrete::ProjectTargetItem* ) { return false; }
 
-        virtual bool removeFile( Koncrete::ProjectFileItem*,
-                                 Koncrete::ProjectFolderItem* ) { return false; }
         virtual bool removeFileFromTarget( Koncrete::ProjectFileItem*,
                                            Koncrete::ProjectTargetItem* ) { return false; }
 
-        virtual QList<Koncrete::ProjectTargetItem*> targets() const;
+        virtual QList<Koncrete::ProjectTargetItem*> targets(Koncrete::ProjectItem*) const;
 
         virtual QList<Koncrete::ProjectFolderItem*> parse( Koncrete::ProjectFolderItem* dom );
-        virtual Koncrete::ProjectItem* import( Koncrete::ProjectModel* model,
-                                         const KUrl& dirName );
+        virtual Koncrete::ProjectItem* import( Koncrete::IProject* );
         virtual KUrl findMakefile( Koncrete::ProjectFolderItem* folder ) const;
         virtual KUrl::List findMakefiles( Koncrete::ProjectFolderItem* folder ) const;
 
-        virtual Koncrete::ProjectFolderItem* top();
-        virtual Koncrete::ProjectFolderItem* addFolder( const KUrl&, Koncrete::ProjectFolderItem* );
+        virtual Koncrete::ProjectFolderItem* addFolder( const KUrl&,
+                Koncrete::ProjectFolderItem* ) { return 0; }
 
-        virtual bool removeFile( Koncrete::ProjectFileItem* );
-        virtual bool renameFile( Koncrete::ProjectFileItem*, const KUrl& );
-        virtual bool renameFolder( Koncrete::ProjectFolderItem*, const KUrl&  );
+        virtual Koncrete::ProjectFileItem* addFile( const KUrl&,
+                Koncrete::ProjectFolderItem* ) { return 0; }
+
+        virtual bool removeFile( Koncrete::ProjectFileItem* ) { return false; }
+        virtual bool removeFolder( Koncrete::ProjectFolderItem* ) { return false; }
+        virtual bool renameFile( Koncrete::ProjectFileItem*, const KUrl& ) { return false; }
+        virtual bool renameFolder( Koncrete::ProjectFolderItem*, const KUrl&  ) { return false; }
 
         virtual void registerExtensions();
         virtual void unregisterExtensions();
