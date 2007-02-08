@@ -23,24 +23,32 @@
 
 #include "projectmodel.h"
 
-
 class QMakeProjectScope;
+
 
 class QMakeFolderItem : public Koncrete::ProjectFolderItem
 {
 public:
-    QMakeFolderItem( QMakeProjectScope*, const KUrl&, QStandardItem* parent = 0 );
-    ~QMakeFolderItem();
+    QMakeFolderItem( Koncrete::IProject*, QMakeProjectScope*, const KUrl&, QStandardItem* parent = 0 );
+    virtual ~QMakeFolderItem();
     QMakeProjectScope* projectScope() const;
 
 private:
     QMakeProjectScope* m_projectScope;
 };
 
+
+class QMakeProjectItem : public Koncrete::ProjectItem, public QMakeFolderItem
+{
+public:
+    QMakeProjectItem( Koncrete::IProject*, QMakeProjectScope*, const QString&, const KUrl&, QStandardItem* parent = 0 );
+    virtual ~QMakeProjectItem();
+};
+
 class QMakeTargetItem : public Koncrete::ProjectTargetItem
 {
 public:
-    QMakeTargetItem( const QString& s, QStandardItem* parent );
+    QMakeTargetItem( Koncrete::IProject*, const QString& s, QStandardItem* parent );
     ~QMakeTargetItem();
     const KUrl::List& includeDirectories() const;
     const QHash<QString, QString>& environment() const;

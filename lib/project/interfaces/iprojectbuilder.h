@@ -44,11 +44,11 @@ public:
 
     virtual IProject *project() const = 0;
 
-    virtual bool build(ProjectItem *dom) = 0;
-    virtual bool clean(ProjectItem *dom) = 0;
+    virtual bool build(ProjectBaseItem *dom) = 0;
+    virtual bool clean(ProjectBaseItem *dom) = 0;
 
 Q_SIGNALS:
-    void built(ProjectItem *dom);
+    void built(ProjectBaseItem *dom);
     void failed();
 };
 

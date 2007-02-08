@@ -24,36 +24,60 @@
 #include <kiconloader.h>
 #include <kio/global.h>
 
+#include "iproject.h"
+
 namespace Koncrete
 {
 
-ProjectItem::ProjectItem( const QString &name, QStandardItem *parent )
-        : QStandardItem( name )
+struct ProjectBaseItemPrivate
 {
+    IProject* project;
+};
+
+ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStandardItem *parent )
+        : QStandardItem( name ), d(new ProjectBaseItemPrivate)
+{
+    d->project = project;
     if ( parent )
         parent->setChild( parent->rowCount(), this );
 }
 
-void ProjectItem::add( ProjectItem* item )
+ProjectBaseItem::~ProjectBaseItem()
+{
+    delete d;
+}
+
+IProject* ProjectBaseItem::project() const
+{
+    return d->project;
+}
+
+void ProjectBaseItem::add( ProjectBaseItem* item )
 {
     setChild( rowCount(), item );
 }
-ProjectFolderItem *ProjectItem::folder() const
+
+ProjectFolderItem *ProjectBaseItem::folder() const
 {
     return 0;
 }
 
-ProjectTargetItem *ProjectItem::target() const
+ProjectTargetItem *ProjectBaseItem::target() const
 {
     return 0;
 }
 
-ProjectFileItem *ProjectItem::file() const
+ProjectFileItem *ProjectBaseItem::file() const
 {
     return 0;
 }
 
-QList<ProjectFolderItem*> ProjectItem::folderList() const
+ProjectItem *ProjectBaseItem::projectItem() const
+{
+    return 0;
+}
+
+QList<ProjectFolderItem*> ProjectBaseItem::folderList() const
 {
     QList<ProjectFolderItem*> lst;
     for ( int i = 0; i < rowCount(); ++i )
@@ -70,7 +94,7 @@ QList<ProjectFolderItem*> ProjectItem::folderList() const
     return lst;
 }
 
-QList<ProjectTargetItem*> ProjectItem::targetList() const
+QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
 {
     QList<ProjectTargetItem*> lst;
     for ( int i = 0; i < rowCount(); ++i )
@@ -87,7 +111,7 @@ QList<ProjectTargetItem*> ProjectItem::targetList() const
     return lst;
 }
 
-QList<ProjectFileItem*> ProjectItem::fileList() const
+QList<ProjectFileItem*> ProjectBaseItem::fileList() const
 {
     QList<ProjectFileItem*> lst;
     for ( int i = 0; i < rowCount(); ++i )
@@ -105,6 +129,27 @@ QList<ProjectFileItem*> ProjectItem::fileList() const
     return lst;
 }
 
+
+ProjectItem::ProjectItem( IProject * project, const QString & name, QStandardItem * parent )
+    : ProjectFolderItem( project, project->folder(), parent )
+{
+    setText( name );
+}
+
+ProjectItem::~ ProjectItem( )
+{
+}
+
+ProjectItem *ProjectItem::projectItem() const
+{
+    return const_cast<ProjectItem*>(this);
+}
+
+int ProjectItem::type( ) const
+{
+    return Project;
+}
+
 ProjectModel::ProjectModel( QObject *parent )
         : QStandardItemModel( parent )
 {}
@@ -113,9 +158,9 @@ ProjectModel::~ProjectModel()
 {}
 
 
-ProjectItem *ProjectModel::item( const QModelIndex &index ) const
+ProjectBaseItem *ProjectModel::item( const QModelIndex &index ) const
 {
-    return reinterpret_cast<ProjectItem*>( itemFromIndex( index ) );
+    return reinterpret_cast<ProjectBaseItem*>( itemFromIndex( index ) );
 }
 
 void ProjectModel::resetModel()
@@ -129,8 +174,8 @@ public:
     KUrl m_url;
 };
 
-ProjectFolderItem::ProjectFolderItem( const KUrl & dir, QStandardItem * parent )
-        : ProjectItem( dir.directory(), parent ), d(new ProjectFolderItemPrivate)
+ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStandardItem * parent )
+        : ProjectBaseItem( project, dir.directory(), parent ), d(new ProjectFolderItemPrivate)
 {
     d->m_url = dir;
     setText( dir.fileName() );
@@ -149,7 +194,7 @@ ProjectFolderItem *ProjectFolderItem::folder() const
 
 int ProjectFolderItem::type() const
 {
-    return ProjectItem::Folder;
+    return ProjectBaseItem::Folder;
 }
 
 const KUrl& ProjectFolderItem::url( ) const
@@ -171,15 +216,15 @@ public:
     QHash<QString, QString> m_env;
 };
 
-ProjectBuildFolderItem::ProjectBuildFolderItem( const KUrl &dir, QStandardItem *parent)
-    : ProjectFolderItem( dir, parent ), d(new ProjectBuildFolderItemPrivate)
+ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, QStandardItem *parent)
+    : ProjectFolderItem( project, dir, parent ), d(new ProjectBuildFolderItemPrivate)
 {
     d->m_url = dir;
 }
 
 int ProjectBuildFolderItem::type() const
 {
-    return ProjectItem::BuildFolder;
+    return ProjectBaseItem::BuildFolder;
 }
 
 void ProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
@@ -203,8 +248,8 @@ class ProjectFileItemPrivate
         KUrl m_url;
 };
 
-ProjectFileItem::ProjectFileItem( const KUrl & file, QStandardItem * parent )
-        : ProjectItem( file.fileName(), parent ), d(new ProjectFileItemPrivate)
+ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandardItem * parent )
+        : ProjectBaseItem( project, file.fileName(), parent ), d(new ProjectFileItemPrivate)
 {
     d->m_url = file;
     setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
@@ -222,7 +267,7 @@ void ProjectFileItem::setUrl( const KUrl& url )
 
 int ProjectFileItem::type() const
 {
-    return ProjectItem::File;
+    return ProjectBaseItem::File;
 }
 
 ProjectFileItem *ProjectFileItem::file() const
@@ -230,13 +275,13 @@ ProjectFileItem *ProjectFileItem::file() const
     return const_cast<ProjectFileItem*>( this );
 }
 
-ProjectTargetItem::ProjectTargetItem( const QString &name, QStandardItem *parent )
-                : ProjectItem( name, parent )
+ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, QStandardItem *parent )
+                : ProjectBaseItem( project, name, parent )
 {}
 
 int ProjectTargetItem::type() const
 {
-    return ProjectItem::Target;
+    return ProjectBaseItem::Target;
 }
 
 ProjectTargetItem *ProjectTargetItem::target() const
@@ -247,4 +292,3 @@ ProjectTargetItem *ProjectTargetItem::target() const
 }
 #include "projectmodel.moc"
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
-

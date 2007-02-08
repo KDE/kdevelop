@@ -69,8 +69,8 @@ public:
 
     void pressed( const QModelIndex & index )
     {
-        QStandardItem* item = m_part->core()->projectController()->activeProject()->model()->itemFromIndex( index );
-        if ( item->type() == ProjectItem::File )
+        QStandardItem* item = m_part->core()->projectController()->projectModel()->itemFromIndex( index );
+        if ( item->type() == ProjectBaseItem::File )
         {
             ProjectItem* projectItem = dynamic_cast<ProjectItem*>( item );
             if ( projectItem && projectItem->file() )
@@ -89,7 +89,6 @@ ProjectManager::ProjectManager( ProjectManagerPart *_part, QWidget *parent )
 
     ProjectManagerDelegate *delegate = new ProjectManagerDelegate( this );
 
-    IProject* project = part()->core()->projectController()->activeProject();
     d->m_projectOverview = new ProjectTreeView( part(), this );
     d->m_projectOverview->setItemDelegate( delegate );
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
@@ -113,20 +112,17 @@ ProjectManager::ProjectManager( ProjectManagerPart *_part, QWidget *parent )
              d->m_projectDetails, SLOT( setRootIndex( QModelIndex ) ) );
 #endif
 
-    if( project )
-    {
-        QAbstractItemModel *overviewModel = project->model();
+    QAbstractItemModel *overviewModel = d->m_part->core()->projectController()->projectModel();
 
 
-        d->m_projectOverview->setModel( overviewModel );
+    d->m_projectOverview->setModel( overviewModel );
 
 #ifdef WITH_PROJECT_DETAILS
-        QAbstractItemModel *detailsModel = m_projectModel;
+    QAbstractItemModel *detailsModel = m_projectModel;
 
-        d->m_projectDetails->setModel( detailsModel );
+    d->m_projectDetails->setModel( detailsModel );
 #endif
 
-    }
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );

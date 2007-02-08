@@ -47,6 +47,7 @@
 #include "filetemplate.h"
 #include "mainwindow.h"
 #include "ifilemanager.h"
+#include "iprojectcontroller.h"
 #include "importprojectjob.h"
 #include "projectmodel.h"
 // #include "ipersistenthash.h"
@@ -63,9 +64,11 @@ public:
     KUrl folder;
     IPlugin* manager;
 //     IPersistentHash persistentHash;
-    ProjectModel* model;
+    ProjectItem* topItem;
     QString name;
-    QList<ProjectFileItem*> recurseFiles( ProjectItem * projectItem )
+    KUrl localFile;
+    KUrl globalFile;
+    QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
     {
         QList<ProjectFileItem*> files;
         if ( ProjectFolderItem * folder = projectItem->folder() )
@@ -98,7 +101,6 @@ public:
     void importDone( KJob* job )
     {
         job->deleteLater();
-        model->resetModel();
     }
 
 };
@@ -110,7 +112,7 @@ Project::Project( QObject *parent )
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/Project", this, QDBusConnection::ExportScriptableSlots );
 
     d->manager = 0;
-    d->model = new ProjectModel( this );
+    d->topItem = 0;
 }
 
 Project::~Project()
@@ -118,17 +120,32 @@ Project::~Project()
     delete d;
 }
 
-ProjectModel* Project::model() const
-{
-    return d->model;
-}
-
 QString Project::name() const
 {
     return d->name;
 }
 
-KUrl Project::folder() const
+KUrl Project::localFile() const
+{
+    return d->localFile;
+}
+
+KUrl Project::globalFile() const
+{
+    return d->globalFile;
+}
+
+void Project::setLocalFile( const KUrl& u )
+{
+    d->localFile = u;
+}
+
+void Project::setGlobalFile( const KUrl& u )
+{
+    d->globalFile = u;
+}
+
+const KUrl& Project::folder() const
 {
     return d->folder;
 }
@@ -167,10 +184,11 @@ bool Project::open( const KUrl& projectFileUrl )
     }
     if ( d->manager && iface )
     {
-        QStandardItem* topItem = iface->import( d->model, d->folder );
-        d->model->insertRow( 0, topItem );
+        ProjectModel* model = Core::self()->projectController()->projectModel();
+        d->topItem = iface->import( this );
+        model->insertRow( model->rowCount(), d->topItem );
 
-        ImportProjectJob* importJob = new ImportProjectJob( d->model->item( 0, 0 ), iface );
+        ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
         importJob->start(); //be asynchronous
     }
@@ -182,6 +200,10 @@ bool Project::open( const KUrl& projectFileUrl )
         d->manager = 0;
         return false;
     }
+    d->globalFile = projectFileUrl;
+    d->localFile = KUrl::fromPath( d->globalFile.directory( KUrl::AppendTrailingSlash )
+                                  + ".kdev4/"
+                                  + d->globalFile.fileName() );
     return true;
 }
 
@@ -196,61 +218,70 @@ void Project::close()
     //the manager plugin will be deleted in the plugin controller, so just set
     //the manager to zero.
     d->manager = 0;
-    QList<QStandardItem*> itemList = d->model->takeRow( 0 );
+    QList<QStandardItem*> itemList = Core::self()->projectController()->projectModel()->takeRow( d->topItem->row() );
     qDeleteAll( itemList );
 
 }
 bool Project::inProject( const KUrl& url ) const
 {
-    IFileManager* iface = d->manager->extension<IFileManager>();
-    ProjectFolderItem *top = iface->top();
-    KUrl u = top->url();
+    KUrl u = d->topItem->url();
     if ( u.protocol() != url.protocol() || u.host() != url.host() )
         return false;
-    while ( top )
+
+    foreach( ProjectFolderItem* top, d->topItem->folderList() )
     {
-        u = top->url();
-        if ( u.isParentOf( url ) )
+        while ( top )
         {
-            ProjectFolderItem *parent = 0L;
-            QList<ProjectFolderItem*> folder_list = top->folderList();
-            foreach( ProjectFolderItem *folder, folder_list )
+            u = top->url();
+            if ( u.isParentOf( url ) )
             {
-                if ( folder->url().isParentOf( url ) )
+                ProjectFolderItem *parent = 0L;
+                QList<ProjectFolderItem*> folder_list = top->folderList();
+                foreach( ProjectFolderItem *folder, folder_list )
                 {
-                    parent = folder;
-                    break;
-                }
-            }
-            if ( !parent ) //the subfolders are not parent of url
-            {
-                QList<ProjectFileItem*> file_list = top->fileList();
-                foreach( ProjectFileItem *file, file_list )
-                {
-                    if ( file->url() == url )
+                    if ( folder->url().isParentOf( url ) )
                     {
-                        return true; //we found it
+                        parent = folder;
                         break;
                     }
                 }
-                return false; //not in the project
+                if ( !parent ) //the subfolders are not parent of url
+                {
+                    QList<ProjectFileItem*> file_list = top->fileList();
+                    foreach( ProjectFileItem *file, file_list )
+                    {
+                        if ( file->url() == url )
+                        {
+                            return true; //we found it
+                            break;
+                        }
+                    }
+                    return false; //not in the project
+                }
+                top = parent;
             }
-            top = parent;
         }
     }
-
     return false;
 }
 
-QList<ProjectFileItem*> Project::allFiles()
+ProjectFileItem* Project::fileAt( int num ) const
 {
-    QStandardItem* rootItem = d->model->item( 0, 0 );
-    ProjectItem* projectItem = dynamic_cast<ProjectItem*>( rootItem );
     QList<ProjectFileItem*> files;
-    if ( projectItem )
-        files = d->recurseFiles( projectItem );
+    if ( d->topItem )
+        files = d->recurseFiles( d->topItem );
 
-    return files;
+    if( !files.isEmpty() && num >= 0 && num < files.count() )
+        return files.at( num );
+    return 0;
+}
+
+int Project::fileCount() const
+{
+    QList<ProjectFileItem*> files;
+    if ( d->topItem )
+        files = d->recurseFiles( d->topItem );
+    return files.count();
 }
 
 KUrl Project::relativeUrl( const KUrl& absolute ) const

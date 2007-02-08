@@ -133,26 +133,26 @@ KConfig *Config::globalProject()
 KSharedConfig::Ptr Config::sharedStandard()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    QStringList current = config->extraConfigFiles();
-    QStringList extraConfig;
-    KUrl local;
-    KUrl global;
-    if( Core::self() && Core::self()->projectController() )
-    {
-        local = Core::self()->projectController() ->localFile();
-        global = Core::self()->projectController() ->globalFile();
-    }
-    if ( local.isValid() )
-        extraConfig.append( local.path() );
-    if ( global.isValid() )
-        extraConfig.append( global.path() );
-
-    if ( current != extraConfig )
-    {
-        config ->sync();
-        config ->setExtraConfigFiles( extraConfig );
-        config ->reparseConfiguration();
-    }
+//     QStringList current = config->extraConfigFiles();
+//     QStringList extraConfig;
+//     KUrl local;
+//     KUrl global;
+//     if( Core::self() && Core::self()->projectController() )
+//     {
+//         local = Core::self()->projectController() ->localFile();
+//         global = Core::self()->projectController() ->globalFile();
+//     }
+//     if ( local.isValid() )
+//         extraConfig.append( local.path() );
+//     if ( global.isValid() )
+//         extraConfig.append( global.path() );
+//
+//     if ( current != extraConfig )
+//     {
+//         config ->sync();
+//         config ->setExtraConfigFiles( extraConfig );
+//         config ->reparseConfiguration();
+//     }
 
     return config;
 }
@@ -160,21 +160,21 @@ KSharedConfig::Ptr Config::sharedStandard()
 KSharedConfig::Ptr Config::sharedLocalProject()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    QStringList current = config->extraConfigFiles();
-    QStringList extraConfig;
-    KUrl local = Core::self()->projectController() ->localFile();
-    KUrl global = Core::self()->projectController() ->globalFile();
-    if ( global.isValid() )
-        extraConfig.append( global.path() );
-    if ( local.isValid() )
-        extraConfig.append( local.path() );
-
-    if ( current != extraConfig )
-    {
-        config ->sync();
-        config ->setExtraConfigFiles( extraConfig );
-        config ->reparseConfiguration();
-    }
+//     QStringList current = config->extraConfigFiles();
+//     QStringList extraConfig;
+//     KUrl local = Core::self()->projectController() ->localFile();
+//     KUrl global = Core::self()->projectController() ->globalFile();
+//     if ( global.isValid() )
+//         extraConfig.append( global.path() );
+//     if ( local.isValid() )
+//         extraConfig.append( local.path() );
+//
+//     if ( current != extraConfig )
+//     {
+//         config ->sync();
+//         config ->setExtraConfigFiles( extraConfig );
+//         config ->reparseConfiguration();
+//     }
 
     return config;
 }
@@ -182,21 +182,21 @@ KSharedConfig::Ptr Config::sharedLocalProject()
 KSharedConfig::Ptr Config::sharedGlobalProject()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    QStringList current = config->extraConfigFiles();
-    QStringList extraConfig;
-    KUrl local = Core::self()->projectController() ->localFile();
-    KUrl global = Core::self()->projectController() ->globalFile();
-    if ( local.isValid() )
-        extraConfig.append( local.path() );
-    if ( global.isValid() )
-        extraConfig.append( global.path() );
-
-    if ( current != extraConfig )
-    {
-        config ->sync();
-        config ->setExtraConfigFiles( extraConfig );
-        config ->reparseConfiguration();
-    }
+//     QStringList current = config->extraConfigFiles();
+//     QStringList extraConfig;
+//     KUrl local = Core::self()->projectController() ->localFile();
+//     KUrl global = Core::self()->projectController() ->globalFile();
+//     if ( local.isValid() )
+//         extraConfig.append( local.path() );
+//     if ( global.isValid() )
+//         extraConfig.append( global.path() );
+//
+//     if ( current != extraConfig )
+//     {
+//         config ->sync();
+//         config ->setExtraConfigFiles( extraConfig );
+//         config ->reparseConfiguration();
+//     }
 
     return config;
 }

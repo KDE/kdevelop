@@ -42,7 +42,7 @@ void ProjectManagerDelegate::paint( QPainter *painter, const QStyleOptionViewIte
     const ProjectModel *projectModel = qobject_cast<const ProjectModel*>( index.model() );
     if ( projectModel )
     {
-        ProjectItem *item = projectModel->item( index );
+        ProjectBaseItem *item = projectModel->item( index );
         if ( item )
         {
             if ( item->folder() )

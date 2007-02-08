@@ -137,7 +137,7 @@ bool ProjectManagerPart::computeChanges( const QStringList &oldFileList, const Q
     return false; //FIXME
 }
 
-void ProjectManagerPart::updateDetails( ProjectItem * )
+void ProjectManagerPart::updateDetails( ProjectBaseItem * )
 {}
 
 void ProjectManagerPart::unload()

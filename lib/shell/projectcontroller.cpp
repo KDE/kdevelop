@@ -39,6 +39,7 @@ Boston, MA 02110-1301, USA.
 #include "../kdevconfig.h"
 #include "project.h"
 #include "mainwindow.h"
+#include "projectmodel.h"
 // #include "kdevlanguagecontroller.h"
 #include "iplugincontroller.h"
 #include "uicontroller.h"
@@ -50,30 +51,20 @@ namespace Koncrete
 struct ProjectControllerPrivate
 {
 public:
-    ProjectControllerPrivate()
-        :m_isLoaded(false)
-    {
-    }
 
-    QString m_name;
-    KUrl m_localFile;
-    KUrl m_globalFile;
-    KUrl m_projectsDir;
-    KUrl m_lastProject;
-    bool m_isLoaded;
-    IProject* m_project;
+    QList<IProject*> m_projects;
     IPlugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
     Core* m_core;
+    ProjectModel* model;
 };
 
 ProjectController::ProjectController( Core* core )
         : IProjectController( core ), d( new ProjectControllerPrivate )
 {
     d->m_core = core;
-    d->m_project = 0;
     d->m_projectPart = 0;
-
+    d->model = new ProjectModel();
     setupActions();
 }
 
@@ -112,12 +103,14 @@ void ProjectController::setupActions()
 
 ProjectController::~ProjectController()
 {
+    delete d->model;
     delete d;
 }
 
 void ProjectController::cleanup()
 {
-    closeProject();
+    foreach( IProject* project, d->m_projects )
+        closeProject( project );
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )
@@ -127,59 +120,72 @@ void ProjectController::loadSettings( bool projectIsLoaded )
 
 void ProjectController::saveSettings( bool projectIsLoaded )
 {
+    Q_UNUSED( projectIsLoaded );
     // Do not save if a project is loaded as this doesn't make sense inside a project file...
-    if ( !projectIsLoaded )
-    {
-        KConfig* standard = Config::standard();
-        standard->setGroup( "General Options" );
-        standard->writePathEntry( "Last Project", d->m_lastProject.path() );
-    }
+//     if ( !projectIsLoaded )
+//     {
+//         KConfig* standard = Config::standard();
+//         standard->setGroup( "General Options" );
+//         standard->writePathEntry( "Last Project", d->m_lastProject.path() );
+//     }
 }
 
-bool ProjectController::isLoaded() const
+// bool ProjectController::isLoaded() const
+// {
+//     return d->m_isLoaded;
+// }
+
+// KUrl ProjectController::localFile() const
+// {
+//     return d->m_localFile;
+// }
+
+// void ProjectController::setLocalFile( const KUrl &localFile )
+// {
+//     d->m_localFile = localFile;
+// }
+
+// KUrl ProjectController::globalFile() const
+// {
+//     return d->m_globalFile;
+// }
+//
+// void ProjectController::setGlobalFile( const KUrl &globalFile )
+// {
+//     d->m_globalFile = globalFile;
+// }
+//
+// KUrl ProjectController::projectDirectory() const
+// {
+//     return KUrl::fromPath( d->m_globalFile.directory() );
+// }
+//
+// KUrl ProjectController::projectsDirectory() const
+// {
+//     return d->m_projectsDir;
+// }
+//
+// void ProjectController::setProjectsDirectory( const KUrl &projectsDir )
+// {
+//     d->m_projectsDir = projectsDir;
+// }
+//
+// IProject* ProjectController::activeProject() const
+// {
+//     return d->m_project;
+// // return 0;
+// }
+
+int ProjectController::projectCount() const
 {
-    return d->m_isLoaded;
+    return d->m_projects.count();
 }
 
-KUrl ProjectController::localFile() const
+IProject* ProjectController::projectAt( int num ) const
 {
-    return d->m_localFile;
-}
-
-void ProjectController::setLocalFile( const KUrl &localFile )
-{
-    d->m_localFile = localFile;
-}
-
-KUrl ProjectController::globalFile() const
-{
-    return d->m_globalFile;
-}
-
-void ProjectController::setGlobalFile( const KUrl &globalFile )
-{
-    d->m_globalFile = globalFile;
-}
-
-KUrl ProjectController::projectDirectory() const
-{
-    return KUrl::fromPath( d->m_globalFile.directory() );
-}
-
-KUrl ProjectController::projectsDirectory() const
-{
-    return d->m_projectsDir;
-}
-
-void ProjectController::setProjectsDirectory( const KUrl &projectsDir )
-{
-    d->m_projectsDir = projectsDir;
-}
-
-IProject* ProjectController::activeProject() const
-{
-    return d->m_project;
-// return 0;
+    if( !d->m_projects.isEmpty() && num >= 0 && num < d->m_projects.count() )
+        return d->m_projects.at( num );
+    return 0;
 }
 
 bool ProjectController::openProject( const KUrl &projectFile )
@@ -201,27 +207,26 @@ bool ProjectController::openProject( const KUrl &projectFile )
     if ( !url.isValid() )
         return false;
 
-    if ( url == d->m_globalFile )
+    foreach( IProject* project, d->m_projects )
     {
-        if ( KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
-                                         i18n( "Reopen the current project?" ) )
-                == KMessageBox::No )
-            return false;
+        if ( url == project->globalFile() )
+        {
+            if ( KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
+                                             i18n( "Reopen the current project?" ) )
+                    == KMessageBox::No )
+                return false;
+        }
     }
+//     if ( d->m_isLoaded )
+//         closeProject();
 
-    if ( d->m_isLoaded )
-        closeProject();
-
-    d->m_globalFile = url;
+//     d->m_globalFile = url;
 
     //FIXME Create the hidden directory if it doesn't exist
-    d->m_localFile = KUrl::fromPath( d->m_globalFile.directory( KUrl::AppendTrailingSlash )
-                                  + ".kdev4/"
-                                  + d->m_globalFile.fileName() );
 
     if ( loadProjectPart() )
     {
-        d->m_isLoaded = true;
+//         d->m_isLoaded = true;
         //The project file has been opened.
         //Now we can load settings for all of the Core objects including this one!!
 //         Core::loadSettings();
@@ -229,6 +234,16 @@ bool ProjectController::openProject( const KUrl &projectFile )
     }
     else
         return false;
+
+
+    IProject* project = new Project();
+    if ( !project->open( url ) )
+    {
+        delete project;
+        return false;
+    }
+    d->m_projects.append( project );
+
 
     KActionCollection * ac = d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
     QAction * action;
@@ -240,17 +255,19 @@ bool ProjectController::openProject( const KUrl &projectFile )
     d->m_recentAction->saveEntries( Config::standard(), "RecentProjects" );
 
     Config::standard() ->sync();
-    emit projectOpened();
+    emit projectOpened( project );
 
     return true;
 }
 
-bool ProjectController::closeProject()
+bool ProjectController::closeProject( IProject* proj )
 {
-    if ( !d->m_isLoaded )
+    if( d->m_projects.indexOf( proj ) == -1 )
         return false;
+//     if ( !d->m_isLoaded )
+//         return false;
 
-    emit projectClosing();
+    emit projectClosing( proj );
 
     //The project file is being closed.
     //Now we can save settings for all of the Core objects including this one!!
@@ -259,12 +276,12 @@ bool ProjectController::closeProject()
 //     Core::self()->documentController() ->closeAllDocuments();
 
     // save the the project to open it automaticly on startup if needed
-    d->m_lastProject = d->m_globalFile;
+//     d->m_lastProject = d->m_globalFile;
 
-    d->m_name = QString::null;
-    d->m_localFile.clear();
-    d->m_globalFile.clear();
-    d->m_projectsDir.clear();
+//     d->m_name = QString::null;
+//     d->m_localFile.clear();
+//     d->m_globalFile.clear();
+//     d->m_projectsDir.clear();
 
     if (d->m_core->uiControllerInternal()->defaultMainWindow())
     {
@@ -275,50 +292,49 @@ bool ProjectController::closeProject()
         action->setEnabled( false );
     }
 
-    emit projectClosed();
-    d->m_core->pluginController()->unloadPlugins( IPluginController::Project );
+
+    proj->close();
+    proj->deleteLater(); //be safe when deleting
+    d->m_projects.removeAll( proj );
+    d->m_recentAction->setCurrentAction( 0 );
+//     d->m_isLoaded = false;
+    if( d->m_projects.isEmpty() )
+        d->m_core->pluginController()->unloadPlugins( IPluginController::Project );
+
+
+    emit projectClosed( proj );
 
     //FIXME
     //     PluginController::self() ->changeProfile( m_oldProfileName );
 
-    d->m_project->close();
-    d->m_project->deleteLater(); //be safe when deleting
-    d->m_project = 0;
-    d->m_recentAction->setCurrentAction( 0 );
-    d->m_isLoaded = false;
     return true;
 }
 
 bool ProjectController::loadProjectPart()
 {
-    KConfig * config = Config::standard();
-    config->setGroup( "General Options" );
-
-    QString projectManager =
-            config->readPathEntry( "Project Management", "ProjectManager" );
-
-    d->m_project = new Project();
-    if ( !d->m_project->open( d->m_globalFile ) )
+    if( !d->m_projectPart )
     {
-        delete d->m_project;
-        d->m_project = 0;
-        delete d->m_projectPart;
-        d->m_projectPart = 0;
-        return false;
-    }
+        KConfig * config = Config::standard();
+        config->setGroup( "General Options" );
 
-    d->m_projectPart = d->m_core->pluginController()->loadPlugin( projectManager );
-    if ( !d->m_projectPart )
-    {
-        KMessageBox::sorry( d->m_core->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Could not load project management plugin %1.",
-                                  projectManager ) );
-        d->m_project->close();
-        delete d->m_project;
-        d->m_project = 0;
-        return false;
+        QString projectManager =
+                config->readPathEntry( "Project Management", "KDevProjectManager" );
+
+        d->m_projectPart = d->m_core->pluginController()->loadPlugin( projectManager );
+        if ( !d->m_projectPart )
+        {
+            KMessageBox::sorry( d->m_core->uiControllerInternal()->defaultMainWindow(),
+                                i18n( "Could not load project management plugin %1.",
+                                      projectManager ) );
+            return false;
+        }
     }
     return true;
+}
+
+ProjectModel* ProjectController::projectModel()
+{
+    return d->model;
 }
 
 }

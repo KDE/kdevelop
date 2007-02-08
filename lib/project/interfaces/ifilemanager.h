@@ -41,6 +41,7 @@ namespace Koncrete
 class ProjectModel;
 class IProject;
 class ProjectItem;
+class ProjectBaseItem;
 class ProjectFolderItem;
 class ProjectTargetItem;
 class ProjectFileItem;
@@ -74,9 +75,6 @@ public:
     };
     Q_DECLARE_FLAGS( Features, Feature )
 
-    /** @return The current project. */
-    virtual IProject *project() const = 0;
-
     /**
      * This method initialize the model item @arg dom
      * @return The list of the sub folders
@@ -87,14 +85,7 @@ public:
      * This method creates the root item from the file @arg fileName
      * @return The created item
      */
-    virtual ProjectItem *import(ProjectModel *model, const KUrl &fileName) = 0;
-
-    /**
-     * Return the top item in this heirachy, which represents the root folder of the source
-     * hierarchy.
-     *
-     */
-    virtual ProjectFolderItem* top() = 0;
+    virtual ProjectItem *import(IProject *project) = 0;
 
     /**
      * Add a folder to the project
@@ -147,7 +138,7 @@ public:
                               const KUrl& newFolder ) = 0;
 
 Q_SIGNALS:
-    void projectItemConfigWidget(const QList<ProjectItem*> &dom, KDialogBase *dialog);
+    void projectItemConfigWidget(const QList<ProjectBaseItem*> &dom, KDialogBase *dialog);
 
     void folderAdded( ProjectFolderItem* folder );
     void folderRemoved( ProjectFolderItem* folder );

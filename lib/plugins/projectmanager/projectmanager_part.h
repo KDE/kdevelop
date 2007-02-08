@@ -31,7 +31,7 @@ class KUrl;
 namespace Koncrete
 {
 
-class ProjectItem;
+class ProjectBaseItem;
 class ProjectModel;
 class ProjectManager;
 class ProjectBuilder;
@@ -69,12 +69,12 @@ public:
 
 Q_SIGNALS:
     void refresh();
-    void addedProjectItem(ProjectItem *dom);
-    void aboutToRemoveProjectItem(ProjectItem *dom);
+    void addedProjectItem(ProjectBaseItem *dom);
+    void aboutToRemoveProjectItem(ProjectBaseItem *dom);
 
 public Q_SLOTS:
     void openURL(const KUrl &url);
-    void updateDetails(ProjectItem *item);
+    void updateDetails(ProjectBaseItem *item);
 
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);

@@ -35,7 +35,7 @@ class ProjectModel;
 class ProjectFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
-class ProjectItem;
+class ProjectBaseItem;
 
 class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
 {
@@ -55,7 +55,7 @@ class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
 
     Q_SIGNALS:
         void activateURL( const KUrl &url );
-        void currentChanged( ProjectItem *item );
+        void currentChanged( ProjectBaseItem *item );
 
     protected Q_SLOTS:
         void slotActivated( const QModelIndex &index );
@@ -70,4 +70,4 @@ class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
 }
 #endif // KDEVPROJECTMANAGER_H
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
+//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

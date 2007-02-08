@@ -44,15 +44,13 @@ public:
 
     virtual Koncrete::ProjectFolderItem* addFolder( const KUrl& folder, Koncrete::ProjectFolderItem *parent );
     virtual Koncrete::ProjectFileItem* addFile( const KUrl& file, Koncrete::ProjectFolderItem *parent );
-    virtual Koncrete::ProjectFolderItem* top();
     virtual bool removeFolder( Koncrete::ProjectFolderItem *folder );
     virtual bool removeFile( Koncrete::ProjectFileItem *file );
     virtual bool renameFolder( Koncrete::ProjectFolderItem *folder, const KUrl& url );
     virtual bool renameFile( Koncrete::ProjectFileItem *file, const KUrl& url );
 
-    virtual Koncrete::IProject *project() const;
     virtual QList<Koncrete::ProjectFolderItem*> parse( Koncrete::ProjectFolderItem *item );
-    virtual Koncrete::ProjectItem *import( Koncrete::ProjectModel *model, const KUrl &fileName );
+    virtual Koncrete::ProjectItem *import( Koncrete::IProject *project );
 
     void registerExtensions();
     void unregisterExtensions();

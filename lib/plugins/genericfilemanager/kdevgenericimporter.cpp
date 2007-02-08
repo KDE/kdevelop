@@ -61,11 +61,6 @@ GenericImporter::GenericImporter( QObject *parent, const QStringList & args )
 GenericImporter::~GenericImporter()
 {}
 
-Koncrete::IProject *GenericImporter::project() const
-{
-    return core()->projectController()->activeProject();
-}
-
 bool GenericImporter::isValid( const QFileInfo &fileInfo ) const
 {
     QString fileName = fileInfo.fileName();
@@ -113,35 +108,21 @@ QList<Koncrete::ProjectFolderItem*> GenericImporter::parse( Koncrete::ProjectFol
         else if ( fileInfo.isDir() && fileInfo.fileName() != QLatin1String( "." )
                   && fileInfo.fileName() != QLatin1String( ".." ) )
         {
-            Koncrete::ProjectFolderItem *folder = new Koncrete::ProjectFolderItem( KUrl( fileInfo.absoluteFilePath() ), item );
+            Koncrete::ProjectFolderItem *folder = new Koncrete::ProjectFolderItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
             folder_list.append( folder );
         }
         else if ( fileInfo.isFile() )
         {
-             Koncrete::ProjectFileItem *file = new Koncrete::ProjectFileItem( KUrl( fileInfo.absoluteFilePath() ), item );
+             Koncrete::ProjectFileItem *file = new Koncrete::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
         }
     }
 
     return folder_list;
 }
 
-Koncrete::ProjectItem *GenericImporter::import( Koncrete::ProjectModel *model,
-        const KUrl &fileName )
+Koncrete::ProjectItem *GenericImporter::import( Koncrete::IProject *project )
 {
-    Q_UNUSED( model )
-    QFileInfo fileInfo( fileName.path() );
-    if ( fileInfo.isDir() )
-    {
-        Koncrete::ProjectFolderItem *folder = new Koncrete::ProjectFolderItem( fileName, 0 );
-        return folder;
-    }
-    else if ( fileInfo.isFile() )
-    {
-        Koncrete::ProjectFileItem *file = new Koncrete::ProjectFileItem( fileName, 0 );
-        return file;
-    }
-
-    return 0;
+    return new Koncrete::ProjectItem( project, project->name(), 0 );;
 }
 
 Koncrete::ProjectFolderItem* GenericImporter::addFolder( const KUrl& url,
@@ -190,10 +171,6 @@ QStringList GenericImporter::extensions() const
     return QStringList() << "IFileManager";
 }
 
-Koncrete::ProjectFolderItem* GenericImporter::top()
-{
-    return 0;
-}
 
 #include "kdevgenericimporter.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

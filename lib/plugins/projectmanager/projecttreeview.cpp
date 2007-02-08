@@ -39,143 +39,152 @@ namespace Koncrete
 
 class ProjectTreeViewPrivate
 {
-public:
-    ProjectManagerPart* m_part;
+
+    public:
+        ProjectManagerPart* m_part;
 };
 
-ProjectTreeView::ProjectTreeView(ProjectManagerPart *part, QWidget *parent)
-  : QTreeView(parent), d(new ProjectTreeViewPrivate)
+ProjectTreeView::ProjectTreeView( ProjectManagerPart *part, QWidget *parent )
+        : QTreeView( parent ), d( new ProjectTreeViewPrivate )
 {
-  d->m_part = part;
-  header()->hide();
+    d->m_part = part;
+    header()->hide();
 
-  setContextMenuPolicy(Qt::CustomContextMenu);
+    setContextMenuPolicy( Qt::CustomContextMenu );
 
-  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)));
-  connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotActivated(QModelIndex)));
+    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
+    connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
 }
 
 ProjectTreeView::~ProjectTreeView()
 {
-  delete d;
+    delete d;
 }
 
 ProjectManagerPart *ProjectTreeView::part() const
 {
-  return d->m_part;
+    return d->m_part;
 }
 
 void ProjectTreeView::reset()
+
 {
-  QTreeView::reset();
+    QTreeView::reset();
 }
 
 ProjectFolderItem *ProjectTreeView::currentFolderItem() const
 {
-  Q_ASSERT(projectModel() != 0);
+    Q_ASSERT( projectModel() != 0 );
 
-  QItemSelectionModel *selection = selectionModel();
-  QModelIndex current = selection->currentIndex();
+    QItemSelectionModel *selection = selectionModel();
+    QModelIndex current = selection->currentIndex();
 
-  while (current.isValid())
+    while ( current.isValid() )
     {
-      if (ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>(projectModel()->item(current)))
-        return folderItem;
+        if ( ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>( projectModel()->item( current ) ) )
+            return folderItem;
 
-      current = projectModel()->parent(current);
+        current = projectModel()->parent( current );
     }
 
-  return 0;
+    return 0;
 }
 
 ProjectFileItem *ProjectTreeView::currentFileItem() const
+
 {
-  Q_ASSERT(projectModel() != 0);
+    Q_ASSERT( projectModel() != 0 );
 
-  QItemSelectionModel *selection = selectionModel();
-  QModelIndex current = selection->currentIndex();
+    QItemSelectionModel *selection = selectionModel();
+    QModelIndex current = selection->currentIndex();
 
-  while (current.isValid())
+    while ( current.isValid() )
     {
-      if (ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>(projectModel()->item(current)))
-        return fileItem;
+        if ( ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>( projectModel()->item( current ) ) )
+            return fileItem;
 
-      current = projectModel()->parent(current);
+        current = projectModel()->parent( current );
     }
 
-  return 0;
+    return 0;
 }
 
 ProjectTargetItem *ProjectTreeView::currentTargetItem() const
+
 {
-  Q_ASSERT(projectModel() != 0);
+    Q_ASSERT( projectModel() != 0 );
 
-  QItemSelectionModel *selection = selectionModel();
-  QModelIndex current = selection->currentIndex();
+    QItemSelectionModel *selection = selectionModel();
+    QModelIndex current = selection->currentIndex();
 
-  while (current.isValid())
+    while ( current.isValid() )
     {
-      if (ProjectTargetItem *targetItem = dynamic_cast<ProjectTargetItem*>(projectModel()->item(current)))
-        return targetItem;
+        if ( ProjectTargetItem *targetItem = dynamic_cast<ProjectTargetItem*>( projectModel()->item( current ) ) )
+            return targetItem;
 
-      current = projectModel()->parent(current);
+        current = projectModel()->parent( current );
     }
 
-  return 0;
+    return 0;
 }
 
 ProjectModel *ProjectTreeView::projectModel() const
+
 {
-  return qobject_cast<ProjectModel*>(model());
+    return qobject_cast<ProjectModel*>( model() );
 }
 
-void ProjectTreeView::slotActivated(const QModelIndex &index)
-{
-  ProjectItem *item = projectModel()->item(index);
+void ProjectTreeView::slotActivated( const QModelIndex &index )
 
-  if (item && item->file())
+{
+    ProjectBaseItem *item = projectModel()->item( index );
+
+    if ( item && item->file() )
     {
-      emit activateURL(item->file()->url());
+        emit activateURL( item->file()->url() );
     }
 }
 
-void ProjectTreeView::popupContextMenu(const QPoint &pos)
+void ProjectTreeView::popupContextMenu( const QPoint &pos )
+
 {
-  QModelIndex index = indexAt(pos);
+    QModelIndex index = indexAt( pos );
 
-  if (ProjectItem *item = projectModel()->item(index))
+    if ( ProjectBaseItem *item = projectModel()->item( index ) )
     {
-      KMenu menu(this);
+        KMenu menu( this );
 
-      if (ProjectFolderItem *folder = item->folder())
+        if ( ProjectFolderItem *folder = item->folder() )
         {
-          menu.addTitle(i18n("Folder: %1", folder->url().directory()));
+            menu.addTitle( i18n( "Folder: %1", folder->url().directory() ) );
         }
-      else if (ProjectFileItem *file = item->file())
+        else if ( ProjectFileItem *file = item->file() )
         {
-          menu.addTitle(i18n("File: %1", file->url().fileName()));
+            menu.addTitle( i18n( "File: %1", file->url().fileName() ) );
         }
-      else if (ProjectTargetItem *target = item->target())
+        else if ( ProjectTargetItem *target = item->target() )
         {
-          menu.addTitle(i18n("Target: %1", target->text()));
+            menu.addTitle( i18n( "Target: %1", target->text() ) );
         }
 
 //       ProjectItemContext context(item);
 //       m_part->core()->mainWindow()->fillContextMenu(&menu, &context);
 
-      menu.exec(mapToGlobal(pos));
+        menu.exec( mapToGlobal( pos ) );
     }
 }
 
-void ProjectTreeView::slotCurrentChanged(const QModelIndex &index)
+void ProjectTreeView::slotCurrentChanged( const QModelIndex &index )
+
 {
-  if (ProjectItem *item = projectModel()->item(index))
+    if ( ProjectBaseItem *item = projectModel()->item( index ) )
     {
-      emit currentChanged(item);
+        emit currentChanged( item );
     }
 }
 
 }
+
 #include "projecttreeview.moc"
 
-// kate: space-indent on; indent-width 2; replace-tabs on;
+//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

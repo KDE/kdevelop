@@ -135,14 +135,14 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, PluginContro
         list += enable;
     }
 
-/*//BEGIN debug
-    kDebug() << "=============" << endl
-        << "    =============" << endl
-        << "        =============   Plugins for Profile:" << endl;
-    for (KServiceOfferList::const_iterator it = list.begin(); it != list.end(); ++it)
-        kDebug() << "        " << (*it)->name() << endl;
-    kDebug() << endl << endl;
-//END debug*/
+//BEGIN debug
+//     kDebug() << "=============" << endl
+//         << "    =============" << endl
+//         << "        =============   Plugins for Profile:" << endl;
+//     for (KService::List::const_iterator it = list.begin(); it != list.end(); ++it)
+//         kDebug() << "        " << (*it)->name() << endl;
+//     kDebug() << endl << endl;
+//END debug
     KPluginInfo::List pluginList = KPluginInfo::fromServices( list );
     return pluginList;
 }

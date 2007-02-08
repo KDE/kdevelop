@@ -53,18 +53,18 @@ public:
     /**
      * Provide access to the builder
      */
-    virtual IProjectBuilder* builder() const = 0;
+    virtual IProjectBuilder* builder(ProjectItem*) const = 0;
 
     /**
      * Provide a list of include directories.
      */
-    virtual KUrl::List includeDirectories() const = 0;
+    virtual KUrl::List includeDirectories(ProjectBaseItem*) const = 0;
 
     /**
      * Provide a list of files that contain the preprocessor defines for the
      * project
      */
-    virtual KUrl::List preprocessorDefines() const = 0;
+    virtual KUrl::List preprocessorDefines(ProjectBaseItem*) const = 0;
 
     /** @return The Makefile associated with the specified @p folder.
      *   @note The Makefile list must contain absolute file names
@@ -116,7 +116,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory() const = 0;
+    virtual KUrl buildDirectory(ProjectItem*) const = 0;
 
     /**
      * Get a list of all the targets in this project
@@ -127,7 +127,7 @@ public:
      * @return The list of targets for this project
      * @todo implement
      */
-    //QList<ProjectTargetItem*> targets() const;
+    QList<ProjectTargetItem*> targets(ProjectItem*) const;
 
 
 };

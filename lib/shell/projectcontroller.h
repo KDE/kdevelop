@@ -41,28 +41,33 @@ public:
     ProjectController( Core* core );
     virtual ~ProjectController();
 
-    KUrl localFile() const;
-    void setLocalFile( const KUrl &localFile );
+    virtual IProject* projectAt( int ) const;
+    virtual int projectCount() const;
 
-    KUrl globalFile() const;
-    void setGlobalFile( const KUrl &globalFile );
+//     KUrl localFile() const;
+//     void setLocalFile( const KUrl &localFile );
+//
+//     KUrl globalFile() const;
+//     void setGlobalFile( const KUrl &globalFile );
+//
+//     KUrl projectsDirectory() const;
+//     void setProjectsDirectory( const KUrl &projectsDir );
+//
+//     bool isLoaded() const;
+//     KUrl projectDirectory() const;
+//
+//     IProject* activeProject() const;
 
-    KUrl projectsDirectory() const;
-    void setProjectsDirectory( const KUrl &projectsDir );
-
-    bool isLoaded() const;
-    KUrl projectDirectory() const;
-
-    IProject* activeProject() const;
+    virtual ProjectModel* projectModel();
 
 public Q_SLOTS:
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
-    bool closeProject();
+    bool closeProject( IProject* );
 
 Q_SIGNALS:
-    void projectOpened();
-    void projectClosing();
-    void projectClosed();
+    void projectOpened( IProject* );
+    void projectClosing( IProject* );
+    void projectClosed( IProject* );
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );

@@ -30,6 +30,7 @@ namespace Koncrete
 
 class IPlugin;
 class IProject;
+class ProjectModel;
 
 class KDEVPLATFORM_EXPORT IProjectController : public QObject
 {
@@ -38,28 +39,32 @@ public:
     IProjectController( QObject *parent = 0 );
     virtual ~IProjectController();
 
-    virtual KUrl localFile() const = 0;
-    virtual void setLocalFile( const KUrl &localFile ) = 0;
+    virtual IProject* projectAt( int ) const = 0;
+    virtual int projectCount() const = 0;
 
-    virtual KUrl globalFile() const = 0;
-    virtual void setGlobalFile( const KUrl &globalFile ) = 0;
+//     virtual KUrl localFile() const = 0;
+//     virtual void setLocalFile( const KUrl &localFile ) = 0;
 
-    virtual KUrl projectsDirectory() const = 0;
-    virtual void setProjectsDirectory( const KUrl &projectsDir ) = 0;
+//     virtual KUrl globalFile() const = 0;
+//     virtual void setGlobalFile( const KUrl &globalFile ) = 0;
 
-    virtual bool isLoaded() const = 0;
-    virtual KUrl projectDirectory() const = 0;
+//     virtual KUrl projectsDirectory() const = 0;
+//     virtual void setProjectsDirectory( const KUrl &projectsDir ) = 0;
 
-    virtual IProject* activeProject() const = 0;
+//     virtual bool isLoaded() const = 0;
+//     virtual KUrl projectDirectory() const = 0;
+
+  //     virtual IProject* activeProject() const = 0;
+    virtual ProjectModel* projectModel() = 0;
 
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() ) = 0;
-    virtual bool closeProject() = 0;
+    virtual bool closeProject( IProject* ) = 0;
 
 Q_SIGNALS:
-    void projectOpened();
-    void projectClosing();
-    void projectClosed();
+    void projectOpened( IProject* );
+    void projectClosing( IProject* );
+    void projectClosed( IProject* );
 };
 
 }

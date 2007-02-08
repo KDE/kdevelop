@@ -22,7 +22,6 @@
 
 #include <QList>
 #include <QVector>
-// #include <QDomDocument>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
@@ -46,6 +45,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
 KDEV_ADD_EXTENSION_FACTORY_NS( Koncrete, IBuildManager, QMakeImporter )
 KDEV_ADD_EXTENSION_FACTORY_NS( Koncrete, IFileManager, QMakeImporter )
 
+
 QMakeImporter::QMakeImporter( QObject* parent,
                               const QStringList& )
         : Koncrete::IPlugin( QMakeSupportFactory::componentData(), parent ), Koncrete::IBuildManager(), m_rootItem( 0L )
@@ -66,14 +66,9 @@ QMakeImporter::~QMakeImporter()
     m_rootItem = 0;
 }
 
-Koncrete::IProject* QMakeImporter::project() const
+KUrl QMakeImporter::buildDirectory(Koncrete::ProjectItem* project) const
 {
-    return m_project;
-}
-
-KUrl QMakeImporter::buildDirectory() const
-{
-    return project()->folder();
+    return project->project()->folder();
 }
 
 QList<Koncrete::ProjectFolderItem*> QMakeImporter::parse( Koncrete::ProjectFolderItem* item )
@@ -90,24 +85,24 @@ QList<Koncrete::ProjectFolderItem*> QMakeImporter::parse( Koncrete::ProjectFolde
 
     foreach( QMakeProjectScope* subproject, folderitem->projectScope()->subProjects() )
     {
-        folderList.append( new QMakeFolderItem( subproject, subproject->absoluteDirUrl(), item ) );
+        folderList.append( new QMakeFolderItem( item->project(), subproject, subproject->absoluteDirUrl(), item ) );
     }
     foreach( KUrl u, folderitem->projectScope()->files() )
     {
-        new Koncrete::ProjectFileItem( u, item );
+        new Koncrete::ProjectFileItem( item->project(), u, item );
     }
     foreach( QString s, folderitem->projectScope()->targets() )
     {
-        new QMakeTargetItem( s,  item );
+        new QMakeTargetItem( item->project(), s,  item );
     }
     kDebug(9024) << k_funcinfo << "Added " << folderList.count() << " Elements" << endl;
 
     return folderList;
 }
 
-Koncrete::ProjectItem* QMakeImporter::import( Koncrete::ProjectModel* model,
-                                        const KUrl& dirName )
+Koncrete::ProjectItem* QMakeImporter::import( Koncrete::IProject* project )
 {
+    KUrl dirName = project->folder();
     if( !dirName.isLocalFile() )
     {
         //FIXME turn this into a real warning
@@ -131,10 +126,9 @@ Koncrete::ProjectItem* QMakeImporter::import( Koncrete::ProjectModel* model,
         KUrl projecturl = dirName;
         projecturl.adjustPath( KUrl::AddTrailingSlash );
         projecturl.setFileName( projectfile );
-        m_rootItem = new QMakeFolderItem( new QMakeProjectScope( projecturl ), dirName );
+        return new QMakeProjectItem( project, new QMakeProjectScope( projecturl ), project->name(), project->folder() );
     }
-
-    return m_rootItem;
+    return 0;
 }
 
 KUrl QMakeImporter::findMakefile( Koncrete::ProjectFolderItem* folder ) const
@@ -161,44 +155,21 @@ KUrl::List QMakeImporter::findMakefiles( Koncrete::ProjectFolderItem* folder ) c
     return l;
 }
 
-QList<Koncrete::ProjectTargetItem*> QMakeImporter::targets() const
+QList<Koncrete::ProjectTargetItem*> QMakeImporter::targets(Koncrete::ProjectItem* item) const
 {
+    Q_UNUSED(item)
     return QList<Koncrete::ProjectTargetItem*>();
 }
 
-KUrl::List QMakeImporter::includeDirectories() const
+KUrl::List QMakeImporter::includeDirectories(Koncrete::ProjectBaseItem* item) const
 {
-    return m_includeDirList;
+    Q_UNUSED(item)
+    return KUrl::List();
 }
 
 QStringList QMakeImporter::extensions() const
 {
     return QStringList() << "IBuildManager" << "IFileManager";
-}
-
-Koncrete::ProjectFolderItem * QMakeImporter::top( )
-{
-    return m_rootItem;
-}
-
-Koncrete::ProjectFolderItem * QMakeImporter::addFolder( const KUrl &, Koncrete::ProjectFolderItem* )
-{
-    return 0;
-}
-
-bool QMakeImporter::removeFile( Koncrete::ProjectFileItem * )
-{
-    return false;
-}
-
-bool QMakeImporter::renameFile( Koncrete::ProjectFileItem *, const KUrl & )
-{
-    return false;
-}
-
-bool QMakeImporter::renameFolder( Koncrete::ProjectFolderItem *, const KUrl & )
-{
-    return false;
 }
 
 

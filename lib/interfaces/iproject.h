@@ -67,9 +67,21 @@ public:
     /// Destructor.
     virtual ~IProject();
 
-    /** Project model accessor */
-    virtual ProjectModel* model() const = 0;
+    /**
+     * Get the file manager for the project
+     *
+     * @return the file manager for the project, if one exists; otherwise null
+     */
+    virtual IFileManager* fileManager() const = 0;
 
+    /** Get a list of all files in the project */
+    virtual int fileCount() const = 0;
+    virtual ProjectFileItem* fileAt( int ) const = 0;
+
+    virtual KUrl localFile() const = 0;
+    virtual KUrl globalFile() const = 0;
+    virtual void setLocalFile( const KUrl& ) = 0;
+    virtual void setGlobalFile( const KUrl& ) = 0;
 
 public Q_SLOTS:
     /**
@@ -90,25 +102,10 @@ public Q_SLOTS:
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual Q_SCRIPTABLE KUrl folder() const = 0;
+    virtual Q_SCRIPTABLE const KUrl& folder() const = 0;
 
     /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString name() const = 0;
-
-    /** Get a list of all files in the project */
-    virtual QList<ProjectFileItem*> allFiles() = 0;
-
-    /**
-     * Get the file manager for the project
-     *
-     * @return the file manager for the project, if one exists; otherwise null
-     */
-    virtual IFileManager* fileManager() const = 0;
-
-    /**
-     * Set the file manager for the project.
-     */
-    virtual void setFileManager( IPlugin* fileManager ) = 0;
 
     /**
      * Find the url relative to the project directory equivalent to @a absoluteUrl.

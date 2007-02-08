@@ -67,9 +67,15 @@ public:
     /// Destructor.
     virtual ~Project();
 
-    /** Project model accessor */
-    ProjectModel* model() const;
+    /** Get a list of all files in the project */
+    virtual int fileCount() const;
+    virtual ProjectFileItem* fileAt( int i ) const;
 
+    virtual KUrl localFile() const;
+    virtual KUrl globalFile() const;
+
+    virtual void setLocalFile( const KUrl& );
+    virtual void setGlobalFile( const KUrl& );
 
 public Q_SLOTS:
     /**
@@ -90,13 +96,10 @@ public Q_SLOTS:
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual Q_SCRIPTABLE KUrl folder() const;
+    virtual Q_SCRIPTABLE const KUrl& folder() const;
 
     /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString name() const;
-
-    /** Get a list of all files in the project */
-    virtual QList<ProjectFileItem*> allFiles();
 
     /**
      * Get the file manager for the project

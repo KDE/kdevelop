@@ -39,31 +39,35 @@ class BuildProject;
 class ProjectFolderItem;
 class ProjectBuildFolderItem;
 class ProjectFileItem;
+class ProjectItem;
 class ProjectTargetItem;
 
 /**
  * Interface that allows a developer to implement the three basic types of
- * items you would see in a project
+ * items you would see in a multi-project
  * \li Folder
+ * \li Project
  * \li Build Target
  * \li File
  */
-class KDEVPLATFORM_EXPORT ProjectItem: public QStandardItem
+class KDEVPLATFORM_EXPORT ProjectBaseItem: public QStandardItem
 {
     public:
-        ProjectItem( const QString &name, QStandardItem *parent = 0 );
+        ProjectBaseItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        virtual ~ProjectBaseItem();
 
         /**
          * add the item @p item to the list of children for this item
          * do not use this function if you gave the item a parent when you
          * created it
          */
-        void add( ProjectItem* item );
+        void add( ProjectBaseItem* item );
 
         enum ProjectItemType
         {
             Folder = QStandardItem::UserType,
             File,
+            Project,
             Target,
             BuildFolder
     };
@@ -74,20 +78,23 @@ class KDEVPLATFORM_EXPORT ProjectItem: public QStandardItem
         virtual ProjectFolderItem *folder() const;
         virtual ProjectTargetItem *target() const;
         virtual ProjectFileItem *file() const;
+        virtual ProjectItem* projectItem() const;
 
         QList<ProjectFolderItem*> folderList() const;
         QList<ProjectTargetItem*> targetList() const;
         QList<ProjectFileItem*> fileList() const;
+    private:
+        struct ProjectBaseItemPrivate* const d;
 };
 
 /**
  * Implementation of the ProjectItem interface that is specific to a
  * folder
  */
-class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectItem
+class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
     public:
-        ProjectFolderItem( const KUrl &dir, QStandardItem *parent = 0 );
+        ProjectFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
 
         virtual ~ProjectFolderItem();
 
@@ -106,12 +113,28 @@ class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectItem
 };
 
 /**
+ * Special folder, the project root folder
+ */
+class KDEVPLATFORM_EXPORT ProjectItem: public ProjectFolderItem
+{
+    public:
+        ProjectItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        ~ProjectItem();
+
+        int type() const;
+
+        ProjectItem* projectItem() const;
+};
+
+
+
+/**
  * Folder which contains buildable targets as part of a buildable project
  */
 class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
     public:
-        ProjectBuildFolderItem( const KUrl &dir, QStandardItem *parent = 0 );
+        ProjectBuildFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
 
         ///Reimplemented from QStandardItem
         virtual int type() const;
@@ -138,10 +161,10 @@ class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
  *
  * This object contains all properties specific to a target.
  */
-class KDEVPLATFORM_EXPORT ProjectTargetItem: public ProjectItem
+class KDEVPLATFORM_EXPORT ProjectTargetItem: public ProjectBaseItem
 {
     public:
-        ProjectTargetItem( const QString &name, QStandardItem *parent = 0 );
+        ProjectTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
 
         ///Reimplemented from QStandardItem
         virtual int type() const;
@@ -169,10 +192,10 @@ class KDEVPLATFORM_EXPORT ProjectTargetItem: public ProjectItem
 /**
  * Object which represents a file.
  */
-class KDEVPLATFORM_EXPORT ProjectFileItem: public ProjectItem
+class KDEVPLATFORM_EXPORT ProjectFileItem: public ProjectBaseItem
 {
     public:
-        ProjectFileItem( const KUrl& file, QStandardItem *parent = 0 );
+        ProjectFileItem( IProject*, const KUrl& file, QStandardItem *parent = 0 );
 
         ///Reimplemented from QStandardItem
         virtual int type() const;
@@ -195,7 +218,7 @@ class KDEVPLATFORM_EXPORT ProjectModel: public QStandardItemModel
         virtual ~ProjectModel();
 
         using QStandardItemModel::item;
-        ProjectItem *item( const QModelIndex &index ) const;
+        ProjectBaseItem *item( const QModelIndex &index ) const;
 
         void resetModel();
 
