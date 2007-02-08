@@ -865,15 +865,23 @@ QStringList CppSupportPart::reorder( const QStringList &list )
 
 	QStringList headerExtensions = QStringList::split( ",", "h,H,hh,hxx,hpp,tlh" );
 
+	QString projectPath = project()->projectDirectory();
+	
 	QStringList::ConstIterator it;
 	for ( it = list.begin(); it != list.end(); ++it )
 	{
-		if( !isValidSource( *it ) ) continue;
-		QString fileName = *it;
-		if ( headerExtensions.contains( QFileInfo( *it ).extension() ) )
-			headers << ( *it );
+		QString filePath = *it;
+		// brilliant stuff.. this method is apparently called both with 
+		// relative and absolute paths.. 
+		if ( !filePath.startsWith("/") ) 
+		{
+			filePath = projectPath + "/" + filePath;
+		}
+		if( !isValidSource( filePath ) ) continue;
+		if ( headerExtensions.contains( QFileInfo( filePath ).extension() ) )
+			headers << ( filePath );
 		else
-			others << ( *it );
+			others << ( filePath );
 	}
 
 	return makeListUnique( headers + others );
