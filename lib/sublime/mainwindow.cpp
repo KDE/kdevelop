@@ -82,6 +82,16 @@ Controller *MainWindow::controller() const
     return d->controller;
 }
 
+View *MainWindow::activeView()
+{
+    return d->controller->activeView(this);
+}
+
+View *MainWindow::activeToolView()
+{
+    return d->controller->activeToolView(this);
+}
+
 }
 
 #include "mainwindow.moc"

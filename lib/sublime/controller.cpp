@@ -20,14 +20,54 @@
 
 #include <QMap>
 #include <QList>
+#include <QEvent>
+#include <QMouseEvent>
+#include <QApplication>
 
 #include <kdebug.h>
 
 #include "area.h"
+#include "view.h"
 #include "document.h"
 #include "mainwindow.h"
 
 namespace Sublime {
+
+struct WidgetFinder {
+    WidgetFinder(QWidget *_w) :w(_w), view(0) {}
+    Area::WalkerMode operator()(AreaIndex *index)
+    {
+        foreach (View *v, index->views())
+        {
+            if (v->hasWidget() && (v->widget() == w))
+            {
+                view = v;
+                return Area::StopWalker;
+            }
+        }
+        return Area::ContinueWalker;
+    }
+
+    QWidget *w;
+    View *view;
+};
+
+struct ToolWidgetFinder {
+    ToolWidgetFinder(QWidget *_w) :w(_w), view(0) {}
+    Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
+    {
+        if (v->hasWidget() && (v->widget() == w))
+        {
+            view = v;
+            return Area::StopWalker;
+        }
+        return Area::ContinueWalker;
+    }
+
+    QWidget *w;
+    View *view;
+};
+
 
 // struct ControllerPrivate
 
@@ -50,6 +90,10 @@ struct ControllerPrivate {
     QList<Area*> areas;
     QMap<QString, Area*> namedAreas;
     QMap<Area*, MainWindow*> shownAreas;
+    QList<MainWindow*> controlledWindows;
+
+    QMap<MainWindow*, View*> activeView;
+    QMap<MainWindow*, View*> activeToolView;
 };
 
 
@@ -65,6 +109,7 @@ Controller::Controller(QObject *parent)
 void Controller::init()
 {
     d = new ControllerPrivate();
+    qApp->installEventFilter(this);
 }
 
 Controller::~Controller()
@@ -80,6 +125,7 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
         areaToShow = new Area(*area);
     else
         areaToShow = area;
+    d->controlledWindows << mainWindow;
     d->shownAreas[areaToShow] = mainWindow;
     MainWindowOperator::setArea(mainWindow, areaToShow);
     connect(areaToShow, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
@@ -127,6 +173,7 @@ void Controller::areaReleased()
 
 void Controller::areaReleased(Sublime::Area *area)
 {
+    d->controlledWindows.removeAll(d->shownAreas[area]);
     d->shownAreas.remove(area);
     d->namedAreas.remove(area->objectName());
 }
@@ -134,6 +181,87 @@ void Controller::areaReleased(Sublime::Area *area)
 Area *Controller::area(const QString &areaName)
 {
     return d->namedAreas[areaName];
+}
+
+/*We need this to catch activation of views and toolviews
+so that we can always tell what view and toolview is active.
+"Active" doesn't mean focused. It means that it is focused now
+or was focused before and no other view/toolview wasn't focused
+after that."*/
+//implementation is based upon KParts::PartManager::eventFilter
+bool Controller::eventFilter(QObject *obj, QEvent *ev)
+{
+    if (ev->type() != QEvent::MouseButtonPress &&
+        ev->type() != QEvent::MouseButtonDblClick &&
+        ev->type() != QEvent::FocusIn)
+        return false;
+
+    //not a widget? - return
+    if (!obj->isWidgetType())
+        return false;
+
+    //is dialog or popup? - return
+    QWidget *w = static_cast<QWidget*>(obj);
+    if (((w->windowFlags().testFlag(Qt::Dialog)) && w->isModal()) ||
+            (w->windowFlags().testFlag(Qt::Popup)) || (w->windowFlags().testFlag(Qt::Tool)))
+        return false;
+
+    //not a mouse button that should activate the widget? - return
+    QMouseEvent *mev = 0;
+    if (ev->type() == QEvent::MouseButtonPress || ev->type() == QEvent::MouseButtonDblClick)
+    {
+        mev = static_cast<QMouseEvent*>(ev);
+        int activationButtonMask = Qt::LeftButton | Qt::MidButton | Qt::RightButton;
+        if ((mev->button() & activationButtonMask) == 0)
+            return false;
+    }
+
+    while (w)
+    {
+        //not inside sublime mainwindow
+        MainWindow *mw = qobject_cast<Sublime::MainWindow*>(w->topLevelWidget());
+        if (!mw || !d->controlledWindows.contains(mw))
+            return false;
+
+        Area *area = mw->area();
+
+        ///@todo adymo: this is extra slow - optimize
+        //find this widget in views
+        WidgetFinder widgetFinder(w);
+        area->walkViews(widgetFinder, area->rootIndex());
+        if (widgetFinder.view)
+        {
+            d->activeView[mw] = widgetFinder.view;
+            kDebug(9037) << "found active view" << endl;
+            ///@todo adymo: shall we filter out the event?
+            return false;
+        }
+
+        //find this widget in toolviews
+        ToolWidgetFinder toolFinder(w);
+        area->walkToolViews(toolFinder, Sublime::AllPositions);
+        if (toolFinder.view)
+        {
+            d->activeToolView[mw] = toolFinder.view;
+            kDebug(9037) << "found active toolview" << endl;
+            ///@todo adymo: shall we filter out the event?
+            return false;
+        }
+
+        w = w->parentWidget();
+    }
+
+    return false;
+}
+
+View *Controller::activeView(MainWindow *mainWindow)
+{
+    return d->activeView[mainWindow];
+}
+
+View *Controller::activeToolView(MainWindow *mainWindow)
+{
+    return d->activeToolView[mainWindow];
 }
 
 }

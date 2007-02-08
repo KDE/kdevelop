@@ -29,6 +29,7 @@ class QDockWidget;
 namespace Sublime {
 
 class Area;
+class View;
 class Controller;
 class MainWindowOperator;
 
@@ -59,6 +60,11 @@ public:
     Area *area() const;
     /**@return controller for this mainwindow.*/
     Controller *controller() const;
+
+    /**@return active view inside this mainwindow.*/
+    View *activeView();
+    /**@return active toolview inside this mainwindow.*/
+    View *activeToolView();
 
 Q_SIGNALS:
     /**Emitted before the area is cleared from this mainwindow.*/

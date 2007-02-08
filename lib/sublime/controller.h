@@ -30,6 +30,7 @@ class QChildEvent;
 namespace Sublime {
 
 class Area;
+class View;
 class Document;
 class MainWindow;
 
@@ -58,12 +59,20 @@ public:
     /**@return the list of documents created in this controller.*/
     QList<Document*> &documents() const;
 
+    /**@return the active view inside the @p mainwindow.*/
+    View *activeView(MainWindow *mainWindow);
+    /**@return the active toolview inside the @p mainwindow.*/
+    View *activeToolView(MainWindow *mainWindow);
+
 public slots:
     //@todo adymo: this should not be a part of public API
     /**Area can connect to this slot to release itself from its mainwindow.*/
     void areaReleased();
     /**Releases @p area from its mainwindow.*/
     void areaReleased(Sublime::Area *area);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *ev);
 
 private:
     void init();
