@@ -26,5 +26,6 @@ KDevDirModel::KDevDirModel(QObject *parent)
 
 Qt::ItemFlags KDevDirModel::flags(const QModelIndex &index) const
 {
+    Q_UNUSED(index)
     return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }

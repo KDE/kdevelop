@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "kdevgenericimporter.h"
+#include "genericimporter.h"
 #include <projectmodel.h>
 
 #include <icore.h>
@@ -113,7 +113,7 @@ QList<Koncrete::ProjectFolderItem*> GenericImporter::parse( Koncrete::ProjectFol
         }
         else if ( fileInfo.isFile() )
         {
-             Koncrete::ProjectFileItem *file = new Koncrete::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+             new Koncrete::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
         }
     }
 
@@ -151,6 +151,8 @@ bool GenericImporter::renameFolder( Koncrete::ProjectFolderItem * folder, const 
 
 bool GenericImporter::renameFile( Koncrete::ProjectFileItem * file, const KUrl& url )
 {
+    Q_UNUSED(file)
+    Q_UNUSED(url)
     return false;
 }
 

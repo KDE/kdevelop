@@ -38,6 +38,7 @@ public:
     KDevFileManagerViewFactory(KDevFileManagerPart *part): m_part(part) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
+        Q_UNUSED(parent)
         return new FileManager(m_part);
     }
 private:

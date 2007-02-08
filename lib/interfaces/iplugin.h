@@ -48,10 +48,12 @@ public: \
     Plugin##Extension##Factory(QExtensionManager *parent = 0) \
         :QExtensionFactory(parent) \
     { \
+        Q_UNUSED(parent) \
     }\
     protected: \
     virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const \
     { \
+        Q_UNUSED(parent) \
         if( iid != Q_TYPEID( Extension ) ) \
             return 0; \
         Plugin* p = qobject_cast<Plugin *>(object);\
@@ -85,10 +87,12 @@ public: \
     Plugin##Extension##Factory(QExtensionManager *parent = 0) \
         :QExtensionFactory(parent) \
     { \
+        Q_UNUSED(parent)\
     }\
     protected: \
     virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const \
     { \
+        Q_UNUSED(parent) \
         if( iid != Q_TYPEID( Namespace::Extension ) ) \
             return 0; \
         Plugin* p = qobject_cast<Plugin *>(object);\
