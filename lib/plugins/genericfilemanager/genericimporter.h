@@ -24,6 +24,16 @@
 
 class QFileInfo;
 class QStringList;
+class KUrl;
+template <typename T> class QList;
+namespace Koncrete
+{
+class ProjectBaseItem;
+class ProjectFolderItem;
+class ProjectFileItem;
+}
+
+class KDialogBase;
 
 class GenericImporter: public Koncrete::IPlugin, public Koncrete::IFileManager
 {
@@ -56,6 +66,18 @@ public:
     void unregisterExtensions();
     QStringList extensions() const;
 
+Q_SIGNALS:
+    void projectItemConfigWidget(const QList<Koncrete::ProjectBaseItem*> &dom, KDialogBase *dialog);
+
+    void folderAdded( Koncrete::ProjectFolderItem* folder );
+    void folderRemoved( Koncrete::ProjectFolderItem* folder );
+    void folderRenamed( const KUrl& oldFolder,
+                        Koncrete::ProjectFolderItem* newFolder );
+
+    void fileAdded(Koncrete::ProjectFileItem* file);
+    void fileRemoved(Koncrete::ProjectFileItem* file);
+    void fileRenamed(const KUrl& oldFile,
+                     Koncrete::ProjectFileItem* newFile);
 
 private:
     bool isValid( const QFileInfo &fileName ) const;
