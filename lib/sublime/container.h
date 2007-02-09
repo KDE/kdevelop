@@ -52,6 +52,8 @@ public:
     QWidget *widget(int index) const;
 
 private:
+    Q_PRIVATE_SLOT(d, void widgetActivated(int))
+
     struct ContainerPrivate *d;
 
 };

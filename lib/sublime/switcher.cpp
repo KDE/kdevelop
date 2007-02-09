@@ -21,7 +21,7 @@
 namespace Sublime {
 
 Switcher::Switcher(QWidget *parent)
-    :QStatusBar(parent)
+    :QComboBox(parent)
 {
 }
 

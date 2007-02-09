@@ -29,9 +29,16 @@ namespace Sublime {
 // struct ContainerPrivate
 
 struct ContainerPrivate {
+
+    void widgetActivated(int idx)
+    {
+        stack->setCurrentIndex(idx);
+    }
+
     Switcher *switcher;
     QStackedLayout *stack;
-    QTabWidget *tab;
+
+    QMap<QWidget*, int> indices;
 };
 
 
@@ -47,12 +54,11 @@ Container::Container(QWidget *parent)
     l->setMargin(0);
     l->setSpacing(0);
 
-    // d->switcher = new Switcher(this);
-    // l->addWidget(d->switcher);
+    d->switcher = new Switcher(this);
+    connect(d->switcher, SIGNAL(activated(int)), this, SLOT(widgetActivated(int)));
+    l->addWidget(d->switcher);
 
     d->stack = new QStackedLayout(l);
-    d->tab = new QTabWidget(this);
-    d->stack->addWidget(d->tab);
 }
 
 Container::~Container()
@@ -62,29 +68,33 @@ Container::~Container()
 
 void Container::addWidget(QWidget *w)
 {
-    // d->stack->addWidget(w);
-    ///@todo adymo: remove tabwidget
-    d->tab->addTab(w, "Tab");
+    int idx = d->stack->addWidget(w);
+    d->indices[w] = idx;
+    d->switcher->insertItem(idx, "View");
 }
 
 void Sublime::Container::removeWidget(QWidget *w)
 {
-    d->tab->removeTab(d->tab->indexOf(w));
+    if (!d->indices.contains(w))
+        return;
+
+    d->switcher->removeItem(d->indices[w]);
+    d->indices.remove(w);
 }
 
 int Container::count() const
 {
-    return d->tab->count();
+    return d->stack->count();
 }
 
 QWidget *Container::widget(int index) const
 {
-    return d->tab->widget(index);
+    return d->stack->widget(index);
 }
 
 bool Sublime::Container::hasWidget(QWidget *w)
 {
-    return d->tab->indexOf(w) != -1;
+    return d->stack->indexOf(w) != -1;
 }
 
 }
