@@ -86,6 +86,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             parent->addWidget(splitter);
         }
     }
+    splitter->show();
 
     if (index->isSplitted()) //this is a visible splitter
         splitter->setOrientation(index->orientation());
@@ -100,6 +101,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         }
         else
             container = qobject_cast<Container*>(splitter->widget(0));
+        container->show();
         foreach (View *view, index->views())
         {
             if (!container->hasWidget(view->widget()))
