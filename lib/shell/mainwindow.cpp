@@ -2,6 +2,7 @@
 Copyright (C) 2002 F@lk Brettschneider <falkbr@kdevelop.org>
 Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
 Copyright (C) 2006 Adam Treat <treat@kde.org>
+Copyright (C) 2006 Alexander Dymo <adymo@kdevelop.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -46,6 +47,8 @@ Boston, MA 02110-1301, USA.
 #include <knotifyconfigwidget.h>
 
 #include <sublime/area.h>
+#include <sublime/view.h>
+#include <sublime/document.h>
 
 #include "core.h"
 // #include "kdevconfig.h"
@@ -219,6 +222,20 @@ void MainWindow::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( newWindow() ) );
     action->setToolTip( i18n( "New Window" ) );
     action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of current area." ) );
+
+    action = actionCollection()->addAction( "split_horizontal" );
+    action->setIcon(KIcon( "split_h" ));
+    action->setText( i18n( "Split &Horizontal" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( splitHorizontal() ) );
+    action->setToolTip( i18n( "Split Horizontal" ) );
+    action->setWhatsThis( i18n( "<b>Split Horizontal</b><p>Splitts the current view horizontally." ) );
+
+    action = actionCollection()->addAction( "split_vertical" );
+    action->setIcon(KIcon( "split_v" ));
+    action->setText( i18n( "Split &Vertical" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
+    action->setToolTip( i18n( "Split Vertical" ) );
+    action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically." ) );
 }
 
 
@@ -231,7 +248,7 @@ void MainWindow::loadSettings( bool projectIsLoaded )
 
 void MainWindow::saveSettings( bool projectIsLoaded )
 {
-	Q_UNUSED( projectIsLoaded );
+    Q_UNUSED( projectIsLoaded );
 /*    if ( projectIsLoaded )
         return;
 
@@ -428,6 +445,27 @@ void MainWindow::keyBindings()
 void MainWindow::newWindow()
 {
     Core::self()->uiControllerInternal()->switchToArea(area()->objectName(), UiController::NewWindow);
+}
+
+void MainWindow::splitHorizontal()
+{
+    split(Qt::Horizontal);
+}
+
+void MainWindow::splitVertical()
+{
+    split(Qt::Vertical);
+}
+
+void MainWindow::split(Qt::Orientation orientation)
+{
+    if (!area())
+        return;
+    Sublime::View *view = activeView();
+    if (!view)
+        return;
+
+    area()->addView(view->document()->createView(), view, orientation);
 }
 
 }

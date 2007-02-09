@@ -2,7 +2,7 @@
 Copyright (C) 2003 F@lk Brettschneider <falkbr@kdevelop.org>
 Copyright (C) 2003 John Firebaugh <jfirebaugh@kde.org>
 Copyright (C) 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
-Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2004, 2007 Alexander Dymo <adymo@kdevelop.org>
 Copyright (C) 2006 Adam Treat <treat@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -86,6 +86,9 @@ private Q_SLOTS:
     void gotoLastWindow();
 
     void newWindow();
+    void splitHorizontal();
+    void splitVertical();
+    void split(Qt::Orientation orientation);
 
     void projectOpened();
     void projectClosed();
