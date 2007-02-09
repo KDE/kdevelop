@@ -37,8 +37,6 @@ struct ContainerPrivate {
 
     Switcher *switcher;
     QStackedLayout *stack;
-
-    QMap<QWidget*, int> indices;
 };
 
 
@@ -69,17 +67,13 @@ Container::~Container()
 void Container::addWidget(QWidget *w)
 {
     int idx = d->stack->addWidget(w);
-    d->indices[w] = idx;
     d->switcher->insertItem(idx, "View");
 }
 
 void Sublime::Container::removeWidget(QWidget *w)
 {
-    if (!d->indices.contains(w))
-        return;
-
-    d->switcher->removeItem(d->indices[w]);
-    d->indices.remove(w);
+    d->switcher->removeItem(d->stack->indexOf(w));
+    d->stack->removeWidget(w);
 }
 
 int Container::count() const
