@@ -12,7 +12,7 @@ set(kdevfilemanager_PART_SRCS
 
 kde4_automoc(${kdevfilemanager_PART_SRCS})
 kde4_add_plugin(kdevfilemanager ${kdevfilemanager_PART_SRCS})
-target_link_libraries(kdevfilemanager ${KDE4_KDECORE_LIBS} koncreteinterfaces)
+target_link_libraries(kdevfilemanager ${KDE4_KDECORE_LIBS} kdevplatforminterfaces)
 
 install(TARGETS kdevfilemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 

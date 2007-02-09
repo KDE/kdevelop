@@ -3,17 +3,17 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/lib/interfaces
 )
 
-set(koncreteproject_LIB_SRCS
+set(kdevplatformproject_LIB_SRCS
     projectmodel.cpp
     importprojectjob.cpp
 )
 
-kde4_automoc(${koncreteproject_LIB_SRCS})
+kde4_automoc(${kdevplatformproject_LIB_SRCS})
 
-kde4_add_library(koncreteproject SHARED ${koncreteproject_LIB_SRCS})
-target_link_libraries(koncreteproject ${QT_QTDESIGNER_LIBRARY} koncreteinterfaces )
-set_target_properties(koncreteproject PROPERTIES VERSION 4.0.0 SOVERSION 4)
-install(TARGETS koncreteproject DESTINATION ${LIB_INSTALL_DIR} )
+kde4_add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
+target_link_libraries(kdevplatformproject ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces )
+set_target_properties(kdevplatformproject PROPERTIES VERSION 4.0.0 SOVERSION 4)
+install(TARGETS kdevplatformproject DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 

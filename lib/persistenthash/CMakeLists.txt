@@ -14,7 +14,7 @@ include_directories(
 # kde4_automoc(${persistenthash_PLUGIN_SRCS})
 
 # kde4_add_plugin(kdevpersistenthash ${persistenthash_PLUGIN_SRCS})
-# target_link_libraries(kdevpersistenthash ${KDE4_KDECORE_LIBS} koncreteinterfaces ${QT_QTDESIGNER_LIBRARY} )
+# target_link_libraries(kdevpersistenthash ${KDE4_KDECORE_LIBS} kdevplatforminterfaces ${QT_QTDESIGNER_LIBRARY} )
 # install(TARGETS kdevpersistenthash DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############

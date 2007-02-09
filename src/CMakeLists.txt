@@ -25,8 +25,8 @@ set(kdevshell_UI
 kde4_automoc(${kdevshell_LIB_SRCS})
 kde4_add_ui_files(kdevshell_LIB_SRCS ${kdevshell_UI})
 kde4_add_library(kdevshell SHARED ${kdevshell_LIB_SRCS})
-target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} koncreteinterfaces
-    koncreteshell ${KDE4_KHTML_LIBS} ktexteditor knotifyconfig)
+target_link_libraries(kdevshell ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} kdevplatforminterfaces
+    kdevplatformshell ${KDE4_KHTML_LIBS} ktexteditor knotifyconfig)
 set_target_properties(kdevshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevshell DESTINATION ${LIB_INSTALL_DIR} )
 

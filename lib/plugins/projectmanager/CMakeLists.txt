@@ -19,7 +19,7 @@ set(kdevprojectmanager_PART_SRCS
 
 kde4_automoc(${kdevprojectmanager_PART_SRCS})
 kde4_add_plugin(kdevprojectmanager ${kdevprojectmanager_PART_SRCS})
-target_link_libraries(kdevprojectmanager ${KDE4_KDECORE_LIBS} koncreteinterfaces koncreteproject ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kdevprojectmanager ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject ${KDE4_THREADWEAVER_LIBRARIES} )
 
 install(TARGETS kdevprojectmanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 

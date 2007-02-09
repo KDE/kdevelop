@@ -15,7 +15,7 @@ set(kdevgenericimporter_PART_SRCS
 
 kde4_automoc(${kdevgenericimporter_PART_SRCS})
 kde4_add_plugin(kdevgenericimporter ${kdevgenericimporter_PART_SRCS})
-target_link_libraries(kdevgenericimporter ${KDE4_KDECORE_LIBS} koncreteinterfaces koncreteproject )
+target_link_libraries(kdevgenericimporter ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject )
 
 install(TARGETS kdevgenericimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 

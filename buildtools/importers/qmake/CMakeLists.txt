@@ -19,7 +19,7 @@ set(kdevqmakeimporter_PART_SRCS
 
 kde4_automoc(${kdevqmakeimporter_PART_SRCS})
 kde4_add_plugin(kdevqmakeimporter ${kdevqmakeimporter_PART_SRCS})
-target_link_libraries( kdevqmakeimporter ${KDE4_KDECORE_LIBS} koncreteinterfaces koncreteproject kdevqmakeparser )
+target_link_libraries( kdevqmakeimporter ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject kdevqmakeparser )
 
 install(TARGETS kdevqmakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
 

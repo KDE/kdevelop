@@ -3,7 +3,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/lib/interfaces
 )
 
-set(koncreteinterfaces_LIB_SRCS
+set(kdevplatforminterfaces_LIB_SRCS
     iplugin.cpp
     icore.cpp
     iuicontroller.cpp
@@ -12,12 +12,12 @@ set(koncreteinterfaces_LIB_SRCS
     iproject.cpp
 )
 
-kde4_automoc(${koncreteinterfaces_LIB_SRCS})
+kde4_automoc(${kdevplatforminterfaces_LIB_SRCS})
 
-kde4_add_library(koncreteinterfaces SHARED ${koncreteinterfaces_LIB_SRCS})
-target_link_libraries(koncreteinterfaces ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} )
-set_target_properties(koncreteinterfaces PROPERTIES VERSION 4.0.0 SOVERSION 4)
-install(TARGETS koncreteinterfaces DESTINATION ${LIB_INSTALL_DIR} )
+kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
+target_link_libraries(kdevplatforminterfaces ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} )
+set_target_properties(kdevplatforminterfaces PROPERTIES VERSION 4.0.0 SOVERSION 4)
+install(TARGETS kdevplatforminterfaces DESTINATION ${LIB_INSTALL_DIR} )
 
 
 install(FILES

@@ -5,7 +5,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/lib/project/interfaces
 )
 
-set(koncreteshell_LIB_SRCS
+set(kdevplatformshell_LIB_SRCS
     mainwindow.cpp
     plugincontroller.cpp
     profileengine.cpp
@@ -22,9 +22,9 @@ set(koncreteshell_LIB_SRCS
      ../kdevconfigskeleton.cpp
 )
 
-kde4_automoc(${koncreteshell_LIB_SRCS})
+kde4_automoc(${kdevplatformshell_LIB_SRCS})
 
-kde4_add_library(koncreteshell SHARED ${koncreteshell_LIB_SRCS})
-target_link_libraries(koncreteshell ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} koncreteinterfaces koncreteproject sublime )
-set_target_properties(koncreteshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
-install(TARGETS koncreteshell DESTINATION ${LIB_INSTALL_DIR} )
+kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
+target_link_libraries(kdevplatformshell ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces kdevplatformproject sublime )
+set_target_properties(kdevplatformshell PROPERTIES VERSION 4.0.0 SOVERSION 4)
+install(TARGETS kdevplatformshell DESTINATION ${LIB_INSTALL_DIR} )
