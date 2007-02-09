@@ -34,7 +34,7 @@ struct PartDocumentPrivate {
 // class PartDocument
 
 PartDocument::PartDocument(Controller *controller, const KUrl &url)
-    :Document(url.url(), controller)
+    :Document(url.fileName(), controller)
 {
     d = new PartDocumentPrivate();
     d->url = url;
