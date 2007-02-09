@@ -26,9 +26,9 @@
 
 #include "qmakeprojectscope.h"
 
-QMakeProjectItem::QMakeProjectItem( Koncrete::IProject* project, QMakeProjectScope* scope,
+QMakeProjectItem::QMakeProjectItem( KDevelop::IProject* project, QMakeProjectScope* scope,
                                 const QString& name, const KUrl& url, QStandardItem* parent )
-: Koncrete::ProjectItem( project, name, parent ), QMakeFolderItem( project, scope, url )
+: KDevelop::ProjectItem( project, name, parent ), QMakeFolderItem( project, scope, url )
 {
 }
 
@@ -36,9 +36,9 @@ QMakeProjectItem::~QMakeProjectItem()
 {
 }
 
-QMakeFolderItem::QMakeFolderItem( Koncrete::IProject* project, QMakeProjectScope* scope,
+QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, QMakeProjectScope* scope,
                                 const KUrl& url, QStandardItem* parent )
-: Koncrete::ProjectFolderItem( project, url, parent ), m_projectScope( scope )
+: KDevelop::ProjectFolderItem( project, url, parent ), m_projectScope( scope )
 {
 }
 
@@ -58,9 +58,9 @@ struct QMakeTargetItemPrivate
     QList<QPair<QString,QString> > m_defs;
 };
 
-QMakeTargetItem::QMakeTargetItem( Koncrete::IProject* project, const QString& s,
+QMakeTargetItem::QMakeTargetItem( KDevelop::IProject* project, const QString& s,
                                 QStandardItem* parent )
-    : Koncrete::ProjectTargetItem( project, s, parent ), d(new QMakeTargetItemPrivate)
+    : KDevelop::ProjectTargetItem( project, s, parent ), d(new QMakeTargetItemPrivate)
 {
 }
 

@@ -26,10 +26,10 @@
 class QMakeProjectScope;
 
 
-class QMakeFolderItem : public Koncrete::ProjectFolderItem
+class QMakeFolderItem : public KDevelop::ProjectFolderItem
 {
 public:
-    QMakeFolderItem( Koncrete::IProject*, QMakeProjectScope*, const KUrl&, QStandardItem* parent = 0 );
+    QMakeFolderItem( KDevelop::IProject*, QMakeProjectScope*, const KUrl&, QStandardItem* parent = 0 );
     virtual ~QMakeFolderItem();
     QMakeProjectScope* projectScope() const;
 
@@ -38,17 +38,17 @@ private:
 };
 
 
-class QMakeProjectItem : public Koncrete::ProjectItem, public QMakeFolderItem
+class QMakeProjectItem : public KDevelop::ProjectItem, public QMakeFolderItem
 {
 public:
-    QMakeProjectItem( Koncrete::IProject*, QMakeProjectScope*, const QString&, const KUrl&, QStandardItem* parent = 0 );
+    QMakeProjectItem( KDevelop::IProject*, QMakeProjectScope*, const QString&, const KUrl&, QStandardItem* parent = 0 );
     virtual ~QMakeProjectItem();
 };
 
-class QMakeTargetItem : public Koncrete::ProjectTargetItem
+class QMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    QMakeTargetItem( Koncrete::IProject*, const QString& s, QStandardItem* parent );
+    QMakeTargetItem( KDevelop::IProject*, const QString& s, QStandardItem* parent );
     ~QMakeTargetItem();
     const KUrl::List& includeDirectories() const;
     const QHash<QString, QString>& environment() const;
