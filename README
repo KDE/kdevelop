@@ -6,7 +6,7 @@ as follows:
   Install doxygen and the kdelibs sources. Then
 
   make apidox
-  make apidox-install
+  make install-apidox
 
 After that you should follow the instructions at:
 
