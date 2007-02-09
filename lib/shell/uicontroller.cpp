@@ -161,10 +161,11 @@ void UiController::openUrl(const KUrl &url)
     {
         //no view currently shown for this url
         partView = doc->createView();
-    }
 
-    //add view to the area
-    area->addView(partView);
+        //add view to the area
+        area->addView(partView);
+    }
+    ///@todo adymo: activate and focus the partView
 }
 
 Sublime::Area *UiController::activeArea()
