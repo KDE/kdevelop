@@ -20,7 +20,7 @@
 
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

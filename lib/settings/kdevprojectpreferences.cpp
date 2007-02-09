@@ -27,7 +27,7 @@
 
 #include "ui_projectsettings.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 typedef KGenericFactory<ProjectPreferences> ProjectPreferencesFactory;

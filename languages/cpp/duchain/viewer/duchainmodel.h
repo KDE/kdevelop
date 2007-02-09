@@ -33,7 +33,7 @@
 
 class TopDUContext;
 class DUChainViewPart;
-namespace Koncrete { class Document; }
+namespace KDevelop { class Document; }
 
 class ProxyObject : public DUChainBase
 {
@@ -55,7 +55,7 @@ class DUChainModel : public QAbstractItemModel, public DUChainObserver
     void setTopContext(TopDUContext* context);
 
   public slots:
-    void documentActivated( Koncrete::Document* document );
+    void documentActivated( KDevelop::Document* document );
 
   public:
     virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;

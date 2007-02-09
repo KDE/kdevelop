@@ -59,7 +59,7 @@
 
 #include "kdevparserdependencypolicy.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 BackgroundParser::BackgroundParser( QObject* parent )
         : QObject( parent ),

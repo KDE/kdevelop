@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevcore.h"
 #include "kdevconfig.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 EnvWidget::EnvWidget( QWidget *parent )

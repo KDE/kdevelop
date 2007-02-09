@@ -35,7 +35,7 @@ class QObject;
 class QAbstractExtensionManager;
 
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ProjectModel;
@@ -153,11 +153,11 @@ Q_SIGNALS:
 };
 
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS( Koncrete::IFileManager::Features )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IFileManager::Features )
 
-KDEV_DECLARE_EXTENSION_INTERFACE( Koncrete, IFileManager, "org.kdevelop.IFileManager")
+KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IFileManager, "org.kdevelop.IFileManager")
 
-Q_DECLARE_INTERFACE( Koncrete::IFileManager, "org.kdevelop.IFileManager" )
+Q_DECLARE_INTERFACE( KDevelop::IFileManager, "org.kdevelop.IFileManager" )
 
 
 #endif

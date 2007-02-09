@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class KDEVPLATFORM_EXPORT StatusBar : public KStatusBar

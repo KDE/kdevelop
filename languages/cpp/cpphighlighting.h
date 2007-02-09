@@ -36,7 +36,7 @@ class CodeModel;
 class DUContext;
 class Declaration;
 
-class CppHighlighting : public QObject, public Koncrete::CodeHighlighting
+class CppHighlighting : public QObject, public KDevelop::CodeHighlighting
 {
   Q_OBJECT
 

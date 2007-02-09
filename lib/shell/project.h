@@ -38,7 +38,7 @@ template<typename T> class QList;
 class KJob;
 class KInstance;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IFileManager;

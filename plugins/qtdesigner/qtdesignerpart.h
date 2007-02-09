@@ -14,7 +14,7 @@ class QWorkspace;
 class KAboutData;
 class KAction;
 
-namespace Koncrete
+namespace KDevelop
 {
   class Document;
 }
@@ -51,7 +51,7 @@ private:
 
 private Q_SLOTS:
   void updateDesignerActions();
-  void activated( Koncrete::Document* );
+  void activated( KDevelop::Document* );
 
 
 private:

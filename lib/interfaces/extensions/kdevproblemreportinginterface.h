@@ -20,7 +20,7 @@
 #ifndef KDEVPROBLEMREPORTINGINTERFACE_H
 #define KDEVPROBLEMREPORTINGINTERFACE_H
 
-namespace Koncrete
+namespace KDevelop
 {
 
 struct ProblemReport

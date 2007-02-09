@@ -31,7 +31,7 @@
 
 class QDomDocument;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class Plugin;

@@ -27,7 +27,7 @@
 
 using namespace ThreadWeaver;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 bool ParserDependencyPolicy::addDependency(ParseJob* dependency, ParseJob* primaryDependee, Job* actualDependee)

@@ -31,7 +31,7 @@ namespace Ui
 class BGSettings;
 }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class BGPreferences : public ConfigModule

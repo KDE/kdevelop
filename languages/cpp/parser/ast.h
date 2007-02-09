@@ -108,7 +108,7 @@ struct UsingDirectiveAST;
 struct WhileStatementAST;
 struct WinDeclSpecAST;
 
-struct AST : public Koncrete::AST
+struct AST : public KDevelop::AST
 {
   enum NODE_KIND
     {

@@ -26,13 +26,13 @@
 
 namespace AutoTools { class ProjectAST; }
 
-class AutoMakeDirItem : public Koncrete::ProjectFolderItem
+class AutoMakeDirItem : public KDevelop::ProjectFolderItem
 {
 public:
     AutoMakeDirItem( const KUrl& url, QStandardItem* parent = 0 );
     virtual ~AutoMakeDirItem();
 
-    virtual Koncrete::ProjectFolderItem* folder() const
+    virtual KDevelop::ProjectFolderItem* folder() const
     {
         return const_cast<AutoMakeDirItem*>( this );
     }
@@ -41,26 +41,26 @@ public:
 
 };
 
-class AutoMakeFileItem : public Koncrete::ProjectFileItem
+class AutoMakeFileItem : public KDevelop::ProjectFileItem
 {
 public:
     AutoMakeFileItem( const KUrl& url, QStandardItem* parent = 0 );
     virtual ~AutoMakeFileItem();
 
-    virtual Koncrete::ProjectFileItem* file() const
+    virtual KDevelop::ProjectFileItem* file() const
     {
         return const_cast<AutoMakeFileItem*>( this );
     }
 };
 
-class AutoMakeTargetItem : public Koncrete::ProjectTargetItem
+class AutoMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
     AutoMakeTargetItem( const TargetInfo& target, QStandardItem* parent = 0 );
     
     virtual ~AutoMakeTargetItem();
 
-    virtual Koncrete::ProjectTargetItem* target() const
+    virtual KDevelop::ProjectTargetItem* target() const
     {
         return const_cast<AutoMakeTargetItem*>( this );
     }
@@ -78,7 +78,7 @@ private:
     QList<QPair<QString, QString> > m_defines;
 };
 
-class AutoMakeGenericItem : public Koncrete::ProjectItem
+class AutoMakeGenericItem : public KDevelop::ProjectItem
 {
 public:
     AutoMakeGenericItem( const QString& target, QStandardItem* parent = 0 );

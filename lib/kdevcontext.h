@@ -37,7 +37,7 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 class CodeItem;
 class ProjectItem;

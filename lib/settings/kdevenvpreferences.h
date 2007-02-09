@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include <kstandarddirs.h>
 
-namespace Koncrete
+namespace KDevelop
 {
     
 class EnvWidget;

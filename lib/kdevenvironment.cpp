@@ -40,7 +40,7 @@ Boston, MA 02110-1301, USA.
 extern char **environ;
 #endif
 
-namespace Koncrete
+namespace KDevelop
 {
 
 Environment::Environment( QObject *parent )

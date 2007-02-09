@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevenvwidget.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 typedef KGenericFactory<EnvPreferences> PreferencesFactory;

@@ -23,7 +23,7 @@
 #include <qlist.h>
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 class CodeRepositoryData;
 class Catalog;

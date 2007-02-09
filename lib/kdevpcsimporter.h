@@ -26,7 +26,7 @@
 
 class QWidget;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

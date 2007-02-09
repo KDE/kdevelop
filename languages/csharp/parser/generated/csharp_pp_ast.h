@@ -80,7 +80,7 @@ namespace csharp_pp
   }
 
 
-  struct ast_node: public Koncrete::AST
+  struct ast_node: public KDevelop::AST
     {
       enum ast_node_kind_enum {
         Kind_pp_and_expression = 1000,

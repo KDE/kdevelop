@@ -39,7 +39,7 @@ Boston, MA 02110-1301, USA.
 class KDialog;
 class KXMLGUIClient;
 
-namespace Koncrete
+namespace KDevelop
 {
 class Core;
 class IPlugin;

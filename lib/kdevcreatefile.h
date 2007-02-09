@@ -24,7 +24,7 @@
 
 #include <kdevplugin.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

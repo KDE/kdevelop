@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QDir>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 Context::Context()

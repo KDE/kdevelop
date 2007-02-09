@@ -28,7 +28,7 @@
 #include "tag.h"
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

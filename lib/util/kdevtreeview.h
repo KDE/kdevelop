@@ -23,7 +23,7 @@
 #include <QtGui/QTreeView>
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class Item;

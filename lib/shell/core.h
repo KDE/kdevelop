@@ -26,7 +26,7 @@ namespace Sublime {
 class Area;
 }
 
-namespace Koncrete {
+namespace KDevelop {
 
 class MainWindow;
 class Config;

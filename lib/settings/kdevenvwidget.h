@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevenvironment.h"
 #include "ui_envsettings.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ConfigSkeleton;

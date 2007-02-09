@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevmainwindow.h"
 #include "kdevplugincontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 LanguageController::LanguageController( QObject *parent )

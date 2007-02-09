@@ -19,7 +19,7 @@
 
 #include "kdevcodehighlighting.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 CodeHighlighting::~CodeHighlighting()

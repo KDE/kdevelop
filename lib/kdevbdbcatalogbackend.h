@@ -40,7 +40,7 @@
 #undef ssize_t
 #endif
 
-namespace Koncrete
+namespace KDevelop
 {
 /**
  * Catalog backend using the bdb

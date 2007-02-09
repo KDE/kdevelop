@@ -43,7 +43,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QStandardItem>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ProjectManagerPrivate

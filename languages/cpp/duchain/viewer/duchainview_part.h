@@ -30,7 +30,7 @@
 class DUChainModel;
 class QTreeView;
 
-class DUChainViewPart : public Koncrete::Plugin
+class DUChainViewPart : public KDevelop::Plugin
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ public:
     DUChainViewPart( QObject *parent, const QStringList & );
     virtual ~DUChainViewPart();
 
-    // Koncrete::Plugin methods
+    // KDevelop::Plugin methods
     virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 

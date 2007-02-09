@@ -25,7 +25,7 @@
 #include "profile.h"
 #include "plugincontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

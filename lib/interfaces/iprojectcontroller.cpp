@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 
 #include "iprojectcontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 IProjectController::IProjectController( QObject *parent )

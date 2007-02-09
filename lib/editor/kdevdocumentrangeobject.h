@@ -27,7 +27,7 @@
 #include "kdevdocumentcursor.h"
 #include "kdevdocumentrange.h"
 
-namespace Koncrete
+namespace KDevelop
 {
   
 /**

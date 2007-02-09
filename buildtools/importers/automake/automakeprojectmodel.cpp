@@ -21,7 +21,7 @@
 #include "automakeprojectmodel.h"
 
 AutoMakeDirItem::AutoMakeDirItem( const KUrl& url, QStandardItem* parent )
-    : Koncrete::ProjectFolderItem( url, parent )
+    : KDevelop::ProjectFolderItem( url, parent )
 {
 }
 
@@ -31,7 +31,7 @@ AutoMakeDirItem::~AutoMakeDirItem()
 
 
 AutoMakeFileItem::AutoMakeFileItem( const KUrl& url, QStandardItem* parent )
-    : Koncrete::ProjectFileItem( url, parent )
+    : KDevelop::ProjectFileItem( url, parent )
 {
 }
 
@@ -40,7 +40,7 @@ AutoMakeFileItem::~AutoMakeFileItem()
 }
 
 AutoMakeTargetItem::AutoMakeTargetItem( const TargetInfo& target, QStandardItem* parent )
-    : Koncrete::ProjectTargetItem( target.url.pathOrUrl(), parent )
+    : KDevelop::ProjectTargetItem( target.url.pathOrUrl(), parent )
 {
     m_target = target;
     setText( target.name );

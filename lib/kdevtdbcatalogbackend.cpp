@@ -28,7 +28,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 TDBCatalogBackend::TDBCatalogBackend()

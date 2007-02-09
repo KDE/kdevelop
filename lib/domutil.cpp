@@ -19,7 +19,7 @@
 #include <QFile>
 #include <QTextStream>
 
-namespace Koncrete
+namespace KDevelop
 {
     
 void DomUtil::makeEmpty( QDomElement& e )

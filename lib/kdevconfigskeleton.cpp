@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevconfig.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 ConfigSkeleton::ConfigSkeleton( const QString & configname )

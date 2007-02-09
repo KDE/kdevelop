@@ -23,7 +23,7 @@
 
 using namespace KTextEditor;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 DocumentCursorObject::DocumentCursorObject(Cursor* cursor)

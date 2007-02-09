@@ -35,7 +35,7 @@
 
 #include <config.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 struct _Catalog_Private

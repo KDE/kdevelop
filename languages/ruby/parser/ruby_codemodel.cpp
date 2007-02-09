@@ -9,10 +9,10 @@ namespace ruby
 
   // ---------------------------------------------------------------------------
 #define CLASS CodeModel
-#define BASECLASS Koncrete::CodeModel
+#define BASECLASS KDevelop::CodeModel
 
   CodeModel::CodeModel( QObject *parent )
-      :  Koncrete::CodeModel( parent )
+      :  KDevelop::CodeModel( parent )
   {}
 
   CodeModel::~CodeModel()
@@ -38,10 +38,10 @@ namespace ruby
 
   // ---------------------------------------------------------------------------
 #define CLASS _CodeModelItem
-#define BASECLASS Koncrete::CodeItem
+#define BASECLASS KDevelop::CodeItem
 
   _CodeModelItem::_CodeModelItem(CodeModel *model,  int kind)
-      :  Koncrete::CodeItem( QString::null,  0 )
+      :  KDevelop::CodeItem( QString::null,  0 )
       ,  _M_model(model)
       ,  _M_kind(kind)
       ,  _M_startLine( -1)
@@ -55,7 +55,7 @@ namespace ruby
 
   _CodeModelItem *_CodeModelItem::itemAt(int index) const
     {
-      return  static_cast<_CodeModelItem*>(Koncrete::ItemCollection::itemAt(index));
+      return  static_cast<_CodeModelItem*>(KDevelop::ItemCollection::itemAt(index));
     }
 
   CodeModelItem _CodeModelItem::toItem() const

@@ -40,7 +40,7 @@
 
 using namespace KTextEditor;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 static KStaticDeleter<EditorIntegratorPrivate> sd;

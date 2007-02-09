@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <kurl.h>
 
-namespace Koncrete {
+namespace KDevelop {
 
 class IDocument;
 

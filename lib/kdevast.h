@@ -24,11 +24,11 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 class LanguageSupport;
 
-/** Koncrete::AST is a simple base struct for the various Abstract Syntax Trees of the parsers. */
+/** KDevelop::AST is a simple base struct for the various Abstract Syntax Trees of the parsers. */
 struct KDEVPLATFORM_EXPORT AST
 {
 public:

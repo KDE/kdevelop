@@ -26,7 +26,7 @@
 
 #include <QMultiMap>
 
-namespace Koncrete
+namespace KDevelop
 {
 class ParseJob;
 

@@ -48,7 +48,7 @@ class QProgressBar;
 class QMutex;
 class QWaitCondition;
 
-namespace Koncrete
+namespace KDevelop
 {
 class AST;
 class Document;

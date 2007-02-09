@@ -24,7 +24,7 @@
 #include "iuicontroller.h"
 #include <sublime/controller.h>
 
-namespace Koncrete {
+namespace KDevelop {
 
 class Core;
 class MainWindow;

@@ -45,7 +45,7 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 // #include "kdevdocumentcontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 struct ProjectControllerPrivate

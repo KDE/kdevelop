@@ -35,9 +35,9 @@ K_EXPORT_COMPONENT_FACTORY( kdevautomakeimporter,
 
 AutoMakeImporter::AutoMakeImporter( QObject* parent,
                                     const QStringList& )
-: Koncrete::BuildManager( AutotoolsSupportFactory::componentData(), parent ), m_rootItem(0L)
+: KDevelop::BuildManager( AutotoolsSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
-    m_project = qobject_cast<Koncrete::Project*>( parent );
+    m_project = qobject_cast<KDevelop::Project*>( parent );
     Q_ASSERT( m_project );
     m_interface = new MakefileInterface( this );
 }
@@ -47,7 +47,7 @@ AutoMakeImporter::~AutoMakeImporter()
 	//delete m_rootItem;
 }
 
-Koncrete::Project* AutoMakeImporter::project() const
+KDevelop::Project* AutoMakeImporter::project() const
 {
     return m_project;
 }
@@ -57,13 +57,13 @@ KUrl AutoMakeImporter::buildDirectory() const
      return project()->folder();
 }
 
-QList<Koncrete::ProjectFolderItem*> AutoMakeImporter::parse( Koncrete::ProjectFolderItem* dom )
+QList<KDevelop::ProjectFolderItem*> AutoMakeImporter::parse( KDevelop::ProjectFolderItem* dom )
 {
     Q_UNUSED( dom );
-    return QList<Koncrete::ProjectFolderItem*>();
+    return QList<KDevelop::ProjectFolderItem*>();
 }
 
-Koncrete::ProjectItem* AutoMakeImporter::import( Koncrete::ProjectModel* model,
+KDevelop::ProjectItem* AutoMakeImporter::import( KDevelop::ProjectModel* model,
                                            const KUrl& fileName )
 {
     Q_UNUSED( model );
@@ -85,19 +85,19 @@ Koncrete::ProjectItem* AutoMakeImporter::import( Koncrete::ProjectModel* model,
 
 }
 
-KUrl AutoMakeImporter::findMakefile( Koncrete::ProjectFolderItem* dom ) const
+KUrl AutoMakeImporter::findMakefile( KDevelop::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl();
 }
 
-KUrl::List AutoMakeImporter::findMakefiles( Koncrete::ProjectFolderItem* dom ) const
+KUrl::List AutoMakeImporter::findMakefiles( KDevelop::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl::List();
 }
 
-void AutoMakeImporter::createProjectItems( const KUrl& folder, Koncrete::ProjectItem* rootItem )
+void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevelop::ProjectItem* rootItem )
 {
     //first look for the subdirs
     //recursively descend into any other subdirs. when finished look for targets.
@@ -118,10 +118,10 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, Koncrete::Project
     }
 
     QList<TargetInfo> targets = m_interface->targetsForFolder( folder );
-    Koncrete::ProjectItem* dotDesktopTarget = 0;
-    Koncrete::ProjectItem* xmlGuiTarget = 0;
-    Koncrete::ProjectItem* notInstalledHeaders = 0;
-    Koncrete::ProjectItem* installedHeaders = 0;
+    KDevelop::ProjectItem* dotDesktopTarget = 0;
+    KDevelop::ProjectItem* xmlGuiTarget = 0;
+    KDevelop::ProjectItem* notInstalledHeaders = 0;
+    KDevelop::ProjectItem* installedHeaders = 0;
 
     foreach( TargetInfo target, targets )
     {
@@ -131,7 +131,7 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, Koncrete::Project
             if ( target.name.contains( ".desktop" ) )
             {
                 if ( dotDesktopTarget == 0 )
-                    dotDesktopTarget = new Koncrete::ProjectItem( i18n( "freedesktop.org Desktop Entry Files" ),
+                    dotDesktopTarget = new KDevelop::ProjectItem( i18n( "freedesktop.org Desktop Entry Files" ),
                                                                 folderItem  );
                 QFileInfo desktopInfo( target.url.path(), target.name );
                 dotDesktopTarget->add( new AutoMakeFileItem( target.name, dotDesktopTarget ) );
@@ -139,7 +139,7 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, Koncrete::Project
             else if ( target.name.contains( ".rc" ) )
             {
                 if ( xmlGuiTarget == 0 )
-                    xmlGuiTarget = new Koncrete::ProjectItem( i18n( "KDE XMLGUI Definitions" ),
+                    xmlGuiTarget = new KDevelop::ProjectItem( i18n( "KDE XMLGUI Definitions" ),
                                                             folderItem );
                 QFileInfo rcInfo( target.url.path(), target.name );
                 xmlGuiTarget->add( new AutoMakeFileItem( KUrl(rcInfo.absoluteFilePath()),
@@ -150,7 +150,7 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, Koncrete::Project
             if ( target.location != AutoMake::None )
             {
                 if ( installedHeaders == 0 )
-                    installedHeaders = new Koncrete::ProjectItem( i18n( "Installed headers" ) );
+                    installedHeaders = new KDevelop::ProjectItem( i18n( "Installed headers" ) );
                 QFileInfo headerInfo( target.url.path(), target.name );
                 installedHeaders->add( new AutoMakeFileItem( KUrl(headerInfo.absoluteFilePath()),
                                                              installedHeaders ) );
@@ -158,7 +158,7 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, Koncrete::Project
             else
             {
                 if ( notInstalledHeaders == 0 )
-                    notInstalledHeaders = new Koncrete::ProjectItem( i18n( "Uninstalled headers" ) );
+                    notInstalledHeaders = new KDevelop::ProjectItem( i18n( "Uninstalled headers" ) );
                 QFileInfo headerInfo( target.url.path(), target.name );
                 notInstalledHeaders->add( new AutoMakeFileItem( KUrl(headerInfo.absoluteFilePath()),
                                                                 notInstalledHeaders ) );
@@ -186,9 +186,9 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, Koncrete::Project
         folderItem->add( notInstalledHeaders );
 }
 
-QList<Koncrete::ProjectTargetItem*> AutoMakeImporter::targets() const
+QList<KDevelop::ProjectTargetItem*> AutoMakeImporter::targets() const
 {
-    return QList<Koncrete::ProjectTargetItem*>();
+    return QList<KDevelop::ProjectTargetItem*>();
 }
 
 #include "automakeimporter.h"

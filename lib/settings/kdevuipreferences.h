@@ -31,7 +31,7 @@ namespace Ui
 class UISettings;
 }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class UIPreferences : public ConfigModule

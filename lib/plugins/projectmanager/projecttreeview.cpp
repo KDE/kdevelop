@@ -34,7 +34,7 @@
 
 #include <QtCore/qdebug.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ProjectTreeViewPrivate

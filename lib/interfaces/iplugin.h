@@ -120,7 +120,7 @@ void Plugin::unregisterExtensions() \
     extensionManager() ), Q_TYPEID( Namespace::Extension ) ); \
 }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ICore;

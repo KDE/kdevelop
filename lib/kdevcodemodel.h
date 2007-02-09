@@ -34,7 +34,7 @@
 
 namespace KTextEditor { class SmartRange; }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class CodeItem;

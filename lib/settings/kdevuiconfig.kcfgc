@@ -1,6 +1,6 @@
 File=kdevuiconfig.kcfg
-Namespace=Koncrete
+Namespace=KDevelop
 ClassName=UISettings
 Singleton=true
-Inherits=Koncrete::ConfigSkeleton
+Inherits=KDevelop::ConfigSkeleton
 IncludeFiles="kdevconfigskeleton.h"

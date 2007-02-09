@@ -24,13 +24,13 @@
 
 class FileManager;
 
-class KDevFileManagerPart: public Koncrete::IPlugin {
+class KDevFileManagerPart: public KDevelop::IPlugin {
     Q_OBJECT
 public:
     KDevFileManagerPart(QObject *parent, const QStringList &args);
     ~KDevFileManagerPart();
 
-    // Koncrete::Plugin methods
+    // KDevelop::Plugin methods
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
     virtual void registerExtensions();
     virtual void unregisterExtensions();

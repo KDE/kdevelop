@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 
 class KUrl;
 
-namespace Koncrete
+namespace KDevelop
 {
 struct AST;
 
@@ -54,9 +54,9 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE( Koncrete, IPersistentHash, "org.kdevelop.IPersistentHash" )
+KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IPersistentHash, "org.kdevelop.IPersistentHash" )
 
-Q_DECLARE_INTERFACE( Koncrete::IPersistentHash, "org.kdevelop.IPersistentHash"  )
+Q_DECLARE_INTERFACE( KDevelop::IPersistentHash, "org.kdevelop.IPersistentHash"  )
 
 #endif
 

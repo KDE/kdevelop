@@ -105,7 +105,7 @@ int main( int argc, char *argv[] )
         splash->repaint();
     }
 
-    using namespace Koncrete;
+    using namespace KDevelop;
     // initialize the editor integrator - it needs a qobject on the main thread
 //     EditorIntegrator::initialise();
 

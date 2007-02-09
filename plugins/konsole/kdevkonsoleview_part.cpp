@@ -22,7 +22,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevkonsoleview,
                             KonsoleViewFactory( "kdevkonsoleview" )  )
 
 KDevKonsoleViewPart::KDevKonsoleViewPart( QObject *parent, const QStringList & )
-    : Koncrete::Plugin( KonsoleViewFactory::componentData(), parent )
+    : KDevelop::Plugin( KonsoleViewFactory::componentData(), parent )
 {
     m_konsoleView = new KDevKonsoleView;
 }

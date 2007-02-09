@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 class QProcess;
 class KProcess;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 typedef QMap<QString, QString> EnvironmentMap;

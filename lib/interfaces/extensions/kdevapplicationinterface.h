@@ -31,7 +31,7 @@
 #include "kdevexport.h"
 
 
-namespace Koncrete
+namespace KDevelop
 {
 /**
 Application frontend interface. 

@@ -26,7 +26,7 @@ class QFileInfo;
 class QStringList;
 class KUrl;
 template <typename T> class QList;
-namespace Koncrete
+namespace KDevelop
 {
 class ProjectBaseItem;
 class ProjectFolderItem;
@@ -35,10 +35,10 @@ class ProjectFileItem;
 
 class KDialogBase;
 
-class GenericImporter: public Koncrete::IPlugin, public Koncrete::IFileManager
+class GenericImporter: public KDevelop::IPlugin, public KDevelop::IFileManager
 {
     Q_OBJECT
-    Q_INTERFACES( Koncrete::IFileManager )
+    Q_INTERFACES( KDevelop::IFileManager )
 public:
     GenericImporter( QObject *parent = 0,
                      const QStringList &args = QStringList() );
@@ -52,32 +52,32 @@ public:
         return Features( Folders | Files );
     }
 
-    virtual Koncrete::ProjectFolderItem* addFolder( const KUrl& folder, Koncrete::ProjectFolderItem *parent );
-    virtual Koncrete::ProjectFileItem* addFile( const KUrl& file, Koncrete::ProjectFolderItem *parent );
-    virtual bool removeFolder( Koncrete::ProjectFolderItem *folder );
-    virtual bool removeFile( Koncrete::ProjectFileItem *file );
-    virtual bool renameFolder( Koncrete::ProjectFolderItem *folder, const KUrl& url );
-    virtual bool renameFile( Koncrete::ProjectFileItem *file, const KUrl& url );
+    virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem *parent );
+    virtual KDevelop::ProjectFileItem* addFile( const KUrl& file, KDevelop::ProjectFolderItem *parent );
+    virtual bool removeFolder( KDevelop::ProjectFolderItem *folder );
+    virtual bool removeFile( KDevelop::ProjectFileItem *file );
+    virtual bool renameFolder( KDevelop::ProjectFolderItem *folder, const KUrl& url );
+    virtual bool renameFile( KDevelop::ProjectFileItem *file, const KUrl& url );
 
-    virtual QList<Koncrete::ProjectFolderItem*> parse( Koncrete::ProjectFolderItem *item );
-    virtual Koncrete::ProjectItem *import( Koncrete::IProject *project );
+    virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem *item );
+    virtual KDevelop::ProjectItem *import( KDevelop::IProject *project );
 
     void registerExtensions();
     void unregisterExtensions();
     QStringList extensions() const;
 
 Q_SIGNALS:
-    void projectItemConfigWidget(const QList<Koncrete::ProjectBaseItem*> &dom, KDialogBase *dialog);
+    void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
 
-    void folderAdded( Koncrete::ProjectFolderItem* folder );
-    void folderRemoved( Koncrete::ProjectFolderItem* folder );
+    void folderAdded( KDevelop::ProjectFolderItem* folder );
+    void folderRemoved( KDevelop::ProjectFolderItem* folder );
     void folderRenamed( const KUrl& oldFolder,
-                        Koncrete::ProjectFolderItem* newFolder );
+                        KDevelop::ProjectFolderItem* newFolder );
 
-    void fileAdded(Koncrete::ProjectFileItem* file);
-    void fileRemoved(Koncrete::ProjectFileItem* file);
+    void fileAdded(KDevelop::ProjectFileItem* file);
+    void fileRemoved(KDevelop::ProjectFileItem* file);
     void fileRenamed(const KUrl& oldFile,
-                     Koncrete::ProjectFileItem* newFile);
+                     KDevelop::ProjectFileItem* newFile);
 
 private:
     bool isValid( const QFileInfo &fileName ) const;

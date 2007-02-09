@@ -24,7 +24,7 @@
 #include "parser/codemodel.h"
 
 CodeDelegate::CodeDelegate( QObject *parent )
-        : Koncrete::CodeDelegate( parent )
+        : KDevelop::CodeDelegate( parent )
 {}
 
 CodeDelegate::~CodeDelegate()
@@ -56,7 +56,7 @@ void CodeDelegate::updateStyle( QStyleOptionViewItem& opt, const QModelIndex& in
     const QAbstractItemModel *model = index.model();
     Q_ASSERT( model );
     QVariant value = model->data( index, Qt::UserRole );
-    Q_ASSERT( value.isValid() ); //This should be set to the Koncrete::CodeItem kind()
+    Q_ASSERT( value.isValid() ); //This should be set to the KDevelop::CodeItem kind()
 
     switch ( value.toInt() )
     {

@@ -24,7 +24,7 @@
 #include <QtGui/QItemDelegate>
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class KDEVPROJECTMANAGER_EXPORT ProjectManagerDelegate: public QItemDelegate

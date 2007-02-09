@@ -25,7 +25,7 @@
 #include "ifilemanager.h"
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IProjectBuilder;
@@ -134,10 +134,10 @@ public:
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( Koncrete::IBuildManager::BuildFeatures )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IBuildManager::BuildFeatures )
 
-KDEV_DECLARE_EXTENSION_INTERFACE( Koncrete, IBuildManager, "org.kdevelop.IBuildManager" )
-Q_DECLARE_INTERFACE( Koncrete::IBuildManager, "org.kdevelop.IBuildManager" )
+KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IBuildManager, "org.kdevelop.IBuildManager" )
+Q_DECLARE_INTERFACE( KDevelop::IBuildManager, "org.kdevelop.IBuildManager" )
 
 #endif
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

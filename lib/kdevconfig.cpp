@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "projectcontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ConfigPrivate

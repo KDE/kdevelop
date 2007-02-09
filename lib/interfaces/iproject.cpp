@@ -28,7 +28,7 @@
 
 #include <QtDBus/QtDBus>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 IProject::IProject(QObject *parent)

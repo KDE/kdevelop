@@ -37,7 +37,7 @@ template<typename T> class QList;
 
 class KJob;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IPlugin;

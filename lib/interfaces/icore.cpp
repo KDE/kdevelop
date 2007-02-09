@@ -18,7 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 #include "icore.h"
 
-namespace Koncrete {
+namespace KDevelop {
 
 ICore::~ICore()
 {

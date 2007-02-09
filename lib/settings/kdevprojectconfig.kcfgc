@@ -1,6 +1,6 @@
 File=kdevprojectconfig.kcfg
-Namespace=Koncrete
+Namespace=KDevelop
 ClassName=ProjectSettings
 Singleton=true
-Inherits=Koncrete::ConfigSkeleton
+Inherits=KDevelop::ConfigSkeleton
 IncludeFiles="kdevconfigskeleton.h"

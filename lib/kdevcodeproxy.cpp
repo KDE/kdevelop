@@ -22,7 +22,7 @@
 
 #include "kdevcodeaggregate_p.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 CodeProxy::CodeProxy( QObject* parent )

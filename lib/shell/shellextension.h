@@ -23,7 +23,7 @@
 #include <QString>
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**Default area parameters collection.*/

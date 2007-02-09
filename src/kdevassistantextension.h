@@ -24,7 +24,7 @@
 #include "shellexport.h"
 
 
-class KDEVSHELL_EXPORT KDevAssistantExtension : public Koncrete::ShellExtension {
+class KDEVSHELL_EXPORT KDevAssistantExtension : public KDevelop::ShellExtension {
 public:
     static void init();
 

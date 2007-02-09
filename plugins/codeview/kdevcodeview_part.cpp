@@ -33,7 +33,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcodeview, KDevCodeViewFactory( "kdevcodeview" ) 
 
 KDevCodeViewPart::KDevCodeViewPart( QObject *parent,
                                     const QStringList& )
-    : Koncrete::Plugin( KDevCodeViewFactory::componentData(), parent )
+    : KDevelop::Plugin( KDevCodeViewFactory::componentData(), parent )
 {
     m_codeView = new KDevCodeView;
 

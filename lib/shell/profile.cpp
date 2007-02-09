@@ -26,7 +26,7 @@
 #include <kconfig.h>
 #include <kio/netaccess.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 Profile::Profile(Profile *parent, const QString &name)

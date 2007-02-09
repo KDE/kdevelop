@@ -55,7 +55,7 @@ KDevCodeView::KDevCodeView( QWidget *parent )
     vbox->setMargin( 0 );
     vbox->setSpacing( 0 );
 
-    if ( !Koncrete::Core::activeLanguage() )
+    if ( !KDevelop::Core::activeLanguage() )
     {
         QLabel * label = new QLabel( this );
         label->setMargin( 20 );
@@ -68,7 +68,7 @@ KDevCodeView::KDevCodeView( QWidget *parent )
         return ;
     }
 
-    Koncrete::CodeProxy * model = Koncrete::Core::activeLanguage() ->codeProxy();
+    KDevelop::CodeProxy * model = KDevelop::Core::activeLanguage() ->codeProxy();
     if ( !model )
     {
         QLabel * label = new QLabel( this );
@@ -136,7 +136,7 @@ KDevCodeView::KDevCodeView( QWidget *parent )
 
     codeTree->setModel( model );
 
-    if ( Koncrete::CodeDelegate * delegate = Koncrete::Core::activeLanguage() ->codeDelegate() )
+    if ( KDevelop::CodeDelegate * delegate = KDevelop::Core::activeLanguage() ->codeDelegate() )
         codeTree->setItemDelegate( delegate );
 
     setWhatsThis( i18n( "Code View" ) );

@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 ProjectManagerDelegate::ProjectManagerDelegate( QObject *parent )

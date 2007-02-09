@@ -94,7 +94,7 @@ void DUChain::clear()
 {
   QWriteLocker writeLock(lock());
   foreach (TopDUContext* context, m_chains) {
-    Koncrete::EditorIntegrator::releaseTopRange(context->textRangePtr());
+    KDevelop::EditorIntegrator::releaseTopRange(context->textRangePtr());
     delete context;
   }
 

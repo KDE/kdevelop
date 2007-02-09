@@ -31,7 +31,7 @@ template<typename T> class QList;
 class QDir;
 class QFileInfo;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IProject;

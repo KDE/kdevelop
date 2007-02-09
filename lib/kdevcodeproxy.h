@@ -27,7 +27,7 @@
 
 #include "kdevcodemodel.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 typedef QList<CodeModel*> CodeModelList;

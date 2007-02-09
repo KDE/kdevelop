@@ -20,7 +20,7 @@
 #include "kdevtreeview.h"
 #include "kdevitemmodel.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 TreeView::TreeView(QWidget *parent)

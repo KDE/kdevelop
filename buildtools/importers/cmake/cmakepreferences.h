@@ -34,7 +34,7 @@ namespace Ui { class CMakeBuildSettings; }
 /**
  * @author Matt Rogers <mattr@kde.org>
  */
-class CMakePreferences : public Koncrete::ConfigModule
+class CMakePreferences : public KDevelop::ConfigModule
 {
 public:
     CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());

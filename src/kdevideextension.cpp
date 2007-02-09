@@ -52,9 +52,9 @@ QString KDevIDEExtension::defaultProfile()
     return "IDE";
 }
 
-Koncrete::AreaParams KDevIDEExtension::defaultArea()
+KDevelop::AreaParams KDevIDEExtension::defaultArea()
 {
-    Koncrete::AreaParams params = {"code", i18n("Code")};
+    KDevelop::AreaParams params = {"code", i18n("Code")};
     return params;
 }
 

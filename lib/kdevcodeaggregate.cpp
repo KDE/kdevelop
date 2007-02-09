@@ -22,7 +22,7 @@
 #include "kdevcodeaggregate_p.h"
 #include "kdevcodemodel.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 CodeAggregate::CodeAggregate( QObject *parent )

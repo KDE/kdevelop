@@ -26,7 +26,7 @@ class Definition;
 class Declaration;
 class Use;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

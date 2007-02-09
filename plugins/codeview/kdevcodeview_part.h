@@ -31,7 +31,7 @@ class KUrl;
 class QModelIndex;
 class KDevCodeView;
 
-class KDevCodeViewPart: public Koncrete::Plugin
+class KDevCodeViewPart: public KDevelop::Plugin
 {
     Q_OBJECT
 public:

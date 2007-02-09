@@ -25,7 +25,7 @@
 
 #include <ktexteditor/range.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

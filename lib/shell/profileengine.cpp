@@ -28,7 +28,7 @@
 #include "iplugin.h"
 #include "plugincontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 ProfileEngine::ProfileEngine()

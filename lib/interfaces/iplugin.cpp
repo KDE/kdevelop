@@ -38,7 +38,7 @@
 // #include "kdevmainwindow.h"
 // #include "kdevIPlugincontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IPlugin::Private
@@ -62,7 +62,7 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
         KXMLGUIClient()
 {
     d = new Private;
-    d->core = static_cast<Koncrete::ICore*>(parent);
+    d->core = static_cast<KDevelop::ICore*>(parent);
     setComponentData( instance );
 }
 

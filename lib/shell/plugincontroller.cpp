@@ -54,7 +54,7 @@ Boston, MA 02110-1301, USA.
 #include "shellextension.h"
 #include <QtDesigner/QExtensionManager>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 struct PluginControllerPrivate

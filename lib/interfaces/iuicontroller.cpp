@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "iuicontroller.h"
 
-namespace Koncrete {
+namespace KDevelop {
 
 IUiController::IUiController()
 {

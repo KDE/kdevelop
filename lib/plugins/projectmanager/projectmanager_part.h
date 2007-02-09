@@ -28,7 +28,7 @@ class QModelIndex;
 
 class KUrl;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ProjectBaseItem;

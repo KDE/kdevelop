@@ -46,7 +46,7 @@ class Document;
 class Editor;
 }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class KDEVPLATFORM_EXPORT PartController : public KParts::PartManager

@@ -20,7 +20,7 @@
 */
 #include "kdevdiffinterface.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 DiffFrontend::DiffFrontend(KInstance *instance, QObject *parent)

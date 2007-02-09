@@ -34,7 +34,7 @@ namespace Ui { class MakeConfig; }
 /**
  * @author Matt Rogers <mattr@kde.org>
  */
-class MakeBuilderPreferences : public Koncrete::ConfigModule
+class MakeBuilderPreferences : public KDevelop::ConfigModule
 {
 public:
     MakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());

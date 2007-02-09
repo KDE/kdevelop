@@ -27,7 +27,7 @@
 class CppLanguageSupport;
 class CppCodeCompletionModel;
 
-namespace Koncrete
+namespace KDevelop
 {
 class Document;
 }
@@ -43,7 +43,7 @@ class CppCodeCompletion : public QObject
     virtual ~CppCodeCompletion();
 
   public Q_SLOTS:
-    void documentLoaded(Koncrete::Document* document);
+    void documentLoaded(KDevelop::Document* document);
     void viewCreated(KTextEditor::Document *document, KTextEditor::View *view);
 
   private:

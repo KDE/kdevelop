@@ -29,7 +29,7 @@
 
 class QDataStream;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class Tag

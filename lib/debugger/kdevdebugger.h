@@ -27,7 +27,7 @@
 
 #include <kurl.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

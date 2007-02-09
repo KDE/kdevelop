@@ -31,10 +31,10 @@ class KDevDocumentItem;
 class KDevMimeTypeItem;
 class KDevFileItem;
 
-class KDevDocumentItem: public Koncrete::ItemCollection
+class KDevDocumentItem: public KDevelop::ItemCollection
 {
 public:
-    KDevDocumentItem( const QString &name, Koncrete::ItemGroup *parent = 0 );
+    KDevDocumentItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
     virtual ~KDevDocumentItem();
 
     virtual KDevDocumentItem *itemAt( int index ) const;
@@ -51,37 +51,37 @@ public:
     {
         switch ( m_documentState )
         {
-        case Koncrete::Document::Clean:
+        case KDevelop::Document::Clean:
             return QIcon();
-        case Koncrete::Document::Modified:
+        case KDevelop::Document::Modified:
             return KIcon( "filesave" );
-        case Koncrete::Document::Dirty:
+        case KDevelop::Document::Dirty:
             return KIcon( "revert" );
-        case Koncrete::Document::DirtyAndModified:
+        case KDevelop::Document::DirtyAndModified:
             return KIcon( "stop" );
         default:
             return QIcon();
         }
     }
 
-    Koncrete::Document::DocumentState documentState() const
+    KDevelop::Document::DocumentState documentState() const
     {
         return m_documentState;
     }
 
-    void setDocumentState( Koncrete::Document::DocumentState state )
+    void setDocumentState( KDevelop::Document::DocumentState state )
     {
         m_documentState = state;
     }
 
 private:
-    Koncrete::Document::DocumentState m_documentState;
+    KDevelop::Document::DocumentState m_documentState;
 };
 
 class KDevMimeTypeItem: public KDevDocumentItem
 {
 public:
-    KDevMimeTypeItem( const QString &name, Koncrete::ItemGroup *parent = 0 );
+    KDevMimeTypeItem( const QString &name, KDevelop::ItemGroup *parent = 0 );
     virtual ~KDevMimeTypeItem();
 
     virtual KDevMimeTypeItem *mimeTypeItem() const
@@ -96,7 +96,7 @@ public:
 class KDevFileItem: public KDevDocumentItem
 {
 public:
-    KDevFileItem( const KUrl &url, Koncrete::ItemGroup *parent = 0 );
+    KDevFileItem( const KUrl &url, KDevelop::ItemGroup *parent = 0 );
     virtual ~KDevFileItem();
 
     virtual KDevFileItem *fileItem() const
@@ -118,7 +118,7 @@ private:
     KUrl m_url;
 };
 
-class KDevDocumentModel: public Koncrete::ItemModel
+class KDevDocumentModel: public KDevelop::ItemModel
 {
     Q_OBJECT
 public:

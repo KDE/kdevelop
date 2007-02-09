@@ -20,7 +20,7 @@
 #include "kdevpcsimporter.h"
 #include "kdevpcsimporter.moc"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 PCSImporter::PCSImporter( QObject * parent )

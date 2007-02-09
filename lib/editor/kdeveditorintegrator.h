@@ -29,7 +29,7 @@ class QMutex;
 
 namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterface; }
 
-namespace Koncrete
+namespace KDevelop
 {
   class DocumentRange;
   class DocumentCursor;

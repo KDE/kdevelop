@@ -32,14 +32,14 @@ class CppLanguageSupport;
 class ParseSession;
 class ParseJob;
 
-class CPPParseJob : public Koncrete::ParseJob
+class CPPParseJob : public KDevelop::ParseJob
 {
     Q_OBJECT
 public:
     CPPParseJob( const KUrl &url,
               CppLanguageSupport* parent );
 
-    CPPParseJob( Koncrete::Document* document,
+    CPPParseJob( KDevelop::Document* document,
               CppLanguageSupport* parent );
 
     virtual ~CPPParseJob();
@@ -49,10 +49,10 @@ public:
     ParseSession* parseSession() const;
 
     void setAST(TranslationUnitAST* ast);
-    virtual Koncrete::AST *AST() const;
+    virtual KDevelop::AST *AST() const;
 
     void setCodeModel(CodeModel* model);
-    virtual Koncrete::CodeModel *codeModel() const;
+    virtual KDevelop::CodeModel *codeModel() const;
 
     void setDUChain(TopDUContext* duChain);
     virtual TopDUContext* duChain() const;

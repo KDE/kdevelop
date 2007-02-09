@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <kglobal.h>
 #include <kurl.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 ConfigModule::ConfigModule( const KComponentData &instance,
                           QWidget *parent,

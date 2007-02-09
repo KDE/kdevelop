@@ -25,7 +25,7 @@
 
 #include <cstring>
 
-namespace Koncrete
+namespace KDevelop
 {
 BDBCatalogBackend::BDBCatalogBackend()
 {

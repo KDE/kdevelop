@@ -25,7 +25,7 @@
 
 using namespace KTextEditor;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 DocumentCursor::DocumentCursor(const KUrl& document, const Cursor& cursor)

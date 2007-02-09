@@ -42,13 +42,13 @@ typedef KGenericFactory<QMakeImporter> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
                             QMakeSupportFactory( "kdevqmakeimporter" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( Koncrete, IBuildManager, QMakeImporter )
-KDEV_ADD_EXTENSION_FACTORY_NS( Koncrete, IFileManager, QMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildManager, QMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IFileManager, QMakeImporter )
 
 
 QMakeImporter::QMakeImporter( QObject* parent,
                               const QStringList& )
-        : Koncrete::IPlugin( QMakeSupportFactory::componentData(), parent )
+        : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent )
 {
 
     /*    QMakeSettings* settings = QMakeSettings::self();
@@ -56,7 +56,7 @@ QMakeImporter::QMakeImporter( QObject* parent,
         //what do the settings say about our generator?
         QString generator = settings->generator();
         if ( generator.contains( "Unix" ) ) //use make
-            m_builder = new Koncrete::MakeBuilder()*/
+            m_builder = new KDevelop::MakeBuilder()*/
 }
 
 QMakeImporter::~QMakeImporter()
@@ -64,14 +64,14 @@ QMakeImporter::~QMakeImporter()
 
 }
 
-KUrl QMakeImporter::buildDirectory(Koncrete::ProjectItem* project) const
+KUrl QMakeImporter::buildDirectory(KDevelop::ProjectItem* project) const
 {
     return project->project()->folder();
 }
 
-QList<Koncrete::ProjectFolderItem*> QMakeImporter::parse( Koncrete::ProjectFolderItem* item )
+QList<KDevelop::ProjectFolderItem*> QMakeImporter::parse( KDevelop::ProjectFolderItem* item )
 {
-    QList<Koncrete::ProjectFolderItem*> folderList;
+    QList<KDevelop::ProjectFolderItem*> folderList;
 
     kDebug(9024) << k_funcinfo << "Parsing item: " << endl;
 
@@ -87,7 +87,7 @@ QList<Koncrete::ProjectFolderItem*> QMakeImporter::parse( Koncrete::ProjectFolde
     }
     foreach( KUrl u, folderitem->projectScope()->files() )
     {
-        new Koncrete::ProjectFileItem( item->project(), u, item );
+        new KDevelop::ProjectFileItem( item->project(), u, item );
     }
     foreach( QString s, folderitem->projectScope()->targets() )
     {
@@ -98,7 +98,7 @@ QList<Koncrete::ProjectFolderItem*> QMakeImporter::parse( Koncrete::ProjectFolde
     return folderList;
 }
 
-Koncrete::ProjectItem* QMakeImporter::import( Koncrete::IProject* project )
+KDevelop::ProjectItem* QMakeImporter::import( KDevelop::IProject* project )
 {
     KUrl dirName = project->folder();
     if( !dirName.isLocalFile() )
@@ -129,7 +129,7 @@ Koncrete::ProjectItem* QMakeImporter::import( Koncrete::IProject* project )
     return 0;
 }
 
-KUrl QMakeImporter::findMakefile( Koncrete::ProjectFolderItem* folder ) const
+KUrl QMakeImporter::findMakefile( KDevelop::ProjectFolderItem* folder ) const
 {
 
     QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
@@ -140,7 +140,7 @@ KUrl QMakeImporter::findMakefile( Koncrete::ProjectFolderItem* folder ) const
     return qmitem->projectScope()->absoluteFileUrl();
 }
 
-KUrl::List QMakeImporter::findMakefiles( Koncrete::ProjectFolderItem* folder ) const
+KUrl::List QMakeImporter::findMakefiles( KDevelop::ProjectFolderItem* folder ) const
 {
     QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
     if( !qmitem )
@@ -153,13 +153,13 @@ KUrl::List QMakeImporter::findMakefiles( Koncrete::ProjectFolderItem* folder ) c
     return l;
 }
 
-QList<Koncrete::ProjectTargetItem*> QMakeImporter::targets(Koncrete::ProjectItem* item) const
+QList<KDevelop::ProjectTargetItem*> QMakeImporter::targets(KDevelop::ProjectItem* item) const
 {
     Q_UNUSED(item)
-    return QList<Koncrete::ProjectTargetItem*>();
+    return QList<KDevelop::ProjectTargetItem*>();
 }
 
-KUrl::List QMakeImporter::includeDirectories(Koncrete::ProjectBaseItem* item) const
+KUrl::List QMakeImporter::includeDirectories(KDevelop::ProjectBaseItem* item) const
 {
     Q_UNUSED(item)
     return KUrl::List();
@@ -174,16 +174,16 @@ QStringList QMakeImporter::extensions() const
 void QMakeImporter::registerExtensions()
 {
     extensionManager()->registerExtensions( new QMakeImporterIFileManagerFactory(
-    extensionManager() ), Q_TYPEID( Koncrete::IFileManager ) );
+    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
     extensionManager()->registerExtensions( new QMakeImporterIBuildManagerFactory(
-    extensionManager() ), Q_TYPEID( Koncrete::IBuildManager ) );
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
 }
 void QMakeImporter::unregisterExtensions()
 {
     extensionManager()->unregisterExtensions( new QMakeImporterIFileManagerFactory(
-    extensionManager() ), Q_TYPEID( Koncrete::IFileManager ) );
+    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
     extensionManager()->unregisterExtensions( new QMakeImporterIBuildManagerFactory(
-    extensionManager() ), Q_TYPEID( Koncrete::IBuildManager ) );
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
 }
 
 #include "qmakeimporter.moc"

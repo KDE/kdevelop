@@ -43,7 +43,7 @@ QtDesignerPart::QtDesignerPart(QWidget* parentWidget,
   setXMLFile( "kdevqtdesigner.rc" );
 
   m_designer = QDesignerComponents::createFormEditor(this);
-  m_designer->setTopLevel( Koncrete::Core::mainWindow());
+  m_designer->setTopLevel( KDevelop::Core::mainWindow());
 
   m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
   Q_ASSERT(m_designer->widgetBox() != 0);
@@ -62,8 +62,8 @@ QtDesignerPart::QtDesignerPart(QWidget* parentWidget,
 
   setupActions();
 
-  connect( Koncrete::Core::documentController(), SIGNAL( documentActivated( Koncrete::Document* ) ),
-           this, SLOT( activated( Koncrete::Document* ) ) );
+  connect( KDevelop::Core::documentController(), SIGNAL( documentActivated( KDevelop::Document* ) ),
+           this, SLOT( activated( KDevelop::Document* ) ) );
 }
 
 QtDesignerPart::~QtDesignerPart()
@@ -82,7 +82,7 @@ QtDesignerPart::~QtDesignerPart()
         m_workspace->deleteLater();
 }
 
-void QtDesignerPart::activated( Koncrete::Document *document )
+void QtDesignerPart::activated( KDevelop::Document *document )
 {
     //FIXME
 //     if ( document->url() == url() )

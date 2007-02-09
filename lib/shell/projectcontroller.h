@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 
 class KRecentFilesAction;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IProject;

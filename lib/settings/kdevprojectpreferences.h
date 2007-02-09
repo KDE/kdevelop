@@ -31,7 +31,7 @@ namespace Ui
 class ProjectSettings;
 }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ProjectPreferences : public ConfigModule

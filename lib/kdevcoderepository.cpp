@@ -19,7 +19,7 @@
 #include "kdevcoderepository.h"
 #include <QList>
 
-namespace Koncrete
+namespace KDevelop
 {
     
 struct CodeRepositoryData

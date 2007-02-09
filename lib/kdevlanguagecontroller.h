@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevlanguagesupport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class KDEVPLATFORM_EXPORT LanguageController: public QObject

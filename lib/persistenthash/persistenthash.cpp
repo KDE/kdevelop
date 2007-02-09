@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 #include "icore.h"
 #include "kdevlanguagesupport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 struct PersistentHashPrivate

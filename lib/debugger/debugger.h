@@ -8,7 +8,7 @@
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class DocumentController;

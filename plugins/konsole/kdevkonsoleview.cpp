@@ -50,13 +50,13 @@ KDevKonsoleView::KDevKonsoleView( QWidget *parent )
     // but by default the konsole shouldn't
     // automatically switch directories on you.
 
-//     connect( Koncrete::Core::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
+//     connect( KDevelop::Core::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
 //              this, SLOT( documentActivated( KDevDocument* ) ) );
 
-    connect( Koncrete::Core::projectController(), SIGNAL( projectOpened() ),
+    connect( KDevelop::Core::projectController(), SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
 
-    connect( Koncrete::Core::projectController(), SIGNAL( projectClosed() ),
+    connect( KDevelop::Core::projectController(), SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
 }
 
@@ -103,15 +103,15 @@ void KDevKonsoleView::partDestroyed()
 
 void KDevKonsoleView::projectOpened()
 {
-    setDirectory( Koncrete::Core::projectController()->globalFile() );
+    setDirectory( KDevelop::Core::projectController()->globalFile() );
 }
 
 void KDevKonsoleView::projectClosed()
 {
-    setDirectory( Koncrete::Core::projectController()->projectsDirectory() );
+    setDirectory( KDevelop::Core::projectController()->projectsDirectory() );
 }
 
-void KDevKonsoleView::documentActivated( Koncrete::Document *document )
+void KDevKonsoleView::documentActivated( KDevelop::Document *document )
 {
     setDirectory( document->url() );
 }

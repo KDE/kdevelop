@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "shellextension.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 ShellExtension *ShellExtension::s_instance = 0;
 

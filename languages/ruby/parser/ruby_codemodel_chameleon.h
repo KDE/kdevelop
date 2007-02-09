@@ -30,7 +30,7 @@ namespace ruby
    * which provides shared pointer abilities.
    */
 
-  class _ModelItemChameleon :  public Koncrete::Shared
+  class _ModelItemChameleon :  public KDevelop::Shared
     {
       CodeModelItem _M_item;
 
@@ -51,12 +51,12 @@ namespace ruby
       void operator=(const _ModelItemChameleon &other);
     };
 
-  class ModelItemChameleon :  public Koncrete::SharedPtr<_ModelItemChameleon>
+  class ModelItemChameleon :  public KDevelop::SharedPtr<_ModelItemChameleon>
     {
 
     public:
       ModelItemChameleon(CodeModelItem item)
-          :  Koncrete::SharedPtr<_ModelItemChameleon>(new _ModelItemChameleon(item))
+          :  KDevelop::SharedPtr<_ModelItemChameleon>(new _ModelItemChameleon(item))
       {}
 
     }

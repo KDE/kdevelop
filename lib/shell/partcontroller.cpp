@@ -47,7 +47,7 @@
 
 #include "partcontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 PartController::PartController(Core *core, QWidget *toplevel)

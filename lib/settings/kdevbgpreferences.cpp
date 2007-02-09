@@ -30,7 +30,7 @@
 
 #include "ui_bgsettings.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 typedef KGenericFactory<BGPreferences> BGPreferencesFactory;
@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY( kcm_kdevbg_settings,
                             BGPreferencesFactory( "kcm_kdevbg_settings" ) )
 
 BGPreferences::BGPreferences( QWidget *parent, const QStringList &args )
- : Koncrete::ConfigModule( BGSettings::self(),
+ : KDevelop::ConfigModule( BGSettings::self(),
                            BGPreferencesFactory::componentData(),
                            parent, args )
 {

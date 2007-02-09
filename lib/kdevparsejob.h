@@ -36,7 +36,7 @@ class SmartRange;
 
 class TopDUContext;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class Document;
@@ -81,7 +81,7 @@ public:
     void setErrorMessage(const QString& message);
     const QString& errorMessage() const;
 
-    virtual ::Koncrete::AST *AST() const = 0;
+    virtual ::KDevelop::AST *AST() const = 0;
     virtual CodeModel *codeModel() const = 0;
     virtual TopDUContext *duChain() const;
 

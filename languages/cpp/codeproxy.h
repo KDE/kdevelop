@@ -25,7 +25,7 @@
 
 class _FunctionModelItem;
 
-class CodeProxy : public Koncrete::CodeProxy
+class CodeProxy : public KDevelop::CodeProxy
 {
     Q_OBJECT
 public:

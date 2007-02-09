@@ -55,7 +55,7 @@
 #include "uicontroller.h"
 
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ProjectPrivate

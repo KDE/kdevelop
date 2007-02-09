@@ -45,13 +45,13 @@
 #include <QtCore/QTimer>
 #include <QtCore/QList>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 typedef KGenericFactory<ProjectManagerPart> ProjectManagerFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevprojectmanager, ProjectManagerFactory( "kdevprojectmanager" ) )
 
-class KDevProjectManagerViewFactory: public Koncrete::IToolViewFactory
+class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {
     public:
         KDevProjectManagerViewFactory( ProjectManagerPart *part ): m_part( part )

@@ -43,7 +43,7 @@
 #include <kdevcoderepository.h>
 
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class AST;

@@ -20,7 +20,7 @@
 
 using namespace KTextEditor;
 
-namespace Koncrete
+namespace KDevelop
 {
     
 DocumentRange::DocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, Range* parent)

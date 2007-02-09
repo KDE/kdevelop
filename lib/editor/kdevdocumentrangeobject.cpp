@@ -27,7 +27,7 @@
 
 using namespace KTextEditor;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 DocumentRangeObject::DocumentRangeObject(Range* range)

@@ -21,7 +21,7 @@
 
 #include <QPixmap>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 DebuggerBase::DebuggerBase(QObject *parent)

@@ -25,7 +25,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 struct ImportProjectJobPrivate

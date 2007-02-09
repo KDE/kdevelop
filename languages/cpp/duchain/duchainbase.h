@@ -28,7 +28,7 @@ class DUChainModel;
 /**
  * Base class for definition-use chain objects.
  */
-class KDEVCPPLANGUAGE_EXPORT DUChainBase : public Koncrete::DocumentRangeObject
+class KDEVCPPLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
 {
   friend class ProxyObject;
 

@@ -9,10 +9,10 @@ namespace csharp
 
   // ---------------------------------------------------------------------------
 #define CLASS CodeModel
-#define BASECLASS Koncrete::CodeModel
+#define BASECLASS KDevelop::CodeModel
 
   CodeModel::CodeModel( QObject *parent )
-      :  Koncrete::CodeModel( parent )
+      :  KDevelop::CodeModel( parent )
   {
 
     _M_globalNamespace =  create < ITEM(GlobalNamespaceDeclaration) > ();
@@ -44,7 +44,7 @@ namespace csharp
       return  _M_globalNamespace;
     }
 
-  Koncrete::ItemCollection *CodeModel::root() const
+  KDevelop::ItemCollection *CodeModel::root() const
     {
       return  _M_globalNamespace;
     }
@@ -54,10 +54,10 @@ namespace csharp
 
   // ---------------------------------------------------------------------------
 #define CLASS _CodeModelItem
-#define BASECLASS Koncrete::CodeItem
+#define BASECLASS KDevelop::CodeItem
 
   _CodeModelItem::_CodeModelItem(CodeModel *model,  int kind)
-      :  Koncrete::CodeItem( QString::null,  0 )
+      :  KDevelop::CodeItem( QString::null,  0 )
       ,  _M_model(model)
       ,  _M_kind(kind)
       ,  _M_startLine( -1)
@@ -71,7 +71,7 @@ namespace csharp
 
   _CodeModelItem *_CodeModelItem::itemAt(int index) const
     {
-      return  static_cast<_CodeModelItem*>(Koncrete::ItemCollection::itemAt(index));
+      return  static_cast<_CodeModelItem*>(KDevelop::ItemCollection::itemAt(index));
     }
 
   CodeModelItem _CodeModelItem::toItem() const

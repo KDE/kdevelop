@@ -44,7 +44,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevjavalanguagesupport,
 
 JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
         const QStringList& /*args*/ )
-        : Koncrete::LanguageSupport( KDevJavaSupportFactory::componentData(), parent )
+        : KDevelop::LanguageSupport( KDevJavaSupportFactory::componentData(), parent )
 {
     QString types =
         QLatin1String( "text/x-java" );
@@ -55,19 +55,19 @@ JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
     //     m_backgroundParser = new BackgroundParser( this );
     //     m_highlights = new CppHighlighting( this );
 
-    connect( Koncrete::Core::documentController(),
-             SIGNAL( documentLoaded( Koncrete::Document* ) ),
-             this, SLOT( documentLoaded( Koncrete::Document* ) ) );
-    connect( Koncrete::Core::documentController(),
-             SIGNAL( documentClosed( Koncrete::Document* ) ),
-             this, SLOT( documentClosed( Koncrete::Document* ) ) );
-    connect( Koncrete::Core::documentController(),
-             SIGNAL( documentActivated( Koncrete::Document* ) ),
-             this, SLOT( documentActivated( Koncrete::Document* ) ) );
-    connect( Koncrete::Core::projectController(),
+    connect( KDevelop::Core::documentController(),
+             SIGNAL( documentLoaded( KDevelop::Document* ) ),
+             this, SLOT( documentLoaded( KDevelop::Document* ) ) );
+    connect( KDevelop::Core::documentController(),
+             SIGNAL( documentClosed( KDevelop::Document* ) ),
+             this, SLOT( documentClosed( KDevelop::Document* ) ) );
+    connect( KDevelop::Core::documentController(),
+             SIGNAL( documentActivated( KDevelop::Document* ) ),
+             this, SLOT( documentActivated( KDevelop::Document* ) ) );
+    connect( KDevelop::Core::projectController(),
              SIGNAL( projectOpened() ),
              this, SLOT( projectOpened() ) );
-    connect( Koncrete::Core::projectController(),
+    connect( KDevelop::Core::projectController(),
              SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
 }
@@ -76,39 +76,39 @@ JavaLanguageSupport::~JavaLanguageSupport()
 {
 }
 
-Koncrete::CodeModel *JavaLanguageSupport::codeModel( const KUrl &url ) const
+KDevelop::CodeModel *JavaLanguageSupport::codeModel( const KUrl &url ) const
 {
     Q_UNUSED( url );
     return 0;
     //     if ( url.isValid() )
     //         return m_codeProxy->codeModel( url );
     //     else
-    //         return m_codeProxy->codeModel( Koncrete::Core::documentController() ->activeDocumentUrl() );
+    //         return m_codeProxy->codeModel( KDevelop::Core::documentController() ->activeDocumentUrl() );
 }
 
-Koncrete::CodeProxy *JavaLanguageSupport::codeProxy() const
+KDevelop::CodeProxy *JavaLanguageSupport::codeProxy() const
 {
     return 0;
     //     return m_codeProxy;
 }
 
-Koncrete::CodeDelegate *JavaLanguageSupport::codeDelegate() const
+KDevelop::CodeDelegate *JavaLanguageSupport::codeDelegate() const
 {
     return 0;
     //     return m_codeDelegate;
 }
 
-Koncrete::CodeRepository *JavaLanguageSupport::codeRepository() const
+KDevelop::CodeRepository *JavaLanguageSupport::codeRepository() const
 {
     return 0;
 }
 
-Koncrete::ParseJob *JavaLanguageSupport::createParseJob( const KUrl &url )
+KDevelop::ParseJob *JavaLanguageSupport::createParseJob( const KUrl &url )
 {
     return new ParseJob( url, this );
 }
 
-Koncrete::ParseJob *JavaLanguageSupport::createParseJob( Koncrete::Document *document )
+KDevelop::ParseJob *JavaLanguageSupport::createParseJob( KDevelop::Document *document )
 {
     return new ParseJob( document, this );
 }
@@ -118,19 +118,19 @@ QStringList JavaLanguageSupport::mimeTypes() const
     return m_mimetypes;
 }
 
-void JavaLanguageSupport::documentLoaded( Koncrete::Document *document )
+void JavaLanguageSupport::documentLoaded( KDevelop::Document *document )
 {
     if ( supportsDocument( document ) )
-        Koncrete::Core::backgroundParser() ->addDocument( document );
+        KDevelop::Core::backgroundParser() ->addDocument( document );
 }
 
-void JavaLanguageSupport::documentClosed( Koncrete::Document *document )
+void JavaLanguageSupport::documentClosed( KDevelop::Document *document )
 {
     if ( supportsDocument( document ) )
-        Koncrete::Core::backgroundParser() ->removeDocument( document );
+        KDevelop::Core::backgroundParser() ->removeDocument( document );
 }
 
-void JavaLanguageSupport::documentActivated( Koncrete::Document *document )
+void JavaLanguageSupport::documentActivated( KDevelop::Document *document )
 {
     Q_UNUSED( document );
 }
@@ -138,15 +138,15 @@ void JavaLanguageSupport::documentActivated( Koncrete::Document *document )
 void JavaLanguageSupport::projectOpened()
 {
     KUrl::List documentList;
-    QList<Koncrete::ProjectFileItem*> files = Koncrete::Core::activeProject()->allFiles();
-    foreach ( Koncrete::ProjectFileItem * file, files )
+    QList<KDevelop::ProjectFileItem*> files = KDevelop::Core::activeProject()->allFiles();
+    foreach ( KDevelop::ProjectFileItem * file, files )
     {
         if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".java" )*/ )
         {
             documentList.append( file->url() );
         }
     }
-    Koncrete::Core::backgroundParser() ->addDocumentList( documentList );
+    KDevelop::Core::backgroundParser() ->addDocumentList( documentList );
 }
 
 void JavaLanguageSupport::projectClosed()

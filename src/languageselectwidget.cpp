@@ -103,7 +103,7 @@ LanguageSelectWidget::~LanguageSelectWidget()
 
 void LanguageSelectWidget::readProjectConfig()
 {
-    using namespace Koncrete;
+    using namespace KDevelop;
     KService::List languageSupportOffers =
         KServiceTypeTrader::self()->query(QLatin1String("KDevelop/LanguageSupport"),
                                QString::fromLatin1("[X-KDevelop-Version] == %1"
@@ -151,7 +151,7 @@ void LanguageSelectWidget::saveProjectConfig()
         ++it;
     }
 
-    using namespace Koncrete;
+    using namespace KDevelop;
     DomUtil::writeListEntry(m_projectDom, "/general/secondaryLanguages", "language", languages);
 }
 

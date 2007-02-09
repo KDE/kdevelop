@@ -27,7 +27,7 @@
 
 class QTreeWidget;
 
-namespace Koncrete
+namespace KDevelop
 {
 class Document;
 }
@@ -40,13 +40,13 @@ class KDEVWIDGETS_EXPORT KSaveSelectDialog : public KDialog
 	Q_OBJECT
 	
 public:
-	KSaveSelectDialog( const QList<Koncrete::Document*>& filelist,
-	                   const QList<Koncrete::Document*>& ignorelist,
+	KSaveSelectDialog( const QList<KDevelop::Document*>& filelist,
+	                   const QList<KDevelop::Document*>& ignorelist,
 	                   QWidget * parent );
 	virtual ~KSaveSelectDialog();
 	
-	QList<Koncrete::Document*> filesToSave();
-        QList<Koncrete::Document*> filesNotToSave();
+	QList<KDevelop::Document*> filesToSave();
+        QList<KDevelop::Document*> filesNotToSave();
 	
 private slots:
 	void saveNone();

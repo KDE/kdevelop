@@ -29,7 +29,7 @@
 #include <kdevast.h>
 #include <kdevdocument.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 LanguageSupport::LanguageSupport(const KComponentData &instance,

@@ -27,7 +27,7 @@
 
 class KUrl;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class ProjectManagerPart;

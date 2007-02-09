@@ -25,7 +25,7 @@ namespace ruby
 
 #define DECLARE_MODEL_NODE(k) \
 enum { __node_kind = Kind_##k }; \
-typedef Koncrete::SharedPtr<k##ModelItem> Pointer;
+typedef KDevelop::SharedPtr<k##ModelItem> Pointer;
 
 #define ITEM(item) item##ModelItem
 #define LIST(item) item##List
@@ -39,7 +39,7 @@ typedef Koncrete::SharedPtr<k##ModelItem> Pointer;
     return  ptr;
   }
 
-  class CodeModel :  public Koncrete::CodeModel
+  class CodeModel :  public KDevelop::CodeModel
     {
 
     public:
@@ -65,7 +65,7 @@ typedef Koncrete::SharedPtr<k##ModelItem> Pointer;
       void operator=(const CodeModel &other);
     };
 
-  class _CodeModelItem :  public Koncrete::CodeItem
+  class _CodeModelItem :  public KDevelop::CodeItem
     {
 
     public:

@@ -17,14 +17,14 @@
 
 class KDevKonsoleView;
 
-class KDevKonsoleViewPart : public Koncrete::Plugin
+class KDevKonsoleViewPart : public KDevelop::Plugin
 {
     Q_OBJECT
 public:
     KDevKonsoleViewPart( QObject *parent, const QStringList & );
     virtual ~KDevKonsoleViewPart();
 
-    // Koncrete::Plugin methods
+    // KDevelop::Plugin methods
     virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 

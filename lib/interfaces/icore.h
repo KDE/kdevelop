@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 
 class KMainWindow;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IUiController;

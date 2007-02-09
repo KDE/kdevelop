@@ -42,7 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
 
 CMakeImporter::CMakeImporter( QObject* parent,
                               const QStringList& )
-    : Koncrete::BuildManager( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
+    : KDevelop::BuildManager( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
     m_project = 0;
 /*    CMakeSettings* settings = CMakeSettings::self();
@@ -58,7 +58,7 @@ CMakeImporter::~CMakeImporter()
     //delete m_rootItem;
 }
 
-Koncrete::Project* CMakeImporter::project() const
+KDevelop::Project* CMakeImporter::project() const
 {
     return m_project;
 }
@@ -68,9 +68,9 @@ KUrl CMakeImporter::buildDirectory() const
      return project()->folder();
 }
 
-QList<Koncrete::ProjectFolderItem*> CMakeImporter::parse( Koncrete::ProjectFolderItem* item )
+QList<KDevelop::ProjectFolderItem*> CMakeImporter::parse( KDevelop::ProjectFolderItem* item )
 {
-    QList<Koncrete::ProjectFolderItem*> folderList;
+    QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
     if ( !folder )
         return folderList;
@@ -95,7 +95,7 @@ QList<Koncrete::ProjectFolderItem*> CMakeImporter::parse( Koncrete::ProjectFolde
             KUrl sourceFile = folder->url();
             sourceFile.adjustPath( KUrl::AddTrailingSlash );
             sourceFile.addPath( sFile );
-            new Koncrete::ProjectFileItem( sourceFile, targetItem );
+            new KDevelop::ProjectFileItem( sourceFile, targetItem );
         }
     }
 
@@ -103,7 +103,7 @@ QList<Koncrete::ProjectFolderItem*> CMakeImporter::parse( Koncrete::ProjectFolde
     return folderList;
 }
 
-Koncrete::ProjectItem* CMakeImporter::import( Koncrete::ProjectModel* model,
+KDevelop::ProjectItem* CMakeImporter::import( KDevelop::ProjectModel* model,
                                               const KUrl& fileName )
 {
     QString buildDir = CMakeSettings::self()->buildFolder();
@@ -122,26 +122,26 @@ Koncrete::ProjectItem* CMakeImporter::import( Koncrete::ProjectModel* model,
         m_projectInfo = m_xmlParser.parse( cmakeInfoFile );
         FolderInfo rootFolder = m_projectInfo.rootFolder;
         m_rootItem = new CMakeFolderItem( rootFolder, 0 );
-        m_rootItem->setText( Koncrete::Core::activeProject()->name() );
+        m_rootItem->setText( KDevelop::Core::activeProject()->name() );
     }
     return m_rootItem;
 }
 
-KUrl CMakeImporter::findMakefile( Koncrete::ProjectFolderItem* dom ) const
+KUrl CMakeImporter::findMakefile( KDevelop::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl();
 }
 
-KUrl::List CMakeImporter::findMakefiles( Koncrete::ProjectFolderItem* dom ) const
+KUrl::List CMakeImporter::findMakefiles( KDevelop::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl::List();
 }
 
-QList<Koncrete::ProjectTargetItem*> CMakeImporter::targets() const
+QList<KDevelop::ProjectTargetItem*> CMakeImporter::targets() const
 {
-    return QList<Koncrete::ProjectTargetItem*>();
+    return QList<KDevelop::ProjectTargetItem*>();
 }
 
 KUrl::List CMakeImporter::includeDirectories() const

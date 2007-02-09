@@ -53,7 +53,7 @@
 
 CPPParseJob::CPPParseJob( const KUrl &url,
                     CppLanguageSupport *parent )
-        : Koncrete::ParseJob( url, parent ),
+        : KDevelop::ParseJob( url, parent ),
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
@@ -70,9 +70,9 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
-CPPParseJob::CPPParseJob( Koncrete::Document *document,
+CPPParseJob::CPPParseJob( KDevelop::Document *document,
                     CppLanguageSupport *parent )
-        : Koncrete::ParseJob( document, parent ),
+        : KDevelop::ParseJob( document, parent ),
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
@@ -89,13 +89,13 @@ CPPParseJob::CPPParseJob( Koncrete::Document *document,
 CPPParseJob::~CPPParseJob()
 {}
 
-Koncrete::AST *CPPParseJob::AST() const
+KDevelop::AST *CPPParseJob::AST() const
 {
     Q_ASSERT ( isFinished () && m_AST );
     return m_AST;
 }
 
-Koncrete::CodeModel *CPPParseJob::codeModel() const
+KDevelop::CodeModel *CPPParseJob::codeModel() const
 {
     Q_ASSERT ( isFinished () && m_model );
     return m_model;
@@ -177,9 +177,9 @@ void ParseJob::run()
 
         QList<DUContext*> chains;
 
-        if (Koncrete::Core::activeProject()) {
+        if (KDevelop::Core::activeProject()) {
             foreach (const QString& include, parentJob()->includedFiles()) {
-                Koncrete::AST* ast = Koncrete::Core::activeProject()->persistentHash()->retrieveAST(include);
+                KDevelop::AST* ast = KDevelop::Core::activeProject()->persistentHash()->retrieveAST(include);
                 if (ast) {
                     TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
                     if (t->ducontext)

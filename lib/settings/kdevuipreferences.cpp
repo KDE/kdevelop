@@ -30,7 +30,7 @@
 
 #include "ui_uisettings.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 typedef KGenericFactory<UIPreferences> UIPreferencesFactory;

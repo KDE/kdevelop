@@ -27,7 +27,7 @@
 namespace csharp
 {
 
-class CodeDelegate: public Koncrete::CodeDelegate
+class CodeDelegate: public KDevelop::CodeDelegate
 {
     Q_OBJECT
 public:

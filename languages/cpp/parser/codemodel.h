@@ -39,7 +39,7 @@
 
 #define DECLARE_MODEL_NODE(k) \
     enum { __node_kind = Kind_##k }; \
-    typedef Koncrete::SharedPtr<k##ModelItem> Pointer;
+    typedef KDevelop::SharedPtr<k##ModelItem> Pointer;
 
 template <class _Target, class _Source>
 _Target model_static_cast(_Source item)
@@ -50,7 +50,7 @@ _Target model_static_cast(_Source item)
   return ptr;
 }
 
-class KDEVCPPPARSER_EXPORT CodeModel : public Koncrete::CodeModel
+class KDEVCPPPARSER_EXPORT CodeModel : public KDevelop::CodeModel
 {
 public:
   enum AccessPolicy
@@ -87,7 +87,7 @@ public:
   }
 
   NamespaceModelItem globalNamespace() const;
-  Koncrete::ItemCollection *root() const;
+  KDevelop::ItemCollection *root() const;
 
   void addCodeItem(CodeModelItem item);
   void removeCodeItem(CodeModelItem item);
@@ -133,7 +133,7 @@ private:
     uint m_indirections : 6;
 };
 
-class KDEVCPPPARSER_EXPORT _CodeModelItem: public Koncrete::CodeItem
+class KDEVCPPPARSER_EXPORT _CodeModelItem: public KDevelop::CodeItem
 {
 public:
   enum Kind
@@ -491,7 +491,7 @@ public:
   bool isAbstract() const;
   void setAbstract(bool isAbstract);
 
-  bool isSimilar(Koncrete::CodeItem *other, bool strict = true) const;
+  bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
 
 protected:
   _FunctionModelItem(CodeModel *model, int kind = __node_kind)

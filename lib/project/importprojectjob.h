@@ -24,7 +24,7 @@
 #include "projectmodel.h"
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class IFileManager;

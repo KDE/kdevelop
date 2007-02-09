@@ -27,7 +27,7 @@
 
 namespace KTextEditor { class SmartCursor; }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

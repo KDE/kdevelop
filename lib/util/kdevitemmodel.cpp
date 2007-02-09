@@ -21,7 +21,7 @@
 
 #include <QtCore/QVector>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 ItemModel::ItemModel(QObject *parent)

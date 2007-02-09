@@ -48,15 +48,15 @@ namespace csharp
 {
 
 ParseJob::ParseJob( const KUrl &url, CSharpLanguageSupport *parent )
-        : Koncrete::ParseJob( url, parent )
+        : KDevelop::ParseJob( url, parent )
         , m_session( new ParseSession )
         , m_AST( 0 )
         , m_model( 0 )
         , m_readFromDisk( false )
 {}
 
-ParseJob::ParseJob( Koncrete::Document *document, CSharpLanguageSupport *parent )
-        : Koncrete::ParseJob( document, parent )
+ParseJob::ParseJob( KDevelop::Document *document, CSharpLanguageSupport *parent )
+        : KDevelop::ParseJob( document, parent )
         , m_session( new ParseSession )
         , m_AST( 0 )
         , m_model( 0 )
@@ -71,13 +71,13 @@ CSharpLanguageSupport* ParseJob::csharp() const
     return static_cast<CSharpLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
-Koncrete::AST *ParseJob::AST() const
+KDevelop::AST *ParseJob::AST() const
 {
     Q_ASSERT ( isFinished () && m_AST );
     return m_AST;
 }
 
-Koncrete::CodeModel *ParseJob::codeModel() const
+KDevelop::CodeModel *ParseJob::codeModel() const
 {
     Q_ASSERT ( isFinished () && m_model );
     return m_model;

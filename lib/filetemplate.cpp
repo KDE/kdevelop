@@ -35,7 +35,7 @@
 #include "domutil.h"
 #include "kdevmainwindow.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 bool FileTemplate::exists(const QString &name, Policy p)

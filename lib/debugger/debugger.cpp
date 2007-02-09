@@ -13,7 +13,7 @@
 
 using namespace KTextEditor;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 Debugger *Debugger::s_instance = 0;

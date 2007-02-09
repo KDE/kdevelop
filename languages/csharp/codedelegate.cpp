@@ -28,7 +28,7 @@ namespace csharp
 {
 
 CodeDelegate::CodeDelegate( QObject *parent )
-        : Koncrete::CodeDelegate( parent )
+        : KDevelop::CodeDelegate( parent )
 {}
 
 CodeDelegate::~CodeDelegate()
@@ -43,7 +43,7 @@ void CodeDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option,
     QStyleOptionViewItem opt = option;
 
     QVariant value = model->data( index, Qt::UserRole );
-    Q_ASSERT( value.isValid() ); //This should be set to the Koncrete::CodeItem kind()
+    Q_ASSERT( value.isValid() ); //This should be set to the KDevelop::CodeItem kind()
 
     switch ( value.toInt() )
     {
@@ -73,7 +73,7 @@ QSize CodeDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModel
     QStyleOptionViewItem opt = option;
 
     QVariant value = model->data( index, Qt::UserRole );
-    Q_ASSERT( value.isValid() ); //This should be set to the Koncrete::CodeItem kind()
+    Q_ASSERT( value.isValid() ); //This should be set to the KDevelop::CodeItem kind()
 
     switch ( value.toInt() )
     {

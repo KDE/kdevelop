@@ -25,7 +25,7 @@
 
 #include "kdevcodeproxy.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class CodeAggregate : public QAbstractProxyModel

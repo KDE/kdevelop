@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevexport.h"
 #include <kconfigskeleton.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class KDEVPLATFORM_EXPORT ConfigSkeleton: public KConfigSkeleton

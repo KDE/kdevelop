@@ -36,7 +36,7 @@ namespace KTextEditor
    class SmartInterface;
 }
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class DocumentRange;

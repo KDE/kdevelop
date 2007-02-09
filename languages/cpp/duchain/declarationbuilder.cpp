@@ -116,7 +116,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       if (!def) {
         QualifiedIdentifier id = identifierForName(node->id);
         if (id.count() > 1) {
-          KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), Koncrete::EditorIntegrator::FrontEdge);
+          KTextEditor::Cursor pos = m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
           //kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
 
@@ -335,7 +335,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
   if (node->name) {
     QualifiedIdentifier id = identifierForName(node->name);
-    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, Koncrete::EditorIntegrator::FrontEdge);
+    KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
     Declaration* actual = 0;
     {

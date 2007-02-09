@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 
 /** This class is a stub at the moment.  It works when you have google sparsehash installed.*/
 
-namespace Koncrete
+namespace KDevelop
 {
 struct AST;
 }
@@ -52,14 +52,14 @@ struct QStrHash
     }
 };
 
-typedef sparse_hash_map<QString, Koncrete::AST*, QStrHash> PHASH;
+typedef sparse_hash_map<QString, KDevelop::AST*, QStrHash> PHASH;
 #else
 
 #include <QHash>
 
 #endif
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class LanguageSupport;
@@ -67,7 +67,7 @@ class LanguageSupport;
 class KDEVPLATFORM_EXPORT PersistentHash: public IPlugin, public IPersistentHash
 {
     Q_OBJECT
-    Q_INTERFACES( Koncrete::IPersistentHash )
+    Q_INTERFACES( KDevelop::IPersistentHash )
 public:
     PersistentHash( KInstance* instance, QObject *parent = 0 );
     virtual ~PersistentHash();

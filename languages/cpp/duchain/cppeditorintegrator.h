@@ -33,7 +33,7 @@ class AST;
  *
  * \todo introduce stacks for the state?
  */
-class KDEVCPPLANGUAGE_EXPORT CppEditorIntegrator : public Koncrete::EditorIntegrator
+class KDEVCPPLANGUAGE_EXPORT CppEditorIntegrator : public KDevelop::EditorIntegrator
 {
 public:
   CppEditorIntegrator(ParseSession* session);
@@ -62,14 +62,14 @@ public:
    */
   KTextEditor::Cursor findPosition(std::size_t token, Edge edge = BackEdge) const;
 
-  using Koncrete::EditorIntegrator::createRange;
+  using KDevelop::EditorIntegrator::createRange;
 
   /**
    * Create a new text range encompassing the given AST \a node.
    * The returned range will become the new currentRange().
    *
    * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a Koncrete::DocumentRange.
+   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
    *
    * \returns the newly created smart range.
    * \overload
@@ -81,7 +81,7 @@ public:
    * The returned range will become the new currentRange().
    *
    * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a Koncrete::DocumentRange.
+   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
    *
    * \returns the newly created smart range.
    * \overload
@@ -93,7 +93,7 @@ public:
    * The returned range will become the new currentRange().
    *
    * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a Koncrete::DocumentRange.
+   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
    *
    * \returns the newly created smart range.
    * \overload
@@ -105,7 +105,7 @@ public:
    * The returned range will become the new currentRange().
    *
    * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a Koncrete::DocumentRange.
+   * this will be a smart range, otherwise it will be a KDevelop::DocumentRange.
    *
    * \returns the newly created smart range.
    * \overload

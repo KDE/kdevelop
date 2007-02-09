@@ -25,13 +25,13 @@
 class KDialog;
 class QWidget;
 
-class KDevIDEExtension : public Koncrete::ShellExtension {
+class KDevIDEExtension : public KDevelop::ShellExtension {
 public:
     static void init();
 
     virtual QString xmlFile();
     virtual QString defaultProfile();
-    virtual Koncrete::AreaParams defaultArea();
+    virtual KDevelop::AreaParams defaultArea();
 
 protected:
     KDevIDEExtension();

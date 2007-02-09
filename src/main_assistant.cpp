@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
   app.processEvents(); //FIXME UGLY BEYOND WORDS!
 
-  using namespace Koncrete;
+  using namespace KDevelop;
   QObject::connect(PluginController::self(), SIGNAL(loadingPlugin(const QString &)),
            splash, SLOT(showMessage(const QString &)));
 

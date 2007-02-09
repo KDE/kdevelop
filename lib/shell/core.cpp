@@ -35,7 +35,7 @@
 #include "projectcontroller.h"
 #include "partcontroller.h"
 
-namespace Koncrete {
+namespace KDevelop {
 
 Core *Core::m_self = 0;
 
@@ -85,7 +85,7 @@ void Core::initialize()
     m_self->d->uiController->initialize();
 }
 
-Core *Koncrete::Core::self()
+Core *KDevelop::Core::self()
 {
     return m_self;
 }

@@ -64,7 +64,7 @@ Boston, MA 02110-1301, USA.
 // #include "kdevprojectcontroller.h"
 // #include "kdevdocumentcontroller.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 
@@ -99,7 +99,7 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
 
     setStandardToolBarMenuEnabled( true );
     setupActions();
-//     setStatusBar( new Koncrete::StatusBar( this ) );
+//     setStatusBar( new KDevelop::StatusBar( this ) );
 
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(IPlugin*)),
              this, SLOT(addPlugin(IPlugin*)));

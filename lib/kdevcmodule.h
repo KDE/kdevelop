@@ -28,7 +28,7 @@ Boston, MA 02110-1301, USA.
 
 class KUrl;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 /**

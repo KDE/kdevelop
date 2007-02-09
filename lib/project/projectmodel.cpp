@@ -26,7 +26,7 @@
 
 #include "iproject.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 struct ProjectBaseItemPrivate

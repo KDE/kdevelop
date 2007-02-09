@@ -20,7 +20,7 @@
 #include "tag.h"
 #include <QDataStream>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 Tag::Tag()

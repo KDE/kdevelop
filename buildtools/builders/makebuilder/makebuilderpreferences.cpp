@@ -35,7 +35,7 @@ typedef KGenericFactory<MakeBuilderPreferences> MakeBuilderPreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdev_makebuilder, MakeBuilderPreferencesFactory( "kcm_kdev_makebuilder" )  )
 
 MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringList& args)
-    : Koncrete::ConfigModule(MakeBuilderSettings::self(),
+    : KDevelop::ConfigModule(MakeBuilderSettings::self(),
                              MakeBuilderPreferencesFactory::componentData(),
                              parent, args)
 {
@@ -57,17 +57,17 @@ MakeBuilderPreferences::~MakeBuilderPreferences()
 
 void MakeBuilderPreferences::load()
 {
-    Koncrete::ConfigModule::load();
+    KDevelop::ConfigModule::load();
 }
 
 void MakeBuilderPreferences::save()
 {
-    Koncrete::ConfigModule::save();
+    KDevelop::ConfigModule::save();
 }
 
 void MakeBuilderPreferences::defaults()
 {
-    Koncrete::ConfigModule::defaults();
+    KDevelop::ConfigModule::defaults();
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on;

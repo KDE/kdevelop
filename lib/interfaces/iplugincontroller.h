@@ -34,7 +34,7 @@ Boston, MA 02110-1301, USA.
 
 class QExtensionManager;
 
-namespace Koncrete
+namespace KDevelop
 {
 class IPlugin;
 class ProfileEngine;

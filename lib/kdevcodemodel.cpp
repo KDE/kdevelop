@@ -26,7 +26,7 @@
 
 #include <ktexteditor/smartrange.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 CodeItem::CodeItem( const QString &name, ItemGroup *parent )

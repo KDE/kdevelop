@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevcodedelegate.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 CodeDelegate::CodeDelegate( QObject *parent )
         : QItemDelegate( parent )

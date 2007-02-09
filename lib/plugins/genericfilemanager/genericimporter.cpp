@@ -37,19 +37,19 @@
 typedef KGenericFactory<GenericImporter> GenericSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevgenericimporter, GenericSupportFactory( "kdevgenericimporter" ) )
 
-KDEV_USE_EXTENSION_INTERFACE_NS( Koncrete, IFileManager, GenericImporter )
+KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, IFileManager, GenericImporter )
 
 class GenericImporterPrivate
 {
     public:
-        Koncrete::IProject *m_project;
+        KDevelop::IProject *m_project;
 
         QStringList includes;
         QStringList excludes;
 };
 
 GenericImporter::GenericImporter( QObject *parent, const QStringList & args )
-        : Koncrete::IPlugin( GenericSupportFactory::componentData(), parent ), Koncrete::IFileManager(), d( new GenericImporterPrivate )
+        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IFileManager(), d( new GenericImporterPrivate )
 {
     Q_UNUSED( args )
     if ( d->includes.isEmpty() )
@@ -90,11 +90,11 @@ bool GenericImporter::isValid( const QFileInfo &fileInfo ) const
     return true;
 }
 
-QList<Koncrete::ProjectFolderItem*> GenericImporter::parse( Koncrete::ProjectFolderItem *item )
+QList<KDevelop::ProjectFolderItem*> GenericImporter::parse( KDevelop::ProjectFolderItem *item )
 {
     QDir dir( item->url().toLocalFile() );
 
-    QList<Koncrete::ProjectFolderItem*> folder_list;
+    QList<KDevelop::ProjectFolderItem*> folder_list;
     QFileInfoList entries = dir.entryInfoList();
 
     for ( int i = 0; i < entries.count(); ++i )
@@ -108,61 +108,61 @@ QList<Koncrete::ProjectFolderItem*> GenericImporter::parse( Koncrete::ProjectFol
         else if ( fileInfo.isDir() && fileInfo.fileName() != QLatin1String( "." )
                   && fileInfo.fileName() != QLatin1String( ".." ) )
         {
-            Koncrete::ProjectFolderItem *folder = new Koncrete::ProjectFolderItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+            KDevelop::ProjectFolderItem *folder = new KDevelop::ProjectFolderItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
             folder_list.append( folder );
         }
         else if ( fileInfo.isFile() )
         {
-             new Koncrete::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+             new KDevelop::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
         }
     }
 
     return folder_list;
 }
 
-Koncrete::ProjectItem *GenericImporter::import( Koncrete::IProject *project )
+KDevelop::ProjectItem *GenericImporter::import( KDevelop::IProject *project )
 {
-    return new Koncrete::ProjectItem( project, project->name(), 0 );;
+    return new KDevelop::ProjectItem( project, project->name(), 0 );;
 }
 
-Koncrete::ProjectFolderItem* GenericImporter::addFolder( const KUrl& url,
-        Koncrete::ProjectFolderItem * folder )
-{
-    Q_UNUSED( url )
-    Q_UNUSED( folder )
-    return 0;
-}
-
-
-Koncrete::ProjectFileItem* GenericImporter::addFile( const KUrl& url,
-        Koncrete::ProjectFolderItem * folder )
+KDevelop::ProjectFolderItem* GenericImporter::addFolder( const KUrl& url,
+        KDevelop::ProjectFolderItem * folder )
 {
     Q_UNUSED( url )
     Q_UNUSED( folder )
     return 0;
 }
 
-bool GenericImporter::renameFolder( Koncrete::ProjectFolderItem * folder, const KUrl& url )
+
+KDevelop::ProjectFileItem* GenericImporter::addFile( const KUrl& url,
+        KDevelop::ProjectFolderItem * folder )
+{
+    Q_UNUSED( url )
+    Q_UNUSED( folder )
+    return 0;
+}
+
+bool GenericImporter::renameFolder( KDevelop::ProjectFolderItem * folder, const KUrl& url )
 {
     Q_UNUSED( folder )
     Q_UNUSED( url )
     return false;
 }
 
-bool GenericImporter::renameFile( Koncrete::ProjectFileItem * file, const KUrl& url )
+bool GenericImporter::renameFile( KDevelop::ProjectFileItem * file, const KUrl& url )
 {
     Q_UNUSED(file)
     Q_UNUSED(url)
     return false;
 }
 
-bool GenericImporter::removeFolder( Koncrete::ProjectFolderItem * folder )
+bool GenericImporter::removeFolder( KDevelop::ProjectFolderItem * folder )
 {
     Q_UNUSED( folder )
     return false;
 }
 
-bool GenericImporter::removeFile( Koncrete::ProjectFileItem * file )
+bool GenericImporter::removeFile( KDevelop::ProjectFileItem * file )
 {
     Q_UNUSED( file )
     return false;

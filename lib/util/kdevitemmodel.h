@@ -27,7 +27,7 @@
 #include "kdevsharedptr.h"
 #include "kdevexport.h"
 
-namespace Koncrete
+namespace KDevelop
 {
 
 class Item;

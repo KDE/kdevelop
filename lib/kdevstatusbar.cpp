@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <klocale.h>
 
-namespace Koncrete
+namespace KDevelop
 {
 
 StatusBar::StatusBar( QWidget *parent )

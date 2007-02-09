@@ -45,7 +45,7 @@
 
 using namespace KTextEditor;
 
-namespace Koncrete
+namespace KDevelop
 {
 
 ParseJob::ParseJob( const KUrl &url,

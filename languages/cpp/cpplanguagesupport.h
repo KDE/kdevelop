@@ -31,36 +31,36 @@ class CodeAggregate;
 class CppHighlighting;
 class CppCodeCompletion;
 
-class CppLanguageSupport : public Koncrete::LanguageSupport
+class CppLanguageSupport : public KDevelop::LanguageSupport
 {
 Q_OBJECT
 public:
     CppLanguageSupport( QObject* parent, const QStringList& args = QStringList() );
     virtual ~CppLanguageSupport();
 
-    //Koncrete::LanguageSupport implementation
-    virtual Koncrete::CodeModel *codeModel( const KUrl& url ) const;
-    virtual Koncrete::CodeProxy *codeProxy() const;
-    virtual Koncrete::CodeDelegate *codeDelegate() const;
-    virtual Koncrete::CodeRepository *codeRepository() const;
-    virtual Koncrete::ParseJob *createParseJob( const KUrl &url );
-    virtual Koncrete::ParseJob *createParseJob( Koncrete::Document *document );
+    //KDevelop::LanguageSupport implementation
+    virtual KDevelop::CodeModel *codeModel( const KUrl& url ) const;
+    virtual KDevelop::CodeProxy *codeProxy() const;
+    virtual KDevelop::CodeDelegate *codeDelegate() const;
+    virtual KDevelop::CodeRepository *codeRepository() const;
+    virtual KDevelop::ParseJob *createParseJob( const KUrl &url );
+    virtual KDevelop::ParseJob *createParseJob( KDevelop::Document *document );
     virtual QStringList mimeTypes() const;
 
-    virtual Koncrete::CodeHighlighting *codeHighlighting() const;
+    virtual KDevelop::CodeHighlighting *codeHighlighting() const;
 
-    virtual void releaseAST( Koncrete::AST *ast);
+    virtual void releaseAST( KDevelop::AST *ast);
 
-    virtual void documentLoaded( Koncrete::AST *ast, const KUrl& document );
+    virtual void documentLoaded( KDevelop::AST *ast, const KUrl& document );
 
     /// Get the full path for a file based on a search through the project's
     /// include directories
     KUrl findInclude( const QString& fileName );
 
 private slots:
-    void documentLoaded( Koncrete::Document *document );
-    void documentClosed( Koncrete::Document *document );
-    void documentActivated( Koncrete::Document *document );
+    void documentLoaded( KDevelop::Document *document );
+    void documentClosed( KDevelop::Document *document );
+    void documentActivated( KDevelop::Document *document );
     void projectOpened();
     void projectClosing();
 

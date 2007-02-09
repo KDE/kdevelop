@@ -34,7 +34,7 @@
 #include "partcontroller.h"
 #include "mainwindow.h"
 
-namespace Koncrete {
+namespace KDevelop {
 
 //FIXME adymo: merge with Sublime::PartDocument
 class PartDocument: public Sublime::PartDocument {
@@ -121,7 +121,7 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     d->defaultArea->addToolView(doc->createView(), Sublime::Left);
 }
 
-void Koncrete::UiController::removeToolView(IToolViewFactory *factory)
+void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 {
     kDebug() << k_funcinfo << endl;
     //delete the tooldocument
@@ -188,7 +188,7 @@ MainWindow *UiController::defaultMainWindow()
     return d->defaultMainWindow;
 }
 
-Sublime::Area * Koncrete::UiController::defaultArea()
+Sublime::Area * KDevelop::UiController::defaultArea()
 {
     return d->defaultArea;
 }

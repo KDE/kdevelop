@@ -33,7 +33,7 @@
 typedef KGenericFactory<KDevFileManagerPart> KDevFileManagerFactory;
 K_EXPORT_COMPONENT_FACTORY(kdevfilemanager, KDevFileManagerFactory("kdevfilemanager"))
 
-class KDevFileManagerViewFactory: public Koncrete::IToolViewFactory{
+class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{
 public:
     KDevFileManagerViewFactory(KDevFileManagerPart *part): m_part(part) {}
     virtual QWidget* create(QWidget *parent = 0)
@@ -46,7 +46,7 @@ private:
 };
 
 KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QStringList &/*args*/)
-    :Koncrete::IPlugin(KDevFileManagerFactory::componentData(), parent)
+    :KDevelop::IPlugin(KDevFileManagerFactory::componentData(), parent)
 {
     setXMLFile("kdevfilemanager.rc");
 
