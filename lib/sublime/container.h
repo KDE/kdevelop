@@ -27,6 +27,8 @@ class QStackedLayout;
 
 namespace Sublime {
 
+class View;
+
 /**
 @short Container for the widgets.
 
@@ -39,8 +41,8 @@ public:
     Container(QWidget *parent = 0);
     ~Container();
 
-    /**Adds the widget to the container.*/
-    void addWidget(QWidget *w);
+    /**Adds the widget for given @p view to the container.*/
+    void addWidget(View *view);
     /**Removes the widget from the container.*/
     void removeWidget(QWidget *w);
     /** @return true if widget is placed inside this container.*/

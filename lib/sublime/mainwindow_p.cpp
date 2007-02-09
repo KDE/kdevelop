@@ -105,7 +105,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         foreach (View *view, index->views())
         {
             if (!container->hasWidget(view->widget()))
-                container->addWidget(view->widget());
+                container->addWidget(view);
         }
     }
     return Area::ContinueWalker;

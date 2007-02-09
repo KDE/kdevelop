@@ -22,6 +22,8 @@
 #include <QStackedLayout>
 #include <QTabWidget>
 
+#include "view.h"
+#include "document.h"
 #include "switcher.h"
 
 namespace Sublime {
@@ -64,10 +66,11 @@ Container::~Container()
     delete d;
 }
 
-void Container::addWidget(QWidget *w)
+void Container::addWidget(View *view)
 {
+    QWidget *w = view->widget();
     int idx = d->stack->addWidget(w);
-    d->switcher->insertItem(idx, "View");
+    d->switcher->insertItem(idx, view->document()->title());
 }
 
 void Sublime::Container::removeWidget(QWidget *w)
