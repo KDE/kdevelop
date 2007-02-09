@@ -232,7 +232,6 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         if (widgetFinder.view)
         {
             d->activeView[mw] = widgetFinder.view;
-            kDebug(9037) << "found active view" << endl;
             ///@todo adymo: shall we filter out the event?
             return false;
         }
@@ -243,7 +242,6 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         if (toolFinder.view)
         {
             d->activeToolView[mw] = toolFinder.view;
-            kDebug(9037) << "found active toolview" << endl;
             ///@todo adymo: shall we filter out the event?
             return false;
         }
