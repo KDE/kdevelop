@@ -48,9 +48,8 @@ KDEV_ADD_EXTENSION_FACTORY_NS( Koncrete, IFileManager, QMakeImporter )
 
 QMakeImporter::QMakeImporter( QObject* parent,
                               const QStringList& )
-        : Koncrete::IPlugin( QMakeSupportFactory::componentData(), parent ), Koncrete::IBuildManager(), m_rootItem( 0L )
+        : Koncrete::IPlugin( QMakeSupportFactory::componentData(), parent )
 {
-    m_project = 0;
 
     /*    QMakeSettings* settings = QMakeSettings::self();
 
@@ -62,8 +61,7 @@ QMakeImporter::QMakeImporter( QObject* parent,
 
 QMakeImporter::~QMakeImporter()
 {
-    delete m_rootItem;
-    m_rootItem = 0;
+
 }
 
 KUrl QMakeImporter::buildDirectory(Koncrete::ProjectItem* project) const
