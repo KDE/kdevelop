@@ -72,7 +72,7 @@ public:
         QStandardItem* item = m_part->core()->projectController()->projectModel()->itemFromIndex( index );
         if ( item->type() == ProjectBaseItem::File )
         {
-            ProjectItem* projectItem = dynamic_cast<ProjectItem*>( item );
+            ProjectBaseItem* projectItem = dynamic_cast<ProjectBaseItem*>( item );
             if ( projectItem && projectItem->file() )
                 m_part->core()->uiController()->openUrl( projectItem->file()->url() );
         }
