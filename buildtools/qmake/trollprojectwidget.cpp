@@ -2017,8 +2017,9 @@ QString TrollProjectWidget::constructMakeCommandLine( Scope* s )
     }
     if ( !DomUtil::readBoolEntry( dom, "/kdevtrollproject/make/abortonerror" ) )
         cmdline += " -k";
+    bool runmultiple = DomUtil::readBoolEntry(dom, "/kdevautoproject/make/runmultiplejobs");
     int jobs = DomUtil::readIntEntry( dom, "/kdevtrollproject/make/numberofjobs" );
-    if ( jobs != 0 )
+    if ( jobs != 0 && runmultiple )
     {
         cmdline += " -j";
         cmdline += QString::number( jobs );
