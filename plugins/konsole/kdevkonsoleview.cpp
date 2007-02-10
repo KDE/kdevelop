@@ -1,6 +1,7 @@
 /***************************************************************************
 *   Copyright (C) 2003, 2006 by KDevelop Authors                          *
 *   kdevelop-devel@kde.org                                                *
+*   Copyright (C) 2007 by Andreas Pakulat <apaku@gmx.de>                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -25,14 +26,57 @@
 
 #include <kparts/part.h>
 
-#include <kdevcore.h>
-#include <project/kdevprojectcontroller.h>
-#include <kdevdocumentcontroller.h>
+#include <icore.h>
+#include <iprojectcontroller.h>
+// #include <kdevdocumentcontroller.h>
 
-KDevKonsoleView::KDevKonsoleView( QWidget *parent )
-        : QWidget( parent ),
-        m_part( 0 )
+#include "kdevkonsoleview_part.h"
+
+class KDevKonsoleViewPrivate
 {
+public:
+    KDevKonsoleViewPart* m_part;
+    KDevKonsoleView* m_view;
+    KParts::ReadOnlyPart *konsolepart;
+    QVBoxLayout *m_vbox;
+
+    void init( )
+    {
+        Q_ASSERT( konsolepart == 0 );
+
+
+        if ( KLibFactory * factory = KLibLoader::self() ->factory( "libkonsolepart" ) )
+        {
+            if ( ( konsolepart = qobject_cast<KParts::ReadOnlyPart*>( factory->create( m_view ) ) ) )
+            {
+                konsolepart->widget() ->setFocusPolicy( Qt::WheelFocus );
+                konsolepart->widget() ->setFocus();
+
+                if ( QFrame * frame = qobject_cast<QFrame*>( konsolepart->widget() ) )
+                    frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+
+                m_vbox->addWidget( konsolepart->widget() );
+                m_view->setFocusProxy( konsolepart->widget() );
+                konsolepart->widget() ->show();
+            }
+        }
+        else
+        {
+            m_vbox->addWidget(
+                new QLabel( i18n( "Konsole not available or libkonsolepart not in path." ),
+                            m_view ) );
+        }
+    }
+
+};
+
+KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPart *part, QWidget* parent )
+        : QWidget( parent ), d(new KDevKonsoleViewPrivate)
+
+{
+    d->m_part = part;
+    d->m_view = this;
+    d->konsolepart = 0;
     setObjectName( i18n( "Konsole" ) );
 
     setWhatsThis( i18n( "<b>Konsole</b><p>"
@@ -40,11 +84,11 @@ KDevKonsoleView::KDevKonsoleView( QWidget *parent )
     setWindowIcon( KIcon( "konsole" ) );
     setWindowTitle( i18n( "Konsole" ) );
 
-    m_vbox = new QVBoxLayout( this );
-    m_vbox->setMargin( 0 );
-    m_vbox->setSpacing( 0 );
+    d->m_vbox = new QVBoxLayout( this );
+    d->m_vbox->setMargin( 0 );
+    d->m_vbox->setSpacing( 0 );
 
-    init();
+    d->init();
 
     //TODO Make this configurable in the future,
     // but by default the konsole shouldn't
@@ -52,68 +96,12 @@ KDevKonsoleView::KDevKonsoleView( QWidget *parent )
 
 //     connect( KDevelop::Core::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
 //              this, SLOT( documentActivated( KDevDocument* ) ) );
-
-    connect( KDevelop::Core::projectController(), SIGNAL( projectOpened() ),
-             this, SLOT( projectOpened() ) );
-
-    connect( KDevelop::Core::projectController(), SIGNAL( projectClosed() ),
-             this, SLOT( projectClosed() ) );
 }
 
 KDevKonsoleView::~KDevKonsoleView()
 {
-    delete m_part;
-}
-
-void KDevKonsoleView::init()
-{
-    Q_ASSERT( m_part == 0 );
-
-    if ( KLibFactory * factory = KLibLoader::self() ->factory( "libkonsolepart" ) )
-    {
-        if ( ( m_part = qobject_cast<KParts::ReadOnlyPart*>( factory->create( this ) ) ) )
-        {
-            m_part->widget() ->setFocusPolicy( Qt::WheelFocus );
-            m_part->widget() ->setFocus();
-
-            if ( QFrame * frame = qobject_cast<QFrame*>( m_part->widget() ) )
-                frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-
-            m_vbox->addWidget( m_part->widget() );
-            connect( m_part, SIGNAL( destroyed() ), this, SLOT( partDestroyed() ) );
-
-            setFocusProxy( m_part->widget() );
-
-            m_part->widget() ->show();
-        }
-    }
-    else
-    {
-        m_vbox->addWidget(
-            new QLabel( i18n( "Konsole not available or libkonsolepart not in path." ),
-                        this ) );
-    }
-}
-
-void KDevKonsoleView::partDestroyed()
-{
-    m_part = 0;
-    init();
-}
-
-void KDevKonsoleView::projectOpened()
-{
-    setDirectory( KDevelop::Core::projectController()->globalFile() );
-}
-
-void KDevKonsoleView::projectClosed()
-{
-    setDirectory( KDevelop::Core::projectController()->projectsDirectory() );
-}
-
-void KDevKonsoleView::documentActivated( KDevelop::Document *document )
-{
-    setDirectory( document->url() );
+    delete d->konsolepart;
+    delete d;
 }
 
 void KDevKonsoleView::setDirectory( const KUrl &url )
@@ -121,8 +109,8 @@ void KDevKonsoleView::setDirectory( const KUrl &url )
     if ( !url.isValid() || !url.isLocalFile() )
         return ;
 
-    if ( m_part && url != m_part->url() )
-        m_part->openUrl( url );
+    if ( d->konsolepart && url != d->konsolepart->url() )
+        d->konsolepart->openUrl( url );
 }
 
 #include "kdevkonsoleview.moc"

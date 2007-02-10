@@ -234,10 +234,10 @@ public:
 
     ICore *core() const;
 
-    virtual void registerExtensions() = 0;
-    virtual void unregisterExtensions() = 0;
+    virtual void registerExtensions();
+    virtual void unregisterExtensions();
 
-    virtual QStringList extensions() const = 0 ;
+    virtual QStringList extensions() const;
 
     template<class Extension> Extension* extension()
     {

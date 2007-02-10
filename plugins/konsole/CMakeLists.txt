@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib)
 
 
 ########### next target ###############
@@ -11,7 +11,7 @@ set(kdevkonsoleview_PART_SRCS
 
 kde4_automoc(${kdevkonsoleview_PART_SRCS})
 kde4_add_plugin(kdevkonsoleview ${kdevkonsoleview_PART_SRCS})
-target_link_libraries(kdevkonsoleview ${KDE4_KDECORE_LIBS} kdevplatform)
+target_link_libraries(kdevkonsoleview ${KDE4_KDECORE_LIBS} kdevplatforminterfaces)
 
 install(TARGETS kdevkonsoleview DESTINATION ${PLUGIN_INSTALL_DIR} )
 

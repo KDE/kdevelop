@@ -39,7 +39,7 @@ public:
     virtual QWidget* create(QWidget *parent = 0)
     {
         Q_UNUSED(parent)
-        return new FileManager(m_part);
+        return new FileManager(m_part, parent);
     }
 private:
     KDevFileManagerPart *m_part;
@@ -50,7 +50,6 @@ KDevFileManagerPart::KDevFileManagerPart(QObject *parent, const QStringList &/*a
 {
     setXMLFile("kdevfilemanager.rc");
 
-//     QTimer::singleShot(0, this, SLOT(init()));
     init();
 }
 
@@ -69,22 +68,11 @@ Qt::DockWidgetArea KDevFileManagerPart::dockWidgetAreaHint() const
     return Qt::LeftDockWidgetArea;
 }
 
-void KDevFileManagerPart::registerExtensions()
-{
-}
-
-void KDevFileManagerPart::unregisterExtensions()
-{
-}
-
-QStringList KDevFileManagerPart::extensions() const
-{
-    return QStringList();
-}
-
 void KDevFileManagerPart::unload()
 {
     core()->uiController()->removeToolView(m_factory);
 }
 
 #include "kdevfilemanagerpart.moc"
+
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

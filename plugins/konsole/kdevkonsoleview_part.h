@@ -1,6 +1,7 @@
 /***************************************************************************
 *   Copyright (C) 2003 by KDevelop Authors                                *
 *   kdevelop-devel@kde.org                                                *
+*   Copyright (C) 2007 by Andreas Pakulat <apaku@gmx.de>                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -12,12 +13,11 @@
 #ifndef __KDEVPART_KDEVKONSOLEVIEW_H__
 #define __KDEVPART_KDEVKONSOLEVIEW_H__
 
-#include <qpointer.h>
-#include "kdevplugin.h"
+#include "iplugin.h"
 
-class KDevKonsoleView;
+class KDevKonsoleViewFactory;
 
-class KDevKonsoleViewPart : public KDevelop::Plugin
+class KDevKonsoleViewPart : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
@@ -25,13 +25,12 @@ public:
     virtual ~KDevKonsoleViewPart();
 
     // KDevelop::Plugin methods
-    virtual QWidget *pluginView() const;
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
 private:
-    QPointer<KDevKonsoleView> m_konsoleView;
+    class KDevKonsoleViewFactory *m_factory;
 };
 
 #endif
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

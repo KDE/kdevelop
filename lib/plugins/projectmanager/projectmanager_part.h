@@ -63,10 +63,6 @@ public:
     virtual void unload();
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
-    QStringList extensions() const { return QStringList(); }
-    void registerExtensions() {}
-    void unregisterExtensions() {}
-
 Q_SIGNALS:
     void refresh();
     void addedProjectItem(ProjectBaseItem *dom);

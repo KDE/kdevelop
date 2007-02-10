@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2006 by Alexander Dymo                                  *
  *   adymo@kdevelop.org                                                    *
+ *   Copyright (C) 2006 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,9 +39,39 @@
 #include "drilldownview.h"
 #include "kdevdirmodel.h"
 
-FileManager::FileManager(KDevFileManagerPart *part)
-    :QWidget(0), m_part(part)
+class FileManagerPrivate
 {
+public:
+
+    KDirModel *m_model;
+    DrillDownView *m_view;
+    KDevFileManagerPart *m_part;
+    void open(const QModelIndex &index)
+    {
+        if (!index.isValid())
+            return;
+
+        KFileItem *fileItem = m_model->itemForIndex(index);
+        if (!fileItem)
+            return;
+
+        if (fileItem->isFile())
+            openFile(fileItem);
+    }
+
+    void openFile(KFileItem *fileItem)
+    {
+        if (!fileItem)
+            return;
+
+        m_part->core()->uiController()->openUrl(fileItem->url());
+    }
+};
+
+FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
+    :QWidget(parent), d(new FileManagerPrivate)
+{
+    d->m_part = part;
     setObjectName("FileManager");
 //     setWindowIcon(SmallIcon("kdevelop"));
     setWindowTitle(i18n("File Manager"));
@@ -49,43 +81,18 @@ FileManager::FileManager(KDevFileManagerPart *part)
     l->setMargin(0);
     l->setSpacing(0);
 
-    m_view = new DrillDownView(this);
-    l->addWidget(m_view);
+    d->m_view = new DrillDownView(this);
+    l->addWidget(d->m_view);
 
-    init();
-}
+    d->m_model = new KDevDirModel(this);
+    d->m_model->dirLister()->openUrl(KUrl::fromPath(QDir::rootPath()));
+    d->m_view->setModel(d->m_model);
 
-void FileManager::init()
-{
-    m_model = new KDevDirModel(this);
-    m_model->dirLister()->openUrl(KUrl::fromPath(QDir::rootPath()));
-    m_view->setModel(m_model);
-
-    connect(m_view, SIGNAL(doubleClicked(const QModelIndex &)),
+    connect(d->m_view, SIGNAL(doubleClicked(const QModelIndex &)),
         this, SLOT(open(const QModelIndex &)));
-    connect(m_view, SIGNAL(returnPressed(const QModelIndex &)),
+    connect(d->m_view, SIGNAL(returnPressed(const QModelIndex &)),
         this, SLOT(open(const QModelIndex &)));
-}
-
-void FileManager::open(const QModelIndex &index)
-{
-    if (!index.isValid())
-        return;
-
-    KFileItem *fileItem = m_model->itemForIndex(index);
-    if (!fileItem)
-        return;
-
-    if (fileItem->isFile())
-        openFile(fileItem);
-}
-
-void FileManager::openFile(KFileItem *fileItem)
-{
-    if (!fileItem)
-        return;
-
-    m_part->core()->uiController()->openUrl(fileItem->url());
 }
 
 #include "filemanager.moc"
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

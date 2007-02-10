@@ -32,9 +32,6 @@ public:
 
     // KDevelop::Plugin methods
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
-    virtual void registerExtensions();
-    virtual void unregisterExtensions();
-    virtual QStringList extensions() const;
     virtual void unload();
 
 private slots:
@@ -46,3 +43,5 @@ private:
 };
 
 #endif
+
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

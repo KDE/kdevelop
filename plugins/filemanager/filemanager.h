@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2006 by Alexander Dymo                                  *
  *   adymo@kdevelop.org                                                    *
+ *   Copyright (C) 2006 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,19 +34,15 @@ class KDevFileManagerPart;
 class FileManager: public QWidget {
     Q_OBJECT
 public:
-    FileManager(KDevFileManagerPart *part);
-
-private slots:
-    void open(const QModelIndex &index);
-    void openFile(KFileItem *fileItem);
+    FileManager(KDevFileManagerPart *part, QWidget* parent);
 
 private:
-    void init();
+    Q_PRIVATE_SLOT(d, void open(const QModelIndex &index))
+    Q_PRIVATE_SLOT(d, void openFile(KFileItem *fileItem))
 
-    KDirModel *m_model;
-    DrillDownView *m_view;
-    KDevFileManagerPart *m_part;
+    struct FileManagerPrivate* const d;
 
 };
 
 #endif
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
