@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="28" name="kdevelop" >
+<kpartgui version="29" name="kdevelop" >
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
     <Action name="file_new"/>
@@ -145,7 +145,6 @@
   <DefineGroup name="view_operations"/>
   <DefineGroup name="zoom_operations"/>
   <Merge/>
-  <Action name="help_whats_this"/>
 </ToolBar>
 
 <ToolBar name="buildToolBar" position="Top" noMerge="1">
