@@ -89,9 +89,17 @@ QWidget *Container::widget(int index) const
     return d->stack->widget(index);
 }
 
-bool Sublime::Container::hasWidget(QWidget *w)
+bool Container::hasWidget(QWidget *w)
 {
     return d->stack->indexOf(w) != -1;
+}
+
+void Container::setCurrentWidget(QWidget *w)
+{
+    if (!hasWidget(w))
+        return;
+    d->stack->setCurrentWidget(w);
+    d->switcher->setCurrentIndex(d->stack->indexOf(w));
 }
 
 }

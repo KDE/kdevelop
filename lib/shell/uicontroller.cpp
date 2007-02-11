@@ -48,11 +48,20 @@ public:
     {
         Q_UNUSED( parent );
         KParts::Part *part = m_partController->createPart(url());
-        return part->widget();
+        m_partController->addPart(part);
+        QWidget *w = part->widget();
+        m_partForWidget[w] = part;
+        return w;
+    }
+
+    KParts::Part *partForWidget(QWidget *w)
+    {
+        return m_partForWidget[w];
     }
 
 private:
     PartController *m_partController;
+    QMap<QWidget*, KParts::Part*> m_partForWidget;
 };
 
 
@@ -165,6 +174,8 @@ void UiController::openUrl(const KUrl &url)
         //add view to the area
         area->addView(partView);
     }
+    activeMainWindow()->activateView(partView);
+    d->core->partController()->setActivePart(doc->partForWidget(partView->widget()), partView->widget());
     ///@todo adymo: activate and focus the partView
 }
 

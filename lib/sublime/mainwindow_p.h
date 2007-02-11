@@ -33,6 +33,7 @@ class QDockWidget;
 namespace Sublime {
 
 class View;
+class Container;
 class Controller;
 class AreaIndex;
 class MainWindow;
@@ -70,6 +71,7 @@ public:
     Area *area;
     QList<QDockWidget*> docks;
     QMap<View*, QDockWidget*> viewDocks;
+    QMap<View*, Container*> viewContainers;
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);

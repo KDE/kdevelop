@@ -105,7 +105,10 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         foreach (View *view, index->views())
         {
             if (!container->hasWidget(view->widget()))
+            {
                 container->addWidget(view);
+                d->viewContainers[view] = container;
+            }
         }
     }
     return Area::ContinueWalker;
@@ -173,6 +176,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     QSplitter *splitter = m_indexSplitters[index];
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
+    viewContainers.remove(view);
     if (container->count() > 1)
     {
         //container is not empty or this is a root index

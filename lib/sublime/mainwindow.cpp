@@ -21,7 +21,9 @@
 #include <kdebug.h>
 
 #include "area.h"
+#include "view.h"
 #include "controller.h"
+#include "container.h"
 #include "mainwindow_p.h"
 
 namespace Sublime {
@@ -92,8 +94,16 @@ View *MainWindow::activeToolView()
     return d->controller->activeToolView(this);
 }
 
+void MainWindow::activateView(View *view)
+{
+    if (!d->viewContainers.contains(view))
+        return;
+    d->viewContainers[view]->setCurrentWidget(view->widget());
+}
+
 }
 
 #include "mainwindow.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
