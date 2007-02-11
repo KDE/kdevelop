@@ -99,6 +99,7 @@ void MainWindow::activateView(View *view)
     if (!d->viewContainers.contains(view))
         return;
     d->viewContainers[view]->setCurrentWidget(view->widget());
+    view->widget()->setFocus();
 }
 
 }
