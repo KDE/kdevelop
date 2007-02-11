@@ -30,6 +30,10 @@ public:
     {
         return new KDevKonsoleView(m_part, parent);
     }
+    virtual Qt::DockWidgetArea defaultPosition(const QString areaName)
+    {
+        return Qt::BottomDockWidgetArea;
+    }
 private:
     KDevKonsoleViewPart *m_part;
 };

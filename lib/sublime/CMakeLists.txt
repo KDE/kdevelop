@@ -21,6 +21,7 @@ set(sublime_LIB_SRCS
     view_p.cpp
     viewcreator.cpp
     viewwidgetcreator.cpp
+    sublimedefs.cpp
 )
 
 # set(sublime_UI

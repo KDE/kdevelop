@@ -16,46 +16,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IUICONTROLLER_H
-#define IUICONTROLLER_H
+#include "sublimedefs.h"
 
-#include "kdevexport.h"
+namespace Sublime {
 
-#include <QStringList>
-#include <kurl.h>
-
-namespace KDevelop {
-
-class IDocument;
-
-class KDEVPLATFORM_EXPORT IToolViewFactory {
-public:
-    virtual ~IToolViewFactory() {}
-    virtual QWidget* create(QWidget *parent = 0) = 0;
-    virtual Qt::DockWidgetArea defaultPosition(const QString areaName) = 0;
-
-};
-
-class KDEVPLATFORM_EXPORT IUiController {
-public:
-    virtual ~IUiController();
-
-    enum SwitchMode { ThisWindow, NewWindow };
-    enum ShowMode { ShowByDefault, HideByDefault };
-
-    virtual void switchToArea(const QString &areaName, SwitchMode switchMode) = 0;
-
-    virtual void addToolView(const QString &name, IToolViewFactory *factory) = 0;
-    virtual void removeToolView(IToolViewFactory *factory) = 0;
-
-    virtual void openUrl(const KUrl &url) = 0;
-
-protected:
-    IUiController();
-};
+Position dockAreaToPosition(Qt::DockWidgetArea dockArea)
+{
+    switch (dockArea) {
+        case Qt::LeftDockWidgetArea: return Sublime::Left;
+        case Qt::RightDockWidgetArea: return Sublime::Right;
+        case Qt::TopDockWidgetArea: return Sublime::Top;
+        case Qt::BottomDockWidgetArea: return Sublime::Bottom;
+        default: return Sublime::Left;
+    }
+    return Sublime::Left;
+}
 
 }
 
-#endif
-
-//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

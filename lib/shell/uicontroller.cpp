@@ -127,7 +127,8 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     kDebug() << k_funcinfo << endl;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
-    d->defaultArea->addToolView(doc->createView(), Sublime::Left);
+    d->defaultArea->addToolView(doc->createView(),
+        Sublime::dockAreaToPosition(factory->defaultPosition(d->defaultArea->objectName())));
 }
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)

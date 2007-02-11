@@ -19,7 +19,10 @@
 #ifndef SUBLIMESUBLIMEDEFS_H
 #define SUBLIMESUBLIMEDEFS_H
 
+#include <Qt>
 #include <QFlags>
+
+#include <kdevexport.h>
 
 /**
 @file sublimedefs.h
@@ -32,6 +35,8 @@ namespace Sublime {
     Positions class (QFlags based).*/
     enum Position { Left = 1, Right = 2, Top = 4, Bottom = 8, AllPositions = Left|Right|Top|Bottom };
     Q_DECLARE_FLAGS(Positions, Position)
+
+    SUBLIME_EXPORT Position dockAreaToPosition(Qt::DockWidgetArea dockArea);
 
 }
 
