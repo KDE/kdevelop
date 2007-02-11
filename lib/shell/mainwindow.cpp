@@ -236,6 +236,8 @@ void MainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically." ) );
 
     action = actionCollection()->addAction( "file_new" );
+    action->setIcon(KIcon("filenew"));
+    action->setShortcut( Qt::CTRL + Qt::Key_N );
     action->setText( i18n( "&New File" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileNew() ) );
     action->setToolTip( i18n( "New File" ) );
