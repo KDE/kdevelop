@@ -1,7 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="27" name="kdevelop" >
+<kpartgui version="28" name="kdevelop" >
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
+    <Action name="file_new"/>
     <DefineGroup name="new_merge"/>
     <Separator/>
     <Action name="file_open"/>

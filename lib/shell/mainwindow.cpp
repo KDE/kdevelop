@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstatusbar.h>
+#include <ktemporaryfile.h>
 
 #include <kparts/part.h>
 #include <ktexteditor/view.h>
@@ -233,6 +234,12 @@ void MainWindow::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
     action->setToolTip( i18n( "Split Vertical" ) );
     action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically." ) );
+
+    action = actionCollection()->addAction( "file_new" );
+    action->setText( i18n( "&New File" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( fileNew() ) );
+    action->setToolTip( i18n( "New File" ) );
+    action->setWhatsThis( i18n( "<b>New File</b><p>Creates an empty file." ) );
 }
 
 
@@ -472,6 +479,11 @@ void KDevelop::MainWindow::activePartChanged(KParts::Part *part)
 {
     if ( Core::self()->uiControllerInternal()->activeMainWindow() == this)
         createGUI(part);
+}
+
+void MainWindow::fileNew()
+{
+    Core::self()->uiControllerInternal()->openEmptyDocument();
 }
 
 }

@@ -24,6 +24,8 @@
 
 #include <kdebug.h>
 
+#include <ktexteditor/document.h>
+
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/partdocument.h>
@@ -47,7 +49,11 @@ public:
     virtual QWidget *createViewWidget(QWidget *parent = 0)
     {
         Q_UNUSED( parent );
-        KParts::Part *part = m_partController->createPart(url());
+        KParts::Part *part;
+        if (url().isEmpty())
+            part = m_partController->createTextPart(url(), "", false);
+        else
+            part = m_partController->createPart(url());
         m_partController->addPart(part);
         QWidget *w = part->widget();
         m_partForWidget[w] = part;
@@ -209,6 +215,14 @@ Sublime::Area * KDevelop::UiController::defaultArea()
 void UiController::initialize()
 {
     defaultMainWindow()->initialize();
+}
+
+void KDevelop::UiController::openEmptyDocument()
+{
+    PartDocument *doc = new PartDocument(d->core->partController(), this, KUrl());
+    Sublime::View *view = doc->createView();
+    activeArea()->addView(view);
+    activeMainWindow()->activateView(view);
 }
 
 }

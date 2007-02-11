@@ -69,6 +69,8 @@ protected:
     virtual bool queryClose();
 
 private Q_SLOTS:
+    void fileNew();
+
     void gotoNextWindow();
     void gotoPreviousWindow();
     void gotoFirstWindow();
