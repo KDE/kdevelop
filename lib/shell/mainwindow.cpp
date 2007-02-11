@@ -84,9 +84,6 @@ public:
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
-    ///@todo adymo: figure out why this doesn't work
-//     Core::self()->partController()->addManagedTopLevelWidget(this);
-
     setObjectName( QLatin1String( "MainWindow" ) );
     d = new MainWindowPrivate();
     d->center = new QStackedWidget( this );
@@ -259,8 +256,9 @@ void MainWindow::saveSettings( bool projectIsLoaded )
 void MainWindow::initialize()
 {
     createGUI(0);
+    Core::self()->partController()->addManagedTopLevelWidget(this);
     connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
-        this, SLOT(createGUI(KParts::Part*)));
+        this, SLOT(activePartChanged(KParts::Part*)));
 /*    connect( Core::documentController(), SIGNAL( documentActivated( Document* ) ),
              this, SLOT( documentActivated( Document* ) ) );
     connect( Core::projectController(), SIGNAL( projectOpened() ),
@@ -472,7 +470,8 @@ void MainWindow::split(Qt::Orientation orientation)
 
 void KDevelop::MainWindow::activePartChanged(KParts::Part *part)
 {
-    createGUI(part);
+    if ( Core::self()->uiControllerInternal()->activeMainWindow() == this)
+        createGUI(part);
 }
 
 }
