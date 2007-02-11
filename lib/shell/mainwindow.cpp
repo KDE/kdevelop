@@ -259,6 +259,8 @@ void MainWindow::saveSettings( bool projectIsLoaded )
 void MainWindow::initialize()
 {
     createGUI(0);
+    connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
+        this, SLOT(createGUI(KParts::Part*)));
 /*    connect( Core::documentController(), SIGNAL( documentActivated( Document* ) ),
              this, SLOT( documentActivated( Document* ) ) );
     connect( Core::projectController(), SIGNAL( projectOpened() ),
@@ -466,6 +468,11 @@ void MainWindow::split(Qt::Orientation orientation)
         return;
 
     area()->addView(view->document()->createView(), view, orientation);
+}
+
+void KDevelop::MainWindow::activePartChanged(KParts::Part *part)
+{
+    createGUI(part);
 }
 
 }

@@ -109,6 +109,7 @@ private Q_SLOTS:
 
     void toggleStatusbar();
 
+    void activePartChanged(KParts::Part *part);
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );
