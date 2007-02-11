@@ -43,19 +43,9 @@ class MainWindowPrivate;
 KDevelop main window interface.
 Provides methods to control the main window of an application.
 */
-class KDEVPLATFORM_EXPORT MainWindow : public Sublime::MainWindow
-{
+class KDEVPLATFORM_EXPORT MainWindow: public Sublime::MainWindow {
     friend class UiController;
     Q_OBJECT
-
-public:
-    enum UIMode
-    {
-        NeutralMode,
-        TopLevelMode,
-        DockedMode
-    };
-
 public:
     MainWindow( Sublime::Controller *parent = 0, Qt::WFlags flags = KDE_DEFAULT_WINDOWFLAGS );
     virtual ~MainWindow();
@@ -71,7 +61,6 @@ public Q_SLOTS:
 
 
 Q_SIGNALS:
-    void modeChanged( UIMode mode );
     void finishedLoading();
     void contextMenu( KMenu *menu, const Context *context );
 
