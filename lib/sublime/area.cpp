@@ -121,10 +121,17 @@ Area::~Area()
     delete d;
 }
 
-void Area::addView(View *view)
+void Area::addView(View *view, View *after)
 {
-    d->currentIndex->add(view);
-    emit viewAdded(d->currentIndex, view);
+    AreaIndex *index = d->currentIndex;
+    if (after)
+    {
+        AreaIndex *i = indexOf(after);
+        if (i)
+            index = i;
+    }
+    index->add(view);
+    emit viewAdded(index, view);
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 

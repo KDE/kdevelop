@@ -70,7 +70,7 @@ public:
     void setTitle(const QString &title);
 
     /**Adds the @p view to the list of views at the current area index.*/
-    void addView(View *view);
+    void addView(View *view, View *after = 0);
     /**Adds the @p view to the area splitting the @p viewToSplit using
     given @p orientation.*/
     void addView(View *view, View *viewToSplit, Qt::Orientation orientation);
