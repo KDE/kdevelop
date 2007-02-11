@@ -108,12 +108,6 @@ void ProjectManagerPart::openURL( const KUrl &url )
 //     return m_projectOverview->currentFileItem();
 // }
 
-Qt::DockWidgetArea ProjectManagerPart::dockWidgetAreaHint() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
-
 bool ProjectManagerPart::computeChanges( const QStringList &oldFileList, const QStringList &newFileList )
 {
     QMap<QString, bool> oldFiles, newFiles;

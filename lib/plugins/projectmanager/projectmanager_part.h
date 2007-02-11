@@ -61,7 +61,6 @@ public:
 
     // Plugin methods
     virtual void unload();
-    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
 Q_SIGNALS:
     void refresh();

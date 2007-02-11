@@ -67,11 +67,6 @@ KDevFileManagerPart::~KDevFileManagerPart()
 {
 }
 
-Qt::DockWidgetArea KDevFileManagerPart::dockWidgetAreaHint() const
-{
-    return Qt::LeftDockWidgetArea;
-}
-
 void KDevFileManagerPart::unload()
 {
     core()->uiController()->removeToolView(m_factory);

@@ -30,8 +30,6 @@ public:
     KDevFileManagerPart(QObject *parent, const QStringList &args);
     ~KDevFileManagerPart();
 
-    // KDevelop::Plugin methods
-    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
     virtual void unload();
 
 private slots:
