@@ -60,7 +60,7 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
         {
             return new ProjectManager( m_part, parent );
         }
-        virtual Qt::DockWidgetArea defaultPosition(const QString areaName)
+        virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
         {
             return Qt::RightDockWidgetArea;
         }

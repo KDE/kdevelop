@@ -32,7 +32,7 @@ class KDEVPLATFORM_EXPORT IToolViewFactory {
 public:
     virtual ~IToolViewFactory() {}
     virtual QWidget* create(QWidget *parent = 0) = 0;
-    virtual Qt::DockWidgetArea defaultPosition(const QString areaName) = 0;
+    virtual Qt::DockWidgetArea defaultPosition(const QString &areaName) = 0;
 
 };
 

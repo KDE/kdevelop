@@ -41,7 +41,7 @@ public:
         Q_UNUSED(parent)
         return new FileManager(m_part, parent);
     }
-    virtual Qt::DockWidgetArea defaultPosition(const QString areaName)
+    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
     {
         return Qt::LeftDockWidgetArea;
     }
