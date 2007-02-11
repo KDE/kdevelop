@@ -2423,6 +2423,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			for( QMap<QString, FileDom>::const_iterator it = newFiles.begin(); it != newFiles.end(); ++it ) {
 				FileDom oldFile = codeModel()->fileByName( it.key() );
 				oldFile->update( *it );
+				codeModel()->mergeGroups( oldFile->groupId(), (*it)->groupId() ); ///Merge parsing-groups together
 			}
 		} else {
 			///Remove the current files and replace them with the new ones

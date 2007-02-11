@@ -469,6 +469,16 @@ void StoreWalker::checkTemplateDeclarator( TemplateModelItem* item ) {
 	}
 }
 
+int StoreWalker::mergeGroups( int g1, int g2 ) {
+	int ng = m_store->mergeGroups( g1, g2 );
+	for( QMap<QString, FileDom>::iterator it = m_overrides.begin(); it != m_overrides.end(); ++it ) {
+		int g =(*it)->groupId();
+		if( g == g1 || g == g2 )
+			(*it)->setGroupId( ng );
+	}
+	return ng;
+}
+
 void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 {
 	int startLine, startColumn;
@@ -533,7 +543,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 				///since we are creating a link between both files, put them into the same parsing-group
 				FileDom dm = embedderClass->file();
 				if( dm ) {
-					m_file->setGroupId( m_store->mergeGroups( dm->groupId(), m_file->groupId() ) );
+					m_file->setGroupId( mergeGroups( dm->groupId(), m_file->groupId() ) );
 				}else{
 					kdDebug() << "file " << embedderClass->fileName() << " missing in store \n";
 				}

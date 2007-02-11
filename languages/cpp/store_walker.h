@@ -90,6 +90,9 @@ private:
             return m_comments.front();
         }
     }
+
+    //Own implementation that also merges the groups of the overrides
+    int mergeGroups( int g1, int g2 );
     
 public:
     void pushComment( QString comm ) {
