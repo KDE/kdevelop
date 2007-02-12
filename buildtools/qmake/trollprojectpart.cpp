@@ -696,7 +696,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
     	cmdline = "tmake ";
     }else
     {
-      cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "")+" ";
+        cmdline = DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/qmake", "")+" ";
     }
 
     //QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
