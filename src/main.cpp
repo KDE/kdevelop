@@ -40,9 +40,9 @@ int main( int argc, char *argv[] )
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", I18N_NOOP( "KDevelop" ),
                           VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP( "(c) 1999-2005, The KDevelop developers" ), "", "http://www.kdevelop.org" );
+                          I18N_NOOP( "(c) 1999-2007, The KDevelop developers" ), "", "http://www.kdevelop.org" );
     aboutData.addAuthor( "Matt Rogers", I18N_NOOP( "Maintainer" ), "mattr@kde.org");
-    aboutData.addAuthor( "Alexander Dymo", I18N_NOOP( "Release coordinator, Overall improvements, Pascal support, C++ support, New File and Documentation parts" ), "adymo@kdevelop.org" );
+    aboutData.addAuthor( "Alexander Dymo", I18N_NOOP( "Co-maintainer, architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( "Amilcar do Carmo Lucas", I18N_NOOP( "Release coordinator, API documentation, Doxygen and autoproject patches" ), "amilcar@ida.ing.tu-bs.de" );
     aboutData.addAuthor( "Bernd Gehrmann", I18N_NOOP( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
     aboutData.addAuthor( "Caleb Tennis", I18N_NOOP( "KTabBar, bugfixes" ), "caleb@aei-tech.com" );
