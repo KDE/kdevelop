@@ -25,7 +25,7 @@
 
 class KListViewItem;
 
-class ProfileEditor: public ProfileEditorBase {
+class ProfileEditor : public ProfileEditorBase {
     Q_OBJECT
 public:
     ProfileEditor(QWidget *parent = 0, const char *name = 0);
