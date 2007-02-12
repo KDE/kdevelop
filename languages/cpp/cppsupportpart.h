@@ -176,7 +176,7 @@ public:
 	void createAccessMethods( ClassDom theClass, VariableDom theVariable );
 
     bool isQueued( const QString& file ) const;
-    bool switchHeaderImpl( const QString& file, int line, int col, QString candidate = QString::null, bool scrollOnly = false );
+    bool switchHeaderImpl( const QString& file, int line, int col, bool scrollOnly = false );
 
 signals:
 	void fileParsed( const QString& fileName );
@@ -294,6 +294,9 @@ private:
 	void MakeMemberHelper( QString& text, int& atline, int& atcol );
 
     QString sourceOrHeaderCandidate( const KURL &url = KURL() );
+	QValueList<FileDom> sourceOrHeaderCandidateList( const KURL &url = KURL() );
+
+	bool jumpIfDeclMatchesDef( const FunctionDom& decl, const FunctionDefinitionDom& def, bool useDeclInfo, bool scrollOnly );
 
 	QStringList modifiedFileList();
 	QString findSourceFile();

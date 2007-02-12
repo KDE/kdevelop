@@ -1092,6 +1092,56 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 	return QString::null;
 }
 
+QValueList<FileDom> CppSupportPart::sourceOrHeaderCandidateList( const KURL &url )
+{
+	QValueList<FileDom> candidateList;
+	// get the path of the currently active document
+	QString urlPath;
+	if ( url.isEmpty() )
+	{
+		KTextEditor::Document * doc =
+			dynamic_cast<KTextEditor::Document*>( partController() ->activePart() );
+		if ( !doc )
+			return candidateList;
+		urlPath = doc->url().path();
+	}
+	else
+	{
+		urlPath = url.path();
+	}
+	QStringList possibleExtsList;
+	QFileInfo fi( urlPath );
+	QString path = fi.filePath();
+	QString ext = fi.extension();
+	// special case for template classes created by the new class dialog
+	if ( path.endsWith( "_impl.h" ) )
+	{
+		possibleExtsList = "h";
+	}
+	// if file is a header file search for implementation file
+	else if ( QStringList::split( ',', "h,H,hh,hxx,hpp,tlh" ).contains( ext ) )
+	{
+		possibleExtsList = QStringList::split( ',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h" );
+	}
+	// if file is an implementation file, search for header file
+	else if ( QStringList::split( ',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl" ).contains( ext ) )
+	{
+		possibleExtsList = QStringList::split( ',', "h,H,hh,hxx,hpp,tlh" );
+	}
+	for ( QStringList::iterator fileIt = m_projectFileList.begin(); fileIt != m_projectFileList.end(); ++fileIt )
+	{
+		QFileInfo info( QDir::cleanDirPath( m_projectDirectory + QDir::separator() + *fileIt ) );
+		if ( info.exists() && possibleExtsList.contains( info.extension() ) )
+		{
+			if ( codeModel()->hasFile( info.filePath() ) )
+			{
+				candidateList << codeModel()->fileByName( info.filePath() );
+			}
+		}
+	}
+	return candidateList;
+}
+
 void CppSupportPart::slotSaveMemory() {
 	if( m_backgroundParser ) {
 		///This is done so the caches are completely empty after kdevelop was idle for some time(else it would be waste of memory). The background-parsers internal lexer-cache-manager just cares about keeping the count of cached files under a specific count, but doesn't decrease that count when kdevelop is idle.
@@ -1103,10 +1153,6 @@ void CppSupportPart::slotSaveMemory() {
 
 void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 {
-	QString candidate = sourceOrHeaderCandidate();
-	if ( candidate == QString::null )
-		return ;
-
 	bool attemptMatch = true;
 	KConfig *config = CppSupportFactory::instance() ->config();
 	if ( config )
@@ -1121,13 +1167,13 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 		unsigned int currentline, column;
 		m_activeViewCursor->cursorPositionReal( &currentline, &column );
 
-		if ( switchHeaderImpl( m_activeFileName, currentline, column, candidate, scrollOnly ) )
+		if ( switchHeaderImpl( m_activeFileName, currentline, column, scrollOnly ) )
 			return;
 	}
 
 	// last chance
 	KURL url;
-	url.setPath( candidate );
+	url.setPath( sourceOrHeaderCandidate() );
 
 	if ( scrollOnly )
 		return;
@@ -1137,94 +1183,75 @@ void CppSupportPart::slotSwitchHeader( bool scrollOnly )
 		partController() ->splitCurrentDocument( url );
 }
 
-bool CppSupportPart::switchHeaderImpl( const QString& file, int line, int col, QString candidate, bool scrollOnly )
+bool CppSupportPart::switchHeaderImpl( const QString& file, int line, int col, bool scrollOnly )
 {
     bool handled = false;
 
-    if ( candidate == QString::null )
-        candidate = sourceOrHeaderCandidate( file );
+    QString candidate = sourceOrHeaderCandidate( file );
 
-    if ( candidate != QString::null ) {
+    QValueList<FileDom> candidates;
+    if ( codeModel()->hasFile( candidate ) ) candidates << codeModel()->fileByName( candidate );
 
-        static KURL lastSyncedUrl;
-        static int lastSyncedLine = -1;
-
-        QValueList<FileDom> candidates;
-        if( codeModel()->hasFile( candidate ) ) candidates << codeModel()->fileByName( candidate );
-        FileDom activeFile = codeModel() ->fileByName( file );
+    FunctionDom d;
+    FileDom activeFile = codeModel() ->fileByName( file );
+    if ( activeFile ) {
         candidates += activeFile->wholeGroup();
-
         CodeModelUtils::CodeModelHelper h( codeModel(), activeFile );
-        FunctionDom d = h.functionAt( line, col );
-
-        if( d ) {
-            if( d->isFunctionDefinition() ) {
-                //Find the declaration in one of the other files
-                for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
+        d = h.functionAt( line, col );
+    }
+    if ( d ) {
+        if( d->isFunctionDefinition() ) {
+            //Find the declaration in one of the other files
+            QValueList<FileDom>::iterator it = candidates.begin();
+            for( ; it != candidates.end() && !handled; ++it ) {
+                FileDom source = *it;
+                // found it. can we find a matching declaration?
+                FunctionList functionList = CodeModelUtils::allFunctionsDetailed( source ).functionList;
+                for ( FunctionList::ConstIterator it_decl = functionList.begin();
+                      it_decl != functionList.end() && !handled; ++it_decl )
+                {
+                    if ( (void*)&(*it_decl) == (void*)d.data() || (scrollOnly && (*it_decl)->fileName() == file ) ) continue;
+                    handled = jumpIfDeclMatchesDef( *it_decl, (FunctionDefinitionModel*) d.data(), true, scrollOnly );
+                }
+            }
+            if ( !handled ) {
+                //Couldn't find the declaration using the filename as a hint, try iterating through the project files.
+                candidates = sourceOrHeaderCandidateList( file );
+                for( it = candidates.begin(); it != candidates.end() && !handled; ++it ) {
                     FileDom source = *it;
-                    // found it. can we find a matching declaration?
                     FunctionList functionList = CodeModelUtils::allFunctionsDetailed( source ).functionList;
                     for ( FunctionList::ConstIterator it_decl = functionList.begin();
-                          it_decl != functionList.end(); ++it_decl )
+                          it_decl != functionList.end() && !handled; ++it_decl )
                     {
-                        if( (void*)&(*it_decl) == (void*)d.data() || (scrollOnly && (*it_decl)->fileName() == file ) ) continue;
-                        if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*)(d.data()) ) )
-                        {
-                            // found the declaration, let's jump!
-                            ( *it_decl ) ->getStartPosition( &line, &col );
-                            KURL url;
-                            url.setPath( (*it_decl)->fileName() );
-                            if ( scrollOnly ) {
-                                KParts::ReadOnlyPart* part = partController()->partForURL( url );
-                                uint currentLine = lastSyncedLine;
-                                if( part ) {
-                                    KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
-                                    if( iface )
-                                        iface->cursorPosition( &currentLine, (uint*) &col );
-                                }
-                                partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
-                            } else if ( !splitHeaderSourceConfig()->splitEnabled() )
-                                partController() ->editDocument( url, line );
-                            else
-                                partController() ->splitCurrentDocument( url, line );
-                            lastSyncedLine = line;
-                            lastSyncedUrl = url;
-                            handled= true;
-                        }
+                        if ( (void*)&(*it_decl) == (void*)d.data() || (scrollOnly && (*it_decl)->fileName() == file ) ) continue;
+                        handled = jumpIfDeclMatchesDef( *it_decl, (FunctionDefinitionModel*) d.data(), true, scrollOnly );
                     }
                 }
-            } else {
-                //Find the definition in one of the other files
-                for( QValueList<FileDom>::iterator it = candidates.begin(); it != candidates.end(); ++it ) {
+            }
+        } else {
+            //Find the definition in one of the other files
+            QValueList<FileDom>::iterator it = candidates.begin();
+            for( ; it != candidates.end() && !handled; ++it ) {
+                FileDom source = *it;
+                FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( source ).functionList;
+                for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
+                      it_def != functionDefList.end() && !handled; ++it_def )
+                {
+                   if ( *it_def == d || (scrollOnly && (*it_def)->fileName() == file ) ) continue;
+                   handled = jumpIfDeclMatchesDef( d, *it_def, false, scrollOnly );
+                }
+            }
+           if ( !handled ) {
+                //Couldn't find the definition using the filename as a hint, try iterating through the project files.
+                candidates = sourceOrHeaderCandidateList( file );
+                for( it = candidates.begin(); it != candidates.end() && !handled; ++it ) {
                     FileDom source = *it;
                     FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( source ).functionList;
                     for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin();
-                          it_def != functionDefList.end(); ++it_def )
+                          it_def != functionDefList.end() && !handled; ++it_def )
                     {
-                        if( *it_def == d || (scrollOnly && (*it_def)->fileName() == file ) ) continue;
-                        if ( CodeModelUtils::compareDeclarationToDefinition( d, *it_def ) )
-                        {
-                            // found the declaration, let's jump!
-                            ( *it_def ) ->getStartPosition( &line, &col );
-                            KURL url;
-                            url.setPath( (*it_def)->fileName() );
-                            if ( scrollOnly ) {
-                                KParts::ReadOnlyPart* part = partController()->partForURL( url );
-                                uint currentLine = lastSyncedLine;
-                                if( part ) {
-                                    KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
-                                    if( iface )
-                                        iface->cursorPosition( &currentLine, (uint*) &col );
-                                }
-                                partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
-                            } else if ( !splitHeaderSourceConfig()->splitEnabled() )
-                                partController() ->editDocument( url, line );
-                            else
-                                partController() ->splitCurrentDocument( url, line );
-                            lastSyncedLine = line;
-                            lastSyncedUrl = url;
-                            handled= true;
-                        }
+                        if ( *it_def == d || (scrollOnly && (*it_def)->fileName() == file ) ) continue;
+                        handled = jumpIfDeclMatchesDef( d, *it_def, false, scrollOnly );
                     }
                 }
             }
@@ -1232,6 +1259,47 @@ bool CppSupportPart::switchHeaderImpl( const QString& file, int line, int col, Q
     }
 
     return handled;
+}
+
+bool CppSupportPart::jumpIfDeclMatchesDef( const FunctionDom& decl, const FunctionDefinitionDom& def, bool useDeclInfo, bool scrollOnly )
+{
+	bool handled = false;
+
+	if ( CodeModelUtils::compareDeclarationToDefinition( decl, def ) )
+	{
+		static KURL lastSyncedUrl;
+		static int lastSyncedLine = -1;
+
+		int line, col;
+		KURL url;
+
+		if ( useDeclInfo ) {
+			decl->getStartPosition( &line, &col );
+			url.setPath( decl->fileName() );
+		} else {
+			def->getStartPosition( &line, &col );
+			url.setPath( def->fileName() );
+		}
+
+		if ( scrollOnly ) {
+			KParts::ReadOnlyPart* part = partController()->partForURL( url );
+			int currentLine = lastSyncedLine;
+			if( part ) {
+				KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+				if( iface )
+					iface->cursorPosition( (uint*) &currentLine, (uint*) &col );
+			}
+			partController() ->scrollToLineColumn( url, line, -1, lastSyncedLine != currentLine || lastSyncedUrl != url );
+		} else if ( !splitHeaderSourceConfig()->splitEnabled() )
+			partController() ->editDocument( url, line );
+		else
+			partController() ->splitCurrentDocument( url, line );
+		lastSyncedLine = line;
+		lastSyncedUrl = url;
+		handled = true;
+	}
+
+	return handled;
 }
 
 void CppSupportPart::slotGotoIncludeFile()
