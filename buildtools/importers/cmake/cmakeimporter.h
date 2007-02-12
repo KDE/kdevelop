@@ -94,6 +94,10 @@ public:
     virtual KUrl findMakefile( KDevelop::ProjectFolderItem* dom ) const;
     virtual KUrl::List findMakefiles( KDevelop::ProjectFolderItem* dom ) const;
 
+    virtual void registerExtensions();
+    virtual void unregisterExtensions();
+    virtual QStringList extensions() const;
+
 
 private:
 

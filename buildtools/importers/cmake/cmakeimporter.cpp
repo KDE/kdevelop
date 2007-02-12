@@ -151,6 +151,26 @@ KUrl::List CMakeImporter::includeDirectories(KDevelop::ProjectBaseItem *item) co
     return m_includeDirList;
 }
 
+QStringList CMakeImporter::extensions() const
+{
+    return QStringList() << "IBuildManager" << "IFileManager";
+}
+
+void CMakeImporter::registerExtensions()
+{
+    extensionManager()->registerExtensions( new CMakeImporterIFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
+    extensionManager()->registerExtensions( new CMakeImporterIBuildManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
+}
+void CMakeImporter::unregisterExtensions()
+{
+    extensionManager()->unregisterExtensions( new CMakeImporterIFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
+    extensionManager()->unregisterExtensions( new CMakeImporterIBuildManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
+}
+
 #include "cmakeimporter.moc"
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
