@@ -19,10 +19,12 @@
  */
 
 #include <QString>
+
+#include <iproject.h>
 #include "cmakemodelitems.h"
 
-CMakeFolderItem::CMakeFolderItem( const FolderInfo& fi, KDevelop::ProjectItem* item )
-    : KDevelop::ProjectBuildFolderItem( fi.name, item )
+CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const FolderInfo& fi, QStandardItem* item )
+    : KDevelop::ProjectItem( project, fi.name, item )
 {
     m_folderInfo = fi;
     KUrl::List includeList;
@@ -42,8 +44,8 @@ FolderInfo CMakeFolderItem::folderInfo() const
     return m_folderInfo;
 }
 
-CMakeTargetItem::CMakeTargetItem( const TargetInfo& target, CMakeFolderItem* item)
-    : KDevelop::ProjectTargetItem( target.name, item )
+CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const TargetInfo& target, CMakeFolderItem* item)
+    : KDevelop::ProjectTargetItem( project, target.name, item )
 {
     m_includeList = item->includeDirectories();
     m_targetInfo = target;

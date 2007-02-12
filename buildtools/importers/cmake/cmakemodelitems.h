@@ -21,18 +21,24 @@
 #ifndef CMAKETARGETITEM_H
 #define CMAKETARGETITEM_H
 
-#include <kdevprojectmodel.h>
+#include <projectmodel.h>
+#include <domutil.h>
 #include "cmakexmlparser.h"
 #include <kdevexport.h>
+
+namespace KDevelop {
+class IProject;
+}
+
 /**
  * The project model item for CMake folders.
  *
  * @author Matt Rogers <mattr@kde.org>
  */
-class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
 {
 public:
-    CMakeFolderItem( const FolderInfo& fi,  KDevelop::ProjectItem* item = 0 );
+    CMakeFolderItem( KDevelop::IProject *project, const FolderInfo& fi, QStandardItem* item = 0 );
     ~CMakeFolderItem();
 
     FolderInfo folderInfo() const;
@@ -50,7 +56,7 @@ private:
 class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    CMakeTargetItem( const TargetInfo& target, CMakeFolderItem* item );
+    CMakeTargetItem( KDevelop::IProject *project, const TargetInfo& target, CMakeFolderItem* item );
     ~CMakeTargetItem();
 
     TargetInfo targetInfo() const;

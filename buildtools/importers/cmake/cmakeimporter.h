@@ -24,9 +24,11 @@
 #include <QList>
 #include <QString>
 
-#include "domutil.h"
-#include "kdevprojectmodel.h"
-#include "kdevbuildmanager.h"
+#include <ibuildmanager.h>
+#include <iplugin.h>
+
+#include <domutil.h>
+
 #include "cmakexmlparser.h"
 
 class QDir;
@@ -34,31 +36,37 @@ class QObject;
 
 namespace KDevelop
 {
-class Project;
+class IProject;
 class ProjectItem;
 class ProjectFolderItem;
+class ProjectBaseItem;
 class ProjectFileItem;
 class ProjectTargetItem;
-class ProjectBuilder;
+class IProjectBuilder;
 }
+
+class CMakeFolderItem;
 
 class cmLocalGenerator;
 
-class CMakeImporter : public KDevelop::BuildManager
+class CMakeImporter : public KDevelop::IPlugin, public KDevelop::IBuildManager
 {
+Q_OBJECT
+Q_INTERFACES( KDevelop::IBuildManager )
+Q_INTERFACES( KDevelop::IFileManager )
 public:
     CMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
 
     virtual ~CMakeImporter();
 
-    virtual KDevelop::Project* project() const;
-    virtual KDevelop::ProjectBuilder* builder() const { return 0; }
-    virtual KUrl buildDirectory() const;
-    virtual KUrl::List includeDirectories() const;
-    virtual KUrl::List preprocessorDefines() const { return KUrl::List(); }
+//     virtual KDevelop::IProject* project() const;
+    virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const { return 0; }
+    virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
+    virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
+    virtual KUrl::List preprocessorDefines(KDevelop::ProjectBaseItem *) const { return KUrl::List(); }
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& /*folder */,
-            KDevelop::Project* /*parent*/ ) { return false; }
+            KDevelop::ProjectFolderItem* /*parent*/ ) { return false; }
 
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
             KDevelop::ProjectFolderItem* ) { return false; }
@@ -72,25 +80,26 @@ public:
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
 
-    virtual bool removeFile( KDevelop::ProjectFileItem*,
-                             KDevelop::ProjectFolderItem* ) { return false; }
+    virtual bool removeFile( KDevelop::ProjectFileItem* ) { return false; }
     virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*,
                                        KDevelop::ProjectTargetItem* ) { return false; }
+
+    virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&) { return false; }
+    virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    virtual KDevelop::ProjectItem* import( KDevelop::ProjectModel* model,
-                                     const KUrl& fileName );
+    virtual KDevelop::ProjectItem* import( KDevelop::IProject *project );
     virtual KUrl findMakefile( KDevelop::ProjectFolderItem* dom ) const;
     virtual KUrl::List findMakefiles( KDevelop::ProjectFolderItem* dom ) const;
 
 
 private:
 
-    KDevelop::Project* m_project;
-    KDevelop::ProjectItem* m_rootItem;
-    KDevelop::ProjectBuilder* m_builder;
+//     KDevelop::IProject* m_project;
+    CMakeFolderItem* m_rootItem;
+    KDevelop::IProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
     CMakeXmlParser m_xmlParser;

@@ -20,6 +20,8 @@ set(kdevplatformshell_LIB_SRCS
     # This will be changed once mattr has thought about configuration.
      ../kdevconfig.cpp
      ../kdevconfigskeleton.cpp
+     ../domutil.cpp
+     ../kdevcmodule.cpp
 )
 
 kde4_automoc(${kdevplatformshell_LIB_SRCS})

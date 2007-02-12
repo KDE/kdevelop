@@ -112,21 +112,6 @@ class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectBaseItem
         class ProjectFolderItemPrivate* const d;
 };
 
-/**
- * Special folder, the project root folder
- */
-class KDEVPLATFORM_EXPORT ProjectItem: public ProjectFolderItem
-{
-    public:
-        ProjectItem( IProject*, const QString &name, QStandardItem *parent = 0 );
-        ~ProjectItem();
-
-        int type() const;
-
-        ProjectItem* projectItem() const;
-};
-
-
 
 /**
  * Folder which contains buildable targets as part of a buildable project
@@ -155,6 +140,22 @@ class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
     private:
         class ProjectBuildFolderItemPrivate* const d;
 };
+
+/**
+ * Special folder, the project root folder
+ */
+class KDEVPLATFORM_EXPORT ProjectItem: public ProjectBuildFolderItem
+{
+    public:
+        ProjectItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        ~ProjectItem();
+
+        int type() const;
+
+        ProjectItem* projectItem() const;
+};
+
+
 
 /**
  * Object which represents a target in a build system.

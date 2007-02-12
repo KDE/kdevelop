@@ -24,14 +24,15 @@
 #include <QVector>
 #include <QDomDocument>
 
+#include <QtDesigner/QExtensionFactory>
 
 #include <kurl.h>
 #include <kio/job.h>
 
-#include "kdevcore.h"
-#include "kdevproject.h"
+#include "icore.h"
+#include "iproject.h"
 #include "kgenericfactory.h"
-#include "kdevprojectmodel.h"
+#include "projectmodel.h"
 
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
@@ -40,11 +41,13 @@ typedef KGenericFactory<CMakeImporter> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
                             CMakeSupportFactory( "kdevcmakeimporter" ) )
 
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildManager, CMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IFileManager, CMakeImporter )
+
 CMakeImporter::CMakeImporter( QObject* parent,
                               const QStringList& )
-    : KDevelop::BuildManager( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
+    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
-    m_project = 0;
 /*    CMakeSettings* settings = CMakeSettings::self();
 
     //what do the settings say about our generator?
@@ -58,14 +61,14 @@ CMakeImporter::~CMakeImporter()
     //delete m_rootItem;
 }
 
-KDevelop::Project* CMakeImporter::project() const
-{
-    return m_project;
-}
+// KDevelop::IProject* CMakeImporter::project() const
+// {
+//     return m_project;
+// }
 
-KUrl CMakeImporter::buildDirectory() const
+KUrl CMakeImporter::buildDirectory(KDevelop::ProjectItem *item) const
 {
-     return project()->folder();
+    return item->project()->folder();
 }
 
 QList<KDevelop::ProjectFolderItem*> CMakeImporter::parse( KDevelop::ProjectFolderItem* item )
@@ -85,17 +88,17 @@ QList<KDevelop::ProjectFolderItem*> CMakeImporter::parse( KDevelop::ProjectFolde
     }
 
     foreach ( FolderInfo sfi, fi.subFolders )
-        folderList.append( new CMakeFolderItem( sfi, folder ) );
+        folderList.append( new CMakeFolderItem( item->project(), sfi, folder ) );
 
     foreach ( TargetInfo ti, fi.targets )
     {
-        CMakeTargetItem* targetItem = new CMakeTargetItem( ti, folder );
+        CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), ti, folder );
         foreach( QString sFile, ti.sources )
         {
             KUrl sourceFile = folder->url();
             sourceFile.adjustPath( KUrl::AddTrailingSlash );
             sourceFile.addPath( sFile );
-            new KDevelop::ProjectFileItem( sourceFile, targetItem );
+            new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
         }
     }
 
@@ -103,8 +106,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeImporter::parse( KDevelop::ProjectFolde
     return folderList;
 }
 
-KDevelop::ProjectItem* CMakeImporter::import( KDevelop::ProjectModel* model,
-                                              const KUrl& fileName )
+KDevelop::ProjectItem* CMakeImporter::import( KDevelop::IProject *project )
 {
     QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
@@ -121,8 +123,8 @@ KDevelop::ProjectItem* CMakeImporter::import( KDevelop::ProjectModel* model,
     {
         m_projectInfo = m_xmlParser.parse( cmakeInfoFile );
         FolderInfo rootFolder = m_projectInfo.rootFolder;
-        m_rootItem = new CMakeFolderItem( rootFolder, 0 );
-        m_rootItem->setText( KDevelop::Core::activeProject()->name() );
+        m_rootItem = new CMakeFolderItem( project, rootFolder, 0 );
+        m_rootItem->setText( project->name() );
     }
     return m_rootItem;
 }
@@ -144,12 +146,11 @@ QList<KDevelop::ProjectTargetItem*> CMakeImporter::targets() const
     return QList<KDevelop::ProjectTargetItem*>();
 }
 
-KUrl::List CMakeImporter::includeDirectories() const
+KUrl::List CMakeImporter::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     return m_includeDirList;
 }
 
+#include "cmakeimporter.moc"
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
-
-

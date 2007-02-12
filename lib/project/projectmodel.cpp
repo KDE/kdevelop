@@ -131,7 +131,7 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
 
 
 ProjectItem::ProjectItem( IProject * project, const QString & name, QStandardItem * parent )
-    : ProjectFolderItem( project, project->folder(), parent )
+    : ProjectBuildFolderItem( project, project->folder(), parent )
 {
     setText( name );
 }
