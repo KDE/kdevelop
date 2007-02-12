@@ -24,6 +24,7 @@
 namespace Sublime {
 
 class Area;
+class View;
 class MainWindow;
 
 /**Proxy class to give descendants access to MainWindow::setArea
@@ -34,6 +35,8 @@ protected:
     void setArea(MainWindow *w, Area *area);
     /**Unsets the area clearing main window.*/
     void clearArea(MainWindow *w);
+    /**Emits activeViewChanged signal from the mainwindow.*/
+    void emitActiveViewChanged(MainWindow *w, View *view);
 
 };
 

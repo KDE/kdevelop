@@ -232,6 +232,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         if (widgetFinder.view)
         {
             d->activeView[mw] = widgetFinder.view;
+            emitActiveViewChanged(mw, widgetFinder.view);
             ///@todo adymo: shall we filter out the event?
             return false;
         }

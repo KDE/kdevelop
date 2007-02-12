@@ -35,6 +35,7 @@ struct ContainerPrivate {
     void widgetActivated(int idx)
     {
         stack->setCurrentIndex(idx);
+        stack->widget(idx)->setFocus();
     }
 
     Switcher *switcher;

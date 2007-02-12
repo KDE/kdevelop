@@ -101,6 +101,7 @@ private Q_SLOTS:
     void toggleStatusbar();
 
     void activePartChanged(KParts::Part *part);
+    void changeActiveView(Sublime::View *view);
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );

@@ -16,7 +16,7 @@ set(kdevplatformshell_LIB_SRCS
     projectcontroller.cpp
     project.cpp
     partcontroller.cpp
-    partcontroller.h
+    partdocument.cpp
     # This will be changed once mattr has thought about configuration.
      ../kdevconfig.cpp
      ../kdevconfigskeleton.cpp

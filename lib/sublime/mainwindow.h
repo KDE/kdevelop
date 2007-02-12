@@ -74,6 +74,8 @@ Q_SIGNALS:
     void areaCleared(Sublime::Area*);
     /**Emitted after the new area has been shown in this mainwindow.*/
     void areaChanged(Sublime::Area*);
+    /**Emitted when the active view is changed.*/
+    void activeViewChanged(Sublime::View*);
 
 private:
     void init();
@@ -87,6 +89,8 @@ private:
     void setArea(Area *area);
     /**Unsets the area clearing main window.*/
     void clearArea();
+    /**Emits activeViewChanged signal.*/
+    void emitActiveViewChanged(View *view);
 
     struct MainWindowPrivate *d;
     friend class MainWindowOperator;

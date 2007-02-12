@@ -61,6 +61,7 @@ Boston, MA 02110-1301, USA.
 // #include "kdevprofileengine.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
+#include "partdocument.h"
 #include "uicontroller.h"
 // #include "kdevprojectcontroller.h"
 // #include "kdevdocumentcontroller.h"
@@ -98,9 +99,6 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
     setStandardToolBarMenuEnabled( true );
     setupActions();
 //     setStatusBar( new KDevelop::StatusBar( this ) );
-
-    connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(IPlugin*)),
-             this, SLOT(addPlugin(IPlugin*)));
 
     setXMLFile( ShellExtension::getInstance() ->xmlFile() );
 }
@@ -266,8 +264,12 @@ void MainWindow::initialize()
 {
     createGUI(0);
     Core::self()->partController()->addManagedTopLevelWidget(this);
+    connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(IPlugin*)),
+             this, SLOT(addPlugin(IPlugin*)));
     connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
         this, SLOT(activePartChanged(KParts::Part*)));
+    connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
+        this, SLOT(changeActiveView(Sublime::View*)));
 /*    connect( Core::documentController(), SIGNAL( documentActivated( Document* ) ),
              this, SLOT( documentActivated( Document* ) ) );
     connect( Core::projectController(), SIGNAL( projectOpened() ),
@@ -486,6 +488,23 @@ void KDevelop::MainWindow::activePartChanged(KParts::Part *part)
 void MainWindow::fileNew()
 {
     Core::self()->uiControllerInternal()->openEmptyDocument();
+}
+
+void MainWindow::changeActiveView(Sublime::View *view)
+{
+    PartDocument *doc = qobject_cast<KDevelop::PartDocument*>(view->document());
+    if (doc)
+    {
+        if (view->hasWidget())
+            Core::self()->partController()->setActivePart(doc->partForWidget(view->widget()));
+    }
+    else
+    {
+        //activated view is not a part document so we need to remove active part gui
+        KParts::Part *activePart = Core::self()->partController()->activePart();
+        if (activePart)
+            guiFactory()->removeClient(activePart);
+    }
 }
 
 }

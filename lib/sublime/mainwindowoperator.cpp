@@ -32,6 +32,11 @@ void MainWindowOperator::clearArea(MainWindow *w)
     w->clearArea();
 }
 
+void MainWindowOperator::emitActiveViewChanged(MainWindow *w, View *view)
+{
+    w->emitActiveViewChanged(view);
+}
+
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

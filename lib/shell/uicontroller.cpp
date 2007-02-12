@@ -24,52 +24,17 @@
 
 #include <kdebug.h>
 
-#include <ktexteditor/document.h>
-
 #include <sublime/area.h>
 #include <sublime/view.h>
-#include <sublime/partdocument.h>
 #include <sublime/tooldocument.h>
 
 #include "core.h"
 #include "shellextension.h"
 #include "partcontroller.h"
 #include "mainwindow.h"
+#include "partdocument.h"
 
 namespace KDevelop {
-
-//FIXME adymo: merge with Sublime::PartDocument
-class PartDocument: public Sublime::PartDocument {
-public:
-    PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url)
-        :Sublime::PartDocument(controller, url), m_partController(partController)
-    {
-    }
-
-    virtual QWidget *createViewWidget(QWidget *parent = 0)
-    {
-        Q_UNUSED( parent );
-        KParts::Part *part;
-        if (url().isEmpty())
-            part = m_partController->createTextPart(url(), "", false);
-        else
-            part = m_partController->createPart(url());
-        m_partController->addPart(part);
-        QWidget *w = part->widget();
-        m_partForWidget[w] = part;
-        return w;
-    }
-
-    KParts::Part *partForWidget(QWidget *w)
-    {
-        return m_partForWidget[w];
-    }
-
-private:
-    PartController *m_partController;
-    QMap<QWidget*, KParts::Part*> m_partForWidget;
-};
-
 
 class UiControllerPrivate {
 public:
