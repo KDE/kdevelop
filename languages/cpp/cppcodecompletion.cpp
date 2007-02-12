@@ -60,7 +60,7 @@ void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEdito
 void CppCodeCompletion::documentLoaded(KDevelop::Document* document)
 {
   if (document->textDocument()) {
-    foreach (KDocument::View* view, document->textDocument()->views())
+    foreach (KTextEditor::View* view, document->textDocument()->views())
       connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), SLOT(cursorPositionChanged()));
 
     connect(document->textDocument(), SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
