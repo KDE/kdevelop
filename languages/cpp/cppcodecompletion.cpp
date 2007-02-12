@@ -4215,20 +4215,26 @@ void CppCodeCompletion::jumpCursorContext( FunctionType f )
 	
 	EvaluationResult result = evaluateExpressionAt( line, column, conf );
 	
-	TypeDesc type = result.resultType;
-	
-	if ( type.resolved() ) 
+	DeclarationInfo d = result.sourceVariable;
+	if ( !d )
 	{
-		if ( type.resolved()->asFunction() ) 
+		LocateResult type = result.resultType;
+		if ( type && type->resolved() )
 		{
-			DeclarationInfo d = type.resolved()->getDeclarationInfo();
-			QString fileName = d.file == "current_file" ? m_activeFileName : d.file.operator QString();
-			
-			if ( f == Definition && m_pSupport->switchHeaderImpl( fileName, d.startLine, d.startCol ) )
-				return;
-			
-			m_pSupport->partController()->editDocument( fileName, d.startLine );
+			if ( type->resolved()->asFunction() )
+			{
+				d = type->resolved()->getDeclarationInfo();
+			}
 		}
+	}
+	if ( d )
+	{
+		QString fileName = d.file == "current_file" ? m_activeFileName : d.file.operator QString();
+		
+		if ( f == Definition && m_pSupport->switchHeaderImpl( fileName, d.startLine, d.startCol ) )
+			return;
+		
+		m_pSupport->partController()->editDocument( fileName, d.startLine );
 	}
 }
 
