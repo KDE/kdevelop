@@ -33,4 +33,5 @@ DOXYGEN_PROJECTNAME = KDevelop QMake parser
 DOXYGEN_DOCDIRPREFIX = kdevparser
 include ../../../../Doxyfile.am
 
-noinst_HEADERS = qmake_lex.h
+noinst_HEADERS = qmake.ll qmake.yy qmake_lex.h
+SUBDIRS = tests

@@ -53,7 +53,7 @@ public:
 private:
   virtual void enterRealProject( QMake::ProjectAST* p )
   {
-      kdDebug(9024) << getIndent() << "--------- Entering Project: " << replaceWs(p->fileName()) << " --------------" << endl;
+      kdDebug(9024) << getIndent() << "--------- Entering Project: " << replaceWs(p->fileName()) << "| LineEnding:" << p->lineEnding() << " --------------" << endl;
       indent += 4;
       QMake::ASTVisitor::enterRealProject(p);
   }

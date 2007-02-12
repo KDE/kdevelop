@@ -113,6 +113,12 @@ public:
         Empty          /**<Project does not exist, the AST is empty*/
     };
 
+    enum LineEnding {
+        Unix,
+        MacOS,
+        Windows
+    };
+
     /**Constructs a project node of given @p kind.*/
     ProjectAST(Kind kind = Project): AST(AST::ProjectAST), m_kind(kind) {}
 
@@ -130,6 +136,9 @@ public:
     void setFileName(const QString& fileName) { m_fileName = fileName; }
     QString fileName() const { return m_fileName; }
 
+    void setLineEnding( LineEnding );
+    LineEnding lineEnding();
+
     /**Scoped identifier (scope name or function name).*/
     QString scopedID;
     /**Function arguments. Empty for other kinds of projects.*/
@@ -138,7 +147,7 @@ public:
 private:
     Kind m_kind;
     QString m_fileName;
-
+    LineEnding m_lineEnding;
 };
 
 

@@ -111,6 +111,17 @@ void ProjectAST::writeBack(QString &buffer)
         buffer += indentation() + "}";
 }
 
+
+void ProjectAST::setLineEnding( ProjectAST::LineEnding l )
+{
+    m_lineEnding = l;
+}
+
+ProjectAST::LineEnding ProjectAST::lineEnding()
+{
+    return m_lineEnding;
+}
+
 //AssignmentAST
 
 AssignmentAST::~AssignmentAST()
@@ -165,4 +176,5 @@ void IncludeAST::writeBack(QString &/*buffer*/)
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
 

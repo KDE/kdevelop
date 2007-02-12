@@ -61,6 +61,7 @@ To debug this lexer, put the line below into the next flex file section.
 
 delim             [ \t]
 ws                {delim}+
+newline           (\n|\r|\r\n)
 begin_ws          ^{delim}+[^\r\n\t ]
 quote             "\""
 var_value         [^\r\n\t ]*[^\r\n\t \\]
@@ -70,10 +71,10 @@ digit             [0-9]
 id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.)*
 id_args           [^\r\n]*\)
 number            {digit}+
-comment           #.*
-comment_cont      {ws}*#.*(\n|\r|\r\n)
-comment_cont_nn   {ws}*#.*
-cont              \\{ws}*(\n|\r|\r\n)
+comment           #.*{newline}
+comment_cont      {ws}*#.*{newline}
+comment_cont_nn   {ws}*#.*[^\r\n]
+cont              \\{ws}*{newline}
 
 %%
 <INITIAL>{ws} {}
@@ -92,6 +93,7 @@ cont              \\{ws}*(\n|\r|\r\n)
 
 <list,list_with_comment,INITIAL>{cont} {
     BEGIN(list);
+    setLineEndingFromString( QString::fromLocal8Bit( YYText(), YYLeng() ) );
     return Parser::token::token::CONT;
 }
 {id_simple} {
@@ -107,6 +109,7 @@ cont              \\{ws}*(\n|\r|\r\n)
 
 <list>{comment_cont} {
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    setLineEndingFromString( mylval->value );
     BEGIN(list);
     return (Parser::token::token::LIST_COMMENT);
     }
@@ -188,13 +191,15 @@ return Parser::token::token::EQ;
     return Parser::token::token::COLON;
 }
 
-<list,list_with_comment,INITIAL>"\n" {
+<list,list_with_comment,INITIAL>{newline} {
     BEGIN(INITIAL);
+    setLineEndingFromString( QString::fromLocal8Bit( YYText(), YYLeng() ) );
     return Parser::token::token::NEWLINE;
 }
 
 {comment} {
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    setLineEndingFromString( mylval->value );
     return (Parser::token::token::COMMENT);
 }
 
@@ -202,7 +207,7 @@ return Parser::token::token::EQ;
 namespace QMake
 {
     Lexer::Lexer( std::istream* argin, std::ostream* argout )
-        : yyFlexLexer(argin, argout), mylval(0)
+        : yyFlexLexer(argin, argout), mylval(0), m_lineEnding(None)
     {
     }
 
@@ -210,6 +215,21 @@ namespace QMake
     {
         mylval = yylval;
         return yylex();
+    }
+
+    void Lexer::setLineEndingFromString( const QString& str )
+    {
+        if( str.endsWith("\r\n") && m_lineEnding == None )
+            m_lineEnding = Windows;
+        else if ( str.endsWith("\r") && m_lineEnding == None )
+            m_lineEnding = MacOS;
+        else if ( m_lineEnding == None )
+            m_lineEnding = Unix;
+    }
+
+    Lexer::LineEnding Lexer::lineending()
+    {
+        return m_lineEnding;
     }
 }
 

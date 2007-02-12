@@ -50,6 +50,19 @@ int Driver::parseFile(const char *fileName, ProjectAST **ast, int debug)
     int ret = p.parse();
     *ast = stack.top();
     (*ast)->setFileName(fileName);
+    switch( l.lineending() )
+    {
+        case QMake::Lexer::Windows:
+            (*ast)->setLineEnding(QMake::ProjectAST::Windows);
+            break;
+        case QMake::Lexer::MacOS:
+            (*ast)->setLineEnding(QMake::ProjectAST::MacOS);
+            break;
+        case QMake::Lexer::Unix:
+        default:
+            (*ast)->setLineEnding(QMake::ProjectAST::Unix);
+            break;
+    }
     return ret;
 }
 
@@ -81,6 +94,19 @@ int Driver::parseString( const char* string, ProjectAST **ast, int debug )
     int ret = p.parse();
     *ast = stack.top();
     (*ast)->setFileName("");
+    switch( l.lineending() )
+    {
+        case QMake::Lexer::Windows:
+            (*ast)->setLineEnding(QMake::ProjectAST::Windows);
+            break;
+        case QMake::Lexer::MacOS:
+            (*ast)->setLineEnding(QMake::ProjectAST::MacOS);
+            break;
+        case QMake::Lexer::Unix:
+        default:
+            (*ast)->setLineEnding(QMake::ProjectAST::Unix);
+            break;
+    }
     return ret;
 }
 
