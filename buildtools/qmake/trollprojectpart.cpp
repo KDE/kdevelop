@@ -114,6 +114,14 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
+    action = new KAction( i18n("&Install Project"),"install" , 0,
+                          m_widget, SLOT(slotInstallProject()),
+                          actionCollection(),"build_install_project"  );
+    action->setToolTip(i18n("Install project"));
+    action->setWhatsThis(i18n("<b>Install project</b><p>Runs <b>make install</b> from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
+
     action = new KAction( i18n("&Clean Project"), 0,
                           m_widget, SLOT(slotCleanProject()),
                           actionCollection(), "build_clean_project" );
@@ -150,6 +158,15 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                           actionCollection(),"build_rebuild_target"  );
     action->setToolTip(i18n("Rebuild subproject"));
     action->setWhatsThis(i18n("<b>Rebuild subproject</b><p>Runs <b>make clean</b> and then <b>make</b> from the current subproject directory. "
+                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
+
+    action = new KAction( i18n("&Install Subproject"), "install", 0,
+                          m_widget, SLOT(slotInstallTarget()),
+                          actionCollection(),"build_install_target"  );
+    action->setToolTip(i18n("Install subproject"));
+    action->setWhatsThis(i18n("<b>Install subproject</b><p>Runs <b>make install</b> from the current subproject directory. "
                               "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));

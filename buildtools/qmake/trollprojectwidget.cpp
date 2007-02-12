@@ -132,6 +132,7 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     QWhatsThis::add( rebuildProjectButton, i18n( "<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from the project directory.<br>"
                          "Environment variables and make arguments can be specified "
                          "in the project settings dialog, <b>Make Options</b> tab." ) );
+
     // run
     executeProjectButton = new QToolButton ( projectTools, "Run button" );
     executeProjectButton->setPixmap ( SmallIcon ( "exec" ) );
@@ -160,7 +161,6 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
     connect ( buildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
     connect ( rebuildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
     connect ( executeProjectButton, SIGNAL ( clicked () ), m_part, SLOT ( slotBuildAndExecuteProject () ) );
-
 
 
     connect ( projectconfButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureProject () ) );
@@ -250,6 +250,7 @@ TrollProjectWidget::TrollProjectWidget( TrollProjectPart *part )
                          "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
                          "Environment variables and make arguments can be specified "
                          "in the project settings dialog, <b>Make Options</b> tab." ) );
+
     // run
     executeTargetButton = new QToolButton ( fileTools, "Run sp button" );
     executeTargetButton->setPixmap ( SmallIcon ( "exec" ) );
@@ -674,6 +675,25 @@ void TrollProjectWidget::slotBuildProject()
     QString buildcmd = constructMakeCommandLine( m_rootSubproject->scope );
     m_part->queueCmd( dir, dircmd + buildcmd );
 }
+
+void TrollProjectWidget::slotInstallProject()
+{
+    if ( m_part->partController() ->saveAllFiles() == false )
+        return ; //user cancelled
+
+    QString dir = projectDirectory();
+
+    if ( !m_rootSubproject )
+        return ;
+
+    createMakefileIfMissing( dir, m_rootSubproject );
+
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString buildcmd = constructMakeCommandLine( m_rootSubproject->scope ) + " install";
+    m_part->queueCmd( dir, dircmd + buildcmd );
+}
+
 void TrollProjectWidget::slotBuildTarget()
 {
     // no subproject selected
@@ -689,6 +709,24 @@ void TrollProjectWidget::slotBuildTarget()
     m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
     QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
     QString buildcmd = constructMakeCommandLine( m_shownSubproject->scope );
+    m_part->queueCmd( dir, dircmd + buildcmd );
+}
+
+void TrollProjectWidget::slotInstallTarget()
+{
+    // no subproject selected
+    m_part->partController() ->saveAllFiles();
+    if ( !m_shownSubproject )
+        return ;
+    // can't build from scope
+    if ( m_shownSubproject->scope->scopeType() != Scope::ProjectScope )
+        return ;
+    QString dir = subprojectDirectory();
+    createMakefileIfMissing( dir, m_shownSubproject );
+
+    m_part->mainWindow() ->raiseView( m_part->makeFrontend() ->widget() );
+    QString dircmd = "cd " + KProcess::quote( dir ) + " && " ;
+    QString buildcmd = constructMakeCommandLine( m_shownSubproject->scope ) + " install";
     m_part->queueCmd( dir, dircmd + buildcmd );
 }
 
@@ -872,6 +910,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     int idBuild = -2;
     int idRebuild = -2;
     int idClean = -2;
+    int idInstall = -2;
     int idDistClean = -2;
     int idQmake = -2;
     int idQmakeRecursive = -2;
@@ -887,6 +926,10 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     {
         idBuild = popup.insertItem( SmallIcon( "make_kdevelop" ), i18n( "Build" ) );
         popup.setWhatsThis( idBuild, i18n( "<b>Build</b><p>Runs <b>make</b> from the selected subproject directory.<br>"
+                                           "Environment variables and make arguments can be specified "
+                                           "in the project settings dialog, <b>Make Options</b> tab." ) );
+        idInstall = popup.insertItem( i18n( "Install" ) );
+        popup.setWhatsThis( idBuild, i18n( "<b>Install</b><p>Runs <b>make install</b> from the selected subproject directory.<br>"
                                            "Environment variables and make arguments can be specified "
                                            "in the project settings dialog, <b>Make Options</b> tab." ) );
         idClean = popup.insertItem( i18n( "Clean" ) );
@@ -978,6 +1021,11 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
     else if ( r == idBuild )
     {
         slotBuildTarget();
+        //        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+    }
+    else if ( r == idInstall )
+    {
+        slotInstallTarget();
         //        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
     }
     else if ( r == idRebuild )

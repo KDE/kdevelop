@@ -3,12 +3,14 @@
 <MenuBar>
   <Menu name="build" >
     <Action name="build_build_project" />
+    <Action name="build_install_project" />
     <Action name="build_rebuild_project" />
     <Action name="build_execute_project" />
     <Action name="build_clean_project" />
     <Action name="build_distclean_project" />
     <Separator/>
     <Action name="build_build_target" />
+    <Action name="build_install_target" />
     <Action name="build_rebuild_target" />
     <Action name="build_execute_target" />
     <Action name="build_clean_target" />

@@ -97,12 +97,14 @@ public:
 
 public slots:
     void slotBuildTarget();
+    void slotInstallTarget();
     void slotRebuildTarget();
     void slotCleanTarget();
     void slotDistCleanTarget();
     void slotExecuteTarget();
 
     void slotBuildProject();
+    void slotInstallProject();
     void slotRebuildProject();
     void slotCleanProject();
     void slotDistCleanProject();
