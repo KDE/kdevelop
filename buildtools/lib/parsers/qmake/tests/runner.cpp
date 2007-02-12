@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
     for( int i = 0 ; i < args->count() ; i++ )
     {
         QMake::ProjectAST *projectAST;
-        int ret = QMake::Driver::parseFile(argv[1], &projectAST, debug);
+        int ret = QMake::Driver::parseFile(args->url(i).path(), &projectAST, debug);
         PrintAST pa;
         if ( ret == 0 )
             if ( !silent )
