@@ -18,11 +18,6 @@ kdevelopbuildtoolsinclude_HEADERS = qmakeast.h qmakedriver.h qmakeastvisitor.h
 
 parser:
 	cd $(srcdir) ; \
-	bison -d qmake.yy -oqmake_yacc.cpp ; \
-	flex -oqmake_lex.cpp qmake.ll
-
-parser_dbg:
-	cd $(srcdir) ; \
 	bison -d qmake.yy -r all -k -t -oqmake_yacc.cpp ; \
 	flex -d -oqmake_lex.cpp qmake.ll
 

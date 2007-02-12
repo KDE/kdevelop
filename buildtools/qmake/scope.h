@@ -238,6 +238,9 @@ private:
     QStringList variableValues( const QString& variable, QMake::AST* ) const;
     QString resolveVariables( const QString& , QMake::AST* ) const;
 
+    // This function determines the currently used String for fileending, it can be \n, \r or \r\n
+    QString getLineEndingString() const;
+
     void allFiles( const QString&, std::set<QString>& );
 
     void loadDefaultOpts();
@@ -248,6 +251,8 @@ private:
     QMap<unsigned int, Scope*> m_scopes;
     Scope* m_parent;
     unsigned int m_maxCustomVarNum;
+
+    QString replaceWs(QString);
 
     // All different subscopes of this scope, the key is the "position" at which the scope starts
     QMap<QString, Scope*> m_subProjects;
@@ -287,10 +292,10 @@ private:
 
         virtual void processInclude( QMake::IncludeAST* a);
 
+        QString replaceWs(QString);
 
     private:
         QString getIndent();
-        QString replaceWs(QString);
         int indent;
 
     };

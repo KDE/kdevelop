@@ -167,7 +167,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 
 /* Enabling verbose error messages.  */
@@ -180,7 +180,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 
 /* Enabling the token table.  */
 #ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 0
+# define YYTOKEN_TABLE 1
 #endif
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].

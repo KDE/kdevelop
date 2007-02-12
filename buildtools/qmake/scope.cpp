@@ -291,8 +291,8 @@ QStringList Scope::variableValuesForOp( const QString& variable , const QString&
             }
         }
     }
-    result.remove( "\\\n" );
-    result.remove( "\n" );
+    result.remove( "\\"+getLineEndingString() );
+    result.remove( getLineEndingString() );
     result = Scope::removeWhiteSpace(result);
     return result;
 }
@@ -310,8 +310,8 @@ QStringList Scope::variableValues( const QString& variable, bool checkIncParent 
     }
 
     calcValuesFromStatements( variable, result, checkIncParent );
-    result.remove( "\\\n" );
-    result.remove( "\n" );
+    result.remove( "\\"+getLineEndingString() );
+    result.remove( getLineEndingString() );
     result = Scope::removeWhiteSpace(result);
     if( scopeType() != Scope::IncludeScope || checkIncParent )
     {
@@ -377,8 +377,8 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
         }
     }
 
-    result.remove( "\\\n" );
-    result.remove( "\n" );
+    result.remove( "\\"+getLineEndingString() );
+    result.remove( getLineEndingString() );
     return ;
 }
 
@@ -695,15 +695,15 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
     {
         if ( origValues.findIndex( *it ) == -1 && !remove )
         {
-            while ( !origValues.isEmpty() && origValues.last() == "\n" )
+            while ( !origValues.isEmpty() && origValues.last() == getLineEndingString() )
                 origValues.pop_back();
-            if ( origValues.count() > 0 && origValues.last() != "\\\n" )
+            if ( origValues.count() > 0 && origValues.last() != "\\"+getLineEndingString() )
             {
                 origValues.append( " " );
-                origValues.append( "\\\n" );
+                origValues.append( "\\"+getLineEndingString() );
                 if( indent != "" )
                     origValues.append( indent );
-            }else if ( !origValues.isEmpty() && origValues.last() == "\\\n" )
+            }else if ( !origValues.isEmpty() && origValues.last() == "\\"+getLineEndingString() )
             {
                 if( indent != "" )
                     origValues.append( indent );
@@ -712,26 +712,26 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             QString newval = *it;
             QRegExp re("([^$])\\$([^$\\(\\)\\{\\} /]*)( |\\)|/)");
             newval.replace(re, "\1$(\\2)\\3");
-            if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains("\n") )
+            if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains(getLineEndingString()) )
                 origValues.append( "\""+newval+"\"" );
             else
                 origValues.append( newval );
-            origValues.append( "\n" );
+            origValues.append( getLineEndingString() );
         } else if ( origValues.findIndex( *it ) != -1 && remove )
         {
             QStringList::iterator posit = origValues.find( *it );
             posit = origValues.remove( posit );
-            while( posit != origValues.end() && ( *posit == "\\\n" || (*posit).stripWhiteSpace() == "" ) )
+            while( posit != origValues.end() && ( *posit == "\\"+getLineEndingString() || (*posit).stripWhiteSpace() == "" ) )
             {
                 posit = origValues.remove( posit );
             }
         }
     }
-    while( !origValues.isEmpty() && (origValues.last() == "\\\n"
-            || origValues.last() == "\n"
+    while( !origValues.isEmpty() && (origValues.last() == "\\"+getLineEndingString()
+            || origValues.last() == getLineEndingString()
             || origValues.last().stripWhiteSpace() == "" ) && !origValues.isEmpty() )
         origValues.pop_back();
-    origValues.append("\n");
+    origValues.append(getLineEndingString());
 }
 
 void Scope::updateVariable( const QString& variable, const QString& op, const QStringList& values, bool removeFromOp )
@@ -823,9 +823,9 @@ void Scope::updateVariable( const QString& variable, const QString& op, const QS
         else
             ast->setDepth( m_root->depth()+1 );
         m_root->addChildAST( ast );
-        if ( values.findIndex( "\n" ) == -1 )
+        if ( values.findIndex( getLineEndingString() ) == -1 )
         {
-            ast->values.append("\n");
+            ast->values.append( getLineEndingString() );
         }
     }
 }
@@ -886,7 +886,7 @@ void Scope::init()
                 for ( QStringList::const_iterator sit = m->values.begin() ; sit != m->values.end(); ++sit )
                 {
                     QString str = *sit;
-                    if ( str == "\\\n" || str == "\n" || str == "." || str == "./" || (str).stripWhiteSpace() == "" )
+                    if ( str == "\\"+getLineEndingString() || str == getLineEndingString() || str == "." || str == "./" || (str).stripWhiteSpace() == "" )
                         continue;
                     QDir subproject;
                     QString projectfile;
@@ -1201,8 +1201,8 @@ QStringList Scope::variableValues( const QString& variable, QMake::AST* stopHere
         return result;
 
     calcValuesFromStatements( variable, result, true, stopHere );
-    result.remove( "\\\n" );
-    result.remove( "\n" );
+    result.remove( "\\"+getLineEndingString() );
+    result.remove( getLineEndingString() );
     result = Scope::removeWhiteSpace(result);
     return result;
 }
@@ -1471,6 +1471,35 @@ void Scope::loadDefaultOpts()
             m_defaultopts->readVariables( m_part->qmakePath(), QFileInfo( m_root->fileName() ).dirPath( true ) );
         }
     }
+}
+
+QString Scope::getLineEndingString() const
+{
+
+    if( scopeType() == ProjectScope )
+    {
+        switch( m_root->lineEnding() )
+        {
+            case QMake::ProjectAST::Windows:
+                return QString("\r\n");
+                break;
+            case QMake::ProjectAST::MacOS:
+                return QString("\r");
+                break;
+            case QMake::ProjectAST::Unix:
+                return QString("\n");
+                break;
+        }
+    }else if( m_parent )
+    {
+        return m_parent->getLineEndingString();
+    }
+    return "\n";
+}
+
+QString Scope::replaceWs(QString s)
+{
+    return s.replace( getLineEndingString(), "%nl").replace("\t", "%tab").replace(" ", "%spc");
 }
 
 #ifdef DEBUG

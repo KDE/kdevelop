@@ -210,8 +210,8 @@ multiline_values : multiline_values line_body opt_comment
 
 line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
     | variable_value                 { $<values>$.append( $<value>1 ); }
-    | CONT                           { $<values>$.append("\\\n"); }
-    | NEWLINE                        { $<values>$.append("\n"); }
+    | CONT                           { $<values>$.append( $<value>1 ); }
+    | NEWLINE                        { $<values>$.append( $<value>1 ); }
     | LIST_WS                        { $<values>$.append($<value>1); }
     | INDENT
         {
@@ -220,13 +220,15 @@ line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
                 $<indent>$ = $<value>1;
         }
     | LIST_COMMENT
+        {
+        }
     | RBRACE
     ;
 
 opt_comment: LIST_COMMENT_WITHOUT_NEWLINE
         {
             CommentAST* node = new CommentAST();
-            node->comment = $<value>1 + "\n";
+            node->comment = $<value>1;
 	        $<node>$ = node;
         }
     |
@@ -316,7 +318,7 @@ else_statement : "else" LCURLY
 comment : COMMENT NEWLINE
         {
             CommentAST *node = new CommentAST();
-            node->comment = $<value>1 + "\n";
+            node->comment = $<value>1;
             $<node>$ = node;
         }
     ;

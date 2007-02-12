@@ -73,7 +73,7 @@ id_args           [^\r\n]*\)
 number            {digit}+
 comment           #.*{newline}
 comment_cont      {ws}*#.*{newline}
-comment_cont_nn   {ws}*#.*[^\r\n]
+comment_cont_nn   {ws}*#[^\r\n]*
 cont              \\{ws}*{newline}
 
 %%
@@ -93,7 +93,8 @@ cont              \\{ws}*{newline}
 
 <list,list_with_comment,INITIAL>{cont} {
     BEGIN(list);
-    setLineEndingFromString( QString::fromLocal8Bit( YYText(), YYLeng() ) );
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    setLineEndingFromString( mylval->value );
     return Parser::token::token::CONT;
 }
 {id_simple} {
@@ -135,9 +136,9 @@ cont              \\{ws}*{newline}
 }
 
 "=" {
-BEGIN(list);
-mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
-return Parser::token::token::EQ;
+    BEGIN(list);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::EQ;
 }
 
 "+=" {
@@ -193,7 +194,8 @@ return Parser::token::token::EQ;
 
 <list,list_with_comment,INITIAL>{newline} {
     BEGIN(INITIAL);
-    setLineEndingFromString( QString::fromLocal8Bit( YYText(), YYLeng() ) );
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    setLineEndingFromString( mylval->value );
     return Parser::token::token::NEWLINE;
 }
 

@@ -482,12 +482,12 @@ namespace QMake
 
   case 16:
 #line 213 "qmake.yy"
-    { (yyval.values).append("\\\n"); ;}
+    { (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) ); ;}
     break;
 
   case 17:
 #line 214 "qmake.yy"
-    { (yyval.values).append("\n"); ;}
+    { (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) ); ;}
     break;
 
   case 18:
@@ -504,34 +504,40 @@ namespace QMake
         ;}
     break;
 
+  case 20:
+#line 223 "qmake.yy"
+    {
+        ;}
+    break;
+
   case 22:
-#line 227 "qmake.yy"
+#line 229 "qmake.yy"
     {
             CommentAST* node = new CommentAST();
-            node->comment = (yysemantic_stack_[(1) - (1)].value) + "\n";
+            node->comment = (yysemantic_stack_[(1) - (1)].value);
 	        (yyval.node) = node;
         ;}
     break;
 
   case 23:
-#line 233 "qmake.yy"
+#line 235 "qmake.yy"
     {
             (yyval.node) = 0;
         ;}
     break;
 
   case 24:
-#line 238 "qmake.yy"
+#line 240 "qmake.yy"
     { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 25:
-#line 239 "qmake.yy"
+#line 241 "qmake.yy"
     { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 31:
-#line 246 "qmake.yy"
+#line 248 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
             projects.push(projectAST);
@@ -541,7 +547,7 @@ namespace QMake
     break;
 
   case 32:
-#line 253 "qmake.yy"
+#line 255 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -549,7 +555,7 @@ namespace QMake
     break;
 
   case 33:
-#line 260 "qmake.yy"
+#line 262 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -569,7 +575,7 @@ namespace QMake
     break;
 
   case 34:
-#line 278 "qmake.yy"
+#line 280 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -577,17 +583,17 @@ namespace QMake
     break;
 
   case 35:
-#line 284 "qmake.yy"
+#line 286 "qmake.yy"
     { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 36:
-#line 285 "qmake.yy"
+#line 287 "qmake.yy"
     { (yyval.value) = ""; ;}
     break;
 
   case 38:
-#line 290 "qmake.yy"
+#line 292 "qmake.yy"
     {
             projects.top()->addChildAST((yysemantic_stack_[(2) - (2)].node));
             (yysemantic_stack_[(2) - (2)].node)->setDepth(depth);
@@ -595,7 +601,7 @@ namespace QMake
     break;
 
   case 40:
-#line 298 "qmake.yy"
+#line 300 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -606,7 +612,7 @@ namespace QMake
     break;
 
   case 41:
-#line 306 "qmake.yy"
+#line 308 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -614,24 +620,24 @@ namespace QMake
     break;
 
   case 42:
-#line 311 "qmake.yy"
+#line 313 "qmake.yy"
     {
             (yyval.node) = new ProjectAST();
         ;}
     break;
 
   case 43:
-#line 317 "qmake.yy"
+#line 319 "qmake.yy"
     {
             CommentAST *node = new CommentAST();
-            node->comment = (yysemantic_stack_[(2) - (1)].value) + "\n";
+            node->comment = (yysemantic_stack_[(2) - (1)].value);
             (yyval.node) = node;
         ;}
     break;
 
 
     /* Line 675 of lalr1.cc.  */
-#line 635 "qmake_yacc.cpp"
+#line 641 "qmake_yacc.cpp"
 	default: break;
       }
     YY_SYMBOL_PRINT ("-> $$ =", yyr1_[yyn], &yyval, &yyloc);
@@ -1006,9 +1012,9 @@ namespace QMake
   {
          0,   147,   147,   147,   154,   159,   162,   166,   170,   174,
      178,   184,   196,   204,   211,   212,   213,   214,   215,   216,
-     222,   223,   226,   233,   238,   239,   242,   242,   242,   242,
-     242,   246,   245,   260,   259,   284,   285,   288,   289,   294,
-     298,   297,   311,   316,   324
+     222,   225,   228,   235,   240,   241,   244,   244,   244,   244,
+     244,   248,   247,   262,   261,   286,   287,   290,   291,   296,
+     300,   299,   313,   318,   326
   };
 
   // Print the state stack on the debug stream.
@@ -1098,7 +1104,7 @@ namespace QMake
 
 } // namespace QMake
 
-#line 327 "qmake.yy"
+#line 329 "qmake.yy"
 
 
 
