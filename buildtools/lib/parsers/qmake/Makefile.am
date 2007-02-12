@@ -29,4 +29,3 @@ DOXYGEN_DOCDIRPREFIX = kdevparser
 include ../../../../Doxyfile.am
 
 noinst_HEADERS = qmake.ll qmake.yy qmake_lex.h
-SUBDIRS = tests
