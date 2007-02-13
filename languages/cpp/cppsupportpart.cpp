@@ -1214,7 +1214,7 @@ bool CppSupportPart::switchHeaderImpl( const QString& file, int line, int col, b
                     handled = jumpIfDeclMatchesDef( *it_decl, (FunctionDefinitionModel*) d.data(), true, scrollOnly );
                 }
             }
-            if ( !handled ) {
+	        if ( !handled && !scrollOnly ) { //scrollOnly is set when performing automatic synchronization. Do not search the whole project in that case(for performance-reasons)
                 //Couldn't find the declaration using the filename as a hint, try iterating through the project files.
                 candidates = sourceOrHeaderCandidateList( file );
                 for( it = candidates.begin(); it != candidates.end() && !handled; ++it ) {
@@ -1241,7 +1241,7 @@ bool CppSupportPart::switchHeaderImpl( const QString& file, int line, int col, b
                    handled = jumpIfDeclMatchesDef( d, *it_def, false, scrollOnly );
                 }
             }
-           if ( !handled ) {
+           if ( !handled && !scrollOnly ) { //scrollOnly is set when performing automatic synchronization. Do not search the whole project in that case(for performance-reasons)
                 //Couldn't find the definition using the filename as a hint, try iterating through the project files.
                 candidates = sourceOrHeaderCandidateList( file );
                 for( it = candidates.begin(); it != candidates.end() && !handled; ++it ) {
