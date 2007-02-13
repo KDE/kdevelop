@@ -541,7 +541,14 @@ QString RubySupportPart::mainProgram() {
 QString RubySupportPart::runDirectory() {
     QString cwd = DomUtil::readEntry(*projectDom(), "/kdevscriptproject/run/globalcwd");
     if (cwd.isEmpty())
-      cwd = project()->buildDirectory();
+    {
+      QString mainProg = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/mainprogram");
+      KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+      if (mainProg.isEmpty() && ro_part)
+        cwd = ro_part->url().directory();
+      else
+        cwd = project()->buildDirectory();
+    }
     return cwd;
 }
 
