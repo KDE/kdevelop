@@ -24,7 +24,7 @@
 #include <QList>
 #include <QString>
 
-#include <ibuildmanager.h>
+#include <ibuildsystemmanager.h>
 #include <iplugin.h>
 
 #include <domutil.h>
@@ -49,11 +49,11 @@ class CMakeFolderItem;
 
 class cmLocalGenerator;
 
-class CMakeImporter : public KDevelop::IPlugin, public KDevelop::IBuildManager
+class CMakeImporter : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
 Q_OBJECT
-Q_INTERFACES( KDevelop::IBuildManager )
-Q_INTERFACES( KDevelop::IFileManager )
+Q_INTERFACES( KDevelop::IBuildSystemManager )
+Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
     CMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
 

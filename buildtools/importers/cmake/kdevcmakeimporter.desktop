@@ -11,4 +11,4 @@ X-KDE-PluginInfo-Name=KDevCMakeImporter
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-FileManager=CMake
 X-KDevelop-Version=4
-X-KDevelop-Interfaces=IBuildManager,IFileManager
+X-KDevelop-Interfaces=IBuildSystemManager,IProjectFileManager

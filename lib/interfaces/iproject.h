@@ -41,7 +41,7 @@ namespace KDevelop
 {
 
 class IPlugin;
-class IFileManager;
+class IProjectFileManager;
 class ProjectModel;
 class ProjectItem;
 class ProjectFileItem;
@@ -72,7 +72,7 @@ public:
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    virtual IFileManager* fileManager() const = 0;
+    virtual IProjectFileManager* fileManager() const = 0;
 
     /** Get a list of all files in the project */
     virtual int fileCount() const = 0;

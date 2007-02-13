@@ -19,8 +19,8 @@ install(TARGETS kdevplatformproject DESTINATION ${LIB_INSTALL_DIR} )
 
 install(FILES
     interfaces/iprojectbuilder.h
-    interfaces/ifilemanager.h
-    interfaces/ibuildmanager.h
+    interfaces/iprojectfilemanager.h
+    interfaces/ibuildsystemmanager.h
     importprojectjob.h
     projectmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project/interfaces

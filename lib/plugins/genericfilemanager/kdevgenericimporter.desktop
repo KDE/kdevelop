@@ -8,5 +8,5 @@ X-KDE-Library=kdevgenericimporter
 X-KDE-PluginInfo-Name=KDevGenericImporter
 X-KDevelop-FileManager=None
 X-KDevelop-Version=4
-X-KDevelop-Interfaces=IFileManager
+X-KDevelop-Interfaces=IProjectFileManager
 

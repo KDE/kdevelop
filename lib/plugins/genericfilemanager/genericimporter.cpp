@@ -37,7 +37,7 @@
 typedef KGenericFactory<GenericImporter> GenericSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevgenericimporter, GenericSupportFactory( "kdevgenericimporter" ) )
 
-KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, IFileManager, GenericImporter )
+KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, IProjectFileManager, GenericImporter )
 
 class GenericImporterPrivate
 {
@@ -49,7 +49,7 @@ class GenericImporterPrivate
 };
 
 GenericImporter::GenericImporter( QObject *parent, const QStringList & args )
-        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IFileManager(), d( new GenericImporterPrivate )
+        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager(), d( new GenericImporterPrivate )
 {
     Q_UNUSED( args )
     if ( d->includes.isEmpty() )
@@ -170,7 +170,7 @@ bool GenericImporter::removeFile( KDevelop::ProjectFileItem * file )
 
 QStringList GenericImporter::extensions() const
 {
-    return QStringList() << "IFileManager";
+    return QStringList() << "IProjectFileManager";
 }
 
 

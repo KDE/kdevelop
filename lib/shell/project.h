@@ -41,7 +41,7 @@ class KInstance;
 namespace KDevelop
 {
 
-class IFileManager;
+class IProjectFileManager;
 class ProjectModel;
 class ProjectItem;
 class ProjectFileItem;
@@ -106,7 +106,7 @@ public Q_SLOTS:
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    IFileManager* fileManager() const;
+    IProjectFileManager* fileManager() const;
 
     /**
      * Set the file manager for the project.

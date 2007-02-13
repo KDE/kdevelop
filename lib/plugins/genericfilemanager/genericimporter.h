@@ -19,7 +19,7 @@
 #ifndef KDEVGENERICIMPORTER_H
 #define KDEVGENERICIMPORTER_H
 
-#include "ifilemanager.h"
+#include "iprojectfilemanager.h"
 #include "iplugin.h"
 
 class QFileInfo;
@@ -35,17 +35,17 @@ class ProjectFileItem;
 
 class KDialogBase;
 
-class GenericImporter: public KDevelop::IPlugin, public KDevelop::IFileManager
+class GenericImporter: public KDevelop::IPlugin, public KDevelop::IProjectFileManager
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IFileManager )
+    Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
     GenericImporter( QObject *parent = 0,
                      const QStringList &args = QStringList() );
     virtual ~GenericImporter();
 
 //
-// IFileManager interface
+// IProjectFileManager interface
 //
     virtual Features features() const
     {

@@ -46,7 +46,7 @@
 #include "iplugin.h"
 #include "filetemplate.h"
 #include "mainwindow.h"
-#include "ifilemanager.h"
+#include "iprojectfilemanager.h"
 #include "iprojectcontroller.h"
 #include "importprojectjob.h"
 #include "projectmodel.h"
@@ -170,10 +170,10 @@ bool Project::open( const KUrl& projectFileUrl )
 
     //Get our importer
     IPluginController* pluginManager = Core::self()->pluginController();
-    d->manager = pluginManager->pluginForExtension( "IFileManager", importerSetting );
-    IFileManager* iface = 0;
+    d->manager = pluginManager->pluginForExtension( "IProjectFileManager", importerSetting );
+    IProjectFileManager* iface = 0;
     if ( d->manager )
-        iface = d->manager->extension<IFileManager>();
+        iface = d->manager->extension<IProjectFileManager>();
     else
     {
         KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
@@ -195,7 +195,7 @@ bool Project::open( const KUrl& projectFileUrl )
     else
     {
         KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "project importing plugin doesn't support the IFileManager interface." ) );
+                            i18n( "project importing plugin doesn't support the IProjectFileManager interface." ) );
         delete d->manager;
         d->manager = 0;
         return false;
@@ -297,9 +297,9 @@ KUrl Project::urlRelativeToProject( const KUrl & relativeUrl ) const
     return relativeUrl;
 }
 
-IFileManager* Project::fileManager() const
+IProjectFileManager* Project::fileManager() const
 {
-    return d->manager->extension<IFileManager>();
+    return d->manager->extension<IProjectFileManager>();
 }
 
 void Project::setFileManager( IPlugin* newManager )

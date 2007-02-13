@@ -20,7 +20,7 @@
 
 #include "importprojectjob.h"
 
-#include "interfaces/ifilemanager.h"
+#include "interfaces/iprojectfilemanager.h"
 
 #include <kglobal.h>
 #include <kdebug.h>
@@ -31,11 +31,11 @@ namespace KDevelop
 struct ImportProjectJobPrivate
 {
     ProjectFolderItem *m_folder;
-    IFileManager *m_importer;
+    IProjectFileManager *m_importer;
     QList<ProjectFolderItem*> m_workingList;
 };
 
-ImportProjectJob::ImportProjectJob(QStandardItem *folder, IFileManager *importer)
+ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer)
     : KJob(0), d(new ImportProjectJobPrivate)
 
 {

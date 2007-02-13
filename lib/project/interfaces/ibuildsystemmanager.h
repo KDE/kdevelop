@@ -22,7 +22,7 @@
 #ifndef IBUILDABLEMANAGER_H
 #define IBUILDABLEMANAGER_H
 
-#include "ifilemanager.h"
+#include "iprojectfilemanager.h"
 #include "kdevexport.h"
 
 namespace KDevelop
@@ -35,11 +35,11 @@ typedef QList<ProjectFileItem*> FileItemList;
  * Manage the file and build system of the project.
  * @author Matt Rogers <mattr@kde.org>, Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORM_EXPORT IBuildManager : public IFileManager
+class KDEVPLATFORM_EXPORT IBuildSystemManager : public IProjectFileManager
 {
 public:
 
-    virtual ~IBuildManager() {}
+    virtual ~IBuildSystemManager() {}
 
     enum BuildFeature
     {
@@ -134,10 +134,10 @@ public:
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IBuildManager::BuildFeatures )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IBuildSystemManager::BuildFeatures )
 
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IBuildManager, "org.kdevelop.IBuildManager" )
-Q_DECLARE_INTERFACE( KDevelop::IBuildManager, "org.kdevelop.IBuildManager" )
+KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IBuildSystemManager, "org.kdevelop.IBuildSystemManager" )
+Q_DECLARE_INTERFACE( KDevelop::IBuildSystemManager, "org.kdevelop.IBuildSystemManager" )
 
 #endif
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

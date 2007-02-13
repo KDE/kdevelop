@@ -60,11 +60,11 @@ class KDialogBase;
  *
  * @author Roberto Raggi, Matt Rogers, Hamish Rodda
  */
-class KDEVPLATFORM_EXPORT IFileManager
+class KDEVPLATFORM_EXPORT IProjectFileManager
 {
 public:
 
-    virtual ~IFileManager() {}
+    virtual ~IProjectFileManager() {}
     /** Features the file manager supports */
     enum Feature
     {
@@ -153,11 +153,11 @@ Q_SIGNALS:
 };
 
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IFileManager::Features )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IProjectFileManager::Features )
 
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IFileManager, "org.kdevelop.IFileManager")
+KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IProjectFileManager, "org.kdevelop.IProjectFileManager")
 
-Q_DECLARE_INTERFACE( KDevelop::IFileManager, "org.kdevelop.IFileManager" )
+Q_DECLARE_INTERFACE( KDevelop::IProjectFileManager, "org.kdevelop.IProjectFileManager" )
 
 
 #endif

@@ -41,8 +41,8 @@ typedef KGenericFactory<CMakeImporter> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
                             CMakeSupportFactory( "kdevcmakeimporter" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildManager, CMakeImporter )
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IFileManager, CMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, CMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, CMakeImporter )
 
 CMakeImporter::CMakeImporter( QObject* parent,
                               const QStringList& )
@@ -153,22 +153,22 @@ KUrl::List CMakeImporter::includeDirectories(KDevelop::ProjectBaseItem *item) co
 
 QStringList CMakeImporter::extensions() const
 {
-    return QStringList() << "IBuildManager" << "IFileManager";
+    return QStringList() << "IBuildSystemManager" << "IProjectFileManager";
 }
 
 void CMakeImporter::registerExtensions()
 {
-    extensionManager()->registerExtensions( new CMakeImporterIFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
-    extensionManager()->registerExtensions( new CMakeImporterIBuildManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
+    extensionManager()->registerExtensions( new CMakeImporterIProjectFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
+    extensionManager()->registerExtensions( new CMakeImporterIBuildSystemManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 void CMakeImporter::unregisterExtensions()
 {
-    extensionManager()->unregisterExtensions( new CMakeImporterIFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
-    extensionManager()->unregisterExtensions( new CMakeImporterIBuildManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
+    extensionManager()->unregisterExtensions( new CMakeImporterIProjectFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
+    extensionManager()->unregisterExtensions( new CMakeImporterIBuildSystemManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 
 #include "cmakeimporter.moc"
