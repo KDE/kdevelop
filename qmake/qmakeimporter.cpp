@@ -42,8 +42,8 @@ typedef KGenericFactory<QMakeImporter> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
                             QMakeSupportFactory( "kdevqmakeimporter" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildManager, QMakeImporter )
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IFileManager, QMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, QMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, QMakeImporter )
 
 
 QMakeImporter::QMakeImporter( QObject* parent,
@@ -167,23 +167,23 @@ KUrl::List QMakeImporter::includeDirectories(KDevelop::ProjectBaseItem* item) co
 
 QStringList QMakeImporter::extensions() const
 {
-    return QStringList() << "IBuildManager" << "IFileManager";
+    return QStringList() << "IBuildSystemManager" << "IProjectFileManager";
 }
 
 
 void QMakeImporter::registerExtensions()
 {
-    extensionManager()->registerExtensions( new QMakeImporterIFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
-    extensionManager()->registerExtensions( new QMakeImporterIBuildManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
+    extensionManager()->registerExtensions( new QMakeImporterIProjectFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
+    extensionManager()->registerExtensions( new QMakeImporterIBuildSystemManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 void QMakeImporter::unregisterExtensions()
 {
-    extensionManager()->unregisterExtensions( new QMakeImporterIFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IFileManager ) );
-    extensionManager()->unregisterExtensions( new QMakeImporterIBuildManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildManager ) );
+    extensionManager()->unregisterExtensions( new QMakeImporterIProjectFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
+    extensionManager()->unregisterExtensions( new QMakeImporterIBuildSystemManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 
 #include "qmakeimporter.moc"

@@ -21,7 +21,7 @@
 #ifndef QMAKEIMPORTER_H
 #define QMAKEIMPORTER_H
 
-#include <ibuildmanager.h>
+#include <ibuildsystemmanager.h>
 #include <iplugin.h>
 
 template <typename T> class QList;
@@ -44,11 +44,11 @@ class ProjectTargetItem;
 class IProjectBuilder;
 }
 
-class QMakeImporter : public KDevelop::IPlugin, public KDevelop::IBuildManager
+class QMakeImporter : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
 Q_OBJECT
-Q_INTERFACES( KDevelop::IBuildManager )
-Q_INTERFACES( KDevelop::IFileManager )
+Q_INTERFACES( KDevelop::IBuildSystemManager )
+Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
     QMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
 
