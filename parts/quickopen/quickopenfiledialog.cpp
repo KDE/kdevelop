@@ -58,6 +58,17 @@ QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, const KURL::List &
     m_items = urls.toStringList();
     QStringList_unique( m_items );
 
+    if (m_part->project())
+    {
+        for (unsigned int i = 0; i < m_items.count(); ++i)
+        {
+            QString url = m_items[i];
+            QString projectUrl = "file://" + m_part->project()->projectDirectory();
+            if (url.startsWith(projectUrl))
+                m_items[i] = url.mid(projectUrl.length() + 1);
+        }
+    }
+
     nameEdit->setFocus();
 
     itemList->insertStringList( m_items );
