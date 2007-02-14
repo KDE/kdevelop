@@ -4207,7 +4207,7 @@ void CppCodeCompletion::jumpCursorContext( FunctionType f )
 {
 	if ( !m_activeCursor ) return;
 	
-	SimpleTypeConfiguration conf( m_activeFileName );	
+	SimpleTypeConfiguration conf( m_activeFileName );
 	
 	unsigned int line;
 	unsigned int column;
@@ -4221,9 +4221,46 @@ void CppCodeCompletion::jumpCursorContext( FunctionType f )
 		LocateResult type = result.resultType;
 		if ( type && type->resolved() )
 		{
-			if ( type->resolved()->asFunction() )
+			if ( type->resolved()->isNamespace() )
+			{
+				SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( type->resolved().data() );
+				if ( ns )
+				{
+					SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( getIncludeFiles() );
+					if ( slaves.begin() != slaves.end() )
+					{
+						SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *slaves.begin() ).first.first.resolved().data() );
+						if ( cm && cm->item() )
+						{
+							SimpleTypeCachedCodeModel* t = new SimpleTypeCachedCodeModel( cm->item() );
+							d = t->desc().resolved()->getDeclarationInfo();
+						}
+						else
+						{
+							SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *slaves.begin() ).first.first.resolved().data() );
+							if ( cn )
+							{
+								TypePointer t = new SimpleTypeNamespace( cn ); //To avoid endless recursion, this needs to be done(the dynamic-cast above fails)
+								d = t->desc().resolved()->getDeclarationInfo();
+							}
+						}
+					}
+				}
+			}
+			else
 			{
 				d = type->resolved()->getDeclarationInfo();
+			}
+		}
+		else if ( type && type.trace() )
+		{
+			QValueList< QPair<SimpleTypeImpl::MemberInfo, TypeDesc> > trace = type.trace()->trace();
+			if ( !trace.isEmpty() )
+			{
+				if ( trace.begin() != trace.end() )
+				{
+					d = (*trace.begin()).first.decl;
+				}
 			}
 		}
 	}
