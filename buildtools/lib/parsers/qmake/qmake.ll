@@ -62,58 +62,42 @@ To debug this lexer, put the line below into the next flex file section.
 delim             [ \t]
 ws                {delim}+
 newline           (\n|\r|\r\n)
-begin_ws          ^{delim}+[^\r\n\t ]
 quote             "\""
-var_value         [^\r\n\t ]*[^\r\n\t \\]
+var_value         [^#\r\n\t ]+[^\r\n\t \\]
 quoted_var_value  {quote}({var_value}|[\t ])({var_value}|[\t ])*{quote}
 letter            [A-Za-z]
 digit             [0-9]
 id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.)*
 id_args           [^\r\n]*\)
 number            {digit}+
-comment           #.*{newline}
-comment_cont      {ws}*#.*{newline}
-comment_cont_nn   {ws}*#[^\r\n]*
+comment           #[^\r\n]*{newline}
+comment_cont      \\{ws}*#[^\r\n]*{newline}
 cont              \\{ws}*{newline}
 
 %%
 <INITIAL>{ws} {}
 
-<list,list_with_comment>{ws} {
+<list>{ws} {
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::LIST_WS;
 }
 
-<list,list_with_comment>{begin_ws} {
-    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
-    unput(char(mylval->value.at(mylval->value.length()-1).latin1()));
-    mylval->value = mylval->value.mid(0, mylval->value.length()-1);
-    return Parser::token::token::INDENT;
-}
-
-<list,list_with_comment,INITIAL>{cont} {
+<list,INITIAL>{cont} {
     BEGIN(list);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
-    setLineEndingFromString( mylval->value );
     return Parser::token::token::CONT;
 }
+
+<list,INITIAL>{comment_cont} {
+    BEGIN(list);
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::COMMENT_CONT;
+}
+
 {id_simple} {
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return (Parser::token::token::ID_SIMPLE);
 }
-
-<list_with_comment>{comment_cont_nn} {
-    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
-    BEGIN(list);
-    return (Parser::token::token::LIST_COMMENT_WITHOUT_NEWLINE);
-}
-
-<list>{comment_cont} {
-    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
-    setLineEndingFromString( mylval->value );
-    BEGIN(list);
-    return (Parser::token::token::LIST_COMMENT);
-    }
 
 <funcargs>{id_args} {
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
@@ -123,14 +107,14 @@ cont              \\{ws}*{newline}
     return (Parser::token::token::ID_ARGS);
     }
 
-<list,list_with_comment>{var_value} {
-    BEGIN(list_with_comment);
+<list>{var_value} {
+    BEGIN(list);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::VARIABLE_VALUE;
 }
 
-<list,list_with_comment>{quoted_var_value} {
-    BEGIN(list_with_comment);
+<list>{quoted_var_value} {
+    BEGIN(list);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::QUOTED_VARIABLE_VALUE;
 }
@@ -192,16 +176,16 @@ cont              \\{ws}*{newline}
     return Parser::token::token::COLON;
 }
 
-<list,list_with_comment,INITIAL>{newline} {
+<list,INITIAL>{newline} {
     BEGIN(INITIAL);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     setLineEndingFromString( mylval->value );
     return Parser::token::token::NEWLINE;
 }
 
-{comment} {
+<list,INITIAL>{comment} {
+    BEGIN(INITIAL);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
-    setLineEndingFromString( mylval->value );
     return (Parser::token::token::COMMENT);
 }
 

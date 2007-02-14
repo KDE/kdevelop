@@ -173,7 +173,7 @@ a.cpp
 */
 class AssignmentAST: public AST {
 public:
-    AssignmentAST(): AST(AST::AssignmentAST), commentnode(0){}
+    AssignmentAST(): AST(AST::AssignmentAST){}
     ~AssignmentAST();
 
     virtual void writeBack(QString &buffer);
@@ -186,7 +186,6 @@ public:
     QStringList values;
     /**Indentation of multiline values*/
     QString indent;
-    QMake::AST* commentnode;
 };
 
 

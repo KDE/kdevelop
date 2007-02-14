@@ -127,19 +127,15 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token LBRACE
 %token RBRACE
 %token COLON
-%token NUMSIGN
 %token NEWLINE
-%token NUMBER
 %token COMMENT
 %token CONT
+%token COMMENT_CONT
 %token RCURLY
 %token LCURLY
 %token ID_ARGS
-%token LIST_COMMENT
-%token LIST_COMMENT_WITHOUT_NEWLINE
 %token QUOTED_VARIABLE_VALUE
 %token VARIABLE_VALUE
-%token INDENT
 %token LIST_WS
 %%
 
@@ -181,67 +177,128 @@ statement : variable_assignment
         }
     ;
 
-variable_assignment : ID_SIMPLE operator multiline_values
+variable_assignment : ID_SIMPLE operator multiline_values listws NEWLINE
+        {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = $<value>1;
+            node->op = $<value>2;
+            node->values = $<values>3 ;
+            node->values.append( $<value>4 );
+            node->values.append( $<value>5 );
+            node->indent = $<indent>3;
+            $<node>$ = node;
+        }
+    | ID_SIMPLE operator listws NEWLINE
+        {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = $<value>1;
+            node->op = $<value>2;
+            node->values.append( $<value>3 );
+            node->values.append( $<value>4 );
+            $<node>$ = node;
+        }
+    | ID_SIMPLE operator listws COMMENT
+        {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = $<value>1;
+            node->op = $<value>2;
+            node->values.append( $<value>3 );
+            node->values.append( $<value>4 );
+            $<node>$ = node;
+        }
+    | ID_SIMPLE operator multiline_values listws COMMENT
         {
             AssignmentAST *node = new AssignmentAST();
             node->scopedID = $<value>1;
             node->op = $<value>2;
             node->values = $<values>3;
+            node->values.append( $<value>4 );
+            node->values.append( $<value>5 );
             node->indent = $<indent>3;
-	        node->commentnode = $<node>3;
             $<node>$ = node;
         }
     ;
 
-multiline_values : multiline_values line_body opt_comment
+multiline_values : multiline_values LIST_WS variable_value
         {
-            $<values>$ += $<values>2;
-            if( $<indent>2 != "" && $<indent>$ == "" )
-                $<indent>$ = $<indent>2;
-            $<node>$ = $<node>3;
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
         }
-    |
+    | multiline_values listws CONT listws variable_value
         {
-            $<values>$.clear();
-            $<indent>$ = "";
-	        $<node>$ = 0;
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+            $<values>$.append( $<value>4 );
+            $<values>$.append( $<value>5 );
+            if( $<indent>4 != "" && $<indent>$ == "" )
+                $<indent>$ = $<indent>4;
+        }
+    | multiline_values listws COMMENT_CONT listws variable_value
+        {
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+            $<values>$.append( $<value>4 );
+            $<values>$.append( $<value>5 );
+            if( $<indent>4 != "" && $<indent>$ == "" )
+                $<indent>$ = $<indent>4;
+        }
+    | listws variable_value
+        {
+            $<values>$ = QStringList();
+            $<values>$.append( $<value>1 );
+            $<values>$.append( $<value>2 );
+        }
+    | listws CONT
+        {
+            $<values>$ = QStringList();
+            $<values>$.append( $<value>1 );
+            $<values>$.append( $<value>2 );
+        }
+    | listws COMMENT_CONT
+        {
+            $<values>$ = QStringList();
+            $<values>$.append( $<value>1 );
+            $<values>$.append( $<value>2 );
         }
     ;
 
-line_body : line_body variable_value { $<values>$.append( $<value>2 ); }
-    | variable_value                 { $<values>$.append( $<value>1 ); }
-    | CONT                           { $<values>$.append( $<value>1 ); }
-    | NEWLINE                        { $<values>$.append( $<value>1 ); }
-    | LIST_WS                        { $<values>$.append($<value>1); }
-    | INDENT
-        {
-            $<values>$.append($<value>1);
-            if( $<indent>$ == "" && $<value>1 != "" )
-                $<indent>$ = $<value>1;
-        }
-    | LIST_COMMENT
-        {
-        }
-    | RBRACE
-    ;
-
-opt_comment: LIST_COMMENT_WITHOUT_NEWLINE
-        {
-            CommentAST* node = new CommentAST();
-            node->comment = $<value>1;
-	        $<node>$ = node;
-        }
-    |
-        {
-            $<node>$ = 0;
-        }
-    ;
 
 variable_value : VARIABLE_VALUE     { $<value>$ = $<value>1; }
     | QUOTED_VARIABLE_VALUE  { $<value>$ = $<value>1; }
     ;
 
-operator : EQ | PLUSEQ | MINUSEQ | STAREQ | TILDEEQ
+
+listws: LIST_WS
+        {
+            $<value>$ = $<value>1;
+            $<indent>$ = $<value>1;
+        }
+    |
+        {
+            $<value>$ = QString();
+            $<indent>$ = QString();
+        }
+    ;
+operator : EQ
+    {
+        $<value>$ = $<value>1;
+    }
+    | PLUSEQ
+    {
+        $<value>$ = $<value>1;
+    }
+    | MINUSEQ
+    {
+        $<value>$ = $<value>1;
+    }
+    | STAREQ
+    {
+        $<value>$ = $<value>1;
+    }
+    | TILDEEQ
+    {
+        $<value>$ = $<value>1;
+    }
     ;
 
 scope : ID_SIMPLE
@@ -315,7 +372,7 @@ else_statement : "else" LCURLY
         }
     ;
 
-comment : COMMENT NEWLINE
+comment : COMMENT
         {
             CommentAST *node = new CommentAST();
             node->comment = $<value>1;

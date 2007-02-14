@@ -388,7 +388,7 @@ namespace QMake
     switch (yyn)
       {
 	  case 2:
-#line 147 "qmake.yy"
+#line 143 "qmake.yy"
     {
         ProjectAST *projectAST = new ProjectAST();
         projects.push(projectAST);
@@ -396,7 +396,7 @@ namespace QMake
     break;
 
   case 4:
-#line 155 "qmake.yy"
+#line 151 "qmake.yy"
     {
             projects.top()->addChildAST((yysemantic_stack_[(2) - (2)].node));
             (yysemantic_stack_[(2) - (2)].node)->setDepth(depth);
@@ -404,140 +404,214 @@ namespace QMake
     break;
 
   case 6:
-#line 163 "qmake.yy"
+#line 159 "qmake.yy"
     {
             (yyval.node) = (yysemantic_stack_[(1) - (1)].node);
         ;}
     break;
 
   case 7:
-#line 167 "qmake.yy"
+#line 163 "qmake.yy"
     {
             (yyval.node) = (yysemantic_stack_[(1) - (1)].node);
         ;}
     break;
 
   case 8:
-#line 171 "qmake.yy"
+#line 167 "qmake.yy"
     {
             (yyval.node) = (yysemantic_stack_[(1) - (1)].node);
         ;}
     break;
 
   case 9:
-#line 175 "qmake.yy"
+#line 171 "qmake.yy"
     {
             (yyval.node) = (yysemantic_stack_[(1) - (1)].node);
         ;}
     break;
 
   case 10:
-#line 179 "qmake.yy"
+#line 175 "qmake.yy"
     {
             (yyval.node) = new NewLineAST();
         ;}
     break;
 
   case 11:
-#line 185 "qmake.yy"
+#line 181 "qmake.yy"
     {
             AssignmentAST *node = new AssignmentAST();
-            node->scopedID = (yysemantic_stack_[(3) - (1)].value);
-            node->op = (yysemantic_stack_[(3) - (2)].value);
-            node->values = (yysemantic_stack_[(3) - (3)].values);
-            node->indent = (yysemantic_stack_[(3) - (3)].indent);
-	        node->commentnode = (yysemantic_stack_[(3) - (3)].node);
+            node->scopedID = (yysemantic_stack_[(5) - (1)].value);
+            node->op = (yysemantic_stack_[(5) - (2)].value);
+            node->values = (yysemantic_stack_[(5) - (3)].values) ;
+            node->values.append( (yysemantic_stack_[(5) - (4)].value) );
+            node->values.append( (yysemantic_stack_[(5) - (5)].value) );
+            node->indent = (yysemantic_stack_[(5) - (3)].indent);
             (yyval.node) = node;
         ;}
     break;
 
   case 12:
-#line 197 "qmake.yy"
+#line 192 "qmake.yy"
     {
-            (yyval.values) += (yysemantic_stack_[(3) - (2)].values);
-            if( (yysemantic_stack_[(3) - (2)].indent) != "" && (yyval.indent) == "" )
-                (yyval.indent) = (yysemantic_stack_[(3) - (2)].indent);
-            (yyval.node) = (yysemantic_stack_[(3) - (3)].node);
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = (yysemantic_stack_[(4) - (1)].value);
+            node->op = (yysemantic_stack_[(4) - (2)].value);
+            node->values.append( (yysemantic_stack_[(4) - (3)].value) );
+            node->values.append( (yysemantic_stack_[(4) - (4)].value) );
+            (yyval.node) = node;
         ;}
     break;
 
   case 13:
-#line 204 "qmake.yy"
+#line 201 "qmake.yy"
     {
-            (yyval.values).clear();
-            (yyval.indent) = "";
-	        (yyval.node) = 0;
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = (yysemantic_stack_[(4) - (1)].value);
+            node->op = (yysemantic_stack_[(4) - (2)].value);
+            node->values.append( (yysemantic_stack_[(4) - (3)].value) );
+            node->values.append( (yysemantic_stack_[(4) - (4)].value) );
+            (yyval.node) = node;
         ;}
     break;
 
   case 14:
-#line 211 "qmake.yy"
-    { (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) ); ;}
+#line 210 "qmake.yy"
+    {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = (yysemantic_stack_[(5) - (1)].value);
+            node->op = (yysemantic_stack_[(5) - (2)].value);
+            node->values = (yysemantic_stack_[(5) - (3)].values);
+            node->values.append( (yysemantic_stack_[(5) - (4)].value) );
+            node->values.append( (yysemantic_stack_[(5) - (5)].value) );
+            node->indent = (yysemantic_stack_[(5) - (3)].indent);
+            (yyval.node) = node;
+        ;}
     break;
 
   case 15:
-#line 212 "qmake.yy"
-    { (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) ); ;}
+#line 223 "qmake.yy"
+    {
+            (yyval.values).append( (yysemantic_stack_[(3) - (2)].value) );
+            (yyval.values).append( (yysemantic_stack_[(3) - (3)].value) );
+        ;}
     break;
 
   case 16:
-#line 213 "qmake.yy"
-    { (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) ); ;}
+#line 228 "qmake.yy"
+    {
+            (yyval.values).append( (yysemantic_stack_[(5) - (2)].value) );
+            (yyval.values).append( (yysemantic_stack_[(5) - (3)].value) );
+            (yyval.values).append( (yysemantic_stack_[(5) - (4)].value) );
+            (yyval.values).append( (yysemantic_stack_[(5) - (5)].value) );
+            if( (yysemantic_stack_[(5) - (4)].indent) != "" && (yyval.indent) == "" )
+                (yyval.indent) = (yysemantic_stack_[(5) - (4)].indent);
+        ;}
     break;
 
   case 17:
-#line 214 "qmake.yy"
-    { (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) ); ;}
+#line 237 "qmake.yy"
+    {
+            (yyval.values).append( (yysemantic_stack_[(5) - (2)].value) );
+            (yyval.values).append( (yysemantic_stack_[(5) - (3)].value) );
+            (yyval.values).append( (yysemantic_stack_[(5) - (4)].value) );
+            (yyval.values).append( (yysemantic_stack_[(5) - (5)].value) );
+            if( (yysemantic_stack_[(5) - (4)].indent) != "" && (yyval.indent) == "" )
+                (yyval.indent) = (yysemantic_stack_[(5) - (4)].indent);
+        ;}
     break;
 
   case 18:
-#line 215 "qmake.yy"
-    { (yyval.values).append((yysemantic_stack_[(1) - (1)].value)); ;}
+#line 246 "qmake.yy"
+    {
+            (yyval.values) = QStringList();
+            (yyval.values).append( (yysemantic_stack_[(2) - (1)].value) );
+            (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) );
+        ;}
     break;
 
   case 19:
-#line 217 "qmake.yy"
+#line 252 "qmake.yy"
     {
-            (yyval.values).append((yysemantic_stack_[(1) - (1)].value));
-            if( (yyval.indent) == "" && (yysemantic_stack_[(1) - (1)].value) != "" )
-                (yyval.indent) = (yysemantic_stack_[(1) - (1)].value);
+            (yyval.values) = QStringList();
+            (yyval.values).append( (yysemantic_stack_[(2) - (1)].value) );
+            (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) );
         ;}
     break;
 
   case 20:
-#line 223 "qmake.yy"
+#line 258 "qmake.yy"
     {
+            (yyval.values) = QStringList();
+            (yyval.values).append( (yysemantic_stack_[(2) - (1)].value) );
+            (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) );
         ;}
+    break;
+
+  case 21:
+#line 266 "qmake.yy"
+    { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 22:
-#line 229 "qmake.yy"
-    {
-            CommentAST* node = new CommentAST();
-            node->comment = (yysemantic_stack_[(1) - (1)].value);
-	        (yyval.node) = node;
-        ;}
+#line 267 "qmake.yy"
+    { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 23:
-#line 235 "qmake.yy"
+#line 272 "qmake.yy"
     {
-            (yyval.node) = 0;
+            (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+            (yyval.indent) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 24:
-#line 240 "qmake.yy"
-    { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
+#line 277 "qmake.yy"
+    {
+            (yyval.value) = QString();
+            (yyval.indent) = QString();
+        ;}
     break;
 
   case 25:
-#line 241 "qmake.yy"
-    { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
+#line 283 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
     break;
 
-  case 31:
-#line 248 "qmake.yy"
+  case 26:
+#line 287 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
+    break;
+
+  case 27:
+#line 291 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
+    break;
+
+  case 28:
+#line 295 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
+    break;
+
+  case 29:
+#line 299 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
+    break;
+
+  case 30:
+#line 305 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
             projects.push(projectAST);
@@ -546,16 +620,16 @@ namespace QMake
         ;}
     break;
 
-  case 32:
-#line 255 "qmake.yy"
+  case 31:
+#line 312 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
         ;}
     break;
 
-  case 33:
-#line 262 "qmake.yy"
+  case 32:
+#line 319 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -574,34 +648,34 @@ namespace QMake
         ;}
     break;
 
-  case 34:
-#line 280 "qmake.yy"
+  case 33:
+#line 337 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
         ;}
     break;
 
-  case 35:
-#line 286 "qmake.yy"
+  case 34:
+#line 343 "qmake.yy"
     { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
-  case 36:
-#line 287 "qmake.yy"
+  case 35:
+#line 344 "qmake.yy"
     { (yyval.value) = ""; ;}
     break;
 
-  case 38:
-#line 292 "qmake.yy"
+  case 37:
+#line 349 "qmake.yy"
     {
             projects.top()->addChildAST((yysemantic_stack_[(2) - (2)].node));
             (yysemantic_stack_[(2) - (2)].node)->setDepth(depth);
         ;}
     break;
 
-  case 40:
-#line 300 "qmake.yy"
+  case 39:
+#line 357 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -611,33 +685,33 @@ namespace QMake
         ;}
     break;
 
-  case 41:
-#line 308 "qmake.yy"
+  case 40:
+#line 365 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
         ;}
     break;
 
-  case 42:
-#line 313 "qmake.yy"
+  case 41:
+#line 370 "qmake.yy"
     {
             (yyval.node) = new ProjectAST();
         ;}
     break;
 
-  case 43:
-#line 319 "qmake.yy"
+  case 42:
+#line 376 "qmake.yy"
     {
             CommentAST *node = new CommentAST();
-            node->comment = (yysemantic_stack_[(2) - (1)].value);
+            node->comment = (yysemantic_stack_[(1) - (1)].value);
             (yyval.node) = node;
         ;}
     break;
 
 
     /* Line 675 of lalr1.cc.  */
-#line 641 "qmake_yacc.cpp"
+#line 715 "qmake_yacc.cpp"
 	default: break;
       }
     YY_SYMBOL_PRINT ("-> $$ =", yyr1_[yyn], &yyval, &yyloc);
@@ -844,16 +918,16 @@ namespace QMake
 
   /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
      STATE-NUM.  */
-  const signed char Parser::yypact_ninf_ = -41;
+  const signed char Parser::yypact_ninf_ = -42;
   const signed char
   Parser::yypact_[] =
   {
-       -41,     1,   -41,   -41,     5,    18,   -41,    -9,   -41,   -41,
-     -41,   -41,   -41,   -41,   -41,   -41,   -41,   -41,   -41,   -14,
-     -41,    -2,   -41,   -41,    21,   -10,     5,   -41,   -41,   -41,
-     -41,   -41,   -41,   -41,   -41,   -41,   -41,   -41,     7,   -41,
-     -41,     4,    -2,   -41,   -41,   -41,   -41,     6,    15,   -41,
-     -41,    -2,    17,   -41
+       -42,     7,   -42,   -42,     5,    30,   -42,   -42,   -42,   -42,
+     -42,   -42,   -42,   -42,   -42,   -42,   -42,   -42,   -42,    -5,
+     -11,    -8,   -42,     4,   -42,    -2,    13,     5,   -42,   -42,
+     -42,   -14,    28,   -42,   -42,   -42,   -42,   -42,   -42,   -42,
+     -42,    -1,    -8,   -42,   -42,   -42,   -11,   -11,   -42,     8,
+     -14,   -14,     3,   -42,   -42,   -42,   -42,    -8,    15,   -42
   };
 
   /* YYDEFACT[S] -- default rule to reduce with in state S when YYTABLE
@@ -862,30 +936,28 @@ namespace QMake
   const unsigned char
   Parser::yydefact_[] =
   {
-         2,     0,     5,     1,     3,    31,    44,     0,     4,     6,
-       7,     8,     9,    10,    26,    27,    28,    29,    30,    36,
-      13,    39,    43,    35,     0,    11,     0,     5,    32,    33,
-      21,    17,    16,    20,    25,    24,    19,    18,    23,    15,
-      38,     0,    39,    22,    12,    14,    37,    42,     0,    34,
-      40,    39,     0,    41
+         2,     0,     5,     1,     3,    30,    43,    42,     4,     6,
+       7,     8,     9,    10,    25,    26,    27,    28,    29,    35,
+      24,    38,    34,     0,    23,    24,     0,     0,     5,    31,
+      32,    23,     0,    12,    13,    19,    20,    22,    21,    18,
+      37,     0,    38,    15,    11,    14,    24,    24,    36,    41,
+       0,     0,     0,    33,    16,    17,    39,    38,     0,    40
   };
 
   /* YYPGOTO[NTERM-NUM].  */
   const signed char
   Parser::yypgoto_[] =
   {
-       -41,   -41,   -41,     8,    10,   -41,   -41,   -41,   -41,    -1,
-     -41,   -41,   -41,   -41,   -41,   -41,   -40,   -41,   -41,   -41,
-     -41
+       -42,   -42,   -42,     1,    17,   -42,   -42,   -27,   -25,   -42,
+     -42,   -42,   -42,   -42,   -42,   -41,   -42,   -42,   -42,   -42
   };
 
   /* YYDEFGOTO[NTERM-NUM].  */
   const signed char
   Parser::yydefgoto_[] =
   {
-        -1,     1,     2,     4,     8,     9,    25,    38,    44,    39,
-      20,    10,    21,    11,    42,    24,    28,    49,    51,    12,
-      13
+        -1,     1,     2,     4,     8,     9,    25,    39,    26,    20,
+      10,    21,    11,    42,    23,    29,    53,    57,    12,    13
   };
 
   /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -895,20 +967,22 @@ namespace QMake
   const unsigned char
   Parser::yytable_[] =
   {
-        30,     3,    47,    31,    22,    23,    32,     5,     5,    26,
-      33,    52,    34,    35,    36,    37,    27,     6,     6,     7,
-       7,    46,    14,    15,    16,    17,    18,    19,    43,    34,
-      35,    29,    48,    50,    53,    41,    40,    45
+        32,    49,     5,    27,    43,    37,    38,     3,     5,    28,
+      24,     6,     7,    22,    30,    48,    58,     6,     7,    31,
+      56,    50,    51,    54,    55,    33,    34,    35,    36,    41,
+      52,    59,    37,    38,    14,    15,    16,    17,    18,    19,
+      44,    45,    46,    47,    40
   };
 
   /* YYCHECK.  */
   const unsigned char
   Parser::yycheck_[] =
   {
-        10,     0,    42,    13,    13,    19,    16,     3,     3,    11,
-      20,    51,    22,    23,    24,    25,    18,    13,    13,    15,
-      15,    17,     4,     5,     6,     7,     8,     9,    21,    22,
-      23,    10,    26,    18,    17,    27,    26,    38
+        25,    42,     3,    11,    31,    19,    20,     0,     3,    17,
+      21,    12,    13,    18,    10,    16,    57,    12,    13,    21,
+      17,    46,    47,    50,    51,    12,    13,    14,    15,    28,
+      22,    16,    19,    20,     4,     5,     6,     7,     8,     9,
+      12,    13,    14,    15,    27
   };
 
   /* STOS_[STATE-NUM] -- The (internal number of the) accessing
@@ -916,12 +990,12 @@ namespace QMake
   const unsigned char
   Parser::yystos_[] =
   {
-         0,    28,    29,     0,    30,     3,    13,    15,    31,    32,
-      38,    40,    46,    47,     4,     5,     6,     7,     8,     9,
-      37,    39,    13,    19,    42,    33,    11,    18,    43,    10,
-      10,    13,    16,    20,    22,    23,    24,    25,    34,    36,
-      31,    30,    41,    21,    35,    36,    17,    43,    26,    44,
-      18,    45,    43,    17
+         0,    24,    25,     0,    26,     3,    12,    13,    27,    28,
+      33,    35,    41,    42,     4,     5,     6,     7,     8,     9,
+      32,    34,    18,    37,    21,    29,    31,    11,    17,    38,
+      10,    21,    31,    12,    13,    14,    15,    19,    20,    30,
+      27,    26,    36,    30,    12,    13,    14,    15,    16,    38,
+      31,    31,    22,    39,    30,    30,    17,    40,    38,    16
   };
 
 #if YYDEBUG
@@ -932,7 +1006,7 @@ namespace QMake
   {
          0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277,   278,   279,   280,   281
+     275,   276,   277
   };
 #endif
 
@@ -940,11 +1014,11 @@ namespace QMake
   const unsigned char
   Parser::yyr1_[] =
   {
-         0,    27,    29,    28,    30,    30,    31,    31,    31,    31,
-      31,    32,    33,    33,    34,    34,    34,    34,    34,    34,
-      34,    34,    35,    35,    36,    36,    37,    37,    37,    37,
-      37,    39,    38,    41,    40,    42,    42,    43,    43,    43,
-      45,    44,    44,    46,    47
+         0,    23,    25,    24,    26,    26,    27,    27,    27,    27,
+      27,    28,    28,    28,    28,    29,    29,    29,    29,    29,
+      29,    30,    30,    31,    31,    32,    32,    32,    32,    32,
+      34,    33,    36,    35,    37,    37,    38,    38,    38,    40,
+      39,    39,    41,    42
   };
 
   /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -952,10 +1026,10 @@ namespace QMake
   Parser::yyr2_[] =
   {
          0,     2,     0,     2,     2,     0,     1,     1,     1,     1,
-       1,     3,     3,     0,     2,     1,     1,     1,     1,     1,
-       1,     1,     1,     0,     1,     1,     1,     1,     1,     1,
-       1,     0,     3,     0,     7,     1,     0,     3,     2,     0,
-       0,     5,     0,     2,     1
+       1,     5,     4,     4,     5,     3,     5,     5,     2,     2,
+       2,     1,     1,     1,     0,     1,     1,     1,     1,     1,
+       0,     3,     0,     7,     1,     0,     3,     2,     0,     0,
+       5,     0,     1,     1
   };
 
 #if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
@@ -965,12 +1039,11 @@ namespace QMake
   const Parser::yytname_[] =
   {
     "$end", "error", "$undefined", "ID_SIMPLE", "EQ", "PLUSEQ", "MINUSEQ",
-  "STAREQ", "TILDEEQ", "LBRACE", "RBRACE", "COLON", "NUMSIGN", "NEWLINE",
-  "NUMBER", "COMMENT", "CONT", "RCURLY", "LCURLY", "ID_ARGS",
-  "LIST_COMMENT", "LIST_COMMENT_WITHOUT_NEWLINE", "QUOTED_VARIABLE_VALUE",
-  "VARIABLE_VALUE", "INDENT", "LIST_WS", "\"else\"", "$accept", "project",
-  "@1", "statements", "statement", "variable_assignment",
-  "multiline_values", "line_body", "opt_comment", "variable_value",
+  "STAREQ", "TILDEEQ", "LBRACE", "RBRACE", "COLON", "NEWLINE", "COMMENT",
+  "CONT", "COMMENT_CONT", "RCURLY", "LCURLY", "ID_ARGS",
+  "QUOTED_VARIABLE_VALUE", "VARIABLE_VALUE", "LIST_WS", "\"else\"",
+  "$accept", "project", "@1", "statements", "statement",
+  "variable_assignment", "multiline_values", "variable_value", "listws",
   "operator", "scope", "@2", "function_call", "@3", "function_args",
   "scope_body", "else_statement", "@4", "comment", "emptyline", 0
   };
@@ -981,17 +1054,19 @@ namespace QMake
   const Parser::rhs_number_type
   Parser::yyrhs_[] =
   {
-        28,     0,    -1,    -1,    29,    30,    -1,    30,    31,    -1,
-      -1,    32,    -1,    38,    -1,    40,    -1,    46,    -1,    47,
-      -1,     3,    37,    33,    -1,    33,    34,    35,    -1,    -1,
-      34,    36,    -1,    36,    -1,    16,    -1,    13,    -1,    25,
-      -1,    24,    -1,    20,    -1,    10,    -1,    21,    -1,    -1,
-      23,    -1,    22,    -1,     4,    -1,     5,    -1,     6,    -1,
-       7,    -1,     8,    -1,    -1,     3,    39,    43,    -1,    -1,
-       3,     9,    42,    10,    41,    43,    44,    -1,    19,    -1,
-      -1,    18,    30,    17,    -1,    11,    31,    -1,    -1,    -1,
-      26,    18,    45,    43,    17,    -1,    -1,    15,    13,    -1,
-      13,    -1
+        24,     0,    -1,    -1,    25,    26,    -1,    26,    27,    -1,
+      -1,    28,    -1,    33,    -1,    35,    -1,    41,    -1,    42,
+      -1,     3,    32,    29,    31,    12,    -1,     3,    32,    31,
+      12,    -1,     3,    32,    31,    13,    -1,     3,    32,    29,
+      31,    13,    -1,    29,    21,    30,    -1,    29,    31,    14,
+      31,    30,    -1,    29,    31,    15,    31,    30,    -1,    31,
+      30,    -1,    31,    14,    -1,    31,    15,    -1,    20,    -1,
+      19,    -1,    21,    -1,    -1,     4,    -1,     5,    -1,     6,
+      -1,     7,    -1,     8,    -1,    -1,     3,    34,    38,    -1,
+      -1,     3,     9,    37,    10,    36,    38,    39,    -1,    18,
+      -1,    -1,    17,    26,    16,    -1,    11,    27,    -1,    -1,
+      -1,    22,    17,    40,    38,    16,    -1,    -1,    13,    -1,
+      12,    -1
   };
 
   /* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
@@ -1000,21 +1075,21 @@ namespace QMake
   Parser::yyprhs_[] =
   {
          0,     0,     3,     4,     7,    10,    11,    13,    15,    17,
-      19,    21,    25,    29,    30,    33,    35,    37,    39,    41,
-      43,    45,    47,    49,    50,    52,    54,    56,    58,    60,
-      62,    64,    65,    69,    70,    78,    80,    81,    85,    88,
-      89,    90,    96,    97,   100
+      19,    21,    27,    32,    37,    43,    47,    53,    59,    62,
+      65,    68,    70,    72,    74,    75,    77,    79,    81,    83,
+      85,    86,    90,    91,    99,   101,   102,   106,   109,   110,
+     111,   117,   118,   120
   };
 
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
   const unsigned short int
   Parser::yyrline_[] =
   {
-         0,   147,   147,   147,   154,   159,   162,   166,   170,   174,
-     178,   184,   196,   204,   211,   212,   213,   214,   215,   216,
-     222,   225,   228,   235,   240,   241,   244,   244,   244,   244,
-     244,   248,   247,   262,   261,   286,   287,   290,   291,   296,
-     300,   299,   313,   318,   326
+         0,   143,   143,   143,   150,   155,   158,   162,   166,   170,
+     174,   180,   191,   200,   209,   222,   227,   236,   245,   251,
+     257,   266,   267,   271,   277,   282,   286,   290,   294,   298,
+     305,   304,   319,   318,   343,   344,   347,   348,   353,   357,
+     356,   370,   375,   383
   };
 
   // Print the state stack on the debug stream.
@@ -1081,8 +1156,7 @@ namespace QMake
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26
+      15,    16,    17,    18,    19,    20,    21,    22
     };
     if ((unsigned int) t <= yyuser_token_number_max_)
       return translate_table[t];
@@ -1091,20 +1165,20 @@ namespace QMake
   }
 
   const int Parser::yyeof_ = 0;
-  const int Parser::yylast_ = 37;
-  const int Parser::yynnts_ = 21;
+  const int Parser::yylast_ = 44;
+  const int Parser::yynnts_ = 20;
   const int Parser::yyempty_ = -2;
   const int Parser::yyfinal_ = 3;
   const int Parser::yyterror_ = 1;
   const int Parser::yyerrcode_ = 256;
-  const int Parser::yyntokens_ = 27;
+  const int Parser::yyntokens_ = 23;
 
-  const unsigned int Parser::yyuser_token_number_max_ = 281;
+  const unsigned int Parser::yyuser_token_number_max_ = 277;
   const Parser::token_number_type Parser::yyundef_token_ = 2;
 
 } // namespace QMake
 
-#line 329 "qmake.yy"
+#line 386 "qmake.yy"
 
 
 

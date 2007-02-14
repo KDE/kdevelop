@@ -145,7 +145,7 @@ public:
     /* returns wether this is an enabled subproject or a disabled one */
     bool isEnabled() { return m_isEnabled; }
 
-    static QStringList removeWhiteSpace(const QStringList& list);
+    QStringList cleanStringList(const QStringList& list) const;
 
     /* Reload a project scope */
     void reloadProject();
@@ -240,7 +240,8 @@ private:
 
     // This function determines the currently used String for fileending, it can be \n, \r or \r\n
     QString getLineEndingString() const;
-
+    bool isComment( const QString& ) const;
+    bool containsContinue( const QString& ) const;
     void allFiles( const QString&, std::set<QString>& );
 
     void loadDefaultOpts();

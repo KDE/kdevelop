@@ -126,8 +126,6 @@ ProjectAST::LineEnding ProjectAST::lineEnding()
 
 AssignmentAST::~AssignmentAST()
 {
-    delete commentnode;
-    commentnode = 0;
 }
 
 void AssignmentAST::writeBack(QString &buffer)
@@ -137,15 +135,7 @@ void AssignmentAST::writeBack(QString &buffer)
     buffer += scopedID + " " + op;
     if( values.first().stripWhiteSpace() != "" )
         buffer += " ";
-    if( values.last() == "\n" && commentnode )
-        values.pop_back();
     buffer += values.join("");
-    if( commentnode )
-    {
-        if( !buffer.endsWith(" ") && !buffer.endsWith("\t") )
-            buffer += " ";
-        buffer += static_cast<QMake::CommentAST*>(commentnode)->comment;
-    }
 }
 
 

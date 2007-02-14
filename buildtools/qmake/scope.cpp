@@ -291,9 +291,7 @@ QStringList Scope::variableValuesForOp( const QString& variable , const QString&
             }
         }
     }
-    result.remove( "\\"+getLineEndingString() );
-    result.remove( getLineEndingString() );
-    result = Scope::removeWhiteSpace(result);
+    result = cleanStringList(result);
     return result;
 }
 
@@ -310,9 +308,7 @@ QStringList Scope::variableValues( const QString& variable, bool checkIncParent 
     }
 
     calcValuesFromStatements( variable, result, checkIncParent );
-    result.remove( "\\"+getLineEndingString() );
-    result.remove( getLineEndingString() );
-    result = Scope::removeWhiteSpace(result);
+    result = cleanStringList(result);
     if( scopeType() != Scope::IncludeScope || checkIncParent )
     {
         m_varCache[ variable ] = result;
@@ -377,8 +373,7 @@ void Scope::calcValuesFromStatements( const QString& variable, QStringList& resu
         }
     }
 
-    result.remove( "\\"+getLineEndingString() );
-    result.remove( getLineEndingString() );
+    result = cleanStringList( result );
     return ;
 }
 
@@ -697,14 +692,19 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
         {
             while ( !origValues.isEmpty() && origValues.last() == getLineEndingString() )
                 origValues.pop_back();
-            if ( origValues.count() > 0 && origValues.last() != "\\"+getLineEndingString() )
+            if ( origValues.count() > 0 && !containsContinue( origValues.last() ) && !isComment( origValues.last() ) )
             {
                 origValues.append( " " );
                 origValues.append( "\\"+getLineEndingString() );
                 if( indent != "" )
                     origValues.append( indent );
-            }else if ( !origValues.isEmpty() && origValues.last() == "\\"+getLineEndingString() )
+            }else if ( !origValues.isEmpty() && containsContinue( origValues.last() ) && !isComment( origValues.last() ) )
             {
+                if( indent != "" )
+                    origValues.append( indent );
+            }else if ( !origValues.isEmpty() && isComment( origValues.last() ) )
+            {
+                origValues[origValues.count()-1] = "\\ "+origValues[origValues.count()-1];
                 if( indent != "" )
                     origValues.append( indent );
             }else if ( origValues.isEmpty() )
@@ -712,7 +712,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             QString newval = *it;
             QRegExp re("([^$])\\$([^$\\(\\)\\{\\} /]*)( |\\)|/)");
             newval.replace(re, "\1$(\\2)\\3");
-            if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains(getLineEndingString()) )
+            if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains( getLineEndingString() ) || (newval).contains("#") )
                 origValues.append( "\""+newval+"\"" );
             else
                 origValues.append( newval );
@@ -721,7 +721,8 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
         {
             QStringList::iterator posit = origValues.find( *it );
             posit = origValues.remove( posit );
-            while( posit != origValues.end() && ( *posit == "\\"+getLineEndingString() || (*posit).stripWhiteSpace() == "" ) )
+            while( posit != origValues.end() && ( (*posit).find( "\\[ \t]*"+getLineEndingString() )
+                    || (*posit).stripWhiteSpace() == "" ) )
             {
                 posit = origValues.remove( posit );
             }
@@ -731,7 +732,10 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             || origValues.last() == getLineEndingString()
             || origValues.last().stripWhiteSpace() == "" ) && !origValues.isEmpty() )
         origValues.pop_back();
-    origValues.append(getLineEndingString());
+    if( !origValues.isEmpty() && origValues.last().find( QRegExp("\\[ \t]*#") ) != -1 )
+        origValues[origValues.count()-1] = origValues[origValues.count()-1].mid(origValues[origValues.count()-1].find( "#") );
+    if( !origValues.isEmpty() && origValues.last().find( getLineEndingString() ) == -1 )
+        origValues.append(getLineEndingString());
 }
 
 void Scope::updateVariable( const QString& variable, const QString& op, const QStringList& values, bool removeFromOp )
@@ -886,7 +890,7 @@ void Scope::init()
                 for ( QStringList::const_iterator sit = m->values.begin() ; sit != m->values.end(); ++sit )
                 {
                     QString str = *sit;
-                    if ( str == "\\"+getLineEndingString() || str == getLineEndingString() || str == "." || str == "./" || (str).stripWhiteSpace() == "" )
+                    if ( containsContinue( str ) || isComment( str ) || str == getLineEndingString() || str == "." || str == "./" || (str).stripWhiteSpace() == "" )
                         continue;
                     QDir subproject;
                     QString projectfile;
@@ -1103,13 +1107,16 @@ bool Scope::listsEqual(const QStringList& l1, const QStringList& l2)
     return (left == right);
 }
 
-QStringList Scope::removeWhiteSpace(const QStringList& list)
+QStringList Scope::cleanStringList(const QStringList& list) const
 {
     QStringList result;
     for( QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
     {
         QString s = *it;
-        if( s.stripWhiteSpace() != "" )
+        if( s.stripWhiteSpace() != ""
+                && !containsContinue(s)
+                && s.stripWhiteSpace() != getLineEndingString()
+                && !isComment(s) )
             result.append(s);
     }
     return result;
@@ -1201,9 +1208,7 @@ QStringList Scope::variableValues( const QString& variable, QMake::AST* stopHere
         return result;
 
     calcValuesFromStatements( variable, result, true, stopHere );
-    result.remove( "\\"+getLineEndingString() );
-    result.remove( getLineEndingString() );
-    result = Scope::removeWhiteSpace(result);
+    result = cleanStringList(result);
     return result;
 }
 
@@ -1448,8 +1453,8 @@ QString Scope::findCustomVarForPath( const QString& path )
     QMap<unsigned int, QMake::AssignmentAST*>::const_iterator it = m_customVariables.begin();
     for( ; it != m_customVariables.end(); ++it )
     {
-        kdDebug(9024) << "Checking " << path << " against " << removeWhiteSpace(it.data()->values) << endl;
-        if( !it.data()->values.isEmpty() && removeWhiteSpace(it.data()->values).front() == path )
+        kdDebug(9024) << "Checking " << path << " against " << cleanStringList(it.data()->values) << endl;
+        if( !it.data()->values.isEmpty() && cleanStringList(it.data()->values).front() == path )
         {
             return it.data()->scopedID;
         }
@@ -1500,6 +1505,17 @@ QString Scope::getLineEndingString() const
 QString Scope::replaceWs(QString s)
 {
     return s.replace( getLineEndingString(), "%nl").replace("\t", "%tab").replace(" ", "%spc");
+}
+
+bool Scope::containsContinue(const QString& s ) const
+{
+    return( s.find( QRegExp( "\\\\s*"+getLineEndingString() ) ) != -1
+            || s.find( QRegExp( "\\\\s*#" ) ) != -1 );
+}
+
+bool Scope::isComment( const QString& s) const
+{
+    return s.startsWith("#");
 }
 
 #ifdef DEBUG

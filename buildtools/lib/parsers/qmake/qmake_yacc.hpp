@@ -231,20 +231,16 @@ namespace QMake
      LBRACE = 264,
      RBRACE = 265,
      COLON = 266,
-     NUMSIGN = 267,
-     NEWLINE = 268,
-     NUMBER = 269,
-     COMMENT = 270,
-     CONT = 271,
-     RCURLY = 272,
-     LCURLY = 273,
-     ID_ARGS = 274,
-     LIST_COMMENT = 275,
-     LIST_COMMENT_WITHOUT_NEWLINE = 276,
-     QUOTED_VARIABLE_VALUE = 277,
-     VARIABLE_VALUE = 278,
-     INDENT = 279,
-     LIST_WS = 280
+     NEWLINE = 267,
+     COMMENT = 268,
+     CONT = 269,
+     COMMENT_CONT = 270,
+     RCURLY = 271,
+     LCURLY = 272,
+     ID_ARGS = 273,
+     QUOTED_VARIABLE_VALUE = 274,
+     VARIABLE_VALUE = 275,
+     LIST_WS = 276
    };
 
     };
