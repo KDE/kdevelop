@@ -504,7 +504,10 @@ void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     foreach (Container *c, containers)
     {
         for (int i = 0; i < c->count(); ++i)
+        {
             QVERIFY(c->widget(i) != 0);
+            QVERIFY(c->widget(i)->parentWidget() != 0);
+        }
         widgetCount += c->count();
     }
 
