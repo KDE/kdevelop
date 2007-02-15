@@ -23,6 +23,9 @@
 
 #include <kdirwatch.h>
 
+#include <kmessagebox.h>
+#include <klocale.h>
+
 #include "urlutil.h"
 #include "trollprojectpart.h"
 #include "qmakedefaultopts.h"
@@ -65,7 +68,6 @@ Scope::~Scope()
     m_scopes.clear();
 
     m_customVariables.clear();
-
     if ( m_root && m_root->isProject() && !m_incast )
     {
         delete m_root;
@@ -152,6 +154,8 @@ bool Scope::loadFromFile( const QString& filename )
     if ( !QFileInfo(filename).exists() || QMake::Driver::parseFile( filename, &m_root, 0 ) != 0 )
     {
         kdDebug( 9024 ) << "Couldn't parse project: " << filename << endl;
+        KMessageBox::error( 0, i18n( "Couldn't parse project file: %1" ).arg( filename ),
+                i18n( "Couldn't parse project file" ) );
         m_root = 0;
         return false;
     }
@@ -187,6 +191,10 @@ void Scope::saveToFile() const
         m_root->writeBack( astbuffer );
         out << astbuffer;
         file.close();
+    }else
+    {
+        KMessageBox::error( 0, i18n( "Couldn't write project file: %1" ).arg( filename ),
+                i18n( "Couldn't write project file" ) );
     }
 #ifdef DEBUG
     Scope::PrintAST pa;
