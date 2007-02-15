@@ -137,8 +137,8 @@ private:
 	KListView* m_currentList;
 	EfficientKListView m_errorList;
 	EfficientKListView m_fixmeList;
-	KListView* m_warningList;
 	EfficientKListView m_todoList;
+    EfficientKListView m_warningList;
 	KListView* m_filteredList;
 	KLineEdit* m_filterEdit;
 

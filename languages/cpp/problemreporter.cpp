@@ -98,6 +98,7 @@ m_markIface( 0 )
 	m_gridLayout = new QGridLayout(this,2,3);
 
 	m_errorList = new KListView(this);
+	m_warningList = new KListView(this);
 	m_fixmeList = new KListView(this);
 	m_todoList = new KListView(this);
 	m_filteredList = new KListView(this);
@@ -107,6 +108,7 @@ m_markIface( 0 )
 	m_currentList->addColumn( i18n("Level") );
 
     //addColumn( i18n("Level") );
+	InitListView(m_warningList);
 	InitListView(m_errorList);
 	InitListView(m_fixmeList);
 	InitListView(m_todoList);
@@ -117,18 +119,20 @@ m_markIface( 0 )
 	m_widgetStack = new QWidgetStack(this);
 	m_widgetStack->addWidget(m_currentList,0);
 	m_widgetStack->addWidget(m_errorList,1);
-	m_widgetStack->addWidget(m_fixmeList,2);
-	m_widgetStack->addWidget(m_todoList,3);
-	m_widgetStack->addWidget(m_filteredList,4);
+	m_widgetStack->addWidget(m_warningList,2);
+	m_widgetStack->addWidget(m_fixmeList,3);
+	m_widgetStack->addWidget(m_todoList,4);
+	m_widgetStack->addWidget(m_filteredList,5);
 
 	m_tabBar = new QTabBar(this);
 	m_tabBar->insertTab(new QTab(i18n("Current")),0);
 	m_tabBar->insertTab(new QTab(i18n("Errors")),1);
-	m_tabBar->insertTab(new QTab(i18n("Fixme")),2);
-	m_tabBar->insertTab(new QTab(i18n("Todo")),3);
-	m_tabBar->insertTab(new QTab(i18n("Filtered")),4);
+	m_tabBar->insertTab(new QTab(i18n("Warnings")),2);
+	m_tabBar->insertTab(new QTab(i18n("Fixme")),3);
+	m_tabBar->insertTab(new QTab(i18n("Todo")),4);
+	m_tabBar->insertTab(new QTab(i18n("Filtered")),5);
 	m_tabBar->setTabEnabled(0,false);
-	m_tabBar->setTabEnabled(4,false);
+	m_tabBar->setTabEnabled(5,false);
 
 	m_filterEdit = new KLineEdit(this);
 
@@ -166,21 +170,22 @@ m_markIface( 0 )
 
 void ProblemReporter::slotFilter()
 {
-	if(!m_tabBar->isTabEnabled(4))
-		m_tabBar->setTabEnabled(4,true);
+	if(!m_tabBar->isTabEnabled(5))
+		m_tabBar->setTabEnabled(5,true);
 
-	m_tabBar->tab(4)->setText(i18n("Filtered: %1").arg( m_filterEdit->text() ));
-	m_tabBar->setCurrentTab(4);
+	m_tabBar->tab(5)->setText(i18n("Filtered: %1").arg( m_filterEdit->text() ));
+	m_tabBar->setCurrentTab(5);
 
 	m_filteredList->clear();
 
 	if ( m_filterEdit->text().isEmpty() )
 	{
-		m_tabBar->setTabEnabled( 4, false );
+		m_tabBar->setTabEnabled( 5, false );
 		return;
 	}
 	
 	filterList(m_errorList,i18n("Error"));
+	filterList(m_warningList,i18n("Warning"));
 	filterList(m_fixmeList,i18n("Fixme"));
 	filterList(m_todoList,i18n("Todo"));
 
@@ -278,9 +283,11 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	kdDebug(9007) << "ProblemReporter::removeAllProblems()" << relFileName << endl;
 
 	m_errorList.limitSize( 300 );
+	m_warningList.limitSize( 300 );
 	m_fixmeList.limitSize( 300 );
 	m_todoList.limitSize( 300 );
 	
+	m_warningList.removeAllItems( relFileName );
 	m_errorList.removeAllItems( relFileName );
 	m_fixmeList.removeAllItems( relFileName );
 	m_todoList.removeAllItems( relFileName );
@@ -309,6 +316,7 @@ void ProblemReporter::initCurrentList()
  	m_currentList->clear();
 
 	updateCurrentWith(m_errorList, i18n("Error"),relFileName);
+	updateCurrentWith(m_warningList, i18n("Warning"),relFileName);
 	updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
 	updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
 
@@ -361,7 +369,7 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 		list = &m_errorList;
 		break;
 	case Problem::Level_Warning:
-		list = &m_errorList;
+		list = &m_warningList;
 		break;
 	case Problem::Level_Todo:
 		list = &m_todoList;
