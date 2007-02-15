@@ -80,6 +80,8 @@
 #include "filetemplate.h"
 #include "settings.h"
 
+#include "blockingkprocess.h"
+
 #include "profileengine.h"
 #include "profile.h"
 
@@ -602,6 +604,14 @@ void AppWizardDialog::accept()
 		(*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_pCurrentAppInfo->subMap);
 	}
 
+    if( !m_pCurrentAppInfo->finishCmd.isEmpty() )
+    {
+        m_pCurrentAppInfo->finishCmd = KMacroExpander::expandMacros(
+                m_pCurrentAppInfo->finishCmd, m_pCurrentAppInfo->subMap );
+        m_pCurrentAppInfo->finishCmdDir = KMacroExpander::expandMacros(
+                m_pCurrentAppInfo->finishCmdDir, m_pCurrentAppInfo->subMap );
+    }
+
 	QMap<QString,QString>::Iterator mapIt( m_pCurrentAppInfo->subMap.begin() );
 	for( ; mapIt != m_pCurrentAppInfo->subMap.end(); ++mapIt )
 	{
@@ -680,9 +690,21 @@ void AppWizardDialog::accept()
 		m_pCurrentAppInfo->subMap.remove( *cleanIt );
 	}
 
-        if  (!m_pCurrentAppInfo->finishCmd.isEmpty())
-           if (KDevAppFrontend *appFrontend = m_part->extension<KDevAppFrontend>("KDevelop/AppFrontend"))
-              appFrontend->startAppCommand(KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmdDir, m_pCurrentAppInfo->subMap), KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmd, m_pCurrentAppInfo->subMap), false);
+      if  (!m_pCurrentAppInfo->finishCmd.isEmpty())
+      {
+        BlockingKProcess proc;
+        proc.setWorkingDirectory( m_pCurrentAppInfo->finishCmdDir );
+        proc.setUseShell( true );
+        proc << "cd" << m_pCurrentAppInfo->finishCmdDir << "&&";
+        proc << m_pCurrentAppInfo->finishCmd;
+        kdDebug(9010) << "Executing:" << proc.args() << endl;
+        proc.start( KProcess::NotifyOnExit );
+        if( !proc.isRunning() && !proc.normalExit() )
+        {
+            kdDebug(9010) << "Couldn't execute: " << proc.args() << endl;
+        }
+      }
+
 
 
 	int id = m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget());
