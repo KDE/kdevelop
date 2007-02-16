@@ -69,6 +69,8 @@ private slots:
     void contextMenu( QPopupMenu *popup, const Context *context );
     void slotAddToProject();
     void slotRemoveFromProject();
+    void slotAddToProjectRecursive();
+    void slotRemoveFromProjectRecursive();
     void slotChooseActiveDirectory();
     void slotBuild();
     void slotCompileFile();
@@ -116,6 +118,8 @@ private:
     QMap<QString, int> m_parsedMakefiles;
     QValueStack<QString> m_makefilesToParse;
     QMap<QString, QString> m_makefileVars;
+    bool m_recursive;
+    bool m_first_recursive;
 };
 
 #endif

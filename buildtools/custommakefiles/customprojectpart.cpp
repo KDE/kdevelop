@@ -224,7 +224,15 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
             int id = popup->insertItem( i18n( "Remove %1 From Project" ).arg( popupstr ),
                                         this, SLOT( slotRemoveFromProject() ) );
             popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Removes current file from the list of files in project. "
-                                           "Note that the file should be manually excluded from corresponding makefile or build.xml." ) );
+                    "Note that the file should be manually excluded from corresponding makefile or build.xml." ) );
+            if ( URLUtil::isDirectory( url ) )
+            {
+                int id = popup->insertItem( i18n( "Remove %1 From Project (recursive)" ).arg( popupstr ),
+                                        this, SLOT( slotRemoveFromProjectRecursive() ) );
+                popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Recursively removes files in the current dir from the list of files in project. "
+                    "Note that the files should be manually excluded from corresponding makefile or build.xml." ) );
+
+            }
         }
         else
         {
@@ -232,7 +240,14 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
             int id = popup->insertItem( i18n( "Add %1 to Project" ).arg( popupstr ),
                                         this, SLOT( slotAddToProject() ) );
             popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Adds current file to the list of files in project. "
-                                           "Note that the file should be manually added to corresponding makefile or build.xml." ) );
+                        "Note that the file should be manually added to corresponding makefile or build.xml." ) );
+            if ( URLUtil::isDirectory( url ) )
+            {
+                int id = popup->insertItem( i18n( "Add %1 to Project (recursive)" ).arg( popupstr ),
+                                        this, SLOT( slotAddToProjectRecursive() ) );
+                popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Recursivly Adds files in the current dir to the list of files in project. "
+                        "Note that the files should be manually added to corresponding makefile or build.xml." ) );
+            }
         }
     }
     else   // more than one file
@@ -272,15 +287,34 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
 
 void CustomProjectPart::slotAddToProject()
 {
+    m_recursive = false;
+    m_first_recursive = true;
     addFiles( m_contextAddFiles );
 }
 
 
 void CustomProjectPart::slotRemoveFromProject()
 {
+    m_recursive = false;
+    m_first_recursive = true;
     removeFiles( m_contextRemoveFiles );
 }
 
+
+void CustomProjectPart::slotAddToProjectRecursive()
+{
+    m_recursive = true;
+    addFiles( m_contextAddFiles );
+    m_recursive = false;
+}
+
+
+void CustomProjectPart::slotRemoveFromProjectRecursive()
+{
+    m_recursive = true;
+    removeFiles( m_contextRemoveFiles );
+    m_recursive = false;
+}
 
 void CustomProjectPart::slotChooseActiveDirectory()
 {
@@ -568,13 +602,15 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
         kdDebug( 9025 ) << "Add file: " << *it << endl;
         if ( QDir::isRelativePath( *it ) )
         {
-            if ( QFileInfo( projectDirectory() + "/" + *it ).isDir() )
+            if ( QFileInfo( projectDirectory() + "/" + *it ).isDir() && ( m_recursive || m_first_recursive ) )
             {
+                m_first_recursive = false;
                 QStringList subentries = QDir( projectDirectory() + "/" + *it ).entryList();
                 for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                     if ( *subit != "." && *subit != ".." )
                         *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
                 addFiles( subentries );
+                m_first_recursive = true;
             }
             else
             {
@@ -584,13 +620,15 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
         }
         else
         {
-            if ( QFileInfo( *it ).isDir() )
+            if ( QFileInfo( *it ).isDir() && ( m_recursive || m_first_recursive ) )
             {
+                m_first_recursive = false;
                 QStringList subentries = QDir( *it ).entryList();
                 for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                     if ( *subit != "." && *subit != ".." )
                         *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
                 addFiles( subentries );
+                m_first_recursive = true;
             }
             else
             {
@@ -599,7 +637,7 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
             }
         }
     }
-
+    m_first_recursive = false;
     saveProject();
 
     kdDebug( 9025 ) << "Emitting addedFilesToProject" << endl;
@@ -627,13 +665,15 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
             continue;
         if ( QDir::isRelativePath( *it ) )
         {
-            if ( QFileInfo( projectDirectory() + "/" + *it ).isDir() )
+            if ( QFileInfo( projectDirectory() + "/" + *it ).isDir() && ( m_recursive || m_first_recursive ) )
             {
+                m_first_recursive = false;
                 QStringList subentries = QDir( projectDirectory() + "/" + *it ).entryList();
                 for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                     if ( *subit != "." && *subit != ".." )
                         *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
                 removeFiles( subentries );
+                m_first_recursive = true;
             }
             else
             {
@@ -643,13 +683,15 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
         }
         else
         {
-            if ( QFileInfo( *it ).isDir() )
+            if ( QFileInfo( *it ).isDir() && ( m_recursive || m_first_recursive ) )
             {
+                m_first_recursive = false;
                 QStringList subentries = QDir( *it ).entryList();
                 for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                     if ( *subit != "." && *subit != ".." )
                         *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
                 removeFiles( subentries );
+                m_first_recursive = true;
             }
             else
             {
