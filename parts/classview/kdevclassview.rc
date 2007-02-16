@@ -1,10 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevClassView" version="9">
+<kpartgui name="KDevClassView" version="10">
 <MenuBar>
-  <Menu name="project" >
-      <Action name="inheritance_dia" group="project_classes" />
-  </Menu>
+	<Menu name="project" >
+		<Action name="inheritance_dia" group="project_classes" />
+	</Menu>
 </MenuBar>
+<Menu name="kdevhidden" >
+	<Action name="navigator_jump_to_next_function"/>
+	<Action name="navigator_jump_to_previous_function"/>
+</Menu>
 
 <ToolBar name="browserToolBar">
   <text>Browser Toolbar</text>

@@ -43,6 +43,22 @@
 //#define BOLDFONTSMALLER
 
 
+namespace
+{
+    template<class T>
+    QValueList<T> QValueList_reversed ( const QValueList<T> & list )
+    {
+        QValueList<T> rList;
+        typename QValueList<T>::ConstIterator it = list.begin();
+        while ( it != list.end() )
+        {
+            rList.push_front ( *it );
+            ++it;
+        }
+        return rList;
+    }
+}
+
 struct NavOp
 {
    NavOp(Navigator *navigator, const QString &fullName)
@@ -94,7 +110,16 @@ Navigator::Navigator(ClassViewPart *parent, const char *name)
     m_state = GoToDefinitions;
     m_navNoDefinition = true;
 
-    m_actionSyncWithEditor = new KAction( i18n("Sync ClassView"), "view_tree", KShortcut(), this, SLOT(slotSyncWithEditor()), m_part->actionCollection(), "classview_sync_with_editor" );
+    m_actionSyncWithEditor = new KAction( i18n("Sync ClassView"), "view_tree", KShortcut(), this, 
+        SLOT(slotSyncWithEditor()), m_part->actionCollection(), "classview_sync_with_editor" );
+
+    KAction * action = new KAction( i18n("Jump to next function"), CTRL+ALT+Key_PageDown, this, 
+        SLOT(slotJumpToNextFunction()), m_part->actionCollection(), "navigator_jump_to_next_function" );
+    action->plug( &m_dummyActionWidget );
+
+    action = new KAction( i18n("Jump to previous function"), CTRL+ALT+Key_PageUp, this, 
+        SLOT(slotJumpToPreviousFunction()), m_part->actionCollection(), "navigator_jump_to_previous_function" );
+    action->plug( &m_dummyActionWidget );
 
     m_syncTimer = new QTimer(this);
     connect(m_syncTimer, SIGNAL(timeout()), this, SLOT(syncFunctionNav()));
@@ -430,7 +455,7 @@ QString Navigator::fullFunctionDeclarationName(FunctionDom fun)
 
 void Navigator::slotSyncWithEditor()
 {
-	kdDebug(9003) << k_funcinfo << endl;
+    kdDebug(9003) << k_funcinfo << endl;
 
     if (FunctionDom fun = currentFunction())
     {
@@ -439,6 +464,76 @@ void Navigator::slotSyncWithEditor()
         ItemDom dom(fun);
         m_part->jumpedToItem( dom );
     }
+}
+
+void Navigator::slotJumpToNextFunction()
+{
+    kdDebug ( 9003 ) << k_funcinfo << endl;
+
+    if ( !m_part->m_activeViewCursor ) return;
+    unsigned int currentLine, currentCol;
+    m_part->m_activeViewCursor->cursorPositionReal ( &currentLine, &currentCol );
+
+    QValueList<int> lines = functionStartLines();
+    if ( lines.isEmpty() ) return;
+
+    QValueList<int>::iterator it = lines.begin();
+    while ( it != lines.end() )
+    {
+        if ( *it > currentLine )
+        {
+            KURL url;
+            url.setPath ( m_part->m_activeFileName );
+            m_part->partController()->editDocument ( url, *it );
+            break;
+        }
+        ++it;
+    }
+}
+
+void Navigator::slotJumpToPreviousFunction()
+{
+    kdDebug ( 9003 ) << k_funcinfo << endl;
+
+    if ( !m_part->m_activeViewCursor ) return;
+    unsigned int currentLine, currentCol;
+    m_part->m_activeViewCursor->cursorPositionReal ( &currentLine, &currentCol );
+
+    QValueList<int> lines = QValueList_reversed<int> ( functionStartLines() );
+    if ( lines.isEmpty() ) return;
+
+    QValueList<int>::iterator it = lines.begin();
+    while ( it != lines.end() )
+    {
+        if ( *it < currentLine )
+        {
+            KURL url;
+            url.setPath ( m_part->m_activeFileName );
+            m_part->partController()->editDocument ( url, *it );
+            break;
+        }
+        ++it;
+    }
+}
+
+QValueList<int> Navigator::functionStartLines()
+{
+    FileDom file = m_part->codeModel()->fileByName ( m_part->m_activeFileName );
+    if ( !file ) return QValueList<int>();
+
+    QValueList<int> lines;
+    FunctionDefinitionList list = CodeModelUtils::allFunctionDefinitionsExhaustive ( file );
+    FunctionDefinitionList::const_iterator it = list.begin();
+    while ( it != list.end() )
+    {
+        int line, col;
+        ( *it )->getStartPosition ( &line, &col );
+        lines << line;
+        ++it;
+    }
+    qHeapSort ( lines );
+
+    return lines;
 }
 
 #include "navigator.moc"

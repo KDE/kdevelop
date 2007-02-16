@@ -64,17 +64,20 @@ public slots:
     void refresh();
     void addFile(const QString &file);
     void slotSyncWithEditor();
-
+    void slotJumpToNextFunction();
+    void slotJumpToPreviousFunction();
 
 protected:
 
     FunctionDom currentFunction();
+    QValueList<int> functionStartLines();
 
 private:
     ClassViewPart *m_part;
     QTimer *m_syncTimer;
     NavigationState m_state;
 
+    QWidget m_dummyActionWidget;
     KAction* m_actionSyncWithEditor;
 
     bool m_navNoDefinition;
