@@ -87,7 +87,7 @@ void eachUpdateSingle( MapContainer& old, const MapContainer& newMap  ) {
   typename MapContainer::iterator oldIt = old.begin();
   typename MapContainer::const_iterator newIt = newMap.begin();
   while( oldIt != old.end() ) {
-    (*oldIt)->update( *oldIt );
+    (*oldIt)->update( *newIt );
     ++oldIt;
     ++newIt;
   }

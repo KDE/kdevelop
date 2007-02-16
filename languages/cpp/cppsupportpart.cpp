@@ -2410,13 +2410,9 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 
 		QStringList l = files.res;
 
-		///Since even normal typing may create problems, these must not break the group, so group everything together afterwards
-		int currentGroup = 0;
-
 		QMap<QString, bool> wholeResult;
 		QStringList missing;
 
-		bool updated = true; ///Could the current code-model be updated to reflect the changes?
 		QMap<QString, FileDom> newFiles;
 		
 		while(!l.isEmpty() ) {
@@ -2454,18 +2450,6 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 							for( QStringList::const_iterator it = grp.begin(); it != grp.end(); ++it )
 								wholeResult[*it] = true;
 						}
-
-						/*
-							///Merge the groups together so that files parsed together get into one group again
-							if( walker.file() ) {
-								if( !files.hadQueueProblem() ) {
-									if( !currentGroup ) {
-										currentGroup = walker.file()->groupId();
-									} else {
-										currentGroup = codeModel()->mergeGroups( currentGroup, walker.file()->groupId() );
-									}
-								}
-							}*/
 					}
 				} else {
 					kdDebug() << "failed to parse " << fileName << endl;
@@ -2480,7 +2464,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 		for( QMap<QString, FileDom>::const_iterator it = newFiles.begin(); it != newFiles.end(); ++it ) {
 			FileDom oldFile = codeModel()->fileByName( it.key() );
 
-			if( !oldFile->canUpdate( *it ) ) {
+			if( !oldFile || !oldFile->canUpdate( *it ) ) {
 				canUpdate = false;
 				break;
 			}
