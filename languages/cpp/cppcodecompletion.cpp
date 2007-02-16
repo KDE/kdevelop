@@ -4215,63 +4215,65 @@ void CppCodeCompletion::jumpCursorContext( FunctionType f )
 	
 	EvaluationResult result = evaluateExpressionAt( line, column, conf );
 	
+	// Determine the declaration info based on the type of item we are dealing with.
 	DeclarationInfo d = result.sourceVariable;
-	if ( !d )
-	{
+	if ( !d ) {
 		LocateResult type = result.resultType;
-		if ( type && type->resolved() )
-		{
-			if ( type->resolved()->isNamespace() )
-			{
+		if ( type && type->resolved() ) {
+			// Is it a namespace?
+			if ( type->resolved()->isNamespace() ) {
 				SimpleTypeCachedNamespace * ns = dynamic_cast<SimpleTypeCachedNamespace*>( type->resolved().data() );
-				if ( ns )
-				{
+				if ( ns ) {
 					SimpleTypeNamespace::SlaveList slaves = ns->getSlaves( getIncludeFiles() );
-					if ( slaves.begin() != slaves.end() )
-					{
-						SimpleTypeCodeModel* cm = dynamic_cast<SimpleTypeCodeModel*>( ( *slaves.begin() ).first.first.resolved().data() );
-						if ( cm && cm->item() )
-						{
-							SimpleTypeCachedCodeModel* t = new SimpleTypeCachedCodeModel( cm->item() );
-							d = t->desc().resolved()->getDeclarationInfo();
-						}
-						else
-						{
-							SimpleTypeNamespace* cn = dynamic_cast<SimpleTypeNamespace*>( ( *slaves.begin() ).first.first.resolved().data() );
-							if ( cn )
-							{
-								TypePointer t = new SimpleTypeNamespace( cn ); //To avoid endless recursion, this needs to be done(the dynamic-cast above fails)
-								d = t->desc().resolved()->getDeclarationInfo();
+					if ( slaves.begin() != slaves.end() ) {
+						SimpleTypeCachedCodeModel * item = dynamic_cast<SimpleTypeCachedCodeModel*>( ( *slaves.begin() ).first.first.resolved().data() );
+						if ( item && item->item() && item->item()->isNamespace() ) {
+							NamespaceModel* ns = dynamic_cast<NamespaceModel*>( item->item().data() );
+							QStringList wholeScope = ns->scope();
+							wholeScope << ns->name();
+							FileList files = cppSupport()->codeModel()->fileList();
+							for ( FileList::iterator it = files.begin(); it != files.end(); ++it ) {
+								NamespaceModel* ns = (*it).data();
+								for ( QStringList::iterator it2 = wholeScope.begin(); it2 != wholeScope.end(); ++it2 ) {
+									if ( ns->hasNamespace( (*it2) ) ) {
+										ns = ns->namespaceByName( *it2 );
+										if ( !ns ) break;
+									} else {
+										ns = 0;
+										break;
+									}
+								}
+								if ( ns ) {
+									d.name = ns->name();
+									ns->getStartPosition( &d.startLine, &d.startCol );
+									ns->getEndPosition( &d.endLine, &d.endCol );
+									d.file = ns->fileName();
+									break;
+								}
 							}
 						}
 					}
 				}
-			}
-			else
-			{
+			} else {
+				// Not a namespace, we can get the declaration info straight from the type description.
 				d = type->resolved()->getDeclarationInfo();
 			}
 		}
-		else if ( type && type.trace() )
-		{
+		// Unresolved, maybe its a named enumeration?
+		else if ( type && type.trace() ) {
 			QValueList< QPair<SimpleTypeImpl::MemberInfo, TypeDesc> > trace = type.trace()->trace();
-			if ( !trace.isEmpty() )
-			{
-				if ( trace.begin() != trace.end() )
-				{
-					d = (*trace.begin()).first.decl;
+			if ( !trace.isEmpty() ) {
+				if ( trace.begin() != trace.end() ) {
+					d = ( *trace.begin() ).first.decl;
 				}
 			}
 		}
 	}
-	if ( d )
-	{
+	if ( d ) {
 		QString fileName = d.file == "current_file" ? m_activeFileName : d.file.operator QString();
-		
-		if ( f == Definition && m_pSupport->switchHeaderImpl( fileName, d.startLine, d.startCol ) )
+		if ( f == Definition && cppSupport()->switchHeaderImpl( fileName, d.startLine, d.startCol ) )
 			return;
-		
-		m_pSupport->partController()->editDocument( fileName, d.startLine );
+		cppSupport()->partController()->editDocument( fileName, d.startLine );
 	}
 }
 
