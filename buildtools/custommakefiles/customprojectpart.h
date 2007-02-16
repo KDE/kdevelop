@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2007 by Andreas Pakulat                                 *
+ *   apaku@gmx.de                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +45,7 @@ public:
     QStringList distFiles() const;
 
 protected:
-    virtual void openProject(const QString &dirName, const QString &projectName);
+    virtual void openProject( const QString &dirName, const QString &projectName );
     virtual void closeProject();
 
     virtual QString projectDirectory() const;
@@ -51,10 +53,10 @@ protected:
     virtual QString mainProgram() const;
     virtual QString activeDirectory() const;
     virtual QStringList allFiles() const;
-    virtual void addFile(const QString &fileName);
-    virtual void addFiles ( const QStringList& fileList );
-    virtual void removeFile(const QString &fileName);
-    virtual void removeFiles ( const QStringList &fileList );
+    virtual void addFile( const QString &fileName );
+    virtual void addFiles( const QStringList& fileList );
+    virtual void removeFile( const QString &fileName );
+    virtual void removeFiles( const QStringList &fileList );
     virtual QString buildDirectory() const;
     virtual QString runDirectory() const;
     virtual QString debugArguments() const;
@@ -63,8 +65,8 @@ protected:
 
 
 private slots:
-    void projectConfigWidget(KDialogBase *dlg);
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void projectConfigWidget( KDialogBase *dlg );
+    void contextMenu( QPopupMenu *popup, const Context *context );
     void slotAddToProject();
     void slotRemoveFromProject();
     void slotChooseActiveDirectory();
@@ -75,19 +77,20 @@ private slots:
     void slotClean();
     void slotExecute();
     void updateTargetMenu();
-    void targetMenuActivated(int id);
-    void targetObjectFilesMenuActivated(int id);
-    void targetOtherFilesMenuActivated(int id);
+    void targetMenuActivated( int id );
+    void targetObjectFilesMenuActivated( int id );
+    void targetOtherFilesMenuActivated( int id );
     void updateMakeEnvironmentsMenu();
-    void makeEnvironmentsMenuActivated(int id);
+    void makeEnvironmentsMenuActivated( int id );
     void slotCommandFinished( const QString& command );
     void slotCommandFailed( const QString& command );
 
 private:
+    bool containsNonProjectFiles( const QString& url );
     void populateProject();
     void saveProject();
     void startMakeCommand( const QString &dir, const QString &target, bool withKdesu = false );
-    void parseMakefile(const QString& file);
+    void parseMakefile( const QString& file );
     QString makeEnvironment() const;
     void putEnvVarsInVarMap();
 
@@ -116,3 +119,4 @@ private:
 };
 
 #endif
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
