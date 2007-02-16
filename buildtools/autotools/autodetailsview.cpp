@@ -253,6 +253,8 @@ void AutoDetailsView::initActions()
 
 	connect( m_listView, SIGNAL( executed( QListViewItem* ) ),
 	         this, SLOT( slotDetailsExecuted( QListViewItem* ) ) );
+	connect( m_listView, SIGNAL( returnPressed( QListViewItem* ) ),
+	         this, SLOT( slotDetailsExecuted( QListViewItem* ) ) );
 	connect( m_listView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( slotDetailsContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
 }
