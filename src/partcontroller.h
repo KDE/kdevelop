@@ -222,6 +222,9 @@ private:
 	};
 
 	LastEditPos m_lastEditPos;
+
+	KParts::Part * m_currentActivePart;
+	bool m_removingActivePart;
 };
 
 

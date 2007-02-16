@@ -90,7 +90,7 @@ struct ModificationData
 
 
 PartController::PartController(QWidget *parent)
-  : KDevPartController(parent), _editorFactory(0L)
+  : KDevPartController(parent), _editorFactory(0L), m_currentActivePart(0), m_removingActivePart(false)
 {
   connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part* )) );
   connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part* )) );
@@ -807,6 +807,11 @@ void PartController::slotPartRemoved( KParts::Part * part )
 
 	_partURLMap.remove( static_cast<KParts::ReadOnlyPart*>(part) );
 
+	if ( part == m_currentActivePart )
+	{
+		m_removingActivePart = true;
+	}
+
 	updateMenuItems();
 }
 
@@ -1307,7 +1312,18 @@ bool PartController::readyToClose()
 
 void PartController::slotActivePartChanged( KParts::Part *part )
 {
-    kdDebug(9000) << k_funcinfo << endl;
+	kdDebug(9000) << k_funcinfo << part << endl;
+
+	if ( !m_isJumping && !m_removingActivePart )
+	{
+		if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>(m_currentActivePart) )
+		{
+			addHistoryEntry( ro_part );
+		}
+	}
+
+	m_currentActivePart = part;
+	m_removingActivePart = false;
 
     if (part) {
         KXMLGUIClient* client = dynamic_cast<KXMLGUIClient*>(part->widget());
@@ -1714,11 +1730,19 @@ void PartController::addHistoryEntry( KParts::ReadOnlyPart * part )
 	HistoryEntry thisEntry = createHistoryEntry( part );
 	if ( !thisEntry.url.isEmpty() )
 	{
-		m_backHistory.push_front( thisEntry );
-		m_backAction->setEnabled( true );
-
-		m_forwardHistory.clear();
-		m_forwardAction->setEnabled( false );
+		HistoryEntry lastEntry = m_backHistory.front();
+		if ( (lastEntry.url.path() != thisEntry.url.path()) || (lastEntry.line != thisEntry.line) )
+		{
+			m_backHistory.push_front( thisEntry );
+			m_backAction->setEnabled( true );
+	
+			m_forwardHistory.clear();
+			m_forwardAction->setEnabled( false );
+		}
+		else
+		{
+			kdDebug(9000) << "** avoiding to create duplicate history entry **" << endl;
+		}
 	}
 }
 
