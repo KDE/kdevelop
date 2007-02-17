@@ -48,6 +48,7 @@
 #include "makeoptionswidget.h"
 #include "custombuildoptionswidget.h"
 #include "custommakeconfigwidget.h"
+#include "custommanagerwidget.h"
 #include "config.h"
 #include "envvartools.h"
 #include "urlutil.h"
@@ -166,6 +167,10 @@ CustomProjectPart::~CustomProjectPart()
 void CustomProjectPart::projectConfigWidget( KDialogBase *dlg )
 {
     QVBox *vbox;
+    vbox = dlg->addVBoxPage( i18n( "Custom Manager" ), i18n( "Custom Manager" ), BarIcon( "make", KIcon::SizeMedium ) );
+    CustomManagerWidget *w0 = new CustomManagerWidget( this, vbox );
+    connect( dlg, SIGNAL( okClicked() ), w0, SLOT( accept() ) );
+
     vbox = dlg->addVBoxPage( i18n( "Run Options" ), i18n( "Run Options" ), BarIcon( "make", KIcon::SizeMedium ) );
     RunOptionsWidget *w1 = new RunOptionsWidget( *projectDom(), "/kdevcustomproject", buildDirectory(), vbox );
     connect( dlg, SIGNAL( okClicked() ), w1, SLOT( accept() ) );
@@ -234,7 +239,7 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
 
             }
         }
-        else
+        else if( isProjectFileType( QFileInfo( relContextFileName ).fileName() ) )
         {
             m_contextAddFiles << relContextFileName;
             int id = popup->insertItem( i18n( "Add %1 to Project" ).arg( popupstr ),
@@ -255,7 +260,7 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
         const KURL::List urls = fcontext->urls();
         for ( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
         {
-            if (( *it ).isLocalFile() )
+            if (( *it ).isLocalFile() && isProjectFileType( ( *it ).fileName() ) )
             {
                 QString canPath( URLUtil::canonicalPath(( *it ).path() ) );
                 QString relPath = URLUtil::extractPathNameRelative( URLUtil::canonicalPath( project()->projectDirectory() ), canPath );
@@ -333,6 +338,14 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
     if ( DomUtil::readEntry( dom, "/kdevcustomproject/run/directoryradio" ) == "" )
     {
         DomUtil::writeEntry( dom, "/kdevcustomproject/run/directoryradio", "executable" );
+    }
+
+    if( filetypes().isEmpty() )
+    {
+        QStringList types;
+        types << "*.java" << "*.h" << "*.H" << "*.hh" << "*.hxx" << "*.hpp" << "*.c" << "*.C"
+                << "*.cc" << "*.cpp" << "*.c++" << "*.cxx" << "Makefile" << "CMakeLists.txt";
+        DomUtil::writeListEntry( dom, "/kdevcustomproject/filetypes", "filetype", types);
     }
 
     /*this entry is currently only created by the cmake kdevelop3 project generator
@@ -418,20 +431,7 @@ void CustomProjectPart::populateProject()
                     continue;
                 }
                 if (( !fileName.endsWith( "~" ) )
-                        && (( fileName.endsWith( ".java" ) )
-                            || ( fileName.endsWith( ".h" ) )
-                            || ( fileName.endsWith( ".H" ) )
-                            || ( fileName.endsWith( ".hh" ) )
-                            || ( fileName.endsWith( ".hxx" ) )
-                            || ( fileName.endsWith( ".hpp" ) )
-                            || ( fileName.endsWith( ".c" ) )
-                            || ( fileName.endsWith( ".C" ) )
-                            || ( fileName.endsWith( ".cc" ) )
-                            || ( fileName.endsWith( ".cpp" ) )
-                            || ( fileName.endsWith( ".c++" ) )
-                            || ( fileName.endsWith( ".cxx" ) )
-                            || ( fileName.startsWith( "Makefile" ) )
-                            || ( fileName == "CMakeLists.txt" ) ) )  //Makefile, Makefile.am, Makefile.in
+                        && isProjectFileType( fileName ) )
                 {
                     kdDebug( 9025 ) << "Adding: " << path << endl;
                     m_sourceFiles.append( path.mid( prefixlen ) );
@@ -612,11 +612,13 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
                 addFiles( subentries );
                 m_first_recursive = true;
             }
-            else
+            else if( isProjectFileType( QFileInfo(*it).fileName() ) )
             {
+                kdDebug(9025) << "adding " << *it << endl;
                 addedFiles << *it;
                 m_sourceFiles.append( *it );
-            }
+            }else
+                kdDebug(9025) << "not adding " << *it << endl;
         }
         else
         {
@@ -630,7 +632,7 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
                 addFiles( subentries );
                 m_first_recursive = true;
             }
-            else
+            else if( isProjectFileType( *it ) )
             {
                 addedFiles << URLUtil::getRelativePath( projectDirectory(), *it );
                 m_sourceFiles.append( URLUtil::getRelativePath( projectDirectory(), *it ) );
@@ -1226,10 +1228,6 @@ QString CustomProjectPart::currentMakeEnvironment() const
     return environment;
 }
 
-
-#include "customprojectpart.moc"
-
-
 /*!
     \fn CustomProjectPart::distFiles() const
  */
@@ -1252,17 +1250,37 @@ bool CustomProjectPart::containsNonProjectFiles( const QString& dir )
         {
             if ( QFileInfo( dir + "/" + *it ).isDir() )
             {
+                kdDebug(9025) << dir+"/"+*it << " checking for contained non-proj-files" << endl;
                 if ( containsNonProjectFiles( dir + "/" + *it ) )
+                {
+                    kdDebug(9025) << dir+"/"+*it << " contains non-proj-files" << endl;
                     return true;
+                }
             }
-            else
+            else if ( isProjectFileType( *it )&& !project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) )
             {
-                if ( !project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) )
-                    return true;
+                kdDebug(9025) << dir+"/"+*it << "is a non-project file" << endl;
+                return true;
             }
         }
     }
     return false;
 }
 
+QStringList CustomProjectPart::filetypes( ) const
+{
+    return DomUtil::readListEntry( *projectDom(), "/kdevcustomproject/filetypes", "filetype" );
+}
+
+bool CustomProjectPart::isProjectFileType( const QString& filename ) const
+{
+    bool result = QDir::match( filetypes(), filename );
+    kdDebug(9025) << "Matching " << filetypes() << " against " << filename << " results: " << result << endl;
+    return result;
+}
+
+#include "customprojectpart.moc"
+
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+
+

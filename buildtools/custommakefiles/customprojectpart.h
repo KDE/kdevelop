@@ -89,7 +89,9 @@ private slots:
 
 private:
     bool containsNonProjectFiles( const QString& url );
+    bool isProjectFileType( const QString& absFile ) const;
     void populateProject();
+    QStringList filetypes() const;
     void saveProject();
     void startMakeCommand( const QString &dir, const QString &target, bool withKdesu = false );
     void parseMakefile( const QString& file );
