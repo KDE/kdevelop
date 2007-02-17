@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=KDevelop QMake Importer
+Name=KDevelop QMake Manager
 Comment=Imports and edits qmake projects
 Comment[el]=Εισαγωγή και επεξεργασία έργων qmake
 Comment[fr]=Importe et modifie des projets qmake

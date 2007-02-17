@@ -12,7 +12,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib
 ########### next target ###############
 
 set(kdevqmakemanager_PART_SRCS
-    qmakeimporter.cpp
+    qmakemanager.cpp
     qmakemodelitems.cpp
     qmakeprojectscope.cpp
 )
@@ -26,6 +26,6 @@ install(TARGETS kdevqmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevqmakeimporter.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevqmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 
