@@ -318,13 +318,13 @@ bool ProjectController::loadProjectPart()
         config->setGroup( "General Options" );
 
         QString projectManager =
-                config->readPathEntry( "Project Management", "KDevProjectManager" );
+                config->readPathEntry( "ProjectManagementView", "KDevProjectManagerView" );
 
         d->m_projectPart = d->m_core->pluginController()->loadPlugin( projectManager );
         if ( !d->m_projectPart )
         {
             KMessageBox::sorry( d->m_core->uiControllerInternal()->defaultMainWindow(),
-                                i18n( "Could not load project management plugin %1.",
+                                i18n( "Could not load project management view plugin %1.",
                                       projectManager ) );
             return false;
         }

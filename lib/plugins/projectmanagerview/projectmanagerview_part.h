@@ -17,8 +17,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVPROJECTMANAGER_PART_H
-#define KDEVPROJECTMANAGER_PART_H
+#ifndef KDEVPROJECTMANAGERVIEW_PART_H
+#define KDEVPROJECTMANAGERVIEW_PART_H
 
 #include <QtCore/QPointer>
 #include "iplugin.h"
@@ -33,14 +33,14 @@ namespace KDevelop
 
 class ProjectBaseItem;
 class ProjectModel;
-class ProjectManager;
+class ProjectManagerView;
 class ProjectBuilder;
 class ProjectImporter;
 class ProjectFileItem;
 class ProjectFolderItem;
 class ProjectTargetItem;
 
-class ProjectManagerPart: public IPlugin
+class ProjectManagerViewPart: public IPlugin
 {
     Q_OBJECT
 public:
@@ -52,8 +52,8 @@ public:
     };
 
 public:
-    ProjectManagerPart(QObject *parent, const QStringList &);
-    virtual ~ProjectManagerPart();
+    ProjectManagerViewPart(QObject *parent, const QStringList &);
+    virtual ~ProjectManagerViewPart();
 
 //     ProjectFolderItem *activeFolder();
 //     ProjectTargetItem *activeTarget();
@@ -75,7 +75,7 @@ protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
 
 private:
-    class ProjectManagerPartPrivate* const d;
+    class ProjectManagerViewPartPrivate* const d;
 
 };
 

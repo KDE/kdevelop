@@ -19,7 +19,7 @@
 */
 
 #include "projecttreeview.h"
-#include "projectmanager_part.h"
+#include "projectmanagerview_part.h"
 #include "projectmodel.h"
 
 #include <QtGui/QHeaderView>
@@ -41,10 +41,10 @@ class ProjectTreeViewPrivate
 {
 
     public:
-        ProjectManagerPart* m_part;
+        ProjectManagerViewPart* m_part;
 };
 
-ProjectTreeView::ProjectTreeView( ProjectManagerPart *part, QWidget *parent )
+ProjectTreeView::ProjectTreeView( ProjectManagerViewPart *part, QWidget *parent )
         : QTreeView( parent ), d( new ProjectTreeViewPrivate )
 {
     d->m_part = part;
@@ -61,7 +61,7 @@ ProjectTreeView::~ProjectTreeView()
     delete d;
 }
 
-ProjectManagerPart *ProjectTreeView::part() const
+ProjectManagerViewPart *ProjectTreeView::part() const
 {
     return d->m_part;
 }

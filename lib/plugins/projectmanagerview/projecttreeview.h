@@ -30,7 +30,7 @@ class KUrl;
 namespace KDevelop
 {
 
-class ProjectManagerPart;
+class ProjectManagerViewPart;
 class ProjectModel;
 class ProjectFolderItem;
 class ProjectFileItem;
@@ -41,10 +41,10 @@ class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
 {
         Q_OBJECT
     public:
-        ProjectTreeView( ProjectManagerPart *part, QWidget *parent );
+        ProjectTreeView( ProjectManagerViewPart *part, QWidget *parent );
         virtual ~ProjectTreeView();
 
-        ProjectManagerPart *part() const;
+        ProjectManagerViewPart *part() const;
         ProjectModel *projectModel() const;
 
         ProjectFolderItem *currentFolderItem() const;
@@ -64,7 +64,7 @@ class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
 
     private:
         class ProjectTreeViewPrivate* const d;
-        ProjectManagerPart *m_part;
+        ProjectManagerViewPart *m_part;
 };
 
 }

@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "projectmanager.h"
-#include "projectmanager_part.h"
+#include "projectmanagerview.h"
+#include "projectmanagerview_part.h"
 #include "projectmodel.h"
 #include "projectmanagerdelegate.h"
 //#include "projectfilter.h"
@@ -49,7 +49,7 @@ namespace KDevelop
 class ProjectManagerPrivate
 {
 public:
-    ProjectManagerPart *m_part;
+    ProjectManagerViewPart *m_part;
     ProjectTreeView *m_projectOverview;
     ProjectTreeView *m_projectDetails;
     QStringList m_cachedFileList;
@@ -79,7 +79,7 @@ public:
     }
 };
 
-ProjectManager::ProjectManager( ProjectManagerPart *_part, QWidget *parent )
+ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent )
         : QWidget( parent ),
         d(new ProjectManagerPrivate)
 {
@@ -128,18 +128,18 @@ ProjectManager::ProjectManager( ProjectManagerPart *_part, QWidget *parent )
     setWhatsThis( i18n( "Project Manager" ) );
 }
 
-ProjectManager::~ProjectManager()
+ProjectManagerView::~ProjectManagerView()
 {
     delete d;
 }
 
-ProjectManagerPart *ProjectManager::part() const
+ProjectManagerViewPart *ProjectManagerView::part() const
 {
     return d->m_part;
 }
 
 
 }
-#include "projectmanager.moc"
+#include "projectmanagerview.moc"
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

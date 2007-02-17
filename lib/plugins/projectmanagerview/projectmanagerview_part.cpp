@@ -17,9 +17,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "projectmanager_part.h"
+#include "projectmanagerview_part.h"
 #include "projectmodel.h"
-#include "projectmanager.h"
+#include "projectmanagerview.h"
 #include "icore.h"
 #include "kdevconfig.h"
 #include "iproject.h"
@@ -48,67 +48,67 @@
 namespace KDevelop
 {
 
-typedef KGenericFactory<ProjectManagerPart> ProjectManagerFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevprojectmanager, ProjectManagerFactory( "kdevprojectmanager" ) )
+typedef KGenericFactory<ProjectManagerViewPart> ProjectManagerFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevprojectmanagerview, ProjectManagerFactory( "kdevprojectmanagerview" ) )
 
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {
     public:
-        KDevProjectManagerViewFactory( ProjectManagerPart *part ): m_part( part )
+        KDevProjectManagerViewFactory( ProjectManagerViewPart *part ): m_part( part )
         {}
         virtual QWidget* create( QWidget *parent = 0 )
         {
-            return new ProjectManager( m_part, parent );
+            return new ProjectManagerView( m_part, parent );
         }
         virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
         {
             return Qt::RightDockWidgetArea;
         }
     private:
-        ProjectManagerPart *m_part;
+        ProjectManagerViewPart *m_part;
 };
 
-class ProjectManagerPartPrivate
+class ProjectManagerViewPartPrivate
 {
 public:
     KDevProjectManagerViewFactory *factory;
 };
 
-ProjectManagerPart::ProjectManagerPart( QObject *parent, const QStringList& )
-        : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerPartPrivate)
+ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QStringList& )
+        : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPartPrivate)
 {
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( "Project Manager", d->factory );
 
-    setXMLFile( "kdevprojectmanager.rc" );
+    setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
-ProjectManagerPart::~ProjectManagerPart()
+ProjectManagerViewPart::~ProjectManagerViewPart()
 {
     delete d;
 }
 
-void ProjectManagerPart::openURL( const KUrl &url )
+void ProjectManagerViewPart::openURL( const KUrl &url )
 {
     core()->uiController()->openUrl( url );
 }
 
-// ProjectFolderItem *ProjectManagerPart::activeFolder()
+// ProjectFolderItem *ProjectManagerViewPart::activeFolder()
 // {
 //     return m_projectOverview->currentFolderItem();
 // }
 //
-// ProjectTargetItem *ProjectManagerPart::activeTarget()
+// ProjectTargetItem *ProjectManagerViewPart::activeTarget()
 // {
 //     return m_projectOverview->currentTargetItem();
 // }
 //
-// ProjectFileItem * ProjectManagerPart::activeFile()
+// ProjectFileItem * ProjectManagerViewPart::activeFile()
 // {
 //     return m_projectOverview->currentFileItem();
 // }
 
-bool ProjectManagerPart::computeChanges( const QStringList &oldFileList, const QStringList &newFileList )
+bool ProjectManagerViewPart::computeChanges( const QStringList &oldFileList, const QStringList &newFileList )
 {
     QMap<QString, bool> oldFiles, newFiles;
 
@@ -135,15 +135,15 @@ bool ProjectManagerPart::computeChanges( const QStringList &oldFileList, const Q
     return false; //FIXME
 }
 
-void ProjectManagerPart::updateDetails( ProjectBaseItem * )
+void ProjectManagerViewPart::updateDetails( ProjectBaseItem * )
 {}
 
-void ProjectManagerPart::unload()
+void ProjectManagerViewPart::unload()
 {
     core()->uiController()->removeToolView(d->factory);
 }
 
 }
-#include "projectmanager_part.moc"
+#include "projectmanagerview_part.moc"
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

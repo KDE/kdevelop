@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTMANAGER_H
-#define KDEVPROJECTMANAGER_H
+#ifndef KDEVPROJECTMANAGERVIEW_H
+#define KDEVPROJECTMANAGERVIEW_H
 
 #include <QtGui/QWidget>
 
@@ -30,20 +30,20 @@ class KUrl;
 namespace KDevelop
 {
 
-class ProjectManagerPart;
+class ProjectManagerViewPart;
 class ProjectModel;
 class ProjectFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
 
-class KDEVPROJECTMANAGER_EXPORT ProjectManager: public QWidget
+class KDEVPROJECTMANAGER_EXPORT ProjectManagerView: public QWidget
 {
         Q_OBJECT
     public:
-        ProjectManager( ProjectManagerPart *_part, QWidget *parent );
-        virtual ~ProjectManager();
+        ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent );
+        virtual ~ProjectManagerView();
 
-        ProjectManagerPart *part() const;
+        ProjectManagerViewPart *part() const;
 
     private:
         Q_PRIVATE_SLOT( d, void pressed( const QModelIndex & index ) )
