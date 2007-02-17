@@ -27,6 +27,9 @@
 #include <klocale.h>
 #include <knotifyclient.h>
 #include <kservice.h>
+#include <kurlrequesterdlg.h>
+#include <kurlrequester.h>
+#include <kurlcompletion.h>
 #include <kfiledialog.h>
 #include "domutil.h"
 #include "misc.h"
@@ -299,12 +302,23 @@ void SubprojectOptionsDialog::outsideMoveDownClicked()
 
 void SubprojectOptionsDialog::outsideAddClicked()
 {
-    QString dir = KFileDialog::getExistingDirectory();
-    if (!dir.isEmpty())
+    KURLRequesterDlg dialog( "", i18n( "Add Include directory: Choose directory, give -Idirectory or use a variable with -I$(FOOBAR)" ), 0, 0 );
+    dialog.urlRequester() ->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    dialog.urlRequester() ->setURL( QString::null );
+    if ( dialog.exec() != QDialog::Accepted )
+        return ;
+    QString file = dialog.urlRequester() ->url();
+    if ( !file.isEmpty() )
     {
-        if( !dir.startsWith( "-I" ) )
-            dir = "-I"+dir;
-        new QListViewItem(outsideinc_listview, dir);
+        if ( !file.isEmpty() )
+        {
+            if( file.startsWith("-I") )
+                new QListViewItem( outsideinc_listview, file );
+            else
+            {
+                new QListViewItem( outsideinc_listview, "-I"+file );
+            }
+        }
     }
 }
 
