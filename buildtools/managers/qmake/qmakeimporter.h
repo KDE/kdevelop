@@ -44,15 +44,15 @@ class ProjectTargetItem;
 class IProjectBuilder;
 }
 
-class QMakeImporter : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
+class QMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
 Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
-    QMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
+    QMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
 
-    virtual ~QMakeImporter();
+    virtual ~QMakeProjectManager();
 
     virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const { return 0; }
     virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;

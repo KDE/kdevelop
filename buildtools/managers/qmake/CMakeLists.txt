@@ -11,17 +11,17 @@ include_directories(${CMAKE_SOURCE_DIR}/lib
 
 ########### next target ###############
 
-set(kdevqmakeimporter_PART_SRCS
+set(kdevqmakemanager_PART_SRCS
     qmakeimporter.cpp
     qmakemodelitems.cpp
     qmakeprojectscope.cpp
 )
 
-kde4_automoc(${kdevqmakeimporter_PART_SRCS})
-kde4_add_plugin(kdevqmakeimporter ${kdevqmakeimporter_PART_SRCS})
-target_link_libraries( kdevqmakeimporter ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject kdevqmakeparser )
+kde4_automoc(${kdevqmakemanager_PART_SRCS})
+kde4_add_plugin(kdevqmakemanager ${kdevqmakemanager_PART_SRCS})
+target_link_libraries( kdevqmakemanager ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject kdevqmakeparser )
 
-install(TARGETS kdevqmakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevqmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
