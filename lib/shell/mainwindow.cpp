@@ -223,7 +223,7 @@ void MainWindow::setupActions()
 
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view_bottom" ));
-    action->setText( i18n( "Split &Horizontal" ) );
+    action->setText( i18n( "Split View &Top/Bottom" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_T );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitHorizontal() ) );
     action->setToolTip( i18n( "Split Horizontal" ) );
@@ -231,7 +231,7 @@ void MainWindow::setupActions()
 
     action = actionCollection()->addAction( "split_vertical" );
     action->setIcon(KIcon( "view_right" ));
-    action->setText( i18n( "Split &Vertical" ) );
+    action->setText( i18n( "Split View &Left/Right" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
     action->setToolTip( i18n( "Split Vertical" ) );
