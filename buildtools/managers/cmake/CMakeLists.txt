@@ -19,8 +19,8 @@ set( cmakecommon_SRCS
   parser/cmakeast.cpp
  )
 
-set( cmakeimporter_SRCS
-  cmakeimporter.cpp
+set( cmakemanager_SRCS
+  cmakemanager.cpp
 )
 
 set( cmakesettings_SRCS
@@ -40,9 +40,9 @@ target_link_libraries( kdevcmakecommon ${KDE4_KDECORE_LIBS}
                        kdevplatforminterfaces kdevplatformproject kdevplatformshell) #DO NOT depend on kdevplatformshell!!!
 set_target_properties(kdevcmakecommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
-kde4_automoc(${cmakeimporter_SRCS} )
-kde4_add_plugin( kdevcmakeimporter ${cmakeimporter_SRCS} )
-target_link_libraries( kdevcmakeimporter ${KDE4_KDECORE_LIBS}
+kde4_automoc(${cmakemanager_SRCS} )
+kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
+target_link_libraries( kdevcmakemanager ${KDE4_KDECORE_LIBS}
                        kdevplatforminterfaces kdevcmakecommon kdevplatformproject)
 
 kde4_automoc(${cmakesettings_SRCS} )
@@ -55,10 +55,10 @@ target_link_libraries( kcm_kdevcmake_settings ${KDE4_KUTILS_LIBS}
 
 
 
-install(TARGETS kdevcmakeimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kdevcmakecommon DESTINATION ${LIB_INSTALL_DIR} )
-install(FILES kdevcmakeimporter.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakeimporter )
+install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakemanager )
 

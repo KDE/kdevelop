@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "cmakeimporter.h"
+#include "cmakemanager.h"
 
 #include <QList>
 #include <QVector>
@@ -37,14 +37,14 @@
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
 
-typedef KGenericFactory<CMakeImporter> CMakeSupportFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevcmakeimporter,
-                            CMakeSupportFactory( "kdevcmakeimporter" ) )
+typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
+K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager,
+                            CMakeSupportFactory( "kdevcmakemanager" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, CMakeImporter )
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, CMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, CMakeProjectManager )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, CMakeProjectManager )
 
-CMakeImporter::CMakeImporter( QObject* parent,
+CMakeProjectManager::CMakeProjectManager( QObject* parent,
                               const QStringList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
@@ -56,22 +56,22 @@ CMakeImporter::CMakeImporter( QObject* parent,
         m_builder = new KDevMakeBuilder()*/
 }
 
-CMakeImporter::~CMakeImporter()
+CMakeProjectManager::~CMakeProjectManager()
 {
     //delete m_rootItem;
 }
 
-// KDevelop::IProject* CMakeImporter::project() const
+// KDevelop::IProject* CMakeProjectManager::project() const
 // {
 //     return m_project;
 // }
 
-KUrl CMakeImporter::buildDirectory(KDevelop::ProjectItem *item) const
+KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectItem *item) const
 {
     return item->project()->folder();
 }
 
-QList<KDevelop::ProjectFolderItem*> CMakeImporter::parse( KDevelop::ProjectFolderItem* item )
+QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
@@ -106,7 +106,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeImporter::parse( KDevelop::ProjectFolde
     return folderList;
 }
 
-KDevelop::ProjectItem* CMakeImporter::import( KDevelop::IProject *project )
+KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project )
 {
     QString buildDir = CMakeSettings::self()->buildFolder();
     kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
@@ -129,48 +129,48 @@ KDevelop::ProjectItem* CMakeImporter::import( KDevelop::IProject *project )
     return m_rootItem;
 }
 
-KUrl CMakeImporter::findMakefile( KDevelop::ProjectFolderItem* dom ) const
+KUrl CMakeProjectManager::findMakefile( KDevelop::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl();
 }
 
-KUrl::List CMakeImporter::findMakefiles( KDevelop::ProjectFolderItem* dom ) const
+KUrl::List CMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* dom ) const
 {
     Q_UNUSED( dom );
     return KUrl::List();
 }
 
-QList<KDevelop::ProjectTargetItem*> CMakeImporter::targets() const
+QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 {
     return QList<KDevelop::ProjectTargetItem*>();
 }
 
-KUrl::List CMakeImporter::includeDirectories(KDevelop::ProjectBaseItem *item) const
+KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     return m_includeDirList;
 }
 
-QStringList CMakeImporter::extensions() const
+QStringList CMakeProjectManager::extensions() const
 {
     return QStringList() << "IBuildSystemManager" << "IProjectFileManager";
 }
 
-void CMakeImporter::registerExtensions()
+void CMakeProjectManager::registerExtensions()
 {
-    extensionManager()->registerExtensions( new CMakeImporterIProjectFileManagerFactory(
+    extensionManager()->registerExtensions( new CMakeProjectManagerIProjectFileManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->registerExtensions( new CMakeImporterIBuildSystemManagerFactory(
+    extensionManager()->registerExtensions( new CMakeProjectManagerIBuildSystemManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
-void CMakeImporter::unregisterExtensions()
+void CMakeProjectManager::unregisterExtensions()
 {
-    extensionManager()->unregisterExtensions( new CMakeImporterIProjectFileManagerFactory(
+    extensionManager()->unregisterExtensions( new CMakeProjectManagerIProjectFileManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->unregisterExtensions( new CMakeImporterIBuildSystemManagerFactory(
+    extensionManager()->unregisterExtensions( new CMakeProjectManagerIBuildSystemManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 
-#include "cmakeimporter.moc"
+#include "cmakemanager.moc"
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;

@@ -49,15 +49,15 @@ class CMakeFolderItem;
 
 class cmLocalGenerator;
 
-class CMakeImporter : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
+class CMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
 Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
-    CMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
+    CMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
 
-    virtual ~CMakeImporter();
+    virtual ~CMakeProjectManager();
 
 //     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const { return 0; }

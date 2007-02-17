@@ -47,7 +47,7 @@ public:
     virtual KUrl localNonShareableFile() const
     {
         return KUrl::fromPath(
-                               KStandardDirs::locate( "data", "kdevcmakeimporter/data.kdev4" ) );
+                               KStandardDirs::locate( "data", "kdevcmakemanager/data.kdev4" ) );
     }
 
 private slots:
