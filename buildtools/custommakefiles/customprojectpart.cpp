@@ -707,7 +707,11 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
 QString CustomProjectPart::buildDirectory() const
 {
     QString dir = DomUtil::readEntry( *projectDom(), "/kdevcustomproject/build/builddir" );
-    return dir.isEmpty() ? projectDirectory() : dir;
+    if( dir.isEmpty() )
+        return projectDirectory();
+    if( QFileInfo( dir ).isRelative() )
+        return QDir::cleanDirPath( projectDirectory() + "/" + dir );
+    return dir;
 }
 
 
