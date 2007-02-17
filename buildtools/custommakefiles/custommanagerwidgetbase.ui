@@ -1,0 +1,102 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CustomManagerWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>CustomManagerWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>713</width>
+            <height>393</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Custom Manager Options</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Filetypes used in Project:</string>
+                            </property>
+                        </widget>
+                        <widget class="KTextEdit">
+                            <property name="name">
+                                <cstring>m_filetypes</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Add filetypes to be used in Projects, can be full filenames or shell wildcards</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Each line contains a filetype used in the project in the form of a filename or a filename wildcard (using shell wildcards). 
+This will be used when adding/removing files in directories and re-populating the project</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>101</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>121</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </hbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>ktextedit.h</includehint>
+</includehints>
+</UI>
