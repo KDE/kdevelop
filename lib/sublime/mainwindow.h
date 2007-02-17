@@ -76,6 +76,8 @@ Q_SIGNALS:
     void areaChanged(Sublime::Area*);
     /**Emitted when the active view is changed.*/
     void activeViewChanged(Sublime::View*);
+    /**Emitted when the active toolview is changed.*/
+    void activeToolViewChanged(Sublime::View*);
 
 private:
     void init();
@@ -91,6 +93,8 @@ private:
     void clearArea();
     /**Sets the active view and focuses it.*/
     void setActiveView(View *view);
+    /**Sets the active toolview and focuses it.*/
+    void setActiveToolView(View *view);
 
     struct MainWindowPrivate *d;
     friend class MainWindowOperator;

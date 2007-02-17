@@ -76,6 +76,7 @@ public:
     QMap<View*, Container*> viewContainers;
 
     View *activeView;
+    View *activeToolView;
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);

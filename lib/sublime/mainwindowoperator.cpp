@@ -37,6 +37,11 @@ void MainWindowOperator::setActiveView(MainWindow *w, View *view)
     w->setActiveView(view);
 }
 
+void MainWindowOperator::setActiveToolView(MainWindow *w, View *view)
+{
+    w->setActiveToolView(view);
+}
+
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

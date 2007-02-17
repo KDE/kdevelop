@@ -91,9 +91,6 @@ struct ControllerPrivate {
     QMap<QString, Area*> namedAreas;
     QMap<Area*, MainWindow*> shownAreas;
     QList<MainWindow*> controlledWindows;
-
-    QMap<MainWindow*, View*> activeView;
-    QMap<MainWindow*, View*> activeToolView;
 };
 
 
@@ -242,7 +239,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         area->walkToolViews(toolFinder, Sublime::AllPositions);
         if (toolFinder.view)
         {
-            d->activeToolView[mw] = toolFinder.view;
+            setActiveToolView(mw, toolFinder.view);
             ///@todo adymo: shall we filter out the event?
             return false;
         }
@@ -251,11 +248,6 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
     }
 
     return false;
-}
-
-View *Controller::activeToolView(MainWindow *mainWindow)
-{
-    return d->activeToolView[mainWindow];
 }
 
 }

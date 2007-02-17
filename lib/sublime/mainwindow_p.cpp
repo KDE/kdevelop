@@ -36,7 +36,8 @@
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w)
-    :controller(0), area(0), activeView(0), m_mainWindow(w), m_areaSwitcherMenu(0)
+    :controller(0), area(0), activeView(0), activeToolView(0),
+    m_mainWindow(w), m_areaSwitcherMenu(0)
 {
 }
 

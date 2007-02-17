@@ -92,7 +92,7 @@ View *MainWindow::activeView()
 
 View *MainWindow::activeToolView()
 {
-    return d->controller->activeToolView(this);
+    return d->activeToolView;
 }
 
 void MainWindow::activateView(View *view)
@@ -108,6 +108,12 @@ void MainWindow::setActiveView(View *view)
 {
     d->activeView = view;
     emit activeViewChanged(view);
+}
+
+void Sublime::MainWindow::setActiveToolView(View *view)
+{
+    d->activeToolView = view;
+    emit activeToolViewChanged(view);
 }
 
 }
