@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "qmakeimporter.h"
+#include "qmakemanager.h"
 
 #include <QList>
 #include <QVector>
@@ -186,5 +186,5 @@ void QMakeProjectManager::unregisterExtensions()
     extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 
-#include "qmakeimporter.moc"
+#include "qmakemanager.moc"
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
