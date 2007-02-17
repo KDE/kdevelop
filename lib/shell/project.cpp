@@ -166,19 +166,19 @@ bool Project::open( const KUrl& projectFileUrl )
 
     d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
     d->folder = projectFileUrl.directory();
-    QString importerSetting = projectGroup.readEntry( "Importer", "GenericImporter" );
+    QString managerSetting = projectGroup.readEntry( "Manager", "GenericManager" );
 
     //Get our importer
     IPluginController* pluginManager = Core::self()->pluginController();
-    d->manager = pluginManager->pluginForExtension( "IProjectFileManager", importerSetting );
+    d->manager = pluginManager->pluginForExtension( "IProjectFileManager", managerSetting );
     IProjectFileManager* iface = 0;
     if ( d->manager )
         iface = d->manager->extension<IProjectFileManager>();
     else
     {
         KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Could not load project importing plugin %1.",
-                                  importerSetting ) );
+                            i18n( "Could not load project management plugin %1.",
+                                  managerSetting ) );
         d->manager = 0;
         return false;
     }
