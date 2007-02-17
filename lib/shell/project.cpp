@@ -166,7 +166,7 @@ bool Project::open( const KUrl& projectFileUrl )
 
     d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
     d->folder = projectFileUrl.directory();
-    QString managerSetting = projectGroup.readEntry( "Manager", "GenericManager" );
+    QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );
 
     //Get our importer
     IPluginController* pluginManager = Core::self()->pluginController();
