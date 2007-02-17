@@ -460,12 +460,12 @@ void MainWindow::newWindow()
 
 void MainWindow::splitHorizontal()
 {
-    split(Qt::Horizontal);
+    split(Qt::Vertical);
 }
 
 void MainWindow::splitVertical()
 {
-    split(Qt::Vertical);
+    split(Qt::Horizontal);
 }
 
 void MainWindow::split(Qt::Orientation orientation)
