@@ -1,8 +1,8 @@
 if (KDE4_BUILD_TESTS)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/buildtools/importers/cmake
-    ${CMAKE_SOURCE_DIR}/buildtools/importers/cmake/parser
+    ${CMAKE_SOURCE_DIR}/buildtools/managers/cmake
+    ${CMAKE_SOURCE_DIR}/buildtools/managers/cmake/parser
     )
 
 set( folderxmltest_SRCS folderxmltest.cpp )
