@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "genericimporter.h"
+#include "genericmanager.h"
 #include <projectmodel.h>
 
 #include <icore.h>
@@ -34,12 +34,12 @@
 #include <QExtensionFactory>
 #include <QRegExp>
 
-typedef KGenericFactory<GenericImporter> GenericSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevgenericimporter, GenericSupportFactory( "kdevgenericimporter" ) )
+typedef KGenericFactory<GenericProjectManager> GenericSupportFactory;
+K_EXPORT_COMPONENT_FACTORY( kdevgenericmanager, GenericSupportFactory( "kdevgenericmanager" ) )
 
-KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, IProjectFileManager, GenericImporter )
+KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, IProjectFileManager, GenericProjectManager )
 
-class GenericImporterPrivate
+class GenericProjectManagerPrivate
 {
     public:
         KDevelop::IProject *m_project;
@@ -48,8 +48,8 @@ class GenericImporterPrivate
         QStringList excludes;
 };
 
-GenericImporter::GenericImporter( QObject *parent, const QStringList & args )
-        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager(), d( new GenericImporterPrivate )
+GenericProjectManager::GenericProjectManager( QObject *parent, const QStringList & args )
+        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager(), d( new GenericProjectManagerPrivate )
 {
     Q_UNUSED( args )
     if ( d->includes.isEmpty() )
@@ -58,10 +58,10 @@ GenericImporter::GenericImporter( QObject *parent, const QStringList & args )
     d->excludes << ".svn" << "CVS" << "moc_*.cpp"; // ### remove me
 }
 
-GenericImporter::~GenericImporter()
+GenericProjectManager::~GenericProjectManager()
 {}
 
-bool GenericImporter::isValid( const QFileInfo &fileInfo ) const
+bool GenericProjectManager::isValid( const QFileInfo &fileInfo ) const
 {
     QString fileName = fileInfo.fileName();
 
@@ -90,7 +90,7 @@ bool GenericImporter::isValid( const QFileInfo &fileInfo ) const
     return true;
 }
 
-QList<KDevelop::ProjectFolderItem*> GenericImporter::parse( KDevelop::ProjectFolderItem *item )
+QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::ProjectFolderItem *item )
 {
     QDir dir( item->url().toLocalFile() );
 
@@ -120,12 +120,12 @@ QList<KDevelop::ProjectFolderItem*> GenericImporter::parse( KDevelop::ProjectFol
     return folder_list;
 }
 
-KDevelop::ProjectItem *GenericImporter::import( KDevelop::IProject *project )
+KDevelop::ProjectItem *GenericProjectManager::import( KDevelop::IProject *project )
 {
     return new KDevelop::ProjectItem( project, project->name(), 0 );;
 }
 
-KDevelop::ProjectFolderItem* GenericImporter::addFolder( const KUrl& url,
+KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,
         KDevelop::ProjectFolderItem * folder )
 {
     Q_UNUSED( url )
@@ -134,7 +134,7 @@ KDevelop::ProjectFolderItem* GenericImporter::addFolder( const KUrl& url,
 }
 
 
-KDevelop::ProjectFileItem* GenericImporter::addFile( const KUrl& url,
+KDevelop::ProjectFileItem* GenericProjectManager::addFile( const KUrl& url,
         KDevelop::ProjectFolderItem * folder )
 {
     Q_UNUSED( url )
@@ -142,37 +142,37 @@ KDevelop::ProjectFileItem* GenericImporter::addFile( const KUrl& url,
     return 0;
 }
 
-bool GenericImporter::renameFolder( KDevelop::ProjectFolderItem * folder, const KUrl& url )
+bool GenericProjectManager::renameFolder( KDevelop::ProjectFolderItem * folder, const KUrl& url )
 {
     Q_UNUSED( folder )
     Q_UNUSED( url )
     return false;
 }
 
-bool GenericImporter::renameFile( KDevelop::ProjectFileItem * file, const KUrl& url )
+bool GenericProjectManager::renameFile( KDevelop::ProjectFileItem * file, const KUrl& url )
 {
     Q_UNUSED(file)
     Q_UNUSED(url)
     return false;
 }
 
-bool GenericImporter::removeFolder( KDevelop::ProjectFolderItem * folder )
+bool GenericProjectManager::removeFolder( KDevelop::ProjectFolderItem * folder )
 {
     Q_UNUSED( folder )
     return false;
 }
 
-bool GenericImporter::removeFile( KDevelop::ProjectFileItem * file )
+bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
 {
     Q_UNUSED( file )
     return false;
 }
 
-QStringList GenericImporter::extensions() const
+QStringList GenericProjectManager::extensions() const
 {
     return QStringList() << "IProjectFileManager";
 }
 
 
-#include "genericimporter.moc"
+#include "genericmanager.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

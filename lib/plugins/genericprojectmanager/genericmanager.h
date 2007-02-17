@@ -16,8 +16,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVGENERICIMPORTER_H
-#define KDEVGENERICIMPORTER_H
+#ifndef KDEVGENERICMANAGER_H
+#define KDEVGENERICMANAGER_H
 
 #include "iprojectfilemanager.h"
 #include "iplugin.h"
@@ -35,14 +35,14 @@ class ProjectFileItem;
 
 class KDialogBase;
 
-class GenericImporter: public KDevelop::IPlugin, public KDevelop::IProjectFileManager
+class GenericProjectManager: public KDevelop::IPlugin, public KDevelop::IProjectFileManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
-    GenericImporter( QObject *parent = 0,
+    GenericProjectManager( QObject *parent = 0,
                      const QStringList &args = QStringList() );
-    virtual ~GenericImporter();
+    virtual ~GenericProjectManager();
 
 //
 // IProjectFileManager interface
@@ -83,7 +83,7 @@ private:
     bool isValid( const QFileInfo &fileName ) const;
 
 private:
-    struct GenericImporterPrivate* const d;
+    struct GenericProjectManagerPrivate* const d;
 };
 
 #endif // KDEVGENERICIMPORTER_H

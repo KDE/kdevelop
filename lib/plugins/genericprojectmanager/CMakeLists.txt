@@ -9,19 +9,19 @@ include_directories(
 
 ########### next target ###############
 
-set(kdevgenericimporter_PART_SRCS
-    genericimporter.cpp
+set(kdevgenericmanager_PART_SRCS
+    genericmanager.cpp
 )
 
-kde4_automoc(${kdevgenericimporter_PART_SRCS})
-kde4_add_plugin(kdevgenericimporter ${kdevgenericimporter_PART_SRCS})
-target_link_libraries(kdevgenericimporter ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject )
+kde4_automoc(${kdevgenericmanager_PART_SRCS})
+kde4_add_plugin(kdevgenericmanager ${kdevgenericmanager_PART_SRCS})
+target_link_libraries(kdevgenericmanager ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject )
 
-install(TARGETS kdevgenericimporter DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install( FILES kdevgenericimporter.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevgenericmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 
