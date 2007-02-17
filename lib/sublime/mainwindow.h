@@ -89,8 +89,8 @@ private:
     void setArea(Area *area);
     /**Unsets the area clearing main window.*/
     void clearArea();
-    /**Emits activeViewChanged signal.*/
-    void emitActiveViewChanged(View *view);
+    /**Sets the active view and focuses it.*/
+    void setActiveView(View *view);
 
     struct MainWindowPrivate *d;
     friend class MainWindowOperator;

@@ -67,11 +67,15 @@ public:
     void clearArea();
     QMenu *areaSwitcherMenu();
 
+    void activateFirstVisibleView();
+
     Controller *controller;
     Area *area;
     QList<QDockWidget*> docks;
     QMap<View*, QDockWidget*> viewDocks;
     QMap<View*, Container*> viewContainers;
+
+    View *activeView;
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);

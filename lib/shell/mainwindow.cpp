@@ -495,15 +495,18 @@ void MainWindow::changeActiveView(Sublime::View *view)
     PartDocument *doc = qobject_cast<KDevelop::PartDocument*>(view->document());
     if (doc)
     {
-        if (view->hasWidget())
-            Core::self()->partController()->setActivePart(doc->partForWidget(view->widget()));
+        //activate part if it is not yet activated
+        KParts::Part *part = doc->partForWidget(view->widget());
+        if (Core::self()->partController()->activePart() != part)
+            Core::self()->partController()->setActivePart(part);
     }
     else
     {
         //activated view is not a part document so we need to remove active part gui
-        KParts::Part *activePart = Core::self()->partController()->activePart();
-        if (activePart)
-            guiFactory()->removeClient(activePart);
+        ///@todo adymo: only this window needs to remove GUI
+//         KParts::Part *activePart = Core::self()->partController()->activePart();
+//         if (activePart)
+//             guiFactory()->removeClient(activePart);
     }
 }
 

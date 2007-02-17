@@ -191,6 +191,7 @@ after that."*/
 //implementation is based upon KParts::PartManager::eventFilter
 bool Controller::eventFilter(QObject *obj, QEvent *ev)
 {
+
     if (ev->type() != QEvent::MouseButtonPress &&
         ev->type() != QEvent::MouseButtonDblClick &&
         ev->type() != QEvent::FocusIn)
@@ -231,8 +232,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         area->walkViews(widgetFinder, area->rootIndex());
         if (widgetFinder.view)
         {
-            d->activeView[mw] = widgetFinder.view;
-            emitActiveViewChanged(mw, widgetFinder.view);
+            setActiveView(mw, widgetFinder.view);
             ///@todo adymo: shall we filter out the event?
             return false;
         }
@@ -251,11 +251,6 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
     }
 
     return false;
-}
-
-View *Controller::activeView(MainWindow *mainWindow)
-{
-    return d->activeView[mainWindow];
 }
 
 View *Controller::activeToolView(MainWindow *mainWindow)

@@ -54,6 +54,7 @@ void MainWindow::setArea(Area *area)
         clearArea();
     d->area = area;
     d->reconstruct();
+    d->activateFirstVisibleView();
     emit areaChanged(area);
 }
 
@@ -86,7 +87,7 @@ Controller *MainWindow::controller() const
 
 View *MainWindow::activeView()
 {
-    return d->controller->activeView(this);
+    return d->activeView;
 }
 
 View *MainWindow::activeToolView()
@@ -100,10 +101,12 @@ void MainWindow::activateView(View *view)
         return;
     d->viewContainers[view]->setCurrentWidget(view->widget());
     view->widget()->setFocus();
+    setActiveView(view);
 }
 
-void MainWindow::emitActiveViewChanged(View *view)
+void MainWindow::setActiveView(View *view)
 {
+    d->activeView = view;
     emit activeViewChanged(view);
 }
 

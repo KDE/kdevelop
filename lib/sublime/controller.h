@@ -59,8 +59,6 @@ public:
     /**@return the list of documents created in this controller.*/
     QList<Document*> &documents() const;
 
-    /**@return the active view inside the @p mainwindow.*/
-    View *activeView(MainWindow *mainWindow);
     /**@return the active toolview inside the @p mainwindow.*/
     View *activeToolView(MainWindow *mainWindow);
 

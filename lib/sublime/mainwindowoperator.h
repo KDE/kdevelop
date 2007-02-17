@@ -35,8 +35,9 @@ protected:
     void setArea(MainWindow *w, Area *area);
     /**Unsets the area clearing main window.*/
     void clearArea(MainWindow *w);
-    /**Emits activeViewChanged signal from the mainwindow.*/
-    void emitActiveViewChanged(MainWindow *w, View *view);
+
+    /**Sets the active view for the mainwindow and focuses it.*/
+    void setActiveView(MainWindow *w, View *view);
 
 };
 

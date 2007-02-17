@@ -49,42 +49,51 @@ public:
     }
 };
 
+void ViewActivationTest::init()
+{
+    controller = new Controller(this);
+    doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>());
+    //this document will create special widgets - QListView nested in QWidget
+    doc2 = new ToolDocument("doc2", controller, new SpecialWidgetFactory<QListView>());
+    doc3 = new ToolDocument("doc3", controller, new SimpleToolWidgetFactory<QListView>());
+    doc4 = new ToolDocument("doc4", controller, new SimpleToolWidgetFactory<QListView>());
+
+    tool1 = new ToolDocument("tool1", controller, new SimpleToolWidgetFactory<QListView>());
+    tool2 = new ToolDocument("tool2", controller, new SimpleToolWidgetFactory<QTextEdit>());
+    tool3 = new ToolDocument("tool3", controller, new SimpleToolWidgetFactory<QTextEdit>());
+
+    area = new Area(controller, "Area");
+    view211 = doc1->createView();
+    area->addView(view211);
+    view212 = doc1->createView();
+    area->addView(view212);
+    view221 = doc2->createView();
+    area->addView(view221, view211, Qt::Vertical);
+    view231 = doc3->createView();
+    area->addView(view231, view221, Qt::Horizontal);
+    view241 = doc4->createView();
+    area->addView(view241, view212, Qt::Vertical);
+    viewT11 = tool1->createView();
+    area->addToolView(viewT11, Sublime::Bottom);
+    viewT21 = tool2->createView();
+    area->addToolView(viewT21, Sublime::Right);
+    viewT31 = tool3->createView();
+    area->addToolView(viewT31, Sublime::Top);
+    viewT32 = tool3->createView();
+    area->addToolView(viewT32, Sublime::Top);
+}
+
+void ViewActivationTest::cleanup()
+{
+    delete controller;
+}
+
 void ViewActivationTest::testViewActivation()
 {
-    //prepare controller, area and mainwindow
-    Controller controller(this);
-    Document *doc1 = new ToolDocument("doc1", &controller, new SimpleToolWidgetFactory<QListView>());
-    //this document will create special widgets - QListView nested in QWidget
-    Document *doc2 = new ToolDocument("doc2", &controller, new SpecialWidgetFactory<QListView>());
-    Document *doc3 = new ToolDocument("doc3", &controller, new SimpleToolWidgetFactory<QListView>());
-    Document *doc4 = new ToolDocument("doc4", &controller, new SimpleToolWidgetFactory<QListView>());
-
-    Document *tool1 = new ToolDocument("tool1", &controller, new SimpleToolWidgetFactory<QListView>());
-    Document *tool2 = new ToolDocument("tool2", &controller, new SimpleToolWidgetFactory<QTextEdit>());
-    Document *tool3 = new ToolDocument("tool3", &controller, new SimpleToolWidgetFactory<QTextEdit>());
-
-    Area *area = new Area(&controller, "Area");
-    View *view211 = doc1->createView();
-    area->addView(view211);
-    View *view212 = doc1->createView();
-    area->addView(view212);
-    View *view221 = doc2->createView();
-    area->addView(view221, view211, Qt::Vertical);
-    View *view231 = doc3->createView();
-    area->addView(view231, view221, Qt::Horizontal);
-    View *view241 = doc4->createView();
-    area->addView(view241, view212, Qt::Vertical);
-    View *viewT11 = tool1->createView();
-    area->addToolView(viewT11, Sublime::Bottom);
-    View *viewT21 = tool2->createView();
-    area->addToolView(viewT21, Sublime::Right);
-    View *viewT31 = tool3->createView();
-    area->addToolView(viewT31, Sublime::Top);
-    View *viewT32 = tool3->createView();
-    area->addToolView(viewT32, Sublime::Top);
-
-    MainWindow mw(&controller);
-    controller.showArea(area, &mw);
+    MainWindow mw(controller);
+    controller->showArea(area, &mw);
+    //we should have an active view immediatelly after the area is shown
+    QCOMPARE(mw.activeView(), view211);
 
     //add some widgets that are not in layout
     QTextEdit *breaker = new QTextEdit(&mw);
@@ -95,7 +104,6 @@ void ViewActivationTest::testViewActivation()
     QDockWidget *dock = new QDockWidget(&mw);
     dock->setWidget(toolBreaker);
     mw.addDockWidget(Qt::LeftDockWidgetArea, dock);
-
 
     //now post events to the widgets and see if mainwindow has the right active views
     //activate view
@@ -134,6 +142,19 @@ void ViewActivationTest::testViewActivation()
     QTest::qWait(10);
     QCOMPARE(mw.activeView(), view221);
     QCOMPARE(mw.activeToolView(), viewT31);
+}
+
+void ViewActivationTest::testActivationInMultipleMainWindows()
+{
+    MainWindow mw(controller);
+    controller->showArea(area, &mw);
+    QCOMPARE(mw.activeView(), view211);
+
+    //check that new mainwindow always have active view right after displaying area
+    MainWindow mw2(controller);
+    controller->showArea(area, &mw2);
+    QVERIFY(mw2.activeView());
+    QCOMPARE(mw2.activeView()->document(), doc1);
 }
 
 KDEVTEST_MAIN(ViewActivationTest)

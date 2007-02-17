@@ -144,7 +144,7 @@ void UiController::openUrl(const KUrl &url)
         partView = doc->createView();
 
         //add view to the area
-        area->addView(partView, activeView(activeMainWindow()));
+        area->addView(partView, activeMainWindow()->activeView());
     }
     activeMainWindow()->activateView(partView);
     d->core->partController()->setActivePart(doc->partForWidget(partView->widget()), partView->widget());

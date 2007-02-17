@@ -23,13 +23,42 @@
 
 namespace Sublime {
 class View;
+class Controller;
+class Document;
+class Area;
 }
 
 class ViewActivationTest: public QObject {
     Q_OBJECT
 private slots:
-    void testViewActivation();
+    void init();
+    void cleanup();
 
+    void testViewActivation();
+    void testActivationInMultipleMainWindows();
+
+private:
+    Sublime::Controller *controller;
+
+    Sublime::Area *area;
+
+    Sublime::Document *doc1;
+    Sublime::Document *doc2;
+    Sublime::Document *doc3;
+    Sublime::Document *doc4;
+    Sublime::Document *tool1;
+    Sublime::Document *tool2;
+    Sublime::Document *tool3;
+
+    Sublime::View *view211;
+    Sublime::View *view212;
+    Sublime::View *view221;
+    Sublime::View *view231;
+    Sublime::View *view241;
+    Sublime::View *viewT11;
+    Sublime::View *viewT21;
+    Sublime::View *viewT31;
+    Sublime::View *viewT32;
 };
 
 #endif

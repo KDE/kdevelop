@@ -32,9 +32,9 @@ void MainWindowOperator::clearArea(MainWindow *w)
     w->clearArea();
 }
 
-void MainWindowOperator::emitActiveViewChanged(MainWindow *w, View *view)
+void MainWindowOperator::setActiveView(MainWindow *w, View *view)
 {
-    w->emitActiveViewChanged(view);
+    w->setActiveView(view);
 }
 
 }
