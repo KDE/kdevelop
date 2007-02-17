@@ -1,2 +1,2 @@
 add_subdirectory(projectmanager)
-add_subdirectory(genericfilemanager)
+add_subdirectory(genericprojectmanager)
