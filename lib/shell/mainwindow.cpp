@@ -214,21 +214,25 @@ void MainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)." ) );
 
     action = actionCollection()->addAction( "new_window" );
+    action->setIcon(KIcon( "window_new" ));
     action->setText( i18n( "&New Window" ) );
+    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( newWindow() ) );
     action->setToolTip( i18n( "New Window" ) );
     action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of current area." ) );
 
     action = actionCollection()->addAction( "split_horizontal" );
-    action->setIcon(KIcon( "split_h" ));
+    action->setIcon(KIcon( "view_bottom" ));
     action->setText( i18n( "Split &Horizontal" ) );
+    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_T );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitHorizontal() ) );
     action->setToolTip( i18n( "Split Horizontal" ) );
     action->setWhatsThis( i18n( "<b>Split Horizontal</b><p>Splitts the current view horizontally." ) );
 
     action = actionCollection()->addAction( "split_vertical" );
-    action->setIcon(KIcon( "split_v" ));
+    action->setIcon(KIcon( "view_right" ));
     action->setText( i18n( "Split &Vertical" ) );
+    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
     action->setToolTip( i18n( "Split Vertical" ) );
     action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically." ) );
