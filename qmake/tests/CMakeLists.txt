@@ -1,17 +1,17 @@
 if(KDE4_BUILD_TESTS)
 
-include_directories(${CMAKE_SOURCE_DIR}/buildtools/importers/qmake/parser
-                    ${CMAKE_SOURCE_DIR}/buildtools/importers/qmake)
+include_directories(${CMAKE_SOURCE_DIR}/buildtools/managers/qmake/parser
+                    ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake)
 
 set(parsetest_SRCS parsetest.cpp)
 kde4_automoc(qmake-parsetest ${parsetest_SRCS})
 kde4_add_executable(qmake-parsetest NOGUI RUN_UNINSTALLED ${parsetest_SRCS})
 target_link_libraries(qmake-parsetest
-	${QT_QTTEST_LIBRARY}
-	${KDE4_KDECORE_LIBS}
-	kdevplatforminterfaces
-	kdevqmakeparser
-	)
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatforminterfaces
+    kdevqmakeparser
+    )
 
 set(assignmenttest_SRCS assignmenttest.cpp)
 kde4_automoc(qmake-assignmenttest ${assignmenttest_SRCS})

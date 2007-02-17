@@ -38,15 +38,15 @@
 #include "qmakemodelitems.h"
 #include "qmakeprojectscope.h"
 
-typedef KGenericFactory<QMakeImporter> QMakeSupportFactory ;
-K_EXPORT_COMPONENT_FACTORY( kdevqmakeimporter,
-                            QMakeSupportFactory( "kdevqmakeimporter" ) )
+typedef KGenericFactory<QMakeProjectManager> QMakeSupportFactory ;
+K_EXPORT_COMPONENT_FACTORY( kdevqmakemanager,
+                            QMakeSupportFactory( "kdevqmakemanager" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, QMakeImporter )
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, QMakeImporter )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, QMakeProjectManager )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, QMakeProjectManager )
 
 
-QMakeImporter::QMakeImporter( QObject* parent,
+QMakeProjectManager::QMakeProjectManager( QObject* parent,
                               const QStringList& )
         : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent )
 {
@@ -59,17 +59,17 @@ QMakeImporter::QMakeImporter( QObject* parent,
             m_builder = new KDevelop::MakeBuilder()*/
 }
 
-QMakeImporter::~QMakeImporter()
+QMakeProjectManager::~QMakeProjectManager()
 {
 
 }
 
-KUrl QMakeImporter::buildDirectory(KDevelop::ProjectItem* project) const
+KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectItem* project) const
 {
     return project->project()->folder();
 }
 
-QList<KDevelop::ProjectFolderItem*> QMakeImporter::parse( KDevelop::ProjectFolderItem* item )
+QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
 
@@ -98,7 +98,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeImporter::parse( KDevelop::ProjectFolde
     return folderList;
 }
 
-KDevelop::ProjectItem* QMakeImporter::import( KDevelop::IProject* project )
+KDevelop::ProjectItem* QMakeProjectManager::import( KDevelop::IProject* project )
 {
     KUrl dirName = project->folder();
     if( !dirName.isLocalFile() )
@@ -129,7 +129,7 @@ KDevelop::ProjectItem* QMakeImporter::import( KDevelop::IProject* project )
     return 0;
 }
 
-KUrl QMakeImporter::findMakefile( KDevelop::ProjectFolderItem* folder ) const
+KUrl QMakeProjectManager::findMakefile( KDevelop::ProjectFolderItem* folder ) const
 {
 
     QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
@@ -140,7 +140,7 @@ KUrl QMakeImporter::findMakefile( KDevelop::ProjectFolderItem* folder ) const
     return qmitem->projectScope()->absoluteFileUrl();
 }
 
-KUrl::List QMakeImporter::findMakefiles( KDevelop::ProjectFolderItem* folder ) const
+KUrl::List QMakeProjectManager::findMakefiles( KDevelop::ProjectFolderItem* folder ) const
 {
     QMakeFolderItem* qmitem = dynamic_cast<QMakeFolderItem*>( folder );
     if( !qmitem )
@@ -153,36 +153,36 @@ KUrl::List QMakeImporter::findMakefiles( KDevelop::ProjectFolderItem* folder ) c
     return l;
 }
 
-QList<KDevelop::ProjectTargetItem*> QMakeImporter::targets(KDevelop::ProjectItem* item) const
+QList<KDevelop::ProjectTargetItem*> QMakeProjectManager::targets(KDevelop::ProjectItem* item) const
 {
     Q_UNUSED(item)
     return QList<KDevelop::ProjectTargetItem*>();
 }
 
-KUrl::List QMakeImporter::includeDirectories(KDevelop::ProjectBaseItem* item) const
+KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* item) const
 {
     Q_UNUSED(item)
     return KUrl::List();
 }
 
-QStringList QMakeImporter::extensions() const
+QStringList QMakeProjectManager::extensions() const
 {
     return QStringList() << "IBuildSystemManager" << "IProjectFileManager";
 }
 
 
-void QMakeImporter::registerExtensions()
+void QMakeProjectManager::registerExtensions()
 {
-    extensionManager()->registerExtensions( new QMakeImporterIProjectFileManagerFactory(
+    extensionManager()->registerExtensions( new QMakeProjectManagerIProjectFileManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->registerExtensions( new QMakeImporterIBuildSystemManagerFactory(
+    extensionManager()->registerExtensions( new QMakeProjectManagerIBuildSystemManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
-void QMakeImporter::unregisterExtensions()
+void QMakeProjectManager::unregisterExtensions()
 {
-    extensionManager()->unregisterExtensions( new QMakeImporterIProjectFileManagerFactory(
+    extensionManager()->unregisterExtensions( new QMakeProjectManagerIProjectFileManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->unregisterExtensions( new QMakeImporterIBuildSystemManagerFactory(
+    extensionManager()->unregisterExtensions( new QMakeProjectManagerIBuildSystemManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 
