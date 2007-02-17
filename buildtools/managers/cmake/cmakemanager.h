@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CMAKEIMPORTER_H
-#define CMAKEIMPORTER_H
+#ifndef CMAKEMANAGER_H
+#define CMAKEMANAGER_H
 
 #include <QList>
 #include <QString>

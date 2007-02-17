@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QMAKEIMPORTER_H
-#define QMAKEIMPORTER_H
+#ifndef QMAKEMANAGER_H
+#define QMAKEMANAGER_H
 
 #include <ibuildsystemmanager.h>
 #include <iplugin.h>
