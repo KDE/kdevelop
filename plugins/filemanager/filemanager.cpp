@@ -109,8 +109,11 @@ public:
     {
         KUrl url = m_model->dirLister()->url();
         bool ok;
+        QString targetDir = url.url();
+        if (targetDir.startsWith("file:///"))
+            targetDir = targetDir.mid(7, 1000);
         QString path = KInputDialog::getText(i18n("New Folder"),
-            i18n("Create new folder in:\n%1").arg(url.url()), "New Folder", &ok, m_view);
+            i18n("Create new folder in:\n")+targetDir, "New Folder", &ok, m_view);
         if (ok && !path.isEmpty())
         {
             url.addPath(path);
