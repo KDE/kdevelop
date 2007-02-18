@@ -244,6 +244,14 @@ void MainWindow::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileNew() ) );
     action->setToolTip( i18n( "New File" ) );
     action->setWhatsThis( i18n( "<b>New File</b><p>Creates an empty file." ) );
+
+    action = actionCollection()->addAction( "file_close" );
+    action->setIcon(KIcon("fileclose"));
+    action->setShortcut( Qt::CTRL + Qt::Key_W );
+    action->setText( i18n( "&Close File" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
+    action->setToolTip( i18n( "Close File" ) );
+    action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file." ) );
 }
 
 
@@ -492,6 +500,14 @@ void KDevelop::MainWindow::activePartChanged(KParts::Part *part)
 void MainWindow::fileNew()
 {
     Core::self()->uiControllerInternal()->openEmptyDocument();
+}
+
+void KDevelop::MainWindow::fileClose()
+{
+    Sublime::View *view = activeView();
+    if (!view)
+        return;
+    area()->removeView(view);
 }
 
 void MainWindow::changeActiveView(Sublime::View *view)

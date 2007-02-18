@@ -70,6 +70,7 @@ protected:
 
 private Q_SLOTS:
     void fileNew();
+    void fileClose();
 
     void gotoNextWindow();
     void gotoPreviousWindow();
