@@ -218,6 +218,10 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
                 m_mainWindow->setCentralWidget(siblingSplitter);
             }
             m_indexSplitters[parent] = siblingSplitter;
+
+            //activate the current view in the remaining child
+            Container *siblingContainer = qobject_cast<Container*>(siblingSplitter->widget(0));
+            m_mainWindow->setActiveView(siblingContainer->viewForWidget(siblingContainer->currentWidget()));
         }
     }
 }
