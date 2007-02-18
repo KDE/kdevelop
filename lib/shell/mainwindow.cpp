@@ -255,21 +255,14 @@ void MainWindow::setupActions()
 }
 
 
-void MainWindow::loadSettings( bool projectIsLoaded )
+void MainWindow::loadSettings()
 {
-    Q_UNUSED( projectIsLoaded );
-/*    KConfig * config = Config::standard();
-    applyMainWindowSettings( config, QLatin1String( "MainWindow" ) );*/
+    Sublime::MainWindow::loadSettings();
 }
 
-void MainWindow::saveSettings( bool projectIsLoaded )
+void MainWindow::saveSettings()
 {
-    Q_UNUSED( projectIsLoaded );
-/*    if ( projectIsLoaded )
-        return;
-
-    KConfig * config = Config::standard();
-    saveMainWindowSettings( config, QLatin1String( "MainWindow" ) );*/
+    Sublime::MainWindow::saveSettings();
 }
 
 void MainWindow::initialize()
@@ -383,7 +376,7 @@ void MainWindow::newToolbarConfig()
 
 bool MainWindow::queryClose()
 {
-    return true;
+    return Sublime::MainWindow::queryClose();
 }
 
 void MainWindow::setupWindowMenu()

@@ -19,6 +19,8 @@
 #include "mainwindow.h"
 
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include "area.h"
 #include "view.h"
@@ -56,13 +58,16 @@ void MainWindow::setArea(Area *area)
     d->reconstruct();
     d->activateFirstVisibleView();
     emit areaChanged(area);
+
+    loadSettings();
 }
 
 void MainWindow::clearArea()
 {
     emit areaCleared(d->area);
     d->clearArea();
-    kDebug(9037) << "area cleared" << endl;
+
+    saveSettings();
 }
 
 QMenu *MainWindow::areaSwitcherMenu()
@@ -115,6 +120,28 @@ void Sublime::MainWindow::setActiveToolView(View *view)
 {
     d->activeToolView = view;
     emit activeToolViewChanged(view);
+}
+
+void MainWindow::saveSettings()
+{
+    QString group = "MainWindow";
+    if (area())
+        group += "_" + area()->objectName();
+    saveMainWindowSettings(KGlobal::config().data(), group);
+}
+
+void MainWindow::loadSettings()
+{
+    QString group = "MainWindow";
+    if (area())
+        group += "_" + area()->objectName();
+    applyMainWindowSettings(KGlobal::config().data(), group);
+}
+
+bool MainWindow::queryClose()
+{
+    saveSettings();
+    return KParts::MainWindow::queryClose();
 }
 
 }

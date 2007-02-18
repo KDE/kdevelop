@@ -79,6 +79,17 @@ Q_SIGNALS:
     /**Emitted when the active toolview is changed.*/
     void activeToolViewChanged(Sublime::View*);
 
+protected:
+    /**Saves size/toolbar/menu/statusbar settings to the global configuration file.
+    Reimplement in subclasses to save more and don't forget to call inherited method.*/
+    virtual void saveSettings();
+    /**Loads size/toolbar/menu/statusbar settings to the global configuration file.
+    Reimplement in subclasses to load more and don't forget to call inherited method.*/
+    virtual void loadSettings();
+
+    /**Reimplemented to save settings.*/
+    virtual bool queryClose();
+
 private:
     void init();
     Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))

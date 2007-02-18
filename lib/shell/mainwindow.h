@@ -105,8 +105,8 @@ private Q_SLOTS:
     void changeActiveView(Sublime::View *view);
 
 protected:
-    virtual void loadSettings( bool projectIsLoaded );
-    virtual void saveSettings( bool projectIsLoaded );
+    virtual void loadSettings();
+    virtual void saveSettings();
     virtual void initialize();
     virtual void cleanup();
 
