@@ -70,6 +70,10 @@ CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const Q
 
     KAction *action;
 
+    action = new KAction( i18n( "Re-Populate Project" ), 0, this, SLOT( populateProject() ), actionCollection(), "repopulate_project" );
+    action->setToolTip( i18n( "Re-Populate Project" ) );
+    action->setWhatsThis( i18n( "<b>Re-Populate Project</b><p>Re-Populate's the project, searches through the project directory and adds all files that match one of the wildcards set in the custom manager options to the project filelist." ) );
+
     action = new KAction( i18n( "&Build Project" ), "make_kdevelop", Key_F8,
                           this, SLOT( slotBuild() ),
                           actionCollection(), "build_build" );
@@ -199,9 +203,10 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
     m_contextRemoveFiles.clear();
 
     QString popupstr = fcontext->urls().first().fileName();
-    popup->insertSeparator();
-    if ( fcontext->urls().size() == 1 && URLUtil::isDirectory( fcontext->urls().first() ))
+
+    if ( fcontext->urls().size() == 1 && URLUtil::isDirectory( fcontext->urls().first() ) )
     {
+        popup->insertSeparator();
         // remember the name of the directory
         m_contextDirName = fcontext->urls().first().path();
         m_contextDirName = m_contextDirName.mid( project()->projectDirectory().length() + 1 );
@@ -210,7 +215,6 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
         popup->setWhatsThis( id, i18n( "<b>Make active directory</b><p>"
                                        "Chooses this directory as the destination for new files created using wizards "
                                        "like the <i>New Class</i> wizard." ) );
-        popup->insertSeparator();
     }
 
     const KURL::List urls = fcontext->urls();
@@ -221,21 +225,21 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
     {
         QString canPath( URLUtil::canonicalPath(( *it ).path() ) );
         QString relPath = URLUtil::extractPathNameRelative( URLUtil::canonicalPath( project()->projectDirectory() ), canPath );
-        if ( ( ( *it ).isLocalFile() && isProjectFileType( ( *it ).fileName() ) ) )
+        if ((( *it ).isLocalFile() && isProjectFileType(( *it ).fileName() ) ) )
         {
             if ( project()->isProjectFile( canPath ) )
                 m_contextRemoveFiles << relPath;
-            if( !project()->isProjectFile( canPath ) )
+            if ( !project()->isProjectFile( canPath ) )
                 m_contextAddFiles << relPath;
         }
-        if( QFileInfo( (*it).path() ).isDir() )
+        if ( QFileInfo(( *it ).path() ).isDir() )
         {
             if ( containsProjectFiles( canPath ) )
             {
                 dirSelected = true;
                 m_contextRemoveFiles << relPath;
             }
-            if( containsNonProjectFiles( canPath ) )
+            if ( containsNonProjectFiles( canPath ) )
             {
                 dirSelected = true;
                 m_contextAddFiles << relPath;
@@ -243,18 +247,20 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
         }
     }
 
+    if( m_contextAddFiles.size() > 0 || m_contextRemoveFiles.size() > 0 )
+        popup->insertSeparator();
     if ( m_contextAddFiles.size() > 0 )
     {
         int id = popup->insertItem( i18n( "Add Selected File/Dir(s) to Project" ),
                                     this, SLOT( slotAddToProject() ) );
         popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Adds selected file/dir(s) to the list of files in project. "
-        "Note that the files should be manually added to corresponding makefile or build.xml." ) );
-        if( dirSelected )
+                                       "Note that the files should be manually added to corresponding makefile or build.xml." ) );
+        if ( dirSelected )
         {
             int id = popup->insertItem( i18n( "Add Selected Dir(s) to Project (recursive)" ),
-                                    this, SLOT( slotAddToProjectRecursive() ) );
+                                        this, SLOT( slotAddToProjectRecursive() ) );
             popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Recursively adds selected dir(s) to the list of files in project. "
-            "Note that the files should be manually added to corresponding makefile or build.xml." ) );
+                                           "Note that the files should be manually added to corresponding makefile or build.xml." ) );
         }
     }
 
@@ -263,14 +269,14 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
         int id = popup->insertItem( i18n( "Remove Selected File/Dir(s) From Project" ),
                                     this, SLOT( slotRemoveFromProject() ) );
         popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Removes selected file/dir(s) from the list of files in project. "
-        "Note that the files should be manually excluded from corresponding makefile or build.xml." ) );
-        if( dirSelected )
+                                       "Note that the files should be manually excluded from corresponding makefile or build.xml." ) );
+        if ( dirSelected )
         {
             int id = popup->insertItem( i18n( "Remove Selected Dir(s) From Project (recursive)" ),
-                                    this, SLOT( slotRemoveFromProject() ) );
+                                        this, SLOT( slotRemoveFromProject() ) );
             popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Recursively removes selected dir(s) from the list of files in project. "
-                "Note that the files should be manually excluded from corresponding makefile or build.xml." ) );
-            }
+                                           "Note that the files should be manually excluded from corresponding makefile or build.xml." ) );
+        }
     }
 }
 
@@ -327,12 +333,12 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
         DomUtil::writeEntry( dom, "/kdevcustomproject/run/directoryradio", "executable" );
     }
 
-    if( filetypes().isEmpty() )
+    if ( filetypes().isEmpty() )
     {
         QStringList types;
         types << "*.java" << "*.h" << "*.H" << "*.hh" << "*.hxx" << "*.hpp" << "*.c" << "*.C"
-                << "*.cc" << "*.cpp" << "*.c++" << "*.cxx" << "Makefile" << "CMakeLists.txt";
-        DomUtil::writeListEntry( dom, "/kdevcustomproject/filetypes", "filetype", types);
+        << "*.cc" << "*.cpp" << "*.c++" << "*.cxx" << "Makefile" << "CMakeLists.txt";
+        DomUtil::writeListEntry( dom, "/kdevcustomproject/filetypes", "filetype", types );
     }
 
     /*this entry is currently only created by the cmake kdevelop3 project generator
@@ -385,10 +391,24 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
     KDevProject::openProject( dirName, projectName );
 }
 
+void CustomProjectPart::cleanFileList()
+{
+    QStringList temp;
+    for( QStringList::const_iterator it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it )
+    {
+        if( !QFileInfo( projectDirectory()+"/"+*it ).exists() )
+            temp << *it;
+    }
+    removeFiles( temp );
+}
 
 void CustomProjectPart::populateProject()
 {
     QApplication::setOverrideCursor( Qt::waitCursor );
+
+    cleanFileList();
+
+    QStringList newlist;
 
     QValueStack<QString> s;
     int prefixlen = m_projectDirectory.length() + 1;
@@ -411,22 +431,26 @@ void CustomProjectPart::populateProject()
                 {
                     continue;
                 }
-                if ( it.current()->isDir() )
+                if ( it.current()->isDir() && m_sourceFiles.find( path.mid( prefixlen ) ) == m_sourceFiles.end())
                 {
                     kdDebug( 9025 ) << "Pushing: " << path << endl;
+                    newlist.append( path );
                     s.push( path );
                     continue;
                 }
                 if (( !fileName.endsWith( "~" ) )
-                        && isProjectFileType( fileName ) )
+                        && isProjectFileType( fileName )
+                        && m_sourceFiles.find( path.mid( prefixlen ) ) == m_sourceFiles.end() )
                 {
                     kdDebug( 9025 ) << "Adding: " << path << endl;
-                    m_sourceFiles.append( path.mid( prefixlen ) );
+                    newlist.append( path.mid( prefixlen ) );
                 }
             }
         }
     }
     while ( !s.isEmpty() );
+
+    addFiles( newlist );
 
     QApplication::restoreOverrideCursor();
 }
@@ -579,52 +603,42 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
         if ( *it == "." || *it == ".." )
             continue;
         kdDebug( 9025 ) << "Add file: " << *it << endl;
-        if ( QDir::isRelativePath( *it ) )
+        QString relpath;
+        if( QDir::isRelativePath( *it ) )
         {
-            if ( QFileInfo( projectDirectory() + "/" + *it ).isDir() && ( m_recursive || m_first_recursive ) )
-            {
-                m_first_recursive = false;
-                QStringList subentries = QDir( projectDirectory() + "/" + *it ).entryList();
-                for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
-                    if ( *subit != "." && *subit != ".." )
-                        *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
-                addFiles( subentries );
-                addedFiles << QDir::cleanDirPath( *it );
-                m_sourceFiles.append( QDir::cleanDirPath( *it ) );
-                m_first_recursive = true;
-            }
-            else if( isProjectFileType( QFileInfo(*it).fileName() ) )
-            {
-                kdDebug(9025) << "adding " << *it << endl;
-                addedFiles << *it;
-                m_sourceFiles.append( *it );
-            }else
-                kdDebug(9025) << "not adding " << *it << endl;
+            relpath = *it;
+        }else
+        {
+            relpath = URLUtil::relativePathToFile( projectDirectory(), *it );
+        }
+
+        if ( QFileInfo( projectDirectory() + "/" + relpath ).isDir() && ( m_recursive || m_first_recursive ) )
+        {
+            m_first_recursive = false;
+            QStringList subentries = QDir( projectDirectory() + "/" + relpath ).entryList();
+            for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
+                if ( *subit != "." && *subit != ".." )
+                    *subit = QDir::cleanDirPath(( relpath ) + "/" + ( *subit ) );
+            addFiles( subentries );
+            addedFiles << QDir::cleanDirPath( relpath );
+            m_sourceFiles.append( QDir::cleanDirPath( relpath ) );
+            m_first_recursive = true;
+        }
+        else if ( isProjectFileType( QFileInfo( relpath ).fileName() ) && m_sourceFiles.find( relpath ) == m_sourceFiles.end() )
+        {
+            kdDebug( 9025 ) << "adding " << relpath << endl;
+            addedFiles << relpath;
+            m_sourceFiles.append( relpath );
         }
         else
         {
-            if ( QFileInfo( *it ).isDir() && ( m_recursive || m_first_recursive ) )
-            {
-                m_first_recursive = false;
-                QStringList subentries = QDir( *it ).entryList();
-                for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
-                    if ( *subit != "." && *subit != ".." )
-                        *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
-                addFiles( subentries );
-                addedFiles << URLUtil::getRelativePath( projectDirectory(), *it );
-                m_first_recursive = true;
-            }
-            else if( isProjectFileType( *it ) )
-            {
-                addedFiles << URLUtil::getRelativePath( projectDirectory(), *it );
-                m_sourceFiles.append( URLUtil::getRelativePath( projectDirectory(), *it ) );
-            }
+            kdDebug( 9025 ) << "not adding " << relpath << endl;
         }
     }
     m_first_recursive = false;
     saveProject();
 
-    kdDebug( 9025 ) << "Emitting addedFilesToProject" << addedFiles<< endl;
+    kdDebug( 9025 ) << "Emitting addedFilesToProject" << addedFiles << endl;
     emit addedFilesToProject( addedFiles );
 }
 
@@ -647,50 +661,31 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
     {
         if ( *it == "." || *it == ".." )
             continue;
+        QString relpath;
         if ( QDir::isRelativePath( *it ) )
-        {
-            if ( QFileInfo( projectDirectory() + "/" + *it ).isDir() && ( m_recursive || m_first_recursive ) )
-            {
-                m_first_recursive = false;
-                QStringList subentries = QDir( projectDirectory() + "/" + *it ).entryList();
-                for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
-                    if ( *subit != "." && *subit != ".." )
-                        *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
-                removeFiles( subentries );
-                if( !containsProjectFiles( *it ) )
-                {
-                    removedFiles << QDir::cleanDirPath( *it );
-                    m_sourceFiles.remove( QDir::cleanDirPath( *it ) );
-                }
-                m_first_recursive = true;
-            }
-            else
-            {
-                removedFiles << *it;
-                m_sourceFiles.remove( *it );
-            }
-        }
+            relpath = *it;
         else
+            relpath = URLUtil::relativePathToFile( projectDirectory(), *it );
+
+        if ( QFileInfo( projectDirectory() + "/" + relpath ).isDir() && ( m_recursive || m_first_recursive ) )
         {
-            if ( QFileInfo( *it ).isDir() && ( m_recursive || m_first_recursive ) )
+            m_first_recursive = false;
+            QStringList subentries = QDir( projectDirectory() + "/" + relpath ).entryList();
+            for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
+                if ( *subit != "." && *subit != ".." )
+                    *subit = QDir::cleanDirPath(( relpath ) + "/" + ( *subit ) );
+            removeFiles( subentries );
+            if ( !containsProjectFiles( relpath ) )
             {
-                m_first_recursive = false;
-                QStringList subentries = QDir( *it ).entryList();
-                for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
-                    if ( *subit != "." && *subit != ".." )
-                        *subit = QDir::cleanDirPath(( *it ) + "/" + ( *subit ) );
-                removeFiles( subentries );
-                if( !containsProjectFiles( URLUtil::getRelativePath( projectDirectory(), *it ) ) )
-                {
-                    removedFiles << URLUtil::getRelativePath( projectDirectory(), *it );
-                }
-                m_first_recursive = true;
+                removedFiles << QDir::cleanDirPath( relpath );
+                m_sourceFiles.remove( QDir::cleanDirPath( relpath ) );
             }
-            else
-            {
-                removedFiles << URLUtil::getRelativePath( projectDirectory(), *it );
-                m_sourceFiles.remove( URLUtil::getRelativePath( projectDirectory(), *it ) );
-            }
+            m_first_recursive = true;
+        }
+        else if( m_sourceFiles.find( relpath ) != m_sourceFiles.end() )
+        {
+            removedFiles << relpath;
+            m_sourceFiles.remove( relpath );
         }
     }
 
@@ -701,9 +696,9 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
 QString CustomProjectPart::buildDirectory() const
 {
     QString dir = DomUtil::readEntry( *projectDom(), "/kdevcustomproject/build/builddir" );
-    if( dir.isEmpty() )
+    if ( dir.isEmpty() )
         return projectDirectory();
-    if( QFileInfo( dir ).isRelative() )
+    if ( QFileInfo( dir ).isRelative() )
         return QDir::cleanDirPath( projectDirectory() + "/" + dir );
     return dir;
 }
@@ -1245,16 +1240,16 @@ bool CustomProjectPart::containsNonProjectFiles( const QString& dir )
         {
             if ( QFileInfo( dir + "/" + *it ).isDir() )
             {
-                kdDebug(9025) << dir+"/"+*it << " checking for contained non-proj-files" << endl;
+                kdDebug( 9025 ) << dir + "/" + *it << " checking for contained non-proj-files" << endl;
                 if ( containsNonProjectFiles( dir + "/" + *it ) )
                 {
-                    kdDebug(9025) << dir+"/"+*it << " contains non-proj-files" << endl;
+                    kdDebug( 9025 ) << dir + "/" + *it << " contains non-proj-files" << endl;
                     return true;
                 }
             }
-            else if ( isProjectFileType( *it )&& !project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) )
+            else if ( isProjectFileType( *it ) && !project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) )
             {
-                kdDebug(9025) << dir+"/"+*it << "is a non-project file" << endl;
+                kdDebug( 9025 ) << dir + "/" + *it << "is a non-project file" << endl;
                 return true;
             }
         }
@@ -1276,7 +1271,7 @@ bool CustomProjectPart::containsProjectFiles( const QString& dir )
                     return true;
                 }
             }
-            else if ( isProjectFileType( *it )&& project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) )
+            else if ( isProjectFileType( *it ) && project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) )
             {
                 return true;
             }

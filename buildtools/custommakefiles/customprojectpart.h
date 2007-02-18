@@ -65,6 +65,7 @@ protected:
 
 
 private slots:
+    void populateProject();
     void projectConfigWidget( KDialogBase *dlg );
     void contextMenu( QPopupMenu *popup, const Context *context );
     void slotAddToProject();
@@ -91,7 +92,8 @@ private:
     bool containsNonProjectFiles( const QString& url );
     bool containsProjectFiles( const QString& url );
     bool isProjectFileType( const QString& absFile ) const;
-    void populateProject();
+    void cleanFileList();
+
     QStringList filetypes() const;
     void saveProject();
     void startMakeCommand( const QString &dir, const QString &target, bool withKdesu = false );

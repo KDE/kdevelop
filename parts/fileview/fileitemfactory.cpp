@@ -45,14 +45,14 @@ bool FileTreeViewItem::changeActiveDir( const QString& olddir, const QString& ne
 {
     kdDebug( 9017 ) << "FileTreeViewItem::changeActiveDir(): " + olddir << " new: " << newdir << " for: " << path() << endl;
 
-    if ( this->path() == olddir && isDir() )
+    if ( this->path() == olddir && isDir() && m_isActiveDir )
     {
         m_isActiveDir = false;
         setVisible( listView()->shouldBeShown( this ) );
         repaint();
     }
 
-    if ( this->path() == newdir && isDir() )
+    if ( this->path() == newdir && isDir() && !m_isActiveDir )
     {
         m_isActiveDir = true;
         setVisible( listView()->shouldBeShown( this ) );
@@ -75,10 +75,10 @@ bool FileTreeViewItem::changeActiveDir( const QString& olddir, const QString& ne
 
 bool FileTreeViewItem::setProjectFile( QString const & path, bool pf )
 {
-    kdDebug( 9017 ) << "FileTreeViewItem::setProjectFile(): " + path << " projectfile: " << pf << endl;
 
-    if ( this->path() == path )
+    if ( this->path() == path && isProjectFile() != pf )
     {
+        kdDebug( 9017 ) << "FileTreeViewItem::setProjectFile(): " + path << " projectfile: " << pf << endl;
         m_isProjectFile = pf;
         setVisible( listView()->shouldBeShown( this ) );
         repaint();
