@@ -48,6 +48,8 @@ public:
     /** @return true if widget is placed inside this container.*/
     bool hasWidget(QWidget *w);
 
+    View *viewForWidget(QWidget *w) const;
+
     /**@return the number of widgets in the container.*/
     int count() const;
     /**@return the widget at given @p index.*/

@@ -36,6 +36,7 @@ private slots:
 
     void testViewActivation();
     void testActivationInMultipleMainWindows();
+    void testActivationAfterViewRemoval();
 
 private:
     Sublime::Controller *controller;

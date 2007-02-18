@@ -40,6 +40,7 @@ struct ContainerPrivate {
 
     Switcher *switcher;
     QStackedLayout *stack;
+    QMap<QWidget*, View*> viewForWidget;
 };
 
 
@@ -72,12 +73,14 @@ void Container::addWidget(View *view)
     QWidget *w = view->widget();
     int idx = d->stack->addWidget(w);
     d->switcher->insertItem(idx, view->document()->title());
+    d->viewForWidget[w] = view;
 }
 
 void Sublime::Container::removeWidget(QWidget *w)
 {
     d->switcher->removeItem(d->stack->indexOf(w));
     d->stack->removeWidget(w);
+    d->viewForWidget.remove(w);
 }
 
 int Container::count() const
@@ -106,6 +109,11 @@ void Container::setCurrentWidget(QWidget *w)
 QWidget *Container::currentWidget() const
 {
     return d->stack->currentWidget();
+}
+
+View *Container::viewForWidget(QWidget *w) const
+{
+    return d->viewForWidget[w];
 }
 
 }

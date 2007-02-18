@@ -157,6 +157,16 @@ void ViewActivationTest::testActivationInMultipleMainWindows()
     QCOMPARE(mw2.activeView()->document(), doc1);
 }
 
+void ViewActivationTest::testActivationAfterViewRemoval()
+{
+    MainWindow mw(controller);
+    controller->showArea(area, &mw);
+    QCOMPARE(mw.activeView(), view211);
+
+    area->removeView(view211);
+    QCOMPARE(mw.activeView(), view212);
+}
+
 KDEVTEST_MAIN(ViewActivationTest)
 #include "viewactivationtest.moc"
 

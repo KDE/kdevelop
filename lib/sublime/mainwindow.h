@@ -98,6 +98,7 @@ private:
 
     struct MainWindowPrivate *d;
     friend class MainWindowOperator;
+    friend class MainWindowPrivate;
 };
 
 }
