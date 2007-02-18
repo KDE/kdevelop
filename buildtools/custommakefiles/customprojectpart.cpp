@@ -308,8 +308,10 @@ void CustomProjectPart::slotRemoveFromProjectRecursive()
 
 void CustomProjectPart::slotChooseActiveDirectory()
 {
+    QString olddir = activeDirectory();
     QDomDocument &dom = *projectDom();
     DomUtil::writeEntry( dom, "/kdevcustomproject/general/activedir", m_contextDirName );
+    emit activeDirectoryChanged( olddir, activeDirectory() );
 }
 
 

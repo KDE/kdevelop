@@ -323,7 +323,7 @@ QString AutoProjectWidget::subprojectDirectory()
 void AutoProjectWidget::setActiveTarget( const QString &targetPath )
 {
 	int prefixlen = m_part->projectDirectory().length() + 1;
-
+	QString olddir = m_part->activeDirectory();
 	m_activeSubproject = 0;
 	m_activeTarget = 0;
 
@@ -363,6 +363,10 @@ void AutoProjectWidget::setActiveTarget( const QString &targetPath )
 				m_detailView->listView()->viewport()->update();
 			}
 		}
+	}
+	if( olddir != m_part->activeDirectory() )
+	{
+		emit m_part->activeDirectoryChanged( olddir, m_part->activeDirectory() );
 	}
 
 	if ( m_activeSubproject == 0 && m_activeTarget == 0 )
@@ -667,7 +671,9 @@ void AutoProjectWidget::saveSession ( QDomElement* el )
 
 void AutoProjectWidget::setActiveSubproject( SubprojectItem * spitem )
 {
+	QString olddir = m_part->activeDirectory();
 	m_activeSubproject = spitem;
+	emit m_part->activeDirectoryChanged( olddir, m_part->activeDirectory() );
 }
 
 void AutoProjectWidget::focusInEvent( QFocusEvent */*e*/ )

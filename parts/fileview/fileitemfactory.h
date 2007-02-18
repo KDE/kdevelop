@@ -29,7 +29,7 @@ namespace filetreeview
         friend class FileTreeBranchItem;
     protected:
         FileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf )
-        : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( pf )
+        : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( pf ), m_isActiveDir( false )
         {
             hideOrShow();
         }
@@ -46,12 +46,15 @@ namespace filetreeview
         void hideOrShow();
         bool isProjectFile() const { return m_isProjectFile; }
         bool setProjectFile( QString const &path, bool pf );
+        bool isActiveDir() const { return m_isActiveDir; }
+        bool changeActiveDir( const QString &, const QString& );
 
     protected:
         virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
     private:
         bool m_isProjectFile;
+        bool m_isActiveDir;
     };
 
     /**

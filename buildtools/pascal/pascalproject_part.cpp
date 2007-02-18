@@ -255,7 +255,9 @@ QString PascalProjectPart::mainSource() const
 
 void PascalProjectPart::setMainSource(QString fullPath)
 {
+    QString olddir = activeDirectory();
     m_mainSource = fullPath.replace(QRegExp(QString(projectDirectory() + QString("/"))),"");
+    emit activeDirectoryChanged( olddir, activeDirectory() );
 }
 
 QString PascalProjectPart::projectDirectory() const

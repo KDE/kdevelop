@@ -68,13 +68,16 @@ public:
 public slots:
     void hideOrShow();
 
+
 private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 
+    void changeActiveDirectory( const QString&, const QString& );
+    void finishPopulate(KFileTreeViewItem* item);
+
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
-
     //! We must guard against unloading the used VCS plug-in when using it: we
     //! fall back to the implementation (a file view without VCS fields, only filenames)
     void slotImplementationInvalidated();

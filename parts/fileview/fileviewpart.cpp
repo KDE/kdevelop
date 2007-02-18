@@ -66,9 +66,9 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
 
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("File Tree"), FILETREE_OPTIONS, info()->icon() );
-	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
-		
+
 	QTimer::singleShot( 1000, this, SLOT(init()) );
 }
 
@@ -79,9 +79,9 @@ void FileViewPart::init( )
 	m_widget = new PartWidget( this );
 	m_widget->setIcon( SmallIcon( info()->icon() ) );
 	mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
-		
+
 	loadSettings();
-	
+
 	m_widget->showProjectFiles();
 }
 
@@ -94,7 +94,7 @@ FileViewPart::~FileViewPart()
     delete m_widget;
 
     storeSettings();
-	
+
 	delete _configProxy;
 }
 

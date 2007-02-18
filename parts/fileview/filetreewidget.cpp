@@ -75,6 +75,8 @@ FileTreeWidget::FileTreeWidget( FileViewPart *part, QWidget *parent, KDevVCSFile
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
     // Intercepts KDevelop core signals and VCS notifications (if available)
+    connect( m_part->project(), SIGNAL( activeDirectoryChanged( const QString&, const QString& ) ),
+             this, SLOT( changeActiveDirectory( const QString&, const QString& ) ) );
     connect( m_part->project(), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addProjectFiles( const QStringList & ) ) );
     connect( m_part->project(), SIGNAL( removedFilesFromProject( const QStringList & ) ),
@@ -110,6 +112,7 @@ void FileTreeWidget::openDirectory( const QString& dirName )
     // if we're reloading
     if (m_rootBranch)
     {
+        disconnect( m_rootBranch, SIGNAL(populateFinished(KFileTreeViewItem*)), this, SLOT(finishPopulate(KFileTreeViewItem*)) );
         removeBranch( m_rootBranch );
         m_projectFiles.clear();
     }
@@ -125,6 +128,7 @@ void FileTreeWidget::openDirectory( const QString& dirName )
     b->setChildRecurse( false );
     m_rootBranch = addBranch( b );
     m_rootBranch->setOpen( true );
+    connect( m_rootBranch, SIGNAL(populateFinished(KFileTreeViewItem*)), this, SLOT(finishPopulate(KFileTreeViewItem*)) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,6 +171,14 @@ void FileTreeWidget::hideOrShow()
     {
         item->hideOrShow();
         item = static_cast<FileTreeViewItem*>(item->nextSibling());
+    }
+}
+
+void FileTreeWidget::finishPopulate(KFileTreeViewItem* item)
+{
+    if( item == firstChild() )
+    {
+        changeActiveDirectory( "", m_part->project()->activeDirectory() );
     }
 }
 
@@ -263,6 +275,15 @@ void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
         {
             item->setProjectFile( file, false );
         }
+    }
+}
+
+void FileTreeWidget::changeActiveDirectory( const QString& olddir, const QString& newdir )
+{
+    FileTreeViewItem* item = static_cast<FileTreeViewItem*>(firstChild());
+    if( item )
+    {
+      item->changeActiveDir( projectDirectory() + "/" + olddir, projectDirectory() + "/" + newdir );
     }
 }
 

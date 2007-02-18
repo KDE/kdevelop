@@ -41,6 +41,36 @@ void FileTreeViewItem::hideOrShow()
     }
 }
 
+bool FileTreeViewItem::changeActiveDir( const QString& olddir, const QString& newdir )
+{
+    kdDebug( 9017 ) << "FileTreeViewItem::changeActiveDir(): " + olddir << " new: " << newdir << " for: " << path() << endl;
+
+    if ( this->path() == olddir && isDir() )
+    {
+        m_isActiveDir = false;
+        setVisible( listView()->shouldBeShown( this ) );
+        repaint();
+    }
+
+    if ( this->path() == newdir && isDir() )
+    {
+        m_isActiveDir = true;
+        setVisible( listView()->shouldBeShown( this ) );
+        repaint();
+        return true;
+    }
+
+    FileTreeViewItem* item = static_cast<FileTreeViewItem*>( firstChild() );
+    while( item )
+    {
+        if ( item->changeActiveDir( olddir, newdir ) )
+            return true;
+        else
+            item = static_cast<FileTreeViewItem*>(item->nextSibling());
+    }
+    return false;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 bool FileTreeViewItem::setProjectFile( QString const & path, bool pf )
@@ -75,6 +105,13 @@ void FileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
     {
         QFont font( p->font() );
         font.setBold( true );
+        p->setFont( font );
+    }
+
+    if( isActiveDir() )
+    {
+        QFont font( p->font() );
+        font.setItalic( true );
         p->setFont( font );
     }
 

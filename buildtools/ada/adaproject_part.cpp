@@ -248,7 +248,9 @@ QString AdaProjectPart::mainSource() const
 
 void AdaProjectPart::setMainSource(QString fullPath)
 {
+    QString olddir = activeDirectory();
     m_mainSource = fullPath.replace(QRegExp(QString(projectDirectory() + QString("/"))),"");
+    emit activeDirectoryChanged( olddir, activeDirectory() );
 }
 
 QString AdaProjectPart::projectDirectory() const

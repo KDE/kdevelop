@@ -1,10 +1,10 @@
 # Here resides the automake project part.
 
 INCLUDES = -I$(top_srcdir)/buildtools/lib -I$(top_srcdir)/buildtools/lib/base \
-	-I$(top_srcdir)/buildtools/lib/widgets -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/buildtools/lib/parsers/autotools -I$(top_srcdir)/buildtools/lib/widgets -I$(top_srcdir)/lib/interfaces \
 	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external \
-	-I$(top_srcdir)/lib/interfaces/extras -I$(top_srcdir)/lib/util -I$(top_builddir)/buildtools/lib/widgets \
-	-I$(top_srcdir)/buildtools/lib/parsers/autotools $(all_includes)
+	-I$(top_srcdir)/lib/interfaces/extras -I$(top_srcdir)/lib/util $(all_includes) \
+	-I$(top_builddir)/buildtools/lib/widgets
 	
 
 kde_module_LTLIBRARIES = libkdevautoproject.la

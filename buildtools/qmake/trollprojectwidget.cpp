@@ -445,6 +445,7 @@ void TrollProjectWidget::setupContext()
 
 void TrollProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 {
+    QString olddir = m_part->activeDirectory();
     if ( !item )
     {
         kdDebug(9024) << "Trying to select a non-existing item" << endl;
@@ -461,6 +462,7 @@ void TrollProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
     {
         m_configDlg->updateSubproject( m_shownSubproject );
     }
+    emit m_part->activeDirectoryChanged( olddir, m_part->activeDirectory() );
 }
 
 QString TrollProjectWidget::getCurrentTarget()
