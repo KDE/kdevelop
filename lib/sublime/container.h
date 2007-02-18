@@ -55,6 +55,8 @@ public:
 
     /**Sets the current widget in the container.*/
     void setCurrentWidget(QWidget *w);
+    /**@return the current widget in the container.*/
+    QWidget *currentWidget() const;
 
 private:
     Q_PRIVATE_SLOT(d, void widgetActivated(int))

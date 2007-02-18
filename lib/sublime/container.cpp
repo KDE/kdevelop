@@ -103,6 +103,11 @@ void Container::setCurrentWidget(QWidget *w)
     d->switcher->setCurrentIndex(d->stack->indexOf(w));
 }
 
+QWidget *Container::currentWidget() const
+{
+    return d->stack->currentWidget();
+}
+
 }
 
 #include "container.moc"
