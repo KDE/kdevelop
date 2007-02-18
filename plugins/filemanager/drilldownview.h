@@ -30,6 +30,9 @@ public:
     DrillDownView(QWidget *parent = 0);
 //     QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
+    void slideLeft();
+    void slideRight();
+
 public Q_SLOTS:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);
@@ -43,6 +46,8 @@ protected:
 //    virtual void mousePressEvent(QMouseEvent* event);
 
 private:
+    void animateSlide(int moveDirection);
+
     QTimeLine animation;
     QPixmap oldView;
     QPixmap newView;

@@ -59,6 +59,8 @@ public:
 
         if (fileItem->isFile())
             openFile(fileItem);
+        else if (fileItem->isDir())
+            m_view->slideRight();
     }
 
     void openFile(KFileItem *fileItem)
@@ -105,4 +107,4 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
 }
 
 #include "filemanager.moc"
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on;

@@ -106,56 +106,72 @@ void DrillDownView::keyPressEvent(QKeyEvent *event)
             if (animation.state() == QTimeLine::Running)
                 return;
 
-            bool animate = true;
-            setUpdatesEnabled(false);
             if (moveDirection == Qt::Key_Right)
-            {
-                if (current != rootIndex())
-                {
-                    setRootIndex(current);
-                    if (model()->canFetchMore(current))
-                    {
-                        animate = false;
-                        model()->fetchMore(current);
-                    }
-                    else if (current.child(0, 0).isValid())
-                        setCurrentIndex(current.child(0, 0));
-                }
-                else
-                    animate = false;
-            }
+                slideRight();
             else
-            {
-                QModelIndex root = rootIndex();
-                if (root.isValid())
-                {
-                    setRootIndex(root.parent());
-                    setCurrentIndex(root);
-                }
-                else
-                    animate = false;
-            }
-            if (animate)
-            {
-                executeDelayedItemsLayout();
-                // Force the hiding/showing of scrollbars
-                setVerticalScrollBarPolicy(verticalScrollBarPolicy());
-                newView = QPixmap::grabWidget(viewport());
-                setUpdatesEnabled(true);
-                int length = qMax(oldView.width(), newView.width());
-                lastPosition = moveDirection == Qt::Key_Left ? length : 0;
-                animation.setFrameRange(0, length);
-                animation.stop();
-                animation.setDirection(moveDirection == Qt::Key_Right ?
-                    QTimeLine::Forward : QTimeLine::Backward);
-                animation.start();
-            }
-            setUpdatesEnabled(true);
+                slideLeft();
         }
     }
     if (event->key() == Qt::Key_Return)
         emit returnPressed(currentIndex());
     QListView::keyPressEvent(event);
+}
+
+void DrillDownView::slideRight()
+{
+    QModelIndex current = currentIndex();
+    bool animate = true;
+    setUpdatesEnabled(false);
+    if (current != rootIndex())
+    {
+        setRootIndex(current);
+        if (model()->canFetchMore(current))
+        {
+            animate = false;
+            model()->fetchMore(current);
+        }
+        else if (current.child(0, 0).isValid())
+            setCurrentIndex(current.child(0, 0));
+    }
+    else
+        animate = false;
+    if (animate)
+        animateSlide(Qt::Key_Right);
+    setUpdatesEnabled(true);
+}
+
+void DrillDownView::slideLeft()
+{
+    QModelIndex current = currentIndex();
+    bool animate = true;
+    setUpdatesEnabled(false);
+    QModelIndex root = rootIndex();
+    if (root.isValid())
+    {
+        setRootIndex(root.parent());
+        setCurrentIndex(root);
+    }
+    else
+        animate = false;
+    if (animate)
+        animateSlide(Qt::Key_Left);
+    setUpdatesEnabled(true);
+}
+
+void DrillDownView::animateSlide(int moveDirection)
+{
+    executeDelayedItemsLayout();
+    // Force the hiding/showing of scrollbars
+    setVerticalScrollBarPolicy(verticalScrollBarPolicy());
+    newView = QPixmap::grabWidget(viewport());
+    setUpdatesEnabled(true);
+    int length = qMax(oldView.width(), newView.width());
+    lastPosition = moveDirection == Qt::Key_Left ? length : 0;
+    animation.setFrameRange(0, length);
+    animation.stop();
+    animation.setDirection(moveDirection == Qt::Key_Right ?
+        QTimeLine::Forward : QTimeLine::Backward);
+    animation.start();
 }
 
 #include "drilldownview.moc"
