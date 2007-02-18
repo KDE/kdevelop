@@ -185,6 +185,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         container->removeWidget(view->widget());
         //activate what is visible currently in the container
         m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
+        container->currentWidget()->setFocus();
     }
     else
     {
