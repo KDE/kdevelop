@@ -35,6 +35,8 @@
 #include <ktoolbar.h>
 #include <kaction.h>
 #include <kstandardaction.h>
+#include <kinputdialog.h>
+#include <kio/netaccess.h>
 
 #include "icore.h"
 #include "iuicontroller.h"
@@ -102,6 +104,20 @@ public:
     {
         m_view->slideRight();
     }
+
+    void newFolder()
+    {
+        KUrl url = m_model->dirLister()->url();
+        bool ok;
+        QString path = KInputDialog::getText(i18n("New Folder"),
+            i18n("Create new folder in:\n%1").arg(url.url()), "New Folder", &ok, m_view);
+        if (ok && !path.isEmpty())
+        {
+            url.addPath(path);
+            KIO::NetAccess::mkdir(url, m_view);
+            m_model->dirLister()->openUrl(url);
+        }
+    }
 };
 
 class ToolBarParent: public QWidget {
@@ -168,9 +184,15 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
 
 void FileManager::setupActions()
 {
-    KAction *action = KStandardAction::up(this, SLOT(goLeft()), 0);
+    KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
     d->toolBar->addAction(action);
-    action = KStandardAction::home(this, SLOT(goHome()), 0);
+    action = KStandardAction::home(this, SLOT(goHome()), this);
+    d->toolBar->addAction(action);
+    action = new KAction(this);
+    action->setIcon(KIcon("folder_new"));
+    action->setText(i18n("New Folder..."));
+    action->setToolTip(i18n("New Folder"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
     d->toolBar->addAction(action);
 }
 
