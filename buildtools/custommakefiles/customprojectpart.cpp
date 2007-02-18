@@ -394,9 +394,11 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
 void CustomProjectPart::cleanFileList()
 {
     QStringList temp;
+    QFileInfo fi;
     for( QStringList::const_iterator it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it )
     {
-        if( !QFileInfo( projectDirectory()+"/"+*it ).exists() )
+        fi.setFile( projectDirectory()+"/"+*it );
+        if( !fi.exists() || ( fi.isFile() && !this->isProjectFile( fi.fileName() ) ) )
             temp << *it;
     }
     removeFiles( temp );
