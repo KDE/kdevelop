@@ -92,7 +92,7 @@ void DrillDownView::slide(int x)
 void DrillDownView::keyPressEvent(QKeyEvent *event)
 {
     QModelIndex current = currentIndex();
-    if (current.isValid())
+    if (current.isValid() || event->key() == Qt::Key_Left)
     {
         Qt::Key moveDirection = Qt::Key_Any;
         if ((event->key() == Qt::Key_Right) && (model()->hasChildren(current)))
