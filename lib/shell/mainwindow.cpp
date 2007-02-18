@@ -488,7 +488,9 @@ void MainWindow::split(Qt::Orientation orientation)
     if (!view)
         return;
 
-    area()->addView(view->document()->createView(), view, orientation);
+    Sublime::View *newView = view->document()->createView();
+    area()->addView(newView, view, orientation);
+    activateView(newView);
 }
 
 void KDevelop::MainWindow::activePartChanged(KParts::Part *part)
