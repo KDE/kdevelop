@@ -183,9 +183,9 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         //container is not empty or this is a root index
         //just remove a widget
         container->removeWidget(view->widget());
-        //activate what is visible currently in the container
-        m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
-        container->currentWidget()->setFocus();
+        //activate what is visible currently in the container if the removed view was active
+        if (m_mainWindow->activeView() == view)
+            m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
     }
     else
     {

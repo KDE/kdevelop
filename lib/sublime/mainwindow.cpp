@@ -100,13 +100,14 @@ void MainWindow::activateView(View *view)
     if (!d->viewContainers.contains(view))
         return;
     d->viewContainers[view]->setCurrentWidget(view->widget());
-    view->widget()->setFocus();
     setActiveView(view);
 }
 
 void MainWindow::setActiveView(View *view)
 {
     d->activeView = view;
+    if (!view->widget()->hasFocus())
+        view->widget()->setFocus();
     emit activeViewChanged(view);
 }
 
