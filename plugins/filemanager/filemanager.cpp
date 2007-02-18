@@ -25,6 +25,8 @@
 #include <QDirModel>
 #include <QLayout>
 #include <QTreeView>
+#include <QTimer>
+#include <QThread>
 
 #include <kurl.h>
 #include <klocale.h>
@@ -66,7 +68,14 @@ public:
 
         m_part->core()->uiController()->openUrl(fileItem->url());
     }
+
+    void init()
+    {
+        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::rootPath()));
+    }
 };
+
+
 
 FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     :QWidget(parent), d(new FileManagerPrivate)
@@ -84,14 +93,15 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     d->m_view = new DrillDownView(this);
     l->addWidget(d->m_view);
 
-    d->m_model = new KDevDirModel(this);
-    d->m_model->dirLister()->openUrl(KUrl::fromPath(QDir::rootPath()));
+    d->m_model = new KDevDirModel(d->m_view);
     d->m_view->setModel(d->m_model);
 
     connect(d->m_view, SIGNAL(doubleClicked(const QModelIndex &)),
         this, SLOT(open(const QModelIndex &)));
     connect(d->m_view, SIGNAL(returnPressed(const QModelIndex &)),
         this, SLOT(open(const QModelIndex &)));
+
+    QTimer::singleShot(0, this, SLOT(init()));
 }
 
 #include "filemanager.moc"
