@@ -34,14 +34,23 @@ public:
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
         const QModelIndex &index) const
     {
+        painter->save();
         QItemDelegate::paint(painter, option, index);
 
         if (m_parent->model()->hasChildren(index))
         {
             QStyleOptionViewItem opt(option);
-            opt.rect.setLeft(opt.rect.width() - 16);
+
+            opt.rect = m_parent->visualRect(index);
+            int left = m_parent->maximumViewportSize().width() - 16;
+            if (m_parent->verticalScrollBar() && m_parent->verticalScrollBar()->isVisible())
+                left -= m_parent->verticalScrollBar()->width();
+            opt.rect.setLeft(left);
+            opt.rect.setWidth(16);
+
             m_parent->style()->drawPrimitive(QStyle::PE_IndicatorArrowRight, &opt, painter);
         }
+        painter->restore();
     }
 
 private:
