@@ -537,14 +537,6 @@ QString CustomProjectPart::runArguments() const
 QString CustomProjectPart::activeDirectory() const
 {
     QDomDocument &dom = *projectDom();
-    KParts::ReadOnlyPart* p = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
-    if ( p )
-    {
-        QString relpath = URLUtil::relativePath( projectDirectory(), p->url().directory() );
-        if ( relpath.startsWith( "/" ) )
-            relpath = relpath.right( relpath.length() - 1 );
-        return relpath;
-    }
     return DomUtil::readEntry( dom, "/kdevcustomproject/general/activedir", "." );
 }
 
