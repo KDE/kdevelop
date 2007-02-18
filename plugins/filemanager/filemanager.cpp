@@ -31,8 +31,10 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
-// #include <kdirmodel.h>
 #include <kdirlister.h>
+#include <ktoolbar.h>
+#include <kaction.h>
+#include <kstandardaction.h>
 
 #include "icore.h"
 #include "iuicontroller.h"
@@ -48,6 +50,7 @@ public:
     FileManager *m_manager;
     KDevDirModel *m_model;
     DrillDownView *m_view;
+    KToolBar *toolBar;
     KDevFileManagerPart *m_part;
 
     FileManagerPrivate(FileManager *manager): m_manager(manager) {}
@@ -77,15 +80,39 @@ public:
 
     void init()
     {
-        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()));
+        goHome();
     }
 
     void goUp()
     {
         m_model->goUp();
     }
+
+    void goHome()
+    {
+        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()));
+    }
 };
 
+class ToolBarParent: public QWidget {
+public:
+    ToolBarParent(QWidget *parent): QWidget(parent), m_toolBar(0) {}
+    void setToolBar(QToolBar *toolBar)
+    {
+        m_toolBar = toolBar;
+    }
+
+    virtual void resizeEvent(QResizeEvent *ev)
+    {
+        if (!m_toolBar)
+            return QWidget::resizeEvent(ev);
+        setMinimumHeight(m_toolBar->sizeHint().height());
+        m_toolBar->resize(width(), height());
+    }
+
+private:
+    QToolBar *m_toolBar;
+};
 
 
 FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
@@ -97,9 +124,19 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     setWindowTitle(i18n("File Manager"));
     setWhatsThis(i18n("File Manager"));
 
-    QHBoxLayout *l = new QHBoxLayout(this);
+    QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);
     l->setSpacing(0);
+
+    ToolBarParent *tbp = new ToolBarParent(this);
+    l->addWidget(tbp);
+
+    d->toolBar = new KToolBar(tbp);
+    d->toolBar->setMovable(false);
+    d->toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    d->toolBar->setIconSize(QSize(16,16));
+    d->toolBar->setContextMenuEnabled(false);
+    tbp->setToolBar(d->toolBar);
 
     d->m_view = new DrillDownView(this);
     l->addWidget(d->m_view);
@@ -114,7 +151,15 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     connect(d->m_view, SIGNAL(tryToSlideLeft()),
         this, SLOT(goUp()));
 
+    setupActions();
+
     QTimer::singleShot(0, this, SLOT(init()));
+}
+
+void FileManager::setupActions()
+{
+    KAction *action = KStandardAction::home(this, SLOT(goHome()), 0);
+    d->toolBar->addAction(action);
 }
 
 #include "filemanager.moc"

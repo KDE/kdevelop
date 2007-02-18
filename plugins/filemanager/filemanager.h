@@ -38,8 +38,12 @@ public:
     FileManager(KDevFileManagerPart *part, QWidget* parent);
 
 private:
-    Q_PRIVATE_SLOT(d, void init())
+    void setupActions();
+
     Q_PRIVATE_SLOT(d, void goUp())
+    Q_PRIVATE_SLOT(d, void goHome())
+
+    Q_PRIVATE_SLOT(d, void init())
     Q_PRIVATE_SLOT(d, void open(const QModelIndex &index))
     Q_PRIVATE_SLOT(d, void openFile(KFileItem *fileItem))
 
