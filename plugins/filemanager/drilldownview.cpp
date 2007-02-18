@@ -115,7 +115,7 @@ void DrillDownView::keyPressEvent(QKeyEvent *event)
                     setRootIndex(current);
                     if (model()->canFetchMore(current))
                     {
-                        //animate = false;
+                        animate = false;
                         model()->fetchMore(current);
                     }
                     else if (current.child(0, 0).isValid())
