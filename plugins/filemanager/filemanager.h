@@ -42,6 +42,8 @@ private:
 
     Q_PRIVATE_SLOT(d, void goUp())
     Q_PRIVATE_SLOT(d, void goHome())
+    Q_PRIVATE_SLOT(d, void goLeft())
+    Q_PRIVATE_SLOT(d, void goRight())
 
     Q_PRIVATE_SLOT(d, void init())
     Q_PRIVATE_SLOT(d, void open(const QModelIndex &index))

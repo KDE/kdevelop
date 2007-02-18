@@ -92,6 +92,16 @@ public:
     {
         m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()));
     }
+
+    void goLeft()
+    {
+        m_view->slideLeft();
+    }
+
+    void goRight()
+    {
+        m_view->slideRight();
+    }
 };
 
 class ToolBarParent: public QWidget {
@@ -158,7 +168,9 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
 
 void FileManager::setupActions()
 {
-    KAction *action = KStandardAction::home(this, SLOT(goHome()), 0);
+    KAction *action = KStandardAction::up(this, SLOT(goLeft()), 0);
+    d->toolBar->addAction(action);
+    action = KStandardAction::home(this, SLOT(goHome()), 0);
     d->toolBar->addAction(action);
 }
 
