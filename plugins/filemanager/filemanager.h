@@ -23,6 +23,7 @@
 #define FILEMANAGER_H
 
 #include <QtGui/QWidget>
+#include <kurl.h>
 
 class QTreeView;
 class QModelIndex;
@@ -38,6 +39,7 @@ public:
 
 private:
     Q_PRIVATE_SLOT(d, void init())
+    Q_PRIVATE_SLOT(d, void goUp())
     Q_PRIVATE_SLOT(d, void open(const QModelIndex &index))
     Q_PRIVATE_SLOT(d, void openFile(KFileItem *fileItem))
 

@@ -38,6 +38,7 @@ public Q_SLOTS:
     void slide(int x);
 
 Q_SIGNALS:
+    void tryToSlideLeft();
     void returnPressed(const QModelIndex &index);
 
 protected:

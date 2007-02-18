@@ -45,9 +45,13 @@ class FileManagerPrivate
 {
 public:
 
-    KDirModel *m_model;
+    FileManager *m_manager;
+    KDevDirModel *m_model;
     DrillDownView *m_view;
     KDevFileManagerPart *m_part;
+
+    FileManagerPrivate(FileManager *manager): m_manager(manager) {}
+
     void open(const QModelIndex &index)
     {
         if (!index.isValid())
@@ -73,14 +77,19 @@ public:
 
     void init()
     {
-        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::rootPath()));
+        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()));
+    }
+
+    void goUp()
+    {
+        m_model->goUp();
     }
 };
 
 
 
 FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
-    :QWidget(parent), d(new FileManagerPrivate)
+    :QWidget(parent), d(new FileManagerPrivate(this))
 {
     d->m_part = part;
     setObjectName("FileManager");
@@ -102,6 +111,8 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
         this, SLOT(open(const QModelIndex &)));
     connect(d->m_view, SIGNAL(returnPressed(const QModelIndex &)),
         this, SLOT(open(const QModelIndex &)));
+    connect(d->m_view, SIGNAL(tryToSlideLeft()),
+        this, SLOT(goUp()));
 
     QTimer::singleShot(0, this, SLOT(init()));
 }

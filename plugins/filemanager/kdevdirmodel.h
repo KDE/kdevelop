@@ -27,6 +27,8 @@ public:
     KDevDirModel(QObject *parent);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    void goUp();
+
 };
 
 #endif

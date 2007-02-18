@@ -146,13 +146,18 @@ void DrillDownView::slideLeft()
     bool animate = true;
     setUpdatesEnabled(false);
     QModelIndex root = rootIndex();
+
     if (root.isValid())
     {
         setRootIndex(root.parent());
         setCurrentIndex(root);
     }
     else
+    {
+        //root can be invalid if dir lister has the directory other than "/" opened
+        emit tryToSlideLeft();
         animate = false;
+    }
     if (animate)
         animateSlide(Qt::Key_Left);
     setUpdatesEnabled(true);

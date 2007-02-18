@@ -19,6 +19,9 @@
  ***************************************************************************/
 #include "kdevdirmodel.h"
 
+#include <kurl.h>
+#include <kdirlister.h>
+
 KDevDirModel::KDevDirModel(QObject *parent)
     :KDirModel(parent)
 {
@@ -28,4 +31,13 @@ Qt::ItemFlags KDevDirModel::flags(const QModelIndex &index) const
 {
     Q_UNUSED(index)
     return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+}
+
+void KDevDirModel::goUp()
+{
+    KUrl up = dirLister()->url().upUrl();
+    if (!up.isValid() || up == dirLister()->url())
+        return;
+
+    dirLister()->openUrl(up);
 }
