@@ -39,6 +39,8 @@ public Q_SLOTS:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);
 
+    void animateNewUrl();
+
 protected Q_SLOTS:
     virtual void verticalScrollbarValueChanged(int value);
     virtual void horizontalScrollbarValueChanged(int value);
@@ -60,6 +62,7 @@ private:
     QPixmap newView;
     int lastPosition;
 
+    QModelIndex newUrlIndex;
 };
 
 #endif

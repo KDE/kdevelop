@@ -134,14 +134,18 @@ void DrillDownView::slideRight()
     setUpdatesEnabled(false);
     if (current != rootIndex())
     {
-        setRootIndex(current);
         if (model()->canFetchMore(current))
         {
             animate = false;
             model()->fetchMore(current);
+            newUrlIndex = current;
         }
-        else if (current.child(0, 0).isValid())
-            setCurrentIndex(current.child(0, 0));
+        else
+        {
+            setRootIndex(current);
+            if (current.child(0, 0).isValid())
+               setCurrentIndex(current.child(0, 0));
+        }
     }
     else
         animate = false;
@@ -204,6 +208,24 @@ void DrillDownView::horizontalScrollbarValueChanged(int /*value*/)
 void DrillDownView::setDirty(QRect rect)
 {
     setDirtyRegion(rect);
+}
+
+void DrillDownView::animateNewUrl()
+{
+    if (!newUrlIndex.isValid())
+        return;
+
+    setRootIndex(newUrlIndex);
+    if (model()->rowCount(newUrlIndex) > 0)
+    {
+        setUpdatesEnabled(false);
+        if (newUrlIndex.child(0, 0).isValid())
+            setCurrentIndex(newUrlIndex.child(0, 0));
+        animateSlide(Qt::Key_Right);
+        setUpdatesEnabled(true);
+    }
+
+    newUrlIndex = QModelIndex();
 }
 
 #include "drilldownview.moc"

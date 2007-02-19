@@ -173,6 +173,9 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     d->m_model = new KDevDirModel(d->m_view);
     d->m_view->setModel(d->m_model);
 
+    connect(d->m_model->dirLister(), SIGNAL(completed()),
+        d->m_view, SLOT(animateNewUrl()));
+
     connect(d->m_view, SIGNAL(doubleClicked(const QModelIndex &)),
         this, SLOT(open(const QModelIndex &)));
     connect(d->m_view, SIGNAL(returnPressed(const QModelIndex &)),
