@@ -62,6 +62,7 @@ private:
     QPixmap newView;
     int lastPosition;
 
+    bool needSlideLeftAnimation;
     QModelIndex newUrlIndex;
 };
 

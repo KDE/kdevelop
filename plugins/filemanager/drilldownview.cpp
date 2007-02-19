@@ -62,7 +62,7 @@ private:
 
 
 DrillDownView::DrillDownView(QWidget *parent)
-    :QListView(parent)
+    :QListView(parent), needSlideLeftAnimation(false)
 {
     connect(&animation, SIGNAL(frameChanged(int)), this, SLOT(slide(int)));
     connect(&animation, SIGNAL(finished()), this, SLOT(update()));
@@ -170,6 +170,7 @@ void DrillDownView::slideLeft()
     {
         //root can be invalid if dir lister has the directory other than "/" opened
         emit tryToSlideLeft();
+        needSlideLeftAnimation = true;
         animate = false;
     }
     if (animate)
@@ -212,16 +213,25 @@ void DrillDownView::setDirty(QRect rect)
 
 void DrillDownView::animateNewUrl()
 {
-    if (!newUrlIndex.isValid())
+    if (!newUrlIndex.isValid() && !needSlideLeftAnimation)
         return;
 
-    setRootIndex(newUrlIndex);
+    int direction = Qt::Key_Right;
+    if (needSlideLeftAnimation)
+    {
+        newUrlIndex = rootIndex();
+        direction = Qt::Key_Left;
+        needSlideLeftAnimation = false;
+    }
+    else
+        setRootIndex(newUrlIndex);
+
     if (model()->rowCount(newUrlIndex) > 0)
     {
         setUpdatesEnabled(false);
         if (newUrlIndex.child(0, 0).isValid())
             setCurrentIndex(newUrlIndex.child(0, 0));
-        animateSlide(Qt::Key_Right);
+        animateSlide(direction);
         setUpdatesEnabled(true);
     }
 
