@@ -188,4 +188,16 @@ void DrillDownView::animateSlide(int moveDirection)
     animation.start();
 }
 
+void DrillDownView::verticalScrollbarValueChanged(int /*value*/)
+{
+    //do nothing and don't let the QAbstractItemView implementation
+    //to try fetching more items, KDirModel doesn't like that
+}
+
+void DrillDownView::horizontalScrollbarValueChanged(int /*value*/)
+{
+    //do nothing and don't let the QAbstractItemView implementation
+    //to try fetching more items, KDirModel doesn't like that
+}
+
 #include "drilldownview.moc"

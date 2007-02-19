@@ -37,6 +37,10 @@ public Q_SLOTS:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);
 
+protected Q_SLOTS:
+    virtual void verticalScrollbarValueChanged(int value);
+    virtual void horizontalScrollbarValueChanged(int value);
+
 Q_SIGNALS:
     void tryToSlideLeft();
     void returnPressed(const QModelIndex &index);
