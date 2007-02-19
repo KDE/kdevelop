@@ -33,6 +33,8 @@ public:
     void slideLeft();
     void slideRight();
 
+    void setDirty(QRect rect);
+
 public Q_SLOTS:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);

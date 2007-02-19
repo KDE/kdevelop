@@ -49,6 +49,7 @@ public:
             opt.rect.setWidth(16);
 
             m_parent->style()->drawPrimitive(QStyle::PE_IndicatorArrowRight, &opt, painter);
+            m_parent->setDirty(opt.rect);
         }
         painter->restore();
     }
@@ -198,6 +199,11 @@ void DrillDownView::horizontalScrollbarValueChanged(int /*value*/)
 {
     //do nothing and don't let the QAbstractItemView implementation
     //to try fetching more items, KDirModel doesn't like that
+}
+
+void DrillDownView::setDirty(QRect rect)
+{
+    setDirtyRegion(rect);
 }
 
 #include "drilldownview.moc"
