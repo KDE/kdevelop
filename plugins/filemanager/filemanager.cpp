@@ -87,21 +87,29 @@ public:
 
     void goUp()
     {
+        if (m_view->isBusy())
+            return;
         m_model->goUp();
     }
 
     void goHome()
     {
+        if (m_view->isBusy())
+            return;
         m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()));
     }
 
     void goLeft()
     {
+        if (m_view->isBusy())
+            return;
         m_view->slideLeft();
     }
 
     void goRight()
     {
+        if (m_view->isBusy())
+            return;
         m_view->slideRight();
     }
 

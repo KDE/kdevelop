@@ -35,6 +35,8 @@ public:
 
     void setDirty(QRect rect);
 
+    bool isBusy();
+
 public Q_SLOTS:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);

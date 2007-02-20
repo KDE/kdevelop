@@ -113,7 +113,7 @@ void DrillDownView::keyPressEvent(QKeyEvent *event)
         if (moveDirection != Qt::Key_Any)
         {
             //eat event if animation is running
-            if (animation.state() == QTimeLine::Running)
+            if (isBusy())
                 return;
 
             if (moveDirection == Qt::Key_Right)
@@ -236,6 +236,11 @@ void DrillDownView::animateNewUrl()
     }
 
     newUrlIndex = QModelIndex();
+}
+
+bool DrillDownView::isBusy()
+{
+    return animation.state() == QTimeLine::Running;
 }
 
 #include "drilldownview.moc"
