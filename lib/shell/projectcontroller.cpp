@@ -98,7 +98,7 @@ void ProjectController::setupActions()
     d->m_recentAction->setToolTip( i18n( "Open recent project" ) );
     d->m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project." ) );
-    d->m_recentAction->loadEntries( config, "RecentProjects" );
+    d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
 }
 
 ProjectController::~ProjectController()
@@ -252,7 +252,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
     action->setEnabled( true );
 
     d->m_recentAction->addUrl( url );
-    d->m_recentAction->saveEntries( Config::standard(), "RecentProjects" );
+    KConfigGroup recentGroup = Config::standard()->group("RecentProjects");
+    d->m_recentAction->saveEntries( recentGroup );
 
     Config::standard() ->sync();
     emit projectOpened( project );

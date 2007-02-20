@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 
 #include <kconfig.h>
+#include <ksharedconfig.h>
 
 #include "kdevexport.h"
 

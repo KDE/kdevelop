@@ -34,7 +34,6 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
-#include <ksimpleconfig.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
 #include <kio/job.h>
@@ -161,7 +160,7 @@ bool Project::open( const KUrl& projectFileUrl )
         return false;
     }
 
-    KSimpleConfig projectConfig( projectFileUrl.pathOrUrl(), true /*read only*/ );
+    KConfig projectConfig( projectFileUrl.pathOrUrl() );
     KConfigGroup projectGroup( &projectConfig, "General Options" );
 
     d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );

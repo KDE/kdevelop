@@ -371,7 +371,7 @@ void MainWindow::configureToolbars()
 
 void MainWindow::newToolbarConfig()
 {
-    applyMainWindowSettings( KGlobal::config().data(), "MainWindow" );
+    applyMainWindowSettings( KConfigGroup(KGlobal::config(), "MainWindow") );
 }
 
 bool MainWindow::queryClose()
