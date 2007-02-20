@@ -39,5 +39,5 @@ void KDevDirModel::goUp()
     if (!up.isValid() || up == dirLister()->url())
         return;
 
-    dirLister()->openUrl(up);
+    dirLister()->openUrl(up, false, true);
 }

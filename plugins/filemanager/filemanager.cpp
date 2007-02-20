@@ -96,7 +96,7 @@ public:
     {
         if (m_view->isBusy())
             return;
-        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()));
+        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()), false, true);
     }
 
     void goLeft()
