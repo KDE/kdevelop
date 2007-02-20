@@ -217,14 +217,14 @@ void DrillDownView::animateNewUrl()
         return;
 
     int direction = Qt::Key_Right;
-    if (needSlideLeftAnimation)
+    if (newUrlIndex.isValid())
+        setRootIndex(newUrlIndex);
+    else if (needSlideLeftAnimation)
     {
         newUrlIndex = rootIndex();
         direction = Qt::Key_Left;
-        needSlideLeftAnimation = false;
     }
-    else
-        setRootIndex(newUrlIndex);
+    needSlideLeftAnimation = false;
 
     if (model()->rowCount(newUrlIndex) > 0)
     {
