@@ -218,10 +218,15 @@ void DrillDownView::animateNewUrl()
 
     int direction = Qt::Key_Right;
     if (newUrlIndex.isValid())
+    {
         setRootIndex(newUrlIndex);
+        if (newUrlIndex.child(0, 0).isValid())
+            setCurrentIndex(newUrlIndex.child(0, 0));
+    }
     else if (needSlideLeftAnimation)
     {
-        newUrlIndex = rootIndex();
+        if (model()->index(0, 0).isValid())
+            setCurrentIndex(model()->index(0, 0));
         direction = Qt::Key_Left;
     }
     needSlideLeftAnimation = false;
@@ -229,8 +234,6 @@ void DrillDownView::animateNewUrl()
     if (model()->rowCount(newUrlIndex) > 0)
     {
         setUpdatesEnabled(false);
-        if (newUrlIndex.child(0, 0).isValid())
-            setCurrentIndex(newUrlIndex.child(0, 0));
         animateSlide(direction);
         setUpdatesEnabled(true);
     }
