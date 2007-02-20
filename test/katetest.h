@@ -99,8 +99,8 @@ class KWrite : public KParts::MainWindow
     static void restore();
 
   private:
-    void readProperties(KConfig *);
-    void saveProperties(KConfig *);
+    void readProperties(const KConfigGroup &);
+    void saveProperties(KConfigGroup &);
     void saveGlobalProperties(KConfig *);
 
   private:
