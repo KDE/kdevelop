@@ -21,6 +21,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <ksharedconfig.h>
 
 #include "area.h"
 #include "view.h"
@@ -127,7 +128,8 @@ void MainWindow::saveSettings()
     QString group = "MainWindow";
     if (area())
         group += "_" + area()->objectName();
-    saveMainWindowSettings(KGlobal::config().data(), group);
+    KConfigGroup cg = KGlobal::config()->group(group);
+    saveMainWindowSettings(cg);
 }
 
 void MainWindow::loadSettings()
@@ -135,7 +137,8 @@ void MainWindow::loadSettings()
     QString group = "MainWindow";
     if (area())
         group += "_" + area()->objectName();
-    applyMainWindowSettings(KGlobal::config().data(), group);
+    KConfigGroup cg = KGlobal::config()->group(group);
+    applyMainWindowSettings(cg);
 }
 
 bool MainWindow::queryClose()
