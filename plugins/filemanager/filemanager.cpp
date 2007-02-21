@@ -52,7 +52,7 @@ public:
     FileManager *m_manager;
     KDevDirModel *m_model;
     DrillDownView *m_view;
-    KToolBar *toolBar;
+    KToolBar *m_toolBar;
     KDevFileManagerPart *m_part;
 
     FileManagerPrivate(FileManager *manager): m_manager(manager) {}
@@ -168,12 +168,12 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     ToolBarParent *tbp = new ToolBarParent(this);
     l->addWidget(tbp);
 
-    d->toolBar = new KToolBar(tbp);
-    d->toolBar->setMovable(false);
-    d->toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    d->toolBar->setIconSize(QSize(16,16));
-    d->toolBar->setContextMenuEnabled(false);
-    tbp->setToolBar(d->toolBar);
+    d->m_toolBar = new KToolBar(tbp);
+    d->m_toolBar->setMovable(false);
+    d->m_toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    d->m_toolBar->setIconSize(QSize(16,16));
+    d->m_toolBar->setContextMenuEnabled(false);
+    tbp->setToolBar(d->m_toolBar);
 
     d->m_view = new DrillDownView(this);
     l->addWidget(d->m_view);
@@ -199,15 +199,15 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
 void FileManager::setupActions()
 {
     KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
-    d->toolBar->addAction(action);
+    d->m_toolBar->addAction(action);
     action = KStandardAction::home(this, SLOT(goHome()), this);
-    d->toolBar->addAction(action);
+    d->m_toolBar->addAction(action);
     action = new KAction(this);
     action->setIcon(KIcon("folder_new"));
     action->setText(i18n("New Folder..."));
     action->setToolTip(i18n("New Folder"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
-    d->toolBar->addAction(action);
+    d->m_toolBar->addAction(action);
 }
 
 #include "filemanager.moc"
