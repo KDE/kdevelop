@@ -144,6 +144,13 @@ public:
             m_model->dirLister()->openUrl(url);
         }
     }
+
+    void urlChanged(const QModelIndex &index)
+    {
+        KFileItem *file = m_model->itemForIndex(index);
+        if (file)
+            m_urlBox->setUrl(file->url());
+    }
 };
 
 class ToolBarParent: public QWidget {
@@ -195,6 +202,7 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     d->m_urlBox->setCompletionObject(cmpl);
     d->m_urlBox->setFrame(false);
     d->m_urlBox->setInsertPolicy(QComboBox::InsertAtBottom);
+    d->m_urlBox->setUrl(KUrl(QDir::homePath()));
     l->addWidget(d->m_urlBox);
     l->addSpacing(2);
     connect(d->m_urlBox, SIGNAL(urlActivated(const KUrl&)),
@@ -217,6 +225,8 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
         this, SLOT(open(const QModelIndex &)));
     connect(d->m_view, SIGNAL(tryToSlideLeft()),
         this, SLOT(goUp()));
+    connect(d->m_view, SIGNAL(rootIndexChanged(const QModelIndex&)),
+        this, SLOT(urlChanged(const QModelIndex&)));
 
     setupActions();
 

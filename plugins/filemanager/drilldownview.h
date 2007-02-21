@@ -40,7 +40,7 @@ public:
 public Q_SLOTS:
 //     void currentChanged( const QModelIndex &current, const QModelIndex &previous );
     void slide(int x);
-
+    void setRootIndex(const QModelIndex &index);
     void animateNewUrl();
 
 protected Q_SLOTS:
@@ -50,6 +50,7 @@ protected Q_SLOTS:
 Q_SIGNALS:
     void tryToSlideLeft();
     void returnPressed(const QModelIndex &index);
+    void rootIndexChanged(const QModelIndex &index);
 
 protected:
     virtual void paintEvent(QPaintEvent * event);

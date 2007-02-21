@@ -53,6 +53,8 @@ private:
     Q_PRIVATE_SLOT(d, void open(const QModelIndex &index))
     Q_PRIVATE_SLOT(d, void openFile(KFileItem *fileItem))
 
+    Q_PRIVATE_SLOT(d, void urlChanged(const QModelIndex &index))
+
     struct FileManagerPrivate* const d;
 
 };

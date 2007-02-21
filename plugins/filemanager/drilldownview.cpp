@@ -248,4 +248,10 @@ bool DrillDownView::isBusy()
     return animation.state() == QTimeLine::Running;
 }
 
+void DrillDownView::setRootIndex(const QModelIndex &index)
+{
+    QListView::setRootIndex(index);
+    emit rootIndexChanged(index);
+}
+
 #include "drilldownview.moc"
