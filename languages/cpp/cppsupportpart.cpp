@@ -516,7 +516,7 @@ void CppSupportPart::projectOpened( )
 	// setup the driver
 	QString conf_file_name = specialHeaderName();
 	if ( QFile::exists( conf_file_name ) )
-		m_driver->parseFile( conf_file_name, true );
+		m_driver->parseFile( conf_file_name, true, true, true );
 
 	m_projectDirectory = URLUtil::canonicalPath( project() ->projectDirectory() );
 	m_projectFileList = project() ->allFiles();

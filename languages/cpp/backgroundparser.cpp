@@ -242,7 +242,7 @@ BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consum
 	
 	QString conf_file_name = m_cppSupport->specialHeaderName();
 	if ( QFile::exists( conf_file_name ) )
-		m_driver->parseFile( conf_file_name, true );
+		m_driver->parseFile( conf_file_name, true, true, true );
 	
 	//disabled for now m_driver->setResolveDependencesEnabled( true );
 }
