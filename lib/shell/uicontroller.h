@@ -52,6 +52,8 @@ public:
     virtual void removeToolView(IToolViewFactory *factory);
     virtual void openUrl(const KUrl &url);
 
+    void addNewToolView(MainWindow *mw);
+
     void openEmptyDocument();
 
     void initialize();

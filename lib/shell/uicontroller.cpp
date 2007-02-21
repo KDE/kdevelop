@@ -21,8 +21,11 @@
 #include <QMap>
 #include <QPointer>
 #include <QApplication>
+#include <QListWidget>
 
 #include <kdebug.h>
+#include <kdialog.h>
+#include <klocale.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -71,6 +74,13 @@ private:
     IToolViewFactory *m_factory;
 };
 
+
+class ViewSelectorItem: public QListWidgetItem {
+public:
+    ViewSelectorItem(const QString &text, QListWidget *parent = 0, int type = Type)
+        :QListWidgetItem(text, parent, type) {}
+    IToolViewFactory *factory;
+};
 
 UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController()
@@ -182,12 +192,40 @@ void UiController::initialize()
     defaultMainWindow()->initialize();
 }
 
-void KDevelop::UiController::openEmptyDocument()
+void UiController::openEmptyDocument()
 {
     PartDocument *doc = new PartDocument(d->core->partController(), this, KUrl());
     Sublime::View *view = doc->createView();
     activeArea()->addView(view);
     activeMainWindow()->activateView(view);
+}
+
+void UiController::addNewToolView(MainWindow *mw)
+{
+    if (!mw || !mw->area())
+        return;
+    KDialog *dia = new KDialog(mw);
+    dia->setCaption(i18n("Select Tool View to Add"));
+    dia->setButtons(KDialog::Ok | KDialog::Cancel);
+    QListWidget *list = new QListWidget(dia);
+
+    for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.begin();
+        it != d->factoryDocuments.end(); ++it)
+    {
+        ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
+        item->factory = it.key();
+        list->addItem(item);
+    }
+
+    dia->setMainWidget(list);
+    if (dia->exec() == QDialog::Accepted && list->currentItem())
+    {
+        ViewSelectorItem *current = static_cast<ViewSelectorItem*>(list->currentItem());
+        Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
+        mw->area()->addToolView(doc->createView(),
+            Sublime::dockAreaToPosition(current->factory->defaultPosition(mw->area()->objectName())));
+    }
+    delete dia;
 }
 
 }

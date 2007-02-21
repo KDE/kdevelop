@@ -77,6 +77,8 @@ private Q_SLOTS:
     void gotoFirstWindow();
     void gotoLastWindow();
 
+    void viewAddNewToolView();
+
     void newWindow();
     void splitHorizontal();
     void splitVertical();

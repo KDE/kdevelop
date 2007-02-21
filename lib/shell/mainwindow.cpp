@@ -252,6 +252,14 @@ void MainWindow::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
     action->setToolTip( i18n( "Close File" ) );
     action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file." ) );
+
+    action = actionCollection()->addAction( "add_toolview" );
+    action->setIcon(KIcon("window_new"));
+    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
+    action->setText( i18n( "&Add Tool View..." ) );
+    connect( action, SIGNAL( triggered( bool ) ),  SLOT( viewAddNewToolView() ) );
+    action->setToolTip( i18n( "Add Tool View" ) );
+    action->setWhatsThis( i18n( "<b>Add Tool View</b><p>Adds a new tool view to this window." ) );
 }
 
 
@@ -523,6 +531,11 @@ void MainWindow::changeActiveView(Sublime::View *view)
 //         if (activePart)
 //             guiFactory()->removeClient(activePart);
     }
+}
+
+void MainWindow::viewAddNewToolView()
+{
+    Core::self()->uiControllerInternal()->addNewToolView(this);
 }
 
 }
