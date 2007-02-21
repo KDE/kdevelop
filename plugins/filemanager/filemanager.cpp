@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Alexander Dymo                                  *
+ *   Copyright (C) 2006-2007 by Alexander Dymo                             *
  *   adymo@kdevelop.org                                                    *
  *   Copyright (C) 2006 by Andreas Pakulat                                 *
  *   apaku@gmx.de                                                          *
@@ -36,6 +36,8 @@
 #include <kaction.h>
 #include <kstandardaction.h>
 #include <kinputdialog.h>
+#include <kurlcombobox.h>
+#include <kurlcompletion.h>
 #include <kio/netaccess.h>
 
 #include "icore.h"
@@ -53,6 +55,7 @@ public:
     KDevDirModel *m_model;
     DrillDownView *m_view;
     KToolBar *m_toolBar;
+    KUrlComboBox *m_urlBox;
     KDevFileManagerPart *m_part;
 
     FileManagerPrivate(FileManager *manager): m_manager(manager) {}
@@ -94,9 +97,7 @@ public:
 
     void goHome()
     {
-        if (m_view->isBusy())
-            return;
-        m_model->dirLister()->openUrl(KUrl::fromPath(QDir::homePath()), false, true);
+        goToUrl(KUrl::fromPath(QDir::homePath()));
     }
 
     void goLeft()
@@ -111,6 +112,20 @@ public:
         if (m_view->isBusy())
             return;
         m_view->slideRight();
+    }
+
+    void goToUrl(const KUrl &url)
+    {
+        if (m_view->isBusy())
+            return;
+        m_model->dirLister()->openUrl(url, false, true);
+    }
+
+    void goToUrl(const QString &url)
+    {
+        kDebug() << k_funcinfo << endl;
+        goToUrl(KUrl(url));
+        m_view->setFocus();
     }
 
     void newFolder()
@@ -175,6 +190,16 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     d->m_toolBar->setContextMenuEnabled(false);
     tbp->setToolBar(d->m_toolBar);
 
+    d->m_urlBox = new KUrlComboBox(KUrlComboBox::Directories, true, this);
+    KUrlCompletion *cmpl = new KUrlCompletion(KUrlCompletion::DirCompletion);
+    d->m_urlBox->setCompletionObject(cmpl);
+    d->m_urlBox->setInsertPolicy(QComboBox::InsertAtBottom);
+    l->addWidget(d->m_urlBox);
+    connect(d->m_urlBox, SIGNAL(urlActivated(const KUrl&)),
+        this, SLOT(goToUrl(const KUrl&)));
+    connect(d->m_urlBox, SIGNAL(returnPressed(const QString&)),
+        this, SLOT(goToUrl(const QString&)));
+
     d->m_view = new DrillDownView(this);
     l->addWidget(d->m_view);
 
@@ -200,8 +225,10 @@ void FileManager::setupActions()
 {
     KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
     d->m_toolBar->addAction(action);
+
     action = KStandardAction::home(this, SLOT(goHome()), this);
     d->m_toolBar->addAction(action);
+
     action = new KAction(this);
     action->setIcon(KIcon("folder_new"));
     action->setText(i18n("New Folder..."));

@@ -44,6 +44,9 @@ private:
     Q_PRIVATE_SLOT(d, void goHome())
     Q_PRIVATE_SLOT(d, void goLeft())
     Q_PRIVATE_SLOT(d, void goRight())
+    Q_PRIVATE_SLOT(d, void goToUrl(const KUrl &url))
+    Q_PRIVATE_SLOT(d, void goToUrl(const QString &url))
+
     Q_PRIVATE_SLOT(d, void newFolder())
 
     Q_PRIVATE_SLOT(d, void init())
