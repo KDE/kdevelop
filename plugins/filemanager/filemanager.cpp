@@ -193,8 +193,10 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     d->m_urlBox = new KUrlComboBox(KUrlComboBox::Directories, true, this);
     KUrlCompletion *cmpl = new KUrlCompletion(KUrlCompletion::DirCompletion);
     d->m_urlBox->setCompletionObject(cmpl);
+    d->m_urlBox->setFrame(false);
     d->m_urlBox->setInsertPolicy(QComboBox::InsertAtBottom);
     l->addWidget(d->m_urlBox);
+    l->addSpacing(2);
     connect(d->m_urlBox, SIGNAL(urlActivated(const KUrl&)),
         this, SLOT(goToUrl(const KUrl&)));
     connect(d->m_urlBox, SIGNAL(returnPressed(const QString&)),

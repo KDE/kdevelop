@@ -64,6 +64,8 @@ private:
 DrillDownView::DrillDownView(QWidget *parent)
     :QListView(parent), needSlideLeftAnimation(false)
 {
+    setFrameShape(QFrame::NoFrame);
+
     connect(&animation, SIGNAL(frameChanged(int)), this, SLOT(slide(int)));
     connect(&animation, SIGNAL(finished()), this, SLOT(update()));
     animation.setDuration(200);
