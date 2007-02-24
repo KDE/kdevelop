@@ -27,7 +27,6 @@
 #include <QTreeView>
 #include <QTimer>
 #include <QThread>
-#include <QSortFilterProxyModel>
 
 #include <kurl.h>
 #include <klocale.h>
@@ -44,6 +43,7 @@
 #include "icore.h"
 #include "iuicontroller.h"
 
+#include "filesortfilterproxymodel.h"
 #include "kdevfilemanagerpart.h"
 #include "drilldownview.h"
 #include "kdevdirmodel.h"
@@ -54,7 +54,7 @@ public:
 
     FileManager *m_manager;
     KDevDirModel *m_model;
-    QSortFilterProxyModel* m_proxyModel;
+    FileSortFilterProxyModel* m_proxyModel;
     DrillDownView *m_view;
     KToolBar *m_toolBar;
     KUrlComboBox *m_urlBox;
@@ -67,7 +67,7 @@ public:
         if (!index.isValid())
             return;
 
-	QModelIndex realIndex = m_proxyModel->mapToSource(index);
+        QModelIndex realIndex = m_proxyModel->mapToSource(index);
         KFileItem *fileItem = m_model->itemForIndex(realIndex);
         if (!fileItem)
             return;
@@ -218,7 +218,7 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     l->addWidget(d->m_view);
 
     d->m_model = new KDevDirModel(d->m_view);
-    d->m_proxyModel = new QSortFilterProxyModel(this);
+    d->m_proxyModel = new FileSortFilterProxyModel(this);
     d->m_proxyModel->setSourceModel(d->m_model);
     d->m_proxyModel->sort(0);
     d->m_view->setModel(d->m_proxyModel);

@@ -37,8 +37,10 @@ public:
         painter->save();
         QItemDelegate::paint(painter, option, index);
 
+//         kDebug() << "paint" << endl;
         if (m_parent->model()->hasChildren(index))
         {
+//             kDebug() << "   has children" << endl;
             QStyleOptionViewItem opt(option);
 
             opt.rect = m_parent->visualRect(index);

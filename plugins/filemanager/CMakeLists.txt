@@ -8,6 +8,7 @@ set(kdevfilemanager_PART_SRCS
     filemanager.cpp
     drilldownview.cpp
     kdevdirmodel.cpp
+    filesortfilterproxymodel.cpp
 )
 
 kde4_automoc(${kdevfilemanager_PART_SRCS})
