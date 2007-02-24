@@ -221,7 +221,8 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
             //activate the current view in the remaining child
             Container *siblingContainer = qobject_cast<Container*>(siblingSplitter->widget(0));
-            m_mainWindow->setActiveView(siblingContainer->viewForWidget(siblingContainer->currentWidget()));
+            if (siblingContainer)
+                m_mainWindow->setActiveView(siblingContainer->viewForWidget(siblingContainer->currentWidget()));
         }
     }
 }
