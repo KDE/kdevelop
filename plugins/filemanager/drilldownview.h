@@ -55,10 +55,12 @@ Q_SIGNALS:
 protected:
     virtual void paintEvent(QPaintEvent * event);
     virtual void keyPressEvent(QKeyEvent *event);
+    virtual void scrollContentsBy(int dx, int dy);
 //    virtual void mousePressEvent(QMouseEvent* event);
 
 private:
     void animateSlide(int moveDirection);
+    QRect normalizeDrillIconRect(const QRect &rect);
 
     QTimeLine animation;
     QPixmap oldView;
@@ -67,6 +69,8 @@ private:
 
     bool needSlideLeftAnimation;
     QModelIndex newUrlIndex;
+
+    friend class DrillDownItemDelegate;
 };
 
 #endif

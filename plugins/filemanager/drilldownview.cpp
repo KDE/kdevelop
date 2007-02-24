@@ -37,21 +37,11 @@ public:
         painter->save();
         QItemDelegate::paint(painter, option, index);
 
-//         kDebug() << "paint" << endl;
         if (m_parent->model()->hasChildren(index))
         {
-//             kDebug() << "   has children" << endl;
             QStyleOptionViewItem opt(option);
-
-            opt.rect = m_parent->visualRect(index);
-            int left = m_parent->maximumViewportSize().width() - 16;
-            if (m_parent->verticalScrollBar() && m_parent->verticalScrollBar()->isVisible())
-                left -= m_parent->verticalScrollBar()->width();
-            opt.rect.setLeft(left);
-            opt.rect.setWidth(16);
-
+            opt.rect = m_parent->normalizeDrillIconRect(m_parent->visualRect(index));
             m_parent->style()->drawPrimitive(QStyle::PE_IndicatorArrowRight, &opt, painter);
-            m_parent->setDirty(opt.rect);
         }
         painter->restore();
     }
@@ -254,6 +244,23 @@ void DrillDownView::setRootIndex(const QModelIndex &index)
 {
     QListView::setRootIndex(index);
     emit rootIndexChanged(index);
+}
+
+void DrillDownView::scrollContentsBy(int dx, int dy)
+{
+    setDirty(normalizeDrillIconRect(rect()));
+    QListView::scrollContentsBy(dx, dy);
+}
+
+QRect DrillDownView::normalizeDrillIconRect(const QRect &rect)
+{
+    QRect r(rect);
+    int left = maximumViewportSize().width() - 16;
+    if (verticalScrollBar() && verticalScrollBar()->isVisible())
+        left -= verticalScrollBar()->width();
+    r.setLeft(left);
+    r.setWidth(16);
+    return r;
 }
 
 #include "drilldownview.moc"
