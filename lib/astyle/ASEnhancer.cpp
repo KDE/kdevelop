@@ -6,19 +6,20 @@
  *   reformatting tool for C, C++, C# and Java source files.
  *   http://astyle.sourceforge.net
  *
- *   The "Artistic Style" project, including all files needed to compile
- *   it, is free software; you can redistribute it and/or modify it
- *   under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License,
- *   or (at your option) any later version.
+ *   The "Artistic Style" project, including all files needed to 
+ *   compile it, is free software; you can redistribute it and/or 
+ *   modify it under the terms of the GNU Lesser General Public 
+ *   License as published by the Free Software Foundation; either
+ *   version 2.1 of the License, or (at your option) any later 
+ *   version.
  *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ *   GNU Lesser General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public
- *   License along with this program; if not, write to the
+ *   You should have received a copy of the GNU Lesser General Public
+ *   License along with this project; if not, write to the 
  *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *   Boston, MA  02110-1301, USA.
  *
@@ -55,8 +56,8 @@
 #endif // TRACEmisc
 
 
-using namespace astyle;
-
+namespace astyle
+{
 
 // ---------------------------- functions for ASEnhancer Class -------------------------------------
 
@@ -107,19 +108,18 @@ ASEnhancer::~ASEnhancer()
 void ASEnhancer::init(int _indentLength,
                       string _indentString,
                       bool _isCStyle,
-                      bool _caseIndent)
+                      bool _caseIndent,
+					  bool _emptyLineFill)
 {
 	// formatting variables from ASFormatter and ASBeautifier
-	indentLength          = _indentLength;
+	indentLength = _indentLength;
 	if (_indentString.compare(0, 1, "\t") == 0)
 		useTabs = true;
 	else
 		useTabs = false;
-	isCStyle              = _isCStyle;
-	caseIndent            = _caseIndent;
-//    emptyLineFill         = _emptyLineFill;
-//    shouldPadOperators    = _shouldPadOperators;
-//    shouldPadParenthesies = _shouldPadParenthesies;
+	isCStyle      = _isCStyle;
+	caseIndent    = _caseIndent;
+	emptyLineFill = _emptyLineFill;
 
 	// unindent variables
 	lineNumber = 0;
@@ -135,19 +135,22 @@ void ASEnhancer::init(int _indentLength,
 #endif
 }
 
-
 /**
  * additional formatting for line of source code.
  * every line of source code in a source code file should be sent
  *     one after the other to this function.
+ * indents event tables
  * unindents the case blocks
  *
  * @param line       the original formatted line will be updated if necessary.
  */
 void ASEnhancer::enhance(string &line)
 {
-	static vector<switchVariables>  swVector;      // stack vector of switch variables
-	static switchVariables sw;                     // switch variables struct
+	static vector<switchVariables>  swVector;       // stack vector of switch variables
+	static switchVariables sw;                      // switch variables struct
+	
+	static bool nextLineIsEventTable;				// begin event table is reached
+	static bool isInEventTable;						// need to indent an event table
 
 	bool   isSpecialChar = false;
 	size_t  lineLength;                             // length of the line being parsed
@@ -155,30 +158,25 @@ void ASEnhancer::enhance(string &line)
 	lineNumber++;
 	lineLength = line.length();
 
-	if (lineLength == 0)
+	// check for beginning of event table
+	if (nextLineIsEventTable)
+	{
+		isInEventTable = true;
+		nextLineIsEventTable = false;	
+	}
+		
+	if (lineLength == 0
+		&& ! isInEventTable
+		&& ! emptyLineFill)
 		return;
 
-	// FIX **************************************
-	// remove whitespace added at the end of some comments and some preprocessor statements
-	// problem when shouldPadOperators is used
-	//if(isWhiteSpaceX(line[lineLength-1]))
-	//{
-	//    if((! emptyLineFill) || (line.find_first_not_of(" \t") != string::npos))
-	//    {
-	//        size_t end = line.find_last_not_of(" \t");
-	//        line.erase(end+1, lineLength);
-	//        lineLength = line.length();
-	//        TRmisc (" trim line ");
-	//    }
-	//}
-
-	if (unindentNextLine)                       // test for unindent on attached brackets
+	// test for unindent on attached brackets
+	if (unindentNextLine)
 	{
 		sw.unindentDepth++;
 		sw.unindentCase = true;
 		unindentNextLine = false;
 		TRcase(" unindent case ", sw.unindentDepth);
-
 	}
 
 	// parse characters in the current line.
@@ -255,20 +253,22 @@ void ASEnhancer::enhance(string &line)
 			bracketCount++;
 
 		if (line[i] == '}')                                 // if close bracket
+		
 			bracketCount--;
 
-		// FIX **************************************
-		// remove whitespace added at (-1)
-		// problem when shouldPadOperators is used
-		//if(line[i] == '(' && shouldPadOperators && ! shouldPadParenthesies)
-		//{
-		//    if(line[i+1] == ' ' && line[i+2] == '-')
-		//    {
-		//        line.erase(i+1, 1);
-		//        lineLength = line.length();
-		//        TRmisc (" fix paren minus ");
-		//    }
-		//}
+		// ----------------  process event tables  --------------------------------------
+
+		// check for event table end
+		if (findHeaderX(line, i, "END_EVENT_TABLE", true)
+		    || findHeaderX(line, i, "END_MESSAGE_MAP", true))
+			isInEventTable = false;
+
+		// check for event table begin
+		if (findHeaderX(line, i, "BEGIN_EVENT_TABLE", true)
+		    || findHeaderX(line, i, "BEGIN_MESSAGE_MAP", true))  
+			nextLineIsEventTable = true;			
+		
+		// ----------------  process switch statements  --------------------------------- 
 
 		if (findHeaderX(line, i, "switch", true))           // if switch statement
 		{
@@ -284,7 +284,7 @@ void ASEnhancer::enhance(string &line)
 		// just want switch statements from this point
 
 		if (caseIndent || switchDepth == 0)                 // from here just want switch statements
-			continue;                                       // get next char
+			continue;                                      // get next char
 
 		if (line[i] == '{')                                 // if open bracket
 		{
@@ -321,12 +321,15 @@ void ASEnhancer::enhance(string &line)
 			if (sw.unindentCase)                            // if unindented last case
 			{
 				sw.unindentCase = false;                    // stop unindenting previous case
-				sw.unindentDepth--;                         // reduct depth
+				sw.unindentDepth--;                         // reduce depth
 			}
 			for (; i < lineLength; i++)                     // bypass colon
 			{
 				if (line[i] == ':')
-					break;
+					if ((i + 1 < lineLength) && (line[i + 1] == ':'))
+						i++;								// bypass scope resolution operator
+					else
+						break;
 			}
 			i++;
 			for (; i < lineLength; i++)                     // bypass whitespace
@@ -349,23 +352,53 @@ void ASEnhancer::enhance(string &line)
 		}
 	}   // end of for loop
 
+	if (isInEventTable) 									// if need to indent
+		indentLine(line, 1);               					//    do it
+
 	if (sw.unindentDepth > 0)                               // if need to unindent
 		unindentLine(line, sw.unindentDepth);               //    do it
 }
 
+/**
+ * indent a line by a given number of tabsets
+ *    by inserting leading whitespace to the line argument.
+ *
+ * @param line          a pointer to the line to indent.
+ * @param unindent      the number of tabsets to insert.
+ * @return              the number of characters inserted.
+ */
+int ASEnhancer::indentLine(string  &line, const int indent) const
+{
+	if (line.length() == 0
+		&& ! emptyLineFill)
+		return 0;
+		
+	size_t charsToInsert;                   	// number of chars to insert
+
+	if (useTabs)                    			// if formatted with tabs
+	{
+		charsToInsert = indent;             	// tabs to insert
+		line.insert((size_t) 0, charsToInsert, '\t');    // insert the tabs
+	}
+	else
+	{
+		charsToInsert = indent * indentLength;  // compute chars to insert
+		line.insert((size_t)0, charsToInsert, ' ');     // insert the spaces
+	}
+
+	return charsToInsert;
+}
 
 /**
- * unindent a case line by a given number of tabsets
+ * unindent a line by a given number of tabsets
  *    by erasing the leading whitespace from the line argument.
- * is inline to aid speed and is called from only one place.
  *
  * @param line          a pointer to the line to unindent.
  * @param unindent      the number of tabsets to erase.
- * @return              the number of characters erased
+ * @return              the number of characters erased.
  */
-int ASEnhancer::unindentLine(string  &line, int unindent) const
+int ASEnhancer::unindentLine(string  &line, const int unindent) const
 {
-	size_t charsToErase;                    // number of chars to erase
 	size_t whitespace = line.find_first_not_of(" \t");
 
 	if (whitespace == string::npos)         // if line is blank
@@ -373,10 +406,12 @@ int ASEnhancer::unindentLine(string  &line, int unindent) const
 
 	if (whitespace == 0)
 		return 0;
+		
+	size_t charsToErase;                    // number of chars to erase
 
-	if (line[0] == '\t')                    // if formatted with tabs
+	if (useTabs)                    		// if formatted with tabs
 	{
-		charsToErase = unindent;            // indents to erase
+		charsToErase = unindent;            // tabs to erase
 		if (charsToErase <= whitespace)     // if there is enough whitespace
 			line.erase(0, charsToErase);    // erase the tabs
 		else
@@ -393,7 +428,6 @@ int ASEnhancer::unindentLine(string  &line, int unindent) const
 
 	return charsToErase;
 }
-
 
 /**
  * check if a specific line position contains a header, out of several possible headers.
@@ -446,3 +480,5 @@ bool ASEnhancer::findHeaderX(const string &line, int i, const char *header, bool
 
 	return false;
 }
+
+}   // end namespace astyle

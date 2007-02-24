@@ -6,19 +6,20 @@
  *   reformatting tool for C, C++, C# and Java source files.
  *   http://astyle.sourceforge.net
  *
- *   The "Artistic Style" project, including all files needed to compile
- *   it, is free software; you can redistribute it and/or modify it
- *   under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License,
- *   or (at your option) any later version.
+ *   The "Artistic Style" project, including all files needed to 
+ *   compile it, is free software; you can redistribute it and/or 
+ *   modify it under the terms of the GNU Lesser General Public 
+ *   License as published by the Free Software Foundation; either
+ *   version 2.1 of the License, or (at your option) any later 
+ *   version.
  *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ *   GNU Lesser General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public
- *   License along with this program; if not, write to the
+ *   You should have received a copy of the GNU Lesser General Public
+ *   License along with this project; if not, write to the 
  *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *   Boston, MA  02110-1301, USA.
  *
@@ -305,11 +306,6 @@ void ASResource::buildOperators(vector<const string*> &operators)
 	operators.push_back(&AS_AND);
 	operators.push_back(&AS_OR);
 	operators.push_back(&AS_COLON_COLON);
-
-	//// BUGFIX: removed the folowing lines
-	////    operators.push_back(&AS_PAREN_PAREN);
-	////    operators.push_back(&AS_BLPAREN_BLPAREN);
-
 	operators.push_back(&AS_PLUS);
 	operators.push_back(&AS_MINUS);
 	operators.push_back(&AS_MULT);
@@ -327,8 +323,6 @@ void ASResource::buildOperators(vector<const string*> &operators)
 	operators.push_back(&AS_BIT_XOR);
 	operators.push_back(&AS_OPERATOR);
 	operators.push_back(&AS_COMMA);
-	//    operators.push_back(&AS_SEMICOLON);
-
 	operators.push_back(&AS_RETURN);
 }
 

@@ -6,19 +6,20 @@
  *   reformatting tool for C, C++, C# and Java source files.
  *   http://astyle.sourceforge.net
  *
- *   The "Artistic Style" project, including all files needed to compile
- *   it, is free software; you can redistribute it and/or modify it
- *   under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License,
- *   or (at your option) any later version.
+ *   The "Artistic Style" project, including all files needed to 
+ *   compile it, is free software; you can redistribute it and/or 
+ *   modify it under the terms of the GNU Lesser General Public 
+ *   License as published by the Free Software Foundation; either
+ *   version 2.1 of the License, or (at your option) any later 
+ *   version.
  *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ *   GNU Lesser General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public
- *   License along with this program; if not, write to the
+ *   You should have received a copy of the GNU Lesser General Public
+ *   License along with this project; if not, write to the 
  *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *   Boston, MA  02110-1301, USA.
  *
@@ -30,9 +31,13 @@
 
 #include <string>
 #include <vector>
-#include <cctype>
 
 using namespace std;
+
+// needed for Red Hat distribution of GCC 3.2 (prior to Jan 2004)
+#if defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 2
+#include <ctype.h>
+#endif
 
 // disable secure version deprecation warnings for .NET 2005
 #ifdef _MSC_VER
@@ -55,8 +60,10 @@ class ASSourceIterator
 {
 	public:
 		int eolWindows;
-		int eolUnix;
-		ASSourceIterator() { eolWindows = eolUnix = 0; }
+		int eolLinux;
+		int eolMacOld;
+		char outputEOL[4];    // output end of line char
+		ASSourceIterator() { eolWindows = eolLinux = eolMacOld = 0; }
 		virtual ~ASSourceIterator() {}
 		virtual bool hasMoreLines() const = 0;
 		virtual string nextLine() = 0;
@@ -165,7 +172,6 @@ class ASBeautifier : protected ASResource
 
 		static vector<const string*> headers;
 		static vector<const string*> nonParenHeaders;
-//        static vector<const string*> preprocessorHeaders;
 		static vector<const string*> preBlockStatements;
 		static vector<const string*> assignmentOperators;
 		static vector<const string*> nonAssignmentOperators;
@@ -200,7 +206,6 @@ class ASBeautifier : protected ASResource
 		bool isCStyle;
 		bool isInOperator;
 		bool isInTemplate;
-//        bool isInConst;
 		bool isInDefine;
 		bool isInDefineDefinition;
 		bool classIndent;
@@ -242,7 +247,7 @@ class ASEnhancer
 		// functions
 		ASEnhancer();
 		~ASEnhancer();
-		void init(int, string, bool, bool);
+		void init(int, string, bool, bool, bool);
 		void enhance(string &line);
 
 	private:
@@ -251,9 +256,7 @@ class ASEnhancer
 		bool   useTabs;
 		bool   isCStyle;
 		bool   caseIndent;
-//        bool   emptyLineFill;
-//        bool   shouldPadOperators;
-//        bool   shouldPadParenthesies;
+		bool   emptyLineFill;
 
 		// parsing variables
 		int  lineNumber;
@@ -272,7 +275,8 @@ class ASEnhancer
 
 	private:    // private functions
 		bool findHeaderX(const string &line, int i, const char *header, bool checkBoundry = true) const;
-		int  unindentLine(string  &line, int unindent) const;
+		int  indentLine(string  &line, const int indent) const;
+		int  unindentLine(string  &line, const int unindent) const;
 
 	private:
 		// struct used by ParseFormattedLine function
@@ -292,7 +296,7 @@ class ASEnhancer
 	private:    // inline functions
 		// check if a specific character can be used in a legal variable/method/class name
 		inline bool isLegalNameCharX(char ch) const {
-			return (std::isalnum(ch) || ch == '.' || ch == '_' || (!isCStyle && ch == '$') || (isCStyle && ch == '~'));
+			return (isalnum(ch) || ch == '.' || ch == '_' || (!isCStyle && ch == '$') || (isCStyle && ch == '~'));
 		}
 
 		// check if a specific character is a whitespace character
@@ -337,7 +341,7 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 		bool isUnaryMinus() const;
 		bool isInExponent() const;
 		bool isOneLineBlockReached() const;
-		bool isNextCharWhiteSpace() const;      // $$$$$$$$$$$$$$$$$$$$$
+		bool isNextCharWhiteSpace() const;  
 		bool lineBeginsWith(char charToCheck) const;
 		void appendChar(char ch, bool canBreakLine = true);
 		void appendSequence(const string &sequence, bool canBreakLine = true);
@@ -348,7 +352,6 @@ class ASFormatter : public ASBeautifier, private ASEnhancer
 
 		static vector<const string*> headers;
 		static vector<const string*> nonParenHeaders;
-//        static vector<const string*> preprocessorHeaders;
 		static vector<const string*> preDefinitionHeaders;
 		static vector<const string*> preCommandHeaders;
 		static vector<const string*> operators;

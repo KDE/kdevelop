@@ -6,19 +6,20 @@
  *   reformatting tool for C, C++, C# and Java source files.
  *   http://astyle.sourceforge.net
  *
- *   The "Artistic Style" project, including all files needed to compile
- *   it, is free software; you can redistribute it and/or modify it
- *   under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License,
- *   or (at your option) any later version.
+ *   The "Artistic Style" project, including all files needed to 
+ *   compile it, is free software; you can redistribute it and/or 
+ *   modify it under the terms of the GNU Lesser General Public 
+ *   License as published by the Free Software Foundation; either
+ *   version 2.1 of the License, or (at your option) any later 
+ *   version.
  *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ *   GNU Lesser General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public
- *   License along with this program; if not, write to the
+ *   You should have received a copy of the GNU Lesser General Public
+ *   License along with this project; if not, write to the 
  *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *   Boston, MA  02110-1301, USA.
  *
@@ -163,7 +164,6 @@ ASBeautifier::ASBeautifier(const ASBeautifier &other)
 	isCStyle = other.isCStyle;
 	isInOperator = other.isInOperator;
 	isInTemplate = other.isInTemplate;
-//    isInConst = other.isInConst;
 	isInDefine = other.isInDefine;
 	isInDefineDefinition = other.isInDefineDefinition;
 	classIndent = other.classIndent;
@@ -212,8 +212,6 @@ ASBeautifier::~ASBeautifier()
 	DELETE_CONTAINER(inStatementIndentStack);
 	DELETE_CONTAINER(inStatementIndentStackSizeStack);
 	DELETE_CONTAINER(parenIndentStack);
-
-	//DELETE_CONTAINER( sourceIterator );
 }
 
 /**
@@ -274,7 +272,6 @@ void ASBeautifier::init()
 	isInHeader = false;
 	isInOperator = false;
 	isInTemplate = false;
-//    isInConst = false;
 	isInConditional = false;
 	templateDepth = 0;
 	parenDepth = 0;
@@ -566,7 +563,6 @@ string ASBeautifier::beautify(const string &originalLine)
 	int spaceTabCount = 0;
 	char tempCh;
 	int headerStackSize = headerStack->size();
-	//bool isLineInStatement = isInStatement;
 	bool shouldIndentBrackettedLine = true;
 	int lineOpeningBlocksNum = 0;
 	int lineClosingBlocksNum = 0;
@@ -911,14 +907,6 @@ string ASBeautifier::beautify(const string &originalLine)
 				isInConditional = (probationHeader == &AS_SYNCHRONIZED);
 				if (probationHeader == &AS_CONST)
 					isImmediatelyAfterConst = true;
-				//  isInConst = true;
-				/* TODO: revove all references to isInConst
-				 * There is actually no more need for the global isInConst variable.
-				               * The only reason for checking const is to see if there is a const
-				 * immediately before an open-bracket.
-				 * Since CONST is now put into probation and is checked during itspost-char,
-				 * isImmediatelyAfterConst can be set by its own...
-				 */
 
 				isInStatement = false;
 				// if the probation comes from the previous line, then indent by 1 tab count.
@@ -938,12 +926,6 @@ string ASBeautifier::beautify(const string &originalLine)
 			prevNonLegalCh = currentNonLegalCh;
 			currentNonLegalCh = ch;
 		}
-
-		//if (isInConst)
-		//{
-		//    isInConst = false;
-		//    isImmediatelyAfterConst = true;
-		//}
 
 		if (isInHeader)
 		{
@@ -1206,14 +1188,6 @@ string ASBeautifier::beautify(const string &originalLine)
 					isInCase = true;
 					--tabCount;
 				}
-				// TODO: the following statement can never be true
-				// because the headers have been commented out of the vector!!!
-				//else if (newHeader == &AS_PUBLIC || newHeader == &AS_PROTECTED || newHeader == &AS_PRIVATE)
-				//{
-				//    if (isCStyle && !isInClassHeader)
-				//        --tabCount;
-				//    isIndentableHeader = false;
-				//}
 				else if (newHeader == &AS_STATIC
 				         || newHeader == &AS_SYNCHRONIZED
 				         || (newHeader == &AS_CONST && isCStyle))
@@ -1233,11 +1207,6 @@ string ASBeautifier::beautify(const string &originalLine)
 				}
 				else if (newHeader == &AS_CONST)
 				{
-					// this will be entered only if NOT in C style
-					// since otherwise the CONST would be found to be a probstion header...
-
-					//if (isCStyle)
-					//  isInConst = true;
 					isIndentableHeader = false;
 				}
 				else if (newHeader == &AS_TEMPLATE)
@@ -1460,18 +1429,11 @@ string ASBeautifier::beautify(const string &originalLine)
 				isInClassHeader = true;
 				outBuffer.append(newHeader->substr(1));
 				i += newHeader->length() - 1;
-				//if (isCStyle)
 				headerStack->push_back(newHeader);
 			}
 		}
 
 		// Handle operators
-		//
-
-////        // PRECHECK if a '==' or '--' or '++' operator was reached.
-////        // If not, then register an indent IF an assignment operator was reached.
-////        // The precheck is important, so that statements such as 'i--==2' are not recognized
-////        // to have assignment operators (here, '-=') in them . . .
 
 		const string *foundAssignmentOp = NULL;
 		const string *foundNonAssignmentOp = NULL;
@@ -1528,11 +1490,6 @@ string ASBeautifier::beautify(const string &originalLine)
 	 * (but rather another header such as "for" or "if", then unindent it
 	 * by one indentation relative to its block.
 	 */
-
-	// indent #define lines with one less tab
-	//if (isInDefine)
-	//    tabCount -= defineTabCount-1;
-
 
 	if (!lineStartsInComment
 	        && !blockIndent
@@ -1592,8 +1549,8 @@ string ASBeautifier::beautify(const string &originalLine)
 
 	if (tabCount < 0)
 		tabCount = 0;
-	if (lineCommentNoBeautify)                                      // **********************
-		tabCount = 0;                                                 // **********************
+	if (lineCommentNoBeautify)  
+		tabCount = 0;  
 
 	// finally, insert indentations into begining of line
 
