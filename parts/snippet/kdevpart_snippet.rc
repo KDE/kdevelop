@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="snippet" library="libkdevsnippet" version="3">
+	<MenuBar>
+	</MenuBar>
+	<Menu name="hidden">
+		<Action name="snippet_showview"/>
+	</Menu>
+</kpartplugin>

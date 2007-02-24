@@ -82,7 +82,7 @@ public slots:
 
 protected slots:
     void showPopupMenu( QListViewItem * item, const QPoint & p, int );
-    void slotListDblClicked(QListViewItem * item, const QPoint & pos, int c);
+    void slotExecuted(QListViewItem * item);
     void slotDropped(QDropEvent *e, QListViewItem *after);
 };
 

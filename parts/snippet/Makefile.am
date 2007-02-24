@@ -11,6 +11,7 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevsnippet.desktop
 
+rc_DATA = kdevpart_snippet.rc
 rcdir = $(kde_datadir)/kdevsnippet
 
 noinst_HEADERS = snippetdlg.h snippetitem.h snippetsettingsbase.h snippetsettings.h snippetconfig.h

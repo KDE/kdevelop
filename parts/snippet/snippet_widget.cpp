@@ -66,8 +66,12 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
     //connect the signals
     connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
              this, SLOT( showPopupMenu(QListViewItem *, const QPoint & , int ) ) );
-    connect( this, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int) ),
-             this, SLOT( slotListDblClicked( QListViewItem *, const QPoint &, int) ) );
+
+    connect( this, SIGNAL( executed (QListViewItem *) ),
+             this, SLOT( slotExecuted( QListViewItem *) ) );
+    connect( this, SIGNAL( returnPressed (QListViewItem *) ),
+             this, SLOT( slotExecuted( QListViewItem *) ) );
+
     connect( this, SIGNAL( dropped(QDropEvent *, QListViewItem *) ),
              this, SLOT( slotDropped(QDropEvent *, QListViewItem *) ) );
 
@@ -261,12 +265,7 @@ void SnippetWidget::slotEditGroup()
   }
 }
 
-//  \fn SnippetWidget::slotListDblClicked()
-/*!
-    On a DoubleClick the clicked snippet gets inserted at the
-    current cursor position of the active view
-*/
-void SnippetWidget::slotListDblClicked(QListViewItem * item, const QPoint &, int)
+void SnippetWidget::slotExecuted(QListViewItem * item)
 {
   SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
   if (!pSnippet || dynamic_cast<SnippetGroup*>(item))
@@ -912,7 +911,7 @@ bool SnippetWidget::acceptDrag (QDropEvent *event) const
     If it is emitted, we need to construct a new snippet entry with
     the data given
  */
-void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *item)
+void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *)
 {
   QListViewItem * item2 = itemAt(e->pos());
   

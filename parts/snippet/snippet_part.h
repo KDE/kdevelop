@@ -37,10 +37,13 @@ public:
     QStringList getProjectLanguages();
 
 private:
+  void setupActions();
+
   QGuardedPtr<SnippetWidget> m_widget;
 
 public slots:
   void slotConfigWidget( KDialogBase *dlg );
+  void slotShowView();
 };
 
 

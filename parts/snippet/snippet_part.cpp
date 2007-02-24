@@ -41,7 +41,7 @@ SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin(&data, parent, name ? name : "SnippetPart" )
 {
   setInstance(snippetFactory::instance());
-  //setXMLFile("kdevpart_snippet.rc");
+  setXMLFile("kdevpart_snippet.rc");
 
   m_widget = new SnippetWidget(this);
   m_widget->setCaption(i18n("Code Snippets"));
@@ -57,6 +57,8 @@ SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
     according to the languages supported by this project*/
   connect( core(), SIGNAL( projectOpened() ), m_widget, SLOT( languageChanged() ) );
   connect( core(), SIGNAL( languageChanged() ), m_widget, SLOT( languageChanged() ) );
+
+  setupActions();
 }
 
 SnippetPart::~SnippetPart()
@@ -67,6 +69,11 @@ SnippetPart::~SnippetPart()
   }
 
   delete m_widget;
+}
+
+void SnippetPart::setupActions()
+{
+  new KAction( i18n("Show Snippet Tree"), CTRL+ALT+SHIFT+Key_S, this, SLOT(slotShowView()), actionCollection(), "snippet_showview");
 }
 
 /*!
@@ -137,6 +144,11 @@ QStringList SnippetPart::getProjectLanguages()
         languages = DomUtil::readListEntry(m_projectDom, "/general/secondaryLanguages", "language");
     languages.prepend( DomUtil::readEntry(m_projectDom, "/general/primarylanguage") );
     return languages;
+}
+
+void SnippetPart::slotShowView()
+{
+    mainWindow()->raiseView( m_widget );
 }
 
 
