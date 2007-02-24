@@ -35,6 +35,7 @@ class PartController;
 
 //FIXME adymo: merge with Sublime::PartDocument or refactor
 class PartDocument: public Sublime::PartDocument {
+    Q_OBJECT
 public:
     PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url);
     virtual ~PartDocument();
