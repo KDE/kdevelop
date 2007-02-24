@@ -27,6 +27,7 @@
 #include <QTreeView>
 #include <QTimer>
 #include <QThread>
+#include <QSortFilterProxyModel>
 
 #include <kurl.h>
 #include <klocale.h>
@@ -53,6 +54,7 @@ public:
 
     FileManager *m_manager;
     KDevDirModel *m_model;
+    QSortFilterProxyModel* m_proxyModel;
     DrillDownView *m_view;
     KToolBar *m_toolBar;
     KUrlComboBox *m_urlBox;
@@ -65,7 +67,8 @@ public:
         if (!index.isValid())
             return;
 
-        KFileItem *fileItem = m_model->itemForIndex(index);
+	QModelIndex realIndex = m_proxyModel->mapToSource(index);
+        KFileItem *fileItem = m_model->itemForIndex(realIndex);
         if (!fileItem)
             return;
 
@@ -147,7 +150,8 @@ public:
 
     void urlChanged(const QModelIndex &index)
     {
-        KFileItem *file = m_model->itemForIndex(index);
+        QModelIndex realIndex = m_proxyModel->mapToSource(index);
+        KFileItem *file = m_model->itemForIndex(realIndex);
         if (file)
             m_urlBox->setUrl(file->url());
     }
@@ -214,7 +218,10 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     l->addWidget(d->m_view);
 
     d->m_model = new KDevDirModel(d->m_view);
-    d->m_view->setModel(d->m_model);
+    d->m_proxyModel = new QSortFilterProxyModel(this);
+    d->m_proxyModel->setSourceModel(d->m_model);
+    d->m_proxyModel->sort(0);
+    d->m_view->setModel(d->m_proxyModel);
 
     connect(d->m_model->dirLister(), SIGNAL(completed()),
         d->m_view, SLOT(animateNewUrl()));
