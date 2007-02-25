@@ -51,6 +51,8 @@ struct CorePrivate {
         partController = new PartController(m_core, uiController->defaultMainWindow());
         projectController = new ProjectController(m_core);
 
+        uiController->initialize();
+
         pluginController->loadPlugins( PluginController::Global );
 
         Sublime::Area *defaultArea = uiController->defaultArea();
@@ -82,7 +84,6 @@ void Core::initialize()
         return;
     m_self = new Core();
     m_self->d->initialize();
-    m_self->d->uiController->initialize();
 }
 
 Core *KDevelop::Core::self()
