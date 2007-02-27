@@ -14,6 +14,7 @@
 
 #include "processwidget.h"
 #include <qwidget.h>
+#include <qfile.h>
 
 class GrepDialog;
 class GrepViewPart;
@@ -102,6 +103,7 @@ private:
 	GrepViewPart *m_part;
 	QToolButton* m_closeButton;
 	QString m_lastPattern;
+	QFile m_tempFile;
 };
 
 #endif
