@@ -88,9 +88,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     config = GrepViewFactory::instance()->config();
     config->setGroup("GrepDialog");
 
-    QGridLayout *layout = new QGridLayout(this, 7, 2, 10, 4);
-    layout->addRowSpacing(4, 10);
-    layout->setRowStretch(4, 0);
+    QGridLayout *layout = new QGridLayout(this, 9, 2, 10, 4);
     layout->setColStretch(0, 0);
     layout->setColStretch(1, 20);
 
@@ -119,35 +117,23 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     template_combo->insertStrList(template_desc);
     template_layout->addWidget(template_combo, 0);
 
-    QLabel *files_label = new QLabel(i18n("&Files:"), this);
-    layout->addWidget(files_label, 2, 0, AlignRight | AlignVCenter);
+    QBoxLayout *search_opts_layout = new QHBoxLayout(15);
+    layout->addLayout(search_opts_layout, 2, 1);
 
-    files_combo = new KComboBox(true, this);
-    files_label->setBuddy(files_combo->focusProxy());
-    files_combo->insertStrList(filepatterns);
-    layout->addWidget(files_combo, 2, 1);
+    regexp_box = new QCheckBox(i18n("&Regular Expression"), this);
+    regexp_box->setChecked(config->readBoolEntry("regexp", false ));
+    search_opts_layout->addWidget(regexp_box);
 
-    QLabel *exclude_label = new QLabel(i18n("&Exclude:"), this);
-    layout->addWidget(exclude_label, 3, 0, AlignRight | AlignVCenter);
-
-    QStringList exclude_list = config->readListEntry("exclude_patterns");
-    exclude_combo = new KComboBox(true, this);
-    exclude_label->setBuddy(files_combo->focusProxy());
-    if (exclude_list.count()) {
-        exclude_combo->insertStringList(exclude_list);
-    }
-    else
-    {
-        exclude_combo->insertItem("/CVS/,/SCCS/,/\\.svn/,/_darcs/");
-        exclude_combo->insertItem("");
-    }
-    layout->addWidget(exclude_combo, 3, 1);
+    case_sens_box = new QCheckBox(i18n("C&ase sensitive"), this);
+    case_sens_box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    case_sens_box->setChecked(config->readBoolEntry("case_sens", true));
+    search_opts_layout->addWidget(case_sens_box);
 
     QLabel *dir_label = new QLabel(i18n("&Directory:"), this);
-    layout->addWidget(dir_label, 4, 0, AlignRight | AlignVCenter);
+    layout->addWidget(dir_label, 3, 0, AlignRight | AlignVCenter);
 
     QBoxLayout *dir_layout = new QHBoxLayout(4);
-    layout->addLayout(dir_layout, 4, 1);
+    layout->addLayout(dir_layout, 3, 1);
 
     dir_combo = new KComboBox( true, this );
     dir_combo->insertStringList(config->readPathListEntry("LastSearchPaths"));
@@ -171,36 +157,56 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     QToolTip::add( synch_button, i18n("Set directory to that of the current file (Alt+Y)") );
     dir_layout->addWidget( synch_button );
 
-    QBoxLayout *dir_checks_layout = new QHBoxLayout(5);
-    layout->addLayout(dir_checks_layout, 5, 1);
-
-    regexp_box = new QCheckBox(i18n("&Regular Expression"), this);
-    regexp_box->setChecked(config->readBoolEntry("regexp", false ));
-    dir_checks_layout->addSpacing(10);
-    dir_checks_layout->addWidget(regexp_box);
+    QBoxLayout *dir_opts_layout = new QHBoxLayout(15);
+    layout->addLayout(dir_opts_layout, 4, 1);
 
     recursive_box = new QCheckBox(i18n("Rec&ursive"), this);
     recursive_box->setChecked(config->readBoolEntry("recursive", true));
-    dir_checks_layout->addSpacing(10);
-    dir_checks_layout->addWidget(recursive_box);
+    dir_opts_layout->addWidget(recursive_box);
 
-    case_sens_box = new QCheckBox(i18n("C&ase sensitive"), this);
-    case_sens_box->setChecked(config->readBoolEntry("case_sens", true));
-    dir_checks_layout->addSpacing(10);
-    dir_checks_layout->addWidget(case_sens_box);
+    use_project_box = new QCheckBox(i18n("Limit search to &project files"), this);
+    use_project_box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    use_project_box->setChecked(config->readBoolEntry("search_project_files", true));
+    dir_opts_layout->addWidget(use_project_box);
+
+    QLabel *files_label = new QLabel(i18n("&Files:"), this);
+    layout->addWidget(files_label, 5, 0, AlignRight | AlignVCenter);
+
+    files_combo = new KComboBox(true, this);
+    files_label->setBuddy(files_combo->focusProxy());
+    files_combo->insertStrList(filepatterns);
+    layout->addWidget(files_combo, 5, 1);
+
+    QLabel *exclude_label = new QLabel(i18n("&Exclude:"), this);
+    layout->addWidget(exclude_label, 6, 0, AlignRight | AlignVCenter);
+
+    QStringList exclude_list = config->readListEntry("exclude_patterns");
+    exclude_combo = new KComboBox(true, this);
+    exclude_label->setBuddy(files_combo->focusProxy());
+    if (exclude_list.count()) {
+        exclude_combo->insertStringList(exclude_list);
+    }
+    else
+    {
+        exclude_combo->insertItem("/CVS/,/SCCS/,/\\.svn/,/_darcs/");
+        exclude_combo->insertItem("");
+    }
+    layout->addWidget(exclude_combo, 6, 1);
+
+    QBoxLayout *other_opts_layout = new QHBoxLayout(15);
+    layout->addLayout(other_opts_layout, 7, 1);
 
     keep_output_box = new QCheckBox(i18n("New view"), this);
     keep_output_box->setChecked(config->readBoolEntry("new_view", true));
-    dir_checks_layout->addSpacing(10);
-    dir_checks_layout->addWidget(keep_output_box);
+    other_opts_layout->addWidget(keep_output_box);
 
     no_find_err_box = new QCheckBox(i18n("&Suppress find errors"), this);
+    no_find_err_box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     no_find_err_box->setChecked(config->readBoolEntry("no_find_errs", true));
-    dir_checks_layout->addSpacing(10);
-    dir_checks_layout->addWidget(no_find_err_box);
+    other_opts_layout->addWidget(no_find_err_box);
 
     QBoxLayout *button_layout = new QHBoxLayout(4);
-    layout->addLayout(button_layout, 6, 1);
+    layout->addLayout(button_layout, 8, 1);
     search_button = new KPushButton(KGuiItem(i18n("Sea&rch"),"grep"), this);
     search_button->setDefault(true);
     KPushButton *done_button = new KPushButton(KStdGuiItem::cancel(), this);
@@ -275,6 +281,7 @@ GrepDialog::~GrepDialog()
     config->writePathEntry("LastSearchPaths", qCombo2StringList(dir_combo));
 	config->writeEntry("regexp", regexp_box->isChecked());
 	config->writeEntry("recursive", recursive_box->isChecked());
+    config->writeEntry("search_project_files", use_project_box->isChecked());
 	config->writeEntry("case_sens", case_sens_box->isChecked());
 	config->writeEntry("new_view", keep_output_box->isChecked());
 	config->writeEntry("no_find_errs", no_find_err_box->isChecked());
@@ -363,6 +370,12 @@ void GrepDialog::slotSynchDirectory( )
 			dir_combo->setEditText( url.upURL().path( +1 ) );
 		}
 	}
+}
+
+void GrepDialog::setEnableProjectBox(bool enable)
+{
+	use_project_box->setEnabled(enable);
+	if (!enable) use_project_box->setChecked(false);
 }
 
 #include "grepdlg.moc"

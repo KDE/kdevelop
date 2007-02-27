@@ -37,6 +37,7 @@ public:
 	{ pattern_combo->setEditText(pattern); }
     void setDirectory(const QString &dir)
 	{ dir_combo->setEditText(dir); }
+    void setEnableProjectBox(bool enable);
 
     QString patternString() const
 	{ return pattern_combo->currentText(); }
@@ -49,6 +50,8 @@ public:
     QString directoryString() const
 	{ return dir_combo->currentText(); }
 
+	bool useProjectFilesFlag() const
+		{ return use_project_box->isChecked(); }
 	bool regexpFlag() const
 		{ return regexp_box->isChecked(); }
 	bool recursiveFlag() const
@@ -80,6 +83,7 @@ private:
 
     QCheckBox *regexp_box;
     QCheckBox *recursive_box;
+    QCheckBox *use_project_box;
     QCheckBox *no_find_err_box;
     QCheckBox *case_sens_box;
     QCheckBox *keep_output_box;

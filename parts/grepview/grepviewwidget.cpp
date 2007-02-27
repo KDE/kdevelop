@@ -180,6 +180,16 @@ void GrepViewWidget::showDialog()
 			}
 		}
 	}
+	// Determine if we have a list of project files
+	KDevProject *openProject = m_part->project();
+	if (openProject)
+	{
+		grepdlg->setEnableProjectBox(!openProject->allFiles().isEmpty());
+	}
+	else
+	{
+		grepdlg->setEnableProjectBox(false);
+	}
 	grepdlg->show();
 }
 
@@ -213,6 +223,17 @@ void GrepViewWidget::showDialogWithPattern(QString pattern)
 	if (len > 0 && pattern[len-1] == '\n')
 		pattern.truncate(len-1);
 	grepdlg->setPattern( pattern );
+
+	// Determine if we have a list of project files
+	KDevProject *openProject = m_part->project();
+	if (openProject)
+	{
+		grepdlg->setEnableProjectBox(!openProject->allFiles().isEmpty());
+	}
+	else
+	{
+		grepdlg->setEnableProjectBox(false);
+	}
 	grepdlg->show();
 }
 
@@ -227,36 +248,89 @@ void GrepViewWidget::searchActivated()
 	m_curOutput->setLastFileName("");
 	m_curOutput->setMatchCount( 0 );
 
-	QString files;
+	QString command, files;
+
 	// waba: code below breaks on filenames containing a ',' !!!
 	QStringList filelist = QStringList::split(",", grepdlg->filesString());
-	if (!filelist.isEmpty())
+
+	if (grepdlg->useProjectFilesFlag())
 	{
-		QStringList::Iterator it(filelist.begin());
-		files = KShellProcess::quote(*it);
-		++it;
-		for (; it != filelist.end(); ++it)
-			files += " -o -name " + KShellProcess::quote(*it);
+		KDevProject *openProject = m_part->project();
+		if (openProject)
+		{
+			QString tmpFilePath;
+			QStringList projectFiles = openProject->allFiles();
+			if (!projectFiles.isEmpty())
+			{
+				tmpFilePath = openProject->projectDirectory() + QChar(QDir::separator()) + ".grep.tmp";
+				QString dir = grepdlg->directoryString(), file;
+				QValueList<QRegExp> regExpList;
+
+				if (dir.endsWith(QChar(QDir::separator())))
+					dir.truncate(dir.length() - 1);
+
+				if (!filelist.isEmpty())
+				{
+					for (QStringList::Iterator it = filelist.begin(); it != filelist.end(); ++it)
+						regExpList.append(QRegExp(*it, true, true));
+				}
+
+				m_tempFile.setName(tmpFilePath);
+				if (m_tempFile.open(IO_WriteOnly))
+				{
+					QTextStream out(&m_tempFile);
+					for (QStringList::Iterator it = projectFiles.begin(); it != projectFiles.end(); ++it)
+					{
+						file = QDir::cleanDirPath(openProject->projectDirectory() + QChar(QDir::separator()) + *it);
+
+						QFileInfo info(file);
+						if (grepdlg->recursiveFlag() && !info.dirPath(true).startsWith(dir)) continue;
+						if (!grepdlg->recursiveFlag() && info.dirPath(true) != dir) continue;
+
+						bool matchOne = regExpList.count() == 0;
+						for (QValueList<QRegExp>::Iterator it2 = regExpList.begin(); it2 != regExpList.end() && !matchOne; ++it2)
+							matchOne = (*it2).exactMatch(file);
+
+						if (matchOne)
+							out << KShellProcess::quote(file) + "\n";
+					}
+
+					m_tempFile.close();
+				}
+				else
+				{
+					KMessageBox::error(this, i18n("Unable to create a temporary file for search."));
+					return;
+				}
+			}
+
+			command = "cat ";
+			command += tmpFilePath.replace(' ', "\\ ");
+		}
 	}
+	else
+	{
+		if (!filelist.isEmpty())
+		{
+			QStringList::Iterator it(filelist.begin());
+			files = KShellProcess::quote(*it);
+			++it;
+			for (; it != filelist.end(); ++it)
+				files += " -o -name " + KShellProcess::quote(*it);
+		}
 
-	m_lastPattern = grepdlg->patternString();
-	QString pattern = grepdlg->templateString();
-	if (grepdlg->regexpFlag())
-	    pattern.replace(QRegExp("%s"), grepdlg->patternString());
-        else
-	    pattern.replace(QRegExp("%s"), escape( grepdlg->patternString() ) );
+		QString filepattern = "find ";
+		filepattern += KShellProcess::quote(grepdlg->directoryString());
+		if (!grepdlg->recursiveFlag())
+			filepattern += " -maxdepth 1";
+		filepattern += " \\( -name ";
+		filepattern += files;
+		filepattern += " \\) -print -follow";
+		if (grepdlg->noFindErrorsFlag())
+			filepattern += " 2>/dev/null";
 
-	QString filepattern = "find ";
-	filepattern += KShellProcess::quote(grepdlg->directoryString());
-	if (!grepdlg->recursiveFlag())
-		filepattern += " -maxdepth 1";
-	filepattern += " \\( -name ";
-	filepattern += files;
-	filepattern += " \\) -print -follow";
-	if (grepdlg->noFindErrorsFlag())
-		filepattern += " 2>/dev/null";
-
-	QString command = filepattern + " " ;
+		command = filepattern + " " ;
+	}
 
 	QStringList excludelist = QStringList::split(",", grepdlg->excludeString());
 	if (!excludelist.isEmpty())
@@ -267,29 +341,34 @@ void GrepViewWidget::searchActivated()
 			command += "-e " + KShellProcess::quote(*it) + " ";
 	}
 
-	// quote spaces in filenames going to xargs
-	command += "| sed \"s/ /\\\\\\ /g\" ";
+	if (!grepdlg->useProjectFilesFlag())
+	{
+		// quote spaces in filenames going to xargs
+		command += "| sed \"s/ /\\\\\\ /g\" ";
+	}
 
 	command += "| xargs " ;
 
 #ifndef USE_SOLARIS
-	command += "egrep -H -n ";
-	if (!grepdlg->caseSensitiveFlag())
-	{
-		command += "-i ";
-	}
-	command += "-e ";
+	command += "egrep -H -n -s ";
 #else
 	// -H reported as not being available on Solaris,
 	// but we're buggy without it on Linux.
 	command += "egrep -n ";
+#endif
+
 	if (!grepdlg->caseSensitiveFlag())
 	{
 		command += "-i ";
 	}
 	command += "-e ";
-#endif
 
+	m_lastPattern = grepdlg->patternString();
+	QString pattern = grepdlg->templateString();
+	if (grepdlg->regexpFlag())
+		pattern.replace(QRegExp("%s"), grepdlg->patternString());
+	else
+		pattern.replace(QRegExp("%s"), escape( grepdlg->patternString() ) );
 	command += KShellProcess::quote(pattern);
 	m_curOutput->startJob("", command);
 
@@ -394,6 +473,9 @@ void GrepViewWidget::slotCloseCurrentOutput( )
 void GrepViewWidget::killJob( int signo )
 {
 	m_curOutput->killJob( signo );
+
+	if (!m_tempFile.name().isEmpty() && m_tempFile.exists())
+		m_tempFile.remove();
 }
 
 bool GrepViewWidget::isRunning( ) const
@@ -413,6 +495,9 @@ void GrepViewWidget::slotOutputTabChanged( )
 void GrepViewWidget::slotSearchProcessExited( )
 {
 	m_part->core()->running(m_part, false);
+
+	if (!m_tempFile.name().isEmpty() && m_tempFile.exists())
+		m_tempFile.remove();
 }
 
 void GrepViewProcessWidget::childFinished( bool normal, int status )
