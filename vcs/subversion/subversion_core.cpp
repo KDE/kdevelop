@@ -222,16 +222,17 @@ void subversionCore::commit( const KURL::List& list ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	int cmd = 3;
+ 	s << cmd;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug(9036) << "commiting : " << (*it).prettyURL() << endl;
-		QByteArray parms;
-		QDataStream s( parms, IO_WriteOnly );
-		int cmd = 3;
-		s << cmd << *it;
-		SimpleJob * job = KIO::special(servURL, parms, true);
-		job->setWindow( m_part->mainWindow()->main() );
-		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+		kdDebug(9036) << "adding to list: " << (*it).prettyURL() << endl;
+		s << *it;
 	}
+	SimpleJob * job = KIO::special(servURL, parms, true);
+	job->setWindow( m_part->mainWindow()->main() );
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 }
 
 void subversionCore::add( const KURL::List& list ) {
