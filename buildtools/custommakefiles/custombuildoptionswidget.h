@@ -21,22 +21,26 @@ class QTabWidget;
 class CustomBuildOptionsWidget : public CustomBuildOptionsWidgetBase
 {
     Q_OBJECT
-    
+
 public:
     CustomBuildOptionsWidget( QDomDocument &dom, QWidget *parent=0, const char *name=0 );
     ~CustomBuildOptionsWidget();
 
-    void setMakeOptionsWidget(QTabWidget *tw, QWidget *mow);
-    
+    void setMakeOptionsWidget(QTabWidget *tw, QWidget *mow, QWidget *oow);
+
 public slots:
     void accept();
 
 private:
     virtual void makeToggled(bool b);
-    
+    virtual void otherToggled(bool b);
+
     QDomDocument &m_dom;
     QTabWidget *m_tabWidget;
     QWidget *m_makeOptions;
+    QWidget *m_otherOptions;
 };
 
 #endif
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

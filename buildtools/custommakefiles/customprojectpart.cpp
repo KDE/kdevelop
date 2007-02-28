@@ -48,6 +48,7 @@
 #include "makeoptionswidget.h"
 #include "custombuildoptionswidget.h"
 #include "custommakeconfigwidget.h"
+#include "customotherconfigwidget.h"
 #include "custommanagerwidget.h"
 #include "config.h"
 #include "envvartools.h"
@@ -185,10 +186,15 @@ void CustomProjectPart::projectConfigWidget( KDialogBase *dlg )
     connect( dlg, SIGNAL( okClicked() ), w2, SLOT( accept() ) );
     buildtab->addTab( w2, i18n( "&Build" ) );
 
+    CustomOtherConfigWidget *w4 = new CustomOtherConfigWidget(this, "/kdevcustomproject", buildtab);
+    connect( dlg, SIGNAL( okClicked() ), w4, SLOT( accept() ) );
+    buildtab->addTab(w4, i18n("&Other"));
+
     CustomMakeConfigWidget *w3 = new CustomMakeConfigWidget( this, "/kdevcustomproject", buildtab );
     buildtab->addTab( w3, i18n( "Ma&ke" ) );
-    w2->setMakeOptionsWidget( buildtab, w3 );
+    w2->setMakeOptionsWidget( buildtab, w3, w4 );
     connect( dlg, SIGNAL( okClicked() ), w3, SLOT( accept() ) );
+
 }
 
 
@@ -378,11 +384,12 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
     }
 
     // check if there is an old envvars entry (from old project file with single make environment)
+    QString buildtool = DomUtil::readEntry(dom , "/kdevcustomproject/build/buildtool" );
     QDomElement el =
-        DomUtil::elementByPath( dom , "/kdevcustomproject/make/envvars" );
+        DomUtil::elementByPath( dom , "/kdevcustomproject/"+buildtool+"/envvars" );
     if ( !el.isNull() )
     {
-        QDomElement envs = DomUtil::createElementByPath( dom , "/kdevcustomproject/make/environments" );
+        QDomElement envs = DomUtil::createElementByPath( dom , "/kdevcustomproject/"+buildtool+"/environments" );
         DomUtil::makeEmpty( envs );
         el.setTagName( "default" );
         envs.appendChild( el );
@@ -712,8 +719,9 @@ QString CustomProjectPart::makeEnvironment() const
     // in the form of: "ENV_VARIABLE=ENV_VALUE"
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
+    QString buildtool = DomUtil::readEntry( *projectDom(), "/kdevcustomproject/build/buildtool" );
     DomUtil::PairList envvars =
-        DomUtil::readPairListEntry( *projectDom(), "/kdevcustomproject/make/environments/" + currentMakeEnvironment(), "envvar", "name", "value" );
+        DomUtil::readPairListEntry( *projectDom(), "/kdevcustomproject/"+buildtool+"/environments/" + currentMakeEnvironment(), "envvar", "name", "value" );
 
     QString environstr;
     DomUtil::PairList::ConstIterator it;
@@ -734,14 +742,22 @@ void CustomProjectPart::startMakeCommand( const QString &dir, const QString &tar
         return; //user cancelled
 
     QDomDocument &dom = *projectDom();
-    bool ant = DomUtil::readEntry( dom, "/kdevcustomproject/build/buildtool" ) == "ant";
+    QString buildtool = DomUtil::readEntry( dom, "/kdevcustomproject/build/buildtool" );
 
     QString cmdline;
-    if ( ant )
+    if ( buildtool == "ant" )
     {
         cmdline = "ant";
     }
-    else
+    else if( buildtool == "other" )
+    {
+        cmdline = DomUtil::readEntry(dom, "/kdevcustomproject/other/otherbin");
+        if (cmdline.isEmpty())
+            cmdline = "echo";
+        else if( cmdline.find("/") == -1 )
+            cmdline = "./"+cmdline;
+        cmdline += " " + DomUtil::readEntry(dom, "/kdevcustomproject/other/otheroptions");
+    }else
     {
         cmdline = DomUtil::readEntry( dom, "/kdevcustomproject/make/makebin" );
         if ( cmdline.isEmpty() )
@@ -767,7 +783,7 @@ void CustomProjectPart::startMakeCommand( const QString &dir, const QString &tar
     dircmd += KProcess::quote( dir );
     dircmd += " && ";
 
-    int prio = DomUtil::readIntEntry( dom, "/kdevcustomproject/make/prio" );
+    int prio = DomUtil::readIntEntry( dom, "/kdevcustomproject/"+buildtool+"/prio" );
     QString nice;
     if ( prio != 0 )
     {
@@ -789,7 +805,9 @@ void CustomProjectPart::startMakeCommand( const QString &dir, const QString &tar
 void CustomProjectPart::slotBuild()
 {
     m_lastCompilationFailed = false;
-    startMakeCommand( buildDirectory(), DomUtil::readEntry( *projectDom(), "/kdevcustomproject/make/defaulttarget" ) );
+    QString buildtool = DomUtil::readEntry( *projectDom(), "/kdevcustomproject/build/buildtool" );
+    startMakeCommand( buildDirectory(), DomUtil::readEntry( *projectDom(),
+            "/kdevcustomproject/"+buildtool+"/defaulttarget" ) );
 }
 
 

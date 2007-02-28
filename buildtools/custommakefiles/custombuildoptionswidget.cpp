@@ -26,6 +26,7 @@ CustomBuildOptionsWidget::CustomBuildOptionsWidget(QDomDocument &dom,
       m_dom(dom)
 {
     ant_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant");
+    other_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "other");
     builddir_edit->setURL(DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir"));
     builddir_edit->completionObject()->setMode(KURLCompletion::DirCompletion);
     builddir_edit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
@@ -33,7 +34,9 @@ CustomBuildOptionsWidget::CustomBuildOptionsWidget(QDomDocument &dom,
     // This connection must not be made before the ant->setChecked() line,
     // because at this time makeToggled() would crash
     connect( make_button, SIGNAL(toggled(bool)),
-             this, SLOT(makeToggled(bool)) );
+            this, SLOT(makeToggled(bool)) );
+    connect( other_button, SIGNAL(toggled(bool)),
+             this, SLOT(otherToggled(bool)) );
 }
 
 
@@ -43,19 +46,37 @@ CustomBuildOptionsWidget::~CustomBuildOptionsWidget()
 
 void CustomBuildOptionsWidget::accept()
 {
-    QString buildtool = ant_button->isChecked()? "ant" : "make";
+    QString buildtool;
+    if (ant_button->isChecked())
+    {
+        buildtool = "ant";
+    }
+    else if (other_button->isChecked())
+    {
+        buildtool = "other";
+    }
+    else
+    {
+        buildtool = "make";
+    }
     DomUtil::writeEntry(m_dom, "/kdevcustomproject/build/buildtool", buildtool);
     DomUtil::writeEntry(m_dom, "/kdevcustomproject/build/builddir", builddir_edit->url());
 }
 
 
-void CustomBuildOptionsWidget::setMakeOptionsWidget(QTabWidget *tw, QWidget *mow)
+void CustomBuildOptionsWidget::setMakeOptionsWidget(QTabWidget *tw, QWidget *mow, QWidget* oow)
 {
     m_tabWidget = tw;
     m_makeOptions = mow;
+    m_otherOptions = oow;
     makeToggled(make_button->isChecked());
+    otherToggled(other_button->isChecked());
 }
 
+void CustomBuildOptionsWidget::otherToggled(bool b)
+{
+    m_tabWidget->setTabEnabled(m_otherOptions, b);
+}
 
 void CustomBuildOptionsWidget::makeToggled(bool b)
 {
@@ -63,3 +84,5 @@ void CustomBuildOptionsWidget::makeToggled(bool b)
 }
 
 #include "custombuildoptionswidget.moc"
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

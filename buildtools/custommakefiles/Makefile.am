@@ -12,7 +12,8 @@ libkdevcustomproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 
 libkdevcustomproject_la_SOURCES = custombuildoptionswidget.cpp \
 	custombuildoptionswidgetbase.ui custommakeconfigwidget.cpp custommakeconfigwidgetbase.ui \
-	custommanagerwidget.cpp custommanagerwidgetbase.ui customprojectpart.cpp
+	custommanagerwidget.cpp custommanagerwidgetbase.ui customotherconfigwidget.cpp \
+	customotherconfigwidgetbase.ui customprojectpart.cpp
 
 METASOURCES = AUTO
 
@@ -21,4 +22,4 @@ service_DATA = kdevcustomproject.desktop
 
 rcdir = $(kde_datadir)/kdevcustomproject
 rc_DATA = kdevcustomproject.rc
-noinst_HEADERS = custommanagerwidget.h
+noinst_HEADERS = custommanagerwidget.h customotherconfigwidget.h

@@ -37,6 +37,9 @@
                     <property name="text">
                         <string>&amp;Make</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+M</string>
+                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -46,7 +49,27 @@
                         <cstring>ant_button</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Ant</string>
+                        <string>A&amp;nt</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>other_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Other</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>other custom build tool, e.g. script</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>There are myriads of buildtools out there that are not ant or make. If you use one of them (or have your own scripts), select this option.</string>
                     </property>
                 </widget>
             </vbox>
@@ -73,7 +96,7 @@
                 <cstring>builddir_label</cstring>
             </property>
             <property name="text">
-                <string>Run the &amp;build tool in the following directory:</string>
+                <string>Run &amp;the build tool in the following directory:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>builddir_edit</cstring>
@@ -130,13 +153,12 @@
         </spacer>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
 <slots>
     <slot access="protected">makeToggled(bool)</slot>
+    <slot access="protected">otherToggled(bool)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
