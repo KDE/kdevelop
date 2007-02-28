@@ -719,7 +719,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
                 origValues.append(" ");
             QString newval = *it;
             QRegExp re("([^$])\\$([^$\\(\\)\\{\\} /]*)( |\\)|/)");
-            newval.replace(re, "\1$(\\2)\\3");
+            newval.replace(re, "\\1$(\\2)\\3");
             if( (newval).contains(" ") || (newval).contains("\t") || (newval).contains( getLineEndingString() ) || (newval).contains("#") )
                 origValues.append( "\""+newval+"\"" );
             else
@@ -740,7 +740,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
             || origValues.last() == getLineEndingString()
             || origValues.last().stripWhiteSpace() == "" ) && !origValues.isEmpty() )
         origValues.pop_back();
-    if( !origValues.isEmpty() && origValues.last().find( QRegExp("\\[ \t]*#") ) != -1 )
+    if( !origValues.isEmpty() && origValues.last().find( QRegExp("\\\\[ \t]*#") ) != -1 )
         origValues[origValues.count()-1] = origValues[origValues.count()-1].mid(origValues[origValues.count()-1].find( "#") );
     if( !origValues.isEmpty() && origValues.last().find( getLineEndingString() ) == -1 )
         origValues.append(getLineEndingString());
@@ -1226,7 +1226,7 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
     QMap<QString, QStringList> variables;
     for( QStringList::iterator it = result.begin(); it != result.end(); ++it )
     {
-        QRegExp re("\\$\\$([^{}\\) /]*)( |\\)|/|$)");
+        QRegExp re("\\$\\$([^{}\\) /]*)( |\\\\)|/|$)");
         int pos = 0;
         while( pos >= 0 )
         {
@@ -1517,8 +1517,8 @@ QString Scope::replaceWs(QString s)
 
 bool Scope::containsContinue(const QString& s ) const
 {
-    return( s.find( QRegExp( "\\\\s*"+getLineEndingString() ) ) != -1
-            || s.find( QRegExp( "\\\\s*#" ) ) != -1 );
+    return( s.find( QRegExp( "\\\\\\s*"+getLineEndingString() ) ) != -1
+            || s.find( QRegExp( "\\\\\\s*#" ) ) != -1 );
 }
 
 bool Scope::isComment( const QString& s) const
