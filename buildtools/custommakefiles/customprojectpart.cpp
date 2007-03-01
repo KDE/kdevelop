@@ -377,7 +377,7 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
         while ( !stream.atEnd() )
         {
             QString s = stream.readLine();
-            if ( !s.startsWith( "#" ) && QFileInfo( projectDirectory() + "/" + s ).exists() )
+            if ( !s.startsWith( "#" ) && QFileInfo( projectDirectory() + "/" + s ).exists() && m_sourceFiles.find(s) == m_sourceFiles.end() )
                 m_sourceFiles << s;
         }
     }
