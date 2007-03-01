@@ -83,6 +83,14 @@ CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const Q
                                 "Environment variables and make arguments can be specified "
                                 "in the project settings dialog, <b>Build Options</b> tab." ) );
 
+    action = new KAction( i18n( "&Build Active Directory" ), "make_kdevelop", Key_F7,
+                          this, SLOT( slotBuildActiveDir() ),
+                          actionCollection(), "build_buildactivetarget" );
+    action->setToolTip( i18n( "Build active directory" ) );
+    action->setWhatsThis( i18n( "<b>Build active directory</b><p>Constructs a series of make commands to build the active directory. "
+                            "Environment variables and make arguments can be specified "
+                            "in the project settings dialog, <b>Make Options</b> tab." ) );
+
     action = new KAction( i18n( "Compile &File" ), "make_kdevelop",
                           this, SLOT( slotCompileFile() ),
                           actionCollection(), "build_compilefile" );
@@ -807,6 +815,14 @@ void CustomProjectPart::slotBuild()
     m_lastCompilationFailed = false;
     QString buildtool = DomUtil::readEntry( *projectDom(), "/kdevcustomproject/build/buildtool" );
     startMakeCommand( buildDirectory(), DomUtil::readEntry( *projectDom(),
+            "/kdevcustomproject/"+buildtool+"/defaulttarget" ) );
+}
+
+void CustomProjectPart::slotBuildActiveDir()
+{
+    m_lastCompilationFailed = false;
+    QString buildtool = DomUtil::readEntry( *projectDom(), "/kdevcustomproject/build/buildtool" );
+    startMakeCommand( buildDirectory()+"/"+activeDirectory(), DomUtil::readEntry( *projectDom(),
             "/kdevcustomproject/"+buildtool+"/defaulttarget" ) );
 }
 

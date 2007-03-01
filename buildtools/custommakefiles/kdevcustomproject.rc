@@ -1,11 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCustomProject" version="4">
+<kpartgui name="KDevCustomProject" version="5">
 <MenuBar>
   <Menu name="project" >
     <Action name="repopulate_project" />
   </Menu>
   <Menu name="build" >
     <Action name="build_build" />
+    <Action name="build_buildactivetarget" />
     <Action name="build_compilefile" />
     <Action name="build_target" />
     <Action name="build_install" />
@@ -17,6 +18,7 @@
 </MenuBar>
 <ToolBar name="buildToolBar" noMerge="1">
     <Action name="build_build" group="build_operations" />
+    <Action name="build_buildactivetarget" group="build_operations" />
     <Action name="build_compilefile" group="build_operations" />
     <Separator group="build_operations"/>
     <Action name="build_install" group="build_operations" />

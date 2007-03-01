@@ -74,6 +74,7 @@ private slots:
     void slotRemoveFromProjectRecursive();
     void slotChooseActiveDirectory();
     void slotBuild();
+    void slotBuildActiveDir();
     void slotCompileFile();
     void slotInstall();
     void slotInstallWithKdesu();
