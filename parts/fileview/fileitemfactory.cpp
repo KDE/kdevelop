@@ -41,7 +41,7 @@ void FileTreeViewItem::hideOrShow()
     }
 }
 
-bool FileTreeViewItem::changeActiveDir( const QString& olddir, const QString& newdir )
+bool FileTreeViewItem::changeActiveDir( const QString& olddir, const QString& newdir, bool foundolddir, bool foundnewdir )
 {
     kdDebug( 9017 ) << "FileTreeViewItem::changeActiveDir(): " + olddir << " new: " << newdir << " for: " << path() << endl;
 
@@ -49,6 +49,7 @@ bool FileTreeViewItem::changeActiveDir( const QString& olddir, const QString& ne
     {
         m_isActiveDir = false;
         setVisible( listView()->shouldBeShown( this ) );
+        foundolddir = true;
         repaint();
     }
 
@@ -56,14 +57,17 @@ bool FileTreeViewItem::changeActiveDir( const QString& olddir, const QString& ne
     {
         m_isActiveDir = true;
         setVisible( listView()->shouldBeShown( this ) );
+        foundnewdir = true;
         repaint();
-        return true;
     }
+
+    if( foundnewdir && foundolddir )
+        return true;
 
     FileTreeViewItem* item = static_cast<FileTreeViewItem*>( firstChild() );
     while( item )
     {
-        if ( item->changeActiveDir( olddir, newdir ) )
+        if ( item->changeActiveDir( olddir, newdir, foundnewdir, foundolddir ) )
             return true;
         else
             item = static_cast<FileTreeViewItem*>(item->nextSibling());

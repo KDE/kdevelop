@@ -47,7 +47,7 @@ namespace filetreeview
         bool isProjectFile() const { return m_isProjectFile; }
         bool setProjectFile( QString const &path, bool pf );
         bool isActiveDir() const { return m_isActiveDir; }
-        bool changeActiveDir( const QString &, const QString& );
+        bool changeActiveDir( const QString &, const QString&, bool foundolddir = false, bool foundnewdir = false );
 
     protected:
         virtual int compare( QListViewItem *i, int col, bool ascending ) const;
