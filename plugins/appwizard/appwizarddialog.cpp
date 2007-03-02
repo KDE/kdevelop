@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2007 by Alexander Dymo                                  *
+ *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,21 +8,15 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef _APPWIZARDFACTORY_H_
-#define _APPWIZARDFACTORY_H_
+#include "appwizarddialog.h"
 
-#include <kgenericfactory.h>
+#include <klocale.h>
 
-#include "appwizardpart.h"
-
-class AppWizardFactory : public KGenericFactory<AppWizardPart> {
-public:
-    AppWizardFactory(const char *instanceName);
-
-protected:
-    virtual KComponentData *createComponentData();
-};
-
-#endif
+AppWizardDialog::AppWizardDialog(QWidget *parent, Qt::WFlags flags)
+    :KAssistantDialog(parent, flags)
+{
+    setWindowTitle(i18n("Create New Project"));
+    KDialog::showButton(Help, false);
+}
 
 // kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

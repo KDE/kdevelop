@@ -1,5 +1,0 @@
-default: all
-
-all:
-	srcdir=`pwd` sh macros/autogen.sh
-

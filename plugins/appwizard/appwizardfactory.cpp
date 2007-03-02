@@ -8,35 +8,28 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
-
 #include <kstandarddirs.h>
-#include <kdevplugininfo.h>
 
 #include "appwizardfactory.h"
 
-static const KDevPluginInfo data("kdevappwizard");
-K_EXPORT_COMPONENT_FACTORY( libkdevappwizard, AppWizardFactory )
+K_EXPORT_COMPONENT_FACTORY(kdevappwizard, AppWizardFactory("kdevappwizard"))
 
-AppWizardFactory::AppWizardFactory()
-    : KDevGenericFactory<AppWizardPart>( data )
+AppWizardFactory::AppWizardFactory(const char *instanceName)
+    : KGenericFactory<AppWizardPart>(instanceName)
 {
 }
 
-KComponentData AppWizardFactory::createComponentData()
+KComponentData *AppWizardFactory::createComponentData()
 {
-    KComponentData instance = KDevGenericFactory<AppWizardPart>::createComponentData();
-    KStandardDirs *dirs = componentData.dirs();
+    KComponentData *componentData = KGenericFactory<AppWizardPart>::createComponentData();
+    KStandardDirs *dirs = componentData->dirs();
     dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
+    dirs->addResourceType("apptemplate_descriptions",
+        KStandardDirs::kde_default("data") + "kdevappwizard/template_descriptions/");
     dirs->addResourceType("appimports", KStandardDirs::kde_default("data") + "kdevappwizard/imports/");
     dirs->addResourceType("appimportfiles", KStandardDirs::kde_default("data") + "kdevappwizard/importfiles/");
 
-    return instance;
-}
-
-const KDevPluginInfo *AppWizardFactory::info()
-{
-    return &data;
+    return componentData;
 }
 
 // kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

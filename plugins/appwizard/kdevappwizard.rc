@@ -3,8 +3,6 @@
 <MenuBar>
   <Menu name="project" >
     <Action name="project_new" group="project_new"/>
-    <Action name="project_import" group="project_import"/>
   </Menu>
 </MenuBar>
 </kpartgui>
-

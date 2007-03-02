@@ -3,6 +3,10 @@
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2004-2005 by Sascha Cunz                                *
  *   sascha@kdevelop.org                                                   *
+ *   Copyright (C) 2005 by Ian Reinhart Geiser                             *
+ *   ian@geiseri.com                                                       *
+ *   Copyright (C) 2007 by Alexander Dymo                                  *
+ *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -10,76 +14,163 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "appwizardpart.h"
 
 #include <QDir>
-#include <QWidget>
-#include <Q3Wizard>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextCodec>
+#include <QTextStream>
 
+#include <ktar.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kprocess.h>
-#include <kdevcore.h>
-#include <kgenericfactory.h>
-#include <kstandarddirs.h>
 #include <kaction.h>
-#include <kiconloader.h>
+#include <ktempdir.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
 #include <kmacroexpander.h>
+#include <kactioncollection.h>
+#include <kio/netaccess.h>
 
-#include "appwizardpart.h"
-#include "appwizarddlg.h"
+#include <icore.h>
+#include <iprojectcontroller.h>
+
 #include "appwizardfactory.h"
-#include <kdevmakefrontend.h>
-#include <kdevdocumentcontroller.h>
-#include <kdevlanguagesupport.h>
+#include "appwizarddialog.h"
+#include "projectselectionpage.h"
+#include "projecttemplatesmodel.h"
 
-AppWizardPart::AppWizardPart(QObject *parent, const char */*name*/, const QStringList &)
-    : KDevPlugin(AppWizardFactory::info(), parent)
+AppWizardPart::AppWizardPart(QObject *parent, const QStringList &)
+    :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
 {
-    setComponentData(AppWizardFactory::componentData());
     setXMLFile("kdevappwizard.rc");
 
-    KAction *action;
-
-    action = new KAction( i18n("&New Project..."), "window_new", 0,
-                          this, SLOT(slotNewProject()),
-                          actionCollection(), "project_new" );
+    QAction *action = actionCollection()->addAction("project_new");
+    action->setIcon(KIcon("window_new"));
+    action->setText(i18n("&New Project..."));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
     action->setToolTip( i18n("Generate a new project from a template") );
     action->setWhatsThis( i18n("<b>New project</b><p>"
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.") );
 
-    /* Not ported yet
-    action = new KAction( i18n("&Import Existing Project..."),"wizard", 0,
-                          this, SLOT(slotImportProject()),
-                          actionCollection(), "project_import" );
-    action->setToolTip( i18n("Import existing project") );
-    action->setWhatsThis( i18n("<b>Import existing project</b><p>Creates a project file for a given directory.") );
-    */
+    m_templatesModel = new ProjectTemplatesModel(this);
 }
-
 
 AppWizardPart::~AppWizardPart()
 {
 }
 
-
 void AppWizardPart::slotNewProject()
 {
-    kDebug(9010) << "new project" << endl;
-    AppWizardDialog dlg(this, 0, "app wizard");
-    dlg.templates_listview->setFocus();
-    dlg.exec();
+    m_templatesModel->refresh();
+    AppWizardDialog dlg;
+
+    ProjectSelectionPage *selectionPage = new ProjectSelectionPage(m_templatesModel, &dlg);
+    dlg.addPage(selectionPage, i18n("General"));
+
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        QString project = createProject(selectionPage);
+        if (!project.isEmpty())
+            core()->projectController()->openProject(KUrl::fromPath(project));
+    }
 }
 
-
-void AppWizardPart::slotImportProject()
+QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
 {
-    /* Not ported yet
-    ImportDialog dlg(this, 0, "import dialog");
-    dlg.exec();
-    */
+    QFileInfo templateInfo(selectionPage->selectedTemplate());
+    if (!templateInfo.exists())
+        return "";
+
+    QString templateName = templateInfo.baseName();
+    kDebug(9010) << "creating project for template: " << templateName << endl;
+
+    QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
+    if (templateArchive.isEmpty())
+        return "";
+
+    //prepare variable substitution hash
+    m_variables.clear();
+    m_variables["APPNAME"] = selectionPage->appName();
+    m_variables["APPNAMEUC"] = selectionPage->appName().toUpper();
+    m_variables["APPNAMELC"] = selectionPage->appName().toLower();
+
+    QString dest = selectionPage->location();
+    KTar arch(templateArchive, "application/x-bzip2");
+    if (arch.open(QIODevice::ReadOnly))
+        unpackArchive(arch.directory(), dest);
+    else
+        kDebug(9010) << "failed to open template archive" << endl;
+
+    return QDir::cleanPath(dest + "/" + selectionPage->appName().toLower() + ".kdev4");
+}
+
+void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
+{
+    KIO::NetAccess::mkdir(dest, 0);
+    kDebug(9010) << "unpacking dir: " << dir->name() << " to " << dest << endl;
+    QStringList entries = dir->entries();
+    kDebug(9010) << "   entries: " << entries.join(",") << endl;
+
+    KTempDir tdir;
+
+    foreach (QString entry, entries)
+    {
+        if (entry.endsWith(".kdevtemplate"))
+            continue;
+        if (dir->entry(entry)->isDirectory())
+        {
+            const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
+            unpackArchive(file, dest + "/" + file->name());
+        }
+        else if (dir->entry(entry)->isFile())
+        {
+            const KArchiveFile *file = (KArchiveFile *)dir->entry(entry);
+            file->copyTo(tdir.name());
+            QString destName = dest + "/" + file->name();
+            if (!copyFile(QDir::cleanPath(tdir.name()+"/"+file->name()),
+                    KMacroExpander::expandMacros(destName, m_variables)))
+            {
+                KMessageBox::sorry(0, i18n("The file %1 cannot be created.").arg(dest));
+                return;
+            }
+        }
+    }
+    tdir.unlink();
+}
+
+bool AppWizardPart::copyFile(const QString &source, const QString &dest)
+{
+    kDebug(9010) << "copy: " << source << " to " << dest << endl;
+    QFile inputFile(source);
+    QFile outputFile(dest);
+
+    if (inputFile.open(QFile::ReadOnly) && outputFile.open(QFile::WriteOnly))
+    {
+        QTextStream input(&inputFile);
+        input.setCodec(QTextCodec::codecForName("UTF-8"));
+        QTextStream output(&outputFile);
+        output.setCodec(QTextCodec::codecForName("UTF-8"));
+        while(!input.atEnd())
+        {
+            QString line = input.readLine();
+            output << KMacroExpander::expandMacros(line, m_variables) << "\n";
+        }
+        // Preserve file mode...
+        struct stat fmode;
+        ::fstat(inputFile.handle(), &fmode);
+        ::fchmod(outputFile.handle(), fmode.st_mode);
+        return true;
+    }
+    else
+    {
+        inputFile.close();
+        outputFile.close();
+        return false;
+    }
 }
 
 #include "appwizardpart.moc"

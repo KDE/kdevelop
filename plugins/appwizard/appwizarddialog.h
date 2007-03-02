@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2007 by Alexander Dymo                                  *
+ *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,19 +8,15 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef _APPWIZARDFACTORY_H_
-#define _APPWIZARDFACTORY_H_
+#ifndef _APPWIZARDDIALOG_H_
+#define _APPWIZARDDIALOG_H_
 
-#include <kgenericfactory.h>
+#include <kassistantdialog.h>
 
-#include "appwizardpart.h"
-
-class AppWizardFactory : public KGenericFactory<AppWizardPart> {
+class AppWizardDialog: public KAssistantDialog {
 public:
-    AppWizardFactory(const char *instanceName);
+    AppWizardDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
 
-protected:
-    virtual KComponentData *createComponentData();
 };
 
 #endif

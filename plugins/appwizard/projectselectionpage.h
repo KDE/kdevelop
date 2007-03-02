@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2007 by Alexander Dymo                                  *
+ *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,19 +8,29 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef _APPWIZARDFACTORY_H_
-#define _APPWIZARDFACTORY_H_
+#ifndef _PROJECTSELECTIONPAGE_H_
+#define _PROJECTSELECTIONPAGE_H_
 
-#include <kgenericfactory.h>
+#include <QWidget>
 
-#include "appwizardpart.h"
+namespace Ui {
+class ProjectSelectionPage;
+}
 
-class AppWizardFactory : public KGenericFactory<AppWizardPart> {
+class ProjectTemplatesModel;
+
+class ProjectSelectionPage: public QWidget {
 public:
-    AppWizardFactory(const char *instanceName);
+    ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent = 0);
+    ~ProjectSelectionPage();
 
-protected:
-    virtual KComponentData *createComponentData();
+    QString selectedTemplate();
+    QString appName();
+    QString location();
+
+private:
+    Ui::ProjectSelectionPage *ui;
+    ProjectTemplatesModel *m_templatesModel;
 };
 
 #endif

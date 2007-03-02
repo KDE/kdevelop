@@ -1,4 +1,4 @@
-
+add_subdirectory(appwizard)
 #add_subdirectory(documentview)
 #add_subdirectory(codeview)
 add_subdirectory(konsole)

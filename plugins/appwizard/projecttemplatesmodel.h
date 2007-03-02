@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2007 by Alexander Dymo                                  *
+ *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,19 +8,27 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef _APPWIZARDFACTORY_H_
-#define _APPWIZARDFACTORY_H_
+#ifndef _PROJECTTEMPLATESMODEL_H_
+#define _PROJECTTEMPLATESMODEL_H_
 
-#include <kgenericfactory.h>
+#include <QMap>
+#include <QStandardItemModel>
 
-#include "appwizardpart.h"
+class AppWizardPart;
 
-class AppWizardFactory : public KGenericFactory<AppWizardPart> {
+class ProjectTemplatesModel: public QStandardItemModel {
 public:
-    AppWizardFactory(const char *instanceName);
+    ProjectTemplatesModel(AppWizardPart *parent);
 
-protected:
-    virtual KComponentData *createComponentData();
+    void refresh();
+
+private:
+    void extractTemplateDescriptions();
+    QStandardItem *createItem(const QString &name, const QString &category);
+
+    AppWizardPart *m_part;
+
+    QMap<QString, QStandardItem*> m_templateItems;
 };
 
 #endif
