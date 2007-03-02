@@ -91,6 +91,7 @@ private slots:
 
 private:
     bool containsNonProjectFiles( const QString& url );
+    QStringList projectFilesInDir( const QString& dir );
     bool containsProjectFiles( const QString& url );
     bool isProjectFileType( const QString& absFile ) const;
     void cleanFileList();
