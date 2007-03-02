@@ -27,6 +27,7 @@
 
 #include <kaction.h>
 #include <kdebug.h>
+#include <kdirwatch.h>
 #include <kdialogbase.h>
 #include <kdevgenericfactory.h>
 #include <kiconloader.h>
@@ -62,7 +63,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( data ) )
 
 CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const QStringList & )
         : KDevBuildTool( &data, parent, name ? name : "CustomProjectPart" )
-        , m_lastCompilationFailed( false )
+        , m_lastCompilationFailed( false ), dirwatch(new KDirWatch(this))
 {
     setInstance( CustomProjectFactory::instance() );
     setXMLFile( "kdevcustomproject.rc" );
@@ -170,7 +171,9 @@ CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const Q
              this, SLOT( slotCommandFinished( const QString& ) ) );
     connect( makeFrontend(), SIGNAL( commandFailed( const QString& ) ),
              this, SLOT( slotCommandFailed( const QString& ) ) );
-}
+    connect( dirwatch, SIGNAL( dirty( const QString&) ),
+             this, SLOT( slotDirDirty( const QString& ) ) );
+ }
 
 
 CustomProjectPart::~CustomProjectPart()
@@ -391,10 +394,13 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
                     path += *it;
                     if( m_sourceFiles.find( path ) == m_sourceFiles.end() )
                     {
+                        dirwatch->addDir( projectDirectory() + "/"+ path );
                         m_sourceFiles << path;
                     }
                     path += "/";
                 }
+                if( QFileInfo( projectDirectory() + "/" +s ).isDir() )
+                    dirwatch->addDir( projectDirectory() + "/"+ s );
                 m_sourceFiles << s;
             }
         }
@@ -654,6 +660,7 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
             for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                 if ( *subit != "." && *subit != ".." )
                     *subit = QDir::cleanDirPath(( relpath ) + "/" + ( *subit ) );
+            dirwatch->addDir( projectDirectory()+"/"+relpath );
             addFiles( subentries );
             addedFiles << QDir::cleanDirPath( relpath );
             m_sourceFiles.append( QDir::cleanDirPath( relpath ) );
@@ -669,6 +676,7 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
                 path += *it;
                 if( m_sourceFiles.find( path ) == m_sourceFiles.end() )
                 {
+                    dirwatch->addDir( projectDirectory() + "/" + path );
                     addedFiles << path;
                     m_sourceFiles << path;
                 }
@@ -1389,6 +1397,23 @@ bool CustomProjectPart::isProjectFileType( const QString& filename ) const
 {
     bool result = QDir::match( filetypes(), filename );
     return result;
+}
+
+void CustomProjectPart::slotDirDirty( const QString& dir )
+{
+    QStringList remove;
+    QString reldir = URLUtil::relativePathToFile( projectDirectory(), dir);
+    for( QStringList::const_iterator it = m_sourceFiles.begin(); it !=
+            m_sourceFiles.end(); ++it)
+    {
+        if( (*it).startsWith(reldir) )
+        {
+            QString lastpart = (*it).mid(reldir.length()+1);
+            if( !QFileInfo(dir+"/"+lastpart).exists() )
+                remove << (*it);
+        }
+    }
+    removeFiles(remove);
 }
 
 #include "customprojectpart.moc"

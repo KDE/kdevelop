@@ -26,6 +26,7 @@ class QListViewItem;
 class QPopupMenu;
 class QStringList;
 class KDialogBase;
+class KDirWatch;
 class CustomProjectWidget;
 class Context;
 class KSelectAction;
@@ -66,6 +67,7 @@ protected:
 
 private slots:
     void populateProject();
+    void slotDirDirty( const QString& dir );
     void projectConfigWidget( KDialogBase *dlg );
     void contextMenu( QPopupMenu *popup, const Context *context );
     void slotAddToProject();
@@ -127,6 +129,7 @@ private:
     QMap<QString, QString> m_makefileVars;
     bool m_recursive;
     bool m_first_recursive;
+    KDirWatch* dirwatch;
 };
 
 #endif
