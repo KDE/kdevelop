@@ -732,6 +732,8 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
         }
         else if( m_sourceFiles.find( relpath ) != m_sourceFiles.end() )
         {
+            removedFiles << relpath;
+            m_sourceFiles.remove( relpath );
             QStringList paths = QStringList::split("/", relpath);
             QString lastsubentry = paths[paths.size()-1];
             paths.pop_back();
@@ -739,7 +741,7 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
             {
                 QString dir = paths.join("/");
                 QStringList projectentries = projectFilesInDir(dir);
-                if( projectentries.size() == 1 &&  projectentries.first() == lastsubentry )
+                if( projectentries.size() == 0 )
                 {
                     removedFiles << dir;
                     m_sourceFiles.remove( dir );
@@ -748,8 +750,6 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
                 lastsubentry = paths[paths.size()-1];
                 paths.pop_back();
             }
-            removedFiles << relpath;
-            m_sourceFiles.remove( relpath );
         }
     }
 
@@ -1371,7 +1371,7 @@ QStringList CustomProjectPart::projectFilesInDir( const QString& dir )
     {
         if ( *it != "." && *it != ".." )
         {
-            if ( project()->isProjectFile( URLUtil::canonicalPath( projectDirectory() + "/" + dir + "/" + *it ) ) )
+            if ( m_sourceFiles.find( dir + "/" + *it ) != m_sourceFiles.end() )
             {
                 result << (*it);
             }
