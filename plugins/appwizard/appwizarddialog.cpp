@@ -17,6 +17,8 @@ AppWizardDialog::AppWizardDialog(QWidget *parent, Qt::WFlags flags)
 {
     setWindowTitle(i18n("Create New Project"));
     KDialog::showButton(Help, false);
+    KDialog::showButton(User2, false);
+    KDialog::showButton(User3, false);
 }
 
 // kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;
