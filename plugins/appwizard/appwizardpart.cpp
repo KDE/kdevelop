@@ -134,7 +134,7 @@ void AppWizardPart::unpackArchive(const KArchiveDirectory *dir, const QString &d
             if (!copyFile(QDir::cleanPath(tdir.name()+"/"+file->name()),
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
-                KMessageBox::sorry(0, i18n("The file %1 cannot be created.").arg(dest));
+                KMessageBox::sorry(0, i18n("The file %1 cannot be created.", dest));
                 return;
             }
         }
