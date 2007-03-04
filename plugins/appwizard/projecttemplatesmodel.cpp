@@ -24,12 +24,13 @@
 ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPart *parent)
     :QStandardItemModel(parent), m_part(parent)
 {
-    m_templateItems[""] = invisibleRootItem();
 }
 
 void ProjectTemplatesModel::refresh()
 {
     clear();
+    m_templateItems.clear();
+    m_templateItems[""] = invisibleRootItem();
     extractTemplateDescriptions();
 
     KStandardDirs *dirs = m_part->componentData().dirs();
