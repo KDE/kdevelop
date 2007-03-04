@@ -168,7 +168,7 @@ void GeneralInfoWidget::writeConfig() {
     DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/author",author_edit->text());
     DomUtil::writeEntry(m_projectDom,"/general/email",email_edit->text());
-    if ( DomUtil::readEntry(m_projectDom,"/general/version") != version_edit->text() ){
+    if ( DomUtil::readEntry(m_projectDom,"/general/version") != version_edit->text() && !DomUtil::elementByPath( m_projectDom, "/kdevautoproject").isNull() ){
         // update the configure.in.in, configure.in or configure.ac file.
 		QFile inInFile(projectDirectory() + "/configure.in.in");
         QFile inFile(projectDirectory() + "/configure.in");
@@ -183,7 +183,7 @@ void GeneralInfoWidget::writeConfig() {
             configureinUpdateVersion( acFile.name(), version_edit->text() );
         }
 		if (! inInFile.exists()&& !inFile.exists() && !acFile.exists()) {
-            KMessageBox::error(this, i18n("Could find configure.in.in, configure.in or configure.ac to update the project version."));
+            KMessageBox::error(this, i18n("Could not find configure.in.in, configure.in or configure.ac to update the project version."));
         }
     }
     DomUtil::writeEntry(m_projectDom,"/general/version",version_edit->text());
