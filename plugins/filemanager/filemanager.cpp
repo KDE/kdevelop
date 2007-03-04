@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdirlister.h>
-#include <ktoolbar.h>
 #include <kaction.h>
 #include <kstandardaction.h>
 #include <kinputdialog.h>
@@ -56,7 +55,7 @@ public:
     KDevDirModel *m_model;
     FileSortFilterProxyModel* m_proxyModel;
     DrillDownView *m_view;
-    KToolBar *m_toolBar;
+    QWidget *m_toolBar;
     KUrlComboBox *m_urlBox;
     KDevFileManagerPart *m_part;
 
@@ -155,6 +154,15 @@ public:
         if (file)
             m_urlBox->setUrl(file->url());
     }
+
+    void addToolButton(QAction *action)
+    {
+        QToolButton *t = new QToolButton(m_toolBar);
+        t->setAutoRaise(true);
+        t->setDefaultAction(action);
+        m_toolBar->setMinimumHeight(t->sizeHint().height());
+        m_toolBar->layout()->addWidget(t);
+    }
 };
 
 class ToolBarParent: public QWidget {
@@ -191,15 +199,12 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     l->setMargin(0);
     l->setSpacing(0);
 
-    ToolBarParent *tbp = new ToolBarParent(this);
-    l->addWidget(tbp);
-
-    d->m_toolBar = new KToolBar(tbp);
-    d->m_toolBar->setMovable(false);
-    d->m_toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    d->m_toolBar->setIconSize(QSize(16,16));
-    d->m_toolBar->setContextMenuEnabled(false);
-    tbp->setToolBar(d->m_toolBar);
+    d->m_toolBar = new QWidget(this);
+    QHBoxLayout *toolBarLayout = new QHBoxLayout(this);
+    toolBarLayout->setMargin(0);
+    toolBarLayout->setSpacing(0);
+    d->m_toolBar->setLayout(toolBarLayout);
+    l->addWidget(d->m_toolBar);
 
     d->m_urlBox = new KUrlComboBox(KUrlComboBox::Directories, true, this);
     KUrlCompletion *cmpl = new KUrlCompletion(KUrlCompletion::DirCompletion);
@@ -236,6 +241,7 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
         this, SLOT(urlChanged(const QModelIndex&)));
 
     setupActions();
+    toolBarLayout->addStretch();
 
     QTimer::singleShot(0, this, SLOT(init()));
 }
@@ -243,17 +249,17 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
 void FileManager::setupActions()
 {
     KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
-    d->m_toolBar->addAction(action);
+    d->addToolButton(action);
 
     action = KStandardAction::home(this, SLOT(goHome()), this);
-    d->m_toolBar->addAction(action);
+    d->addToolButton(action);
 
     action = new KAction(this);
     action->setIcon(KIcon("folder_new"));
     action->setText(i18n("New Folder..."));
     action->setToolTip(i18n("New Folder"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
-    d->m_toolBar->addAction(action);
+    d->addToolButton(action);
 }
 
 #include "filemanager.moc"
