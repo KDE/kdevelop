@@ -31,6 +31,7 @@ namespace KDevelop
 class IUiController;
 class IPluginController;
 class IProjectController;
+class ILanguageController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -56,6 +57,8 @@ public:
     virtual IPluginController *pluginController() = 0;
 
     virtual IProjectController *projectController() = 0;
+
+    virtual ILanguageController *languageController() = 0;
 
 protected:
     ICore(QObject *parent = 0) { Q_UNUSED(parent) };

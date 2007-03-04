@@ -16,62 +16,41 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef CORE_H
-#define CORE_H
+#ifndef ILANGUAGE_H
+#define ILANGUAGE_H
 
-#include <kdevexport.h>
-#include "icore.h"
+#include <QObject>
 
-namespace Sublime {
-class Area;
-}
+#include <kurl.h>
+
+#include "kdevexport.h"
 
 namespace KDevelop {
 
-class MainWindow;
-class Config;
-class PluginController;
-class ProjectController;
-class PartController;
-class UiController;
+class ILanguageSupport;
 
-class KDEVPLATFORM_EXPORT Core: public ICore {
+class KDEVPLATFORM_EXPORT ILanguage: public QObject {
 public:
-    static void initialize();
-    static Core *self();
+    ILanguage(const QString &name, QObject *parent = 0);
+    virtual ~ILanguage();
 
-    virtual ~Core();
+    QString name() const;
 
-    /** @copydoc ICore::uiController() */
-    virtual IUiController *uiController();
+    virtual void activate() = 0;
+    virtual void deactivate() = 0;
 
-    /** @copydoc ICore::pluginController() */
-    virtual IPluginController *pluginController();
+    //virtual CodeDelegate *codeDelegate() const = 0;
+    //virtual CodeHighlighting *codeHighlighting() const = 0;
 
-    /** @copydoc ICore::projectController() */
-    virtual IProjectController *projectController();
-
-    /** @copydoc ICore::languageController() */
-    virtual ILanguageController *languageController();
-
-    /// @internal
-    PartController *partController();
-    /// @internal
-    Config* config();
-    /// @internal
-    UiController *uiControllerInternal();
-
-    void cleanup();
+    /** @return the language support plugin.*/
+    virtual ILanguageSupport* languageSupport() = 0;
 
 private:
-    Core(QObject *parent = 0);
-    static Core *m_self;
-
-    struct CorePrivate *d;
+    struct ILanguagePrivate *d;
 };
 
 }
 
 #endif
 
-// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on;

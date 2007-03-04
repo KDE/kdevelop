@@ -16,62 +16,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef CORE_H
-#define CORE_H
+#ifndef LANGUAGE_H
+#define LANGUAGE_H
 
-#include <kdevexport.h>
-#include "icore.h"
+#include "ilanguage.h"
 
-namespace Sublime {
-class Area;
-}
+#include <QList>
 
 namespace KDevelop {
 
-class MainWindow;
-class Config;
-class PluginController;
-class ProjectController;
-class PartController;
-class UiController;
-
-class KDEVPLATFORM_EXPORT Core: public ICore {
+class KDEVPLATFORM_EXPORT Language: public ILanguage {
 public:
-    static void initialize();
-    static Core *self();
+    Language(ILanguageSupport *support, QObject *parent = 0);
+    virtual ~Language();
 
-    virtual ~Core();
+    virtual void activate();
+    virtual void deactivate();
 
-    /** @copydoc ICore::uiController() */
-    virtual IUiController *uiController();
+    virtual ILanguageSupport* languageSupport();
 
-    /** @copydoc ICore::pluginController() */
-    virtual IPluginController *pluginController();
-
-    /** @copydoc ICore::projectController() */
-    virtual IProjectController *projectController();
-
-    /** @copydoc ICore::languageController() */
-    virtual ILanguageController *languageController();
-
-    /// @internal
-    PartController *partController();
-    /// @internal
-    Config* config();
-    /// @internal
-    UiController *uiControllerInternal();
-
-    void cleanup();
+    static QList<Language*> findByUrl(const KUrl &url, QObject *parent);
 
 private:
-    Core(QObject *parent = 0);
-    static Core *m_self;
-
-    struct CorePrivate *d;
+    struct LanguagePrivate *d;
 };
 
 }
 
 #endif
 
-// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on;

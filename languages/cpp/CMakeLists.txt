@@ -3,7 +3,11 @@
 #add_subdirectory(duchain)
 add_subdirectory(app_templates)
 
-include_directories( ${CMAKE_TOP_BUILD_DIR} ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/editor ${CMAKE_SOURCE_DIR}/languages/cpp/duchain ${CMAKE_SOURCE_DIR}/languages/cpp/parser ${CMAKE_SOURCE_DIR}/languages/cpp/duchain/viewer ${CMAKE_SOURCE_DIR}/lib/project
+include_directories( ${CMAKE_TOP_BUILD_DIR} ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/editor
+    ${CMAKE_SOURCE_DIR}/languages/cpp/duchain ${CMAKE_SOURCE_DIR}/languages/cpp/parser
+    ${CMAKE_SOURCE_DIR}/languages/cpp/duchain/viewer ${CMAKE_SOURCE_DIR}/lib/project
+    ${CMAKE_SOURCE_DIR}/lib/language/interfaces
     )
 
 
@@ -36,14 +40,14 @@ set(kdevcpplanguage_LIB_SRCS
 
 set(kdevcpplanguagesupport_PART_SRCS
     cpplanguagesupport.cpp
-    parsejob.cpp
-    preprocessjob.cpp
-    codedelegate.cpp
-    codeproxy.cpp
-    cpphighlighting.cpp
-    cppcodecompletion.cpp
-    cppcodecompletionmodel.cpp
-    ${kdevcppduchain_SRCS}
+#    parsejob.cpp
+#    preprocessjob.cpp
+#    codedelegate.cpp
+#    codeproxy.cpp
+#    cpphighlighting.cpp
+#    cppcodecompletion.cpp
+#    cppcodecompletionmodel.cpp
+#    ${kdevcppduchain_SRCS}
 )
 
 #kde4_automoc(${kdevcpplanguage_LIB_SRCS})
@@ -52,15 +56,13 @@ set(kdevcpplanguagesupport_PART_SRCS
 #set_target_properties(kdevcpplanguage PROPERTIES VERSION 4.0.0 SOVERSION 4)
 #install(TARGETS kdevcpplanguage DESTINATION ${LIB_INSTALL_DIR} )
 
-#kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
-#kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
-#target_link_libraries(kdevcpplanguagesupport kdevcpplanguage threadweaver)
+kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
+kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
+target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces)
 
-#install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-#install( FILES kdevcppsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-
-
+install( FILES kdevcppsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

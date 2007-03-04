@@ -1,4 +1,5 @@
 /***************************************************************************
+ *   Copyright (C) 2006 Adam Treat <treat@kde.org>                         *
  *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -16,62 +17,38 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef CORE_H
-#define CORE_H
+#ifndef LANGUAGECONTROLLER_H
+#define LANGUAGECONTROLLER_H
 
-#include <kdevexport.h>
-#include "icore.h"
+#include "ilanguagecontroller.h"
 
-namespace Sublime {
-class Area;
+namespace KParts {
+class Part;
 }
 
 namespace KDevelop {
 
-class MainWindow;
-class Config;
-class PluginController;
-class ProjectController;
-class PartController;
-class UiController;
-
-class KDEVPLATFORM_EXPORT Core: public ICore {
+class KDEVPLATFORM_EXPORT LanguageController: public ILanguageController {
+    Q_OBJECT
 public:
-    static void initialize();
-    static Core *self();
+    LanguageController(QObject *parent);
+    ~LanguageController();
 
-    virtual ~Core();
+    void initialize();
 
-    /** @copydoc ICore::uiController() */
-    virtual IUiController *uiController();
-
-    /** @copydoc ICore::pluginController() */
-    virtual IPluginController *pluginController();
-
-    /** @copydoc ICore::projectController() */
-    virtual IProjectController *projectController();
-
-    /** @copydoc ICore::languageController() */
-    virtual ILanguageController *languageController();
-
-    /// @internal
-    PartController *partController();
-    /// @internal
-    Config* config();
-    /// @internal
-    UiController *uiControllerInternal();
-
-    void cleanup();
+    /** @copydoc ILanguageController::activeLanguage()*/
+    virtual QList<ILanguage*> activeLanguages();
+    /** @copydoc ILanguageController::language()*/
+    virtual ILanguage *language(const QString &name);
 
 private:
-    Core(QObject *parent = 0);
-    static Core *m_self;
+    Q_PRIVATE_SLOT(d, void activePartChanged(KParts::Part*))
 
-    struct CorePrivate *d;
+    struct LanguageControllerPrivate *d;
 };
 
-}
+};
 
 #endif
 
-// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on;

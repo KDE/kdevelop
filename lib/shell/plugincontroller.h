@@ -27,7 +27,6 @@ Boston, MA 02110-1301, USA.
 #include "iplugincontroller.h"
 
 #include <QHash>
-#include <QList>
 
 #include <kurl.h>
 #include <kservice.h>
@@ -103,8 +102,12 @@ public:
      * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    IPlugin *pluginForExtension(const QString &extension );
-    IPlugin *pluginForExtension(const QString &extension, const QString& pluginname );
+    IPlugin *pluginForExtension(const QString &extension, const QString &pluginname = "");
+    IPlugin *pluginForExtension(const QString &extension, const QStringList &constraints);
+
+    QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints);
+
+    static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints);
 
     /**
      * Reimplement this function only if your shell supports plugin profiles.

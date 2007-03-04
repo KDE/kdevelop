@@ -10,6 +10,8 @@ set(kdevplatforminterfaces_LIB_SRCS
     iplugincontroller.cpp
     iprojectcontroller.cpp
     iproject.cpp
+    ilanguagecontroller.cpp
+    ilanguage.cpp
 )
 
 kde4_automoc(${kdevplatforminterfaces_LIB_SRCS})
@@ -22,5 +24,6 @@ install(TARGETS kdevplatforminterfaces DESTINATION ${LIB_INSTALL_DIR} )
 
 install(FILES
     kdevelopplugin.desktop
+    kdeveloplanguagesupport.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR}
 )

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
-Copyright     2006 Matt Rogers <mattr@kde.org
+Copyright (C) 2004, 2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2006 Matt Rogers <mattr@kde.org
 Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
 Based on code from Kopete
@@ -92,7 +92,7 @@ PluginController::PluginController(Core *core)
 PluginController::~PluginController()
 {
     if ( d->cleanupMode != PluginControllerPrivate::CleanupDone )
-        kWarning(9000) << k_funcinfo << "Destructing plugin controller without going through the shutdown process! Backtrace is: " 
+        kWarning(9000) << k_funcinfo << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
                        << endl << kBacktrace() << endl;
 
     // Quick cleanup of the remaining plugins, hope it helps
@@ -397,27 +397,46 @@ void PluginController::loadDependencies( KPluginInfo* info )
     }
 }
 
-IPlugin* PluginController::pluginForExtension( const QString& extension )
+IPlugin* PluginController::pluginForExtension( const QString& extension, const QString& pluginname)
 {
-    return pluginForExtension( extension, "" );
+    QStringList constraints;
+    if (!pluginname.isEmpty())
+        constraints << QString("[X-KDE-PluginInfo-Name]=='%1'").arg( pluginname );
+
+    return pluginForExtension(extension, constraints);
 }
 
-IPlugin* PluginController::pluginForExtension( const QString& extension, const QString& pluginname )
+IPlugin *PluginController::pluginForExtension(const QString &extension, const QStringList &constraints)
 {
-    QList<KPluginInfo*> infos;
-    if( pluginname.isEmpty() )
-        infos = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg( extension ) );
-    else
-        infos = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces] and [X-KDE-PluginInfo-Name]=='%2'").arg( extension ).arg( pluginname ) );
+    KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
+
     if( infos.isEmpty() )
         return 0;
     if( d->plugins.contains( infos.first() ) )
-    {
         return d->loadedPlugins[ infos.first() ];
-    }else
-    {
+    else
         return loadPluginInternal( infos.first()->pluginName() );
+}
+
+QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extension, const QStringList &constraints)
+{
+    KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
+    QList<IPlugin*> plugins;
+    foreach (KPluginInfo *info, infos)
+    {
+        if( d->plugins.contains( info ) )
+            plugins << d->loadedPlugins[ info ];
+        else
+            plugins << loadPluginInternal( info->pluginName() );
     }
+    return plugins;
+}
+
+KPluginInfo::List PluginController::queryExtensionPlugins(const QString &extension, const QStringList &constraints)
+{
+    QStringList c = constraints;
+    c << QString("'%1' in [X-KDevelop-Interfaces]").arg( extension );
+    return queryPlugins( c.join(" and ") );
 }
 
 QExtensionManager* PluginController::extensionManager()

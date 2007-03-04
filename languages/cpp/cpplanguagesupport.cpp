@@ -19,13 +19,14 @@
 * Free Software Foundation, Inc.,
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
+#include "cpplanguagesupport.h"
 
 #include "config.h"
-
+/*
 #ifdef HAVE_VALGRIND_H
 #include <valgrind/valgrind.h>
 #endif
-
+*/
 #include <QMutex>
 #include <QMutexLocker>
 #include <QApplication>
@@ -36,6 +37,7 @@
 #include <kgenericfactory.h>
 #include <kio/netaccess.h>
 
+/*
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
@@ -46,7 +48,6 @@
 #include <kdevbackgroundparser.h>
 #include <kdevpersistenthash.h>
 
-#include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
 
 #include "parser/codemodel.h"
@@ -65,17 +66,21 @@
 #include "codeproxy.h"
 #include "codedelegate.h"
 #include "cppcodecompletion.h"
-
+*/
 #include <kdebug.h>
+#include <QExtensionFactory>
 
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
 
+KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, CppLanguageSupport )
+
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
-        : KDevelop::LanguageSupport( KDevCppSupportFactory::componentData(), parent )
+        : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
+        KDevelop::ILanguageSupport()
 {
-    QString types =
+/*    QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
     m_mimetypes = types.split( "," );
 
@@ -104,16 +109,16 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
     // Initialise singletons, to prevent needing a mutex in their self() methods
     TypeRepository::self();
-    SymbolTable::self();
+    SymbolTable::self();*/
 }
 
 CppLanguageSupport::~CppLanguageSupport()
 {
     // Ensure all parse jobs have finished before this object goes away
-    lockAllParseMutexes();
-    unlockAllParseMutexes();
+/*    lockAllParseMutexes();
+    unlockAllParseMutexes();*/
 }
-
+/*
 KDevelop::CodeModel *CppLanguageSupport::codeModel( const KUrl &url ) const
 {
     if ( url.isValid() )
@@ -285,6 +290,17 @@ void CppLanguageSupport::documentLoaded(KDevelop::AST * ast, const KUrl & docume
     }
 
     unlockAllParseMutexes();
+}
+*/
+
+QString CppLanguageSupport::name() const
+{
+    return "C++";
+}
+
+QStringList CppLanguageSupport::extensions() const
+{
+    return QStringList() << "ILanguageSupport";
 }
 
 #include "cpplanguagesupport.moc"

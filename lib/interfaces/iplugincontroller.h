@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #define IPLUGINCONTROLLER_H
 
 #include <QObject>
+#include <QList>
 
 #include <kplugininfo.h>
 #include <kurl.h>
@@ -85,16 +86,6 @@ public:
      */
     virtual IPlugin* loadPlugin( const QString & pluginName ) = 0;
 
-    /**
-     * Queries for the plugin which supports given extension interface.
-     * All already loaded plugins will be queried and the first one to support the extension interface
-     * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
-     * required in .desktop file for that plugin.
-     * @param extension The extension interface
-     * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it, returns the first found plugin
-     */
-     virtual IPlugin *pluginForExtension(const QString &extension ) = 0;
-
      /**
      * Queries for the plugin which supports given extension interface.
      * All already loaded plugins will be queried and the first one to support the extension interface
@@ -104,7 +95,9 @@ public:
      * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginname ) = 0;
+    virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginname = "" ) = 0;
+
+    virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints) = 0;
 
     /**
      * Queries KDevelop services. Version is checked automatically

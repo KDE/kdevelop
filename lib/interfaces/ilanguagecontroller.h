@@ -16,62 +16,39 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef CORE_H
-#define CORE_H
+#ifndef ILANGUAGECONTROLLER_H
+#define ILANGUAGECONTROLLER_H
+
+#include <QList>
+#include <QObject>
 
 #include <kdevexport.h>
-#include "icore.h"
-
-namespace Sublime {
-class Area;
-}
 
 namespace KDevelop {
 
-class MainWindow;
-class Config;
-class PluginController;
-class ProjectController;
-class PartController;
-class UiController;
+class ILanguage;
 
-class KDEVPLATFORM_EXPORT Core: public ICore {
+class KDEVPLATFORM_EXPORT ILanguageController: public QObject {
 public:
-    static void initialize();
-    static Core *self();
+    ILanguageController(QObject *parent = 0);
 
-    virtual ~Core();
+    /**@return the currently active languages loaded for the currently active file.
+    The list is empty if the file's language is unsupported.*/
+    virtual QList<ILanguage*>activeLanguages() = 0;
+    /**@return the language for given @p name.*/
+    virtual ILanguage* language(const QString &name) = 0;
 
-    /** @copydoc ICore::uiController() */
-    virtual IUiController *uiController();
+    /**@return the aggregate code model for all loaded language supports.*/
+    //virtual CodeModel codeModel() = 0;
 
-    /** @copydoc ICore::pluginController() */
-    virtual IPluginController *pluginController();
+    /**@return the code model for currenly loaded file
+    (code model is empty if file is not loaded or not supported).*/
+    //virtual CodeModel activeCodeModel() = 0;
 
-    /** @copydoc ICore::projectController() */
-    virtual IProjectController *projectController();
-
-    /** @copydoc ICore::languageController() */
-    virtual ILanguageController *languageController();
-
-    /// @internal
-    PartController *partController();
-    /// @internal
-    Config* config();
-    /// @internal
-    UiController *uiControllerInternal();
-
-    void cleanup();
-
-private:
-    Core(QObject *parent = 0);
-    static Core *m_self;
-
-    struct CorePrivate *d;
 };
 
 }
 
 #endif
 
-// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on;

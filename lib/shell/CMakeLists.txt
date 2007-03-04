@@ -3,6 +3,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/lib/interfaces
     ${CMAKE_SOURCE_DIR}/lib/project
     ${CMAKE_SOURCE_DIR}/lib/project/interfaces
+    ${CMAKE_SOURCE_DIR}/lib/language
+    ${CMAKE_SOURCE_DIR}/lib/language/interfaces
 )
 
 set(kdevplatformshell_LIB_SRCS
@@ -17,6 +19,8 @@ set(kdevplatformshell_LIB_SRCS
     project.cpp
     partcontroller.cpp
     partdocument.cpp
+    languagecontroller.cpp
+    language.cpp
     # This will be changed once mattr has thought about configuration.
      ../kdevconfig.cpp
      ../kdevconfigskeleton.cpp

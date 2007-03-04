@@ -11,5 +11,5 @@ Name[x-test]=xxKDevelop Language Support Interfacexx
 [PropertyDef::X-KDevelop-Language]
 Type=QString
 
-
-
+[PropertyDef::X-KDevelop-SupportedMimeTypes]
+Type=QStringList

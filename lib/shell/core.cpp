@@ -34,6 +34,7 @@
 #include "plugincontroller.h"
 #include "projectcontroller.h"
 #include "partcontroller.h"
+#include "languagecontroller.h"
 
 namespace KDevelop {
 
@@ -50,8 +51,10 @@ struct CorePrivate {
         pluginController = new PluginController(m_core);
         partController = new PartController(m_core, uiController->defaultMainWindow());
         projectController = new ProjectController(m_core);
+        languageController = new LanguageController(m_core);
 
         uiController->initialize();
+        languageController->initialize();
 
         pluginController->loadPlugins( PluginController::Global );
 
@@ -64,6 +67,7 @@ struct CorePrivate {
     {
         delete config;
         delete projectController;
+        delete languageController;
         delete pluginController;
         delete uiController;
         delete partController;
@@ -72,6 +76,7 @@ struct CorePrivate {
     QPointer<PluginController> pluginController;
     QPointer<UiController> uiController;
     QPointer<ProjectController> projectController;
+    QPointer<LanguageController> languageController;
     QPointer<PartController> partController;
     QPointer<Config> config;
 
@@ -136,7 +141,11 @@ UiController *Core::uiControllerInternal()
     return d->uiController;
 }
 
+ILanguageController *Core::languageController()
+{
+    return d->languageController;
+}
+
 }
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
-

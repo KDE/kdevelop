@@ -16,62 +16,30 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef CORE_H
-#define CORE_H
-
-#include <kdevexport.h>
-#include "icore.h"
-
-namespace Sublime {
-class Area;
-}
+#include "ilanguage.h"
 
 namespace KDevelop {
 
-class MainWindow;
-class Config;
-class PluginController;
-class ProjectController;
-class PartController;
-class UiController;
-
-class KDEVPLATFORM_EXPORT Core: public ICore {
-public:
-    static void initialize();
-    static Core *self();
-
-    virtual ~Core();
-
-    /** @copydoc ICore::uiController() */
-    virtual IUiController *uiController();
-
-    /** @copydoc ICore::pluginController() */
-    virtual IPluginController *pluginController();
-
-    /** @copydoc ICore::projectController() */
-    virtual IProjectController *projectController();
-
-    /** @copydoc ICore::languageController() */
-    virtual ILanguageController *languageController();
-
-    /// @internal
-    PartController *partController();
-    /// @internal
-    Config* config();
-    /// @internal
-    UiController *uiControllerInternal();
-
-    void cleanup();
-
-private:
-    Core(QObject *parent = 0);
-    static Core *m_self;
-
-    struct CorePrivate *d;
+struct ILanguagePrivate {
+    QString name;
 };
+
+ILanguage::ILanguage(const QString &name, QObject *parent)
+{
+    d = new ILanguagePrivate();
+    d->name = name;
+}
+
+ILanguage::~ILanguage()
+{
+    delete d;
+}
+
+QString ILanguage::name() const
+{
+    return d->name;
+}
 
 }
 
-#endif
-
-// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+//kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on;
