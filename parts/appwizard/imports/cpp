@@ -1,4 +1,4 @@
 # KDE Config File
 [General]
-Comment=Generic C++ Application (Custom Makefiles)
+Comment=Generic C++ Application (Custom Buildsystem)
 Comment[fr]=Une application C++ générique (Makefiles personnalisés)
