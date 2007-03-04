@@ -45,7 +45,6 @@ public:
     bool isDirty();
     QStringList distFiles() const;
 
-protected:
     virtual void openProject( const QString &dirName, const QString &projectName );
     virtual void closeProject();
 
@@ -74,6 +73,7 @@ private slots:
     void slotRemoveFromProject();
     void slotAddToProjectRecursive();
     void slotRemoveFromProjectRecursive();
+    void slotChangeBlacklist();
     void slotChooseActiveDirectory();
     void slotBuild();
     void slotBuildActiveDir();
@@ -96,14 +96,18 @@ private:
     QStringList projectFilesInDir( const QString& dir );
     bool containsProjectFiles( const QString& url );
     bool isProjectFileType( const QString& absFile ) const;
+    bool isInBlacklist( const QString& ) const;
     void cleanFileList();
 
     QStringList filetypes() const;
+    QStringList blacklist() const;
+    void updateBlacklist( const QStringList& );
     void saveProject();
     void startMakeCommand( const QString &dir, const QString &target, bool withKdesu = false );
     void parseMakefile( const QString& file );
     QString makeEnvironment() const;
     void putEnvVarsInVarMap();
+    void switchBlacklistEntry(const QString& );
 
     QString m_projectDirectory;
     QString m_projectName;

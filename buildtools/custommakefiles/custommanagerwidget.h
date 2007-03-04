@@ -18,18 +18,20 @@
 #include <qdom.h>
 
 class CustomProjectPart;
+class KEditListBox;
 
 class CustomManagerWidget : public CustomManagerWidgetBase
 {
-        Q_OBJECT
+Q_OBJECT
 
-    public:
-        CustomManagerWidget( CustomProjectPart* part, QWidget* parent );
-        ~CustomManagerWidget();
-    public slots:
-        void accept();
-    private:
-        QDomDocument& m_dom;
+public:
+    CustomManagerWidget( CustomProjectPart* part, QWidget* parent );
+    ~CustomManagerWidget();
+public slots:
+    void accept();
+private:
+    QDomDocument& m_dom;
+    KEditListBox* m_blacklistBox;
 };
 
 #endif
