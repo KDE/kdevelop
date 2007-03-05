@@ -456,16 +456,32 @@ namespace QMake
 #line 192 "qmake.yy"
     {
             AssignmentAST *node = new AssignmentAST();
-            node->scopedID = (yysemantic_stack_[(4) - (1)].value);
-            node->op = (yysemantic_stack_[(4) - (2)].value);
-            node->values.append( (yysemantic_stack_[(4) - (3)].value) );
-            node->values.append( (yysemantic_stack_[(4) - (4)].value) );
+            node->scopedID = (yysemantic_stack_[(5) - (1)].value);
+            node->op = (yysemantic_stack_[(5) - (2)].value);
+            node->values = (yysemantic_stack_[(5) - (3)].values) ;
+            node->values.append( (yysemantic_stack_[(5) - (4)].value) );
+            node->values.append( (yysemantic_stack_[(5) - (5)].value) );
+            node->indent = (yysemantic_stack_[(5) - (3)].indent);
             (yyval.node) = node;
         ;}
     break;
 
   case 13:
-#line 201 "qmake.yy"
+#line 203 "qmake.yy"
+    {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = (yysemantic_stack_[(5) - (1)].value);
+            node->op = (yysemantic_stack_[(5) - (2)].value);
+            node->values = (yysemantic_stack_[(5) - (3)].values) ;
+            node->values.append( (yysemantic_stack_[(5) - (4)].value) );
+            node->values.append( (yysemantic_stack_[(5) - (5)].value) );
+            node->indent = (yysemantic_stack_[(5) - (3)].indent);
+            (yyval.node) = node;
+        ;}
+    break;
+
+  case 14:
+#line 214 "qmake.yy"
     {
             AssignmentAST *node = new AssignmentAST();
             node->scopedID = (yysemantic_stack_[(4) - (1)].value);
@@ -476,8 +492,20 @@ namespace QMake
         ;}
     break;
 
-  case 14:
-#line 210 "qmake.yy"
+  case 15:
+#line 223 "qmake.yy"
+    {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = (yysemantic_stack_[(4) - (1)].value);
+            node->op = (yysemantic_stack_[(4) - (2)].value);
+            node->values.append( (yysemantic_stack_[(4) - (3)].value) );
+            node->values.append( (yysemantic_stack_[(4) - (4)].value) );
+            (yyval.node) = node;
+        ;}
+    break;
+
+  case 16:
+#line 232 "qmake.yy"
     {
             AssignmentAST *node = new AssignmentAST();
             node->scopedID = (yysemantic_stack_[(5) - (1)].value);
@@ -490,24 +518,16 @@ namespace QMake
         ;}
     break;
 
-  case 15:
-#line 223 "qmake.yy"
-    {
-            (yyval.values).append( (yysemantic_stack_[(3) - (2)].value) );
-            (yyval.values).append( (yysemantic_stack_[(3) - (3)].value) );
-        ;}
-    break;
-
-  case 16:
-#line 228 "qmake.yy"
-    {
-            (yyval.values).append( (yysemantic_stack_[(3) - (2)].value) );
-            (yyval.values).append( (yysemantic_stack_[(3) - (3)].value) );
-        ;}
-    break;
-
   case 17:
-#line 233 "qmake.yy"
+#line 245 "qmake.yy"
+    {
+            (yyval.values).append( (yysemantic_stack_[(3) - (2)].value) );
+            (yyval.values).append( (yysemantic_stack_[(3) - (3)].value) );
+        ;}
+    break;
+
+  case 18:
+#line 250 "qmake.yy"
     {
             (yyval.values).append( (yysemantic_stack_[(5) - (2)].value) );
             (yyval.values).append( (yysemantic_stack_[(5) - (3)].value) );
@@ -518,16 +538,8 @@ namespace QMake
         ;}
     break;
 
-  case 18:
-#line 242 "qmake.yy"
-    {
-            (yyval.values).append( (yysemantic_stack_[(3) - (2)].value) );
-            (yyval.values).append( (yysemantic_stack_[(3) - (3)].value) );
-        ;}
-    break;
-
   case 19:
-#line 247 "qmake.yy"
+#line 259 "qmake.yy"
     {
             (yyval.values).append( (yysemantic_stack_[(5) - (2)].value) );
             (yyval.values).append( (yysemantic_stack_[(5) - (3)].value) );
@@ -539,24 +551,6 @@ namespace QMake
     break;
 
   case 20:
-#line 256 "qmake.yy"
-    {
-            (yyval.values) = QStringList();
-            (yyval.values).append( (yysemantic_stack_[(2) - (1)].value) );
-            (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) );
-        ;}
-    break;
-
-  case 21:
-#line 262 "qmake.yy"
-    {
-            (yyval.values) = QStringList();
-            (yyval.values).append( (yysemantic_stack_[(2) - (1)].value) );
-            (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) );
-        ;}
-    break;
-
-  case 22:
 #line 268 "qmake.yy"
     {
             (yyval.values) = QStringList();
@@ -565,18 +559,36 @@ namespace QMake
         ;}
     break;
 
+  case 21:
+#line 274 "qmake.yy"
+    {
+            (yyval.values) = QStringList();
+            (yyval.values).append( (yysemantic_stack_[(2) - (1)].value) );
+            (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) );
+        ;}
+    break;
+
+  case 22:
+#line 280 "qmake.yy"
+    {
+            (yyval.values) = QStringList();
+            (yyval.values).append( (yysemantic_stack_[(2) - (1)].value) );
+            (yyval.values).append( (yysemantic_stack_[(2) - (2)].value) );
+        ;}
+    break;
+
   case 23:
-#line 276 "qmake.yy"
+#line 288 "qmake.yy"
     { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 24:
-#line 277 "qmake.yy"
+#line 289 "qmake.yy"
     { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 25:
-#line 282 "qmake.yy"
+#line 294 "qmake.yy"
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
             (yyval.indent) = (yysemantic_stack_[(1) - (1)].value);
@@ -584,7 +596,7 @@ namespace QMake
     break;
 
   case 26:
-#line 287 "qmake.yy"
+#line 299 "qmake.yy"
     {
             (yyval.value) = QString();
             (yyval.indent) = QString();
@@ -592,42 +604,42 @@ namespace QMake
     break;
 
   case 27:
-#line 293 "qmake.yy"
-    {
-        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
-    ;}
-    break;
-
-  case 28:
-#line 297 "qmake.yy"
-    {
-        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
-    ;}
-    break;
-
-  case 29:
-#line 301 "qmake.yy"
-    {
-        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
-    ;}
-    break;
-
-  case 30:
 #line 305 "qmake.yy"
     {
         (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
     ;}
     break;
 
-  case 31:
+  case 28:
 #line 309 "qmake.yy"
     {
         (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
     ;}
     break;
 
+  case 29:
+#line 313 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
+    break;
+
+  case 30:
+#line 317 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
+    break;
+
+  case 31:
+#line 321 "qmake.yy"
+    {
+        (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
+    ;}
+    break;
+
   case 32:
-#line 315 "qmake.yy"
+#line 327 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
             projects.push(projectAST);
@@ -637,7 +649,7 @@ namespace QMake
     break;
 
   case 33:
-#line 322 "qmake.yy"
+#line 334 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -645,7 +657,7 @@ namespace QMake
     break;
 
   case 34:
-#line 329 "qmake.yy"
+#line 341 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -665,7 +677,7 @@ namespace QMake
     break;
 
   case 35:
-#line 347 "qmake.yy"
+#line 359 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -673,17 +685,17 @@ namespace QMake
     break;
 
   case 36:
-#line 353 "qmake.yy"
+#line 365 "qmake.yy"
     { (yyval.value) = (yysemantic_stack_[(1) - (1)].value); ;}
     break;
 
   case 37:
-#line 354 "qmake.yy"
+#line 366 "qmake.yy"
     { (yyval.value) = ""; ;}
     break;
 
   case 39:
-#line 359 "qmake.yy"
+#line 371 "qmake.yy"
     {
             projects.top()->addChildAST((yysemantic_stack_[(2) - (2)].node));
             (yysemantic_stack_[(2) - (2)].node)->setDepth(depth);
@@ -691,7 +703,7 @@ namespace QMake
     break;
 
   case 41:
-#line 367 "qmake.yy"
+#line 379 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -702,7 +714,7 @@ namespace QMake
     break;
 
   case 42:
-#line 375 "qmake.yy"
+#line 387 "qmake.yy"
     {
             (yyval.node) = projects.pop();
             depth--;
@@ -710,14 +722,14 @@ namespace QMake
     break;
 
   case 43:
-#line 380 "qmake.yy"
+#line 392 "qmake.yy"
     {
             (yyval.node) = new ProjectAST();
         ;}
     break;
 
   case 44:
-#line 386 "qmake.yy"
+#line 398 "qmake.yy"
     {
             CommentAST *node = new CommentAST();
             node->comment = (yysemantic_stack_[(1) - (1)].value);
@@ -727,7 +739,7 @@ namespace QMake
 
 
     /* Line 675 of lalr1.cc.  */
-#line 731 "qmake_yacc.cpp"
+#line 743 "qmake_yacc.cpp"
 	default: break;
       }
     YY_SYMBOL_PRINT ("-> $$ =", yyr1_[yyn], &yyval, &yyloc);
@@ -955,9 +967,9 @@ namespace QMake
          2,     0,     5,     1,     3,    32,    45,    44,     4,     6,
        7,     8,     9,    10,    27,    28,    29,    30,    31,    37,
       26,    40,    36,     0,    25,    26,     0,     0,     5,    33,
-      34,    25,     0,    12,    13,    21,    22,    24,    23,    20,
-      39,     0,    40,    15,    11,    14,    16,    18,    38,    43,
-       0,     0,     0,    35,    17,    19,    41,    40,     0,    42
+      34,    25,     0,    14,    15,    21,    22,    24,    23,    20,
+      39,     0,    40,    17,    11,    16,    12,    13,    38,    43,
+       0,     0,     0,    35,    18,    19,    41,    40,     0,    42
   };
 
   /* YYPGOTO[NTERM-NUM].  */
@@ -1031,7 +1043,7 @@ namespace QMake
   Parser::yyr1_[] =
   {
          0,    23,    25,    24,    26,    26,    27,    27,    27,    27,
-      27,    28,    28,    28,    28,    29,    29,    29,    29,    29,
+      27,    28,    28,    28,    28,    28,    28,    29,    29,    29,
       29,    29,    29,    30,    30,    31,    31,    32,    32,    32,
       32,    32,    34,    33,    36,    35,    37,    37,    38,    38,
       38,    40,    39,    39,    41,    42
@@ -1042,7 +1054,7 @@ namespace QMake
   Parser::yyr2_[] =
   {
          0,     2,     0,     2,     2,     0,     1,     1,     1,     1,
-       1,     5,     4,     4,     5,     3,     3,     5,     3,     5,
+       1,     5,     5,     5,     4,     4,     5,     3,     5,     5,
        2,     2,     2,     1,     1,     1,     0,     1,     1,     1,
        1,     1,     0,     3,     0,     7,     1,     0,     3,     2,
        0,     0,     5,     0,     1,     1
@@ -1072,17 +1084,18 @@ namespace QMake
   {
         24,     0,    -1,    -1,    25,    26,    -1,    26,    27,    -1,
       -1,    28,    -1,    33,    -1,    35,    -1,    41,    -1,    42,
-      -1,     3,    32,    29,    31,    12,    -1,     3,    32,    31,
-      12,    -1,     3,    32,    31,    13,    -1,     3,    32,    29,
-      31,    13,    -1,    29,    21,    30,    -1,    29,    31,    14,
-      -1,    29,    31,    14,    31,    30,    -1,    29,    31,    15,
-      -1,    29,    31,    15,    31,    30,    -1,    31,    30,    -1,
-      31,    14,    -1,    31,    15,    -1,    20,    -1,    19,    -1,
-      21,    -1,    -1,     4,    -1,     5,    -1,     6,    -1,     7,
-      -1,     8,    -1,    -1,     3,    34,    38,    -1,    -1,     3,
-       9,    37,    10,    36,    38,    39,    -1,    18,    -1,    -1,
-      17,    26,    16,    -1,    11,    27,    -1,    -1,    -1,    22,
-      17,    40,    38,    16,    -1,    -1,    13,    -1,    12,    -1
+      -1,     3,    32,    29,    31,    12,    -1,     3,    32,    29,
+      31,    14,    -1,     3,    32,    29,    31,    15,    -1,     3,
+      32,    31,    12,    -1,     3,    32,    31,    13,    -1,     3,
+      32,    29,    31,    13,    -1,    29,    21,    30,    -1,    29,
+      31,    14,    31,    30,    -1,    29,    31,    15,    31,    30,
+      -1,    31,    30,    -1,    31,    14,    -1,    31,    15,    -1,
+      20,    -1,    19,    -1,    21,    -1,    -1,     4,    -1,     5,
+      -1,     6,    -1,     7,    -1,     8,    -1,    -1,     3,    34,
+      38,    -1,    -1,     3,     9,    37,    10,    36,    38,    39,
+      -1,    18,    -1,    -1,    17,    26,    16,    -1,    11,    27,
+      -1,    -1,    -1,    22,    17,    40,    38,    16,    -1,    -1,
+      13,    -1,    12,    -1
   };
 
   /* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
@@ -1091,10 +1104,10 @@ namespace QMake
   Parser::yyprhs_[] =
   {
          0,     0,     3,     4,     7,    10,    11,    13,    15,    17,
-      19,    21,    27,    32,    37,    43,    47,    51,    57,    61,
-      67,    70,    73,    76,    78,    80,    82,    83,    85,    87,
-      89,    91,    93,    94,    98,    99,   107,   109,   110,   114,
-     117,   118,   119,   125,   126,   128
+      19,    21,    27,    33,    39,    44,    49,    55,    59,    65,
+      71,    74,    77,    80,    82,    84,    86,    87,    89,    91,
+      93,    95,    97,    98,   102,   103,   111,   113,   114,   118,
+     121,   122,   123,   129,   130,   132
   };
 
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
@@ -1102,10 +1115,10 @@ namespace QMake
   Parser::yyrline_[] =
   {
          0,   143,   143,   143,   150,   155,   158,   162,   166,   170,
-     174,   180,   191,   200,   209,   222,   227,   232,   241,   246,
-     255,   261,   267,   276,   277,   281,   287,   292,   296,   300,
-     304,   308,   315,   314,   329,   328,   353,   354,   357,   358,
-     363,   367,   366,   380,   385,   393
+     174,   180,   191,   202,   213,   222,   231,   244,   249,   258,
+     267,   273,   279,   288,   289,   293,   299,   304,   308,   312,
+     316,   320,   327,   326,   341,   340,   365,   366,   369,   370,
+     375,   379,   378,   392,   397,   405
   };
 
   // Print the state stack on the debug stream.
@@ -1194,7 +1207,7 @@ namespace QMake
 
 } // namespace QMake
 
-#line 396 "qmake.yy"
+#line 408 "qmake.yy"
 
 
 

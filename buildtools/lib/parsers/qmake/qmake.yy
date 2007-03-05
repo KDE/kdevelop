@@ -188,6 +188,28 @@ variable_assignment : ID_SIMPLE operator multiline_values listws NEWLINE
             node->indent = $<indent>3;
             $<node>$ = node;
         }
+    | ID_SIMPLE operator multiline_values listws CONT
+        {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = $<value>1;
+            node->op = $<value>2;
+            node->values = $<values>3 ;
+            node->values.append( $<value>4 );
+            node->values.append( $<value>5 );
+            node->indent = $<indent>3;
+            $<node>$ = node;
+        }
+    | ID_SIMPLE operator multiline_values listws COMMENT_CONT
+        {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = $<value>1;
+            node->op = $<value>2;
+            node->values = $<values>3 ;
+            node->values.append( $<value>4 );
+            node->values.append( $<value>5 );
+            node->indent = $<indent>3;
+            $<node>$ = node;
+        }
     | ID_SIMPLE operator listws NEWLINE
         {
             AssignmentAST *node = new AssignmentAST();
@@ -224,11 +246,6 @@ multiline_values : multiline_values LIST_WS variable_value
             $<values>$.append( $<value>2 );
             $<values>$.append( $<value>3 );
         }
-    | multiline_values listws CONT
-        {
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-        }
     | multiline_values listws CONT listws variable_value
         {
             $<values>$.append( $<value>2 );
@@ -237,11 +254,6 @@ multiline_values : multiline_values LIST_WS variable_value
             $<values>$.append( $<value>5 );
             if( $<indent>4 != "" && $<indent>$ == "" )
                 $<indent>$ = $<indent>4;
-        }
-    | multiline_values listws COMMENT_CONT
-        {
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
         }
     | multiline_values listws COMMENT_CONT listws variable_value
         {
