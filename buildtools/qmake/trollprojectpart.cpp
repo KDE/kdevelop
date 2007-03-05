@@ -255,7 +255,7 @@ QString TrollProjectPart::makeEnvironment()
 
     if( !hasQtDir && !isQt4Project() && !DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "").isEmpty() )
     {
-         environstr += QString( "QTDIR=" ) + EnvVarTools::quote( DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "") ) + QString( " " );
+         environstr += QString( "QTDIR=" ) + EnvVarTools::quote( DomUtil::readEntry(*projectDom(), "/kdevcppsupport/qt/root", "") ) + QString( " PATH=$QTDIR/bin:$PATH " );
     }
 
     return environstr;
