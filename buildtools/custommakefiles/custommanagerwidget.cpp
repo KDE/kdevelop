@@ -29,7 +29,7 @@ CustomManagerWidget::CustomManagerWidget( CustomProjectPart* part, QWidget* pare
 {
     m_filetypes->insertStringList( DomUtil::readListEntry( m_dom, "kdevcustomproject/filetypes", "filetype" ) );
     KURLRequester* urlselector = new KURLRequester( );
-    urlselector->setMode( KFile::Files | KFile::ExistingOnly | KFile::LocalOnly );
+    urlselector->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
     urlselector->setURL( QString::null );
     urlselector->completionObject() ->setDir( part->projectDirectory() );
     urlselector->fileDialog() ->setURL( KURL( part->projectDirectory() ) );

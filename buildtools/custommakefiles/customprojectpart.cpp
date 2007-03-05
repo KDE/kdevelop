@@ -55,6 +55,8 @@
 #include "envvartools.h"
 #include "urlutil.h"
 
+#include "addfilesdialog.h"
+
 #include <kdevplugininfo.h>
 
 typedef KDevGenericFactory<CustomProjectPart> CustomProjectFactory;
@@ -75,6 +77,10 @@ CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const Q
     action = new KAction( i18n( "Re-Populate Project" ), 0, this, SLOT( populateProject() ), actionCollection(), "repopulate_project" );
     action->setToolTip( i18n( "Re-Populate Project" ) );
     action->setWhatsThis( i18n( "<b>Re-Populate Project</b><p>Re-Populate's the project, searches through the project directory and adds all files that match one of the wildcards set in the custom manager options to the project filelist." ) );
+
+    action = new KAction( i18n( "Add New Files To Project" ), 0, this, SLOT( addNewFilesToProject() ), actionCollection(), "addnewfiles_project" );
+    action->setToolTip( i18n( "Add New Files To Project" ) );
+    action->setWhatsThis( i18n( "<b>Add New Files To Project</b><p>Adds files created outside of kdevelop to the project." ) );
 
     action = new KAction( i18n( "&Build Project" ), "make_kdevelop", Key_F8,
                           this, SLOT( slotBuild() ),
@@ -256,7 +262,7 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
     for ( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
     {
         QString canPath( URLUtil::canonicalPath(( *it ).path() ) );
-        QString relPath = URLUtil::extractPathNameRelative( URLUtil::canonicalPath( project()->projectDirectory() ), canPath );
+        QString relPath = relativeToProject( canPath );
         if( isInBlacklist( relPath ) )
             continue;
         if ((( *it ).isLocalFile() && isProjectFileType(( *it ).fileName() ) ) )
@@ -365,8 +371,14 @@ void CustomProjectPart::slotChooseActiveDirectory()
 
 void CustomProjectPart::openProject( const QString &dirName, const QString &projectName )
 {
+    dirwatch->blockSignals( true );
+    dirwatch->stopScan();
+
     m_projectDirectory = dirName;
     m_projectName = projectName;
+
+
+    m_autoAddFiles.clear();
 
     QDomDocument &dom = *projectDom();
     // Set the default directory radio to "executable"
@@ -398,6 +410,7 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
             projectName.lower() + ".kdevelop.filelist",
             projectName + ".kdevelop.filelist" );
     }
+
     QFile f( m_filelistDir + "/" + projectName + ".kdevelop.filelist" );
     if ( f.open( IO_ReadOnly ) )
     {
@@ -407,24 +420,8 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
             QString s = stream.readLine();
             if ( !s.startsWith( "#" ) && QFileInfo( projectDirectory() + "/" + s ).exists() && m_sourceFiles.find(s) == m_sourceFiles.end() )
             {
-
                 if( isInBlacklist(s) )
                     continue;
-                QStringList paths = QStringList::split("/", s);
-                paths.pop_back();
-                QString path;
-                for( QStringList::const_iterator it = paths.begin(); it != paths.end(); ++it)
-                {
-                    path += *it;
-                    if( m_sourceFiles.find( path ) == m_sourceFiles.end() )
-                    {
-                        dirwatch->addDir( projectDirectory() + "/"+ path );
-                        m_sourceFiles << path;
-                    }
-                    path += "/";
-                }
-                if( QFileInfo( projectDirectory() + "/" +s ).isDir() )
-                    dirwatch->addDir( projectDirectory() + "/"+ s );
                 m_sourceFiles << s;
             }
         }
@@ -450,8 +447,22 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
         el.setTagName( "default" );
         envs.appendChild( el );
     }
-
+    addDirWatches( dirName );
     KDevProject::openProject( dirName, projectName );
+    dirwatch->startScan();
+    dirwatch->blockSignals( false );
+}
+
+void CustomProjectPart::addDirWatches( const QString& absPath )
+{
+
+    dirwatch->addDir( absPath );
+    QStringList entries = QDir( absPath ).entryList( QDir::Dirs );
+    for( QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it )
+    {
+        if( *it != "." && *it != ".." )
+            addDirWatches( absPath + "/" + *it );
+    }
 }
 
 void CustomProjectPart::cleanFileList()
@@ -492,10 +503,10 @@ void CustomProjectPart::populateProject()
             {
                 QString fileName = it.current()->fileName();
                 QString path = it.current()->absFilePath();
-                if ( fileName == "." || fileName == ".." || isInBlacklist( fileName ) )
-                {
+                if ( fileName == "." || fileName == ".." )
                     continue;
-                }
+                if( isInBlacklist( fileName ) )
+                    continue;
                 if ( it.current()->isDir() && m_sourceFiles.find( path.mid( prefixlen ) ) == m_sourceFiles.end())
                 {
                     kdDebug( 9025 ) << "Pushing: " << path << endl;
@@ -539,6 +550,7 @@ void CustomProjectPart::saveProject()
     for ( it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it )
         stream << ( *it ) << endl;
     f.close();
+    m_autoAddFiles.clear();
 }
 
 
@@ -665,7 +677,9 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
     QStringList addedFiles;
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
-        if ( *it == "." || *it == ".." || isInBlacklist( *it ) )
+        if ( *it == "." || *it == ".." )
+            continue;
+        if ( isInBlacklist( *it ) )
             continue;
         kdDebug( 9025 ) << "Add file: " << *it << endl;
         QString relpath;
@@ -674,7 +688,7 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
             relpath = *it;
         }else
         {
-            relpath = URLUtil::relativePathToFile( projectDirectory(), *it );
+            relpath = relativeToProject( *it );
         }
 
         if ( QFileInfo( projectDirectory() + "/" + relpath ).isDir() && ( m_recursive || m_first_recursive ) )
@@ -683,11 +697,10 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
             QStringList subentries = QDir( projectDirectory() + "/" + relpath ).entryList();
             for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                 if ( *subit != "." && *subit != ".." )
-                    *subit = QDir::cleanDirPath(( relpath ) + "/" + ( *subit ) );
-            dirwatch->addDir( projectDirectory()+"/"+relpath );
+                    *subit = relpath + "/" + ( *subit );
             addFiles( subentries );
-            addedFiles << QDir::cleanDirPath( relpath );
-            m_sourceFiles.append( QDir::cleanDirPath( relpath ) );
+            addedFiles << relpath;
+            m_sourceFiles.append( relpath );
             m_first_recursive = true;
         }
         else if ( isProjectFileType( QFileInfo( relpath ).fileName() ) && m_sourceFiles.find( relpath ) == m_sourceFiles.end() )
@@ -700,7 +713,6 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
                 path += *it;
                 if( m_sourceFiles.find( path ) == m_sourceFiles.end() )
                 {
-                    dirwatch->addDir( projectDirectory() + "/" + path );
                     addedFiles << path;
                     m_sourceFiles << path;
                 }
@@ -745,7 +757,7 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
         if ( QDir::isRelativePath( *it ) )
             relpath = *it;
         else
-            relpath = URLUtil::relativePathToFile( projectDirectory(), *it );
+            relpath = relativeToProject( *it );
 
         if ( QFileInfo( projectDirectory() + "/" + relpath ).isDir() && ( m_recursive || m_first_recursive ) )
         {
@@ -753,12 +765,12 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
             QStringList subentries = QDir( projectDirectory() + "/" + relpath ).entryList();
             for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                 if ( *subit != "." && *subit != ".." )
-                    *subit = QDir::cleanDirPath(( relpath ) + "/" + ( *subit ) );
+                    *subit = relpath + "/" + ( *subit );
             removeFiles( subentries );
             if ( !containsProjectFiles( relpath ) )
             {
-                removedFiles << QDir::cleanDirPath( relpath );
-                m_sourceFiles.remove( QDir::cleanDirPath( relpath ) );
+                removedFiles << relpath;
+                m_sourceFiles.remove( relpath );
             }
             m_first_recursive = true;
         }
@@ -1353,7 +1365,9 @@ bool CustomProjectPart::containsNonProjectFiles( const QString& dir )
     QStringList subentries = QDir( dir ).entryList();
     for ( QStringList::const_iterator it = subentries.begin(); it != subentries.end(); ++it )
     {
-        if ( *it == "." || *it == ".."  || isInBlacklist( *it ) )
+        if ( *it == "." || *it == ".."  )
+            continue;
+        if( isInBlacklist( *it ) )
             continue;
         if ( QFileInfo( dir + "/" + *it ).isDir() && !isInBlacklist( *it ) )
         {
@@ -1382,8 +1396,11 @@ bool CustomProjectPart::containsProjectFiles( const QString& dir )
     QStringList subentries = QDir( dir ).entryList();
     for ( QStringList::const_iterator it = subentries.begin(); it != subentries.end(); ++it )
     {
-        if ( *it == "." || *it == ".." || isInBlacklist( *it ) )
+        if ( *it == "." || *it == ".." )
             continue;
+        if( isInBlacklist( *it ) )
+            continue;
+
         if ( QFileInfo( dir + "/" + *it ).isDir() && !isInBlacklist( *it ) )
         {
             if ( containsProjectFiles( dir + "/" + *it ) )
@@ -1428,7 +1445,11 @@ bool CustomProjectPart::isProjectFileType( const QString& filename ) const
     for( QStringList::const_iterator it = types.begin(); it != types.end(); ++it )
     {
         re.setPattern( *it );
-        if( re.search( filename ) != -1 )
+        if ( ( (*it).find("*") != -1 || (*it).find("?") != -1 ) && re.search( filename ) != -1 )
+            return true;
+        else if( filename.find( "/" ) != -1 && filename.find( *it ) != -1 )
+            return true;
+        else if( filename.find( "/" ) == -1 && filename == *it)
             return true;
     }
     return false;
@@ -1437,7 +1458,11 @@ bool CustomProjectPart::isProjectFileType( const QString& filename ) const
 void CustomProjectPart::slotDirDirty( const QString& dir )
 {
     QStringList remove;
-    QString reldir = URLUtil::relativePathToFile( projectDirectory(), dir);
+    QString reldir = relativeToProject( dir );
+    if( !reldir.isEmpty() )
+        reldir += "/";
+    kdDebug(9025) << "dir: " << dir <<" reldir:" << reldir << endl;
+
     QStringList blacklist = this->blacklist();
     for( QStringList::const_iterator it = m_sourceFiles.begin(); it !=
             m_sourceFiles.end(); ++it)
@@ -1458,6 +1483,20 @@ void CustomProjectPart::slotDirDirty( const QString& dir )
     }
     updateBlacklist( blacklist );
     removeFiles(remove);
+
+    QStringList files = QDir(dir).entryList();
+    for( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
+    {
+        if( *it == "." || *it == ".." )
+            continue;
+
+        kdDebug(9025) << "Checking " << reldir+*it << " against sources list: " << m_sourceFiles << endl;
+        if( m_sourceFiles.find( reldir+*it ) == m_sourceFiles.end() && isProjectFileType( *it ) && !isInBlacklist( reldir+*it ) )
+        {
+            kdDebug(9025) << "Adding " << reldir+*it << " to autolist" << endl;
+            m_autoAddFiles.append( reldir+*it );
+        }
+    }
 }
 
 void CustomProjectPart::switchBlacklistEntry( const QString& path)
@@ -1476,11 +1515,19 @@ void CustomProjectPart::switchBlacklistEntry( const QString& path)
     updateBlacklist( blacklist );
 }
 
+QString CustomProjectPart::relativeToProject( const QString& abspath ) const
+{
+    QString path = abspath.mid( projectDirectory().length()+1 );
+    if( path.endsWith("/") )
+        path = path.mid( 0, path.length()-1 );
+    return path;
+}
+
 bool CustomProjectPart::isInBlacklist( const QString& path ) const
 {
     QString relpath = path;
     if( !QFileInfo( relpath ).isRelative() )
-        relpath = URLUtil::relativePathToFile( projectDirectory(), path );
+        relpath = relativeToProject( path );
     kdDebug(9025) << "Checking " << relpath << " if it is in blacklist" << endl;
     QStringList blacklist = this->blacklist();
     if( blacklist.find( relpath ) != blacklist.end() )
@@ -1505,6 +1552,31 @@ void CustomProjectPart::updateBlacklist( const QStringList& l )
 QStringList CustomProjectPart::blacklist() const
 {
     return DomUtil::readListEntry( *projectDom(), "kdevcustomproject/blacklist", "path");
+}
+
+void CustomProjectPart::addNewFilesToProject()
+{
+    QStringList addfiles;
+    for( QStringList::const_iterator it = m_autoAddFiles.begin(); it != m_autoAddFiles.end(); ++it )
+    {
+        if( m_sourceFiles.find( *it ) == m_sourceFiles.end() && isProjectFileType( *it ) && !isInBlacklist( *it ) )
+        {
+            addfiles << *it;
+        }
+    }
+
+    kdDebug(9025) << "Took " << addfiles <<  " from " << m_autoAddFiles << endl;
+
+    AddFilesDialog *dlg = new AddFilesDialog( addfiles, this->mainWindow()->main() );
+    if( dlg->exec() == KDialog::Accepted )
+    {
+        kdDebug(9025) << "Dialog was accepted" << endl;
+        m_autoAddFiles.clear();
+        QStringList blacklist = this->blacklist();
+        blacklist += dlg->excludedPaths();
+        updateBlacklist( blacklist );
+        addFiles( dlg->includedPaths() );
+    }
 }
 
 #include "customprojectpart.moc"

@@ -1,8 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCustomProject" version="5">
+<kpartgui name="KDevCustomProject" version="6">
 <MenuBar>
   <Menu name="project" >
     <Action name="repopulate_project" />
+	<Action name="addnewfiles_project" />
   </Menu>
   <Menu name="build" >
     <Action name="build_build" />

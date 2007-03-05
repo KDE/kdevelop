@@ -1,0 +1,53 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>AddFilesDialogBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>AddFilesDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>532</width>
+            <height>324</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>AddFilesDialogBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Files to add to the Project:</string>
+            </property>
+        </widget>
+        <widget class="KListView">
+            <property name="name">
+                <cstring>fileView</cstring>
+            </property>
+            <property name="rootIsDecorated">
+                <bool>true</bool>
+            </property>
+            <property name="itemsMovable">
+                <bool>false</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Select the files to add to the project</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Select the files and directories that should be added to the list of project files. All other files and directories will be put into the blacklist.</string>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
+</UI>

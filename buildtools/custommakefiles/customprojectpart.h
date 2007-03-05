@@ -73,6 +73,7 @@ private slots:
     void slotRemoveFromProject();
     void slotAddToProjectRecursive();
     void slotRemoveFromProjectRecursive();
+    void addNewFilesToProject();
     void slotChangeBlacklist();
     void slotChooseActiveDirectory();
     void slotBuild();
@@ -98,6 +99,8 @@ private:
     bool isProjectFileType( const QString& absFile ) const;
     bool isInBlacklist( const QString& ) const;
     void cleanFileList();
+    QString relativeToProject( const QString& ) const;
+    void addDirWatches( const QString& );
 
     QStringList filetypes() const;
     QStringList blacklist() const;
@@ -113,6 +116,7 @@ private:
     QString m_projectName;
     QString m_filelistDir;
     QStringList m_sourceFiles;
+    QStringList m_autoAddFiles;
     QPopupMenu *m_targetMenu;
     QPopupMenu *m_targetObjectFilesMenu;
     QPopupMenu *m_targetOtherFilesMenu;

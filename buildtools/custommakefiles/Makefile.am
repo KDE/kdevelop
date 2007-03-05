@@ -10,10 +10,10 @@ libkdevcustomproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevcustomproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/buildtools/lib/widgets/libkdevbuildtoolswidgets.la $(top_builddir)/buildtools/lib/base/libkdevbuildbase.la
 
-libkdevcustomproject_la_SOURCES = custombuildoptionswidget.cpp \
-	custombuildoptionswidgetbase.ui custommakeconfigwidget.cpp custommakeconfigwidgetbase.ui \
-	custommanagerwidget.cpp custommanagerwidgetbase.ui customotherconfigwidget.cpp \
-	customotherconfigwidgetbase.ui customprojectpart.cpp
+libkdevcustomproject_la_SOURCES = addfilesdialog.cpp addfilesdialogbase.ui \
+	custombuildoptionswidget.cpp custombuildoptionswidgetbase.ui custommakeconfigwidget.cpp \
+	custommakeconfigwidgetbase.ui custommanagerwidget.cpp custommanagerwidgetbase.ui \
+	customotherconfigwidget.cpp customotherconfigwidgetbase.ui customprojectpart.cpp
 
 METASOURCES = AUTO
 
@@ -22,4 +22,5 @@ service_DATA = kdevcustomproject.desktop
 
 rcdir = $(kde_datadir)/kdevcustomproject
 rc_DATA = kdevcustomproject.rc
-noinst_HEADERS = custommanagerwidget.h customotherconfigwidget.h
+noinst_HEADERS = addfilesdialog.h custommanagerwidget.h \
+	customotherconfigwidget.h
