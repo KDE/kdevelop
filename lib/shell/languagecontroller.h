@@ -47,7 +47,7 @@ private:
     struct LanguageControllerPrivate *d;
 };
 
-};
+}
 
 #endif
 
