@@ -292,6 +292,9 @@ class Driver::ParseHelper {
       
       if( !lexedFileP && m_previousParsedFile ) //only add the new cache-instance if a fitting isn't already stored, and if this file was included by another one.
         m_driver->m_lexerCache.addLexedFile( m_driver->m_currentLexerCache );
+
+        //Copy the recursive include-files into the ParsedFile
+        m_driver->m_currentParsedFile->addIncludeFiles( m_driver->m_currentLexerCache->includeFiles() );
       }
 
   
@@ -398,7 +401,7 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
   CachedLexedFilePointer lexedFileP = m_lexerCache.lexedFile(  HashedString( file ) );
   if( lexedFileP ) {
     CachedLexedFile& lexedFile( *lexedFileP );
-    m_currentLexerCache->merge( lexedFile );
+    m_currentLexerCache->merge( lexedFile ); //The ParseHelper will will copy the include-files into the result later
     for( MacroSet::Macros::const_iterator it = lexedFile.definedMacros().macros().begin(); it != lexedFile.definedMacros().macros().end(); ++it ) {
       addMacro( (*it) );
     }
@@ -503,6 +506,7 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
             }
     }
 }
+  
 }
 
 void Driver::setupLexer( Lexer * lexer ) {
@@ -842,6 +846,10 @@ QString ParsedFile::fileName() const {
 
 QDateTime ParsedFile::timeStamp() const {
     return m_timeStamp;
+}
+
+void ParsedFile::addIncludeFiles( const HashedStringSet& includeFiles ) {
+    m_includeFiles += includeFiles;
 }
 
 void ParsedFile::addIncludeFile( const QString& includePath, const ParsedFilePointer& parsed, bool localInclude ) {

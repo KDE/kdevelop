@@ -84,6 +84,8 @@ class ParsedFile : public AbstractParseResult {
     
     const HashedStringSet& includeFiles() const;
 
+    void addIncludeFiles( const HashedStringSet& includeFiles );
+    
     void addIncludeFile( const QString& includePath, const ParsedFilePointer& parsed, bool localInclude );
     
     /**
