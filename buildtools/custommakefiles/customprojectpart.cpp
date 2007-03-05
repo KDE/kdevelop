@@ -377,7 +377,6 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
     m_projectDirectory = dirName;
     m_projectName = projectName;
 
-
     m_autoAddFiles.clear();
 
     QDomDocument &dom = *projectDom();
@@ -535,6 +534,7 @@ void CustomProjectPart::populateProject()
 void CustomProjectPart::closeProject()
 {
     saveProject();
+    m_autoAddFiles.clear();
 }
 
 void CustomProjectPart::saveProject()
@@ -550,7 +550,6 @@ void CustomProjectPart::saveProject()
     for ( it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it )
         stream << ( *it ) << endl;
     f.close();
-    m_autoAddFiles.clear();
 }
 
 
@@ -1283,8 +1282,6 @@ void CustomProjectPart::slotCommandFinished( const QString& command )
 
 void CustomProjectPart::slotCommandFailed( const QString& /*command*/ )
 {
-    kdDebug( 9025 ) << k_funcinfo << endl;
-
     m_lastCompilationFailed = true;
     m_executeAfterBuild = false;
 }
