@@ -42,7 +42,7 @@ CustomMakeConfigWidget::CustomMakeConfigWidget(CustomProjectPart* part, const QS
     defaultTarget_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/defaulttarget"));
     makeoptions_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/makeoptions"));
 
-    envs_combo->setValidator(new QRegExpValidator(QRegExp("^\\D.*"), this));
+    envs_combo->setValidator(new QRegExpValidator(QRegExp("^\\D[^\\s]*"), this));
     m_allEnvironments = m_part->allMakeEnvironments();
     m_currentEnvironment = m_part->currentMakeEnvironment();
     env_var_group->setColumnLayout( 1, Qt::Vertical );
