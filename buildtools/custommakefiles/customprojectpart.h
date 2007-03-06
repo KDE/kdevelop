@@ -101,6 +101,7 @@ private:
     void cleanFileList();
     QString relativeToProject( const QString& ) const;
     void addDirWatches( const QString& );
+    void findNewFiles( const QString& dir, QStringList& list) const;
 
     QStringList filetypes() const;
     QStringList blacklist() const;
