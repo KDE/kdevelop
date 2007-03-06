@@ -17,7 +17,7 @@
 #include <qheader.h>
 #include <qstringlist.h>
 #include <klocale.h>
-
+#include <kdebug.h>
 #include "addfilesdialogbase.h"
 
 AddFilesDialog::AddFilesDialog( QStringList paths, QWidget* parent, const char* name )
@@ -37,15 +37,40 @@ AddFilesDialog::AddFilesDialog( QStringList paths, QWidget* parent, const char* 
 AddFilesDialog::~AddFilesDialog()
 {}
 
-/*$SPECIALIZATION$*/
-void AddFilesDialog::reject()
+void AddFilesDialog::slotCancel()
 {
-    KDialogBase::reject();
+    excludePaths.clear();
+    includePaths.clear();
+    KDialogBase::slotCancel();
 }
 
-void AddFilesDialog::accept()
+void AddFilesDialog::checkItem( QCheckListItem* item, const QString& curpath )
 {
-    KDialogBase::accept();
+    if( !item )
+        return;
+
+    QString path = curpath + item->text();
+    if( item->state() != QCheckListItem::Off )
+        includePaths << path;
+    else
+        excludePaths << path;
+    if( item->firstChild() )
+    {
+        checkItem( static_cast<QCheckListItem*>(item->firstChild()), path+"/" );
+    }
+    if( item->nextSibling() )
+    {
+        checkItem( static_cast<QCheckListItem*>(item->nextSibling()), curpath );
+    }
+}
+
+void AddFilesDialog::slotOk()
+{
+    QCheckListItem* item = static_cast<QCheckListItem*> (m_widget->fileView->firstChild());
+    checkItem( item, "" );
+    kdDebug(9025) << "Inc List:" << includePaths << endl;
+    kdDebug(9025) << "Exc List:" << excludePaths << endl;
+    KDialogBase::slotOk();
 }
 
 void AddFilesDialog::addPath( QCheckListItem* item, const QString& path )
@@ -93,12 +118,12 @@ QCheckListItem* AddFilesDialog::createItem( QCheckListItem* parent, const QStrin
 
 QStringList AddFilesDialog::excludedPaths() const
 {
-    return QStringList();
+    return excludePaths;
 }
 
 QStringList AddFilesDialog::includedPaths() const
 {
-    return QStringList();
+    return includePaths;
 }
 
 #include "addfilesdialog.moc"

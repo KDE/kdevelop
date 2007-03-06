@@ -65,7 +65,8 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( data ) )
 
 CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const QStringList & )
         : KDevBuildTool( &data, parent, name ? name : "CustomProjectPart" )
-        , m_lastCompilationFailed( false ), dirwatch(new KDirWatch(this))
+        , m_lastCompilationFailed( false ), m_recursive(false), m_first_recursive(false)
+        , dirwatch(new KDirWatch(this))
 {
     setInstance( CustomProjectFactory::instance() );
     setXMLFile( "kdevcustomproject.rc" );
@@ -674,6 +675,7 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
 {
     QStringList::ConstIterator it;
     QStringList addedFiles;
+    kdDebug(9025) << "Adding files: " << fileList << endl;
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
         if ( *it == "." || *it == ".." )
@@ -689,6 +691,9 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
         {
             relpath = relativeToProject( *it );
         }
+
+        if( !QFileInfo( projectDirectory() + "/" + relpath ).exists() )
+            continue;
 
         if ( QFileInfo( projectDirectory() + "/" + relpath ).isDir() && ( m_recursive || m_first_recursive ) )
         {
@@ -1569,6 +1574,8 @@ void CustomProjectPart::addNewFilesToProject()
     {
         kdDebug(9025) << "Dialog was accepted" << endl;
         m_autoAddFiles.clear();
+        m_first_recursive = false;
+        m_recursive = false;
         QStringList blacklist = this->blacklist();
         blacklist += dlg->excludedPaths();
         updateBlacklist( blacklist );

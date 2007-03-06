@@ -37,12 +37,15 @@ protected:
 
 protected slots:
     /*$PROTECTED_SLOTS$*/
-    virtual void reject();
-    virtual void accept();
+    virtual void slotCancel();
+    virtual void slotOk();
 private:
     void addPath( QCheckListItem* , const QString& );
+    void checkItem( QCheckListItem* item, const QString& curpath );
     QCheckListItem* createItem( QCheckListItem*, const QString&, int );
     AddFilesDialogBase* m_widget;
+    QStringList excludePaths;
+    QStringList includePaths;
 };
 
 #endif
