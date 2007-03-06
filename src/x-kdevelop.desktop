@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=KDevelop 4 Project File
+Comment[x-test]=xxKDevelop 4 Project Filexx
 DefaultApp=kdevelop
 Icon=kdevelop_project
 Type=MimeType

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop Autotools Importer
+Name[x-test]=xxKDevelop Autotools Importerxx
 Comment=Allows KDevelop to manage projects using a GNU-based build system
+Comment[x-test]=xxAllows KDevelop to manage projects using a GNU-based build systemxx
 Icon=gear
 ServiceTypes=KDevelop/FileManager
 X-KDE-Library=kdevautomakeimporter

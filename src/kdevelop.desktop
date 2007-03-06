@@ -7,7 +7,15 @@ Icon=kdevelop
 DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop 4
+Name[x-test]=xxKDevelop 4xx
 GenericName=IDE
+GenericName[da]=Integreret udviklingsmiljø
+GenericName[hu]=Fejlesztőkörnyezet
+GenericName[nds]=Programmsmeed
+GenericName[ru]=Интегрированная среда разработки
+GenericName[sv]=Utvecklingsmiljö
+GenericName[tr]=Bütünleşik Geliştirme Ortamı
 GenericName[x-test]=xxIDExx
+GenericName[zh_TW]=整合開發環境
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 
