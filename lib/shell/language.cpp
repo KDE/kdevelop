@@ -32,16 +32,20 @@ namespace KDevelop {
 struct LanguagePrivate {
     ILanguageSupport *support;
 
+    static QMap<QString, Language*> languages;
     static QMap<KMimeType::Ptr, QList<Language*> > languageCache;
 };
 
+QMap<QString, Language*> LanguagePrivate::languages;
 QMap<KMimeType::Ptr, QList<Language*> > LanguagePrivate::languageCache;
 
 Language::Language(ILanguageSupport *support, QObject *parent)
     :ILanguage(support->name(), parent)
 {
+    kDebug(9000) << "creating language " << support->name() << endl;
     d = new LanguagePrivate();
     d->support = support;
+    LanguagePrivate::languages[support->name()] = this;
 }
 
 Language::~Language()
@@ -81,12 +85,20 @@ QList<Language*> Language::findByUrl(const KUrl &url, QObject *parent)
         foreach (IPlugin *support, supports)
         {
             ILanguageSupport *languageSupport = support->extension<ILanguageSupport>();
-            languages << new Language(languageSupport, parent);
+            if (Language *lang = findByName(languageSupport->name()))
+                languages << lang;
+            else
+                languages << new Language(languageSupport, parent);
         }
         LanguagePrivate::languageCache[mimeType] = languages;
     }
 
     return languages;
+}
+
+Language *Language::findByName(const QString &name)
+{
+    return LanguagePrivate::languages[name];
 }
 
 }

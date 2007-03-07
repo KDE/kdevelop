@@ -35,6 +35,7 @@ public:
 
     virtual ILanguageSupport* languageSupport();
 
+    static Language *findByName(const QString &name);
     static QList<Language*> findByUrl(const KUrl &url, QObject *parent);
 
 private:
