@@ -12,7 +12,6 @@
 #include <kdevmakeinterface.h>
 #include <domutil.h>
 
-#include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <kprocess.h>
 #include <kdialog.h>

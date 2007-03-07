@@ -33,7 +33,6 @@
 #include <kservicetypetrader.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kplugininfo.h>

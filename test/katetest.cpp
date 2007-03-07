@@ -46,7 +46,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kurl.h>
 #include <kconfig.h>
 #include <kcmdlineargs.h>
 #include <kmessagebox.h>
@@ -54,11 +53,7 @@
 #include <kedittoolbar.h>
 #include <kparts/event.h>
 #include <kmenubar.h>
-#include <kiconloader.h>
-#include <klocale.h>
 #include <ksqueezedtextlabel.h>
-#include <kconfig.h>
-#include <kdebug.h>
 #include <kstringhandler.h>
 
 #include <QStackedWidget>

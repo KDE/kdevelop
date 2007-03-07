@@ -26,11 +26,9 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
-#include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kpagedialog.h>
 #include <kpagewidgetmodel.h>
-#include <kicon.h>
 
 KDevIDEExtension::KDevIDEExtension()
  : ShellExtension()
