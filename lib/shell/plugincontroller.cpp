@@ -364,23 +364,8 @@ void PluginController::pluginDestroyed( QObject* deletedPlugin )
 ///@todo plugin load operation should be O(n)
 bool PluginController::checkForDependencies( KPluginInfo* info, QStringList& missing ) const
 {
+    QVariant prop = info->property( "X-KDevelop-IRequired" );
     bool result = true;
-    QVariant prop = info->property( "X-KDevelop-DependsPlugins" );
-    if( prop.canConvert<QStringList>() )
-    {
-        QStringList deps = prop.toStringList();
-        foreach( QString name, deps )
-        {
-            KPluginInfo::List l = queryPlugins( QString("'%1' in [X-KDE-PluginInfo-Name]").arg(name) );
-            if( l.isEmpty() )
-            {
-                result = false;
-                missing << name;
-            }
-        }
-    }
-
-    prop = info->property( "X-KDevelop-IRequired" );
     if( prop.canConvert<QStringList>() )
     {
         QStringList deps = prop.toStringList();
@@ -399,17 +384,7 @@ bool PluginController::checkForDependencies( KPluginInfo* info, QStringList& mis
 
 void PluginController::loadDependencies( KPluginInfo* info )
 {
-    QVariant prop = info->property( "X-KDevelop-DependsPlugin" );
-    if( prop.canConvert<QStringList>() )
-    {
-        QStringList deps = prop.toStringList();
-        foreach( QString pname, deps )
-        {
-            loadPluginInternal( pname );
-        }
-    }
-
-    prop = info->property( "X-KDevelop-IRequired" );
+    QVariant prop = info->property( "X-KDevelop-IRequired" );
     if( prop.canConvert<QStringList>() )
     {
         QStringList deps = prop.toStringList();

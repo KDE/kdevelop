@@ -62,6 +62,3 @@ Type=QStringList
 [PropertyDef::X-KDevelop-IOptional]
 Type=QStringList
 
-[PropertyDef::X-KDevelop-DependsPlugins]
-Type=QStringList
-
