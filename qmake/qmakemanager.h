@@ -33,6 +33,7 @@ class QString;
 class QDir;
 class QObject;
 class KDialogBase;
+class IQMakeBuilder;
 namespace KDevelop
 {
 class IProject;
@@ -54,7 +55,7 @@ public:
 
     virtual ~QMakeProjectManager();
 
-    virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectItem*) const { return 0; }
+    virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectItem*) const;
     virtual KUrl buildDirectory(KDevelop::ProjectItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
     virtual KUrl::List preprocessorDefines(KDevelop::ProjectBaseItem*) const { return KUrl::List(); }
@@ -105,7 +106,7 @@ Q_SIGNALS:
                      KDevelop::ProjectFileItem* newFile);
 private:
 
-    KDevelop::IProjectBuilder* m_builder;
+    IQMakeBuilder* m_builder;
 };
 
 #endif

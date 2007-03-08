@@ -36,3 +36,4 @@ X-KDE-PluginInfo-Name=KDevQMakeManager
 X-KDevelop-FileManager=QMake
 X-KDevelop-Version=4
 X-KDevelop-Interfaces=IBuildSystemManager,IProjectFileManager
+X-KDevelop-IRequired=IQMakeBuilder
