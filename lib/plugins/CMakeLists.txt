@@ -1,2 +1,3 @@
 add_subdirectory(projectmanagerview)
+add_subdirectory(outputviews)
 add_subdirectory(genericprojectmanager)

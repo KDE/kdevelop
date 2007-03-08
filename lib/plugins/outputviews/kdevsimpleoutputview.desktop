@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=KDevSimpleOutputView
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevsimpleoutputview
+X-KDE-PluginInfo-Name=KDevSimpleOutputView
+X-KDevelop-Version=4
+X-KDevelop-Interfaces=IOutputView
