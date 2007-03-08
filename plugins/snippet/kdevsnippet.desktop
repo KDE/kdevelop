@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin allows to store code snippets and insert them into open files
+Name=KDevSnippet
+GenericName=Code Snippets
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevsnippet
+X-KDE-PluginInfo-Name=kdevsnippet
+X-KDE-PluginInfo-Author=Robert Gruber
+X-KDE-PluginInfo-Version=0.75
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=4
+X-KDevelop-Category=Global
+X-KDevelop-Properties=CodeEditing

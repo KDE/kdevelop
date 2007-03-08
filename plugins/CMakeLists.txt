@@ -6,4 +6,5 @@ add_subdirectory(qtdesigner)
 #add_subdirectory(fileselector)
 #add_subdirectory(valgrind)
 add_subdirectory(filemanager)
+add_subdirectory(snippet)
 
