@@ -31,7 +31,9 @@
 #include <kio/job.h>
 
 #include "icore.h"
+#include "iplugincontroller.h"
 #include "iproject.h"
+#include "iqmakebuilder.h"
 #include "kgenericfactory.h"
 #include "projectmodel.h"
 
@@ -48,15 +50,13 @@ KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, QMakeProjectManage
 
 QMakeProjectManager::QMakeProjectManager( QObject* parent,
                               const QStringList& )
-        : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent )
+        : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent ), m_builder(0)
 {
-
-    /*    QMakeSettings* settings = QMakeSettings::self();
-
-        //what do the settings say about our generator?
-        QString generator = settings->generator();
-        if ( generator.contains( "Unix" ) ) //use make
-            m_builder = new KDevelop::MakeBuilder()*/
+    IPlugin* i = core()->pluginController()->pluginForExtension( "IQMakeBuilder" );
+    if( i )
+    {
+        m_builder = i->extension<IQMakeBuilder>();
+    }
 }
 
 QMakeProjectManager::~QMakeProjectManager()
@@ -157,6 +157,11 @@ QList<KDevelop::ProjectTargetItem*> QMakeProjectManager::targets(KDevelop::Proje
 {
     Q_UNUSED(item)
     return QList<KDevelop::ProjectTargetItem*>();
+}
+
+KDevelop::IProjectBuilder* QMakeProjectManager::builder(KDevelop::ProjectItem*) const
+{
+    return m_builder;
 }
 
 KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* item) const

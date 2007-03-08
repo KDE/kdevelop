@@ -2,6 +2,7 @@ add_subdirectory(parser)
 add_subdirectory(tests)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/buildtools/builders/qmakebuilder
     ${CMAKE_SOURCE_DIR}/lib/interfaces
     ${CMAKE_SOURCE_DIR}/lib/project
     ${CMAKE_SOURCE_DIR}/lib/project/interfaces
