@@ -98,6 +98,7 @@ public:
     virtual void unregisterExtensions();
     virtual QStringList extensions() const;
 
+    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectItem*) const { return QList<KDevelop::ProjectTargetItem*>(); }
 
 private:
 

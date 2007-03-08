@@ -127,7 +127,7 @@ public:
      * @return The list of targets for this project
      * @todo implement
      */
-    QList<ProjectTargetItem*> targets(ProjectItem*) const;
+    virtual QList<ProjectTargetItem*> targets(ProjectItem*) const = 0;
 
 
 };
