@@ -37,19 +37,19 @@ KDevHTMLPart::KDevHTMLPart()
   KActionCollection * actions = actionCollection();// new KActionCollection( this );
   reloadAction = actions->addAction( "doc_reload" );
   reloadAction->setText( i18n( "Reload" ) );
-  reloadAction->setIcon( KIcon("reload") );
+  reloadAction->setIcon( KIcon("view-refresh") );
   reloadAction->setWhatsThis(i18n("<b>Reload</b><p>Reloads the current document."));
   connect(reloadAction, SIGNAL(triggered(bool)), SLOT( slotReload() ));
 
   stopAction = actions->addAction( "doc_stop" );
   stopAction->setText(i18n( "Stop" ) );
-  stopAction->setIcon( KIcon("stop") );
+  stopAction->setIcon( KIcon("process-stop") );
   stopAction->setWhatsThis(i18n("<b>Stop</b><p>Stops the loading of current document."));
   connect(stopAction, SIGNAL(triggered(bool)), SLOT( slotStop() ));
 
   duplicateAction = actions->addAction( "doc_dup" );
   duplicateAction->setText( i18n( "Duplicate Tab" ) );
-  duplicateAction->setIcon( KIcon("window_new") );
+  duplicateAction->setIcon( KIcon("window-new") );
   duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
   connect(duplicateAction, SIGNAL(triggered(bool)), SLOT( slotDuplicate() ));
 
@@ -64,7 +64,7 @@ KDevHTMLPart::KDevHTMLPart()
 
 //BEGIN documentation history stuff
 
-  m_backAction = new KToolBarPopupAction(KIcon("back"), i18n("Back"), actions);
+  m_backAction = new KToolBarPopupAction(KIcon("go-previous"), i18n("Back"), actions);
   actions->addAction( "browser_back", m_backAction );
   m_backAction->setEnabled( false );
   m_backAction->setToolTip(i18n("Back"));
@@ -76,7 +76,7 @@ KDevHTMLPart::KDevHTMLPart()
   connect(m_backAction->menu(), SIGNAL(activated(int)),
          this, SLOT(slotPopupActivated(int)));
 
-  m_forwardAction = new KToolBarPopupAction(KIcon("forward"), i18n("Forward"), actions);
+  m_forwardAction = new KToolBarPopupAction(KIcon("go-next"), i18n("Forward"), actions);
   actions->addAction( "browser_forward", m_forwardAction );
   m_forwardAction->setEnabled( false );
   m_forwardAction->setToolTip(i18n("Forward"));
@@ -111,7 +111,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
   QAction* idNewWindow = 0L;
   if (!url.isEmpty() && (m_options & CanOpenInNewWindow))
   {
-    idNewWindow = popup.addAction(KIcon("window_new"),i18n("Open in New Tab"));
+    idNewWindow = popup.addAction(KIcon("window-new"),i18n("Open in New Tab"));
     idNewWindow->setWhatsThis(i18n("<b>Open in new window</b><p>Opens current link in a new window."));
     needSep = true;
   }

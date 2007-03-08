@@ -110,7 +110,7 @@ void ProjectManager::createActions( KActionCollection* ac )
   m_openRecentProjectAction->setWhatsThis(i18n("<b>Open recent project</b><p>Opens recently opened project."));
   m_openRecentProjectAction->loadEntries(KGlobal::config(), "RecentProjects");
 
-  m_closeProjectAction = new KAction(KIcon("fileclose"), i18n("C&lose Project"), ac, "project_close");
+  m_closeProjectAction = new KAction(KIcon("window-close"), i18n("C&lose Project"), ac, "project_close");
   connect(m_closeProjectAction, SIGNAL(triggered(bool) ), SLOT(closeProject()));
   m_closeProjectAction->setEnabled(false);
   m_closeProjectAction->setToolTip(i18n("Close project"));

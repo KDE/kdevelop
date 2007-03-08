@@ -136,7 +136,7 @@ void MainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
 
     KToolBarPopupAction *popupAction;
-    popupAction = new KToolBarPopupAction( KIcon( "stop" ),
+    popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
                                            i18n( "&Stop" ),
                                            actionCollection()
                                            );
@@ -214,7 +214,7 @@ void MainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)." ) );
 
     action = actionCollection()->addAction( "new_window" );
-    action->setIcon(KIcon( "window_new" ));
+    action->setIcon(KIcon( "window-new" ));
     action->setText( i18n( "&New Window" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( newWindow() ) );
@@ -238,7 +238,7 @@ void MainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically." ) );
 
     action = actionCollection()->addAction( "file_new" );
-    action->setIcon(KIcon("filenew"));
+    action->setIcon(KIcon("document-new"));
     action->setShortcut( Qt::CTRL + Qt::Key_N );
     action->setText( i18n( "&New File" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileNew() ) );
@@ -246,7 +246,7 @@ void MainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>New File</b><p>Creates an empty file." ) );
 
     action = actionCollection()->addAction( "file_close" );
-    action->setIcon(KIcon("fileclose"));
+    action->setIcon(KIcon("window-close"));
     action->setShortcut( Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close File" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
@@ -254,7 +254,7 @@ void MainWindow::setupActions()
     action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file." ) );
 
     action = actionCollection()->addAction( "add_toolview" );
-    action->setIcon(KIcon("window_new"));
+    action->setIcon(KIcon("window-new"));
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
     action->setText( i18n( "&Add Tool View..." ) );
     connect( action, SIGNAL( triggered( bool ) ),  SLOT( viewAddNewToolView() ) );

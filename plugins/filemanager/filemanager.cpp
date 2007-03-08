@@ -255,7 +255,7 @@ void FileManager::setupActions()
     d->addToolButton(action);
 
     action = new KAction(this);
-    action->setIcon(KIcon("folder_new"));
+    action->setIcon(KIcon("folder-new"));
     action->setText(i18n("New Folder..."));
     action->setToolTip(i18n("New Folder"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));

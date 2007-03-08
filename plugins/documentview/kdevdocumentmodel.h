@@ -54,11 +54,11 @@ public:
         case KDevelop::Document::Clean:
             return QIcon();
         case KDevelop::Document::Modified:
-            return KIcon( "filesave" );
+            return KIcon( "document-save" );
         case KDevelop::Document::Dirty:
-            return KIcon( "revert" );
+            return KIcon( "file-revert" );
         case KDevelop::Document::DirtyAndModified:
-            return KIcon( "stop" );
+            return KIcon( "process-stop" );
         default:
             return QIcon();
         }
