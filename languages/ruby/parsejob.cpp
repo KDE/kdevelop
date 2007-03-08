@@ -38,8 +38,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "parser/parsesession.h"
-#include "parser/ruby_parser.h"
+// from the parser subdirectory
+#include <parsesession.h>
+#include <ruby_parser.h>
 
 #include "rubylanguagesupport.h"
 

@@ -27,8 +27,10 @@
 #include <kgenericfactory.h>
 
 #include <kdevast.h>
-#include "parser/ruby_parser.h"
-#include "parser/ruby_serialize_visitor.h"
+
+// from the parser subdirectory
+#include <ruby_parser.h>
+#include <ruby_serialize_visitor.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>

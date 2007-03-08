@@ -27,8 +27,9 @@
 #include <kurl.h>
 #include <kdevparsejob.h>
 
-#include "parser/ruby_ast.h"
-#include "parser/ruby_codemodel.h"
+// from the parser subdirectory
+#include <ruby_ast.h>
+#include <ruby_codemodel.h>
 
 class KDevelop::CodeModel;
 class RubyLanguageSupport;
