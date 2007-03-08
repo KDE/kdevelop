@@ -59,6 +59,7 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor( "Simon Hausmann", I18N_NOOP( "Help with KParts infrastructure" ), "hausmann@kde.org" );
     aboutData.addAuthor( "Oliver Kellogg", I18N_NOOP( "Ada support" ), "okellogg@users.sourceforge.net" );
     aboutData.addAuthor( "Jakob Simon-Gaarde", I18N_NOOP( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
+    aboutData.addAuthor( "Andreas Pakulat", I18N_NOOP( "Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( "F@lk Brettschneider", I18N_NOOP( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
     aboutData.addAuthor( "Mario Scalas", I18N_NOOP( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
     aboutData.addAuthor( "Jens Dagerbo", I18N_NOOP( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
@@ -89,7 +90,7 @@ int main( int argc, char *argv[] )
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-
+    Q_UNUSED(args)
     KApplication app;
 
     KDevIDEExtension::init();
