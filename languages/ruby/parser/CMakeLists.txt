@@ -128,14 +128,30 @@ set_source_files_properties(
 
 
 if(FLEX_EXECUTABLE)
+    # Copy ruby_lexer.ll to the builddir, so that flex doesn't write out
+    # absolute paths in the generated file when we pass them as arguments.
+    # In short, I don't want stuff like
+    # '#line 2 "/home/kde/build/.../ruby_lexer.cpp" in SVN.
+    add_custom_command(
+        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.ll"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.ll"
+        COMMAND ${CMAKE_COMMAND}  ARGS -E copy_if_different
+                "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.ll"
+                "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.ll"
+    )
+    set_source_files_properties(
+        "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.ll"
+        GENERATED
+    )
     # Add command to generate the lexer.
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp"
-        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.ll"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.ll"
         DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/ruby_parser.h"
         COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/ruby_lexer.ll"
+        ARGS    -o"ruby_lexer.cpp"
+                "ruby_lexer.ll"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 else(FLEX_EXECUTABLE)
     # If flex is not available, copy the pre-generated lexer from SVN.
@@ -151,10 +167,10 @@ endif(FLEX_EXECUTABLE)
 
 set(kdevrubyparser_STAT_SRCS
     ${kdevrubyparser_STAT_SRCS}
-    ${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp
+    "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp"
 )
 set_source_files_properties(
-    ${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp
+    "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp"
     GENERATED
 )
 
@@ -264,6 +280,11 @@ add_custom_target( copy-generated
             "${CMAKE_CURRENT_BINARY_DIR}/ruby_debug_visitor.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/generated/ruby_debug_visitor.h"
 
+    # flex generated file
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/generated/ruby_lexer.cpp"
+
     # kdev-cmg generated files
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CMAKE_CURRENT_BINARY_DIR}/ruby_codemodel.h"
@@ -292,6 +313,8 @@ add_custom_target( copy-generated
             "${CMAKE_CURRENT_BINARY_DIR}/ruby_default_visitor.cpp"
             "${CMAKE_CURRENT_BINARY_DIR}/ruby_serialize_visitor.h"
             "${CMAKE_CURRENT_BINARY_DIR}/ruby_debug_visitor.h"
+    # flex generated file
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/ruby_lexer.cpp"
     # kdev-cmg generated files
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/ruby_codemodel.h"
             "${CMAKE_CURRENT_BINARY_DIR}/ruby_codemodel.cpp"

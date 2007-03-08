@@ -5,9 +5,9 @@
 #define ruby_H_INCLUDED
 
 #include "ruby_ast.h"
-#include "kdev-pg-memory-pool.h"
-#include "kdev-pg-allocator.h"
-#include "kdev-pg-token-stream.h"
+#include <kdev-pg-memory-pool.h>
+#include <kdev-pg-allocator.h>
+#include <kdev-pg-token-stream.h>
 
 namespace ruby
   {

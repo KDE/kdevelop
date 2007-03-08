@@ -117,14 +117,30 @@ set_source_files_properties(
 
 
 if(FLEX_EXECUTABLE)
+    # Copy java_lexer.ll to the builddir, so that flex doesn't write out
+    # absolute paths in the generated file when we pass them as arguments.
+    # In short, I don't want stuff like
+    # '#line 2 "/home/kde/build/.../java_lexer.cpp" in SVN.
+    add_custom_command(
+        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.ll"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
+        COMMAND ${CMAKE_COMMAND}  ARGS -E copy_if_different
+                "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
+                "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.ll"
+    )
+    set_source_files_properties(
+        "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.ll"
+        GENERATED
+    )
     # Add command to generate the lexer.
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp"
-        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.ll"
         DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/java_parser.h"
         COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/java_lexer.ll"
+        ARGS    -o"java_lexer.cpp"
+                "java_lexer.ll"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 else(FLEX_EXECUTABLE)
     # If flex is not available, copy the pre-generated lexer from SVN.
@@ -140,10 +156,10 @@ endif(FLEX_EXECUTABLE)
 
 set(kdevjavaparser_STAT_SRCS
     ${kdevjavaparser_STAT_SRCS}
-    ${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp
+    "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp"
 )
 set_source_files_properties(
-    ${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp
+    "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp"
     GENERATED
 )
 
@@ -179,6 +195,9 @@ add_custom_target( copy-generated
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CMAKE_CURRENT_BINARY_DIR}/java_serialize_visitor.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/generated/java_serialize_visitor.h"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/generated/java_lexer.cpp"
 
 # 2. depend on the files being copied
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/java_ast.h"
@@ -189,4 +208,5 @@ add_custom_target( copy-generated
             "${CMAKE_CURRENT_BINARY_DIR}/java_default_visitor.h"
             "${CMAKE_CURRENT_BINARY_DIR}/java_default_visitor.cpp"
             "${CMAKE_CURRENT_BINARY_DIR}/java_serialize_visitor.h"
+            "${CMAKE_CURRENT_BINARY_DIR}/java_lexer.cpp"
 )

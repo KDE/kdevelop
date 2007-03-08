@@ -4,7 +4,7 @@
 #ifndef ruby_AST_H_INCLUDED
 #define ruby_AST_H_INCLUDED
 
-#include "kdev-pg-list.h"
+#include <kdev-pg-list.h>
 
 #include <kdevast.h>
 

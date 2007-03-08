@@ -1822,7 +1822,7 @@ namespace ruby
 
         if (false) // the only way to enter here is using goto
           {
-          __catch_1:
+__catch_1:
             if (try_start_state_1)
               {
                 restore_state(try_start_state_1);
@@ -7904,7 +7904,7 @@ namespace ruby
           }
         else if ((yytoken == Token_STAR) && ( (expect_array_or_block_arguments = true) ))
           {
-            restMethodDefinitionArgument_ast *__node_134 = 0;
+            restMethodDefinitionArgument_ast * __node_134 = 0;
             if (!parse_restMethodDefinitionArgument(&__node_134))
               {
                 if (!yy_block_errors)
@@ -7916,7 +7916,7 @@ namespace ruby
           }
         else if ((yytoken == Token_BAND) && ( (expect_array_or_block_arguments = true) ))
           {
-            blockMethodDefinitionArgument_ast *__node_135 = 0;
+            blockMethodDefinitionArgument_ast * __node_135 = 0;
             if (!parse_blockMethodDefinitionArgument(&__node_135))
               {
                 if (!yy_block_errors)
@@ -9113,7 +9113,7 @@ namespace ruby
 
         if (false) // the only way to enter here is using goto
           {
-          __catch_2:
+__catch_2:
             if (try_start_state_2)
               {
                 restore_state(try_start_state_2);

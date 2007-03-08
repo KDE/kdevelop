@@ -201,14 +201,30 @@ set_source_files_properties(
 
 
 if(FLEX_EXECUTABLE)
+    # Copy csharp_lexer.ll to the builddir, so that flex doesn't write out
+    # absolute paths in the generated file when we pass them as arguments.
+    # In short, I don't want stuff like
+    # '#line 2 "/home/kde/build/.../csharp_lexer.cpp" in SVN.
+    add_custom_command(
+        OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.ll"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
+        COMMAND ${CMAKE_COMMAND}  ARGS -E copy_if_different
+                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
+                "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.ll"
+    )
+    set_source_files_properties(
+        "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.ll"
+        GENERATED
+    )
     # Add command to generate the lexer.
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp"
-        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.ll"
         DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_parser.h"
         COMMAND ${FLEX_EXECUTABLE}
-        ARGS    -o"${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp"
-                "${CMAKE_CURRENT_SOURCE_DIR}/csharp_lexer.ll"
+        ARGS    -o"csharp_lexer.cpp"
+                "csharp_lexer.ll"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 else(FLEX_EXECUTABLE)
     # If flex is not available, copy the pre-generated lexer from SVN.
@@ -224,10 +240,10 @@ endif(FLEX_EXECUTABLE)
 
 set(kdevcsharpparser_STAT_SRCS
     ${kdevcsharpparser_STAT_SRCS}
-    ${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp
+    "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp"
 )
 set_source_files_properties(
-    ${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp
+    "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp"
     GENERATED
 )
 
@@ -352,6 +368,11 @@ add_custom_target( copy-generated
             "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_pp_default_visitor.cpp"
 
+    # flex generated file
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/generated/csharp_lexer.cpp"
+
     # kdev-cmg generated files
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.h"
@@ -387,6 +408,8 @@ add_custom_target( copy-generated
             "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_visitor.cpp"
             "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.h"
             "${CMAKE_CURRENT_BINARY_DIR}/csharp_pp_default_visitor.cpp"
+    # flex generated file
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_lexer.cpp"
     # kdev-cmg generated files
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.h"
             "${CMAKE_CURRENT_BINARY_DIR}/csharp_codemodel.cpp"
