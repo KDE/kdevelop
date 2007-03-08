@@ -36,6 +36,7 @@ struct HeaderGeneratorVisitor : public DefaultVisitor
   NameCompiler nc;
 
   QList<QString> m_classes;
+  QSet<QString> m_namespaces;
 
   QualifiedIdentifier m_currentNS;
 
@@ -83,6 +84,17 @@ struct HeaderGeneratorVisitor : public DefaultVisitor
 
     m_currentNS = identifier;
   }
+
+  virtual void visitFunctionDefinition(FunctionDefinitionAST* node)
+  {
+    if (!node->win_decl_specifiers)
+      return;
+
+    if (m_currentNS.isEmpty())
+      return;
+
+    m_namespaces.insert(m_currentNS.toString().replace("::", "/"));
+  }
 };
 
 class HeaderGenerator : public rpp::Preprocessor
@@ -105,6 +117,9 @@ private:
 
   // path, filename
   QMultiMap<QString, QString> filesToInstall;
+
+  // namespace, filename
+  QMultiMap<QString, QString> namespaceDeclarations;
 
   QDir outputDir;
 
@@ -347,9 +362,6 @@ rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type
 {
   //kDebug() << k_funcinfo << fileName << " from " << preprocessing.top() << endl;
 
-  if (fileName.endsWith("kkeydialog.h"))
-    kDebug() << "Maybe parsing " << fileName << endl;
-
   KUrl::List toTry;
 
   {
@@ -428,9 +440,9 @@ void HeaderGenerator::run()
       }
 
       for (QDomElement source = install.firstChildElement(sourceElementName); !source.isNull(); source = source.nextSiblingElement(sourceElementName)) {
-        if (source.text().endsWith("kkeydialog.h"))
+        //if (source.text().endsWith("kkeydialog.h"))
           //continue;
-          kDebug() << "Parsing " << source.text() << endl;
+          //kDebug() << "Parsing " << source.text() << endl;
 
         preprocessor.environment()->clear();
         preprocessor.environment()->visitBlock(topBlock);
@@ -467,7 +479,7 @@ void HeaderGenerator::run()
           //kFatal() << "bye :)" << endl;
         }
 
-        if (source.text().endsWith("kkeydialog.h")) {
+        if (false && source.text().endsWith("kkeydialog.h")) {
           kDebug() << "Parse " << source.text() << ": " << hg.m_classes.count() << " classes found:" << hg.m_classes << " lines " << contents.count('\n') << endl
           << QString::fromUtf8(contents) << endl;
 
@@ -514,20 +526,72 @@ void HeaderGenerator::run()
           KUrl sourceUrl(source.text());
           QString sourceRelativeUrl = sourceRelativeInstallPath + source.text().mid(folderUrl.path().length());
 
-          ts << "#include \"";
-
+          QString dotdot;
           int dotdotcount = className.count('/');
           for (int i = 0; i <= dotdotcount; ++i)
-            ts << QString("../");
+            dotdot.append("../");
 
-          ts << sourceRelativeInstallPath << sourceUrl.fileName() << "\"\n";
+          QString includeFile = QString("#include \"%1%2%3\"\n").arg(dotdot).arg(sourceRelativeInstallPath).arg(sourceUrl.fileName());
 
-          //ts << QString::fromUtf8(contents) << "\n";
+          ts << includeFile;
 
           filesToInstall.insert(classDirectory, className);
+
+          foreach (const QString& ns, hg.m_namespaces)
+            namespaceDeclarations.insert(ns, includeFile);
         }
       }
     }
+  }
+
+  {
+    QTextStream *ts = 0;
+    QMapIterator<QString, QString> it = namespaceDeclarations;
+    QString currentNS;
+
+    while (it.hasNext()) {
+      it.next();
+      if (currentNS != it.key()) {
+        currentNS = it.key();
+        delete ts;
+        ts = 0;
+
+        if (filesToInstall.contains(it.key()))
+          continue;
+
+        QString namespaceName = it.key();
+
+        // Found a namespace without a class... install a file for it
+        QString forwardingHeaderPath(outputDirectory.path(KUrl::AddTrailingSlash) + namespaceName);
+        QString namespaceDirectory;
+        int index = namespaceName.lastIndexOf('/');
+        if (index > 0)
+          namespaceDirectory = namespaceName.left(index);
+
+        QFile forwardingHeader(forwardingHeaderPath);
+        if (!forwardingHeader.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+          if (!namespaceDirectory.isEmpty() && outputDir.mkpath(namespaceDirectory)) {
+            if (forwardingHeader.open(QIODevice::WriteOnly | QIODevice::Truncate))
+              goto success2;
+          }
+
+          kWarning() << "Could not open forwarding header file " << forwardingHeaderPath << endl;
+          continue;
+        }
+
+        success2:
+
+        ts = new QTextStream(&forwardingHeader);
+
+        filesToInstall.insert(namespaceDirectory, namespaceName);
+      }
+
+      if (ts)
+        *ts << it.value();
+    }
+
+    delete ts;
+    ts = 0;
   }
 
   QFile cmakelist(outputDirectory.path(KUrl::AddTrailingSlash) + "CMakeLists.txt");
@@ -552,7 +616,8 @@ void HeaderGenerator::run()
       ts << endl;
       ts << "install( FILES " << endl;
 
-      QStringList classes = filesToInstall.values(directory);
+      QSet<QString> classes2 = QSet<QString>::fromList(filesToInstall.values(directory));
+      QStringList classes = classes2.toList();
       classes.sort();
 
       foreach (const QString& className, classes)
