@@ -3,6 +3,8 @@ add_subdirectory(parser)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/interfaces
+    ${CMAKE_SOURCE_DIR}/lib/language/interfaces
     ${CMAKE_SOURCE_DIR}/lib/project
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
     ${CMAKE_CURRENT_BINARY_DIR}/parser
@@ -13,17 +15,16 @@ include_directories(
 
 set(kdevjavalanguagesupport_PART_SRCS
     javalanguagesupport.cpp
-    parsejob.cpp
-#     codedelegate.cpp
-#     codeproxy.cpp
+#    parsejob.cpp
+#    codedelegate.cpp
+#    codeproxy.cpp
 )
 
 kde4_automoc(${kdevjavalanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevjavalanguagesupport ${kdevjavalanguagesupport_PART_SRCS})
 target_link_libraries(kdevjavalanguagesupport
-    ${KDE4_KDECORE_LIBS}
-    kdevplatform
-    ${KDE4_THREADWEAVER_LIBRARIES}
+    ${QT_QTDESIGNER_LIBRARY}
+    kdevplatforminterfaces
     kdevjavaparser
 )
 

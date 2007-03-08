@@ -17,11 +17,16 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
+#include "javalanguagesupport.h"
+
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 
+#include <QExtensionFactory>
+
+/*
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
@@ -29,23 +34,25 @@ Boston, MA 02110-1301, USA.
 #include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
+*/
+
 #include "parsejob.h"
-
-#include "javalanguagesupport.h"
-
 // #include "codeproxy.h"
 // #include "codedelegate.h"
 
-#include <kdebug.h>
+using namespace java;
 
 typedef KGenericFactory<JavaLanguageSupport> KDevJavaSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevjavalanguagesupport,
-                            KDevJavaSupportFactory( "kdevjavasupport" ) )
+K_EXPORT_COMPONENT_FACTORY( kdevjavalanguagesupport, KDevJavaSupportFactory( "kdevjavasupport" ) )
+
+KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, JavaLanguageSupport )
 
 JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
-        const QStringList& /*args*/ )
-        : KDevelop::LanguageSupport( KDevJavaSupportFactory::componentData(), parent )
+                                          const QStringList& /*args*/ )
+        : KDevelop::IPlugin( KDevJavaSupportFactory::componentData(), parent )
+        , KDevelop::ILanguageSupport()
 {
+    /*
     QString types =
         QLatin1String( "text/x-java" );
     m_mimetypes = types.split( "," );
@@ -70,12 +77,14 @@ JavaLanguageSupport::JavaLanguageSupport( QObject* parent,
     connect( KDevelop::Core::projectController(),
              SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
+    */
 }
 
 JavaLanguageSupport::~JavaLanguageSupport()
 {
 }
 
+/*
 KDevelop::CodeModel *JavaLanguageSupport::codeModel( const KUrl &url ) const
 {
     Q_UNUSED( url );
@@ -141,7 +150,7 @@ void JavaLanguageSupport::projectOpened()
     QList<KDevelop::ProjectFileItem*> files = KDevelop::Core::activeProject()->allFiles();
     foreach ( KDevelop::ProjectFileItem * file, files )
     {
-        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".java" )*/ )
+        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".java" )* / )
         {
             documentList.append( file->url() );
         }
@@ -152,6 +161,17 @@ void JavaLanguageSupport::projectOpened()
 void JavaLanguageSupport::projectClosed()
 {
     // FIXME This should remove the project files from the backgroundparser
+}
+*/
+
+QString JavaLanguageSupport::name() const
+{
+    return "Java";
+}
+
+QStringList JavaLanguageSupport::extensions() const
+{
+    return QStringList() << "ILanguageSupport";
 }
 
 #include "javalanguagesupport.moc"

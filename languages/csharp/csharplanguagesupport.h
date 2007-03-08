@@ -20,7 +20,8 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVCSHARPLANGUAGESUPPORT_H
 #define KDEVCSHARPLANGUAGESUPPORT_H
 
-#include <kdevlanguagesupport.h>
+#include <iplugin.h>
+#include <ilanguagesupport.h>
 
 namespace csharp
 {
@@ -29,14 +30,22 @@ namespace csharp
     class CodeDelegate;
 }
 
-class CSharpLanguageSupport : public KDevelop::LanguageSupport
+class CSharpLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
 Q_OBJECT
+Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
     CSharpLanguageSupport( QObject *parent, const QStringList& args = QStringList() );
     virtual ~CSharpLanguageSupport();
 
-    //KDevelop::LanguageSupport implementation
+    virtual QString name() const;
+
+    void registerExtensions();
+    void unregisterExtensions();
+    QStringList extensions() const;
+
+    /*
+    // KDevelop::LanguageSupport implementation
     virtual KDevelop::CodeModel *codeModel( const KUrl& url ) const;
     virtual KDevelop::CodeProxy *codeProxy() const;
     virtual KDevelop::CodeDelegate *codeDelegate() const;
@@ -47,19 +56,24 @@ public:
 
     virtual void read( KDevelop::AST *ast, std::ifstream &in );
     virtual void write( KDevelop::AST *ast, std::ofstream &out );
+    */
 
 private slots:
+    /*
     void documentLoaded( KDevelop::Document *document );
     void documentClosed( KDevelop::Document *document );
     void documentActivated( KDevelop::Document *document );
     void projectOpened();
     void projectClosed();
+    */
 
 private:
+    /*
     QStringList m_mimetypes;
     csharp::CodeProxy *m_codeProxy;
     csharp::CodeDelegate *m_codeDelegate;
 //     CSharpHighlighting *m_highlights;
+    */
 };
 
 #endif

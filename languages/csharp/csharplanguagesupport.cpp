@@ -17,17 +17,16 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
+#include "csharplanguagesupport.h"
+
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 
-#include <kdevast.h>
+#include <QExtensionFactory>
 
-// from the parser subdirectory
-#include <csharp_parser.h>
-#include <csharp_serialize_visitor.h>
-
+/*
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
@@ -35,25 +34,31 @@ Boston, MA 02110-1301, USA.
 #include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
+
+#include <kdevast.h>
+*/
+
+// from the parser subdirectory
+#include <csharp_parser.h>
+#include <csharp_serialize_visitor.h>
+
 #include "parsejob.h"
-
-#include "csharplanguagesupport.h"
-
 #include "codeproxy.h"
 #include "codedelegate.h"
-
-#include <kdebug.h>
 
 using namespace csharp;
 
 typedef KGenericFactory<CSharpLanguageSupport> KDevCSharpSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport,
-                            KDevCSharpSupportFactory( "kdevcsharpsupport" ) )
+K_EXPORT_COMPONENT_FACTORY( kdevcsharplanguagesupport, KDevCSharpSupportFactory( "kdevcsharpsupport" ) )
+
+KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, CSharpLanguageSupport )
 
 CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
-        const QStringList& /*args*/ )
-        : KDevelop::LanguageSupport( KDevCSharpSupportFactory::componentData(), parent )
+                                              const QStringList& /*args*/ )
+        : KDevelop::IPlugin( KDevCSharpSupportFactory::componentData(), parent )
+        , KDevelop::ILanguageSupport()
 {
+    /*
     QString types = QLatin1String( "text/x-csharp" );
     m_mimetypes = types.split( "," );
 
@@ -76,11 +81,13 @@ CSharpLanguageSupport::CSharpLanguageSupport( QObject* parent,
     connect( KDevelop::Core::projectController(),
              SIGNAL( projectClosed() ),
              this, SLOT( projectClosed() ) );
+    */
 }
 
 CSharpLanguageSupport::~CSharpLanguageSupport()
 {}
 
+/*
 KDevelop::CodeModel *CSharpLanguageSupport::codeModel( const KUrl &url ) const
 {
     if ( url.isValid() )
@@ -163,7 +170,7 @@ void CSharpLanguageSupport::projectOpened()
     QList<KDevelop::ProjectFileItem*> files = KDevelop::Core::activeProject() ->allFiles();
     foreach ( KDevelop::ProjectFileItem * file, files )
     {
-        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".cs" )*/ )
+        if ( supportsDocument( file->url() ) /*&& file->url().fileName().endsWith( ".cs" )* / )
         {
             documentList.append( file->url() );
         }
@@ -174,6 +181,17 @@ void CSharpLanguageSupport::projectOpened()
 void CSharpLanguageSupport::projectClosed()
 {
     // FIXME This should remove the project files from the backgroundparser
+}
+                                             */
+
+QString CSharpLanguageSupport::name() const
+{
+    return "C#";
+}
+
+QStringList CSharpLanguageSupport::extensions() const
+{
+    return QStringList() << "ILanguageSupport";
 }
 
 #include "csharplanguagesupport.moc"

@@ -67,7 +67,6 @@
 #include "codedelegate.h"
 #include "cppcodecompletion.h"
 */
-#include <kdebug.h>
 #include <QExtensionFactory>
 
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;

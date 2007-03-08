@@ -24,20 +24,32 @@
 #ifndef KDEVRUBYLANGUAGESUPPORT_H
 #define KDEVRUBYLANGUAGESUPPORT_H
 
-#include <kdevlanguagesupport.h>
+#include <iplugin.h>
+#include <ilanguagesupport.h>
 
 namespace ruby
 {
     class CodeModel;
+    // class CodeProxy;
+    // class CodeDelegate;
 }
 
-class RubyLanguageSupport: public KDevelop::LanguageSupport {
-    Q_OBJECT
+class RubyLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
+{
+Q_OBJECT
+Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
-    RubyLanguageSupport(QObject *parent, const QStringList &args = QStringList());
+    RubyLanguageSupport( QObject *parent, const QStringList& args = QStringList() );
     virtual ~RubyLanguageSupport();
 
-    //KDevelop::LanguageSupport implementation
+    virtual QString name() const;
+
+    void registerExtensions();
+    void unregisterExtensions();
+    QStringList extensions() const;
+
+    /*
+    // KDevelop::LanguageSupport implementation
     virtual KDevelop::CodeModel *codeModel( const KUrl& url ) const;
     virtual KDevelop::CodeProxy *codeProxy() const;
     virtual KDevelop::CodeDelegate *codeDelegate() const;
@@ -48,16 +60,21 @@ public:
 
     virtual void read( KDevelop::AST *ast, std::ifstream &in );
     virtual void write( KDevelop::AST *ast, std::ofstream &out );
+    */
 
 private slots:
+    /*
     void documentLoaded( KDevelop::Document *document );
     void documentClosed( KDevelop::Document *document );
     void documentActivated( KDevelop::Document *document );
     void projectOpened();
     void projectClosed();
+    */
 
 private:
+    /*
     QStringList m_mimetypes;
+    */
 };
 
 #endif

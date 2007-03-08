@@ -21,17 +21,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.           *
  *****************************************************************************/
 
+#include "rubylanguagesupport.h"
+
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 
-#include <kdevast.h>
+#include <QExtensionFactory>
 
-// from the parser subdirectory
-#include <ruby_parser.h>
-#include <ruby_serialize_visitor.h>
-
+/*
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include <kdevfilemanager.h>
@@ -39,21 +38,29 @@
 #include <kdevprojectcontroller.h>
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
+
+#include <kdevast.h>
+*/
+
+// from the parser subdirectory
+#include <ruby_parser.h>
+#include <ruby_serialize_visitor.h>
+
 #include "parsejob.h"
-
-#include "rubylanguagesupport.h"
-
-#include <kdebug.h>
 
 using namespace ruby;
 
 typedef KGenericFactory<RubyLanguageSupport> KDevRubySupportFactory;
-K_EXPORT_COMPONENT_FACTORY(kdevrubylanguagesupport,
-                           KDevRubySupportFactory( "kdevrubysupport" ))
+K_EXPORT_COMPONENT_FACTORY( kdevrubylanguagesupport, KDevRubySupportFactory( "kdevrubysupport" ) )
 
-RubyLanguageSupport::RubyLanguageSupport(QObject *parent, const QStringList& /*args*/)
-    :KDevelop::LanguageSupport(KDevRubySupportFactory::componentData(), parent)
+KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, RubyLanguageSupport )
+
+RubyLanguageSupport::RubyLanguageSupport( QObject* parent,
+                                          const QStringList& /*args*/ )
+        : KDevelop::IPlugin( KDevRubySupportFactory::componentData(), parent )
+        , KDevelop::ILanguageSupport()
 {
+    /*
     QString types = QLatin1String("application/x-ruby");
     m_mimetypes = types.split(",");
 
@@ -67,12 +74,14 @@ RubyLanguageSupport::RubyLanguageSupport(QObject *parent, const QStringList& /*a
         this, SLOT(projectOpened()));
     connect(KDevelop::Core::projectController(), SIGNAL(projectClosed()),
         this, SLOT(projectClosed()));
+    */
 }
 
 RubyLanguageSupport::~RubyLanguageSupport()
 {
 }
 
+/*
 KDevelop::CodeModel *RubyLanguageSupport::codeModel(const KUrl &url) const
 {
     Q_UNUSED( url );
@@ -164,6 +173,17 @@ void RubyLanguageSupport::projectOpened()
 void RubyLanguageSupport::projectClosed()
 {
     // FIXME This should remove the project files from the backgroundparser
+}
+*/
+
+QString RubyLanguageSupport::name() const
+{
+    return "Ruby";
+}
+
+QStringList RubyLanguageSupport::extensions() const
+{
+    return QStringList() << "ILanguageSupport";
 }
 
 #include "rubylanguagesupport.moc"
