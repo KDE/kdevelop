@@ -23,7 +23,7 @@
 #ifndef KDEVCODEMODEL_H
 #define KDEVCODEMODEL_H
 
-#include "kdevitemmodel.h"
+#include "util/kdevitemmodel.h"
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/rangefeedback.h>
 
