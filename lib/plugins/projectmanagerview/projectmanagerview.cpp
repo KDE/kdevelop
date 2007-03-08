@@ -31,6 +31,8 @@
 #include "iprojectcontroller.h"
 #include "iuicontroller.h"
 #include "iproject.h"
+#include "ibuildsystemmanager.h"
+#include "iprojectbuilder.h"
 #include <kmainwindow.h>
 // #include <kdevcontext.h>
 #include <kiconloader.h>
@@ -38,6 +40,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
+#include <kactioncollection.h>
 
 #include <QtCore/QDebug>
 #include <QtGui/QVBoxLayout>
@@ -77,6 +80,31 @@ public:
                 m_part->core()->uiController()->openUrl( projectItem->file()->url() );
         }
     }
+    void buildCurrentProject()
+    {
+        QModelIndex current = m_projectOverview->selectionModel()->currentIndex();
+        if( current.isValid() )
+        {
+            ProjectModel* model = m_part->core()->projectController()->projectModel();
+            QStandardItem* item = model->itemFromIndex( current );
+            if( item->type() == KDevelop::ProjectBaseItem::Project )
+            {
+                ProjectItem* prjitem = dynamic_cast<ProjectItem*>( item );
+                if( prjitem )
+                {
+                    IProjectFileManager* fmgr = prjitem->project()->fileManager();
+                    IBuildSystemManager* mgr;
+                    mgr = dynamic_cast<IBuildSystemManager*>( fmgr );
+                    if( !mgr )
+                        mgr = static_cast<IBuildSystemManager*>( fmgr );
+                    if( mgr )
+                    {
+                        mgr->builder( prjitem )->build( prjitem );
+                    }
+                }
+            }
+        }
+    }
 };
 
 ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *parent )
@@ -96,7 +124,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
         //   connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
     connect( d->m_projectOverview, SIGNAL( pressed( QModelIndex ) ),
              this, SLOT( pressed( QModelIndex ) ) );
-
 
 
 #ifdef WITH_PROJECT_DETAILS
@@ -126,6 +153,12 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
+
+    QAction* action = d->m_part->actionCollection()->addAction( "project_build" );
+    action->setText(i18n( "Build Selected Project" ) );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( buildCurrentProject() ) );
+    action->setToolTip( i18n( "Build Selected Project" ) );
+    action->setWhatsThis( i18n( "<b>Build Selected Project</b><p>Builds the currently selected project." ) );
 }
 
 ProjectManagerView::~ProjectManagerView()
