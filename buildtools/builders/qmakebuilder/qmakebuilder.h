@@ -49,7 +49,8 @@ public:
     virtual void registerExtensions();
     virtual void unregisterExtensions();
     virtual QStringList extensions() const;
-private slots:
+
+private Q_SLOTS:
     void commandFinished(const QString &command);
     void commandFailed(const QString &command);
 

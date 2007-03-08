@@ -1,11 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQMakeBuilder
+Comment=Builds QMake Projects
 Icon=gear
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=kdevmakebuilder
-X-KDevelop-ProjectBuilder=
+X-KDE-Library=kdevqmakebuilder
+X-KDE-PluginInfo-Name=KDevQMakeBuilder
+X-KDevelop-ProjectBuilder=QMake
 X-KDevelop-Version=4
-X-KDevelop-Interfaces=IProjectBuilder
-X-KDevelop-IRequired=IProjectBuilder
-X-KDevelop-DependsPlugins=KDevMakeBuilder
+X-KDevelop-Interfaces=IQMakeBuilder

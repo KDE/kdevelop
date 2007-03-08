@@ -29,6 +29,7 @@
 #include <iproject.h>
 #include <icore.h>
 #include <iplugincontroller.h>
+#include <ioutputview.h>
 #include <domutil.h>
 #include <QtDesigner/QExtensionFactory>
 
@@ -47,25 +48,6 @@ K_EXPORT_COMPONENT_FACTORY( kdevqmakebuilder,
                             QMakeBuilderFactory( "kdevqmakebuilder" ) )
 
 
-// class QMakeBuilderIQMakeBuilderFactory: public QExtensionFactory {
-// public:
-//     QMakeBuilderIQMakeBuilderFactory(QIQMakeBuilderManager *parent = 0)
-//         :QIQMakeBuilderFactory(parent)
-//     {
-//         Q_UNUSED(parent)
-//     }
-//     protected:
-//     virtual QObject *createIQMakeBuilder(QObject* object, const QString& iid, QObject* parent ) const
-//     {
-//         Q_UNUSED(parent)
-//         if( iid != Q_TYPEID( IQMakeBuilder ) )
-//             return 0;
-//         QMakeBuilder* p = qobject_cast<QMakeBuilder *>(object);
-//         if( !p )
-//             return 0;
-//         return object;
-//     }
-// };
 KDEV_ADD_EXTENSION_FACTORY( IQMakeBuilder, QMakeBuilder )
 KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectBuilder, QMakeBuilder )
 
@@ -81,7 +63,19 @@ QMakeBuilder::~QMakeBuilder()
 
 bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
-    Q_UNUSED( dom )
+    if( dom->type() != KDevelop::ProjectBaseItem::Project )
+        return false;
+    KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(dom);
+    IPlugin* i = core()->pluginController()->pluginForExtension("IOutputView");
+    if( i )
+    {
+        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        if( view )
+        {
+            view->queueCommand( item->url(), QStringList() << "qmake-qt4" );
+            return true;
+        }
+    }
     return false;
 }
 
