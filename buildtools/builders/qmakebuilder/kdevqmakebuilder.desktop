@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+Name=KDevQMakeBuilder
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevmakebuilder
+X-KDevelop-ProjectBuilder=
+X-KDevelop-Version=4
+X-KDevelop-Interfaces=IProjectBuilder
+X-KDevelop-IRequired=IProjectBuilder
+X-KDevelop-DependsPlugins=KDevMakeBuilder

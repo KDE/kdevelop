@@ -1,5 +1,4 @@
 /* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
     This library is free software; you can redistribute it and/or
@@ -17,43 +16,29 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef IPROJECTBUILDER_H
-#define IPROJECTBUILDER_H
+#ifndef IQMAKEBUILDER_H
+#define IQMAKEBUILDER_H
 
+#include "iprojectbuilder.h"
 #include "iextension.h"
 #include <QtDesigner/QAbstractExtensionFactory>
-#include "kdevexport.h"
 
-namespace KDevelop
-{
 class IProject;
-class ProjectBaseItem;
+class ProjectItem;
 
 /**
-@author Roberto Raggi
-
-@short KDevProjectBuilder Base class for the Project Builders
-
-Describes a <b>Project Builder</b> to KDevelop's Project Manager.
+@author Andreas Pakulat
 */
-class KDEVPLATFORM_EXPORT IProjectBuilder
+
+class IQMakeBuilder : public KDevelop::IProjectBuilder
 {
 public:
 
-    virtual ~IProjectBuilder() {}
+    virtual ~IQMakeBuilder() {}
 
-    virtual bool build(ProjectBaseItem *dom) = 0;
-    virtual bool clean(ProjectBaseItem *dom) = 0;
-
-Q_SIGNALS:
-    void built(ProjectBaseItem *dom);
-    void failed();
 };
 
-}
-
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IProjectBuilder, "org.kdevelop.IProjectBuilder" )
-Q_DECLARE_INTERFACE( KDevelop::IProjectBuilder, "org.kdevelop.IProjectBuilder" )
+Q_DECLARE_EXTENSION_INTERFACE( IQMakeBuilder, "org.kdevelop.IQMakeBuilder" )
 
 #endif
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
