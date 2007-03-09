@@ -21,6 +21,8 @@
 
 #include <QtDesigner/QAbstractExtensionFactory>
 
+#include <kurl.h>
+
 #include "iextension.h"
 #include "kdevexport.h"
 

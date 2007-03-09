@@ -107,6 +107,7 @@ Language *Language::findByName(const QString &name)
 
 BackgroundParser *Language::backgroundParser()
 {
+    return d->backgroundParser;
 }
 
 }
