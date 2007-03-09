@@ -67,7 +67,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     // Higher priority means it will be preferred over other waiting preprocess jobs
     m_parseJob->setPriority(1);
 
-    //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
+    kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
 /*

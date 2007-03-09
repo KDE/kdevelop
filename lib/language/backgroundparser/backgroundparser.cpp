@@ -253,6 +253,7 @@ void BackgroundParser::parseDocuments()
 
 void BackgroundParser::parseDocumentsInternal()
 {
+    kDebug() << "BackgroundParser::parseDocumentsInternal" << endl;
     // First create the jobs, then enqueue them, because they may
     // need to access each other for generating dependencies.
     QList<ParseJob*> jobs;
@@ -260,6 +261,7 @@ void BackgroundParser::parseDocumentsInternal()
     for ( QMap<KUrl, bool>::Iterator it = m_documents.begin();
             it != m_documents.end(); ++it )
     {
+        kDebug() << "adding document " << it.key() << endl;
         KUrl url = it.key();
         bool &p = it.value();
         if ( p )
@@ -293,7 +295,7 @@ void BackgroundParser::parseDocumentsInternal()
     // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
     foreach (ParseJob* parse, jobs) {
-        //kDebug() << k_funcinfo << "Enqueue " << parse << endl;
+        kDebug() << k_funcinfo << "Enqueue " << parse << endl;
         m_weaver ->enqueue( parse );
     }
 }
