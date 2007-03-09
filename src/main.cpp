@@ -23,7 +23,7 @@
 // #include "kdevprojectcontroller.h"
 // #include "kdevdocumentcontroller.h"
 // #include "kdevbackgroundparser.h"
-// #include "kdeveditorintegrator.h"
+#include "editorintegrator.h"
 
 #include "kdevideextension.h"
 
@@ -108,7 +108,7 @@ int main( int argc, char *argv[] )
 
     using namespace KDevelop;
     // initialize the editor integrator - it needs a qobject on the main thread
-//     EditorIntegrator::initialise();
+    EditorIntegrator::initialise();
 
     //initialize the api object
     //WARNING! the order is important

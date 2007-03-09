@@ -43,7 +43,7 @@
 #include "core.h"
 // #include "kdevmainwindow.h"
 // #include "kdevconfig.h"
-// #include "kdeveditorintegrator.h"
+#include "editorintegrator.h"
 
 #include "partcontroller.h"
 
@@ -102,7 +102,7 @@ KTextEditor::Document* PartController::createTextPart(
                                                    "KTextEditor::Editor",
                                                    m_editor ) );
 
-//     EditorIntegrator::addDocument( doc );
+    EditorIntegrator::addDocument( doc );
 
     if ( !encoding.isNull() )
     {
