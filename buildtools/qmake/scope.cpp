@@ -729,7 +729,7 @@ void Scope::updateValues( QStringList& origValues, const QStringList& newValues,
         {
             QStringList::iterator posit = origValues.find( *it );
             posit = origValues.remove( posit );
-            while( posit != origValues.end() && ( (*posit).find( "\\[ \t]*"+getLineEndingString() )
+            while( posit != origValues.end() && ( (*posit).find( QRegExp("\\\\[\\s]*"+getLineEndingString() ) ) != -1
                     || (*posit).stripWhiteSpace() == "" ) )
             {
                 posit = origValues.remove( posit );
