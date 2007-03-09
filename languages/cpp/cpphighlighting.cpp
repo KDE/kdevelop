@@ -186,6 +186,7 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
+  kDebug() << "highighting du chain" << endl;
   QReadLocker lock(DUChain::lock());
   Q_ASSERT(context->topContext() == context);
   highlightDUChain(static_cast<DUContext*>(context));

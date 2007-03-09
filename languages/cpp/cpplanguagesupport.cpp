@@ -286,31 +286,30 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
 
     return ret;
 }
-/*
-void CppLanguageSupport::documentLoaded(KDevelop::AST * ast, const KUrl & document)
+
+void CppLanguageSupport::documentLoaded(TranslationUnitAST *ast, const KUrl & document)
 {
     // Pretty heavy handed - find another way?
     // TODO: use the definition-use chain locking here, rather than in the builders?
-    lockAllParseMutexes();
+    language()->lockAllParseMutexes();
 
     TopDUContext* context = DUChain::self()->chainForDocument(document);
     if (context) {
-        TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
-        CppEditorIntegrator editor(t->session);
+        CppEditorIntegrator editor(ast->session);
         {
             SmartConverter sc(&editor, m_highlights);
             sc.convertDUChain(context);
 
             if (!context->hasUses()) {
                 UseBuilder ub(&editor);
-                ub.buildUses(t);
+                ub.buildUses(ast);
             }
         }
     }
 
-    unlockAllParseMutexes();
+    language()->unlockAllParseMutexes();
 }
-*/
+
 
 QString CppLanguageSupport::name() const
 {

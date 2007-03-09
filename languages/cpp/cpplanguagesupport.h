@@ -31,6 +31,7 @@ class CodeDelegate;
 class CodeAggregate;
 class CppHighlighting;
 class CppCodeCompletion;
+class TranslationUnitAST;
 
 namespace KParts { class Part; }
 namespace KDevelop { class CodeHighlighting; class IProject; }
@@ -64,9 +65,9 @@ public:
     virtual KDevelop::CodeHighlighting *codeHighlighting() const;
 /*
     virtual void releaseAST( KDevelop::AST *ast);
-
-    virtual void documentLoaded( KDevelop::AST *ast, const KUrl& document );
 */
+    virtual void documentLoaded( TranslationUnitAST *ast, const KUrl& document );
+
     /// Get the full path for a file based on a search through the project's
     /// include directories
     KUrl findInclude(const KUrl &source, const QString& includeName );

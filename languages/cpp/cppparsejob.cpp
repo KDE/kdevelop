@@ -184,6 +184,7 @@ void ParseJob::run()
 
         // Control the lifetime of the editor integrator (so that locking works)
         {
+            kDebug() << "building duchain" << endl;
             CppEditorIntegrator editor(parentJob()->parseSession());
 
             // Translate the cursors we generate with edits that have happened since retrieval of the document source.
@@ -209,6 +210,7 @@ void ParseJob::run()
 
             parentJob()->setDUChain(topContext);
 
+            kDebug() << "duchain is built" << endl;
             if ( parentJob()->cpp()->codeHighlighting() )
                 parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
 
@@ -218,11 +220,12 @@ void ParseJob::run()
 
         // Debug output...
 
-        /*if (topContext->smartRange()) {
+        if (topContext->smartRange()) {
+            kDebug() << "================== duchain =======================" << endl;
             DumpChain dump;
             dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);
-        }*/
+        }
     }
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
