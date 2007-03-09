@@ -48,7 +48,7 @@ public:
     void unregisterExtensions();
     QStringList extensions() const;
 
-//     virtual KDevelop::ParseJob *createParseJob( const KUrl &url );
+    virtual KDevelop::ParseJob *createParseJob( const KUrl &url );
 
     //KDevelop::LanguageSupport implementation
 /*    virtual KDevelop::CodeModel *codeModel( const KUrl& url ) const;

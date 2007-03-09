@@ -140,12 +140,12 @@ KDevelop::CodeRepository *CppLanguageSupport::codeRepository() const
 {
     return 0;
 }
-
+*/
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
-    return new CPPParseJob( url, this );
+    return 0; //new CPPParseJob( url, this );
 }
-
+/*
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( KDevelop::Document *document )
 {
     return new CPPParseJob( document, this );
