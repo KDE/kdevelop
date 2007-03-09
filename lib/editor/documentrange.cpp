@@ -16,13 +16,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kdevdocumentrange.h"
+#include "documentrange.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
-    
+
 DocumentRange::DocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, Range* parent)
   : Range(start, end)
   , m_document(document)

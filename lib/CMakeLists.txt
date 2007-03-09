@@ -1,6 +1,7 @@
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
 add_subdirectory(project)
+add_subdirectory(editor)
 add_subdirectory(language)
 add_subdirectory(shell)
 add_subdirectory(persistenthash)

@@ -16,14 +16,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kdevdocumentrangeobject.h"
+#include "documentrangeobject.h"
 
 #include <QMutexLocker>
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
-#include "kdeveditorintegrator.h"
+#include "editorintegrator.h"
 
 using namespace KTextEditor;
 

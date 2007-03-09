@@ -16,12 +16,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kdevdocumentcursor.h"
+#include "documentcursor.h"
 
 #include <ktexteditor/smartcursor.h>
 #include <ktexteditor/document.h>
 
-#include "kdevdocumentrangeobject.h"
+#include "documentrangeobject.h"
 
 using namespace KTextEditor;
 

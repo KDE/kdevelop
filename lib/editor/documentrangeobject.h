@@ -24,12 +24,12 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include "kdevdocumentcursor.h"
-#include "kdevdocumentrange.h"
+#include "documentcursor.h"
+#include "documentrange.h"
 
 namespace KDevelop
 {
-  
+
 /**
  * Base class for any object which has an associated range of text.
  *

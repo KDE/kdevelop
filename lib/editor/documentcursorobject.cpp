@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kdevdocumentcursorobject.h"
+#include "documentcursorobject.h"
 
 #include <ktexteditor/smartcursor.h>
 #include <ktexteditor/document.h>

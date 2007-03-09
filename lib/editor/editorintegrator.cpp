@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kdeveditorintegrator.h"
-#include "kdeveditorintegrator_p.h"
+#include "editorintegrator.h"
+#include "editorintegrator_p.h"
 
 #include <limits.h>
 
@@ -30,13 +30,8 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "kdevast.h"
-#include "kdevdocumentrange.h"
-#include "kdevdocumentrangeobject.h"
-
-#include "kdevproject.h"
-#include "kdevcore.h"
-#include "kdevpersistenthash.h"
+#include "documentrange.h"
+#include "documentrangeobject.h"
 
 using namespace KTextEditor;
 
@@ -96,11 +91,6 @@ void EditorIntegratorPrivate::documentLoaded()
 
     documents.insert(doc->url(), doc);
   }
-
-  if (Project* project = Core::activeProject())
-    if (PersistentHash* hash = project->persistentHash())
-      if (AST* ast = hash->retrieveAST(doc->url()))
-        ast->documentLoaded(doc->url());
 }
 
 void EditorIntegratorPrivate::documentUrlChanged(Document* document)
@@ -362,6 +352,6 @@ void EditorIntegrator::initialise()
 }
 
 }
-#include "kdeveditorintegrator_p.moc"
+#include "editorintegrator_p.moc"
 
 // kate: indent-width 2;

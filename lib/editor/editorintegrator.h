@@ -23,7 +23,7 @@
 
 #include <ktexteditor/range.h>
 
-#include "kdevdocumentcursor.h"
+#include "documentcursor.h"
 
 class QMutex;
 
