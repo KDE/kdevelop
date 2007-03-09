@@ -104,10 +104,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
              SIGNAL( documentActivated( KDevelop::Document* ) ),
              this, SLOT( documentActivated( KDevelop::Document* ) ) );*/
     connect( core()->projectController(),
-             SIGNAL( projectOpened(KDevelop::IProject*) ),
+             SIGNAL( projectOpened( IProject* ) ),
              this, SLOT( projectOpened(KDevelop::IProject*) ) );
     connect( core()->projectController(),
-             SIGNAL( projectClosing(KDevelop::IProject*) ),
+             SIGNAL( void projectClosing( IProject* ) ),
              this, SLOT( projectClosing(KDevelop::IProject*) ) );
     ///@todo this connect should be here until proper document controller system is in place
     connect( core()->partManager(), SIGNAL( activePartChanged(KParts::Part*)),
