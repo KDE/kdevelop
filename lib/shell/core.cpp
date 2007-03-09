@@ -35,6 +35,7 @@
 #include "projectcontroller.h"
 #include "partcontroller.h"
 #include "languagecontroller.h"
+#include "editorintegrator.h"
 
 namespace KDevelop {
 
@@ -89,6 +90,7 @@ void Core::initialize()
         return;
     m_self = new Core();
     m_self->d->initialize();
+    EditorIntegrator::initialise();
 }
 
 Core *KDevelop::Core::self()
