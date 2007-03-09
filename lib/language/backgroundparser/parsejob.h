@@ -34,14 +34,9 @@ namespace KTextEditor
 class SmartRange;
 }
 
-class TopDUContext;
-
 namespace KDevelop
 {
 
-class Document;
-class AST;
-class CodeModel;
 class BackgroundParser;
 
 /**
@@ -52,9 +47,6 @@ class KDEVPLATFORM_EXPORT ParseJob : public ThreadWeaver::JobSequence
     Q_OBJECT
 public:
     ParseJob( const KUrl &url, QObject *parent );
-
-    ParseJob( Document *document,
-                  QObject* parent );
 
     virtual ~ParseJob();
 
@@ -76,14 +68,9 @@ public:
     int revisionToken() const;
 
     const KUrl& document() const;
-    Document* openDocument() const;
 
     void setErrorMessage(const QString& message);
     const QString& errorMessage() const;
-
-    virtual ::KDevelop::AST *AST() const = 0;
-    virtual CodeModel *codeModel() const = 0;
-    virtual TopDUContext *duChain() const;
 
     /// Overriden to allow jobs to determine if they've been requested to abort
     virtual void requestAbort();
@@ -108,7 +95,6 @@ public:
 
 protected:
     KUrl m_document;
-    Document* m_openDocument;
     QString m_errorMessage;
     BackgroundParser* m_backgroundParser;
 

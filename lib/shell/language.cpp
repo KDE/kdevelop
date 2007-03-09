@@ -26,11 +26,13 @@
 #include "ilanguagesupport.h"
 
 #include "core.h"
+#include "backgroundparser.h"
 
 namespace KDevelop {
 
 struct LanguagePrivate {
     ILanguageSupport *support;
+    BackgroundParser *backgroundParser;
 
     static QMap<QString, Language*> languages;
     static QMap<KMimeType::Ptr, QList<Language*> > languageCache;
@@ -45,6 +47,8 @@ Language::Language(ILanguageSupport *support, QObject *parent)
     kDebug(9000) << "creating language " << support->name() << endl;
     d = new LanguagePrivate();
     d->support = support;
+    d->backgroundParser = new BackgroundParser(support, this);
+
     LanguagePrivate::languages[support->name()] = this;
 }
 
@@ -99,6 +103,10 @@ QList<Language*> Language::findByUrl(const KUrl &url, QObject *parent)
 Language *Language::findByName(const QString &name)
 {
     return LanguagePrivate::languages[name];
+}
+
+BackgroundParser *Language::backgroundParser()
+{
 }
 
 }

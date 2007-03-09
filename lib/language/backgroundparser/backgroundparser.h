@@ -23,7 +23,6 @@
 #define KDEVBACKGROUNDPARSER_H
 
 #include <QObject>
-#include "kdevcore.h"
 
 #include <kurl.h>
 #include <QMap>
@@ -31,6 +30,8 @@
 #include <QMutex>
 #include <QHash>
 #include <QPointer>
+
+#include "kdevexport.h"
 
 namespace ThreadWeaver
 {
@@ -50,28 +51,18 @@ class QWaitCondition;
 
 namespace KDevelop
 {
-class AST;
-class Document;
-class CodeModel;
-class LanguageSupport;
-class PersistentHash;
+class ILanguageSupport;
 class ParseJob;
 class ParserDependencyPolicy;
-
-typedef QList< QPair<KUrl, CodeModel* > > CodeModelCache;
 
 using namespace ThreadWeaver;
 
 class KDEVPLATFORM_EXPORT BackgroundParser : public QObject
 {
-    friend class Core;
-
     Q_OBJECT
 public:
-    BackgroundParser( QObject* parent = 0 );
+    BackgroundParser(ILanguageSupport *languageSupport, QObject* parent = 0 );
     virtual ~BackgroundParser();
-
-    void cacheModels( uint modelsToCache );
 
     /**
      * Abort or dequeue all current running jobs with the specified \a parent.
@@ -101,16 +92,16 @@ public Q_SLOTS:
     void setThreads( int threads );
 
     void addDocument( const KUrl &url );
-    void addDocument( Document *document );
+//     void addDocument( Document *document );
     void addDocumentList( const KUrl::List &urls );
     void removeDocument( const KUrl &url );
-    void removeDocument( Document *document );
+//     void removeDocument( Document *document );
 
     void parseDocuments();
 
 private Q_SLOTS:
     void parseComplete( Job *job );
-    void documentChanged( KTextEditor::Document *document );
+//     void documentChanged( KTextEditor::Document *document );
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );
@@ -127,7 +118,9 @@ Q_SIGNALS:
 private:
     // Non-mutex guarded functions, only call with m_mutex acquired.
     void parseDocumentsInternal();
-    void cacheModelsInternal( uint modelsToCache );
+//     void cacheModelsInternal( uint modelsToCache );
+
+    ILanguageSupport *m_languageSupport;
 
     QTimer *m_timer;
     int m_delay;
@@ -137,11 +130,9 @@ private:
     // A list of known documents, and whether they are due to be parsed or not
     QMap<KUrl, bool> m_documents;
     // A list of open documents
-    QMap<KUrl, Document*> m_openDocuments;
+//     QMap<KUrl, Document*> m_openDocuments;
     // Current parse jobs
     QHash<KUrl, ParseJob*> m_parseJobs;
-    // A list of cached models when parsing a large amount of files.
-    CodeModelCache m_modelCache;
 
     QPointer<QProgressBar> m_progressBar;
 

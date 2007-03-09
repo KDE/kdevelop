@@ -19,7 +19,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kdevparsejob.h"
+#include "parsejob.h"
 
 #include <cassert>
 #include <fcntl.h>
@@ -37,11 +37,10 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "editor/kdeveditorintegrator.h"
-#include <kdevdocumentcontroller.h>
+#include "editorintegrator.h"
 
-#include "kdevbackgroundparser.h"
-#include "kdevparserdependencypolicy.h"
+#include "backgroundparser.h"
+#include "parserdependencypolicy.h"
 
 using namespace KTextEditor;
 
@@ -52,19 +51,6 @@ ParseJob::ParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
         m_document( url ),
-        m_openDocument( 0 ),
-        m_backgroundParser( 0 ),
-        m_abortMutex(new QMutex),
-        m_abortRequested( false ),
-        m_aborted( false ),
-        m_revisionToken(-1)
-{}
-
-ParseJob::ParseJob( Document *document,
-                            QObject *parent )
-        : ThreadWeaver::JobSequence( parent ),
-        m_document( document->url() ),
-        m_openDocument( document ),
         m_backgroundParser( 0 ),
         m_abortMutex(new QMutex),
         m_abortRequested( false ),
@@ -74,22 +60,18 @@ ParseJob::ParseJob( Document *document,
 
 ParseJob::~ParseJob()
 {
-    if (m_revisionToken != -1) {
+    ///@todo adymo: reenable after documentcontroller is ported
+/*    if (m_revisionToken != -1) {
         Q_ASSERT(m_openDocument);
         SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
         Q_ASSERT(smart);
         smart->releaseRevision(m_revisionToken);
-    }
+    }*/
 }
 
 const KUrl& ParseJob::document() const
 {
     return m_document;
-}
-
-Document* ParseJob::openDocument() const
-{
-    return m_openDocument;
 }
 
 bool ParseJob::success() const
@@ -102,15 +84,18 @@ const QString & ParseJob::errorMessage() const
     return m_errorMessage;
 }
 
-TopDUContext* ParseJob::duChain() const
-{
-    // No definition-use chain available by default
-    return 0L;
-}
+// TopDUContext* ParseJob::duChain() const
+// {
+//     // No definition-use chain available by default
+//     return 0L;
+// }
 
 bool ParseJob::contentsAvailableFromEditor() const
 {
-    return m_openDocument && m_openDocument->textDocument() && EditorIntegrator::documentLoaded(m_openDocument->textDocument());
+    ///@todo adymo: reenable after documentcontroller is ported
+    return false;
+//     return m_openDocument && m_openDocument->textDocument() &&
+//         EditorIntegrator::documentLoaded(m_openDocument->textDocument());
 }
 
 int ParseJob::revisionToken() const
@@ -120,7 +105,9 @@ int ParseJob::revisionToken() const
 
 QString ParseJob::contentsFromEditor(bool saveRevisionToken)
 {
-    SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
+    ///@todo adymo: reenable after documentcontroller is ported
+    return "";
+/*    SmartInterface* smart = dynamic_cast<SmartInterface*>(m_openDocument->textDocument());
 
     QMutexLocker lock(smart ? smart->smartMutex() : 0);
 
@@ -128,7 +115,7 @@ QString ParseJob::contentsFromEditor(bool saveRevisionToken)
         m_revisionToken = smart->currentRevision();
     }
 
-    return m_openDocument->textDocument()->text();
+    return m_openDocument->textDocument()->text();*/
 }
 
 void ParseJob::setErrorMessage(const QString& message)
@@ -138,13 +125,15 @@ void ParseJob::setErrorMessage(const QString& message)
 
 int ParseJob::priority() const
 {
-    if (m_openDocument)
+    ///@todo adymo: reenable after documentcontroller is ported
+    return 0;
+/*    if (m_openDocument)
         if (m_openDocument->isActive())
             return 2;
         else
             return 1;
     else
-        return 0;
+        return 0;*/
 }
 
 void ParseJob::addJob(Job* job)
@@ -208,6 +197,6 @@ void ParseJob::abortJob()
 }
 
 }
-#include "kdevparsejob.moc"
+#include "parsejob.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

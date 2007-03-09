@@ -28,6 +28,7 @@
 namespace KDevelop {
 
 class ILanguageSupport;
+class BackgroundParser;
 
 class KDEVPLATFORM_EXPORT ILanguage: public QObject {
 public:
@@ -43,7 +44,10 @@ public:
     //virtual CodeHighlighting *codeHighlighting() const = 0;
 
     /** @return the language support plugin.*/
-    virtual ILanguageSupport* languageSupport() = 0;
+    virtual ILanguageSupport *languageSupport() = 0;
+
+    /** @return the background parser for parsing sources.*/
+    virtual BackgroundParser *backgroundParser() = 0;
 
 private:
     struct ILanguagePrivate *d;

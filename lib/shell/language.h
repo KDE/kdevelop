@@ -34,6 +34,7 @@ public:
     virtual void deactivate();
 
     virtual ILanguageSupport* languageSupport();
+    virtual BackgroundParser *backgroundParser();
 
     static Language *findByName(const QString &name);
     static QList<Language*> findByUrl(const KUrl &url, QObject *parent);

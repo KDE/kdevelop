@@ -19,21 +19,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kdevbackgroundparser.h"
-
-#include "kdevcore.h"
-#include "kdevproject.h"
-#include "kdevcodemodel.h"
-#include "kdevmainwindow.h"
-#include "kdevlanguagesupport.h"
-#include "kdevdocumentcontroller.h"
-#include "kdevcodehighlighting.h"
-
-#include "kdevast.h"
-#include "kdevconfig.h"
-#include "kdevparsejob.h"
-#include "kdevpersistenthash.h"
-#include "kdevprojectcontroller.h"
+#include "backgroundparser.h"
 
 #include <QList>
 #include <QFile>
@@ -45,7 +31,10 @@
 #include <QThread>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <kstatusbar.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
@@ -57,12 +46,15 @@
 #include <JobCollection.h>
 #include <DebuggingAids.h>
 
-#include "kdevparserdependencypolicy.h"
+#include "parsejob.h"
+#include "ilanguagesupport.h"
+#include "parserdependencypolicy.h"
 
 namespace KDevelop
 {
-BackgroundParser::BackgroundParser( QObject* parent )
+BackgroundParser::BackgroundParser(ILanguageSupport *languageSupport,  QObject* parent )
         : QObject( parent ),
+        m_languageSupport(languageSupport),
         m_delay( 500 ),
         m_threads( 1 ),
         m_modelsToCache( 0 ),
@@ -81,7 +73,8 @@ BackgroundParser::BackgroundParser( QObject* parent )
     suspend(); //Don't start the weaver until after project file has been read
 
     // Signal to allow other threads to request document addition.
-    connect(this, SIGNAL(requestAddDocument(const QUrl&)), this, SLOT(acceptAddDocument(const QUrl&)), Qt::QueuedConnection);
+    connect(this, SIGNAL(requestAddDocument(const QUrl&)),
+        this, SLOT(acceptAddDocument(const QUrl&)), Qt::QueuedConnection);
 }
 
 BackgroundParser::~BackgroundParser()
@@ -118,11 +111,10 @@ void BackgroundParser::clear(QObject* parent)
 
 void BackgroundParser::loadSettings( bool projectIsLoaded )
 {
-    KConfig * config = Config::standard();
-    config->setGroup( "Background Parser" );
-    bool enabled = config->readEntry( "Enabled", true );
-    m_delay = config->readEntry( "Delay", 500 );
-    m_threads = config->readEntry( "Number of Threads", 1 );
+    KConfigGroup config(KGlobal::config(), "Background Parser");
+    bool enabled = config.readEntry( "Enabled", true );
+    m_delay = config.readEntry( "Delay", 500 );
+    m_threads = config.readEntry( "Number of Threads", 1 );
 
     if ( enabled )
         resume();
@@ -138,29 +130,13 @@ void BackgroundParser::initialize()
 {
     QMutexLocker lock(m_mutex);
 
-    m_progressBar->setMinimumWidth( 150 );
+/*    m_progressBar->setMinimumWidth( 150 );
     Core::mainWindow()->statusBar()->addPermanentWidget( m_progressBar );
-    m_progressBar->hide();
+    m_progressBar->hide();*/
 }
 
 void BackgroundParser::cleanup()
 {
-}
-
-void BackgroundParser::cacheModels( uint modelsToCache )
-{
-    QMutexLocker lock(m_mutex);
-
-    cacheModelsInternal(modelsToCache);
-}
-
-void BackgroundParser::cacheModelsInternal( uint modelsToCache )
-{
-    m_modelsToCache = modelsToCache;
-    m_progressBar->reset();
-    m_progressBar->setMinimum( 0 );
-    m_progressBar->setMaximum( modelsToCache );
-    m_progressBar->show();
 }
 
 void BackgroundParser::acceptAddDocument(const QUrl& url)
@@ -208,6 +184,7 @@ void BackgroundParser::addDocument( const KUrl &url )
     m_waitForJobCreation->wakeAll();
 }
 
+/*
 void BackgroundParser::addDocument( Document* document )
 {
     Q_ASSERT(thread() == QThread::currentThread());
@@ -221,6 +198,7 @@ void BackgroundParser::addDocument( Document* document )
 
     addDocument( document->url() );
 }
+*/
 
 void BackgroundParser::addDocumentList( const KUrl::List &urls )
 {
@@ -236,7 +214,7 @@ void BackgroundParser::addDocumentList( const KUrl::List &urls )
         }
     }
 
-    cacheModelsInternal( i );
+//     cacheModelsInternal( i );
     parseDocumentsInternal();
 }
 
@@ -250,10 +228,11 @@ void BackgroundParser::removeDocument( const KUrl &url )
     }
 
     m_documents.remove( url );
-    if ( m_openDocuments.contains( url ) )
-        m_openDocuments.remove( url );
+//     if ( m_openDocuments.contains( url ) )
+//         m_openDocuments.remove( url );
 }
 
+/*
 void BackgroundParser::removeDocument( Document* document )
 {
     Q_ASSERT(thread() == QThread::currentThread());
@@ -262,6 +241,7 @@ void BackgroundParser::removeDocument( Document* document )
 
     removeDocument( document->url() );
 }
+*/
 
 void BackgroundParser::parseDocuments()
 {
@@ -272,10 +252,6 @@ void BackgroundParser::parseDocuments()
 
 void BackgroundParser::parseDocumentsInternal()
 {
-    LanguageSupport * langSupport = Core::activeLanguage();
-    if ( !langSupport )
-        return ;
-
     // First create the jobs, then enqueue them, because they may
     // need to access each other for generating dependencies.
     QList<ParseJob*> jobs;
@@ -288,12 +264,12 @@ void BackgroundParser::parseDocumentsInternal()
         if ( p )
         {
             ParseJob * parse = 0L;
-            Document* document = m_openDocuments[ url ];
+//             Document* document = m_openDocuments[ url ];
 
-            if ( document )
-                parse = langSupport->createParseJob( document );
-            else
-                parse = langSupport->createParseJob( url );
+//             if ( document )
+//                 parse = langSupport->createParseJob( document );
+//             else
+                parse = m_languageSupport->createParseJob( url );
 
             if ( !parse )
                 return ; //Language part did not produce a valid ParseJob
@@ -331,49 +307,6 @@ void BackgroundParser::parseComplete( Job *job )
     {
         m_parseJobs.remove(parseJob->document());
 
-        LanguageSupport * langSupport = Core::activeLanguage();
-
-        // Ensure success, otherwise nothing to do
-        if (parseJob->success() && langSupport)
-        {
-            if ( m_modelsToCache )
-            {
-                if ( parseJob->codeModel() )
-                m_modelCache.append( qMakePair( parseJob->document(),
-                                                parseJob->codeModel() ) );
-
-                m_modelsToCache--; //decrement
-                m_progressBar->setValue( m_progressBar->value() + 1 );
-
-                if ( !m_modelsToCache /*&& !m_modelCache.isEmpty()*/ )
-                {
-                    if ( parseJob->codeModel() )
-                    langSupport->codeProxy() ->insertModelCache( m_modelCache );
-                    m_modelCache.clear();
-
-                    //FIXME Stub for now, but eventually save persistent parser info
-                    //whatever that may entail.
-                    if (Core::activeProject())
-                        Core::activeProject()->persistentHash()->save();
-
-                    m_progressBar->hide();
-                }
-            }
-            else
-            {
-                if ( parseJob->codeModel() )
-                langSupport->codeProxy() ->insertModel( parseJob->document(),
-                                                        parseJob->codeModel() );
-            }
-
-            //FIXME Stub for now, but eventually save persistent parser info
-            //whatever that may entail.
-            if (Core::activeProject())
-                Core::activeProject()->persistentHash()->insertAST( parseJob->document(), parseJob->AST() );
-            else
-                parseJob->AST()->release();
-        }
-
         // FIXME hack, threadweaver doesn't let us know when we can delete, so just pick an arbitrary time...
         // (awaiting reply from Mirko on this one)
         parseJob->setBackgroundParser(0);
@@ -382,6 +315,7 @@ void BackgroundParser::parseComplete( Job *job )
     }
 }
 
+/*
 void BackgroundParser::documentChanged( KTextEditor::Document * document )
 {
     QMutexLocker lock(m_mutex);
@@ -395,6 +329,7 @@ void BackgroundParser::documentChanged( KTextEditor::Document * document )
     if ( !m_timer->isActive() && !s )
         m_timer->start( m_delay );
 }
+*/
 
 void BackgroundParser::suspend()
 {
@@ -459,6 +394,6 @@ ParseJob* BackgroundParser::parseJobForDocument(const KUrl& document) const
 }
 
 }
-#include "kdevbackgroundparser.moc"
+#include "backgroundparser.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

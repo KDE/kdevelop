@@ -19,11 +19,11 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kdevparserdependencypolicy.h"
+#include "parserdependencypolicy.h"
 
 #include <QSet>
 
-#include "kdevparsejob.h"
+#include "parsejob.h"
 
 using namespace ThreadWeaver;
 
