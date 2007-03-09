@@ -146,6 +146,7 @@ void BackgroundParser::acceptAddDocument(const QUrl& url)
 
 void BackgroundParser::addDocument( const KUrl &url )
 {
+    kDebug() << "BackgroundParser::addDocument" << endl;
     QMutexLocker lock(m_mutex);
     {
 

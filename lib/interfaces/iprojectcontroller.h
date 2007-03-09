@@ -64,9 +64,9 @@ public Q_SLOTS:
     virtual bool closeProject( IProject* ) = 0;
 
 Q_SIGNALS:
-    void projectOpened( IProject* );
-    void projectClosing( IProject* );
-    void projectClosed( IProject* );
+    void projectOpened( KDevelop::IProject* );
+    void projectClosing( KDevelop::IProject* );
+    void projectClosed( KDevelop::IProject* );
 };
 
 }
