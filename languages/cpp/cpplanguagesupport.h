@@ -32,6 +32,8 @@ class CodeAggregate;
 class CppHighlighting;
 class CppCodeCompletion;
 
+namespace KDevelop { class CodeHighlighting; }
+
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
 Q_OBJECT
@@ -55,9 +57,9 @@ public:
     virtual KDevelop::CodeRepository *codeRepository() const;
     virtual KDevelop::ParseJob *createParseJob( KDevelop::Document *document );
     virtual QStringList mimeTypes() const;
-
+*/
     virtual KDevelop::CodeHighlighting *codeHighlighting() const;
-
+/*
     virtual void releaseAST( KDevelop::AST *ast);
 
     virtual void documentLoaded( KDevelop::AST *ast, const KUrl& document );
@@ -77,9 +79,9 @@ private:
 /*    QStringList m_mimetypes;
     CodeProxy *m_codeProxy;
     CodeDelegate *m_codeDelegate;
+*/
     CppHighlighting *m_highlights;
     CppCodeCompletion* m_cc;
-*/
 };
 
 #endif

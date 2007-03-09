@@ -32,7 +32,6 @@
 
 namespace KTextEditor { class SmartRange; }
 
-class CodeModel;
 class DUContext;
 class Declaration;
 
@@ -73,8 +72,6 @@ class CppHighlighting : public QObject, public KDevelop::CodeHighlighting
 
     CppHighlighting(QObject* parent);
     virtual ~CppHighlighting();
-
-    void highlightModel(CodeModel* model, const QModelIndex& parent = QModelIndex()) const;
 
     void highlightTree(KTextEditor::SmartRange* topRange) const;
     void highlightDUChain(TopDUContext* context) const;

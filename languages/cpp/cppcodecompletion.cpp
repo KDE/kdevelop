@@ -21,12 +21,12 @@
 
 #include "cppcodecompletion.h"
 
+#include <kparts/partmanager.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/codecompletioninterface.h>
 
-#include <kdevcore.h>
-#include <kdevdocumentcontroller.h>
+#include <icore.h>
 
 #include "cpplanguagesupport.h"
 #include "cppcodecompletionmodel.h"
@@ -40,7 +40,8 @@ CppCodeCompletion::CppCodeCompletion( CppLanguageSupport * parent )
   : QObject(parent)
   , m_model(new CppCodeCompletionModel(this))
 {
-  connect (KDevelop::Core::documentController(), SIGNAL(documentLoaded(KDevelop::Document*)), SLOT(documentLoaded(KDevelop::Document*)));
+  connect (parent->core()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+    SLOT(documentLoaded(KParts::Part*)));
 }
 
 CppCodeCompletion::~CppCodeCompletion()
@@ -57,13 +58,14 @@ void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEdito
   }
 }
 
-void CppCodeCompletion::documentLoaded(KDevelop::Document* document)
+void CppCodeCompletion::documentLoaded(KParts::Part* document)
 {
-  if (document->textDocument()) {
-    foreach (KTextEditor::View* view, document->textDocument()->views())
+  KTextEditor::Document *textDocument = dynamic_cast<KTextEditor::Document*>(document);
+  if (textDocument) {
+    foreach (KTextEditor::View* view, textDocument->views())
       connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), SLOT(cursorPositionChanged()));
 
-    connect(document->textDocument(), SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
+    connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
 
   } else {
     kDebug() << k_funcinfo << "Non-text editor document added" << endl;

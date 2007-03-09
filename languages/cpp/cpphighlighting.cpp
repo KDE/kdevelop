@@ -25,7 +25,6 @@
 
 #include <ktexteditor/smartrange.h>
 
-#include "parser/codemodel.h"
 #include "duchain/topducontext.h"
 #include "duchain/declaration.h"
 #include "duchain/definition.h"
@@ -167,54 +166,6 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
   }
 
   return a;
-}
-
-void CppHighlighting::highlightModel(CodeModel* model, const QModelIndex & parent) const
-{
-  int rowCount = 0;
-  rowCount = model->rowCount(parent);
-
-  for (int i = 0; i < rowCount; ++i) {
-    QModelIndex index = model->index(i, 0, parent);
-    const KDevelop::Item* item = static_cast<const KDevelop::CodeModel*>(index.model())->item(index);
-    Types type = UnknownType;
-
-    const KDevelop::CodeItem* c = dynamic_cast<const KDevelop::CodeItem*>(item);
-    if (!c)
-      continue;
-
-    if (dynamic_cast<const _ClassModelItem*>(c))
-      type = ClassType;
-    else if (dynamic_cast<const _EnumModelItem*>(c))
-      type = EnumType;
-    else if (dynamic_cast<const _EnumeratorModelItem*>(c))
-      type = EnumeratorType;
-    else if (dynamic_cast<const _FileModelItem*>(c))
-      type = FileType;
-    else if (dynamic_cast<const _FunctionDefinitionModelItem*>(c))
-      type = FunctionDefinitionType;
-    else if (dynamic_cast<const _FunctionModelItem*>(c))
-      type = FunctionType;
-    else if (dynamic_cast<const _NamespaceModelItem*>(c))
-      type = NamespaceType;
-    else if (dynamic_cast<const _ScopeModelItem*>(c))
-      type = ScopeType;
-    else if (dynamic_cast<const _TemplateModelItem*>(c))
-      type = TemplateType;
-    else if (dynamic_cast<const _TemplateParameterModelItem*>(c))
-      type = TemplateParameterType;
-    else if (dynamic_cast<const _TypeAliasModelItem*>(c))
-      type = TypeAliasType;
-
-    foreach (KTextEditor::SmartRange* sr, c->references())
-      sr->setAttribute(attributeForType(type, ReferenceContext));
-    if (c->definition())
-      c->definition()->setAttribute(attributeForType(type, DeclarationContext));
-    if (c->declaration())
-      c->declaration()->setAttribute(attributeForType(type, DeclarationContext));
-
-    highlightModel(model, index);
-  }
 }
 
 void CppHighlighting::highlightTree( KTextEditor::SmartRange * range ) const

@@ -54,6 +54,8 @@ public:
     /** @copydoc ICore::languageController() */
     virtual ILanguageController *languageController();
 
+    virtual KParts::PartManager *partManager();
+
     /// @internal
     PartController *partController();
     /// @internal

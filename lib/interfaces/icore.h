@@ -25,6 +25,11 @@ Boston, MA 02110-1301, USA.
 
 class KMainWindow;
 
+namespace KParts
+{
+class PartManager;
+}
+
 namespace KDevelop
 {
 
@@ -59,6 +64,8 @@ public:
     virtual IProjectController *projectController() = 0;
 
     virtual ILanguageController *languageController() = 0;
+
+    virtual KParts::PartManager *partManager() = 0;
 
 protected:
     ICore(QObject *parent = 0) { Q_UNUSED(parent) };

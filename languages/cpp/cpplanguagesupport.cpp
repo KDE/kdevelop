@@ -48,10 +48,10 @@
 #include <kdevdocumentcontroller.h>
 #include <kdevbackgroundparser.h>
 #include <kdevpersistenthash.h>
-
+*/
 #include "cpphighlighting.h"
 
-#include "parser/codemodel.h"
+// #include "parser/codemodel.h"
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 
@@ -63,11 +63,11 @@
 #include "duchain/symboltable.h"
 #include "duchain/typerepository.h"
 
-#include "parsejob.h"
-#include "codeproxy.h"
-#include "codedelegate.h"
+// #include "parsejob.h"
+// #include "codeproxy.h"
+// #include "codedelegate.h"
 #include "cppcodecompletion.h"
-*/
+
 
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
@@ -79,14 +79,14 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
         : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
         KDevelop::ILanguageSupport()
 {
+    m_highlights = new CppHighlighting( this );
+    m_cc = new CppCodeCompletion( this );
 /*    QString types =
         QLatin1String( "text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src" );
     m_mimetypes = types.split( "," );
 
     m_codeProxy = new CodeProxy( this );
     m_codeDelegate = new CodeDelegate( this );
-    m_highlights = new CppHighlighting( this );
-    m_cc = new CppCodeCompletion( this );
 
     SymbolTable::self();
 
@@ -172,12 +172,12 @@ void CppLanguageSupport::documentActivated( KDevelop::Document *document )
 {
     Q_UNUSED( document );
 }
-
+*/
 KDevelop::CodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }
-
+/*
 void CppLanguageSupport::projectOpened()
 {
 #ifdef HAVE_VALGRIND_H

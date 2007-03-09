@@ -131,6 +131,11 @@ IProjectController* Core::projectController()
     return d->projectController;
 }
 
+KParts::PartManager *KDevelop::Core::partManager()
+{
+    return d->partController;
+}
+
 PartController *Core::partController()
 {
     return d->partController;
