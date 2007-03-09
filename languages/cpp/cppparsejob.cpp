@@ -67,7 +67,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     // Higher priority means it will be preferred over other waiting preprocess jobs
     m_parseJob->setPriority(1);
 
-    kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
+    kDebug( 9007 ) << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
 /*
@@ -150,7 +150,7 @@ void ParseJob::run()
     if ( ast )
     {
 //         ast->language = parentJob()->cpp();
-//         ast->session = parentJob()->parseSession();
+        ast->session = parentJob()->parseSession();
     }
 
     parentJob()->setAST(ast);
@@ -184,7 +184,7 @@ void ParseJob::run()
 
         // Control the lifetime of the editor integrator (so that locking works)
         {
-            kDebug() << "building duchain" << endl;
+            kDebug( 9007 ) << "building duchain" << endl;
             CppEditorIntegrator editor(parentJob()->parseSession());
 
             // Translate the cursors we generate with edits that have happened since retrieval of the document source.
@@ -210,7 +210,7 @@ void ParseJob::run()
 
             parentJob()->setDUChain(topContext);
 
-            kDebug() << "duchain is built" << endl;
+            kDebug( 9007 ) << "duchain is built" << endl;
             if ( parentJob()->cpp()->codeHighlighting() )
                 parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
 
@@ -221,7 +221,7 @@ void ParseJob::run()
         // Debug output...
 
         if (topContext->smartRange()) {
-            kDebug() << "================== duchain =======================" << endl;
+            kDebug( 9007 ) << "================== duchain =======================" << endl;
             DumpChain dump;
             dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);

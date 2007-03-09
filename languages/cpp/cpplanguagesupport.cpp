@@ -182,10 +182,10 @@ void CppLanguageSupport::documentActivated( KDevelop::Document *document )
 */
 void CppLanguageSupport::documentActivated(KParts::Part *part)
 {
-    kDebug() << "CppLanguageSupport::documentActivated" << endl;
+    kDebug( 9007 ) << "CppLanguageSupport::documentActivated" << endl;
     if (KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(part))
     {
-        kDebug() << "adding document to bgparser" << endl;
+        kDebug( 9007 ) << "adding document to bgparser" << endl;
         language()->backgroundParser()->addDocument(ropart->url());
     }
 }

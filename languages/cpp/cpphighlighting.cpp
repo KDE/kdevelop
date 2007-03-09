@@ -178,7 +178,7 @@ void CppHighlighting::highlightTree( KTextEditor::SmartRange * range ) const
 
 void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 {
-  kDebug() << range << QString(range->depth(), ' ') << *range << " attr " << range->attribute() << endl;
+  kDebug( 9007 ) << range << QString(range->depth(), ' ') << *range << " attr " << range->attribute() << endl;
   Q_ASSERT(range->start() <= range->end());
   foreach (SmartRange* child, range->childRanges())
     outputRange(child);
@@ -186,7 +186,7 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
-  kDebug() << "highighting du chain" << endl;
+  kDebug( 9007 ) << "highighting du chain" << endl;
   QReadLocker lock(DUChain::lock());
   Q_ASSERT(context->topContext() == context);
   highlightDUChain(static_cast<DUContext*>(context));
