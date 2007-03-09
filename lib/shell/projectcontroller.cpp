@@ -338,6 +338,17 @@ bool ProjectController::loadProjectPart()
     return true;
 }
 
+IProject* ProjectController::currentProject()
+{
+    QModelIndex current = d->model->selectionModel()->currentIndex();
+    if( current.isValid() )
+    {
+        ProjectBaseItem* item = d->model->item(current);
+        return item->project();
+    }
+    return 0;
+}
+
 ProjectModel* ProjectController::projectModel()
 {
     return d->model;

@@ -58,6 +58,7 @@ public:
 
   //     virtual IProject* activeProject() const = 0;
     virtual ProjectModel* projectModel() = 0;
+    virtual IProject* currentProject() = 0;
 
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() ) = 0;
