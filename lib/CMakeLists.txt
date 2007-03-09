@@ -39,7 +39,6 @@ endif (BERKELEY_DB_FOUND)
 #     kdevplugincontroller.cpp
 #     kdevplugin.cpp
 #     domutil.cpp
-#     kdevitemmodel.cpp
 #     filetemplate.cpp
 #     kdevcodedelegate.cpp
 #     kdevcodeproxy.cpp
