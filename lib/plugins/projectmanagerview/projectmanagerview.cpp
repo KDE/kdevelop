@@ -82,26 +82,19 @@ public:
     }
     void buildCurrentProject()
     {
-        QModelIndex current = m_projectOverview->selectionModel()->currentIndex();
-        if( current.isValid() )
+        ProjectBaseItem* item = m_part->core()->projectController()->projectModel()->item(
+                m_overView->selectionModel()->currentIndex() );
+        if( item )
         {
-            ProjectModel* model = m_part->core()->projectController()->projectModel();
-            QStandardItem* item = model->itemFromIndex( current );
-            if( item->type() == KDevelop::ProjectBaseItem::Project )
+            IProject* project = item->project();
+            IProjectFileManager* fmgr = project->fileManager();
+            IBuildSystemManager* mgr;
+            mgr = dynamic_cast<IBuildSystemManager*>( fmgr );
+            if( !mgr )
+                mgr = static_cast<IBuildSystemManager*>( fmgr );
+            if( mgr )
             {
-                ProjectItem* prjitem = dynamic_cast<ProjectItem*>( item );
-                if( prjitem )
-                {
-                    IProjectFileManager* fmgr = prjitem->project()->fileManager();
-                    IBuildSystemManager* mgr;
-                    mgr = dynamic_cast<IBuildSystemManager*>( fmgr );
-                    if( !mgr )
-                        mgr = static_cast<IBuildSystemManager*>( fmgr );
-                    if( mgr )
-                    {
-                        mgr->builder( prjitem )->build( prjitem );
-                    }
-                }
+                mgr->builder( item )->build( item );
             }
         }
     }
