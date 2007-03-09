@@ -29,6 +29,7 @@
 namespace KDevelop {
 
 class ParseJob;
+class ILanguage;
 
 class KDEVPLATFORM_EXPORT ILanguageSupport {
 public:
@@ -38,6 +39,8 @@ public:
     virtual QString name() const = 0;
     /** @return the parse job that is used by background parser to parse given @p url.*/
     virtual ParseJob *createParseJob(const KUrl &url) = 0;
+    /** @return the language for this support.*/
+    virtual ILanguage *language() = 0;
 
 };
 

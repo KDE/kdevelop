@@ -78,6 +78,10 @@ public:
     virtual int fileCount() const = 0;
     virtual ProjectFileItem* fileAt( int ) const = 0;
 
+    virtual QList<ProjectFileItem*> files() const = 0;
+
+    virtual ProjectFileItem *fileForUrl( const KUrl& ) const = 0;
+
     virtual KUrl localFile() const = 0;
     virtual KUrl globalFile() const = 0;
     virtual void setLocalFile( const KUrl& ) = 0;

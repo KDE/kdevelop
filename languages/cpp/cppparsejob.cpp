@@ -19,7 +19,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "parsejob.h"
+#include "cppparsejob.h"
 
 #include <QFile>
 #include <QByteArray>
@@ -27,12 +27,13 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kdevcore.h"
-#include "kdevdocument.h"
-#include "kdevproject.h"
-#include "kdevpersistenthash.h"
+// #include "kdevcore.h"
+// #include "kdevdocument.h"
+// #include "kdevproject.h"
 
 #include "Thread.h"
+
+#include "ilanguage.h"
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
@@ -41,7 +42,7 @@
 #include "cpphighlighting.h"
 
 #include "parser/parsesession.h"
-#include "parser/binder.h"
+// #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "duchain/dumpchain.h"
@@ -56,7 +57,6 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         : KDevelop::ParseJob( url, parent ),
         m_session( new ParseSession ),
         m_AST( 0 ),
-        m_model( 0 ),
         m_duContext( 0 ),
         m_readFromDisk( false )
 {
@@ -70,6 +70,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
 
+/*
 CPPParseJob::CPPParseJob( KDevelop::Document *document,
                     CppLanguageSupport *parent )
         : KDevelop::ParseJob( document, parent ),
@@ -85,20 +86,15 @@ CPPParseJob::CPPParseJob( KDevelop::Document *document,
 
     //kDebug() << k_funcinfo << "Created job " << this << " pp " << ppj << " parse " << parseJob() << endl;
 }
+*/
 
 CPPParseJob::~CPPParseJob()
 {}
 
-KDevelop::AST *CPPParseJob::AST() const
+TranslationUnitAST *CPPParseJob::AST() const
 {
     Q_ASSERT ( isFinished () && m_AST );
     return m_AST;
-}
-
-KDevelop::CodeModel *CPPParseJob::codeModel() const
-{
-    Q_ASSERT ( isFinished () && m_model );
-    return m_model;
 }
 
 TopDUContext* CPPParseJob::duChain() const
@@ -122,11 +118,6 @@ void CPPParseJob::setAST(TranslationUnitAST * ast)
     m_AST = ast;
 }
 
-void CPPParseJob::setCodeModel(CodeModel * model)
-{
-    m_model = model;
-}
-
 void CPPParseJob::setDUChain(TopDUContext * duChain)
 {
     m_duContext = duChain;
@@ -147,7 +138,7 @@ void ParseJob::run()
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
-    QMutexLocker lock(parentJob()->cpp()->parseMutex(thread()));
+    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(thread()));
 
     Parser parser( new Control() );
 
@@ -158,25 +149,26 @@ void ParseJob::run()
 
     if ( ast )
     {
-        ast->language = parentJob()->cpp();
-        ast->session = parentJob()->parseSession();
+//         ast->language = parentJob()->cpp();
+//         ast->session = parentJob()->parseSession();
     }
 
     parentJob()->setAST(ast);
 
     if ( ast )
     {
-        CodeModel* model = new CodeModel;
-        Binder binder( model, parentJob()->parseSession() );
-        binder.run( parentJob()->document(), ast );
+//         CodeModel* model = new CodeModel;
+//         Binder binder( model, parentJob()->parseSession() );
+//         binder.run( parentJob()->document(), ast );
 
         if (parentJob()->abortRequested())
             return parentJob()->abortJob();
 
-        parentJob()->setCodeModel(model);
+//         parentJob()->setCodeModel(model);
 
         QList<DUContext*> chains;
 
+/*
         if (KDevelop::Core::activeProject()) {
             foreach (const QString& include, parentJob()->includedFiles()) {
                 KDevelop::AST* ast = KDevelop::Core::activeProject()->persistentHash()->retrieveAST(include);
@@ -187,7 +179,7 @@ void ParseJob::run()
                 }
             }
         }
-
+*/
         TopDUContext* topContext;
 
         // Control the lifetime of the editor integrator (so that locking works)
@@ -235,7 +227,7 @@ void ParseJob::run()
     //     DumpTree dumpTree;
     //     dumpTree.dump( m_AST );
 
-    //kDebug( 9007 ) << "===-- Parsing finished --===> " << parentJob()->document().fileName() << endl;
+    kDebug( 9007 ) << "===-- Parsing finished --===> " << parentJob()->document().fileName() << endl;
 }
 
 
@@ -268,10 +260,6 @@ bool CPPParseJob::wasReadFromDisk() const
     return m_readFromDisk;
 }
 
-#include "parsejob.moc"
-
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
-
 ParseJob * CPPParseJob::parseJob() const
 {
     return m_parseJob;
@@ -286,3 +274,7 @@ void ParseJob::setPriority(int priority)
 {
     m_priority = priority;
 }
+
+#include "cppparsejob.moc"
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

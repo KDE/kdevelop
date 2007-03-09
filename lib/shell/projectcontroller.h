@@ -43,6 +43,7 @@ public:
 
     virtual IProject* projectAt( int ) const;
     virtual int projectCount() const;
+    virtual QList<IProject*> projects() const;
 
 //     KUrl localFile() const;
 //     void setLocalFile( const KUrl &localFile );

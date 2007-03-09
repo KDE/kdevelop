@@ -25,6 +25,9 @@
 
 #include "kdevexport.h"
 
+class QMutex;
+class QThread;
+
 namespace KDevelop {
 
 class ILanguageSupport;
@@ -48,6 +51,10 @@ public:
 
     /** @return the background parser for parsing sources.*/
     virtual BackgroundParser *backgroundParser() = 0;
+
+    virtual QMutex *parseMutex(QThread *thread) const = 0;
+    virtual void lockAllParseMutexes() = 0;
+    virtual void unlockAllParseMutexes() = 0;
 
 private:
     struct ILanguagePrivate *d;

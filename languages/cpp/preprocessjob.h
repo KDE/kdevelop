@@ -24,7 +24,7 @@
 
 class CPPParseJob;
 
-#include "kdevparsejob.h"
+#include "parsejob.h"
 
 #include "parser/rpp/preprocessor.h"
 

@@ -30,16 +30,18 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <kdevcore.h>
-#include <kdevproject.h>
-#include <kdevpersistenthash.h>
-#include <kdevbackgroundparser.h>
+// #include <kdevcore.h>
+// #include <kdevproject.h>
+// #include <kdevpersistenthash.h>
+#include "backgroundparser.h"
 
 #include "Thread.h"
 
+#include "ilanguage.h"
+
 #include "cpplanguagesupport.h"
 #include "parser/parsesession.h"
-#include "parsejob.h"
+#include "cppparsejob.h"
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 #include "parser/rpp/pp-environment.h"
@@ -63,7 +65,7 @@ void PreprocessJob::run()
     if (checkAbort())
         return;
 
-    QMutexLocker lock(parentJob()->cpp()->parseMutex(thread()));
+    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(thread()));
 
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
     parentJob()->setReadFromDisk(readFromDisk);
@@ -130,7 +132,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             VALGRIND_CHECK_MEM_IS_DEFINED(lang, sizeof(CppLanguageSupport)); */
 
 
-    includedFile = parentJob()->cpp()->findInclude(fileName);
+    includedFile = parentJob()->cpp()->findInclude(parentJob()->document(), fileName);
     if (includedFile.isValid()) {
         if (KDevelop::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile)) {
             /*if (job == parentJob())
@@ -154,30 +156,17 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
         kWarning() << k_funcinfo << "Parent job disappeared!!" << endl;
     }*/
 
-    if (KDevelop::Core::activeProject()) {
-        KDevelop::AST* ast = 0;
-        if (includedFile.isValid())
-            ast = KDevelop::Core::activeProject()->persistentHash()->retrieveAST(includedFile);
-        if (!ast)
-            ast = KDevelop::Core::activeProject()->persistentHash()->retrieveAST(fileName);
+    if (!dependencyAdded && dependencyAllowed && includedFile.isValid()) {
+        parentJob()->backgroundParser()->addDocument(includedFile);
+        KDevelop::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile);
+        /*if (job == parentJob())
+            // Trying to include self
+            goto done;
 
-        if (ast) {
-            TranslationUnitAST* t = static_cast<TranslationUnitAST*>(ast);
-            // FIXME
-            //parentJob()->parseSession()->macros->importEnvironment(sourceLine, t->session->macros);
-
-        } else if (!dependencyAdded && dependencyAllowed && includedFile.isValid()) {
-            parentJob()->backgroundParser()->addDocument(includedFile);
-            KDevelop::ParseJob* job = parentJob()->backgroundParser()->parseJobForDocument(includedFile);
-            /*if (job == parentJob())
-                // Trying to include self
-                goto done;
-
-            if (job && !job->isFinished()) {
-                dependencyAllowed = parentJob()->addDependency(job, parentJob()->parseJob());
-                kDebug() << k_funcinfo << "Added dependency on job " << job << " to " << parentJob() << " pp " << this << " parse " << parentJob()->parseJob() << " success " << dependencyAllowed << endl;
-            }*/
-        }
+        if (job && !job->isFinished()) {
+            dependencyAllowed = parentJob()->addDependency(job, parentJob()->parseJob());
+            kDebug() << k_funcinfo << "Added dependency on job " << job << " to " << parentJob() << " pp " << this << " parse " << parentJob()->parseJob() << " success " << dependencyAllowed << endl;
+        }*/
     }
 
     done:

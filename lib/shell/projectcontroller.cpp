@@ -188,6 +188,11 @@ IProject* ProjectController::projectAt( int num ) const
     return 0;
 }
 
+QList<IProject*> ProjectController::projects() const
+{
+    return d->m_projects;
+}
+
 bool ProjectController::openProject( const KUrl &projectFile )
 {
     KUrl url = projectFile;

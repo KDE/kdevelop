@@ -80,10 +80,9 @@ QList<ILanguage*> LanguageController::activeLanguages()
     return d->activeLanguages;
 }
 
-ILanguage *LanguageController::language(const QString &/*name*/)
+ILanguage *LanguageController::language(const QString &name)
 {
-    ///@todo adymo: implement
-    return 0;
+    return Language::findByName(name);
 }
 
 }

@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 #define IPROJECTCONTROLLER_H
 
 #include <QObject>
+#include <QList>
 #include <kurl.h>
 #include "kdevexport.h"
 
@@ -41,6 +42,7 @@ public:
 
     virtual IProject* projectAt( int ) const = 0;
     virtual int projectCount() const = 0;
+    virtual QList<IProject*> projects() const = 0;
 
 //     virtual KUrl localFile() const = 0;
 //     virtual void setLocalFile( const KUrl &localFile ) = 0;

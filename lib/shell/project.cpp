@@ -275,6 +275,28 @@ ProjectFileItem* Project::fileAt( int num ) const
     return 0;
 }
 
+QList<ProjectFileItem *> KDevelop::Project::files() const
+{
+    QList<ProjectFileItem *> files;
+    if ( d->topItem )
+        files = d->recurseFiles( d->topItem );
+    return files;
+}
+
+ProjectFileItem *Project::fileForUrl(const KUrl& url) const
+{
+    QList<ProjectFileItem*> files;
+    if ( d->topItem )
+        files = d->recurseFiles( d->topItem );
+
+    foreach (ProjectFileItem *file, files)
+    {
+        if (file->url() == url)
+            return file;
+    }
+    return 0;
+}
+
 int Project::fileCount() const
 {
     QList<ProjectFileItem*> files;

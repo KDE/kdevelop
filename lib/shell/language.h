@@ -26,6 +26,7 @@
 namespace KDevelop {
 
 class KDEVPLATFORM_EXPORT Language: public ILanguage {
+    Q_OBJECT
 public:
     Language(ILanguageSupport *support, QObject *parent = 0);
     virtual ~Language();
@@ -33,11 +34,30 @@ public:
     virtual void activate();
     virtual void deactivate();
 
-    virtual ILanguageSupport* languageSupport();
+    virtual ILanguageSupport *languageSupport();
     virtual BackgroundParser *backgroundParser();
 
     static Language *findByName(const QString &name);
     static QList<Language*> findByUrl(const KUrl &url, QObject *parent);
+
+
+    /**
+     * The mutex for the specified \a thread must be held when doing any background parsing.
+     */
+    virtual QMutex *parseMutex(QThread *thread) const;
+
+    /**
+     * Lock all background parser mutexes.
+     */
+    virtual void lockAllParseMutexes();
+
+    /**
+     * Unlock all background parser mutexes.
+     */
+    virtual void unlockAllParseMutexes();
+
+public Q_SLOTS:
+    void threadFinished();
 
 private:
     struct LanguagePrivate *d;

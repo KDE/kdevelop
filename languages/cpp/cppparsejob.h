@@ -22,15 +22,15 @@
 #ifndef PARSEJOB_H
 #define PARSEJOB_H
 
-#include "kdevparsejob.h"
+#include "parsejob.h"
 
 #include <QStringList>
 
-class CodeModel;
 class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
 class ParseJob;
+class TopDUContext;
 
 class CPPParseJob : public KDevelop::ParseJob
 {
@@ -39,8 +39,8 @@ public:
     CPPParseJob( const KUrl &url,
               CppLanguageSupport* parent );
 
-    CPPParseJob( KDevelop::Document* document,
-              CppLanguageSupport* parent );
+//     CPPParseJob( KDevelop::Document* document,
+//               CppLanguageSupport* parent );
 
     virtual ~CPPParseJob();
 
@@ -49,10 +49,7 @@ public:
     ParseSession* parseSession() const;
 
     void setAST(TranslationUnitAST* ast);
-    virtual KDevelop::AST *AST() const;
-
-    void setCodeModel(CodeModel* model);
-    virtual KDevelop::CodeModel *codeModel() const;
+    virtual TranslationUnitAST *AST() const;
 
     void setDUChain(TopDUContext* duChain);
     virtual TopDUContext* duChain() const;
@@ -69,7 +66,6 @@ public:
 private:
     ParseSession* m_session;
     TranslationUnitAST *m_AST;
-    CodeModel *m_model;
     QStringList m_includedFiles;
     TopDUContext* m_duContext;
     bool m_readFromDisk;

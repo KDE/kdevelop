@@ -1,4 +1,5 @@
 /***************************************************************************
+ *   Copyright (C) 2006 Hamish Rodda <rodda@kde.org>                       *
  *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,6 +19,10 @@
  ***************************************************************************/
 #include "language.h"
 
+#include <QHash>
+#include <QMutex>
+#include <QThread>
+
 #include <kdebug.h>
 #include <kmimetype.h>
 
@@ -31,8 +36,16 @@
 namespace KDevelop {
 
 struct LanguagePrivate {
+    ~LanguagePrivate()
+    {
+        delete mutexMutex;
+    }
+
     ILanguageSupport *support;
     BackgroundParser *backgroundParser;
+
+    mutable QHash<QThread*, QMutex*> parseMutexes;
+    QMutex *mutexMutex;
 
     static QMap<QString, Language*> languages;
     static QMap<KMimeType::Ptr, QList<Language*> > languageCache;
@@ -48,6 +61,7 @@ Language::Language(ILanguageSupport *support, QObject *parent)
     d = new LanguagePrivate();
     d->support = support;
     d->backgroundParser = new BackgroundParser(support, this);
+    d->mutexMutex = new QMutex();
 
     LanguagePrivate::languages[support->name()] = this;
 }
@@ -110,6 +124,68 @@ BackgroundParser *Language::backgroundParser()
     return d->backgroundParser;
 }
 
+QMutex *Language::parseMutex(QThread *thread) const
+{
+    QMutexLocker lock(d->mutexMutex);
+
+    if (!d->parseMutexes.contains(thread))
+    {
+        connect(thread, SIGNAL(finished()), SLOT(threadFinished()));
+        d->parseMutexes.insert(thread, new QMutex);
+    }
+
+    return d->parseMutexes[thread];
 }
+
+void Language::lockAllParseMutexes()
+{
+    d->mutexMutex->lock();
+
+    QList<QMutex*> waitForLock;
+
+    // Grab the easy pickings first
+    QHashIterator<QThread*, QMutex*> it = d->parseMutexes;
+    while (it.hasNext()) {
+        it.next();
+        if (!it.value()->tryLock())
+        waitForLock.append(it.value());
+    }
+
+    // Work through the stragglers
+    foreach (QMutex* mutex, waitForLock)
+        mutex->lock();
+}
+
+void Language::unlockAllParseMutexes()
+{
+    QHashIterator<QThread*, QMutex*> it = d->parseMutexes;
+    while (it.hasNext())
+    {
+        it.next();
+        it.value()->unlock();
+    }
+
+    d->mutexMutex->unlock();
+}
+
+void Language::threadFinished()
+{
+    Q_ASSERT(sender());
+
+    QMutexLocker lock(d->mutexMutex);
+
+    QThread* thread = static_cast<QThread*>(sender());
+
+    Q_ASSERT(d->parseMutexes.contains(thread));
+
+    QMutex* mutex = d->parseMutexes[thread];
+    mutex->unlock();
+    delete mutex;
+    d->parseMutexes.remove(thread);
+}
+
+}
+
+#include "language.moc"
 
 //kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on;

@@ -32,7 +32,8 @@ class CodeAggregate;
 class CppHighlighting;
 class CppCodeCompletion;
 
-namespace KDevelop { class CodeHighlighting; }
+namespace KParts { class Part; }
+namespace KDevelop { class CodeHighlighting; class IProject; }
 
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -47,6 +48,8 @@ public:
     void registerExtensions();
     void unregisterExtensions();
     QStringList extensions() const;
+
+    virtual KDevelop::ILanguage *language();
 
     virtual KDevelop::ParseJob *createParseJob( const KUrl &url );
 
@@ -63,18 +66,20 @@ public:
     virtual void releaseAST( KDevelop::AST *ast);
 
     virtual void documentLoaded( KDevelop::AST *ast, const KUrl& document );
-
+*/
     /// Get the full path for a file based on a search through the project's
     /// include directories
-    KUrl findInclude( const QString& fileName );
-*/
+    KUrl findInclude(const KUrl &source, const QString& includeName );
+
 private slots:
 /*    void documentLoaded( KDevelop::Document *document );
     void documentClosed( KDevelop::Document *document );
     void documentActivated( KDevelop::Document *document );
-    void projectOpened();
-    void projectClosing();
 */
+    void documentActivated(KParts::Part *part);
+    void projectOpened(KDevelop::IProject *project);
+    void projectClosing(KDevelop::IProject *project);
+
 private:
 /*    QStringList m_mimetypes;
     CodeProxy *m_codeProxy;
