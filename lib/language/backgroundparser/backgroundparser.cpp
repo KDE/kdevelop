@@ -70,7 +70,7 @@ BackgroundParser::BackgroundParser(ILanguageSupport *languageSupport,  QObject* 
     m_timer->setSingleShot( true );
     connect( m_timer, SIGNAL( timeout() ), this, SLOT( parseDocuments() ) );
 
-    suspend(); //Don't start the weaver until after project file has been read
+    loadSettings(false); //start the weaver
 
     // Signal to allow other threads to request document addition.
     connect(this, SIGNAL(requestAddDocument(const QUrl&)),
