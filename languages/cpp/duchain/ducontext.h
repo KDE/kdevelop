@@ -23,7 +23,7 @@
 #include <QReadWriteLock>
 #include <kdevexport.h>
 
-#include "kdevdocumentcursorobject.h"
+#include "documentcursorobject.h"
 #include "identifier.h"
 #include "typesystem.h"
 #include "duchainbase.h"

@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QString>
 #include <QStack>
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 #include "pp-macro.h"
 #include "pp-macro-expander.h"

@@ -20,7 +20,7 @@
 #define DEFINITIONUSE_H
 
 #include <kdevexport.h>
-#include "kdevdocumentrangeobject.h"
+#include "documentrangeobject.h"
 #include "duchainbase.h"
 
 #include <QReadWriteLock>

@@ -22,7 +22,7 @@
 #define PP_MACRO_H
 
 #include <QStringList>
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 namespace rpp {
 

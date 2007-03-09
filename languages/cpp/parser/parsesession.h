@@ -24,7 +24,7 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 class pool;
 class TokenStream;

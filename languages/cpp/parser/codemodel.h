@@ -33,9 +33,8 @@
 #include <QtCore/QVector>
 
 #include <kurl.h>
-#include <kdevexport.h>
+#include <cppparserexport.h>
 #include <ktexteditor/cursor.h>
-#include <kdevexport.h>
 
 #define DECLARE_MODEL_NODE(k) \
     enum { __node_kind = Kind_##k }; \

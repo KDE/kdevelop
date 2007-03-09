@@ -20,7 +20,7 @@
 #define VISITOR_H
 
 #include "ast.h"
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 class KDEVCPPPARSER_EXPORT Visitor
 {

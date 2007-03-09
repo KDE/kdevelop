@@ -23,7 +23,7 @@
 
 #include <kstaticdeleter.h>
 
-#include "kdeveditorintegrator.h"
+#include "editorintegrator.h"
 
 #include "topducontext.h"
 
@@ -101,10 +101,6 @@ void DUChain::clear()
   m_chains.clear();
 }
 
-#include "duchain.moc"
-
-// kate: indent-width 2;
-
 const QList< DUChainObserver * > & DUChain::observers() const
 {
   ENSURE_CHAIN_READ_LOCKED
@@ -150,3 +146,7 @@ void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChain
   foreach (DUChainObserver* observer, self()->observers())
     observer->useChanged(use, change, relationship, relatedObject);
 }
+
+#include "duchain.moc"
+
+// kate: indent-width 2;

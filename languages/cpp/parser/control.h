@@ -22,7 +22,7 @@
 #include "symbol.h"
 #include "memorypool.h"
 #include "problem.h"
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 #include <QtCore/QHash>
 

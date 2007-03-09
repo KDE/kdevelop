@@ -24,7 +24,7 @@
 #include <kdevexport.h>
 
 #include "identifier.h"
-#include "kdevdocumentrangeobject.h"
+#include "documentrangeobject.h"
 #include "cppnamespace.h"
 #include "typesystem.h"
 #include "duchainbase.h"

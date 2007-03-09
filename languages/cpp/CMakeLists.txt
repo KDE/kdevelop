@@ -1,6 +1,6 @@
 
-#add_subdirectory(parser)
-#add_subdirectory(duchain)
+add_subdirectory(parser)
+add_subdirectory(duchain)
 add_subdirectory(app_templates)
 
 include_directories( ${CMAKE_TOP_BUILD_DIR} ${CMAKE_SOURCE_DIR}/lib

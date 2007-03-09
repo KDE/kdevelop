@@ -25,7 +25,7 @@
 #include <QVarLengthArray>
 
 #include <kdebug.h>
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 class QualifiedIdentifier;
 

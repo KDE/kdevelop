@@ -25,7 +25,7 @@
 #include <QMap>
 #include <QString>
 #include <QStack>
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 namespace rpp {
 

@@ -30,6 +30,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QApplication>
+#include <QExtensionFactory>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
@@ -67,7 +68,6 @@
 #include "codedelegate.h"
 #include "cppcodecompletion.h"
 */
-#include <QExtensionFactory>
 
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )

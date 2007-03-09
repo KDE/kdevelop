@@ -20,10 +20,8 @@
 #define DUCHAINBASE_H
 
 class TopDUContext;
-class QReadWriteLock;
-class DUChainModel;
 
-#include "kdevdocumentrangeobject.h"
+#include "documentrangeobject.h"
 #include <kdevexport.h>
 /**
  * Base class for definition-use chain objects.

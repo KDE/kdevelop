@@ -23,7 +23,7 @@
 
 #include <ktexteditor/smartrange.h>
 
-#include <kdeveditorintegrator.h>
+#include <editorintegrator.h>
 #include <kdevcodehighlighting.h>
 
 #include "ducontext.h"

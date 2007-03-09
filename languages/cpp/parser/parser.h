@@ -23,7 +23,7 @@
 #include "lexer.h"
 
 #include <QtCore/QString>
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 class FileSymbol;
 class TokenStream;

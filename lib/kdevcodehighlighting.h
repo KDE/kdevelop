@@ -37,7 +37,7 @@ to parsed code here.
 class KDEVPLATFORM_EXPORT CodeHighlighting
 {
 public:
-    virtual ~CodeHighlighting();
+    virtual ~CodeHighlighting() {}
 
     /**@return Whether the given url is supported by the language part.*/
     virtual void highlightDUChain(TopDUContext* context) const = 0;

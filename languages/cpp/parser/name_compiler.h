@@ -21,7 +21,7 @@
 
 #include "default_visitor.h"
 #include "identifier.h"
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 class ParseSession;
 

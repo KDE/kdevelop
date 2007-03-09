@@ -20,7 +20,7 @@
 #define DEFAULT_VISITOR_H
 
 #include "visitor.h"
-#include <kdevexport.h>
+#include <cppparserexport.h>
 
 class KDEVCPPPARSER_EXPORT DefaultVisitor: public Visitor
 {

@@ -46,12 +46,13 @@ public:
     void unregisterExtensions();
     QStringList extensions() const;
 
+//     virtual KDevelop::ParseJob *createParseJob( const KUrl &url );
+
     //KDevelop::LanguageSupport implementation
 /*    virtual KDevelop::CodeModel *codeModel( const KUrl& url ) const;
     virtual KDevelop::CodeProxy *codeProxy() const;
     virtual KDevelop::CodeDelegate *codeDelegate() const;
     virtual KDevelop::CodeRepository *codeRepository() const;
-    virtual KDevelop::ParseJob *createParseJob( const KUrl &url );
     virtual KDevelop::ParseJob *createParseJob( KDevelop::Document *document );
     virtual QStringList mimeTypes() const;
 

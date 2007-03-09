@@ -24,7 +24,7 @@
 #include "name_compiler.h"
 #include "declarator_compiler.h"
 #include "lexer.h"
-#include <kdevexport.h>
+#include <cppparserexport.h>
 #include <QtCore/QSet>
 
 #include <kurl.h>

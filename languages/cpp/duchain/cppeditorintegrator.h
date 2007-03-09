@@ -19,7 +19,7 @@
 #ifndef CPPEDITORINTEGRATOR_H
 #define CPPEDITORINTEGRATOR_H
 
-#include "kdeveditorintegrator.h"
+#include "editorintegrator.h"
 #include <kdevexport.h>
 #include "lexer.h"
 

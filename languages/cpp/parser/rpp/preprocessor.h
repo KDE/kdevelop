@@ -23,7 +23,7 @@
 #define PREPROCESSOR_H
 
 #include <QtCore/QString>
-#include <kdevexport.h>
+#include <cppparserexport.h>
 namespace rpp {
 
 class Stream;
