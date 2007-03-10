@@ -81,6 +81,7 @@ Config::Config( ICore* parent )
     : QObject(parent), d(new ConfigPrivate)
 {
     d->m_core = parent;
+    d->settingsDialog = 0;
     d->mode = Config::Standard;
 }
 
