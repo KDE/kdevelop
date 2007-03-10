@@ -30,7 +30,6 @@
 #include <icore.h>
 #include <iplugincontroller.h>
 #include <ioutputview.h>
-#include <domutil.h>
 #include <QtDesigner/QExtensionFactory>
 
 
