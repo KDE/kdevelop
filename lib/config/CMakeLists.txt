@@ -16,9 +16,8 @@ target_link_libraries(kdevplatformconfig ${KDE4_CORE_LIBS} kdevplatforminterface
 set_target_properties(kdevplatformconfig PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevplatformconfig DESTINATION ${LIB_INSTALL_DIR} )
 install(FILES
-	kdevconfig.h
-	kdevconfigskeleton.h
-	kdevcmmodule.h
-	DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/config
+    kdevconfig.h
+    kdevconfigskeleton.h
+    kdevcmmodule.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/config
 )
-
