@@ -8,28 +8,21 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef _PROJECTTEMPLATESMODEL_H_
-#define _PROJECTTEMPLATESMODEL_H_
+#ifndef PROJECTTEMPLATEITEM_H
+#define PROJECTTEMPLATEITEM_H
 
-#include <QMap>
-#include <QStandardItemModel>
+#include <QStandardItem>
 
-class AppWizardPart;
-class ProjectTemplateItem;
-
-class ProjectTemplatesModel: public QStandardItemModel {
+class ProjectTemplateItem: public QStandardItem {
 public:
-    ProjectTemplatesModel(AppWizardPart *parent);
-
-    void refresh();
+    ProjectTemplateItem();
+    ProjectTemplateItem(const QString &text);
+    ProjectTemplateItem(const QIcon &icon, const QString &text);
+    ProjectTemplateItem(int rows, int columns = 1);
 
 private:
-    void extractTemplateDescriptions();
-    ProjectTemplateItem *createItem(const QString &name, const QString &category);
+    void init();
 
-    AppWizardPart *m_part;
-
-    QMap<QString, QStandardItem*> m_templateItems;
 };
 
 #endif

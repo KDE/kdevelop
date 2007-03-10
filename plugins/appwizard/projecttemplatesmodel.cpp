@@ -11,7 +11,6 @@
 #include "projecttemplatesmodel.h"
 
 #include <QFileInfo>
-#include <QStandardItem>
 
 #include <ktar.h>
 #include <kurl.h>
@@ -20,6 +19,7 @@
 #include <kcomponentdata.h>
 
 #include "appwizardpart.h"
+#include "projecttemplateitem.h"
 
 ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPart *parent)
     :QStandardItemModel(parent), m_part(parent)
@@ -42,12 +42,12 @@ void ProjectTemplatesModel::refresh()
         QString name = general.readEntry("Name");
         QString category = general.readEntry("Category");
 
-        QStandardItem *templateItem = createItem(name, category);
+        ProjectTemplateItem *templateItem = createItem(name, category);
         templateItem->setData(templateDescription);
     }
 }
 
-QStandardItem *ProjectTemplatesModel::createItem(const QString &name, const QString &category)
+ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, const QString &category)
 {
     QStringList path = category.split("/");
 
@@ -58,7 +58,7 @@ QStandardItem *ProjectTemplatesModel::createItem(const QString &name, const QStr
         currentPath << entry;
         if (!m_templateItems.contains(currentPath.join("/")))
         {
-            QStandardItem *item = new QStandardItem(entry);
+            ProjectTemplateItem *item = new ProjectTemplateItem(entry);
             parent->appendRow(item);
             m_templateItems[currentPath.join("/")] = item;
             parent = item;
@@ -67,7 +67,7 @@ QStandardItem *ProjectTemplatesModel::createItem(const QString &name, const QStr
             parent = m_templateItems[currentPath.join("/")];
     }
 
-    QStandardItem *templateItem = new QStandardItem(name);
+    ProjectTemplateItem *templateItem = new ProjectTemplateItem(name);
     parent->appendRow(templateItem);
     return templateItem;
 }

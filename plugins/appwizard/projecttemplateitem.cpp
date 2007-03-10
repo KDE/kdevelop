@@ -8,30 +8,35 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef _PROJECTTEMPLATESMODEL_H_
-#define _PROJECTTEMPLATESMODEL_H_
+#include "projecttemplateitem.h"
 
-#include <QMap>
-#include <QStandardItemModel>
+ProjectTemplateItem::ProjectTemplateItem()
+    :QStandardItem()
+{
+    init();
+}
 
-class AppWizardPart;
-class ProjectTemplateItem;
+ProjectTemplateItem::ProjectTemplateItem(const QIcon & icon, const QString & text)
+    :QStandardItem(icon, text)
+{
+    init();
+}
 
-class ProjectTemplatesModel: public QStandardItemModel {
-public:
-    ProjectTemplatesModel(AppWizardPart *parent);
+ProjectTemplateItem::ProjectTemplateItem(const QString & text)
+    :QStandardItem(text)
+{
+    init();
+}
 
-    void refresh();
+ProjectTemplateItem::ProjectTemplateItem(int rows, int columns)
+    :QStandardItem(rows, columns)
+{
+    init();
+}
 
-private:
-    void extractTemplateDescriptions();
-    ProjectTemplateItem *createItem(const QString &name, const QString &category);
-
-    AppWizardPart *m_part;
-
-    QMap<QString, QStandardItem*> m_templateItems;
-};
-
-#endif
+void ProjectTemplateItem::init()
+{
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+}
 
 // kate: indent-width 4; replace-tabs on; tab-width 4; space-indent on;

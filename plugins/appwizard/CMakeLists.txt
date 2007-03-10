@@ -9,6 +9,7 @@ set(kdevappwizard_PART_SRCS
     appwizarddialog.cpp
     projectselectionpage.cpp
     projecttemplatesmodel.cpp
+    projecttemplateitem.cpp
 )
 
 set(kdevappwizard_PART_UI
