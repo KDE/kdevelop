@@ -8,7 +8,6 @@ add_subdirectory(shell)
 add_subdirectory(persistenthash)
 #add_subdirectory(util)
 #add_subdirectory(widgets)
-#add_subdirectory(debugger)
 add_subdirectory(plugins)
 #add_subdirectory(settings)
 
