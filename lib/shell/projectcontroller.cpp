@@ -299,9 +299,11 @@ bool ProjectController::loadProjectPart()
     return true;
 }
 
-void ProjectController::setCurrentProject( IProject* p )
+void ProjectController::changeCurrentProject( const QModelIndex& index )
 {
-    d->m_currentProject = p;
+    ProjectBaseItem* item = projectModel()->item( index );
+    if( item )
+        d->m_currentProject = item->project();
 }
 
 IProject* ProjectController::currentProject() const

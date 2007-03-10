@@ -52,7 +52,7 @@ public:
 public Q_SLOTS:
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
     bool closeProject( IProject* );
-    void setCurrentProject( IProject* );
+    void changeCurrentProject( const QModelIndex& );
 
 Q_SIGNALS:
     void projectOpened( KDevelop::IProject* );

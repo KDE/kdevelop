@@ -26,12 +26,15 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include "kdevexport.h"
 
+class QModelIndex;
+
 namespace KDevelop
 {
 
 class IPlugin;
 class IProject;
 class ProjectModel;
+
 
 class KDEVPLATFORM_EXPORT IProjectController : public QObject
 {
@@ -59,11 +62,12 @@ public:
   //     virtual IProject* activeProject() const = 0;
     virtual ProjectModel* projectModel() = 0;
     virtual IProject* currentProject() const = 0;
-    virtual void setCurrentProject( IProject* ) = 0;
+
 
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() ) = 0;
     virtual bool closeProject( IProject* ) = 0;
+    virtual void changeCurrentProject( const QModelIndex& ) = 0;
 
 Q_SIGNALS:
     void projectOpened( KDevelop::IProject* );

@@ -80,14 +80,6 @@ public:
                 m_part->core()->uiController()->openUrl( projectItem->file()->url() );
         }
     }
-    void currentIndexChanged( const QModelIndex& current, const QModelIndex& )
-    {
-        ProjectBaseItem* item = m_part->core()->projectController()->projectModel()->item( current );
-        if( item )
-        {
-            m_part->core()->projectController()->setCurrentProject( item->project() );
-        }
-    }
     void buildCurrentProject()
     {
         ProjectBaseItem* item = m_part->core()->projectController()->projectModel()->item(
@@ -133,6 +125,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
         //   connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
     connect( d->m_projectOverview, SIGNAL( pressed( QModelIndex ) ),
              this, SLOT( pressed( QModelIndex ) ) );
+    connect( d->m_projectOverview, SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
+           d->m_part->core()->projectController(), SLOT(changeCurrentProject( const QModelIndex&) ) );
 
 
 #ifdef WITH_PROJECT_DETAILS
