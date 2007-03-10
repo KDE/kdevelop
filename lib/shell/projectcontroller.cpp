@@ -91,7 +91,7 @@ void ProjectController::setupActions()
     action->setEnabled( false );
 
     KConfig * config = Config::self()->standard();
-    config->setGroup( "General Options" );
+//     KConfigGroup group = config->group( "General Options" );
 
     d->m_recentAction =
         KStandardAction::openRecent( this, SLOT( openProject( const KUrl& ) ),
@@ -124,12 +124,12 @@ void ProjectController::saveSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
     // Do not save if a project is loaded as this doesn't make sense inside a project file...
-    if ( projects().count() == 0 )
-    {
-        KConfig* standard = Config::self()->standard();
-        standard->setGroup( "General Options" );
+//     if ( projects().count() == 0 )
+//     {
+//         KConfig* standard = Config::self()->standard();
+//         KConfigGroup group = standard->group( "General Options" );
 //         standard->writePathEntry( "Last Project", d->m_lastProject.path() );
-    }
+//     }
 }
 
 // bool ProjectController::isLoaded() const
@@ -161,8 +161,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
     if ( url.isEmpty() )
     {
         KConfig * config = Config::self()->standard();
-        config->setGroup( "General Options" );
-        QString dir = config->readPathEntry( "DefaultProjectsDirectory",
+        KConfigGroup group = config->group( "General Options" );
+        QString dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
 
         url = KFileDialog::getOpenUrl( dir, i18n( "*.kdev4|KDevelop 4 Project Files\n" ),
@@ -183,16 +183,11 @@ bool ProjectController::openProject( const KUrl &projectFile )
                 return false;
         }
     }
-//     if ( d->m_isLoaded )
-//         closeProject();
-
-//     d->m_globalFile = url;
 
     //FIXME Create the hidden directory if it doesn't exist
 
     if ( loadProjectPart() )
     {
-//         d->m_isLoaded = true;
         //The project file has been opened.
         //Now we can load settings for all of the Core objects including this one!!
 //         Core::loadSettings();
@@ -282,10 +277,10 @@ bool ProjectController::loadProjectPart()
     if( !d->m_projectPart )
     {
         KConfig * config = Config::self()->standard();
-        config->setGroup( "General Options" );
+        KConfigGroup group = config->group( "General Options" );
 
         QString projectManager =
-                config->readPathEntry( "ProjectManagementView", "KDevProjectManagerView" );
+                group.readEntry( "ProjectManagementView", "KDevProjectManagerView" );
 
         d->m_projectPart = d->m_core->pluginController()->loadPlugin( projectManager );
         if ( !d->m_projectPart )

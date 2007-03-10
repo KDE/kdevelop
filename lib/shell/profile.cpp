@@ -38,18 +38,18 @@ Profile::Profile(Profile *parent, const QString &name)
     QString profileConfig = KStandardDirs::locate("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
 
-    config.setGroup("Information");
-    m_genericName = config.readEntry("GenericName");
-    m_description = config.readEntry("Description");
+    KConfigGroup group = config.group("Information");
+    m_genericName = group.readEntry("GenericName");
+    m_description = group.readEntry("Description");
 
-    config.setGroup("Properties");
-    m_properties = config.readEntry("List", QStringList());
+    group = config.group("Properties");
+    m_properties = group.readEntry("List", QStringList());
 
-    config.setGroup("Enable");
-    m_explicitEnable = config.readEntry("List", QStringList());
+    group = config.group("Enable");
+    m_explicitEnable = group.readEntry("List", QStringList());
 
-    config.setGroup("Disable");
-    m_explicitDisable = config.readEntry("List", QStringList());
+    group = config.group("Disable");
+    m_explicitDisable = group.readEntry("List", QStringList());
 }
 
 Profile::Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description)
@@ -89,18 +89,18 @@ void Profile::save()
     QString profileConfig = KStandardDirs::locateLocal("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
 
-    config.setGroup("Information");
-    config.writeEntry("GenericName", m_genericName);
-    config.writeEntry("Description", m_description);
+    KConfigGroup group = config.group("Information");
+    group.writeEntry("GenericName", m_genericName);
+    group.writeEntry("Description", m_description);
 
-    config.setGroup("Properties");
-    config.writeEntry("List", m_properties);
+    group = config.group("Properties");
+    group.writeEntry("List", m_properties);
 
-    config.setGroup("Enable");
-    config.writeEntry("List", m_explicitEnable);
+    group = config.group("Enable");
+    group.writeEntry("List", m_explicitEnable);
 
-    config.setGroup("Disable");
-    config.writeEntry("List", m_explicitDisable);
+    group = config.group("Disable");
+    group.writeEntry("List", m_explicitDisable);
 
     config.sync();
 }

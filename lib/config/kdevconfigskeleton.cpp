@@ -66,7 +66,7 @@ void ConfigSkeleton::usrWriteConfig()
         }
     }
     localProjectConfig->sync();
-//     localProjectConfig->setGroup( origLocalProjectGroup );
+//     KConfigGroup group = localProjectConfig->group( origLocalProjectGroup );
 
     KSharedConfig::Ptr standardConfig = Config::self()->sharedStandard();
 //     QString origStandardGroup = standardConfig->group();

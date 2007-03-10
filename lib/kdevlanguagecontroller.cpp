@@ -48,9 +48,9 @@ void LanguageController::loadSettings( bool projectIsLoaded )
     if ( projectIsLoaded )
     {
         KConfig * config = Config::standard();
-        config->setGroup( "General Options" );
-    
-        QString language = config->readPathEntry( "PrimaryLanguage", "C++" );
+        KConfigGroup group = config->group( "General Options" );
+
+        QString language = group->readEntry( "PrimaryLanguage", "C++" );
         Core::languageController() ->languageSupport( language );
     }
 }
