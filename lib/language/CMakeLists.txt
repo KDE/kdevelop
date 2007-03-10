@@ -25,3 +25,10 @@ install(FILES
     interfaces/ilanguagesupport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language/interfaces
 )
+
+install(FILES
+    backgroundparser/backgroundparser.h
+    backgroundparser/parsejob.h
+    backgroundparser/parserdependencypolicy.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language/backgroundparser
+)

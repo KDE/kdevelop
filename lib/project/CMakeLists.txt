@@ -21,7 +21,11 @@ install(FILES
     interfaces/iprojectbuilder.h
     interfaces/iprojectfilemanager.h
     interfaces/ibuildsystemmanager.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project/interfaces
+ )
+
+install(FILES
     importprojectjob.h
     projectmodel.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project
  )
