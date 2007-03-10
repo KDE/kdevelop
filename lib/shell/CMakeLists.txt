@@ -12,6 +12,7 @@ include_directories(
 
 set(kdevplatformshell_LIB_SRCS
     mainwindow.cpp
+    mainwindow_p.cpp
     plugincontroller.cpp
     profileengine.cpp
     profile.cpp

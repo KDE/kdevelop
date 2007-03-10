@@ -24,8 +24,9 @@ Boston, MA 02110-1301, USA.
 #define KDEV_MAINWINDOW_H
 
 #include <kmainwindow.h>
-#include <sublime/mainwindow.h>
+
 #include "core.h"
+#include <sublime/mainwindow.h>
 
 #include "kdevexport.h"
 
@@ -37,10 +38,8 @@ class Context;
 class IPlugin;
 class Document;
 
-class MainWindowPrivate;
-
 /**
-KDevelop main window interface.
+KDevelop main window.
 Provides methods to control the main window of an application.
 */
 class KDEVPLATFORM_EXPORT MainWindow: public Sublime::MainWindow {
@@ -52,13 +51,9 @@ public:
 
     //FIXME document this
     virtual void fillContextMenu( KMenu *menu, const Context *context );
+
 public Q_SLOTS:
-    virtual void addPlugin( IPlugin *plugin );
-
-    virtual void removePlugin( IPlugin *plugin );
-
     virtual void setVisible( bool visible );
-
 
 Q_SIGNALS:
     void finishedLoading();
@@ -68,44 +63,6 @@ protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
     virtual bool queryClose();
 
-private Q_SLOTS:
-    void fileNew();
-    void fileClose();
-
-    void gotoNextWindow();
-    void gotoPreviousWindow();
-    void gotoFirstWindow();
-    void gotoLastWindow();
-
-    void viewAddNewToolView();
-
-    void newWindow();
-    void splitHorizontal();
-    void splitVertical();
-    void split(Qt::Orientation orientation);
-
-    void projectOpened();
-    void projectClosed();
-    void configureToolbars();
-    void fillWindowMenu();
-    void newToolbarConfig();
-
-    void reportBug();
-    void keyBindings();
-    void configureNotifications();
-    void configureEditors();
-    void settingsDialog();
-    void activeProcessChanged( IPlugin *plugin, bool b );
-    void stopPopupActivated( int );
-    void stopMenuAboutToShow();
-    void stopButtonPressed();
-    void showMenuBar();
-
-    void toggleStatusbar();
-
-    void activePartChanged(KParts::Part *part);
-    void changeActiveView(Sublime::View *view);
-
 protected:
     virtual void loadSettings();
     virtual void saveSettings();
@@ -113,11 +70,11 @@ protected:
     virtual void cleanup();
 
 private:
-    void setupActions();
-    void setupWindowMenu();
-
-    MainWindowPrivate *d;
+    class MainWindowPrivate *d;
+    friend class MainWindowPrivate;
 };
 
 }
 #endif
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
