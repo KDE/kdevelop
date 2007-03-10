@@ -28,6 +28,7 @@
 class QStringList;
 class QStandardItemModel;
 class KUrl;
+class KProcess;
 class QString;
 
 /**
@@ -54,11 +55,11 @@ Q_SIGNALS:
     void commandFailed( const QStringList& command );
 
 private Q_SLOTS:
-    void procFinished( int, QProcess::ExitStatus );
+    void procFinished( KProcess* );
 
 private:
-    Q_PRIVATE_SLOT( d, void procReadyReadStdOut() )
-    Q_PRIVATE_SLOT( d, void procReadyReadStdErr() )
+    Q_PRIVATE_SLOT( d, void procReadStdout(KProcess* proc, const char*, int) )
+    Q_PRIVATE_SLOT( d, void procReadStderr(KProcess* proc, const char*, int) )
     Q_PRIVATE_SLOT( d, void startNextJob() )
     class SimpleOutputViewPrivate* const d;
 };

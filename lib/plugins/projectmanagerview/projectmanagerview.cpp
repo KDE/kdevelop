@@ -102,7 +102,9 @@ public:
                 mgr = static_cast<IBuildSystemManager*>( fmgr );
             if( mgr )
             {
-                mgr->builder( prjitem )->build( item );
+                IProjectBuilder* builder = mgr->builder( prjitem );
+                if( builder)
+                  builder->build( item );
             }
         }
     }

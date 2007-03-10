@@ -1,6 +1,6 @@
-/* KDevelop CMake Support
+/* KDevelop
  *
- * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,44 +18,31 @@
  * 02110-1301, USA.
  */
 
-#ifndef MAKEBUILDERPREFERENCES_H
-#define MAKEBUILDERPREFERENCES_H
+#ifndef IMAKEBUILDER_H
+#define IMAKEBUILDER_H
 
-#include "kdevcmmodule.h"
+#include "iprojectbuilder.h"
+#include "iextension.h"
+#include <QtDesigner/QAbstractExtensionFactory>
 
-#include <kurl.h>
-#include <kstandarddirs.h>
-
-class QWidget;
-class QStringList;
-
-namespace Ui { class MakeConfig; }
+class IProject;
+class ProjectItem;
 
 /**
- * @author Matt Rogers <mattr@kde.org>
- */
-class MakeBuilderPreferences : public KDevelop::ConfigModule
+@author Andreas Pakulat
+*/
+
+class IMakeBuilder : public KDevelop::IProjectBuilder
 {
 public:
-    MakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
-    ~MakeBuilderPreferences();
 
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
+    virtual ~IMakeBuilder() {}
 
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                               KStandardDirs::locate( "data", "kdevmakebuilder/data.kdev4" ) );
-    }
-
-private slots:
-    void settingsChanged();
-
-private:
-    Ui::MakeConfig* m_prefsUi;
 };
 
+Q_DECLARE_EXTENSION_INTERFACE( IMakeBuilder, "org.kdevelop.IMakeBuilder" )
+
+
 #endif
+
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

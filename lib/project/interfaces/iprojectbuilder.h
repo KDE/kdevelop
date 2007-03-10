@@ -47,7 +47,7 @@ public:
 
 Q_SIGNALS:
     void built(ProjectBaseItem *dom);
-    void failed();
+    void failed(ProjectBaseItem *dom);
 };
 
 }

@@ -69,30 +69,34 @@ public:
     SimpleOutputViewViewFactory* m_factory;
     QStandardItemModel* m_model;
     QList<QPair<KUrl, QStringList> > m_jobs;
-    QProcess* m_childProc;
+    KProcess* m_childProc;
     QStringList m_currentCmd;
     bool isRunning()
     {
-        return (m_childProc->state() == QProcess::Running);
+        return (m_childProc->isRunning());
     }
     void startNextJob()
     {
         if( m_jobs.isEmpty() )
             return;
         m_model->clear();
-        m_childProc->close();
+        m_childProc->clearArguments();
+        m_childProc->setUseShell( true );
         QPair<KUrl, QStringList> job = m_jobs.takeFirst();
         m_childProc->setWorkingDirectory( job.first.path() );
         QStringList l = job.second;
         m_currentCmd = job.second;
-        QString cmd = l.takeFirst();
+//         QString cmd = l.takeFirst();
         QStandardItem* i = new QStandardItem( m_currentCmd.join(" ") );
         m_model->appendRow( i );
-        m_childProc->start(cmd, l);
+        *m_childProc << "cd" << KProcess::quote( job.first.path() ) << "&&";
+        foreach(QString s, l)
+            *m_childProc << s;
+        m_childProc->start( KProcess::OwnGroup, KProcess::AllOutput );
     }
-    void procReadyReadStdOut()
+    void procReadStdout(KProcess* proc, const char* buf, int len)
     {
-        QString txt = QString::fromLocal8Bit( m_childProc->readAllStandardOutput() );
+        QString txt = QString::fromLocal8Bit( buf, len );
         QStringList l = txt.split("\n");
         foreach( QString s, l )
         {
@@ -100,9 +104,9 @@ public:
         }
     }
 
-    void procReadyReadStdErr()
+    void procReadStderr(KProcess* proc, const char* buf, int len)
     {
-        QString txt = QString::fromLocal8Bit( m_childProc->readAllStandardOutput() );
+        QString txt = QString::fromLocal8Bit( buf, len );
         QStringList l = txt.split("\n");
         foreach( QString s, l )
         {
@@ -117,13 +121,13 @@ SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
       d(new SimpleOutputViewPrivate)
 {
     d->m_model = new QStandardItemModel( this );
-    d->m_childProc = new QProcess( this );
+    d->m_childProc = new KProcess( this );
     d->m_factory = new SimpleOutputViewViewFactory( this );
     core()->uiController()->addToolView( "Output View", d->m_factory );
-    connect( d->m_childProc, SIGNAL(readyReadStandardOutput() ), this, SLOT( procReadyReadStdOut() ) );
-    connect( d->m_childProc, SIGNAL(readyReadStandardError() ), this, SLOT( procReadyReadStdOut() ) );
-    connect( d->m_childProc, SIGNAL(finished(int, QProcess::ExitStatus) ),
-             this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
+    connect( d->m_childProc, SIGNAL(receivedStdout(KProcess* proc, const char*, int) ), this, SLOT( procReadStdout(KProcess* proc, const char*, int) ) );
+    connect( d->m_childProc, SIGNAL(receivedStderr(KProcess* proc, const char*, int) ), this, SLOT( procReadStderr(KProcess* proc, const char*, int) ) );
+    connect( d->m_childProc, SIGNAL(processExited( KProcess* ) ),
+             this, SLOT( procFinished( KProcess* ) ) );
 }
 
 SimpleOutputView::~SimpleOutputView()
@@ -138,6 +142,7 @@ QStandardItemModel* SimpleOutputView::model()
 
 void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command )
 {
+    kDebug(9004) << "Queueing Command: " << dir << "|" << command << endl;
     d->m_jobs.append(QPair<KUrl,QStringList>(dir,command));
     if( !d->isRunning() )
     {
@@ -146,19 +151,20 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command 
 }
 
 
-void SimpleOutputView::procFinished( int exitCode, QProcess::ExitStatus exitStatus )
+void SimpleOutputView::procFinished( KProcess* proc )
 {
-    Q_UNUSED(exitCode);
-    if( exitStatus == QProcess::NormalExit )
+    if( !proc->exitStatus() )
     {
-        QStandardItem* endItem = new QStandardItem(QString("Finished (%1)").arg(exitCode) );
+        QStandardItem* endItem = new QStandardItem(QString("Finished (%1)").arg(proc->exitStatus()) );
         d->m_model->appendRow( endItem );
+        kDebug(9004) << "Finished Sucessfully" << endl;
         emit commandFinished( d->m_currentCmd );
     }
     else
     {
-        QStandardItem* endItem = new QStandardItem(QString("Failed (%1)").arg(exitCode));
+        QStandardItem* endItem = new QStandardItem(QString("Failed (%1)").arg(proc->exitStatus()));
         d->m_model->appendRow( endItem );
+        kDebug(9004) << "Failed" << endl;
         emit commandFailed( d->m_currentCmd );
     }
     QTimer::singleShot(0, this, SLOT( startNextJob() ) );

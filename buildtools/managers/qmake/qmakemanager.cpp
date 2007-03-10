@@ -53,6 +53,7 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent,
         : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent ), m_builder(0)
 {
     IPlugin* i = core()->pluginController()->pluginForExtension( "IQMakeBuilder" );
+    Q_ASSERT(i);
     if( i )
     {
         m_builder = i->extension<IQMakeBuilder>();
