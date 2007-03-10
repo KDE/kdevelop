@@ -58,8 +58,8 @@ private Q_SLOTS:
     void procFinished( KProcess* );
 
 private:
-    Q_PRIVATE_SLOT( d, void procReadStdout(KProcess* proc, const char*, int) )
-    Q_PRIVATE_SLOT( d, void procReadStderr(KProcess* proc, const char*, int) )
+    Q_PRIVATE_SLOT( d, void procReadStdout(KProcess* proc, char*, int) )
+    Q_PRIVATE_SLOT( d, void procReadStderr(KProcess* proc, char*, int) )
     Q_PRIVATE_SLOT( d, void startNextJob() )
     class SimpleOutputViewPrivate* const d;
 };

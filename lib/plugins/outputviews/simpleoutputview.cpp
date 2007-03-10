@@ -94,7 +94,7 @@ public:
             *m_childProc << s;
         m_childProc->start( KProcess::OwnGroup, KProcess::AllOutput );
     }
-    void procReadStdout(KProcess* proc, const char* buf, int len)
+    void procReadStdout(KProcess* proc, char* buf, int len)
     {
         QString txt = QString::fromLocal8Bit( buf, len );
         QStringList l = txt.split("\n");
@@ -104,7 +104,7 @@ public:
         }
     }
 
-    void procReadStderr(KProcess* proc, const char* buf, int len)
+    void procReadStderr(KProcess* proc, char* buf, int len)
     {
         QString txt = QString::fromLocal8Bit( buf, len );
         QStringList l = txt.split("\n");
@@ -124,8 +124,8 @@ SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
     d->m_childProc = new KProcess( this );
     d->m_factory = new SimpleOutputViewViewFactory( this );
     core()->uiController()->addToolView( "Output View", d->m_factory );
-    connect( d->m_childProc, SIGNAL(receivedStdout(KProcess* proc, const char*, int) ), this, SLOT( procReadStdout(KProcess* proc, const char*, int) ) );
-    connect( d->m_childProc, SIGNAL(receivedStderr(KProcess* proc, const char*, int) ), this, SLOT( procReadStderr(KProcess* proc, const char*, int) ) );
+    connect( d->m_childProc, SIGNAL(receivedStdout(KProcess* , char*, int) ), this, SLOT( procReadStdout(KProcess* , char*, int) ) );
+    connect( d->m_childProc, SIGNAL(receivedStderr(KProcess* , char*, int) ), this, SLOT( procReadStderr(KProcess* , char*, int) ) );
     connect( d->m_childProc, SIGNAL(processExited( KProcess* ) ),
              this, SLOT( procFinished( KProcess* ) ) );
 }
