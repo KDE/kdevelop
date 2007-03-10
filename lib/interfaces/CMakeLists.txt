@@ -21,6 +21,18 @@ target_link_libraries(kdevplatforminterfaces ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevplatforminterfaces DESTINATION ${LIB_INSTALL_DIR} )
 
+install(FILES
+    iplugin.h
+    icore.h
+    iuicontroller.h
+    iplugincontroller.h
+    iprojectcontroller.h
+    iproject.h
+    ilanguagecontroller.h
+    ilanguage.h
+    iextension.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces
+)
 
 install(FILES
     kdevelopplugin.desktop
