@@ -45,6 +45,7 @@ void ProjectTemplatesModel::refresh()
         ProjectTemplateItem *templateItem = createItem(name, category);
         templateItem->setData(templateDescription);
     }
+    setHorizontalHeaderLabels(QStringList() << i18n("Project Templates"));
 }
 
 ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, const QString &category)
