@@ -52,7 +52,7 @@ Boston, MA 02110-1301, USA.
 #include <sublime/document.h>
 
 #include "core.h"
-// #include "kdevconfig.h"
+#include "kdevconfig.h"
 #include "iplugin.h"
 // #include "kdevprofile.h"
 // #include "kdevdocument.h"
@@ -114,12 +114,12 @@ void MainWindow::setupActions()
 
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1", app );
-//     action = KStandardAction::preferences( this, SLOT( settingsDialog() ),
-//                                       actionCollection());
-//     actionCollection()->addAction( "settings_configure", action );
-//     action->setToolTip( text );
-//     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
-//                               i18n( "Lets you customize %1.", app ) ) );
+    action = KStandardAction::preferences( this, SLOT( settingsDialog() ),
+                                      actionCollection());
+    actionCollection()->addAction( "settings_configure", action );
+    action->setToolTip( text );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
+                              i18n( "Lets you customize %1.", app ) ) );
 
     action = actionCollection()->addAction( "settings_configure_editors" );
     action->setText( i18n( "Configure &Editor..." ) );
@@ -439,7 +439,7 @@ void MainWindow::configureNotifications()
 
 void MainWindow::settingsDialog()
 {
-//     Config::settingsDialog();
+    Config::self()->settingsDialog( );
 }
 
 void MainWindow::configureEditors()
