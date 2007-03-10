@@ -38,7 +38,7 @@ kde4_automoc(${cmakecommon_SRCS})
 kde4_add_kcfg_files( cmakecommon_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon ${KDE4_KDECORE_LIBS}
-                       kdevplatforminterfaces kdevplatformconfig kdevplatformproject kdevplatformshell) #DO NOT depend on kdevplatformshell!!!
+                       kdevplatforminterfaces kdevplatformconfig kdevplatformproject )
 set_target_properties(kdevcmakecommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
 kde4_automoc(${cmakemanager_SRCS} )
