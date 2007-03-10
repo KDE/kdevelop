@@ -2,4 +2,4 @@ File=makebuilderconfig.kcfg
 ClassName=MakeBuilderSettings
 Singleton=true
 Inherits=KDevelop::ConfigSkeleton
-IncludeFiles="kdevconfigskeleton.h"
+IncludeFiles="configskeleton.h"

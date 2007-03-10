@@ -21,7 +21,7 @@
 #ifndef MAKEBUILDERPREFERENCES_H
 #define MAKEBUILDERPREFERENCES_H
 
-#include "kdevcmmodule.h"
+#include "configmodule.h"
 
 #include <kurl.h>
 #include <kstandarddirs.h>
