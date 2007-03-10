@@ -121,6 +121,7 @@ private slots:
 	void slotSelected( QListViewItem* );
 	void slotTabSelected( int tabindex );
 	void slotFilter();
+	void initCurrentList();
 
 private:
 	QString levelToString( int level ) const;
@@ -128,13 +129,13 @@ private:
 	void InitListView( KListView* listview );
 	void filterList( KListView* listview, const QString& level );
     void updateCurrentWith( EfficientKListView& listview, const QString& level, const QString& filename );
-	void initCurrentList();
 
 private:
 	QGridLayout* m_gridLayout;
 	QTabBar* m_tabBar;
 	QWidgetStack* m_widgetStack;
 	KListView* m_currentList;
+    QTimer* m_initCurrentTimer;
 	EfficientKListView m_errorList;
 	EfficientKListView m_fixmeList;
 	EfficientKListView m_todoList;

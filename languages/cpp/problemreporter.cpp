@@ -95,6 +95,8 @@ m_markIface( 0 )
 	                           "<tt>//TODO: my todo</tt><br>"
 	                           "<tt>//FIXME fix this</tt>"));
 
+	m_initCurrentTimer = new QTimer( this );
+	connect( m_initCurrentTimer, SIGNAL(timeout()), this, SLOT(initCurrentList()) );
 	m_gridLayout = new QGridLayout(this,2,3);
 
 	m_errorList = new KListView(this);
@@ -391,7 +393,7 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
         
 	}
 	
-	initCurrentList();
+	m_initCurrentTimer->start( 500, true );
 }
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )
