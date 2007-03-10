@@ -26,6 +26,7 @@
 #include "kdevexport.h"
 
 class KUrl;
+class QItemSelectionModel;
 
 namespace KDevelop
 {
@@ -50,6 +51,8 @@ class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
         ProjectFolderItem *currentFolderItem() const;
         ProjectFileItem *currentFileItem() const;
         ProjectTargetItem *currentTargetItem() const;
+
+        void setSelectionModel( QItemSelectionModel* );
 
         virtual void reset();
 

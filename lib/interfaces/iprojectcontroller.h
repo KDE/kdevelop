@@ -34,7 +34,7 @@ namespace KDevelop
 class IPlugin;
 class IProject;
 class ProjectModel;
-
+class ProjectBaseItem;
 
 class KDEVPLATFORM_EXPORT IProjectController : public QObject
 {
@@ -67,7 +67,7 @@ public:
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() ) = 0;
     virtual bool closeProject( IProject* ) = 0;
-    virtual void changeCurrentProject( const QModelIndex& ) = 0;
+    virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
 
 Q_SIGNALS:
     void projectOpened( KDevelop::IProject* );

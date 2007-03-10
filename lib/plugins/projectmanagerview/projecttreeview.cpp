@@ -56,6 +56,18 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPart *part, QWidget *parent 
     connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
 }
 
+void ProjectTreeView::setSelectionModel( QItemSelectionModel* newmodel )
+{
+    if( selectionModel() )
+    {
+        disconnect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
+             this, SLOT( slotCurrentChanged( const QModelIndex& ) ) );
+    }
+    QTreeView::setSelectionModel( newmodel );
+    connect( newmodel, SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
+             this, SLOT( slotCurrentChanged( const QModelIndex& ) ) );
+}
+
 ProjectTreeView::~ProjectTreeView()
 {
     delete d;
@@ -175,8 +187,8 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 }
 
 void ProjectTreeView::slotCurrentChanged( const QModelIndex &index )
-
 {
+    kDebug(9000) << "Changed model index" << endl;
     if ( ProjectBaseItem *item = projectModel()->item( index ) )
     {
         emit currentChanged( item );

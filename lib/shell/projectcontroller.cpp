@@ -58,6 +58,10 @@ public:
     Core* m_core;
     IProject* m_currentProject;
     ProjectModel* model;
+    void closeProject()
+    {
+        m_core->projectController()->closeProject( m_currentProject );
+    }
 };
 
 ProjectController::ProjectController( Core* core )
@@ -224,6 +228,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
 bool ProjectController::closeProject( IProject* proj )
 {
+    if( !proj )
+        return false;
     if( d->m_projects.indexOf( proj ) == -1 )
         return false;
 //     if ( !d->m_isLoaded )
@@ -294,11 +300,13 @@ bool ProjectController::loadProjectPart()
     return true;
 }
 
-void ProjectController::changeCurrentProject( const QModelIndex& index )
+void ProjectController::changeCurrentProject( ProjectBaseItem* item )
 {
-    ProjectBaseItem* item = projectModel()->item( index );
+    kDebug(9000) << "Changing current project" << endl;
     if( item )
         d->m_currentProject = item->project();
+    else
+        kDebug(9000) << "Aaaah, no item found for index" << endl;
 }
 
 IProject* ProjectController::currentProject() const

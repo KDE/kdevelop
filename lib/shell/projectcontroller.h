@@ -52,7 +52,7 @@ public:
 public Q_SLOTS:
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
     bool closeProject( IProject* );
-    void changeCurrentProject( const QModelIndex& );
+    void changeCurrentProject( ProjectBaseItem* );
 
 Q_SIGNALS:
     void projectOpened( KDevelop::IProject* );
@@ -72,6 +72,7 @@ private:
     bool loadProjectPart();
 
 private:
+    Q_PRIVATE_SLOT(d, void closeProject())
     struct ProjectControllerPrivate* const d;
 };
 

@@ -127,8 +127,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
         //   connect(m_projectOverview, SIGNAL(activateURL(KUrl)), this, SLOT(openURL(KUrl)));
     connect( d->m_projectOverview, SIGNAL( pressed( QModelIndex ) ),
              this, SLOT( pressed( QModelIndex ) ) );
-    connect( d->m_projectOverview, SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-           d->m_part->core()->projectController(), SLOT(changeCurrentProject( const QModelIndex&) ) );
+    connect( d->m_projectOverview, SIGNAL( currentChanged( ProjectBaseItem* ) ),
+           d->m_part->core()->projectController(), SLOT(changeCurrentProject( ProjectBaseItem* ) ) );
 
 
 #ifdef WITH_PROJECT_DETAILS
@@ -148,6 +148,9 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPart *_part, QWidget *
 
 
     d->m_projectOverview->setModel( overviewModel );
+
+    d->m_projectOverview->setSelectionModel(
+            new QItemSelectionModel( overviewModel, d->m_projectOverview ) );
 
 #ifdef WITH_PROJECT_DETAILS
     QAbstractItemModel *detailsModel = m_projectModel;
