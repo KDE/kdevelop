@@ -17,7 +17,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "kdevconfigskeleton.h"
+#include "configskeleton.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kdebug.h>
 
-#include "kdevconfig.h"
+#include "configuration.h"
 
 namespace KDevelop
 {
@@ -53,7 +53,7 @@ void ConfigSkeleton::usrWriteConfig()
 
     // We iterate twice so that we're not changing the config object too much
 
-    KSharedConfig::Ptr localProjectConfig = Config::self()->sharedLocalProject();
+    KSharedConfig::Ptr localProjectConfig = Configuration::self()->sharedLocalProject();
 //     QString origLocalProjectGroup = localProjectConfig->group();
     KConfigSkeletonItem::List _items = items();
     KConfigSkeletonItem::List::ConstIterator it;
@@ -68,7 +68,7 @@ void ConfigSkeleton::usrWriteConfig()
     localProjectConfig->sync();
 //     KConfigGroup group = localProjectConfig->group( origLocalProjectGroup );
 
-    KSharedConfig::Ptr standardConfig = Config::self()->sharedStandard();
+    KSharedConfig::Ptr standardConfig = Configuration::self()->sharedStandard();
 //     QString origStandardGroup = standardConfig->group();
     KConfigSkeletonItem::List _items2 = items();
     KConfigSkeletonItem::List::ConstIterator it2;
@@ -112,6 +112,6 @@ void ConfigSkeleton::parseNonShareableFile( const KUrl &url )
 }
 
 }
-#include "kdevconfigskeleton.moc"
+#include "configskeleton.moc"
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

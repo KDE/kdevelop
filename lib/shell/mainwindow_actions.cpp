@@ -103,7 +103,7 @@ void MainWindowPrivate::configureNotifications()
 
 void MainWindowPrivate::settingsDialog()
 {
-    Config::self()->settingsDialog( );
+    Configuration::self()->settingsDialog( );
 }
 
 void MainWindowPrivate::configureEditors()

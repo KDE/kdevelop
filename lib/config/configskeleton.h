@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDECONFIGSKELETON_H
-#define KDECONFIGSKELETON_H
+#ifndef KDEVCONFIGSKELETON_H
+#define KDEVCONFIGSKELETON_H
 
 #include "kdevexport.h"
 #include <kconfigskeleton.h>

@@ -18,7 +18,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "kdevconfig.h"
+#include "configuration.h"
 
 #include <kmenu.h>
 #include <klocale.h>
@@ -36,26 +36,26 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-Config *Config::m_self = 0;
+Configuration *Configuration::m_self = 0;
 
-class ConfigPrivate
+class ConfigurationPrivate
 {
 public:
-    Config::Mode mode;
+    Configuration::Mode mode;
     KSettings::Dialog *settingsDialog;
     ICore* m_core;
-    void setMode( Config::Mode m )
+    void setMode( Configuration::Mode m )
     {
         mode = m;
         switch ( mode )
         {
-        case Config::Standard:
+        case Configuration::Standard:
             settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Standard" ) );
             break;
-        case Config::LocalProject:
+        case Configuration::LocalProject:
             settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Local Project" ) );
             break;
-        case Config::GlobalProject:
+        case Configuration::GlobalProject:
             settingsDialog->dialog() ->setButtonText( KDialog::User2, i18n( "Global Project" ) );
             break;
         default:
@@ -65,47 +65,47 @@ public:
 
     void local()
     {
-        setMode( Config::LocalProject );
+        setMode( Configuration::LocalProject );
     }
     void shared()
     {
-        setMode( Config::GlobalProject );
+        setMode( Configuration::GlobalProject );
     }
     void global()
     {
-        setMode( Config::Standard );
+        setMode( Configuration::Standard );
     }
 };
 
-Config::Config( ICore* parent )
-    : QObject(parent), d(new ConfigPrivate)
+Configuration::Configuration( ICore* parent )
+    : QObject(parent), d(new ConfigurationPrivate)
 {
     d->m_core = parent;
     d->settingsDialog = 0;
-    d->mode = Config::Standard;
+    d->mode = Configuration::Standard;
 }
 
-void Config::initialize( ICore* core )
+void Configuration::initialize( ICore* core )
 {
     if( m_self )
         return;
-    m_self = new Config( core );
+    m_self = new Configuration( core );
 }
 
-Config* Config::self()
+Configuration* Configuration::self()
 {
     return m_self;
 }
 
-Config::~Config()
+Configuration::~Configuration()
 {}
 
-Config::Mode Config::mode()
+Configuration::Mode Configuration::mode()
 {
     return d->mode;
 }
 
-void Config::settingsDialog()
+void Configuration::settingsDialog()
 {
     if ( !d->settingsDialog )
     {
@@ -131,22 +131,22 @@ void Config::settingsDialog()
     d->settingsDialog->show();
 }
 
-KConfig *Config::standard()
+KConfig *Configuration::standard()
 {
     return sharedStandard().data();
 }
 
-KConfig *Config::localProject()
+KConfig *Configuration::localProject()
 {
     return sharedLocalProject().data();
 }
 
-KConfig *Config::globalProject()
+KConfig *Configuration::globalProject()
 {
     return sharedGlobalProject().data();
 }
 
-KSharedConfig::Ptr Config::sharedStandard()
+KSharedConfig::Ptr Configuration::sharedStandard()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
@@ -177,7 +177,7 @@ KSharedConfig::Ptr Config::sharedStandard()
     return config;
 }
 
-KSharedConfig::Ptr Config::sharedLocalProject()
+KSharedConfig::Ptr Configuration::sharedLocalProject()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
@@ -207,7 +207,7 @@ KSharedConfig::Ptr Config::sharedLocalProject()
     return config;
 }
 
-KSharedConfig::Ptr Config::sharedGlobalProject()
+KSharedConfig::Ptr Configuration::sharedGlobalProject()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
@@ -240,6 +240,6 @@ KSharedConfig::Ptr Config::sharedGlobalProject()
 
 }
 
-#include "kdevconfig.moc"
+#include "configuration.moc"
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

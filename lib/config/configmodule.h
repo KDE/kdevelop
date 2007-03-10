@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kcmodule.h>
 #include "kdevexport.h"
-#include "kdevconfigskeleton.h"
+#include "configskeleton.h"
 
 class KUrl;
 

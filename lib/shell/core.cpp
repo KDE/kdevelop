@@ -28,7 +28,7 @@
 #include <sublime/tooldocument.h>
 
 #include "shellextension.h"
-#include "kdevconfig.h"
+#include "configuration.h"
 #include "mainwindow.h"
 #include "uicontroller.h"
 #include "plugincontroller.h"
@@ -47,7 +47,6 @@ struct CorePrivate {
     }
     void initialize()
     {
-        Config::initialize( m_core );
         uiController = new UiController(m_core);
         pluginController = new PluginController(m_core);
         partController = new PartController(m_core, uiController->defaultMainWindow());
@@ -87,6 +86,7 @@ void Core::initialize()
     if( m_self )
         return;
     m_self = new Core();
+    Configuration::initialize( m_self );
     m_self->d->initialize();
     EditorIntegrator::initialise();
 }

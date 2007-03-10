@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVCONFIG_H
-#define KDEVCONFIG_H
+#ifndef KDEVCONFIGURATION_H
+#define KDEVCONFIGURATION_H
 
 #include <QObject>
 
@@ -38,7 +38,7 @@ Developers using the KDevelop API should use these config objects instead of
 the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
 it can cause unexpected syncing issues.
 */
-class KDEVPLATFORM_EXPORT Config : public QObject
+class KDEVPLATFORM_EXPORT Configuration : public QObject
 {
     Q_OBJECT
 public:
@@ -50,9 +50,9 @@ public:
     };
     Q_DECLARE_FLAGS(Modes, Mode)
 
-    static Config *self();
+    static Configuration *self();
     static void initialize( ICore* core );
-    virtual ~Config();
+    virtual ~Configuration();
 
     /**
      * Used by KCM dialogs to determine which file to save settings to.
@@ -117,12 +117,12 @@ public:
     KSharedConfig::Ptr sharedGlobalProject();
 
 private:
-    Config(ICore *parent = 0);
-    static Config *m_self;
+    Configuration(ICore *parent = 0);
+    static Configuration *m_self;
     Q_PRIVATE_SLOT(d, void local() )
     Q_PRIVATE_SLOT(d, void shared() )
     Q_PRIVATE_SLOT(d, void global() )
-    class ConfigPrivate* const d;
+    class ConfigurationPrivate* const d;
 };
 
 }
