@@ -22,7 +22,6 @@
 #include <icore.h>
 #include <iproject.h>
 #include <iprojectcontroller.h>
-#include <domutil.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>

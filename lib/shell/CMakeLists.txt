@@ -24,8 +24,6 @@ set(kdevplatformshell_LIB_SRCS
     partdocument.cpp
     languagecontroller.cpp
     language.cpp
-    # This will be changed once mattr has thought about configuration.
-     ../domutil.cpp
 )
 
 kde4_automoc(${kdevplatformshell_LIB_SRCS})
