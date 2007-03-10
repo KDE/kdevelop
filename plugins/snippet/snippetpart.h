@@ -27,6 +27,11 @@ public:
     SnippetPart(QObject *parent, const QStringList &args);
     virtual ~SnippetPart();
 
+    /**
+     * Inserts the given @p snippet into the currently active view.
+     * If the current active view is not inherited from KTextEditor::View 
+     * nothing will happen.
+     */
     void insertText(QString snippet);
 
     // KDevelop::IPlugin methods

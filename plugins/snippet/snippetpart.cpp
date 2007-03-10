@@ -13,6 +13,8 @@
 
 #include <klocale.h>
 #include <kgenericfactory.h>
+#include <ktexteditor/view.h>
+#include <kparts/partmanager.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
@@ -63,6 +65,11 @@ void SnippetPart::unload()
 void SnippetPart::insertText(QString snippet)
 {
     kDebug() << "Insert Snippet: " << snippet <<endl;
+
+	KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( core()->partManager()->activeWidget() );
+	if (view) {
+		view->insertText( snippet );
+	}
 }
 
 #include "snippetpart.moc"
