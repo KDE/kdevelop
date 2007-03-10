@@ -49,12 +49,15 @@ public:
     virtual void registerExtensions();
     virtual void unregisterExtensions();
     virtual QStringList extensions() const;
-
+Q_SIGNALS:
+    void built(KDevelop::ProjectBaseItem*);
+    void failed(KDevelop::ProjectBaseItem*);
 private Q_SLOTS:
-    void commandFinished(const QString &command);
-    void commandFailed(const QString &command);
+    void commandFinished(const QStringList &command);
+    void commandFailed(const QStringList &command);
 
 private:
+    QList< QPair< QStringList, KDevelop::ProjectBaseItem*> > m_queue;
 };
 
 #endif // QMAKEBUILDER_H

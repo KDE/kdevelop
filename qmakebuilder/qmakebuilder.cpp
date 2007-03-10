@@ -20,6 +20,8 @@
 
 #include "qmakebuilder.h"
 
+#include "imakebuilder.h"
+
 #include <config.h>
 
 #include <QtCore/QStringList>
@@ -54,6 +56,30 @@ KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectBuilder, QMakeBuilder )
 QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
     : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent)
 {
+    IPlugin* i = core()->pluginController()->pluginForExtension("IOutputView");
+    if( i )
+    {
+        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        if( view )
+        {
+            connect(i, SIGNAL(commandFinished(const QStringList &)),
+                this, SLOT(commandFinished(const QStringList &)));
+            connect(i, SIGNAL(commandFailed(const QStringList &)),
+                this, SLOT(commandFailed(const QStringList &)));
+        }
+    }
+    i = core()->pluginController()->pluginForExtension("IMakeBuilder");
+    if( i )
+    {
+        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        if( view )
+        {
+            connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)),
+                this, SLOT(built(KDevelop::ProjectBaseItem*)));
+            connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)),
+                this, SLOT(failed(KDevelop::ProjectBaseItem*)));
+        }
+    }
 }
 
 QMakeBuilder::~QMakeBuilder()
@@ -62,6 +88,7 @@ QMakeBuilder::~QMakeBuilder()
 
 bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
+    kDebug(9024) << "Building" << endl;
     if( dom->type() != KDevelop::ProjectBaseItem::Project )
         return false;
     KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(dom);
@@ -71,7 +98,10 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            view->queueCommand( item->url(), QStringList() << "qmake-qt4" );
+            QStringList cmd;
+            cmd << "qmake-qt4";
+            m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
+            view->queueCommand( item->url(), cmd );
             return true;
         }
     }
@@ -84,14 +114,44 @@ bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return false;
 }
 
-void QMakeBuilder::commandFinished(const QString &command)
+void QMakeBuilder::commandFinished(const QStringList &command)
 {
-    Q_UNUSED(command);
+    kDebug(9024) << "command finished " << command << endl;
+    if( !m_queue.isEmpty() )
+    {
+        kDebug(9024) << "queue not empty" << endl;
+        QPair< QStringList, KDevelop::ProjectBaseItem* > pair = m_queue.front();
+
+        if( pair.first == command )
+        {
+            kDebug(9024) << "found command" << endl;
+            m_queue.pop_front();
+            IPlugin* i = core()->pluginController()->pluginForExtension("IMakeBuilder");
+            if( i )
+            {
+                IMakeBuilder* builder = i->extension<IMakeBuilder>();
+                if( builder )
+                {
+                    kDebug(9024) << "Building with make" << endl;
+                    builder->build(pair.second);
+                }else kDebug(9024) << "Make builder not with extension" << endl;
+            }
+            else kDebug(9024) << "Make builder not found" << endl;
+        }
+    }
 }
 
-void QMakeBuilder::commandFailed(const QString &command)
+void QMakeBuilder::commandFailed(const QStringList &command)
 {
-    Q_UNUSED(command);
+    if( !m_queue.isEmpty() )
+    {
+        QPair<QStringList, KDevelop::ProjectBaseItem*> pair = m_queue.front();
+        if( pair.first == command )
+        {
+            m_queue.pop_front();
+            emit failed(pair.second);
+        }
+    }
 }
 
 QStringList QMakeBuilder::extensions() const

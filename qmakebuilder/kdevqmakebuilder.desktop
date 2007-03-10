@@ -9,3 +9,4 @@ X-KDE-PluginInfo-Name=KDevQMakeBuilder
 X-KDevelop-ProjectBuilder=QMake
 X-KDevelop-Version=4
 X-KDevelop-Interfaces=IQMakeBuilder
+X-KDevelop-IRequired=IOutputView,IMakeBuilder

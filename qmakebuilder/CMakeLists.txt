@@ -1,5 +1,7 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/lib
+include_directories(
+    ${CMAKE_SOURCE_DIR}/buildtools/builders/makebuilder
+    ${CMAKE_SOURCE_DIR}/lib
     ${CMAKE_SOURCE_DIR}/lib/interfaces
     ${CMAKE_SOURCE_DIR}/lib/plugins/outputviews/interfaces
     ${CMAKE_SOURCE_DIR}/lib/project
