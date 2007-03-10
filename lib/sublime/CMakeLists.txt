@@ -24,11 +24,7 @@ set(sublime_LIB_SRCS
     sublimedefs.cpp
 )
 
-# set(sublime_UI
-# )
-
 kde4_automoc(${sublime_LIB_SRCS})
-# kde4_add_ui_files(sublime_LIB_SRCS ${sublime_UI})
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
 target_link_libraries(sublime ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
 set_target_properties(sublime PROPERTIES VERSION 4.0.0 SOVERSION 4)
@@ -40,6 +36,7 @@ install(TARGETS sublime DESTINATION ${LIB_INSTALL_DIR} )
 install(FILES
     area.h
     areaindex.h
+    areawalkers.h
     container.h
     controller.h
     document.h
@@ -50,4 +47,6 @@ install(FILES
     switcher.h
     tooldocument.h
     view.h
+    viewcreator.h
+    viewwidgetcreator.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/sublime )
