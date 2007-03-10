@@ -30,7 +30,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
-class Core;
+class ICore;
 
 /**
 The interface to KDevelop's config objects.
@@ -50,7 +50,8 @@ public:
     };
     Q_DECLARE_FLAGS(Modes, Mode)
 
-    Config( Core* core );
+    static Config *self();
+    static void initialize( ICore* core );
     virtual ~Config();
 
     /**
@@ -72,7 +73,7 @@ public:
      * found in the global project file and the local project file.  THE MOST
      * SPECIFIC FILE WILL BE THE GLOBAL PROJECT FILE.
      */
-    static KConfig *standard();
+    KConfig *standard();
 
     /**
      * @return A pointer to the local project config object.  This object will point
@@ -85,7 +86,7 @@ public:
      * found in the global project file and the local project file.  THE MOST
      * SPECIFIC FILE WILL BE THE LOCAL PROJECT FILE.
      */
-    static KConfig *localProject();
+    KConfig *localProject();
 
     /**
      * @return A pointer to the global project config object.  This object will point
@@ -100,22 +101,24 @@ public:
      *
      * This function should RARELY be used as it is operationally the same as standard()
      */
-    static KConfig *globalProject();
+    KConfig *globalProject();
 
     /**
      * @return A shared pointer to the standard config object.
      */
-    static KSharedConfig::Ptr sharedStandard();
+    KSharedConfig::Ptr sharedStandard();
     /**
      * @return A shared pointer to the local project config object.
      */
-    static KSharedConfig::Ptr sharedLocalProject();
+    KSharedConfig::Ptr sharedLocalProject();
     /**
      * @return A shared pointer to the global project config object.
      */
-    static KSharedConfig::Ptr sharedGlobalProject();
+    KSharedConfig::Ptr sharedGlobalProject();
 
 private:
+    Config(ICore *parent = 0);
+    static Config *m_self;
     Q_PRIVATE_SLOT(d, void local() )
     Q_PRIVATE_SLOT(d, void shared() )
     Q_PRIVATE_SLOT(d, void global() )
@@ -125,4 +128,4 @@ private:
 }
 #endif
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

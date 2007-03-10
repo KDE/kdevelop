@@ -80,12 +80,28 @@ public:
                 m_part->core()->uiController()->openUrl( projectItem->file()->url() );
         }
     }
+    void currentIndexChanged( const QModelIndex& current, const QModelIndex& )
+    {
+        ProjectBaseItem* item = m_part->core()->projectController()->projectModel()->item( current );
+        if( item )
+        {
+            m_part->core()->projectController()->setCurrentProject( item->project() );
+        }
+    }
     void buildCurrentProject()
     {
         ProjectBaseItem* item = m_part->core()->projectController()->projectModel()->item(
-                m_overView->selectionModel()->currentIndex() );
+                m_projectOverview->selectionModel()->currentIndex() );
         if( item )
         {
+            while( !item->type() == ProjectBaseItem::Project )
+            {
+                ProjectBaseItem* it = dynamic_cast<ProjectBaseItem*>(item->parent());
+                if( !it )
+                    return;
+                item = it;
+            }
+            ProjectItem* prjitem = static_cast<ProjectItem*>(item);
             IProject* project = item->project();
             IProjectFileManager* fmgr = project->fileManager();
             IBuildSystemManager* mgr;
@@ -94,7 +110,7 @@ public:
                 mgr = static_cast<IBuildSystemManager*>( fmgr );
             if( mgr )
             {
-                mgr->builder( item )->build( item );
+                mgr->builder( prjitem )->build( item );
             }
         }
     }

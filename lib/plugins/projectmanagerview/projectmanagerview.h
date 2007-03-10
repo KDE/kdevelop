@@ -51,6 +51,7 @@ class KDEVPROJECTMANAGER_EXPORT ProjectManagerView: public QWidget
         Q_PRIVATE_SLOT( d, void fileDirty( const QString &fileName ) )
         Q_PRIVATE_SLOT( d, void fileDeleted( const QString &fileName ) )
         Q_PRIVATE_SLOT( d, void buildCurrentProject() )
+        Q_PRIVATE_SLOT( d, void currentIndexChanged( const QModelIndex&, const QModelIndex& ) )
         class ProjectManagerPrivate* const d;
 };
 

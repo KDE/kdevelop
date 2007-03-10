@@ -28,7 +28,7 @@
 #include <sublime/tooldocument.h>
 
 #include "shellextension.h"
-#include "../kdevconfig.h"
+#include "kdevconfig.h"
 #include "mainwindow.h"
 #include "uicontroller.h"
 #include "plugincontroller.h"
@@ -47,7 +47,7 @@ struct CorePrivate {
     }
     void initialize()
     {
-        config = new Config( m_core );
+        Config::initialize( m_core );
         uiController = new UiController(m_core);
         pluginController = new PluginController(m_core);
         partController = new PartController(m_core, uiController->defaultMainWindow());
@@ -66,7 +66,6 @@ struct CorePrivate {
     }
     ~CorePrivate()
     {
-        delete config;
         delete projectController;
         delete languageController;
         delete pluginController;
@@ -79,7 +78,6 @@ struct CorePrivate {
     QPointer<ProjectController> projectController;
     QPointer<LanguageController> languageController;
     QPointer<PartController> partController;
-    QPointer<Config> config;
 
     Core *m_core;
 };

@@ -53,8 +53,8 @@ void ConfigSkeleton::usrWriteConfig()
 
     // We iterate twice so that we're not changing the config object too much
 
-    KSharedConfig::Ptr localProjectConfig = Config::sharedLocalProject();
-    QString origLocalProjectGroup = localProjectConfig->group();
+    KSharedConfig::Ptr localProjectConfig = Config::self()->sharedLocalProject();
+//     QString origLocalProjectGroup = localProjectConfig->group();
     KConfigSkeletonItem::List _items = items();
     KConfigSkeletonItem::List::ConstIterator it;
     for ( it = _items.begin(); it != _items.end(); ++it )
@@ -66,10 +66,10 @@ void ConfigSkeleton::usrWriteConfig()
         }
     }
     localProjectConfig->sync();
-    localProjectConfig->setGroup( origLocalProjectGroup );
+//     localProjectConfig->setGroup( origLocalProjectGroup );
 
-    KSharedConfig::Ptr standardConfig = Config::sharedStandard();
-    QString origStandardGroup = standardConfig->group();
+    KSharedConfig::Ptr standardConfig = Config::self()->sharedStandard();
+//     QString origStandardGroup = standardConfig->group();
     KConfigSkeletonItem::List _items2 = items();
     KConfigSkeletonItem::List::ConstIterator it2;
     for ( it2 = _items2.begin(); it2 != _items2.end(); ++it2 )
@@ -81,7 +81,7 @@ void ConfigSkeleton::usrWriteConfig()
         }
     }
     standardConfig->sync();
-    standardConfig->setGroup( origStandardGroup );
+//     standardConfig->setGroup( origStandardGroup );
 
     readConfig();
 
@@ -114,4 +114,4 @@ void ConfigSkeleton::parseNonShareableFile( const KUrl &url )
 }
 #include "kdevconfigskeleton.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

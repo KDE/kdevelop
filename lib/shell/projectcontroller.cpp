@@ -36,7 +36,7 @@ Boston, MA 02110-1301, USA.
 
 #include "core.h"
 #include "iplugin.h"
-#include "../kdevconfig.h"
+#include "kdevconfig.h"
 #include "project.h"
 #include "mainwindow.h"
 #include "projectmodel.h"
@@ -56,6 +56,7 @@ public:
     IPlugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
     Core* m_core;
+    IProject* m_currentProject;
     ProjectModel* model;
 };
 
@@ -64,6 +65,7 @@ ProjectController::ProjectController( Core* core )
 {
     d->m_core = core;
     d->m_projectPart = 0;
+    d->m_currentProject = 0;
     d->model = new ProjectModel();
     setupActions();
 }
@@ -88,7 +90,7 @@ void ProjectController::setupActions()
     action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
     action->setEnabled( false );
 
-    KConfig * config = Config::standard();
+    KConfig * config = Config::self()->standard();
     config->setGroup( "General Options" );
 
     d->m_recentAction =
@@ -122,58 +124,17 @@ void ProjectController::saveSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
     // Do not save if a project is loaded as this doesn't make sense inside a project file...
-//     if ( !projectIsLoaded )
-//     {
-//         KConfig* standard = Config::standard();
-//         standard->setGroup( "General Options" );
+    if ( projects().count() == 0 )
+    {
+        KConfig* standard = Config::self()->standard();
+        standard->setGroup( "General Options" );
 //         standard->writePathEntry( "Last Project", d->m_lastProject.path() );
-//     }
+    }
 }
 
 // bool ProjectController::isLoaded() const
 // {
 //     return d->m_isLoaded;
-// }
-
-// KUrl ProjectController::localFile() const
-// {
-//     return d->m_localFile;
-// }
-
-// void ProjectController::setLocalFile( const KUrl &localFile )
-// {
-//     d->m_localFile = localFile;
-// }
-
-// KUrl ProjectController::globalFile() const
-// {
-//     return d->m_globalFile;
-// }
-//
-// void ProjectController::setGlobalFile( const KUrl &globalFile )
-// {
-//     d->m_globalFile = globalFile;
-// }
-//
-// KUrl ProjectController::projectDirectory() const
-// {
-//     return KUrl::fromPath( d->m_globalFile.directory() );
-// }
-//
-// KUrl ProjectController::projectsDirectory() const
-// {
-//     return d->m_projectsDir;
-// }
-//
-// void ProjectController::setProjectsDirectory( const KUrl &projectsDir )
-// {
-//     d->m_projectsDir = projectsDir;
-// }
-//
-// IProject* ProjectController::activeProject() const
-// {
-//     return d->m_project;
-// // return 0;
 // }
 
 int ProjectController::projectCount() const
@@ -199,7 +160,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     if ( url.isEmpty() )
     {
-        KConfig * config = Config::standard();
+        KConfig * config = Config::self()->standard();
         config->setGroup( "General Options" );
         QString dir = config->readPathEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
@@ -257,10 +218,10 @@ bool ProjectController::openProject( const KUrl &projectFile )
     action->setEnabled( true );
 
     d->m_recentAction->addUrl( url );
-    KConfigGroup recentGroup = Config::standard()->group("RecentProjects");
+    KConfigGroup recentGroup = Config::self()->standard()->group("RecentProjects");
     d->m_recentAction->saveEntries( recentGroup );
 
-    Config::standard() ->sync();
+    Config::self()->standard() ->sync();
     emit projectOpened( project );
 
     return true;
@@ -320,7 +281,7 @@ bool ProjectController::loadProjectPart()
 {
     if( !d->m_projectPart )
     {
-        KConfig * config = Config::standard();
+        KConfig * config = Config::self()->standard();
         config->setGroup( "General Options" );
 
         QString projectManager =
@@ -338,15 +299,14 @@ bool ProjectController::loadProjectPart()
     return true;
 }
 
-IProject* ProjectController::currentProject()
+void ProjectController::setCurrentProject( IProject* p )
 {
-    QModelIndex current = d->model->selectionModel()->currentIndex();
-    if( current.isValid() )
-    {
-        ProjectBaseItem* item = d->model->item(current);
-        return item->project();
-    }
-    return 0;
+    d->m_currentProject = p;
+}
+
+IProject* ProjectController::currentProject() const
+{
+    return d->m_currentProject;
 }
 
 ProjectModel* ProjectController::projectModel()

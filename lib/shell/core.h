@@ -59,8 +59,6 @@ public:
     /// @internal
     PartController *partController();
     /// @internal
-    Config* config();
-    /// @internal
     UiController *uiControllerInternal();
 
     void cleanup();

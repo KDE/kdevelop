@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright (C) 2006 Adam Treat <treat@kde.org>
+Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -28,19 +29,21 @@ Boston, MA 02110-1301, USA.
 #include <kcmultidialog.h>
 #include <ksettings/dialog.h>
 
-#include "core.h"
-#include "mainwindow.h"
-#include "projectcontroller.h"
+#include "icore.h"
+#include "iprojectcontroller.h"
+#include "iproject.h"
 
 namespace KDevelop
 {
+
+Config *Config::m_self = 0;
 
 class ConfigPrivate
 {
 public:
     Config::Mode mode;
     KSettings::Dialog *settingsDialog;
-    Core* m_core;
+    ICore* m_core;
     void setMode( Config::Mode m )
     {
         mode = m;
@@ -74,11 +77,23 @@ public:
     }
 };
 
-Config::Config( Core* core )
-    : d(new ConfigPrivate)
+Config::Config( ICore* parent )
+    : QObject(parent), d(new ConfigPrivate)
 {
-    d->m_core = core;
+    d->m_core = parent;
     d->mode = Config::Standard;
+}
+
+void Config::initialize( ICore* core )
+{
+    if( m_self )
+        return;
+    m_self = new Config( core );
+}
+
+Config* Config::self()
+{
+    return m_self;
 }
 
 Config::~Config()
@@ -133,26 +148,30 @@ KConfig *Config::globalProject()
 KSharedConfig::Ptr Config::sharedStandard()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-//     QStringList current = config->extraConfigFiles();
-//     QStringList extraConfig;
-//     KUrl local;
-//     KUrl global;
-//     if( Core::self() && Core::self()->projectController() )
-//     {
-//         local = Core::self()->projectController() ->localFile();
-//         global = Core::self()->projectController() ->globalFile();
-//     }
-//     if ( local.isValid() )
-//         extraConfig.append( local.path() );
-//     if ( global.isValid() )
-//         extraConfig.append( global.path() );
-//
-//     if ( current != extraConfig )
-//     {
-//         config ->sync();
-//         config ->setExtraConfigFiles( extraConfig );
-//         config ->reparseConfiguration();
-//     }
+    QStringList current = config->extraConfigFiles();
+    QStringList extraConfig;
+    KUrl local;
+    KUrl global;
+    if( d->m_core->projectController() )
+    {
+        IProject* project = d->m_core->projectController()->currentProject();
+        if( project )
+        {
+            local = project->localFile();
+            global = project->globalFile();
+        }
+    }
+    if ( local.isValid() )
+        extraConfig.append( local.path() );
+    if ( global.isValid() )
+        extraConfig.append( global.path() );
+
+    if ( current != extraConfig )
+    {
+        config ->sync();
+        config ->setExtraConfigFiles( extraConfig );
+        config ->reparseConfiguration();
+    }
 
     return config;
 }
@@ -160,43 +179,60 @@ KSharedConfig::Ptr Config::sharedStandard()
 KSharedConfig::Ptr Config::sharedLocalProject()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-//     QStringList current = config->extraConfigFiles();
-//     QStringList extraConfig;
-//     KUrl local = Core::self()->projectController() ->localFile();
-//     KUrl global = Core::self()->projectController() ->globalFile();
-//     if ( global.isValid() )
-//         extraConfig.append( global.path() );
-//     if ( local.isValid() )
-//         extraConfig.append( local.path() );
-//
-//     if ( current != extraConfig )
-//     {
-//         config ->sync();
-//         config ->setExtraConfigFiles( extraConfig );
-//         config ->reparseConfiguration();
-//     }
+    QStringList current = config->extraConfigFiles();
+    QStringList extraConfig;
+    KUrl local;
+    KUrl global;
+    if( d->m_core->projectController() )
+    {
+        IProject* project = d->m_core->projectController()->currentProject();
+        if( project )
+        {
+            local = project->localFile();
+            global = project->globalFile();
+        }
+    }
+    if ( global.isValid() )
+        extraConfig.append( global.path() );
+    if ( local.isValid() )
+        extraConfig.append( local.path() );
 
+    if ( current != extraConfig )
+    {
+        config ->sync();
+        config ->setExtraConfigFiles( extraConfig );
+        config ->reparseConfiguration();
+    }
     return config;
 }
 
 KSharedConfig::Ptr Config::sharedGlobalProject()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-//     QStringList current = config->extraConfigFiles();
-//     QStringList extraConfig;
-//     KUrl local = Core::self()->projectController() ->localFile();
-//     KUrl global = Core::self()->projectController() ->globalFile();
-//     if ( local.isValid() )
-//         extraConfig.append( local.path() );
-//     if ( global.isValid() )
-//         extraConfig.append( global.path() );
-//
-//     if ( current != extraConfig )
-//     {
-//         config ->sync();
-//         config ->setExtraConfigFiles( extraConfig );
-//         config ->reparseConfiguration();
-//     }
+    QStringList current = config->extraConfigFiles();
+    KUrl local;
+    KUrl global;
+    QStringList extraConfig;
+    if( d->m_core->projectController() )
+    {
+        IProject* project = d->m_core->projectController()->currentProject();
+        if( project )
+        {
+            local = project->localFile();
+            global = project->globalFile();
+        }
+    }
+    if ( local.isValid() )
+        extraConfig.append( local.path() );
+    if ( global.isValid() )
+        extraConfig.append( global.path() );
+
+    if ( current != extraConfig )
+    {
+        config ->sync();
+        config ->setExtraConfigFiles( extraConfig );
+        config ->reparseConfiguration();
+    }
 
     return config;
 }
@@ -205,4 +241,4 @@ KSharedConfig::Ptr Config::sharedGlobalProject()
 
 #include "kdevconfig.moc"
 
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

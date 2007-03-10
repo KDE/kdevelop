@@ -21,7 +21,7 @@
 #ifndef CMAKEPREFERENCES_H
 #define CMAKEPREFERENCES_H
 
-#include "kdevcmodule.h"
+#include "kdevcmmodule.h"
 
 #include <kurl.h>
 #include <kstandarddirs.h>

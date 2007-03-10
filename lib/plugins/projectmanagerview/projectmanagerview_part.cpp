@@ -21,7 +21,7 @@
 #include "projectmodel.h"
 #include "projectmanagerview.h"
 #include "icore.h"
-#include "kdevconfig.h"
+// #include "kdevconfig.h"
 #include "iproject.h"
 #include "iprojectfilemanager.h"
 #include "ibuildsystemmanager.h"
@@ -78,7 +78,6 @@ ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QStringLi
 {
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( "Project Manager", d->factory );
-
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
 
