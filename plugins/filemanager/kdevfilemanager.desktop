@@ -7,6 +7,7 @@ Comment[x-test]=xxThis plugin brings a filemanager to KDevelop.xx
 Name=KDevFileManager
 Name[x-test]=xxKDevFileManagerxx
 GenericName=File Manager
+GenericName[ja]=ファイルマネージャ
 GenericName[x-test]=xxFile Managerxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevfilemanager
