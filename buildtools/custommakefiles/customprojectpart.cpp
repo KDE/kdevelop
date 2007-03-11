@@ -478,7 +478,9 @@ void CustomProjectPart::findNewFiles( const QString& dir, QStringList& filelist 
 {
     if( dir.isEmpty() )
         return;
-    QStringList entries = QDir(dir).entryList();
+    QStringList fileentries = QDir(dir).entryList( filetypes().join(";") );
+    QStringList dirs = QDir(dir).entryList(QDir::Dirs);
+    QStringList entries = fileentries+dirs;
     QString relpath = relativeToProject( dir );
     if( !relpath.isEmpty() )
         relpath += "/";
@@ -681,7 +683,9 @@ void CustomProjectPart::addFiles( const QStringList& fileList )
         if ( QFileInfo( projectDirectory() + "/" + relpath ).isDir() && ( m_recursive || m_first_recursive ) )
         {
             m_first_recursive = false;
-            QStringList subentries = QDir( projectDirectory() + "/" + relpath ).entryList();
+            QStringList fileentries = QDir( projectDirectory() + "/" + relpath ).entryList( filetypes().join(";") );
+            QStringList dirs = QDir( projectDirectory() + "/" + relpath ).entryList(QDir::Dirs);
+            QStringList subentries = fileentries+dirs;
             for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                 if ( *subit != "." && *subit != ".." )
                     *subit = relpath + "/" + ( *subit );
@@ -748,7 +752,9 @@ void CustomProjectPart::removeFiles( const QStringList& fileList )
         if ( QFileInfo( projectDirectory() + "/" + relpath ).isDir() && ( m_recursive || m_first_recursive ) )
         {
             m_first_recursive = false;
-            QStringList subentries = QDir( projectDirectory() + "/" + relpath ).entryList();
+            QStringList fileentries = QDir( projectDirectory() + "/" + relpath ).entryList( filetypes().join(";") );
+            QStringList dirs = QDir( projectDirectory() + "/" + relpath ).entryList(QDir::Dirs);
+            QStringList subentries = fileentries+dirs;
             for ( QStringList::iterator subit = subentries.begin(); subit != subentries.end(); ++subit )
                 if ( *subit != "." && *subit != ".." )
                     *subit = relpath + "/" + ( *subit );
@@ -1343,7 +1349,9 @@ bool CustomProjectPart::containsNonProjectFiles( const QString& dir )
 {
     if( isInBlacklist( dir ) )
         return false;
-    QStringList subentries = QDir( dir ).entryList();
+    QStringList fileentries = QDir( dir ).entryList( filetypes().join(";") );
+    QStringList dirs = QDir( dir ).entryList(QDir::Dirs);
+    QStringList subentries = fileentries+dirs;
     subentries.remove(".");
     subentries.remove("..");
     for ( QStringList::const_iterator it = subentries.begin(); it != subentries.end(); ++it )
@@ -1357,8 +1365,7 @@ bool CustomProjectPart::containsNonProjectFiles( const QString& dir )
                 return true;
             }
         }
-        else if ( isProjectFileType( *it )
-                && !project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) )
+        else if ( !project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) )
                 && !isInBlacklist( *it ) )
         {
             return true;
@@ -1371,7 +1378,10 @@ bool CustomProjectPart::containsProjectFiles( const QString& dir )
 {
     if( isInBlacklist( dir ) )
         return false;
-    QStringList subentries = QDir( dir ).entryList();
+
+    QStringList fileentries = QDir( dir ).entryList( filetypes().join(";") );
+    QStringList dirs = QDir( dir ).entryList(QDir::Dirs);
+    QStringList subentries = fileentries+dirs;
     subentries.remove(".");
     subentries.remove("..");
     for ( QStringList::const_iterator it = subentries.begin(); it != subentries.end(); ++it )
@@ -1386,7 +1396,7 @@ bool CustomProjectPart::containsProjectFiles( const QString& dir )
                 return true;
             }
         }
-        else if ( isProjectFileType( *it ) && project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) && !isInBlacklist( *it ) )
+        else if ( project()->isProjectFile( URLUtil::canonicalPath( dir + "/" + *it ) ) && !isInBlacklist( *it ) )
         {
             return true;
         }
@@ -1397,7 +1407,9 @@ bool CustomProjectPart::containsProjectFiles( const QString& dir )
 QStringList CustomProjectPart::projectFilesInDir( const QString& dir )
 {
     QStringList result;
-    QStringList subentries = QDir( projectDirectory()+"/"+dir ).entryList();
+    QStringList fileentries = QDir( projectDirectory() + "/" + dir ).entryList( filetypes().join(";") );
+    QStringList dirs = QDir( projectDirectory() + "/" + dir ).entryList(QDir::Dirs);
+    QStringList subentries = fileentries+dirs;
     subentries.remove(".");
     subentries.remove("..");
     for ( QStringList::const_iterator it = subentries.begin(); it != subentries.end(); ++it )
@@ -1462,7 +1474,9 @@ void CustomProjectPart::slotDirDirty( const QString& dir )
     updateBlacklist( blacklist );
     removeFiles(remove);
 
-    QStringList files = QDir(dir).entryList();
+    QStringList fileentries = QDir( dir ).entryList( filetypes().join(";") );
+    QStringList dirs = QDir( dir ).entryList(QDir::Dirs);
+    QStringList files = fileentries+dirs;
     files.remove(".");
     files.remove("..");
     for( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
