@@ -456,7 +456,7 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
                                                   "Populate it with all C/C++/Java files below "
                                                   "the project directory?" ), QString::null, i18n( "Populate" ), i18n( "Do Not Populate" ) );
         if ( r == KMessageBox::Yes )
-            QTimer::singleShot(1000, this, SLOT(populateProject()));
+            populateProject();
     }
 
 
@@ -519,7 +519,7 @@ void CustomProjectPart::addDirWatches( const QString& absPath )
 void CustomProjectPart::populateProject()
 {
 
-    KDialogBase* dlg = new KDialogBase(0, "typeselector", true,
+    KDialogBase* dlg = new KDialogBase( mainWindow()->main(), "typeselector", true,
             "Select filetypes of project", KDialogBase::Ok|KDialogBase::Cancel);
     QVBox* box = dlg->makeVBoxMainWidget();
     KEditListBox* lb = new KEditListBox("Filetypes in the project", box, "selecttypes",
@@ -1573,7 +1573,7 @@ void CustomProjectPart::addNewFilesToProject()
     if( addfiles.isEmpty() )
         return;
 
-    AddFilesDialog *dlg = new AddFilesDialog( addfiles, this->mainWindow()->main() );
+    AddFilesDialog *dlg = new AddFilesDialog( addfiles, mainWindow()->main() );
     if( dlg->exec() == KDialog::Accepted )
     {
         m_autoAddFiles.clear();
