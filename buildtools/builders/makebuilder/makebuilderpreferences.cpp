@@ -20,16 +20,12 @@
 
 #include "makebuilderpreferences.h"
 
-#include <vector>
-
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
 
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
-
-typedef std::vector<std::string> StringVector;
 
 typedef KGenericFactory<MakeBuilderPreferences> MakeBuilderPreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdev_makebuilder, MakeBuilderPreferencesFactory( "kcm_kdev_makebuilder" )  )
