@@ -81,7 +81,7 @@ public:
             return;
         m_model->clear();
         m_childProc->clearArguments();
-        m_childProc->setUseShell( true );
+//         m_childProc->setUseShell( true );
         QPair<KUrl, QStringList> job = m_jobs.takeFirst();
         m_childProc->setWorkingDirectory( job.first.path() );
         QStringList l = job.second;
@@ -89,10 +89,12 @@ public:
 //         QString cmd = l.takeFirst();
         QStandardItem* i = new QStandardItem( m_currentCmd.join(" ") );
         m_model->appendRow( i );
-        *m_childProc << "cd" << KProcess::quote( job.first.path() ) << "&&";
         foreach(QString s, l)
-            *m_childProc << s;
+            if( !s.isEmpty() )
+                *m_childProc << s;
         m_childProc->start( KProcess::OwnGroup, KProcess::AllOutput );
+        if( !isRunning() )
+            kDebug(9000) << "Couldn't start process" << endl;
     }
     void procReadStdout(KProcess* proc, char* buf, int len)
     {
