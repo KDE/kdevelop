@@ -35,8 +35,6 @@ public slots:
     virtual void accept();
 
 private:
-    void fillWithItemsFromListWidget(QStringList& list);
-
     Snippet *snippet_;
 };
 

@@ -11,6 +11,7 @@
 
 #include "editsnippet.h"
 
+#include <keditlistbox.h>
 #include <kmessagebox.h>
 
 #include "snippet.h"
@@ -24,7 +25,9 @@ EditSnippet::EditSnippet(Snippet *s, QWidget* parent)
     snippetName->setText( s->text() );
     snippetText->clear();
     snippetText->insertPlainText( s->getSnippetPlainText() );
-    keywordList->addItems( s->getKeywordList() );
+
+    keywordList->clear();
+    keywordList->insertStringList( s->getKeywordList() );
 }
 
 EditSnippet::~EditSnippet()
@@ -43,23 +46,13 @@ void EditSnippet::accept()
     // First we need to save the user's data in our Snippet object
     snippet_->changeName( name );
     snippet_->setSnippetText( snippetText->toPlainText() );
-    fillWithItemsFromListWidget( snippet_->getKeywordList() );
+    snippet_->getKeywordList() = keywordList->items();
 
     // Write the Snippet's data back to it's file
     snippet_->save();
 
     // Call baseclass' accept() method
     QDialog::accept();
-}
-
-void EditSnippet::fillWithItemsFromListWidget(QStringList & list)
-{
-    list.clear();
-
-    for (int i=0; i < keywordList->count(); i++) {
-        QListWidgetItem* item  = keywordList->item(i);
-        list << item->text();
-    }
 }
 
 #include "editsnippet.moc"
