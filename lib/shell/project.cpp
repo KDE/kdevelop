@@ -43,7 +43,6 @@
 
 #include "core.h"
 #include "iplugin.h"
-#include "filetemplate.h"
 #include "mainwindow.h"
 #include "iprojectfilemanager.h"
 #include "iprojectcontroller.h"
