@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <kdirwatch.h>
 #include <kdialogbase.h>
+#include <keditlistbox.h>
 #include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -437,6 +438,16 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
                 m_sourceFiles << s;
             }
         }
+        QStringList newfiles;
+        findNewFiles(dirName, newfiles);
+
+        if( newfiles.count() > 0 )
+        {
+            m_autoAddFiles = newfiles;
+            addNewFilesToProject();
+        }
+
+        addDirWatches( dirName );
     }
     else
     {
@@ -445,17 +456,9 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
                                                   "Populate it with all C/C++/Java files below "
                                                   "the project directory?" ), QString::null, i18n( "Populate" ), i18n( "Do Not Populate" ) );
         if ( r == KMessageBox::Yes )
-            populateProject();
+            QTimer::singleShot(1000, this, SLOT(populateProject()));
     }
 
-    QStringList newfiles;
-    findNewFiles(dirName, newfiles);
-
-    if( newfiles.count() > 0 )
-    {
-        m_autoAddFiles = newfiles;
-        addNewFilesToProject();
-    }
 
     // check if there is an old envvars entry (from old project file with single make environment)
     QString buildtool = DomUtil::readEntry(dom , "/kdevcustomproject/build/buildtool" );
@@ -468,7 +471,6 @@ void CustomProjectPart::openProject( const QString &dirName, const QString &proj
         el.setTagName( "default" );
         envs.appendChild( el );
     }
-    addDirWatches( dirName );
     KDevProject::openProject( dirName, projectName );
     dirwatch->startScan();
     dirwatch->blockSignals( false );
@@ -516,8 +518,19 @@ void CustomProjectPart::addDirWatches( const QString& absPath )
 
 void CustomProjectPart::populateProject()
 {
-    QApplication::setOverrideCursor( Qt::waitCursor );
 
+    KDialogBase* dlg = new KDialogBase(0, "typeselector", true,
+            "Select filetypes of project", KDialogBase::Ok|KDialogBase::Cancel);
+    QVBox* box = dlg->makeVBoxMainWidget();
+    KEditListBox* lb = new KEditListBox("Filetypes in the project", box, "selecttypes",
+                                        false, KEditListBox::Add|KEditListBox::Remove);
+    lb->setItems( filetypes() );
+    if( dlg->exec() == QDialog::Accepted )
+    {
+        setFiletypes( lb->items() );
+    }
+
+    QApplication::setOverrideCursor( Qt::waitCursor );
     removeFiles( m_sourceFiles );
     updateBlacklist( QStringList() );
 
@@ -526,9 +539,9 @@ void CustomProjectPart::populateProject()
     findNewFiles( projectDirectory(), newlist );
 
     m_autoAddFiles = newlist;
-    addNewFilesToProject();
-
     QApplication::restoreOverrideCursor();
+    addNewFilesToProject();
+    addDirWatches( m_projectDirectory );
 }
 
 
@@ -1433,8 +1446,10 @@ bool CustomProjectPart::isProjectFileType( const QString& filename ) const
     QRegExp re("", true, true);
     for( QStringList::const_iterator it = types.begin(); it != types.end(); ++it )
     {
-        re.setPattern( *it+"$" );
-        if ( ( (*it).find("*") != -1 || (*it).find("?") != -1 ) && re.search( filename ) != -1 )
+        re.setPattern( *it );
+        int pos = re.search( filename );
+        uint len = re.matchedLength();
+        if ( ( (*it).find("*") != -1 || (*it).find("?") != -1 ) && pos+len == filename.length() )
             return true;
         else if( filename.find( "/" ) != -1 && filename.find( *it ) != -1 )
             return true;
@@ -1569,6 +1584,11 @@ void CustomProjectPart::addNewFilesToProject()
         updateBlacklist( blacklist );
         addFiles( dlg->includedPaths() );
     }
+}
+
+void CustomProjectPart::setFiletypes( const QStringList& l )
+{
+    DomUtil::writeListEntry( *projectDom(), "kdevcustomproject/filetypes", "filetype", l );
 }
 
 #include "customprojectpart.moc"

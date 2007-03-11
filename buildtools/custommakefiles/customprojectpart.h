@@ -99,6 +99,7 @@ private:
     bool isProjectFileType( const QString& absFile ) const;
     bool isInBlacklist( const QString& ) const;
     void cleanFileList();
+    void setFiletypes( const QStringList& );
     QString relativeToProject( const QString& ) const;
     void addDirWatches( const QString& );
     void findNewFiles( const QString& dir, QStringList& list) const;
