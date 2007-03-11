@@ -109,8 +109,7 @@ void Configuration::settingsDialog()
 {
     if ( !d->settingsDialog )
     {
-        d->settingsDialog = new KSettings::Dialog( QStringList( "kdevelop" ),
-                                KSettings::Dialog::Static, 0 );
+        d->settingsDialog = new KSettings::Dialog( KSettings::Dialog::Static, 0 );
 
         KCMultiDialog *dialog = d->settingsDialog->dialog();
         dialog->setButtons( KDialog::Help | KDialog::Default | KDialog::Cancel
