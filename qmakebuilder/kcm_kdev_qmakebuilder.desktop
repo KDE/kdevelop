@@ -12,7 +12,5 @@ X-KDE-ParentComponents=kdevelop
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=QMake
-Name[x-test]=xxQMakexx
 Comment=Configure QMake settings
-Comment[x-test]=xxConfigure QMake settingsxx
 
