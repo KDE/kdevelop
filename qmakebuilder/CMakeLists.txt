@@ -43,14 +43,11 @@ kde4_add_kcfg_files( qmakebuilder_cfg_SRCS qmakebuilderconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_qmakebuilder ${qmakebuilder_cfg_SRCS} )
 target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KUTILS_LIBS} kdevplatforminterfaces kdevplatformconfig )
 
-
-install( TARGETS kcm_kdev_qmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-
 ########### install files ###############
+install( FILES kdevqmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES iqmakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/qmake )
+install( TARGETS kcm_kdev_qmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_qmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevqmakebuilder )
-install( FILES kdevqmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 
