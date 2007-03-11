@@ -44,11 +44,8 @@ public:
     virtual void save();
     virtual void defaults();
 
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                               KStandardDirs::locate( "data", "kdevmakebuilder/data.kdev4" ) );
-    }
+    virtual KUrl localNonShareableFile() const;
+
 
 private slots:
     void settingsChanged();

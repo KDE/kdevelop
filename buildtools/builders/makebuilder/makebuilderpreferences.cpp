@@ -51,6 +51,12 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringLis
 
 }
 
+KUrl MakeBuilderPreferences::localNonShareableFile() const
+{
+    return KUrl::fromPath(
+            KStandardDirs::locate( "data", "kdevmakebuilder/data.kdev4", componentData() ) );
+}
+
 MakeBuilderPreferences::~MakeBuilderPreferences()
 {
 }
