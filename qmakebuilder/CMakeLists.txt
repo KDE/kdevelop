@@ -2,6 +2,7 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/buildtools/builders/makebuilder
     ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/config
     ${CMAKE_SOURCE_DIR}/lib/interfaces
     ${CMAKE_SOURCE_DIR}/lib/plugins/outputviews/interfaces
     ${CMAKE_SOURCE_DIR}/lib/project
@@ -27,9 +28,29 @@ target_link_libraries(
 
 install(TARGETS kdevqmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
+########### next target ###############
+set( qmakebuilder_cfg_SRCS
+    qmakebuilderpreferences.cpp
+)
+
+set( qmakebuilder_cfg_UI
+    qmakeconfig.ui
+)
+
+kde4_automoc(${qmakebuilder_cfg_SRCS})
+kde4_add_ui_files( qmakebuilder_cfg_SRCS ${qmakebuilder_cfg_UI} )
+kde4_add_kcfg_files( qmakebuilder_cfg_SRCS qmakebuilderconfig.kcfgc )
+kde4_add_plugin( kcm_kdev_qmakebuilder ${qmakebuilder_cfg_SRCS} )
+target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KUTILS_LIBS} kdevplatforminterfaces kdevplatformconfig )
+
+
+install( TARGETS kcm_kdev_qmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
+
 
 ########### install files ###############
 install( FILES iqmakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/qmake )
+install( FILES kcm_kdev_qmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevqmakebuilder )
 install( FILES kdevqmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 
