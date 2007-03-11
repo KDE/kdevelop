@@ -42,7 +42,7 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QStringL
     l->addWidget( w );
 
     addConfig( QMakeBuilderSettings::self(), w );
-
+    kDebug(9024) << "Creating QMake KCM" << endl;
     load();
 
 }
@@ -59,11 +59,13 @@ QMakeBuilderPreferences::~QMakeBuilderPreferences()
 
 void QMakeBuilderPreferences::load()
 {
+    kDebug(9024) << "Loading qmake config" << endl;
     KDevelop::ConfigModule::load();
 }
 
 void QMakeBuilderPreferences::save()
 {
+    kDebug(9024) << "Saving qmake config" << endl;
     KDevelop::ConfigModule::save();
 }
 

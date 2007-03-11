@@ -47,7 +47,7 @@ public:
     virtual KUrl localNonShareableFile() const;
 
 
-private slots:
+private Q_SLOTS:
     void settingsChanged();
 
 private:

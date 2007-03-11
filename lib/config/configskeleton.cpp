@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "configskeleton.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 
 #include <kurl.h>
@@ -91,7 +92,7 @@ void ConfigSkeleton::usrWriteConfig()
 void ConfigSkeleton::parseNonShareableFile( const KUrl &url )
 {
     //Don't need to parse the file more than once?
-    if ( m_parsed )
+    if ( m_parsed || !QFileInfo(url.path()).exists() )
         return ;
 
     m_parsed = true;

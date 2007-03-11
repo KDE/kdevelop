@@ -21,6 +21,8 @@ Boston, MA 02110-1301, USA.
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kcomponentdata.h>
+#include <kaboutdata.h>
 #include <kurl.h>
 
 namespace KDevelop
@@ -38,6 +40,8 @@ ConfigModule::ConfigModule( ConfigSkeleton *config,
                           const QStringList &args )
         : KCModule( instance, parent, args ), m_config( config )
 {
+    kDebug(9000) << "creating kcm module " << instance.aboutData()->appName() << endl;
+    kDebug(9000) << "using configskeleton: " << config << endl;
 }
 
 ConfigModule::~ConfigModule()
@@ -45,6 +49,7 @@ ConfigModule::~ConfigModule()
 
 void ConfigModule::save()
 {
+    kDebug(9000) << "Saving config" << endl;
     //Calls the ConfigSkeleton file with the return value of the pure
     //virtual function localNonShareableFile() which must be implemented
     //by every kcm that inherits this class.
