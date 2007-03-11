@@ -225,7 +225,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18n( "<b>Split Horizontal</b><p>Splitts the current view horizontally." ) );
 
     action = actionCollection()->addAction( "split_vertical" );
-    action->setIcon(KIcon( "view_right" ));
+    action->setIcon(KIcon( "view-left-right" ));
     action->setText( i18n( "Split View &Left/Right" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
