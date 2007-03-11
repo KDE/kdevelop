@@ -1433,7 +1433,7 @@ bool CustomProjectPart::isProjectFileType( const QString& filename ) const
     QRegExp re("", true, true);
     for( QStringList::const_iterator it = types.begin(); it != types.end(); ++it )
     {
-        re.setPattern( *it );
+        re.setPattern( *it+"$" );
         if ( ( (*it).find("*") != -1 || (*it).find("?") != -1 ) && re.search( filename ) != -1 )
             return true;
         else if( filename.find( "/" ) != -1 && filename.find( *it ) != -1 )
