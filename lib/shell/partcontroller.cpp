@@ -174,13 +174,11 @@ KParts::Part* PartController::createPart( const KUrl & url )
     QString className;
     QString services[] =
         {
-            "KDevelop/ReadWritePart", "KDevelop/ReadOnlyPart",
             "KParts/ReadWritePart", "KParts/ReadOnlyPart"
         };
 
     QString classNames[] =
         {
-            "KParts::ReadWritePart", "KParts::ReadOnlyPart",
             "KParts::ReadWritePart", "KParts::ReadOnlyPart"
         };
     KParts::Factory *editorFactory = 0;
