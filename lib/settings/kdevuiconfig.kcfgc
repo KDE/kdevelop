@@ -1,6 +1,0 @@
-File=kdevuiconfig.kcfg
-Namespace=KDevelop
-ClassName=UISettings
-Singleton=true
-Inherits=KDevelop::ConfigSkeleton
-IncludeFiles="kdevconfigskeleton.h"

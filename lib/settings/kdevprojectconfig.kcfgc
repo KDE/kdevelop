@@ -1,6 +1,0 @@
-File=kdevprojectconfig.kcfg
-Namespace=KDevelop
-ClassName=ProjectSettings
-Singleton=true
-Inherits=KDevelop::ConfigSkeleton
-IncludeFiles="kdevconfigskeleton.h"

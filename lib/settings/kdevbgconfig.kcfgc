@@ -1,6 +1,0 @@
-File=kdevbgconfig.kcfg
-Namespace=KDevelop
-ClassName=BGSettings
-Singleton=true
-Inherits=KDevelop::ConfigSkeleton
-IncludeFiles="kdevconfigskeleton.h"
