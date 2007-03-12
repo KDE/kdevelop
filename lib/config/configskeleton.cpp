@@ -54,7 +54,7 @@ void ConfigSkeleton::usrWriteConfig()
 
     // We iterate twice so that we're not changing the config object too much
 
-    KSharedConfig::Ptr localProjectConfig = Configuration::self()->sharedLocalProject();
+    KSharedConfig::Ptr localProjectConfig = Configuration::self()->sharedLocalCurrentProject();
 //     QString origLocalProjectGroup = localProjectConfig->group();
     KConfigSkeletonItem::List _items = items();
     KConfigSkeletonItem::List::ConstIterator it;
@@ -69,7 +69,7 @@ void ConfigSkeleton::usrWriteConfig()
     localProjectConfig->sync();
 //     KConfigGroup group = localProjectConfig->group( origLocalProjectGroup );
 
-    KSharedConfig::Ptr standardConfig = Configuration::self()->sharedStandard();
+    KSharedConfig::Ptr standardConfig = Configuration::self()->sharedStandardCurrentProject();
 //     QString origStandardGroup = standardConfig->group();
     KConfigSkeletonItem::List _items2 = items();
     KConfigSkeletonItem::List::ConstIterator it2;
@@ -107,8 +107,6 @@ void ConfigSkeleton::parseNonShareableFile( const KUrl &url )
 
         dataFile.close();
     }
-    else
-        kDebug() << k_funcinfo << "Can not open " << fileName << endl;
 
 }
 

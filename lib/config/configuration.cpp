@@ -130,36 +130,32 @@ void Configuration::settingsDialog()
     d->settingsDialog->show();
 }
 
-KConfig *Configuration::standard()
+KConfig *Configuration::standard( IProject* project )
 {
-    return sharedStandard().data();
+    return sharedStandard( project ).data();
 }
 
-KConfig *Configuration::localProject()
+KConfig *Configuration::localProject( IProject* project )
 {
-    return sharedLocalProject().data();
+    return sharedLocalProject( project ).data();
 }
 
-KConfig *Configuration::globalProject()
+KConfig *Configuration::globalProject( IProject* project )
 {
-    return sharedGlobalProject().data();
+    return sharedGlobalProject( project ).data();
 }
 
-KSharedConfig::Ptr Configuration::sharedStandard()
+KSharedConfig::Ptr Configuration::sharedStandard( IProject* project )
 {
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
     KUrl local;
     KUrl global;
-    if( d->m_core->projectController() )
+    if( project )
     {
-        IProject* project = d->m_core->projectController()->currentProject();
-        if( project )
-        {
-            local = project->localFile();
-            global = project->globalFile();
-        }
+        local = project->localFile();
+        global = project->globalFile();
     }
     if ( local.isValid() )
         extraConfig.append( local.path() );
@@ -176,21 +172,17 @@ KSharedConfig::Ptr Configuration::sharedStandard()
     return config;
 }
 
-KSharedConfig::Ptr Configuration::sharedLocalProject()
+KSharedConfig::Ptr Configuration::sharedLocalProject( IProject* project )
 {
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     QStringList extraConfig;
     KUrl local;
     KUrl global;
-    if( d->m_core->projectController() )
+    if( project )
     {
-        IProject* project = d->m_core->projectController()->currentProject();
-        if( project )
-        {
-            local = project->localFile();
-            global = project->globalFile();
-        }
+        local = project->localFile();
+        global = project->globalFile();
     }
     if ( global.isValid() )
         extraConfig.append( global.path() );
@@ -206,21 +198,17 @@ KSharedConfig::Ptr Configuration::sharedLocalProject()
     return config;
 }
 
-KSharedConfig::Ptr Configuration::sharedGlobalProject()
+KSharedConfig::Ptr Configuration::sharedGlobalProject( IProject* project )
 {
     KSharedConfig::Ptr config = KGlobal::config();
     QStringList current = config->extraConfigFiles();
     KUrl local;
     KUrl global;
     QStringList extraConfig;
-    if( d->m_core->projectController() )
+    if( project )
     {
-        IProject* project = d->m_core->projectController()->currentProject();
-        if( project )
-        {
-            local = project->localFile();
-            global = project->globalFile();
-        }
+        local = project->localFile();
+        global = project->globalFile();
     }
     if ( local.isValid() )
         extraConfig.append( local.path() );
@@ -236,6 +224,46 @@ KSharedConfig::Ptr Configuration::sharedGlobalProject()
 
     return config;
 }
+
+KConfig *Configuration::standardCurrentProject()
+{
+    return sharedStandardCurrentProject().data();
+}
+
+KConfig *Configuration::localCurrentProject()
+{
+    return sharedLocalCurrentProject().data();
+}
+
+KConfig *Configuration::globalCurrentProject()
+{
+    return sharedGlobalCurrentProject().data();
+}
+
+KSharedConfig::Ptr Configuration::sharedStandardCurrentProject()
+{
+    IProject* proj = 0;
+    if( d->m_core->projectController() )
+        proj = d->m_core->projectController()->currentProject();
+    return sharedStandard( proj );
+}
+
+KSharedConfig::Ptr Configuration::sharedLocalCurrentProject()
+{
+    IProject* proj = 0;
+    if( d->m_core->projectController() )
+        proj = d->m_core->projectController()->currentProject();
+    return sharedLocalProject( proj );
+}
+
+KSharedConfig::Ptr Configuration::sharedGlobalCurrentProject()
+{
+    IProject* proj = 0;
+    if( d->m_core->projectController() )
+        proj = d->m_core->projectController()->currentProject();
+    return sharedGlobalProject( proj );
+}
+
 
 }
 

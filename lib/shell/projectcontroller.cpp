@@ -94,7 +94,7 @@ void ProjectController::setupActions()
     action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
     action->setEnabled( false );
 
-    KConfig * config = Configuration::self()->standard();
+    KConfig * config = Configuration::self()->standardCurrentProject();
 //     KConfigGroup group = config->group( "General Options" );
 
     d->m_recentAction =
@@ -164,7 +164,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     if ( url.isEmpty() )
     {
-        KConfig * config = Configuration::self()->standard();
+        KConfig * config = Configuration::self()->standardCurrentProject();
         KConfigGroup group = config->group( "General Options" );
         QString dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
@@ -217,10 +217,10 @@ bool ProjectController::openProject( const KUrl &projectFile )
     action->setEnabled( true );
 
     d->m_recentAction->addUrl( url );
-    KConfigGroup recentGroup = Configuration::self()->standard()->group("RecentProjects");
+    KConfigGroup recentGroup = Configuration::self()->standardCurrentProject()->group("RecentProjects");
     d->m_recentAction->saveEntries( recentGroup );
 
-    Configuration::self()->standard() ->sync();
+    Configuration::self()->standardCurrentProject() ->sync();
     emit projectOpened( project );
 
     return true;
@@ -282,7 +282,7 @@ bool ProjectController::loadProjectPart()
 {
     if( !d->m_projectPart )
     {
-        KConfig * config = Configuration::self()->standard();
+        KConfig * config = Configuration::self()->standardCurrentProject();
         KConfigGroup group = config->group( "General Options" );
 
         QString projectManager =

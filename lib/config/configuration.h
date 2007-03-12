@@ -31,12 +31,15 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 class ICore;
+class IProject;
 
 /**
 The interface to KDevelop's config objects.
 Developers using the KDevelop API should use these config objects instead of
 the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
 it can cause unexpected syncing issues.
+@TODO the config-parameters need to take an IProject pointer
+@TODO listen to currentProject changed signal from project controller, so we can update the settings dialog
 */
 class KDEVPLATFORM_EXPORT Configuration : public QObject
 {
@@ -73,7 +76,7 @@ public:
      * found in the global project file and the local project file.  THE MOST
      * SPECIFIC FILE WILL BE THE GLOBAL PROJECT FILE.
      */
-    KConfig *standard();
+    KConfig *standard( IProject* );
 
     /**
      * @return A pointer to the local project config object.  This object will point
@@ -86,7 +89,7 @@ public:
      * found in the global project file and the local project file.  THE MOST
      * SPECIFIC FILE WILL BE THE LOCAL PROJECT FILE.
      */
-    KConfig *localProject();
+    KConfig *localProject( IProject*  );
 
     /**
      * @return A pointer to the global project config object.  This object will point
@@ -101,20 +104,45 @@ public:
      *
      * This function should RARELY be used as it is operationally the same as standard()
      */
-    KConfig *globalProject();
+    KConfig *globalProject( IProject*  );
 
     /**
      * @return A shared pointer to the standard config object.
      */
-    KSharedConfig::Ptr sharedStandard();
+    KSharedConfig::Ptr sharedStandard( IProject*  );
+
     /**
      * @return A shared pointer to the local project config object.
      */
-    KSharedConfig::Ptr sharedLocalProject();
+    KSharedConfig::Ptr sharedLocalProject( IProject*  );
+
     /**
      * @return A shared pointer to the global project config object.
      */
-    KSharedConfig::Ptr sharedGlobalProject();
+    KSharedConfig::Ptr sharedGlobalProject( IProject*  );
+
+
+    /**
+     * same as standard() but uses the currently selected project
+     * @see standard( IProject* )
+     */
+    KConfig *standardCurrentProject();
+
+    /**
+     * same as local() but uses the currently selected project
+     * @see local( IProject* )
+     */
+    KConfig *localCurrentProject();
+
+    /**
+     * same as global() but uses the currently selected project
+     * @see global( IProject* )
+     */
+    KConfig *globalCurrentProject();
+
+    KSharedConfig::Ptr sharedStandardCurrentProject();
+    KSharedConfig::Ptr sharedLocalCurrentProject();
+    KSharedConfig::Ptr sharedGlobalCurrentProject();
 
 private:
     Configuration(ICore *parent = 0);
