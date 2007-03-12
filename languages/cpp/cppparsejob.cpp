@@ -45,6 +45,7 @@
 // #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
+#include "duchain/duchain.h"
 #include "duchain/dumpchain.h"
 #include "duchain/cppeditorintegrator.h"
 #include "duchain/declarationbuilder.h"
@@ -211,8 +212,8 @@ void ParseJob::run()
             parentJob()->setDUChain(topContext);
 
             kDebug( 9007 ) << "duchain is built" << endl;
-            if ( parentJob()->cpp()->codeHighlighting() )
-                parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
+//             if ( parentJob()->cpp()->codeHighlighting() )
+//                 parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
 
             if (editor.smart())
               editor.smart()->clearRevision();
@@ -221,6 +222,7 @@ void ParseJob::run()
         // Debug output...
 
         if (topContext->smartRange()) {
+            QReadLocker lock(DUChain::lock());
             kDebug( 9007 ) << "================== duchain =======================" << endl;
             DumpChain dump;
             dump.dump(ast, parentJob()->parseSession());

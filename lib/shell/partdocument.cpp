@@ -48,7 +48,7 @@ QWidget *PartDocument::createViewWidget(QWidget *parent)
     if (url().isEmpty())
         part = d->partController->createTextPart(url(), "", false);
     else
-        part = d->partController->createPart(url());
+        part = d->partController->createTextPart(url(), "", true);
     d->partController->addPart(part);
     QWidget *w = part->widget();
     d->partForWidget[w] = part;
