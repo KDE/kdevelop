@@ -43,7 +43,6 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QStringL
     l->addWidget( w );
 
     addConfig( QMakeBuilderSettings::self(), w );
-    kDebug(9024) << "Creating QMake KCM" << endl;
     load();
 
 }
@@ -60,7 +59,6 @@ QMakeBuilderPreferences::~QMakeBuilderPreferences()
 
 void QMakeBuilderPreferences::load()
 {
-    kDebug(9024) << "Loading qmake config" << endl;
     KDevelop::ConfigModule::load();
     m_prefsUi->qmakebin->setUrl(QMakeBuilderSettings::qmakebin());
     connect(m_prefsUi->qmakebin, SIGNAL(textChanged(const QString&)), this, SLOT(changed()));
@@ -70,7 +68,6 @@ void QMakeBuilderPreferences::load()
 
 void QMakeBuilderPreferences::save()
 {
-    kDebug(9024) << "Saving qmake config" << endl;
     QMakeBuilderSettings::setQmakebin(m_prefsUi->qmakebin->url().url());
     KDevelop::ConfigModule::save();
 }
