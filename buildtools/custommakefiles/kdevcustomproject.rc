@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCustomProject" version="6">
+<kpartgui name="KDevCustomProject" version="7">
 <MenuBar>
   <Menu name="project" >
     <Action name="repopulate_project" />
@@ -11,6 +11,7 @@
     <Action name="build_compilefile" />
     <Action name="build_target" />
     <Action name="build_install" />
+	<Action name="build_installactivetarget" />
     <Action name="build_make_environment" />
     <Action name="build_clean" />
     <Separator/>

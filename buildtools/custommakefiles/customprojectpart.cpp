@@ -116,6 +116,14 @@ CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const Q
                                 "Environment variables and make arguments can be specified "
                                 "in the project settings dialog, <b>Make Options</b> tab." ) );
 
+    action = new KAction( i18n( "Install Active Directory" ), 0,
+                          this, SLOT( slotInstallActiveDir() ),
+                          actionCollection(), "build_installactivetarget" );
+    action->setToolTip( i18n( "Install active directory" ) );
+    action->setWhatsThis( i18n( "<b>Install active directory</b><p>Runs <b>make install</b> command from the active directory.<br>"
+                                "Environment variables and make arguments can be specified "
+                                "in the project settings dialog, <b>Make Options</b> tab." ) );
+
     action = new KAction( i18n( "Install (as root user)" ), 0,
                           this, SLOT( slotInstallWithKdesu() ),
                           actionCollection(), "build_install_kdesu" );
@@ -953,6 +961,11 @@ void CustomProjectPart::slotCompileFile()
     }
 
     startMakeCommand( buildDir, target );
+}
+
+void CustomProjectPart::slotInstallActiveDir()
+{
+    startMakeCommand( buildDirectory()+"/"+activeDirectory(), QString::fromLatin1( "install" ) );
 }
 
 void CustomProjectPart::slotInstall()

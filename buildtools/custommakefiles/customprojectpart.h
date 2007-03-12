@@ -80,6 +80,7 @@ private slots:
     void slotBuildActiveDir();
     void slotCompileFile();
     void slotInstall();
+    void slotInstallActiveDir();
     void slotInstallWithKdesu();
     void slotClean();
     void slotExecute();
