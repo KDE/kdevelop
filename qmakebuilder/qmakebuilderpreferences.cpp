@@ -60,15 +60,16 @@ QMakeBuilderPreferences::~QMakeBuilderPreferences()
 void QMakeBuilderPreferences::load()
 {
     KDevelop::ConfigModule::load();
-    m_prefsUi->qmakebin->setUrl(QMakeBuilderSettings::qmakebin());
-    connect(m_prefsUi->qmakebin, SIGNAL(textChanged(const QString&)), this, SLOT(changed()));
-    connect(m_prefsUi->qmakebin, SIGNAL(returnPressed()), this, SLOT(changed()));
-    connect(m_prefsUi->qmakebin, SIGNAL(urlSelected(const KUrl&)), this, SLOT(changed()));
+    m_prefsUi->kcfg_qmakebin->setUrl(QMakeBuilderSettings::qmakebin());
+    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(textChanged(const QString&)), this, SLOT(changed()));
+    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(returnPressed()), this, SLOT(changed()));
+    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(urlSelected(const KUrl&)), this, SLOT(changed()));
 }
 
 void QMakeBuilderPreferences::save()
 {
-    QMakeBuilderSettings::setQmakebin(m_prefsUi->qmakebin->url().url());
+    kDebug(9024) << "Saving QMake Builder config" << endl;
+    QMakeBuilderSettings::setQmakebin(m_prefsUi->kcfg_qmakebin->url().url());
     KDevelop::ConfigModule::save();
 }
 
