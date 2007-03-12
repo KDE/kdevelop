@@ -192,10 +192,10 @@ void QtDesignerPart::setupActions()
 
 bool QtDesignerPart::openFile()
 {
-  QFile uiFile(m_file);
+  QFile uiFile(localFilePath());
   QDesignerFormWindowManagerInterface* manager = m_designer->formWindowManager();
   QDesignerFormWindowInterface* widget = manager->createFormWindow();
-  widget->setFileName(m_file);
+  widget->setFileName(localFilePath());
   widget->setContents(&uiFile);
   manager->setActiveFormWindow(widget);
   m_workspace->addWindow(widget);
@@ -212,7 +212,7 @@ bool QtDesignerPart::openFile()
 
 bool QtDesignerPart::saveFile()
 {
-    KSaveFile uiFile( m_file );
+    KSaveFile uiFile( localFilePath() );
     //FIXME: find a way to return an error. KSaveFile
     //doesn't use the KIO error codes
     if ( !uiFile.open() )
