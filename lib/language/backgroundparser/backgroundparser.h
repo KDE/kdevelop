@@ -85,6 +85,11 @@ public:
      */
     ParserDependencyPolicy* dependencyPolicy() const;
 
+    /**
+     * @return true if the background parser already contains the document.
+    */
+    bool containsDocument(const KUrl &document) const;
+
 public Q_SLOTS:
     void suspend();
     void resume();

@@ -212,8 +212,11 @@ void ParseJob::run()
             parentJob()->setDUChain(topContext);
 
             kDebug( 9007 ) << "duchain is built" << endl;
-//             if ( parentJob()->cpp()->codeHighlighting() )
-//                 parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
+            if ( parentJob()->cpp()->codeHighlighting() )
+            {
+                QMutexLocker lock(editor.smart()->smartMutex());
+                parentJob()->cpp()->codeHighlighting()->highlightDUChain( topContext );
+            }
 
             if (editor.smart())
               editor.smart()->clearRevision();

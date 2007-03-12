@@ -186,7 +186,8 @@ void CppLanguageSupport::documentActivated(KParts::Part *part)
     if (KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(part))
     {
         kDebug( 9007 ) << "adding document to bgparser" << endl;
-        language()->backgroundParser()->addDocument(ropart->url());
+        if (!language()->backgroundParser()->containsDocument(ropart->url()))
+            language()->backgroundParser()->addDocument(ropart->url());
     }
 }
 

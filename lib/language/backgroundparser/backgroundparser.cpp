@@ -396,6 +396,11 @@ ParseJob* BackgroundParser::parseJobForDocument(const KUrl& document) const
     return 0;
 }
 
+bool BackgroundParser::containsDocument(const KUrl &document) const
+{
+    return m_documents.contains(document);
+}
+
 }
 #include "backgroundparser.moc"
 
