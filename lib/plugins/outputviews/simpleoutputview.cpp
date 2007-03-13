@@ -142,8 +142,9 @@ QStandardItemModel* SimpleOutputView::model()
     return d->m_model;
 }
 
-void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command )
+void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command, const QStringList& env )
 {
+    Q_UNUSED(env)
     kDebug(9004) << "Queueing Command: " << dir << "|" << command << endl;
     d->m_jobs.append(QPair<KUrl,QStringList>(dir,command));
     if( !d->isRunning() )

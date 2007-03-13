@@ -105,7 +105,7 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             kDebug(9024) << "Reading setting: " << group.readEntry("qmakebin") << endl;
             cmd << group.readEntry("qmakebin", "qmake-qt4");
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
-            view->queueCommand( item->url(), cmd );
+            view->queueCommand( item->url(), cmd, QStringList() );
             return true;
         }
     }

@@ -32,6 +32,22 @@ class QString;
 */
 namespace KDevelop
 {
+
+// Idea for later: Let the output view work on executable commands
+// class ExecutableCommand
+// {
+// public:
+//     ExecutableCommand();
+//     void setWorkingDir(const KUrl&);
+//     void setCommandList(const QStringList&);
+//     void setEnvironment(const QStringList&);
+//     QStringList environment() const;
+//     QStringList commandlist() const;
+//     KUrl workingDirectory() const;
+// private:
+//     struct ExecutableCommandPrivate* const d;
+// };
+
 class IOutputView
 {
 public:
@@ -39,11 +55,11 @@ public:
     virtual ~IOutputView() {}
 
 public:
-    virtual void queueCommand(const KUrl& dir, const QStringList& command ) = 0;
+    virtual void queueCommand( const KUrl&, const QStringList&, const QStringList& ) = 0;
 
 Q_SIGNALS:
-    virtual void commandFinished( const QStringList& command ) = 0;
-    virtual void commandFailed( const QStringList& command ) = 0;
+    virtual void commandFinished( const QStringList& ) = 0;
+    virtual void commandFailed( const QStringList& ) = 0;
 };
 }
 KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IOutputView, "org.kdevelop.IOutputView" )

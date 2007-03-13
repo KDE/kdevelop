@@ -80,7 +80,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             QStringList cmd = buildCommand(item);
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
             kDebug(9038) << "Starting build: " << cmd << endl;
-            view->queueCommand( item->url(), cmd );
+            view->queueCommand( item->url(), cmd, QStringList() );
             return true;
         }
     }

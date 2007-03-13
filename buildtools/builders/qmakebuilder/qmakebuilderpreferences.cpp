@@ -69,7 +69,7 @@ void QMakeBuilderPreferences::load()
 void QMakeBuilderPreferences::save()
 {
     kDebug(9024) << "Saving QMake Builder config" << endl;
-    QMakeBuilderSettings::setQmakebin(m_prefsUi->kcfg_qmakebin->url().url());
+    QMakeBuilderSettings::setQmakebin(m_prefsUi->kcfg_qmakebin->url().path());
     KDevelop::ConfigModule::save();
 }
 

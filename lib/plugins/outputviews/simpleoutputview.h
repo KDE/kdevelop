@@ -42,7 +42,7 @@ Q_INTERFACES( KDevelop::IOutputView )
 public:
     SimpleOutputView(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~SimpleOutputView();
-    void queueCommand(const KUrl& dir, const QStringList& command );
+    void queueCommand(const KUrl& dir, const QStringList& command, const QStringList& env );
 
     virtual void registerExtensions();
     virtual void unregisterExtensions();
