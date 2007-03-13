@@ -109,9 +109,12 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
     connect( core()->projectController(),
              SIGNAL( projectClosing( KDevelop::IProject* ) ),
              this, SLOT( projectClosing( KDevelop::IProject* ) ) );
-    ///@todo this connect should be here until proper document controller system is in place
-    connect( core()->partManager(), SIGNAL( activePartChanged(KParts::Part*)),
+
+    ///@todo these connects should be here until proper document controller system is in place
+    connect( core()->partManager(), SIGNAL( partAdded(KParts::Part*)),
              this, SLOT( documentActivated(KParts::Part*) ) );
+    connect( core()->partManager(), SIGNAL( partRemoved(KParts::Part*)),
+             this, SLOT( documentClosed(KParts::Part*) ) );
 
     // Initialise singletons, to prevent needing a mutex in their self() methods
     TypeRepository::self();
@@ -186,8 +189,17 @@ void CppLanguageSupport::documentActivated(KParts::Part *part)
     if (KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(part))
     {
         kDebug( 9007 ) << "adding document to bgparser" << endl;
-        if (!language()->backgroundParser()->containsDocument(ropart->url()))
-            language()->backgroundParser()->addDocument(ropart->url());
+        language()->backgroundParser()->addDocument(ropart->url());
+    }
+}
+
+void CppLanguageSupport::documentClosed(KParts::Part *part)
+{
+    kDebug( 9007 ) << "CppLanguageSupport::documentClosed" << endl;
+    if (KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(part))
+    {
+        kDebug( 9007 ) << "removing document from bgparser" << endl;
+        language()->backgroundParser()->removeDocument(ropart->url());
     }
 }
 

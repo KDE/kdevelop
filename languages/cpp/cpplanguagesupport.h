@@ -78,6 +78,7 @@ private slots:
     void documentActivated( KDevelop::Document *document );
 */
     void documentActivated(KParts::Part *part);
+    void documentClosed(KParts::Part *part);
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
 
