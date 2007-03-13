@@ -121,6 +121,7 @@ void Snippet::setRawData(QString data)
     }
 
     setSnippetText( newText );
+    keywords_.clear();
 
     if (metadata.count() > 0) {
         // if there is meta information, call handleMetaData() which is 
@@ -134,8 +135,6 @@ void Snippet::handleMetaData(QStringList& metadata)
     //Each line looks like this:
     //##META## keyword = abcdef
     QRegExp rx("(\\w+)\\s*=\\s*(\\w*)");
-
-    keywords_.clear();
 
     QString str;
     foreach(str, metadata) {
