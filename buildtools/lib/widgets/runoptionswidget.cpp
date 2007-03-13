@@ -85,8 +85,8 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
 
     // Read the main program command line arguments and store them in the edit box
 
-    runargs_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
-    debugargs_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/globaldebugarguments"));
+    runargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
+    debugargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/globaldebugarguments"));
 
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
     autocompile_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autocompile", false));
