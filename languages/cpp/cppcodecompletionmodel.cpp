@@ -21,6 +21,7 @@
 
 #include "cppcodecompletionmodel.h"
 
+#include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
@@ -48,6 +49,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
   KUrl url = view->document()->url();
   if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
+    kDebug(9007) << "completion invoked for context " << top << endl;
     QReadLocker lock(DUChain::lock());
     DUContext* thisContext = top->findContextAt(range.start());
 

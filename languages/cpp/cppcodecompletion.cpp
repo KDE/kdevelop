@@ -40,7 +40,7 @@ CppCodeCompletion::CppCodeCompletion( CppLanguageSupport * parent )
   : QObject(parent)
   , m_model(new CppCodeCompletionModel(this))
 {
-  connect (parent->core()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+  connect (parent->core()->partManager(), SIGNAL(partAdded(KParts::Part*)),
     SLOT(documentLoaded(KParts::Part*)));
 }
 
@@ -55,6 +55,7 @@ void CppCodeCompletion::viewCreated(KTextEditor::Document * document, KTextEdito
   if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
     cc->setAutomaticInvocationEnabled(true);
     cc->registerCompletionModel(m_model);
+    kDebug(9007) << "Registered completion model" << endl;
   }
 }
 
@@ -63,12 +64,12 @@ void CppCodeCompletion::documentLoaded(KParts::Part* document)
   KTextEditor::Document *textDocument = dynamic_cast<KTextEditor::Document*>(document);
   if (textDocument) {
     foreach (KTextEditor::View* view, textDocument->views())
-      connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), SLOT(cursorPositionChanged()));
+      viewCreated(textDocument, view);
 
     connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
 
   } else {
-    kDebug() << k_funcinfo << "Non-text editor document added" << endl;
+    kDebug(9007) << k_funcinfo << "Non-text editor document added" << endl;
   }
 }
 
