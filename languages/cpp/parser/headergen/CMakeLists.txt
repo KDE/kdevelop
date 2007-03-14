@@ -9,7 +9,7 @@ set(headergen_SRCS
 )
 
 kde4_add_executable(headergen ${headergen_SRCS})
-target_link_libraries(headergen ${KDE4_KDECORE_LIBS} kdevcpprpp kdevcppparser)
+target_link_libraries(headergen ${QT_QTXML_LIBRARY} ${KDE4_KDECORE_LIBS} kdevcpprpp kdevcppparser)
 add_test(headergen ${EXECUTABLE_OUTPUT_PATH}/headergen)
 
 endif(KDE4_BUILD_TESTS)
