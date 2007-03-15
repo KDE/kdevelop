@@ -1554,7 +1554,7 @@ bool CustomProjectPart::isInBlacklist( const QString& path ) const
     QString parentpath;
     for( QStringList::const_iterator it = paths.begin(); it != paths.end(); ++it )
     {
-        parentpath = *it;
+        parentpath += *it;
         if( blacklist.find( parentpath ) != blacklist.end() )
             return true;
         parentpath = parentpath + "/";
