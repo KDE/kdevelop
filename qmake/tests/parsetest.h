@@ -39,6 +39,8 @@ class ParseTest : public QObject
         void successFullProject_data();
         void failFullProject();
         void failFullProject_data();
+        void lineEnding();
+        void lineEnding_data();
 };
 
 #endif

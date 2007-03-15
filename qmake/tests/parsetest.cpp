@@ -46,6 +46,7 @@ VARIABLE = value1=value++
 #include "parsetest.h"
 #include "qmakedriver.h"
 #include "qmakeast.h"
+#include <QDebug>
 
 QTEST_MAIN( ParseTest )
 
@@ -59,17 +60,22 @@ ParseTest::~ParseTest()
 void ParseTest::successSimpleProject()
 {
     QFETCH( QString, project );
+    QFETCH( QString, output );
     QMake::ProjectAST* a = new QMake::ProjectAST();
     int ret = QMake::Driver::parseString( project, a );
-    delete a;
     QVERIFY( ret == 0 );
+    QString writeback;
+    a->writeToString( writeback );
+    QVERIFY( writeback == output );
+    delete a;
 }
 
 void ParseTest::successSimpleProject_data()
 {
     QTest::addColumn<QString>( "project" );
-    QTest::newRow( "row1" ) << "VAR = VALUE\n"
-        "func1(arg1)\n";
+    QTest::addColumn<QString>( "output" );
+    QTest::newRow( "row1" ) << "VAR = VALUE\nfunc1(arg1)\n"
+        << "VAR = VALUE\nfunc1(arg1)\n";
 }
 
 void ParseTest::failSimpleProject()
@@ -77,8 +83,8 @@ void ParseTest::failSimpleProject()
     QFETCH( QString, project );
     QMake::ProjectAST* a = new QMake::ProjectAST();
     int ret = QMake::Driver::parseString( project, a );
-    delete a;
     QVERIFY( ret != 0 );
+    delete a;
 }
 
 void ParseTest::failSimpleProject_data()
@@ -87,19 +93,59 @@ void ParseTest::failSimpleProject_data()
     QTest::newRow( "row1" ) << "VAR =";
 }
 
+void ParseTest::lineEnding()
+{
+    QFETCH( QString, project );
+    QFETCH( QString, output );
+    QMake::ProjectAST* a = new QMake::ProjectAST();
+    int ret = QMake::Driver::parseString( project, a );
+    QVERIFY( ret == 0 );
+    QString writeback;
+    a->writeToString( writeback );
+    QVERIFY( writeback == output );
+    QVERIFY( a->lineEnding() == QMake::ProjectAST::Windows );
+    delete a;
+}
+
+void ParseTest::lineEnding_data()
+{
+    QTest::addColumn<QString>( "project" );
+    QTest::addColumn<QString>( "output" );
+    QTest::newRow( "row1" ) << "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n"
+        << "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n";
+}
+
 void ParseTest::successFullProject()
 {
     QFETCH( QString, project );
+    QFETCH( QString, output );
     QMake::ProjectAST* a = new QMake::ProjectAST();
     int ret = QMake::Driver::parseString( project, a );
-    delete a;
     QVERIFY( ret == 0 );
+    QString writeback;
+    a->writeToString( writeback );
+    QVERIFY( writeback == output );
+    delete a;
 }
 
 void ParseTest::successFullProject_data()
 {
     QTest::addColumn<QString>( "project" );
+    QTest::addColumn<QString>( "output" );
     QTest::newRow( "row1" ) << "#Comment\n"
+        "VARIABLE1 = Value1 Value2\n"
+        "VARIABLE2= Value1 Value2\n"
+        "VARIABLE3 =Value1 Value2\n"
+        "VARIABLE4=Value1 Value2\n"
+        "VARIABLE = Value1 Value2 #some comment\n"
+        "VARIABLE = $$Value1 $(Value2) $${Value3} #some comment\n"
+        "VARIABLE = $$Value1 $(Value2) $${Value3} \\\nValue4\n"
+        "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) : FO=0\n"
+        "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) {  \n"
+        "FOO = bar\n"
+        "}\n"
+        "!do()\n"
+        << "#Comment\n"
         "VARIABLE1 = Value1 Value2\n"
         "VARIABLE2= Value1 Value2\n"
         "VARIABLE3 =Value1 Value2\n"
@@ -119,8 +165,8 @@ void ParseTest::failFullProject()
     QFETCH( QString, project );
     QMake::ProjectAST* a = new QMake::ProjectAST();
     int ret = QMake::Driver::parseString( project, a );
-    delete a;
     QVERIFY( ret != 0);
+    delete a;
 }
 
 void ParseTest::failFullProject_data()
