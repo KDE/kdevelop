@@ -56,7 +56,8 @@ namespace QMake
 
     ProjectAST::~ProjectAST()
     {
-        for ( QList<StatementAST*>::const_iterator it = m_statements.begin(); it != m_statements.end(); ++it )
+        QList<StatementAST*>::const_iterator it;
+        for ( it = m_statements.begin(); it != m_statements.end(); ++it )
         {
             delete( *it );
         }
@@ -85,7 +86,8 @@ namespace QMake
 
     void ProjectAST::writeToString( QString& buf ) const
     {
-        for ( QList<StatementAST*>::const_iterator it = m_statements.begin(); it != m_statements.end(); ++it )
+        QList<StatementAST*>::const_iterator it;
+        for ( it = m_statements.begin(); it != m_statements.end(); ++it )
         {
             if (( *it ) )
                 ( *it )->writeToString( buf );
@@ -112,9 +114,11 @@ namespace QMake
         m_statements.removeAt( i );
     }
 
-    AssignmentAST::AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& comment, const QString& ws, AST* parent )
-            : StatementAST( ws, parent ), m_variable( variable ), m_op( op )
-            , m_values( values ), m_comment( comment )
+    AssignmentAST::AssignmentAST( const QString& variable, const QString& op,
+            const QStringList& values, const QString& comment,
+            const QString& lineend, const QString& ws, AST* parent )
+        : StatementAST( ws, parent ), m_variable( variable ), m_op( op )
+            , m_values( values ), m_comment( comment ), m_lineend( lineend )
     {}
 
     AssignmentAST::~AssignmentAST()
@@ -162,11 +166,16 @@ namespace QMake
         buf += m_op;
         buf += m_values.join( "" );
         buf += m_comment;
-        buf += "\n";
+        //@TODO use System lineending, i.e. \r\n on windows, \n on *nix and ?? on macos
+        if( m_lineend.isEmpty() )
+            buf += "\n";
+        else
+            buf += m_lineend;
     }
 
-    CommentAST::CommentAST( const QString& comment, const QString& ws, AST* parent )
-            : StatementAST( ws, parent ), m_comment( comment )
+    CommentAST::CommentAST( const QString& comment, const QString& ws,
+            AST* parent )
+        : StatementAST( ws, parent ), m_comment( comment )
     {}
 
     QString CommentAST::comment() const
@@ -187,14 +196,17 @@ namespace QMake
         buf += m_comment;
     }
 
-    ScopeAST::ScopeAST( FunctionCallAST* call, const QString& ws, AST* parent )
-            : StatementAST( ws, parent ), m_call( call ), m_type( Function ), m_body( 0 )
+    ScopeAST::ScopeAST( FunctionCallAST* call, const QString& lineend,
+            const QString& ws, AST* parent )
+        : StatementAST( ws, parent ), m_call( call ), m_type( Function ),
+        m_body( 0 ), m_lineend(lineend)
     {
     }
 
 
     ScopeAST::ScopeAST( const QString& scopename, const QString& ws, AST* parent )
-            : StatementAST( ws, parent ), m_call( 0 ), m_scopeName( scopename ), m_type( Simple ), m_body( 0 )
+        : StatementAST( ws, parent ), m_call( 0 ), m_scopeName( scopename ),
+        m_type( Simple ), m_body( 0 )
     {
     }
 
@@ -243,6 +255,8 @@ namespace QMake
             buf += m_scopeName;
         if ( m_body )
             m_body->writeToString( buf );
+        else
+            buf += m_lineend;
 
     }
 
@@ -253,18 +267,20 @@ namespace QMake
 
     ScopeBodyAST::ScopeBodyAST( const QString& begin, QList<StatementAST*> stmts,
                                 const QString& end, AST* parent )
-            : AST( "", parent ), m_statements( stmts ),
-            m_begin( begin ), m_end( end )
+        : AST( "", parent ), m_statements( stmts ),
+        m_begin( begin ), m_end( end )
     {}
 
-    ScopeBodyAST::ScopeBodyAST( const QString& begin, StatementAST* stmt, AST* parent )
-            : AST( "", parent ), m_begin( begin ), m_end( "" )
+    ScopeBodyAST::ScopeBodyAST( const QString& begin, StatementAST* stmt,
+            AST* parent )
+        : AST( "", parent ), m_begin( begin ), m_end( "" )
     {
         m_statements.append( stmt );
     }
     ScopeBodyAST::~ScopeBodyAST()
     {
-        for ( QList<StatementAST*>::const_iterator it = m_statements.begin(); it != m_statements.end(); ++it )
+        QList<StatementAST*>::const_iterator it;
+        for ( it = m_statements.begin(); it != m_statements.end(); ++it )
         {
             delete( *it );
         }
@@ -274,7 +290,8 @@ namespace QMake
     void ScopeBodyAST::writeToString( QString& buf ) const
     {
         buf += m_begin;
-        for ( QList<StatementAST*>::const_iterator it = m_statements.begin(); it != m_statements.end(); ++it )
+        QList<StatementAST*>::const_iterator it;
+        for ( it = m_statements.begin(); it != m_statements.end(); ++it )
         {
             if (( *it ) )
                 ( *it )->writeToString( buf );
@@ -303,9 +320,11 @@ namespace QMake
         m_statements.removeAt( i );
     }
 
-    OrAST::OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall, ScopeBodyAST* body
-                  , const QString& ws, AST* parent )
-            : StatementAST( ws, parent ), m_lCall( lcall ), m_rCall( rcall ), m_body( body ), m_orop( orop )
+    OrAST::OrAST( FunctionCallAST* lcall, const QString& orop,
+                FunctionCallAST* rcall, ScopeBodyAST* body,
+                const QString& ws, AST* parent )
+        : StatementAST( ws, parent ), m_lCall( lcall ), m_rCall( rcall ),
+        m_body( body ), m_orop( orop )
     {}
 
     OrAST::~OrAST()
@@ -360,7 +379,7 @@ namespace QMake
     }
 
     FunctionArgAST::FunctionArgAST( const QString& ws, AST* parent )
-            : AST( ws, parent )
+        : AST( ws, parent )
     {}
 
     FunctionArgAST::~FunctionArgAST()
@@ -371,9 +390,10 @@ namespace QMake
         buf += whitespace();
     }
 
-    FunctionCallAST::FunctionCallAST( const QString& functionname, const QString& begin,
-                                      QList<FunctionArgAST*> args, const QString& end, const QString& ws, AST* parent )
-            : FunctionArgAST( ws, parent ), m_args( args ),
+    FunctionCallAST::FunctionCallAST( const QString& functionname,
+            const QString& begin, QList<FunctionArgAST*> args,
+            const QString& end, const QString& ws, AST* parent )
+        : FunctionArgAST( ws, parent ), m_args( args ),
             m_functionName( functionname ), m_begin( begin ), m_end( end )
     {
     }
@@ -381,7 +401,8 @@ namespace QMake
 
     FunctionCallAST::~FunctionCallAST()
     {
-        for ( QList<FunctionArgAST*>::const_iterator it = m_args.begin(); it != m_args.end(); ++it )
+        QList<FunctionArgAST*>::const_iterator it;
+        for ( it = m_args.begin(); it != m_args.end(); ++it )
         {
             delete( *it );
         }
@@ -400,7 +421,8 @@ namespace QMake
         FunctionArgAST::writeToString( buf );
         buf += m_functionName;
         buf += m_begin;
-        for ( QList<FunctionArgAST*>::const_iterator it = m_args.begin(); it != m_args.end(); )
+        QList<FunctionArgAST*>::const_iterator it;
+        for ( it = m_args.begin(); it != m_args.end(); )
         {
             if (( *it ) )
                 ( *it )->writeToString( buf );
@@ -426,8 +448,9 @@ namespace QMake
         m_args.removeAt( i );
     }
 
-    SimpleFunctionArgAST::SimpleFunctionArgAST( const QString& value, const QString& ws, AST* parent )
-            : FunctionArgAST( ws, parent ), m_value( value )
+    SimpleFunctionArgAST::SimpleFunctionArgAST( const QString& value,
+            const QString& ws, AST* parent )
+        : FunctionArgAST( ws, parent ), m_value( value )
     {}
 
     SimpleFunctionArgAST::~SimpleFunctionArgAST()

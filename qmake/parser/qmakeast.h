@@ -27,6 +27,8 @@
 
 #include "qmakeexport.h"
 
+//@TODO Port to default constructors and use the set* API to set the various contents; complex constructors are unreadable
+
 namespace QMake
 {
     class Driver;
@@ -77,20 +79,20 @@ namespace QMake
             void writeToString( QString& ) const;
             void setFilename( const QString& );
 
-            void setLineEnding( LineEnding );   
-            LineEnding lineEnding();   
+            void setLineEnding( LineEnding );
+            LineEnding lineEnding();
         private:
             QString m_filename;
             QList<StatementAST*> m_statements;
             LineEnding m_lineEnding;
-	    
+
 
     };
 
     class QMAKEPARSER_EXPORT AssignmentAST : public StatementAST
     {
         public:
-            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& comment, const QString& = "", AST* parent = 0 );
+            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& comment, const QString& = "", const QString& = "", AST* parent = 0 );
             ~AssignmentAST();
 
             void addValue( const QString& );
@@ -106,7 +108,7 @@ namespace QMake
             QString m_op;
             QStringList m_values;
             QString m_comment;
-
+            QString m_lineend;
     };
 
     class QMAKEPARSER_EXPORT NewlineAST : public StatementAST
@@ -194,7 +196,7 @@ namespace QMake
     {
         public:
             enum ScopeType { Function, Simple };
-            ScopeAST( FunctionCallAST* call, const QString& ws = "", AST* parent = 0 );
+            ScopeAST( FunctionCallAST* call, const QString& lineend = QString(), const QString& ws = "", AST* parent = 0 );
             ScopeAST( const QString& name, const QString& ws = "", AST* parent = 0 );
             ~ScopeAST();
             void writeToString( QString& ) const;
@@ -209,6 +211,7 @@ namespace QMake
             QString m_scopeName;
             ScopeType m_type;
             ScopeBodyAST* m_body;
+            QString m_lineend;
     };
 
     class QMAKEPARSER_EXPORT OrAST : public StatementAST
