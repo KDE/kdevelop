@@ -49,11 +49,11 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
 
     mainprogram_edit->completionObject()->setMode(KURLCompletion::FileCompletion);
     mainprogram_edit->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
-    if( DomUtil::readEntry(dom, configGroup + "/run/mainprogram").isEmpty())
+    if( DomUtil::readEntry(dom, configGroup + "/run/mainprogram").isEmpty() && QFileInfo( buildDirectory ).exists() )
     {
         mainprogram_edit->setURL( buildDirectory );
         mainprogram_edit->fileDialog()->setURL( KURL::fromPathOrURL(buildDirectory) );
-    }else
+    }else if ( QFileInfo( DomUtil::readEntry(dom, configGroup + "/run/mainprogram") ).exists() )
     {
         QString program = DomUtil::readEntry(dom, configGroup + "/run/mainprogram");
         if( QDir::isRelativePath(program) )
@@ -64,11 +64,11 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
 
     cwd_edit->completionObject()->setMode(KURLCompletion::DirCompletion);
     cwd_edit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-    if( DomUtil::readEntry(dom, configGroup + "/run/globalcwd").isEmpty())
+    if( DomUtil::readEntry(dom, configGroup + "/run/globalcwd").isEmpty() && QFileInfo( buildDirectory ).exists() )
     {
         cwd_edit->setURL( buildDirectory );
         cwd_edit->fileDialog()->setURL( KURL::fromPathOrURL(buildDirectory) );
-    }else
+    }else if( QFileInfo( DomUtil::readEntry(dom, configGroup + "/run/globalcwd") ).exists() )
     {
         cwd_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/globalcwd"));
         cwd_edit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry(dom, configGroup + "/run/globalcwd") ) );

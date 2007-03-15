@@ -27,7 +27,9 @@ CustomBuildOptionsWidget::CustomBuildOptionsWidget(QDomDocument &dom,
 {
     ant_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant");
     other_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "other");
-    builddir_edit->setURL(DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir"));
+    if( !DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir").isEmpty()
+        && QFileInfo( DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir") ).exists() )
+        builddir_edit->setURL(DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir"));
     builddir_edit->completionObject()->setMode(KURLCompletion::DirCompletion);
     builddir_edit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
