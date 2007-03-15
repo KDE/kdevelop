@@ -495,7 +495,7 @@ void RubySupportPart::slotRun ()
 
         // Starting WEBrick for a Rails app. Translate a SIGTERM signal sent by KDevelop
         // to a SIGINT expected by WEBrick (ie control&c) to terminate it.
-        cmd += "script/server& \n trap \"kill -s SIGINT $!\" SIGTERM \n wait \n exit 0";
+        cmd += "script/server& \n trap \"kill -s SIGINT $!\" TERM \n wait \n exit 0";
         if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
             appFrontend->startAppCommand(project()->projectDirectory(), cmd, false);
     } else {
