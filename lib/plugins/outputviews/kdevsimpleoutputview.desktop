@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevSimpleOutputView
+Name[x-test]=xxKDevSimpleOutputViewxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevsimpleoutputview

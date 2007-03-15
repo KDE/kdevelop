@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQMakeBuilder
+Name[x-test]=xxKDevQMakeBuilderxx
 Comment=Builds QMake Projects
+Comment[x-test]=xxBuilds QMake Projectsxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevqmakebuilder
