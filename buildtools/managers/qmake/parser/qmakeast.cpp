@@ -166,9 +166,12 @@ namespace QMake
         buf += m_op;
         buf += m_values.join( "" );
         buf += m_comment;
-        //@TODO use System lineending, i.e. \r\n on windows, \n on *nix and ?? on macos
         if( m_lineend.isEmpty() )
+#ifdef Q_WS_WIN
+            buf += "\r\n";
+#else
             buf += "\n";
+#endif
         else
             buf += m_lineend;
     }
