@@ -42,6 +42,8 @@ class AssignmentTest : public QObject
         void cleanup();
         void simpleParsed();
         void simpleParsed_data();
+        void assignInValue();
+        void assignInValue_data();
     private:
         QMake::ProjectAST* ast;
 };
