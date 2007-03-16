@@ -41,13 +41,13 @@ namespace QMake
             *ast = 0;
             return 1;
         }
-        printf("Parsing\n");
+//         printf("Parsing\n");
         Lexer l(&inf);
         l.set_debug(debug);
         Parser p(&l, ast);
         p.set_debug_level(debug);
         int ret = p.parse();
-        printf("Parsed: %d\n", ret);
+//         printf("Parsed: %d\n", ret);
         switch( l.lineending() )
         {
            case QMake::Lexer::MacOS:
@@ -62,7 +62,7 @@ namespace QMake
                  break;
         }
         ast->setFilename(QString::fromUtf8( filename ));
-        printf("lineEnding: %d\n", ast->lineEnding());
+//         printf("lineEnding: %d\n", ast->lineEnding());
         return ret;
     }
 
@@ -80,7 +80,7 @@ namespace QMake
         Parser p(&l, ast);
         p.set_debug_level(debug);
         int ret = p.parse();
-        printf("Parsed: %d\n", ret);
+//         printf("Parsed: %d\n", ret);
         switch( l.lineending() )
         {
            case QMake::Lexer::MacOS:
@@ -94,7 +94,7 @@ namespace QMake
                  ast->setLineEnding( QMake::ProjectAST::Unix );
                  break;
         }
-        printf("lineEnding: %d\n", ast->lineEnding());
+//         printf("lineEnding: %d\n", ast->lineEnding());
         ast->setFilename( "" );
         return ret;
     }
