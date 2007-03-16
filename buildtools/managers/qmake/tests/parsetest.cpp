@@ -22,10 +22,6 @@
 
 Some notes for special cases to test:
 
-VARIABLE += " value "
-
-VARIABLE += " value ( " -> Only 1 parenthesis
-
 eval($${subdir}.depends = $$basename($${subdir})/$(MAKEFILE)
 
 somescope:anotherscope {
@@ -39,7 +35,7 @@ eval( $$somefunc( $$VAR, else ) ) {
 
 scopename:  (no statement, is accepted by qmake)
 
-VARIABLE = value1=value++
+
 
 */
 
