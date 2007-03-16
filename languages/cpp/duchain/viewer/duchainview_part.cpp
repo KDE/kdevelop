@@ -69,7 +69,6 @@ DUChainViewPart::DUChainViewPart( QObject *parent,
 
 DUChainViewPart::~DUChainViewPart()
 {
-    delete m_factory;
 }
 
 void DUChainViewPart::unload()
