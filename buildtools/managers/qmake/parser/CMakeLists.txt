@@ -51,15 +51,15 @@ if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_VERSION LESS 2.3 AND NOT F
         GENERATED
     )
 
-     add_custom_target( debug-parser
+    add_custom_target( debug-parser
+        COMMAND ${FLEX_EXECUTABLE} -s -d -o "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"   "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
         COMMAND ${BISON_EXECUTABLE} -r all -k -t -o"${CMAKE_CURRENT_BINARY_DIR}/qmake_parser.cpp" -d "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.yy"
-        COMMAND ${FLEX_EXECUTABLE} -d -s -o "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
+
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_parser.yy"
-        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.h"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
         )
-
+    include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 else(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_VERSION LESS 2.3 AND NOT FLEX_VERSION LESS 2.5.31)
     message("Assuming existence of the generated lexer file qmake_lexer.cpp")
