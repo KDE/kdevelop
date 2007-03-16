@@ -65,7 +65,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 %token WS VARIABLE DOLLAR COLON COMMA LCURLY RCURLY
 %token LPAREN RPAREN EQUAL OR PLUSEQ MINUSEQ TILDEEQ STAREQ
 %token NEWLINE CONT COMMENT EXCLAM EMPTYLINE VAR_VALUE
-%token QMVARIABLE SHELLVARIABLE FUNCTIONNAME
+%token QMVARIABLE SHELLVARIABLE FUNCTIONNAME CONT_COMMENT
 %token FUNCTIONCALL SCOPENAME QUOTED_VAR_VALUE FNVALUE
 
 %%
@@ -96,6 +96,7 @@ statement: comment
         }
     | EMPTYLINE
         {
+            qDebug() << "EMPTY line";
             $<stmt>$ = new NewlineAST( $<value>1 );
         }
     | variable_assignment
@@ -366,7 +367,20 @@ values: values WS VAR_VALUE
             $<values>$.append( $<value>3 );
             $<values>$.append( $<value>4 );
         }
+    | values CONT_COMMENT ws VAR_VALUE
+        {
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+            $<values>$.append( $<value>4 );
+        }
     | values CONT ws QUOTED_VAR_VALUE
+        {
+
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+            $<values>$.append( $<value>4 );
+        }
+    | values CONT_COMMENT ws QUOTED_VAR_VALUE
         {
 
             $<values>$.append( $<value>2 );
@@ -384,6 +398,11 @@ values: values WS VAR_VALUE
             $<values>$.append( $<value>1 );
         }
     | CONT
+        {
+            $<values>$ = QStringList();
+            $<values>$.append( $<value>1 );
+        }
+    | CONT_COMMENT
         {
             $<values>$ = QStringList();
             $<values>$.append( $<value>1 );

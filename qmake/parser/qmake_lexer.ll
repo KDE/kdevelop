@@ -156,6 +156,11 @@ fnvalue       ([^ \t\f\n\r,$()]|"$("[^ \t\f\n\r,$()]+")")+
     setLineEndingFromString( mylval->value );
     return Parser::token::CONT;
   }
+<assignment>{ws}*"\\#"[^\r\n]*{newline} {
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+    setLineEndingFromString( mylval->value );
+    return Parser::token::CONT_COMMENT;
+  }
 <assignment>{non_ws_cont} {
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
     return Parser::token::VAR_VALUE;
@@ -164,16 +169,18 @@ fnvalue       ([^ \t\f\n\r,$()]|"$("[^ \t\f\n\r,$()]+")")+
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
     return Parser::token::QUOTED_VAR_VALUE;
   }
-^{ws}*{newline} {
-    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-    setLineEndingFromString( mylval->value );
-    return Parser::token::EMPTYLINE;
-  }
 <assignment,INITIAL>{ws}*{newline} {
     BEGIN(INITIAL);
+    qDebug() << "NEWLINE";
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
     setLineEndingFromString( mylval->value );
     return Parser::token::NEWLINE;
+  }
+^{ws}*{newline} {
+    qDebug() << "NEWLINE";
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+    setLineEndingFromString( mylval->value );
+    return Parser::token::EMPTYLINE;
   }
 
 <assignment,fnarg,INITIAL>{ws}+ {
