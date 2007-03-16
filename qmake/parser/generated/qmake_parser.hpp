@@ -48,7 +48,7 @@ namespace QMake
 }
 
 /* First part of user declarations.  */
-#line 1 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
 
 /* KDevelop QMake Support
  *
@@ -105,7 +105,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 
 
 /* Line 35 of lalr1.cc.  */
-#line 109 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_parser.hpp"
+
 
 #include "location.hh"
 
@@ -124,7 +124,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 
 /* Enabling the token table.  */
 #ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 1
+# define YYTOKEN_TABLE 0
 #endif
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].

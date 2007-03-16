@@ -41,7 +41,7 @@
 
 
 /* Line 317 of lalr1.cc.  */
-#line 45 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
+
 
 #ifndef YY_
 # if YYENABLE_NLS
@@ -387,7 +387,7 @@ namespace QMake
     switch (yyn)
       {
 	  case 2:
-#line 75 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             foreach( StatementAST* s, (yysemantic_stack_[(1) - (1)].stmtlist))
             {
@@ -397,63 +397,63 @@ namespace QMake
     break;
 
   case 3:
-#line 84 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.stmtlist).append( (yysemantic_stack_[(2) - (2)].stmt) );
         ;}
     break;
 
   case 4:
-#line 88 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.stmtlist).clear();
         ;}
     break;
 
   case 5:
-#line 94 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.stmt) = new CommentAST( (yysemantic_stack_[(1) - (1)].value) );
         ;}
     break;
 
   case 6:
-#line 98 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.stmt) = new NewlineAST( (yysemantic_stack_[(1) - (1)].value) );
         ;}
     break;
 
   case 7:
-#line 102 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.stmt) = (yysemantic_stack_[(1) - (1)].stmt);
         ;}
     break;
 
   case 8:
-#line 106 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.stmt) = (yysemantic_stack_[(1) - (1)].stmt);
         ;}
     break;
 
   case 9:
-#line 110 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
-            (yyval.stmt) = new ScopeAST( (yysemantic_stack_[(3) - (2)].funccall), (yysemantic_stack_[(3) - (1)].value) );
+            (yyval.stmt) = new ScopeAST( (yysemantic_stack_[(3) - (2)].funccall), (yysemantic_stack_[(3) - (3)].value), (yysemantic_stack_[(3) - (1)].value) );
         ;}
     break;
 
   case 10:
-#line 114 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.stmt) = (yysemantic_stack_[(1) - (1)].stmt);
         ;}
     break;
 
   case 11:
-#line 120 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             ScopeAST* node = (yysemantic_stack_[(2) - (1)].scope);
             node->setScopeBody( (yysemantic_stack_[(2) - (2)].scopebody) );
@@ -462,7 +462,7 @@ namespace QMake
     break;
 
   case 12:
-#line 128 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yysemantic_stack_[(6) - (2)].funccall)->setWhitespace((yysemantic_stack_[(6) - (1)].value));
             (yysemantic_stack_[(6) - (5)].funccall)->setWhitespace((yysemantic_stack_[(6) - (4)].value));
@@ -472,7 +472,7 @@ namespace QMake
     break;
 
   case 13:
-#line 137 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             ScopeAST* node = new ScopeAST( (yysemantic_stack_[(2) - (2)].value), (yysemantic_stack_[(2) - (1)].value) );
             (yyval.scope) = node;
@@ -480,15 +480,15 @@ namespace QMake
     break;
 
   case 14:
-#line 142 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
-            ScopeAST* node = new ScopeAST( (yysemantic_stack_[(2) - (2)].funccall), (yysemantic_stack_[(2) - (1)].value) );
+            ScopeAST* node = new ScopeAST( (yysemantic_stack_[(2) - (2)].funccall), "", (yysemantic_stack_[(2) - (1)].value) );
             (yyval.scope) = node;
         ;}
     break;
 
   case 15:
-#line 149 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(8) - (1)].value)+(yysemantic_stack_[(8) - (2)].value)+(yysemantic_stack_[(8) - (3)].value)+(yysemantic_stack_[(8) - (4)].value), (yysemantic_stack_[(8) - (5)].stmtlist), (yysemantic_stack_[(8) - (6)].value)+(yysemantic_stack_[(8) - (7)].value)+(yysemantic_stack_[(8) - (8)].value) );
             (yyval.scopebody) = node;
@@ -496,7 +496,7 @@ namespace QMake
     break;
 
   case 16:
-#line 154 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(7) - (1)].value)+(yysemantic_stack_[(7) - (2)].value)+(yysemantic_stack_[(7) - (3)].value), (yysemantic_stack_[(7) - (4)].stmtlist), (yysemantic_stack_[(7) - (5)].value)+(yysemantic_stack_[(7) - (6)].value)+(yysemantic_stack_[(7) - (7)].value) );
             (yyval.scopebody) = node;
@@ -504,7 +504,7 @@ namespace QMake
     break;
 
   case 17:
-#line 159 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(6) - (1)].value)+(yysemantic_stack_[(6) - (2)].value)+(yysemantic_stack_[(6) - (3)].value), (yysemantic_stack_[(6) - (4)].stmtlist), (yysemantic_stack_[(6) - (5)].value)+(yysemantic_stack_[(6) - (6)].value) );
             (yyval.scopebody) = node;
@@ -512,7 +512,7 @@ namespace QMake
     break;
 
   case 18:
-#line 164 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(7) - (1)].value)+(yysemantic_stack_[(7) - (2)].value)+(yysemantic_stack_[(7) - (3)].value)+(yysemantic_stack_[(7) - (4)].value), (yysemantic_stack_[(7) - (5)].stmtlist), (yysemantic_stack_[(7) - (6)].value)+(yysemantic_stack_[(7) - (7)].value) );
             (yyval.scopebody) = node;
@@ -520,7 +520,7 @@ namespace QMake
     break;
 
   case 19:
-#line 169 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(3) - (1)].value)+(yysemantic_stack_[(3) - (2)].value), (yysemantic_stack_[(3) - (3)].stmt) );
             (yyval.scopebody) = node;
@@ -528,21 +528,21 @@ namespace QMake
     break;
 
   case 20:
-#line 176 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 21:
-#line 180 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(2) - (1)].value)+(yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 22:
-#line 186 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             FunctionCallAST* node = new FunctionCallAST( (yysemantic_stack_[(4) - (1)].value), (yysemantic_stack_[(4) - (2)].value), (yysemantic_stack_[(4) - (3)].arglist), (yysemantic_stack_[(4) - (4)].value) );
             (yyval.funccall) = node;
@@ -550,35 +550,35 @@ namespace QMake
     break;
 
   case 23:
-#line 191 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.funccall) = new FunctionCallAST( (yysemantic_stack_[(3) - (1)].value), (yysemantic_stack_[(3) - (2)].value), QList<FunctionArgAST*>(), (yysemantic_stack_[(3) - (3)].value) );
         ;}
     break;
 
   case 24:
-#line 195 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.funccall) = new FunctionCallAST( (yysemantic_stack_[(5) - (1)].value)+(yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].value), (yysemantic_stack_[(5) - (4)].arglist), (yysemantic_stack_[(5) - (5)].value) );
         ;}
     break;
 
   case 25:
-#line 199 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.funccall) = new FunctionCallAST( (yysemantic_stack_[(4) - (1)].value)+(yysemantic_stack_[(4) - (2)].value), (yysemantic_stack_[(4) - (3)].value), QList<FunctionArgAST*>(), (yysemantic_stack_[(4) - (4)].value) );
         ;}
     break;
 
   case 26:
-#line 205 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.arglist).append( (yysemantic_stack_[(3) - (3)].fnarg) );
         ;}
     break;
 
   case 27:
-#line 209 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.arglist).clear();
             (yyval.arglist).append( (yysemantic_stack_[(1) - (1)].fnarg) );
@@ -586,238 +586,238 @@ namespace QMake
     break;
 
   case 28:
-#line 216 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.fnarg) = new SimpleFunctionArgAST( (yysemantic_stack_[(2) - (2)].value), (yysemantic_stack_[(2) - (1)].value) );
         ;}
     break;
 
   case 29:
-#line 220 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.fnarg) = new FunctionCallAST( (yysemantic_stack_[(7) - (2)].value), (yysemantic_stack_[(7) - (3)].value)+(yysemantic_stack_[(7) - (4)].value), (yysemantic_stack_[(7) - (5)].arglist), (yysemantic_stack_[(7) - (6)].value)+(yysemantic_stack_[(7) - (7)].value), (yysemantic_stack_[(7) - (1)].value) );
         ;}
     break;
 
   case 30:
-#line 226 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 31:
-#line 230 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 32:
-#line 234 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 33:
-#line 238 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 34:
-#line 242 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 35:
-#line 246 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 36:
-#line 250 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 37:
-#line 254 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 38:
-#line 258 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 39:
-#line 262 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 40:
-#line 266 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 41:
-#line 270 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 42:
-#line 274 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(2) - (2)].value);
         ;}
     break;
 
   case 43:
-#line 278 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) += (yysemantic_stack_[(4) - (2)].value)+(yysemantic_stack_[(4) - (3)].value)+(yysemantic_stack_[(4) - (4)].value);
         ;}
     break;
 
   case 44:
-#line 282 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 45:
-#line 286 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(3) - (1)].value)+(yysemantic_stack_[(3) - (2)].value)+(yysemantic_stack_[(3) - (3)].value);
         ;}
     break;
 
   case 46:
-#line 290 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 47:
-#line 294 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 48:
-#line 298 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 49:
-#line 302 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 50:
-#line 306 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 51:
-#line 310 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 52:
-#line 314 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 53:
-#line 318 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 54:
-#line 322 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 55:
-#line 326 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 56:
-#line 330 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 57:
-#line 336 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
-            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(6) - (2)].value), (yysemantic_stack_[(6) - (3)].value), (yysemantic_stack_[(6) - (4)].values), (yysemantic_stack_[(6) - (5)].value), (yysemantic_stack_[(6) - (1)].value) );
+            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(6) - (2)].value), (yysemantic_stack_[(6) - (3)].value), (yysemantic_stack_[(6) - (4)].values), (yysemantic_stack_[(6) - (5)].value), (yysemantic_stack_[(6) - (6)].value), (yysemantic_stack_[(6) - (1)].value) );
         ;}
     break;
 
   case 58:
-#line 340 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
-            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].value), QStringList(), (yysemantic_stack_[(5) - (4)].value), (yysemantic_stack_[(5) - (1)].value) );
+            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].value), QStringList(), (yysemantic_stack_[(5) - (4)].value),  (yysemantic_stack_[(5) - (5)].value), (yysemantic_stack_[(5) - (1)].value) );
         ;}
     break;
 
   case 59:
-#line 344 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
-            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].value), (yysemantic_stack_[(5) - (4)].values), "", (yysemantic_stack_[(5) - (1)].value) );
+            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].value), (yysemantic_stack_[(5) - (4)].values), "", (yysemantic_stack_[(5) - (5)].value), (yysemantic_stack_[(5) - (1)].value) );
         ;}
     break;
 
   case 60:
-#line 348 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
-            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(4) - (2)].value), (yysemantic_stack_[(4) - (3)].value), QStringList(), "", (yysemantic_stack_[(4) - (1)].value) );
+            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(4) - (2)].value), (yysemantic_stack_[(4) - (3)].value), QStringList(), "", (yysemantic_stack_[(4) - (4)].value), (yysemantic_stack_[(4) - (1)].value) );
         ;}
     break;
 
   case 61:
-#line 354 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.values).append( (yysemantic_stack_[(3) - (2)].value) );
             (yyval.values).append( (yysemantic_stack_[(3) - (3)].value) );
@@ -825,7 +825,7 @@ namespace QMake
     break;
 
   case 62:
-#line 359 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.values).append( (yysemantic_stack_[(3) - (2)].value) );
             (yyval.values).append( (yysemantic_stack_[(3) - (3)].value) );
@@ -833,7 +833,7 @@ namespace QMake
     break;
 
   case 63:
-#line 364 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.values).append( (yysemantic_stack_[(4) - (2)].value) );
             (yyval.values).append( (yysemantic_stack_[(4) - (3)].value) );
@@ -842,7 +842,7 @@ namespace QMake
     break;
 
   case 64:
-#line 370 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
 
             (yyval.values).append( (yysemantic_stack_[(4) - (2)].value) );
@@ -852,7 +852,7 @@ namespace QMake
     break;
 
   case 65:
-#line 377 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.values) = QStringList();
             (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) );
@@ -860,7 +860,7 @@ namespace QMake
     break;
 
   case 66:
-#line 382 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.values) = QStringList();
             (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) );
@@ -868,7 +868,7 @@ namespace QMake
     break;
 
   case 67:
-#line 387 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.values) = QStringList();
             (yyval.values).append( (yysemantic_stack_[(1) - (1)].value) );
@@ -876,56 +876,56 @@ namespace QMake
     break;
 
   case 68:
-#line 394 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 69:
-#line 398 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 70:
-#line 402 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 71:
-#line 406 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 72:
-#line 410 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 73:
-#line 416 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(1) - (1)].value);
         ;}
     break;
 
   case 74:
-#line 420 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = "";
         ;}
     break;
 
   case 75:
-#line 426 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
     {
             (yyval.value) = (yysemantic_stack_[(2) - (1)].value)+(yysemantic_stack_[(2) - (2)].value);
         ;}
@@ -933,7 +933,7 @@ namespace QMake
 
 
     /* Line 675 of lalr1.cc.  */
-#line 937 "/home/andreas/KDE-work/4.0/build/kdevelop/buildtools/importers/qmake/parser/qmake_parser.cpp"
+
 	default: break;
       }
     YY_SYMBOL_PRINT ("-> $$ =", yyr1_[yyn], &yyval, &yyloc);
@@ -1472,7 +1472,7 @@ namespace QMake
 
 } // namespace QMake
 
-#line 431 "/home/andreas/KDE-work/4.0/kdevelop/buildtools/importers/qmake/parser/qmake_parser.yy"
+
 
 
 namespace QMake
