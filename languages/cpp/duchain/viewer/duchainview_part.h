@@ -23,14 +23,14 @@
 #ifndef DUCHAINVIEW_PART_H
 #define DUCHAINVIEW_PART_H
 
-#include <kdevplugin.h>
+#include <iplugin.h>
 
 #include <QPointer>
 
 class DUChainModel;
 class QTreeView;
 
-class DUChainViewPart : public KDevelop::Plugin
+class DUChainViewPart : public KDevelop::IPlugin
 {
     Q_OBJECT
 
@@ -39,12 +39,13 @@ public:
     virtual ~DUChainViewPart();
 
     // KDevelop::Plugin methods
-    virtual QWidget *pluginView() const;
-    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+    virtual void unload();
+
+    DUChainModel* model() const;
 
 private:
     DUChainModel* m_model;
-    QPointer<QTreeView> m_view;
+    class DUChainViewFactory* m_factory;
 };
 
 #endif // DUCHAINVIEW_PART_H

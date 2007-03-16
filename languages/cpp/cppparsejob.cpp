@@ -27,10 +27,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// #include "kdevcore.h"
-// #include "kdevdocument.h"
-// #include "kdevproject.h"
-
 #include "Thread.h"
 
 #include "ilanguage.h"
@@ -73,13 +69,15 @@ CPPParseJob::CPPParseJob( const KUrl &url,
 
 /*
 CPPParseJob::CPPParseJob( KDevelop::Document *document,
-                    CppLanguageSupport *parent )
+                    CppLanguageSupport *parent,
+                    const KTextEditor::Range& textRangeToParse )
         : KDevelop::ParseJob( document, parent ),
         m_session( new ParseSession ),
         m_AST( 0 ),
         m_model( 0 ),
         m_duContext( 0 ),
-        m_readFromDisk( false )
+        m_readFromDisk( false ),
+        m_textRangeToParse(textRangeToParse)
 {
     PreprocessJob* ppj;
     addJob(ppj = new PreprocessJob(this));
@@ -122,6 +120,11 @@ void CPPParseJob::setAST(TranslationUnitAST * ast)
 void CPPParseJob::setDUChain(TopDUContext * duChain)
 {
     m_duContext = duChain;
+}
+
+const KTextEditor::Range& CPPParseJob::textRangeToParse() const
+{
+    return m_textRangeToParse;
 }
 
 ParseJob::ParseJob(CPPParseJob * parent)
@@ -187,13 +190,14 @@ void ParseJob::run()
         {
             kDebug( 9007 ) << "building duchain" << endl;
             CppEditorIntegrator editor(parentJob()->parseSession());
+            editor.setCurrentUrl(parentJob()->document());
 
             // Translate the cursors we generate with edits that have happened since retrieval of the document source.
-            if (editor.smart())
-              editor.smart()->useRevision(parentJob()->revisionToken() == -1 ? 0 : parentJob()->revisionToken());
+            if (editor.smart() && parentJob()->revisionToken() != -1)
+              editor.smart()->useRevision(parentJob()->revisionToken());
 
-            DeclarationBuilder definitionBuilder(&editor);
-            topContext = definitionBuilder.buildDeclarations(parentJob()->document(), ast, &chains);
+            DeclarationBuilder declarationBuilder(&editor);
+            topContext = declarationBuilder.buildDeclarations(parentJob()->document(), ast, &chains);
 
             if (parentJob()->abortRequested())
                 return parentJob()->abortJob();
@@ -227,9 +231,11 @@ void ParseJob::run()
         if (topContext->smartRange()) {
             QReadLocker lock(DUChain::lock());
             kDebug( 9007 ) << "================== duchain =======================" << endl;
+        /*if (topContext->smartRange()) {
             DumpChain dump;
             dump.dump(ast, parentJob()->parseSession());
             dump.dump(topContext);
+        }*/
         }
     }
     //     DumpTree dumpTree;

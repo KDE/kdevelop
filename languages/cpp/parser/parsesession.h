@@ -24,6 +24,8 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
+#include <ktexteditor/cursor.h>
+
 #include <cppparserexport.h>
 
 class pool;
@@ -48,7 +50,7 @@ public:
   void positionAt(std::size_t offset, int *line, int *column,
                   QString *filename) const;
 
-  void setContents(const QByteArray& contents);
+  void setContents(const QByteArray& contents, const KTextEditor::Cursor& offset = KTextEditor::Cursor());
 
   const char *contents() const;
   std::size_t size() const;
@@ -57,6 +59,7 @@ public:
   LocationTable* location_table;
   LocationTable* line_table;
   rpp::MacroBlock* macros;
+  KTextEditor::Cursor m_contentOffset;
 
 private:
   void extract_line(int offset, int *line, QString *filename) const;

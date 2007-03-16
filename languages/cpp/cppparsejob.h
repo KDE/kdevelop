@@ -26,6 +26,8 @@
 
 #include <QStringList>
 
+#include <ktexteditor/range.h>
+
 class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
@@ -63,6 +65,8 @@ public:
 
     ::ParseJob* parseJob() const;
 
+    const KTextEditor::Range& textRangeToParse() const;
+
 private:
     ParseSession* m_session;
     TranslationUnitAST *m_AST;
@@ -70,6 +74,7 @@ private:
     TopDUContext* m_duContext;
     bool m_readFromDisk;
     ::ParseJob* m_parseJob;
+    KTextEditor::Range m_textRangeToParse;
 };
 
 class ParseJob : public ThreadWeaver::Job

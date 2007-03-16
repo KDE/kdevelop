@@ -107,6 +107,11 @@ public:
   DUContext* findContextAt(const KTextEditor::Cursor& position) const;
 
   /**
+   * Find the context which most specifically covers \a range.
+   */
+  DUContext* findContextIncluding(const KTextEditor::Range& range) const;
+
+  /**
    * Calculate the fully qualified scope identifier
    */
   QualifiedIdentifier scopeIdentifier(bool includeClasses = false) const;

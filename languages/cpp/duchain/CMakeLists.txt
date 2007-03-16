@@ -1,6 +1,6 @@
 
 # add_subdirectory(tests)
-# add_subdirectory(viewer)
+add_subdirectory(viewer)
 
 include_directories( ${CMAKE_TOP_BUILD_DIR}
     ${CMAKE_SOURCE_DIR}/lib

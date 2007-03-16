@@ -642,6 +642,20 @@ DUContext * DUContext::findContextAt(const KTextEditor::Cursor & position) const
   return const_cast<DUContext*>(this);
 }
 
+DUContext* DUContext::findContextIncluding(const KTextEditor::Range& range) const
+{
+  ENSURE_CHAIN_READ_LOCKED
+
+  if (!textRange().contains(range))
+    return 0;
+
+  foreach (DUContext* child, m_childContexts)
+    if (DUContext* specific = child->findContextIncluding(range))
+      return specific;
+
+  return const_cast<DUContext*>(this);
+}
+
 Use* DUContext::findUseAt(const KTextEditor::Cursor & position) const
 {
   ENSURE_CHAIN_READ_LOCKED

@@ -28,37 +28,58 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 
-#include <kdevcore.h>
-#include <kdevmainwindow.h>
+#include <icore.h>
+#include <iuicontroller.h>
 
 typedef KGenericFactory<DUChainViewPart> KDevDUChainViewFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevduchainview, KDevDUChainViewFactory( "kdevduchainview" ) )
 
+class DUChainViewFactory: public KDevelop::IToolViewFactory
+{
+public:
+    DUChainViewFactory(DUChainViewPart *part): m_part(part) {}
+
+    virtual QWidget* create(QWidget *parent = 0)
+    {
+        QTreeView* view = new QTreeView(parent);
+        view->setObjectName("DUChain Viewer Tree");
+        view->setWindowTitle(i18n("Definition-Use Chain"));
+        view->setModel(m_part->model());
+        return view;
+    }
+
+    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+private:
+    DUChainViewPart *m_part;
+};
+
 DUChainViewPart::DUChainViewPart( QObject *parent,
                                     const QStringList& )
-    : KDevelop::Plugin( KDevDUChainViewFactory::componentData(), parent )
+    : KDevelop::IPlugin( KDevDUChainViewFactory::componentData(), parent )
     , m_model(new DUChainModel(this))
-    , m_view(new QTreeView())
+    , m_factory(new DUChainViewFactory(this))
 {
-    m_view->setObjectName("DUChain Viewer Tree");
-    m_view->setWindowTitle(i18n("Definition-Use Chain"));
-    m_view->setModel(m_model);
+    core()->uiController()->addToolView(i18n("DUChain Viewer"), m_factory);
     setXMLFile( "kdevduchainview.rc" );
 }
 
 DUChainViewPart::~DUChainViewPart()
 {
-    delete m_view;
+    delete m_factory;
 }
 
-QWidget *DUChainViewPart::pluginView() const
+void DUChainViewPart::unload()
 {
-    return m_view;
+    core()->uiController()->removeToolView(m_factory);
 }
 
-Qt::DockWidgetArea DUChainViewPart::dockWidgetAreaHint() const
+DUChainModel* DUChainViewPart::model() const
 {
-    return Qt::RightDockWidgetArea;
+    return m_model;
 }
 
 #include "duchainview_part.moc"

@@ -65,8 +65,11 @@ void ParseSession::positionAt(std::size_t offset, int *line, int *column,
   //kDebug() << k_funcinfo << offset << ": line " << (base_line + *line - line2  - 1) << ", column " << *column << " == " << base_line << " + " << *line << " - " << line2 << " - 1" << endl;
   *line = base_line + *line - line2  - 1;
 
-  if (*filename == "<internal>")
+  if (*filename == "<internal>") {
     filename->clear();
+    *line += m_contentOffset.line();
+    *column += m_contentOffset.column();
+  }
 }
 
 void ParseSession::extract_line(int offset, int *line, QString *filename) const
@@ -146,7 +149,8 @@ const char * ParseSession::contents() const
   return m_contents.constData();
 }
 
-void ParseSession::setContents(const QByteArray & contents)
+void ParseSession::setContents(const QByteArray & contents, const KTextEditor::Cursor& offset)
 {
   m_contents = contents;
+  m_contentOffset = offset;
 }

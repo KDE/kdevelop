@@ -25,9 +25,7 @@
 
 #include <klocale.h>
 
-#include <kdevdocument.h>
-#include <kdevcore.h>
-#include <kdevdocumentcontroller.h>
+#include "icore.h"
 
 #include "duchainview_part.h"
 #include "topducontext.h"
@@ -51,7 +49,7 @@ DUChainModel::DUChainModel(DUChainViewPart* parent)
   : QAbstractItemModel(parent)
   , m_chain(0)
 {
-  connect (KDevelop::Core::documentController(), SIGNAL(documentActivated(KDevelop::Document*)), SLOT(documentActivated(KDevelop::Document*)));
+  //connect (KDevelop::ICore::documentController(), SIGNAL(documentActivated(KDevelop::Document*)), SLOT(documentActivated(KDevelop::Document*)));
 }
 
 DUChainModel::~DUChainModel()
@@ -60,11 +58,11 @@ DUChainModel::~DUChainModel()
 
 void DUChainModel::documentActivated( KDevelop::Document* document )
 {
-  if (document) {
+  /*if (document) {
     TopDUContext* chain = DUChain::self()->chainForDocument(document->url());
     if (chain)
       setTopContext(chain);
-  }
+  }*/
 }
 
 void DUChainModel::setTopContext(TopDUContext* context)

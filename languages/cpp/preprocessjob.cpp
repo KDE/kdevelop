@@ -30,9 +30,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// #include <kdevcore.h>
-// #include <kdevproject.h>
-// #include <kdevpersistenthash.h>
 #include "backgroundparser.h"
 
 #include "Thread.h"
@@ -46,6 +43,7 @@
 #include "parser/parsesession.h"
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-engine.h"
+#include "duchain/duchain.h"
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
@@ -89,6 +87,22 @@ void PreprocessJob::run()
     }
     else
     {
+        KTextEditor::Range range = KTextEditor::Range::invalid();
+
+        //===--- Incremental Parsing!!! yay :) ---===//
+        /*if (KDevelop::Core::activeProject() && parentJob->textRangeToParse().isValid()) {
+            //if (Core::activeProject()->persistentHash()->retrieveAST( parentJob->document() ))
+                // We have an AST which could be used
+
+            if (DUContext* topContext = DUChain::self()->chainForDocument(parentJob->document())) {
+                // We have a definition-use chain for this document already
+                // Find a recovery point
+                DUContext* specific = topContext->findContextIncluding(parentJob->textRangeToParse());
+                // Not worthwhile "incrementally" parsing the top level context (i think...?)
+                if (specific != topContext)
+            }
+        }*/
+
         contents = parentJob()->contentsFromEditor(true);
     }
 
