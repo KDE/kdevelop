@@ -294,9 +294,15 @@ private:
 	void MakeMemberHelper( QString& text, int& atline, int& atcol );
 
     QString sourceOrHeaderCandidate( const KURL &url = KURL() );
-	QValueList<FileDom> sourceOrHeaderCandidateList( const KURL &url = KURL() );
 
-	bool jumpIfDeclMatchesDef( const FunctionDom& decl, const FunctionDefinitionDom& def, bool useDeclInfo, bool scrollOnly );
+	FunctionDom findFunction( const FunctionDom& def );
+	FunctionDom findFunctionInNamespace( const NamespaceDom& ns, const FunctionDom& func, const std::set<NamespaceImportModel>& nsImports,
+	                                     int scopeIndex, FunctionDom& bestMatch );
+	FunctionDom findFunctionInClass( const ClassDom& cs, const FunctionDom& func, const std::set<NamespaceImportModel>& nsImports,
+	                                 int scopeIndex, FunctionDom& bestMatch );
+	FunctionDom findFunctionDefinition( const FunctionDom& decl );
+
+	void jumpToCodeModelItem( const ItemDom& item, bool scrollOnly );
 
 	QStringList modifiedFileList();
 	QString findSourceFile();

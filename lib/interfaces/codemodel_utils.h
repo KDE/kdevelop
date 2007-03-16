@@ -415,10 +415,19 @@ void processNamespaces(FunctionDefinitionList &list, const NamespaceDom dom, QMa
  * Compares a declaration and a defintion of a function.
  * @param dec declaration
  * @param def definition
- * @return true, if dec is the declaration of the functiondefinition def, false otherwise
+ * @return true, if dec is the declaration of the function definition def, false otherwise
  * @author Jonas Jacobi <j.jacobi@gmx.de>
  */
 bool compareDeclarationToDefinition(const FunctionDom& dec, const FunctionDefinitionDom& def);
+
+/**
+ * Compares a declaration and a defintion of a function.
+ * @param dec declaration
+ * @param def definition
+ * @param nsImports namespace imports for the namespace the definition appears in
+ * @return true, if dec is the declaration of the function definition def, false otherwise
+ */
+bool compareDeclarationToDefinition(const FunctionDom& dec, const FunctionDefinitionDom& def, const std::set<NamespaceImportModel>& nsImports);
 
 /**
  * Predicate for use with findFunctionDefintions. Searches for a defintion matching a declaration.

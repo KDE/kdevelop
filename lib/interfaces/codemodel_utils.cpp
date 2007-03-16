@@ -336,6 +336,48 @@ bool compareDeclarationToDefinition( const FunctionDom & dec, const FunctionDefi
 }
 
 
+bool compareDeclarationToDefinition( const FunctionDom & dec, const FunctionDefinitionDom & def, const std::set<NamespaceImportModel> & nsImports )
+{
+	if (dec->name() == def->name() && resultTypesFit( dec, def ) && dec->isConstant() == def->isConstant())
+	{
+		const ArgumentList defList = def->argumentList(), decList = dec->argumentList();
+		if (defList.size() != decList.size())
+			return false;
+
+		size_t n = defList.size();
+		for(size_t i = 0; i < n; ++i)
+			if (defList[i]->type() != decList[i]->type())
+				return false;
+
+		const QStringList &defScope = def->scope(), &decScope = dec->scope();
+		if (defScope != decScope)
+		{
+			if (defScope.size() >= decScope.size())
+				return false;
+
+			n = decScope.size();
+			for(size_t i1 = 0, i2 = 0; i1 < n; ++i1)
+			{
+				if (i2 >= defScope.size() || decScope[i1] != defScope[i2])
+				{
+					NamespaceImportModel model;
+					model.setName(decScope[i1]);
+					model.setFileName(def->fileName());
+					if (nsImports.find(model) == nsImports.end())
+						return false;
+				}
+				else
+				{
+					++i2;
+				}
+			}
+		}
+		
+		return true;
+	}
+	return false;
+}
+
 
 
 FunctionList allFunctionsExhaustive(FileDom &dom) {
