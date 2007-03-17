@@ -36,6 +36,5 @@ install(FILES
 
 install(FILES
     kdevelopplugin.desktop
-    kdeveloplanguagesupport.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR}
 )
