@@ -96,7 +96,6 @@ statement: comment
         }
     | EMPTYLINE
         {
-            qDebug() << "EMPTY line";
             $<stmt>$ = new NewlineAST( $<value>1 );
         }
     | variable_assignment

@@ -171,7 +171,6 @@ fnvalue       ([^ \t\f\n\r,$()]|"$("[^ \t\f\n\r,$()]+")")+
   }
 <assignment,INITIAL>{ws}*{newline} {
     BEGIN(INITIAL);
-    qDebug() << "NEWLINE";
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
     setLineEndingFromString( mylval->value );
     return Parser::token::NEWLINE;
