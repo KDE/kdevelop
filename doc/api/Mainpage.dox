@@ -1,37 +1,49 @@
 /** \file Mainpage.dox
-    \brief The main page of the doxygen generated %API Documentation
+    \brief The main page of the doxygen generated API Documentation
 */
 
 /**
-\mainpage The KDevelop %API %Documentation
+\mainpage The KDevelop API Documentation
 
-KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications under X11.
+%KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications
+under Unix, MacOS and Windows.
+\n \n
+%KDevelop Platform is set of libraries and tools that are used to build IDEs (Integrated Development Environments),
+applications similar to IDEs (web development enviroment, text editors for programmers and designers, etc.)
+and/or IDE plugins for all possible purposes.
 
-\section intro Introduction
+Platform provides:
+- the plugin architecture (interfaces);
+- the common support libraries;
+- the generic shell with plugin profiles support.
+.
+
+
+\section Introduction Introduction
 
 This document is targeted at all those that want to add or improve KDevelop's source code.
-If you are instead looking for a user manual, just go to the help menu of your KDevelop and select KDevelop handbook.
-This documentation contains the KDevelop online class reference for the current
-development version of KDevelop.  Additionally, you
-can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">mailing list</a> for any additions and/or
-modifications to the %API.
+If you are instead looking for a user manual, just go to the help menu of your %KDevelop and select %KDevelop handbook.
+This documentation contains the %KDevelop online class reference for the current
+development version of %KDevelop.  Additionally, you
+can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">mailing list</a> for any additions and/or modifications to the API.
 
 An on-line, updated every 24H, html version of this documentation can be found at: http://www.kdevelop.org/HEAD/doc/api/html/index.html
 
-More information about the KDevelop architecture in form of tutorials, HOWTOs,
+More information about the %KDevelop architecture in form of tutorials, HOWTOs,
 and FAQs can be found at
 the <a href="http://www.kdevelop.org">KDevelop website</a>.
 
 
 \section status Current Status
 
-Here you can see the current \ref requirements and the \ref features.
-There is also a \ref LangSupportStatus (doc/api/LangSupportStatus.dox file) page and a \ref EditorsSupportStatus (doc/api/EditorsSupportStatus.dox file) page.
+<a href="http://www.kdevelop.org/index.html?filename=HEAD/requirements.html">KDevelop Requirements</a> \n
+<a href="http://www.kdevelop.org/index.html?filename=HEAD/features.html">KDevelop Features</a> \n
+\ref LangSupportStatus (doc/api/LangSupportStatus.dox file)
 
 
-\section expand How to expand KDevelop
+\section expand How to extend KDevelop
 
-First of all read the \ref architecture (doc/api/Architecture.dox file) then you can find more information on how to expand KDevelop:
+First of all read the \ref architecture (doc/api/Architecture.dox file) then you can find more information on how to extend %KDevelop:
   - \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file)
   - \ref howToAddProgrammingLanguages (doc/api/HowToAddProgrammingLanguages.dox file)
   - \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
@@ -40,51 +52,65 @@ First of all read the \ref architecture (doc/api/Architecture.dox file) then you
 
 Additionally you may also want to find out \ref howToDocument (doc/api/HowToDocument.dox file).
 
+\section participate How to participate in KDevelop development
+
+\subsection cooperation KDevelop Development Team Cooperation Model
+
+%KDevelop is the result of the work of many people. To help syncronize the effords and to automate
+some tasks, the team uses many tools:
+
+  - SVN repository
+  - KDE Bugzilla
+  - Web servers
+  - Mailing Lists
+  - IRC
+  - Doxygen
+  - docbook
+  - LXR
+  - E-mail
+  - Cron Jobs
+  - and of course %KDevelop :)
+  .
+
+They get interconnected like this:
+
+\image html Development.png
+
+\subsection join Joining the Team
+
+You're always welcome to join the team. Read the
+<a href="http://www.kdevelop.org/index.html?filename=join-the-team.html">detailed guide</a> on how to proceed.
+
 \section PlannedTasks Planned tasks
 
 Here is a priority ordered list:
-  -# \ref HighPriTasks (doc/api/HighPriTasks.dox file)
   -# fix the dispersed \ref fixme
-  -# <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">reported bugs in bugzilla database</a>
-  -# fix the bugs in the \ref bug
+  -# <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">fix reported bugs in bugzilla database</a>
   -# fix the dispersed \ref todo all over the code.
   .
-There are some \ref unmaintained parts in KDevelop. You migth want to "adopt" one. :)\n
-There is also \ref FutureTasks (doc/api/FutureTasks.dox file). Put all ideas for the future KDevelop releases there. It is also a good place to comment on those ideas.
+
+For the list of future tasks, ideas, unmaintained plugins and many more, visit
+<a href="http://www.kdevelop.org/mediawiki/index.php/Main_Page">KDevelop Wiki</a>
 
 \section misc Misc
 
-  - \ref authors
-  - \ref maintainers
-  - \ref FAQ
-  - \ref deprecated
-
-\section misc_libs Miscellaneous libraries included in KDevelop
-  - \ref PropEditor
+  - <a href="http://www.kdevelop.org/index.html?filename=HEAD/authors.html">Authors</a>
+  - <a href="http://www.kdevelop.org/mediawiki/index.php/FAQ">FAQ</a>
 
 \section howTobuildAPIlocalcopy How to build a local copy of this documentation
 
-This documentation is very large and changes with every cvs commit, therefore is not available for download.
-To build your local copy of this documentation you have two choices, depending on your system configuration.
-  - If you have doxygen >= 1.3.4 , PHP >= 4.10 and a local running webserver then
-    - make apidox
-    - make install-apidox (as root)
-    .
-  - If you have an older system then
-    - setenv KDEDIR=/location_of_your_kde_instalation
-    - setenv QTDIR=/location_of_your_qt_instalation
-    - doxygen Doxyfile
-    - make install-apidox (as root)
-    .
-  .
-
-The advantage of the first method is that you'll get a search engine in your documentation if you read your
-documentation using your local webserver.
+This documentation is very large and changes with every svn commit, therefore is not available for download.
+To build your local copy of this documentation:
+- export KDEDIR=/location_of_your_kde_instalation
+- export QTDIR=/location_of_your_qt_instalation
+- doxygen
+- make install-apidox (as root)
+.
 
 \section License
 
 Permission is granted to copy, distribute and/or modify this document under
-the terms of the GNU Free %Documentation License, Version 1.2 or any later
+the terms of the GNU Free Documentation License, Version 1.2 or any later
 version published by the Free Software Foundation; For details see
 http://www.gnu.org/copyleft/fdl.html .
 
