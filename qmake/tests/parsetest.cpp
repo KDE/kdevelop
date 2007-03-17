@@ -43,92 +43,37 @@ scopename:  (no statement, is accepted by qmake)
 #include "qmakedriver.h"
 #include "qmakeast.h"
 #include <QDebug>
+#include "testmacros.h"
 
 QTEST_MAIN( ParseTest )
 
 ParseTest::ParseTest( QObject* parent )
-        : QObject( parent )
+    : QObject( parent ), ast(0)
 {}
 
 ParseTest::~ParseTest()
 {}
 
-void ParseTest::successSimpleProject()
-{
-    QFETCH( QString, project );
-    QFETCH( QString, output );
-    QMake::ProjectAST* a = new QMake::ProjectAST();
-    int ret = QMake::Driver::parseString( project, a );
-    QVERIFY( ret == 0 );
-    QString writeback;
-    a->writeToString( writeback );
-    QVERIFY( writeback == output );
-    delete a;
-}
+BEGINTESTFUNCIMPL(ParseTest, successSimpleProject, 2)
+ENDTESTFUNCIMPL
 
-void ParseTest::successSimpleProject_data()
-{
-    QTest::addColumn<QString>( "project" );
-    QTest::addColumn<QString>( "output" );
-    QTest::newRow( "row1" ) << "VAR = VALUE\nfunc1(arg1)\n"
-        << "VAR = VALUE\nfunc1(arg1)\n";
-}
+DATAFUNCIMPL(ParseTest, successSimpleProject, "VAR = VALUE\nfunc1(arg1)\n")
 
-void ParseTest::failSimpleProject()
-{
-    QFETCH( QString, project );
-    QMake::ProjectAST* a = new QMake::ProjectAST();
-    int ret = QMake::Driver::parseString( project, a );
-    QVERIFY( ret != 0 );
-    delete a;
-}
+BEGINTESTFAILFUNCIMPL(ParseTest, failSimpleProject)
+ENDTESTFUNCIMPL
 
-void ParseTest::failSimpleProject_data()
-{
-    QTest::addColumn<QString>( "project" );
-    QTest::newRow( "row1" ) << "VAR =";
-}
+DATAFUNCIMPL(ParseTest, failSimpleProject, "VAR =")
 
-void ParseTest::lineEnding()
-{
-    QFETCH( QString, project );
-    QFETCH( QString, output );
-    QMake::ProjectAST* a = new QMake::ProjectAST();
-    int ret = QMake::Driver::parseString( project, a );
-    QVERIFY( ret == 0 );
-    QString writeback;
-    a->writeToString( writeback );
-    QVERIFY( writeback == output );
-    QVERIFY( a->lineEnding() == QMake::ProjectAST::Windows );
-    delete a;
-}
+BEGINTESTFUNCIMPL(ParseTest, lineEnding, 3)
+    QVERIFY( ast->lineEnding() == QMake::ProjectAST::Windows );
+ENDTESTFUNCIMPL
 
-void ParseTest::lineEnding_data()
-{
-    QTest::addColumn<QString>( "project" );
-    QTest::addColumn<QString>( "output" );
-    QTest::newRow( "row1" ) << "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n"
-        << "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n";
-}
+DATAFUNCIMPL(ParseTest, lineEnding, "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n")
 
-void ParseTest::successFullProject()
-{
-    QFETCH( QString, project );
-    QFETCH( QString, output );
-    QMake::ProjectAST* a = new QMake::ProjectAST();
-    int ret = QMake::Driver::parseString( project, a );
-    QVERIFY( ret == 0 );
-    QString writeback;
-    a->writeToString( writeback );
-    QVERIFY( writeback == output );
-    delete a;
-}
+BEGINTESTFUNCIMPL(ParseTest, successFullProject, 11)
+ENDTESTFUNCIMPL
 
-void ParseTest::successFullProject_data()
-{
-    QTest::addColumn<QString>( "project" );
-    QTest::addColumn<QString>( "output" );
-    QTest::newRow( "row1" ) << "#Comment\n"
+DATAFUNCIMPL(ParseTest, successFullProject, "#Comment\n"
         "VARIABLE1 = Value1 Value2\n"
         "VARIABLE2= Value1 Value2\n"
         "VARIABLE3 =Value1 Value2\n"
@@ -140,35 +85,12 @@ void ParseTest::successFullProject_data()
         "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) {  \n"
         "FOO = bar\n"
         "}\n"
-        "!do()\n"
-        << "#Comment\n"
-        "VARIABLE1 = Value1 Value2\n"
-        "VARIABLE2= Value1 Value2\n"
-        "VARIABLE3 =Value1 Value2\n"
-        "VARIABLE4=Value1 Value2\n"
-        "VARIABLE = Value1 Value2 #some comment\n"
-        "VARIABLE = $$Value1 $(Value2) $${Value3} #some comment\n"
-        "VARIABLE = $$Value1 $(Value2) $${Value3} \\\nValue4\n"
-        "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) : FO=0\n"
-        "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) {  \n"
-        "FOO = bar\n"
-        "}\n"
-        "!do()\n";
-}
+        "!do()\n")
 
-void ParseTest::failFullProject()
-{
-    QFETCH( QString, project );
-    QMake::ProjectAST* a = new QMake::ProjectAST();
-    int ret = QMake::Driver::parseString( project, a );
-    QVERIFY( ret != 0);
-    delete a;
-}
+BEGINTESTFAILFUNCIMPL(ParseTest, failFullProject )
+ENDTESTFUNCIMPL
 
-void ParseTest::failFullProject_data()
-{
-    QTest::addColumn<QString>( "project" );
-    QTest::newRow( "row1" ) << "#Comment\n"
+DATAFUNCIMPL(ParseTest, failFullProject, "#Comment\n"
         "VARIABLE1 = Value1 Value2\n"
         "VARIABLE2= Value1 Value2\n"
         "VARIABLE3 =Value1 Value2\n"
@@ -178,8 +100,21 @@ void ParseTest::failFullProject_data()
         "fo()\n{\n"
         "VARIABLE = Value1 Value2 \\#some comment\n"
         "win32 : FOOBAR=Value1\n"
-        "fun1()|!fun2(): FOOBAR=Value1\n";
+        "fun1()|!fun2(): FOOBAR=Value1\n")
+
+void ParseTest::init()
+{
+    ast = new QMake::ProjectAST();
+    QVERIFY( ast != 0 );
 }
+
+void ParseTest::cleanup()
+{
+    delete ast;
+    ast = 0;
+    QVERIFY( ast == 0 );
+}
+
 
 #include "parsetest.moc"
 

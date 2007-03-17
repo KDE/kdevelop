@@ -45,6 +45,14 @@ void classname::funcname()\
     ast->writeToString(result);\
     QVERIFY( result == output );
 
+#define BEGINTESTFAILFUNCIMPL( classname, funcname ) \
+void classname::funcname()\
+{\
+    QFETCH( QString, project );\
+    QFETCH( QString, output );\
+    int ret = QMake::Driver::parseString( project, ast );\
+    QVERIFY( ret != 0 );
+
 
 #define ENDTESTFUNCIMPL }
 

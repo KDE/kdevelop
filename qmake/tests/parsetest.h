@@ -24,6 +24,11 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
+namespace QMake
+{
+    class ProjectAST;
+}
+
 class ParseTest : public QObject
 {
         Q_OBJECT
@@ -31,6 +36,8 @@ class ParseTest : public QObject
         ParseTest( QObject* parent = 0 );
         ~ParseTest();
     private slots:
+        void init();
+        void cleanup();
         void successSimpleProject();
         void successSimpleProject_data();
         void failSimpleProject();
@@ -41,6 +48,8 @@ class ParseTest : public QObject
         void failFullProject_data();
         void lineEnding();
         void lineEnding_data();
+    private:
+        QMake::ProjectAST* ast;
 };
 
 #endif

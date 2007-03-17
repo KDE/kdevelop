@@ -22,6 +22,7 @@
 #include "qmakedriver.h"
 #include "qmakeast.h"
 
+#include "testmacros.h"
 
 // VARIABLE += " value "
 // VARIABLE += " value ( " -> Only 1 parenthesis
@@ -30,27 +31,27 @@
 QTEST_MAIN( AssignmentTest )
 
 AssignmentTest::AssignmentTest( QObject* parent )
-        : QObject( parent )
+    : QObject( parent ), ast(0)
 {}
 
 AssignmentTest::~AssignmentTest()
 {}
 
-BEGINTESTFUNCIMPL( AssignmentTest, simpleParsed, 1 )
+BEGINTESTFUNCIMPL( AssignmentTest, simpleParsed, 1)
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
 TESTASSIGNMENT( assignment, "VAR", " = ", 1, "VALUE" )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(AssignmentTest, simpleParsed, "VAR = VALUE\n")
 
-BEGINTESTFUNCIMPL( AssignmentTest, assignInValue, 1 )
+BEGINTESTFUNCIMPL( AssignmentTest, assignInValue, 1)
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
 TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "value1=value++" )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(AssignmentTest, assignInValue, "VARIABLE = value1=value++\n")
 
-BEGINTESTFUNCIMPL( AssignmentTest, commentCont, 1 )
+BEGINTESTFUNCIMPL( AssignmentTest, commentCont, 1)
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
     qDebug() << assignment->values().join("");
 TESTASSIGNMENT( assignment, "VARIABLE", " = ", 4, "foobar\\#somecomment\nnextval")

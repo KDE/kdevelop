@@ -25,8 +25,6 @@
 #include <QtTest/QtTest>
 #include <QtCore/QList>
 
-#include "testmacros.h"
-
 namespace QMake
 {
     class StatementAST;
