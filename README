@@ -1,25 +1,22 @@
-KDE API Documentation
+KDevelop IDE and Platform
 ---------------------------
+General information about KDevelop: http://www.kdevelop.org/index.html
+List of features: http://www.kdevelop.org/index.html?filename=HEAD/features.html
+List of requirements: http://www.kdevelop.org/index.html?filename=HEAD/requirements.html
+Compiling instructions: http://www.kdevelop.org/index.html?filename=HEAD/branches_compiling.html
+
+
+KDevelop Platform API Documentation
+-------------------------------------
+API documentation is available from http://www.kdevelop.org/HEAD/doc/api/html/index.html
+
+To build it by yourself, make sure you have KDE API documentation installed.
+Run doxygen in the KDevelop top source directory to generate the API documentation.
+
 If the KDE API documentation does not exist, it can be created
 as follows:
-
-  Install doxygen and the kdelibs sources. Then
-
-  make apidox
-  make apidox-install
-
-After that you should follow the instructions at:
-
-http://www.kdevelop.org/index.html?filename=branches_compiling.html
-
-to compile KDevelop
-
-
-For the graphical classbrowser, you need the program 'dot'
-from the graphviz package which can be downloaded from
-www.graphviz.org. This is only a runtime dependency!
-
-If you are experiencing build problems related to .moc files, try
-  rm *.moc*
-  make force-reedit
-in the source directory where the build system complains.
+  Install doxygen and the fetch kdelibs sources. Then
+  mkdir apidox
+  cd apidox
+  ../kdelibs/doc/api/doxygen.sh ../kdelibs/
+  After that install kdelibs-apidocs directory to $KDEDIR/share/doc/HTML/en/
