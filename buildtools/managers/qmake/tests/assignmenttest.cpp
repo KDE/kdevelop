@@ -22,11 +22,10 @@
 #include "qmakedriver.h"
 #include "qmakeast.h"
 
+
 // VARIABLE += " value "
 // VARIABLE += " value ( " -> Only 1 parenthesis
 // VARIABLE = value1=value++
-// VARIABLE = foobar\\#somecomment
-//            nextval
 
 QTEST_MAIN( AssignmentTest )
 
@@ -37,56 +36,27 @@ AssignmentTest::AssignmentTest( QObject* parent )
 AssignmentTest::~AssignmentTest()
 {}
 
-void AssignmentTest::simpleParsed()
-{
-    QFETCH( QString, project );
-    QFETCH( QString, output );
-    int ret = QMake::Driver::parseString( project, ast );
-    QVERIFY( ret == 0 );
-    QVERIFY( ast->statements().count() == 1 );
-    QString result;
-    ast->writeToString(result);
-    QVERIFY( result == output );
+BEGINTESTFUNCIMPL( AssignmentTest, simpleParsed, 1 )
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
-    QVERIFY( assignment != 0 );
-    QVERIFY( assignment->variable() == "VAR" );
-    QVERIFY( assignment->op() == " = " );
-    QVERIFY( assignment->values().count() == 1 );
-    QVERIFY( assignment->values().first() == "VALUE" );
-}
+TESTASSIGNMENT( assignment, "VAR", " = ", 1, "VALUE" )
+ENDTESTFUNCIMPL
 
-void AssignmentTest::simpleParsed_data()
-{
-    QTest::addColumn<QString>( "project" );
-    QTest::addColumn<QString>( "output" );
-    QTest::newRow( "row1" ) << "VAR = VALUE\n" << "VAR = VALUE\n";
-}
+DATAFUNCIMPL(AssignmentTest, simpleParsed, "VAR = VALUE\n")
 
-void AssignmentTest::assignInValue()
-{
-    QFETCH( QString, project );
-    QFETCH( QString, output );
-    int ret = QMake::Driver::parseString( project, ast );
-    QVERIFY( ret == 0 );
-    QVERIFY( ast->statements().count() == 1 );
-    QString result;
-    ast->writeToString(result);
-    QVERIFY( result == output );
+BEGINTESTFUNCIMPL( AssignmentTest, assignInValue, 1 )
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
-    QVERIFY( assignment != 0 );
-    QVERIFY( assignment->variable() == "VARIABLE" );
-    QVERIFY( assignment->op() == " = " );
-    QVERIFY( assignment->values().count() == 1 );
-    QVERIFY( assignment->values().first() == "value1=value++" );
-}
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "value1=value++" )
+ENDTESTFUNCIMPL
 
-void AssignmentTest::assignInValue_data()
-{
-    QTest::addColumn<QString>( "project" );
-    QTest::addColumn<QString>( "output" );
-    QTest::newRow( "row1" ) << "VARIABLE = value1=value++\n"
-        << "VARIABLE = value1=value++\n";
-}
+DATAFUNCIMPL(AssignmentTest, assignInValue, "VARIABLE = value1=value++\n")
+
+BEGINTESTFUNCIMPL( AssignmentTest, commentCont, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+    qDebug() << assignment->values().join("");
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 4, "foobar\\#somecomment\nnextval")
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, commentCont, "VARIABLE = foobar\\#somecomment\nnextval\n" )
 
 void AssignmentTest::init()
 {

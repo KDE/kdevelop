@@ -25,11 +25,20 @@
 #include <QtTest/QtTest>
 #include <QtCore/QList>
 
+#include "testmacros.h"
+
 namespace QMake
 {
     class StatementAST;
     class ProjectAST;
 }
+
+#define TESTASSIGNMENT( ast, var, opval, valcount, joinvalues ) \
+    QVERIFY( ast != 0 );\
+    QVERIFY( ast->variable() == var );\
+    QVERIFY( ast->op() == opval );\
+    QVERIFY( ast->values().count() == valcount );\
+    QVERIFY( ast->values().join("") == joinvalues );
 
 class AssignmentTest : public QObject
 {
@@ -44,6 +53,8 @@ class AssignmentTest : public QObject
         void simpleParsed_data();
         void assignInValue();
         void assignInValue_data();
+        void commentCont();
+        void commentCont_data();
     private:
         QMake::ProjectAST* ast;
 };
