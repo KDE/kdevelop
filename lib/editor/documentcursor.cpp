@@ -28,7 +28,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-DocumentCursor::DocumentCursor(const KUrl& document, const Cursor& cursor)
+DocumentCursor::DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor)
   : Cursor(cursor)
   , m_document(document)
 {
@@ -40,7 +40,7 @@ DocumentCursor::DocumentCursor(KTextEditor::Range* range, Position position )
 {
 }
 
-DocumentCursor::DocumentCursor(Cursor* cursor)
+DocumentCursor::DocumentCursor(KTextEditor::Cursor* cursor)
   : Cursor(*cursor)
 {
   if (cursor->isSmartCursor())

@@ -91,7 +91,7 @@ public:
     /**
      * Add a file to a target
      *
-     * Adds the file specified by @pfile to the target @p parent and modifies
+     * Adds the file specified by @p file to the target @p parent and modifies
      * the underlying build system if needed.
      */
     virtual bool addFileToTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
@@ -107,7 +107,7 @@ public:
     /**
      * Remove a file from a target
      *
-     * Removes the file specified by @p file from the folder @parent and
+     * Removes the file specified by @p file from the folder @p parent and
      * modifies the underlying build system if needed. The file is not removed
      * from the folder it is in
      */

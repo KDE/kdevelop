@@ -57,8 +57,9 @@ class SUBLIME_EXPORT Area: public QObject {
     Q_OBJECT
 public:
     /**Creates and area with given @p name and adds it to the @p controller.
+    @param controller is the controller in which this area will be available.
     @param name should identify this area and be unique for all areas in the controller.
-        @ref objectName shall be used to get this name after area creation.
+        @ref QObject::objectName shall be used to get this name after area creation.
     @param title is the user-visible (translatable) title for the area.
         Use @ref title and @ref setTitle to operate on the title.
         This parameter can be omitted and then name will be used as title.*/

@@ -30,7 +30,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-DocumentRangeObject::DocumentRangeObject(Range* range)
+DocumentRangeObject::DocumentRangeObject(KTextEditor::Range* range)
   : m_range(0)
   , m_ownsRange(true)
   , m_url(0)
@@ -49,7 +49,7 @@ DocumentRangeObject::~ DocumentRangeObject( )
   delete m_url;
 }
 
-void DocumentRangeObject::setTextRange( Range * range, bool ownsRange )
+void DocumentRangeObject::setTextRange( KTextEditor::Range * range, bool ownsRange )
 {
   Q_ASSERT(range);
 
@@ -86,7 +86,7 @@ const Range DocumentRangeObject::textRange( ) const
   return *m_range;
 }
 
-void DocumentRangeObject::setRange(const Range& range)
+void DocumentRangeObject::setRange(const KTextEditor::Range& range)
 {
   QMutexLocker lock(&m_rangeMutex);
   *m_range = range;
@@ -104,7 +104,7 @@ KUrl DocumentRangeObject::url() const
   return url(m_range);
 }
 
-KUrl DocumentRangeObject::url( const Range * range )
+KUrl DocumentRangeObject::url( const KTextEditor::Range * range )
 {
   if (range->isSmartRange())
     return static_cast<const SmartRange*>(range)->document()->url();

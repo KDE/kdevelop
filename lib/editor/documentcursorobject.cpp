@@ -26,7 +26,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-DocumentCursorObject::DocumentCursorObject(Cursor* cursor)
+DocumentCursorObject::DocumentCursorObject(KTextEditor::Cursor* cursor)
   : m_cursor(0)
 {
   setTextCursor(cursor);
@@ -40,7 +40,7 @@ DocumentCursorObject::~ DocumentCursorObject( )
   delete m_cursor;
 }
 
-void DocumentCursorObject::setTextCursor( Cursor * cursor )
+void DocumentCursorObject::setTextCursor( KTextEditor::Cursor * cursor )
 {
   Q_ASSERT(cursor);
 
@@ -83,7 +83,7 @@ KUrl DocumentCursorObject::url() const
   return url(m_cursor);
 }
 
-KUrl DocumentCursorObject::url( const Cursor * cursor )
+KUrl DocumentCursorObject::url( const KTextEditor::Cursor * cursor )
 {
   if (cursor->isSmartCursor())
     return static_cast<const SmartCursor*>(cursor)->document()->url();

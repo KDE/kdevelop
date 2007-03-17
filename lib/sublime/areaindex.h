@@ -120,7 +120,8 @@ public:
 
     /**Adds view to the list of views in this position.
     Does nothing if the view is already splitted.
-    @param after if not 0, new view will be placed after this one*/
+    @param after if not 0, new view will be placed after this one.
+    @param view the view to be added.*/
     void add(View *view, View *after = 0);
     /**Removes view and unsplits the parent index when no views
     are left at the current index.*/

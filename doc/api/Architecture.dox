@@ -64,7 +64,7 @@ always has access to core via \ref KDevelop::IPlugin::core method. There's no ne
 KDevAPI class anymore.
 
 Core is a singleton that needs to be manually initialized by platform application using
-\ref Core::initialize right after the KApplication object is created and ShellExtension is initialized.
+\ref KDevelop::Core::initialize right after the KApplication object is created and ShellExtension is initialized.
 KDevelop::ShellExtension is the same thing as in KDevelop3 - the way to platform application to tell
 which UI configuration files are used and what is the default profile. KDevelop4 shell extension's
 only difference is defaultArea() method which shall return the name of default UI area
@@ -125,7 +125,7 @@ documentation for reference.
 - Subclass it from your interface
 - Use Q_INTERFACES macro in class declaration
 - reimplement \ref KDevelop::IPlugin::extensions, \ref KDevelop::IPlugin::registerExtensions
-  and \ref KDevelop::IPlugin::unregisterExtension methods
+  and \ref KDevelop::IPlugin::unregisterExtensions methods
   - you can use the KDEV_USE_EXTENSION_INTERFACE macro if your plugin implements only one interface
     to generate the register/unregister functions
   .
@@ -197,7 +197,7 @@ empty or project management view might be closed at any time.
 %KDevelop Platform provides by default "GenericProjectManager" which just threats all files and
 subdirectories under project directory as project items and currently provides no building facilities.
 
-The project file (<projectname>.kdev4) controls which project file manager will be loaded.
+The project file (&lt;projectname&gt.kdev4) controls which project file manager will be loaded.
 For example, this .kdev4 file will load Generic manager:
 \code
     [General Options]

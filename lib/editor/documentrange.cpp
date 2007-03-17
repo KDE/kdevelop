@@ -23,7 +23,8 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-DocumentRange::DocumentRange(const KUrl& document, const Cursor& start, const Cursor& end, Range* parent)
+DocumentRange::DocumentRange(const KUrl& document, const KTextEditor::Cursor& start,
+        const KTextEditor::Cursor& end, KTextEditor::Range* parent)
   : Range(start, end)
   , m_document(document)
   , m_parentRange(0)
@@ -31,7 +32,7 @@ DocumentRange::DocumentRange(const KUrl& document, const Cursor& start, const Cu
   setParentRange(parent);
 }
 
-DocumentRange::DocumentRange(const KUrl& document, const Range& range, Range* parent)
+DocumentRange::DocumentRange(const KUrl& document, const KTextEditor::Range& range, KTextEditor::Range* parent)
   : Range(range)
   , m_document(document)
   , m_parentRange(0)
@@ -72,7 +73,7 @@ const QList< DocumentRange * > & DocumentRange::childRanges() const
   return m_childRanges;
 }
 
-void DocumentRange::setParentRange(Range* parent)
+void DocumentRange::setParentRange(KTextEditor::Range* parent)
 {
   if (m_parentRange && !m_parentRange->isSmartRange())
     static_cast<DocumentRange*>(m_parentRange)->m_childRanges.removeAll(this);

@@ -44,8 +44,9 @@ class ILanguageController;
  * should be used.
  *
  * ICore can provide the user with instances of the following things:
- * <li>the mainwindow
- * <li>the plugin controller
+ * - the mainwindow
+ * - the plugin controller
+ * .
  *
  * When an object is provided to ICore so it can be used later, ICore
  * will take ownership of the object and upon application shutdown will take

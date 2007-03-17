@@ -36,7 +36,7 @@ public:
 
     void initialize();
 
-    /** @copydoc ILanguageController::activeLanguage()*/
+    /** @copydoc ILanguageController::activeLanguages()*/
     virtual QList<ILanguage*> activeLanguages();
     /** @copydoc ILanguageController::language()*/
     virtual ILanguage *language(const QString &name);

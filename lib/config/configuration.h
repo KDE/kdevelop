@@ -38,8 +38,8 @@ The interface to KDevelop's config objects.
 Developers using the KDevelop API should use these config objects instead of
 the standard KGlobal::config object.  Again, DO NOT USE KGlobal::config() as
 it can cause unexpected syncing issues.
-@TODO the config-parameters need to take an IProject pointer
-@TODO listen to currentProject changed signal from project controller, so we can update the settings dialog
+@todo the config-parameters need to take an IProject pointer
+@todo listen to currentProject changed signal from project controller, so we can update the settings dialog
 */
 class KDEVPLATFORM_EXPORT Configuration : public QObject
 {

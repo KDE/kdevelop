@@ -102,12 +102,9 @@ public:
   };
 
   /**
-   * Returns a toplevel range in \a document for use as \a type.
+   * Returns a toplevel range in a document for use as \a type.
    *
    * \param type The use for which the created range will be used
-   * \param document The text editor document to create in.  If one is not
-   *                 defined, the currently active document will be used
-   *                 instead.
    * \returns the range either found or created, if the document was valid and supports
    *          smart ranges.
    */

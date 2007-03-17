@@ -30,7 +30,7 @@ using namespace ThreadWeaver;
 namespace KDevelop
 {
 
-bool ParserDependencyPolicy::addDependency(ParseJob* dependency, ParseJob* primaryDependee, Job* actualDependee)
+bool ParserDependencyPolicy::addDependency(ParseJob* dependency, ParseJob* primaryDependee, ThreadWeaver::Job* actualDependee)
 {
   QSet<ParseJob*> encountered;
 
@@ -46,7 +46,7 @@ bool ParserDependencyPolicy::addDependency(ParseJob* dependency, ParseJob* prima
   return true;
 }
 
-void ParserDependencyPolicy::destructed(Job *job)
+void ParserDependencyPolicy::destructed(ThreadWeaver::Job *job)
 {
   DependencyPolicy::destructed(job);
 

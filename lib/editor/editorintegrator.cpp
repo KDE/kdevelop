@@ -70,7 +70,7 @@ EditorIntegratorPrivate::~EditorIntegratorPrivate()
   delete mutex;
 }
 
-void EditorIntegrator::addDocument( Document * document )
+void EditorIntegrator::addDocument( KTextEditor::Document * document )
 {
   Q_ASSERT(data()->thread() == document->thread());
   QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
@@ -93,7 +93,7 @@ void EditorIntegratorPrivate::documentLoaded()
   }
 }
 
-void EditorIntegratorPrivate::documentUrlChanged(Document* document)
+void EditorIntegratorPrivate::documentUrlChanged(KTextEditor::Document* document)
 {
   QMutexLocker lock(mutex);
 
@@ -131,7 +131,7 @@ bool EditorIntegrator::documentLoaded(KTextEditor::Document* document)
   return data()->documents.values().contains(document);
 }
 
-void EditorIntegratorPrivate::removeDocument( Document* document )
+void EditorIntegratorPrivate::removeDocument( KTextEditor::Document* document )
 {
   QMutexLocker lock(mutex);
 
@@ -151,7 +151,7 @@ SmartInterface* EditorIntegrator::smart() const
   return m_smart;
 }
 
-Cursor* EditorIntegrator::createCursor(const Cursor& position)
+Cursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
 {
   Cursor* ret = 0;
 
@@ -222,7 +222,7 @@ void EditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange * range)
   kWarning() << k_funcinfo << "Could not find record of top level range " << range << "!" << endl;
 }
 
-Range* EditorIntegrator::createRange( const Range & range )
+Range* EditorIntegrator::createRange( const KTextEditor::Range & range )
 {
   Range* ret;
 
@@ -253,22 +253,22 @@ Range* EditorIntegrator::createRange()
   return createRange(m_newRangeMarker);
 }
 
-void EditorIntegrator::setNewRange(const Range& range)
+void EditorIntegrator::setNewRange(const KTextEditor::Range& range)
 {
   m_newRangeMarker = range;
 }
 
-void EditorIntegrator::setNewEnd( const Cursor & position )
+void EditorIntegrator::setNewEnd( const KTextEditor::Cursor & position )
 {
   m_newRangeMarker.end() = position;
 }
 
-void EditorIntegrator::setNewStart( const Cursor & position )
+void EditorIntegrator::setNewStart( const KTextEditor::Cursor & position )
 {
   m_newRangeMarker.start() = position;
 }
 
-void EditorIntegrator::setCurrentRange( Range* range )
+void EditorIntegrator::setCurrentRange( KTextEditor::Range* range )
 {
   m_currentRange = range;
 }
