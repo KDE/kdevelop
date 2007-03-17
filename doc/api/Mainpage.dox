@@ -100,7 +100,7 @@ For the list of future tasks, ideas, unmaintained plugins and many more, visit
 \section howTobuildAPIlocalcopy How to build a local copy of this documentation
 
 This documentation is very large and changes with every svn commit, therefore is not available for download.
-To build your local copy of this documentation:
+To build your local copy of this documentation download doxygen version 1.5.0 or newer and:
 - export KDEDIR=/location_of_your_kde_instalation
 - export QTDIR=/location_of_your_qt_instalation
 - doxygen

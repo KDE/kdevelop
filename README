@@ -15,7 +15,7 @@ Run doxygen in the KDevelop top source directory to generate the API documentati
 
 If the KDE API documentation does not exist, it can be created
 as follows:
-  Install doxygen and the fetch kdelibs sources. Then
+  Install doxygen >= 1.5.0 and the fetch kdelibs sources. Then
   mkdir apidox
   cd apidox
   ../kdelibs/doc/api/doxygen.sh ../kdelibs/
