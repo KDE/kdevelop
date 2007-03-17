@@ -31,6 +31,7 @@
 #include "ducontext.h"
 #include "duchain.h"
 #include "duchain/topducontext.h"
+#include "duchain/dumpchain.h"
 
 using namespace KTextEditor;
 
@@ -52,6 +53,14 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     kDebug(9007) << "completion invoked for context " << top << endl;
     QReadLocker lock(DUChain::lock());
     DUContext* thisContext = top->findContextAt(range.start());
+
+    kDebug(9007) << "context is set to " << thisContext << endl;
+    {
+      QReadLocker lock(DUChain::lock());
+      kDebug( 9007 ) << "================== duchain for the context =======================" << endl;
+      DumpChain dump;
+      dump.dump(thisContext);
+    }
 
     setContext(thisContext, range.start());
   }
@@ -95,7 +104,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         }
 
         case Name:
-          return dec->identifier().toString();
+          if (dec->identifier().toString().isEmpty())
+            return "<unknown>";
+          else
+            return dec->identifier().toString();
 
         case Arguments:
           if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
