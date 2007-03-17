@@ -90,7 +90,13 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = doc/api \
-                         lib
+                         lib/interfaces \
+                         lib/config \
+                         lib/editor \
+                         lib/language \
+                         lib/project \
+                         lib/shell \
+                         lib/sublime
 FILE_PATTERNS          = *.h \
                          *.cpp \
                          *.cc \
@@ -101,20 +107,7 @@ FILE_PATTERNS          = *.h \
                          *.h++ \
                          *.hh
 RECURSIVE              = YES
-EXCLUDE                = languages/ada/app_templates \
-                         languages/cpp/app_templates \
-                         languages/cpp/file_templates \
-                         languages/cpp/subclassing_template \
-                         languages/fortran/app_templates \
-                         languages/haskell/app_templates \
-                         languages/java/app_templates \
-                         languages/pascal/app_templates \
-                         languages/perl/app_templates \
-                         languages/php/app_templates \
-                         languages/python/app_templates \
-                         languages/ruby/app_templates \
-                         languages/sql/app_templates \
-                         vcs/cvsclient
+EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.moc.* \
                          moc* \
@@ -123,9 +116,9 @@ EXCLUDE_PATTERNS       = *.moc.* \
                          */test/* \
                          */tests/* \
                          *face_skel.cpp \
-                         *.ui.h
-EXAMPLE_PATH           = languages/cpp/app_templates/khello \
-                         languages/cpp/app_templates/kdevpart
+                         *.ui.h \
+                         kdev*
+EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = ./doc/api
@@ -155,9 +148,9 @@ IGNORE_PREFIX          = K
 GENERATE_HTML          = YES
 HTML_OUTPUT            = ./html
 HTML_FILE_EXTENSION    = .html
-HTML_HEADER            = $(KDEDIR)/share/doc/HTML/en/common/header.html
-HTML_FOOTER            = $(KDEDIR)/share/doc/HTML/en/common/footer.html
-HTML_STYLESHEET        = $(KDEDIR)/share/doc/HTML/en/common/doxygen.css
+HTML_HEADER            = doc/api/common/header.html
+HTML_FOOTER            = doc/api/common/footer.html
+HTML_STYLESHEET        = doc/api/common/doxygen.css
 HTML_ALIGN_MEMBERS     = YES
 GENERATE_HTMLHELP      = NO
 CHM_FILE               = 
