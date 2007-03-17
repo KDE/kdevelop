@@ -146,6 +146,7 @@ public:
     ...
     MyOperator op;
     walkToolViews(op, Sublime::AllPositions)
+    @endcode
     */
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
