@@ -85,6 +85,8 @@ class AssignmentTest : public QObject
         void shellVar_data();
         void commandExec();
         void commandExec_data();
+        void bracketVarQuote();
+        void bracketVarQuote_data();
 //         void noDashEndVar();
 //         void noDashEndVar_data();
     private:
