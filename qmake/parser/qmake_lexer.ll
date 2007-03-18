@@ -169,6 +169,10 @@ fnvalue       ([^ \t\f\n\r,$()]|"$("[^ \t\f\n\r,$()]+")")+
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
     return Parser::token::QUOTED_VAR_VALUE;
   }
+<assignment>"("{non_cont}");" {
+    mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
+    return Parser::token::QUOTED_VAR_VALUE;
+  }
 <assignment,INITIAL>{ws}*{newline} {
     BEGIN(INITIAL);
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
