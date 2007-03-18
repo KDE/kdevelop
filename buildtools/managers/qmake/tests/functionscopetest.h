@@ -25,10 +25,12 @@
 #include <QtTest/QtTest>
 #include <QtCore/QList>
 
+
 namespace QMake
 {
     class StatementAST;
     class ProjectAST;
+    class FunctionArgAST;
 }
 
 class FunctionScopeTest : public QObject
@@ -45,6 +47,8 @@ class FunctionScopeTest : public QObject
         void execBasicFunc();
         void execBasicFunc_data();
     private:
+        bool matchArguments( QList<QMake::FunctionArgAST*>,
+                             QList<QMake::FunctionArgAST*> );
         QMake::ProjectAST* ast;
 
 };
