@@ -18,6 +18,8 @@
  ***************************************************************************/
 #include "textdocument.h"
 
+#include <QPointer>
+
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
@@ -30,7 +32,7 @@ struct TextDocumentPrivate {
     {
         document = 0;
     }
-    KTextEditor::Document *document;
+    QPointer<KTextEditor::Document> document;
 };
 
 
