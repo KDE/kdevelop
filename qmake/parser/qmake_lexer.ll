@@ -42,7 +42,7 @@ ws            [ \t\f]
 letter        [a-zA-Z]
 digit         [0-9]
 newline       ("\n"|"\r\n"|"\r")
-identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_")|".")*
+identifier    ({letter}|{digit}|"_")(({letter}|{digit}|"_"|"-"|".")*({letter}|{digit}|"_"|"."))?
 op            ("="|"+="|"-="|"~="|"*=")
 non_ws_cont   [^ \t\f\r\n\\]+
 non_cont      [^\n\r\\]+
