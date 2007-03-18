@@ -91,10 +91,10 @@ class AssignmentTest : public QObject
         void pathValue_data();
         void commandExecQMakeVar();
         void commandExecQMakeVar_data();
-        void varNameEvaluated();
-        void varNameEvaluated_data();
-//         void noDashEndVar();
-//         void noDashEndVar_data();
+        void noDashEndVar();
+        void noDashEndVar_data();
+        void varNameDollar();
+        void varNameDollar_data();
     private:
         QMake::ProjectAST* ast;
 };
