@@ -228,6 +228,11 @@ namespace QMake
     {
         return m_lineEnding;
     }
+
+    void Lexer::LexerError( const char* msg )
+    {
+        qDebug() << msg;
+    }
 }
 
 
