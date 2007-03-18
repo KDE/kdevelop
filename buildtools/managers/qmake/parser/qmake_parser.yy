@@ -332,21 +332,13 @@ fnvalue: fnvalue FNVALUE
         }
     ;
 
-variable_assignment: ws VARIABLE op values COMMENT NEWLINE
+variable_assignment: ws VARIABLE op values NEWLINE
         {
-            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>5, $<value>6, $<value>1 );
-        }
-    | ws VARIABLE op COMMENT NEWLINE
-        {
-            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), $<value>4,  $<value>5, $<value>1 );
-        }
-    | ws VARIABLE op values NEWLINE
-        {
-            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, "", $<value>5, $<value>1 );
+            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>5, $<value>1 );
         }
     | ws VARIABLE op NEWLINE
         {
-            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), "", $<value>4, $<value>1 );
+            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), $<value>4, $<value>1 );
         }
     ;
 
