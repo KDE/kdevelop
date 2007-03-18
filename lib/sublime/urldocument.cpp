@@ -16,36 +16,46 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEPARTDOCUMENT_H
-#define SUBLIMEPARTDOCUMENT_H
+#include "urldocument.h"
 
-#include <kurl.h>
-
-#include <kdevexport.h>
-
-#include "document.h"
+#include <QWidget>
+#include <QTextEdit>
 
 namespace Sublime {
 
-/**
-@short Document to represent and manage KParts
-*/
-class SUBLIME_EXPORT PartDocument: public Document {
-public:
-    PartDocument(Controller *controller, const KUrl &url);
-    ~PartDocument();
+// struct UrlDocumentPrivate
 
-protected:
-    virtual QWidget *createViewWidget(QWidget *parent = 0);
-    KUrl url() const;
-
-private:
-    struct PartDocumentPrivate *d;
-
+struct UrlDocumentPrivate {
+    KUrl url;
 };
 
+
+
+// class UrlDocument
+
+UrlDocument::UrlDocument(Controller *controller, const KUrl &url)
+    :Document(url.fileName(), controller)
+{
+    d = new UrlDocumentPrivate();
+    d->url = url;
 }
 
-#endif
+UrlDocument::~UrlDocument()
+{
+    delete d;
+}
+
+KUrl UrlDocument::url() const
+{
+    return d->url;
+}
+
+QWidget *UrlDocument::createViewWidget(QWidget *parent)
+{
+    ///@todo adymo: load file contents here
+    return new QTextEdit(parent);
+}
+
+}
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

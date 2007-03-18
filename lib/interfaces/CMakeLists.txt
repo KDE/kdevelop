@@ -30,6 +30,7 @@ install(FILES
     iproject.h
     ilanguagecontroller.h
     ilanguage.h
+    idocument.h
     iextension.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces
 )

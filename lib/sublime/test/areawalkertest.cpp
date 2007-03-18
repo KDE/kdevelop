@@ -24,7 +24,7 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/controller.h>
-#include <sublime/partdocument.h>
+#include <sublime/urldocument.h>
 
 #include <kapplication.h>
 
@@ -59,7 +59,7 @@ struct AreaStopper {
 void AreaWalkerTest::testViewWalkerModes()
 {
     Controller *controller = new Controller(this);
-    Document *doc = new PartDocument(controller, KUrl::fromPath("~/foo.cpp"));
+    Document *doc = new UrlDocument(controller, KUrl::fromPath("~/foo.cpp"));
     Area *area = new Area(controller, "Area");
     View *view1 = doc->createView();
     view1->setObjectName("1");
@@ -110,7 +110,7 @@ void AreaWalkerTest::testViewWalkerModes()
 void AreaWalkerTest::testToolViewWalkerModes()
 {
     Controller *controller = new Controller(this);
-    Document *doc = new PartDocument(controller, KUrl::fromPath("~/foo.cpp"));
+    Document *doc = new UrlDocument(controller, KUrl::fromPath("~/foo.cpp"));
     Area *area = new Area(controller, "Area");
     View *view = doc->createView();
     view->setObjectName("1");

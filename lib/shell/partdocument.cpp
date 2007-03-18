@@ -30,7 +30,7 @@ struct PartDocumentPrivate {
 };
 
 PartDocument::PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url)
-    :Sublime::PartDocument(controller, url)
+    :Sublime::UrlDocument(controller, url)
 {
     d = new PartDocumentPrivate();
     d->partController = partController;
@@ -58,6 +58,48 @@ QWidget *PartDocument::createViewWidget(QWidget *parent)
 KParts::Part *PartDocument::partForWidget(QWidget *w)
 {
     return d->partForWidget[w];
+}
+
+KUrl PartDocument::url() const
+{
+    return Sublime::UrlDocument::url();
+}
+
+KMimeType::Ptr PartDocument::mimeType() const
+{
+    return KMimeType::mimeType("text/plain");
+}
+
+void PartDocument::save()
+{
+}
+
+KTextEditor::Document *PartDocument::textDocument() const
+{
+    return 0;
+}
+
+KParts::Part *PartDocument::part() const
+{
+    return 0;
+}
+
+bool PartDocument::isActive() const
+{
+    return false;
+}
+
+void PartDocument::close()
+{
+}
+
+void PartDocument::reload()
+{
+}
+
+IDocument::DocumentState KDevelop::PartDocument::state() const
+{
+    return Clean;
 }
 
 }

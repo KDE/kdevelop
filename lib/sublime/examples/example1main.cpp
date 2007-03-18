@@ -33,7 +33,7 @@
 #include <sublime/area.h>
 #include <sublime/sublimedefs.h>
 #include <sublime/tooldocument.h>
-#include <sublime/partdocument.h>
+#include <sublime/urldocument.h>
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 
@@ -42,9 +42,9 @@ Example1Main::Example1Main()
 {
     //documents
     m_controller = new Sublime::Controller(this);
-    Sublime::Document *doc1 = new Sublime::PartDocument(m_controller, KUrl::fromPath("~/foo.cpp"));
-    Sublime::Document *doc2 = new Sublime::PartDocument(m_controller, KUrl::fromPath("~/boo.cpp"));
-    Sublime::Document *doc3 = new Sublime::PartDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
+    Sublime::Document *doc1 = new Sublime::UrlDocument(m_controller, KUrl::fromPath("~/foo.cpp"));
+    Sublime::Document *doc2 = new Sublime::UrlDocument(m_controller, KUrl::fromPath("~/boo.cpp"));
+    Sublime::Document *doc3 = new Sublime::UrlDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
 
     //documents for toolviews
     Sublime::Document *tool1 = new Sublime::ToolDocument("ListView", m_controller,

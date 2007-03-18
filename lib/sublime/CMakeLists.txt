@@ -14,7 +14,7 @@ set(sublime_LIB_SRCS
     mainwindow.cpp
     mainwindow_p.cpp
     mainwindowoperator.cpp
-    partdocument.cpp
+    urldocument.cpp
     switcher.cpp
     tooldocument.cpp
     view.cpp
@@ -42,7 +42,7 @@ install(FILES
     document.h
     mainwindow.h
     mainwindowoperator.h
-    partdocument.h
+    urldocument.h
     sublimedefs.h
     switcher.h
     tooldocument.h

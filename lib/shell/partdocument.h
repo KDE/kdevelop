@@ -19,7 +19,8 @@
 #ifndef KDEV_PARTDOCUMENT_H
 #define KDEV_PARTDOCUMENT_H
 
-#include <sublime/partdocument.h>
+#include "idocument.h"
+#include <sublime/urldocument.h>
 
 namespace Sublime {
 class Controller;
@@ -33,8 +34,8 @@ namespace KDevelop {
 
 class PartController;
 
-//FIXME adymo: merge with Sublime::PartDocument or refactor
-class PartDocument: public Sublime::PartDocument {
+//FIXME adymo: refactor
+class PartDocument: public Sublime::UrlDocument, public IDocument {
     Q_OBJECT
 public:
     PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url);
@@ -42,6 +43,16 @@ public:
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     KParts::Part *partForWidget(QWidget *w);
+
+    virtual KUrl url() const;
+    virtual KMimeType::Ptr mimeType() const;
+    virtual KParts::Part* part() const;
+    virtual KTextEditor::Document* textDocument() const;
+    virtual void save();
+    virtual void reload();
+    virtual void close();
+    virtual bool isActive() const;
+    virtual DocumentState state() const;
 
 private:
     class PartDocumentPrivate *d;

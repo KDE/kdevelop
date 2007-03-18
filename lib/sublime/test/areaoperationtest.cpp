@@ -32,7 +32,7 @@
 #include <sublime/area.h>
 #include <sublime/sublimedefs.h>
 #include <sublime/tooldocument.h>
-#include <sublime/partdocument.h>
+#include <sublime/urldocument.h>
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
@@ -77,10 +77,10 @@ struct AreaWidgetChecker {
 void AreaOperationTest::init()
 {
     m_controller = new Controller(this);
-    Document *doc1 = new PartDocument(m_controller, KUrl::fromPath("~/foo.cpp"));
-    Document *doc2 = new PartDocument(m_controller, KUrl::fromPath("~/boo.cpp"));
-    Document *doc3 = new PartDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
-    Document *doc4 = new PartDocument(m_controller, KUrl::fromPath("~/zoo.cpp"));
+    Document *doc1 = new UrlDocument(m_controller, KUrl::fromPath("~/foo.cpp"));
+    Document *doc2 = new UrlDocument(m_controller, KUrl::fromPath("~/boo.cpp"));
+    Document *doc3 = new UrlDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
+    Document *doc4 = new UrlDocument(m_controller, KUrl::fromPath("~/zoo.cpp"));
 
     //documents for toolviews
     Document *tool1 = new ToolDocument("tool1", m_controller, new SimpleToolWidgetFactory<QListView>());
@@ -323,7 +323,7 @@ void AreaOperationTest::testSimpleViewAdditionAndDeletion()
     m_controller->showArea(m_area1, &mw);
     checkArea1(&mw);
 
-    Document *doc5 = new PartDocument(m_controller, KUrl::fromPath("~/new.cpp"));
+    Document *doc5 = new UrlDocument(m_controller, KUrl::fromPath("~/new.cpp"));
     View *view = doc5->createView();
     view->setObjectName("view1.5.1");
     m_area1->addView(view);
@@ -364,7 +364,7 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
     MainWindow mw(m_controller);
     m_controller->showArea(m_area2, &mw);
 
-    Document *doc5 = new PartDocument(m_controller, KUrl::fromPath("~/new.cpp"));
+    Document *doc5 = new UrlDocument(m_controller, KUrl::fromPath("~/new.cpp"));
     View *view = doc5->createView();
     view->setObjectName("view2.5.1");
 
