@@ -92,7 +92,7 @@ namespace QMake
     class QMAKEPARSER_EXPORT AssignmentAST : public StatementAST
     {
         public:
-            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& comment, const QString& = "", const QString& = "", AST* parent = 0 );
+            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& = "", const QString& = "", AST* parent = 0 );
             ~AssignmentAST();
 
             void addValue( const QString& );
@@ -107,7 +107,6 @@ namespace QMake
             QString m_variable;
             QString m_op;
             QStringList m_values;
-            QString m_comment;
             QString m_lineend;
     };
 

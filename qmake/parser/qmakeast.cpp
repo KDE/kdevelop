@@ -115,10 +115,10 @@ namespace QMake
     }
 
     AssignmentAST::AssignmentAST( const QString& variable, const QString& op,
-            const QStringList& values, const QString& comment,
+            const QStringList& values,
             const QString& lineend, const QString& ws, AST* parent )
         : StatementAST( ws, parent ), m_variable( variable ), m_op( op )
-            , m_values( values ), m_comment( comment ), m_lineend( lineend )
+            , m_values( values ), m_lineend( lineend )
     {}
 
     AssignmentAST::~AssignmentAST()
@@ -165,7 +165,6 @@ namespace QMake
         buf += m_variable;
         buf += m_op;
         buf += m_values.join( "" );
-        buf += m_comment;
         if( m_lineend.isEmpty() )
 #ifdef Q_WS_WIN
             buf += "\r\n";
