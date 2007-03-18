@@ -131,6 +131,43 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, opEqual, "VARIABLE = value\n" )
 
+BEGINTESTFUNCIMPL( AssignmentTest, otherVarSimple, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "$$OTHERVAR" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, otherVarSimple, "VARIABLE = $$OTHERVAR\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, otherVarBrace, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "$${OTHERVAR}" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, otherVarBrace, "VARIABLE = $${OTHERVAR[]\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, otherVarBracket, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "$$[OTHERVAR]" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, otherVarBracket, "VARIABLE = $$[OTHERVAR]\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, shellVar, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "$(OTHERVAR)" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, shellVar, "VARIABLE = $(OTHERVAR)\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, commandExec, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "( cd /home && ls )" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, commandExec, "VARIABLE = ( cd /home && ls );\n" )
+
+
+
 // BEGINTESTFAILFUNCIMPL( AssignmentTest, noDashEndVar )
 // ENDTESTFUNCIMPL
 
