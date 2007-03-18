@@ -75,6 +75,16 @@ class AssignmentTest : public QObject
         void opStarEq_data();
         void opEqual();
         void opEqual_data();
+        void otherVarSimple();
+        void otherVarSimple_data();
+        void otherVarBrace();
+        void otherVarBrace_data();
+        void otherVarBracket();
+        void otherVarBracket_data();
+        void shellVar();
+        void shellVar_data();
+        void commandExec();
+        void commandExec_data();
 //         void noDashEndVar();
 //         void noDashEndVar_data();
     private:
