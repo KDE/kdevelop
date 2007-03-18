@@ -187,17 +187,16 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, commandExecQMakeVar, "VARIABLE = (ls $$VAR/html/*);\n" )
 
-BEGINTESTFUNCIMPL( AssignmentTest, varNameEvaluated, 1 )
-    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
-TESTASSIGNMENT( assignment, "eval($$subdir}-VARIABLE", " = ", 1, "VAR" )
+BEGINTESTFAILFUNCIMPL( AssignmentTest, noDashEndVar )
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL( AssignmentTest, varNameEvaluated, "eval($$subdir}-VARIABLE = VAR\n" )
+DATAFUNCIMPL( AssignmentTest, noDashEndVar, "VAR- += value\n" )
 
-// BEGINTESTFAILFUNCIMPL( AssignmentTest, noDashEndVar )
-// ENDTESTFUNCIMPL
+BEGINTESTFAILFUNCIMPL( AssignmentTest, varNameDollar )
+ENDTESTFUNCIMPL
 
-// DATAFUNCIMPL( AssignmentTest, noDashEndVar, "VAR- += value\n" )
+DATAFUNCIMPL( AssignmentTest, varNameDollar, "$$VAR += value\n" )
+
 
 void AssignmentTest::init()
 {
