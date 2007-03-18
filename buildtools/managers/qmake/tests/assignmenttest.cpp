@@ -173,6 +173,26 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, bracketVarQuote, "VARIABLE = \"$${VAR}\"\n" )
 
+BEGINTESTFUNCIMPL( AssignmentTest, pathValue, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "$${VAR}/html/*" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, pathValue, "VARIABLE = $${VAR}/html/*\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, commandExecQMakeVar, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "(ls $$VAR/html/*);" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, commandExecQMakeVar, "VARIABLE = (ls $$VAR/html/*);\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, varNameEvaluated, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "eval($$subdir}-VARIABLE", " = ", 1, "VAR" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, varNameEvaluated, "eval($$subdir}-VARIABLE = VAR\n" )
 
 // BEGINTESTFAILFUNCIMPL( AssignmentTest, noDashEndVar )
 // ENDTESTFUNCIMPL
