@@ -187,6 +187,19 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, commandExecQMakeVar, "VARIABLE = (ls $$VAR/html/*);\n" )
 
+BEGINTESTFUNCIMPL( AssignmentTest, varComment, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 3, "value #comment" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, varComment, "VARIABLE = value #comment\n" )
+
+BEGINTESTFAILFUNCIMPL( AssignmentTest, contAfterComment )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, contAfterComment, "VAR- += value#comment\\\n" )
+
+
 BEGINTESTFAILFUNCIMPL( AssignmentTest, noDashEndVar )
 ENDTESTFUNCIMPL
 

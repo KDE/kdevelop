@@ -95,6 +95,10 @@ class AssignmentTest : public QObject
         void noDashEndVar_data();
         void varNameDollar();
         void varNameDollar_data();
+        void varComment();
+        void varComment_data();
+        void contAfterComment();
+        void contAfterComment_data();
     private:
         QMake::ProjectAST* ast;
 };
