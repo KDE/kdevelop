@@ -296,10 +296,10 @@ private:
     QString sourceOrHeaderCandidate( const KURL &url = KURL() );
 
 	FunctionDom findFunction( const FunctionDom& def );
-	FunctionDom findFunctionInNamespace( const NamespaceDom& ns, const FunctionDom& func, const std::set<NamespaceImportModel>& nsImports,
-	                                     int scopeIndex, FunctionDom& bestMatch );
-	FunctionDom findFunctionInClass( const ClassDom& cs, const FunctionDom& func, const std::set<NamespaceImportModel>& nsImports,
-	                                 int scopeIndex, FunctionDom& bestMatch );
+	FunctionDom findFunctionInNamespace( const NamespaceDom& ns, const FunctionDom& def, const std::set<NamespaceImportModel>& nsImports,
+	                                     const QString& candidateFile, int scopeIndex, FunctionDom& bestMatch );
+	FunctionDom findFunctionInClass( const ClassDom& cs, const FunctionDom& def, const std::set<NamespaceImportModel>& nsImports,
+	                                 const QString& candidateFile, int scopeIndex, FunctionDom& bestMatch );
 	FunctionDom findFunctionDefinition( const FunctionDom& decl );
 
 	void jumpToCodeModelItem( const ItemDom& item, bool scrollOnly );

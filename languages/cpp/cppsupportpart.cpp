@@ -1172,26 +1172,26 @@ FunctionDom CppSupportPart::findFunction( const FunctionDom& def )
 	// or the child of a class node (class member).  Search recursively until we find a declaration that matches.
 	FunctionDom bestMatch;
 	FunctionDom decl = findFunctionInNamespace( codeModel()->globalNamespace(), def, codeModel()->globalNamespace()->namespaceImports(),
-	                                            0, bestMatch );
+	                                            sourceOrHeaderCandidate( def->fileName() ), 0, bestMatch );
 	return decl ? decl : bestMatch;
 }
 
-FunctionDom CppSupportPart::findFunctionInNamespace( const NamespaceDom& ns, const FunctionDom& func, const std::set<NamespaceImportModel>& nsImports,
-                                                     int scopeIndex, FunctionDom& bestMatch )
+FunctionDom CppSupportPart::findFunctionInNamespace( const NamespaceDom& ns, const FunctionDom& def, const std::set<NamespaceImportModel>& nsImports,
+                                                     const QString& candidateFile, int scopeIndex, FunctionDom& bestMatch )
 {
 	FunctionDom d;
-	QStringList scope = func->scope();
+	QStringList scope = def->scope();
 	if ( !(scopeIndex >= (signed) scope.size()) ) {
 		NamespaceDom ns_next = ns->namespaceByName( scope[ scopeIndex ] );
 		if ( ns_next ) {
-			d = findFunctionInNamespace( ns_next, func, ns_next->namespaceImports(), scopeIndex+1, bestMatch );
+			d = findFunctionInNamespace( ns_next, def, ns_next->namespaceImports(), candidateFile, scopeIndex+1, bestMatch );
 		}
 		if ( !d ) {
 			for ( std::set<NamespaceImportModel>::const_iterator it_ns = nsImports.begin(); it_ns != nsImports.end(); ++it_ns ) {
-				if ( (*it_ns).fileName().str() == func->fileName() ) {
+				if ( (*it_ns).fileName().str() == def->fileName() ) {
 					ns_next = ns->namespaceByName( (*it_ns).name() );
 					if ( ns_next ) {
-						if ( d = findFunctionInNamespace( ns_next, func, nsImports, scopeIndex, bestMatch ) ) break;
+						if ( d = findFunctionInNamespace( ns_next, def, nsImports, candidateFile, scopeIndex, bestMatch ) ) break;
 					}
 				}
 			}
@@ -1199,17 +1199,20 @@ FunctionDom CppSupportPart::findFunctionInNamespace( const NamespaceDom& ns, con
 		if ( !d ) {
 			ClassList classList = ns->classByName( scope[ scopeIndex ] );
 			for ( ClassList::ConstIterator it_cs = classList.begin(); it_cs != classList.end(); ) {
-				if ( d = findFunctionInClass( *(it_cs++), func, nsImports, scopeIndex+1, bestMatch ) ) break;
+				if ( d = findFunctionInClass( *(it_cs++), def, nsImports, candidateFile, scopeIndex+1, bestMatch ) ) break;
 			}
 		}
 	}
 	if ( !d ) {
-		FunctionList functionList = ns->functionByName( func->name() );
+		FunctionList functionList = ns->functionByName( def->name() );
 		for ( FunctionList::ConstIterator it_decl = functionList.begin(); it_decl != functionList.end(); ++it_decl ) {
-			if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*) func.data(), nsImports ) ) {
-				ParsedFile* p = dynamic_cast<ParsedFile*>( func->file()->parseResult().data() );
+			if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*) def.data(), nsImports ) ) {
+				ParsedFile* p = dynamic_cast<ParsedFile*>( def->file()->parseResult().data() );
 				if ( p ) {
 					if ( p->includeFiles()[ (*it_decl)->fileName() ] ) {
+						d = *it_decl;
+						break;
+					} else if ( (*it_decl)->fileName() == candidateFile ) {
 						d = *it_decl;
 						break;
 					}
@@ -1223,24 +1226,27 @@ FunctionDom CppSupportPart::findFunctionInNamespace( const NamespaceDom& ns, con
 	return d;
 }
 
-FunctionDom CppSupportPart::findFunctionInClass( const ClassDom& cs, const FunctionDom& func, const std::set<NamespaceImportModel>& nsImports,
-                                                 int scopeIndex, FunctionDom& bestMatch )
+FunctionDom CppSupportPart::findFunctionInClass( const ClassDom& cs, const FunctionDom& def, const std::set<NamespaceImportModel>& nsImports,
+                                                 const QString& candidateFile, int scopeIndex, FunctionDom& bestMatch )
 {
 	FunctionDom d;
-	QStringList scope = func->scope();
+	QStringList scope = def->scope();
 	if ( !(scopeIndex >= (signed) scope.size()) ) {
 		ClassList classList = cs->classByName( scope[ scopeIndex ] );
 		for ( ClassList::ConstIterator it_cs = classList.begin(); it_cs != classList.end(); ) {
-			if ( d = findFunctionInClass( *(it_cs++), func, nsImports, scopeIndex+1, bestMatch ) ) break;
+			if ( d = findFunctionInClass( *(it_cs++), def, nsImports, candidateFile, scopeIndex+1, bestMatch ) ) break;
 		}
 	}
 	if ( !d ) {
-		FunctionList functionList = cs->functionByName( func->name() );
+		FunctionList functionList = cs->functionByName( def->name() );
 		for ( FunctionList::ConstIterator it_decl = functionList.begin(); it_decl != functionList.end(); ++it_decl ) {
-			if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*) func.data(), nsImports ) ) {
-				ParsedFile* p = dynamic_cast<ParsedFile*>( func->file()->parseResult().data() );
+			if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, (FunctionDefinitionModel*) def.data(), nsImports ) ) {
+				ParsedFile* p = dynamic_cast<ParsedFile*>( def->file()->parseResult().data() );
 				if ( p ) {
 					if ( p->includeFiles()[ (*it_decl)->fileName() ] ) {
+						d = *it_decl;
+						break;
+					} else if ( (*it_decl)->fileName() == candidateFile ) {
 						d = *it_decl;
 						break;
 					}
@@ -1260,6 +1266,7 @@ FunctionDom CppSupportPart::findFunctionDefinition( const FunctionDom& decl )
 	// Since the definition can be the child of any namespace in its scope depending on syntax, we have to check every one.
 	FunctionDom def, bestMatch;
 	NamespaceDom ns = codeModel()->globalNamespace();
+	QString candidateFile = sourceOrHeaderCandidate( decl->fileName() );
 	FunctionDefinitionList functionList = ns->functionDefinitionByName( decl->name() );
 	for ( FunctionDefinitionList::ConstIterator it_def = functionList.begin(); it_def != functionList.end() && !def; ++it_def ) {
 		if ( CodeModelUtils::compareDeclarationToDefinition( decl, *it_def, ns->namespaceImports() ) ) {
@@ -1267,6 +1274,9 @@ FunctionDom CppSupportPart::findFunctionDefinition( const FunctionDom& decl )
 			if ( p ) {
 				if ( p->includeFiles()[ decl->fileName() ] ) {
 					def = *it_def;
+				} else if ( (*it_def)->fileName() == candidateFile ) {
+					def = *it_def;
+					break;
 				}
 			}
 			if ( !bestMatch ) {
@@ -1286,6 +1296,9 @@ FunctionDom CppSupportPart::findFunctionDefinition( const FunctionDom& decl )
 					if ( p ) {
 						if ( p->includeFiles()[ decl->fileName() ] ) {
 							def = *it_def;
+						} else if ( (*it_def)->fileName() == candidateFile ) {
+							def = *it_def;
+							break;
 						}
 					}
 					if ( !bestMatch ) {
