@@ -235,7 +235,7 @@ namespace QMake
 
     void Lexer::LexerError( const char* msg )
     {
-        qDebug() << msg;
+        if( debug() == 1 ) qDebug() << msg;
     }
 }
 
