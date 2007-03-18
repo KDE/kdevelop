@@ -25,6 +25,16 @@
 
 QTEST_MAIN( FunctionScopeTest )
 
+#define TESTFUNCNAME( scopeast, funcname ) \
+    QVERIFY( scopeast->functionCall() != 0 ); \
+    QVERIFY( scopeast->scopeName().isEmpty() ); \
+    QMake::FunctionCallAST* funccall = scopeast->functionCall(); \
+    QVERIFY( funccall->functionName() == funcname );
+
+#define TESTFUNCARGS( funccall, arglist ) \
+    QVERIFY( funccall != 0 ); \
+    QVERIFY( matchArguments( funccall->arguments(), arglist ) );
+
 FunctionScopeTest::FunctionScopeTest( QObject* parent )
     : QObject( parent ), ast(0)
 {}
@@ -45,14 +55,41 @@ void FunctionScopeTest::cleanup()
     QVERIFY( ast == 0 );
 }
 
+bool FunctionScopeTest::matchArguments( QList<QMake::FunctionArgAST*> realargs,
+                                        QList<QMake::FunctionArgAST*> testargs )
+{
+    if( realargs.count() != testargs.count() )
+        return false;
+    int i = 0;
+    QMake::FunctionCallAST* call;
+    QMake::SimpleFunctionArgAST* simple;
+    QMake::FunctionCallAST* testcall;
+    QMake::SimpleFunctionArgAST* testsimple;
+
+    foreach( QMake::FunctionArgAST* ast, realargs )
+    {
+        call = dynamic_cast<QMake::FunctionCallAST*>(ast);
+        testcall = dynamic_cast<QMake::FunctionCallAST*>( testargs.at( i ) );
+        if( call && testcall )
+        {
+        }
+        simple = dynamic_cast<QMake::SimpleFunctionArgAST*>(ast);
+        testsimple = dynamic_cast<QMake::SimpleFunctionArgAST*>( testargs.at( i ) );
+        if( simple && testsimple )
+        {
+            if( simple->value() != testsimple->value() )
+                return false;
+        }
+        i++;
+    }
+    return true;
+}
+
+
 BEGINTESTFUNCIMPL( FunctionScopeTest, execBasicFunc, 1 )
     QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
-    QVERIFY( scope->functionCall() != 0 );
-    QVERIFY( scope->scopeName().isEmpty() );
+    TESTFUNCNAME( scope, "foobar" )
     QVERIFY( scope->scopeBody() == 0 );
-    QMake::FunctionCallAST* funccall = scope->functionCall();
-    QVERIFY( funccall->functionName() == "foobar" );
-    QVERIFY( funccall->arguments().isEmpty() );
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, execBasicFunc, "foobar()\n")
@@ -60,23 +97,12 @@ DATAFUNCIMPL( FunctionScopeTest, execBasicFunc, "foobar()\n")
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, execSimpleFunc, 1 )
     QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
-    QVERIFY( scope->functionCall() != 0 );
-    QVERIFY( scope->scopeName().isEmpty() );
-    QVERIFY( scope->scopeBody() == 0 );
-    QMake::FunctionCallAST* funccall = scope->functionCall();
-    QVERIFY( funccall->functionName() == "foobar" );
-    QVERIFY( funccall->arguments().count() == 2 );
-    QMake::FunctionArgAST* fnarg = funccall->arguments().first();
-    QVERIFY( fnarg != 0 );
-    QMake::SimpleFunctionArgAST* simple;
-    simple = dynamic_cast<QMake::SimpleFunctionArgAST*>( fnarg );
-    QVERIFY( simple != 0);
-    QVERIFY( simple->value() == "arg1" );
-    fnarg = funccall->arguments().at(1);
-    QVERIFY( fnarg != 0 );
-    simple = dynamic_cast<QMake::SimpleFunctionArgAST*>(fnarg);
-    QVERIFY( simple != 0);
-    QVERIFY( simple->value() == "arg2 " );
+    TESTFUNCNAME( scope, "foobar" )
+
+    QList<QMake::FunctionArgAST*> testlist;
+    testlist.append( new QMake::SimpleFunctionArgAST("arg1") );
+    testlist.append( new QMake::SimpleFunctionArgAST("arg2 ") );
+    TESTFUNCARGS( funccall, testlist )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, execSimpleFunc, "foobar( arg1, arg2 )\n")
