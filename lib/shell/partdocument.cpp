@@ -26,7 +26,7 @@ namespace KDevelop {
 
 struct PartDocumentPrivate {
     PartController *partController;
-    QMap<QWidget*, KParts::Part*> partForWidget;
+    QMap<QWidget*, KParts::Part*> partForView;
 };
 
 PartDocument::PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url)
@@ -44,21 +44,26 @@ PartDocument::~PartDocument()
 QWidget *PartDocument::createViewWidget(QWidget *parent)
 {
     Q_UNUSED( parent );
-    KParts::Part *part;
-    if (url().isEmpty())
-        part = d->partController->createTextPart(url(), "", false);
-    else
-        part = d->partController->createTextPart(url(), "", true);
+    KParts::Part *part = d->partController->createPart(url());
     d->partController->addPart(part);
     QWidget *w = part->widget();
-    d->partForWidget[w] = part;
+    d->partForView[w] = part;
     return w;
 }
 
-KParts::Part *PartDocument::partForWidget(QWidget *w)
+KParts::Part *PartDocument::partForView(QWidget *view) const
 {
-    return d->partForWidget[w];
+    return d->partForView[view];
 }
+
+PartController *PartDocument::partController()
+{
+    return d->partController;
+}
+
+
+
+//KDevelop::IDocument implementation
 
 KUrl PartDocument::url() const
 {
@@ -67,11 +72,7 @@ KUrl PartDocument::url() const
 
 KMimeType::Ptr PartDocument::mimeType() const
 {
-    return KMimeType::mimeType("text/plain");
-}
-
-void PartDocument::save()
-{
+    return KMimeType::findByUrl(url());
 }
 
 KTextEditor::Document *PartDocument::textDocument() const
@@ -79,14 +80,13 @@ KTextEditor::Document *PartDocument::textDocument() const
     return 0;
 }
 
-KParts::Part *PartDocument::part() const
-{
-    return 0;
-}
-
 bool PartDocument::isActive() const
 {
     return false;
+}
+
+void PartDocument::save()
+{
 }
 
 void PartDocument::close()
@@ -97,7 +97,7 @@ void PartDocument::reload()
 {
 }
 
-IDocument::DocumentState KDevelop::PartDocument::state() const
+IDocument::DocumentState PartDocument::state() const
 {
     return Clean;
 }
@@ -105,4 +105,5 @@ IDocument::DocumentState KDevelop::PartDocument::state() const
 }
 
 #include "partdocument.moc"
+
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

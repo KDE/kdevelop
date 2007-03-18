@@ -16,60 +16,79 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEV_PARTDOCUMENT_H
-#define KDEV_PARTDOCUMENT_H
+#include "textdocument.h"
 
-#include "idocument.h"
-#include <sublime/urldocument.h>
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
 
-namespace Sublime {
-class Controller;
-}
-
-namespace KParts {
-class Part;
-}
+#include "partcontroller.h"
 
 namespace KDevelop {
 
-class PartController;
-
-/**
-The generic document which represents KParts.
-
-This document is used by shell when more specific document classes
-are incapable of loading the url.
-
-This document loads one KPart (read-only or read-write) per view
-and sets part widget to be a view widget.
-*/
-class PartDocument: public Sublime::UrlDocument, public IDocument {
-    Q_OBJECT
-public:
-    PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url);
-    virtual ~PartDocument();
-
-    virtual QWidget *createViewWidget(QWidget *parent = 0);
-    virtual KParts::Part *partForView(QWidget *view) const;
-
-    virtual KUrl url() const;
-    virtual KMimeType::Ptr mimeType() const;
-    virtual KTextEditor::Document* textDocument() const;
-    virtual void save();
-    virtual void reload();
-    virtual void close();
-    virtual bool isActive() const;
-    virtual DocumentState state() const;
-
-protected:
-    PartController *partController();
-
-private:
-    class PartDocumentPrivate *d;
+struct TextDocumentPrivate {
+    TextDocumentPrivate()
+    {
+        document = 0;
+    }
+    KTextEditor::Document *document;
 };
 
+
+TextDocument::TextDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url)
+    :PartDocument(partController, controller, url)
+{
+    d = new TextDocumentPrivate();
 }
 
-#endif
+TextDocument::~TextDocument()
+{
+    delete d;
+}
+
+QWidget *TextDocument::createViewWidget(QWidget *parent)
+{
+    if (!d->document)
+    {
+        d->document = partController()->createTextPart(url(), "", !url().isEmpty());
+        partController()->addPart(d->document);
+        return d->document->widget();
+    }
+    return d->document->createView(parent);
+}
+
+KParts::Part *TextDocument::partForView(QWidget *view) const
+{
+    if (d->document && d->document->views().contains((KTextEditor::View*)view))
+        return d->document;
+    return 0;
+}
+
+
+
+// KDevelop::IDocument implementation
+
+void TextDocument::close()
+{
+}
+
+void TextDocument::reload()
+{
+}
+
+void TextDocument::save()
+{
+}
+
+bool TextDocument::isActive() const
+{
+    return false;
+}
+
+IDocument::DocumentState TextDocument::state() const
+{
+    return Clean;
+}
+
+}
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

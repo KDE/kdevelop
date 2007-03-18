@@ -16,56 +16,36 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEV_PARTDOCUMENT_H
-#define KDEV_PARTDOCUMENT_H
+#ifndef KDEV_TEXTDOCUMENT_H
+#define KDEV_TEXTDOCUMENT_H
 
-#include "idocument.h"
-#include <sublime/urldocument.h>
-
-namespace Sublime {
-class Controller;
-}
-
-namespace KParts {
-class Part;
-}
+#include "partdocument.h"
 
 namespace KDevelop {
 
-class PartController;
-
 /**
-The generic document which represents KParts.
+Text document which represents KTextEditor documents.
 
-This document is used by shell when more specific document classes
-are incapable of loading the url.
-
-This document loads one KPart (read-only or read-write) per view
-and sets part widget to be a view widget.
+Usually Kate documents are represented by this class but TextDocument is not
+limited to Kate. Each conforming text editor will work.
 */
-class PartDocument: public Sublime::UrlDocument, public IDocument {
-    Q_OBJECT
+class TextDocument: public PartDocument {
 public:
-    PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url);
-    virtual ~PartDocument();
+    TextDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url);
+    virtual ~TextDocument();
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;
 
-    virtual KUrl url() const;
-    virtual KMimeType::Ptr mimeType() const;
-    virtual KTextEditor::Document* textDocument() const;
     virtual void save();
     virtual void reload();
     virtual void close();
     virtual bool isActive() const;
     virtual DocumentState state() const;
 
-protected:
-    PartController *partController();
-
 private:
-    class PartDocumentPrivate *d;
+    struct TextDocumentPrivate *d;
+
 };
 
 }

@@ -65,9 +65,9 @@ public:
     virtual KMimeType::Ptr mimeType() const = 0;
 
     /**
-     * Returns the part, if this document is a KPart or 0 otherwise.
+     * Returns the part for given @p view if this document is a KPart document or 0 otherwise.
      */
-    virtual KParts::Part* part() const = 0;
+    virtual KParts::Part* partForView(QWidget *view) const = 0;
 
     /**
      * Returns the text editor, if this is a text document or 0 otherwise.

@@ -36,6 +36,7 @@
 #include "partcontroller.h"
 #include "mainwindow.h"
 #include "partdocument.h"
+#include "textdocument.h"
 
 namespace KDevelop {
 
@@ -136,7 +137,12 @@ void UiController::openUrl(const KUrl &url)
 
     //get a part document
     if (!d->parts.contains(url))
-        d->parts[url] = new PartDocument(d->core->partController(), this, url);
+    {
+        if (d->core->partController()->isTextType(KMimeType::findByUrl(url)))
+            d->parts[url] = new TextDocument(d->core->partController(), this, url);
+        else
+            d->parts[url] = new PartDocument(d->core->partController(), this, url);
+    }
     PartDocument *doc = d->parts[url];
 
     //find a view if there's one already opened in this area
@@ -158,7 +164,7 @@ void UiController::openUrl(const KUrl &url)
         area->addView(partView, activeMainWindow()->activeView());
     }
     activeMainWindow()->activateView(partView);
-    d->core->partController()->setActivePart(doc->partForWidget(partView->widget()), partView->widget());
+    d->core->partController()->setActivePart(doc->partForView(partView->widget()), partView->widget());
     ///@todo adymo: activate and focus the partView
 }
 

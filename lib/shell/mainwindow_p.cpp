@@ -91,7 +91,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     if (doc)
     {
         //activate part if it is not yet activated
-        KParts::Part *part = doc->partForWidget(view->widget());
+        KParts::Part *part = doc->partForView(view->widget());
         if (Core::self()->partController()->activePart() != part)
             Core::self()->partController()->setActivePart(part);
     }
