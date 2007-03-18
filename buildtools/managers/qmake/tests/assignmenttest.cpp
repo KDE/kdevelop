@@ -24,10 +24,6 @@
 
 #include "testmacros.h"
 
-// VARIABLE += " value "
-// VARIABLE += " value ( " -> Only 1 parenthesis
-// VARIABLE = value1=value++
-
 QTEST_MAIN( AssignmentTest )
 
 AssignmentTest::AssignmentTest( QObject* parent )
@@ -37,27 +33,108 @@ AssignmentTest::AssignmentTest( QObject* parent )
 AssignmentTest::~AssignmentTest()
 {}
 
-BEGINTESTFUNCIMPL( AssignmentTest, simpleParsed, 1)
+BEGINTESTFUNCIMPL( AssignmentTest, simpleParsed, 1 )
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
 TESTASSIGNMENT( assignment, "VAR", " = ", 1, "VALUE" )
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL(AssignmentTest, simpleParsed, "VAR = VALUE\n")
+DATAFUNCIMPL(AssignmentTest, simpleParsed, "VAR = VALUE\n" )
 
-BEGINTESTFUNCIMPL( AssignmentTest, assignInValue, 1)
+BEGINTESTFUNCIMPL( AssignmentTest, assignInValue, 1 )
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
 TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "value1=value++" )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(AssignmentTest, assignInValue, "VARIABLE = value1=value++\n")
 
-BEGINTESTFUNCIMPL( AssignmentTest, commentCont, 1)
+BEGINTESTFUNCIMPL( AssignmentTest, commentCont, 1 )
     QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
-    qDebug() << assignment->values().join("");
-TESTASSIGNMENT( assignment, "VARIABLE", " = ", 4, "foobar\\#somecomment\nnextval")
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 4, "foobar\\#somecomment\nnextval" )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, commentCont, "VARIABLE = foobar\\#somecomment\nnextval\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, quotedBrace, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " += ", 1, "\" value ( \"" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, quotedBrace, "VARIABLE += \" value ( \"\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, quotedVal, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " += ", 1, "\" value \"" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, quotedVal, "VARIABLE += \" value \"\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, dotVariable, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VAR.IABLE", " += ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, dotVariable, "VAR.IABLE += value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, underscoreVariable, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VAR_IABLE", " += ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, underscoreVariable, "VAR_IABLE += value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, dashVariable, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VAR-IABLE", " += ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, dashVariable, "VAR-IABLE += value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, opNoSpace, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", "+=", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, opNoSpace, "VARIABLE+=value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, opPlusEq, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " += ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, opPlusEq, "VARIABLE += value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, opTildeEq, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " ~= ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, opTildeEq, "VARIABLE ~= value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, opStarEq, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " *= ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, opStarEq, "VARIABLE *= value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, opMinusEq, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " -= ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, opMinusEq, "VARIABLE -= value\n" )
+
+BEGINTESTFUNCIMPL( AssignmentTest, opEqual, 1 )
+    QMake::AssignmentAST* assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " = ", 1, "value" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, opEqual, "VARIABLE = value\n" )
+
+// BEGINTESTFAILFUNCIMPL( AssignmentTest, noDashEndVar )
+// ENDTESTFUNCIMPL
+
+// DATAFUNCIMPL( AssignmentTest, noDashEndVar, "VAR- += value\n" )
 
 void AssignmentTest::init()
 {
