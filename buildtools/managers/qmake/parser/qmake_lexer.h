@@ -32,12 +32,14 @@ namespace QMake
     class Lexer : public yyFlexLexer
     {
         public:
-            enum LineEnding { None = 0, Unix = 1, MacOS = 2, Windows = 4 }; 
+            enum LineEnding { None = 0, Unix = 1, MacOS = 2, Windows = 4 };
             Lexer( std::istream* argin = 0, std::ostream* argout = 0 );
             int yylex( QMake::Parser::semantic_type* yylval );
             int yylex();
-	    void setLineEndingFromString( const QString& );
+            void setLineEndingFromString( const QString& );
             int lineending();
+        protected:
+            void LexerError( const char* msg );
         private:
             unsigned int bracecount;
             QMake::Result* mylval;
