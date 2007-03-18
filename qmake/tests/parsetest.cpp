@@ -59,7 +59,8 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(ParseTest, successSimpleProject, "VAR = VALUE\nfunc1(arg1)\n")
 
-BEGINTESTFAILFUNCIMPL(ParseTest, failSimpleProject)
+BEGINTESTFAILFUNCIMPL(ParseTest, failSimpleProject,
+        "Missing value for variable and no lineending")
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(ParseTest, failSimpleProject, "VAR =")
@@ -68,12 +69,13 @@ BEGINTESTFUNCIMPL(ParseTest, lineEnding, 3)
     QVERIFY( ast->lineEnding() == QMake::ProjectAST::Windows );
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL(ParseTest, lineEnding, "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n")
+DATAFUNCIMPL(ParseTest, lineEnding,
+    "VAR = VALUE\r\ncallfunc(FOOBAR)\r!exists(barfoo)\n")
 
 BEGINTESTFUNCIMPL(ParseTest, successFullProject, 11)
 ENDTESTFUNCIMPL
 
-DATAFUNCIMPL(ParseTest, successFullProject, "#Comment\n"
+DATAFUNCIMPL( ParseTest, successFullProject, "#Comment\n"
         "VARIABLE1 = Value1 Value2\n"
         "VARIABLE2= Value1 Value2\n"
         "VARIABLE3 =Value1 Value2\n"
@@ -85,9 +87,10 @@ DATAFUNCIMPL(ParseTest, successFullProject, "#Comment\n"
         "message( foo, bar, $$foobar( foo, $$FOOBAR ), $${FOOBAR}, $(SHELL) ) {  \n"
         "FOO = bar\n"
         "}\n"
-        "!do()\n")
+        "!do()\n" )
 
-BEGINTESTFAILFUNCIMPL(ParseTest, failFullProject )
+BEGINTESTFAILFUNCIMPL(ParseTest, failFullProject,
+        "Missing closing brace in scope for fo()" )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL(ParseTest, failFullProject, "#Comment\n"
