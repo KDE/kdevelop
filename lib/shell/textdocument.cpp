@@ -36,7 +36,7 @@ struct TextDocumentPrivate {
 };
 
 
-TextDocument::TextDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url)
+TextDocument::TextDocument(PartController *partController, UiController *controller, const KUrl &url)
     :PartDocument(partController, controller, url)
 {
     d = new TextDocumentPrivate();
@@ -79,11 +79,6 @@ void TextDocument::reload()
 
 void TextDocument::save()
 {
-}
-
-bool TextDocument::isActive() const
-{
-    return false;
 }
 
 IDocument::DocumentState TextDocument::state() const

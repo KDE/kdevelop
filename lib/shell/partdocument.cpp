@@ -20,20 +20,26 @@
 
 #include <ktexteditor/document.h>
 
+#include <sublime/view.h>
+#include <sublime/mainwindow.h>
+
+#include "uicontroller.h"
 #include "partcontroller.h"
 
 namespace KDevelop {
 
 struct PartDocumentPrivate {
     PartController *partController;
+    UiController *uiController;
     QMap<QWidget*, KParts::Part*> partForView;
 };
 
-PartDocument::PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url)
+PartDocument::PartDocument(PartController *partController, UiController *controller, const KUrl &url)
     :Sublime::UrlDocument(controller, url)
 {
     d = new PartDocumentPrivate();
     d->partController = partController;
+    d->uiController = controller;
 }
 
 PartDocument::~PartDocument()
@@ -61,6 +67,11 @@ PartController *PartDocument::partController()
     return d->partController;
 }
 
+UiController *PartDocument::uiController()
+{
+    return d->uiController;
+}
+
 
 
 //KDevelop::IDocument implementation
@@ -82,7 +93,7 @@ KTextEditor::Document *PartDocument::textDocument() const
 
 bool PartDocument::isActive() const
 {
-    return false;
+    return d->uiController->activeMainWindow()->activeView()->document() == this;
 }
 
 void PartDocument::save()

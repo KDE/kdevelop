@@ -22,16 +22,13 @@
 #include "idocument.h"
 #include <sublime/urldocument.h>
 
-namespace Sublime {
-class Controller;
-}
-
 namespace KParts {
 class Part;
 }
 
 namespace KDevelop {
 
+class UiController;
 class PartController;
 
 /**
@@ -46,7 +43,7 @@ and sets part widget to be a view widget.
 class PartDocument: public Sublime::UrlDocument, public IDocument {
     Q_OBJECT
 public:
-    PartDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url);
+    PartDocument(PartController *partController, UiController *controller, const KUrl &url);
     virtual ~PartDocument();
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
@@ -63,6 +60,7 @@ public:
 
 protected:
     PartController *partController();
+    UiController *uiController();
 
 private:
     class PartDocumentPrivate *d;

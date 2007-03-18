@@ -31,7 +31,7 @@ limited to Kate. Each conforming text editor will work.
 */
 class TextDocument: public PartDocument {
 public:
-    TextDocument(PartController *partController, Sublime::Controller *controller, const KUrl &url);
+    TextDocument(PartController *partController, UiController *controller, const KUrl &url);
     virtual ~TextDocument();
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
@@ -40,7 +40,6 @@ public:
     virtual void save();
     virtual void reload();
     virtual void close();
-    virtual bool isActive() const;
     virtual DocumentState state() const;
 
 private:
