@@ -732,7 +732,13 @@ void CreateTestSourcelistAst::writeBack( QString& )
 
 bool CreateTestSourcelistAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "create_test_sourcelist" )
+        return false;
+
+    if ( func.arguments.count() < 3 )
+        return false;
+
+    return true;
 }
 
 EnableLanguageAst::EnableLanguageAst()
@@ -749,7 +755,14 @@ void EnableLanguageAst::writeBack( QString& )
 
 bool EnableLanguageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if ( func.name.toLower() != "enable_language" )
+        return false;
+
+    if ( func.arguments.count() != 1 )
+        return false;
+
+    m_language = func.arguments[0].value;
+    return true;
 }
 
 EnableTestingAst::EnableTestingAst()

@@ -240,6 +240,7 @@ CMAKE_END_AST_CLASS( CreateTestSourcelistAst )
 
 
 CMAKE_BEGIN_AST_CLASS( EnableLanguageAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, language, Language )
 CMAKE_END_AST_CLASS( EnableLanguageAst )
 
 

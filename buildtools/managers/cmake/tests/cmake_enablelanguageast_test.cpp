@@ -34,18 +34,45 @@ void EnableLanguageAstTest::testGoodParse()
 
 void EnableLanguageAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "ENABLE_LANGUAGE";
+    func2.name = "enable_language";
+
+    QStringList argList1, argList2;
+    argList1 << "C++";
+    argList2 << "Java";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good uppercase" ) << func1;
+    QTest::newRow( "good lowercase" ) << func2;
 }
 
 void EnableLanguageAstTest::testBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    EnableLanguageAst* ast = new EnableLanguageAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
 
 void EnableLanguageAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "ENABLE_LANGUAGES";
+    func2.name = "enable_language";
+
+    QStringList argList1, argList2;
+    argList1 << "C++";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad uppercase" ) << func1;
+    QTest::newRow( "bad lowercase. no param" ) << func2;
 }
 
 #include "cmake_enablelanguageast_test.moc"
