@@ -22,6 +22,7 @@
 
 #include <kmimetype.h>
 #include <kiconloader.h>
+#include <kicon.h>
 #include <kio/global.h>
 
 #include "iproject.h"
@@ -220,6 +221,7 @@ ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &d
     : ProjectFolderItem( project, dir, parent ), d(new ProjectBuildFolderItemPrivate)
 {
     d->m_url = dir;
+    setIcon( KIcon("folder-development") );
 }
 
 int ProjectBuildFolderItem::type() const
