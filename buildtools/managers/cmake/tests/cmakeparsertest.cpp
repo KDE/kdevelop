@@ -47,7 +47,7 @@ void CMakeParserTest::testLexerCreation()
 
 void CMakeParserTest::testLexerWithFile()
 {
-    KTemporaryFile tempFile;
+    QTemporaryFile tempFile;
     tempFile.setAutoRemove( false );
     tempFile.open();
     if ( !QFile::exists( tempFile.fileName() ) )
