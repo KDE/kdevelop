@@ -22,13 +22,13 @@
 
 Some notes for special cases to test:
 
-eval($${subdir}.depends = $$basename($${subdir})/$(MAKEFILE)
 
 somescope:anotherscope {
 }
 
 scope | scope : SOMEVAR = foo
 
+eval($${subdir}.depends = $$basename($${subdir})/$(MAKEFILE)
 eval( $$somefunc( $$VAR, else ) ) {
 } else {
 }
