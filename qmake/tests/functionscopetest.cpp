@@ -88,12 +88,11 @@ bool FunctionScopeTest::matchArguments( QList<QMake::FunctionArgAST*> realargs,
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, execBasicFunc, 1 )
     QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
-    TESTFUNCNAME( scope, "foobar" )
+TESTFUNCNAME( scope, "foobar" )
     QVERIFY( scope->scopeBody() == 0 );
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, execBasicFunc, "foobar()\n")
-
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, execSimpleFunc, 1 )
     QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
@@ -107,6 +106,13 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, execSimpleFunc, "foobar( arg1, arg2 )\n")
 
+BEGINTESTFUNCIMPL( FunctionScopeTest, evalQMakeSyntax, 1 )
+    QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
+    TESTFUNCNAME( scope, "eval" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( FunctionScopeTest, evalQMakeSyntax,
+              "eval($${subdir}.depends = $$basename($${subdir})/$(MAKEFILE)" )
 
 #include "functionscopetest.moc"
 

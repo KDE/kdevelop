@@ -46,6 +46,8 @@ class FunctionScopeTest : public QObject
         void execSimpleFunc_data();
         void execBasicFunc();
         void execBasicFunc_data();
+        void evalQMakeSyntax();
+        void evalQMakeSyntax_data();
     private:
         bool matchArguments( QList<QMake::FunctionArgAST*>,
                              QList<QMake::FunctionArgAST*> );
