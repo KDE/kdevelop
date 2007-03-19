@@ -1171,6 +1171,8 @@ public:
 
     ParseResultPointer parseResult() const;
     void setParseResult( const ParseResultPointer& result );
+
+  void update( const FileModel* i );
 private:
     int m_groupId;
     ParseResultPointer m_parseResult;

@@ -1772,6 +1772,11 @@ bool TypeAliasModel::canUpdate( const TypeAliasModel* i ) const {
   return m_type == i->m_type;
 }
 
+void FileModel::update( const FileModel* file ) {
+  m_parseResult = file->m_parseResult;
+  NamespaceModel::update( file );
+}
+
 FileList FileModel::wholeGroup() {
     if( isSingleGroup( m_groupId ) ) return ( FileList() << FileDom(this) );
     return codeModel()->getGroup( m_groupId );
