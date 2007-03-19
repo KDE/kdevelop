@@ -1481,19 +1481,43 @@ void NamespaceModel::write( QDataStream & stream ) const
 bool NamespaceModel::canUpdate( const NamespaceModel* ns ) const {
   if( !ClassModel::canUpdate( ns ) )
     return false;
-    ///@todo check namespace-aliases and imports
-//     const NamespaceModel::NamespaceAliasModelList& namespaceAliases = file->namespaceAliases();
-//     const NamespaceModel::NamespaceImportModelList& namespaceImports = file->namespaceImports();
+    
+    const NamespaceAliasModelList& aliases = namespaceAliases();
+    const NamespaceImportModelList& imports = namespaceImports();
+    const NamespaceAliasModelList& aliases2 = ns->namespaceAliases();
+    const NamespaceImportModelList& imports2 = ns->namespaceImports();
 
+    if( aliases.size() != aliases2.size() ) return false;
+    if( imports.size() != imports2.size() ) return false;
+
+    ///Test if all aliases are same, if not return false
+    NamespaceModel::NamespaceAliasModelList::const_iterator it_al1 = aliases.begin();
+    NamespaceModel::NamespaceAliasModelList::const_iterator it_al2 = aliases2.begin();
+    while( it_al1 != aliases.end() ) {
+      if( !(*it_al1 == *it_al2) )
+        return false;
+
+      ++it_al1;
+      ++it_al2;
+    }
+    
+    ///Test if all imports are same, if not return false
+    NamespaceModel::NamespaceImportModelList::const_iterator it_ip1 = imports.begin();
+    NamespaceModel::NamespaceImportModelList::const_iterator it_ip2 = imports2.begin();
+    while( it_ip1 != imports.end() ) {
+      if( !(*it_ip1 == *it_ip2) )
+        return false;
+
+      ++it_ip1;
+      ++it_ip2;
+    }
+    
     return eachCanUpdateSingle( m_namespaces, ns->m_namespaces );
 }
 
 void NamespaceModel::update( const NamespaceModel* ns )
 {
   ClassModel::update( ns );
-    ///@todo update namespace-aliases and imports
-//     const NamespaceModel::NamespaceAliasModelList& namespaceAliases = file->namespaceAliases();
-//     const NamespaceModel::NamespaceImportModelList& namespaceImports = file->namespaceImports();
 
     eachUpdateSingle( m_namespaces, ns->m_namespaces );
 }
