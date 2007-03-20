@@ -411,13 +411,6 @@ namespace QMake
         m_args.clear();
     }
 
-    QString FunctionCallAST::value() const
-    {
-        QString val;
-        writeToString( val );
-        return val;
-    }
-
     void FunctionCallAST::writeToString( QString& buf ) const
     {
         FunctionArgAST::writeToString( buf );
@@ -443,6 +436,16 @@ namespace QMake
     void FunctionCallAST::insertArgument( int i, FunctionArgAST* arg )
     {
         m_args.insert( i, arg );
+    }
+
+    QString FunctionCallAST::functionName() const
+    {
+        return m_functionName;
+    }
+
+    void FunctionCallAST::setFunctionName( const QString& name)
+    {
+        m_functionName = name;
     }
 
     void FunctionCallAST::removeArgument( int i )

@@ -137,7 +137,7 @@ namespace QMake
         public:
             FunctionArgAST( const QString& ws = "", AST* parent = 0 );
             virtual ~FunctionArgAST();
-            virtual QString value() const = 0;
+//             virtual QString value() const = 0;
             virtual void writeToString( QString& ) const;
         private:
     };
@@ -148,10 +148,11 @@ namespace QMake
             FunctionCallAST( const QString& name, const QString& begin, QList<FunctionArgAST*> args,
                              const QString& end = "", const QString& ws = "", AST* parent = 0 );
             ~FunctionCallAST();
-            QString value() const;
             QList<FunctionArgAST*> arguments() const;
             void insertArgument( int i, FunctionArgAST* );
             void removeArgument( int i );
+            QString functionName() const;
+            void setFunctionName( const QString& );
             void writeToString( QString& ) const;
         private:
             QList<FunctionArgAST*> m_args;
