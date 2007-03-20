@@ -1,7 +1,6 @@
 add_subdirectory(parser)
 
-message (STATUS "FIX QMAKE TEST CASES TO COMPILE!")
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib
     ${CMAKE_SOURCE_DIR}/buildtools/builders/qmakebuilder
