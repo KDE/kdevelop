@@ -52,8 +52,6 @@ class FunctionScopeTest : public QObject
         void simpleVarArg_data();
         void argWithEqual();
         void argWithEqual_data();
-        void missingBrace();
-        void missingBrace_data();
         void partlyQuotedArg();
         void partlyQuotedArg_data();
         void slashArg();
@@ -64,6 +62,17 @@ class FunctionScopeTest : public QObject
         void nestedFunccalls_data();
         void multiLineScope();
         void multiLineScope_data();
+        void multiLineScopeFuncCall();
+        void multiLineScopeFuncCall_data();
+        void oneStmtSubScope();
+        void oneStmtSubScope_data();
+
+        void missingStmt();
+        void missingStmt_data();
+        void missingBrace();
+        void missingBrace_data();
+        void missingParenthesis();
+        void missingParenthesis_data();
     private:
         bool matchArguments( QList<QMake::FunctionArgAST*>,
                              QList<QMake::FunctionArgAST*> );
