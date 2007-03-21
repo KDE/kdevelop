@@ -99,7 +99,7 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
     m_variables["APPNAMELC"] = selectionPage->appName().toLower();
 
     QString dest = selectionPage->location();
-    KTar arch(templateArchive, "application/x-bzip2");
+    KTar arch(templateArchive, "application/x-bzip");
     if (arch.open(QIODevice::ReadOnly))
         unpackArchive(arch.directory(), dest);
     else

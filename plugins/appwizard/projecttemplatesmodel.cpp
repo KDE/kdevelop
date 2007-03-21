@@ -83,7 +83,7 @@ void ProjectTemplatesModel::extractTemplateDescriptions()
     foreach (QString archName, templateArchives)
     {
         kDebug(9010) << "processing template " << archName << endl;
-        KTar templateArchive(archName, "application/x-bzip2");
+        KTar templateArchive(archName, "application/x-bzip");
         if (templateArchive.open(QIODevice::ReadOnly))
         {
             QFileInfo templateInfo(archName);
