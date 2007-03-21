@@ -264,6 +264,29 @@ DATAFUNCIMPL( FunctionScopeTest, oneStmtScope,
               "contains(SOMETHINGELSE, foobar) : VARIABLE = val1 val2\n" )
 
 
+BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtSubScope, 1 )
+    QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
+    TESTFUNCNAME( scope, "contains" )
+    QList<QMake::FunctionArgAST*> testlist;
+    testlist.append( new QMake::SimpleFunctionArgAST("SOMETHINGELSE") );
+    testlist.append( new QMake::SimpleFunctionArgAST("foobar") );
+    TESTFUNCARGS( funccall, testlist )
+    QList<QMake::StatementAST*> teststmts;
+    QMake::FunctionCallAST* call;
+    call = new QMake::FunctionCallAST( "func2", "(", QList<QMake::FunctionArgAST*>(), ")" );
+    QMake::ScopeAST* subscope;
+    subscope = new QMake::ScopeAST( call, "\n" );
+    QMake::ScopeBodyAST* body;
+    body = new QMake::ScopeBodyAST( "{", QList<QMake::StatementAST*>(), "}" );
+    body->insertStatement(0, new QMake::AssignmentAST( "VARIABLE", " = ", QStringList() << "val1" << " " << "val2", "\n" ) );
+    subscope->setScopeBody( body );
+    teststmts.append( subscope );
+    TESTSCOPEBODY( scope, teststmts, 1 )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( FunctionScopeTest, oneStmtSubScope,
+              "contains(SOMETHINGELSE, foobar) : contains( foobar ) : VARIABLE = val1 val2\n" )
+
 BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScope, 1 )
     QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
     TESTFUNCNAME( scope, "contains" )
@@ -280,11 +303,49 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( FunctionScopeTest, multiLineScope,
               "contains(SOMETHINGELSE, foobar) {\n  VARIABLE = val1 val2\nVARIABLE2 = val2\n}\n" )
 
-BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingBrace, "No closing brace for function call" )
+
+BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScopeFuncCall, 1 )
+    QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
+    TESTFUNCNAME( scope, "contains" )
+    QList<QMake::FunctionArgAST*> testlist;
+    testlist.append( new QMake::SimpleFunctionArgAST("SOMETHINGELSE") );
+    testlist.append( new QMake::SimpleFunctionArgAST("foobar") );
+    TESTFUNCARGS( funccall, testlist )
+    QList<QMake::StatementAST*> teststmts;
+    teststmts.append( new QMake::AssignmentAST( "VARIABLE", " = ", QStringList() << "val1" << " " << "val2", "\n" ) );
+    QMake::FunctionCallAST* call;
+    call = new QMake::FunctionCallAST( "func2", "(", QList<QMake::FunctionArgAST*>(), ")" );
+    QMake::ScopeAST* subscope;
+    subscope = new QMake::ScopeAST( call, "\n" );
+    QMake::ScopeBodyAST* body;
+    body = new QMake::ScopeBodyAST( "{", QList<QMake::StatementAST*>(), "}" );
+    body->insertStatement(0, new QMake::AssignmentAST( "VARIABLE2", " = ", QStringList() << "val2", "\n" ) );
+    subscope->setScopeBody( body );
+    teststmts.append( subscope );
+    TESTSCOPEBODY( scope, teststmts, 2 )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( FunctionScopeTest, multiLineScopeFuncCall,
+              "contains(SOMETHINGELSE, foobar) {\n  VARIABLE = val1 val2\n  func2() {\n    VARIABLE2 = val2\n}\n}\n" )
+
+BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingParenthesis, "No closing parenthesis for function call" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( FunctionScopeTest, missingParenthesis,
+              "eval(SOMETHINGELSE\n" )
+
+
+BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingStmt, "No statement on one line function scope" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( FunctionScopeTest, missingStmt,
+              "eval(SOMETHINGELSE):\n" )
+
+BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingBrace, "No closing brace for function scope" )
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, missingBrace,
-              "eval(SOMETHINGELSE\n" )
+              "eval(SOMETHINGELSE){\n" )
 
 #include "functionscopetest.moc"
 
