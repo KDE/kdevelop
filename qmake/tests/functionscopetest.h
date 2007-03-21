@@ -48,9 +48,23 @@ class FunctionScopeTest : public QObject
         void execBasicFunc_data();
         void evalQMakeSyntax();
         void evalQMakeSyntax_data();
+        void simpleVarArg();
+        void simpleVarArg_data();
+        void argWithEqual();
+        void argWithEqual_data();
+        void missingBrace();
+        void missingBrace_data();
+        void partlyQuotedArg();
+        void partlyQuotedArg_data();
+        void slashArg();
+        void slashArg_data();
+        void oneStmtScope();
+        void oneStmtScope_data();
     private:
         bool matchArguments( QList<QMake::FunctionArgAST*>,
                              QList<QMake::FunctionArgAST*> );
+        bool matchScopeBodies( QList<QMake::StatementAST*>,
+                             QList<QMake::StatementAST*> );
         QMake::ProjectAST* ast;
 
 };
