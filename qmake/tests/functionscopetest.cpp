@@ -227,6 +227,26 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( FunctionScopeTest, slashArg,
               "eval(SOMELITERALSTRNIG/$$SOMETHINGELSE)\n" )
 
+BEGINTESTFUNCIMPL( FunctionScopeTest, nestedFunccalls, 1 )
+    QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
+    TESTFUNCNAME( scope, "eval" )
+    QVERIFY( scope->scopeBody() == 0 );
+    QList<QMake::FunctionArgAST*> testlist;
+    QMake::FunctionCallAST* nest1;
+    nest1 = new QMake::FunctionCallAST("$$contains", "(", QList<QMake::FunctionArgAST*>(), ")" );
+    QMake::FunctionCallAST* nest2;
+    nest2 = new QMake::FunctionCallAST("$$foobar", "(", QList<QMake::FunctionArgAST*>(), ")" );
+    nest2->insertArgument(0, new QMake::SimpleFunctionArgAST( "some" ) );
+    nest1->insertArgument(0, new QMake::SimpleFunctionArgAST( "QT_PROJECT" ) );
+    nest1->insertArgument(1, nest2 );
+    testlist.append( new QMake::SimpleFunctionArgAST( "val" ) );
+    testlist.append( nest1 );
+    TESTFUNCARGS( funccall, testlist )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( FunctionScopeTest, nestedFunccalls,
+              "eval(val, $$contains(QT_PROJECT, $$foobar(some)))\n" )
+
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtScope, 1 )
     QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
@@ -242,6 +262,23 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, oneStmtScope,
               "contains(SOMETHINGELSE, foobar) : VARIABLE = val1 val2\n" )
+
+
+BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScope, 1 )
+    QMake::ScopeAST* scope = dynamic_cast<QMake::ScopeAST*>( ast->statements().first() );
+    TESTFUNCNAME( scope, "contains" )
+    QList<QMake::FunctionArgAST*> testlist;
+    testlist.append( new QMake::SimpleFunctionArgAST("SOMETHINGELSE") );
+    testlist.append( new QMake::SimpleFunctionArgAST("foobar") );
+    TESTFUNCARGS( funccall, testlist )
+    QList<QMake::StatementAST*> teststmts;
+    teststmts.append( new QMake::AssignmentAST( "VARIABLE", " = ", QStringList() << "val1" << " " << "val2", "\n" ) );
+    teststmts.append( new QMake::AssignmentAST( "VARIABLE2", " = ", QStringList() << "val2", "\n" ) );
+    TESTSCOPEBODY( scope, teststmts, 2 )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( FunctionScopeTest, multiLineScope,
+              "contains(SOMETHINGELSE, foobar) {\n  VARIABLE = val1 val2\nVARIABLE2 = val2\n}\n" )
 
 BEGINTESTFAILFUNCIMPL( FunctionScopeTest, missingBrace, "No closing brace for function call" )
 ENDTESTFUNCIMPL

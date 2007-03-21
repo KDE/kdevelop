@@ -60,6 +60,10 @@ class FunctionScopeTest : public QObject
         void slashArg_data();
         void oneStmtScope();
         void oneStmtScope_data();
+        void nestedFunccalls();
+        void nestedFunccalls_data();
+        void multiLineScope();
+        void multiLineScope_data();
     private:
         bool matchArguments( QList<QMake::FunctionArgAST*>,
                              QList<QMake::FunctionArgAST*> );
