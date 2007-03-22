@@ -21,6 +21,12 @@
 #ifndef QMAKETESTMACROS_H
 #define QMAKETESTMACROS_H
 
+namespace QMake{
+    class StatementAST;
+}
+
+template <typename T> class QList;
+
 #define FUNCDEF( funcname )\
         void  funcname();\
         void  funcname##_data();
@@ -56,6 +62,14 @@ void classname::funcname()\
 
 
 #define ENDTESTFUNCIMPL }
+
+#define TESTSCOPEBODY( scope, teststmts, stmtcount ) \
+    QVERIFY( scope->scopeBody() != 0 ); \
+    QVERIFY( scope->scopeBody()->statements().count() == stmtcount ); \
+    QVERIFY( matchScopeBodies(scope->scopeBody()->statements(), teststmts) );
+
+bool matchScopeBodies( QList<QMake::StatementAST*>,
+                             QList<QMake::StatementAST*> );
 
 #endif
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

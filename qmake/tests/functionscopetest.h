@@ -74,10 +74,6 @@ class FunctionScopeTest : public QObject
         void missingParenthesis();
         void missingParenthesis_data();
     private:
-        bool matchArguments( QList<QMake::FunctionArgAST*>,
-                             QList<QMake::FunctionArgAST*> );
-        bool matchScopeBodies( QList<QMake::StatementAST*>,
-                             QList<QMake::StatementAST*> );
         QMake::ProjectAST* ast;
 
 };

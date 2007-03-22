@@ -23,7 +23,7 @@
 #include "qmakedriver.h"
 #include "qmakeast.h"
 
-#include "testmacros.h"
+#include "testhelpers.h"
 
 QTEST_MAIN( AssignmentTest )
 
