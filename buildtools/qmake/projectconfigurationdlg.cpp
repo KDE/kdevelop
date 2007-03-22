@@ -1857,9 +1857,11 @@ void ProjectConfigurationDlg::removeSharedLibDeps()
         if( prjItem->scope->variableValues("LIBS").findIndex(infos["shared_libdir"]) != -1 )
             prjItem->scope->removeFromPlusOp("LIBS", infos["shared_libdir"]);
         if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["shared_depend"]) != -1 )
+        {
             prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["shared_depend"]);
 
-        prjItem->scope->saveToFile();
+            prjItem->scope->saveToFile();
+        }
     }
 }
 
@@ -1879,9 +1881,8 @@ void ProjectConfigurationDlg::addStaticLibDeps()
         {
             prjItem->scope->addToPlusOp("LIBS", infos["static_lib"]);
             prjItem->scope->addToPlusOp("TARGETDEPS", infos["static_depend"]);
+            prjItem->scope->saveToFile();
         }
-
-        prjItem->scope->saveToFile();
     }
 }
 
@@ -1900,8 +1901,10 @@ void ProjectConfigurationDlg::removeStaticLibDeps()
         if( prjItem->scope->variableValues("LIBS").findIndex(infos["static_lib"]) != -1 )
             prjItem->scope->removeFromPlusOp("LIBS", infos["static_lib"]);
         if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["static_depend"]) != -1 )
+        {
             prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["static_depend"]);
-        prjItem->scope->saveToFile();
+            prjItem->scope->saveToFile();
+        }
     }
 }
 
@@ -1921,9 +1924,8 @@ void ProjectConfigurationDlg::addSharedLibDeps()
             prjItem->scope->addToPlusOp("LIBS", infos["shared_lib"]);
             prjItem->scope->addToPlusOp("LIBS", infos["shared_libdir"]);
             prjItem->scope->addToPlusOp("TARGETDEPS", infos["shared_depend"]);
+            prjItem->scope->saveToFile();
         }
-
-        prjItem->scope->saveToFile();
     }
 }
 
@@ -1939,9 +1941,10 @@ void ProjectConfigurationDlg::removeAppDeps()
         QMap<QString, QString> infos = myProjectItem->getLibInfos(prjItem->scope->projectDir());
 
         if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["app_depend"]) != -1 )
+        {
             prjItem->scope->removeFromPlusOp("TARGETDEPS", infos["app_depend"]);
-
-        prjItem->scope->saveToFile();
+            prjItem->scope->saveToFile();
+        }
     }
 }
 
@@ -1958,9 +1961,11 @@ void ProjectConfigurationDlg::addAppDeps()
 
         if( prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["shared_depend"]) != -1
             || prjItem->scope->variableValues("TARGETDEPS").findIndex(infos["static_depend"]) != -1 )
+        {
             prjItem->scope->addToPlusOp("TARGETDEPS", infos["app_depend"]);
 
-        prjItem->scope->saveToFile();
+            prjItem->scope->saveToFile();
+        }
     }
 }
 
