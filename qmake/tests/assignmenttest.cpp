@@ -218,6 +218,16 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, varComment, "VARIABLE = value #comment\n" )
 
+BEGINTESTFUNCIMPL( AssignmentTest, varNameDollar, 1 )
+    QMake::AssignmentAST* assignment;
+    assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "$$VARIABLE", " += ", 1, "value" )
+ENDTESTFUNCIMPL
+
+
+DATAFUNCIMPL( AssignmentTest, varNameDollar, "$$VAR += value\n" )
+
+
 BEGINTESTFAILFUNCIMPL( AssignmentTest, contAfterComment,
     "No Comments before a continuation character" )
 ENDTESTFUNCIMPL
@@ -230,12 +240,6 @@ BEGINTESTFAILFUNCIMPL( AssignmentTest, noDashEndVar,
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, noDashEndVar, "VAR- += value\n" )
-
-BEGINTESTFAILFUNCIMPL( AssignmentTest, varNameDollar,
-    "No dollar signs in variable names" )
-ENDTESTFUNCIMPL
-
-DATAFUNCIMPL( AssignmentTest, varNameDollar, "$$VAR += value\n" )
 
 
 void AssignmentTest::init()

@@ -33,16 +33,14 @@ namespace QMake
     class Lexer;
 
     struct Result {
-        Result() : stmt(0), scopebody(0), scope(0), fnarg(0), funccall(0) {}
+        Result() : stmt(0), scopebody(0), scope(0), funccall(0) {}
         QString value;
         QMake::StatementAST* stmt;
         QMake::ScopeBodyAST* scopebody;
         QMake::ScopeAST* scope;
-        QMake::FunctionArgAST* fnarg;
         QMake::FunctionCallAST* funccall;
         QStringList values;
         QList<QMake::StatementAST*> stmtlist;
-        QList<QMake::FunctionArgAST*> arglist;
     };
 
     #define YYSTYPE Result
@@ -184,105 +182,99 @@ scope_name: SCOPENAME
 
 functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<arglist>3, $<value>4 );
+            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<values>3, $<value>4 );
             $<funccall>$ = node;
         }
     | FUNCTIONNAME LPAREN RPAREN
         {
-            $<funccall>$ = new FunctionCallAST( $<value>1, $<value>2, QList<FunctionArgAST*>(), $<value>3 );
+            $<funccall>$ = new FunctionCallAST( $<value>1, $<value>2, QStringList(), $<value>3 );
         }
     | EXCLAM FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, $<arglist>4, $<value>5 );
+            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, $<values>4, $<value>5 );
         }
     | EXCLAM FUNCTIONNAME LPAREN RPAREN
         {
-            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, QList<FunctionArgAST*>(), $<value>4 );
+            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, QStringList(), $<value>4 );
         }
     ;
 
 functionargs: functionargs COMMA functionarg
         {
-            $<arglist>$.append( $<fnarg>3 );
+            $<values>$.append( $<value>3 );
         }
     | functionarg
         {
-            $<arglist>$.clear();
-            $<arglist>$.append( $<fnarg>1 );
+            $<values>$.clear();
+            $<values>$.append( $<value>1 );
         }
     ;
 
-functionarg: ws fnvalue
-        {
-            $<fnarg>$ = new SimpleFunctionArgAST( $<value>2, $<value>1 );
-        }
-    | ws FUNCTIONCALL ws LPAREN functionargs RPAREN ws
-        {
-            $<fnarg>$ = new FunctionCallAST( $<value>2, $<value>3+$<value>4, $<arglist>5, $<value>6+$<value>7, $<value>1 );
-        }
-    ;
-
-fnvalue: fnvalue FNVALUE
+functionarg: functionarg FNVALUE
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue QMVARIABLE
+    | functionarg QMVARIABLE
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue SHELLVARIABLE
+    | functionarg SHELLVARIABLE
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue WS
+    | functionarg WS
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue TILDEEQ
+    | functionarg TILDEEQ
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue PLUSEQ
+    | functionarg PLUSEQ
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue MINUSEQ
+    | functionarg MINUSEQ
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue STAREQ
+    | functionarg STAREQ
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue EQUAL
+    | functionarg EQUAL
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue COLON
+    | functionarg COLON
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue OR
+    | functionarg OR
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue EXCLAM
+    | functionarg EXCLAM
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue DOLLAR
+    | functionarg DOLLAR
         {
             $<value>$ += $<value>2;
         }
-    | fnvalue LPAREN fnvalue RPAREN
+    | functionarg LPAREN functionarg RPAREN
         {
             $<value>$ += $<value>2+$<value>3+$<value>4;
+        }
+    | functionarg FUNCTIONCALL ws LPAREN functionargs RPAREN
+        {
+            $<value>$ += $<value>2+$<value>3+$<value>4+$<values>5.join(",")+$<value>6;
         }
     | DOLLAR
         {
             $<value>$ = $<value>1;
         }
-    | LPAREN fnvalue RPAREN
+    | LPAREN functionarg RPAREN
         {
             $<value>$ = $<value>1+$<value>2+$<value>3;
         }
@@ -326,9 +318,17 @@ fnvalue: fnvalue FNVALUE
         {
             $<value>$ = $<value>1;
         }
+    | WS
+        {
+            $<value>$ = $<value>1;
+        }
     | EXCLAM
         {
             $<value>$ = $<value>1;
+        }
+    | FUNCTIONCALL ws LPAREN functionargs RPAREN
+        {
+            $<value>$ = $<value>1+$<value>2+$<value>3+$<values>4.join(",")+$<value>5;
         }
     ;
 

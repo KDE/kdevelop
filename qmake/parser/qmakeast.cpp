@@ -380,22 +380,10 @@ namespace QMake
         m_body = body;
     }
 
-    FunctionArgAST::FunctionArgAST( const QString& ws, AST* parent )
-        : AST( ws, parent )
-    {}
-
-    FunctionArgAST::~FunctionArgAST()
-    {}
-
-    void FunctionArgAST::writeToString( QString& buf ) const
-    {
-        buf += whitespace();
-    }
-
     FunctionCallAST::FunctionCallAST( const QString& functionname,
-            const QString& begin, QList<FunctionArgAST*> args,
+            const QString& begin, QStringList args,
             const QString& end, const QString& ws, AST* parent )
-        : FunctionArgAST( ws, parent ), m_args( args ),
+        : AST( ws, parent ), m_args( args ),
             m_functionName( functionname ), m_begin( begin ), m_end( end )
     {
     }
@@ -403,37 +391,25 @@ namespace QMake
 
     FunctionCallAST::~FunctionCallAST()
     {
-        QList<FunctionArgAST*>::const_iterator it;
-        for ( it = m_args.begin(); it != m_args.end(); ++it )
-        {
-            delete( *it );
-        }
         m_args.clear();
     }
 
     void FunctionCallAST::writeToString( QString& buf ) const
     {
-        FunctionArgAST::writeToString( buf );
+        buf += whitespace();
         buf += m_functionName;
         buf += m_begin;
-        QList<FunctionArgAST*>::const_iterator it;
-        for ( it = m_args.begin(); it != m_args.end(); )
-        {
-            if (( *it ) )
-                ( *it )->writeToString( buf );
-            if ( ++it != m_args.end() )
-                buf += ",";
-        }
+        buf += m_args.join(",");
         buf += m_end;
     }
 
 
-    QList<FunctionArgAST*> FunctionCallAST::arguments() const
+    QStringList FunctionCallAST::arguments() const
     {
         return m_args;
     }
 
-    void FunctionCallAST::insertArgument( int i, FunctionArgAST* arg )
+    void FunctionCallAST::insertArgument( int i, const QString& arg )
     {
         m_args.insert( i, arg );
     }
@@ -451,30 +427,6 @@ namespace QMake
     void FunctionCallAST::removeArgument( int i )
     {
         m_args.removeAt( i );
-    }
-
-    SimpleFunctionArgAST::SimpleFunctionArgAST( const QString& value,
-            const QString& ws, AST* parent )
-        : FunctionArgAST( ws, parent ), m_value( value )
-    {}
-
-    SimpleFunctionArgAST::~SimpleFunctionArgAST()
-    {}
-
-    QString SimpleFunctionArgAST::value() const
-    {
-        return m_value;
-    }
-
-    void SimpleFunctionArgAST::setValue( const QString& val )
-    {
-        m_value = val;
-    }
-
-    void SimpleFunctionArgAST::writeToString( QString& buf ) const
-    {
-        FunctionArgAST::writeToString( buf );
-        buf += m_value;
     }
 
 }
