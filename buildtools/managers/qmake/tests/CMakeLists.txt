@@ -22,7 +22,7 @@ target_link_libraries(qmake-assignmenttest
     kdevqmakeparser
     )
 
-set(functionscopetest_SRCS functionscopetest.cpp)
+set(functionscopetest_SRCS functionscopetest.cpp testhelpers.cpp)
 kde4_automoc(qmake-functionscopetest ${functionscopetest_SRCS})
 kde4_add_executable(qmake-functionscopetest NOGUI RUN_UNINSTALLED ${functionscopetest_SRCS})
 target_link_libraries(qmake-functionscopetest

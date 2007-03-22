@@ -43,7 +43,7 @@ scopename:  (no statement, is accepted by qmake)
 #include "qmakedriver.h"
 #include "qmakeast.h"
 #include <QDebug>
-#include "testmacros.h"
+#include "testhelpers.h"
 
 QTEST_MAIN( ParseTest )
 

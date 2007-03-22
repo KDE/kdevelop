@@ -21,7 +21,7 @@
 #include "functionscopetest.h"
 #include "qmakeast.h"
 #include "qmakedriver.h"
-#include "testmacros.h"
+#include "testhelpers.h"
 
 QTEST_MAIN( FunctionScopeTest )
 
@@ -58,50 +58,6 @@ void FunctionScopeTest::cleanup()
     delete ast;
     ast = 0;
     QVERIFY( ast == 0 );
-}
-
-bool FunctionScopeTest::matchScopeBodies( QList<QMake::StatementAST*> realbody,
-                             QList<QMake::StatementAST*> testbody )
-{
-    if( realbody.count() != testbody.count() )
-        return false;
-    int i = 0;
-    QMake::AssignmentAST* assign;
-    QMake::ScopeAST* scope;
-    QMake::AssignmentAST* testassign;
-    QMake::ScopeAST* testscope;
-
-    foreach( QMake::StatementAST* ast, realbody )
-    {
-        scope = dynamic_cast<QMake::ScopeAST*>(ast);
-        testscope = dynamic_cast<QMake::ScopeAST*>( testbody.at( i ) );
-        if( scope && testscope )
-        {
-            if( ( scope->scopeBody() && !testscope->scopeBody() )
-                    || ( !scope->scopeBody() && testscope->scopeBody() ) )
-                return false;
-            if( scope->scopeBody() && testscope->scopeBody() )
-            {
-                QList<QMake::StatementAST*> bodylist;
-                QList<QMake::StatementAST*> testbodylist;
-                bodylist = scope->scopeBody()->statements();
-                testbodylist = testscope->scopeBody()->statements();
-                if( !matchScopeBodies( bodylist, testbodylist ) )
-                    return false;
-            }
-        }
-        assign = dynamic_cast<QMake::AssignmentAST*>(ast);
-        testassign = dynamic_cast<QMake::AssignmentAST*>( testbody.at( i ) );
-        if( assign && testassign )
-        {
-            if( assign->variable() != testassign->variable()
-                    || assign->op() != testassign->op()
-                    || assign->values() != testassign->values() )
-                return false;
-        }
-        i++;
-    }
-    return true;
 }
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, execBasicFunc, 1 )
