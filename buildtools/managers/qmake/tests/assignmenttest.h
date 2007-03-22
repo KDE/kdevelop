@@ -31,13 +31,6 @@ namespace QMake
     class ProjectAST;
 }
 
-#define TESTASSIGNMENT( ast, var, opval, valcount, joinvalues ) \
-    QVERIFY( ast != 0 );\
-    QVERIFY( ast->variable() == var );\
-    QVERIFY( ast->op() == opval );\
-    QVERIFY( ast->values().count() == valcount );\
-    QVERIFY( ast->values().join("") == joinvalues );
-
 class AssignmentTest : public QObject
 {
         Q_OBJECT

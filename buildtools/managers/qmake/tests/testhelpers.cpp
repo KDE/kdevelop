@@ -21,13 +21,13 @@
 #include "testhelpers.h"
 
 #include <QtCore/QList>
+#include <QtTest/QtTest>
 #include "qmakeast.h"
 
-bool matchScopeBodies( QList<QMake::StatementAST*> realbody,
+void matchScopeBodies( QList<QMake::StatementAST*> realbody,
                              QList<QMake::StatementAST*> testbody )
 {
-    if( realbody.count() != testbody.count() )
-        return false;
+    QVERIFY( realbody.count() == testbody.count() );
     int i = 0;
     QMake::AssignmentAST* assign;
     QMake::ScopeAST* scope;
@@ -38,31 +38,36 @@ bool matchScopeBodies( QList<QMake::StatementAST*> realbody,
     {
         scope = dynamic_cast<QMake::ScopeAST*>(ast);
         testscope = dynamic_cast<QMake::ScopeAST*>( testbody.at( i ) );
+
         if( scope && testscope )
         {
-            if( ( scope->scopeBody() && !testscope->scopeBody() )
-                    || ( !scope->scopeBody() && testscope->scopeBody() ) )
-                return false;
+            QVERIFY( ( scope->functionCall() && testscope->functionCall() )
+                    || ( scope->scopeName() == testscope->scopeName() ) );
+            if( scope->functionCall() && testscope->functionCall() )
+            {
+                TESTFUNCNAME( scope, testscope->functionCall()->functionName() )
+                TESTFUNCARGS( scope->functionCall(), testscope->functionCall()->arguments() )
+            }
+            QVERIFY( ( scope->scopeBody() && testscope->scopeBody() )
+                        || ( !scope->scopeBody() && !testscope->scopeBody() ) );
             if( scope->scopeBody() && testscope->scopeBody() )
             {
                 QList<QMake::StatementAST*> bodylist;
                 QList<QMake::StatementAST*> testbodylist;
                 bodylist = scope->scopeBody()->statements();
                 testbodylist = testscope->scopeBody()->statements();
-                if( !matchScopeBodies( bodylist, testbodylist ) )
-                    return false;
+                matchScopeBodies( bodylist, testbodylist );
             }
         }
         assign = dynamic_cast<QMake::AssignmentAST*>(ast);
         testassign = dynamic_cast<QMake::AssignmentAST*>( testbody.at( i ) );
         if( assign && testassign )
         {
-            if( assign->variable() != testassign->variable()
-                    || assign->op() != testassign->op()
-                    || assign->values() != testassign->values() )
-                return false;
+            TESTASSIGNMENT( assign, testassign->variable(), testassign->op(),
+                            testassign->values().count(), testassign->values().join("") )
         }
         i++;
     }
-    return true;
 }
+
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

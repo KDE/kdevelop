@@ -25,21 +25,6 @@
 
 QTEST_MAIN( FunctionScopeTest )
 
-#define TESTFUNCNAME( scopeast, funcname ) \
-    QVERIFY( scopeast->functionCall() != 0 ); \
-    QVERIFY( scopeast->scopeName().isEmpty() ); \
-    QMake::FunctionCallAST* funccall = scopeast->functionCall(); \
-    QVERIFY( funccall->functionName() == funcname );
-
-#define TESTFUNCARGS( funccall, arglist ) \
-    QVERIFY( funccall != 0 ); \
-    QVERIFY( funccall->arguments() == arglist );
-
-#define TESTSCOPEBODY( scope, teststmts, stmtcount ) \
-    QVERIFY( scope->scopeBody() != 0 ); \
-    QVERIFY( scope->scopeBody()->statements().count() == stmtcount ); \
-    QVERIFY( matchScopeBodies(scope->scopeBody()->statements(), teststmts) );
-
 FunctionScopeTest::FunctionScopeTest( QObject* parent )
     : QObject( parent ), ast(0)
 {}
@@ -180,7 +165,7 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, oneStmtSubScope, 1 )
     TESTFUNCARGS( funccall, testlist )
     QList<QMake::StatementAST*> teststmts;
     QMake::FunctionCallAST* call;
-    call = new QMake::FunctionCallAST( "contains", "(", QStringList(), ")" );
+    call = new QMake::FunctionCallAST( "contains", "(", QStringList() << " foobar ", ")" );
     QMake::ScopeAST* subscope;
     subscope = new QMake::ScopeAST( call, "\n" );
     QMake::ScopeBodyAST* body;
