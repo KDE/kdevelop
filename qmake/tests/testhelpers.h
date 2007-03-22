@@ -63,12 +63,30 @@ void classname::funcname()\
 
 #define ENDTESTFUNCIMPL }
 
+#define TESTASSIGNMENT( ast, var, opval, valcount, joinvalues ) \
+    QVERIFY( ast != 0 );\
+    QVERIFY( ast->variable() == var );\
+    QVERIFY( ast->op() == opval );\
+    QVERIFY( ast->values().count() == valcount );\
+    QVERIFY( ast->values().join("") == joinvalues );
+
+#define TESTFUNCNAME( scopeast, funcname ) \
+    QVERIFY( scopeast->functionCall() != 0 ); \
+    QVERIFY( scopeast->scopeName().isEmpty() ); \
+    QMake::FunctionCallAST* funccall = scopeast->functionCall(); \
+    QVERIFY( funccall->functionName() == funcname );
+
+#define TESTFUNCARGS( funccall, arglist ) \
+    QVERIFY( funccall != 0 ); \
+    QVERIFY( funccall->arguments() == arglist );
+
 #define TESTSCOPEBODY( scope, teststmts, stmtcount ) \
     QVERIFY( scope->scopeBody() != 0 ); \
     QVERIFY( scope->scopeBody()->statements().count() == stmtcount ); \
-    QVERIFY( matchScopeBodies(scope->scopeBody()->statements(), teststmts) );
+    matchScopeBodies(scope->scopeBody()->statements(), teststmts);
 
-bool matchScopeBodies( QList<QMake::StatementAST*>,
+
+void matchScopeBodies( QList<QMake::StatementAST*>,
                              QList<QMake::StatementAST*> );
 
 #endif
