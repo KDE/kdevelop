@@ -132,47 +132,25 @@ namespace QMake
             QString m_comment;
     };
 
-    class QMAKEPARSER_EXPORT FunctionArgAST : public AST
-    {
-        public:
-            FunctionArgAST( const QString& ws = "", AST* parent = 0 );
-            virtual ~FunctionArgAST();
-//             virtual QString value() const = 0;
-            virtual void writeToString( QString& ) const;
-        private:
-    };
 
-    class QMAKEPARSER_EXPORT FunctionCallAST : public FunctionArgAST
+    class QMAKEPARSER_EXPORT FunctionCallAST : public AST
     {
         public:
-            FunctionCallAST( const QString& name, const QString& begin, QList<FunctionArgAST*> args,
+            FunctionCallAST( const QString& name, const QString& begin, QStringList args,
                              const QString& end = "", const QString& ws = "", AST* parent = 0 );
             ~FunctionCallAST();
-            QList<FunctionArgAST*> arguments() const;
-            void insertArgument( int i, FunctionArgAST* );
+            QStringList arguments() const;
+            void insertArgument( int i, const QString& );
             void removeArgument( int i );
             QString functionName() const;
             void setFunctionName( const QString& );
             void writeToString( QString& ) const;
         private:
-            QList<FunctionArgAST*> m_args;
+            QStringList m_args;
             QString m_functionName;
             QString m_begin;
             QString m_end;
     };
-
-    class QMAKEPARSER_EXPORT SimpleFunctionArgAST : public FunctionArgAST
-    {
-        public:
-            SimpleFunctionArgAST( const QString& arg, const QString& ws = "", AST* parent = 0 );
-            ~SimpleFunctionArgAST();
-            QString value() const;
-            void setValue( const QString& );
-            void writeToString( QString& ) const;
-        private:
-            QString m_value;
-    };
-
 
     class QMAKEPARSER_EXPORT ScopeBodyAST: public AST
     {

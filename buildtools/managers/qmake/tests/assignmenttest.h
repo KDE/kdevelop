@@ -89,12 +89,13 @@ class AssignmentTest : public QObject
         void bracketVarQuote_data();
         void pathValue();
         void pathValue_data();
+        void varNameDollar();
+        void varNameDollar_data();
+
         void commandExecQMakeVar();
         void commandExecQMakeVar_data();
         void noDashEndVar();
         void noDashEndVar_data();
-        void varNameDollar();
-        void varNameDollar_data();
         void varComment();
         void varComment_data();
         void contAfterComment();

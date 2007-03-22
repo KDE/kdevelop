@@ -84,16 +84,14 @@ namespace QMake
     class Lexer;
 
     struct Result {
-        Result() : stmt(0), scopebody(0), scope(0), fnarg(0), funccall(0) {}
+        Result() : stmt(0), scopebody(0), scope(0), funccall(0) {}
         QString value;
         QMake::StatementAST* stmt;
         QMake::ScopeBodyAST* scopebody;
         QMake::ScopeAST* scope;
-        QMake::FunctionArgAST* fnarg;
         QMake::FunctionCallAST* funccall;
         QStringList values;
         QList<QMake::StatementAST*> stmtlist;
-        QList<QMake::FunctionArgAST*> arglist;
     };
 
     #define YYSTYPE Result

@@ -9,6 +9,13 @@ set(kdevqmakeparser_SRCS qmakeast.cpp qmakedriver.cpp)
 include(FindFlex)
 include(FindBison)
 
+if(FLEX_VERSION LESS 2.5.33)
+	message("LESS")
+else(FLEX_VERSION LESS 2.5.33)
+	message("EQ_MORE")
+endif(FLEX_VERSION LESS 2.5.33)
+
+
 if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_VERSION LESS 2.3 AND NOT FLEX_VERSION LESS 2.5.31)
     # Add command to generate the lexer.
     add_custom_command(
