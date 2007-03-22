@@ -221,9 +221,8 @@ DATAFUNCIMPL( AssignmentTest, varComment, "VARIABLE = value #comment\n" )
 BEGINTESTFUNCIMPL( AssignmentTest, varNameDollar, 1 )
     QMake::AssignmentAST* assignment;
     assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
-TESTASSIGNMENT( assignment, "$$VARIABLE", " += ", 1, "value" )
+TESTASSIGNMENT( assignment, "$$VAR", " += ", 1, "value" )
 ENDTESTFUNCIMPL
-
 
 DATAFUNCIMPL( AssignmentTest, varNameDollar, "$$VAR += value\n" )
 
