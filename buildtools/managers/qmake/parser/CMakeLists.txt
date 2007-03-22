@@ -10,11 +10,11 @@ include(FindFlex)
 include(FindBison)
 include(MacroEnsureVersion)
 
-macro_ensure_version( ${FLEX_VERSION} "2.5.33" FLEX_TOO_OLD )
-macro_ensure_version2( ${BISON_VERSION} "2.3" BISON_TOO_OLD )
+macro_ensure_version( "2.5.31" "${FLEX_VERSION}" FLEX_NOT_OLD )
+macro_ensure_version2( "2.3" "${BISON_VERSION}" BISON_NOT_OLD )
 
 
-if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_TOO_OLD AND NOT FLEX_TOO_OLD)
+if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
     # Add command to generate the lexer.
     add_custom_command(
         OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/qmake_lexer.cpp"
@@ -66,13 +66,13 @@ if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_TOO_OLD AND NOT FLEX_TOO_O
         )
     include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
-else(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_TOO_OLD AND NOT FLEX_TOO_OLD)
+else(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
     message("Assuming existence of the generated lexer file qmake_lexer.cpp")
     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
     message("Assuming existence of the generated parser file qmake_parser.cpp")
     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp ${kdevqmakeparser_SRCS})
     include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/generated )
-endif(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND NOT BISON_TOO_OLD AND NOT FLEX_TOO_OLD)
+endif(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
 
 kde4_automoc(${kdevqmakeparser_SRCS})
 kde4_add_library(kdevqmakeparser SHARED ${kdevqmakeparser_SRCS})
