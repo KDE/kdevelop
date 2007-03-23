@@ -117,7 +117,7 @@ namespace QMake
             {}
             void writeToString( QString& buf ) const
             {
-                buf += whitespace() + "\n";
+                buf += whitespace();
             }
     };
 
@@ -130,26 +130,6 @@ namespace QMake
             void writeToString( QString& ) const;
         private:
             QString m_comment;
-    };
-
-
-    class QMAKEPARSER_EXPORT FunctionCallAST : public AST
-    {
-        public:
-            FunctionCallAST( const QString& name, const QString& begin, QStringList args,
-                             const QString& end = "", const QString& ws = "", AST* parent = 0 );
-            ~FunctionCallAST();
-            QStringList arguments() const;
-            void insertArgument( int i, const QString& );
-            void removeArgument( int i );
-            QString functionName() const;
-            void setFunctionName( const QString& );
-            void writeToString( QString& ) const;
-        private:
-            QStringList m_args;
-            QString m_functionName;
-            QString m_begin;
-            QString m_end;
     };
 
     class QMAKEPARSER_EXPORT ScopeBodyAST: public AST
@@ -173,45 +153,64 @@ namespace QMake
     class QMAKEPARSER_EXPORT ScopeAST : public StatementAST
     {
         public:
-            enum ScopeType { Function, Simple };
-            ScopeAST( FunctionCallAST* call, const QString& lineend = QString(), const QString& ws = "", AST* parent = 0 );
-            ScopeAST( const QString& name, const QString& ws = "", AST* parent = 0 );
+            ScopeAST( const QString& ws = "", AST* parent = 0 );
             ~ScopeAST();
             void writeToString( QString& ) const;
             void setScopeBody( ScopeBodyAST* );
             ScopeBodyAST* scopeBody() const;
-            void setScopeName( const QString& );
-            QString scopeName( ) const;
-            void setFunctionCall( FunctionCallAST* );
-            FunctionCallAST* functionCall() const;
+            QString lineEnding() const;
+            void setLineEnding( const QString& );
         private:
-            FunctionCallAST* m_call;
-            QString m_scopeName;
-            ScopeType m_type;
             ScopeBodyAST* m_body;
             QString m_lineend;
     };
 
-    class QMAKEPARSER_EXPORT OrAST : public StatementAST
+    class QMAKEPARSER_EXPORT FunctionCallAST : public ScopeAST
+    {
+        public:
+            FunctionCallAST( const QString& name, const QString& begin, QStringList args,
+                             const QString& end = "", const QString& ws = "", AST* parent = 0 );
+            ~FunctionCallAST();
+            QStringList arguments() const;
+            void insertArgument( int i, const QString& );
+            void removeArgument( int i );
+            QString functionName() const;
+            void setFunctionName( const QString& );
+            void writeToString( QString& ) const;
+        private:
+            QStringList m_args;
+            QString m_functionName;
+            QString m_begin;
+            QString m_end;
+    };
+
+
+    class QMAKEPARSER_EXPORT SimpleScopeAST : public ScopeAST
+    {
+        public:
+            SimpleScopeAST( const QString& name, const QString& ws = "", AST* parent = 0);
+            ~SimpleScopeAST();
+            QString scopeName() const;
+            void setScopeName( const QString& );
+            void writeToString( QString& ) const;
+        private:
+            QString m_scopeName;
+    };
+
+    class QMAKEPARSER_EXPORT OrAST : public ScopeAST
     {
         public:
             OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall,
-                   ScopeBodyAST* body,
                    const QString& ws = "", AST* parent = 0 );
             ~OrAST();
             void writeToString( QString& ) const;
             FunctionCallAST* leftCall() const;
             FunctionCallAST* rightCall() const;
-            ScopeBodyAST* scopeBody() const;
             void setLeftCall( FunctionCallAST* );
             void setRightCall( FunctionCallAST* );
-            void setScopeBody( ScopeBodyAST* );
         private:
             FunctionCallAST* m_lCall;
             FunctionCallAST* m_rCall;
-            ScopeBodyAST* m_body;
-            QString m_begin;
-            QString m_end;
             QString m_orop;
     };
 

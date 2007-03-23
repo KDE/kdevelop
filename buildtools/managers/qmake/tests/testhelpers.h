@@ -71,10 +71,16 @@ void classname::funcname()\
     QVERIFY( ast->values().join("") == joinvalues );
 
 #define TESTFUNCNAME( scopeast, funcname ) \
-    QVERIFY( scopeast->functionCall() != 0 ); \
-    QVERIFY( scopeast->scopeName().isEmpty() ); \
-    QMake::FunctionCallAST* funccall = scopeast->functionCall(); \
-    QVERIFY( funccall->functionName() == funcname );
+    QVERIFY( scopeast ); \
+    QVERIFY( scopeast->functionName() == funcname );
+
+#define TESTOROP( scopeast, funcname1, funcname2 ) \
+    QVERIFY( scopeast->leftCall() != 0 ); \
+    QVERIFY( scopeast->rightCall() != 0 ); \
+    QMake::FunctionCallAST* leftfunccall = scopeast->leftCall(); \
+    QMake::FunctionCallAST* rightfunccall = scopeast->rightCall(); \
+    QVERIFY( leftfunccall->functionName() == funcname1 ); \
+    QVERIFY( rightfunccall->functionName() == funcname2 );
 
 #define TESTFUNCARGS( funccall, arglist ) \
     QVERIFY( funccall != 0 ); \

@@ -66,6 +66,10 @@ class FunctionScopeTest : public QObject
         void multiLineScopeFuncCall_data();
         void oneStmtSubScope();
         void oneStmtSubScope_data();
+        void notFunc();
+        void notFunc_data();
+        void orOp();
+        void orOp_data();
 
         void missingStmt();
         void missingStmt_data();

@@ -41,12 +41,32 @@ void matchScopeBodies( QList<QMake::StatementAST*> realbody,
 
         if( scope && testscope )
         {
-            QVERIFY( ( scope->functionCall() && testscope->functionCall() )
-                    || ( scope->scopeName() == testscope->scopeName() ) );
-            if( scope->functionCall() && testscope->functionCall() )
+            QMake::FunctionCallAST* call = dynamic_cast<QMake::FunctionCallAST*>(scope);
+            QMake::FunctionCallAST* testcall = dynamic_cast<QMake::FunctionCallAST*>(testscope);
+            QMake::SimpleScopeAST* simple = dynamic_cast<QMake::SimpleScopeAST*>(scope);
+            QMake::SimpleScopeAST* testsimple = dynamic_cast<QMake::SimpleScopeAST*>(testscope);
+            QMake::OrAST* orop = dynamic_cast<QMake::OrAST*>(scope);
+            QMake::OrAST* testorop = dynamic_cast<QMake::OrAST*>(testscope);
+            QVERIFY( ( call && testcall )
+                || ( simple && testsimple )
+                || ( orop && testorop ) );
+            if( call && testcall )
             {
-                TESTFUNCNAME( scope, testscope->functionCall()->functionName() )
-                TESTFUNCARGS( scope->functionCall(), testscope->functionCall()->arguments() )
+                TESTFUNCNAME( call, testcall->functionName() )
+                TESTFUNCARGS( call, testcall->arguments() )
+            }else if( simple && testsimple )
+            {
+
+            }else if( orop && testorop )
+            {
+                TESTFUNCNAME( orop->leftCall(),
+                                testorop->leftCall()->functionName() )
+                TESTFUNCNAME( orop->rightCall(),
+                                testorop->rightCall()->functionName() )
+                TESTFUNCARGS( orop->leftCall(),
+                                testorop->leftCall()->arguments() )
+                TESTFUNCARGS( orop->rightCall(),
+                                testorop->rightCall()->arguments() )
             }
             QVERIFY( ( scope->scopeBody() && testscope->scopeBody() )
                         || ( !scope->scopeBody() && !testscope->scopeBody() ) );

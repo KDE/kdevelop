@@ -70,7 +70,7 @@ int main( int argc, char* argv[] )
                 ast->writeToString( buf );
             kDebug(9024) << "Project Read: "<< ast->statements().count() << " Top-Level Statements" << endl;
             if( !silent )
-                kDebug(9024) << "-------------\n" << buf << "\n-------------\n";
+                kDebug(9024) << "-------------\n" << buf << "-------------\n";
         }
     }
 
