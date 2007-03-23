@@ -31,9 +31,18 @@ target_link_libraries(qmake-functionscopetest
     kdevqmakeparser
     )
 
+set(scopetest_SRCS scopetest.cpp testhelpers.cpp)
+kde4_automoc(qmake-scopetest ${scopetest_SRCS})
+kde4_add_executable(qmake-scopetest NOGUI RUN_UNINSTALLED ${scopetest_SRCS})
+target_link_libraries(qmake-scopetest
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevqmakeparser
+    )
 
 add_test(qmake-parsetest ${EXECUTABLE_OUTPUT_PATH}/qmake-parsetest)
 add_test(qmake-assignmenttest ${EXECUTABLE_OUTPUT_PATH}/qmake-assignmenttest)
 add_test(qmake-functionscopetest ${EXECUTABLE_OUTPUT_PATH}/qmake-functionscopetest)
+add_test(qmake-scopetest ${EXECUTABLE_OUTPUT_PATH}/qmake-scopetest)
 
 endif(KDE4_BUILD_TESTS)

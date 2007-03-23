@@ -74,6 +74,10 @@ void classname::funcname()\
     QVERIFY( scopeast ); \
     QVERIFY( scopeast->functionName() == funcname );
 
+#define TESTSCOPENAME( scopeast, scopename ) \
+    QVERIFY( scopeast ); \
+    QVERIFY( scopeast->scopeName() == scopename );
+
 #define TESTOROP( scopeast, funcname1, funcname2 ) \
     QVERIFY( scopeast->leftCall() != 0 ); \
     QVERIFY( scopeast->rightCall() != 0 ); \
