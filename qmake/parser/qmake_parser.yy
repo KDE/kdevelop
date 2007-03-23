@@ -104,68 +104,64 @@ statement: comment
         {
             $<stmt>$ = $<stmt>1;
         }
-    | ws functioncall NEWLINE
-        {
-            $<stmt>$ = new ScopeAST( $<funccall>2, $<value>3, $<value>1 );
-        }
-    | or_op
-        {
-            $<stmt>$ = $<stmt>1;
-        }
     ;
 
-scope: scope_head scope_body
+scope: scope_head ws scope_body
         {
             ScopeAST* node = $<scope>1;
-            node->setScopeBody( $<scopebody>2 );
+            $<scopebody>3->setWhitespace( $<value>2 );
+            node->setScopeBody( $<scopebody>3 );
             $<stmt>$ = node;
         }
-    ;
-
-or_op: ws functioncall OR ws functioncall scope_body
+    | scope_head NEWLINE
         {
-            $<funccall>2->setWhitespace($<value>1);
-            $<funccall>5->setWhitespace($<value>4);
-            OrAST* node = new OrAST( $<funccall>2, $<value>3, $<funccall>5, $<scopebody>6 );
+            ScopeAST* node = $<scope>1;
+            node->setLineEnding( $<value>2 );
             $<stmt>$ = node;
         }
     ;
 
 scope_head: ws scope_name
         {
-            ScopeAST* node = new ScopeAST( $<value>2, $<value>1 );
+            SimpleScopeAST* node = new SimpleScopeAST( $<value>2, $<value>1 );
             $<scope>$ = node;
         }
     | ws functioncall
         {
-            ScopeAST* node = new ScopeAST( $<funccall>2, "", $<value>1 );
+            ScopeAST* node = $<funccall>2;
+            node->setWhitespace( $<value>1 );
             $<scope>$ = node;
         }
+    | ws functioncall OR functioncall
+    {
+        OrAST* node = new OrAST( $<funccall>2, $<value>3, $<funccall>4, $<value>1 );
+        $<scope>$ = node;
+    }
     ;
 
-scope_body: ws LCURLY COMMENT NEWLINE statements ws RCURLY NEWLINE
-        {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7+$<value>8 );
-            $<scopebody>$ = node;
-        }
-    | ws LCURLY NEWLINE statements ws RCURLY NEWLINE
+scope_body: LCURLY COMMENT NEWLINE statements ws RCURLY NEWLINE
         {
             ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6+$<value>7 );
             $<scopebody>$ = node;
         }
-    | ws LCURLY NEWLINE statements ws RCURLY
+    | LCURLY NEWLINE statements ws RCURLY NEWLINE
+        {
+            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, $<stmtlist>3, $<value>4+$<value>5+$<value>6 );
+            $<scopebody>$ = node;
+        }
+    | LCURLY NEWLINE statements ws RCURLY
+        {
+            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, $<stmtlist>3, $<value>4+$<value>5 );
+            $<scopebody>$ = node;
+        }
+    | LCURLY COMMENT NEWLINE statements ws RCURLY
         {
             ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6 );
             $<scopebody>$ = node;
         }
-    | ws LCURLY COMMENT NEWLINE statements ws RCURLY
+    | COLON statement
         {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3+$<value>4, $<stmtlist>5, $<value>6+$<value>7 );
-            $<scopebody>$ = node;
-        }
-    | ws COLON statement
-        {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, $<stmt>3 );
+            ScopeBodyAST* node = new ScopeBodyAST( $<value>1, $<stmt>2 );
             $<scopebody>$ = node;
         }
     ;
