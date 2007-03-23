@@ -12,6 +12,7 @@ Comment[et]=Lihtne failide üleslaadimise plugin. See kopeerib faili mis tahes K
 Comment[eu]=Fitxategi kargatzaile plugin sinplea. Fitxategiaren kopia bat egiten du edozein KIO euskarridun protokolo erabiliz.
 Comment[fa]=وصلۀ بارگذارندۀ پروندۀ ساده. رونوشت پرونده‌ای را روی هر قرارداد پشتیبانی KIO انجام می‌دهد.
 Comment[fr]=Simple module d'envoi de fichier. Il fait une copie de fichier par n'importe quel protocole KIO géré.
+Comment[gl]=Extensión sinxelo para a subida de ficheiros. Fai unha copia do ficheiro a través de calqueira dos protocolos KIO soportados.
 Comment[hu]=Egyszerű fájlfeltöltő modul. Fájlok másolására képes bármelyik KDE-protokollon keresztül.
 Comment[it]=Semplice plugin di invio file. Fa una copia del file tramite qualunque protocollo KIO supportato.
 Comment[ja]=簡単なファイルアップローダプラグイン。KIO がサポートするプロトコル上でファイルをコピーします。

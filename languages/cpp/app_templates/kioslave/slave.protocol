@@ -18,6 +18,7 @@ Description[eu]=kioslave bat honentzat: %{APPNAMELC}
 Description[fa]=یک kioslave برای %{APPNAMELC}
 Description[fr]=Un module d'entrée / sortie pour %{APPNAMELC}
 Description[ga]=kioslave le haghaidh %{APPNAMELC}
+Description[gl]=Un kioslave para %{APPNAMELC}
 Description[hu]=%{APPNAMELC}-támogató KIOslave
 Description[it]=Un kioslave per %{APPNAMELC}
 Description[ja]=%{APPNAMELC}のためのkioslave
