@@ -42,7 +42,7 @@ namespace KDevelop
  * Uses a disguised singleton + stateful design.
  *
  * \todo introduce stacks for the state?
- *
+ * \todo move private members to a private class
  * \todo non-loaded documents don't trigger the removeDocument call...
  */
 class KDEVPLATFORM_EXPORT EditorIntegrator
@@ -218,4 +218,4 @@ protected:
 }
 #endif // EDITORINTEGRATOR_H
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

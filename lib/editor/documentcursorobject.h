@@ -52,11 +52,11 @@ public:
   virtual void deleted(KTextEditor::SmartCursor* cursor);
 
 private:
-  KTextEditor::Cursor* m_cursor;
-  KUrl m_url;
+  class DocumentCursorObjectPrivate* const d;
 };
 
 }
 #endif // KDEVDOCUMENTCURSOROBJECT_H
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+

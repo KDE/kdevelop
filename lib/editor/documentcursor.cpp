@@ -28,42 +28,51 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+class DocumentCursorPrivate
+{
+public:
+    DocumentCursorPrivate( const KUrl& document = KUrl() ) : m_document(document)
+    {}
+    KUrl m_document;
+};
+
 DocumentCursor::DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor)
   : Cursor(cursor)
-  , m_document(document)
+  ,d( new DocumentCursorPrivate( document ) )
 {
 }
 
 DocumentCursor::DocumentCursor(KTextEditor::Range* range, Position position )
   : Cursor(position == Start ? range->start() : range->end())
-  , m_document(DocumentRangeObject::url(range))
+  ,d( new DocumentCursorPrivate( DocumentRangeObject::url(range) ) )
 {
 }
 
 DocumentCursor::DocumentCursor(KTextEditor::Cursor* cursor)
-  : Cursor(*cursor)
+    : Cursor(*cursor)
+    ,d( new DocumentCursorPrivate )
 {
   if (cursor->isSmartCursor())
-    m_document = cursor->toSmartCursor()->document()->url();
+    d->m_document = cursor->toSmartCursor()->document()->url();
   else
-    m_document = static_cast<DocumentCursor*>(cursor)->document();
+    d->m_document = static_cast<DocumentCursor*>(cursor)->document();
 }
 
 DocumentCursor::DocumentCursor(const DocumentCursor& copy)
   : Cursor(copy)
-  , m_document(copy.document())
+  , d( new DocumentCursorPrivate( copy.document() ) )
 {
 }
 
 const KUrl& DocumentCursor::document() const
 {
-  return m_document;
+  return d->m_document;
 }
 
 void DocumentCursor::setDocument(const KUrl& document)
 {
-  m_document = document;
+  d->m_document = document;
 }
 
 }
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

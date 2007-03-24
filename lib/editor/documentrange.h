@@ -54,12 +54,11 @@ public:
   const QList<DocumentRange*>& childRanges() const;
 
 private:
-  KUrl m_document;
-  KTextEditor::Range* m_parentRange;
-  QList<DocumentRange*> m_childRanges;
+  class DocumentRangePrivate* const d;
 };
 
 }
 #endif // DOCUMENTRANGE_H
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+

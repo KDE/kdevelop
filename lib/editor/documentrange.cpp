@@ -23,27 +23,31 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+class DocumentRangePrivate{
+public:
+  DocumentRangePrivate( const KUrl& document ) : m_document(document)
+    , m_parentRange(0)
+  {}
+  KUrl m_document;
+  KTextEditor::Range* m_parentRange;
+  QList<DocumentRange*> m_childRanges;
+};
+
 DocumentRange::DocumentRange(const KUrl& document, const KTextEditor::Cursor& start,
         const KTextEditor::Cursor& end, KTextEditor::Range* parent)
-  : Range(start, end)
-  , m_document(document)
-  , m_parentRange(0)
+  : Range(start, end), d( new DocumentRangePrivate( document ) )
 {
   setParentRange(parent);
 }
 
 DocumentRange::DocumentRange(const KUrl& document, const KTextEditor::Range& range, KTextEditor::Range* parent)
-  : Range(range)
-  , m_document(document)
-  , m_parentRange(0)
+  : Range(range), d( new DocumentRangePrivate( document ) )
 {
   setParentRange(parent);
 }
 
 DocumentRange::DocumentRange(const DocumentRange& copy)
-  : Range(copy)
-  , m_document(copy.document())
-  , m_parentRange(0)
+  : Range(copy), d( new DocumentRangePrivate( copy.d->m_document ) )
 {
   setParentRange(copy.parentRange());
 }
@@ -52,36 +56,34 @@ DocumentRange::~DocumentRange()
 {
   setParentRange(0);
 
-  foreach (DocumentRange* child, m_childRanges)
+  foreach (DocumentRange* child, d->m_childRanges)
     child->setParentRange(0);
 }
 
 const KUrl& DocumentRange::document() const
 {
-  return m_document;
+  return d->m_document;
 }
 
 void DocumentRange::setDocument(const KUrl& document)
 {
-  m_document = document;
+  d->m_document = document;
 }
-
-// kate: indent-width 2;
 
 const QList< DocumentRange * > & DocumentRange::childRanges() const
 {
-  return m_childRanges;
+  return d->m_childRanges;
 }
 
 void DocumentRange::setParentRange(KTextEditor::Range* parent)
 {
-  if (m_parentRange && !m_parentRange->isSmartRange())
-    static_cast<DocumentRange*>(m_parentRange)->m_childRanges.removeAll(this);
+  if (d->m_parentRange && !d->m_parentRange->isSmartRange())
+    static_cast<DocumentRange*>(d->m_parentRange)->d->m_childRanges.removeAll(this);
 
-  m_parentRange = parent;
+  d->m_parentRange = parent;
 
-  if (m_parentRange && !m_parentRange->isSmartRange()) {
-    QMutableListIterator<DocumentRange*> it = static_cast<DocumentRange*>(m_parentRange)->m_childRanges;
+  if (d->m_parentRange && !d->m_parentRange->isSmartRange()) {
+    QMutableListIterator<DocumentRange*> it = static_cast<DocumentRange*>(d->m_parentRange)->d->m_childRanges;
     it.toBack();
     while (it.hasPrevious()) {
       it.previous();
@@ -98,7 +100,9 @@ void DocumentRange::setParentRange(KTextEditor::Range* parent)
 
 Range* DocumentRange::parentRange() const
 {
-  return m_parentRange;
+  return d->m_parentRange;
 }
 
 }
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+

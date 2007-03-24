@@ -41,11 +41,14 @@ public:
   DocumentRangeObject(KTextEditor::Range* range);
   virtual ~DocumentRangeObject();
 
+  enum RangeOwning{ Own, DontOwn };
+  Q_DECLARE_FLAGS( RangeOwnings, RangeOwning )
+
   /**
    * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
    * deleted when the object is deleted.
    */
-  void setTextRange(KTextEditor::Range* range, bool ownsRange = true);
+  void setTextRange(KTextEditor::Range* range, RangeOwning ownsRange = Own);
 
   void setRange(const KTextEditor::Range& range);
   const KTextEditor::Range textRange() const;
@@ -67,13 +70,14 @@ public:
 private:
   Q_DISABLE_COPY(DocumentRangeObject)
 
-  mutable QMutex m_rangeMutex;
-  KTextEditor::Range* m_range;
-  bool m_ownsRange;
-  KUrl* m_url;
+  class DocumentRangeObjectPrivate* const d;
 };
+
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::DocumentRangeObject::RangeOwnings )
 
 }
 #endif // RANGEOBJECT_H
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+

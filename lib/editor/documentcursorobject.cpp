@@ -26,61 +26,69 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+class DocumentCursorObjectPrivate
+{
+public:
+    DocumentCursorObjectPrivate() : m_cursor(0) {}
+    KTextEditor::Cursor* m_cursor;
+    KUrl m_url;
+};
+
 DocumentCursorObject::DocumentCursorObject(KTextEditor::Cursor* cursor)
-  : m_cursor(0)
+  : d( new DocumentCursorObjectPrivate )
 {
   setTextCursor(cursor);
 }
 
 DocumentCursorObject::~ DocumentCursorObject( )
 {
-  if (m_cursor->isSmartCursor())
-    m_cursor->toSmartCursor()->setWatcher(0);
+  if (d->m_cursor->isSmartCursor())
+    d->m_cursor->toSmartCursor()->setWatcher(0);
 
-  delete m_cursor;
+  delete d->m_cursor;
 }
 
 void DocumentCursorObject::setTextCursor( KTextEditor::Cursor * cursor )
 {
   Q_ASSERT(cursor);
 
-  if (m_cursor == cursor)
+  if (d->m_cursor == cursor)
     return;
 
-  if (m_cursor) {
+  if (d->m_cursor) {
     // TODO.. overkill???
-    if (m_cursor->isSmartCursor())
-      m_cursor->toSmartCursor()->setWatcher(0);
+    if (d->m_cursor->isSmartCursor())
+      d->m_cursor->toSmartCursor()->setWatcher(0);
 
-    delete m_cursor;
+    delete d->m_cursor;
   }
 
-  m_cursor = cursor;
+  d->m_cursor = cursor;
 
-  if (m_cursor->isSmartCursor()) {
-    m_cursor->toSmartCursor()->setWatcher(this);
-    m_url = url(m_cursor);
+  if (d->m_cursor->isSmartCursor()) {
+    d->m_cursor->toSmartCursor()->setWatcher(this);
+    d->m_url = url(d->m_cursor);
   }
 }
 
 const Cursor& DocumentCursorObject::textCursor( ) const
 {
-  return *m_cursor;
+  return *d->m_cursor;
 }
 
 Cursor& DocumentCursorObject::textCursor( )
 {
-  return *m_cursor;
+  return *d->m_cursor;
 }
 
 const DocumentCursor& DocumentCursorObject::textDocCursor() const
 {
-  return *static_cast<DocumentCursor*>(m_cursor);
+  return *static_cast<DocumentCursor*>(d->m_cursor);
 }
 
 KUrl DocumentCursorObject::url() const
 {
-  return url(m_cursor);
+  return url(d->m_cursor);
 }
 
 KUrl DocumentCursorObject::url( const KTextEditor::Cursor * cursor )
@@ -93,24 +101,24 @@ KUrl DocumentCursorObject::url( const KTextEditor::Cursor * cursor )
 
 SmartCursor* DocumentCursorObject::smartCursor() const
 {
-  if (m_cursor->isSmartCursor())
-    return static_cast<SmartCursor*>(m_cursor);
+  if (d->m_cursor->isSmartCursor())
+    return static_cast<SmartCursor*>(d->m_cursor);
 
   return 0L;
 }
 
 Cursor* DocumentCursorObject::textCursorPtr() const
 {
-  return m_cursor;
+  return d->m_cursor;
 }
-
-// kate: indent-width 2;
 
 void DocumentCursorObject::deleted(KTextEditor::SmartCursor * cursor)
 {
-  Q_ASSERT(cursor == m_cursor);
+  Q_ASSERT(cursor == d->m_cursor);
   //Q_ASSERT(false);
-  m_cursor = new DocumentCursor(m_url, *m_cursor);
+  d->m_cursor = new DocumentCursor(d->m_url, *d->m_cursor);
 }
 
 }
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+
