@@ -36,8 +36,6 @@
 typedef KGenericFactory<GenericProjectManager> GenericSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevgenericmanager, GenericSupportFactory( "kdevgenericmanager" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, GenericProjectManager )
-
 class GenericProjectManagerPrivate
 {
     public:
@@ -50,6 +48,7 @@ class GenericProjectManagerPrivate
 GenericProjectManager::GenericProjectManager( QObject *parent, const QStringList & args )
         : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager(), d( new GenericProjectManagerPrivate )
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     Q_UNUSED( args )
     if ( d->includes.isEmpty() )
         d->includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << "*.cs" << "*.java";   // ### remove me
@@ -165,23 +164,6 @@ bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
 {
     Q_UNUSED( file )
     return false;
-}
-
-void GenericProjectManager::registerExtensions()
-{
-    extensionManager()->registerExtensions( new GenericProjectManagerIProjectFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager) );
-}
-
-void GenericProjectManager::unregisterExtensions()
-{
-    extensionManager()->unregisterExtensions( new GenericProjectManagerIProjectFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager) );
-}
-
-QStringList GenericProjectManager::extensions() const
-{
-    return QStringList() << "IProjectFileManager";
 }
 
 

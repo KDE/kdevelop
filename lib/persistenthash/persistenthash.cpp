@@ -51,6 +51,7 @@ public:
 PersistentHash::PersistentHash( KInstance* instance, QObject *parent)
         : IPlugin( instance, parent ), d(new PersistentHashPrivate)
 {
+    KDEV_USE_EXTENSION_ITERFACE( KDevelop::IPersistentHash )
 #ifndef NO_GOOGLE_SPARSEHASH
     d->m_astHash.set_deleted_key( NULL );
 #endif
@@ -211,31 +212,6 @@ void PersistentHash::save()
 #endif
 }
 
-QStringList PersistentHash::extensions()
-{
-    return QStringList() << "IPersistentHash";
-}
-
-KDEV_ADD_EXTENSION_FACTORY( IPersistentHash, PersistentHash )
-
-void PersistentHash::registerExtensions()
-{
-    extensionManager()->registerExtensions( new PersistentHashIPersistentHashFactory(
-    extensionManager() ), Q_TYPEID( IPersistentHash) );
-}
-
-void PersistentHash::registerExtensions()
-{
-    extensionManager()->unregisterExtensions( new PersistentHashIPersistentHashFactory(
-    extensionManager() ), Q_TYPEID( IPersistentHash) );
-}
-
-QStringList PersistentHash::extensions()
-{
-    return QStringList() << "IPersistentHash";
-}
-
-}
 #include "persistenthash.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

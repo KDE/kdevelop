@@ -49,10 +49,6 @@ public:
     virtual bool build(KDevelop::ProjectBaseItem *dom);
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
 
-    virtual void registerExtensions();
-    virtual void unregisterExtensions();
-    virtual QStringList extensions() const;
-
 Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem* );
     void failed( KDevelop::ProjectBaseItem* );

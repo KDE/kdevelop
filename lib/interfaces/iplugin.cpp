@@ -35,33 +35,55 @@
 #include "iplugin.h"
 #include "icore.h"
 #include "iplugincontroller.h"
-// #include "kdevmainwindow.h"
-// #include "kdevIPlugincontroller.h"
+#include <QtDesigner/QExtensionFactory>
+#include <QtDesigner/QExtensionManager>
 
 namespace KDevelop
 {
 
-class IPlugin::Private
+class PluginExtensionFactory : public QExtensionFactory {
+public:
+    PluginExtensionFactory( const QStringList& extensions, QExtensionManager *parent = 0 )
+        :QExtensionFactory( parent ), m_extensions( extensions )
+    {
+    }
+    protected:
+    virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const
+    {
+        Q_UNUSED(parent)
+        if( !m_extensions.contains( iid ) )
+            return 0;
+        IPlugin* p = qobject_cast<IPlugin *>(object);
+        if( !p )
+            return 0;
+        return object;
+    }
+    private:
+        QStringList m_extensions;
+};
+
+class IPluginPrivate
 {
 public:
-    Private()
-        : iconLoader(0)
+    IPluginPrivate()
+        : iconLoader(0), m_factory(0)
     {}
 
-    ~Private()
+    ~IPluginPrivate()
     {
         delete iconLoader;
     }
 
     ICore *core;
     KIconLoader* iconLoader;
+    PluginExtensionFactory* m_factory;
+    QStringList m_extensions;
 };
 
 IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
         : QObject( parent ),
-        KXMLGUIClient()
+        KXMLGUIClient(), d( new IPluginPrivate )
 {
-    d = new Private;
     d->core = static_cast<KDevelop::ICore*>(parent);
     setComponentData( instance );
 }
@@ -118,15 +140,37 @@ QExtensionManager* IPlugin::extensionManager()
 
 QStringList KDevelop::IPlugin::extensions( ) const
 {
-  return QStringList();
-}
-
-void KDevelop::IPlugin::unregisterExtensions( )
-{
+  return d->m_extensions;
 }
 
 void KDevelop::IPlugin::registerExtensions( )
 {
+    if( extensions().isEmpty() )
+        return;
+    if( !d->m_factory )
+        d->m_factory = new PluginExtensionFactory( extensions(), extensionManager() );
+    Q_FOREACH( QString ext, extensions() )
+    {
+        extensionManager()->registerExtensions( d->m_factory, ext );
+    }
+}
+
+void KDevelop::IPlugin::unregisterExtensions( )
+{
+    if( extensions().isEmpty() )
+        return;
+    if( !d->m_factory )
+        return;
+    Q_FOREACH( QString ext, extensions() )
+    {
+        extensionManager()->unregisterExtensions( d->m_factory, ext );
+    }
+
+}
+
+void KDevelop::IPlugin::addExtension( const QString& ext )
+{
+    d->m_extensions << ext;
 }
 
 

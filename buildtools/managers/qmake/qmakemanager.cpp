@@ -44,14 +44,12 @@ typedef KGenericFactory<QMakeProjectManager> QMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevqmakemanager,
                             QMakeSupportFactory( "kdevqmakemanager" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, QMakeProjectManager )
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, QMakeProjectManager )
-
-
 QMakeProjectManager::QMakeProjectManager( QObject* parent,
                               const QStringList& )
         : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent ), m_builder(0)
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     IPlugin* i = core()->pluginController()->pluginForExtension( "IQMakeBuilder" );
     Q_ASSERT(i);
     if( i )
@@ -170,7 +168,7 @@ KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* it
     Q_UNUSED(item)
     return KUrl::List();
 }
-
+/*
 QStringList QMakeProjectManager::extensions() const
 {
     return QStringList() << "IBuildSystemManager" << "IProjectFileManager";
@@ -190,7 +188,7 @@ void QMakeProjectManager::unregisterExtensions()
     extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
     extensionManager()->unregisterExtensions( new QMakeProjectManagerIBuildSystemManagerFactory(
     extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
-}
+}*/
 
 #include "qmakemanager.moc"
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

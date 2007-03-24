@@ -46,10 +46,6 @@ public:
 
     virtual QString name() const;
 
-    void registerExtensions();
-    void unregisterExtensions();
-    QStringList extensions() const;
-
     virtual KDevelop::ILanguage *language();
 
     virtual KDevelop::ParseJob *createParseJob( const KUrl &url );

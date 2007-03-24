@@ -62,10 +62,6 @@ public:
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem *item );
     virtual KDevelop::ProjectItem *import( KDevelop::IProject *project );
 
-    void registerExtensions();
-    void unregisterExtensions();
-    QStringList extensions() const;
-
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
 

@@ -41,12 +41,11 @@
 typedef KGenericFactory<MakeBuilder> MakeBuilderFactory ;
 K_EXPORT_COMPONENT_FACTORY(kdevmakebuilder, MakeBuilderFactory("kdevmakebuilder"))
 
-KDEV_ADD_EXTENSION_FACTORY( IMakeBuilder, MakeBuilder )
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectBuilder, MakeBuilder )
-
 MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
     : KDevelop::IPlugin(MakeBuilderFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
+    KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
     IPlugin* i = core()->pluginController()->pluginForExtension("IOutputView");
     if( i )
     {
@@ -161,28 +160,6 @@ QStringList MakeBuilder::buildCommand( KDevelop::ProjectBaseItem *item,
 
     return cmdline;
 }
-
-QStringList MakeBuilder::extensions() const
-{
-    return QStringList() << "IMakeBuilder" << "IProjectBuilder";
-}
-
-
-void MakeBuilder::registerExtensions()
-{
-    extensionManager()->registerExtensions( new MakeBuilderIMakeBuilderFactory(
-    extensionManager() ), Q_TYPEID( IMakeBuilder ) );
-    extensionManager()->registerExtensions( new MakeBuilderIProjectBuilderFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectBuilder ) );
-}
-void MakeBuilder::unregisterExtensions()
-{
-    extensionManager()->unregisterExtensions( new MakeBuilderIMakeBuilderFactory(
-    extensionManager() ), Q_TYPEID( IMakeBuilder ) );
-    extensionManager()->unregisterExtensions( new MakeBuilderIProjectBuilderFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectBuilder ) );
-}
-
 
 #include "makebuilder.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

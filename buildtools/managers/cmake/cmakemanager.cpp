@@ -41,13 +41,12 @@ typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager,
                             CMakeSupportFactory( "kdevcmakemanager" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IBuildSystemManager, CMakeProjectManager )
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, CMakeProjectManager )
-
 CMakeProjectManager::CMakeProjectManager( QObject* parent,
                               const QStringList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_rootItem(0L)
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
 /*    CMakeSettings* settings = CMakeSettings::self();
 
     //what do the settings say about our generator?
@@ -149,26 +148,6 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     return m_includeDirList;
-}
-
-QStringList CMakeProjectManager::extensions() const
-{
-    return QStringList() << "IBuildSystemManager" << "IProjectFileManager";
-}
-
-void CMakeProjectManager::registerExtensions()
-{
-    extensionManager()->registerExtensions( new CMakeProjectManagerIProjectFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->registerExtensions( new CMakeProjectManagerIBuildSystemManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
-}
-void CMakeProjectManager::unregisterExtensions()
-{
-    extensionManager()->unregisterExtensions( new CMakeProjectManagerIProjectFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->unregisterExtensions( new CMakeProjectManagerIBuildSystemManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
 }
 
 #include "cmakemanager.moc"

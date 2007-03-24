@@ -43,8 +43,6 @@ typedef KGenericFactory<SimpleOutputView> SimpleOutputViewFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevsimpleoutputview,
                             SimpleOutputViewFactory( "kdevsimpleoutputview" ) )
 
-KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IOutputView, SimpleOutputView )
-
 class SimpleOutputViewViewFactory : public KDevelop::IToolViewFactory{
 public:
     SimpleOutputViewViewFactory(SimpleOutputView *part): m_part(part) {}
@@ -122,6 +120,7 @@ SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
     : KDevelop::IPlugin(SimpleOutputViewFactory::componentData(), parent),
       d(new SimpleOutputViewPrivate)
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
     d->m_model = new QStandardItemModel( this );
     d->m_childProc = new KProcess( this );
     d->m_factory = new SimpleOutputViewViewFactory( this );
@@ -171,23 +170,6 @@ void SimpleOutputView::procFinished( KProcess* proc )
         emit commandFailed( d->m_currentCmd );
     }
     QTimer::singleShot(0, this, SLOT( startNextJob() ) );
-}
-
-QStringList SimpleOutputView::extensions() const
-{
-    return QStringList() << "IOutputView";
-}
-
-
-void SimpleOutputView::registerExtensions()
-{
-    extensionManager()->registerExtensions( new SimpleOutputViewIOutputViewFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IOutputView ) );
-}
-void SimpleOutputView::unregisterExtensions()
-{
-    extensionManager()->unregisterExtensions( new SimpleOutputViewIOutputViewFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IOutputView ) );
 }
 
 #include "simpleoutputview.moc"

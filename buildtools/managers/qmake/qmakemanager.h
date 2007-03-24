@@ -89,9 +89,9 @@ public:
     virtual bool renameFile( KDevelop::ProjectFileItem*, const KUrl& ) { return false; }
     virtual bool renameFolder( KDevelop::ProjectFolderItem*, const KUrl&  ) { return false; }
 
-    virtual void registerExtensions();
-    virtual void unregisterExtensions();
-    virtual QStringList extensions() const;
+//     virtual void registerExtensions();
+//     virtual void unregisterExtensions();
+//     virtual QStringList extensions() const;
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
 

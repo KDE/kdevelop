@@ -43,55 +43,12 @@ class KIconLoader;
 #define KDEVELOP_PLUGIN_VERSION 4
 
 /**
- * Use these macros for every extension interface your plugin implements,
- * it generates an extension factory of the name PluginExtensionFactory
- * which you then can use in the registerExtensions/unregisterExtensions
- * to register the interface with the extensionManager()
- *
- * the _NS version needs to be used when the interface is inside a namespace
+ * This macro adds an extension interface to register with the extension manager
+ * Call this macro for all interfaces your plugin implements in its constructor
  */
 
-#define KDEV_ADD_EXTENSION_FACTORY( Extension, Plugin ) \
-class Plugin##Extension##Factory: public QExtensionFactory { \
-public: \
-    Plugin##Extension##Factory(QExtensionManager *parent = 0) \
-        :QExtensionFactory(parent) \
-    { \
-        Q_UNUSED(parent) \
-    }\
-    protected: \
-    virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const \
-    { \
-        Q_UNUSED(parent) \
-        if( iid != Q_TYPEID( Extension ) ) \
-            return 0; \
-        Plugin* p = qobject_cast<Plugin *>(object);\
-        if( !p ) \
-            return 0; \
-        return object; \
-    } \
-};
-
-#define KDEV_ADD_EXTENSION_FACTORY_NS( Namespace, Extension, Plugin ) \
-class Plugin##Extension##Factory: public QExtensionFactory { \
-public: \
-    Plugin##Extension##Factory(QExtensionManager *parent = 0) \
-        :QExtensionFactory(parent) \
-    { \
-        Q_UNUSED(parent) \
-    }\
-    protected: \
-    virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const \
-    { \
-        Q_UNUSED(parent) \
-        if( iid != Q_TYPEID( Namespace::Extension ) ) \
-            return 0; \
-        Plugin* p = qobject_cast<Plugin *>(object);\
-        if( !p ) \
-            return 0; \
-        return object; \
-    } \
-};
+#define KDEV_USE_EXTENSION_INTERFACE( Extension ) \
+    addExtension( Q_TYPEID( Extension ) );
 
 namespace KDevelop
 {
@@ -207,10 +164,10 @@ public:
 
     ICore *core() const;
 
-    virtual void registerExtensions();
-    virtual void unregisterExtensions();
+    void registerExtensions();
+    void unregisterExtensions();
 
-    virtual QStringList extensions() const;
+    QStringList extensions() const;
 
     template<class Extension> Extension* extension()
     {
@@ -224,12 +181,12 @@ public Q_SLOTS:
     void newIconLoader() const;
 
 protected:
-    QExtensionManager* extensionManager();
-
+    void addExtension( const QString& );
 
 private:
-    class Private;
-    Private* d;
+    class IPluginPrivate*  const d;
+    QExtensionManager* extensionManager();
+
 
 };
 

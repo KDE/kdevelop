@@ -84,10 +84,6 @@ public:
     void load();
     void save();
 
-    QStringList extensions();
-    void registerExtensions();
-    void unregisterExtensions();
-
 private:
     struct PersistentHashPrivate* const d;
 };

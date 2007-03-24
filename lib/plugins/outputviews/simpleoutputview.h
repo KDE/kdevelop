@@ -44,10 +44,6 @@ public:
     virtual ~SimpleOutputView();
     void queueCommand(const KUrl& dir, const QStringList& command, const QStringList& env );
 
-    virtual void registerExtensions();
-    virtual void unregisterExtensions();
-    virtual QStringList extensions() const;
-
     QStandardItemModel* model();
 
 Q_SIGNALS:
