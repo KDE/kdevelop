@@ -216,7 +216,24 @@ QStringList PersistentHash::extensions()
     return QStringList() << "IPersistentHash";
 }
 
-KDEV_USE_EXTENSION_INTERFACE( IPersistentHash, PersistentHash )
+KDEV_ADD_EXTENSION_FACTORY( IPersistentHash, PersistentHash )
+
+void PersistentHash::registerExtensions()
+{
+    extensionManager()->registerExtensions( new PersistentHashIPersistentHashFactory(
+    extensionManager() ), Q_TYPEID( IPersistentHash) );
+}
+
+void PersistentHash::registerExtensions()
+{
+    extensionManager()->unregisterExtensions( new PersistentHashIPersistentHashFactory(
+    extensionManager() ), Q_TYPEID( IPersistentHash) );
+}
+
+QStringList PersistentHash::extensions()
+{
+    return QStringList() << "IPersistentHash";
+}
 
 }
 #include "persistenthash.moc"

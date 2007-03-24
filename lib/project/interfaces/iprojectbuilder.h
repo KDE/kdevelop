@@ -21,7 +21,6 @@
 #define IPROJECTBUILDER_H
 
 #include "iextension.h"
-#include <QtDesigner/QAbstractExtensionFactory>
 #include "kdevexport.h"
 
 namespace KDevelop
@@ -52,7 +51,7 @@ Q_SIGNALS:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IProjectBuilder, "org.kdevelop.IProjectBuilder" )
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IProjectBuilder, "org.kdevelop.IProjectBuilder" )
 Q_DECLARE_INTERFACE( KDevelop::IProjectBuilder, "org.kdevelop.IProjectBuilder" )
 
 #endif

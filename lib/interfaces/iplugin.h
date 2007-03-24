@@ -42,6 +42,15 @@ class KIconLoader;
  */
 #define KDEVELOP_PLUGIN_VERSION 4
 
+/**
+ * Use these macros for every extension interface your plugin implements,
+ * it generates an extension factory of the name PluginExtensionFactory
+ * which you then can use in the registerExtensions/unregisterExtensions
+ * to register the interface with the extensionManager()
+ *
+ * the _NS version needs to be used when the interface is inside a namespace
+ */
+
 #define KDEV_ADD_EXTENSION_FACTORY( Extension, Plugin ) \
 class Plugin##Extension##Factory: public QExtensionFactory { \
 public: \
@@ -63,31 +72,13 @@ public: \
     } \
 };
 
-
-/**
- * Use this macro for every extension you implement, it implements the
- * register/unregister functions and the Factory class that is needed
- */
-#define KDEV_USE_EXTENSION_INTERFACE( Extension, Plugin ) \
-KDEV_ADD_EXTENSION_FACTORY( Extension, Plugin ) \
-void Plugin::registerExtensions() \
-{ \
-    extensionManager()->registerExtensions( new Plugin##Extension##Factory( \
-    extensionManager() ), Q_TYPEID( Extension ) ); \
-} \
-void Plugin::unregisterExtensions() \
-{ \
-    extensionManager()->unregisterExtensions( new Plugin##Extension##Factory( \
-    extensionManager() ), Q_TYPEID( Extension ) ); \
-}
-
 #define KDEV_ADD_EXTENSION_FACTORY_NS( Namespace, Extension, Plugin ) \
 class Plugin##Extension##Factory: public QExtensionFactory { \
 public: \
     Plugin##Extension##Factory(QExtensionManager *parent = 0) \
         :QExtensionFactory(parent) \
     { \
-        Q_UNUSED(parent)\
+        Q_UNUSED(parent) \
     }\
     protected: \
     virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const \
@@ -101,24 +92,6 @@ public: \
         return object; \
     } \
 };
-
-
-/**
- * This is the same macro as above, except it allows the extension interface
- * to be contained in a namespace
- */
-#define KDEV_USE_EXTENSION_INTERFACE_NS( Namespace, Extension, Plugin ) \
-KDEV_ADD_EXTENSION_FACTORY_NS( Namespace, Extension, Plugin ) \
-void Plugin::registerExtensions() \
-{ \
-    extensionManager()->registerExtensions( new Plugin##Extension##Factory( \
-    extensionManager() ), Q_TYPEID( Namespace::Extension ) ); \
-} \
-void Plugin::unregisterExtensions() \
-{ \
-    extensionManager()->unregisterExtensions( new Plugin##Extension##Factory( \
-    extensionManager() ), Q_TYPEID( Namespace::Extension ) ); \
-}
 
 namespace KDevelop
 {

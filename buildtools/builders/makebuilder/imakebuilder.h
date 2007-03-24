@@ -23,7 +23,6 @@
 
 #include "iprojectbuilder.h"
 #include "iextension.h"
-#include <QtDesigner/QAbstractExtensionFactory>
 
 class IProject;
 class ProjectItem;
@@ -40,8 +39,8 @@ public:
 
 };
 
-Q_DECLARE_EXTENSION_INTERFACE( IMakeBuilder, "org.kdevelop.IMakeBuilder" )
-
+KDEV_DECLARE_EXTENSION_INTERFACE( IMakeBuilder, "org.kdevelop.IMakeBuilder" )
+Q_DECLARE_INTERFACE( IMakeBuilder, "org.kdevelop.IMakeBuilder" )
 
 #endif
 

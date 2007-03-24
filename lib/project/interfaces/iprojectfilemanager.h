@@ -23,7 +23,6 @@
 #define IFILEMANAGER_H
 
 #include <QtCore/QStringList>
-#include <QtDesigner/QAbstractExtensionFactory>
 
 #include <kurl.h>
 
@@ -155,10 +154,8 @@ Q_SIGNALS:
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IProjectFileManager::Features )
 
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IProjectFileManager, "org.kdevelop.IProjectFileManager")
-
-Q_DECLARE_INTERFACE( KDevelop::IProjectFileManager, "org.kdevelop.IProjectFileManager" )
-
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IProjectFileManager, "org.kdevelop.IProjectFileManager")
+Q_DECLARE_INTERFACE( KDevelop::IProjectFileManager, "org.kdevelop.IProjectFileManager")
 
 #endif
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

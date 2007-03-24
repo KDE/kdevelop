@@ -19,8 +19,6 @@
 #ifndef ILANGUAGESUPPORT_H
 #define ILANGUAGESUPPORT_H
 
-#include <QtDesigner/QAbstractExtensionFactory>
-
 #include <kurl.h>
 
 #include "iextension.h"
@@ -46,7 +44,7 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, ILanguageSupport, "org.kdevelop.ILanguageSupport")
-Q_DECLARE_INTERFACE( KDevelop::ILanguageSupport, "org.kdevelop.ILanguageSupport" )
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, "org.kdevelop.ILanguageSupport")
+Q_DECLARE_INTERFACE( KDevelop::ILanguageSupport, "org.kdevelop.ILanguageSupport")
 
 #endif

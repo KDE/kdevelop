@@ -79,12 +79,12 @@
 // #include "codeproxy.h"
 // #include "codedelegate.h"
 #include "cppcodecompletion.h"
-
+#include <QtDesigner/QExtensionFactory>
 
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
 
-KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, CppLanguageSupport )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, ILanguageSupport, CppLanguageSupport )
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent,
                                         const QStringList& /*args*/ )
@@ -329,14 +329,26 @@ QString CppLanguageSupport::name() const
     return "C++";
 }
 
-QStringList CppLanguageSupport::extensions() const
-{
-    return QStringList() << "ILanguageSupport";
-}
-
 KDevelop::ILanguage *CppLanguageSupport::language()
 {
     return core()->languageController()->language(name());
+}
+
+void CppLanguageSupport::registerExtensions()
+{
+    extensionManager()->registerExtensions( new CppLanguageSupportILanguageSupportFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::ILanguageSupport) );
+}
+
+void CppLanguageSupport::unregisterExtensions()
+{
+    extensionManager()->unregisterExtensions( new CppLanguageSupportILanguageSupportFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::ILanguageSupport) );
+}
+
+QStringList CppLanguageSupport::extensions() const
+{
+    return QStringList() << "ILanguageSupport";
 }
 
 #include "cpplanguagesupport.moc"

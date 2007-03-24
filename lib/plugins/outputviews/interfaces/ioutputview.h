@@ -22,7 +22,6 @@
 #define KDEVIOUTPUTVIEW_H
 
 #include "iextension.h"
-#include <QtDesigner/QAbstractExtensionFactory>
 
 class KUrl;
 class QString;
@@ -62,7 +61,7 @@ Q_SIGNALS:
     virtual void commandFailed( const QStringList& ) = 0;
 };
 }
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IOutputView, "org.kdevelop.IOutputView" )
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutputView" )
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )
 
 #endif

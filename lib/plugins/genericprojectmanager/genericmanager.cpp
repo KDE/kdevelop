@@ -28,15 +28,15 @@
 #include <klocale.h>
 
 #include <QDir>
+#include <QExtensionFactory>
 #include <QFile>
 #include <QFileInfo>
-#include <QExtensionFactory>
 #include <QRegExp>
 
 typedef KGenericFactory<GenericProjectManager> GenericSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevgenericmanager, GenericSupportFactory( "kdevgenericmanager" ) )
 
-KDEV_USE_EXTENSION_INTERFACE_NS( KDevelop, IProjectFileManager, GenericProjectManager )
+KDEV_ADD_EXTENSION_FACTORY_NS( KDevelop, IProjectFileManager, GenericProjectManager )
 
 class GenericProjectManagerPrivate
 {
@@ -165,6 +165,18 @@ bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
 {
     Q_UNUSED( file )
     return false;
+}
+
+void GenericProjectManager::registerExtensions()
+{
+    extensionManager()->registerExtensions( new GenericProjectManagerIProjectFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager) );
+}
+
+void GenericProjectManager::unregisterExtensions()
+{
+    extensionManager()->unregisterExtensions( new GenericProjectManagerIProjectFileManagerFactory(
+    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager) );
 }
 
 QStringList GenericProjectManager::extensions() const

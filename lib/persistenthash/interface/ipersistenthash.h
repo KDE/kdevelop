@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 #define IPERSISTENTHASH_H
 
 #include "iextension.h"
-#include <QtDesigner/QAbstractExtensionFactory>
 #include "kdevexport.h"
 
 class KUrl;
@@ -54,9 +53,8 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IPersistentHash, "org.kdevelop.IPersistentHash" )
-
-Q_DECLARE_INTERFACE( KDevelop::IPersistentHash, "org.kdevelop.IPersistentHash"  )
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IPersistentHash, "org.kdevelop.IPersistentHash" )
+Q_DECLARE_INTERFACE( KDevelop::IPersistentHash, "org.kdevelop.IPersistentHash" )
 
 #endif
 
