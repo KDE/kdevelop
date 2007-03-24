@@ -87,6 +87,12 @@ class ICore;
  * - <i>Comment</i> is a short description about the plugin (optional);
  * - <i>Icon</i> is a plugin icon (preferred);
  * - <i>X-KDevelop-Plugin-Version</i> is a version of a plugin (optional);
+ * - <i>X-KDevelop-Interfaces</i> is a list of extension interfaces that this
+ * plugin implements (optional);
+ * - <i>X-KDevelop-IRequired</i> is a list of extension interfaces that this
+ * plugin depends on (optional);
+ * - <i>X-KDevelop-IOptional</i> is a list of extension interfaces that this
+ * plugin will use if they are available (optional);
  * - <i>X-KDevelop-Plugin-Homepage</i> is a home page of a plugin (optional);
  * - <i>X-KDevelop-Plugin-License</i> is a license (optional). can be: GPL,
  * LGPL, BSD, Artistic, QPL or Custom. If this property is not set, license is
