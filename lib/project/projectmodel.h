@@ -84,7 +84,7 @@ class KDEVPLATFORM_EXPORT ProjectBaseItem: public QStandardItem
         QList<ProjectTargetItem*> targetList() const;
         QList<ProjectFileItem*> fileList() const;
     private:
-        struct ProjectBaseItemPrivate* const d;
+        class ProjectBaseItemPrivate* const d;
 };
 
 /**

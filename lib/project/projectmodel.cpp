@@ -30,7 +30,7 @@
 namespace KDevelop
 {
 
-struct ProjectBaseItemPrivate
+class ProjectBaseItemPrivate
 {
     IProject* project;
 };
