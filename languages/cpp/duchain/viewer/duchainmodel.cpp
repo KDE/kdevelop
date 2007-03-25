@@ -42,7 +42,7 @@ ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
 {
   Q_ASSERT(parent && object);
 
-  setTextRange(object->textRangePtr(), false);
+  setTextRange(object->textRangePtr(), Own);
 }
 
 DUChainModel::DUChainModel(DUChainViewPart* parent)
