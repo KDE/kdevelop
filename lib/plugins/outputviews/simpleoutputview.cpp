@@ -63,6 +63,8 @@ private:
 
 class SimpleOutputViewPrivate
 {
+    friend class SimpleOutputView;
+    SimpleOutputView* q;
 public:
     SimpleOutputViewViewFactory* m_factory;
     QStandardItemModel* m_model;
@@ -114,12 +116,31 @@ public:
         }
     }
 
+    void procFinished( KProcess* proc )
+    {
+        if( !proc->exitStatus() )
+        {
+            QStandardItem* endItem = new QStandardItem(QString("Finished (%1)").arg(proc->exitStatus()) );
+            m_model->appendRow( endItem );
+            kDebug(9004) << "Finished Sucessfully" << endl;
+            emit q->commandFinished( m_currentCmd );
+        }
+        else
+        {
+            QStandardItem* endItem = new QStandardItem(QString("Failed (%1)").arg(proc->exitStatus()));
+            m_model->appendRow( endItem );
+            kDebug(9004) << "Failed" << endl;
+            emit q->commandFailed( m_currentCmd );
+        }
+        QTimer::singleShot(0, q, SLOT( startNextJob() ) );
+    }
 };
 
 SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
     : KDevelop::IPlugin(SimpleOutputViewFactory::componentData(), parent),
       d(new SimpleOutputViewPrivate)
 {
+    d->q = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
     d->m_model = new QStandardItemModel( this );
     d->m_childProc = new KProcess( this );
@@ -152,25 +173,6 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     }
 }
 
-
-void SimpleOutputView::procFinished( KProcess* proc )
-{
-    if( !proc->exitStatus() )
-    {
-        QStandardItem* endItem = new QStandardItem(QString("Finished (%1)").arg(proc->exitStatus()) );
-        d->m_model->appendRow( endItem );
-        kDebug(9004) << "Finished Sucessfully" << endl;
-        emit commandFinished( d->m_currentCmd );
-    }
-    else
-    {
-        QStandardItem* endItem = new QStandardItem(QString("Failed (%1)").arg(proc->exitStatus()));
-        d->m_model->appendRow( endItem );
-        kDebug(9004) << "Failed" << endl;
-        emit commandFailed( d->m_currentCmd );
-    }
-    QTimer::singleShot(0, this, SLOT( startNextJob() ) );
-}
 
 #include "simpleoutputview.moc"
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

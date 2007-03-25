@@ -50,14 +50,13 @@ Q_SIGNALS:
     void commandFinished( const QStringList& command );
     void commandFailed( const QStringList& command );
 
-private Q_SLOTS:
-    void procFinished( KProcess* );
-
 private:
     Q_PRIVATE_SLOT( d, void procReadStdout(KProcess* proc, char*, int) )
     Q_PRIVATE_SLOT( d, void procReadStderr(KProcess* proc, char*, int) )
     Q_PRIVATE_SLOT( d, void startNextJob() )
+    Q_PRIVATE_SLOT( d, void procFinished( KProcess* ) )
     class SimpleOutputViewPrivate* const d;
+    friend class SimpleOutputViewPrivate;
 };
 
 #endif // SIMPLEOUTPUTVIEW_H
