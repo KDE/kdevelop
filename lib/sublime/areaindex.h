@@ -149,7 +149,6 @@ protected:
 private:
     /**Constructor for indices other than root.*/
     AreaIndex(AreaIndex *parent);
-    void init();
 
     /**Sets the parent for this index.*/
     void setParent(AreaIndex *parent);
@@ -162,7 +161,7 @@ private:
     of another child to this index.*/
     void unsplit(AreaIndex *childToRemove);
 
-    struct AreaIndexPrivate *d;
+    struct AreaIndexPrivate * const d;
 
 };
 

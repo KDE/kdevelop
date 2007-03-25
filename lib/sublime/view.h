@@ -55,7 +55,7 @@ private:
 
     //copy is not allowed, create a new view from the document instead
     View(const View &v);
-    struct ViewPrivate *d;
+    struct ViewPrivate *const d;
 
     friend class ViewCreator;
 };

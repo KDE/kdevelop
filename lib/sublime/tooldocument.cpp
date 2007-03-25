@@ -40,8 +40,8 @@ struct ToolDocumentPrivate {
 
 ToolDocument::ToolDocument(const QString &title, Controller *controller, ToolFactory *factory)
     :Document(title, controller)
+    , d( new ToolDocumentPrivate() )
 {
-    d = new ToolDocumentPrivate();
     d->factory = factory;
 }
 

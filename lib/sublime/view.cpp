@@ -28,9 +28,8 @@
 namespace Sublime {
 
 View::View(Document *doc)
-    :QObject(doc)
+    :QObject(doc), d(new ViewPrivate(this))
 {
-    d = new ViewPrivate(this);
     d->doc = doc;
 }
 

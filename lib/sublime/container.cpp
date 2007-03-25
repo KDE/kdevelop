@@ -48,9 +48,8 @@ struct ContainerPrivate {
 // class Container
 
 Container::Container(QWidget *parent)
-    :QWidget(parent)
+    :QWidget(parent), d(new ContainerPrivate())
 {
-    d = new ContainerPrivate();
 
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);

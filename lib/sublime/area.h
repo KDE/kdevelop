@@ -166,7 +166,7 @@ private:
     template <typename Operator>
     WalkerMode walkViewsInternal(Operator &op, AreaIndex *index);
 
-    struct AreaPrivate *d;
+    struct AreaPrivate *const d;
 
 };
 

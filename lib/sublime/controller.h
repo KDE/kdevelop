@@ -81,7 +81,7 @@ private:
     @todo adymo: refactor*/
     void addDocument(Document *document);
 
-    struct ControllerPrivate *d;
+    struct ControllerPrivate *const d;
 
     friend class Area;
     friend class Document;

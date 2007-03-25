@@ -40,7 +40,7 @@ protected:
     KUrl url() const;
 
 private:
-    struct UrlDocumentPrivate *d;
+    struct UrlDocumentPrivate * const d;
 
 };
 

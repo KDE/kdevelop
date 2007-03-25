@@ -42,10 +42,9 @@ struct DocumentPrivate {
 //class Document
 
 Document::Document(const QString &title, Controller *controller)
-    :QObject(controller), ViewCreator()
+    :QObject(controller), ViewCreator(), d( new DocumentPrivate() )
 {
     setObjectName(title);
-    d = new DocumentPrivate();
     d->controller = controller;
     d->controller->addDocument(this);
     connect(this, SIGNAL(destroyed(QObject*)), d->controller, SLOT(removeDocument(QObject*)));

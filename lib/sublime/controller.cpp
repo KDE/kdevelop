@@ -98,14 +98,14 @@ struct ControllerPrivate {
 // class Controller
 
 Controller::Controller(QObject *parent)
-    :QObject(parent), MainWindowOperator()
+    :QObject(parent), MainWindowOperator(), d( new ControllerPrivate() )
 {
     init();
 }
 
 void Controller::init()
 {
-    d = new ControllerPrivate();
+
     qApp->installEventFilter(this);
 }
 

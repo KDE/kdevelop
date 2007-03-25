@@ -63,7 +63,7 @@ public:
 private:
     Q_PRIVATE_SLOT(d, void widgetActivated(int))
 
-    struct ContainerPrivate *d;
+    struct ContainerPrivate * const d;
 
 };
 

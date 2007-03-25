@@ -68,7 +68,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void removeView(QObject*))
 
-    struct DocumentPrivate *d;
+    struct DocumentPrivate *const d;
 
     friend class ViewWidgetCreator;
 };

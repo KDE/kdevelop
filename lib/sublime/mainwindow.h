@@ -91,7 +91,6 @@ protected:
     virtual bool queryClose();
 
 private:
-    void init();
     Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void toolViewAdded(Sublime::View*, Sublime::Position))
@@ -107,7 +106,7 @@ private:
     /**Sets the active toolview and focuses it.*/
     void setActiveToolView(View *view);
 
-    struct MainWindowPrivate *d;
+    struct MainWindowPrivate *const d;
     friend class MainWindowOperator;
     friend class MainWindowPrivate;
 };

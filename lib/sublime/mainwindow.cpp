@@ -32,17 +32,11 @@
 namespace Sublime {
 
 MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
-    :KParts::MainWindow(0, flags)
+    :KParts::MainWindow(0, flags), d(new MainWindowPrivate(this))
 {
-    init();
     d->controller = controller;
     connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
     connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
-}
-
-void MainWindow::init()
-{
-    d = new MainWindowPrivate(this);
 }
 
 MainWindow::~MainWindow()

@@ -64,21 +64,18 @@ struct AreaIndexPrivate {
 
 // class AreaIndex
 
-AreaIndex::AreaIndex()
+AreaIndex::AreaIndex() : d(new AreaIndexPrivate)
 {
-    init();
 }
 
-AreaIndex::AreaIndex(AreaIndex *parent)
+AreaIndex::AreaIndex(AreaIndex *parent) : d(new AreaIndexPrivate)
 {
-    init();
     d->parent = parent;
 }
 
-AreaIndex::AreaIndex(const AreaIndex &index)
+AreaIndex::AreaIndex(const AreaIndex &index)  : d(new AreaIndexPrivate( *(index.d) ) )
 {
     kDebug(9037) << "copying area index" << endl;
-    d = new AreaIndexPrivate(*(index.d));
     if (d->first)
         d->first->setParent(this);
     if (d->second)
@@ -87,11 +84,6 @@ AreaIndex::AreaIndex(const AreaIndex &index)
     d->views.clear();
     foreach (View *view, index.views())
         add(view->document()->createView());
-}
-
-void AreaIndex::init()
-{
-    d = new AreaIndexPrivate();
 }
 
 AreaIndex::~AreaIndex()

@@ -90,20 +90,19 @@ struct AreaPrivate {
 // class Area
 
 Area::Area(Controller *controller, const QString &name, const QString &title)
-    :QObject(controller)
+    :QObject(controller), d( new AreaPrivate() )
 {
     setObjectName(name);
-    d = new AreaPrivate();
     d->title = title;
     d->controller = controller;
     d->controller->addArea(this);
     connect(this, SIGNAL(destroyed(QObject*)), d->controller, SLOT(removeArea(QObject*)));
 }
 
-Area::Area(const Area &area): QObject(area.controller())
+Area::Area(const Area &area)
+    : QObject(area.controller()), d( new AreaPrivate( *(area.d) ) )
 {
     static QMap<QString, int> nums;
-    d = new AreaPrivate(*(area.d));
     QString areaBaseName = area.objectName().split("(").first();
     setObjectName(areaBaseName + QString("(copy %1)").arg(nums[areaBaseName]));
     d->controller->addArea(this);

@@ -63,7 +63,7 @@ protected:
     ToolFactory *factory() const;
 
 private:
-    struct ToolDocumentPrivate *d;
+    struct ToolDocumentPrivate * const d;
 
 };
 
