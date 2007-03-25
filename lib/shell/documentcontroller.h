@@ -76,7 +76,7 @@ public Q_SLOTS:
     @param activate Indicates whether to fully activate the document.*/
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
-            bool activate = true );
+            DocumentActivation activate = IDocumentController::ActivateOnOpen );
 
 private:
     void emitSaved(IDocument *document);

@@ -155,7 +155,7 @@ QString KDevelop::DocumentController::encoding() const
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Cursor& /*cursor*/,
-        bool activate )
+        DocumentActivation activate )
 {
     UiController *uiController = Core::self()->uiControllerInternal();
     Sublime::Area *area = uiController->activeArea();
@@ -219,7 +219,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         //add view to the area
         area->addView(partView, uiController->activeMainWindow()->activeView());
     }
-    if (activate)
+    if (activate == IDocumentController::ActivateOnOpen)
     {
         uiController->activeMainWindow()->activateView(partView);
         Core::self()->partController()->setActivePart(doc->partForView(partView->widget()), partView->widget());

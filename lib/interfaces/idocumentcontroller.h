@@ -34,6 +34,11 @@ class IDocument;
 class KDEVPLATFORM_EXPORT IDocumentController: public QObject {
     Q_OBJECT
 public:
+    enum DocumentActivation
+    {
+        ActivateOnOpen,        /**Activate Document on Opening.*/
+        DontActivate,          /**Don't activate the Document.*/
+    };
     IDocumentController(QObject *parent);
 
     /**Call this before a call to @ref editDocument to set the encoding of the
@@ -63,7 +68,7 @@ public Q_SLOTS:
     @param activate Indicates whether to fully activate the document.*/
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
-            bool activate = true ) = 0;
+            DocumentActivation activate = ActivateOnOpen ) = 0;
 
 Q_SIGNALS:
     /**Emitted when the document is given focus or activated.*/
