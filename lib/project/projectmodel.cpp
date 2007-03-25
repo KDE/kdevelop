@@ -32,6 +32,7 @@ namespace KDevelop
 
 class ProjectBaseItemPrivate
 {
+public:
     IProject* project;
 };
 
