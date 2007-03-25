@@ -80,17 +80,23 @@ class KDEVPLATFORM_EXPORT ProjectBaseItem: public QStandardItem
         virtual ProjectFileItem *file() const;
         virtual ProjectItem* projectItem() const;
 
+        void setParent( QStandardItem* );
+
         QList<ProjectFolderItem*> folderList() const;
         QList<ProjectTargetItem*> targetList() const;
         QList<ProjectFileItem*> fileList() const;
+    protected:
+        class ProjectBaseItemPrivate* const d_ptr;
+        ProjectBaseItem( ProjectBaseItemPrivate& dd );
     private:
-        class ProjectBaseItemPrivate* const d;
+        Q_DECLARE_PRIVATE(ProjectBaseItem);
 };
 
 /**
  * Implementation of the ProjectItem interface that is specific to a
  * folder
  */
+class ProjectFolderItemPrivate;
 class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
     public:
@@ -108,14 +114,18 @@ class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectBaseItem
 
         /** Set the url of this folder */
         void setUrl( const KUrl& );
+    protected:
+        ProjectFolderItem( ProjectFolderItemPrivate& );
     private:
-        class ProjectFolderItemPrivate* const d;
+        Q_DECLARE_PRIVATE(ProjectFolderItem)
+//         class ProjectFolderItemPrivate* const d;
 };
 
 
 /**
  * Folder which contains buildable targets as part of a buildable project
  */
+class ProjectBuildFolderItemPrivate;
 class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
     public:
@@ -138,7 +148,7 @@ class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
          */
         const QHash<QString, QString>& environment() const;
     private:
-        class ProjectBuildFolderItemPrivate* const d;
+        Q_DECLARE_PRIVATE(ProjectBuildFolderItem)
 };
 
 /**
@@ -193,6 +203,7 @@ class KDEVPLATFORM_EXPORT ProjectTargetItem: public ProjectBaseItem
 /**
  * Object which represents a file.
  */
+class ProjectFileItemPrivate;
 class KDEVPLATFORM_EXPORT ProjectFileItem: public ProjectBaseItem
 {
     public:
@@ -208,7 +219,7 @@ class KDEVPLATFORM_EXPORT ProjectFileItem: public ProjectBaseItem
         void setUrl( const KUrl& );
 
     private:
-        class ProjectFileItemPrivate* const d;
+        Q_DECLARE_PRIVATE(ProjectFileItem)
 };
 
 class KDEVPLATFORM_EXPORT ProjectModel: public QStandardItemModel

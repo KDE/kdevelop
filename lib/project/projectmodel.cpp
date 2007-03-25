@@ -33,25 +33,39 @@ namespace KDevelop
 class ProjectBaseItemPrivate
 {
 public:
+    ProjectBaseItemPrivate() : project(0) {}
     IProject* project;
 };
 
 ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStandardItem *parent )
-        : QStandardItem( name ), d(new ProjectBaseItemPrivate)
+        : QStandardItem( name ), d_ptr(new ProjectBaseItemPrivate)
 {
+    Q_D(ProjectBaseItem);
     d->project = project;
-    if ( parent )
-        parent->setChild( parent->rowCount(), this );
+    setParent( parent );
+}
+
+ProjectBaseItem::ProjectBaseItem( ProjectBaseItemPrivate& dd)
+    : d_ptr(&dd)
+{
 }
 
 ProjectBaseItem::~ProjectBaseItem()
 {
+    Q_D(ProjectBaseItem);
     delete d;
 }
 
 IProject* ProjectBaseItem::project() const
 {
+    Q_D(const ProjectBaseItem);
     return d->project;
+}
+
+void ProjectBaseItem::setParent( QStandardItem* parent )
+{
+    if( parent )
+        parent->setChild( parent->rowCount(), this );
 }
 
 void ProjectBaseItem::add( ProjectBaseItem* item )
@@ -127,7 +141,6 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
         }
 
     }
-
     return lst;
 }
 
@@ -170,23 +183,30 @@ void ProjectModel::resetModel()
     reset();
 }
 
-class ProjectFolderItemPrivate
+class ProjectFolderItemPrivate : public ProjectBaseItemPrivate
 {
 public:
     KUrl m_url;
 };
 
 ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStandardItem * parent )
-        : ProjectBaseItem( project, dir.directory(), parent ), d(new ProjectFolderItemPrivate)
+        : ProjectBaseItem( *new ProjectFolderItemPrivate )
 {
+    Q_D(ProjectFolderItem);
+    d->project = project;
     d->m_url = dir;
+    setParent(parent);
     setText( dir.fileName() );
     setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
 }
 
+ProjectFolderItem::ProjectFolderItem( ProjectFolderItemPrivate& dd)
+    : ProjectBaseItem( dd )
+{
+}
+
 ProjectFolderItem::~ProjectFolderItem()
 {
-    delete d;
 }
 
 ProjectFolderItem *ProjectFolderItem::folder() const
@@ -201,27 +221,31 @@ int ProjectFolderItem::type() const
 
 const KUrl& ProjectFolderItem::url( ) const
 {
+    Q_D(const ProjectFolderItem);
     return d->m_url;
 }
 
 void ProjectFolderItem::setUrl( const KUrl& url )
 {
+    Q_D(ProjectFolderItem);
     d->m_url = url;
     setText( url.fileName() );
 }
 
-class ProjectBuildFolderItemPrivate
+class ProjectBuildFolderItemPrivate : public ProjectFolderItemPrivate
 {
 public:
-    KUrl m_url;
     KUrl::List m_includeDirs; ///include directories
     QHash<QString, QString> m_env;
 };
 
 ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, QStandardItem *parent)
-    : ProjectFolderItem( project, dir, parent ), d(new ProjectBuildFolderItemPrivate)
+    : ProjectFolderItem( *new ProjectBuildFolderItemPrivate )
 {
-    d->m_url = dir;
+    Q_D(ProjectBuildFolderItem);
+    d->project = project;
+    setUrl( dir );
+    setParent( parent );
     setIcon( KIcon("folder-development") );
 }
 
@@ -232,39 +256,47 @@ int ProjectBuildFolderItem::type() const
 
 void ProjectBuildFolderItem::setIncludeDirectories( const KUrl::List& dirList )
 {
+    Q_D(ProjectBuildFolderItem);
     d->m_includeDirs = dirList;
 }
 
 const KUrl::List& ProjectBuildFolderItem::includeDirectories() const
 {
+    Q_D(const ProjectBuildFolderItem);
     return d->m_includeDirs;
 }
 
 const QHash<QString, QString>& ProjectBuildFolderItem::environment() const
 {
+    Q_D(const ProjectBuildFolderItem);
     return d->m_env;
 }
 
-class ProjectFileItemPrivate
+class ProjectFileItemPrivate : public ProjectBaseItemPrivate
 {
     public:
         KUrl m_url;
 };
 
 ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandardItem * parent )
-        : ProjectBaseItem( project, file.fileName(), parent ), d(new ProjectFileItemPrivate)
+        : ProjectBaseItem( *new ProjectFileItemPrivate )
 {
-    d->m_url = file;
+    Q_D(ProjectFileItem);
+    d->project = project;
+    setText( file.fileName() );
+    setParent( parent );
     setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
 }
 
 const KUrl & ProjectFileItem::url( ) const
 {
+    Q_D(const ProjectFileItem);
     return d->m_url;
 }
 
 void ProjectFileItem::setUrl( const KUrl& url )
 {
+    Q_D(ProjectFileItem);
     d->m_url = url;
 }
 
