@@ -111,12 +111,13 @@ documentation for reference.
 - Include <iextension.h>
 - Add following macros to the header file with a class (if you use namespace):
     \code
-    KDEV_DECLARE_EXTENSION_INTERFACE( KDevelop, IMyInterface, "org.kdevelop.IMyInterface")
+    KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IMyInterface, "org.kdevelop.IMyInterface")
     Q_DECLARE_INTERFACE( KDevelop::IMyInterface, "org.kdevelop.IMyInterface" )
     \endcode
 - Or use (when the interface is not in namespace)
     \code
-    Q_DECLARE_EXTENSION_INTERFACE( IMyInterface, "org.kdevelop.IMyInterface" )
+    KDEV_DECLARE_EXTENSION_INTERFACE( IMyInterface, "org.kdevelop.IMyInterface" )
+    Q_DECLARE_INTERFACE( IMyInterface, "org.kdevelop.IMyInterface" )
     \endcode
 .
 
@@ -124,11 +125,10 @@ documentation for reference.
 - Create a plugin as usual
 - Subclass it from your interface
 - Use Q_INTERFACES macro in class declaration
-- reimplement \ref KDevelop::IPlugin::extensions, \ref KDevelop::IPlugin::registerExtensions
-  and \ref KDevelop::IPlugin::unregisterExtensions methods
-  - you can use the KDEV_USE_EXTENSION_INTERFACE macro if your plugin implements only one interface
-    to generate the register/unregister functions
-  .
+- use KDEV_USE_EXTENSION_INTERFACE macro in the constructor of the plugin:
+    \code
+    KDEV_USE_EXTENSION_INTERFACE( IMyInterface )
+    \endcode
 - declare in plugin's .desktop file:
     \code
     X-KDevelop-Interfaces=IMyInterface
@@ -139,11 +139,12 @@ documentation for reference.
         Q_OBJECT
         Q_INTERFACES(KDevelop::IMyInterface)
     public:
-        QStringList extensions() const { return QStringList() << "IMyInterface" }
+        MyPlugin(QObject* parent) : IPlugin( parent )
+        {
+            KDEV_USE_EXTENSION_INTERFACE( KDevelop::IMyInterface )
+        }
     };
     \endcode
-- in the implementation create a QExtensionFactory subclass for each interface your
-  plugin implements. This is easiest with the KDEV_ADD_EXTENSION_FACTORY_NS or KDEV_ADD_EXTENSION_FACTORY macro.
 .
 
 \subsubsection load_extension To load a plugin that supports extension interface:
