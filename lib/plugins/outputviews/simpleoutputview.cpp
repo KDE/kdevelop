@@ -63,8 +63,8 @@ private:
 
 class SimpleOutputViewPrivate
 {
-    friend class SimpleOutputView;
-    SimpleOutputView* q;
+    Q_DECLARE_PUBLIC( SimpleOutputView );
+    SimpleOutputView* q_ptr;
 public:
     SimpleOutputViewViewFactory* m_factory;
     QStandardItemModel* m_model;
@@ -118,6 +118,7 @@ public:
 
     void procFinished( KProcess* proc )
     {
+        Q_Q(SimpleOutputView);
         if( !proc->exitStatus() )
         {
             QStandardItem* endItem = new QStandardItem(QString("Finished (%1)").arg(proc->exitStatus()) );
@@ -140,7 +141,7 @@ SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
     : KDevelop::IPlugin(SimpleOutputViewFactory::componentData(), parent),
       d(new SimpleOutputViewPrivate)
 {
-    d->q = this;
+    d->q_ptr = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
     d->m_model = new QStandardItemModel( this );
     d->m_childProc = new KProcess( this );
