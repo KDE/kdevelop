@@ -37,14 +37,14 @@ public:
 };
 
 DocumentCursor::DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor)
-  : Cursor(cursor)
-  ,d( new DocumentCursorPrivate( document ) )
+    : Cursor(cursor)
+    ,d( new DocumentCursorPrivate( document ) )
 {
 }
 
 DocumentCursor::DocumentCursor(KTextEditor::Range* range, Position position )
-  : Cursor(position == Start ? range->start() : range->end())
-  ,d( new DocumentCursorPrivate( DocumentRangeObject::url(range) ) )
+    : Cursor(position == Start ? range->start() : range->end())
+    ,d( new DocumentCursorPrivate( DocumentRangeObject::url(range) ) )
 {
 }
 
@@ -52,26 +52,31 @@ DocumentCursor::DocumentCursor(KTextEditor::Cursor* cursor)
     : Cursor(*cursor)
     ,d( new DocumentCursorPrivate )
 {
-  if (cursor->isSmartCursor())
-    d->m_document = cursor->toSmartCursor()->document()->url();
-  else
-    d->m_document = static_cast<DocumentCursor*>(cursor)->document();
+    if (cursor->isSmartCursor())
+        d->m_document = cursor->toSmartCursor()->document()->url();
+    else
+        d->m_document = static_cast<DocumentCursor*>(cursor)->document();
 }
 
 DocumentCursor::DocumentCursor(const DocumentCursor& copy)
-  : Cursor(copy)
-  , d( new DocumentCursorPrivate( copy.document() ) )
+    : Cursor(copy)
+    , d( new DocumentCursorPrivate( copy.document() ) )
 {
+}
+
+DocumentCursor::~DocumentCursor()
+{
+    delete d;
 }
 
 const KUrl& DocumentCursor::document() const
 {
-  return d->m_document;
+    return d->m_document;
 }
 
 void DocumentCursor::setDocument(const KUrl& document)
 {
-  d->m_document = document;
+    d->m_document = document;
 }
 
 }

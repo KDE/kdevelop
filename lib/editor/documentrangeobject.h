@@ -38,39 +38,39 @@ namespace KDevelop
 class KDEVPLATFORM_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
-  DocumentRangeObject(KTextEditor::Range* range);
-  virtual ~DocumentRangeObject();
+    DocumentRangeObject(KTextEditor::Range* range);
+    virtual ~DocumentRangeObject();
 
-  enum RangeOwning{ Own, DontOwn };
-  Q_DECLARE_FLAGS( RangeOwnings, RangeOwning )
+    enum RangeOwning{ Own, DontOwn };
+    Q_DECLARE_FLAGS( RangeOwnings, RangeOwning )
 
-  /**
-   * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
-   * deleted when the object is deleted.
-   */
-  void setTextRange(KTextEditor::Range* range, RangeOwning ownsRange = Own);
+    /**
+     * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be
+     * deleted when the object is deleted.
+     */
+    void setTextRange(KTextEditor::Range* range, RangeOwning ownsRange = Own);
 
-  void setRange(const KTextEditor::Range& range);
-  const KTextEditor::Range textRange() const;
-  const DocumentRange textDocRange() const;
-  KTextEditor::Range* textRangePtr() const;
-  KTextEditor::SmartRange* smartRange() const;
+    void setRange(const KTextEditor::Range& range);
+    const KTextEditor::Range textRange() const;
+    const DocumentRange textDocRange() const;
+    KTextEditor::Range* textRangePtr() const;
+    KTextEditor::SmartRange* smartRange() const;
 
-  KUrl url() const;
-  static KUrl url(const KTextEditor::Range* range);
+    KUrl url() const;
+    static KUrl url(const KTextEditor::Range* range);
 
-  bool contains(const DocumentCursor& cursor) const;
+    bool contains(const DocumentCursor& cursor) const;
 
-  virtual void rangeDeleted(KTextEditor::SmartRange* range);
+    virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
-  /// Take the range from this object. USE WITH CARE!! You must be willing to
-  /// immediately delete this range object if you take its range.
-  KTextEditor::Range* takeRange();
+    /// Take the range from this object. USE WITH CARE!! You must be willing to
+    /// immediately delete this range object if you take its range.
+    KTextEditor::Range* takeRange();
 
 private:
-  Q_DISABLE_COPY(DocumentRangeObject)
+    Q_DISABLE_COPY(DocumentRangeObject)
 
-  class DocumentRangeObjectPrivate* const d;
+    class DocumentRangeObjectPrivate* const d;
 };
 
 

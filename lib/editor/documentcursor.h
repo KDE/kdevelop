@@ -39,31 +39,32 @@ namespace KDevelop
 class KDEVPLATFORM_EXPORT DocumentCursor : public KTextEditor::Cursor
 {
 public:
-  DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
+    DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
+    ~DocumentCursor();
 
-  enum Position {
-    Start,
-    End
-  };
+    enum Position {
+        Start,
+        End
+    };
 
-  /// Constructor for information extraction only, does not take ownership of the cursor.
-  /// \a range must be either a DocumentRange or a KTextEditor::SmartRange.
-  DocumentCursor(KTextEditor::Range* range, Position position);
+    /// Constructor for information extraction only, does not take ownership of the cursor.
+    /// \a range must be either a DocumentRange or a KTextEditor::SmartRange.
+    DocumentCursor(KTextEditor::Range* range, Position position);
 
-  /// Constructor for information extraction only, does not take ownership of the cursor.
-  /// \a cursor must be either a DocumentCursor or a KTextEditor::SmartCursor.
-  DocumentCursor(KTextEditor::Cursor* cursor);
+    /// Constructor for information extraction only, does not take ownership of the cursor.
+    /// \a cursor must be either a DocumentCursor or a KTextEditor::SmartCursor.
+    DocumentCursor(KTextEditor::Cursor* cursor);
 
-  DocumentCursor(const DocumentCursor& copy);
+    DocumentCursor(const DocumentCursor& copy);
 
-  /// Returns the associated document.
-  const KUrl& document() const;
+    /// Returns the associated document.
+    const KUrl& document() const;
 
-  /// Sets the associated document.
-  void setDocument(const KUrl& document);
+    /// Sets the associated document.
+    void setDocument(const KUrl& document);
 
 private:
-  class DocumentCursorPrivate* const d;
+    class DocumentCursorPrivate* const d;
 };
 
 }

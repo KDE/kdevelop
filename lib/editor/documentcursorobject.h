@@ -35,24 +35,24 @@ namespace KDevelop
 class KDEVPLATFORM_EXPORT DocumentCursorObject : public KTextEditor::SmartCursorWatcher
 {
 public:
-  DocumentCursorObject(KTextEditor::Cursor* cursor);
-  virtual ~DocumentCursorObject();
+    DocumentCursorObject(KTextEditor::Cursor* cursor);
+    virtual ~DocumentCursorObject();
 
-  void setTextCursor(KTextEditor::Cursor* cursor);
+    void setTextCursor(KTextEditor::Cursor* cursor);
 
-  KTextEditor::Cursor& textCursor();
-  const KTextEditor::Cursor& textCursor() const;
-  const DocumentCursor& textDocCursor() const;
-  KTextEditor::Cursor* textCursorPtr() const;
-  KTextEditor::SmartCursor* smartCursor() const;
+    KTextEditor::Cursor& textCursor();
+    const KTextEditor::Cursor& textCursor() const;
+    const DocumentCursor& textDocCursor() const;
+    KTextEditor::Cursor* textCursorPtr() const;
+    KTextEditor::SmartCursor* smartCursor() const;
 
-  KUrl url() const;
-  static KUrl url(const KTextEditor::Cursor* range);
+    KUrl url() const;
+    static KUrl url(const KTextEditor::Cursor* range);
 
-  virtual void deleted(KTextEditor::SmartCursor* cursor);
+    virtual void deleted(KTextEditor::SmartCursor* cursor);
 
 private:
-  class DocumentCursorObjectPrivate* const d;
+    class DocumentCursorObjectPrivate* const d;
 };
 
 }

@@ -37,24 +37,24 @@ namespace KDevelop
 class KDEVPLATFORM_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
-  DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
-  DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
-  DocumentRange(const DocumentRange& copy);
-  virtual ~DocumentRange();
+    DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
+    DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
+    DocumentRange(const DocumentRange& copy);
+    virtual ~DocumentRange();
 
-  /// Returns the associated document.
-  const KUrl& document() const;
+    /// Returns the associated document.
+    const KUrl& document() const;
 
-  /// Sets the associated document.
-  void setDocument(const KUrl& document);
+    /// Sets the associated document.
+    void setDocument(const KUrl& document);
 
-  KTextEditor::Range* parentRange() const;
-  void setParentRange(KTextEditor::Range* parent);
+    KTextEditor::Range* parentRange() const;
+    void setParentRange(KTextEditor::Range* parent);
 
-  const QList<DocumentRange*>& childRanges() const;
+    const QList<DocumentRange*>& childRanges() const;
 
 private:
-  class DocumentRangePrivate* const d;
+    class DocumentRangePrivate* const d;
 };
 
 }
