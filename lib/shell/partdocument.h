@@ -19,17 +19,13 @@
 #ifndef KDEV_PARTDOCUMENT_H
 #define KDEV_PARTDOCUMENT_H
 
-#include "idocument.h"
-#include <sublime/urldocument.h>
+#include <document.h>
 
 namespace KParts {
 class Part;
 }
 
 namespace KDevelop {
-
-class UiController;
-class PartController;
 
 /**
 The generic document which represents KParts.
@@ -40,27 +36,25 @@ are incapable of loading the url.
 This document loads one KPart (read-only or read-write) per view
 and sets part widget to be a view widget.
 */
-class PartDocument: public Sublime::UrlDocument, public IDocument {
+class PartDocument: public Document {
     Q_OBJECT
 public:
-    PartDocument(PartController *partController, UiController *controller, const KUrl &url);
+    PartDocument(const KUrl &url);
     virtual ~PartDocument();
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;
 
-    virtual KUrl url() const;
     virtual KMimeType::Ptr mimeType() const;
     virtual KTextEditor::Document* textDocument() const;
-    virtual void save();
+    virtual bool save(DocumentSaveMode mode = Default);
     virtual void reload();
     virtual void close();
     virtual bool isActive() const;
     virtual DocumentState state() const;
 
-protected:
-    PartController *partController();
-    UiController *uiController();
+    virtual void activate(Sublime::View *activeView);
+    virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
 private:
     class PartDocumentPrivate *d;

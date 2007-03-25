@@ -12,6 +12,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     iproject.cpp
     ilanguagecontroller.cpp
     ilanguage.cpp
+    idocumentcontroller.cpp
 )
 
 kde4_automoc(${kdevplatforminterfaces_LIB_SRCS})
@@ -31,6 +32,7 @@ install(FILES
     ilanguagecontroller.h
     ilanguage.h
     idocument.h
+    idocumentcontroller.h
     iextension.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces
 )

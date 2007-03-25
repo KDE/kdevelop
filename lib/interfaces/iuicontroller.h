@@ -48,8 +48,6 @@ public:
     virtual void addToolView(const QString &name, IToolViewFactory *factory) = 0;
     virtual void removeToolView(IToolViewFactory *factory) = 0;
 
-    virtual void openUrl(const KUrl &url) = 0;
-
 protected:
     IUiController();
 };

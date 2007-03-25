@@ -34,6 +34,7 @@ class PluginController;
 class ProjectController;
 class PartController;
 class UiController;
+class DocumentController;
 
 class KDEVPLATFORM_EXPORT Core: public ICore {
 public:
@@ -56,10 +57,14 @@ public:
 
     virtual KParts::PartManager *partManager();
 
+    virtual IDocumentController *documentController();
+
     /// @internal
     PartController *partController();
     /// @internal
     UiController *uiControllerInternal();
+    /// @internal
+    virtual DocumentController *documentControllerInternal();
 
     void cleanup();
 

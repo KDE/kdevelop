@@ -16,52 +16,62 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef UICONTROLLER_H
-#define UICONTROLLER_H
+#include "document.h"
 
-#include <kdevexport.h>
+#include <sublime/view.h>
+#include <sublime/mainwindow.h>
 
-#include "iuicontroller.h"
-#include <sublime/controller.h>
+#include "core.h"
+#include "uicontroller.h"
+#include "documentcontroller.h"
 
 namespace KDevelop {
 
-class Core;
-class MainWindow;
-
-class KDEVPLATFORM_EXPORT UiController: public Sublime::Controller, public IUiController {
-public:
-    UiController(Core *core);
-    virtual ~UiController();
-
-    /** @return area for currently active sublime mainwindow or 0 if
-    no sublime mainwindow is active.*/
-    virtual Sublime::Area *activeArea();
-    /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
-    virtual Sublime::MainWindow *activeMainWindow();
-
-    /** @return default main window - the main window for default area in the shell.
-    No guarantee is given that it always exists so this method may return 0.*/
-    MainWindow *defaultMainWindow();
-    /** @return the default area for this shell.*/
-    Sublime::Area *defaultArea();
-
-    virtual void switchToArea(const QString &areaName, SwitchMode switchMode);
-
-    virtual void addToolView(const QString &name, IToolViewFactory *factory);
-    virtual void removeToolView(IToolViewFactory *factory);
-
-    void addNewToolView(MainWindow *mw);
-
-    void openEmptyDocument();
-
-    void initialize();
-private:
-    class UiControllerPrivate *d;
+struct DocumentPrivate {
 };
+
+Document::Document(const KUrl &url)
+    :Sublime::UrlDocument(Core::self()->uiControllerInternal(), url)
+{
+    d = new DocumentPrivate();
+}
+
+Document::~Document()
+{
+    delete d;
+}
+
+void Document::notifyStateChanged()
+{
+    Core::self()->documentControllerInternal()->emitStateChanged(this);
+}
+
+void Document::notifySaved()
+{
+    Core::self()->documentControllerInternal()->emitSaved(this);
+}
+
+void Document::notifyActivated()
+{
+    Core::self()->documentControllerInternal()->emitActivated(this);
+}
+
+void Document::activate(Sublime::View */*activeView*/)
+{
+    notifyActivated();
+}
+
+
+
+//KDevelop::IDocument implementation
+
+KUrl Document::url() const
+{
+    return Sublime::UrlDocument::url();
+}
 
 }
 
-#endif
+#include "document.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

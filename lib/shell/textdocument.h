@@ -30,21 +30,26 @@ Usually Kate documents are represented by this class but TextDocument is not
 limited to Kate. Each conforming text editor will work.
 */
 class TextDocument: public PartDocument {
+    Q_OBJECT
 public:
-    TextDocument(PartController *partController, UiController *controller, const KUrl &url);
+    TextDocument(const KUrl &url);
     virtual ~TextDocument();
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;
 
-    virtual void save();
+    virtual bool save(DocumentSaveMode mode = Default);
     virtual void reload();
-    virtual void close();
     virtual DocumentState state() const;
 
-private:
-    struct TextDocumentPrivate *d;
+    virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
+private:
+    Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
+    Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
+
+    struct TextDocumentPrivate *d;
+    friend class TextDocumentPrivate;
 };
 
 }

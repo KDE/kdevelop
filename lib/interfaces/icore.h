@@ -37,6 +37,7 @@ class IUiController;
 class IPluginController;
 class IProjectController;
 class ILanguageController;
+class IDocumentController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -67,6 +68,8 @@ public:
     virtual ILanguageController *languageController() = 0;
 
     virtual KParts::PartManager *partManager() = 0;
+
+    virtual IDocumentController *documentController() = 0;
 
 protected:
     ICore(QObject *parent = 0) { Q_UNUSED(parent) };

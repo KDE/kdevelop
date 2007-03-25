@@ -16,48 +16,42 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef UICONTROLLER_H
-#define UICONTROLLER_H
+#ifndef KDEV_DOCUMENT_H
+#define KDEV_DOCUMENT_H
 
-#include <kdevexport.h>
+#include "idocument.h"
+#include <sublime/urldocument.h>
 
-#include "iuicontroller.h"
-#include <sublime/controller.h>
+namespace Sublime { class View; }
 
 namespace KDevelop {
 
 class Core;
-class MainWindow;
 
-class KDEVPLATFORM_EXPORT UiController: public Sublime::Controller, public IUiController {
+/**
+The abstract KDevelop document.
+
+This document is designed to be subclassed by all document implementations.
+*/
+class Document: public Sublime::UrlDocument, public IDocument {
+    Q_OBJECT
 public:
-    UiController(Core *core);
-    virtual ~UiController();
+    Document(const KUrl &url);
+    virtual ~Document();
 
-    /** @return area for currently active sublime mainwindow or 0 if
-    no sublime mainwindow is active.*/
-    virtual Sublime::Area *activeArea();
-    /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
-    virtual Sublime::MainWindow *activeMainWindow();
+    virtual KUrl url() const;
 
-    /** @return default main window - the main window for default area in the shell.
-    No guarantee is given that it always exists so this method may return 0.*/
-    MainWindow *defaultMainWindow();
-    /** @return the default area for this shell.*/
-    Sublime::Area *defaultArea();
+    /**Performs document activation actions if any.
+    This implementation just notifies the document controller about activation.*/
+    virtual void activate(Sublime::View *activeView);
 
-    virtual void switchToArea(const QString &areaName, SwitchMode switchMode);
+protected:
+    void notifyStateChanged();
+    void notifySaved();
+    void notifyActivated();
 
-    virtual void addToolView(const QString &name, IToolViewFactory *factory);
-    virtual void removeToolView(IToolViewFactory *factory);
-
-    void addNewToolView(MainWindow *mw);
-
-    void openEmptyDocument();
-
-    void initialize();
 private:
-    class UiControllerPrivate *d;
+    class DocumentPrivate *d;
 };
 
 }

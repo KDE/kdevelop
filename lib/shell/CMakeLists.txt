@@ -22,8 +22,10 @@ set(kdevplatformshell_LIB_SRCS
     projectcontroller.cpp
     project.cpp
     partcontroller.cpp
+    document.cpp
     partdocument.cpp
     textdocument.cpp
+    documentcontroller.cpp
     languagecontroller.cpp
     language.cpp
 )
@@ -46,8 +48,10 @@ install(FILES
     projectcontroller.h
     project.h
     partcontroller.h
+    document.h
     partdocument.h
     textdocument.h
+    documentcontroller.h
     languagecontroller.h
     language.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell

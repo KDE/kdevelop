@@ -20,26 +20,70 @@
 
 #include <QPointer>
 
+#include <klocale.h>
+#include <kmessagebox.h>
+
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/modificationinterface.h>
 
+#include <sublime/mainwindow.h>
+
+#include "core.h"
+#include "uicontroller.h"
 #include "partcontroller.h"
+#include "documentcontroller.h"
 
 namespace KDevelop {
 
 struct TextDocumentPrivate {
-    TextDocumentPrivate()
+    TextDocumentPrivate(TextDocument *textDocument)
+        :m_textDocument(textDocument)
     {
         document = 0;
+        state = IDocument::Clean;
     }
     QPointer<KTextEditor::Document> document;
+    IDocument::DocumentState state;
+
+
+    void newDocumentStatus(KTextEditor::Document *document)
+    {
+        if (document->isModified())
+            state = IDocument::Clean;
+        else
+            state = Document::Dirty;
+        m_textDocument->notifyStateChanged();
+    }
+
+    void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
+        KTextEditor::ModificationInterface::ModifiedOnDiskReason reason)
+    {
+        switch (reason)
+        {
+            case KTextEditor::ModificationInterface::OnDiskUnmodified:
+                if (!document->isModified())
+                    state = IDocument::Clean;
+                else
+                    state = IDocument::Dirty;
+                break;
+            case KTextEditor::ModificationInterface::OnDiskModified:
+            case KTextEditor::ModificationInterface::OnDiskCreated:
+            case KTextEditor::ModificationInterface::OnDiskDeleted:
+                state = IDocument::DirtyAndModified;
+        }
+        m_textDocument->notifyStateChanged();
+    }
+
+private:
+    TextDocument *m_textDocument;
 };
 
 
-TextDocument::TextDocument(PartController *partController, UiController *controller, const KUrl &url)
-    :PartDocument(partController, controller, url)
+TextDocument::TextDocument(const KUrl &url)
+    :PartDocument(url)
 {
-    d = new TextDocumentPrivate();
+    d = new TextDocumentPrivate(this);
 }
 
 TextDocument::~TextDocument()
@@ -51,8 +95,20 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 {
     if (!d->document)
     {
-        d->document = partController()->createTextPart(url(), "", !url().isEmpty());
-        partController()->addPart(d->document);
+        d->document = Core::self()->partController()->createTextPart(url(),
+            Core::self()->documentController()->encoding(), !url().isEmpty());
+        Core::self()->partController()->addPart(d->document);
+
+        connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
+                 this, SLOT(newDocumentStatus(KTextEditor::Document*)));
+        KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
+        if (iface)
+        {
+            iface->setModifiedOnDiskWarning(true);
+            connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
+                this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
+        }
+
         return d->document->widget();
     }
     return d->document->createView(parent);
@@ -69,16 +125,69 @@ KParts::Part *TextDocument::partForView(QWidget *view) const
 
 // KDevelop::IDocument implementation
 
-void TextDocument::close()
-{
-}
-
 void TextDocument::reload()
 {
+    if (!d->document)
+        return;
+
+    if (d->document->isModified())
+    {
+        if (KMessageBox::warningYesNo(Core::self()->uiControllerInternal()->activeMainWindow(),
+                i18n( "The file \"%1\" is modified "
+                      "in memory. Are you sure you "
+                      "want to reload it? (Local "
+                      "changes will be lost.)", url().path() ),
+                i18n( "Document is Modified" ) ) == KMessageBox::Yes )
+            d->document->setModified(false);
+        else
+            return ;
+    }
+
+    QList<KTextEditor::Cursor> cursors;
+    foreach (KTextEditor::View *view, d->document->views())
+        cursors << view->cursorPosition();
+
+    d->document->openUrl(url());
+
+    notifyStateChanged();
+
+    int i = 0;
+    foreach (KTextEditor::View *view, d->document->views())
+        view->setCursorPosition(cursors[i++]);
 }
 
-void TextDocument::save()
+bool TextDocument::save(DocumentSaveMode mode)
 {
+    if (!d->document)
+        return true;
+
+    switch (d->state)
+    {
+        case Document::Clean: return true;
+        case Document::Modified: break;
+        case Document::Dirty:
+        case Document::DirtyAndModified:
+            if (!(mode & Silent))
+            {
+                int code = KMessageBox::warningYesNoCancel(
+                    Core::self()->uiControllerInternal()->activeMainWindow(),
+                    i18n("The file \"%1\" is modified on disk.\n\nAre "
+                        "you sure you want to overwrite it? (External "
+                        "changes will be lost.)", d->document->url().path()),
+                    i18n("Document Externally Modified"));
+                if (code != KMessageBox::Yes)
+                    return false;
+            }
+            break;
+    }
+
+    if (d->document->save())
+    {
+        notifyStateChanged();
+        notifySaved();
+        return true;
+    }
+    return false;
 }
 
 IDocument::DocumentState TextDocument::state() const
@@ -86,6 +195,23 @@ IDocument::DocumentState TextDocument::state() const
     return Clean;
 }
 
+void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
+{
+    if (cursor.line() < 0)
+        return ;
+
+    KTextEditor::View *view = d->document->activeView();
+
+    KTextEditor::Cursor c = cursor;
+    if (c.column() == 1)
+        c.setColumn(0);
+
+    if (view)
+        view->setCursorPosition(c);
 }
+
+}
+
+#include "textdocument.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

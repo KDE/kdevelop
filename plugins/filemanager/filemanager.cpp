@@ -40,7 +40,7 @@
 #include <kio/netaccess.h>
 
 #include "icore.h"
-#include "iuicontroller.h"
+#include "idocumentcontroller.h"
 
 #include "filesortfilterproxymodel.h"
 #include "kdevfilemanagerpart.h"
@@ -82,7 +82,7 @@ public:
         if (!fileItem)
             return;
 
-        m_part->core()->uiController()->openUrl(fileItem->url());
+        m_part->core()->documentController()->openDocument(fileItem->url());
     }
 
     void init()

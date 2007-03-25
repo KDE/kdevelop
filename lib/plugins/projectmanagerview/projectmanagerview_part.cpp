@@ -26,6 +26,7 @@
 #include "iprojectfilemanager.h"
 #include "ibuildsystemmanager.h"
 #include "iuicontroller.h"
+#include "idocumentcontroller.h"
 #include "iprojectbuilder.h"
 #include "iprojectcontroller.h"
 #include "importprojectjob.h"
@@ -88,7 +89,7 @@ ProjectManagerViewPart::~ProjectManagerViewPart()
 
 void ProjectManagerViewPart::openURL( const KUrl &url )
 {
-    core()->uiController()->openUrl( url );
+    core()->documentController()->openDocument( url );
 }
 
 // ProjectFolderItem *ProjectManagerViewPart::activeFolder()

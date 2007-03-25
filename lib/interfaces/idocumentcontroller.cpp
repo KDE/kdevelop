@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright (C) 2007 by Alexander Dymo                                  *
+ *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,52 +17,17 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef UICONTROLLER_H
-#define UICONTROLLER_H
-
-#include <kdevexport.h>
-
-#include "iuicontroller.h"
-#include <sublime/controller.h>
+#include "idocumentcontroller.h"
 
 namespace KDevelop {
 
-class Core;
-class MainWindow;
-
-class KDEVPLATFORM_EXPORT UiController: public Sublime::Controller, public IUiController {
-public:
-    UiController(Core *core);
-    virtual ~UiController();
-
-    /** @return area for currently active sublime mainwindow or 0 if
-    no sublime mainwindow is active.*/
-    virtual Sublime::Area *activeArea();
-    /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
-    virtual Sublime::MainWindow *activeMainWindow();
-
-    /** @return default main window - the main window for default area in the shell.
-    No guarantee is given that it always exists so this method may return 0.*/
-    MainWindow *defaultMainWindow();
-    /** @return the default area for this shell.*/
-    Sublime::Area *defaultArea();
-
-    virtual void switchToArea(const QString &areaName, SwitchMode switchMode);
-
-    virtual void addToolView(const QString &name, IToolViewFactory *factory);
-    virtual void removeToolView(IToolViewFactory *factory);
-
-    void addNewToolView(MainWindow *mw);
-
-    void openEmptyDocument();
-
-    void initialize();
-private:
-    class UiControllerPrivate *d;
-};
+IDocumentController::IDocumentController(QObject *parent)
+    :QObject(parent)
+{
+}
 
 }
 
-#endif
+#include "idocumentcontroller.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

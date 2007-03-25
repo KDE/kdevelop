@@ -87,13 +87,11 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
-    PartDocument *doc = qobject_cast<KDevelop::PartDocument*>(view->document());
+    Document *doc = qobject_cast<KDevelop::Document*>(view->document());
     if (doc)
     {
         //activate part if it is not yet activated
-        KParts::Part *part = doc->partForView(view->widget());
-        if (Core::self()->partController()->activePart() != part)
-            Core::self()->partController()->setActivePart(part);
+        doc->activate(view);
     }
     else
     {

@@ -18,28 +18,24 @@
  ***************************************************************************/
 #include "partdocument.h"
 
-#include <ktexteditor/document.h>
-
+#include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/mainwindow.h>
 
+#include "core.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
 
 namespace KDevelop {
 
 struct PartDocumentPrivate {
-    PartController *partController;
-    UiController *uiController;
     QMap<QWidget*, KParts::Part*> partForView;
 };
 
-PartDocument::PartDocument(PartController *partController, UiController *controller, const KUrl &url)
-    :Sublime::UrlDocument(controller, url)
+PartDocument::PartDocument(const KUrl &url)
+    :Document(url)
 {
     d = new PartDocumentPrivate();
-    d->partController = partController;
-    d->uiController = controller;
 }
 
 PartDocument::~PartDocument()
@@ -47,11 +43,10 @@ PartDocument::~PartDocument()
     delete d;
 }
 
-QWidget *PartDocument::createViewWidget(QWidget *parent)
+QWidget *PartDocument::createViewWidget(QWidget */*parent*/)
 {
-    Q_UNUSED( parent );
-    KParts::Part *part = d->partController->createPart(url());
-    d->partController->addPart(part);
+    KParts::Part *part = Core::self()->partController()->createPart(url());
+    Core::self()->partController()->addPart(part);
     QWidget *w = part->widget();
     d->partForView[w] = part;
     return w;
@@ -62,24 +57,10 @@ KParts::Part *PartDocument::partForView(QWidget *view) const
     return d->partForView[view];
 }
 
-PartController *PartDocument::partController()
-{
-    return d->partController;
-}
-
-UiController *PartDocument::uiController()
-{
-    return d->uiController;
-}
-
 
 
 //KDevelop::IDocument implementation
 
-KUrl PartDocument::url() const
-{
-    return Sublime::UrlDocument::url();
-}
 
 KMimeType::Ptr PartDocument::mimeType() const
 {
@@ -93,24 +74,49 @@ KTextEditor::Document *PartDocument::textDocument() const
 
 bool PartDocument::isActive() const
 {
-    return d->uiController->activeMainWindow()->activeView()->document() == this;
+    return Core::self()->uiControllerInternal()->activeMainWindow()->activeView()->document() == this;
 }
 
-void PartDocument::save()
+bool PartDocument::save(DocumentSaveMode /*mode*/)
 {
+    //part document is read-only so do nothing here
+    return true;
 }
 
 void PartDocument::close()
 {
+    //close all views and then delete ourselves
+    ///@todo test this
+    foreach (Sublime::Area *area, Core::self()->uiControllerInternal()->areas())
+    {
+        QList<Sublime::View*> areaViews = area->views();
+        foreach (Sublime::View *view, areaViews)
+            if (views().contains(view))
+                area->removeView(view);
+    }
 }
 
 void PartDocument::reload()
 {
+    //part document is read-only so do nothing here
 }
 
 IDocument::DocumentState PartDocument::state() const
 {
     return Clean;
+}
+
+void PartDocument::activate(Sublime::View *activeView)
+{
+    KParts::Part *part = partForView(activeView->widget());
+    if (Core::self()->partController()->activePart() != part)
+        Core::self()->partController()->setActivePart(part);
+    Document::activate(activeView);
+}
+
+void PartDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
+{
+    //do nothing here
 }
 
 }

@@ -30,6 +30,7 @@
 #include "icore.h"
 #include "iprojectcontroller.h"
 #include "iuicontroller.h"
+#include "idocumentcontroller.h"
 #include "iproject.h"
 #include "ibuildsystemmanager.h"
 #include "iprojectbuilder.h"
@@ -77,7 +78,7 @@ public:
         {
             ProjectBaseItem* projectItem = dynamic_cast<ProjectBaseItem*>( item );
             if ( projectItem && projectItem->file() )
-                m_part->core()->uiController()->openUrl( projectItem->file()->url() );
+                m_part->core()->documentController()->openDocument( projectItem->file()->url() );
         }
     }
     void buildCurrentProject()

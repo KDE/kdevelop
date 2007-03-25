@@ -23,6 +23,7 @@
 #include <kurl.h>
 #include <kmimetype.h>
 #include <kdevexport.h>
+#include <ktexteditor/cursor.h>
 
 namespace KParts { class Part; }
 namespace KTextEditor { class Document; }
@@ -54,6 +55,12 @@ public:
         DirtyAndModified   /**< Document is modified inside the IDE and at the same time by an external process.*/
     };
 
+    enum DocumentSaveMode
+    {
+        Default = 0,
+        Silent = 1,
+    };
+
     /**
      * Returns the URL of this document.
      */
@@ -75,12 +82,13 @@ public:
     virtual KTextEditor::Document* textDocument() const = 0;
 
     /**
-     * Requests that the document be saved.
+     * Saves the document.
+     * @return true if the document was saved, false otherwise
      */
-    virtual void save() = 0;
+    virtual bool save(DocumentSaveMode mode = Default) = 0;
 
     /**
-     * Requests that the document be reloaded.
+     * Reloads the document.
      */
     virtual void reload() = 0;
 
@@ -99,6 +107,8 @@ public:
     * @return The document state.
     */
     virtual DocumentState state() const = 0;
+
+    virtual void setCursorPosition(const KTextEditor::Cursor &cursor) = 0;
 
 };
 

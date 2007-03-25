@@ -36,6 +36,7 @@
 #include "partcontroller.h"
 #include "languagecontroller.h"
 #include "editorintegrator.h"
+#include "documentcontroller.h"
 
 namespace KDevelop {
 
@@ -52,6 +53,7 @@ struct CorePrivate {
         partController = new PartController(m_core, uiController->defaultMainWindow());
         projectController = new ProjectController(m_core);
         languageController = new LanguageController(m_core);
+        documentController = new DocumentController(m_core);
 
         uiController->initialize();
         languageController->initialize();
@@ -70,6 +72,7 @@ struct CorePrivate {
         delete pluginController;
         delete uiController;
         delete partController;
+        delete documentController;
     }
 
     QPointer<PluginController> pluginController;
@@ -77,6 +80,7 @@ struct CorePrivate {
     QPointer<ProjectController> projectController;
     QPointer<LanguageController> languageController;
     QPointer<PartController> partController;
+    QPointer<DocumentController> documentController;
 
     Core *m_core;
 };
@@ -149,6 +153,16 @@ UiController *Core::uiControllerInternal()
 ILanguageController *Core::languageController()
 {
     return d->languageController;
+}
+
+IDocumentController *Core::documentController()
+{
+    return d->documentController;
+}
+
+DocumentController *Core::documentControllerInternal()
+{
+    return d->documentController;
 }
 
 }

@@ -49,7 +49,6 @@ public:
         defaultMainWindow = new MainWindow(controller);
     }
 
-    QMap<KUrl, PartDocument*> parts;
     Sublime::Area *defaultArea;
     Core *core;
     MainWindow* defaultMainWindow;
@@ -129,45 +128,6 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     delete doc;
 }
 
-void UiController::openUrl(const KUrl &url)
-{
-    Sublime::Area *area = activeArea();
-    if (!area)
-        return;
-
-    //get a part document
-    if (!d->parts.contains(url))
-    {
-        if (d->core->partController()->isTextType(KMimeType::findByUrl(url)))
-            d->parts[url] = new TextDocument(d->core->partController(), this, url);
-        else
-            d->parts[url] = new PartDocument(d->core->partController(), this, url);
-    }
-    PartDocument *doc = d->parts[url];
-
-    //find a view if there's one already opened in this area
-    Sublime::View *partView = 0;
-    foreach (Sublime::View *view, doc->views())
-    {
-        if (area->views().contains(view))
-        {
-            partView = view;
-            break;
-        }
-    }
-    if (!partView)
-    {
-        //no view currently shown for this url
-        partView = doc->createView();
-
-        //add view to the area
-        area->addView(partView, activeMainWindow()->activeView());
-    }
-    activeMainWindow()->activateView(partView);
-    d->core->partController()->setActivePart(doc->partForView(partView->widget()), partView->widget());
-    ///@todo adymo: activate and focus the partView
-}
-
 Sublime::Area *UiController::activeArea()
 {
     Sublime::MainWindow *m = activeMainWindow();
@@ -201,7 +161,7 @@ void UiController::initialize()
 
 void UiController::openEmptyDocument()
 {
-    PartDocument *doc = new PartDocument(d->core->partController(), this, KUrl());
+    PartDocument *doc = new PartDocument(KUrl());
     Sublime::View *view = doc->createView();
     activeArea()->addView(view);
     activeMainWindow()->activateView(view);
