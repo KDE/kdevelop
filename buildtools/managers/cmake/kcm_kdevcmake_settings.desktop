@@ -14,5 +14,6 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 Name=CMake
 Name[x-test]=xxCMakexx
 Comment=Configure CMake settings
+Comment[es]=Configurar las preferencias de CMake
 Comment[x-test]=xxConfigure CMake settingsxx
 

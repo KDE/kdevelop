@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop QMake Manager
+Name[es]=Gestor QMake de KDevelop
 Name[x-test]=xxKDevelop QMake Managerxx
 Comment=Imports and edits qmake projects
 Comment[ca]=Importa i edita els projectes de qmake

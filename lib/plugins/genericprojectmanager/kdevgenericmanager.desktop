@@ -1,8 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop Generic Importer
+Name[es]=Importador genérico de KDevelop
 Name[x-test]=xxKDevelop Generic Importerxx
 Comment=Allow KDevelop to manage generic projects
+Comment[es]=Permite que KDevelop gestione proyectos genéricos
 Comment[x-test]=xxAllow KDevelop to manage generic projectsxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin

@@ -7,6 +7,7 @@ Comment[x-test]=xxThis plugin displays a graphical view of the definition-use ch
 Name=KDevDUChainView
 Name[x-test]=xxKDevDUChainViewxx
 GenericName=DUChain View
+GenericName[es]=Visor DUChain
 GenericName[x-test]=xxDUChain Viewxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevduchainview

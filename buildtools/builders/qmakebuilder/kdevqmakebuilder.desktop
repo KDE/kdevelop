@@ -3,6 +3,7 @@ Type=Service
 Name=KDevQMakeBuilder
 Name[x-test]=xxKDevQMakeBuilderxx
 Comment=Builds QMake Projects
+Comment[es]=Construye proyectos QMake
 Comment[x-test]=xxBuilds QMake Projectsxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin

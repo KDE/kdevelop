@@ -14,5 +14,6 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 Name=QMake
 Name[x-test]=xxQMakexx
 Comment=Configure QMake settings
+Comment[es]=Configurar las preferencias de QMake
 Comment[x-test]=xxConfigure QMake settingsxx
 

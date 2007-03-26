@@ -7,6 +7,7 @@ Comment[x-test]=xxThis plugin allows to store code snippets and insert them into
 Name=KDevSnippet
 Name[x-test]=xxKDevSnippetxx
 GenericName=Code Snippets
+GenericName[es]=Fragmentos de código
 GenericName[x-test]=xxCode Snippetsxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevsnippet
