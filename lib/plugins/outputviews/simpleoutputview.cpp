@@ -33,7 +33,7 @@
 #include <iuicontroller.h>
 
 #include <kgenericfactory.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -69,7 +69,7 @@ public:
     SimpleOutputViewViewFactory* m_factory;
     QStandardItemModel* m_model;
     QList<QPair<KUrl, QStringList> > m_jobs;
-    KProcess* m_childProc;
+    K3Process* m_childProc;
     QStringList m_currentCmd;
     bool isRunning()
     {
@@ -92,11 +92,11 @@ public:
         foreach(QString s, l)
             if( !s.isEmpty() )
                 *m_childProc << s;
-        m_childProc->start( KProcess::OwnGroup, KProcess::AllOutput );
+        m_childProc->start( K3Process::OwnGroup, K3Process::AllOutput );
         if( !isRunning() )
             kDebug(9000) << "Couldn't start process" << endl;
     }
-    void procReadStdout(KProcess* proc, char* buf, int len)
+    void procReadStdout(K3Process* proc, char* buf, int len)
     {
         QString txt = QString::fromLocal8Bit( buf, len );
         QStringList l = txt.split("\n");
@@ -106,7 +106,7 @@ public:
         }
     }
 
-    void procReadStderr(KProcess* proc, char* buf, int len)
+    void procReadStderr(K3Process* proc, char* buf, int len)
     {
         QString txt = QString::fromLocal8Bit( buf, len );
         QStringList l = txt.split("\n");
@@ -116,7 +116,7 @@ public:
         }
     }
 
-    void procFinished( KProcess* proc )
+    void procFinished( K3Process* proc )
     {
         Q_Q(SimpleOutputView);
         if( !proc->exitStatus() )
@@ -144,13 +144,13 @@ SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
     d->q_ptr = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
     d->m_model = new QStandardItemModel( this );
-    d->m_childProc = new KProcess( this );
+    d->m_childProc = new K3Process( this );
     d->m_factory = new SimpleOutputViewViewFactory( this );
     core()->uiController()->addToolView( "Output View", d->m_factory );
-    connect( d->m_childProc, SIGNAL(receivedStdout(KProcess* , char*, int) ), this, SLOT( procReadStdout(KProcess* , char*, int) ) );
-    connect( d->m_childProc, SIGNAL(receivedStderr(KProcess* , char*, int) ), this, SLOT( procReadStderr(KProcess* , char*, int) ) );
-    connect( d->m_childProc, SIGNAL(processExited( KProcess* ) ),
-             this, SLOT( procFinished( KProcess* ) ) );
+    connect( d->m_childProc, SIGNAL(receivedStdout(K3Process* , char*, int) ), this, SLOT( procReadStdout(K3Process* , char*, int) ) );
+    connect( d->m_childProc, SIGNAL(receivedStderr(K3Process* , char*, int) ), this, SLOT( procReadStderr(K3Process* , char*, int) ) );
+    connect( d->m_childProc, SIGNAL(processExited( K3Process* ) ),
+             this, SLOT( procFinished( K3Process* ) ) );
 }
 
 SimpleOutputView::~SimpleOutputView()

@@ -23,7 +23,7 @@
 
 #include <QObject>
 
-class KProcess;
+class K3Process;
 class QXmlInputSource;
 class QXmlSimpleReader;
 class ValgrindModel;
@@ -43,12 +43,12 @@ public:
 private slots:
   void newValgrindConnection();
   void readFromValgrind();
-  void processExited(KProcess* p);
-  void receivedStdout( KProcess*, char*, int );
-  void receivedStderr( KProcess*, char*, int );
+  void processExited(K3Process* p);
+  void receivedStdout( K3Process*, char*, int );
+  void receivedStderr( K3Process*, char*, int );
 
 private:
-  KProcess* m_process;
+  K3Process* m_process;
   int m_currentPid;
 
   QXmlInputSource* m_inputSource;

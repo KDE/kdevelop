@@ -13,7 +13,7 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kdebug.h>

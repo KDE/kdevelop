@@ -24,7 +24,7 @@ class QDomDocument;
 #include <kparts/componentfactory.h>
 #include <kaction.h>
 #include <kcmdlineargs.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>

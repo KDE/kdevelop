@@ -19,7 +19,7 @@
 
 #include "execcommand.h"
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <kprogressdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -32,21 +32,21 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args,
 {
   progressDlg = 0;
 
-  proc = new KProcess();
+  proc = new K3Process();
   proc->setWorkingDirectory( workingDir );
   for ( QStringList::ConstIterator it = env.begin(); it != env.end(); ++it )
     proc->setEnvironment( (*it).section( '=', 0, 0 ), (*it).section( '=', 1, 1 ) );
   *proc << executable;
   *proc << args;
 
-  connect( proc, SIGNAL(processExited(KProcess*)),
+  connect( proc, SIGNAL(processExited(K3Process*)),
            this, SLOT(processExited()) );
-  connect( proc, SIGNAL(receivedStdout(KProcess*,char*,int)),
-           this, SLOT(receivedStdout(KProcess*,char*,int)) );
-  connect( proc, SIGNAL(receivedStderr(KProcess*,char*,int)),
-           this, SLOT(receivedStderr(KProcess*,char*,int)) );
+  connect( proc, SIGNAL(receivedStdout(K3Process*,char*,int)),
+           this, SLOT(receivedStdout(K3Process*,char*,int)) );
+  connect( proc, SIGNAL(receivedStderr(K3Process*,char*,int)),
+           this, SLOT(receivedStderr(K3Process*,char*,int)) );
 
-  bool ok = proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
+  bool ok = proc->start( K3Process::NotifyOnExit, K3Process::AllOutput );
 
   if ( !ok ) {
     KMessageBox::error( 0, i18n("Could not invoke \"%1\". Please make sure it is installed correctly", executable ),
@@ -63,12 +63,12 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args,
   }
 }
 
-void ExecCommand::receivedStdout (KProcess*, char *buffer, int buflen)
+void ExecCommand::receivedStdout (K3Process*, char *buffer, int buflen)
 {
   out += QString::fromUtf8( buffer, buflen );  
 }
 
-void ExecCommand::receivedStderr (KProcess*, char *buffer, int buflen)
+void ExecCommand::receivedStderr (K3Process*, char *buffer, int buflen)
 {
   err += QString::fromUtf8( buffer, buflen );
 }

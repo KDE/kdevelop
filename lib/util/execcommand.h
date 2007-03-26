@@ -24,7 +24,7 @@
 #include <qstringlist.h>
 #include "kdevexport.h"
 
-class KProcess;
+class K3Process;
 class KProgressDialog;
 
 /**
@@ -56,13 +56,13 @@ signals:
     void finished( const QString& output, const QString& errorOutput );
 
 private slots:
-    void receivedStdout (KProcess *, char *buffer, int buflen);
-    void receivedStderr (KProcess *, char *buffer, int buflen);
+    void receivedStdout (K3Process *, char *buffer, int buflen);
+    void receivedStderr (K3Process *, char *buffer, int buflen);
     void processExited();
     void cancelClicked();
 
 private:
-    KProcess* proc;
+    K3Process* proc;
     KProgressDialog* progressDlg;
     QString   out;
     QString   err;

@@ -25,7 +25,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -39,10 +39,10 @@ ValgrindControl::ValgrindControl( QObject * parent )
   , m_server(0)
   , m_connection(0)
 {
-  m_process = new KShellProcess();
-  connect( m_process, SIGNAL(receivedStdout( KProcess*, char*, int )), SLOT(receivedStdout( KProcess*, char*, int )) );
-  connect( m_process, SIGNAL(receivedStderr( KProcess*, char*, int )), SLOT(receivedStderr( KProcess*, char*, int )) );
-  connect( m_process, SIGNAL(processExited( KProcess* )), SLOT(processExited( KProcess* )) );
+  m_process = new K3ShellProcess();
+  connect( m_process, SIGNAL(receivedStdout( K3Process*, char*, int )), SLOT(receivedStdout( K3Process*, char*, int )) );
+  connect( m_process, SIGNAL(receivedStderr( K3Process*, char*, int )), SLOT(receivedStderr( K3Process*, char*, int )) );
+  connect( m_process, SIGNAL(processExited( K3Process* )), SLOT(processExited( K3Process* )) );
 }
 
 void ValgrindControl::run( ValgrindModel * model, const QString & executable, const QString & parameters, const QString & valgrindExecutable, const QString & valgrindParameters )
@@ -70,7 +70,7 @@ void ValgrindControl::run( ValgrindModel * model, const QString & executable, co
 
   m_process->clearArguments();
   *m_process << valgrindExecutable << valgrindParameters  << "--xml=yes" << QString("--log-socket=localhost:%1").arg(port) << executable << parameters;
-  m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput );
+  m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput );
   //mainWindow()->raiseView( m_treeView );
   //KDevCore::core()->running( this, true );
 
@@ -82,7 +82,7 @@ void ValgrindControl::stop()
   m_process->kill();
 }
 
-void ValgrindControl::processExited( KProcess* p )
+void ValgrindControl::processExited( K3Process* p )
 {
   if ( p == m_process ) {
     //core()->running( this, false );
@@ -93,11 +93,11 @@ void ValgrindControl::processExited( KProcess* p )
 
     /*if (kcInfo.runKc)
     {
-        KProcess *kcProc = new KProcess;
+        K3Process *kcProc = new K3Process;
 //        kcProc->setWorkingDirectory(kcInfo.kcWorkDir);
         *kcProc << kcInfo.kcPath;
         *kcProc << QString("cachegrind.out.%1").arg(p->pid());
-        kcProc->start(KProcess::DontCare);
+        kcProc->start(K3Process::DontCare);
     }*/
   }
 }
@@ -119,11 +119,11 @@ void ValgrindControl::newValgrindConnection( )
   }
 }
 
-void ValgrindControl::receivedStdout( KProcess*, char*, int )
+void ValgrindControl::receivedStdout( K3Process*, char*, int )
 {
 }
 
-void ValgrindControl::receivedStderr( KProcess*, char*, int )
+void ValgrindControl::receivedStderr( K3Process*, char*, int )
 {
 }
 

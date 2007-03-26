@@ -28,7 +28,7 @@
 class QStringList;
 class QStandardItemModel;
 class KUrl;
-class KProcess;
+class K3Process;
 class QString;
 
 /**
@@ -51,10 +51,10 @@ Q_SIGNALS:
     void commandFailed( const QStringList& command );
 
 private:
-    Q_PRIVATE_SLOT( d, void procReadStdout(KProcess* proc, char*, int) )
-    Q_PRIVATE_SLOT( d, void procReadStderr(KProcess* proc, char*, int) )
+    Q_PRIVATE_SLOT( d, void procReadStdout(K3Process* proc, char*, int) )
+    Q_PRIVATE_SLOT( d, void procReadStderr(K3Process* proc, char*, int) )
     Q_PRIVATE_SLOT( d, void startNextJob() )
-    Q_PRIVATE_SLOT( d, void procFinished( KProcess* ) )
+    Q_PRIVATE_SLOT( d, void procFinished( K3Process* ) )
     class SimpleOutputViewPrivate* const d;
     friend class SimpleOutputViewPrivate;
 };
