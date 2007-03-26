@@ -42,7 +42,9 @@ target_link_libraries(kdevsubversion
                     ${APU_EXTRA_LIBFLAGS}
                     ${QT_QTDESIGNER_LIBRARY}
                     ${KDE4_KDECORE_LIBS}
-                    kdevplatforminterfaces)
+                    kdevplatforminterfaces
+                    kdevplatformvcs
+                    )
 
 install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -12,6 +12,7 @@
 #include <kmenu.h>
 #include <kurl.h>
 #include <kactioncollection.h>
+#include <qwidget.h>
 
 #include <QPointer>
 #include <QtDesigner/QExtensionFactory>
@@ -55,13 +56,13 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     , d(new KDevSubversionPartPrivate)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IVersionControl )
-            
+
     d->m_factory = new KDevSubversionViewFactory(this);
     core()->uiController()->addToolView("Subversion", d->m_factory);
     // init svn core
     d->m_impl = new SubversionCore(this, this);
 //     d->m_infoProvider = new SvnFileInfoProvider(this);
-    
+
     setXMLFile("kdevsubversion.rc");
 
     QAction *action;
@@ -85,7 +86,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action = actionCollection()->addAction("svn_update");
     action->setText(i18n("Update to..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(update()));
-    
+
     action = actionCollection()->addAction("svn_log");
     action->setText(i18n("Show Subversion Log..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(logView()));
@@ -98,13 +99,13 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action = actionCollection()->addAction("svn_blame");
     action->setText(i18n("Show Blame (annotate)..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(blame()));
-    
+
     // init context menu
 //     connect( ((UiController*)(core()->uiController()))->defaultMainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
 //             this, SLOT(contextMenu(KMenu *, const Context *)));
 //     connect( Core::mainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
 //             this, SLOT(contextMenu(KMenu *, const Context *)));
-    
+
 }
 
 KDevSubversionPart::~KDevSubversionPart()
@@ -113,7 +114,7 @@ KDevSubversionPart::~KDevSubversionPart()
 //     delete d->m_infoProvider;
     delete d;
 }
-bool KDevSubversionPart::statusASync( const KUrl &dirPath, bool recursive, VcsFileInfoMap &map )
+bool KDevSubversionPart::statusASync( const KUrl &dirPath, KDevelop::IVersionControl::WorkingMode mode,  const QList<KDevelop::VcsFileInfo> &map )
 {
     //TODO
 }
@@ -124,7 +125,7 @@ void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
     connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
 }
 //////////////////////////////////////////////
-void KDevSubversionPart::checkout( const KUrl &repository, const KUrl &targetDir, bool recurse )
+void KDevSubversionPart::checkout( const KUrl &repository, const KUrl &targetDir, KDevelop::IVersionControl::WorkingMode mode )
 {
 }
 
@@ -140,7 +141,7 @@ void KDevSubversionPart::remove( const KUrl::List &urls )
 void KDevSubversionPart::commit( const KUrl::List &wcPaths )
 {
 //     void spawnCommitThread( KUrl::List &urls, bool recurse, bool keepLocks );
-    d->m_impl->spawnCommitThread( wcPaths, true, false );   
+    d->m_impl->spawnCommitThread( wcPaths, true, false );
 }
 void KDevSubversionPart::update( const KUrl::List &wcPaths )
 {
@@ -157,38 +158,38 @@ void KDevSubversionPart::annotate( const KUrl &path_or_url )
 {
     d->m_impl->spawnBlameThread(path_or_url, true,  0, "", -1, "HEAD" );
 }
-bool KDevSubversionPart::urlFocusedDocument( KUrl &url )
+
+const KUrl& KDevSubversionPart::urlFocusedDocument()
 {
     KParts::ReadOnlyPart *part =
             dynamic_cast<KParts::ReadOnlyPart*>( core()->partManager()->activePart() );
     if ( part ) {
         if (part->url().isLocalFile() ) {
-            url = part->url();
-            return true;
+            return part->url();
         }
     }
-    return false;
+    return KUrl();
 }
-//////////////////////////////////////////////
+////////////////////////////////////////////
 void KDevSubversionPart::checkout()
 {
 }
 void KDevSubversionPart::add()
 {
-    KUrl activeUrl;
-    if( urlFocusedDocument( activeUrl ) ){
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
         KUrl::List list;
         list << activeUrl;
         add( list );
     } else {
         KMessageBox::error(NULL, i18n("No active docuement to add") );
     }
-    
+
 }
 void KDevSubversionPart::remove()
 {
-    KUrl activeUrl;
-    if( urlFocusedDocument( activeUrl ) ){
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
         KUrl::List list;
         list << activeUrl;
         remove( list );
@@ -198,8 +199,8 @@ void KDevSubversionPart::remove()
 }
 void KDevSubversionPart::commit()
 {
-    KUrl activeUrl;
-    if( urlFocusedDocument( activeUrl ) ){
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
         KUrl::List list;
         list << activeUrl;
         commit( list );
@@ -209,8 +210,8 @@ void KDevSubversionPart::commit()
 }
 void KDevSubversionPart::update()
 {
-    KUrl activeUrl;
-    if( urlFocusedDocument( activeUrl ) ){
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
         KUrl::List list;
         list << activeUrl;
         update( list );
@@ -220,9 +221,8 @@ void KDevSubversionPart::update()
 }
 void KDevSubversionPart::logView()
 {
-    KUrl activeUrl;
-    
-    if( urlFocusedDocument(activeUrl) ){
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
         logview( activeUrl );
     } else{
         KMessageBox::error(NULL, "No active docuement to view log" );
@@ -230,8 +230,8 @@ void KDevSubversionPart::logView()
 }
 void KDevSubversionPart::blame()
 {
-    KUrl activeUrl;
-    if( urlFocusedDocument(activeUrl) ){
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
         annotate( activeUrl );
     } else{
         KMessageBox::error(NULL, "No active docuement to view blame" );
@@ -248,22 +248,6 @@ SubversionCore* KDevSubversionPart::svncore()
 {
     return d->m_impl;
 }
-
-// void KDevSubversionPart::registerExtensions()
-// {
-//     extensionManager()->registerExtensions( new KDevSubversionPartIVersionControlFactory(
-//             extensionManager() ), Q_TYPEID( KDevelop::IVersionControl ) );
-// }
-// void KDevSubversionPart::unregisterExtensions()
-// {
-//     extensionManager()->unregisterExtensions( new KDevSubversionPartIVersionControlFactory(
-//             extensionManager() ), Q_TYPEID( KDevelop::IVersionControl ) );
-// }
-// QStringList KDevSubversionPart::extensions() const
-// {
-//     return QStringList() << "IVersionControl";
-// }
-
 
 #include "subversion_part.moc"
 

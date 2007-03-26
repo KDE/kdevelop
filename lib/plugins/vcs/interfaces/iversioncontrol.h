@@ -26,129 +26,70 @@
 #include "iextension.h"
 #include "kdevexport.h"
 #include <QtDesigner/QAbstractExtensionFactory>
-
 #include <kurl.h>
 
-#include <qstring.h>
-#include <qwidget.h>
-#include <qmap.h>
-
 class QMenu;
+class QString;
+template <typename T> class QList;
+class QWidget;
 
 /**
 @file iversioncontrol.h
 Version control system interface and utility classes.
  */
 namespace KDevelop{
-    
-/**State of the file.*/
-enum VcsFileState {
-    Unknown        /**<No VCS information about a file is known.*/,
-    Added          /**<File was added to the repository but not commited.*/,
-    Uptodate       /**<File was updated or it is already at up to date version.*/,
-    Modified       /**<File was modified locally.*/,
-    Conflict       /**<Local version conflicts with the one in a repository.*/,
-    Sticky         /**<File is sticky.*/,
-    NeedsPatch     /**<File needs a patch.*/,
-    NeedsCheckout  /**<File needs to be checkout again.*/,
-    Directory      /**<This is a directory.*/ ,
-    Deleted        /**<File or Directory is scheduled to be deleted. */ ,
-    Replaced       /**<File was scheduled for deletion, and then a new file with the same name was scheduled for addition in its place. */
-};
 
-class VcsFileInfoPrivate
-{
-public:
-    /**The FULL file or directory path.*/
-    KUrl filePath;
-    /**The working revision number.*/
-    QString workRevision;
-    /**The repository revision number.*/
-    QString repoRevision;
-    /**The state of a file.*/
-    VcsFileState state;
-};
 
 /**
  * Info about file state in VCS.
  * Used, for example in file views to display VCS related information about files.
  */
-class VcsFileInfo
+class KDEVPLATFORM_EXPORT VcsFileInfo
 {
 public:
+    /**State of the file.*/
+    enum VcsFileState {
+        Unknown        /**<No VCS information about a file is known.*/,
+        Added          /**<File was added to the repository but not commited.*/,
+        Uptodate       /**<File was updated or it is already at up to date version.*/,
+        Modified       /**<File was modified locally.*/,
+        Conflict       /**<Local version conflicts with the one in a repository.*/,
+        Sticky         /**<File is sticky.*/,
+        NeedsPatch     /**<File needs a patch.*/,
+        NeedsCheckout  /**<File needs to be checkout again.*/,
+        Directory      /**<This is a directory.*/ ,
+        Deleted        /**<File or Directory is scheduled to be deleted. */ ,
+        Replaced       /**<File was scheduled for deletion, and then a new file with the same name was scheduled for addition in its place. */
+    };
+
     /**Constructor.*/
-    VcsFileInfo() : d( new VcsFileInfoPrivate ) {}
+    VcsFileInfo();
     /**Constructor.
     @param fn The file name (without a path).
     @param workRev The current working revision of a file.
     @param repoRev The last revision of a file in the repository.
-    @param aState The state of a file.*/    
-    VcsFileInfo( KUrl &fn, QString workRev, QString repoRev, VcsFileState aState )
-    : d( new VcsFileInfoPrivate )
-    {
-        d->filePath= fn;
-        d->workRevision = workRev;
-        d->repoRevision = repoRev;
-        d->state = aState;
-    }
+    @param aState The state of a file.*/
+    VcsFileInfo( const KUrl &fn, const QString& workRev,
+                 const QString& repoRev, VcsFileState aState );
+
     /**Destructor*/
-    ~VcsFileInfo()
-    {
-        delete d;
-    }
+    ~VcsFileInfo();
+
     /** Accessors */
-    KUrl filePath() { return d->filePath; }
-    QString workRev() { return d->workRevision; }
-    QString repoRev() { return d->repoRevision; }
-    VcsFileState state() { return d->state; }
+    KUrl filePath() const;
+    QString workingCopyRevision() const;
+    QString repositoryRevision() const;
+    VcsFileState state() const;
 
     /**@return A descriptive string with all VCS related info about the file.*/
-    QString toString() const
-    {
-        return "(" + d->filePath.fileName() + ", " + d->workRevision + ", " + d->repoRevision + ", " + state2String( d->state ) + ")";
-    }
+    QString toString() const;
 
     /**@return A textual VCS state description.*/
-    static QString state2String( VcsFileState state )
-    {
-        switch (state)
-        {
-            case Added: return "added";
-            case Uptodate: return "up-to-date";
-            case Modified: return "modified";
-            case Conflict: return "conflict";
-            case Sticky: return "sticky";
-            case NeedsPatch: return "needs update";
-            case NeedsCheckout: return "needs check-out";
-            case Directory: return "directory";
-            case Deleted: return "deleted";
-            case Replaced: return "replaced";
-            case Unknown:
-            default:
-                return "unknown";
-        }
-    }
+    static QString state2String( VcsFileInfo::VcsFileState state );
 private:
-    struct VcsFileInfoPrivate *d;
+    class VcsFileInfoPrivate *const d;
 
 };
-
-/** @class VcsFileInfoMap
-Info for a bunch of files that got modified.
-This is a type definition: @code QMap<QString,VcsFileInfo> VcsFileInfoMap; @endcode
-This class is obtained by IVcsFileInfoProvider::statusSync or IVcsFileInfoProvider::statusASync.
-QString is the filename or directory which is relative to &dirPath parameter of these methods.
-
-For example, for $PROJECT_TOP_SRC_DIR/dir1/dir2/file1.c,
-we invoke statusSync( file://$PROJECT_TOP_SRC_DIR/dir1 ). Then
-@code
-vcsMap = statusSync( file://$PROJECT_TOP_SRC_DIR/dir1, true );
-VcsFileInfo info1 = (vcsMap)["."]              // info about dir1 ('s property)
-VcsFileInfo info2 = (vcsMap)["./dir2"]         // info about dir2 ('s property)
-VcsFileInfo info3 = (vcsMap)["./dir2/file1.c]; // info about file1.c
-@endcode
- */
-typedef QMap<QString,VcsFileInfo> VcsFileInfoMap;
 
 /**
 KDevelop version control system interface.
@@ -158,11 +99,13 @@ VCS support plugins should implement this interface.
 
 @sa http://www.kdevelop.org/mediawiki/index.php/Extension_Interfaces_and_Plugins
 */
-class IVersionControl
+class KDEVPLATFORM_EXPORT IVersionControl
 {
-
 public:
-
+    enum WorkingMode{
+        Recursive,
+        NonRecursive
+    };
 /// Destructor
     virtual ~IVersionControl(){};
 
@@ -183,7 +126,7 @@ public:
     <b>warning</b>: this returns false by default.*/
     virtual bool isValidDirectory(const KUrl &dirPath) const = 0;
 
-/**Gets the status for local files in the specified directory (local copy): 
+/**Gets the status for local files in the specified directory (local copy):
     the info are collected locally so they are necessarily in sync with the repository
 
     This is a <b>synchronous operation</b> (blocking).
@@ -192,7 +135,7 @@ public:
     files and directories.
     @return Status for all files in dirPath
     @sa VcsFileInfoMap */
-    virtual const VcsFileInfoMap& statusSync(const KUrl &dirPath, bool recursive) = 0;
+    virtual const QList<VcsFileInfo>& statusSync(const KUrl &dirPath, WorkingMode mode ) = 0;
 
 /**Starts a request for directory status to the remote repository.
     Requests and answers are asynchronous.
@@ -206,7 +149,8 @@ public:
     @param infoMap The reference to VcsFileInfoMap you want the plugin will return
     to you when it has done.
     @return true if the request has been successfully started, false otherwise.*/
-    virtual bool statusASync(const KUrl &dirPath, bool recursive, VcsFileInfoMap &infoMap) = 0;
+    virtual bool statusASync(const KUrl &dirPath, WorkingMode mode,
+                             const QList<VcsFileInfo>& infos) = 0;
 
 /** Fill context menu. VCS plugins will fill out the caller's context menu appropriately
  *  It is VCS plugin's responsibility to connect menu signals to appropriate slots
@@ -217,7 +161,8 @@ public:
 
 /** Action interfaces. These methods is supposed to be ASync (ie. non-blocking) */
     // TODO add more
-    virtual void checkout( const KUrl &repository, const KUrl &targetDir, bool recurse ) = 0;
+    virtual void checkout( const KUrl &repository, const KUrl &targetDir,
+                           WorkingMode mode ) = 0;
     virtual void add( const KUrl::List &wcPaths ) = 0;
     virtual void remove( const KUrl::List &paths_or_urls ) = 0;
     virtual void commit( const KUrl::List &wcPaths ) = 0;
@@ -229,14 +174,14 @@ Q_SIGNALS:
 /**Emitted when the Version Control has finished importing a module from remote
     repository
     @param destinationDir The directory where the module has been fetched.*/
-    virtual void finishedFetching(KUrl destinationDir) = 0;
+    virtual void finishedFetching( const KUrl& destinationDir) = 0;
 
 /**Emitted when the status request to remote repository has finished.
     @param fileInfoMap The status for <b>registered in repository</b> files.
     The status of files under dirPath, including informations from repository
     such as out-of-dateness, since this is async operation.
     @see statusASync for to find out when this signal should be used.*/
-    virtual void statusReady(const VcsFileInfoMap &fileInfoMap) = 0;
+    virtual void statusReady(const QList<VcsFileInfo> &infos) = 0;
 
 };
 
