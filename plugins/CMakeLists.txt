@@ -7,5 +7,4 @@ add_subdirectory(konsole)
 #add_subdirectory(valgrind)
 add_subdirectory(filemanager)
 add_subdirectory(snippet)
-add_subdirectory(vcs)
 

@@ -1,7 +1,7 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib
                      ${CMAKE_SOURCE_DIR}/lib/interfaces
-                     ${CMAKE_SOURCE_DIR}/plugins/vcs/interfaces
+                     ${CMAKE_SOURCE_DIR}/lib/plugins/vcs/interfaces
                      ${APU_INCLUDE_DIR}
                      ${APR_INCLUDE_DIR}
                      ${SUBVERSION_INCLUDE_DIR}
