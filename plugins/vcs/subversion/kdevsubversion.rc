@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevSubversion" version="1">
+<MenuBar>
+  <Menu name="subversion"><Text>&amp;Subversion</Text>
+    <Action name="svn_add" />
+    <Action name="svn_remove" />
+    <Action name="svn_commit" />
+    <Action name="svn_update" />
+    <Action name="svn_log" />
+    <Action name="svn_blame" />
+  </Menu>
+</MenuBar>
+</kpartgui>

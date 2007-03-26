@@ -1,8 +1,8 @@
 add_subdirectory(interfaces)
 
-# if(SUBVERSIONFOUND)
-#     add_subdirectory(subversion)
-# endif(SUBVERSIONFOUND)
+if(SUBVERSIONFOUND)
+    add_subdirectory(subversion)
+endif(SUBVERSIONFOUND)
 
 install(FILES
     interfaces/iversioncontrol.h
