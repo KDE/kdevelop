@@ -30,6 +30,11 @@
 #include "subversion_core.h"
 #include "subversion_widget.h"
 #include "subversionprojectwidget.h"
+#include "subversion_fileinfo.h"
+#include "kdevversioncontrol.h"
+#include "svn_fileselectdlg_commit.h"
+#include "svn_logviewwidget.h"
+
 #include "urlutil.h"
 #include <qvbox.h>
 #include <kdialogbase.h>
@@ -42,6 +47,8 @@
 #include <kdebug.h>
 #include <qwidget.h>
 #include <kdevplugininfo.h>
+
+#include <kmessagebox.h>
 
 static const KDevPluginInfo data("kdevsubversion");
 
@@ -84,7 +91,7 @@ subversionPart::~subversionPart() {
 }
 
 void subversionPart::setupActions() {
-	actionCommit = new KAction( i18n("&Commit to Repository"), 0, this, SLOT(slotActionCommit()), actionCollection(), "subversion_commit" );
+	actionCommit = new KAction( i18n("&Commit to Repository..."), 0, this, SLOT(slotActionCommit()), actionCollection(), "subversion_commit" );
 	actionCommit->setToolTip( i18n("Commit file(s)") );
 	actionCommit->setWhatsThis( i18n("<b>Commit file(s)</b><p>Commits file to repository if modified.") );
 
@@ -96,6 +103,9 @@ void subversionPart::setupActions() {
 	actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()), actionCollection(), "subversion_add" );
 	actionAdd->setToolTip( i18n("Add file to repository") );
 	actionAdd->setWhatsThis( i18n("<b>Add file to repository</b><p>Adds file to repository.") );
+	
+	actionLog = new KAction( i18n("Show logs..."), 0, this, SLOT(slotLog()), actionCollection(), "subversion_log" );
+	actionBlame = new KAction( i18n("Blame..."), 0, this, SLOT(slotBlame()), actionCollection(), "subversion_blame");
 
 	actionRemove = new KAction( i18n("&Remove From Repository"), 0, this, SLOT(slotActionDel()), actionCollection(), "subversion_remove" );
 	actionRemove->setToolTip( i18n("Remove from repository") );
@@ -201,7 +211,11 @@ if(!project())
         subMenu->setWhatsThis(id, i18n("<b>Add file to repository</b><p>Adds file to repository."));
 		id = subMenu->insertItem( actionRemove->text(), this, SLOT(slotDel()) );
         subMenu->setWhatsThis(id, i18n("<b>Remove from repository</b><p>Removes file(s) from repository."));
-
+		id = subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
+		subMenu->setWhatsThis(id, i18n("<b>Show logs..</b><p>View Logs"));
+		id = subMenu->insertItem( actionBlame->text(), this, SLOT(slotBlame()) );
+		subMenu->setWhatsThis(id, i18n("<b>Blame 0:HEAD </b><p>Show Annotate"));
+		
 		subMenu->insertSeparator();
 		id = subMenu->insertItem( actionDiffLocal->text(), this, SLOT(slotDiffLocal()) );
 		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff file to local disk."));
@@ -267,7 +281,7 @@ void subversionPart::slotActionCommit() {
 	kdDebug(9036) << "subversion: slotActionCommit()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
-		m_impl->commit( doc );
+		m_impl->commit( doc, true, true );
 	}
 }
 
@@ -309,13 +323,55 @@ void subversionPart::slotActionDiffHead() {
 		m_impl->diff( doc, "HEAD" );
 	}
 }
-
-void subversionPart::slotCommit() {
-	m_impl->commit (m_urls);
+void subversionPart::slotCommit()
+{
+	SVNFileSelectDlgCommit dialog( m_urls, this, 0 );
+	if( dialog.exec() == QDialog::Accepted ){
+		KURL::List tobeCommittedUrls = dialog.checkedUrls();
+		bool recursive = dialog.recursive();
+		bool keepLocks = dialog.keepLocks();
+		m_impl->commit(tobeCommittedUrls, recursive, keepLocks );
+	}
+}
+void subversionPart::slotAdd() {
+	m_impl->add( m_urls );
 }
 
-void subversionPart::slotAdd() {
-	m_impl->add (m_urls);
+void subversionPart::slotLog()
+{
+	if (m_urls.count() > 1){
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							i18n("Please select only one item for subversion log") );
+		return;
+	}
+	SvnLogViewOptionDlg dlg;
+	if( dlg.exec() ){
+		int revstart = dlg.revstart();
+		QString revkindstart = dlg.revKindStart();
+		int revend = dlg.revend();
+		QString revkindend = dlg.revKindEnd();
+		bool reposit = dlg.repositLog();
+		bool strictNode = dlg.strictNode();
+		m_impl->svnLog (m_urls, revstart, revkindstart, revend, revkindend, reposit, true/*changedPath*/, strictNode);	
+	} else{
+		return;
+	}
+}
+void subversionPart::slotBlame()
+{
+	if (m_urls.count() > 1){
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							 i18n("Please select only one item to see annotate") );
+		return;
+	}
+	if (m_urls.count() < 1){
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							 i18n("Select file to see blame") );
+		return;
+	}
+	KURL url = m_urls.first();
+// 	m_impl->blame(url, repositBlame, int revstart, QString revKindStart, int revend, QString revKindEnd);
+	m_impl->blame(url, true, 0, "", -1, "HEAD");
 }
 
 void subversionPart::slotDel() {

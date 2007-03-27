@@ -21,9 +21,13 @@
 #define __SUBVERSION_WIDGET_H__
 
 #include <qtextedit.h>
+#include <qlistview.h>
 
 class subversionPart;
 
+/**
+ * Not used anymore. Once used to display output message. Now SvnLogViewWidget handles these messages
+*/
 class subversionWidget : public QTextEdit
 {
   Q_OBJECT
@@ -36,6 +40,17 @@ public:
 private:
 	subversionPart *m_part;
 
+};
+/**
+ * reimplement compare(), to be able to sort any item by integer
+ */
+class SvnIntSortListItem : public QListViewItem {
+public:
+	SvnIntSortListItem ( QListView* parent=0 );
+	~SvnIntSortListItem ();
+	/** Returns < 0 if this item is less than i, 0 if they are equal and > 0 if this item is greater than i. 
+	 */
+	virtual int compare( QListViewItem* i, int col, bool ascending ) const;
 };
 
 #endif

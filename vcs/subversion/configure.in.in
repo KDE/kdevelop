@@ -1,0 +1,142 @@
+dnl with_subversion is determined by toplevel configure.in
+dnl AC_ARG_WITH(subversion,
+dnl   [AC_HELP_STRING(--with-subversion,
+dnl     [enable support for subversion @<:@default=check@:>@])],
+dnl   [], with_subversion=check)
+
+SVN_SUBDIR=""
+if test "x$with_subversion" != xno; then
+
+APR_CONFIGS="apr-config /usr/local/apr/bin/apr-config"
+SVN_SUBDIR="svn"
+AC_ARG_WITH(apr-config,
+[[  --with-apr-config=FILE    Use the given path to apr-config when determining
+                            APR configuration; defaults to "apr-config"]],
+[
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        APR_CONFIGS=$withval
+    fi
+])
+AC_MSG_CHECKING([for APR])
+APR_CONFIG=""
+for VALUE in $APR_CONFIGS ; do
+	if $VALUE --cflags > /dev/null; then
+		APR_CONFIG=$VALUE
+		break
+	fi
+done
+test $VALUE && APR_CONFIG=$VALUE
+if test $APR_CONFIG ; then
+    AC_MSG_RESULT([found])
+else
+    AC_MSG_RESULT([not found])
+	SVN_SUBDIR=
+dnl    AC_MSG_ERROR([APR is required. Try --with-apr-config.])
+fi
+	
+APR_CPPFLAGS="`$APR_CONFIG --cppflags`"
+APR_INCLUDE="`$APR_CONFIG --includes`"
+APR_LIBS="`$APR_CONFIG --link-ld --libs`"
+
+dnl
+dnl APR util
+dnl
+
+APU_CONFIGS="apu-config /usr/local/apr/bin/apu-config"
+AC_ARG_WITH(apu-config,
+[[  --with-apu-config=FILE    Use the given path to apu-config when determining
+                            APR util configuration; defaults to "apu-config"]],
+[
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        APU_CONFIGS=$withval
+    fi
+])
+AC_MSG_CHECKING([for APR util])
+APU_CONFIG=""
+for VALUE in $APU_CONFIGS ; do
+	if $VALUE --includes > /dev/null; then
+		APU_CONFIG=$VALUE
+		break
+	fi
+done
+if test $APU_CONFIG ; then
+    AC_MSG_RESULT([found])
+else
+    AC_MSG_RESULT([not found])
+	SVN_SUBDIR=
+dnl    AC_MSG_ERROR([APR util is required. Try --with-apu-config.])
+fi
+dnl APR_CPPFLAGS="$APR_CPPFLAGS `$APU_CONFIG --includes`"
+APR_INCLUDE="$APR_INCLUDE `$APU_CONFIG --includes`"
+APR_LIBS="$APR_LIBS `$APU_CONFIG --link-ld --libs`"
+
+dnl Search for subversion libraries
+dnl svn-config was removed at current subversion release.
+
+dnl if test -x "$SVNCONFIG"; then
+
+dnl else
+
+SVNLD=""
+dnl just a fallback to debian's config so that it works for me :)
+SVN_INCLUDES="/usr/local/include /usr/include /usr/include/subversion-1 /usr/local/include/subversion-1"
+AC_ARG_WITH(svn-include,
+			[[  --with-svn-include=DIR   Use the given path to the subversion headers.]],
+			[
+			if test "$withval" != "yes" -a "$withval" != ""; then
+				SVN_INCLUDES=$withval
+			fi
+			])
+AC_MSG_CHECKING([for Subversion headers])
+SVN_INCLUDE=""
+for VALUE in $SVN_INCLUDES ; do
+	if test -f $VALUE/svn_types.h ; then
+		SVN_INCLUDE="-I$VALUE"
+		break
+	fi
+done
+if test $SVN_INCLUDE ; then
+	AC_MSG_RESULT([found])
+else
+	AC_MSG_RESULT([not found])
+	SVN_SUBDIR=
+dnl	AC_MSG_ERROR([Subversion headers are required. Try --with-svn-include.])
+fi
+SVN_LIBS="/usr/local/lib /usr/lib /usr/lib64"
+AC_ARG_WITH(svn-lib,
+		[[  --with-svn-lib=DIR  Use the given path to the subversion libraries.]],
+		[
+			if test "$withval" != "yes" -a "$withval" != ""; then
+				SVN_LIBS=$withval
+			fi
+		])
+AC_MSG_CHECKING([for Subversion libraries])
+SVN_LIB=""
+for VALUE in $SVN_LIBS ; do
+	if ls $VALUE/libsvn_client-1.* 1>/dev/null 2>&1; then
+		SVN_LIB="-L$VALUE"
+		break
+	fi
+done
+if test $SVN_LIB ; then
+	AC_MSG_RESULT([found])
+else
+	AC_MSG_RESULT([not found])
+	SVN_SUBDIR=
+fi
+dnl fi // end of if test -x "$SVNCONFIG"; then
+
+SVN_LIB="$SVN_LIB $APR_LIBS -lsvn_client-1"
+SVN_INCLUDE="$SVN_INCLUDE $APR_INCLUDE"
+SVN_CPPFLAGS="$APR_CPPFLAGS $SVN_CPPFLAGS"
+
+if test "x$with_subversion" != xcheck && test -z "$SVN_SUBDIR"; then
+  AC_MSG_ERROR([--enable-subversion was given, but test for subversion failed. Please install subversion headers and libraries])
+fi
+fi
+
+AC_SUBST(SVN_INCLUDE)
+AC_SUBST(SVN_LIB)
+AC_SUBST(SVN_CPPFLAGS)
+AC_SUBST(SVNLD)
+AM_CONDITIONAL(include_kioslave_svn, test -n "$SVN_SUBDIR")

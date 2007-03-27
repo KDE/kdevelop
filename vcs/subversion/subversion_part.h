@@ -51,6 +51,7 @@ public:
 		void setBaseURL(const KURL& url ) { base = url; }
 		KURL baseURL() { return base; }
 		virtual bool isValidDirectory( const QString &dirPath ) const;
+		KURL::List urls() { return m_urls; }
 
 signals:
 //		void finishedFetching( QString destinationDir );
@@ -70,6 +71,8 @@ private slots:
 		void slotCommit();
 		void slotAdd();
 		void slotDel();
+		void slotLog();
+		void slotBlame();
 		void slotDiffLocal();
 		void slotDiffHead();
 		void slotResolve();
@@ -84,6 +87,8 @@ private:
 		*actionDiffHead,
 		*actionDiffLocal,
 		*actionAdd,
+		*actionLog,
+		*actionBlame,
 		*actionRemove,
 		*actionUpdate,
 		//*actionAddToIgnoreList,

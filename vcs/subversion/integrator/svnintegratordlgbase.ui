@@ -12,6 +12,9 @@
             <height>429</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>SvnIntegratorDlgBase</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -79,6 +82,9 @@ to perform any subversion operations.</string>
                     <property name="text">
                         <string>&amp;Create a project tree and import new project into trunk</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Creates project, imports it into the subversion
 repository and checks it out as a working copy.
@@ -126,9 +132,13 @@ The repository has to exist -
 eg. been created with 'svnadmin'</string>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Subversion repository location.
-The repository has to exist -
-eg. been created with 'svnadmin'</string>
+                                <string>Subversion repository location. This should include the subdirectory for the project in the repository. The project subdirectory and further subdirectories will be created. 
+
+So for example if you give http://localhost/svn/projectname the following directories will be created and the project imported into the trunk subdirectory:
+http://localhost/svn/projectname
+http://localhost/svn/projectname/tags
+http://localhost/svn/projectname/branches
+http://localhost/svn/projectname/trunk</string>
                             </property>
                         </widget>
                     </hbox>

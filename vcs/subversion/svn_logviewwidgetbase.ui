@@ -1,0 +1,109 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>SvnLogViewWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SvnLogViewWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>692</width>
+            <height>343</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>SvnLogViewWidgetBase</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QSplitter" row="0" column="0">
+            <property name="name">
+                <cstring>splitter1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <widget class="QListView">
+                <column>
+                    <property name="text">
+                        <string>Rev</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <column>
+                    <property name="text">
+                        <string>Date</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <column>
+                    <property name="text">
+                        <string>Author</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <column>
+                    <property name="text">
+                        <string>Comment</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <property name="name">
+                    <cstring>listView1</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="allColumnsShowFocus">
+                    <bool>true</bool>
+                </property>
+                <property name="showSortIndicator">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QTextEdit">
+                <property name="name">
+                    <cstring>textEdit1</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>WheelFocus</enum>
+                </property>
+                <property name="readOnly">
+                    <bool>true</bool>
+                </property>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

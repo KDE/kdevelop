@@ -19,6 +19,7 @@
 
 #include <kparts/part.h>
 #include <kdevcore.h>
+#include <kdebug.h>
 
 #include "subversion_part.h"
 #include "subversion_widget.h"
@@ -34,7 +35,23 @@ subversionWidget::subversionWidget(subversionPart *part, QWidget *parent, const 
 }
 
 subversionWidget::~subversionWidget()
+{}
+
+SvnIntSortListItem::SvnIntSortListItem( QListView* parent )
+	:QListViewItem(parent)
+{}
+SvnIntSortListItem::~SvnIntSortListItem()
+{}
+
+int SvnIntSortListItem::compare( QListViewItem *item, int col, bool ascending ) const
 {
+	
+	unsigned int myVal = this->text(col).toUInt();
+	unsigned int yourVal = item->text(col).toUInt();
+	if( myVal < yourVal ) return -1;
+	if( myVal == yourVal ) return 0;
+	if( myVal > yourVal ) return 1;
 }
+
 
 #include "subversion_widget.moc"

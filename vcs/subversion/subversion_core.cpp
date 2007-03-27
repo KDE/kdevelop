@@ -22,6 +22,8 @@
 #include "subversion_part.h"
 #include "subversion_core.h"
 #include "subversion_widget.h"
+#include "svn_blamewidget.h"
+#include "svn_logviewwidget.h"
 #include "subversiondiff.h"
 #include <kdevmainwindow.h>
 #include "svn_co.h"
@@ -42,14 +44,21 @@
 #include <qtextbrowser.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <qregexp.h>
 
+#include <kapplication.h>
+#include <kinstance.h>
+#include <kaboutdata.h>
 
 using namespace KIO;
 
 subversionCore::subversionCore(subversionPart *part)
-	: QObject(this, "subversion core"), DCOPObject("subversion") {
+// 	: QObject(NULL, "subversion core"), DCOPObject("subversion") {
+	: QObject(NULL, "subversion core") {
 		m_part = part;
-		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
+// 		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
+		m_logViewWidget = new SvnLogViewWidget( part, 0 );
+// 		m_part->mainWindow()->embedOutputView( m_logViewWidget, i18n( "Subversion Log" ), i18n( "Subversion Log" ) );
 //		if ( ! connectDCOPSignal("kded", "ksvnd", "subversionNotify(QString,int,int,QString,int,int,long int,QString)", "notification(QString,int,int,QString,int,int,long int,QString)", false ) )
 //			kdWarning() << "Failed to connect to kded dcop signal ! Notifications won't work..." << endl;
 
@@ -59,11 +68,16 @@ subversionCore::subversionCore(subversionPart *part)
 }
 
 subversionCore::~subversionCore() {
-	if ( processWidget() ) {
-		m_part->mainWindow()->removeView( m_widget );
-		delete m_widget;
+// 	if ( processWidget() ) {
+// 		m_part->mainWindow()->removeView( processWidget() );
+// 		delete processWidget();
+// 	}
+	if( m_logViewWidget ){
+		m_part->mainWindow()->removeView( m_logViewWidget );
+		delete m_logViewWidget;
 	}
 	delete diffTmpDir;
+	//FIXME delete m_fileInfoProvider here?
 }
 
 KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
@@ -71,32 +85,34 @@ KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
 }
 
 //not used anymore
-void subversionCore::notification( const QString& path, int action, int kind, const QString& mime_type, int content_state ,int prop_state ,long int revision, const QString& userstring ) {
-	kdDebug(9036) << "Subversion Notification : "
-		<< "path : " << path
-		<< "action: " << action
-		<< "kind : " << kind
-		<< "mime_type : " << mime_type
-		<< "content_state : " << content_state
-		<< "prop_state : " << prop_state
-		<< "revision : " << revision
-		<< "userstring : " << userstring
-		<< endl;
-	if ( !userstring.isEmpty() ) {
-		m_part->mainWindow()->raiseView(m_widget);
-		m_widget->append( userstring );
-	}
-}
+// void subversionCore::notification( const QString& path, int action, int kind, const QString& mime_type, int content_state ,int prop_state ,long int revision, const QString& userstring ) {
+// 	kdDebug(9036) << "Subversion Notification : "
+// 		<< "path : " << path
+// 		<< "action: " << action
+// 		<< "kind : " << kind
+// 		<< "mime_type : " << mime_type
+// 		<< "content_state : " << content_state
+// 		<< "prop_state : " << prop_state
+// 		<< "revision : " << revision
+// 		<< "userstring : " << userstring
+// 		<< endl;
+// 	if ( !userstring.isEmpty() ) {
+// 		m_part->mainWindow()->raiseView(processWidget());
+// 		processWidget()->append( userstring );
+// 	}
+// }
 
-subversionWidget *subversionCore::processWidget() const {
-	return m_widget;
+//subversionWidget *subversionCore::processWidget() const {
+SvnLogViewWidget* subversionCore::processWidget() const {
+// 	return processWidget();
+	return m_logViewWidget;
 }
 
 void subversionCore::resolve( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
-	if ( ! servURL.protocol().startsWith( "svn" ) ) {
-		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
@@ -114,7 +130,7 @@ void subversionCore::resolve( const KURL::List& list ) {
 
 void subversionCore::update( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
@@ -134,7 +150,7 @@ void subversionCore::update( const KURL::List& list ) {
 
 void subversionCore::diff( const KURL::List& list, const QString& where){
 	kdDebug(9036) << "diff " << list << endl;
-	KURL servURL = "svn+http://this_is_a_fake_URL_and_this_is_normal/";
+	KURL servURL = "kdevsvn+svn://this_is_a_fake_URL_and_this_is_normal/";
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
@@ -215,17 +231,17 @@ void subversionCore::diff( const KURL::List& list, const QString& where){
 	}
 }
 
-void subversionCore::commit( const KURL::List& list ) {
+void subversionCore::commit( const KURL::List& list, bool recurse, bool keeplocks ) {
 	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
-	if ( ! servURL.protocol().startsWith( "svn" ) ) {
-		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	QByteArray parms;
 	QDataStream s( parms, IO_WriteOnly );
-	int cmd = 3;
- 	s << cmd;
+	int cmd = 103;
+ 	s << cmd << recurse << keeplocks;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "adding to list: " << (*it).prettyURL() << endl;
 		s << *it;
@@ -234,12 +250,61 @@ void subversionCore::commit( const KURL::List& list ) {
 	job->setWindow( m_part->mainWindow()->main() );
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 }
+// Right now, only one item for each action.
+void subversionCore::svnLog( const KURL::List& list,
+		int revstart, QString revKindStart, int revend, QString revKindEnd,
+		bool repositLog, bool discorverChangedPath, bool strictNodeHistory )
+{
+	KURL servURL = m_part->baseURL();
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
+	}
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	// prepare arguments
+	int cmd = 4;
+// 	int revstart = -1, revend = 0;
+// 	QString revKindStart = "HEAD", revKindEnd = "";
+// 	bool repositLog = true, discorverChangedPath = true, strictNodeHistory = true;
+	s << cmd << revstart << revKindStart << revend << revKindEnd;
+	s << repositLog << discorverChangedPath << strictNodeHistory;
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+		kdDebug(9036) << "svnCore: adding to list: " << (*it).prettyURL() << endl;
+		s << *it;
+	}
+	SimpleJob * job = KIO::special(servURL, parms, true);
+	job->setWindow( m_part->mainWindow()->main() );
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotLogResult( KIO::Job * ) ) );
+
+}
+
+void subversionCore::blame( const KURL &url, bool repositBlame, int revstart, QString revKindStart, int revend, QString revKindEnd )
+{
+	KURL servURL = m_part->baseURL();
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
+	}
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	// prepare arguments
+	int cmd = 14;
+	s << cmd << url << repositBlame ;
+	s << revstart << revKindStart << revend << revKindEnd ;
+
+	SimpleJob * job = KIO::special(servURL, parms, true);
+	job->setWindow( m_part->mainWindow()->main() );
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotBlameResult( KIO::Job * ) ) );
+}
 
 void subversionCore::add( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
-		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
@@ -256,9 +321,9 @@ void subversionCore::add( const KURL::List& list ) {
 
 void subversionCore::del( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
-	if ( ! servURL.protocol().startsWith( "svn" ) ) {
-		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
@@ -275,9 +340,9 @@ void subversionCore::del( const KURL::List& list ) {
 
 void subversionCore::revert( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
-	if ( ! servURL.protocol().startsWith( "svn" ) ) {
-		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
@@ -312,32 +377,147 @@ void subversionCore::checkout() {
 }
 
 void subversionCore::slotEndCheckout( KIO::Job * job ) {
-		if ( job->error() ) {
-			job->showErrorDialog( m_part->mainWindow()->main() );
-			emit checkoutFinished( QString::null );
-		} else
-			emit checkoutFinished(wcPath);
+	if ( job->error() ) {
+		job->showErrorDialog( m_part->mainWindow()->main() );
+		emit checkoutFinished( QString::null );
+	} else
+		emit checkoutFinished(wcPath);
 }
 
 void subversionCore::slotResult( KIO::Job * job ) {
-		if ( job->error() )
-			job->showErrorDialog( m_part->mainWindow()->main() );
-		KIO::MetaData ma = job->metaData();
-		QValueList<QString> keys = ma.keys();
-		qHeapSort( keys );
-		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+	if ( job->error() )
+		job->showErrorDialog( m_part->mainWindow()->main() );
+	KIO::MetaData ma = job->metaData();
+	QValueList<QString> keys = ma.keys();
+	qHeapSort( keys );
+	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
-		for ( it = begin; it != end; ++it ) {
-			kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
-			if ( ( *it ).endsWith( "string" ) ) {
-				m_part->mainWindow()->raiseView(m_widget);
-				m_widget->append( ma[ *it ] );
-			}
-			//extra check to retrieve the diff output in case with run a diff command
-			if ( ( *it ).endsWith( "diffresult" ) ) {
-				diffresult << ma[ *it ];
-			}
+	for ( it = begin; it != end; ++it ) {
+// 		kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+		if ( ( *it ).endsWith( "string" ) ) {
+			m_part->mainWindow()->raiseView(processWidget());
+			processWidget()->append( ma[ *it ] );
 		}
+		//extra check to retrieve the diff output in case with run a diff command
+		if ( ( *it ).endsWith( "diffresult" ) ) {
+			diffresult << ma[ *it ];
+		}
+	}
+}
+void subversionCore::slotLogResult( KIO::Job * job )
+{
+	if ( job->error() ){
+		job->showErrorDialog( m_part->mainWindow()->main() );
+		return;
+	}
+
+	holderList.clear();
+
+	KIO::MetaData ma = job->metaData();
+	QValueList<QString> keys = ma.keys();
+	QRegExp rx( "([0-9]*)(.*)" );
+	int curIdx, lastIdx;
+
+	for (QValueList<QString>::Iterator it = keys.begin(); it != keys.end(); /*++it*/ ){
+		if ( rx.search( *it ) == -1 ){
+			kdDebug(9036) << " Exiting loop at line " << __LINE__ <<endl;
+			return; // something is wrong ! :)
+		}
+		curIdx = lastIdx = rx.cap( 1 ).toInt();
+		SvnLogHolder logHolder;
+		while ( curIdx == lastIdx ) {
+			kdDebug(9036) << "svn log MetaData: " << *it << ":" << ma[ *it ] << endl;
+
+			if ( rx.cap( 2 ) == "author" )
+				logHolder.author = ma[*it];
+			else if ( rx.cap( 2	 ) == "date" )
+				logHolder.date = ma[*it];
+			else if ( rx.cap( 2	 ) == "logmsg" )
+				logHolder.logMsg = ma[*it];
+			else if ( rx.cap( 2	 ) == "pathlist" )
+				logHolder.pathList = ma[*it];
+			else if ( rx.cap( 2	 ) == "rev" )
+				logHolder.rev = ma[*it];
+
+			++it;
+			if ( it == keys.end() )
+				break;
+			if ( rx.search( *it ) == -1 ){
+				kdDebug(9036) << " Exiting loop at line " << __LINE__ <<endl;
+				break; // something is wrong ! :)
+			}
+			curIdx = rx.cap( 1 ).toInt();
+		}//end of while
+		holderList.append( logHolder );
+	}
+	processWidget()->setLogResult( &holderList );
+	m_part->mainWindow()->raiseView(processWidget());
+
+}
+
+void subversionCore::slotBlameResult( KIO::Job * job )
+{
+	if ( job->error() ){
+		job->showErrorDialog( m_part->mainWindow()->main() );
+		return;
+	}
+	blameList.clear();
+
+	KIO::MetaData ma = job->metaData();
+	QValueList<QString> keys = ma.keys();
+	QRegExp rx( "([0-9]*)(.*)" );
+	int curIdx, lastIdx;
+
+	for (QValueList<QString>::Iterator it = keys.begin(); it != keys.end(); /*++it*/ ){
+		if ( rx.search( *it ) == -1 ){
+			kdDebug(9036) << " Exiting loop at line " << __LINE__ <<endl;
+			return; // something is wrong ! :)
+		}
+
+		// if metadata has action key, that means a notification for svn_wc_notify_blame_completed
+		// Thus, consume this notification
+		if ( rx.cap( 2 ) == "action" ){
+			curIdx = lastIdx = rx.cap( 1 ).toInt();
+			while ( curIdx == lastIdx ){
+				++it;
+				if ( it == keys.end() ) break;
+				if ( rx.search( *it ) == -1 ) continue; // something is wrong
+				curIdx = rx.cap( 1 ).toInt();
+			}
+			continue;
+		}
+		// get actual blame data
+		curIdx = lastIdx = rx.cap( 1 ).toInt();
+		SvnBlameHolder blameHolder;
+		while ( curIdx == lastIdx ) {
+			kdDebug(9036) << "svn blame MetaData: " << *it << ":" << ma[ *it ] << endl;
+
+			if ( rx.cap( 2 ) == "LINE" )
+				blameHolder.line= (ma[*it]).toInt();
+			else if ( rx.cap( 2	 ) == "REV" )
+				blameHolder.rev = (ma[*it]).toLongLong();
+			else if ( rx.cap( 2	 ) == "AUTHOR" )
+				blameHolder.author= ma[*it];
+			else if ( rx.cap( 2	 ) == "DATE" )
+				blameHolder.date= ma[*it];
+			else if ( rx.cap( 2	 ) == "CONTENT" )
+				blameHolder.content = ma[*it];
+
+			++it;
+			if ( it == keys.end() )
+				break;
+			if ( rx.search( *it ) == -1 ){
+				kdDebug(9036) << " Exiting loop at line " << __LINE__ <<endl;
+				break; // something is wrong ! :)
+			}
+			curIdx = rx.cap( 1 ).toInt();
+		}//end of while
+		blameList.append( blameHolder );
+// 		blameList.insert( blameHolder.line, blameHolder );
+	}
+	SvnBlameWidget dlg;
+	dlg.copyBlameData( &blameList );
+	dlg.exec();
 }
 
 void subversionCore::createNewProject( const QString& // dirName

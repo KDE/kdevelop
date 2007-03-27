@@ -1,0 +1,9 @@
+if test "x$with_subversion" = xcheck && test -z "$SVN_SUBDIR"; then
+  echo ""
+  echo "You're missing Subversion libraries (1.x)"
+  echo "KDE will not be able to browse Subversion repositories without it,"
+  echo "consider installing it."
+  echo "Look at kioslave/svn/README for more information"
+  echo ""
+  all_tests=bad
+fi

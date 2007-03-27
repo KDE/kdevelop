@@ -44,8 +44,11 @@ public:
     virtual ~SVNFileInfoProvider();
 
 // -- Sync interface
-    virtual const VCSFileInfoMap *status( const QString &dirPath ) ;
-
+    virtual const VCSFileInfoMap *status( const QString &dirPath );
+// -- These two are used for subversionPart and subversionCore. Of couruse, others can use it.
+	const VCSFileInfoMap* statusExt( const QString &dirPath, bool checkRepos, bool fullRecurse, bool getAll, bool noIgnore );
+	void slotStatusExt( const QString&, const QString& , int, int, int, int, long int ) ;
+	
 // -- Async interface for requesting data
     virtual bool requestStatus( const QString &dirPath, void *callerData );
 
@@ -60,7 +63,9 @@ public slots:
 private:
     mutable void *m_savedCallerData;
 	mutable QString m_previousDirPath;
+	mutable QString m_recursivePreviousDirPath;
 	mutable VCSFileInfoMap *m_cachedDirEntries;
+	mutable VCSFileInfoMap *m_recursiveDirEntries;
 	KIO::SimpleJob *job;
 	subversionPart *m_part;
 };

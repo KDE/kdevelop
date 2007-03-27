@@ -1,0 +1,137 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>SvnCommitDlgBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>SvnCommitDlgBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>514</width>
+            <height>305</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string></string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QListView" row="0" column="0" rowspan="1" colspan="3">
+            <column>
+                <property name="text">
+                    <string>Column 1</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+        <item>
+            <property name="text">
+                <string>New Item</string>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+        </item>
+            <property name="name">
+                <cstring>listView1</cstring>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>335</width>
+                    <height>30</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QCheckBox" row="1" column="0">
+            <property name="name">
+                <cstring>keepLocksChk</cstring>
+            </property>
+            <property name="text">
+                <string>Keep Locks</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="2">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>O&amp;K</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton3_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QCheckBox" row="1" column="1">
+            <property name="name">
+                <cstring>recursiveChk</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>pushButton3</sender>
+        <signal>clicked()</signal>
+        <receiver>SvnCommitDlgBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton3_2</sender>
+        <signal>clicked()</signal>
+        <receiver>SvnCommitDlgBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
