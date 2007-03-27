@@ -58,7 +58,7 @@ public:
     enum DocumentSaveMode
     {
         Default = 0,
-        Silent = 1,
+        Silent = 1
     };
 
     /**
