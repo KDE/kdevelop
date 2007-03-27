@@ -18,6 +18,7 @@
 #include <kcombobox.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kfiledialog.h>
 #include <kurlcompletion.h>
 
 #include "urlutil.h"
@@ -30,8 +31,9 @@ CreateScopeDlg::CreateScopeDlg( QMakeScopeItem* item, QWidget* parent, const cha
 {
     incUrl->setMode( KFile::File | KFile::LocalOnly );
     incUrl->setCaption( i18n( "Choose existing .pri file or give a new filename for creation" ) );
-    incUrl->setURL( QString::null );
+    incUrl->setURL( QString("") );
     incUrl->completionObject() ->setDir( item->scope->projectDir() );
+    incUrl->fileDialog()->setURL( KURL::fromPathOrURL( item->scope->projectDir() ) );
 }
 
 CreateScopeDlg::~CreateScopeDlg()
@@ -56,7 +58,8 @@ void CreateScopeDlg::accept()
                 QString file = incUrl->url();
                 if ( !incUrl->url().endsWith( ".pri" ) )
                     file += ".pri";
-
+                if( file.find("/") == -1 )
+                    file = m_item->scope->projectDir()+"/"+file;
                 // We need to create the file, because getRelativePath checks for existent paths
                 if( !QFile::exists(file) )
                 {
