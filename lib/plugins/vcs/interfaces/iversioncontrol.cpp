@@ -58,6 +58,24 @@ VcsFileInfo::VcsFileInfo( const KUrl &fn, const QString& workRev,
     d->state = aState;
 }
 
+VcsFileInfo::VcsFileInfo( const VcsFileInfo &rhs )
+    :d( new VcsFileInfoPrivate )
+{
+    d->filePath = rhs.filePath();
+    d->workRevision = rhs.workingCopyRevision();
+    d->repoRevision = rhs.repositoryRevision();
+    d->state = rhs.state();
+}
+
+VcsFileInfo& VcsFileInfo::operator = ( const VcsFileInfo &rhs )
+{
+    d->filePath = rhs.filePath();
+    d->workRevision = rhs.workingCopyRevision();
+    d->repoRevision = rhs.repositoryRevision();
+    d->state = rhs.state();
+    return *this;
+}
+
 VcsFileInfo::~VcsFileInfo()
 {
     delete d;

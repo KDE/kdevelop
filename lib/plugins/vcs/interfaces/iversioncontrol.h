@@ -72,6 +72,11 @@ public:
     VcsFileInfo( const KUrl &fn, const QString& workRev,
                  const QString& repoRev, VcsFileState aState );
 
+    /**Copy constructor. Needed to be used with QList */
+    VcsFileInfo( const VcsFileInfo &rhs );
+    /**Assignment operator. Needed to be used with QList */
+    VcsFileInfo& operator = ( const VcsFileInfo &rhs );
+
     /**Destructor*/
     ~VcsFileInfo();
 
