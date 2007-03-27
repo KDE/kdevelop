@@ -1423,9 +1423,21 @@ bool CppNewClassDialog::ClassGenerator::generate()
 
 	gen_interface();
 
-	QStringList fileList;
-	fileList.append ( project->activeDirectory() + "/" + header );
-	if (!headeronly) fileList.append ( project->activeDirectory() + "/" + implementation );
+    QStringList fileList;
+    QString file;
+    if( project->activeDirectory().isEmpty() )
+        file = header;
+    else
+      file = project->activeDirectory() + "/" + header;
+    fileList.append ( file );
+    if (!headeronly)
+    {
+        if( project->activeDirectory().isEmpty() )
+            file = implementation;
+        else
+          file = project->activeDirectory() + "/" + implementation;
+        fileList.append ( file );
+    }
 	project->addFiles ( fileList );
 
 	return true;
