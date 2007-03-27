@@ -63,7 +63,7 @@ private:
 
 class SimpleOutputViewPrivate
 {
-    Q_DECLARE_PUBLIC( SimpleOutputView );
+    Q_DECLARE_PUBLIC( SimpleOutputView )
     SimpleOutputView* q_ptr;
 public:
     SimpleOutputViewViewFactory* m_factory;
