@@ -89,7 +89,7 @@ class KDEVPLATFORM_EXPORT ProjectBaseItem: public QStandardItem
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
     private:
-        Q_DECLARE_PRIVATE(ProjectBaseItem);
+        Q_DECLARE_PRIVATE(ProjectBaseItem)
 };
 
 /**
