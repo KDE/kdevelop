@@ -665,7 +665,13 @@ QString CustomProjectPart::activeDirectory() const
 
 QStringList CustomProjectPart::allFiles() const
 {
-    return m_sourceFiles;
+    QStringList sources;
+    for( QStringList::const_iterator it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it )
+    {
+        if( QFileInfo( projectDirectory()+"/"+*it ).isFile() )
+            sources << *it;
+    }
+    return sources;
 }
 
 
