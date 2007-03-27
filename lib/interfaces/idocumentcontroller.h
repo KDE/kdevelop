@@ -37,7 +37,7 @@ public:
     enum DocumentActivation
     {
         ActivateOnOpen,        /**Activate Document on Opening.*/
-        DontActivate,          /**Don't activate the Document.*/
+        DontActivate           /**Don't activate the Document.*/
     };
     IDocumentController(QObject *parent);
 
