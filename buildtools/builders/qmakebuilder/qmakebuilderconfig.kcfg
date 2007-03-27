@@ -3,7 +3,6 @@
 <kcfg>
   <kcfgfile name="kdeveloprc"/>
   <group name="QMakeBuilder">
-    <entry name="qmakebin" key="QMakeBinary" type="Path">
-    </entry>
+	  <entry name="qmakebin" key="QMakeBinary" type="Url" />
   </group>
 </kcfg>
