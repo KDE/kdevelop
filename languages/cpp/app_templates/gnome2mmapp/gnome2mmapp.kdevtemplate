@@ -1,25 +1,64 @@
 # KDE Config File
 [General]
 Name=GNOME-- Application framework
+Name[ca]=Infraestructura d'aplicació per a GNOME
 Name[da]=GNOME-- Programskelet
 Name[de]=GNOME-- Anwendungsgrundgerüst
+Name[el]=GNOME-- Πλαίσιο εφαρμογής
+Name[es]=Infraestructura para aplicación GNOME--
 Name[et]=GNOME-- rakenduse raamistik
+Name[eu]=GNOME-- Aplikazioen lan-markoa
+Name[fa]=چارچوب کاربرد GNOME--
+Name[fr]=Infrastructure d'application GNOME--
+Name[ga]=Creatlach feidhmchláir GNOME--
+Name[gl]=Entorno de traballo para aplicación GNOME
 Name[hu]=GNOME - Alkalmazás-keretrendszer
-Name[it]=GNOME-- Infrastruttura di applicazione
+Name[it]=Infrastruttura per applicazioni GNOME--
+Name[ja]=GNOME-- アプリケーションフレームワーク
+Name[nds]=Programmrahmenwark för "GNOME--"
+Name[nl]=GNOME-- Applicationframework
+Name[pl]=GNOME-- Szablon programu
+Name[pt]=Plataforma de aplicações GNOME--
+Name[pt_BR]=Plataforma de aplicações GNOME--
+Name[ru]=Приложение GNOME--
+Name[sk]=GNOME-- aplikačný framework
+Name[sl]=Ogrodje programa za GNOME--
+Name[sr]=Радни оквир GNOME-- програма
+Name[sr@Latn]=Radni okvir GNOME-- programa
 Name[sv]=GNOME-- programramverk
 Name[tr]=GNOME-- Uygulama Çatısı
 Name[zh_CN]=GNOME-- 应用程序框架
+Name[zh_TW]=GNOME-- 應用程式框架
 Category=C++/GTK+
 Icon=gnome2mmapp.png
 Comment=Generates a simple GNOME-- application. Gnomemm, Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
+Comment[ca]=Genera una simple aplicació GNOME. Gnomemm, Gtkmm >= 1.2.8 i < 1.3.0 haurien d'estar instal·lats. Per editar el fitxer glade es requereix (http://home.wtal.de/petig/Gtk/).
 Comment[da]=Genererer et simpelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 og < 1.3.0 skal være installeret. For at redigere glade file glade-- kræves (http://home.wtal.de/petig/Gtk/).
 Comment[de]=Erstellt eine einfache GNOME-Anwendung. Gnomemm, Gtkmm >= 1.2.8 und < 1.3.0 sollten installiert sein. Zum Bearbeiten der glade-Datei ist glade-- (http://home.wtal.de/petig/Gtk/) erforderlich.
+Comment[el]=Δημιουργεί μια απλή εφαρμογή GNOME. Τα Gnomemm, Gtkmm >= 1.2.8 και < 1.3.0 πρέπει να είναι εγκατεστημένα. Για την επεξεργασία του αρχείου glade απαιτείται το glade (http://home.wtal.de/petig/Gtk/).
+Comment[es]=Genera una sencilla aplicación GNOME--. Debe tener instalados Gnomemm, Gtkmm >= 1.2.8 y < 1.3.0. Para editar archivos glade se necesita glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[et]=Lihtsa GNOME-- rakenduse loomine. Paigaldatud peavad olema Gnomemm, Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[eu]=GNOME-- applicazio sinple bat sortzen du. Gnomemm, Gtkmm >= 1.2.8 and < 1.3.0 instalatu behar dira. Glade fitxategia editatzeko glade-- (http://home.wtal.de/petig/Gtk/) behar da.
+Comment[fa]=یک کاربرد سادۀ GNOME-- تولید می‌کند. Gnomemm، Gtkmm >= ۱.۲.۸ و  < ۱.۳.۰ باید نصب شده باشد. برای ویرایش پروندۀ glade، glade-- (http://home.wtal.de/petig/Gtk/) نیاز است.
+Comment[fr]=Génère une application GNOME-- simple. Gnomemm et Gtkmm >= 1.2.8 et < 1.3.0 doivent être installés. Pour éditer le fichier glade, glade-- (http://home.wtal.de/petig/Gtk/) est requis.
+Comment[ga]=Cruthaíonn sé seo feidhmchlár simplí GNOME--. Ba chóir Gnomemm, Gtkmm >= 1.2.8 agus < 1.3.0 a bheith suiteáilte. Chun comhad glade a chur in eagar, tá glade-- (http://home.wtal.de/petig/Gtk/) de dhíth ort.
+Comment[gl]=Xera una aplicación sinxela GNOME. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 deben estar instalados. Para editar un arquivo glade é necesario glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[hu]=Létrehoz egy egyszerű GNOME--os -alkalmazást. A Gnomemm, a Gtkmm (>= 1.2.8 és < 1.3.0) szükséges hozzá. Glade-fájl szerkesztéséhez a glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
-Comment[it]=Genera una semplice applicazione GNOME. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 dovrebbero essere installati. Si richiede glade per modificare i file di glade -- (http://home.wtal.de/petig/Gtk/).
+Comment[it]=Genera una semplice applicazione GNOME--. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 dovrebbero essere installati. Si richiede glade per modificare i file di glade -- (http://home.wtal.de/petig/Gtk/).
+Comment[ja]=簡単なGNOME--アプリケーションを作製します。Gnomemm, Gtkmm >= 1.2.8 かつ < 1.3.0 が必要です。gladeファイルを編集するには glade-- (http://home.wtal.de/petig/Gtk/) が必要です。
+Comment[nds]=Stellt en eenfach "GNOME--"-Programm op. "Gnomemm", "Gtkmm" >= 1.2.8 un < 1.3.0 schöölt installeert wesen. För't Bewerken vun de glade-Datei deit "glade--" (http://home.wtal.de/petig/Gtk/) noot.
+Comment[nl]=Genereert een eenvoudige GNOME-- toepassing. Gnomemm, Gtkmm >= 1.2.8 en < 1.3.0 dienen te zijn geïnstalleerd. Voor het bewerken van glade file is glade-- (http://home.wtal.de/petig/Gtk/) nodig.
+Comment[pl]=Generuje prosty program dla środowiska GNOME--. Gnomemm i Gtkmm w wersji >= 1.2.8 i < 1.3.0 powinny być zainstalowane. Do edycji pliku glade konieczny jest program glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[pt]=Gera uma aplicação simples em GNOME--. Deverão estar instalados o Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[pt_BR]=Gera uma aplicação simples em GNOME--. Deverão estar instalados o Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[ru]=Создание простого приложения GNOME--. Требуются Gnomemm, Gtkmm >= 1.2.8 и < 1.3.0. Для редактирования файла glade нужна соответствующая программа (http://home.wtal.de/petig/Gtk/).
+Comment[sk]=Vygeneruje jednoduchú GNOME-- aplikáciu. Vyžaduje nainštalovanéGnomemm, Gtkmm >= 1.2.8 a < 1.3.0. Na editovanie glade súboru he potrebnýglade-- (http://home.wtal.de/petig/Gtk/).
+Comment[sr]=Прави једноставан GNOME-- програм. Gnomemm, Gtkmm >= 1.2.8 и < 1.3.0 требало би да су инсталирани. Да бисте уређивали glade фајл, неопходан је glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[sr@Latn]=Pravi jednostavan GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 i < 1.3.0 trebalo bi da su instalirani. Da biste uređivali glade fajl, neophodan je glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[tr]=Basit bir GNOME-- uygulaması yaratır. Gnomemm, Gtkmm>=1.28 ve <1.3.0 yüklü olmalıdır. Glade dosyasını düzenlemek için glade-- (http://home.wtal.de/petig/Gtk/) gereklidir.
 Comment[zh_CN]=生成简单的 GNOME-- 应用程序。必须安装 Gnomemm、1.2.8 到 1.3.0 之间的 Gtkmm。要编辑 glade 文件，需要使用 glade-- (http://home.wtal.de/petig/Gtk/)。
+Comment[zh_TW]=產生一個簡單的 GNOME-- 應用程式。要先安裝 Gnomemm，Gtkmm 版本 >= 1.2.8 且 < 1.3.0。要編輯 glade 檔則要先安裝 glade-- （http://home.wtal.de/petig/Gtk/）。
 FileTemplates=hh,CStyle,cc,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=gnome2mmapp.tar.gz
@@ -114,11 +153,31 @@ Dest=%{dest}/src/main_window_glade.cc
 [MSG]
 Type=message
 Comment=A GNOME-- application framework was created in %{dest}
+Comment[ca]=Una infraestructura d'aplicació per a GNOME ha estat creada en %{dest}
 Comment[da]=Et GNOME-- programskelet blev oprettet i %{dest}
 Comment[de]=Ein GNOME-Anwendungsgerüst wurde in %{dest} erstellt.
+Comment[el]=Ένα πλαίσιο εφαρμογής GNOME δημιουργήθηκε στο %{dest}
+Comment[es]=Una infraestructura de aplicación GNOME-- ha sido creada en %{dest}
 Comment[et]=GNOME-- rakenduse raamistik loodi asukohta %{dest}
+Comment[eu]=GNOME-- applicazioen lan-marko bat sortu da hemen: %{dest}
+Comment[fa]=یک چارچوب کاربرد GNOME-- در %{dest} ایجاد شد
+Comment[fr]=Une infrastructure d'application GNOME-- a été créée dans %{dest}
+Comment[ga]=Cruthaíodh creatlach feidhmchláir GNOME-- i %{dest}
+Comment[gl]=Creouse un contorno de traballo para aplicación GNOME en %{dest}
 Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
-Comment[it]=È stato creata una infrastruttura applicativa GNOME in %{dest}
+Comment[it]=È stato creata l'infrastruttura per un'applicazione GNOME in %{dest}
+Comment[ja]=GNOME-- アプリケーションフレームワークを%{dest}に作成しました
+Comment[nds]=In %{dest} wöör en Programmrahmenwark för "GNOME--" opstellt
+Comment[nl]=Een GNOME-- applicationframework is aangemaakt in %{dest}
+Comment[pl]=Szablon programu dla GNOME-- został utworzony w %{dest}
+Comment[pt]=Foi criada a plataforma de uma aplicação GNOME-- em %{dest}
+Comment[pt_BR]=Foi criada a plataforma de uma aplicação GNOME-- em %{dest}
+Comment[ru]=Простое приложение GNOME-- создано в %{dest}
+Comment[sk]=GNOME-- aplikačný framework bol vytvorený v %{dest}
+Comment[sl]=Ogrodje programa za GNOME-- je bilo ustvarjeno v %{dest}
+Comment[sr]=Радни оквир GNOME-- програма направљен је у %{dest}
+Comment[sr@Latn]=Radni okvir GNOME-- programa napravljen je u %{dest}
 Comment[sv]=Ett GNOME-- programramverk skapades i %{dest}
 Comment[tr]=Bir GNOME-- uygulama çatısı %{dest} içinde yaratılmıştır.
 Comment[zh_CN]=在 %{dest} 中创建了 GNOME-- 应用程序框架
+Comment[zh_TW]=GNOME-- 應用程式框架已建立於 %{dest}

@@ -1,29 +1,10 @@
 # KDE Config File
 [General]
 Name=Qt3 Application
-Name[br]=Arload
-Name[cy]=Cymhwysiad
-Name[da]=Program
-Name[de]=Qt3 Anwendung
-Name[et]=Rakendus
-Name[ga]=Feidhmchlár
-Name[hu]=Alkalmazások
-Name[it]=Applicazione
-Name[rw]=Porogaramu
-Name[sv]=Program
-Name[tr]=Uygulama
-Name[zh_CN]=应用程序
 Icon=qmakeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt3 based application (crossplatform compatible)
-Comment[da]=Generér et QMake/Qt baseret program (krydsplatform kompatibel)
-Comment[de]=Erstellt eine QMake/Qt3 basierte Anwendung (Crossplattform kompatibel)
-Comment[et]=Rakenduse loomine QMake'i/Qt põhjal (multiplatvormne)
-Comment[hu]=Létrehoz egy QMake/Qt-alapú, keresztfordításra is megfelelő alkalmazást
-Comment[it]=Genera un'applicazione basata su QMake/Qt (compatibile multipiattaforma)
-Comment[sv]=Skapar ett QMake/Qt-baserat program (fungerar på andra plattformar)
-Comment[tr]=QMake/Qt tabanlı bir uygulama yarat (Platformlararası geçimli)
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=qmakeapp.tar.gz
@@ -80,13 +61,6 @@ Dest=%{dest}/src/fileprint.xpm
 [MSG]
 Type=message
 Comment=A Qt3/Qmake based application was created in %{dest}
-Comment[da]=Et Qt/Qmake baseret program blev oprettet i %{dest}
-Comment[de]=Eine QMake/Qt3 basierte Anwendung wurde in %{dest} erstellt.
-Comment[et]=Rakendus QMkae'i põhjal loodi asukohta %{dest}
-Comment[hu]=Létrejött egy Qt/Qmake-alapú alkalmazás itt: %{dest}
-Comment[it]=È stata creata un'applicazione basata su Qt/Qmake in %{dest}
-Comment[sv]=Ett QMake/Qt-baserat program skapades i %{dest}
-Comment[tr]=Bir Qt/QMake tabanlı uygulama %{dest} içinde yaratıldı.
 
 [QTDIR]
 Type=value

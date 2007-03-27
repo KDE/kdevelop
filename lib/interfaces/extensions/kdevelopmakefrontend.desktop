@@ -7,20 +7,25 @@ Name=Make Frontend Interface
 Name[ca]=Interfície de l'entorn per a make
 Name[da]=Make brugerflade-grænseflade
 Name[de]=Schnittstelle für Make-Oberflächen (KDevelop)
+Name[el]=Διασύνδεση προγράμματος Make
 Name[es]=Interfaz del entorno de make
 Name[et]=Make kasutajaliides
 Name[eu]=Make ingurunearen interfazea
+Name[fa]=واسط پایانۀ Make
 Name[fr]=Interface du programme « make »
+Name[gl]=Interface do frontal de Make
 Name[hi]=मेक फ्रन्टएण्ड इंटरफ़ेस
 Name[hu]=Make kezelőfelület
 Name[it]=Interfaccia per Make
-Name[ja]=Make フロントエンドインタフェイス
+Name[ja]=Make フロントエンド インターフェース
 Name[nb]=Grenesnitt for å lage brukergrensesnitt
+Name[nds]=Koppelsteed för "Make"-Böversiet
 Name[nl]=Make Frontend-interface
 Name[pl]=Interfejs do Make
 Name[pt]=Interface para o Make
 Name[pt_BR]=Interface de Frontend do Make
-Name[ru]=Интерфейс оболочки Make
+Name[ru]=Интерфейс Make
+Name[sk]=Rozhranie pre make
 Name[sl]=Vmesnik za make
 Name[sr]=Кориснички интерфејс за make
 Name[sr@Latn]=Korisnički interfejs za make
@@ -28,8 +33,8 @@ Name[sv]=Byggränssnitt
 Name[ta]=முன்பகுதி இடை விளிம்பை அமை
 Name[tg]=Интерфейс пӯсти Make 
 Name[tr]=Make Önuç Arayüzü
-Name[xx]=xxMake Frontend Interfacexx
 Name[zh_CN]=Make 前端接口
+Name[zh_TW]=Make 前端介面
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
