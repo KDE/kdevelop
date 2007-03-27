@@ -34,6 +34,9 @@ namespace Sublime {
 MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     :KParts::MainWindow(0, flags), d(new MainWindowPrivate(this))
 {
+    setDockOptions( QMainWindow::DockOptions( QMainWindow::AnimatedDocks
+                    | QMainWindow::AllowTabbedDocks
+                    | QMainWindow::VerticalTabs ) );
     d->controller = controller;
     connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
     connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
