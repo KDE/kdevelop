@@ -153,7 +153,7 @@ KFileTreeViewItem* VCSFileTreeBranchItem::createTreeViewItem( KFileTreeViewItem*
     QString fileName = fileURL.fileName();
     QString dirName = URLUtil::extractPathNameRelative( lv->projectDirectory(), fileURL.directory() );
 
-    const VCSFileInfoMap &vcsFiles = *m_vcsInfoProvider->requestStatus( dirName );
+    const VCSFileInfoMap &vcsFiles = *m_vcsInfoProvider->status( dirName );
 //  kdDebug(9017) << "Dir has " << vcsFiles.count() << " registered files!" << endl;
     if (vcsFiles.contains( fileName ))
         newItem->setVCSInfo( vcsFiles[ fileName ] );

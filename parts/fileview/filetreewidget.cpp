@@ -242,6 +242,14 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
         QString file = projectDirectory() + "/" + ( *it );
         if ( !m_projectFiles.contains( file ) )
         {
+            QStringList paths = QStringList::split( "/", *it);
+            paths.pop_back();
+            while( !paths.isEmpty() )
+            {
+                if( !m_projectFiles.contains( paths.join("/") ) )
+                    m_projectFiles.append( projectDirectory() + "/" + paths.join("/") );
+                paths.pop_back();
+            }
             m_projectFiles.append( file );
 //            kdDebug(9017) << "file added: " << file << endl;
         }
