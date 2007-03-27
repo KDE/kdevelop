@@ -60,16 +60,16 @@ QMakeBuilderPreferences::~QMakeBuilderPreferences()
 void QMakeBuilderPreferences::load()
 {
     KDevelop::ConfigModule::load();
-    m_prefsUi->kcfg_qmakebin->setUrl(QMakeBuilderSettings::qmakebin());
-    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(textChanged(const QString&)), this, SLOT(changed()));
-    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(returnPressed()), this, SLOT(changed()));
-    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(urlSelected(const KUrl&)), this, SLOT(changed()));
+//    m_prefsUi->kcfg_qmakebin->setUrl(QMakeBuilderSettings::qmakebin());
+//    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(textChanged(const QString&)), this, SLOT(changed()));
+//    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(returnPressed()), this, SLOT(changed()));
+//    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(urlSelected(const KUrl&)), this, SLOT(changed()));
 }
 
 void QMakeBuilderPreferences::save()
 {
-    kDebug(9024) << "Saving QMake Builder config" << endl;
-    QMakeBuilderSettings::setQmakebin(m_prefsUi->kcfg_qmakebin->url().path());
+//    kDebug(9024) << "Saving QMake Builder config" << endl;
+//    QMakeBuilderSettings::setQmakebin(m_prefsUi->kcfg_qmakebin->url().path());
     KDevelop::ConfigModule::save();
 }
 
