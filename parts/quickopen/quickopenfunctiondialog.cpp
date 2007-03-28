@@ -33,53 +33,52 @@
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
 #include <kdevlanguagesupport.h>
+#include <qregexp.h>
 
 
 #include "quickopenfunctionchooseform.h"
 #include "quickopenfunctiondialog.h"
 
 QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* parent, const char* name, bool modal, WFlags fl)
-: QuickOpenDialog(part, parent, name, modal, fl), spaces(0)
+: QuickOpenDialog(part, parent, name, modal, fl)
 {
         nameLabel->setText( i18n("Function &name:") );
         itemListLabel->setText( i18n("Function &list:") );
 
-        FileList fileList = m_part->codeModel()->fileList();
-
-        // for each one file, get all function list
-        FileDom fileDom;
-        for( FileList::Iterator it = fileList.begin() ; it!=fileList.end() ; ++it ){
-                fileDom = *it;
-                FunctionDefinitionList defs = CodeModelUtils::allFunctionDefinitionsDetailed( fileDom ).functionList;
-                if( defs.isEmpty() ) {
-                  m_functionDefList += CodeModelUtils::allFunctionsDetailed( fileDom ).functionList;
-                } else {
-                  for( FunctionDefinitionList::iterator it = defs.begin(); it != defs.end(); ++it )
-                    (m_functionDefList).append( (*it).data() );
-                }
-        }
-
-        fillFunctions();
+        fillItemList();
+        
+        itemList->insertStringList( wildCardCompletion( "" ) );
 
         nameEdit->setFocus();
 
         itemList->setCurrentItem( 0 );
 }
 
-QuickOpenFunctionDialog::~QuickOpenFunctionDialog()
-{
+void QuickOpenFunctionDialog::fillItemList() {
+    m_items.clear();
+    m_functionDefList.clear();
+    FileList fileList = m_part->codeModel()->fileList();
+
+    // for each one file, get all functions
+    FileDom fileDom;
+    for( FileList::Iterator it = fileList.begin() ; it!=fileList.end() ; ++it ){
+            fileDom = *it;
+            FunctionDefinitionList defs = CodeModelUtils::allFunctionDefinitionsDetailed( fileDom ).functionList;
+            if( defs.isEmpty() ) {
+              m_functionDefList += CodeModelUtils::allFunctionsDetailed( fileDom ).functionList;
+            } else {
+              for( FunctionDefinitionList::iterator it = defs.begin(); it != defs.end(); ++it )
+                (m_functionDefList).append( (*it).data() );
+            }
+    }
+
+    for( FunctionList::const_iterator it = m_functionDefList.begin(); it != m_functionDefList.end(); ++it )
+      m_items << (*it)->name();
+    QStringList_unique( m_items );
 }
 
-void QuickOpenFunctionDialog::fillFunctions() 
+QuickOpenFunctionDialog::~QuickOpenFunctionDialog()
 {
-    m_items.clear();
-    for( FunctionList::ConstIterator it = m_functionDefList.begin() ; it!=m_functionDefList.end(); ++it ){
-        const FunctionModel *fmodel = (*it).data();
-        m_items.append( fmodel->name() );
-    }
-    QStringList_unique( m_items );
-    itemList->clear();
-    itemList->insertStringList( m_items );
 }
 
 void QuickOpenFunctionDialog::gotoFile( QString name )
@@ -151,59 +150,73 @@ void QuickOpenFunctionDialog::executed(QListBoxItem*)
 {
 }
 
-void QuickOpenFunctionDialog::slotTextChanged(const QString & text) {
-    QString txt = text;
-    //if(text.contains(':')/2 != 0) {
-        QStringList parts = QStringList::split("::", text);
-        if(text.endsWith("::") || parts.isEmpty()) {
-            txt = "";
-        }else{
-            txt = parts.back();
-            parts.pop_back();
-        }
-
-        if(text.contains(':')/2 != spaces) {
-            if(text.contains(':')/2 < spaces) { ///reload all function-definitions
-                m_functionDefList.clear();
-                FileList fileList = m_part->codeModel()->fileList();
-                FileDom fileDom;
-                for( FileList::Iterator it = fileList.begin() ; it!=fileList.end() ; ++it ){
-                    fileDom = *it;
-                    m_functionDefList += CodeModelUtils::allFunctionsDetailed( fileDom ).functionList;
-                }
-            }
-
-            if(!parts.isEmpty()) {
-                FunctionList accepted;
-                FunctionList::iterator it = m_functionDefList.begin();
-                while(it != m_functionDefList.end()) {
-                    QStringList scope = (*it)->scope();
-                    QStringList::iterator mit = parts.begin();
-                    QStringList::iterator sit = scope.begin();
-                    bool fail = false;
-                    while(mit != parts.end()) {
-                        while(sit != scope.end() && *sit != *mit) ++sit;
-                        if(sit == scope.end()) {
-                            fail = true;
-                            break;
-                        }
-                        ++mit;
-                    }
-                    if(!fail) accepted.append(*it);
-                    ++it;
-                }
-                m_functionDefList = accepted;
-            }
-
-            fillFunctions();
-
-            spaces = text.contains(':')/2;
-        }
-    //}
-
-    QuickOpenDialog::slotTextChanged(txt);
+void QuickOpenFunctionDialog::itemSelectionChanged() {
+      QString text = nameEdit->text();
+      QString txt = text;
+      QStringList parts = QStringList::split("::", text);
+      if( !text.endsWith( "::" ) && !parts.isEmpty() )
+        parts.pop_back();
+      parts << itemList->currentText();
+      nameEdit->setText(parts.join("::"));
 }
 
+void QuickOpenFunctionDialog::slotTextChangedDelayed() {
+    QString text = nameEdit->text();
+    QString txt = text;
+    QStringList parts = QStringList::split("::", text);
+    if(text.endsWith("::") || parts.isEmpty()) {
+        txt = "";
+    }else{
+        txt = parts.back();
+        parts.pop_back();
+    }
+    QValueList<QRegExp> regExpParts;
+    for( QStringList::const_iterator it = parts.begin(); it != parts.end(); ++it ) {
+      regExpParts << QRegExp( *it, false, true );
+    }
+
+    QString scope = parts.join("::");
+
+    if( m_scope != scope ) {
+        if( !scope.startsWith(m_scope) ) { ///Not a specialization, so reload all function-definitions
+          fillItemList();
+        }
+
+        if(!parts.isEmpty()) {
+            FunctionList accepted;
+            QStringList acceptedItems;
+            FunctionList::iterator it = m_functionDefList.begin();
+            while(it != m_functionDefList.end()) {
+                QStringList scope = (*it)->scope();
+                QValueList<QRegExp>::iterator mit = regExpParts.begin();
+                QStringList::iterator sit = scope.begin();
+                bool fail = false;
+                while(mit != regExpParts.end()) {
+                    while(sit != scope.end() && !(*mit).exactMatch( *sit ) ) ++sit;
+                    if(sit == scope.end()) {
+                        fail = true;
+                        break;
+                    }
+                    ++mit;
+                }
+                if(!fail) {
+                  accepted.append(*it);
+                  acceptedItems << (*it)->name();
+                }
+                ++it;
+            }
+            m_functionDefList = accepted;
+            m_items = acceptedItems;
+            QStringList_unique( m_items );
+        }
+
+        m_scope = scope;
+    }
+    
+    itemList->clear();
+    itemList->insertStringList( wildCardCompletion( txt ) );
+    itemList->setCurrentItem(0);
+}
 
 void QuickOpenFunctionDialog::slotReturnPressed()
 {

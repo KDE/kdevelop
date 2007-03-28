@@ -178,6 +178,9 @@ public:
     bool isQueued( const QString& file ) const;
     bool switchHeaderImpl( const QString& file, int line, int col, bool scrollOnly = false );
 
+    QStringList getIncludePath() const;
+
+    const Driver* driver() const;
 signals:
 	void fileParsed( const QString& fileName );
     ///Emitted whenever a file was parsed, but the code-model could be updated(the file in the code-model did not have to be replaced)

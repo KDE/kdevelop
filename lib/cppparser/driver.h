@@ -373,6 +373,9 @@ class Driver {
      * Returns the local instance of the lexer-cache, can be used from outside to control the cache-behavior.
      * */
     LexerCache* lexerCache();
+
+    QString findIncludeFile( const Dependence& dep ) const;
+    
   protected:
     /**
      * Set up the lexer.
@@ -400,11 +403,10 @@ class Driver {
     void clearMacros();
     
     void clearParsedMacros();
-    
+
     private:
     QMap<QString, Dependence>& findOrInsertDependenceList( const QString& fileName );
     QValueList<Problem>& findOrInsertProblemList( const QString& fileName );
-    QString findIncludeFile( const Dependence& dep ) const;
 
     
   private:

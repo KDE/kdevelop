@@ -66,7 +66,7 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
             {
                 itemList->setCurrentItem(i);
                 nameEdit->blockSignals(true);
-                nameEdit->setText(itemList->currentText());
+                itemSelectionChanged();
                 nameEdit->blockSignals(false);
             }
             return true;
@@ -77,7 +77,7 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
             {
                 itemList->setCurrentItem(i);
                 nameEdit->blockSignals(true);
-                nameEdit->setText(itemList->currentText());
+                itemSelectionChanged();
                 nameEdit->blockSignals(false);
             }
             return true;
@@ -85,7 +85,7 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
         {
             QApplication::sendEvent(itemList, e);
             nameEdit->blockSignals(true);
-            nameEdit->setText(itemList->currentText());
+            itemSelectionChanged();
             nameEdit->blockSignals(false);
         }
     }

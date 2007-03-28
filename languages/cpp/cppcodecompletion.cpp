@@ -8,7 +8,7 @@ copyright            : (C) 2002,2003 by Roberto Raggi
 email                : roberto@kdevelop.org
 copyright            : (C) 2005 by Adam Treat
 email                : manyoso@yahoo.com
-copyright            : (C) 2006 by David Nolden
+copyright            : (C) 2006,2007 by David Nolden
 email                : david.nolden.kdevelop@art-master.de
 ***************************************************************************/
 
@@ -335,10 +335,15 @@ using namespace CppEvaluation;
 struct PopupFillerHelpStruct {
   CppCodeCompletion* receiver;
 	FileList files;
-  PopupFillerHelpStruct( CppCodeCompletion* rec ) {
+	CppCodeCompletion::PopupActions& m_popupActions;
+	PopupFillerHelpStruct( CppCodeCompletion* rec ) : m_popupActions( rec->m_popupActions ) {
     receiver = rec;
 	  files = receiver->cppSupport()->codeModel()->fileList();
   }
+
+	bool shouldShowIncludeMenu() const {
+		return true;
+	}
 
 	QMap<QString, QPopupMenu*> m_namespacePopupCache;
 
@@ -508,9 +513,14 @@ ItemDom itemFromScope( const QStringList& scope, NamespaceDom startNamespace ) {
 
 struct PopupClassViewFillerHelpStruct {
   CppCodeCompletion* receiver;
-  PopupClassViewFillerHelpStruct( CppCodeCompletion* rec ) {
+	CppCodeCompletion::PopupActions& m_popupActions;
+	PopupClassViewFillerHelpStruct( CppCodeCompletion* rec ) : m_popupActions( rec->m_popupActions ) {
     receiver = rec;
   }
+
+	bool shouldShowIncludeMenu() const {
+		return false;
+	}
 
   void insertItem( QPopupMenu* parent, SimpleTypeImpl::MemberInfo d , QString prefix ) {
     Q_UNUSED(prefix);
@@ -592,7 +602,7 @@ struct PopupClassViewFillerHelpStruct {
   }
 };
 
-template <class HelpStruct>
+template <class HelpStruct = PopupFillerHelpStruct>
 class PopupFiller {
     HelpStruct struk;
     QString depthAdd;
@@ -600,9 +610,53 @@ class PopupFiller {
   public:
     PopupFiller( HelpStruct str , QString dAdd, int maxCount = 100 ) : struk( str ), depthAdd( dAdd ), s( maxCount ) {}
 
+	    
+		void  fillIncludes( const DeclarationInfo& decl, QPopupMenu* parent, bool& needSeparator ) {
+			if( !struk.receiver->getIncludeFiles()[ HashedString( decl.file ) ] ) {
+				QString file = decl.file;
+				//The include-file seems to be missing
+				if( needSeparator ) {
+					needSeparator = false;
+					parent->insertSeparator();
+				}
+
+				QString includeFile = file;
+				QFileInfo info( file );
+
+				const Driver* driver = struk.receiver->cppSupport()->driver();
+				if( driver ) {
+					QStringList elements = QStringList::split( "/", file );
+					includeFile = elements.back();
+					elements.pop_back();
+
+					Dependence d;
+					d.first = includeFile;
+					d.second = Dep_Local;
+					while( driver->findIncludeFile( d ) != file && !elements.empty() ) {
+						//kdDebug( 9007 ) << "could not find include-file \"" << d.first << "\"" << endl;
+						includeFile = elements.back() + "/" + includeFile;
+						d.first = includeFile;
+						elements.pop_back();
+					}
+					if( elements.empty() )
+						includeFile = "/" + includeFile;
+
+					//kdDebug( 9007 ) << "found include-file \"" << includeFile << "\"" << endl;
+				}
+				int id = parent->insertItem( i18n( "#include \"%1\" ( defines %2 )" ).arg ( includeFile ).arg( decl.name ), struk.receiver, SLOT( popupAction( int ) ) );
+				DeclarationInfo fakeDec;
+				fakeDec.name = decl.name;
+				fakeDec.file = includeFile;
+				fakeDec.startLine = -1; //Use startline -1 to indicate that instead of jumping to the file, the file should be included.
+				struk.m_popupActions.insert( id, fakeDec );
+			}
+		}
+	
     void fill( QPopupMenu * parent, LocateResult d, QString prefix = "", const DeclarationInfo & sourceVariable = DeclarationInfo() ) {
       Debug dbg( "#fl# ", 10 )
       ;
+
+	    
       if ( !s || !dbg ) {
         //dbgMajor() << "safety-counter triggered while filling \"" << d.fullNameChain() << "\"" << endl;
         return ;
@@ -711,6 +765,10 @@ class PopupFiller {
                 m->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
               }
             }
+
+	          /*bool needSeparator = true;
+	          if( struk.shouldShowIncludeMenu() && struk.receiver->cppSupport()->codeCompletionConfig()->preProcessAllHeaders() &&  !(*it).first.decl.file.operator QString().isEmpty() )
+	          	fillIncludes( (*it).first.decl, mo, needSeparator );*/
           }
         }
       }
@@ -740,6 +798,26 @@ class PopupFiller {
           }
         }
       }
+
+	    //Add entries for including missing include-files
+	    if( struk.shouldShowIncludeMenu() && struk.receiver->cppSupport()->codeCompletionConfig()->preProcessAllHeaders() ) {
+					bool needSeparator = true;
+					//Show the include-files for the whole trace, because usually the first in the trace should be the one to include
+					if ( d.trace() ) {
+						QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> > trace = d.trace() ->trace();
+						if ( !trace.isEmpty() ) {
+							for ( QValueList<QPair<SimpleTypeImpl::MemberInfo, TypeDesc> >::iterator it = trace.begin(); it != trace.end(); ++it ) {
+								if( struk.shouldShowIncludeMenu() && struk.receiver->cppSupport()->codeCompletionConfig()->preProcessAllHeaders() &&  !(*it).first.decl.file.operator QString().isEmpty() )
+									fillIncludes( (*it).first.decl, parent, needSeparator );
+							}
+						}
+					}
+
+		    	//Show the include-file for the item itself
+				 	if( d->resolved() && !d->resolved()->isNamespace() && struk.receiver->cppSupport() ) {
+						fillIncludes( d->resolved()->getDeclarationInfo(), parent, needSeparator );
+					}
+    	}
     }
 };
 
@@ -941,7 +1019,7 @@ void CppCodeCompletion::integratePart( KParts::Part * part ) {
   if ( doc ) {
     kdDebug( 9007 ) << k_funcinfo << "integrate document: " << doc << endl;
 
-    if ( m_pSupport && m_pSupport->codeCompletionConfig() ->automaticCodeCompletion() ) {
+	  if ( m_pSupport ) { //The slot should connected even when automatic completion is disabled, so it can be enabled any time
       kdDebug( 9007 ) << k_funcinfo << "enabling code completion" << endl;
       connect( part, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
       connect( part->widget(), SIGNAL( completionDone() ), this,
@@ -1025,7 +1103,7 @@ void CppCodeCompletion::slotTextChanged() {
   if ( !m_activeCursor )
     return ;
 
-  unsigned int nLine, nCol;
+	unsigned int nLine, nCol;
   m_activeCursor->cursorPositionReal( &nLine, &nCol );
 
   QString strCurLine = m_activeEditor->textLine( nLine );
@@ -1068,8 +1146,8 @@ void CppCodeCompletion::slotTextChanged() {
       time = m_pSupport->codeCompletionConfig() ->codeCompletionDelay();
     m_ccTimer->start( time, true );
   }
-
-  fitContextItem( nLine, nCol );
+	
+	fitContextItem( nLine, nCol );
 }
 
 void CppCodeCompletion::fitContextItem( int nLine, int nCol ) {
@@ -1381,7 +1459,12 @@ void CppCodeCompletion::popupAction( int number ) {
   PopupActions::iterator it = m_popupActions.find( number );
   if ( it != m_popupActions.end() ) {
     QString fileName = ( *it ).file == "current_file" ? m_activeFileName : ( *it ).file.operator QString();
-    m_pSupport->partController() ->editDocument( fileName, ( *it ).startLine );
+	  if( (*it).startLine == -1 ) {
+		  //startLine -1 indicates that the file should be added to the include-files
+		  m_activeEditor->insertLine( 0, QString("#include \"%1\" /* defines %2 */").arg( fileName ).arg( (*it).name ) );
+	  } else {
+    	m_pSupport->partController() ->editDocument( fileName, ( *it ).startLine );
+	  }
   } else {
     kdDebug( 9007 ) << "error" << endl;
   }
@@ -1480,7 +1563,6 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		for ( QStringList::iterator it = ls.begin(); it != ls.end(); ++it ) {
 			b->insertItem( *it, 0, SLOT( popupClassViewAction( int ) ) );
 		}
-
 	}
 
 	if ( !type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) && !BuiltinTypes::isBuiltin( type.resultType ) )
@@ -4167,6 +4249,7 @@ void CppCodeCompletion::computeFileEntryList( ) {
 
     CodeCompletionEntry entry;
     entry.text = QFileInfo( *it ).fileName();
+	  
     m_fileEntryList.push_back( entry );
   }
 
@@ -4322,6 +4405,14 @@ QString CppCodeCompletion::createTypeInfoString( int line, int column )
 			typeInfoString += QString( i18n(" (unresolved) ") );
 		}
 	}
+
+	if( cppSupport() && type->resolved() && cppSupport()->codeCompletionConfig()->preProcessAllHeaders() ) {
+		    DeclarationInfo decl = type->resolved()->getDeclarationInfo();
+		    if( !getIncludeFiles()[ HashedString( decl.file ) ] ) {
+			    typeInfoString += " [header not included] ";
+		    }
+	}
+	
 	return typeInfoString;
 }
 

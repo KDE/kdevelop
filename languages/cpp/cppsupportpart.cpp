@@ -2749,6 +2749,16 @@ void CppSupportPart::updateParserConfiguration()
 	parseProject( true );
 }
 
+const Driver* CppSupportPart::driver() const {
+	return m_driver;
+}
+
+QStringList CppSupportPart::getIncludePath() const {
+	if( !m_driver )
+		return QStringList();
+	return m_driver->includePaths();
+}
+
 KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::DesignerType type )
 {
 	KDevDesignerIntegration * des = 0;
