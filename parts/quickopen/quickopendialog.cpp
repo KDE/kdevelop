@@ -136,6 +136,10 @@ void QuickOpenDialog::QStringList_unique( QStringList & list )
     }
 }
 
+void QuickOpenDialog::itemSelectionChanged() {
+  nameEdit->setText(itemList->currentText());
+}
+
 #include "quickopendialog.moc"
 
 // kate: space-indent on; indent-width 4; tab-width 4; show-tabs on;
