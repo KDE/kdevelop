@@ -202,16 +202,16 @@ svn_error_t* SvnLogviewJob::receiveLogMessage(void *baton, apr_hash_t *changed_p
     if( changed_paths != NULL ){
         QString pathlist;
         void *onePath;
-        const char *pathkey;
+        const void *pathkey;
         apr_hash_index_t *hi;
         for (hi = apr_hash_first(pool, changed_paths); hi; hi = apr_hash_next(hi)) {
-            apr_hash_this(hi, (const void**) &pathkey, NULL, &onePath);
+            apr_hash_this(hi, &pathkey, NULL, &onePath);
             svn_log_changed_path_t *cp = (svn_log_changed_path_t*)onePath;
-            kDebug() << "OnePath: " << cp->copyfrom_path << " and key: " << pathkey << endl;
+            kDebug() << "OnePath: " << cp->copyfrom_path << " and key: " << (const char*)pathkey << endl;
             pathlist += cp->action;
             pathlist += " ";
 //          pathlist += cp->copyfrom_path;
-            pathlist += pathkey;
+            pathlist += (const char*)pathkey;
             pathlist += "\n";
         }
         kDebug() << "pathlist: " << pathlist <<endl;
