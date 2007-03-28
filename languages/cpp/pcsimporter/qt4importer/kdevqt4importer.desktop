@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQt4Importer
+Name[sv]=KDevelop QT4-import
 Comment=KDevelop Qt4 PCS Importer
+Comment[sv]=KDevelop QT4 PCS-import
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqt4importer

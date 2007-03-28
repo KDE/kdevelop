@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=KConfig XT for KDE 3.5
+Name[sv]=KConfig XT för KDE 3.5
 Category=C++/KDE
 Icon=kxt.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog compatible with KDE 3.5 only
+Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta, som bara fungerar med KDE 3.5
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp,%{dest}/README
 Archive=kconfig35.tar.gz
@@ -180,3 +182,4 @@ Dest=%{dest}/configure.in.in
 [MSG]
 Type=message
 Comment=A KDE 3.5 KConfig XT application was created in %{dest}
+Comment[sv]=Ett KDE 3.5 KConfig XT-program skapades i %{dest}

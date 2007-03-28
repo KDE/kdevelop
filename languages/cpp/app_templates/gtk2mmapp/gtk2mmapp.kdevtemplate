@@ -31,6 +31,7 @@ Name[zh_TW]=Gtk-- 應用程式框架
 Category=C++/GTK+
 Icon=gtk2mmapp.png
 Comment=Generates a simple Gtk-- application. Gtkmm >= 2.8.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
+Comment[sv]=Skapar ett enkelt Gtk-- program. Gtkmm >= 2.8.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
 FileTemplates=hh,CStyle,cc,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=gtk2mmapp.tar.gz

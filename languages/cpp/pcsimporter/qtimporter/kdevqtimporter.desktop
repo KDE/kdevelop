@@ -11,6 +11,7 @@ Name[sv]=KDevelop QT-import
 Name[ta]=கெடெவ் க்யு இறக்குமதியாளர்
 Name[zh_TW]=KDev Qt 匯入器
 Comment=KDevelop Qt3 PCS Importer
+Comment[sv]=KDevelop QT3 PCS-import
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqtimporter

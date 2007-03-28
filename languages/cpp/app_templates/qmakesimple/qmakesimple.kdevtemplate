@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Qt3 Hello world program
+Name[sv]=Qt3 Hello world-program
 Icon=qmakesimple.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generates a simple Hello world program in C++ using QMake/Qt3 based project manager
+Comment[sv]=Skapar ett enkelt Hello world-program i C++ baserat på QMake/Qt3 projekthantering
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=qmakesimple.tar.gz
@@ -37,6 +39,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A Qmake/Qt3 based hello world program was created in %{dest}
+Comment[sv]=Ett Qmake/Qt3-baserat Hello world-program skapades i %{dest}
 
 
 [QTDIR]
@@ -44,10 +47,12 @@ Type=value
 ValueType=QString
 Value=QTDIR
 Comment=Directory where Qt3 is installed.
+Comment[sv]=Katalog där Qt3 är installerat.
 Default=
 [QMAKE]
 Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake (Qt3).
+Comment[sv]=Absolut sökväg till QMake (Qt3).
 Default=

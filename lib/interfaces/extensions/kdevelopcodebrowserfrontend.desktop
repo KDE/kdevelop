@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/CodeBrowserFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Code Browser Frontend
+Name[sv]=Kodbläddringsgränssnitt
 
 [PropertyDef::X-KDevelop-Version]
 Type=int

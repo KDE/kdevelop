@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Qt3 Application
+Name[sv]=Qt3-program
 Icon=cmakeqt3app.png
 Category=C++/CMake based projects
 Comment=Generate a CMake based Qt3 application
+Comment[sv]=Skapar ett CMake-baserat Qt3-program
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=cmakeqt3app.tar.gz
@@ -60,3 +62,4 @@ Directory=%{dest}
 [MSG]
 Type=message
 Comment=A CMake based Qt3 application was created in %{dest}
+Comment[sv]=Ett CMake-baserat Qt3-program skapades i %{dest}

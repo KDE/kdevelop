@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Qt4 Application
+Name[sv]=Qt4-program
 Icon=qt4makeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt4 based application (crossplatform compatible) - Needs Qt4
+Comment[sv]=Skapar ett QMake/Qt4-baserat program (fungerar på andra plattformar). Kräver Qt4.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp,%{dest}/src/ReadMe
 Archive=qt4makeapp.tar.gz
@@ -86,6 +88,7 @@ Dest=%{dest}/src/ReadMe
 [MSG]
 Type=message
 Comment=A Qt4/Qmake based application was created in %{dest}
+Comment[sv]=Ett QMake/Qt4-baserat program skapades i %{dest}
 
 Comment=
 [QMAKE]
@@ -93,10 +96,12 @@ Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake (Qt4).
+Comment[sv]=Absolut sökväg till QMake (Qt4).
 Default=
 [DESIGNER]
 Type=value
 ValueType=QString
 Value=DESIGNER
 Comment=Absolute Path for Designer (Qt4).
+Comment[sv]=Absolut sökväg till Designer (Qt4).
 Default=

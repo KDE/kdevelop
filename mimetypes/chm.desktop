@@ -1,5 +1,13 @@
 [Desktop Entry]
 Comment=HTML Help Document
+Comment[br]=Teul skoazell HTML
+Comment[ga]=Cáipéis Chabhrach HTML
+Comment[hi]=एचटीएमएल मदद दस्तावेज़
+Comment[nb]=HTML-hjelpedokument
+Comment[pt_BR]=Documento de Ajuda HTML
+Comment[sv]=HTML-hjälpdokument
+Comment[ta]=HTML  உதவி ஆவணம்
+Comment[tr]=HTML Yardım Belgesi
 Hidden=false
 Icon=help
 MimeType=application/chm
