@@ -27,7 +27,7 @@
       <used>true</used>
       <version>3</version>
       <includestyle>3</includestyle>
-      <designerintegration>KDevEmbeddedDesigner</designerintegration>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
       <root>%{QTDIR}</root>
       <qmake>%{QMAKE}</qmake>
     </qt>

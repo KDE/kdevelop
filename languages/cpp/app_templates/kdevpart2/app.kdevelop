@@ -126,7 +126,7 @@
       <version>3</version>
       <used>true</used>
       <includestyle>3</includestyle>
-      <designerintegration>KDevEmbeddedDesigner</designerintegration>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
     </qt>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
