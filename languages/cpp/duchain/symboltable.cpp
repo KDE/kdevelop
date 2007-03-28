@@ -26,7 +26,7 @@
 #include "declaration.h"
 #include "ducontext.h"
 
-static KStaticDeleter<SymbolTable> sd;
+static KStaticDeleter<SymbolTable> sdSymbol;
 SymbolTable* SymbolTable::s_instance = 0;
 
 SymbolTable::SymbolTable()
@@ -37,7 +37,7 @@ SymbolTable::SymbolTable()
 SymbolTable* SymbolTable::self()
 {
   if (!s_instance)
-    sd.setObject(s_instance, new SymbolTable());
+    sdSymbol.setObject(s_instance, new SymbolTable());
 
   return s_instance;
 }

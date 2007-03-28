@@ -22,7 +22,7 @@
 
 #include <kstaticdeleter.h>
 
-static KStaticDeleter<TypeRepository> sd;
+static KStaticDeleter<TypeRepository> sdType;
 TypeRepository* TypeRepository::s_instance = 0;
 
 TypeRepository::TypeRepository()
@@ -157,7 +157,7 @@ void TypeRepository::newIntegralType(CppIntegralType::IntegralTypes type, CppInt
 TypeRepository* TypeRepository::self()
 {
   if (!s_instance)
-    sd.setObject(s_instance, new TypeRepository());
+    sdType.setObject(s_instance, new TypeRepository());
 
   return s_instance;
 }
