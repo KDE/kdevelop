@@ -894,7 +894,9 @@ void CppSupportPart::addedFilesToProject( const QStringList &fileList )
 
 	for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
 	{
-		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + ( *it ) );
+		QString path = *it;
+		if (!path.startsWith("/")
+			path = URLUtil::canonicalPath( m_projectDirectory + "/" + ( *it ) );
 
 		maybeParse( path );
 		//emit addedSourceInfo( path );
