@@ -1,3 +1,5 @@
+include(FindSubversionLibrary)
+
 if(SUBVERSIONFOUND)
     add_subdirectory(subversion)
 endif(SUBVERSIONFOUND)

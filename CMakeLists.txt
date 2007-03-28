@@ -7,7 +7,6 @@ find_package(BerkeleyDB)
 #find_package(TDB)
 include (KDE4Defaults)
 include (MacroLibrary)
-include (FindSubversion)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${BERKELEY_DB_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
