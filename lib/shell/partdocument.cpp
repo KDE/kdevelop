@@ -74,7 +74,7 @@ KTextEditor::Document *PartDocument::textDocument() const
 
 bool PartDocument::isActive() const
 {
-    return Core::self()->uiControllerInternal()->activeMainWindow()->activeView()->document() == this;
+    return Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView()->document() == this;
 }
 
 bool PartDocument::save(DocumentSaveMode /*mode*/)

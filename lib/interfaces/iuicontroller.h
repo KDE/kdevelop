@@ -24,6 +24,10 @@
 #include <QStringList>
 #include <kurl.h>
 
+namespace KParts {
+    class MainWindow;
+}
+
 namespace KDevelop {
 
 class IDocument;
@@ -47,6 +51,10 @@ public:
 
     virtual void addToolView(const QString &name, IToolViewFactory *factory) = 0;
     virtual void removeToolView(IToolViewFactory *factory) = 0;
+    
+    /** @return active mainwindow or 0 if no such mainwindow is active.*/
+    virtual KParts::MainWindow *activeMainWindow() = 0;
+
 
 protected:
     IUiController();

@@ -130,13 +130,13 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 
 Sublime::Area *UiController::activeArea()
 {
-    Sublime::MainWindow *m = activeMainWindow();
+    Sublime::MainWindow *m = activeSublimeWindow();
     if (m)
-        return activeMainWindow()->area();
+        return activeSublimeWindow()->area();
     return 0;
 }
 
-Sublime::MainWindow *UiController::activeMainWindow()
+Sublime::MainWindow *UiController::activeSublimeWindow()
 {
     QWidget *active = QApplication::activeWindow();
     if (!active)
@@ -164,7 +164,7 @@ void UiController::openEmptyDocument()
     PartDocument *doc = new PartDocument(KUrl());
     Sublime::View *view = doc->createView();
     activeArea()->addView(view);
-    activeMainWindow()->activateView(view);
+    activeSublimeWindow()->activateView(view);
 }
 
 void UiController::addNewToolView(MainWindow *mw)

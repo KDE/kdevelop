@@ -217,11 +217,11 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         partView = doc->createView();
 
         //add view to the area
-        area->addView(partView, uiController->activeMainWindow()->activeView());
+        area->addView(partView, uiController->activeSublimeWindow()->activeView());
     }
     if (activate == IDocumentController::ActivateOnOpen)
     {
-        uiController->activeMainWindow()->activateView(partView);
+        uiController->activeSublimeWindow()->activateView(partView);
         Core::self()->partController()->setActivePart(doc->partForView(partView->widget()), partView->widget());
         emit documentActivated( doc );
     }
@@ -256,7 +256,7 @@ void DocumentController::activateDocument( IDocument * document )
 IDocument* DocumentController::activeDocument() const
 {
     UiController *uiController = Core::self()->uiControllerInternal();
-    return qobject_cast<Document*>(uiController->activeMainWindow()->activeView()->document());
+    return qobject_cast<Document*>(uiController->activeSublimeWindow()->activeView()->document());
 }
 
 void DocumentController::emitSaved(IDocument *document)
