@@ -153,14 +153,14 @@ completion-box.</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Completely evaluate member-types of 
-template-classes(this includes types 
+template-classes (this includes types 
 of member-variables and return-types 
 of member-functions) in the 
 completion-box.</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>Completely evaluate member-types of 
-template-classes(this includes types 
+template-classes (this includes types 
 of member-variables and return-types 
 of member-functions) in the 
 completion-box.</string>
