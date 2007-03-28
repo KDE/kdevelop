@@ -41,15 +41,6 @@ IPluginController::~IPluginController()
 {
 }
 
-template<class Extension> Extension* IPluginController::extensionForPlugin( const QString &extension, const QString &pluginname)
-{
-    IPlugin *plugin = pluginForExtension(extension, pluginname);
-    if (plugin)
-        return plugin->extension<Extension*>();
-    else
-        return 0L;
-}
-
 KPluginInfo::List IPluginController::query( const QString &serviceType,
         const QString &constraint )
 {
