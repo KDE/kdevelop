@@ -110,14 +110,14 @@ Navigator::Navigator(ClassViewPart *parent, const char *name)
     m_state = GoToDefinitions;
     m_navNoDefinition = true;
 
-    m_actionSyncWithEditor = new KAction( i18n("Sync ClassView"), "view_tree", KShortcut(), this, 
+    m_actionSyncWithEditor = new KAction( i18n("Sync ClassView"), "view_tree", KShortcut(), this,
         SLOT(slotSyncWithEditor()), m_part->actionCollection(), "classview_sync_with_editor" );
 
-    KAction * action = new KAction( i18n("Jump to next function"), CTRL+ALT+Key_PageDown, this, 
+    KAction * action = new KAction( i18n("Jump to next function"), CTRL+ALT+Key_PageDown, this,
         SLOT(slotJumpToNextFunction()), m_part->actionCollection(), "navigator_jump_to_next_function" );
     action->plug( &m_dummyActionWidget );
 
-    action = new KAction( i18n("Jump to previous function"), CTRL+ALT+Key_PageUp, this, 
+    action = new KAction( i18n("Jump to previous function"), CTRL+ALT+Key_PageUp, this,
         SLOT(slotJumpToPreviousFunction()), m_part->actionCollection(), "navigator_jump_to_previous_function" );
     action->plug( &m_dummyActionWidget );
 
@@ -276,7 +276,7 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
                 FunctionNavItem::Declaration);
             m_functionNavDecls[fullName] = item;
             item->setItem( 0, fullFunctionItem( *it ) );
-            
+
             m_part->m_functionsnav->view()->addItem(item);
         }
         toLeave << fullName;
@@ -376,10 +376,10 @@ FunctionDom Navigator::currentFunction()
 ///can highlight as it likes
 TextPaintItem highlightFunctionName(QString function, int type, TextPaintStyleStore& styles) {
     TextPaintItem ret;
-    
+
     if( !styles.hasStyle( type ) ) {
         QFont font = styles.getStyle( 0 ).font;
-        
+
         switch(type) {
             case 1:
             default:
@@ -389,14 +389,14 @@ TextPaintItem highlightFunctionName(QString function, int type, TextPaintStyleSt
                 font.setPointSize( (font.pointSize() * 9) / 10 );
 #endif
         }
-        
+
         styles.addStyle( type, font );
     }
-    
+
     QString args;
     QString fScope;
     int cutpos;
-    
+
     if((cutpos = function.find('(')) != -1) {
         args = function.right( function.length() - cutpos );
         function = function.left( cutpos );
@@ -418,14 +418,14 @@ TextPaintItem highlightFunctionName(QString function, int type, TextPaintStyleSt
 template <class DomType>
 TextPaintItem Navigator::fullFunctionItem(DomType fun)
 {
-    
+
     QStringList scope = fun->scope();
     QString function = scope.join(".");
     if (!function.isEmpty())
         function += ".";
     function += m_part->languageSupport()->formatModelItem(fun, true);
     function = m_part->languageSupport()->formatClassName(function);
-    
+
     return highlightFunctionName(function, 1, m_styles);
 }
 
