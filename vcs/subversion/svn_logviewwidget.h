@@ -21,12 +21,18 @@
 #ifndef SVNLOGVIEWWIDGET_H
 #define SVNLOGVIEWWIDGET_H
 
-#include "svn_logviewwidgetbase.h"
-#include "svn_logviewoptiondlgbase.h"
-#include "subversion_part.h"
 #include "subversion_widget.h"
+#include "svn_logviewoptiondlgbase.h"
+// #include "subversion_part.h"
 #include <qvaluelist.h>
 #include <qlistview.h>
+class subversionPart;
+// class QWidget;
+#include <qwidget.h>
+class KTextEdit;
+class QSplitter;
+class QGridLayout;
+
 
 class SvnLogHolder{
 	public:
@@ -39,27 +45,24 @@ class SvnLogHolder{
 		QString rev;
 };
 
-class SvnLogViewWidget : public SvnLogViewWidgetBase {
+class SvnLogViewWidget : public /*SvnLogViewWidgetBase*/ QWidget {
 	Q_OBJECT
 public:
 	SvnLogViewWidget(subversionPart *part, QWidget *parent);
-	~SvnLogViewWidget();
+	virtual ~SvnLogViewWidget();
 	void setLogResult( QValueList<SvnLogHolder> *loglist );
-	void append(QString txt);
+
 public slots:
 	void slotClicked( QListViewItem* item );
 private:
 	subversionPart *m_part;
 	bool connected;
-};
 
-class SvnLogViewItem : public SvnIntSortListItem {
-public:
-	SvnLogViewItem( QListView* parent );
-	~SvnLogViewItem();
-	
-	QString m_pathList;
-	QString m_message;
+    QSplitter* splitter1;
+    QListView* listView1;
+    KTextEdit* textEdit1;
+    QGridLayout* m_layout;
+    
 };
 
 class SvnLogViewOptionDlg : public SvnLogViewOptionDlgBase {

@@ -56,8 +56,8 @@ subversionCore::subversionCore(subversionPart *part)
 // 	: QObject(NULL, "subversion core"), DCOPObject("subversion") {
 	: QObject(NULL, "subversion core") {
 		m_part = part;
-// 		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
-		m_logViewWidget = new SvnLogViewWidget( part, 0 );
+		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
+// 		m_logViewWidget = new SvnLogViewWidget( part, 0 );
 // 		m_part->mainWindow()->embedOutputView( m_logViewWidget, i18n( "Subversion Log" ), i18n( "Subversion Log" ) );
 //		if ( ! connectDCOPSignal("kded", "ksvnd", "subversionNotify(QString,int,int,QString,int,int,long int,QString)", "notification(QString,int,int,QString,int,int,long int,QString)", false ) )
 //			kdWarning() << "Failed to connect to kded dcop signal ! Notifications won't work..." << endl;
@@ -68,14 +68,14 @@ subversionCore::subversionCore(subversionPart *part)
 }
 
 subversionCore::~subversionCore() {
-// 	if ( processWidget() ) {
-// 		m_part->mainWindow()->removeView( processWidget() );
-// 		delete processWidget();
-// 	}
-	if( m_logViewWidget ){
-		m_part->mainWindow()->removeView( m_logViewWidget );
-		delete m_logViewWidget;
+	if ( processWidget() ) {
+		m_part->mainWindow()->removeView( processWidget() );
+		delete processWidget();
 	}
+// 	if( m_logViewWidget ){
+// 		m_part->mainWindow()->removeView( m_logViewWidget );
+// 		delete m_logViewWidget;
+// 	}
 	delete diffTmpDir;
 	//FIXME delete m_fileInfoProvider here?
 }
@@ -102,10 +102,11 @@ KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
 // 	}
 // }
 
-//subversionWidget *subversionCore::processWidget() const {
-SvnLogViewWidget* subversionCore::processWidget() const {
+subversionWidget *subversionCore::processWidget() const {
+// SvnLogViewWidget* subversionCore::processWidget() const {
 // 	return processWidget();
-	return m_logViewWidget;
+// 	return m_logViewWidget;
+    return m_widget;
 }
 
 void subversionCore::resolve( const KURL::List& list ) {
@@ -464,7 +465,7 @@ void subversionCore::slotLogResult( KIO::Job * job )
 		}//end of while
 		holderList.append( logHolder );
 	}
-	processWidget()->setLogResult( &holderList );
+	processWidget()->showLogResult( &holderList );
 	m_part->mainWindow()->raiseView(processWidget());
 
 }
@@ -535,9 +536,8 @@ void subversionCore::slotBlameResult( KIO::Job * job )
 		blameList.append( blameHolder );
 // 		blameList.insert( blameHolder.line, blameHolder );
 	}
-	SvnBlameWidget dlg;
-	dlg.copyBlameData( &blameList );
-	dlg.exec();
+    processWidget()->showBlameResult( &blameList );
+    m_part->mainWindow()->raiseView(processWidget());
 }
 
 void subversionCore::createNewProject( const QString& // dirName

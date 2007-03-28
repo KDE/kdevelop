@@ -23,19 +23,67 @@
 
 #include "subversion_part.h"
 #include "subversion_widget.h"
+#include <ktextedit.h>
+#include <klocale.h>
+#include <qtoolbutton.h>
+#include <qpushbutton.h>
 
-subversionWidget::subversionWidget(subversionPart *part, QWidget *parent, const char* name)
- : QTextEdit(parent, name)
+subversionWidget::subversionWidget( subversionPart *part, QWidget *parent, const char* name )
+    : KTabWidget(parent)
 {
 	m_part = part;
-	setReadOnly( true );
-#if QT_VERSION >= 0x030100
-	setTextFormat( Qt::LogText );
-#endif
+    m_edit = new KTextEdit( this );
+    m_edit->setReadOnly( TRUE );
+    tab()->addTab( m_edit, i18n("Notification") );
+    m_closeButton = new QPushButton( tab() );
+    m_closeButton->setText( i18n("Close") );
+    tab()->setCornerWidget(m_closeButton);
+    connect( m_closeButton, SIGNAL(clicked()), this, SLOT(closeCurrentTab()) );
 }
 
 subversionWidget::~subversionWidget()
 {}
+
+void subversionWidget::append( QString notifications )
+{
+    if( !m_edit ){
+        // should not happen
+        m_edit = new KTextEdit(this);
+    }
+    m_edit->append( notifications );
+    showPage( m_edit );
+}
+
+void subversionWidget::showLogResult( QValueList<SvnLogHolder> *holderList )
+{
+    SvnLogViewWidget *widget = new SvnLogViewWidget( m_part, this );
+    widget->setLogResult( holderList );
+    tab()->addTab( widget, i18n("Log History") );
+    tab()->setTabEnabled( widget, true );
+    tab()->showPage( widget );
+}
+
+void subversionWidget::showBlameResult( QValueList<SvnBlameHolder> *blamelist )
+{
+    SvnBlameWidget *widget = new SvnBlameWidget( this );
+    widget->copyBlameData( blamelist );
+    tab()->addTab( widget, i18n("Blame") );
+    tab()->setTabEnabled( widget, true );
+    tab()->showPage( widget );
+}
+void subversionWidget::closeCurrentTab()
+{
+    QWidget *current = tab()->currentPage();
+    KTextEdit *edit = static_cast<KTextEdit*>(current);
+    if( edit ){
+        if( edit == m_edit ) // main notification output should not be deleted
+            return;
+    }
+    tab()->removePage( current );
+    delete current;
+}
+
+////////////////////////////////////////////////////////////////////////
 
 SvnIntSortListItem::SvnIntSortListItem( QListView* parent )
 	:QListViewItem(parent)
@@ -53,5 +101,13 @@ int SvnIntSortListItem::compare( QListViewItem *item, int col, bool ascending ) 
 	if( myVal > yourVal ) return 1;
 }
 
+SvnLogViewItem::SvnLogViewItem( QListView * parent )
+    :SvnIntSortListItem( parent )
+{
+    m_pathList = "";
+    m_message = "";
+}
+SvnLogViewItem ::~SvnLogViewItem ()
+{}
 
 #include "subversion_widget.moc"

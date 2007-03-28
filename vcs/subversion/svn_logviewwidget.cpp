@@ -20,17 +20,51 @@
 
 #include "svn_logviewwidget.h"
 #include "subversion_core.h"
-#include <qtextedit.h>
+#include <ktextedit.h>
 #include <klocale.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
 #include <knuminput.h>
 #include <qcheckbox.h>
 
+#include <qsplitter.h>
+#include <qheader.h>
+#include <qlistview.h>
+#include <qlayout.h>
+
 SvnLogViewWidget::SvnLogViewWidget(subversionPart *part, QWidget *parent)
-	:SvnLogViewWidgetBase(parent)
+	:QWidget(parent), m_part(part)
 {
-	m_part = part;
+    m_layout = new QGridLayout( this, 1, 1, 11, 6, "SvnLogViewWidgetBaseLayout");
+
+    splitter1 = new QSplitter( this, "splitter1" );
+    splitter1->setOrientation( QSplitter::Horizontal );
+    splitter1->setMargin(1);
+
+    listView1 = new QListView( splitter1, "listView1" );
+    listView1->addColumn( i18n( "Rev" ) );
+    listView1->addColumn( i18n( "Date" ) );
+    listView1->addColumn( i18n( "Author" ) );
+    listView1->addColumn( i18n( "Comment" ) );
+    QFont listView1_font(  listView1->font() );
+    listView1_font.setPointSize( 9 );
+    listView1->setFont( listView1_font );
+    listView1->setAllColumnsShowFocus( TRUE );
+    listView1->setShowSortIndicator( TRUE );
+
+    textEdit1 = new KTextEdit( splitter1, "textEdit1" );
+    QFont textEdit1_font(  textEdit1->font() );
+    textEdit1_font.setPointSize( 9 );
+    textEdit1->setFont( textEdit1_font );
+    textEdit1->setFocusPolicy( QTextEdit::WheelFocus );
+    textEdit1->setReadOnly( TRUE );
+
+    m_layout->addWidget( splitter1, 0, 0 );
+    m_layout->setMargin(1);
+
+    resize( QSize(692, 343).expandedTo(minimumSizeHint()) );
+    clearWState( WState_Polished );
+    
 	connected = connect( listView1, SIGNAL(clicked( QListViewItem *)), this, SLOT(slotClicked(QListViewItem*)) );
 }
 SvnLogViewWidget::~SvnLogViewWidget()
@@ -58,14 +92,7 @@ void SvnLogViewWidget::setLogResult( QValueList<SvnLogHolder> *loglist )
 		item->m_pathList = holder.pathList;
 		item->m_message = holder.logMsg;
 	}
-	this->listView1->show();
-}
-
-void SvnLogViewWidget::append(QString txt)
-{
-	this->textEdit1->clear();// todo eventually, notification message and log history will be maintained separately.
-	this->textEdit1->append(txt);
-	this->listView1->hide();
+// 	this->listView1->show();
 }
 
 void SvnLogViewWidget::slotClicked( QListViewItem *oneItem )
@@ -77,15 +104,6 @@ void SvnLogViewWidget::slotClicked( QListViewItem *oneItem )
 	textEdit1->append( "\n\n" );
 	textEdit1->append( item->m_message + "\n" );
 }
-
-SvnLogViewItem::SvnLogViewItem( QListView * parent )
-	:SvnIntSortListItem( parent )
-{
-	m_pathList = "";
-	m_message = "";
-}
-SvnLogViewItem ::~SvnLogViewItem ()
-{}
 
 SvnLogViewOptionDlg::SvnLogViewOptionDlg( QWidget *parent, const char* name, bool modal, WFlags f )
 : SvnLogViewOptionDlgBase( parent, name, modal,f )

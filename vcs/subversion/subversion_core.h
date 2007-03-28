@@ -45,8 +45,8 @@ public:
 
   subversionCore(subversionPart *part);
   ~subversionCore();
-//	subversionWidget *processWidget() const;
-	SvnLogViewWidget *processWidget() const;
+	subversionWidget *processWidget() const;
+// 	SvnLogViewWidget *processWidget() const;
 	void update( const KURL::List&);
 	void commit( const KURL::List&, bool recurse, bool keeplocks );
 	void svnLog( const KURL::List& list,
@@ -76,7 +76,7 @@ signals:
 
 private:
 
-// 	QGuardedPtr<subversionWidget> m_widget;
+	QGuardedPtr<subversionWidget> m_widget;
 	subversionPart *m_part;
 	QString wcPath;
 	SVNFileInfoProvider *m_fileInfoProvider;
@@ -84,7 +84,7 @@ private:
 	// be nice about tmp diff files: delete all of them when exiting.
 	KTempDir* diffTmpDir;
 
-	QGuardedPtr<SvnLogViewWidget> m_logViewWidget;
+// 	QGuardedPtr<SvnLogViewWidget> m_logViewWidget;
 	QValueList<SvnLogHolder> holderList;
 	QValueList<SvnBlameHolder> blameList;
 // 	QMap<unsigned int, SvnBlameHolder> blameList;

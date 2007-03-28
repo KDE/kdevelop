@@ -20,25 +20,44 @@
 #ifndef __SUBVERSION_WIDGET_H__
 #define __SUBVERSION_WIDGET_H__
 
-#include <qtextedit.h>
 #include <qlistview.h>
+#include "svn_blamewidget.h"
+#include "svn_logviewwidget.h"
+#include <qvaluelist.h>
 
 class subversionPart;
+#include <ktabwidget.h>
+#include <qguardedptr.h>
+class KTextEdit;
+class SvnLogHolder;
+class SvnBlameHolder;
+class SvnLogViewWidget;
+class QToolButton;
+class QPushButton;
 
-/**
- * Not used anymore. Once used to display output message. Now SvnLogViewWidget handles these messages
-*/
-class subversionWidget : public QTextEdit
+/** The main Subversion DockWidget. Contains logview-output, blame-output, status and etc */
+// class subversionWidget : public SvnOutputWidgetBase
+class subversionWidget : public KTabWidget
 {
-  Q_OBJECT
-    
+    Q_OBJECT
 public:
-		  
-  subversionWidget(subversionPart *part, QWidget *parent, const char* name);
-  ~subversionWidget();
+    subversionWidget(subversionPart *part, QWidget *parent, const char* name);
+    ~subversionWidget();
+
+    // append what?. Append any text status outputs
+    void append( QString notifications );
+    void showLogResult( QValueList<SvnLogHolder> *holderList );
+    void showBlameResult( QValueList<SvnBlameHolder> *blamelist );
+
+protected slots:
+    void closeCurrentTab();
 
 private:
+    KTabWidget* tab(){ return this; }
 	subversionPart *m_part;
+    
+    QGuardedPtr<KTextEdit> m_edit;
+    QPushButton *m_closeButton;
 
 };
 /**
@@ -51,6 +70,15 @@ public:
 	/** Returns < 0 if this item is less than i, 0 if they are equal and > 0 if this item is greater than i. 
 	 */
 	virtual int compare( QListViewItem* i, int col, bool ascending ) const;
+};
+
+class SvnLogViewItem : public SvnIntSortListItem {
+    public:
+        SvnLogViewItem( QListView* parent );
+        ~SvnLogViewItem();
+
+        QString m_pathList;
+        QString m_message;
 };
 
 #endif
