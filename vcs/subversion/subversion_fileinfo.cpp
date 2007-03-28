@@ -62,12 +62,12 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		rPath += QDir::separator() + dirPath;
 		kdDebug(9036) << "DIR : " << rPath << " " << KURL( QFileInfo( rPath ).absFilePath() ) << endl;
 
-		s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << true << true; //original line
+// 		s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << true << true; //original line
 
 		// Dukju Ahn: if checkRepos is set, status() accesses remote repository,
 		// which causes significant delaym_owner especially when network speed is not fast enough.
 		// Of course, the user cannot get information about the out-of-dateness of his local copy.
-// 		s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << false/*checkRepos*/ << true /*fullRecurse*/;
+		s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << false/*checkRepos*/ << true /*fullRecurse*/;
 
 		KIO::SimpleJob *job2 = KIO::special(servURL, parms, false);
 		job2->setWindow( m_part->mainWindow()->main() );
@@ -90,6 +90,17 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		for ( it = begin; it != end; ) {
 			kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
 			if ( rx.search( *it ) == -1 ) return m_cachedDirEntries; // something is wrong ! :)
+            /* if some notification comes here, consume these notification metadatas */
+            if ( rx.cap( 2 ) == "action" ){
+                curIdx = lastIdx = rx.cap( 1 ).toInt();
+                while ( curIdx == lastIdx ){
+                    ++it;
+                    if ( it == end ) break;
+                    if ( rx.search( *it ) == -1 ) continue; // something is wrong
+                    curIdx = rx.cap( 1 ).toInt();
+                }
+                continue;
+            }
 			curIdx = lastIdx = rx.cap( 1 ).toInt();
 			while ( curIdx == lastIdx ) {
 				if ( rx.cap( 2 ) == "path" )
@@ -105,6 +116,8 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 				else if ( rx.cap( 2	 ) == "rev" )
 					rev = ma[ *it ].toLong();
 				++it;
+                if ( it == end )
+                    break;
 				if ( rx.search( *it ) == -1 ) break; // something is wrong ! :)
 				curIdx = rx.cap( 1 ).toInt();
 			}
@@ -159,6 +172,17 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 	for ( it = begin; it != end; ) {
 		kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
 		if ( rx.search( *it ) == -1 ) return; // something is wrong ! :)
+        /* if some notification comes here, consume these notification metadatas */
+        if ( rx.cap( 2 ) == "action" ){
+            curIdx = lastIdx = rx.cap( 1 ).toInt();
+            while ( curIdx == lastIdx ){
+                ++it;
+                if ( it == end ) break;
+                if ( rx.search( *it ) == -1 ) continue; // something is wrong
+                curIdx = rx.cap( 1 ).toInt();
+            }
+            continue;
+        }
 		curIdx = lastIdx = rx.cap( 1 ).toInt();
 		while ( curIdx == lastIdx ) {
 			if ( rx.cap( 2 ) == "path" )
@@ -174,6 +198,8 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 			else if ( rx.cap( 2	 ) == "rev" )
 				rev = ma[ *it ].toLong();
 			++it;
+            if ( it == end )
+                break;
 			if ( rx.search( *it ) == -1 ) break; // something is wrong ! :)
 			curIdx = rx.cap( 1 ).toInt();
 		}
@@ -185,10 +211,10 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 }
 
 void SVNFileInfoProvider::slotStatus( const QString& path,int text_status, int prop_status,int repos_text_status, int repos_prop_status, long int rev) {
-	kdDebug(9036) << "##################################################################################### svn provider : slotstatus"
-		<< " path " << path << " text_status " << text_status << " prop_status " << prop_status << " repos_text_status " << repos_text_status
-		<< " repos_prop_status " << repos_prop_status << " rev " << rev
-		<< endl;
+// 	kdDebug(9036) << "##################################################################################### svn provider : slotstatus"
+// 		<< " path " << path << " text_status " << text_status << " prop_status " << prop_status << " repos_text_status " << repos_text_status
+// 		<< " repos_prop_status " << repos_prop_status << " rev " << rev
+// 		<< endl;
 
 	if ( !m_cachedDirEntries )
 		m_cachedDirEntries = new VCSFileInfoMap;

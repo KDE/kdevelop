@@ -61,7 +61,8 @@ SVNFileSelectDlgCommit::SVNFileSelectDlgCommit( KURL::List &urls, subversionPart
 		if (fileInfo.isFile()){
 			KURL base_url( part->project()->projectDirectory()+"/" );
 			QString dirPath = KURL::relativeURL( base_url, fileInfo.dirPath(TRUE) );
-			vcsMap = ((SVNFileInfoProvider*)part->fileInfoProvider()) -> statusExt(dirPath, false, true, false, false);
+			vcsMap = ((SVNFileInfoProvider*)part->fileInfoProvider()) ->
+                    statusExt(dirPath, false/*repository access*/, true/*recurse*/, false/*getall*/, true/*noIgnore*/);
 			vcsInfo = (*vcsMap)[fileInfo.fileName()];
 			if( vcsInfo.state == VCSFileInfo::Added || vcsInfo.state == VCSFileInfo::Modified ||
 				vcsInfo.state == VCSFileInfo::Deleted || vcsInfo.state == VCSFileInfo::Replaced ){
@@ -78,7 +79,8 @@ SVNFileSelectDlgCommit::SVNFileSelectDlgCommit( KURL::List &urls, subversionPart
 		else if (fileInfo.isDir()){
 			KURL base_url( part->project()->projectDirectory()+"/" );
 			QString dirPath = KURL::relativeURL( base_url, fileInfo.absFilePath() );
-			vcsMap = ((SVNFileInfoProvider*)part->fileInfoProvider())->statusExt( dirPath, false, true, false, false );
+            vcsMap = ((SVNFileInfoProvider*)part->fileInfoProvider()) ->
+                    statusExt(dirPath, false/*repository access*/, true/*recurse*/, false/*getall*/, true/*noIgnore*/);
 			for (VCSFileInfoMap::ConstIterator it=vcsMap->begin(); it!=vcsMap->end(); ++it){
 				
 				vcsInfo = it.data();
@@ -86,7 +88,7 @@ SVNFileSelectDlgCommit::SVNFileSelectDlgCommit( KURL::List &urls, subversionPart
 				QString absPathStr( fileInfo.filePath() + "/" + it.key() );
 				KURL urlFromStatus( absPathStr );
 				if( vcsInfo.state == VCSFileInfo::Added || vcsInfo.state == VCSFileInfo::Modified ||
-					vcsInfo.state == VCSFileInfo::Deleted ){
+                    vcsInfo.state == VCSFileInfo::Deleted || vcsInfo.state == VCSFileInfo::Replaced){
 
 					this->insertItem( VCSFileInfo::state2String( vcsInfo.state ), urlFromStatus );
 					

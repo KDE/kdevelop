@@ -131,8 +131,8 @@ void subversionCore::resolve( const KURL::List& list ) {
 void subversionCore::update( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
 	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
-	if ( ! servURL.protocol().startsWith( "svn" ) ) {
-		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
@@ -303,7 +303,7 @@ void subversionCore::blame( const KURL &url, bool repositBlame, int revstart, QS
 void subversionCore::add( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
 	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
-	if ( ! servURL.protocol().startsWith( "svn" ) ) {
+	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
 		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
@@ -369,7 +369,7 @@ void subversionCore::checkout() {
 		int cmd = 1;
 		int rev = -1;
 		s << cmd << servURL << KURL( wcPath ) << rev << QString( "HEAD" );
-		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
 		SimpleJob * job = KIO::special(servURL,parms, true);
 		job->setWindow( m_part->mainWindow()->main() );
 		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotEndCheckout( KIO::Job * ) ) );
@@ -385,9 +385,17 @@ void subversionCore::slotEndCheckout( KIO::Job * job ) {
 }
 
 void subversionCore::slotResult( KIO::Job * job ) {
-	if ( job->error() )
-		job->showErrorDialog( m_part->mainWindow()->main() );
-	KIO::MetaData ma = job->metaData();
+    if ( job->error() ){
+        job->showErrorDialog( m_part->mainWindow()->main() );
+        if( job->error() == ERR_CANNOT_LAUNCH_PROCESS )
+            KMessageBox::error( m_part->mainWindow()->main(),
+                                i18n("If you just have installed new version of KDevelop,"
+                                     " and if the error message was unknown protocol kdevsvn+*,"
+                                     " try to restart KDE"
+                                    ) );
+        return;
+    }
+    KIO::MetaData ma = job->metaData();
 	QValueList<QString> keys = ma.keys();
 	qHeapSort( keys );
 	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
@@ -408,6 +416,12 @@ void subversionCore::slotLogResult( KIO::Job * job )
 {
 	if ( job->error() ){
 		job->showErrorDialog( m_part->mainWindow()->main() );
+        if( job->error() == ERR_CANNOT_LAUNCH_PROCESS )
+            KMessageBox::error( m_part->mainWindow()->main(),
+                                i18n("If you just have installed new version of KDevelop,"
+                                    " and if the error message was unknown protocol kdevsvn+*,"
+                                    " try to restart KDE"
+                                    ) );
 		return;
 	}
 
@@ -457,10 +471,16 @@ void subversionCore::slotLogResult( KIO::Job * job )
 
 void subversionCore::slotBlameResult( KIO::Job * job )
 {
-	if ( job->error() ){
-		job->showErrorDialog( m_part->mainWindow()->main() );
-		return;
-	}
+    if ( job->error() ){
+        job->showErrorDialog( m_part->mainWindow()->main() );
+        if( job->error() == ERR_CANNOT_LAUNCH_PROCESS )
+            KMessageBox::error( m_part->mainWindow()->main(),
+                                i18n("If you just have installed new version of KDevelop,"
+                                     " and if the error message was unknown protocol kdevsvn+*,"
+                                     " try to restart KDE"
+                                    ) );
+        return;
+    }
 	blameList.clear();
 
 	KIO::MetaData ma = job->metaData();
