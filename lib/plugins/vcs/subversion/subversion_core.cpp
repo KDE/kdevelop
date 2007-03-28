@@ -97,8 +97,9 @@ svn_error_t* SvnBlameJob::blameReceiver( void *baton, apr_int64_t line_no, svn_r
     holder.contents = line;
 
     job->m_blameList << holder;
-     
+    return 0;     
 }
+
 void SvnBlameJob::notify( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool )
 {
     SvnBlameJob *job = (SvnBlameJob*) baton;

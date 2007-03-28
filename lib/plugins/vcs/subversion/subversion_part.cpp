@@ -117,6 +117,7 @@ KDevSubversionPart::~KDevSubversionPart()
 bool KDevSubversionPart::statusASync( const KUrl &dirPath, KDevelop::IVersionControl::WorkingMode mode,  const QList<KDevelop::VcsFileInfo> &map )
 {
     //TODO
+    return false;
 }
 void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
 {
