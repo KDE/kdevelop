@@ -23,6 +23,8 @@ Boston, MA 02110-1301, USA.
 */
 #include "iplugincontroller.h"
 
+#include <QtDesigner/QExtensionManager>
+
 #include <kservicetypetrader.h>
 #include "iplugin.h"
 
@@ -37,6 +39,15 @@ IPluginController::IPluginController( QObject* parent )
 
 IPluginController::~IPluginController()
 {
+}
+
+template<class Extension> Extension* IPluginController::extensionForPlugin( const QString &extension, const QString &pluginname)
+{
+    IPlugin *plugin = pluginForExtension(extension, pluginname);
+    if (plugin)
+        return plugin->extension<Extension*>();
+    else
+        return 0L;
 }
 
 KPluginInfo::List IPluginController::query( const QString &serviceType,

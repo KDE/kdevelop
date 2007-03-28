@@ -73,7 +73,8 @@ public:
     /**
      * @brief Unloads the plugin specified by @p plugin
      *
-     * @param plugin The name of the plugin as specified by the
+     * @param plugin The name of the pl#include <QtDesigner/QExtensionManager>
+    ugin as specified by the
      * X-KDE-PluginInfo-Name key of the .desktop file for the plugin
      */
     virtual void unloadPlugin( const QString & plugin ) = 0;
@@ -98,6 +99,19 @@ public:
     virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginname = "" ) = 0;
 
     virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints) = 0;
+    
+     /**
+     * Queries for the plugin which supports given extension interface and returns a pointer to the extension interface.
+     * This is the difference between this method and pluginForExtension, what returns the plugin itself.
+     * All already loaded plugins will be queried and the first one to support the extension interface
+     * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
+     * required in .desktop file for that plugin.
+     * @param extension The extension interface
+     * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
+     * @return Pointer to the extension interface or 0 if no plugin supports it
+      */
+    template<class Extension> Extension* extensionForPlugin( const QString &extension, const QString &pluginname);
+
 
     /**
      * Queries KDevelop services. Version is checked automatically
