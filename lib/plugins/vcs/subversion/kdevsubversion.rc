@@ -8,6 +8,8 @@
     <Action name="svn_update" />
     <Action name="svn_log" />
     <Action name="svn_blame" />
+    <Action name="svn_status_sync" />
+    <Action name="svn_status_async" />
   </Menu>
 </MenuBar>
 </kpartgui>

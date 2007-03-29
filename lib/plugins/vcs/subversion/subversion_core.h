@@ -20,7 +20,6 @@
 // using namespace ThreadWeaver;
 
 class KDevSubversionPart;
-class SvnFileInfoProvider;
 class KDevSubversionView;
 class KUrl::List;
 class SvnLogHolder;
@@ -41,6 +40,11 @@ class SubversionJob;
 #define SVNLOGIN_IDPWDPROMPT         ( (QEvent::Type)15150 )
 #define SVNLOGIN_SERVERTRUSTPROMPT   ( (QEvent::Type)15151 )
 #define SVNCOMMIT_LOGMESSAGEPROMPT   ( (QEvent::Type)15160 )
+
+namespace SubversionUtils
+{
+    svn_opt_revision_t createRevision( long int revision, const QString& revkind );
+};
 
 class SvnNotificationEvent : public QEvent {
 public:
@@ -121,19 +125,71 @@ public:
     QString m_message;
 };
 ///////////////////////////////////////////////////////
-class SubversionJob : public /*ThreadWeaver::Job*/ QThread
+/** @class SvnJobBase base class for all subversion job (both for sync and async)
+ *  Provides basic subversion library initialization. Also provides job status setters/getters
+ */
+class SvnJobBase
+{
+public:
+    SvnJobBase( int type );
+    virtual ~SvnJobBase();
+
+    QString errorMsg();
+    bool wasSuccessful() { return m_success; }
+    int type() { return m_type; }
+    
+protected:
+    /// use svn_strerror(apr_err, buf, bufsize) to obtain detailed error message
+    /// @sa svn_error.h
+    void setErrorMsgExt( svn_error_t *err )
+    {
+        m_aprErr = err->apr_err;
+        m_errMsg = QString::fromLocal8Bit(err->message);
+    }
+    void setErrorMsg( QString msg ) { m_errMsg = msg; }
+    void setSuccessful( bool success ) { m_success = success; }
+    int m_type;
+    bool m_success;
+    QString m_errMsg;
+    apr_status_t m_aprErr;
+    
+    svn_client_ctx_t *ctx;
+    apr_pool_t *pool;
+};
+
+/// @class SubversionSyncJob base classes for Sync (blocking) jobs.
+/// Provides authentication routines suitable for blocking jobs.
+class SubversionSyncJob : public SvnJobBase
+{
+public:
+    SubversionSyncJob( int type );
+    virtual ~SubversionSyncJob();
+
+    static svn_error_t* displayLoginDialog(
+            svn_auth_cred_simple_t **cred, void *baton, const char *realm,
+            const char *username, svn_boolean_t may_save, apr_pool_t *pool);
+    static svn_error_t* trustSSLPrompt (svn_auth_cred_ssl_server_trust_t **cred_p,
+                                        void *baton,
+                                        const char *realm,
+                                        apr_uint32_t failures,
+                                        const svn_auth_ssl_server_cert_info_t *ci,
+                                        svn_boolean_t may_save,
+                                        apr_pool_t *pool);
+    
+protected:
+    void initNotifier(svn_wc_notify_func2_t notifyCallback);
+};
+
+/// @class SubversionJob base classes for ASync Jobs
+/// 1. provides authentication routines suitable for multi-thread jobs.
+/// 2. emits signal finished(SubversionJob*) with its pointer
+class SubversionJob : public QThread, public SvnJobBase
 {
     Q_OBJECT
 public:
     SubversionJob( int actionType, QObject *parent = 0 );
     virtual ~SubversionJob();
 
-    QString errorMsg();
-    bool wasSuccessful() { return m_success; }
-    int type() { return m_type; }
-    
-    svn_opt_revision_t createRevision( long int revision, const QString& revkind );
-//                                        apr_pool_t *pool );
     static svn_error_t* displayLoginDialog(
             svn_auth_cred_simple_t **cred, void *baton, const char *realm,
             const char *username, svn_boolean_t may_save, apr_pool_t *pool);
@@ -152,26 +208,9 @@ protected Q_SLOTS:
     void slotFinished();
     
 protected:
-    virtual void run() = 0;
     void initNotifier(svn_wc_notify_func2_t notifyCallback);
-    /// @param apr_err: error code.
-    /// @param msg: simplified error message 
-    /// use svn_strerror(apr_err, buf, bufsize) to obtain detailed error message
-    /// @sa svn_error.h
-    void setErrorMsgExt( svn_error_t *err )
-    {
-        m_aprErr = err->apr_err;
-        m_errMsg = QString::fromLocal8Bit(err->message);
-    }
-    void setErrorMsg( QString msg ) { m_errMsg = msg; }
-    void setSuccessful( bool success ) { m_success = success; }
-    int m_type;
-    bool m_success;
-    QString m_errMsg;
-    apr_status_t m_aprErr;
-    
-    svn_client_ctx_t *ctx;
-    apr_pool_t *pool;
+    virtual void run() = 0;
+
 };
 
 class SvnBlameJob : public SubversionJob {
@@ -282,6 +321,18 @@ protected:
     bool m_recurse, m_getAll, m_update, m_noIgnore, m_ignoreExternals;
 };
 
+class SvnStatusSyncJob : public SubversionSyncJob
+{
+public:
+    SvnStatusSyncJob( int type );
+    QList<SvnStatusHolder>& statusExec( const KUrl &wcPath, long rev, QString revKind,
+                    bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals);
+
+    static void statusReceiver( void *baton, const char *path, svn_wc_status2_t *status );
+    
+    QList<SvnStatusHolder> m_holderList;
+};
+
 class SvnAddJob : public SubversionJob
 {
 public:
@@ -366,7 +417,7 @@ public:
                         bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
     void spawnBlameThread( const KUrl &url, bool repositBlame,
                     int revstart, QString revKindStart, int revend, QString revKindEnd );
-    void spawnStatusThread( const KUrl &wcPath, long rev, QString revKind,
+    const SvnStatusJob* spawnStatusThread( const KUrl &wcPath, long rev, QString revKind,
                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals );
     
 protected Q_SLOTS:    
@@ -383,7 +434,6 @@ protected:
     
 private:
     KDevSubversionPart *m_part;
-    SvnFileInfoProvider *m_fileInfoProvider;
     KDevSubversionView *m_view;
     
     QList <SubversionJob*> m_threadList; // list of RUNNING threads

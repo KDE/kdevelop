@@ -1,6 +1,8 @@
 #include "subversion_part.h"
 #include "subversion_view.h"
 #include "subversion_fileinfo.h"
+#include "svn_models.h"
+#include <svn_wc.h>
 
 #include <iuicontroller.h>
 #include <icore.h>
@@ -45,6 +47,10 @@ public:
     KUrl m_ctxUrl;
 //     QPointer<SvnFileInfoProvider> m_infoProvider;
 //     SvnFileInfoProvider *m_infoProvider;
+    QList<KDevelop::VcsFileInfo> m_vcsInfoList;
+    QMap< SvnStatusJob*, QList<KDevelop::VcsFileInfo> > m_fileInfoMap;
+    QList<KDevelop::VcsFileInfo> asyncStatusList;
+
 };
 
 /** Design: One part can have many Views. One View has its own core.
@@ -61,7 +67,8 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     core()->uiController()->addToolView("Subversion", d->m_factory);
     // init svn core
     d->m_impl = new SubversionCore(this, this);
-//     d->m_infoProvider = new SvnFileInfoProvider(this);
+    // for now, used to signal statusReady(QList<VcsFileInfo>&)
+    connect( d->m_impl, SIGNAL(jobFinished( SubversionJob* )), this, SLOT(slotJobFinished( SubversionJob * )) );
 
     setXMLFile("kdevsubversion.rc");
 
@@ -100,6 +107,14 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action->setText(i18n("Show Blame (annotate)..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(blame()));
 
+    action = actionCollection()->addAction("svn_status_sync");
+    action->setText(i18n("Show status with blocking mode"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(statusSync()));
+
+    action = actionCollection()->addAction("svn_status_async");
+    action->setText(i18n("Show status with non-blocking mode"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(statusASync()));
+
     // init context menu
 //     connect( ((UiController*)(core()->uiController()))->defaultMainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
 //             this, SLOT(contextMenu(KMenu *, const Context *)));
@@ -114,10 +129,58 @@ KDevSubversionPart::~KDevSubversionPart()
 //     delete d->m_infoProvider;
     delete d;
 }
-bool KDevSubversionPart::statusASync( const KUrl &dirPath, KDevelop::IVersionControl::WorkingMode mode,  const QList<KDevelop::VcsFileInfo> &map )
+
+const QList<KDevelop::VcsFileInfo>& KDevSubversionPart::statusSync( const KUrl &dirPath,
+                                                    KDevelop::IVersionControl::WorkingMode mode )
 {
-    //TODO
+    d->m_vcsInfoList.clear();
+    
+    SvnStatusSyncJob *job = new SvnStatusSyncJob( SVN_STATUS );
+    bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
+    QList<SvnStatusHolder> &holder = job->statusExec( dirPath, -1, "WORKING", recurse, true, false, true, false );
+
+    for( QList<SvnStatusHolder>::iterator it = holder.begin(); it != holder.end(); ++it ){
+        // get revision. 
+        QString rev = QString::number( (*it).baseRevision );
+        // get status
+        KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
+        
+        SvnStatusHolder hold = (*it); // debug
+        kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
+        kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
+                
+        // get status -- working copy 
+        if( (*it).textStatus == svn_wc_status_normal
+            && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
+            // text status always exist if under VC. but in most cases, property value may not exist
+            state = KDevelop::VcsFileInfo::Uptodate;
+        else if( (*it).textStatus == svn_wc_status_added || (*it).propStatus == svn_wc_status_added )
+            state = KDevelop::VcsFileInfo::Added;
+        else if( (*it).textStatus == svn_wc_status_modified || (*it).propStatus == svn_wc_status_modified )
+            state = KDevelop::VcsFileInfo::Modified;
+        else if( (*it).textStatus == svn_wc_status_conflicted || (*it).propStatus == svn_wc_status_conflicted )
+            state = KDevelop::VcsFileInfo::Conflict;
+        else if( (*it).textStatus == svn_wc_status_deleted || (*it).propStatus == svn_wc_status_deleted )
+            state = KDevelop::VcsFileInfo::Deleted;
+        else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
+            state = KDevelop::VcsFileInfo::Replaced;
+        
+        KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
+        d->m_vcsInfoList.append( vcsInfo );
+    }
+    delete job;
+    return d->m_vcsInfoList;
     return false;
+}
+bool KDevSubversionPart::statusASync( const KUrl &dirPath,
+                                      KDevelop::IVersionControl::WorkingMode mode,
+                                      const QList<KDevelop::VcsFileInfo> &infos )
+{
+    bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
+    const SvnStatusJob *job;
+    job = d->m_impl->spawnStatusThread( dirPath, -1, "HEAD", recurse, true, true, true, false );
+    d->m_fileInfoMap.insert( (SvnStatusJob*)job, infos );
+    return true;
 }
 void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
 {
@@ -160,7 +223,7 @@ void KDevSubversionPart::annotate( const KUrl &path_or_url )
     d->m_impl->spawnBlameThread(path_or_url, true,  0, "", -1, "HEAD" );
 }
 
-const KUrl& KDevSubversionPart::urlFocusedDocument()
+const KUrl KDevSubversionPart::urlFocusedDocument()
 {
     KParts::ReadOnlyPart *part =
             dynamic_cast<KParts::ReadOnlyPart*>( core()->partManager()->activePart() );
@@ -238,6 +301,28 @@ void KDevSubversionPart::blame()
         KMessageBox::error(NULL, "No active docuement to view blame" );
     }
 }
+void KDevSubversionPart::statusSync()
+{
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
+        const QList<KDevelop::VcsFileInfo> &vcsList = statusSync( activeUrl, KDevelop::IVersionControl::Recursive );
+        for( QList<KDevelop::VcsFileInfo>::const_iterator it = vcsList.constBegin(); it != vcsList.constEnd(); ++it ){
+            // TODO print to GUI
+            kDebug() << (*it).toString() << endl;
+        }
+    } else{
+        KMessageBox::error(NULL, "No active docuement to view status" );
+    }
+}
+void KDevSubversionPart::statusASync()
+{
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
+        statusASync( activeUrl, KDevelop::IVersionControl::Recursive, d->asyncStatusList );
+    } else{
+        KMessageBox::error(NULL, "No active docuement to view status" );
+    }
+}
 //////////////////////////////////////////////
 void KDevSubversionPart::ctxLogView()
 {
@@ -249,7 +334,61 @@ SubversionCore* KDevSubversionPart::svncore()
 {
     return d->m_impl;
 }
+//////////////////////////////////////////////
+void KDevSubversionPart::slotJobFinished( SubversionJob *job )
+{
+    switch( job->type() ){
+        case SVN_STATUS:{
+            if( !job->wasSuccessful() ){
+                KMessageBox::error(NULL, job->errorMsg());
+                break;
+            }
+            SvnStatusJob *statusJob = (SvnStatusJob*)job;
+            QList<KDevelop::VcsFileInfo> infos = d->m_fileInfoMap.value( statusJob );
 
+            for( QList<SvnStatusHolder>::iterator it = statusJob->m_holderList.begin() ;
+                 it != statusJob->m_holderList.end() ;
+                 ++it ) {
+                SvnStatusHolder hold = (*it); // debug
+                kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
+                kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
+                // get revision. 
+                QString rev = QString::number( (*it).baseRevision );
+                
+                KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
+                // get status -- working copy first
+                if( (*it).textStatus == svn_wc_status_normal
+                    && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
+                    // text status always exist if under VC. but in most cases, property value may not exist
+                    state = KDevelop::VcsFileInfo::Uptodate;
+                else if( (*it).textStatus == svn_wc_status_added || (*it).propStatus == svn_wc_status_added )
+                    state = KDevelop::VcsFileInfo::Added;
+                else if( (*it).textStatus == svn_wc_status_modified || (*it).propStatus == svn_wc_status_modified )
+                    state = KDevelop::VcsFileInfo::Modified;
+                else if( (*it).textStatus == svn_wc_status_conflicted || (*it).propStatus == svn_wc_status_conflicted )
+                    state = KDevelop::VcsFileInfo::Conflict;
+                else if( (*it).textStatus == svn_wc_status_deleted || (*it).propStatus == svn_wc_status_deleted )
+                    state = KDevelop::VcsFileInfo::Deleted;
+                else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
+                    state = KDevelop::VcsFileInfo::Replaced;
+                // get status -- override the previous result if remote repository is modified
+                if( (*it).reposTextStat == svn_wc_status_added || (*it).reposTextStat == svn_wc_status_modified
+                    || (*it).reposPropStat == svn_wc_status_modified )
+                    state = KDevelop::VcsFileInfo::NeedsPatch;
+                
+                // TODO retrive repository revision. Set workingcopy and reposit revision same for a moment
+                KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
+                infos.append( vcsInfo );
+            }
+            
+            emit statusReady( infos );
+            d->m_fileInfoMap.remove( statusJob );
+            break;
+        } //end of case SVN_STATUS
+        default:
+            break;
+    };
+}
 #include "subversion_part.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

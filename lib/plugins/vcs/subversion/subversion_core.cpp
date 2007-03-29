@@ -27,6 +27,36 @@
 
 // using namespace ThreadWeaver;
 
+namespace SubversionUtils
+{
+svn_opt_revision_t createRevision( long int revision, const QString& revkind )
+{
+    svn_opt_revision_t result/*,endrev*/;
+
+    if ( revision != -1 ) {
+        result.value.number = revision;
+        result.kind = svn_opt_revision_number;
+    } else if ( revkind == "WORKING" ) {
+        result.kind = svn_opt_revision_working;
+    } else if ( revkind == "BASE" ) {
+        result.kind = svn_opt_revision_base;
+    } else if ( revkind == "HEAD" ) {
+        result.kind = svn_opt_revision_head;
+    } else if ( revkind == "COMMITTED" ) {
+        result.kind = svn_opt_revision_committed;
+    } else if ( revkind == "PREV" ) {
+        result.kind = svn_opt_revision_previous;
+    }
+
+//  else if ( !revkind.isNull() ) {
+//     svn_opt_parse_revision(&result,&endrev,revkind.toUtf8(),pool);
+    else {
+        result.kind = svn_opt_revision_unspecified;
+    }
+    return result;
+}
+}; // end of namespace SubversionCore
+
 SvnBlameJob::SvnBlameJob(  KUrl path_or_url,
                            bool reposit,
                            long int startRev, QString startRevStr,
@@ -35,8 +65,8 @@ SvnBlameJob::SvnBlameJob(  KUrl path_or_url,
     : SubversionJob( actionType, parent )
      ,m_repositBlame(reposit)
 {
-    m_startRev = createRevision( startRev, startRevStr );
-    m_endRev = createRevision( endRev, endRevStr );
+    m_startRev = SubversionUtils::createRevision( startRev, startRevStr );
+    m_endRev = SubversionUtils::createRevision( endRev, endRevStr );
     m_pathOrUrl = path_or_url;
 }
 SvnBlameJob::~SvnBlameJob()
@@ -138,9 +168,14 @@ void SvnLogviewJob::run()
     setTerminationEnabled(true);
     apr_pool_t *subpool = svn_pool_create (pool);
     
-    // TODO HEAD:1 was removed from SVN API 1.2, instead callers should specify HEAD:0
-    svn_opt_revision_t rev1 = createRevision( revstart, revkindstart/*, subpool */);
-    svn_opt_revision_t rev2 = createRevision( revend, revkindend/*, subpool*/ );
+    svn_opt_revision_t rev1, rev2;
+    if( revkindstart == "HEAD" || revend == 1 ){
+        rev1 = SubversionUtils::createRevision( -1, "HEAD" );
+        rev2 = SubversionUtils::createRevision( 0, "" );
+    } else {
+        rev1 = SubversionUtils::createRevision( revstart, revkindstart );
+        rev2 = SubversionUtils::createRevision( revend, revkindend );
+    }
     
     apr_array_header_t *targets = apr_array_make(subpool, 1+urls.count(), sizeof(const char *));
 
@@ -322,7 +357,7 @@ void SvnStatusJob::run()
 
 //     recordCurrentURL( nurl );
 
-    svn_opt_revision_t rev = createRevision( m_rev, m_revKind );
+    svn_opt_revision_t rev = SubversionUtils::createRevision( m_rev, m_revKind );
 
 //     initNotifier( SvnStatusJob::statusCallback );
 
@@ -351,6 +386,67 @@ void SvnStatusJob::statusReceiver( void *baton, const char *path, svn_wc_status2
     if( !status || !baton ) return;
     
     SvnStatusJob *job = (SvnStatusJob*) baton;
+    SvnStatusHolder holder;
+
+    holder.wcPath = QString::fromUtf8( path );
+    if( status->entry ){
+        holder.entityName = status->entry->name;
+        holder.baseRevision = status->entry->revision;
+        holder.nodeKind = status->entry->kind; // absent, file, dir, unknown
+    }
+    holder.textStatus = status->text_status;
+    holder.propStatus = status->prop_status;
+    holder.locked = status->locked;
+    holder.copied = status->copied;
+    holder.switched = status->switched;
+    holder.reposTextStat = status->repos_text_status;
+    holder.reposPropStat = status->repos_prop_status;
+
+    job->m_holderList << holder;
+}
+
+SvnStatusSyncJob::SvnStatusSyncJob( int type )
+    : SubversionSyncJob( type )
+{
+}
+
+QList<SvnStatusHolder>& SvnStatusSyncJob::statusExec( const KUrl &wcPath, long rev, QString revKind,
+                                                    bool recurse, bool getAll, bool update,
+                                                    bool noIgnore, bool ignoreExternals)
+{
+    apr_pool_t *subpool = svn_pool_create(pool);
+    svn_revnum_t result_rev;
+
+    svn_opt_revision_t rev_t = SubversionUtils::createRevision( rev, revKind );
+
+//     initNotifier( SvnStatusSyncJob::statusReceiver );
+
+    svn_error_t *err = svn_client_status2( &result_rev,
+                                            svn_path_canonicalize( wcPath.path().toUtf8(), subpool ),
+                                            &rev_t,
+                                            SvnStatusSyncJob::statusReceiver,
+                                            this,
+                                            recurse, getAll, update,
+                                            noIgnore, ignoreExternals,
+                                            ctx, subpool );
+
+    if ( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy( subpool );
+        this->m_holderList.clear();
+        return this->m_holderList;
+    }
+    
+    svn_pool_destroy(subpool);
+    setSuccessful(true);
+    return this->m_holderList;
+}
+
+void SvnStatusSyncJob::statusReceiver( void *baton, const char *path, svn_wc_status2_t *status )
+{
+    if( !status || !baton ) return;
+    
+    SvnStatusSyncJob *job = (SvnStatusSyncJob*) baton;
     SvnStatusHolder holder;
 
     holder.wcPath = QString::fromUtf8( path );
@@ -464,7 +560,7 @@ SvnUpdateJob::SvnUpdateJob( const KUrl::List &wcPaths, long int rev, QString rev
     , m_wcPaths( wcPaths )
     , m_recurse(recurse), m_ignoreExternals(ignoreExternals)
 {
-    m_rev = createRevision( rev, revKind );
+    m_rev = SubversionUtils::createRevision( rev, revKind );
 }
 
 void SvnUpdateJob::run()
@@ -520,11 +616,10 @@ void SvnUpdateJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, a
 //     kDebug() << notifyString << endl;
 }
 
-SubversionJob::SubversionJob( int actionType, QObject *parent )
-//     : ThreadWeaver::Job(parent), m_type(actionType)
-    : QThread(parent), m_type(actionType), m_aprErr(0)
+///////////////////////////////////////////////////////////////////
+SvnJobBase::SvnJobBase( int type )
+    : m_type(type), m_aprErr(0)
 {
-    connect( this, SIGNAL(finished()), this, SLOT(slotFinished()) );
     setErrorMsg("");
     setSuccessful(false);
     apr_initialize();
@@ -532,7 +627,7 @@ SubversionJob::SubversionJob( int actionType, QObject *parent )
     
     svn_error_t *err = svn_client_create_context(&ctx, pool);
     if ( err ) {
-        kDebug() << "SubversionJob::SubversionJob() create_context ERROR" << endl;
+        kDebug() << "SvnJobBase::SvnJobBase() create_context ERROR" << endl;
         setErrorMsg( QString::fromLocal8Bit(err->message) );
         return;
     }
@@ -540,11 +635,161 @@ SubversionJob::SubversionJob( int actionType, QObject *parent )
     if ( !err ) {
         svn_config_get_config (&ctx->config,NULL,pool);
     } else{
-        kDebug() << " SubversionJob:: svn_config_ensure failed: " << endl;
+        kDebug() << " SvnJobBase:: svn_config_ensure failed: " << endl;
     }
-
         //TODO
     ctx->cancel_func = NULL;
+}
+
+SvnJobBase::~SvnJobBase()
+{
+    svn_pool_destroy(pool);
+    apr_terminate();
+}
+
+QString SvnJobBase::errorMsg()
+{
+    QString msg = m_errMsg;
+    if( m_aprErr ){
+        char buf[512];
+        svn_strerror(m_aprErr, buf, 512);
+        msg = msg + "\n: " + QString::fromLocal8Bit( buf );
+    }
+    return msg;
+//     return m_errMsg;
+}
+
+////////////////////////////////////////////////////////////////////////
+
+SubversionSyncJob::SubversionSyncJob( int type )
+    : SvnJobBase( type )
+{
+        // user identification providers
+    apr_array_header_t *providers = apr_array_make(pool, 9, sizeof(svn_auth_provider_object_t *));
+
+    svn_auth_provider_object_t *provider;
+
+        //disk cache
+    svn_client_get_simple_provider(&provider,pool);
+    APR_ARRAY_PUSH(providers, svn_auth_provider_object_t*) = provider;
+    svn_client_get_username_provider(&provider,pool);
+    APR_ARRAY_PUSH(providers, svn_auth_provider_object_t*) = provider;
+
+        //interactive prompt
+    svn_client_get_simple_prompt_provider (&provider, SubversionSyncJob::displayLoginDialog, this, 2, pool);
+    APR_ARRAY_PUSH(providers, svn_auth_provider_object_t*) = provider;
+        //we always ask user+pass, no need for a user only question
+//     svn_client_get_username_prompt_provider (&provider,kio_svnProtocol::checkAuth,this,2,pool);
+//     APR_ARRAY_PUSH(providers, svn_auth_provider_object_t*) = provider;
+
+        //SSL disk cache, keep that one, because it does nothing bad :)
+    svn_client_get_ssl_server_trust_file_provider (&provider, pool);
+    APR_ARRAY_PUSH (providers, svn_auth_provider_object_t *) = provider;
+    svn_client_get_ssl_client_cert_file_provider (&provider, pool);
+    APR_ARRAY_PUSH (providers, svn_auth_provider_object_t *) = provider;
+    svn_client_get_ssl_client_cert_pw_file_provider (&provider, pool);
+    APR_ARRAY_PUSH (providers, svn_auth_provider_object_t *) = provider;
+
+        //SSL interactive prompt, where things get hard
+    svn_client_get_ssl_server_trust_prompt_provider (&provider, SubversionSyncJob::trustSSLPrompt, this, pool);
+    APR_ARRAY_PUSH (providers, svn_auth_provider_object_t *) = provider;
+//     svn_client_get_ssl_client_cert_prompt_provider (&provider, kio_svnProtocol::clientCertSSLPrompt, this, 2, pool);
+//     APR_ARRAY_PUSH (providers, svn_auth_provider_object_t *) = provider;
+//     svn_client_get_ssl_client_cert_pw_prompt_provider (&provider, kio_svnProtocol::clientCertPasswdPrompt, this, 2, pool);
+//     APR_ARRAY_PUSH (providers, svn_auth_provider_object_t *) = provider;
+    //
+    svn_auth_open(&ctx->auth_baton, providers, pool);
+}
+
+SubversionSyncJob::~ SubversionSyncJob()
+{}
+
+svn_error_t*
+SubversionSyncJob::displayLoginDialog(  svn_auth_cred_simple_t **cred,
+                                        void *baton,
+                                        const char *realm,
+                                        const char *username,
+                                        svn_boolean_t may_save,
+                                        apr_pool_t *pool)
+{
+    kDebug() << " SyncJob::displayLoginDialog called " << endl;
+    SubversionSyncJob *p = ( SubversionSyncJob* )baton;
+    QString userName, passWord;
+    bool maySave;
+    
+    QString realmStr = QString::fromLocal8Bit( realm );
+    SvnLoginDialog dlg;
+    dlg.setRealm( realmStr );
+    dlg.exec();
+    userName = dlg.userEdit->text();
+    passWord = dlg.pwdEdit->text();
+    maySave = dlg.checkBox->isChecked();
+
+    kDebug() << " Name: " << userName << " PassWord: " << passWord << endl;
+
+    svn_auth_cred_simple_t *ret =
+            (svn_auth_cred_simple_t*)apr_pcalloc(pool, sizeof(svn_auth_cred_simple_t ));
+    ret->username = apr_pstrdup(pool, userName.toUtf8());
+    ret->password = apr_pstrdup(pool, passWord.toUtf8());
+    if(may_save)
+        ret->may_save = maySave;
+    *cred = ret;
+    
+    return SVN_NO_ERROR;
+}
+svn_error_t*
+SubversionSyncJob::trustSSLPrompt(  svn_auth_cred_ssl_server_trust_t **cred_p,
+                                    void *baton,
+                                    const char *realm,
+                                    apr_uint32_t failures,
+                                    const svn_auth_ssl_server_cert_info_t *ci,
+                                    svn_boolean_t may_save,
+                                    apr_pool_t *pool)
+{
+    kDebug() << " SyncJob::trustSSLPrompt called" << endl;
+    SubversionSyncJob *job = ( SubversionSyncJob* )baton;
+    
+    SvnSSLTrustDialog dlg;
+    dlg.setFailedReasons( failures );
+    dlg.setCertInfos( ci );
+    dlg.exec();
+    int userDecision = dlg.userDecision();
+
+    switch( userDecision ){
+        case 0: // accept once
+            *cred_p = (svn_auth_cred_ssl_server_trust_t*) apr_pcalloc(pool, sizeof (svn_auth_cred_ssl_server_trust_t));
+            (*cred_p)->may_save = false;
+            (*cred_p)->accepted_failures = 0;
+            break;
+        case 1:
+            *cred_p = (svn_auth_cred_ssl_server_trust_t*) apr_pcalloc(pool, sizeof (svn_auth_cred_ssl_server_trust_t));
+            if( may_save ){
+                (*cred_p)->may_save = true;
+                kDebug() << " Saving SSL Cert " << endl;
+            }
+            (*cred_p)->accepted_failures = 0;
+            break;
+        default:
+        case -1:
+            kDebug() << " SSL server trust failed for some reason" << endl;
+            *cred_p = 0L;
+            break;
+    };
+    return SVN_NO_ERROR;
+}
+
+void SubversionSyncJob::initNotifier(svn_wc_notify_func2_t notifyCallback)
+{
+    ctx->notify_func2 = notifyCallback;
+    ctx->notify_baton2 = this;
+}
+////////////////////////////////////////////////////////////////////////
+
+SubversionJob::SubversionJob( int actionType, QObject *parent )
+    : QThread( parent ), SvnJobBase( actionType )
+{
+    connect( this, SIGNAL(finished()), this, SLOT(slotFinished()) );
+
     // user identification providers
     apr_array_header_t *providers = apr_array_make(pool, 9, sizeof(svn_auth_provider_object_t *));
 
@@ -584,46 +829,7 @@ SubversionJob::SubversionJob( int actionType, QObject *parent )
 
 }
 SubversionJob::~SubversionJob()
-{
-    svn_pool_destroy(pool);
-    apr_terminate();
-}
-QString SubversionJob::errorMsg()
-{
-    QString msg = m_errMsg;
-    if( m_aprErr ){
-        char buf[512];
-        svn_strerror(m_aprErr, buf, 512);
-        msg = msg + "\n: " + QString::fromLocal8Bit( buf );
-    }
-    return msg;
-//     return m_errMsg;
-}
-svn_opt_revision_t SubversionJob::createRevision( long int revision, const QString& revkind ) {
-    svn_opt_revision_t result/*,endrev*/;
-
-    if ( revision != -1 ) {
-        result.value.number = revision;
-        result.kind = svn_opt_revision_number;
-    } else if ( revkind == "WORKING" ) {
-        result.kind = svn_opt_revision_working;
-    } else if ( revkind == "BASE" ) {
-        result.kind = svn_opt_revision_base;
-    } else if ( revkind == "HEAD" ) {
-        result.kind = svn_opt_revision_head;
-    } else if ( revkind == "COMMITTED" ) {
-        result.kind = svn_opt_revision_committed;
-    } else if ( revkind == "PREV" ) {
-        result.kind = svn_opt_revision_previous;
-    }
-
-//     else if ( !revkind.isNull() ) {
-//         svn_opt_parse_revision(&result,&endrev,revkind.toUtf8(),pool);
-    else {
-        result.kind = svn_opt_revision_unspecified;
-    }
-    return result;
-}
+{}
 
 svn_error_t*
 SubversionJob::displayLoginDialog(svn_auth_cred_simple_t **cred,
@@ -732,6 +938,7 @@ void SubversionJob::slotFinished()
 {
     emit finished(this);
 }
+
 void SubversionJob::initNotifier(svn_wc_notify_func2_t notifyCallback)
 {
     ctx->notify_func2 = notifyCallback;
@@ -819,7 +1026,6 @@ void SubversionCore::spawnCommitThread( const KUrl::List &urls, bool recurse, bo
     job->start( QThread::HighPriority );
     cleanupFinishedThreads();
 }
-//TODO
 void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
                                         long rev, QString revKind,
                                         bool recurse, bool ignoreExternals )
@@ -873,12 +1079,13 @@ void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
 
     cleanupFinishedThreads();
 }
-void SubversionCore::spawnStatusThread( const KUrl &wcPath, long rev, QString revKind,
+const SvnStatusJob* SubversionCore::spawnStatusThread( const KUrl &wcPath, long rev, QString revKind,
                 bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals )
 {
     SvnStatusJob *job = new SvnStatusJob( wcPath, rev, revKind,
                     recurse, getAll, update, noIgnore, ignoreExternals, SVN_STATUS, this );
     SVNCORE_SPAWN_COMMON( job )
+    return job;
 }
 
 /// User can excute many logview jobs. Other job happens to try to manipulate

@@ -24,8 +24,8 @@ public:
     virtual void createNewProject(const KUrl& dir){};
     virtual bool fetchFromRepository(){return false;};
     virtual bool isValidDirectory(const KUrl &dirPath) const {return false;}
-    virtual const QList<KDevelop::VcsFileInfo>& statusSync(const KUrl &dirPath, KDevelop::IVersionControl::WorkingMode mode ){ return QList<KDevelop::VcsFileInfo>(); }
-    virtual bool statusASync( const KUrl &dirPath, WorkingMode mode, const QList<KDevelop::VcsFileInfo> &map );
+    virtual const QList<KDevelop::VcsFileInfo>& statusSync(const KUrl &dirPath, KDevelop::IVersionControl::WorkingMode mode );
+    virtual bool statusASync( const KUrl &dirPath, WorkingMode mode, const QList<KDevelop::VcsFileInfo> &infos );
     virtual void fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu );
 
     virtual void checkout( const KUrl &repository, const KUrl &targetDir, KDevelop::IVersionControl::WorkingMode mode );
@@ -38,7 +38,7 @@ public:
 
     // SubversionPart internal methods
     SubversionCore* svncore();
-    const KUrl& urlFocusedDocument( );
+    const KUrl urlFocusedDocument( );
 
 public Q_SLOTS:
     // invoked by menubar, editor-context menu
@@ -49,13 +49,21 @@ public Q_SLOTS:
     void update();
     void logView();
     void blame();
+    void statusSync();
+    void statusASync();
     // invoked by context-menu
     void ctxLogView();
 
 Q_SIGNALS:
     void finishedFetching(const KUrl& destinationDir);
-    void statusReady(const QList<KDevelop::VcsFileInfo> &fileInfoMap);
+    void statusReady(const QList<KDevelop::VcsFileInfo> &infos);
+
+private Q_SLOTS:
+    void slotJobFinished( SubversionJob *job );
 private:
+//     const QList<KDevelop::VcsFileInfo>& statusSync( const KUrl &dirPath,
+//                     KDevelop::IVersionControl::WorkingMode mode,
+//                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals );
 
     struct KDevSubversionPartPrivate * const d;
 };
