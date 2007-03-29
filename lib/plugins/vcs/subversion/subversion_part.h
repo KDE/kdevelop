@@ -35,6 +35,7 @@ public:
     virtual void update( const KUrl::List &wcPaths );
     virtual void logview( const KUrl &wcPath_or_url );
     virtual void annotate( const KUrl &path_or_url );
+    virtual void vcsInfo( const KUrl &path_or_url ); // not yet in interface
 
     // SubversionPart internal methods
     SubversionCore* svncore();
@@ -51,6 +52,7 @@ public Q_SLOTS:
     void blame();
     void statusSync();
     void statusASync();
+    void svnInfo();
     // invoked by context-menu
     void ctxLogView();
 
@@ -61,9 +63,6 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotJobFinished( SubversionJob *job );
 private:
-//     const QList<KDevelop::VcsFileInfo>& statusSync( const KUrl &dirPath,
-//                     KDevelop::IVersionControl::WorkingMode mode,
-//                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals );
 
     struct KDevSubversionPartPrivate * const d;
 };

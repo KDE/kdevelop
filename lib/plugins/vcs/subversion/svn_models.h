@@ -4,6 +4,7 @@
 #include <QAbstractItemModel>
 #include <QVariant>
 #include <QList>
+#include <kurl.h>
 
 class QModelIndex;
 
@@ -54,6 +55,28 @@ public:
     bool switched;
     int reposTextStat;
     int reposPropStat;
+};
+
+/// A structure which describes various system-generated metadata about
+/// a working-copy path or URL.
+class SvnInfoHolder : public SvnGenericHolder {
+public:
+    virtual QVariant variant(int col){ return QVariant(); };
+
+    // the requested path
+    KUrl path;
+    /* Where the item lives in the repository. */
+    KUrl url;
+    /* The revision of the object.  If path_or_url is a working-copy
+    * path, then this is its current working revnum.  If path_or_url
+    * is a URL, then this is the repos revision that path_or_url lives in. */
+    int rev;
+    int kind;
+    /* The root URL of the repository. */
+    KUrl reposRootUrl;
+    QString reposUuid;
+    int lastChangedRev;
+    QString lastChangedAuthor;
 };
 
 

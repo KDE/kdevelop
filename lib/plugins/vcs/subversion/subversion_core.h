@@ -13,6 +13,7 @@
 #include <QThread>
 #include <QEvent>
 #include <QMutex>
+#include <QDateTime>
 
 #include <kurl.h>
 // #include <Job.h>
@@ -26,6 +27,7 @@ class SvnLogHolder;
 class SvnBlameHolder;
 class SvnStatusHolder;
 class SubversionJob;
+class SvnInfoHolder;
 
 #define SVN_LOGVIEW  10
 #define SVN_BLAME    11
@@ -35,6 +37,7 @@ class SubversionJob;
 #define SVN_COMMIT   15
 #define SVN_UPDATE   16
 #define SVN_STATUS   17
+#define SVN_INFO     18
 
 #define SVNACTION_NOTIFICATION       ( (QEvent::Type)15149 )
 #define SVNLOGIN_IDPWDPROMPT         ( (QEvent::Type)15150 )
@@ -44,7 +47,15 @@ class SubversionJob;
 namespace SubversionUtils
 {
     svn_opt_revision_t createRevision( long int revision, const QString& revkind );
+    class SvnRevision{
+    public:
+        int revNum;
+        QString revKind;
+        QDateTime revDate;
+    };
 };
+
+using namespace SubversionUtils;
 
 class SvnNotificationEvent : public QEvent {
 public:
@@ -375,6 +386,27 @@ protected:
     bool m_recurse, m_ignoreExternals;
 };
 
+class SvnInfoJob : public SubversionJob
+{
+public:
+    SvnInfoJob( const KUrl &pathOrUrl,
+                const SvnRevision &peg, const SvnRevision &revision,
+                bool recurse, int type, QObject *parent );
+
+    static svn_error_t* infoReceiver( void *baton,
+                                      const char *path,
+                                      const svn_info_t *info,
+                                      apr_pool_t *pool);
+    QMap< KUrl, SvnInfoHolder > m_holderMap;
+    
+protected:
+    virtual void run();
+    KUrl m_pathOrUrl;
+    SubversionUtils::SvnRevision m_peg;
+    SubversionUtils::SvnRevision m_revision;
+    bool m_recurse;
+};
+
 // class SvnCheckoutJob : public SubversionJob
 // {
 // public:
@@ -419,6 +451,10 @@ public:
                     int revstart, QString revKindStart, int revend, QString revKindEnd );
     const SvnStatusJob* spawnStatusThread( const KUrl &wcPath, long rev, QString revKind,
                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals );
+    void spawnInfoThread( const KUrl &pathOrUrl,
+                          const SvnRevision &peg, const SvnRevision &revision,
+                          bool recurse );
+                          
     
 protected Q_SLOTS:    
     void slotLogResult( SubversionJob* job );

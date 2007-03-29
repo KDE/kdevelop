@@ -46,6 +46,8 @@ svn_opt_revision_t createRevision( long int revision, const QString& revkind )
         result.kind = svn_opt_revision_committed;
     } else if ( revkind == "PREV" ) {
         result.kind = svn_opt_revision_previous;
+    } else if ( revkind == "UNSPECIFIED" ) {
+        result.kind = svn_opt_revision_unspecified;
     }
 
 //  else if ( !revkind.isNull() ) {
@@ -55,6 +57,7 @@ svn_opt_revision_t createRevision( long int revision, const QString& revkind )
     }
     return result;
 }
+
 }; // end of namespace SubversionCore
 
 SvnBlameJob::SvnBlameJob(  KUrl path_or_url,
@@ -616,6 +619,60 @@ void SvnUpdateJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, a
 //     kDebug() << notifyString << endl;
 }
 
+SvnInfoJob::SvnInfoJob( const KUrl &pathOrUrl,
+                        const SvnRevision &peg, const SvnRevision &revision,
+                        bool recurse, int type, QObject *parent  )
+    : SubversionJob( type, parent )
+    , m_pathOrUrl(pathOrUrl)
+    , m_peg(peg), m_revision(revision), m_recurse(recurse)
+{
+}
+
+svn_error_t* SvnInfoJob::infoReceiver( void *baton, const char *path,
+                                       const svn_info_t *info, apr_pool_t *pool)
+{
+    SvnInfoJob *job = (SvnInfoJob*)baton ;
+    if( !job )
+        return SVN_NO_ERROR;
+    
+    SvnInfoHolder holder;
+    holder.path = KUrl( path );
+    holder.url = KUrl( info->URL );
+    holder.rev = info->rev;
+    holder.kind = info->kind;
+    holder.reposRootUrl = KUrl( info->repos_root_URL );
+    holder.reposUuid = QString::fromLocal8Bit( info->repos_UUID );
+    holder.lastChangedRev = info->last_changed_rev;
+    holder.lastChangedAuthor = QString::fromLocal8Bit( info->last_changed_author );
+
+    job->m_holderMap.insert( KUrl(path), holder );
+    return SVN_NO_ERROR;
+}
+
+void SvnInfoJob::run()
+{
+    kDebug() << " SvnInfoJob:run() " <<endl;
+    
+    apr_pool_t *subpool = svn_pool_create (pool);
+    svn_opt_revision_t peg_rev = SubversionUtils::createRevision( m_peg.revNum, m_peg.revKind );
+    svn_opt_revision_t revision = SubversionUtils::createRevision( m_revision.revNum, m_revision.revKind );
+
+    svn_error_t *err = svn_client_info( m_pathOrUrl.pathOrUrl().toUtf8(),
+                                        &peg_rev, &revision,
+                                        SvnInfoJob::infoReceiver,
+                                        this,
+                                        m_recurse,
+                                        ctx, pool );
+
+    if ( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy (subpool);
+        return;
+    }
+    svn_pool_destroy (subpool);
+    setSuccessful(true);
+}
+
 ///////////////////////////////////////////////////////////////////
 SvnJobBase::SvnJobBase( int type )
     : m_type(type), m_aprErr(0)
@@ -1013,18 +1070,12 @@ void SubversionCore::spawnAddThread( const KUrl::List &wcPaths, bool recurse, bo
 void SubversionCore::spawnRemoveThread( const KUrl::List &urls, bool force )
 {
     SvnDeleteJob *job = new SvnDeleteJob( urls, force, SVN_DELETE, this );
-    connect( job, SIGNAL(finished(SubversionJob*)), this, SLOT( slotFinished(SubversionJob*) ) );
-    m_threadList.append( job );
-    job->start( QThread::HighPriority );
-    cleanupFinishedThreads();
+    SVNCORE_SPAWN_COMMON( job )
 }
 void SubversionCore::spawnCommitThread( const KUrl::List &urls, bool recurse, bool keepLocks )
 {
     SvnCommitJob *job = new SvnCommitJob( urls, recurse, keepLocks, SVN_COMMIT, this );
-    connect( job, SIGNAL(finished(SubversionJob*)), this, SLOT(slotFinished(SubversionJob*)) );
-    m_threadList.append( job );
-    job->start( QThread::HighPriority );
-    cleanupFinishedThreads();
+    SVNCORE_SPAWN_COMMON( job )
 }
 void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
                                         long rev, QString revKind,
@@ -1086,6 +1137,14 @@ const SvnStatusJob* SubversionCore::spawnStatusThread( const KUrl &wcPath, long 
                     recurse, getAll, update, noIgnore, ignoreExternals, SVN_STATUS, this );
     SVNCORE_SPAWN_COMMON( job )
     return job;
+}
+
+void SubversionCore::spawnInfoThread( const KUrl &pathOrUrl,
+                                      const SvnRevision &peg, const SvnRevision &revision,
+                                      bool recurse )
+{
+    SvnInfoJob *job = new SvnInfoJob( pathOrUrl, peg, revision, recurse, SVN_INFO, this );
+    SVNCORE_SPAWN_COMMON( job )
 }
 
 /// User can excute many logview jobs. Other job happens to try to manipulate

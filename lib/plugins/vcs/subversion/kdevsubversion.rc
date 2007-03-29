@@ -10,6 +10,7 @@
     <Action name="svn_blame" />
     <Action name="svn_status_sync" />
     <Action name="svn_status_async" />
+    <Action name="svn_info" />
   </Menu>
 </MenuBar>
 </kpartgui>

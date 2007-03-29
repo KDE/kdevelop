@@ -115,6 +115,10 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action->setText(i18n("Show status with non-blocking mode"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(statusASync()));
 
+    action = actionCollection()->addAction("svn_info");
+    action->setText(i18n("Show the system-generated metadatas"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(svnInfo()));
+
     // init context menu
 //     connect( ((UiController*)(core()->uiController()))->defaultMainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
 //             this, SLOT(contextMenu(KMenu *, const Context *)));
@@ -170,7 +174,6 @@ const QList<KDevelop::VcsFileInfo>& KDevSubversionPart::statusSync( const KUrl &
     }
     delete job;
     return d->m_vcsInfoList;
-    return false;
 }
 bool KDevSubversionPart::statusASync( const KUrl &dirPath,
                                       KDevelop::IVersionControl::WorkingMode mode,
@@ -221,6 +224,16 @@ void KDevSubversionPart::logview( const KUrl &wcPath_or_url )
 void KDevSubversionPart::annotate( const KUrl &path_or_url )
 {
     d->m_impl->spawnBlameThread(path_or_url, true,  0, "", -1, "HEAD" );
+}
+void KDevSubversionPart::vcsInfo( const KUrl &path_or_url ) // not yet in interface
+{
+    SubversionUtils::SvnRevision peg;
+    SubversionUtils::SvnRevision revision;
+    peg.revKind = "UNSPECIFIED"; peg.revNum = -1;
+    revision.revKind = "UNSPECIFIED"; revision.revNum = -1;
+    
+    
+    d->m_impl->spawnInfoThread( path_or_url, peg, revision, false );
 }
 
 const KUrl KDevSubversionPart::urlFocusedDocument()
@@ -323,6 +336,15 @@ void KDevSubversionPart::statusASync()
         KMessageBox::error(NULL, "No active docuement to view status" );
     }
 }
+void KDevSubversionPart::svnInfo()
+{
+    KUrl activeUrl = urlFocusedDocument();
+    if( activeUrl.isValid() ){
+        vcsInfo( activeUrl );
+    } else{
+        KMessageBox::error(NULL, "No active docuement to view information" );
+    }
+}
 //////////////////////////////////////////////
 void KDevSubversionPart::ctxLogView()
 {
@@ -385,6 +407,24 @@ void KDevSubversionPart::slotJobFinished( SubversionJob *job )
             d->m_fileInfoMap.remove( statusJob );
             break;
         } //end of case SVN_STATUS
+        case SVN_INFO: {
+            if( !job->wasSuccessful() ){
+                KMessageBox::error(NULL, job->errorMsg());
+                break;
+            }
+            SvnInfoJob *infojob = dynamic_cast<SvnInfoJob*>( job );
+            if( !infojob ) return;
+            QList<SvnInfoHolder> list = infojob->m_holderMap.values();
+            // TODO print to GUI
+            for( QList<SvnInfoHolder>::iterator it = list.begin(); it != list.end(); ++it ){
+                SvnInfoHolder holder = (*it);
+                kDebug() << " ReqPath " << holder.path << endl;
+                kDebug() << " url" << holder.url.pathOrUrl() << endl;
+                kDebug() << " Reposit Root " << holder.reposRootUrl.pathOrUrl() << endl;
+                kDebug() << " Repos UUID" << holder.reposUuid << endl;
+            }
+            break;
+        } //end of case SVN_INFO
         default:
             break;
     };
