@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>548</width>
+            <width>560</width>
             <height>708</height>
         </rect>
     </property>
@@ -539,7 +539,7 @@ slow.</string>
                             <cstring>groupBox12</cstring>
                         </property>
                         <property name="title">
-                            <string>Header/Source split</string>
+                            <string>Header/Source split (Highly Experimental)</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -551,6 +551,9 @@ slow.</string>
                                 </property>
                                 <property name="text">
                                     <string>Enable split of Header/So&amp;urce files</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Check to have header and source appear in the same page.</string>
