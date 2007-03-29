@@ -16,7 +16,7 @@ public slots:
   void slotAction();
 };
 
-class %{APPNAME}Factory : public KParts::Factory
+class %{APPNAME}Factory : public KLibFactory
 {
   Q_OBJECT
 public:

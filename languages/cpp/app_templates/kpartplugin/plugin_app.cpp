@@ -73,7 +73,7 @@ void Plugin%{APPNAME}::slotAction()
 }
 
 %{APPNAME}Factory::%{APPNAME}Factory()
-  : KParts::Factory()
+  : KLibFactory()
 {
 }
 
