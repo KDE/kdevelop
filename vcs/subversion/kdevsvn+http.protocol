@@ -14,5 +14,7 @@ listing=Name,Size,Date,Owner
 defaultMimetype=application/octet-stream
 Icon=remote
 Description=Subversion ioslave for KDevelop
+Description[ms]=IOslave Subversion untuk KDevelop
+Description[sv]=Subversion I/O-slav för KDevelop
 maxInstances=5
 class=:internet

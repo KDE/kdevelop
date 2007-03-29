@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop subversion module
+Name[ms]=Modul Subversion KDevelop
+Name[sv]=KDevelop Subversion-modul
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
 X-KDE-Library=kdevsvnd
