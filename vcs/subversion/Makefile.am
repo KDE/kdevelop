@@ -1,5 +1,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/interfaces/extensions $(SVN_INCLUDE) $(all_includes)
 
+METASOURCES = AUTO
+
 kde_module_LTLIBRARIES = libkdevsubversion.la kio_kdevsvn.la kded_kdevsvnd.la
 
 libkdevsubversion_la_SOURCES = subversion_core.cpp subversion_fileinfo.cpp \
@@ -16,7 +18,8 @@ kio_kdevsvn_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN) $(SVN_LIB)
 
 kded_kdevsvnd_la_SOURCES = commitdlg.ui kdevsvnd.cpp kdevsvnd.skel kdevsvnd_widgets.cpp svnssltrustpromptbase.ui
 kded_kdevsvnd_la_LIBADD = $(LIB_KIO)
-kded_kdevsvnd_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
+kded_kdevsvnd_la_LDFLAGS = -module $(all_libraries) -avoid-version
+#kded_kdevsvnd_la_METASOURCES = AUTO
 
 kdeddir = $(kde_servicesdir)/kded
 kded_DATA = kdevsvnd.desktop
@@ -27,7 +30,6 @@ service_DATA = kdevsubversion.desktop
 protocoldir = $(kde_servicesdir)
 protocol_DATA = kdevsvn+file.protocol kdevsvn+http.protocol kdevsvn+https.protocol kdevsvn+ssh.protocol kdevsvn+svn.protocol
 
-METASOURCES = AUTO
 
 SUBDIRS = integrator
 noinst_HEADERS = kdevsvnd.h svn_blamewidget.h svn_fileselectdlg_commit.h \
