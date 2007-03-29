@@ -2,6 +2,7 @@ project(kdevqmakeparser)
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
                      ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake
+                     ${FLEX_INCLUDE_DIR}
                    )
 
 set(kdevqmakeparser_SRCS qmakeast.cpp qmakedriver.cpp)
