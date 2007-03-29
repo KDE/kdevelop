@@ -18,7 +18,7 @@ kio_kdevsvn_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN) $(SVN_LIB)
 
 kded_kdevsvnd_la_SOURCES = commitdlg.ui kdevsvnd.cpp kdevsvnd.skel kdevsvnd_widgets.cpp svnssltrustpromptbase.ui
 kded_kdevsvnd_la_LIBADD = $(LIB_KIO)
-kded_kdevsvnd_la_LDFLAGS = -module $(all_libraries) -avoid-version
+kded_kdevsvnd_la_LDFLAGS = -module $(all_libraries) -avoid-version -no-undefined -lkdeinit_kded
 #kded_kdevsvnd_la_METASOURCES = AUTO
 
 kdeddir = $(kde_servicesdir)/kded
