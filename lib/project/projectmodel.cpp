@@ -283,6 +283,7 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandar
 {
     Q_D(ProjectFileItem);
     d->project = project;
+    d->m_url = file;
     setText( file.fileName() );
     setParent( parent );
     setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
