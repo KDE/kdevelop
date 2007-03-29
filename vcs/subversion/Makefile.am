@@ -11,32 +11,24 @@ libkdevsubversion_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 
 	
 kio_kdevsvn_la_SOURCES = svn_kio.cpp
-kio_kdevsvn_la_LIBADD = -lkio
-kio_kdevsvn_la_LDFLAGS = -module -avoid-version -no-undefined $(all_libraries) $(KDE_PLUGIN) $(SVNLD) $(SVN_LIB)
+kio_kdevsvn_la_LIBADD = $(LIB_KIO)
+kio_kdevsvn_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN) $(SVN_LIB)
 
 kded_kdevsvnd_la_SOURCES = commitdlg.ui kdevsvnd.cpp kdevsvnd.skel kdevsvnd_widgets.cpp svnssltrustpromptbase.ui
 kded_kdevsvnd_la_LIBADD = $(LIB_KIO)
-# kded_kdevsvnd_la_LDFLAGS = -module -avoid-version -no-undefined $(all_libraries) $(KDE_PLUGIN)
-kded_kdevsvnd_la_LDFLAGS = $(all_libraries) -module -avoid-version
-kded_kdevsvnd_la_METASOURCES = AUTO
+kded_kdevsvnd_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
 
-kded_DATA = kdevsvnd.desktop
 kdeddir = $(kde_servicesdir)/kded
+kded_DATA = kdevsvnd.desktop
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevsubversion.desktop
 
-# subversion ioslave
-#kde_module_LTLIBRARIES = kio_kdevsvn.la
-
-protocol_DATA = kdevsvn+file.protocol kdevsvn+http.protocol kdevsvn+https.protocol kdevsvn+ssh.protocol kdevsvn+svn.protocol
 protocoldir = $(kde_servicesdir)
+protocol_DATA = kdevsvn+file.protocol kdevsvn+http.protocol kdevsvn+https.protocol kdevsvn+ssh.protocol kdevsvn+svn.protocol
 
 METASOURCES = AUTO
 
-# end of subversion ioslave
-
-rcdir = $(kde_datadir)/kdevsubversion
 SUBDIRS = integrator
 noinst_HEADERS = kdevsvnd.h svn_blamewidget.h svn_fileselectdlg_commit.h \
 	svn_logviewwidget.h

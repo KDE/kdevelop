@@ -77,7 +77,6 @@ dnl if test -x "$SVNCONFIG"; then
 
 dnl else
 
-SVNLD=""
 dnl just a fallback to debian's config so that it works for me :)
 SVN_INCLUDES="/usr/local/include /usr/include /usr/include/subversion-1 /usr/local/include/subversion-1"
 AC_ARG_WITH(svn-include,
@@ -138,5 +137,4 @@ fi
 AC_SUBST(SVN_INCLUDE)
 AC_SUBST(SVN_LIB)
 AC_SUBST(SVN_CPPFLAGS)
-AC_SUBST(SVNLD)
 AM_CONDITIONAL(include_kioslave_svn, test -n "$SVN_SUBDIR")
