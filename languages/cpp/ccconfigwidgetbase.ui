@@ -552,9 +552,6 @@ slow.</string>
                                 <property name="text">
                                     <string>Enable split of Header/So&amp;urce files</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Check to have header and source appear in the same page.</string>
                                 </property>

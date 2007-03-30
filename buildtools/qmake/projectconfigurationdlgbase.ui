@@ -539,9 +539,6 @@
                                 <property name="text">
                                     <string>X11</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+1</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Support required for X11 application or library</string>
                                 </property>

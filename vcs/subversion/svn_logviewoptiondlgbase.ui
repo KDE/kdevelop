@@ -12,9 +12,6 @@
             <height>339</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>SvnLogViewOptionDlgBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -25,9 +22,6 @@
             </property>
             <property name="text">
                 <string>&amp;OK</string>
-            </property>
-            <property name="accel">
-                <string>Alt+O</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
@@ -59,9 +53,6 @@
                     <property name="text">
                         <string>Wor&amp;king Copy History</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
@@ -69,9 +60,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Repository History</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
                     </property>
                 </widget>
             </grid>
@@ -94,9 +82,6 @@
                     <property name="text">
                         <string>&amp;By Revision Number</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
@@ -104,9 +89,6 @@
                     </property>
                     <property name="text">
                         <string>B&amp;y Revision Specifier</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+Y</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="1">
@@ -130,9 +112,6 @@
             </property>
             <property name="text">
                 <string>C&amp;ancel</string>
-            </property>
-            <property name="accel">
-                <string>Alt+A</string>
             </property>
         </widget>
         <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
@@ -166,9 +145,6 @@
                     <property name="text">
                         <string>&amp;By Revision Number</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
@@ -176,9 +152,6 @@
                     </property>
                     <property name="text">
                         <string>B&amp;y Revision Specifier</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+Y</string>
                     </property>
                 </widget>
             </grid>
