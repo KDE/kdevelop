@@ -21,6 +21,8 @@
 #include "lexer.h"
 #include "memorypool.h"
 
+#include <cctype>
+
 ParseSession::ParseSession()
   : mempool(new pool)
   , token_stream(0)
