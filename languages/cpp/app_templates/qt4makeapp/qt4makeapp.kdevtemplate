@@ -1,11 +1,17 @@
 # KDE Config File
 [General]
 Name=Qt4 Application
+Name[es]=Aplicación Qt4
+Name[pt]=Aplicação do Qt4
+Name[pt_BR]=Aplicação do Qt4
 Name[sv]=Qt4-program
 Icon=qt4makeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt4 based application (crossplatform compatible) - Needs Qt4
+Comment[es]=Genera una aplicación basada en QMake/Qt4 (con compatibilidad multiplataforma) - Necesita Qt4
+Comment[pt]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas) - Necessita do Qt4
+Comment[pt_BR]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas) - Necessita do Qt4
 Comment[sv]=Skapar ett QMake/Qt4-baserat program (fungerar på andra plattformar). Kräver Qt4.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp,%{dest}/src/ReadMe
@@ -88,6 +94,9 @@ Dest=%{dest}/src/ReadMe
 [MSG]
 Type=message
 Comment=A Qt4/Qmake based application was created in %{dest}
+Comment[es]=Una aplicación basada en Qt4/Qmake ha sido creada en %{dest}
+Comment[pt]=Foi criada uma aplicação baseada no Qt4/Qmake em %{dest}
+Comment[pt_BR]=Foi criada uma aplicação baseada no Qt4/Qmake em %{dest}
 Comment[sv]=Ett QMake/Qt4-baserat program skapades i %{dest}
 
 Comment=
@@ -96,6 +105,9 @@ Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake (Qt4).
+Comment[es]=Ruta completa para QMake (Qt4).
+Comment[pt]=Localização Absoluta do QMake (Qt4).
+Comment[pt_BR]=Localização Absoluta do QMake (Qt4).
 Comment[sv]=Absolut sökväg till QMake (Qt4).
 Default=
 [DESIGNER]
@@ -103,5 +115,8 @@ Type=value
 ValueType=QString
 Value=DESIGNER
 Comment=Absolute Path for Designer (Qt4).
+Comment[es]=Ruta completa para Designer (Qt4).
+Comment[pt]=Localização Absoluta do Designer (Qt4).
+Comment[pt_BR]=Localização Absoluta do Designer (Qt4).
 Comment[sv]=Absolut sökväg till Designer (Qt4).
 Default=

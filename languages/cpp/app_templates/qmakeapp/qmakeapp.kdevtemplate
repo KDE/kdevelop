@@ -1,11 +1,17 @@
 # KDE Config File
 [General]
 Name=Qt3 Application
+Name[es]=Aplicación Qt3
+Name[pt]=Aplicação do Qt3
+Name[pt_BR]=Aplicação do Qt3
 Name[sv]=Qt3-program
 Icon=qmakeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt3 based application (crossplatform compatible)
+Comment[es]=Genera una aplicación basada en QMake/Qt3 (con compatibilidad multiplataforma)
+Comment[pt]=Gera uma aplicação baseada no QMake/Qt3 (compatível com várias plataformas)
+Comment[pt_BR]=Gera uma aplicação baseada no QMake/Qt3 (compatível com várias plataformas)
 Comment[sv]=Skapar ett QMake/Qt3-baserat program (fungerar på andra plattformar)
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -63,6 +69,9 @@ Dest=%{dest}/src/fileprint.xpm
 [MSG]
 Type=message
 Comment=A Qt3/Qmake based application was created in %{dest}
+Comment[es]=Una aplicación basada en Qt3/Qmake ha sido creada en %{dest}
+Comment[pt]=Foi criada uma aplicação baseada no Qt3/Qmake em %{dest}
+Comment[pt_BR]=Foi criada uma aplicação baseada no Qt3/Qmake em %{dest}
 Comment[sv]=Ett QMake/Qt3-baserat program skapades i %{dest}
 
 [QTDIR]
@@ -70,6 +79,9 @@ Type=value
 ValueType=QString
 Value=QTDIR
 Comment=Directory where Qt3 is installed.
+Comment[es]=Carpeta donde se ha instalado Qt3.
+Comment[pt]=A pasta onde está instalado o Qt3.
+Comment[pt_BR]=A pasta onde está instalado o Qt3.
 Comment[sv]=Katalog där Qt3 är installerat.
 Default=
 [QMAKE]
@@ -77,5 +89,8 @@ Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake (Qt3).
+Comment[es]=Ruta completa para QMake (Qt3).
+Comment[pt]=Localização Absoluta do QMake (Qt3).
+Comment[pt_BR]=Localização Absoluta do QMake (Qt3).
 Comment[sv]=Absolut sökväg till QMake (Qt3).
 Default=
