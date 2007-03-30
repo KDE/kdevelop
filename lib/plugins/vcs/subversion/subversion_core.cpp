@@ -58,7 +58,7 @@ svn_opt_revision_t createRevision( long int revision, const QString& revkind )
     return result;
 }
 
-}; // end of namespace SubversionCore
+} // end of namespace SubversionCore
 
 SvnBlameJob::SvnBlameJob(  KUrl path_or_url,
                            bool reposit,
