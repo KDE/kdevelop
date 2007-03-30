@@ -31,6 +31,10 @@ class subversionCore;
 class subversionOptionsWidget;
 class subversionProjectWidget;
 class Context;
+namespace SvnGlobal
+{
+class SvnInfoHolder;
+};
 
 class subversionPart : public KDevVersionControl
 {
@@ -52,6 +56,7 @@ public:
 		KURL baseURL() { return base; }
 		virtual bool isValidDirectory( const QString &dirPath ) const;
 		KURL::List urls() { return m_urls; }
+        subversionCore* svncore() { return m_impl; }
 
 signals:
 //		void finishedFetching( QString destinationDir );
@@ -100,6 +105,7 @@ private:
 		KURL base;
 
 public:
+        QMap< KURL, SvnGlobal::SvnInfoHolder > m_prjInfoMap;
 
 };
 

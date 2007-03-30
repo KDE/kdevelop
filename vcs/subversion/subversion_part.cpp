@@ -31,6 +31,7 @@
 #include "subversion_widget.h"
 #include "subversionprojectwidget.h"
 #include "subversion_fileinfo.h"
+#include "subversion_global.h"
 #include "kdevversioncontrol.h"
 #include "svn_fileselectdlg_commit.h"
 #include "svn_logviewwidget.h"
@@ -80,6 +81,7 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 	m_impl->processWidget()->setCaption(i18n( "Subversion Output" ));
 	mainWindow()->embedOutputView( (QWidget*)m_impl->processWidget(), i18n( "Subversion" ), i18n( "Subversion messages" ) );
     QWhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
+
 }
 
 subversionPart::~subversionPart() {
@@ -371,7 +373,7 @@ void subversionPart::slotBlame()
 	}
 	KURL url = m_urls.first();
 // 	m_impl->blame(url, repositBlame, int revstart, QString revKindStart, int revend, QString revKindEnd);
-	m_impl->blame(url, true, 0, "", -1, "HEAD");
+	m_impl->blame(url, SvnGlobal::path_to_reposit, 0, "", -1, "HEAD");
 }
 
 void subversionPart::slotDel() {

@@ -46,7 +46,7 @@ public:
 
     // append what?. Append any text status outputs
     void append( QString notifications );
-    void showLogResult( QValueList<SvnLogHolder> *holderList );
+    void showLogResult( QValueList<SvnLogHolder> *holderList, QString reqUrl );
     void showBlameResult( QValueList<SvnBlameHolder> *blamelist );
 
 protected slots:

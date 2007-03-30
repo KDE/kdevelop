@@ -240,6 +240,7 @@ void SVNFileInfoProvider::slotStatus( const QString& path,int text_status, int p
 			state = VCSFileInfo::Deleted;
 			break;
 		case 7: //replaced
+            state = VCSFileInfo::Replaced;
 			break;
 		case 8: //modified
 			state = VCSFileInfo::Modified;

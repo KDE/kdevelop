@@ -32,7 +32,7 @@ class subversionPart;
 class KTextEdit;
 class QSplitter;
 class QGridLayout;
-
+class SvnLogViewItem;
 
 class SvnLogHolder{
 	public:
@@ -51,12 +51,18 @@ public:
 	SvnLogViewWidget(subversionPart *part, QWidget *parent);
 	virtual ~SvnLogViewWidget();
 	void setLogResult( QValueList<SvnLogHolder> *loglist );
+	void setRequestedUrl( QString url );
 
-public slots:
+protected slots:
 	void slotClicked( QListViewItem* item );
+    void contextMenuRequested( QListViewItem *item, const QPoint & pos, int col );
+    void blameThis();
+    void diffToPrevious();
+    
 private:
+	QString m_reqUrl;
 	subversionPart *m_part;
-	bool connected;
+    SvnLogViewItem* m_ctxLogItem;
 
     QSplitter* splitter1;
     QListView* listView1;

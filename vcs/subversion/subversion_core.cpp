@@ -19,6 +19,7 @@
 
 #include <kparts/part.h>
 #include <kdevcore.h>
+#include <kdevproject.h>
 #include "subversion_part.h"
 #include "subversion_core.h"
 #include "subversion_widget.h"
@@ -51,6 +52,7 @@
 #include <kaboutdata.h>
 
 using namespace KIO;
+using namespace SvnGlobal;
 
 subversionCore::subversionCore(subversionPart *part)
 // 	: QObject(NULL, "subversion core"), DCOPObject("subversion") {
@@ -232,6 +234,20 @@ void subversionCore::diff( const KURL::List& list, const QString& where){
 	}
 }
 
+void subversionCore::diffAsync( const KURL &pathOrUrl1, const KURL &pathOrUrl2,
+							int rev1, QString revKind1, int rev2, QString revKind2,
+							bool recurse )
+{
+	KURL servURL = "kdevsvn+svn://blah/";
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	int cmd = 13;
+	kdDebug(9036) << "diffing async : " << pathOrUrl1 << " and " << pathOrUrl2 << endl;
+	s << cmd << pathOrUrl1 << pathOrUrl2 << rev1 << revKind1 << rev2 << revKind2 << recurse;
+	KIO::SimpleJob * job = KIO::special(servURL, parms, true);
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotDiffResult( KIO::Job * ) ) );
+}
+
 void subversionCore::commit( const KURL::List& list, bool recurse, bool keeplocks ) {
 	KURL servURL = m_part->baseURL();
 	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
@@ -256,6 +272,9 @@ void subversionCore::svnLog( const KURL::List& list,
 		int revstart, QString revKindStart, int revend, QString revKindEnd,
 		bool repositLog, bool discorverChangedPath, bool strictNodeHistory )
 {
+	// ensure that part has repository information. This info is used to retrieve root repository URL
+    if( m_part->m_prjInfoMap.count() < 1 )
+        clientInfo( KURL(m_part->project()->projectDirectory()), false, m_part->m_prjInfoMap );
 	KURL servURL = m_part->baseURL();
 	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
 	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
@@ -281,7 +300,7 @@ void subversionCore::svnLog( const KURL::List& list,
 
 }
 
-void subversionCore::blame( const KURL &url, bool repositBlame, int revstart, QString revKindStart, int revend, QString revKindEnd )
+void subversionCore::blame( const KURL &url, UrlMode mode, int revstart, QString revKindStart, int revend, QString revKindEnd )
 {
 	KURL servURL = m_part->baseURL();
 	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
@@ -293,7 +312,7 @@ void subversionCore::blame( const KURL &url, bool repositBlame, int revstart, QS
 	QDataStream s( parms, IO_WriteOnly );
 	// prepare arguments
 	int cmd = 14;
-	s << cmd << url << repositBlame ;
+	s << cmd << url << (int)mode ;
 	s << revstart << revKindStart << revend << revKindEnd ;
 
 	SimpleJob * job = KIO::special(servURL, parms, true);
@@ -377,6 +396,54 @@ void subversionCore::checkout() {
 	}
 }
 
+bool subversionCore::clientInfo( KURL path_or_url, bool recurse, QMap< KURL, SvnInfoHolder> &holderMap )
+{
+    KURL servURL = "kdevsvn+svn://blah/";
+    QByteArray parms;
+    QDataStream s( parms, IO_WriteOnly );
+    int cmd = 15;
+    s << cmd << path_or_url << -1 << QString("UNSPECIFIED") << -1 << QString("UNSPECIFIED") << recurse;
+    SimpleJob *job = KIO::special( servURL, parms, false );
+
+    QMap<QString,QString> ma;
+    KIO::NetAccess::synchronousRun(job, 0, 0, 0, &ma ); // synchronize
+
+    QValueList<QString> keys = ma.keys();
+    QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+    int curIdx, lastIdx;
+    QRegExp rx( "([0-9]*)(.*)" );
+    
+    for ( it = begin; it != end; /*++it*/) {
+        kdDebug(9036) << "METADATA key: " << *it << " value: " << ma[ *it ] << endl;
+        if ( rx.search( *it ) == -1 ) return false; // something is wrong ! :)
+        curIdx = lastIdx = rx.cap( 1 ).toInt();
+        SvnInfoHolder holder;
+        
+        while ( curIdx == lastIdx ) {
+            if ( rx.cap( 2 ) == "PATH" )
+                holder.path = KURL( ma[ *it ] );
+            else if ( rx.cap( 2  ) == "URL" )
+                holder.url = KURL( ma[*it] );
+            else if ( rx.cap( 2  ) == "REV" )
+                holder.rev= ma[ *it ].toInt();
+            else if ( rx.cap( 2  ) == "KIND" )
+                holder.kind = ma[ *it ].toInt();
+            else if ( rx.cap( 2  ) == "REPOS_ROOT_URL" )
+                holder.reposRootUrl = KURL( ma[*it] );
+            else if ( rx.cap( 2  ) == "REPOS_UUID" )
+                holder.reposUuid = ma[ *it ];
+            
+            ++it;
+            if ( it == end )
+                break;
+            if ( rx.search( *it ) == -1 ) return false; // something is wrong ! :)
+            curIdx = rx.cap( 1 ).toInt();
+        }
+        holderMap.insert( holder.path, holder );
+    }
+    return true;;
+}
+        
 void subversionCore::slotEndCheckout( KIO::Job * job ) {
 	if ( job->error() ) {
 		job->showErrorDialog( m_part->mainWindow()->main() );
@@ -426,12 +493,13 @@ void subversionCore::slotLogResult( KIO::Job * job )
 		return;
 	}
 
-	holderList.clear();
+	QValueList<SvnLogHolder> holderList;
 
 	KIO::MetaData ma = job->metaData();
 	QValueList<QString> keys = ma.keys();
 	QRegExp rx( "([0-9]*)(.*)" );
 	int curIdx, lastIdx;
+	QString requestedUrl;
 
 	for (QValueList<QString>::Iterator it = keys.begin(); it != keys.end(); /*++it*/ ){
 		if ( rx.search( *it ) == -1 ){
@@ -453,6 +521,8 @@ void subversionCore::slotLogResult( KIO::Job * job )
 				logHolder.pathList = ma[*it];
 			else if ( rx.cap( 2	 ) == "rev" )
 				logHolder.rev = ma[*it];
+			else if ( rx.cap( 2  ) == "requrl" )
+				requestedUrl = ma[*it];
 
 			++it;
 			if ( it == keys.end() )
@@ -465,7 +535,7 @@ void subversionCore::slotLogResult( KIO::Job * job )
 		}//end of while
 		holderList.append( logHolder );
 	}
-	processWidget()->showLogResult( &holderList );
+	processWidget()->showLogResult( &holderList, requestedUrl );
 	m_part->mainWindow()->raiseView(processWidget());
 
 }
@@ -538,6 +608,63 @@ void subversionCore::slotBlameResult( KIO::Job * job )
 	}
     processWidget()->showBlameResult( &blameList );
     m_part->mainWindow()->raiseView(processWidget());
+}
+
+void subversionCore::slotDiffResult( KIO::Job * job )
+{
+	if ( job->error() ){
+		job->showErrorDialog( m_part->mainWindow()->main() );
+		if( job->error() == ERR_CANNOT_LAUNCH_PROCESS )
+			KMessageBox::error( m_part->mainWindow()->main(),
+								i18n("If you just have installed new version of KDevelop,"
+									" and if the error message was unknown protocol kdevsvn+*,"
+									" try to restart KDE"
+									) );
+		return;
+	}
+	KIO::MetaData ma = job->metaData();
+	QValueList<QString> keys = ma.keys();
+	qHeapSort( keys );
+	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+	QStringList diffList;
+	
+	for ( it = begin; it != end; ++it ) {
+// 		kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+		if ( ( *it ).endsWith( "diffresult" ) ) {
+			diffList << ma[ *it ];
+		}
+	}
+
+	if ( diffList.count() > 0 ) {
+		//check kompare is available
+		if ( !KStandardDirs::findExe( "kompare" ).isNull() ) {
+			KTempFile *tmp = new KTempFile;
+			tmp->setAutoDelete(true);
+			QTextStream *stream = tmp->textStream();
+			stream->setCodec( QTextCodec::codecForName( "utf8" ) );
+			for ( QStringList::Iterator it2 = diffList.begin();it2 != diffList.end() ; ++it2 ) {
+				( *stream ) << ( *it2 ) << "\n";
+			}
+			tmp->close();
+			KProcess *p = new KProcess;
+			*p << "kompare" << "-n" << "-o" << tmp->name();
+			p->start();
+			
+		} else { //else do it with message box
+			KMessageBox::information( NULL, i18n("You don't have kompare installed. We recommend you to install kompare to view difference graphically") + "\nhttp://www.caffeinated.me.uk/kompare/" );
+			Subversion_Diff df;
+			for ( QStringList::Iterator it2 = diffList.begin();it2 != diffList.end() ; ++it2 ) {
+				df.text->append( *it2 );
+			}
+			QFont f = df.font();
+			f.setFixedPitch( true );
+			df.text->setFont( f );
+			df.exec();
+		}
+	}
+	else{
+		KMessageBox::information( 0, i18n("No subversion differences") );
+	}
 }
 
 void subversionCore::createNewProject( const QString& // dirName

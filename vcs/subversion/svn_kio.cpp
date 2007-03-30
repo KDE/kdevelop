@@ -56,6 +56,7 @@
 #include <ktextedit.h>
 
 using namespace KIO;
+using namespace SvnGlobal;
 
 typedef struct
 {
@@ -892,11 +893,11 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 		case SVN_BLAME:
 			{
 				KURL url;
-				bool repositBlame;
+				int urlMode;
 				int pegRev, startRev, endRev;
 				QString pegRevKind, startRevKind, endRevKind;
 				stream >> url;
-				stream >> repositBlame;
+				stream >> urlMode;
 // 				stream >> pegRev;
 // 				stream >> pegRevKind;
 				stream >> startRev;
@@ -904,9 +905,24 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 				stream >> endRev;
 				stream >> endRevKind;
 
-				blame(url, repositBlame, startRev, startRevKind, endRev, endRevKind);
+				blame(url, (UrlMode)urlMode, startRev, startRevKind, endRev, endRevKind);
 				break;
 			}
+        case SVN_INFO:
+            {
+                KURL pathOrUrl;
+                int pegRev, rev;
+                QString pegRevKind, revKind;
+                bool recurse = false;
+                stream >> pathOrUrl;
+                stream >> pegRev;
+                stream >> pegRevKind;
+                stream >> rev;
+                stream >> revKind;
+                stream >> recurse;
+                svn_info( pathOrUrl, pegRev, pegRevKind, rev, revKind, recurse );
+                break;
+            }
 		default:
 			{
 				kdDebug(9036) << "kio_svnProtocol DEFAULT" << endl;
@@ -925,7 +941,8 @@ void kio_svnProtocol::popupMessage( const QString& message ) {
 // 	if ( !dcopClient()->send( "kded","ksvnd","popupMessage(QString)", params ) )
 // 		kdWarning() << "Communication with KDED:KSvnd failed" << endl;
 }
-void kio_svnProtocol::blame( KURL url, bool repositBlame,/* int pegRev, QString pegRevKind,*/ int startRev, QString startRevKind, int endRev, QString endRevKind )
+
+void kio_svnProtocol::blame( KURL url, UrlMode mode,/* int pegRev, QString pegRevKind,*/ int startRev, QString startRevKind, int endRev, QString endRevKind )
 {
 	kdDebug(9036) << " __TIME__ " << __TIME__ << endl;
 // 	kdDebug(9036) << " PegRev " << pegRev << pegRevKind << endl;
@@ -940,7 +957,7 @@ void kio_svnProtocol::blame( KURL url, bool repositBlame,/* int pegRev, QString 
 // 	svn_opt_revision_t revPeg = createRevision( pegRev, pegRevKind, subpool );
 
 	// fill out "path_or_url"
-	if (repositBlame) {
+	if (mode == path_to_reposit ) {
 		svn_error_t *urlErr=0;
 		urlErr = svn_client_url_from_path( &path_or_url, url.path().utf8(), subpool );
 		kdDebug(9036) << " __LINE__ " << __LINE__ << endl;
@@ -952,12 +969,20 @@ void kio_svnProtocol::blame( KURL url, bool repositBlame,/* int pegRev, QString 
 			error( KIO::ERR_SLAVE_DEFINED, i18n("Converted repository URL is empty. Check whether requested item is under version control"));
 		}
 		kdDebug(9036) << " URL from PATH: " << path_or_url << endl;
-	} else{
+	} else if (mode == path_to_path ){
 		url.setProtocol( "file" );
 		path_or_url = svn_path_canonicalize( url.path().utf8(), subpool );
-		kdDebug(9036) << " URL from Working Copy: " << path_or_url << endl;
-	}
-	initNotifier(false, false, false, subpool);
+		kdDebug(9036) << " Working Copy Path: " << path_or_url << endl;
+	} else {
+        svn_string_t *string = svn_string_create( url.pathOrURL().utf8(), subpool );
+        path_or_url = string->data;
+        kdDebug(9036) << " Untouched URL or Path: " << path_or_url << endl;
+    }
+    if( !path_or_url ){
+        svn_pool_destroy (subpool);
+        error( KIO::ERR_SLAVE_DEFINED, i18n("Fail to retrieve target path or URL") );
+    }
+    //initNotifier(false, false, false, subpool);
 	svn_client_blame_receiver_t receiver = kio_svnProtocol::blameReceiver;
 	kdDebug(9036) << " __LINE__ " << __LINE__ << endl;
 	svn_error_t *err = svn_client_blame( path_or_url, &rev1, &rev2, receiver, (void*)this, ctx, subpool );
@@ -1002,8 +1027,10 @@ void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int re
 	svn_opt_revision_t rev1 = createRevision( revstart, revkindstart, subpool );
 	svn_opt_revision_t rev2 = createRevision( revend, revkindend, subpool );
 
+	m_counter = 0;
 	apr_array_header_t *targets = apr_array_make(subpool, 1+urls.count(), sizeof(const char *));
-
+	QString convertedPathUrl;
+	
 	for ( QValueListConstIterator<KURL> it = urls.begin(); it != urls.end() ; ++it ) {
 		KURL nurl = *it;
 
@@ -1020,15 +1047,19 @@ void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int re
 			}
 			(*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
 				urlFromPath;
+			convertedPathUrl = QString::fromUtf8(urlFromPath);
 			kdDebug(9036) << " urlFromPath: " << urlFromPath << endl;
+			
 		}else{ // show working copy log
 			nurl.setProtocol( "file" );
+			convertedPathUrl = QString::fromUtf8( svn_path_canonicalize( nurl.path().utf8(), subpool ) );
 			(*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
 				svn_path_canonicalize( nurl.path().utf8(), subpool );
 		}
+		setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "requrl", convertedPathUrl );
+		incCounter();
 	}
-
-	m_counter = 0;
+	
 	svn_log_message_receiver_t receiver = kio_svnProtocol::receiveLogMessage;
 	svn_error_t *err = svn_client_log2(targets, &rev1, &rev2, 0, discorverChangedPaths, strictNodeHistory, receiver, this, ctx, subpool);
 	if ( err )
@@ -1088,6 +1119,9 @@ svn_opt_revision_t kio_svnProtocol::createRevision( int revision, const QString&
 	}
 // 	} else if ( !revkind.isNull() ) {
 // 		svn_opt_parse_revision(&result,&endrev,revkind.utf8(),pool);
+    else if ( revkind == "UNSPECIFIED" ){
+        result.kind = svn_opt_revision_unspecified;
+    }
 	else {
 		result.kind = svn_opt_revision_unspecified;
 	}
@@ -1409,6 +1443,46 @@ void kio_svnProtocol::wc_status2(const KURL& wc, bool checkRepos, bool fullRecur
 
 	finished();
 	svn_pool_destroy (subpool);
+}
+
+void kio_svnProtocol::svn_info( KURL pathOrUrl, int pegRev, QString pegRevKind, int rev, QString revKind, bool recurse )
+{
+    kdDebug(9036) << " kio_svnProtocol::svn_info(): pegRev " << pegRev << " pegKind " << pegRevKind << " rev " << rev << " revKind " << revKind << " recurse " << recurse << endl;
+
+    apr_pool_t *subpool = svn_pool_create (pool);
+    svn_opt_revision_t peg_rev = createRevision( pegRev, pegRevKind, subpool );
+    svn_opt_revision_t revision = createRevision( rev, revKind, subpool );
+
+    svn_error_t *err = svn_client_info( pathOrUrl.pathOrURL().utf8(),
+                                        &peg_rev, &revision,
+                                        kio_svnProtocol::infoReceiver,
+                                        this,
+                                        recurse,
+                                        ctx, pool );
+
+    if ( err ){
+        error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
+    }
+    svn_pool_destroy( subpool );
+    finished();
+}
+
+svn_error_t* kio_svnProtocol::infoReceiver( void *baton, const char *path,
+                                       const svn_info_t *info, apr_pool_t *pool)
+{
+    kio_svnProtocol *p= (kio_svnProtocol*)baton ;
+    if( !p )
+        return SVN_NO_ERROR;
+    
+    p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "PATH", QString::fromUtf8( path ));
+    p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "URL", QString( info->URL ) );
+    p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "REV", QString::number( info->rev ));
+    p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "KIND", QString::number( info->kind ));
+    p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "REPOS_ROOT_URL", QString( info->repos_root_URL ) );
+    p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "REPOS_UUID", QString(info->repos_UUID) );
+    p->incCounter();
+
+    return SVN_NO_ERROR;
 }
 
 //change the proto and remove trailing /

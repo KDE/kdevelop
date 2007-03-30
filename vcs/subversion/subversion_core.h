@@ -27,6 +27,7 @@
 #include <kurl.h>
 #include <ktempdir.h>
 #include "subversion_fileinfo.h"
+#include "subversion_global.h"
 
 class KDevProject;
 class subversionPart;
@@ -52,13 +53,21 @@ public:
 	void svnLog( const KURL::List& list,
 			int revstart, QString revKindStart, int revend, QString revKindEnd, 
 			bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
-	void blame( const KURL &url, bool repositBlame, int revstart, QString revKindStart, int revend, QString revKindEnd );
+	void blame( const KURL &url, SvnGlobal::UrlMode mode, int revstart, QString revKindStart, int revend, QString revKindEnd );
 	void add( const KURL::List&);
 	void del( const KURL::List&);
 	void diff( const KURL::List&, const QString& where);
+	void diffAsync( const KURL &pathOrUrl1, const KURL &pathOrUrl2,
+					int rev1, QString revKind1, int rev2, QString revKind2,
+					bool recurse );
 	void revert( const KURL::List&);
 	void resolve( const KURL::List&);
 	void checkout();
+    // This is blocking function. But the GUI is not blocked.
+    // Information will be pulled solely from the working copy.Thus no network connections will be made.
+    // Parameter holderMap is the map to be filled out by this method. Callers should preallocate this object.
+    // Return true on success. Otherwise return false.
+    bool clientInfo( KURL path_or_url, bool recurse, QMap< KURL, SvnGlobal::SvnInfoHolder> &holderMap );
 	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
     KDevVCSFileInfoProvider *fileInfoProvider() const;
 
@@ -70,6 +79,7 @@ private slots:
 	void slotResult( KIO::Job * job );
 	void slotLogResult( KIO::Job * job );
 	void slotBlameResult( KIO::Job * job );
+	void slotDiffResult( KIO::Job * job );
 
 signals:
 	void checkoutFinished( QString dir );
@@ -85,7 +95,6 @@ private:
 	KTempDir* diffTmpDir;
 
 // 	QGuardedPtr<SvnLogViewWidget> m_logViewWidget;
-	QValueList<SvnLogHolder> holderList;
 	QValueList<SvnBlameHolder> blameList;
 // 	QMap<unsigned int, SvnBlameHolder> blameList;
 	

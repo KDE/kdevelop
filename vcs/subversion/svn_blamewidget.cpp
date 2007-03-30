@@ -3,7 +3,12 @@
 #include <qmap.h>
 #include <qlistview.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
+#include <qstringlist.h>
+#include <qfont.h>
+
 #include <klocale.h>
+#include <kmessagebox.h>
 
 SvnBlameWidget::SvnBlameWidget( QWidget *parent, const char* name, bool modal, WFlags f )
 	:QWidget( parent )
@@ -37,7 +42,11 @@ void SvnBlameWidget::show()
 {
 	outView()->clear();
 	outView()->setSortColumn(0);
-// 	QMap<unsigned int, SvnBlameHolder>::Iterator it;
+	
+	QFont f = outView()->font();
+	f.setFixedPitch( true );
+	outView()->setFont( f );
+
 	QValueList<SvnBlameHolder>::Iterator it;
 	
 	for( it = m_blamelist.begin(); it != m_blamelist.end(); ++it ){
@@ -62,7 +71,56 @@ QListView* SvnBlameWidget::outView()
 {
     return m_listView;
 }
-// TODO eventually, to implement some interactive functions with IDE, this widget should be modeless
-// void SvnBlameWidget::show()
+
+/////////////////////////////////////////////////////////////
+
+SvnBlameFileSelectDlg::SvnBlameFileSelectDlg( QWidget *parent )
+    : QDialog( parent )
+{
+    m_selected = "";
+    setCaption( i18n("Select one file to view annotation") );
+    
+    m_layout = new QGridLayout( this, 2, 2 );
+    m_view = new QListView( this );
+    m_view->addColumn( i18n("files") );
+    m_okBtn = new QPushButton( i18n("OK"), this );
+    m_cancelBtn = new QPushButton( i18n("Cancel"), this );
+    m_layout->addMultiCellWidget( m_view, 0, 0, 0, 1 );
+    m_layout->addWidget( m_okBtn, 1, 0 );
+    m_layout->addWidget( m_cancelBtn, 1, 1 );
+    
+    connect( m_okBtn, SIGNAL(clicked()), this, SLOT(accept()) );
+    connect( m_cancelBtn, SIGNAL(clicked()), this, SLOT(reject()) );
+//     resize( QSize(305, 300).expandedTo(minimumSizeHint()) );
+}
+SvnBlameFileSelectDlg::~SvnBlameFileSelectDlg()
+{}
+
+void SvnBlameFileSelectDlg::setCandidate( QStringList *list )
+{
+    for( QValueList<QString>::iterator it = list->begin(); it != list->end(); ++it ){
+        QListViewItem *item = new QListViewItem( m_view, *it );
+    }
+}
+
+QString SvnBlameFileSelectDlg::selected()
+{
+    return m_selected;
+}
+
+void SvnBlameFileSelectDlg::accept()
+{
+    while( true ){
+        QListViewItem *item = m_view->currentItem();
+        if( item ){
+            m_selected = item->text(0);
+            break;
+        }
+        else{
+            KMessageBox::error( this, i18n("Select file from list to view annotation") );
+        }
+    }
+    QDialog::accept();
+}
 
 #include "svn_blamewidget.moc"

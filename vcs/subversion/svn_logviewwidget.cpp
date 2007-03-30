@@ -19,8 +19,13 @@
  */
 
 #include "svn_logviewwidget.h"
+#include "svn_blamewidget.h"
 #include "subversion_core.h"
+#include "subversion_global.h"
+#include <kdevproject.h>
 #include <ktextedit.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
@@ -31,6 +36,7 @@
 #include <qheader.h>
 #include <qlistview.h>
 #include <qlayout.h>
+#include <qstringlist.h>
 
 SvnLogViewWidget::SvnLogViewWidget(subversionPart *part, QWidget *parent)
 	:QWidget(parent), m_part(part)
@@ -46,6 +52,7 @@ SvnLogViewWidget::SvnLogViewWidget(subversionPart *part, QWidget *parent)
     listView1->addColumn( i18n( "Date" ) );
     listView1->addColumn( i18n( "Author" ) );
     listView1->addColumn( i18n( "Comment" ) );
+    listView1->resize( QSize(1, 1).expandedTo(minimumSizeHint()) );
     QFont listView1_font(  listView1->font() );
     listView1_font.setPointSize( 9 );
     listView1->setFont( listView1_font );
@@ -53,6 +60,7 @@ SvnLogViewWidget::SvnLogViewWidget(subversionPart *part, QWidget *parent)
     listView1->setShowSortIndicator( TRUE );
 
     textEdit1 = new KTextEdit( splitter1, "textEdit1" );
+    textEdit1->resize( QSize(1, 1).expandedTo(minimumSizeHint()) );
     QFont textEdit1_font(  textEdit1->font() );
     textEdit1_font.setPointSize( 9 );
     textEdit1->setFont( textEdit1_font );
@@ -65,7 +73,9 @@ SvnLogViewWidget::SvnLogViewWidget(subversionPart *part, QWidget *parent)
     resize( QSize(692, 343).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );
     
-	connected = connect( listView1, SIGNAL(clicked( QListViewItem *)), this, SLOT(slotClicked(QListViewItem*)) );
+	connect( listView1, SIGNAL(clicked( QListViewItem *)), this, SLOT(slotClicked(QListViewItem*)) );
+    connect( listView1, SIGNAL(contextMenuRequested( QListViewItem*, const QPoint&, int )),
+             this, SLOT(contextMenuRequested(QListViewItem*, const QPoint&, int)) );
 }
 SvnLogViewWidget::~SvnLogViewWidget()
 {
@@ -95,14 +105,86 @@ void SvnLogViewWidget::setLogResult( QValueList<SvnLogHolder> *loglist )
 // 	this->listView1->show();
 }
 
+void SvnLogViewWidget::setRequestedUrl( QString reqUrl )
+{
+	m_reqUrl = reqUrl;
+}
+
 void SvnLogViewWidget::slotClicked( QListViewItem *oneItem )
 {
 	if( !oneItem ) return;
-	SvnLogViewItem *item = (SvnLogViewItem*)oneItem;
+	SvnLogViewItem *item = dynamic_cast<SvnLogViewItem*>( oneItem );
+    if( !item ) return;
 	textEdit1->clear();
 	textEdit1->append( item->m_pathList );
 	textEdit1->append( "\n\n" );
 	textEdit1->append( item->m_message + "\n" );
+}
+void SvnLogViewWidget::contextMenuRequested( QListViewItem *item, const QPoint & pos, int col )
+{
+    if( !item || col == -1 )
+        return;
+    m_ctxLogItem = dynamic_cast<SvnLogViewItem*>(item);
+    if( !m_ctxLogItem )
+        return;
+    QPopupMenu *menu = new QPopupMenu(this);
+    menu->insertItem( i18n("Blame this revision"), this, SLOT(blameThis()) );
+    menu->insertItem( i18n("Difference to previous revision"), this, SLOT(diffToPrevious()) );
+    menu->exec( pos );
+}
+void SvnLogViewWidget::blameThis()
+{
+	if( !m_ctxLogItem ){
+		KMessageBox::error( this, i18n("No revision was clicked"), i18n("error") );
+		return;
+	}
+	// note that blame is done on single file.
+	QStringList modifies = QStringList::split( "\n", m_ctxLogItem->m_pathList, false );
+	QString selectedPath;
+	if( modifies.count() > 1 ){
+		SvnBlameFileSelectDlg dlg(this);
+		dlg.setCandidate( &modifies );
+		if( dlg.exec() == QDialog::Accepted ){
+			selectedPath = dlg.selected();
+		} else{
+			return;
+		}
+		
+	} else if( modifies.count() == 1 ){
+		selectedPath = *( modifies.at(0) );
+	} else {
+		return;
+	}
+	
+	QString relPath = selectedPath.section( '/', 1 );
+	
+	QValueList< SvnGlobal::SvnInfoHolder > holderList = m_part->m_prjInfoMap.values();
+	SvnGlobal::SvnInfoHolder holder;
+	if( holderList.count() > 0 ){
+		// get full Url
+		holder = holderList.first();
+		QString absPath =  holder.reposRootUrl.url(-1) + '/' + relPath;
+		kdDebug(9036) << " Blame requested on path " << absPath << endl;
+		// get revision
+		int revEnd = m_ctxLogItem->text(0).toInt();
+		// final request
+		m_part->svncore()->blame( KURL(absPath), SvnGlobal::dont_touch, 0, "", revEnd, "" );
+	}
+	else{
+		return;
+	}
+}
+
+void SvnLogViewWidget::diffToPrevious()
+{
+    if( !m_ctxLogItem ){
+        KMessageBox::error( this, i18n("No revision was clicked"), i18n("error") );
+        return;
+    }
+    int revThis = m_ctxLogItem->text(0).toInt();
+	int revPrev = revThis - 1;
+	kdDebug(9036) << " Diff to prev requested on " << m_reqUrl << endl;
+	m_part->svncore()->diffAsync( m_reqUrl, m_reqUrl, revPrev, "", revThis, "", true/*recurse*/ );
 }
 
 SvnLogViewOptionDlg::SvnLogViewOptionDlg( QWidget *parent, const char* name, bool modal, WFlags f )

@@ -54,10 +54,11 @@ void subversionWidget::append( QString notifications )
     showPage( m_edit );
 }
 
-void subversionWidget::showLogResult( QValueList<SvnLogHolder> *holderList )
+void subversionWidget::showLogResult( QValueList<SvnLogHolder> *holderList, QString reqUrl )
 {
     SvnLogViewWidget *widget = new SvnLogViewWidget( m_part, this );
     widget->setLogResult( holderList );
+	widget->setRequestedUrl( reqUrl );
     tab()->addTab( widget, i18n("Log History") );
     tab()->setTabEnabled( widget, true );
     tab()->showPage( widget );
