@@ -68,6 +68,7 @@ QString FileTemplate::makeSubstitutions( QDomDocument & dom, const QString & tex
     QString author = DomUtil::readEntry(dom, "/general/author");
     QString email = DomUtil::readEntry(dom, "/general/email");
     QString version = DomUtil::readEntry(dom, "/general/version");
+    QString appname = DomUtil::readEntry(dom, "/general/projectname");
     QString date = QDate::currentDate().toString();
     QString year = QString::number(QDate::currentDate().year());
 
@@ -77,6 +78,7 @@ QString FileTemplate::makeSubstitutions( QDomDocument & dom, const QString & tex
     str.replace(QRegExp("\\$VERSION\\$"),version);
     str.replace(QRegExp("\\$DATE\\$"),date);
     str.replace(QRegExp("\\$YEAR\\$"),year);
+    str.replace(QRegExp("\\$APPNAME\\$"),appname);
 
     return str;
 }
