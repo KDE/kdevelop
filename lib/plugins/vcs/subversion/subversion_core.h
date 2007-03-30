@@ -53,7 +53,7 @@ namespace SubversionUtils
         QString revKind;
         QDateTime revDate;
     };
-};
+}
 
 using namespace SubversionUtils;
 
