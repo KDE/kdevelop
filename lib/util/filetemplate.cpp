@@ -79,6 +79,9 @@ QString FileTemplate::makeSubstitutions( QDomDocument & dom, const QString & tex
     str.replace(QRegExp("\\$DATE\\$"),date);
     str.replace(QRegExp("\\$YEAR\\$"),year);
     str.replace(QRegExp("\\$APPNAME\\$"),appname);
+    str.replace(QRegExp("\\$APPNAME\\$"),appname);
+    str.replace(QRegExp("\\$APPNAMEUC\\$"),appname.upper());
+    str.replace(QRegExp("\\$APPNAMELC\\$"),appname.lower());
 
     return str;
 }
