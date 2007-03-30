@@ -438,8 +438,7 @@
                                             <string></string>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Set project to be built in debug_and_release mod
-e</string>
+                                            <string>Set project to be built in debug_and_release mode</string>
                                         </property>
                                     </widget>
                                 </hbox>
