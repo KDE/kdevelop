@@ -12,10 +12,10 @@ include(FindBison)
 include(MacroEnsureVersion)
 
 if(BISON_FOUND)
-  macro_ensure_version( "2.5.31" "${FLEX_VERSION}" FLEX_NOT_OLD )
+    macro_ensure_version2( "2.3" "${BISON_VERSION}" BISON_NOT_OLD )
 endif(BISON_FOUND)
 if(FLEX_FOUND)
-macro_ensure_version2( "2.3" "${BISON_VERSION}" BISON_NOT_OLD )
+    macro_ensure_version( "2.5.31" "${FLEX_VERSION}" FLEX_NOT_OLD )
 endif(FLEX_FOUND)
 
 if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
