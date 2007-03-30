@@ -552,7 +552,7 @@ void subversionCore::slotBlameResult( KIO::Job * job )
                                     ) );
         return;
     }
-	blameList.clear();
+	QValueList<SvnBlameHolder> blameList;
 
 	KIO::MetaData ma = job->metaData();
 	QValueList<QString> keys = ma.keys();

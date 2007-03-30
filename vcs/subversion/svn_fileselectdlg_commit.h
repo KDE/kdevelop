@@ -38,7 +38,6 @@ public:
 	SVNFileSelectDlgCommit( KURL::List&, subversionPart* part, QWidget* parent = 0 );
 	~SVNFileSelectDlgCommit();
 	void insertItem( QString status, KURL url );
-// 	void setListItem( int status, KURL::List urls );
 	KURL::List checkedUrls();
 	bool recursive();
 	bool keepLocks();

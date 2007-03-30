@@ -94,10 +94,6 @@ private:
 	// be nice about tmp diff files: delete all of them when exiting.
 	KTempDir* diffTmpDir;
 
-// 	QGuardedPtr<SvnLogViewWidget> m_logViewWidget;
-	QValueList<SvnBlameHolder> blameList;
-// 	QMap<unsigned int, SvnBlameHolder> blameList;
-	
 };
 
 #endif

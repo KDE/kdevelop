@@ -1,3 +1,17 @@
+/*
+ *  Copyright (C) 2007 Dukju Ahn (dukjuahn@gmail.com)
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ */
+
 #include "svn_blamewidget.h"
 #include "subversion_widget.h"
 #include <qmap.h>
@@ -29,11 +43,7 @@ SvnBlameWidget::SvnBlameWidget( QWidget *parent, const char* name, bool modal, W
 SvnBlameWidget::~SvnBlameWidget()
 {}
 
-// copy whole value. If blocking dialog box, it is expensive
-// but eventually we will make this dialog box as modeless.
-
 void SvnBlameWidget::copyBlameData( QValueList<SvnBlameHolder> *blamelist )
-//void SvnBlameWidget::copyBlameData( QMap<unsigned int, SvnBlameHolder> *blamelist )
 {
 	m_blamelist = *blamelist;
 }
@@ -91,7 +101,6 @@ SvnBlameFileSelectDlg::SvnBlameFileSelectDlg( QWidget *parent )
     
     connect( m_okBtn, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( m_cancelBtn, SIGNAL(clicked()), this, SLOT(reject()) );
-//     resize( QSize(305, 300).expandedTo(minimumSizeHint()) );
 }
 SvnBlameFileSelectDlg::~SvnBlameFileSelectDlg()
 {}
