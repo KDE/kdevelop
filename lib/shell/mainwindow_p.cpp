@@ -50,7 +50,6 @@ Boston, MA 02110-1301, USA.
 #include "iplugin.h"
 
 #include "core.h"
-#include "configuration.h"
 #include "partdocument.h"
 #include "partcontroller.h"
 #include "uicontroller.h"
