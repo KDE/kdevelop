@@ -1678,13 +1678,13 @@ void CppCodeCompletion::slotTextHint( int line, int column, QString &text ) {
   if ( type->resolved() ) {
     addStatusText( i18n( "Type of \"%1\" is \"%2\"" ).arg( type.expr.expr() ).arg( type->fullNameChain() ), timeout );
     if ( type.sourceVariable && !type.sourceVariable.comment.isEmpty() ) {
-      addStatusText( i18n( "Comment on variable %1: \"%2\"" ).arg( type.sourceVariable.name ).arg( type.sourceVariable.comment ) , 10000 );
+      addStatusText( i18n( "Comment on variable \"%1\": \"%2\"" ).arg( type.sourceVariable.name ).arg( type.sourceVariable.comment ) , 10000 );
     }
     if ( !type->resolved() ->comment().isEmpty() ) {
-      addStatusText( i18n( "Comment on %1: \"%2\"" ).arg( type->name() ).arg( type->resolved() ->comment() ) , 10000 );
+      addStatusText( i18n( "Comment on \"%1\": \"%2\"" ).arg( type->name() ).arg( type->resolved() ->comment() ) , 10000 );
     }
     if ( type->resolved() ->comment().isEmpty() ) {
-      addStatusText( i18n( "%1 has no comment" ).arg( type->name() ) , timeout );
+      addStatusText( i18n( "\"%1\" has no comment" ).arg( type->name() ) , timeout );
     }
   } else {
     if ( type ) {
