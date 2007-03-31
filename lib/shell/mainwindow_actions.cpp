@@ -103,7 +103,7 @@ void MainWindowPrivate::configureNotifications()
 
 void MainWindowPrivate::settingsDialog()
 {
-    Configuration::self()->settingsDialog( );
+    Core::self()->uiControllerInternal()->showSettingsDialog();
 }
 
 void MainWindowPrivate::configureEditors()

@@ -21,31 +21,21 @@
 #ifndef QMAKEBUILDERPREFERENCES_H
 #define QMAKEBUILDERPREFERENCES_H
 
-#include "configmodule.h"
-
-#include <kurl.h>
-#include <kstandarddirs.h>
+#include "projectkcmodule.h"
 
 class QWidget;
 class QStringList;
-
+class QMakeBuilderSettings;
 namespace Ui { class QMakeConfig; }
 
 /**
  * @author Andreas Pakulat <apaku@gmx.de>
  */
-class QMakeBuilderPreferences : public KDevelop::ConfigModule
+class QMakeBuilderPreferences : public ProjectKCModule<QMakeBuilderSettings>
 {
 public:
     QMakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
     ~QMakeBuilderPreferences();
-
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
-
-    virtual KUrl localNonShareableFile() const;
-
 
 private Q_SLOTS:
     void settingsChanged();

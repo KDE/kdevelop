@@ -21,11 +21,13 @@
 #ifndef CMAKEPREFERENCES_H
 #define CMAKEPREFERENCES_H
 
-#include "configmodule.h"
+#include <projectkcmodule.h>
 
 #include <kurl.h>
 #include <kstandarddirs.h>
 
+
+class CMakeSettings;
 class QWidget;
 class QStringList;
 
@@ -34,21 +36,12 @@ namespace Ui { class CMakeBuildSettings; }
 /**
  * @author Matt Rogers <mattr@kde.org>
  */
-class CMakePreferences : public KDevelop::ConfigModule
+class CMakePreferences : public ProjectKCModule<CMakeSettings>
 {
 public:
     CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());
     ~CMakePreferences();
 
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
-
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                               KStandardDirs::locate( "data", "kdevcmakemanager/data.kdev4" ) );
-    }
 
 private slots:
     void settingsChanged();

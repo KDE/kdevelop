@@ -20,7 +20,6 @@
 
 #include "qmakebuilder.h"
 #include "imakebuilder.h"
-#include "configuration.h"
 
 #include <config.h>
 
@@ -97,8 +96,8 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         if( view )
         {
             QStringList cmd;
-            KConfig* cfg = KDevelop::Configuration::self()->localProject( dom->project() );
-            KConfigGroup group(cfg, "QMake Builder");
+            KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
+            KConfigGroup group(cfg.data(), "QMake Builder");
             kDebug(9024) << "Reading setting: " << group.readEntry("qmakebin") << endl;
             cmd << group.readEntry("qmakebin", "qmake-qt4");
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );

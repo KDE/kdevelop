@@ -47,27 +47,14 @@ public:
     virtual int projectCount() const = 0;
     virtual QList<IProject*> projects() const = 0;
 
-//     virtual KUrl localFile() const = 0;
-//     virtual void setLocalFile( const KUrl &localFile ) = 0;
-
-//     virtual KUrl globalFile() const = 0;
-//     virtual void setGlobalFile( const KUrl &globalFile ) = 0;
-
-//     virtual KUrl projectsDirectory() const = 0;
-//     virtual void setProjectsDirectory( const KUrl &projectsDir ) = 0;
-
-//     virtual bool isLoaded() const = 0;
-//     virtual KUrl projectDirectory() const = 0;
-
-  //     virtual IProject* activeProject() const = 0;
     virtual ProjectModel* projectModel() = 0;
-    virtual IProject* currentProject() const = 0;
+//     virtual IProject* currentProject() const = 0;
 
 
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() ) = 0;
     virtual bool closeProject( IProject* ) = 0;
-    virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
+//     virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
 
 Q_SIGNALS:
     void projectOpened( KDevelop::IProject* );

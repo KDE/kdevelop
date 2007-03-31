@@ -75,11 +75,9 @@ public:
 
     virtual ProjectFileItem *fileForUrl( const KUrl& ) const;
 
-    virtual KUrl localFile() const;
-    virtual KUrl globalFile() const;
-
-    virtual void setLocalFile( const KUrl& );
-    virtual void setGlobalFile( const KUrl& );
+    virtual KUrl projectConfigFile() const;
+    virtual KUrl projectDefaultsConfigFile() const;
+    virtual KSharedConfig::Ptr projectConfiguration() const;
 
 public Q_SLOTS:
     /**

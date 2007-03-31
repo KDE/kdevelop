@@ -26,6 +26,9 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <ksettings/dialog.h>
+#include <ksettings/dispatcher.h>
+#include <kcmultidialog.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -42,7 +45,7 @@ namespace KDevelop {
 
 class UiControllerPrivate {
 public:
-    UiControllerPrivate(UiController *controller): m_controller(controller)
+    UiControllerPrivate(UiController *controller): cfgDlg(0), m_controller(controller)
     {
         AreaParams defaultAreaParams = ShellExtension::getInstance()->defaultArea();
         defaultArea = new Sublime::Area(m_controller, defaultAreaParams.name, defaultAreaParams.title);
@@ -54,6 +57,13 @@ public:
     MainWindow* defaultMainWindow;
 
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
+
+    KSettings::Dialog* cfgDlg;
+
+    void loadSettings()
+    {
+        kDebug(9000) << "Loading settings" << endl;
+    }
 
 private:
     UiController *m_controller;
@@ -98,6 +108,14 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
     Q_UNUSED( switchMode );
     MainWindow *main = new MainWindow(this);
+    KSettings::Dispatcher::self()->registerComponent( KGlobal::mainComponent(),
+                                    main, SLOT( loadSettings() ) );
+    KSettings::Dispatcher::self()->registerComponent( KComponentData("kdevplatform"),
+                                    main, SLOT( loadSettings() ) );
+    KSettings::Dispatcher::self()->registerComponent( KGlobal::mainComponent(),
+                                    this, SLOT( loadSettings() ) );
+    KSettings::Dispatcher::self()->registerComponent( KComponentData("kdevplatform"),
+                                    this, SLOT( loadSettings() ) );
     showArea(area(areaName), main);
     main->initialize();
     main->show();
@@ -193,6 +211,20 @@ void UiController::addNewToolView(MainWindow *mw)
             Sublime::dockAreaToPosition(current->factory->defaultPosition(mw->area()->objectName())));
     }
     delete dia;
+}
+
+void UiController::showSettingsDialog()
+{
+    if(!d->cfgDlg)
+        d->cfgDlg = new KSettings::Dialog( QStringList() << "kdevplatform",
+                                    KSettings::Dialog::Static,
+                                    activeMainWindow() );
+
+// The following doesn't work for some reason if the parent != activeMainWin,
+// the show() call doesn't show the dialog
+//     if( d->cfgDlg->dialog()->parentWidget() != activeMainWindow() )
+//         d->cfgDlg->dialog()->setParent( activeMainWindow() );
+    d->cfgDlg->show();
 }
 
 }

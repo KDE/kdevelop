@@ -1,6 +1,6 @@
-/* KDevelop CMake Support
+/* KDevelop
  *
- * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,33 +18,28 @@
  * 02110-1301, USA.
  */
 
-#ifndef MAKEBUILDERPREFERENCES_H
-#define MAKEBUILDERPREFERENCES_H
+#ifndef PROJECTKCMODULE_H
+#define PROJECTKCMODULE_H
 
-#include <projectkcmodule.h>
-#include <kurl.h>
-#include <kstandarddirs.h>
+#include <kcmodule.h>
 
+class KComponentData;
 class QWidget;
 class QStringList;
-class MakeBuilderSettings;
-namespace Ui { class MakeConfig; }
 
-/**
- * @author Matt Rogers <mattr@kde.org>
- */
-class MakeBuilderPreferences : public ProjectKCModule<MakeBuilderSettings>
+template <typename T> class ProjectKCModule : public KCModule
 {
-public:
-    MakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
-    ~MakeBuilderPreferences();
-
-private slots:
-    void settingsChanged();
-
-private:
-    Ui::MakeConfig* m_prefsUi;
+    public:
+        ProjectKCModule( const KComponentData& componentData, QWidget* parent, const QStringList& args )
+            : KCModule( componentData, parent, args )
+        {
+            Q_ASSERT( args.count() > 1 );
+            T::instance( args.first() );
+            T::self()->setProjectConfig( args.at(1) );
+        }
+        virtual ~ProjectKCModule() {}
 };
 
 #endif
+
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

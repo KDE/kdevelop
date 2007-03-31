@@ -32,10 +32,11 @@
 #include <kurl.h>
 
 #include "kdevexport.h"
-
+#include <ksharedconfig.h>
 template<typename T> class QList;
 
 class KJob;
+
 
 namespace KDevelop
 {
@@ -82,10 +83,11 @@ public:
 
     virtual ProjectFileItem *fileForUrl( const KUrl& ) const = 0;
 
-    virtual KUrl localFile() const = 0;
-    virtual KUrl globalFile() const = 0;
-    virtual void setLocalFile( const KUrl& ) = 0;
-    virtual void setGlobalFile( const KUrl& ) = 0;
+    virtual KUrl projectConfigFile() const = 0;
+    virtual KUrl projectDefaultsConfigFile() const = 0;
+    virtual KSharedConfig::Ptr projectConfiguration() const = 0;
+//     virtual void setLocalFile( const KUrl& ) = 0;
+//     virtual void setGlobalFile( const KUrl& ) = 0;
 
 public Q_SLOTS:
     /**

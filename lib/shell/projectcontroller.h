@@ -47,12 +47,12 @@ public:
 
     virtual ProjectModel* projectModel();
 
-    IProject* currentProject() const;
+//     IProject* currentProject() const;
 
 public Q_SLOTS:
     bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
     bool closeProject( IProject* );
-    void changeCurrentProject( ProjectBaseItem* );
+//     void changeCurrentProject( ProjectBaseItem* );
 
 Q_SIGNALS:
     void projectOpened( KDevelop::IProject* );
@@ -72,7 +72,6 @@ private:
     bool loadProjectPart();
 
 private:
-    Q_PRIVATE_SLOT(d, void closeProject())
     struct ProjectControllerPrivate* const d;
 };
 

@@ -40,8 +40,8 @@ public:
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
     virtual Sublime::MainWindow *activeSublimeWindow();
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
-    virtual KParts::MainWindow *activeMainWindow() 
-    { 
+    virtual KParts::MainWindow *activeMainWindow()
+    {
       return (KParts::MainWindow*)(activeSublimeWindow());
     };
 
@@ -61,7 +61,10 @@ public:
     void openEmptyDocument();
 
     void initialize();
+
+    void showSettingsDialog();
 private:
+    Q_PRIVATE_SLOT(d, void loadSettings())
     class UiControllerPrivate *d;
 };
 

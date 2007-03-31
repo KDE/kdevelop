@@ -5,6 +5,7 @@ include_directories(
 
 set(kdevplatformproject_LIB_SRCS
     projectmodel.cpp
+    projectconfigskeleton.cpp
     importprojectjob.cpp
 )
 
@@ -26,6 +27,7 @@ install(FILES
 
 install(FILES
     importprojectjob.h
+    projectconfigskeleton.h
     projectmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project
  )

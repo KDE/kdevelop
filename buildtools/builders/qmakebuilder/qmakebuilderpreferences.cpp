@@ -32,50 +32,23 @@ typedef KGenericFactory<QMakeBuilderPreferences> QMakeBuilderPreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdev_qmakebuilder, QMakeBuilderPreferencesFactory( "kcm_kdev_qmakebuilder" )  )
 
 QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QStringList& args)
-    : KDevelop::ConfigModule(QMakeBuilderSettings::self(),
-                             QMakeBuilderPreferencesFactory::componentData(),
-                             parent, args)
+    : ProjectKCModule<QMakeBuilderSettings>( QMakeBuilderPreferencesFactory::componentData(), parent, args)
 {
+//     Q_ASSERT( args.count() > 0 );
+//     QMakeBuilderSettings::instance( args.first() );
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::QMakeConfig;
     m_prefsUi->setupUi( w );
     l->addWidget( w );
-
     addConfig( QMakeBuilderSettings::self(), w );
     load();
 
-}
-
-KUrl QMakeBuilderPreferences::localNonShareableFile() const
-{
-    return KUrl::fromPath(
-            KStandardDirs::locate( "data", "kdevqmakebuilder/data.kdev4") );
 }
 
 QMakeBuilderPreferences::~QMakeBuilderPreferences()
 {
 }
 
-void QMakeBuilderPreferences::load()
-{
-    KDevelop::ConfigModule::load();
-//    m_prefsUi->kcfg_qmakebin->setUrl(QMakeBuilderSettings::qmakebin());
-//    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(textChanged(const QString&)), this, SLOT(changed()));
-//    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(returnPressed()), this, SLOT(changed()));
-//    connect(m_prefsUi->kcfg_qmakebin, SIGNAL(urlSelected(const KUrl&)), this, SLOT(changed()));
-}
-
-void QMakeBuilderPreferences::save()
-{
-//    kDebug(9024) << "Saving QMake Builder config" << endl;
-//    QMakeBuilderSettings::setQmakebin(m_prefsUi->kcfg_qmakebin->url().path());
-    KDevelop::ConfigModule::save();
-}
-
-void QMakeBuilderPreferences::defaults()
-{
-    KDevelop::ConfigModule::defaults();
-}
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

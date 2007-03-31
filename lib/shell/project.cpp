@@ -66,6 +66,7 @@ public:
     QString name;
     KUrl localFile;
     KUrl globalFile;
+    KSharedConfig::Ptr m_cfg;
     QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
     {
         QList<ProjectFileItem*> files;
@@ -123,25 +124,30 @@ QString Project::name() const
     return d->name;
 }
 
-KUrl Project::localFile() const
+KUrl Project::projectConfigFile() const
 {
     return d->localFile;
 }
 
-KUrl Project::globalFile() const
+KUrl Project::projectDefaultsConfigFile() const
 {
     return d->globalFile;
 }
 
-void Project::setLocalFile( const KUrl& u )
+KSharedConfig::Ptr Project::projectConfiguration() const
 {
-    d->localFile = u;
+    return d->m_cfg;
 }
 
-void Project::setGlobalFile( const KUrl& u )
-{
-    d->globalFile = u;
-}
+// void Project::setLocalFile( const KUrl& u )
+// {
+//     d->localFile = u;
+// }
+
+// void Project::setGlobalFile( const KUrl& u )
+// {
+//     d->globalFile = u;
+// }
 
 const KUrl& Project::folder() const
 {
@@ -199,9 +205,15 @@ bool Project::open( const KUrl& projectFileUrl )
         return false;
     }
     d->globalFile = projectFileUrl;
-    d->localFile = KUrl::fromPath( d->globalFile.directory( KUrl::AppendTrailingSlash )
+    d->localFile = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash )
                                   + ".kdev4/"
-                                  + d->globalFile.fileName() );
+                                  + projectFileUrl.fileName() );
+    if( QFileInfo( d->localFile.path() ).exists() )
+    {
+        KSharedConfig::Ptr ptr = KSharedConfig::openConfig( d->globalFile.path() );
+        delete ptr->copyTo( d->localFile.path() );
+    }
+    d->m_cfg = KSharedConfig::openConfig( d->localFile.path() );
     return true;
 }
 

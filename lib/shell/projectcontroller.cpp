@@ -36,7 +36,6 @@ Boston, MA 02110-1301, USA.
 
 #include "core.h"
 #include "iplugin.h"
-#include "configuration.h"
 #include "project.h"
 #include "mainwindow.h"
 #include "projectmodel.h"
@@ -56,12 +55,8 @@ public:
     IPlugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
     Core* m_core;
-    IProject* m_currentProject;
+//     IProject* m_currentProject;
     ProjectModel* model;
-    void closeProject()
-    {
-        m_core->projectController()->closeProject( m_currentProject );
-    }
 };
 
 ProjectController::ProjectController( Core* core )
@@ -69,7 +64,7 @@ ProjectController::ProjectController( Core* core )
 {
     d->m_core = core;
     d->m_projectPart = 0;
-    d->m_currentProject = 0;
+//     d->m_currentProject = 0;
     d->model = new ProjectModel();
     setupActions();
 }
@@ -94,7 +89,7 @@ void ProjectController::setupActions()
     action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
     action->setEnabled( false );
 
-    KConfig * config = Configuration::self()->standardCurrentProject();
+    KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
 
     d->m_recentAction =
@@ -127,19 +122,8 @@ void ProjectController::loadSettings( bool projectIsLoaded )
 void ProjectController::saveSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
-    // Do not save if a project is loaded as this doesn't make sense inside a project file...
-//     if ( projects().count() == 0 )
-//     {
-//         KConfig* standard = Config::self()->standard();
-//         KConfigGroup group = standard->group( "General Options" );
-//         standard->writePathEntry( "Last Project", d->m_lastProject.path() );
-//     }
 }
 
-// bool ProjectController::isLoaded() const
-// {
-//     return d->m_isLoaded;
-// }
 
 int ProjectController::projectCount() const
 {
@@ -164,7 +148,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     if ( url.isEmpty() )
     {
-        KConfig * config = Configuration::self()->standardCurrentProject();
+        KSharedConfig * config = KGlobal::config().data();
         KConfigGroup group = config->group( "General Options" );
         QString dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
@@ -179,7 +163,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     foreach( IProject* project, d->m_projects )
     {
-        if ( url == project->globalFile() )
+        if ( url == project->projectDefaultsConfigFile() )
         {
             if ( KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
                                              i18n( "Reopen the current project?" ) )
@@ -217,10 +201,11 @@ bool ProjectController::openProject( const KUrl &projectFile )
     action->setEnabled( true );
 
     d->m_recentAction->addUrl( url );
-    KConfigGroup recentGroup = Configuration::self()->standardCurrentProject()->group("RecentProjects");
+    KSharedConfig * config = KGlobal::config().data();
+    KConfigGroup recentGroup = config->group("RecentProjects");
     d->m_recentAction->saveEntries( recentGroup );
 
-    Configuration::self()->standardCurrentProject() ->sync();
+    config->sync();
     emit projectOpened( project );
 
     return true;
@@ -282,7 +267,8 @@ bool ProjectController::loadProjectPart()
 {
     if( !d->m_projectPart )
     {
-        KConfig * config = Configuration::self()->standardCurrentProject();
+        KSharedConfig* config = KGlobal::config().data();
+
         KConfigGroup group = config->group( "General Options" );
 
         QString projectManager =
@@ -298,20 +284,6 @@ bool ProjectController::loadProjectPart()
         }
     }
     return true;
-}
-
-void ProjectController::changeCurrentProject( ProjectBaseItem* item )
-{
-    kDebug(9000) << "Changing current project" << endl;
-    if( item )
-        d->m_currentProject = item->project();
-    else
-        kDebug(9000) << "Aaaah, no item found for index" << endl;
-}
-
-IProject* ProjectController::currentProject() const
-{
-    return d->m_currentProject;
 }
 
 ProjectModel* ProjectController::projectModel()

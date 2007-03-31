@@ -31,9 +31,8 @@ typedef KGenericFactory<MakeBuilderPreferences> MakeBuilderPreferencesFactory;
 K_EXPORT_COMPONENT_FACTORY( kcm_kdev_makebuilder, MakeBuilderPreferencesFactory( "kcm_kdev_makebuilder" )  )
 
 MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringList& args)
-    : KDevelop::ConfigModule(MakeBuilderSettings::self(),
-                             MakeBuilderPreferencesFactory::componentData(),
-                             parent, args)
+    : ProjectKCModule<MakeBuilderSettings>( MakeBuilderPreferencesFactory::componentData(),
+                parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -47,29 +46,8 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QStringLis
 
 }
 
-KUrl MakeBuilderPreferences::localNonShareableFile() const
-{
-    return KUrl::fromPath(
-            KStandardDirs::locate( "data", "kdevmakebuilder/data.kdev4") );
-}
-
 MakeBuilderPreferences::~MakeBuilderPreferences()
 {
-}
-
-void MakeBuilderPreferences::load()
-{
-    KDevelop::ConfigModule::load();
-}
-
-void MakeBuilderPreferences::save()
-{
-    KDevelop::ConfigModule::save();
-}
-
-void MakeBuilderPreferences::defaults()
-{
-    KDevelop::ConfigModule::defaults();
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
