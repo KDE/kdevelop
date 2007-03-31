@@ -34,9 +34,6 @@ namespace Sublime {
 MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     :KParts::MainWindow(0, flags), d(new MainWindowPrivate(this))
 {
-    setDockOptions( QMainWindow::DockOptions( QMainWindow::AnimatedDocks
-                    | QMainWindow::AllowTabbedDocks
-                    | QMainWindow::VerticalTabs ) );
     d->controller = controller;
     connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
     connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
@@ -136,12 +133,39 @@ void MainWindow::loadSettings()
         group += "_" + area()->objectName();
     KConfigGroup cg = KGlobal::config()->group(group);
     applyMainWindowSettings(cg);
+
 }
 
 bool MainWindow::queryClose()
 {
     saveSettings();
     return KParts::MainWindow::queryClose();
+}
+
+MainWindow::VerticalTabsMode MainWindow::verticalToolViewTabsMode()
+{
+    return d->m_verticalTabsMode;
+}
+
+void MainWindow::setVerticalToolViewTabsMode( Sublime::MainWindow::VerticalTabsMode tabmode )
+{
+    d->m_verticalTabsMode = tabmode;
+    kDebug(9000) << tabmode << endl;
+    if( d->m_verticalTabsMode == MainWindow::UseVerticalTabs)
+        setDockOptions( dockOptions() | QMainWindow::VerticalTabs );
+    else if( dockOptions() & QMainWindow::VerticalTabs )
+        setDockOptions( dockOptions() ^ QMainWindow::VerticalTabs );
+}
+
+MainWindow::VerticalTitleBarMode MainWindow::verticalToolViewTitleBarMode()
+{
+    return d->m_verticalTitleBarMode;
+}
+
+void MainWindow::setVerticalToolViewTitleBarMode( VerticalTitleBarMode mode )
+{
+    d->m_verticalTitleBarMode = mode;
+    d->applyVerticalTitleBarMode();
 }
 
 }

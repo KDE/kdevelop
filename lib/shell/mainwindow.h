@@ -52,6 +52,7 @@ public:
     //FIXME document this
     virtual void fillContextMenu( KMenu *menu, const Context *context );
 
+
 public Q_SLOTS:
     virtual void setVisible( bool visible );
 
@@ -75,6 +76,7 @@ private:
 };
 
 }
+
 #endif
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

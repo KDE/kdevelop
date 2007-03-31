@@ -28,7 +28,7 @@
 #include <sublime/tooldocument.h>
 
 #include "shellextension.h"
-#include "configuration.h"
+
 #include "mainwindow.h"
 #include "uicontroller.h"
 #include "plugincontroller.h"
@@ -90,7 +90,6 @@ void Core::initialize()
     if( m_self )
         return;
     m_self = new Core();
-    Configuration::initialize( m_self );
     m_self->d->initialize();
     EditorIntegrator::initialise();
 }

@@ -47,6 +47,18 @@ controller->showArea(area, &w);
 class SUBLIME_EXPORT MainWindow: public KParts::MainWindow {
 Q_OBJECT
 public:
+    enum VerticalTitleBarMode{
+        NoDocks,
+        HorizontalDocks,
+        VerticalDocks,
+        AllDocks
+    };
+
+    enum VerticalTabsMode{
+        NoVerticalTabs,
+        UseVerticalTabs
+    };
+
     /**Creates a mainwindow and adds it to the controller.*/
     MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
     ~MainWindow();
@@ -68,6 +80,14 @@ public:
 
     /**Shows the @p view and makes it active.*/
     void activateView(View *view);
+
+    /**Use vertical tabs instead of horizontal for the toolviews*/
+    VerticalTabsMode verticalToolViewTabsMode();
+    void setVerticalToolViewTabsMode( VerticalTabsMode );
+
+    /**Sets wether vertical titlebar should be used and on which toolviews*/
+    VerticalTitleBarMode verticalToolViewTitleBarMode();
+    void setVerticalToolViewTitleBarMode( VerticalTitleBarMode );
 
 Q_SIGNALS:
     /**Emitted before the area is cleared from this mainwindow.*/
@@ -112,6 +132,7 @@ private:
 };
 
 }
+
 
 #endif
 

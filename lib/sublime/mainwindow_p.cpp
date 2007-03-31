@@ -37,6 +37,8 @@ namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w)
     :controller(0), area(0), activeView(0), activeToolView(0),
+    m_verticalTabsMode( Sublime::MainWindow::UseVerticalTabs ),
+    m_verticalTitleBarMode( Sublime::MainWindow::HorizontalDocks ),
     m_mainWindow(w), m_areaSwitcherMenu(0)
 {
 }
@@ -46,6 +48,20 @@ Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sub
     if (!d->viewDocks.contains(view))
     {
         QDockWidget *dock = new QDockWidget(view->document()->title(), d->m_mainWindow);
+        if( d->m_verticalTitleBarMode ==  Sublime::MainWindow::AllDocks )
+        {
+            dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
+        }
+        else if( ( position == Sublime::Bottom || position == Sublime::Top )
+                    && d->m_verticalTitleBarMode == Sublime::MainWindow::HorizontalDocks )
+        {
+            dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
+        }else if ( ( position == Sublime::Left || position == Sublime::Right )
+                    && d->m_verticalTitleBarMode == Sublime::MainWindow::VerticalDocks  )
+        {
+            dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
+        }
+
         d->docks.append(dock);
         KAcceleratorManager::setNoAccel(dock);
 
@@ -299,6 +315,35 @@ void MainWindowPrivate::activateFirstVisibleView()
 {
     if (area->views().count() > 0)
         m_mainWindow->activateView(area->views().first());
+}
+
+void MainWindowPrivate::applyVerticalTitleBarMode()
+{
+    Q_FOREACH( QDockWidget* w, viewDocks.values() )
+    {
+        if( m_verticalTitleBarMode == Sublime::MainWindow::NoDocks && w->features() & QDockWidget::DockWidgetVerticalTitleBar )
+            w->setFeatures( w->features() ^ QDockWidget::DockWidgetVerticalTitleBar );
+        else if( m_verticalTitleBarMode == Sublime::MainWindow::AllDocks )
+            w->setFeatures( w->features() | QDockWidget::DockWidgetVerticalTitleBar );
+        else if( m_verticalTitleBarMode == Sublime::MainWindow::HorizontalDocks &&
+                ( m_mainWindow->dockWidgetArea( w ) == Qt::TopDockWidgetArea
+                || m_mainWindow->dockWidgetArea( w ) == Qt::BottomDockWidgetArea ) )
+            w->setFeatures( w->features() | QDockWidget::DockWidgetVerticalTitleBar );
+        else if( m_verticalTitleBarMode == Sublime::MainWindow::VerticalDocks &&
+                ( m_mainWindow->dockWidgetArea( w ) == Qt::LeftDockWidgetArea
+                || m_mainWindow->dockWidgetArea( w ) == Qt::RightDockWidgetArea ) )
+            w->setFeatures( w->features() | QDockWidget::DockWidgetVerticalTitleBar );
+        else if( m_verticalTitleBarMode == Sublime::MainWindow::HorizontalDocks &&
+                ( m_mainWindow->dockWidgetArea( w ) == Qt::LeftDockWidgetArea
+                || m_mainWindow->dockWidgetArea( w ) == Qt::RightDockWidgetArea )
+                && w->features() & QDockWidget::DockWidgetVerticalTitleBar )
+            w->setFeatures( w->features() ^ QDockWidget::DockWidgetVerticalTitleBar );
+        else if( m_verticalTitleBarMode == Sublime::MainWindow::VerticalDocks &&
+                ( m_mainWindow->dockWidgetArea( w ) == Qt::TopDockWidgetArea
+                || m_mainWindow->dockWidgetArea( w ) == Qt::BottomDockWidgetArea )
+                && w->features() & QDockWidget::DockWidgetVerticalTitleBar )
+            w->setFeatures( w->features() ^ QDockWidget::DockWidgetVerticalTitleBar );
+    }
 }
 
 }

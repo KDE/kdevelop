@@ -25,6 +25,8 @@
 #include "area.h"
 #include "sublimedefs.h"
 
+#include "mainwindow.h"
+
 class QMenu;
 class QAction;
 class QSplitter;
@@ -36,7 +38,6 @@ class View;
 class Container;
 class Controller;
 class AreaIndex;
-class MainWindow;
 
 class MainWindowPrivate: public QObject {
     Q_OBJECT
@@ -69,6 +70,9 @@ public:
 
     void activateFirstVisibleView();
 
+    /**Updates all QDockWidgets to the TitleBarMode that is set*/
+    void applyVerticalTitleBarMode();
+
     Controller *controller;
     Area *area;
     QList<QDockWidget*> docks;
@@ -77,6 +81,9 @@ public:
 
     View *activeView;
     View *activeToolView;
+
+    Sublime::MainWindow::VerticalTabsMode m_verticalTabsMode;
+    Sublime::MainWindow::VerticalTitleBarMode m_verticalTitleBarMode;
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
@@ -97,6 +104,7 @@ private:
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
+
 };
 
 }

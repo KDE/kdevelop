@@ -66,7 +66,22 @@ MainWindow::~ MainWindow()
 
 void MainWindow::loadSettings()
 {
+    kDebug(9000) << "Loading Settings" << endl;
+    KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
+    bool verticaltabs = cg.readEntry( "Use Vertical Tabs", true );
+    bool verticaltitle = cg.readEntry( "Use Vertical TitleBar", true );
+
+    kDebug(9000) << verticaltabs <<"|" << verticaltitle << endl;
+    if( verticaltabs )
+        setVerticalToolViewTabsMode( Sublime::MainWindow::UseVerticalTabs );
+    else
+        setVerticalToolViewTabsMode( Sublime::MainWindow::NoVerticalTabs );
+    if( verticaltitle )
+        setVerticalToolViewTitleBarMode( Sublime::MainWindow::HorizontalDocks );
+    else
+        setVerticalToolViewTitleBarMode( Sublime::MainWindow::NoDocks );
     Sublime::MainWindow::loadSettings();
+
 }
 
 void MainWindow::saveSettings()
