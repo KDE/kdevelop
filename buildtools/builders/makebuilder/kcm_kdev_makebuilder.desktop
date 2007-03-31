@@ -8,7 +8,7 @@ X-KDE-ModuleType=Library
 X-KDE-Library=kdev_makebuilder
 X-KDE-FactoryName=kcm_kdev_makebuilder
 X-KDE-ParentApp=kdevplatformproject
-X-KDE-ParentComponents=kdevmakebuilder
+X-KDE-ParentComponents=KDevMakeBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Make

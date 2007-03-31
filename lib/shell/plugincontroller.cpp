@@ -443,6 +443,16 @@ QExtensionManager* PluginController::extensionManager()
     return m_manager;
 }
 
+QStringList PluginController::allPluginNames()
+{
+    QStringList names;
+    Q_FOREACH( KPluginInfo* info , d->plugins )
+    {
+        names << info->pluginName();
+    }
+    return names;
+}
+
 }
 #include "plugincontroller.moc"
 

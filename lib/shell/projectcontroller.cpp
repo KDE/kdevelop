@@ -20,7 +20,9 @@ Boston, MA 02110-1301, USA.
 
 #include "projectcontroller.h"
 
-#include <QDir>
+#include <QtCore/QDir>
+#include <QtCore/QSignalMapper>
+#include <QtGui/QAction>
 
 #include <kaction.h>
 #include <kconfig.h>
@@ -33,6 +35,8 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <kservicetypetrader.h>
 #include <krecentfilesaction.h>
+#include <kactionmenu.h>
+#include <ksettings/dialog.h>
 
 #include "core.h"
 #include "iplugin.h"
@@ -40,23 +44,45 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "projectmodel.h"
 // #include "kdevlanguagecontroller.h"
-#include "iplugincontroller.h"
+#include "plugincontroller.h"
 #include "uicontroller.h"
 // #include "kdevdocumentcontroller.h"
 
 namespace KDevelop
 {
 
-struct ProjectControllerPrivate
+class ProjectControllerPrivate
 {
 public:
-
     QList<IProject*> m_projects;
     IPlugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
+    KActionMenu *m_projectConfigAction;
+    QSignalMapper *m_signalMapper;
     Core* m_core;
 //     IProject* m_currentProject;
     ProjectModel* model;
+    QMap<IProject*, KSettings::Dialog*> m_cfgDlgs;
+    void projectConfig( QObject * obj )
+    {
+        if( !obj )
+            return;
+        IProject* proj = qobject_cast<IProject*>(obj);
+        if( !proj )
+            return;
+        if( !m_cfgDlgs.contains( proj ) )
+            m_cfgDlgs[proj] = new KSettings::Dialog( findPluginsForProject( proj ),
+                                                     KSettings::Dialog::Static,
+                                                     m_core->uiController()->activeMainWindow(),
+                                                     QStringList() << proj->projectConfigFile().url()
+                                                        << proj->projectDefaultsConfigFile().url() );
+
+        m_cfgDlgs[proj]->show();
+    }
+    QStringList findPluginsForProject( IProject* )
+    {
+        return m_core->pluginControllerInternal()->allPluginNames();
+    }
 };
 
 ProjectController::ProjectController( Core* core )
@@ -64,6 +90,9 @@ ProjectController::ProjectController( Core* core )
 {
     d->m_core = core;
     d->m_projectPart = 0;
+    d->m_signalMapper = new QSignalMapper( this );
+    connect( d->m_signalMapper, SIGNAL( mapped( QObject* ) ),
+            this, SLOT( projectConfig( QObject* ) ) );
 //     d->m_currentProject = 0;
     d->model = new ProjectModel();
     setupActions();
@@ -100,6 +129,9 @@ void ProjectController::setupActions()
     d->m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
+
+    d->m_projectConfigAction = new KActionMenu( i18n("Configure Project"), ac );
+    ac->addAction( "project_config_menu", d->m_projectConfigAction );
 }
 
 ProjectController::~ProjectController()
@@ -144,6 +176,7 @@ QList<IProject*> ProjectController::projects() const
 
 bool ProjectController::openProject( const KUrl &projectFile )
 {
+
     KUrl url = projectFile;
 
     if ( url.isEmpty() )
@@ -206,6 +239,10 @@ bool ProjectController::openProject( const KUrl &projectFile )
     d->m_recentAction->saveEntries( recentGroup );
 
     config->sync();
+    QAction* qa = new QAction( project->name(), d->m_projectConfigAction );
+    connect( qa, SIGNAL( triggered() ), d->m_signalMapper, SLOT( map() ) );
+    d->m_signalMapper->setMapping( qa, project );
+    d->m_projectConfigAction->addAction( qa );
     emit projectOpened( project );
 
     return true;
@@ -213,6 +250,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
 bool ProjectController::closeProject( IProject* proj )
 {
+
     if( !proj )
         return false;
     if( d->m_projects.indexOf( proj ) == -1 )
@@ -265,6 +303,7 @@ bool ProjectController::closeProject( IProject* proj )
 
 bool ProjectController::loadProjectPart()
 {
+
     if( !d->m_projectPart )
     {
         KSharedConfig* config = KGlobal::config().data();

@@ -8,7 +8,7 @@ X-KDE-ModuleType=Library
 X-KDE-Library=kdevcmake_settings
 X-KDE-FactoryName=kcm_kdevcmake_settings
 X-KDE-ParentApp=kdevplatformproject
-X-KDE-ParentComponents=kdevcmakemanager
+X-KDE-ParentComponents=KDevCMakeManager
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=CMake

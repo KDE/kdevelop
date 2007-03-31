@@ -139,6 +139,8 @@ public:
 
     QExtensionManager* extensionManager();
 
+    QStringList allPluginNames();
+
 private Q_SLOTS:
     ///A plugin has been destroyed. Cleanup our data structures
     void pluginDestroyed( QObject* );

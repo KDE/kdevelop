@@ -66,6 +66,8 @@ public:
     /// @internal
     virtual DocumentController *documentControllerInternal();
 
+    PluginController* pluginControllerInternal();
+
     void cleanup();
 
 private:

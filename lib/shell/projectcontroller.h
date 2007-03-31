@@ -72,7 +72,8 @@ private:
     bool loadProjectPart();
 
 private:
-    struct ProjectControllerPrivate* const d;
+    Q_PRIVATE_SLOT(d, void projectConfig( QObject* ) )
+    class ProjectControllerPrivate* const d;
 };
 
 }
