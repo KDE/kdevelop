@@ -12,7 +12,5 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=USERINTERFACE
 
 Name=User Interface
-Name[x-test]=xxUser Interfacexx
 Comment=Configure User Interface settings
-Comment[x-test]=xxConfigure User Interface settingsxx
 
