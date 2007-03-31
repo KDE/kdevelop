@@ -4234,7 +4234,7 @@ EvaluationResult CppCodeCompletion::evaluateExpression( ExpressionInfo expr, Sim
 		}
 	}
 
-  addStatusText( i18n( "Type of %1 is %2 %3" ).arg( expr.expr() ).arg( res->fullNameChain() ).arg( resolutionType ), 5000 );
+  addStatusText( i18n( "Type of \"%1\" is \"%2\", %3" ).arg( expr.expr() ).arg( res->fullNameChain() ).arg( resolutionType ), 5000 );
 
   return res;
 }
