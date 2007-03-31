@@ -1127,7 +1127,7 @@ void CppCodeCompletion::slotTextChanged() {
 
   bool argsHint = m_pSupport->codeCompletionConfig() ->automaticArgumentsHint();
   bool codeComplete = m_pSupport->codeCompletionConfig() ->automaticCodeCompletion();
-  bool headComplete = m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion();
+	bool headComplete = codeComplete; //m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion();
 
   // m_codeCompleteChRx completes on alpha chars and '.'
   // m_codeCompleteCh2Rx completes on "->" and "::"
