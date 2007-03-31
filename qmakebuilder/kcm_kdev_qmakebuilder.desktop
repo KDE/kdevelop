@@ -8,7 +8,7 @@ X-KDE-ModuleType=Library
 X-KDE-Library=kdev_qmakebuilder
 X-KDE-FactoryName=kcm_kdev_qmakebuilder
 X-KDE-ParentApp=kdevplatformproject
-X-KDE-ParentComponents=kdevqmakebuilder
+X-KDE-ParentComponents=KDevQMakeBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=QMake
