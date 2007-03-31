@@ -822,8 +822,19 @@ void TrollProjectWidget::slotAddSubproject( QMakeScopeItem *spitem )
                                                 "Do you have write permission "
                                                 "in the project folder?" ) );
                     return ;
+                }else
+                {
+                    QFile f( dir.absPath()+"/"+realdir+"/"+realdir+".pro" );
+                    f.open( IO_WriteOnly );
+                    f.close();
                 }
             }
+        }else
+        {
+            QString realdir = spitem->scope->resolveVariables( subdirname );
+            QFile f( projectdir+"/"+realdir+".pro" );
+            f.open( IO_WriteOnly );
+            f.close();
         }
 
         addSubprojectToItem( spitem, subdirname );
