@@ -73,8 +73,7 @@ public:
     /**
      * @brief Unloads the plugin specified by @p plugin
      *
-     * @param plugin The name of the pl#include <QtDesigner/QExtensionManager>
-    ugin as specified by the
+     * @param plugin The name of the plugin as specified by the
      * X-KDE-PluginInfo-Name key of the .desktop file for the plugin
      */
     virtual void unloadPlugin( const QString & plugin ) = 0;
