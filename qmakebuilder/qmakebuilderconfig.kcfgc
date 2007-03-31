@@ -1,6 +1,5 @@
 File=qmakebuilderconfig.kcfg
 ClassName=QMakeBuilderSettings
-Singleton=true
-#Mutators=true
-Inherits=KDevelop::ConfigSkeleton
-IncludeFiles="configskeleton.h"
+singleton=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles=projectconfigskeleton.h
