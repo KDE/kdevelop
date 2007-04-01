@@ -28,6 +28,7 @@ class SvnBlameHolder;
 class SvnStatusHolder;
 class SubversionJob;
 class SvnInfoHolder;
+class KTempDir;
 
 #define SVN_LOGVIEW  10
 #define SVN_BLAME    11
@@ -38,6 +39,7 @@ class SvnInfoHolder;
 #define SVN_UPDATE   16
 #define SVN_STATUS   17
 #define SVN_INFO     18
+#define SVN_DIFF     19
 
 #define SVNACTION_NOTIFICATION       ( (QEvent::Type)15149 )
 #define SVNLOGIN_IDPWDPROMPT         ( (QEvent::Type)15150 )
@@ -407,6 +409,44 @@ protected:
     bool m_recurse;
 };
 
+class SvnInfoSyncJob : public SubversionSyncJob
+{
+public:
+    SvnInfoSyncJob();
+    QMap< KUrl, SvnInfoHolder >* infoExec( const KUrl &pathOrUrl,
+                                           const SvnRevision *peg, const SvnRevision *revision,
+                                           bool recurse );
+    static svn_error_t* infoReceiver( void *baton,
+                                      const char *path,
+                                      const svn_info_t *info,
+                                      apr_pool_t *pool);
+    QMap< KUrl, SvnInfoHolder > m_holderMap;
+};
+
+class SvnDiffJob : public SubversionJob
+{
+public:
+    SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+                const SvnRevision &rev1, const SvnRevision &rev2,
+                bool recurse, bool ignoreAncestry, bool noDiffDeleted, bool ignoreContentType,
+                int type, QObject *parent );
+    /// Destuctor. Destroy temp dir and output/error files
+    virtual ~SvnDiffJob();
+
+    KTempDir *m_tmpDir;
+    /// full path to *.diff file output
+    char *out_name;
+    /// full path to error file
+    char *err_name;
+protected:
+    virtual void run();
+    
+    KUrl m_pathOrUrl1, m_pathOrUrl2;
+    SvnRevision m_rev1, m_rev2;
+    bool m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType;
+
+};
+
 // class SvnCheckoutJob : public SubversionJob
 // {
 // public:
@@ -454,7 +494,11 @@ public:
     void spawnInfoThread( const KUrl &pathOrUrl,
                           const SvnRevision &peg, const SvnRevision &revision,
                           bool recurse );
-                          
+    void spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+                          const SvnRevision &rev1, const SvnRevision &rev2,
+                          bool recurse, bool ignoreAncestry, bool noDiffDeleted,
+                          bool ignoreContentType );
+
     
 protected Q_SLOTS:    
     void slotLogResult( SubversionJob* job );
@@ -465,6 +509,8 @@ Q_SIGNALS:
     void jobFinished( SubversionJob* );
     void logFetched(SubversionJob*);
     void blameFetched( SubversionJob* );
+    void diffFetched( SubversionJob* );
+
 protected:
     virtual void customEvent( QEvent * event );
     

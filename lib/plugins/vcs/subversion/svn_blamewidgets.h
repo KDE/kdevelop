@@ -3,6 +3,12 @@
 
 #include "ui_svnblamewidget.h"
 #include "svn_models.h"
+#include <QDialog>
+
+class QListView;
+class QGridLayout;
+class QPushButton;
+class QListWidget;
 
 class SvnBlameWidget : public QWidget, public Ui::SvnBlameWidget{
 public:
@@ -13,5 +19,27 @@ private:
     BlameItem *m_item;
     BlameTreeModel *m_blameModel;
 };
+
+class SvnBlameFileSelectDlg : public QDialog {
+    Q_OBJECT
+public:
+    SvnBlameFileSelectDlg( QWidget *parent = 0L );
+    virtual ~SvnBlameFileSelectDlg();
+    void setCandidate( QStringList *modifies );
+    QString selected();
+
+public Q_SLOTS:
+    virtual void accept();
+
+private:
+    QGridLayout *m_layout;
+    QListWidget *m_listWidget;
+    QPushButton *m_okBtn;
+    QPushButton *m_cancelBtn;
+
+    QStringList *m_candidates;
+    QString m_selected;
+};
+
 
 #endif

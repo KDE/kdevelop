@@ -207,6 +207,7 @@ public:
     void sort ( int column, Qt::SortOrder order = Qt::AscendingOrder );
     /// on error, return -1
     long revision( const QModelIndex &index ) const;
+    QStringList modifiedLists( const QModelIndex &index ) const;
 protected:
     LogItem *rootItem;
 };

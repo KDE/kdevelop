@@ -284,6 +284,12 @@ long LogviewTreeModel::revision( const QModelIndex &index ) const
     else
         return revNo;
 }
+QStringList LogviewTreeModel::modifiedLists( const QModelIndex &index ) const
+{
+    QString pathlist = rootItem->data( index.row(), 4 ).toString();
+    QStringList ret = pathlist.split( "\n", QString::SkipEmptyParts );
+    return ret;
+}
 //////////////////////////////////
 LogviewDetailedModel::LogviewDetailedModel( LogItem *item, QObject *parent )
     : QAbstractListModel(parent), m_item(item)

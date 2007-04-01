@@ -2,6 +2,7 @@
 #include "subversion_view.h"
 #include "subversion_fileinfo.h"
 #include "svn_models.h"
+#include "svn_commitwidgets.h"
 #include <svn_wc.h>
 
 #include <iuicontroller.h>
@@ -187,9 +188,26 @@ bool KDevSubversionPart::statusASync( const KUrl &dirPath,
 }
 void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
 {
+    //TODO check whether the url is really under version control
     d->m_ctxUrl = ctxUrl;
-    QAction *action = ctxMenu.addAction(i18n("Subversion Log View"));
+    QMenu *subMenu = new QMenu( "Subversion", (QWidget*)&ctxMenu );
+    
+    QAction *action;
+    action = subMenu->addAction(i18n("Log View"));
     connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
+    action = subMenu->addAction(i18n("Blame (Annotate)"));
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
+    action = subMenu->addAction(i18n("Update"));
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+    action = subMenu->addAction(i18n("Commit..."));
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+    action = subMenu->addAction(i18n("Add to version control"));
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+    action = subMenu->addAction(i18n("Remove from version control"));
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+
+
+    ctxMenu.addMenu( subMenu );
 }
 //////////////////////////////////////////////
 void KDevSubversionPart::checkout( const KUrl &repository, const KUrl &targetDir, KDevelop::IVersionControl::WorkingMode mode )
@@ -207,8 +225,22 @@ void KDevSubversionPart::remove( const KUrl::List &urls )
 }
 void KDevSubversionPart::commit( const KUrl::List &wcPaths )
 {
-//     void spawnCommitThread( KUrl::List &urls, bool recurse, bool keepLocks );
-    d->m_impl->spawnCommitThread( wcPaths, true, false );
+    SvnCommitOptionDlg dlg( this, NULL );
+    dlg.setCommitCandidates( wcPaths );
+    if( dlg.exec() != QDialog::Accepted )
+        return;
+    
+    KUrl::List checkedList = dlg.checkedUrls();
+    if( checkedList.count() < 1 )
+        return;
+    bool recurse = dlg.recursive();
+    bool keeplocks = dlg.keepLocks();
+    //debug
+    for( QList<KUrl>::iterator it = checkedList.begin(); it!=checkedList.end() ; ++it ){
+        kDebug() << "KDevSubversionPart::commit(KUrl::List&) : " << *it << endl;
+    }
+    
+    d->m_impl->spawnCommitThread( checkedList, recurse, keeplocks );
 }
 void KDevSubversionPart::update( const KUrl::List &wcPaths )
 {
@@ -235,7 +267,10 @@ void KDevSubversionPart::vcsInfo( const KUrl &path_or_url ) // not yet in interf
     
     d->m_impl->spawnInfoThread( path_or_url, peg, revision, false );
 }
-
+SubversionCore* KDevSubversionPart::svncore()
+{
+    return d->m_impl;
+}
 const KUrl KDevSubversionPart::urlFocusedDocument()
 {
     KParts::ReadOnlyPart *part =
@@ -348,14 +383,37 @@ void KDevSubversionPart::svnInfo()
 //////////////////////////////////////////////
 void KDevSubversionPart::ctxLogView()
 {
+    logview( d->m_ctxUrl );
+}
+void KDevSubversionPart::ctxBlame()
+{
+    annotate( d->m_ctxUrl );
+}
+void KDevSubversionPart::ctxCommit()
+{
     KUrl::List list;
     list << d->m_ctxUrl;
-    d->m_impl->spawnLogviewThread( list, -1, "HEAD", 0, "", 0, true, true, false );
+    commit( list );
 }
-SubversionCore* KDevSubversionPart::svncore()
+void KDevSubversionPart::ctxUpdate()
 {
-    return d->m_impl;
+    KUrl::List list;
+    list << d->m_ctxUrl;
+    update( list );
 }
+void KDevSubversionPart::ctxAdd()
+{
+    KUrl::List list;
+    list << d->m_ctxUrl;
+    add( list );
+}
+void KDevSubversionPart::ctxRemove()
+{
+    KUrl::List list;
+    list << d->m_ctxUrl;
+    remove( list );
+}
+
 //////////////////////////////////////////////
 void KDevSubversionPart::slotJobFinished( SubversionJob *job )
 {

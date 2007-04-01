@@ -1,5 +1,6 @@
 #include "svn_logviewwidgets.h"
-#include "svn_models.h"
+#include "svn_blamewidgets.h"
+// #include "svn_models.h" // included int blamewidget
 
 #include <kaction.h>
 #include <kmenu.h>
@@ -53,6 +54,10 @@ void SvnLogviewWidget::customContextMenuEvent( const QPoint &point )
 
     QAction *action = menu.addAction(i18n("Blame this Revision"));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(blameRev()) );
+    
+    action = menu.addAction(i18n("Diff to previous revision"));
+    connect( action, SIGNAL(triggered(bool)), this, SLOT(diffToPrev()) );
+    
     menu.exec( treeView->viewport()->mapToGlobal(point) );
 }
 
@@ -80,9 +85,55 @@ void SvnLogviewWidget::blameRev()
     if( rev == -1 ){ //error
         return;
     }
-    KUrl::List list;
-    list << m_url;
-    m_part->svncore()->spawnBlameThread(m_url, true,  0, "", rev, "" );
+    // note that blame is done on single file.
+    QStringList modifies = m_logviewModel->modifiedLists( m_contextIndex );
+    QString selectedPath;
+    if( modifies.count() > 1 ){
+        SvnBlameFileSelectDlg dlg(this);
+        dlg.setCandidate( &modifies );
+        if( dlg.exec() == QDialog::Accepted ){
+            selectedPath = dlg.selected();
+        } else{
+            return;
+        }
+        
+    } else if( modifies.count() == 1 ){
+        selectedPath = modifies.at(0);
+    } else {
+        return;
+    }
+    
+    QString relPath = selectedPath.section( '/', 1 );
+    // get repository root URL
+    SvnInfoSyncJob job;
+    QMap<KUrl, SvnInfoHolder> *infoMap = job.infoExec( this->m_url, NULL, NULL, false );
+    if( !infoMap ) return;
+    
+    QList< SvnInfoHolder > holderList = infoMap->values();
+    if( holderList.count() > 0 ){
+        // get full Url
+        SvnInfoHolder holder = holderList.first();
+        KUrl absUrl =  holder.reposRootUrl;
+        absUrl.addPath( relPath );
+        kDebug() << " Blame requested on path " << absUrl << endl;
+        // final request
+        m_part->svncore()->spawnBlameThread( absUrl, true,  0, "", rev, "" );
+    }
+    else{
+        return;
+    }
+}
+
+void SvnLogviewWidget::diffToPrev()
+{
+    long rev = m_logviewModel->revision( m_contextIndex );
+    if( rev == -1 ){ //error
+        return;
+    }
+    SubversionUtils::SvnRevision rev1, rev2;
+    rev1.revNum = rev-1;
+    rev2.revNum = rev;
+    m_part->svncore()->spawnDiffThread( m_url, m_url, rev1, rev2, true, false, false, false );
 }
 void SvnLogviewWidget::treeViewClicked( const QModelIndex &index )
 {

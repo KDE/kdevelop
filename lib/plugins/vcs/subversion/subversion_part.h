@@ -55,6 +55,11 @@ public Q_SLOTS:
     void svnInfo();
     // invoked by context-menu
     void ctxLogView();
+    void ctxBlame();
+    void ctxCommit();
+    void ctxUpdate();
+    void ctxAdd();
+    void ctxRemove();
 
 Q_SIGNALS:
     void finishedFetching(const KUrl& destinationDir);

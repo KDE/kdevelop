@@ -5,18 +5,25 @@
 #include "svn_blamewidgets.h"
 // #include "ui_svnlogviewwidget.h"
 #include <kmessagebox.h>
-
+#include <ktabwidget.h>
+#include <ktextedit.h>
+#include <ktextbrowser.h>
 
 #include <QList>
 #include <QVariant>
 #include <QModelIndex>
+#include <QPushButton>
+#include <QTextStream>
+#include <QFile>
 
 class KDevSubversionViewPrivate{
 public:
     KDevSubversionPart *m_part;
     KDevSubversionView *m_view;
     QVBoxLayout *m_layout;
-    QWidget *m_child;
+    KTabWidget *m_tab;
+    KTextEdit *m_edit;
+    QPushButton *m_closeButton;
 };
 // TODO first make empty widget by factory. This host container widget is parent
 // of every other subwidgets, including logviewer, blame, notifier, ...
@@ -25,13 +32,20 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
 {
     d->m_part = part;
     d->m_view = this;
-    d->m_layout = new QVBoxLayout(this);
-    d->m_layout->setSpacing(0);
+    
+    d->m_tab = new KTabWidget(this);
+    d->m_layout = new QVBoxLayout( this );
     d->m_layout->setMargin(0);
-    d->m_child = 0L;
-//     d->setupUi();
-//     connect( d->ui->treeView, SIGNAL(clicked (const QModelIndex &)),
-//              d->m_logviewDetailedModel, SLOT(setNewRevision(const QModelIndex &)) );
+    d->m_layout->addWidget( tab() );
+    
+    d->m_edit = new KTextEdit( tab() );
+    d->m_edit->setReadOnly( TRUE );
+    tab()->addTab( d->m_edit, i18n("Notification") );
+    
+    d->m_closeButton = new QPushButton( tab() );
+    d->m_closeButton->setText( i18n("Close") );
+    tab()->setCornerWidget( d->m_closeButton );
+    connect( d->m_closeButton, SIGNAL(clicked()), this, SLOT(closeCurrentTab()) );
     
     setObjectName( i18n( "Subversion" ) );
     setWhatsThis( i18n( "<b>Subversion</b><p>"
@@ -40,13 +54,15 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
     setWindowTitle( i18n( "subversion" ) );
     
     connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),
-             this, SLOT(printNotification(QString)) );    
+            this, SLOT(printNotification(QString)) );
     connect( d->m_part->svncore(), SIGNAL(logFetched(SubversionJob *)),
-             this, SLOT(printLog(SubversionJob *)) );
+            this, SLOT(printLog(SubversionJob *)) );
     connect( d->m_part->svncore(), SIGNAL(blameFetched(SubversionJob *)),
-             this, SLOT(printBlame(SubversionJob *)) );
+            this, SLOT(printBlame(SubversionJob *)) );
+    connect( d->m_part->svncore(), SIGNAL(diffFetched(SubversionJob *)),
+             this, SLOT(printDiff(SubversionJob *)) );
     connect( d->m_part->svncore(), SIGNAL(jobFinished(SubversionJob*)),
-             this, SLOT(slotJobFinished(SubversionJob*)) );
+            this, SLOT(slotJobFinished(SubversionJob*)) );
 
 }
 
@@ -59,25 +75,24 @@ KDevSubversionView::~KDevSubversionView()
 void KDevSubversionView::printNotification(QString msg)
 {
     kDebug() << " KDevSubversionView::printNotification: " << msg << endl;
+    if( !d->m_edit ){
+        // should not happen
+        d->m_edit = new KTextEdit(this);
+    }
+    d->m_edit->append( msg );
+    tab()->setCurrentIndex( tab()->indexOf(d->m_edit) );
 }
 void KDevSubversionView::printLog(SubversionJob *j)
 {
-    if( d->m_child ){
-        d->m_layout->removeWidget( d->m_child );
-        delete d->m_child;
-        d->m_child = 0L;
-    }
-    
     SvnLogviewJob *job = (SvnLogviewJob*)j;
     if (job->wasSuccessful() ){
-        SvnLogviewWidget *logWidget = new SvnLogviewWidget( job->urlList()[0], d->m_part, this);
+        SvnLogviewWidget *widget= new SvnLogviewWidget( job->urlList()[0], d->m_part, tab() );
         
-        logWidget->refreshWithNewData( job->m_loglist );
-        
-        d->m_child = logWidget;
-        
-        d->m_layout->addWidget( logWidget );
-        this->show();
+        widget->refreshWithNewData( job->m_loglist );
+
+        tab()->addTab( widget, i18n("Log History") );
+        tab()->setTabEnabled( tab()->indexOf(widget), true );
+        tab()->setCurrentIndex( tab()->indexOf(widget) );
     }
     else{
         KMessageBox::error( this, job->errorMsg(), "error" );
@@ -87,23 +102,51 @@ void KDevSubversionView::printLog(SubversionJob *j)
 }
 void KDevSubversionView::printBlame( SubversionJob* j )
 {
-    if( d->m_child ){
-        d->m_layout->removeWidget( d->m_child );
-        delete d->m_child;
-        d->m_child = 0L;
-    }
     SvnBlameJob *job = (SvnBlameJob*) j;
     if( job->wasSuccessful() ){
-        SvnBlameWidget *widget = new SvnBlameWidget(this);
+        SvnBlameWidget *widget = new SvnBlameWidget( tab() );
         widget->refreshWithNewData( job->m_blameList);
-        d->m_child = widget;
-        d->m_layout->addWidget( widget );
-        this->show();
+        tab()->addTab( widget, i18n("Blame") );
+        tab()->setTabEnabled( tab()->indexOf(widget), true );
+        tab()->setCurrentIndex( tab()->indexOf(widget) );
     }
     else{
         KMessageBox::error( this, job->errorMsg(), "error" );
     }
 }
+
+void KDevSubversionView::printDiff( SubversionJob *j )
+{
+    SvnDiffJob *job = dynamic_cast<SvnDiffJob*>(j);
+    if( !job ) return;
+    if( !job->wasSuccessful() ){
+        KMessageBox::error( this, job->errorMsg() );
+        return;
+    }
+    QFile file( job->out_name );
+    if( !file.exists() ){
+        KMessageBox::error( this, i18n("The output diff file cannot be located") );
+        return;
+    }
+    // end of error check
+    
+    KTextBrowser *widget = new KTextBrowser( tab() );
+    if ( file.open( QIODevice::ReadOnly ) ) {
+        QTextStream stream( &file );
+        QString line;
+        while ( !stream.atEnd() ) {
+            line = stream.readLine();
+            widget->append( line );
+        }
+        file.close();
+    }
+    
+    widget->setReadOnly( true );
+    tab()->addTab( widget, i18n("Diff") );
+    tab()->setCurrentIndex( tab()->indexOf(widget) );
+
+}
+
 void KDevSubversionView::slotJobFinished( SubversionJob *job )
 {
     switch( job->type() ){
@@ -126,23 +169,40 @@ void KDevSubversionView::slotJobFinished( SubversionJob *job )
             if( job->wasSuccessful() )
                 KMessageBox::information( NULL, "Successfully deleted" );
             else
-                KMessageBox::information( NULL, "delete failed\n" + job->errorMsg() );
+                KMessageBox::information( NULL, "Deleting failed\n" + job->errorMsg() );
             break;
         case SVN_COMMIT:
             if( job->wasSuccessful() )
                 KMessageBox::information( NULL, "Successfully committed" );
             else
-                KMessageBox::information( NULL, "commit failed\n" + job->errorMsg() );
+                KMessageBox::information( NULL, "Commit failed\n" + job->errorMsg() );
             break;
         case SVN_UPDATE:
             if( job->wasSuccessful() )
                 KMessageBox::information( NULL, "Successfully updated" );
             else
-                KMessageBox::information( NULL, "updating failed\n" + job->errorMsg() );
+                KMessageBox::information( NULL, "Updating failed\n" + job->errorMsg() );
             break;
         case SVN_STATUS:
             break;
+
     }
 }
 
+void KDevSubversionView::closeCurrentTab()
+{
+    QWidget *current = tab()->currentWidget();
+    KTextEdit *edit = static_cast<KTextEdit*>(current);
+    if( edit ){
+        if( edit == d->m_edit ) // main notification output should not be deleted
+            return;
+    }
+    tab()->removePage( current );
+    delete current;
+}
+
+KTabWidget* KDevSubversionView::tab()
+{
+    return d->m_tab;
+}
 #include "subversion_view.moc"

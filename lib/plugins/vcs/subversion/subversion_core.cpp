@@ -5,6 +5,7 @@
 #include "svn_authdialog.h"
 #include "svn_commitwidgets.h"
 #include <kmessagebox.h>
+#include <ktempdir.h>
 
 // //ThreadWeaver includes
 // #include <State.h>
@@ -83,25 +84,32 @@ void SvnBlameJob::run()
 
     const char* path_or_url=0;
     // fill out path_or_url according to the repository access flag, defined by user
+    kDebug() << " SvnBlameJob::run() reqPath " << m_pathOrUrl << endl;
     if (m_repositBlame) {
         svn_error_t *urlErr=0;
-        urlErr = svn_client_url_from_path( &path_or_url, m_pathOrUrl.path().toUtf8(), subpool );
-        if (urlErr || !path_or_url ){
+        const char* out_url = 0;
+        urlErr = svn_client_url_from_path( &out_url, m_pathOrUrl.pathOrUrl().toUtf8(), subpool );
+        if (urlErr || !out_url ){
             setErrorMsg( i18n("Fail to retrieve repository URL of request file."
                     "Check whether the requested file is really under version control"));
             svn_pool_destroy( subpool );
             return;
         }
-        if (QString(path_or_url).isEmpty()){
+        if (QString(out_url).isEmpty()){
             setErrorMsg (i18n("Converted repository URL is empty."
                     "Check whether requested item is really under version control" ));
             svn_pool_destroy( subpool );
             return;
         }
+        // if the out_url is same with m_pathOrUrl..toUtf8, out_url's memory address is just m_pathUrl
+        // so we must allocate separate memory
+        path_or_url = apr_pstrdup( subpool, out_url ); 
         kDebug() << " repository URL from PATH: " << path_or_url << endl;
     } else{
+        const char *out_url = 0;
         m_pathOrUrl.setProtocol( "file" );
-        path_or_url = svn_path_canonicalize( m_pathOrUrl.path().toUtf8(), subpool );
+        out_url = svn_path_canonicalize( m_pathOrUrl.path().toUtf8(), subpool );
+        path_or_url = apr_pstrdup( subpool, out_url );
         kDebug() << " working copy path : " << path_or_url << endl;
     }// ent of filling out path_or_url
     
@@ -202,12 +210,13 @@ void SvnLogviewJob::run()
 //                 setFinished(true);
                 return;
             }
-            (*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) = urlFromPath;
+            (*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
+                    apr_pstrdup( subpool, urlFromPath );
             kDebug() << " urlFromPath: " << urlFromPath << endl;
         }else{ // show working copy log
             nurl.setProtocol( "file" ); 
             (*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
-                    svn_path_canonicalize( nurl.path().toUtf8(), subpool );
+                    apr_pstrdup( subpool, svn_path_canonicalize( nurl.path().toUtf8(), subpool ) );
         }
     }
     
@@ -275,22 +284,35 @@ void SvnCommitJob::run()
 {
     kDebug() << " inside SvnCommitJob " << endl;
     apr_pool_t *subpool = svn_pool_create( pool );
-    svn_client_commit_info_t *commit_info = NULL;
+//     svn_client_commit_info_t *commit_info = NULL;
+    svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
     
     apr_array_header_t *targets = apr_array_make(subpool, 1+m_urls.count(), sizeof(const char *));
     for ( QList<KUrl>::iterator it = m_urls.begin(); it != m_urls.end() ; ++it ) {
         KUrl nurl = *it;
         nurl.setProtocol( "file" );
+        kDebug() << " oneUrl: " << nurl << endl;
         (*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
                 svn_path_canonicalize( nurl.path().toUtf8(), subpool );
     }
 
-    svn_error_t *err = svn_client_commit2(&commit_info,targets,m_recurse,m_keepLocks,ctx,subpool);
+//     svn_error_t *err = svn_client_commit2(&commit_info,targets,m_recurse,m_keepLocks,ctx,subpool);
+    svn_error_t *err = svn_client_commit3(&commit_info,targets,m_recurse,m_keepLocks,ctx,subpool);
     if ( err ){
         setErrorMsgExt( err );
         svn_pool_destroy (subpool);
         return;
     }
+    
+    if( commit_info ){
+        if( commit_info->revision == SVN_INVALID_REVNUM ){
+            // commit was a no-op; nothing needed to be committed.
+            setErrorMsg( i18n("Nothing needed to be committed. Maybe all files are up to date") );
+            svn_pool_destroy (subpool);
+            return;
+        }
+    }
+    
     // TODO handle separately to adjust svn+ssh  SVN_ERR_RA_SVN_CONNECTION_CLOSED,
     svn_pool_destroy (subpool);
     setSuccessful(true);
@@ -332,6 +354,10 @@ SvnCommitJob::commitLogUserInput( const char **log_msg,
         *log_msg = string->data;
     } else {
         *log_msg = NULL;
+        svn_error_t *err = svn_error_create( SVN_ERR_CANCELLED,
+                                             NULL,
+                                             apr_pstrdup( pool, "Commit interruppted" ) );
+        return err;
     }
     return SVN_NO_ERROR;
 }
@@ -504,7 +530,7 @@ void SvnAddJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_
     QString notifyString;
     switch( notify->action ){
         case svn_wc_notify_add:
-            notifyString = i18n("Added %1").arg( notify->path );
+            notifyString = i18n("Added ") + QString( notify->path );
 //             kDebug() << notifyString << endl;
             break;
     }
@@ -550,10 +576,12 @@ void SvnDeleteJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, a
     QString notifyString;
     switch( notify->action ){
         case svn_wc_notify_delete:
-            notifyString = i18n("Deleted %1").arg( notify->path );
+            notifyString = i18n("Deleted ") + QString( notify->path );
 //             kDebug() << notifyString << endl;
             break;
     }
+	SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
+	QCoreApplication::postEvent( job->parent(), event );
 }
 
 SvnUpdateJob::SvnUpdateJob( const KUrl::List &wcPaths, long int rev, QString revKind,
@@ -578,6 +606,7 @@ void SvnUpdateJob::run()
         nurl.setProtocol( "file" );
         *(( const char ** )apr_array_push(( apr_array_header_t* )targets)) =
                 svn_path_canonicalize( nurl.path().toUtf8(), subpool );
+        kDebug() << " canonicalized path: " << nurl.path() << endl;
     }
 
     initNotifier(SvnUpdateJob::notifyCallback);
@@ -596,27 +625,29 @@ void SvnUpdateJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, a
 {
     SvnUpdateJob *job = (SvnUpdateJob*) baton;
     QString notifyString;
-    // TODO update notify
+    // TODO conflict
     switch( notify->action ){
         case svn_wc_notify_update_delete:
-            notifyString = i18n("Deleted %1").arg( notify->path );
+            notifyString = i18n("Deleted " ) + QString( notify->path );
             kDebug() << notifyString << endl;
             break;
         case svn_wc_notify_update_add:
-            notifyString = i18n("Added %1").arg( notify->path );
+            notifyString = i18n("Added ") + QString( notify->path );
             break;
         case svn_wc_notify_update_update:
-            notifyString = i18n("Updated %1").arg( notify->path );
+            notifyString = i18n("Updated ") + QString( notify->path );
             break;
         case svn_wc_notify_update_completed:
             /* The last notification in an update (including updates of externals). */
-            notifyString = i18n("Revision %1").arg( notify->revision);
+            notifyString = i18n("Revision ") + QString::number(notify->revision);
             break;
         case svn_wc_notify_update_external:
-            notifyString = i18n("Updating externals: %1").arg( notify->path );
+            notifyString = i18n("Updating externals: ") + QString( notify->path );
             break;
     }
 //     kDebug() << notifyString << endl;
+	SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
+	QCoreApplication::postEvent( job->parent(), event );
 }
 
 SvnInfoJob::SvnInfoJob( const KUrl &pathOrUrl,
@@ -671,6 +702,151 @@ void SvnInfoJob::run()
     }
     svn_pool_destroy (subpool);
     setSuccessful(true);
+}
+
+SvnInfoSyncJob::SvnInfoSyncJob()
+    : SubversionSyncJob( SVN_INFO )
+{}
+
+QMap< KUrl, SvnInfoHolder >* SvnInfoSyncJob::infoExec( const KUrl &pathOrUrl,
+                                       const SvnRevision *aPeg, const SvnRevision *aRevision,
+                                       bool recurse )
+{
+    kDebug() << " SvnInfoSyncJob:infoExec() " <<endl;
+    
+    apr_pool_t *subpool = svn_pool_create (pool);
+    
+    svn_opt_revision_t peg_rev = SubversionUtils::createRevision( -1, "UNSPECIFIED" );
+    svn_opt_revision_t revision = SubversionUtils::createRevision( -1, "UNSPECIFIED" );
+    
+    if( aPeg )
+        peg_rev = SubversionUtils::createRevision( aPeg->revNum, aPeg->revKind );
+    if( aRevision )
+        revision = SubversionUtils::createRevision( aRevision->revNum, aRevision->revKind );
+
+    svn_error_t *err = svn_client_info( pathOrUrl.pathOrUrl().toUtf8(),
+                                        &peg_rev, &revision,
+                                        SvnInfoSyncJob::infoReceiver,
+                                        this,
+                                        recurse,
+                                        ctx, pool );
+
+    if ( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy (subpool);
+        return NULL;
+    }
+    svn_pool_destroy (subpool);
+    setSuccessful(true);
+    return &m_holderMap;
+}
+svn_error_t* SvnInfoSyncJob::infoReceiver( void *baton, const char *path,
+                                       const svn_info_t *info, apr_pool_t *pool)
+{
+    SvnInfoSyncJob *job = (SvnInfoSyncJob*)baton ;
+    if( !job )
+        return SVN_NO_ERROR;
+    
+    SvnInfoHolder holder;
+    holder.path = KUrl( path );
+    holder.url = KUrl( info->URL );
+    holder.rev = info->rev;
+    holder.kind = info->kind;
+    holder.reposRootUrl = KUrl( info->repos_root_URL );
+    holder.reposUuid = QString::fromLocal8Bit( info->repos_UUID );
+    holder.lastChangedRev = info->last_changed_rev;
+    holder.lastChangedAuthor = QString::fromLocal8Bit( info->last_changed_author );
+
+    job->m_holderMap.insert( KUrl(path), holder );
+    return SVN_NO_ERROR;
+}
+SvnDiffJob::SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+                        const SvnRevision &rev1, const SvnRevision &rev2,
+                        bool recurse, bool ignoreAncestry, bool noDiffDeleted, bool ignoreContentType,
+                        int type, QObject *parent )
+    : SubversionJob( type, parent )
+    , m_pathOrUrl1(pathOrUrl1), m_pathOrUrl2(pathOrUrl2), m_rev1(rev1), m_rev2(rev2)
+    , m_recurse(recurse), m_ignoreAncestry(ignoreAncestry)
+    , m_noDiffDeleted(noDiffDeleted), m_ignoreContentType(ignoreContentType)
+    , m_tmpDir(0), out_name(0), err_name(0)
+{}
+
+SvnDiffJob::~SvnDiffJob()
+{
+    delete m_tmpDir;
+}
+
+void SvnDiffJob::run()
+{
+    apr_pool_t *subpool = svn_pool_create (pool);
+    // null options
+    apr_array_header_t *options = svn_cstring_split( "", "\t\r\n", TRUE, subpool );
+
+    // make 2 path or url
+    const char *path1 = 0, *path2 = 0;
+    
+    if ( m_pathOrUrl1.protocol() == "file" ) {
+        path1 = svn_path_canonicalize( apr_pstrdup( subpool, m_pathOrUrl1.path().toUtf8() ), subpool );
+    } else {
+        path1 = apr_pstrdup( subpool, m_pathOrUrl1.pathOrUrl().toUtf8() );
+    }
+    if ( m_pathOrUrl2.protocol() == "file" ) {
+        path2 = svn_path_canonicalize( apr_pstrdup( subpool, m_pathOrUrl2.path().toUtf8() ), subpool );
+    } else {
+        path2 = apr_pstrdup( subpool, m_pathOrUrl2.pathOrUrl().toUtf8() );
+    }
+    kDebug() << "1 : " << path1 << " 2: " << path2 << endl;
+
+    // make revisions
+    svn_opt_revision_t revision1,revision2;
+    revision1 = SubversionUtils::createRevision( m_rev1.revNum, m_rev1.revKind );
+    revision2 = SubversionUtils::createRevision( m_rev2.revNum, m_rev2.revKind );
+
+    // make temp files
+    m_tmpDir = new KTempDir();
+    QString tmpPath = m_tmpDir->name();
+    // Don't allocate in subpool. Use pool. subpool is destroyed after run() return,
+    // which will destroy tempfiles. But, pool is destroyed in ~SubversionJob().
+    // Slots to this job will display tempfile and delete SubversionJob*
+    out_name = apr_pstrdup( pool, QString( tmpPath + "svndiffout_XXXXXX" ).toUtf8() );
+    err_name = apr_pstrdup( pool, QString( tmpPath + "svndifferr_XXXXXX" ).toUtf8() );
+    apr_file_t *outfile = NULL, *errfile = NULL;
+    apr_file_mktemp( &outfile, out_name , APR_READ|APR_WRITE|APR_CREATE|APR_TRUNCATE, pool );
+    apr_file_mktemp( &errfile, err_name , APR_READ|APR_WRITE|APR_CREATE|APR_TRUNCATE, pool );
+    kDebug() << " SvnDiffJob::run() out_name " << out_name << " err_name " << err_name << endl;
+
+    svn_error_t *err = svn_client_diff2(options, path1, &revision1, path2, &revision2,
+                                        m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType,
+                                        outfile, errfile, ctx, subpool);
+    if ( err ){
+        setErrorMsgExt( err );
+        apr_file_close(outfile);
+        apr_file_close(errfile);
+        svn_pool_destroy (subpool);
+        return;
+    }
+    //read the content of the outfile now. 6-random XXXXXX are now replaced with unique letters.
+//     QStringList tmp;
+    apr_file_close(outfile);
+    apr_file_close(errfile);
+//     QFile file(templ);
+//     if ( file.open(  IO_ReadOnly ) ) {
+//         QTextStream stream(  &file );
+//         QString line;
+//         while ( !stream.atEnd() ) {
+//             line = stream.readLine();
+//             tmp << line;
+//         }
+//         file.close();
+//     }
+//     for ( QStringList::Iterator itt = tmp.begin(); itt != tmp.end(); itt++ ) {
+//         setMetaData(QString::number( m_counter ).rightJustify( 10,'0' )+ "diffresult", ( *itt ) );
+//         m_counter++;
+//     }
+//     //delete temp file
+//     file.remove();
+    setSuccessful( true );
+    svn_pool_destroy (subpool);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1147,6 +1323,18 @@ void SubversionCore::spawnInfoThread( const KUrl &pathOrUrl,
     SVNCORE_SPAWN_COMMON( job )
 }
 
+void SubversionCore::spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+                                      const SvnRevision &rev1, const SvnRevision &rev2,
+                                      bool recurse, bool ignoreAncestry, bool noDiffDeleted,
+                                      bool ignoreContentType )
+{
+    SvnDiffJob *job = new SvnDiffJob( pathOrUrl1, pathOrUrl2, rev1, rev2,
+                                      recurse, ignoreAncestry, noDiffDeleted, ignoreContentType,
+                                      SVN_DIFF, this );
+    SVNCORE_SPAWN_COMMON( job )
+}
+
+
 /// User can excute many logview jobs. Other job happens to try to manipulate
 /// logview widget while one job is painting widgets. Only one job should
 /// be able to manipulate widget.
@@ -1169,6 +1357,8 @@ void SubversionCore::slotFinished( SubversionJob* job )
     mtx.lock();
     if( job->type() == SVN_BLAME ){
         emit blameFetched( job );
+    } else if( job->type() == SVN_DIFF ){
+        emit diffFetched( job );
     } else {
         emit jobFinished( job );
     }
@@ -1186,6 +1376,7 @@ void SubversionCore::customEvent( QEvent * event )
     switch( type ){
         case SVNACTION_NOTIFICATION : {
             SvnNotificationEvent *ev = (SvnNotificationEvent*)event;
+			kDebug() << " SubversionCore:: Notification Message " << ev->m_msg << endl;
             emit svnNotify( ev->m_msg );
             break;
         }

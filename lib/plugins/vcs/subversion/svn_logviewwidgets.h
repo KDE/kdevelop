@@ -20,6 +20,7 @@ protected:
 protected slots:
     void customContextMenuEvent( const QPoint &point );
     void blameRev();
+    void diffToPrev();
     void treeViewClicked( const QModelIndex &index );
     void listViewClicked( const QModelIndex &index );
 
