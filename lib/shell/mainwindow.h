@@ -64,9 +64,10 @@ protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
     virtual bool queryClose();
 
-protected:
+protected slots:
     virtual void loadSettings();
     virtual void saveSettings();
+protected:
     virtual void initialize();
     virtual void cleanup();
 

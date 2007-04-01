@@ -60,11 +60,6 @@ public:
 
     KSettings::Dialog* cfgDlg;
 
-    void loadSettings()
-    {
-        kDebug(9000) << "Loading settings" << endl;
-    }
-
 private:
     UiController *m_controller;
 };
@@ -93,9 +88,12 @@ public:
 };
 
 UiController::UiController(Core *core)
-    :Sublime::Controller(0), IUiController()
+    :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
 {
-    d = new UiControllerPrivate(this);
+    KSettings::Dispatcher::self()->registerComponent( KGlobal::mainComponent(),
+                                    defaultMainWindow(), SLOT( loadSettings() ) );
+    KSettings::Dispatcher::self()->registerComponent( KComponentData("kdevplatform"),
+                                    defaultMainWindow(), SLOT( loadSettings() ) );
     d->core = core;
 }
 
@@ -112,14 +110,11 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
                                     main, SLOT( loadSettings() ) );
     KSettings::Dispatcher::self()->registerComponent( KComponentData("kdevplatform"),
                                     main, SLOT( loadSettings() ) );
-    KSettings::Dispatcher::self()->registerComponent( KGlobal::mainComponent(),
-                                    this, SLOT( loadSettings() ) );
-    KSettings::Dispatcher::self()->registerComponent( KComponentData("kdevplatform"),
-                                    this, SLOT( loadSettings() ) );
     showArea(area(areaName), main);
     main->initialize();
     main->show();
 }
+
 
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {

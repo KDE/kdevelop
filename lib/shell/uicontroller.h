@@ -64,8 +64,7 @@ public:
 
     void showSettingsDialog();
 private:
-    Q_PRIVATE_SLOT(d, void loadSettings())
-    class UiControllerPrivate *d;
+    class UiControllerPrivate * const d;
 };
 
 }
