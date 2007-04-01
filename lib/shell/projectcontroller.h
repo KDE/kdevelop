@@ -47,6 +47,8 @@ public:
 
     virtual ProjectModel* projectModel();
 
+    IProject* findProjectForUrl( const KUrl& ) const;
+
 //     IProject* currentProject() const;
 
 public Q_SLOTS:

@@ -330,6 +330,16 @@ ProjectModel* ProjectController::projectModel()
     return d->model;
 }
 
+IProject* ProjectController::findProjectForUrl( const KUrl& url ) const
+{
+    Q_FOREACH( IProject* proj, d->m_projects )
+    {
+        if( proj->inProject( url ) )
+            return proj;
+    }
+    return 0;
+}
+
 }
 #include "projectcontroller.moc"
 
