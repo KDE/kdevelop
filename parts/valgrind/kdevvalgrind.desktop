@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Valgrind is a tool that helps you find memory management problems in programs. http://valgrind.org/
+Comment[de]=Valgrind ist ein Werkzeug zum Auffinden von Speicherverwaltungsproblemen in Anwendungen. http://valgrind.org/
 Comment[es]=Valgrind es una herramienta que le ayuda a encontrar problemas de gestión de memoria en los programas. http://valgrind.org/
 Comment[ms]=Valgrind adalah alatan yang membantu anda mencari masalah pengurusan memori dalam program. http://valgrind.org/
 Comment[pt]=O Valgrind é uma ferramenta que o ajuda a descobrir os problemas de gestão de memória nos programas. http://www.valgrind.org/

@@ -3,7 +3,7 @@
 Name=Python Qt application
 Name[ca]=Aplicació per a Qt en Python
 Name[da]=Python Qt program
-Name[de]=Python Qt-Anwendung
+Name[de]=Python/Qt-Anwendung
 Name[el]=Εφαρμογή Python Qt
 Name[es]=Aplicación Qt en Python
 Name[et]=Pythoni Qt rakendus
@@ -137,7 +137,7 @@ Type=message
 Comment=A Python Qt application was created in %{dest}
 Comment[ca]=Una aplicació per a Qt en Python ha estat creada en %{dest}
 Comment[da]=Et Python Qt program blev oprettet i %{dest}
-Comment[de]=Eine Python Qt-Anwendung wurde in %{dest} erstellt.
+Comment[de]=Eine Python/Qt-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια εφαρμογή Python Qt δημιουργήθηκε στο %{dest}
 Comment[es]=Una aplicación Qt en Python ha sido creada en %{dest}
 Comment[et]=Pythoni Qt rakendus loodi asukohta %{dest}

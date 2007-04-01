@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Basic Qt4 Application
+Name[de]=Einfache Qt4-Anwendung
 Name[es]=Aplicación Qt4 básica
 Name[pt]=Aplicação Básica em Qt4
 Name[pt_BR]=Aplicação Básica em Qt4
@@ -8,6 +9,7 @@ Name[sv]=Grundläggande Qt4-program
 Icon=qt4hello.png
 Category=C++/QMake project
 Comment=Generate a very simple QMake/Qt4 based application (crossplatform compatible) - Needs Qt4
+Comment[de]=Erstellt eine sehr einfache, auf QMake/Qt4 basierende Anwendung (plattformunabhängig). - Benötigt Qt4.
 Comment[es]=Genera una aplicación muy sencilla basada en QMake/Qt4 (con compatibilidad multiplataforma) - Necesita Qt4
 Comment[pt]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas) - Necessita do Qt4
 Comment[pt_BR]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas) - Necessita do Qt4
@@ -48,6 +50,7 @@ Dest=%{dest}/src/ReadMe
 [MSG]
 Type=message
 Comment=A Qt4/Qmake based application was created in %{dest}
+Comment[de]=Eine auf QMake/Qt4 basierende Anwendung wurde in %{dest} erstellt.
 Comment[es]=Una aplicación basada en Qt4/Qmake ha sido creada en %{dest}
 Comment[pt]=Foi criada uma aplicação baseada no Qt4/Qmake em %{dest}
 Comment[pt_BR]=Foi criada uma aplicação baseada no Qt4/Qmake em %{dest}
@@ -58,6 +61,7 @@ Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake (Qt4).
+Comment[de]=Absoluter Pfad für QMake (Qt4).
 Comment[es]=Ruta completa para QMake (Qt4).
 Comment[pt]=Localização Absoluta do QMake (Qt4).
 Comment[pt_BR]=Localização Absoluta do QMake (Qt4).
@@ -69,6 +73,7 @@ Type=value
 ValueType=QString
 Value=DESIGNER
 Comment=Absolute Path for Designer (Qt4).
+Comment[de]=Absoluter Pfad für Designer (Qt4).
 Comment[es]=Ruta completa para Designer (Qt4).
 Comment[pt]=Localização Absoluta do Designer (Qt4).
 Comment[pt_BR]=Localização Absoluta do Designer (Qt4).

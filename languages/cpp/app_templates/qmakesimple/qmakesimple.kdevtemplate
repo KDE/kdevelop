@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Qt3 Hello world program
+Name[de]=Qt3-"Hello World"-Programm
 Name[es]=Programa Qt3 «Hola mundo»
 Name[pt]=Programa 'Olá mundo' em Qt3
 Name[pt_BR]=Programa 'Olá mundo' em Qt3
@@ -9,6 +10,7 @@ Icon=qmakesimple.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generates a simple Hello world program in C++ using QMake/Qt3 based project manager
+Comment[de]=Erstellt ein einfaches "Hello World"-Programm in C++ basierend auf dem QMake-Projektmanager und Qt3.
 Comment[es]=Genera un sencillo programa «Hola mundo» en C++ que usa un gestor de proyecto basado en QMake/Qt3
 Comment[pt]=Gera um programa simples Olá Mundo em C++, usando o gestor de projectos QMake/Qt3
 Comment[pt_BR]=Gera um programa simples Olá Mundo em C++, usando o gestor de projectos QMake/Qt3
@@ -45,6 +47,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A Qmake/Qt3 based hello world program was created in %{dest}
+Comment[de]=Ein auf QMake basierendes "Hello World"-Programm wurde in %{dest} erstellt.
 Comment[es]=Un programa «Hola mundo» basado en QMake/Qt3 ha sido creado en %{dest}
 Comment[pt]=Foi criado um programa Olá Mundo, baseado no Qmake/Qt3, em %{dest}
 Comment[pt_BR]=Foi criado um programa Olá Mundo, baseado no Qmake/Qt3, em %{dest}
@@ -56,6 +59,7 @@ Type=value
 ValueType=QString
 Value=QTDIR
 Comment=Directory where Qt3 is installed.
+Comment[de]=Qt3-Verzeichnis
 Comment[es]=Carpeta donde se ha instalado Qt3.
 Comment[pt]=A pasta onde está instalado o Qt3.
 Comment[pt_BR]=A pasta onde está instalado o Qt3.
@@ -66,6 +70,7 @@ Type=value
 ValueType=QString
 Value=QMAKE
 Comment=Absolute Path for QMake (Qt3).
+Comment[de]=Absoluter Pfad für QMake (Qt3).
 Comment[es]=Ruta completa para QMake (Qt3).
 Comment[pt]=Localização Absoluta do QMake (Qt3).
 Comment[pt_BR]=Localização Absoluta do QMake (Qt3).

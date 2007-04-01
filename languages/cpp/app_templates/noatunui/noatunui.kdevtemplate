@@ -2,7 +2,7 @@
 [General]
 Name=Noatun UI plugin
 Name[ca]=Connector d'interfície d'usuari per a Noatun
-Name[de]=Noatun UI-Plugin
+Name[de]=Noatun-UI-Modul
 Name[el]=Πρόσθετο Noatun UI
 Name[es]=Plugin de interfaz de usuario para Noatun
 Name[et]=Noatuni kasutajaliidese plugin
@@ -32,7 +32,7 @@ Category=C++/KDE
 Comment=Generates a simple user interface plugin for noatun.
 Comment[ca]=Genera un simple connector d'interfície d'usuari per a Noatun.
 Comment[da]=Genererer en simpel brugergrænseflade-plugin  for noatun.
-Comment[de]=Erstellt ein einfaches Oberflächen-Plugin für noatun
+Comment[de]=Erstellt ein einfaches Oberflächen-Modul für Noatun
 Comment[el]=Δημιουργεί ένα απλό πρόσθετο γραφικού περιβάλλοντος για το noatun.
 Comment[es]=Genera un plugin de interfaz de usuario para Noatun.
 Comment[et]=Noatuni lihtsa kasutajaliidese plugina loomine.
@@ -165,7 +165,7 @@ Type=message
 Comment=A Noatun UI plugin was created in %{dest}
 Comment[ca]=Un connector d'interfície d'usuari per a Noatun ha estat creat en %{dest}
 Comment[da]=Et Noatun UI-plugin blev oprettet i %{dest}
-Comment[de]=Ein Oberflächen-Plugin für Noatun wurde in %{dest} erstellt.
+Comment[de]=Ein Oberflächen-Modul für Noatun wurde in %{dest} erstellt.
 Comment[el]=Ένα πρόσθετο Noatun UI δημιουργήθηκε στο %{dest}
 Comment[es]=Un plugin de interfaz de usuario para Noatun ha sido creado en %{dest}
 Comment[et]=Noatuni kasutajaliidese plugin loodi asukohta %{dest}

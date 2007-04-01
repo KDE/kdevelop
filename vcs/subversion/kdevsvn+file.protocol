@@ -14,6 +14,7 @@ listing=Name,Size,Date,Owner
 defaultMimetype=application/octet-stream
 Icon=remote
 Description=Subversion ioslave for KDevelop
+Description[de]=Ein-/Ausgabemodul für Subversion (KDevelop)
 Description[es]=El ioslave de Subversion para KDevelop
 Description[ms]=IOslave Subversion untuk KDevelop
 Description[pt]='Ioslave' do Subversion para o KDevelop

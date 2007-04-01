@@ -1,8 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQt4Importer
+Name[de]=Qt4-PCS-Import (KDevelop)
 Name[sv]=KDevelop QT4-import
 Comment=KDevelop Qt4 PCS Importer
+Comment[de]=Qt4-Import für persistenten Klassenspeicher
 Comment[es]=Importador PCS de Qt4 de KDevelop
 Comment[pt]=Importador de PCS para Qt4 do KDevelop
 Comment[pt_BR]=Importador de PCS para Qt4 do KDevelop

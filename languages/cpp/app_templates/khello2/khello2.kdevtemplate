@@ -3,7 +3,7 @@
 Name=Simple Designer based KDE Application
 Name[ca]=Simple aplicació per al KDE basada en el dissenyador
 Name[da]=Simpelt Designer-baseret KDE program
-Name[de]=Einfache, Designer-basierte KDE-Anwendung
+Name[de]=Einfache, auf Designer basierende KDE-Anwendung
 Name[el]=Απλή εφαρμογή KDE βασισμένη στο σχεδιαστή
 Name[es]=Aplicación para KDE sencilla basada en el diseñador
 Name[et]=Lihtne KDE rakendus Disaineri põhjal
@@ -200,7 +200,7 @@ Type=message
 Comment=A simple designer based KDE application was created in %{dest}
 Comment[ca]=A simple aplicació per al KDE basada en el dissenyador ha estat creada en %{dest}
 Comment[da]=Et simpelt designer-baseret KDE program blev oprettet i %{dest}
-Comment[de]=Eine einfache Designer-basierte KDE-Anwendung wurde in %{dest} erstellt.
+Comment[de]=Eine einfache, auf Designer basierende KDE-Anwendung wurde in %{dest} erstellt.
 Comment[el]=Μια απλή εφαρμογή KDE βασισμένη στο σχεδιαστή δημιουργήθηκε στο %{dest}
 Comment[es]=Una sencilla aplicación para KDE basada en el diseñador ha sido creada en %{dest}
 Comment[et]=Lihtne KDE rakendus Disaineri põhjal loodi asukohta %{dest}

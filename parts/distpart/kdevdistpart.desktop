@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Aids in building and publishing the final project. Supports creation of RPM packages or source packages.
+Comment[de]=Unterstützt beim Erstellen und Ausliefern des fertigen Projekts. Derzeit werden RPM- und Quell-Pakete unterstützt.
 Comment[es]=Ayuda en la construcción y publicación del proyecto final. Contempla la creación de paquetes RPM y de código fuente.
 Comment[pt]=Ajuda na construção e publicação do projecto final. Suporta a criação de pacotes RPM ou pacotes com código-fonte.
 Comment[pt_BR]=Ajuda na construção e publicação do projecto final. Suporta a criação de pacotes RPM ou pacotes com código-fonte.

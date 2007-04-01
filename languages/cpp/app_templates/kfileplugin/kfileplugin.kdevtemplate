@@ -3,7 +3,7 @@
 Name=KFile plugin
 Name[br]=Lugent KFile
 Name[ca]=Connector KFile
-Name[de]=KFile-Plugin
+Name[de]=KFile-Modul
 Name[el]=Πρόσθετο KFile
 Name[es]=Plugin para KFile
 Name[et]=KFile'i plugin
@@ -34,7 +34,7 @@ Category=C++/KDE
 Comment=Generates a KFile plugin for konqueror to display meta information.
 Comment[ca]=Genera un connector KFile per al konqueror per a mostrar meta informació.
 Comment[da]=Genererer et KFile-plugin for konqueror til at vise meta-information.
-Comment[de]=Erstellt ein KFile-Plugin für Konqueror zur Anzeige von Meta-Daten.
+Comment[de]=Erstellt ein KFile-Modul für Konqueror zur Anzeige von Meta-Daten.
 Comment[el]=Δημιουργεί ένα πρόσθετο KFile για την εμφάνιση μεταπληροφοριών στον konqueror.
 Comment[es]=Genera un plugin KFile de Konqueror para mostrar metainformación.
 Comment[et]=Konquerori KFile'i plugina loomine, mis näitab metainfot.
