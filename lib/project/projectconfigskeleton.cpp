@@ -37,6 +37,8 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfig::Ptr config )
 void ProjectConfigSkeleton::setProjectConfig( const QString& cfg )
 {
     config()->setExtraConfigFiles( QStringList() << cfg );
+    config()->reparseConfiguration();
+    readConfig();
 }
 
 ProjectConfigSkeleton::~ProjectConfigSkeleton()
