@@ -34,17 +34,13 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfig::Ptr config )
 {
 }
 
-void ProjectConfigSkeleton::setProjectConfig( const QString& config )
+void ProjectConfigSkeleton::setProjectConfig( const QString& cfg )
 {
-    m_projectDefaultsConfigFile = config;
+    config()->setExtraConfigFiles( QStringList() << cfg );
 }
 
 ProjectConfigSkeleton::~ProjectConfigSkeleton()
 {}
-
-void ProjectConfigSkeleton::usrSetDefaults()
-{
-}
 
 }
 #include "projectconfigskeleton.moc"

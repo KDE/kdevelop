@@ -45,10 +45,7 @@ public:
 
     void setProjectConfig( const QString& );
 
-    virtual void usrSetDefaults();
-
 private:
-    KUrl m_projectDefaultsConfigFile;
     /**
      * There's no way in KDE4 API to find out the file that the config object
      * was created from, so we can't apply defaults when using this

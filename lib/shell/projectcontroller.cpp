@@ -74,8 +74,8 @@ public:
             m_cfgDlgs[proj] = new KSettings::Dialog( findPluginsForProject( proj ),
                                                      KSettings::Dialog::Static,
                                                      m_core->uiController()->activeMainWindow(),
-                                                     QStringList() << proj->projectConfigFile().url()
-                                                        << proj->projectDefaultsConfigFile().url() );
+                                                     QStringList() << proj->projectDefaultsConfigFile().path()
+                                                        << proj->projectConfigFile().path() );
 
         m_cfgDlgs[proj]->show();
     }

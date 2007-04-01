@@ -208,12 +208,8 @@ bool Project::open( const KUrl& projectFileUrl )
     d->localFile = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash )
                                   + ".kdev4/"
                                   + projectFileUrl.fileName() );
-    if( QFileInfo( d->localFile.path() ).exists() )
-    {
-        KSharedConfig::Ptr ptr = KSharedConfig::openConfig( d->globalFile.path() );
-        delete ptr->copyTo( d->localFile.path() );
-    }
-    d->m_cfg = KSharedConfig::openConfig( d->localFile.path() );
+    d->m_cfg = KSharedConfig::openConfig( d->globalFile.path() );
+    d->m_cfg->setExtraConfigFiles( QStringList() << d->localFile.path() );
     return true;
 }
 
