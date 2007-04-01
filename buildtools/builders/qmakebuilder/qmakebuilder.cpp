@@ -98,8 +98,8 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             QStringList cmd;
             KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
             KConfigGroup group(cfg.data(), "QMake Builder");
-            kDebug(9024) << "Reading setting: " << group.readEntry("qmakebin") << endl;
-            cmd << group.readEntry("qmakebin", "qmake-qt4");
+            kDebug(9024) << "Reading setting: " << group.readEntry("QMake Binary") << endl;
+            cmd << group.readEntry("QMake Binary", "qmake-qt4");
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
             view->queueCommand( item->url(), cmd, QStringList() );
             return true;
