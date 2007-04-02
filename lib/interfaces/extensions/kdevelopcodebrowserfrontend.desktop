@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/CodeBrowserFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Code Browser Frontend
+Name[de]=Quelltextbrowser-Oberfläche
 Name[es]=Interfaz para el navegador de código
 Name[pt]=Interface de Navegação do Código
 Name[pt_BR]=Interface de Navegação do Código
