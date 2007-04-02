@@ -20,6 +20,7 @@
 #include <kparts/part.h>
 #include <kdevcore.h>
 #include <kdebug.h>
+#include <klineedit.h>
 
 #include "subversion_part.h"
 #include "subversion_widget.h"
@@ -110,5 +111,26 @@ SvnLogViewItem::SvnLogViewItem( QListView * parent )
 }
 SvnLogViewItem ::~SvnLogViewItem ()
 {}
+
+////////////////////////////////////////////////////////////////////////
+
+SvnProgressDlg::SvnProgressDlg( bool showNow )
+	: KIO::DefaultProgress( showNow )
+{
+	setStopOnClose( true );
+	setCaption( i18n("Subversion Job Progress") );
+}
+
+SvnProgressDlg::~SvnProgressDlg()
+{}
+
+void SvnProgressDlg::setSourceUrl( const QString &src )
+{
+	sourceEdit->setText( src );
+}
+void SvnProgressDlg::setDestUrl( const QString &dest )
+{
+	destEdit->setText( dest );
+}
 
 #include "subversion_widget.moc"

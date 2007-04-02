@@ -85,6 +85,7 @@ signals:
 	void checkoutFinished( QString dir );
 
 private:
+	void initProcessDlg( KIO::Job *job, const QString &src, const QString &dest );
 
 	QGuardedPtr<subversionWidget> m_widget;
 	subversionPart *m_part;

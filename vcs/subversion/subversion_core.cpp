@@ -244,8 +244,9 @@ void subversionCore::diffAsync( const KURL &pathOrUrl1, const KURL &pathOrUrl2,
 	int cmd = 13;
 	kdDebug(9036) << "diffing async : " << pathOrUrl1 << " and " << pathOrUrl2 << endl;
 	s << cmd << pathOrUrl1 << pathOrUrl2 << rev1 << revKind1 << rev2 << revKind2 << recurse;
-	KIO::SimpleJob * job = KIO::special(servURL, parms, true);
+	KIO::SimpleJob * job = KIO::special(servURL, parms, false);
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotDiffResult( KIO::Job * ) ) );
+	initProcessDlg( (KIO::Job*)job, pathOrUrl1.prettyURL(), pathOrUrl2.prettyURL() );
 }
 
 void subversionCore::commit( const KURL::List& list, bool recurse, bool keeplocks ) {
@@ -263,9 +264,12 @@ void subversionCore::commit( const KURL::List& list, bool recurse, bool keeplock
 		kdDebug(9036) << "adding to list: " << (*it).prettyURL() << endl;
 		s << *it;
 	}
-	SimpleJob * job = KIO::special(servURL, parms, true);
-	job->setWindow( m_part->mainWindow()->main() );
+	SimpleJob * job = KIO::special(servURL, parms, false);
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	if( list.count() == 1 )
+		initProcessDlg( (KIO::Job*)job, (*(list.begin())).prettyURL() , i18n("Commit to remote repository") );
+	else if( list.count() > 1 )
+		initProcessDlg( (KIO::Job*)job, i18n("From working copy") , i18n("Commit to remote repository") );
 }
 // Right now, only one item for each action.
 void subversionCore::svnLog( const KURL::List& list,
@@ -294,10 +298,10 @@ void subversionCore::svnLog( const KURL::List& list,
 		kdDebug(9036) << "svnCore: adding to list: " << (*it).prettyURL() << endl;
 		s << *it;
 	}
-	SimpleJob * job = KIO::special(servURL, parms, true);
-	job->setWindow( m_part->mainWindow()->main() );
+	SimpleJob * job = KIO::special(servURL, parms, false);
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotLogResult( KIO::Job * ) ) );
-
+	//  progress info. LogView is allowed and meaninful only for one url in KDev3.4
+	initProcessDlg( (KIO::Job*)job, (*(list.begin())).prettyURL() , i18n("Subversion Log View") );
 }
 
 void subversionCore::blame( const KURL &url, UrlMode mode, int revstart, QString revKindStart, int revend, QString revKindEnd )
@@ -315,9 +319,9 @@ void subversionCore::blame( const KURL &url, UrlMode mode, int revstart, QString
 	s << cmd << url << (int)mode ;
 	s << revstart << revKindStart << revend << revKindEnd ;
 
-	SimpleJob * job = KIO::special(servURL, parms, true);
-	job->setWindow( m_part->mainWindow()->main() );
+	SimpleJob * job = KIO::special(servURL, parms, false);
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotBlameResult( KIO::Job * ) ) );
+	initProcessDlg( (KIO::Job*)job, url.prettyURL() , i18n("Subversion Blame") );
 }
 
 void subversionCore::add( const KURL::List& list ) {
@@ -665,6 +669,18 @@ void subversionCore::slotDiffResult( KIO::Job * job )
 	else{
 		KMessageBox::information( 0, i18n("No subversion differences") );
 	}
+}
+
+void subversionCore::initProcessDlg( KIO::Job *job, const QString &src, const QString &dest )
+{
+	SvnProgressDlg *progress = new SvnProgressDlg( true );
+	progress->setSourceUrl( src );
+	progress->setDestUrl( dest );
+	progress->setJob( job );
+	connect( job, SIGNAL( totalSize(KIO::Job*, KIO::filesize_t) ),
+			 progress, SLOT( slotTotalSize (KIO::Job*, KIO::filesize_t) ) );
+	connect( job, SIGNAL( processedSize(KIO::Job*, KIO::filesize_t) ),
+			 progress, SLOT( slotProcessedSize(KIO::Job*, KIO::filesize_t) ) );
 }
 
 void subversionCore::createNewProject( const QString& // dirName

@@ -108,6 +108,7 @@ class kio_svnProtocol : public KIO::SlaveBase
 		static svn_error_t *commitLogPrompt( const char **log_msg, const char **tmp_file, apr_array_header_t *commit_items, void *baton, apr_pool_t *pool );
 		static void notify(void *baton, const char *path, svn_wc_notify_action_t action, svn_node_kind_t kind, const char *mime_type, svn_wc_notify_state_t content_state, svn_wc_notify_state_t prop_state, svn_revnum_t revision);
 		static void status(void *baton, const char *path, svn_wc_status_t *status);
+		static void progressCallback( apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
 
 		QString chooseProtocol ( const QString& kproto ) const; 
 		QString makeSvnURL ( const KURL& url ) const;

@@ -27,6 +27,7 @@
 
 class subversionPart;
 #include <ktabwidget.h>
+#include <kio/defaultprogress.h>
 #include <qguardedptr.h>
 class KTextEdit;
 class SvnLogHolder;
@@ -79,6 +80,16 @@ class SvnLogViewItem : public SvnIntSortListItem {
 
         QString m_pathList;
         QString m_message;
+};
+
+/////////////////////////////////////////////////////////////
+/// Subversion Progress Display Widget
+class SvnProgressDlg : public KIO::DefaultProgress {
+public:
+	SvnProgressDlg( bool showNow = true );
+	~SvnProgressDlg();
+	void setSourceUrl( const QString & );
+	void setDestUrl( const QString & );
 };
 
 #endif

@@ -144,6 +144,9 @@ kio_svnProtocol::kio_svnProtocol(const QCString &pool_socket, const QCString &ap
 		ctx->log_msg_baton = this; //pass this so that we can get a dcopClient from it
 		//TODO
 		ctx->cancel_func = NULL;
+		// progress notifications
+		ctx->progress_func = kio_svnProtocol::progressCallback;
+		ctx->progress_baton = this;
 
 		apr_array_header_t *providers = apr_array_make(pool, 15, sizeof(svn_auth_provider_object_t *));
 
@@ -1974,6 +1977,14 @@ void kio_svnProtocol::status(void *baton, const char *path, svn_wc_status_t *sta
 	p->incCounter();
 }
 
+void kio_svnProtocol::progressCallback( apr_off_t processed, apr_off_t total, void *baton, apr_pool_t *pool)
+{
+	kio_svnProtocol *p = (kio_svnProtocol*)baton;
+	if( total > -1 )
+		p->totalSize( total );
+	if( processed > -1 )
+		p->processedSize( processed );
+}
 
 void kio_svnProtocol::wc_resolve( const KURL& wc, bool recurse ) {
 	kdDebug(9036) << "kio_svnProtocol::wc_resolve() : " << wc.url() << endl;
