@@ -389,7 +389,7 @@ namespace QMake
 	  case 2:
 
     {
-            foreach( StatementAST* s, (yysemantic_stack_[(1) - (1)].stmtlist))
+            Q_FOREACH( StatementAST* s, (yysemantic_stack_[(1) - (1)].stmtlist))
             {
                 project->addStatement( s );
             }
@@ -413,14 +413,18 @@ namespace QMake
   case 5:
 
     {
-            (yyval.stmt) = new CommentAST( (yysemantic_stack_[(1) - (1)].value) );
+            CommentAST* node = new CommentAST();
+            node->setComment( (yysemantic_stack_[(1) - (1)].value) );
+            (yyval.stmt) = node;
         ;}
     break;
 
   case 6:
 
     {
-            (yyval.stmt) = new NewlineAST( (yysemantic_stack_[(1) - (1)].value) );
+            NewlineAST* node = new NewlineAST();
+            node->setWhitespace( (yysemantic_stack_[(1) - (1)].value) );
+            (yyval.stmt) = node;
         ;}
     break;
 
@@ -460,7 +464,9 @@ namespace QMake
   case 11:
 
     {
-            SimpleScopeAST* node = new SimpleScopeAST( (yysemantic_stack_[(2) - (2)].value), (yysemantic_stack_[(2) - (1)].value) );
+            SimpleScopeAST* node = new SimpleScopeAST();
+            node->setScopeName( (yysemantic_stack_[(2) - (2)].value) );
+            node->setWhitespace( (yysemantic_stack_[(2) - (1)].value) );
             (yyval.scope) = node;
         ;}
     break;
@@ -477,7 +483,11 @@ namespace QMake
   case 13:
 
     {
-        OrAST* node = new OrAST( (yysemantic_stack_[(4) - (2)].funccall), (yysemantic_stack_[(4) - (3)].value), (yysemantic_stack_[(4) - (4)].funccall), (yysemantic_stack_[(4) - (1)].value) );
+        OrAST* node = new OrAST();
+        node->setLeftCall( (yysemantic_stack_[(4) - (2)].funccall) );
+        node->setRightCall( (yysemantic_stack_[(4) - (4)].funccall) );
+        node->setOrOp( (yysemantic_stack_[(4) - (3)].value) );
+        node->setWhitespace( (yysemantic_stack_[(4) - (1)].value) );
         (yyval.scope) = node;
     ;}
     break;
@@ -485,7 +495,10 @@ namespace QMake
   case 14:
 
     {
-            ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(7) - (1)].value)+(yysemantic_stack_[(7) - (2)].value)+(yysemantic_stack_[(7) - (3)].value), (yysemantic_stack_[(7) - (4)].stmtlist), (yysemantic_stack_[(7) - (5)].value)+(yysemantic_stack_[(7) - (6)].value)+(yysemantic_stack_[(7) - (7)].value) );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( (yysemantic_stack_[(7) - (1)].value)+(yysemantic_stack_[(7) - (2)].value)+(yysemantic_stack_[(7) - (3)].value) );
+			node->setStatements( (yysemantic_stack_[(7) - (4)].stmtlist) );
+			node->setEnd( (yysemantic_stack_[(7) - (5)].value)+(yysemantic_stack_[(7) - (6)].value)+(yysemantic_stack_[(7) - (7)].value) );
             (yyval.scopebody) = node;
         ;}
     break;
@@ -493,7 +506,10 @@ namespace QMake
   case 15:
 
     {
-            ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(6) - (1)].value)+(yysemantic_stack_[(6) - (2)].value), (yysemantic_stack_[(6) - (3)].stmtlist), (yysemantic_stack_[(6) - (4)].value)+(yysemantic_stack_[(6) - (5)].value)+(yysemantic_stack_[(6) - (6)].value) );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( (yysemantic_stack_[(6) - (1)].value)+(yysemantic_stack_[(6) - (2)].value) );
+			node->setStatements( (yysemantic_stack_[(6) - (3)].stmtlist) );
+			node->setEnd( (yysemantic_stack_[(6) - (4)].value)+(yysemantic_stack_[(6) - (5)].value)+(yysemantic_stack_[(6) - (6)].value) );
             (yyval.scopebody) = node;
         ;}
     break;
@@ -501,7 +517,10 @@ namespace QMake
   case 16:
 
     {
-            ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(5) - (1)].value)+(yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].stmtlist), (yysemantic_stack_[(5) - (4)].value)+(yysemantic_stack_[(5) - (5)].value) );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( (yysemantic_stack_[(5) - (1)].value)+(yysemantic_stack_[(5) - (2)].value) );
+			node->setStatements( (yysemantic_stack_[(5) - (3)].stmtlist) );
+			node->setEnd( (yysemantic_stack_[(5) - (4)].value)+(yysemantic_stack_[(5) - (5)].value) );
             (yyval.scopebody) = node;
         ;}
     break;
@@ -509,7 +528,10 @@ namespace QMake
   case 17:
 
     {
-            ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(6) - (1)].value)+(yysemantic_stack_[(6) - (2)].value)+(yysemantic_stack_[(6) - (3)].value), (yysemantic_stack_[(6) - (4)].stmtlist), (yysemantic_stack_[(6) - (5)].value)+(yysemantic_stack_[(6) - (6)].value) );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( (yysemantic_stack_[(6) - (1)].value)+(yysemantic_stack_[(6) - (2)].value)+(yysemantic_stack_[(6) - (3)].value) );
+			node->setStatements( (yysemantic_stack_[(6) - (4)].stmtlist) );
+			node->setEnd( (yysemantic_stack_[(6) - (5)].value)+(yysemantic_stack_[(6) - (6)].value) );
             (yyval.scopebody) = node;
         ;}
     break;
@@ -517,7 +539,9 @@ namespace QMake
   case 18:
 
     {
-            ScopeBodyAST* node = new ScopeBodyAST( (yysemantic_stack_[(2) - (1)].value), (yysemantic_stack_[(2) - (2)].stmt) );
+            ScopeBodyAST* node = new ScopeBodyAST();
+            node->setBegin( (yysemantic_stack_[(2) - (1)].value) );
+            node->addStatement( (yysemantic_stack_[(2) - (2)].stmt) );
             (yyval.scopebody) = node;
         ;}
     break;
@@ -539,7 +563,11 @@ namespace QMake
   case 21:
 
     {
-            FunctionCallAST* node = new FunctionCallAST( (yysemantic_stack_[(4) - (1)].value), (yysemantic_stack_[(4) - (2)].value), (yysemantic_stack_[(4) - (3)].values), (yysemantic_stack_[(4) - (4)].value) );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( (yysemantic_stack_[(4) - (1)].value) );
+            node->setBegin( (yysemantic_stack_[(4) - (2)].value) );
+            node->setArguments( (yysemantic_stack_[(4) - (3)].values) );
+            node->setEnd( (yysemantic_stack_[(4) - (4)].value) );
             (yyval.funccall) = node;
         ;}
     break;
@@ -547,21 +575,34 @@ namespace QMake
   case 22:
 
     {
-            (yyval.funccall) = new FunctionCallAST( (yysemantic_stack_[(3) - (1)].value), (yysemantic_stack_[(3) - (2)].value), QStringList(), (yysemantic_stack_[(3) - (3)].value) );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( (yysemantic_stack_[(3) - (1)].value) );
+            node->setBegin( (yysemantic_stack_[(3) - (2)].value) );
+            node->setEnd( (yysemantic_stack_[(3) - (3)].value) );
+            (yyval.funccall) = node;
         ;}
     break;
 
   case 23:
 
     {
-            (yyval.funccall) = new FunctionCallAST( (yysemantic_stack_[(5) - (1)].value)+(yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].value), (yysemantic_stack_[(5) - (4)].values), (yysemantic_stack_[(5) - (5)].value) );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( (yysemantic_stack_[(5) - (1)].value)+(yysemantic_stack_[(5) - (2)].value) );
+            node->setBegin( (yysemantic_stack_[(5) - (3)].value) );
+            node->setArguments( (yysemantic_stack_[(5) - (4)].values) );
+            node->setEnd( (yysemantic_stack_[(5) - (5)].value) );
+            (yyval.funccall) = node;
         ;}
     break;
 
   case 24:
 
     {
-            (yyval.funccall) = new FunctionCallAST( (yysemantic_stack_[(4) - (1)].value)+(yysemantic_stack_[(4) - (2)].value), (yysemantic_stack_[(4) - (3)].value), QStringList(), (yysemantic_stack_[(4) - (4)].value) );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( (yysemantic_stack_[(4) - (1)].value)+(yysemantic_stack_[(4) - (2)].value) );
+            node->setBegin( (yysemantic_stack_[(4) - (3)].value) );
+            node->setEnd( (yysemantic_stack_[(4) - (4)].value) );
+            (yyval.funccall) = node;
         ;}
     break;
 
@@ -793,14 +834,25 @@ namespace QMake
   case 57:
 
     {
-            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(5) - (2)].value), (yysemantic_stack_[(5) - (3)].value), (yysemantic_stack_[(5) - (4)].values), (yysemantic_stack_[(5) - (5)].value), (yysemantic_stack_[(5) - (1)].value) );
+        	AssignmentAST* node = new AssignmentAST();
+        	node->setWhitespace( (yysemantic_stack_[(5) - (1)].value) );
+        	node->setVariable( (yysemantic_stack_[(5) - (2)].value) );
+        	node->setOp( (yysemantic_stack_[(5) - (3)].value) );
+        	node->setValues( (yysemantic_stack_[(5) - (4)].values) );
+        	node->setLineEnding( (yysemantic_stack_[(5) - (5)].value) );
+            (yyval.stmt) = node;
         ;}
     break;
 
   case 58:
 
     {
-            (yyval.stmt) = new AssignmentAST( (yysemantic_stack_[(4) - (2)].value), (yysemantic_stack_[(4) - (3)].value), QStringList(), (yysemantic_stack_[(4) - (4)].value), (yysemantic_stack_[(4) - (1)].value) );
+            AssignmentAST* node = new AssignmentAST();
+        	node->setWhitespace( (yysemantic_stack_[(4) - (1)].value) );
+        	node->setVariable( (yysemantic_stack_[(4) - (2)].value) );
+        	node->setOp( (yysemantic_stack_[(4) - (3)].value) );
+        	node->setLineEnding( (yysemantic_stack_[(4) - (4)].value) );
+            (yyval.stmt) = node;
         ;}
     break;
 
@@ -1396,14 +1448,14 @@ namespace QMake
   const unsigned short int
   Parser::yyrline_[] =
   {
-         0,    72,    72,    81,    86,    91,    95,    99,   103,   109,
-     116,   124,   129,   135,   142,   147,   152,   157,   162,   169,
-     173,   179,   184,   188,   192,   198,   202,   209,   213,   217,
-     221,   225,   229,   233,   237,   241,   245,   249,   253,   257,
-     261,   265,   269,   273,   277,   281,   285,   289,   293,   297,
-     301,   305,   309,   313,   317,   321,   325,   331,   335,   341,
-     346,   351,   357,   363,   370,   377,   382,   387,   392,   399,
-     403,   407,   411,   415,   421,   426,   431
+         0,    72,    72,    81,    86,    91,    97,   103,   107,   113,
+     120,   128,   135,   141,   152,   160,   168,   176,   184,   193,
+     197,   203,   212,   220,   229,   239,   243,   250,   254,   258,
+     262,   266,   270,   274,   278,   282,   286,   290,   294,   298,
+     302,   306,   310,   314,   318,   322,   326,   330,   334,   338,
+     342,   346,   350,   354,   358,   362,   366,   372,   382,   393,
+     398,   403,   409,   415,   422,   429,   434,   439,   444,   451,
+     455,   459,   463,   467,   473,   478,   483
   };
 
   // Print the state stack on the debug stream.

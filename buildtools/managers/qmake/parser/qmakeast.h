@@ -28,6 +28,7 @@
 #include "qmakeexport.h"
 
 //@TODO Port to default constructors and use the set* API to set the various contents; complex constructors are unreadable
+//@TODO move the code from qmakeast.cpp into multiple files, move all code in this header to .cpp
 
 namespace QMake
 {
@@ -36,7 +37,7 @@ namespace QMake
     class QMAKEPARSER_EXPORT AST
     {
         public:
-            AST( const QString ws = "", AST* parent = 0 );
+            explicit AST( AST* parent = 0 );
             virtual ~AST() = 0;
 
             AST* parent() const;
@@ -54,8 +55,7 @@ namespace QMake
     class QMAKEPARSER_EXPORT StatementAST : public AST
     {
         public:
-            StatementAST( const QString& ws = "", AST* parent = 0 ) : AST( ws, parent )
-            {}
+            explicit StatementAST( AST* parent = 0 );
     };
 
     class QMAKEPARSER_EXPORT ProjectAST : public AST
@@ -63,11 +63,11 @@ namespace QMake
         public:
             enum LineEnding {
                 Unix = 1,
-		MacOS = 2,
-		Windows = 4
+                MacOS = 2,
+                Windows = 4
             };
 
-            ProjectAST( AST* parent = 0 );
+            explicit ProjectAST( AST* parent = 0 );
             ~ProjectAST();
 
             QString filename() const;
@@ -92,16 +92,18 @@ namespace QMake
     class QMAKEPARSER_EXPORT AssignmentAST : public StatementAST
     {
         public:
-            AssignmentAST( const QString& variable, const QString& op, const QStringList& values, const QString& = "", const QString& = "", AST* parent = 0 );
+            explicit AssignmentAST( AST* parent = 0 );
             ~AssignmentAST();
 
             void addValue( const QString& );
             QStringList values() const;
+            void setValues( const QStringList& );
             void removeValue( const QString& );
             QString variable() const;
             void setVariable( const QString& );
             QString op() const;
             void setOp( const QString& );
+            void setLineEnding( const QString& );
             void writeToString( QString& ) const;
         private:
             QString m_variable;
@@ -113,18 +115,14 @@ namespace QMake
     class QMAKEPARSER_EXPORT NewlineAST : public StatementAST
     {
         public:
-            NewlineAST( const QString& ws = "", AST* parent = 0 ) : StatementAST( ws, parent )
-            {}
-            void writeToString( QString& buf ) const
-            {
-                buf += whitespace();
-            }
+            explicit NewlineAST( AST* parent = 0 );
+            void writeToString( QString& buf ) const;
     };
 
     class QMAKEPARSER_EXPORT CommentAST : public StatementAST
     {
         public:
-            CommentAST( const QString& comment, const QString& ws = "", AST* parent = 0 );
+            explicit CommentAST( AST* parent = 0 );
             QString comment() const;
             void setComment( const QString& );
             void writeToString( QString& ) const;
@@ -135,14 +133,17 @@ namespace QMake
     class QMAKEPARSER_EXPORT ScopeBodyAST: public AST
     {
         public:
-            ScopeBodyAST( const QString& begin, QList<StatementAST*> stmts,
-                          const QString& end = "", AST* parent = 0 );
-            ScopeBodyAST( const QString& begin, StatementAST* stmt, AST* parent = 0 );
+            explicit ScopeBodyAST( AST* parent = 0 );
             ~ScopeBodyAST();
             void insertStatement( int i, StatementAST* );
             void addStatement( StatementAST* );
             QList<StatementAST*> statements() const;
             void removeStatement( int i );
+            void setStatements( QList<StatementAST*> );
+            QString begin() const;
+            QString end() const;
+            void setBegin( const QString& );
+            void setEnd( const QString& );
             void writeToString( QString& ) const;
         private:
             QList<StatementAST*> m_statements;
@@ -153,7 +154,7 @@ namespace QMake
     class QMAKEPARSER_EXPORT ScopeAST : public StatementAST
     {
         public:
-            ScopeAST( const QString& ws = "", AST* parent = 0 );
+            explicit ScopeAST( AST* parent = 0 );
             ~ScopeAST();
             void writeToString( QString& ) const;
             void setScopeBody( ScopeBodyAST* );
@@ -168,15 +169,19 @@ namespace QMake
     class QMAKEPARSER_EXPORT FunctionCallAST : public ScopeAST
     {
         public:
-            FunctionCallAST( const QString& name, const QString& begin, QStringList args,
-                             const QString& end = "", const QString& ws = "", AST* parent = 0 );
+            explicit FunctionCallAST( AST* parent = 0 );
             ~FunctionCallAST();
             QStringList arguments() const;
             void insertArgument( int i, const QString& );
+            void setArguments( const QStringList& );
             void removeArgument( int i );
             QString functionName() const;
             void setFunctionName( const QString& );
             void writeToString( QString& ) const;
+            QString begin() const;
+            QString end() const;
+            void setBegin( const QString& );
+            void setEnd( const QString& );
         private:
             QStringList m_args;
             QString m_functionName;
@@ -188,7 +193,7 @@ namespace QMake
     class QMAKEPARSER_EXPORT SimpleScopeAST : public ScopeAST
     {
         public:
-            SimpleScopeAST( const QString& name, const QString& ws = "", AST* parent = 0);
+            explicit SimpleScopeAST( AST* parent = 0);
             ~SimpleScopeAST();
             QString scopeName() const;
             void setScopeName( const QString& );
@@ -200,14 +205,15 @@ namespace QMake
     class QMAKEPARSER_EXPORT OrAST : public ScopeAST
     {
         public:
-            OrAST( FunctionCallAST* lcall, const QString& orop, FunctionCallAST* rcall,
-                   const QString& ws = "", AST* parent = 0 );
+            explicit OrAST( AST* parent = 0 );
             ~OrAST();
             void writeToString( QString& ) const;
             FunctionCallAST* leftCall() const;
             FunctionCallAST* rightCall() const;
             void setLeftCall( FunctionCallAST* );
             void setRightCall( FunctionCallAST* );
+            QString orOp() const;
+            void setOrOp( const QString& );
         private:
             FunctionCallAST* m_lCall;
             FunctionCallAST* m_rCall;

@@ -71,7 +71,7 @@ extern int QMakelex( QMake::Result* yylval, QMake::Lexer* lexer);
 project:
     statements
         {
-            foreach( StatementAST* s, $<stmtlist>1)
+            Q_FOREACH( StatementAST* s, $<stmtlist>1)
             {
                 project->addStatement( s );
             }
@@ -90,11 +90,15 @@ statements: statements statement
 
 statement: comment
         {
-            $<stmt>$ = new CommentAST( $<value>1 );
+            CommentAST* node = new CommentAST();
+            node->setComment( $<value>1 );
+            $<stmt>$ = node;
         }
     | EMPTYLINE
         {
-            $<stmt>$ = new NewlineAST( $<value>1 );
+            NewlineAST* node = new NewlineAST();
+            node->setWhitespace( $<value>1 );
+            $<stmt>$ = node;
         }
     | variable_assignment
         {
@@ -123,7 +127,9 @@ scope: scope_head ws scope_body
 
 scope_head: ws scope_name
         {
-            SimpleScopeAST* node = new SimpleScopeAST( $<value>2, $<value>1 );
+            SimpleScopeAST* node = new SimpleScopeAST();
+            node->setScopeName( $<value>2 );
+            node->setWhitespace( $<value>1 );
             $<scope>$ = node;
         }
     | ws functioncall
@@ -134,34 +140,52 @@ scope_head: ws scope_name
         }
     | ws functioncall OR functioncall
     {
-        OrAST* node = new OrAST( $<funccall>2, $<value>3, $<funccall>4, $<value>1 );
+        OrAST* node = new OrAST();
+        node->setLeftCall( $<funccall>2 );
+        node->setRightCall( $<funccall>4 );
+        node->setOrOp( $<value>3 );
+        node->setWhitespace( $<value>1 );
         $<scope>$ = node;
     }
     ;
 
 scope_body: LCURLY COMMENT NEWLINE statements ws RCURLY NEWLINE
         {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6+$<value>7 );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( $<value>1+$<value>2+$<value>3 );
+			node->setStatements( $<stmtlist>4 );
+			node->setEnd( $<value>5+$<value>6+$<value>7 );
             $<scopebody>$ = node;
         }
     | LCURLY NEWLINE statements ws RCURLY NEWLINE
         {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, $<stmtlist>3, $<value>4+$<value>5+$<value>6 );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( $<value>1+$<value>2 );
+			node->setStatements( $<stmtlist>3 );
+			node->setEnd( $<value>4+$<value>5+$<value>6 );
             $<scopebody>$ = node;
         }
     | LCURLY NEWLINE statements ws RCURLY
         {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2, $<stmtlist>3, $<value>4+$<value>5 );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( $<value>1+$<value>2 );
+			node->setStatements( $<stmtlist>3 );
+			node->setEnd( $<value>4+$<value>5 );
             $<scopebody>$ = node;
         }
     | LCURLY COMMENT NEWLINE statements ws RCURLY
         {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1+$<value>2+$<value>3, $<stmtlist>4, $<value>5+$<value>6 );
+            ScopeBodyAST* node = new ScopeBodyAST();
+			node->setBegin( $<value>1+$<value>2+$<value>3 );
+			node->setStatements( $<stmtlist>4 );
+			node->setEnd( $<value>5+$<value>6 );
             $<scopebody>$ = node;
         }
     | COLON statement
         {
-            ScopeBodyAST* node = new ScopeBodyAST( $<value>1, $<stmt>2 );
+            ScopeBodyAST* node = new ScopeBodyAST();
+            node->setBegin( $<value>1 );
+            node->addStatement( $<stmt>2 );
             $<scopebody>$ = node;
         }
     ;
@@ -178,20 +202,37 @@ scope_name: SCOPENAME
 
 functioncall: FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            FunctionCallAST* node = new FunctionCallAST( $<value>1, $<value>2, $<values>3, $<value>4 );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( $<value>1 );
+            node->setBegin( $<value>2 );
+            node->setArguments( $<values>3 );
+            node->setEnd( $<value>4 );
             $<funccall>$ = node;
         }
     | FUNCTIONNAME LPAREN RPAREN
         {
-            $<funccall>$ = new FunctionCallAST( $<value>1, $<value>2, QStringList(), $<value>3 );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( $<value>1 );
+            node->setBegin( $<value>2 );
+            node->setEnd( $<value>3 );
+            $<funccall>$ = node;
         }
     | EXCLAM FUNCTIONNAME LPAREN functionargs RPAREN
         {
-            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, $<values>4, $<value>5 );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( $<value>1+$<value>2 );
+            node->setBegin( $<value>3 );
+            node->setArguments( $<values>4 );
+            node->setEnd( $<value>5 );
+            $<funccall>$ = node;
         }
     | EXCLAM FUNCTIONNAME LPAREN RPAREN
         {
-            $<funccall>$ = new FunctionCallAST( $<value>1+$<value>2, $<value>3, QStringList(), $<value>4 );
+            FunctionCallAST* node = new FunctionCallAST();
+            node->setFunctionName( $<value>1+$<value>2 );
+            node->setBegin( $<value>3 );
+            node->setEnd( $<value>4 );
+            $<funccall>$ = node;
         }
     ;
 
@@ -330,11 +371,22 @@ functionarg: functionarg FNVALUE
 
 variable_assignment: ws VARIABLE op values NEWLINE
         {
-            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, $<values>4, $<value>5, $<value>1 );
+        	AssignmentAST* node = new AssignmentAST();
+        	node->setWhitespace( $<value>1 );
+        	node->setVariable( $<value>2 );
+        	node->setOp( $<value>3 );
+        	node->setValues( $<values>4 );
+        	node->setLineEnding( $<value>5 );
+            $<stmt>$ = node;
         }
     | ws VARIABLE op NEWLINE
         {
-            $<stmt>$ = new AssignmentAST( $<value>2, $<value>3, QStringList(), $<value>4, $<value>1 );
+            AssignmentAST* node = new AssignmentAST();
+        	node->setWhitespace( $<value>1 );
+        	node->setVariable( $<value>2 );
+        	node->setOp( $<value>3 );
+        	node->setLineEnding( $<value>4 );
+            $<stmt>$ = node;
         }
     ;
 

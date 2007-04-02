@@ -38,7 +38,7 @@ namespace QMake
         if ( !inf.is_open() )
         {
             std::cerr << filename << ": file not found" << std::endl;
-            *ast = 0;
+            ast = 0;
             return 1;
         }
 //         printf("Parsing\n");
@@ -47,7 +47,6 @@ namespace QMake
         Parser p(&l, ast);
         p.set_debug_level(debug);
         int ret = p.parse();
-//         printf("Parsed: %d\n", ret);
         switch( l.lineending() )
         {
            case QMake::Lexer::MacOS:
