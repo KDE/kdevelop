@@ -5,7 +5,17 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
                      ${FLEX_INCLUDE_DIR}
                    )
 
-set(kdevqmakeparser_SRCS qmakeast.cpp qmakedriver.cpp)
+set( kdevqmakeparser_SRCS
+    qmakeast.cpp
+    qmakeast_assignment.cpp
+    qmakeast_body.cpp
+    qmakeast_or.cpp
+    qmakeast_project.cpp
+    qmakeast_func.cpp
+    qmakeast_scope.cpp
+    qmakeast_simple.cpp
+    qmakedriver.cpp
+    )
 
 include(FindFlex)
 include(FindBison)
