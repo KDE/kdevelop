@@ -26,7 +26,7 @@
 class QWidget;
 
 /**
-KDevelop persistant class store importer plugin.
+KDevelop persistent class store importer plugin.
 
 These plugins are used by language support plugins to fill symbol stores
 with symbol information from certain files. The purpose of the importer

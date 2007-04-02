@@ -59,7 +59,7 @@ public:
 
     /**@return A reference to the part controller which is used to manipulate loaded KParts.*/
     virtual KDevPartController *partController() const = 0;
-    
+
     /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
     virtual KDevPluginController *pluginController() const = 0;
 
@@ -72,29 +72,29 @@ public:
 
     /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
     QDomDocument *projectDom() const;
-    
+
     /**Sets the Document Object Model for the current project.
     @param dom The project DOM.*/
     void setProjectDom(QDomDocument *dom);
 
     /**@return A reference to the current project component or 0 if no project is loaded.*/
     KDevProject *project() const;
-    
+
     /**Sets the current project.
     @param project The project plugin which becames the current project.*/
     void setProject(KDevProject *project);
 
     /**@return A reference to the language support component or 0 if no support available.*/
     KDevLanguageSupport *languageSupport() const;
-    
+
     /**Sets the object charged of providing handling for the source files written in particular
     language (languages support component).
     @param languageSupport The language support plugin.*/
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
 
-    /**@return A reference to the code repository (accessor to persistant symbol stores).*/
+    /**@return A reference to the code repository (accessor to persistent symbol stores).*/
     KDevCodeRepository *codeRepository() const;
-    
+
 private:
     class Private;
     Private *d;

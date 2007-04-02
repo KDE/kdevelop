@@ -262,13 +262,13 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	m_switchHeaderSourceAction->setEnabled( false );
 
 	KAction *action;
-	
+
 	action = new KAction( i18n( "Complete Text" ), CTRL + Key_Space,
 	                      this, SLOT( slotCompleteText() ),
 	                      actionCollection(), "edit_complete_text" );
 	action->setToolTip( i18n( "Complete current expression" ) );
 	action->setWhatsThis( i18n( "<b>Complete Text</p><p>Completes current expression using "
-	                            "memory class store for the current project and persistant class stores "
+	                            "memory class store for the current project and persistent class stores "
 	                            "for external libraries." ) );
 	action->setEnabled( false );
 
@@ -283,14 +283,14 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	action->setWhatsThis( i18n( "<b>Make member</b><p>Creates a class member function in implementation file "
 	                            "based on the member declaration at the current line." ) );
 	action->plug( &m_DummyActionWidget );
-	
+
 	action = new KAction( i18n( "Navigation Menu" ), 0, CTRL + ALT + Key_Space,
 	                      this, SLOT( slotNavigate() ),
 	                      actionCollection(), "edit_navigate" );
 	action->setToolTip( i18n( "Show the navigation-menu" ) );
 	action->setWhatsThis( i18n( "<b>Navigate</b><p>Shows a navigation-menu based on the type-evaluation of the item under the cursor." ) );
 	action->plug( &m_DummyActionWidget );
-	
+
 
 	action = new KAction( i18n( "New Class..." ), "classnew", 0,
 	                      this, SLOT( slotNewClass() ),
@@ -543,7 +543,7 @@ void CppSupportPart::projectOpened( )
 
 	m_pCompletion = new CppCodeCompletion( this );
 	m_projectClosed = false;
-	
+
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
@@ -866,14 +866,14 @@ QStringList CppSupportPart::reorder( const QStringList &list )
 	QStringList headerExtensions = QStringList::split( ",", "h,H,hh,hxx,hpp,tlh" );
 
 	QString projectPath = project()->projectDirectory();
-	
+
 	QStringList::ConstIterator it;
 	for ( it = list.begin(); it != list.end(); ++it )
 	{
 		QString filePath = *it;
-		// brilliant stuff.. this method is apparently called both with 
-		// relative and absolute paths.. 
-		if ( !filePath.startsWith("/") ) 
+		// brilliant stuff.. this method is apparently called both with
+		// relative and absolute paths..
+		if ( !filePath.startsWith("/") )
 		{
 			filePath = projectPath + "/" + filePath;
 		}
@@ -1445,7 +1445,7 @@ void CppSupportPart::slotCompleteText()
 }
 
 /**
- * parsing stuff for project persistant classstore and code completion
+ * parsing stuff for project persistent classstore and code completion
  */
 void CppSupportPart::initialParse( )
 {
@@ -1470,22 +1470,22 @@ bool CppSupportPart::parseProject( bool force )
 	kapp->setOverrideCursor( waitCursor );
 
 	_jd = new JobData;
-	if( QFileInfo( project() ->projectDirectory() + "/" + project()->projectName().lower() 
+	if( QFileInfo( project() ->projectDirectory() + "/" + project()->projectName().lower()
 				+ ".kdevelop.pcs" ).exists())
 	{
 		QDir d( project() ->projectDirectory());
-		d.rename(project() ->projectName().lower() + ".kdevelop.pcs", 
+		d.rename(project() ->projectName().lower() + ".kdevelop.pcs",
 					project() ->projectName() +".kdevelop.pcs");
 	}
-	_jd->file.setName( project() ->projectDirectory() + "/" + project()->projectName() 
+	_jd->file.setName( project() ->projectDirectory() + "/" + project()->projectName()
 			+ ".kdevelop.pcs" );
-	
-	QString skip_file_name = project() ->projectDirectory() + "/" + 
+
+	QString skip_file_name = project() ->projectDirectory() + "/" +
 		project() ->projectName() + ".kdevelop.ignore_pcs";
-	QString skip_lower_file_name = project() ->projectDirectory() + "/" + 
+	QString skip_lower_file_name = project() ->projectDirectory() + "/" +
 		project() ->projectName().lower() + ".kdevelop.ignore_pcs";
 
-	if ( !force && !QFile::exists( skip_file_name ) && 
+	if ( !force && !QFile::exists( skip_file_name ) &&
 			!QFile::exists( skip_lower_file_name ) && _jd->file.open( IO_ReadOnly ) )
 	{
 		_jd->stream.setDevice( &( _jd->file ) );
@@ -1627,11 +1627,11 @@ void CppSupportPart::slotParseFiles()
 				kapp->restoreOverrideCursor( );
 				emit updatedSourceInfo();
 				mainWindow( ) ->statusBar( ) ->message( i18n( "Done" ), 2000 );
-				QFile::remove( project() ->projectDirectory() 
-						+ "/" + project() ->projectName() 
+				QFile::remove( project() ->projectDirectory()
+						+ "/" + project() ->projectName()
 						+ ".kdevelop.ignore_pcs" );
-				QFile::remove( project() ->projectDirectory() 
-						+ "/" + project() ->projectName().lower() 
+				QFile::remove( project() ->projectDirectory()
+						+ "/" + project() ->projectName().lower()
 						+ ".kdevelop.ignore_pcs" );
 
 			}
@@ -1739,9 +1739,9 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 
 	atLine = -2;
 	atColumn = 0;
-	
+
 	QString implFile = findSourceFile();
-	
+
 	m_backgroundParser->lock();
 	TranslationUnitAST* translationUnit = *m_backgroundParser->translationUnit( m_activeFileName );
 	if ( translationUnit )
@@ -1759,13 +1759,13 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 			currentNode = currentNode->parent();
 		}
 		SimpleDeclarationAST* decl = currentNode ? ( SimpleDeclarationAST* ) currentNode : 0;
-		
+
 		if ( decl && decl->storageSpecifier() && decl->storageSpecifier()->text().contains("friend") )
 		{
 			kdDebug(9007) << "this is a friend declaration, don't create any definition" << endl;
 			fail = true;
 		}
-		
+
 		if ( !fail && decl && decl->initDeclaratorList() && !declarator )
 		{
 			InitDeclaratorAST * i = decl->initDeclaratorList() ->initDeclaratorList().at( 0 );
@@ -1816,7 +1816,7 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 			if ( translationUnit )
 				translationUnit->getEndPosition( &atLine, &atColumn );
 		}
-		
+
 		kdDebug() << "at line in mm: " << atLine << endl;
 	}
 	m_backgroundParser->unlock();
@@ -1967,7 +1967,7 @@ void CppSupportPart::setupCatalog( )
 	if ( pcsList.size() && pcsVersion() < KDEV_DB_VERSION )
 	{
 		QStringList l = pcsList + pcsIdxList;
-		int rtn = KMessageBox::questionYesNoList( 0, i18n( "Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?" ), l, i18n( "C++ Support" ), KStdGuiItem::del(), KStdGuiItem::cancel() );
+		int rtn = KMessageBox::questionYesNoList( 0, i18n( "Persistent class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?" ), l, i18n( "C++ Support" ), KStdGuiItem::del(), KStdGuiItem::cancel() );
 		if ( rtn == KMessageBox::Yes )
 		{
 			QStringList::Iterator it = l.begin();
@@ -2168,7 +2168,7 @@ void CppSupportPart::saveProjectSourceInfo()
 	if ( !project() || fileList.isEmpty() )
 		return ;
 
-	QFile f( project() ->projectDirectory() + "/" 
+	QFile f( project() ->projectDirectory() + "/"
 			+ project() ->projectName() + ".kdevelop.pcs" );
 	if ( !f.open( IO_WriteOnly ) )
 		return ;
@@ -2209,9 +2209,9 @@ void CppSupportPart::saveProjectSourceInfo()
 		stream.device() ->at( end );
 	}
 
-	QFile::remove(  project() ->projectDirectory() + "/" 
+	QFile::remove(  project() ->projectDirectory() + "/"
 			+ project() ->projectName() + ".kdevelop.ignore_pcs" );
-	QFile::remove(  project() ->projectDirectory() + "/" 
+	QFile::remove(  project() ->projectDirectory() + "/"
 			+ project() ->projectName().lower() + ".kdevelop.ignore_pcs" );
 
 	m_backgroundParser->unlock();
@@ -2452,7 +2452,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 		QStringList missing;
 
 		QMap<QString, FileDom> newFiles;
-		
+
 		while(!l.isEmpty() ) {
 			QString fileName = l.front();
 
@@ -2465,15 +2465,15 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 					if ( true /*!hasErrors*/ )
 					{
 						FileDom oldFile = codeModel()->fileByName( fileName );
-						
+
 						StoreWalker walker( fileName, codeModel() );
 						walker.setOverrides( newFiles );
-						
+
 						walker.parseTranslationUnit( *ast );
 
 						if( oldFile ) {
 							newFiles[fileName] = walker.file();
-							
+
 							///update timestamps
 							QFileInfo fileInfo( fileName );
 							QString path = URLUtil::canonicalPath( fileName );
@@ -2482,7 +2482,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 						} else {
 							codeModel() ->addFile( walker.file() );
 						}
-						
+
 						if( walker.file() ) {
 							QStringList grp = walker.file()->wholeGroupStrings();
 							for( QStringList::const_iterator it = grp.begin(); it != grp.end(); ++it )
@@ -2547,7 +2547,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 					emit addedSourceInfo( l.front() );
 					l.pop_front();
 				}
-				
+
 				if( !files.hasFlag( ParseEmitWaiting::Silent ) )
 					emitFileParsed( files );
 			} else {
@@ -2690,7 +2690,7 @@ void CppSupportPart::slotCursorPositionChanged()
 			mainWindow()->statusBar()->message( typeInfoString );
 		}
 	}
-	
+
 	//    m_functionHintTimer->changeInterval( 1000 );
 	if ( splitHeaderSourceConfig()->splitEnabled()
 	     && splitHeaderSourceConfig()->autoSync() )
@@ -2720,7 +2720,7 @@ void CppSupportPart::createIgnorePCSFile( )
 {
 	static QCString skip_me( "ignore me\n" );
 
-	QString skip_file_name = project() ->projectDirectory() + "/" 
+	QString skip_file_name = project() ->projectDirectory() + "/"
 		+ project() ->projectName() + ".kdevelop.ignore_pcs";
 	QFile skip_pcs_file( skip_file_name );
 	if ( skip_pcs_file.open( IO_WriteOnly ) )

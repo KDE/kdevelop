@@ -24,23 +24,23 @@
 
 /**
 @file kdevcoderepository.h
-Code repository - the persistant symbol store accessor.
+Code repository - the persistent symbol store accessor.
 */
 
 class KDevCodeRepositoryData;
 class Catalog;
 
 /**
-Code repository - the persistant symbol store accessor.
-Symbols from parsed files can be saved to the persistant symbol store.
-Persistance in this case means that symbol database is never loaded into memory
+Code repository - the persistent symbol store accessor.
+Symbols from parsed files can be saved to the persistent symbol store.
+Persistence in this case means that symbol database is never loaded into memory
 and works like a usual database which executes queries.
 
-Code repository consists from @ref Catalog objects that represent separate symbol 
+Code repository consists from @ref Catalog objects that represent separate symbol
 databases. Catalogs can be created/loaded/unloaded dynamically.
 To find a symbol in the repository each catalog should be queried.
 
-Persistant symbol store is useful to keep information about code that
+Persistent symbol store is useful to keep information about code that
 never or rarely changes. System libraries are perfect examples of such code.
 Symbols from code contained in project files are better stored in memory
 symbol store like @ref CodeModel.
@@ -53,8 +53,8 @@ public:
     KDevCodeRepository();
     /**Destructor.*/
     virtual ~KDevCodeRepository();
-    
-    /**@return The main catalog. Each catalog can be marked is main 
+
+    /**@return The main catalog. Each catalog can be marked is main
     to provide easy access to it.*/
     Catalog* mainCatalog();
     /**Sets the main catalog.

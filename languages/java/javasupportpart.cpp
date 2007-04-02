@@ -526,10 +526,10 @@ JavaSupportPart::parseProject( )
     QDataStream stream;
     QMap< QString, QPair<uint, uint> > pcs;
 
-    if( QFileInfo( project()->projectDirectory() + "/" + 
+    if( QFileInfo( project()->projectDirectory() + "/" +
 			    project()->projectName().lower() + ".kdevelop.pcs" ).exists() )
     {
-        d.rename(project()->projectName().lower() + ".kdevelop.pcs", 
+        d.rename(project()->projectName().lower() + ".kdevelop.pcs",
 			project()->projectName() + ".kdevelop.pcs");
     }
     QFile f(project()->projectDirectory() + "/" + project()->projectName() + ".kdevelop.pcs");
@@ -733,7 +733,7 @@ void JavaSupportPart::setupCatalog( )
 
     if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;
-        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KStdGuiItem::remove(), i18n("Keep Them") );
+        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistent class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KStdGuiItem::remove(), i18n("Keep Them") );
         if( rtn == KMessageBox::Yes ){
             QStringList::Iterator it = l.begin();
             while( it != l.end() ){
@@ -868,7 +868,7 @@ void JavaSupportPart::saveProjectSourceInfo( )
     if( !project() || fileList.isEmpty() )
 	return;
 
-    QFile f( project()->projectDirectory() + "/" + 
+    QFile f( project()->projectDirectory() + "/" +
 		    project()->projectName() + ".kdevelop.pcs" );
     if( !f.open( IO_WriteOnly ) )
 	return;

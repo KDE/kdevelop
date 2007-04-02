@@ -152,7 +152,7 @@ public:
     /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
     virtual KDevPluginController *pluginController() const;
 
-    /**@return A reference to the code repository (accessor to persistant symbol stores).*/
+    /**@return A reference to the code repository (accessor to persistent symbol stores).*/
     KDevCodeRepository* codeRepository() const;
 
     /**Queries for the plugin which supports given service type (such plugins are called extensions in KDevelop).

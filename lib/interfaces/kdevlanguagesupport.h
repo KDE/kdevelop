@@ -49,12 +49,12 @@ Language supports are usually loaded among with a project. In this case project 
 which language support to load.
 
 Language support plugin is a good place for:
-- a language parser which fills memory and persistant symbol store
+- a language parser which fills memory and persistent symbol store
 (see @ref CodeModel and @ref KDevCodeRepository);
 - code wizards specific to a programming language (like new class wizard);
-- GUI designer integration (see @ref KDevLanguageSupport::designer method 
+- GUI designer integration (see @ref KDevLanguageSupport::designer method
 documentation and @ref KDevDesignerIntegration class documentation;
-- symbol (class, function, etc.) name formatting to a human-readable convention (pretty 
+- symbol (class, function, etc.) name formatting to a human-readable convention (pretty
 formatted name).
 .
 */
@@ -71,12 +71,12 @@ public:
         Structs=2        /**<Language has structures or records.*/,
         Functions=4      /**<Language has functions.*/,
         Variables=8      /**<Language has variables.*/,
-        
+
         Namespaces=16    /**<Language has namespaces.*/,
         Signals=32       /**<Language has signals (or qt library bindings are available).*/,
         Slots=64         /**<Language has slots (or qt library bindings are available).*/,
         Declarations=128 /**<Language has function declarations (like c, c++ and pascal).*/,
-                   
+
         /*features of the language support part*/
         NewClass=512        /**<Language support can create classes.*/,
         AddMethod=1024      /**<Language support can create methods.*/,
@@ -100,15 +100,15 @@ public:
     /**@return The feature set of the language. This is e.g. used
     by the class view to decide which organizer items to display and which not.*/
     virtual Features features();
-    
-    /**@return A typical mimetype list for the support language, this list 
+
+    /**@return A typical mimetype list for the support language, this list
     should be configurable in the languagesupport dialog.*/
     virtual KMimeType::List mimeTypes();
 
-    /**Formats a Tag as used by the persistant symbol store to the human-readable convention.
+    /**Formats a Tag as used by the persistent symbol store to the human-readable convention.
     @param tag Tag to format.*/
     virtual QString formatTag(const Tag& tag);
-    
+
     /**Formats a CodeModelItem as used by the CodeModel to the human-readable convention.
     @param item Symbol to format.
     @param shortDescription Show short description of a symbol. For example, when
@@ -116,23 +116,23 @@ public:
     the return type and argument default values.*/
     virtual QString formatModelItem(const CodeModelItem *item, bool shortDescription=false);
 
-    /**Formats a canonicalized class path as used by the symbol store to the 
+    /**Formats a canonicalized class path as used by the symbol store to the
     human-readable convention. For example, the C++ support part formats the
     string "KParts.Part" into "KParts::Part".
     @param name Class name.*/
     virtual QString formatClassName(const QString &name);
-    
+
     /**The opposite of @ref formatClassName. Reverts formatting.
     @param name Class name.*/
     virtual QString unformatClassName(const QString &name);
-    
-    /**Determines whether the document should be opened in a split view.  The 
-    language part can determine this internally and then set the active document 
+
+    /**Determines whether the document should be opened in a split view.  The
+    language part can determine this internally and then set the active document
     and if so, set the active document so that the newly opened one will be split
     with it.
     @param name URL of the document in question.*/
     virtual bool shouldSplitDocument( const KURL &url );
-    
+
     /**Returns the language parts Split View orientation.
     By default Qt::Vertical.*/
     virtual Qt::Orientation splitOrientation() const;
@@ -140,22 +140,22 @@ public:
     /**Opens a "New class" dialog and adds the configured class to the sources.
     Define NewClass feature if you reimplement this method.*/
     virtual void addClass();
-    
+
     /**Opens an "Add method" dialog and adds the configured method to the sources.
     Define AddMethod feature if you reimplement this method.
     @param klass The class DOM to add a method to.*/
     virtual void addMethod(ClassDom klass);
-    
-    /**Opens an "Implement Virtual Methods" dialog and adds the configured methods 
+
+    /**Opens an "Implement Virtual Methods" dialog and adds the configured methods
     to the sources. Define AddMethod feature if you reimplement this method.
     @param klass The class DOM to add a virtual method to.*/
     virtual void implementVirtualMethods(ClassDom klass);
-    
+
     /**Opens an "Add attribute" dialog and adds the configured attribute to the sources.
     Define AddAttribute feature if you reimplement this method.
     @param klass The class DOM to add an attribute to.*/
     virtual void addAttribute(ClassDom klass);
-	
+
 	/**
 	 * Opens an "create get/set methods" dialog and adds the configured methods to the sources.
 	 * Define CreateAccessMethods feature if you reimplement this method.
@@ -163,13 +163,13 @@ public:
 	 * @param theVariable The attribute the access methods should be generated for.
 	 */
 	virtual void createAccessMethods(ClassDom theClass, VariableDom theVariable);
-    
+
     /**Opens an "Subclass Widget" dialog for given Qt .ui file (formName)
     and propmts to implement it's slots.
     @param formName The name of a form to subclass.
     @return A list of newly created files.*/
     virtual QStringList subclassWidget(const QString& formName);
-    
+
     /**Opens an "Update Widget" dialog for given Qt .ui file (formName)
     and prompts to add missing slot implementations
     in the subclass located in fileName.
@@ -211,14 +211,14 @@ public slots:
     @param formName The name of a GUI form.
     @param function The function to implement (add).*/
     void addFunction(DesignerType type, const QString &formName, Function function);
-    
+
     /**Removes a function requested by a GUI designer. No need to reimplement this slot
     unless you want to use specific implementation of KDevDesignerIntegration interface.
     @param type The type of integrated designer.
     @param formName The name of a GUI form.
     @param function The function to remove.*/
     void removeFunction(DesignerType type, const QString &formName, Function function);
-    
+
     /**Edits a function requested by a GUI designer. No need to reimplement this slot
     unless you want to use specific implementation of KDevDesignerIntegration interface.
     @param type The type of integrated designer.
@@ -226,7 +226,7 @@ public slots:
     @param oldFunction The old function signature before editing.
     @param function The new function signature after editing.*/
     void editFunction(DesignerType type, const QString &formName, Function oldFunction, Function function);
-    
+
     /**Opens a function requested by a GUI designer. No need to reimplement this slot
     unless you want to use specific implementation of KDevDesignerIntegration interface.
     @param type The type of integrated designer.
@@ -239,7 +239,7 @@ public slots:
     @param type The type of integrated designer.
     @param formName The name of a GUI form.*/
     void openSource(DesignerType type, const QString &formName);
-        
+
 signals:
     /**Emitted when the content of the memory symbol store has been modified.*/
     void updatedSourceInfo();

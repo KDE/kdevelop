@@ -859,7 +859,7 @@ void CppNewClassDialog::parseClass( QString clName, QString inheritance )
 
 	if ( myClasses.empty() )
 	{
-		kdDebug() << "Trying persistant class store..." << endl;
+		kdDebug() << "Trying persistent class store..." << endl;
 		parsePCSClass( clName, inheritance );
 	}
 

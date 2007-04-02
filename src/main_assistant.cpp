@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Kurt Granroth", I18N_NOOP("KDE application templates"), "kurth@granroth.org");
   aboutData.addAuthor("Ian Reinhart Geiser", I18N_NOOP("Dist part, bash support, application templates"), "geiseri@yahoo.com");
   aboutData.addAuthor("Matthias Hoelzer-Kluepfel", I18N_NOOP("Several components, htdig indexing"), "hoelzer@kde.org");
-  aboutData.addAuthor("Victor Roeder", I18N_NOOP("Help with Automake manager and persistant class store"), "victor_roeder@gmx.de");
+  aboutData.addAuthor("Victor Roeder", I18N_NOOP("Help with Automake manager and persistent class store"), "victor_roeder@gmx.de");
   aboutData.addAuthor("Harald Fernengel", I18N_NOOP("Ported to Qt 3, patches, valgrind, diff and perforce support"), "harry@kdevelop.org");
   aboutData.addAuthor("Roberto Raggi", I18N_NOOP("QEditor component, code completion, Abbrev component, C++ support, Java support"), "roberto@kdevelop.org");
   aboutData.addAuthor("Simon Hausmann", I18N_NOOP("Help with KParts infrastructure"), "hausmann@kde.org");
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Hugo Varotto", I18N_NOOP("Fileselector component"), "hugo@varotto-usa.com");
   aboutData.addCredit("Matt Newell", I18N_NOOP("Fileselector component"), "newellm@proaxis.com");
   aboutData.addCredit("Trolltech AS", I18N_NOOP("Designer code"), "info@trolltech.com");
-  aboutData.addCredit("Daniel Engelschalt", I18N_NOOP("C++ code completion, persistant class store"), "daniel.engelschalt@gmx.net");
+  aboutData.addCredit("Daniel Engelschalt", I18N_NOOP("C++ code completion, persistent class store"), "daniel.engelschalt@gmx.net");
   aboutData.addCredit("Stephane ANCELOT", I18N_NOOP("Patches"), "sancelot@free.fr");
   aboutData.addCredit("Jens Zurheide", I18N_NOOP("Patches"), "jens.zurheide@gmx.de");
   aboutData.addCredit("Luc Willems", I18N_NOOP("Help with Perl support"), "Willems.luc@pandora.be");
