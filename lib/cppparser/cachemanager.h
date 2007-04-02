@@ -15,6 +15,7 @@
 
 #ifndef CACHEMANAGER_H
 #define CACHEMANAGER_H
+#include <cstdlib>
 #include <set>
 #include <limits>
 

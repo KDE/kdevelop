@@ -40,6 +40,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
+#include <cctype>
 #include <set>
 #include <typeinfo>
 #include <cctype>

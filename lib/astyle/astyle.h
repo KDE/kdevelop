@@ -29,6 +29,7 @@
 #ifndef ASTYLE_H
 #define ASTYLE_H
 
+#include <cctype>
 #include <string>
 #include <vector>
 
