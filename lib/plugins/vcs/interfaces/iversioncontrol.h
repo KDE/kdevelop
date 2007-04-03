@@ -32,6 +32,10 @@ class QMenu;
 class QString;
 template <typename T> class QList;
 class QWidget;
+namespace KDevelop
+{
+    class ProjectBaseItem;
+}
 
 /**
 @file iversioncontrol.h
@@ -163,6 +167,12 @@ public:
  *  @param ctxMenu The reference to QMenu to be filled out by VCS plugins
  */
     virtual void fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu ) = 0;
+    
+/** Same with above, except that this accepts ProjectBaseitem&
+ *  @param prjItem The Project Item for which the context menu was requested
+ *  @param ctxMenu The reference to QMenu to be filled out by VCS plugins
+ */
+    virtual void fillContextMenu( const ProjectBaseItem *prjItem, QMenu &ctxMenu ) = 0;
 
 /** Action interfaces. These methods is supposed to be ASync (ie. non-blocking) */
     // TODO add more

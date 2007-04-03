@@ -1,3 +1,4 @@
+#include "projectmodel.h"
 #include "subversion_part.h"
 #include "subversion_view.h"
 #include "subversion_fileinfo.h"
@@ -18,6 +19,7 @@
 #include <qwidget.h>
 
 #include <QPointer>
+#include <QDir>
 #include <QtDesigner/QExtensionFactory>
 
 // KDEV_ADD_EXTENSION_FACTORY_NS(KDevelop, IVersionControl, KDevSubversionPart)
@@ -134,7 +136,17 @@ KDevSubversionPart::~KDevSubversionPart()
 //     delete d->m_infoProvider;
     delete d;
 }
+bool KDevSubversionPart::isValidDirectory(const KUrl &dirPath) const
+{
+    QString svn = "/.svn/";
+    QDir svndir( dirPath.path() + svn );
+    QString entriesFileName = dirPath.path() + svn + "entries";
 
+    kDebug() << "dirpath " << dirPath.path() +"/.svn/" << " exists:" << svndir.exists() << endl;
+    kDebug() << "entries " << entriesFileName << " exists:" << QFile::exists( entriesFileName ) << endl;
+    return svndir.exists() &&
+            QFile::exists( entriesFileName );
+}
 const QList<KDevelop::VcsFileInfo>& KDevSubversionPart::statusSync( const KUrl &dirPath,
                                                     KDevelop::IVersionControl::WorkingMode mode )
 {
@@ -188,7 +200,6 @@ bool KDevSubversionPart::statusASync( const KUrl &dirPath,
 }
 void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
 {
-    //TODO check whether the url is really under version control
     d->m_ctxUrl = ctxUrl;
     QMenu *subMenu = new QMenu( "Subversion", (QWidget*)&ctxMenu );
     
@@ -208,6 +219,22 @@ void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
 
 
     ctxMenu.addMenu( subMenu );
+}
+
+void KDevSubversionPart::fillContextMenu( const KDevelop::ProjectBaseItem *prjItem,
+                                          QMenu &ctxMenu )
+{
+
+    if ( KDevelop::ProjectFolderItem *folder = prjItem->folder() ){
+        if( !isValidDirectory( folder->url() ) )
+            return;
+        
+        this->fillContextMenu( folder->url(), ctxMenu );
+    }
+    else if ( KDevelop::ProjectFileItem *file = prjItem->file() ){
+        this->fillContextMenu( file->url(), ctxMenu );
+    }
+
 }
 //////////////////////////////////////////////
 void KDevSubversionPart::checkout( const KUrl &repository, const KUrl &targetDir, KDevelop::IVersionControl::WorkingMode mode )

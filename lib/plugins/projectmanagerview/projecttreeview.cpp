@@ -21,7 +21,8 @@
 #include "projecttreeview.h"
 #include "projectmanagerview_part.h"
 #include "projectmodel.h"
-
+#include "iversioncontrol.h"
+#include <iplugincontroller.h>
 #include <QtGui/QHeaderView>
 
 #include <icore.h>
@@ -165,14 +166,24 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     if ( ProjectBaseItem *item = projectModel()->item( index ) )
     {
         KMenu menu( this );
+        // query already loaded VCS plugins
+        // TODO if more than two plugins are found (eg svn, cvs, clearcase etc.. ) iterate over these.
+        IPlugin* vcsIface = d->m_part->core()->pluginController()->pluginForExtension("IVersionControl");
+        KDevelop::IVersionControl *vctrl = NULL;
+        if( vcsIface )
+            vctrl= vcsIface->extension<KDevelop::IVersionControl>();
 
         if ( ProjectFolderItem *folder = item->folder() )
         {
             menu.addTitle( i18n( "Folder: %1", folder->url().directory() ) );
+            if( vctrl )
+                vctrl->fillContextMenu( (ProjectBaseItem*)folder, menu );
         }
         else if ( ProjectFileItem *file = item->file() )
         {
             menu.addTitle( i18n( "File: %1", file->url().fileName() ) );
+            if( vctrl )
+                vctrl->fillContextMenu( (ProjectBaseItem*)file, menu );
         }
         else if ( ProjectTargetItem *target = item->target() )
         {
