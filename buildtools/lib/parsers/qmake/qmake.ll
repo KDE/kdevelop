@@ -55,8 +55,7 @@ To debug this lexer, put the line below into the next flex file section.
 %option c++
 %option yyclass="QMake::Lexer"
 
-%x list
-%x list_with_comment
+%x vallist
 %x funcargs
 
 delim             [ \t]
@@ -77,19 +76,19 @@ cont              \\{ws}*{newline}
 %%
 <INITIAL>{ws} {}
 
-<list>{ws} {
+<vallist>{ws} {
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::LIST_WS;
 }
 
-<list,INITIAL>{cont} {
-    BEGIN(list);
+<vallist,INITIAL>{cont} {
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::CONT;
 }
 
-<list,INITIAL>{comment_cont} {
-    BEGIN(list);
+<vallist,INITIAL>{comment_cont} {
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::COMMENT_CONT;
 }
@@ -107,44 +106,44 @@ cont              \\{ws}*{newline}
     return (Parser::token::token::ID_ARGS);
     }
 
-<list>{var_value} {
-    BEGIN(list);
+<vallist>{var_value} {
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::VARIABLE_VALUE;
 }
 
-<list>{quoted_var_value} {
-    BEGIN(list);
+<vallist>{quoted_var_value} {
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::QUOTED_VARIABLE_VALUE;
 }
 
 "=" {
-    BEGIN(list);
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::EQ;
 }
 
 "+=" {
-    BEGIN(list);
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::PLUSEQ;
 }
 
 "-=" {
-    BEGIN(list);
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::MINUSEQ;
 }
 
 "*=" {
-    BEGIN(list);
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::STAREQ;
 }
 
 "~=" {
-    BEGIN(list);
+    BEGIN(vallist);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return Parser::token::token::TILDEEQ;
 }
@@ -176,14 +175,14 @@ cont              \\{ws}*{newline}
     return Parser::token::token::COLON;
 }
 
-<list,INITIAL>{newline} {
+<vallist,INITIAL>{newline} {
     BEGIN(INITIAL);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     setLineEndingFromString( mylval->value );
     return Parser::token::token::NEWLINE;
 }
 
-<list,INITIAL>{comment} {
+<vallist,INITIAL>{comment} {
     BEGIN(INITIAL);
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
     return (Parser::token::token::COMMENT);
