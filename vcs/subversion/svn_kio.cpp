@@ -967,7 +967,11 @@ void kio_svnProtocol::blame( KURL url, UrlMode mode,/* int pegRev, QString pegRe
 	// fill out "path_or_url"
 	if (mode == path_to_reposit ) {
 		svn_error_t *urlErr=0;
-		urlErr = svn_client_url_from_path( &path_or_url, url.path().utf8(), subpool );
+		// output of svn_client_url_from_path could be the same with url.path().utf8()
+		// In that case, path_or_url just points to url.path().utf8(), which will be destroyed outside the if(){}
+		// Thus, we should allocate new memory
+		const char* orig_path = apr_pstrdup( subpool, url.path().utf8() );
+		urlErr = svn_client_url_from_path( &path_or_url, orig_path, subpool );
 		kdDebug(9036) << " __LINE__ " << __LINE__ << endl;
 		if (urlErr || !path_or_url ){
 			error( KIO::ERR_SLAVE_DEFINED,
@@ -979,7 +983,8 @@ void kio_svnProtocol::blame( KURL url, UrlMode mode,/* int pegRev, QString pegRe
 		kdDebug(9036) << " URL from PATH: " << path_or_url << endl;
 	} else if (mode == path_to_path ){
 		url.setProtocol( "file" );
-		path_or_url = svn_path_canonicalize( url.path().utf8(), subpool );
+		// svn_path_canonicalize is also the same with the above case. Needs explicit memory allocation.
+		path_or_url = apr_pstrdup( subpool, svn_path_canonicalize( url.path().utf8(), subpool ) );
 		kdDebug(9036) << " Working Copy Path: " << path_or_url << endl;
 	} else {
         svn_string_t *string = svn_string_create( url.pathOrURL().utf8(), subpool );
@@ -1142,23 +1147,30 @@ void kio_svnProtocol::svn_diff(const KURL & url1, const KURL& url2,int rev1, int
 	apr_pool_t *subpool = svn_pool_create (pool);
 	apr_array_header_t *options = svn_cstring_split( "", "\t\r\n", TRUE, subpool );
 
-	KURL nurl1 = url1;
-	KURL nurl2 = url2;
-	nurl1.setProtocol( chooseProtocol( url1.protocol() ) ); //svn+https -> https for eg
-	nurl2.setProtocol( chooseProtocol( url2.protocol() ) );
-	recordCurrentURL( nurl1 );
-	QString source = makeSvnURL( nurl1 );
-	QString target = makeSvnURL( nurl2 );
+// 	KURL nurl1 = url1;
+// 	KURL nurl2 = url2;
+// 	nurl1.setProtocol( chooseProtocol( url1.protocol() ) ); //svn+https -> https for eg
+// 	nurl2.setProtocol( chooseProtocol( url2.protocol() ) );
+// 	recordCurrentURL( nurl1 );
+// 	QString source = makeSvnURL( nurl1 );
+// 	QString target = makeSvnURL( nurl2 );
 
-	const char *path1 = svn_path_canonicalize( apr_pstrdup( subpool, source.utf8() ), subpool );
-	const char *path2 = svn_path_canonicalize( apr_pstrdup( subpool, target.utf8() ), subpool );
+// 	const char *path1 = svn_path_canonicalize( apr_pstrdup( subpool, source.utf8() ), subpool );
+// 	const char *path2 = svn_path_canonicalize( apr_pstrdup( subpool, target.utf8() ), subpool );
+
 	//remove file:/// so we can diff for working copies, needs a better check (so we support URL for file:/// _repositories_ )
-	if ( nurl1.protocol() == "file" ) {
-		path1 = svn_path_canonicalize( apr_pstrdup( subpool, nurl1.path().utf8() ), subpool );
-	}
-	if ( nurl2.protocol() == "file" ) {
-		path2 = svn_path_canonicalize( apr_pstrdup( subpool, nurl2.path().utf8() ), subpool );
-	}
+// 	if ( nurl1.protocol() == "file" ) {
+// 		path1 = svn_path_canonicalize( apr_pstrdup( subpool, nurl1.path().utf8() ), subpool );
+// 	}
+// 	if ( nurl2.protocol() == "file" ) {
+// 		path2 = svn_path_canonicalize( apr_pstrdup( subpool, nurl2.path().utf8() ), subpool );
+// 	}
+	
+	// all the commentted codes above are redundancy. url1/url2 is only file:// , svn:// or https://
+	// svn+https etc. are not handed out here.
+	const char *path1 = apr_pstrdup( subpool, url1.pathOrURL().utf8() );
+	const char *path2 = apr_pstrdup( subpool, url2.pathOrURL().utf8() );;
+	
 	kdDebug( 9036 ) << "1 : " << path1 << " 2: " << path2 << endl;
 
 	svn_opt_revision_t revision1,revision2;
