@@ -380,11 +380,27 @@ void subversionPart::slotDel() {
 	m_impl->del (m_urls);
 }
 
+// note: currently diffAsync does not support merging. But svncore::diff()
+// cannot be invoked on directory, while diffAsync can.
 void subversionPart::slotDiffLocal() {
-	m_impl->diff (m_urls, "BASE");
+// 	m_impl->diff (m_urls, "BASE");
+	if( m_urls.count() < 1 ){
+		// Impossible to reach here but..
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							 i18n("Select file or directory to see diff") );
+		return;
+	}
+	m_impl->diffAsync( *(m_urls.begin()), *(m_urls.begin()), -1, "BASE", -1, "WORKING", true );
 }
 void subversionPart::slotDiffHead() {
-	m_impl->diff (m_urls, "HEAD");
+// 	m_impl->diff (m_urls, "HEAD");
+	if( m_urls.count() < 1 ){
+		// Impossible to reach here but..
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							 i18n("Select file or directory to see diff") );
+		return;
+	}
+	m_impl->diffAsync( *(m_urls.begin()), *(m_urls.begin()), -1, "BASE", -1, "HEAD", true );
 }
 
 void subversionPart::slotRevert() {
