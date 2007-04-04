@@ -1,16 +1,22 @@
 # KDE Config File
 [General]
 Name=Qt3 Application
+Name[ca]=Aplicació Qt3
 Name[de]=Qt3-Anwendung
 Name[es]=Aplicación Qt3
+Name[it]=Applicazione Qt3
+Name[nds]=Qt3-Programm
 Name[pt]=Aplicação do Qt3
 Name[pt_BR]=Aplicação do Qt3
 Name[sv]=Qt3-program
 Icon=cmakeqt3app.png
 Category=C++/CMake based projects
 Comment=Generate a CMake based Qt3 application
+Comment[ca]=Genera una aplicació Qt3 basada en CMake
 Comment[de]=Erstellt eine auf CMake basierende Qt3-Anwendung
 Comment[es]=Genera una aplicación Qt3 basada en CMake
+Comment[it]=Genera un'applicazione Qt3 basata su CMake
+Comment[nds]=Stellt en op CMake opbuut Qt3-Programm op
 Comment[pt]=Gera uma aplicação em Qt3 baseada no CMake
 Comment[pt_BR]=Gera uma aplicação em Qt3 baseada no CMake
 Comment[sv]=Skapar ett CMake-baserat Qt3-program
@@ -70,8 +76,11 @@ Directory=%{dest}
 [MSG]
 Type=message
 Comment=A CMake based Qt3 application was created in %{dest}
+Comment[ca]=Una aplicació Qt3 basada en CMake ha estat creada en %{dest}
 Comment[de]=Eine auf CMake basierende Qt3-Anwendung wurde in %{dest} erstellt.
 Comment[es]=Una aplicación Qt3 basada en CMake ha sido creada en %{dest}
+Comment[it]=È stata creata un'applicazione Qt3 basata su CMake in %{dest}
+Comment[nds]=In %{dest} wöör en op CMake opbuut Qt3-Programm opstellt
 Comment[pt]=Foi criada uma aplicação do Qt3 baseada no CMake em %{dest}
 Comment[pt_BR]=Foi criada uma aplicação do Qt3 baseada no CMake em %{dest}
 Comment[sv]=Ett CMake-baserat Qt3-program skapades i %{dest}

@@ -35,6 +35,7 @@ Comment[zh_CN]=CTags 是一个支持多种语言源文件浏览的工具。启�
 Comment[zh_TW]=CTags 是支援許多種語言的程式源碼導覽工具。它載入後會提供一個選單，尋找型態的宣告、定義，並提供一個查詢對話框。http://ctags.sourceforge.net/
 Name=KDevCTags2
 Name[da]=KDevelop CTags2
+Name[nds]=KDevelop-CTags2
 Name[sk]=KDev CTags2
 Name[sv]=KDevelop ctags-2
 Name[tg]=KDevCТегҳо2

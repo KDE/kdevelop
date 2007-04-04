@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDevClearcaseIntegrator
 Name[da]=KDevelop Clearcase-integration
+Name[nds]=KDevelop-Clearcase-Integreren
 Name[sk]=KDev ClearCase integrácia
 Name[sv]=KDevelop Clearcase-integration
 Name[zh_TW]=KDevelop Clearcase 整合器

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Name=KDev%{APPNAME}
+Name[nds]=KDev%{ProgNaam}
 Name[sv]=KDevelop %{APPNAME}
 Name[ta]=கெடெவ்%{APPNAME}
 GenericName=%{APPNAME} Plugin

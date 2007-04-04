@@ -34,6 +34,7 @@ Comment[zh_CN]=调用KTrader的图形工具－就像查询已经注册的服务�
 Comment[zh_TW]=執行類似 KTrader 查詢註冊服務的圖形化工具
 Name=KDevPartExplorer
 Name[da]=KDevelop Part-søger
+Name[nds]=KDevelop-Komponentkieker
 Name[sk]=KDev Part prieskumník
 Name[sv]=KDevelop delutforskare
 Name[zh_TW]=KDevelop 元件探索

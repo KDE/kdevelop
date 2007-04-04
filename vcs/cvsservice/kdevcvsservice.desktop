@@ -34,6 +34,7 @@ Comment[zh_CN]=使用 Cervisia 的 cvsservice 的 CVS 集成。http://www.kde.or
 Comment[zh_TW]=使用 Cervisia 服務做 CVS 整合。http://www.kde.org/apps/cervisia/
 Name=KDevCvsService
 Name[da]=KDevelop CVS-service
+Name[nds]=KDevelop-CVS-Deenst
 Name[sk]=KDev Cvs služba
 Name[sv]=KDevelop CVS-tjänst
 Name[zh_TW]=KDevelop CVS 服務

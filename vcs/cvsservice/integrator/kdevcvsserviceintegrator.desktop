@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDevCVSIntegrator
 Name[da]=KDevelop CVS-integration
+Name[nds]=KDevelop-CVS-Integreren
 Name[sk]=KDev CVS integrácia
 Name[sv]=KDevelop CVS-integration
 Name[zh_TW]=KDevelop CVS 整合器

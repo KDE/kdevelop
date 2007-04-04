@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDevSubversionIntegrator
 Name[da]=KDevelop Subversion-integration
+Name[nds]=KDevelop-Subversion-Integreren
 Name[sk]=KDev Subversion integrácia
 Name[sv]=KDevelop Subversion-integration
 Name[zh_TW]=KDevelop Subversion 整合器

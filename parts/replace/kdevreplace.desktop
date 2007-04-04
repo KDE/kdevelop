@@ -34,6 +34,7 @@ Comment[zh_CN]=这个插件是面向真个工程的“查找和替换”工具�
 Comment[zh_TW]=這個外掛程式是一個專案的「搜尋與取代」互動工具。使用字串或正規表示式來搜尋，並選擇是否要取代。載入後可以在「編輯」選單中找到。
 Name=KDevReplace
 Name[da]=KDevelop Erstat
+Name[nds]=KDevelop-Utwesseln
 Name[sk]=KDev zameniť
 Name[sv]=KDevelop ersätt
 Name[zh_TW]=KDevelop 取代

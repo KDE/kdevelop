@@ -4,6 +4,7 @@ Type=Service
 Exec=blubb
 Name=KDevscripting
 Name[da]=KDevelop scriptning
+Name[nds]=KDevelop-Skriptschrieven
 Name[sk]=KDev skriptovanie
 Name[sv]=KDevelop-skriptanvändning
 Name[zh_TW]=KDevelop 文稿

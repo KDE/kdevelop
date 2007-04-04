@@ -4,6 +4,7 @@ Type=Service
 Exec=blubb
 Name=KDevVCSManager
 Name[da]=KDevelop VCS-håndtering
+Name[nds]=KDevelop-VKS-Pleger
 Name[sk]=KDev VCS manažér
 Name[sv]=KDevelop VCS-hantering
 Name[tg]=РоҳбариKDevVCS

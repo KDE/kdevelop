@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDevPerforceIntegrator
 Name[da]=KDevelop Perforce-integration
+Name[nds]=KDevelop-Perforce-Integreren
 Name[sk]=KDev Perforce integrácia
 Name[sv]=KDevelop Perforce-integration
 Name[zh_TW]=KDevelop Perforce 整合器

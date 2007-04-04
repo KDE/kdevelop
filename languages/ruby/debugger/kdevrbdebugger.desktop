@@ -31,6 +31,7 @@ Comment[zh_CN]=此插件提供了一个 Ruby 的源代码级调试器的前端�
 Comment[zh_TW]=此外掛程式提供 Ruby 除錯器的前端介面。
 Name=KDevRbDebugger
 Name[da]=KDevelop Ruby fejlretter
+Name[nds]=Ruby-Fehlersöök för KDevelop
 Name[pl]=KDevDebugerRb
 Name[sk]=KDev Ruby debuger
 Name[sv]=KDevelop Ruby-avlusare

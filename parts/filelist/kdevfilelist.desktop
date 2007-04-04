@@ -33,6 +33,7 @@ Comment[zh_CN]=提供目前已打开全部文件的列表。(当标签栏不够�
 Comment[zh_TW]=提供目前開啟檔案的列表。
 Name=KDevfilelist
 Name[da]=KDevelop filliste
+Name[nds]=KDevelop-Dateilist
 Name[pt_BR]=Lista de arq. do KDev
 Name[sk]=KDev zoznam súborov
 Name[sv]=KDevelop fillista
