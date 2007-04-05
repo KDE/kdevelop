@@ -39,6 +39,7 @@ Comment[nds]=Stellt en eenfach "Moin Welt"-Programm in C++ op, mit "CMake" anste
 Comment[pt]=Gera um programa simples Olá Mundo em C++, com a ferramenta CMake em vez da combinação automake/autoconf/libtool. Necessita do cmake 2.1 ou do cmake 2.2.
 Comment[pt_BR]=Gera um programa simples Olá Mundo em C++, com a ferramenta CMake em vez da combinação automake/autoconf/libtool. Necessita do cmake 2.1 ou do cmake 2.2.
 Comment[sv]=Skapar ett enkelt Hello world-program i C++ med användning av byggverktyget CMake istället för kombinationen automake/autoconf/libtool. Det kräver cmake 2.1 eller cmake 2.2.
+Comment[zh_TW]=它產生一個簡單的 C++ Hello world 程式。它要用 CMake 建立工具來編譯，而不是用 automake/autoconf/libtool 等。它需要 cmake 2.1 或是 2.2 版以上。
 #FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/main.cpp,%{dest}/README
 Archive=cmakesimple.tar.gz

@@ -11,6 +11,7 @@ Comment[nds]=Ünnerstütten för't Opstellen un Apenmaken vun't fardige Projekt.
 Comment[pt]=Ajuda na construção e publicação do projecto final. Suporta a criação de pacotes RPM ou pacotes com código-fonte.
 Comment[pt_BR]=Ajuda na construção e publicação do projecto final. Suporta a criação de pacotes RPM ou pacotes com código-fonte.
 Comment[sv]=Hjälper till att bygga och publicera det färdiga projektet. Stöder att skapa RPM-paket och källkodspaket.
+Comment[zh_TW]=協助建立與發布最終專案版本。支援建立 RPM 套件與 RPM 源碼套件。
 Name=KDevdistpart
 Name[da]=KDevelop distpart
 Name[de]=Unterstützung für Paketerstellung (KDevelop)

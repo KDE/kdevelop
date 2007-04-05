@@ -13,6 +13,7 @@ Comment[nds]=Qt4-Import för duerhaftig Klassenspieker
 Comment[pt]=Importador de PCS para Qt4 do KDevelop
 Comment[pt_BR]=Importador de PCS para Qt4 do KDevelop
 Comment[sv]=KDevelop QT4 PCS-import
+Comment[zh_TW]=KDevelop Qt4 PCS 匯入器
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqt4importer

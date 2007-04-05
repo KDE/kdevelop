@@ -9,6 +9,7 @@ Name[nds]=Qt4-Programm
 Name[pt]=Aplicação do Qt4
 Name[pt_BR]=Aplicação do Qt4
 Name[sv]=Qt4-program
+Name[zh_TW]=Qt4 應用程式
 Icon=qt4makeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
@@ -21,6 +22,7 @@ Comment[nds]=Stellt en op QMake un Qt4 opbuut Programm op (över Bedriefümgeven
 Comment[pt]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas) - Necessita do Qt4
 Comment[pt_BR]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas) - Necessita do Qt4
 Comment[sv]=Skapar ett QMake/Qt4-baserat program (fungerar på andra plattformar). Kräver Qt4.
+Comment[zh_TW]=產生一個 QMake/Qt4 為基礎的應用程式（跨平台相容）─需要 Qt4
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp,%{dest}/src/ReadMe
 Archive=qt4makeapp.tar.gz
@@ -110,6 +112,7 @@ Comment[nds]=In %{dest} wöör en op Qt4 un Qmake opbuut Programm opstellt
 Comment[pt]=Foi criada uma aplicação baseada no Qt4/Qmake em %{dest}
 Comment[pt_BR]=Foi criada uma aplicação baseada no Qt4/Qmake em %{dest}
 Comment[sv]=Ett QMake/Qt4-baserat program skapades i %{dest}
+Comment[zh_TW]=一個 QMake/Qt4 為基礎的應用程式已建立於 %{dest}
 
 Comment=
 [QMAKE]
@@ -125,6 +128,7 @@ Comment[nds]=Afsluut Padd för QMake (Qt4)
 Comment[pt]=Localização Absoluta do QMake (Qt4).
 Comment[pt_BR]=Localização Absoluta do QMake (Qt4).
 Comment[sv]=Absolut sökväg till QMake (Qt4).
+Comment[zh_TW]=QMake（Qt4）的絕對路徑
 Default=
 [DESIGNER]
 Type=value
@@ -139,4 +143,5 @@ Comment[nds]=Afsluut Padd för Designer (Qt4)
 Comment[pt]=Localização Absoluta do Designer (Qt4).
 Comment[pt_BR]=Localização Absoluta do Designer (Qt4).
 Comment[sv]=Absolut sökväg till Designer (Qt4).
+Comment[zh_TW]=設計家（Qt4）的絕對路徑
 Default=

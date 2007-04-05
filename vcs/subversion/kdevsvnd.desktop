@@ -11,6 +11,7 @@ Name[nds]=KDevelop-Moduul för Subversion
 Name[pt]=Módulo de Subversion do KDevelop
 Name[pt_BR]=Módulo de Subversion do KDevelop
 Name[sv]=KDevelop Subversion-modul
+Name[zh_TW]=KDevelop Subversion 模組
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
 X-KDE-Library=kdevsvnd
