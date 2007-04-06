@@ -34,6 +34,7 @@ Comment=Generates a simple Hello world program in C++ using the CMake build tool
 Comment[ca]=Genera un simple programa de Hello world en C++ usant l'eina de construcció CMake en comptes de la combinació automake/autoconf/libtool. Requereix cmake 2.1 o cmake 2.2.
 Comment[de]=Erstellt ein einfaches "Hello World"-Programm in C++. Der Kompiliervorgang wird mit CMake anstelle der Kombination automake/autoconf/libtool durchgeführt und erfordert CMake 2.1 (das über das CVS-Archiv von CMake verfügbar ist) oder die kommende Version 2.2 von CMake.
 Comment[es]=Genera un sencillo programa «Hola mundo» en C++ usando la herramienta CMake en lugar de la combinación automake/autoconf/libtool. Requiere cmake 2.1 o cmake 2.2.
+Comment[hu]=Létrehoz egy egyszerű 'Hello world' programot C++ nyelven a CMake segítségével (az automake/autoconf/libtool kombináció helyett). CMake 2.1 vagy 2.2 szükséges hozzá.
 Comment[it]=Genera un semplice programma di "Hello world" in C++ che usa CMake invece della combinazione automake/autoconf/libtool. Si richiede cmake 2.1 o la versione 2.2.
 Comment[nds]=Stellt en eenfach "Moin Welt"-Programm in C++ op, mit "CMake" ansteed vun de "automake/autoconf/libtool"-Reeg. Nödig is Verschoon 2.1 oder 2.2 vun CMake.
 Comment[pt]=Gera um programa simples Olá Mundo em C++, com a ferramenta CMake em vez da combinação automake/autoconf/libtool. Necessita do cmake 2.1 ou do cmake 2.2.
