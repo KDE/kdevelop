@@ -1133,7 +1133,7 @@ void CppCodeCompletion::slotTextChanged() {
   // m_codeCompleteCh2Rx completes on "->" and "::"
 
   if ( ( argsHint && ch == "(" ) ||
-       ( strCurLine.simplifyWhiteSpace().contains( "virtual" ) ) ||
+       ( codeComplete && strCurLine.simplifyWhiteSpace().contains( "virtual" ) ) ||
        ( codeComplete && ( m_codeCompleteChRx.search( ch ) != -1 ||
                            m_codeCompleteCh2Rx.search( ch2 ) != -1 ) ) ||
        ( headComplete && ( ch == "\"" || ch == "<" ) && m_includeRx.search( strCurLine ) != -1 ) ) {

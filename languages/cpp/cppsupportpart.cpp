@@ -544,6 +544,7 @@ void CppSupportPart::projectOpened( )
 	m_pCompletion = new CppCodeCompletion( this );
 	m_projectClosed = false;
 
+	updateParserConfiguration(); //Necessary to respect custom include-paths and such
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
