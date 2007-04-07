@@ -549,7 +549,6 @@ void CppSupportPart::projectOpened( )
 	m_projectClosed = false;
 
 	updateParserConfiguration(); //Necessary to respect custom include-paths and such
-	updateParserConfiguration(); //Necessary to get include-paths
 	
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
@@ -1471,6 +1470,9 @@ void CppSupportPart::initialParse( )
 
 bool CppSupportPart::parseProject( bool force )
 {
+	if( _jd )
+		delete _jd->progressBar; ///Make sure the progress-bar is open
+
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 1" << endl;
 	mainWindow() ->statusBar() ->message( i18n( "Updating..." ) );
 
