@@ -19,16 +19,16 @@ libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 
 libkdevcppsupport_la_SOURCES = KDevCppSupportIface.cpp KDevCppSupportIface.skel \
 	addattributedialog.cpp addattributedialogbase.ui addmethoddialog.cpp addmethoddialogbase.ui \
-	ast_utils.cpp backgroundparser.cpp ccconfigwidget.cpp \
-	ccconfigwidgetbase.ui classgeneratorconfig.cpp classgeneratorconfigbase.ui \
-	codeinformationrepository.cpp completiondebug.cpp configproblemreporter.ui cppcodecompletion.cpp \
+	ast_utils.cpp backgroundparser.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui \
+	classgeneratorconfig.cpp classgeneratorconfigbase.ui codeinformationrepository.cpp \
+	completiondebug.cpp configproblemreporter.ui cppcodecompletion.cpp \
 	cppcodecompletionconfig.cpp cppevaluation.cpp cppimplementationwidget.cpp cppnewclassdlg.cpp \
 	cppnewclassdlgbase.ui cppsplitheadersourceconfig.cpp cppsupport_utils.cpp \
 	cppsupportfactory.cpp cppsupportpart.cpp creategettersetter.ui \
 	creategettersetterconfiguration.cpp creategettersetterconfiguration.h creategettersetterdialog.cpp \
 	creategettersetterdialog.h createpcsdialog.cpp createpcsdialogbase.ui doxydoc.cpp includefiles.cpp \
-	kdevdriver.cpp problemreporter.cpp qtbuildconfig.cpp qtdesignercppintegration.cpp \
-	setuphelper.cpp simplecontext.cpp simpletype.cpp simpletypecatalog.cpp \
+	includepathresolver.cpp kdevdriver.cpp problemreporter.cpp qtbuildconfig.cpp \
+	qtdesignercppintegration.cpp setuphelper.cpp simplecontext.cpp simpletype.cpp simpletypecatalog.cpp \
 	simpletypefunction.cpp simpletypenamespace.cpp store_walker.cpp storeconverter.cpp \
 	stringhelpers.cpp subclassingdlg.cpp subclassingdlgbase.ui tag_creator.cpp typedesc.cpp
 
@@ -54,6 +54,6 @@ AM_CXXFLAGS = -DAST_DEBUG
 #r___DEPENDENCIES = libkdevcppsupport.la
 #r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 noinst_HEADERS = cppevaluation.h cppimplementationwidget.h \
-	cppsplitheadersourceconfig.h declarationinfo.h expressioninfo.h includefiles.h \
+	cppsplitheadersourceconfig.h declarationinfo.h expressioninfo.h includefiles.h includepathresolver.h \
 	qtdesignercppintegration.h setuphelper.h simplecontext.h simpletypecatalog.h simpletypefunction.h \
 	simpletypenamespace.h storeconverter.h

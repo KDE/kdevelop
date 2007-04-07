@@ -77,27 +77,27 @@ void KDevDriver::setup()
 
         bool ok;
         QString includePath = SetupHelper::getGccIncludePath(&ok);
-        if (!ok) 
-          return;  
-        QStringList ls = QStringList::split( "\n", includePath );
-        for( QStringList::const_iterator it = ls.begin(); it != ls.end(); ++it ) {
-        if( !(*it).isEmpty() )
-            addIncludePath( *it );
-        }
+		if (ok) {
+			QStringList ls = QStringList::split( "\n", includePath );
+			for( QStringList::const_iterator it = ls.begin(); it != ls.end(); ++it ) {
+			if( !(*it).isEmpty() )
+				addIncludePath( *it );
+			}
+		}
     
         addIncludePath( includePath );
 		addIncludePath( "/usr/include/g++-3" );
 		addIncludePath( "/usr/include/g++" );
         QStringList lines = SetupHelper::getGccMacros(&ok);
-        if (!ok) 
-            return;  
-                 
-        for (QStringList::ConstIterator it = lines.constBegin(); it != lines.constEnd(); ++it) {
-			QStringList lst = QStringList::split( ' ', *it );
-			if ( lst.count() != 3 )
-				continue;
-			addMacro( Macro( lst[1], lst[2] ) );
+		if (!ok) {
+			for (QStringList::ConstIterator it = lines.constBegin(); it != lines.constEnd(); ++it) {
+				QStringList lst = QStringList::split( ' ', *it );
+				if ( lst.count() != 3 )
+					continue;
+				addMacro( Macro( lst[1], lst[2] ) );
+			}
 		}
+		
 		addMacro( Macro( "__cplusplus", "1" ) );
 		addMacro( Macro( "Q_SIGNALS", "signals" ) );
 		addMacro( Macro( "Q_SLOTS", "slots" ) );
