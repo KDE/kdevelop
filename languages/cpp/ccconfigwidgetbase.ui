@@ -324,8 +324,8 @@ and create a significant delay.</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. 
-example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). "&lt;&lt;" 
-means that the right operator is imported into the left, while "=" means that both namespaces are treated as
+example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). 
+"&lt;&lt;" means that the right namespace is imported into the left, while "=" means that both namespaces are treated as
 if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
                                 </property>
                             </widget>
