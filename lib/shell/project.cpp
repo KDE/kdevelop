@@ -37,9 +37,11 @@
 #include <kconfiggroup.h>
 #include <klocale.h>
 #include <kio/job.h>
+#include <kio/netaccess.h>
 #include <kio/global.h>
 #include <kmessagebox.h>
 #include <kio/jobclasses.h>
+#include <ktemporaryfile.h>
 
 #include "core.h"
 #include "iplugin.h"
@@ -60,12 +62,15 @@ class ProjectPrivate
 {
 public:
     KUrl folder;
+    KUrl projectFileUrl;
+    KUrl developerFileUrl;
+    QString developerTempFile;
+    QString projectTempFile;
+    KTemporaryFile* tmp;
     IPlugin* manager;
 //     IPersistentHash persistentHash;
     ProjectItem* topItem;
     QString name;
-    KUrl localFile;
-    KUrl globalFile;
     KSharedConfig::Ptr m_cfg;
     QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
     {
@@ -112,6 +117,7 @@ Project::Project( QObject *parent )
 
     d->manager = 0;
     d->topItem = 0;
+    d->tmp = 0;
 }
 
 Project::~Project()
@@ -124,14 +130,14 @@ QString Project::name() const
     return d->name;
 }
 
-KUrl Project::projectConfigFile() const
+QString Project::developerTempFile() const
 {
-    return d->localFile;
+    return d->developerTempFile;
 }
 
-KUrl Project::projectDefaultsConfigFile() const
+QString Project::projectTempFile() const
 {
-    return d->globalFile;
+    return d->projectTempFile;
 }
 
 KSharedConfig::Ptr Project::projectConfiguration() const
@@ -166,12 +172,60 @@ bool Project::open( const KUrl& projectFileUrl )
         return false;
     }
 
-    KConfig projectConfig( projectFileUrl.pathOrUrl() );
-    KConfigGroup projectGroup( &projectConfig, "General Options" );
+    d->projectFileUrl = projectFileUrl;
+    d->developerFileUrl = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash )
+                                  + ".kdev4/"
+                                  + projectFileUrl.fileName() );
 
-    d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
+    statJob = KIO::stat( d->developerFileUrl );
+    if( !statJob->exec() )
+    {
+        KUrl dir = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) + ".kdev4");
+        statJob = KIO::stat( projectFileUrl );
+        if( !statJob->exec() )
+        {
+            KIO::SimpleJob* mkdirJob = KIO::mkdir( dir );
+            if( !mkdirJob->exec() )
+            {
+                KMessageBox::sorry(
+                        Core::self()->uiControllerInternal()->activeMainWindow(),
+                        i18n("Unable to create hidden dir (%1) for developer file",
+                        dir.pathOrUrl() )
+                        );
+                return false;
+            }
+        }
+    }
+
+    if( !KIO::NetAccess::download( d->projectFileUrl, d->projectTempFile,
+                        Core::self()->uiControllerInternal()->activeMainWindow() ) )
+    {
+        KMessageBox::sorry( Core::self()->uiControllerInternal()->activeMainWindow(),
+                            i18n("Unable to get project file: %1",
+                            d->projectFileUrl.pathOrUrl() ) );
+        return false;
+
+    }
+
+    statJob = KIO::stat( d->developerFileUrl );
+    if( !statJob->exec() || !KIO::NetAccess::download( d->developerFileUrl, d->developerTempFile,
+            Core::self()->uiControllerInternal()->activeMainWindow() ) )
+    {
+
+        d->tmp = new KTemporaryFile();
+        d->tmp->open();
+        d->tmp->close();
+        d->developerTempFile = d->tmp->fileName();
+    }
+
+    d->m_cfg = KSharedConfig::openConfig( d->projectTempFile );
+    d->m_cfg->setExtraConfigFiles( QStringList() << d->developerTempFile );
+
+    KConfigGroup projectGroup( d->m_cfg, "General Options" );
+
+    d->name = projectGroup.readEntry( "Project Name", projectFileUrl.fileName() );
     d->folder = projectFileUrl.directory();
-    QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );
+    QString managerSetting = projectGroup.readEntry( "Project Manager", "KDevGenericManager" );
 
     //Get our importer
     IPluginController* pluginManager = Core::self()->pluginController();
@@ -205,12 +259,7 @@ bool Project::open( const KUrl& projectFileUrl )
         d->manager = 0;
         return false;
     }
-    d->globalFile = projectFileUrl;
-    d->localFile = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash )
-                                  + ".kdev4/"
-                                  + projectFileUrl.fileName() );
-    d->m_cfg = KSharedConfig::openConfig( d->globalFile.path() );
-    d->m_cfg->setExtraConfigFiles( QStringList() << d->localFile.path() );
+
     return true;
 }
 
@@ -228,6 +277,20 @@ void Project::close()
     QList<QStandardItem*> itemList = Core::self()->projectController()->projectModel()->takeRow( d->topItem->row() );
     qDeleteAll( itemList );
 
+    if( d->tmp )
+    {
+        d->tmp->close();
+    }
+
+    if( !KIO::NetAccess::upload( d->developerTempFile, d->developerFileUrl,
+                Core::self()->uiControllerInternal()->activeMainWindow() ) )
+    {
+        KMessageBox::sorry( Core::self()->uiControllerInternal()->activeMainWindow(),
+                    i18n("Couldn't store developer specific project configuration.\n"
+                         "Attention: The project settings you changed will be lost."
+                    ) );
+    }
+    delete d->tmp;
 }
 bool Project::inProject( const KUrl& url ) const
 {
@@ -340,6 +403,16 @@ void Project::setFileManager( IPlugin* newManager )
 // {
 //     return &d->persistentHash;
 // }
+
+KUrl Project::projectFileUrl() const
+{
+    return d->projectFileUrl;
+}
+
+KUrl Project::developerFileUrl() const
+{
+    return d->developerFileUrl;
+}
 
 }
 

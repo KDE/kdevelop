@@ -33,9 +33,11 @@ template <typename T> class ProjectKCModule : public KCModule
         ProjectKCModule( const KComponentData& componentData, QWidget* parent, const QStringList& args )
             : KCModule( componentData, parent, args )
         {
-            Q_ASSERT( args.count() > 1 );
+            Q_ASSERT( args.count() > 3 );
             T::instance( args.first() );
-            T::self()->setProjectConfig( args.at(1) );
+            T::self()->setDeveloperTempFile( args.at(1) );
+            T::self()->setProjectFileUrl( args.at(2) );
+            T::self()->setDeveloperFileUrl( args.at(3) );
         }
         virtual ~ProjectKCModule() {}
 };

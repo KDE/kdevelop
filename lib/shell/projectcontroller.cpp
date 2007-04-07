@@ -67,15 +67,17 @@ public:
     {
         if( !obj )
             return;
-        IProject* proj = qobject_cast<IProject*>(obj);
+        Project* proj = qobject_cast<Project*>(obj);
         if( !proj )
             return;
         if( !m_cfgDlgs.contains( proj ) )
             m_cfgDlgs[proj] = new KSettings::Dialog( findPluginsForProject( proj ),
                                                      KSettings::Dialog::Static,
                                                      m_core->uiController()->activeMainWindow(),
-                                                     QStringList() << proj->projectDefaultsConfigFile().path()
-                                                        << proj->projectConfigFile().path() );
+                                                     QStringList() << proj->projectTempFile()
+                                                         << proj->developerTempFile()
+                                                         << proj->projectFileUrl().url()
+                                                         << proj->developerFileUrl().url() );
 
         m_cfgDlgs[proj]->show();
     }
@@ -196,7 +198,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     foreach( IProject* project, d->m_projects )
     {
-        if ( url == project->projectDefaultsConfigFile() )
+        if ( url == project->projectFileUrl() )
         {
             if ( KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
                                              i18n( "Reopen the current project?" ) )

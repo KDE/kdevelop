@@ -75,8 +75,10 @@ public:
 
     virtual ProjectFileItem *fileForUrl( const KUrl& ) const;
 
-    virtual KUrl projectConfigFile() const;
-    virtual KUrl projectDefaultsConfigFile() const;
+    QString projectTempFile() const;
+    QString developerTempFile() const;
+    KUrl developerFileUrl() const;
+    virtual KUrl projectFileUrl() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 
 public Q_SLOTS:

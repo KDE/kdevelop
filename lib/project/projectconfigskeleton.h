@@ -43,8 +43,13 @@ public:
 
     virtual ~ProjectConfigSkeleton();
 
-    void setProjectConfig( const QString& );
-
+    void setDeveloperTempFile( const QString& );
+    void setProjectFileUrl( const QString& );
+    void setDeveloperFileUrl( const QString& );
+protected:
+    void usrSetDefaults();
+    bool usrUseDefaults( bool b );
+    void usrWriteConfig();
 private:
     /**
      * There's no way in KDE4 API to find out the file that the config object
@@ -53,7 +58,8 @@ private:
      * this constructor is used and see if we need to add apropriate API to
      * kdelibs
      */
-    ProjectConfigSkeleton( KSharedConfig::Ptr config );
+     ProjectConfigSkeleton( KSharedConfig::Ptr config );
+     struct ProjectConfigSkeletonPrivate * const d;
 };
 
 }

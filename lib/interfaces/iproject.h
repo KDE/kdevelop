@@ -83,8 +83,9 @@ public:
 
     virtual ProjectFileItem *fileForUrl( const KUrl& ) const = 0;
 
-    virtual KUrl projectConfigFile() const = 0;
-    virtual KUrl projectDefaultsConfigFile() const = 0;
+//     virtual KUrl projectConfigFile() const = 0;
+//     virtual KUrl projectDefaultsConfigFile() const = 0;
+    virtual KUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
 //     virtual void setLocalFile( const KUrl& ) = 0;
 //     virtual void setGlobalFile( const KUrl& ) = 0;
