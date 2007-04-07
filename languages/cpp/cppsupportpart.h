@@ -31,6 +31,9 @@
 #include <kdebug.h>
 #include "driver.h"
 
+
+class UIBlockTester;
+
 class Context;
 class CppCodeCompletion;
 class CppCodeCompletionConfig;
@@ -51,7 +54,6 @@ class Driver;
 class KPopupMenu;
 class BackgroundParserConfig;
 class KAction;
-
 
 namespace KParts
 {
@@ -333,6 +335,7 @@ private:
 	ClassDom m_curClass;
 	QGuardedPtr< ProblemReporter > m_problemReporter;
 	BackgroundParser* m_backgroundParser;
+    UIBlockTester* m_lockupTester;
 
 	KTextEditor::Document* m_activeDocument;
 	KTextEditor::View* m_activeView;

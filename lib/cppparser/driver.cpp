@@ -135,7 +135,8 @@ void Driver::reset( ) {
   }
 }
 
-void Driver::updateIncludePath( const QString& file ) const {
+QStringList Driver::getCustomIncludePath( const QString& file ) {
+  return QStringList();
 }
 
 void Driver::remove
@@ -492,8 +493,9 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
 
     m_lexerCache.increaseFrame();
   m_currentMasterFileName = fileName;
-  
-  updateIncludePath( fileName );
+
+  QStringList oldIncludePaths = m_includePaths;
+  m_includePaths = getCustomIncludePath( fileName );
   
     ParseHelper p( fileName, force, this );
     if( !onlyPreProcess ){
@@ -504,9 +506,10 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
             if( (*it).second.fileName() == fileName ) {
                 (*it).second.setFileName( QString::null );
             }
+        }
     }
-}
-  
+
+    m_includePaths = oldIncludePaths;
 }
 
 void Driver::setupLexer( Lexer * lexer ) {

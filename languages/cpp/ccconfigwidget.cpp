@@ -173,7 +173,6 @@ void CCConfigWidget::initCodeCompletionTab( )
 	checkParseMissingHeaders->setChecked( c->parseMissingHeaders() );
 	checkResolveIncludePaths->setChecked( c->resolveIncludePaths() );
 	checkParseMissingHeaders->hide();
-	checkResolveIncludePaths->hide();
 	editIncludePaths->setText( c->customIncludePaths() );
 }
 

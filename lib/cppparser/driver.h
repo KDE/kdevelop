@@ -336,7 +336,7 @@ class Driver {
       return m_includePaths;
     }
 
-    virtual void updateIncludePath( const QString& file ) const;
+    virtual QStringList getCustomIncludePath( const QString& file );
 
   
     virtual void addIncludePath( const QString &path );

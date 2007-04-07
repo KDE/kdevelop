@@ -11,11 +11,18 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+/** Unfortunately this doesn't work with unsermake, but with make and cmake.
+/**
+ * */
+#include <stdio.h>
+#include <unistd.h>
+#include <memory>
 #include "kurl.h" /* defines KURL */
 #include "qdir.h" /* defines QDir */
 #include "qregexp.h" /* defines QRegExp */
 #include "klocale.h" /* defines [function] i18n */
-#include "blockingkprocess.h" /* defines BlockingKProcess */
+#include "lib/util/blockingkprocess.h" /* defines BlockingKProcess */
 #include "includepathresolver.h"
 
 #ifdef TEST
@@ -25,18 +32,90 @@
 using namespace std;
 #endif
 
+///After how many seconds should we retry?
+#define CACHE_FAIL_FOR_SECONDS 120
+
 using namespace CppTools;
 
-IncludePathResolver::IncludePathResolver() : m_outOfSource(false) {
+bool IncludePathResolver::executeCommand ( const QString& command, QString& result )
+{
+  FILE* fp;
+  const int BUFSIZE = 2048;
+  char buf [BUFSIZE];
+
+  result = QString();
+
+  if ((fp = popen(command.local8Bit(), "r")) == NULL)
+    return false;
+
+  while (fgets(buf, sizeof (buf), fp))
+    result += QString(buf);
+
+  int stat = pclose(fp);
+
+  return stat == 0;
+} 
+
+IncludePathResolver::IncludePathResolver( bool continueEventLoop ) : m_isResolving(false), m_outOfSource(false), m_continueEventLoop(continueEventLoop)  {
+}
+
+///More efficient solution: Only do exactly one call for each directory. During that call, mark all source-files as changed, and make all targets for those files.
+PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file ) {
+  QFileInfo fi( file );
+  return resolveIncludePath( fi.fileName(), fi.dirPath(true) );
 }
 
 PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& workingDirectory ) {
+  
+  struct Enabler {
+    bool& b;
+    Enabler( bool& bb ) : b(bb) {
+      b = true;
+    }
+    ~Enabler() {
+      b = false;
+    }
+  };
+
+  if( m_isResolving )
+    return PathResolutionResult(false, i18n("tried include-path-resolution while another resolution-process was still running") );
+  
+  Enabler e( m_isResolving );
+  ///First check the cache
+  QDir dir( workingDirectory );
+  dir = QDir( dir.absPath() );
+  QFileInfo makeFile( dir, "Makefile" );
+
+  QStringList cachedPath; ///If the call doesn't succeed, use the cached not up-to-date version
+  QDateTime makeFileModification = makeFile.lastModified();
+  Cache::iterator it = m_cache.find( dir.path() );
+  if( it != m_cache.end() ) {
+    cachedPath = (*it).path;
+    if( makeFileModification == (*it).modificationTime ) {
+      if( !(*it).failed ) {
+        ///We have a valid cached result
+        PathResolutionResult ret(true);
+        ret.path = (*it).path;
+        return ret;
+      } else {
+        ///We have a cached failed result. We should use that for some time but then try again. Return the failed result if: ( there were too many tries within this folder OR this file was already tried ) AND The last tries have not expired yet
+        if( ((*it).failedFiles.size() > 10 || (*it).failedFiles.find( file ) != (*it).failedFiles.end()) && (*it).failTime.secsTo( QDateTime::currentDateTime() ) < CACHE_FAIL_FOR_SECONDS ) {
+          PathResolutionResult ret(true); ///Fake that the result is ok
+          ret.path = (*it).path;
+          return ret;
+        } else {
+          ///Try getting a correct result again
+        }
+      }
+    }
+  }
+  
   QString targetName;
   QFileInfo fi( file );
   
   QString absoluteFile = file;
   if( !file.startsWith("/") )
-    absoluteFile = workingDirectory + "/" + file;
+    absoluteFile = dir.path() + "/" + file;
   KURL u( absoluteFile );
   u.cleanPath();
   absoluteFile = u.path();
@@ -47,7 +126,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   targetName = file.left( dot ) + ".o";
 
-  QString wd = workingDirectory;
+  QString wd = dir.path();
   if( !wd.startsWith("/") ) {
     wd = QDir::currentDirPath() + "/" + wd;
     KURL u( wd );
@@ -65,39 +144,73 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   }
 
   PathResolutionResult res = resolveIncludePathInternal( absoluteFile, wd, targetName );
-  if( res )
-    return res;
+  if( res ) {
+    CacheEntry ce;
+    ce.modificationTime = makeFileModification;
+    ce.path = res.path;
+    m_cache[dir.path()] = ce;
 
-  //Try it using a relative path. Unfortunately, which is required differs by setup.
-  QString relativeFile = absoluteFile;
-  if( relativeFile.startsWith( wd ) )
-    relativeFile = relativeFile.mid( wd.length() );
-  while( relativeFile.startsWith("/") )
-    relativeFile = relativeFile.mid(1);
+    return res;
+  }
+
+  //Try it using a relative path. Which kind is required differs by setup.
+  QString relativeFile = KURL::relativePath(wd, absoluteFile);
   
-  return resolveIncludePathInternal( relativeFile, wd, targetName );
+  res = resolveIncludePathInternal( relativeFile, wd, targetName );
+    
+  if( res.path.isEmpty() )
+      res.path = cachedPath; //We failed, maybe there is an old cached result, use that.
+  
+  if( it == m_cache.end() )
+    it = m_cache.insert( dir.path(), CacheEntry() );
+  
+  CacheEntry& ce(*it);
+  ce.modificationTime = makeFileModification;
+  ce.path = res.path;
+  if( !res ) {
+    ce.failed = true;
+    ce.failTime = QDateTime::currentDateTime();
+    ce.failedFiles[file] = true;
+  } else {
+    ce.failed = false;
+    ce.failedFiles.clear();
+  }
+  
+  return res;
 }
 
 PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters ) {
 
   QString processStdout;
-  BlockingKProcess proc;
-
-  proc.setWorkingDirectory( workingDirectory );
-  proc.setUseShell( true );
-  QString command = "make --no-print-directory -W " + proc.quote(file) + " -n " + makeParameters;
-#ifdef TEST
-  cout << "calling " << command << endl;
-#endif
-  proc << command;
-  if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
-    return PathResolutionResult( false, i18n("Couldn't start the make-process") );
+  
+  QString command = "make --no-print-directory -W \'" + file + "\' -n " + makeParameters;
+  
+  QString fullOutput;
+  
+  if( m_continueEventLoop ) {
+    BlockingKProcess proc;
+    proc.setWorkingDirectory( workingDirectory );
+    proc.setUseShell( true );
+    proc << command;
+    if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
+      return PathResolutionResult( false, i18n("Couldn't start the make-process") );
+    }
+    
+    fullOutput = proc.stdOut();
+    if( proc.exitStatus() != 0 )
+      return PathResolutionResult( false, i18n("make-process finished with nonzero exit-status"), i18n("output: %1").arg( fullOutput ) );
+  } else {
+    char* oldWd = getcwd(0,0);
+    chdir( workingDirectory.local8Bit() );
+    bool ret = executeCommand(command, fullOutput);
+    if( oldWd ) {
+      chdir( oldWd );
+      free( oldWd );
+    }
+    if( !ret )
+      return PathResolutionResult( false, i18n("make-process failed"), i18n("output: %1").arg( fullOutput ) );
   }
   
-  QString fullOutput = proc.stdOut();
-  
-  if( proc.exitStatus() != 0 )
-    return PathResolutionResult( false, i18n("make-process finished with nonzero exit-status"), i18n("output: %1").arg( fullOutput ) );
 
   QRegExp newLineRx("\\\\\\n");
   fullOutput.replace( newLineRx, "" );
@@ -151,8 +264,11 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
             absoluteFile = workingDirectory +  "/" + file;
           KURL u( absoluteFile );
           u.cleanPath();
-          return resolveIncludePathInternal( u.path(), newWorkingDirectory, makeParams );
-          
+          ///Try once with relative, and once with absolute path
+          PathResolutionResult res = resolveIncludePathInternal( u.path(), newWorkingDirectory, makeParams );
+          if( res )
+            return res;
+          return resolveIncludePathInternal( KURL::relativePath(newWorkingDirectory,u.path()), newWorkingDirectory, makeParams );
         }else{
           return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The parameter-string \"%1\" does not seem to be valid. Output was: %2").arg(makeParams).arg(fullOutput) );
         }
@@ -172,7 +288,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   QRegExp validRx( "\\b([cg]\\+\\+|gcc)\\s" );
   QRegExp pathEndRx( "\\s");//( [^\\](\\\\\\\\)*)[\\s]" ); ///Regular expression to find the end of an include-path without triggering at an escaped white-space
   if( validRx.search( fullOutput ) == -1 )
-    return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: %1\nCommand: \"%2\"\nOutput: \"%3\"").arg(workingDirectory).arg(command).arg(fullOutput) );
+    return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"").arg(workingDirectory).arg(command).arg(fullOutput) );
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;

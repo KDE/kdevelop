@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>560</width>
-            <height>708</height>
+            <height>646</height>
         </rect>
     </property>
     <property name="caption">
@@ -303,6 +303,9 @@ and create a significant delay.</string>
                                 <property name="text">
                                     <string>Show t&amp;ype evaluation in status bar</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
                                 <property name="name">
@@ -320,7 +323,10 @@ and create a significant delay.</string>
                                     <string>std=_GLIBCXX_STD</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). "&lt;&lt;" means that the right operator is imported into the left, while "=" means that both namespaces are treated as if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
+                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. 
+example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). "&lt;&lt;" 
+means that the right operator is imported into the left, while "=" means that both namespaces are treated as
+if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="5" column="0">
@@ -339,7 +345,8 @@ and create a significant delay.</string>
                                     <string>src;</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
+                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. 
+Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
@@ -376,6 +383,9 @@ and create a significant delay.</string>
                                 <property name="text">
                                     <string>Preprocess &amp;included headers</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+I</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Try to locate all included files and preprocess them. This makes macros work correctly.
 Note: Having all the system directories listed here may cause Kdevelop to be
@@ -395,10 +405,17 @@ slow.</string>
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Automatically resolve include-paths</string>
+                                    <string>Advanced include-path resolution using ma&amp;ke(experimental)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+K</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Try to resolve the include-paths by using information from Makefiles etc.</string>
+                                    <string>Try to resolve the include-path by getting the command that would be used 
+for compiling the file and parsing the gcc-options. The build-system needs to be working, 
+test for problems by running "make -n -W myfile.cpp myfile.o" in the directory. 
+This also works with cmake, and maybe some other build-systems that build on make. 
+The project needs to be compiled or at least configured before this system may work.</string>
                                 </property>
                             </widget>
                         </grid>
@@ -517,7 +534,7 @@ slow.</string>
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>40</height>
+                                <height>52</height>
                             </size>
                         </property>
                     </spacer>
@@ -1481,6 +1498,8 @@ you right click on a variable in a header file.</string>
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
@@ -1739,28 +1758,12 @@ you right click on a variable in a header file.</string>
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

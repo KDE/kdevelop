@@ -1,18 +1,24 @@
+#include "klocale.h" /* defines [function] i18n */
 #include <lexer.h>
 
 #include "kdevdriver.h"
 #include "cppcodecompletionconfig.h"
 #include "setuphelper.h"
 #include <unistd.h>
+#include "includepathresolver.h"
 
 
 
-KDevDriver::KDevDriver( CppSupportPart* cppSupport )
-: m_cppSupport( cppSupport )
+KDevDriver::KDevDriver( CppSupportPart* cppSupport, bool foreground )
+: m_cppSupport( cppSupport ), m_includePathResolver(0), m_foreground(foreground)
 {
 	//setupProject();
 	setup();
 	
+}
+
+KDevDriver::~KDevDriver() {
+	delete m_includePathResolver;
 }
 
 CppSupportPart* KDevDriver::cppSupport() { return m_cppSupport; }
@@ -137,7 +143,27 @@ void KDevDriver::setup()
 	}
 
 	setResolveDependencesEnabled( cfg->preProcessAllHeaders() /*|| cfg->parseMissingHeaders()*/ );
-	
+
+	if( cfg->resolveIncludePaths() ) {
+		delete m_includePathResolver;
+		m_includePathResolver = new CppTools::IncludePathResolver( m_foreground );
+	}
 }
+
+QStringList KDevDriver::getCustomIncludePath( const QString& file ) {
+	if( !m_includePathResolver )
+		return QStringList();
+	CppTools::PathResolutionResult res = m_includePathResolver->resolveIncludePath( file );
+	
+	if( !res.success ) {
+		Problem p( i18n( "%1. Message: %2" ).arg( res.errorMessage ).arg( res.longErrorMessage ), 0, 0, Problem::Level_Warning );
+		p.setFileName( file );
+		addProblem( file, p );
+	}
+
+	return res.path + includePaths();
+}
+
+
 
 //kate: indent-mode csands; tab-width 4; space-indent off;
