@@ -64,7 +64,18 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     }
   }
 
-  return resolveIncludePathInternal( absoluteFile, wd, targetName );
+  PathResolutionResult res = resolveIncludePathInternal( absoluteFile, wd, targetName );
+  if( res )
+    return res;
+
+  //Try it using a relative path. Unfortunately, which is required differs by setup.
+  QString relativeFile = absoluteFile;
+  if( relativeFile.startsWith( wd ) )
+    relativeFile = relativeFile.mid( wd.length() );
+  while( relativeFile.startsWith("/") )
+    relativeFile = relativeFile.mid(1);
+  
+  return resolveIncludePathInternal( relativeFile, wd, targetName );
 }
 
 PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters ) {
@@ -74,7 +85,8 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
   proc.setWorkingDirectory( workingDirectory );
   proc.setUseShell( true );
-  QString command = "make -W " + proc.quote(file) + " -n " + makeParameters;
+  QString command = "make --no-print-directory -W " + proc.quote(file) + " -n " + makeParameters;
+  cout << "calling " << command << endl;
   proc << command;
   if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
     return PathResolutionResult( false, i18n("Couldn't start the make-process") );
@@ -101,7 +113,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
 
   ///STEP 1: Test if it is a recursive make-call
-  QRegExp makeRx( "\\bmake\\b" );
+  QRegExp makeRx( "\\bmake\\s" );
   int offset = 0;
   while( (offset = makeRx.search( firstLine, offset )) != -1 )
   {
