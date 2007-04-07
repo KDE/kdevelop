@@ -977,6 +977,7 @@ QStringList StoreWalker::scopeOfName( NameAST* id, const QStringList& startScope
 }
 
 
+///@todo respect the imports that result from the headers etc.
 ClassDom StoreWalker::findClassFromScope( const QStringList& scope ) 
 {
 	QString scopeText = scope.join("::");
@@ -1046,13 +1047,25 @@ ClassDom StoreWalker::classFromScope(const QStringList& scope) {
 	if( !glob ) return ClassDom();
 	c = findScopeInFile( scope, glob );
 	
+	
+	QMap<QString, FileDom>::const_iterator it;
+
 	if( c ) {
-		QMap<QString, FileDom>::const_iterator it = m_overrides.find( c->fileName() );
+		///Check the file that overrides the code-model file
+		it = m_overrides.find( c->fileName() );
+		
 		//Find the class within the file that is overriding the one in code-model.
 		if( it != m_overrides.end() ) {
 			return findScopeInFile( scope, *it );
 		} else {
 			return c;
+		}
+	} else {
+		///Search in all overrides, because they will be added later all at once
+		for( QMap<QString, FileDom>::const_iterator it = m_overrides.begin(); it != m_overrides.end(); ++it ) {
+			c = findScopeInFile( scope, *it );
+			if( c )
+				return c;
 		}
 	}
 
