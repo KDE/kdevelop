@@ -192,73 +192,6 @@ public:
 };
 
 
-#include <qthread.h>
-#include <qmutex.h>
-#include <qtimer.h>
-///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread
-class UIBlockTester : public QObject {
-	Q_OBJECT
-    class UIBlockTesterThread : public QThread {
-    public:
-      UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ) {
-      }
-      
-      void run() {
-          while(1) {
-              msleep( m_parent.m_msecs / 10 );
-              m_parent.m_timeMutex.lock();
-              QDateTime t = QDateTime::currentDateTime();
-              uint msecs = m_parent.m_lastTime.time().msecsTo( t.time() );
-              if( msecs > m_parent.m_msecs ) {
-                  m_parent.lockup();
-                  m_parent.m_lastTime = t;
-              }
-              m_parent.m_timeMutex.unlock();
-          }
-      }
-      
-    private:
-      UIBlockTester& m_parent;
-    };
-  friend class UIBlockTesterThread;
-public:
-    
-		///@param milliseconds when the ui locks for .. milliseconds, lockup() is called
-    UIBlockTester( uint milliseconds ) : m_thread( *this ), m_msecs( milliseconds ) {
-		m_timer = new QTimer( this );
-		m_timer->start( milliseconds/10 );
-		connect( m_timer, SIGNAL(timeout()), this, SLOT(timer()) );
-        timer();
-        m_thread.start();
-	}
-    ~UIBlockTester() {
-      m_thread.terminate();
-      m_thread.wait();
-    }
-	
-private slots:
-	void timer() {
-		m_timeMutex.lock();
-		m_lastTime = QDateTime::currentDateTime();
-		m_timeMutex.unlock();
-	}
-	
-protected:
-	virtual void lockup() {
-		//std::cout << "UIBlockTester: lockup of the UI for " << m_msecs << endl; ///kdDebug(..) is not thread-safe..
-		int a = 1; ///Place breakpoint here
-	}
-
-private:
-    UIBlockTesterThread m_thread;
-	QDateTime m_lastTime;
-	QMutex m_timeMutex;
-	QTimer * m_timer;
-	uint m_msecs;
-};
-
-
-
 CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QStringList &args )
 : KDevLanguageSupport( CppSupportFactory::info(), parent, name ? name : "KDevCppSupport" ), m_backgroundParser(0),
 	m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ), m_activeViewCursor( 0 ),
@@ -3079,7 +3012,45 @@ void CppSupportPart::updateBackgroundParserConfig()
 	*m_backgroundParserConfig = config;
 }
 
-
+UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ) {
+}
+      
+void UIBlockTester::UIBlockTesterThread::run() {
+  while(1) {
+	  msleep( m_parent.m_msecs / 10 );
+	  m_parent.m_timeMutex.lock();
+	  QDateTime t = QDateTime::currentDateTime();
+	  uint msecs = m_parent.m_lastTime.time().msecsTo( t.time() );
+	  if( msecs > m_parent.m_msecs ) {
+		  m_parent.lockup();
+		  m_parent.m_lastTime = t;
+	  }
+	  m_parent.m_timeMutex.unlock();
+  }
+}
+      
+UIBlockTester::UIBlockTester( uint milliseconds ) : m_thread( *this ), m_msecs( milliseconds ) {
+	m_timer = new QTimer( this );
+	m_timer->start( milliseconds/10 );
+	connect( m_timer, SIGNAL(timeout()), this, SLOT(timer()) );
+	timer();
+	m_thread.start();
+}
+UIBlockTester::~UIBlockTester() {
+  m_thread.terminate();
+  m_thread.wait();
+}
+	
+void UIBlockTester::timer() {
+	m_timeMutex.lock();
+	m_lastTime = QDateTime::currentDateTime();
+	m_timeMutex.unlock();
+}
+	
+void UIBlockTester::lockup() {
+	//std::cout << "UIBlockTester: lockup of the UI for " << m_msecs << endl; ///kdDebug(..) is not thread-safe..
+	int a = 1; ///Place breakpoint here
+}
 
 #include "cppsupportpart.moc"
 //kate: indent-mode csands; tab-width 4; space-indent off;

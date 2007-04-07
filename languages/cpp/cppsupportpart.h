@@ -21,6 +21,9 @@
 #include <kdevcore.h>
 #include <kdevlanguagesupport.h>
 
+#include <qthread.h>
+#include <qmutex.h>
+#include <qtimer.h>
 #include <kdialogbase.h>
 #include <qguardedptr.h>
 #include <qstring.h>
@@ -32,7 +35,37 @@
 #include "driver.h"
 
 
-class UIBlockTester;
+///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread
+class UIBlockTester : public QObject {
+	Q_OBJECT
+    class UIBlockTesterThread : public QThread {
+    public:
+      UIBlockTesterThread( UIBlockTester& parent );
+      void run();
+      
+    private:
+      UIBlockTester& m_parent;
+    };
+  friend class UIBlockTesterThread;
+public:
+    
+  ///@param milliseconds when the ui locks for .. milliseconds, lockup() is called
+  UIBlockTester( uint milliseconds );
+  ~UIBlockTester();
+	
+private slots:
+  void timer();
+	
+protected:
+  virtual void lockup();
+
+private:
+    UIBlockTesterThread m_thread;
+	QDateTime m_lastTime;
+	QMutex m_timeMutex;
+	QTimer * m_timer;
+	uint m_msecs;
+};
 
 class Context;
 class CppCodeCompletion;
