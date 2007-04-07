@@ -1480,6 +1480,7 @@ bool CustomProjectPart::isProjectFileType( const QString& filename ) const
 
 void CustomProjectPart::slotDirDirty( const QString& dir )
 {
+
     QStringList remove;
     QString reldir = relativeToProject( dir );
     if( !reldir.isEmpty() )
@@ -1513,13 +1514,19 @@ void CustomProjectPart::slotDirDirty( const QString& dir )
     QStringList files = fileentries+dirs;
     files.remove(".");
     files.remove("..");
+    kdDebug(9025) << "Got dirty signal from " << dir << endl;
     for( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
     {
-        if( m_sourceFiles.find( reldir+*it ) == m_sourceFiles.end() && isProjectFileType( *it ) && !isInBlacklist( reldir+*it ) )
+        if( m_sourceFiles.find( reldir+*it ) == m_sourceFiles.end() && ( isProjectFileType( *it ) || QFileInfo( dir+"/"+*it ).isDir() ) && !isInBlacklist( reldir+*it ) )
         {
             kdDebug(9025) << "Adding " << reldir+*it << " to autolist" << endl;
             m_autoAddFiles.append( reldir+*it );
-        }
+            if( QFileInfo( dir+"/"+*it ).isDir() )
+            {
+                addDirWatches( dir+"/"+*it );
+            }
+        }else
+            kdDebug(9025) << "Not Adding" << reldir+*it << endl;
     }
 }
 
@@ -1583,7 +1590,7 @@ void CustomProjectPart::addNewFilesToProject()
     QStringList addfiles;
     for( QStringList::const_iterator it = m_autoAddFiles.begin(); it != m_autoAddFiles.end(); ++it )
     {
-        if( m_sourceFiles.find( *it ) == m_sourceFiles.end() && isProjectFileType( *it ) && !isInBlacklist( *it ) )
+        if( m_sourceFiles.find( *it ) == m_sourceFiles.end() && ( isProjectFileType( *it ) || QFileInfo( projectDirectory()+"/"+*it ).isDir() ) && !isInBlacklist( *it ) )
         {
             addfiles << *it;
         }
@@ -1599,7 +1606,13 @@ void CustomProjectPart::addNewFilesToProject()
         m_first_recursive = false;
         m_recursive = false;
         QStringList blacklist = this->blacklist();
-        blacklist += dlg->excludedPaths();
+        QStringList excludelist = dlg->excludedPaths();
+        blacklist += excludelist;
+        for( QStringList::const_iterator it = excludelist.begin(); it != excludelist.end(); ++it )
+        {
+            if( QFileInfo( projectDirectory()+"/"+*it ).isDir() )
+                dirwatch->removeDir(projectDirectory()+"/"+*it);
+        }
         updateBlacklist( blacklist );
         addFiles( dlg->includedPaths() );
     }
