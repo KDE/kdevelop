@@ -15,7 +15,7 @@
 #include "qdir.h" /* defines QDir */
 #include "qregexp.h" /* defines QRegExp */
 #include "klocale.h" /* defines [function] i18n */
-#include "lib/util/blockingkprocess.h" /* defines BlockingKProcess */
+#include "blockingkprocess.h" /* defines BlockingKProcess */
 #include "includepathresolver.h"
 
 #ifdef TEST
@@ -86,7 +86,9 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   proc.setWorkingDirectory( workingDirectory );
   proc.setUseShell( true );
   QString command = "make --no-print-directory -W " + proc.quote(file) + " -n " + makeParameters;
+#ifdef TEST
   cout << "calling " << command << endl;
+#endif
   proc << command;
   if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
     return PathResolutionResult( false, i18n("Couldn't start the make-process") );
