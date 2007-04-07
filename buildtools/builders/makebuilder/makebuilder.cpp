@@ -46,7 +46,7 @@ MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
-    IPlugin* i = core()->pluginController()->pluginForExtension("IOutputView");
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
@@ -70,7 +70,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
     if( dom->type() != KDevelop::ProjectBaseItem::Project )
         return false;
     KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(dom);
-    IPlugin* i = core()->pluginController()->pluginForExtension("IOutputView");
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();

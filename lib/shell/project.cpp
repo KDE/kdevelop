@@ -175,7 +175,7 @@ bool Project::open( const KUrl& projectFileUrl )
 
     //Get our importer
     IPluginController* pluginManager = Core::self()->pluginController();
-    d->manager = pluginManager->pluginForExtension( "IProjectFileManager", managerSetting );
+    d->manager = pluginManager->pluginForExtension( "org.kdevelop.IProjectFileManager", managerSetting );
     IProjectFileManager* iface = 0;
     if ( d->manager )
         iface = d->manager->extension<IProjectFileManager>();

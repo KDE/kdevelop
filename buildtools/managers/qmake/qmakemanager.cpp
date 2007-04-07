@@ -50,7 +50,7 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent,
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
-    IPlugin* i = core()->pluginController()->pluginForExtension( "IQMakeBuilder" );
+    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IQMakeBuilder" );
     Q_ASSERT(i);
     if( i )
     {

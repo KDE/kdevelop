@@ -53,7 +53,7 @@ QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IQMakeBuilder )
-    IPlugin* i = core()->pluginController()->pluginForExtension("IOutputView");
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
@@ -65,7 +65,7 @@ QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
                 this, SLOT(commandFailed(const QStringList &)));
         }
     }
-    i = core()->pluginController()->pluginForExtension("IMakeBuilder");
+    i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
@@ -89,7 +89,7 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
     if( dom->type() != KDevelop::ProjectBaseItem::Project )
         return false;
     KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(dom);
-    IPlugin* i = core()->pluginController()->pluginForExtension("IOutputView");
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
@@ -99,7 +99,9 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
             KConfigGroup group(cfg.data(), "QMake Builder");
             kDebug(9024) << "Reading setting: " << group.readEntry("QMake Binary") << endl;
-            cmd << group.readEntry("QMake Binary", "qmake-qt4");
+            KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
+//             kDebug(9024) << v << v.type() << v.userType() << endl;
+            cmd << v.path();
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
             view->queueCommand( item->url(), cmd, QStringList() );
             return true;
@@ -126,7 +128,7 @@ void QMakeBuilder::commandFinished(const QStringList &command)
         {
             kDebug(9024) << "found command" << endl;
             m_queue.pop_front();
-            IPlugin* i = core()->pluginController()->pluginForExtension("IMakeBuilder");
+            IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
             if( i )
             {
                 IMakeBuilder* builder = i->extension<IMakeBuilder>();
