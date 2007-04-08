@@ -242,7 +242,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   dir = QDir( dir.absPath() );
   QFileInfo makeFile( dir, "Makefile" );
   if( !makeFile.exists() )
-    return PathResolutionResult(false, i18n("Makefile is missing in folder %1").arg(dir.absPath()) );
+    return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"").arg(dir.absPath()), i18n("problem while trying to resolve include-paths for %1").arg(file) );
 
   QStringList cachedPath; //If the call doesn't succeed, use the cached not up-to-date version
   QDateTime makeFileModification = makeFile.lastModified();

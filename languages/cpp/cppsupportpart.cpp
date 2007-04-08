@@ -233,7 +233,7 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 	//    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
 
 	setXMLFile( "kdevcppsupport.rc" );
-
+	
 	m_catalogList.setAutoDelete( true );
 
 	connect( core(), SIGNAL( projectOpened() ), this, SLOT( projectOpened() ) );

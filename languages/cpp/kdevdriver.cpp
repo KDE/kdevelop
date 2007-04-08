@@ -58,30 +58,31 @@ void KDevDriver::setup()
 	clearMacros();
 	clearIncludePaths();
 
-	addMacro( Macro( "__cplusplus", "1" ) );
 	
-	QString kdedir = getenv( "KDEDIR" );
-	if( !kdedir.isNull() )
-	addIncludePath( kdedir + "/include" );
-
-	QString qtdir = getenv( "QTDIR" );
-	if( !qtdir.isNull() )
-	addIncludePath( qtdir + "/include" );
-
-	QString qmakespec = getenv( "QMAKESPEC" );
-	if ( qmakespec.isNull() )
-	qmakespec = "linux-g++";
-	// #### implement other mkspecs and find a better way to find the
-	// #### proper mkspec (althoigh this will be no fun :-)
-
-	addIncludePath( qtdir + "/mkspecs/" + qmakespec );
-	if ( qmakespec == "linux-g++" ) 
-	{
+	bool ok;
+	QString verboseGccOutput = SetupHelper::getVerboseGccIncludePath( &ok );
+	QStringList verboseGccLines = QStringList::split( '\n', verboseGccOutput );
+	if( verboseGccLines.count() > 3 ) {
+		///Parse the output of gcc. It includes gcc's final include-path when parsing an empty c++-file(including dirs like /usr/include/c++/4.xx/...)
+		//what about order?
+		for( QStringList::iterator it = verboseGccLines.begin(); it != verboseGccLines.end(); ++it ) {
+			if( (*it).startsWith(" ") && (*it).length() > 2 && (*it)[1] != ' ' ) {
+				//it is a potential include-file
+				QString path = (*it).stripWhiteSpace();
+				QFileInfo info( path );
+				if( info.exists() ) {
+					kdDebug( 9007 ) << "Adding include-path from gcc-output: \"" << path << "\" absolute: \"" << info.absFilePath() << "\"" <<  endl;
+					addIncludePath(info.absFilePath());
+				}
+			}
+		}
+	} else {
+		///Do some of the old stuff
 		addIncludePath( "/include" );
 		addIncludePath( "/usr/include" );
 		addIncludePath( "/usr/local/include" );
-
-        bool ok;
+        
+		bool ok;
         QString includePath = SetupHelper::getGccIncludePath(&ok);
 		if (ok) {
 			QStringList ls = QStringList::split( "\n", includePath );
@@ -94,33 +95,43 @@ void KDevDriver::setup()
         addIncludePath( includePath );
 		addIncludePath( "/usr/include/g++-3" );
 		addIncludePath( "/usr/include/g++" );
-        QStringList lines = SetupHelper::getGccMacros(&ok);
-		if (!ok) {
-			for (QStringList::ConstIterator it = lines.constBegin(); it != lines.constEnd(); ++it) {
-				QStringList lst = QStringList::split( ' ', *it );
-				if ( lst.count() != 3 )
-					continue;
-				addMacro( Macro( lst[1], lst[2] ) );
-			}
-		}
-		
-		addMacro( Macro( "__cplusplus", "1" ) );
-		addMacro( Macro( "Q_SIGNALS", "signals" ) );
-		addMacro( Macro( "Q_SLOTS", "slots" ) );
-		addMacro( Macro( "Q_SCRIPTABLE", "" ) );
-	} else if ( qmakespec == "win32-borland" ) {
-		QString incl = getenv( "INCLUDE" );
-		QStringList includePaths = QStringList::split( ';', incl );
-		QStringList::Iterator it = includePaths.begin();
-		while( it != includePaths.end() ){
-			addIncludePath( *it );
-			++it;
-		}
-
-	// ### I am sure there are more standard include paths on
-	// ### windows. I will fix that soon
-	// ### Also do the compiler specific defines on windows
 	}
+	
+	addMacro( Macro( "__cplusplus", "1" ) );
+
+	///@todo maybe remove the following? Is there any normal user who has his environment set up correctly so this is of any use?
+	QString kdedir = getenv( "KDEDIR" );
+	if( !kdedir.isNull() )
+		addIncludePath( kdedir + "/include" );
+
+	QString qmakespec = getenv( "QMAKESPEC" );
+	if ( qmakespec.isNull() )
+	qmakespec = "linux-g++";
+	
+	QString qtdir = getenv( "QTDIR" );
+	if( !qtdir.isNull() ) {
+		addIncludePath( qtdir + "/include" );
+
+		// #### implement other mkspecs and find a better way to find the
+		// #### proper mkspec (althoigh this will be no fun :-)
+
+		addIncludePath( qtdir + "/mkspecs/" + qmakespec );
+	}
+
+	QStringList lines = SetupHelper::getGccMacros(&ok);
+	if (!ok) {
+		for (QStringList::ConstIterator it = lines.constBegin(); it != lines.constEnd(); ++it) {
+			QStringList lst = QStringList::split( ' ', *it );
+			if ( lst.count() != 3 )
+				continue;
+			addMacro( Macro( lst[1], lst[2] ) );
+		}
+	}
+		
+	addMacro( Macro( "__cplusplus", "1" ) );
+	addMacro( Macro( "Q_SIGNALS", "signals" ) );
+	addMacro( Macro( "Q_SLOTS", "slots" ) );
+	addMacro( Macro( "Q_SCRIPTABLE", "" ) );
 
 	CppCodeCompletionConfig* cfg = m_cppSupport->codeCompletionConfig();
 	QString str = cfg->customIncludePaths();

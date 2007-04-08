@@ -820,8 +820,6 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 		tagBuilder.setVirtual( isVirtual );
 		tagBuilder.setAccess( TagUtils::stringToAccess( access ) );
 		
-		m_catalog->addItem( tag );
-		
 		int line, col;
 		baseClause->getStartPosition( &line, &col );
 		tag.setStartPosition( line, col );
@@ -829,7 +827,9 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 		baseClause->getEndPosition( &line, &col );
 		tag.setEndPosition( line, col );
 		
-		++it;
+        m_catalog->addItem( tag );
+		
+        ++it;
 	}
 }
 
