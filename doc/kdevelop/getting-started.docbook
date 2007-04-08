@@ -106,7 +106,7 @@ Besides the <guimenu>Help</guimenu> which offers answers to specific questions, 
 
 <formalpara>
 <title>What Does This Menu Entry Do?</title>
-<para>When you place the mouse cursor on a menu entry, there will usually some short information be displayed in the status bar. While in most cases this repeats just the name of the selection, in some cases it will provide additional information about the purpose of the menu command.</para>
+<para>When you place the mouse cursor on a menu entry, some short information will usually be displayed in the status bar. While in most cases this repeats just the name of the selection, in some cases it will provide additional information about the purpose of the menu command.</para>
 </formalpara>
 
 <formalpara>
