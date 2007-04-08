@@ -3064,13 +3064,17 @@ void CppSupportPart::buildSafeFileSet() {
 }
 
 void CppSupportPart::addToRepository( ParsedFilePointer file ) {
-	QString catalogString = KURL::encode_string_no_slash(m_projectDirectory);
+	QString catalogString( "automatic_" + KURL::encode_string_no_slash(m_projectDirectory) );
+	
+	KStandardDirs *dirs = CppSupportFactory::instance() ->dirs();
+
+	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + catalogString + ".db";
 
 	Catalog* catalog = 0;
 	///First check if the catalog is already there
 	QValueList<Catalog*> catalogs = codeRepository()->registeredCatalogs();
 	for( QValueList<Catalog*>::const_iterator it = catalogs.begin(); it != catalogs.end(); ++it ) {
-		if( (*it)->dbName() == catalogString ) {
+		if( (*it)->dbName() == dbName ) {
 			catalog = *it;
 			break;
 		}
@@ -3080,7 +3084,7 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 		kdDebug( 9007 ) << "creating new catalog named " << catalogString << " for automatic filling" << endl;
 		//QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName" << "prefix";
 		catalog = new Catalog;
-		catalog->open( catalogString );
+		catalog->open( dbName );
 		catalog->addIndex( "kind" );
 		catalog->addIndex( "name" );
 		catalog->addIndex( "scope" );

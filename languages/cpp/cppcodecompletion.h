@@ -159,7 +159,6 @@ public slots:
 	 *        (eg presses the completion shortcut CTRL+space)
 	 */
 	void completeText( bool invokedOnDemand = false );
-
 private slots:
     void emptyCache();
 	void slotPartAdded( KParts::Part *part );

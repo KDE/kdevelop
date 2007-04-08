@@ -925,7 +925,12 @@ m_codeCompleteCh2Rx( "(->)|(\\:\\:)" ) {
   m_completionMode = NormalCompletion;
 
   m_repository = new CodeInformationRepository( cppSupport->codeRepository() );
-  setupCodeInformationRepository();
+
+	connect( cppSupport->codeRepository(), SIGNAL(catalogRegistered( Catalog* )), this, SLOT( emptyCache() ) );
+	connect( cppSupport->codeRepository(), SIGNAL(catalogUnregistered( Catalog* )), this, SLOT( emptyCache() ) );
+	connect( cppSupport->codeRepository(), SIGNAL(catalogChanged( Catalog* )), this, SLOT( emptyCache() ) );
+  
+	setupCodeInformationRepository();
 
   if ( part->partController() ->parts() ) {
     QPtrListIterator<KParts::Part> it( *part->partController() ->parts() );
