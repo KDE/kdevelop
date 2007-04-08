@@ -18,6 +18,7 @@
 	 */
 
 #include "subversion_fileinfo.h"
+#include "subversion_core.h"
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -29,6 +30,7 @@
 #include <qregexp.h>
 
 #include <kio/netaccess.h>
+#include <klocale.h>
 
 SVNFileInfoProvider::SVNFileInfoProvider(subversionPart *parent, const char *name)
     : KDevVCSFileInfoProvider( parent, "svnfileinfoprovider" ),
@@ -148,9 +150,8 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 	s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << true << true;
 	KURL servURL = "kdevsvn+http://fakeserver_this_is_normal_behavior/";
 	job = KIO::special(servURL, parms, false);
-	job->setWindow( m_part->mainWindow()->main() );
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
-
+	m_part->svncore()->initProcessDlg( job, dirPath, i18n("Subversion File/Directory Status") );
     return true;
 }
 

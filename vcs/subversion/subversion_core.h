@@ -73,7 +73,8 @@ public:
     bool clientInfo( KURL path_or_url, bool recurse, QMap< KURL, SvnGlobal::SvnInfoHolder> &holderMap );
 	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
     KDevVCSFileInfoProvider *fileInfoProvider() const;
-
+	
+	void initProcessDlg( KIO::Job *job, const QString &src, const QString &dest );
 // k_dcop:
 // 	void notification( const QString&, int,int, const QString&, int,int ,long int, const QString& );
 
@@ -88,8 +89,6 @@ signals:
 	void checkoutFinished( QString dir );
 
 private:
-	void initProcessDlg( KIO::Job *job, const QString &src, const QString &dest );
-
 	QGuardedPtr<subversionWidget> m_widget;
 	subversionPart *m_part;
 	QString wcPath;
