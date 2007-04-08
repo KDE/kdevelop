@@ -38,6 +38,16 @@
 #include <list>
 
 
+class BackgroundKDevDriver : public KDevDriver {
+public:
+	BackgroundKDevDriver( CppSupportPart* cppSupport, BackgroundParser* bp ) : KDevDriver( cppSupport, false ), m_backgroundParser(bp) {
+	}
+	virtual void fileParsed( const ParsedFile& fileName );
+private:
+	BackgroundParser* m_backgroundParser;
+};
+
+
 class KDevSourceProvider: public SourceProvider
 {
 public:
@@ -237,7 +247,7 @@ BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consum
 : m_consumed( consumed ), m_cppSupport( part ), m_close( false ), m_saveMemory( false )
 {
 	m_fileList = new SynchronizedFileList();
-	m_driver = new KDevDriver( m_cppSupport );
+	m_driver = new BackgroundKDevDriver( m_cppSupport, this );
 	m_driver->setSourceProvider( new KDevSourceProvider( m_cppSupport ) );
 	
 	QString conf_file_name = m_cppSupport->specialHeaderName();
@@ -327,8 +337,14 @@ void BackgroundParser::removeFile( const QString& fileName )
 		m_isEmpty.wakeAll();
 }
 
-Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, bool lock )
+void BackgroundKDevDriver::fileParsed( const ParsedFile& fileName ) {
+	m_backgroundParser->fileParsed( fileName );
+}
+
+void BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, bool lock )
 {
+	m_lock = lock;
+	m_readFromDisk = readFromDisk;
 	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() ) ->setReadFromDisk( readFromDisk );
 	
 	m_driver->remove( fileName );
@@ -336,39 +352,40 @@ Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, b
     if( !m_driver->isResolveDependencesEnabled() )
         m_driver->removeAllMacrosInFile( fileName );  // romove all macros defined by this
 	// translation unit.
-	ParsedFilePointer translationUnit = m_driver->takeTranslationUnit( fileName );
+}
+
+void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
+	ParsedFilePointer translationUnit = m_driver->takeTranslationUnit( fileName.fileName() );
 	
 	Unit* unit = new Unit;
-	unit->fileName = fileName;
+	unit->fileName = fileName.fileName();
 	unit->translationUnit = translationUnit;
-	unit->problems = m_driver->problems( fileName );
+	unit->problems = m_driver->problems( fileName.fileName() );
 	
 	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() ) ->setReadFromDisk( false );
 	
-	if ( lock )
+	if ( m_lock )
 		m_mutex.lock();
 	
-	if ( m_unitDict.find( fileName ) != m_unitDict.end() )
+	if ( m_unitDict.find( fileName.fileName() ) != m_unitDict.end() )
 	{
-		Unit * u = m_unitDict[ fileName ];
-		m_unitDict.remove( fileName );
+		Unit * u = m_unitDict[ fileName.fileName() ];
+		m_unitDict.remove( fileName.fileName() );
 		delete( u );
 		u = 0;
 	}
 	
-	m_unitDict.insert( fileName, unit );
+	m_unitDict.insert( fileName.fileName(), unit );
 	
-	if ( lock )
+	if ( m_lock )
 		m_mutex.unlock();
 	
-	KApplication::postEvent( m_cppSupport, new FileParsedEvent( fileName, unit->problems, readFromDisk ) );
+	KApplication::postEvent( m_cppSupport, new FileParsedEvent( fileName.fileName(), unit->problems, m_readFromDisk ) );
 	
 	m_currentFile = QString::null;
 	
 	if ( m_fileList->isEmpty() )
-		m_isEmpty.wakeAll();
-	
-	return unit;
+		m_isEmpty.wakeAll();	
 }
 
 Unit* BackgroundParser::findUnit( const QString& fileName )
@@ -490,5 +507,6 @@ void BackgroundParser::saveMemory() {
 	m_saveMemory = true; //Delay the operation
 	m_canParse.wakeAll();
 }
+
 
 //kate: indent-mode csands; tab-width 4; space-indent off;

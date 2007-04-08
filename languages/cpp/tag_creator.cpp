@@ -14,6 +14,7 @@
 #include "ast_utils.h"
 #include "cpp_tags.h"
 #include "doxydoc.h"
+#include "driver.h" 
 
 #include <kdebug.h>
 #include <qfileinfo.h>
@@ -66,6 +67,24 @@ void TagCreator::parseTranslationUnit( const ParsedFile& ast )
 	m_inClass = false;
 	
 	m_imports << QStringList();
+
+  	Tag tag;
+  	tag.setKind( Tag::Kind_TranslationUnit );
+  	tag.setFileName( m_fileName );
+  	tag.setName( m_fileName );
+
+	QByteArray data;
+	QDataStream stream(data, IO_WriteOnly );
+	ast.write( stream );
+	tag.setAttribute( "cppparsedfile", data );
+	tag.setAttribute( "includedFrom", ast.includedFrom() );
+	
+  	tag.setScope( m_currentScope );
+  	if( !ast->comment().isEmpty() )
+		tag.setComment( ast->comment() );
+	  
+  	m_catalog->addItem( tag );
+	
 	TreeParser::parseTranslationUnit( ast );
 	m_imports.pop_back();
 }

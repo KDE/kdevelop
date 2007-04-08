@@ -87,7 +87,11 @@ class ParsedFile : public AbstractParseResult {
     void addIncludeFiles( const HashedStringSet& includeFiles );
     
     void addIncludeFile( const QString& includePath, const ParsedFilePointer& parsed, bool localInclude );
-    
+
+    ///If this file was parsed while resolving the dependencies of another file, this returns the file this one was included from. Else returns an empty string.
+    QString includedFrom() const;
+
+    void setIncludedFrom( const QString& str );
     /**
      * @return Reference to the internal list of all directly included files(without those included indirectly)
      */
@@ -127,6 +131,7 @@ class ParsedFile : public AbstractParseResult {
         }
         stream >> m_fileName;
         stream >> m_timeStamp;
+        stream >> m_includedFrom;
         m_usedMacros.read( stream );
         m_translationUnit = 0;
         m_includeFiles.read( stream );
@@ -142,6 +147,7 @@ class ParsedFile : public AbstractParseResult {
         }
         stream << m_fileName;
         stream << m_timeStamp;
+        stream << m_includedFrom;
         m_usedMacros.write( stream );
         m_includeFiles.write( stream );
     }
@@ -157,7 +163,7 @@ class ParsedFile : public AbstractParseResult {
     HashedStringSet m_includeFiles;
     QString m_fileName;
     QDateTime m_timeStamp;
-    
+    QString m_includedFrom;
 };
 
 /**
@@ -374,9 +380,13 @@ class Driver {
      * */
     LexerCache* lexerCache();
 
-    QString findIncludeFile( const Dependence& dep ) const;
-    
+    ///This uses getCustomIncludePath(..) to resolve the include-path internally
+    QString findIncludeFile( const Dependence& dep, const QString& fromFile );
+
   protected:
+    ///This uses the state of the parser to find the include-file
+     QString findIncludeFile( const Dependence& dep ) const;
+
     /**
      * Set up the lexer.
      */
@@ -396,9 +406,7 @@ class Driver {
      * This function is only used when dependency-resolving is activated.
      * @arg file absolute path to the file
      */
-    virtual bool shouldParseFile( const ParsedFilePointer& /*file*/ ) {
-      return true;
-    }
+    virtual bool shouldParseIncludedFile( const ParsedFilePointer& /*file*/ );
 
     void clearMacros();
     

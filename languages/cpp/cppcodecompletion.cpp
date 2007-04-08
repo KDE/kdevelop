@@ -623,7 +623,7 @@ class PopupFiller {
 				QString includeFile = file;
 				QFileInfo info( file );
 
-				const Driver* driver = struk.receiver->cppSupport()->driver();
+				Driver* driver = struk.receiver->cppSupport()->driver();
 				if( driver ) {
 					QStringList elements = QStringList::split( "/", file );
 					includeFile = elements.back();
@@ -632,7 +632,7 @@ class PopupFiller {
 					Dependence d;
 					d.first = includeFile;
 					d.second = Dep_Local;
-					while( driver->findIncludeFile( d ) != file && !elements.empty() ) {
+					while( driver->findIncludeFile( d, struk.receiver->activeFileName() ) != file && !elements.empty() ) {
 						//kdDebug( 9007 ) << "could not find include-file \"" << d.first << "\"" << endl;
 						includeFile = elements.back() + "/" + includeFile;
 						d.first = includeFile;

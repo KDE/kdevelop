@@ -32,6 +32,8 @@
 #include <qdatastream.h>
 #include <qbuffer.h>
 #include <assert.h>
+
+#include <iostream>
     
 
 //     void Macro::read( QDataStream& stream ) {
@@ -136,7 +138,7 @@ void Driver::reset( ) {
 }
 
 QStringList Driver::getCustomIncludePath( const QString& file ) {
-  return QStringList();
+  return includePaths();
 }
 
 void Driver::remove
@@ -255,9 +257,11 @@ ParsedFilePointer Driver::translationUnit( const QString& fileName ) const {
 
 class Driver::ParseHelper {
   public:
-    ParseHelper( const QString& fileName, bool force, Driver* driver, bool reportMessages = true ) : m_wasReset( false ), m_fileName( fileName ), m_previousFileName( driver->m_currentFileName ),  m_previousLexer( driver->lexer ), m_previousParsedFile( driver->m_currentParsedFile ), m_previousCachedLexedFile( driver->m_currentLexerCache ), m_force( force ), m_driver( driver ), m_lex( m_driver ) {
+    ParseHelper( const QString& fileName, bool force, Driver* driver, bool reportMessages = true, QString includedFrom = QString() ) : m_wasReset( false ), m_fileName( fileName ), m_previousFileName( driver->m_currentFileName ),  m_previousLexer( driver->lexer ), m_previousParsedFile( driver->m_currentParsedFile ), m_previousCachedLexedFile( driver->m_currentLexerCache ), m_force( force ), m_driver( driver ), m_lex( m_driver ) {
       QFileInfo fileInfo( fileName );
       m_driver->m_currentParsedFile = new ParsedFile( fileName, fileInfo.lastModified() );
+      if( !includedFrom.isEmpty() )
+        m_driver->m_currentParsedFile->setIncludedFrom( includedFrom );
 #ifdef CACHELEXER
       m_driver->m_currentLexerCache = new CachedLexedFile( fileName, &m_driver->m_lexerCache );
 #endif
@@ -298,7 +302,6 @@ class Driver::ParseHelper {
         m_driver->m_currentParsedFile->addIncludeFiles( m_driver->m_currentLexerCache->includeFiles() );
       }
 
-  
     void parse() {
       CachedLexedFilePointer lf = m_driver->m_currentLexerCache; //Set the lexer-cache to zero, so the problems registered through addProblem go directly into the file
       m_driver->m_currentLexerCache = 0;
@@ -410,12 +413,15 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
     return;
   }
 
-  ParseHelper h( file, true, this, false );
+  ParseHelper h( file, true, this, false, m_currentMasterFileName );
 
   /*if ( m_parsedUnits.find(file) != m_parsedUnits.end() )
   	return;*/
 
-  //h.parse();
+  if( shouldParseIncludedFile( m_currentParsedFile ) ) {///Until the ParseHelper is destroyed, m_currentParsedFile will stay the included file
+    std::cout << "shouldParseIncludedFile returned 1 for " << m_currentParsedFile << endl;
+    h.parse();
+  }
 }
 
 void Driver::addProblem( const QString & fileName, const Problem & problem ) {
@@ -487,12 +493,15 @@ void Driver::clearParsedMacros() {
     }
 }
 
-void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force , bool macrosGlobal ) {
-   //if( isResolveDependencesEnabled() )
-    clearParsedMacros(); ///Since everything will be re-lexed, we do not need any old macros
-
-    m_lexerCache.increaseFrame();
+void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force , bool macrosGlobal )
+{
+  QString oldMasterFileName = m_currentMasterFileName;
   m_currentMasterFileName = fileName;
+  
+ //if( isResolveDependencesEnabled() )
+  clearParsedMacros(); ///Since everything will be re-lexed, we do not need any old macros
+
+  m_lexerCache.increaseFrame();
 
   QStringList oldIncludePaths = m_includePaths;
   m_includePaths = getCustomIncludePath( fileName );
@@ -509,7 +518,8 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
         }
     }
 
-    m_includePaths = oldIncludePaths;
+  m_includePaths = oldIncludePaths;
+  m_currentMasterFileName = oldMasterFileName;
 }
 
 void Driver::setupLexer( Lexer * lexer ) {
@@ -653,6 +663,27 @@ void Driver::addIncludePath( const QString &path ) {
     m_includePaths << path;
 }
 
+QString Driver::findIncludeFile( const Dependence& dep, const QString& fromFile ) {
+  QString fileName = dep.first;
+  
+  if ( dep.second == Dep_Local ) {
+    QString path = QFileInfo( fromFile ).dirPath( true );
+    QFileInfo fileInfo( QFileInfo( path, fileName ) );
+    if ( fileInfo.exists() && fileInfo.isFile() )
+      return fileInfo.absFilePath();
+  }
+
+  QStringList includePaths = getCustomIncludePath( fromFile );
+  
+  for ( QStringList::ConstIterator it = includePaths.begin(); it != includePaths.end(); ++it ) {
+    QFileInfo fileInfo( *it, fileName );
+    if ( fileInfo.exists() && fileInfo.isFile() )
+      return fileInfo.absFilePath();
+  }
+
+  return QString::null;
+}
+
 QString Driver::findIncludeFile( const Dependence& dep ) const {
   QString fileName = dep.first;
 
@@ -661,7 +692,6 @@ QString Driver::findIncludeFile( const Dependence& dep ) const {
     QFileInfo fileInfo( QFileInfo( path, fileName ) );
     if ( fileInfo.exists() && fileInfo.isFile() )
       return fileInfo.absFilePath();
-
   }
 
   for ( QStringList::ConstIterator it = m_includePaths.begin(); it != m_includePaths.end(); ++it ) {
@@ -677,6 +707,10 @@ void Driver::setResolveDependencesEnabled( bool enabled ) {
   depresolv = enabled;
   if ( depresolv )
     setupPreProcessor();
+}
+
+bool Driver::shouldParseIncludedFile( const ParsedFilePointer& /*file*/) {
+  return false;
 }
 
 void Driver::setupPreProcessor() {}
@@ -787,6 +821,14 @@ ParsedFile::ParsedFile( const QByteArray& array ) {
     QBuffer b( array );
     QDataStream d( &b );
     read( d );
+}
+
+QString ParsedFile::includedFrom() const {
+  return m_includedFrom;
+}
+
+void ParsedFile::setIncludedFrom( const QString& str ) {
+  m_includedFrom = str;
 }
 
 QByteArray ParsedFile::serialize() const {

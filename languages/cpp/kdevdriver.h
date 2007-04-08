@@ -41,14 +41,18 @@ protected:
 
     ///Returns the complete include-path for that file. Not constant because it may add Problem-items to the driver. Must be absolute path.
     virtual QStringList getCustomIncludePath( const QString& file );
+
+    virtual bool shouldParseIncludedFile( const ParsedFilePointer& /*file*/ );
+
 private:
  
 	CppSupportPart* m_cppSupport;
     CppTools::IncludePathResolver* m_includePathResolver;
     bool m_foreground;
+    bool m_shouldParseIncludedFiles;
 };
 
-#endif 
+#endif
 // kate: indent-mode csands; tab-width 4;
 
 

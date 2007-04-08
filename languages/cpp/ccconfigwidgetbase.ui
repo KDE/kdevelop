@@ -362,10 +362,10 @@ Paths not starting with '/' will be interpreted as relative to the project-folde
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Parse missing headers</string>
+                                    <string>Parse missing headers into a database(experimental)</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Parse preprocessed headers into the code-model if they were not parsed yet.</string>
+                                    <string>Parse preprocessed headers that don't come from this project into a special database. Each header is parsed only once. If they change delete the database.</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
@@ -405,10 +405,10 @@ slow.</string>
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Advanced include-path resolution using ma&amp;ke(experimental)</string>
+                                    <string>Advanced include-path resolution using make(e&amp;xperimental)</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+K</string>
+                                    <string>Alt+X</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Try to resolve the include-path by getting the command that would be used 

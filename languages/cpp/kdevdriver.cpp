@@ -8,9 +8,8 @@
 #include "includepathresolver.h"
 
 
-
 KDevDriver::KDevDriver( CppSupportPart* cppSupport, bool foreground )
-: m_cppSupport( cppSupport ), m_includePathResolver(0), m_foreground(foreground)
+: m_cppSupport( cppSupport ), m_includePathResolver(0), m_foreground(foreground), m_shouldParseIncludedFiles(true)
 {
 	//setupProject();
 	setup();
@@ -142,17 +141,21 @@ void KDevDriver::setup()
 		pos = end+1;
 	}
 
-	setResolveDependencesEnabled( cfg->preProcessAllHeaders() /*|| cfg->parseMissingHeaders()*/ );
+	setResolveDependencesEnabled( cfg->preProcessAllHeaders() | cfg->parseMissingHeaders() );
 
 	if( cfg->resolveIncludePaths() ) {
 		delete m_includePathResolver;
 		m_includePathResolver = new CppTools::IncludePathResolver( m_foreground );
 	}
+	
+	m_shouldParseIncludedFiles = cfg->parseMissingHeaders();
 }
 
 QStringList KDevDriver::getCustomIncludePath( const QString& file ) {
+	if( !file.startsWith("/") )
+		kdDebug( 9007 ) << "KDevDriver::getCustomIncludePath(..): given file \"" << file << "\" is not absolute" << endl;
 	if( !m_includePathResolver )
-		return QStringList();
+		return includePaths();
 	CppTools::PathResolutionResult res = m_includePathResolver->resolveIncludePath( file );
 	
 	if( !res.success ) {
@@ -164,6 +167,8 @@ QStringList KDevDriver::getCustomIncludePath( const QString& file ) {
 	return res.path + includePaths();
 }
 
-
+bool KDevDriver::shouldParseIncludedFile( const ParsedFilePointer& file ) {
+	return m_shouldParseIncludedFiles && !m_cppSupport->safeFileSet().contains(file->fileName()) && !m_cppSupport->safeFileSet().contains( file->fileName() + "||" + file->includedFrom() );
+}
 
 //kate: indent-mode csands; tab-width 4; space-indent off;

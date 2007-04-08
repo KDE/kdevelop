@@ -12,13 +12,14 @@
 
 #include "setuphelper.h"
 #include "blockingkprocess.h"
-
+#include "driver.h"
 #include <kdebug.h>
 
 namespace SetupHelper {
   
 QString getGccIncludePath(bool *ok)
 {
+  Driver* d;
   *ok = true;
   QString processStdout; 
   BlockingKProcess proc;

@@ -53,6 +53,7 @@
 #include "qtdesignercppintegration.h"
 #include "cppimplementationwidget.h"
 #include "configproblemreporter.h"
+#include "codeinformationrepository.h"
 
 #include <qeventloop.h>
 #include <qheader.h>
@@ -108,8 +109,8 @@
 ///Currently activating this leads to mysterious crashes, but on long-term it's better
 const bool alwaysParseInBackground = true;
 
-enum { KDEV_DB_VERSION = 17 };
-enum { KDEV_PCS_VERSION = 15 };
+enum { KDEV_DB_VERSION = 18 };
+enum { KDEV_PCS_VERSION = 16 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
@@ -396,8 +397,16 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 				m_problemReporter->reportProblem( fileName, p );
 			}
 		}
-
-		if( !project()->isProjectFile( fileName ) || !m_parseEmitWaiting.reject( fileName ) ) {
+		ParsedFilePointer p = m_backgroundParser->translationUnit( fileName );
+		if( p && !p->includedFrom().isEmpty() ) {
+			kdDebug( 9007 ) << "customEvent() got included file " << fileName << " included from " << p->includedFrom() << endl;
+			if( !project()->isProjectFile( fileName ) ) {
+				//The file was parsed to resolve a dependency, and is not a project file
+				addToRepository( p );
+			} else {
+				//It is a project-file that was parsed for whatever reason to resolve a dependency(currently it isn't handled this way)
+			}
+		} else if( !project()->isProjectFile( fileName ) || !m_parseEmitWaiting.reject( fileName ) ) {
             ParseEmitWaiting::Processed p = m_parseEmitWaiting.processFile( fileName, ( !m_hadErrors && hasErrors && !fromDisk && m_isTyping && fileName == m_activeFileName ) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None );
 			parseEmit( p );
         } else {
@@ -548,8 +557,9 @@ void CppSupportPart::projectOpened( )
 	m_pCompletion = new CppCodeCompletion( this );
 	m_projectClosed = false;
 
+	buildSafeFileSet();
 	updateParserConfiguration(); //Necessary to respect custom include-paths and such
-	
+
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
@@ -896,6 +906,7 @@ QStringList CppSupportPart::reorder( const QStringList &list )
 void CppSupportPart::addedFilesToProject( const QStringList &fileList )
 {
 	m_projectFileList = project() ->allFiles();
+	buildSafeFileSet();
 	QStringList files = reorder( fileList );
 
 	for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
@@ -912,6 +923,7 @@ void CppSupportPart::addedFilesToProject( const QStringList &fileList )
 void CppSupportPart::removedFilesFromProject( const QStringList &fileList )
 {
 	m_projectFileList = project() ->allFiles();
+	buildSafeFileSet();
 	for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
@@ -2764,6 +2776,10 @@ const Driver* CppSupportPart::driver() const {
 	return m_driver;
 }
 
+Driver* CppSupportPart::driver() {
+	return m_driver;
+}
+
 QStringList CppSupportPart::getIncludePath() const {
 	if( !m_driver )
 		return QStringList();
@@ -3012,6 +3028,118 @@ void CppSupportPart::updateBackgroundParserConfig()
 	}
 
 	*m_backgroundParserConfig = config;
+}
+
+const SynchronizedFileSet& CppSupportPart::safeFileSet() const {
+	return m_safeProjectFiles;
+}
+
+void CppSupportPart::buildSafeFileSet() {
+	SynchronizedFileSet::SetType files;
+
+	for( QStringList::const_iterator it = m_projectFileList.begin(); it != m_projectFileList.end(); ++it ) {
+		QFileInfo fi( *it );
+		QString file = *it;
+		if( fi.isRelative() ) {
+			fi.setFile( QDir(m_projectDirectory), *it );
+			file = fi.absFilePath();
+		}
+
+		files.insert( HashedString(file) );
+	}
+
+	///Now get all translation-units from the code-repository
+ 	QValueList<Catalog::QueryArgument> args;
+
+	args << Catalog::QueryArgument( "kind", Tag::Kind_TranslationUnit );
+
+	QValueList<Tag> tags( codeCompletion()->repository()->query( args ) );
+
+	for( QValueList<Tag>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
+		//generally don't reparse
+		files.insert( (*it).fileName() );
+		//files.insert( (*it).fileName() + "||" + (*it).attribute("includedFrom").toString() );
+	}
+	m_safeProjectFiles.setFiles( files );
+}
+
+void CppSupportPart::addToRepository( ParsedFilePointer file ) {
+	QString catalogString = KURL::encode_string_no_slash(m_projectDirectory);
+
+	Catalog* catalog = 0;
+	///First check if the catalog is already there
+	QValueList<Catalog*> catalogs = codeRepository()->registeredCatalogs();
+	for( QValueList<Catalog*>::const_iterator it = catalogs.begin(); it != catalogs.end(); ++it ) {
+		if( (*it)->dbName() == catalogString ) {
+			catalog = *it;
+			break;
+		}
+	}
+
+	if( !catalog ) {
+		kdDebug( 9007 ) << "creating new catalog named " << catalogString << " for automatic filling" << endl;
+		//QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName" << "prefix";
+		catalog = new Catalog;
+		catalog->open( catalogString );
+		catalog->addIndex( "kind" );
+		catalog->addIndex( "name" );
+		catalog->addIndex( "scope" );
+		catalog->addIndex( "fileName" );
+		/*
+		for ( QStringList::Iterator idxIt = indexList.begin(); idxIt != indexList.end(); ++idxIt )
+			catalog->addIndex( ( *idxIt ).utf8() );*/
+		addCatalog( catalog );
+	}
+	catalog->setEnabled( true );
+
+	///Now check if the file was already parsed with the same parameters, if yes don't parse again(auto-update is currently not supported, when major changes have been done in the libraries, the repository should be deleted)
+    QValueList<Catalog::QueryArgument> args;
+
+	bool compatibleParsed = false;
+	Tag compatibleParsedTag;
+	
+	args << Catalog::QueryArgument( "kind", Tag::Kind_TranslationUnit );
+	args << Catalog::QueryArgument( "fileName", file->fileName() );
+	QValueList<Tag> tags( catalog->query( args ) );
+	if( !tags.isEmpty() ) {
+		for( QValueList<Tag>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
+			if( (*it).hasAttribute( "cppparsedfile" ) ) {
+				QVariant v = (*it).attribute( "cppparsedfile" );
+				///@todo reenable this
+				/*QByteArray b = v.toByteArray();
+				if( !b.isEmpty() ) {
+					//Would be much more efficient not to do this deserialization
+					ParsedFile f(b);
+					if( f.usedMacros().valueHash() == file->usedMacros().valueHash() && f.usedMacros().idHash() == file->usedMacros().idHash() && f.includeFiles().hash() == file->includeFiles().hash() ) {
+						///Do not reparse the file, it seems to already be in the repository in a similar state
+						if( (*it).attribute( "includedFrom" ).toString() == file->includedFrom() ) return;
+
+						///It is probable that the same state has already been parsed, but there seems to be no such tag yet(the tag will be added)
+						compatibleParsed = true;
+						compatibleParsedTag = *it;
+						break;
+					}
+				}*/
+			}
+		}
+	}
+
+	if( compatibleParsed ) {
+		///Add a Tag that makes sure that the file will not be parsed again
+		compatibleParsedTag.setAttribute( "includedFrom", file->includedFrom() );
+		QByteArray data;
+		QDataStream s( data, IO_WriteOnly );
+		file->write( s );
+		compatibleParsedTag.setAttribute( "cppparsedfile", data );
+		catalog->addItem( compatibleParsedTag );
+		return;
+	}
+
+	kdDebug( 9007 ) << "parsing translation-unit " << file->fileName() << " into catalog " << catalogString << endl;
+	TagCreator w( file->fileName(), catalog );
+	w.parseTranslationUnit( *file );
+	codeRepository()->touchCatalog( catalog );
+	m_safeProjectFiles.insert( file->fileName() );
 }
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ) {

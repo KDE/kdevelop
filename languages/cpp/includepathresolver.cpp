@@ -286,6 +286,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
   ///STEP 2: Search the output for include-paths
   QRegExp validRx( "\\b([cg]\\+\\+|gcc)\\s" );
+  ///@todo fix this regular expression(it must not break on escaped spaces)
   QRegExp pathEndRx( "\\s");//( [^\\](\\\\\\\\)*)[\\s]" ); ///Regular expression to find the end of an include-path without triggering at an escaped white-space
   if( validRx.search( fullOutput ) == -1 )
     return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"").arg(workingDirectory).arg(command).arg(fullOutput) );

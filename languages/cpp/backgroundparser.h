@@ -24,7 +24,7 @@
 class CppSupportPart;
 class TranslationUnitAST;
 class SynchronizedFileList;
-
+class BackgroundKDevDriver;
 class Unit
 {
 public:
@@ -94,8 +94,10 @@ public:
 	virtual void run();
 
 protected:
+    friend class BackgroundKDevDriver;
+    void fileParsed( const ParsedFile& fileName );
 	Unit* findUnit( const QString& fileName );
-	Unit* parseFile( const QString& fileName, bool readFromDisk, bool lock = false )
+	void parseFile( const QString& fileName, bool readFromDisk, bool lock = false )
 		;
 
 private:
@@ -110,6 +112,10 @@ private:
 	bool m_close;
 	QMap<QString, Unit*> m_unitDict;
     bool m_saveMemory; //used to prevent blocking
+
+    //State of parseFile(..):
+    bool m_lock;
+    bool m_readFromDisk;
 };
 
 #endif 

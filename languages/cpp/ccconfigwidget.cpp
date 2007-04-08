@@ -172,7 +172,6 @@ void CCConfigWidget::initCodeCompletionTab( )
 	checkListGlobalItems->setChecked( c->alwaysIncludeNamespaces() );
 	checkParseMissingHeaders->setChecked( c->parseMissingHeaders() );
 	checkResolveIncludePaths->setChecked( c->resolveIncludePaths() );
-	checkParseMissingHeaders->hide();
 	editIncludePaths->setText( c->customIncludePaths() );
 }
 
@@ -209,9 +208,9 @@ void CCConfigWidget::saveCodeCompletionTab( )
 		it.data() ->setEnabled( it.key() ->isOn() );
 	}
 
-	c->setPreProcessAllHeaders( checkPreprocessIncludedHeaders->isChecked() );
-	c->setAlwaysIncludeNamespaces( checkListGlobalItems->isChecked() );
+	c->setPreProcessAllHeaders( checkPreprocessIncludedHeaders->isChecked() || checkParseMissingHeaders->isChecked() );
 	c->setParseMissingHeaders( checkParseMissingHeaders->isChecked() );
+	c->setAlwaysIncludeNamespaces( checkListGlobalItems->isChecked() );
 	c->setResolveIncludePaths( checkResolveIncludePaths->isChecked() );
 	c->setCustomIncludePaths( editIncludePaths->text() );
 

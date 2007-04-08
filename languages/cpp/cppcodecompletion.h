@@ -35,6 +35,7 @@
 #include <ktexteditor/view.h>
 
 #include <qobject.h>
+#include <qmutex.h>
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qguardedptr.h>
@@ -89,8 +90,6 @@ namespace CppEvaluation
 struct ExpressionInfo;
 
 typedef KSharedPtr<SimpleTypeImpl> TypePointer;
-
-
 
 class CppCodeCompletion : public QObject
 {
@@ -148,6 +147,10 @@ public:
     void addStatusText( QString text, int timeout );
     void clearStatusText();
 
+    QString activeFileName() const {
+      return m_activeFileName;
+    }
+  
 public slots:
 	/**
 	 * @param invokedOnDemand if true and there is exactly one matching entry

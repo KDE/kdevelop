@@ -32,6 +32,7 @@
 #include <qdir.h>
 #include <qprogressbar.h>
 #include <kdebug.h>
+#include <ext/hash_map>
 #include "driver.h"
 
 
@@ -100,6 +101,54 @@ namespace KTextEditor
 	class SelectionInterface;
 	class ViewCursorInterface;
 }
+
+
+class SynchronizedFileSet
+{
+public:
+	typedef __gnu_cxx::hash_set< HashedString > SetType;
+	SynchronizedFileSet()
+	{}
+	
+	bool isEmpty() const
+	{
+		QMutexLocker locker( &m_mutex );
+		return m_fileSet.empty();
+	}
+	
+	uint count() const
+	{
+		QMutexLocker locker( &m_mutex );
+		return m_fileSet.size();
+	}
+	
+	void clear()
+	{
+		QMutexLocker locker( &m_mutex );
+		m_fileSet.clear();
+	}
+
+    void setFiles( const SetType& files ) {
+		QMutexLocker locker( &m_mutex );
+        m_fileSet = files;
+    }
+	
+	void insert( const HashedString& str )
+	{
+        HashedString s( QString(str.str().local8Bit()) );
+		QMutexLocker locker( &m_mutex );
+		m_fileSet.insert( s );
+	}
+
+    bool contains( const HashedString& str ) const {
+		QMutexLocker locker( &m_mutex );
+        return m_fileSet.find( str ) != m_fileSet.end();
+    }
+
+private:
+	mutable QMutex m_mutex;
+	SetType m_fileSet;
+};
 
 class CppSupportPart : public KDevLanguageSupport
 {
@@ -216,6 +265,11 @@ public:
     QStringList getIncludePath() const;
 
     const Driver* driver() const;
+
+    Driver* driver();
+
+    ///thread-safe, returns the thread-safe set of all files that do not need to be parsed when being included, either because they are part of the project and parsed anyway, or because they are already in the code-repository
+    const SynchronizedFileSet& safeFileSet() const;
 signals:
 	void fileParsed( const QString& fileName );
     ///Emitted whenever a file was parsed, but the code-model could be updated(the file in the code-model did not have to be replaced)
@@ -553,7 +607,8 @@ private:
 private slots:
 	void parseEmit( ParseEmitWaiting::Processed files );
 private:
-	
+
+    SynchronizedFileSet m_safeProjectFiles;
 	BackgroundParserConfig * m_backgroundParserConfig;
 	
 	static QStringList m_sourceMimeTypes;
@@ -568,7 +623,9 @@ private:
 	// we need something to plug actions that are not in any menu 
 	// into in order for their shortcuts to work
 	QWidget m_DummyActionWidget;
-	
+
+    void addToRepository( ParsedFilePointer );
+    void  buildSafeFileSet();
 	void emitSynchronousParseReady( const QString& file, ParsedFilePointer unit );
 
 	struct JobData
