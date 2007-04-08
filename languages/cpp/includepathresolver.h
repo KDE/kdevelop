@@ -17,6 +17,8 @@
 #include <qmap.h>
 
 namespace CppTools {
+  class FileModificationTimeWrapper;
+  
   struct PathResolutionResult {
     PathResolutionResult( bool _success, const QString& _errorMessage = QString(), const QString& _longErrorMessage = QString() ) : success( _success ), errorMessage( _errorMessage ), longErrorMessage( _longErrorMessage )  {
     }
@@ -30,6 +32,8 @@ namespace CppTools {
       return success;
     };
   };
+
+  class SourcePathInformation;
 
   ///One resolution-try can issue up to 4 make-calls in worst case
   class IncludePathResolver {
@@ -57,8 +61,11 @@ namespace CppTools {
       typedef QMap<QString, CacheEntry> Cache;
       Cache m_cache;
 
-      bool executeCommand ( const QString& command, QString& result );
-      PathResolutionResult resolveIncludePathInternal( const QString& absoluteFile, const QString& workingDirectory, const QString& makeParameters );
+      ///Executes the command, either using popen or BlockingKProcess
+      PathResolutionResult getFullOutput( const QString& command, const QString& workingDirectory, QString& output ) const;
+      bool executeCommandPopen ( const QString& command, const QString& workingDirectory, QString& result ) const;
+      ///file should be the name of the target, without extension(because that may be different)
+      PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source );
       bool m_outOfSource;
       QString m_source;
       QString m_build;

@@ -54,6 +54,7 @@ void KDevDriver::setupLexer( Lexer* lexer )
 //! code provided by Reginald Stadlbauer <reggie@trolltech.com>
 void KDevDriver::setup()
 {
+	if( lexerCache() ) lexerCache()->clear(); ///Clear the lexer-cache so missing headers get a chance to be parsed
 	clearMacros();
 	clearIncludePaths();
 
