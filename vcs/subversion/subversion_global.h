@@ -15,6 +15,9 @@
 #ifndef SUBVERSION_GLOBAL_H
 #define SUBVERSION_GLOBAL_H
 
+class KURL;
+class QString;
+
 namespace SvnGlobal
 {
 

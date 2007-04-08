@@ -400,6 +400,37 @@ void subversionCore::checkout() {
 	}
 }
 
+void subversionCore::switchTree( const KURL &path, const KURL &repositUrl,
+								int revNum, const QString &revKind, bool recurse )
+{
+	KURL servURL = "kdevsvn+svn://blah/";
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	// prepare arguments
+	int cmd = 12;
+	s << cmd << path << repositUrl ;
+	s << recurse << revNum << revKind;
+
+	SimpleJob * job = KIO::special(servURL, parms, false);
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	initProcessDlg( (KIO::Job*)job, repositUrl.prettyURL() , path.prettyURL() );
+}
+
+void subversionCore::switchRelocate( const KURL &path,
+									 const KURL &currentUrl, const KURL &newUrl, bool recurse )
+{
+	KURL servURL = "kdevsvn+svn://blah/";
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	// prepare arguments
+	int cmd = 16;
+	s << cmd << path << currentUrl << newUrl << recurse;
+
+	SimpleJob * job = KIO::special(servURL, parms, false);
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	// this doesn't contact repository
+}
+
 bool subversionCore::clientInfo( KURL path_or_url, bool recurse, QMap< KURL, SvnInfoHolder> &holderMap )
 {
     KURL servURL = "kdevsvn+svn://blah/";

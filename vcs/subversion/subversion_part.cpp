@@ -35,6 +35,7 @@
 #include "kdevversioncontrol.h"
 #include "svn_fileselectdlg_commit.h"
 #include "svn_logviewwidget.h"
+#include "svn_switchwidget.h"
 
 #include "urlutil.h"
 #include <qvbox.h>
@@ -145,6 +146,8 @@ void subversionPart::setupActions() {
 			this, SLOT(slotActionResolve()), actionCollection(), "subversion_resolve" );
 	actionResolve->setToolTip( i18n("Resolve the conflicting state of a file after a merge") );
 	actionResolve->setWhatsThis( i18n("<b>Resolve the conflicting state</b><p>Remove the conflict state that can be set on a file after a merge failed.") );
+	actionSwitch = new KAction( i18n("Switch this working copy to URL.."), 0,
+			this, SLOT(slotSwitch()), actionCollection(), "subversion_switch" );
 }
 
 QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
@@ -231,6 +234,8 @@ if(!project())
 		subMenu->setWhatsThis(id, i18n("<b>Revert</b><p>Undo local changes.") );
 		id = subMenu->insertItem( actionResolve->text(), this, SLOT(slotResolve()) );
 		subMenu->setWhatsThis(id, i18n("<b>Resolve</b><p>Resolve conflicting state.") );
+		id = subMenu->insertItem( actionSwitch->text(), this, SLOT(slotSwitch()) );
+		subMenu->setWhatsThis(id, i18n("<b>Switch</b><p>Switch working tree.") );
 
 		/*
 		subMenu->insertSeparator();
@@ -277,6 +282,46 @@ void subversionPart::slotActionResolve() {
 
 void subversionPart::slotResolve() {
 	m_impl->resolve (m_urls);
+}
+
+void subversionPart::slotSwitch()
+{
+	if( m_urls.count() > 1 ){
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							i18n("Please select only one item for subversion switch") );
+		return;
+	}
+	if( m_urls.count() < 1 ) return;
+	
+	// retrieve repository info from local-copy metadata which will be displayed in dialog box
+	KURL wcPath = m_urls.first();
+	QMap< KURL, SvnGlobal::SvnInfoHolder> holderMap;
+	SvnGlobal::SvnInfoHolder holder;
+			
+	m_impl->clientInfo( wcPath, false, holderMap );
+	QValueList< SvnGlobal::SvnInfoHolder > holderList = holderMap.values();
+	holder = holderList.first();
+	// invoke dialog box
+	SvnSwitchDlg dlg( &holder, wcPath.path(), (QWidget*)project()->mainWindow()->main() );
+	
+	if( dlg.exec() != QDialog::Accepted ){
+		return;
+	}
+	// check target url's validity
+	KURL repositUrl = KURL( dlg.destUrl() );
+	if( !repositUrl.isValid() ){
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							 i18n("The destination URL is invalid") );
+		return;
+	}
+	// call core
+	if( dlg.switchOnly() )
+		m_impl->switchTree( wcPath, repositUrl, -1, "HEAD", dlg.recursive() );
+	else if( dlg.relocation() )
+		m_impl->switchRelocate( wcPath, dlg.currentUrl(), repositUrl, dlg.recursive() );
+	else
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							i18n("Fail to conduct subversion switch. No action was selected") );
 }
 
 void subversionPart::slotActionCommit() {

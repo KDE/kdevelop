@@ -63,6 +63,9 @@ public:
 	void revert( const KURL::List&);
 	void resolve( const KURL::List&);
 	void checkout();
+	void switchTree( const KURL &path, const KURL &repositUrl,
+					 int revNum, const QString &revKind, bool recurse );
+	void switchRelocate( const KURL &path, const KURL &currentUrl, const KURL &newUrl, bool recurse );
     // This is blocking function. But the GUI is not blocked.
     // Information will be pulled solely from the working copy.Thus no network connections will be made.
     // Parameter holderMap is the map to be filled out by this method. Callers should preallocate this object.

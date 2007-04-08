@@ -7,7 +7,8 @@ kde_module_LTLIBRARIES = libkdevsubversion.la kio_kdevsvn.la kded_kdevsvnd.la
 libkdevsubversion_la_SOURCES = subversion_core.cpp subversion_fileinfo.cpp \
 	subversion_fileinfo.skel subversion_part.cpp subversion_widget.cpp subversiondiff.ui \
 	subversionprojectwidget.ui svn_blamewidget.cpp svn_co.ui svn_commitdlgbase.ui \
-	svn_fileselectdlg_commit.cpp svn_logviewoptiondlgbase.ui svn_logviewwidget.cpp
+	svn_fileselectdlg_commit.cpp svn_logviewoptiondlgbase.ui svn_logviewwidget.cpp svn_switchdlgbase.ui \
+	svn_switchwidget.cpp
 libkdevsubversion_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/extensions/libkdevextensions.la
 libkdevsubversion_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 
@@ -32,4 +33,4 @@ protocol_DATA = kdevsvn+file.protocol kdevsvn+http.protocol kdevsvn+https.protoc
 
 SUBDIRS = integrator
 noinst_HEADERS = kdevsvnd.h svn_blamewidget.h svn_fileselectdlg_commit.h \
-	svn_logviewwidget.h
+	svn_logviewwidget.h svn_switchwidget.h

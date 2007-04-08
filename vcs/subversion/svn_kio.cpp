@@ -881,6 +881,17 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 				svn_switch(wc,url,revnumber,revkind,recurse);
 				break;
 			}
+		case SVN_SWITCH_RELOCATE:
+			{
+				KURL wc, origUrl, newUrl;
+				bool recurse;
+				stream >> wc;
+				stream >> origUrl;
+				stream >> newUrl;
+				stream >> recurse;
+				svn_switch_relocate( wc, origUrl, newUrl, recurse );
+				break;
+			}
 		case SVN_DIFF:
 			{
 				KURL url1,url2;
@@ -1221,24 +1232,48 @@ void kio_svnProtocol::svn_switch( const KURL& wc, const KURL& repos, int revnumb
 	KURL dest = wc;
 	nurl.setProtocol( chooseProtocol( repos.protocol() ) );
 	dest.setProtocol( "file" );
-	recordCurrentURL( nurl );
-	QString source = dest.path();
-	QString target = makeSvnURL( repos );
+// 	recordCurrentURL( nurl );
+// 	QString source = dest.path();
+// 	QString target = makeSvnURL( repos );
 
-	const char *path = svn_path_canonicalize( apr_pstrdup( subpool, source.utf8() ), subpool );
-	const char *url = svn_path_canonicalize( apr_pstrdup( subpool, target.utf8() ), subpool );
+	const char *path = svn_path_canonicalize( apr_pstrdup( subpool, dest.path().utf8() ), subpool );
+	const char *url = svn_path_canonicalize( apr_pstrdup( subpool, nurl.url().utf8() ), subpool );
+	kdDebug(9036) << " WC path: " << path << " Repository URL: " << url << endl;
 
 	svn_opt_revision_t rev = createRevision( revnumber, revkind, subpool );
 
 	initNotifier(false, false, false, subpool);
 	svn_error_t *err = svn_client_switch (NULL/*result revision*/, path, url, &rev, recurse, ctx, subpool);
 	if ( err ){
-		error( KIO::ERR_SLAVE_DEFINED, err->message );
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit( err->message ) );
 		svn_pool_destroy (subpool);
 	}
 
 	finished();
 	svn_pool_destroy (subpool);
+}
+
+void kio_svnProtocol::svn_switch_relocate( const KURL &wc, const KURL &origUrl, const KURL &newUrl,
+										   bool recurse )
+{
+	apr_pool_t *subpool = svn_pool_create( pool );
+
+	const char *wcPath = svn_path_canonicalize( apr_pstrdup( subpool, wc.path().utf8() ), subpool );
+	const char *fromUrl = apr_pstrdup( subpool, origUrl.url().utf8() );
+	const char *toUrl = apr_pstrdup( subpool, newUrl.url().utf8() );
+	kdDebug(9036) << " WC path: " << wcPath << " from: " << fromUrl << " to: " << toUrl << endl;
+
+	svn_error_t *err = svn_client_relocate( wcPath, fromUrl, toUrl, recurse, ctx, pool );
+	
+	if ( err ){
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit( err->message ) );
+		svn_pool_destroy (subpool);
+	}
+	m_counter = 0L;
+	setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "string",
+				QString("switched to %1").arg( toUrl ) );
+	finished();
+	svn_pool_destroy( subpool );
 }
 
 void kio_svnProtocol::update( const KURL& wc, int revnumber, const QString& revkind ) {
