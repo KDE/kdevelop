@@ -303,6 +303,9 @@ class Driver::ParseHelper {
       }
 
     void parse() {
+      QString oldMasterFileName = m_driver->m_currentMasterFileName; //Change the master-file so problems will be reported correctly
+      m_driver->m_currentMasterFileName = m_absFilePath;
+      
       CachedLexedFilePointer lf = m_driver->m_currentLexerCache; //Set the lexer-cache to zero, so the problems registered through addProblem go directly into the file
       m_driver->m_currentLexerCache = 0;
       
@@ -316,6 +319,8 @@ class Driver::ParseHelper {
       m_driver->fileParsed( *m_driver->m_currentParsedFile );
 
       m_driver->m_currentLexerCache = lf;
+      
+      m_driver->m_currentMasterFileName = oldMasterFileName;
     }
 
     ParsedFilePointer parsedFile() const {
