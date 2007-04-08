@@ -13,7 +13,6 @@
  ***************************************************************************/
 
 /** Unfortunately this doesn't work with unsermake, but with make and cmake.
-/**
  * */
 #include <stdio.h>
 #include <unistd.h>
@@ -22,11 +21,11 @@
 #include "qdir.h" /* defines QDir */
 #include "qregexp.h" /* defines QRegExp */
 #include "klocale.h" /* defines [function] i18n */
-#include "lib/util/blockingkprocess.h" /* defines BlockingKProcess */
+#include "blockingkprocess.h" /* defines BlockingKProcess */
 #include "includepathresolver.h"
 
 #ifdef TEST
-#include "lib/util/blockingkprocess.cpp"
+#include "blockingkprocess.cpp"
 
 #include <iostream>
 using namespace std;
