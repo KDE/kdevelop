@@ -1,0 +1,141 @@
+<ui version="4.0" >
+ <class>SvnProgressDialog</class>
+ <widget class="QDialog" name="SvnProgressDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>364</width>
+    <height>153</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="srcLabel" >
+     <property name="text" >
+      <string>Source</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="2" >
+    <widget class="KLineEdit" name="sourceEdit" >
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="destLabel" >
+     <property name="text" >
+      <string>Destination</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2" >
+    <widget class="KLineEdit" name="destEdit" >
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="progressLabel" >
+     <property name="text" >
+      <string>Progress</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2" >
+    <widget class="QProgressBar" name="m_progressBar" >
+     <property name="value" >
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3" >
+    <widget class="Line" name="line" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>221</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2" >
+    <widget class="KPushButton" name="abortButton" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Abort Job</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <widget class="KInformationLabel" name="kinformationlabel" >
+   <property name="geometry" >
+    <rect>
+     <x>80</x>
+     <y>60</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KInformationLabel</class>
+   <extends>QFrame</extends>
+   <header>kinformationlabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>abortButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SvnProgressDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>303</x>
+     <y>138</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>184</x>
+     <y>84</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

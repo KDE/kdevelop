@@ -1,11 +1,14 @@
 #include "subversion_core.h"
 #include "subversion_part.h"
+#include "subversion_view.h"
 #include "svn_models.h"
 #include "ui_svnlogindialog.h"
 #include "svn_authdialog.h"
 #include "svn_commitwidgets.h"
 #include <kmessagebox.h>
 #include <ktempdir.h>
+#include <kprogressdialog.h>
+#include <QProgressDialog>
 
 // //ThreadWeaver includes
 // #include <State.h>
@@ -381,6 +384,7 @@ SvnStatusJob::SvnStatusJob( const KUrl &wcPath, long rev, QString revKind,
 
 void SvnStatusJob::run()
 {
+    setTerminationEnabled(true);
     apr_pool_t *subpool = svn_pool_create(pool);
     svn_revnum_t result_rev;
 
@@ -596,6 +600,7 @@ SvnUpdateJob::SvnUpdateJob( const KUrl::List &wcPaths, long int rev, QString rev
 
 void SvnUpdateJob::run()
 {
+    setTerminationEnabled(true);
     kDebug() << " SvnUpdateJob:run() " <<endl;
     
     apr_pool_t *subpool = svn_pool_create (pool);
@@ -682,6 +687,7 @@ svn_error_t* SvnInfoJob::infoReceiver( void *baton, const char *path,
 
 void SvnInfoJob::run()
 {
+    setTerminationEnabled(true);
     kDebug() << " SvnInfoJob:run() " <<endl;
     
     apr_pool_t *subpool = svn_pool_create (pool);
@@ -778,6 +784,7 @@ SvnDiffJob::~SvnDiffJob()
 
 void SvnDiffJob::run()
 {
+    setTerminationEnabled(true);
     apr_pool_t *subpool = svn_pool_create (pool);
     // null options
     apr_array_header_t *options = svn_cstring_split( "", "\t\r\n", TRUE, subpool );
@@ -888,7 +895,13 @@ QString SvnJobBase::errorMsg()
         svn_strerror(m_aprErr, buf, 512);
         msg = msg + "\n: " + QString::fromLocal8Bit( buf );
     }
-    return msg;
+    if( !msg.isEmpty() ){
+        return msg;
+    }
+    else{
+        //KMessageBox hangs when returning empty string
+        return QString( i18n("Sorry. No error message available") );
+    }
 //     return m_errMsg;
 }
 
@@ -1022,6 +1035,11 @@ SubversionJob::SubversionJob( int actionType, QObject *parent )
     : QThread( parent ), SvnJobBase( actionType )
 {
     connect( this, SIGNAL(finished()), this, SLOT(slotFinished()) );
+    connect( this, SIGNAL(terminated()), this, SLOT(slotTerminated()) );
+    
+    // progress notification callback
+    ctx->progress_func = SubversionJob::progressCallback;
+    ctx->progress_baton = this;
 
     // user identification providers
     apr_array_header_t *providers = apr_array_make(pool, 9, sizeof(svn_auth_provider_object_t *));
@@ -1166,10 +1184,32 @@ SubversionJob::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **cred_p,
     };
     return SVN_NO_ERROR;
 }
+void SubversionJob::progressCallback( apr_off_t progress, apr_off_t total,
+                                        void *baton, apr_pool_t *pool)
+{
+    SubversionJob *job = (SubversionJob*)baton;
+    if( !job ) return;
+    if( total > -1 || progress > -1 )
+        job->emitProgressChanged( (int)total, (int)progress );
+}
+
+void SubversionJob::emitProgressChanged( int maxVal, int curVal )
+{
+    if( maxVal > -1 )
+        emit bytesMaximumChanged( maxVal );
+    if( curVal > -1 )
+        emit bytesTransferred( curVal );
+}
 
 void SubversionJob::slotFinished()
 {
     emit finished(this);
+}
+
+void SubversionJob::slotTerminated()
+{
+    kDebug() << " SubversionJob::slotTerminated() " << endl;
+    setErrorMsg( i18n("Job was terminated") );
 }
 
 void SubversionJob::initNotifier(svn_wc_notify_func2_t notifyCallback)
@@ -1241,16 +1281,21 @@ void SubversionCore::spawnCheckoutThread()
 void SubversionCore::spawnAddThread( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore )
 {
     SvnAddJob *job = new SvnAddJob( wcPaths, recurse, force, noIgnore, SVN_ADD, this );
+    // add and remove job --> they don't access repository. So progress dialog is unnecessary
+    // because the job ends very quickly. These two jobs may be relocated to Sync job.
     SVNCORE_SPAWN_COMMON( job )
 }
 void SubversionCore::spawnRemoveThread( const KUrl::List &urls, bool force )
 {
     SvnDeleteJob *job = new SvnDeleteJob( urls, force, SVN_DELETE, this );
+    // add and remove job --> they don't access repository. So progress dialog is unnecessary
+    // because the job ends very quickly. These two jobs may be relocated to Sync job.
     SVNCORE_SPAWN_COMMON( job )
 }
 void SubversionCore::spawnCommitThread( const KUrl::List &urls, bool recurse, bool keepLocks )
 {
     SvnCommitJob *job = new SvnCommitJob( urls, recurse, keepLocks, SVN_COMMIT, this );
+    initProgressDlg( job, i18n("Subversion Commit") );
     SVNCORE_SPAWN_COMMON( job )
 }
 void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
@@ -1260,14 +1305,17 @@ void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
     SvnUpdateJob *job = new SvnUpdateJob( wcPaths, rev, revKind,
                                           recurse, ignoreExternals,
                                           SVN_UPDATE, this );
+    initProgressDlg( job, i18n("Subversion Update") );
     SVNCORE_SPAWN_COMMON( job )
 }
-
 void SubversionCore::spawnLogviewThread(const KUrl::List& list,
         int revstart, QString revKindStart, int revend, QString revKindEnd,
         int limit,
         bool repositLog, bool discorverChangedPath, bool strictNodeHistory )
 {
+    // KUrl::List is handed. But only one Url will be used effectively.
+    if( list.count() < 1 ) return;
+    
     SvnLogviewJob* logJob = new SvnLogviewJob(
                             revstart, revKindStart,revend, revKindEnd,
                             limit,
@@ -1275,21 +1323,16 @@ void SubversionCore::spawnLogviewThread(const KUrl::List& list,
                             list,
                             SVN_LOGVIEW, this );
     
+    initProgressDlg( logJob, i18n("Subversion Logview"),
+                     list.at(0).prettyUrl(), i18n("Subversion Logview") );
+    
     connect( logJob, SIGNAL(finished(SubversionJob*)), this, SLOT( slotLogResult(SubversionJob*) ) );
 //     connect( logJob, SIGNAL(finished(SubversionJob*)), this, SLOT(slotFinished(SubversionJob*)) );
+
     m_threadList.append( logJob );
-    logJob->start( QThread::HighPriority );
+	logJob->start( QThread::HighPriority );
     
-    cleanupFinishedThreads();
-//     connect( logJob1, SIGNAL( done( Job* ) ),this, SLOT( slotLogResult( Job* ) ) );
-// //     connect( logJob, SIGNAL( failed( Job* ) ),this, SLOT( slotLogResult( Job* ) ) );
-//     m_weaver->enqueue( logJob1 );
-// //     m_weaver->resume();
-//     int len = m_weaver->queueLength();
-//     int num = m_weaver->currentNumberOfThreads();
-//     bool workinghard = m_weaver->state().stateId() ==  ThreadWeaver::WorkingHard;
-//     int stateId = m_weaver->state().stateId();
-//     kDebug() << "spawnLogviewThread:" << " queue length " << len << " state ID " << stateId << endl;
+	cleanupFinishedThreads();
 }
 
 void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
@@ -1299,6 +1342,10 @@ void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
                                revstart, revKindStart,
                                revend,   revKindEnd,
                                SVN_BLAME, this );
+    
+    initProgressDlg( job, i18n("Subversion Blame"),
+                     url.prettyUrl(), i18n("Subversion Blame") );
+    
     connect( job, SIGNAL(finished(SubversionJob*)), this, SLOT( slotFinished(SubversionJob*) ) );
     
     m_threadList.append( job );
@@ -1311,6 +1358,8 @@ const SvnStatusJob* SubversionCore::spawnStatusThread( const KUrl &wcPath, long 
 {
     SvnStatusJob *job = new SvnStatusJob( wcPath, rev, revKind,
                     recurse, getAll, update, noIgnore, ignoreExternals, SVN_STATUS, this );
+    initProgressDlg( job, i18n("Subversion Status"),
+                     wcPath.prettyUrl(), i18n("Subversion Status") );
     SVNCORE_SPAWN_COMMON( job )
     return job;
 }
@@ -1320,6 +1369,8 @@ void SubversionCore::spawnInfoThread( const KUrl &pathOrUrl,
                                       bool recurse )
 {
     SvnInfoJob *job = new SvnInfoJob( pathOrUrl, peg, revision, recurse, SVN_INFO, this );
+    initProgressDlg( job, i18n("Subversion Info"),
+                     pathOrUrl.prettyUrl(), i18n("Subversion Info") );
     SVNCORE_SPAWN_COMMON( job )
 }
 
@@ -1331,6 +1382,8 @@ void SubversionCore::spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOr
     SvnDiffJob *job = new SvnDiffJob( pathOrUrl1, pathOrUrl2, rev1, rev2,
                                       recurse, ignoreAncestry, noDiffDeleted, ignoreContentType,
                                       SVN_DIFF, this );
+    initProgressDlg( job, i18n("Subversion Difference"),
+                     pathOrUrl1.prettyUrl(), pathOrUrl2.prettyUrl() );
     SVNCORE_SPAWN_COMMON( job )
 }
 
@@ -1348,8 +1401,13 @@ void SubversionCore::slotLogResult( SubversionJob* job )
     else{
         kDebug() << " slotLogResult: " << "thread could not gain lock, job results are discarded" << endl;
     }
-    m_threadList.removeAll( job );
     m_completedList.append( job );
+//     KProgressDialog *dlg = m_threadMap.value( job );
+//     m_threadMap.remove( job );
+    m_threadList.removeAll( job );
+    // don't need belows. QThread::finished() signal will invoke QDialog::close() slot
+//     dlg->hide();
+//     delete dlg;
     
 }
 void SubversionCore::slotFinished( SubversionJob* job )
@@ -1363,10 +1421,10 @@ void SubversionCore::slotFinished( SubversionJob* job )
         emit jobFinished( job );
     }
 
-    mtx.unlock();
-    
-    m_threadList.removeAll( job );
     m_completedList.append( job );
+    m_threadList.removeAll( job );
+    
+    mtx.unlock();
 }
 
 /** Handle events from SubversionJob classes. Since job is thread, mutex is used. */
@@ -1428,7 +1486,30 @@ void SubversionCore::customEvent( QEvent * event )
             break;
     }
 }
-
+// common routines to initiate progress dialog
+void SubversionCore::initProgressDlg( SubversionJob *job,
+                                      const QString &caption,
+                                      const QString &src, const QString &dest )
+{
+    SvnProgressDialog *dlg = new SvnProgressDialog( (QWidget*)NULL, caption );
+            
+    dlg->setSource( src );
+    dlg->setDestination( dest );
+    
+    QProgressBar *bar = dlg->progressBar();
+    connect( job, SIGNAL(bytesMaximumChanged( int )), bar, SLOT(setMaximum(int)) );
+    connect( job, SIGNAL(bytesTransferred( int )), bar, SLOT(setValue(int)) );
+    
+    dlg->setAttribute( Qt::WA_DeleteOnClose );
+    connect( job, SIGNAL(finished()), dlg, SLOT(close()) );
+    connect( dlg, SIGNAL(rejected()), job, SLOT(terminate()) );
+    
+    // when QThread terminates, it emits terminated() first and finished() second.
+    // so I don't connect terminated() to any slot. Every work will be done in finished() signal    
+    // connect( logJob, SIGNAL(terminated()), dlg, SLOT(close()) );
+    // connect( logJob, SIGNAL(terminated(SubversionJob*)), this, SLOT( slotTerminated(SubversionJob*)) );
+    dlg->show();
+}
 
 #include "subversion_core.moc"
 

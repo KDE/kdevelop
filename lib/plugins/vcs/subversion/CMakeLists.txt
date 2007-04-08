@@ -30,6 +30,7 @@ set(kdevsubversion_PART_UI
     svnssltrustdialog.ui
     svncommitloginputdlg.ui
     uicommit_option_dlg.ui
+    uiprogress_dlg.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

@@ -29,6 +29,7 @@ class SvnStatusHolder;
 class SubversionJob;
 class SvnInfoHolder;
 class KTempDir;
+class KProgressDialog;
 
 #define SVN_LOGVIEW  10
 #define SVN_BLAME    11
@@ -41,6 +42,7 @@ class KTempDir;
 #define SVN_INFO     18
 #define SVN_DIFF     19
 
+#define SVNACTION_PROGRESS           ( (QEvent::Type)15148 )
 #define SVNACTION_NOTIFICATION       ( (QEvent::Type)15149 )
 #define SVNLOGIN_IDPWDPROMPT         ( (QEvent::Type)15150 )
 #define SVNLOGIN_SERVERTRUSTPROMPT   ( (QEvent::Type)15151 )
@@ -213,12 +215,21 @@ public:
                                 const svn_auth_ssl_server_cert_info_t *ci,
                                 svn_boolean_t may_save,
                                 apr_pool_t *pool);
-
+    
+    static void progressCallback( apr_off_t progress, apr_off_t total,
+                                  void *baton, apr_pool_t *pool);
+    
+    void emitProgressChanged( int maxVal, int curVal );
+    
 Q_SIGNALS:
     void finished(SubversionJob*);
+    // used for progress notification
+    void bytesMaximumChanged( int );
+    void bytesTransferred( int );
     
 protected Q_SLOTS:
     void slotFinished();
+    void slotTerminated();
     
 protected:
     void initNotifier(svn_wc_notify_func2_t notifyCallback);
@@ -515,12 +526,15 @@ protected:
     virtual void customEvent( QEvent * event );
     
 private:
+    void initProgressDlg( SubversionJob *job, const QString &caption,
+                          const QString &src = QString(), const QString &dest = QString() );
+    
     KDevSubversionPart *m_part;
     KDevSubversionView *m_view;
     
     QList <SubversionJob*> m_threadList; // list of RUNNING threads
     QList <SubversionJob*> m_completedList; // threads that emitted finished() signal.
-    
+	
     mutable QMutex mtx;
 };
 

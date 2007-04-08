@@ -15,6 +15,7 @@
 #include <QPushButton>
 #include <QTextStream>
 #include <QFile>
+#include <QDialog>
 
 class KDevSubversionViewPrivate{
 public:
@@ -205,4 +206,34 @@ KTabWidget* KDevSubversionView::tab()
 {
     return d->m_tab;
 }
+
+//////////////////////////////////////////////////////////////////
+
+SvnProgressDialog::SvnProgressDialog( QWidget *parent, const QString &caption )
+    : QDialog( parent ), Ui::SvnProgressDialog()
+{
+    Ui::SvnProgressDialog::setupUi(this);
+    setWindowTitle( caption );
+}
+
+SvnProgressDialog::~SvnProgressDialog()
+{
+    kDebug() << "SvnProgressDialog:: destructor " << endl;
+}
+
+QProgressBar* SvnProgressDialog::progressBar()
+{
+    return m_progressBar;
+}
+
+void SvnProgressDialog::setSource( const QString &src )
+{
+    sourceEdit->setText( src );
+}
+
+void SvnProgressDialog::setDestination( const QString &dest )
+{
+    destEdit->setText( dest );
+}
+
 #include "subversion_view.moc"
