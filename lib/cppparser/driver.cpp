@@ -418,10 +418,8 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep ) {
   /*if ( m_parsedUnits.find(file) != m_parsedUnits.end() )
   	return;*/
 
-  if( shouldParseIncludedFile( m_currentParsedFile ) ) {///Until the ParseHelper is destroyed, m_currentParsedFile will stay the included file
-    std::cout << "shouldParseIncludedFile returned 1 for " << m_currentParsedFile << endl;
+  if( shouldParseIncludedFile( m_currentParsedFile ) ) ///Until the ParseHelper is destroyed, m_currentParsedFile will stay the included file
     h.parse();
-  }
 }
 
 void Driver::addProblem( const QString & fileName, const Problem & problem ) {
@@ -810,6 +808,10 @@ void MacroSet::computeHash() const {
  * @return All Macros that were used while processing this translation-unit
  * */
 MacroSet& ParsedFile::usedMacros() {
+  return m_usedMacros;
+}
+
+const MacroSet& ParsedFile::usedMacros() const {
   return m_usedMacros;
 }
 

@@ -168,9 +168,9 @@ void CCConfigWidget::initCodeCompletionTab( )
 		m_catalogs[ item ] = c;
 	}
 
-	checkPreprocessIncludedHeaders->setChecked( c->preProcessAllHeaders() );
-	checkListGlobalItems->setChecked( c->alwaysIncludeNamespaces() );
+	checkPreprocessIncludedHeaders->setChecked( c->preProcessAllHeaders() && !c->parseMissingHeaders() );
 	checkParseMissingHeaders->setChecked( c->parseMissingHeaders() );
+	checkListGlobalItems->setChecked( c->alwaysIncludeNamespaces() );
 	checkResolveIncludePaths->setChecked( c->resolveIncludePaths() );
 	editIncludePaths->setText( c->customIncludePaths() );
 }

@@ -76,6 +76,7 @@ class ParsedFile : public AbstractParseResult {
      * @return All Macros that were used while processing this translation-unit. May be modified.
      */
     MacroSet& usedMacros();
+    const MacroSet& usedMacros() const;
 
     /**
      * @return Absolutely all files included by this one(no matter through how many other files they were included)

@@ -109,7 +109,7 @@
 ///Currently activating this leads to mysterious crashes, but on long-term it's better
 const bool alwaysParseInBackground = true;
 
-enum { KDEV_DB_VERSION = 18 };
+enum { KDEV_DB_VERSION = 19 };
 enum { KDEV_PCS_VERSION = 16 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
@@ -3056,9 +3056,7 @@ void CppSupportPart::buildSafeFileSet() {
 	QValueList<Tag> tags( codeCompletion()->repository()->query( args ) );
 
 	for( QValueList<Tag>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
-		//generally don't reparse
-		files.insert( (*it).fileName() );
-		//files.insert( (*it).fileName() + "||" + (*it).attribute("includedFrom").toString() );
+		files.insert( (*it).fileName() + "||" + (*it).attribute("macroValueHash").toString() + "||" + (*it).attribute("macroIdHash").toString() );
 	}
 	m_safeProjectFiles.setFiles( files );
 }
@@ -3143,7 +3141,7 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 	TagCreator w( file->fileName(), catalog );
 	w.parseTranslationUnit( *file );
 	codeRepository()->touchCatalog( catalog );
-	m_safeProjectFiles.insert( file->fileName() );
+	m_safeProjectFiles.insert( file->fileName() + "||" + QString("%1").arg(file->usedMacros().valueHash()) + "||" + QString("%1").arg(file->usedMacros().idHash()) );
 }
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ) {

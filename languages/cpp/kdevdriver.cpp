@@ -168,7 +168,7 @@ QStringList KDevDriver::getCustomIncludePath( const QString& file ) {
 }
 
 bool KDevDriver::shouldParseIncludedFile( const ParsedFilePointer& file ) {
-	return m_shouldParseIncludedFiles && !m_cppSupport->safeFileSet().contains(file->fileName()) && !m_cppSupport->safeFileSet().contains( file->fileName() + "||" + file->includedFrom() );
+	return m_shouldParseIncludedFiles && !m_cppSupport->safeFileSet().contains(file->fileName()) && !m_cppSupport->safeFileSet().contains( file->fileName() + "||" + QString("%1").arg(file->usedMacros().valueHash()) + "||" + QString("%1").arg(file->usedMacros().idHash()) );
 }
 
 //kate: indent-mode csands; tab-width 4; space-indent off;

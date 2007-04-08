@@ -78,6 +78,8 @@ void TagCreator::parseTranslationUnit( const ParsedFile& ast )
 	ast.write( stream );
 	tag.setAttribute( "cppparsedfile", data );
 	tag.setAttribute( "includedFrom", ast.includedFrom() );
+	tag.setAttribute( "macroValueHash", QString("%1").arg( ast.usedMacros().valueHash()) );
+	tag.setAttribute( "macroIdHash", QString("%1").arg( ast.usedMacros().idHash() ) );
 	
   	tag.setScope( m_currentScope );
   	if( !ast->comment().isEmpty() )

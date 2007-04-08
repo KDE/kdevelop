@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>560</width>
-            <height>646</height>
+            <width>581</width>
+            <height>708</height>
         </rect>
     </property>
     <property name="caption">
@@ -30,11 +30,11 @@
                 <attribute name="title">
                     <string>&amp;Code Completion</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox">
+                    <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
                             <cstring>groupBox4</cstring>
                         </property>
@@ -194,7 +194,7 @@ and create a significant delay.</string>
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox">
+                    <widget class="QGroupBox" row="1" column="0">
                         <property name="name">
                             <cstring>groupBox8_2</cstring>
                         </property>
@@ -285,142 +285,24 @@ and create a significant delay.</string>
                             </widget>
                         </vbox>
                     </widget>
-                    <widget class="QGroupBox">
+                    <spacer row="5" column="0">
                         <property name="name">
-                            <cstring>groupBox9_2</cstring>
+                            <cstring>spacer15_2</cstring>
                         </property>
-                        <property name="title">
-                            <string>Misc</string>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkShowTypeEvaluationInStatusBar</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show t&amp;ype evaluation in status bar</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+Y</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Namespace alias list:</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>editNamespaceAlias</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>std=_GLIBCXX_STD</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. 
-example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). 
-"&lt;&lt;" means that the right namespace is imported into the left, while "=" means that both namespaces are treated as
-if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="5" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1_6</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Custom include paths:</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="5" column="1">
-                                <property name="name">
-                                    <cstring>editIncludePaths</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>src;</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. 
-Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkParseMissingHeaders</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>4</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>Parse missing headers into a database(experimental)</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Parse preprocessed headers that don't come from this project into a special database. Each header is parsed only once. If they change delete the database.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkPreprocessIncludedHeaders</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>4</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>Preprocess &amp;included headers</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+I</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Try to locate all included files and preprocess them. This makes macros work correctly.
-Note: Having all the system directories listed here may cause Kdevelop to be
-slow.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkResolveIncludePaths</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>4</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>Advanced include-path resolution using make(e&amp;xperimental)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+X</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Try to resolve the include-path by getting the command that would be used 
-for compiling the file and parsing the gcc-options. The build-system needs to be working, 
-test for problems by running "make -n -W myfile.cpp myfile.o" in the directory. 
-This also works with cmake, and maybe some other build-systems that build on make. 
-The project needs to be compiled or at least configured before this system may work.</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QGroupBox">
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QGroupBox" row="4" column="0">
                         <property name="name">
                             <cstring>groupBox5</cstring>
                         </property>
@@ -521,24 +403,154 @@ The project needs to be compiled or at least configured before this system may w
                             </widget>
                         </hbox>
                     </widget>
-                    <spacer>
+                    <widget class="QGroupBox" row="3" column="0">
                         <property name="name">
-                            <cstring>spacer15_2</cstring>
+                            <cstring>groupBox9_2</cstring>
                         </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
+                        <property name="title">
+                            <string>Misc</string>
                         </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>checkResolveIncludePaths</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Advanced include-path resolution using make(e&amp;xperimental)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+X</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Try to resolve the include-path by getting the command that would be used 
+for compiling the file and parsing the gcc-options. The build-system needs to be working, 
+test for problems by running "make -n -W myfile.cpp myfile.o" in the directory. 
+This also works with cmake, and maybe some other build-systems that build on make. 
+The project needs to be compiled or at least configured before this system may work.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>checkShowTypeEvaluationInStatusBar</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show t&amp;ype evaluation in status bar</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="3" column="1">
+                                <property name="name">
+                                    <cstring>editIncludePaths</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>src;</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. 
+Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>editNamespaceAlias</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>std=_GLIBCXX_STD</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. 
+example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). 
+"&lt;&lt;" means that the right namespace is imported into the left, while "=" means that both namespaces are treated as
+if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="3" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_6</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Custom include paths:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Namespace alias list:</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="2" column="0">
+                        <property name="name">
+                            <cstring>buttonGroup6</cstring>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>52</height>
-                            </size>
+                        <property name="title">
+                            <string>Incremental Parsing</string>
                         </property>
-                    </spacer>
-                </vbox>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>radioButton13</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Do not process included headers</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="0">
+                                <property name="name">
+                                    <cstring>checkParseMissingHeaders</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Preprocess and parse included headers into a database(experimental)</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Parse preprocessed headers that are not part of this project 
+into a special completion-database. To reparse the headers delete
+the database and reopen the project.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>checkPreprocessIncludedHeaders</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Preprocess included headers (collect macros and visibility-information)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+I</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Try to locate all included files and preprocess them. 
+This makes macros and imported namespaces work correctly, and allows KDevelop
+to know what code-items are visible from within which file.
+Note: Parsing may become very slow when this is enabled
+(It will become faster after some time).</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
