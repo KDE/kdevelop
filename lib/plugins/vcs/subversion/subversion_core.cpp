@@ -1502,7 +1502,7 @@ void SubversionCore::initProgressDlg( SubversionJob *job,
     
     dlg->setAttribute( Qt::WA_DeleteOnClose );
     connect( job, SIGNAL(finished()), dlg, SLOT(close()) );
-    connect( dlg, SIGNAL(rejected()), job, SLOT(terminate()) );
+	connect( dlg, SIGNAL(finished()), job, SLOT(terminate()) );
     
     // when QThread terminates, it emits terminated() first and finished() second.
     // so I don't connect terminated() to any slot. Every work will be done in finished() signal    

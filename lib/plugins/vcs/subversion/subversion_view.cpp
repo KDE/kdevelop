@@ -8,6 +8,7 @@
 #include <ktabwidget.h>
 #include <ktextedit.h>
 #include <ktextbrowser.h>
+#include <klineedit.h>
 
 #include <QList>
 #include <QVariant>
@@ -16,6 +17,8 @@
 #include <QTextStream>
 #include <QFile>
 #include <QDialog>
+#include <QLabel>
+#include <QProgressBar>
 
 class KDevSubversionViewPrivate{
 public:
@@ -209,31 +212,73 @@ KTabWidget* KDevSubversionView::tab()
 
 //////////////////////////////////////////////////////////////////
 
-SvnProgressDialog::SvnProgressDialog( QWidget *parent, const QString &caption )
-    : QDialog( parent ), Ui::SvnProgressDialog()
+class SvnProgressDialog::SvnProgressDialogPrivate
 {
-    Ui::SvnProgressDialog::setupUi(this);
-    setWindowTitle( caption );
+public:
+	QLabel *srcLabel;
+	QLabel *destLabel;
+	QLabel *progressLabel;
+	KLineEdit *sourceEdit;
+	KLineEdit *destEdit;
+	QProgressBar *m_progressBar;
+};
+
+SvnProgressDialog::SvnProgressDialog( QWidget *parent, const QString &caption )
+	: KDialog( parent ), d( new SvnProgressDialogPrivate )
+{
+	setCaption( caption );
+	setButtons( KDialog::Cancel );
+	setButtonText( KDialog::Cancel, i18n( " Abort" ) );
+	setModal( false );
+	setMinimumWidth( 360 );
+
+	QWidget *mainWidget = new QWidget( this );
+	QGridLayout *layout = new QGridLayout( mainWidget );
+
+	d->srcLabel = new QLabel( i18n("Source:"), mainWidget );
+	layout->addWidget( d->srcLabel, 0, 0 );
+	d->destLabel = new QLabel( i18n("Destination:"), mainWidget );
+	layout->addWidget( d->destLabel, 1, 0 );
+	d->progressLabel = new QLabel( i18n("Progress:"), mainWidget );
+	layout->addWidget( d->progressLabel, 2, 0 );
+
+	d->sourceEdit = new KLineEdit( mainWidget );
+	d->sourceEdit->setReadOnly( true );
+	layout->addWidget( d->sourceEdit, 0, 1 );
+	d->destEdit = new KLineEdit( mainWidget );
+	d->destEdit->setReadOnly( true );
+	layout->addWidget( d->destEdit, 1, 1 );
+	d->m_progressBar = new QProgressBar( mainWidget );
+	layout->addWidget( d->m_progressBar, 2, 1 );
+
+	QSizePolicy policy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+	policy.setHorizontalStretch(1);
+	d->sourceEdit->setSizePolicy( policy );
+	d->destEdit->setSizePolicy( policy );
+	d->m_progressBar->setSizePolicy( policy );
+	
+	setMainWidget(mainWidget);
 }
 
 SvnProgressDialog::~SvnProgressDialog()
 {
     kDebug() << "SvnProgressDialog:: destructor " << endl;
+	delete d;
 }
 
 QProgressBar* SvnProgressDialog::progressBar()
 {
-    return m_progressBar;
+    return d->m_progressBar;
 }
 
 void SvnProgressDialog::setSource( const QString &src )
 {
-    sourceEdit->setText( src );
+    d->sourceEdit->setText( src );
 }
 
 void SvnProgressDialog::setDestination( const QString &dest )
 {
-    destEdit->setText( dest );
+    d->destEdit->setText( dest );
 }
 
 #include "subversion_view.moc"

@@ -2,7 +2,8 @@
 #define KDEVSUBVERSIONVIEW_H
 
 #include "subversion_part.h"
-#include "ui_uiprogress_dlg.h"
+#include <kdialog.h>
+// #include "ui_uiprogress_dlg.h"
 class SubversionJob;
 class QWidget;
 struct KDevSubversionViewPrivate;
@@ -37,7 +38,7 @@ private:
 
 /** @short Progress display dialog for subversion ASync jobs
  */
-class SvnProgressDialog : public QDialog, public Ui::SvnProgressDialog
+class SvnProgressDialog : public KDialog /*public QDialog, public Ui::SvnProgressDialog*/
 {
 public:
     SvnProgressDialog( QWidget *parent, const QString &caption = QString() );
@@ -46,6 +47,10 @@ public:
     QProgressBar* progressBar();
     void setSource( const QString &src );
     void setDestination( const QString &dest );
+private:
+	class SvnProgressDialogPrivate;
+	SvnProgressDialogPrivate* const d;
+	
 };
 
 #endif
