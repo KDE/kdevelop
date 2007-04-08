@@ -313,7 +313,7 @@ bool ProjectController::loadProjectPart()
         KConfigGroup group = config->group( "General Options" );
 
         QString projectManager =
-                group.readEntry( "ProjectManagementView", "KDevProjectManagerView" );
+                group.readEntry( "ManagementView", "KDevProjectManagerView" );
 
         d->m_projectPart = d->m_core->pluginController()->loadPlugin( projectManager );
         if ( !d->m_projectPart )

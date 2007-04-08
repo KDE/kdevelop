@@ -221,11 +221,11 @@ bool Project::open( const KUrl& projectFileUrl )
     d->m_cfg = KSharedConfig::openConfig( d->projectTempFile );
     d->m_cfg->setExtraConfigFiles( QStringList() << d->developerTempFile );
 
-    KConfigGroup projectGroup( d->m_cfg, "General Options" );
+    KConfigGroup projectGroup( d->m_cfg, "Project" );
 
-    d->name = projectGroup.readEntry( "Project Name", projectFileUrl.fileName() );
+    d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
     d->folder = projectFileUrl.directory();
-    QString managerSetting = projectGroup.readEntry( "Project Manager", "KDevGenericManager" );
+    QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );
 
     //Get our importer
     IPluginController* pluginManager = Core::self()->pluginController();

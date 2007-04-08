@@ -1,5 +1,4 @@
-[General Options]
-Project Builder=KDevMakeBuilder
-Project Manager=KDevQMakeManager
+[Project]
+Manager=KDevQMakeManager
 PrimaryLanguage=C++
-ProjectManagementView=KDevProjectManagerView
+ManagementView=KDevProjectManagerView
