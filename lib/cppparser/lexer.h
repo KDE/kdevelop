@@ -248,6 +248,13 @@ public:
     }
     
 private:
+    void setEndPtr( const QChar* c ) {
+      m_endPtr = c;
+      if( m_ptr <  m_endPtr )
+          m_currentChar = *m_ptr;
+      else
+          m_currentChar = QChar::null;
+    }
     const QChar currentChar() const;
     QChar peekChar( int n=1 ) const;
     int currentPosition() const;
@@ -531,7 +538,6 @@ inline void Lexer::nextChar()
         m_currentChar = *m_ptr;
     else
         m_currentChar = QChar::null;
-
 }
 
 inline void Lexer::nextChar( int n )
@@ -851,6 +857,8 @@ inline void Lexer::insertCurrent( const QString& str ) {
     m_endPtr = offset( m_source.length() );
     if( m_ptr < m_endPtr )
       m_currentChar = *m_ptr;
+    else
+      m_currentChar = QChar::null;
 }
 
 #endif
