@@ -458,18 +458,22 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
   ///STEP 2: Search the output for include-paths
   QRegExp validRx( "\\b([cg]\\+\\+|gcc)" );
-  ///@todo fix this regular expression(it must not break on escaped spaces)
-  QRegExp pathEndRx( "\\s");//( [^\\](\\\\\\\\)*)[\\s]" ); ///Regular expression to find the end of an include-path without triggering at an escaped white-space
   if( validRx.search( fullOutput ) == -1 )
     return PathResolutionResult( false, i18n("Output seems not to be a valid gcc or g++ call"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"").arg(workingDirectory).arg( source.getCommand(file, makeParameters) ).arg(fullOutput) );
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;
-  
-  QRegExp includeRx("\\s(-I|--include-dir=)");
+
+  QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" ); 
+  QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.
+  QString escapedPathRx( "(([^)(\"'\\s]*)(\\\\\\s)?)*" ); //Matches /usr/I\ am \ a\ strange\ path/include
+
+  QRegExp includeRx( QString( "%1(%2|%3)(?=\\s)" ).arg( includeParameterRx ).arg( quotedRx ).arg( escapedPathRx ) );
+  includeRx.setMinimal( true );
+  includeRx.setCaseSensitive( true );
   offset = 0;
   while( (offset = includeRx.search( fullOutput, offset )) != -1 ) {
-    offset += 1;
+    offset += 1; ///The previous white space
     int pathOffset = 2;
     if( fullOutput[offset+1] == '-' ) {
       ///Must be --include-dir=, with a length of 14 characters
@@ -484,10 +488,16 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
     
 
     int start = offset + pathOffset;
-    int end = pathEndRx.search( fullOutput, start );
-    if( end == -1 ) break; //Maybe a warning? Something went wrong
-    end+= pathEndRx.matchedLength();
-    QString path = fullOutput.mid( start, end-start ).stripWhiteSpace();;
+    int end = offset + includeRx.matchedLength();
+    
+    QString path = fullOutput.mid( start, end-start ).stripWhiteSpace();
+    if( path.startsWith( "\"") || path.startsWith( "\'") && path.length() > 2 ) {
+      //probable a quoted path
+      if( path.endsWith(path.left(1)) ) {
+        //Quotation is ok, remove it
+        path = path.mid( 1, path.length() - 2 );
+      }
+    }
     if( !path.startsWith("/") )
       path = workingDirectory + (workingDirectory.endsWith("/") ? "" : "/") + path;
     
