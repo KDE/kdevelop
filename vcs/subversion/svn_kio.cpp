@@ -523,52 +523,53 @@ bool kio_svnProtocol::createUDSEntry( const QString& filename, const QString& us
 	return true;
 }
 
-void kio_svnProtocol::copy(const KURL & src, const KURL& dest, int /*permissions*/, bool /*overwrite*/) {
-	kdDebug(9036) << "kio_svnProtocol::copy() Source : " << src.url() << " Dest : " << dest.url() << endl;
-
-	apr_pool_t *subpool = svn_pool_create (pool);
-	svn_client_commit_info_t *commit_info = NULL;
-
-	KURL nsrc = src;
-	KURL ndest = dest;
-	nsrc.setProtocol( chooseProtocol( src.protocol() ) );
-	ndest.setProtocol( chooseProtocol( dest.protocol() ) );
-	QString srcsvn = nsrc.url();
-	QString destsvn = ndest.url();
-
-	recordCurrentURL( nsrc );
-
-	//find the requested revision
-	svn_opt_revision_t rev;
-	int idx = srcsvn.findRev( "?rev=" );
-	if ( idx != -1 ) {
-		QString revstr = srcsvn.mid( idx+5 );
-		kdDebug(9036) << "revision string found " << revstr  << endl;
-		if ( revstr == "HEAD" ) {
-			rev.kind = svn_opt_revision_head;
-			kdDebug(9036) << "revision searched : HEAD" << endl;
-		} else {
-			rev.kind = svn_opt_revision_number;
-			rev.value.number = revstr.toLong();
-			kdDebug(9036) << "revision searched : " << rev.value.number << endl;
-		}
-		srcsvn = srcsvn.left( idx );
-		kdDebug(9036) << "new src : " << srcsvn << endl;
-	} else {
-		kdDebug(9036) << "no revision given. searching HEAD " << endl;
-		rev.kind = svn_opt_revision_head;
-	}
-
-	initNotifier(false, false, false, subpool);
-	svn_error_t *err = svn_client_copy(&commit_info, srcsvn.utf8(), &rev, destsvn.utf8(), ctx, subpool);
-	if ( err ) {
-		error( KIO::ERR_SLAVE_DEFINED, err->message );
-		svn_pool_destroy (subpool);
-	}
-
-	finished();
-	svn_pool_destroy (subpool);
-}
+// not used, at least for KDevelop
+// void kio_svnProtocol::copy(const KURL & src, const KURL& dest, int /*permissions*/, bool /*overwrite*/) {
+// 	kdDebug(9036) << "kio_svnProtocol::copy() Source : " << src.url() << " Dest : " << dest.url() << endl;
+// 
+// 	apr_pool_t *subpool = svn_pool_create (pool);
+// 	svn_client_commit_info_t *commit_info = NULL;
+// 
+// 	KURL nsrc = src;
+// 	KURL ndest = dest;
+// 	nsrc.setProtocol( chooseProtocol( src.protocol() ) );
+// 	ndest.setProtocol( chooseProtocol( dest.protocol() ) );
+// 	QString srcsvn = nsrc.url();
+// 	QString destsvn = ndest.url();
+// 
+// 	recordCurrentURL( nsrc );
+// 
+// 	//find the requested revision
+// 	svn_opt_revision_t rev;
+// 	int idx = srcsvn.findRev( "?rev=" );
+// 	if ( idx != -1 ) {
+// 		QString revstr = srcsvn.mid( idx+5 );
+// 		kdDebug(9036) << "revision string found " << revstr  << endl;
+// 		if ( revstr == "HEAD" ) {
+// 			rev.kind = svn_opt_revision_head;
+// 			kdDebug(9036) << "revision searched : HEAD" << endl;
+// 		} else {
+// 			rev.kind = svn_opt_revision_number;
+// 			rev.value.number = revstr.toLong();
+// 			kdDebug(9036) << "revision searched : " << rev.value.number << endl;
+// 		}
+// 		srcsvn = srcsvn.left( idx );
+// 		kdDebug(9036) << "new src : " << srcsvn << endl;
+// 	} else {
+// 		kdDebug(9036) << "no revision given. searching HEAD " << endl;
+// 		rev.kind = svn_opt_revision_head;
+// 	}
+// 
+// 	initNotifier(false, false, false, subpool);
+// 	svn_error_t *err = svn_client_copy(&commit_info, srcsvn.utf8(), &rev, destsvn.utf8(), ctx, subpool);
+// 	if ( err ) {
+// 		error( KIO::ERR_SLAVE_DEFINED, err->message );
+// 		svn_pool_destroy (subpool);
+// 	}
+// 
+// 	finished();
+// 	svn_pool_destroy (subpool);
+// }
 
 void kio_svnProtocol::mkdir( const KURL::List& list, int /*permissions*/ ) {
 	kdDebug(9036) << "kio_svnProtocol::mkdir(LIST) : " << list << endl;
@@ -942,6 +943,18 @@ void kio_svnProtocol::special( const QByteArray& data ) {
                 svn_info( pathOrUrl, pegRev, pegRevKind, rev, revKind, recurse );
                 break;
             }
+		case SVN_COPY:
+			{
+				KURL src, dest;
+				int srcRev;
+				QString srcRevKind;
+				stream >> src;
+				stream >> srcRev;
+				stream >> srcRevKind;
+				stream >> dest;
+				svn_copy( src, srcRev, srcRevKind, dest );
+                break;
+			}
 		default:
 			{
 				kdDebug(9036) << "kio_svnProtocol DEFAULT" << endl;
@@ -1556,6 +1569,43 @@ svn_error_t* kio_svnProtocol::infoReceiver( void *baton, const char *path,
     return SVN_NO_ERROR;
 }
 
+void kio_svnProtocol::svn_copy( const KURL &srcUrl, int srcRev, const QString &srcRevKind,
+								const KURL &destUrl )
+{
+	kdDebug(9036) << " kio: svn_copy src: " << srcUrl << " Dest Url: " << destUrl << " revnum: " << srcRev << " revKind: " << srcRevKind << endl;
+	apr_pool_t *subpool = svn_pool_create (pool);
+	svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
+	
+	svn_opt_revision_t rev = createRevision( srcRev, srcRevKind, subpool );
+
+	// TODO more elegant notification mechanism
+	initNotifier(false, false, false, subpool);
+	svn_error_t *err = svn_client_copy2( &commit_info,
+										 srcUrl.pathOrURL().utf8(), &rev,
+										 destUrl.pathOrURL().utf8(),
+										 ctx, subpool);
+	
+	if ( err ) {
+		apr_status_t errcode = err->apr_err;
+		char buf[512];
+		svn_strerror(errcode, buf, 512);
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(buf) );
+		svn_pool_destroy (subpool);
+		return;
+	}
+	
+	if( commit_info ){
+		setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "string",
+					i18n("Copied Revision %1").arg( commit_info->revision) );
+	} else {
+		setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "string",
+					i18n("Copied") );
+	}
+	
+	finished();
+	svn_pool_destroy (subpool);
+}
+
 //change the proto and remove trailing /
 //remove double / also
 QString kio_svnProtocol::makeSvnURL ( const KURL& url ) const {
@@ -1825,6 +1875,7 @@ void kio_svnProtocol::notify(void *baton, const char *path, svn_wc_notify_action
 				userstring = i18n( "A %1" ).arg( path );
 			break;
 		case svn_wc_notify_copy: //copy
+			userstring = i18n( "Copied %1 " ).arg( path );
 			break;
 		case svn_wc_notify_delete: //delete
 			nb->received_some_change = TRUE;
@@ -1998,6 +2049,7 @@ void kio_svnProtocol::notify(void *baton, const char *path, svn_wc_notify_action
 	p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "prop", QString::number( prop_state ));
 	p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "rev", QString::number( revision ));
 	p->setMetaData(QString::number( p->counter() ).rightJustify( 10,'0' )+ "string", userstring );
+	kdDebug(9036) << " kio_svnProtocol::notify() userstring " << userstring << endl;
 	p->incCounter();
 }
 

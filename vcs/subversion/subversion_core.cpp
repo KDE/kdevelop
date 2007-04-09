@@ -431,6 +431,21 @@ void subversionCore::switchRelocate( const KURL &path,
 	// this doesn't contact repository
 }
 
+void subversionCore::svnCopy( const KURL &src, int srcRev, const QString &srcRevKind,
+							  const KURL &dest )
+{
+	KURL servURL = "kdevsvn+svn://blah/";
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	// prepare arguments
+	int cmd = 17;
+	s << cmd << src << srcRev << srcRevKind << dest;
+
+	SimpleJob * job = KIO::special(servURL, parms, false);
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	initProcessDlg( (KIO::Job*)job, src.prettyURL(), dest.prettyURL() );
+}
+
 bool subversionCore::clientInfo( KURL path_or_url, bool recurse, QMap< KURL, SvnInfoHolder> &holderMap )
 {
     KURL servURL = "kdevsvn+svn://blah/";

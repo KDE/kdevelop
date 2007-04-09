@@ -77,7 +77,7 @@ class kio_svnProtocol : public KIO::SlaveBase
 		virtual void mkdir(const KURL& url, int permissions);
 		virtual void mkdir(const KURL::List& list, int permissions);
 		virtual void del( const KURL& url, bool isfile );
-		virtual void copy(const KURL & src, const KURL& dest, int permissions, bool overwrite);
+// 		virtual void copy(const KURL & src, const KURL& dest, int permissions, bool overwrite);
 		virtual void rename(const KURL& src, const KURL& dest, bool overwrite);
 		void checkout( const KURL& repos, const KURL& wc, int revnumber, const QString& revkind );
 		void import( const KURL& repos, const KURL& wc );
@@ -102,6 +102,7 @@ class kio_svnProtocol : public KIO::SlaveBase
 		void wc_status2(const KURL& wc, bool checkRepos=false, bool fullRecurse=true, bool getAll=true, bool noIgnore=false, int revnumber=-1, const QString& revkind="WORKING");
         void svn_info( KURL pathOrUrl, int pegRev, QString pegRevKind, int rev, QString revKind, bool recurse );
         static svn_error_t* infoReceiver( void *baton, const char *path, const svn_info_t *info, apr_pool_t *pool);
+		void svn_copy( const KURL &srcUrl, int srcRev, const QString &srcRevKind, const KURL &destUrl );
 
 		static svn_error_t* checkAuth(svn_auth_cred_simple_t **cred, void *baton, const char *realm, const char *username, svn_boolean_t may_save, apr_pool_t *pool);
 		static svn_error_t *trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **cred_p, void *, const char *realm, apr_uint32_t failures, const svn_auth_ssl_server_cert_info_t *cert_info, svn_boolean_t may_save, apr_pool_t *pool);
@@ -143,6 +144,7 @@ class kio_svnProtocol : public KIO::SlaveBase
 			SVN_BLAME=14,
             SVN_INFO = 15,
 			SVN_SWITCH_RELOCATE = 16,
+			SVN_COPY = 17,
 			SVN_COMMIT_2=103,
 			SVN_STATUS_2=109
                     

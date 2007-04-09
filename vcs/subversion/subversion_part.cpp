@@ -36,6 +36,7 @@
 #include "svn_fileselectdlg_commit.h"
 #include "svn_logviewwidget.h"
 #include "svn_switchwidget.h"
+#include "svn_copywidget.h"
 
 #include "urlutil.h"
 #include <qvbox.h>
@@ -148,6 +149,8 @@ void subversionPart::setupActions() {
 	actionResolve->setWhatsThis( i18n("<b>Resolve the conflicting state</b><p>Remove the conflict state that can be set on a file after a merge failed.") );
 	actionSwitch = new KAction( i18n("Switch this working copy to URL.."), 0,
 			this, SLOT(slotSwitch()), actionCollection(), "subversion_switch" );
+	actionCopy = new KAction( i18n("Copy this working copy to URL.."), 0,
+								this, SLOT(slotCopy()), actionCollection(), "subversion_copy" );
 }
 
 QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
@@ -236,6 +239,8 @@ if(!project())
 		subMenu->setWhatsThis(id, i18n("<b>Resolve</b><p>Resolve conflicting state.") );
 		id = subMenu->insertItem( actionSwitch->text(), this, SLOT(slotSwitch()) );
 		subMenu->setWhatsThis(id, i18n("<b>Switch</b><p>Switch working tree.") );
+		id = subMenu->insertItem( actionCopy->text(), this, SLOT(slotCopy()) );
+		subMenu->setWhatsThis(id, i18n("<b>Copy</b><p>Copy from/between path/URLs") );
 
 		/*
 		subMenu->insertSeparator();
@@ -322,6 +327,41 @@ void subversionPart::slotSwitch()
 	else
 		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
 							i18n("Fail to conduct subversion switch. No action was selected") );
+}
+
+void subversionPart::slotCopy()
+{
+	// error check
+	if( m_urls.count() > 1 ){
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							 i18n("Please select only one item for subversion switch") );
+		return;
+	}
+	if( m_urls.count() < 1 ) return;
+
+	// retrieve repository info from local-copy metadata which will be displayed in dialog box
+	KURL wcPath = m_urls.first();
+	QMap< KURL, SvnGlobal::SvnInfoHolder> holderMap;
+	SvnGlobal::SvnInfoHolder holder;
+	m_impl->clientInfo( wcPath, false, holderMap );
+	QValueList< SvnGlobal::SvnInfoHolder > holderList = holderMap.values();
+	holder = holderList.first();
+	// start input dialog
+	SvnCopyDialog dlg( wcPath.prettyURL(),
+					   &holder,
+					   (QWidget*)project()->mainWindow()->main());
+	
+	if( dlg.exec() != QDialog::Accepted )
+		return;
+	// retrieve user input
+	KURL srcUrl = dlg.sourceUrl();
+    int rev = dlg.revision();
+    QString revKind = dlg.revKind();
+    KURL dest = dlg.destUrl();
+
+	kdDebug(9036) << " SRC: " << srcUrl << " DEST: " << dest << " Revnum: " << rev << " RevKind: " << revKind << endl;
+
+	m_impl->svnCopy( srcUrl, rev, revKind, dest );
 }
 
 void subversionPart::slotActionCommit() {
