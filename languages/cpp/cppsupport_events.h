@@ -28,6 +28,7 @@ enum
     Event_FileParsed = QEvent::User + 1000
 };
 
+
 class FileParsedEvent: public QCustomEvent
 {
 public:
@@ -40,6 +41,7 @@ public:
 		{
 			Problem p = *it;
 			m_problems.append( Problem( deepCopy( p.text() ), p.line(), p.column(), p.level() ) );
+  		    m_problems.back().setFileName( deepCopy( p.fileName() ) );
 			++it;
 		}
 	}
