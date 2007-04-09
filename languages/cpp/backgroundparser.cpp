@@ -365,15 +365,15 @@ QValueList<Problem> cloneProblemList( const QValueList<Problem>& list ) {
 void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
 	ParsedFilePointer translationUnit = m_driver->takeTranslationUnit( fileName.fileName() );
 	
+	if ( m_lock )
+		m_mutex.lock();
+	
 	Unit* unit = new Unit;
 	unit->fileName = fileName.fileName();
 	unit->translationUnit = translationUnit;
 	unit->problems = cloneProblemList( m_driver->problems( fileName.fileName() ) );
 	
 	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() ) ->setReadFromDisk( false );
-	
-	if ( m_lock )
-		m_mutex.lock();
 	
 	if ( m_unitDict.find( fileName.fileName() ) != m_unitDict.end() )
 	{
@@ -385,15 +385,15 @@ void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
 	
 	m_unitDict.insert( fileName.fileName(), unit );
 	
-	if ( m_lock )
-		m_mutex.unlock();
-	
 	KApplication::postEvent( m_cppSupport, new FileParsedEvent( fileName.fileName(), unit->problems, m_readFromDisk ) );
 	
 	m_currentFile = QString::null;
 	
 	if ( m_fileList->isEmpty() )
 		m_isEmpty.wakeAll();	
+
+	if ( m_lock )
+		m_mutex.unlock();
 }
 
 Unit* BackgroundParser::findUnit( const QString& fileName )

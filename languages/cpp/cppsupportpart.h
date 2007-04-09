@@ -262,8 +262,6 @@ public:
     bool isQueued( const QString& file ) const;
     bool switchHeaderImpl( const QString& file, int line, int col, bool scrollOnly = false );
 
-    QStringList getIncludePath() const;
-
     const Driver* driver() const;
 
     Driver* driver();
