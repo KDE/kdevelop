@@ -50,7 +50,7 @@ using namespace std;
 #endif
 
 ///After how many seconds should we retry?
-#define CACHE_FAIL_FOR_SECONDS 120
+#define CACHE_FAIL_FOR_SECONDS 200
 
 using namespace CppTools;
 
@@ -257,7 +257,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
         return ret;
       } else {
         //We have a cached failed result. We should use that for some time but then try again. Return the failed result if: ( there were too many tries within this folder OR this file was already tried ) AND The last tries have not expired yet
-        if( ((*it).failedFiles.size() > 10 || (*it).failedFiles.find( file ) != (*it).failedFiles.end()) && (*it).failTime.secsTo( QDateTime::currentDateTime() ) < CACHE_FAIL_FOR_SECONDS ) {
+        if( /*((*it).failedFiles.size() > 3 || (*it).failedFiles.find( file ) != (*it).failedFiles.end()) &&*/ (*it).failTime.secsTo( QDateTime::currentDateTime() ) < CACHE_FAIL_FOR_SECONDS ) {
           PathResolutionResult ret(true); //Fake that the result is ok
           ret.path = (*it).path;
           return ret;
@@ -457,7 +457,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   }
 
   ///STEP 2: Search the output for include-paths
-  QRegExp validRx( "\\b([cg]\\+\\+|gcc)\\s" );
+  QRegExp validRx( "\\b([cg]\\+\\+|gcc)" );
   ///@todo fix this regular expression(it must not break on escaped spaces)
   QRegExp pathEndRx( "\\s");//( [^\\](\\\\\\\\)*)[\\s]" ); ///Regular expression to find the end of an include-path without triggering at an escaped white-space
   if( validRx.search( fullOutput ) == -1 )
