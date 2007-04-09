@@ -360,7 +360,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
             QString textToInsert;
 
-            m_endPtr = offset( currentPosition() + m.body().length() );
+            setEndPtr( offset( currentPosition() + m.body().length() ) );
+            
             while( currentChar() ){
 
                 readWhiteSpaces();
@@ -397,11 +398,11 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                     textToInsert.append( str.str() + QString::fromLatin1(" ") );
                 }
             }
-
+        
 #if defined( KDEVELOP_BGPARSER )
 	    qthread_yield();
 #endif
-            insertCurrent( textToInsert );
+        insertCurrent( textToInsert ); //also corrects the end-pointer
 
             d->endScope();
             m_preprocessorEnabled = preproc;
