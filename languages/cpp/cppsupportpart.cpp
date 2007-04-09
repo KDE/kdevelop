@@ -105,8 +105,6 @@
 #include <domutil.h>
 #include <config.h>
 
-
-///Currently activating this leads to mysterious crashes, but on long-term it's better
 const bool alwaysParseInBackground = true;
 
 enum { KDEV_DB_VERSION = 19 };

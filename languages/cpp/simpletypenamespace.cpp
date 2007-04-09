@@ -17,8 +17,9 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "safetycounter.h"
 
-//Whether additional output about imported and not imported namespaces should be printen
-//#define IMPORT_DEBUG
+//#define PHYSICAL_IMPORT
+//Necessary, because else nested members cannot search the correct scope
+#define PHYSICALLY_IMPORT_NAMESPACES
 
 extern SafetyCounter safetyCounter;
 
@@ -164,6 +165,8 @@ SimpleTypeImpl::MemberInfo SimpleTypeNamespace::findMember( TypeDesc name, Membe
           mem.setBuilt( b );
         }
 #else
+        if( mem.memberType == MemberInfo::NestedType )
+          chooseSpecialization( mem );
         TypePointer b = mem.build();
         if( b && b->parent() && b->parent()->masterProxy().data() == this )
           b->setParent( this );
@@ -296,7 +299,7 @@ std::set<size_t> SimpleTypeNamespace::updateAliases( const IncludeFiles& files/*
             break;
           }
         }
-#ifdef PHYSICAL_IMPORT
+#ifdef PHYSICALLY_IMPORT_NAMESPACES
         if ( desc.resolved()->masterProxy().data() != this ) {
           desc.setResolved( desc.resolved()->clone() ); //expensive, cache is not shared
           desc.resolved()->setMasterProxy( this ); //Possible solution: don't use this, simply set the parents of all found members correctly
@@ -352,7 +355,7 @@ void SimpleTypeNamespace::addImport( const TypeDesc& import, const IncludeFiles&
   invalidateCache();
   TypeDesc d = import;
   if ( d.resolved() ) {
-    #ifdef PHYSICAL_IMPORT
+    #ifdef PHYSICALLY_IMPORT_NAMESPACES
 
     if( d.resolved()->masterProxy().data() != this ) {
       d.setResolved( d.resolved()->clone() ); //Expensive because of lost caching, think about how necessary this is
