@@ -18,16 +18,26 @@ IF (UNIX)
         )
   ENDMACRO(FIND_SUB_LIB)
 
+  FIND_PROGRAM(SVN_ROOT NAMES svn)
+  IF (SVN_ROOT)
+    STRING(REGEX REPLACE "^(.*)/bin/svn$" "\\1" SVN_ROOT "${SVN_ROOT}")
+  ENDIF (SVN_ROOT)
+
   IF (SUBVERSION_INSTALL_PATH)
-    FIND_PATH(SUBVERSION_INCLUDE_DIR svn_client.h
+    FIND_PATH(SUBVERSION_INCLUDE_DIR subversion-1/svn_client.h
         PATHS
-        ${SUBVERSION_INSTALL_PATH}/include/subversion-1
+        ${SUBVERSION_INSTALL_PATH}/include
         NO_DEFAULT_PATH
     )
   ENDIF (SUBVERSION_INSTALL_PATH)
-  FIND_PATH(SUBVERSION_INCLUDE_DIR svn_client.h
-        /usr/include/subversion-1
-        /usr/local/include/subversion-1)
+  FIND_PATH(SUBVERSION_INCLUDE_DIR subversion-1/svn_client.h
+        ${SVN_ROOT}/include
+        /usr/include
+        /usr/local/include
+  )
+
+  # looks like some headers want <header.h> and some want <subversion-1/header.h>
+  SET(SUBVERSION_INCLUDE_DIR "${SUBVERSION_INCLUDE_DIR}" "${SUBVERSION_INCLUDE_DIR}/subversion-1")
 
   FIND_SUB_LIB(SUBVERSION_CLIENTLIB svn_client-1)
   FIND_SUB_LIB(SUBVERSION_REPOSITORYLIB svn_repos-1)
