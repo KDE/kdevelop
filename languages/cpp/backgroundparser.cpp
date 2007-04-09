@@ -354,13 +354,21 @@ void BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, bo
 	// translation unit.
 }
 
+QValueList<Problem> cloneProblemList( const QValueList<Problem>& list ) {
+	QValueList<Problem> ret;
+	for( QValueList<Problem>::const_iterator it = list.begin(); it != list.end(); ++it ) {
+		ret << Problem( *it, true );
+	}
+	return ret;
+}
+
 void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
 	ParsedFilePointer translationUnit = m_driver->takeTranslationUnit( fileName.fileName() );
 	
 	Unit* unit = new Unit;
 	unit->fileName = fileName.fileName();
 	unit->translationUnit = translationUnit;
-	unit->problems = m_driver->problems( fileName.fileName() );
+	unit->problems = cloneProblemList( m_driver->problems( fileName.fileName() ) );
 	
 	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() ) ->setReadFromDisk( false );
 	
