@@ -23,6 +23,7 @@ Description[ms]=IOslave Subversion untuk KDevelop
 Description[nds]=KDevelop-In-/Utgaavmoduul för Subversion
 Description[pt]='Ioslave' do Subversion para o KDevelop
 Description[pt_BR]='Ioslave' do Subversion para o KDevelop
+Description[sk]=Subversion ioslave pre KDevelop
 Description[sv]=Subversion I/O-slav för KDevelop
 Description[zh_TW]=KDevelop 的 Subversion ioslave
 maxInstances=5
