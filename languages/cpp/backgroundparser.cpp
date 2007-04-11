@@ -365,13 +365,18 @@ QValueList<Problem> cloneProblemList( const QValueList<Problem>& list ) {
 
 void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
 	ParsedFilePointer translationUnitUnsafe = m_driver->takeTranslationUnit( fileName.fileName() );
-
+	ParsedFilePointer translationUnit;
 	//Since the lexer-cache keeps many QStrings like macro-names used in the background, everything must be copied here. The safest solution is just
 	//serializing and deserializing the whole thing(the serialization does not respect the AST, but that can be copied later because that's safe)
 	QMemArray<char> data;
-	QDataStream stream( data, IO_WriteOnly );
-	translationUnitUnsafe->write( stream );
-	ParsedFilePointer translationUnit = new ParsedFile( data );
+	{
+	  QDataStream stream( data, IO_WriteOnly );
+	  translationUnitUnsafe->write( stream );
+	}
+	{
+	  QDataStream stream( data, IO_ReadOnly );
+	  translationUnit = new ParsedFile( stream );
+	}
 
 	translationUnit->setTranslationUnit( translationUnitUnsafe->operator TranslationUnitAST *() ); //Copy the AST, doing that is thread-safe
 	
