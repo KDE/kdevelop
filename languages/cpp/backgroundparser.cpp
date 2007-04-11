@@ -36,6 +36,7 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <list>
+#include <qdatastream.h>
 
 
 class BackgroundKDevDriver : public KDevDriver {
@@ -363,7 +364,16 @@ QValueList<Problem> cloneProblemList( const QValueList<Problem>& list ) {
 }
 
 void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
-	ParsedFilePointer translationUnit = m_driver->takeTranslationUnit( fileName.fileName() );
+	ParsedFilePointer translationUnitUnsafe = m_driver->takeTranslationUnit( fileName.fileName() );
+
+	//Since the lexer-cache keeps many QStrings like macro-names used in the background, everything must be copied here. The safest solution is just
+	//serializing and deserializing the whole thing(the serialization does not respect the AST, but that can be copied later because that's safe)
+	QMemArray<char> data;
+	QDataStream stream( data, IO_WriteOnly );
+	translationUnitUnsafe->write( stream );
+	ParsedFilePointer translationUnit = new ParsedFile( data );
+
+	translationUnit->setTranslationUnit( translationUnitUnsafe->operator TranslationUnitAST *() ); //Copy the AST, doing that is thread-safe
 	
 	if ( m_lock )
 		m_mutex.lock();
