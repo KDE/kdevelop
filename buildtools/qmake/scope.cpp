@@ -883,7 +883,7 @@ void Scope::init()
         {
             QMake::IncludeAST * i = static_cast<QMake::IncludeAST*>( *it );
             QString filename = i->projectName;
-            if( i->projectName.startsWith("$") )
+            if( i->projectName.stripWhiteSpace().startsWith("$") )
             {
                 filename = resolveVariables(i->projectName, *it);
             }
@@ -1249,6 +1249,23 @@ QStringList Scope::resolveVariables( const QStringList& values, QMake::AST* stop
                     variables[re.cap(1)] = resolveVariables( variableValues( re.cap(1), stopHere ) );
                 pos += re.matchedLength();
             }
+        }
+        re = QRegExp("\\$\\$\\(([^\\)\\}]*)\\)");
+        pos = 0;
+        QMap<QString, QString> envvars;
+        while( pos >= 0 )
+        {
+            pos = re.search( (*it), pos );
+            if( pos > -1 )
+            {
+                if( !envvars.contains( re.cap(1) ) && ::getenv( re.cap(1).local8Bit() ) != 0 )
+                    envvars[re.cap(1)] = QString::fromLocal8Bit(::getenv( re.cap(1).local8Bit() ) );
+                pos += re.matchedLength();
+            }
+        }
+        for( QMap<QString, QString>::const_iterator it2 = envvars.begin(); it2 != envvars.end(); ++it2 )
+        {
+            (*it).replace("$$("+it2.key()+")", it2.data() );
         }
         for( QMap<QString, QStringList>::const_iterator it2 = variables.begin(); it2 != variables.end(); ++it2 )
         {
