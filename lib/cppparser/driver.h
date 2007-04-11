@@ -236,7 +236,7 @@ class Driver {
      * Indicates that the file has been parsed
      * @param fileName The name of the file parsed. It is legal to create a ParsedFilePointer on the given item.
      */
-    virtual void fileParsed( const ParsedFile& fileName );
+    virtual void fileParsed( ParsedFile& fileName );
 
     /**
      * Removes the file specified by @p fileName from the driver

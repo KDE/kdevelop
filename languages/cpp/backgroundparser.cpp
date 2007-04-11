@@ -43,7 +43,7 @@ class BackgroundKDevDriver : public KDevDriver {
 public:
 	BackgroundKDevDriver( CppSupportPart* cppSupport, BackgroundParser* bp ) : KDevDriver( cppSupport, false ), m_backgroundParser(bp) {
 	}
-	virtual void fileParsed( const ParsedFile& fileName );
+	virtual void fileParsed( ParsedFile& fileName );
 private:
 	BackgroundParser* m_backgroundParser;
 };
@@ -338,7 +338,7 @@ void BackgroundParser::removeFile( const QString& fileName )
 		m_isEmpty.wakeAll();
 }
 
-void BackgroundKDevDriver::fileParsed( const ParsedFile& fileName ) {
+void BackgroundKDevDriver::fileParsed( ParsedFile& fileName ) {
 	m_backgroundParser->fileParsed( fileName );
 }
 
@@ -363,8 +363,9 @@ QValueList<Problem> cloneProblemList( const QValueList<Problem>& list ) {
 	return ret;
 }
 
-void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
-	ParsedFilePointer translationUnitUnsafe = m_driver->takeTranslationUnit( fileName.fileName() );
+void BackgroundParser::fileParsed( ParsedFile& file ) {
+	ParsedFilePointer translationUnitUnsafe = m_driver->takeTranslationUnit( file.fileName() );
+	//now file and translationUnitUnsafe are the same
 	ParsedFilePointer translationUnit;
 	//Since the lexer-cache keeps many QStrings like macro-names used in the background, everything must be copied here. The safest solution is just
 	//serializing and deserializing the whole thing(the serialization does not respect the AST, but that can be copied later because that's safe)
@@ -379,28 +380,29 @@ void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
 	}
 
 	translationUnit->setTranslationUnit( translationUnitUnsafe->operator TranslationUnitAST *() ); //Copy the AST, doing that is thread-safe
-	
+	translationUnitUnsafe->setTranslationUnit( 0 ); //Move the AST completely out of this thread's scope. Else it might crash on dual-core machines
+	file.setTranslationUnit(0); //just to be sure, set to zero on both
 	if ( m_lock )
 		m_mutex.lock();
 	
 	Unit* unit = new Unit;
-	unit->fileName = fileName.fileName();
+	unit->fileName = file.fileName();
 	unit->translationUnit = translationUnit;
-	unit->problems = cloneProblemList( m_driver->problems( fileName.fileName() ) );
+	unit->problems = cloneProblemList( m_driver->problems( file.fileName() ) );
 	
 	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() ) ->setReadFromDisk( false );
 	
-	if ( m_unitDict.find( fileName.fileName() ) != m_unitDict.end() )
+	if ( m_unitDict.find( file.fileName() ) != m_unitDict.end() )
 	{
-		Unit * u = m_unitDict[ fileName.fileName() ];
-		m_unitDict.remove( fileName.fileName() );
+		Unit * u = m_unitDict[ file.fileName() ];
+		m_unitDict.remove( file.fileName() );
 		delete( u );
 		u = 0;
 	}
 	
-	m_unitDict.insert( fileName.fileName(), unit );
+	m_unitDict.insert( file.fileName(), unit );
 	
-	KApplication::postEvent( m_cppSupport, new FileParsedEvent( fileName.fileName(), unit->problems, m_readFromDisk ) );
+	KApplication::postEvent( m_cppSupport, new FileParsedEvent( file.fileName(), unit->problems, m_readFromDisk ) );
 	
 	m_currentFile = QString::null;
 	

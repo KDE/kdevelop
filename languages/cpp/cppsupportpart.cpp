@@ -122,7 +122,7 @@ public:
 	CppDriver( CppSupportPart* cppSupport ) : KDevDriver( cppSupport, true )
 	{}
 
-	void fileParsed( const ParsedFile& fileName )
+	void fileParsed( ParsedFile& fileName )
 	{
 		//kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
 

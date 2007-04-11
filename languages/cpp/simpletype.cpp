@@ -563,7 +563,7 @@ void SimpleTypeImpl::chooseSpecialization( MemberInfo& member ) {
   if ( m_masterProxy )
     t = m_masterProxy;
 
-  QValueList<TypePointer> classes = t->getMemberClasses( type->desc().name() );
+  QValueList<TypePointer> classes = t->getMemberClasses( type->desc() );
 
   //Find the specialization that fits the given template-parameters the best
 

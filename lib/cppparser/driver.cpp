@@ -718,7 +718,7 @@ bool Driver::shouldParseIncludedFile( const ParsedFilePointer& /*file*/) {
 
 void Driver::setupPreProcessor() {}
 
-void Driver::fileParsed( const ParsedFile & fileName ) {
+void Driver::fileParsed( ParsedFile & fileName ) {
   Q_UNUSED( fileName );
 }
 

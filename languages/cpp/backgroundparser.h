@@ -95,7 +95,7 @@ public:
 
 protected:
     friend class BackgroundKDevDriver;
-    void fileParsed( const ParsedFile& fileName );
+    void fileParsed( ParsedFile& fileName );
 	Unit* findUnit( const QString& fileName );
 	void parseFile( const QString& fileName, bool readFromDisk, bool lock = false )
 		;

@@ -71,7 +71,7 @@ public:
 	}
 #endif
 
-	void fileParsed( const ParsedFile& ast )
+	void fileParsed( ParsedFile& ast )
 	{
 		/// @todo increment progress
 
