@@ -41,7 +41,7 @@ void QMakeDefaultOpts::readVariables( const QString& qmake, const QString& projd
         proc << makefile.name();
         proc << qmakefile.name();
         kdDebug(9024) << "Executing:" << proc.args() << endl;
-        proc.start( KProcess::NotifyOnExit, KProcess::Stderr );
+        proc.start( KProcess::NotifyOnExit, KProcess::Communication(KProcess::MergedStderr | KProcess::Stdout) );
         if( !proc.isRunning() && !proc.normalExit() )
         {
             kdDebug(9024) << "Couldn't execute qmake: " << proc.args() << endl;
@@ -53,7 +53,7 @@ void QMakeDefaultOpts::readVariables( const QString& qmake, const QString& projd
         {
             makefile.unlink();
             qmakefile.unlink();
-            QStringList lines = QStringList::split( "\n", proc.stdErr() );
+            QStringList lines = QStringList::split( "\n", proc.stdOut() );
             for ( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it)
             {
                 QString line = *it;
