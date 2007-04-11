@@ -294,9 +294,6 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	m_fixmeList.removeAllItems( relFileName );
 	m_todoList.removeAllItems( relFileName );
     
-	if ( filename == m_fileName )
-		m_currentList->clear();
-	
 	if( m_markIface )
 	{
 		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
@@ -307,6 +304,7 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 			++it;
 		}
 	}
+  m_initCurrentTimer->start(500, true);
 }
 
 void ProblemReporter::initCurrentList()

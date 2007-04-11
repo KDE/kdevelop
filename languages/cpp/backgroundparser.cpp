@@ -389,11 +389,11 @@ void BackgroundParser::fileParsed( const ParsedFile& fileName ) {
 	
 	m_currentFile = QString::null;
 	
-	if ( m_fileList->isEmpty() )
+    if ( m_lock )
+        m_mutex.unlock();
+	
+  if ( m_fileList->isEmpty() )
 		m_isEmpty.wakeAll();	
-
-	if ( m_lock )
-		m_mutex.unlock();
 }
 
 Unit* BackgroundParser::findUnit( const QString& fileName )
