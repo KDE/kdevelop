@@ -60,6 +60,10 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
             program = buildDirectory + "/" + program;
         mainprogram_edit->setURL(program);
         mainprogram_edit->fileDialog()->setURL( program );
+    }else
+    {
+        mainprogram_edit->setURL(QString());
+        mainprogram_edit->fileDialog()->setURL(QString());
     }
 
     cwd_edit->completionObject()->setMode(KURLCompletion::DirCompletion);
@@ -72,6 +76,10 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     {
         cwd_edit->setURL(DomUtil::readEntry(dom, configGroup + "/run/globalcwd"));
         cwd_edit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry(dom, configGroup + "/run/globalcwd") ) );
+    }else
+    {
+        cwd_edit->setURL(QString());
+        cwd_edit->fileDialog()->setURL(QString());
     }
 
     if( configGroup == "/kdevautoproject" || configGroup == "/kdevtrollproject" )

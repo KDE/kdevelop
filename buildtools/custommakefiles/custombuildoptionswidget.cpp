@@ -15,6 +15,7 @@
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kurlcompletion.h>
+#include <kfiledialog.h>
 #include <qradiobutton.h>
 #include <qtabwidget.h>
 #include "domutil.h"
@@ -28,8 +29,16 @@ CustomBuildOptionsWidget::CustomBuildOptionsWidget(QDomDocument &dom,
     ant_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant");
     other_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "other");
     if( !DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir").isEmpty()
-        && QFileInfo( DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir") ).exists() )
+            && QFileInfo( DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir") ).exists() )
+    {
         builddir_edit->setURL(DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir"));
+        builddir_edit->fileDialog()->setURL( DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir") );
+    }
+    else
+    {
+        builddir_edit->setURL( QString() );
+        builddir_edit->fileDialog()->setURL( QString() );
+    }
     builddir_edit->completionObject()->setMode(KURLCompletion::DirCompletion);
     builddir_edit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
