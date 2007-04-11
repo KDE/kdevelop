@@ -1,3 +1,6 @@
+add_subdirectory(cvs)
+
+
 include(FindSubversionLibrary)
 
 if(SUBVERSIONFOUND)

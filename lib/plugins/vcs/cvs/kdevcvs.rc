@@ -1,0 +1,15 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevCvs" version="1">
+<MenuBar>
+  <Menu name="CVS"><Text>&amp;CVS</Text>
+    <Action name="cvs_log" />
+    <Action name="cvs_diff" />
+    <Action name="cvs_edit" />
+    <Action name="cvs_unedit" />
+    <Action name="cvs_editors" />
+    <Action name="cvs_add" />
+    <Action name="cvs_commit" />
+    <Action name="cvs_update" />
+  </Menu>
+</MenuBar>
+</kpartgui>

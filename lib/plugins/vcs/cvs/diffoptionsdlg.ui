@@ -1,0 +1,251 @@
+<ui version="4.0" >
+ <class>DiffOptionsDlgBase</class>
+ <widget class="QDialog" name="DiffOptionsDlgBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>246</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Choose Revisions to Diff</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QLabel" name="labelUrl" >
+     <property name="text" >
+      <string>URL</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Q3ButtonGroup" name="buttonGroup1" >
+     <property name="title" >
+      <string>Build Difference Between</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="2" column="0" >
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QRadioButton" name="diffLocalOtherRadio" >
+          <property name="text" >
+           <string>Local copy and an arbitrary &amp;revision:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KLineEdit" name="revOtherEdit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QRadioButton" name="diffArbitraryRevRadio" >
+        <property name="text" >
+         <string>&amp;Two arbitrary revisions/tags:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" >
+       <layout class="QGridLayout" >
+        <item row="0" column="0" >
+         <widget class="QLabel" name="textLabel1" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>Revision A:</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="KLineEdit" name="revbEdit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="toolTip" >
+           <string>Second revision to compare (leave empty to diff against HEAD)</string>
+          </property>
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="KLineEdit" name="revaEdit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="toolTip" >
+           <string>First revision to compare</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QLabel" name="textLabel2" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>Revision B:</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="diffLocalHeadRadio" >
+        <property name="text" >
+         <string>Local cop&amp;y and HEAD</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QRadioButton" name="diffLocalBaseRadio" >
+        <property name="text" >
+         <string>Local copy a&amp;nd BASE</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Q3ButtonGroup</class>
+   <extends>Q3GroupBox</extends>
+   <header>Qt3Support/Q3ButtonGroup</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>diffLocalBaseRadio</tabstop>
+  <tabstop>diffLocalHeadRadio</tabstop>
+  <tabstop>diffLocalOtherRadio</tabstop>
+  <tabstop>revOtherEdit</tabstop>
+  <tabstop>diffArbitraryRevRadio</tabstop>
+  <tabstop>revaEdit</tabstop>
+  <tabstop>revbEdit</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>DiffOptionsDlgBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>257</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>DiffOptionsDlgBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>325</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>diffLocalOtherRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>revOtherEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>97</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>230</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>diffArbitraryRevRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>revaEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>132</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>148</x>
+     <y>153</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>diffArbitraryRevRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>revbEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>227</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>249</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
