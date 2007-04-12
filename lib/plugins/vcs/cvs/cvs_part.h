@@ -32,7 +32,7 @@ class CvsProxy;
 class CvsPart: public KDevelop::IPlugin , public KDevelop::IVersionControl
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IVersionControl );
+    Q_INTERFACES( KDevelop::IVersionControl )
 
 friend class CvsProxy;
 
