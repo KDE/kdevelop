@@ -1,5 +1,4 @@
-#add_subdirectory(cvs)
-
+add_subdirectory(cvs)
 
 include(FindSubversionLibrary)
 
