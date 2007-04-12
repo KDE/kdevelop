@@ -9,39 +9,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "updateoptionsdlg.h"
+#ifndef COMMITDIALOG_H
+#define COMMITDIALOG_H
 
-#include <KLineEdit>
-#include <QCheckBox>
-#include <QRadioButton>
+#include <QDialog>
+#include <KTextEdit>
 
-UpdateOptionsDlg::UpdateOptionsDlg( QWidget* parent)
-    : QDialog(parent), Ui::UpdateOptionsDlgBase()
+#include "ui_commitdialog.h"
+
+/**
+ * Allows to enter text which can them be used as
+ * parameter for @code cvs commit @endcode
+ * @author Robert Gruber <rgruber@users.sourceforge.net>
+ */
+class CommitDialog : public QDialog, private Ui::CommitDialogBase
 {
-    Ui::UpdateOptionsDlgBase::setupUi(this);
-}
+Q_OBJECT
+public:
+    CommitDialog(QDialog *parent = 0);
+    virtual ~CommitDialog();
 
-UpdateOptionsDlg::~UpdateOptionsDlg()
-{
-}
+    /**
+     * @return The text entered by the user
+     */
+    QString message() { return textedit->toPlainText(); }
+};
 
-QString UpdateOptionsDlg::options() const
-{
-    QString options;
-
-    if (revertCheck->isChecked()) {
-        options += " -C ";
-    }
-
-    if (revisionRadio->isChecked()) {
-        options += " -r"+revisionEdit->text();
-    } else if (dateRadio->isChecked()) {
-        options += " -D"+dateEdit->text();
-    }
-
-    return options;
-}
-
-#include "updateoptionsdlg.moc"
+#endif
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
-

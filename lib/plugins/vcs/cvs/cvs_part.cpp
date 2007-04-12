@@ -27,11 +27,11 @@
 #include "cvsmainview.h"
 #include "cvsproxy.h"
 #include "cvsjob.h"
-#include "diffoptionsdlg.h"
+#include "diffoptionsdialog.h"
 #include "editorsview.h"
 #include "logview.h"
-#include "commitdlg.h"
-#include "updateoptionsdlg.h"
+#include "commitdialog.h"
+#include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
 
 typedef KGenericFactory<CvsPart> KDevCvsFactory;
@@ -284,7 +284,7 @@ void CvsPart::logview(const KUrl & url)
 
 void CvsPart::update(const KUrl::List & urls)
 {
-    UpdateOptionsDlg dlg;
+    UpdateOptionsDialog dlg;
     if (dlg.exec() == QDialog::Accepted) {
         ///@todo find a common base directory for the files
         QFileInfo info( urls[0].path() );
@@ -300,7 +300,7 @@ void CvsPart::update(const KUrl::List & urls)
 
 void CvsPart::commit(const KUrl::List & urls)
 {
-    CommitDlg dlg;
+    CommitDialog dlg;
     if (dlg.exec() == QDialog::Accepted) {
         ///@todo find a common base directory for the files
         QFileInfo info( urls[0].path() );
@@ -341,7 +341,7 @@ void CvsPart::add(const KUrl::List & urls)
 
 void CvsPart::diff(const KUrl& url)
 {
-    DiffOptionsDlg dlg(0, url);
+    DiffOptionsDialog dlg(0, url);
 
     if (dlg.exec() == QDialog::Accepted) {
         CvsJob* job = d->m_proxy->diff( url, "", dlg.revA(), dlg.revB() );

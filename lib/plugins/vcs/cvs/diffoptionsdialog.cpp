@@ -9,22 +9,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "diffoptionsdlg.h"
+#include "diffoptionsdialog.h"
 
 
-DiffOptionsDlg::DiffOptionsDlg(QWidget *parent, const KUrl& url)
-    : QDialog(parent), Ui::DiffOptionsDlgBase(), m_url(url)
+DiffOptionsDialog::DiffOptionsDialog(QWidget *parent, const KUrl& url)
+    : QDialog(parent), Ui::DiffOptionsDialogBase(), m_url(url)
 {
-    Ui::DiffOptionsDlgBase::setupUi(this);
+    Ui::DiffOptionsDialogBase::setupUi(this);
 
     labelUrl->setText( url.path() );
 }
 
-DiffOptionsDlg::~DiffOptionsDlg()
+DiffOptionsDialog::~DiffOptionsDialog()
 {
 }
 
-DiffOptionsDlg::DiffType DiffOptionsDlg::requestedDiff() const
+DiffOptionsDialog::DiffType DiffOptionsDialog::requestedDiff() const
 {
     if (diffArbitraryRevRadio->isChecked())
         return diffArbitrary;
@@ -36,7 +36,7 @@ DiffOptionsDlg::DiffType DiffOptionsDlg::requestedDiff() const
         return diffLocalHEAD;
 }
 
-QString DiffOptionsDlg::revA() const
+QString DiffOptionsDialog::revA() const
 {
     if (requestedDiff() == diffArbitrary)
         return revaEdit->text();
@@ -48,7 +48,7 @@ QString DiffOptionsDlg::revA() const
         return QString::null;
 }
 
-QString DiffOptionsDlg::revB() const
+QString DiffOptionsDialog::revB() const
 {
     if (requestedDiff())
         return this->revbEdit->text();
@@ -56,5 +56,5 @@ QString DiffOptionsDlg::revB() const
         return QString::null;
 }
 
-#include "diffoptionsdlg.moc"
+#include "diffoptionsdialog.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

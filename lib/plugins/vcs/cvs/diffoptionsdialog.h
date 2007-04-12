@@ -9,30 +9,43 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef COMMITDLG_H
-#define COMMITDLG_H
+#ifndef DIFFOPTIONSDIALOG_H
+#define DIFFOPTIONSDIALOG_H
 
 #include <QDialog>
-#include <KTextEdit>
+#include <KUrl>
 
-#include "ui_commitdlg.h"
+#include "ui_diffoptionsdialog.h"
 
 /**
- * Allows to enter text which can them be used as
- * parameter for @code cvs commit @endcode
+ * Allows the user to define which revisions to pass to @code cvs diff @endcode
+ * Calling revA() and revB() returns the revisions the user wants to diff.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CommitDlg : public QDialog, private Ui::CommitDlgBase
+class DiffOptionsDialog : public QDialog, private Ui::DiffOptionsDialogBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    CommitDlg(QDialog *parent = 0);
-    virtual ~CommitDlg();
+    DiffOptionsDialog(QWidget *parent, const KUrl& url);
+    virtual ~DiffOptionsDialog();
 
     /**
-     * @return The text entered by the user
+     * @return The first diffing revision, branchname or tag
+     * @note Can also be QString::null if the user requested a diff agains BASE
      */
-    QString message() { return textedit->toPlainText(); }
+    QString revA() const;
+    /**
+     * @return The second diffing revision, branchname or tag
+     * @note Can also be QString::null if the user requested a diff agains a single revision
+     */
+    QString revB() const;
+
+private:
+    enum DiffType { diffLocalBASE, diffLocalHEAD, diffLocalOther, diffArbitrary };
+
+    KUrl m_url;
+
+    DiffType requestedDiff() const;
 };
 
 #endif

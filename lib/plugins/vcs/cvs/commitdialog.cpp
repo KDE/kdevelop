@@ -9,17 +9,17 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "commitdlg.h"
+#include "commitdialog.h"
 
-CommitDlg::CommitDlg(QDialog *parent)
-    : QDialog(parent), Ui::CommitDlgBase()
+CommitDialog::CommitDialog(QDialog *parent)
+    : QDialog(parent), Ui::CommitDialogBase()
 {
-    Ui::CommitDlgBase::setupUi(this);
+    Ui::CommitDialogBase::setupUi(this);
 }
 
-CommitDlg::~CommitDlg()
+CommitDialog::~CommitDialog()
 {
 }
 
-#include "commitdlg.moc"
+#include "commitdialog.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

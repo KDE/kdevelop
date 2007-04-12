@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>DiffOptionsDlgBase</class>
- <widget class="QDialog" name="DiffOptionsDlgBase" >
+ <class>DiffOptionsDialogBase</class>
+ <widget class="QDialog" name="DiffOptionsDialogBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -170,7 +170,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DiffOptionsDlgBase</receiver>
+   <receiver>DiffOptionsDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -186,7 +186,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DiffOptionsDlgBase</receiver>
+   <receiver>DiffOptionsDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >

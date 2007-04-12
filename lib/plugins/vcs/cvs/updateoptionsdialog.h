@@ -9,25 +9,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef UPDATEOPTIONSDLG_H
-#define UPDATEOPTIONSDLG_H
+#ifndef UPDATEOPTIONSDIALOG_H
+#define UPDATEOPTIONSDIALOG_H
 
 #include <QDialog>
 
-#include "ui_updateoptionsdlg.h"
+#include "ui_updateoptionsdialog.h"
 
 /**
  * Allows the user to define the options to pass to @code cvs update @endcode
  * Calling options() returns a QString with the user specified options.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class UpdateOptionsDlg : public QDialog, private Ui::UpdateOptionsDlgBase
+class UpdateOptionsDialog : public QDialog, private Ui::UpdateOptionsDialogBase
 {
   Q_OBJECT
 
 public:
-    UpdateOptionsDlg(QWidget* parent = 0);
-    virtual ~UpdateOptionsDlg();
+    UpdateOptionsDialog(QWidget* parent = 0);
+    virtual ~UpdateOptionsDialog();
 
     /**
      * @return The options set by the use

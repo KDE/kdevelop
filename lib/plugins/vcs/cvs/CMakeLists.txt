@@ -14,21 +14,21 @@ set(kdevcvs_PART_SRCS
 	cvsgenericoutputview.cpp
 	cvsjob.cpp
 	cvsproxy.cpp
-	diffoptionsdlg.cpp
+	diffoptionsdialog.cpp
 	editorsview.cpp
 	logview.cpp
-	commitdlg.cpp
-	updateoptionsdlg.cpp
+	commitdialog.cpp
+	updateoptionsdialog.cpp
 )
 
 set(kdevcvs_PART_UI
 	cvsmainview.ui
 	cvsgenericoutputview.ui
-	diffoptionsdlg.ui
+	diffoptionsdialog.ui
 	editorsview.ui
 	logview.ui
-	commitdlg.ui
-	updateoptionsdlg.ui
+	commitdialog.ui
+	updateoptionsdialog.ui
 )
 
 kde4_add_ui_files(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
