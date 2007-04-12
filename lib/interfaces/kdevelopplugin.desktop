@@ -62,5 +62,5 @@ Type=QStringList
 [PropertyDef::X-KDevelop-IOptional]
 Type=QStringList
 
-[PropertyDef::X-KDevelop-SupportedMimeType]
+[PropertyDef::X-KDevelop-SupportedMimeTypes]
 Type=QStringList
