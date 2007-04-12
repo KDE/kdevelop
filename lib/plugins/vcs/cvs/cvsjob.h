@@ -56,7 +56,7 @@ public:
     /**
      * @return The whole output of the job
      */
-    QStringList output() const;
+    QString output() const;
 
 public slots:
     void cancel();

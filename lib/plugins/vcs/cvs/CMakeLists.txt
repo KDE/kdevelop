@@ -16,6 +16,7 @@ set(kdevcvs_PART_SRCS
 	cvsproxy.cpp
 	diffoptionsdlg.cpp
 	editorsview.cpp
+	logview.cpp
 	commitdlg.cpp
 	updateoptionsdlg.cpp
 )
@@ -25,6 +26,7 @@ set(kdevcvs_PART_UI
 	cvsgenericoutputview.ui
 	diffoptionsdlg.ui
 	editorsview.ui
+	logview.ui
 	commitdlg.ui
 	updateoptionsdlg.ui
 )

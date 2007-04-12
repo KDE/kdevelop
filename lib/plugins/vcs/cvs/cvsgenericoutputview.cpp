@@ -42,7 +42,7 @@ void CvsGenericOutputView::slotJobFinished(KJob * job)
     CvsJob * cvsjob = dynamic_cast<CvsJob*>(job);
     if (cvsjob) {
         appendText( cvsjob->cvsCommand() );
-        appendText( cvsjob->output().join("\n") );
+        appendText( cvsjob->output() );
         if (job->error() == 0) {
             appendText( i18n("Job exited normally") );
         } else {

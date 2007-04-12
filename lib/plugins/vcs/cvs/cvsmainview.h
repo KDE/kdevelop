@@ -14,6 +14,7 @@
 
 #include <QWidget>
 #include <KJob>
+#include <QToolButton>
 
 #include "ui_cvsmainview.h"
 
@@ -25,8 +26,11 @@ class CvsGenericOutputView;
  * It only constists out of a KTabWidget. 
  * 
  * When created, a CvsGenericOutputView will be inserted.
+ * 
  * Inserting text into that default output view is possible via the
  * slotJobFinished() slot. 
+ * 
+ * Additional tabs can be added via slotAddTab().
  * 
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
@@ -48,9 +52,15 @@ public slots:
      */
     void slotJobFinished(KJob* job);
 
+    /**
+     * Closes the current active tab (if it's not the first tab)
+     */
+    void slotTabClose();
+
 private:
     CvsPart* m_part;
     CvsGenericOutputView* m_mainview;
+    QToolButton* m_closeButton;
 };
 
 #endif

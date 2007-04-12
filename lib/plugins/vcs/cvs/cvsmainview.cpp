@@ -35,6 +35,16 @@ CvsMainView::CvsMainView( CvsPart *part, QWidget* parent )
     // create a default output view
     m_mainview = new CvsGenericOutputView(m_part);
     tabwidget->addTab( m_mainview, i18n("CVS") );
+
+    // add a close button as corner widget
+    m_closeButton = new QToolButton(tabwidget);
+    m_closeButton->setIcon( KIcon( "tab-remove" ) );
+    m_closeButton->adjustSize();
+    m_closeButton->setAutoRaise(true);
+    m_closeButton->setEnabled(false);
+    tabwidget->setCornerWidget( m_closeButton );
+    connect(m_closeButton, SIGNAL( clicked() ),
+            this, SLOT( slotTabClose() ));
 }
 
 CvsMainView::~CvsMainView()
@@ -46,13 +56,32 @@ CvsMainView::~CvsMainView()
 void CvsMainView::slotAddTab(QWidget * tab, QString label)
 {
     kDebug() <<  k_funcinfo << label << endl;
-    tabwidget->addTab( tab, label );
+
+    int idx = tabwidget->addTab( tab, label );
+    tabwidget->setCurrentIndex(idx);
+
+    if (tabwidget->count() > 1)
+        m_closeButton->setEnabled(true);
 }
 
 void CvsMainView::slotJobFinished(KJob * job)
 {
     kDebug() <<  k_funcinfo <<endl;
     m_mainview->slotJobFinished(job);
+    tabwidget->setCurrentIndex(0);
+}
+
+void CvsMainView::slotTabClose()
+{
+    int idx = tabwidget->currentIndex();
+
+    // don't allow to close the first tab
+    if (idx != 0)
+        tabwidget->removeTab( idx );
+
+    // if only the first tab remains, disable the close button
+    if (tabwidget->count() <= 1)
+        m_closeButton->setEnabled(false);
 }
 
 #include "cvsmainview.moc"

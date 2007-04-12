@@ -29,6 +29,7 @@
 #include "cvsjob.h"
 #include "diffoptionsdlg.h"
 #include "editorsview.h"
+#include "logview.h"
 #include "commitdlg.h"
 #include "updateoptionsdlg.h"
 #include "cvsgenericoutputview.h"
@@ -276,7 +277,7 @@ void CvsPart::logview(const KUrl & url)
     CvsJob* job = d->m_proxy->log( url );
     if (job) {
         job->start();
-        CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
+        LogView* view = new LogView(this, job);
         emit addNewTabToMainView( view, i18n("Log") );
     }
 }

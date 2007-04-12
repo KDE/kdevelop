@@ -67,7 +67,7 @@ void EditorsView::slotJobFinished(KJob* job)
                         "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)");
     QString lastfilename;
 
-    QStringList lines = cvsjob->output();
+    QStringList lines = cvsjob->output().split("\n");
 
     QMultiMap<QString,CvsLocker> lockedFiles;
 

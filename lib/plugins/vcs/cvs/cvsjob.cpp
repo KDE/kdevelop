@@ -38,7 +38,7 @@ struct CvsJob::Private
     QString     rsh;
     QString     directory;
     bool        isRunning;
-    QStringList outputLines;
+    QString     outputLines;
 };
 
 
@@ -122,7 +122,7 @@ QString CvsJob::cvsCommand() const
 }
 
 
-QStringList CvsJob::output() const
+QString CvsJob::output() const
 {
     return d->outputLines;
 }
@@ -188,7 +188,7 @@ void CvsJob::slotReceivedStdout(K3Process* proc, char* buffer, int buflen)
     QString output = QString::fromLocal8Bit(buffer, buflen);
 
     // accumulate output
-    d->outputLines += output.split("\n");
+    d->outputLines += output;
     kDebug()<<  k_funcinfo <<"received output: "<<endl;
     kDebug()<<output<<endl;
 }
@@ -201,7 +201,7 @@ void CvsJob::slotReceivedStderr(K3Process* proc, char* buffer, int buflen)
     QString output = QString::fromLocal8Bit(buffer, buflen);
 
     // accumulate output
-    d->outputLines += output.split("\n");
+    d->outputLines += output;
 
     kDebug()<<  k_funcinfo <<"received error: "<<endl;
     kDebug()<<output<<endl;
