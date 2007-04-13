@@ -9,7 +9,7 @@ include_directories( ${KDE4_INCLUDES}
 ########### next target ###############
 
 set(kdevcvs_PART_SRCS
-	cvs_part.cpp
+	cvspart.cpp
 	cvsmainview.cpp
 	cvsgenericoutputview.cpp
 	cvsjob.cpp

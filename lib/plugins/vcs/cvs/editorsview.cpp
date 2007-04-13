@@ -18,7 +18,7 @@
 #include <KDebug>
 #include <KMessageBox>
 
-#include "cvs_part.h"
+#include "cvspart.h"
 #include "cvsjob.h"
 #include "cvsproxy.h"
 

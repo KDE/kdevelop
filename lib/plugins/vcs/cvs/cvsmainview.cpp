@@ -13,13 +13,13 @@
 
 #include <KLocale>
 
-#include "cvs_part.h"
+#include "cvspart.h"
 #include "cvsjob.h"
 #include "cvsgenericoutputview.h"
 
 CvsMainView::CvsMainView( CvsPart *part, QWidget* parent )
- : QWidget( parent ), 
-   Ui::CvsMainViewBase(), 
+ : QWidget( parent ),
+   Ui::CvsMainViewBase(),
    m_part(part)
 {
     Ui::CvsMainViewBase::setupUi(this);

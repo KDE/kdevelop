@@ -18,7 +18,7 @@
 #include <KMessageBox>
 #include <K3Process>
 
-#include "cvs_part.h"
+#include "cvspart.h"
 #include "cvsjob.h"
 
 
@@ -92,7 +92,7 @@ CvsJob* CvsProxy::log(const KUrl& url)
     return NULL;
 }
 
-CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions, 
+CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions,
                     const QString& revA, const QString& revB)
 {
     kDebug() << k_funcinfo << endl;
@@ -211,7 +211,7 @@ CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, bool binar
     return NULL;
 }
 
-CvsJob* CvsProxy::update(const QString & repo, const KUrl::List & files, 
+CvsJob* CvsProxy::update(const QString & repo, const KUrl::List & files,
                       const QString & updateOptions, bool pruneDirs, bool createDirs)
 {
     kDebug() << k_funcinfo << endl;
