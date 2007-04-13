@@ -14,7 +14,6 @@
 #include <QFileInfo>
 #include <QTextBrowser>
 #include <QRegExp>
-#include <QMultiMap>
 #include <KDebug>
 #include <KMessageBox>
 
@@ -22,13 +21,6 @@
 #include "cvsjob.h"
 #include "cvsproxy.h"
 
-class CvsLocker {
-public:
-    QString user;
-    QString date;
-    QString machine;
-    QString localrepo;
-};
 
 EditorsView::EditorsView(CvsPart* part, CvsJob* job, QWidget *parent)
     : QWidget(parent), Ui::EditorsViewBase(), m_part(part)
@@ -61,17 +53,47 @@ void EditorsView::slotJobFinished(KJob* job)
         return;
     }
 
-    static QRegExp re("([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
-                        "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)");
-    static QRegExp subre("\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
-                        "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)");
-    QString lastfilename;
-
-    QStringList lines = cvsjob->output().split("\n");
 
     QMultiMap<QString,CvsLocker> lockedFiles;
 
-    int found = 0;
+    parseOutput(cvsjob->output(), lockedFiles);
+
+    if (lockedFiles.size() == 0) {
+        textbrowser->append(i18n("No files from your query are marked as being edited."));
+    } else {
+        QString html;
+
+        foreach (QString key, lockedFiles.uniqueKeys()) {
+            html += "<h3>"+key+"</h3><br>";
+
+            foreach(CvsLocker item, lockedFiles.values( key )) {
+                html += "<b>"+i18n("User")+":</b> "+item.user+"<br>";
+                html += "<b>"+i18n("Date")+":</b> "+item.date+"<br>";
+                html += "<b>"+i18n("Machine")+":</b> "+item.machine+"<br>";
+                html += "<b>"+i18n("Repository")+":</b> "+item.localrepo+"<br>";
+                html += "<br>";
+            }
+            html += "<br>";
+        }
+
+        textbrowser->setHtml( html );
+    }
+}
+
+void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLocker>& editorsInfo)
+{
+    // the first line contains the filename and than the locker information
+    static QRegExp re("([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
+                        "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)");
+    // if there are more than one locker of a single file, the second line for a file
+    // only contains the locker information (no filename)
+    static QRegExp subre("\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
+                        "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)");
+
+    QString lastfilename;
+
+    QStringList lines = jobOutput.split("\n");
+
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
 
@@ -83,9 +105,7 @@ void EditorsView::slotJobFinished(KJob* job)
             item.machine = re.cap(9);
             item.localrepo = re.cap(10);
 
-            lockedFiles.insert(file, item);
-
-            found++;
+            editorsInfo.insert(file, item);
 
             lastfilename = file;
         } else {
@@ -96,32 +116,9 @@ void EditorsView::slotJobFinished(KJob* job)
                 item.machine = subre.cap(8);
                 item.localrepo = subre.cap(9);
 
-                lockedFiles.insert(lastfilename, item);
-
-                found++;
+                editorsInfo.insert(lastfilename, item);
             }
         }
-    }
-
-    if (!found) {
-        textbrowser->append(i18n("No files from your query are marked as being edited."));
-    } else {
-        QString html;
-
-        foreach (QString key, lockedFiles.uniqueKeys()) {
-            html += "<h3>"+key+"</h3><br>";
-
-            foreach(CvsLocker item, lockedFiles.values( key )) {
-                html += "<b>"+i18n("User")+":</b>"+item.user+"<br>";
-                html += "<b>"+i18n("Date")+":</b>"+item.date+"<br>";
-                html += "<b>"+i18n("Machine")+":</b>"+item.machine+"<br>";
-                html += "<b>"+i18n("Repository")+":</b>"+item.localrepo+"<br>";
-                html += "<br>";
-            }
-            html += "<br>";
-        }
-
-        textbrowser->setHtml( html );
     }
 }
 
