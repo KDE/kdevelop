@@ -13,6 +13,7 @@ Name[pt]=Interface de Navegação do Código
 Name[pt_BR]=Interface de Navegação do Código
 Name[sk]=Rozhranie pre prehliadač kódu
 Name[sv]=Kodbläddringsgränssnitt
+Name[zh_TW]=源碼瀏覽器前端介面
 
 [PropertyDef::X-KDevelop-Version]
 Type=int
