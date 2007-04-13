@@ -22,13 +22,6 @@
 #include "cvsjob.h"
 #include "cvsproxy.h"
 
-class CvsLog {
-public:
-    QString revision;
-    QString date;
-    QString user;
-    QString log;
-};
 
 LogView::LogView(CvsPart* part, CvsJob* job, QWidget *parent)
     : QWidget(parent), Ui::LogViewBase(), m_part(part)
@@ -61,19 +54,39 @@ void LogView::slotJobFinished(KJob* job)
         return;
     }
 
-    QStringList lines = cvsjob->output().split("\n");
+    QList<CvsRevision> logEntries;
+    parseOutput(cvsjob->output(), logEntries);
 
+    if (logEntries.size() == 0) {
+        textbrowser->append(i18n("No log information found"));
+    } else {
+        QString html;
+
+        foreach(CvsRevision item, logEntries) {
+            html += "<b>"+i18n("Revision")+":</b> "+item.revision+"<br>";
+            html += "<b>"+i18n("User")+":</b> "+item.user+"<br>";
+            html += "<b>"+i18n("Date")+":</b> "+item.date+"<br>";
+            html += item.log+"<br>";
+            html += "<br>";
+        }
+        html += "<br>";
+
+        textbrowser->setHtml( html );
+    }
+}
+
+void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revisions)
+{
     static QRegExp rx_sep( "[-=]+" );
     static QRegExp rx_rev( "revision ((\\d+\\.?)+)" );
-    static QRegExp rx_branch( "branches:\\s+([^;]+).*" );
+    static QRegExp rx_branch( "branches:\\s+(.*)" );
     static QRegExp rx_date( "date:\\s+([^;]*);\\s+author:\\s+([^;]*).*" );
 
-    QList<CvsLog> logEntries;
 
-    int found = 0;
+    QStringList lines = jobOutput.split("\n");
+
+    CvsRevision item;
     bool firstSeperatorReached = false;
-
-    CvsLog item;
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
@@ -91,7 +104,7 @@ void LogView::slotJobFinished(KJob* job)
         } else  if (rx_sep.exactMatch(s)) {
 //             kDebug() << "MATCH SEPERATOR" <<endl;
             if (firstSeperatorReached) {
-                logEntries.append( item );
+                revisions.append( item );
 
                 item.user.clear();
                 item.date.clear();
@@ -100,30 +113,12 @@ void LogView::slotJobFinished(KJob* job)
             } else {
                 firstSeperatorReached = true;
             }
-            found++;
         } else {
             if (firstSeperatorReached) {
 //                 kDebug() << "ADDING LOG" <<endl;
                 item.log += s+"\n";
             }
         }
-    }
-
-    if (!found) {
-        textbrowser->append(i18n("No log information found"));
-    } else {
-        QString html;
-
-        foreach(CvsLog item, logEntries) {
-            html += "<b>"+i18n("Revision")+":</b> "+item.revision+"<br>";
-            html += "<b>"+i18n("User")+":</b> "+item.user+"<br>";
-            html += "<b>"+i18n("Date")+":</b> "+item.date+"<br>";
-            html += item.log+"<br>";
-            html += "<br>";
-        }
-        html += "<br>";
-
-        textbrowser->setHtml( html );
     }
 }
 
