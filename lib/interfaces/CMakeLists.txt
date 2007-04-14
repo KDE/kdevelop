@@ -18,7 +18,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 kde4_automoc(${kdevplatforminterfaces_LIB_SRCS})
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
-target_link_libraries(kdevplatforminterfaces ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${BERKELEY_DB_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} )
+target_link_libraries(kdevplatforminterfaces ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ktexteditor ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} )
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevplatforminterfaces DESTINATION ${LIB_INSTALL_DIR} )
 
