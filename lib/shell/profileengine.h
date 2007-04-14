@@ -49,7 +49,7 @@ Used to get a list of urls to the profile resources.
 Resource urls can be filtered by an @p filter parameter
 passed to the constructor. Filter can have values
 as described in @ref QDir::setNameFilter function documentation.*/
-class KDEVPLATFORM_EXPORT ProfileListingEx {
+class KDEVPLATFORMSHELL_EXPORT ProfileListingEx {
 public:
     ProfileListingEx(const QString &filter): m_filter(filter) {}
     void operator() (Profile *profile)
@@ -88,7 +88,7 @@ KDevelop
 @endcode
 To manage a tree of profiles, use @ref ProfileEngine::walkProfiles methods.
 */
-class KDEVPLATFORM_EXPORT ProfileEngine {
+class KDEVPLATFORMSHELL_EXPORT ProfileEngine {
 public:
     ProfileEngine();
     ~ProfileEngine();
