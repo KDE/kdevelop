@@ -53,7 +53,7 @@ class PersistentHash;
  *
  * Provide better descriptions
  */
-class KDEVPLATFORM_EXPORT Project : public IProject
+class KDEVPLATFORMSHELL_EXPORT Project : public IProject
 {
     Q_OBJECT
 public:

@@ -35,7 +35,7 @@ typedef QList<ProjectFileItem*> FileItemList;
  * Manage the file and build system of the project.
  * @author Matt Rogers <mattr@kde.org>, Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORM_EXPORT IBuildSystemManager : public IProjectFileManager
+class KDEVPLATFORMPROJECT_EXPORT IBuildSystemManager : public IProjectFileManager
 {
 public:
 

@@ -42,7 +42,7 @@ class Document;
 KDevelop main window.
 Provides methods to control the main window of an application.
 */
-class KDEVPLATFORM_EXPORT MainWindow: public Sublime::MainWindow {
+class KDEVPLATFORMSHELL_EXPORT MainWindow: public Sublime::MainWindow {
     friend class UiController;
     Q_OBJECT
 public:

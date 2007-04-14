@@ -32,7 +32,7 @@ namespace KDevelop
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVPLATFORM_EXPORT DocumentCursorObject : public KTextEditor::SmartCursorWatcher
+class KDEVPLATFORMEDITOR_EXPORT DocumentCursorObject : public KTextEditor::SmartCursorWatcher
 {
 public:
     DocumentCursorObject(KTextEditor::Cursor* cursor);

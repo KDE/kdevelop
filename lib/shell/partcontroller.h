@@ -49,7 +49,7 @@ class Editor;
 namespace KDevelop
 {
 
-class KDEVPLATFORM_EXPORT PartController : public KParts::PartManager
+class KDEVPLATFORMSHELL_EXPORT PartController : public KParts::PartManager
 {
     friend class CorePrivate;
     Q_OBJECT

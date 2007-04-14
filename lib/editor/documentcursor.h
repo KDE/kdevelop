@@ -36,7 +36,7 @@ namespace KDevelop
  *
  * \todo override comparison operators and take them into account
  */
-class KDEVPLATFORM_EXPORT DocumentCursor : public KTextEditor::Cursor
+class KDEVPLATFORMEDITOR_EXPORT DocumentCursor : public KTextEditor::Cursor
 {
 public:
     DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());

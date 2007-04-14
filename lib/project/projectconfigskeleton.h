@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-class KDEVPLATFORM_EXPORT ProjectConfigSkeleton: public KConfigSkeleton
+class KDEVPLATFORMPROJECT_EXPORT ProjectConfigSkeleton: public KConfigSkeleton
 {
     Q_OBJECT
 public:

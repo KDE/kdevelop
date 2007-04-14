@@ -45,7 +45,7 @@ class ProfileEngine;
  * The Plugin controller is responsible for querying, loading and unloading
  * available plugins.
  */
-class KDEVPLATFORM_EXPORT IPluginController : public QObject
+class KDEVPLATFORMINTERFACES_EXPORT IPluginController : public QObject
 {
 
 Q_OBJECT

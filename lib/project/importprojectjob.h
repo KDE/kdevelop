@@ -29,7 +29,7 @@ namespace KDevelop
 
 class IProjectFileManager;
 
-class KDEVPLATFORM_EXPORT ImportProjectJob: public KJob
+class KDEVPLATFORMPROJECT_EXPORT ImportProjectJob: public KJob
 {
     Q_OBJECT
 public:

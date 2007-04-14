@@ -33,7 +33,7 @@ Profile listing operation.
 Used to get a plain list of profiles
 and store it in the QMap<QString, Profile*>.
 */
-class KDEVPLATFORM_EXPORT ProfileListing{
+class KDEVPLATFORMSHELL_EXPORT ProfileListing{
 public:
     void operator() (Profile *profile)
     {

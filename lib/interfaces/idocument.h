@@ -42,7 +42,7 @@ namespace KDevelop {
  * - clearer distinction in the code between an open document and a url
  *   (which may or may not be open)
  */
-class IDocument {
+class KDEVPLATFORMINTERFACES_EXPORT IDocument {
 public:
     virtual ~IDocument() {}
 

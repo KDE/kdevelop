@@ -25,7 +25,7 @@
 
 namespace KDevelop {
 
-class KDEVPLATFORM_EXPORT Language: public ILanguage {
+class KDEVPLATFORMSHELL_EXPORT Language: public ILanguage {
     Q_OBJECT
 public:
     Language(ILanguageSupport *support, QObject *parent = 0);

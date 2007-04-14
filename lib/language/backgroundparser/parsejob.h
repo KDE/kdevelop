@@ -42,7 +42,7 @@ class BackgroundParser;
 /**
  * The base class for background parser jobs.
  */
-class KDEVPLATFORM_EXPORT ParseJob : public ThreadWeaver::JobSequence
+class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence
 {
     Q_OBJECT
 public:

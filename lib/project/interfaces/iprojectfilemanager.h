@@ -59,7 +59,7 @@ class KDialogBase;
  *
  * @author Roberto Raggi, Matt Rogers, Hamish Rodda
  */
-class KDEVPLATFORM_EXPORT IProjectFileManager
+class KDEVPLATFORMPROJECT_EXPORT IProjectFileManager
 {
 public:
 

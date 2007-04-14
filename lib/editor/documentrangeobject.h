@@ -35,7 +35,7 @@ namespace KDevelop
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVPLATFORM_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORMEDITOR_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
     DocumentRangeObject(KTextEditor::Range* range);

@@ -28,7 +28,7 @@ class Part;
 
 namespace KDevelop {
 
-class KDEVPLATFORM_EXPORT LanguageController: public ILanguageController {
+class KDEVPLATFORMSHELL_EXPORT LanguageController: public ILanguageController {
     Q_OBJECT
 public:
     LanguageController(QObject *parent);

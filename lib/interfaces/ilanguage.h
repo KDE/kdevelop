@@ -33,7 +33,7 @@ namespace KDevelop {
 class ILanguageSupport;
 class BackgroundParser;
 
-class KDEVPLATFORM_EXPORT ILanguage: public QObject {
+class KDEVPLATFORMINTERFACES_EXPORT ILanguage: public QObject {
 public:
     ILanguage(const QString &name, QObject *parent = 0);
     virtual ~ILanguage();

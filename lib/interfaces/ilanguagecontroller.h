@@ -28,7 +28,7 @@ namespace KDevelop {
 
 class ILanguage;
 
-class KDEVPLATFORM_EXPORT ILanguageController: public QObject {
+class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
 public:
     ILanguageController(QObject *parent = 0);
 

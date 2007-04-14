@@ -57,7 +57,7 @@ class ParserDependencyPolicy;
 
 using namespace ThreadWeaver;
 
-class KDEVPLATFORM_EXPORT BackgroundParser : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject
 {
     Q_OBJECT
 public:

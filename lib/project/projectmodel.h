@@ -50,7 +50,7 @@ class ProjectTargetItem;
  * \li Build Target
  * \li File
  */
-class KDEVPLATFORM_EXPORT ProjectBaseItem: public QStandardItem
+class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 {
     public:
         ProjectBaseItem( IProject*, const QString &name, QStandardItem *parent = 0 );

@@ -129,7 +129,7 @@ class ICore;
  * @sa Core class documentation for an information about features which are available to
  * plugins from shell applications.
  */
-class KDEVPLATFORM_EXPORT IPlugin: public QObject, public KXMLGUIClient
+class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 

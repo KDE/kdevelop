@@ -53,7 +53,7 @@ class ProjectFolderItem;
  *
  * Provide better descriptions
  */
-class KDEVPLATFORM_EXPORT IProject : public QObject
+class KDEVPLATFORMINTERFACES_EXPORT IProject : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")

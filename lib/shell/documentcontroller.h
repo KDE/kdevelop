@@ -40,7 +40,7 @@ namespace KDevelop {
  * Please note that this interface gives access to documents and not to their views.
  * It is possible that more than 1 view is shown in KDevelop for a document.
 */
-class KDEVPLATFORM_EXPORT DocumentController: public IDocumentController {
+class KDEVPLATFORMSHELL_EXPORT DocumentController: public IDocumentController {
     Q_OBJECT
     Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.DocumentController" )
 public:

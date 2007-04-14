@@ -32,7 +32,7 @@ namespace KDevelop {
 
 class IDocument;
 
-class KDEVPLATFORM_EXPORT IToolViewFactory {
+class KDEVPLATFORMINTERFACES_EXPORT IToolViewFactory {
 public:
     virtual ~IToolViewFactory() {}
     virtual QWidget* create(QWidget *parent = 0) = 0;
@@ -40,7 +40,7 @@ public:
 
 };
 
-class KDEVPLATFORM_EXPORT IUiController {
+class KDEVPLATFORMINTERFACES_EXPORT IUiController {
 public:
     virtual ~IUiController();
 

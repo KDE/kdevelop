@@ -50,7 +50,7 @@ class PluginControllerPrivate;
  * The Plugin controller is responsible for querying, loading and unloading
  * available plugins.
  */
-class KDEVPLATFORM_EXPORT PluginController: public IPluginController
+class KDEVPLATFORMSHELL_EXPORT PluginController: public IPluginController
 {
 
     Q_OBJECT

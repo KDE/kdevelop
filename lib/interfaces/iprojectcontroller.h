@@ -36,7 +36,7 @@ class IProject;
 class ProjectModel;
 class ProjectBaseItem;
 
-class KDEVPLATFORM_EXPORT IProjectController : public QObject
+class KDEVPLATFORMINTERFACES_EXPORT IProjectController : public QObject
 {
     Q_OBJECT
 public:

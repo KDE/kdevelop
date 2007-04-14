@@ -31,7 +31,7 @@ namespace KDevelop {
 
 class IDocument;
 
-class KDEVPLATFORM_EXPORT IDocumentController: public QObject {
+class KDEVPLATFORMINTERFACES_EXPORT IDocumentController: public QObject {
     Q_OBJECT
 public:
     enum DocumentActivation

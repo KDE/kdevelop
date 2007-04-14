@@ -35,7 +35,7 @@ class ProjectBaseItem;
 
 Describes a <b>Project Builder</b> to KDevelop's Project Manager.
 */
-class KDEVPLATFORM_EXPORT IProjectBuilder
+class KDEVPLATFORMPROJECT_EXPORT IProjectBuilder
 {
 public:
 

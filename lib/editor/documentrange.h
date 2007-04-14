@@ -34,7 +34,7 @@ namespace KDevelop
  *
  * \todo parent/child relationships here too?
  */
-class KDEVPLATFORM_EXPORT DocumentRange : public KTextEditor::Range
+class KDEVPLATFORMEDITOR_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
     DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);

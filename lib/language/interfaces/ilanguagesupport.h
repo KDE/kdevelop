@@ -29,7 +29,7 @@ namespace KDevelop {
 class ParseJob;
 class ILanguage;
 
-class KDEVPLATFORM_EXPORT ILanguageSupport {
+class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
 public:
     virtual ~ILanguageSupport() {}
 

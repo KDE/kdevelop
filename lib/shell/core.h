@@ -36,7 +36,7 @@ class PartController;
 class UiController;
 class DocumentController;
 
-class KDEVPLATFORM_EXPORT Core: public ICore {
+class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
     static void initialize();
     static Core *self();

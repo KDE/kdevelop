@@ -27,7 +27,7 @@ class KComponentData;
 class QWidget;
 class QStringList;
 
-template <typename T> class ProjectKCModule : public KCModule
+template <typename T> class KDEVPLATFORMPROJECT_EXPORT ProjectKCModule : public KCModule
 {
     public:
         ProjectKCModule( const KComponentData& componentData, QWidget* parent, const QStringList& args )

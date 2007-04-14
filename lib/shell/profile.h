@@ -32,7 +32,7 @@ namespace KDevelop
 
 A class which represents a profile for KDevelop platform stored on disk.
 */
-class KDEVPLATFORM_EXPORT Profile {
+class KDEVPLATFORMSHELL_EXPORT Profile {
 public:
     /**An entry in the lists that store profile information*/
     struct Entry {

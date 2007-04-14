@@ -45,7 +45,7 @@ namespace KDevelop
  * \todo move private members to a private class
  * \todo non-loaded documents don't trigger the removeDocument call...
  */
-class KDEVPLATFORM_EXPORT EditorIntegrator
+class KDEVPLATFORMEDITOR_EXPORT EditorIntegrator
 {
 public:
   EditorIntegrator();

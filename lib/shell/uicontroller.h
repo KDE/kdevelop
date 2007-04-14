@@ -29,7 +29,7 @@ namespace KDevelop {
 class Core;
 class MainWindow;
 
-class KDEVPLATFORM_EXPORT UiController: public Sublime::Controller, public IUiController {
+class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public IUiController {
 public:
     UiController(Core *core);
     virtual ~UiController();
