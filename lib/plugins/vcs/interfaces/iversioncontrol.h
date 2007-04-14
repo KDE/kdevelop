@@ -48,7 +48,7 @@ namespace KDevelop{
  * Info about file state in VCS.
  * Used, for example in file views to display VCS related information about files.
  */
-class KDEVPLATFORM_EXPORT VcsFileInfo
+class KDEVPLATFORMVCS_EXPORT VcsFileInfo
 {
 public:
     /**State of the file.*/
@@ -108,7 +108,7 @@ VCS support plugins should implement this interface.
 
 @sa http://www.kdevelop.org/mediawiki/index.php/Extension_Interfaces_and_Plugins
 */
-class KDEVPLATFORM_EXPORT IVersionControl
+class KDEVPLATFORMVCS_EXPORT IVersionControl
 {
 public:
     enum WorkingMode{
