@@ -522,28 +522,21 @@ void FileCreatePart::slotInitialize( )
 
 QString FileCreatePart::findGlobalXMLFile() const
 {
-  QString initialFilename = ::locate("data", "kdevfilecreate/template-info.xml");
-  QDomDocument globalDom;
-  QString filename = initialFilename;
-  DomUtil::openDOMFile(globalDom,filename);
-  QDomElement e = globalDom.documentElement();
-  if( !e.hasAttribute( "version" ) || e.attribute( "version" ) != QString(VERSION) )
+  int version = 0;
+  QString filename;
+  QStringList filenames = KGlobal::instance()->dirs()->findAllResources("data", "kdevfilecreate/template-info.xml");
+  for( QStringList::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
   {
-    QStringList filenames = KGlobal::instance()->dirs()->findAllResources("data", "kdevfilecreate/template-info.xml");
-    filenames.remove(initialFilename);
-    for( QStringList::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
+    QDomDocument globalDom;
+    DomUtil::openDOMFile(globalDom,*it);
+    QDomElement e = globalDom.documentElement();
+    if( !e.hasAttribute( "version" ) && e.attribute( "version" ).toInt() < version )
     {
+      continue;
+    }else
+    {
+      version = e.attribute( "version" ).toInt();
       filename = *it;
-      DomUtil::openDOMFile(globalDom,filename);
-      QDomElement e = globalDom.documentElement();
-      QString a = e.attribute("version");
-      QString n = e.tagName();
-      QString v = QString(VERSION);
-      if( e.hasAttribute( "version" ) && e.attribute( "version" ) == QString(VERSION) )
-      {
-        kdDebug(9034) << "Found file:" << filename <<endl;
-        return filename;
-      }
     }
   }
   return filename;
