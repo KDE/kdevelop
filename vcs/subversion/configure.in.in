@@ -130,7 +130,7 @@ SVN_INCLUDE="$SVN_INCLUDE $APR_INCLUDE"
 SVN_CPPFLAGS="$APR_CPPFLAGS $SVN_CPPFLAGS"
 
 if test "x$with_subversion" != xcheck && test -z "$SVN_SUBDIR"; then
-  AC_MSG_ERROR([--enable-subversion was given, but test for subversion failed. Please install subversion headers and libraries])
+  AC_MSG_ERROR([--enable-subversion was given, but test for subversion failed. Please install subversion headers and libraries and its dependencies (APR and APU utils)])
 fi
 fi
 
