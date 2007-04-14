@@ -713,8 +713,13 @@ void QMakeScopeItem::removeValue( const QString& var, const QString& value )
     if( scope->scopeType() != Scope::IncludeScope && scope->variableValues( var ).findIndex( value ) != -1 )
     {
         if( scope->variableValuesForOp( var, "+=" ).findIndex(value) != -1 )
+        {
             scope->removeFromPlusOp( var, QStringList( value ) );
-        else
+            if( scope->variableValues( var ).findIndex( value ) != -1 )
+            {
+                scope->addToMinusOp( var, QStringList( value ) );
+            }
+        }else
             scope->addToMinusOp( var, QStringList( value ) );
     }else if( scope->scopeType() == Scope::IncludeScope )
     {
