@@ -23,7 +23,7 @@ macro(kdevelop_add_app_templates _templateNames)
         add_custom_command(OUTPUT ${_template}
             COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                 --exclude .kdev_ignore --exclude .svn
-                -j -f ${_template} .
+                -z -f ${_template} .
             #DEPENDS ${_deps}
         )
 
