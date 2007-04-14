@@ -3,7 +3,6 @@
 
 #include "iversioncontrol.h"
 #include <iplugin.h>
-#include <kdevcontext.h>
 #include "subversion_core.h"
 #include <qwidget.h>
 
