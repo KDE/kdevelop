@@ -16,7 +16,6 @@
 #include <KUrl>
 #include <KJob>
 
-class CvsPart;
 class CvsJob;
 
 /**
@@ -50,9 +49,15 @@ class CvsProxy : public QObject
 {
     Q_OBJECT
 public:
-    CvsProxy(CvsPart* part);
+    CvsProxy(QObject* parent = 0);
     ~CvsProxy();
 
+    bool isValidDirectory(const KUrl &dirPath) const;
+
+    CvsJob* import(const KUrl& directory, 
+                const QString & server, const QString& repositoryName,
+                const QString& vendortag, const QString& releasetag,
+                const QString& message);
     CvsJob* log(const KUrl& file);
     CvsJob* diff(const KUrl& url, const QString& diffOptions="", 
               const QString& revA="", const QString& revB="");
@@ -72,9 +77,13 @@ private slots:
 
 private:
     bool addFileList(CvsJob* job, const QString& repository, const KUrl::List& urls);
-    bool prepareJob(CvsJob* job, const QString& repository);
 
-    CvsPart* m_part;
+    enum RequestedOperation {
+        NormalOperation,
+        Import
+    };
+    bool prepareJob(CvsJob* job, const QString& repository, 
+                    enum RequestedOperation op = CvsProxy::NormalOperation);
 };
 
 #endif

@@ -10,6 +10,7 @@
     <Action name="cvs_add" />
     <Action name="cvs_commit" />
     <Action name="cvs_update" />
+    <Action name="cvs_import" />
   </Menu>
 </MenuBar>
 </kpartgui>

@@ -18,12 +18,10 @@
 #include <KMessageBox>
 #include <K3Process>
 
-#include "cvspart.h"
 #include "cvsjob.h"
 
-
-CvsProxy::CvsProxy(CvsPart* part)
-: QObject(part), m_part(part)
+CvsProxy::CvsProxy(QObject* parent)
+: QObject(parent)
 {
 }
 
@@ -37,9 +35,19 @@ void CvsProxy::slotResult(KJob* job)
     job->deleteLater();
 }
 
-bool CvsProxy::prepareJob(CvsJob* job, const QString& repository)
+bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
 {
-    if (!m_part->isValidDirectory(repository)) {
+    QString path = dirPath.path() + QDir::separator() + "CVS";
+    return QFileInfo(path).exists();
+}
+
+bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum RequestedOperation op)
+{
+    // Only do this check if it's a normal operation like diff, log ...
+    // For other operations like "cvs import" isValidDirectory() would fail as the
+    // directory is not yet under CVS control
+    if (op == CvsProxy::NormalOperation &&
+        !isValidDirectory(repository)) {
         kDebug() << repository << " is not a valid CVS repository" << endl;
         return false;
     }
@@ -63,7 +71,7 @@ bool CvsProxy::addFileList(CvsJob* job, const QString& repository, const KUrl::L
 {
     foreach(KUrl url, urls) {
         //@todo this is ok for now, but what if some of the urls are not
-	//      to the given repository
+        //      to the given repository
         QString file = KUrl::relativeUrl(repository + QDir::separator(), url);
 
         *job << K3Process::quote( file );
@@ -229,6 +237,33 @@ CvsJob* CvsProxy::update(const QString & repo, const KUrl::List & files,
             *job << updateOptions;
 
         addFileList(job, repo, files);
+
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+CvsJob * CvsProxy::import(const KUrl & directory, 
+                          const QString & server, const QString & repositoryName, 
+                          const QString & vendortag, const QString & releasetag,
+                          const QString& message)
+{
+    kDebug() << k_funcinfo << endl;
+
+    CvsJob* job = new CvsJob(this);
+    if ( prepareJob(job, directory.path(), CvsProxy::Import) ) {
+        *job << "cvs";
+        *job << "-d";
+        *job << server;
+        *job << "import";
+
+        *job << "-m";
+        *job << K3Process::quote( message );
+
+        *job << repositoryName;
+        *job << vendortag;
+        *job << releasetag;
 
         return job;
     }

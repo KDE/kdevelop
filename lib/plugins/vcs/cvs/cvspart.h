@@ -76,6 +76,7 @@ public slots:
     void slotAdd();
     void slotCommit();
     void slotUpdate();
+    void slotImport();
 
 // Signals inherited from IVersionControl
 Q_SIGNALS:

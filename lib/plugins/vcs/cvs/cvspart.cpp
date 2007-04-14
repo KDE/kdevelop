@@ -33,6 +33,7 @@
 #include "commitdialog.h"
 #include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
+#include "importdialog.h"
 
 typedef KGenericFactory<CvsPart> KDevCvsFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcvs,
@@ -124,6 +125,10 @@ void CvsPart::setupActions()
     action->setText(i18n("Update Files..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotUpdate()));
 
+    action = actionCollection()->addAction("cvs_import");
+    action->setText(i18n("Import Directory..."));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotImport()));
+
 }
 
 const KUrl CvsPart::urlFocusedDocument() const
@@ -203,6 +208,22 @@ void CvsPart::slotEditors()
     editors(urls);
 }
 
+void CvsPart::slotImport()
+{
+    KUrl url = urlFocusedDocument();
+
+    /// @todo just for testing; remove me...
+    // In order to be able the test the ImportDialog and the 
+    // import job I need to get to a directory somehow.
+    // So this is a bit of a hack right now. I take the directory
+    // from the currently opened file are directory to import.
+    // This whole slot will be removed later when createNewProject()
+    // gets called via the IVersionControl interface.
+    QFileInfo info(url.path());
+
+    createNewProject( KUrl(info.absolutePath()) );
+}
+
 
 
 
@@ -212,8 +233,9 @@ void CvsPart::slotEditors()
 
 void CvsPart::createNewProject(const KUrl & dir)
 {
-    Q_UNUSED(dir)
-    /// @todo implemt me !
+    ImportDialog dlg(this, dir);
+    // the dialog handles the import by itself ...
+    dlg.exec();
 }
 
 void CvsPart::fillContextMenu(const KDevelop::ProjectBaseItem * prjItem, QMenu & ctxMenu)
@@ -232,8 +254,7 @@ void CvsPart::fillContextMenu(const KUrl & ctxUrl, QMenu & ctxMenu)
 
 bool CvsPart::isValidDirectory(const KUrl & dirPath) const
 {
-    QString path = dirPath.path() + QDir::separator() + "CVS";
-    return QFileInfo(path).exists();
+    return d->m_proxy->isValidDirectory(dirPath);
 }
 
 bool CvsPart::fetchFromRepository()
