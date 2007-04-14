@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVEXPORT_H
-#define KDEVEXPORT_H
+#ifndef QMAKEEXPORT_H
+#define QMAKEEXPORT_H
 
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
@@ -33,7 +33,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef QMAKEPARSER_EXPORT
-# ifdef MAKE_KDEVPLATFORM_LIB
+# ifdef MAKE_KDEVQMAKEPARSER_LIB
 #  define QMAKEPARSER_EXPORT KDE_EXPORT
 # else
 #  define QMAKEPARSER_EXPORT KDE_IMPORT
