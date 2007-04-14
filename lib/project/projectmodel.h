@@ -97,7 +97,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
  * folder
  */
 class ProjectFolderItemPrivate;
-class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectBaseItem
+class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
     public:
         ProjectFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
@@ -126,7 +126,7 @@ class KDEVPLATFORM_EXPORT ProjectFolderItem: public ProjectBaseItem
  * Folder which contains buildable targets as part of a buildable project
  */
 class ProjectBuildFolderItemPrivate;
-class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
+class KDEVPLATFORMPROJECT_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
     public:
         ProjectBuildFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
@@ -154,7 +154,7 @@ class KDEVPLATFORM_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 /**
  * Special folder, the project root folder
  */
-class KDEVPLATFORM_EXPORT ProjectItem: public ProjectBuildFolderItem
+class KDEVPLATFORMPROJECT_EXPORT ProjectItem: public ProjectBuildFolderItem
 {
     public:
         ProjectItem( IProject*, const QString &name, QStandardItem *parent = 0 );
@@ -172,7 +172,7 @@ class KDEVPLATFORM_EXPORT ProjectItem: public ProjectBuildFolderItem
  *
  * This object contains all properties specific to a target.
  */
-class KDEVPLATFORM_EXPORT ProjectTargetItem: public ProjectBaseItem
+class KDEVPLATFORMPROJECT_EXPORT ProjectTargetItem: public ProjectBaseItem
 {
     public:
         ProjectTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
@@ -204,7 +204,7 @@ class KDEVPLATFORM_EXPORT ProjectTargetItem: public ProjectBaseItem
  * Object which represents a file.
  */
 class ProjectFileItemPrivate;
-class KDEVPLATFORM_EXPORT ProjectFileItem: public ProjectBaseItem
+class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 {
     public:
         ProjectFileItem( IProject*, const KUrl& file, QStandardItem *parent = 0 );
@@ -222,7 +222,7 @@ class KDEVPLATFORM_EXPORT ProjectFileItem: public ProjectBaseItem
         Q_DECLARE_PRIVATE(ProjectFileItem)
 };
 
-class KDEVPLATFORM_EXPORT ProjectModel: public QStandardItemModel
+class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
 {
         Q_OBJECT
     public:
