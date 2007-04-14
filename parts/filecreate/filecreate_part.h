@@ -120,6 +120,11 @@ private:
   void addFileType(const QString & filename);
 
   /**
+   * Finds the global XML file that has the same version as KDevelop
+   */
+  QString findGlobalXMLFile() const;
+
+  /**
    * List of file types from which the user can choose
    */
   QPtrList<FileType> m_filetypes;

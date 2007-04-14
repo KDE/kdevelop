@@ -52,6 +52,8 @@
 
 #include "kdevplugininfo.h"
 
+#include "config.h"
+
 static const KDevPluginInfo data("kdevfilecreate");
 
 typedef KDevGenericFactory<FileCreatePart> FileCreateFactory;
@@ -518,15 +520,45 @@ void FileCreatePart::slotInitialize( )
   }
 }
 
+QString FileCreatePart::findGlobalXMLFile() const
+{
+  QString initialFilename = ::locate("data", "kdevfilecreate/template-info.xml");
+  QDomDocument globalDom;
+  QString filename = initialFilename;
+  DomUtil::openDOMFile(globalDom,filename);
+  QDomElement e = globalDom.documentElement();
+  if( !e.hasAttribute( "version" ) || e.attribute( "version" ) != QString(VERSION) )
+  {
+    QStringList filenames = KGlobal::instance()->dirs()->findAllResources("data", "kdevfilecreate/template-info.xml");
+    filenames.remove(initialFilename);
+    for( QStringList::const_iterator it = filenames.begin(); it != filenames.end(); ++it )
+    {
+      filename = *it;
+      DomUtil::openDOMFile(globalDom,filename);
+      QDomElement e = globalDom.documentElement();
+      QString a = e.attribute("version");
+      QString n = e.tagName();
+      QString v = QString(VERSION);
+      if( e.hasAttribute( "version" ) && e.attribute( "version" ) == QString(VERSION) )
+      {
+        kdDebug(9034) << "Found file:" << filename <<endl;
+        return filename;
+      }
+    }
+  }
+  return filename;
+}
+
 void FileCreatePart::slotGlobalInitialize( )
 {
   // read in global template information
-  QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
+  QString globalXMLFile = findGlobalXMLFile();
   kdDebug(9034) << "Found global template info info " << globalXMLFile << endl;
   QDomDocument globalDom;
-  if (!globalXMLFile.isNull() &&
-      DomUtil::openDOMFile(globalDom,globalXMLFile)) {
+  if (!globalXMLFile.isNull() && DomUtil::openDOMFile(globalDom,globalXMLFile))
+  {
     kdDebug(9034) << "Reading global template info..." << endl;
+
     readTypes(globalDom, m_filetypes, false);
 
   }
@@ -534,4 +566,4 @@ void FileCreatePart::slotGlobalInitialize( )
 
 #include "filecreate_part.moc"
 
-	// kate: indent-width 4; replace-tabs off; tab-width 4; space-indent off;
+// kate: indent-width 2; replace-tabs on; tab-width 4; space-indent on;
