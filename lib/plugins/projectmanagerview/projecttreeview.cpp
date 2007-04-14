@@ -26,7 +26,6 @@
 
 #include <icore.h>
 #include <kmainwindow.h>
-#include <kdevcontext.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>

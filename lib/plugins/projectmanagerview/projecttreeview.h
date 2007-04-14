@@ -38,7 +38,7 @@ class ProjectFileItem;
 class ProjectTargetItem;
 class ProjectBaseItem;
 
-class KDEVPROJECTMANAGER_EXPORT ProjectTreeView: public QTreeView
+class ProjectTreeView: public QTreeView
 {
         Q_OBJECT
     public:

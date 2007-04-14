@@ -27,7 +27,7 @@
 namespace KDevelop
 {
 
-class KDEVPROJECTMANAGER_EXPORT ProjectManagerDelegate: public QItemDelegate
+class ProjectManagerDelegate: public QItemDelegate
 {
         Q_OBJECT
     public:

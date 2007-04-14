@@ -36,7 +36,7 @@ class ProjectFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
 
-class KDEVPROJECTMANAGER_EXPORT ProjectManagerView: public QWidget
+class ProjectManagerView: public QWidget
 {
         Q_OBJECT
     public:
