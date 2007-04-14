@@ -20,10 +20,13 @@ AC_ARG_WITH(apr-config,
 AC_MSG_CHECKING([for APR])
 APR_CONFIG=""
 for VALUE in $APR_CONFIGS ; do
+    if test -x $VALUE
+    then
 	if $VALUE --cflags > /dev/null; then
 		APR_CONFIG=$VALUE
 		break
 	fi
+    fi
 done
 test $VALUE && APR_CONFIG=$VALUE
 if test $APR_CONFIG ; then
@@ -54,10 +57,13 @@ AC_ARG_WITH(apu-config,
 AC_MSG_CHECKING([for APR util])
 APU_CONFIG=""
 for VALUE in $APU_CONFIGS ; do
+     if test -x $VALUE
+     then
 	if $VALUE --includes > /dev/null; then
 		APU_CONFIG=$VALUE
 		break
 	fi
+    fi
 done
 if test $APU_CONFIG ; then
     AC_MSG_RESULT([found])
