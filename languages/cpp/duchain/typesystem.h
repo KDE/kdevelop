@@ -21,7 +21,7 @@
 #define TYPESYSTEM_H
 
 #include "identifier.h"
-#include <kdevexport.h>
+#include "duchainexport.h"
 #include <QSet>
 #include <QString>
 #include <QList>
@@ -62,7 +62,7 @@ public:
   virtual void endVisit (const ArrayType *) {}
 };
 
-class KDEVCPPLANGUAGE_EXPORT AbstractType : public KShared
+class DUCHAIN_EXPORT AbstractType : public KShared
 {
 public:
   typedef KSharedPtr<AbstractType> Ptr;
@@ -312,7 +312,7 @@ private:
   QList<AbstractType::Ptr> m_elements;
 };
 
-class KDEVCPPLANGUAGE_EXPORT ArrayType : public AbstractType
+class DUCHAIN_EXPORT ArrayType : public AbstractType
 {
 public:
   typedef KSharedPtr<ArrayType> Ptr;

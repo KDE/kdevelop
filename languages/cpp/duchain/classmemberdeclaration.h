@@ -22,11 +22,11 @@
 #define CLASSMEMBERDECLARATION_H
 
 #include "declaration.h"
-#include <kdevexport.h>
+#include "duchainexport.h"
 /**
  * Represents a single class member definition in a definition-use chain.
  */
-class KDEVCPPLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
+class DUCHAIN_EXPORT ClassMemberDeclaration : public Declaration
 {
 public:
   ClassMemberDeclaration(KTextEditor::Range* range, DUContext* context);

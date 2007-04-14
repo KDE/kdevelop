@@ -24,7 +24,7 @@
 #include <ktexteditor/smartrange.h>
 
 #include <editorintegrator.h>
-#include <kdevcodehighlighting.h>
+#include "kdevcodehighlighting.h"
 
 #include "ducontext.h"
 #include "declaration.h"

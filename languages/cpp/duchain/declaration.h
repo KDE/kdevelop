@@ -21,7 +21,7 @@
 
 #include <QList>
 #include <QReadWriteLock>
-#include <kdevexport.h>
+#include "duchainexport.h"
 
 #include "identifier.h"
 #include "documentrangeobject.h"
@@ -38,7 +38,7 @@ class ForwardDeclaration;
 /**
  * Represents a single declaration in a definition-use chain.
  */
-class KDEVCPPLANGUAGE_EXPORT Declaration : public DUChainBase
+class DUCHAIN_EXPORT Declaration : public DUChainBase
 {
   friend class DUContext;
   friend class ForwardDeclaration;

@@ -20,12 +20,12 @@
 #define TYPEREPOSITORY_H
 
 #include "cpptypes.h"
-#include <kdevexport.h>
+#include "duchainexport.h"
 #include <QSet>
 #include <QMultiHash>
 #include <QMutex>
 
-class KDEVCPPLANGUAGE_EXPORT TypeRepository
+class DUCHAIN_EXPORT TypeRepository
 {
 public:
   static TypeRepository* self();

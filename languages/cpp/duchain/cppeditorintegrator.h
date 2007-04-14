@@ -20,7 +20,7 @@
 #define CPPEDITORINTEGRATOR_H
 
 #include "editorintegrator.h"
-#include <kdevexport.h>
+#include "duchainexport.h"
 #include "lexer.h"
 
 class AST;
@@ -33,7 +33,7 @@ class AST;
  *
  * \todo introduce stacks for the state?
  */
-class KDEVCPPLANGUAGE_EXPORT CppEditorIntegrator : public KDevelop::EditorIntegrator
+class DUCHAIN_EXPORT CppEditorIntegrator : public KDevelop::EditorIntegrator
 {
 public:
   CppEditorIntegrator(ParseSession* session);

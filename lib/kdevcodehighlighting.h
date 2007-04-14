@@ -34,7 +34,7 @@ KDevelop text highlighting support interface - the base class for
 language support text highlighting routines. Languages can apply highlighting
 to parsed code here.
 */
-class KDEVPLATFORM_EXPORT CodeHighlighting
+class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting
 {
 public:
     virtual ~CodeHighlighting() {}

@@ -22,11 +22,11 @@
 class TopDUContext;
 
 #include "documentrangeobject.h"
-#include <kdevexport.h>
+#include "duchainexport.h"
 /**
  * Base class for definition-use chain objects.
  */
-class KDEVCPPLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
+class DUCHAIN_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
 {
   friend class ProxyObject;
 

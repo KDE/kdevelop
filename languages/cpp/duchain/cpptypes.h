@@ -26,7 +26,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QPair>
 
-#include <kdevexport.h>
+#include "duchainexport.h"
 #include "typesystem.h"
 #include "cppnamespace.h"
 
@@ -34,7 +34,7 @@ class DUContext;
 class Declaration;
 class ClassFunctionDeclaration;
 
-class KDEVCPPLANGUAGE_EXPORT CppCVType
+class DUCHAIN_EXPORT CppCVType
 {
   friend class TypeRepository;
   friend class TypeBuilder;
@@ -79,7 +79,7 @@ private:
   Declaration* m_declaration;
 };
 
-class KDEVCPPLANGUAGE_EXPORT CppIntegralType : public IntegralType, public CppCVType
+class DUCHAIN_EXPORT CppIntegralType : public IntegralType, public CppCVType
 {
   friend class TypeRepository;
 
@@ -127,7 +127,7 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
-class KDEVCPPLANGUAGE_EXPORT CppFunctionType : public FunctionType, public CppIdentifiedType, public CppCVType
+class DUCHAIN_EXPORT CppFunctionType : public FunctionType, public CppIdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
@@ -142,7 +142,7 @@ public:
   virtual QString mangled() const;
 };
 
-class KDEVCPPLANGUAGE_EXPORT CppPointerType : public PointerType, public CppCVType
+class DUCHAIN_EXPORT CppPointerType : public PointerType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppPointerType> Ptr;
@@ -156,7 +156,7 @@ public:
   //virtual uint hash() const;
 };
 
-class KDEVCPPLANGUAGE_EXPORT CppReferenceType : public ReferenceType, public CppCVType
+class DUCHAIN_EXPORT CppReferenceType : public ReferenceType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppReferenceType> Ptr;
@@ -172,7 +172,7 @@ public:
 
 class CppClassType;
 
-class KDEVCPPLANGUAGE_EXPORT CppClassType : public StructureType, public CppIdentifiedType, public CppCVType
+class DUCHAIN_EXPORT CppClassType : public StructureType, public CppIdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
@@ -278,7 +278,7 @@ private:
   QString m_value;
 };*/
 
-class KDEVCPPLANGUAGE_EXPORT CppEnumerationType : public CppIntegralType, public CppIdentifiedType
+class DUCHAIN_EXPORT CppEnumerationType : public CppIntegralType, public CppIdentifiedType
 {
 public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
