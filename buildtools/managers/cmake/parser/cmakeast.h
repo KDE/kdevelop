@@ -24,7 +24,7 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <kdevexport.h>
+#include "cmakeexport.h"
 #include "cmakelistsparser.h"
 
 class KDEVCMAKECOMMON_EXPORT CMakeAst

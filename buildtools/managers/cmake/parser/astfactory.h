@@ -22,7 +22,7 @@
 #define ASTFACTORY_H
 
 #include <QtCore/QMap>
-#include <kdevexport.h>
+#include "cmakeexport.h"
 
 class QString;
 class CMakeAst;

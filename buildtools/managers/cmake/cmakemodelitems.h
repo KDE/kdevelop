@@ -24,7 +24,7 @@
 #include <projectmodel.h>
 #include <domutil.h>
 #include "cmakexmlparser.h"
-#include <kdevexport.h>
+#include <cmakeexport.h>
 
 namespace KDevelop {
 class IProject;

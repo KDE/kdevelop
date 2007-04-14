@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QMetaType>
 #include "cmListFileLexer.h"
-#include <kdevexport.h>
+#include "cmakeexport.h"
 
 class CMakeAst;
 struct CMakeFunctionArgument;

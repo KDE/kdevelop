@@ -24,7 +24,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtXml/QDomElement>
-#include <kdevexport.h>
+#include <cmakeexport.h>
 #include "kurl.h"
 
 struct TargetInfo

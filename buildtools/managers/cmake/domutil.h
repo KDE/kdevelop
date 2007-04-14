@@ -19,7 +19,7 @@
 #include <QList>
 #include <QMap>
 #include <QHash>
-#include "kdevexport.h"
+#include "cmakeexport.h"
 
 namespace KDevelop
 {
@@ -47,7 +47,7 @@ typedef QList<DomPathElement> DomPath;
 /**
  * Utility class for conveniently accessing data in a %DOM tree.
  */
-class KDEVPLATFORM_EXPORT DomUtil
+class KDEVCMAKECOMMON_EXPORT DomUtil
 {
 public:
     typedef QPair<QString, QString> Pair;
