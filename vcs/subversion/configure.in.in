@@ -7,7 +7,7 @@ dnl   [], with_subversion=check)
 SVN_SUBDIR=""
 if test "x$with_subversion" != xno; then
 
-APR_CONFIGS="/usr/bin/apr-config /usr/local/bin/apr-config /usr/local/apr/bin/apr-config"
+APR_CONFIGS="/usr/bin/apr-config /usr/bin/apr-1-config /usr/local/bin/apr-config /usr/local/apr/bin/apr-config"
 SVN_SUBDIR="svn"
 AC_ARG_WITH(apr-config,
 [[  --with-apr-config=FILE    Use the given path to apr-config when determining
@@ -42,7 +42,7 @@ dnl
 dnl APR util
 dnl
 
-APU_CONFIGS="/usr/bin/apu-config /usr/local/bin/apu-config /usr/local/apu/bin/apu-config"
+APU_CONFIGS="/usr/bin/apu-config /usr/bin/apu-1-config /usr/local/bin/apu-config /usr/local/apu/bin/apu-config"
 AC_ARG_WITH(apu-config,
 [[  --with-apu-config=FILE    Use the given path to apu-config when determining
                             APR util configuration; defaults to "apu-config"]],
