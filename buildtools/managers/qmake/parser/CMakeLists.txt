@@ -2,7 +2,6 @@ project(kdevqmakeparser)
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
                      ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake
-                     ${FLEX_INCLUDE_DIR}
                    )
 
 set( kdevqmakeparser_SRCS
@@ -78,7 +77,8 @@ if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.h"
         DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/qmake_lexer.ll"
         )
-    include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+    include_directories( ${CMAKE_CURRENT_BINARY_DIR} 
+                     ${FLEX_INCLUDE_DIR} )
 
 else(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
     message("Assuming existence of the generated lexer file qmake_lexer.cpp")
