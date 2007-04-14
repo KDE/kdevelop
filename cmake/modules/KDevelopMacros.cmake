@@ -4,7 +4,11 @@ macro(kdevelop_add_app_templates _templateNames)
 
         get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
         get_filename_component(_baseName ${_tmp_file} NAME_WE)
-        set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
+        if(WIN32)
+			set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.zip)
+		else(WIN32)
+			set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
+		endif(WIN32)
 
         add_custom_target(${_baseName} ALL DEPENDS ${_template})
 
@@ -20,12 +24,22 @@ macro(kdevelop_add_app_templates _templateNames)
         #    endif ( ${_v1} AND ${_v2} )
         #endforeach(_file)
 
-        add_custom_command(OUTPUT ${_template}
-            COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
-                --exclude .kdev_ignore --exclude .svn
-                -z -f ${_template} .
-            #DEPENDS ${_deps}
-        )
+		if(WIN32)
+			add_custom_command(OUTPUT ${_template}
+	            COMMAND zip ARGS -r -D
+	                ${_template} ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
+					-x .svn .kdev_ignore
+	            #DEPENDS ${_deps}
+	        )
+		else(WIN32)
+			add_custom_command(OUTPUT ${_template}
+	            COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
+	                --exclude .kdev_ignore --exclude .svn
+	                -z -f ${_template} .
+	            #DEPENDS ${_deps}
+	        )
+		endif(WIN32)
+        
 
         #install( FILES ${_templateName}/${_templateName}.kdevtemplate
         #    DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard/templates )

@@ -23,6 +23,7 @@
 #include <QTextStream>
 
 #include <ktar.h>
+#include <kzip.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -99,12 +100,20 @@ QString AppWizardPart::createProject(ProjectSelectionPage *selectionPage)
     m_variables["APPNAMELC"] = selectionPage->appName().toLower();
 
     QString dest = selectionPage->location();
-    KTar arch(templateArchive, "application/x-bzip");
-    if (arch.open(QIODevice::ReadOnly))
-        unpackArchive(arch.directory(), dest);
-    else
-        kDebug(9010) << "failed to open template archive" << endl;
-
+	KArchive* arch = 0;
+	if( templateArchive.endsWith(".zip") )
+	{
+		arch = new KZip(templateArchive);
+	}
+	else
+	{
+	    arch = new KTar(templateArchive, "application/x-bzip");
+	}
+	if (arch->open(QIODevice::ReadOnly))
+		unpackArchive(arch->directory(), dest);
+	else
+		kDebug(9010) << "failed to open template archive" << endl;
+	
     return QDir::cleanPath(dest + "/" + selectionPage->appName().toLower() + ".kdev4");
 }
 
