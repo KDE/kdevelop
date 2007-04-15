@@ -93,7 +93,7 @@ class kio_svnProtocol : public KIO::SlaveBase
 		static svn_error_t* blameReceiver( void *baton, apr_int64_t line_no, svn_revnum_t rev, const char *author, const char *date, const char *line, apr_pool_t *pool );
 		void svn_log( int revstart, const QString &revkindstart, int revend, const QString &revkindend, bool repositLog, bool discorverChangedPath, bool strictNodeHistory, const KURL::List& targets );
 		static svn_error_t* receiveLogMessage(void *baton, apr_hash_t *changed_paths, svn_revnum_t revision, const char *author, const char *date, const char *message, apr_pool_t *pool );
-		void add( const KURL& wc );
+		void add( const KURL::List& wcList );
 		//these work using the working copy
 		void wc_resolve( const KURL& wc, bool recurse = true );
 		void wc_delete( const KURL::List& wc );

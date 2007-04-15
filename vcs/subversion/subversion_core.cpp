@@ -325,41 +325,32 @@ void subversionCore::blame( const KURL &url, UrlMode mode, int revstart, QString
 }
 
 void subversionCore::add( const KURL::List& list ) {
-	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
-	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
-		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
-	}
-	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug(9036) << "adding : " << (*it).prettyURL() << endl;
-		QByteArray parms;
-		QDataStream s( parms, IO_WriteOnly );
-		int cmd = 6;
-		s << cmd << *it;
-		SimpleJob * job = KIO::special(servURL, parms, true);
-		job->setWindow( m_part->mainWindow()->main() );
-		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
-	}
+	
+	KURL servURL = "kdevsvn+svn://blah/";
+	kdDebug(9036) << "Deleting servURL : " << servURL.prettyURL() << endl;
+	
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	int cmd = 6;
+	s << cmd << list;
+	// add/delete/revert works on local copy. Don't need to show progress dialog
+	SimpleJob * job = KIO::special(servURL, parms, false); 
+	job->setWindow( m_part->mainWindow()->main() );
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 }
 
 void subversionCore::del( const KURL::List& list ) {
-	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
-	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
-		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
-	}
-	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug(9036) << "deleting : " << (*it).prettyURL() << endl;
-		QByteArray parms;
-		QDataStream s( parms, IO_WriteOnly );
-		int cmd = 7;
-		s << cmd << *it;
-		SimpleJob * job = KIO::special(servURL, parms, true);
-		job->setWindow( m_part->mainWindow()->main() );
-		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
-	}
+	KURL servURL = "kdevsvn+svn://blah/";
+	kdDebug(9036) << "Deleting servURL : " << servURL.prettyURL() << endl;
+	
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	int cmd = 7;
+	s << cmd << list;
+	// add/delete/revert works on local copy. Don't need to show progress dialog
+	SimpleJob * job = KIO::special(servURL, parms, false);
+	job->setWindow( m_part->mainWindow()->main() );
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 }
 
 void subversionCore::revert( const KURL::List& list ) {

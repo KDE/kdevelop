@@ -792,20 +792,16 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 			}
 		case SVN_ADD:
 			{
-				KURL wc;
-				stream >> wc;
+				KURL::List wcList;
+				stream >> wcList;
 				kdDebug(9036) << "kio_svnProtocol ADD" << endl;
-				add(wc);
+				add(wcList);
 				break;
 			}
 		case SVN_DEL:
 			{
 				KURL::List wclist;
-				while ( !stream.atEnd() ) {
-					KURL tmp;
-					stream >> tmp;
-					wclist << tmp;
-				}
+				stream >> wclist;
 				kdDebug(9036) << "kio_svnProtocol DEL" << endl;
 				wc_delete(wclist);
 				break;
@@ -1436,22 +1432,28 @@ void kio_svnProtocol::commit2(bool recurse, bool keeplocks, const KURL::List& wc
 	svn_pool_destroy (subpool);
 }
 
-void kio_svnProtocol::add(const KURL& wc) {
-	kdDebug(9036) << "kio_svnProtocol::add() : " << wc.url() << endl;
+void kio_svnProtocol::add(const KURL::List& list) {
+	kdDebug(9036) << "kio_svnProtocol::add() __TIME__" << __TIME__ << endl;
 
 	apr_pool_t *subpool = svn_pool_create (pool);
 	bool nonrecursive = false;
-
-	KURL nurl = wc;
-	nurl.setProtocol( "file" );
-	QString target = nurl.url();
-	recordCurrentURL( nurl );
-
 	initNotifier(false, false, false, subpool);
-	svn_error_t *err = svn_client_add(svn_path_canonicalize( nurl.path().utf8(), subpool ),nonrecursive,ctx,subpool);
+
+	svn_error_t *err = NULL;
+	for( QValueList<KURL>::ConstIterator it = list.begin(); it != list.end(); ++it ){
+		
+		KURL nurl = (*it);
+		nurl.setProtocol( "file" );
+		recordCurrentURL( nurl );
+		kdDebug(9036) << " Schedule to Add: " << nurl.path().utf8() << endl;
+		err = svn_client_add( svn_path_canonicalize( nurl.path().utf8(), subpool ),
+							  nonrecursive, ctx, subpool);
+		if( err ) break;
+	}
 	if ( err ){
-		error( KIO::ERR_SLAVE_DEFINED, err->message );
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+		return;
 	}
 
 	finished();
@@ -1463,8 +1465,8 @@ void kio_svnProtocol::wc_delete(const KURL::List& wc) {
 
 	apr_pool_t *subpool = svn_pool_create (pool);
 	svn_client_commit_info_t *commit_info = NULL;
-	bool nonrecursive = false;
-
+	bool force = false;
+	
 	apr_array_header_t *targets = apr_array_make(subpool, 1+wc.count(), sizeof(const char *));
 
 	for ( QValueListConstIterator<KURL> it = wc.begin(); it != wc.end() ; ++it ) {
@@ -1475,10 +1477,10 @@ void kio_svnProtocol::wc_delete(const KURL::List& wc) {
 	}
 
 	initNotifier(false, false, false, subpool);
-	svn_error_t *err = svn_client_delete(&commit_info,targets,nonrecursive,ctx,subpool);
-
+	svn_error_t *err = svn_client_delete(&commit_info,targets,force,ctx,subpool);
+	
 	if ( err )
-		error( KIO::ERR_SLAVE_DEFINED, err->message );
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 
 	finished();
 	svn_pool_destroy (subpool);
