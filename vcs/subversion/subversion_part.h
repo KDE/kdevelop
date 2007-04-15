@@ -83,6 +83,7 @@ private slots:
 		void slotResolve();
 		void slotSwitch();
 		void slotCopy();
+		void slotMerge();
 		void slotProjectClosed();
 		void slotProjectOpened();
 
@@ -103,7 +104,8 @@ private:
 		*actionRevert,
 		*actionResolve,
 		*actionSwitch,
-		*actionCopy;
+		*actionCopy,
+		*actionMerge;
 
 		QGuardedPtr<subversionProjectWidget> m_projWidget;
 		KURL base;

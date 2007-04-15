@@ -955,6 +955,20 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 				svn_copy( src, srcRev, srcRevKind, dest );
                 break;
 			}
+		case SVN_MERGE:
+			{
+				KURL src1, src2, wc_target;
+				int rev1, rev2;
+				QString revKind1, revKind2;
+				bool recurse, ignore_ancestry, force, dry_run;
+				stream >> src1 >> rev1 >> revKind1;
+				stream >> src2 >> rev2 >> revKind2;
+				stream >> wc_target;
+				stream >> recurse >> ignore_ancestry >> force >> dry_run;
+				svn_merge( src1, rev1, revKind1, src2, rev2, revKind2, wc_target,
+						   recurse, ignore_ancestry, force, dry_run );
+				break;
+			}
 		default:
 			{
 				kdDebug(9036) << "kio_svnProtocol DEFAULT" << endl;
@@ -1604,6 +1618,37 @@ void kio_svnProtocol::svn_copy( const KURL &srcUrl, int srcRev, const QString &s
 	
 	finished();
 	svn_pool_destroy (subpool);
+}
+
+void kio_svnProtocol::svn_merge(const KURL &src1, int revNum1, QString revKind1,
+								const KURL &src2, int revNum2, QString revKind2,
+								const KURL &target_wc,
+								bool recurse, bool ignore_ancestry, bool force, bool dry_run )
+{
+	kdDebug(9036) << " KIO::svn_merge src1 " << src1.pathOrURL().utf8() << " src2 " << src2.pathOrURL().utf8() << " target " << target_wc.pathOrURL().utf8() << endl;
+	apr_pool_t *subpool = svn_pool_create( pool );
+
+	svn_opt_revision_t rev1 = createRevision( revNum1, revKind1, subpool );
+	svn_opt_revision_t rev2 = createRevision( revNum2, revKind2, subpool );
+
+	initNotifier( false, false, false, subpool );
+	svn_error_t *err = svn_client_merge( src1.pathOrURL().utf8(), &rev1,
+										 src2.pathOrURL().utf8(), &rev2,
+										 target_wc.pathOrURL().utf8(),
+										 recurse, ignore_ancestry, force, dry_run,
+									     ctx, pool );
+	if ( err ) {
+		apr_status_t errcode = err->apr_err;
+		char buf[512];
+		svn_strerror(errcode, buf, 512);
+		error( KIO::ERR_SLAVE_DEFINED,
+			   QString::fromLocal8Bit(err->message) + "\n "+ QString::fromLocal8Bit(buf) );
+		svn_pool_destroy (subpool);
+		return;
+	}
+	
+	finished();
+	svn_pool_destroy( subpool );
 }
 
 //change the proto and remove trailing /

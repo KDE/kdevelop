@@ -1,0 +1,374 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>SvnMergeOptionDialogBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>SvnMergeOptionDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>473</width>
+            <height>590</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Subversion Merge</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Destination</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Destination working path</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="1" column="0">
+                    <property name="name">
+                        <cstring>dest</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>buttonGroup2</cstring>
+            </property>
+            <property name="title">
+                <string>Source 1</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KIntNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>revnum1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minValue">
+                        <number>-1</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="3" column="0">
+                    <property name="name">
+                        <cstring>revnumbtn1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Number:</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="3" column="2">
+                    <property name="name">
+                        <cstring>revkindbtn1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Keyword:</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="3" column="3">
+                    <item>
+                        <property name="text">
+                            <string>HEAD</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>BASE</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>COMMITTED</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>PREV</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>revkind1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="1" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>src1</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Source URL or working path:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Specify revision as</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>buttonGroup2_2</cstring>
+            </property>
+            <property name="title">
+                <string>Source 2</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="3" column="0">
+                    <property name="name">
+                        <cstring>revnumbtn2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Number:</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="3" column="2">
+                    <property name="name">
+                        <cstring>revkindbtn2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Keyword:</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="KURLRequester" row="1" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>src2</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>textLabel2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Specify revision as</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="3" column="3">
+                    <item>
+                        <property name="text">
+                            <string>HEAD</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>BASE</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>COMMITTED</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>PREV</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>revkind2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="currentItem">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>revnum2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minValue">
+                        <number>-1</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>textLabel3_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Source URL or working path:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QPushButton" row="7" column="1">
+            <property name="name">
+                <cstring>okBtn</cstring>
+            </property>
+            <property name="text">
+                <string>OK</string>
+            </property>
+        </widget>
+        <spacer row="7" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>171</width>
+                    <height>31</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="7" column="2">
+            <property name="name">
+                <cstring>cancelBtn</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>forceCheck</cstring>
+            </property>
+            <property name="text">
+                <string>--force (Force to delete locally modified or unversioned items.)</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>nonRecurse</cstring>
+            </property>
+            <property name="text">
+                <string>--non-recursive</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>ignoreAncestryCheck</cstring>
+            </property>
+            <property name="text">
+                <string>--ignore-ancestry</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>dryRunCheck</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>--dry-run (Only receive full result notification
+                without actually modifying working copy)</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>okBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>SvnMergeOptionDialogBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancelBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>SvnMergeOptionDialogBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

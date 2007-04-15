@@ -37,6 +37,7 @@
 #include "svn_logviewwidget.h"
 #include "svn_switchwidget.h"
 #include "svn_copywidget.h"
+#include "svn_mergewidget.h"
 
 #include "urlutil.h"
 #include <qvbox.h>
@@ -52,6 +53,8 @@
 #include <kdevplugininfo.h>
 
 #include <kmessagebox.h>
+
+using namespace SvnGlobal;
 
 static const KDevPluginInfo data("kdevsubversion");
 
@@ -149,8 +152,11 @@ void subversionPart::setupActions() {
 	actionResolve->setWhatsThis( i18n("<b>Resolve the conflicting state</b><p>Remove the conflict state that can be set on a file after a merge failed.") );
 	actionSwitch = new KAction( i18n("Switch this working copy to URL.."), 0,
 			this, SLOT(slotSwitch()), actionCollection(), "subversion_switch" );
+	// warn slogCopy(), slotMerge only works on context menu. There is no main-menu action
 	actionCopy = new KAction( i18n("Copy this working copy to URL.."), 0,
 								this, SLOT(slotCopy()), actionCollection(), "subversion_copy" );
+	actionMerge = new KAction( i18n("Merge difference to working copy"), 0,
+							  this, SLOT(slotMerge()), actionCollection(), "subversion_merge" );
 }
 
 QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
@@ -241,6 +247,8 @@ if(!project())
 		subMenu->setWhatsThis(id, i18n("<b>Switch</b><p>Switch working tree.") );
 		id = subMenu->insertItem( actionCopy->text(), this, SLOT(slotCopy()) );
 		subMenu->setWhatsThis(id, i18n("<b>Copy</b><p>Copy from/between path/URLs") );
+		id = subMenu->insertItem( actionMerge->text(), this, SLOT(slotMerge()) );
+		subMenu->setWhatsThis(id, i18n("<b>Merge</b><p>Merge difference to working copy") );
 
 		/*
 		subMenu->insertSeparator();
@@ -362,6 +370,29 @@ void subversionPart::slotCopy()
 	kdDebug(9036) << " SRC: " << srcUrl << " DEST: " << dest << " Revnum: " << rev << " RevKind: " << revKind << endl;
 
 	m_impl->svnCopy( srcUrl, rev, revKind, dest );
+}
+
+void subversionPart::slotMerge()
+{
+	// error check
+	if( m_urls.count() > 1 ){
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							 i18n("Please select only one item for subversion merge") );
+		return;
+	}
+	if( m_urls.count() < 1 ) return;
+
+	KURL wcTarget= m_urls.first();
+	SvnMergeDialog dlg( wcTarget, (QWidget*)project()->mainWindow()->main() );
+	if( dlg.exec() != QDialog::Accepted ) return;
+
+	KURL src1 = dlg.source1();
+	SvnRevision rev1 = dlg.rev1();
+	KURL src2 = dlg.source2();
+	SvnRevision rev2 = dlg.rev2();
+
+	m_impl->merge( src1, rev1.revNum, rev1.revKind, src2, rev2.revNum, rev2.revKind, wcTarget,
+				   dlg.recurse(), dlg.ignoreAncestry(), dlg.force(), dlg.dryRun() );
 }
 
 void subversionPart::slotActionCommit() {

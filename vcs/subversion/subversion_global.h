@@ -15,8 +15,8 @@
 #ifndef SUBVERSION_GLOBAL_H
 #define SUBVERSION_GLOBAL_H
 
-class KURL;
-class QString;
+#include <kurl.h>
+#include <qdatetime.h>
 
 namespace SvnGlobal
 {
@@ -43,6 +43,13 @@ public:
     /* The root URL of the repository. */
     KURL reposRootUrl;
     QString reposUuid;
+};
+
+class SvnRevision{
+public:
+	int revNum;
+	QString revKind;
+	QDateTime revDate;
 };
 
 } // end of namespace SvnGlobal

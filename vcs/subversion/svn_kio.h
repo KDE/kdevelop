@@ -103,6 +103,9 @@ class kio_svnProtocol : public KIO::SlaveBase
         void svn_info( KURL pathOrUrl, int pegRev, QString pegRevKind, int rev, QString revKind, bool recurse );
         static svn_error_t* infoReceiver( void *baton, const char *path, const svn_info_t *info, apr_pool_t *pool);
 		void svn_copy( const KURL &srcUrl, int srcRev, const QString &srcRevKind, const KURL &destUrl );
+		void svn_merge( const KURL &src1, int rev1, QString revKind1, const KURL &src2, int rev2, QString revKind2,
+						const KURL &target_wc,
+						bool recurse, bool ignore_ancestry, bool force, bool dry_run );
 
 		static svn_error_t* checkAuth(svn_auth_cred_simple_t **cred, void *baton, const char *realm, const char *username, svn_boolean_t may_save, apr_pool_t *pool);
 		static svn_error_t *trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **cred_p, void *, const char *realm, apr_uint32_t failures, const svn_auth_ssl_server_cert_info_t *cert_info, svn_boolean_t may_save, apr_pool_t *pool);
@@ -145,6 +148,7 @@ class kio_svnProtocol : public KIO::SlaveBase
             SVN_INFO = 15,
 			SVN_SWITCH_RELOCATE = 16,
 			SVN_COPY = 17,
+			SVN_MERGE = 18,
 			SVN_COMMIT_2=103,
 			SVN_STATUS_2=109
                     

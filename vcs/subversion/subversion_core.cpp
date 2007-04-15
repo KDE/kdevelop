@@ -446,6 +446,24 @@ void subversionCore::svnCopy( const KURL &src, int srcRev, const QString &srcRev
 	initProcessDlg( (KIO::Job*)job, src.prettyURL(), dest.prettyURL() );
 }
 
+void subversionCore::merge( const KURL &src1, int rev1, QString revKind1,
+							const KURL &src2, int rev2, QString revKind2, const KURL &wc_path,
+							bool recurse, bool ignore_ancestry, bool force, bool dry_run )
+{
+	KURL servURL = "kdevsvn+svn://blah/";
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	// prepare arguments
+	int cmd = 18;
+	s << cmd << src1 << rev1 << revKind1 << src2 << rev2 << revKind2 << wc_path;
+	s << recurse << ignore_ancestry << force << dry_run;
+
+	SimpleJob * job = KIO::special(servURL, parms, false);
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	initProcessDlg( (KIO::Job*)job, src1.prettyURL() + "\n" + src2.prettyURL() ,
+					wc_path.prettyURL() );
+}
+
 bool subversionCore::clientInfo( KURL path_or_url, bool recurse, QMap< KURL, SvnInfoHolder> &holderMap )
 {
     KURL servURL = "kdevsvn+svn://blah/";
