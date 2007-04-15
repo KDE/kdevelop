@@ -809,11 +809,7 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 		case SVN_REVERT:
 			{
 				KURL::List wclist;
-				while ( !stream.atEnd() ) {
-					KURL tmp;
-					stream >> tmp;
-					wclist << tmp;
-				}
+				stream >> wclist;
 				kdDebug(9036) << "kio_svnProtocol REVERT" << endl;
 				wc_revert(wclist);
 				break;
@@ -1504,8 +1500,9 @@ void kio_svnProtocol::wc_revert(const KURL::List& wc) {
 	initNotifier(false, false, false, subpool);
 	svn_error_t *err = svn_client_revert(targets,nonrecursive,ctx,subpool);
 	if ( err ){
-		error( KIO::ERR_SLAVE_DEFINED, err->message );
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit( err->message ) );
 		svn_pool_destroy (subpool);
+		return;
 	}
 
 	finished();
