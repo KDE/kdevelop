@@ -42,13 +42,15 @@ public:
 
 public slots:
     /**
-     * Inserts @p tag into the KTabWidget and calls it @p label
+     * Inserts @p tag into the KTabWidget and calls it @p label .
+     * This slot gets connected to CvsPart::addNewTabToMainView().
      */
     void slotAddTab(QWidget* tab, QString label);
 
     /**
      * When this slot gets called, the output of the job will be written to 
      * the default outputview of the KTabWidget.
+     * This slot gets connected to CvsPart::jobFinished().
      */
     void slotJobFinished(KJob* job);
 
