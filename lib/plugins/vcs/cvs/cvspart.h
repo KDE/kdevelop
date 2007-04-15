@@ -74,6 +74,7 @@ public slots:
     void slotUnEdit();
     void slotEditors();
     void slotAdd();
+    void slotRemove();
     void slotCommit();
     void slotUpdate();
     void slotImport();
@@ -84,7 +85,21 @@ Q_SIGNALS:
     virtual void statusReady(const QList<KDevelop::VcsFileInfo> &infos);
 
 signals:
+    /**
+     * Some actions like commit, add, remove... will connect the job's
+     * result() signal to this signal. Anybody, like for instance the 
+     * CvsMainView class, that is interested in getting notified about
+     * jobs that finished can connect to this signal.
+     * @see class CvsMainView
+     */
     void jobFinished(KJob* job);
+
+    /**
+     * Gets emmited when a job like log, editors... was created.
+     * CvsPart will connect the newly created view to the result() signal 
+     * of a job. So the new view will show the ouput of that job as
+     * soon as it has finished.
+     */
     void addNewTabToMainView(QWidget* tab, QString label);
 
 private:

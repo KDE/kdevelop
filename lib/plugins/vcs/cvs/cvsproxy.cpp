@@ -219,6 +219,25 @@ CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, bool binar
     return NULL;
 }
 
+CvsJob * CvsProxy::remove(const QString & repo, const KUrl::List & files)
+{
+    kDebug() << k_funcinfo << endl;
+
+    CvsJob* job = new CvsJob(this);
+    if ( prepareJob(job, repo) ) {
+        *job << "cvs";
+        *job << "remove";
+
+        *job << "-f"; //existing files will be deleted
+
+        addFileList(job, repo, files);
+
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
 CvsJob* CvsProxy::update(const QString & repo, const KUrl::List & files,
                       const QString & updateOptions, bool pruneDirs, bool createDirs)
 {
@@ -254,6 +273,7 @@ CvsJob * CvsProxy::import(const KUrl & directory,
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, directory.path(), CvsProxy::Import) ) {
         *job << "cvs";
+        *job << "-q"; // don't print directory changes
         *job << "-d";
         *job << server;
         *job << "import";

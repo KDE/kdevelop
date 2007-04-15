@@ -8,6 +8,7 @@
     <Action name="cvs_unedit" />
     <Action name="cvs_editors" />
     <Action name="cvs_add" />
+    <Action name="cvs_remove" />
     <Action name="cvs_commit" />
     <Action name="cvs_update" />
     <Action name="cvs_import" />

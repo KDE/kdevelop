@@ -68,6 +68,7 @@ public:
                 const QString& message);
     CvsJob* add(const QString& repo, const KUrl::List& files, 
              bool binary = false);
+    CvsJob* remove(const QString& repo, const KUrl::List& files);
     CvsJob* update(const QString& repo, const KUrl::List& files, 
                 const QString& updateOptions,
                 bool pruneDirs = true, bool createDirs = true);

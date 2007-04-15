@@ -117,6 +117,10 @@ void CvsPart::setupActions()
     action->setText(i18n("Add Files..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAdd()));
 
+    action = actionCollection()->addAction("cvs_remove");
+    action->setText(i18n("Remove Files..."));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotRemove()));
+
     action = actionCollection()->addAction("cvs_commit");
     action->setText(i18n("Commit Files..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCommit()));
@@ -178,6 +182,15 @@ void CvsPart::slotAdd()
     urls << url;
 
     add(urls);
+}
+
+void CvsPart::slotRemove()
+{
+    KUrl url = urlFocusedDocument();
+    KUrl::List urls;
+    urls << url;
+
+    remove(urls);
 }
 
 void CvsPart::slotCommit()
@@ -337,8 +350,15 @@ void CvsPart::commit(const KUrl::List & urls)
 
 void CvsPart::remove(const KUrl::List & urls)
 {
-    Q_UNUSED(urls)
-    /// @todo implemt me !
+    ///@todo find a common base directory for the files
+    QFileInfo info( urls[0].path() );
+
+    CvsJob* job = d->m_proxy->remove( info.absolutePath(), urls );
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SIGNAL( jobFinished(KJob*) ));
+        job->start();
+    }
 }
 
 void CvsPart::add(const KUrl::List & urls)
