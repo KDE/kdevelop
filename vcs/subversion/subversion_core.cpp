@@ -132,23 +132,18 @@ void subversionCore::resolve( const KURL::List& list ) {
 }
 
 void subversionCore::update( const KURL::List& list ) {
-	KURL servURL = m_part->baseURL();
-	if ( servURL.isEmpty() ) servURL="kdevsvn+svn://blah/";
-	if ( ! servURL.protocol().startsWith( "kdevsvn+" ) ) {
-		servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
-	}
-	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug(9036) << "updating : " << (*it).prettyURL() << endl;
-		QByteArray parms;
-		QDataStream s( parms, IO_WriteOnly );
-		int cmd = 2;
-		int rev = -1;
-		s << cmd << *it << rev << QString( "HEAD" );
-		SimpleJob * job = KIO::special(servURL, parms, true);
-		job->setWindow( m_part->mainWindow()->main() );
-		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
-	}
+	KURL servURL = "kdevsvn+svn://blah/";
+	kdDebug(9036) << "Updating. servURL : " << servURL.prettyURL() << endl;
+	
+	QByteArray parms;
+	QDataStream s( parms, IO_WriteOnly );
+	int cmd = 2;
+	int rev = -1;
+	s << cmd << list << rev << QString( "HEAD" );
+	
+	SimpleJob * job = KIO::special(servURL, parms, false);
+	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	initProcessDlg( (KIO::Job*)job, i18n("Subversion Update") , i18n("Subversion Update") );
 }
 
 void subversionCore::diff( const KURL::List& list, const QString& where){

@@ -720,14 +720,14 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 			}
 		case SVN_UPDATE:
 			{
-				KURL wc;
+				KURL::List list;
 				int revnumber;
 				QString revkind;
-				stream >> wc;
+				stream >> list;
 				stream >> revnumber;
 				stream >> revkind;
-				kdDebug(9036) << "kio_svnProtocol UPDATE " << wc.url() << " at " << revnumber << " or " << revkind << endl;
-				update(wc, revnumber, revkind );
+				kdDebug(9036) << "kio_svnProtocol UPDATE " << endl;
+				update( list, revnumber, revkind );
 				break;
 			}
 		case SVN_COMMIT:
@@ -1295,22 +1295,27 @@ void kio_svnProtocol::svn_switch_relocate( const KURL &wc, const KURL &origUrl, 
 	svn_pool_destroy( subpool );
 }
 
-void kio_svnProtocol::update( const KURL& wc, int revnumber, const QString& revkind ) {
-	kdDebug(9036) << "kio_svn::update : " << wc.path() << " at revision " << revnumber << " or " << revkind << endl ;
+void kio_svnProtocol::update( const KURL::List &list, int revnumber, const QString& revkind ) {
+	kdDebug(9036) << "kio_svn::update : __TIME__" << __TIME__ << endl;
 
 	apr_pool_t *subpool = svn_pool_create (pool);
-	KURL dest = wc;
-	dest.setProtocol( "file" );
-	QString target = dest.path();
-	recordCurrentURL( dest );
 
+	apr_array_header_t *targets = apr_array_make(subpool, 1+list.count(), sizeof(const char *));
 	svn_opt_revision_t rev = createRevision( revnumber, revkind, subpool );
 
+	for( QValueList<KURL>::ConstIterator it = list.begin(); it != list.end(); ++it ){
+		KURL nurl = *it;
+		*( const char ** )apr_array_push(targets) = svn_path_canonicalize( nurl.path().utf8(), subpool );
+	}
+
 	initNotifier(false, false, false, subpool);
-	svn_error_t *err = svn_client_update (NULL, svn_path_canonicalize( target.utf8(), subpool ), &rev, true, ctx, subpool);
+	svn_error_t *err = svn_client_update2( NULL, targets, &rev,
+										   true/*recurse*/, false/*ignore_external*/,
+										   ctx, subpool);
 	if ( err ){
-		error( KIO::ERR_SLAVE_DEFINED, err->message );
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+		return;
 	}
 
 	finished();

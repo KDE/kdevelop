@@ -86,7 +86,7 @@ class kio_svnProtocol : public KIO::SlaveBase
 				                  bool recurse );
 		void svn_diff( const KURL& url1, const KURL& url2, int rev1, int rev2, const QString& revkind1, const QString& revkind2, bool recurse);
 		//TODO fix with svn 1.2 : support a KURL::List -> svn_client_update2()
-		void update( const KURL& wc, int revnumber, const QString& revkind );
+		void update( const KURL::List &list, int revnumber, const QString& revkind );
 		void commit( const KURL::List& wc );
 		void commit2( bool recurse, bool keeplocks, const KURL::List& wc );
 		void blame( KURL url, SvnGlobal::UrlMode mode, /*int pegRev, QString pegRevKind,*/ int startRev, QString startRevKind, int endRev, QString endRevKind );
