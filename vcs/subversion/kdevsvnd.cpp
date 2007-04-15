@@ -49,7 +49,7 @@ KDevSvnd::~KDevSvnd()
 
 QString KDevSvnd::commitDialog(QString modifiedFiles) {
 	CommitDlg commitDlg;
-	commitDlg.setCaption(i18n("Enter Commit Log Message ") + QString( __TIME__) );
+	commitDlg.setCaption(i18n("Enter Commit Log Message "));
 	commitDlg.listMessage->setText( modifiedFiles );
 	int result = commitDlg.exec();
 	if ( result == QDialog::Accepted ) {
