@@ -25,7 +25,7 @@
 #include <QtGui/QHeaderView>
 
 #include <icore.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>

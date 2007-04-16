@@ -125,7 +125,7 @@ void MainWindow::fillContextMenu( KMenu *menu, const Context *context )
 
 void MainWindow::setVisible( bool visible )
 {
-    KMainWindow::setVisible( visible );
+    KXmlGuiWindow::setVisible( visible );
     emit finishedLoading();
 }
 

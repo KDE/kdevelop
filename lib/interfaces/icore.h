@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 #include "kdevexport.h"
 
-class KMainWindow;
+class KXmlGuiWindow;
 
 namespace KParts
 {

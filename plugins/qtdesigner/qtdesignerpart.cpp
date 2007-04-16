@@ -12,7 +12,7 @@
 #include <kaboutdata.h>
 #include <kaction.h>
 #include <kmimetype.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kparts/genericfactory.h>
 #include <kparts/partmanager.h>
 #include <ksavefile.h>

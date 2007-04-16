@@ -38,7 +38,7 @@
 #include <sublime/mainwindow.h>
 
 Example1Main::Example1Main()
-    :KMainWindow(0)
+    :KXmlGuiWindow(0)
 {
     //documents
     m_controller = new Sublime::Controller(this);

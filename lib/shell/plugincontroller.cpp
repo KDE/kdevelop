@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kparts/componentfactory.h>
 #include <assert.h>
 #include <kdebug.h>

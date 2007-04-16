@@ -34,7 +34,7 @@
 #include "iproject.h"
 #include "ibuildsystemmanager.h"
 #include "iprojectbuilder.h"
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 // #include <kdevcontext.h>
 #include <kiconloader.h>
 #include <kmenu.h>

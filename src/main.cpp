@@ -4,7 +4,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 

@@ -68,7 +68,7 @@ Boston, MA 02110-1301, USA.
 #include <kdeversion.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kdialog.h>
 #include <kcompletion.h>
 #include <kiconloader.h>

@@ -20,7 +20,7 @@ class QDomDocument;
 #include <ktoolbar.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kparts/componentfactory.h>
 #include <kaction.h>
 #include <kcmdlineargs.h>

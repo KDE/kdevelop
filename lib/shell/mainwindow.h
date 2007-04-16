@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEV_MAINWINDOW_H
 #define KDEV_MAINWINDOW_H
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 
 #include "core.h"
 #include <sublime/mainwindow.h>

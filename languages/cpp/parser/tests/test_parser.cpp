@@ -38,7 +38,7 @@ private slots:
     NameTable table;
     table.findOrInsert("Ideal::MainWindow", sizeof("Ideal::MainWindow"));
     table.findOrInsert("QMainWindow", sizeof("QMainWindow"));
-    table.findOrInsert("KMainWindow", sizeof("KMainWindow"));
+    table.findOrInsert("KXmlGuiWindow", sizeof("KXmlGuiWindow"));
     QCOMPARE(table.count(), size_t(3));
     const NameSymbol *s = table.findOrInsert("QMainWindow", sizeof("QMainWindow"));
     QCOMPARE(QString(s->data), QString("QMainWindow"));

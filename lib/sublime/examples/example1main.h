@@ -19,14 +19,14 @@
 #ifndef EXAMPLE1MAIN_H
 #define EXAMPLE1MAIN_H
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 
 namespace Sublime {
     class Area;
     class Controller;
 }
 
-class Example1Main: public KMainWindow {
+class Example1Main: public KXmlGuiWindow {
     Q_OBJECT
 public:
     Example1Main();
