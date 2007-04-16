@@ -290,6 +290,8 @@ const QList< KDevelop::VcsFileInfo > & CvsPart::statusSync(const KUrl & dirPath,
     Q_UNUSED(dirPath)
     Q_UNUSED(mode)
     /// @todo implemt me !
+    static const QList< KDevelop::VcsFileInfo > null;
+    return null;
 }
 
 void CvsPart::checkout(const KUrl & repository, const KUrl & targetDir, KDevelop::IVersionControl::WorkingMode mode)
