@@ -178,12 +178,12 @@ void QtDesignerPart::setupActions()
     designerAction = manager->actionUndo();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "designer_undo" );
-    designerKAction->setIcon( KIcon( "edit_undo" ) );
+    designerKAction->setIcon( KIcon( "edit-undo" ) );
 
     designerAction = manager->actionRedo();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
                                           "designer_redo" );
-    designerKAction->setIcon( KIcon( "edit_redo" ) );
+    designerKAction->setIcon( KIcon( "edit-redo" ) );
 
     designerAction = manager->actionSelectAll();
     designerKAction = wrapDesignerAction( designerAction, actionCollection(),

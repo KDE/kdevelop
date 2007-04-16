@@ -97,7 +97,7 @@ void ProjectManager::createActions( KActionCollection* ac )
 {
   KAction *action;
 
-  action = new KAction(KIcon("project_open"), i18n("&Open Project..."), ac, "project_open");
+  action = new KAction(KIcon("project-open"), i18n("&Open Project..."), ac, "project_open");
   connect(action, SIGNAL(triggered(bool) ), SLOT(slotOpenProject()));
   action->setToolTip( i18n("Open project"));
   action->setWhatsThis(i18n("<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project."));

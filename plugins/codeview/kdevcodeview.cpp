@@ -87,7 +87,7 @@ KDevCodeView::KDevCodeView( QWidget *parent )
     toolBar->setFrameShadow( QFrame::Raised );
 
     KDevCodeTree *codeTree = new KDevCodeTree( this );
-    codeTree->setWindowIcon( KIcon( "view_tree" ) );
+    codeTree->setWindowIcon( KIcon( "view-tree" ) );
     codeTree->setWindowTitle( i18n( "Code View" ) );
 
     QHBoxLayout *hbox = new QHBoxLayout( toolBar );
