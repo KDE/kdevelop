@@ -1,8 +1,12 @@
 #include "subversion_view.h"
 #include "subversion_core.h"
+#include "svnkjobbase.h"
+#include "subversionthreads.h"
+#include "interthreadevents.h"
 #include "svn_models.h"
 #include "svn_logviewwidgets.h"
 #include "svn_blamewidgets.h"
+#include "subversion_utils.h"
 // #include "ui_svnlogviewwidget.h"
 #include <kmessagebox.h>
 #include <ktabwidget.h>
@@ -59,14 +63,14 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
     
     connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),
             this, SLOT(printNotification(QString)) );
-    connect( d->m_part->svncore(), SIGNAL(logFetched(SubversionJob *)),
-            this, SLOT(printLog(SubversionJob *)) );
-    connect( d->m_part->svncore(), SIGNAL(blameFetched(SubversionJob *)),
-            this, SLOT(printBlame(SubversionJob *)) );
-    connect( d->m_part->svncore(), SIGNAL(diffFetched(SubversionJob *)),
-             this, SLOT(printDiff(SubversionJob *)) );
-    connect( d->m_part->svncore(), SIGNAL(jobFinished(SubversionJob*)),
-            this, SLOT(slotJobFinished(SubversionJob*)) );
+    connect( d->m_part->svncore(), SIGNAL(logFetched(SvnKJobBase*)),
+             this, SLOT(printLog(SvnKJobBase*)) );
+    connect( d->m_part->svncore(), SIGNAL(blameFetched(SvnKJobBase*)),
+             this, SLOT(printBlame(SvnKJobBase*)) );
+    connect( d->m_part->svncore(), SIGNAL(diffFetched(SvnKJobBase *)),
+             this, SLOT(printDiff(SvnKJobBase *)) );
+    connect( d->m_part->svncore(), SIGNAL(jobFinished(SvnKJobBase*)),
+             this, SLOT(slotJobFinished(SvnKJobBase*)) );
 
 }
 
@@ -86,48 +90,46 @@ void KDevSubversionView::printNotification(QString msg)
     d->m_edit->append( msg );
     tab()->setCurrentIndex( tab()->indexOf(d->m_edit) );
 }
-void KDevSubversionView::printLog(SubversionJob *j)
+void KDevSubversionView::printLog(SvnKJobBase *j)
 {
-    SvnLogviewJob *job = (SvnLogviewJob*)j;
-    if (job->wasSuccessful() ){
-        SvnLogviewWidget *widget= new SvnLogviewWidget( job->urlList()[0], d->m_part, tab() );
-        
-        widget->refreshWithNewData( job->m_loglist );
-
-        tab()->addTab( widget, i18n("Log History") );
-        tab()->setTabEnabled( tab()->indexOf(widget), true );
-        tab()->setCurrentIndex( tab()->indexOf(widget) );
-    }
-    else{
-        KMessageBox::error( this, job->errorMsg(), "error" );
-// //         d->ui->textEdit->append( "log failed" );
-    }
-    
-}
-void KDevSubversionView::printBlame( SubversionJob* j )
-{
-    SvnBlameJob *job = (SvnBlameJob*) j;
-    if( job->wasSuccessful() ){
-        SvnBlameWidget *widget = new SvnBlameWidget( tab() );
-        widget->refreshWithNewData( job->m_blameList);
-        tab()->addTab( widget, i18n("Blame") );
-        tab()->setTabEnabled( tab()->indexOf(widget), true );
-        tab()->setCurrentIndex( tab()->indexOf(widget) );
-    }
-    else{
-        KMessageBox::error( this, job->errorMsg(), "error" );
-    }
-}
-
-void KDevSubversionView::printDiff( SubversionJob *j )
-{
-    SvnDiffJob *job = dynamic_cast<SvnDiffJob*>(j);
-    if( !job ) return;
-    if( !job->wasSuccessful() ){
-        KMessageBox::error( this, job->errorMsg() );
+    if( j->error() ){
+        KMessageBox::error( this, j->smartError(), "error" );
         return;
     }
-    QFile file( job->out_name );
+    SvnLogviewJob *th = (SvnLogviewJob*) ( j->svnThread() );
+    SvnLogviewWidget *widget= new SvnLogviewWidget( th->urlList()[0], d->m_part, tab() );
+
+    widget->refreshWithNewData( th->m_loglist );
+
+    tab()->addTab( widget, i18n("Log History") );
+    tab()->setTabEnabled( tab()->indexOf(widget), true );
+    tab()->setCurrentIndex( tab()->indexOf(widget) );
+}
+void KDevSubversionView::printBlame( SvnKJobBase* job )
+{
+    if( job->error() ){
+        KMessageBox::error( this, job->errorText(), "error" );
+        return;
+    }
+    SvnBlameWidget *widget = new SvnBlameWidget( tab() );
+    SvnBlameJob *th = dynamic_cast< SvnBlameJob*>( job->svnThread() );
+    widget->refreshWithNewData( th->m_blameList);
+    tab()->addTab( widget, i18n("Blame") );
+    tab()->setTabEnabled( tab()->indexOf(widget), true );
+    tab()->setCurrentIndex( tab()->indexOf(widget) );
+}
+
+void KDevSubversionView::printDiff( SvnKJobBase *job )
+{
+    if( job->error() ){
+        KMessageBox::error( this, job->errorText(), "error" );
+        return;
+    }
+    
+    SvnDiffJob *th = dynamic_cast<SvnDiffJob*>( job->svnThread() );
+    if( !job ) return;
+    
+    QFile file( th->out_name );
     if( !file.exists() ){
         KMessageBox::error( this, i18n("The output diff file cannot be located") );
         return;
@@ -151,8 +153,12 @@ void KDevSubversionView::printDiff( SubversionJob *j )
 
 }
 
-void KDevSubversionView::slotJobFinished( SubversionJob *job )
+void KDevSubversionView::slotJobFinished( SvnKJobBase *job )
 {
+    if( job->error() ){
+        KMessageBox::error( this, job->errorText(), "error" );
+        return;
+    }
     switch( job->type() ){
         case SVN_LOGVIEW:
             break; // not used for logview
@@ -164,32 +170,18 @@ void KDevSubversionView::slotJobFinished( SubversionJob *job )
         case SVN_ADD:
             // note: these messagebox are just temporary ones.
             // don't try to i18n(), because it will be removed
-            if( job->wasSuccessful() )
-                KMessageBox::information( NULL, "Successfully Added" );
-            else
-                KMessageBox::information( NULL, "Addeding failed\n" + job->errorMsg() );
+            KMessageBox::information( NULL, "Successfully Added" );
             break;
         case SVN_DELETE:
-            if( job->wasSuccessful() )
-                KMessageBox::information( NULL, "Successfully deleted" );
-            else
-                KMessageBox::information( NULL, "Deleting failed\n" + job->errorMsg() );
+            KMessageBox::information( NULL, "Successfully deleted" );
             break;
         case SVN_COMMIT:
-            if( job->wasSuccessful() )
-                KMessageBox::information( NULL, "Successfully committed" );
-            else
-                KMessageBox::information( NULL, "Commit failed\n" + job->errorMsg() );
+            KMessageBox::information( NULL, "Successfully committed" );
             break;
         case SVN_UPDATE:
-            if( job->wasSuccessful() )
-                KMessageBox::information( NULL, "Successfully updated" );
-            else
-                KMessageBox::information( NULL, "Updating failed\n" + job->errorMsg() );
-            break;
+            KMessageBox::information( NULL, "Successfully updated" );
         case SVN_STATUS:
             break;
-
     }
 }
 

@@ -1,7 +1,10 @@
 #include "svn_logviewwidgets.h"
 #include "svn_blamewidgets.h"
+#include "subversion_core.h"
+#include "subversionthreads.h"
+#include "subversion_utils.h"
 // #include "svn_models.h" // included int blamewidget
-
+#include "svnkjobbase.h"
 #include <kaction.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
@@ -96,20 +99,22 @@ void SvnLogviewWidget::blameRev()
         } else{
             return;
         }
-        
+
     } else if( modifies.count() == 1 ){
         selectedPath = modifies.at(0);
     } else {
         return;
     }
-    
+
     QString relPath = selectedPath.section( '/', 1 );
     // get repository root URL
-    SvnInfoSyncJob job;
-    QMap<KUrl, SvnInfoHolder> *infoMap = job.infoExec( this->m_url, NULL, NULL, false );
-    if( !infoMap ) return;
-    
-    QList< SvnInfoHolder > holderList = infoMap->values();
+    SvnUtils::SvnRevision nullRev;
+    SvnKJobBase* job = m_part->svncore()->createInfoJob( m_url, nullRev, nullRev, false );
+    if( !job->exec() ) return;
+    SvnInfoJob *thread = dynamic_cast<SvnInfoJob*>(job->svnThread());
+    QMap<KUrl, SvnInfoHolder> &infoMap = thread->m_holderMap;
+
+    QList< SvnInfoHolder > holderList = infoMap.values();
     if( holderList.count() > 0 ){
         // get full Url
         SvnInfoHolder holder = holderList.first();
@@ -130,7 +135,7 @@ void SvnLogviewWidget::diffToPrev()
     if( rev == -1 ){ //error
         return;
     }
-    SubversionUtils::SvnRevision rev1, rev2;
+    SvnUtils::SvnRevision rev1, rev2;
     rev1.revNum = rev-1;
     rev2.revNum = rev;
     m_part->svncore()->spawnDiffThread( m_url, m_url, rev1, rev2, true, false, false, false );

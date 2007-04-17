@@ -53,6 +53,7 @@ public Q_SLOTS:
     void statusSync();
     void statusASync();
     void svnInfo();
+
     // invoked by context-menu
     void ctxLogView();
     void ctxBlame();
@@ -66,7 +67,7 @@ Q_SIGNALS:
     void statusReady(const QList<KDevelop::VcsFileInfo> &infos);
 
 private Q_SLOTS:
-    void slotJobFinished( SubversionJob *job );
+    void slotJobFinished( SvnKJobBase *job );
 private:
 
     struct KDevSubversionPartPrivate * const d;

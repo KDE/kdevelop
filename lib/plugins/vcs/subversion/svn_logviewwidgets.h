@@ -3,7 +3,6 @@
 #include "ui_svnlogviewwidget.h"
 #include "svn_models.h"
 #include "subversion_part.h"
-#include "subversion_core.h"
 
 class QModelIndex;
 

@@ -4,7 +4,7 @@
 #include "subversion_part.h"
 #include <kdialog.h>
 // #include "ui_uiprogress_dlg.h"
-class SubversionJob;
+class KJob;
 class QWidget;
 struct KDevSubversionViewPrivate;
 class QModelIndex;
@@ -14,6 +14,10 @@ class SvnBlameHolder;
 class QProgressBar;
 class KUrl;
 
+/** @class KDevSubversionView
+ *  @short Displays any subversion results in a bottom-docked tabwidget.
+ *  Upon any new job results are available, add a tab or print the simple notification messages.
+ */
 class KDevSubversionView : public QWidget/*, public Ui::SvnLogviewWidget*/ {
     Q_OBJECT
 public:
@@ -22,10 +26,10 @@ public:
     
 public Q_SLOTS:
     void printNotification( QString msg );
-    void printLog( SubversionJob *job );
-    void printBlame( SubversionJob *job );
-    void printDiff( SubversionJob *job );
-    void slotJobFinished( SubversionJob *job );
+    void printLog( SvnKJobBase *job );
+    void printBlame( SvnKJobBase *job );
+    void printDiff( SvnKJobBase *job );
+    void slotJobFinished( SvnKJobBase *job );
     void closeCurrentTab();    
 private:
     KTabWidget *tab();

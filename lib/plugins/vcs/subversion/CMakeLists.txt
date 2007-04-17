@@ -15,12 +15,15 @@ set(kdevsubversion_PART_SRCS
     subversion_part.cpp
     subversion_view.cpp
     subversion_core.cpp
-    subversion_fileinfo.cpp
     svn_models.cpp
     svn_commitwidgets.cpp
     svn_logviewwidgets.cpp
     svn_blamewidgets.cpp
     svn_authdialog.cpp
+    svnkjobbase.cpp
+    subversionthreads.cpp
+    subversion_utils.cpp
+    interthreadevents.cpp
 )
 
 set(kdevsubversion_PART_UI

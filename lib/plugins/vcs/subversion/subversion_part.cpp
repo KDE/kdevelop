@@ -1,7 +1,10 @@
 #include "projectmodel.h"
 #include "subversion_part.h"
 #include "subversion_view.h"
-#include "subversion_fileinfo.h"
+#include "subversion_utils.h"
+#include "subversionthreads.h"
+#include "interthreadevents.h"
+#include "svnkjobbase.h"
 #include "svn_models.h"
 #include "svn_commitwidgets.h"
 #include <svn_wc.h>
@@ -51,15 +54,11 @@ public:
 //     QPointer<SvnFileInfoProvider> m_infoProvider;
 //     SvnFileInfoProvider *m_infoProvider;
     QList<KDevelop::VcsFileInfo> m_vcsInfoList;
-    QMap< SvnStatusJob*, QList<KDevelop::VcsFileInfo> > m_fileInfoMap;
+    QMap< SvnKJobBase*, QList<KDevelop::VcsFileInfo> > m_fileInfoMap;
     QList<KDevelop::VcsFileInfo> asyncStatusList;
 
 };
 
-/** Design: One part can have many Views. One View has its own core.
- *  Therefore, one can do multiples of jobs simultaneously.
- *  For example, one can see blame in one view while retreiving logs at other view.
- */
 KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     : KDevelop::IPlugin(KDevSubversionFactory::componentData(), parent)
     , d(new KDevSubversionPartPrivate)
@@ -71,7 +70,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     // init svn core
     d->m_impl = new SubversionCore(this, this);
     // for now, used to signal statusReady(QList<VcsFileInfo>&)
-    connect( d->m_impl, SIGNAL(jobFinished( SubversionJob* )), this, SLOT(slotJobFinished( SubversionJob * )) );
+    connect( d->m_impl, SIGNAL(jobFinished( SvnKJobBase* )), this, SLOT(slotJobFinished( SvnKJobBase * )) );
 
     setXMLFile("kdevsubversion.rc");
 
@@ -152,21 +151,31 @@ const QList<KDevelop::VcsFileInfo>& KDevSubversionPart::statusSync( const KUrl &
 {
     d->m_vcsInfoList.clear();
     
-    SvnStatusSyncJob *job = new SvnStatusSyncJob( SVN_STATUS );
     bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
-    QList<SvnStatusHolder> &holder = job->statusExec( dirPath, -1, "WORKING", recurse, true, false, true, false );
+    SvnKJobBase * job = d->m_impl->createStatusJob( dirPath, -1, "WORKING",
+                                                    recurse, true, false, true, false );
+    if( !job->exec() ){
+        // error
+        KMessageBox::error( NULL, job->errorText() );
+        return d->m_vcsInfoList;
+    }
+    
+    SvnStatusJob *th = dynamic_cast<SvnStatusJob*>(job->svnThread());
+    if( !th ) return d->m_vcsInfoList;
+    
+    QList<SvnStatusHolder> holder = th->m_holderList;
 
     for( QList<SvnStatusHolder>::iterator it = holder.begin(); it != holder.end(); ++it ){
-        // get revision. 
+        // get revision.
         QString rev = QString::number( (*it).baseRevision );
         // get status
         KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
-        
+
         SvnStatusHolder hold = (*it); // debug
         kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
         kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
-                
-        // get status -- working copy 
+
+        // get status -- working copy
         if( (*it).textStatus == svn_wc_status_normal
             && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
             // text status always exist if under VC. but in most cases, property value may not exist
@@ -181,11 +190,11 @@ const QList<KDevelop::VcsFileInfo>& KDevSubversionPart::statusSync( const KUrl &
             state = KDevelop::VcsFileInfo::Deleted;
         else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
             state = KDevelop::VcsFileInfo::Replaced;
-        
+
         KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
         d->m_vcsInfoList.append( vcsInfo );
     }
-    delete job;
+//     delete job;
     return d->m_vcsInfoList;
 }
 bool KDevSubversionPart::statusASync( const KUrl &dirPath,
@@ -193,9 +202,10 @@ bool KDevSubversionPart::statusASync( const KUrl &dirPath,
                                       const QList<KDevelop::VcsFileInfo> &infos )
 {
     bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
-    const SvnStatusJob *job;
+    const SvnKJobBase *job;
     job = d->m_impl->spawnStatusThread( dirPath, -1, "HEAD", recurse, true, true, true, false );
-    d->m_fileInfoMap.insert( (SvnStatusJob*)job, infos );
+    // after the job complete, retrieve proper QList<VcsfileInfo> using SvnKJobBase* as QMap's key
+    d->m_fileInfoMap.insert( (SvnKJobBase*)job, infos );
     return true;
 }
 void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
@@ -286,12 +296,9 @@ void KDevSubversionPart::annotate( const KUrl &path_or_url )
 }
 void KDevSubversionPart::vcsInfo( const KUrl &path_or_url ) // not yet in interface
 {
-    SubversionUtils::SvnRevision peg;
-    SubversionUtils::SvnRevision revision;
-    peg.revKind = "UNSPECIFIED"; peg.revNum = -1;
-    revision.revKind = "UNSPECIFIED"; revision.revNum = -1;
-    
-    
+    SvnUtils::SvnRevision peg;
+    SvnUtils::SvnRevision revision;
+
     d->m_impl->spawnInfoThread( path_or_url, peg, revision, false );
 }
 SubversionCore* KDevSubversionPart::svncore()
@@ -407,6 +414,7 @@ void KDevSubversionPart::svnInfo()
         KMessageBox::error(NULL, "No active docuement to view information" );
     }
 }
+
 //////////////////////////////////////////////
 void KDevSubversionPart::ctxLogView()
 {
@@ -442,16 +450,18 @@ void KDevSubversionPart::ctxRemove()
 }
 
 //////////////////////////////////////////////
-void KDevSubversionPart::slotJobFinished( SubversionJob *job )
+void KDevSubversionPart::slotJobFinished( SvnKJobBase *job )
 {
     switch( job->type() ){
         case SVN_STATUS:{
-            if( !job->wasSuccessful() ){
-                KMessageBox::error(NULL, job->errorMsg());
+            if( job->error() ){
+                KMessageBox::error(NULL, job->smartError() );
                 break;
             }
-            SvnStatusJob *statusJob = (SvnStatusJob*)job;
-            QList<KDevelop::VcsFileInfo> infos = d->m_fileInfoMap.value( statusJob );
+            SvnStatusJob *statusJob = dynamic_cast<SvnStatusJob*>( job->svnThread() );
+            if( !statusJob ) return;
+            
+            QList<KDevelop::VcsFileInfo> infos = d->m_fileInfoMap.value( job );
 
             for( QList<SvnStatusHolder>::iterator it = statusJob->m_holderList.begin() ;
                  it != statusJob->m_holderList.end() ;
@@ -459,9 +469,9 @@ void KDevSubversionPart::slotJobFinished( SubversionJob *job )
                 SvnStatusHolder hold = (*it); // debug
                 kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
                 kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
-                // get revision. 
+                // get revision.
                 QString rev = QString::number( (*it).baseRevision );
-                
+
                 KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
                 // get status -- working copy first
                 if( (*it).textStatus == svn_wc_status_normal
@@ -482,22 +492,22 @@ void KDevSubversionPart::slotJobFinished( SubversionJob *job )
                 if( (*it).reposTextStat == svn_wc_status_added || (*it).reposTextStat == svn_wc_status_modified
                     || (*it).reposPropStat == svn_wc_status_modified )
                     state = KDevelop::VcsFileInfo::NeedsPatch;
-                
+
                 // TODO retrive repository revision. Set workingcopy and reposit revision same for a moment
                 KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
                 infos.append( vcsInfo );
             }
-            
+
             emit statusReady( infos );
-            d->m_fileInfoMap.remove( statusJob );
+            d->m_fileInfoMap.remove( job );
             break;
         } //end of case SVN_STATUS
         case SVN_INFO: {
-            if( !job->wasSuccessful() ){
-                KMessageBox::error(NULL, job->errorMsg());
+            if( job->error() ){
+                KMessageBox::error(NULL, job->smartError() );
                 break;
             }
-            SvnInfoJob *infojob = dynamic_cast<SvnInfoJob*>( job );
+            SvnInfoJob *infojob = dynamic_cast<SvnInfoJob*>( job->svnThread() );
             if( !infojob ) return;
             QList<SvnInfoHolder> list = infojob->m_holderMap.values();
             // TODO print to GUI
