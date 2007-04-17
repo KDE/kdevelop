@@ -218,8 +218,8 @@ bool IncludePathResolver::executeCommandPopen ( const QString& command, const QS
 }
 
 IncludePathResolver::IncludePathResolver( bool continueEventLoop ) : m_isResolving(false), m_outOfSource(false), m_continueEventLoop(continueEventLoop)  {
-  m_continueEventLoop = false;
-#warning DEBUGGING TEST, REMOVE THIS
+/*  m_continueEventLoop = false;
+#warning DEBUGGING TEST, REMOVE THIS*/
 }
 
 ///More efficient solution: Only do exactly one call for each directory. During that call, mark all source-files as changed, and make all targets for those files.
