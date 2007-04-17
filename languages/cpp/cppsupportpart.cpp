@@ -3027,7 +3027,7 @@ const SynchronizedFileSet& CppSupportPart::safeFileSet() const {
 }
 
 void CppSupportPart::buildSafeFileSet() {
-	SynchronizedFileSet::SetType files;
+	SynchronizedFileSet::SetType files; //everything that goes into this set must be deep-copied
 
 	for( QStringList::const_iterator it = m_projectFileList.begin(); it != m_projectFileList.end(); ++it ) {
 		QFileInfo fi( *it );
@@ -3037,7 +3037,8 @@ void CppSupportPart::buildSafeFileSet() {
 			file = fi.absFilePath();
 		}
 
-		files.insert( HashedString(file) );
+		//deep-copy
+		files.insert( HashedString(QString::fromUtf8(file.utf8())) );
 	}
 
 	///Now get all translation-units from the code-repository
