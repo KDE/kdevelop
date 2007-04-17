@@ -38,6 +38,7 @@
 #include <codemodel.h>
 #include <ext/hash_map>
 #include "lexercache.h"
+#include <qmutex.h>
 
 
 class Lexer;
@@ -425,6 +426,7 @@ class Driver {
     typedef QMap< QString, DependenceMap> DependencesMap;
     DependencesMap m_dependences;
     MacroMap m_macros;
+    QMutex m_problemMutex;
     QMap< QString, QValueList<Problem> > m_problems;
     QMap<QString, ParsedFilePointer> m_parsedUnits;
     QStringList m_includePaths;
