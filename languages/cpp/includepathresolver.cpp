@@ -128,13 +128,6 @@ namespace CppTools {
       ifTest( if( m_isUnsermake ) cout << "unsermake detected" << endl );
     }
 
-    QString targetExtension() const {
-      if( isUnsermake() )
-        return ".lo";
-      else
-        return ".o";
-    }
-
     bool isUnsermake() const {
       return m_isUnsermake;
     }
@@ -146,9 +139,9 @@ namespace CppTools {
 
     QString getCommand( const QString& sourceFile, const QString& makeParameters ) const {
       if( isUnsermake() )
-        return "unsermake --no-real-compare -n " + makeParameters;
+        return "unsermake -k --no-real-compare -n " + makeParameters;
       else
-        return "make --no-print-directory -W \'" + sourceFile + "\' -n " + makeParameters;
+        return "make -k --no-print-directory -W \'" + sourceFile + "\' -n " + makeParameters;
     }
 
     bool hasMakefile() const {
@@ -158,6 +151,19 @@ namespace CppTools {
 
     bool shouldTouchFiles() const {
       return isUnsermake() || m_shouldTouchFiles;
+    }
+    
+    QStringList possibleTargets( const QString& targetBaseName ) const {
+      QStringList ret;
+      if( isUnsermake() ) {
+	//unsermake breaks if the first given target does not exist, so in worst-case 2 calls are necessary
+	ret << targetBaseName + ".lo " + targetBaseName + ".o";
+	ret << targetBaseName + ".o";
+      } else {
+	//if -k is given, make continues with the other target if one does not exist, so both possible targets can be given in one call
+	ret << targetBaseName + ".lo " + targetBaseName + ".o";
+      }
+      return ret;
     }
 
     private:
@@ -212,6 +218,8 @@ bool IncludePathResolver::executeCommandPopen ( const QString& command, const QS
 }
 
 IncludePathResolver::IncludePathResolver( bool continueEventLoop ) : m_isResolving(false), m_outOfSource(false), m_continueEventLoop(continueEventLoop)  {
+  m_continueEventLoop = false;
+#warning DEBUGGING TEST, REMOVE THIS
 }
 
 ///More efficient solution: Only do exactly one call for each directory. During that call, mark all source-files as changed, and make all targets for those files.
@@ -303,14 +311,19 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   }
 
   SourcePathInformation source( wd );
-  targetName += source.targetExtension();
+  QStringList possibleTargets = source.possibleTargets( targetName );
 
   source.setShouldTouchFiles(true); //Think about whether this should be always enabled. I've enabled it for now so there's an even bigger chance that everything works.
   
   ///STEP 3: Try resolving the paths, by using once the absolute and once the relative file-path. Which kind is required differs from setup to setup.
   
   ///STEP 3.1: Try resolution using the absolute path
-  PathResolutionResult res = resolveIncludePathInternal( absoluteFile, wd, targetName, source );
+  PathResolutionResult res;
+  //Try for each possible target
+  for( QStringList::const_iterator it = possibleTargets.begin(); it != possibleTargets.end(); ++it ) {
+    res = resolveIncludePathInternal( absoluteFile, wd, *it, source );
+    if( res ) break;
+  }
   if( res ) {
     CacheEntry ce;
     ce.modificationTime = makeFileModification;
@@ -320,10 +333,13 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     return res;
   }
 
+
   ///STEP 3.2: Try resolution using the relative path
   QString relativeFile = KURL::relativePath(wd, absoluteFile);
-  
-  res = resolveIncludePathInternal( relativeFile, wd, targetName, source );
+  for( QStringList::const_iterator it = possibleTargets.begin(); it != possibleTargets.end(); ++it ) {
+    res = resolveIncludePathInternal( relativeFile, wd, *it, source );
+    if( res ) break;
+  }
     
   if( res.path.isEmpty() )
       res.path = cachedPath; //We failed, maybe there is an old cached result, use that.

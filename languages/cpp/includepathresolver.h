@@ -20,7 +20,7 @@ namespace CppTools {
   class FileModificationTimeWrapper;
   
   struct PathResolutionResult {
-    PathResolutionResult( bool _success, const QString& _errorMessage = QString(), const QString& _longErrorMessage = QString() ) : success( _success ), errorMessage( _errorMessage ), longErrorMessage( _longErrorMessage )  {
+    PathResolutionResult( bool _success = false, const QString& _errorMessage = QString(), const QString& _longErrorMessage = QString() ) : success( _success ), errorMessage( _errorMessage ), longErrorMessage( _longErrorMessage )  {
     }
     bool success;
     QString errorMessage;
