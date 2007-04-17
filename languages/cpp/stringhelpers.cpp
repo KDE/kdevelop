@@ -196,6 +196,7 @@ int findCommaOrEnd( const QString& str , int pos, QChar validEnd) {
   
   for( int a = pos; a < (int)str.length(); a++) {
     switch(str[a]) {
+    case '"':
     case '(':
       case '[':
         case '{':
@@ -222,11 +223,14 @@ int countExtract( QChar c, const QString& str ) {
   for( int a = 0; a < (int)str.length(); a++) {
     if( str[a] == c ) ++ret;
     switch( str[a] ) {
+    case '"':
     case '(':
       case '[':
         case '{':
         case '<':
         a = findClose( str, a );
+	if( a == -1 )
+	  return ret;
     }
   }
   return ret;
