@@ -175,7 +175,7 @@ void CvsJob::slotProcessExited(K3Process* proc)
 
     if (!d->childproc->normalExit()) {
         setError( d->childproc->exitStatus() );
-        setErrorText( i18n("Process exited with status %1").arg(d->childproc->exitStatus()) );
+        setErrorText( i18n("Process exited with status %1", d->childproc->exitStatus()) );
     }
     emitResult();
 }

@@ -428,7 +428,7 @@ void SvnBlameJob::notify( void *baton, const svn_wc_notify_t *notify, apr_pool_t
     QString notifyString;
     switch( notify->action ){
         case svn_wc_notify_blame_revision:
-            notifyString = i18n("Blame finished for revision %1, path %2").arg( notify->revision ).arg( notify->path );
+            notifyString = i18n( "Blame finished for revision %1, path %2", notify->revision, notify->path );
             kDebug() << notifyString << endl;
             break;
     }
