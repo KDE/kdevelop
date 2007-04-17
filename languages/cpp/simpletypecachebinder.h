@@ -96,7 +96,10 @@ class SimpleTypeCacheBinder : public Base {
 
    bool operator == ( const LocateDesc& rhs ) const {
        //return compare( rhs ) == 0;
-       return m_hashKey == rhs.m_hashKey && mname.hashKey2() == rhs.mname.hashKey2();
+     if( m_hashKey == rhs.m_hashKey && mname.hashKey2() == rhs.mname.hashKey2() )
+       return mname.name() == rhs.mname.name();
+     else
+       return false;
    }
 
    bool operator > ( const LocateDesc& rhs ) const {
@@ -159,6 +162,8 @@ class SimpleTypeCacheBinder : public Base {
 
     bool operator == ( const MemberFindDesc& rhs ) const {
      bool ret = m_hashKey2 == rhs.m_hashKey2 && findType == rhs.findType;
+      if( ret )
+        return m_desc.name() == rhs.m_desc.name(); //Just for a little more security
      return ret;
     }
     /*

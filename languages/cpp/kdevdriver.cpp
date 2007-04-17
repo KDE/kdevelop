@@ -58,6 +58,7 @@ void KDevDriver::setup()
 	clearMacros();
 	clearIncludePaths();
 
+	addMacro( Macro("KDEVELOP_PARSER", "3.4") );
 	
 	bool ok;
 	QString verboseGccOutput = SetupHelper::getVerboseGccIncludePath( &ok );
