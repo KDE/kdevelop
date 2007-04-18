@@ -39,7 +39,7 @@ CppHighlighting::CppHighlighting( QObject * parent )
 {
 }
 
-CppHighlighting::~ CppHighlighting( )
+CppHighlighting::~CppHighlighting( )
 {
 }
 

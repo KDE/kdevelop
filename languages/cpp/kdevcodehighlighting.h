@@ -19,8 +19,6 @@
 #ifndef KDEVCODEHIGHLIGHTING_H
 #define KDEVCODEHIGHLIGHTING_H
 
-#include "kdevexport.h"
-
 class TopDUContext;
 class Definition;
 class Declaration;
@@ -34,10 +32,10 @@ KDevelop text highlighting support interface - the base class for
 language support text highlighting routines. Languages can apply highlighting
 to parsed code here.
 */
-class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting
+class CodeHighlighting
 {
 public:
-    virtual ~CodeHighlighting() {}
+    virtual ~CodeHighlighting();
 
     /**@return Whether the given url is supported by the language part.*/
     virtual void highlightDUChain(TopDUContext* context) const = 0;

@@ -22,6 +22,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpplanguagesupport.cpp
     cppparsejob.cpp
     preprocessjob.cpp
+	kdevcodehighlighting.cpp
 #    codedelegate.cpp
 #    codeproxy.cpp
    cpphighlighting.cpp
