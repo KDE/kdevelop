@@ -34,6 +34,7 @@ BlockingKProcess::BlockingKProcess()
  : KProcess()
 {
   m_stdOut = "";
+  m_stdErr = "";
   m_timeoutValue = 60;
   m_timer = 0L;
   connect(this, SIGNAL(receivedStdout(KProcess *, char *, int)),
