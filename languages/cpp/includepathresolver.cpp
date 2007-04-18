@@ -161,9 +161,10 @@ namespace CppTools {
 	ret << targetBaseName + ".lo";
 	ret << targetBaseName + ".o";
       } else {
-	//if -k is given, make continues with the other target if one does not exist, so both possible targets can be given in one call
-        //It is important that make returns 1 even if only one of the targets exists.
-	ret << targetBaseName + ".lo " + targetBaseName + ".o";
+	//It would be nice if both targets could be processed in one call, the problem is the exit-status of make, so for now make has to be called twice.
+	ret << targetBaseName + ".o";
+	ret << targetBaseName + ".lo";
+	//ret << targetBaseName + ".lo " + targetBaseName + ".o";
       }
       return ret;
     }
@@ -379,7 +380,7 @@ PathResolutionResult IncludePathResolver::getFullOutput( const QString& command,
     if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
       return PathResolutionResult( false, i18n("Couldn't start the make-process") );
     }
-    
+
     output = proc.stdOut();
     if( proc.exitStatus() != 0 )
       return PathResolutionResult( false, i18n("make-process finished with nonzero exit-status"), i18n("output: %1").arg( output ) );
