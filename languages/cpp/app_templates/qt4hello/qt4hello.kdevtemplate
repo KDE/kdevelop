@@ -2,6 +2,7 @@
 [General]
 Name=Basic Qt4 Application
 Name[ca]=Aplicació en Qt4 bàsica
+Name[da]=Basalt Qt4-program
 Name[de]=Einfache Qt4-Anwendung
 Name[es]=Aplicación Qt4 básica
 Name[hu]=Egyszerű Qt4-alapú alkalmazás
@@ -16,6 +17,7 @@ Icon=qt4hello.png
 Category=C++/QMake project
 Comment=Generate a very simple QMake/Qt4 based application (crossplatform compatible) - Needs Qt4
 Comment[ca]=Genera una aplicació molt simple basada en QMake/Qt4 (multi plataforma) -requereix Qt4-
+Comment[da]=Generér et meget enkelt QMake/Qt4 baseret program (krydsplatform kompatibel) - behøver Qt4
 Comment[de]=Erstellt eine sehr einfache, auf QMake/Qt4 basierende Anwendung (plattformunabhängig). - Benötigt Qt4.
 Comment[es]=Genera una aplicación muy sencilla basada en QMake/Qt4 (con compatibilidad multiplataforma) - Necesita Qt4
 Comment[hu]=Létrehoz egy QMake/Qt4-alapú, keresztfordításra is alkalmas alkalmazást - Qt4-et igényel
@@ -63,6 +65,7 @@ Dest=%{dest}/src/ReadMe
 Type=message
 Comment=A Qt4/Qmake based application was created in %{dest}
 Comment[ca]=Una aplicació basada en Qt4/Qmake ha estat creada en %{dest}
+Comment[da]=Et Qt4/Qmake baseret program blev oprettet i %{dest}
 Comment[de]=Eine auf QMake/Qt4 basierende Anwendung wurde in %{dest} erstellt.
 Comment[es]=Una aplicación basada en Qt4/Qmake ha sido creada en %{dest}
 Comment[hu]=Létrejött egy Qt4/Qmake-alapú alkalmazás itt: %{dest}

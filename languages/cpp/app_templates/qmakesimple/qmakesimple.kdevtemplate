@@ -2,6 +2,7 @@
 [General]
 Name=Qt3 Hello world program
 Name[ca]=Programa Hello world per a Qt3
+Name[da]=Qt3 Goddag verden program
 Name[de]=Qt3-"Hello World"-Programm
 Name[es]=Programa Qt3 «Hola mundo»
 Name[hu]=Qt3-alapú 'Hello world' program
@@ -17,6 +18,7 @@ Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generates a simple Hello world program in C++ using QMake/Qt3 based project manager
 Comment[ca]=Genera un simple programa de Hello world en C++ usant el gestor de projectes basat en QMake/Qt3
+Comment[da]=Genererer et simpelt Goddag verden program in C++ ved brug af QMake/Qt3 baseret projekthåndtering
 Comment[de]=Erstellt ein einfaches "Hello World"-Programm in C++ basierend auf dem QMake-Projektmanager und Qt3.
 Comment[es]=Genera un sencillo programa «Hola mundo» en C++ que usa un gestor de proyecto basado en QMake/Qt3
 Comment[hu]=Létrehoz egy egyszerű 'Hello world' programot C++-ban, QMake/Qt3-alapú projektkezelővel
@@ -60,6 +62,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 Type=message
 Comment=A Qmake/Qt3 based hello world program was created in %{dest}
 Comment[ca]=Una programa de hello world basat en QMake/Qt3 ha estat creat en %{dest}
+Comment[da]=et Qmake/Qt3 baseret Goddag verden program blev oprettet i %{dest}
 Comment[de]=Ein auf QMake basierendes "Hello World"-Programm wurde in %{dest} erstellt.
 Comment[es]=Un programa «Hola mundo» basado en QMake/Qt3 ha sido creado en %{dest}
 Comment[hu]=Létrejött egy Qmake/Qt3-alapú 'Hello world' program itt: %{dest}

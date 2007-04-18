@@ -2,6 +2,7 @@
 [General]
 Name=Qt3 Application
 Name[ca]=Aplicació Qt3
+Name[da]=Qt3-Program
 Name[de]=Qt3-Anwendung
 Name[es]=Aplicación Qt3
 Name[hu]=Qt3-alapú alkalmazások
@@ -17,6 +18,7 @@ Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt3 based application (crossplatform compatible)
 Comment[ca]=Genera una aplicació basada en QMake/Qt3 (multi plataforma)
+Comment[da]=Generér et QMake/Qt3 baseret program (krydsplatform kompatibel)
 Comment[de]=Erstellt eine auf QMake/Qt3 basierende Anwendung (plattformunabhängig)
 Comment[es]=Genera una aplicación basada en QMake/Qt3 (con compatibilidad multiplataforma)
 Comment[hu]=Létrehoz egy QMake/Qt3-alapú, keresztfordításra is alkalmas alkalmazást
@@ -84,6 +86,7 @@ Dest=%{dest}/src/fileprint.xpm
 Type=message
 Comment=A Qt3/Qmake based application was created in %{dest}
 Comment[ca]=Una aplicació basada en Qt3/Qmake ha estat creada en %{dest}
+Comment[da]=Et Qt3/Qmake baseret program blev oprettet i %{dest}
 Comment[de]=Eine auf QMake/Qt3 basierende Anwendung wurde in %{dest} erstellt.
 Comment[es]=Una aplicación basada en Qt3/Qmake ha sido creada en %{dest}
 Comment[hu]=Létrejött egy Qt3/Qmake-alapú alkalmazás itt: %{dest}
