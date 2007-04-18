@@ -54,6 +54,7 @@ namespace CppTools {
         }
         QDateTime modificationTime;
         QStringList path;
+        QString errorMessage, longErrorMessage;
         bool failed;
         QMap<QString,bool> failedFiles;
         QDateTime failTime;

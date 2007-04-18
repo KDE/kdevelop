@@ -54,6 +54,7 @@ using namespace std;
 
 using namespace CppTools;
 
+
 namespace CppTools {
   ///Helper-class used to fake file-modification times
   class FileModificationTimeWrapper {
@@ -157,10 +158,11 @@ namespace CppTools {
       QStringList ret;
       if( isUnsermake() ) {
 	//unsermake breaks if the first given target does not exist, so in worst-case 2 calls are necessary
-	ret << targetBaseName + ".lo " + targetBaseName + ".o";
+	ret << targetBaseName + ".lo";
 	ret << targetBaseName + ".o";
       } else {
 	//if -k is given, make continues with the other target if one does not exist, so both possible targets can be given in one call
+        //It is important that make returns 1 even if only one of the targets exists.
 	ret << targetBaseName + ".lo " + targetBaseName + ".o";
       }
       return ret;
@@ -266,7 +268,9 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       } else {
         //We have a cached failed result. We should use that for some time but then try again. Return the failed result if: ( there were too many tries within this folder OR this file was already tried ) AND The last tries have not expired yet
         if( /*((*it).failedFiles.size() > 3 || (*it).failedFiles.find( file ) != (*it).failedFiles.end()) &&*/ (*it).failTime.secsTo( QDateTime::currentDateTime() ) < CACHE_FAIL_FOR_SECONDS ) {
-          PathResolutionResult ret(true); //Fake that the result is ok
+          PathResolutionResult ret(false); //Fake that the result is ok
+          ret.errorMessage = i18n("Cached: ") + (*it).errorMessage;
+          ret.longErrorMessage = (*it).longErrorMessage;
           ret.path = (*it).path;
           return ret;
         } else {
@@ -326,6 +330,8 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   }
   if( res ) {
     CacheEntry ce;
+    ce.errorMessage = res.errorMessage;
+    ce.longErrorMessage = res.longErrorMessage;
     ce.modificationTime = makeFileModification;
     ce.path = res.path;
     m_cache[dir.path()] = ce;
@@ -352,6 +358,8 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   ce.path = res.path;
   if( !res ) {
     ce.failed = true;
+    ce.errorMessage = res.errorMessage;
+    ce.longErrorMessage = res.longErrorMessage;
     ce.failTime = QDateTime::currentDateTime();
     ce.failedFiles[file] = true;
   } else {
