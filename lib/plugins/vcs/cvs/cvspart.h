@@ -44,7 +44,7 @@ public:
     virtual void createNewProject(const KUrl& dir);
     virtual bool fetchFromRepository();
     virtual bool isValidDirectory(const KUrl &dirPath) const;
-    virtual const QList<KDevelop::VcsFileInfo>& statusSync(const KUrl &dirPath, KDevelop::IVersionControl::WorkingMode mode );
+    virtual QList<KDevelop::VcsFileInfo> statusSync(const KUrl &dirPath, KDevelop::IVersionControl::WorkingMode mode );
     virtual bool statusASync( const KUrl &dirPath, WorkingMode mode, const QList<KDevelop::VcsFileInfo> &infos );
     virtual void fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu );
     virtual void fillContextMenu( const KDevelop::ProjectBaseItem *prjItem, QMenu &ctxMenu );

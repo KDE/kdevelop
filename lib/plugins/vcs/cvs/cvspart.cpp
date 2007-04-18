@@ -11,15 +11,18 @@
 
 #include "cvspart.h"
 
+#include <QtGui/QAction>
+#include <QtGui/QMenu>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
+
 #include <KParts/PartManager>
 #include <KParts/Part>
 #include <KGenericFactory>
 #include <KActionCollection>
 #include <KMessageBox>
-#include <QAction>
 #include <KUrl>
-#include <QFileInfo>
-#include <QDir>
+
 
 #include <iuicontroller.h>
 #include <icore.h>
@@ -285,13 +288,12 @@ bool CvsPart::statusASync(const KUrl & dirPath, WorkingMode mode, const QList< K
     return false;
 }
 
-const QList< KDevelop::VcsFileInfo > & CvsPart::statusSync(const KUrl & dirPath, KDevelop::IVersionControl::WorkingMode mode)
+QList< KDevelop::VcsFileInfo > CvsPart::statusSync(const KUrl & dirPath, KDevelop::IVersionControl::WorkingMode mode)
 {
     Q_UNUSED(dirPath)
     Q_UNUSED(mode)
     /// @todo implemt me !
-    static const QList< KDevelop::VcsFileInfo > null;
-    return null;
+	return QList< KDevelop::VcsFileInfo >();
 }
 
 void CvsPart::checkout(const KUrl & repository, const KUrl & targetDir, KDevelop::IVersionControl::WorkingMode mode)

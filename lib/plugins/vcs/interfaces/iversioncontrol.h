@@ -144,7 +144,7 @@ public:
     files and directories.
     @return Status for all files in dirPath
     @sa VcsFileInfoMap */
-    virtual const QList<VcsFileInfo>& statusSync(const KUrl &dirPath, WorkingMode mode ) = 0;
+    virtual QList<VcsFileInfo> statusSync(const KUrl &dirPath, WorkingMode mode ) = 0;
 
 /**Starts a request for directory status to the remote repository.
     Requests and answers are asynchronous.

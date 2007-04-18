@@ -157,7 +157,7 @@ bool KDevSubversionPart::isValidDirectory(const KUrl &dirPath) const
     return svndir.exists() &&
             QFile::exists( entriesFileName );
 }
-const QList<KDevelop::VcsFileInfo>& KDevSubversionPart::statusSync( const KUrl &dirPath,
+QList<KDevelop::VcsFileInfo> KDevSubversionPart::statusSync( const KUrl &dirPath,
                                                     KDevelop::IVersionControl::WorkingMode mode )
 {
     d->m_vcsInfoList.clear();
