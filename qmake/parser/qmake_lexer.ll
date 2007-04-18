@@ -51,7 +51,7 @@ fnvalue       ([^ \t\f\n\r,$()]|"$("[^ \t\f\n\r,$()]+")")+
 
 <fnarg,assignment,INITIAL>"$" {
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-    return Parser::token::token::DOLLAR;
+    return Parser::token::DOLLAR;
   }
 "{" {
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());

@@ -1076,7 +1076,7 @@ case 1:
 YY_RULE_SETUP
 {
     mylval->value = QString::fromLocal8Bit(YYText(), YYLeng());
-    return Parser::token::token::DOLLAR;
+    return Parser::token::DOLLAR;
   }
 	YY_BREAK
 case 2:
