@@ -1,3 +1,18 @@
+/***************************************************************************
+ *   This file was partly taken from kdesdk subversion ioslave plugin      *
+ *   Copyright (C) 2003 Mickael Marchand <marchand@kde.org>                *
+ *                                                                         *
+ *   Adapted for KDevelop                                                  *
+ *   Copyright (C) 2007 by Dukju Ahn                                       *
+ *   dukjuahn@gmail.com                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+ 
 #ifndef SUBVERSIONTHREADS_H
 #define SUBVERSIONTHREADS_H
 
