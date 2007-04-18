@@ -44,6 +44,7 @@ public:
 	BackgroundKDevDriver( CppSupportPart* cppSupport, BackgroundParser* bp ) : KDevDriver( cppSupport, false ), m_backgroundParser(bp) {
 	}
 	virtual void fileParsed( ParsedFile& fileName );
+	virtual void addDependence( const QString& fileName, const Dependence& dep );
 private:
 	BackgroundParser* m_backgroundParser;
 };
@@ -52,9 +53,11 @@ private:
 class KDevSourceProvider: public SourceProvider
 {
 public:
-	KDevSourceProvider( CppSupportPart* cppSupport )
+	//Deadlock is a mutex that is locked when KDevSourceProvider::contents(..) is used, and that should be unlocked before QApplication is locked(that way a deadlock where the thread that holds the QApplication-mutex and tries to lock the given mutex, while the thread that calls contents(..) and holds the given mutex and tries to lock the QApplication-mutex, cannot happen)
+	KDevSourceProvider( CppSupportPart* cppSupport, QMutex& deadlock )
 		: m_cppSupport( cppSupport ),
-		m_readFromDisk( false )
+		m_readFromDisk( false ),
+		m_deadlock(deadlock)
 	{}
 	
 	void setReadFromDisk( bool b )
@@ -72,9 +75,9 @@ public:
 		
 		if ( !m_readFromDisk )
 		{
+			m_deadlock.unlock();
 			// GET LOCK
-			kapp->lock ()
-				;
+			kapp->lock ();
 			
 			//kdDebug(9007) << "-------> kapp locked" << endl;
 			
@@ -95,9 +98,10 @@ public:
 				
 				break;
 			}
-			
+
 			// RELEASE LOCK
 			kapp->unlock();
+			m_deadlock.lock();
 			//kdDebug(9007) << "-------> kapp unlocked" << endl;
 		}
 		
@@ -118,6 +122,7 @@ public:
 	virtual bool isModified( const QString& fileName )
 	{
 		bool ret = false;
+		m_deadlock.unlock();
 		kapp->lock ();
 
 		KParts::ReadOnlyPart *part = m_cppSupport->partController()->partForURL( KURL(fileName) );
@@ -127,12 +132,14 @@ public:
 			ret = doc->isModified();
 
 		kapp->unlock();
+		m_deadlock.lock();
 		return ret;
 	}
 	
 private:
 	CppSupportPart* m_cppSupport;
 	bool m_readFromDisk;
+	QMutex& m_deadlock;
 private:
 	KDevSourceProvider( const KDevSourceProvider& source );
 	void operator = ( const KDevSourceProvider& source );
@@ -249,11 +256,13 @@ BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consum
 {
 	m_fileList = new SynchronizedFileList();
 	m_driver = new BackgroundKDevDriver( m_cppSupport, this );
-	m_driver->setSourceProvider( new KDevSourceProvider( m_cppSupport ) );
+	m_driver->setSourceProvider( new KDevSourceProvider( m_cppSupport,  m_mutex ) );
 	
 	QString conf_file_name = m_cppSupport->specialHeaderName();
+	m_mutex.lock();
 	if ( QFile::exists( conf_file_name ) )
 		m_driver->parseFile( conf_file_name, true, true, true );
+	m_mutex.unlock();
 	
 	//disabled for now m_driver->setResolveDependencesEnabled( true );
 }
@@ -338,13 +347,21 @@ void BackgroundParser::removeFile( const QString& fileName )
 		m_isEmpty.wakeAll();
 }
 
+void BackgroundKDevDriver::addDependence( const QString& fileName, const Dependence& dep ) {
+	//give waiting threads a chance to perform their actions
+	m_backgroundParser->m_mutex.unlock();
+	m_backgroundParser->m_mutex.lock();
+	KDevDriver::addDependence( fileName, dep );
+}
+
 void BackgroundKDevDriver::fileParsed( ParsedFile& fileName ) {
 	m_backgroundParser->fileParsed( fileName );
 }
 
 void BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, bool lock )
 {
-	m_lock = lock;
+	if( lock )
+		m_mutex.lock();
 	m_readFromDisk = readFromDisk;
 	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() ) ->setReadFromDisk( readFromDisk );
 	
@@ -353,6 +370,8 @@ void BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, bo
     if( !m_driver->isResolveDependencesEnabled() )
         m_driver->removeAllMacrosInFile( fileName );  // romove all macros defined by this
 	// translation unit.
+    if ( lock )
+        m_mutex.unlock();
 }
 
 QValueList<Problem> cloneProblemList( const QValueList<Problem>& list ) {
@@ -364,6 +383,7 @@ QValueList<Problem> cloneProblemList( const QValueList<Problem>& list ) {
 }
 
 void BackgroundParser::fileParsed( ParsedFile& file ) {
+
 	ParsedFilePointer translationUnitUnsafe = m_driver->takeTranslationUnit( file.fileName() );
 	//now file and translationUnitUnsafe are the same
 	ParsedFilePointer translationUnit;
@@ -382,8 +402,6 @@ void BackgroundParser::fileParsed( ParsedFile& file ) {
 	translationUnit->setTranslationUnit( translationUnitUnsafe->operator TranslationUnitAST *() ); //Copy the AST, doing that is thread-safe
 	translationUnitUnsafe->setTranslationUnit( 0 ); //Move the AST completely out of this thread's scope. Else it might crash on dual-core machines
 	file.setTranslationUnit(0); //just to be sure, set to zero on both
-	if ( m_lock )
-		m_mutex.lock();
 	
 	Unit* unit = new Unit;
 	unit->fileName = file.fileName();
@@ -405,9 +423,6 @@ void BackgroundParser::fileParsed( ParsedFile& file ) {
 	KApplication::postEvent( m_cppSupport, new FileParsedEvent( file.fileName(), unit->problems, m_readFromDisk ) );
 	
 	m_currentFile = QString::null;
-	
-    if ( m_lock )
-        m_mutex.unlock();
 	
   if ( m_fileList->isEmpty() )
 		m_isEmpty.wakeAll();	

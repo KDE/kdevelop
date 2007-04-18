@@ -114,7 +114,6 @@ private:
     bool m_saveMemory; //used to prevent blocking
 
     //State of parseFile(..):
-    bool m_lock;
     bool m_readFromDisk;
 };
 
