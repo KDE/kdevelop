@@ -34,7 +34,7 @@ SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
     d->m_kjob = parent;
     connect( this, SIGNAL(terminated()), this, SLOT(slotTerminated()) );
     connect( this, SIGNAL(finished()), this, SLOT(slotFinished()) );
-    apr_initialize();
+    
     d->m_pool = svn_pool_create (NULL);
     
     svn_error_t *err = svn_client_create_context(&(d->m_ctx), pool());
@@ -99,7 +99,6 @@ SubversionThread::~SubversionThread()
     kDebug() << " SubversionThread destructor .. " << endl;
     delete d;
     svn_pool_destroy( pool() );
-    apr_terminate();
 }
 
 int SubversionThread::type()

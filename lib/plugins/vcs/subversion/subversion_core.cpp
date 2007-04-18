@@ -35,6 +35,7 @@ SubversionCore::SubversionCore( KDevSubversionPart *part, QObject *parent )
     : QObject(parent) , m_part(part)
 //       ,m_weaver( new Weaver(this) )
 {
+    apr_initialize();
 	m_uiServer = new KUiServerJobTracker( this );
 // when using threadweaver
 //     ThreadWeaver::setDebugLevel(true, 1);
@@ -64,6 +65,7 @@ SubversionCore::~SubversionCore()
 //     }
 
 	delete m_uiServer;
+    apr_terminate();
     kDebug() << " ~SubversionCore(): end cleanup... " << endl;
 
 }
