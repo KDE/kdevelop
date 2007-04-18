@@ -44,7 +44,7 @@ namespace KDevelop {
  */
 class KDEVPLATFORMINTERFACES_EXPORT IDocument {
 public:
-    virtual ~IDocument() {}
+    virtual ~IDocument();
 
     /**Document state.*/
     enum DocumentState

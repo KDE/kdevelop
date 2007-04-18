@@ -5,6 +5,7 @@ include_directories(
 
 set(kdevplatforminterfaces_LIB_SRCS
     iplugin.cpp
+	idocument.cpp
     icore.cpp
     iuicontroller.cpp
     iplugincontroller.cpp
