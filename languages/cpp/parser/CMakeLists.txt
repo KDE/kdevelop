@@ -5,7 +5,6 @@ add_subdirectory(tests)
 add_subdirectory(headergen)
 
 
-add_definitions(-fPIC)
 
 ########### next target ###############
 

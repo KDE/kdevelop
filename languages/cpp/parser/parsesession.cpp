@@ -85,7 +85,10 @@ void ParseSession::extract_line(int offset, int *line, QString *filename) const
     }
 
   ++cursor; // skip '#'
-  if (std::isspace(*cursor) && std::isdigit(*(cursor + 1)))
+  {
+  // apaku: this using is needed for MSVC, Else it complains about isspace not being a member of std. I'll trz to fix that.
+  using namespace std;
+  if (isspace(*cursor) && std::isdigit(*(cursor + 1)))
     {
       ++cursor;
       char buffer[1024], *cp = buffer;
@@ -94,7 +97,7 @@ void ParseSession::extract_line(int offset, int *line, QString *filename) const
       *cp = '\0';
       int line_number = strtol(buffer, 0, 0);
 
-      if (! std::isspace(*cursor))
+      if (! isspace(*cursor))
         {
           /*Problem p = createProblem();
           p.setMessage("expected white space");
@@ -134,7 +137,7 @@ void ParseSession::extract_line(int offset, int *line, QString *filename) const
       //kDebug() << k_funcinfo << "filename: " << buffer << " line: " << line << endl;
       return;
     }
-
+	}
 skip_line:
   // skip the line
   while (*cursor && *cursor != '\n')
