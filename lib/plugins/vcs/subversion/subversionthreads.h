@@ -57,6 +57,8 @@ public:
 
     static void progressCallback( apr_off_t progress, apr_off_t total,
                                     void *baton, apr_pool_t *pool);
+	
+    static void notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool );
     
 //     static svn_error_t* cancelCallback( void *cancel_baton );
     
@@ -69,6 +71,8 @@ public:
     SvnServerCertInfo** certInfo();
     /// Used for svn-lib's authentication callbacks
     SvnLoginInfo** loginInfo();
+    /// Used for commit operation's notification.
+    bool* sentFirstTxDelta();
     
 public Q_SLOTS:
     /** @param ms Wait the thread to be terminated up to ms milisecond
@@ -82,7 +86,6 @@ protected Q_SLOTS:
 protected:
     /// Receive reply event from SubversionCore. Upon receiving, exits thread's event loop
     virtual void customEvent( QEvent *event );
-    void initNotifier(svn_wc_notify_func2_t notifyCallback);
     virtual void run() = 0;
     /// set error message into parent SvnKJobBase
     void setErrorMsgExt( svn_error_t *err );
@@ -118,8 +121,6 @@ public:
                                        const char *line,
                                        apr_pool_t *pool);
 
-    static void notify( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool );
-    
     QList<SvnBlameHolder> m_blameList;
 protected:
     virtual void run();
@@ -226,7 +227,6 @@ public:
     
 protected:
     virtual void run();
-    static void notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool );
     KUrl::List m_wcPaths;
     bool m_recurse, m_force, m_noIgnore;
 };
@@ -237,7 +237,6 @@ public:
     SvnDeleteJob( const KUrl::List &urls, bool force, int type, SvnKJobBase *parent );
 protected:
     virtual void run();
-    static void notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool );
     
     KUrl::List m_urls;
     bool m_force;
@@ -250,7 +249,6 @@ public:
                   bool recurse, bool ignoreExternals,
                   int type, SvnKJobBase *parent );
     
-    static void notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool );
 protected:
     virtual void run();
     

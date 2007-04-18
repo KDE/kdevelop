@@ -25,6 +25,8 @@ public:
     
     svn_client_ctx_t *m_ctx;
     apr_pool_t *m_pool;
+
+    bool m_sent_first_txdelta;
 };
 
 SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
@@ -32,6 +34,7 @@ SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
 {
     d->m_type = actionType;
     d->m_kjob = parent;
+    d->m_sent_first_txdelta = false;
     connect( this, SIGNAL(terminated()), this, SLOT(slotTerminated()) );
     connect( this, SIGNAL(finished()), this, SLOT(slotFinished()) );
     
@@ -51,7 +54,10 @@ SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
     }
     
 //     ctx->cancel_func = SubversionThread::cancelCallback;
-    
+
+    // notification callback
+    ctx()->notify_func2 = SubversionThread::notifyCallback;
+    ctx()->notify_baton2 = this;
     // progress notification callback
     ctx()->progress_func = SubversionThread::progressCallback;
     ctx()->progress_baton = this;
@@ -218,6 +224,73 @@ void SubversionThread::progressCallback( apr_off_t progress, apr_off_t total,
     }
 }
 
+void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool )
+{
+    SubversionThread *thread = (SubversionThread*) baton;
+    QString notifyString;
+    switch( notify->action ){
+        case svn_wc_notify_add:
+            notifyString = i18n("Added %1", notify->path );
+            break;
+        case svn_wc_notify_delete:
+            notifyString = i18n("Deleted %1", notify->path );
+            break;
+        // various update notifications
+        case svn_wc_notify_update_delete:
+            notifyString = i18n("Deleted %1", notify->path );
+            kDebug() << notifyString << endl;
+            break;
+        case svn_wc_notify_update_add:
+            notifyString = i18n("Added %1", notify->path );
+            break;
+        case svn_wc_notify_update_update:
+            notifyString = i18n("Updated %1", notify->path );
+            break;
+        case svn_wc_notify_update_completed:
+            // The last notification in an update (including updates of externals).
+            notifyString = i18n("Revision %1", QString::number(notify->revision) );
+            break;
+        case svn_wc_notify_update_external:
+            notifyString = i18n("Updating externals: %1", notify->path );
+            break;
+        case svn_wc_notify_status_completed:
+            break;
+        case svn_wc_notify_status_external:
+            break;
+        // various commit notifications
+        case svn_wc_notify_commit_modified:
+            notifyString = i18n( "Sending %1", notify->path );
+            break;
+        case svn_wc_notify_commit_added:
+            if( notify->mime_type ){
+                notifyString = i18n( "Adding mimetype %1. %2", notify->mime_type, notify->path );
+            } else {
+                notifyString = i18n( "Adding %1.", notify->path );
+            }
+            break;
+        case svn_wc_notify_commit_deleted:
+            notifyString = i18n( "Deleting %1.", notify->path );
+            break;
+        case svn_wc_notify_commit_replaced:
+            notifyString = i18n( "Replacing %1.", notify->path );
+            break;
+        case svn_wc_notify_commit_postfix_txdelta:
+            if (! *(thread->sentFirstTxDelta()) ) {
+                *(thread->sentFirstTxDelta()) = true;
+                notifyString=i18n("Transmitting file data ");
+            } else {
+                notifyString=".";
+            }
+            break;
+        case svn_wc_notify_blame_revision:
+            notifyString = i18n( "Blame finished for revision %1, path %2", notify->revision, notify->path );
+            kDebug() << notifyString << endl;
+            break;
+    }
+    SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
+    QCoreApplication::postEvent( thread->kjob()->parent(), event );
+}
+
 //Fully-Implemented but seems to be not called by Svn-library
 // svn_error_t* SubversionThread::cancelCallback( void *cancel_baton )
 // {
@@ -246,6 +319,11 @@ SvnServerCertInfo** SubversionThread::certInfo()
 SvnLoginInfo** SubversionThread::loginInfo()
 {
     return &(d->m_loginInfo);
+}
+
+bool* SubversionThread::sentFirstTxDelta()
+{
+    return &(d->m_sent_first_txdelta);
 }
 
 bool SubversionThread::requestTerminate( unsigned long ms )
@@ -299,12 +377,6 @@ void SubversionThread::customEvent( QEvent *event )
         default:
             break;
     }
-}
-
-void SubversionThread::initNotifier(svn_wc_notify_func2_t notifyCallback)
-{
-    ctx()->notify_func2 = notifyCallback;
-    ctx()->notify_baton2 = this;
 }
 
 void SubversionThread::setErrorMsgExt( svn_error_t *err )
@@ -394,9 +466,6 @@ void SvnBlameJob::run()
         kDebug() << " working copy path : " << path_or_url << endl;
     }// ent of filling out path_or_url
     
-    // TODO disable after being stabilized. notification is not necessary.
-    // because it notifies line-by-line. 
-    initNotifier( SvnBlameJob::notify );
     svn_client_blame_receiver_t receiver = SvnBlameJob::blameReceiver;
     svn_error_t *err = svn_client_blame( path_or_url, &m_startRev, &m_endRev, receiver, (void*)this, ctx(), subpool );
     if ( err ){
@@ -421,17 +490,6 @@ svn_error_t* SvnBlameJob::blameReceiver( void *baton, apr_int64_t line_no, svn_r
     return 0;     
 }
 
-void SvnBlameJob::notify( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool )
-{
-    SvnBlameJob *job = (SvnBlameJob*) baton;
-    QString notifyString;
-    switch( notify->action ){
-        case svn_wc_notify_blame_revision:
-            notifyString = i18n( "Blame finished for revision %1, path %2", notify->revision, notify->path );
-            kDebug() << notifyString << endl;
-            break;
-    }
-}
 //////////////////////////////////////////////////////////////
 SvnLogviewJob::SvnLogviewJob( int rev1, const QString& revkind1,
                 int rev2, const QString& revkind2,
@@ -575,14 +633,19 @@ void SvnCommitJob::run()
         return;
     }
     
+    QString notifyString;
     if( commit_info ){
         if( commit_info->revision == SVN_INVALID_REVNUM ){
             // commit was a no-op; nothing needed to be committed.
-            setErrorMsg( i18n("Nothing needed to be committed. Maybe all files are up to date") );
-            svn_pool_destroy (subpool);
-            return;
+            notifyString = i18n("Nothing needed to be committed. Maybe all files are up to date");
+        } else{
+            notifyString = i18n("Committed revision %1", commit_info->revision);
         }
+    } else{
+        notifyString = i18n("Committed");
     }
+    SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
+    QCoreApplication::postEvent( kjob()->parent(), event );
     
     // TODO handle separately to adjust svn+ssh  SVN_ERR_RA_SVN_CONNECTION_CLOSED,
     svn_pool_destroy (subpool);
@@ -711,7 +774,6 @@ void SvnAddJob::run()
         
         KUrl nurl = *it;
         nurl.setProtocol( "file" );
-        initNotifier(SvnAddJob::notifyCallback);
         
         svn_error_t *err = svn_client_add2( svn_path_canonicalize( nurl.path().toUtf8(), subpool ),
                                             m_recurse, m_force, ctx(), subpool );
@@ -723,20 +785,6 @@ void SvnAddJob::run()
     
     }
     svn_pool_destroy (subpool);
-}
-
-void SvnAddJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool )
-{
-    SvnAddJob *job = (SvnAddJob*) baton;
-    QString notifyString;
-    switch( notify->action ){
-        case svn_wc_notify_add:
-            notifyString = i18n("Added ") + QString( notify->path );
-//             kDebug() << notifyString << endl;
-            break;
-    }
-    SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
-    QCoreApplication::postEvent( job->parent(), event );
 }
 
 //////////////////////////////////////////////////////////
@@ -760,7 +808,6 @@ void SvnDeleteJob::run()
                 svn_path_canonicalize( nurl.path().toUtf8(), subpool );
     }
 
-    initNotifier(SvnDeleteJob::notifyCallback);
     svn_error_t *err = svn_client_delete( &commit_info, targets, m_force, ctx(), subpool);
 
     if ( err ){
@@ -770,19 +817,6 @@ void SvnDeleteJob::run()
     }
     
     svn_pool_destroy (subpool);
-}
-void SvnDeleteJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool )
-{
-    SvnDeleteJob *job = (SvnDeleteJob*) baton;
-    QString notifyString;
-    switch( notify->action ){
-        case svn_wc_notify_delete:
-            notifyString = i18n("Deleted ") + QString( notify->path );
-//             kDebug() << notifyString << endl;
-            break;
-    }
-    SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
-    QCoreApplication::postEvent( job->parent(), event );
 }
 
 /////////////////////////////////////////////////////////////
@@ -813,7 +847,6 @@ void SvnUpdateJob::run()
         kDebug() << " canonicalized path: " << nurl.path() << endl;
     }
 
-    initNotifier(SvnUpdateJob::notifyCallback);
     svn_error_t *err = svn_client_update2( NULL, targets, &m_rev,
                                         m_recurse, m_ignoreExternals,
                                         ctx(), subpool );
@@ -823,34 +856,6 @@ void SvnUpdateJob::run()
         return;
     }
     svn_pool_destroy (subpool);
-}
-void SvnUpdateJob::notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool )
-{
-    SvnUpdateJob *job = (SvnUpdateJob*) baton;
-    QString notifyString;
-    // TODO conflict
-    switch( notify->action ){
-        case svn_wc_notify_update_delete:
-            notifyString = i18n("Deleted " ) + QString( notify->path );
-            kDebug() << notifyString << endl;
-            break;
-        case svn_wc_notify_update_add:
-            notifyString = i18n("Added ") + QString( notify->path );
-            break;
-        case svn_wc_notify_update_update:
-            notifyString = i18n("Updated ") + QString( notify->path );
-            break;
-        case svn_wc_notify_update_completed:
-            /* The last notification in an update (including updates of externals). */
-            notifyString = i18n("Revision ") + QString::number(notify->revision);
-            break;
-        case svn_wc_notify_update_external:
-            notifyString = i18n("Updating externals: ") + QString( notify->path );
-            break;
-    }
-//     kDebug() << notifyString << endl;
-    SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
-    QCoreApplication::postEvent( job->parent(), event );
 }
 
 //////////////////////////////////////////////////////////

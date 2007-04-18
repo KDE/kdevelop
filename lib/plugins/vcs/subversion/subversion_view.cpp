@@ -170,16 +170,13 @@ void KDevSubversionView::slotJobFinished( SvnKJobBase *job )
         case SVN_ADD:
             // note: these messagebox are just temporary ones.
             // don't try to i18n(), because it will be removed
-            KMessageBox::information( NULL, "Successfully Added" );
             break;
         case SVN_DELETE:
-            KMessageBox::information( NULL, "Successfully deleted" );
             break;
         case SVN_COMMIT:
-            KMessageBox::information( NULL, "Successfully committed" );
             break;
         case SVN_UPDATE:
-            KMessageBox::information( NULL, "Successfully updated" );
+            break;
         case SVN_STATUS:
             break;
     }
