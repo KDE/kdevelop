@@ -52,7 +52,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		m_cachedDirEntries = new VCSFileInfoMap;
 //	return m_cachedDirEntries;
 
-	kdDebug(9036) << "##################################################################################### svn provider : status " << dirPath << endl;
+	kdDebug(9036) << "svn provider : status " << dirPath << endl;
 
 	if ( dirPath != m_previousDirPath ) {
 		m_previousDirPath = dirPath;
@@ -69,7 +69,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		// Dukju Ahn: if checkRepos is set, status() accesses remote repository,
 		// which causes significant delaym_owner especially when network speed is not fast enough.
 		// Of course, the user cannot get information about the out-of-dateness of his local copy.
-		s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << false/*checkRepos*/ << true /*fullRecurse*/;
+		s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << false/*checkRepos*/ << false /*fullRecurse*/;
 
 		KIO::SimpleJob *job2 = KIO::special(servURL, parms, false);
 		job2->setWindow( m_part->mainWindow()->main() );
@@ -126,7 +126,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 			slotStatus(path, text_status, prop_status, repos_text_status, repos_prop_status, rev);
 		}
 	}
-
+	kdDebug(9036) << " Returning VcsFileInfoMap. provider::status() finished " << endl;
     return m_cachedDirEntries;
 }
 
