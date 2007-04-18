@@ -42,7 +42,7 @@ public:
 template <class Widget>
 class SimpleToolWidgetFactory: public ToolFactory {
 public:
-    virtual QWidget* create(ToolDocument */*doc*/, QWidget *parent = 0)
+    virtual QWidget* create(ToolDocument * /*doc*/, QWidget *parent = 0)
     {
         return new Widget(parent);
     }
