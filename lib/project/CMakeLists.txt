@@ -7,6 +7,9 @@ set(kdevplatformproject_LIB_SRCS
     projectmodel.cpp
     projectconfigskeleton.cpp
     importprojectjob.cpp
+	interfaces/iprojectbuilder.cpp
+    interfaces/iprojectfilemanager.cpp
+    interfaces/ibuildsystemmanager.cpp
 )
 
 kde4_automoc(${kdevplatformproject_LIB_SRCS})

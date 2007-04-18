@@ -63,7 +63,7 @@ class KDEVPLATFORMPROJECT_EXPORT IProjectFileManager
 {
 public:
 
-    virtual ~IProjectFileManager() {}
+    virtual ~IProjectFileManager();
     /** Features the file manager supports */
     enum Feature
     {

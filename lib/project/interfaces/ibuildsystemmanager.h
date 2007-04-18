@@ -39,7 +39,7 @@ class KDEVPLATFORMPROJECT_EXPORT IBuildSystemManager : public IProjectFileManage
 {
 public:
 
-    virtual ~IBuildSystemManager() {}
+    virtual ~IBuildSystemManager();
 
     enum BuildFeature
     {

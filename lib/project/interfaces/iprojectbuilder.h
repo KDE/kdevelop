@@ -39,7 +39,7 @@ class KDEVPLATFORMPROJECT_EXPORT IProjectBuilder
 {
 public:
 
-    virtual ~IProjectBuilder() {}
+    virtual ~IProjectBuilder();
 
     virtual bool build(ProjectBaseItem *dom) = 0;
     virtual bool clean(ProjectBaseItem *dom) = 0;
