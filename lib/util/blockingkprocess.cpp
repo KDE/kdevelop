@@ -24,7 +24,7 @@ BlockingKProcess::BlockingKProcess(QObject *parent, const char *name)
   
   connect(this, SIGNAL(receivedStdout(KProcess *, char *, int)),
           this, SLOT(slotReceivedStdOut(KProcess *, char *, int)));
-  connect(this, SIGNAL(receivedSterr(KProcess *, char *, int)),
+  connect(this, SIGNAL(receivedStderr(KProcess *, char *, int)),
           this, SLOT(slotReceivedStdErr(KProcess *, char *, int)));
   connect(this, SIGNAL(processExited(KProcess *)),
           this, SLOT(slotProcessExited(KProcess *)));  
@@ -38,6 +38,8 @@ BlockingKProcess::BlockingKProcess()
   m_timer = 0L;
   connect(this, SIGNAL(receivedStdout(KProcess *, char *, int)),
           this, SLOT(slotReceivedStdOut(KProcess *, char *, int)));
+  connect(this, SIGNAL(receivedStderr(KProcess *, char *, int)),
+          this, SLOT(slotReceivedStdErr(KProcess *, char *, int)));
   connect(this, SIGNAL(processExited(KProcess *)),
           this, SLOT(slotProcessExited(KProcess *)));  
 }
