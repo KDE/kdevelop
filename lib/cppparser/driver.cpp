@@ -297,7 +297,8 @@ class Driver::ParseHelper {
       CachedLexedFilePointer lexedFileP = m_driver->m_lexerCache.lexedFile(  HashedString( fileName ) );
       
       m_driver->m_dependences.remove( fileName );
-      {
+      if( fileName != m_driver->m_currentMasterFileName ) {
+        //For the master-filename, the problems are removed when parseFile(..) is called
         SpecialMutexLocker l( m_driver->m_problemMutex );
         m_driver->m_problems.remove( fileName );
       }
@@ -529,6 +530,9 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
 
   m_lexerCache.increaseFrame();
 
+  //Remove the problems now instead of in ParseHelper, because this way the problems reported by getCustomIncludePath(...) will not be discarded
+  m_problems.remove( fileName );
+  
   QStringList oldIncludePaths = m_includePaths;
   m_includePaths = getCustomIncludePath( fileName );
   

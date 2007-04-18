@@ -397,7 +397,12 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		}
 		ParsedFilePointer p = m_backgroundParser->translationUnit( fileName );
 		if( p && !p->includedFrom().isEmpty() ) {
-			kdDebug( 9007 ) << "customEvent() got included file " << fileName << " included from " << p->includedFrom() << endl;
+			kdDebug( 9007 ) << "customEvent() parsed included file \"" << fileName << "\" included from \"" << p->includedFrom() << "\"" << endl;
+		} else {
+			kdDebug( 9007 ) << "customEvent() parsed file \"" << fileName << "\"" <<  endl;
+		}
+		
+		if( p && !p->includedFrom().isEmpty() ) {
 			if( !project()->isProjectFile( fileName ) ) {
 				//The file was parsed to resolve a dependency, and is not a project file
 				addToRepository( p );
@@ -599,7 +604,7 @@ void CppSupportPart::projectClosed( )
 	for ( QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*>::const_iterator it = m_designers.begin();
 	      it != m_designers.end(); ++it )
 	{
-		kdDebug() << "calling save settings fro designer integration" << endl;
+		kdDebug( 9007 ) << "calling save settings fro designer integration" << endl;
 		it.data() ->saveSettings( *project() ->projectDom(), "kdevcppsupport/designerintegration" );
 	}
 
@@ -721,7 +726,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 
 		if ( showContextMenuExplosion )
 		{
-			//kdDebug() << "CppSupportPart::contextMenu 1" << endl;
+			//kdDebug( 9007 ) << "CppSupportPart::contextMenu 1" << endl;
 			QString candidate;
 			if ( isSource( m_activeFileName ) )
 				candidate = sourceOrHeaderCandidate();
@@ -732,7 +737,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 			if ( m_activeViewCursor != 0 )
 				m_activeViewCursor->cursorPositionReal( &curLine, &curCol );
 
-			//kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
+			//kdDebug( 9007 ) << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
 
 			if ( !candidate.isEmpty() && codeModel() ->hasFile( candidate ) )
 			{
@@ -742,13 +747,13 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 				                               "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file." ) );
 
 				FileDom file2 = codeModel() ->fileByName( candidate );
-				//kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
+				//kdDebug( 9007 ) << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
 
 				FunctionList functionList2 = CodeModelUtils::allFunctions( file2 );
 				for ( FunctionList::ConstIterator it = functionList2.begin(); it != functionList2.end(); ++it )
 				{
 					QString text = ( *it ) ->scope().join( "::" );
-					//kdDebug() << "CppSupportPart::contextMenu 3 text: " << text << endl;
+					//kdDebug( 9007 ) << "CppSupportPart::contextMenu 3 text: " << text << endl;
 					if ( !text.isEmpty() )
 					{
 						text += "::";
@@ -765,7 +770,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 				{
 					popup->removeItem( id );
 				}
-				//kdDebug() << "CppSupportPart::contextMenu 4" << endl;
+				//kdDebug( 9007 ) << "CppSupportPart::contextMenu 4" << endl;
 			}
 
 			QString candidate1;
@@ -777,7 +782,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 			{
 				candidate1 = m_activeFileName;
 			}
-			//kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
+			//kdDebug( 9007 ) << "CppSupportPart::go to definition in " << candidate1 << endl;
 			if ( codeModel() ->hasFile( candidate1 ) )
 			{
 				QPopupMenu * m = new QPopupMenu( popup );
@@ -849,7 +854,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 		const FileContext * fc = static_cast<const FileContext*>( context );
 		//this is a .ui file and only selection contains only one such file
 		KURL url = fc->urls().first();
-		kdDebug() << "file context with " << url.path() << endl;
+		kdDebug( 9007 ) << "file context with " << url.path() << endl;
 		if ( url.fileName().endsWith( ".ui" ) )
 		{
 			m_contextFileName = url.path();
@@ -1080,7 +1085,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 	        //kdDebug( 9007 ) << "Trying " << ( *it ) << endl;
                 if ( QFileInfo( *it ).exists() )
                 {
-			kdDebug() << "using: " << *it << endl;
+			kdDebug( 9007 ) << "using: " << *it << endl;
                         return * it;
                 }
         }
@@ -1102,7 +1107,7 @@ QString CppSupportPart::sourceOrHeaderCandidate( const KURL &url )
 			{
 				//kdDebug( 9007 ) << "checking if " << *fileIt << " exists" << endl;
 				if ( QFileInfo( *fileIt ).exists() )
-					kdDebug() << "using: " << *fileIt << endl;
+					kdDebug( 9007 ) << "using: " << *fileIt << endl;
 					return *fileIt;
 			}
 		}
@@ -1483,7 +1488,6 @@ bool CppSupportPart::parseProject( bool force )
 	if( _jd )
 		delete _jd->progressBar; ///Make sure the progress-bar is open
 
-	kdDebug( 9007 ) << "CppSupportPart::parseProject 1" << endl;
 	mainWindow() ->statusBar() ->message( i18n( "Updating..." ) );
 
 	kapp->setOverrideCursor( waitCursor );
@@ -1532,17 +1536,14 @@ bool CppSupportPart::parseProject( bool force )
 			}
 		}
 	}
-	kdDebug( 9007 ) << "CppSupportPart::parseProject 2" << endl;
 
 	_jd->files = reorder( modifiedFileList() );
-	kdDebug( 9007 ) << "CppSupportPart::parseProject 3" << endl;
 
 	QProgressBar* bar = new QProgressBar( _jd->files.count( ), mainWindow( ) ->statusBar( ) );
 	bar->setMinimumWidth( 120 );
 	bar->setCenterIndicator( true );
 	mainWindow( ) ->statusBar( ) ->addWidget( bar );
 	bar->show( );
-	kdDebug( 9007 ) << "CppSupportPart::parseProject 4" << endl;
 
 	_jd->progressBar = bar;
 	_jd->dir.setPath( m_projectDirectory );
@@ -1551,7 +1552,6 @@ bool CppSupportPart::parseProject( bool force )
 	_jd->backgroundCount = 0;
 	_jd->cycle = 0;
 
-	kdDebug( 9007 ) << "CppSupportPart::parseProject 5" << endl;
 	QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
 
 	m_saveMemoryTimer->stop(); //Do not regularly remove cached files that may still be needed while parsing(the cache anyway be full for the whole parsing-process)
@@ -1580,7 +1580,6 @@ void CppSupportPart::slotParseFiles()
 			if ( isValidSource( absFilePath ) )
 			{
 				QDateTime t = fileInfo.lastModified();
-				kdDebug( 9007 ) << "reading " << absFilePath << endl;
 
 				if ( ! ( m_timestamp.contains( absFilePath ) && m_timestamp[ absFilePath ] == t ) )
 				{
@@ -1594,18 +1593,18 @@ void CppSupportPart::slotParseFiles()
 						if( t.toTime_t() != _jd->pcs[ absFilePath ].first ) {
 							///The FileDom had to be created first, so the dependencies are known
 							_jd->reparseList << file->name();
-							kdDebug( 9007 ) << "File timestamp: " << ": " <<  t.toTime_t()   << endl;
-							kdDebug( 9007 ) << "Stored timestamp: " << ": " <<  _jd->pcs[ absFilePath ].first << endl;
+/*							kdDebug( 9007 ) << "File timestamp: " << ": " <<  t.toTime_t()   << endl;
+							kdDebug( 9007 ) << "Stored timestamp: " << ": " <<  _jd->pcs[ absFilePath ].first << endl;*/
 						} else {
 							m_timestamp[ absFilePath ] = t;
-							kdDebug( 9007 ) << "timestamp ok" << endl;
+/*							kdDebug( 9007 ) << "timestamp ok" << endl;*/
 						}
 					} else {
 					  _jd->reparseList <<  absFilePath;
-					  kdDebug( 9007 ) << absFilePath << " put into reparse-list"  << endl;
-					}
+	/*				  kdDebug( 9007 ) << absFilePath << " put into reparse-list"  << endl;
+	*/				}
 				} else {
-				  kdDebug( 9007 ) << absFilePath << " is already in code-model"  << endl;
+/*				  kdDebug( 9007 ) << absFilePath << " is already in code-model"  << endl;*/
 				}
 			}
 		}
@@ -1836,7 +1835,7 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 				translationUnit->getEndPosition( &atLine, &atColumn );
 		}
 
-		kdDebug() << "at line in mm: " << atLine << endl;
+		kdDebug( 9007 ) << "at line in mm: " << atLine << endl;
 	}
 	m_backgroundParser->unlock();
 }
@@ -1862,8 +1861,8 @@ void CppSupportPart::slotMakeMember()
 		m_backgroundParser->lock ()
 			;
 
-		kdDebug() << "at line in mm: " << atLine << " atCol: " << atColumn << endl;
-		kdDebug() << "text: " << text << endl;
+		kdDebug( 9007 ) << "at line in mm: " << atLine << " atCol: " << atColumn << endl;
+		kdDebug( 9007 ) << "text: " << text << endl;
 		if ( m_activeEditor )
 			m_activeEditor->insertText( atLine, atColumn, text );
 		if ( m_activeViewCursor )
@@ -2343,7 +2342,7 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 			lst << *it;
 		}else{
 			lst = codeModel()->getGroupStrings( d->groupId() );
-			kdDebug() << "adding group of: " << *it << ":\n" << " which is " << lst.join("\n") << "\n\n";
+/*			kdDebug( 9007 ) << "adding group of: " << *it << ":\n" << " which is " << lst.join("\n") << "\n\n";*/
 			if( lst.count() > 10 ) {
 				lst = codeModel()->getGroupStrings( d->groupId() );
 			}
@@ -2370,7 +2369,7 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 		QStringList group = reorder( groups[a] );
 
 
-		kdDebug() << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";
+/*		kdDebug( 9007 ) << "reparsing the following group: " << ":\n" << group.join("\n") << "\n\n";*/
 		if( background ) {
 
 			m_backgroundParser->lock();
@@ -2422,7 +2421,7 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 int CppSupportPart::parseFileAndDependencies( const QString & fileName, bool background, bool parseFirst, bool silent ) {
 	if(! isValidSource( fileName ) ) return 0;
 
-	kdDebug() << "reparsing dependencies of " << fileName << "\n";
+// 	kdDebug( 9007 ) << "reparsing dependencies of " << fileName << "\n";
 
 	return parseFilesAndDependencies( fileName, background, parseFirst, silent );
 }
@@ -2509,7 +2508,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 						}
 					}
 				} else {
-					kdDebug() << "failed to parse " << fileName << endl;
+					kdDebug( 9007 ) << "failed to parse " << fileName << endl;
 				}
 			}
 

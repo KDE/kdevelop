@@ -53,7 +53,7 @@ class Problem {
     Problem( const QString& text, int line, int column, int level = Level_Error )
         : m_text( text ), m_line( line ), m_column( column ), m_level( level ) {}
 
-    Problem( const Problem& source, bool threadSafeClone )
+    Problem( const Problem& source, bool /*threadSafeClone*/ )
       : m_text( QString::fromUtf8( source.m_text.utf8().data() ) ), m_line( source.m_line ),
         m_column( source.m_column ), m_level( source.m_level ), m_file( QString::fromUtf8( source.m_file.utf8().data() ) ) {}
         
