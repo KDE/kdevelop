@@ -429,9 +429,6 @@ and create a significant delay.</string>
                                 <property name="text">
                                     <string>Advanced include-path resolution using make(e&amp;xperimental)</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+X</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Try to resolve the include-path by getting the command that would be used 
 for compiling the file and parsing the gcc-options. The build-system needs to be working, 
@@ -446,9 +443,6 @@ The project needs to be compiled or at least configured before this system may w
                                 </property>
                                 <property name="text">
                                     <string>Show t&amp;ype evaluation in status bar</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+Y</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="3" column="1">
@@ -536,9 +530,6 @@ the database and reopen the project.</string>
                                 </property>
                                 <property name="text">
                                     <string>Preprocess included headers (collect macros and visibility-information)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+I</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Try to locate all included files and preprocess them. 
