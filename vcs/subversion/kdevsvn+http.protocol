@@ -17,6 +17,7 @@ Description=Subversion ioslave for KDevelop
 Description[ca]=L'esclau io (ioslave) Subversion per a KDevelop
 Description[de]=Ein-/Ausgabemodul für Subversion (KDevelop)
 Description[es]=El ioslave de Subversion para KDevelop
+Description[et]=KDevelopi Subversioni IO-moodul
 Description[hu]=Subversion KDE-protokoll a KDevelophoz
 Description[it]=ioslave di subversion per KDevelop
 Description[ms]=IOslave Subversion untuk KDevelop
