@@ -48,6 +48,7 @@ public slots:
   virtual void slotTextChangedDelayed();
 
 protected:
+    void maybeUpdateSelection();
     virtual void itemSelectionChanged();
     void QStringList_unique( QStringList & list );
     QStringList wildCardCompletion( const QString & text );

@@ -118,6 +118,7 @@ void QuickOpenClassDialog::accept()
 
 void QuickOpenClassDialog::slotReturnPressed( )
 {
+    maybeUpdateSelection();
     accept();
 }
 

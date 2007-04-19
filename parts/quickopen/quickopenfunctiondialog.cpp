@@ -220,6 +220,7 @@ void QuickOpenFunctionDialog::slotTextChangedDelayed() {
 
 void QuickOpenFunctionDialog::slotReturnPressed()
 {
+        maybeUpdateSelection();
         QListBoxItem *listboxItem = itemList->selectedItem();
         slotExecuted( listboxItem );
 }

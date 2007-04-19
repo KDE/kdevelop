@@ -96,6 +96,7 @@ void QuickOpenFileDialog::slotExecuted( QListBoxItem* item )
 
 void QuickOpenFileDialog::slotReturnPressed( )
 {
+    maybeUpdateSelection();
     slotExecuted( itemList->selectedItem() );
 }
 

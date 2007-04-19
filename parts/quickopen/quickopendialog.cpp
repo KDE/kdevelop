@@ -44,6 +44,11 @@ void QuickOpenDialog::slotTextChanged(const QString & text)
     m_typeTimeout.start( 100, true );
 }
 
+void QuickOpenDialog::maybeUpdateSelection() {
+    if( m_typeTimeout.isActive() )
+        slotTextChangedDelayed();
+}
+
 void QuickOpenDialog::slotTextChangedDelayed()
 {
     itemList->clear();
