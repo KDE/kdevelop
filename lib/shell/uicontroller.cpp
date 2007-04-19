@@ -133,7 +133,9 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 
     ///@todo adymo: on document deletion all its views shall be also deleted
     foreach (Sublime::View *view, doc->views())
-//warning removeToolView deletes view - once per area (CID 3303)
+#ifdef __GNUC__
+#warning removeToolView deletes view - once per area (CID 3303)
+#endif
         foreach (Sublime::Area *area, areas())
             area->removeToolView(view);
 
