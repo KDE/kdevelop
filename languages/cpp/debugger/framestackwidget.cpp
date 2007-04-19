@@ -128,12 +128,6 @@ void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
 
 void FramestackWidget::slotEvent(GDBController::event_t e)
 {
-    //We do not update the frame stack widget if it is not visible.
-    //This saves some time when stepping in/over, as unnecessary 
-    //GDB commands are avoided.
-    if (!isVisible())
-        return;
-
     switch(e)
     {
         case GDBController::program_state_changed: 
@@ -473,17 +467,6 @@ void FramestackWidget::drawContentsOffset( QPainter * p, int ox, int oy,
     p->fillRect(section1, KGlobalSettings::alternateBackgroundColor());
 }
 
-
-void FramestackWidget::showEvent ( QShowEvent *event )
-{
-    QListView::showEvent( event );
-
-    //Because this widget was hidden before, its state is out of date.
-    //Force an update by sending the appropriate events.
-    slotEvent( GDBController::program_state_changed );
-    slotEvent( GDBController::thread_or_frame_changed );
-}
-        
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************

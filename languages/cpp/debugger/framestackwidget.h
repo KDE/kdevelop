@@ -112,7 +112,6 @@ protected:
     void drawContentsOffset( QPainter * p, int ox, int oy,
                              int cx, int cy, int cw, int ch );
 
-    void showEvent ( QShowEvent *event );
 
 
 private:
