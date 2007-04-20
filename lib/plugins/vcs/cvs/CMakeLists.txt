@@ -1,3 +1,4 @@
+add_subdirectory(tests)
 
 include_directories( ${KDE4_INCLUDES}
 	${CMAKE_SOURCE_DIR}/lib 
