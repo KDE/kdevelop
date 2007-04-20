@@ -20,6 +20,7 @@ set(kdevcvs_PART_SRCS
 	commitdialog.cpp
 	updateoptionsdialog.cpp
 	importdialog.cpp
+	checkoutdialog.cpp
 )
 
 set(kdevcvs_PART_UI
@@ -31,6 +32,7 @@ set(kdevcvs_PART_UI
 	commitdialog.ui
 	updateoptionsdialog.ui
 	importdialog.ui
+	checkoutdialog.ui
 )
 
 kde4_add_ui_files(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})

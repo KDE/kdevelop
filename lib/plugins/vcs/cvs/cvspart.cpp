@@ -37,6 +37,7 @@
 #include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
 #include "importdialog.h"
+#include "checkoutdialog.h"
 
 typedef KGenericFactory<CvsPart> KDevCvsFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcvs,
@@ -135,6 +136,14 @@ void CvsPart::setupActions()
     action = actionCollection()->addAction("cvs_import");
     action->setText(i18n("Import Directory..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotImport()));
+
+    action = actionCollection()->addAction("cvs_annotate");
+    action->setText(i18n("Annotate..."));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAnnotate()));
+
+    action = actionCollection()->addAction("cvs_checkout");
+    action->setText(i18n("Checkout..."));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCheckout()));
 
 }
 
@@ -240,6 +249,17 @@ void CvsPart::slotImport()
     createNewProject( KUrl(info.absolutePath()) );
 }
 
+void CvsPart::slotAnnotate()
+{
+    KUrl url = urlFocusedDocument();
+    annotate( url );
+}
+
+void CvsPart::slotCheckout()
+{
+    fetchFromRepository();
+}
+
 
 
 
@@ -275,7 +295,11 @@ bool CvsPart::isValidDirectory(const KUrl & dirPath) const
 
 bool CvsPart::fetchFromRepository()
 {
-    /// @todo implemt me !
+    CheckoutDialog dlg(this);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        return true;
+    }
     return false;
 }
 
@@ -306,8 +330,12 @@ void CvsPart::checkout(const KUrl & repository, const KUrl & targetDir, KDevelop
 
 void CvsPart::annotate(const KUrl & url)
 {
-    Q_UNUSED(url)
-    /// @todo implemt me !
+    CvsJob* job = d->m_proxy->annotate( url );
+    if (job) {
+        CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
+        emit addNewTabToMainView( view, i18n("Annotate") );
+        job->start();
+    }
 }
 
 void CvsPart::logview(const KUrl & url)

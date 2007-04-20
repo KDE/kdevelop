@@ -126,6 +126,28 @@ CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions,
     return NULL;
 }
 
+CvsJob * CvsProxy::annotate(const KUrl & url, const QString & revision)
+{
+    kDebug() << k_funcinfo << endl;
+
+    QFileInfo info(url.path());
+
+    CvsJob* job = new CvsJob(this);
+    if ( prepareJob(job, info.absolutePath()) ) {
+        *job << "cvs";
+        *job << "annotate";
+
+        if (!revision.isEmpty())
+            *job << "-r"<<K3Process::quote(revision);
+
+        *job << K3Process::quote(info.fileName());
+
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
 CvsJob* CvsProxy::edit(const QString& repo, const KUrl::List& files)
 {
     kDebug() << k_funcinfo << endl;
@@ -284,6 +306,47 @@ CvsJob * CvsProxy::import(const KUrl & directory,
         *job << repositoryName;
         *job << vendortag;
         *job << releasetag;
+
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+CvsJob * CvsProxy::checkout(const KUrl & targetDir, 
+                            const QString & server, const QString & module, 
+                            const QString & checkoutOptions, 
+                            const QString & revision, 
+                            bool recursive,
+                            bool pruneDirs)
+{
+    kDebug() << k_funcinfo << endl;
+
+    CvsJob* job = new CvsJob(this);
+    ///@todo when doing a checkout we don't have the targetdir yet,
+    ///      for now it'll work to just run the command from the root
+    if ( prepareJob(job, "/", CvsProxy::CheckOut) ) {
+        *job << "cvs";
+        *job << "-q"; // don't print directory changes
+        *job << "-d" << server;
+        *job << "checkout";
+
+        if (!checkoutOptions.isEmpty())
+            *job << checkoutOptions;
+
+        if (!revision.isEmpty()) {
+            *job << "-r" << revision;
+        }
+
+        if (pruneDirs)
+            *job << "-P";
+
+        if (!recursive)
+            *job << "-l";
+
+        *job << "-d" << targetDir.path();
+
+        *job << module;
 
         return job;
     }

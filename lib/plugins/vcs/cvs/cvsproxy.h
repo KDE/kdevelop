@@ -61,6 +61,7 @@ public:
     CvsJob* log(const KUrl& file);
     CvsJob* diff(const KUrl& url, const QString& diffOptions="", 
               const QString& revA="", const QString& revB="");
+    CvsJob* annotate(const KUrl& url, const QString& revision="");
     CvsJob* edit(const QString& repo, const KUrl::List& files);
     CvsJob* unedit(const QString& repo, const KUrl::List& files);
     CvsJob* editors(const QString& repo, const KUrl::List& files);
@@ -73,6 +74,13 @@ public:
                 const QString& updateOptions,
                 bool pruneDirs = true, bool createDirs = true);
 
+    CvsJob* checkout(const KUrl& targetDir, 
+                const QString & server, const QString& module,
+                const QString& checkoutOptions="",
+                const QString& revision="",
+                bool recursive = true,
+                bool pruneDirs = true);
+
 private slots:
     void slotResult(KJob* job);
 
@@ -81,7 +89,8 @@ private:
 
     enum RequestedOperation {
         NormalOperation,
-        Import
+        Import,
+        CheckOut
     };
     bool prepareJob(CvsJob* job, const QString& repository, 
                     enum RequestedOperation op = CvsProxy::NormalOperation);
