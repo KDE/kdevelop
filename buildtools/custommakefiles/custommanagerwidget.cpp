@@ -33,7 +33,10 @@ CustomManagerWidget::CustomManagerWidget( CustomProjectPart* part, QWidget* pare
     urlselector->setURL( QString::null );
     urlselector->completionObject() ->setDir( part->projectDirectory() );
     urlselector->fileDialog() ->setURL( KURL( part->projectDirectory() ) );
-    m_blacklistBox = new KEditListBox( i18n("Blacklisted files/dirs"), urlselector->customEditor(), this);
+    m_blacklistBox = new KEditListBox( i18n("blacklisted files and directories are not"
+			    " considered part of the project, even if they fit one of "
+			    "the wildcard patterns in the project file list",
+			    "Blacklisted files/dirs"), urlselector->customEditor(), this);
     m_blacklistBox->setButtons( KEditListBox::Add | KEditListBox::Remove );
     m_blacklistBox->insertStringList( DomUtil::readListEntry( m_dom, "kdevcustomproject/blacklist","path") );
     grid->addWidget( m_blacklistBox, 0, 1 );
