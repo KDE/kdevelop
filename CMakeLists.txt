@@ -2,6 +2,10 @@ project(kdevelop)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
+#get include-path of common-cpp
+include(UsePkgConfig)
+pkgconfig(libccgnu2 ccgnu2_includes ccgnu2_linkdir ccgnu2_linkflags ccgnu2_cflags)
+
 find_package(KDE4 REQUIRED)
 #find_package(BerkeleyDB)
 #find_package(TDB)

@@ -6,5 +6,8 @@ add_subdirectory(language)
 add_subdirectory(shell)
 add_subdirectory(persistenthash)
 add_subdirectory(plugins)
+add_subdirectory(network)
+add_subdirectory(libdiff2)
+add_subdirectory(dynamictext)
 
 install(FILES kdevexport.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/)

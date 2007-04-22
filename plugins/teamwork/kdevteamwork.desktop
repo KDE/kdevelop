@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin allows collaboration using kdevelop
+Name=KDevTeamwork
+GenericName=Teamwork
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevteamwork
+X-KDevelop-Version=4
+X-KDevelop-Category=Project
+X-KDevelop-Properties=CodeNavigation

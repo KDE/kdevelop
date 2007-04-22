@@ -82,7 +82,7 @@ void PreprocessJob::run()
 
         QByteArray fileData = file.readAll();
         contents = QString::fromUtf8( fileData.constData() );
-        Q_ASSERT( !contents.isEmpty() );
+	//        Q_ASSERT( !contents.isEmpty() );
         file.close();
     }
     else

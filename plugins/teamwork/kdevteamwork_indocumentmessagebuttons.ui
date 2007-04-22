@@ -1,0 +1,33 @@
+<ui version="4.0" >
+ <class>InDocumentButtons</class>
+ <widget class="QWidget" name="InDocumentButtons" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>333</width>
+    <height>51</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QPushButton" name="jumpToPosition" >
+     <property name="text" >
+      <string>Jump to Position</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
