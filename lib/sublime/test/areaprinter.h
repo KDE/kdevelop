@@ -19,7 +19,7 @@
 #ifndef SUBLIMEAREAPRINTER_H
 #define SUBLIMEAREAPRINTER_H
 
-#include <QString>
+
 #include <sublime/area.h>
 #include <sublime/sublimedefs.h>
 

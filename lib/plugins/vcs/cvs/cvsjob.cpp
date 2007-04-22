@@ -17,7 +17,7 @@
 
 #include <QFile>
 #include <QList>
-#include <QString>
+
 #include <QStringList>
 #include <KDebug>
 #include <KLocale>

@@ -22,7 +22,7 @@
 #define PP_ENGINE_H
 
 #include <QHash>
-#include <QString>
+
 #include <QStack>
 #include <cppparserexport.h>
 

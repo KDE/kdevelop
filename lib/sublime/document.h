@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include <QList>
-#include <QString>
+
 
 #include <kdevexport.h>
 

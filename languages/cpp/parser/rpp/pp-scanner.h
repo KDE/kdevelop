@@ -22,7 +22,7 @@
 #ifndef PP_SCANNER_H
 #define PP_SCANNER_H
 
-#include <QString>
+
 
 #include "pp-stream.h"
 

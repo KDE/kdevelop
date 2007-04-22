@@ -23,7 +23,7 @@
 
 #include <QHash>
 #include <QMap>
-#include <QString>
+
 #include <QStack>
 #include <cppparserexport.h>
 

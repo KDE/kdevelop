@@ -14,7 +14,7 @@
 
 #include <QObject>
 #include <QIcon>
-#include <QString>
+
 #include <QStringList>
 #include <QStandardItem>
 

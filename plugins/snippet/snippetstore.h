@@ -13,7 +13,7 @@
 #define __SNIPPETSTORE_H__
 
 #include <QObject>
-#include <QString>
+
 #include <QList>
 #include <QStandardItemModel>
 

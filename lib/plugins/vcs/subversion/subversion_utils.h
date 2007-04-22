@@ -24,7 +24,7 @@
 #define SVN_DIFF     19
 
 struct svn_opt_revision_t;
-#include <QString>
+
 #include <QDateTime>
 
 namespace SvnUtils

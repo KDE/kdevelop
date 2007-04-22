@@ -23,7 +23,7 @@
 #include "identifier.h"
 #include "duchainexport.h"
 #include <QSet>
-#include <QString>
+
 #include <QList>
 
 #include <ksharedptr.h>

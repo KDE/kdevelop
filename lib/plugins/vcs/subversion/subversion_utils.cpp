@@ -12,7 +12,7 @@
 #include "subversion_utils.h"
 #include <subversion-1/svn_opt.h>
 
-#include <QString>
+
 #include <QDateTime>
 
 namespace SvnUtils

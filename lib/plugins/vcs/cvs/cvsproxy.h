@@ -12,7 +12,7 @@
 #ifndef CVSPROXY_H
 #define CVSPROXY_H
 
-#include <QString>
+
 #include <KUrl>
 #include <KJob>
 

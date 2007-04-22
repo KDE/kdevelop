@@ -16,7 +16,7 @@
 #ifndef CVSJOB_H
 #define CVSJOB_H
 
-#include <QString>
+
 #include <QStringList>
 #include <KJob>
 

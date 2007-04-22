@@ -2,7 +2,7 @@
 #define __PROJECTMANAGER_H__
 
 
-#include <QString>
+
 #include <QObject>
 #include <QDomDocument>
 

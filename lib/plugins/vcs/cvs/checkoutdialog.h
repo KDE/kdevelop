@@ -13,7 +13,7 @@
 #define CHECKOUTDIALOG_H
 
 #include <QDialog>
-#include <QString>
+
 #include <KJob>
 #include <KUrl>
 

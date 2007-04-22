@@ -24,7 +24,7 @@
 
 #include <QList>
 #include <QHash>
-#include <QString>
+
 
 #include "pp-macro.h"
 #include "pp-stream.h"

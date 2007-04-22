@@ -22,7 +22,7 @@
 #define CODEDISPLAY_H
 
 #include <QIcon>
-#include <QString>
+
 
 class _CodeModelItem;
 
