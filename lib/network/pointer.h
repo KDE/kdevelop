@@ -112,7 +112,7 @@ class LockedSharedPtr : protected SharedPtr<Item> {
   public:
     inline LockedSharedPtr() : SharedPtr<Item>() {
       inc();
-    };
+    }
 
     template <class Serialization>
     inline LockedSharedPtr( const SharedPtr<Item, Serialization>& item ) : SharedPtr<Item>( item ) {
@@ -406,7 +406,7 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
     inline SafeSharedPtr<Item, Serialization>& operator = ( const SafeSharedPtr<Item2, Serialization2>& rhs ) {
       SharedPtr<Item, Serialization>::operator=( const_cast<Item2*>( rhs.getUnsafeData() ) );
       return *this;
-    };
+    }
 
     inline operator bool () const {
       return ( bool ) * ( ( SharedPtr<Item, Serialization>* ) this );
