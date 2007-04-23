@@ -485,7 +485,7 @@ void SvnBlameJob::run()
     svn_client_blame_receiver_t receiver = SvnBlameJob::blameReceiver;
     svn_error_t *err = svn_client_blame( path_or_url, &rev1, &rev2, receiver, (void*)this, ctx(), subpool );
     if ( err ){
-        setErrorMsg( QString::fromLocal8Bit( err->message ) );
+        setErrorMsgExt( err );
         svn_pool_destroy( subpool );
         return;
     }
@@ -580,7 +580,7 @@ void SvnLogviewJob::run()
                             limit, discorverChangedPaths, strictNodeHistory,
                             receiver, this, ctx(), subpool);
     if ( err ){
-        setErrorMsg( QString::fromLocal8Bit(err->message) );
+        setErrorMsgExt( err );
         svn_pool_destroy (subpool);
         return;
     }
