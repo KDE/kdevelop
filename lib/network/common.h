@@ -109,7 +109,7 @@ namespace Teamwork {
       StreamError( const std::string& str ) : TeamworkError( "Stream-Error: " + str ) {}
   }
   ;
-};
+}
 
 #ifndef USE_BOOST_MUTEX
 

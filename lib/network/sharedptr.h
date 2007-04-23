@@ -366,7 +366,7 @@ class SharedPtr {
       }
     }*/
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     /**
      * Returns the number of references.
