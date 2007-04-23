@@ -131,28 +131,28 @@ void SubversionCore::spawnCommitThread( const KUrl::List &urls, bool recurse, bo
     initProgressDlg( job );
 }
 void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
-                                        long rev, QString revKind,
+                                        const SvnRevision &rev,
                                         bool recurse, bool ignoreExternals )
 {
     if( wcPaths.count() < 1 ) return;
     SvnKJobBase *job = new SvnKJobBase( SVN_UPDATE, this );
-    SvnUpdateJob *thread = new SvnUpdateJob( wcPaths, rev, revKind,
+    SvnUpdateJob *thread = new SvnUpdateJob( wcPaths, rev,
                                           recurse, ignoreExternals,
                                           SVN_UPDATE, job );
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
 }
 void SubversionCore::spawnLogviewThread(const KUrl::List& list,
-        int revstart, QString revKindStart, int revend, QString revKindEnd,
-        int limit,
-        bool repositLog, bool discorverChangedPath, bool strictNodeHistory )
+                                        const SvnRevision &rev1, const SvnRevision &rev2,
+                                        int limit, bool repositLog,
+                                        bool discorverChangedPath, bool strictNodeHistory )
 {
     // KUrl::List is handed. But only one Url will be used effectively.
     if( list.count() < 1 ) return;
     
     SvnKJobBase *job= new SvnKJobBase( SVN_LOGVIEW, this );
     SvnLogviewJob* thread = new SvnLogviewJob(
-                            revstart, revKindStart,revend, revKindEnd,
+                            rev1, rev2,
                             limit,
                             repositLog, discorverChangedPath, strictNodeHistory,
                             list,
@@ -169,22 +169,21 @@ void SubversionCore::spawnLogviewThread(const KUrl::List& list,
 }
 
 void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
-                int revstart, QString revKindStart, int revend, QString revKindEnd )
+                                       const SvnRevision &rev1, const SvnRevision &rev2 )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_BLAME, this );
     SvnBlameJob *thread = new SvnBlameJob( url, repositBlame,
-                               revstart, revKindStart,
-                               revend,   revKindEnd,
+                               rev1, rev2, 
                                SVN_BLAME, job );
     
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
 }
-const SvnKJobBase* SubversionCore::spawnStatusThread( const KUrl &wcPath, long rev, QString revKind,
+const SvnKJobBase* SubversionCore::spawnStatusThread( const KUrl &wcPath, const SvnRevision &rev,
                 bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_STATUS, this );
-    SvnStatusJob *thread = new SvnStatusJob( wcPath, rev, revKind,
+    SvnStatusJob *thread = new SvnStatusJob( wcPath, rev,
                     recurse, getAll, update, noIgnore, ignoreExternals, SVN_STATUS, job );
     
     SVNCORE_SPAWN_COMMON( job, thread )
@@ -192,12 +191,12 @@ const SvnKJobBase* SubversionCore::spawnStatusThread( const KUrl &wcPath, long r
     return job;
 }
 
-SvnKJobBase* SubversionCore::createStatusJob( const KUrl &wcPath, long rev, QString revKind,
+SvnKJobBase* SubversionCore::createStatusJob( const KUrl &wcPath, const SvnRevision &rev, 
                                         bool recurse, bool getAll, bool update,
                                         bool noIgnore, bool ignoreExternals )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_STATUS, this );
-    SvnStatusJob *thread = new SvnStatusJob( wcPath, rev, revKind,
+    SvnStatusJob *thread = new SvnStatusJob( wcPath, rev,
                     recurse, getAll, update, noIgnore, ignoreExternals, SVN_STATUS, job );
     job->setSvnThread( thread );
     return job;

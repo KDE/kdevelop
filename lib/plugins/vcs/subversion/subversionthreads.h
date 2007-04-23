@@ -121,8 +121,7 @@ class SvnBlameJob : public SubversionThread
 public:
     SvnBlameJob( KUrl path_or_url,
                  bool repositblame,
-                long int startRev, QString startRevStr,
-                long int endRev,   QString endRevStr,
+                const SvnRevision &rev1, const SvnRevision &rev2,
                 int actionType, SvnKJobBase *parent );
 
     virtual ~SvnBlameJob();
@@ -140,7 +139,7 @@ public:
 protected:
     virtual void run();
 private:
-    svn_opt_revision_t m_startRev, m_endRev;
+    SvnRevision m_startRev, m_endRev;
     KUrl m_pathOrUrl;
     bool m_repositBlame;
 };
@@ -149,8 +148,8 @@ private:
 class SvnLogviewJob : public SubversionThread
 {
 public:
-    SvnLogviewJob( int revstart, const QString& revkindstart,
-                   int revend, const QString& revkindend,
+    SvnLogviewJob( const SvnRevision &rev1, 
+                   const SvnRevision &rev2,
                    int listLimit,
                    bool repositLog,
                    bool discorverChangedPaths,
@@ -174,8 +173,7 @@ public:
 protected:
     virtual void run();
 private:
-    int revstart, revend;
-    QString revkindstart, revkindend;
+    SvnRevision m_rev1, m_rev2;
     int limit;
     bool repositLog, discorverChangedPaths, strictNodeHistory;
     KUrl::List urls;
@@ -205,7 +203,7 @@ private:
 class SvnStatusJob : public SubversionThread
 {
 public:
-    SvnStatusJob( const KUrl &wcPath, long rev, QString revKind,
+    SvnStatusJob( const KUrl &wcPath, const SvnRevision &rev,
                   bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals,
                   int type, SvnKJobBase *parent );
     
@@ -216,8 +214,7 @@ public:
 protected:
     virtual void run();
     KUrl m_wcPath;
-    long m_rev;
-    QString m_revKind;
+    SvnRevision m_rev;
     bool m_recurse, m_getAll, m_update, m_noIgnore, m_ignoreExternals;
 };
 
@@ -260,7 +257,7 @@ protected:
 class SvnUpdateJob : public SubversionThread
 {
 public:
-    SvnUpdateJob( const KUrl::List &wcPaths, long int rev, QString revKind,
+    SvnUpdateJob( const KUrl::List &wcPaths, const SvnRevision &rev,
                   bool recurse, bool ignoreExternals,
                   int type, SvnKJobBase *parent );
     
@@ -268,7 +265,7 @@ protected:
     virtual void run();
     
     KUrl::List m_wcPaths;
-    svn_opt_revision_t m_rev;
+    SvnRevision m_rev;
     bool m_recurse, m_ignoreExternals;
 };
 

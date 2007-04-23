@@ -133,7 +133,10 @@ void SvnLogviewWidget::blameRev()
         absUrl.addPath( relPath );
         kDebug() << " Blame requested on path " << absUrl << endl;
         // final request
-        m_part->svncore()->spawnBlameThread( absUrl, true,  0, "", rev, "" );
+        SvnRevision rev1, rev2;
+        rev1.setNumber( 0 );
+        rev2.setNumber( rev );
+        m_part->svncore()->spawnBlameThread( absUrl, true,  rev1, rev2 );
     }
     else{
         return;
@@ -147,8 +150,8 @@ void SvnLogviewWidget::diffToPrev()
         return;
     }
     SvnUtils::SvnRevision rev1, rev2;
-    rev1.revNum = rev-1;
-    rev2.revNum = rev;
+    rev1.setNumber( rev - 1 );
+    rev2.setNumber( rev );
     m_part->svncore()->spawnDiffThread( m_url, m_url, rev1, rev2, true, false, false, false );
 }
 void SvnLogviewWidget::treeViewClicked( const QModelIndex &index )

@@ -163,7 +163,9 @@ QList<KDevelop::VcsFileInfo> KDevSubversionPart::statusSync( const KUrl &dirPath
     d->m_vcsInfoList.clear();
     
     bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
-    SvnKJobBase * job = d->m_impl->createStatusJob( dirPath, -1, "WORKING",
+    SvnRevision rev;
+    rev.setKey( SvnRevision::WORKING );
+    SvnKJobBase * job = d->m_impl->createStatusJob( dirPath, rev,
                                                     recurse, true, false, true, false );
     if( !job->exec() ){
         // error
@@ -214,7 +216,9 @@ bool KDevSubversionPart::statusASync( const KUrl &dirPath,
 {
     bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
     const SvnKJobBase *job;
-    job = d->m_impl->spawnStatusThread( dirPath, -1, "HEAD", recurse, true, true, true, false );
+    SvnRevision rev;
+    rev.setKey( SvnRevision::HEAD );
+    job = d->m_impl->spawnStatusThread( dirPath, rev, recurse, true, true, true, false );
     // after the job complete, retrieve proper QList<VcsfileInfo> using SvnKJobBase* as QMap's key
     d->m_fileInfoMap.insert( (SvnKJobBase*)job, infos );
     return true;
@@ -293,17 +297,25 @@ void KDevSubversionPart::commit( const KUrl::List &wcPaths )
 void KDevSubversionPart::update( const KUrl::List &wcPaths )
 {
     // paths, rev, revKind, recurse, ignoreExternals
-    d->m_impl->spawnUpdateThread( wcPaths, -1, "HEAD", true, true );
+    SvnRevision rev;
+    rev.setKey( SvnRevision::HEAD );
+    d->m_impl->spawnUpdateThread( wcPaths, rev, true, true );
 }
 void KDevSubversionPart::logview( const KUrl &wcPath_or_url )
 {
     KUrl::List list;
     list << wcPath_or_url;
-    d->m_impl->spawnLogviewThread(list, -1, "HEAD", 0, "", 0, true, true, false );
+    SvnRevision rev1, rev2;
+    rev1.setKey( SvnRevision::HEAD );
+    rev2.setNumber( 0 );
+    d->m_impl->spawnLogviewThread(list, rev1, rev2, 0, true, true, false );
 }
 void KDevSubversionPart::annotate( const KUrl &path_or_url )
 {
-    d->m_impl->spawnBlameThread(path_or_url, true,  0, "", -1, "HEAD" );
+    SvnRevision rev1, rev2;
+    rev1.setNumber( 0 );
+    rev2.setKey( SvnRevision::HEAD );
+    d->m_impl->spawnBlameThread(path_or_url, true,  rev1, rev2 );
 }
 void KDevSubversionPart::vcsInfo( const KUrl &path_or_url ) // not yet in interface
 {

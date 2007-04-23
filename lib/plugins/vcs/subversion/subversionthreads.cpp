@@ -431,14 +431,13 @@ apr_pool_t* SubversionThread::pool()
 
 SvnBlameJob::SvnBlameJob(  KUrl path_or_url,
                         bool reposit,
-                        long int startRev, QString startRevStr,
-                        long int endRev,   QString endRevStr,
+                        const SvnRevision &rev1, const SvnRevision &rev2,
                         int actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent )
     ,m_repositBlame(reposit)
 {
-    m_startRev = SvnUtils::createRevision( startRev, startRevStr );
-    m_endRev = SvnUtils::createRevision( endRev, endRevStr );
+    m_startRev = rev1;
+    m_endRev = rev2;
     m_pathOrUrl = path_or_url;
 }
 SvnBlameJob::~SvnBlameJob()
@@ -480,9 +479,11 @@ void SvnBlameJob::run()
         path_or_url = apr_pstrdup( subpool, out_url );
         kDebug() << " working copy path : " << path_or_url << endl;
     }// ent of filling out path_or_url
-    
+
+    svn_opt_revision_t rev1 = m_startRev.revision();
+    svn_opt_revision_t rev2 = m_endRev.revision();
     svn_client_blame_receiver_t receiver = SvnBlameJob::blameReceiver;
-    svn_error_t *err = svn_client_blame( path_or_url, &m_startRev, &m_endRev, receiver, (void*)this, ctx(), subpool );
+    svn_error_t *err = svn_client_blame( path_or_url, &rev1, &rev2, receiver, (void*)this, ctx(), subpool );
     if ( err ){
         setErrorMsg( QString::fromLocal8Bit( err->message ) );
         svn_pool_destroy( subpool );
@@ -506,8 +507,8 @@ svn_error_t* SvnBlameJob::blameReceiver( void *baton, apr_int64_t line_no, svn_r
 }
 
 //////////////////////////////////////////////////////////////
-SvnLogviewJob::SvnLogviewJob( int rev1, const QString& revkind1,
-                int rev2, const QString& revkind2,
+SvnLogviewJob::SvnLogviewJob( const SvnRevision &rev1,
+                const SvnRevision &rev2,
                 int listLimit,
                 bool reposit,
                 bool discorverPaths,
@@ -515,8 +516,7 @@ SvnLogviewJob::SvnLogviewJob( int rev1, const QString& revkind1,
                 const KUrl::List& urls,
                 int actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent ),
-    revstart(rev1), revkindstart(revkind1),
-    revend(rev2), revkindend(revkind2),
+    m_rev1( rev1 ), m_rev2( rev2 ),
     limit( listLimit ), repositLog(reposit),
     discorverChangedPaths(discorverPaths),
     strictNodeHistory(strictNodeHistory),
@@ -532,12 +532,17 @@ void SvnLogviewJob::run()
     apr_pool_t *subpool = svn_pool_create (pool());
     
     svn_opt_revision_t rev1, rev2;
-    if( revkindstart == "HEAD" || revend == 1 ){
-        rev1 = SvnUtils::createRevision( -1, "HEAD" );
-        rev2 = SvnUtils::createRevision( 0, "" );
-    } else {
-        rev1 = SvnUtils::createRevision( revstart, revkindstart );
-        rev2 = SvnUtils::createRevision( revend, revkindend );
+    rev1 = m_rev1.revision();
+    rev2 = m_rev2.revision();
+
+    // IMPORTANT: A special case for the revision range HEAD:1, which was present
+    // in svn_client_log(), has been removed from svn_client_log2().  Instead, it
+    // is expected that callers will specify the range HEAD:0, to avoid a
+    // SVN_ERR_FS_NO_SUCH_REVISION error when invoked against an empty repository
+    // (i.e. one not containing a revision 1).
+    if( rev1.kind == svn_opt_revision_head && rev2.kind == svn_opt_revision_number
+        && rev2.value.number == 1 ){
+        rev2.value.number = 0;
     }
     
     apr_array_header_t *targets = apr_array_make(subpool, 1+urls.count(), sizeof(const char *));
@@ -702,7 +707,7 @@ SvnCommitJob::commitLogUserInput( const char **log_msg,
 
 //////////////////////////////////////////////////////////
 
-SvnStatusJob::SvnStatusJob( const KUrl &wcPath, long rev, QString revKind,
+SvnStatusJob::SvnStatusJob( const KUrl &wcPath, const SvnRevision &rev,
                             bool recurse, bool getAll, bool update,
                             bool noIgnore, bool ignoreExternals,
                             int type, SvnKJobBase *parent )
@@ -711,7 +716,6 @@ SvnStatusJob::SvnStatusJob( const KUrl &wcPath, long rev, QString revKind,
     m_wcPath = wcPath;
     m_wcPath.setProtocol( "file" );
     m_rev = rev;
-    m_revKind = revKind;
     m_recurse = recurse;
     m_getAll = getAll;
     m_update = update;
@@ -727,7 +731,7 @@ void SvnStatusJob::run()
 
 //     recordCurrentURL( nurl );
 
-    svn_opt_revision_t rev = SvnUtils::createRevision( m_rev, m_revKind );
+    svn_opt_revision_t rev = m_rev.revision();
 
 //     initNotifier( SvnStatusJob::statusCallback );
 
@@ -836,14 +840,14 @@ void SvnDeleteJob::run()
 
 /////////////////////////////////////////////////////////////
 
-SvnUpdateJob::SvnUpdateJob( const KUrl::List &wcPaths, long int rev, QString revKind,
+SvnUpdateJob::SvnUpdateJob( const KUrl::List &wcPaths, const SvnRevision &rev,
                             bool recurse, bool ignoreExternals,
                             int type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
     , m_wcPaths( wcPaths )
     , m_recurse(recurse), m_ignoreExternals(ignoreExternals)
 {
-    m_rev = SvnUtils::createRevision( rev, revKind );
+    m_rev = rev;
 }
 
 void SvnUpdateJob::run()
@@ -862,7 +866,8 @@ void SvnUpdateJob::run()
         kDebug() << " canonicalized path: " << nurl.path() << endl;
     }
 
-    svn_error_t *err = svn_client_update2( NULL, targets, &m_rev,
+    svn_opt_revision_t revision = m_rev.revision();
+    svn_error_t *err = svn_client_update2( NULL, targets, &revision,
                                         m_recurse, m_ignoreExternals,
                                         ctx(), subpool );
     if ( err ){
@@ -911,8 +916,8 @@ void SvnInfoJob::run()
     kDebug() << " SvnInfoJob:run() " <<endl;
     
     apr_pool_t *subpool = svn_pool_create (pool());
-    svn_opt_revision_t peg_rev = SvnUtils::createRevision( m_peg.revNum, m_peg.revKind );
-    svn_opt_revision_t revision = SvnUtils::createRevision( m_revision.revNum, m_revision.revKind );
+    svn_opt_revision_t peg_rev = m_peg.revision();
+    svn_opt_revision_t revision = m_revision.revision();
 
     svn_error_t *err = svn_client_info( m_pathOrUrl.pathOrUrl().toUtf8(),
                                         &peg_rev, &revision,
@@ -971,8 +976,8 @@ void SvnDiffJob::run()
 
     // make revisions
     svn_opt_revision_t revision1,revision2;
-    revision1 = SvnUtils::createRevision( m_rev1.revNum, m_rev1.revKind );
-    revision2 = SvnUtils::createRevision( m_rev2.revNum, m_rev2.revKind );
+    revision1 = m_rev1.revision();
+    revision2 = m_rev2.revision();
 
     // make temp files
     m_tmpDir = new KTempDir();

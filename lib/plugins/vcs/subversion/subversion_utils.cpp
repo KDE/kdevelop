@@ -13,48 +13,76 @@
 #include <subversion-1/svn_opt.h>
 
 
-#include <QDateTime>
-
 namespace SvnUtils
 {
 
-SvnRevision::SvnRevision( int aRev, QString aRevKind, QDateTime aRevDate )
-: revNum( aRev ), revKind( aRevKind ), revDate( aRevDate )
-{}
-
 SvnRevision::SvnRevision()
-: revNum(-1), revKind( "UNSPECIFIED" )
+: type( kind ), revNum(-1), revKind( UNSPECIFIED )
 {}
 
-svn_opt_revision_t createRevision( long int revision, const QString& revkind )
+void SvnRevision::setNumber( long int revnum )
 {
-    svn_opt_revision_t result/*,endrev*/;
-
-    if ( revision != -1 ) {
-        result.value.number = revision;
-        result.kind = svn_opt_revision_number;
-    } else if ( revkind == "WORKING" ) {
-        result.kind = svn_opt_revision_working;
-    } else if ( revkind == "BASE" ) {
-        result.kind = svn_opt_revision_base;
-    } else if ( revkind == "HEAD" ) {
-        result.kind = svn_opt_revision_head;
-    } else if ( revkind == "COMMITTED" ) {
-        result.kind = svn_opt_revision_committed;
-    } else if ( revkind == "PREV" ) {
-        result.kind = svn_opt_revision_previous;
-    } else if ( revkind == "UNSPECIFIED" ) {
-        result.kind = svn_opt_revision_unspecified;
-    }
-    else {
-        result.kind = svn_opt_revision_unspecified;
-    }
-    return result;
+    type = number;
+    revNum = revnum;
 }
 
-svn_opt_revision_t createRevision( SvnRevision &revision )
+void SvnRevision::setKey( RevKeyword keyword )
 {
-    return createRevision( revision.revNum, revision.revKind );
+    type = kind;
+    revKind = keyword;
+}
+
+void SvnRevision::setDate( QDateTime aDate )
+{
+    type = date;
+    revDate = aDate;
+}
+
+void SvnRevision::setDate( QDate aDate, QTime aTime )
+{
+    setDate( QDateTime( aDate, aTime ) );
+}
+
+svn_opt_revision_t SvnRevision::revision()
+{
+    svn_opt_revision_t ret;
+    switch( type ){
+        case number:
+            ret.value.number = revNum;
+            ret.kind = svn_opt_revision_number;
+            break;
+        case kind:
+            ret.value.number = -1;
+            if( revKind == WORKING ){
+                ret.kind = svn_opt_revision_working;
+            } else if ( revKind == BASE ) {
+                ret.kind = svn_opt_revision_base;
+            } else if ( revKind == HEAD ) {
+                ret.kind = svn_opt_revision_head;
+            } else if ( revKind == COMMITTED ) {
+                ret.kind = svn_opt_revision_committed;
+            } else if ( revKind == PREV ) {
+                ret.kind = svn_opt_revision_previous;
+            } else if ( revKind == UNSPECIFIED ) {
+                ret.kind = svn_opt_revision_unspecified;
+            } else{
+                ret.kind = svn_opt_revision_unspecified;
+            }
+            break;
+        case date:
+            ret.kind = svn_opt_revision_date;
+
+            // Note: from apr_time.h. This is used as subversion revision specifier.
+            // /* number of microseconds since 00:00:00 january 1, 1970 UTC */
+            // typedef apr_int64_t apr_time_t;
+            ret.value.date = ((apr_time_t)(revDate.toTime_t())) * 1000000;
+            break;
+        default:
+            ret.kind = svn_opt_revision_unspecified;
+            break;
+    }
+    
+    return ret;
 }
 
 } // end of namespace SvnUtils

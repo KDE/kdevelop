@@ -33,18 +33,51 @@ namespace SvnUtils
 class SvnRevision
 {
 public:
-    /// Construct Valid Revision
-    SvnRevision( int aRev, QString aRevKind, QDateTime aRevDate );
+    /** To be used with setRevision( RevKeyword )
+     */
+    enum RevKeyword
+    {
+        UNSPECIFIED = 0,
+        COMMITTED = 1,
+        PREV  = 2,
+        BASE = 3,
+        WORKING = 4,
+        HEAD = 5
+    };
+    
     /// Construct InValid (Unspecified) Revision.
     SvnRevision();
-    int revNum;
-    QString revKind;
+
+    /// Specify revision as number.
+    void setNumber( long int revnum );
+    
+    /** Specify revision as keyword. Supported string is
+     *  WORKING, BASE, HEAD, COMMITTED, PREV and UNSPECIFIED
+     */ 
+    void setKey( RevKeyword key );
+
+    /// Specify revision as date,time
+    void setDate( QDateTime date );
+
+    /// Overloaded method. Same with above.
+    void setDate( QDate aDate, QTime aTime = QTime() );
+            
+    /// Returns SVN C-Api compatible struct. Use this to call svn_client_* and etc.
+    svn_opt_revision_t revision();
+
+private:
+    enum RevType
+    {
+        number = 0,
+        kind = 1,
+        date = 2
+    };
+    RevType type;
+    
+    long int revNum;
+    RevKeyword revKind;
     QDateTime revDate;
 };
-
-// TODO support datetime
-svn_opt_revision_t createRevision( long int revision, const QString& revkind );
-svn_opt_revision_t createRevision( SvnRevision &revision );
 
 } // end of namespace SvnRevision
 

@@ -50,21 +50,20 @@ public:
     void spawnRemoveThread( const KUrl::List &urls, bool force );
     void spawnCommitThread( const KUrl::List &urls, bool recurse, bool keepLocks );
     void spawnUpdateThread( const KUrl::List &wcPaths,
-                            long rev, QString revKind,
+                            const SvnRevision &rev,
                             bool recurse, bool ignoreExternals );
     void spawnLogviewThread(const KUrl::List& list,
-                        int revstart, QString revKindStart, int revend, QString revKindEnd,
-                        int limit,
+                        const SvnRevision &rev1, const SvnRevision &rev2, int limit,
                         bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
     void spawnBlameThread( const KUrl &url, bool repositBlame,
-                    int revstart, QString revKindStart, int revend, QString revKindEnd );
+                    const SvnRevision &rev1, const SvnRevision &rev2 );
     
     /// Creates job. Starts it ASynchronously. Also returns the running job.
-    const SvnKJobBase* spawnStatusThread( const KUrl &wcPath, long rev, QString revKind,
+    const SvnKJobBase* spawnStatusThread( const KUrl &wcPath, const SvnRevision &rev,
                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals );
     /// Create KJob and returns it, but not executing it.
     /// It is up to caller how to start the job
-    SvnKJobBase* createStatusJob( const KUrl &wcPath, long rev, QString revKind,
+    SvnKJobBase* createStatusJob( const KUrl &wcPath, const SvnRevision &rev,
                             bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals );
     void spawnInfoThread( const KUrl &pathOrUrl,
                           const SvnRevision &peg, const SvnRevision &revision,
