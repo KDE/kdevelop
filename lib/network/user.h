@@ -185,7 +185,7 @@ typedef SafeSharedPtr<User> UserPointer;
 #else
 typedef SafeSharedPtr<User, BoostSerialization> UserPointer;
 #endif
-};
+}
 
 #endif
 

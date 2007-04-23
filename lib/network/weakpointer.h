@@ -71,7 +71,7 @@ class WeakSafeSharedPtr {
     WeakSafeSharedPtr( const Input& ptr ) {
       set
         ( ptr );
-    };
+    }
 
     SafeSharedPtr<Item, Serialization> get
       () {
@@ -224,7 +224,7 @@ class WeakSharedPtr {
     WeakSharedPtr( const Input& ptr ) {
       set
         ( ptr );
-    };
+    }
 
     Item* get
       () {

@@ -97,7 +97,7 @@ typedef Binder< TeamworkMessage >
 //::Append< MaintenanceMessageChain >::Result
 ::Append< ForwardMessage >::Result
 TeamworkMessages;
-};
+}
 
 #endif
 

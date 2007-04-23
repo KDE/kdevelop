@@ -117,17 +117,17 @@ class LockedSharedPtr : protected SharedPtr<Item> {
     template <class Serialization>
     inline LockedSharedPtr( const SharedPtr<Item, Serialization>& item ) : SharedPtr<Item>( item ) {
       inc();
-    };
+    }
 
     inline LockedSharedPtr( Item* item ) : SharedPtr<Item>( item ) {
       inc();
-    };
+    }
 
     ///timeout in nanoseconds
     template <class Serialization>
     inline LockedSharedPtr( const SharedPtr<Item, Serialization>& item, int timeout ) : SharedPtr<Item>( item ) {
       inc( timeout );
-    };
+    }
 
     inline LockedSharedPtr( const LockedSharedPtr<Item>& rhs ) : SharedPtr<Item>( rhs ) {
       inc();
@@ -337,10 +337,8 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
 
     template <class Serialization2>
     inline SafeSharedPtr( const SharedPtr<Item, Serialization2>& i ) : SharedPtr<Item, Serialization>( i ) {}
-    ;
 
     inline SafeSharedPtr( Item* i = 0 ) : SharedPtr<Item, Serialization>( i ) {}
-    ;
 
     inline SafeSharedPtr( const SafeSharedPtr<Item, Serialization>& rhs ) : SharedPtr<Item, Serialization>( rhs.getUnsafeData() ) {}
 
@@ -544,7 +542,7 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
       }
     };
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 
