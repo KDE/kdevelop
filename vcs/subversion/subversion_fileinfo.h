@@ -50,7 +50,7 @@ public:
 	void slotStatusExt( const QString&, const QString& , int, int, int, int, long int ) ;
 	
 // -- Async interface for requesting data
-    virtual bool requestStatus( const QString &dirPath, void *callerData );
+    virtual bool requestStatus( const QString &dirPath, void *callerData, bool recursive = true, bool checkRepos = true );
 
 	QString projectDirectory() const;
 

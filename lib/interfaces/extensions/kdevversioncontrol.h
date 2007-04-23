@@ -208,8 +208,11 @@ public:
     @param dirPath The (relative to project directory) directory which status you are asking for.
     @param callerData The pointer to some data you want the provider will return
     to you when it has done.
+    @param recursive If false, retrieve information only for dirPath's immediate children.
+    @param checkRepos If true, contact remote repository and augment repository's status.
+    If false, retrieve only for local modification information.
     @return true if the request has been successfully started, false otherwise.*/
-    virtual bool requestStatus( const QString &dirPath, void *callerData ) = 0;
+    virtual bool requestStatus( const QString &dirPath, void *callerData, bool recursive = true, bool checkRepos = true ) = 0;
 
 signals:
     /**Emitted when the status request to remote repository has finished.

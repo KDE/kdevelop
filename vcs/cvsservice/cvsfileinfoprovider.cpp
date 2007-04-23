@@ -65,7 +65,7 @@ const VCSFileInfoMap *CVSFileInfoProvider::status( const QString &dirPath )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerData )
+bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerData, bool recursive, bool checkRepos )
 {
     m_savedCallerData = callerData;
     if (m_requestStatusJob)
@@ -83,7 +83,7 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 
 
     // path, recursive, tagInfo: hmmm ... we may use tagInfo for collecting file tags ...
-    DCOPRef job = m_cvsService->status( dirPath, true, false );
+    DCOPRef job = m_cvsService->status( dirPath, recursive, checkRepos );
     m_requestStatusJob = new CvsJob_stub( job.app(), job.obj() );
 
     kdDebug(9006) << "Running command : " << m_requestStatusJob->cvsCommand() << endl;

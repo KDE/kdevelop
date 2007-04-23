@@ -45,7 +45,7 @@ const VCSFileInfoMap* ClearcaseFileinfoProvider::status( const QString &dirPath 
     return vcsInfo_;
 }
 
-bool ClearcaseFileinfoProvider::requestStatus( const QString &dirPath, void *callerData ) {
+bool ClearcaseFileinfoProvider::requestStatus( const QString &dirPath, void *callerData, bool recursive, bool checkRepos  ) {
  	
     VCSFileInfoMap* vcsDirInfos = ccManipulator_.retreiveFilesInfos(dirPath);
 

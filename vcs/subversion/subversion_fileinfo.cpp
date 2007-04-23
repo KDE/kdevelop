@@ -130,7 +130,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
     return m_cachedDirEntries;
 }
 
-bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerData ) {
+bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerData, bool recursive, bool checkRepos ) {
 	kdDebug(9036) << "##################################################################################### svn provider : request status" << endl;
     m_savedCallerData = callerData;
     // Flush old cache
@@ -147,11 +147,12 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 	QString rPath = projectDirectory( );
 	rPath += QDir::separator() + dirPath;
 	kdDebug(9036) << "DIR : " << rPath << " " << QFileInfo( rPath ).absFilePath() << endl;
-	s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << true << true;
+	s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << checkRepos << recursive;
 	KURL servURL = "kdevsvn+http://fakeserver_this_is_normal_behavior/";
 	job = KIO::special(servURL, parms, false);
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
-	m_part->svncore()->initProcessDlg( job, dirPath, i18n("Subversion File/Directory Status") );
+	if( checkRepos )
+		m_part->svncore()->initProcessDlg( job, dirPath, i18n("Subversion File/Directory Status") );
     return true;
 }
 

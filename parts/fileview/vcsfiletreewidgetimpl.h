@@ -50,6 +50,7 @@ private slots:
     //! the items which are childs of the @see filetreeview::FileTreeViewItem stored in
     //! @p callerData.
     void vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData );
+    void slotDirectoryExpanded( QListViewItem* );
 
 private:
     bool showVCSFields() const;

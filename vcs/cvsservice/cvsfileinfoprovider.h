@@ -39,7 +39,7 @@ public:
     virtual const VCSFileInfoMap *status( const QString &dirPath ) ;
 
 // -- Async interface for requesting data
-    virtual bool requestStatus( const QString &dirPath, void *callerData );
+    virtual bool requestStatus( const QString &dirPath, void *callerData, bool recursive = true, bool checkRepos = true  );
 
 public slots:
     void updateStatusFor( const CVSDir& );

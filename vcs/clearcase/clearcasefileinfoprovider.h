@@ -31,7 +31,7 @@ public:
     const VCSFileInfoMap *status( const QString &dirPath ) ;
 
     // -- Async interface for requesting data
-    bool requestStatus( const QString &dirPath, void *callerData );
+    bool requestStatus( const QString &dirPath, void *callerData, bool recursive = true, bool checkRepos = true );
 
 
 private:

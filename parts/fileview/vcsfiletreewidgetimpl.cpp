@@ -150,13 +150,13 @@ KFileTreeViewItem* VCSFileTreeBranchItem::createTreeViewItem( KFileTreeViewItem*
 
     VCSFileTreeViewItem *newItem = new VCSFileTreeViewItem( parent, fileItem, this, isDirectory );
 
-    QString fileName = fileURL.fileName();
-    QString dirName = URLUtil::extractPathNameRelative( lv->projectDirectory(), fileURL.directory() );
+//     QString fileName = fileURL.fileName();
+//     QString dirName = URLUtil::extractPathNameRelative( lv->projectDirectory(), fileURL.directory() );
 
-    const VCSFileInfoMap &vcsFiles = *m_vcsInfoProvider->status( dirName );
+//     const VCSFileInfoMap &vcsFiles = *m_vcsInfoProvider->status( dirName );
 //  kdDebug(9017) << "Dir has " << vcsFiles.count() << " registered files!" << endl;
-    if (vcsFiles.contains( fileName ))
-        newItem->setVCSInfo( vcsFiles[ fileName ] );
+//     if (vcsFiles.contains( fileName ))
+//         newItem->setVCSInfo( vcsFiles[ fileName ] );
 //            else
 //                kdDebug(9017) << "!!!No VCS info for this file!!!" << endl;
     return newItem;
@@ -218,6 +218,7 @@ VCSFileTreeWidgetImpl::VCSFileTreeWidgetImpl( FileTreeWidget *parent, KDevVCSFil
     QDomDocument &dom = projectDom();
     m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
     slotToggleShowVCSFields( showVCSFields() ); // show or hide fields depending on read settings
+    connect( parent, SIGNAL(expanded(QListViewItem*)), this, SLOT(slotDirectoryExpanded(QListViewItem*)));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -296,7 +297,11 @@ void VCSFileTreeWidgetImpl::vcsDirStatusReady( const VCSFileInfoMap &modifiedFil
     kdDebug(9017) << "VCSFileTreeWidgetImpl::vcsDirStatusReady(const VCSFileInfoMap &, void*)" << endl;
 
     VCSFileTreeViewItem *item = static_cast<VCSFileTreeViewItem*>( callerData );
-    Q_ASSERT( item ); // this must _not_ fail!
+//     Q_ASSERT( item ); // this must _not_ fail!
+    if( !item ){
+        kdDebug(9017) << "static_cast<VCSFileTreeViewItem*>( callerData ) failed" << endl;
+        return;
+    }
     // Update vcs file info for all childs in this tree folder ...
     item = static_cast<VCSFileTreeViewItem*>( item->firstChild() );
     while (item)
@@ -328,6 +333,21 @@ void VCSFileTreeWidgetImpl::slotSyncWithRepository()
     kdDebug(9017) << "VCS Info requested for: " << relDirPath << endl;
     m_vcsInfoProvider->requestStatus( relDirPath, m_vcsStatusRequestedItem );
     m_isSyncingWithRepository = true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void VCSFileTreeWidgetImpl::slotDirectoryExpanded( QListViewItem* aItem )
+{
+    VCSFileTreeViewItem *item = static_cast<VCSFileTreeViewItem *>( aItem );
+    if( !item ) return;
+
+    const QString relDirPath = URLUtil::extractPathNameRelative( projectDirectory(), item->fileItem()->url().path() );
+    kdDebug(9017) << "ASync VCS Info requested for: " << relDirPath << endl;
+    m_vcsInfoProvider->requestStatus( relDirPath, item, false, false );
+
+//     m_isSyncingWithRepository = true;
+
 }
 
 #include "vcsfiletreewidgetimpl.moc"
