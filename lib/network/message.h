@@ -400,7 +400,7 @@ class MessageDispatcher {
       template <class Type, class Node>
       void operator () ( const Node& node ) {
         ret = node.dispatch( targ, msg );
-      };
+      }
     };
 
     typedef Tree::TreeMasterNode< MessageInterface, Messages, EntryTemplate > Nodes;

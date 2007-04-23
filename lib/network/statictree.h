@@ -30,7 +30,7 @@ void printId( Out& out, const uchar* const id ) {
       out << ".";
     out << ( int ) id[ i ];
   }
-};
+}
 
 class Empty {}
 ;
