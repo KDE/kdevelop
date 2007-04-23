@@ -213,7 +213,7 @@ svn_error_t* kio_svnProtocol::checkAuth(svn_auth_cred_simple_t **cred, void *bat
 	kio_svnProtocol *p = ( kio_svnProtocol* )baton;
 	svn_auth_cred_simple_t *ret = (svn_auth_cred_simple_t*)apr_pcalloc (pool, sizeof (*ret));
 
-//	p->info.keepPassword = true;
+	p->info.keepPassword = true;
 	p->info.verifyPath=true;
 	kdDebug(9036 ) << "auth current URL : " << p->myURL.url() << endl;
 	p->info.url = p->myURL;
@@ -227,7 +227,7 @@ svn_error_t* kio_svnProtocol::checkAuth(svn_auth_cred_simple_t **cred, void *bat
 //	}
 	ret->username = apr_pstrdup(pool, p->info.username.utf8());
 	ret->password = apr_pstrdup(pool, p->info.password.utf8());
-	if (may_save) ret->may_save = false;
+	if (may_save) ret->may_save = p->info.keepPassword;
 	*cred = ret;
 	return SVN_NO_ERROR;
 }
@@ -1751,10 +1751,12 @@ svn_error_t *kio_svnProtocol::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **
 		*cred_p = 0L; //FIXME when rejected, maybe more elegant methods..
 	} else if( resultCode == 0 ){ //accept once
 		*cred_p = (svn_auth_cred_ssl_server_trust_t*)apr_pcalloc (pool, sizeof (svn_auth_cred_ssl_server_trust_t));
+		kdDebug(9036) << " accept once " << endl;
 		(*cred_p)->may_save = false;
 		(*cred_p)->accepted_failures = 0;
 	} else if( resultCode == 1 ){ //accept permanently
 		*cred_p = (svn_auth_cred_ssl_server_trust_t*)apr_pcalloc (pool, sizeof (svn_auth_cred_ssl_server_trust_t));
+		kdDebug(9036) << " accept permanently " << endl;
 		(*cred_p)->may_save = true;
 		(*cred_p)->accepted_failures = 0;
 	} else{
