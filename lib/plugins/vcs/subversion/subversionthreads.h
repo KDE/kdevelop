@@ -74,6 +74,12 @@ public:
                                     void *baton, apr_pool_t *pool);
 	
     static void notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool );
+
+    static svn_error_t* commitLogUserInput( const char **log_msg,
+                                            const char **tmp_file,
+                                            apr_array_header_t *commit_items,
+                                            void *baton,
+                                            apr_pool_t *pool );
     
 //     static svn_error_t* cancelCallback( void *cancel_baton );
     
@@ -185,12 +191,6 @@ public:
     SvnCommitJob( const KUrl::List &urls, bool recurse, bool keepLocks,
                   int actionType, SvnKJobBase *parent );
     virtual ~SvnCommitJob();
-
-    static svn_error_t* commitLogUserInput( const char **log_msg,
-                                            const char **tmp_file,
-                                            apr_array_header_t *commit_items,
-                                            void *baton,
-                                            apr_pool_t *pool );
 
 protected:
     virtual void run();
@@ -326,6 +326,21 @@ protected:
     SvnRevision m_rev1, m_rev2;
     bool m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType;
 
+};
+
+class SvnImportJob : public SubversionThread
+{
+public:
+    SvnImportJob( const KUrl &path, const KUrl &url,
+                  bool nonRecurse, bool noIgnore,
+                  int type, SvnKJobBase *parent );
+    virtual ~SvnImportJob();
+
+protected:
+    virtual void run();
+
+    KUrl m_path, m_url;
+    bool m_nonRecurse, m_noIgnore;
 };
 
 // class SvnCheckoutJob : public SubversionJob

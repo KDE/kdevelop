@@ -76,6 +76,10 @@ SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
     // progress notification callback
     ctx()->progress_func = SubversionThread::progressCallback;
     ctx()->progress_baton = this;
+    // commit log message fetching callback. Since commit is performed not only by commit
+    // but also by copy, import etc, commit log message callback should be shared by various actions.
+    ctx()->log_msg_func = SubversionThread::commitLogUserInput;
+    ctx()->log_msg_baton = this;
 
     // user identification providers
     apr_array_header_t *providers = apr_array_make(pool(), 9, sizeof(svn_auth_provider_object_t *));
@@ -304,6 +308,43 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
     }
     SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
     QCoreApplication::postEvent( thread->kjob()->parent(), event );
+}
+
+// static callback function called by svn_client_commit2
+svn_error_t*
+SubversionThread::commitLogUserInput( const char **log_msg,
+                                    const char **tmp_file,
+                                    apr_array_header_t *commit_items,
+                                    void *baton,
+                                    apr_pool_t *pool )
+{
+    SubversionThread *thread = (SubversionThread*)baton;
+
+    SvnCommitLogInfo *info = new SvnCommitLogInfo();
+    info->m_commit_items = commit_items;
+    info->origSender = thread;
+    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent( SVNCOMMIT_LOGMESSAGEPROMPT, info
+                                                                 );
+    QCoreApplication::postEvent( thread->kjob()->parent(), ev );
+
+    thread->enterLoop();
+    
+    QString fetchedMsg = info->m_message;
+    bool isAccepted = info->m_accept;
+    delete info; info = NULL;
+
+    *tmp_file = NULL;
+    if( isAccepted ){
+        svn_string_t *string = svn_string_create( fetchedMsg.toUtf8(), pool );
+        *log_msg = string->data;
+    } else {
+        *log_msg = NULL;
+        svn_error_t *err = svn_error_create( SVN_ERR_CANCELLED,
+                                             NULL,
+                                             apr_pstrdup( pool, "Commit interruppted" ) );
+        return err;
+    }
+    return SVN_NO_ERROR;
 }
 
 //Fully-Implemented but seems to be not called by Svn-library
@@ -624,8 +665,6 @@ SvnCommitJob::SvnCommitJob( const KUrl::List &urls,
     : SubversionThread( actionType, parent )
     , m_urls(urls), m_recurse(recurse), m_keepLocks(keepLocks)
 {
-    ctx()->log_msg_func = SvnCommitJob::commitLogUserInput;
-    ctx()->log_msg_baton = this;
 }
 SvnCommitJob::~SvnCommitJob()
 {}
@@ -669,40 +708,6 @@ void SvnCommitJob::run()
     
     // TODO handle separately to adjust svn+ssh  SVN_ERR_RA_SVN_CONNECTION_CLOSED,
     svn_pool_destroy (subpool);
-}
-// static callback function called by svn_client_commit2
-svn_error_t*
-SvnCommitJob::commitLogUserInput( const char **log_msg,
-                                const char **tmp_file,
-                                apr_array_header_t *commit_items,
-                                void *baton,
-                                apr_pool_t *pool )
-{
-    SvnCommitJob *thread = (SvnCommitJob*)baton;
-
-    SvnCommitLogInfo *info = new SvnCommitLogInfo();
-    info->m_commit_items = commit_items;
-    info->origSender = thread;
-    SvnInterThreadPromptEvent *ev = new SvnInterThreadPromptEvent( SVNCOMMIT_LOGMESSAGEPROMPT, info );
-    QCoreApplication::postEvent( thread->kjob()->parent(), ev );
-
-    thread->enterLoop();
-    
-    QString fetchedMsg = info->m_message;
-    bool isAccepted = info->m_accept;
-    delete info; info = 0L;
-    
-    if( isAccepted ){
-        svn_string_t *string = svn_string_create( fetchedMsg.toUtf8(), pool );
-        *log_msg = string->data;
-    } else {
-        *log_msg = NULL;
-        svn_error_t *err = svn_error_create( SVN_ERR_CANCELLED,
-                                            NULL,
-                                            apr_pstrdup( pool, "Commit interruppted" ) );
-        return err;
-    }
-    return SVN_NO_ERROR;
 }
 
 //////////////////////////////////////////////////////////
@@ -1007,6 +1012,41 @@ void SvnDiffJob::run()
     apr_file_close(outfile);
     apr_file_close(errfile);
     svn_pool_destroy (subpool);
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+SvnImportJob::SvnImportJob( const KUrl &path, const KUrl &url,
+                            bool nonRecurse, bool noIgnore,
+                            int type, SvnKJobBase *parent )
+    : SubversionThread( type, parent )
+    , m_path(path), m_url(url), m_nonRecurse(nonRecurse), m_noIgnore(noIgnore)
+{}
+
+SvnImportJob::~SvnImportJob()
+{}
+
+void SvnImportJob::run()
+{
+    setTerminationEnabled(true);
+    apr_pool_t *subpool = svn_pool_create( pool() );
+    svn_commit_info_t *ciinfo = svn_create_commit_info( subpool );
+
+	const char *path = apr_pstrdup( subpool,
+                svn_path_canonicalize( m_path.path().toUtf8(), subpool ) );
+	const char *url = apr_pstrdup( subpool,
+                svn_path_canonicalize( m_url.pathOrUrl().toUtf8(), subpool ) );
+
+    kDebug() << " path: " << path << " Url: " << url << endl;
+
+    svn_error_t *err = svn_client_import2( &ciinfo, path, url, m_nonRecurse, m_noIgnore,
+                                           ctx(), subpool );
+    if( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy( subpool );
+        return;
+    }
+    svn_pool_destroy( subpool );
+    return;
 }
 
 #include "subversionthreads.moc"

@@ -64,6 +64,7 @@ public Q_SLOTS:
     void statusSync();
     void statusASync();
     void svnInfo();
+    void import();
 
     // invoked by context-menu
     void ctxLogView();

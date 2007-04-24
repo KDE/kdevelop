@@ -236,6 +236,15 @@ void SubversionCore::spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOr
     initProgressDlg( job );
 }
 
+void SubversionCore::spawnImportThread( const KUrl &path, const KUrl &url,
+                                        bool nonRecurse, bool noIgnore )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_IMPORT, this );
+    SvnImportJob *thread = new SvnImportJob( path, url, nonRecurse, noIgnore, SVN_IMPORT, job );
+    
+    SVNCORE_SPAWN_COMMON( job, thread )
+}
+
 void SubversionCore::slotLogResult( KJob *aJob )
 {
     SvnKJobBase *job = dynamic_cast<SvnKJobBase*>( aJob );

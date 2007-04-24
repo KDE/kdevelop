@@ -24,6 +24,7 @@ set(kdevsubversion_PART_SRCS
     subversionthreads.cpp
     subversion_utils.cpp
     interthreadevents.cpp
+    svn_importwidgets.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -33,6 +34,7 @@ set(kdevsubversion_PART_UI
     svnssltrustdialog.ui
     svncommitloginputdlg.ui
     uicommit_option_dlg.ui
+    svnimportdialog.ui
 )
 
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

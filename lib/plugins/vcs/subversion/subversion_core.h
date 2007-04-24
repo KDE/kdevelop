@@ -78,6 +78,8 @@ public:
                           bool recurse, bool ignoreAncestry, bool noDiffDeleted,
                           bool ignoreContentType );
 
+    void spawnImportThread( const KUrl &path, const KUrl &url, bool nonRecurse, bool noIgnore );
+
     
 protected Q_SLOTS:
     /// slot for logview only. Logview is the testbed whenever a big change happens.

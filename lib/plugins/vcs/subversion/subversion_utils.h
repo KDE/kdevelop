@@ -22,6 +22,7 @@
 #define SVN_STATUS   17
 #define SVN_INFO     18
 #define SVN_DIFF     19
+#define SVN_IMPORT   20
 
 struct svn_opt_revision_t;
 

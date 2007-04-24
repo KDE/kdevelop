@@ -18,6 +18,7 @@
 #include "svnkjobbase.h"
 #include "svn_models.h"
 #include "svn_commitwidgets.h"
+#include "svn_importwidgets.h"
 #include <svn_wc.h>
 
 #include <iuicontroller.h>
@@ -112,9 +113,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     connect(action, SIGNAL(triggered(bool)), this, SLOT(logView()));
     action->setToolTip( i18n("Show subversion log history") );
     action->setWhatsThis( i18n("<b>Show subversion log</b><p>"
-            "View log in KDevelop. "
-            "To use subversion integration, install kioslave-svn"
-            "package which is under kdesdk") );
+            "View log in KDevelop. " ) );
 
     action = actionCollection()->addAction("svn_blame");
     action->setText(i18n("Show Blame (annotate)..."));
@@ -131,6 +130,10 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action = actionCollection()->addAction("svn_info");
     action->setText(i18n("Show the system-generated metadatas"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(svnInfo()));
+
+    action = actionCollection()->addAction("svn_import");
+    action->setText(i18n("Import into repository"));
+    connect( action, SIGNAL(triggered(bool)), this, SLOT(import()));
 
     // init context menu
 //     connect( ((UiController*)(core()->uiController()))->defaultMainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
@@ -436,6 +439,19 @@ void KDevSubversionPart::svnInfo()
     } else{
         KMessageBox::error(NULL, "No active docuement to view information" );
     }
+}
+
+// I think importing one currently opened file is impractical
+void KDevSubversionPart::import()
+{
+    SvnImportDialog dlg;
+    if( dlg.exec() != QDialog::Accepted ){
+        return;
+    }
+    // TODO if context menu systems are ready in kdevplatform
+    // redirect this to import( KUrl local ) which doesn't exist yet.
+    d->m_impl->spawnImportThread( dlg.srcLocal(), dlg.destRepository(),
+                                  dlg.nonRecurse(), dlg.noIgnore() );
 }
 
 //////////////////////////////////////////////
