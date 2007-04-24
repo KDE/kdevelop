@@ -169,6 +169,7 @@ void DocumentWrapper::saveAsBufferFile() {
 
   if ( doc && doc->textDocument() ) {
     if ( doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified ) {
+      #warning i18n: Missing argument to the i18n call below
       int answer = KMessageBox::warningYesNo( KDevTeamwork::core()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" ) );
       if ( answer != KMessageBox::Yes )
         return ;

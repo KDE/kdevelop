@@ -267,7 +267,7 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
             break;
         case svn_wc_notify_update_completed:
             // The last notification in an update (including updates of externals).
-            notifyString = i18n("Revision %1", QString::number(notify->revision) );
+            notifyString = i18n("Revision %1", notify->revision );
             break;
         case svn_wc_notify_update_external:
             notifyString = i18n("Updating externals: %1", notify->path );
