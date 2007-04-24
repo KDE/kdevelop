@@ -50,10 +50,9 @@ Kde4_automoc(${kdevteamwork_PART_SRCS})
 kde4_add_plugin(kdevteamwork ${kdevteamwork_PART_SRCS})
 kde4_add_ui_files(kdevteamwork_PART_SRCS ${kdevteamwork_UI} )
 
-target_link_libraries(kdevteamwork ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevplatforminterfaces network dynamictext boost_serialization boost_thread diff2)
+target_link_libraries(kdevteamwork ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevplatforminterfaces network dynamictext boost_serialization boost_thread diff2)
 
 kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevteamwork)
-#install_targets(${PLUGIN_INSTALL_DIR} kdevteamwork)
 install(TARGETS kdevteamwork DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
