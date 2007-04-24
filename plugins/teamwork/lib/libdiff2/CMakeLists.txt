@@ -1,7 +1,9 @@
 #@todo: this file needs to be worked over
 
-include_directories( ${CMAKE_SOURCE_DIR}/kompare/libdialogpages ${CMAKE_SOURCE_DIR}/kompare/komparepart ${CMAKE_SOURCE_DIR}/kompare/interfaces  )
-
+include_directories( 
+	${CMAKE_SOURCE_DIR}/kompare/libdialogpages 
+	${CMAKE_SOURCE_DIR}/kompare/komparepart 
+	${CMAKE_SOURCE_DIR}/kompare/interfaces  )
 
 ########### next target ###############
 
