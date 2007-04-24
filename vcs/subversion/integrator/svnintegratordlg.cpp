@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "svnintegratordlg.h"
+#include "blockingkprocess.h"
 #include <kurl.h>
 #include <kio/jobclasses.h>
 #include <kio/job.h>
@@ -29,6 +30,9 @@
 #include <kio/scheduler.h>
 #include <kprocess.h>
 #include <kdeversion.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <kio/netaccess.h>
 
@@ -42,27 +46,16 @@ SvnIntegratorDlg::SvnIntegratorDlg( QWidget *parent, const char *name )
 
 void SvnIntegratorDlg::accept()
 {
+    // to let ioslave know which protocol it should start.
+    KURL protocolUrl = KURL("kdevsvn+svn://blah/");
     KURL servURL( repos1->url() );
     if ( servURL.isEmpty() ) return;
-    if ( ! servURL.protocol().startsWith( "kdevsvn" ) )
-        servURL.setProtocol( "kdevsvn+" + servURL.protocol() ); //make sure it starts with "svn"
+    
     kdDebug( 9036 ) << "servURL : " << servURL.prettyURL() << endl;
     if ( createProject->isChecked() )
     {
-//         KURL miscURL = servURL;
-        KIO::SimpleJob * job = KIO::mkdir( servURL );
-        NetAccess::synchronousRun( job, 0 );
-//         miscURL.setPath( servURL.path() + "/tags/" );
-//         job = KIO::mkdir( miscURL );
-//         NetAccess::synchronousRun( job, 0 );
-//         miscURL.setPath( servURL.path() + "/branches/" );
-//         job = KIO::mkdir( miscURL );
-//         NetAccess::synchronousRun( job, 0 );
-//         miscURL.setPath( servURL.path() + "/trunk/" );
-//         job = KIO::mkdir( miscURL );
-//         NetAccess::synchronousRun( job, 0 );
-
         KURL::List list;
+        list << servURL; // project root directory
         KURL miscURL = servURL.url();
         miscURL.setPath( servURL.path() + "/tags/" );
         list << miscURL;
@@ -75,31 +68,44 @@ void SvnIntegratorDlg::accept()
         QDataStream s( parms, IO_WriteOnly );
         int cmd = 10; // MKDIR(list)
         s << cmd << list;
-        job = KIO::special( servURL, parms, true );
-        NetAccess::synchronousRun( job, 0 );
+        KIO::SimpleJob* job = KIO::special( protocolUrl, parms, true );
+        if( !NetAccess::synchronousRun( job, 0 ) ){
+            KMessageBox::error( this, i18n("Fail to create project directories on repository") );
+            return;
+        }
 
         QByteArray parms2;
         QDataStream s2( parms2, IO_WriteOnly );
         cmd = 5; //IMPORT
         servURL.setPath( servURL.path() + "/trunk/" );
         s2 << cmd << servURL << KURL::fromPathOrURL( m_projectLocation );
-        job = KIO::special( servURL, parms2, true );
-        NetAccess::synchronousRun( job, 0 );
+        KIO::SimpleJob* importJob = KIO::special( protocolUrl, parms2, true );
+        if( !NetAccess::synchronousRun( importJob, 0 ) ){
+            KMessageBox::error( this, i18n("Fail to import into repository.") );
+            return;
+        }
     }
     //delete the template directory and checkout a fresh one from the server
-    KProcess *rmproc = new KProcess();
+    BlockingKProcess *rmproc = new BlockingKProcess();
     *rmproc << "rm";
     *rmproc << "-f" << "-r" << m_projectLocation;
-    rmproc->start( KProcess::Block );
+    rmproc->start();
+    
+    delete rmproc;
+    rmproc = NULL;
 
     QByteArray parms3;
     QDataStream s3( parms3, IO_WriteOnly );
     int cmd2 = 1; //CHECKOUT
     int rev = -1;
-    //servURL should be set correctly above
+    
     s3 << cmd2 << servURL << KURL::fromPathOrURL( m_projectLocation ) << rev << QString( "HEAD" );
-    SimpleJob *job2 = KIO::special( servURL, parms3, true );
-    NetAccess::synchronousRun( job2, 0 );
+    SimpleJob *job2 = KIO::special( protocolUrl, parms3, true );
+    if( ! NetAccess::synchronousRun( job2, 0 ) ){
+        // Checkout failed
+        KMessageBox::error(this, i18n("Fail to checkout from repository.") );
+        return;
+    }
 }
 
 void SvnIntegratorDlg::init( const QString &projectName, const QString &projectLocation )

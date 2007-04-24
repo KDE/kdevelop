@@ -592,7 +592,7 @@ void kio_svnProtocol::mkdir( const KURL::List& list, int /*permissions*/ ) {
 	initNotifier(false, false, false, subpool);
 	svn_error_t *err = svn_client_mkdir(&commit_info,targets,ctx,subpool);
 	if ( err ) {
-		error( KIO::ERR_COULD_NOT_MKDIR, err->message );
+		error( KIO::ERR_COULD_NOT_MKDIR, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
 	}
 
@@ -1326,27 +1326,22 @@ void kio_svnProtocol::import( const KURL& repos, const KURL& wc ) {
 	kdDebug(9036) << "kio_svnProtocol::import() : " << wc.url() << " into " << repos.url() << endl;
 
 	apr_pool_t *subpool = svn_pool_create (pool);
-	svn_client_commit_info_t *commit_info = NULL;
+// 	svn_client_commit_info_t *commit_info =
+// 			(svn_client_commit_info_t*) apr_palloc( subpool, sizeof(svn_client_commit_info_t) );
+	svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
 	bool nonrecursive = false;
 
-	KURL nurl = repos;
-	KURL dest = wc;
-	nurl.setProtocol( chooseProtocol( repos.protocol() ) );
-	dest.setProtocol( "file" );
-	recordCurrentURL( nurl );
-	dest.cleanPath( true ); // remove doubled '/'
-	QString source = dest.path(-1);
-	QString target = makeSvnURL( repos );
-
-	const char *path = svn_path_canonicalize( apr_pstrdup( subpool, source.utf8() ), subpool );
-	const char *url = svn_path_canonicalize( apr_pstrdup( subpool, target.utf8() ), subpool );
+	const char *path = apr_pstrdup( subpool, svn_path_canonicalize( wc.path().utf8(), subpool ) );
+	const char *url = apr_pstrdup( subpool, svn_path_canonicalize( repos.pathOrURL().utf8(), subpool ) );
 
     initNotifier(false, false, false, subpool);
-    kdDebug(9036) << "Executing import: " << path << " to " << url << " " << nonrecursive << endl;
-	svn_error_t *err = svn_client_import(&commit_info,path,url,nonrecursive,ctx,subpool);
+	kdDebug(9036) << " Executing import: " << path << " to " << url << endl;
+	
+	svn_error_t *err = svn_client_import2(&commit_info, path, url, nonrecursive, false, ctx, subpool);
 	if ( err ){
-		error( KIO::ERR_SLAVE_DEFINED, err->message );
+		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+		return;
 	}
 
     svn_pool_destroy (subpool);
@@ -1839,7 +1834,10 @@ svn_error_t *kio_svnProtocol::clientCertPasswdPrompt(
 }
 
 
-svn_error_t *kio_svnProtocol::commitLogPrompt( const char **log_msg, const char **/*file*/, apr_array_header_t *commit_items, void *baton, apr_pool_t *pool ) {
+svn_error_t *kio_svnProtocol::commitLogPrompt( const char **log_msg, const char **file,
+                    apr_array_header_t *commit_items, void *baton, apr_pool_t *pool )
+{
+	*file = NULL; // if omitting this, it will segfault at import operation.
 	QCString replyType;
 	QByteArray params;
 	QByteArray reply;
