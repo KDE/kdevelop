@@ -22,7 +22,6 @@
 #include "pointer.h"
 #include "helpers.h"
 #include "messageimpl.h"
-#include <cc++/socket.h>
 #include "logger.h"
 #include "handler.h"
 #include "weakpointer.h"
@@ -126,16 +125,16 @@ class SessionReplyManager {
     virtual ~SessionReplyManager();
 };
 
-class BasicTCPSession : protected TCPSession,   /*public virtual SafeShared,*/ public SessionInterface, public SessionReplyManager {
+class BasicTCPSession : protected ost::TCPSession,   /*public virtual SafeShared,*/ public SessionInterface, public SessionReplyManager {
   public:
     using Thread::setName;
     using Thread::getName;
 
     ///Used by the server to construct a session
-    BasicTCPSession( TCPSocket &server, HandlerPointer handler_, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix = "" );
+    BasicTCPSession( ost::TCPSocket &server, HandlerPointer handler_, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix = "" );
 
     ///Used by the client to connect to a server
-    BasicTCPSession( const InetHostAddress &host, tpport_t port, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix = "" );
+    BasicTCPSession( const ost::InetHostAddress &host, ost::tpport_t port, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix = "" );
 
     virtual ~BasicTCPSession();
 

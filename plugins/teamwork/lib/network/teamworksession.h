@@ -37,6 +37,10 @@ email                : david.nolden.kdevelop@art-master.de
 
 namespace  Teamwork {
 
+/** TeamworkSession extends BasicTCPSession with the ability to manage virtual sub-sessions to users reachable through a forwarding server.
+ *  It is created by Teamwork::Server and Teamwork::Client
+* */
+
 class TeamworkSession : public BasicTCPSession {
     bool incoming_;
     typedef std::map<UserPointer, ForwardSessionPointer, UserPointer::ValueSmallerCompare> ForwardSessionMap;
@@ -50,7 +54,7 @@ class TeamworkSession : public BasicTCPSession {
     virtual void final();
 
   public:
-    TeamworkSession( TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger );
+    TeamworkSession( ost::TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger );
 
     TeamworkSession( const ServerInformation& server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix = "" );
 

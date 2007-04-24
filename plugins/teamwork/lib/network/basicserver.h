@@ -25,20 +25,20 @@
 
 namespace Teamwork {
 
-class BasicTCPSocket : public TCPSocket {
+class BasicTCPSocket : public ost::TCPSocket {
   protected:
-    bool onAccept( const InetHostAddress &ia, tpport_t port );
+    bool onAccept( const ost::InetHostAddress &ia, ost::tpport_t port );
 
   public:
-    BasicTCPSocket( InetAddress &ia, int port );
+    BasicTCPSocket( ost::InetAddress &ia, int port );
 };
 
-/**This class runs the server as the run()-method is called in the same thread.
+/**This class runs the server as the run()-method is called in the same ost::Thread.
 This class never deletes itself, it can be deleted from outside once isRunning() returns false or the threads are joined, or it can be deleted through a SharedPtr/SafeSharedPtr.
 For each client that connects, it creates a session derived from BasicSession, which can also be
 created by a derived class.
  */
-class BasicServer : protected Thread, public WeakSafeShared {
+class BasicServer : protected ost::Thread, public WeakSafeShared {
   public:
     BasicServer( const char* str, int port, MessageTypeSet& messageTypes, LoggerPointer logger, bool openServer = true );
 
@@ -49,24 +49,24 @@ class BasicServer : protected Thread, public WeakSafeShared {
     ///returns the reference to a synchronized list of messages that are waiting for being processed. Processed messages should be removed from that list.
     SafeList<DispatchableMessage>& messages();
 
-    /**After this function was called, the thread is going to exit soon.
+    /**After this function was called, the ost::Thread is going to exit soon.
       once isRunning() returns false, it can be deleted.*/
     void stopRunning();
 
-    ///Returns whether the thread is running
-    using Thread::isRunning;
+    ///Returns whether the ost::Thread is running
+    using ost::Thread::isRunning;
 
-    ///Starts the thread, should be called after the thread was constructed
-    using Thread::start;
+    ///Starts the ost::Thread, should be called after the ost::Thread was constructed
+    using ost::Thread::start;
 
-    using Thread::join;
+    using ost::Thread::join;
 
     ///This can be used to allow/disallow incoming connections. Already connected clients are not kicked on deactivation.
     void allowIncoming( bool allow );
 
   protected:
 
-    ///this one is called from within another thread, so it is more useful to override processMessage(...) in the teamwork-server than this one
+    ///this one is called from within another ost::Thread, so it is more useful to override processMessage(...) in the teamwork-server than this one
     virtual bool handleMessage( DispatchableMessage msg ) throw();
 
     virtual LoggerPrinter err();
@@ -75,14 +75,14 @@ class BasicServer : protected Thread, public WeakSafeShared {
 
     virtual void run();
 
-    /**This is called once at the beginning of the thread*/
+    /**This is called once at the beginning of the ost::Thread*/
     virtual void initial();
 
-    /**Gets called regularly from within the server-thread
+    /**Gets called regularly from within the server-ost::Thread
     should be overridden, can return whether it needs more cpu-time*/
     virtual bool think();
 
-    /**This is called once at end of the thread*/
+    /**This is called once at end of the ost::Thread*/
     virtual void final( void );
 
     /**In this function, the derived class should take the ownership of the session. If it refuses the ownership, it can return false.
@@ -96,7 +96,7 @@ class BasicServer : protected Thread, public WeakSafeShared {
     LoggerPointer& logger();
   private:
     friend class HandlerProxy<BasicServer>;
-    BroadcastAddress addr;
+    ost::BroadcastAddress addr;
     LoggerPointer logger_;
     bool failed_, exit_, allowIncoming_;
     BasicTCPSocket* server_;

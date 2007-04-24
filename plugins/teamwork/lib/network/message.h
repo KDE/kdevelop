@@ -305,10 +305,9 @@ class MessageTypeSet {
     ///returns the class-name of the message(the most specialized one registered in this type-set)
     std::string identify( MessageInterface* msg ) const;
 
-    ///Parent-messages are automatically added too
+    ///Register a static list of message-types to this type-set. Not yet registered parent-messages are automatically registered too.
     template < class Types >
     void registerMessageTypes() {
-      //cout << "registering " << typeid( Types ).name() << endl;
       RegisterAllTypes< typename Tree::MakeComplete< typename Tree::ExtractChains< Types >::Result, MessageInterface > ::Result, MessageTypeSet >::reg ( *this );
     }
 
@@ -339,32 +338,37 @@ class MessageTypeSet {
       return idFromName( staticMessageName<Type>() );
     }
 
-    ///This can be used to conveniently create new messages with the correct Message-Id and unique-Id filled, with arbitrary count of parameters
+    ///Conveniently create a new message with the correct Message-Id and unique-Id filled. All parameters are passed to the constructor of the created message.
     template <class MessageType>
     inline MessageType* create() {
       return new MessageType( idFromName( staticMessageName<MessageType>() ).modifyUniqueId( currentUniqueMessageId_++ ) );
     }
+    ///Conveniently create a new message with the correct Message-Id and unique-Id filled. All parameters are passed to the constructor of the created message.
     template <class MessageType, class ParamType1>
     inline MessageType* create( ParamType1 param ) {
       return new MessageType( idFromName( staticMessageName<MessageType>() ).modifyUniqueId( currentUniqueMessageId_++ ), param );
     }
+    ///Conveniently create a new message with the correct Message-Id and unique-Id filled. All parameters are passed to the constructor of the created message.
     template <class MessageType, class ParamType1, class ParamType2>
     inline MessageType* create( ParamType1 param, ParamType2 param2 ) {
       return new MessageType( idFromName( staticMessageName<MessageType>() ).modifyUniqueId( currentUniqueMessageId_++ ), param, param2 );
     }
-
+    ///Conveniently create a new message with the correct Message-Id and unique-Id filled. All parameters are passed to the constructor of the created message.
     template <class MessageType, class ParamType1, class ParamType2, class ParamType3>
     inline MessageType* create( ParamType1 param, ParamType2 param2, ParamType3 param3 ) {
       return new MessageType( idFromName( staticMessageName<MessageType>() ).modifyUniqueId( currentUniqueMessageId_++ ), param, param2, param3 );
     }
+    ///Conveniently create a new message with the correct Message-Id and unique-Id filled. All parameters are passed to the constructor of the created message.
     template <class MessageType, class ParamType1, class ParamType2, class ParamType3, class ParamType4>
     inline MessageType* create( ParamType1 param, ParamType2 param2, ParamType3 param3, ParamType4 param4 ) {
       return new MessageType( idFromName( staticMessageName<MessageType>() ).modifyUniqueId( currentUniqueMessageId_++ ), param, param2, param3, param4 );
     }
+    ///Conveniently create a new message with the correct Message-Id and unique-Id filled. All parameters are passed to the constructor of the created message.
     template <class MessageType, class ParamType1, class ParamType2, class ParamType3, class ParamType4, class ParamType5>
     inline MessageType* create( ParamType1 param, ParamType2 param2, ParamType3 param3, ParamType4 param4, ParamType5 param5 ) {
       return new MessageType( idFromName( staticMessageName<MessageType>() ).modifyUniqueId( currentUniqueMessageId_++ ), param, param2, param3, param4, param5 );
     }
+    ///Conveniently create a new message with the correct Message-Id and unique-Id filled. All parameters are passed to the constructor of the created message.
     template <class MessageType, class ParamType1, class ParamType2, class ParamType3, class ParamType4, class ParamType5, class ParamType6>
     inline MessageType* create( ParamType1 param, ParamType2 param2, ParamType3 param3, ParamType4 param4, ParamType5 param5, ParamType6 param6 ) {
       return new MessageType( idFromName( staticMessageName<MessageType>() ).modifyUniqueId( currentUniqueMessageId_++ ), param, param2, param3, param4, param5, param6 );
@@ -374,8 +378,7 @@ class MessageTypeSet {
 
 /**This is a message-type-set dedicated only to dispatching a chosen set of message-types
 to a chosen dispatch-target. It delivers the given message as the most special type the message
-is based on. Messages must be the list of messages(without any inheritance-info), and AllMessages must be
- a set of chains that defines all parts of the tree that intersect with the way from the tree's root until the messages(needed for tree-consistency).*/
+is based on, by calling "TargetType::dispatchMessage( MessageType* )". Messages must be the list of messages(without any inheritance-info)*/
 template <class TargetType, class Messages>
 class MessageDispatcher {
     TargetType& targ_;

@@ -15,7 +15,9 @@
 #ifndef POINTER_H
 #define POINTER_H
 
+//Needed for AtomicCounter
 #include <cc++/thread.h>
+
 #include "sharedptr.h"
 #include "common.h"
 #include "boost/serialization/nvp.hpp"
@@ -24,7 +26,6 @@
 #define SEC_TO_NANO 1000000000
 
 using namespace std;
-using namespace ost;
 
 ///A class that derives from SafeShared must also publish the MutexInterface(maybe by deriving from MutexInterfaceImpl)
 class SafeShared : public MutexInterfaceImpl {
@@ -79,7 +80,7 @@ class SafeShared : public MutexInterfaceImpl {
   protected:
     virtual ~SafeShared() { }
   private:
-    mutable AtomicCounter count;
+    mutable ost::AtomicCounter count;
     ///This little additional effort is necessary to support weak pointers.
     virtual void prepareDeletion() {}
 };

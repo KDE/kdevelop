@@ -13,7 +13,7 @@
  ***************************************************************************/
 
 #include "sharedptr.h"
-#include <cc++2/cc++/socket.h>
+#include <cc++/socket.h>
 #include <cstdlib>
 #include <vector>
 #include <exception>
@@ -31,10 +31,7 @@
 
 #define SLEEPTIME 50
 
-//#ifdef  CCXX_NAMESPACES
 using namespace std;
-using namespace ost;
-//#endif
 
 typedef char StandardDataType;
 

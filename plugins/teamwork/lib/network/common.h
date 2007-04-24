@@ -27,7 +27,7 @@
 #define BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T) \
     extended_type_info_no_rtti<const T>
 */
-#include <cc++/thread.h>
+//#include <cc++/thread.h>
 #ifndef USE_TEXT_ARCHIVE
 #ifdef USE_POLYMORPHIC_ARCHIVE
 #include <boost/archive/polymorphic_binary_iarchive.hpp>
@@ -149,8 +149,6 @@ class MutexInterfaceImpl {
 
 ///this ugly hack is necessary because the general concept of the boost thread-library wants
 ///to force us to use scoped lock-classes, but we want to do that work ourselves.
-///the other option would be to change the whole design and thereby make it incompatible to
-///the common-cpp mutexes.
 #define private public
 #include <boost/thread/recursive_mutex.hpp>
 #undef private
@@ -173,7 +171,6 @@ class MutexInterfaceImpl {
 
     void lockCountUp() const {
       m_.do_lock();
-      //l_.lock();
     }
 
     bool tryLockCountUp() const {

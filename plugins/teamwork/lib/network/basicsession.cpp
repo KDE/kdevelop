@@ -115,7 +115,7 @@ string toString( vector<char>& v ) {
 void BasicTCPSession::initial( void ) {
   running_ = true;
   out() << "connecting";
-  TCPSession::initial();
+  ost::TCPSession::initial();
   if ( isConnected() ) {
     out() << "connection successfull";
   } else {
@@ -379,12 +379,12 @@ u32 BasicTCPSession::getData( vector<DataType>& to, u32 max ) {
 const int BasicTCPSession::ConnectionTimeout = 10000;
 
 
-BasicTCPSession::BasicTCPSession( const InetHostAddress &host, tpport_t port, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix ) : TCPSession( host, port ), SessionReplyManager( this ), myDirection( Outgoing ), exit_( false ), failed_( false ), running_( true ), hadFinal_(false), receivingSize_( 0 ), handler_( handler ), logger_( logger ), messages_( messages ), selfPointer_( this ) {
+BasicTCPSession::BasicTCPSession( const ost::InetHostAddress &host, ost::tpport_t port, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix ) : ost::TCPSession( host, port ), SessionReplyManager( this ), myDirection( Outgoing ), exit_( false ), failed_( false ), running_( true ), hadFinal_(false), receivingSize_( 0 ), handler_( handler ), logger_( logger ), messages_( messages ), selfPointer_( this ) {
   initName( namePrefix );
 }
 
 
-BasicTCPSession::BasicTCPSession( TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix ) : TCPSession( server ), SessionReplyManager( this ), myDirection( Incoming ), exit_( false ), failed_( false ), running_( true ), hadFinal_(false), receivingSize_( 0 ), handler_( handler ), logger_( logger ), messages_( messages ), selfPointer_( this ) {
+BasicTCPSession::BasicTCPSession( ost::TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix ) : ost::TCPSession( server ), SessionReplyManager( this ), myDirection( Incoming ), exit_( false ), failed_( false ), running_( true ), hadFinal_(false), receivingSize_( 0 ), handler_( handler ), logger_( logger ), messages_( messages ), selfPointer_( this ) {
   initName( namePrefix );
 }
 
@@ -575,7 +575,7 @@ bool BasicTCPSession::isRunning() {
 
 string BasicTCPSession::peerDesc() {
   ostringstream str;
-  tpport_t port;
+  ost::tpport_t port;
 
   str << getPeer( &port ) << ":" << port;
 
@@ -584,7 +584,7 @@ string BasicTCPSession::peerDesc() {
 
 string BasicTCPSession::localDesc() {
   ostringstream str;
-  tpport_t port;
+  ost::tpport_t port;
 
   str << getLocal( &port ) << ":" << port;
 

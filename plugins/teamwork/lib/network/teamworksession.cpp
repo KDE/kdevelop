@@ -18,7 +18,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 namespace Teamwork {
 
-TeamworkSession::TeamworkSession( TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger ) : BasicTCPSession( server, handler, messages, logger, "incoming_" ), incoming_( true ) {}
+TeamworkSession::TeamworkSession( ost::TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger ) : BasicTCPSession( server, handler, messages, logger, "incoming_" ), incoming_( true ) {}
 
 TeamworkSession::TeamworkSession( const ServerInformation& server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix ) : BasicTCPSession( server.addr().c_str() , server.port(), handler, messages, logger, namePrefix ), incoming_( false ) {}
 
