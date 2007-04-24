@@ -15,8 +15,8 @@
 #ifndef SAFELOGGER_H
 #define SAFELOGGER_H
 
-#include "lib/network/pointer.h"
-#include "lib/network/logger.h"
+#include "pointer.h"
+#include "logger.h"
 #include <string>
 #include <vector>
 

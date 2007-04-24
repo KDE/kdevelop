@@ -32,7 +32,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "collaborationmanager.h"
 #include "filecollaborationmessages.h"
 #include "documentwrapper.h"
-#include "lib/network/basicsession.h"
+#include "basicsession.h"
 #include "utils.h"
 #include "verify.h"
 #include "filesynchronizemessage.h"

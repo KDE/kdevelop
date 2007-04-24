@@ -15,8 +15,8 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef SUMTREE_H
 #define SUMTREE_H
 
-#include "lib/network/pointer.h"
-#include "lib/network/weakpointer.h"
+#include "pointer.h"
+#include "weakpointer.h"
 #include <list>
 #include "verify.h"
 

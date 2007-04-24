@@ -17,7 +17,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include <QObject>
 #include <QMap>
-#include "network/pointer.h"
+#include "pointer.h"
 #include <memory>
 
 #include <kiconloader.h>

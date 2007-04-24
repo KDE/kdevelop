@@ -16,7 +16,7 @@ email                : david.nolden.kdevelop@art-master.de
 #define EDITPATCH_H
 
 #include <QObject>
-#include "lib/network/sharedptr.h"
+#include "sharedptr.h"
 #include "kdevteamwork_editpatch.ui.h"
 #include <QDialog>
 #include <QPointer>

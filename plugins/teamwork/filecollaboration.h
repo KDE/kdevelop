@@ -19,13 +19,13 @@
 #include <QList>
 #include <QIcon>
 
-#include "lib/network/message.h"
-#include "lib/network/pointer.h"
-#include "lib/network/weakpointer.h"
+#include "message.h"
+#include "pointer.h"
+#include "weakpointer.h"
 
 #include "filecollaborationmessages.h"
 #include "collaborationmanager.h"
-#include "lib/network/crossmap.h"
+#include "crossmap.h"
 #include "safelogger.h"
 
 

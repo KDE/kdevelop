@@ -18,7 +18,7 @@ email                : david.nolden.kdevelop@art-master.de
 #define CROSSMAP_H
 
 
-#include "lib/network/statictree.h"
+#include "statictree.h"
 #include <map>
 #include <string>
 #include <ext/hash_map>

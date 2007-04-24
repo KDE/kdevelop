@@ -38,17 +38,17 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QPersistentModelIndex>
 #include <QWidget>
 
-#include "network/common.h"
-#include "network/message.h"
-#include "network/teamworkmessages.h"
+#include "common.h"
+#include "message.h"
+#include "teamworkmessages.h"
 #include "collaborationmanager.h"
 #include "messagemanager.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_messageshower.h"
-#include "network/teamworkserver.h"
-#include "network/teamworkclient.h"
+#include "teamworkserver.h"
+#include "teamworkclient.h"
 #include "kdevteamwork_messages.h"
-#include "network/message.h"
+#include "message.h"
 #include "kdevteamwork_helpers.h"
 #include "kdevteamwork_list.ui.h"
 #include "kdevteamwork_helpers.h"

@@ -23,7 +23,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 //#include <boost/serialization/extended_type_info_typeid.hpp>
 #include "kdevteamwork_messages.h"
-#include "lib/network/easymessage.h"
+#include "easymessage.h"
 #include "utils.h"
 #include "vectortimestamp.h"
 #include "dynamictexthelpers.h"

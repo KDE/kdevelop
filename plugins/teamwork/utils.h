@@ -18,8 +18,8 @@
 #include <QString>
 #include <string>
 #include <QVariant>
-#include <lib/network/sharedptr.h>
-#include <lib/network/basicsession.h>
+#include <sharedptr.h>
+#include <basicsession.h>
 #include <iostream>
 
 QString toQ( const std::string& rhs );

@@ -19,8 +19,8 @@
 
 #include "offsetutils.h"
 #include "verify.h"
-#include "lib/network/sharedptr.h"
-#include "lib/network/weakpointer.h"
+#include "sharedptr.h"
+#include "weakpointer.h"
 #include "vectortimestamp.h"
 
 ///Check whether these are useful for something or should be completely removed

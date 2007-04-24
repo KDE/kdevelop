@@ -9,7 +9,8 @@ find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
 include (MacroLibrary)
 
-macro_optional_find_package(Commoncpp)
+find_package(Commoncpp)
+find_package(Boost)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 

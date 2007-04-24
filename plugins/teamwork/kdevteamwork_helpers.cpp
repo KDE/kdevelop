@@ -1,6 +1,6 @@
 #include <QIcon>
 #include "kdevteamwork_helpers.h"
-#include "lib/network/message.h"
+#include "message.h"
 
 IconCache* IconCache::m_instance = 0;
 

@@ -17,13 +17,13 @@
 
 //#include "kdevtreeview.h"
 #include "kdevteamwork_interface.ui.h"
-#include "network/pointer.h"
+#include "pointer.h"
 #include <QStandardItemModel>
-#include "network/teamworkserver.h"
-#include "network/teamworkclient.h"
+#include "teamworkserver.h"
+#include "teamworkclient.h"
 #include "kdevteamwork_messages.h"
 #include "patchesmanager.h"
-#include "network/message.h"
+#include "message.h"
 #include <QTimer>
 
 ///@TODO: Dispatch the messages in a more flexible way: Allow any client to register with an arbitrary message-type that he wants to get(including all sub-messages).

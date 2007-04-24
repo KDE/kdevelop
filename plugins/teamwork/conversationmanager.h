@@ -27,7 +27,7 @@
 #include <ktexteditor/smartinterface.h>
 #include <QtCore/QPointer>
 #include "kdevteamwork_user.h"
-#include "lib/network/messageserialization.h"
+#include "messageserialization.h"
 #include "messagehistorymanager.h"
 #include "crossmap.h"
 #include <QTime>

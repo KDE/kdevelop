@@ -20,7 +20,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "autoconstructpointer.h"
 
 #include "kdevteamwork_list.ui.h"
-#include "lib/network/pointer.h"
+#include "pointer.h"
 
 class QWidget;
 class QListView;

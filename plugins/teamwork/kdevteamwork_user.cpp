@@ -13,7 +13,7 @@
  ***************************************************************************/
 
 #include "kdevteamwork_user.h"
-#include "lib/network/teamworkmessages.h"
+#include "teamworkmessages.h"
 #include "kdevteamwork.h"
 #include <boost/serialization/export.hpp>
 #include "kdevteamwork_helpers.h"

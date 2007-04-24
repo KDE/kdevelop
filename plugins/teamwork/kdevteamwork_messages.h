@@ -18,9 +18,9 @@ email                : david.nolden.kdevelop@art-master.de
 
 //#include <boost/serialization/extended_type_info_typeid.hpp>
 
-#include "network/common.h"
-#include "network/message.h"
-#include "network/teamworkmessages.h"
+#include "common.h"
+#include "message.h"
+#include "teamworkmessages.h"
 #include <QString>
 #include <QDateTime>
 #include "utils.h"

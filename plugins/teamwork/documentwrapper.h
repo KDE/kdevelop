@@ -17,8 +17,8 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "vectortimestamp.h"
 #include <QObject>
-#include "lib/network/pointer.h"
-#include "lib/network/weakpointer.h"
+#include "pointer.h"
+#include "weakpointer.h"
 #include "safelogger.h"
 #include <map.h>
 #include <KParts/MainWindow>

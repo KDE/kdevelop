@@ -17,14 +17,14 @@
 
 #include <klockfile.h>
 
-#include "lib/network/messageserialization.h"
-#include "lib/network/basicsession.h"
+#include "messageserialization.h"
+#include "basicsession.h"
 #include "kdevteamwork_messages.h"
 #include <QDateTime>
 #include <QList>
 #include <QTimer>
 #include <QMap>
-#include "lib/network/user.h"
+#include "user.h"
 #include "kurl.h"
 #include "serializationhelpers.h"
 

@@ -18,7 +18,7 @@
 #include "conversationmanager.h"
 #include "guimessagehistory.h"
 #include "messagehistorymanager.h"
-#include "lib/network/message.h"
+#include "message.h"
 #include <QDialog>
 #include <QMenu>
 #include "kdevteamwork_messageshower.h"

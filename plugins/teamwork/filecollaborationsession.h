@@ -18,14 +18,14 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QStringList>
 #include <QList>
 
-#include "lib/network/message.h"
-#include "lib/network/pointer.h"
-#include "lib/network/weakpointer.h"
+#include "message.h"
+#include "pointer.h"
+#include "weakpointer.h"
 
 #include "filecollaborationmessages.h"
-#include "lib/network/crossmap.h"
+#include "crossmap.h"
 #include "vectortimestamp.h"
-#include "lib/network/weakpointer.h"
+#include "weakpointer.h"
 #include "safelogger.h"
 
 class FileCollaboration;

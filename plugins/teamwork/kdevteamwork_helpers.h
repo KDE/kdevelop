@@ -15,8 +15,8 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef KDEVTEAMWORK_HELPERS
 #define KDEVTEAMWORK_HELPERS
 
-#include"lib/network/pointer.h"
-#include"lib/network/basicsession.h"
+#include"pointer.h"
+#include"basicsession.h"
 #include<memory>
 #include <QString>
 #include  <QIcon>

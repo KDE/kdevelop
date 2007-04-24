@@ -18,9 +18,9 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef FILECOLLABORATIONMANAGER_H
 #define FILECOLLABORATIONMANAGER_H
 
-#include "lib/network/message.h"
-#include "lib/network/pointer.h"
-#include "lib/network/weakpointer.h"
+#include "message.h"
+#include "pointer.h"
+#include "weakpointer.h"
 
 #include "filecollaborationmessages.h"
 #include "crossmap.h"

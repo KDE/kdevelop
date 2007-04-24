@@ -1,17 +1,13 @@
-add_subdirectory(lib)
 
 include_directories( 
-	./lib 
 	${CMAKE_SOURCE_DIR}/lib 
-	./lib/dynamictext 
 	${CMAKE_SOURCE_DIR}/lib/interfaces 
-	${CMAKE_SOURCE_DIR}/lib/util 
-	${CMAKE_SOURCE_DIR}/lib/widgets 
-	./lib/network 
-	./lib/libdiff2
-       ${COMMONCPP2_INCLUDE_DIR}	
+	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib/network 
+	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib/dynamictext 
+	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib/libdiff2
     )
 
+add_subdirectory(lib)
 
 ########### next target ###############
 
@@ -54,20 +50,21 @@ set(kdevteamwork_PART_SRCS
 set (kdevteamwork_UI
       kdevteamwork_interface.ui)
 
-ADD_DEFINITIONS( -fexceptions -Wall -fno-inline)
-Kde4_automoc(${kdevteamwork_PART_SRCS})
+#ADD_DEFINITIONS( -fexceptions -Wall -fno-inline)
+ADD_DEFINITIONS(-fexceptions -Wall)
+
+kde4_automoc(${kdevteamwork_PART_SRCS})
 kde4_add_plugin(kdevteamwork ${kdevteamwork_PART_SRCS})
 kde4_add_ui_files(kdevteamwork_PART_SRCS ${kdevteamwork_UI} )
 
 target_link_libraries(kdevteamwork ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevplatforminterfaces network dynamictext boost_serialization boost_thread diff2)
 
-kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevteamwork)
+#kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kdevteamwork)
 install(TARGETS kdevteamwork DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
 install( FILES kdevteamwork.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevteamwork.rc DESTINATION ${DATA_INSTALL_DIR}/kdevteamwork )
-
 
 

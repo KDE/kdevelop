@@ -14,7 +14,7 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef VECTORTIMESTAMPEDITOR_H
 #define VECTORTIMESTAMPEDITOR_H
 
-#include "lib/network/sharedptr.h"
+#include "sharedptr.h"
 #include <QObject>
 #include "kdevteamwork_vectortimestampwidget.ui.h"
 #include "kdevteamwork_timestampwidget.ui.h"
@@ -24,7 +24,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QPointer>
 #include "loglevel.h"
 #include "vectortimestamp.h"
-#include "lib/network/logger.h"
+#include "logger.h"
 
 class VectorTimestampEditor;
 class TimestampEditor;

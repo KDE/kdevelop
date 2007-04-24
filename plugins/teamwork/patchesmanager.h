@@ -19,10 +19,10 @@
 #include <string>
 #include <QObject>
 #include "kdevteamwork_managepatches.ui.h"
-#include "lib/network/common.h"
-#include "lib/network/pointer.h"
-#include "lib/network/message.h"
-#include "lib/network/easymessage.h"
+#include "common.h"
+#include "pointer.h"
+#include "message.h"
+#include "easymessage.h"
 #include "kdevteamwork_messages.h"
 #include "patchmessage.h"
 #include <QMetaType>
