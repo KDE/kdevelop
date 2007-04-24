@@ -2,7 +2,21 @@
 PROJECT(network)
 
 
-SET(libfiles serverconfig.cpp message.cpp basicserver.cpp basicsession.cpp messageimpl.cpp helpers.cpp teamworkserver.cpp teamworksession.cpp user.cpp teamworkclient.cpp forwardsession.cpp logger.cpp)
+SET(libfiles 
+	serverconfig.cpp 
+	message.cpp 
+	basicserver.cpp 
+	basicsession.cpp 
+	messageimpl.cpp 
+	helpers.cpp 
+	teamworkserver.cpp 
+	teamworksession.cpp 
+	user.cpp 
+	teamworkclient.cpp 
+	forwardsession.cpp 
+	logger.cpp
+	)
+
 SET(testfiles main.cpp )
 
 LINK_LIBRARIES(${COMMONCPP2_LIBRARY} dl boost_serialization)

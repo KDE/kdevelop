@@ -32,9 +32,3 @@ target_link_libraries(diff2  ${KDE4_KDEUI_LIBS} )
 set_target_properties(diff2 PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
 install(TARGETS diff2 DESTINATION ${LIB_INSTALL_DIR})
-
-########### install files ###############
-
-
-SET(CMAKE_CXX_FLAGS -fPIC)
-SET(CMAKE_C_FLAGS -fPIC)
