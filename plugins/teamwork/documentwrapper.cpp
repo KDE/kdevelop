@@ -294,7 +294,7 @@ bool DocumentWrapper::synchronize( const UserPointer& user ) {
   
   UserPointer::Locked l = user;
   if ( l && l->online().session() ) {
-    return globalSendHelper.send<FileSynchronize>( l->online().session().getUnsafeData(), fileName(), *m_text, true, id(), m_session->id() );
+    return globalMessageSendHelper().send<FileSynchronize>( l->online().session().getUnsafeData(), fileName(), *m_text, true, id(), m_session->id() );
   } else {
     err() << "cannot send synchronization-message because the user cannot be locked, or is not online";
     return false;
@@ -316,7 +316,7 @@ int DocumentWrapper::dispatchMessage( FileEditRejectMessage* msg ) {
   } catch ( const DynamicTextError & err ) {
     ///There is no other way than resynchronizing the whole file
     out() << "error while handling a reject, resynchronizing. Error: " << err.what();
-    globalSendHelper.sendReply<FileEditRejectMessage>( msg, VectorTimestamp(), id(), m_session->id() );
+    globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, VectorTimestamp(), id(), m_session->id() );
   }
   return 1;
 }
@@ -329,7 +329,7 @@ int DocumentWrapper::dispatchMessage( MessageInterface* msg ) {
 int DocumentWrapper::dispatchMessage( FileEditMessage* msg ) {
   try {
     if ( ( m_disabled || m_dead ) && m_session->isMasterSession() ) {
-      globalSendHelper.sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
+      globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
       return 0;
     }
     FileEditMessage * emsg = dynamic_cast<FileEditMessage*>( msg );
@@ -367,7 +367,7 @@ int DocumentWrapper::dispatchMessage( FileEditMessage* msg ) {
   } catch ( const DynamicTextError & error ) {
     ///@todo error-handling
     err() << "dispatchMessage( FileEditMessage " << msg->timeStamp() << " " << msg->replacement() << " ): " << error.what();
-    globalSendHelper.sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
+    globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
 
   }
   return 1;
@@ -611,10 +611,10 @@ int DocumentWrapper::dispatchMessage( FileSynchronize* msg ) {
     m_text = msg->createDynamicText();
     connect( m_text.data(), SIGNAL( stateChanged( QDynamicText& ) ), this, SLOT( stateChanged() ) );
     fillDocumentText();
-    globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionSuccessful );
+    globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionSuccessful );
   } catch ( const DynamicTextError & error ) {
     err() << "error while synchronization: " << error.what();
-    globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
+    globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
   }
 
   return 1;

@@ -415,7 +415,7 @@ void KDevTeamwork::slotMessageHistory() {
 }
 
 bool KDevTeamwork::setActive( bool active ) {
-  cout << globalTypeSet.stats();
+  cout << globalMessageTypeSet().stats();
   if ( !m_active && active ) {
     log( "GUI: starting collaboration" );
     ///start the client
@@ -549,7 +549,7 @@ void KDevTeamwork::uiShowPatches() {
     return ;
   }
 
-  globalSendHelper.send<PatchesManagerMessage>( user->online().session().getUnsafeData(), PatchesManagerMessage::GetPatchesList );
+  globalMessageSendHelper().send<PatchesManagerMessage>( user->online().session().getUnsafeData(), PatchesManagerMessage::GetPatchesList );
 }
 
 void KDevTeamwork::showUserInfo( const UserPointer& user ) {
@@ -1850,7 +1850,7 @@ void KDevTeamwork::handleTextMessage( SafeSharedPtr<KDevTeamworkTextMessage> sms
   if ( msg ) {
     if ( !m_messageManager->processMessage( msg ) )
       addReceivedMessageToList( smsg );
-    globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionSuccessful );
+    globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionSuccessful );
   } else {
     err( "could not lock incoming kdev-text-message" );
   }

@@ -158,7 +158,7 @@ MessageInterface::ReplyResult FileCollaborationRequest::gotReply( const Dispatch
     if ( m_state == Unknown && msg.cast<FileCollaborationRequest>() ) {
       LockedSharedPtr<FileCollaborationRequest> lmsg = msg.cast<FileCollaborationRequest>();
       if ( lmsg ) {
-        globalSendHelper.sendReply<KDevSystemMessage>( lmsg, KDevSystemMessage::ActionSuccessful );
+        globalMessageSendHelper().sendReply<KDevSystemMessage>( lmsg, KDevSystemMessage::ActionSuccessful );
         m_state = Accepted;
         emit connectionResult( true );
       } else {
@@ -207,7 +207,7 @@ void FileCollaborationRequestData::denyCollaboration() {
   cout << "denyCollaboration" << endl;
   MessagePointer::Locked l = ( FileCollaborationRequest* ) this;
   if ( l && m_teamwork ) {
-    globalSendHelper.sendReply<KDevSystemMessage> ( l, KDevSystemMessage::ActionDenied );
+    globalMessageSendHelper().sendReply<KDevSystemMessage> ( l, KDevSystemMessage::ActionDenied );
     m_state = Denied;
     m_teamwork->collaborationManager() ->fileCollaborationManager().denyCollaboration( ( FileCollaborationRequest* ) this );
   } else {

@@ -496,7 +496,7 @@ void InDocumentConversation::sendMessage() {
       out( Logger::Debug ) << "sending references: " << start.asText() << " " << end.asText();
     }
 
-    MessagePointer::Locked stdMsg = globalTypeSet.create<InDocumentMessage>( text, start, end, context() );
+    MessagePointer::Locked stdMsg = globalMessageTypeSet().create<InDocumentMessage>( text, start, end, context() );
 
     InDocumentMessagePointer::Locked msg = stdMsg.cast<InDocumentMessage>();
     
@@ -1135,7 +1135,7 @@ void InDocumentConversation::addMessage( InDocumentMessage* msg ) {
 
   if ( msg->info().isIncoming() && msg->info().session() ) {
     ///Send a notification that the message arrived to the other side.
-    //globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionSuccessful ); //this is also done for KDevTeamworkTextMessage now
+    //globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionSuccessful ); //this is also done for KDevTeamworkTextMessage now
   }
 }
 

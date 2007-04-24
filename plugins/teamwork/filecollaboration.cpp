@@ -203,7 +203,7 @@ void FileCollaboration::invite( const FileCollaborationRequestPointer& request, 
   if ( !l )
     throw QString( "in FileCollaboration(): could not lock user" );
 
-  LockedSharedPtr<FileCollaborationRequest> lmsg = globalTypeSet.create<FileCollaborationRequest>( this, m_index, m_session->primaryIndex(), m_session->id() );
+  LockedSharedPtr<FileCollaborationRequest> lmsg = globalMessageTypeSet().create<FileCollaborationRequest>( this, m_index, m_session->primaryIndex(), m_session->id() );
   if ( !lmsg )
     throw QString( "in FileCollaboration(): could not create message" );
 
@@ -245,7 +245,7 @@ void FileCollaboration::invite( const FileCollaborationRequestPointer& request, 
 void FileCollaboration::close( const QString & reason ) {
   KDevTeamworkUserPointer::Locked l = m_user;
   if ( l && l->online().session() ) {
-    globalSendHelper.send<FileCollaborationMessage>( l->online().session().getUnsafeData(), m_session->id(), FileCollaborationMessageData::CloseSession );
+    globalMessageSendHelper().send<FileCollaborationMessage>( l->online().session().getUnsafeData(), m_session->id(), FileCollaborationMessageData::CloseSession );
   }
 }
 

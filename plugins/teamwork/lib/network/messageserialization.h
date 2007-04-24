@@ -1,7 +1,7 @@
 #ifndef MESSAGEPOINTER_H
 #define MESSAGEPOINTER_H
 
-///This header defines a normal SafeSharedPtr wich uses the message-serialization-system and the MessageTypeSet to serialize and deserialize messages(it stores and loads the messages as vectors). It automatically uses the global message-set stored in globalTypeSet. A hard lock is done while saving. Warning: May throw exceptions on errors
+///This header defines a normal SafeSharedPtr wich uses the message-serialization-system and the MessageTypeSet to serialize and deserialize messages(it stores and loads the messages as vectors). It automatically uses the global message-set stored in globalMessageTypeSet(). A hard lock is done while saving. Warning: May throw exceptions on errors
 
 #include "common.h"
 #include "message.h"
@@ -29,9 +29,9 @@ struct MessageSerialization {
       arch & boost::serialization::make_nvp( "data", v );
 #endif
 
-      t = ( ( Teamwork::MessagePointer ) Teamwork::buildMessageFromBuffer( v, Teamwork::globalTypeSet, 0 ) ).cast<Type>();
+      t = ( ( Teamwork::MessagePointer ) Teamwork::buildMessageFromBuffer( v, Teamwork::globalMessageTypeSet(), 0 ) ).cast<Type>();
 #else
-      t = ( ( ( Teamwork::MessagePointer ) Teamwork::buildMessageFromArchive( arch, Teamwork::globalTypeSet, 0 ) ).cast<Type>();
+      t = ( ( ( Teamwork::MessagePointer ) Teamwork::buildMessageFromArchive( arch, Teamwork::globalMessageTypeSet(), 0 ) ).cast<Type>();
 #endif
     }
     else {

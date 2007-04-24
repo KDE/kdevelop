@@ -527,7 +527,7 @@ void FileCollaborationSession::publishFileList( const CollabFileList& files ) {
     KDevTeamworkUserPointer::Locked l = collab->user();
     if ( l ) {
       if ( l->online().session() ) {
-        globalSendHelper.send<FileListMessage>( l->online().session().getUnsafeData(), files, id() );
+        globalMessageSendHelper().send<FileListMessage>( l->online().session().getUnsafeData(), files, id() );
       }
     } else {
       err() << "publishFileList(..): could not lock user";
@@ -542,7 +542,7 @@ void FileCollaborationSession::publishEdit( const VectorTimestamp& state, const 
       KDevTeamworkUserPointer::Locked l = collab->user();
       if ( l ) {
         if ( l->online().session() ) {
-          globalSendHelper.send<FileEditMessage>( l->online().session().getUnsafeData(), state, replacement, sender->id(), id() );
+          globalMessageSendHelper().send<FileEditMessage>( l->online().session().getUnsafeData(), state, replacement, sender->id(), id() );
         }
       } else {
         err() << "publishEdit(..): could not lock user";
@@ -722,7 +722,7 @@ int FileCollaborationSession::dispatchMessage( DocumentWrapperMessage* msg ) {
     if ( smsg ) {
       ///This has to be unterstood as an invitation to add a new document.
       if ( m_isMasterSession && !m_allowSentDocuments ) {
-        globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionDenied );
+        globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionDenied );
         QString userName = "anonymous user";
         if ( msg->info().user() )
           userName = ~msg->info().user().getUnsafeData() ->safeName();
@@ -733,7 +733,7 @@ int FileCollaborationSession::dispatchMessage( DocumentWrapperMessage* msg ) {
         DocumentWrapperPointer wrapper = m_files[ smsg->wrapperId() ];
         if ( !wrapper ) {
           err() << "could not create wrapper";
-          globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
+          globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
           return 1;
         }
         wrapper->processMessage( smsg );
@@ -748,7 +748,7 @@ int FileCollaborationSession::dispatchMessage( DocumentWrapperMessage* msg ) {
         }
       } else {
         err() << "failed to add file on synchronization: " << smsg->fileName();
-        globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
+        globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed );
       }
     } else {
       out( Logger::Warning ) << "could not locate the correct document-wrapper for a message of type " << msg->name() << " wrapper-id: " << msg->wrapperId();

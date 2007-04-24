@@ -40,7 +40,7 @@ UserPointer Server::identity() const {
   return ident_;
 }
 
-Server::Server( const ServerInformation& inf, const LoggerPointer& logger ) : BasicServer( inf.addr().c_str(), inf.port(), globalTypeSet, logger ), MessageSendHelper( globalTypeSet ), dispatcher_( *this ), userListDirty_( false ) {
+Server::Server( const ServerInformation& inf, const LoggerPointer& logger ) : BasicServer( inf.addr().c_str(), inf.port(), globalMessageTypeSet(), logger ), MessageSendHelper( globalMessageTypeSet() ), dispatcher_( *this ), userListDirty_( false ) {
   //dispatcher_.print( cout );
 }
 
@@ -64,7 +64,7 @@ Server::~Server() {
 }
 
 SessionPointer Server::createSession( BasicTCPSocket* sock ) {
-  return new TeamworkSession( *sock, new HandlerProxy<BasicServer>( this ), globalTypeSet, logger() );
+  return new TeamworkSession( *sock, new HandlerProxy<BasicServer>( this ), globalMessageTypeSet(), logger() );
   ///check yet whether this is thread-safe, if not give some kind of safe pointers
 }
 
@@ -199,7 +199,7 @@ void Server::closeSession( const SessionPointer& session ) {
 }
 
 MessageTypeSet& Server::messageTypes() {
-  return globalTypeSet;
+  return globalMessageTypeSet();
 }
 
 UserPointer Server::createUser( IdentificationMessage* msg ) {

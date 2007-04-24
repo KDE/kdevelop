@@ -20,12 +20,11 @@
 
 namespace Teamwork {
 
-extern MessageTypeSet globalTypeSet;
-///A little helper-class that allows creating types with less writing(can be imported to any class by inheritance)
+///A little helper-class that allows creating types with less writing(can be imported into any class by inheritance)
 class MessageSendHelper {
     MessageTypeSet& types_;
   public:
-    MessageSendHelper( MessageTypeSet& types = globalTypeSet ) : types_( types ) {}
+    MessageSendHelper( MessageTypeSet& types = globalMessageTypeSet() ) : types_( types ) {}
 
     ///The following is a set of little helper-functions that are used to reduce the mass of code
     template <class MessageType>
@@ -155,8 +154,7 @@ class MessageSendHelper {
 };
 
 ///This can be used to simply send messages using the global message-type-set
-extern MessageSendHelper globalSendHelper;
-
+MessageSendHelper& globalMessageSendHelper();
 }
 #endif
 

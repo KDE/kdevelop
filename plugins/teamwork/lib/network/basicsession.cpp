@@ -279,7 +279,7 @@ void BasicTCPSession::serializeMessage() {
         err() << std::string( "could not serialize message of type \"" ) + mp->name() + "\", reason: " + std::string( error.what() );
         mp->result( false );
         if ( mp->info().isReplyTo() ) {
-          MessageInterface * msg = globalTypeSet.create<SystemMessage>( SystemMessage::SerializationFailed, error.what() );
+          MessageInterface * msg = globalMessageTypeSet().create<SystemMessage>( SystemMessage::SerializationFailed, error.what() );
           msg->info().setReply( mp->info().isReplyTo() );
           messagesToSend_.pop_front();
           messagesToSend_.push_front( msg );

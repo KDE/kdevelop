@@ -22,8 +22,17 @@
 
 
 namespace Teamwork {
-MessageTypeSet globalTypeSet;
-MessageSendHelper globalSendHelper;
+
+//By making this a static function, it is sure that the object is initialized when first used
+MessageTypeSet& globalMessageTypeSet() {
+  static MessageTypeSet allMessages;
+  return allMessages;
+}
+
+MessageSendHelper& globalMessageSendHelper() {
+    static MessageSendHelper globalSendHelper;
+    return globalSendHelper;
+}
 
 void registerDefaultMessages( MessageTypeSet& target ) {
   target.registerMessageType<RawMessage, MessageInterface>( );

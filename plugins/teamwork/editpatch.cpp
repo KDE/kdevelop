@@ -275,7 +275,7 @@ void EditPatch::slotApplyEditPatch() {
       if ( !session )
         throw "the session could not be acquired";
 
-      MessagePointer::Locked mp = globalTypeSet.create<PatchRequestMessage>( lpatch, m_parent->teamwork(), PatchRequestData::Apply );
+      MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_parent->teamwork(), PatchRequestData::Apply );
       session.getUnsafeData() ->sendMessage( mp );
       m_parent->teamwork() ->addMessageToList( mp );
     } catch ( const char * str ) {
@@ -313,10 +313,10 @@ SafeSharedPtr<PatchMessage> EditPatch::getPatchMessage( PatchRequestData::Reques
       throw "could not lock patch";
 
     UserPointer::Locked fakeUser( new KDevTeamworkUser( UserPointer::Locked( new User( "local" ) ) ) );
-    SafeSharedPtr<Teamwork::FakeSession>::Locked fakeSession( new Teamwork::FakeSession( fakeUser, m_parent->teamwork() ->logger(), globalTypeSet, 0 ) );
+    SafeSharedPtr<Teamwork::FakeSession>::Locked fakeSession( new Teamwork::FakeSession( fakeUser, m_parent->teamwork() ->logger(), globalMessageTypeSet(), 0 ) );
     fakeUser->setSession( ( SessionInterface* ) fakeSession );
 
-    SafeSharedPtr<PatchRequestMessage>::Locked request = globalTypeSet.create<PatchRequestMessage>( lpatch, m_parent->teamwork() );
+    SafeSharedPtr<PatchRequestMessage>::Locked request = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_parent->teamwork() );
 
     request->info().setSession( ( SessionInterface* ) fakeSession );
 
@@ -425,7 +425,7 @@ void EditPatch::slotShowEditPatch() {
       if ( !session )
         throw "the session could not be acquired";
 
-      MessagePointer::Locked mp = globalTypeSet.create<PatchRequestMessage>( lpatch, m_parent->teamwork() );
+      MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_parent->teamwork() );
       session.getUnsafeData() ->sendMessage( mp );
       m_parent->teamwork() ->addMessageToList( mp );
     }

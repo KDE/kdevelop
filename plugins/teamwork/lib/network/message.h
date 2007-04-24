@@ -187,7 +187,7 @@ That is simplified by using MessageTypeSet::create which directly fills the corr
 To create and use an own message there's three things to do:
 1. Implement a message based on MessageInterface(or simpler based on RawMessage)
 2. Within the class-declaration, use the DECLARE_MESSAGE(name, parent, subindex)-macro to define the inheritance used in the message-tree
-3. Register the message to the used MessageTypeSet, to register it to globalTypeSet simply use the REGISTER_MESSAGE(Message)-macro(within an implementation-file).
+3. Register the message to the used MessageTypeSet, to register it to globalMessageTypeSet() simply use the REGISTER_MESSAGE(Message)-macro(within an implementation-file).
 Now the message can be sent and received. */
 
 class MessageInterface : public SafeShared /*, public virtual Serializable*/ {
@@ -195,7 +195,7 @@ class MessageInterface : public SafeShared /*, public virtual Serializable*/ {
 
     virtual void serialize( OutArchive& target ) = 0;
 
-    ///this function must be thread-safe
+    ///this function must be thread-safe(so the message does not need to be locked when it is called)
     virtual MessageInfo& info() = 0;
 
     virtual const MessageInfo& info() const = 0;
@@ -253,6 +253,7 @@ each message must have an explicit sub-id. To create messages even easier and sa
   inline bool isDerived() { return strcmp( #Name, name() ) != 0; } \
 
 
+///simple container-helper-class that could be removed
 class DispatchableMessage {
     MessagePointer msg_;
   public:
@@ -438,20 +439,19 @@ class MessageDispatcher {
 };
 
 
-///This message-type-set contains all messages that were registered by a call to REGISTER_MESSAGE, and may be used instead of the local type-sets(maybe those should be removed for simplicity)
-extern MessageTypeSet globalTypeSet;
+///This message-type-set contains all messages that were registered by a call to REGISTER_MESSAGE, and may be used instead of the local type-sets, for simplicity. That way messages can be serialized/deserialized without the core-parts being aware that they exist.
+MessageTypeSet& globalMessageTypeSet();
 
 template <class MessageType>
 class RegisterMessageTypeInternal {
   public:
     RegisterMessageTypeInternal() {
-      globalTypeSet.registerMessageTypes<MessageType>();
+      globalMessageTypeSet().registerMessageTypes<MessageType>();
     }
 };
 
 /**This should be used directly from outside to globally register new message-types.
 The messages should have used the DECLARE_MESSAGE(...)-macro.
-It is important that this message is called after the global object "globalTypeSet" is initialized
 */
 #define REGISTER_MESSAGE(TYPE)  \
 struct registerType##TYPE {     \

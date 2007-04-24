@@ -229,7 +229,7 @@ namespace Teamwork {
         ///Simulate sending the message by serializing and deserializing it within a local buffer
           vector<char> vec;
           serializeMessageToBuffer( vec, *msg );
-          MessagePointer nmsg = buildMessageFromBuffer( vec, globalTypeSet, 0 );
+          MessagePointer nmsg = buildMessageFromBuffer( vec, globalMessageTypeSet(), 0 );
           if ( !nmsg ) {
             err() << "FakeSession: could not build message from buffer";
             return false;

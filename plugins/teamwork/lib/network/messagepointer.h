@@ -1,7 +1,7 @@
 #ifndef MESSAGEPOINTER_H
 #define MESSAGEPOINTER_H
 
-///This header defines a normal SafeSharedPtr wich uses the message-serialization-system and the MessageTypeSet to serialize and deserialize messages(it stores and loads the messages as vectors). It automatically uses the global message-set stored in globalTypeSet. A hard lock is done while saving.
+///This header defines a normal SafeSharedPtr wich uses the message-serialization-system and the MessageTypeSet to serialize and deserialize messages(it stores and loads the messages as vectors). It automatically uses the global message-set stored in globalMessageTypeSet(). A hard lock is done while saving.
 
 #include "common.h"
 #include "message.h"
@@ -37,7 +37,7 @@ class SafeSharedMessagePtr : public SafeSharedPtr<Item> {
       if ( b ) {
         std::vector<char> v;
         arch & v;
-        *this = ( ( MessagePointer ) buildMessageFromBuffer( v, globalTypeSet, 0 ) ).cast<Item>();
+        *this = ( ( MessagePointer ) buildMessageFromBuffer( v, globalMessageTypeSet(), 0 ) ).cast<Item>();
       } else {
         *this = 0;
       }

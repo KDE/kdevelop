@@ -276,7 +276,7 @@ int main( int argc, char * argv[] ) {
 
 
 void test2() {
-  globalTypeSet.stats();
+  globalMessageTypeSet().stats();
   SafeSharedPtr<Client> client1 = new Client( ServerInformation( "0.0.0.0", 8155 ) );
   client1.getUnsafe() ->allowIncoming( true );
   client1.getUnsafeData() ->start();

@@ -254,7 +254,7 @@ void CollaborationManager::uiCloseCollaboration() {
     if ( !m_teamwork->client() || !lUser->online().session() )
       throw "no physical collaboration";
 
-    globalSendHelper.send<KDevSystemMessage>( lUser->online().session().getUnsafeData(), KDevSystemMessage::CollaborationClosed, "stopping collaboration" );
+    globalMessageSendHelper().send<KDevSystemMessage>( lUser->online().session().getUnsafeData(), KDevSystemMessage::CollaborationClosed, "stopping collaboration" );
   }
   catch ( QString & str ) {
     err() << "in uiCloseCollaboration: " <<  str;
@@ -337,7 +337,7 @@ void CollaborationManager::uiAcceptCollaboration() {
     if ( lMessage && lMessage.cast<ConnectionRequest>() ) {
       if ( lMessage->info().session() ) {
         lMessage.cast<ConnectionRequest>() ->setState( ConnectionRequest::Accepted );
-        globalSendHelper.sendReply<KDevSystemMessage>( lMessage, KDevSystemMessage::CollaborationAccepted, "collaboration accepted" );
+        globalMessageSendHelper().sendReply<KDevSystemMessage>( lMessage, KDevSystemMessage::CollaborationAccepted, "collaboration accepted" );
         if ( lMessage->info().user() )
           addCollaboratingUser( lMessage->info().user() );
         m_teamwork->messageManager()->updateMessage( lMessage );
@@ -371,7 +371,7 @@ void CollaborationManager::uiDenyCollaboration() {
     if ( lMessage && lMessage.cast<ConnectionRequest>() ) {
       if ( lMessage->info().session() ) {
         lMessage.cast<ConnectionRequest>() ->setState( ConnectionRequest::Accepted );
-        globalSendHelper.sendReply<KDevSystemMessage>( lMessage, KDevSystemMessage::CollaborationRefused, "collaboration denied" );
+        globalMessageSendHelper().sendReply<KDevSystemMessage>( lMessage, KDevSystemMessage::CollaborationRefused, "collaboration denied" );
         m_teamwork->messageManager()->updateMessage( lMessage );
       }
     } else {

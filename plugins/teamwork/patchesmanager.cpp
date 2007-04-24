@@ -260,7 +260,7 @@ void PatchesManager::slotApplyPatch() {
     if ( !lsession )
       throw "the session could not be locked";
 
-    SafeSharedPtr<PatchRequestMessage>::Locked mp = globalTypeSet.create<PatchRequestMessage>( lpatch, m_teamwork, PatchRequestData::Apply );
+    SafeSharedPtr<PatchRequestMessage>::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_teamwork, PatchRequestData::Apply );
     lsession->sendMessage( mp );
     m_teamwork->addMessageToList( ( PatchRequestMessage* ) mp );
   } catch ( const char * str ) {
@@ -292,7 +292,7 @@ void PatchesManager::slotDownloadPatch() {
     if ( !session )
       throw "the session could not be acquired";
 
-    MessagePointer::Locked mp = globalTypeSet.create<PatchRequestMessage>( lpatch, m_teamwork, PatchRequestData::Download );
+    MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_teamwork, PatchRequestData::Download );
     session.getUnsafeData() ->sendMessage( mp );
     m_teamwork->addMessageToList( mp );
   } catch ( const char * str ) {
@@ -324,7 +324,7 @@ void PatchesManager::slotShowPatch() {
     if ( !session )
       throw "the session could not be acquired";
 
-    MessagePointer::Locked mp = globalTypeSet.create<PatchRequestMessage>( lpatch, m_teamwork );
+    MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_teamwork );
     session.getUnsafeData() ->sendMessage( mp );
     m_teamwork->addMessageToList( mp );
   } catch ( const char * str ) {
@@ -632,7 +632,7 @@ int PatchesManager::dispatchMessage( PatchRequestMessage* msg ) {
         case ConnectedOnly: {
           if ( !m_teamwork->collaborationManager() ->isCollaborating( userFromSession( msg->info().session() ) ) ) {
             log( "not sending patch " + ~patch->name + " to " + userNameFromSession( msg->info().session() ) + " because the user is not collaborating" );
-            globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "access only for collaborating users" );
+            globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "access only for collaborating users" );
             return 1;
           }
         }
@@ -643,16 +643,16 @@ int PatchesManager::dispatchMessage( PatchRequestMessage* msg ) {
         break;
         default: {
           log( "not sending patch " + ~patch->name + " to " + userNameFromSession( msg->info().session() ) + " because the patch is private" );
-          globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "the patch is private" );
+          globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "the patch is private" );
           return 1;
         }
         break;
       }
     }
     log( "sending patch " + ~patch->name + " to " + userNameFromSession( msg->info().session() ) );
-    globalSendHelper.sendReply<PatchMessage>( msg, ( LocalPatchSourcePointer ) patch, m_teamwork->logger() );
+    globalMessageSendHelper().sendReply<PatchMessage>( msg, ( LocalPatchSourcePointer ) patch, m_teamwork->logger() );
   } else {
-    globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "no fitting patch available, or patch could not be locked" );
+    globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "no fitting patch available, or patch could not be locked" );
     log( "got a patch-request, but the requested patch could not be found or could not be locked", Warning );
   }
 
@@ -673,7 +673,7 @@ int PatchesManager::dispatchMessage( PatchesManagerMessage* msg ) {
       case PatchesManagerMessage::GetPatchesList: {
         SessionPointer::Locked l = msg->info().session();
         if ( l && l->isRunning() ) {
-          l->sendMessage( globalTypeSet.create<PatchesListMessage>( m_config.patchSources ) );
+          l->sendMessage( globalMessageTypeSet().create<PatchesListMessage>( m_config.patchSources ) );
 
           UserPointer::Locked pl = l->safeUser();
           if ( pl ) {
@@ -780,7 +780,7 @@ void PatchesManager::slotAllowPatch() {
       throw "could not find the requested patch";
 
     log( "sending patch " + ~lpatch->name + " to " + userNameFromSession( msg->info().session() ) );
-    globalSendHelper.sendReply<PatchMessage>( msg, ( LocalPatchSourcePointer ) lpatch, m_teamwork->logger() );
+    globalMessageSendHelper().sendReply<PatchMessage>( msg, ( LocalPatchSourcePointer ) lpatch, m_teamwork->logger() );
 
     msg->setStatus( PatchRequestData::Accepted );
 
@@ -807,7 +807,7 @@ void PatchesManager::slotDenyPatch() {
       throw "cannot lock/cast message";
 
     log( "denying patch to " + userNameFromSession( msg->info().session() ) );
-    globalSendHelper.sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "access denied" );
+    globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionFailed, "access denied" );
 
     msg->setStatus( PatchRequestData::Denied );
 
