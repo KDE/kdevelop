@@ -15,7 +15,7 @@
 #ifndef KDEVTEAMWORK_CLIENT_H
 #define KDEVTEAMWORK_CLIENT_H
 
-#include "kdevtreeview.h"
+//#include "kdevtreeview.h"
 #include "kdevteamwork_interface.ui.h"
 #include "network/pointer.h"
 #include <QStandardItemModel>

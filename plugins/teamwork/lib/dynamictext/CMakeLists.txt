@@ -1,6 +1,6 @@
 PROJECT( dynamictext )
 
-include_directories( ${ccgnu2_includes}/cc++2 ${CMAKE_SOURCE_DIR}/lib/network ${CMAKE_SOURCE_DIR})
+include_directories( ${ccgnu2_includes}/cc++2 ${CMAKE_SOURCE_DIR}/lib/network ${CMAKE_SOURCE_DIR} ../.. ../network)
 
 #if you don't want the full compiler output, remove the following line
 SET(CMAKE_VERBOSE_MAKEFILE ON)

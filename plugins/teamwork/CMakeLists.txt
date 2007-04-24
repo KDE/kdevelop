@@ -1,5 +1,6 @@
+add_subdirectory(lib)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/dynamictext ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/network ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/libdiff2 ${ccgnu2_includes}/cc++2
+include_directories( ./lib ${CMAKE_SOURCE_DIR}/lib ./lib/dynamictext ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ./lib/network ./lib/libdiff2 ${ccgnu2_includes}/cc++2
     )
 
 
