@@ -122,7 +122,7 @@ namespace Teamwork {
       return list_.size();
     }
   };
-};
+}
 //must not be included earlier because of include-recursion
 #include "message.h"
 

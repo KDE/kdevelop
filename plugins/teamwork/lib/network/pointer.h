@@ -543,7 +543,7 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
       }
     };
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 
