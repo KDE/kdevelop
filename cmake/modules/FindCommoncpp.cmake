@@ -20,8 +20,6 @@ IF( NOT WIN32 )
 ENDIF( NOT WIN32 )
 
 FIND_PATH(COMMONCPP2_INCLUDE_DIRS cc++/network.h
-    PATH_SUFFIXES
-    cc++
     PATHS
     ${_Libccgnu2IncDir}
     /usr/include/
