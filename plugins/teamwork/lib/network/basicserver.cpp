@@ -42,7 +42,6 @@ typedef char StandardDataType;
 namespace Teamwork {
 
 BasicTCPSocket::BasicTCPSocket( ost::InetAddress &ia, int port ) : ost::TCPSocket( ia, port ) {}
-;
 
 bool BasicTCPSocket::onAccept( const ost::InetHostAddress &ia, ost::tpport_t port ) {
   setCompletion( false );
@@ -196,7 +195,7 @@ void BasicServer::final( void ) {
 
 bool BasicServer::registerSession( SessionPointer /*session*/ ) {
   return false;
-};
+}
 
 void BasicServer::clearSelfPointer() {
   SafeSharedPtr<BasicServer> s = selfPointer_;
@@ -220,7 +219,7 @@ BasicServer::~BasicServer() {
 
 bool BasicServer::isOk() {
   return !exit_ && !failed_;
-};
+}
 
 SafeList<DispatchableMessage>& BasicServer::messages() {
   return messagesToHandle_;

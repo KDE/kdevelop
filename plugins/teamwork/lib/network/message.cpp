@@ -82,7 +82,7 @@ MessageFactoryInterface* MessageTypeSet::findFactory( MessageId& id ) const {
     --id;
   }
   return 0;
-};
+}
 
 DispatchableMessage MessageTypeSet::buildMessage( InArchive& from, const MessageInfo& inf ) const {
   MessageId id = inf.id();
