@@ -1572,59 +1572,41 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 	}
 
 	///Test if it is an include-directive
-	bool isIncludeDirective = false;
-	QString lineText = getText( line, 0, line+1, 0 );
-		QRegExp includeRx( "(?:#include[\\s]*(?:\\\"|\\<))([^\\n]*)(\\\"|\\>)" );
-		if( includeRx.search( lineText ) != -1 ) {
-			//It is an include-directive. The regular expression captures the  string, and the closing sign('"' or '>').
-			isIncludeDirective = true;
-			bool simpleAlgorithm = false;
-			QStringList captured = includeRx.capturedTexts();
-			if( captured.size() == 3 ) {
-				Dependence d;
-				d.first = captured[1];
-				d.second = captured[2] == "\"" ? Dep_Local : Dep_Global;
-				QString file = cppSupport()->driver()->findIncludeFile( d, activeFileName() );
-				if( file.isEmpty() ) {
-					//A simple backup-algorithm that can only find files within the same project
-					file = cppSupport()->findHeaderSimple( d.first );
-					simpleAlgorithm = true;
-				}
+	QString includeFileName, includeFilePath;
+	bool simpleAlgorithm = false;
+	bool isIncludeDirective = getIncludeInfo( line, includeFileName, includeFilePath, simpleAlgorithm );
+	if( isIncludeDirective ) {
+		///Add menu entry
+		if( !includeFilePath.isEmpty() ) {
+			int gid;
+			QPopupMenu * m = PopupTracker::createPopup( popup );
+			if ( contextMenuEntriesAtTop )
+				gid = popup->insertItem( i18n( "Goto Include File: %1" ).arg( cleanForMenu( includeFileName ) ), m, 5, cpos++ );
+			else
+				gid = popup->insertItem( i18n( "Goto Include File: %1" ).arg( cleanForMenu( includeFileName ) ), m );
 
-				///Add menu entry
-				int gid;
-				if( !file.isEmpty() ) {
-					QPopupMenu * m = PopupTracker::createPopup( popup );
-					if ( contextMenuEntriesAtTop )
-						gid = popup->insertItem( i18n( "Goto Include File: %1" ).arg( cleanForMenu( d.first ) ), m, 5, cpos++ );
-					else
-						gid = popup->insertItem( i18n( "Goto Include File: %1" ).arg( cleanForMenu( d.first ) ), m );
+			int id = m->insertItem( i18n( "Jump to %1" ).arg( cleanForMenu( includeFilePath ) ), this, SLOT( popupAction( int ) ) );
 
-					int id = m->insertItem( i18n( "Jump to %1" ).arg( cleanForMenu( file ) ), this, SLOT( popupAction( int ) ) );
+			DeclarationInfo i;
+			i.file = includeFilePath;
+			i.startCol = 0;
+			i.startLine = 0;
+			i.endCol = 0;
+			i.endLine = 0;
+			m_popupActions.insert( id, i );
 
-					DeclarationInfo i;
-					i.file = file;
-					i.startCol = 0;
-					i.startLine = 0;
-					i.endCol = 0;
-					i.endLine = 0;
-					m_popupActions.insert( id, i );
-
-					if( simpleAlgorithm && cppSupport()->codeCompletionConfig()->resolveIncludePaths() ) {
-						//Add a notification that the correct algorithm failed in finding the include-file correctly
-						m->insertItem( i18n( "This include-file could not be located regularly, and was selected from the project-file-list." ) );
-					}
-				} else {
-					///Could not find include-file
-					if ( contextMenuEntriesAtTop )
-						popup->insertItem( i18n( "Not Found: \"%1\"" ).arg( d.first ), 5, cpos++ );
-					else
-						popup->insertItem( i18n( "Not Found: \"%1\"" ).arg( d.first ) );
-				}
-			} else {
-				kdDebug( 9007 ) << "wrong count of captured items" << endl;
+			if( simpleAlgorithm && cppSupport()->codeCompletionConfig()->resolveIncludePaths() ) {
+				//Add a notification that the correct algorithm failed in finding the include-file correctly
+				m->insertItem( i18n( "This include-file could not be located regularly, and was selected from the project file list." ) );
 			}
+		} else {
+			///Could not find include-file
+			if ( contextMenuEntriesAtTop )
+				popup->insertItem( i18n( "Not Found: \"%1\"" ).arg( includeFileName ), 5, cpos++ );
+			else
+				popup->insertItem( i18n( "Not Found: \"%1\"" ).arg( includeFileName ) );
 		}
+	}
 
 	///Break if we cannot show additional information
 	if ( isIncludeDirective || (!type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) && !BuiltinTypes::isBuiltin( type.resultType ) ) )
@@ -4361,7 +4343,20 @@ void CppCodeCompletion::jumpCursorContext( FunctionType f )
 	EvaluationResult result = evaluateExpressionAt( line, column, conf );
 	
 	// Determine the declaration info based on the type of item we are dealing with.
-	DeclarationInfo d = result.sourceVariable;
+	DeclarationInfo d;
+	
+	QString includeFileName, includeFilePath;
+	bool unused;
+	
+	if ( result.isMacro ) {
+		d.name = result.macro.name();
+		d.file = result.macro.fileName();
+	} else if ( getIncludeInfo( line, includeFileName, includeFilePath, unused ) ) {
+		d.name = includeFileName;
+		d.file = includeFilePath;
+	} else {
+		d = result.sourceVariable;
+	}
 	if ( !d ) {
 		LocateResult type = result.resultType;
 		if ( type && type->resolved() ) {
@@ -4478,9 +4473,35 @@ QString CppCodeCompletion::createTypeInfoString( int line, int column )
 	return typeInfoString;
 }
 
+bool CppCodeCompletion::getIncludeInfo( int line, QString& includeFileName, QString& includeFilePath, bool& usedProjectFiles )
+{
+	bool isIncludeDirective = false;
+	QString lineText = getText( line, 0, line+1, 0 );
+	QRegExp includeRx( "(?:#include[\\s]*(?:\\\"|\\<))([^\\n]*)(\\\"|\\>)" );
+	if( includeRx.search( lineText ) != -1 ) {
+		//It is an include-directive. The regular expression captures the string, and the closing sign('"' or '>').
+		isIncludeDirective = true;
+		usedProjectFiles = false;
+		QStringList captured = includeRx.capturedTexts();
+		if( captured.size() == 3 ) {
+			Dependence d;
+			d.first = captured[1];
+			d.second = captured[2] == "\"" ? Dep_Local : Dep_Global;
+			includeFilePath = cppSupport()->driver()->findIncludeFile( d, activeFileName() );
+			if( includeFilePath.isEmpty() ) {
+					//A simple backup-algorithm that can only find files within the same project
+				includeFilePath = cppSupport()->findHeaderSimple( d.first );
+				usedProjectFiles = true;
+			}
+			includeFileName = d.first;
+		} else {
+			kdDebug( 9007 ) << "wrong count of captured items" << endl;
+		}
+	}
+	return isIncludeDirective;
+}
 
 
 #include "cppcodecompletion.moc"
 //kate: indent-mode csands; tab-width 2; space-indent off;
-
 

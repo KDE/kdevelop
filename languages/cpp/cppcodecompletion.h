@@ -196,6 +196,7 @@ private:
 	void computeRecoveryPoints( ParsedFilePointer unit );
 	void computeRecoveryPointsLocked();
 	void jumpCursorContext( FunctionType );
+	bool getIncludeInfo( int line, QString& includeFileName, QString& includeFilePath, bool& usedProjectFiles );
 	
     enum EvaluateExpressionOptions {
         IncludeStandardExpressions = 1,
