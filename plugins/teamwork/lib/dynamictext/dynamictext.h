@@ -155,7 +155,7 @@ class DynamicText : public SafeShared {
 			const_cast<DynamicText*>( this ) ->standardSerialize( arch, version );
 		}
 
-		BOOST_SERIALIZATION_SPLIT_MEMBER();
+		BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 	private:
 		template<class Archive>
@@ -183,7 +183,7 @@ class DynamicText : public SafeShared {
     virtual void notifyStateChanged();
 
 		///@todo check which keys are really necessary
-    BIND_LIST_3( ReplacementKeys, WeakReplacementPointer, VectorTimestamp, ReplacementId );
+    BIND_LIST_3( ReplacementKeys, WeakReplacementPointer, VectorTimestamp, ReplacementId )
     typedef Utils::CrossMap< WeakReplacementPointer, ReplacementKeys > ReplacementSet;
     ReplacementSet m_allReplacements;
     friend class Advancer;

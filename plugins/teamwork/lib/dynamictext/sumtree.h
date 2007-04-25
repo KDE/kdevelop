@@ -178,7 +178,7 @@ class Map : public WeakShared {
     NodePointer tree_;
 };
 
-};
+}
 
 #endif
 

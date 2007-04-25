@@ -437,7 +437,7 @@ class FlexibleText {
       return (*text_[s.index])[offset - s.sum];
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
   private:
     void deleteText() {
       for( typename StringVector::iterator it = text_.begin(); it != text_.end(); ++it ) {

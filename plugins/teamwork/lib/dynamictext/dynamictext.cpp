@@ -25,9 +25,9 @@ typedef DynamicTextErrorDummy CatchedDynamicTextError;
 #endif
 
 
-CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, WeakReplacementPointer, 0, value );
-CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, VectorTimestamp, 0, value->vectorStamp() );
-CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, ReplacementId, 0, ReplacementId( value->primaryIndex(), value->primaryStamp() ) );
+CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, WeakReplacementPointer, 0, value )
+CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, VectorTimestamp, 0, value->vectorStamp() )
+CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, ReplacementId, 0, ReplacementId( value->primaryIndex(), value->primaryStamp() ) )
 
 namespace __gnu_cxx {
 template <>

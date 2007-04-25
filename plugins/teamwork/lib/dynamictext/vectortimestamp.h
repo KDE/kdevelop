@@ -118,7 +118,7 @@ class VectorTimestamp {
 
 std::ostream& operator << ( std::ostream& str, const VectorTimestamp& timestamp );
 
-BOOST_CLASS_IMPLEMENTATION(VectorTimestamp, object_serializable);
+BOOST_CLASS_IMPLEMENTATION(VectorTimestamp, object_serializable)
 
 #endif
 

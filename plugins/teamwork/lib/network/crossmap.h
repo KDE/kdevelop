@@ -644,7 +644,7 @@ class CrossMap {
       }
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     /**If the Id is known, that should be used. "operator ==" is used while searching,
      * so if something that affects that operator changed, the item cannot be found and updated.
@@ -765,7 +765,7 @@ class CrossMap {
 
 }
 
-CROSSMAP_DEFINE_CONTAINER( std::list );
+CROSSMAP_DEFINE_CONTAINER( std::list )
 
 #endif
 
