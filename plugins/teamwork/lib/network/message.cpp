@@ -66,12 +66,12 @@ void MessageInfo::setSession( const SessionPointer& sess ) {
     session_ = sess;
     user_ = 0;
   }
-};
+}
 
 void MessageInfo::setUser( const UserPointer& user ) {
   user_ = user;
   session_ = 0;
-};
+}
 
 MessageFactoryInterface* MessageTypeSet::findFactory( MessageId& id ) const {
   while ( id ) { ///walk up the tree until a matching maybe inherited message-type is found
