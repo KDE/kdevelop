@@ -236,6 +236,9 @@ public:
 	bool isHeader( const QString& fileName ) const;
 	bool isSource( const QString& fileName ) const;
 
+    //uses the old simple algorithm to find the header
+    QString findHeaderSimple( const QString &header );
+  
 	virtual KDevDesignerIntegration *designer( KInterfaceDesigner::DesignerType type );
 
 	void setTyping( bool typing );

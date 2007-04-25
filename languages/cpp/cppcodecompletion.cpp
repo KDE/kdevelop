@@ -1578,12 +1578,18 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		if( includeRx.search( lineText ) != -1 ) {
 			//It is an include-directive. The regular expression captures the  string, and the closing sign('"' or '>').
 			isIncludeDirective = true;
+			bool simpleAlgorithm = false;
 			QStringList captured = includeRx.capturedTexts();
 			if( captured.size() == 3 ) {
 				Dependence d;
 				d.first = captured[1];
 				d.second = captured[2] == "\"" ? Dep_Local : Dep_Global;
 				QString file = cppSupport()->driver()->findIncludeFile( d, activeFileName() );
+				if( file.isEmpty() ) {
+					//A simple backup-algorithm that can only find files within the same project
+					file = cppSupport()->findHeaderSimple( d.first );
+					simpleAlgorithm = true;
+				}
 
 				///Add menu entry
 				int gid;
@@ -1603,6 +1609,11 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 					i.endCol = 0;
 					i.endLine = 0;
 					m_popupActions.insert( id, i );
+
+					if( simpleAlgorithm && cppSupport()->codeCompletionConfig()->resolveIncludePaths() ) {
+						//Add a notification that the correct algorithm failed in finding the include-file correctly
+						m->insertItem( i18n( "This include-file could not be located regularly, and was selected from the project-file-list." ) );
+					}
 				} else {
 					///Could not find include-file
 					if ( contextMenuEntriesAtTop )

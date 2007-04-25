@@ -3100,6 +3100,21 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 	m_safeProjectFiles.insert( file->fileName() + "||" + QString("%1").arg(file->usedMacros().valueHash()) + "||" + QString("%1").arg(file->usedMacros().idHash()) );
 }
 
+QString CppSupportPart::findHeaderSimple( const QString &header )
+{
+        QStringList::ConstIterator it;
+        for ( it = m_projectFileList.begin(); it != m_projectFileList.end(); ++it )
+        {
+                QString s = *it;
+                if (s == header)
+                    return s;
+                if ( ( s.right( header.length() ) == header ) && ( s[s.length() - header.length() - 1] == '/' ) )
+                        return s;
+        }
+
+        return QString::null;
+}
+
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ) {
 }
       
