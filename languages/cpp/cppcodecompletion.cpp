@@ -1544,6 +1544,7 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 
   EvaluationResult type = evaluateExpressionAt( line, column, conf );
 
+	///Test if it is a macro
 	if( type.isMacro ) {
 		QPopupMenu * m = PopupTracker::createPopup( popup );
 		int gid;
@@ -1570,14 +1571,59 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 		}
 	}
 
-	if ( !type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) && !BuiltinTypes::isBuiltin( type.resultType ) )
-    return ;
+	///Test if it is an include-directive
+	bool isIncludeDirective = false;
+	QString lineText = getText( line, 0, line+1, 0 );
+		QRegExp includeRx( "(?:#include[\\s]*(?:\\\"|\\<))([^\\n]*)(\\\"|\\>)" );
+		if( includeRx.search( lineText ) != -1 ) {
+			//It is an include-directive. The regular expression captures the  string, and the closing sign('"' or '>').
+			isIncludeDirective = true;
+			QStringList captured = includeRx.capturedTexts();
+			if( captured.size() == 3 ) {
+				Dependence d;
+				d.first = captured[1];
+				d.second = captured[2] == "\"" ? Dep_Local : Dep_Global;
+				QString file = cppSupport()->driver()->findIncludeFile( d, activeFileName() );
 
-  QString name = type->fullNameChain();
-  if ( type.sourceVariable )
-    name += " " + type.sourceVariable.name;
-  if ( type.resultType->resolved() && type.resultType->resolved() ->asFunction() )
-    name = buildSignature( type.resultType->resolved() );
+				///Add menu entry
+				int gid;
+				if( !file.isEmpty() ) {
+					QPopupMenu * m = PopupTracker::createPopup( popup );
+					if ( contextMenuEntriesAtTop )
+						gid = popup->insertItem( i18n( "Goto Include File: %1" ).arg( cleanForMenu( d.first ) ), m, 5, cpos++ );
+					else
+						gid = popup->insertItem( i18n( "Goto Include File: %1" ).arg( cleanForMenu( d.first ) ), m );
+
+					int id = m->insertItem( i18n( "Jump to %1" ).arg( cleanForMenu( file ) ), this, SLOT( popupAction( int ) ) );
+
+					DeclarationInfo i;
+					i.file = file;
+					i.startCol = 0;
+					i.startLine = 0;
+					i.endCol = 0;
+					i.endLine = 0;
+					m_popupActions.insert( id, i );
+				} else {
+					///Could not find include-file
+					if ( contextMenuEntriesAtTop )
+						popup->insertItem( i18n( "Not Found: \"%1\"" ).arg( d.first ), 5, cpos++ );
+					else
+						popup->insertItem( i18n( "Not Found: \"%1\"" ).arg( d.first ) );
+				}
+			} else {
+				kdDebug( 9007 ) << "wrong count of captured items" << endl;
+			}
+		}
+
+	///Break if we cannot show additional information
+	if ( isIncludeDirective || (!type->resolved() && !type.sourceVariable && ( !type.resultType.trace() || type.resultType.trace() ->trace().isEmpty() ) && !BuiltinTypes::isBuiltin( type.resultType ) ) )
+		return ;
+
+	QString name = type->fullNameChain();
+	if ( type.sourceVariable )
+		name += " " + type.sourceVariable.name;
+	if ( type.resultType->resolved() && type.resultType->resolved() ->asFunction() )
+		name = buildSignature( type.resultType->resolved() );
 
   ///Fill the jump-menu
   {

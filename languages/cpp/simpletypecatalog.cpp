@@ -278,6 +278,7 @@ QStringList SimpleTypeCatalog::getBaseStrings() {
  }
 
  QStringList ret;
+ QMap<QString, bool> bases;
 // try with parentsc
  QTime t;
  t.restart();
@@ -290,9 +291,9 @@ QStringList SimpleTypeCatalog::getBaseStrings() {
 
   CppBaseClass<Tag> info( tag );
 
-   ret << info.baseClass();
+   bases[ info.baseClass() ] = true;
  }
- return ret;
+ return bases.keys();
 }
 
 SimpleTypeImpl::TemplateParamInfo SimpleTypeCatalog::getTemplateParamInfo() {

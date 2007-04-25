@@ -305,7 +305,6 @@ private slots:
 	void slotNavigate();
 	void slotNewClass();
 	void slotSwitchHeader( bool scrollOnly = false );
-	void slotGotoIncludeFile();
 	void slotCompleteText();
 	void slotMakeMember();
 	void slotExtractInterface();
@@ -401,7 +400,6 @@ private:
 
 	void saveProjectSourceInfo();
 	QStringList reorder( const QStringList& list );
-	static QString findHeader( const QStringList&list, const QString& header );
 
 	CppCodeCompletion* m_pCompletion;
 	CppCodeCompletionConfig* m_pCompletionConfig;

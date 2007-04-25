@@ -626,22 +626,6 @@ void CppSupportPart::projectClosed( )
 }
 
 
-QString CppSupportPart::findHeader( const QStringList &list, const QString &header )
-{
-	QStringList::ConstIterator it;
-	for ( it = list.begin(); it != list.end(); ++it )
-	{
-		QString s = *it;
-		if (s == header)
-		    return s;
-		if ( ( s.right( header.length() ) == header ) && ( s[s.length() - header.length() - 1] == '/' ) )
-			return s;
-	}
-
-	return QString::null;
-}
-
-
 void CppSupportPart::slotNavigate() {
 	if( codeCompletion() && m_activeView && m_activeViewCursor ) {
 		unsigned int curLine = 0, curCol = 0;
@@ -819,19 +803,6 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 		QString str = econtext->currentLine();
 		if ( str.isEmpty() )
 			return ;
-
-		QRegExp re( "[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*" );
-		if ( !re.exactMatch( str ) )
-			return ;
-
-		QString popupstr = re.cap( 1 );
-		m_contextFileName = findHeader( m_projectFileList, popupstr );
-		if ( m_contextFileName.isEmpty() )
-			return ;
-
-		id = popup->insertItem( i18n( "Goto Include File: %1" ).arg( popupstr ), this, SLOT( slotGotoIncludeFile() ) );
-		popup->setWhatsThis( id, i18n( "<b>Goto include file</b><p>Opens an include file under the cursor position." ) );
-
 	}
 	else if ( context->hasType( Context::CodeModelItemContext ) )
 	{
@@ -1359,13 +1330,6 @@ void CppSupportPart::jumpToCodeModelItem( const ItemDom& item, bool scrollOnly )
 		partController() ->splitCurrentDocument( url, line );
 	lastSyncedLine = line;
 	lastSyncedUrl = url;
-}
-
-void CppSupportPart::slotGotoIncludeFile()
-{
-	if ( !m_contextFileName.isEmpty() )
-		partController() ->editDocument( KURL( m_contextFileName ), 0 );
-
 }
 
 KDevLanguageSupport::Features CppSupportPart::features()
