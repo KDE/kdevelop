@@ -42,7 +42,7 @@ void MessageManager::init() {
 
 MessageManager::~MessageManager() {}
 
-void MessageManager::restorePartialProjectSession( const QDomElement* el ) {
+void MessageManager::restorePartialProjectSession( const QDomElement* /*el*/ ) {
   /*try {
     xmlDeserializeFromElementItem( el, "ConversationManager", m_conversationManager );
   } catch ( const QString & str ) {
@@ -50,7 +50,7 @@ void MessageManager::restorePartialProjectSession( const QDomElement* el ) {
   }*/
 }
 
-void MessageManager::savePartialProjectSession( QDomElement* el ) {
+void MessageManager::savePartialProjectSession( QDomElement* /*el*/ ) {
   /*try {
     xmlSerializeToElementItem( el, "ConversationManager", m_conversationManager );
   } catch ( const QString & str ) {

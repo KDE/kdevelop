@@ -115,7 +115,7 @@ UserPointer KDevTeamworkClient::createUser( const User* user ) {
 
 ///this is called whenever a new user successfully logged into the server
 void KDevTeamworkClient::userConnected( const Teamwork::UserPointer& user ) {
-  kdDebug() << "userConnected" << endl;
+  kDebug() << "userConnected" << endl;
 
   emit guiUserConnected( user );
 
@@ -125,7 +125,7 @@ void KDevTeamworkClient::userConnected( const Teamwork::UserPointer& user ) {
 
 ///called whenever a user leaves the server
 void KDevTeamworkClient::userDisconnected( const Teamwork::UserPointer& user ) {
-  kdDebug() << "userDisconnected" << endl;
+  kDebug() << "userDisconnected" << endl;
 
   emit guiUserDisconnected( user );
 
@@ -134,7 +134,7 @@ void KDevTeamworkClient::userDisconnected( const Teamwork::UserPointer& user ) {
 
 ///this is called whenever a connection is successfully established to a server
 void KDevTeamworkClient::connectedToServer( const Teamwork::ClientSessionDesc& session, const Teamwork::ServerInformation& server ) {
-  kdDebug() << "connectedToServer" << endl;
+  kDebug() << "connectedToServer" << endl;
 
   emit guiServerConnected( session, server );
 
@@ -143,7 +143,7 @@ void KDevTeamworkClient::connectedToServer( const Teamwork::ClientSessionDesc& s
 
 ///this is called whenever a server the client disconnects from a connected server in any way
 void KDevTeamworkClient::disconnectedFromServer( const Teamwork::ClientSessionDesc& session, const Teamwork::ServerInformation& server ) {
-  kdDebug() << "disconnectedFromServer" << endl;
+  kDebug() << "disconnectedFromServer" << endl;
 
   emit guiServerDisconnected( session, server );
 

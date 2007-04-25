@@ -65,7 +65,7 @@ class vector_read_device {
 			return n;
 		}
 
-		std::streamsize write(const char* s, std::streamsize n)
+		std::streamsize write(const char* /*s*/, std::streamsize /*n*/)
 		{
 			return 0;
 		}

@@ -57,7 +57,7 @@ std::string compareText( const std::string& str1, const std::string& str2 ) {
   std::ostringstream os;
   StringList l1 = splitString( str1 );
   StringList l2 = splitString( str2 );
-  int size = l1.size();
+  uint size = l1.size();
   if ( l2.size() > size )
     size = l2.size();
 
@@ -67,7 +67,7 @@ std::string compareText( const std::string& str1, const std::string& str2 ) {
   int cnt2 = 0;
   os << "total length: " << str1.length() << " " << str2.length() << endl;
 
-  for ( int a = 0; a < size; a++ ) {
+  for ( uint a = 0; a < size; a++ ) {
     std::string text1 = "empty";
     std::string text2 = "empty";
 
@@ -97,7 +97,7 @@ struct doubleText {
   std::string string;
   clock_t flexClock;
   clock_t stringClock;
-  doubleText( const std::string& str ) : flexClock( 0 ), stringClock( 0 ), flexText( str ), string( str ) {}
+  doubleText( const std::string& str ) : flexText( str ), string( str ), flexClock( 0 ), stringClock( 0 ) {}
   int lastActionType;
   int lastPosition;
   std::string lastText;
@@ -179,17 +179,17 @@ void verifyFlexibleText() {
   for ( int b = 0; b < 1000000; b++ ) {
     ///remove a random small range
     if ( d.string.size() != 0 ) {
-      int remSize = rand() % 5;
-      int remPos = rand() % d.string.size();
+      uint remSize = rand() % 5;
+      uint remPos = rand() % d.string.size();
       if ( remPos + remSize > d.string.size() )
         remSize = d.string.size() - remPos;
       d.remove( remPos, remSize );
     }
 
-    int addSize = rand() % 10;
-    int addPos = rand() % ( d.string.size() + 1 );
+    uint addSize = rand() % 10;
+    uint addPos = rand() % ( d.string.size() + 1 );
     std::string input;
-    for ( int a = 0; a < addSize; a++ ) {
+    for ( uint a = 0; a < addSize; a++ ) {
       input += inputs[ rand() % 44 ];
     }
     d.insert( addPos, input );
@@ -204,8 +204,8 @@ void verifyFlexibleText() {
     ///Copy the text and remove some part, to make sure that the tree stays consistent
     Text f( d.flexText );
     if ( d.string.size() != 0 ) {
-      int remSize = rand() % 5;
-      int remPos = rand() % d.string.size();
+      uint remSize = rand() % 5;
+      uint remPos = rand() % d.string.size();
       if ( remPos + remSize > d.string.size() )
         remSize = d.string.size() - remPos;
       f.remove( remPos, remSize );
@@ -270,7 +270,7 @@ void verifySumTree() {
     try {
       SumTree::Map tree( summands );
       int sum = tree.sum( 5 );
-      int nsum = tree.sum( 6 );
+/*      int nsum = tree.sum( 6 );*/
       DYN_VERIFY_SAME( tree.index( sum ), 5 );
       tree.setIndexValue( 5, 0 );
       //      DYN_VERIFY_SAME( tree.index( sum ), 6 ); ///Reactivate in time!
@@ -310,7 +310,7 @@ void verifySumTree() {
 
     try {
       SumTree::Map tree( summands );
-      int sum = 0;
+/*      int sum = 0;*/
       for ( int a = 0; a < count; a++ ) {
         int s = tree.indexValue( a );
         DYN_VERIFY_SAME( s, summands[ a ] );
@@ -323,9 +323,8 @@ void verifySumTree() {
 
     try {
       SumTree::Map tree( summands );
-      int sum = 0;
       for ( int a = 0; a < count; a++ ) {
-        int v = tree.setIndexValue( a, a );
+        tree.setIndexValue( a, a );
         DYN_VERIFY_SAME( a, tree.indexValue( a ) );
       }
 
@@ -336,7 +335,6 @@ void verifySumTree() {
 
     try {
       SumTree::Map tree( summands );
-      int sum = 0;
       for ( int a = 0; a < count; a++ ) {
         int v = tree.indexValue( a );
         DYN_VERIFY_SAME( v + a, tree.changeIndexValue( a, a ) );
@@ -349,7 +347,6 @@ void verifySumTree() {
 
     try {
       SumTree::Map tree( summands );
-      int sum = 0;
       for ( int a = 0; a < count; a += 2 ) {
         int v = tree.indexValue( a );
         tree.insertIndex( a, a );
@@ -362,7 +359,6 @@ void verifySumTree() {
     }
     try {
       SumTree::Map tree( summands );
-      int sum = 0;
       for ( int a = count / 10; a >= 0; a-- ) {
         int r = tree.removeIndex( a * 9 );
         DYN_VERIFY_SAME( r, summands[ a * 9 ] );
@@ -660,7 +656,7 @@ void verifyOffsets() {
   OffsetMap o2;
   for ( int a = 0; a < SMALLCNT; a++ ) {
     float f = ( float( rand() ) / RAND_MAX ) * CNT;
-    int of = ( ( float( rand() ) / RAND_MAX ) * 100 ) - 50;
+    int of = (int)( ( float( rand() ) / RAND_MAX ) * 100 ) - 50;
     if ( of ) {
       OffsetMap in( ( uint ) f, of );
       if ( o.isCompatible( in ) )
@@ -672,7 +668,7 @@ void verifyOffsets() {
   cout << "building map 2" << endl;
   for ( int a = 0; a < SMALLCNT; a++ ) {
     float f = ( float( rand() ) / RAND_MAX ) * CNT;
-    int of = ( ( float( rand() ) / RAND_MAX ) * 100 ) - 50;
+    int of = (int)( ( float( rand() ) / RAND_MAX ) * 100 ) - 50;
     if ( of ) {
       OffsetMap in( ( uint ) f, of );
       if ( o.isCompatible( in ) )
@@ -690,9 +686,9 @@ void verifyOffsets() {
 
   o2 %= OffsetMap( 1, 1 );
   o2 %= OffsetMap( 8, -2 );
-  /*o2 % OffsetMap( 5, 1 );
-  o2 % OffsetMap( 10, -2 );
-  o2 % OffsetMap( 15, 3 );*/
+//   o2 % OffsetMap( 5, 1 );
+//   o2 % OffsetMap( 10, -2 );
+//   o2 % OffsetMap( 15, 3 );
 
   //cout << "map 1: ";
   o.printMap();
@@ -701,7 +697,7 @@ void verifyOffsets() {
   if ( !o.isCompatible( o2 ) ) {
     cout << "map 2 is not compatible" << endl;
     return ;
-  }
+  }*/
   OffsetMap o3 = o % o2;
   //cout << "combined: ";
   o3.printMap();

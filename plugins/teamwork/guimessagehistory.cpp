@@ -31,7 +31,7 @@ Q_DECLARE_METATYPE( KDevTeamworkUserPointer );
 Q_DECLARE_METATYPE( HistoryMessagePointer );
 Q_DECLARE_METATYPE( Teamwork::MessageId );
 
-GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, QString context ) : m_manager( manager ), SafeLogger( manager->teamwork() ->logger() ), m_defaultContext( context ) {
+GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, QString context ) : SafeLogger( manager->teamwork() ->logger() ), m_manager( manager ), m_defaultContext( context ) {
   foreach( KDevTeamworkUserPointer user, users )
   addUser( user );
 
@@ -303,12 +303,12 @@ void GuiMessageHistory::slotNewMessage( const HistoryMessagePointer& msg ) {
   }
 }
 
-void GuiMessageHistory::typeFilterChanged( int index ) {
+void GuiMessageHistory::typeFilterChanged( int /*index*/ ) {
   applyFilters();
 }
 
 
-void GuiMessageHistory::contextFilterChanged( int index ) {
+void GuiMessageHistory::contextFilterChanged( int /*index*/ ) {
   applyFilters();
 }
 

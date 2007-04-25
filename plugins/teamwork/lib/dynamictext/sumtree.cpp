@@ -34,7 +34,7 @@ void mult( ostream& os, int count, const char* c ) {
     os << c;
 }
 
-Node::Node( bool isLeaf, Node* parent ) : parent_( parent ), sum_( 0 ), indexCount_( 0 ), isLeaf_( isLeaf ), nodeCount_( 0 ) {}
+Node::Node( bool isLeaf, Node* parent ) : parent_( parent ), nodeCount_( 0 ), sum_( 0 ), indexCount_( 0 ), isLeaf_( isLeaf ) {}
 
 Node* Node::makeOwn( Node* parent ) {
   //Node * myParent = parent_ get();
@@ -78,7 +78,7 @@ int Map::index( int sum ) const {
 Map::Map( const SumVector& summands ) {
   tree_ = new Node( false, 0 );
   int cnt = build( summands.begin(), summands.end(), tree_ );
-  DYN_VERIFY_SAME( cnt, summands.size() );
+  DYN_VERIFY_SAME( (int)cnt, (int)summands.size() );
 }
 
 Map::~Map() {}
@@ -87,6 +87,7 @@ Map::Map( const Map& rhs ) : tree_ ( new Node( *rhs.tree_ ) ) {}
 
 Map& Map::operator = ( const Map& rhs ) {
   tree_ = new Node( *rhs.tree_ );
+  return *this;
 }
 
 void Node::addNode( Node* node ) {
@@ -223,7 +224,7 @@ int Node::changeIndexValue( int indicesNeeded, int value ) {
 void Node::updateStructure() {
   if ( isLeaf_ )
     return ;
-  DYN_VERIFY_SAME( nodes_.size(), nodeCount_ );
+  DYN_VERIFY_SAME( (int)nodes_.size(), (int)nodeCount_ );
 
   int dif = nodeCount_ - PREFERRED_NODES;
   if ( dif > 0 ) {
@@ -264,7 +265,7 @@ void Node::updateStructure() {
     if ( best != nodes_.end() ) {
       NodePointer branch = new Node( false, this );
       branch->nodes_.insert( branch->nodes_.begin(), best, bestLast );
-      DYN_VERIFY_SAME( branch->nodes_.size(), cnt );
+      DYN_VERIFY_SAME( (int)branch->nodes_.size(), (int)cnt );
       branch->nodeCount_ = cnt;
 
       it = best;
@@ -277,11 +278,11 @@ void Node::updateStructure() {
 
       nodeCount_ += 1;
       nodes_.insert( best, branch );
-      DYN_VERIFY_SAME( nodeCount_, nodes_.size() );
+      DYN_VERIFY_SAME( (int)nodeCount_, (int)nodes_.size() );
 
       nodeCount_ -= cnt;
       nodes_.erase( best, bestLast );
-      DYN_VERIFY_SAME( nodeCount_, nodes_.size() );
+      DYN_VERIFY_SAME( (int)nodeCount_, (int)nodes_.size() );
 
     } else {
       DYN_VERIFY( 0 );

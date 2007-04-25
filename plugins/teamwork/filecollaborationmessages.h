@@ -248,7 +248,7 @@ class FileEditMessageData {
       arch & m_replacement & m_state;
     }
 
-    FileEditMessageData( const VectorTimestamp& state = VectorTimestamp(), const SimpleReplacement& rep = SimpleReplacement() ) : m_state(state), m_replacement( rep ) {
+    FileEditMessageData( const VectorTimestamp& state = VectorTimestamp(), const SimpleReplacement& rep = SimpleReplacement() ) : m_replacement( rep ), m_state(state) {
     }
 
     const SimpleReplacement& replacement () const {

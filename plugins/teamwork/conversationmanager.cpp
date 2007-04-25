@@ -137,7 +137,7 @@ struct TemporaryConversationConnector : public Shared {
     target = 0;
   }
 
-  TemporaryConversationConnector ( const TemporaryConversationConnector& /*rhs*/ ) {}
+  TemporaryConversationConnector ( const TemporaryConversationConnector& rhs ) : Shared(rhs) {}
 }
 ;
 
@@ -219,7 +219,7 @@ void ConversationManager::load() {
   }
 }
 
-void ConversationManager::documentActivated( IDocument* document ) {
+void ConversationManager::documentActivated( IDocument* /*document*/ ) {
   //document->
   /*for( ConversationSet::iterator it = m_conversations.begin(); it != m_conversations.end(); ++it ) {
     (*it)->documentActivated( document );
@@ -549,7 +549,7 @@ void InDocumentConversation::jumpTo() {
   }
 }
 
-void InDocumentConversation::fillContextMenu( QMenu* menu, KDevTeamwork* teamwork, MessagePointer msg ) {
+void InDocumentConversation::fillContextMenu( QMenu* menu, KDevTeamwork* /*teamwork*/, MessagePointer msg ) {
   if ( !m_jumpToAction ) {
     m_jumpToAction = new QAction( "Show in Document", this );
     connect( m_jumpToAction, SIGNAL( triggered() ), this, SLOT( jumpTo() ), Qt::QueuedConnection );
@@ -577,7 +577,7 @@ void InDocumentConversation::cursorPositionChanged ( KTextEditor::View *view, co
     
 }
 
-void InDocumentConversation::verticalScrollPositionChanged ( KTextEditor::View *view, const KTextEditor::Cursor& newPos ) {
+void InDocumentConversation::verticalScrollPositionChanged ( KTextEditor::View *view, const KTextEditor::Cursor& /*newPos*/ ) {
   if( !m_active || m_block ) return;
   KTextEditor::Cursor c = currentDocCursor();
   placeWidget( view, &c );
@@ -589,7 +589,7 @@ void InDocumentConversation::log( QString str, LogLevel level ) const {
 };
 
 
-void InDocumentConversation::horizontalScrollPositionChanged ( KTextEditor::View *view ) {
+void InDocumentConversation::horizontalScrollPositionChanged ( KTextEditor::View */*view*/ ) {
   //manager()->log( "horizontalScrollPositionChanged", Debug );
 }
 
@@ -633,7 +633,7 @@ void  InDocumentConversation::selectNearestMessage() {
       messageSelected( msg );
 }
 
-void InDocumentConversation::userStateChanged( KDevTeamworkUserPointer user ) {
+void InDocumentConversation::userStateChanged( KDevTeamworkUserPointer /*user*/ ) {
   log( "userStateChanged" );
   fillUserBox();
 }
@@ -914,11 +914,11 @@ KTextEditor::Cursor InDocumentConversation::findPositionInDocument( InDocumentMe
       err() << "could not lock first message";
     else
       err() << "kdev-document has no text-document";
-    return KTextEditor::Cursor::invalid();
   }
+  return KTextEditor::Cursor::invalid();
 }
 
-InDocumentConversation::InDocumentConversation( InDocumentMessage* msg ) : SafeLogger( KDevTeamwork::self()->logger() ), m_jumpToAction( 0 ), m_hideAction( 0 ), m_userInfoAction( 0 ), m_messagesModel( 0 ), m_messageCount( 0 ), m_block( false ), m_currentRange(0) {
+InDocumentConversation::InDocumentConversation( InDocumentMessage* msg ) : SafeLogger( KDevTeamwork::self()->logger() ), m_messageCount( 0 ), m_jumpToAction( 0 ), m_hideAction( 0 ), m_userInfoAction( 0 ), m_messagesModel( 0 ), m_block( false ), m_currentRange(0) {
   setActive( true );
   LogSuffix s( "constructor: ", this );
 
@@ -987,15 +987,15 @@ UserPointer InDocumentConversation::primaryUser() {
   return l->info().user();
 }
 
-void InDocumentConversation::textChanged ( KTextEditor::Document * document, const KTextEditor::Range & oldRange, const KTextEditor::Range & newRange ) {
+void InDocumentConversation::textChanged ( KTextEditor::Document * /*document*/, const KTextEditor::Range & /*oldRange*/, const KTextEditor::Range & /*newRange*/ ) {
   m_currentSearchInstance = InDocumentReference::TextSearchInstance();
 }
 
-void InDocumentConversation::textRemoved ( KTextEditor::Document * document, const KTextEditor::Range & range ) {
+void InDocumentConversation::textRemoved ( KTextEditor::Document * /*document*/, const KTextEditor::Range & /*range*/ ) {
   m_currentSearchInstance = InDocumentReference::TextSearchInstance();
 }
 
-void InDocumentConversation::textInserted ( KTextEditor::Document * document, const KTextEditor::Range & range ) {
+void InDocumentConversation::textInserted ( KTextEditor::Document * /*document*/, const KTextEditor::Range & /*range*/ ) {
   m_currentSearchInstance = InDocumentReference::TextSearchInstance();
 }
 

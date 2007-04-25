@@ -245,9 +245,10 @@ int FileCollaborationManager::dispatchMessage( FileCollaborationRequest* msg ) {
 int FileCollaborationManager::dispatchMessage( FileCollaborationMessage* msg ) {
   SessionSet::Iterator it = m_sessions.values<CollabSessionId>( msg->sessionId() );
   if( it ) {
-    const_cast<FileCollaborationSession*>((*it).data())->processMessage( msg );
+    return const_cast<FileCollaborationSession*>((*it).data())->processMessage( msg );
   } else {
     out( Logger::Warning ) << "got a FileCollaborationMessage of type " << msg->name() << " for a non-existent session: " << (uint)msg->sessionId();
+    return 0;
   }
 }
 
@@ -279,7 +280,7 @@ void FileCollaborationManager::denyCollaboration( const FileCollaborationRequest
       if( lm ) {
         int cnt = m_requests.size();
         lm->denyCollaboration();
-        if( m_requests.size() != cnt ) {
+        if( m_requests.size() != (uint)cnt ) {
           ready = false;
           break;
         }
@@ -329,7 +330,7 @@ bool FileCollaborationManager::acceptCollaboration( const FileCollaborationReque
         if( lm ) {
           int cnt = m_requests.size();
           lm->denyCollaboration();
-          if( m_requests.size() != cnt ) {
+          if( m_requests.size() != (uint)cnt ) {
             ready = false;
             break;
           }

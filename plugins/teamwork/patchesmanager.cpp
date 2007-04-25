@@ -817,7 +817,7 @@ void PatchesManager::slotDenyPatch() {
   }
 }
 
-void PatchesManager::restorePartialProjectSession( const QDomElement* el ) {
+void PatchesManager::restorePartialProjectSession( const QDomElement* /*el*/ ) {
   /*try {
     xmlDeserializeFromElementItem( el, "PatchesManager", NVP( m_config ) );
   } catch ( const QString & str ) {
@@ -825,7 +825,7 @@ void PatchesManager::restorePartialProjectSession( const QDomElement* el ) {
   }*/
 }
 
-void PatchesManager::savePartialProjectSession( QDomElement* el ) {
+void PatchesManager::savePartialProjectSession( QDomElement* /*el*/ ) {
   /*try {
     xmlSerializeToElementItem( el, "PatchesManager", NVP( m_config ) );
   } catch ( const QString & str ) {

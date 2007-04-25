@@ -132,7 +132,10 @@ const string& User::password() const {
 };
 
 void User::ban( bool banned ) {
-  rights_ |= BannedRights;
+  if( banned )
+    rights_ |= BannedRights;
+  else if( rights_ & BannedRights )
+    rights_ -= BannedRights;
 }
 
 bool User::banned() const {

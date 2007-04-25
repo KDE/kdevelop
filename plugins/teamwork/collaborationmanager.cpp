@@ -290,9 +290,9 @@ void CollaborationManager::processMessage( const CollaborationMessagePointer& ms
     m_fileCollaboration->processMessage( msg.cast< FileCollaborationMessage >() );
 }
 
-void CollaborationManager::restorePartialProjectSession( const QDomElement* el ) {}
+void CollaborationManager::restorePartialProjectSession( const QDomElement* /*el*/ ) {}
 
-void CollaborationManager::savePartialProjectSession( QDomElement* el ) {}
+void CollaborationManager::savePartialProjectSession( QDomElement* /*el*/ ) {}
 
 void setValueMessage( QVariant& v, const MessagePointer& msg );
 

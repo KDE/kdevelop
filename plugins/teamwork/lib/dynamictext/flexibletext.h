@@ -124,7 +124,7 @@ class FlexibleText {
       int currentLine = line;
       uint size = text_.size();
       while ( count > 0 ) {
-        if ( currentLine >= size )
+        if ( currentLine >= (int)size )
           return ret;
         int get
           = min( text_[ currentLine ] ->length() - column, count );
@@ -361,7 +361,7 @@ class FlexibleText {
         lineColMap_.changeIndexValue( line, -lengthLeft );
       } else if ( broken ) {
         ///Move  the next unaffected line up
-        if ( text_.size() > currentLine + 1 ) {
+        if ( (int)text_.size() > currentLine + 1 ) {
           currentLine++;
           uint len = text_[ currentLine ] ->length();
           text_[ line ] ->append( *text_[ currentLine ] );

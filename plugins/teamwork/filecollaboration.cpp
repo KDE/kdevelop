@@ -31,7 +31,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "filecollaboration.h"
 
 
-FileCollaboration::FileCollaboration( KDevTeamworkUserPointer user, FileCollaborationSession* session, const FileCollaborationRequestPointer& request ) : SafeLogger( session->manager() ->teamwork() ->logger() ), m_user( user ), m_session( session ),  /*m_dispatcher( *this ),*/ m_index( 0 ), m_userConnected( false ), m_invited( false ), m_connectionActive( false ) {
+FileCollaboration::FileCollaboration( KDevTeamworkUserPointer user, FileCollaborationSession* session, const FileCollaborationRequestPointer& request ) : SafeLogger( session->manager() ->teamwork() ->logger() ), m_user( user ), m_session( session ),  /*m_dispatcher( *this ),*/ m_index( 0 ), m_connectionActive( false ), m_userConnected( false ), m_invited( false ) {
   connect( session->manager(), SIGNAL( fillCollaboratingUserMenu( QMenu*, const UserPointer& ) ), this, SLOT( slotFillCollaboratingUserMenu( QMenu*, const UserPointer& ) ) );
 
   KDevTeamworkUserPointer::Locked l = user;
@@ -168,7 +168,7 @@ FileCollaborationSessionPointer FileCollaboration::session() const {
   return m_session;
 }
 
-void FileCollaboration::slotFillCollaboratingUserMenu( QMenu * menu, const UserPointer & user ) {}
+void FileCollaboration::slotFillCollaboratingUserMenu( QMenu * /*menu*/, const UserPointer & /*user*/ ) {}
 
 bool FileCollaboration::invited() const {
   return m_invited;
@@ -184,7 +184,7 @@ void FileCollaborationUserTreeAction::fillContextMenu( QMenu* menu ) {
     target->fillContextMenu( var, menu );
 }
 
-void FileCollaboration::fillContextMenu( int i, QMenu* menu ) {
+void FileCollaboration::fillContextMenu( int /*i*/, QMenu* menu ) {
   KDevTeamwork::self()->fillUserMenu( menu, user().cast<User>() );
   if( m_session->isMasterSession() ) {
     menu->addAction( m_session->getRemoveUserAction( m_user.cast<User>() ) );
@@ -242,7 +242,7 @@ void FileCollaboration::invite( const FileCollaborationRequestPointer& request, 
 
 }
 
-void FileCollaboration::close( const QString & reason ) {
+void FileCollaboration::close( const QString & /*reason*/ ) {
   KDevTeamworkUserPointer::Locked l = m_user;
   if ( l && l->online().session() ) {
     globalMessageSendHelper().send<FileCollaborationMessage>( l->online().session().getUnsafeData(), m_session->id(), FileCollaborationMessageData::CloseSession );

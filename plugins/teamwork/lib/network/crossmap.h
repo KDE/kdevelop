@@ -263,9 +263,9 @@ class CrossMap {
         Self* map_;
         Value* value_;
       public:
-        ValueEditor( Self* map, const Id id, Value* value ) : map_( map ), id_( id ), value_( value ) {}
+        ValueEditor( Self* map, const Id id, Value* value ) : id_( id ), map_( map ), value_( value ) {}
 
-        ValueEditor( const ValueEditor& e ) : map_( e.map_ ), value_( e.value_ ), id_( e.id_ ) {
+        ValueEditor( const ValueEditor& e ) : id_( e.id_ ), map_( e.map_ ), value_( e.value_ ) {
           const_cast<ValueEditor&>( e ).id_ = 0; ///This is done so the destruction of the other ValueEditor doesn't update the map
         }
 

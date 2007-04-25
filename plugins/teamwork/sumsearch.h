@@ -200,7 +200,7 @@ template <int maxDepth, typename SumType, int order, bool dummy>
 class DifferenceSumReference {
   public:
     template <class Archive>
-    void serialize( Archive& arch, const uint version ) {}
+    void serialize( Archive& /*arch*/, const uint /*version*/ ) {}
 }
 ;
 
@@ -216,7 +216,7 @@ class SumReference {
     SumReference() : valid_( false ) {}
 
     template <class Archive>
-    void serialize( Archive& arch, const uint version ) {
+    void serialize( Archive& arch, const uint /*version*/ ) {
       arch & valid_ & leftMarker & rightMarker;
       arch & nextOrder_;
     }

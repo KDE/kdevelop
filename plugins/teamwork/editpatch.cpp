@@ -64,7 +64,7 @@ QString getDefaultExtension( const QStringList& patterns );
 
 Q_DECLARE_METATYPE( const Diff2::DiffModel* );
 
-EditPatch::EditPatch( PatchesManager* parent, LocalPatchSourcePointer patch, bool local ) : SafeLogger( parent->teamwork() ->logger(), "EditPatch: " ), QObject( parent ), m_parent( parent ), m_editingPatch( patch ), m_editPatchLocal( local ), m_editDlg( 0 ), m_actionState( LocalPatchSource::Unknown ), m_started( false ), m_reversed( false ), m_isSource( false ) {
+EditPatch::EditPatch( PatchesManager* parent, LocalPatchSourcePointer patch, bool local ) : QObject( parent ), SafeLogger( parent->teamwork() ->logger(), "EditPatch: " ), m_actionState( LocalPatchSource::Unknown ), m_parent( parent ), m_editingPatch( patch ), m_editPatchLocal( local ), m_editDlg( 0 ), m_reversed( false ), m_started( false ), m_isSource( false ) {
   m_updateKompareTimer = new QTimer( this );
   m_updateKompareTimer->setSingleShot( true );
   connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
@@ -306,7 +306,7 @@ void EditPatch::slotUnapplyEditPatch() {
   emit stateChanged( this );
 }
 
-SafeSharedPtr<PatchMessage> EditPatch::getPatchMessage( PatchRequestData::RequestType type ) {
+SafeSharedPtr<PatchMessage> EditPatch::getPatchMessage( PatchRequestData::RequestType /*type*/ ) {
   try {
     LocalPatchSourcePointer::Locked lpatch = patchFromEdit();
     if ( !lpatch )

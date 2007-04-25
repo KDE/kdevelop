@@ -253,7 +253,7 @@ void VectorTimestampEditor::fillWidgets() {
   uint cnt = m_timestamps.count();
   uint sz = m_text->state().size();
   if( cnt < sz ) {  ///Add missing widgets
-    for( int a = 0; a < sz - cnt; a++ ) {
+    for( uint a = 0; a < sz - cnt; a++ ) {
       m_timestamps << new TimestampEditor( new VectorTimestampEditorLogger( this ), this, a+cnt );
     }
   }

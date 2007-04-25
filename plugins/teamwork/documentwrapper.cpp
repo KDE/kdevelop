@@ -82,7 +82,20 @@ uint DocumentWrapper::id() const {
   return m_id;
 }
 
-DocumentWrapper::DocumentWrapper( uint id, const LoggerPointer& logger, QString fileName, uint ownIndex, bool readFile_, FileCollaborationSession* session, bool fromBuffer ) : SafeLogger( logger, ~( "document-wrapper \"" + fileName + "\": " ) ), m_fileName( fileName ), m_document( 0 ), m_text( new QDynamicText() ), m_block( false ), m_realFile( readFile_ ), m_ownIndex( ownIndex ), m_hadError( false ), m_disabled( false ), m_id( id ), m_session( session ), m_dispatcher( *this ), m_dead( false ) {
+DocumentWrapper::DocumentWrapper( uint id, const LoggerPointer& logger, QString fileName, uint ownIndex, bool readFile_, FileCollaborationSession* session, bool fromBuffer ) :
+    SafeLogger( logger, ~( "document-wrapper \"" + fileName + "\": " ) ),
+                m_text( new QDynamicText() ),
+                m_block( false ),
+                m_realFile( readFile_ ),
+                m_fileName( fileName ),
+                m_document( 0 ), 
+                m_session( session ),
+                m_ownIndex( ownIndex ),
+                m_id( id ),
+                m_hadError( false ),
+                m_disabled( false ),
+                m_dead( false ),
+                m_dispatcher( *this ){
   //openDocument();
   out( Logger::Debug ) << "DocumentWrapper for " << fileName << "created: " << ownIndex << " " << readFile_;
   if ( m_realFile )
@@ -108,7 +121,7 @@ void DocumentWrapper::updateTree( QModelIndex& i, QStandardItemModel* model ) {
   model->setData( i, v, Qt::UserRole );
 }
 
-void DocumentWrapper::fillContextMenu( int var, QMenu* menu ) {
+void DocumentWrapper::fillContextMenu( int /*var*/, QMenu* menu ) {
   QMenu * m = new QMenu( menu );
   m->setTitle( "Save Visible State" );
   m->addAction( "As Patch", this, SLOT( saveAsPatch() ) );
@@ -190,7 +203,7 @@ bool OutputFileWriter::failed() const {
   return m_failed;
 }
 
-void OutputFileWriter::receivedStdout( K3Process *proc, char *buffer, int buflen ) {
+void OutputFileWriter::receivedStdout( K3Process */*proc*/, char *buffer, int buflen ) {
   if ( m_file.write( buffer, buflen ) != buflen ) {
     m_failed = true;
   }
@@ -527,7 +540,7 @@ void DocumentWrapper::textChanged ( KTextEditor::Document * document, const KTex
 }
 
 ///All the line/column to/from linear conversion is very slow and should be done different
-void DocumentWrapper::textRemoved ( KTextEditor::Document * document, const KTextEditor::Range & range ) {
+void DocumentWrapper::textRemoved ( KTextEditor::Document * /*document*/, const KTextEditor::Range & range ) {
   if ( m_block )
     return ;
   int start = m_text->text().lineColumnToLinear( range.start().line(), range.start().column() );

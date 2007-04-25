@@ -76,7 +76,7 @@ void MessageSendManager::disconnectDocument() {
   m_lastDocument = 0;
 }
 
-void MessageSendManager::documentDestroyed( QObject* obj ) {
+void MessageSendManager::documentDestroyed( QObject* /*obj*/ ) {
   m_lastDocument = 0;
 }
 

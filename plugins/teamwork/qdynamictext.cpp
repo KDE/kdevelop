@@ -26,7 +26,7 @@ void QDynamicText::notifyStateChanged() {
   emit stateChanged( *this );
 }
 
-QDynamicText::QDynamicText( const QDynamicText& rhs ) : DynamicText( rhs ) {
+QDynamicText::QDynamicText( const QDynamicText& rhs ) : QObject(), DynamicText( rhs ) {
 }
 
 QDynamicText& QDynamicText::operator = ( const QDynamicText& rhs ) {

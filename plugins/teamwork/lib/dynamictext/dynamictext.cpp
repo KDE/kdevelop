@@ -65,7 +65,7 @@ bool Replacement::apply( TextType& text, const OffsetMap& outerOffset, OffsetMap
   if ( m_enabled ) {
     int pos = outerOffset( contextOffset( m_replacement.m_position ) );
     DYN_VERIFY_SMALLERSAME( 0, pos );
-    DYN_VERIFY_SMALLERSAME( ( uint ) pos, text.length() );
+    DYN_VERIFY_SMALLERSAME( (int)pos, (int)text.length() );
     DYN_VERIFY_SAME( text.substr( pos, m_replacement.m_oldText.length() ), m_replacement.m_oldText );
 
     text.replace( pos, m_replacement.m_oldText.length(), m_replacement.m_newText );
@@ -81,7 +81,7 @@ bool Replacement::unApply( TextType& text, const OffsetMap& outerOffset, OffsetM
   if ( m_enabled ) {
     int pos = outerOffset( contextOffset( m_replacement.m_position ) );
     DYN_VERIFY_SMALLERSAME( 0, pos );
-    DYN_VERIFY_SMALLERSAME( ( uint ) pos, text.length() );
+    DYN_VERIFY_SMALLERSAME( (int)pos, (int)text.length() );
     DYN_VERIFY_SAME( text.substr( pos, m_replacement.m_newText.length() ), m_replacement.m_newText );
 
     text.replace( pos, m_replacement.m_newText.length(), m_replacement.m_oldText );
@@ -1044,17 +1044,17 @@ bool DynamicText::changeStateInternal( const VectorTimestamp& state, bool /*forc
 }
 
 void DynamicText::cut() {
-  for ( int a = 0; a < m_applied.size(); a++ ) {
+  for ( uint a = 0; a < m_applied.size(); a++ ) {
     if ( m_applied[ a ].last )
       m_applied[ a ].last->setNext( 0 );
   }
-  for ( int a = 0; a < m_unApplied.size(); a++ ) {
+  for ( uint a = 0; a < m_unApplied.size(); a++ ) {
     m_unApplied[ a ].first = 0;
     m_unApplied[ a ].last = 0;
   }
 }
 
-DynamicText::DynamicText( const VectorTimestamp& initialState, const String& initialText ) : m_state( initialState ), m_initialState( initialState ), m_text( initialText ), m_initialText( initialText ) {
+DynamicText::DynamicText( const VectorTimestamp& initialState, const String& initialText ) : m_text( initialText ), m_initialText( initialText ), m_state( initialState ), m_initialState( initialState ) {
   m_dummy = new Replacement();
 }
 

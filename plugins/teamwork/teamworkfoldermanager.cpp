@@ -37,7 +37,7 @@ QString TeamworkFolderManager::workspaceDirectory() {
 TeamworkFolderManager::TeamworkFolderManager() {
   m_self = this;
   if( KDevTeamwork::core()->projectController()->projects().isEmpty() ) {
-    kdDebug() << "ERROR: Teamwork-plugin started with no project open";
+    kDebug() << "ERROR: Teamwork-plugin started with no project open";
     return;
   }
   KUrl u = KDevTeamwork::core()->projectController()->projects().front()->folder();

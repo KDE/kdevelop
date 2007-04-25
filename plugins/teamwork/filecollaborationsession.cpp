@@ -46,8 +46,13 @@ CROSSMAP_KEY_EXTRACTOR( DocumentWrapperPointer, uint, 0, value->id() );
 FileCollaborationSession::FileCollaborationSession( QString name, CollabFileList files, FileCollaborationManager* manager, uint primaryIndex, CollabSessionId id ) :
     SafeLogger( manager->teamwork() ->logger(), "in FileCollaborationSession:" ),
     m_manager( manager ),
-    m_isMasterSession( primaryIndex == 0 ), m_primaryIndex( primaryIndex ), m_indexCount( primaryIndex ? 0 : 1 ), m_wrapperIndexCount( primaryIndex ? 0 : 1 ),
-m_name( name ), m_dispatcher( *this ), m_allowSentDocuments( false ) {
+    m_allowSentDocuments( false ),
+    m_isMasterSession( primaryIndex == 0 ),
+    m_primaryIndex( primaryIndex ),
+    m_indexCount( primaryIndex ? 0 : 1 ),
+    m_wrapperIndexCount( primaryIndex ? 0 : 1 ),
+    m_name( name ),
+    m_dispatcher( *this ) {
   m_publishFileListTimer = new QTimer( this );
   connect( m_publishFileListTimer, SIGNAL( timeout() ), this, SLOT( slotPublishFileList() ) );
   m_publishFileListTimer->setSingleShot( true );
@@ -62,8 +67,10 @@ m_name( name ), m_dispatcher( *this ), m_allowSentDocuments( false ) {
 
   if ( id != 0 )
     m_id = id;
-  else
-    m_id = *( ( CollabSessionId* ) & ( KRandom::randomString( 8 ).toLatin1() [ 0 ] ) ); ///Not a good way of generating a 64-bit random-number..
+  else {
+    QString str = KRandom::randomString( 8 ).toLatin1();
+    m_id = *( ( CollabSessionId* ) & ( str.toAscii().data() [ 0 ] ) ); ///Not a good way of generating a 64-bit random-number..
+  }
 
   out( Logger::Debug ) << "starting session";
 
@@ -89,7 +96,6 @@ void FileCollaborationSession::setAllowSentDocuments( bool allow ) {
 
 
 bool FileCollaborationSession::synchronizeFile( const FileCollaborationPointer& collab, const DocumentWrapperPointer& wrapper ) {
-  bool sendDynamicText = true;
   return wrapper->synchronize( collab->user() );
 }
 
@@ -147,7 +153,7 @@ const FileCollaborationSession::FileSet& FileCollaborationSession::files() const
 }
 
 
-void FileCollaborationSession::fillContextMenu( int i, QMenu* menu ) {
+void FileCollaborationSession::fillContextMenu( int /*i*/, QMenu* menu ) {
   IDocument * d = KDevTeamwork::documentController() ->activeDocument();
   if ( d && d->textDocument() ) {
     KUrl u = TeamworkFolderManager::workspaceRelative( d->url().path() );
@@ -269,7 +275,6 @@ void FileCollaborationSession::updateTree( QModelIndex& i, QStandardItemModel* m
     ///Add missing files
     for ( FileSet::ValueMap::iterator it = m_files.begin(); it != m_files.end(); ++it ) {
       if ( !positions.contains( ( *it ).second.value ) ) {
-        int num = model->rowCount( i );
         model->insertRow( 0, i ); ///Documents are inserted at the top, users at the bottom.
         QModelIndex ind = model->index( 0, 0, i );
         ;
@@ -551,7 +556,7 @@ void FileCollaborationSession::publishEdit( const VectorTimestamp& state, const 
   }
 }
 
-void FileCollaborationSession::slotFillCollaboratingUserMenu( QMenu * menu, const UserPointer & user ) {}
+void FileCollaborationSession::slotFillCollaboratingUserMenu( QMenu * /*menu*/, const UserPointer & /*user*/ ) {}
 
 CollabSessionId FileCollaborationSession::id() const {
   return m_id;
@@ -626,7 +631,7 @@ uint FileCollaborationSession::allocateWrapperIndex() {
 
 }
 
-void FileCollaborationSession::kickUser( const KDevTeamworkUserPointer & user ) {}
+void FileCollaborationSession::kickUser( const KDevTeamworkUserPointer & /*user*/ ) {}
 
 QString FileCollaborationSession::name() const {
   return m_name;
@@ -656,7 +661,7 @@ void FileCollaborationSession::processMessage( const FileCollaborationMessagePoi
     err() << "could not process message: " << str;
   }
 }*/
-int FileCollaborationSession::dispatchMessage( MessageInterface* msg ) {
+int FileCollaborationSession::dispatchMessage( MessageInterface* /*msg*/ ) {
   err() << "got unknown message-type";
   return 1;
 }

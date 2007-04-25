@@ -23,7 +23,7 @@
 
 Q_DECLARE_METATYPE( MessagePointer );
 
-FileCollaborationRequestData::FileCollaborationRequestData( FileCollaboration* collab, uint index, uint senderIndex ) : m_state( Unknown ), m_collab( collab ), m_index( index ), m_senderIndex( senderIndex ), m_isAutomatic( false ), m_acceptAction( 0 ), m_denyAction( 0 ) {
+FileCollaborationRequestData::FileCollaborationRequestData( FileCollaboration* collab, uint index, uint senderIndex ) : m_state( Unknown ), m_index( index ), m_senderIndex( senderIndex ), m_isAutomatic( false ), m_collab( collab ), m_acceptAction( 0 ), m_denyAction( 0 ) {
 
   if ( collab ) {
     m_files = collab->session() ->fileNames();
@@ -179,11 +179,11 @@ MessageInterface::ReplyResult FileCollaborationRequest::gotReply( const Dispatch
     return ReplyResult( handled );
 };
 
-void FileCollaborationRequestData::dispatchSignal( const AcceptSignal& sig ) {
+void FileCollaborationRequestData::dispatchSignal( const AcceptSignal& /*sig*/ ) {
   acceptCollaboration();
 }
 
-void FileCollaborationRequestData::dispatchSignal( const DenySignal& sig ) {
+void FileCollaborationRequestData::dispatchSignal( const DenySignal& /*sig*/ ) {
   denyCollaboration();
 }
 

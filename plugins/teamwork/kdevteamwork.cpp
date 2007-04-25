@@ -208,15 +208,15 @@ MessageManager* KDevTeamwork::messageManager() {
 
 KDevTeamwork::KDevTeamwork( KDevTeamworkPart *part, QWidget *parent ) :
     m_logger( new KDevTeamworkLogger( this ) ),
+m_destroyed( false ),
 m_part( part ),
 m_active( false ),
 m_serverActive( false ),
 m_patchesManager( this ),
 m_collaborationManager( this ),
 m_messageManager( this ),
-m_currentLogFilter( ( LogLevel ) ( Error | Warning | Info ) ),
 m_messageSendManager( *m_widgets ),
-m_destroyed( false )
+m_currentLogFilter( ( LogLevel ) ( Error | Warning | Info ) )
 {
   m_self = this;
   
@@ -362,7 +362,7 @@ KDevTeamwork::~KDevTeamwork() {
     l->invalidateTeamwork();
   } else {
     ///error
-    kdDebug() << "error while destruction of KDevTeamwork: could not lock client-pointer. Client cannot be destroyed.";
+    kDebug() << "error while destruction of KDevTeamwork: could not lock client-pointer. Client cannot be destroyed.";
   }
 
   m_logger.lock() ->invalidate();
@@ -600,7 +600,7 @@ void KDevTeamwork::connectServer() {
     if ( m_client ) {
       TeamworkClientPointer::Locked l = m_client;
       if ( l ) {
-        kdDebug() << "connecting to \"" << toQ( stringToAddr( txt ) ) << "\":" << stringToPort( txt ) << endl;
+        kDebug() << "connecting to \"" << toQ( stringToAddr( txt ) ) << "\":" << stringToPort( txt ) << endl;
 
         QString userName = m_widgets->loginName->text();
 
@@ -660,7 +660,7 @@ void KDevTeamwork::log( const QString & str, LogLevel level ) {
       m_widgets->logList->setRowHidden( 0 , true );*/
 
   filterLog( 3 );
-  //kdDebug() << "log: \"" << str << "\" level: " << level << endl;
+  //kDebug() << "log: \"" << str << "\" level: " << level << endl;
 }
 
 void KDevTeamwork::err( const QString& str ) {
@@ -728,10 +728,10 @@ void KDevTeamworkLogger::log( const std::string& str , Level lv ) {
       return ;
     }
 
-    kdDebug() << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"" << endl;
+    kDebug() << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"" << endl;
     QMetaObject::invokeMethod( m_teamwork, "guiLog", Qt::QueuedConnection, Q_ARG( QString, toQ( str ) ), Q_ARG( int, level ) );
   } else {
-    kdDebug() << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"" << endl;
+    kDebug() << "log-level: \"" << ~levelToString( lv ) << "\" message:  \"" << toQ( str ) << "\"" << endl;
   }
 }
 
@@ -793,7 +793,7 @@ void KDevTeamwork::guiUserDisconnected( Teamwork::UserPointer user ) {
     m_widgets->messageTargetUser->removeItem( i );
 
 
-  //kdDebug() << "disconnecting user is not in list: " << name << endl;
+  //kDebug() << "disconnecting user is not in list: " << name << endl;
 }
 
 void KDevTeamwork::guiServerConnected( Teamwork::ClientSessionDesc /*session*/, Teamwork::ServerInformation server ) {
@@ -831,7 +831,7 @@ void KDevTeamwork::guiServerDisconnected( Teamwork::ClientSessionDesc /*session*
     }
   }
 
-  kdDebug() << "disconnecting server is not in list: " << desc << endl;
+  kDebug() << "disconnecting server is not in list: " << desc << endl;
 }
 
 QIcon KDevTeamwork::iconFromUser( User* user, K3Icon::Group size ) {
@@ -1844,6 +1844,7 @@ void KDevTeamwork::sendMessageButton() {
     err( "could not lock the client-handler while sending message" );
   }
 }
+
 
 void KDevTeamwork::handleTextMessage( SafeSharedPtr<KDevTeamworkTextMessage> smsg ) {
   LockedSharedPtr<KDevTeamworkTextMessage> msg = smsg;

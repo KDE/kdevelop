@@ -125,6 +125,8 @@ KMimeType::Ptr LocalPatchSource::getMimeType() {
 class AbstractPatchArchiver {
   virtual void put( QByteArray& data );
   virtual void put( int i );
+  virtual ~AbstractPatchArchiver() {
+  };
   };
   /*
 template<class Archive>
@@ -142,7 +144,7 @@ class PatchArchiver {
   }
   };
   */
-void PatchData::transferData( KIO::Job* job, const QByteArray& data ) {
+void PatchData::transferData( KIO::Job* /*job*/, const QByteArray& data ) {
   std::vector<char> vec;
   vec.resize( data.size() );  ///a serialization-function for QByteArray should be written instead of moving the data through std::vector
   memcpy( &(vec[0]), data.data(), data.size() );
@@ -313,7 +315,7 @@ template void PatchData::load( boost::archive::binary_iarchive& arch, const uint
 template void PatchData::saveInternal( boost::archive::binary_oarchive& arch, const uint );
 */
 
-void PatchData::receivedStdout( K3Process *proc, char *buffer, int /*buflen*/ ) {
+void PatchData::receivedStdout( K3Process */*proc*/, char *buffer, int /*buflen*/ ) {
   if ( !currentArchive || errored ) {
     if ( !errored ) {
       log() << "received unexpected stdout-data";
@@ -356,7 +358,7 @@ QStringList splitArgs( const QString& str ) {
   return ret;
 }
 
-PatchRequestData::PatchRequestData( const LocalPatchSourcePointer& id, KDevTeamwork* tw, RequestType req ) : requestType_( req ), stat( Waiting ), emitter( new SafeTeamworkEmitter( tw ) ), request_( id ) {
+PatchRequestData::PatchRequestData( const LocalPatchSourcePointer& id, KDevTeamwork* tw, RequestType req ) : request_( id ), requestType_( req ), stat( Waiting ), emitter( new SafeTeamworkEmitter( tw ) ) {
   LocalPatchSourcePointer::Locked l = id;
   if( l ) {
     ident_ = l->identity();
