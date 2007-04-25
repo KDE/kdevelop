@@ -1,10 +1,10 @@
 
 PROJECT(network)
 
-#include_directories(
-#        ${COMMONCPP2_INCLUDE_DIRS}
-#        ${Boost_INCLUDE_DIRS}
-#    )
+include_directories(
+        ${COMMONCPP2_INCLUDE_DIRS}
+        ${Boost_INCLUDE_DIRS}
+    )
 
 
 SET(libfiles
