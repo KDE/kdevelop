@@ -16,10 +16,10 @@
 #include  <QWidget>
 #include <QObject>
 #include "kdevteamwork_messages.h"
-#include "kdevteamwork_textmessage.ui.h"
-#include "kdevteamwork_indocumentcontextlines.ui.h"
-#include "kdevteamwork_indocumentmessagebuttons.ui.h"
-#include "kdevteamwork_indocumentmessagestate.ui.h"
+#include "ui_kdevteamwork_textmessage.h"
+#include "ui_kdevteamwork_indocumentcontextlines.h"
+#include "ui_kdevteamwork_indocumentmessagebuttons.h"
+#include "ui_kdevteamwork_indocumentmessagestate.h"
 #include <klocalizedstring.h>
 #include <QPointer>
 #include "kdevteamwork.h"

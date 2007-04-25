@@ -16,8 +16,8 @@
 #define QDYNAMICTEXT_H
 
 #include <QObject>
-#include  <boost/serialization/base_object.hpp>
-#include <dynamictext.h>
+#include <boost/serialization/base_object.hpp>
+#include "dynamictext/dynamictext.h"
 #include <boost/serialization/export.hpp>
 
 class QDynamicText : public QObject, public DynamicText {

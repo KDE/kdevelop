@@ -26,7 +26,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <ktexteditor/document.h>
 #include <iproject.h>
 #include <idocument.h>
-    
+
 #include <QtCore/qdebug.h>
 #include <QAction>
 #include <QCursor>
@@ -38,21 +38,21 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QPersistentModelIndex>
 #include <QWidget>
 
-#include "common.h"
-#include "message.h"
-#include "teamworkmessages.h"
+#include "network/common.h"
+#include "network/message.h"
+#include "network/teamworkmessages.h"
 #include "collaborationmanager.h"
 #include "messagemanager.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_messageshower.h"
-#include "teamworkserver.h"
-#include "teamworkclient.h"
+#include "network/teamworkserver.h"
+#include "network/teamworkclient.h"
 #include "kdevteamwork_messages.h"
-#include "message.h"
+#include "network/message.h"
 #include "kdevteamwork_helpers.h"
-#include "kdevteamwork_list.ui.h"
+#include "ui_kdevteamwork_list.h"
 #include "kdevteamwork_helpers.h"
-#include "kdevteamwork_interface.ui.h"
+#include "ui_kdevteamwork_interface.h"
 #include "messageusertab.h"
 #include "teamworkfoldermanager.h"
 #include "messagesendmanager.h"
@@ -61,7 +61,7 @@ using namespace KDevelop;
 using namespace Teamwork;
 
 ///@todo make sure fromUtf8(..) and toUtf8(..) is used everywhere, especially in all the messages
-    
+
 const int messageSendTimeout = 3000;
 
 KDevTeamwork* KDevTeamwork::m_self = 0;
@@ -219,7 +219,7 @@ m_messageSendManager( *m_widgets ),
 m_currentLogFilter( ( LogLevel ) ( Error | Warning | Info ) )
 {
   m_self = this;
-  
+
   m_widget = parent;
 
   m_widgets->setupUi( parent );
@@ -240,7 +240,7 @@ m_currentLogFilter( ( LogLevel ) ( Error | Warning | Info ) )
   m_widgets->answeringToButton->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
   m_widgets->answeringToButton->setArrowType( Qt::DownArrow );
   m_widgets->answeringToButton->setPopupMode( QToolButton::InstantPopup );
-  
+
   /*m_messageFilterMenu = new QMenu( i18n( "Filter" ), m_widgets->messageFilter );
 
   m_widgets->messageFilter->setMenu( m_messageFilterMenu );*/
@@ -356,7 +356,7 @@ KDevTeamwork::~KDevTeamwork() {
   delete m_updateTimer;
   delete m_updateAnswerTimer;
   delete m_replyWaitingTimeout;
-  
+
   if ( TeamworkClientPointer::Locked l = m_client ) {
 
     l->invalidateTeamwork();
@@ -1014,18 +1014,18 @@ void KDevTeamwork::sendMessageToUser() {
 
 
 void KDevTeamwork::contextMenu( const QPoint& p, const QModelIndex& index ) {
-  
+
   if(!index.isValid() )
     return;
   QMenu menu;
-  
+
   QVariant v = index.model() ->data( index, Qt::UserRole );
   if ( v.canConvert<UserPointer>() ) {
     fillUserMenu( &menu, v.value<UserPointer>() );
     getPatchesList( v.value<UserPointer>() );
 
   }
-  
+
   if ( v.canConvert<LocalPatchSourcePointer>() ) {
     m_patchesManager->fillDeveloperActions( index, &menu );
   }
@@ -1036,7 +1036,7 @@ void KDevTeamwork::contextMenu( const QPoint& p, const QModelIndex& index ) {
 void KDevTeamwork::maybeDeveloperContextMenu() {
   if ( m_contextMenuIndex.get() ) {
     contextMenu( QCursor::pos(), *m_contextMenuIndex );
-  } 
+  }
 }
 
 void KDevTeamwork::developerClicked( const QModelIndex& index ) {
@@ -1470,7 +1470,7 @@ void KDevTeamwork::dispatchMessage( SafeSharedPtr<KDevSystemMessage> msg ) {
       m_answerTo = 0;
       m_updateAnswerTimer->start( 300 );
     }
-    
+
     MessagePointer isReplyTo = l->info().replyToMessage();
     switch ( l->message() ) {
       case KDevSystemMessage::CollaborationAccepted: {
@@ -1759,7 +1759,7 @@ void KDevTeamwork::sendMessageButton() {
   MessagePointer::Locked lmsg = m_answerTo;
 
   if( txt.isEmpty() ) return;
-  
+
   UserPointer user = currentMessageTargetUser();
   if( !user ) {
     log( "sendMessageButton(): target-user not available", Error );

@@ -15,14 +15,14 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef DOCUMENT_WRAPPER_H
 #define DOCUMENT_WRAPPER_H
 
-#include "vectortimestamp.h"
+#include "dynamictext/vectortimestamp.h"
 #include <QObject>
-#include "pointer.h"
-#include "weakpointer.h"
+#include "network/pointer.h"
+#include "network/weakpointer.h"
 #include "safelogger.h"
-#include <map.h>
+#include <map>
 #include <KParts/MainWindow>
-    
+
 #include <autoconstructpointer.h>
 #include "filesynchronizemessage.h"
 #include <QFile>
@@ -76,7 +76,7 @@ class DocumentWrapper : public QObject, public SafeLogger, public Shared {
   public:
     ///If readFile is true, the file is read from disk. Else we wait for the file from the other side. May throw QString on error.
     BIND_LIST_3( Messages, FileEditMessage, FileEditRejectMessage, FileSynchronize );
-    
+
     DocumentWrapper( uint id, const LoggerPointer& logger, QString fileName, uint ownIndex, bool readFile, FileCollaborationSession* session, bool fromBuffer );
 
     QString fileName() const;
@@ -108,18 +108,18 @@ class DocumentWrapper : public QObject, public SafeLogger, public Shared {
     void setDisabled( bool disabled );
 
     bool disabled() const;
-    
+
     QIcon icon() const;
 
     bool synchronize( const UserPointer& user );
-    
+
   signals:
     void publishEdit( const VectorTimestamp& state, const SimpleReplacement& replacement, DocumentWrapper* sender );
 
   public slots:
     void saveAsBufferFile();
     LocalPatchSourcePointer saveAsPatch( bool addToList = true, bool edit = true );
-  
+
   private slots:
     void remove();
     void toggleEnabled();
@@ -154,7 +154,7 @@ class DocumentWrapper : public QObject, public SafeLogger, public Shared {
     QDynamicTextPointer m_text;
 
     bool m_block;
-    
+
     bool m_realFile;
     QString m_fileName; ///Relative path of the file(from project-dir)
     KDevelop::IDocument* m_document;

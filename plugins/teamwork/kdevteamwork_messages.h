@@ -18,15 +18,15 @@ email                : david.nolden.kdevelop@art-master.de
 
 //#include <boost/serialization/extended_type_info_typeid.hpp>
 
-#include "common.h"
-#include "message.h"
-#include "teamworkmessages.h"
+#include "network/common.h"
+#include "network/message.h"
+#include "network/teamworkmessages.h"
 #include <QString>
 #include <QDateTime>
 #include "utils.h"
 #include <QIcon>
 #include <QVariant>
-#include "easymessage.h"
+#include "network/easymessage.h"
 #include <string>
 #include <boost/serialization/level.hpp>
 #include "loglevel.h"
@@ -110,11 +110,11 @@ class KDevTeamworkTextMessage : public TextMessage, public AbstractGUIMessage {
     void setAnswered( bool );
 
     bool answered() const;
-    
+
     virtual void serialize( OutArchive& arch );
 
     virtual bool needReply() const;
-    
+
     QDateTime creationTime();
 
     virtual bool canShowInWidget();
@@ -131,7 +131,7 @@ class KDevTeamworkTextMessage : public TextMessage, public AbstractGUIMessage {
 class FailureMessage : public KDevTeamworkTextMessage {
   public:
   FailureMessage( const QString& text, const MessagePointer& msg );
-  
+
   virtual QIcon messageIcon() const;
 };
 

@@ -19,15 +19,15 @@
 #include <QList>
 #include <QIcon>
 
-#include "message.h"
-#include "pointer.h"
-#include "weakpointer.h"
+#include "network/message.h"
+#include "network/pointer.h"
+#include "network/weakpointer.h"
 
 #include "filecollaborationmessages.h"
 #include "collaborationmanager.h"
-#include "crossmap.h"
+#include "network/crossmap.h"
 #include "safelogger.h"
-
+#include "verify.h"
 
 namespace KTextEditor {
 class Document;
@@ -71,11 +71,11 @@ class FileCollaboration : public QObject, public Shared, public SafeLogger {
 
     ///@return whether the connection is active
     bool connectionActive() const;
-    
+
     void close( const QString& reason );
 
     QIcon icon() const;
-    
+
   signals:
     void connectionResult( FileCollaboration*, bool ); ///If true, connection was successful. If false, connection failed.
 
@@ -109,7 +109,7 @@ class FileCollaboration : public QObject, public Shared, public SafeLogger {
 
     bool m_connectionActive;
     bool m_userConnected;
-    bool m_invited; 
+    bool m_invited;
 
     virtual std::string logPrefix();
 

@@ -1,6 +1,6 @@
 #include <QIcon>
 #include "kdevteamwork_helpers.h"
-#include "message.h"
+#include "network/message.h"
 
 IconCache* IconCache::m_instance = 0;
 
@@ -54,7 +54,7 @@ IconCache::IconCache() {
 	maps_[ "filecollaborationrequest_in_failed" ] = "remove";
 	maps_[ "filecollaborationrequest_in_failed" ] = "remove";
 	maps_[ "fileusercollaboration_inactive" ] = "presence_unknown";
-	
+
 	maps_[ "patch" ] = "txt2";
 	maps_[ "failed" ] = "fileclose";
 

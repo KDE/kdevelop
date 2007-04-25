@@ -19,8 +19,8 @@
 
 #include "offsetutils.h"
 #include "verify.h"
-#include "sharedptr.h"
-#include "weakpointer.h"
+#include "network/sharedptr.h"
+#include "network/weakpointer.h"
 #include "vectortimestamp.h"
 
 ///Check whether these are useful for something or should be completely removed
@@ -57,7 +57,7 @@ class Replacement : public WeakShared {
 
     ///Returns a map that simulates applying the replacement. of( x -> y ) with x pre-state of this state, and y state of this.
 		OffsetMap offset( const OffsetMap& ofs = OffsetMap() );
-		
+
 		ReplacementPointer next() const;
 		ReplacementPointer prev() const;
 

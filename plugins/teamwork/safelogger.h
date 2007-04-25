@@ -15,8 +15,8 @@
 #ifndef SAFELOGGER_H
 #define SAFELOGGER_H
 
-#include "pointer.h"
-#include "logger.h"
+#include "network/pointer.h"
+#include "network/logger.h"
 #include <string>
 #include <vector>
 
@@ -28,9 +28,9 @@ class LogSuffix;
 class SafeLogger {
   public:
     friend class LogSuffix;
-    
+
     SafeLogger( Teamwork::LoggerPointer logger, std::string logPrefix = "" );
-    
+
     virtual ~SafeLogger();
 
     ///Returns a temporary stream-object(see documentation of Teamwork::LoggerPrinter) for the given log-level.

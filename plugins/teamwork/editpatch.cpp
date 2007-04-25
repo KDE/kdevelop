@@ -12,6 +12,8 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "editpatch.h"
+
 #include <kmimetype.h>
 #include <kmimetypechooser.h>
 #include <kmimetypetrader.h>
@@ -37,17 +39,17 @@ email                : david.nolden.kdevelop@art-master.de
 #include "messagemanager.h"
 #include "kdevteamwork_helpers.h"
 #include "teamworkfoldermanager.h"
-#include "kde_terminal_interface.h"
+#include <kde_terminal_interface.h>
 #include <kparts/part.h>
 #include <kparts/factory.h>
-#include "editpatch.h"
-#include "komparemodellist.h"
-#include "kompare.h"
-#include "kmessagebox.h"
+
+#include "libdiff2/komparemodellist.h"
+#include "libdiff2/kompare.h"
+#include <kmessagebox.h>
 #include <QMetaType>
 #include <QVariant>
-#include "diffsettings.h"
-#include "ktexteditor/cursor.h"
+#include "libdiff2/diffsettings.h"
+#include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/markinterface.h>
@@ -59,7 +61,7 @@ email                : david.nolden.kdevelop@art-master.de
 #define CATCHLIBDIFF
 
 using namespace KDevelop;
-    
+
 QString getDefaultExtension( const QStringList& patterns );
 
 Q_DECLARE_METATYPE( const Diff2::DiffModel* );
@@ -547,7 +549,7 @@ void EditPatch::slotToFile() {
     l->setFileName( ~TeamworkFolderManager::relative( f ) );
   else
     l->setFileName( "" );
-    
+
   m_editPatch.tabWidget->setCurrentIndex( 0 );
   m_editPatch.filename->setUrl( f );
   fillEditFromPatch();

@@ -15,7 +15,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "collaborationmanager.h"
 #include "filecollaborationmanager.h"
 #include "kdevteamwork_user.h"
-#include  <sstream>
+#include <sstream>
 #include <QAction>
 #include <QMenu>
 #include "kdevutils.h"
@@ -29,9 +29,9 @@ email                : david.nolden.kdevelop@art-master.de
 #include "kdevteamwork_helpers.h"
 #include <QStandardItemModel>
 #include <QModelIndex>
-#include "filecollaborationsession.h" 
+#include "filecollaborationsession.h"
 //#include "FileSynchronize.h"
-#include "verify.h"
+#include "dynamictext/verify.h"
 #include "filesynchronizemessage.h"
 #include "teamworkfoldermanager.h"
 
@@ -290,7 +290,7 @@ void FileCollaborationSession::updateTree( QModelIndex& i, QStandardItemModel* m
         int num = model->rowCount( i );
         model->insertRow( num, i );
         QModelIndex ind = model->index( num, 0, i );
-      
+
         if ( !ind.isValid() )
           throw "index-error";
         userPositions[ *it ] = ind;
@@ -302,14 +302,14 @@ void FileCollaborationSession::updateTree( QModelIndex& i, QStandardItemModel* m
       QModelIndex i( *it );
       const_cast<DocumentWrapperPointer&>( it.key() ) ->updateTree( i, model );
     }
-    
+
     ///Update users
     for ( QMap<FileCollaborationPointer, QPersistentModelIndex>::iterator it = userPositions.begin(); it != userPositions.end(); ++it ) {
       QModelIndex i(*it);
       it.key()->updateTree( i , model );
-      
+
     }
-    
+
   } catch ( const char * str ) {
     err() << "in updateTree: " << str;
   } catch ( const QString & str ) {
@@ -375,7 +375,7 @@ uint FileCollaborationSession::addFileInternal( const CollabFile& f, bool fromBu
     QString file = f.file;
     /*if ( KDevCore::projectController() ->activeProject() ) {
       KUrl u( file );
-      
+
       if ( u.isParentOf( KDevCore::projectController() ->activeProject() ->projectDirectory() ) ) {
         QString d = KDevCore::projectController() ->activeProject() ->projectDirectory().path();
         if( !d.endsWith( "/" ) ) d += "/";
@@ -432,8 +432,8 @@ void FileCollaborationSession::saveAsPatch() {
 void FileCollaborationSession::addFile() {
   try {
     IDocument * document = KDevTeamwork::documentController() ->activeDocument();
-    Q_VERIFY( document != 0 );
-    Q_VERIFY( document->textDocument() != 0 );
+    Q_ASSERT( document != 0 );
+    Q_ASSERT( document->textDocument() != 0 );
 
     KUrl u = TeamworkFolderManager::workspaceRelative( document->url().path() );
 
@@ -646,17 +646,17 @@ void FileCollaborationSession::processMessage( const FileCollaborationMessagePoi
     FileCollaborationMessagePointer::Locked lmsg = msg;
     if ( !lmsg )
       throw "could not lock message";
- 
+
     UserPointer u = lmsg->info().user();
     if ( !u )
       throw QString( "no user-information" );
- 
+
     FileCollaborationPointer collab = m_collaborations[ u ];
     if ( !collab )
       throw ~( "got message from not involved user \"" + u.getUnsafeData() ->safeName() + "\"" );
- 
+
     collab->processMessage( msg );
- 
+
   } catch ( QString str ) {
     err() << "could not process message: " << str;
   }

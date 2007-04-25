@@ -13,7 +13,7 @@
  ***************************************************************************/
 
 #include "filesynchronizemessage.h"
-#include "dynamictext.h"
+#include "dynamictext/dynamictext.h"
 #include "utils.h"
 
 FileSynchronizeData::FileSynchronizeData( QString fileName, const QDynamicText& text, bool sendDynamic ) {

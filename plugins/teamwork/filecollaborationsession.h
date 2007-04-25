@@ -18,14 +18,13 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QStringList>
 #include <QList>
 
-#include "message.h"
-#include "pointer.h"
-#include "weakpointer.h"
+#include "network/message.h"
+#include "network/pointer.h"
+#include "network/weakpointer.h"
 
 #include "filecollaborationmessages.h"
-#include "crossmap.h"
-#include "vectortimestamp.h"
-#include "weakpointer.h"
+#include "network/crossmap.h"
+#include "dynamictext/vectortimestamp.h"
 #include "safelogger.h"
 
 class FileCollaboration;
@@ -82,7 +81,7 @@ class FileCollaborationSession : public QObject, public WeakShared, public SafeL
     QIcon icon() const;
 
     bool isMasterSession() const;
-    
+
     uint primaryIndex() const;
 
     void updateTree( QModelIndex& i, QStandardItemModel* model );
@@ -91,7 +90,7 @@ class FileCollaborationSession : public QObject, public WeakShared, public SafeL
 
     ///Allocates a new timestamp-index(for a new collaborator)
     uint allocateIndex();
-    
+
     uint allocateWrapperIndex();
 
     ///Returns the name of the first online peer-user, or empty string
@@ -131,7 +130,7 @@ class FileCollaborationSession : public QObject, public WeakShared, public SafeL
     void removeCollaboration( const FileCollaborationPointer& collab );
 
     QAction* getRemoveUserAction( const UserPointer& user );
-    
+
     void publishFileRemove( uint id );
     void publishFileList( const CollabFileList& files );
 

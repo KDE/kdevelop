@@ -14,7 +14,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #define NOCATCH
 
-#include "common.h"
+#include "network/common.h"
 #include "dynamictext.h"
 #include "verify.h"
 
@@ -543,7 +543,7 @@ OffsetMap DynamicText::offset( VectorTimestamp from, VectorTimestamp to, int pos
   OffsetRequest request( from, to );
 
 //   OffsetCache::iterator it = m_offsetCache.find( request );
-// 
+//
 //   if ( it != m_offsetCache.end() ) {
 //     return ( *it ).second;
 //   }
@@ -652,7 +652,7 @@ OffsetMap DynamicText::offset( VectorTimestamp from, VectorTimestamp to, int pos
         VectorTimestamp nextStamp;
         VectorTimestamp intermediate;
         OffsetMap ret;
-        
+
         if ( to[ a ] < from[ a ] ) {
           VectorTimestamp n = from;
           n.setPrimaryIndex( a );
@@ -815,31 +815,31 @@ bool DynamicText::rewindInternal( const VectorTimestamp& state ) {
 /*
 // ReplacementPointer DynamicText::findBound( const VectorTimestamp& stamp ) {
 // }
- 
+
 OffsetMap DynamicText::backwardsOffset( const VectorTimestamp& to ) {
 DYN_VERIFY( to.smallerOrSame( m_state ) );
 DYN_VERIFY( m_allReplacements.iterator( to ) );
- 
+
 bool applied = true;
- 
+
 int sz = m_applied.size();
- 
+
 DYN_VERIFY_SMALLERSAME( to.size(), sz );
 DYN_VERIFY_SMALLERSAME( m_state.size(), sz );
 //DYN_VERIFY( sz >= to.size() && sz >= m_state.size() );
- 
+
 std::vector<ReplacementPointer> chains( sz );
 for ( int a = 0; a < sz; a++ ) {
   chains[ a ] = m_applied[ a ].last;
   if ( chains[ a ] )
     DYN_VERIFY( chains[ a ] ->primaryIndex() == a );
 }
- 
+
 OffsetMap offset = m_currentOffset;
 VectorTimestamp currentState = m_state;
- 
+
 SafetyCounter s( 10000 );
- 
+
 while ( applied ) {
   DYN_VERIFY( s );
   applied = false;
@@ -848,10 +848,10 @@ while ( applied ) {
       continue;
     DYN_VERIFY ( to[ a ] <= currentState[ a ] );
     DYN_VERIFY( chains[ a ] );
- 
+
     VectorTimestamp s = chains[ a ] ->vectorStamp();
     //s.decrease();
- 
+
     if ( !( currentState == to ) && s == currentState ) {
       offset = offset % ( ~chains[ a ] ->offset() );
       applied = true;
@@ -861,7 +861,7 @@ while ( applied ) {
     }
   }
 }
- 
+
 DYN_VERIFY( currentState == to );
 return offset;
 }*/

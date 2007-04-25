@@ -19,7 +19,7 @@
 #include <QPoint>
 #include <QMenu>
 #include <QHeaderView>
-#include  "messagemanager.h"
+#include "messagemanager.h"
 #include "conversationmanager.h"
 #include "kdevteamwork_messages.h"
 #include "idocumentcontroller.h"
@@ -41,10 +41,10 @@
 #include <QBrush>
 #include "kdevteamwork_helpers.h"
 #include "teamworkfoldermanager.h"
-#include "crossmap.h"
+#include "network/crossmap.h"
 
 using namespace KDevelop;
-    
+
 Q_DECLARE_METATYPE( MessagePointer );
 Q_DECLARE_METATYPE( InDocumentMessagePointer );
 
@@ -241,20 +241,20 @@ std::string InDocumentConversation::logPrefix() {
 void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
   LogSuffix( "messageSelected: ", this );
   try {
-  if( !m_currentConnectedDocument ) 
+  if( !m_currentConnectedDocument )
     throw "no connected document";
 
   KTextEditor::View* view = m_currentConnectedDocument->activeView();
   if( !view )
     throw "current document has no view";
-  
+
   MessagePointer::Locked l = msg;
   if( !l )
     throw "messageSelected: could not lock message";
 
   KTextEditor::Cursor c, endC;
   c = findPositionInDocument( l.cast<InDocumentMessage>(), &endC );
-  
+
   KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( (KTextEditor::Document*)m_currentConnectedDocument );
   if ( smart ) {
     if ( endC.isValid() && c.isValid() ) {
@@ -264,7 +264,7 @@ void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
 
       if( m_currentRange )
         delete m_currentRange;
-      
+
       m_currentRange = smart->newSmartRange( c, endC );
       KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
@@ -338,7 +338,7 @@ void InDocumentConversation::selectMessage( InDocumentMessagePointer msg ) {
         if( views.isEmpty() ) throw "no views available for document";
         view = dynamic_cast<KTextEditor::View*>( views.front() );
       }
-      
+
       if ( view ) {
         KTextEditor::Cursor endC = KTextEditor::Cursor::invalid();
         KTextEditor::Cursor c = findPositionInDocument( l, l->end().isValid() ? &endC : 0 );
@@ -398,7 +398,7 @@ void InDocumentConversation::messageClicked( const QModelIndex& index ) {
   QVariant v = index.model() ->data( index, Qt::UserRole );
   if ( v.canConvert<MessagePointer>() ) {
     InDocumentMessagePointer msg = v.value<MessagePointer>().cast<InDocumentMessage>();
-    
+
     QMetaObject::invokeMethod( this, "selectMessage", Qt::QueuedConnection, Q_ARG( InDocumentMessagePointer, msg ) );
   } else {
     manager() ->log( "cannot convert a list-item to a MessagePointer", Error );
@@ -499,7 +499,7 @@ void InDocumentConversation::sendMessage() {
     MessagePointer::Locked stdMsg = globalMessageTypeSet().create<InDocumentMessage>( text, start, end, context() );
 
     InDocumentMessagePointer::Locked msg = stdMsg.cast<InDocumentMessage>();
-    
+
     if ( !msg )
       throw QString( "could not create InDocumentMessage" );
 
@@ -517,7 +517,7 @@ void InDocumentConversation::sendMessage() {
     s.getUnsafeData() ->sendMessage( msg );
     m_widgets.message->setEnabled( false );
     m_sendingMessage = msg;
-    
+
     manager()->manager()->teamwork()->addMessageToList( msg.data() );
   } catch ( const char * str ) {
     err() <<"error while sending message: " << str;
@@ -574,7 +574,7 @@ void InDocumentConversation::cursorPositionChanged ( KTextEditor::View *view, co
 
   if( m_currentConnectedDocument ) ///Eventually select another message that is nearer
     m_selectNearestMessageTimer->start( 400 );
-    
+
 }
 
 void InDocumentConversation::verticalScrollPositionChanged ( KTextEditor::View *view, const KTextEditor::Cursor& /*newPos*/ ) {
@@ -605,11 +605,11 @@ void  InDocumentConversation::selectNearestMessage() {
     return;
   }
   InDocumentMessagePointer msg;
-  
+
     KTextEditor::Cursor c = m_currentConnectedDocument->activeView()->cursorPosition();
     int nearestDiff = 1000000;
     KTextEditor::Cursor nearestCursor;
-    
+
     QString file = TeamworkFolderManager::workspaceRelative( m_currentConnectedDocument->url().path() );
 
     MessageSet::Iterator it = m_messages.values( file );
@@ -775,7 +775,7 @@ void InDocumentConversation::embedInView( KTextEditor::View* view, IDocument* do
 
     if( !document->textDocument() )
       throw "no text-document";
-    
+
     if ( !position.isValid() )
       throw "the cursor-position is not valid";
 
@@ -925,9 +925,9 @@ InDocumentConversation::InDocumentConversation( InDocumentMessage* msg ) : SafeL
   m_selectNearestMessageTimer = new QTimer( this );
   m_selectNearestMessageTimer->setSingleShot( true );
   connect( m_selectNearestMessageTimer, SIGNAL( timeout() ), this, SLOT( selectNearestMessage() ) );
-  
+
   qRegisterMetaType<InDocumentMessagePointer>( "InDocumentMessagePointer" );
-  
+
   if ( msg ) {
     m_line = msg->start().line();
     m_documentName = ~msg->document();
@@ -1016,7 +1016,7 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
   QString file = TeamworkFolderManager::workspaceRelative( document->url().path() );
 
   MessageSet::Iterator it = m_messages.values( file );
-  
+
   if( !it /*&& !msg_*/ ) {
   /*  out( Logger::Debug ) << "comparing " << file << " failed: is not part of conversation";
     MessageSet::Iterator it = m_messages.orderedValues<QString>();
@@ -1029,7 +1029,7 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
           current = l->document();
         }
       }
-      
+
       ++it;
   }*/
     return; ///Document contains none of our messages
@@ -1039,7 +1039,7 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
   KTextEditor::Document* doc = document->textDocument();
 
   InDocumentMessagePointer msg = msg_;
-  
+
   if( doc != m_currentConnectedDocument ) {
 
     if( m_currentConnectedDocument )
@@ -1059,14 +1059,14 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
   }
 
   bool wasNewDocument = false;
-  
+
   if( m_currentConnectedDocument != doc ) {
     wasNewDocument = true;
     m_currentSearchInstance = InDocumentReference::TextSearchInstance();
   }
 
   m_currentConnectedDocument = doc;
-  
+
   ///Determine the nearest message to the cursor
 
   if( !msg ) {
@@ -1101,7 +1101,7 @@ void InDocumentConversation::setActive( bool active ) {
       if( m_currentConnectedDocument->activeView() )
         disconnect( m_currentConnectedDocument->activeView(), 0, this, 0 );
       disconnect( m_currentConnectedDocument, 0, this, 0 );
-      
+
     }
     m_currentConnectedDocument = 0;
 
@@ -1201,7 +1201,7 @@ MessageInterface::ReplyResult InDocumentMessage::gotReply( const DispatchableMes
   if ( m_internal.get() && m_internal->m_conversation ) {
     QMetaObject::invokeMethod( ( InDocumentConversation* ) m_internal->m_conversation, "gotReply", Qt::QueuedConnection, Q_ARG( MessagePointer, ( MessagePointer ) p ) );
   }
-  
+
   return KDevTeamworkTextMessage::gotReply( p );
 }
 

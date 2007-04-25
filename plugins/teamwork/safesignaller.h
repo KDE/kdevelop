@@ -21,8 +21,8 @@ This header implements a very simple signalling-system that uses the SafeSharedP
 
 #include <QObject>
 #include <ext/hash_set>
-#include "pointer.h"
-#include "weakpointer.h"
+#include "network/pointer.h"
+#include "network/weakpointer.h"
 
 struct SignalProxyBase {
   virtual void signal() = 0;
@@ -45,11 +45,11 @@ class SafeSignal {
   }
   SafeSignal( const SafeSignal& rhs ) {
   }
-  
+
 public:
   SafeSignal() {
   }
-  
+
   void connect( const TargetType& targ ) {
     if( isConnected( targ ) ) return;
     m_connected.insert( targ );
@@ -64,7 +64,7 @@ public:
   bool isConnected( const TargetType& targ ) {
     return m_connected.find( targ ) != m_connected.end();
   }
-  
+
   void operator() ( const Signal& signal = Signal() ) {
     for( typename ConnectionMap::iterator it = m_connected.begin(); it != m_connected.end(); ++it ) {
       typename TargetType::Locked l = *it;
@@ -72,7 +72,7 @@ public:
         l->dispatchSignal( signal );
     }
   }
-  
+
 private:
   SignalProxyBase* m_proxy;
   typedef __gnu_cxx::hash_set< TargetType, hashCall<TargetType> > ConnectionMap;

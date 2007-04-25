@@ -13,8 +13,8 @@ email                : david.nolden.kdevelop@art-master.de
  ***************************************************************************/
 
 #include "safesignaller.h"
-#include"kdevteamwork.h"
-#include "weakpointer.h"
+#include "kdevteamwork.h"
+#include "network/weakpointer.h"
 
 QSafeSignaller::~QSafeSignaller() {
   delete m_proxy;

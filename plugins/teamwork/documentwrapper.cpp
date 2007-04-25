@@ -27,14 +27,14 @@ email                : david.nolden.kdevelop@art-master.de
 #include <ktexteditor/range.h>
 #include <idocumentcontroller.h>
 #include <idocument.h>
-#include "lib/dynamictext/dynamictext.h"
+#include "dynamictext/dynamictext.h"
 #include "kdevteamwork_helpers.h"
 #include "collaborationmanager.h"
 #include "filecollaborationmessages.h"
 #include "documentwrapper.h"
-#include "basicsession.h"
+#include "network/basicsession.h"
 #include "utils.h"
-#include "verify.h"
+#include "dynamictext/verify.h"
 #include "filesynchronizemessage.h"
 #include "qdynamictext.h"
 #include "vectortimestampeditor.h"
@@ -51,7 +51,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 using namespace KDevelop;
 
-#define IFDEBUG( x ) /**/ 
+#define IFDEBUG( x ) /**/
 //#define IFDEBUG( x ) x
 
 std::ostream& operator << ( std::ostream& o, const SimpleReplacement& rhs ) {
@@ -88,7 +88,7 @@ DocumentWrapper::DocumentWrapper( uint id, const LoggerPointer& logger, QString 
                 m_block( false ),
                 m_realFile( readFile_ ),
                 m_fileName( fileName ),
-                m_document( 0 ), 
+                m_document( 0 ),
                 m_session( session ),
                 m_ownIndex( ownIndex ),
                 m_id( id ),
@@ -305,7 +305,7 @@ bool DocumentWrapper::synchronize( const UserPointer& user ) {
     return false;
 
   out( Logger::Debug ) << "synchronizing with " << user.getUnsafeData()->safeName();
-  
+
   UserPointer::Locked l = user;
   if ( l && l->online().session() ) {
     return globalMessageSendHelper().send<FileSynchronize>( l->online().session().getUnsafeData(), fileName(), *m_text, true, id(), m_session->id() );
@@ -358,7 +358,7 @@ int DocumentWrapper::dispatchMessage( FileEditMessage* msg ) {
     if ( m_document && m_document->textDocument() ) {
       Block b( m_block );
       int line, column;
-      
+
       m_text->text().linearToLineColumn( emsg->replacement().m_position, line, column );
       if ( line == -1 || column == -1 ) {
         err() << "dispatchMessage( FileEditMessage ): could not convert index to cursor";

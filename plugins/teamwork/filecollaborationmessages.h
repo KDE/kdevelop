@@ -23,11 +23,11 @@ email                : david.nolden.kdevelop@art-master.de
 
 //#include <boost/serialization/extended_type_info_typeid.hpp>
 #include "kdevteamwork_messages.h"
-#include "easymessage.h"
+#include "network/easymessage.h"
 #include "utils.h"
-#include "vectortimestamp.h"
-#include "dynamictexthelpers.h"
-#include <list> 
+#include "dynamictext/vectortimestamp.h"
+#include "dynamictext/dynamictexthelpers.h"
+#include <list>
 //#include <boost/serialization/extended_type_info.hpp>
 
 namespace KTextEditor {
@@ -166,7 +166,7 @@ class FileCollaborationRequestData : public QObject, public AbstractGUIMessage {
 
     void dispatchSignal( const AcceptSignal& sig );
     void dispatchSignal( const DenySignal& sig );
-    
+
     ///The index of the sender of this message
     uint senderIndex() const;
   signals:
@@ -227,7 +227,7 @@ typedef SafeSharedPtr<FileCollaborationRequest> FileCollaborationRequestPointer;
 class DocumentWrapperMessageData {
   public:
     DocumentWrapperMessageData( uint wrapperId = 0 ) : m_wrapperId( wrapperId ) {}
-    
+
     template <class Archive>
         void serialize( Archive& arch, unsigned int /*version*/ ) {
       arch & m_wrapperId;
@@ -258,7 +258,7 @@ class FileEditMessageData {
     const VectorTimestamp& timeStamp() const {
       return m_state;
     }
-  
+
   private:
     SimpleReplacement m_replacement;
     VectorTimestamp m_state;
@@ -275,7 +275,7 @@ struct FileEditRejectMessageData {
     void serialize( Archive& arch, unsigned int /*version*/ ) {
       arch & m_state;
     }
-    
+
     const VectorTimestamp& timeStamp() const {
       return m_state;
     }

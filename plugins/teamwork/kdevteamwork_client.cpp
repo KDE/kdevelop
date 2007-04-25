@@ -23,9 +23,9 @@
 
 
 #include <QtCore/qdebug.h>
-#include "common.h"
-#include "message.h"
-#include "teamworkmessages.h"
+#include "network/common.h"
+#include "network/message.h"
+#include "network/teamworkmessages.h"
 #include <kiconloader.h>
 #include <QAction>
 #include <QCursor>
@@ -33,7 +33,7 @@
 #include "kdevteamwork_client.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_helpers.h"
-#include "defines.h"
+#include "network/defines.h"
 
 
 std::string stringToAddr( const QString& txt ) {

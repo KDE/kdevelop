@@ -13,7 +13,7 @@
  ***************************************************************************/
 
 #include "guimessagehistory.h"
-#include  "messagemanager.h"
+#include "messagemanager.h"
 #include <QMetaObject>
 #include  <QStandardItemModel>
 #include "messagehistorymanager.h"
@@ -23,7 +23,7 @@
 #include "utils.h"
 #include <QMenu>
 #include <QHeaderView>
-#include  "kdevteamwork_messageshower.h"
+#include "kdevteamwork_messageshower.h"
 
 using namespace Teamwork;
 

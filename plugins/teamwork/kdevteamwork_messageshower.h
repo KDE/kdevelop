@@ -22,10 +22,10 @@ class KDevTeamworkUser;
 class InDocumentMessage;
 
 #include <QObject>
-#include "kdevteamwork_textmessage.ui.h"
-#include "kdevteamwork_userinfo.ui.h"
+#include "ui_kdevteamwork_textmessage.h"
+#include "ui_kdevteamwork_userinfo.h"
 #include <QPointer>
-#include "pointer.h"
+#include "network/pointer.h"
 #include "kdevteamwork_helpers.h"
 #include "safelogger.h"
 #include "autoconstructpointer.h"

@@ -13,16 +13,16 @@
  ***************************************************************************/
 
 #ifndef PATCHESMANAGER_H
-#define PATCHESMANAGER_H 
+#define PATCHESMANAGER_H
 //#include <boost/serialization/list.hpp>
 #include <list>
 #include <string>
 #include <QObject>
-#include "kdevteamwork_managepatches.ui.h"
-#include "common.h"
-#include "pointer.h"
-#include "message.h"
-#include "easymessage.h"
+#include "ui_kdevteamwork_managepatches.h"
+#include "network/common.h"
+#include "network/pointer.h"
+#include "network/message.h"
+#include "network/easymessage.h"
 #include "kdevteamwork_messages.h"
 #include "patchmessage.h"
 #include <QMetaType>
@@ -94,7 +94,7 @@ class PatchesManager : public QObject {
 
     ///Tries to find out whether the patch is applied by using the patch-command in dry-run mode. Only  works with patch-files(not commands). Fills the result into the given patch
     LocalPatchSource::State determineState( const LocalPatchSourcePointer& patch );
-    
+
     ///Tries to merge the patches to one. If it fails, returns zero.
     LocalPatchSourcePointer merge( const QString& name, const QList<LocalPatchSourcePointer>& patches );
 

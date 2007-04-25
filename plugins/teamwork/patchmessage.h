@@ -21,10 +21,10 @@
 #include <QObject>
 #include <QDataStream>
 #include <QByteArray>
-#include "common.h"
-#include "pointer.h"
-#include "message.h"
-#include "easymessage.h"
+#include "network/common.h"
+#include "network/pointer.h"
+#include "network/message.h"
+#include "network/easymessage.h"
 #include "kdevteamwork_messages.h"
 #include <QMetaType>
 #include <QStandardItemModel>
@@ -50,16 +50,17 @@ enum PatchAccessRights {
 	Ask ///This means that the patch is publically visible, but on request, the owner is asked whether it really should be sent.
 };
 
-struct LocalPatchSource : public SafeShared {
+class LocalPatchSource : public SafeShared {
 
 	///This class should be used for identification instead of just the name, because the type of comparison might change in future
-	class Identity {
+	public:
+		class Identity {
 		private:
 			string name_;
 		public:
 			Identity( const LocalPatchSource& src ) : name_(src.name) {
 			}
-		
+
 			template<class Archive>
 			void serialize( Archive& arch, const uint /*version*/ ) {
 				arch & name_;
@@ -119,7 +120,7 @@ struct LocalPatchSource : public SafeShared {
 		command = "";
 	}
 
-  
+
   ///Tries to determine the patch-depth(by searching for -pX parameters in the apply-command. Defaults to zero.
   uint patchDepth() const;
 
@@ -128,12 +129,12 @@ struct LocalPatchSource : public SafeShared {
 
   ///Tries to determine the params for applying the patch. If none are given, uses reasonable default-parameters. If reverse is true, the unapply-parameters are given.
   string patchParams( bool reverse = false ) const;
-  
+
 	template<class Archive>
 	void serialize( Archive& arch, const uint /*version*/ ) {
 		KUrl u( ~filename );
 		filename = ~u.prettyUrl();  ///If there is a password, leave it out
-		
+
 		arch & NVP( filename );
 		arch & NVP( command );
 		arch & NVP( name );
@@ -202,7 +203,7 @@ struct LocalPatchSource : public SafeShared {
 		/*void setMimeType( KSharedPtr<KMimeType> mimeType );
 
     KSharedPtr<KMimeType> getMimeType();*/
-	
+
 	private:
 		UserPointer user_;
 };
@@ -213,7 +214,7 @@ typedef SafeSharedPtr<LocalPatchSource> LocalPatchSourcePointer;
 
 
 ///This message is just a base-class for all messages that should be forwarded to the PatchesListManager
-struct PatchesManagerMessage : public SystemMessage
+class PatchesManagerMessage : public SystemMessage
 {
 	DECLARE_MESSAGE( PatchesManagerMessage, SystemMessage, 6 );
 
@@ -221,7 +222,7 @@ struct PatchesManagerMessage : public SystemMessage
 		None = 50,
 		GetPatchesList
 	};
-	
+
 	PatchesManagerMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {
 	}
 
@@ -245,10 +246,10 @@ class PatchesListMessage : public PatchesManagerMessage
 		void serial( Arch& arch ) {
 			arch & patches;
 		}
-	
+
 	public:
 		list<LocalPatchSource> patches;
-	
+
 		PatchesListMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {
 			serial( arch );
 		}
@@ -271,7 +272,7 @@ class PatchesListMessage : public PatchesManagerMessage
 };
 
 class PatchRequestMessage;
-	
+
 class PatchRequestData : public AbstractGUIMessage {
 	public:
 	enum Status {
@@ -287,10 +288,10 @@ class PatchRequestData : public AbstractGUIMessage {
 		Download,
 		Apply
 	};
-	
+
   PatchRequestData( const LocalPatchSourcePointer& id = LocalPatchSourcePointer(), KDevTeamwork* tw = 0, RequestType req = View );
   virtual ~PatchRequestData();
-	
+
 	template<class Arch>
 	void serialize( Arch& arch, const uint /*version*/  ) {
 		arch & ident_;
@@ -323,10 +324,10 @@ class PatchRequestData : public AbstractGUIMessage {
 	virtual QIcon messageIcon() const;
 
 	virtual QString messageText() const;
-	
+
 	PatchRequestMessage* selfMessage() ;
 	const PatchRequestMessage* selfMessage()  const;
-	
+
 	private:
 		LocalPatchSource::Identity ident_;
     LocalPatchSourcePointer request_;
@@ -361,7 +362,7 @@ class PatchDataReceiver : public QObject {
 class PatchData {
 	public:
 		PatchData( const LocalPatchSourcePointer& p = LocalPatchSourcePointer(), LoggerPointer logg = LoggerPointer() );
-	
+
 	//template<class Arch>
 	void load( InArchive& arch, const uint /*version*/  );
 
@@ -379,7 +380,7 @@ class PatchData {
 
 	///Here the signals from TransferJob arrive.
 	void transferData( KIO::Job*, const QByteArray& );
-	
+
 	void transferFinished();
 
   void transferCanceled();

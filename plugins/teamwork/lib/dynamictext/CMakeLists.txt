@@ -1,10 +1,8 @@
 PROJECT( dynamictext )
-
-include_directories( 
-        ${COMMONCPP2_INCLUDE_DIRS}
-        ${Boost_INCLUDE_DIRS}
-	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib/network 
-    )
+# include_directories(
+#         ${COMMONCPP2_INCLUDE_DIRS}
+#         ${Boost_INCLUDE_DIRS}
+#     )
 
 #if you don't want the full compiler output, remove the following line
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
@@ -27,15 +25,15 @@ ADD_DEFINITIONS(-Wall -fexceptions)
 
 ######## next target ########
 
-ADD_LIBRARY( dynamictext SHARED ${dynamictext_SRCS} )
+ADD_LIBRARY( dynamictext STATIC ${dynamictext_SRCS} )
 TARGET_LINK_LIBRARIES( dynamictext ${COMMONCPP2_LIBRARIES} boost_serialization boost_thread)
 set_target_properties( dynamictext PROPERTIES VERSION 1.0.0 SOVERSION 1)
-install(TARGETS dynamictext DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS dynamictext DESTINATION ${LIB_INSTALL_DIR})
 
 ADD_EXECUTABLE( testexec main.cpp)
-TARGET_LINK_LIBRARIES( testexec dynamictext boost_thread )
+TARGET_LINK_LIBRARIES( testexec dynamictext boost_thread dl )
 
 #ADD_DEPENDENCIES( testexec, dynamictext )
- 
+
 #SET(CMAKE_CXX_FLAGS -fPIC)
 #SET(CMAKE_C_FLAGS -fPIC)

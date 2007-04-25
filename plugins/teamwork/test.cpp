@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include "../../crossmap.h"
+#include "network/crossmap.h"
 #include <assert.h>
 #include <iostream>
 #include <list>
@@ -36,7 +36,7 @@ struct TestMappable {
   }
 
   std::list<int> intList;
-  
+
   Name name;
 
   bool operator == ( const TestMappable& rhs ) const {

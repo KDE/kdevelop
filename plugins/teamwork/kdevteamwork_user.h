@@ -15,12 +15,12 @@
 #ifndef KDEVTEAMWORK_USER_H
 #define KDEVTEAMWORK_USER_H
 
-#include "user.h"
+#include "network/user.h"
 #include <QObject>
 #include <QMetaType>
 #include <QString>
-#include "pointer.h"
-#include  <kiconloader.h>
+#include "network/pointer.h"
+#include <kiconloader.h>
 
 using namespace Teamwork;
 class KDevTeamworkUser;

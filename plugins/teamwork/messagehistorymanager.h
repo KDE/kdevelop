@@ -17,15 +17,15 @@
 
 #include <klockfile.h>
 
-#include "messageserialization.h"
-#include "basicsession.h"
+#include "network/messageserialization.h"
+#include "network/basicsession.h"
 #include "kdevteamwork_messages.h"
 #include <QDateTime>
 #include <QList>
 #include <QTimer>
 #include <QMap>
-#include "user.h"
-#include "kurl.h"
+#include "network/user.h"
+#include <kurl.h>
 #include "serializationhelpers.h"
 
 
@@ -59,7 +59,7 @@ struct HistoryMessageDesc
 			l->info().setIsIncoming( isIncoming );
 		}
 	}
-	
+
 	template<class Archive>
 	void save( Archive& arch, const uint /*version*/ ) const {
 		arch & NVP( user );
@@ -77,7 +77,7 @@ struct HistoryMessageDesc
 struct HistoryGroupLocation {
 	string fileName;
 	uint offset;
-	
+
 	template<class Archive>
 	void serialize( Archive& arch, const uint /*version*/ ) {
 		arch & fileName;
@@ -101,10 +101,10 @@ class MessageHistoryManager : public QObject {
 		QList<HistoryMessagePointer>  getMessages( const KDevTeamworkClientPointer& client, QDate from = QDate(), QDate until = QDate(), UserSet users = UserSet() );
 
 		HistoryMessagePointer  getMessageFromId( Teamwork::UniqueMessageId id, const KDevTeamworkClientPointer& client );
-		
+
 	signals:
 		void newMessage( HistoryMessagePointer msg ); ///This is emitted whenever a new message should be added to the history
-		
+
 	private  slots:
 		void writePending();
 
@@ -123,7 +123,7 @@ class MessageHistoryManager : public QObject {
 
 		///May throw QString
 		KUrl directory() throw(QString);
-		
+
 		QTimer* m_pendingTimer;
 		QList< HistoryMessageDesc > m_pending;
 		Teamwork::LoggerPointer m_logger;

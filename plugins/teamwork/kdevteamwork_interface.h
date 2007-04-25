@@ -19,9 +19,9 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-#include "kcombobox.h"
-#include "klineedit.h"
-#include "ktextedit.h"
+#include <kcombobox.h>
+#include <klineedit.h>
+#include <ktextedit.h>
 
 class Ui_Teamwork
 {

@@ -16,14 +16,14 @@
 #define KDEVTEAMWORK_CLIENT_H
 
 //#include "kdevtreeview.h"
-#include "kdevteamwork_interface.ui.h"
-#include "pointer.h"
+#include "ui_kdevteamwork_interface.h"
+#include "network/pointer.h"
 #include <QStandardItemModel>
-#include "teamworkserver.h"
-#include "teamworkclient.h"
+#include "network/teamworkserver.h"
+#include "network/teamworkclient.h"
 #include "kdevteamwork_messages.h"
 #include "patchesmanager.h"
-#include "message.h"
+#include "network/message.h"
 #include <QTimer>
 
 ///@TODO: Dispatch the messages in a more flexible way: Allow any client to register with an arbitrary message-type that he wants to get(including all sub-messages).
@@ -49,7 +49,7 @@ class KDevTeamworkClient : public QObject, public Teamwork::Client
 {
 	public:
 		KDevTeamworkClient( KDevTeamwork* teamwork );
-    
+
 		void invalidateTeamwork() {
 			disconnectAllServers();
 			closeAllIncomingSessions();
@@ -62,11 +62,11 @@ class KDevTeamworkClient : public QObject, public Teamwork::Client
 		int dispatchMessage( PatchesManagerMessage* msg );
 
 		int dispatchMessage( KDevTeamworkTextMessage* msg );
-    
+
 		int dispatchMessage( KDevSystemMessage* msg );
-    
+
 		int dispatchMessage( ConnectionRequest* msg );
-    
+
 		int dispatchMessage( MessageInterface* /*msg*/ ) {
 			return 0;
 		}
@@ -78,7 +78,7 @@ class KDevTeamworkClient : public QObject, public Teamwork::Client
 		void guiServerConnected( Teamwork::ClientSessionDesc, Teamwork::ServerInformation );
 		void guiServerDisconnected( Teamwork::ClientSessionDesc, Teamwork::ServerInformation );
 		void guiUserList( std::list<UserPointer> );
-		
+
 		void signalDispatchMessage( PatchesManagerMessagePointer );
 		void signalDispatchMessage( CollaborationMessagePointer );
 
@@ -88,23 +88,23 @@ class KDevTeamworkClient : public QObject, public Teamwork::Client
 
     ///this is called whenever a new user successfully logged into the server
 		virtual void userConnected( const Teamwork::UserPointer& user );
-    
+
     ///called whenever a user leaves the server
 		virtual void userDisconnected( const Teamwork::UserPointer& user );
-    
+
     ///this is called whenever a connection is successfully established to a server
 		virtual void connectedToServer( const Teamwork::ClientSessionDesc& session, const Teamwork::ServerInformation& server );
-    
+
     ///this is called whenever a server the client disconnects from a connected server in any way
 		virtual void disconnectedFromServer( const Teamwork::ClientSessionDesc& session, const Teamwork::ServerInformation& server );
-    
+
 		virtual void processMessage( MessageInterface* msg ) throw() {
 			if( !dispatcher_( msg ) )
 				Teamwork::Client::processMessage( msg );
 		}
 
 		virtual void gotUserList( const std::list<UserPointer>& users );
-    
+
 	private:
 		typedef Teamwork::MessageDispatcher< KDevTeamworkClient, KDevTeamworkDispatchMessages> DispatcherType;
     //AllKDevTeamworkMessages, KDevTeamworkMessages

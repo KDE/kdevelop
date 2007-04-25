@@ -15,15 +15,15 @@
 #ifndef COLLABORATIONMANAGER_H
 #define COLLABORATIONMANAGER_H
 
-#include "message.h"
-#include "user.h"
-#include "pointer.h"
+#include "network/message.h"
+#include "network/user.h"
+#include "network/pointer.h"
 #include "filecollaborationmessages.h"
 #include "kdevteamwork.h"
 #include "utils.h"
 #include <QObject>
 #include <set>
-#include  "safelogger.h"
+#include "safelogger.h"
 #include <QPointer>
 #include <memory>
 

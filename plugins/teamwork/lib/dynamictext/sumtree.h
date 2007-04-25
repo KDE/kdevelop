@@ -15,8 +15,8 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef SUMTREE_H
 #define SUMTREE_H
 
-#include "pointer.h"
-#include "weakpointer.h"
+#include "network/pointer.h"
+#include "network/weakpointer.h"
 #include <list>
 #include "verify.h"
 
@@ -47,7 +47,7 @@ class Node : public Shared {
     inline void update( const int sumDif, const int indexCountDif ) {
       sum_ += sumDif;
       indexCount_ += indexCountDif;
-      
+
       //      DYN_VERIFY_SMALLER( sum_, 1000000 );
       Node* parent = parent_/*.get()*/;
       if( parent && (sumDif != 0 || indexCountDif != 0 ) )
@@ -58,7 +58,7 @@ class Node : public Shared {
 
     ///The sum is counted until that index, not including it.
     int sum( int index ) const;
-    
+
     int index( int sum ) const;
 
     int sum() const {
@@ -83,7 +83,7 @@ class Node : public Shared {
     }
 
     bool hasIndex( int index ) const;
-  
+
     int indexValue( int index ) const;
 
     int setIndexValue( int index, int value );
@@ -93,7 +93,7 @@ class Node : public Shared {
     void insertIndex( int index, int value  );
 
     void insertRange( int position, int size, int value );
-  
+
     int removeIndex( int index );
 
   bool isLeaf() const {
@@ -105,12 +105,12 @@ class Node : public Shared {
     }
 
     void updateStructure();
-  
+
   private:
     void splitRange( int splitPosition, Node* insertNode );
 
     void removeChild( Node* n );
-    
+
     friend class EndIndexCompare;
     /*WeakNodePointer*/Node* parent_; ///if this is zero, the node is available for taking, else it must be copied.
     ListType nodes_;
@@ -143,7 +143,7 @@ class Map : public WeakShared {
 
     bool hasIndex( int index ) const;
   //    Map rebuild();
-    
+
     ///Complexity: O(1)
     int indexCount()const ;
 
@@ -167,12 +167,12 @@ class Map : public WeakShared {
      * $
      */
   void insertRange( int position, int size, int eachValue = 0 );
-  
+
     ///Removes one index at position index, returns the personal sum that index had associated
     int removeIndex( int index );
 
     std::string dump() const;
-    
+
   private:
     int build( const SumVector::const_iterator& begin, const SumVector::const_iterator& end, Node* parent );
     NodePointer tree_;

@@ -13,8 +13,8 @@
  ***************************************************************************/
 
 #include "collaborationmanager.h"
-#include  <QPersistentModelIndex>
-#include  <QMenu>
+#include <QPersistentModelIndex>
+#include <QMenu>
 #include <QMetaType>
 #include "filecollaborationmanager.h"
 #include "kdevteamwork_user.h"
@@ -36,10 +36,10 @@ CollaborationManager::CollaborationManager( KDevTeamwork* tw ) : SafeLogger( tw-
   m_contextMenuTimer->setSingleShot( true );
 
   connect( m_contextMenuTimer, SIGNAL( timeout() ), this, SLOT( maybeContextMenu() ) );
-  
+
   m_closeCollaborationAction = new QAction( "Stop Collaboration", this );
   connect( m_closeCollaborationAction, SIGNAL( triggered() ), this, SLOT( uiCloseCollaboration() ) );
-  
+
   m_developersModel = new QStandardItemModel( 0, 1, this );
 
   qRegisterMetaType<MessagePointer>( "MessagePointer" );
@@ -96,10 +96,10 @@ void CollaborationManager::updateList() {
   QStandardItemModel* model = m_developersModel;
   /*model->clear();
   model->insertColumn( 0 );*/
-  
+
   ///find all users and sessions, and where they are stored in the tree-view
   QMap< UserPointer, QPersistentModelIndex > users;
-  
+
   for( int r = 0; r < model->rowCount(); ++r ) {
     QModelIndex i = model->index( r, 0 );
     if( !i.isValid() ) continue;
@@ -111,7 +111,7 @@ void CollaborationManager::updateList() {
       for( int r2 = 0; r2 < model->rowCount( i ); ++r2 ) {
         QModelIndex i2 = model->index( r2, 0, i );
         if( !i2.isValid() ) continue;
-        
+
         QVariant v = i.data( Qt::UserRole );
 
         if( v.canConvert<UserPointer>() )
@@ -129,7 +129,7 @@ void CollaborationManager::updateList() {
   ///Now add/update all users
   for ( UserSet::reverse_iterator it = m_collaboratingUsers.rbegin(); it != m_collaboratingUsers.rend(); ++it ) {
     //FileCollaborationSessionPointer session = m_fileCollaboration->sessions().value( (*it).cast<KDevTeamworkUser>() );
-    
+
     KDevTeamworkUserPointer::Locked l = (*it).cast<KDevTeamworkUser>();
 
     QModelIndex iparent;//( sessions[session] );
@@ -202,11 +202,11 @@ void CollaborationManager::collaboratingDeveloperClicked( const QModelIndex& ind
 }
 
 void CollaborationManager::contextMenu( const QPoint& p, const QModelIndex& index ) {
-  
+
   if(!index.isValid() )
     return;
   QMenu menu;
-  
+
   QVariant v = index.model() ->data( index, Qt::UserRole );
   if ( v.canConvert<UserPointer>() ) {
     m_teamwork->fillUserMenu( &menu, v.value<UserPointer>() );
@@ -214,7 +214,7 @@ void CollaborationManager::contextMenu( const QPoint& p, const QModelIndex& inde
 
     if( isCollaborating( v.value<UserPointer>() ) )
       emit fillCollaboratingUserMenu( &menu, v.value<UserPointer>() );
-  
+
     m_closeCollaborationAction->setData( v );
     menu.addAction( m_closeCollaborationAction );
   } else if( v.canConvert<CollaborationTreeActionPointer>() ) {
@@ -247,7 +247,7 @@ void CollaborationManager::uiCloseCollaboration() {
 
     UserPointer::Locked lUser = v.value<UserPointer>();
     if( !lUser ) throw "failed to lock user";
-    
+
     removeCollaboratingUser( lUser );
 
     m_teamwork->startUpdateTimer();

@@ -1,7 +1,7 @@
 #ifndef MESSAGEHISTORY_H
 #define MESSAGEHISTORY_H
 
-#include "kdevteamwork_messagehistory.ui.h"
+#include "ui_kdevteamwork_messagehistory.h"
 #include <QList>
 #include <QObject>
 #include <QWidget>

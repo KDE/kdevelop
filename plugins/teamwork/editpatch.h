@@ -16,12 +16,18 @@ email                : david.nolden.kdevelop@art-master.de
 #define EDITPATCH_H
 
 #include <QObject>
-#include "sharedptr.h"
-#include "kdevteamwork_editpatch.ui.h"
+#include "network/sharedptr.h"
+#include "ui_kdevteamwork_editpatch.h"
 #include <QDialog>
 #include <QPointer>
-#include <safelogger.h>
+#include "safelogger.h"
 #include <memory>
+#include "patchmessage.h"
+
+
+namespace KParts{
+  class Part;
+}
 
 class PatchesManager;
 namespace Diff2 {
@@ -59,7 +65,7 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
   public:
     EditPatch( PatchesManager* parent, LocalPatchSourcePointer patch, bool local );
     ~EditPatch();
-    
+
     void apply( bool reverse = false, const QString& fileName = "" );
 
     LocalPatchSourcePointer patch() const;
@@ -92,9 +98,9 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
     void nextHunk();
     void prevHunk();
     void  highlightFile();
-    
+
     void updateKompareModel();
-    
+
     void updateByType();
   private:
     void seekHunk( bool forwards, bool isSource, QString file = QString() );
@@ -109,14 +115,14 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
     LocalPatchSourcePointer patchFromEdit();
 
     void removeHighlighting( const QString& file = QString() );
-    
+
     LocalPatchSource::State m_actionState;
 
     ///Gets local patches via a fake-session
     SafeSharedPtr<PatchMessage> getPatchMessage( PatchRequestData::RequestType type );
     ///Tries to locally get the patch-message and then store it to a temporary file. If successful returns the filename.
     QString getPatchFile(bool temp = false);
-    
+
     PatchesManager* m_parent;
     LocalPatchSourcePointer m_editingPatch;
     bool m_editPatchLocal;
@@ -126,7 +132,7 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
 
     QTime m_lastDataTime;
     QString m_lastTerminalData;
-    
+
     QPointer<KParts::Part> m_konsolePart;
 
     QTimer* m_updateKompareTimer;

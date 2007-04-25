@@ -13,13 +13,13 @@
  ***************************************************************************/
 
 #include "kdevteamwork_messages.h"
-#include  "kdevteamwork.h"
+#include "kdevteamwork.h"
 #include  <QDateTime>
 #include "kdevteamwork_messageshower.h"
 #include "kdevteamwork_helpers.h"
 #include "indocumentreference.h"
-#include "teamworkserver.h"
-#include "teamworkclient.h"
+#include "network/teamworkserver.h"
+#include "network/teamworkclient.h"
 
 REGISTER_MESSAGE( KDevSystemMessage );
 REGISTER_MESSAGE( KDevTeamworkTextMessage );

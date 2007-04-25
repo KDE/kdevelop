@@ -3,7 +3,7 @@
 
 #include  <QString>
 #include <string>
-#include "sharedptr.h"
+#include "network/sharedptr.h"
 #include "sumsearch.h"
 
 class InDocumentReference {

@@ -19,8 +19,8 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QPointer>
 #include "autoconstructpointer.h"
 
-#include "kdevteamwork_list.ui.h"
-#include "pointer.h"
+#include "ui_kdevteamwork_list.h"
+#include "network/pointer.h"
 
 class QWidget;
 class QListView;

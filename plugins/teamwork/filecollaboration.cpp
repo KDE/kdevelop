@@ -26,7 +26,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "kdevteamwork_helpers.h"
 #include <QStandardItemModel>
 #include <QModelIndex>
-#include "verify.h"
+#include "dynamictext/verify.h"
 
 #include "filecollaboration.h"
 
@@ -78,7 +78,7 @@ int FileCollaboration::dispatchMessage( MessageInterface* msg ) {
   out( Logger::Warning ) << "got unknown message of type " << msg->name();
   return 0;
 }
- 
+
 int FileCollaboration::dispatchMessage( FileCollaborationMessage* msg ) {
   ///@todo clean/remove
   out( Logger::Debug ) << "got FileCollaborationMessage";
@@ -92,17 +92,17 @@ int FileCollaboration::dispatchMessage( FileCollaborationMessage* msg ) {
         if ( !msg->messageData().canConvert<QString>() )
           throw "wrong messageData in Synchronize-request(cannot extract filename)";
         QString fileName = msg->messageData().value<QString>();
- 
+
         KDevTeamworkUserPointer::Locked l = m_user;
         if ( !l )
           throw "could not lock user";
- 
+
         if ( !l->online().session() )
           throw "user is not online";
- 
+
         if ( !l->online().session().getUnsafeData() ->isOk() )
           throw "user is not online, session is dead";
- 
+
       }
       break;
       default:
@@ -116,7 +116,7 @@ int FileCollaboration::dispatchMessage( FileCollaborationMessage* msg ) {
   }
   return 0;
 }
- 
+
 int FileCollaboration::dispatchMessage( FileCollaborationRequest* msg ) {
   out( Logger::Debug ) << "got FileCollaborationRequest";
   return 0;
@@ -252,7 +252,7 @@ void FileCollaboration::close( const QString & /*reason*/ ) {
 QIcon FileCollaboration::icon() const {
   if( m_connectionActive ) {
     KDevTeamworkUserPointer::Locked l = m_user;
-    if( l ) 
+    if( l )
       return l->icon();
     else
       return QIcon();

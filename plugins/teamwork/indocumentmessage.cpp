@@ -13,7 +13,7 @@ email                : david.nolden.kdevelop@art-master.de
  ***************************************************************************/
 
 #include "indocumentmessage.h"
-#include "message.h"
+#include "network/message.h"
 #include "kdevteamwork_messageshower.h"
 
 ///@todo move some stuff from conversationmanager.cpp here

@@ -21,15 +21,15 @@
 #include <boost/serialization/set.hpp>
 #include <QObject>
 #include <QTimer>
-#include "kdevteamwork_internalmessage.ui.h"
+#include "ui_kdevteamwork_internalmessage.h"
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartcursor.h>
 #include <ktexteditor/smartinterface.h>
 #include <QtCore/QPointer>
 #include "kdevteamwork_user.h"
-#include "messageserialization.h"
+#include "network/messageserialization.h"
 #include "messagehistorymanager.h"
-#include "crossmap.h"
+#include "network/crossmap.h"
 #include <QTime>
 #include "safelogger.h"
 
@@ -177,7 +177,7 @@ class InDocumentConversation : public QObject, public Shared, public SafeLogger 
     virtual std::string logPrefix();
 
     InDocumentMessagePointer selectedMessage();
-    
+
     void documentActivated( KDevelop::IDocument* document, const InDocumentMessagePointer& msg );
 
     void messageSelected( const MessagePointer& msg );

@@ -20,9 +20,9 @@
 
 typedef std::string String;
 
-#include "crossmap.h"
-#include "pointer.h"
-#include "weakpointer.h"
+#include "network/crossmap.h"
+#include "network/pointer.h"
+#include "network/weakpointer.h"
 #include "vectortimestamp.h"
 #include "offsetutils.h"
 
@@ -114,7 +114,7 @@ class DynamicText : public SafeShared {
 
 		/** @return the first replacement with the given primary index, or zero */
 		ReplacementPointer first( uint index ) const;
-		
+
 		/** @return the first replacement with the given primary index, that is currently not applied  to the text(its primary stamp is higher than the current state's stamp on that index), or zero */
 		ReplacementPointer firstUnapplied( uint index ) const;
 
@@ -123,12 +123,12 @@ class DynamicText : public SafeShared {
 
 		/** @return the last replacement with the given primary index, that is currently applied  to the text(its primary stamp is same as the current state's stamp on that index), or zero */
 		ReplacementPointer lastApplied( uint index ) const;
-		
+
 		/**
 		 * @return the highest stamp with that index
 		 * */
 		Timestamp highestStamp( uint index ) const;
-		
+
 		/**Returns the internal replacement-objects that can be used for example to disable
 		 * a single replacement. This is dangerous.
 		 * @param primaryIndex index(user?)
@@ -149,7 +149,7 @@ class DynamicText : public SafeShared {
 				}
 			}
 		}
-		
+
 		template<class Archive>
 		void save( Archive& arch,  const uint version ) const {
 			const_cast<DynamicText*>( this ) ->standardSerialize( arch, version );
@@ -169,7 +169,7 @@ class DynamicText : public SafeShared {
 			arch & m_unApplied;
       arch & m_initialText;
 		}
-    
+
     VectorTimestamp insertInternal( uint index, const SimpleReplacement& replacement );
 
     bool changeStateInternal( const VectorTimestamp& state = VectorTimestamp(), bool force = false );
@@ -181,11 +181,11 @@ class DynamicText : public SafeShared {
     ///The following are notification-functions that can be overriden by derived classes
     virtual void notifyInserted( const ReplacementPointer& rep );
     virtual void notifyStateChanged();
-        
+
 		///@todo check which keys are really necessary
     BIND_LIST_3( ReplacementKeys, WeakReplacementPointer, VectorTimestamp, ReplacementId );
     typedef Utils::CrossMap< WeakReplacementPointer, ReplacementKeys > ReplacementSet;
-    ReplacementSet m_allReplacements; 
+    ReplacementSet m_allReplacements;
     friend class Advancer;
 
     ///This contains the chains from the beginning until(including) the last item that is applied.
@@ -207,7 +207,7 @@ class DynamicText : public SafeShared {
 
 		///Returns the backwards-offset from the current position to the searched one(the searched must be legal, and smaller than current state). If position is set, offsets that do not affect the given position in the from-space are not included.
 		OffsetMap offset( VectorTimestamp from, VectorTimestamp to, int position = -1 );
-    
+
     ReplacementPointer m_dummy;
 
 				///Changes the state to the newest one available

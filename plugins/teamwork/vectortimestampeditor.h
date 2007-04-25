@@ -14,17 +14,17 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef VECTORTIMESTAMPEDITOR_H
 #define VECTORTIMESTAMPEDITOR_H
 
-#include "sharedptr.h"
+#include "network/sharedptr.h"
 #include <QObject>
-#include "kdevteamwork_vectortimestampwidget.ui.h"
-#include "kdevteamwork_timestampwidget.ui.h"
+#include "ui_kdevteamwork_vectortimestampwidget.h"
+#include "ui_kdevteamwork_timestampwidget.h"
 #include "safelogger.h"
 #include <QList>
 #include <QDateTime>
 #include <QPointer>
 #include "loglevel.h"
-#include "vectortimestamp.h"
-#include "logger.h"
+#include "dynamictext/vectortimestamp.h"
+#include "network/logger.h"
 
 class VectorTimestampEditor;
 class TimestampEditor;
@@ -62,7 +62,7 @@ class TimestampEditor : public QObject, public Shared, public SafeLogger {
 
     ///This returns the currently edited replacement, or zero.
     ReplacementPointer replacement();
-    
+
     VectorTimestampEditor* m_parent;
     uint m_index;
     Timestamp m_currentStamp;
@@ -89,7 +89,7 @@ class VectorTimestampEditor : public QObject, public SafeLogger {
     QDynamicTextPointer text();
 
     void log( const QString& str, LogLevel level = Info );
-    
+
   private slots:
     void toTailTimestamp();
     void clearLog();
@@ -99,7 +99,7 @@ class VectorTimestampEditor : public QObject, public SafeLogger {
 
   private:
     void fillWidgets();
-    
+
     friend class TimestampEditor;
 
     QDynamicText* m_text;

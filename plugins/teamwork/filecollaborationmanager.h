@@ -18,12 +18,12 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef FILECOLLABORATIONMANAGER_H
 #define FILECOLLABORATIONMANAGER_H
 
-#include "message.h"
-#include "pointer.h"
-#include "weakpointer.h"
+#include "network/message.h"
+#include "network/pointer.h"
+#include "network/weakpointer.h"
 
 #include "filecollaborationmessages.h"
-#include "crossmap.h"
+#include "network/crossmap.h"
 #include "safelogger.h"
 
 #include "filecollaboration.h"
@@ -56,7 +56,7 @@ class FileCollaborationManager : public QObject, public SafeLogger {
     void denyCollaboration( const FileCollaborationRequestPointer& msg );
 
     void closeSession( const FileCollaborationSessionPointer& session );
-    
+
   public slots:
     void updateCollaborationModel( QStandardItemModel* model );
     void slotFillCollaboratingUserMenu( QMenu* menu, const UserPointer& user );

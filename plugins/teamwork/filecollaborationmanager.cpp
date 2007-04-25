@@ -27,8 +27,8 @@ email                : david.nolden.kdevelop@art-master.de
 #include "kdevteamwork_helpers.h"
 #include <QStandardItemModel>
 #include <QModelIndex>
-#include "verify.h"
-#include "kdevteamwork_filecollaborationsession.ui.h"
+#include "dynamictext/verify.h"
+#include "ui_kdevteamwork_filecollaborationsession.h"
 #include <QFileInfo>
 
 
@@ -53,7 +53,7 @@ CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, CollabSessionId, 0, val
  * - Some time-stamping would be very useful.
  * - When a client "Undo"'s, only his own changes should be undone.
  * - Conflicts should be detected and synchronized
- * 
+ *
  * */
 
 
@@ -295,7 +295,7 @@ bool FileCollaborationManager::acceptCollaboration( const FileCollaborationReque
     FileCollaborationRequestPointer::Locked l = msg;
     if ( !l )
       throw "could not lock message";
-    
+
     //Q_VERIFY( l->index() !=  0 );
 
     FileCollaborationSessionPointer session;
@@ -338,7 +338,7 @@ bool FileCollaborationManager::acceptCollaboration( const FileCollaborationReque
         ++range.first;
       }
     }
-    
+
     out( Logger::Debug ) << "collaboration accepted";
     m_requests.erase( l->sessionId() );
     return true;

@@ -17,7 +17,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include <QObject>
 #include <QPointer>
-#include "kdevteamwork_interface.ui.h"
+#include "ui_kdevteamwork_interface.h"
 #include <ktexteditor/range.h>
 
 namespace KDevelop {

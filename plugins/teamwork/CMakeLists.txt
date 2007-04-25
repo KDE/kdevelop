@@ -1,10 +1,8 @@
 
-include_directories( 
-	${CMAKE_SOURCE_DIR}/lib 
-	${CMAKE_SOURCE_DIR}/lib/interfaces 
-	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib/network 
-	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib/dynamictext 
-	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib/libdiff2
+include_directories(
+	${CMAKE_SOURCE_DIR}/lib
+	${CMAKE_SOURCE_DIR}/lib/interfaces
+	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib
     )
 
 add_subdirectory(lib)
@@ -32,8 +30,8 @@ set(kdevteamwork_PART_SRCS
     filecollaboration.cpp
     kdevutils.cpp
     documentwrapper.cpp
-    indocumentmessage.cpp 
-    indocumentreference.cpp 
+    indocumentmessage.cpp
+    indocumentreference.cpp
     kdevteamwork_helpers.cpp
     messageusertab.cpp
     verify.cpp
@@ -47,15 +45,31 @@ set(kdevteamwork_PART_SRCS
     safesignaller.cpp
 )
 
-set (kdevteamwork_UI
-      kdevteamwork_interface.ui)
+set (
+    kdevteamwork_UI
+    kdevteamwork_editpatch.ui
+    kdevteamwork_managepatches.ui
+    kdevteamwork_filecollaborationsession.ui
+    kdevteamwork_indocumentcontextlines.ui
+    kdevteamwork_messagehistory.ui
+    kdevteamwork_indocumentmessagebuttons.ui
+    kdevteamwork_textmessage.ui
+    kdevteamwork_indocumentmessagestate.ui
+    kdevteamwork_timestampwidget.ui
+    kdevteamwork_interface.ui
+    kdevteamwork_userinfo.ui
+    kdevteamwork_internalmessage.ui
+    kdevteamwork_vectortimestampwidget.ui
+    kdevteamwork_list.ui
+)
+
 
 #ADD_DEFINITIONS( -fexceptions -Wall -fno-inline)
 ADD_DEFINITIONS(-fexceptions -Wall)
 
 kde4_automoc(${kdevteamwork_PART_SRCS})
-kde4_add_plugin(kdevteamwork ${kdevteamwork_PART_SRCS})
 kde4_add_ui_files(kdevteamwork_PART_SRCS ${kdevteamwork_UI} )
+kde4_add_plugin(kdevteamwork ${kdevteamwork_PART_SRCS})
 
 target_link_libraries(kdevteamwork ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevplatforminterfaces network dynamictext boost_serialization boost_thread diff2)
 

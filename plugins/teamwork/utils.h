@@ -18,9 +18,16 @@
 #include <QString>
 #include <string>
 #include <QVariant>
-#include <sharedptr.h>
-#include <basicsession.h>
+#include "network/sharedptr.h"
+#include "network/basicsession.h"
 #include <iostream>
+#include <QDataStream>
+#include <QTextStream>
+#include <QByteArray>
+#include <boost/serialization/split_member.hpp>
+#include <boost/serialization/level.hpp>
+#include <boost/serialization/binary_object.hpp>
+#include <vector>
 
 QString toQ( const std::string& rhs );
 std::string fromQ( const QString& str );
@@ -42,13 +49,6 @@ void indexToLineCol( int index, const std::string& text, int& line, int& col );
 ///Returns -1 if the index does not exist
 int lineColToIndex( const std::string& text, int line, int col );
 
-#include <QDataStream>
-#include <QTextStream>
-#include <QByteArray>
-#include <boost/serialization/split_member.hpp>
-#include <boost/serialization/level.hpp>
-#include <boost/serialization/binary_object.hpp>
-#include <vector>
 
 #define QSTREAM QTextStream
 

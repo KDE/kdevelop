@@ -11,12 +11,12 @@ email                : david.nolden.kdevelop@art-master.de
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "messageusertab.h"
 
 #include <QWidget>
 #include<QListView>
 #include<QStandardItemModel>
 
-#include "messageusertab.h"
 #include "kdevteamwork.h"
 #include "kdevteamwork_user.h"
 #include <QMetaType>

@@ -14,8 +14,8 @@
 
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -34,7 +34,7 @@ namespace FuzzySearch {
  * How should all the differences be weighed together to a compound difference?
  *
  * The weighting still needs some work.
- * 
+ *
  * */
 
 template < class Compare1, class Compare2, class Then, class Else >
@@ -245,7 +245,7 @@ public:
  * For that reason a parallel difference-sum-search can be used, which would look like 111111| in the first, and 112(-1)21| in the second case.
  * SumType must be signed for that to work.
  * */
- 
+
 
 template <int maxDepth, typename SumType, int order, bool dummy>
 class DifferenceSumSearch {
@@ -600,7 +600,7 @@ class DifferenceSumSearch<maxDepth, SumType, order, false> {
 
       FindRefProgress( PrevSearch& search, const SumReference < maxDepth, SumType, order + 1 > & _ref, Evaluator& _eval ) : find( search.nextOrder_.search_, _ref.nextOrder_.reference_, _eval )
       {}
-      
+
       SumType leftDiff() {
         return find.leftDiff();
       }

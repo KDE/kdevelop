@@ -17,12 +17,12 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include <QObject>
 #include <QMap>
-#include "pointer.h"
+#include "network/pointer.h"
 #include <memory>
 
 #include <kiconloader.h>
 #include "autoconstructpointer.h"
-
+#include "kdevteamwork_client.h"
 
 class MessageManager;
 class CollaborationManager;
@@ -83,7 +83,6 @@ namespace Ui {
 class Teamwork;
 };
 
-#include "kdevteamwork_client.h"
 
 
 class KDevTeamwork : public QObject {
@@ -105,7 +104,7 @@ class KDevTeamwork : public QObject {
     static KDevelop::ICore* core();
 
     static KDevelop::IDocumentController* documentController();
-    
+
     /**Sets the whole  teamwork-part(client plus server) active/inactive. When set inactive, all connetions are closed.
     on success returns the given activity-state. */
     bool setActive( bool active );
@@ -165,7 +164,7 @@ class KDevTeamwork : public QObject {
 
     ///Prepares the GUI for sending a message to the given user
     void guiSendMessageTo( const UserPointer& target, const MessagePointer& answerTo = MessagePointer() );
-    
+
     ///This can be used by messages in other threads to send a request that their state(currently only icon) has changed
     void updateMessageInfo( MessagePointer );
 
@@ -227,7 +226,7 @@ class KDevTeamwork : public QObject {
 
     void messageTargetUserChanged();
     void updateAnswerMenu();
-    
+
     void handleTextMessage( SafeSharedPtr<KDevTeamworkTextMessage> msg );
 
     void guiUserConnected( Teamwork::UserPointer );
@@ -254,7 +253,7 @@ class KDevTeamwork : public QObject {
 
     void lockMessageGui( const MessagePointer& msg );
     void unlockMessageGui();
-    
+
     friend class KDevTeamworkLogger;
     friend class KDevTeamworkClient;
 
@@ -315,7 +314,7 @@ class KDevTeamwork : public QObject {
     MessagePointer m_answerTo;
     MessagePointer m_waitingForReply; ///This message is blocking the message-gui waiting for a reply
     QTimer* m_replyWaitingTimeout;
-    
+
 
     friend class MessageUserTab;
 
