@@ -2,6 +2,8 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/lib
 	${CMAKE_SOURCE_DIR}/lib/interfaces
 	${CMAKE_SOURCE_DIR}/plugins/teamwork/lib
+	${COMMONCPP2_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
     )
 
 add_subdirectory(lib)
@@ -65,7 +67,7 @@ set (
 
 #ADD_DEFINITIONS( -fexceptions -Wall -fno-inline)
 ADD_DEFINITIONS(-fexceptions -Wall)
-SET(CMAKE_BUILD_TYPE release)
+#SET(CMAKE_BUILD_TYPE release)
 
 kde4_automoc(${kdevteamwork_PART_SRCS})
 kde4_add_ui_files(kdevteamwork_PART_SRCS ${kdevteamwork_UI} )
