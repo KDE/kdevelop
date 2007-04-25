@@ -1,10 +1,10 @@
 add_subdirectory(cvs)
 
-include(FindSubversionLibrary)
+find_package(SubversionLibrary)
 
-if(SUBVERSIONFOUND)
+if(SUBVERSION_FOUND)
     add_subdirectory(subversion)
-endif(SUBVERSIONFOUND)
+endif(SUBVERSION_FOUND)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/lib

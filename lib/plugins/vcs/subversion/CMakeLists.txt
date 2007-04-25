@@ -3,9 +3,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib
                      ${CMAKE_SOURCE_DIR}/lib/interfaces
                      ${CMAKE_SOURCE_DIR}/lib/plugins/vcs/interfaces
                      ${CMAKE_SOURCE_DIR}/lib/project
-                     ${APU_INCLUDE_DIR}
-                     ${APR_INCLUDE_DIR}
-                     ${SUBVERSION_INCLUDE_DIR}
+                     ${SUBVERSION_INCLUDE_DIRS}
 )
 
 
