@@ -23,9 +23,6 @@ SET(libfiles
 	)
 
 SET(testfiles main.cpp )
-#this is needed until somebody finds a way to not produce a
-#13 Meg static lib in debug build.
-SET(CMAKE_BUILD_TYPE release)
 
 #add definitions, compiler switches, etc.
 

@@ -18,11 +18,6 @@ set(diff2_PART_SRCS
 	diffsettings.cpp
 	settingsbase.cpp )
 
-
-#this is needed until somebody finds a way to not produce a
-#13 Meg static lib in debug build.
-SET(CMAKE_BUILD_TYPE release)
-
 kde4_automoc(${diff2_PART_SRCS})
 
 kde4_add_library(diff2 ${diff2_PART_SRCS})

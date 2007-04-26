@@ -14,10 +14,6 @@ SET( dynamictext_SRCS
 	sumtree.cpp
 )
 
-#this is needed until somebody finds a way to not produce a
-#13 Meg static lib in debug build.
-SET(CMAKE_BUILD_TYPE release)
-
 #add definitions, compiler switches, etc.
 #ADD_DEFINITIONS(-Wall -g -fno-inline -fexceptions)
 #ADD_DEFINITIONS(-Wall -os -finline -fexceptions)
