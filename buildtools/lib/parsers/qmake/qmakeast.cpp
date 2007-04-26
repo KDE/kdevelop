@@ -85,9 +85,9 @@ void ProjectAST::writeBack(QString &buffer)
             buffer += indentation();
         buffer += scopedID;
 	if( m_children.count() == 1 )
-	    buffer += ": ";
+	    buffer += " : ";
         else
-            buffer += "{";
+            buffer += " {";
     }
     else if (isFunctionScope())
     {

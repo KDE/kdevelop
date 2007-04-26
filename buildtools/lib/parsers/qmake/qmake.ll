@@ -66,7 +66,7 @@ var_value         [^#\r\n\t ]+[^\r\n\t \\]
 quoted_var_value  {quote}({var_value}|[\t ])({var_value}|[\t ])*{quote}
 letter            [A-Za-z]
 digit             [0-9]
-id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.)*
+id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|\$|\.|\+)*
 id_args           [^\r\n]*\)
 number            {digit}+
 comment           #[^\r\n]*{newline}
@@ -74,7 +74,10 @@ comment_cont      \\{ws}*#[^\r\n]*{newline}
 cont              \\{ws}*{newline}
 
 %%
-<INITIAL>{ws} {}
+<INITIAL>{ws} {
+    mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
+    return Parser::token::token::WS;
+}
 
 <vallist>{ws} {
     mylval->value = QString::fromLocal8Bit( YYText(), YYLeng() );
