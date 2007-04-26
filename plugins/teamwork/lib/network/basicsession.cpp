@@ -480,7 +480,7 @@ BasicTCPSession::~BasicTCPSession() {
 
 bool BasicTCPSession::isOk() {
   return !exit_ && !failed_;
-};
+}
 
 void BasicTCPSession::startSession() {
   start();

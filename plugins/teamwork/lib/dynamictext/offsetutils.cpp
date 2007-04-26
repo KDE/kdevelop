@@ -36,7 +36,7 @@ OffsetMap::OffsetMap( OffsetPosition position, int offset ) {
   addOffset( position, offset );
 }
 
-OffsetMap::OffsetMap() {};
+OffsetMap::OffsetMap() {}
 
 /**Returns true if the given map can be inserted without making the map inconsistent
  * */
