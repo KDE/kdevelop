@@ -46,6 +46,8 @@ email                : david.nolden.kdevelop@art-master.de
 #include "dynamictext/verify.h"
 #include "patchmessage.h"
 #include "filecollaborationmanager.h"
+#include "network/messagetypeset.h"
+#include "network/messagesendhelper.h"
 #include "iuicontroller.h" /* defines [function] activeMainWindow */
 #include "icore.h" /* defines [function] uiController */
 
@@ -182,8 +184,7 @@ void DocumentWrapper::saveAsBufferFile() {
 
   if ( doc && doc->textDocument() ) {
     if ( doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified ) {
-      #warning i18n: Missing argument to the i18n call below
-      int answer = KMessageBox::warningYesNo( KDevTeamwork::core()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" ) );
+      int answer = KMessageBox::warningYesNo( KDevTeamwork::core()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" ).arg( m_fileName ) );
       if ( answer != KMessageBox::Yes )
         return ;
     }
@@ -304,18 +305,18 @@ bool DocumentWrapper::synchronize( const UserPointer& user ) {
   if ( m_dead )
     return false;
 
-  out( Logger::Debug ) << "synchronizing with " << user.getUnsafeData()->safeName();
+  out( Logger::Debug ) << "synchronizing with " << user.unsafe()->safeName();
 
   UserPointer::Locked l = user;
   if ( l && l->online().session() ) {
-    return globalMessageSendHelper().send<FileSynchronize>( l->online().session().getUnsafeData(), fileName(), *m_text, true, id(), m_session->id() );
+    return globalMessageSendHelper().send<FileSynchronize>( l->online().session().unsafe(), fileName(), *m_text, true, id(), m_session->id() );
   } else {
     err() << "cannot send synchronization-message because the user cannot be locked, or is not online";
     return false;
   }
 }
 
-int DocumentWrapper::dispatchMessage( FileEditRejectMessage* msg ) {
+int DocumentWrapper::receiveMessage( FileEditRejectMessage* msg ) {
   if ( m_session->isMasterSession() ) {
     out( Logger::Warning ) << "got a reject-message from a client, sending complete synchronization";
     synchronize( msg->info().user() );
@@ -335,12 +336,12 @@ int DocumentWrapper::dispatchMessage( FileEditRejectMessage* msg ) {
   return 1;
 }
 
-int DocumentWrapper::dispatchMessage( MessageInterface* msg ) {
+int DocumentWrapper::receiveMessage( MessageInterface* msg ) {
   out( Logger::Warning ) << "got unknown message of type " << msg->name();
   return 0;
 }
 
-int DocumentWrapper::dispatchMessage( FileEditMessage* msg ) {
+int DocumentWrapper::receiveMessage( FileEditMessage* msg ) {
   try {
     if ( ( m_disabled || m_dead ) && m_session->isMasterSession() ) {
       globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
@@ -361,7 +362,7 @@ int DocumentWrapper::dispatchMessage( FileEditMessage* msg ) {
 
       m_text->text().linearToLineColumn( emsg->replacement().m_position, line, column );
       if ( line == -1 || column == -1 ) {
-        err() << "dispatchMessage( FileEditMessage ): could not convert index to cursor";
+        err() << "receiveMessage( FileEditMessage ): could not convert index to cursor";
         return 0;
       }
 
@@ -369,7 +370,7 @@ int DocumentWrapper::dispatchMessage( FileEditMessage* msg ) {
 
       m_text->text().linearToLineColumn( emsg->replacement().m_position + emsg->replacement().m_oldText.length(), line, column );
       if ( line == -1 || column == -1 ) {
-        err() << "dispatchMessage( FileEditMessage ): could not convert index to cursor";
+        err() << "receiveMessage( FileEditMessage ): could not convert index to cursor";
         return 0;
       }
 
@@ -380,7 +381,7 @@ int DocumentWrapper::dispatchMessage( FileEditMessage* msg ) {
 
   } catch ( const DynamicTextError & error ) {
     ///@todo error-handling
-    err() << "dispatchMessage( FileEditMessage " << msg->timeStamp() << " " << msg->replacement() << " ): " << error.what();
+    err() << "receiveMessage( FileEditMessage " << msg->timeStamp() << " " << msg->replacement() << " ): " << error.what();
     globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
 
   }
@@ -613,7 +614,7 @@ std::string DocumentWrapper::logPrefix() {
   return "DocumentWrapper for " + ~fileName() + ": ";
 }
 
-int DocumentWrapper::dispatchMessage( FileSynchronize* msg ) {
+int DocumentWrapper::receiveMessage( FileSynchronize* msg ) {
   ///@todo merge synchronizations from different clients when self was crashed
   /*if ( !m_text->state().isZero() ) {
     err() << "got synchronization although timestamp already is " << m_text->state().print();

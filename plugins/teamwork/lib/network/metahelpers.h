@@ -14,6 +14,7 @@
 
 #ifndef METAHELPERS_H
 #define METAHELPERS_H
+
 #include "statictree.h"
 
 namespace Meta {

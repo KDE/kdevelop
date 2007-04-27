@@ -213,7 +213,7 @@ virtual QString messageText() const;
 
 virtual QIcon messageIcon() const;
 
-virtual ReplyResult gotReply( const DispatchableMessage& p );
+virtual ReplyResult gotReply( const MessagePointer& p );
 
 virtual void fillContextMenu( QMenu* /*menu*/, KDevTeamwork* /*teamwork*/ );
 

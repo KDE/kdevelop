@@ -19,9 +19,9 @@
 #include <QList>
 #include <QIcon>
 
-#include "network/message.h"
-#include "network/pointer.h"
-#include "network/weakpointer.h"
+#include "network/messagetypeset.h"
+#include "network/safesharedptr.h"
+#include "network/weaksafesharedptr.h"
 
 #include "filecollaborationmessages.h"
 #include "collaborationmanager.h"
@@ -95,10 +95,10 @@ class FileCollaboration : public QObject, public Shared, public SafeLogger {
     friend class FileCollaborationUserTreeAction;
     friend class FileCollaborationSession;
 
-//     int dispatchMessage( MessageInterface* msg );
-//     int dispatchMessage( FileSynchronize* msg );
-//     int dispatchMessage( FileCollaborationRequest* msg );
-//     int dispatchMessage( FileCollaborationMessage* msg );
+//     int receiveMessage( MessageInterface* msg );
+//     int receiveMessage( FileSynchronize* msg );
+//     int receiveMessage( FileCollaborationRequest* msg );
+//     int receiveMessage( FileCollaborationMessage* msg );
 
     KDevTeamworkUserPointer m_user;
     FileCollaborationSessionPointer m_session;

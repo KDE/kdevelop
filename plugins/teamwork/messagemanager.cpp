@@ -18,7 +18,7 @@
 #include "conversationmanager.h"
 #include "guimessagehistory.h"
 #include "messagehistorymanager.h"
-#include "network/message.h"
+#include "network/messagetypeset.h"
 #include <QDialog>
 #include <QMenu>
 #include "kdevteamwork_messageshower.h"
@@ -90,15 +90,15 @@ void MessageManager::slotShowMessage() {
 }
 
 
-int MessageManager::dispatchMessage( MessageInterface* /*msg*/ ) {
+int MessageManager::receiveMessage( MessageInterface* /*msg*/ ) {
   return 0;
 }
 
-int MessageManager::dispatchMessage( KDevTeamworkTextMessage* /*msg*/ ) {
+int MessageManager::receiveMessage( KDevTeamworkTextMessage* /*msg*/ ) {
   return 0;
 }
 
-int MessageManager::dispatchMessage( InDocumentMessage* msg ) {
+int MessageManager::receiveMessage( InDocumentMessage* msg ) {
   return m_conversationManager->processMessage( msg );
 }
 
@@ -151,8 +151,8 @@ void MessageManager::fillMessageMenu( QMenu* menu, MessagePointer msg ) {
       if ( !menu->children().isEmpty() )
         menu->addSeparator();
 
-      if ( l->info().session() && l->info().session().getUnsafeData() ->isOk() ) {
-        QMenu * m = new QMenu( ~u.getUnsafeData() ->safeName(), menu );
+      if ( l->info().session() && l->info().session().unsafe() ->isOk() ) {
+        QMenu * m = new QMenu( ~u.unsafe() ->safeName(), menu );
         menu->addMenu( m );
         m_teamwork->fillUserMenu( m, u );
       }

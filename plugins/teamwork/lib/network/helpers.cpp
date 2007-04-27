@@ -13,7 +13,8 @@
  ***************************************************************************/
 
 #include "helpers.h"
-#include "message.h"
+#include "serialization.h"
+#include "messagetypeset.h"
 #include "basicsession.h"
 #include "vector_stream.h"
 
@@ -31,8 +32,23 @@ std::vector<char> binaryInt( int num ) {
 }
 
 namespace Teamwork {
+  MessagePointer buildMessageFromArchive( InArchive& arch, MessageTypeSet& messages  ) {
+    return buildMessageFromArchive( arch, messages, 0 );
+  }
+  MessagePointer buildMessageFromArchive( InArchive& arch, MessageTypeSet& messages, SessionPointer sess  ) {
+    MessageInfo inf( arch );
+    inf.setSession( sess );
+    
+    return messages.buildMessage( arch, inf );
+  }
 
-  DispatchableMessage buildMessageFromBuffer( const std::vector<char>& buf, MessageTypeSet& messages, SessionPointer sess ) {
+  void serializeMessageToArchive( OutArchive& arch, MessageInterface& message ) {
+    message.info().serialize( arch );
+    
+    message.serialize( arch ); ///it must be called like this, because the serialization would add type-information we don't want
+  }
+
+  MessagePointer buildMessageFromBuffer( const std::vector<char>& buf, MessageTypeSet& messages, SessionPointer sess ) {
     vector_read_stream str( buf );
     InArchive arch( str );
 
@@ -47,7 +63,7 @@ namespace Teamwork {
   }
 
   /*
-  DispatchableMessage buildMessageFromBuffer( std::vector<char> buf, MessageTypeSet& messages, SessionPointer sess  )
+  MessagePointer buildMessageFromBuffer( std::vector<char> buf, MessageTypeSet& messages, SessionPointer sess  )
   {
     buf.push_back( 0 );
     BinaryStreamBuf b( buf );

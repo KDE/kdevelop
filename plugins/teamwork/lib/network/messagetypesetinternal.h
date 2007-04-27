@@ -11,9 +11,12 @@ email                : david.nolden.kdevelop@art-master.de
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#ifndef MESSAGEINTERNAL_H
+#define MESSAGEINTERNAL_H
 
-#include "common.h"
 #include "statictree.h"
+#include "messageinterface.h"
+#include <string>
 
 #define  DISABLEWARNINGS
 
@@ -22,7 +25,7 @@ using namespace Tree;
 class MessageInfo;
 struct MessageFactoryInterface {
   virtual MessagePointer buildMessage( InArchive& from , const MessageInfo& inf ) = 0;
-  virtual string identify() = 0;
+  virtual std::string identify() = 0;
 #ifdef DISABLEWARNINGS
   virtual ~MessageFactoryInterface() {}
 #endif
@@ -34,7 +37,7 @@ struct MessageFactory : public MessageFactoryInterface {
   virtual MessagePointer buildMessage( InArchive& from, const MessageInfo& inf ) {
     return MessagePointer( new MessageType( from, inf ) );
   }
-  virtual string identify() {
+  virtual std::string identify() {
     return MessageType::staticName();
   }
 
@@ -67,5 +70,6 @@ struct RegisterAllTypes< Binder< Side1, Side2 >, Target > {
 };
 }
 
+#endif
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

@@ -12,41 +12,38 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include <boost/archive/polymorphic_xml_oarchive.hpp>
-#include <boost/archive/polymorphic_xml_iarchive.hpp>
+ #include <boost/archive/polymorphic_xml_oarchive.hpp>
+ #include <boost/archive/polymorphic_xml_iarchive.hpp>
+
+#include <QPersistentModelIndex>
+#include <QMenu>
+#include <QFile>
+#include <QTimer>
+
 #include <kmimetype.h>
-#include <kmimetypechooser.h>
 #include <kmimetypetrader.h>
 #include <kio/netaccess.h>
 #include <kopenwithdialog.h>
 #include <k3process.h>
-#include <krandom.h>
-#include <QTabWidget>
-#include <QMenu>
-#include <QFile>
-#include <QPersistentModelIndex>
-#include "patchesmanager.h"
-#include <kfiledialog.h>
-#include "kdevteamwork.h"
+
 #include <idocumentcontroller.h>
-#include "kdevteamwork_part.h"
 #include "iplugincontroller.h"
-#include "collaborationmanager.h"
-#include <icore.h>
-#include "serializationutils.h"
+
+#include "network/sessioninterface.h"
+#include "network/messagetypeset.h"
+#include "network/messagesendhelper.h"
+
 #include "kdevteamwork_user.h"
+#include "ui_kdevteamwork_interface.h"
+#include "patchesmanager.h"
+#include "collaborationmanager.h"
 #include "messagemanager.h"
-/*#include <ktempfile.h>*/
+#include "kdevteamwork_client.h"
 #include "kdevteamwork_helpers.h"
 #include "teamworkfoldermanager.h"
-#include "kde_terminal_interface.h"
-#include <kparts/part.h>
-#include <kparts/factory.h>
 #include "editpatch.h"
-#include "teamworkfoldermanager.h"
 
-using namespace Teamwork;
-using namespace std;
+#include "serializationutils.h"
 
 QString userNameFromSession( const SessionPointer& session ) {
   UserPointer::Locked lu = userFromSession( session );
@@ -77,8 +74,8 @@ QString getDefaultExtension( const QStringList& patterns ) {
 
 REGISTER_MESSAGE( PatchesManagerMessage );
 REGISTER_MESSAGE( PatchesListMessage );
-REGISTER_MESSAGE( PatchRequestMessage );
-REGISTER_MESSAGE( PatchMessage );
+EASY_IMPLEMENT_MESSAGE( PatchRequestMessage );
+EASY_IMPLEMENT_MESSAGE( PatchMessage );
 
 Q_DECLARE_METATYPE( QPersistentModelIndex );
 Q_DECLARE_METATYPE( LocalPatchSourcePointer );
@@ -148,7 +145,7 @@ void PatchesManager::slotManagePatches() {
 void PatchesManager::slotUpdateConnection( TeamworkClientPointer newClient ) {
   if ( newClient ) {
     log( "slotUpdateConnection", Debug );
-    connect( newClient.getUnsafeData(), SIGNAL( signalDispatchMessage( PatchesManagerMessagePointer ) ), this, SLOT( processMessage( PatchesManagerMessagePointer ) ), Qt::QueuedConnection );
+    connect( newClient.unsafe(), SIGNAL( signalDispatchMessage( PatchesManagerMessagePointer ) ), this, SLOT( processMessage( PatchesManagerMessagePointer ) ), Qt::QueuedConnection );
   }
 }
 
@@ -260,8 +257,8 @@ void PatchesManager::slotApplyPatch() {
     if ( !lsession )
       throw "the session could not be locked";
 
-    SafeSharedPtr<PatchRequestMessage>::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_teamwork, PatchRequestData::Apply );
-    lsession->sendMessage( mp );
+    SafeSharedPtr<PatchRequestMessage>::Locked mp = new PatchRequestMessage( globalMessageTypeSet(), lpatch, m_teamwork, PatchRequestData::Apply );
+    lsession->send( mp );
     m_teamwork->addMessageToList( ( PatchRequestMessage* ) mp );
   } catch ( const char * str ) {
     log( QString( "error in slotApplyPatch: " ) + str, Error );
@@ -292,8 +289,8 @@ void PatchesManager::slotDownloadPatch() {
     if ( !session )
       throw "the session could not be acquired";
 
-    MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_teamwork, PatchRequestData::Download );
-    session.getUnsafeData() ->sendMessage( mp );
+    MessagePointer::Locked mp = new PatchRequestMessage( globalMessageTypeSet(), lpatch, m_teamwork, PatchRequestData::Download );
+    session.unsafe() ->send( mp );
     m_teamwork->addMessageToList( mp );
   } catch ( const char * str ) {
     log( QString( "error in slotDownloadPatch: " ) + str, Error );
@@ -324,8 +321,8 @@ void PatchesManager::slotShowPatch() {
     if ( !session )
       throw "the session could not be acquired";
 
-    MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_teamwork );
-    session.getUnsafeData() ->sendMessage( mp );
+    MessagePointer::Locked mp = new PatchRequestMessage( globalMessageTypeSet(), lpatch, m_teamwork );
+    session.unsafe() ->send( mp );
     m_teamwork->addMessageToList( mp );
   } catch ( const char * str ) {
     log( QString( "error in slotShowPatch: " ) + str, Error );
@@ -358,12 +355,12 @@ void PatchesManager::processMessage( PatchesManagerMessagePointer msg ) {
   }
 }
 
-int PatchesManager::dispatchMessage( MessageInterface* msg ) {
+int PatchesManager::receiveMessage( MessageInterface* msg ) {
   m_teamwork->log( QString( "PatchesManager got unknown message of type " ) + msg->name() );
   return 0;
 }
 
-int PatchesManager::dispatchMessage( PatchMessage* msg ) {
+int PatchesManager::receiveMessage( PatchMessage* msg ) {
   try {
     SafeSharedPtr<PatchRequestMessage>::Locked request = msg->info().replyToMessage().cast<PatchRequestMessage>();
     if ( !request )
@@ -616,7 +613,7 @@ LocalPatchSourcePointer PatchesManager::merge( const QString& name, const QList<
 }
 
 
-int PatchesManager::dispatchMessage( PatchRequestMessage* msg ) {
+int PatchesManager::receiveMessage( PatchRequestMessage* msg ) {
   ///Send the patch to the target.
   LocalPatchSourcePointer::Locked patch = patchFromIdentity( msg->patchIdentity() );
 
@@ -659,13 +656,13 @@ int PatchesManager::dispatchMessage( PatchRequestMessage* msg ) {
   return 1;
 }
 
-int PatchesManager::dispatchMessage( PatchesListMessage* msg ) {
+int PatchesManager::receiveMessage( PatchesListMessage* msg ) {
   ///Give the list to the GUI or whoever was waiting for it
   m_teamwork->handlePatchesList( msg );
   return 0;
 }
 
-int PatchesManager::dispatchMessage( PatchesManagerMessage* msg ) {
+int PatchesManager::receiveMessage( PatchesManagerMessage* msg ) {
   if ( !msg->isDerived() ) {
     switch ( msg->message() ) {
       case PatchesManagerMessage::None:
@@ -673,7 +670,7 @@ int PatchesManager::dispatchMessage( PatchesManagerMessage* msg ) {
       case PatchesManagerMessage::GetPatchesList: {
         SessionPointer::Locked l = msg->info().session();
         if ( l && l->isRunning() ) {
-          l->sendMessage( globalMessageTypeSet().create<PatchesListMessage>( m_config.patchSources ) );
+          l->send( new PatchesListMessage( globalMessageTypeSet(), m_config.patchSources ) );
 
           UserPointer::Locked pl = l->safeUser();
           if ( pl ) {

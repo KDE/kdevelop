@@ -12,50 +12,47 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include "kdevteamwork.h"
-#include "kdevteamwork_part.h"
+///@todo the whole inclusion-structure needs a big cleanup
+
+
+#include <list>
+
 #include <QtGui/QHeaderView>
-
-#include <kmenu.h>
-#include <kdebug.h>
-#include <kfile.h>
-#include <klocale.h>
-
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <ktexteditor/document.h>
-#include <iproject.h>
-#include <idocument.h>
-
-#include <QtCore/qdebug.h>
 #include <QAction>
+#include <QTimer>
 #include <QCursor>
-#include <QTimer>
 #include <QDialog>
-#include <QStandardItemModel>
-#include <QTimer>
-#include <QListView>
 #include <QPersistentModelIndex>
 #include <QWidget>
 
-#include "network/common.h"
-#include "network/message.h"
-#include "network/teamworkmessages.h"
+#include <kdebug.h>
+#include <klocale.h>
+#include <ktexteditor/document.h>
+
+#include <icore.h>
+#include <idocumentcontroller.h>
+#include <idocument.h>
+
+#include "network/messagetypeset.h"
+#include "network/multisession.h"
+#include "kdevteamwork.h"
+#include "kdevteamwork_part.h"
+#include "kdevteamwork_messageshower.h"
+#include "kdevteamwork_user.h"
+#include "kdevteamwork_client.h"
+#include "teamworkfoldermanager.h"
+#include "helpers.h"
+#include "kdevteamwork_helpers.h"
+#include "messageusertab.h"
+#include "messagesendmanager.h"
+
+///@todo Make most of these managers independent
 #include "collaborationmanager.h"
 #include "messagemanager.h"
-#include "kdevteamwork_user.h"
-#include "kdevteamwork_messageshower.h"
-#include "network/teamworkserver.h"
-#include "network/teamworkclient.h"
-#include "kdevteamwork_messages.h"
-#include "network/message.h"
-#include "kdevteamwork_helpers.h"
+#include "patchesmanager.h"
+
 #include "ui_kdevteamwork_list.h"
-#include "kdevteamwork_helpers.h"
 #include "ui_kdevteamwork_interface.h"
-#include "messageusertab.h"
-#include "teamworkfoldermanager.h"
-#include "messagesendmanager.h"
 
 using namespace KDevelop;
 using namespace Teamwork;
@@ -65,7 +62,6 @@ using namespace Teamwork;
 const int messageSendTimeout = 3000;
 
 KDevTeamwork* KDevTeamwork::m_self = 0;
-
 
 //Q_DECLARE_METATYPE( UserPointer );
 Q_DECLARE_METATYPE( QPersistentModelIndex );
@@ -186,11 +182,6 @@ template <class Type >
 QModelIndex findInModelNormal( QStandardItemModel* model, const Type& t, const QModelIndex& parent = QModelIndex() ) {
   return findInModel<Type, NormalIdentCompare<Type> > ( model, t, parent );
 }
-
-UserPointer userFromSession( const SessionPointer& session ) {
-  if( !session ) return 0;
-  return session.getUnsafeData() ->safeUser();
-};
 
 UserPointer KDevTeamwork::localUser() {
   ///@todo care about real local user
@@ -428,7 +419,7 @@ bool KDevTeamwork::setActive( bool active ) {
         log( "could not lock fresh created KDevTeamworkClient", Error );
       }
     }
-    m_client.getUnsafeData() ->start();
+    m_client.unsafe() ->start();
 
     allowIncomingChanged( m_widgets->allowIncoming->checkState() );
   } else if ( m_client && !active ) {
@@ -549,7 +540,7 @@ void KDevTeamwork::uiShowPatches() {
     return ;
   }
 
-  globalMessageSendHelper().send<PatchesManagerMessage>( user->online().session().getUnsafeData(), PatchesManagerMessage::GetPatchesList );
+  globalMessageSendHelper().send<PatchesManagerMessage>( user->online().session().unsafe(), PatchesManagerMessage::GetPatchesList );
 }
 
 void KDevTeamwork::showUserInfo( const UserPointer& user ) {
@@ -862,7 +853,7 @@ void KDevTeamwork::updateTimeout() {
       if ( l ) {
         SessionPointer s = l->online().session();
 
-        if ( s && s.getUnsafeData() ->isOk() ) {
+        if ( s && s.unsafe() ->isOk() ) {
           icon = iconFromUser( l, K3Icon::Toolbar );
         } else {
           model->removeRow( a );
@@ -936,7 +927,7 @@ void KDevTeamwork::registerPatches( PatchesListMessage* msg, QStandardItemModel*
 
       for ( list<LocalPatchSource>::iterator it = msg->patches.begin(); it != msg->patches.end(); ++it ) {
         LocalPatchSourcePointer source = new LocalPatchSource( *it );
-        source.getUnsafeData() ->setUser( luser );
+        source.unsafe() ->setUser( luser );
         QModelIndex ind = findInModel<LocalPatchSourcePointer, LocalPatchSourcePointer::ValueIdentCompare>( model, source, i );
         if ( ind.isValid() )
           model->removeRows( ind.row(), 1, i );
@@ -990,7 +981,7 @@ void KDevTeamwork::fillUserMenu( QMenu* menu, const UserPointer& user ) {
 
 void KDevTeamwork::fillMessageMenu( QMenu* menu, const MessagePointer& msg ) {
   MessagePointer::Locked l = msg;
-  if ( l->info().session() && l->info().session().getUnsafeData() ->isOk() && l->info().isIncoming() ) {
+  if ( l->info().session() && l->info().session().unsafe() ->isOk() && l->info().isIncoming() ) {
     QVariant v;
     v.setValue( msg );
     sendAnswerAction->setData( v );
@@ -1082,7 +1073,7 @@ void KDevTeamwork::serverClicked( const QModelIndex& index ) {
     if ( v.canConvert<ServerInformation>() ) {
       UserPointer user;
       ServerInformation p = v.value<ServerInformation>();
-      TeamworkSessionPointer sess = l->sessionToServer( p );
+      MultiSessionPointer sess = l->sessionToServer( p );
 
       if ( sess )
         user = l->findSessionUser( sess );
@@ -1114,7 +1105,7 @@ void KDevTeamwork::serverDoubleClicked( const QModelIndex& index ) {
     if ( v.canConvert<ServerInformation>() ) {
       UserPointer user;
       ServerInformation p = v.value<ServerInformation>();
-      TeamworkSessionPointer::Locked sess = l->sessionToServer( p );
+      MultiSessionPointer::Locked sess = l->sessionToServer( p );
       if ( sess )
         user = l->findSessionUser( sess.cast<SessionInterface>().data() );
       else
@@ -1171,14 +1162,14 @@ void KDevTeamwork::updateAnswerMenu() {
         if( m ) {
           KDevTeamworkTextMessage* tm = m.freeCast<KDevTeamworkTextMessage>();
           AbstractGUIMessage* gm = m.freeCast<AbstractGUIMessage>();
-          if( gm && tm && m->info().isIncoming() && (!tm->answered() || m.data() == m_answerTo.getUnsafeData() ) ) {
+          if( gm && tm && m->info().isIncoming() && (!tm->answered() || m.data() == m_answerTo.unsafe() ) ) {
             //gm->messageIcon()
             QAction* a = new QAction( gm->messageText().left( 30 )+"...", menu );
             QVariant v;
             v.setValue<MessagePointer>( m );
             a->setData( v );
             a->setCheckable( true );
-            if( m.data() == m_answerTo.getUnsafeData() ) a->setChecked( true );
+            if( m.data() == m_answerTo.unsafe() ) a->setChecked( true );
             menu->addAction( a );
             connect( a, SIGNAL( toggled( bool ) ), this, SLOT( answerMenuToggled( bool ) ) );
             connect( a, SIGNAL( triggered( bool ) ), this, SLOT( answerMenuTriggered( bool ) ) );
@@ -1435,7 +1426,7 @@ void KDevTeamwork::messageReplyTimeout() {
 }
 
 void KDevTeamwork::lockMessageGui( const MessagePointer& msg ) {
-  //log( QString("lockMessageGui called, waiting for %1").arg( msg.getUnsafeData() ), Debug );
+  //log( QString("lockMessageGui called, waiting for %1").arg( msg.unsafe() ), Debug );
   m_waitingForReply = msg;
   m_widgets->messageText->setEnabled( false );
   m_widgets->clearMessageButton->setEnabled( false );
@@ -1452,7 +1443,7 @@ void KDevTeamwork::unlockMessageGui() {
   m_replyWaitingTimeout->stop();
 }
 
-void KDevTeamwork::dispatchMessage( SafeSharedPtr<KDevSystemMessage> msg ) {
+void KDevTeamwork::receiveMessage( SafeSharedPtr<KDevSystemMessage> msg ) {
   SafeSharedPtr<KDevSystemMessage>::Locked l = msg;
   MessagePointer::Locked lv = m_waitingForReply;
   if ( l ) {
@@ -1778,7 +1769,7 @@ void KDevTeamwork::sendMessageButton() {
     if ( user && ul && ul->online() ) {
       switch ( m_widgets->messageType->currentIndex() ) {
         case Message: {
-          msg = l->messageTypes().create<KDevTeamworkTextMessage>( txt );
+          msg = new KDevTeamworkTextMessage( l->messageTypes(), txt );
           break;
         }
         case SourceMessage: {
@@ -1799,7 +1790,7 @@ void KDevTeamwork::sendMessageButton() {
           }
           log( QString("created reference for: (%1, %2) : (%3, %4)").arg( ref.line() ).arg( ref.col() ).arg( endRef.line() ).arg( endRef.col() ), Debug );
 
-          msg = l->messageTypes().create<InDocumentMessage>( txt, ref, endRef, m_widgets->context->text() );
+          msg = new InDocumentMessage( l->messageTypes(), txt, ref, endRef, m_widgets->context->text() );
 
           InDocumentMessage* dmsg = msg.freeCast<InDocumentMessage>();
           if ( dmsg ) {
@@ -1814,12 +1805,12 @@ void KDevTeamwork::sendMessageButton() {
         if ( m_answerTo ) {
           MessagePointer::Locked la = m_answerTo;
           if ( la ) {
-            msg->info().setReply( la->info().id().uniqueId() );
+            msg->info().setReply( la->info().uniqueId() );
             msg->info().setReplyMessage( m_answerTo );
           }
         }
 
-        ul->online().session().getUnsafeData() ->sendMessage( msg );
+        ul->online().session().unsafe() ->send( msg );
         addSentMessageToList( msg );
         switch ( m_widgets->messageType->currentIndex() ) {
           case SourceMessage: {}

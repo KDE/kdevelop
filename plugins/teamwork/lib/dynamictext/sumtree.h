@@ -15,9 +15,12 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef SUMTREE_H
 #define SUMTREE_H
 
-#include "network/pointer.h"
-#include "network/weakpointer.h"
 #include <list>
+#include <vector>
+
+#include "network/safesharedptr.h"
+#include "network/weaksafesharedptr.h"
+
 #include "verify.h"
 
 namespace SumTree {

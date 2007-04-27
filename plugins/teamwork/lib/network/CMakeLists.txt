@@ -2,7 +2,7 @@
 PROJECT(network)
 
 include_directories(
-        ${COMMONCPP2_INCLUDE_DIRS}
+        ${COMMONCPP2_INCLUDE_DIRS}/..
         ${Boost_INCLUDE_DIRS}
     )
 
@@ -15,11 +15,13 @@ SET(libfiles
 	messageimpl.cpp
 	helpers.cpp
 	teamworkserver.cpp
-	teamworksession.cpp
+	multisession.cpp
 	user.cpp
 	teamworkclient.cpp
 	forwardsession.cpp
 	logger.cpp
+	sessioninterface.cpp
+	dynamicmessagedispatcher.cpp
 	)
 
 SET(testfiles main.cpp )
@@ -42,7 +44,9 @@ SET_TARGET_PROPERTIES( network PROPERTIES VERSION 1.0.0 SOVERSION 1)
 ###### Next Target ##########
 
 ADD_EXECUTABLE( kdevteamwork_server ${testfiles} )
+
 TARGET_LINK_LIBRARIES( kdevteamwork_server boost_thread dl network ${COMMONCPP2_LIBRARIES} )
+
 INSTALL(TARGETS kdevteamwork_server DESTINATION ${BIN_INSTALL_DIR})
 
 #ADD_DEPENDENCIES( kdevteamwork_server network )

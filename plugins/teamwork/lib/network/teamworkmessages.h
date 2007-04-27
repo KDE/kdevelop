@@ -14,16 +14,13 @@
 
 #ifndef TEAMWORKMESSAGES_H
 #define TEAMWORKMESSAGES_H
-#include "common.h"
-#include "pointer.h"
-#include "message.h"
-#include "helpers.h"
-#include <string>
+
+#include "networkfwd.h"
 #include "user.h"
 #include "messageimpl.h"
+#include "binder.h"
 
 namespace Teamwork {
-using namespace std;
 /*
 vector<char> messageToData( MessageInterface* msg ) {
   vector<char> vec;
@@ -36,7 +33,7 @@ vector<char> messageToData( MessageInterface* msg ) {
 class TeamworkMessage : public RawMessage {
     DECLARE_MESSAGE( TeamworkMessage, RawMessage, 1 );
   public:
-    TeamworkMessage( const MessageInfo& info );
+    TeamworkMessage( const MessageTypeSet& messageTypes );
     TeamworkMessage( InArchive& arch, const MessageInfo& info );
 };
 
@@ -51,7 +48,7 @@ class IdentificationMessage : public TeamworkMessage {
 
   public:
 
-    IdentificationMessage( const MessageInfo& info, const User& user );
+    IdentificationMessage( const MessageTypeSet& messageTypes, const User& user );
 
     IdentificationMessage( InArchive& arch, const MessageInfo& info );
 
@@ -69,7 +66,7 @@ class ForwardMessage : public RawMessage {
     User source_;
     User target_;
   public:
-    ForwardMessage( const MessageInfo& info, MessageInterface* messageToForward, const User& source, const User& targ );
+    ForwardMessage( const MessageTypeSet& messageTypes, MessageInterface* messageToForward, const User& source, const User& targ );
 
     ForwardMessage( InArchive& arch, const MessageInfo& info );
 

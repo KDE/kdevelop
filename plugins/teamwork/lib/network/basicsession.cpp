@@ -12,9 +12,14 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "serialization.h"
+#include "logger.h"
+#include "handler.h"
 #include "basicsession.h"
 #include "messageimpl.h"
 #include "user.h"
+#include "messagetypeset.h"
+#include "helpers.h"
 #define MESSAGEDEBUG 
 //#define DISABLETRYCATCH
 #define DISABLEUNIVERSALCATCH 
@@ -28,12 +33,12 @@ using namespace std;
 SessionReplyManager::SessionReplyManager( MutexInterfaceImpl* selfMutex ) : selfMutex_( selfMutex ) {}
 
 void SessionReplyManager::addWaitingMessage( MessageInterface* msg ) {
-  waitingMessages_[ msg->id().uniqueId() ] = MessagePointer( msg );
+  waitingMessages_[ msg->uniqueId() ] = MessagePointer( msg );
 }
 
-bool SessionReplyManager::handleMessageWaiting( DispatchableMessage & msg ) {
+bool SessionReplyManager::handleMessageWaiting( MessagePointer & msg ) {
   if ( msg ) {
-    uint i = msg->getUnsafeData() ->info().isReplyTo();
+    uint i = msg.unsafe() ->info().isReplyTo();
     if ( i ) {
       WaitingMap::iterator it = waitingMessages_.find( i );
       if ( it != waitingMessages_.end() ) {
@@ -46,7 +51,7 @@ bool SessionReplyManager::handleMessageWaiting( DispatchableMessage & msg ) {
           if ( selfMutex_ )
             selfMutex_->lockCountUp();
           if ( !ret.messageHandled )
-            msg->getUnsafeData() ->info().setReplyMessage( ( *it ).second );
+            msg.unsafe() ->info().setReplyMessage( ( *it ).second );
         } else {
           //err() << "could not lock waiting message";
         }
@@ -67,7 +72,7 @@ void SessionReplyManager::removeAllMessages() {
     if ( l ) {
       if ( selfMutex_ )
         selfMutex_->lockCountDown();
-      l->gotReply( DispatchableMessage() );
+      l->gotReply( MessagePointer() );
       if ( selfMutex_ )
         selfMutex_->lockCountUp();
     }
@@ -101,11 +106,11 @@ void SessionInterface::final() {
 }
 
 
-bool SessionInterface::handleMessage( DispatchableMessage /*msg*/ ) throw() {
+bool SessionInterface::handleMessage( MessagePointer /*msg*/ ) throw() {
   return false;
 }
 
-string toString( vector<char>& v ) {
+string toString( std::vector<char>& v ) {
   string ret;
   for ( uint a = 0; a < v.size(); a++ )
     ret += v[ a ];
@@ -160,7 +165,7 @@ bool BasicTCPSession::inputOutput() {
           if ( !receivingData_.empty() ) {
             processIncomingMessage( receivingData_ );
             //out() << "got: " << toString( receivingData_ );
-            DispatchableMessage msg = buildMessageFromBuffer( receivingData_, messages_, this );
+            MessagePointer msg = buildMessageFromBuffer( receivingData_, messages_, this );
             MessagePointer::Locked l = ( MessagePointer ) msg;
             if ( l ) {
               l->info().setSession( this );
@@ -247,7 +252,7 @@ void BasicTCPSession::serializeMessage() {
         try {
           if ( clone ) {
             std::vector<char> buffer2;
-            serializeMessageToBuffer( buffer2, *clone.getUnsafeData() );
+            serializeMessageToBuffer( buffer2, *clone.unsafe() );
             if ( buffer2.size() == buffer.size() ) {
               if ( memcmp( &buffer[ 0 ], &buffer2[ 0 ], buffer.size() ) != 0 )
                 err() << "the reconstruction of a message of type \"" << mp->name() << "\" is wrong, the serialized content does not match!" ;
@@ -279,7 +284,7 @@ void BasicTCPSession::serializeMessage() {
         err() << std::string( "could not serialize message of type \"" ) + mp->name() + "\", reason: " + std::string( error.what() );
         mp->result( false );
         if ( mp->info().isReplyTo() ) {
-          MessageInterface * msg = globalMessageTypeSet().create<SystemMessage>( SystemMessage::SerializationFailed, error.what() );
+          MessageInterface * msg = new SystemMessage( messages_, SystemMessage::SerializationFailed, error.what() );
           msg->info().setReply( mp->info().isReplyTo() );
           messagesToSend_.pop_front();
           messagesToSend_.push_front( msg );
@@ -301,7 +306,7 @@ void BasicTCPSession::serializeMessage() {
 }
 
 template <class DataType>
-u32 BasicTCPSession::writeData( vector<DataType>& from, u32 max ) {
+u32 BasicTCPSession::writeData( std::vector<DataType>& from, u32 max ) {
   u32 count = 0;
   if ( isPending( pendingOutput, 0 ) ) {
     while ( isPending( pendingOutput, 0 ) && isOk() && count != max ) {
@@ -331,7 +336,7 @@ u32 BasicTCPSession::writeData( vector<DataType>& from, u32 max ) {
   if ( count == from.size() ) {
     from.clear();
   } else {
-    vector<DataType> newVec;
+    std::vector<DataType> newVec;
     newVec.resize( from.size() - count );
     memcpy( &newVec[ 0 ], &from[ count ], ( from.size() - count ) * sizeof( DataType ) );
     from = newVec;
@@ -341,7 +346,7 @@ u32 BasicTCPSession::writeData( vector<DataType>& from, u32 max ) {
 }
 
 template <class DataType>
-u32 BasicTCPSession::getData( vector<DataType>& to, u32 max ) {
+u32 BasicTCPSession::getData( std::vector<DataType>& to, u32 max ) {
   u32 count = 0;
   if ( isPending( pendingInput, 0 ) ) {
     while ( isPending( pendingInput, 0 ) && isOk() && count != max ) {
@@ -499,7 +504,7 @@ void BasicTCPSession::final( void ) {
   clearSelfPointer();
 }
 
-bool BasicTCPSession::handleMessage( DispatchableMessage msg ) throw() {
+bool BasicTCPSession::handleMessage( MessagePointer msg ) throw() {
   if ( handler_ ) {
     lockCountDown();
     bool ret = false;
@@ -544,7 +549,7 @@ void BasicTCPSession::removeAllMessages() {
   }
 }
 
-bool BasicTCPSession::sendMessage( MessageInterface* msg ) {
+bool BasicTCPSession::send( MessageInterface* msg ) {
   msg->info().setSession( this );
   if ( !exit_ && !failed_ ) {
     messagesToSend_ << msg;

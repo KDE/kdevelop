@@ -17,8 +17,8 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "dynamictext/vectortimestamp.h"
 #include <QObject>
-#include "network/pointer.h"
-#include "network/weakpointer.h"
+#include "network/safesharedptr.h"
+#include "network/weaksafesharedptr.h"
 #include "safelogger.h"
 #include <map>
 #include <KParts/MainWindow>
@@ -136,10 +136,10 @@ class DocumentWrapper : public QObject, public SafeLogger, public Shared {
     void textInserted ( KTextEditor::Document * document,
                         const KTextEditor::Range & range );
   private:
-    int dispatchMessage( FileEditMessage* msg );
-    int dispatchMessage( FileSynchronize* msg );
-    int dispatchMessage( FileEditRejectMessage* msg );
-    int dispatchMessage( MessageInterface* msg );
+    int receiveMessage( FileEditMessage* msg );
+    int receiveMessage( FileSynchronize* msg );
+    int receiveMessage( FileEditRejectMessage* msg );
+    int receiveMessage( MessageInterface* msg );
 
     bool checkDocumentSync() const; ///Expensive, only for debugging
 

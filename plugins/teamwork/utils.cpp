@@ -45,7 +45,7 @@ QString operator ~ ( const std::string& rhs ) {
 	return toQ(rhs );
 }
 
-ostream& operator << ( ostream& stream, const QString str ) {
+std::ostream& operator << ( std::ostream& stream, const QString str ) {
 	stream << str.toUtf8().data();
   return stream;
 }

@@ -15,7 +15,8 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include "pointer.h"
+#include "networkfwd.h"
+#include "safesharedptr.h"
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -39,8 +40,6 @@ struct Logger : public SafeShared {
   ///This function is used when an error occured while locking the Logger, or in other dangerous error-cases. It must be thread-safe.
   virtual void safeErrorLog( const std::string& str, Level lv );
 };
-
-typedef SafeSharedPtr<Logger> LoggerPointer;
 
 ///this class represents one line of logger-output. On its destruction the line is given to the logger. When it is copied, the copy-source is invalidated.
 class LoggerPrinter {

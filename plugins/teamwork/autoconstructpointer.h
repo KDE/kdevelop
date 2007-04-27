@@ -15,12 +15,12 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef AUTO_CONSTRUCT_POINTER_H
 #define AUTO_CONSTRUCT_POINTER_H
 
-#include "network/pointer.h"
-
 /**This is a pointer-class that can be used as a simple wrapper to have the same safety
 *as using normal element-classes, but allows the classes to be forward-declared.  Also
 *it features serialization.
 *It cannot be zero!  */
+
+class NormalSerialization;
 
 template <class T, class Serialization = NormalSerialization>
 class AutoConstructPointer {

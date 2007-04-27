@@ -12,14 +12,17 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include  "patchmessage.h"
+#include "network/serialization.h"
+#include <boost/serialization/list.hpp>
+#include <boost/serialization/vector.hpp>
 #include  <memory>
+
+#include  "patchmessage.h"
 #include <k3process.h>
 #include <kurl.h>
 #include <kmimetype.h>
 #include <memory.h>
 #include <kio/netaccess.h>
-#include <boost/serialization/vector.hpp>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
 #include "teamworkfoldermanager.h"
@@ -28,15 +31,6 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "kdevteamwork_helpers.h"
 
-/*#include <boost/archive/polymorphic_iarchive.hpp>
-#include <boost/archive/polymorphic_oarchive.hpp>*/
-
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-
 PatchData::PatchData( const LocalPatchSourcePointer& p, LoggerPointer logg ) : m_patch( p ), logger( logg ), deserialized( false ), finished( false ), isBinary_( false ) {
   projectDir = TeamworkFolderManager::workspaceDirectory();
 }
@@ -44,6 +38,15 @@ PatchData::PatchData( const LocalPatchSourcePointer& p, LoggerPointer logg ) : m
 LocalPatchSourcePointer PatchData::patch() {
   return m_patch;
 }
+
+PatchesListMessage::PatchesListMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {
+  serial( arch );
+}
+
+void PatchesListMessage::serialize( OutArchive& arch ) {
+  Precursor::serialize( arch );
+  serial( arch );
+};
 
 uint LocalPatchSource::patchDepth() const {
   QString cmd = ~applyCommand;
@@ -366,7 +369,7 @@ PatchRequestData::PatchRequestData( const LocalPatchSourcePointer& id, KDevTeamw
 }
 
 /*
-PatchRequestMessage::PatchRequestMessage( const Teamwork::MessageInfo& info, const LocalPatchSource::Identity& id, KDevTeamwork* tw, RequestType requestType
+PatchRequestMessage::PatchRequestMessage( const Teamwork::MessageTypeSet& info, const LocalPatchSource::Identity& id, KDevTeamwork* tw, RequestType requestType
  ) : PatchRequestData( id ), Precursor( info ),  emitter( new SafeTeamworkEmitter(tw), m_requestType( requestType ) ) {
   }*/
 
@@ -424,7 +427,7 @@ const PatchRequestMessage* PatchRequestData::selfMessage() const {
   return dynamic_cast<const PatchRequestMessage*>( this );
 }
 
-MessageInterface::ReplyResult PatchRequestMessage::gotReply( const DispatchableMessage& p ) {
+MessageInterface::ReplyResult PatchRequestMessage::gotReply( const MessagePointer& p ) {
   KDevSystemMessagePointer::Locked lmessage = ( ( MessagePointer ) p ).cast<KDevSystemMessage>();
 
   if ( lmessage ) {

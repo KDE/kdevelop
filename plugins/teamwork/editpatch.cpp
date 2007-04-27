@@ -15,6 +15,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "editpatch.h"
 
 #include <kmimetype.h>
+#include <klineedit.h>
 #include <kmimetypechooser.h>
 #include <kmimetypetrader.h>
 #include <kio/netaccess.h>
@@ -23,6 +24,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QTabWidget>
 #include <QMenu>
 #include <QFile>
+#include <QTimer>
 #include <QPersistentModelIndex>
 //#include <lib/kdevappintterface.h>
 #include "patchesmanager.h"
@@ -37,6 +39,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "serializationutils.h"
 #include "kdevteamwork_user.h"
 #include "messagemanager.h"
+#include "network/messagetypeset.h"
 #include "kdevteamwork_helpers.h"
 #include "teamworkfoldermanager.h"
 #include <kde_terminal_interface.h>
@@ -56,6 +59,8 @@ email                : david.nolden.kdevelop@art-master.de
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/highlightinginterface.h>
 #include "idocumentcontroller.h"
+
+#include "kdevteamwork_client.h"
 
 ///Whether arbitrary exceptions that occure while diff-parsing within the library should be catched
 #define CATCHLIBDIFF
@@ -277,8 +282,8 @@ void EditPatch::slotApplyEditPatch() {
       if ( !session )
         throw "the session could not be acquired";
 
-      MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_parent->teamwork(), PatchRequestData::Apply );
-      session.getUnsafeData() ->sendMessage( mp );
+      MessagePointer::Locked mp = new PatchRequestMessage( globalMessageTypeSet(), lpatch, m_parent->teamwork(), PatchRequestData::Apply );
+      session.unsafe() ->send( mp );
       m_parent->teamwork() ->addMessageToList( mp );
     } catch ( const char * str ) {
       err() << "error in slotApplyEditPatch: " << str;
@@ -318,7 +323,7 @@ SafeSharedPtr<PatchMessage> EditPatch::getPatchMessage( PatchRequestData::Reques
     SafeSharedPtr<Teamwork::FakeSession>::Locked fakeSession( new Teamwork::FakeSession( fakeUser, m_parent->teamwork() ->logger(), globalMessageTypeSet(), 0 ) );
     fakeUser->setSession( ( SessionInterface* ) fakeSession );
 
-    SafeSharedPtr<PatchRequestMessage>::Locked request = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_parent->teamwork() );
+    SafeSharedPtr<PatchRequestMessage>::Locked request = new PatchRequestMessage( globalMessageTypeSet(), lpatch, m_parent->teamwork() );
 
     request->info().setSession( ( SessionInterface* ) fakeSession );
 
@@ -427,8 +432,8 @@ void EditPatch::slotShowEditPatch() {
       if ( !session )
         throw "the session could not be acquired";
 
-      MessagePointer::Locked mp = globalMessageTypeSet().create<PatchRequestMessage>( lpatch, m_parent->teamwork() );
-      session.getUnsafeData() ->sendMessage( mp );
+      MessagePointer::Locked mp = new PatchRequestMessage( globalMessageTypeSet(), lpatch, m_parent->teamwork() );
+      session.unsafe() ->send( mp );
       m_parent->teamwork() ->addMessageToList( mp );
     }
   } catch ( const QString & str ) {

@@ -14,12 +14,19 @@
 
 #include "teamworkclient.h"
 #include "forwardsession.h"
+#include "user.h"
+#include "teamworkmessages.h"
+#include "teamworkservermessages.h"
+#include "messagesendhelper.h"
+#include "forwardsession.h"
+#include "multisession.h"
 
 
 namespace Teamwork {
 
+BIND_LIST_2( TeamworkClientDispatchMessages , ForwardMessage, UserListMessage );
+
 ///Takes a list of SafeSharedPtr's, and returns a list of the same LockedSharedPtr's
-#ifndef USE_OLD_SHAREDPTR
 template <class Type, class Serialization>
 list< typename SafeSharedPtr<Type, Serialization>::Locked > lockList( const list< SafeSharedPtr<Type, Serialization> >& lst ) {
   list< typename SafeSharedPtr<Type, Serialization>::Locked > ret;
@@ -29,17 +36,6 @@ list< typename SafeSharedPtr<Type, Serialization>::Locked > lockList( const list
 
   return ret;
 }
-#else
-template <class Type>
-list< typename SafeSharedPtr<Type>::Locked > lockList( const list< SafeSharedPtr<Type> >& lst ) {
-  list< typename SafeSharedPtr<Type>::Locked > ret;
-  for ( typename list< SafeSharedPtr<Type> >::const_iterator it = lst.begin(); it != lst.end(); ++it ) {
-    ret.push_back( *it );
-  }
-
-  return ret;
-}
-#endif
 
 void Client::userDisconnected( const Teamwork::UserPointer& /*user*/ ) {
   needUserUpdate_ = true; ///The connected client may have been a client that created a direct connection to us, and which may still be reachable through an indirect connection, so an update is needed
@@ -57,7 +53,7 @@ void Client::disconnectedFromServer( const ClientSessionDesc& /*session*/, const
 
 bool Client::think() {
   for ( ClientSessionMap::iterator it = clientSessions_.begin(); it != clientSessions_.end(); ) {
-    if ( !( *it ).second.session.getUnsafeData() ->isRunning() ) {
+    if ( !( *it ).second.session.unsafe() ->isRunning() ) {
       out() << "closing outgoing session because it stopped running";
       disconnectedFromServer( ( *it ).second, ( *it ).first );
       ClientSessionMap::iterator itb = it;
@@ -65,7 +61,7 @@ bool Client::think() {
       clientSessions_.erase( itb );
     } else {
       if ( needUserUpdate_ ) {
-        send<SystemMessage>( ( *it ).second.session.getUnsafeData(), SystemMessage::GetUserList );
+        send<SystemMessage>( ( *it ).second.session.unsafe(), SystemMessage::GetUserList );
       }
       ++it;
     }
@@ -88,13 +84,13 @@ void Client::connectToServer( const ServerInformation& server, const UserPointer
     return ;
   }
 
-  SessionInterface* session = new TeamworkSession( server, new HandlerProxy<BasicServer>( this ), messageTypes(), logger() , server.desc() + "_outgoing_" );
+  SessionInterface* session = new MultiSession( server, new HandlerProxy<BasicServer>( this ), messageTypes(), logger() , server.desc() + "_outgoing_" );
   clientSessions_[ server ] = ClientSessionDesc( p, session );
   session->startSession();
 
   UserPointer::Locked l = p;
   if ( l )
-    send<IdentificationMessage>( clientSessions_[ server ].session.getUnsafe(), *l );
+    send<IdentificationMessage>( clientSessions_[ server ].session.unsafe(), *l );
   else
     err() << "could not lock user";
 
@@ -105,19 +101,19 @@ bool Client::isConnectedToServer( const ServerInformation& server ) {
   return clientSessions_.find( server ) != clientSessions_.end();
 }
 
-TeamworkSessionPointer Client::sessionToServer( const ServerInformation& server ) {
+MultiSessionPointer Client::sessionToServer( const ServerInformation& server ) {
   ClientSessionMap::iterator it = clientSessions_.find( server );
   if ( it == clientSessions_.end() )
     return 0;
   else
-    return ( *it ).second.session.cast<TeamworkSession>();
+    return ( *it ).second.session.cast<MultiSession>();
 }
 
 void Client::disconnectFromServer( const ServerInformation& server ) {
   ClientSessionMap::iterator it = clientSessions_.find( server );
   if ( it != clientSessions_.end() ) {
     disconnectedFromServer( ( *it ).second, ( *it ).first );
-    ( *it ).second.session.getUnsafeData() ->stopRunning();
+    ( *it ).second.session.unsafe() ->stopRunning();
     clientSessions_.erase( it );
   }
 };
@@ -129,21 +125,21 @@ void Client::disconnectAllServers () {
   }
 }
 
-int Client::dispatchMessage( UserListMessage* msg ) {
+int Client::receiveMessage( UserListMessage* msg ) {
   out( Logger::Debug ) << "handling user-list of size " << msg->users.size();
   std::list<UserPointer> users;
   {
     std::set
       <UserPointer::Locked, UserPointer::Locked::ValueSmallerCompare> allReceivedUsers;
 
-    TeamworkSessionPointer session = msg->info().session().cast<TeamworkSession>();
+    MultiSessionPointer session = msg->info().session().cast<MultiSession>();
 
     if ( !session ) {
       out() << "got a user-list message on an indirect session, ignoring";
       return 0;
     }
 
-    TeamworkSessionPointer::Locked lsession = session;
+    MultiSessionPointer::Locked lsession = session;
     if ( !lsession ) {
       err() << "could not lock session while receiving user-list";
       return 0;
@@ -176,7 +172,7 @@ int Client::dispatchMessage( UserListMessage* msg ) {
         ///Create a new session to the user
         users.push_back( l );
 
-        l->setSession( new ForwardSession( identity(), l, msg->info().session().cast<TeamworkSession>(), logger(), messageTypes(), new HandlerProxy<BasicServer>( this ) ) );
+        l->setSession( new ForwardSession( identity(), l, msg->info().session().cast<MultiSession>(), logger(), messageTypes(), new HandlerProxy<BasicServer>( this ) ) );
         registerSessionUser( l ); ///Register the user together with its session, so it's noticed once the session is down.
       }
     }
@@ -189,7 +185,7 @@ int Client::dispatchMessage( UserListMessage* msg ) {
       if ( fnd == allReceivedUsers.end() ) {
         ForwardSessionPointer p = lsession->getForwardSession( ( *it ).data() );
         if ( p ) {
-          p.getUnsafeData() ->stopRunning();
+          p.unsafe() ->stopRunning();
           out( Logger::Debug ) << "closing secondary session because the user went offline";
         }
       }
@@ -203,11 +199,11 @@ int Client::dispatchMessage( UserListMessage* msg ) {
   return 1;
 }
 
-int Client::dispatchMessage( MessageInterface* /*msg*/ ) {
+int Client::receiveMessage( MessageInterface* /*msg*/ ) {
   return 0;
 }
 
-int Client::dispatchMessage( ForwardMessage * msg ) {
+int Client::receiveMessage( ForwardMessage * msg ) {
   out( Logger::Debug ) << "Client dispatching ForwardMessage";
   if ( !identity() )
     return 0;
@@ -222,7 +218,7 @@ int Client::dispatchMessage( ForwardMessage * msg ) {
 
   out() << "an indirect message from a not yet known client arrived";
 
-  if ( !msg->info().session().cast<TeamworkSession>() ) {
+  if ( !msg->info().session().cast<MultiSession>() ) {
     out() << "got a forward-message on an indirect session, ignoring";
     return 0;
   }
@@ -235,7 +231,7 @@ int Client::dispatchMessage( ForwardMessage * msg ) {
       return 1;
     }
 
-    ForwardSession* f = new ForwardSession( identity(), user, msg->info().session().cast<TeamworkSession>(), logger(), messageTypes(), new HandlerProxy<BasicServer>( this ) );
+    ForwardSession* f = new ForwardSession( identity(), user, msg->info().session().cast<MultiSession>(), logger(), messageTypes(), new HandlerProxy<BasicServer>( this ) );
     f->setUser( f->target() );
     cl->info().setSession( f );
 
@@ -253,12 +249,52 @@ int Client::dispatchMessage( ForwardMessage * msg ) {
 }
 
 void Client::processMessage( MessageInterface* msg ) {
-  if ( dispatcher_( msg ) ) {
+  MessageDispatcher< Client, TeamworkClientDispatchMessages > dispatcher(*this);
+  if ( dispatcher( msg ) ) {
     out( Logger::Debug ) << "handled message in the client-class";
   } else {
     out( Logger::Debug ) << "handing message from client-class to the server-class";
     Server::processMessage( msg );
   }
+}
+
+///Is called whenever a connected server sends its list of connected users
+void Client::gotUserList( const std::list<UserPointer>& /*users*/ ) {
+}
+
+///this could be used to create a custom session deriven from MultiSession
+SessionPointer Client::createSession( BasicTCPSocket* sock ) {
+  return Server::createSession( sock );
+}
+
+bool Client::registerSession( SessionPointer session ) {
+  if ( ! Server::registerSession( session ) )
+    return false;
+
+  if ( session.unsafe() ->sessionDirection() != SessionInterface::Incoming )
+    return true; ///Only send an identification-message to incoming connections, outgoing ones are sent directly while connecting
+
+  if ( identity() ) {
+    UserPointer::Locked l = identity();
+    if ( l )
+      send<IdentificationMessage>( session.unsafe(), *l );
+    else
+      err() << "could not lock user to send identifaction to a new client";
+  } else {
+    out() << "this server has no identity";
+  }
+
+  return true;
+};
+
+Client::Client( ServerInformation serverInfo, LoggerPointer logger ) : Server( serverInfo, logger ), needUserUpdate_( false ) {
+  //    messageTypes().registerMessageTypes<AllTeamworkClientMessages> ();
+  //dispatcher_.print( cout );
+  allowIncoming( false );
+}
+
+Client::~Client() {
+  disconnectAllServers();
 }
 }
 

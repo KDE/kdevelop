@@ -12,16 +12,19 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "serialization.h"
 #include "teamworkserver.h"
 #include "messageimpl.h"
 #include "teamworkmessages.h"
 #include "teamworkservermessages.h"
 #include "forwardsession.h"
-#include "teamworksession.h"
+#include "multisession.h"
 
 
 namespace Teamwork {
 using namespace std;
+
+BIND_LIST_4( TeamworkServerDispatchMessages, SystemMessage, ForwardMessage, IdentificationMessage, TextMessage );
 
 template <class From, class To, class Compare>
 list<To> mapValues( map<From, To, Compare> mp ) {
@@ -40,7 +43,7 @@ UserPointer Server::identity() const {
   return ident_;
 }
 
-Server::Server( const ServerInformation& inf, const LoggerPointer& logger ) : BasicServer( inf.addr().c_str(), inf.port(), globalMessageTypeSet(), logger ), MessageSendHelper( globalMessageTypeSet() ), dispatcher_( *this ), userListDirty_( false ) {
+Server::Server( const ServerInformation& inf, const LoggerPointer& logger ) : BasicServer( inf.addr().c_str(), inf.port(), globalMessageTypeSet(), logger ), MessageSendHelper( globalMessageTypeSet() ), userListDirty_( false ) {
   //dispatcher_.print( cout );
 }
 
@@ -64,12 +67,12 @@ Server::~Server() {
 }
 
 SessionPointer Server::createSession( BasicTCPSocket* sock ) {
-  return new TeamworkSession( *sock, new HandlerProxy<BasicServer>( this ), globalMessageTypeSet(), logger() );
+  return new MultiSession( *sock, new HandlerProxy<BasicServer>( this ), globalMessageTypeSet(), logger() );
   ///check yet whether this is thread-safe, if not give some kind of safe pointers
 }
 
 bool Server::registerSession( SessionPointer session ) {
-  TeamworkSessionPointer s = session.cast<TeamworkSession>();
+  MultiSessionPointer s = session.cast<MultiSession>();
   if ( s ) {
     unknownSessions_.insert( s );
     return true;
@@ -90,7 +93,7 @@ void Server::sendUserLists() {
   out( Logger::Debug ) << "broadcasting user-list";
   list<UserPointer> users = mapValues( sessions_ );
   for ( SessionMap::iterator it = sessions_.begin(); it != sessions_.end(); ++it ) {
-    send<UserListMessage>( ( *it ).first.getUnsafeData(), users, ( *it ).second );
+    send<UserListMessage>( ( *it ).first.unsafe(), users, ( *it ).second );
   }
 }
 
@@ -117,7 +120,7 @@ UserPointer Server::findUser( const UserIdentity& user ) {
 bool Server::think() {
   ///identify dead sessions and free pointers to them so they are deleted by reference-counting
   for ( SessionSet::iterator it = unknownSessions_.begin(); it != unknownSessions_.end(); ) {
-    if ( !( *it ).getUnsafe() ->isRunning() ) {
+    if ( !( *it ).unsafe() ->isRunning() ) {
       out() << "deleting unknown incoming session";
       SessionSet::iterator itb = it;
       ++it;
@@ -127,7 +130,7 @@ bool Server::think() {
   }
 
   for ( SessionMap::iterator it = sessions_.begin(); it != sessions_.end(); ) {
-    if ( !( *it ).first.getUnsafe() ->isRunning() ) {
+    if ( !( *it ).first.unsafe() ->isRunning() ) {
       SessionMap::iterator itb = it;
       ++it;
       UserPointer::Locked l = ( *itb ).second;
@@ -189,13 +192,13 @@ void Server::closeSession( const SessionPointer& session ) {
     }
   }
 
-  session.getUnsafe() ->stopRunning();
+  session.unsafe() ->stopRunning();
   if ( haveSession ) {
     userDisconnected( sessions_[ session ] );
     userListDirty_ = true;
   }
   sessions_.erase( session );
-  unknownSessions_.erase( session.cast<TeamworkSession>() );
+  unknownSessions_.erase( session.cast<MultiSession>() );
 }
 
 MessageTypeSet& Server::messageTypes() {
@@ -211,7 +214,7 @@ UserPointer Server::createUser( const User* user ) {
 }
 
 void Server::addUser( UserPointer user ) {
-  out() << "adding new user: \"" << user.getUnsafeData() ->safeName() << "\"";
+  out() << "adding new user: \"" << user.unsafe() ->safeName() << "\"";
   users_.insert( user );
 }
 
@@ -242,16 +245,16 @@ UserPointer Server::getUser( const UserIdentity& user ) {
   }
 }
 
-int Server::dispatchMessage( IdentificationMessage* msg ) {
+int Server::receiveMessage( IdentificationMessage* msg ) {
   string username = "unknown user";
-  TeamworkSessionPointer theSession;
+  MultiSessionPointer theSession;
   try {
-    TeamworkSessionPointer session = msg->info().session().cast<TeamworkSession>();
+    MultiSessionPointer session = msg->info().session().cast<MultiSession>();
     if ( !session )
       throw TeamworkError( "failed to cast server-session" );
     theSession = session;
 
-    TeamworkSessionPointer::Locked l = session;
+    MultiSessionPointer::Locked l = session;
     if ( !l )
       throw TeamworkError( "failed to lock source-session" );
 
@@ -303,22 +306,22 @@ int Server::dispatchMessage( IdentificationMessage* msg ) {
       if ( ll )
         peerDesc = ll->peerDesc();
       out() << "the user " + ul->name() + " logged in twice, the first one from " << peerDesc << " is disconnected";
-      send<SystemMessage>( ul->online().session().getUnsafeData(), SystemMessage::BadAuthentication, "another use with the name " + ul->name() + " logged in" );
-      send<SystemMessage>( msg->info().session().getUnsafeData(), SystemMessage::AlreadyLoggedIn, "the user " + ul->name() + " was already logged in" );
+      send<SystemMessage>( ul->online().session().unsafe(), SystemMessage::BadAuthentication, "another use with the name " + ul->name() + " logged in" );
+      send<SystemMessage>( msg->info().session().unsafe(), SystemMessage::AlreadyLoggedIn, "the user " + ul->name() + " was already logged in" );
       closeSession( ul->online().session() );
     }
 
     ul->setSession( msg->info().session() );
     sessions_[ session.cast<SessionInterface>() ] = user;
     unknownSessions_.erase( session );
-    out() << "login successful: \"" << user.getUnsafeData() ->name() << "\"";
+    out() << "login successful: \"" << user.unsafe() ->name() << "\"";
     send<SystemMessage>( l, SystemMessage::LoginSuccess, string( "welcome to this teamwork-server" ) );
     userConnected( user );
 
     userListDirty_ = true;
   } catch ( exception & exc ) {
     string addrInfo;
-    TeamworkSessionPointer::Locked l = theSession;
+    MultiSessionPointer::Locked l = theSession;
     if ( l )
       addrInfo = "from " + l->peerDesc() + " ";
     ;
@@ -328,23 +331,23 @@ int Server::dispatchMessage( IdentificationMessage* msg ) {
 
     out() << "login of user \"" << username << "\" " << addrInfo << "failed: " << exc.what();
 
-    send<SystemMessage>( msg->info().session().getUnsafeData(), SystemMessage::LoginFailedUnknown, "reason: " + string( exc.what() ) );
+    msg->info().session().unsafe()->send( new SystemMessage( messageTypes_ , SystemMessage::LoginFailedUnknown, "reason: " + string( exc.what() ) ) );
 
   }
   return 0;
 }
 
-int Server::dispatchMessage( TextMessage* msg ) {
+int Server::receiveMessage( TextMessage* msg ) {
   out() << "got text-message: " << msg->text();
   return 0;
 }
 
-int Server::dispatchMessage( MessageInterface* /*msg*/ ) {
+int Server::receiveMessage( MessageInterface* /*msg*/ ) {
   out() << "got unknown message-type";
   return 0;
 }
 
-int Server::dispatchMessage( SystemMessage* msg ) {
+int Server::receiveMessage( SystemMessage* msg ) {
   out() << "got system-message: " << msg->messageAsString() << ": " << msg->text();
   switch ( msg->message() ) {
     case SystemMessage::GetUserList: {
@@ -358,7 +361,6 @@ int Server::dispatchMessage( SystemMessage* msg ) {
 
         sendReply<UserListMessage>( msg, users, msg->info().user() );
       }
-
     };
     break;
     default:
@@ -376,13 +378,13 @@ UserPointer Server::findSessionUser( const SessionPointer& session ) {
 }
 }
 
-int Teamwork::Server::dispatchMessage( ForwardMessage * msg ) {
+int Teamwork::Server::receiveMessage( ForwardMessage * msg ) {
   out( Logger::Debug ) << "forwarding message";
 
   UserPointer u( new User( msg->target() ) );
   UserSet::iterator it = users_.find( u );
 
-  TeamworkSession* sess = msg->info().session().cast<TeamworkSession>().getUnsafe();
+  MultiSession* sess = msg->info().session().cast<MultiSession>().unsafe();
   if ( !sess ) {
     out() << "got forward-message from unknown session";
     return 0;
@@ -395,7 +397,7 @@ int Teamwork::Server::dispatchMessage( ForwardMessage * msg ) {
       if ( l ) {
         if ( l->online() && l->online().session() ) {
           out( Logger::Debug ) << "forwarding a message from " << msg->source().name() << " to " << msg->target().name();
-          l->online().session().getUnsafe() ->sendMessage( msg );
+          l->online().session().unsafe() ->send( msg );
         } else {
           if ( msg->storeOnServer() ) {
             out( Logger::Debug ) << "failed to forward a message from " << msg->source().name() << " to " << msg->target().name() << ", storing it on the server";
@@ -446,7 +448,8 @@ const Teamwork::ServerConfiguration& Teamwork::Server::configuration() const {
 }
 
 void Teamwork::Server::processMessage( MessageInterface* msg ) {
-  dispatcher_( msg );
+  MessageDispatcher< Server, TeamworkServerDispatchMessages > dispatcher(*this);
+  dispatcher( msg );
 }
 
 

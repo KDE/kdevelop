@@ -21,8 +21,8 @@ This header implements a very simple signalling-system that uses the SafeSharedP
 
 #include <QObject>
 #include <ext/hash_set>
-#include "network/pointer.h"
-#include "network/weakpointer.h"
+#include "network/safesharedptr.h"
+#include "network/weaksafesharedptr.h"
 
 struct SignalProxyBase {
   virtual void signal() = 0;
@@ -33,7 +33,7 @@ struct SignalProxyBase {
 template<class Type>
 struct hashCall {
   size_t operator() ( const Type& rhs ) const {
-    return (size_t)rhs.getUnsafeData();
+    return (size_t)rhs.unsafe();
   }
 };
 

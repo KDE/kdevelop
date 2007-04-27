@@ -16,101 +16,19 @@
 #define BASICSESSION
 
 #include <cc++/socket.h>
-#include "common.h"
-#include "interfaces.h"
-#include "message.h"
-#include "pointer.h"
-#include "helpers.h"
-#include "messageimpl.h"
+#include <vector>
+
+#include "networkfwd.h"
+#include "safesharedptr.h"
+#include "safelist.h"
 #include "logger.h"
-#include "handler.h"
-#include "weakpointer.h"
+#include "sessioninterface.h"
+#include <map>
 
 namespace Teamwork {
-class User;
-typedef SafeSharedPtr<User, BoostSerialization> UserPointer;
-typedef WeakSafeSharedPtr<SessionInterface> WeakSessionPointer;
 
-class SessionInterface : public /*Weak*/SafeShared {
-    string sessionName_;
-    UserPointer user_;
-
-  protected:
-    SessionInterface();
-
-    /**This can be overridden to possibly handle messages directly in this object.
-    The default-implementation just sends the messages to the handler which created this session.*/
-    virtual bool handleMessage( DispatchableMessage msg ) throw();
-
-    ///This can be overridden to do some work on a regular basis. Returns whether more time is needed.
-    virtual bool think() = 0;
-
-    ///This can be overridden to do some cleanup-work within the session-thread. By default it tries to lock the associated user, and call setSession(this) so the user has a chance to notice the difference.
-    virtual void final();
-
-  public:
-
-    virtual void startSession() {}
-
-    virtual ~SessionInterface();
-    /**After this function was called, the thread is going to exit soon.
-    once isRunning() returns false, it can be deleted(better call join()).*/
-    virtual void stopRunning() = 0;
-
-    virtual void stopRunningNow() = 0;
-
-    ///This must be thread-safe
-    virtual bool sendMessage( MessageInterface* msg ) = 0;
-
-    ///Returns true if no errors occured and the session was not ended.  Must be thread-safe.
-    virtual bool isOk() = 0;
-
-    ///Returns whether the thread is running. Must be thread-safe.
-    virtual bool isRunning() = 0;
-
-    virtual string sessionName() {
-      return sessionName_;
-    }
-
-    virtual void setSessionName( const string& name ) {
-      sessionName_ = name;
-    }
-
-    virtual string peerDesc() {
-      return string();
-    }
-
-    virtual string localDesc() {
-      return string();
-    }
-
-    enum SessionType {
-      Direct,
-      Forwarded
-  };
-
-    ///this function must be thread-safe
-    virtual SessionType sessionType() {
-      return Direct;
-    }
-
-    enum SessionDirection {
-      Outgoing,
-      Incoming
-  };
-
-    ///this function must be thread-safe
-    virtual SessionDirection sessionDirection() = 0;
-
-    ///This function is thread-safe.  The user is not necessarily filled.
-    UserPointer safeUser() const;
-
-    ///This should never be called again once it has been set on a session, to make it thread-safe.
-    void setUser( const UserPointer& user );
-};
-
-class SessionReplyManager {
-    typedef map<uint, MessagePointer> WaitingMap;
+ class SessionReplyManager {
+    typedef std::map<uint, MessagePointer> WaitingMap;
     MutexInterfaceImpl* selfMutex_;
     WaitingMap waitingMessages_; ///here, all messages that wait for a reply are stored, mapped to their unique-ids.
   protected:
@@ -118,7 +36,7 @@ class SessionReplyManager {
 
     void addWaitingMessage( MessageInterface* msg );
 
-    bool handleMessageWaiting( DispatchableMessage & msg );
+    bool handleMessageWaiting( MessagePointer & msg );
 
     void removeAllMessages();
 
@@ -150,7 +68,7 @@ class BasicTCPSession : protected ost::TCPSession,   /*public virtual SafeShared
     virtual void stopRunningNow();
 
     ///THREAD-SAFE
-    virtual bool sendMessage( MessageInterface* msg );
+    virtual bool send( MessageInterface* msg );
 
     ///Returns whether the thread is running
     virtual bool isRunning();
@@ -185,7 +103,7 @@ class BasicTCPSession : protected ost::TCPSession,   /*public virtual SafeShared
 
     /**This can be overridden to possibly handle messages directly in this object.
     The default-implementation just sends the messages to the handler which created this session.*/
-    virtual bool handleMessage( DispatchableMessage msg ) throw() ;
+    virtual bool handleMessage( MessagePointer msg ) throw() ;
 
     ///This can be overridden to do some work on a regular basis. Returns whether more time is needed.
     virtual bool think() {
@@ -211,13 +129,13 @@ class BasicTCPSession : protected ost::TCPSession,   /*public virtual SafeShared
 
     void serializeMessage();
 
-    ///Takes all Data that was written away from the vector, throws StreamError
+    ///Takes all Data that was written away from the std::vector, throws StreamError
     template <class DataType>
-        u32 writeData( vector<DataType>& from, u32 max );
+        u32 writeData( std::vector<DataType>& from, u32 max );
 
-    ///Appends the data to the given Vector, throws StreamError
+    ///Appends the data to the given std::vector, throws StreamError
     template <class DataType>
-        u32 getData( vector<DataType>& to, u32 max );
+        u32 getData( std::vector<DataType>& to, u32 max );
 
     void failed( std::string reason = "" );
 

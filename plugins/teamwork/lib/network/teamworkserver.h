@@ -12,82 +12,55 @@
  *                                                                         *
  ***************************************************************************/
 
+/** @Todo hide all this behind an interface
+ * */
+
 #ifndef TEAMWORKSERVER_H
 #define TEAMWORKSERVER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "common.h"
-#include "message.h"
-#include "pointer.h"
-#include "basicserver.h"
-#include "basicsession.h"
 #include <string>
-#include <list>
 #include <map>
 #include <set>
-#include "sharedptr.h"
-#include "teamworkmessages.h"
-#include "teamworkservermessages.h"
+
+#include "networkfwd.h"
+#include "safesharedptr.h"
+#include "sessioninterface.h"
+#include "messageinterface.h"
+#include "basicserver.h"
 #include "user.h"
-#include "messagesendhelper.h" 
+#include "messagesendhelper.h"
 #include "serverconfig.h"
-#include "weakpointer.h"
 
 namespace Teamwork {
+class Server;
+class IdentificationMessage;
+class ServerInformation;
+
+class SystemMessage;
+class ForwardMessage;
+class IdentificationMessage;
+class TextMessage;
+
 class ForwardSession;
 typedef SafeSharedPtr<ForwardSession> ForwardSessionPointer;
 
-BIND_LIST_4( TeamworkServerDispatchMessages, SystemMessage, ForwardMessage, IdentificationMessage, TextMessage );
-
-class ServerInformation {
-    string addr_;
-    int port_;
-  public:
-    ServerInformation( const string& addr = "", int port = 0 ) {
-      addr_ = addr;
-      port_ = port;
-    }
-    bool operator < ( const ServerInformation& rhs ) const {
-      return addr_ < rhs.addr_ || ( addr_ == rhs.addr_ && port_ < rhs.port_ );
-    }
-
-    const string& addr() const {
-      return addr_;
-    }
-    int port() const {
-      return port_;
-    }
-
-    string desc() const {
-      ostringstream s;
-      s << addr_ << ":" << port_;
-      return s.str();
-    }
-};
-
-class TeamworkSession;
-typedef SafeSharedPtr<TeamworkSession> TeamworkSessionPointer;
-typedef WeakSafeSharedPtr<TeamworkSession> WeakTeamworkSessionPointer;
-
-using namespace std;
-class IdentificationMessage;
-
-class Server;
-
-typedef set
-  < UserPointer, UserPointer::ValueSmallerCompare > UserSet;
+class MultiSession;
+typedef SafeSharedPtr<MultiSession> MultiSessionPointer;
+typedef WeakSafeSharedPtr<MultiSession> WeakMultiSessionPointer;
 
 class Server : public BasicServer, public MessageSendHelper {
-    typedef map< SessionPointer, UserPointer > SessionMap;
-    typedef set< TeamworkSessionPointer > SessionSet;
+    typedef std::map< SessionPointer, UserPointer > SessionMap;
+    typedef std::set< MultiSessionPointer > SessionSet;
+    
     UserPointer ident_;
 
   public:
+    typedef std::set< UserPointer, UserPointer::ValueSmallerCompare > UserSet;
+    
     Server( const ServerInformation& inf, const LoggerPointer& logger );
     ~Server();
 
-    ///If the server-name in the configuration is not empty, and there currently is no local identity set, the local identity is set to that name.
+    ///If the server-name in the configuration is not empty, and there currently is no local identity std::set, the local identity is std::set to that name.
     void setConfiguration( const ServerConfiguration& conf );
 
     const ServerConfiguration& configuration() const;
@@ -96,7 +69,7 @@ class Server : public BasicServer, public MessageSendHelper {
     ///The following two functions can be used to make UserPointers consistent through a longer session where the server may be closed/opened multiple times:
     void getUserSet( UserSet& users );
 
-    ///Insert the given user-set into the server's own.
+    ///Insert the given user-std::set into the server's own.
     void insertUserSet( const UserSet& users );
 
 
@@ -113,11 +86,11 @@ class Server : public BasicServer, public MessageSendHelper {
     virtual UserPointer createUser( const User* user );
 
 
-    int dispatchMessage( SystemMessage* msg );
-    int dispatchMessage( ForwardMessage* msg );
-    int dispatchMessage( IdentificationMessage* msg );
-    int dispatchMessage( TextMessage* msg );
-    int dispatchMessage( MessageInterface* msg );
+    int receiveMessage( SystemMessage* msg );
+    int receiveMessage( ForwardMessage* msg );
+    int receiveMessage( IdentificationMessage* msg );
+    int receiveMessage( TextMessage* msg );
+    int receiveMessage( MessageInterface* msg );
 
     ///Tries to find the user(together with appropriately filled online-information) among connected users, servers, and users available through another connected server
     UserPointer findUser( const UserPointer& user );
@@ -132,7 +105,7 @@ class Server : public BasicServer, public MessageSendHelper {
     virtual void closeAllIncomingSessions();
 
         /**Associate this client with a user-identity. May be invalid( is initialized as such ).
-    Without this identity correctly set, forwarded messages can not be dispatched. The identity will also be broadcasted to new clients that connect to the server, but not to already connected ones */
+    Without this identity correctly std::set, forwarded messages can not be dispatched. The identity will also be broadcasted to new clients that connect to the server, but not to already connected ones */
     void setIdentity( const UserPointer& user );
     ///Returns the user-identity currently associated with this client. May be invalid.
     virtual UserPointer identity() const;
@@ -164,7 +137,6 @@ class Server : public BasicServer, public MessageSendHelper {
     SessionMap sessions_;
     SessionSet unknownSessions_;
     UserSet users_;
-    MessageDispatcher< Server, TeamworkServerDispatchMessages > dispatcher_;
 
     ServerConfiguration configuration_;
     
@@ -173,6 +145,33 @@ class Server : public BasicServer, public MessageSendHelper {
     void sendUserLists();
 
     void addUser( UserPointer user );
+};
+
+///Encapsulates information about a server to connect to
+class ServerInformation {
+    std::string addr_;
+    int port_;
+  public:
+    ServerInformation( const std::string& addr = "", int port = 0 ) {
+      addr_ = addr;
+      port_ = port;
+    }
+    bool operator < ( const ServerInformation& rhs ) const {
+      return addr_ < rhs.addr_ || ( addr_ == rhs.addr_ && port_ < rhs.port_ );
+    }
+
+    const std::string& addr() const {
+      return addr_;
+    }
+    int port() const {
+      return port_;
+    }
+
+    std::string desc() const {
+      std::stringstream s;
+      s << addr_ << ":" << port_;
+      return s.str();
+    }
 };
 }
 

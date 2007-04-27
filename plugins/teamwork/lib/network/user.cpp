@@ -12,13 +12,40 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "teamworkmessages.h"
+
+#include "serialization.h"
+
+#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/export.hpp> //must be included after archive-headers
+
 #include "user.h"
-#include <boost/serialization/export.hpp>
+#include "sessioninterface.h"
+#include "teamworkmessages.h"
 
 namespace Teamwork {
+
+void OnlineInformation::setSession( const SessionPointer& sess ) {
+  session_ = sess;
+}
+
+OnlineInformation::OnlineInformation( const OnlineInformation& /*rhs*/ ) {
+}
+
+OnlineInformation& OnlineInformation::operator = ( const OnlineInformation& /*rhs*/ ) {
+  return *this;
+}
+
+OnlineInformation::OnlineInformation() {}
+
+OnlineInformation::~OnlineInformation() {
+}
+
+const SessionPointer& OnlineInformation::session() {
+  return session_;
+}
+
 OnlineInformation::operator bool() {
-  return session_ && session_.getUnsafeData() ->isOk();
+  return session_ && session_.unsafe() ->isOk();
 }
 
 User::User( const User* user ) {
@@ -59,6 +86,19 @@ void User::setRights( int rights ) {
 
 bool User::matchRight( int right ) {
   return right & rights_;
+}
+
+OnlineInformation& User::online() {
+  return online_;
+}
+
+template<class Archive>
+void User::serialize( Archive& arch, const uint /*version*/ ) {
+  arch & boost::serialization::make_nvp( "Name", name_ );
+  arch & boost::serialization::make_nvp( "password", password_ );
+  arch & boost::serialization::make_nvp( "description", description_ );
+  arch & boost::serialization::make_nvp( "rights", rights_ );
+  arch & boost::serialization::make_nvp( "email", email_ );
 }
 
 ///this function is used for authentification. The given user should be the one trying to connect.
@@ -145,6 +185,8 @@ bool User::banned() const {
 void User::setPassword( const string& password ) {
   password_ = password;
 }
+
+INSTANTIATE_SERIALIZATION_FUNCTIONS( User );
 };
 
 ///This should be done for each class derived from User, so it can correctly be serialized.

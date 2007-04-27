@@ -46,7 +46,7 @@ class InDocumentMessage : public KDevTeamworkTextMessage {
 
 	public:
 
-		InDocumentMessage( const Teamwork::MessageInfo& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context );
+		InDocumentMessage( const Teamwork::MessageTypeSet& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context );
 
 		InDocumentMessage( InArchive& from, const Teamwork::MessageInfo& info );
 
@@ -74,7 +74,7 @@ class InDocumentMessage : public KDevTeamworkTextMessage {
 
 		virtual void result( bool success );
 
-		virtual ReplyResult gotReply( const DispatchableMessage& /*p*/ );
+		virtual ReplyResult gotReply( const MessagePointer& /*p*/ );
 
 		virtual QString shortName() const;
 

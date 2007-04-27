@@ -12,17 +12,20 @@
  *                                                                         *
  ***************************************************************************/
 
+/** This include-file contains most of the meta-programming code used in this network-library.
+ *  The biggest part of it is management of simple type-lists(like adding a type, removing a type, finding one, etc.)
+ *  and building a static tree for message-dispatching. Unfortunately it's a bit hard to overview. :)
+ */
+
 #ifndef STATICTREE
 #define STATICTREE
 
+#include "binder.h"
 #include <string>
 
-#define UNUSED(x) (void)(x)
-
 typedef unsigned char uchar;
-
 namespace Tree {
-  using namespace std;
+
 template <class Out>
 void printId( Out& out, const uchar* const id ) {
   for ( uint i = 0; i < strlen( ( char* ) id ); ++i ) {
@@ -31,54 +34,6 @@ void printId( Out& out, const uchar* const id ) {
     out << ( int ) id[ i ];
   }
 }
-
-class Empty {}
-;
-
-/**  This class is used to group multiple types together. They can be appended in a nicer looking manner
-then recursion, Example:
-Binder<Message1>::Append<Message2>::Append<Message3>::Result
-Would be the same as Binder<Binder<Message1, Message2>, Message3 >
-*/
-
-
-template <class Chain1, class Chain2 = Empty>
-struct Binder {
-  template <class NChain>
-  struct Append {
-    typedef Binder< Binder< Chain1, Chain2 >, NChain > Result;
-  };
-};
-
-template <class Item1>
-struct Binder<Empty, Item1> {
-  typedef Item1 Result;
-  template <class NChain>
-  struct Append {
-    typedef Binder< Item1, NChain > Result;
-  };
-};
-
-template <class Item1>
-struct Binder<Item1, Empty> {
-  typedef Item1 Result;
-  template <class NChain>
-  struct Append {
-    typedef Binder< Item1, NChain > Result;
-  };
-
-};
-
-template <>
-struct Binder<Empty, Empty> {
-  typedef Empty Result;
-  template <class NChain>
-  struct Append {
-    typedef Binder< NChain, Empty > Result;
-  };
-}
-;
-
 
 template < int Condition, class Then, class Else >
 struct If {
@@ -111,11 +66,6 @@ template < class Compare, class Then, class Else >
 struct IfSame<Compare, Compare, Then, Else> {
   typedef Then Result;
 };
-
-
-template <class Slave, class Parent = typename Slave::Precursor, uchar preferredSubId = Slave::preferredIndex>
-class Chain {}
-;
 
 template <class Chain>
 struct Count {
@@ -274,7 +224,7 @@ struct TreeNodeSlaves {
     return 0;
   }
   template < class Out >
-  inline void print( Out& out, string prefix ) {
+  inline void print( Out& out, std::string prefix ) {
     out << prefix + "deadnode1\n";
   }
 };
@@ -480,13 +430,10 @@ struct TreeNodeSlaves<Consider<Entry<Empty, preferredSubId> >, Stuff, EntryTempl
   }
 
   template < class Out >
-  inline void print( Out& out, string prefix ) {
-    UNUSED( out );
-    UNUSED( prefix );
+  inline void print( Out& /*out*/, std::string /*prefix*/ ) {
   }
 
-  inline void buildFullId( const string& pre ) {
-    UNUSED( pre );
+  inline void buildFullId( const std::string& /*pre*/ ) {
   }
 };
 
@@ -500,13 +447,10 @@ struct TreeNodeSlaves<Consider<Empty >, Stuff, EntryTemplate, cnum > {
     return 0;
   }
   template < class Out >
-  inline void print( Out& out, string prefix ) {
-    UNUSED( out );
-    UNUSED( prefix );
+  inline void print( Out& /*out*/, std::string /*prefix*/ ) {
   }
 
-  inline void buildFullId( const string& pre ) {
-    UNUSED( pre );
+  inline void buildFullId( const std::string& /*pre*/ ) {
   }
 };
 
@@ -594,12 +538,12 @@ class TreeNode : public TreeNodeData<CurrentType, EntryTemplate> {
     ///This walks the tree until it cannot go on, then applies the given Action to the current node(additionally giving the type at the node as template-argument), and gives back the return-type(Action::ReturnType).
   public:
 
-    inline void buildFullId( const string& pre ) {
+    inline void buildFullId( const std::string& pre ) {
       slaves.buildFullId( pre );
     }
 
     template < class Out >
-    void print( Out& out, string prefix = "" ) {
+    void print( Out& out, std::string prefix = "" ) {
       //out << prefix + " " << typeid( CurrentType ).name() << "\n";
       out << "no rtti";
       slaves.template print<Out>( out, prefix );
@@ -839,13 +783,13 @@ struct TreeSlaveData {
   enum ID {
     id = id_ > preferredSubId ? id_ : preferredSubId
   };
-  string fullId;
+  std::string fullId;
   TreeNode<SlaveType, Stuff, EntryTemplate> slave;
 
   TreeSlaveData() {}
 
   template < class Out >
-  inline void print( Out& out, string prefix ) {
+  inline void print( Out& out, std::string prefix ) {
     prefix += "-";
     out << prefix + " ";
     if ( !fullId.empty() )
@@ -856,7 +800,7 @@ struct TreeSlaveData {
     slave.print( out, prefix );
   }
 
-  inline void buildFullId( const string& pre ) {
+  inline void buildFullId( const std::string& pre ) {
     fullId = pre;
     fullId.push_back( id );
     slave.buildFullId( fullId );
@@ -870,7 +814,7 @@ struct TreeSlaveData< 0, SlaveType, Stuff, id_, preferredSubId, EntryTemplate> {
     id = id_ > preferredSubId ? id_ : preferredSubId
   };
 
-  inline void buildFullId( const string& pre ) {}
+  inline void buildFullId( const std::string& pre ) {}
 
   ///dummies:
   struct DummySlave {
@@ -882,7 +826,7 @@ struct TreeSlaveData< 0, SlaveType, Stuff, id_, preferredSubId, EntryTemplate> {
   DummySlave slave;
 
   template < class Out >
-  inline void print( Out& out, string prefix ) {}
+  inline void print( Out& out, std::string prefix ) {}
 
 }
 ;
@@ -891,7 +835,7 @@ struct TreeSlaveData< 0, SlaveType, Stuff, id_, preferredSubId, EntryTemplate> {
 template <class Slave, class Stuff, uchar cnum, uchar preferredSubId, class EntryTemplate>
 struct TreeNodeSlaves< Consider<Entry<Slave, preferredSubId> >, Stuff, EntryTemplate, cnum> : public TreeSlaveData<1, Slave, Stuff, cnum, preferredSubId, EntryTemplate> {
   typedef TreeSlaveData<1, Slave, Stuff, cnum, preferredSubId, EntryTemplate> Base;
-  inline void buildFullId( const string& pre ) {
+  inline void buildFullId( const std::string& pre ) {
     Base::buildFullId( pre );
   }
 
@@ -905,7 +849,7 @@ struct TreeNodeSlaves< Consider<Entry<Slave, preferredSubId> >, Stuff, EntryTemp
   }
 
   template < class Out >
-  inline void print( Out& out, string prefix ) {
+  inline void print( Out& out, std::string prefix ) {
     Base::print( out, prefix );
   }
 };
@@ -920,7 +864,7 @@ struct TreeNodeSlaves< Consider<Binder<Slave1, Slave2> >, Stuff, EntryTemplate, 
     id = Side2::id
   };
 
-  inline void buildFullId( const string& pre ) {
+  inline void buildFullId( const std::string& pre ) {
     Side1::buildFullId( pre );
     Side2::buildFullId( pre );
   };
@@ -934,21 +878,12 @@ struct TreeNodeSlaves< Consider<Binder<Slave1, Slave2> >, Stuff, EntryTemplate, 
     }
   }
   template < class Out >
-  inline void print( Out& out, string prefix ) {
+  inline void print( Out& out, std::string prefix ) {
     Side1::print( out, prefix );
     Side2::print( out, prefix );
   }
 };
 }
-
-///This macro simplifies the syntax of defining a static type-list. The first parameter is the name of the new type, the other parameters are the types.
-#define BIND_LIST_1( name, x1 ) typedef Binder<x1> name;
-#define BIND_LIST_2( name, x1, x2 ) typedef Binder<x1>::Append<x2>::Result name;
-#define BIND_LIST_3( name, x1, x2, x3 ) typedef Binder<x1>::Append<x2>::Result::Append<x3>::Result name;
-#define BIND_LIST_4( name, x1, x2, x3, x4 ) typedef Binder<x1>::Append<x2>::Result::Append<x3>::Result::Append<x4>::Result name;
-#define BIND_LIST_5( name, x1, x2, x3, x4, x5 ) typedef Binder<x1>::Append<x2>::Result::Append<x3>::Result::Append<x4>::Result::Append<x5>::Result name;
-#define BIND_LIST_6( name, x1, x2, x3, x4, x5, x6 ) typedef Binder<x1>::Append<x2>::Result::Append<x3>::Result::Append<x4>::Result::Append<x5>::Result::Append<x6>::Result name;
-
 
 #endif
 

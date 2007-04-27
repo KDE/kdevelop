@@ -14,7 +14,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #define NOCATCH
 
-#include "network/common.h"
+#include "network/serialization.h"
 #include "dynamictext.h"
 #include "verify.h"
 

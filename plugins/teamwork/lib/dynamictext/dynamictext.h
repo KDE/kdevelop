@@ -21,8 +21,8 @@
 typedef std::string String;
 
 #include "network/crossmap.h"
-#include "network/pointer.h"
-#include "network/weakpointer.h"
+#include "network/safesharedptr.h"
+#include "network/weaksafesharedptr.h"
 #include "vectortimestamp.h"
 #include "offsetutils.h"
 

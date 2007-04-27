@@ -18,9 +18,11 @@ email                : david.nolden.kdevelop@art-master.de
 
 //#include <boost/serialization/extended_type_info_typeid.hpp>
 
-#include "network/common.h"
-#include "network/message.h"
+#include "network/serialization.h"
+#include "network/messagetypeset.h"
 #include "network/teamworkmessages.h"
+#include "network/forwardsession.h"
+
 #include <QString>
 #include <QDateTime>
 #include "utils.h"
@@ -60,7 +62,7 @@ class KDevSystemMessage : public SystemMessage {
   };
     KDevSystemMessage( InArchive& arch, const Teamwork::MessageInfo& info );
 
-    KDevSystemMessage( const Teamwork::MessageInfo& info, Message msg , const string& str = "" );
+    KDevSystemMessage( const Teamwork::MessageTypeSet& info, Message msg , const string& str = "" );
 
     Message message();
 
@@ -99,7 +101,7 @@ class KDevTeamworkTextMessage : public TextMessage, public AbstractGUIMessage {
     DECLARE_MESSAGE( KDevTeamworkTextMessage, TextMessage, 6 );
   public:
 
-    KDevTeamworkTextMessage( const Teamwork::MessageInfo& info, const QString& text );
+    KDevTeamworkTextMessage( const Teamwork::MessageTypeSet& info, const QString& text );
 
     KDevTeamworkTextMessage( InArchive& from, const Teamwork::MessageInfo& info );
 
@@ -144,7 +146,7 @@ class ConnectionRequest : public KDevTeamworkTextMessage {
       Unknown
   };
 
-    ConnectionRequest( const Teamwork::MessageInfo& info, const Teamwork::UserPointer& self, const Teamwork::UserPointer& target, const QString& text, KDevTeamwork* teamwork );
+    ConnectionRequest( const Teamwork::MessageTypeSet& info, const Teamwork::UserPointer& self, const Teamwork::UserPointer& target, const QString& text, KDevTeamwork* teamwork );
 
     ConnectionRequest( InArchive& arch, const Teamwork::MessageInfo& info );
 
@@ -156,7 +158,7 @@ class ConnectionRequest : public KDevTeamworkTextMessage {
 
     virtual QIcon messageIcon() const;
 
-    virtual ReplyResult gotReply( const DispatchableMessage& /*p*/ );
+    virtual ReplyResult gotReply( const MessagePointer& /*p*/ );
 
     void setState( State s );
 

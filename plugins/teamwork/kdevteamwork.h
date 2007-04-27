@@ -17,73 +17,26 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include <QObject>
 #include <QMap>
-#include "network/pointer.h"
+#include <QMenu>
+#include <QDomDocument>
 #include <memory>
-
 #include <kiconloader.h>
+#include <set>
+#include <list>
+
+#include "teamworkfwd.h"
+#include "loglevel.h"
+#include "network/safesharedptr.h"
+#include "network/messageinterface.h"
 #include "autoconstructpointer.h"
-#include "kdevteamwork_client.h"
-
-class MessageManager;
-class CollaborationManager;
-class MessageSendManager;
-class PatchesManager;
-class KUrl;
-class KDevTeamworkPart;
-class KDevTeamwork;
-class QStandardItemModel;
-class QTimer;
-class QListView;
-class QWidget;
-class QModeIndex;
-class MessageSerialization;
-class BoostSerialization;
-class Ui_List;
-class KDevTeamworkLogger;
-class MessageUserTab;
-class QPersistentModelIndex;
-class TeamworkFolderManager;
-
-namespace KDevelop {
-  class ICore;
-  class IDocumentController;
-  class IDocument;
-};
-
-namespace Teamwork {
-class MessageInterface;
-typedef SafeSharedPtr<MessageInterface, MessageSerialization> MessagePointer;
-class User;
-typedef SafeSharedPtr<User, BoostSerialization> UserPointer;
-};
 
 using namespace Teamwork;
-
-class KDevTeamworkUser;
-typedef SafeSharedPtr<KDevTeamworkUser, BoostSerialization> KDevTeamworkUserPointer;
-class KDevTeamworkClient;
-typedef SafeSharedPtr<KDevTeamworkClient> KDevTeamworkClientPointer;
-
-UserPointer userFromSession( const SessionPointer& session ); ///should go into some helpers-header
-
-///This is used to give feedback from other threads to teamwork by using the fact that the connections are automatically disconnected whenever one side is destroyed
-
-using namespace Teamwork;
-
-///Since deleting the client by a reference-counter in some meta-object leads to crashes, this is used to keep the client alive longer and delete it as last.
-class LaterDeleter : public QObject {
-  Q_OBJECT;
-  public:
-    LaterDeleter( const KDevTeamworkClientPointer& c );
-    ~LaterDeleter();
-    KDevTeamworkClientPointer m_c;
-};
 
 namespace Ui {
 class Teamwork;
 };
 
-
+class QModelIndex;
 
 class KDevTeamwork : public QObject {
     enum MessageTypes {
@@ -162,7 +115,10 @@ class KDevTeamwork : public QObject {
 
   public slots:
 
-    ///Prepares the GUI for sending a message to the given user
+    /**Prepares the GUI for sending a message to the given user. Second parameter may be zero
+     * @param target The user the message should be sent to
+     * @param answerTo which message this one is a reply to.
+     * */
     void guiSendMessageTo( const UserPointer& target, const MessagePointer& answerTo = MessagePointer() );
 
     ///This can be used by messages in other threads to send a request that their state(currently only icon) has changed
@@ -201,7 +157,7 @@ class KDevTeamwork : public QObject {
     void clientDoubleClicked( const QModelIndex& index );
     void messageDoubleClicked( const QModelIndex& index );
 
-    void dispatchMessage( SafeSharedPtr<KDevSystemMessage> msg );
+    void receiveMessage( SafeSharedPtr<KDevSystemMessage> msg );
 
     void clearLogButton();
     void saveLogButton();
@@ -333,7 +289,7 @@ class KDevTeamwork : public QObject {
     AutoConstructPointer<MessageManager> m_messageManager;
     AutoConstructPointer<MessageSendManager> m_messageSendManager;
 
-    Teamwork::UserSet m_persistentUsers;
+    std::set<UserPointer, UserPointer::ValueSmallerCompare> m_persistentUsers;
 
     LogLevel m_currentLogFilter;
 

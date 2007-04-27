@@ -20,7 +20,7 @@
 #include "offsetutils.h"
 #include "verify.h"
 #include "network/sharedptr.h"
-#include "network/weakpointer.h"
+#include "network/weaksafesharedptr.h"
 #include "vectortimestamp.h"
 
 ///Check whether these are useful for something or should be completely removed

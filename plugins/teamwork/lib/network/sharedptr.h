@@ -123,7 +123,7 @@ struct NormalSerialization {
 template <class Type, class Container>
 struct extractItemUnsafe {
   static Type* extract( const Container& cont ) {
-    return const_cast<Type*>( cont.getUnsafeData() );
+    return const_cast<Type*>( cont.unsafe() );
   }
 };
 

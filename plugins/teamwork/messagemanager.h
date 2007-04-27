@@ -51,9 +51,9 @@ class MessageManager : public QObject {
 
     void savePartialProjectSession( QDomElement* el );
 
-    int dispatchMessage( MessageInterface* msg );
-    int dispatchMessage( KDevTeamworkTextMessage* msg );
-    int dispatchMessage( InDocumentMessage* msg );
+    int receiveMessage( MessageInterface* msg );
+    int receiveMessage( KDevTeamworkTextMessage* msg );
+    int receiveMessage( InDocumentMessage* msg );
 
     int processMessage( KDevTeamworkTextMessage* msg );
 

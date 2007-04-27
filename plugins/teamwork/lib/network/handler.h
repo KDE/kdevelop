@@ -15,13 +15,16 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef HANDLER_H
 #define HANDLER_H
 
+#include "networkfwd.h"
+#include "safesharedptr.h"
+
 namespace Teamwork {
 class HandlerInterface : public SafeShared {
   public:
     virtual ~HandlerInterface() {}
     /**When the handler is multithreaded, this function must be thread-safe by just queueing the Message to a secure list and processing later.
     No locking must be done within this function, since it may cause deadlocks as the handler itself tries to lock the message-sender */
-    virtual bool handleMessage( DispatchableMessage msg ) = 0;
+    virtual bool handleMessage( MessagePointer msg ) = 0;
 };
 
 template <class Target>
@@ -29,10 +32,10 @@ struct HandlerProxy : public HandlerInterface {
   WeakSafeSharedPtr<Target> handler_;
   HandlerProxy( const SafeSharedPtr<Target>& targ ) : handler_( targ ) {}
 
-  virtual bool handleMessage( DispatchableMessage msg ) {
+  virtual bool handleMessage( MessagePointer msg ) {
     SafeSharedPtr<Target> targ = handler_.get();
     if ( targ )
-      return targ.getUnsafeData() ->handleMessage( msg );
+      return targ.unsafe() ->handleMessage( msg );
     else
       return false;
   }

@@ -18,8 +18,12 @@
 #include "collaborationmanager.h"
 #include <QMenu>
 #include <ktexteditor/document.h>
+#include "network/messagesendhelper.h"
+#include "network/messagetypeset.h"
 #include "kdevteamwork_helpers.h"
 #include "safesignaller.h"
+#include <boost/serialization/list.hpp>
+#include "qtserialization.h"
 
 Q_DECLARE_METATYPE( MessagePointer );
 
@@ -74,7 +78,7 @@ void FileCollaborationRequestData::setName( const QString& theValue ) {
 QString FileCollaborationRequest::messageText() const {
   QString name = "unknown";
   if ( info().user() )
-    name = ~info().user().getUnsafeData() ->safeName();
+    name = ~info().user().unsafe() ->safeName();
   QString files;
   for( CollabFileList::const_iterator it = m_files.begin(); it != m_files.end(); ++it ) {
     if( !files.isEmpty() ) files += "\n";
@@ -129,7 +133,7 @@ bool FileCollaborationRequest::needReply() const {
 }
 
 
-MessageInterface::ReplyResult FileCollaborationRequest::gotReply( const DispatchableMessage& p ) {
+MessageInterface::ReplyResult FileCollaborationRequest::gotReply( const MessagePointer& p ) {
   if ( !m_collab )
     return ReplyResult();
   bool handled = false;
@@ -239,12 +243,12 @@ void FileCollaborationRequest::fillContextMenu( QMenu* menu, KDevTeamwork* teamw
   }
 }
 
-REGISTER_MESSAGE( FileCollaborationMessage );
-REGISTER_MESSAGE( DocumentWrapperMessage );
-REGISTER_MESSAGE( FileCollaborationRequest );
-REGISTER_MESSAGE( FileEditMessage );
-REGISTER_MESSAGE( FileListMessage );
-REGISTER_MESSAGE( FileEditRejectMessage );
+EASY_IMPLEMENT_MESSAGE( FileCollaborationMessage );
+EASY_IMPLEMENT_MESSAGE( DocumentWrapperMessage );
+EASY_IMPLEMENT_MESSAGE( FileCollaborationRequest );
+EASY_IMPLEMENT_MESSAGE( FileEditMessage );
+EASY_IMPLEMENT_MESSAGE( FileListMessage );
+EASY_IMPLEMENT_MESSAGE( FileEditRejectMessage );
 
 #include "filecollaborationmessages.moc"
 

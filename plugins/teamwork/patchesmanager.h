@@ -18,18 +18,20 @@
 #include <list>
 #include <string>
 #include <QObject>
-#include "ui_kdevteamwork_managepatches.h"
-#include "network/common.h"
-#include "network/pointer.h"
-#include "network/message.h"
-#include "network/easymessage.h"
-#include "kdevteamwork_messages.h"
-#include "patchmessage.h"
 #include <QMetaType>
 #include <QStandardItemModel>
+#include <QPointer>
+
+#include "network/serialization.h"
+#include "network/safesharedptr.h"
+#include "network/messagetypeset.h"
+#include "network/easymessage.h"
+
+#include "ui_kdevteamwork_managepatches.h"
+#include "kdevteamwork_messages.h"
+#include "patchmessage.h"
 
 #include "utils.h"
-#include <QPointer>
 
 
 using namespace std;
@@ -43,8 +45,6 @@ class KDevTeamworkClient;
 class PatchesManager;
 typedef SafeSharedPtr<KDevTeamworkClient> TeamworkClientPointer;
 typedef SharedPtr<EditPatch> EditPatchPointer;
-
-//namespace Teamwork {
 
 
 struct PatchesManagerConfig {
@@ -167,11 +167,11 @@ class PatchesManager : public QObject {
 
     void applyPatch( LocalPatchSourcePointer::Locked patch, bool reverse = false );
 
-    int dispatchMessage( MessageInterface* msg );
-    int dispatchMessage( PatchesManagerMessage* msg );
-    int dispatchMessage( PatchesListMessage* msg );
-    int dispatchMessage( PatchRequestMessage* msg );
-    int dispatchMessage( PatchMessage* msg );
+    int receiveMessage( MessageInterface* msg );
+    int receiveMessage( PatchesManagerMessage* msg );
+    int receiveMessage( PatchesListMessage* msg );
+    int receiveMessage( PatchRequestMessage* msg );
+    int receiveMessage( PatchMessage* msg );
 
     QList<EditPatchPointer> m_editing;
 

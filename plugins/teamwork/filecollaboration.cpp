@@ -12,21 +12,24 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include "collaborationmanager.h"
-#include "filecollaborationmanager.h"
-#include "kdevteamwork_user.h"
 #include <QAction>
 #include <QMenu>
-#include "kdevutils.h"
-#include <krandom.h>
-#include "documentwrapper.h"
-#include <ktexteditor/document.h>
-#include <ktexteditor/cursor.h>
 #include <QFileInfo>
-#include "kdevteamwork_helpers.h"
 #include <QStandardItemModel>
 #include <QModelIndex>
+
+#include <ktexteditor/document.h>
+#include <ktexteditor/cursor.h>
+
+#include "filecollaborationmanager.h"
+#include "kdevteamwork_user.h"
+#include "kdevutils.h"
+#include "documentwrapper.h"
+#include "kdevteamwork_helpers.h"
+
 #include "dynamictext/verify.h"
+#include "network/messagesendhelper.h"
+#include "network/messagetypeset.h"
 
 #include "filecollaboration.h"
 
@@ -74,12 +77,12 @@ void FileCollaboration::processMessage( const MessagePointer& msg ) {
   }
 }
 /*
-int FileCollaboration::dispatchMessage( MessageInterface* msg ) {
+int FileCollaboration::receiveMessage( MessageInterface* msg ) {
   out( Logger::Warning ) << "got unknown message of type " << msg->name();
   return 0;
 }
 
-int FileCollaboration::dispatchMessage( FileCollaborationMessage* msg ) {
+int FileCollaboration::receiveMessage( FileCollaborationMessage* msg ) {
   ///@todo clean/remove
   out( Logger::Debug ) << "got FileCollaborationMessage";
   if ( msg->isDerived() ) {
@@ -100,7 +103,7 @@ int FileCollaboration::dispatchMessage( FileCollaborationMessage* msg ) {
         if ( !l->online().session() )
           throw "user is not online";
 
-        if ( !l->online().session().getUnsafeData() ->isOk() )
+        if ( !l->online().session().unsafe() ->isOk() )
           throw "user is not online, session is dead";
 
       }
@@ -110,14 +113,14 @@ int FileCollaboration::dispatchMessage( FileCollaborationMessage* msg ) {
       break;
     }
   } catch ( const QString & str ) {
-    err() << "in dispatchMessage( FileCollaborationMessage* ): " << str;
+    err() << "in receiveMessage( FileCollaborationMessage* ): " << str;
   } catch ( const char * str ) {
-    err() << "in dispatchMessage( FileCollaborationMessage* ): " << str;
+    err() << "in receiveMessage( FileCollaborationMessage* ): " << str;
   }
   return 0;
 }
 
-int FileCollaboration::dispatchMessage( FileCollaborationRequest* msg ) {
+int FileCollaboration::receiveMessage( FileCollaborationRequest* msg ) {
   out( Logger::Debug ) << "got FileCollaborationRequest";
   return 0;
 }*/
@@ -132,7 +135,7 @@ void FileCollaboration::userStateChanged() {
     if ( !l )
       throw "could not lock user";
 
-    if ( l->online() && l->online().session().getUnsafeData() ->isOk() ) {
+    if ( l->online() && l->online().session().unsafe() ->isOk() ) {
       if ( !m_userConnected ) {
         ///Automatically re-invite the user to connect
         invite( 0, true );
@@ -203,7 +206,7 @@ void FileCollaboration::invite( const FileCollaborationRequestPointer& request, 
   if ( !l )
     throw QString( "in FileCollaboration(): could not lock user" );
 
-  LockedSharedPtr<FileCollaborationRequest> lmsg = globalMessageTypeSet().create<FileCollaborationRequest>( this, m_index, m_session->primaryIndex(), m_session->id() );
+  LockedSharedPtr<FileCollaborationRequest> lmsg = new FileCollaborationRequest( globalMessageTypeSet(), this, m_index, m_session->primaryIndex(), m_session->id() );
   if ( !lmsg )
     throw QString( "in FileCollaboration(): could not create message" );
 
@@ -229,12 +232,12 @@ void FileCollaboration::invite( const FileCollaborationRequestPointer& request, 
     if ( !lrequest )
       throw QString( "in FileCollaboration(): could not lock request" );
 
-    lmsg->info().setReply( lrequest->info().id().uniqueId() );
+    lmsg->info().setReply( lrequest->info().uniqueId() );
     lmsg->info().setReplyMessage( request );
   } else {
     m_invited = true;
   }
-  l->online().session().getUnsafeData() ->sendMessage( lmsg );
+  l->online().session().unsafe() ->send( lmsg );
 
   if ( !request && !automatic ) {
     m_session->manager() ->teamwork() ->addMessageToList( lmsg.data() );
@@ -245,7 +248,7 @@ void FileCollaboration::invite( const FileCollaborationRequestPointer& request, 
 void FileCollaboration::close( const QString & /*reason*/ ) {
   KDevTeamworkUserPointer::Locked l = m_user;
   if ( l && l->online().session() ) {
-    globalMessageSendHelper().send<FileCollaborationMessage>( l->online().session().getUnsafeData(), m_session->id(), FileCollaborationMessageData::CloseSession );
+    l->online().session().unsafe()->send( new FileCollaborationMessage( globalMessageTypeSet(), m_session->id(), FileCollaborationMessageData::CloseSession ) );
   }
 }
 

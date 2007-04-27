@@ -15,27 +15,21 @@
 #ifndef MESSAGEHISTORYMANAGER_H
 #define MESSAGEHISTORYMANAGER_H
 
-#include <klockfile.h>
 
-#include "network/messageserialization.h"
-#include "network/basicsession.h"
-#include "kdevteamwork_messages.h"
-#include <QDateTime>
 #include <QList>
-#include <QTimer>
 #include <QMap>
-#include "network/user.h"
+
+#include <klockfile.h>
 #include <kurl.h>
-#include "serializationhelpers.h"
+
+#include "network/user.h"
+#include "kdevteamwork_messages.h"
+#include "teamworkfwd.h"
+#include <nvp.h>
 
 
+class QTimer;
 class KDevTeamworkTextMessage;
-class KDevTeamworkClient;
-typedef SafeSharedPtr<KDevTeamworkClient>  KDevTeamworkClientPointer;
-using namespace Teamwork;
-
-class KDevTeamworkUser;
-typedef SafeSharedPtr<KDevTeamworkUser, BoostSerialization> KDevTeamworkUserPointer;
 
 typedef SafeSharedPtr<KDevTeamworkTextMessage, MessageSerialization> HistoryMessagePointer;
 

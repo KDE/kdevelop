@@ -15,15 +15,18 @@
 #ifndef SAFELOGGER_H
 #define SAFELOGGER_H
 
-#include "network/pointer.h"
-#include "network/logger.h"
 #include <string>
 #include <vector>
+
+#include "network/safesharedptr.h"
+#include "network/logger.h"
 
 class LogSuffix;
 
 /** This class can be used for very comfortable and safe logging: Just derive your own class from it initialize
  *  it with the logger-pointer, and give a log-prefix or override logPrefix(..) for flexible prefixing.
+ *
+ *  Then you can use 'out(...) << "your text"' or 'err() << "your text"' to log.
  * */
 class SafeLogger {
   public:

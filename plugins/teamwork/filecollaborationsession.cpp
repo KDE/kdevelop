@@ -12,26 +12,35 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include "collaborationmanager.h"
-#include "filecollaborationmanager.h"
-#include "kdevteamwork_user.h"
+#include "filecollaborationsession.h"
+
+Q_DECLARE_METATYPE( Teamwork::UserPointer );
+
 #include <sstream>
 #include <QAction>
 #include <QMenu>
-#include "kdevutils.h"
-#include <krandom.h>
-#include "documentwrapper.h"
-#include <ktexteditor/document.h>
-#include <ktexteditor/cursor.h>
-#include "idocumentcontroller.h"
-#include <idocument.h>
-#include <QFileInfo>
-#include "kdevteamwork_helpers.h"
+#include <QTimer>
 #include <QStandardItemModel>
 #include <QModelIndex>
-#include "filecollaborationsession.h"
-//#include "FileSynchronize.h"
-#include "dynamictext/verify.h"
+
+#include "idocumentcontroller.h"
+#include <idocument.h>
+
+#include <krandom.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/cursor.h>
+
+#include "network/messagesendhelper.h"
+#include "network/messagetypeset.h"
+
+#include "filecollaborationmanager.h"
+#include "dynamictext/vectortimestamp.h"
+#include "kdevteamwork_user.h"
+#include "documentwrapper.h"
+#include "patchesmanager.h"
+#include "kdevteamwork_helpers.h"
+
+
 #include "filesynchronizemessage.h"
 #include "teamworkfoldermanager.h"
 
@@ -419,7 +428,7 @@ void FileCollaborationSession::saveAsPatch() {
   if ( !m_isMasterSession ) {
     CollaborationSet::Iterator it = m_collaborations.values();
     if ( ( *it ) ->user() )
-      patchName += "@" + ~( *it ) ->user().getUnsafeData() ->safeName() + "_" + QDateTime::currentDateTime().toString( Qt::ISODate );
+      patchName += "@" + ~( *it ) ->user().unsafe() ->safeName() + "_" + QDateTime::currentDateTime().toString( Qt::ISODate );
   }
 
   LocalPatchSourcePointer p = manager() ->teamwork() ->patchesManager() ->merge( patchName, patches );
@@ -532,7 +541,7 @@ void FileCollaborationSession::publishFileList( const CollabFileList& files ) {
     KDevTeamworkUserPointer::Locked l = collab->user();
     if ( l ) {
       if ( l->online().session() ) {
-        globalMessageSendHelper().send<FileListMessage>( l->online().session().getUnsafeData(), files, id() );
+        globalMessageSendHelper().send<FileListMessage>( l->online().session().unsafe(), files, id() );
       }
     } else {
       err() << "publishFileList(..): could not lock user";
@@ -547,7 +556,7 @@ void FileCollaborationSession::publishEdit( const VectorTimestamp& state, const 
       KDevTeamworkUserPointer::Locked l = collab->user();
       if ( l ) {
         if ( l->online().session() ) {
-          globalMessageSendHelper().send<FileEditMessage>( l->online().session().getUnsafeData(), state, replacement, sender->id(), id() );
+          globalMessageSendHelper().send<FileEditMessage>( l->online().session().unsafe(), state, replacement, sender->id(), id() );
         }
       } else {
         err() << "publishEdit(..): could not lock user";
@@ -653,7 +662,7 @@ void FileCollaborationSession::processMessage( const FileCollaborationMessagePoi
 
     FileCollaborationPointer collab = m_collaborations[ u ];
     if ( !collab )
-      throw ~( "got message from not involved user \"" + u.getUnsafeData() ->safeName() + "\"" );
+      throw ~( "got message from not involved user \"" + u.unsafe() ->safeName() + "\"" );
 
     collab->processMessage( msg );
 
@@ -661,12 +670,12 @@ void FileCollaborationSession::processMessage( const FileCollaborationMessagePoi
     err() << "could not process message: " << str;
   }
 }*/
-int FileCollaborationSession::dispatchMessage( MessageInterface* /*msg*/ ) {
+int FileCollaborationSession::receiveMessage( MessageInterface* /*msg*/ ) {
   err() << "got unknown message-type";
   return 1;
 }
 
-int FileCollaborationSession::dispatchMessage( FileListMessage* msg ) {
+int FileCollaborationSession::receiveMessage( FileListMessage* msg ) {
   for ( CollabFileList::iterator it = msg->m_files.begin(); it != msg->m_files.end(); ++it ) {
     FileSet::Iterator doc = m_files.values( it->id );
     if ( doc ) {
@@ -691,7 +700,7 @@ int FileCollaborationSession::dispatchMessage( FileListMessage* msg ) {
   return 1;
 }
 
-int FileCollaborationSession::dispatchMessage( FileCollaborationMessage* msg ) {
+int FileCollaborationSession::receiveMessage( FileCollaborationMessage* msg ) {
   switch ( msg->message() ) {
     case FileCollaborationMessageData::CloseSession:
       if ( !m_isMasterSession ) {
@@ -712,7 +721,7 @@ int FileCollaborationSession::dispatchMessage( FileCollaborationMessage* msg ) {
   return 1;
 }
 
-int FileCollaborationSession::dispatchMessage( DocumentWrapperMessage* msg ) {
+int FileCollaborationSession::receiveMessage( DocumentWrapperMessage* msg ) {
   CollaborationSet::Iterator sender = m_collaborations.values( msg->info().user() );
   if ( !sender ) {
     err() << "got FileSynchronize from a not collaborating user";
@@ -730,7 +739,7 @@ int FileCollaborationSession::dispatchMessage( DocumentWrapperMessage* msg ) {
         globalMessageSendHelper().sendReply<KDevSystemMessage>( msg, KDevSystemMessage::ActionDenied );
         QString userName = "anonymous user";
         if ( msg->info().user() )
-          userName = ~msg->info().user().getUnsafeData() ->safeName();
+          userName = ~msg->info().user().unsafe() ->safeName();
         out( Logger::Warning ) << "got a file-synchronization from " << userName << " for \"" << smsg->fileName() << "\", but new files from collaborators are not allowed.";
         return 1;
       }

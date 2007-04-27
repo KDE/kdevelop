@@ -4,16 +4,14 @@
 #include "teamworkmessages.h"
 #include "user.h"
 #include <list>
-#include <string>
 
 namespace Teamwork {
-using namespace std;
 
 struct UserListMessage : public TeamworkMessage {
   DECLARE_MESSAGE( UserListMessage, TeamworkMessage, 2 );
-  list<User> users;
+  std::list<User> users;
 
-  UserListMessage( const MessageInfo& info, list<UserPointer> inUsers, const UserPointer& targetUser );
+  UserListMessage( const MessageTypeSet& messageTypes, std::list<UserPointer> inUsers, const UserPointer& targetUser );
 
   UserListMessage( InArchive& arch, const MessageInfo& info );
 
@@ -25,8 +23,7 @@ struct UserListMessage : public TeamworkMessage {
   virtual void serialize( OutArchive& arch );
 };
 
-typedef UserListMessage
-TeamworkServerMessages;
+typedef UserListMessage TeamworkServerMessages;
 }
 
 #endif

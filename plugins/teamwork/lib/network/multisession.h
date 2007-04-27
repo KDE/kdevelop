@@ -17,9 +17,9 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "common.h"
-#include "message.h"
-#include "pointer.h"
+#include "serialization.h"
+#include "messagetypeset.h"
+#include "safesharedptr.h"
 #include "basicserver.h"
 #include "basicsession.h"
 #include <string>
@@ -36,12 +36,12 @@ email                : david.nolden.kdevelop@art-master.de
 
 
 namespace  Teamwork {
-
-/** TeamworkSession extends BasicTCPSession with the ability to manage virtual sub-sessions to users reachable through a forwarding server.
+class ServerInformation;
+/** MultiSession extends BasicTCPSession with the ability to manage virtual sub-sessions to users reachable through a forwarding server.
  *  It is created by Teamwork::Server and Teamwork::Client
 * */
 
-class TeamworkSession : public BasicTCPSession {
+class MultiSession : public BasicTCPSession {
     bool incoming_;
     typedef std::map<UserPointer, ForwardSessionPointer, UserPointer::ValueSmallerCompare> ForwardSessionMap;
     ForwardSessionMap forwardSessions_;
@@ -54,11 +54,11 @@ class TeamworkSession : public BasicTCPSession {
     virtual void final();
 
   public:
-    TeamworkSession( ost::TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger );
+    MultiSession( ost::TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger );
 
-    TeamworkSession( const ServerInformation& server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix = "" );
+    MultiSession( const ServerInformation& server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix = "" );
 
-    bool operator < ( const TeamworkSession& rhs ) const {
+    bool operator < ( const MultiSession& rhs ) const {
       return this < ( &rhs );
     }
 
@@ -69,11 +69,11 @@ class TeamworkSession : public BasicTCPSession {
 
     virtual bool think();
 
-    virtual ~TeamworkSession();
+    virtual ~MultiSession();
 
     void registerForwardSession( const UserPointer& peer, const ForwardSessionPointer& sess );
 
-    virtual bool handleMessage( DispatchableMessage msg ) throw();
+    virtual bool handleMessage( MessagePointer msg ) throw();
 
     ForwardSessionPointer getForwardSession( const UserPointer& user ) {
       ForwardSessionMap::const_iterator it = forwardSessions_.find( user );

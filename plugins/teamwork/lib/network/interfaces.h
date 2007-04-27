@@ -12,21 +12,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef INTERFACES_H
-#define INTERFACES_H
-
-#include "common.h"
-#include "pointer.h"
-
-class SafeShared;
-class MutexInterface;
-struct MessageSerialization;
-
-namespace Teamwork {
-	class MessageInterface;
-	typedef SafeSharedPtr<MessageInterface, MessageSerialization> MessagePointer;
-	}
-
-#endif
+// #ifndef INTERFACES_H
+// #define INTERFACES_H
+// 
+// #include "serialization.h"
+// #include "safesharedptr.h"
+// 
+// class SafeShared;
+// struct MessageSerialization;
+// 
+// namespace Teamwork {
+//  typedef SafeSharedPtr<MessageInterface, MessageSerialization> MessagePointer;
+//  }
+// 
+// #endif
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

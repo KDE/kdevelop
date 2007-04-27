@@ -15,6 +15,7 @@
 #include "filesynchronizemessage.h"
 #include "dynamictext/dynamictext.h"
 #include "utils.h"
+#include "qtserialization.h"
 
 FileSynchronizeData::FileSynchronizeData( QString fileName, const QDynamicText& text, bool sendDynamic ) {
   if( sendDynamic ) {
@@ -33,6 +34,6 @@ QDynamicTextPointer FileSynchronizeData::createDynamicText() {
     return new QDynamicText( m_state, ~m_fileText );
 }
 
-REGISTER_MESSAGE( FileSynchronize );
+EASY_IMPLEMENT_MESSAGE( FileSynchronize );
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

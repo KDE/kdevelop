@@ -13,19 +13,10 @@ email                : david.nolden.kdevelop@art-master.de
  ***************************************************************************/
 
 
-#include "sharedptr.h"
-#include <cc++/socket.h>
-#include <cstdlib>
-#include <vector>
-#include <exception>
-#include <map>
-#include <list>
-#include "interfaces.h"
-#include <typeinfo>
-#include <sstream>
-#include "message.h"
-#include "messageimpl.h"
-#include "helpers.h"
+#include "serialization.h"
+
+#include "handler.h"
+#include "messageinterface.h"
 #include "basicsession.h"
 #include "basicserver.h"
 
@@ -50,7 +41,7 @@ bool BasicTCPSocket::onAccept( const ost::InetHostAddress &ia, ost::tpport_t por
   return true;
 }
 
-/**The MessageId holds all information necessary to Identify a Message and build an Object from it.
+/**The MessageType holds all information necessary to Identify a Message and build an Object from it.
   The IdList is an inheritance-chain. Messages whose list begins with IDs of other Messages must be specializations of those, and the parent-types should be able to handle those too.
 */
 
@@ -100,7 +91,7 @@ void BasicServer::run() {
               server_->reject();
               out() << "session rejected";
             } else {
-              tcp.getUnsafe() ->startSession();
+              tcp.unsafe() ->startSession();
             }
           } else {
             out() << "session was rejected";
@@ -158,7 +149,7 @@ SessionPointer BasicServer::createSession( BasicTCPSocket* sock ) {
   return s;
 }
 
-bool BasicServer::handleMessage( DispatchableMessage msg ) throw() {
+bool BasicServer::handleMessage( MessagePointer msg ) throw() {
   messagesToHandle_ << msg;
   return true;
 }
@@ -206,7 +197,7 @@ LoggerPointer& BasicServer::logger() {
   return logger_;
 }
 
-BasicServer::BasicServer( const char* str, int port, MessageTypeSet& messageTypes, LoggerPointer logger, bool openServer ) : Thread( ), logger_( logger ), failed_( false ), exit_( false ), allowIncoming_( openServer ), server_( 0 ), messageTypes_( messageTypes ), port_( port ), selfPointer_( this ) {
+BasicServer::BasicServer( const char* str, int port, MessageTypeSet& messageTypes, LoggerPointer logger, bool openServer ) : Thread( ), messageTypes_( messageTypes ), logger_( logger ), failed_( false ), exit_( false ), allowIncoming_( openServer ), server_( 0 ), port_( port ), selfPointer_( this ) {
   addr = str;
 
   if( allowIncoming_ )
@@ -221,7 +212,7 @@ bool BasicServer::isOk() {
   return !exit_ && !failed_;
 }
 
-SafeList<DispatchableMessage>& BasicServer::messages() {
+SafeList<MessagePointer>& BasicServer::messages() {
   return messagesToHandle_;
 }
 

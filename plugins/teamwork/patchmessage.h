@@ -21,17 +21,20 @@
 #include <QObject>
 #include <QDataStream>
 #include <QByteArray>
-#include "network/common.h"
-#include "network/pointer.h"
-#include "network/message.h"
-#include "network/easymessage.h"
-#include "kdevteamwork_messages.h"
 #include <QMetaType>
 #include <QStandardItemModel>
 #include <kurl.h>
 #include <ksharedptr.h>
+
+#include "network/serialization.h"
+#include "network/safesharedptr.h"
+#include "network/messagetypeset.h"
+#include "network/easymessage.h"
+
+#include "kdevteamwork_messages.h"
 #include "utils.h"
-#include "serializationhelpers.h"
+#include "nvp.h"
+
 #include <boost/serialization/split_member.hpp>
 
 namespace KIO {
@@ -226,7 +229,7 @@ class PatchesManagerMessage : public SystemMessage
 	PatchesManagerMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {
 	}
 
-	PatchesManagerMessage( const Teamwork::MessageInfo& info, Message msg = None ) : Precursor( info, (SystemMessage::Message)msg, "" ) {
+	PatchesManagerMessage( const Teamwork::MessageTypeSet& info, Message msg = None ) : Precursor( info, (SystemMessage::Message)msg, "" ) {
 	}
 
 	Message message() {
@@ -250,11 +253,9 @@ class PatchesListMessage : public PatchesManagerMessage
 	public:
 		list<LocalPatchSource> patches;
 
-		PatchesListMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {
-			serial( arch );
-		}
+		PatchesListMessage( InArchive& arch, const Teamwork::MessageInfo& info );
 
-		PatchesListMessage( const Teamwork::MessageInfo& info, list<LocalPatchSourcePointer>& _patches ) : Precursor( info, None ) {
+		PatchesListMessage( const Teamwork::MessageTypeSet& info, list<LocalPatchSourcePointer>& _patches ) : Precursor( info, None ) {
 			for( list<LocalPatchSourcePointer>::iterator it = _patches.begin(); it != _patches.end(); ++it ) {
 				LocalPatchSourcePointer::Locked l = *it;
 				if( l ) {
@@ -265,10 +266,7 @@ class PatchesListMessage : public PatchesManagerMessage
 			}
 		}
 
-		virtual void serialize( OutArchive& arch ) {
-			Precursor::serialize( arch );
-			serial( arch );
-		};
+		virtual void serialize( OutArchive& arch );
 };
 
 class PatchRequestMessage;
@@ -339,7 +337,7 @@ class PatchRequestData : public AbstractGUIMessage {
 
 EASY_DECLARE_MESSAGE_BEGIN( PatchRequestMessage, PatchesManagerMessage, 11, PatchRequestData, 3 );
 		virtual bool needReply () const { return true; }
-		virtual ReplyResult gotReply( const DispatchableMessage& /*p*/ );
+		virtual ReplyResult gotReply( const MessagePointer& /*p*/ );
 END();
 
 class PatchData;

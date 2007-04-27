@@ -14,28 +14,26 @@
 
 #ifndef CONVERSATIONMANAGER_H
 #define CONVERSATIONMANAGER_H
-#include <list>
-#include <map>
 
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/set.hpp>
 #include <QObject>
-#include <QTimer>
-#include "ui_kdevteamwork_internalmessage.h"
+#include <QtCore/QPointer>
+#include <QTime>
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartcursor.h>
 #include <ktexteditor/smartinterface.h>
-#include <QtCore/QPointer>
-#include "kdevteamwork_user.h"
-#include "network/messageserialization.h"
+#include "teamworkfwd.h"
+#include "indocumentreference.h"
 #include "messagehistorymanager.h"
 #include "network/crossmap.h"
-#include <QTime>
 #include "safelogger.h"
+#include "ui_kdevteamwork_internalmessage.h"
+#
 
 class QStandardItemModel;
 class TemporaryConversationConnector;
 class KDevTeamworkClient;
+class QTimer;
+class InDocumentMessage;
 
 namespace KDevelop {
   class IDocument;
@@ -197,7 +195,7 @@ class InDocumentConversation : public QObject, public Shared, public SafeLogger 
     SessionPointer session();
     void fillUserBox();
     void fillMessageModel();
-    void fillMessageToModel( const InDocumentMessagePointer::Locked& );
+    void fillMessageToModel( const LockedSharedPtr<InDocumentMessage>& );
     void setupWidget( QWidget* parent );
     void embedInView( KTextEditor::View* view, KDevelop::IDocument* document, KTextEditor::Cursor position );
     KTextEditor::Cursor findPositionInDocument( InDocumentMessagePointer::Locked l, KTextEditor::Cursor* endTarget = 0 );

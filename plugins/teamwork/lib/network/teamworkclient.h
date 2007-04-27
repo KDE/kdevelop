@@ -14,28 +14,19 @@
 #ifndef TEAMWORK_CLIENT_H
 #define TEAMWORK_CLIENT_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "common.h"
-#include "message.h"
-#include "pointer.h"
-#include "basicserver.h"
-#include "basicsession.h"
-#include <string>
 #include <list>
 #include <map>
-#include <set>
-#include "sharedptr.h"
-#include "teamworkmessages.h"
-#include "teamworkserver.h"
-#include "teamworkservermessages.h"
-#include "user.h"
-#include "messagesendhelper.h"
-#include "forwardsession.h"
 
-using namespace Tree;
+#include "networkfwd.h"
+#include "safesharedptr.h"
+#include "teamworkserver.h"
+#include "user.h"
 
 namespace Teamwork {
+
+class ClientSessionHandler;
+class UserListMessage;
+
 struct ClientSessionDesc {
   UserPointer loginUser; ///user as which we are logged in
   SessionPointer session;
@@ -50,20 +41,14 @@ struct ClientSessionDesc {
 struct SessionPointerCompare {
 public:
   bool operator () ( const SessionPointer& s1, const SessionPointer& s2 ) const {
-    return s1.getUnsafeData() < s2.getUnsafeData();
+    return s1.unsafe() < s2.unsafe();
   }
 };
-
-class ClientSessionHandler;
-
-BIND_LIST_2( TeamworkClientDispatchMessages , ForwardMessage, UserListMessage );
-
 
 /// A teamwork-client generally is the same as a teamwork-server, except it not only supports incoming connections, but also outgoing ones and connections forwarded through a server, and may be associated with a user-identity.
 class Client : public Server {
     typedef map< ServerInformation, ClientSessionDesc > ClientSessionMap;
     ClientSessionMap clientSessions_;
-    MessageDispatcher< Client, TeamworkClientDispatchMessages > dispatcher_;
     friend class ClientSessionHandler;
     bool needUserUpdate_;
 
@@ -71,32 +56,12 @@ class Client : public Server {
     virtual bool think();
 
     ///Is called whenever a connected server sends its list of connected users
-    virtual void gotUserList( const std::list<UserPointer>& /*users*/ ) {}
+    virtual void gotUserList( const std::list<UserPointer>& /*users*/ );
 
-    ///this could be used to create a custom session deriven from TeamworkSession
-    virtual SessionPointer createSession( BasicTCPSocket* sock ) {
-      return Server::createSession( sock );
-    }
+    ///this could be used to create a custom session deriven from MultiSession
+    virtual SessionPointer createSession( BasicTCPSocket* sock );
 
-    virtual bool registerSession( SessionPointer session ) {
-      if ( ! Server::registerSession( session ) )
-        return false;
-
-      if ( session.getUnsafeData() ->sessionDirection() != SessionInterface::Incoming )
-        return true; ///Only send an identification-message to incoming connections, outgoing ones are sent directly while connecting
-
-      if ( identity() ) {
-        UserPointer::Locked l = identity();
-        if ( l )
-          send<IdentificationMessage>( session.getUnsafe(), *l );
-        else
-          err() << "could not lock user to send identifaction to a new client";
-      } else {
-        out() << "this server has no identity";
-      }
-
-      return true;
-    };
+    virtual bool registerSession( SessionPointer session );
 
     virtual void userDisconnected( const Teamwork::UserPointer& user );
 
@@ -108,15 +73,9 @@ class Client : public Server {
     virtual void processMessage( MessageInterface* msg );
 
   public:
-    Client( ServerInformation serverInfo, LoggerPointer logger = new Logger() ) : Server( serverInfo, logger ), dispatcher_( *this ), needUserUpdate_( false ) {
-      //    messageTypes().registerMessageTypes<AllTeamworkClientMessages> ();
-      //dispatcher_.print( cout );
-      allowIncoming( false );
-    }
+    Client( ServerInformation serverInfo, LoggerPointer logger = new Logger() );
 
-    virtual ~Client() {
-      disconnectAllServers();
-    }
+    virtual ~Client();
 
     ///when no user is given, the identity-user is used. If that is not set, the connect fails.
     void connectToServer( const ServerInformation& server, const UserPointer& asUser = UserPointer() ) ;
@@ -125,12 +84,12 @@ class Client : public Server {
 
     bool isConnectedToServer( const ServerInformation& server ) ;
     ///may return invalid pointer when connectedToServer(...) == false
-    TeamworkSessionPointer sessionToServer( const ServerInformation& server ) ;
+    MultiSessionPointer sessionToServer( const ServerInformation& server ) ;
 
-    //int dispatchMessage( IdentificationMessage* msg );
-    int dispatchMessage( ForwardMessage* msg );
-    int dispatchMessage( MessageInterface* msg ) ;
-    int dispatchMessage( UserListMessage* msg );
+    //int receiveMessage( IdentificationMessage* msg );
+    int receiveMessage( ForwardMessage* msg );
+    int receiveMessage( MessageInterface* msg ) ;
+    int receiveMessage( UserListMessage* msg );
 };
 };
 

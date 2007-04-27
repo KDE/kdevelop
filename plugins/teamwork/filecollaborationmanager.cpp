@@ -12,25 +12,34 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include "collaborationmanager.h"
-#include "filecollaborationmanager.h"
-#include "kdevteamwork_user.h"
 #include <QAction>
 #include <QMenu>
-#include "kdevutils.h"
-#include <krandom.h>
-#include "documentwrapper.h"
+#include <QTimer>
+#include <QFileInfo>
+#include <QModelIndex>
+#include <QStandardItemModel>
+
 #include <ktexteditor/document.h>
 #include <ktexteditor/cursor.h>
-#include "idocumentcontroller.h"
-#include <QFileInfo>
-#include "kdevteamwork_helpers.h"
-#include <QStandardItemModel>
-#include <QModelIndex>
-#include "dynamictext/verify.h"
-#include "ui_kdevteamwork_filecollaborationsession.h"
-#include <QFileInfo>
 
+#include "idocumentcontroller.h"
+
+#include "network/messagesendhelper.h"
+#include "network/messagetypeset.h"
+#include "network/sessioninterface.h"
+
+#include "dynamictext/verify.h"
+
+#include "teamworkfwd.h"
+#include "filecollaborationmanager.h"
+#include "patchesmanager.h"
+#include "kdevteamwork_user.h"
+#include "kdevutils.h"
+#include "documentwrapper.h"
+#include "kdevteamwork_helpers.h"
+#include "ui_kdevteamwork_filecollaborationsession.h"
+
+using namespace Teamwork;
 
 CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, QList<QString>, 0, value->plainFileNames() );
 CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, QList<KDevTeamworkUserPointer>, 0, value->users() );
@@ -69,7 +78,7 @@ CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, CollabSessionId, 0, val
  * */
 
 
-
+Q_DECLARE_METATYPE( Teamwork::UserPointer );
 
 
 
@@ -223,7 +232,7 @@ void FileCollaborationManager::processMessage( FileCollaborationMessagePointer m
       if ( s ) {
         s->processMessage( l.data() );
       } else {
-        err() << "got message for unknown file-collaboration-session with id ~" << l->sessionId() <<", type: " << msg.getUnsafeData()->name();
+        err() << "got message for unknown file-collaboration-session with id ~" << l->sessionId() <<", type: " << msg.unsafe()->name();
       }
     }
   } else {
@@ -231,18 +240,18 @@ void FileCollaborationManager::processMessage( FileCollaborationMessagePointer m
   }
 }
 
-int FileCollaborationManager::dispatchMessage( MessageInterface* msg ) {
+int FileCollaborationManager::receiveMessage( MessageInterface* msg ) {
   out( Logger::Warning ) << "got unknown message-type " << msg->name();
   return 0;
 }
 
-int FileCollaborationManager::dispatchMessage( FileCollaborationRequest* msg ) {
+int FileCollaborationManager::receiveMessage( FileCollaborationRequest* msg ) {
   ///Since it is an AbstractGUIMessage, it can plug itself into the GUI and wait for an answer by the user.
   m_manager->teamwork() ->addMessageToList( msg );
   return 1;
 }
 
-int FileCollaborationManager::dispatchMessage( FileCollaborationMessage* msg ) {
+int FileCollaborationManager::receiveMessage( FileCollaborationMessage* msg ) {
   SessionSet::Iterator it = m_sessions.values<CollabSessionId>( msg->sessionId() );
   if( it ) {
     return const_cast<FileCollaborationSession*>((*it).data())->processMessage( msg );
@@ -306,7 +315,7 @@ bool FileCollaborationManager::acceptCollaboration( const FileCollaborationReque
       if( name.isEmpty() ) {
         name = "anonymous session";
         if(  l->info().user() )
-          name += "@" + ~l->info().user().getUnsafeData()->safeName();
+          name += "@" + ~l->info().user().unsafe()->safeName();
       }
       session = startSession( name, l->files(), l->index(), l->sessionId() );
       if ( !session )

@@ -12,17 +12,116 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "common.h"
+#include "serialization.h"
+#include "messagetypeset.h"
 #include "messageimpl.h"
+#include "helpers.h"
 #include "basicsession.h"
 #include "teamworkmessages.h"
 #include "teamworkservermessages.h"
 #include "messagesendhelper.h"
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/list.hpp>
+
 
 
 
 namespace Teamwork {
 
+  template<class Archive>
+  void MessageType::serialize( Archive& target, const uint /*version*/  ) {
+    target & idList_;
+    packFastId();
+  }
+
+  MessageInfo::MessageInfo( const MessageInfo& rhs ) {
+    operator=( rhs );
+
+  }
+
+  MessageInfo& MessageInfo::operator = ( const MessageInfo& rhs ) {
+    id_ = rhs.id_;
+    uniqueId_ = rhs.uniqueId_;
+    session_ = rhs.session_;
+    user_ = rhs.user_;
+    replyToMessage_ = rhs.replyToMessage_;
+    isReplyTo_ = rhs.isReplyTo_;
+    deserialized_ = rhs.deserialized_;
+    return *this;
+  }
+  
+
+  MessageInfo::MessageInfo( InArchive& arch ) : id_( arch ), deserialized_( true ) {
+    //cout << "deserializing message-info";
+    arch & isReplyTo_;
+    arch & uniqueId_;
+  }
+
+  const MessageType& MessageInfo::type() const {
+    return id_;
+  }
+
+  void MessageInfo::serialize( OutArchive& arch, const uint version ) {
+    id_.serialize( arch, version );
+    arch & isReplyTo_;
+    arch & uniqueId_;
+  }
+
+  UniqueMessageId MessageInfo::isReplyTo() const {
+    return isReplyTo_;
+  }
+
+  void MessageInfo::setReply( UniqueMessageId replyId ) {
+    isReplyTo_ = replyId;
+  }
+
+  void MessageInfo::setId( const MessageType& id ) {
+    id_ = id;
+  }
+
+  void MessageInfo::makePersistent() {
+    setSession( 0 );
+  }
+
+  bool MessageInfo::isIncoming() const {
+    return deserialized_;
+  }
+
+  void MessageInfo::setIsIncoming( bool b ) {
+    deserialized_ = b;
+  }
+
+  MessageInterface::~MessageInterface() {}
+  ;
+
+  const char* MessageInterface::name() {
+    return staticName();
+  }
+
+  const char* MessageInterface::staticName() {
+    return "MessageInterface";
+  }
+
+  const MessageType& MessageInterface::type() const {
+    return info().type();
+  }
+
+  const UniqueMessageId MessageInterface::uniqueId() const {
+    return info().uniqueId();
+  }
+  
+
+  bool MessageInterface::needReply() const {
+    return false;
+  }
+
+  MessageInterface::ReplyResult::ReplyResult( bool messageHandled_ , bool awaitingMore_ ) : messageHandled( messageHandled_ ), awaitingMore( awaitingMore_ ) {}
+
+  MessageInterface::ReplyResult MessageInterface::gotReply( const MessagePointer& /*p*/ ) {
+    return false;
+  }
+
+  
 //By making this a static function, it is sure that the object is initialized when first used
 MessageTypeSet& globalMessageTypeSet() {
   static MessageTypeSet allMessages;
@@ -40,12 +139,12 @@ void registerDefaultMessages( MessageTypeSet& target ) {
 }
 
 
-RawMessage::RawMessage( const MessageInfo& info, const DataVector& data ) : info_( info ), body_( data ) {}
+RawMessage::RawMessage( const MessageTypeSet& info, const DataVector& data ) : info_( info.messageInfo( name() ) ), body_( data ) {}
 ;
 
 ///This should be used to indicate that this message is a reply to the other message(replyTarget)
 void RawMessage::setReply( MessageInterface* replyTarget ) {
-  info_.setReply( replyTarget->id().uniqueId() );
+  info_.setReply( replyTarget->info().uniqueId() );
 }
 
 RawMessage::RawMessage( InArchive& from, const MessageInfo& info ) : info_( info ) {
@@ -66,8 +165,7 @@ MessageInfo& RawMessage::info() {
 
 /**This is called once a message has been tried to be sent, with the appropriate result, and can be used by the message to give some feedback to the sender. The Session used to send the message is still locked.
   */
-void RawMessage::result( bool success ) {
-  UNUSED( success );
+void RawMessage::result( bool /*success*/ ) {
 }
 
 /**Returns a reference to the data-store of this raw message. It does not include data serialized to inherited messages. */
@@ -81,7 +179,7 @@ const DataVector& RawMessage::body() const {
 }
 
 
-TextMessage::TextMessage( const MessageInfo& info, const std::string& text ) : RawMessage( info, DataVector() ) {
+TextMessage::TextMessage( const MessageTypeSet& info, const std::string& text ) : RawMessage( info, DataVector() ) {
   if ( text.length() == 0 )
     return ;
   body().resize( text.length() + 1 );
@@ -97,7 +195,7 @@ std::string TextMessage::text() const {
   return std::string( &( body() [ 0 ] ) );
 }
 
-SystemMessage::SystemMessage( const MessageInfo& info, Message msg, const string& ptext ) : TextMessage( info, ptext ), msg_( msg ) {}
+SystemMessage::SystemMessage( const MessageTypeSet& info, Message msg, const string& ptext ) : TextMessage( info, ptext ), msg_( msg ) {}
 
 SystemMessage::SystemMessage( InArchive& arch, const MessageInfo& info ) : TextMessage( arch, info ) {
   serial( arch );
@@ -141,10 +239,10 @@ string SystemMessage::messageAsString() {
 }
 
 
-TeamworkMessage::TeamworkMessage( const MessageInfo& info ) : RawMessage( info, DataVector() ) {}
+TeamworkMessage::TeamworkMessage( const MessageTypeSet& info ) : RawMessage( info, DataVector() ) {}
 TeamworkMessage::TeamworkMessage( InArchive& arch, const MessageInfo& info ) : RawMessage( arch, info ) {}
 
-IdentificationMessage::IdentificationMessage( const MessageInfo& info, const User& user ) : TeamworkMessage( info ), user_( user ) {}
+IdentificationMessage::IdentificationMessage( const MessageTypeSet& info, const User& user ) : TeamworkMessage( info ), user_( user ) {}
 
 IdentificationMessage::IdentificationMessage( InArchive& arch, const MessageInfo& info ) : TeamworkMessage( arch, info ) {
   serial( arch );
@@ -160,7 +258,7 @@ void IdentificationMessage::serialize( OutArchive& arch ) {
 }
 
 
-ForwardMessage::ForwardMessage( const MessageInfo& info, MessageInterface* messageToForward, const User& source, const User& targ ) : RawMessage( info, DataVector( ) ), source_( source ), target_( targ ) {
+ForwardMessage::ForwardMessage( const MessageTypeSet& info, MessageInterface* messageToForward, const User& source, const User& targ ) : RawMessage( info, DataVector( ) ), source_( source ), target_( targ ) {
   serializeMessageToBuffer( body(), *messageToForward );
   source_.stripForTarget( target_ );
   target_.stripForIdentification();
@@ -195,7 +293,7 @@ bool ForwardMessage::storeOnServer() {
   return false;
 }
 
-UserListMessage::UserListMessage( const MessageInfo& info, list<UserPointer> inUsers, const UserPointer& targetUser ) : TeamworkMessage( info ) {
+UserListMessage::UserListMessage( const MessageTypeSet& info, list<UserPointer> inUsers, const UserPointer& targetUser ) : TeamworkMessage( info ) {
   for ( list<UserPointer>::iterator it = inUsers.begin(); it != inUsers.end(); ++it ) {
     if ( *it == targetUser )
       continue;
@@ -220,6 +318,7 @@ void UserListMessage::serialize( OutArchive& arch ) {
   serial( arch );
 }
 
+INSTANTIATE_SERIALIZATION_FUNCTIONS( MessageType );
 
 REGISTER_MESSAGE( RawMessage );
 REGISTER_MESSAGE( TextMessage );

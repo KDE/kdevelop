@@ -1,11 +1,10 @@
 #ifndef MESSAGEPOINTER_H
 #define MESSAGEPOINTER_H
 
-///This header defines a normal SafeSharedPtr wich uses the message-serialization-system and the MessageTypeSet to serialize and deserialize messages(it stores and loads the messages as vectors). It automatically uses the global message-set stored in globalMessageTypeSet(). A hard lock is done while saving. Warning: May throw exceptions on errors
+///This header defines a serialization-class that can be used as template-parameter to SafeSharedPtr so it uses the message-serialization-system and the MessageTypeSet to serialize and deserialize messages(it stores and loads the messages as vectors). It automatically uses the global message-set stored in globalMessageTypeSet(). A hard lock is done while saving. Warning: May throw exceptions on errors
 
-#include "common.h"
-#include "message.h"
-#include "pointer.h"
+#include "serialization.h"
+#include "messagetypeset.h"
 #include "helpers.h"
 #include  <vector>
 
@@ -47,7 +46,7 @@ struct MessageSerialization {
       
       arch << boost::serialization::make_nvp( "valid", b );
       std::vector<char> v;
-      Teamwork::serializeMessageToBuffer( v, *t.getUnsafeData() );
+      Teamwork::serializeMessageToBuffer( v, *t.unsafe() );
 
 #ifdef USE_TEXT_ARCHIVE
       
@@ -61,7 +60,7 @@ struct MessageSerialization {
 #endif
       
 #else
-      Teamwork::serializeMessageToArchive( arch, *t.getUnsafeData() );
+      Teamwork::serializeMessageToArchive( arch, *t.unsafe() );
 #endif
     } else {
       bool b = false;

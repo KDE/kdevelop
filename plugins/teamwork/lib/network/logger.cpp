@@ -65,7 +65,7 @@ LoggerPrinter::~LoggerPrinter() {
       l->log( s, level_ );
     } else {
       if ( logger_ ) {
-        logger_.getUnsafeData() ->safeErrorLog( s, level_ );
+        logger_.unsafe() ->safeErrorLog( s, level_ );
       } else {
         cerr << "(bad logger): " << s << endl;
       }

@@ -15,21 +15,17 @@
 #ifndef KDEVTEAMWORK_CLIENT_H
 #define KDEVTEAMWORK_CLIENT_H
 
-//#include "kdevtreeview.h"
-#include "ui_kdevteamwork_interface.h"
-#include "network/pointer.h"
-#include <QStandardItemModel>
-#include "network/teamworkserver.h"
+
+#include "teamworkfwd.h"
+#include "network/safesharedptr.h"
 #include "network/teamworkclient.h"
 #include "kdevteamwork_messages.h"
-#include "patchesmanager.h"
-#include "network/message.h"
+#include <list>
+
+
 #include <QTimer>
 
-///@TODO: Dispatch the messages in a more flexible way: Allow any client to register with an arbitrary message-type that he wants to get(including all sub-messages).
-
-typedef SafeSharedPtr< KDevTeamworkTextMessage > KDevTextMessagePointer;
-typedef SafeSharedPtr< ConnectionRequest > ConnectionRequestPointer;
+///@TODO: Dispatch the messages in a more flexible way: Allow any client to register with an arbitrary message-type that he wants to get(including all sub-messages). DynamicMessageDispatcher can do this. Use that, and make the way messages are connected more flexible.
 
 Q_DECLARE_METATYPE( Teamwork::ServerInformation );
 Q_DECLARE_METATYPE( Teamwork::UserPointer );
@@ -37,12 +33,7 @@ Q_DECLARE_METATYPE( ConnectionRequestPointer );
 Q_DECLARE_METATYPE( SafeSharedPtr<KDevTeamworkTextMessage> );
 Q_DECLARE_METATYPE( std::list<UserPointer> );
 Q_DECLARE_METATYPE( SafeSharedPtr<KDevSystemMessage> );
-Q_DECLARE_METATYPE( PatchesManagerMessagePointer );
 Q_DECLARE_METATYPE( CollaborationMessagePointer );
-
-UserPointer userFromSession( const SessionPointer& session );
-
-BIND_LIST_5( KDevTeamworkDispatchMessages, KDevTeamworkTextMessage, KDevSystemMessage, ConnectionRequest, PatchesManagerMessage, CollaborationMessage );
 
 ///most of the functions in this class are called from within another thread
 class KDevTeamworkClient : public QObject, public Teamwork::Client
@@ -57,17 +48,17 @@ class KDevTeamworkClient : public QObject, public Teamwork::Client
 			m_teamwork = 0;
 		}
 
-		int dispatchMessage( CollaborationMessage* msg );
+		int receiveMessage( CollaborationMessage* msg );
 
-		int dispatchMessage( PatchesManagerMessage* msg );
+		int receiveMessage( PatchesManagerMessage* msg );
 
-		int dispatchMessage( KDevTeamworkTextMessage* msg );
+		int receiveMessage( KDevTeamworkTextMessage* msg );
 
-		int dispatchMessage( KDevSystemMessage* msg );
+		int receiveMessage( KDevSystemMessage* msg );
 
-		int dispatchMessage( ConnectionRequest* msg );
+		int receiveMessage( ConnectionRequest* msg );
 
-		int dispatchMessage( MessageInterface* /*msg*/ ) {
+		int receiveMessage( MessageInterface* /*msg*/ ) {
 			return 0;
 		}
 
@@ -98,23 +89,17 @@ class KDevTeamworkClient : public QObject, public Teamwork::Client
     ///this is called whenever a server the client disconnects from a connected server in any way
 		virtual void disconnectedFromServer( const Teamwork::ClientSessionDesc& session, const Teamwork::ServerInformation& server );
 
-		virtual void processMessage( MessageInterface* msg ) throw() {
-			if( !dispatcher_( msg ) )
-				Teamwork::Client::processMessage( msg );
-		}
-
 		virtual void gotUserList( const std::list<UserPointer>& users );
 
+    void processMessage( MessageInterface* msg ) throw();
+
 	private:
-		typedef Teamwork::MessageDispatcher< KDevTeamworkClient, KDevTeamworkDispatchMessages> DispatcherType;
+		
     //AllKDevTeamworkMessages, KDevTeamworkMessages
 		Q_OBJECT
 		KDevTeamwork* m_teamwork;
-		DispatcherType dispatcher_;
 
 };
-
-typedef SafeSharedPtr<KDevTeamworkClient> TeamworkClientPointer;
 
 #endif
 

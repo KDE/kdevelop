@@ -12,27 +12,31 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "serialization.h"
 #include "serverconfig.h"
 #include "boost/archive/polymorphic_xml_oarchive.hpp"
 #include "boost/archive/polymorphic_xml_iarchive.hpp"
 #include "boost/archive/polymorphic_text_oarchive.hpp"
 #include "boost/archive/polymorphic_text_iarchive.hpp"
 #include "boost/serialization/list.hpp"
+#include <boost/serialization/set.hpp>
 #include <fstream>
 #include "defines.h"
+#include <iostream>
 
 namespace Teamwork {
 
-ServerConfiguration::ServerConfiguration() : port( STANDARDPORT ), bind( "127.0.0.1" ) {
+ServerConfiguration::ServerConfiguration() : port( STANDARDPORT ), bind( "0.0.0.0" ) {
 }
 
 bool loadServerConfiguration( ServerConfiguration& conf ) {
   std::ifstream file( "teamwork.config", ios_base::in );
   if( !file.good() ) {
-    cout << "could not open config-file";
+    cout << "could not open config-file" << endl;
     return false;
   }
-  boost::archive::polymorphic_text_iarchive arch( file );
+  /*boost::archive::polymorphic_text_iarchive*/
+  InArchive arch( file );
   try {
   } catch( ... ) {
     cout << "error while reading the config-file" << endl;
@@ -42,13 +46,24 @@ bool loadServerConfiguration( ServerConfiguration& conf ) {
   return true;
 }
 
+template<class Archive>
+void ServerConfiguration::serialize( Archive& arch, const unsigned int /*version*/ ) {
+  arch & serverName;
+  arch & serverPassword;
+  arch & port;
+  arch & bind;
+  arch & registeredUsers;
+}
+
+
 bool saveServerConfiguration( ServerConfiguration& conf ) {
   std::ofstream file( "teamwork.config", ios_base::out );
   if( !file.good() ) {
-    cout << "could not open config-file";
+    cout << "could not open config-file" << endl;
     return false;
   }
-  boost::archive::polymorphic_text_oarchive arch( file );
+  /*boost::archive::polymorphic_text_oarchive*/
+  OutArchive arch( file );
   try {
   } catch( ... ) {
     cout << "error while loading the config-file" << endl;
@@ -57,6 +72,8 @@ bool saveServerConfiguration( ServerConfiguration& conf ) {
   arch & conf;
   return true;
 }
+
+INSTANTIATE_SERIALIZATION_FUNCTIONS( ServerConfiguration );
 
 }
 

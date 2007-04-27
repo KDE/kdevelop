@@ -13,16 +13,16 @@ email                : david.nolden.kdevelop@art-master.de
  ***************************************************************************/
 
 #include "teamworkserver.h"
-#include "teamworksession.h"
+#include "multisession.h"
 #include "forwardsession.h"
 
 namespace Teamwork {
 
-TeamworkSession::TeamworkSession( ost::TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger ) : BasicTCPSession( server, handler, messages, logger, "incoming_" ), incoming_( true ) {}
+MultiSession::MultiSession( ost::TCPSocket &server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger ) : BasicTCPSession( server, handler, messages, logger, "incoming_" ), incoming_( true ) {}
 
-TeamworkSession::TeamworkSession( const ServerInformation& server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix ) : BasicTCPSession( server.addr().c_str() , server.port(), handler, messages, logger, namePrefix ), incoming_( false ) {}
+MultiSession::MultiSession( const ServerInformation& server, HandlerPointer handler, MessageTypeSet& messages, const LoggerPointer& logger, const string& namePrefix ) : BasicTCPSession( server.addr().c_str() , server.port(), handler, messages, logger, namePrefix ), incoming_( false ) {}
 
-void TeamworkSession::deleteForwardSessions() {
+void MultiSession::deleteForwardSessions() {
   for ( ForwardSessionMap::iterator it = forwardSessions_.begin(); it != forwardSessions_.end(); ++it ) {
     ForwardSessionPointer::Locked l = ( *it ).second;
     if ( l ) {
@@ -43,12 +43,12 @@ void TeamworkSession::deleteForwardSessions() {
   garbageSessions_.clear();
 }
 
-void TeamworkSession::final() {
+void MultiSession::final() {
   deleteForwardSessions();
   BasicTCPSession::final();
 }
 
-bool TeamworkSession::think() {
+bool MultiSession::think() {
   bool ret = false;
 
   for ( ForwardSessionMap::iterator it = forwardSessions_.begin(); it != forwardSessions_.end(); ) {
@@ -57,7 +57,7 @@ bool TeamworkSession::think() {
     ///This costs very much and should be optimized once it works perfectly
     ForwardSessionPointer::Locked l = ( *it2 ).second;
     if ( l ) {
-      if ( !( *it2 ).second.getUnsafeData() ->isRunning() ) {
+      if ( !( *it2 ).second.unsafe() ->isRunning() ) {
         l->final();
         forwardSessions_.erase( it2 );
       } else {
@@ -70,7 +70,7 @@ bool TeamworkSession::think() {
   for ( list<ForwardSessionPointer>::iterator it = garbageSessions_.begin(); it != garbageSessions_.end(); ) {
     list<ForwardSessionPointer>::iterator it2 = it;
     ++it;
-    if ( !( *it2 ).getUnsafeData() ->isRunning() ) {
+    if ( !( *it2 ).unsafe() ->isRunning() ) {
       ForwardSessionPointer::Locked l = ( *it2 );
       if ( l ) {
         l->final();
@@ -87,22 +87,22 @@ template <class Type>
     class FastLockHelper {}
 ;
 
-TeamworkSession::~TeamworkSession() {
+MultiSession::~MultiSession() {
   deleteForwardSessions();
 }
 
-void TeamworkSession::registerForwardSession( const UserPointer& peer, const ForwardSessionPointer& sess ) {
+void MultiSession::registerForwardSession( const UserPointer& peer, const ForwardSessionPointer& sess ) {
   if ( forwardSessions_.find( peer ) != forwardSessions_.end() ) { ///finalize some older open session to the same target
     UserPointer::Locked u = peer;
     out() << "closing a duplicated indirect session to " << ( u ? u->name() : "not lockable" );
-    forwardSessions_[ peer ].getUnsafeData() ->stopRunning();
+    forwardSessions_[ peer ].unsafe() ->stopRunning();
     garbageSessions_.push_back( forwardSessions_[ peer ] );
   }
 
   forwardSessions_[ peer ] = sess;
 }
 
-bool TeamworkSession::handleMessage( DispatchableMessage msg ) throw() {
+bool MultiSession::handleMessage( MessagePointer msg ) throw() {
   MessagePointer mp = msg;
   SafeSharedPtr<ForwardMessage> forward = mp.cast<ForwardMessage>();
   if ( forward ) {

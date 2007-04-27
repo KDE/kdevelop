@@ -17,6 +17,7 @@
 #include "kdevteamwork.h"
 #include <boost/serialization/export.hpp>
 #include "kdevteamwork_helpers.h"
+#include "network/sessioninterface.h"
 
 
 KDevTeamworkUser::KDevTeamworkUser( const User* user ) {
@@ -38,7 +39,7 @@ void KDevTeamworkUser::setSession( const SessionPointer& sess ) {
 QIcon KDevTeamworkUser::icon( K3Icon::Group size ) {
 	SessionPointer s = online().session();
 
-	if( s && s.getUnsafeData()->isOk() ) {
+	if( s && s.unsafe()->isOk() ) {
 		SessionPointer::Locked l = s;
 		if( l ) {
 			if( l->sessionType() == SessionInterface::Direct )

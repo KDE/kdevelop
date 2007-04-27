@@ -16,7 +16,7 @@
 #define SERIALIZATION_UTILS_H
 
 ///Unfortunately it seems that boost doesn't like the things that Qt syntactically does to the xml-syntax.
-///It fails to load logically same documents when they come from QDom, so I embed the data as simple text into the xml-document.
+///It fails to load logically same documents when they come from QDom, so we embed the data as simple text into the xml-document.
 
 #define XML_USE_TEXT_ARCHIVE
 
@@ -38,7 +38,7 @@ typedef boost::archive::polymorphic_xml_oarchive XmlOArchive;
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/level.hpp>
-#include "serializationhelpers.h"
+#include "nvp.h"
 
 #include <QString>
 #include <QDomDocument>

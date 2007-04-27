@@ -12,17 +12,25 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
-#include "common.h"
-#include "message.h"
+#include "serialization.h"
+#include "messagetypeset.h"
 #include "basicsession.h"
 #include "user.h"
 
 namespace Teamwork {
 
-MessageInfo::MessageInfo( const MessageId& id, const SessionPointer& session, UniqueMessageId isReplyTo ) : isReplyTo_( isReplyTo ), deserialized_( false ) {
+MessageInfo::MessageInfo( const MessageType& id, UniqueMessageId uniqueId ) : isReplyTo_( 0 ), uniqueId_( uniqueId ), deserialized_( false ) {
+  id_ = id;
+  cout << "creating message-info normally";
+}
+
+MessageInfo::MessageInfo( const MessageType& id, UniqueMessageId uniqueId, const SessionPointer& session, UniqueMessageId isReplyTo ) : isReplyTo_( isReplyTo ), uniqueId_( uniqueId ), deserialized_( false ) {
   id_ = id;
   session_ = session;
   cout << "creating message-info normally";
+}
+
+MessageInfo::~MessageInfo() {
 }
 
 void MessageInfo::setReplyMessage( const MessagePointer& msg ) {
@@ -48,7 +56,7 @@ SessionPointer MessageInfo::session() const {
 
 UserPointer MessageInfo::user() const {
   if ( session_ ) {
-    return session_.getUnsafeData() ->safeUser();
+    return session_.unsafe() ->safeUser();
   } else {
     return user_;
   }
@@ -60,7 +68,7 @@ void MessageInfo::setSession( const SessionPointer& sess ) {
     user_ = 0;
     return ;
   }
-  if ( UserPointer p = sess.getUnsafeData() ->safeUser() ) {
+  if ( UserPointer p = sess.unsafe() ->safeUser() ) {
     setUser( p );
   } else {
     session_ = sess;
@@ -73,7 +81,7 @@ void MessageInfo::setUser( const UserPointer& user ) {
   session_ = 0;
 }
 
-MessageFactoryInterface* MessageTypeSet::findFactory( MessageId& id ) const {
+MessageFactoryInterface* MessageTypeSet::findFactory( MessageType& id ) const {
   while ( id ) { ///walk up the tree until a matching maybe inherited message-type is found
     TypeMap::const_iterator it = types_.find( id );
     if ( it != types_.end() ) {
@@ -84,21 +92,21 @@ MessageFactoryInterface* MessageTypeSet::findFactory( MessageId& id ) const {
   return 0;
 }
 
-DispatchableMessage MessageTypeSet::buildMessage( InArchive& from, const MessageInfo& inf ) const {
-  MessageId id = inf.id();
+MessagePointer MessageTypeSet::buildMessage( InArchive& from, const MessageInfo& inf ) const {
+  MessageType id = inf.type();
 
   MessageFactoryInterface* i = findFactory( id );
   if ( i ) {
     MessageInfo info( inf );
     info.setId( id );
-    return DispatchableMessage( i->buildMessage( from, info ) );
+    return MessagePointer( i->buildMessage( from, info ) );
   }
 
   cout << "could not build message with id " << id.desc() << endl;
-  return DispatchableMessage();
+  return MessagePointer();
 }
 
-void MessageId::packFastId() {
+void MessageType::packFastId() {
   //return;
   fastId_ = 0;
   if ( idList_.size() > 4 ) {
@@ -113,17 +121,17 @@ void MessageId::packFastId() {
   }
 }
 
-MessageId::MessageId( IdList IDs, uint uniqueId ) : idList_( IDs ), useFastId( false ), uniqueId_( uniqueId ) {
+MessageType::MessageType( IdList IDs ) : idList_( IDs ), useFastId( false ) {
   packFastId();
 }
 
-MessageId::MessageId( InArchive& from ) : useFastId( false ) {
+MessageType::MessageType( InArchive& from ) : useFastId( false ) {
   serialize( from );
 }
 
 
 ///Only compares the type-id, not the uniqueId
-bool MessageId::operator == ( const MessageId& rhs ) const {
+bool MessageType::operator == ( const MessageType& rhs ) const {
   if ( useFastId && rhs.useFastId )
     return fastId_ == rhs.fastId_;
   int s1 = idList_.size();
@@ -138,7 +146,7 @@ bool MessageId::operator == ( const MessageId& rhs ) const {
   return true;
 }
 
-bool MessageId::operator < ( const MessageId& rhs ) const {
+bool MessageType::operator < ( const MessageType& rhs ) const {
   if ( useFastId && rhs.useFastId )
     return fastId_ < rhs.fastId_;
   int s1 = idList_.size();
@@ -162,7 +170,12 @@ bool MessageId::operator < ( const MessageId& rhs ) const {
   return false;
 }
 
-bool MessageId::startsWith( const MessageId& rhs ) const {
+int MessageType::length() const {
+  return idList_.size();
+}
+
+
+bool MessageType::startsWith( const MessageType& rhs ) const {
   int s1 = idList_.size();
   int s2 = rhs.idList_.size();
   if ( s1 < s2 )
@@ -176,7 +189,7 @@ bool MessageId::startsWith( const MessageId& rhs ) const {
   return true;
 }
 
-MessageId& MessageId::operator += ( unsigned char append ) {
+MessageType& MessageType::operator += ( unsigned char append ) {
   if ( !idList_.empty() )
     idList_.pop_back();
   idList_.push_back( append );
@@ -185,7 +198,7 @@ MessageId& MessageId::operator += ( unsigned char append ) {
   return *this;
 }
 
-MessageId& MessageId::operator -- () {
+MessageType& MessageType::operator -- () {
   if ( !idList_.empty() ) {
     idList_.pop_back();
     idList_.pop_back();
@@ -195,11 +208,11 @@ MessageId& MessageId::operator -- () {
   return *this;
 }
 
-MessageId::operator bool() const {
+MessageType::operator bool() const {
   return !idList_.empty();
 }
 
-std::string MessageId::desc() const {
+std::string MessageType::desc() const {
   if ( idList_.empty() )
     return "'invalid id'";
   std::ostringstream ret;
@@ -211,7 +224,7 @@ std::string MessageId::desc() const {
   return ret.str();
 }
 
-MessageId::operator const uchar*() const {
+MessageType::operator const unsigned char*() const {
   if ( idList_.empty() ) {
     return ( const uchar* ) "";
   } else {
@@ -219,22 +232,21 @@ MessageId::operator const uchar*() const {
   }
 }
 
-UniqueMessageId MessageId::uniqueId() const {
+UniqueMessageId MessageInfo::uniqueId() const {
   return uniqueId_;
 }
 
-/**Since the uniqueId is not used for sorting this casts away constness so the id of a MessageId that is used as Key in a Map can be changed */
-const MessageId& MessageId::modifyUniqueId( UniqueMessageId newId ) const {
-  const_cast<MessageId*>( this ) ->uniqueId_ = newId;
-  return *this;
+/**Since the uniqueId is not used for sorting this casts away constness so the id of a MessageType that is used as Key in a Map can be changed */
+void MessageInfo::setUniqueId( UniqueMessageId newId ) const {
+  const_cast<MessageInfo*>( this ) ->uniqueId_ = newId;
 }
 
-MessageTypeSet::TypeMap::iterator MessageTypeSet::search( const MessageId& id ) {
+MessageTypeSet::TypeMap::iterator MessageTypeSet::search( const MessageType& id ) {
   return types_.find( id );
 }
 
-MessageId MessageTypeSet::allocateSubId( const MessageId& id, int preferredSubId  ) {
-  MessageId tempId = id;
+MessageType MessageTypeSet::allocateSubId( const MessageType& id, int preferredSubId  ) {
+  MessageType tempId = id;
   if ( preferredSubId == 0 )
     preferredSubId = 1;
   for ( int a = preferredSubId; a < 255; a++ ) {
@@ -251,10 +263,9 @@ MessageId MessageTypeSet::allocateSubId( const MessageId& id, int preferredSubId
     return allocateSubId( allocateSubId( --tempId ), preferredSubId );
   }
 
-  return MessageId();
+  return MessageType();
 }
 MessageTypeSet::MessageTypeSet() {
-  cout << "MessageTypeSet constructed";
   srand( time( NULL ) );
   currentUniqueMessageId_ = rand();
   currentUniqueMessageId_ *= rand();
@@ -262,7 +273,7 @@ MessageTypeSet::MessageTypeSet() {
   currentUniqueMessageId_ *= rand();
 }
 
-DispatchableMessage MessageTypeSet::buildMessage( InArchive& from, const MessageInfo& inf ) const;
+MessagePointer MessageTypeSet::buildMessage( InArchive& from, const MessageInfo& inf ) const;
 
 MessageTypeSet::~MessageTypeSet() {
   for ( TypeMap::iterator it = types_.begin(); it != types_.end(); ++it ) {
@@ -271,13 +282,15 @@ MessageTypeSet::~MessageTypeSet() {
   types_.clear();
 }
 
-const MessageId& MessageTypeSet::idFromName( const std::string& name ) {
+const MessageType& MessageTypeSet::idFromName( const std::string& name ) const {
   TypeNameMap::const_iterator it = ids_.find( name );
   if ( it != ids_.end() ) {
     return ( *it ).second;
+  } else if( name == "MessageInterface" ) {
+    return const_cast<TypeNameMap&>(ids_)[name]; //Automatically register MessageInterface with the zero-id
   } else {
     cout << "could not assign an ID to a message called \"" << name << "\", it seems not to be registered in the message-type-set" << endl;
-    return ids_[ name ];
+    return const_cast<TypeNameMap&>(ids_)[ name ];
   }
 }
 
@@ -292,7 +305,7 @@ std::string MessageTypeSet::stats() const {
 
 ///returns the class-name of the message(the most specialized one registered in this type-set)
 std::string MessageTypeSet::identify( MessageInterface* msg ) const {
-  MessageId id = msg->info().id();
+  MessageType id = msg->info().type();
   MessageFactoryInterface* i = findFactory( id );
   if ( i ) {
     return i->identify();

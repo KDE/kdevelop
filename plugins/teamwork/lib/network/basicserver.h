@@ -15,15 +15,17 @@
 #ifndef TEAMWORK_SERVER_H
 #define TEAMWORK_SERVER_H
 
-#include "common.h"
-#include "basicsession.h"
-#include "helpers.h"
-#include "message.h"
-#include "pointer.h"
-#include "weakpointer.h"
-#include "handler.h"
+#include "networkfwd.h"
+#include "safesharedptr.h"
+#include "weaksafesharedptr.h"
+#include "safelist.h"
+#include "logger.h"
+
+#include <cc++/socket.h>
 
 namespace Teamwork {
+template <class Target>
+struct HandlerProxy;
 
 class BasicTCPSocket : public ost::TCPSocket {
   protected:
@@ -47,7 +49,7 @@ class BasicServer : protected ost::Thread, public WeakSafeShared {
     virtual bool isOk();
 
     ///returns the reference to a synchronized list of messages that are waiting for being processed. Processed messages should be removed from that list.
-    SafeList<DispatchableMessage>& messages();
+    SafeList<MessagePointer>& messages();
 
     /**After this function was called, the ost::Thread is going to exit soon.
       once isRunning() returns false, it can be deleted.*/
@@ -67,7 +69,7 @@ class BasicServer : protected ost::Thread, public WeakSafeShared {
   protected:
 
     ///this one is called from within another ost::Thread, so it is more useful to override processMessage(...) in the teamwork-server than this one
-    virtual bool handleMessage( DispatchableMessage msg ) throw();
+    virtual bool handleMessage( MessagePointer msg ) throw();
 
     virtual LoggerPrinter err();
 
@@ -94,15 +96,16 @@ class BasicServer : protected ost::Thread, public WeakSafeShared {
     void clearSelfPointer();
 
     LoggerPointer& logger();
+  protected:
+    MessageTypeSet& messageTypes_;
   private:
     friend class HandlerProxy<BasicServer>;
     ost::BroadcastAddress addr;
     LoggerPointer logger_;
     bool failed_, exit_, allowIncoming_;
     BasicTCPSocket* server_;
-    MessageTypeSet messageTypes_;
     int port_;
-    SafeList<DispatchableMessage> messagesToHandle_;
+    SafeList<MessagePointer> messagesToHandle_;
     SafeSharedPtr< BasicServer > selfPointer_;
 
     void buildSocket();

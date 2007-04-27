@@ -14,57 +14,51 @@
 
 #ifndef TEAMWORK_USER_H
 #define TEAMWORK_USER_H
-#include "boost/archive/polymorphic_oarchive.hpp"
-#include <list>
+
+#include <boost/serialization/nvp.hpp>
 #include <string>
-#include "pointer.h"
-#include "basicsession.h"
-#include "user.h"
-#include "weakpointer.h"
-#include "boost/serialization/nvp.hpp"
+
+#include "networkfwd.h"
+#include "safesharedptr.h"
+#include "weaksafesharedptr.h"
 
 namespace Teamwork {
-class IdentificationMessage;
-class User;
-
-///when a user is flagged as only that means that there is a session to that user. It does not mean that that session is really functional.
+///when a user is flagged as online that means that there is a session to that user. It does not mean that that session is really functional.
 class OnlineInformation {
     friend class User;
-    SessionPointer session_;
+    SafeSharedPtr<SessionInterface> session_;
+    //SessionPointer session_;
 
-    void setSession( const SessionPointer& sess ) {
-      session_ = sess;
-    }
+    void setSession( const SessionPointer& sess );
 
+    OnlineInformation( const OnlineInformation& rhs );
+    OnlineInformation& operator = ( const OnlineInformation& rhs );
   public:
-    OnlineInformation() {}
+    OnlineInformation();
+    ~OnlineInformation();
 
     ///When a user is reported as online, it is guaranteed that the session is valid.
     operator bool();
 
-    const SessionPointer& session() {
-      return session_;
-    }
+    const SessionPointer& session();
 };
-
-class User;
 
 ///This represents the identity of a user, it can be used to store it persistently.
 class UserIdentity {
-    string name_;
+    std::string name_;
     friend class User;
 
   public:
-    UserIdentity( const string& name ) {
+    UserIdentity( const std::string& name ) {
       name_ = name;
     }
     UserIdentity() {}
 
-    const string& name() const {
+    const std::string& name() const {
       return name_;
     }
 
-    template <class Archive>
+    template<class Archive>
     void serialize( Archive& arch, const uint /*version*/ ) {
       arch & boost::serialization::make_nvp( "name", name_ );
     }
@@ -87,10 +81,10 @@ class UserIdentity {
 
 
 class User : public WeakSafeShared {
-    string name_;
-    string password_;
-    string description_;
-    string email_;
+    std::string name_;
+    std::string password_;
+    std::string description_;
+    std::string email_;
     int rights_;
     OnlineInformation online_;
   public:
@@ -105,21 +99,12 @@ class User : public WeakSafeShared {
 
     User( const User* user );
 
-    User( string name = "", string password = "", string description = "" );
-
-    /*User( const TargetUser& targ ) : name_( targ.targetName() ), rights_(0) {
-    }*/
+    User( std::string name = "", std::string password = "", std::string description = "" );
 
     virtual ~User();
 
-    template <class Archive>
-    void serialize( Archive& arch, const uint /*version*/ ) {
-      arch & boost::serialization::make_nvp( "Name", name_ );
-      arch & boost::serialization::make_nvp( "password", password_ );
-      arch & boost::serialization::make_nvp( "description", description_ );
-      arch & boost::serialization::make_nvp( "rights", rights_ );
-      arch & boost::serialization::make_nvp( "email", email_ );
-    }
+    template<class Archive>
+    void serialize( Archive& arch, const uint /*version*/ );
 
     bool matchRight( int right );
 
@@ -138,22 +123,20 @@ class User : public WeakSafeShared {
     void stripForIdentification();
 
     ///the structure can be changed through this.
-    OnlineInformation& online() {
-      return online_;
-    }
+    OnlineInformation& online();
 
     ///To set the user offline, this should be called with a zero-pointer
     virtual void setSession( const SessionPointer& sess );
 
-    virtual string description() const;
+    virtual std::string description() const;
 
     bool operator < ( const User& rhs ) const;
 
-    bool operator < ( const string& rhs ) const;
+    bool operator < ( const std::string& rhs ) const;
 
     bool operator < ( const UserIdentity& rhs ) const;
 
-    const string& name() const;
+    const std::string& name() const;
 
     int rights() const;
 
@@ -166,25 +149,21 @@ class User : public WeakSafeShared {
     void setEmail( const std::string& );
 
     ///This function is thread-safe(no locking must be done before calling it)
-    string safeName() const;
+    std::string safeName() const;
 
-    const string& password() const;
+    const std::string& password() const;
 
     void ban( bool banned );
 
     bool banned() const;
 
-    void setPassword( const string& password );
+    void setPassword( const std::string& password );
 
     ///Creates a lightweigth-structure for identification which may be used for persistent storage.
     UserIdentity identity();
 };
 
-#ifdef USE_OLD_SHAREDPTR
-typedef SafeSharedPtr<User> UserPointer;
-#else
 typedef SafeSharedPtr<User, BoostSerialization> UserPointer;
-#endif
 }
 
 #endif

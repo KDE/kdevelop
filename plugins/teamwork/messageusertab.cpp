@@ -20,6 +20,9 @@ email                : david.nolden.kdevelop@art-master.de
 #include "kdevteamwork.h"
 #include "kdevteamwork_user.h"
 #include <QMetaType>
+#include "ui_kdevteamwork_interface.h"
+#include "utils.h"
+#include "kdevteamwork_messages.h"
 
 Q_DECLARE_METATYPE( MessagePointer );
 

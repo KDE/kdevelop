@@ -18,12 +18,12 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef FILECOLLABORATIONMANAGER_H
 #define FILECOLLABORATIONMANAGER_H
 
-#include "network/message.h"
-#include "network/pointer.h"
-#include "network/weakpointer.h"
+#include "network/messagetypeset.h"
+#include "network/safesharedptr.h"
+#include "network/weaksafesharedptr.h"
+#include "network/crossmap.h"
 
 #include "filecollaborationmessages.h"
-#include "network/crossmap.h"
 #include "safelogger.h"
 
 #include "filecollaboration.h"
@@ -70,11 +70,11 @@ class FileCollaborationManager : public QObject, public SafeLogger {
 
     void processMessage( FileCollaborationMessagePointer msg );
 
-    int dispatchMessage( MessageInterface* msg );
+    int receiveMessage( MessageInterface* msg );
 
-    int dispatchMessage( FileCollaborationRequest* msg );
+    int receiveMessage( FileCollaborationRequest* msg );
 
-    int dispatchMessage( FileCollaborationMessage* msg );
+    int receiveMessage( FileCollaborationMessage* msg );
 
     CollaborationManager* m_manager;
     SessionSet m_sessions;

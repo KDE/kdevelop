@@ -13,6 +13,7 @@
  ***************************************************************************/
 
 #include "collaborationmanager.h"
+#include "network/messagesendhelper.h"
 #include <QPersistentModelIndex>
 #include <QMenu>
 #include <QMetaType>
@@ -20,8 +21,12 @@
 #include "kdevteamwork_user.h"
 #include "messagemanager.h"
 #include "kdevteamwork_user.h"
+#include "kdevteamwork_client.h"
 #include <QModelIndex>
 #include <QPoint>
+#include <QTimer>
+#include "ui_kdevteamwork_interface.h"
+#include <QStandardItemModel>
 
 Q_DECLARE_METATYPE( MessagePointer );
 
@@ -254,7 +259,7 @@ void CollaborationManager::uiCloseCollaboration() {
     if ( !m_teamwork->client() || !lUser->online().session() )
       throw "no physical collaboration";
 
-    globalMessageSendHelper().send<KDevSystemMessage>( lUser->online().session().getUnsafeData(), KDevSystemMessage::CollaborationClosed, "stopping collaboration" );
+    globalMessageSendHelper().send<KDevSystemMessage>( lUser->online().session().unsafe(), KDevSystemMessage::CollaborationClosed, "stopping collaboration" );
   }
   catch ( QString & str ) {
     err() << "in uiCloseCollaboration: " <<  str;
@@ -278,7 +283,7 @@ void CollaborationManager::fillUserMenu( QMenu* menu, const UserPointer& user ) 
 
 void CollaborationManager::updateConnection( const TeamworkClientPointer& cl ) {
   if( cl ) {
-    connect( cl.getUnsafeData(), SIGNAL(signalDispatchMessage(CollaborationMessagePointer)), this, SLOT(processMessage(const CollaborationMessagePointer&)) );
+    connect( cl.unsafe(), SIGNAL(signalDispatchMessage(CollaborationMessagePointer)), this, SLOT(processMessage(const CollaborationMessagePointer&)) );
   } else {
     m_developersModel->clear();
     m_developersModel->insertColumn( 0 );
@@ -401,8 +406,8 @@ void CollaborationManager::uiRequestCollaboration() {
     UserPointer::Locked ident = l->identity();
     if ( user && ident ) {
       if ( user->online().session() ) {
-        ConnectionRequest * msg = l->messageTypes().create<ConnectionRequest>( ident, user, "please let me connect", m_teamwork );
-        user->online().session().getUnsafeData() ->sendMessage( msg );
+        ConnectionRequest * msg = new ConnectionRequest( l->messageTypes(), ident, user, "please let me connect", m_teamwork );
+        user->online().session().unsafe() ->send( msg );
         m_teamwork->addMessageToList( msg );
       } else {
         throw "no open session to the target-user";

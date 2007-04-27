@@ -19,7 +19,7 @@
 #include <cc++/thread.h>
 
 #include "sharedptr.h"
-#include "common.h"
+#include "mutexinterface.h"
 #include "boost/serialization/nvp.hpp"
 
 #define MILLI_TO_NANO 1000000
@@ -27,7 +27,16 @@
 
 using namespace std;
 
-///A class that derives from SafeShared must also publish the MutexInterface(maybe by deriving from MutexInterfaceImpl)
+#ifndef SAFESHAREDPTR_HAVE_DEFAULT
+#define SAFESHAREDPTR_HAVE_DEFAULT
+template<class Type, class Serialization = NormalSerialization>
+class SafeSharedPtr;
+#endif
+
+/** Derive your classes from SafeShared if you want to use thread-safe reference-counting.
+ *  It can either be used with SafeSharedPtr to also control access to the function, or with SharedPtr
+ *  to only do thread-safe reference-counting.
+ * */
 class SafeShared : public MutexInterfaceImpl {
   public:
     /**
@@ -323,32 +332,28 @@ class LockedSharedPtr : protected SharedPtr<Item> {
 ///five seconds of default-timeout
 const int SafeSharedLockTimeout = SEC_TO_NANO * 5;
 
-///A shared pointer that features thread-safe locking
-template <class Item, class Serialization = NormalSerialization>
+template <class Item, class Serialization>
 class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
   public:
     typedef SharedPtr<Item, Serialization> Precursor;
-#ifndef USE_NEW_LOCKED
-
+    
     typedef LockedSharedPtr<Item> Locked;
-#else
-
-    typedef LockedSharedPtr<Item, Serialization> Locked;
-#endif
-
+    
     template <class Serialization2>
     inline SafeSharedPtr( const SharedPtr<Item, Serialization2>& i ) : SharedPtr<Item, Serialization>( i ) {}
 
-    inline SafeSharedPtr( Item* i = 0 ) : SharedPtr<Item, Serialization>( i ) {}
+    inline SafeSharedPtr() : SharedPtr<Item, Serialization>() {
+    };
+    
+    inline SafeSharedPtr( Item* i ) : SharedPtr<Item, Serialization>( i ) {}
 
-    inline SafeSharedPtr( const SafeSharedPtr<Item, Serialization>& rhs ) : SharedPtr<Item, Serialization>( rhs.getUnsafeData() ) {}
+    inline SafeSharedPtr( const SafeSharedPtr<Item, Serialization>& rhs ) : SharedPtr<Item, Serialization>( rhs.unsafe() ) {}
 
     template <class Item2, class Serialization2>
-    inline SafeSharedPtr( const SafeSharedPtr<Item2, Serialization2>& rhs ) : SharedPtr<Item, Serialization>( rhs.getUnsafeData() ) {}
+    inline SafeSharedPtr( const SafeSharedPtr<Item2, Serialization2>& rhs ) : SharedPtr<Item, Serialization>( rhs.unsafe() ) {}
 
     template <class Serialization2>
-    inline SafeSharedPtr( SafeSharedPtr<Item, Serialization2>& rhs ) : SharedPtr<Item, Serialization>( rhs.getUnsafeData() ) {}
-
+    inline SafeSharedPtr( SafeSharedPtr<Item, Serialization2>& rhs ) : SharedPtr<Item, Serialization>( rhs.unsafe() ) {}
 #ifndef USE_NEW_LOCKED
 
     inline SafeSharedPtr( LockedSharedPtr<Item>& rhs ) : SharedPtr<Item, Serialization>( rhs.data() ) {}
@@ -368,7 +373,7 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
     inline Locked tryLock( int timeout = 0 ) const throw() {
       return Locked( *( Precursor* ) this, timeout );
     }
-
+    
     template <class Type>
     inline operator SafeSharedPtr<Type, Serialization>() {
       return SafeSharedPtr<Type, Serialization>( static_cast<Type*>( this->data() ) );
@@ -382,30 +387,26 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
         return Locked(  *(Precursor*)this );
         }*/
     }
-
+    
     template <class TargetType>
     inline SafeSharedPtr<TargetType, Serialization> cast() const {
       return SafeSharedPtr<TargetType, Serialization>( dynamic_cast<TargetType*>( const_cast<Item*>( this->data() ) ) );
     }
 
-    ///This should only be used to call functions that are thread-safe
-    inline SharedPtr<Item, Serialization> getUnsafe() const {
-      return SharedPtr<Item, Serialization>( const_cast<Item*>( this->data() ) );
-    }
-
-    inline Item* getUnsafeData() const {
+    ///This omits locking the mutex, and must only be used to call functions that are thread-safe
+    inline Item* unsafe() const {
       return const_cast<Item*>( this->data() );
     }
 
 
     inline SafeSharedPtr<Item, Serialization>& operator = ( const SafeSharedPtr<Item, Serialization>& rhs ) {
-      SharedPtr<Item, Serialization>::operator=( const_cast<Item*>( rhs.getUnsafeData() ) );
+      SharedPtr<Item, Serialization>::operator=( const_cast<Item*>( rhs.unsafe() ) );
       return *this;
     };
 
     template <class Item2, class Serialization2>
     inline SafeSharedPtr<Item, Serialization>& operator = ( const SafeSharedPtr<Item2, Serialization2>& rhs ) {
-      SharedPtr<Item, Serialization>::operator=( const_cast<Item2*>( rhs.getUnsafeData() ) );
+      SharedPtr<Item, Serialization>::operator=( const_cast<Item2*>( rhs.unsafe() ) );
       return *this;
     }
 
@@ -431,7 +432,7 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
       Serialization::template save<Item>
       ( *this, arch, 0 );
     }
-
+    
     template <class Serialization2>
     inline bool operator == ( const SafeSharedPtr<Item, Serialization2>& rhs ) const {
       return this->data() == rhs.data();
@@ -441,7 +442,7 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
     inline bool operator < ( const SafeSharedPtr<Item, Serialization2>& rhs ) const {
       return this->data() < rhs.data();
     }
-
+    
     /**This uses non-timed locks, so there is a deadlock-danger. */
     template <class Item2, class Serialization2>
     bool valueSmaller( const SafeSharedPtr<Item2, Serialization2>& rhs ) const {
@@ -542,15 +543,15 @@ class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
         return lhs.valueSame( rhs );
       }
     };
+    
 
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
-
 namespace boost {
 namespace serialization {
-template <class T >
-struct implementation_level< SafeSharedPtr<T> > {
+template <class T, class B >
+struct implementation_level< SafeSharedPtr<T, B> > {
   typedef mpl::integral_c_tag tag;
   typedef mpl::int_< boost::serialization::object_serializable > type;
   BOOST_STATIC_CONSTANT(
@@ -559,17 +560,6 @@ struct implementation_level< SafeSharedPtr<T> > {
   );
 };
 }
-}
-
-namespace Teamwork {
-class HandlerInterface;
-class BasicTCPSession;
-class SessionInterface;
-class BasicServer;
-typedef SafeSharedPtr<HandlerInterface> HandlerPointer;
-//typedef SafeSharedPtr<BasicTCPSession> SessionPointer;
-typedef SafeSharedPtr<SessionInterface> SessionPointer;
-typedef SafeSharedPtr<BasicServer> ServerPointer;
 }
 
 #endif

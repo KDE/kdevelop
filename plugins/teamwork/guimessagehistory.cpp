@@ -29,7 +29,7 @@ using namespace Teamwork;
 
 Q_DECLARE_METATYPE( KDevTeamworkUserPointer );
 Q_DECLARE_METATYPE( HistoryMessagePointer );
-Q_DECLARE_METATYPE( Teamwork::MessageId );
+Q_DECLARE_METATYPE( Teamwork::MessageType );
 
 GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, QString context ) : SafeLogger( manager->teamwork() ->logger() ), m_manager( manager ), m_defaultContext( context ) {
   foreach( KDevTeamworkUserPointer user, users )
@@ -57,7 +57,7 @@ GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, Q
 
   qRegisterMetaType<KDevTeamworkUserPointer>( "KDevTeamworkUserPointer" );
   qRegisterMetaType<HistoryMessagePointer>( "HistoryMessagePointer" );
-  qRegisterMetaType<Teamwork::MessageId>( "Teamwork::MessageId" );
+  qRegisterMetaType<Teamwork::MessageType>( "Teamwork::MessageType" );
 
   connect( m_widgetData.developers->selectionModel(), SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged() ) );
   connect( m_widgetData.untilDate, SIGNAL( dateChanged ( const QDate & ) ), this, SLOT( slotSelectionChanged() ) );
@@ -321,12 +321,12 @@ void GuiMessageHistory::clearFilters() {
 
 void GuiMessageHistory::applyFilters( int firstN ) {
   QString type = m_widgetData.typeFilter->currentText();
-  Teamwork::MessageId id;
+  Teamwork::MessageType id;
 
   if ( m_widgetData.typeFilter->currentIndex() != -1 ) {
     QVariant v = m_widgetData.typeFilter->itemData( m_widgetData.typeFilter->currentIndex() );
-    if ( v.canConvert<Teamwork::MessageId>() ) {
-      id = v.value<Teamwork::MessageId>();
+    if ( v.canConvert<Teamwork::MessageType>() ) {
+      id = v.value<Teamwork::MessageType>();
     }
   }
   QString context = m_widgetData.contextFilter->currentText();
@@ -343,7 +343,7 @@ void GuiMessageHistory::applyFilters( int firstN ) {
     QVariant v = m_messagesModel->data( index, Qt::UserRole );
     if ( HistoryMessagePointer::Locked lmsg = v.value<HistoryMessagePointer>() ) {
       if ( !type.isEmpty() ) {
-        if ( lmsg->info().id().startsWith( id ) )
+        if ( lmsg->info().type().startsWith( id ) )
           typeFits = true;
       } else {
         typeFits = true;
@@ -406,7 +406,7 @@ void GuiMessageHistory::fillMessages() {
   }
 
   QMap<QString, bool> contexts;
-  QMap<QString, Teamwork::MessageId> types;
+  QMap<QString, Teamwork::MessageType> types;
   QMap<UserPointer, bool> grabbedUsers;
 
   QList<HistoryMessagePointer> messages = m_manager->historyManager().getMessages( m_manager->teamwork() ->client(), m_widgetData.fromDate->date(), m_widgetData.untilDate->date(), users );
@@ -416,7 +416,7 @@ void GuiMessageHistory::fillMessages() {
 
     HistoryMessagePointer::Locked l = msg;
     if ( l ) {
-      types[ QString( l->name() ) ] = l->info().id();
+      types[ QString( l->name() ) ] = l->info().type();
       if ( InDocumentMessage * dmsg = l.freeCast<InDocumentMessage>() ) {
         contexts[ dmsg->context() ] = true;
       }
@@ -457,7 +457,7 @@ void GuiMessageHistory::fillMessages() {
     fillDeveloperList();
 
   m_widgetData.typeFilter->insertItem( 0, "" );
-  for ( QMap<QString, Teamwork::MessageId>::iterator it = types.begin(); it != types.end(); ++it ) {
+  for ( QMap<QString, Teamwork::MessageType>::iterator it = types.begin(); it != types.end(); ++it ) {
     m_widgetData.typeFilter->insertItem( m_widgetData.typeFilter->count(), it.key() );
     QVariant v;
     v.setValue( *it );
@@ -521,14 +521,14 @@ void GuiMessageHistory::fillDeveloperList() {
 
 void GuiMessageHistory::clearUsers() {
   for ( UserSet::iterator it = m_users.begin(); it != m_users.end(); ++it ) {
-    disconnect( it.key().getUnsafeData(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( slotUserStateChanged( const KDevTeamworkUserPointer& ) ) );
+    disconnect( it.key().unsafe(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( slotUserStateChanged( const KDevTeamworkUserPointer& ) ) );
   }
   m_users.clear();
 }
 
 void GuiMessageHistory::addUser( const KDevTeamworkUserPointer& user ) {
   m_users[ user ] = true;
-  connect( user.getUnsafeData(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( slotUserStateChanged( const KDevTeamworkUserPointer& ) ), Qt::QueuedConnection );
+  connect( user.unsafe(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( slotUserStateChanged( const KDevTeamworkUserPointer& ) ), Qt::QueuedConnection );
 }
 
 void GuiMessageHistory::updateUserIcon( const KDevTeamworkUserPointer& user ) {

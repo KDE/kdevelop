@@ -16,10 +16,8 @@
 #define SERVERCONFIG_H
 
 #include "user.h"
-#include "teamworkmessages.h"
 #include <string>
 #include <set>
-#include <boost/serialization/set.hpp>
 
 namespace Teamwork {
 struct ServerConfiguration {
@@ -36,13 +34,7 @@ struct ServerConfiguration {
   std::set<User> registeredUsers;
   
   template<class Archive>
-  void serialize( Archive& arch, const unsigned int /*version*/ ) {
-    arch & serverName;
-    arch & serverPassword;
-    arch & port;
-    arch & bind;
-    arch & registeredUsers;
-  }
+  void serialize( Archive& arch, const unsigned int /*version*/ );
 };
 
 bool loadServerConfiguration( ServerConfiguration& conf );

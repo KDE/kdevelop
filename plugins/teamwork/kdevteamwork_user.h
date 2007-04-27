@@ -15,18 +15,21 @@
 #ifndef KDEVTEAMWORK_USER_H
 #define KDEVTEAMWORK_USER_H
 
-#include "network/user.h"
 #include <QObject>
 #include <QMetaType>
 #include <QString>
-#include "network/pointer.h"
-#include <kiconloader.h>
+#include  <kiconloader.h>
+
+#include "network/networkfwd.h"
+#include "teamworkfwd.h"
+#include "network/user.h"
 
 using namespace Teamwork;
-class KDevTeamworkUser;
 class QIcon;
-typedef SafeSharedPtr<KDevTeamworkUser, BoostSerialization> KDevTeamworkUserPointer;
 
+namespace Teamwork {
+  class IdentificationMessage;
+};
 
 class KDevTeamworkUser : public QObject, public User {
     Q_OBJECT
@@ -50,6 +53,8 @@ class KDevTeamworkUser : public QObject, public User {
     ///All signals in this class should be connected using queued connections, because they get called from other threads
     void userStateChanged( KDevTeamworkUserPointer user );
 };
+
+typedef SafeSharedPtr<KDevTeamworkUser, BoostSerialization> KDevTeamworkUserPointer;
 
 #endif
 

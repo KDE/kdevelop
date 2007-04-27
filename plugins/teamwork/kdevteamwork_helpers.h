@@ -15,24 +15,27 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef KDEVTEAMWORK_HELPERS
 #define KDEVTEAMWORK_HELPERS
 
-#include "network/pointer.h"
-#include "network/basicsession.h"
-#include <memory>
+#include"teamworkfwd.h"
 #include <QString>
 #include <QIcon>
 #include <QMap>
 #include <QPair>
 #include <QObject>
-#include <kiconloader.h>
+#include <kicontheme.h>
+#include "network/logger.h"
 
-namespace Teamwork {
-class MessageInterface;
-typedef SafeSharedPtr<MessageInterface, MessageSerialization> MessagePointer;
-};
+///This file contains a few classes that I currently don't know where else to put
 
 using namespace Teamwork;
 
-class KDevTeamwork;
+///Since deleting the client by a reference-counter in some meta-object leads to crashes, this is used to keep the client alive longer and delete it as last.
+class LaterDeleter : public QObject {
+  Q_OBJECT;
+  public:
+    LaterDeleter( const KDevTeamworkClientPointer& c );
+    ~LaterDeleter();
+    KDevTeamworkClientPointer m_c;
+};
 
 class SafeTeamworkEmitter : public QObject, public Shared {
     Q_OBJECT;

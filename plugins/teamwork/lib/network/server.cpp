@@ -22,7 +22,7 @@
 #include "interfaces.h"
 #include <typeinfo>
 #include <sstream>
-#include "message.h"
+#include "messagetypeset.h"
 #include "messageimpl.h"
 #include "helpers.h"
 #include "basicsession.h"
@@ -48,7 +48,7 @@ bool BasicTCPSocket::onAccept( const InetHostAddress &ia, tpport_t port ) {
   return true;
 }
 
-/**The MessageId holds all information necessary to Identify a Message and build an Object from it.
+/**The MessageType holds all information necessary to Identify a Message and build an Object from it.
   The IdList is an inheritance-chain. Messages whose list begins with IDs of other Messages must be specializations of those, and the parent-types should be able to handle those too.
 */
 
@@ -98,7 +98,7 @@ void BasicServer::run() {
               server_->reject();
               out() << "session rejected";
             } else {
-              tcp.getUnsafe() ->startSession();
+              tcp.unsafe() ->startSession();
             }
           } else {
             out() << "session was rejected";

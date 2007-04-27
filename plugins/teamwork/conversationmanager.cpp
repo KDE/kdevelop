@@ -12,38 +12,45 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "network/serialization.h"
+#include "conversationmanager.h"
+
 #include <boost/archive/polymorphic_xml_oarchive.hpp>
 #include <boost/archive/polymorphic_xml_iarchive.hpp>
+#include <boost/serialization/list.hpp>
+
 #include <QPalette>
 #include <QColor>
 #include <QPoint>
 #include <QMenu>
+#include <QTimer>
+#include <QStandardItemModel>
 #include <QHeaderView>
-#include "messagemanager.h"
-#include "conversationmanager.h"
-#include "kdevteamwork_messages.h"
-#include "idocumentcontroller.h"
-#include "idocument.h"
+#include <QBrush>
+
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/cursor.h>
-#include "kdevteamwork.h"
-#include <ktexteditor/view.h>
-#include <ktexteditor/cursor.h>
-#include <QStandardItemModel>
-#include "kdevteamwork_user.h"
-#include "kdevteamwork_client.h"
-#include <boost/archive/text_iarchive.hpp>
-#include <ktexteditor/view.h>
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/attribute.h>
-#include <QBrush>
+
+#include "idocumentcontroller.h"
+#include "idocument.h"
+
+#include "network/messageserialization.h"
+
+#include "messagemanager.h"
+#include "kdevteamwork_user.h"
+#include "kdevteamwork_messages.h"
+#include "kdevteamwork.h"
+#include "kdevteamwork_user.h"
 #include "kdevteamwork_helpers.h"
 #include "teamworkfoldermanager.h"
-#include "network/crossmap.h"
 
 using namespace KDevelop;
+
+Q_DECLARE_METATYPE( Teamwork::UserPointer );
 
 Q_DECLARE_METATYPE( MessagePointer );
 Q_DECLARE_METATYPE( InDocumentMessagePointer );
@@ -88,7 +95,7 @@ void InDocumentConversation::save( ArchType& arch, unsigned int version ) const 
   for ( MessageSet::Iterator it = m_messages.orderedValues<int>(); it; ++it ) {
     InDocumentMessagePointer::Locked l = it->message;
     if ( l ) {
-      ids.push_back( l->info().id().uniqueId() );
+      ids.push_back( l->info().uniqueId() );
     } else {
       log( "could not lock InDocumentMessage for getting id", Error );
     }
@@ -285,7 +292,7 @@ void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
         QVariant v = m_messagesModel->data( i, Qt::UserRole );
         if ( v.canConvert<MessagePointer>() ) {
           InDocumentMessagePointer smsg = v.value<MessagePointer>().cast<InDocumentMessage>();
-          if( smsg.getUnsafeData() == msg.getUnsafeData() ) {
+          if( smsg.unsafe() == msg.unsafe() ) {
             m_widgets.messages->selectionModel()->clear();
             m_widgets.messages->selectionModel()->select( i, QItemSelectionModel::Select );
             break;
@@ -410,7 +417,7 @@ void InDocumentConversation::gotReply( MessagePointer smsg ) {
   if ( !msg ) {
     addListItem( "failed to send, got no reply" );
   } else {
-    if ( msg->info().replyToMessage().getUnsafeData() == ( MessageInterface* ) m_sendingMessage.getUnsafeData() ) {
+    if ( msg->info().replyToMessage().unsafe() == ( MessageInterface* ) m_sendingMessage.unsafe() ) {
       SafeSharedPtr<KDevSystemMessage>::Locked sysMsg = msg.cast<KDevSystemMessage>();
       if ( sysMsg ) {
         if ( sysMsg->message() == KDevSystemMessage::ActionSuccessful ) {
@@ -496,7 +503,7 @@ void InDocumentConversation::sendMessage() {
       out( Logger::Debug ) << "sending references: " << start.asText() << " " << end.asText();
     }
 
-    MessagePointer::Locked stdMsg = globalMessageTypeSet().create<InDocumentMessage>( text, start, end, context() );
+    MessagePointer::Locked stdMsg = new InDocumentMessage( globalMessageTypeSet(), text, start, end, context() );
 
     InDocumentMessagePointer::Locked msg = stdMsg.cast<InDocumentMessage>();
 
@@ -514,7 +521,7 @@ void InDocumentConversation::sendMessage() {
     if ( !s )
       throw QString( "no session to send the message" );
 
-    s.getUnsafeData() ->sendMessage( msg );
+    s.unsafe() ->send( msg );
     m_widgets.message->setEnabled( false );
     m_sendingMessage = msg;
 
@@ -1176,7 +1183,7 @@ QString InDocumentMessage::document() {
   return m_start.document();
 }
 
-InDocumentMessage::InDocumentMessage( const Teamwork::MessageInfo& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context ) : KDevTeamworkTextMessage( info, text ), m_start( startRef ), m_end( endRef ), m_context( ~context ) {}
+InDocumentMessage::InDocumentMessage( const Teamwork::MessageTypeSet& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context ) : KDevTeamworkTextMessage( info, text ), m_start( startRef ), m_end( endRef ), m_context( ~context ) {}
 
 InDocumentMessage::InDocumentMessage( InArchive& from, const Teamwork::MessageInfo& info ) : KDevTeamworkTextMessage( from, info ) {
   serial( from );
@@ -1197,7 +1204,7 @@ void InDocumentMessage::result( bool success ) {
   }
 }
 
-MessageInterface::ReplyResult InDocumentMessage::gotReply( const DispatchableMessage& p ) {
+MessageInterface::ReplyResult InDocumentMessage::gotReply( const MessagePointer& p ) {
   if ( m_internal.get() && m_internal->m_conversation ) {
     QMetaObject::invokeMethod( ( InDocumentConversation* ) m_internal->m_conversation, "gotReply", Qt::QueuedConnection, Q_ARG( MessagePointer, ( MessagePointer ) p ) );
   }

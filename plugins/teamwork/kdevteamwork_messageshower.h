@@ -25,7 +25,7 @@ class InDocumentMessage;
 #include "ui_kdevteamwork_textmessage.h"
 #include "ui_kdevteamwork_userinfo.h"
 #include <QPointer>
-#include "network/pointer.h"
+#include "network/safesharedptr.h"
 #include "kdevteamwork_helpers.h"
 #include "safelogger.h"
 #include "autoconstructpointer.h"

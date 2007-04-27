@@ -27,50 +27,10 @@ email                : david.nolden.kdevelop@art-master.de
 #include "crossmapimpl.h"
 
 
-// #define OLDEXT BOOST_STD_EXTENSION_NAMESPACE
-// #define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
-
 #include <boost/serialization/hash_map.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/utility.hpp>
-
-// #define BOOST_STD_EXTENSION_NAMESPACE OLDEXT
-
 #include <boost/serialization/map.hpp> 
-// namespace boost {
-// namespace serialization {
-//   template <class Archive, class Key, class Tp, class HashFcn, class EqualKey, class Allocator >
-//       inline void save(
-//           Archive & ar,
-//       const __gnu_cxx::hash_map<Key, Tp, HashFcn, EqualKey, Allocator> &t,
-//       const unsigned int file_version
-//                       ) {
-//         boost::serialization::stl::save_collection <
-//             Archive,
-//         __gnu_cxx::hash_map<Key, Tp, HashFcn, EqualKey, Allocator>
-//             > ( ar, t );
-//                       }
-//
-//                       template <class Archive, class Key, class Tp, class HashFcn, class EqualKey, class Allocator >
-//                           inline void load(
-//                               Archive & ar,
-//                           __gnu_cxx::hash_map<Key, Tp, HashFcn, EqualKey, Allocator> &t,
-//                           const unsigned int file_version
-//                                           ) {
-//                             boost::serialization::stl::load_collection <
-//                                 Archive,
-//                             __gnu_cxx::hash_map<Key, Tp, HashFcn, EqualKey, Allocator>,
-//                             boost::serialization::stl::archive_input_map <
-//                                 Archive,
-//                             __gnu_cxx::hash_map<Key, Tp, HashFcn, EqualKey, Allocator>
-//                                 > ,
-//                                 boost::serialization::stl::no_reserve_imp <
-//                                     __gnu_cxx::hash_map<Key, Tp, HashFcn, EqualKey, Allocator>
-//                                     >
-//                                         > ( ar, t );
-//                                           }
-// }
-// }
 
 namespace Utils {
 
@@ -97,7 +57,6 @@ struct StandardCrossMapKeyExtractor {
     }
   };
 };
-
 
 ///For the trivial identity no special extraction has to be specialized if StandardCrossMapKeyExtractor is used.
 template <class Type>
@@ -161,28 +120,6 @@ template <class Type>
 struct Hashed {}
 ;
 
-/**This is a special set that allows storing/sorting items by an arbitrary count of keys.
- * that supports an arbitrary count of keys and key-types. The keys are extracted in
- * the moment an item is inserted. If the keys change, update(..) should be called on the item.
- *
- * Value should be a type with a default-constructor(is used as Dummy for Functions like operator[] if the key cannot be found)
- *
- * It is very similar to the boost multi-index, but the api is a bit easier.
- *
- * Advantage against boost's multi-index: One item can be reachable by many indices in the same category,
- * by using CROSSMAP_DEFINE_CONTAINER(..) and giving such a key-container as to the key-list.
- * Then the item will be searchable by each key in the list.
- * (If the value-type is used as key, it will be filled with the key's value by default and no key-extractor needs to be defined for that case)
- * (Example: multiple filenames may be associated to users, and it is possible to get a list of users for each filename)
- *
- * Disadvantage: Less efficient, bigger binary
- *
- * @param Value The value-type
- * @param Keys a meta-list containing all keys(using BIND_LIST or Binder<...,...>
- * @param KeyExtractor (optional) a class that helps extracting the keys from the values
- * @param rebuildAfterLoad whether serialization should only store a list of values, without the additional maps and the cross-link-data etc.(then every key has to be re-extracted after the archive was loaded)
- */
-
 class CrossMapId {
     uint id_;
   public:
@@ -221,6 +158,27 @@ class CrossMapId {
       return id_;
     }
 };
+
+/**This is a kind of in-memory database that allows storing/sorting items by an arbitrary count of keys
+ * and key-types. The keys are extracted in
+ * the moment an item is inserted. If the keys change, update(..) should be called on the item.
+ * 
+ *
+ * It is very similar to the boost multi-index, but the api is a bit easier.
+ *
+ * Advantage against boost's multi-index: One item can be reachable by many indices in the same category,
+ * by using CROSSMAP_DEFINE_CONTAINER(..) and giving such a key-container as to the key-list.
+ * Then the item will be searchable by each key in the list.
+ * (If the value-type is used as key, it will be filled with the key's value by default and no key-extractor needs to be defined for that case)
+ * (Example: multiple filenames may be associated to users, and it is possible to get a list of users for each filename)
+ *
+ * Disadvantage: Less efficient, bigger binary
+ *
+ * @param Value The value-type, should be a type with a default-constructor(is used as Dummy for Functions like operator[] if the key cannot be found)
+ * @param Keys a meta-list containing all keys(using BIND_LIST or Binder<...,...>
+ * @param KeyExtractor (optional) a class that helps extracting the keys from the values
+ * @param rebuildAfterLoad whether serialization should only store a list of values, without the additional maps and the cross-link-data etc.(then every key has to be re-extracted after the archive was loaded, and the structure may be different)
+ */
 
 template <class Value, class Keys, class KeyExtractor = StandardCrossMapKeyExtractor>
 class CrossMap {

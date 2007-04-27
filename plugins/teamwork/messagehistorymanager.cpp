@@ -12,18 +12,25 @@
  *                                                                         *
  ***************************************************************************/
 
+
 #include <fstream>
 #include <QDate>
 #include <QMap>
+#include <QTimer>
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <klockfile.h>
+
+#include "network/serialization.h"
+#include "network/messageserialization.h"
 
 #include "messagehistorymanager.h"
 #include "kdevteamwork_messages.h"
 #include "kdevteamwork_user.h"
 #include "teamworkfoldermanager.h"
 
+
+#include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -32,7 +39,6 @@
 #include <boost/serialization/level.hpp>
 
 #include <QDir>
-#include <QPair>
 #include "kdevteamwork_client.h"
 //#include <map>
 
@@ -269,7 +275,7 @@ void MessageHistoryManager::writePending()
 
 					HistoryMessagePointer::Locked l = it2->message;
 					if( l ) {
-						insertions[ l->info().id().uniqueId() ] = location;
+						insertions[ l->info().uniqueId() ] = location;
 					} else {
 						err() << "could not lock a message while storing it into the history";
 					}
@@ -421,7 +427,7 @@ HistoryMessagePointer  MessageHistoryManager::getMessageFromId( Teamwork::Unique
 		for( QList<HistoryMessageDesc>::iterator it = messages.begin(); it != messages.end(); ++it ) {
 			HistoryMessagePointer::Locked l = it->message;
 			if( l ){
-				if( l->info().id().uniqueId() == id ) {
+				if( l->info().uniqueId() == id ) {
 					return fillMessageUser( *it, client );
 				}
 			}

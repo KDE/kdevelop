@@ -1,10 +1,17 @@
 #ifndef WEAKPOINTER_H
 #define WEAKPOINTER_H
-#include "pointer.h"
-#include <boost/serialization/split_member.hpp>
+
+#include "safesharedptr.h"
 
 class WeakSafeShared;
 class WeakShared;
+
+#ifndef WEAKSAFESHAREDPTR_HAVE_DEFAULT
+#define WEAKSAFESHAREDPTR_HAVE_DEFAULT
+template<class Type, class Serialization = NormalSerialization>
+class WeakSafeSharedPtr;
+#endif
+
 
 class WeakReference : public SafeShared {
     WeakSafeShared* pointer_;
@@ -61,7 +68,7 @@ class WeakSafeShared : protected SafeShared {
     WeakSafeSharedPtr itself does not consume more memory than SafeSharedPtr, but locking-operations are more costly, because two locks are done instead of one.
  */
 
-template <class Item, class Serialization = NormalSerialization>
+template <class Item, class Serialization>
 class WeakSafeSharedPtr {
     SafeSharedPtr<WeakReference> ref_;
   public:
@@ -74,7 +81,7 @@ class WeakSafeSharedPtr {
     }
 
     SafeSharedPtr<Item, Serialization> get
-      () {
+      () const {
       typename SafeSharedPtr<WeakReference>::Locked l = ref_;
       if ( !l )
         return 0;
@@ -134,7 +141,7 @@ class WeakSafeSharedPtr {
       if ( !l )
         return false;
 
-      return l->pointer() == ( WeakSafeShared* ) rhs.getUnsafeData();
+      return l->pointer() == ( WeakSafeShared* ) rhs.unsafe();
     }
 
     inline bool operator == ( const LockedSharedPtr<Item>& rhs ) const {
@@ -144,7 +151,7 @@ class WeakSafeSharedPtr {
       if ( !l )
         return false;
 
-      return l->pointer() == ( WeakSafeShared* ) rhs.getUnsafeData();
+      return l->pointer() == ( WeakSafeShared* ) rhs.unsafe();
     }
 
     template <class Serialization2>

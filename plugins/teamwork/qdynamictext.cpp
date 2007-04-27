@@ -12,7 +12,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "network/common.h"
+#include "network/serialization.h"
 #include "qdynamictext.h"
 
 QDynamicText::QDynamicText( const VectorTimestamp& initialState, const std::string& initialText ) : DynamicText( initialState, initialText ) {

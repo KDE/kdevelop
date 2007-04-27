@@ -12,29 +12,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "kdevteamwork.h"
-#include "kdevteamwork_part.h"
-#include <QtGui/QHeaderView>
-
-#include <kmenu.h>
+#include <list>
 #include <kdebug.h>
-#include <kfile.h>
-#include <klocale.h>
 
+#include "kdevteamwork.h"
+#include "helpers.h"
 
-#include <QtCore/qdebug.h>
-#include "network/common.h"
-#include "network/message.h"
+#include "patchmessage.h"
+#include "network/messagetypeset.h"
 #include "network/teamworkmessages.h"
-#include <kiconloader.h>
-#include <QAction>
-#include <QCursor>
-#include <QTimer>
+#include "network/defines.h"
 #include "kdevteamwork_client.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_helpers.h"
-#include "network/defines.h"
 
+BIND_LIST_5( KDevTeamworkDispatchMessages, KDevTeamworkTextMessage, KDevSystemMessage, ConnectionRequest, PatchesManagerMessage, CollaborationMessage );
 
 std::string stringToAddr( const QString& txt ) {
   if ( txt.indexOf( ':' ) != -1 )
@@ -50,7 +42,7 @@ int stringToPort( const QString& txt ) {
 }
 
 
-KDevTeamworkClient::KDevTeamworkClient( KDevTeamwork* teamwork ) : Client( ServerInformation( "0.0.0.0", STANDARDPORT ), teamwork->m_logger.cast<Logger>() ), m_teamwork( teamwork ), dispatcher_( *this ) {
+KDevTeamworkClient::KDevTeamworkClient( KDevTeamwork* teamwork ) : Client( ServerInformation( "0.0.0.0", STANDARDPORT ), teamwork->m_logger.cast<Logger>() ), m_teamwork( teamwork ) {
   qRegisterMetaType<Teamwork::UserPointer>( "Teamwork::UserPointer" );
   qRegisterMetaType<Teamwork::ClientSessionDesc>( "Teamwork::ClientSessionDesc" );
   qRegisterMetaType<Teamwork::ServerInformation>( "Teamwork::ServerInformation" );
@@ -71,29 +63,29 @@ KDevTeamworkClient::KDevTeamworkClient( KDevTeamwork* teamwork ) : Client( Serve
   setIdentity( new User( "server&client" ) );
 }
 
-int KDevTeamworkClient::dispatchMessage( KDevSystemMessage* msg ) {
+int KDevTeamworkClient::receiveMessage( KDevSystemMessage* msg ) {
   if ( m_teamwork )
-    QMetaObject::invokeMethod( m_teamwork, "dispatchMessage", Qt::QueuedConnection, Q_ARG( SafeSharedPtr<KDevSystemMessage>, msg ) );
+    QMetaObject::invokeMethod( m_teamwork, "receiveMessage", Qt::QueuedConnection, Q_ARG( SafeSharedPtr<KDevSystemMessage>, msg ) );
   return 1;
 }
 
-int KDevTeamworkClient::dispatchMessage( CollaborationMessage* msg ) {
+int KDevTeamworkClient::receiveMessage( CollaborationMessage* msg ) {
   emit signalDispatchMessage( CollaborationMessagePointer( msg ) );
   return 1;
 }
 
-int KDevTeamworkClient::dispatchMessage( PatchesManagerMessage* msg ) {
+int KDevTeamworkClient::receiveMessage( PatchesManagerMessage* msg ) {
   emit signalDispatchMessage( PatchesManagerMessagePointer( msg ) );
   return 1;
 }
 
-int KDevTeamworkClient::dispatchMessage( KDevTeamworkTextMessage* msg ) {
+int KDevTeamworkClient::receiveMessage( KDevTeamworkTextMessage* msg ) {
   if ( m_teamwork )
     QMetaObject::invokeMethod( m_teamwork, "handleTextMessage", Qt::QueuedConnection, Q_ARG( SafeSharedPtr<KDevTeamworkTextMessage>, msg ) );
   return 1;
 }
 
-int KDevTeamworkClient::dispatchMessage( ConnectionRequest* msg ) {
+int KDevTeamworkClient::receiveMessage( ConnectionRequest* msg ) {
   out( Logger::Debug ) << "dispatching connection-request";
   if ( m_teamwork )
     QMetaObject::invokeMethod( m_teamwork, "connectionRequest", Qt::QueuedConnection, Q_ARG( ConnectionRequestPointer, msg ) );
@@ -148,6 +140,12 @@ void KDevTeamworkClient::disconnectedFromServer( const Teamwork::ClientSessionDe
   emit guiServerDisconnected( session, server );
 
   Client::disconnectedFromServer( session, server );
+}
+
+void KDevTeamworkClient::processMessage( MessageInterface* msg ) throw() {
+  Teamwork::MessageDispatcher< KDevTeamworkClient, KDevTeamworkDispatchMessages> dispatcher( *this );
+  if( !dispatcher( msg ) )
+    Teamwork::Client::processMessage( msg );
 }
 
 #include "kdevteamwork_client.moc"

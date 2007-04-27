@@ -59,9 +59,9 @@ void KDevTeamworkMessageShower::fill() {
     QString user = QString( "Unknown" );
 
     if ( msg->info().user() ) {
-      user = ~msg->info().user().getUnsafeData() ->safeName();
+      user = ~msg->info().user().unsafe() ->safeName();
       if ( msg->info().user().cast<KDevTeamworkUser>() ) {
-        connect( msg->info().user().cast<KDevTeamworkUser>().getUnsafeData(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( userStateChanged() ) );
+        connect( msg->info().user().cast<KDevTeamworkUser>().unsafe(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( userStateChanged() ) );
       }
     }
 
@@ -91,7 +91,7 @@ void KDevTeamworkMessageShower::fill() {
 }
 
 void KDevTeamworkMessageShower::messageUpdated( const MessagePointer& msg ) {
-  if ( msg.getUnsafeData() == m_message.getUnsafeData() ) {
+  if ( msg.unsafe() == m_message.unsafe() ) {
     fillData();
   }
 }
@@ -163,7 +163,7 @@ KDevTeamworkUserInfoShower::KDevTeamworkUserInfoShower( KDevTeamworkUser* user, 
 
   connect( m_widgetData.menuButton, SIGNAL( clicked() ), this, SLOT( menuButton() ) );
   connect( m_widgetData.historyButton, SIGNAL( clicked() ), this, SLOT( historyButton() ) );
-  connect( m_user.getUnsafeData(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( userStateChanged() ) );
+  connect( m_user.unsafe(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( userStateChanged() ) );
 }
 
 void KDevTeamworkUserInfoShower::menuButton() {
@@ -211,13 +211,13 @@ void KDevTeamworkUserInfoShower::setStatus() {
     if ( !l->online() ) {
       available << QString( "not available" );
     } else {
-      if ( l->online().session().getUnsafeData() ->sessionType() == SessionInterface::Direct ) {
+      if ( l->online().session().unsafe() ->sessionType() == SessionInterface::Direct ) {
         available << QString( "direct" );
       } else {
         available << QString( "indirect" );
       }
 
-      if ( l->online().session().getUnsafeData() ->sessionDirection() == SessionInterface::Incoming ) {
+      if ( l->online().session().unsafe() ->sessionDirection() == SessionInterface::Incoming ) {
         available << QString( "incoming" );
       } else {
         available << QString( "Outgoing" );

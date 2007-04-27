@@ -21,7 +21,9 @@
 #include "basicserver.h"
 #include "basicsession.h"
 #include "teamworkserver.h"
+#include "messageimpl.h"
 #include "teamworkclient.h"
+#include "dynamicmessagedispatcher.h"
 #include <assert.h>
 #include <vector>
 #include <list>
@@ -30,9 +32,11 @@
 #include "defines.h"
 
 using namespace  Teamwork;
+#define USE_DYNAMIC_DISPATCHER
 
 #define CHECKARGS(b) if( !(b) ) { cout << "wrong argument-count"; return 3; }
 #define NEXTARG if( argc > 0 ) arg = argv[0]; else arg = ""; --argc;
+
 int changeSettings( int argc, char * argv[] ) {
   /*NEXTARG;
   NEXTARG;*/
@@ -225,30 +229,67 @@ int changeSettings( int argc, char * argv[] ) {
 
 using namespace Teamwork;
 
+#ifndef USE_DYNAMIC_DISPATCHER
+
+///Version that uses the static message-dispatcher
 class StandaloneServer : public Teamwork::Server {
     typedef Binder< RawMessage > :: Append< TextMessage > :: Result MessagesToDispatch;
-    MessageDispatcher< StandaloneServer, MessagesToDispatch > dispatcher_;
   public:
-    StandaloneServer( int port, std::string bind ) : Teamwork::Server( ServerInformation( bind, port ), new Logger() ), dispatcher_( *this ) {
+    StandaloneServer( int port, std::string bind ) : Teamwork::Server( ServerInformation( bind, port ), new Logger() ) {
     }
     virtual ~StandaloneServer() {}
 
-    int dispatchMessage( TextMessage* msg ) {
+    int receiveMessage( TextMessage* msg ) {
       out() << "standalone-server got text-message: " << msg->text() << " real message-type: " << msg->name();
       return 1;
     }
 
-    int dispatchMessage( MessageInterface* msg ) {
+    int receiveMessage( MessageInterface* msg ) {
       UserPointer::Locked lu = msg->info().user();
       out() << "standalone-server got unknown message: " << msg->name() << " from: " << (lu ? lu->name() : "unknown user" );
       return 1;
     }
 
-    virtual bool handleMessage( DispatchableMessage m ) throw() {
-      dispatcher_( m->lock ().data() );
+    virtual bool handleMessage( MessagePointer m ) throw() {
+      MessageDispatcher< StandaloneServer, MessagesToDispatch > dispatcher(*this);
+      dispatcher( m.lock ().data() );
       return Teamwork::Server::handleMessage( m );
     }
 };
+
+#else
+
+///Version that uses the dynamic message-dispatcher (use these as examples)
+class StandaloneServer : public Teamwork::Server {
+    DynamicMessageDispatcher dispatcher_;
+  public:
+    StandaloneServer( int port, std::string bind ) : Teamwork::Server( ServerInformation( bind, port ), new Logger() ) {
+      dispatcher_.registerCallback<TextMessage>( this, &StandaloneServer::receiveTextMessage );
+      dispatcher_.registerCallback<MessageInterface>( this, &StandaloneServer::receiveUnknownMessage );
+    }
+    virtual ~StandaloneServer() {}
+
+    int receiveTextMessage( const SafeSharedPtr<TextMessage>& smsg ) {
+      LockedSharedPtr<TextMessage> msg = smsg;
+      out() << "standalone-server got text-message: " << msg->text() << " real message-type: " << msg->name();
+      return 1;
+    }
+
+    int receiveUnknownMessage( const SafeSharedPtr<MessageInterface>& smsg ) {
+      LockedSharedPtr<MessageInterface> msg = smsg;
+      UserPointer::Locked lu = msg->info().user();
+      out() << "standalone-server got unknown message: " << msg->name() << " from: " << (lu ? lu->name() : "unknown user" );
+      return 1;
+    }
+
+    virtual bool handleMessage( MessagePointer m ) throw() {
+      if( dispatcher_( m ) )
+        return true;
+      return Teamwork::Server::handleMessage( m );
+    }
+};
+
+#endif
 
 int server() {
   ServerConfiguration conf;
@@ -257,38 +298,43 @@ int server() {
   }
 
   SafeSharedPtr<StandaloneServer> serv = new StandaloneServer( conf.port, conf.bind );
-  serv.getUnsafe()->setConfiguration( conf );
-  serv.getUnsafe() ->start();
-  serv.getUnsafe() ->allowIncoming( true );
+  serv.unsafe()->setConfiguration( conf );
+  serv.unsafe() ->start();
+  serv.unsafe() ->allowIncoming( true );
   cout << "server running on port " << conf.port << endl;
 
-  serv.getUnsafe() ->join();
+  serv.unsafe() ->join();
   return 0;
 };
-
-
-int main( int argc, char * argv[] ) {
-  if( argc != 1 ) return changeSettings( argc, argv );
-  server();
-
-  return EXIT_SUCCESS;
-}
 
 
 void test2() {
   globalMessageTypeSet().stats();
   SafeSharedPtr<Client> client1 = new Client( ServerInformation( "0.0.0.0", 8155 ) );
-  client1.getUnsafe() ->allowIncoming( true );
-  client1.getUnsafeData() ->start();
+  client1.unsafe() ->allowIncoming( true );
+  client1.unsafe() ->start();
   SafeSharedPtr<Client> client2 = new Client( ServerInformation( "0.0.0.0", 8156 ) );
-  client2.getUnsafe() ->allowIncoming( true );
-  client2.getUnsafeData() ->start();
+  client2.unsafe() ->allowIncoming( true );
+  client2.unsafe() ->start();
   {
     SafeSharedPtr<Client>::Locked l = client1;
-    l->connectToServer( ServerInformation( "127.0.0.1", 8156 ), new User( "david", "honk", "some random user" ) );
+    l->connectToServer( ServerInformation( "127.0.0.1", 8156 ), new User( "david", "honk", "I am a user" ) );
   }
 
-  client2.getUnsafeData() ->join();
+  client2.unsafe() ->join();
 }
 
+
+int main( int argc, char * argv[] ) {
+  if( argc > 1 ) {
+    if( strcmp(argv[1], "test") != 0 ) {
+      return changeSettings( argc, argv );
+    } else {
+      test2();
+    }
+  }
+  server();
+
+  return EXIT_SUCCESS;
+}
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

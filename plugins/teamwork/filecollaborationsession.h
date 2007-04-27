@@ -18,17 +18,23 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QStringList>
 #include <QList>
 
-#include "network/message.h"
-#include "network/pointer.h"
-#include "network/weakpointer.h"
+#include "teamworkfwd.h"
+#include "network/messagetypeset.h"
+#include "network/safesharedptr.h"
+#include "network/weaksafesharedptr.h"
 
 #include "filecollaborationmessages.h"
 #include "network/crossmap.h"
-#include "dynamictext/vectortimestamp.h"
 #include "safelogger.h"
 
+class VectorTimestamp;
 class FileCollaboration;
 typedef SharedPtr<FileCollaboration> FileCollaborationPointer;
+class FileCollaborationSession;
+typedef SharedPtr<FileCollaborationSession> FileCollaborationSessionPointer;
+class DocumentWrapper;
+class FileCollaborationManager;
+typedef SharedPtr<DocumentWrapper> DocumentWrapperPointer;
 
 NAMED_TYPE( SessionName, QString );
 
@@ -41,9 +47,9 @@ class FileCollaborationSession : public QObject, public WeakShared, public SafeL
       Finished
   };
 
-  ///Collaboration the associated user
+  ///Collaboration-class, the associated user
     BIND_LIST_2( Keys, FileCollaborationPointer, UserPointer );
-    ///Wrapper, its index, filename
+    ///Document-Wrapper, its index, filename
     BIND_LIST_3( FileKeys, DocumentWrapperPointer, uint, QString );
     BIND_LIST_3( Messages, FileCollaborationMessage, DocumentWrapperMessage, FileListMessage );
 
@@ -122,10 +128,10 @@ class FileCollaborationSession : public QObject, public WeakShared, public SafeL
   private slots:
     void removeUserAction();
   private:
-    int dispatchMessage( MessageInterface* msg );
-    int dispatchMessage( FileListMessage* msg );
-    int dispatchMessage( FileCollaborationMessage* msg );
-    int dispatchMessage( DocumentWrapperMessage* msg );
+    int receiveMessage( MessageInterface* msg );
+    int receiveMessage( FileListMessage* msg );
+    int receiveMessage( FileCollaborationMessage* msg );
+    int receiveMessage( DocumentWrapperMessage* msg );
 
     void removeCollaboration( const FileCollaborationPointer& collab );
 
