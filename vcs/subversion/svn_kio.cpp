@@ -1332,7 +1332,7 @@ void kio_svnProtocol::import( const KURL& repos, const KURL& wc ) {
 	bool nonrecursive = false;
 
 	const char *path = apr_pstrdup( subpool, svn_path_canonicalize( wc.path().utf8(), subpool ) );
-	const char *url = apr_pstrdup( subpool, svn_path_canonicalize( repos.pathOrURL().utf8(), subpool ) );
+	const char *url = apr_pstrdup( subpool, svn_path_canonicalize( repos.url().utf8(), subpool ) );
 
     initNotifier(false, false, false, subpool);
 	kdDebug(9036) << " Executing import: " << path << " to " << url << endl;
@@ -1887,12 +1887,16 @@ svn_error_t *kio_svnProtocol::commitLogPrompt( const char **log_msg, const char 
 	kdDebug(9036) << " __TIME__ " << __TIME__ << endl;
 	if ( !p->dcopClient()->call( "kded","kdevsvnd","commitDialog(QString)", params, replyType, reply ) ) {
 		kdWarning() << "Communication with KDED:KDevSvnd failed" << endl;
-		return SVN_NO_ERROR;
+		svn_error_t *err = svn_error_create( SVN_ERR_EXTERNAL_PROGRAM, NULL,
+											 apr_pstrdup( pool, "Fail to call kded_kdevsvnd via DCOP. If this is your first problem, try to restart KDE" ) );
+		return err;
 	}
 
 	if ( replyType != "QString" ) {
 		kdWarning() << "Unexpected reply type" << endl;
-		return SVN_NO_ERROR;
+		svn_error_t *err = svn_error_create( SVN_ERR_EXTERNAL_PROGRAM, NULL,
+											 apr_pstrdup( pool, "Fail to call kded_kdevsvnd via DCOP." ) );
+		return err;
 	}
 
 	QDataStream stream2 ( reply, IO_ReadOnly );
@@ -1900,7 +1904,9 @@ svn_error_t *kio_svnProtocol::commitLogPrompt( const char **log_msg, const char 
 
 	if ( result.isNull() ) { //cancelled
 		*log_msg = NULL;
-		return SVN_NO_ERROR;
+		svn_error_t *err = svn_error_create( SVN_ERR_CANCELLED, NULL,
+											 apr_pstrdup( pool, "Commit interruppted" ) );
+		return err;
 	}
 
 	message = svn_stringbuf_create( result.utf8(), pool );
