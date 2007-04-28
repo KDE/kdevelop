@@ -28,12 +28,12 @@
 #include "ui_kdevteamwork_interface.h"
 #include <QStandardItemModel>
 
-Q_DECLARE_METATYPE( MessagePointer );
+Q_DECLARE_METATYPE( MessagePointer )
 
 using namespace std;
 typedef QPointer<FileCollaborationSession> QFileCollaborationSessionPointer;
-Q_DECLARE_METATYPE( QPersistentModelIndex );
-Q_DECLARE_METATYPE( QFileCollaborationSessionPointer );
+Q_DECLARE_METATYPE( QPersistentModelIndex )
+Q_DECLARE_METATYPE( QFileCollaborationSessionPointer )
 
 CollaborationManager::CollaborationManager( KDevTeamwork* tw ) : SafeLogger( tw->logger() ), m_teamwork( tw ), m_fileCollaboration( this ), m_ignoreClick( false ) {
 
@@ -63,7 +63,7 @@ CollaborationManager::CollaborationManager( KDevTeamwork* tw ) : SafeLogger( tw-
   m_requestCollaborationAction->setToolTip( "Request a collaboration-session to the selected user." );
 
   connect( m_teamwork, SIGNAL(init()), this, SLOT(init() ) );
-};
+}
 
 void CollaborationManager::init() {
   connect( m_teamwork->widgets().connectedDevelopers, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( collaboratingDeveloperClicked( const QModelIndex& ) ) );

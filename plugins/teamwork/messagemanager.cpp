@@ -26,7 +26,7 @@
 #include <QList>
 #include <QAction>
 
-Q_DECLARE_METATYPE( MessagePointer );
+Q_DECLARE_METATYPE( MessagePointer )
 
 
 

@@ -59,7 +59,7 @@ QString KDevTeamworkUser::toolTip() {
 	return "";
 }
 
-Q_DECLARE_METATYPE( KDevTeamworkUserPointer );
+Q_DECLARE_METATYPE( KDevTeamworkUserPointer )
 BOOST_CLASS_EXPORT_GUID(KDevTeamworkUser, "KDevTeamworkUser");
 
 

@@ -50,10 +50,10 @@
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE( Teamwork::UserPointer );
+Q_DECLARE_METATYPE( Teamwork::UserPointer )
 
-Q_DECLARE_METATYPE( MessagePointer );
-Q_DECLARE_METATYPE( InDocumentMessagePointer );
+Q_DECLARE_METATYPE( MessagePointer )
+Q_DECLARE_METATYPE( InDocumentMessagePointer )
 
 CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, int, 0, value.position );
 CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, InDocumentMessagePointer, 0, value.message );

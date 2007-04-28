@@ -24,7 +24,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "utils.h"
 #include "kdevteamwork_messages.h"
 
-Q_DECLARE_METATYPE( MessagePointer );
+Q_DECLARE_METATYPE( MessagePointer )
 
 
 MessageUserTab& MessageUserTab::operator = ( const MessageUserTab& /*rhs*/ ) {

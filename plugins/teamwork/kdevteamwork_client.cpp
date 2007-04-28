@@ -26,7 +26,7 @@
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_helpers.h"
 
-BIND_LIST_5( KDevTeamworkDispatchMessages, KDevTeamworkTextMessage, KDevSystemMessage, ConnectionRequest, PatchesManagerMessage, CollaborationMessage );
+BIND_LIST_5( KDevTeamworkDispatchMessages, KDevTeamworkTextMessage, KDevSystemMessage, ConnectionRequest, PatchesManagerMessage, CollaborationMessage )
 
 std::string stringToAddr( const QString& txt ) {
   if ( txt.indexOf( ':' ) != -1 )

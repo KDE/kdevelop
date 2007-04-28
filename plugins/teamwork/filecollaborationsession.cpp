@@ -14,7 +14,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "filecollaborationsession.h"
 
-Q_DECLARE_METATYPE( Teamwork::UserPointer );
+Q_DECLARE_METATYPE( Teamwork::UserPointer )
 
 #include <sstream>
 #include <QAction>

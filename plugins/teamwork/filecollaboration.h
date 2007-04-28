@@ -48,7 +48,7 @@ typedef SafeSharedPtr<KDevTeamworkUser, BoostSerialization> KDevTeamworkUserPoin
 typedef SharedPtr<FileCollaborationSession> FileCollaborationSessionPointer;
 typedef SharedPtr<DocumentWrapper> DocumentWrapperPointer;
 
-// BIND_LIST_2( FileCollaborationDirectMessages, FileCollaborationRequest, FileCollaborationMessage );
+// BIND_LIST_2( FileCollaborationDirectMessages, FileCollaborationRequest, FileCollaborationMessage )
 
 class FileCollaborationUserTreeAction;
 

@@ -45,7 +45,7 @@ struct TestMappable {
 };
 
 
-BIND_LIST_6( KeyList, TestMappable::Name, int, char*, std::string, int, std::list<int> );
+BIND_LIST_6( KeyList, TestMappable::Name, int, char*, std::string, int, std::list<int> )
 
 ///A little test for GetListItem
 Assert< IfSame< GetListItem< 0, KeyList >::Result, TestMappable::Name, Success, Fail >::Result::value >::OK ok1;

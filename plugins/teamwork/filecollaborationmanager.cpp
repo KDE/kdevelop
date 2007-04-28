@@ -78,7 +78,7 @@ CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, CollabSessionId, 0, val
  * */
 
 
-Q_DECLARE_METATYPE( Teamwork::UserPointer );
+Q_DECLARE_METATYPE( Teamwork::UserPointer )
 
 
 

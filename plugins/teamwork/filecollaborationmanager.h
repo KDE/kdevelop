@@ -38,7 +38,7 @@ class FileCollaborationManager : public QObject, public SafeLogger {
     Q_OBJECT
   public:
     ///FileCollaborationSession itself is used as key too, so sessions can always be found even if all Files und Users change.
-    BIND_LIST_5( SessionKeys, FileCollaborationSessionPointer, CollabSessionId, QList<QString>, QList<KDevTeamworkUserPointer>, SessionName );
+    BIND_LIST_5( SessionKeys, FileCollaborationSessionPointer, CollabSessionId, QList<QString>, QList<KDevTeamworkUserPointer>, SessionName )
 
     typedef Utils::CrossMap< FileCollaborationSessionPointer, SessionKeys > SessionSet;
 

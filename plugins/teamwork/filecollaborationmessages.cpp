@@ -25,7 +25,7 @@
 #include <boost/serialization/list.hpp>
 #include "qtserialization.h"
 
-Q_DECLARE_METATYPE( MessagePointer );
+Q_DECLARE_METATYPE( MessagePointer )
 
 FileCollaborationRequestData::FileCollaborationRequestData( FileCollaboration* collab, uint index, uint senderIndex ) : m_state( Unknown ), m_index( index ), m_senderIndex( senderIndex ), m_isAutomatic( false ), m_collab( collab ), m_acceptAction( 0 ), m_denyAction( 0 ) {
 

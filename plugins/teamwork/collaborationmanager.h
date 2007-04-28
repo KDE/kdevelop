@@ -58,7 +58,7 @@ struct StandardCollaborationTreeAction : public CollaborationTreeAction {
 
 typedef SharedPtr< CollaborationTreeAction > CollaborationTreeActionPointer;
 
-Q_DECLARE_METATYPE( CollaborationTreeActionPointer );
+Q_DECLARE_METATYPE( CollaborationTreeActionPointer )
 
 using namespace Teamwork;
 class KDevTeamwork;

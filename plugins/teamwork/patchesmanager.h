@@ -73,7 +73,7 @@ struct PatchesManagerConfig {
   }
 };
 
-BIND_LIST_4( PatchesManagerMessages, PatchesManagerMessage, PatchesListMessage, PatchRequestMessage, PatchMessage );
+BIND_LIST_4( PatchesManagerMessages, PatchesManagerMessage, PatchesListMessage, PatchRequestMessage, PatchMessage )
 
 class PatchesManager : public QObject {
     Q_OBJECT

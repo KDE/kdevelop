@@ -77,9 +77,9 @@ REGISTER_MESSAGE( PatchesListMessage );
 EASY_IMPLEMENT_MESSAGE( PatchRequestMessage );
 EASY_IMPLEMENT_MESSAGE( PatchMessage );
 
-Q_DECLARE_METATYPE( QPersistentModelIndex );
-Q_DECLARE_METATYPE( LocalPatchSourcePointer );
-Q_DECLARE_METATYPE( MessagePointer );
+Q_DECLARE_METATYPE( QPersistentModelIndex )
+Q_DECLARE_METATYPE( LocalPatchSourcePointer )
+Q_DECLARE_METATYPE( MessagePointer )
 
 PatchesManager::PatchesManager( KDevTeamwork* tw ) : QObject( tw ), m_teamwork( tw ), dispatcher_( *this ), m_manageDlg( 0 ) {
 

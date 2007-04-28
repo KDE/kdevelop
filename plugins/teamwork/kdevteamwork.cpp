@@ -63,11 +63,11 @@ const int messageSendTimeout = 3000;
 
 KDevTeamwork* KDevTeamwork::m_self = 0;
 
-//Q_DECLARE_METATYPE( UserPointer );
-Q_DECLARE_METATYPE( QPersistentModelIndex );
-Q_DECLARE_METATYPE( MessagePointer );
-Q_DECLARE_METATYPE( LocalPatchSourcePointer );
-Q_DECLARE_METATYPE( KDevTeamworkUserPointer );
+//Q_DECLARE_METATYPE( UserPointer )
+Q_DECLARE_METATYPE( QPersistentModelIndex )
+Q_DECLARE_METATYPE( MessagePointer )
+Q_DECLARE_METATYPE( LocalPatchSourcePointer )
+Q_DECLARE_METATYPE( KDevTeamworkUserPointer )
 
 
 LaterDeleter::LaterDeleter( const KDevTeamworkClientPointer& c ) : m_c( c ) {

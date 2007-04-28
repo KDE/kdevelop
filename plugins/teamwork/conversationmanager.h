@@ -122,7 +122,7 @@ struct OrderedDocumentMessage {
 class InDocumentConversation : public QObject, public Shared, public SafeLogger {
     Q_OBJECT
     ///Order, message, file
-    BIND_LIST_3( Keys, InDocumentMessagePointer, int, QString );
+    BIND_LIST_3( Keys, InDocumentMessagePointer, int, QString )
     typedef Utils::CrossMap< OrderedDocumentMessage, Keys > MessageSet;
   public:
     InDocumentConversation( InDocumentMessage* msg = 0 );

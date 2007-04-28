@@ -27,9 +27,9 @@
 
 using namespace Teamwork;
 
-Q_DECLARE_METATYPE( KDevTeamworkUserPointer );
-Q_DECLARE_METATYPE( HistoryMessagePointer );
-Q_DECLARE_METATYPE( Teamwork::MessageType );
+Q_DECLARE_METATYPE( KDevTeamworkUserPointer )
+Q_DECLARE_METATYPE( HistoryMessagePointer )
+Q_DECLARE_METATYPE( Teamwork::MessageType )
 
 GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, QString context ) : SafeLogger( manager->teamwork() ->logger() ), m_manager( manager ), m_defaultContext( context ) {
   foreach( KDevTeamworkUserPointer user, users )
