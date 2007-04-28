@@ -905,7 +905,7 @@ void KDevTeamwork::addDeveloper( const Teamwork::UserPointer& u ) {
   } else {
     err( "could not lock a user-pointer from a received list" );
   }
-};
+}
 
 void KDevTeamwork::registerPatches( PatchesListMessage* msg, QStandardItemModel* model ) {
   SessionPointer::Locked lsession = msg->info().session();
@@ -951,7 +951,7 @@ void KDevTeamwork::registerPatches( PatchesListMessage* msg, QStandardItemModel*
 void KDevTeamwork::handlePatchesList( PatchesListMessage* msg ) {
   registerPatches( msg, m_developersModel );
   registerPatches( msg, m_collaborationManager->developersModel() );
-};
+}
 
 void KDevTeamwork::guiUserList( std::list<UserPointer> users ) {
 
@@ -960,7 +960,7 @@ void KDevTeamwork::guiUserList( std::list<UserPointer> users ) {
   for ( std::list<UserPointer>::iterator it = users.begin(); it != users.end(); ++it ) {
     addDeveloper( *it );
   }
-};
+}
 
 void KDevTeamwork::fillUserMenu( QMenu* menu, const UserPointer& user ) {
   UserPointer::Locked luser = user;
