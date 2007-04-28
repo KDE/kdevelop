@@ -24,7 +24,7 @@
 namespace Teamwork {
 using namespace std;
 
-BIND_LIST_4( TeamworkServerDispatchMessages, SystemMessage, ForwardMessage, IdentificationMessage, TextMessage );
+BIND_LIST_4( TeamworkServerDispatchMessages, SystemMessage, ForwardMessage, IdentificationMessage, TextMessage )
 
 template <class From, class To, class Compare>
 list<To> mapValues( map<From, To, Compare> mp ) {

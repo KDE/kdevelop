@@ -186,10 +186,10 @@ void User::setPassword( const string& password ) {
   password_ = password;
 }
 
-INSTANTIATE_SERIALIZATION_FUNCTIONS( User );
+INSTANTIATE_SERIALIZATION_FUNCTIONS( User )
 }
 
 ///This should be done for each class derived from User, so it can correctly be serialized.
-BOOST_CLASS_EXPORT_GUID( Teamwork::User, "Teamwork::User" );
+BOOST_CLASS_EXPORT_GUID( Teamwork::User, "Teamwork::User" )
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

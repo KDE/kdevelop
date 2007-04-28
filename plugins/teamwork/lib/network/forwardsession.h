@@ -115,7 +115,7 @@ namespace Teamwork {
       */
       MessagePointer::Locked getFirstMessage() throw( const char* );
   };
-};
+}
 
 #endif
 
