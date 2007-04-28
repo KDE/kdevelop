@@ -26,3 +26,4 @@ IBuildSystemManager::~IBuildSystemManager()
 {
 }
 }
+
