@@ -100,6 +100,6 @@ class DynamicMessageDispatcher {
     DelivererList m_deliverers;
     MessageTypeSet& m_messageTypes;
 };
-};
+}
 
 #endif
