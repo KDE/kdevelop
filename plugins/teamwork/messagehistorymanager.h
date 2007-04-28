@@ -65,7 +65,7 @@ struct HistoryMessageDesc
 		return (bool) message;
 	}
 
-	BOOST_SERIALIZATION_SPLIT_MEMBER();
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 struct HistoryGroupLocation {

@@ -177,7 +177,7 @@ struct SumGroup {
       ret += ( dif * ( ( maxDepth - a ) + 1 ) ) /* >> a*/;
     }
     return ret;
-  };
+  }
 
   template <class Archive>
   void serialize( Archive& arch, const uint /*version*/ ) {
@@ -615,7 +615,7 @@ class DifferenceSumSearch<maxDepth, SumType, order, false> {
 };
 
 
-}; //FuzzySearch
+} //FuzzySearch
 
 using namespace FuzzySearch;
 

@@ -300,11 +300,11 @@ struct FileListMessageData {
 
 EASY_DECLARE_MESSAGE( FileListMessage, FileCollaborationMessage, 5, FileListMessageData, 1 );
 
-BOOST_CLASS_IMPLEMENTATION( FileEditRejectMessageData, boost::serialization::object_serializable );
-BOOST_CLASS_IMPLEMENTATION( SimpleReplacement, boost::serialization::object_serializable );
-BOOST_CLASS_IMPLEMENTATION( FileCollaborationMessageData, boost::serialization::object_serializable );
-BOOST_CLASS_IMPLEMENTATION( FileCollaborationRequestData, boost::serialization::object_serializable );
-BOOST_CLASS_IMPLEMENTATION( FileEditMessageData, boost::serialization::object_serializable );
+BOOST_CLASS_IMPLEMENTATION( FileEditRejectMessageData, boost::serialization::object_serializable )
+BOOST_CLASS_IMPLEMENTATION( SimpleReplacement, boost::serialization::object_serializable )
+BOOST_CLASS_IMPLEMENTATION( FileCollaborationMessageData, boost::serialization::object_serializable )
+BOOST_CLASS_IMPLEMENTATION( FileCollaborationRequestData, boost::serialization::object_serializable )
+BOOST_CLASS_IMPLEMENTATION( FileEditMessageData, boost::serialization::object_serializable )
 
 
 #endif

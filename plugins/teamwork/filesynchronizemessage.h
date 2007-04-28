@@ -55,7 +55,7 @@ class FileSynchronizeData {
 
 EASY_DECLARE_MESSAGE( FileSynchronize, DocumentWrapperMessage, 3, FileSynchronizeData, 3 );
 
-BOOST_CLASS_IMPLEMENTATION( FileSynchronizeData, boost::serialization::object_serializable );
+BOOST_CLASS_IMPLEMENTATION( FileSynchronizeData, boost::serialization::object_serializable )
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on
 ///Eventually think about sending a whole history with a FileSynchronize

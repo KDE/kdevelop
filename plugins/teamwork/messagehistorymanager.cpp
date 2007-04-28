@@ -495,7 +495,7 @@ Teamwork::LoggerPrinter MessageHistoryManager::err() {
 	return ret;
 }
 
-BOOST_CLASS_IMPLEMENTATION(HistoryMessageDesc, boost::serialization::object_serializable);
+BOOST_CLASS_IMPLEMENTATION(HistoryMessageDesc, boost::serialization::object_serializable)
 
 #include "messagehistorymanager.moc"
 

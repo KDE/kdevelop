@@ -60,7 +60,7 @@ QString KDevTeamworkUser::toolTip() {
 }
 
 Q_DECLARE_METATYPE( KDevTeamworkUserPointer )
-BOOST_CLASS_EXPORT_GUID(KDevTeamworkUser, "KDevTeamworkUser");
+BOOST_CLASS_EXPORT_GUID(KDevTeamworkUser, "KDevTeamworkUser")
 
 
 #include "kdevteamwork_user.moc"

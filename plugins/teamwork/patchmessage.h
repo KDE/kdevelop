@@ -211,7 +211,7 @@ class LocalPatchSource : public SafeShared {
 		UserPointer user_;
 };
 
-//BOOST_CLASS_EXPORT( LocalPatchSource );
+//BOOST_CLASS_EXPORT( LocalPatchSource )
 
 typedef SafeSharedPtr<LocalPatchSource> LocalPatchSourcePointer;
 
@@ -385,7 +385,7 @@ class PatchData {
 
 	LocalPatchSourcePointer patch();
 
-	BOOST_SERIALIZATION_SPLIT_MEMBER();
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 	private:
 
 	//template<class Arch>

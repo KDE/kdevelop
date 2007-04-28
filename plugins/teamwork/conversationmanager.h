@@ -37,7 +37,7 @@ class InDocumentMessage;
 
 namespace KDevelop {
   class IDocument;
-};
+}
 
 typedef SafeSharedPtr<InDocumentMessage, MessageSerialization> InDocumentMessagePointer;
 
@@ -95,7 +95,7 @@ namespace KTextEditor {
 class View;
 class Cursor;
 class SmartCursor;
-};
+}
 class InDocumentMessage;
 enum LogLevel;
 class ConversationManager;
@@ -231,7 +231,7 @@ class InDocumentConversation : public QObject, public Shared, public SafeLogger 
 
     QTime m_lastSendTime;
   public:
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 typedef SharedPtr<InDocumentConversation> InDocumentConversationPointer;

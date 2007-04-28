@@ -172,7 +172,7 @@ class ConnectionRequest : public KDevTeamworkTextMessage {
     SafeTeamworkEmitterPointer m_emitter;
 };
 
-BOOST_CLASS_IMPLEMENTATION( NoData, boost::serialization::object_serializable );
+BOOST_CLASS_IMPLEMENTATION( NoData, boost::serialization::object_serializable )
 
 EASY_DECLARE_MESSAGE( CollaborationMessage, TextMessage, 9, NoData, 0 );
 

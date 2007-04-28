@@ -50,7 +50,7 @@ void save( Archive & arch, const QByteArray& b, const unsigned int /*version*/ )
 }
 }
 
-BOOST_SERIALIZATION_SPLIT_FREE( QByteArray );
+BOOST_SERIALIZATION_SPLIT_FREE( QByteArray )
 
 ///Usually uses a QDataStream to convert to a binary object, and stores that.
 template <class Type>
@@ -76,7 +76,7 @@ class QSerialize {
       s >> m_t;
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 /**This function returns a temporary serialization-object that can be used to serialize Qt-Types using the boost-serialization-library. */
@@ -123,10 +123,10 @@ struct implementation_level< QSerialize<T> > {
 }
 }
 
-BOOST_CLASS_IMPLEMENTATION(QString, object_serializable);
-BOOST_CLASS_IMPLEMENTATION(QStringList, object_serializable);
-BOOST_CLASS_IMPLEMENTATION(QVariant, object_serializable);
-BOOST_CLASS_IMPLEMENTATION(QByteArray, object_serializable);
+BOOST_CLASS_IMPLEMENTATION(QString, object_serializable)
+BOOST_CLASS_IMPLEMENTATION(QStringList, object_serializable)
+BOOST_CLASS_IMPLEMENTATION(QVariant, object_serializable)
+BOOST_CLASS_IMPLEMENTATION(QByteArray, object_serializable)
 
 
 #endif
