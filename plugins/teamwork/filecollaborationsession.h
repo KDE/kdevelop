@@ -39,7 +39,7 @@ typedef SharedPtr<DocumentWrapper> DocumentWrapperPointer;
 NAMED_TYPE( SessionName, QString );
 
 class FileCollaborationSession : public QObject, public WeakShared, public SafeLogger {
-    Q_OBJECT;
+    Q_OBJECT
   public:
 
     enum State {
@@ -48,10 +48,10 @@ class FileCollaborationSession : public QObject, public WeakShared, public SafeL
   };
 
   ///Collaboration-class, the associated user
-    BIND_LIST_2( Keys, FileCollaborationPointer, UserPointer );
+    BIND_LIST_2( Keys, FileCollaborationPointer, UserPointer )
     ///Document-Wrapper, its index, filename
-    BIND_LIST_3( FileKeys, DocumentWrapperPointer, uint, QString );
-    BIND_LIST_3( Messages, FileCollaborationMessage, DocumentWrapperMessage, FileListMessage );
+    BIND_LIST_3( FileKeys, DocumentWrapperPointer, uint, QString )
+    BIND_LIST_3( Messages, FileCollaborationMessage, DocumentWrapperMessage, FileListMessage )
 
     typedef Utils::CrossMap<DocumentWrapperPointer, FileKeys> FileSet;
 

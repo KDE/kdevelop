@@ -36,13 +36,13 @@ typedef SafeSharedPtr<KDevTeamworkUser, BoostSerialization> KDevTeamworkUserPoin
 class ConversationManager;
 
 
-BIND_LIST_2( MessageManagerMessages, KDevTeamworkTextMessage, InDocumentMessage );
+BIND_LIST_2( MessageManagerMessages, KDevTeamworkTextMessage, InDocumentMessage )
 
 /** This class manages the KDevTeamworkTextMessage-based messages
  */
 
 class MessageManager : public QObject {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     MessageManager( KDevTeamwork* tw );
     ~MessageManager();

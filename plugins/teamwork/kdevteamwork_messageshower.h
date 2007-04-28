@@ -43,7 +43,7 @@ typedef SafeSharedPtr<MessageInterface, MessageSerialization> MessagePointer;
 using namespace Teamwork;
 
 class KDevTeamworkMessageShower : public QObject {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     KDevTeamworkMessageShower( KDevTeamworkTextMessage* msg, QWidget* widget, KDevTeamwork* teamwork );
   public slots:
@@ -66,7 +66,7 @@ class KDevTeamworkMessageShower : public QObject {
 
 
 class KDevTeamworkUserInfoShower : public QObject {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     KDevTeamworkUserInfoShower( KDevTeamworkUser* user, QWidget* widget, KDevTeamwork* teamwork );
   public slots:
@@ -85,7 +85,7 @@ class KDevTeamworkUserInfoShower : public QObject {
 };
 
 class InDocumentMessageShower : public KDevTeamworkMessageShower, private SafeLogger {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     InDocumentMessageShower( InDocumentMessage* msg, QWidget* widget, KDevTeamwork* teamwork );
   public slots:

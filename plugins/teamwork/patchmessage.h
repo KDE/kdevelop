@@ -39,7 +39,7 @@
 
 namespace KIO {
 	class Job;
-};
+}
 class KMimeType;
 class KJob;
 
@@ -116,7 +116,7 @@ class LocalPatchSource : public SafeShared {
 	PatchAccessRights access;
 
   LocalPatchSource()  : state( Unknown ), access( Private ) {
-	};
+	}
 
 	void setFileName( const string& str ) {
 		filename = str;
@@ -294,7 +294,7 @@ class PatchRequestData : public AbstractGUIMessage {
 	void serialize( Arch& arch, const uint /*version*/  ) {
 		arch & ident_;
 		arch & requestType_;
-	};
+	}
 
 	LocalPatchSource::Identity patchIdentity() {
 		return ident_;
@@ -345,7 +345,7 @@ class K3Process;
 
 ///This needs a helper, because the object must be created in the same thread.
 class PatchDataReceiver : public QObject {
-	Q_OBJECT;
+	Q_OBJECT
 	PatchData* data;
 	public:
 		PatchDataReceiver( PatchData* d );

@@ -30,7 +30,7 @@ using namespace Teamwork;
 
 ///Since deleting the client by a reference-counter in some meta-object leads to crashes, this is used to keep the client alive longer and delete it as last.
 class LaterDeleter : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     LaterDeleter( const KDevTeamworkClientPointer& c );
     ~LaterDeleter();
@@ -38,7 +38,7 @@ class LaterDeleter : public QObject {
 };
 
 class SafeTeamworkEmitter : public QObject, public Shared {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     SafeTeamworkEmitter( KDevTeamwork* tw );
 

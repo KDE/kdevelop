@@ -93,7 +93,7 @@ struct SignalProxy : public SignalProxyBase {
 
 ///This is a very simple safe-signaller object that can be used to easily bind safe signals into QActions etc. The signal-type may be any copyable object. The given object will be copied, and sent once the signal is emitted.
 class QSafeSignaller : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
   QSafeSignaller& operator = ( const QSafeSignaller& rhs );
   QSafeSignaller( const QSafeSignaller& rhs );
 public:

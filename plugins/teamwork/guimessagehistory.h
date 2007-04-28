@@ -11,7 +11,7 @@
 namespace Teamwork {
 	class Logger;
 	typedef SafeSharedPtr<Logger> LoggerPointer;
-};
+}
 
 
 class MessageManager;
@@ -22,7 +22,7 @@ typedef SafeSharedPtr<KDevTeamworkTextMessage, MessageSerialization> HistoryMess
 class QStandardItemModel;
 
 class GuiMessageHistory : public QObject, public SafeLogger {
-	Q_OBJECT;
+	Q_OBJECT
 	public:
 		typedef QList<KDevTeamworkUserPointer> UserList;
 		typedef QMap<KDevTeamworkUserPointer, bool> UserSet;

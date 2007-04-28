@@ -27,13 +27,13 @@
 
 ///@TODO: Dispatch the messages in a more flexible way: Allow any client to register with an arbitrary message-type that he wants to get(including all sub-messages). DynamicMessageDispatcher can do this. Use that, and make the way messages are connected more flexible.
 
-Q_DECLARE_METATYPE( Teamwork::ServerInformation );
-Q_DECLARE_METATYPE( Teamwork::UserPointer );
-Q_DECLARE_METATYPE( ConnectionRequestPointer );
-Q_DECLARE_METATYPE( SafeSharedPtr<KDevTeamworkTextMessage> );
-Q_DECLARE_METATYPE( std::list<UserPointer> );
-Q_DECLARE_METATYPE( SafeSharedPtr<KDevSystemMessage> );
-Q_DECLARE_METATYPE( CollaborationMessagePointer );
+Q_DECLARE_METATYPE( Teamwork::ServerInformation )
+Q_DECLARE_METATYPE( Teamwork::UserPointer )
+Q_DECLARE_METATYPE( ConnectionRequestPointer )
+Q_DECLARE_METATYPE( SafeSharedPtr<KDevTeamworkTextMessage> )
+Q_DECLARE_METATYPE( std::list<UserPointer> )
+Q_DECLARE_METATYPE( SafeSharedPtr<KDevSystemMessage> )
+Q_DECLARE_METATYPE( CollaborationMessagePointer )
 
 ///most of the functions in this class are called from within another thread
 class KDevTeamworkClient : public QObject, public Teamwork::Client

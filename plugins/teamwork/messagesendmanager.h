@@ -22,17 +22,17 @@ email                : david.nolden.kdevelop@art-master.de
 
 namespace KDevelop {
 class IDocument;
-};
+}
 
 namespace  KTextEditor {
   class View;
   class Document;
-};
+}
 
 /**This cares about the "send message"-tab in the kdevteamwork user-interface by updating it, according to the current selection in the current document.
  * */
 class MessageSendManager : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     MessageSendManager( Ui::Teamwork& widgets );
 

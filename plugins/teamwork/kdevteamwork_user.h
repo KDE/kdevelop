@@ -29,7 +29,7 @@ class QIcon;
 
 namespace Teamwork {
   class IdentificationMessage;
-};
+}
 
 class KDevTeamworkUser : public QObject, public User {
     Q_OBJECT

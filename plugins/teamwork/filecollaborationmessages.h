@@ -32,7 +32,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 namespace KTextEditor {
 class Document;
-};
+}
 
 struct CollabFile {
   uint id;
@@ -122,7 +122,7 @@ EASY_DECLARE_MESSAGE( FileCollaborationMessage, CollaborationMessage, 6, FileCol
 
 
 class FileCollaborationRequestData : public QObject, public AbstractGUIMessage {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     struct AcceptSignal {
     };

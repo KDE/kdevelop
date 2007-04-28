@@ -40,7 +40,7 @@ typedef SharedPtr< Replacement, BoostSerializationNormal > ReplacementPointer;
 
 
 class TimestampEditor : public QObject, public Shared, public SafeLogger {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     TimestampEditor( Teamwork::LoggerPointer logger, VectorTimestampEditor* parent, uint index );
 
@@ -80,7 +80,7 @@ class VectorTimestampEditorLogger : public Teamwork::Logger {
 
 ///If the parent is destroyed, VectorTimestampEditor is destroyed too. Also it destroys itself if "finish" is clicked, or the dynamic text is destroyed.
 class VectorTimestampEditor : public QObject, public SafeLogger {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     ///If embed is false, a new dialog will be created
     VectorTimestampEditor( Teamwork::LoggerPointer logger, QObject* parent, bool embed, QDynamicTextPointer text, bool editable );

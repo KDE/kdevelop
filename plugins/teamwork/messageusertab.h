@@ -32,12 +32,12 @@ typedef SafeSharedPtr<KDevTeamworkUser, BoostSerialization> KDevTeamworkUserPoin
 namespace Teamwork {
   class MessageInterface;
   typedef SafeSharedPtr< MessageInterface, MessageSerialization > MessagePointer;
-};
+}
 
 class KDevTeamwork;
 
 class MessageUserTab : public QObject, public Shared {
-    Q_OBJECT;
+    Q_OBJECT
 		QPointer<QWidget> m_widget;
 		QStandardItemModel* m_model;
 		QListView* m_view;

@@ -34,7 +34,7 @@ using namespace Teamwork;
 
 namespace Ui {
 class Teamwork;
-};
+}
 
 class QModelIndex;
 

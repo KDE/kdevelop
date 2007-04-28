@@ -33,20 +33,20 @@ class PatchesManager;
 namespace Diff2 {
 class KompareModelList;
 class DiffModel;
-};
+}
 namespace KTextEditor {
   class SmartRange;
-};
+}
 namespace Kompare {
   class Info;
-};
+}
 namespace KDevelop {
 class IDocument;
-};
+}
 
 ///Delete itself when the document(or textDocument), or Diff-Model is deleted.
 class DocumentHighlighter : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     DocumentHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, bool isSource ) throw( QString );
     ~DocumentHighlighter();
@@ -61,7 +61,7 @@ class DocumentHighlighter : public QObject {
 class DiffSettings;
 
 class EditPatch : public QObject, public Shared, public SafeLogger {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     EditPatch( PatchesManager* parent, LocalPatchSourcePointer patch, bool local );
     ~EditPatch();

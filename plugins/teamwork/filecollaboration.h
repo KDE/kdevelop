@@ -53,7 +53,7 @@ typedef SharedPtr<DocumentWrapper> DocumentWrapperPointer;
 class FileCollaborationUserTreeAction;
 
 class FileCollaboration : public QObject, public Shared, public SafeLogger {
-  Q_OBJECT;
+  Q_OBJECT
   public:
 
     ///May throw QString

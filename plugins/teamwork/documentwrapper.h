@@ -30,12 +30,12 @@ email                : david.nolden.kdevelop@art-master.de
 namespace Teamwork {
 class Logger;
 typedef SafeSharedPtr<Logger> LoggerPointer;
-};
+}
 
 namespace KTextEditor {
 class Document;
 class Range;
-};
+}
 
 class FileSynchronize;
 class DynamicText;
@@ -46,7 +46,7 @@ class QVariant;
 class DocumentWrapperTreeAction;
 namespace KDevelop {
 class IDocument;
-};
+}
 class DocumentWrapperMessage;
 class QDynamicText;
 class FileCollaborationSession;
@@ -59,7 +59,7 @@ typedef SafeSharedPtr<LocalPatchSource> LocalPatchSourcePointer;
 typedef SharedPtr<QDynamicText, BoostSerializationNormal> QDynamicTextPointer;
 
 class OutputFileWriter : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
   public:
     OutputFileWriter( const QString& file );
     bool failed() const;
@@ -72,10 +72,10 @@ class OutputFileWriter : public QObject {
 
 ///A class that cares about the state of a document and it's history
 class DocumentWrapper : public QObject, public SafeLogger, public Shared {
-    Q_OBJECT;
+    Q_OBJECT
   public:
     ///If readFile is true, the file is read from disk. Else we wait for the file from the other side. May throw QString on error.
-    BIND_LIST_3( Messages, FileEditMessage, FileEditRejectMessage, FileSynchronize );
+    BIND_LIST_3( Messages, FileEditMessage, FileEditRejectMessage, FileSynchronize )
 
     DocumentWrapper( uint id, const LoggerPointer& logger, QString fileName, uint ownIndex, bool readFile, FileCollaborationSession* session, bool fromBuffer );
 
