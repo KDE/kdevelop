@@ -91,7 +91,7 @@ class Client : public Server {
     int receiveMessage( MessageInterface* msg ) ;
     int receiveMessage( UserListMessage* msg );
 };
-};
+}
 
 #endif
 

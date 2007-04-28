@@ -24,7 +24,7 @@
 
 namespace Teamwork {
 
-BIND_LIST_2( TeamworkClientDispatchMessages , ForwardMessage, UserListMessage );
+BIND_LIST_2( TeamworkClientDispatchMessages , ForwardMessage, UserListMessage )
 
 ///Takes a list of SafeSharedPtr's, and returns a list of the same LockedSharedPtr's
 template <class Type, class Serialization>
