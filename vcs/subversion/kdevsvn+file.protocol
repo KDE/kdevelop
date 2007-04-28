@@ -16,6 +16,7 @@ Icon=remote
 Description=Subversion ioslave for KDevelop
 Description[ca]=L'esclau io (ioslave) Subversion per a KDevelop
 Description[de]=Ein-/Ausgabemodul für Subversion (KDevelop)
+Description[el]=Subversion ioslave για το KDevelop
 Description[es]=El ioslave de Subversion para KDevelop
 Description[et]=KDevelopi Subversioni IO-moodul
 Description[hu]=Subversion KDE-protokoll a KDevelophoz

@@ -5,6 +5,7 @@ Exec=blubb
 Comment=Aids in building and publishing the final project. Supports creation of RPM packages or source packages.
 Comment[ca]=Ajuda en la construcció i publicació del projecte final. Suporta la creació de paquets RPM o paquets font.
 Comment[de]=Unterstützt beim Erstellen und Ausliefern des fertigen Projekts. Derzeit werden RPM- und Quell-Pakete unterstützt.
+Comment[el]=Βοηθά στην κατασκευή και δημοσίευση του τελικού έργου. Για την ώρα υποστηρίζεται μόνο η μορφή RPM.
 Comment[es]=Ayuda en la construcción y publicación del proyecto final. Contempla la creación de paquetes RPM y de código fuente.
 Comment[et]=Abi valmisprojekti ehitamisel ja avaldamisel. Toetatud on RPM-pakettide ja lähtekoodipakettide loomine.
 Comment[hu]=A projekt felépítésében és publikálásában segít. RPM és forráscsomagok készítését teszi lehetővé.
