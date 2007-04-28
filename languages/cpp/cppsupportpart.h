@@ -106,8 +106,8 @@ namespace KTextEditor
 class SynchronizedFileSet
 {
 public:
-	typedef __gnu_cxx::hash_set< HashedString > SetType;
-	SynchronizedFileSet()
+    typedef __gnu_cxx::hash_set< HashedString > SetType;
+    SynchronizedFileSet()
 	{}
 	
 	bool isEmpty() const
@@ -135,8 +135,9 @@ public:
 	
 	void insert( const HashedString& str )
 	{
-        HashedString s( QString(str.str().local8Bit()) );
+        HashedString s( QString::fromUtf8(str.str().utf8()) );
 		QMutexLocker locker( &m_mutex );
+          
 		m_fileSet.insert( s );
 	}
 
@@ -271,6 +272,7 @@ public:
 
     ///thread-safe, returns the thread-safe set of all files that do not need to be parsed when being included, either because they are part of the project and parsed anyway, or because they are already in the code-repository
     const SynchronizedFileSet& safeFileSet() const;
+    SynchronizedFileSet& safeFileSet();
 signals:
 	void fileParsed( const QString& fileName );
     ///Emitted whenever a file was parsed, but the code-model could be updated(the file in the code-model did not have to be replaced)
@@ -457,6 +459,7 @@ private:
 	QTimer* m_saveMemoryTimer;
 	QTimer * m_textChangedTimer;
 	QTimer * m_cursorMovedTimer;
+    QTimer* m_buildSafeFileSetTimer;
     
     class ParseEmitWaiting {
     public:
@@ -605,6 +608,7 @@ private:
 
 private slots:
 	void parseEmit( ParseEmitWaiting::Processed files );
+    void  buildSafeFileSet();
 private:
 
     SynchronizedFileSet m_safeProjectFiles;
@@ -624,7 +628,6 @@ private:
 	QWidget m_DummyActionWidget;
 
     void addToRepository( ParsedFilePointer );
-    void  buildSafeFileSet();
 	void emitSynchronousParseReady( const QString& file, ParsedFilePointer unit );
 
 	struct JobData

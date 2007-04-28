@@ -639,6 +639,8 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
        
        return ret;
      }*/
+  /*
+  //This optimization is now disabled, because it allows following a wrong path.
   if( name.next() ) {
     //This is an optimization for better use of the cache: Find the elements separately, so searches
     //For elements that start with the same scope will be speeded up.
@@ -649,7 +651,7 @@ LocateResult SimpleTypeImpl::locateType( TypeDesc name , LocateMode mode , int d
       d.setIncludeFiles( name.includeFiles() );
       return r->resolved()->locateType( d, (LocateMode)r.locateMode().mode, r.locateMode().dir );
     }
-  }
+   }*/
 
   LocateResult ret = name; ///In case the type cannot be located, this helps to find at least the best match
   //LocateResult ret;

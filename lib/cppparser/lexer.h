@@ -225,6 +225,9 @@ public:
     int index() const;
     void setIndex( int index );
 
+    //returns the count of lines that wer skipped due to #ifdef's
+    int skippedLines() const;
+    
     void reset();
 
     const Token& tokenAt( int position ) const;
@@ -322,7 +325,7 @@ private:
     __gnu_cxx::hash_map< HashedString, QPair<SkipType, QString> > m_words;
 
     
-    
+    int m_skippedLines;
     int m_currentLine;
     int m_currentColumn;
     bool m_skipWordsEnabled;

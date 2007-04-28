@@ -78,6 +78,7 @@ void TagCreator::parseTranslationUnit( const ParsedFile& ast )
 	ast.write( stream );
 	tag.setAttribute( "cppparsedfile", data );
 	tag.setAttribute( "includedFrom", ast.includedFrom() );
+	tag.setAttribute( "skippedLines", QString("%1").arg( ast.skippedLines()) );
 	tag.setAttribute( "macroValueHash", QString("%1").arg( ast.usedMacros().valueHash()) );
 	tag.setAttribute( "macroIdHash", QString("%1").arg( ast.usedMacros().idHash() ) );
 	

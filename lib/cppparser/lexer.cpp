@@ -142,8 +142,13 @@ void Lexer::setSource( const QString& source )
     tokenize();
 }
 
+int Lexer::skippedLines() const {
+  return m_skippedLines;
+}
+
 void Lexer::reset()
 {
+    m_skippedLines = 0;
     m_index = 0;
     m_size = 0;
     m_tokens.clear();
@@ -240,6 +245,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
             Token tok(m_source);
             nextToken( tok, true );
         }
+        ++m_skippedLines;
         m_startLine = true;
         setPreprocessorEnabled( ppe );
         return;

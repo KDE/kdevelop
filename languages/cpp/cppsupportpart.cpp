@@ -107,8 +107,8 @@
 
 const bool alwaysParseInBackground = true;
 
-enum { KDEV_DB_VERSION = 19 };
-enum { KDEV_PCS_VERSION = 16 };
+enum { KDEV_DB_VERSION = 20 };
+enum { KDEV_PCS_VERSION = 17 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
 QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";
@@ -223,7 +223,9 @@ CppSupportPart::CppSupportPart( QObject *parent, const char *name, const QString
 
 // 	m_deleteParserStoreTimer = new QTimer( this );
 	m_saveMemoryTimer = new QTimer( this );
+	m_buildSafeFileSetTimer = new QTimer( this );
 // 	m_functionHintTimer = new QTimer( this );
+	connect( m_buildSafeFileSetTimer, SIGNAL(timeout()), this, SLOT(buildSafeFileSet()) );
 	connect( m_saveMemoryTimer, SIGNAL(timeout()), this, SLOT(slotSaveMemory()) );
 // 	connect( m_deleteParserStoreTimer, SIGNAL(timeout()), this, SLOT(slotDeleteParserStore()) );
 	resetParserStoreTimer();
@@ -371,11 +373,6 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	{
 		resetParserStoreTimer();
 
-		if( _jd ) {
-			_jd->backgroundState ++;
-			_jd->lastParse = QTime::currentTime();
-		}
-
 		FileParsedEvent * event = ( FileParsedEvent* ) ev;
 		fromDisk = event->fromDisk();
 		QString fileName = event->fileName();
@@ -412,10 +409,23 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		} else if( !project()->isProjectFile( fileName ) || !m_parseEmitWaiting.reject( fileName ) ) {
             ParseEmitWaiting::Processed p = m_parseEmitWaiting.processFile( fileName, ( !m_hadErrors && hasErrors && !fromDisk && m_isTyping && fileName == m_activeFileName ) ? ParseEmitWaiting::HadErrors : ParseEmitWaiting::None );
 			parseEmit( p );
+			
+	        //Increase status-bar
+			if( p.hasFlag( ParseEmitWaiting::Silent ) && _jd ) {
+				_jd->backgroundState ++;
+				_jd->lastParse = QTime::currentTime();
+			}
+			
         } else {
 	        ParseEmitWaiting::Processed p = m_fileParsedEmitWaiting.processFile( fileName );
 	        if( !p.hasFlag( ParseEmitWaiting::Silent ) )
 		        emitFileParsed( p );
+
+	        //Increase status-bar
+			if( p.hasFlag( ParseEmitWaiting::Silent ) && _jd ) {
+				_jd->backgroundState ++;
+				_jd->lastParse = QTime::currentTime();
+			}
         }
 	}
 }
@@ -560,7 +570,7 @@ void CppSupportPart::projectOpened( )
 	m_pCompletion = new CppCodeCompletion( this );
 	m_projectClosed = false;
 
-	buildSafeFileSet();
+	m_buildSafeFileSetTimer->start( 500, true );
 	updateParserConfiguration(); //Necessary to respect custom include-paths and such
 
 	QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
@@ -880,7 +890,6 @@ QStringList CppSupportPart::reorder( const QStringList &list )
 void CppSupportPart::addedFilesToProject( const QStringList &fileList )
 {
 	m_projectFileList = project() ->allFiles();
-	buildSafeFileSet();
 	QStringList files = reorder( fileList );
 
 	for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
@@ -892,12 +901,12 @@ void CppSupportPart::addedFilesToProject( const QStringList &fileList )
 		maybeParse( path );
 		//emit addedSourceInfo( path );
 	}
+	m_buildSafeFileSetTimer->start( 500, true );
 }
 
 void CppSupportPart::removedFilesFromProject( const QStringList &fileList )
 {
 	m_projectFileList = project() ->allFiles();
-	buildSafeFileSet();
 	for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
@@ -906,6 +915,7 @@ void CppSupportPart::removedFilesFromProject( const QStringList &fileList )
 		removeWithReferences( path );
 		m_backgroundParser->removeFile( path );
 	}
+	m_buildSafeFileSetTimer->start( 500, true );
 }
 
 void CppSupportPart::changedFilesInProject( const QStringList & fileList )
@@ -1628,8 +1638,8 @@ void CppSupportPart::slotParseFiles()
 		} else {
 			_jd->progressBar->setProgress( _jd->backgroundState ); ///restart
 			_jd->progressBar->setTotalSteps( _jd->backgroundCount );
-			if( _jd->lastParse.msecsTo( QTime::currentTime()) > 300000 ) {
-				_jd->backgroundCount = _jd->backgroundState;   ///Stop waiting if there is no progress
+			if( _jd->lastParse.msecsTo( QTime::currentTime()) > 60000 && !m_backgroundParser->filesInQueue()) {
+				_jd->backgroundCount = _jd->backgroundState;   ///Stop waiting if there is no progress and no file in the background-parser
 				QTimer::singleShot( 0, this, SLOT( slotParseFiles() ) );
 			} else {
 				int timeStep = 0;
@@ -2362,8 +2372,6 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 				}
 			} else {
 				for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
-					if( !silent && _jd ) //If this this file is not silent and thus not part of the initial parse, increase the background-count so the progress-bar does not get confused
-						++_jd->backgroundCount;
 					backgroundParser()->addFile(*it);
 				}
 			}
@@ -2372,8 +2380,6 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 
 		} else {
 			for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
-				if( !silent && _jd ) //If this this file is not silent and thus not part of the initial parse, increase the background-count so the progress-bar does not get confused
-					++_jd->backgroundCount;
 				m_driver->parseFile( *it );
 			}
 		}
@@ -2439,7 +2445,7 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 			QString fileName = l.front();
 
 			if( !m_backgroundParser->hasTranslationUnit( fileName ) ) {
-			  	kdDebug( 9007 ) << "error: translation-unit is missing" << endl;
+			  kdDebug( 9007 ) << "error: translation-unit is missing: " << fileName << endl;
 				missing << fileName;
 			} else {
 				if ( ParsedFilePointer ast = m_backgroundParser->translationUnit( fileName ) )
@@ -2514,8 +2520,9 @@ void CppSupportPart::parseEmit( ParseEmitWaiting::Processed files ) {
 		m_backgroundParser->unlock();
 
 		if( !missing.isEmpty() ) {
-			kdDebug( 9007 ) << "error: translation-units were missing: " << missing << "\nreparsing them" << endl;
-			parseFilesAndDependencies( missing, true, false, files.hasFlag( ParseEmitWaiting::Silent ) );
+			kdDebug( 9007 ) << "error: translation-units were missing: " << missing << endl;
+  	           //don't reparse missing units, because it may cause the whole project to be reparsed
+		  //			parseFilesAndDependencies( missing, true, false, files.hasFlag( ParseEmitWaiting::Silent ) );
 		}
 
 		if( files.hasFlag( ParseEmitWaiting::Silent ) ) {
@@ -2730,6 +2737,7 @@ void CppSupportPart::updateParserConfiguration()
 	dynamic_cast<KDevDriver*>(m_driver)->setup();
 	m_driver->parseFile( conf_file_name, true, true, true );
 
+	m_buildSafeFileSetTimer->start( 500, true );
 	parseProject( true );
 }
 
@@ -2989,9 +2997,14 @@ const SynchronizedFileSet& CppSupportPart::safeFileSet() const {
 	return m_safeProjectFiles;
 }
 
+SynchronizedFileSet& CppSupportPart::safeFileSet() {
+	return m_safeProjectFiles;
+}
+
 void CppSupportPart::buildSafeFileSet() {
 	SynchronizedFileSet::SetType files; //everything that goes into this set must be deep-copied
 
+	kdDebug( 9007 ) << "CppSupportPart:: rebuilding safe-file-set" << endl;
 	for( QStringList::const_iterator it = m_projectFileList.begin(); it != m_projectFileList.end(); ++it ) {
 		QFileInfo fi( *it );
 		QString file = *it;
@@ -3001,7 +3014,7 @@ void CppSupportPart::buildSafeFileSet() {
 		}
 
 		//deep-copy
-		files.insert( HashedString(QString::fromUtf8(file.utf8())) );
+		files.insert( QString::fromUtf8(file.utf8()) );
 	}
 
 	///Now get all translation-units from the code-repository
@@ -3042,6 +3055,7 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 		catalog->addIndex( "kind" );
 		catalog->addIndex( "name" );
 		catalog->addIndex( "scope" );
+		catalog->addIndex( "prefix" );
 		catalog->addIndex( "fileName" );
 		/*
 		for ( QStringList::Iterator idxIt = indexList.begin(); idxIt != indexList.end(); ++idxIt )
@@ -3080,7 +3094,7 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 				}*/
 			}
 		}
-	}
+ }
 
 	if( compatibleParsed ) {
 		///Add a Tag that makes sure that the file will not be parsed again
@@ -3097,6 +3111,7 @@ void CppSupportPart::addToRepository( ParsedFilePointer file ) {
 	TagCreator w( file->fileName(), catalog );
 	w.parseTranslationUnit( *file );
 	codeRepository()->touchCatalog( catalog );
+	
 	m_safeProjectFiles.insert( file->fileName() + "||" + QString("%1").arg(file->usedMacros().valueHash()) + "||" + QString("%1").arg(file->usedMacros().idHash()) );
 }
 

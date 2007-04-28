@@ -182,7 +182,23 @@ QStringList KDevDriver::getCustomIncludePath( const QString& file ) {
 }
 
 bool KDevDriver::shouldParseIncludedFile( const ParsedFilePointer& file ) {
-	return m_shouldParseIncludedFiles && !m_cppSupport->safeFileSet().contains(file->fileName()) && !m_cppSupport->safeFileSet().contains( file->fileName() + "||" + QString("%1").arg(file->usedMacros().valueHash()) + "||" + QString("%1").arg(file->usedMacros().idHash()) );
+	QString compoundString = file->fileName() + "||" + QString("%1").arg(file->usedMacros().valueHash()) + "||" + QString("%1").arg(file->usedMacros().idHash());
+
+	if( !m_shouldParseIncludedFiles )
+		return false;
+	m_cppSupport->safeFileSet().contains( compoundString );
+
+	if( m_cppSupport->safeFileSet().contains( file->fileName()) ){
+		return false;
+	} else if( m_cppSupport->safeFileSet().contains( compoundString ) ) {
+		//kdDebug( 9007 ) << "ALREADY IN FILE-SET: " << compoundString << endl;
+		return false;
+	} else {
+		m_cppSupport->safeFileSet().insert( compoundString ); //This is needed so the same instance of a file is not queued many times
+		//kdDebug( 9007 ) << "NOT IN FILE-SET, PARSING: " << compoundString << endl;
+		return true;
+	}
+
 }
 
 //kate: indent-mode csands; tab-width 4; space-indent off;

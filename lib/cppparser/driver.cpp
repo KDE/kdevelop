@@ -322,6 +322,7 @@ class Driver::ParseHelper {
 
         //Copy the recursive include-files into the ParsedFile
         m_driver->m_currentParsedFile->addIncludeFiles( m_driver->m_currentLexerCache->includeFiles() );
+        m_driver->m_currentParsedFile->setSkippedLines( m_lex.skippedLines() );
       }
 
     void parse() {
@@ -914,6 +915,14 @@ void ParsedFile::setTranslationUnit( const TranslationUnitAST::Node& trans ) {
 // HashedStringSet& ParsedFile::includeFiles() {
 //     return m_includeFiles;
 // }
+
+int ParsedFile::skippedLines() const {
+  return m_skippedLines;
+}
+
+void ParsedFile::setSkippedLines( int lines ) {
+  m_skippedLines = lines;
+}
 
 const HashedStringSet& ParsedFile::includeFiles() const {
     return m_includeFiles;

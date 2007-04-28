@@ -80,6 +80,12 @@ class ParsedFile : public AbstractParseResult {
     const MacroSet& usedMacros() const;
 
     /**
+     * @return the count of lines that were skipped while preprocessing the file
+     * */
+    int skippedLines() const;
+
+    void setSkippedLines( int lines );
+    /**
      * @return Absolutely all files included by this one(no matter through how many other files they were included)
      */
 //     HashedStringSet& includeFiles();
@@ -131,6 +137,7 @@ class ParsedFile : public AbstractParseResult {
         //"parsed" will not be reconstructed
             m_directIncludeFiles.push_back( i );
         }
+        stream >> m_skippedLines;
         stream >> m_fileName;
         stream >> m_timeStamp;
         stream >> m_includedFrom;
@@ -147,6 +154,7 @@ class ParsedFile : public AbstractParseResult {
             stream << i;
             stream << (*it).includePath;
         }
+        stream << m_skippedLines;
         stream << m_fileName;
         stream << m_timeStamp;
         stream << m_includedFrom;
@@ -163,6 +171,7 @@ class ParsedFile : public AbstractParseResult {
     MacroSet m_usedMacros;
     TranslationUnitAST::Node m_translationUnit;
     HashedStringSet m_includeFiles;
+    int m_skippedLines;
     QString m_fileName;
     QDateTime m_timeStamp;
     QString m_includedFrom;
