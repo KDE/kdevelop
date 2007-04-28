@@ -92,7 +92,6 @@ namespace Teamwork {
   }
 
   MessageInterface::~MessageInterface() {}
-  ;
 
   const char* MessageInterface::name() {
     return staticName();
@@ -140,7 +139,6 @@ void registerDefaultMessages( MessageTypeSet& target ) {
 
 
 RawMessage::RawMessage( const MessageTypeSet& info, const DataVector& data ) : info_( info.messageInfo( name() ) ), body_( data ) {}
-;
 
 ///This should be used to indicate that this message is a reply to the other message(replyTarget)
 void RawMessage::setReply( MessageInterface* replyTarget ) {
@@ -157,11 +155,11 @@ void RawMessage::serialize( OutArchive& target ) {
 
 const MessageInfo& RawMessage::info() const {
   return info_;
-};
+}
 
 MessageInfo& RawMessage::info() {
   return info_;
-};
+}
 
 /**This is called once a message has been tried to be sent, with the appropriate result, and can be used by the message to give some feedback to the sender. The Session used to send the message is still locked.
   */
@@ -287,7 +285,7 @@ MessagePointer ForwardMessage::deserializeContained( MessageTypeSet& messageType
   } catch ( ... ) {
     return MessagePointer();
   }
-};
+}
 
 bool ForwardMessage::storeOnServer() {
   return false;
@@ -318,15 +316,15 @@ void UserListMessage::serialize( OutArchive& arch ) {
   serial( arch );
 }
 
-INSTANTIATE_SERIALIZATION_FUNCTIONS( MessageType );
+INSTANTIATE_SERIALIZATION_FUNCTIONS( MessageType )
 
-REGISTER_MESSAGE( RawMessage );
-REGISTER_MESSAGE( TextMessage );
-REGISTER_MESSAGE( TeamworkMessage );
-REGISTER_MESSAGE( IdentificationMessage );
-REGISTER_MESSAGE( ForwardMessage );
-REGISTER_MESSAGE( SystemMessage );
-REGISTER_MESSAGE( UserListMessage );
+REGISTER_MESSAGE( RawMessage )
+REGISTER_MESSAGE( TextMessage )
+REGISTER_MESSAGE( TeamworkMessage )
+REGISTER_MESSAGE( IdentificationMessage )
+REGISTER_MESSAGE( ForwardMessage )
+REGISTER_MESSAGE( SystemMessage )
+REGISTER_MESSAGE( UserListMessage )
 }
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on
