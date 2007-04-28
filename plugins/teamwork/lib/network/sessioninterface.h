@@ -104,5 +104,5 @@ namespace Teamwork {
     ///This can be overridden to do some cleanup-work within the session-thread. By default it tries to lock the associated user, and call setSession(this) so the user has a chance to notice the difference.
     virtual void final();
   };
-};
+}
 #endif

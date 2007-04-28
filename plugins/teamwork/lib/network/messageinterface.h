@@ -157,7 +157,6 @@ class MessageInterface : public SafeShared /*, public virtual Serializable*/ {
     virtual void result( bool success ) = 0;
 
     virtual ~MessageInterface();
-    ;
     
     virtual const char* name();
 
