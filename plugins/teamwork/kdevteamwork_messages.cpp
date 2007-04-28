@@ -22,9 +22,9 @@
 #include "network/teamworkclient.h"
 #include <boost/serialization/list.hpp>
 
-REGISTER_MESSAGE( KDevSystemMessage );
-REGISTER_MESSAGE( KDevTeamworkTextMessage );
-REGISTER_MESSAGE( ConnectionRequest );
+REGISTER_MESSAGE( KDevSystemMessage )
+REGISTER_MESSAGE( KDevTeamworkTextMessage )
+REGISTER_MESSAGE( ConnectionRequest )
 EASY_IMPLEMENT_MESSAGE( CollaborationMessage )
 
 

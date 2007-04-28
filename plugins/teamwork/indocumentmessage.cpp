@@ -39,6 +39,6 @@ void InDocumentMessage::showInWidget( QWidget* widget, KDevTeamwork* tw ) {
   new InDocumentMessageShower( this, widget, tw );
 }
 
-REGISTER_MESSAGE( InDocumentMessage );
+REGISTER_MESSAGE( InDocumentMessage )
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

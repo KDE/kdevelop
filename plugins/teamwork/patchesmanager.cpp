@@ -72,8 +72,8 @@ QString getDefaultExtension( const QStringList& patterns ) {
 ///currently, KOpenWithDlg crashes.
 //#define USE_KOPENWITHDLG
 
-REGISTER_MESSAGE( PatchesManagerMessage );
-REGISTER_MESSAGE( PatchesListMessage );
+REGISTER_MESSAGE( PatchesManagerMessage )
+REGISTER_MESSAGE( PatchesListMessage )
 EASY_IMPLEMENT_MESSAGE( PatchRequestMessage )
 EASY_IMPLEMENT_MESSAGE( PatchMessage )
 
