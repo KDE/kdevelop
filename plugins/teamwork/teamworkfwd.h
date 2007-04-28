@@ -46,7 +46,7 @@ namespace KDevelop {
   class ICore;
   class IDocumentController;
   class IDocument;
-};
+}
 
 class KDevTeamworkUser;
 typedef SafeSharedPtr< KDevTeamworkUser, BoostSerialization > KDevTeamworkUserPointer;

@@ -21,7 +21,7 @@ namespace Teamwork {
 
       MutexLocker( MutexLocker& rhs ) : m_( rhs.m_ ) {
         m_.enterMutex();
-      };
+      }
 
       ~MutexLocker() {
         m_.leaveMutex();
@@ -31,7 +31,7 @@ namespace Teamwork {
     mutable ost::Mutex m_;
   public:
     SafeList() {
-    };
+    }
     
     void push_back( const Type& t ) {
       MutexLocker l( m_ );

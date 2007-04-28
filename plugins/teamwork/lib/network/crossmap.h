@@ -124,13 +124,12 @@ class CrossMapId {
     uint id_;
   public:
     CrossMapId() : id_( 0 ) {}
-    ;
 
     CrossMapId( uint id ) : id_( id ) {}
 
     uint id() {
       return id_;
-    };
+    }
 
     bool operator == ( const CrossMapId & rhs ) const {
       return id_ == rhs.id_;
@@ -539,7 +538,7 @@ class CrossMap {
     ///@return 0 if there is no content, 1 if there is content, and 2 if the set is inconsistent(some maps have content, others don't)
     int hasContent() const {
       return !values_.empty() && data_.hasContent();
-    };
+    }
 
     bool empty() const {
       return !hasContent();
@@ -635,7 +634,7 @@ class CrossMap {
       } else {
         return false;
       }
-    };
+    }
 
     typename ValueMap::iterator begin() {
       return values_.begin();

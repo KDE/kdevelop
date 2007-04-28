@@ -740,7 +740,7 @@ void verifyOffsets() {
   }
   cout << "success" << endl;
 
-};
+}
 
 
 int main( int argc, char *argv[] ) {

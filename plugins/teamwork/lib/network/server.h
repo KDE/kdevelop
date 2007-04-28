@@ -111,7 +111,7 @@ namespace Teamwork {
       Must be ovverridden. */
       virtual bool registerSession( SessionPointer /*session*/ ) {
         return false;
-      };
+      }
 
     ///After this is called, the object may well be deleted
       void clearSelfPointer() {
@@ -141,7 +141,7 @@ namespace Teamwork {
 
       virtual bool isOk() {
         return !exit_ && !failed_;
-      };
+      }
 
       ///returns the reference to a synchronized list of messages that are waiting for being processed. Processed messages should be removed from that list.
       SafeList<MessagePointer>& messages() {

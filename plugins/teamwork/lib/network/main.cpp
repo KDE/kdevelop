@@ -305,7 +305,7 @@ int server() {
 
   serv.unsafe() ->join();
   return 0;
-};
+}
 
 
 void test2() {
