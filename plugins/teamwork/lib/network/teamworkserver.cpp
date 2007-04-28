@@ -79,7 +79,7 @@ bool Server::registerSession( SessionPointer session ) {
   } else {
     return false;
   }
-};
+}
 
 bool Server::registerSessionUser( const UserPointer& user ) {
   UserPointer::Locked l = user;

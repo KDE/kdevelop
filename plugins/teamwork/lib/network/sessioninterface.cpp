@@ -51,4 +51,4 @@ namespace Teamwork {
   SessionInterface::SessionType SessionInterface::sessionType() {
     return Direct;
   }
-};
+}

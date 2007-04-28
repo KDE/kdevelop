@@ -169,7 +169,7 @@ const string& User::name() const {
 
 const string& User::password() const {
   return password_;
-};
+}
 
 void User::ban( bool banned ) {
   if( banned )
@@ -187,7 +187,7 @@ void User::setPassword( const string& password ) {
 }
 
 INSTANTIATE_SERIALIZATION_FUNCTIONS( User );
-};
+}
 
 ///This should be done for each class derived from User, so it can correctly be serialized.
 BOOST_CLASS_EXPORT_GUID( Teamwork::User, "Teamwork::User" );

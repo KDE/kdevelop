@@ -116,7 +116,7 @@ void Client::disconnectFromServer( const ServerInformation& server ) {
     ( *it ).second.session.unsafe() ->stopRunning();
     clientSessions_.erase( it );
   }
-};
+}
 
 void Client::disconnectAllServers () {
   int c = 0;
@@ -285,7 +285,7 @@ bool Client::registerSession( SessionPointer session ) {
   }
 
   return true;
-};
+}
 
 Client::Client( ServerInformation serverInfo, LoggerPointer logger ) : Server( serverInfo, logger ), needUserUpdate_( false ) {
   //    messageTypes().registerMessageTypes<AllTeamworkClientMessages> ();

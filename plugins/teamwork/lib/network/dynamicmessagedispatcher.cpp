@@ -79,5 +79,5 @@ int DynamicMessageDispatcher::operator ()( const MessagePointer& msg ) {
     return 0; //Message could not be delivered, or all fitting targets returned 0
   }
 
-};
+}
 
