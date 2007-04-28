@@ -243,12 +243,12 @@ void FileCollaborationRequest::fillContextMenu( QMenu* menu, KDevTeamwork* teamw
   }
 }
 
-EASY_IMPLEMENT_MESSAGE( FileCollaborationMessage );
-EASY_IMPLEMENT_MESSAGE( DocumentWrapperMessage );
-EASY_IMPLEMENT_MESSAGE( FileCollaborationRequest );
-EASY_IMPLEMENT_MESSAGE( FileEditMessage );
-EASY_IMPLEMENT_MESSAGE( FileListMessage );
-EASY_IMPLEMENT_MESSAGE( FileEditRejectMessage );
+EASY_IMPLEMENT_MESSAGE( FileCollaborationMessage )
+EASY_IMPLEMENT_MESSAGE( DocumentWrapperMessage )
+EASY_IMPLEMENT_MESSAGE( FileCollaborationRequest )
+EASY_IMPLEMENT_MESSAGE( FileEditMessage )
+EASY_IMPLEMENT_MESSAGE( FileListMessage )
+EASY_IMPLEMENT_MESSAGE( FileEditRejectMessage )
 
 #include "filecollaborationmessages.moc"
 

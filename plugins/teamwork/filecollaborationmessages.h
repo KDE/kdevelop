@@ -109,7 +109,7 @@ class FileCollaborationMessageData {
 class FileCollaborationSession;
 class FileCollaboration;
 
-EASY_DECLARE_MESSAGE( FileCollaborationMessage, CollaborationMessage, 6, FileCollaborationMessageData, 3 );
+EASY_DECLARE_MESSAGE( FileCollaborationMessage, CollaborationMessage, 6, FileCollaborationMessageData, 3 )
 
 /**A file-collaboration-request is sent to request collaboration. The request stays alive
  * in the session and keeps forwarding all replies to the FileCollaboration-object, until that
@@ -198,7 +198,7 @@ class FileCollaborationRequestData : public QObject, public AbstractGUIMessage {
 };
 
 ///A FileCollaborationRequest is an invitation to a local file-collaboration-session.
-EASY_DECLARE_MESSAGE_BEGIN( FileCollaborationRequest, FileCollaborationMessage, 2, FileCollaborationRequestData, 3 );
+EASY_DECLARE_MESSAGE_BEGIN( FileCollaborationRequest, FileCollaborationMessage, 2, FileCollaborationRequestData, 3 )
 
 virtual bool needReply() const;
 
@@ -239,7 +239,7 @@ class DocumentWrapperMessageData {
     uint m_wrapperId;
 };
 
-EASY_DECLARE_MESSAGE( DocumentWrapperMessage, FileCollaborationMessage, 4, DocumentWrapperMessageData, 1 );
+EASY_DECLARE_MESSAGE( DocumentWrapperMessage, FileCollaborationMessage, 4, DocumentWrapperMessageData, 1 )
 
 class FileEditMessageData {
   public:
@@ -264,7 +264,7 @@ class FileEditMessageData {
     VectorTimestamp m_state;
 };
 
-EASY_DECLARE_MESSAGE( FileEditMessage, DocumentWrapperMessage, 1, FileEditMessageData, 2 );
+EASY_DECLARE_MESSAGE( FileEditMessage, DocumentWrapperMessage, 1, FileEditMessageData, 2 )
 
 struct FileEditRejectMessageData {
   public:
@@ -283,7 +283,7 @@ struct FileEditRejectMessageData {
     VectorTimestamp m_state;
 };
 
-EASY_DECLARE_MESSAGE( FileEditRejectMessage, DocumentWrapperMessage, 2, FileEditRejectMessageData, 1 );
+EASY_DECLARE_MESSAGE( FileEditRejectMessage, DocumentWrapperMessage, 2, FileEditRejectMessageData, 1 )
 
 struct FileListMessageData {
   FileListMessageData( const CollabFileList& files = CollabFileList() ) : m_files( files ) {
@@ -298,7 +298,7 @@ struct FileListMessageData {
 };
 
 
-EASY_DECLARE_MESSAGE( FileListMessage, FileCollaborationMessage, 5, FileListMessageData, 1 );
+EASY_DECLARE_MESSAGE( FileListMessage, FileCollaborationMessage, 5, FileListMessageData, 1 )
 
 BOOST_CLASS_IMPLEMENTATION( FileEditRejectMessageData, boost::serialization::object_serializable )
 BOOST_CLASS_IMPLEMENTATION( SimpleReplacement, boost::serialization::object_serializable )

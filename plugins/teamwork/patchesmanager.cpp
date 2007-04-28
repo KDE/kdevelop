@@ -74,8 +74,8 @@ QString getDefaultExtension( const QStringList& patterns ) {
 
 REGISTER_MESSAGE( PatchesManagerMessage );
 REGISTER_MESSAGE( PatchesListMessage );
-EASY_IMPLEMENT_MESSAGE( PatchRequestMessage );
-EASY_IMPLEMENT_MESSAGE( PatchMessage );
+EASY_IMPLEMENT_MESSAGE( PatchRequestMessage )
+EASY_IMPLEMENT_MESSAGE( PatchMessage )
 
 Q_DECLARE_METATYPE( QPersistentModelIndex )
 Q_DECLARE_METATYPE( LocalPatchSourcePointer )

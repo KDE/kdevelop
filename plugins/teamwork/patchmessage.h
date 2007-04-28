@@ -335,7 +335,7 @@ class PatchRequestData : public AbstractGUIMessage {
     SafeTeamworkEmitterPointer emitter;
 };
 
-EASY_DECLARE_MESSAGE_BEGIN( PatchRequestMessage, PatchesManagerMessage, 11, PatchRequestData, 3 );
+EASY_DECLARE_MESSAGE_BEGIN( PatchRequestMessage, PatchesManagerMessage, 11, PatchRequestData, 3 )
 		virtual bool needReply () const { return true; }
 		virtual ReplyResult gotReply( const MessagePointer& /*p*/ );
 END();
@@ -414,7 +414,7 @@ class PatchData {
 	}
 };
 
-EASY_DECLARE_MESSAGE( PatchMessage, PatchesManagerMessage, 6, PatchData, 2 );
+EASY_DECLARE_MESSAGE( PatchMessage, PatchesManagerMessage, 6, PatchData, 2 )
 
 #endif
 

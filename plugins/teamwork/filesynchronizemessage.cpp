@@ -34,6 +34,6 @@ QDynamicTextPointer FileSynchronizeData::createDynamicText() {
     return new QDynamicText( m_state, ~m_fileText );
 }
 
-EASY_IMPLEMENT_MESSAGE( FileSynchronize );
+EASY_IMPLEMENT_MESSAGE( FileSynchronize )
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

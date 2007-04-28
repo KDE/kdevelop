@@ -174,7 +174,7 @@ class ConnectionRequest : public KDevTeamworkTextMessage {
 
 BOOST_CLASS_IMPLEMENTATION( NoData, boost::serialization::object_serializable )
 
-EASY_DECLARE_MESSAGE( CollaborationMessage, TextMessage, 9, NoData, 0 );
+EASY_DECLARE_MESSAGE( CollaborationMessage, TextMessage, 9, NoData, 0 )
 
 typedef SafeSharedPtr<CollaborationMessage> CollaborationMessagePointer;
 

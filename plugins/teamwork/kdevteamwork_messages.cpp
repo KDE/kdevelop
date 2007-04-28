@@ -25,7 +25,7 @@
 REGISTER_MESSAGE( KDevSystemMessage );
 REGISTER_MESSAGE( KDevTeamworkTextMessage );
 REGISTER_MESSAGE( ConnectionRequest );
-EASY_IMPLEMENT_MESSAGE( CollaborationMessage );
+EASY_IMPLEMENT_MESSAGE( CollaborationMessage )
 
 
 KDevSystemMessage::KDevSystemMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : SystemMessage( arch, info ) {}
