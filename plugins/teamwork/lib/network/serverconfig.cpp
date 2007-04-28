@@ -73,7 +73,7 @@ bool saveServerConfiguration( ServerConfiguration& conf ) {
   return true;
 }
 
-INSTANTIATE_SERIALIZATION_FUNCTIONS( ServerConfiguration );
+INSTANTIATE_SERIALIZATION_FUNCTIONS( ServerConfiguration )
 
 }
 

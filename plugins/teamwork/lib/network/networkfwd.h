@@ -51,8 +51,8 @@ namespace boost {
     class polymorphic_text_iarchive;*/
     class text_oarchive;
     class text_iarchive;
-  };
-};
+  }
+}
 
 namespace Teamwork {
   class HandlerInterface;
