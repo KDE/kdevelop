@@ -44,7 +44,7 @@ void Logger::safeErrorLog( const std::string& str, Level lv ) {
 void LoggerPrinter::invalidate() {
   out_ = 0;
   logger_ = 0;
-};
+}
 LoggerPrinter& LoggerPrinter::operator = ( const LoggerPrinter& /*rhs*/ ) {
   return * this;
 }
