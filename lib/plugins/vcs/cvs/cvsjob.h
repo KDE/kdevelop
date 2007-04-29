@@ -19,8 +19,7 @@
 
 #include <QStringList>
 #include <KJob>
-
-class K3Process;
+#include <K3Process>
 
 /**
  * This class is capable of running our cvs commands 
@@ -45,8 +44,20 @@ public:
 
     /**
      * Call this mehod to start this job.
+     * @note Default communiaction mode is K3Process::AllOutput.
+     * @see Use setCommunicationMode() to override the default communication mode.
      */
     virtual void start();
+
+    /**
+     * In some cases it's needed to specify the communisation mode between the 
+     * process and the job object. This is for instance done for the "cvs status"
+     * command. If stdout and stderr are processed as separate streams their signals
+     * do not always get emmited in correct order by K3Process. Which will lead to a 
+     * screwed up ouput.
+     * @note Default communiaction mode is K3Process::AllOutput.
+     */
+    void setCommunicationMode(K3Process::Communication comm);
 
     /**
      * @return The command that is executed when calling start()

@@ -21,12 +21,11 @@
 #include <QStringList>
 #include <KDebug>
 #include <KLocale>
-#include <K3Process>
 
 
 struct CvsJob::Private
 {
-    Private() : isRunning(false)
+    Private() : isRunning(false), commMode(K3Process::AllOutput)
     {
         childproc = new K3Process;
         childproc->setUseShell(true, "/bin/sh");
@@ -39,6 +38,7 @@ struct CvsJob::Private
     QString     directory;
     bool        isRunning;
     QString     outputLines;
+    K3Process::Communication commMode;
 };
 
 
@@ -152,7 +152,13 @@ void CvsJob::start()
 
     d->outputLines.clear();
     d->isRunning = true;
-    d->childproc->start(K3Process::NotifyOnExit, K3Process::AllOutput);
+    d->childproc->start(K3Process::NotifyOnExit, d->commMode);
+}
+
+
+void CvsJob::setCommunicationMode(K3Process::Communication comm)
+{
+    d->commMode = comm;
 }
 
 
