@@ -414,7 +414,7 @@ class PatchData {
 	}
 };
 
-EASY_DECLARE_MESSAGE( PatchMessage, PatchesManagerMessage, 6, PatchData, 2 )
+EASY_DECLARE_MESSAGE( PatchMessage, PatchesManagerMessage, 6, PatchData, 2 );
 
 #endif
 

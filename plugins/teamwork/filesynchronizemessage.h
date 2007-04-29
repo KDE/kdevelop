@@ -53,7 +53,7 @@ class FileSynchronizeData {
     SharedPtr<QDynamicText, BoostSerializationNormal> m_text;
 };
 
-EASY_DECLARE_MESSAGE( FileSynchronize, DocumentWrapperMessage, 3, FileSynchronizeData, 3 )
+EASY_DECLARE_MESSAGE( FileSynchronize, DocumentWrapperMessage, 3, FileSynchronizeData, 3 );
 
 BOOST_CLASS_IMPLEMENTATION( FileSynchronizeData, boost::serialization::object_serializable )
 
