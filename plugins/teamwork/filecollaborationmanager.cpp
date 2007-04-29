@@ -41,11 +41,11 @@ email                : david.nolden.kdevelop@art-master.de
 
 using namespace Teamwork;
 
-CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, QList<QString>, 0, value->plainFileNames() );
-CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, QList<KDevTeamworkUserPointer>, 0, value->users() );
-CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, SessionName, 0, value->name() );
-CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, FileCollaborationSessionPointer, 0, value );
-CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, CollabSessionId, 0, value->id() );
+CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, QList<QString>, 0, value->plainFileNames() )
+CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, QList<KDevTeamworkUserPointer>, 0, value->users() )
+CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, SessionName, 0, value->name() )
+CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, FileCollaborationSessionPointer, 0, value )
+CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, CollabSessionId, 0, value->id() )
 
 /**How file-collaboration should work:
  * Host:

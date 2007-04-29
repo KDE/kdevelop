@@ -45,7 +45,7 @@ SET_TARGET_PROPERTIES( network PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 ADD_EXECUTABLE( kdevteamwork_server ${testfiles} )
 
-TARGET_LINK_LIBRARIES( kdevteamwork_server boost_thread dl network ${COMMONCPP2_LIBRARIES} )
+TARGET_LINK_LIBRARIES( kdevteamwork_server boost_thread dl network ${COMMONCPP2_LIBRARIES} ${ZLIB_LIBRARIES} )
 
 INSTALL(TARGETS kdevteamwork_server DESTINATION ${BIN_INSTALL_DIR})
 

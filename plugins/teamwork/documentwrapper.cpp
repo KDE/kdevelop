@@ -293,7 +293,7 @@ void DocumentWrapper::saveNewBuffer() {
 
 void DocumentWrapper::manageDynamicText() {
   new VectorTimestampEditor( logger(), this, false, m_text, true );
-};
+}
 
 void DocumentWrapper::stateChanged() {
   if ( m_block )

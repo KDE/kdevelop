@@ -181,7 +181,7 @@ MessageInterface::ReplyResult FileCollaborationRequest::gotReply( const MessageP
     return ReplyResult( true, true );
   else
     return ReplyResult( handled );
-};
+}
 
 void FileCollaborationRequestData::dispatchSignal( const AcceptSignal& /*sig*/ ) {
   acceptCollaboration();

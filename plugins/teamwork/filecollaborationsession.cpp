@@ -46,11 +46,11 @@ Q_DECLARE_METATYPE( Teamwork::UserPointer )
 
 using namespace KDevelop;
 
-CROSSMAP_KEY_EXTRACTOR( FileCollaborationPointer, FileCollaborationPointer, 0, value );
-CROSSMAP_KEY_EXTRACTOR( FileCollaborationPointer, UserPointer, 0, value->user() );
+CROSSMAP_KEY_EXTRACTOR( FileCollaborationPointer, FileCollaborationPointer, 0, value )
+CROSSMAP_KEY_EXTRACTOR( FileCollaborationPointer, UserPointer, 0, value->user() )
 
-CROSSMAP_KEY_EXTRACTOR( DocumentWrapperPointer, QString, 0, value->fileName() );
-CROSSMAP_KEY_EXTRACTOR( DocumentWrapperPointer, uint, 0, value->id() );
+CROSSMAP_KEY_EXTRACTOR( DocumentWrapperPointer, QString, 0, value->fileName() )
+CROSSMAP_KEY_EXTRACTOR( DocumentWrapperPointer, uint, 0, value->id() )
 
 FileCollaborationSession::FileCollaborationSession( QString name, CollabFileList files, FileCollaborationManager* manager, uint primaryIndex, CollabSessionId id ) :
     SafeLogger( manager->teamwork() ->logger(), "in FileCollaborationSession:" ),

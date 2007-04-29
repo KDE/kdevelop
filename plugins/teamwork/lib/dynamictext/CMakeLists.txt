@@ -31,7 +31,7 @@ set_target_properties( dynamictext PROPERTIES VERSION 1.0.0 SOVERSION 1)
 #install(TARGETS dynamictext DESTINATION ${LIB_INSTALL_DIR})
 
 ADD_EXECUTABLE( testexec main.cpp)
-TARGET_LINK_LIBRARIES( testexec dynamictext boost_thread dl )
+TARGET_LINK_LIBRARIES( testexec dynamictext boost_thread dl ${ZLIB_LIBRARIES} )
 
 #ADD_DEPENDENCIES( testexec, dynamictext )
 

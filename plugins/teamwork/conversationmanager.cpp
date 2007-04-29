@@ -55,9 +55,9 @@ Q_DECLARE_METATYPE( Teamwork::UserPointer )
 Q_DECLARE_METATYPE( MessagePointer )
 Q_DECLARE_METATYPE( InDocumentMessagePointer )
 
-CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, int, 0, value.position );
-CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, InDocumentMessagePointer, 0, value.message );
-CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, QString, 0, value.message.lock()->start().document() );
+CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, int, 0, value.position )
+CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, InDocumentMessagePointer, 0, value.message )
+CROSSMAP_KEY_EXTRACTOR( OrderedDocumentMessage, QString, 0, value.message.lock()->start().document() )
 
 template <class ArchType>
 void InDocumentConversation::load( ArchType& arch, unsigned int version ) {
@@ -235,7 +235,7 @@ void ConversationManager::documentActivated( IDocument* /*document*/ ) {
 
 void ConversationManager::log( QString str, LogLevel level ) {
   m_manager->log( str, level );
-};
+}
 
 ConversationManager* InDocumentConversation::manager() const {
   return ConversationManager::instance();
@@ -593,7 +593,7 @@ void InDocumentConversation::verticalScrollPositionChanged ( KTextEditor::View *
 
 void InDocumentConversation::log( QString str, LogLevel level ) const {
   const_cast<ConversationManager*>( manager() ) ->log( "InDocumentConversation: " + str, level );
-};
+}
 
 
 void InDocumentConversation::horizontalScrollPositionChanged ( KTextEditor::View */*view*/ ) {

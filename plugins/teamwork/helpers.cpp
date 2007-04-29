@@ -20,7 +20,7 @@
 Teamwork::UserPointer userFromSession( const Teamwork::SessionPointer& session ) {
   if( !session ) return 0;
   return session.unsafe() ->safeUser();
-};
+}
 
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on
