@@ -14,6 +14,7 @@
     <Action name="cvs_update" />
     <Action name="cvs_import" />
     <Action name="cvs_checkout" />
+    <Action name="cvs_status" />
   </Menu>
 </MenuBar>
 </kpartgui>

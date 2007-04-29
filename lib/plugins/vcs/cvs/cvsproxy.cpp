@@ -16,7 +16,6 @@
 #include <KLocale>
 #include <KUrl>
 #include <KMessageBox>
-#include <K3Process>
 
 #include "cvsjob.h"
 
@@ -347,6 +346,26 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
         *job << "-d" << targetDir.path();
 
         *job << module;
+
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+CvsJob * CvsProxy::status(const KUrl & directory, bool recursive, bool taginfo)
+{
+    kDebug() << k_funcinfo << endl;
+
+    CvsJob* job = new CvsJob(this);
+    if ( prepareJob(job, directory.path()) ) {
+        *job << "cvs";
+        *job << "status";
+
+        if (!recursive)
+            *job << "-l";
+        if (taginfo)
+            *job << "-v";
 
         return job;
     }

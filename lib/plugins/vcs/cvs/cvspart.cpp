@@ -38,6 +38,7 @@
 #include "cvsgenericoutputview.h"
 #include "importdialog.h"
 #include "checkoutdialog.h"
+#include "cvsfileinfoprovider.h"
 
 typedef KGenericFactory<CvsPart> KDevCvsFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcvs,
@@ -62,6 +63,7 @@ class CvsPartPrivate {
 public:
     KDevCvsViewFactory* m_factory;
     QPointer<CvsProxy> m_proxy;
+    QPointer<CvsFileInfoProvider> m_fileinfoprovider;
 };
 
 CvsPart::CvsPart( QObject *parent, const QStringList & )
@@ -78,6 +80,10 @@ CvsPart::CvsPart( QObject *parent, const QStringList & )
     setupActions();
 
     d->m_proxy = new CvsProxy(this);
+
+    d->m_fileinfoprovider = new CvsFileInfoProvider(d->m_proxy, this);
+    connect( d->m_fileinfoprovider, SIGNAL(statusReady(const QList<KDevelop::VcsFileInfo>&)),
+             this, SIGNAL(statusReady(const QList<KDevelop::VcsFileInfo>&)) );
 }
 
 CvsPart::~CvsPart()
@@ -144,6 +150,10 @@ void CvsPart::setupActions()
     action = actionCollection()->addAction("cvs_checkout");
     action->setText(i18n("Checkout..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCheckout()));
+
+    action = actionCollection()->addAction("cvs_status");
+    action->setText(i18n("Status..."));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStatus()));
 
 }
 
@@ -260,6 +270,22 @@ void CvsPart::slotCheckout()
     fetchFromRepository();
 }
 
+void CvsPart::slotStatus()
+{
+    KUrl url = urlFocusedDocument();
+    QFileInfo info(url.path());
+
+    QList<KDevelop::VcsFileInfo> infos;
+
+    /// @todo just for testing; remove me...
+    // In order to be able to test the "cvs status" command this slot takes
+    // the path of the currently open file and requests the status of all
+    // files from that directory
+    // The whole slot will be removed as soon as the status-slots get
+    // called via IVersionControl interface.
+    statusASync( KUrl(info.absolutePath()), IVersionControl::NonRecursive, infos );
+}
+
 
 
 
@@ -305,19 +331,15 @@ bool CvsPart::fetchFromRepository()
 
 bool CvsPart::statusASync(const KUrl & dirPath, WorkingMode mode, const QList< KDevelop::VcsFileInfo > & infos)
 {
-    Q_UNUSED(dirPath)
-    Q_UNUSED(mode)
+    ///@todo what are these infos for? The signal that gets emmitted when the operation finished return it's own list.
     Q_UNUSED(infos)
-    /// @todo implemt me !
-    return false;
+
+    return d->m_fileinfoprovider->requestStatusASync(dirPath, mode);
 }
 
 QList< KDevelop::VcsFileInfo > CvsPart::statusSync(const KUrl & dirPath, KDevelop::IVersionControl::WorkingMode mode)
 {
-    Q_UNUSED(dirPath)
-    Q_UNUSED(mode)
-    /// @todo implemt me !
-	return QList< KDevelop::VcsFileInfo >();
+    return d->m_fileinfoprovider->requestStatusSync(dirPath, mode);
 }
 
 void CvsPart::checkout(const KUrl & repository, const KUrl & targetDir, KDevelop::IVersionControl::WorkingMode mode)

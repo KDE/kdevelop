@@ -80,6 +80,7 @@ public slots:
     void slotImport();
     void slotAnnotate();
     void slotCheckout();
+    void slotStatus();
 
 // Signals inherited from IVersionControl
 Q_SIGNALS:

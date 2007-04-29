@@ -81,6 +81,8 @@ public:
                 bool recursive = true,
                 bool pruneDirs = true);
 
+    CvsJob* status(const KUrl& directory, bool recursive=false, bool taginfo=false);
+
 private slots:
     void slotResult(KJob* job);
 

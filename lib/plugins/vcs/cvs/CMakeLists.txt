@@ -22,6 +22,7 @@ set(kdevcvs_PART_SRCS
 	updateoptionsdialog.cpp
 	importdialog.cpp
 	checkoutdialog.cpp
+	cvsfileinfoprovider.cpp
 )
 
 set(kdevcvs_PART_UI
