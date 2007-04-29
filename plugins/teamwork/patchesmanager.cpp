@@ -140,7 +140,7 @@ void PatchesManager::slotManagePatches() {
   m_patchesModel = new QStandardItemModel( 0, 1, m_managePatches.patchesList );
   m_managePatches.patchesList->setModel( m_patchesModel );
   guiUpdatePatchesList();
-};
+}
 
 void PatchesManager::slotUpdateConnection( TeamworkClientPointer newClient ) {
   if ( newClient ) {
@@ -151,7 +151,7 @@ void PatchesManager::slotUpdateConnection( TeamworkClientPointer newClient ) {
 
 void PatchesManager::log( QString str, LogLevel level ) {
   m_teamwork->log( "patchesmanager: " + str, level );
-};
+}
 
 void PatchesManager::addPatch( const LocalPatchSourcePointer& patch ) {
   if( !hasPatch( patch ) ) {
@@ -230,7 +230,7 @@ LocalPatchSourcePointer PatchesManager::selectedPatch() {
   }
 
   return LocalPatchSourcePointer();
-};
+}
 
 ///The following three functions are nearly the same, maybe they should be put together
 void PatchesManager::slotApplyPatch() {
@@ -755,7 +755,7 @@ void PatchesManager::slotShowRequestedPatch() {
   } catch ( const char * str ) {
     log( QString( "slotShowRequestedPatch failed: " ) + str );
   }
-};
+}
 
 void PatchesManager::slotAllowPatch() {
   try {
