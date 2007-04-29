@@ -830,7 +830,7 @@ QIcon KDevTeamwork::iconFromUser( User* user, K3Icon::Group size ) {
   if ( !u )
     return m_icons->getIcon( "remove", size );
   return u->icon( size );
-};
+}
 
 
 void KDevTeamwork::updateTimeout() {

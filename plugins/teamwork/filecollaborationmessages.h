@@ -222,7 +222,6 @@ END();
 typedef SafeSharedPtr<FileCollaborationMessage> FileCollaborationMessagePointer;
 typedef SafeSharedPtr<FileCollaborationRequest> FileCollaborationRequestPointer;
 
-;
 
 class DocumentWrapperMessageData {
   public:
@@ -231,7 +230,7 @@ class DocumentWrapperMessageData {
     template <class Archive>
         void serialize( Archive& arch, unsigned int /*version*/ ) {
       arch & m_wrapperId;
-        };
+        }
         uint wrapperId() {
           return m_wrapperId;
         }
