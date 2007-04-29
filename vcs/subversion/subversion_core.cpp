@@ -699,7 +699,7 @@ void subversionCore::slotDiffResult( KIO::Job * job )
 			p->start();
 			
 		} else { //else do it with message box
-			KMessageBox::information( NULL, i18n("You don't have kompare installed. We recommend you to install kompare to view difference graphically") + "\nhttp://www.caffeinated.me.uk/kompare/" );
+			KMessageBox::information( NULL, i18n("You don't have kompare installed. We recommend you to install kompare to view difference graphically") + "\nhttp://www.caffeinated.me.uk/kompare/" , QString::null , "userDoesNotWantKompare" );
 			Subversion_Diff df;
 			for ( QStringList::Iterator it2 = diffList.begin();it2 != diffList.end() ; ++it2 ) {
 				df.text->append( *it2 );
