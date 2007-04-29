@@ -146,6 +146,11 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 	int cmd = 9;
 	QString rPath = projectDirectory( );
 	rPath += QDir::separator() + dirPath;
+    
+    if( ! m_part->isValidDirectory( rPath ) ){
+        return false;
+    }
+    
 	kdDebug(9036) << "DIR : " << rPath << " " << QFileInfo( rPath ).absFilePath() << endl;
 	s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << checkRepos << recursive;
 	KURL servURL = "kdevsvn+http://fakeserver_this_is_normal_behavior/";
