@@ -155,7 +155,7 @@ Name( InArchive& arch, const Teamwork::MessageInfo& info );                     
     Precursor::serialize( arch );                         \
     /*static_cast<DataType&>(*this).serialize( arch, 0 );*/  \
     arch & boost::serialization::base_object<DataType>(*this);  \
-};                                                                \
+}                                                                \
 Name :: Name ( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {      \
     /*static_cast<DataType&>(*this).serialize( arch, 0 );*/  \
     arch & boost::serialization::base_object<DataType>(*this);          \
