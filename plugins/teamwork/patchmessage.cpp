@@ -46,7 +46,7 @@ PatchesListMessage::PatchesListMessage( InArchive& arch, const Teamwork::Message
 void PatchesListMessage::serialize( OutArchive& arch ) {
   Precursor::serialize( arch );
   serial( arch );
-};
+}
 
 uint LocalPatchSource::patchDepth() const {
   QString cmd = ~applyCommand;
@@ -258,7 +258,7 @@ void PatchData::saveInternal( OutArchive& arch, const uint /*version*/ ) {
     throw NonFatalSerializationError( ( string( "PatchData::serialize: " ) + str.toUtf8().data() ).c_str() );
   }
   currentArchive = 0;
-};
+}
 
 //template<class Arch>
 void PatchData::load( InArchive& arch, const uint /*version*/ ) {

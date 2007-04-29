@@ -111,7 +111,7 @@ int MessageManager::processMessage( KDevTeamworkTextMessage* msg ) {
 
 void MessageManager::log( QString str, LogLevel level ) {
   m_teamwork->log( "MessageManager: " + str, level );
-};
+}
 
 KDevTeamwork* MessageManager::teamwork() {
   return m_teamwork;

@@ -32,7 +32,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 ///There's not many messages that need to be dispatched right now
 BIND_LIST_2( FileCollaborationMessages, FileCollaborationMessage, FileCollaborationRequest )
-CROSSMAP_DEFINE_CONTAINER( QList );
+CROSSMAP_DEFINE_CONTAINER( QList )
 
 class FileCollaborationManager : public QObject, public SafeLogger {
     Q_OBJECT

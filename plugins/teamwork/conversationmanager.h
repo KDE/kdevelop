@@ -102,7 +102,7 @@ class ConversationManager;
 class QWidget;
 class SmartCursor;
 
-CROSSMAP_DEFINE_CONTAINER( QList );
+CROSSMAP_DEFINE_CONTAINER( QList )
 
 struct OrderedDocumentMessage {
   int position;
