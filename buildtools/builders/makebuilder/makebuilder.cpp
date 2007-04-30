@@ -52,10 +52,10 @@ MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            connect(i, SIGNAL(commandFinished(const QStringList &)),
-                this, SLOT(commandFinished(const QStringList &)));
-            connect(i, SIGNAL(commandFailed(const QStringList &)),
-                this, SLOT(commandFailed(const QStringList &)));
+            connect(i, SIGNAL(commandFinished(const QString &)),
+                this, SLOT(commandFinished(const QString &)));
+            connect(i, SIGNAL(commandFailed(const QString &)),
+                this, SLOT(commandFailed(const QString &)));
         }
     }
 }
@@ -79,7 +79,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             QStringList cmd = buildCommand(item);
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
             kDebug(9038) << "Starting build: " << cmd << endl;
-            view->queueCommand( item->url(), cmd, QStringList() );
+            view->queueCommand( item->url(), cmd, QMap<QString,QString>() );
             return true;
         }
     }
@@ -93,13 +93,13 @@ bool MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
     return false;
 }
 
-void MakeBuilder::commandFinished(const QStringList &command)
+void MakeBuilder::commandFinished(const QString &command)
 {
     if( !m_queue.isEmpty() )
     {
         QPair< QStringList, KDevelop::ProjectBaseItem* > pair = m_queue.front();
 
-        if( pair.first == command )
+        if( pair.first.join(" ") == command )
         {
             m_queue.pop_front();
             emit built( pair.second );
@@ -107,12 +107,12 @@ void MakeBuilder::commandFinished(const QStringList &command)
     }
 }
 
-void MakeBuilder::commandFailed(const QStringList &command)
+void MakeBuilder::commandFailed(const QString &command)
 {
     if( !m_queue.isEmpty() )
     {
         QPair<QStringList, KDevelop::ProjectBaseItem*> pair = m_queue.front();
-        if( pair.first == command )
+        if( pair.first.join(" ") == command )
         {
             m_queue.pop_front();
             emit failed(pair.second);

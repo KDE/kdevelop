@@ -23,7 +23,6 @@
 
 #include "ioutputview.h"
 #include "iplugin.h"
-#include <QtCore/QProcess>
 
 class QStringList;
 class QStandardItemModel;
@@ -34,6 +33,7 @@ class QString;
 /**
 @author Andreas Pakulat
 */
+
 class SimpleOutputView : public KDevelop::IPlugin, public KDevelop::IOutputView
 {
 Q_OBJECT
@@ -42,19 +42,18 @@ Q_INTERFACES( KDevelop::IOutputView )
 public:
     SimpleOutputView(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~SimpleOutputView();
-    void queueCommand(const KUrl& dir, const QStringList& command, const QStringList& env );
+    void queueCommand(const KUrl& dir, const QStringList& command, const QMap<QString, QString>& env );
 
-    QStandardItemModel* model();
+    void registerLogView( const QString& title );
+    void appendLine( const QString& title, const QString& line );
+    void appendLines( const QString& title, const QStringList& line );
 
 Q_SIGNALS:
-    void commandFinished( const QStringList& command );
-    void commandFailed( const QStringList& command );
+    void commandFinished( const QString& command );
+    void commandFailed( const QString& command );
+    void modelAdded( const QString&, QStandardItemModel* );
 
 private:
-    Q_PRIVATE_SLOT( d, void procReadStdout(K3Process* proc, char*, int) )
-    Q_PRIVATE_SLOT( d, void procReadStderr(K3Process* proc, char*, int) )
-    Q_PRIVATE_SLOT( d, void startNextJob() )
-    Q_PRIVATE_SLOT( d, void procFinished( K3Process* ) )
     class SimpleOutputViewPrivate* const d;
     friend class SimpleOutputViewPrivate;
 };

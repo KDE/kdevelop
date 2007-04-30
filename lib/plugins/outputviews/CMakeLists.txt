@@ -9,6 +9,8 @@ include_directories(${CMAKE_SOURCE_DIR}/lib
 
 set(simpleoutputview_LIB_SRCS
     simpleoutputview.cpp
+    outputviewcommand.cpp
+    outputwidget.cpp
 )
 
 kde4_automoc(${simpleoutputview_LIB_SRCS})

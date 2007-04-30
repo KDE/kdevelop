@@ -25,6 +25,7 @@
 
 class KUrl;
 class QString;
+template <typename T1, typename T2> class QMap;
 
 /**
 @author Andreas Pakulat
@@ -33,18 +34,16 @@ namespace KDevelop
 {
 
 // Idea for later: Let the output view work on executable commands
-// class ExecutableCommand
+// class IExecutableCommand
 // {
 // public:
-//     ExecutableCommand();
-//     void setWorkingDir(const KUrl&);
-//     void setCommandList(const QStringList&);
-//     void setEnvironment(const QStringList&);
-//     QStringList environment() const;
-//     QStringList commandlist() const;
-//     KUrl workingDirectory() const;
-// private:
-//     struct ExecutableCommandPrivate* const d;
+//     virtual ~IExecutableCommand(){}
+//     virtual void setWorkingDir(const KUrl&) = 0;
+//     virtual void setCommandList(const QStringList&) = 0;
+//     virtual void setEnvironment(const QMap<QString, QString>&) = 0;
+//     virtual QMap<QString, QString> environment() const = 0;
+//     virtual QStringList commandlist() const = 0;
+//     virtual KUrl workingDirectory() const = 0;
 // };
 
 class IOutputView
@@ -54,11 +53,27 @@ public:
     virtual ~IOutputView() {}
 
 public:
-    virtual void queueCommand( const KUrl&, const QStringList&, const QStringList& ) = 0;
+    /**
+     * Execute the Command in a K3Process and capture the output in
+     * a new tab with the command as title
+     */
+    virtual void queueCommand( const KUrl& workingdir, const QStringList&, const QMap<QString, QString>& ) = 0;
+
+    /**
+     * Register a new Tab for Outputting logging information, this can be used
+     * for example to log things that the VCS plugin does
+     */
+    virtual void registerLogView( const QString& title ) = 0;
+
+    /**
+     * Add the line or lines to the registered tab identified via title
+     */
+    virtual void appendLine( const QString& title, const QString& line ) = 0;
+    virtual void appendLines( const QString& title, const QStringList& lines ) = 0;
 
 Q_SIGNALS:
-    virtual void commandFinished( const QStringList& ) = 0;
-    virtual void commandFailed( const QStringList& ) = 0;
+    virtual void commandFinished( const QString& ) = 0;
+    virtual void commandFailed( const QString& ) = 0;
 };
 }
 KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutputView" )

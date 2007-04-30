@@ -59,10 +59,10 @@ QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            connect(i, SIGNAL(commandFinished(const QStringList &)),
-                this, SLOT(commandFinished(const QStringList &)));
-            connect(i, SIGNAL(commandFailed(const QStringList &)),
-                this, SLOT(commandFailed(const QStringList &)));
+            connect(i, SIGNAL(commandFinished(const QString &)),
+                this, SLOT(commandFinished(const QString &)));
+            connect(i, SIGNAL(commandFailed(const QString &)),
+                this, SLOT(commandFailed(const QString &)));
         }
     }
     i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
@@ -103,7 +103,7 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 //             kDebug(9024) << v << v.type() << v.userType() << endl;
             cmd << v.path();
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
-            view->queueCommand( item->url(), cmd, QStringList() );
+            view->queueCommand( item->url(), cmd, QMap<QString, QString>() );
             return true;
         }
     }
@@ -116,7 +116,7 @@ bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return false;
 }
 
-void QMakeBuilder::commandFinished(const QStringList &command)
+void QMakeBuilder::commandFinished(const QString &command)
 {
     kDebug(9024) << "command finished " << command << endl;
     if( !m_queue.isEmpty() )
@@ -124,7 +124,7 @@ void QMakeBuilder::commandFinished(const QStringList &command)
         kDebug(9024) << "queue not empty" << endl;
         QPair< QStringList, KDevelop::ProjectBaseItem* > pair = m_queue.front();
 
-        if( pair.first == command )
+        if( pair.first.join(" ") == command )
         {
             kDebug(9024) << "found command" << endl;
             m_queue.pop_front();
@@ -143,12 +143,12 @@ void QMakeBuilder::commandFinished(const QStringList &command)
     }
 }
 
-void QMakeBuilder::commandFailed(const QStringList &command)
+void QMakeBuilder::commandFailed(const QString &command)
 {
     if( !m_queue.isEmpty() )
     {
         QPair<QStringList, KDevelop::ProjectBaseItem*> pair = m_queue.front();
-        if( pair.first == command )
+        if( pair.first.join(" ") == command )
         {
             m_queue.pop_front();
             emit failed(pair.second);
