@@ -33,10 +33,10 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     : QDialog(0, "hierarchy dialog", WDestructiveClose)
 {
     class_combo = new KComboView(true, 150, this);
-    class_combo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ); 
+    class_combo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 //    class_combo->setMinimumWidth(150);
     namespace_combo = new KComboView(true, 150, this);
-    namespace_combo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ); 
+    namespace_combo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 //    namespace_combo->setMinimumWidth(150);
 
     QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
@@ -50,7 +50,7 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     layout->addLayout(combo_layout);
     combo_layout->addWidget(namespace_combo);
     combo_layout->addWidget(class_combo);
-    combo_layout->addStretch();
+    combo_layout->addSpacing(60);
     combo_layout->addWidget(close_button);
     layout->addWidget(splitter);
 
