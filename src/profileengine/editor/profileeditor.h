@@ -23,6 +23,8 @@
 
 #include "profileeditorbase.h"
 
+class QListBoxItem;
+class QListViewItem;
 class KListViewItem;
 
 class ProfileEditor : public ProfileEditorBase {
