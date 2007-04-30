@@ -6,6 +6,7 @@ X-KDE-Derived=KDevelop/Plugin
 Name=Code Browser Frontend
 Name[ca]=Interfície per al navegador de codi
 Name[de]=Quelltextbrowser-Oberfläche
+Name[el]=Πρόγραμμα περιήγησης κώδικα
 Name[es]=Interfaz para el navegador de código
 Name[et]=Koodibrauseri kasutajaliides
 Name[hu]=Kódböngésző
@@ -14,6 +15,8 @@ Name[nds]=Kodekieker-Böversiet
 Name[pt]=Interface de Navegação do Código
 Name[pt_BR]=Interface de Navegação do Código
 Name[sk]=Rozhranie pre prehliadač kódu
+Name[sr]=Интерфејс прегледача кода
+Name[sr@Latn]=Interfejs pregledača koda
 Name[sv]=Kodbläddringsgränssnitt
 Name[zh_TW]=源碼瀏覽器前端介面
 

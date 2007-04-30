@@ -43,6 +43,8 @@ Comment[nds]=Stellt en eenfach "Gtk--"-Programm op. Gtkmm >= 2.8.0 schull instal
 Comment[pt]=Gera uma aplicação simples em Gtk--. Deverá estar instalado o Gtkmm >= 2.8.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[pt_BR]=Gera uma aplicação simples em Gtk--. Deverá estar instalado o Gtkmm >= 2.8.0. Para editar o ficheiro do Glade,, é necessário o glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sk]=Vygeneruje jednoduchú Gtk-- aplikáciu. Vyžaduje nainštalované Gtkmm >= 2.8.0. Na editovanie glade súboru he potrebný glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[sr]=Прави једноставан Gtk-- програм. Gtkmm >= 2.8.0 требало би да је инсталиран. Да бисте уређивали glade фајл, неопходан је glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[sr@Latn]=Pravi jednostavan Gtk-- program. Gtkmm >= 2.8.0 trebalo bi da je instaliran. Da biste uređivali glade fajl, neophodan je glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt Gtk-- program. Gtkmm >= 2.8.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[zh_TW]=產生一個簡單的 Gtk-- 應用程式。要先安裝 Gtkmm 版本 >= 2.8.0。要編輯 glade 檔則要先安裝 glade-- （http://home.wtal.de/petig/Gtk/）。
 FileTemplates=hh,CStyle,cc,CStyle
