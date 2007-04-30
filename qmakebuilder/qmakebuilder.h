@@ -50,8 +50,8 @@ Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
 private Q_SLOTS:
-    void commandFinished(const QStringList &command);
-    void commandFailed(const QStringList &command);
+    void commandFinished(const QString &command);
+    void commandFailed(const QString &command);
 
 private:
     QList< QPair< QStringList, KDevelop::ProjectBaseItem*> > m_queue;
