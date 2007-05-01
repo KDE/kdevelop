@@ -119,6 +119,8 @@ ProjectConfigurationDlg::ProjectConfigurationDlg( QListView *_prjList, TrollProj
     uidir_url->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     m_CWDEdit->completionObject()->setMode(KURLCompletion::DirCompletion);
     m_CWDEdit->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    m_targetPath->completionObject()->setMode(KURLCompletion::DirCompletion);
+    m_targetPath->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 }
 
 void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
@@ -148,12 +150,6 @@ void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
 
 ProjectConfigurationDlg::~ProjectConfigurationDlg()
 {}
-
-void ProjectConfigurationDlg::browseTargetPath()
-{
-    m_targetPath->setText( URLUtil::getRelativePath( myProjectItem->scope->projectDir(), KFileDialog::getExistingDirectory() ) );
-    buttonApply->setEnabled( false );
-}
 
 void ProjectConfigurationDlg::updateProjectConfiguration()
 {
@@ -398,16 +394,19 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             myProjectItem->scope->addToPlusOp( "CONFIG", *it );
     }
 
+    QString targetpath = m_targetPath->url();
+    if( !QFileInfo( targetpath ).isRelative() )
+        targetpath = URLUtil::getRelativePath( myProjectItem->scope->projectDir(), targetpath );
     if( myProjectItem->scope->scopeType() == Scope::FunctionScope || myProjectItem->scope->scopeType() == Scope::SimpleScope )
     {
         if( myProjectItem->scope->variableValues("TARGET").findIndex( m_targetOutputFile->text() ) == -1 )
             myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
-        if( myProjectItem->scope->variableValues("DESTDIR").findIndex( m_targetPath->text() ) == -1 )
-            myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
+        if( myProjectItem->scope->variableValues("DESTDIR").findIndex( targetpath ) == -1 )
+            myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( targetpath ) );
     }else
     {
         myProjectItem->scope->setEqualOp( "TARGET", QStringList( m_targetOutputFile->text() ) );
-        myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( m_targetPath->text() ) );
+        myProjectItem->scope->setEqualOp( "DESTDIR", QStringList( targetpath ) );
     }
 
     myProjectItem->updateValues( "DEFINES", QStringList::split( " ", m_defines->text() ) );
@@ -852,7 +851,7 @@ void ProjectConfigurationDlg::updateControls()
     m_InstallTargetPath->setText( myProjectItem->scope->variableValues( "target.path" ).front() );
 
     m_targetOutputFile->setText( myProjectItem->scope->variableValues( "TARGET" ).front() );
-    m_targetPath->setText( myProjectItem->scope->variableValues( "DESTDIR" ).front() );
+    m_targetPath->setURL( myProjectItem->scope->projectDir()+"/"+myProjectItem->scope->variableValues( "DESTDIR" ).front() );
 
     m_defines->setText( myProjectItem->scope->variableValues( "DEFINES" ).join( " " ) );
     m_debugFlags->setText( myProjectItem->scope->variableValues( "QMAKE_CXXFLAGS_DEBUG" ).join( " " ) );

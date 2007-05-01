@@ -65,7 +65,6 @@ public:
 public slots:
     //  virtual void           radioLibrarytoggled(bool);
     virtual void updateProjectConfiguration();
-    virtual void browseTargetPath();
 
     virtual void buildorderMoveUpClicked();
     virtual void buildorderMoveDownClicked();

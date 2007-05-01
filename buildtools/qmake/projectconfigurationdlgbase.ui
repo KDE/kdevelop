@@ -206,33 +206,14 @@
                                     <cstring>m_targetOutputFile</cstring>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>m_targetPath</cstring>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                            <widget class="KLineEdit" row="1" column="1">
                                 <property name="name">
                                     <cstring>m_targetOutputFile</cstring>
                                 </property>
                             </widget>
-                            <widget class="KPushButton" row="0" column="2">
+                            <widget class="KURLRequester" row="0" column="1">
                                 <property name="name">
-                                    <cstring>Browse</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Browse...</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Browse</string>
+                                    <cstring>m_targetPath</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -2251,12 +2232,6 @@
         <slot>activateApply(const QString&amp;)</slot>
     </connection>
     <connection>
-        <sender>m_targetPath</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>activateApply(const QString&amp;)</slot>
-    </connection>
-    <connection>
         <sender>objdir_url</sender>
         <signal>urlSelected(const QString&amp;)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -2369,12 +2344,6 @@
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>apply()</slot>
-    </connection>
-    <connection>
-        <sender>Browse</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>browseTargetPath()</slot>
     </connection>
     <connection>
         <sender>buildmovedown_button</sender>
@@ -2640,6 +2609,24 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>upCustomValueClicked()</slot>
     </connection>
+    <connection>
+        <sender>m_targetPath</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_targetPath</sender>
+        <signal>returnPressed(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>m_targetPath</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>activateApply(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>TabBuild</tabstop>
@@ -2647,8 +2634,6 @@
     <tabstop>radioLibrary</tabstop>
     <tabstop>radioSubdirs</tabstop>
     <tabstop>checkOrdered</tabstop>
-    <tabstop>m_targetPath</tabstop>
-    <tabstop>Browse</tabstop>
     <tabstop>m_targetOutputFile</tabstop>
     <tabstop>checkInstallTarget</tabstop>
     <tabstop>m_InstallTargetPath</tabstop>
@@ -2750,7 +2735,6 @@
     <include location="global" impldecl="in implementation">kpushbutton.h</include>
 </includes>
 <slots>
-    <slot>browseTargetPath()</slot>
     <slot>updateProjectConfiguration()</slot>
     <slot>buildorderMoveUpClicked()</slot>
     <slot>buildorderMoveDownClicked()</slot>
@@ -2802,6 +2786,7 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
