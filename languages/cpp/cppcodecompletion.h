@@ -219,9 +219,6 @@ private:
     CppEvaluation::EvaluationResult evaluateExpressionType( int line, int column, SimpleTypeConfiguration& conf, EvaluateExpressionOptions opt = DefaultCompletionOptions  );
     SimpleType unTypeDef( SimpleType scope , QMap<QString, QString>& typedefs );
     
-	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );
-    bool correctAccessOpAccurate( QStringList ptrList, MemberAccessOp accessOp );    
-
   //    QString buildSignature( TypePointer currType );
     SimpleType typeOf( QValueList<Tag>& tags, MemberAccessOp accessOp );
     

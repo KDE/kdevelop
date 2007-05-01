@@ -1405,24 +1405,6 @@ QStringList CppCodeCompletion::splitExpression( const QString& text ) {
   return l;
 }
 
-bool CppCodeCompletion::correctAccessOpAccurate( QStringList ptrList, MemberAccessOp accessOp ) {
-  //Remove the vars that don't correspond to the member access operator
-  //that we are using.
-
-  ///@todo: Take into account the de-reference operator...
-  bool arrowOp = accessOp == ArrowOp && ptrList.count() && ptrList[ 0 ] == "*";
-  bool dotOp = accessOp == DotOp && ( !ptrList.count() || ptrList[ 0 ] == "&" );
-  return arrowOp || dotOp;
-}
-
-
-bool CppCodeCompletion::correctAccessOp( QStringList ptrList, MemberAccessOp accessOp ) {
-  if ( m_demandCompletion || accessOp == NoOp )
-    return true;
-
-  return correctAccessOpAccurate( ptrList, accessOp );
-}
-
 ///Before calling this, a SimpleTypeConfiguration-object should be created, so that the ressources will be freed when that object is destroyed
 EvaluationResult CppCodeCompletion::evaluateExpressionAt( int line, int column , SimpleTypeConfiguration& conf, bool ifUnknownSetType ) {
   kdDebug( 9007 ) << "CppCodeCompletion::evaluateExpressionAt( " << line << ", " << column << " )" << endl;
