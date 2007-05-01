@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="kdevcustommakemanager" library="libkdevcustommakemanager" version="4">
+<MenuBar>
+ <Menu name="build"><Text>&amp;Build</Text>
+  <Action name="build_target"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>
