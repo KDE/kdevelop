@@ -113,9 +113,20 @@ public Q_SLOTS:
     IProjectFileManager* fileManager() const;
 
     /**
+     * Get the plugin that manages the project
+     * This can be used to get other interfaces like IBuildSystemManager
+     */
+    IPlugin* managerPlugin() const;
+
+    /**
      * Set the file manager for the project.
      */
     void setFileManager( IPlugin* fileManager );
+
+    /**
+     * With this the top-level project item can be retrieved
+     */
+    ProjectItem* projectItem() const;
 
     /**
      * Find the url relative to the project directory equivalent to @a absoluteUrl.

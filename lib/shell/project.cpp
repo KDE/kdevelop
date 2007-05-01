@@ -394,6 +394,11 @@ IProjectFileManager* Project::fileManager() const
     return d->manager->extension<IProjectFileManager>();
 }
 
+IPlugin* Project::managerPlugin() const
+{
+  return d->manager;
+}
+
 void Project::setFileManager( IPlugin* newManager )
 {
     d->manager = newManager;
@@ -412,6 +417,11 @@ KUrl Project::projectFileUrl() const
 KUrl Project::developerFileUrl() const
 {
     return d->developerFileUrl;
+}
+
+ProjectItem* Project::projectItem() const
+{
+    return d->topItem;
 }
 
 }

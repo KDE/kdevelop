@@ -75,6 +75,17 @@ public:
      */
     virtual IProjectFileManager* fileManager() const = 0;
 
+    /**
+     * Get the plugin that manages the project
+     * This can be used to get other interfaces like IBuildSystemManager
+     */
+    virtual IPlugin* managerPlugin() const = 0;
+
+    /**
+     * With this the top-level project item can be retrieved
+     */
+    virtual ProjectItem* projectItem() const = 0;
+
     /** Get a list of all files in the project */
     virtual int fileCount() const = 0;
     virtual ProjectFileItem* fileAt( int ) const = 0;
