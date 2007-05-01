@@ -834,7 +834,7 @@ void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
         return;
 
     int s = KMessageBox::questionYesNo( 0,
-        i18n("Do you want to be added to CVS repository too?"),
+        i18n("Do you want the files to be added to CVS repository too?"),
         i18n("CVS - New Files Added to Project"),
         KStdGuiItem::add(),
         i18n("Do Not Add"),
