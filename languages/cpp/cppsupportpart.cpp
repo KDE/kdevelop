@@ -537,7 +537,7 @@ void CppSupportPart::projectOpened( )
 	kdDebug( 9007 ) << "projectOpened( )" << endl;
 
 	m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
-	m_backgroundParser->start( QThread::LowPriority );
+	m_backgroundParser->start( QThread::IdlePriority );
 
 	// setup the driver
 	QString conf_file_name = specialHeaderName();
