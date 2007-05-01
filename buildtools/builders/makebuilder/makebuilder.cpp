@@ -25,6 +25,7 @@
 #include "makebuilder.h"
 #include <projectmodel.h>
 
+#include <ibuildsystemmanager.h>
 #include <iproject.h>
 #include <icore.h>
 #include <iplugincontroller.h>
@@ -67,21 +68,107 @@ MakeBuilder::~MakeBuilder()
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
 {
     kDebug(9038) << "Building with make" << endl;
-    if( dom->type() != KDevelop::ProjectBaseItem::Project )
+    if( ! (dom->type() == KDevelop::ProjectBaseItem::Project || dom->type() == KDevelop::ProjectBaseItem::Target) )
         return false;
-    KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(dom);
+
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            QStringList cmd = buildCommand(item);
-            m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
-            kDebug(9038) << "Starting build: " << cmd << endl;
-            view->queueCommand( item->url(), cmd, QMap<QString,QString>() );
+            KUrl buildDir;
+            QStringList cmd;
+            // get or compute build directory and cmd
+            if( dom->type() == KDevelop::ProjectBaseItem::Project )
+            {
+                KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(dom);
+                cmd = buildCommand(item);
+                m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
+
+                KDevelop::IProjectFileManager *fileMan = item->project()->fileManager();
+                KDevelop::IBuildSystemManager *bldMan = dynamic_cast<KDevelop::IBuildSystemManager*>(fileMan);
+                if( bldMan )
+                    buildDir = bldMan->buildDirectory( item ); // the correct build dir
+                else
+                    buildDir = item->url();
+            }
+            else if( dom->type() == KDevelop::ProjectBaseItem::Target )
+            {
+                KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(dom);
+                cmd = buildCommand( targetItem, targetItem->text() );
+                m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
+
+                // get top build directory, specified by build system manager
+                KDevelop::IProjectFileManager *fileMan = targetItem->project()->fileManager();
+                KDevelop::IBuildSystemManager *bldMan = dynamic_cast<KDevelop::IBuildSystemManager*>(fileMan);
+                KDevelop::ProjectItem *prjItem = ancesterProjectItem( targetItem );
+                KUrl topBldDir;
+                // ### buildDirectory only takes ProjectItem as an argument. Why it can't be
+                // any ProjectBaseItem?? This will make the algorithms belows much easier
+                if( prjItem )
+                {
+                    if( bldMan )
+                        topBldDir = bldMan->buildDirectory( prjItem ); // the correct build dir
+                    else
+                    {
+                        kDebug(9038) << " Warning: fail to get build manager " << endl;
+                        topBldDir = prjItem->url();
+                    }
+                }
+                else
+                {
+                    // just set to top project dir, since we can't call buildDirectory without ProjectItem
+                    kDebug(9038) << " Warning: fail to retrieve KDevelop::ProjectItem " << endl;
+                    topBldDir = targetItem->project()->folder(); 
+                }
+
+                // now compute relative directory: itemDir - topProjectDir,
+                // and append the difference to top_build_dir found above.
+                if( targetItem->parent() == NULL )
+                {
+                    // This case shouldn't happen. Just set to project top build dir.
+                    buildDir = topBldDir;
+                }
+                else
+                {
+                    if( targetItem->parent()->type() == KDevelop::ProjectBaseItem::Folder ||
+                        targetItem->parent()->type() == KDevelop::ProjectBaseItem::BuildFolder ||
+                        targetItem->parent()->type() == KDevelop::ProjectBaseItem::Project )
+                    {
+                        KDevelop::ProjectFolderItem *parentOfTarget =
+                                static_cast<KDevelop::ProjectFolderItem*>( targetItem->parent() );
+                        KUrl itemDir = parentOfTarget->url();
+                        
+                        QString relative;
+                        if( prjItem )
+                        {
+                            // desired case
+                            KUrl rootUrl = prjItem->url();
+                            rootUrl.adjustPath(KUrl::AddTrailingSlash);
+                            relative = KUrl::relativeUrl( rootUrl, itemDir );
+                        }
+                        else
+                        {
+                            KUrl topProjectDir = targetItem->project()->folder();
+                            topProjectDir.adjustPath(KUrl::AddTrailingSlash);
+                            relative = KUrl::relativeUrl( topProjectDir, itemDir );
+                        }
+
+                        buildDir = topBldDir;
+                        buildDir.addPath( relative );
+                    }
+                    else
+                    {
+                        // This case shouldn't happen too. Just set to top build dir.
+                        buildDir = topBldDir;
+                    }
+                }
+            } // end of else if( type() == ProjectTargetItem )
+            kDebug(9038) << "Starting build: " << cmd << " Build directory " << buildDir << endl;
+            view->queueCommand( buildDir, cmd, QMap<QString,QString>() );
             return true;
-        }
+        } // end of if(view)
     }
     return false;
 
@@ -152,7 +239,7 @@ QStringList MakeBuilder::buildCommand( KDevelop::ProjectBaseItem *item,
 //     cmdline.prepend(nice);
 //     cmdline.prepend(makeEnvironment());
 
-    Q_ASSERT(item->folder());
+//     Q_ASSERT(item->folder());
 
 //     cmdline.prepend("&&");
 //     cmdline.prepend( item->folder()->text() );
@@ -160,6 +247,23 @@ QStringList MakeBuilder::buildCommand( KDevelop::ProjectBaseItem *item,
 
     return cmdline;
 }
+
+KDevelop::ProjectItem* MakeBuilder::ancesterProjectItem( QStandardItem *child )
+{
+    QStandardItem *parent = child->parent();
+    if( !parent )
+        return NULL;
+    
+    if( parent->type() == KDevelop::ProjectBaseItem::Project )
+    {
+        KDevelop::ProjectItem *foundroot = NULL;
+        foundroot = dynamic_cast<KDevelop::ProjectItem*>( parent );
+        return foundroot;
+    }
+    else
+        return ancesterProjectItem( parent );
+}
+
 
 #include "makebuilder.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

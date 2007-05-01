@@ -29,9 +29,11 @@
 class QStringList;
 class KDialog;
 class QString;
+class QStandardItem;
 
 namespace KDevelop {
 class ProjectBaseItem;
+class ProjectItem;
 }
 
 /**
@@ -46,6 +48,14 @@ public:
     MakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~MakeBuilder();
 
+    // Can accept KDevelop::ProjectTargetItem or KDevelop::ProjectItem
+    //
+    // If argument is ProjectItem, invoke "make" in IBuildSystemManager::buildDirectory(), with no target
+    //
+    // If argument is ProjectTargetItem, invoke "make" with targetname QStandardItem::text(). In this case,
+    // it tries its best to fetch ProjectItem, which is the argument of IBuildSystemManager::buildDirectory()
+    // If it fails to fetch ProjectItem, the top build directory is defaulted to project directory.
+    // Based on top build directory, the actual build_dir is computed and handed to outputview
     virtual bool build(KDevelop::ProjectBaseItem *dom);
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
 
@@ -59,6 +69,11 @@ private Q_SLOTS:
 
 private:
     QStringList buildCommand(KDevelop::ProjectBaseItem *dom, const QString &target = QString::null);
+    
+    // Retrieve the first occurrence of ProjectItem while recursively climbing up to parent.
+    // If the top-most item cannot be found, or top-most item is not a KDevelop::ProjectItem
+    // then returns NULL
+    KDevelop::ProjectItem *ancesterProjectItem( QStandardItem *child );
 
 private:
     QList<QPair< QStringList, KDevelop::ProjectBaseItem* > > m_queue;
