@@ -52,7 +52,7 @@ public:
 	void commit( const KURL::List&, bool recurse, bool keeplocks );
 	void svnLog( const KURL::List& list,
 			int revstart, QString revKindStart, int revend, QString revKindEnd, 
-			bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
+			bool repositLog, bool discorverChangedPath, bool strictNodeHistory, int limit );
 	void blame( const KURL &url, SvnGlobal::UrlMode mode, int revstart, QString revKindStart, int revend, QString revKindEnd );
 	void add( const KURL::List&);
 	void del( const KURL::List&);
