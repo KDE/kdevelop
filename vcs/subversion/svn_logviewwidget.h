@@ -82,14 +82,12 @@ public:
 	QString revKindEnd();
 	bool repositLog();
 	bool strictNode();
-	int limit();
 public slots:
 	void reinstallRevisionSpecifiers(int repositState );
 	void setStartRevnumRadio();
 	void setStartRevkindRadio();
 	void setEndRevnumRadio();
 	void setEndRevkindRadio();
-	void slotLimitChanged(int);
 };
 
 #endif

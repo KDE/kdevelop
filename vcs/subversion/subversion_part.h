@@ -80,7 +80,6 @@ private slots:
 		void slotBlame();
 		void slotDiffLocal();
 		void slotDiffHead();
-		void slotDiffWorkingHead();
 		void slotResolve();
 		void slotSwitch();
 		void slotCopy();
@@ -95,7 +94,6 @@ private:
 		KAction *actionCommit,
 		*actionDiffHead,
 		*actionDiffLocal,
-		*actionDiffWorkingHead,
 		*actionAdd,
 		*actionLog,
 		*actionBlame,

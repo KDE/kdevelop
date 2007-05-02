@@ -763,7 +763,6 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 				int revstart, revend;
 				QString revkindstart, revkindend;
                 bool repositLog, discorverChangedPath, strictNodeHistory;
-				int limit;
 				KURL::List targets;
 
 				stream >> revstart;
@@ -773,14 +772,13 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 				stream >> repositLog;
                 stream >> discorverChangedPath;
                 stream >> strictNodeHistory;
-				stream >> limit;
 				while ( !stream.atEnd() ) {
 					KURL tmp;
 					stream >> tmp;
 					targets << tmp;
 				}
 				svn_log( revstart, revkindstart, revend, revkindend,
-                         repositLog, discorverChangedPath, strictNodeHistory, limit, targets );
+                         repositLog, discorverChangedPath, strictNodeHistory, targets );
 				break;
 			}
 		case SVN_IMPORT:
@@ -1056,7 +1054,7 @@ svn_error_t* kio_svnProtocol::blameReceiver( void *baton, apr_int64_t line_no, s
 	Thus, svn_log should get another flag (bool repositHistory )specifying between file:/// or URL
 */
 void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int revend, const QString& revkindend,
-							bool repositLog, bool discorverChangedPaths, bool strictNodeHistory, int limit,
+							bool repositLog, bool discorverChangedPaths, bool strictNodeHistory,
 							const KURL::List& urls )
 {
 // 	kdDebug(9036) << " from revision " << revstart << " or " << revkindstart << " to " << " revision " << revend << " or " << revkindend << endl;
@@ -1102,7 +1100,7 @@ void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int re
 	}
 	
 	svn_log_message_receiver_t receiver = kio_svnProtocol::receiveLogMessage;
-	svn_error_t *err = svn_client_log2(targets, &rev1, &rev2, limit, discorverChangedPaths, strictNodeHistory, receiver, this, ctx, subpool);
+	svn_error_t *err = svn_client_log2(targets, &rev1, &rev2, 0, discorverChangedPaths, strictNodeHistory, receiver, this, ctx, subpool);
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);

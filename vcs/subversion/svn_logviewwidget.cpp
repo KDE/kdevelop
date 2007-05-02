@@ -199,7 +199,6 @@ SvnLogViewOptionDlg::SvnLogViewOptionDlg( QWidget *parent, const char* name, boo
 	connect( comboBox1, SIGNAL(activated(const QString&)), this, SLOT(setStartRevkindRadio()) );
 	connect( intInput2, SIGNAL(valueChanged(int)), this, SLOT(setEndRevnumRadio()) );
 	connect( comboBox2, SIGNAL(activated(const QString&)), this, SLOT(setEndRevkindRadio()) );
-	connect( limitNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotLimitChanged(int)) );
 }
 SvnLogViewOptionDlg::~SvnLogViewOptionDlg()
 {}
@@ -268,14 +267,6 @@ bool SvnLogViewOptionDlg::strictNode()
 		return false;
 	}
 }
-int SvnLogViewOptionDlg::limit()
-{
-	if( limitChk->isChecked() ){
-		return limitNumInput->value();
-	} else{
-		return 0;
-	}
-}
 void SvnLogViewOptionDlg::setStartRevnumRadio()
 {
 	radio3->setChecked(true);
@@ -291,10 +282,6 @@ void SvnLogViewOptionDlg::setEndRevnumRadio()
 void SvnLogViewOptionDlg::setEndRevkindRadio()
 {
 	radio6->setChecked(true);
-}
-void SvnLogViewOptionDlg::slotLimitChanged(int)
-{
-	limitChk->setChecked(true);
 }
 
 #include "svn_logviewwidget.moc"
