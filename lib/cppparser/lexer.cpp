@@ -298,11 +298,10 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    int svLine = currentLine();
 	    int svColumn = currentColumn();
 
-//	    Macro& m = m_driver->macro( ide );
-	    Macro m = m_driver->macro( ide );
-            m_driver->usingMacro( m, m_currentLine, m_currentColumn );
+       Macro m = m_driver->macro( ide );
+       m_driver->usingMacro( m );
 
-            QString ellipsisArg;
+       QString ellipsisArg;
 
 	    if( m.hasArguments() ){
                 int endIde = currentPosition();
@@ -638,14 +637,16 @@ int Lexer::macroDefined()
     m_driver->usingString( word );
     bool r = m_driver->hasMacro( word );
 
-    if( r ) m_driver->usingMacro( m_driver->macro( word ), m_currentLine, m_currentColumn );
-    
+    if( r ) m_driver->usingMacro( m_driver->macro( word ) );
+
     return r;
 }
 
 void Lexer::processDefine( Macro& m )
 {
     m.setFileName( m_driver->currentFileName() );
+    m.setLine( m_currentLine );
+    m.setColumn( m_currentColumn );
     readWhiteSpaces( false );
 
     int startMacroName = currentPosition();
@@ -867,7 +868,7 @@ int Lexer::macroPrimary()
                 HashedString h( tk.text() );
                 m_driver->usingString( h );
                 if( m_driver->hasMacro( h ) ) {
-                    m_driver->usingMacro( m_driver->macro( h ), m_currentLine, m_currentColumn );
+                    m_driver->usingMacro( m_driver->macro( h ) );
                     return true;
                 } else {
                     return false;

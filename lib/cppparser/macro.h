@@ -120,8 +120,8 @@ class Macro {
     typedef QString Argument;
 
   public:
-      Macro( bool hasArguments = false ) : m_idHashValid( false ), m_valueHashValid( false ), m_hasArguments( hasArguments ), m_isUndefMacro( false ) {}
-      Macro( const QString &n, const QString &b ) : m_idHashValid( false ), m_valueHashValid( false ), m_name( n ), m_body( b ), m_hasArguments( false ), m_isUndefMacro( false ) {}
+      Macro( bool hasArguments = false ) : m_idHashValid( false ), m_valueHashValid( false ), m_line( 0 ), m_column( 0 ), m_hasArguments( hasArguments ), m_isUndefMacro( false ) {}
+      Macro( const QString &n, const QString &b ) : m_idHashValid( false ), m_valueHashValid( false ), m_name( n ), m_line( 0 ), m_column( 0 ), m_body( b ), m_hasArguments( false ), m_isUndefMacro( false ) {}
 
       //Sorts the macros by their hash-value, then by their name.
     struct NameArgCompare {
@@ -191,6 +191,8 @@ class Macro {
     Macro( const Macro& source )
         : m_idHashValid( source.m_idHashValid ), m_valueHashValid( source.m_valueHashValid ), m_idHash( source.m_idHash ), m_valueHash( source.m_valueHash ), m_name( source.m_name ),
         m_fileName( source.m_fileName ),
+        m_line( source.m_line ),
+        m_column( source.m_column ),
         m_body( source.m_body ),
         m_hasArguments( source.m_hasArguments ),
         m_argumentList( source.m_argumentList ), m_isUndefMacro( source.m_isUndefMacro ) {}
@@ -201,8 +203,10 @@ class Macro {
         m_idHash = source.m_idHash;
         m_valueHash = source.m_valueHash;
         m_name = source.m_name;
-        m_body = source.m_body;
         m_fileName = source.m_fileName;
+        m_line = source.m_line;
+        m_column = source.m_column;
+        m_body = source.m_body;
         m_hasArguments = source.m_hasArguments;
         m_argumentList = source.m_argumentList;
         m_isUndefMacro = source.m_isUndefMacro;
@@ -232,6 +236,8 @@ class Macro {
         stream >> m_idHash;
         stream >> m_valueHash;
         stream >> m_name;
+        stream >> m_line;
+        stream >> m_column;
         stream >> m_body;
         stream >> m_fileName;
         stream >> m_argumentList;
@@ -246,6 +252,8 @@ class Macro {
         stream << m_idHash;
         stream << m_valueHash;
         stream << m_name;
+        stream << m_line;
+        stream << m_column;
         stream << m_body;
         stream << m_fileName;
         stream << m_argumentList;
@@ -269,6 +277,24 @@ class Macro {
     void setFileName( const QString& fileName ) {
       m_fileName = fileName;
       invalidateHash();
+    }
+
+    /** Get the line the macro is defined on */
+    int line() const {
+      return m_line;
+    }
+    /** Set the line the macro is defined on */
+    void setLine( int line ) {
+      m_line = line;
+    }
+
+    /** Get the column the macro starts at */
+    int column() const {
+      return m_column;
+    }
+    /** Set the column the macro starts at */
+    void setColumn( int column ) {
+      m_column = column;
     }
 
     /** Get the body of the macro */
@@ -359,6 +385,8 @@ class Macro {
 
     QString m_name;
     QString m_fileName;
+    int m_line;
+    int m_column;
     QString m_body;
     bool m_hasArguments;
     QStringList m_argumentList; //While identification, only the count plays a role, not the values.
@@ -374,7 +402,7 @@ class MacroSet {
         MacroSet() : m_idHashValid( false ), m_valueHashValid( false ) {
         }
 
-        void addMacro( const Macro& macro, int line, int column );
+        void addMacro( const Macro& macro );
 
         void read( QDataStream& stream )  {
             //stream >> m_idHashValid >> m_idHash >> m_valueHashValid >> m_valueHash;

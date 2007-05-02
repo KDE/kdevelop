@@ -1541,10 +1541,10 @@ void CppCodeCompletion::contextEvaluationMenus ( QPopupMenu *popup, const Contex
 
 		DeclarationInfo i;
 		i.file = type.macro.fileName();
-		i.startCol = 0;
-		i.startLine = 0;
-		i.endCol = 0;
-		i.endLine = 0;
+		i.startCol = type.macro.column();
+		i.startLine = type.macro.line();
+		i.endCol = type.macro.column();
+		i.endLine = type.macro.line();
 		m_popupActions.insert( id, i );
 
 		QStringList ls = prepareTextForMenu( type.macro.body(), 20, 100 );
@@ -4333,6 +4333,8 @@ void CppCodeCompletion::jumpCursorContext( FunctionType f )
 	if ( result.isMacro ) {
 		d.name = result.macro.name();
 		d.file = result.macro.fileName();
+		d.startLine = d.endLine = result.macro.line();
+		d.startCol = d.endCol = result.macro.column();
 	} else if ( getIncludeInfo( line, includeFileName, includeFilePath, unused ) ) {
 		d.name = includeFileName;
 		d.file = includeFilePath;
@@ -4471,7 +4473,7 @@ bool CppCodeCompletion::getIncludeInfo( int line, QString& includeFileName, QStr
 			d.second = captured[2] == "\"" ? Dep_Local : Dep_Global;
 			includeFilePath = cppSupport()->driver()->findIncludeFile( d, activeFileName() );
 			if( includeFilePath.isEmpty() ) {
-					//A simple backup-algorithm that can only find files within the same project
+				//A simple backup-algorithm that can only find files within the same project
 				includeFilePath = cppSupport()->findHeaderSimple( d.first );
 				usedProjectFiles = true;
 			}

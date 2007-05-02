@@ -353,7 +353,7 @@ class Driver {
       return m_includePaths;
     }
 
-    virtual QStringList getCustomIncludePath( const QString& file );
+    virtual QStringList getCustomIncludePath( const QString& );
 
   
     virtual void addIncludePath( const QString &path );
@@ -384,7 +384,7 @@ class Driver {
      * Used by the Lexer to indicate that a Macro was used
      * @param macro The used macro
      * */
-    void usingMacro( const Macro& macro, int line, int column );
+    void usingMacro( const Macro& macro );
 
     /**
      * Returns the local instance of the lexer-cache, can be used from outside to control the cache-behavior.

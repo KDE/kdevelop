@@ -155,7 +155,7 @@ void Driver::reset( ) {
   }
 }
 
-QStringList Driver::getCustomIncludePath( const QString& file ) {
+QStringList Driver::getCustomIncludePath( const QString& ) {
   return includePaths();
 }
 
@@ -750,12 +750,12 @@ void Driver::fileParsed( ParsedFile & fileName ) {
   Q_UNUSED( fileName );
 }
 
-void Driver::usingMacro( const Macro& macro, int line, int column ) {
+void Driver::usingMacro( const Macro& macro ) {
     if( m_currentParsedFile )
-        m_currentParsedFile->usedMacros().addMacro( macro, line, column );
+        m_currentParsedFile->usedMacros().addMacro( macro );
 #ifdef CACHELEXER
     if( m_currentLexerCache )
-      m_currentLexerCache->addUsedMacro( macro, line, column );
+      m_currentLexerCache->addUsedMacro( macro );
 #endif
 }
 
@@ -777,7 +777,7 @@ void Driver::usingMacro( const Macro& macro, int line, int column ) {
 // MacroSet::MacroSet() : m_idHashValid( false ), m_valueHashValid( false ) {
 // }
 
-void MacroSet::addMacro( const Macro& macro, int line, int column ) {
+void MacroSet::addMacro( const Macro& macro ) {
   std::pair<Macros::const_iterator, bool> r = m_usedMacros.insert( macro );
   if( !r.second ) {
     //Make sure the macro added later will be used

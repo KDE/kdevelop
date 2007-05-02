@@ -151,7 +151,6 @@ void LexerCache::clear() {
 
 void LexerCache::erase( const CacheNode* node ) {
   std::pair< CachedLexedFileMap::iterator, CachedLexedFileMap::iterator> files = m_files.equal_range( ((const CachedLexedFile*)(node))->fileName() );
-  int cnt = 0;
   while ( files.first != files.second ) {
     if( (*files.first).second.data() == ((const CachedLexedFile*)(node)) ) {
       m_files.erase( files.first );
@@ -172,16 +171,16 @@ void CachedLexedFile::addDefinedMacro( const Macro& macro ) {
 #ifdef LEXERCACHE_DEBUG
   //kdDebug( 9007 ) << "defined macro " << macro.name() << endl;
 #endif
-  m_definedMacros.addMacro( macro, 0, 0 );
+  m_definedMacros.addMacro( macro );
   m_definedMacroNames.insert( HashedString( macro.name() ) );
 }
 
-void CachedLexedFile::addUsedMacro( const Macro& macro, int line, int column ) {
+void CachedLexedFile::addUsedMacro( const Macro& macro ) {
   if ( !m_definedMacros.hasMacro( macro.name() ) ) {
 #ifdef LEXERCACHE_DEBUG
     //kdDebug( 9007 ) << "used macro " << macro.name() << endl;
 #endif
-    m_usedMacros.addMacro( macro, line, column );
+    m_usedMacros.addMacro( macro );
   }
 }
 
@@ -218,7 +217,7 @@ void CachedLexedFile::merge( const CachedLexedFile& file ) {
 #ifdef LEXERCACHE_DEBUG
       //kdDebug( 9007 ) << "inserting used macro " << ( *it ).name() << endl;
 #endif
-      m_usedMacros.addMacro( *it, 0, 0 );
+      m_usedMacros.addMacro( *it );
     }
   }
 

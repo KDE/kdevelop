@@ -41,7 +41,7 @@ class CachedLexedFile : public KShared, public CacheNode {
 
     void addDefinedMacro( const Macro& macro  );
 
-    void addUsedMacro( const Macro& macro, int line, int column );
+    void addUsedMacro( const Macro& macro );
 
     void addIncludeFile( const HashedString& file, const QDateTime& modificationTime );
 
