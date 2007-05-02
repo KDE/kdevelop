@@ -44,13 +44,17 @@ public:
     virtual ~SimpleOutputView();
     void queueCommand(const KUrl& dir, const QStringList& command, const QMap<QString, QString>& env );
 
-    void registerLogView( const QString& title );
-    void appendLine( const QString& title, const QString& line );
-    void appendLines( const QString& title, const QStringList& line );
+    void registerLogView( const QString& id, const QString& title );
+    void appendLine( const QString& id, const QString& line );
+    void appendLines( const QString& id, const QStringList& line );
+
+    QStandardItemModel* registeredModel( const QString& );
+    QString registeredTitle( const QString& );
+    QStringList registeredViews();
 
 Q_SIGNALS:
-    void commandFinished( const QString& command );
-    void commandFailed( const QString& command );
+    void commandFinished( const QString& id );
+    void commandFailed( const QString& id );
     void modelAdded( const QString&, QStandardItemModel* );
 
 private:

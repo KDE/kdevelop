@@ -63,17 +63,17 @@ public:
      * Register a new Tab for Outputting logging information, this can be used
      * for example to log things that the VCS plugin does
      */
-    virtual void registerLogView( const QString& title ) = 0;
+    virtual void registerLogView( const QString& id, const QString& title ) = 0;
 
     /**
      * Add the line or lines to the registered tab identified via title
      */
-    virtual void appendLine( const QString& title, const QString& line ) = 0;
-    virtual void appendLines( const QString& title, const QStringList& lines ) = 0;
+    virtual void appendLine( const QString& id, const QString& line ) = 0;
+    virtual void appendLines( const QString& id, const QStringList& lines ) = 0;
 
 Q_SIGNALS:
-    virtual void commandFinished( const QString& ) = 0;
-    virtual void commandFailed( const QString& ) = 0;
+    virtual void commandFinished( const QString& id ) = 0;
+    virtual void commandFailed( const QString& id ) = 0;
 };
 }
 KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutputView" )

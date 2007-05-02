@@ -30,6 +30,10 @@ OutputWidget::OutputWidget(QWidget* parent, SimpleOutputView* view)
 {
     connect( view, SIGNAL( modelAdded( const QString&, QStandardItemModel* ) ),
              this, SLOT( addNewTab( const QString&, QStandardItemModel* ) ) );
+    foreach( QString id, view->registeredViews() )
+    {
+        addNewTab( view->registeredTitle(id), view->registeredModel(id) );
+    }
 }
 
 void OutputWidget::addNewTab(const QString& title, QStandardItemModel* model )

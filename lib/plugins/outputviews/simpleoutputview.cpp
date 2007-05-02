@@ -65,6 +65,8 @@ class SimpleOutputViewPrivate
 public:
     SimpleOutputViewViewFactory* m_factory;
     QMap<QString, QStandardItemModel* > m_models;
+    QMap<QString, QString> m_titles;
+    QStringList m_ids;
     QMap<QString, OutputViewCommand* > m_jobs;
 
 };
@@ -109,30 +111,55 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     }
 }
 
-void SimpleOutputView::registerLogView( const QString& title )
+void SimpleOutputView::registerLogView( const QString& id, const QString& title )
 {
-    if( !d->m_models.contains( title ) )
+    if( !d->m_ids.contains( id ) && !d->m_models.contains(id) && !d->m_titles.contains(id) )
     {
-        d->m_models[title] = new QStandardItemModel(this);
-        emit modelAdded( title, d->m_models[title] );
+        d->m_ids << id;
+        d->m_titles[id] = title;
+        d->m_models[id] = new QStandardItemModel(this);
+        emit modelAdded( d->m_titles[id], d->m_models[id] );
     }
 }
 
-void SimpleOutputView::appendLine( const QString& title, const QString& line )
+void SimpleOutputView::appendLine( const QString& id, const QString& line )
 {
-    if( d->m_models.contains( title ) )
+    if( d->m_models.contains( id ) )
     {
-        d->m_models[title]->appendRow( new QStandardItem( line ) );
+        d->m_models[id]->appendRow( new QStandardItem( line ) );
     }
 }
 
-void SimpleOutputView::appendLines( const QString& title, const QStringList& lines )
+void SimpleOutputView::appendLines( const QString& id, const QStringList& lines )
 {
-    if( d->m_models.contains( title ) )
+    if( d->m_models.contains( id ) )
     {
         foreach( QString line, lines )
-            d->m_models[title]->appendRow( new QStandardItem( line ) );
+            d->m_models[id]->appendRow( new QStandardItem( line ) );
     }
+}
+
+QStringList SimpleOutputView::registeredViews()
+{
+    return d->m_ids;
+}
+
+QStandardItemModel* SimpleOutputView::registeredModel( const QString& id )
+{
+    if( d->m_models.contains( id ) )
+    {
+        return d->m_models[id];
+    }
+    return 0;
+}
+
+QString SimpleOutputView::registeredTitle( const QString& id )
+{
+    if( d->m_titles.contains( id ) )
+    {
+        return d->m_titles[id];
+    }
+    return QString();
 }
 
 #include "simpleoutputview.moc"
