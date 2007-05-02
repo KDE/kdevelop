@@ -122,14 +122,16 @@ void subversionPart::setupActions() {
 	actionUpdate->setToolTip( i18n("Update") );
 	actionUpdate->setWhatsThis( i18n("<b>Update</b><p>Updates file(s) from repository.") );
 
-	actionDiffLocal = new KAction( i18n("&Diff to Disk"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_local" );
+	actionDiffLocal = new KAction( i18n("&Diff BASE:WORKING"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_local" );
 	actionDiffLocal->setToolTip( i18n("Diff to Disk") );
 	actionDiffLocal->setWhatsThis( i18n("<b>Diff to disk</b><p>Diff current file to the BASE checked out copy.") );
 
-	actionDiffHead = new KAction( i18n("&Diff to HEAD"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_head" );
+	actionDiffHead = new KAction( i18n("&Diff BASE:HEAD"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_head" );
 	actionDiffHead->setToolTip( i18n("Diff to HEAD") );
-	actionDiffHead->setWhatsThis( i18n("<b>Diff HEAD</b><p>Diff the current file to HEAD in svn.") );
+	actionDiffHead->setWhatsThis( i18n("<b>Diff HEAD</b><p>Diff the HEAD in svn to the BASE checked out copy.") );
 
+	actionDiffWorkingHead = new KAction( i18n("Diff WORKING:HEAD"), 0, this, SLOT(slotActionDiffLocal()), actionCollection(), "subversion_diff_workinghead" );
+	actionDiffWorkingHead->setWhatsThis( i18n("<b>Diff HEAD</b><p>Diff the HEAD in svn to the current working copy.") );
 
 	actionRevert = new KAction( i18n("&Revert"), 0, this, SLOT(slotActionRevert()), actionCollection(), "subversion_revert" );
 	actionRevert->setToolTip( i18n("Revert") );
@@ -232,13 +234,15 @@ if(!project())
 		
 		subMenu->insertSeparator();
 		id = subMenu->insertItem( actionDiffLocal->text(), this, SLOT(slotDiffLocal()) );
-		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff file to local disk."));
-
+		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff working copy to base checkouted copy."));
 		id = subMenu->insertItem( actionDiffHead->text(), this, SLOT(slotDiffHead()) );
-		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff file to repository."));
-
+		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff repository to base checkouted copy."));
+		id = subMenu->insertItem( actionDiffWorkingHead->text(), this, SLOT(slotDiffWorkingHead()) );
+		subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Diff repository to working copy."));
+		
+		subMenu->insertSeparator();
 		id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
-        subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Updates file(s) from repository."));
+		subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Updates file(s) from repository."));
 		id = subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
 		subMenu->setWhatsThis(id, i18n("<b>Revert</b><p>Undo local changes.") );
 		id = subMenu->insertItem( actionResolve->text(), this, SLOT(slotResolve()) );
@@ -513,10 +517,20 @@ void subversionPart::slotDiffHead() {
 	if( m_urls.count() < 1 ){
 		// Impossible to reach here but..
 		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
-							 i18n("Select file or directory to see diff") );
+							i18n("Select file or directory to see diff") );
 		return;
 	}
 	m_impl->diffAsync( *(m_urls.begin()), *(m_urls.begin()), -1, "BASE", -1, "HEAD", true );
+}
+
+void subversionPart::slotDiffWorkingHead() {
+	if( m_urls.count() < 1 ){
+		// Impossible to reach here but..
+		KMessageBox::error( (QWidget*)project()->mainWindow()->main(),
+							i18n("Select file or directory to see diff") );
+		return;
+	}
+	m_impl->diffAsync( *(m_urls.begin()), *(m_urls.begin()), -1, "WORKING", -1, "HEAD", true );
 }
 
 void subversionPart::slotRevert() {
