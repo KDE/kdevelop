@@ -1,9 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop CustomMake Manager
-Name[x-test]=xxKDevelop CustomMake Managerxx
 Comment=Imports and edits custom make projects
-Comment[x-test]=xxImports and edits Custommake projectsxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcustommakemanager
