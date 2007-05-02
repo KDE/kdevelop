@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDevelop subversion module
 Name[ca]=Mòdul de Subversion per a KDevelop
+Name[da]=KDevelop Subversion-modul
 Name[de]=Subversion-Komponente (KDevelop)
 Name[el]=Άρθρωμα subversion του KDevelop
 Name[es]=Módulo de Subversion de KDevelop

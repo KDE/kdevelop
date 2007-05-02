@@ -5,6 +5,7 @@ X-KDE-ServiceType=KDevelop/CodeBrowserFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Code Browser Frontend
 Name[ca]=Interfície per al navegador de codi
+Name[da]=Kodebrowser-grænseflade
 Name[de]=Quelltextbrowser-Oberfläche
 Name[el]=Πρόγραμμα περιήγησης κώδικα
 Name[es]=Interfaz para el navegador de código
