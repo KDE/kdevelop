@@ -28,8 +28,10 @@
 class IDistributedVersionControl
 {
 public:
-    void push();
-    void pull();
+    VcsJob push( const QString& repositoryLocation ) = 0;
+    VcsJob pull( const QString& repositoryLocation ) = 0;
+    VcsJob clone( const QString& repositoryLocationSrc,
+                  const QString& repositoryLocationDst ) = 0;
 };
 
 #endif
