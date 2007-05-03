@@ -30,12 +30,12 @@ public:
     /**
      * Creates a branch from the given mapping information
      */
-    virtual int branch( const VCSMapping& ) = 0;
+    virtual VcsJob branch( const VCSMapping& ) = 0;
 
     /**
      * Creates a new tag from the given mapping information
      */
-    virtual int tag( const VCSMapping& ) = 0;
+    virtual VcsJob tag( const VCSMapping& ) = 0;
 };
 
 }

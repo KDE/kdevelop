@@ -18,31 +18,26 @@
  * 02110-1301, USA.
  */
 
-#ifndef IBROWSINGVERSIONCONTROL_H
-#define IBROWSINGVERSIONCONTROL_H
+#ifndef IATOMICBROWSINGVERSIONCONTROL_H
+#define IATOMICBROWSINGVERSIONCONTROL_H
 
-class IBrowsingVersionControl
+class IAtomicBrowsingVersionControl
 {
 public:
     /**
-     * Retrieve a list of entries in the given repository location
-     */
-    int ls( const QString& repoLocation, const Revision& rev );
-
-    /**
      * retrieve the last revision in which the repository location was changed
      */
-    int repositoryRevision( const QString& repoLocation, Revision::RevisionType );
+    virtual VcsJob repositoryRevision( const QString& repoLocation, Revision::RevisionType ) = 0;
 
     /**
-     * Show the history of the repository location
+     * Get the changes made by a particular revision
      */
-    int log( const QString& repoLocation );
+    virtual VcsJob change( Revision ) = 0;
 
     /**
-     * Retrieve a file from the repository without checking it out
+     * Show the changes made by a particular revision
      */
-    int cat( const QString& repoLocation, const Revision& rev );
+    virtual VcsJob showChange( Revision ) = 0;
 };
 
 #endif

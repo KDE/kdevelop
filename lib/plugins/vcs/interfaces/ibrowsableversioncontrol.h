@@ -18,25 +18,31 @@
  * 02110-1301, USA.
  */
 
-#ifndef IREPOSITORYVERSIONCONTROL_H
-#define IREPOSITORYVERSIONCONTROL_H
+#ifndef IBROWSABLEVERSIONCONTROL_H
+#define IBROWSABLEVERSIONCONTROL_H
 
-class IRepositoryVersionControl
+class IBrowsableVersionControl
 {
 public:
     /**
-     * Copy the source location in the repository to the destination
+     * Retrieve a list of entries in the given repository location
      */
-    virtual VcsJob copy( const QString& repoSrc,
-                         const QString& repoDst,
-                         const Revision& srcRev ) = 0;
+    virtual VcsJob ls( const QString& repoLocation, const Revision& rev ) = 0;
 
     /**
-     * Move the source location in the repository to the destination
+     * Retrieve the history of the repository location
      */
-    virtual VcsJob move( const QString& repoSrc,
-                         const QString& repoDst,
-                         const Revision& srcRev ) = 0;
+    virtual VcsJob log( const QString& repoLocation ) = 0;
+
+    /**
+     * Show the history of the repository location
+     */
+    virtual VcsJob showLog( const QString& repoLocation ) = 0;
+
+    /**
+     * Retrieve a file from the repository without checking it out
+     */
+    virtual VcsJob cat( const QString& repoLocation, const Revision& rev ) = 0;
 };
 
 #endif
