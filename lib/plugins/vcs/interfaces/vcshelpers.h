@@ -77,7 +77,7 @@ public:
  * Small container class that has a mapping of
  * repository-location -> local location including a recursion flag
  *
- * Just a convenient API around QMap<KUrl, QPair<KUrl, RecursionMode>>
+ * Just a convenient API around QMap<KUrl, QPair<KUrl, MappingFlags>>
  *
  */
 class VcsMapping

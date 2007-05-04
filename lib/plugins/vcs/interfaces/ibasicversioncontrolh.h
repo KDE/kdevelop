@@ -71,14 +71,14 @@ public:
      * only active for directories
      */
     virtual VcsJob add( const KUrl::List& localLocations,
-                        RecursiveMode recursion ) = 0;
+                        RecursionMode recursion ) = 0;
 
     /**
      * removes a local file/dir from the list of versioned files recursive
      * is only active for directories
      */
     virtual VcsJob remove( const KUrl::List& localLocations,
-                           RecursiveMode recursion ) = 0;
+                           RecursionMode recursion ) = 0;
 
     /**
      * this is for files only, it makes a file editable, this may be a no-op
@@ -97,7 +97,7 @@ public:
      * active for directories
      */
     virtual VcsJob status( const KUrl::List& localLocations,
-                           RecursiveMode recursion ) = 0;
+                           RecursionMode recursion ) = 0;
     /**
      * gives the revision of file/dir, that is the revision to which this files
      * was updated when update() was run the last time
@@ -111,7 +111,7 @@ public:
      */
     virtual VcsJob copy( const KUrl& localLocationSrc,
                          const KUrl& localLocationDst,
-                         RecursiveMode recursion ) = 0;
+                         RecursionMode recursion ) = 0;
 
     /**
      * moves src to dst, preserving history if the VCS system allows that, may
@@ -119,7 +119,7 @@ public:
      */
     virtual VcsJob move( const KUrl& localLocationSrc,
                          const KUrl& localLocationDst,
-                         RecursiveMode recursion ) = 0;
+                         RecursionMode recursion ) = 0;
 
     /**
      * revert all local changes on the given file, making its content equal
@@ -127,20 +127,20 @@ public:
      * unedit() (if not a no-op) is implied.
      */
     virtual VcsJob revert( const KUrl::List& localLocations,
-                           RecursiveMode recursion ) = 0;
+                           RecursionMode recursion ) = 0;
 
     /**
      * fetches the latest changes from the repository, if there are
      * conflicts a merge needs to be executed separately
      */
     virtual VcsJob update( const KUrl::List& localLocations,
-                           RecursiveMode recursion ) = 0;
+                           RecursionMode recursion ) = 0;
 
     /**
      * Checks in the changes of the given file(s)/dir(s) into the repository
      */
     virtual VcsJob commit( const KUrl::List& localLocations,
-                           RecursiveMode recursion,
+                           RecursionMode recursion,
                            QString message ) = 0;
 
     /**
@@ -148,7 +148,7 @@ public:
      * of the given file(s)/dir(s) into the repository
      */
     virtual VcsJob showCommit( const KUrl::List& localLocations,
-                               RecursiveMode recursion,
+                               RecursionMode recursion,
                                QString message ) = 0;
     /**
      * Retrieves a diff between the two locations at the given revisions
@@ -204,7 +204,7 @@ public:
      * conflict solving dialog to the user
      */
     virtual VcsJob resolve( const KUrl::List& localLocations,
-                            RecursiveMode recursion ) = 0;
+                            RecursionMode recursion ) = 0;
 
     /**
      * The following two methods are part of the basic interface so other plugins
@@ -219,7 +219,7 @@ public:
      */
     virtual VcsJob import( const KUrl& localLocation,
                            const QString& repositoryLocation,
-                           RecursiveMode recursion ) = 0;
+                           RecursionMode recursion ) = 0;
 
     /**
      * Checks out files or dirs from a repository into a local directory
