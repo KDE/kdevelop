@@ -137,6 +137,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %token QUOTED_VARIABLE_VALUE
 %token VARIABLE_VALUE
 %token LIST_WS
+%token ENDOFFILE
 %%
 
 project :
@@ -188,6 +189,16 @@ variable_assignment : ID_SIMPLE operator multiline_values listws NEWLINE
             node->indent = $<indent>3;
             $<node>$ = node;
         }
+    | ID_SIMPLE operator multiline_values listws ENDOFFILE
+        {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = $<value>1;
+            node->op = $<value>2;
+            node->values = $<values>3 ;
+            node->values.append( $<value>4 );
+            node->indent = $<indent>3;
+            $<node>$ = node;
+        }
     | ID_SIMPLE operator multiline_values listws CONT
         {
             AssignmentAST *node = new AssignmentAST();
@@ -217,6 +228,14 @@ variable_assignment : ID_SIMPLE operator multiline_values listws NEWLINE
             node->op = $<value>2;
             node->values.append( $<value>3 );
             node->values.append( $<value>4 );
+            $<node>$ = node;
+        }
+    | ID_SIMPLE operator listws ENDOFFILE
+        {
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = $<value>1;
+            node->op = $<value>2;
+            node->values.append( $<value>3 );
             $<node>$ = node;
         }
     | ID_SIMPLE operator listws COMMENT
@@ -275,6 +294,14 @@ multiline_values : multiline_values LIST_WS variable_value
             $<values>$ = QStringList();
             $<values>$.append( $<value>1 );
             $<values>$.append( $<value>2 );
+        }
+    | listws CONT listws variable_value
+        {
+            $<values>$ = QStringList();
+            $<values>$.append( $<value>1 );
+            $<values>$.append( $<value>2 );
+            $<values>$.append( $<value>3 );
+            $<values>$.append( $<value>4 );
         }
     | listws COMMENT_CONT
         {

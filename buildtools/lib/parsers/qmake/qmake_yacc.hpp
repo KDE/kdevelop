@@ -240,7 +240,8 @@ namespace QMake
      ID_ARGS = 273,
      QUOTED_VARIABLE_VALUE = 274,
      VARIABLE_VALUE = 275,
-     LIST_WS = 276
+     LIST_WS = 276,
+     ENDOFFILE = 277
    };
 
     };
@@ -335,7 +336,7 @@ namespace QMake
     static const signed char yytable_[];
     static const signed char yytable_ninf_;
 
-    static const signed char yycheck_[];
+    static const unsigned char yycheck_[];
 
     /// For a state, its accessing symbol.
     static const unsigned char yystos_[];
