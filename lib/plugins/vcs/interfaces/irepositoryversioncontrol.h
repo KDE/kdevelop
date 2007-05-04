@@ -37,6 +37,11 @@ public:
     virtual VcsJob move( const QString& repoSrc,
                          const QString& repoDst,
                          const VcsRevision& srcRev ) = 0;
+
+    /**
+     * removes a source location in the repository
+     */
+    virtual VcsJob remove( const QStringList& repoLocations ) = 0;
 };
 
 #endif
