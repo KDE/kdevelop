@@ -25,23 +25,51 @@ class IRepositoryVersionControl
 {
 public:
     /**
-     * Copy the source location in the repository to the destination
+     * Copies the source location in the repository to the destination
      */
-    virtual VcsJob copy( const QString& repoSrc,
+    virtual VcsJob copy( const QString& commitMessage,
+                         const QString& repoSrc,
                          const QString& repoDst,
                          const VcsRevision& srcRev ) = 0;
 
     /**
-     * Move the source location in the repository to the destination
+     * Shows a dialog asking for a commit message that will copy the source
+     * location in the repository to the destination
      */
-    virtual VcsJob move( const QString& repoSrc,
+    virtual VcsJob showCopy( const QString& commitMessage,
+                             const QString& repoSrc,
+                             const QString& repoDst,
+                             const VcsRevision& srcRev ) = 0;
+
+    /**
+     * Moves the source location in the repository to the destination
+     */
+    virtual VcsJob move( const QString& commitMessage,
+                         const QString& repoSrc,
                          const QString& repoDst,
                          const VcsRevision& srcRev ) = 0;
 
     /**
-     * removes a source location in the repository
+     * Shows a dialog asking for a commit message that will move the source
+     * location in the repository to the destination
      */
-    virtual VcsJob remove( const QStringList& repoLocations ) = 0;
+    virtual VcsJob showMove( const QString& commitMessage,
+                             const QString& repoSrc,
+                             const QString& repoDst,
+                             const VcsRevision& srcRev ) = 0;
+
+    /**
+     * Removes the source locations in the repository
+     */
+    virtual VcsJob remove( const QString& commitMessage,
+                           const QStringList& repoLocations ) = 0;
+
+    /**
+     * Shows a dialog asking for a commit message that will remove the source
+     * locations in the repository
+     */
+    virtual VcsJob showRemove( const QString& commitMessage,
+                               const QStringList& repoLocations ) = 0;
 };
 
 #endif

@@ -136,17 +136,17 @@ public:
     /**
      * Checks in the changes of the given file(s)/dir(s) into the repository
      */
-    virtual VcsJob commit( const KUrl::List& localLocations,
-                           RecursionMode recursion,
-                           QString message ) = 0;
+    virtual VcsJob commit( const QString& message,
+                           const KUrl::List& localLocations,
+                           RecursionMode recursion ) = 0;
 
     /**
      * Shows a dialog asking for a commit message that will check in the changes
      * of the given file(s)/dir(s) into the repository
      */
-    virtual VcsJob showCommit( const KUrl::List& localLocations,
-                               RecursionMode recursion,
-                               QString message ) = 0;
+    virtual VcsJob showCommit( const QString& message,
+                               const KUrl::List& localLocations,
+                               RecursionMode recursion ) = 0;
     /**
      * Retrieves a diff between the two locations at the given revisions
      *
