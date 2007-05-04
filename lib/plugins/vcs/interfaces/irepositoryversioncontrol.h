@@ -29,14 +29,14 @@ public:
      */
     virtual VcsJob copy( const QString& repoSrc,
                          const QString& repoDst,
-                         const Revision& srcRev ) = 0;
+                         const VcsRevision& srcRev ) = 0;
 
     /**
      * Move the source location in the repository to the destination
      */
     virtual VcsJob move( const QString& repoSrc,
                          const QString& repoDst,
-                         const Revision& srcRev ) = 0;
+                         const VcsRevision& srcRev ) = 0;
 };
 
 #endif

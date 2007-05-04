@@ -103,7 +103,7 @@ public:
      * was updated when update() was run the last time
      */
     virtual VcsJob localRevision( const KUrl& localLocation,
-                                  Revision::Type ) = 0;
+                                  VcsRevision::RevisionType ) = 0;
 
     /**
      * executes a copy of a file/dir, preserving history if the VCS system
@@ -162,8 +162,8 @@ public:
     // we should always return DiffRaw in that case?
     virtual VcsJob diff( const QVariant& localOrRepoLocationSrc,
                          const QVariant& localOrRepoLocationDst,
-                         const Revision& srcRevision,
-                         const Revision& dstRevision,
+                         const VcsRevision& srcRevision,
+                         const VcsRevision& dstRevision,
                          VcsDiffMode ) = 0;
 
     /**
@@ -174,8 +174,8 @@ public:
      */
     virtual VcsJob showDiff( const QVariant& localOrRepoLocationSrc,
                              const QVariant& localOrRepoLocationDst,
-                             const Revision& srcRevision,
-                             const Revision& dstRevision ) = 0;
+                             const VcsRevision& srcRevision,
+                             const VcsRevision& dstRevision ) = 0;
 
     /**
      * Retrieve the history of a given local url
@@ -195,8 +195,8 @@ public:
      */
     virtual VcsJob merge( const QVariant& localOrRepoLocationSrc,
                           const QVariant& localOrRepoLocationDst,
-                          const Revision& srcRevision,
-                          const Revision& dstRevision,
+                          const VcsRevision& srcRevision,
+                          const VcsRevision& dstRevision,
                           const KUrl& localLocation ) = 0;
 
     /**

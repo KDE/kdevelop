@@ -27,7 +27,7 @@ public:
     /**
      * Retrieve a list of entries in the given repository location
      */
-    virtual VcsJob ls( const QString& repoLocation, const Revision& rev ) = 0;
+    virtual VcsJob ls( const QString& repoLocation, const VcsRevision& rev ) = 0;
 
     /**
      * Retrieve the history of the repository location
@@ -42,7 +42,7 @@ public:
     /**
      * Retrieve a file from the repository without checking it out
      */
-    virtual VcsJob cat( const QString& repoLocation, const Revision& rev ) = 0;
+    virtual VcsJob cat( const QString& repoLocation, const VcsRevision& rev ) = 0;
 };
 
 #endif
