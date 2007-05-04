@@ -28,7 +28,7 @@ namespace KDevelop {
   class ICore;
   class IDocumentController;
   class IProject;
-};
+}
 
 class KDevTeamworkPart: public KDevelop::IPlugin
 {
