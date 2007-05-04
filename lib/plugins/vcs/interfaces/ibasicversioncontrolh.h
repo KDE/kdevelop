@@ -77,8 +77,7 @@ public:
      * removes a local file/dir from the list of versioned files recursive
      * is only active for directories
      */
-    virtual VcsJob remove( const KUrl::List& localLocations,
-                           RecursionMode recursion ) = 0;
+    virtual VcsJob remove( const KUrl::List& localLocations ) = 0;
 
     /**
      * this is for files only, it makes a file editable, this may be a no-op
