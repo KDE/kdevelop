@@ -42,6 +42,7 @@
 
 #include "messagemanager.h"
 #include "kdevteamwork_user.h"
+#include "kdevteamwork_part.h"
 #include "kdevteamwork_messages.h"
 #include "kdevteamwork.h"
 #include "kdevteamwork_user.h"
@@ -156,7 +157,7 @@ ConversationManager* ConversationManager::m_instance;
 ConversationManager::ConversationManager( MessageManager* mng ) {
   m_manager = mng;
   m_instance = this;
-  IDocumentController* docControl = KDevTeamwork::documentController();
+  IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
   if ( docControl ) {
     connect( docControl, SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( docControl, SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
@@ -196,9 +197,12 @@ int ConversationManager::processMessage( InDocumentMessage* msg ) {
 
 void ConversationManager::save() {
   try {
-    QString fileName = TeamworkFolderManager::absolute( "conversation.database" );
-    std::ofstream file(fileName.toLatin1(), ios_base::out | ios_base::binary );
-    if( !file.good() ) throw "could not open " + fileName + " for writing";
+    KUrl fileName = TeamworkFolderManager::teamworkAbsolute( "conversation.database" );
+    ///@todo make this work with remote Urls
+    if( !fileName.isLocalFile() ) throw QString( "file is not a local Url: %1" ).arg( fileName.prettyUrl() );
+    
+    std::ofstream file(fileName.path().toLocal8Bit(), ios_base::out | ios_base::binary );
+    if( !file.good() ) throw "could not open " + fileName.prettyUrl() + " for writing";
     boost::archive::polymorphic_xml_oarchive arch( file );
     arch << NVP(m_conversations);
   } catch ( std::exception & exc ) {
@@ -212,9 +216,12 @@ void ConversationManager::save() {
 
 void ConversationManager::load() {
   try {
-    QString fileName = TeamworkFolderManager::absolute( "conversation.database" );
-    std::ifstream file(fileName.toLatin1(), ios_base::binary );
-    if( !file.good() ) throw "could not open " + fileName + " for reading";
+    KUrl fileName = TeamworkFolderManager::teamworkAbsolute( "conversation.database" );
+    ///@todo make this work with remote Urls
+    if( !fileName.isLocalFile() ) throw QString( "file is not a local Url: %1" ).arg( fileName.prettyUrl() );
+    
+    std::ifstream file(fileName.path().toLocal8Bit(), ios_base::binary );
+    if( !file.good() ) throw "could not open " + fileName.prettyUrl() + " for reading";
     boost::archive::polymorphic_xml_iarchive arch( file );
     arch >> NVP(m_conversations);
   } catch ( std::exception & exc ) {
@@ -330,7 +337,7 @@ void InDocumentConversation::selectMessage( InDocumentMessagePointer msg ) {
     out( Logger::Debug ) << "opening: " << url.path();
 
 
-    IDocumentController* docControl = KDevTeamwork::documentController();
+    IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
 
     IDocument* doc = docControl->documentForUrl( url );
     if(!doc) doc = docControl->openDocument( url );
@@ -469,7 +476,7 @@ void InDocumentConversation::sendMessage() {
     if ( text.isEmpty() )
       throw "no text";
 
-    IDocumentController* docControl = KDevTeamwork::documentController();
+    IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
 
     IDocument* d = docControl->activeDocument();
     if ( !d )
@@ -497,7 +504,7 @@ void InDocumentConversation::sendMessage() {
       KTextEditor::Cursor b = r.start();
       KTextEditor::Cursor e = r.end();
       QString txt = doc->text();
-      QString path = TeamworkFolderManager::workspaceRelative( doc->url().pathOrUrl() );
+      QString path = TeamworkFolderManager::workspaceRelative( doc->url() );
       start = InDocumentReference( path, b.line(), b.column(), txt );
       end = InDocumentReference( path, e.line(), e.column(), txt );
       out( Logger::Debug ) << "sending references: " << start.asText() << " " << end.asText();
@@ -617,7 +624,7 @@ void  InDocumentConversation::selectNearestMessage() {
     int nearestDiff = 1000000;
     KTextEditor::Cursor nearestCursor;
 
-    QString file = TeamworkFolderManager::workspaceRelative( m_currentConnectedDocument->url().path() );
+    QString file = TeamworkFolderManager::workspaceRelative( m_currentConnectedDocument->url() );
 
     MessageSet::Iterator it = m_messages.values( file );
 
@@ -950,7 +957,7 @@ InDocumentConversation::InDocumentConversation( InDocumentMessage* msg ) : SafeL
       if ( line == -1 )
         throw "in-document-message has no line-information";
 
-      IDocumentController* docControl = KDevTeamwork::documentController();
+      IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
       if ( !docControl )
         throw "no document-controller";
 
@@ -1020,7 +1027,7 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
     err() << "Document is no text-document";
     return ;
   }
-  QString file = TeamworkFolderManager::workspaceRelative( document->url().path() );
+  QString file = TeamworkFolderManager::workspaceRelative( document->url() );
 
   MessageSet::Iterator it = m_messages.values( file );
 
@@ -1095,7 +1102,7 @@ void InDocumentConversation::setActive( bool active ) {
     return ;
 
   m_active = active;
-  IDocumentController* docControl = KDevTeamwork::documentController();
+  IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
 
   if ( active ) {
     if( m_widget ) m_widget->show();

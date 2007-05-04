@@ -15,7 +15,6 @@
 #ifndef __KDEVPART_KDEVCODEVIEW_H__
 #define __KDEVPART_KDEVCODEVIEW_H__
 
-#include <QtCore/QHash>
 #include <QtCore/QPointer>
 
 #include <iplugin.h>
@@ -24,6 +23,12 @@ class KUrl;
 class QModelIndex;
 class KDevTeamwork;
 class KDevTeamworkPartFactory;
+
+namespace KDevelop {
+  class ICore;
+  class IDocumentController;
+  class IProject;
+};
 
 class KDevTeamworkPart: public KDevelop::IPlugin
 {
@@ -45,17 +50,28 @@ public:
     virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
     void import( RefreshPolicy policy = Refresh );
+    
+    static KDevelop::ICore* staticCore();
+
+    static KDevelop::IDocumentController* staticDocumentController();
 
     virtual void restorePartialProjectSession(const QDomElement* el);
 
     virtual void savePartialProjectSession(QDomElement* el);
-    
+
     signals:
     void refresh();
 
 private slots:
+    void projectOpened( KDevelop::IProject* );
+    void projectClosed( KDevelop::IProject* );
 
 private:
+    void destroyTeamwork();
+    void startTeamwork( KDevelop::IProject* );
+
+    KDevelop::IProject* m_currentProject;
+    static KDevTeamworkPart* m_self;
     QPointer<KDevTeamwork> m_teamwork;
     QWidget* m_window;
 };

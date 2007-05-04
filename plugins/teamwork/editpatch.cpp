@@ -18,7 +18,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include <klineedit.h>
 #include <kmimetypechooser.h>
 #include <kmimetypetrader.h>
-#include <kio/netaccess.h>
 #include <k3process.h>
 #include <krandom.h>
 #include <QTabWidget>
@@ -121,7 +120,7 @@ LocalPatchSourcePointer EditPatch::patchFromEdit() {
   ls.unApplyCommand = ~m_editPatch.unapplyCommand->text();
   ls.type = ~m_editPatch.type->text();
   if( !m_editPatch.filename->url().path().isEmpty() )
-    ls.filename = ~TeamworkFolderManager::relative( ( m_editPatch.filename->url().path() ) );
+    ls.filename = ~TeamworkFolderManager::teamworkRelative( ( m_editPatch.filename->url() ) );
   else
     ls.filename = "";
   ls.description = ~m_editPatch.description->toPlainText();
@@ -153,7 +152,7 @@ void EditPatch::fillEditFromPatch() {
   m_editPatch.unapplyCommand->setText( ~patch.unApplyCommand );
   m_editPatch.type->setText( ~patch.type );
   if( !patch.filename.empty() )
-    m_editPatch.filename->setUrl( TeamworkFolderManager::absolute( ~patch.filename ) );
+    m_editPatch.filename->setUrl( TeamworkFolderManager::teamworkAbsolute( ~patch.filename ) );
   else
     m_editPatch.filename->setUrl( KUrl() );
   m_editPatch.description->setText( ~patch.description );
@@ -349,7 +348,7 @@ SafeSharedPtr<PatchMessage> EditPatch::getPatchMessage( PatchRequestData::Reques
   return 0;
 }
 
-QString EditPatch::getPatchFile( bool temp ) {
+KUrl EditPatch::getPatchFile( bool temp ) {
   try {
     LocalPatchSourcePointer patch = patchFromEdit();
     if ( !m_parent->hasPatch( patch ) )
@@ -382,19 +381,20 @@ QString EditPatch::getPatchFile( bool temp ) {
     if ( temp )
       subFolder = "temp";
 
-    QString filePath = TeamworkFolderManager::createUniqueFile( "patches/" + subFolder, fileName );
+    KUrl filePath = TeamworkFolderManager::createUniqueFile( "patches/" + subFolder, fileName );
     if ( temp )
       TeamworkFolderManager::registerTempItem( filePath );
 
     {
-      QFile file( filePath );
+      ///@todo use NetAccess
+      QFile file( filePath.path() );
 
       file.open( QIODevice::WriteOnly );
       if ( !file.isOpen() )
-        throw QString( "could not open %1" ).arg( filePath );
+        throw QString( "could not open %1" ).arg( filePath.path() );
 
       if ( file.write( msg->data() ) != msg->data().size() )
-        throw "writing the file " + filePath + " failed";
+        throw "writing the file " + filePath.path() + " failed";
     }
     return filePath;
   } catch ( const QString & str ) {
@@ -544,14 +544,14 @@ void EditPatch::slotToFile() {
     err() << "slotToFile() could not lock edited patch";
     return ;
   }
-  QString f = getPatchFile();
+  KUrl f = getPatchFile();
   if ( f.isEmpty() ) {
     err() << "slotToFile() could not get create patch-file";
     return ;
   }
-  out( Logger::Debug ) << "converting patch with command \"" << l->command << "\" to file \"" << f << "\"";
+  out( Logger::Debug ) << "converting patch with command \"" << l->command << "\" to file \"" << f.prettyUrl() << "\"";
   if( !f.isEmpty() )
-    l->setFileName( ~TeamworkFolderManager::relative( f ) );
+    l->setFileName( ~TeamworkFolderManager::teamworkRelative( f ) );
   else
     l->setFileName( "" );
 
@@ -796,7 +796,8 @@ void EditPatch::apply( bool reverse, const QString& _fileName ) {
     }
     QString command = "FILE=" + fileName + " " + ~patch->patchTool( reverse ) + " " + params + " && echo " + QString( terminalSuccessMarker ) + "\n";
 
-    terminal->showShellInDir( TeamworkFolderManager::workspaceDirectory() );
+    ///@todo not working with remove directories
+    terminal->showShellInDir( TeamworkFolderManager::workspaceDirectory().path() );
 
     if ( reverse )
       m_actionState = LocalPatchSource::NotApplied;
@@ -887,10 +888,10 @@ void EditPatch::seekHunk( bool forwards, bool isSource, QString fileName ) {
 
       //out( Logger::Debug ) << "highlighting " << file.path();
 
-      IDocument* doc = KDevTeamwork::documentController() ->documentForUrl( file );
+      IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
 
       if ( doc ) {
-        KDevTeamwork::documentController()->activateDocument( doc );
+        KDevTeamworkPart::staticDocumentController()->activateDocument( doc );
         if ( doc->textDocument() ) {
           KTextEditor::View * v = doc->textDocument() ->activeView();
           int bestLine = -1;
@@ -959,10 +960,10 @@ void EditPatch::highlightFile() {
 
       out( Logger::Debug ) << "highlighting " << file.path();
 
-      IDocument* doc = KDevTeamwork::documentController() ->documentForUrl( file );
+      IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
 
       if ( !doc ) {
-        doc = KDevTeamwork::documentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+        doc = KDevTeamworkPart::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
         seekHunk( true, m_isSource, file.path() );
       }
       removeHighlighting( file.path() );
@@ -999,7 +1000,7 @@ void EditPatch::fileDoubleClicked( const QModelIndex& i ) {
 
     out( Logger::Debug ) << "opening " << file.path();
 
-    KDevTeamwork::documentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+    KDevTeamworkPart::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
 
     seekHunk( true, m_isSource, file.path() );
   } catch ( const QString & str ) {
@@ -1135,12 +1136,13 @@ void EditPatch::updateKompareModel() {
     m_kompareInfo.reset( new Kompare::Info() );
     removeHighlighting();
     m_modelList.reset( new Diff2::KompareModelList( m_diffSettings, *m_kompareInfo, ( QObject* ) this ) );
-    QString diffFile = getPatchFile( true );
+    KUrl diffFile = getPatchFile( true );
     if ( diffFile.isEmpty() )
       return ;
     try {
-      if ( !m_modelList->openDirAndDiff( TeamworkFolderManager::workspaceDirectory(), diffFile ) )
-        throw "could not open diff " + diffFile;
+      ///@todo does not work with remote URLs
+      if ( !m_modelList->openDirAndDiff( TeamworkFolderManager::workspaceDirectory().path(), diffFile.path() ) )
+        throw "could not open diff " + diffFile.path();
     } catch ( const QString & str ) {
       throw;
     } catch ( ... ) {

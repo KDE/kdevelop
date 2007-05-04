@@ -26,11 +26,11 @@ void QSafeSignaller::signal() {
   m_proxy->signal();
 }
 
-QSafeSignaller& QSafeSignaller::operator = ( const QSafeSignaller& rhs ) {
+QSafeSignaller& QSafeSignaller::operator = ( const QSafeSignaller& /*rhs*/ ) {
   return *this;
 }
 
-QSafeSignaller::QSafeSignaller( const QSafeSignaller& rhs ) {
+QSafeSignaller::QSafeSignaller( const QSafeSignaller& /*rhs*/ ) : QObject() {
 }
 
 #include "safesignaller.moc"

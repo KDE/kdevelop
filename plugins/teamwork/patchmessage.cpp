@@ -186,7 +186,7 @@ void PatchData::saveInternal( OutArchive& arch, const uint /*version*/ ) {
       isBinary_ = true;
       EntryType v = BinaryHeader;
       arch << v;
-      KUrl url( TeamworkFolderManager::absolute( ~lpatch->filename ) );
+      KUrl url = TeamworkFolderManager::teamworkAbsolute( ~lpatch->filename );
       log( Logger::Debug ) << "opening file for sending: " << ~url.prettyUrl();
 
       //(QWidget*)KDevApi::self()->mainWindow()->main()

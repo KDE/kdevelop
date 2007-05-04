@@ -31,6 +31,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "autoconstructpointer.h"
 
 using namespace Teamwork;
+class KUrl;
 
 namespace Ui {
 class Teamwork;
@@ -39,6 +40,7 @@ class Teamwork;
 class QModelIndex;
 
 class KDevTeamwork : public QObject {
+    static KDevTeamwork* m_self;
     enum MessageTypes {
       Message = 0,
       SourceMessage = 1
@@ -47,16 +49,12 @@ class KDevTeamwork : public QObject {
     Q_OBJECT
   public:
     typedef SafeSharedPtr<KDevTeamworkClient> TeamworkClientPointer;
-    KDevTeamwork( KDevTeamworkPart *part, QWidget *parent );
+    KDevTeamwork( const KUrl& workspaceDirectory, KDevTeamworkPart *part, QWidget *parent );
     virtual ~KDevTeamwork();
 
     KDevTeamworkPart *part() const;
 
     static KDevTeamwork* self() ;
-
-    static KDevelop::ICore* core();
-
-    static KDevelop::IDocumentController* documentController();
 
     /**Sets the whole  teamwork-part(client plus server) active/inactive. When set inactive, all connetions are closed.
     on success returns the given activity-state. */
@@ -296,7 +294,6 @@ class KDevTeamwork : public QObject {
     AutoConstructPointer<IconCache> m_icons;
     std::auto_ptr<QPersistentModelIndex> m_contextMenuIndex;
 
-    static KDevTeamwork* m_self;
     enum MessageTypeIndex {
       NormalMessage,
       DocumentMessage

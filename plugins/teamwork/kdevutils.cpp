@@ -14,7 +14,7 @@
 
 #include "kdevutils.h"
 #include "teamworkfoldermanager.h"
-#include "kdevteamwork.h"
+#include "kdevteamwork_part.h"
 #include <idocumentcontroller.h>
 #include <idocument.h>
 #include <ktexteditor/document.h>
@@ -24,7 +24,7 @@
 using namespace KDevelop;
 
 QString currentDocumentPath() {
-  IDocumentController * docControl = KDevTeamwork::documentController();
+  IDocumentController * docControl = KDevTeamworkPart::staticDocumentController();
 
   IDocument* d = docControl->activeDocument();
   if ( !d )
@@ -38,7 +38,7 @@ QString currentDocumentPath() {
   if ( !view )
     throw QString( "no active view" );
 
-  return TeamworkFolderManager::workspaceRelative( d->url().path() );
+  return TeamworkFolderManager::workspaceRelative( d->url() );
 }
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

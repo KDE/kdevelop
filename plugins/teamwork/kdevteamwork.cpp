@@ -28,6 +28,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktexteditor/document.h>
+#include <kurl.h>
 
 #include <icore.h>
 #include <idocumentcontroller.h>
@@ -55,7 +56,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include "ui_kdevteamwork_interface.h"
 
 using namespace KDevelop;
-using namespace Teamwork;
 
 ///@todo make sure fromUtf8(..) and toUtf8(..) is used everywhere, especially in all the messages
 
@@ -197,8 +197,9 @@ MessageManager* KDevTeamwork::messageManager() {
 }
 
 
-KDevTeamwork::KDevTeamwork( KDevTeamworkPart *part, QWidget *parent ) :
-    m_logger( new KDevTeamworkLogger( this ) ),
+KDevTeamwork::KDevTeamwork( const KUrl& workspaceDirectory, KDevTeamworkPart *part, QWidget *parent ) :
+m_folderManager( workspaceDirectory ),
+m_logger( new KDevTeamworkLogger( this ) ),
 m_destroyed( false ),
 m_part( part ),
 m_active( false ),
@@ -210,7 +211,6 @@ m_messageSendManager( *m_widgets ),
 m_currentLogFilter( ( LogLevel ) ( Error | Warning | Info ) )
 {
   m_self = this;
-
   m_widget = parent;
 
   m_widgets->setupUi( parent );
@@ -1778,7 +1778,7 @@ void KDevTeamwork::sendMessageButton() {
           InDocumentReference endRef( false, m_widgets->reference->text() );
           KUrl docUrl = TeamworkFolderManager::workspaceAbsolute( ref.document() );
 
-          IDocument* doc = core()->documentController()->documentForUrl( docUrl );
+          IDocument* doc = KDevTeamworkPart::staticCore()->documentController()->documentForUrl( docUrl );
 
           if ( doc && doc->textDocument() ) {
             docText = doc->textDocument() ->text();
@@ -1858,15 +1858,6 @@ void KDevTeamwork::savePartialProjectSession( QDomElement* el ) {
   m_patchesManager->savePartialProjectSession( el );
   m_collaborationManager->savePartialProjectSession( el );
   m_messageManager->savePartialProjectSession( el );
-}
-
-KDevelop::ICore * KDevTeamwork::core( )
-{
-  return self()->m_part->core();
-}
-
-KDevelop::IDocumentController* KDevTeamwork::documentController() {
-  return core()->documentController();
 }
 
 KDevTeamwork* KDevTeamwork::self() {

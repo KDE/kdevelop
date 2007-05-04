@@ -35,28 +35,58 @@
 #include <kiconloader.h>
 #include <kparts/componentfactory.h>
 #include <kgenericfactory.h>
+#include <icore.h>
+#include <iprojectcontroller.h>
+#include <iproject.h>
 
 // #include <kplugininfo.h>
+
+KDevTeamworkPart* KDevTeamworkPart::m_self = 0;
 
  typedef KGenericFactory<KDevTeamworkPart> KDevTeamworkFactory;
  K_EXPORT_COMPONENT_FACTORY( kdevteamwork, KDevTeamworkFactory( "kdevteamwork" ) )
 
 KDevTeamworkPart::KDevTeamworkPart( QObject *parent,
                                     const QStringList& )
-    : KDevelop::IPlugin( KDevTeamworkFactory::componentData(), parent )
+    : KDevelop::IPlugin( KDevTeamworkFactory::componentData(), parent ), m_currentProject( 0 )
 {
+    m_self = this;
+    setXMLFile( "kdevteamwork.rc" );
+    
     QWidget *window = new QWidget;
     
     m_window = window;
-    
-    setXMLFile( "kdevteamwork.rc" );
-    
-    m_teamwork = new KDevTeamwork( this, window );
+
+    connect( core()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ), this, SLOT( projectOpened( KDevelop::IProject* ) ) );
+    connect( core()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), this, SLOT( projectClosed( KDevelop::IProject* ) ) );
+}
+
+KDevelop::ICore * KDevTeamworkPart::staticCore( )
+{
+  return m_self->core();
+}
+
+void KDevTeamworkPart::destroyTeamwork() {
+    delete m_teamwork;
+    m_teamwork = 0;
+    m_currentProject = 0;
+    m_window->hide();
+}
+
+void KDevTeamworkPart::startTeamwork( KDevelop::IProject* project ) {
+    destroyTeamwork();
+    m_teamwork = new KDevTeamwork( project->folder(), this, m_window );
+    m_currentProject = project;
+    m_window->show();
+}
+
+KDevelop::IDocumentController* KDevTeamworkPart::staticDocumentController() {
+  return staticCore()->documentController();
 }
 
 KDevTeamworkPart::~KDevTeamworkPart()
 {
-    delete m_teamwork;
+    destroyTeamwork();
 }
 
 QWidget* KDevTeamworkPart::pluginView() const
@@ -79,6 +109,16 @@ void KDevTeamworkPart::restorePartialProjectSession(const QDomElement* el) {
 
 void KDevTeamworkPart::savePartialProjectSession(QDomElement* el) {
     m_teamwork->savePartialProjectSession( el );
+}
+
+void KDevTeamworkPart::projectOpened( KDevelop::IProject* project ) {
+    if( !m_currentProject )
+        startTeamwork( project );
+}
+
+void KDevTeamworkPart::projectClosed( KDevelop::IProject* project ) {
+    if( project == m_currentProject )
+        destroyTeamwork();
 }
 
 

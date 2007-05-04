@@ -14,9 +14,7 @@
 
 #include "teamworkfoldermanager.h"
 #include <icore.h>
-#include <iprojectcontroller.h>
-#include <iproject.h>
-#include "kdevteamwork.h"
+#include "kdevteamwork_part.h"
 #include <kio/netaccess.h>
 #include <krandom.h>
 #include <QStringList>
@@ -24,50 +22,60 @@
 #include <QFile>
 #include <QDateTime>
 #include <kdebug.h>
+#include <kurl.h>
 
 
 TeamworkFolderManager* TeamworkFolderManager::m_self = 0;
 
-QString TeamworkFolderManager::workspaceDirectory() {
+KUrl TeamworkFolderManager::workspaceDirectory() {
   return m_self->m_workspaceDir;
 }
 
-
-
-TeamworkFolderManager::TeamworkFolderManager() {
+TeamworkFolderManager::TeamworkFolderManager( const KUrl& directory ) {
   m_self = this;
-  if( KDevTeamwork::core()->projectController()->projects().isEmpty() ) {
-    kDebug() << "ERROR: Teamwork-plugin started with no project open";
-    return;
-  }
-  KUrl u = KDevTeamwork::core()->projectController()->projects().front()->folder();
-  m_workspaceDir = u.path();
+
+  KUrl u = directory;
+  u.cleanPath();
+  
+  m_workspaceDir = u;
   u.addPath( ".teamwork" );
   u.cleanPath();
-  m_teamworkDir = u.path();
+  m_teamworkDir = u;
 }
 
 TeamworkFolderManager* TeamworkFolderManager::self() {
   return m_self;
 }
 
-QString TeamworkFolderManager::absolute( const QString& subDirectory, const QString& subFolder ) {
+KUrl TeamworkFolderManager::teamworkAbsolute( const QString& subDirectory, const QString& subFolder ) {
   KUrl ret( self()->m_teamworkDir );
   ret.addPath( subFolder );
   if( subDirectory.startsWith( ret.path() ) ) return subDirectory;
   ret.addPath( subDirectory );
-  return ret.path();
+  ret.cleanPath();
+  return ret;
 }
 
-QString TeamworkFolderManager::workspaceAbsolute( const QString& subDirectory, const QString& subFolder ) {
+KUrl TeamworkFolderManager::workspaceAbsolute( const QString& subDirectory, const QString& subFolder ) {
   KUrl ret( self()->m_workspaceDir );
   ret.addPath( subFolder );
   if( subDirectory.startsWith( ret.path() ) ) return subDirectory;
   ret.addPath( subDirectory );
-  return ret.path();
+  ret.cleanPath();
+  return ret;
 }
 
-QString TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString name, QString namePrefix, QString nameSuffix ) throw(QString) {
+void TeamworkFolderManager::createTeamworkFolder() throw(QString) {
+  KUrl ul = self()->m_workspaceDir;
+
+  ul.addPath( ".teamwork" );
+  if ( !KIO::NetAccess::exists( ul, true, 0 ) )
+    if( !KIO::NetAccess::mkdir( ul, 0 ) )
+      throw QString( "could not create \"%1\"" ).arg( ul.prettyUrl() );
+}
+
+
+KUrl TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString name, QString namePrefix, QString nameSuffix ) throw(QString) {
   if( self()->m_workspaceDir.isEmpty() )
     throw QString( "no teamwork-workspace-directory set" );
   KUrl ul = self()->m_workspaceDir;
@@ -87,7 +95,7 @@ QString TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString
       KIO::NetAccess::mkdir( ul, 0 );
 
     if ( !KIO::NetAccess::exists( ul, true, 0 ) )
-      throw QString( "could not create directory %1 directory" ).arg( ul.path() );
+      throw QString( "could not create directory %1 directory" ).arg( ul.prettyUrl() );
       
     sub.pop_front();
   }
@@ -101,7 +109,7 @@ QString TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString
     KIO::NetAccess::mkdir( nu, 0 );
 
     if ( KIO::NetAccess::exists( nu, true, 0 ) )
-      return nu.path();
+      return nu;
   }
 
     ///If the file exists try it with additional date/time
@@ -113,7 +121,7 @@ QString TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString
     KIO::NetAccess::mkdir( nu, 0 );
 
     if ( KIO::NetAccess::exists( nu, true, 0 ) )
-      return nu.path();
+      return nu;
   }
 
     ///If even this file exists, add a suffix behind the date
@@ -125,14 +133,14 @@ QString TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString
       KIO::NetAccess::mkdir( nu, 0 );
 
       if ( KIO::NetAccess::exists( nu, true, 0 ) )
-        return nu.path();
+        return nu;
     }
   }
 
   throw QString( "failed to allocate filename for %1" ).arg( name + "." + nameSuffix );
 }
 
-QString TeamworkFolderManager::createUniqueFile( QString subFolder, QString extension, QString name, QString namePrefix, QString nameSuffix ) throw(QString) {
+KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString extension, QString name, QString namePrefix, QString nameSuffix ) throw(QString) {
   if( self()->m_workspaceDir.isEmpty() )
     throw QString( "no teamwork-workspace-directory set" );
     KUrl ul = self()->m_workspaceDir;
@@ -152,7 +160,7 @@ QString TeamworkFolderManager::createUniqueFile( QString subFolder, QString exte
         KIO::NetAccess::mkdir( ul, 0 );
 
       if ( !KIO::NetAccess::exists( ul, true, 0 ) )
-        throw QString( "could not create directory %1 directory" ).arg( ul.path() );
+        throw QString( "could not create directory %1 directory" ).arg( ul.prettyUrl() );
       
       sub.pop_front();
     }
@@ -163,9 +171,8 @@ QString TeamworkFolderManager::createUniqueFile( QString subFolder, QString exte
 
     nu.cleanPath();
     if( !KIO::NetAccess::exists( nu, true, 0 ) ){
-      QFile f( nu.path() );
-      if( f.open(QIODevice::WriteOnly) )
-        return nu.path();
+      if( createFile( nu ) )
+        return nu;
     }
 
     ///If the file exists try it with additional date/time
@@ -174,9 +181,8 @@ QString TeamworkFolderManager::createUniqueFile( QString subFolder, QString exte
     
     nu.cleanPath();
     if( !KIO::NetAccess::exists( nu, true, 0 ) ) {
-      QFile f( nu.path() );
-      if( f.open(QIODevice::WriteOnly) )
-        return nu.path();
+      if( createFile( nu ) )
+        return nu;
     }
 
     ///If even this file exists, add a suffix behind the date
@@ -185,38 +191,40 @@ QString TeamworkFolderManager::createUniqueFile( QString subFolder, QString exte
       nu.addPath( namePrefix + QString("_%1_").arg( a ) + name + QDateTime::currentDateTime().toString( Qt::ISODate ) + nameSuffix + "." + extension );
       nu.cleanPath();
       if( !KIO::NetAccess::exists( nu, true, 0 ) ){
-        QFile f( nu.path() );
-        if( f.open(QIODevice::WriteOnly) )
-          return nu.path();
+      if( createFile( nu ) )
+        return nu;
       }
     }
 
     throw QString( "failed to allocate filename for %1" ).arg( name + "." + nameSuffix );
 }
 
-QString TeamworkFolderManager::createUniqueFile( QString subFolder, QString fileName, QString namePrefix, QString nameSuffix ) throw(QString) {
+KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString fileName, QString namePrefix, QString nameSuffix ) throw(QString) {
   QFileInfo i( fileName );
   KUrl u( subFolder );
   u.addPath( i.path() );
   return createUniqueFile( u.path(), i.completeSuffix(), i.baseName(), namePrefix, nameSuffix );
 }
 
-void TeamworkFolderManager::registerTempItem( const QString& u ) {
-  self()->m_tempItems[absolute(u)] = true;
+void TeamworkFolderManager::registerTempItem( const KUrl& u ) {
+  if( u.isRelative() )
+    self()->m_tempItems[teamworkAbsolute(u.path()).pathOrUrl()] = true;
+  else
+    self()->m_tempItems[u.pathOrUrl()] = true;
 }
 
-QString TeamworkFolderManager::relative( const QString& url, const QString& subfolder ) {
+QString TeamworkFolderManager::teamworkRelative( const KUrl& url, const QString& subfolder ) {
   KUrl u = self()->m_teamworkDir;
   u.addPath( subfolder );
   u.adjustPath( KUrl::AddTrailingSlash );
-  return KUrl::relativeUrl( u, KUrl(url) );
+  return KUrl::relativeUrl( u, url );
 }
 
-QString TeamworkFolderManager::workspaceRelative( const QString& url, const QString& subfolder ) {
+QString TeamworkFolderManager::workspaceRelative( const KUrl& url, const QString& subfolder ) {
   KUrl u = self()->m_workspaceDir;
   u.addPath( subfolder );
   u.adjustPath( KUrl::AddTrailingSlash );
-  return KUrl::relativeUrl( u, KUrl(url) );
+  return KUrl::relativeUrl( u, url );
 }
 
 TeamworkFolderManager::~TeamworkFolderManager() {
@@ -224,14 +232,24 @@ TeamworkFolderManager::~TeamworkFolderManager() {
     ///First, make sure that the file is really a subfolder of the .teamwork-directory
     KUrl f(  it.key() );
     f.cleanPath();
-    if( (f.path()).startsWith( m_teamworkDir ) ) {
+    if( (f.path()).startsWith( m_teamworkDir.path(KUrl::AddTrailingSlash) ) && (f.pathOrUrl()).startsWith( m_teamworkDir.pathOrUrl() ) ) {
       if( ! KIO::NetAccess::del( f, 0 ) )
-        kDebug() << "TeamworkFolderManager error: File " << f << " could not be deleted" << endl;
+        kDebug() << "TeamworkFolderManager error: File " << f.prettyUrl() << " could not be deleted" << endl;
     } else {
-      kDebug() << "TeamworkFolderManager error: File " << f << " was registered as temporary file, but is not in folder " << m_teamworkDir << endl;
+      kDebug() << "TeamworkFolderManager error: File " << f.prettyUrl() << " was registered as temporary file, but is not in folder " << m_teamworkDir << endl;
     }
   }
   m_tempItems.clear();
 }
+
+///@todo use netaccess!
+bool TeamworkFolderManager::createFile( const KUrl& url ) {
+  QFile f( url.path() );
+  if( f.open(QIODevice::WriteOnly) )
+    return true;
+  else
+    return false;
+}
+
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

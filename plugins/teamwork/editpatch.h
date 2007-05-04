@@ -121,7 +121,7 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
     ///Gets local patches via a fake-session
     SafeSharedPtr<PatchMessage> getPatchMessage( PatchRequestData::RequestType type );
     ///Tries to locally get the patch-message and then store it to a temporary file. If successful returns the filename.
-    QString getPatchFile(bool temp = false);
+    KUrl getPatchFile(bool temp = false);
 
     PatchesManager* m_parent;
     LocalPatchSourcePointer m_editingPatch;

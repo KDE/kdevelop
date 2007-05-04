@@ -21,16 +21,16 @@ email                : david.nolden.kdevelop@art-master.de
 #include <idocumentcontroller.h>
 #include <indocumentreference.h>
 
+#include "kdevteamwork_part.h"
 #include "messagesendmanager.h"
-#include "kdevteamwork.h"
 #include "teamworkfoldermanager.h"
 
 MessageSendManager::MessageSendManager( Ui::Teamwork& widgets ) : m_widgets( widgets ) {
-  connect( KDevTeamwork::documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
-  connect( KDevTeamwork::documentController(), SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
-  connect( KDevTeamwork::documentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
-  if( KDevTeamwork::documentController()->activeDocument() )
-    documentActivated( KDevTeamwork::documentController()->activeDocument() );
+  connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+  connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+  connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
+  if( KDevTeamworkPart::staticDocumentController()->activeDocument() )
+    documentActivated( KDevTeamworkPart::staticDocumentController()->activeDocument() );
 }
 
 void MessageSendManager::documentActivated( KDevelop::IDocument* document ) {
@@ -89,7 +89,7 @@ void MessageSendManager::selectionChanged( KTextEditor::View* view ) {
   KTextEditor::Document* doc = view->document();
   m_currentFile = "";
   if( doc )
-      m_currentFile = TeamworkFolderManager::workspaceRelative( doc->url().path() );
+      m_currentFile = TeamworkFolderManager::workspaceRelative( doc->url() );
 
   ///Now check if the message-send-widget is visible
   if( m_widgets.toolBox->currentWidget() == m_widgets.messaging && !m_currentFile.isEmpty() ) {

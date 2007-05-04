@@ -13,6 +13,7 @@ email                : david.nolden.kdevelop@art-master.de
  ***************************************************************************/
 
 #include "kdevteamwork_messages.h"
+#include "kdevteamwork_part.h"
 #include <QStandardItemModel>
 #include <QModelIndex>
 #include <QMenu>
@@ -180,11 +181,11 @@ void DocumentWrapper::toggleEnabled() {
 void DocumentWrapper::saveAsBufferFile() {
   KUrl u = TeamworkFolderManager::workspaceAbsolute( m_fileName );
 
-  IDocument* doc = KDevTeamwork::documentController() ->openDocument( u, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+  IDocument* doc = KDevTeamworkPart::staticDocumentController() ->openDocument( u, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
 
   if ( doc && doc->textDocument() ) {
     if ( doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified ) {
-      int answer = KMessageBox::warningYesNo( KDevTeamwork::core()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" ).arg( m_fileName ) );
+      int answer = KMessageBox::warningYesNo( KDevTeamworkPart::staticCore()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" ).arg( m_fileName ) );
       if ( answer != KMessageBox::Yes )
         return ;
     }
@@ -227,19 +228,19 @@ LocalPatchSourcePointer DocumentWrapper::saveAsPatch( bool addToList, bool edit 
     l->unApplyCommand = "-p0 -R";
     l->userIdentity = m_session->manager() ->teamwork() ->currentUserIdentity();
 
-    QString u = TeamworkFolderManager::createUniqueFile( "patches", "diff", ~l->name, "collab_", "" );
+    KUrl u = TeamworkFolderManager::createUniqueFile( "patches", "diff", ~l->name, "collab_", "" );
 
-    l->filename = ~TeamworkFolderManager::relative( u, "patches" );
+    l->filename = ~TeamworkFolderManager::teamworkRelative( u, "patches" );
 
-    QString workingDir = TeamworkFolderManager::createUniqueDirectory( "temp", m_session->name(), "diff_" );
-    KUrl subFolder( TeamworkFolderManager::relative( workingDir ) );
+    KUrl workingDir = TeamworkFolderManager::createUniqueDirectory( "temp", m_session->name(), "diff_" );
+    KUrl subFolder( TeamworkFolderManager::teamworkRelative( workingDir ) );
     subFolder.addPath( QFileInfo( m_fileName ).path() );
 
     KUrl tempCurrent = TeamworkFolderManager::createUniqueFile( subFolder.path(), m_fileName );
     KUrl tempBase = TeamworkFolderManager::createUniqueFile( subFolder.path(), m_fileName, "base_" );
 
-    TeamworkFolderManager::self() ->registerTempItem( tempCurrent.pathOrUrl() );
-    TeamworkFolderManager::self() ->registerTempItem( tempBase.pathOrUrl() );
+    TeamworkFolderManager::self() ->registerTempItem( tempCurrent );
+    TeamworkFolderManager::self() ->registerTempItem( tempBase );
 
     {
       std::ofstream fCurrent( tempCurrent.path().toUtf8().data(), ios_base::out );
@@ -256,9 +257,10 @@ LocalPatchSourcePointer DocumentWrapper::saveAsPatch( bool addToList, bool edit 
 
     K3Process proc;
 
-    OutputFileWriter ow( u );
-    proc.setWorkingDirectory( workingDir );
-    QString cmdLine = + + " " + tempCurrent.path() + " > " + u;
+    ///@todo make this work with remote files
+    OutputFileWriter ow( u.path() );
+    proc.setWorkingDirectory( workingDir.path() );
+    QString cmdLine = + + " " + tempCurrent.path() + " > " + u.path();
     proc.setPriority( K3Process::PrioLowest );
     proc << "diff";
     proc << "--unified=4";
@@ -268,7 +270,7 @@ LocalPatchSourcePointer DocumentWrapper::saveAsPatch( bool addToList, bool edit 
     connect( &proc, SIGNAL( receivedStdout ( K3Process *, char *, int ) ), &ow, SLOT( receivedStdout( K3Process*, char*, int ) ) );
 
     if ( ow.failed() )
-      throw QString( "writing to %1 failed" ).arg( u );
+      throw QString( "writing to %1 failed" ).arg( u.prettyUrl() );
 
     out( Logger::Debug ) << "saveAsPatch(..) executing \"diff --unified=4 " + tempBase.path() + " " + tempCurrent.path() + "\"";
 
@@ -434,7 +436,7 @@ void DocumentWrapper::openDocument( bool toForeground ) {
   try {
     if ( m_document ) {
       if( toForeground )
-        KDevTeamwork::documentController() ->activateDocument( m_document );
+        KDevTeamworkPart::staticDocumentController() ->activateDocument( m_document );
       return ;
     }
 
@@ -451,12 +453,13 @@ void DocumentWrapper::openDocument( bool toForeground ) {
         location = m_session->firstPeerName();
       }
 
-      m_tempFile = TeamworkFolderManager::createUniqueFile( subfolder.pathOrUrl(), m_fileName, "", "@" + m_session->name() );
+      ///@todo make this work work remote files
+      m_tempFile = TeamworkFolderManager::createUniqueFile( subfolder.path(), m_fileName, "", "@" + m_session->name() ).path();
     }
 
     out( Logger::Debug ) << "temporary file for " << fileName() << " is " << m_tempFile;
 
-    m_document = KDevTeamwork::documentController() ->openDocument( m_tempFile, KTextEditor::Cursor(), toForeground == true ? KDevelop::IDocumentController::ActivateOnOpen : KDevelop::IDocumentController::DontActivate );
+    m_document = KDevTeamworkPart::staticDocumentController() ->openDocument( m_tempFile, KTextEditor::Cursor(), toForeground == true ? KDevelop::IDocumentController::ActivateOnOpen : KDevelop::IDocumentController::DontActivate );
 
     if ( m_document ) {
       KTextEditor::Document * doc = m_document->textDocument();
@@ -661,7 +664,7 @@ void DocumentWrapper::readFile( bool fromBuffer ) throw ( QString ) {
   QString txt;
 
   if ( fromBuffer ) {
-    IDocument * doc = KDevTeamwork::documentController() ->documentForUrl( u );
+    IDocument * doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( u );
     if ( doc && doc->textDocument() ) {
       txt = doc->textDocument() ->text();
     }

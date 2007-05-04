@@ -72,21 +72,21 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**Emitted when the document is given focus or activated.*/
-    void documentActivated( IDocument* document );
+    void documentActivated( KDevelop::IDocument* document );
 
     /**Emitted when a document has been saved.*/
-    void documentSaved( IDocument* document );
+    void documentSaved( KDevelop::IDocument* document );
 
     /**Emitted when a document has been loaded.
     Note, no views exist for the document at the time this signal is emitted.*/
-    void documentLoaded( IDocument* document );
+    void documentLoaded( KDevelop::IDocument* document );
 
     /**Emitted when a document has been closed.*/
-    void documentClosed( IDocument* document );
+    void documentClosed( KDevelop::IDocument* document );
 
     /**This is emitted when the document changes, either internally
     or on disc.*/
-    void documentStateChanged( IDocument* document );
+    void documentStateChanged( KDevelop::IDocument* document );
 
 };
 

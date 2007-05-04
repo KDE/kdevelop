@@ -36,6 +36,7 @@ Q_DECLARE_METATYPE( Teamwork::UserPointer )
 #include "filecollaborationmanager.h"
 #include "dynamictext/vectortimestamp.h"
 #include "kdevteamwork_user.h"
+#include "kdevteamwork_part.h"
 #include "documentwrapper.h"
 #include "patchesmanager.h"
 #include "kdevteamwork_helpers.h"
@@ -163,9 +164,9 @@ const FileCollaborationSession::FileSet& FileCollaborationSession::files() const
 
 
 void FileCollaborationSession::fillContextMenu( int /*i*/, QMenu* menu ) {
-  IDocument * d = KDevTeamwork::documentController() ->activeDocument();
+  IDocument * d = KDevTeamworkPart::staticDocumentController() ->activeDocument();
   if ( d && d->textDocument() ) {
-    KUrl u = TeamworkFolderManager::workspaceRelative( d->url().path() );
+    KUrl u = TeamworkFolderManager::workspaceRelative( d->url() );
 
     if ( !m_files.values( u.path() ) )
       menu->addAction( "Add Current File", this, SLOT( addFile() ) );
@@ -440,16 +441,16 @@ void FileCollaborationSession::saveAsPatch() {
 }
 void FileCollaborationSession::addFile() {
   try {
-    IDocument * document = KDevTeamwork::documentController() ->activeDocument();
+    IDocument * document = KDevTeamworkPart::staticDocumentController() ->activeDocument();
     Q_ASSERT( document != 0 );
     Q_ASSERT( document->textDocument() != 0 );
 
-    KUrl u = TeamworkFolderManager::workspaceRelative( document->url().path() );
+    KUrl u = TeamworkFolderManager::workspaceRelative( document->url() );
 
     out( Logger::Debug ) << "adding " << u.path() << " to the session";
 
     uint index = allocateWrapperIndex();
-    QString fileName = TeamworkFolderManager::relative( u.path() );
+    QString fileName = TeamworkFolderManager::teamworkRelative( u );
 
     if ( !addFileInternal( CollabFile( index, fileName ), true, true ) )
       throw "could not add file " + u.path();
