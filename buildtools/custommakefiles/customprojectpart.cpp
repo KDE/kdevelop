@@ -1607,6 +1607,24 @@ void CustomProjectPart::addNewFilesToProject()
         m_recursive = false;
         QStringList blacklist = this->blacklist();
         QStringList excludelist = dlg->excludedPaths();
+        QStringList removeFromExcludes;
+        for( QStringList::const_iterator it = excludelist.begin(); it != excludelist.end(); ++it )
+        {
+            if( QFileInfo( projectDirectory()+"/"+*it ).isDir() )
+            {
+                for( QStringList::const_iterator it2 = m_sourceFiles.begin(); it2 != m_sourceFiles.end(); ++it2 )
+                {
+                    if( (*it2).find( *it ) != -1 )
+                    {
+                        removeFromExcludes << *it;
+                    }
+                }
+            }
+        }
+        for( QStringList::const_iterator it = removeFromExcludes.begin(); it != removeFromExcludes.end(); ++it )
+        {
+            excludelist.remove(*it);
+        }
         blacklist += excludelist;
         for( QStringList::const_iterator it = excludelist.begin(); it != excludelist.end(); ++it )
         {
