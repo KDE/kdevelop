@@ -245,6 +245,34 @@ void SubversionCore::spawnImportThread( const KUrl &path, const KUrl &url,
     SVNCORE_SPAWN_COMMON( job, thread )
 }
 
+void SubversionCore::spawnRevertThread( const KUrl &path, bool recurse )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_REVERT, this );
+    SvnRevertJob *thread = new SvnRevertJob( path, recurse, SVN_REVERT, job );
+
+    SVNCORE_SPAWN_COMMON( job, thread )
+}
+
+void SubversionCore::spawnCopyThread( const KUrl &srcPathOrUrl,
+                                      const SvnRevision &srcRev,
+                                      const KUrl &dstPathOrUrl )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_COPY, this );
+    SvnCopyJob *thread = new SvnCopyJob( srcPathOrUrl, srcRev, dstPathOrUrl, SVN_COPY, job );
+    
+    SVNCORE_SPAWN_COMMON( job, thread )
+}
+
+void SubversionCore::spawnMoveThread( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_MOVE, this );
+    SvnMoveJob *thread = new SvnMoveJob( srcPathOrUrl, dstPathUrl, force, SVN_MOVE, job );
+
+    SVNCORE_SPAWN_COMMON( job, thread )
+}
+
+///////////////////////     internals       ///////////////////////////////////////////////
+
 void SubversionCore::slotLogResult( KJob *aJob )
 {
     SvnKJobBase *job = dynamic_cast<SvnKJobBase*>( aJob );

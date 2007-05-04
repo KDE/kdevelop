@@ -363,4 +363,48 @@ protected:
 //     bool m_recurse, m_ignoreExternals;
 // };
 
+class SvnRevertJob : public SubversionThread
+{
+public:
+    SvnRevertJob( const KUrl::List &paths, bool recurse,
+                  int type, SvnKJobBase *parent );
+    virtual ~SvnRevertJob();
+
+protected:
+    virtual void run();
+    
+    class Private;
+    Private *d;
+};
+
+class SvnCopyJob : public SubversionThread
+{
+public:
+    // subversion doesn't support non-recursive ops. It's recursive by default.
+    SvnCopyJob( const KUrl& srcPathOrUrl, const SvnUtils::SvnRevision &srcRev,
+                const KUrl& dstPathOrUrl, int type, SvnKJobBase *parent );
+    virtual ~SvnCopyJob();
+    
+protected:
+    virtual void run();
+
+    class Private;
+    Private *d;
+};
+
+class SvnMoveJob : public SubversionThread
+{
+public:
+    SvnMoveJob( const KUrl& srcPathOrUrl, const KUrl& dstPathOrUrl,
+                bool force, int type, SvnKJobBase *parent );
+    virtual ~SvnMoveJob();
+
+protected:
+    virtual void run();
+    
+    class Private;
+    Private *d;
+};
+
+
 #endif

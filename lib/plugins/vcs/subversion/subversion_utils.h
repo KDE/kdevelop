@@ -23,6 +23,9 @@
 #define SVN_INFO     18
 #define SVN_DIFF     19
 #define SVN_IMPORT   20
+#define SVN_REVERT   21
+#define SVN_COPY     22
+#define SVN_MOVE     23
 
 struct svn_opt_revision_t;
 

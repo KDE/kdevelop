@@ -303,7 +303,15 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
             break;
         case svn_wc_notify_blame_revision:
             notifyString = i18n( "Blame finished for revision %1, path %2", notify->revision, notify->path );
-            kDebug() << notifyString << endl;
+            break;
+        case svn_wc_notify_revert:
+            notifyString = i18n( "Reverted working copy %1", notify->path );
+            break;
+        case svn_wc_notify_failed_revert:
+            notifyString = i18n( "Reverting failed on working copy %1", notify->path );
+            break;
+        case svn_wc_notify_copy:
+            notifyString = i18n( "Copied %1", notify->path );
             break;
     }
     SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
@@ -1048,5 +1056,149 @@ void SvnImportJob::run()
     svn_pool_destroy( subpool );
     return;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+class SvnRevertJob::Private
+{
+public:
+    KUrl::List m_paths;
+    bool m_recurse;
+};
+
+SvnRevertJob::SvnRevertJob( const KUrl::List &paths, bool recurse,
+              int type, SvnKJobBase *parent )
+    : SubversionThread( type, parent ), d( new Private )
+{
+    d->m_paths = paths;
+    d->m_recurse = recurse;
+}
+
+SvnRevertJob::~SvnRevertJob()
+{
+    delete d;
+}
+
+void SvnRevertJob::run()
+{
+    setTerminationEnabled( true );
+    apr_pool_t *subpool = svn_pool_create( pool() );
+
+    apr_array_header_t *targets =
+            apr_array_make( subpool, 1+d->m_paths.count(), sizeof(const char *));
+
+    for ( QList<KUrl>::iterator it = d->m_paths.begin() ; it != d->m_paths.end() ; ++it ) {
+        KUrl nurl = *it;
+        nurl.setProtocol( "file" );
+        *(( const char ** )apr_array_push(( apr_array_header_t* )targets)) =
+                svn_path_canonicalize( nurl.path().toUtf8(), subpool );
+        kDebug() << " canonicalized path: " << nurl.path() << endl;
+    }
+    kDebug() << " recurse " << d->m_recurse << endl;
+    svn_error_t *err = svn_client_revert( targets, d->m_recurse, ctx(), subpool );
+    if( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy( subpool );
+        return;
+    }
+
+    svn_pool_destroy( subpool );
+    return;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+class SvnCopyJob::Private
+{
+public:
+    KUrl m_srcPathOrUrl;
+    SvnUtils::SvnRevision m_srcRev;
+    KUrl m_dstPathOrUrl;
+};
+
+SvnCopyJob::SvnCopyJob( const KUrl& srcPathOrUrl, const SvnUtils::SvnRevision &srcRev,
+                        const KUrl& dstPathOrUrl, int type, SvnKJobBase *parent )
+    : SubversionThread( type, parent ), d( new Private )
+{
+    d->m_srcPathOrUrl = srcPathOrUrl;
+    d->m_srcRev = srcRev;
+    d->m_dstPathOrUrl = dstPathOrUrl;
+}
+
+SvnCopyJob::~SvnCopyJob()
+{
+    delete d;
+}
+
+void SvnCopyJob::run()
+{
+    setTerminationEnabled( true );
+    apr_pool_t *subpool = svn_pool_create( pool() );
+    svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
+    
+    svn_opt_revision_t rev = d->m_srcRev.revision();
+
+    svn_error_t *err = svn_client_copy2( &commit_info,
+                                         d->m_srcPathOrUrl.pathOrUrl().toUtf8(),
+                                         &rev,
+                                         d->m_dstPathOrUrl.pathOrUrl().toUtf8(),
+                                         ctx(), subpool);
+    
+    if( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy( subpool );
+        return;
+    }
+
+    svn_pool_destroy( subpool );
+    return;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+class SvnMoveJob::Private
+{
+public:
+    KUrl m_srcPathOrUrl;
+    KUrl m_dstPathOrUrl;
+    bool m_force;
+};
+
+SvnMoveJob::SvnMoveJob( const KUrl& srcPathOrUrl, const KUrl& dstPathOrUrl,
+                bool force, int type, SvnKJobBase *parent )
+    : SubversionThread( type, parent ), d( new Private )
+{
+    d->m_srcPathOrUrl = srcPathOrUrl;
+    d->m_dstPathOrUrl = dstPathOrUrl;
+    d->m_force = force;
+}
+
+SvnMoveJob::~SvnMoveJob()
+{
+    delete d;
+}
+
+void SvnMoveJob::run()
+{
+    setTerminationEnabled( true );
+    apr_pool_t *subpool = svn_pool_create( pool() );
+    svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
+    
+    svn_error_t *err = svn_client_move3( &commit_info,
+                                         d->m_srcPathOrUrl.pathOrUrl().toUtf8(),
+                                         d->m_dstPathOrUrl.pathOrUrl().toUtf8(),
+                                         d->m_force,
+                                         ctx(), subpool);
+    
+    if( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy( subpool );
+        return;
+    }
+
+    svn_pool_destroy( subpool );
+    return;
+}
+
 
 #include "subversionthreads.moc"

@@ -80,6 +80,12 @@ public:
 
     void spawnImportThread( const KUrl &path, const KUrl &url, bool nonRecurse, bool noIgnore );
 
+    void spawnRevertThread( const KUrl &path, bool recurse );
+
+    void spawnCopyThread( const KUrl &srcPathOrUrl, const SvnRevision &srcRev, const KUrl &dstPathOrUrl );
+
+    void spawnMoveThread( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force );
+
     
 protected Q_SLOTS:
     /// slot for logview only. Logview is the testbed whenever a big change happens.
