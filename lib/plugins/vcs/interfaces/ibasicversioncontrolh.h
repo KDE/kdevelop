@@ -134,6 +134,7 @@ public:
      * conflicts a merge needs to be executed separately
      */
     virtual VcsJob update( const KUrl::List& localLocations,
+                           const VcsRevision& rev,
                            RecursionMode recursion ) = 0;
 
     /**
