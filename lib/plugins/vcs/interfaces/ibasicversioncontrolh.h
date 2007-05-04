@@ -110,16 +110,14 @@ public:
      * allows that, may be implemented by filesystem copy+add
      */
     virtual VcsJob copy( const KUrl& localLocationSrc,
-                         const KUrl& localLocationDst,
-                         RecursionMode recursion ) = 0;
+                         const KUrl& localLocationDstn ) = 0;
 
     /**
      * moves src to dst, preserving history if the VCS system allows that, may
      * be implemented by copy+remove
      */
     virtual VcsJob move( const KUrl& localLocationSrc,
-                         const KUrl& localLocationDst,
-                         RecursionMode recursion ) = 0;
+                         const KUrl& localLocationDst ) = 0;
 
     /**
      * revert all local changes on the given file, making its content equal
