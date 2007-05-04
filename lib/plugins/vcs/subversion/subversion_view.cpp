@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "subversion_view.h"
 #include "subversion_core.h"
 #include "svnkjobbase.h"
@@ -19,6 +19,9 @@
 #include "svn_blamewidgets.h"
 #include "subversion_utils.h"
 // #include "ui_svnlogviewwidget.h"
+#include "ioutputview.h"
+#include <icore.h>
+#include <iplugincontroller.h>
 #include <kmessagebox.h>
 #include <ktabwidget.h>
 #include <ktextedit.h>
@@ -41,8 +44,8 @@ public:
     KDevSubversionView *m_view;
     QVBoxLayout *m_layout;
     KTabWidget *m_tab;
-    KTextEdit *m_edit;
     QPushButton *m_closeButton;
+    KDevelop::IOutputView *m_outview;
 };
 // TODO first make empty widget by factory. This host container widget is parent
 // of every other subwidgets, including logviewer, blame, notifier, ...
@@ -57,10 +60,6 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
     d->m_layout->setMargin(0);
     d->m_layout->addWidget( tab() );
     
-    d->m_edit = new KTextEdit( tab() );
-    d->m_edit->setReadOnly( TRUE );
-    tab()->addTab( d->m_edit, i18n("Notification") );
-    
     d->m_closeButton = new QPushButton( tab() );
     d->m_closeButton->setText( i18n("Close") );
     tab()->setCornerWidget( d->m_closeButton );
@@ -72,8 +71,6 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
     setWindowIcon( KIcon( "subversion" ) );
     setWindowTitle( i18n( "subversion" ) );
     
-    connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),
-            this, SLOT(printNotification(QString)) );
     connect( d->m_part->svncore(), SIGNAL(logFetched(SvnKJobBase*)),
              this, SLOT(printLog(SvnKJobBase*)) );
     connect( d->m_part->svncore(), SIGNAL(blameFetched(SvnKJobBase*)),
@@ -82,6 +79,20 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
              this, SLOT(printDiff(SvnKJobBase *)) );
     connect( d->m_part->svncore(), SIGNAL(jobFinished(SvnKJobBase*)),
              this, SLOT(slotJobFinished(SvnKJobBase*)) );
+    
+    KDevelop::IPlugin* plugin =
+        d->m_part->core()->pluginController()->pluginForExtension( "org.kdevelop.IOutputView" );
+    if( plugin ){
+        d->m_outview = plugin->extension<KDevelop::IOutputView>();
+        if( d->m_outview ){
+            d->m_outview->registerLogView( "id_kdevsubversion", i18n("Subversion Notification") );
+            connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),
+                    this, SLOT(printNotification(QString)) );
+        }
+        
+    } else{
+        d->m_outview = NULL;
+    }
 
 }
 
@@ -93,14 +104,13 @@ KDevSubversionView::~KDevSubversionView()
 
 void KDevSubversionView::printNotification(QString msg)
 {
-    kDebug() << " KDevSubversionView::printNotification: " << msg << endl;
-    if( !d->m_edit ){
-        // should not happen
-        d->m_edit = new KTextEdit(this);
+    if( !d->m_outview ){
+        return;
     }
-    d->m_edit->append( msg );
-    tab()->setCurrentIndex( tab()->indexOf(d->m_edit) );
+    kDebug() << " printNotification " << msg << endl;
+    d->m_outview->appendLine( "id_kdevsubversion", msg );
 }
+
 void KDevSubversionView::printLog(SvnKJobBase *j)
 {
     if( j->error() ){
@@ -196,11 +206,11 @@ void KDevSubversionView::slotJobFinished( SvnKJobBase *job )
 void KDevSubversionView::closeCurrentTab()
 {
     QWidget *current = tab()->currentWidget();
-    KTextEdit *edit = static_cast<KTextEdit*>(current);
-    if( edit ){
-        if( edit == d->m_edit ) // main notification output should not be deleted
-            return;
-    }
+//     KTextEdit *edit = static_cast<KTextEdit*>(current);
+//     if( edit ){
+//         if( edit == d->m_edit ) // main notification output should not be deleted
+//             return;
+//     }
     tab()->removePage( current );
     delete current;
 }
