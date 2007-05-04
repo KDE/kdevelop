@@ -33,7 +33,6 @@ public:
 private slots:
     void testGoodParse();
     void testGoodParse_data();
-
     void testBadParse();
     void testBadParse_data();
 };

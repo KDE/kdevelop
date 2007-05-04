@@ -385,6 +385,9 @@ CMAKE_END_AST_CLASS( MakeDirectoryAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MarkAsAdvancedAst )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, advancedVars, AdvancedVars)
+CMAKE_ADD_AST_MEMBER( bool, bool, isClear, Clear)
+CMAKE_ADD_AST_MEMBER( bool, bool, isForce, Force)
 CMAKE_END_AST_CLASS( MarkAsAdvancedAst )
 
 

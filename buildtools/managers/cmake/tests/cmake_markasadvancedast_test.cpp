@@ -28,24 +28,47 @@ void MarkAsAdvancedAstTest::testGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
     MarkAsAdvancedAst* ast = new MarkAsAdvancedAst();
-    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    QCOMPARE( ast->parseFunctionInfo( function ), true );
     delete ast;
 }
 
 void MarkAsAdvancedAstTest::testGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "mark_as_advanced";
+    l.addArguments(QStringList() << "FORCE" << "My_LIBRARY" << "My_INCLUDES");
+    QTest::newRow("a forced mark_as_advanced") << l;
+    
+    l.arguments.clear();
+    l.addArguments(QStringList() << "CLEAR" << "My_LIB");
+    QTest::newRow("a clear mark_as_advanced") << l;
+    
+    l.arguments.clear();
+    l.addArguments(QStringList() << "My_LIB");
+    QTest::newRow("a normal mark_as_advanced") << l;
 }
 
 void MarkAsAdvancedAstTest::testBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
-    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    MarkAsAdvancedAst* ast = new MarkAsAdvancedAst();
+    QCOMPARE( ast->parseFunctionInfo( function ), false );
     delete ast;
 }
 
 void MarkAsAdvancedAstTest::testBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "mark_as_advanced";
+    QTest::newRow("a mark_as_advanced without parameters") << l;
+    
+    l.arguments.clear();
+    l.addArguments(QStringList() << "CLEAR");
+    QTest::newRow("a clear mark_as_advanced without parameters") << l;
 }
 
 #include "cmake_markasadvancedast_test.moc"
