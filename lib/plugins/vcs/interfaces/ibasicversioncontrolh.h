@@ -74,8 +74,7 @@ public:
                         RecursionMode recursion ) = 0;
 
     /**
-     * removes a local file/dir from the list of versioned files recursive
-     * is only active for directories
+     * removes a local file/dir from the list of versioned files
      */
     virtual VcsJob remove( const KUrl::List& localLocations ) = 0;
 
