@@ -25,7 +25,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "messagesendmanager.h"
 #include "teamworkfoldermanager.h"
 
-MessageSendManager::MessageSendManager( Ui::Teamwork& widgets ) : m_widgets( widgets ) {
+MessageSendManager::MessageSendManager( Ui::Teamwork& widgets ) : m_widgets( widgets ), m_lastDocument(0) {
   connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
   connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
   connect( KDevTeamworkPart::staticDocumentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
