@@ -200,7 +200,7 @@ void Navigator::slotCursorPositionChanged()
     //this is reasonable assumption because problem reporter should be the same for all languages
     KConfig* config = kapp->config();
     config->setGroup( "General Options" );
-    int m_delay = config->readNumEntry( "BgParserDelay", 250 );
+    int m_delay = config->readNumEntry( "BgParserDelay", 500 );
 
     m_syncTimer->changeInterval(500 >= m_delay+100 ? 500 : m_delay+100 );
 }

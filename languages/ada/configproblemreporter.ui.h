@@ -15,7 +15,7 @@ void ConfigureProblemReporter::init()
     config->setGroup( "General Options" );
     bgParserCheckbox->setChecked( config->readBoolEntry("EnableAdaBgParser", true) );
     delaySlider->setEnabled( bgParserCheckbox->isChecked() );
-    delaySlider->setValue( config->readNumEntry("AdaBgParserDelay", 1000) );
+    delaySlider->setValue( config->readNumEntry("BgParserDelay", 500) );
 }
 
 void ConfigureProblemReporter::destroy()
@@ -28,7 +28,7 @@ void ConfigureProblemReporter::accept()
     config->setGroup( "General Options" );
     config->writeEntry( "EnableAdaBgParser", bgParserCheckbox->isChecked() );
     if( bgParserCheckbox->isChecked() )
-	config->writeEntry( "AdaBgParserDelay", delaySlider->value() );
+	config->writeEntry( "BgParserDelay", delaySlider->value() );
     config->sync();
 }
 

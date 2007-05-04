@@ -252,8 +252,8 @@ void ProblemReporter::configure()
     kdDebug(9007) << "ProblemReporter::configure()" << endl;
     KConfig* config = kapp->config();
     config->setGroup( "General Options" );
-    m_active = config->readBoolEntry( "EnableCppBgParser", TRUE );
-    m_delay = config->readNumEntry( "BgParserDelay", 250 );
+    m_active = config->readBoolEntry( "EnablePascalBgParser", TRUE );
+    m_delay = config->readNumEntry( "BgParserDelay", 500 );
 }
 
 void ProblemReporter::configWidget( KDialogBase* dlg )

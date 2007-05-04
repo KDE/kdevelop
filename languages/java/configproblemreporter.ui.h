@@ -15,7 +15,7 @@ void ConfigureProblemReporter::init()
     config->setGroup( "General Options" );
     bgParserCheckbox->setChecked( config->readBoolEntry("EnableJavaBgParser", true) );
     delaySlider->setEnabled( bgParserCheckbox->isChecked() );
-    delaySlider->setValue( config->readNumEntry("JavaBgParserDelay", 250) );
+    delaySlider->setValue( config->readNumEntry("BgParserDelay", 500) );
     setDelayLabel( delaySlider->value() );
 }
 
@@ -29,7 +29,7 @@ void ConfigureProblemReporter::accept()
     config->setGroup( "General Options" );
     config->writeEntry( "EnableJavaBgParser", bgParserCheckbox->isChecked() );
     if( bgParserCheckbox->isChecked() )
-	config->writeEntry( "JavaBgParserDelay", delaySlider->value() );
+	config->writeEntry( "BgParserDelay", delaySlider->value() );
     config->sync();
 }
 
