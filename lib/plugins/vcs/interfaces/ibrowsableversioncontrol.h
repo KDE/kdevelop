@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
  *
  * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Matthew Woehlke <mw_triad@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

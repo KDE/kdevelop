@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
  *
  * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Matthew Woehlke <mw_triad@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,6 +154,91 @@ class VcsChange
     VcsActions actions();
     QString message();
     QList<VcsItemEvent> items();
+};
+
+/**
+ * This class encapsulates running a vcs job. It allows to start a job and retrieve
+ * results
+ *
+ * @TODO: Should this stay an interface or do we just subclass KJob?
+ */
+class VcsJob
+{
+    /**
+     * To easily check which type of job this is
+     *
+     * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not QFlags!)
+     */
+    enum VcsJobType
+    {
+        Add,
+        Remove,
+        Copy,
+        Move,
+        Diff,
+        Commit,
+        Update,
+        Merge,
+        Resolve,
+        Import,
+        Checkout,
+        Log,
+        Push,
+        Pull,
+        Clone
+    };
+
+    /**
+     * Simple enum to define how the job finished
+     */
+    enum FinishStatus
+    {
+        Done,
+        Cancelled,
+        Error
+    };
+
+    public:
+        /**
+         * This method will return all available results of the job. The actual
+         * data type that is wrapped in the QVariant depends on the type of job.
+         */
+        QVariant fetchResults();
+
+        /**
+         * Used to find out about the type of job
+         *
+         * @return the type of job
+         */
+        VcsJobType type();
+
+        /**
+         * Can be used to obtain an error message if the job exited with an error
+         * status. If there's no error or the job is not finished this is an
+         * empty string.
+         */
+        QString errorMessage();
+
+    public Q_SLOTS:
+        /**
+         * The job is not allowed to emit any signals until this method has been called.
+         * A plugin may either really start the job here or it may as well buffer any
+         * signals before start has been called.
+         */
+        void start();
+
+        /**
+         * This cancels the job, the job shall not emit any signals excep the finished()
+         * signal when the cancelling is done and any resources have been cleaned up
+         */
+        void cancel();
+
+    Q_SIGNALS:
+        /**
+         * this signal is emitted whenever new results are available
+         */
+        void resultsReady( VcsJob* );
+        void finished( VcsJob*, FinishStatus );
 };
 
 }
