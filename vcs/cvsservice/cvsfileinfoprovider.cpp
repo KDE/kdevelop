@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <qregexp.h>
+#include <qtimer.h>
 #include <kurl.h>
 #include <kdebug.h>
 
@@ -82,8 +83,30 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
     }
 
 
+    if (!checkRepos) {
+        kdDebug(9006) << "No repo check reqested; Just read CVS/Entries from: " << dirPath << endl;
+        QDir qd(projectDirectory()+QDir::separator()+dirPath);
+        CVSDir cdir(qd);
+        if (cdir.isValid())
+        {
+            emit needStatusUpdate(cdir);
+            return true;
+        }
+        kdDebug(9006) << dirPath << " is not a valid cvs directory" << endl;
+        return false;
+    }
+
+    // Fix a possible bug in cvs client:
+    // When "cvs status" get's called nonrecursiv for a directory, it will
+    // not print anything if the path ends with a slash. So we need to ensure
+    // this here.
+    QString newPath = dirPath;
+    if (newPath.endsWith("/"))
+        newPath.truncate( newPath.length()-1 );
+
+
     // path, recursive, tagInfo: hmmm ... we may use tagInfo for collecting file tags ...
-    DCOPRef job = m_cvsService->status( dirPath, recursive, checkRepos );
+    DCOPRef job = m_cvsService->status( newPath, recursive, false );
     m_requestStatusJob = new CvsJob_stub( job.app(), job.obj() );
 
     kdDebug(9006) << "Running command : " << m_requestStatusJob->cvsCommand() << endl;
@@ -101,10 +124,29 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
     }*/
 }
 
+void CVSFileInfoProvider::propagateUpdate()
+{
+    emit statusReady( *m_cachedDirEntries, m_savedCallerData );
+}
+
 void CVSFileInfoProvider::updateStatusFor(const CVSDir& dir)
 {
     m_cachedDirEntries = dir.cacheableDirStatus();
-    emit statusReady( *m_cachedDirEntries, m_savedCallerData );
+    printOutFileInfoMap( *m_cachedDirEntries );
+
+    /* FileTree will call requestStatus() everytime the user expands a directory
+     * Unfortunatly requestStatus() will be called before the 
+     * VCSFileTreeViewItem of the directory will be filled with the files
+     * it contains. Meaning, m_savedCallerData contains no childs at that
+     * time. When a dcop call is made to run "cvs status" this is no problem.
+     * The dcop call takes quit long, and so FileTree has enough time the fill
+     * in the childs before we report the status back.
+     * As far as the reading of the CVS/Entries file is very fast, 
+     * it will happen that we emit statusReady() here before the directory 
+     * item conains any childs. Therefor we need to give FileTree some time
+     * to update the directory item before we give the status infos.
+     */
+    QTimer::singleShot( 1000, this, SLOT(propagateUpdate()) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

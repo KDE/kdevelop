@@ -43,6 +43,8 @@ public:
 
 public slots:
     void updateStatusFor( const CVSDir& );
+private slots:
+    void propagateUpdate();
 
 signals:
     void needStatusUpdate(const CVSDir&);
