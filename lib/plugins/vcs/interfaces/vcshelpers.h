@@ -109,7 +109,7 @@ public:
     KUrl repositoryLocation();
     KUrl repositoryCopySourceLocation(); // may be NULL
     VcsAction action();
-}
+};
 
 /**
  * Small container class that contains information about a history event of a
@@ -123,7 +123,7 @@ public:
     QDate date();
     QString message();
     VcsItemEvent item();
-}
+};
 
 /**
  * Small container class that contains information about a single change.
@@ -136,7 +136,7 @@ class VcsChange
     VcsAction action();
     QString message();
     QList<VcsItemEvent> items();
-}
+};
 
 }
 
