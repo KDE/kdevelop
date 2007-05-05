@@ -128,6 +128,12 @@ public:
     /**
      * fetches the latest changes from the repository, if there are
      * conflicts a merge needs to be executed separately
+     *
+     * @param localLocation the local files/dirs that should be updated
+     * @param rev Update to this revision, if rev is a range the VcsJob will
+     * immediately return with an error
+     * @param recursion defines wether the directories should be updated recursively
+     *
      */
     virtual VcsJob update( const KUrl::List& localLocations,
                            const VcsRevision& rev,
@@ -176,8 +182,10 @@ public:
 
     /**
      * Retrieve the history of a given local url
+     *
+     * @param limit show at most this many entries
      */
-    virtual VcsJob log( const KUrl& localLocation ) = 0;
+    virtual VcsJob log( const KUrl& localLocation, unsigned long limit ) = 0;
 
     /**
      * Show the history of a given local url

@@ -31,8 +31,10 @@ public:
 
     /**
      * Retrieve the history of the repository location
+     *
+     * @param limit show at most this many entries
      */
-    virtual VcsJob log( const QString& repoLocation ) = 0;
+    virtual VcsJob log( const QString& repoLocation, unsigned long limit ) = 0;
 
     /**
      * Show the history of the repository location
