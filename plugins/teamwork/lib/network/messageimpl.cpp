@@ -32,7 +32,7 @@ namespace Teamwork {
   }
 
   MessageConstructionInfo::MessageConstructionInfo( const MessageTypeSet& rhs ) : typeSet_( rhs ) {
-  };
+  }
 
   const MessageTypeSet& MessageConstructionInfo::typeSet() const {
     return typeSet_;
@@ -47,7 +47,7 @@ namespace Teamwork {
   }
 
   MessageConstructionInfo::MessageConstructionInfo( const MessageConstructionInfo& rhs ) : name_( rhs.name_ ), typeSet_( rhs.typeSet_ ) {
-  };
+  }
 
   MessageConstructionInfo& MessageConstructionInfo::operator=( const MessageConstructionInfo& ) {
     return *this;
