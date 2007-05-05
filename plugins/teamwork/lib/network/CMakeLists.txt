@@ -28,10 +28,9 @@ SET(testfiles main.cpp )
 
 #add definitions, compiler switches, etc.
 
-#ADD_DEFINITIONS(-Wall -g -ftemplate-depth-50 -D_REENTRANT -fexceptions -fno-inline )
-#ADD_DEFINITIONS(-Wall -g -ftemplate-depth-50 -D_REENTRANT -fexceptions -finline )
-#ADD_DEFINITIONS(-Wall -O2 -ftemplate-depth-50 -D_REENTRANT -fexceptions -finline )
-ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions -finline)
+#ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions -finline)
+#ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions -fno-inline)
+ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions)
 #list all source files here
 
 ###### First Target ##########

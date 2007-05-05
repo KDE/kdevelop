@@ -12,6 +12,8 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include <boost/archive/archive_exception.hpp>
+
 #include "serialization.h"
 #include "logger.h"
 #include "handler.h"
@@ -29,6 +31,14 @@ email                : david.nolden.kdevelop@art-master.de
 
 namespace Teamwork {
 using namespace std;
+
+void compare( const std::vector<char>& buffer, const std::vector<char>& buffer2 ) {
+  std::vector<char> buf1=buffer;
+  buf1.push_back(0);
+  std::vector<char> buf2=buffer2;
+  buf2.push_back(0);
+  std::cout << "comparing buffers, first buffer:\n" << &buf1[0] << "\nsecond buffer:\n" << &buf2[0] << "\n";
+} 
 
 SessionReplyManager::SessionReplyManager( MutexInterfaceImpl* selfMutex ) : selfMutex_( selfMutex ) {}
 
@@ -207,6 +217,10 @@ bool BasicTCPSession::inputOutput() {
   } catch ( const StreamError & err ) {
     failed( std::string( "stream-error in inputOuput: " ) + err.what() );
   }
+  catch( const boost::archive::archive_exception& exc ) {
+    failed( std::string( "archive-exception while deserializing message: " + std::string( exc.what() ) ) );
+  }
+  
 #ifndef DISABLEUNIVERSALCATCH
   catch ( std::exception & err ) {
     failed( std::string( "exception occured in inputOuput: " ) + err.what() );
@@ -243,12 +257,13 @@ void BasicTCPSession::serializeMessage() {
         } catch ( const CannotReserialize& ) {
           clone = 0;
         }
-#ifndef DISABLEUNIVERSALCATCH
+        catch( const boost::archive::archive_exception& e ) {
+          err() << "archive-exception while reconstructing message: " << e.what();
+        }
         catch ( ... ) {
           err() << "exception while reconstructing the message";
           throw;
         }
-#endif
         try {
           if ( clone ) {
             std::vector<char> buffer2;
@@ -256,13 +271,19 @@ void BasicTCPSession::serializeMessage() {
             if ( buffer2.size() == buffer.size() ) {
               if ( memcmp( &buffer[ 0 ], &buffer2[ 0 ], buffer.size() ) != 0 )
                 err() << "the reconstruction of a message of type \"" << mp->name() << "\" is wrong, the serialized content does not match!" ;
+                compare( buffer, buffer2 );
             } else {
               err() << "the reconstruction of a message of type \"" << mp->name() << "\" is wrong!(mismatch in size: " << buffer.size() << " -> " << buffer2.size() << ")" ;
+                compare( buffer, buffer2 );
             }
           } else {
             err() << "a message that is being sent could not be reconstructed for debugging: \"" << mp->name() << "\"";
           }
-        } catch ( const CannotReserialize& ) {}
+        } catch ( const CannotReserialize& )
+        {}
+        catch( const boost::archive::archive_exception& e ) {
+          err() << "archive-exception while reconstructing message: " << e.what();
+        }
 #ifndef DISABLEUNIVERSALCATCH
 
         catch ( ... ) {
@@ -291,11 +312,15 @@ void BasicTCPSession::serializeMessage() {
           return ;
         }
       }
+      catch( const boost::archive::archive_exception& exc ) {
+        err() << "archive-exception while reconstructing message: " << exc.what();
+        failed( std::string( "could not serialize message of type \"" ) + mp->name() + "\", reason: " + std::string( exc.what() ) );
+      }
 #ifndef DISABLEUNIVERSALCATCH
       catch ( const std::exception & exc ) {
-        failed( std::string( "could not serialize message of type \"" ) + mp->name() + "\", reason: " + std::string( exc.what() ) );
+        failed( std::string( "error: could not serialize message of type \"" ) + mp->name() + "\", reason: " + std::string( exc.what() ) );
       } catch ( ... ) {
-        failed( "could not serialize message " + mp->name() );
+        failed( "error: could not serialize message " + mp->name() );
       }
 #endif
 #endif
@@ -551,6 +576,11 @@ void BasicTCPSession::removeAllMessages() {
 
 bool BasicTCPSession::send( MessageInterface* msg ) {
   msg->info().setSession( this );
+
+  //The following message indicates that the message's constructor does not correctly fill it's message-info. When this error happens, probably MessageConstructionInfo is not used correctly.
+  if( !(msg->info().type() == messages_.idFromName( msg->name() )) )
+    err() << "sending message that is flagged with an incorrect type, real type: " << msg->name() << " " << messages_.idFromName( msg->name() ).desc() <<  " flagged type: " << msg->info().type().desc();
+
   if ( !exit_ && !failed_ ) {
     messagesToSend_ << msg;
   } else {

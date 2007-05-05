@@ -62,6 +62,7 @@ class MessageTypeSet {
 
     ~MessageTypeSet();
 
+    //Returns the message-type mapped to a message-name. A message-name in rtti (typeid(Message).name()) format is also accepted for messages derived from MessageInterface
     const MessageType& idFromName( const std::string& name ) const;
 
     std::string stats() const;
@@ -88,6 +89,7 @@ class MessageTypeSet {
       if ( myId ) {
         //std::cout << "registering message-type " << staticMessageName<Message>() << " with id " << myId.desc() << endl;
         ids_[ staticMessageName<Message>() ] = myId;
+	ids_[ typeid(Message).name() ] = myId;
         if ( types_.find( myId ) != types_.end() )
           delete types_[ myId ];
         types_[ myId ] = new MessageFactory<Message>();
@@ -116,7 +118,7 @@ class MessageTypeSet {
     }
     
     /**Returns a new correctly filled MessageInfo-structure, that also contains a vald UniqueId,
-     * by the name as which the message is registered.
+     * by the name as which the message is registered, or by the message's rtti-name.
      * */
     MessageInfo messageInfo(const char* name) const {
       return MessageInfo( idFromName( name ), currentUniqueMessageId_++ );

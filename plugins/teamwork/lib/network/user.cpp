@@ -16,6 +16,7 @@
 #include "serialization.h"
 
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/string.hpp>
 #include <boost/serialization/export.hpp> //must be included after archive-headers
 
 #include "user.h"
@@ -189,7 +190,7 @@ void User::setPassword( const string& password ) {
 INSTANTIATE_SERIALIZATION_FUNCTIONS( User )
 }
 
-///This should be done for each class derived from User, so it can correctly be serialized.
+///This should be done for each class derived from User, so it can correctly be serialized from a pointer.
 BOOST_CLASS_EXPORT_GUID( Teamwork::User, "Teamwork::User" )
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

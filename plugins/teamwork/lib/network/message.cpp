@@ -19,15 +19,18 @@ email                : david.nolden.kdevelop@art-master.de
 
 namespace Teamwork {
 
+MessageInfo::MessageInfo() : isReplyTo_( 0 ), uniqueId_( 0 ), deserialized_( false ) {
+}
+
 MessageInfo::MessageInfo( const MessageType& id, UniqueMessageId uniqueId ) : isReplyTo_( 0 ), uniqueId_( uniqueId ), deserialized_( false ) {
   id_ = id;
-  cout << "creating message-info normally";
+  //  cout << "creating message-info normally";
 }
 
 MessageInfo::MessageInfo( const MessageType& id, UniqueMessageId uniqueId, const SessionPointer& session, UniqueMessageId isReplyTo ) : isReplyTo_( isReplyTo ), uniqueId_( uniqueId ), deserialized_( false ) {
   id_ = id;
   session_ = session;
-  cout << "creating message-info normally";
+  //  cout << "creating message-info normally";
 }
 
 MessageInfo::~MessageInfo() {
@@ -129,8 +132,6 @@ MessageType::MessageType( InArchive& from ) : useFastId( false ) {
   serialize( from );
 }
 
-
-///Only compares the type-id, not the uniqueId
 bool MessageType::operator == ( const MessageType& rhs ) const {
   if ( useFastId && rhs.useFastId )
     return fastId_ == rhs.fastId_;

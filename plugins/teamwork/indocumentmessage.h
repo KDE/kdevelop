@@ -46,7 +46,7 @@ class InDocumentMessage : public KDevTeamworkTextMessage {
 
 	public:
 
-		InDocumentMessage( const Teamwork::MessageTypeSet& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context );
+		InDocumentMessage( const Teamwork::MessageConstructionInfo& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context );
 
 		InDocumentMessage( InArchive& from, const Teamwork::MessageInfo& info );
 

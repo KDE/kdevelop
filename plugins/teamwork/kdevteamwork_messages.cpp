@@ -21,6 +21,7 @@
 #include "network/teamworkserver.h"
 #include "network/teamworkclient.h"
 #include <boost/serialization/list.hpp>
+#include <boost/serialization/string.hpp>
 
 REGISTER_MESSAGE( KDevSystemMessage )
 REGISTER_MESSAGE( KDevTeamworkTextMessage )
@@ -29,7 +30,7 @@ EASY_IMPLEMENT_MESSAGE( CollaborationMessage )
 
 
 KDevSystemMessage::KDevSystemMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : SystemMessage( arch, info ) {}
-KDevSystemMessage::KDevSystemMessage( const Teamwork::MessageTypeSet& info, Message msg , const string& str ) : SystemMessage( info, ( Teamwork::SystemMessage::Message ) msg, str ) {}
+KDevSystemMessage::KDevSystemMessage( const Teamwork::MessageConstructionInfo& info, Message msg , const string& str ) : SystemMessage( info(this), ( Teamwork::SystemMessage::Message ) msg, str ) {}
 
 KDevSystemMessage::Message KDevSystemMessage::message() {
   return ( Message ) SystemMessage::message();
@@ -59,7 +60,7 @@ QString KDevSystemMessage::text() {
 
 typedef SafeSharedPtr<KDevSystemMessage> KDevSystemMessagePointer;
 
-KDevTeamworkTextMessage::KDevTeamworkTextMessage( const Teamwork::MessageTypeSet& info, const QString& text ) : TextMessage( info, text.toUtf8().data() ), creationTime_( QDateTime::currentDateTime() ), m_answered( false ) {}
+KDevTeamworkTextMessage::KDevTeamworkTextMessage( const Teamwork::MessageConstructionInfo& info, const QString& text ) : TextMessage( info(this), text.toUtf8().data() ), creationTime_( QDateTime::currentDateTime() ), m_answered( false ) {}
 
 KDevTeamworkTextMessage::KDevTeamworkTextMessage( InArchive& from, const Teamwork::MessageInfo& info ) : TextMessage( from, info ), m_answered( false ) {
   std::string date;
@@ -141,7 +142,7 @@ QIcon KDevTeamworkTextMessage::messageIcon() const {
     return cache( "text_message_out" );
 }
 
-ConnectionRequest::ConnectionRequest( const Teamwork::MessageTypeSet& info, const Teamwork::UserPointer& self, const Teamwork::UserPointer& target, const QString& text, KDevTeamwork* teamwork ) : KDevTeamworkTextMessage( info, text ), m_state( Waiting ), m_emitter( new SafeTeamworkEmitter( teamwork ) ) {
+ConnectionRequest::ConnectionRequest( const Teamwork::MessageConstructionInfo& info, const Teamwork::UserPointer& self, const Teamwork::UserPointer& target, const QString& text, KDevTeamwork* teamwork ) : KDevTeamworkTextMessage( info(this), text ), m_state( Waiting ), m_emitter( new SafeTeamworkEmitter( teamwork ) ) {
   Teamwork::UserPointer::Locked l = self;
   Teamwork::UserPointer::Locked tl = target;
   if ( l ) {

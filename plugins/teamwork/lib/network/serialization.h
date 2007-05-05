@@ -26,23 +26,28 @@
     extended_type_info_no_rtti<const T>
 */
 //#include <cc++/thread.h>
-#ifndef USE_TEXT_ARCHIVE
-#ifdef USE_POLYMORPHIC_ARCHIVE
-#include <boost/archive/polymorphic_binary_iarchive.hpp>
-#include <boost/archive/polymorphic_binary_oarchive.hpp>
-#else
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#endif
-#else
-#ifdef USE_POLYMORPHIC_ARCHIVE
-#include <boost/archive/polymorphic_text_iarchive.hpp>
-#include <boost/archive/polymorphic_text_oarchive.hpp>
-#else
+
+#ifdef USE_TEXT_ARCHIVE
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #endif
+
+#ifdef USE_POLYMORPHIC_ARCHIVE
+#include <boost/archive/polymorphic_iarchive.hpp>
+#include <boost/archive/polymorphic_oarchive.hpp>
 #endif
+
+#ifdef USE_BINARY_ARCHIVE
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#endif
+
+#ifdef USE_XML_ARCHIVE
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#endif
+
+
 //#include <boost/serialization/base_object.hpp>
 #include <boost/serialization/extended_type_info.hpp>
 //#include <boost/serialization/utility.hpp>

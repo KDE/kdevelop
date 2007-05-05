@@ -78,6 +78,9 @@ class MessageInfo {
     bool deserialized_;
   public:
 
+    //Only for temporary usage
+    MessageInfo();
+
     MessageInfo( InArchive& arch );
     MessageInfo( const MessageType& type, UniqueMessageId id );
     MessageInfo( const MessageType& type, UniqueMessageId id, const SessionPointer& session, UniqueMessageId isReplyTo = 0 );
@@ -158,6 +161,7 @@ class MessageInterface : public SafeShared /*, public virtual Serializable*/ {
 
     virtual ~MessageInterface();
     
+    ///This function is thread-safe
     virtual const char* name();
 
     ///This function must be implemented for all messages, it is atomatically cared about by the DECLARE_MESSAGE(..) macros etc.

@@ -23,6 +23,7 @@
 #include "kdevteamwork_helpers.h"
 #include "safesignaller.h"
 #include <boost/serialization/list.hpp>
+#include <boost/serialization/string.hpp>
 #include "qtserialization.h"
 
 Q_DECLARE_METATYPE( MessagePointer )

@@ -11,7 +11,7 @@ struct UserListMessage : public TeamworkMessage {
   DECLARE_MESSAGE( UserListMessage, TeamworkMessage, 2 );
   std::list<User> users;
 
-  UserListMessage( const MessageTypeSet& messageTypes, std::list<UserPointer> inUsers, const UserPointer& targetUser );
+  UserListMessage( const MessageConstructionInfo& messageTypes, std::list<UserPointer> inUsers, const UserPointer& targetUser );
 
   UserListMessage( InArchive& arch, const MessageInfo& info );
 

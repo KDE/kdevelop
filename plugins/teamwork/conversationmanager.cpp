@@ -1190,7 +1190,7 @@ QString InDocumentMessage::document() {
   return m_start.document();
 }
 
-InDocumentMessage::InDocumentMessage( const Teamwork::MessageTypeSet& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context ) : KDevTeamworkTextMessage( info, text ), m_start( startRef ), m_end( endRef ), m_context( ~context ) {}
+InDocumentMessage::InDocumentMessage( const Teamwork::MessageConstructionInfo& info, const QString& text, const InDocumentReference& startRef, const InDocumentReference& endRef, const QString& context ) : KDevTeamworkTextMessage( info(this), text ), m_start( startRef ), m_end( endRef ), m_context( ~context ) {}
 
 InDocumentMessage::InDocumentMessage( InArchive& from, const Teamwork::MessageInfo& info ) : KDevTeamworkTextMessage( from, info ) {
   serial( from );

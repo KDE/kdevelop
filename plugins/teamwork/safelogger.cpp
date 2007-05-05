@@ -38,7 +38,7 @@ Teamwork::LoggerPrinter SafeLogger::out( Teamwork::Logger::Level level ) {
   Teamwork::LoggerPrinter ret( m_logger, level );
   ret << logPrefix();
   uint sz = m_logSuffix.size();
-  for ( int a = 0; a < sz; a++ )
+  for ( uint a = 0; a < sz; a++ )
     ret << m_logSuffix[ a ];
   return ret;
 }
@@ -51,7 +51,7 @@ Teamwork::LoggerPrinter SafeLogger::err() {
   Teamwork::LoggerPrinter ret( m_logger, Teamwork::Logger::Error );
   ret << logPrefix();
   uint sz = m_logSuffix.size();
-  for ( int a = 0; a < sz; a++ )
+  for ( uint a = 0; a < sz; a++ )
     ret << m_logSuffix[ a ];
   return ret;
 }

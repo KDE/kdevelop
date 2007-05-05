@@ -15,7 +15,8 @@
 #ifndef NETWORKFWD_H
 #define NETWORKFWD_H
 
-//#define USE_POLYMORPHIC_ARCHIVE
+#define USE_POLYMORPHIC_ARCHIVE
+
 class MessageSerialization;
 class NormalSerialization;
 class BoostSerialization;
@@ -34,23 +35,17 @@ class WeakSafeSharedPtr;
 
 namespace boost {
   namespace archive {
-//     namespace detail {
-//       template<class Archive>
-//       class polymorphic_oarchive_impl;
-//       template<class Archive>
-//       class polymorphic_iarchive_impl;
-//     };
-//     class polymorphic_binary_oarchive;
-//     class polymorphic_binary_iarchive;
-
     class binary_oarchive;
     class binary_iarchive;
 
-/*    typedef detail::polymorphic_oarchive_impl< text_oarchive_impl<text_oarchive> > polymorphic_text_oarchive;
-    typedef detail::polymorphic_iarchive_impl< text_iarchive_impl<text_iarchive> > polymorphic_text_oarchive;
-    class polymorphic_text_iarchive;*/
     class text_oarchive;
     class text_iarchive;
+
+    class xml_oarchive;
+    class xml_iarchive;
+
+    class polymorphic_iarchive;
+    class polymorphic_oarchive;
   }
 }
 
@@ -83,23 +78,24 @@ namespace Teamwork {
 
   typedef WeakSafeSharedPtr<SessionInterface> WeakSessionPointer;
 
-  #ifndef USE_TEXT_ARCHIVE
-   #ifdef USE_POLYMORPHIC_ARCHIVE
-  typedef boost::archive::polymorphic_binary_oarchive OutArchive;
-  typedef boost::archive::polymorphic_binary_iarchive InArchive;
-  #else
+  #ifdef USE_BINARY_ARCHIVE
   typedef boost::archive::binary_oarchive OutArchive;
   typedef boost::archive::binary_iarchive InArchive;
   #endif
+  
+  #ifdef USE_POLYMORPHIC_ARCHIVE
+  typedef boost::archive::polymorphic_oarchive OutArchive;
+  typedef boost::archive::polymorphic_iarchive InArchive;
+  #endif
 
-  #else
-   #ifdef USE_POLYMORPHIC_ARCHIVE
-  typedef boost::archive::polymorphic_text_oarchive OutArchive;
-  typedef boost::archive::polymorphic_text_iarchive InArchive;
-  #else
+  #ifdef USE_TEXT_ARCHIVE
   typedef boost::archive::text_oarchive OutArchive;
   typedef boost::archive::text_iarchive InArchive;
   #endif
+  
+  #ifdef USE_XML_ARCHIVE
+  typedef boost::archive::xml_iarchive InArchive;
+  typedef boost::archive::xml_oarchive OutArchive;
   #endif
 
   MessageTypeSet& globalMessageTypeSet();

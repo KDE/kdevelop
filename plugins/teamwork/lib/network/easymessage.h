@@ -45,95 +45,95 @@ END()
 
 //These are class-initialization-declarations for with different redirections to Data / Parent
 //First: Total count of parameters, second: how many of them go into Data
-#define PARAMETER_SPLIT_0_0(Data, Parent) Data(), Parent( info )
-#define PARAMETER_SPLIT_0_1(Data, Parent) Data(), Parent( info )
-#define PARAMETER_SPLIT_0_2(Data, Parent) Data(), Parent( info )
-#define PARAMETER_SPLIT_0_3(Data, Parent) Data(), Parent( info )
-#define PARAMETER_SPLIT_0_4(Data, Parent) Data(), Parent( info )
-#define PARAMETER_SPLIT_0_5(Data, Parent) Data(), Parent( info )
+#define PARAMETER_SPLIT_0_0(Data, Parent) Data(), Parent( info(this) )
+#define PARAMETER_SPLIT_0_1(Data, Parent) Data(), Parent( info(this) )
+#define PARAMETER_SPLIT_0_2(Data, Parent) Data(), Parent( info(this) )
+#define PARAMETER_SPLIT_0_3(Data, Parent) Data(), Parent( info(this) )
+#define PARAMETER_SPLIT_0_4(Data, Parent) Data(), Parent( info(this) )
+#define PARAMETER_SPLIT_0_5(Data, Parent) Data(), Parent( info(this) )
 
-#define PARAMETER_SPLIT_1_0(Data, Parent) Data(), Parent( info, p1 )
-#define PARAMETER_SPLIT_1_1(Data, Parent) Data( p1 ), Parent( info )
-#define PARAMETER_SPLIT_1_2(Data, Parent) Data( p1 ), Parent( info )
-#define PARAMETER_SPLIT_1_3(Data, Parent) Data( p1 ), Parent( info )
-#define PARAMETER_SPLIT_1_4(Data, Parent) Data( p1 ), Parent( info )
-#define PARAMETER_SPLIT_1_5(Data, Parent) Data( p1 ), Parent( info )
+#define PARAMETER_SPLIT_1_0(Data, Parent) Data(), Parent( info(this), p1 )
+#define PARAMETER_SPLIT_1_1(Data, Parent) Data( p1 ), Parent( info(this) )
+#define PARAMETER_SPLIT_1_2(Data, Parent) Data( p1 ), Parent( info(this) )
+#define PARAMETER_SPLIT_1_3(Data, Parent) Data( p1 ), Parent( info(this) )
+#define PARAMETER_SPLIT_1_4(Data, Parent) Data( p1 ), Parent( info(this) )
+#define PARAMETER_SPLIT_1_5(Data, Parent) Data( p1 ), Parent( info(this) )
 
-#define PARAMETER_SPLIT_2_0(Data, Parent) Data(), Parent( info, p1, p2 )
-#define PARAMETER_SPLIT_2_1(Data, Parent) Data(p1), Parent( info, p2 )
-#define PARAMETER_SPLIT_2_2(Data, Parent) Data(p1, p2), Parent( info )
-#define PARAMETER_SPLIT_2_3(Data, Parent) Data(p1, p2), Parent( info )
-#define PARAMETER_SPLIT_2_4(Data, Parent) Data(p1, p2), Parent( info )
-#define PARAMETER_SPLIT_2_5(Data, Parent) Data(p1, p2), Parent( info )
+#define PARAMETER_SPLIT_2_0(Data, Parent) Data(), Parent( info(this), p1, p2 )
+#define PARAMETER_SPLIT_2_1(Data, Parent) Data(p1), Parent( info(this), p2 )
+#define PARAMETER_SPLIT_2_2(Data, Parent) Data(p1, p2), Parent( info(this) )
+#define PARAMETER_SPLIT_2_3(Data, Parent) Data(p1, p2), Parent( info(this) )
+#define PARAMETER_SPLIT_2_4(Data, Parent) Data(p1, p2), Parent( info(this) )
+#define PARAMETER_SPLIT_2_5(Data, Parent) Data(p1, p2), Parent( info(this) )
 
-#define PARAMETER_SPLIT_3_0(Data, Parent) Data(), Parent( info, p1, p2, p3 )
-#define PARAMETER_SPLIT_3_1(Data, Parent) Data(p1), Parent( info, p2, p3 )
-#define PARAMETER_SPLIT_3_2(Data, Parent) Data(p1, p2), Parent( info, p3 )
-#define PARAMETER_SPLIT_3_3(Data, Parent) Data(p1, p2, p3), Parent( info )
-#define PARAMETER_SPLIT_3_4(Data, Parent) Data(p1, p2, p3), Parent( info )
-#define PARAMETER_SPLIT_3_5(Data, Parent) Data(p1, p2, p3), Parent( info )
+#define PARAMETER_SPLIT_3_0(Data, Parent) Data(), Parent( info(this), p1, p2, p3 )
+#define PARAMETER_SPLIT_3_1(Data, Parent) Data(p1), Parent( info(this), p2, p3 )
+#define PARAMETER_SPLIT_3_2(Data, Parent) Data(p1, p2), Parent( info(this), p3 )
+#define PARAMETER_SPLIT_3_3(Data, Parent) Data(p1, p2, p3), Parent( info(this) )
+#define PARAMETER_SPLIT_3_4(Data, Parent) Data(p1, p2, p3), Parent( info(this) )
+#define PARAMETER_SPLIT_3_5(Data, Parent) Data(p1, p2, p3), Parent( info(this) )
 
-#define PARAMETER_SPLIT_4_0(Data, Parent) Data(), Parent( info, p1, p2, p3, p4 )
-#define PARAMETER_SPLIT_4_1(Data, Parent) Data(p1), Parent( info, p2, p3, p4 )
-#define PARAMETER_SPLIT_4_2(Data, Parent) Data(p1, p2), Parent( info, p3, p4 )
-#define PARAMETER_SPLIT_4_3(Data, Parent) Data(p1, p2, p3), Parent( info, p4 )
-#define PARAMETER_SPLIT_4_4(Data, Parent) Data(p1, p2, p3, p4), Parent( info )
-#define PARAMETER_SPLIT_4_5(Data, Parent) Data(p1, p2, p3, p4), Parent( info )
+#define PARAMETER_SPLIT_4_0(Data, Parent) Data(), Parent( info(this), p1, p2, p3, p4 )
+#define PARAMETER_SPLIT_4_1(Data, Parent) Data(p1), Parent( info(this), p2, p3, p4 )
+#define PARAMETER_SPLIT_4_2(Data, Parent) Data(p1, p2), Parent( info(this), p3, p4 )
+#define PARAMETER_SPLIT_4_3(Data, Parent) Data(p1, p2, p3), Parent( info(this), p4 )
+#define PARAMETER_SPLIT_4_4(Data, Parent) Data(p1, p2, p3, p4), Parent( info(this) )
+#define PARAMETER_SPLIT_4_5(Data, Parent) Data(p1, p2, p3, p4), Parent( info(this) )
 
-#define PARAMETER_SPLIT_5_0(Data, Parent) Data(), Parent( info, p1, p2, p3, p4, p5 )
-#define PARAMETER_SPLIT_5_1(Data, Parent) Data(p1), Parent( info, p2, p3, p4, p5 )
-#define PARAMETER_SPLIT_5_2(Data, Parent) Data(p1, p2), Parent( info, p3, p4, p5 )
-#define PARAMETER_SPLIT_5_3(Data, Parent) Data(p1, p2, p3), Parent( info, p4, p5 )
-#define PARAMETER_SPLIT_5_4(Data, Parent) Data(p1, p2, p3, p4), Parent( info, p5 )
-#define PARAMETER_SPLIT_5_5(Data, Parent) Data(p1, p2, p3, p4, p5), Parent( info )
+#define PARAMETER_SPLIT_5_0(Data, Parent) Data(), Parent( info(this), p1, p2, p3, p4, p5 )
+#define PARAMETER_SPLIT_5_1(Data, Parent) Data(p1), Parent( info(this), p2, p3, p4, p5 )
+#define PARAMETER_SPLIT_5_2(Data, Parent) Data(p1, p2), Parent( info(this), p3, p4, p5 )
+#define PARAMETER_SPLIT_5_3(Data, Parent) Data(p1, p2, p3), Parent( info(this), p4, p5 )
+#define PARAMETER_SPLIT_5_4(Data, Parent) Data(p1, p2, p3, p4), Parent( info(this), p5 )
+#define PARAMETER_SPLIT_5_5(Data, Parent) Data(p1, p2, p3, p4, p5), Parent( info(this) )
 
 #define EASY_CONSTRUCTOR(Name, Parent, index, Data, SplitPosition)                                   \
-inline Name( const Teamwork::MessageTypeSet& info ) : Data(), Parent( info ) {   \
+inline Name( const Teamwork::MessageConstructionInfo& info ) : Data(), Parent( info(this) ) {   \
 }                                                       \
 template<class Param1>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1 ) : PARAMETER_SPLIT_ ## 1 ## _ ## SplitPosition (Data,Parent)  {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1 ) : PARAMETER_SPLIT_ ## 1 ## _ ## SplitPosition (Data,Parent)  {   \
 }                                                       \
 template<class Param1>                                  \
-Name( const Teamwork::MessageTypeSet& info, const Param1& p1 ) : PARAMETER_SPLIT_ ## 1 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, const Param1& p1 ) : PARAMETER_SPLIT_ ## 1 ## _ ## SplitPosition (Data,Parent) {   \
 }                                                       \
 \
 template<class Param1, class Param2>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 template<class Param1, class Param2>                                  \
-Name( const Teamwork::MessageTypeSet& info, const Param1& p1, Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, const Param1& p1, Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 template<class Param1, class Param2>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, const Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, const Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 template<class Param1, class Param2>                                  \
-Name( const Teamwork::MessageTypeSet& info, const Param1& p1, const Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, const Param1& p1, const Param2& p2 ) : PARAMETER_SPLIT_ ## 2 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 \
 template<class Param1, class Param2, class Param3>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, Param2& p2, Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, Param2& p2, Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 template<class Param1, class Param2, class Param3>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 template<class Param1, class Param2, class Param3>                                  \
-Name( const Teamwork::MessageTypeSet& info, const Param1& p1, const Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, const Param1& p1, const Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 template<class Param1, class Param2, class Param3>                                  \
-Name( const Teamwork::MessageTypeSet& info, const Param1& p1, Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, const Param1& p1, Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 template<class Param1, class Param2, class Param3>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, const Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, const Param2& p2, const Param3& p3 ) : PARAMETER_SPLIT_ ## 3 ## _ ## SplitPosition (Data,Parent) {   \
 } \
 \
 template<class Param1, class Param2, class Param3, class Param4>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, Param2& p2, Param3& p3, Param4& p4 ) : PARAMETER_SPLIT_ ## 4 ## _ ## SplitPosition (Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, Param2& p2, Param3& p3, Param4& p4 ) : PARAMETER_SPLIT_ ## 4 ## _ ## SplitPosition (Data,Parent) {   \
 }                                 \
 template<class Param1, class Param2, class Param3, class Param4>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, Param2& p2, const Param3& p3, const Param4& p4 ) : PARAMETER_SPLIT_ ## 4 ## _ ## SplitPosition(Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, Param2& p2, const Param3& p3, const Param4& p4 ) : PARAMETER_SPLIT_ ## 4 ## _ ## SplitPosition(Data,Parent) {   \
 }                                 \
 template<class Param1, class Param2, class Param3, class Param4, class Param5>                                  \
-Name( const Teamwork::MessageTypeSet& info, Param1& p1, Param2& p2, Param3& p3, Param4& p4, Param5& p5 ) : PARAMETER_SPLIT_ ## 5 ## _ ## SplitPosition(Data,Parent) {   \
+Name( const Teamwork::MessageConstructionInfo& info, Param1& p1, Param2& p2, Param3& p3, Param4& p4, Param5& p5 ) : PARAMETER_SPLIT_ ## 5 ## _ ## SplitPosition(Data,Parent) {   \
 }           \
 /**/
 

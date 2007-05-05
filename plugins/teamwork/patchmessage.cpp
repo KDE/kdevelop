@@ -14,6 +14,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "network/serialization.h"
 #include <boost/serialization/list.hpp>
+#include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
 #include  <memory>
 
@@ -367,12 +368,6 @@ PatchRequestData::PatchRequestData( const LocalPatchSourcePointer& id, KDevTeamw
     ident_ = l->identity();
   }
 }
-
-/*
-PatchRequestMessage::PatchRequestMessage( const Teamwork::MessageTypeSet& info, const LocalPatchSource::Identity& id, KDevTeamwork* tw, RequestType requestType
- ) : PatchRequestData( id ), Precursor( info ),  emitter( new SafeTeamworkEmitter(tw), m_requestType( requestType ) ) {
-  }*/
-
 
 PatchDataReceiver::PatchDataReceiver( PatchData* d ) : data( d ) {}
 void PatchDataReceiver::receivedStdout( K3Process *proc, char *buffer, int buflen ) {

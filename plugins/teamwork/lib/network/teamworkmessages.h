@@ -21,6 +21,7 @@
 #include "binder.h"
 
 namespace Teamwork {
+
 /*
 vector<char> messageToData( MessageInterface* msg ) {
   vector<char> vec;
@@ -33,7 +34,7 @@ vector<char> messageToData( MessageInterface* msg ) {
 class TeamworkMessage : public RawMessage {
     DECLARE_MESSAGE( TeamworkMessage, RawMessage, 1 );
   public:
-    TeamworkMessage( const MessageTypeSet& messageTypes );
+    TeamworkMessage( const MessageConstructionInfo& messageTypes );
     TeamworkMessage( InArchive& arch, const MessageInfo& info );
 };
 
@@ -48,7 +49,7 @@ class IdentificationMessage : public TeamworkMessage {
 
   public:
 
-    IdentificationMessage( const MessageTypeSet& messageTypes, const User& user );
+    IdentificationMessage( const MessageConstructionInfo& messageTypes, const User& user );
 
     IdentificationMessage( InArchive& arch, const MessageInfo& info );
 
@@ -66,7 +67,7 @@ class ForwardMessage : public RawMessage {
     User source_;
     User target_;
   public:
-    ForwardMessage( const MessageTypeSet& messageTypes, MessageInterface* messageToForward, const User& source, const User& targ );
+    ForwardMessage( const MessageConstructionInfo& messageTypes, MessageInterface* messageToForward, const User& source, const User& targ );
 
     ForwardMessage( InArchive& arch, const MessageInfo& info );
 

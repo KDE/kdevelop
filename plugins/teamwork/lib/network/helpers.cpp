@@ -18,6 +18,22 @@
 #include "basicsession.h"
 #include "vector_stream.h"
 
+///We can choose an archive-type of our own
+#ifdef USE_POLYMORPHIC_ARCHIVE
+// #include <boost/archive/polymorphic_xml_iarchive.hpp>
+// #include <boost/archive/polymorphic_xml_oarchive.hpp>
+// typedef boost::archive::polymorphic_xml_iarchive InternalIArchive;
+// typedef boost::archive::polymorphic_xml_oarchive InternalOArchive;
+
+#include <boost/archive/polymorphic_text_iarchive.hpp>
+#include <boost/archive/polymorphic_text_oarchive.hpp>
+typedef boost::archive::polymorphic_text_iarchive InternalIArchive;
+typedef boost::archive::polymorphic_text_oarchive InternalOArchive;
+#else
+typedef IArchive InternalIArchive;
+typedef OArchive InternalOArchive;
+#endif
+
 std::string formatInt( int i ) {
   ostringstream o;
   o << i;
@@ -50,14 +66,14 @@ namespace Teamwork {
 
   MessagePointer buildMessageFromBuffer( const std::vector<char>& buf, MessageTypeSet& messages, SessionPointer sess ) {
     vector_read_stream str( buf );
-    InArchive arch( str );
+    InternalIArchive arch( str );
 
     return buildMessageFromArchive( arch, messages, sess );
   }
 
   void serializeMessageToBuffer( std::vector<char>& buf, MessageInterface& message ) {
     vector_stream str( buf );
-    OutArchive arch( str );
+    InternalOArchive arch( str );
 
     serializeMessageToArchive( arch, message );
   }

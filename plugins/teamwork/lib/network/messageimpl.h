@@ -31,25 +31,55 @@ class CustomMessage : public RawMessage {
   MyDataType myData;
   
   template<class Arch>
-  void ser( Arch& arch ) {
+  void serial( Arch& arch ) {
     arch & myData;
 }
   public:
 
-  CustomMessage( const MessageTypeSet& messageTypes, MyDataType& data ) :  RawMessage( info, id ), myData( data ) {
+  CustomMessage( const MessageConstructionInfo& info, MyDataType& data ) :  RawMessage( info(this) ), myData( data ) {
 }
 
   CustomMessage( InArchive& arch, const MessageInfo& info ) : RawMessage( arch, info ) {
-    ser( arch );
+    serial( arch );
 }
 
-  virtual bool serialize( OutArchive& arch ) {
-    if( !Precursor::serialize( arch ) ) return false;
-    ser( arch );
-    return true;
+  virtual void serialize( OutArchive& arch ) {
+    Precursor::serialize( arch );
+    serial( arch );
 }
 };
  */
+
+ class MessageConstructionInfo;
+ /**MessageConstructionInfo is a class used while constructing messages, that makes sure that the name of the most derived message will be passed on to RawMessage.
+  *Use it by simply passing the this-pointer of each constructed message while passing it to the parent-message. */
+
+ class MessageConstructionInfo {
+ public:
+   //This is the constructor you are supposed to use when creating a message(use the automatic conversion from MessageTypeSet&)
+   MessageConstructionInfo( const MessageTypeSet& rhs );
+
+   //Use this to pass MessageConstructionInfo up to the parent, giving "this" as argument.
+    template<class Message>
+    MessageConstructionInfo operator() (Message* ) const {
+      return MessageConstructionInfo( name_.empty() ? Message::staticName() : name_, typeSet_ );
+    }
+
+    const MessageTypeSet& typeSet() const;
+
+    const std::string name() const;
+
+    MessageInfo messageInfo() const;
+
+    //operator () must be used when passing the construction-info to the parent
+    MessageConstructionInfo( const MessageConstructionInfo& rhs );
+
+ private:
+    MessageConstructionInfo( const std::string& name, const MessageTypeSet& typeSet_ );
+    MessageConstructionInfo& operator=( const MessageConstructionInfo& );
+    std::string name_;
+    const MessageTypeSet& typeSet_;
+ };
 
   class RawMessage : public MessageInterface
   {
@@ -60,7 +90,7 @@ class CustomMessage : public RawMessage {
 
     public:
     
-      RawMessage( const MessageTypeSet& messageTypes, const DataVector& data );
+      RawMessage( const MessageConstructionInfo& messageTypes, const DataVector& data );
 
       ///This should be used to indicate that this message is a reply to the other message(replyTarget)
       void setReply( MessageInterface* replyTarget );
@@ -88,7 +118,7 @@ class CustomMessage : public RawMessage {
   class TextMessage : public RawMessage {
     DECLARE_MESSAGE( TextMessage, RawMessage, 3 );
     public:
-      TextMessage( const MessageTypeSet& messageTypes, const std::string& text = "" );
+      TextMessage( const MessageConstructionInfo& messageTypes, const std::string& text = "" );
       
       TextMessage( InArchive& from, const MessageInfo& info );
   
@@ -120,7 +150,7 @@ class CustomMessage : public RawMessage {
         arch & msg_;
       }
     public:
-      SystemMessage( const MessageTypeSet& messageTypes, Message msg, const string& ptext="" );
+      SystemMessage( const MessageConstructionInfo& messageTypes, Message msg, const string& ptext="" );
 
       SystemMessage( InArchive& arch, const MessageInfo& info );
 

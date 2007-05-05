@@ -28,6 +28,31 @@
 
 namespace Teamwork {
 
+  MessageConstructionInfo::MessageConstructionInfo( const std::string& name, const MessageTypeSet& typeSet ) : name_(name), typeSet_(typeSet) {
+  }
+
+  MessageConstructionInfo::MessageConstructionInfo( const MessageTypeSet& rhs ) : typeSet_( rhs ) {
+  };
+
+  const MessageTypeSet& MessageConstructionInfo::typeSet() const {
+    return typeSet_;
+  }
+
+  const std::string MessageConstructionInfo::name() const {
+    return name_;
+  }
+
+  MessageInfo MessageConstructionInfo::messageInfo() const {
+    return typeSet_.messageInfo( name_.c_str() );
+  }
+
+  MessageConstructionInfo::MessageConstructionInfo( const MessageConstructionInfo& rhs ) : name_( rhs.name_ ), typeSet_( rhs.typeSet_ ) {
+  };
+
+  MessageConstructionInfo& MessageConstructionInfo::operator=( const MessageConstructionInfo& ) {
+    return *this;
+  }
+
   template<class Archive>
   void MessageType::serialize( Archive& target, const uint /*version*/  ) {
     target & idList_;
@@ -36,7 +61,6 @@ namespace Teamwork {
 
   MessageInfo::MessageInfo( const MessageInfo& rhs ) {
     operator=( rhs );
-
   }
 
   MessageInfo& MessageInfo::operator = ( const MessageInfo& rhs ) {
@@ -138,7 +162,9 @@ void registerDefaultMessages( MessageTypeSet& target ) {
 }
 
 
-RawMessage::RawMessage( const MessageTypeSet& info, const DataVector& data ) : info_( info.messageInfo( name() ) ), body_( data ) {}
+RawMessage::RawMessage( const MessageConstructionInfo& info, const DataVector& data ) : body_( data ) {
+  info_ = info.messageInfo();
+}
 
 ///This should be used to indicate that this message is a reply to the other message(replyTarget)
 void RawMessage::setReply( MessageInterface* replyTarget ) {
@@ -177,7 +203,7 @@ const DataVector& RawMessage::body() const {
 }
 
 
-TextMessage::TextMessage( const MessageTypeSet& info, const std::string& text ) : RawMessage( info, DataVector() ) {
+TextMessage::TextMessage( const MessageConstructionInfo& info, const std::string& text ) : RawMessage( info(this), DataVector() ) {
   if ( text.length() == 0 )
     return ;
   body().resize( text.length() + 1 );
@@ -193,7 +219,7 @@ std::string TextMessage::text() const {
   return std::string( &( body() [ 0 ] ) );
 }
 
-SystemMessage::SystemMessage( const MessageTypeSet& info, Message msg, const string& ptext ) : TextMessage( info, ptext ), msg_( msg ) {}
+SystemMessage::SystemMessage( const MessageConstructionInfo& info, Message msg, const string& ptext ) : TextMessage( info(this), ptext ), msg_( msg ) {}
 
 SystemMessage::SystemMessage( InArchive& arch, const MessageInfo& info ) : TextMessage( arch, info ) {
   serial( arch );
@@ -237,10 +263,10 @@ string SystemMessage::messageAsString() {
 }
 
 
-TeamworkMessage::TeamworkMessage( const MessageTypeSet& info ) : RawMessage( info, DataVector() ) {}
+TeamworkMessage::TeamworkMessage( const MessageConstructionInfo& info ) : RawMessage( info(this), DataVector() ) {}
 TeamworkMessage::TeamworkMessage( InArchive& arch, const MessageInfo& info ) : RawMessage( arch, info ) {}
 
-IdentificationMessage::IdentificationMessage( const MessageTypeSet& info, const User& user ) : TeamworkMessage( info ), user_( user ) {}
+IdentificationMessage::IdentificationMessage( const MessageConstructionInfo& info, const User& user ) : TeamworkMessage( info(this) ), user_( user ) {}
 
 IdentificationMessage::IdentificationMessage( InArchive& arch, const MessageInfo& info ) : TeamworkMessage( arch, info ) {
   serial( arch );
@@ -256,7 +282,7 @@ void IdentificationMessage::serialize( OutArchive& arch ) {
 }
 
 
-ForwardMessage::ForwardMessage( const MessageTypeSet& info, MessageInterface* messageToForward, const User& source, const User& targ ) : RawMessage( info, DataVector( ) ), source_( source ), target_( targ ) {
+ForwardMessage::ForwardMessage( const MessageConstructionInfo& info, MessageInterface* messageToForward, const User& source, const User& targ ) : RawMessage( info(this), DataVector( ) ), source_( source ), target_( targ ) {
   serializeMessageToBuffer( body(), *messageToForward );
   source_.stripForTarget( target_ );
   target_.stripForIdentification();
@@ -291,7 +317,7 @@ bool ForwardMessage::storeOnServer() {
   return false;
 }
 
-UserListMessage::UserListMessage( const MessageTypeSet& info, list<UserPointer> inUsers, const UserPointer& targetUser ) : TeamworkMessage( info ) {
+UserListMessage::UserListMessage( const MessageConstructionInfo& info, list<UserPointer> inUsers, const UserPointer& targetUser ) : TeamworkMessage( info(this) ) {
   for ( list<UserPointer>::iterator it = inUsers.begin(); it != inUsers.end(); ++it ) {
     if ( *it == targetUser )
       continue;

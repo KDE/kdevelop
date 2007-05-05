@@ -62,7 +62,7 @@ class KDevSystemMessage : public SystemMessage {
   };
     KDevSystemMessage( InArchive& arch, const Teamwork::MessageInfo& info );
 
-    KDevSystemMessage( const Teamwork::MessageTypeSet& info, Message msg , const string& str = "" );
+    KDevSystemMessage( const Teamwork::MessageConstructionInfo& info, Message msg , const string& str = "" );
 
     Message message();
 
@@ -101,7 +101,7 @@ class KDevTeamworkTextMessage : public TextMessage, public AbstractGUIMessage {
     DECLARE_MESSAGE( KDevTeamworkTextMessage, TextMessage, 6 );
   public:
 
-    KDevTeamworkTextMessage( const Teamwork::MessageTypeSet& info, const QString& text );
+    KDevTeamworkTextMessage( const Teamwork::MessageConstructionInfo& info, const QString& text );
 
     KDevTeamworkTextMessage( InArchive& from, const Teamwork::MessageInfo& info );
 
@@ -146,7 +146,7 @@ class ConnectionRequest : public KDevTeamworkTextMessage {
       Unknown
   };
 
-    ConnectionRequest( const Teamwork::MessageTypeSet& info, const Teamwork::UserPointer& self, const Teamwork::UserPointer& target, const QString& text, KDevTeamwork* teamwork );
+    ConnectionRequest( const Teamwork::MessageConstructionInfo& info, const Teamwork::UserPointer& self, const Teamwork::UserPointer& target, const QString& text, KDevTeamwork* teamwork );
 
     ConnectionRequest( InArchive& arch, const Teamwork::MessageInfo& info );
 
