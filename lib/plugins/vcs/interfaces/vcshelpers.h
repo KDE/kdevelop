@@ -24,6 +24,9 @@
 namespace KDevelop
 {
 
+/**
+ * Status of a local file
+ */
 enum VcsState
 {
     Unknown         /**<No VCS information about a file is known (or file is not under VCS control).*/,
@@ -34,19 +37,27 @@ enum VcsState
     Deleted         /**<File or Directory is scheduled to be deleted. */,
 };
 
+/**
+ * Class that tells you what happened to a given repository location in a
+ * specific revision.
+ *
+ * Combinations of some of the flags are possible, for example add+modify,
+ * copy+modify or merge+modify
+ */
 enum VcsAction
 {
-    // TODO should this be ChildModified instead of None?
-    None            /**<Directory was not changed (only contents changed).*/,
-    Add             /**<File was added.*/,
-    Delete          /**<File was deleted.*/,
-    Edit            /**<File was edited.*/,
-    Copy            /**<File was copied.*/,
-    CopyWithEdit    /**<File was copied (and differs from the source).*/,
-    Merge           /**<File had changes merged into it.*/,
-    MergeWithEdit   /**<File had changes merged into it, and was also edited.*/,
+    ContentsModified     /**<Directory was not changed (only contents changed).*/,
+    Add                  /**<File was added.*/,
+    Delete               /**<File was deleted.*/,
+    Modified             /**<File was modified, for example by editing.*/,
+    Copy                 /**<File was copied.*/,
+    Merge                /**<File had changes merged into it.*/,
 };
+Q_DECLARE_FLAGS( VcsActions, VcsAction )
 
+/**
+ * Specify the type of difference the diff() method creates
+ */
 enum VcsDiffMode
 {
     DiffRaw         /**<Request complete copies of both items.*/,
@@ -54,6 +65,9 @@ enum VcsDiffMode
     DiffDontCare    /**<Don't care; plugin will return whichever is easiest.*/,
 };
 
+/**
+ * Encapsulates a vcs revision number, date or range of revisions
+ */
 class VcsRevision
 {
 public:
@@ -108,7 +122,7 @@ class VcsItemEvent
 public:
     KUrl repositoryLocation();
     KUrl repositoryCopySourceLocation(); // may be NULL
-    VcsAction action();
+    VcsActions actions();
 };
 
 /**
@@ -118,7 +132,7 @@ public:
 class VcsEvent
 {
 public:
-    KVcsRevision revision();
+    VcsRevision revision();
     QString user();
     QDate date();
     QString message();
@@ -127,13 +141,16 @@ public:
 
 /**
  * Small container class that contains information about a single change.
+ *
+ * The actions() will be the comined actions of all items. This corresponds to
+ * a cvs or svn commit for example.
  */
 class VcsChange
 {
-    KVcsRevision revision();
+    VcsRevision revision();
     QString user();
     QDate date();
-    VcsAction action();
+    VcsActions actions();
     QString message();
     QList<VcsItemEvent> items();
 };
@@ -141,6 +158,7 @@ class VcsChange
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::MappingFlags )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsActions )
 
 #endif
 
