@@ -46,10 +46,14 @@ PartDocument::~PartDocument()
 QWidget *PartDocument::createViewWidget(QWidget */*parent*/)
 {
     KParts::Part *part = Core::self()->partController()->createPart(url());
-    Core::self()->partController()->addPart(part);
-    QWidget *w = part->widget();
-    d->partForView[w] = part;
-    return w;
+    if( part )
+    {
+        Core::self()->partController()->addPart(part);
+        QWidget *w = part->widget();
+        d->partForView[w] = part;
+        return w;
+    }
+    return 0;
 }
 
 KParts::Part *PartDocument::partForView(QWidget *view) const

@@ -182,7 +182,7 @@ KParts::Part* PartController::createPart( const KUrl & url )
             "KParts::ReadWritePart", "KParts::ReadOnlyPart"
         };
     KParts::Factory *editorFactory = 0;
-    for ( uint i = 0; i < 4; ++i )
+    for ( uint i = 0; i < 2; ++i )
     {
         editorFactory = findPartFactory( mimeType->name(), services[ i ] );
         if ( editorFactory )
