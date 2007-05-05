@@ -45,14 +45,14 @@ enum VcsAction
     CopyWithEdit    /**<File was copied (and differs from the source).*/,
     Merge           /**<File had changes merged into it.*/,
     MergeWithEdit   /**<File had changes merged into it, and was also edited.*/,
-}
+};
 
 enum VcsDiffMode
 {
     DiffRaw         /**<Request complete copies of both items.*/,
     DiffUnified     /**<Request copy of first item with diff.*/,
     DiffDontCare    /**<Don't care; plugin will return whichever is easiest.*/,
-}
+};
 
 class VcsRevision
 {
