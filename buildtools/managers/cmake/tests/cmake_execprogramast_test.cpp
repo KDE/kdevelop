@@ -34,6 +34,31 @@ void ExecProgramAstTest::testGoodParse()
 
 void ExecProgramAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2, func3, func4;
+    func1.name = "exec_program";
+    func2.name = func1.name.toUpper();
+    func3.name = func4.name = func1.name;
+
+    QStringList argList1, argList2, argList3, argList4;
+    argList1 << "myExec";
+    argList2 = argList1;
+    argList2 << "myRunDir";
+    argList3 = argList1;
+    argList3 << "ARGS" << "arg1" << "arg2";
+    argList4 = argList1;
+    argList4 << "RETURN_VALUE" << "myReturnVar";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+    func3.addArguments( argList3 );
+    func4.addArguments( argList4 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good 1" ) << func1;
+    QTest::newRow( "good 2" ) << func2;
+    QTest::newRow( "good 3" ) << func3;
+    QTest::newRow( "good 4" ) << func4;
+
 }
 
 void ExecProgramAstTest::testBadParse()
@@ -46,6 +71,18 @@ void ExecProgramAstTest::testBadParse()
 
 void ExecProgramAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "wrong_name_here";
+    func2.name = "exec_program";
+
+    QStringList argList1;
+    argList1 << "myExec";
+
+    func1.addArguments( argList1 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad 1" ) << func1;
+    QTest::newRow( "bad 2" ) << func2;
 }
 
 #include "cmake_execprogramast_test.moc"
