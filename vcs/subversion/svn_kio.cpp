@@ -594,6 +594,7 @@ void kio_svnProtocol::mkdir( const KURL::List& list, int /*permissions*/ ) {
 	if ( err ) {
 		error( KIO::ERR_COULD_NOT_MKDIR, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+        return;
 	}
 
 	finished();
@@ -618,6 +619,7 @@ void kio_svnProtocol::mkdir( const KURL& url, int /*permissions*/ ) {
 	if ( err ) {
 		error( KIO::ERR_COULD_NOT_MKDIR, err->message );
 		svn_pool_destroy (subpool);
+        return;
 	}
 
 	finished();
@@ -642,6 +644,7 @@ void kio_svnProtocol::del( const KURL& url, bool /*isfile*/ ) {
 	if ( err ) {
 		error( KIO::ERR_CANNOT_DELETE, err->message );
 		svn_pool_destroy (subpool);
+        return;
 	}
 
 	finished();
@@ -689,6 +692,7 @@ void kio_svnProtocol::rename(const KURL& src, const KURL& dest, bool /*overwrite
 	if ( err ) {
 		error( KIO::ERR_CANNOT_RENAME, err->message );
 		svn_pool_destroy (subpool);
+		return;
 	}
 
 	finished();
@@ -1104,6 +1108,7 @@ void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int re
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+        return;
 	}
 
 	finished();
@@ -1217,6 +1222,7 @@ void kio_svnProtocol::svn_diff(const KURL & url1, const KURL& url2,int rev1, int
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+		return;
 	}
 	//read the content of the outfile now
 	QStringList tmp;
@@ -1266,6 +1272,7 @@ void kio_svnProtocol::svn_switch( const KURL& wc, const KURL& repos, int revnumb
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit( err->message ) );
 		svn_pool_destroy (subpool);
+        return;
 	}
 
 	finished();
@@ -1287,6 +1294,7 @@ void kio_svnProtocol::svn_switch_relocate( const KURL &wc, const KURL &origUrl, 
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit( err->message ) );
 		svn_pool_destroy (subpool);
+        return;
 	}
 	m_counter = 0L;
 	setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "string",
@@ -1368,6 +1376,7 @@ void kio_svnProtocol::checkout( const KURL& repos, const KURL& wc, int revnumber
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, err->message );
 		svn_pool_destroy (subpool);
+        return;
 	}
 
 	finished();
@@ -1402,6 +1411,7 @@ void kio_svnProtocol::commit2(bool recurse, bool keeplocks, const KURL::List& wc
 		svn_strerror(err->apr_err, errbuf, 512);
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) + "\n: " +  QString::fromLocal8Bit(errbuf) );
 		svn_pool_destroy (subpool);
+		return;
 	}
 
 	if ( commit_info ) {
@@ -1535,6 +1545,7 @@ void kio_svnProtocol::wc_status2(const KURL& wc, bool checkRepos, bool fullRecur
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+        return;
 	}
 
 	finished();
@@ -1559,6 +1570,7 @@ void kio_svnProtocol::svn_info( KURL pathOrUrl, int pegRev, QString pegRevKind, 
     if ( err ){
         error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
+        return;
     }
     svn_pool_destroy( subpool );
     finished();
