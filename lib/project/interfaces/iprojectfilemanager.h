@@ -19,8 +19,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef IFILEMANAGER_H
-#define IFILEMANAGER_H
+#ifndef IPROJECTFILEMANAGER_H
+#define IPROJECTFILEMANAGER_H
 
 #include <QtCore/QStringList>
 

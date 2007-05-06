@@ -19,8 +19,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef IBUILDABLEMANAGER_H
-#define IBUILDABLEMANAGER_H
+#ifndef IBUILDSYSTEMMANAGER_H
+#define IBUILDSYSTEMMANAGER_H
 
 #include "iprojectfilemanager.h"
 #include "kdevexport.h"
