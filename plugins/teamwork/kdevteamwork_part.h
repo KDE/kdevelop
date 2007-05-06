@@ -19,6 +19,7 @@
 
 #include <iplugin.h>
 
+class KDevTeamworkViewFactory;
 class KUrl;
 class QModelIndex;
 class KDevTeamwork;
@@ -59,6 +60,11 @@ public:
 
     virtual void savePartialProjectSession(QDomElement* el);
 
+    void setView( QWidget* view );
+
+      // KDevelop::Plugin methods
+    virtual void unload();
+
     signals:
     void refresh();
 
@@ -73,7 +79,8 @@ private:
     KDevelop::IProject* m_currentProject;
     static KDevTeamworkPart* m_self;
     QPointer<KDevTeamwork> m_teamwork;
-    QWidget* m_window;
+    QPointer<QWidget> m_window;
+    KDevTeamworkViewFactory* m_factory;
 };
 
 #endif

@@ -32,11 +32,11 @@ QString currentDocumentPath() {
 
   KTextEditor::Document* doc = d->textDocument();
   if ( !doc )
-    throw QString( "no active text-document" );
+    throw QString( "active document is no text-document" );
 
   KTextEditor::View* view = doc->activeView();
   if ( !view )
-    throw QString( "no active view" );
+    throw QString( "no active document-view" );
 
   return TeamworkFolderManager::workspaceRelative( d->url() );
 }

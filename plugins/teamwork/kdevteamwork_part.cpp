@@ -38,6 +38,7 @@
 #include <icore.h>
 #include <iprojectcontroller.h>
 #include <iproject.h>
+#include <iuicontroller.h>
 
 // #include <kplugininfo.h>
 
@@ -46,16 +47,42 @@ KDevTeamworkPart* KDevTeamworkPart::m_self = 0;
  typedef KGenericFactory<KDevTeamworkPart> KDevTeamworkFactory;
  K_EXPORT_COMPONENT_FACTORY( kdevteamwork, KDevTeamworkFactory( "kdevteamwork" ) )
 
+class KDevTeamworkViewFactory : public KDevelop::IToolViewFactory
+{
+public:
+    KDevTeamworkViewFactory(KDevTeamworkPart *part): m_part(part) {}
+
+    virtual QWidget* create(QWidget *parent = 0)
+    {
+        QWidget* view = new QWidget(parent);
+        view->setObjectName("Teamwork");
+        view->setWindowTitle(i18n("Teamwork"));
+        m_part->setView( view );
+        return view;
+    }
+
+    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+private:
+    KDevTeamworkPart *m_part;
+};
+
+void KDevTeamworkPart::unload()
+{
+    core()->uiController()->removeToolView(m_factory);
+}
+
 KDevTeamworkPart::KDevTeamworkPart( QObject *parent,
                                     const QStringList& )
-    : KDevelop::IPlugin( KDevTeamworkFactory::componentData(), parent ), m_currentProject( 0 )
+    : KDevelop::IPlugin( KDevTeamworkFactory::componentData(), parent ), m_currentProject( 0 ), m_window(0), m_factory( new KDevTeamworkViewFactory(this) )
 {
     m_self = this;
     setXMLFile( "kdevteamwork.rc" );
-    
-    QWidget *window = new QWidget;
-    
-    m_window = window;
+    core()->uiController()->addToolView(i18n("Teamwork"), m_factory);
+    m_window = 0;
 
     connect( core()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ), this, SLOT( projectOpened( KDevelop::IProject* ) ) );
     connect( core()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), this, SLOT( projectClosed( KDevelop::IProject* ) ) );
@@ -66,17 +93,28 @@ KDevelop::ICore * KDevTeamworkPart::staticCore( )
   return m_self->core();
 }
 
+void KDevTeamworkPart::setView( QWidget* view ) {
+    KDevelop::IProject* oldProject = m_currentProject;
+    destroyTeamwork();
+    m_window = view;
+
+    if( oldProject )
+        startTeamwork( oldProject );
+}
+
 void KDevTeamworkPart::destroyTeamwork() {
     delete m_teamwork;
     m_teamwork = 0;
     m_currentProject = 0;
-    m_window->hide();
+    if( m_window )
+        m_window->hide();
 }
 
 void KDevTeamworkPart::startTeamwork( KDevelop::IProject* project ) {
     destroyTeamwork();
-    m_teamwork = new KDevTeamwork( project->folder(), this, m_window );
     m_currentProject = project;
+    if( !m_window ) return;
+    m_teamwork = new KDevTeamwork( project->folder(), this, m_window );
     m_window->show();
 }
 

@@ -229,7 +229,7 @@ class PatchesManagerMessage : public SystemMessage
 	PatchesManagerMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {
 	}
 
-	PatchesManagerMessage( const Teamwork::MessageConstructionInfo& info, Message msg = None ) : Precursor( info, (SystemMessage::Message)msg, "" ) {
+	PatchesManagerMessage( const Teamwork::MessageConstructionInfo& info, Message msg = None ) : Precursor( info(this), (SystemMessage::Message)msg, "" ) {
 	}
 
 	Message message() {
@@ -255,7 +255,7 @@ class PatchesListMessage : public PatchesManagerMessage
 
 		PatchesListMessage( InArchive& arch, const Teamwork::MessageInfo& info );
 
-		PatchesListMessage( const Teamwork::MessageConstructionInfo& info, list<LocalPatchSourcePointer>& _patches ) : Precursor( info, None ) {
+		PatchesListMessage( const Teamwork::MessageConstructionInfo& info, list<LocalPatchSourcePointer>& _patches ) : Precursor( info(this), None ) {
 			for( list<LocalPatchSourcePointer>::iterator it = _patches.begin(); it != _patches.end(); ++it ) {
 				LocalPatchSourcePointer::Locked l = *it;
 				if( l ) {

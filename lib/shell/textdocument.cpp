@@ -91,6 +91,11 @@ TextDocument::~TextDocument()
     delete d;
 }
 
+KTextEditor::Document *TextDocument::textDocument() const
+{
+    return d->document;
+}
+
 QWidget *TextDocument::createViewWidget(QWidget *parent)
 {
     if (!d->document)

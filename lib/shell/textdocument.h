@@ -44,6 +44,8 @@ public:
 
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
+    virtual KTextEditor::Document* textDocument() const;
+
 private:
     Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
     Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
