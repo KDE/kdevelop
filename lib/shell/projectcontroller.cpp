@@ -40,6 +40,7 @@ Boston, MA 02110-1301, USA.
 
 #include "core.h"
 #include "iplugin.h"
+#include "iprojectfilemanager.h"
 #include "project.h"
 #include "mainwindow.h"
 #include "projectmodel.h"
@@ -81,9 +82,20 @@ public:
 
         m_cfgDlgs[proj]->show();
     }
-    QStringList findPluginsForProject( IProject* )
+    QStringList findPluginsForProject( IProject* project )
     {
-        return m_core->pluginControllerInternal()->allPluginNames();
+//         return QStringList();
+        QList<IPlugin*> plugins = m_core->pluginControllerInternal()->loadedPlugins();
+        QStringList pluginnames;
+        for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); it++ )
+        {
+            IPlugin* plugin = *it;
+            IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
+            if( !iface || plugin == project->managerPlugin() )
+                pluginnames << m_core->pluginController()->pluginInfo( plugin )->name();
+        }
+
+        return pluginnames;
     }
 };
 
