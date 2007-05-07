@@ -33,14 +33,21 @@ public:
     /**
      * Retrieve the history of the repository location
      *
-     * @param limit show at most this many entries
+     * @param rev List @p rev and earlier. The default is HEAD.
+     * @param limit Restrict to the most recent @p limit entries. Note that the
+     * limit is @e advisory and may be ignored.
      */
-    virtual VcsJob log( const QString& repoLocation, unsigned long limit ) = 0;
+    virtual VcsJob log( const QString& repoLocation,
+                        const VcsRevision& rev,
+                        unsigned int limit ) = 0;
 
     /**
      * Show the history of the repository location
+     *
+     * @param rev List @p rev and earlier. The default is HEAD.
      */
-    virtual VcsJob showLog( const QString& repoLocation ) = 0;
+    virtual VcsJob showLog( const QString& repoLocation,
+                            const VcsRevision& rev ) = 0;
 
     /**
      * Retrieve a file from the repository without checking it out

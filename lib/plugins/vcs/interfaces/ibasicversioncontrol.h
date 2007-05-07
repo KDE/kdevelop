@@ -131,9 +131,10 @@ public:
      * conflicts a merge needs to be executed separately
      *
      * @param localLocation the local files/dirs that should be updated
-     * @param rev Update to this revision, if rev is a range the VcsJob will
-     * immediately return with an error
-     * @param recursion defines wether the directories should be updated recursively
+     * @param rev Update to this revision. The operation will fail if @p rev is
+     * a range.
+     * @param recursion defines wether the directories should be updated
+     * recursively
      *
      */
     virtual VcsJob update( const KUrl::List& localLocations,
@@ -184,14 +185,21 @@ public:
     /**
      * Retrieve the history of a given local url
      *
-     * @param limit show at most this many entries
+     * @param rev List @p rev and earlier. The default is HEAD.
+     * @param limit Restrict to the most recent @p limit entries. Note that the
+     * limit is @e advisory and may be ignored.
      */
-    virtual VcsJob log( const KUrl& localLocation, unsigned long limit ) = 0;
+    virtual VcsJob log( const KUrl& localLocation,
+                        const VcsRevision& rev,
+                        unsigned long limit ) = 0;
 
     /**
      * Show the history of a given local url
+     *
+     * @param rev List @p rev and earlier. The default is HEAD.
      */
-    virtual VcsJob showLog( const KUrl& localLocation ) = 0;
+    virtual VcsJob showLog( const KUrl& localLocation
+                            const VcsRevision& rev ) = 0;
 
     /**
      * merge/integrate the changes between src and dest into the given local file
