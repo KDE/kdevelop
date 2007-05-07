@@ -116,7 +116,9 @@ public:
 
 /**
  * Small container class that contains information about a history event of a
- * single repository item.
+ * single repository item. This class contains information that is common to a
+ * VcsEvent (which represents a single item) and a VcsChange (which may have
+ * information about several items).
  */
 class VcsItemEvent
 {
@@ -151,7 +153,6 @@ class VcsChange
     VcsRevision revision();
     QString user();
     QDate date();
-    VcsActions actions();
     QString message();
     QList<VcsItemEvent> items();
 };
