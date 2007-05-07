@@ -25,7 +25,6 @@
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
-#include <QtDesigner/QExtensionFactory>
 
 #include <kurl.h>
 #include <kio/job.h>
@@ -54,7 +53,7 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent,
     Q_ASSERT(i);
     if( i )
     {
-        m_builder = i->extension<IQMakeBuilder>();
+       m_builder = i->extension<IQMakeBuilder>();
     }
 }
 
@@ -168,27 +167,6 @@ KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* it
     Q_UNUSED(item)
     return KUrl::List();
 }
-/*
-QStringList QMakeProjectManager::extensions() const
-{
-    return QStringList() << "IBuildSystemManager" << "IProjectFileManager";
-}
-
-
-void QMakeProjectManager::registerExtensions()
-{
-    extensionManager()->registerExtensions( new QMakeProjectManagerIProjectFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->registerExtensions( new QMakeProjectManagerIBuildSystemManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
-}
-void QMakeProjectManager::unregisterExtensions()
-{
-    extensionManager()->unregisterExtensions( new QMakeProjectManagerIProjectFileManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IProjectFileManager ) );
-    extensionManager()->unregisterExtensions( new QMakeProjectManagerIBuildSystemManagerFactory(
-    extensionManager() ), Q_TYPEID( KDevelop::IBuildSystemManager ) );
-}*/
 
 #include "qmakemanager.moc"
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

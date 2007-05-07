@@ -58,6 +58,9 @@ namespace QMake
             explicit StatementAST( AST* parent = 0 );
     };
 
+    /**
+     * Represents a QMake Project file
+     */
     class QMAKEPARSER_EXPORT ProjectAST : public AST
     {
         public:
@@ -70,6 +73,9 @@ namespace QMake
             explicit ProjectAST( AST* parent = 0 );
             ~ProjectAST();
 
+            /**
+            * Returns the filename of the project file, or an empty string if the project was parser from a string
+            */
             QString filename() const;
             void insertStatement( int i, StatementAST* );
             void addStatement( StatementAST* );

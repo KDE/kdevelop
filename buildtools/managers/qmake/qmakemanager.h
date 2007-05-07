@@ -21,8 +21,8 @@
 #ifndef QMAKEMANAGER_H
 #define QMAKEMANAGER_H
 
-#include <ibuildsystemmanager.h>
-#include <iplugin.h>
+#include "ibuildsystemmanager.h"
+#include "iplugin.h"
 
 template <typename T> class QList;
 class QString;
@@ -48,8 +48,8 @@ class IProjectBuilder;
 class QMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
 Q_OBJECT
-Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
+Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
     QMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
 
@@ -89,9 +89,6 @@ public:
     virtual bool renameFile( KDevelop::ProjectFileItem*, const KUrl& ) { return false; }
     virtual bool renameFolder( KDevelop::ProjectFolderItem*, const KUrl&  ) { return false; }
 
-//     virtual void registerExtensions();
-//     virtual void unregisterExtensions();
-//     virtual QStringList extensions() const;
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
 
@@ -106,7 +103,7 @@ Q_SIGNALS:
                      KDevelop::ProjectFileItem* newFile);
 private:
 
-    IQMakeBuilder* m_builder;
+   IQMakeBuilder* m_builder;
 };
 
 #endif
