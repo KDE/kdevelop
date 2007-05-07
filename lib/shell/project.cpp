@@ -43,10 +43,11 @@
 #include <kio/jobclasses.h>
 #include <ktemporaryfile.h>
 
+#include "iprojectfilemanager.h"
+
 #include "core.h"
 #include "iplugin.h"
 #include "mainwindow.h"
-#include "iprojectfilemanager.h"
 #include "iprojectcontroller.h"
 #include "importprojectjob.h"
 #include "projectmodel.h"
@@ -254,7 +255,7 @@ bool Project::open( const KUrl& projectFileUrl )
     else
     {
         KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "project importing plugin doesn't support the IProjectFileManager interface." ) );
+                            i18n( "project importing plugin (%1) doesn't support the IProjectFileManager interface.", managerSetting ) );
         delete d->manager;
         d->manager = 0;
         return false;
