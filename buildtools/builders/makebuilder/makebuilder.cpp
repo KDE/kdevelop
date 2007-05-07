@@ -126,13 +126,12 @@ void MakeBuilder::commandFailed(const QString &command)
     }
 }
 
-KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
+KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* _item )
 {
     KUrl buildDir;
-    if( item->type() == KDevelop::ProjectBaseItem::Project )
+    if( _item->type() == KDevelop::ProjectBaseItem::Project )
     {
-        KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(item);
-
+        KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(_item);
         KDevelop::IPlugin *plugin = item->project()->managerPlugin();
         KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
         if( bldMan )
@@ -140,13 +139,13 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
         else
             buildDir = item->url();
     }
-    else if( item->type() == KDevelop::ProjectBaseItem::Target )
+    else if( _item->type() == KDevelop::ProjectBaseItem::Target )
     {
-        KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
+        KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(_item);
         // get top build directory, specified by build system manager
-        KDevelop::IPlugin *plugin = item->project()->managerPlugin();
+        KDevelop::IPlugin *plugin = _item->project()->managerPlugin();
         KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
-        KDevelop::ProjectItem *prjItem = item->project()->projectItem();
+        KDevelop::ProjectItem *prjItem = _item->project()->projectItem();
         KUrl topBldDir;
         // ### buildDirectory only takes ProjectItem as an argument. Why it can't be
         // any ProjectBaseItem?? This will make the algorithms belows much easier
