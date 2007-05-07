@@ -126,26 +126,26 @@ void MakeBuilder::commandFailed(const QString &command)
     }
 }
 
-KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* _item )
+KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
 {
     KUrl buildDir;
-    if( _item->type() == KDevelop::ProjectBaseItem::Project )
+    if( item->type() == KDevelop::ProjectBaseItem::Project )
     {
-        KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(_item);
-        KDevelop::IPlugin *plugin = item->project()->managerPlugin();
+        KDevelop::ProjectItem* prjitem = static_cast<KDevelop::ProjectItem*>(item);
+        KDevelop::IPlugin *plugin = prjitem->project()->managerPlugin();
         KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
         if( bldMan )
-            buildDir = bldMan->buildDirectory( item ); // the correct build dir
+            buildDir = bldMan->buildDirectory( prjitem ); // the correct build dir
         else
-            buildDir = item->url();
+            buildDir = prjitem->url();
     }
-    else if( _item->type() == KDevelop::ProjectBaseItem::Target )
+    else if( item->type() == KDevelop::ProjectBaseItem::Target )
     {
-        KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(_item);
+        KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
         // get top build directory, specified by build system manager
-        KDevelop::IPlugin *plugin = _item->project()->managerPlugin();
+        KDevelop::IPlugin *plugin = targetItem->project()->managerPlugin();
         KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
-        KDevelop::ProjectItem *prjItem = _item->project()->projectItem();
+        KDevelop::ProjectItem *prjItem = targetItem->project()->projectItem();
         KUrl topBldDir;
         // ### buildDirectory only takes ProjectItem as an argument. Why it can't be
         // any ProjectBaseItem?? This will make the algorithms belows much easier
