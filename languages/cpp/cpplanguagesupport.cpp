@@ -277,7 +277,7 @@ KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeN
             continue;
 
         KDevelop::IBuildSystemManager* buildManager =
-            dynamic_cast<KDevelop::IBuildSystemManager*>(project->fileManager());
+            project->managerPlugin()->extension<KDevelop::IBuildSystemManager>();
         if (!buildManager)
             continue;
         KDevelop::ProjectFileItem *file = project->fileForUrl(source);
