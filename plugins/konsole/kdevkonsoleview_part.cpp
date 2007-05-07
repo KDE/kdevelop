@@ -18,7 +18,29 @@
 #include "icore.h"
 #include "kdevkonsoleview.h"
 
-typedef KGenericFactory<KDevKonsoleViewPart> KonsoleViewFactory;
+class KonsoleViewFactory : public KGenericFactory<KDevKonsoleViewPart>
+{
+    public:
+        KonsoleViewFactory(const char* componentName = 0 )
+            : KGenericFactory<KDevKonsoleViewPart>( componentName )
+        {
+        }
+
+        KonsoleViewFactory(const KAboutData* data)
+            : KGenericFactory<KDevKonsoleViewPart>( data )
+        {
+        }
+
+        virtual QObject* createObject(QObject* parent, const char* className,
+                                      const QStringList& args)
+        {
+            KLibFactory * factory = KLibLoader::self() ->factory( "libkonsolepart" );
+            if( factory )
+                return KGenericFactory<KDevKonsoleViewPart>::createObject( parent,className,args );
+            return 0;
+        }
+};
+
 K_EXPORT_COMPONENT_FACTORY( kdevkonsoleview,
                             KonsoleViewFactory( "kdevkonsoleview" )  )
 
