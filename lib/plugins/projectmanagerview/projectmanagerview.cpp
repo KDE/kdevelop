@@ -96,11 +96,8 @@ public:
             }
             ProjectItem* prjitem = static_cast<ProjectItem*>(item);
             IProject* project = item->project();
-            IProjectFileManager* fmgr = project->fileManager();
-            IBuildSystemManager* mgr;
-            mgr = dynamic_cast<IBuildSystemManager*>( fmgr );
-            if( !mgr )
-                mgr = static_cast<IBuildSystemManager*>( fmgr );
+            IPlugin* fmgr = project->managerPlugin();
+            IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
             if( mgr )
             {
                 IProjectBuilder* builder = mgr->builder( prjitem );
