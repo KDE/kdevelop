@@ -15,6 +15,6 @@ namespace SumTree {
       virtual void notifyFlexibleTextReplace( int position, int length, const StringType& replacement ) = 0;
       virtual ~FlexibleTextNotifier(){};
   };
-};
+}
 
 #endif
