@@ -18,10 +18,10 @@
  * 02110-1301, USA.
  */
 
-#ifndef IATOMICBROWSINGVERSIONCONTROL_H
-#define IATOMICBROWSINGVERSIONCONTROL_H
+#ifndef IATOMICBROWSABLEVERSIONCONTROL_H
+#define IATOMICBROWSABLEVERSIONCONTROL_H
 
-class IAtomicBrowsingVersionControl
+class IAtomicBrowsableVersionControl
 {
 public:
     /**
