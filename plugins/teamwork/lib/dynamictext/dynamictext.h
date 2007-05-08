@@ -72,7 +72,7 @@ class DynamicText : public SafeShared {
 
     /**Does the replacement precisely, considering the timestamp. Jumps back to the current state after inserting.
     * @param stamp The timestamp in whose context the replacement has to be done
-    * @param m_realReplaceents Stores all the real done replacements. not used. */
+    * @param replacement The replacement to do in the given timestamp. It will be stored.. */
     bool insert( const VectorTimestamp& stamp, const SimpleReplacement& replacement );
 
 		/**Inserts the replacement in the current context, using the given index, and returning the resulting identifying timestamp.
@@ -130,7 +130,7 @@ class DynamicText : public SafeShared {
 		Timestamp highestStamp( uint index ) const;
 
 		/**Returns the internal replacement-objects that can be used for example to disable
-		 * a single replacement. This is dangerous.
+		 * a single replacement. This is dangerous, they should not be altered.
 		 * @param primaryIndex index(user?)
 		 * @param stamp timestamp for that index
 		 * */
@@ -179,6 +179,7 @@ class DynamicText : public SafeShared {
     bool advanceInternal( const VectorTimestamp& state );
 
     ///The following are notification-functions that can be overriden by derived classes
+    ///To get notified about exact string-changes you can register a notifier to the FlexibleText returned by text().
     virtual void notifyInserted( const ReplacementPointer& rep );
     virtual void notifyStateChanged();
 

@@ -35,7 +35,7 @@ bool loadServerConfiguration( ServerConfiguration& conf ) {
     cout << "could not open config-file" << endl;
     return false;
   }
-  boost::archive::polymorphic_xml_iarchive arch( file );
+  boost::archive::polymorphic_text_iarchive arch( file );
   try {
   } catch( ... ) {
     cout << "error while reading the config-file" << endl;
@@ -62,7 +62,7 @@ bool saveServerConfiguration( ServerConfiguration& conf ) {
     return false;
   }
   /*boost::archive::polymorphic_text_oarchive*/
-  boost::archive::polymorphic_xml_oarchive arch( file );
+  boost::archive::polymorphic_text_oarchive arch( file );
   try {
   } catch( ... ) {
     cout << "error while loading the config-file" << endl;

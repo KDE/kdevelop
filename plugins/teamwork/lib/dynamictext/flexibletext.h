@@ -15,36 +15,44 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef FLEXIBLETEXT_H
 #define FLEXIBLETEXT_H
 
-#include <list>
-#include <sstream>
-#include <deque>
-#include "sumtree.h"
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/deque.hpp>
 #include <boost/serialization/string.hpp>
 #include <iostream>
+#include <list>
+#include <sstream>
+#include <deque>
+
+#include "sumtree.h"
+#include "flexibletextnotifier.h"
 
 namespace SumTree {
 
-/**This is a class that simulates a normal string, but is much more flexible and allows access using line/column- and index-information.
- * For big documents  that are edited it is much more efficient than a string, because much less allocation has to be done, because the
- * document is stored within smaller units.
- *
- * This class may throw DynamicTextError on errors.
- * */
-
+template<class Tp>
+class TemporaryExchange {
+  public:
+    TemporaryExchange( Tp& target, Tp newValue ) : target_(target), oldValue_(target) {
+      target_ = newValue;
+    }
+    ~TemporaryExchange() {
+      target_ = oldValue_;
+    }
+  private:
+    Tp& target_;
+    Tp oldValue_;
+};
 ///This is just a little helper that autmatically deleted unremoved members of a string-list on exceptions etc.
 ///If they should be used on elsewhere, they must be removed from this list.
 template <class StringList>
-struct AutoStringList {
-  AutoStringList( const StringList& rhs ) : list( rhs ) {}
+struct ManagedStringList {
+  ManagedStringList( const StringList& rhs ) : list( rhs ) {}
 
   void delete_front() {
     delete list.front();
     list.pop_front();
   }
 
-  ~AutoStringList() {
+  ~ManagedStringList() {
     for ( typename StringList::iterator it = list.begin(); it != list.end(); ++it ) {
       delete *it;
     }
@@ -56,19 +64,23 @@ struct AutoStringList {
   StringList list;
 };
 
-/** Any function in this class may throw DynamicTextError on error!
+/**This is a class that simulates a normal string, but is much more flexible and allows access using line/column- and index-information.
+ * For big documents that are edited it is much more efficient than a string, because much less allocation has to be done, since the
+ * document is internally stored within smaller units(divided into lines).
+ *
+ * Any function in this class may throw DynamicTextError on error!
  * */
+
 template <class String, class Char = char, Char lineBreak = '\n'>
 class FlexibleText {
   typedef std::deque<String*> StringVector;
   public:
     typedef std::list<String*> StringList;
-    typedef AutoStringList<StringList> AStringList;
 
-    FlexibleText( const String& text = "" ) {
+    FlexibleText( const String& text = "" ) : notify_(0) {
       build( text );
     }
-    
+
     ~FlexibleText() {
       deleteText();
     }
@@ -78,7 +90,7 @@ class FlexibleText {
 //       build( text );
 //     }
 
-    FlexibleText( const FlexibleText& rhs ) {
+    FlexibleText( const FlexibleText& rhs ) : notify_(0) {
       operator=( rhs );
     }
 
@@ -109,13 +121,46 @@ class FlexibleText {
     }
 
     
-    void replace( int position, int length, const String& replacement ) {
+    void replace( int position, int length, const String& replacement )
+    {
       ///Maybe implement this more efficiently as a single action
+      if( notify_ )
+        notify_->notifyFlexibleTextReplace( position, length, replacement );
+      TemporaryExchange< FlexibleTextNotifier<String>* > hideNotify( notify_, 0 );
+      
       SumTree::IndexAndSum s;
       lineColMap_.indexAndSum( position, s );
       int column = position - s.sum;
       erase( s.index, column, length );
       insert( s.index, column, replacement );
+    }
+
+    void insert( int position, const String& text )
+    {
+      if( notify_ )
+        notify_->notifyFlexibleTextInsert( position, text );
+      TemporaryExchange< FlexibleTextNotifier<String>* > hideNotify( notify_, 0 );
+      
+      SumTree::IndexAndSum s;
+      lineColMap_.indexAndSum( position, s );
+      insert( s.index, position - s.sum, text );
+    }
+
+    ///Remove 'length' charateres at position 'position'. remove and erase do the same, they are provided for compatibility with Qt and STL.
+    void remove( int position, int length ) {
+      return erase( position, length );
+    }
+    
+    ///Remove 'length' charateres at position 'position'. remove and erase do the same, they are provided for compatibility with Qt and STL.
+    void erase( int position, int length )
+    {
+      if( notify_ )
+        notify_->notifyFlexibleTextErase( position, length );
+      TemporaryExchange< FlexibleTextNotifier<String>* > hideNotify( notify_, 0 );
+      
+      SumTree::IndexAndSum s;
+      lineColMap_.indexAndSum( position, s );
+      erase ( s.index, position - s.sum, length );
     }
 
     String substr( int line, int column, int count ) const {
@@ -153,12 +198,6 @@ class FlexibleText {
       //lineColMap_ = lineColMap_.rebuild();
     }
 
-    void insert( int position, const String& text ) {
-      SumTree::IndexAndSum s;
-      lineColMap_.indexAndSum( position, s );
-      insert( s.index, position - s.sum, text );
-    }
-
     void checkConsistency() {
 #ifdef EXTREMEDEBUG
       int sum = 0;
@@ -178,7 +217,76 @@ class FlexibleText {
 #endif
     };
     
+    ///Returns the whole text as the normal string-representation
+    String text() const {
+      return substr( 0, 0, length() );
+    }
 
+    /*operator String() const {
+      return substr( 0, 0, length() );
+    }*/
+
+    std::string dump() const {
+      String ret;
+      int line = 0;
+      for( typename StringVector::const_iterator it = text_.begin(); it != text_.end(); ++it ) {
+        std::ostringstream os; os << "line " << line << "(len " << (*it)->length() << "): \"" << **it << "\"\n";
+        ret += os.str();
+        line++;
+      }
+      return ret;
+    }
+
+    std::string dumpTree() const {
+      return lineColMap_.dump();
+    }
+
+    template<class Archive>
+    void save( Archive& arch, const uint ) const {
+      int lines = text_.size();
+      arch << lines;
+      for( typename StringVector::const_iterator it = text_.begin(); it != text_.end(); ++it ) {
+        arch << **it;
+      }
+    }
+
+    template<class Archive>
+    void load( Archive& arch, const uint ) {
+      deleteText();
+
+      int lines;
+      arch >> lines;
+
+      for( int a = 0; a < lines; a++ ) {
+        String* s = new String();
+        arch >> *s;
+        text_.push_back( s );
+      }
+      rebuildTree();
+    }
+
+    ///Very inefficient, ranges should be used whenever possible
+    Char operator [] ( uint offset ) const {
+      IndexAndSum s;
+      lineColMap_.indexAndSum( offset, s );
+      return (*text_[s.index])[offset - s.sum];
+    }
+
+    /** Register a notifier that will be notified with ANY change to the text, exactly before the change is applied */
+    void registerNotifier( FlexibleTextNotifier<String>* notifier ) const {
+      notify_ = notifier;
+    };
+
+    /** unregister a previously registered notifier */
+    void unregisterNotifier() const {
+      notify_ = 0;
+    }
+
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
+  private:
+
+    ///Erase and insert could be public, the only problem is that the change-notification would become more complicated(currently notification is done in linear measure)
+    
     void insert( int line, int column, const String& text ) {
 #ifdef EXTREMDEBUG
       cout << "insertion at " << line << ":" << column << " length " << text.length() << " of \"" << text << "\"" << endl;
@@ -236,84 +344,8 @@ class FlexibleText {
       checkConsistency();
 #endif
     }
-
-#ifdef HONK
-    void oldInsert( int line, int column, const String& text ) {
-#ifdef EXTREMDEBUG
-      cout << "insertion at " << line << ":" << column << " length " << text.length() << " of \"" << text << "\"" << endl;
-      checkConsistency();
-#endif
-      char* c = &text[0];
-      uint len = text.length();
-      int currentStart = 0;
-
-      for ( uint a = 0; a < len; a++ ) {
-        if ( c[ a ] == lineBreak ) {
-          ret.push_back( new String( text.substr( currentStart, a - currentStart ) ) );
-          currentStart = a + 1;
-        }
-      }
-      //if ( currentStart != len )
-      ret.push_back( new String( text.substr( currentStart, len - currentStart ) ) );
-
-
-      if ( text.empty() )
-        return ;
-      AStringList newLines = split( text );
-      if ( newLines->empty() )
-        return ;
-
-      if ( newLines->size() == 1 ) {
-        ///Easy case: The text only needs to be inserted into the specific line
-        text_[ line ] ->insert( column, *newLines->front() );
-        lineColMap_.changeIndexValue( line, newLines->front() ->length() );
-#ifdef EXTREMDEBUG
-        checkConsistency();
-#endif
-        return ;
-      }
-
-      int removeLength = text_[ line ] ->length() - column;
-      DYN_VERIFY_SMALLERSAME( 0, removeLength );
-      ///Copy the last part of the line it is inserted to, and append it to the last line inserted.
-      ( newLines->back() ) ->append( text_[ line ] ->substr( column, removeLength ) );
-
-      ///Replace the removed part of the inserted-to line with the first inserted line
-      lineColMap_.changeIndexValue( line, newLines->front() ->length() - removeLength );
-      text_[ line ] ->replace( column, removeLength, *newLines->front() );
-      newLines.delete_front();
-
-      ///Now insert all other lines behind "line"
-      int l = line + 1;
-      /*uint needSize = newLines->size() + l;
-      if( text_.size() < needSize ) text_.resize( needSize );*/
-#ifdef EXTREMEDEBUG
-      checkConsistency();
-      cout << "text before: \n" << dump() << "offsets before: " << lineColMap_.dump() << endl;
-#endif
-      while ( !newLines->empty() ) {
-  lineColMap_.insertIndex( l, newLines->front() ->length() + 1 );
-  text_.insert( text_.begin() + l, newLines->front() );
-  newLines->pop_front();
-  l++;
-      }
-#ifdef EXTREMEDEBUG
-      cout << "text after: \n" << dump() << "offsets after: " << lineColMap_.dump() << endl;
-      checkConsistency();
-#endif
-    }
-#endif
-    
-    void remove( int position, int length ) {
-      return erase( position, length );
-    }
-    
-    void erase( int position, int length ) {
-      SumTree::IndexAndSum s;
-      lineColMap_.indexAndSum( position, s );
-      erase ( s.index, position - s.sum, length );
-    }
-
+        
+    ///Remove 'length' charateres in line 'line', starting at column 'column'. If the length is longer then the rest of the line, this will continue deleting in the next line.
     void erase( int line, int column, int length ) {
 #ifdef EXTREMEDEBUG
       cout << "erasing " << line << ":" << column << " length " << length << endl;
@@ -381,64 +413,7 @@ class FlexibleText {
       checkConsistency();
 #endif
     }
-
-    ///Returns the whole text as the normal string-representation
-    String text() const {
-      return substr( 0, 0, length() );
-    }
-
-    /*operator String() const {
-      return substr( 0, 0, length() );
-    }*/
-
-    std::string dump() const {
-      String ret;
-      int line = 0;
-      for( typename StringVector::const_iterator it = text_.begin(); it != text_.end(); ++it ) {
-        std::ostringstream os; os << "line " << line << "(len " << (*it)->length() << "): \"" << **it << "\"\n";
-        ret += os.str();
-        line++;
-      }
-      return ret;
-    }
-
-    std::string dumpTree() const {
-      return lineColMap_.dump();
-    }
-
-    template<class Archive>
-    void save( Archive& arch, const uint ) const {
-      int lines = text_.size();
-      arch << lines;
-      for( typename StringVector::const_iterator it = text_.begin(); it != text_.end(); ++it ) {
-        arch << **it;
-      }
-    }
-
-    template<class Archive>
-    void load( Archive& arch, const uint ) {
-      deleteText();
-
-      int lines;
-      arch >> lines;
-
-      for( int a = 0; a < lines; a++ ) {
-        String* s = new String();
-        arch >> *s;
-        text_.push_back( s );
-      }
-      rebuildTree();
-    }
-
-    ///Very inefficient
-    Char operator [] ( uint offset ) const {
-      IndexAndSum s;
-      lineColMap_.indexAndSum( offset, s );
-      return (*text_[s.index])[offset - s.sum];
-    }
-
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
-  private:
+    
     void deleteText() {
       for( typename StringVector::iterator it = text_.begin(); it != text_.end(); ++it ) {
         delete *it;
@@ -480,7 +455,7 @@ class FlexibleText {
 
     void build( const String& text ) {
       std::vector<int> length;
-      AStringList lines( split( text ) );
+      ManagedStringList<StringList> lines( split( text ) );
       int size = lines->size();
       length.resize( size );
 
@@ -500,11 +475,10 @@ class FlexibleText {
       return a < b ? a : b;
     }
 
-
+    mutable FlexibleTextNotifier<String>* notify_;
     StringVector text_; ///Not the most intelligent solution(some combination of maps and offset-maps would be perfect)
     SumTree::Map lineColMap_;
 };
-
 }
 
 template <class String, class Char, Char lineBreak>

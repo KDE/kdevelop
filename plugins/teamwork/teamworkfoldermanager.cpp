@@ -224,6 +224,7 @@ QString TeamworkFolderManager::workspaceRelative( const KUrl& url, const QString
   KUrl u = self()->m_workspaceDir;
   u.addPath( subfolder );
   u.adjustPath( KUrl::AddTrailingSlash );
+  //kDebug() << "workspaceRelative( " << url << ", " << subfolder << " ) called. Worspace: " << self()->m_workspaceDir << " base: " << u << " result: " << KUrl::relativeUrl( u, url ) << endl;
   return KUrl::relativeUrl( u, url );
 }
 

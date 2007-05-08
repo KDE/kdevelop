@@ -15,17 +15,21 @@ email                : david.nolden.kdevelop@art-master.de
 #ifndef DOCUMENT_WRAPPER_H
 #define DOCUMENT_WRAPPER_H
 
-#include "dynamictext/vectortimestamp.h"
 #include <QObject>
+#include <QFile>
+
+#include <KParts/MainWindow>
+#include <map>
+#include <string>
+
+#include "dynamictext/vectortimestamp.h"
+#include "dynamictext/flexibletextnotifier.h"
 #include "network/safesharedptr.h"
 #include "network/weaksafesharedptr.h"
 #include "safelogger.h"
-#include <map>
-#include <KParts/MainWindow>
 
 #include <autoconstructpointer.h>
 #include "filesynchronizemessage.h"
-#include <QFile>
 
 namespace Teamwork {
 class Logger;
@@ -71,7 +75,7 @@ class OutputFileWriter : public QObject {
 };
 
 ///A class that cares about the state of a document and it's history
-class DocumentWrapper : public QObject, public SafeLogger, public Shared {
+class DocumentWrapper : public QObject, public SafeLogger, public Shared, public SumTree::FlexibleTextNotifier<std::string> {
     Q_OBJECT
   public:
     ///If readFile is true, the file is read from disk. Else we wait for the file from the other side. May throw QString on error.
@@ -136,6 +140,12 @@ class DocumentWrapper : public QObject, public SafeLogger, public Shared {
     void textInserted ( KTextEditor::Document * document,
                         const KTextEditor::Range & range );
   private:
+    ///Notifications from FlexibleText
+    virtual void notifyFlexibleTextErase( int position, int length );
+    virtual void notifyFlexibleTextInsert( int position, const std::string& text );
+    virtual void notifyFlexibleTextReplace( int position, int length, const std::string& replacement );
+
+    
     int receiveMessage( FileEditMessage* msg );
     int receiveMessage( FileSynchronize* msg );
     int receiveMessage( FileEditRejectMessage* msg );

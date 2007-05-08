@@ -68,7 +68,7 @@ bool Map::hasIndex( int index ) const {
 void Map::indexAndSum( int sum, IndexAndSum& targ ) const {
   targ.index = 0;
   targ.sum = 0;
-  return tree_->indexAndSum( sum, targ );
+  tree_->indexAndSum( sum, targ );
 }
 
 int Map::index( int sum ) const {

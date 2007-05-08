@@ -255,6 +255,8 @@ std::string InDocumentConversation::logPrefix() {
 void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
   LogSuffix( "messageSelected: ", this );
   try {
+    m_selectNearestMessageTimer->stop();
+    
   if( !m_currentConnectedDocument )
     throw "no connected document";
 
@@ -1023,6 +1025,10 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
     err() << "This conversation is not active";
     return;
   }
+  if( !document ) {
+    err() << "got document-pointer with value zero";
+    return;
+  }
   if( !document->textDocument() || ! document->textDocument() ->activeView() ) {
     err() << "Document is no text-document";
     return ;
@@ -1072,29 +1078,21 @@ void InDocumentConversation::documentActivated( IDocument* document, const InDoc
              const KTextEditor::Range & ) ) );
   }
 
-  bool wasNewDocument = false;
-
-  if( m_currentConnectedDocument != doc ) {
-    wasNewDocument = true;
+  if( m_currentConnectedDocument != doc )
     m_currentSearchInstance = InDocumentReference::TextSearchInstance();
-  }
 
   m_currentConnectedDocument = doc;
 
   ///Determine the nearest message to the cursor
 
-  if( !msg ) {
-    err() << "no nearest message found";
-    return;
-  }
-
-  if( wasNewDocument )
+  if( msg ) {
+    ///Always re-embed, because it's possible that documentActivated was called earlier without a given message
     embedInView( doc ->activeView(), document, findPositionInDocument(  msg ) );
 
-  if( msg )
     messageSelected( msg );
-  else
+  } else {
     m_selectNearestMessageTimer->start( 300 );
+  }
 }
 
 void InDocumentConversation::setActive( bool active ) {
@@ -1109,7 +1107,8 @@ void InDocumentConversation::setActive( bool active ) {
     connect( docControl, SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( docControl, SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( manager() ->manager() ->teamwork(), SIGNAL( updateConnection( TeamworkClientPointer ) ), this, SLOT( updateAllUsers() ) );
-    documentActivated( docControl->activeDocument() );
+    if( docControl->activeDocument() )
+      documentActivated( docControl->activeDocument() );
   } else {
     if( m_currentConnectedDocument ) {
       if( m_currentConnectedDocument->activeView() )

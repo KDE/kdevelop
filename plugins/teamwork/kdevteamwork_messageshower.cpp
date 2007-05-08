@@ -161,8 +161,8 @@ KDevTeamworkUserInfoShower::KDevTeamworkUserInfoShower( KDevTeamworkUser* user, 
   setStatus();
   setIcon();
 
-  connect( m_widgetData.menuButton, SIGNAL( clicked() ), this, SLOT( menuButton() ) );
-  connect( m_widgetData.historyButton, SIGNAL( clicked() ), this, SLOT( historyButton() ) );
+  connect( m_widgetData.menuButton, SIGNAL( clicked(bool) ), this, SLOT( menuButton() ) );
+  connect( m_widgetData.historyButton, SIGNAL( clicked(bool) ), this, SLOT( historyButton() ) );
   connect( m_user.unsafe(), SIGNAL( userStateChanged( KDevTeamworkUserPointer ) ), this, SLOT( userStateChanged() ) );
 }
 

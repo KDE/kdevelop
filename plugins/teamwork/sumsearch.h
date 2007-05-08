@@ -24,7 +24,7 @@
 #define DEFAULTORDER 2
 
 
-///State-based-build can only nearly complete with extreme compiler-parameters set. Somehow it must be possible to make it faster.
+///State-based-build can only nearly complete with extreme compiler-parameters set, although it should theoretically be faster, if the compile would optimize it the right way.
 
 //#define STATEBASEDBUILD
 

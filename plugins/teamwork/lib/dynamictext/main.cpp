@@ -132,7 +132,26 @@ struct doubleText {
     //compare();
   }
   void compare() {
-    if ( flexText.text().length() != string.length() ) {
+    bool fail = false;
+    
+    
+    if ( flexText.text().length() != string.length() )
+      fail = true;
+
+    if( flexText.length() < 10000 ) {
+      //As long as the text is not big, check for line/column conversion consistency
+      int len = flexText.length();
+      for( int a = 0; a < len; a++ ) {
+        int line, column;
+        flexText.linearToLineColumn( a, line, column );
+        if( flexText.lineColumnToLinear( line, column ) != a ) {
+          cout << "linear to line/column-check: back-conversion failed at position " << a << endl;
+          fail = false;
+        }
+      }
+    }
+
+    if( fail ){
       cout << "error, last action: " << ( lastActionType ? "removal " : "insertion " ) << " of \"";
       if ( lastActionType )
         cout << lastLength;
@@ -156,6 +175,40 @@ void verifyFlexibleText() {
   bla.push_back( "hallo" );
   bla.push_back( "Ich bin der David" );
 
+  {
+    /*Text:
+a (length 2, total 2)
+b (length 3, total 5)
+ccc (length 4, total 9)
+    (length 1, total 10)
+dddd (length 5, total 15)
+
+     */
+    Text text( "a\nbb\nccc\n\ndddd\n" );
+    int line, column;
+    text.linearToLineColumn( 0, line, column );
+    DYN_VERIFY_SAME( line, 0 ); DYN_VERIFY_SAME( column, 0 );
+    
+    text.linearToLineColumn( 1, line, column );
+    DYN_VERIFY_SAME( line, 0 ); DYN_VERIFY_SAME( column, 1 );
+  
+    text.linearToLineColumn( 2, line, column );
+    DYN_VERIFY_SAME( line, 1 ); DYN_VERIFY_SAME( column, 0 );
+    
+    text.linearToLineColumn( 4, line, column );
+    DYN_VERIFY_SAME( line, 1 ); DYN_VERIFY_SAME( column, 2 );
+    
+    text.linearToLineColumn( 5, line, column );
+    DYN_VERIFY_SAME( line, 2 ); DYN_VERIFY_SAME( column, 0 );
+
+    text.remove( 3, 1 );
+    text.linearToLineColumn( 3, line, column );
+    DYN_VERIFY_SAME( line, 1 ); DYN_VERIFY_SAME( column, 1 );
+    
+    text.linearToLineColumn( 4, line, column );
+    DYN_VERIFY_SAME( line, 2 ); DYN_VERIFY_SAME( column, 0 );
+    cout << "Line-wrap tested ok" << endl;
+  };
 
   Text text( "hallo\nIch bin der David" );
   cout << text.text() << endl;
@@ -176,7 +229,7 @@ void verifyFlexibleText() {
   doubleText d( input );
   int cnt = 0;
 
-  for ( int b = 0; b < 1000000; b++ ) {
+  for ( int b = 0; b < 100000; b++ ) {
     ///remove a random small range
     if ( d.string.size() != 0 ) {
       uint remSize = rand() % 5;

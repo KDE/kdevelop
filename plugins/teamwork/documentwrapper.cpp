@@ -354,40 +354,84 @@ int DocumentWrapper::receiveMessage( FileEditMessage* msg ) {
       Block b( m_block );
       bool wasTail = m_text->state() == m_text->tailState();
       m_text->insert( emsg->timeStamp(), emsg->replacement() );
-      if ( wasTail )
+
+      if ( wasTail ) {
+        m_text->text().registerNotifier( this );
         m_text->changeState();
-    }
-
-    if ( m_document && m_document->textDocument() ) {
-      Block b( m_block );
-      int line, column;
-
-      m_text->text().linearToLineColumn( emsg->replacement().m_position, line, column );
-      if ( line == -1 || column == -1 ) {
-        err() << "receiveMessage( FileEditMessage ): could not convert index to cursor";
-        return 0;
+        m_text->text().unregisterNotifier();
       }
-
-      KTextEditor::Cursor start( line, column );
-
-      m_text->text().linearToLineColumn( emsg->replacement().m_position + emsg->replacement().m_oldText.length(), line, column );
-      if ( line == -1 || column == -1 ) {
-        err() << "receiveMessage( FileEditMessage ): could not convert index to cursor";
-        return 0;
-      }
-
-      KTextEditor::Cursor end( line, column );
-
-      m_document->textDocument() ->replaceText( KTextEditor::Range( start, end ), ~emsg->replacement().m_newText );
     }
 
   } catch ( const DynamicTextError & error ) {
     ///@todo error-handling
     err() << "receiveMessage( FileEditMessage " << msg->timeStamp() << " " << msg->replacement() << " ): " << error.what();
     globalMessageSendHelper().sendReply<FileEditRejectMessage>( msg, m_text->tailState(), id(), m_session->id() );
-
+    m_text->text().unregisterNotifier(); //@todo use a little wrapper-class for this
   }
   return 1;
+}
+
+void DocumentWrapper::notifyFlexibleTextErase( int position, int length ) {
+    if ( m_document && m_document->textDocument() ) {
+      Block b( m_block );
+      int line, column;
+
+      m_text->text().linearToLineColumn( position, line, column );
+      if ( line == -1 || column == -1 )
+        throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
+      
+      KTextEditor::Cursor start( line, column );
+
+      
+      m_text->text().linearToLineColumn( position + length, line, column );
+      
+      if ( line == -1 || column == -1 )
+        throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
+      
+      KTextEditor::Cursor end( line, column );
+
+      
+      m_document->textDocument() ->replaceText( KTextEditor::Range( start, end ), "" );
+    }
+}
+
+void DocumentWrapper::notifyFlexibleTextInsert( int position, const std::string& text ) {
+    if ( m_document && m_document->textDocument() ) {
+      Block b( m_block );
+      int line, column;
+
+      m_text->text().linearToLineColumn( position, line, column );
+      if ( line == -1 || column == -1 )
+        throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
+      
+      KTextEditor::Cursor start( line, column );
+
+      m_document->textDocument() ->replaceText( KTextEditor::Range( start, start ), toQ( text.c_str() ) );
+    }
+}
+
+void DocumentWrapper::notifyFlexibleTextReplace( int position, int length, const std::string& replacement ) {
+    if ( m_document && m_document->textDocument() ) {
+      Block b( m_block );
+      int line, column;
+
+      m_text->text().linearToLineColumn( position, line, column );
+      if ( line == -1 || column == -1 )
+        throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
+      
+      KTextEditor::Cursor start( line, column );
+
+      
+      m_text->text().linearToLineColumn( position + length, line, column );
+      
+      if ( line == -1 || column == -1 )
+        throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
+      
+      KTextEditor::Cursor end( line, column );
+
+      
+      m_document->textDocument() ->replaceText( KTextEditor::Range( start, end ), toQ( replacement.c_str() ) );
+    }
 }
 
 void DocumentWrapper::processMessage( DocumentWrapperMessage* msg ) {

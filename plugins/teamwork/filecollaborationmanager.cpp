@@ -57,16 +57,8 @@ CROSSMAP_KEY_EXTRACTOR( FileCollaborationSessionPointer, CollabSessionId, 0, val
  * - The client can only be part of one collaboration-session at a time.
  * - Once the session is closed, he is asked whether the result of the session should be stored as a diff-file to the patches-list.(that way it may be applied to the local tree)
  *
- * Implementation:
- * - An edit-position is sent as a fuzzy reference(using SumSearch).
- * - Some time-stamping would be very useful.
- * - When a client "Undo"'s, only his own changes should be undone.
- * - Conflicts should be detected and synchronized
+ * Implementation: See DynamicText
  *
- * */
-
-
-/**What's needed: A wrapper for KDocument that can retrieve the document-text for any given timestamp, allow to change it, and then to reapply it.
  * */
 
 /**Algorithm for the FileCollaboration:

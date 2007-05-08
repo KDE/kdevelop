@@ -197,8 +197,8 @@ void Server::closeSession( const SessionPointer& session ) {
     userDisconnected( sessions_[ session ] );
     userListDirty_ = true;
   }
+  unknownSessions_.erase( session.cast<MultiSession>() ); //do this before the next line, because the session may already be deleted
   sessions_.erase( session );
-  unknownSessions_.erase( session.cast<MultiSession>() );
 }
 
 MessageTypeSet& Server::messageTypes() {

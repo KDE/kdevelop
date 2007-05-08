@@ -29,7 +29,7 @@ struct DynamicTextError {
   std::string file;
   std::string expression;
   std::string realExpression;
-  DynamicTextError( const std::string& fun, int l, const std::string& f, const std::string& exp, const std::string& realExp = "" );
+  DynamicTextError( const std::string& fun, int l = 0, const std::string& f = "", const std::string& exp  = "", const std::string& realExp = "" );
   std::string what() const;
 };
 
