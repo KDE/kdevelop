@@ -1076,7 +1076,7 @@ void DynamicText::unHashReplacement( const ReplacementPointer& rep ) {
   m_allReplacements.remove( rep );
 }
 
-void DynamicText::notifyInserted( const ReplacementPointer& rep ) {}
+void DynamicText::notifyInserted( const ReplacementPointer& /*rep*/ ) {}
 
 void DynamicText::notifyStateChanged() {}
 

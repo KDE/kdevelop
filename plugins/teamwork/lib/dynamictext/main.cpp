@@ -133,8 +133,8 @@ struct doubleText {
   }
   void compare() {
     bool fail = false;
-    
-    
+
+
     if ( flexText.text().length() != string.length() )
       fail = true;
 
@@ -188,23 +188,23 @@ dddd (length 5, total 15)
     int line, column;
     text.linearToLineColumn( 0, line, column );
     DYN_VERIFY_SAME( line, 0 ); DYN_VERIFY_SAME( column, 0 );
-    
+
     text.linearToLineColumn( 1, line, column );
     DYN_VERIFY_SAME( line, 0 ); DYN_VERIFY_SAME( column, 1 );
-  
+
     text.linearToLineColumn( 2, line, column );
     DYN_VERIFY_SAME( line, 1 ); DYN_VERIFY_SAME( column, 0 );
-    
+
     text.linearToLineColumn( 4, line, column );
     DYN_VERIFY_SAME( line, 1 ); DYN_VERIFY_SAME( column, 2 );
-    
+
     text.linearToLineColumn( 5, line, column );
     DYN_VERIFY_SAME( line, 2 ); DYN_VERIFY_SAME( column, 0 );
 
     text.remove( 3, 1 );
     text.linearToLineColumn( 3, line, column );
     DYN_VERIFY_SAME( line, 1 ); DYN_VERIFY_SAME( column, 1 );
-    
+
     text.linearToLineColumn( 4, line, column );
     DYN_VERIFY_SAME( line, 2 ); DYN_VERIFY_SAME( column, 0 );
     cout << "Line-wrap tested ok" << endl;
@@ -302,12 +302,12 @@ void verifySumTree() {
     tree.removeIndex( 0 );
     tree.removeIndex( 0 );
     DYN_VERIFY_SAME( tree.indexValue( 0 ), 0 );
-    
+
   } catch ( DynamicTextError err ) {
   cout << "remove-index-test failed: " << err.what() << endl;
     terminate();
   }
-  
+
   int cycles = 3;
   for ( int a = 0; a < cycles; a++ ) {
     cout << "testing cycle " << a + 1 << endl;
@@ -422,7 +422,7 @@ void verifySumTree() {
     }
   }
 
-  
+
 }
 
 ///@todo create so automatic testing-algorithm that tests the system more intensively
@@ -678,7 +678,7 @@ void verifyOffsets() {
           int pos1 = rand() % 10;
           int off1 = rand() % 10;
           if( off1 < -pos1 ) off1 = pos1;
-          
+
           int pos2 = rand() % 10;
           int off2 = rand() % 10;
           if( off2 < -pos2 ) off2 = pos2;
@@ -796,7 +796,7 @@ void verifyOffsets() {
 }
 
 
-int main( int argc, char *argv[] ) {
+int main( int /* argc */, char /**argv[]*/ ) {
   verifySumTree();
   verifyFlexibleText();
   verifyOffsets();

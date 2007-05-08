@@ -35,5 +35,3 @@ TARGET_LINK_LIBRARIES( testexec dynamictext boost_thread dl ${ZLIB_LIBRARIES} )
 
 #ADD_DEPENDENCIES( testexec, dynamictext )
 
-#SET(CMAKE_CXX_FLAGS -fPIC)
-#SET(CMAKE_C_FLAGS -fPIC)

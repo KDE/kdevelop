@@ -83,7 +83,7 @@ Map::Map( const SumVector& summands ) {
 
 Map::~Map() {}
 
-Map::Map( const Map& rhs ) : tree_ ( new Node( *rhs.tree_ ) ) {}
+Map::Map( const Map& rhs ) : WeakShared(), tree_ ( new Node( *rhs.tree_ ) ) {}
 
 Map& Map::operator = ( const Map& rhs ) {
   tree_ = new Node( *rhs.tree_ );
@@ -105,17 +105,17 @@ bool Node::hasIndex( int indicesNeeded ) const {
       break;
     }
   }
-  
+
   if ( it != nodes_.end() ) {
     ///Ask the next one for the summ
     return ( *it ) ->hasIndex( indicesNeeded );
   }
-  
+
   if( !isRange() )
     if( indicesNeeded == 0 ) return true;
   else
     if( indicesNeeded < indexCount_ ) return true;
-  
+
   return false;
 }
 
@@ -160,11 +160,11 @@ int Node::setIndexValue( int indicesNeeded, int value ) {
     ( *it ) = ( *it ) ->makeOwn( this );
     return ( *it ) ->setIndexValue( indicesNeeded, value );
   }
-  
+
   if( !isRange() ) {
     DYN_VERIFY_SAME( indicesNeeded, 0 );
     DYN_VERIFY( isLeaf_ );
-    
+
     int ret = sum_;
     update( value - ret, 0 );
     return ret;
@@ -185,7 +185,7 @@ int Node::setIndexValue( int indicesNeeded, int value ) {
 int Node::changeIndexValue( int indicesNeeded, int value ) {
   ListType::iterator it = nodes_.begin(); ///Add all nodes whose upper bound is lower/same as index(they are completely in)
   ListType::iterator end = nodes_.end();
-  
+
   for ( ; it != end && indicesNeeded > 0 ; ++it ) {
     int itCount = ( *it ) ->indexCount();
     if ( itCount <= indicesNeeded ) {
@@ -205,7 +205,7 @@ int Node::changeIndexValue( int indicesNeeded, int value ) {
   if( !isRange() ) {
     DYN_VERIFY_SAME( indicesNeeded, 0 );
     DYN_VERIFY( isLeaf_ );
-    
+
     update( value, 0 );
     return sum_;
   } else {
@@ -330,7 +330,7 @@ void Node::insertIndex( int indicesNeeded, int value ) {
   if ( it == nodes_.end() || ( *it ) ->isLeaf() ) {
 
     bool range = isRange();
-    
+
     if ( indicesNeeded <= 1 || range ) {
       Node * n = new Node( true, this );
       if( range ) {
@@ -358,12 +358,12 @@ void Node::splitRange( int indicesNeeded, Node* insertNode ) {
   DYN_VERIFY_SAME( eachValue*indexCount_, sum_ );
   int r1Size = indicesNeeded;
   int r2Size = indexCount_ - indicesNeeded;
-  
+
   update( -sum_, -indexCount_ ); /*This should be done more efficiently with only one single update*/
   DYN_VERIFY_SAME( sum_, 0 );
   DYN_VERIFY_SAME( indexCount_, 0 );
           ///This makes this range-node a normal node.
-  
+
   Node * n;
 //         Add the first split-range
   if( r1Size ) {
@@ -372,10 +372,10 @@ void Node::splitRange( int indicesNeeded, Node* insertNode ) {
     ++nodeCount_;
     n->update( eachValue * r1Size, r1Size );
   }
-  
+
   nodes_.insert( nodes_.end(), NodePointer( insertNode ) );
   ++nodeCount_;
-  
+
         ///Add the second split-range
   if( r2Size ) {
     n = new Node( false, this );
@@ -383,7 +383,7 @@ void Node::splitRange( int indicesNeeded, Node* insertNode ) {
     ++nodeCount_;
     n->update( eachValue * r2Size, r2Size );
   }
-  
+
   DYN_VERIFY( !isRange() );
 }
 
@@ -397,7 +397,7 @@ void Node::insertRange( int indicesNeeded, int size, int value ) {
       break;
     }
   }
-  
+
   if ( it == nodes_.end() || ( *it ) ->isLeaf() ) {
     bool range = isRange();
     if ( indicesNeeded <= 1 || range ) {
@@ -412,7 +412,7 @@ void Node::insertRange( int indicesNeeded, int size, int value ) {
         nodes_.insert( it, NodePointer( n ) );
         ++nodeCount_;
       }
-      
+
       n->update( value*size, size );
     } else {
       ///There are still indices missing, they could be filled with zeroes
@@ -546,7 +546,7 @@ int Node::index( int sum ) const {
     return 0;
   } else {
     cout << nodes_.size() << endl;
- 
+
     DYN_VERIFY( isLeaf_ && sum == 0 );
   }
 }*/
