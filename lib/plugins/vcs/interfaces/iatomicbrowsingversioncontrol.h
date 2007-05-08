@@ -27,17 +27,18 @@ public:
     /**
      * retrieve the last revision in which the repository location was changed
      */
-    virtual VcsJob repositoryRevision( const QString& repoLocation, Revision::RevisionType ) = 0;
+    virtual VcsJob repositoryRevision( const QString& repoLocation,
+                                       VcsRevision::RevisionType ) = 0;
 
     /**
      * Get the changes made by a particular revision
      */
-    virtual VcsJob change( Revision ) = 0;
+    virtual VcsJob change( const VcsRevision& ) = 0;
 
     /**
      * Show the changes made by a particular revision
      */
-    virtual VcsJob showChange( Revision ) = 0;
+    virtual VcsJob showChange( const VcsRevision& ) = 0;
 };
 
 #endif

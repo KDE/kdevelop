@@ -80,12 +80,12 @@ public:
         Range
     };
     setRevisionValue( const QVariant& rev, RevisionType );
-    setSourceRevision( const Revision& );
-    setTargetRevision( const Revision& );
+    setSourceRevision( const VcsRevision& );
+    setTargetRevision( const VcsRevision& );
     RevisionType revisionType() const;
     QString revisionValue() const;
-    Revision sourceRevision() const;
-    Revision targetRevision() const;
+    VcsRevision sourceRevision() const;
+    VcsRevision targetRevision() const;
 };
 
 /**
