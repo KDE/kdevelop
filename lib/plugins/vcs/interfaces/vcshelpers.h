@@ -116,9 +116,7 @@ public:
 
 /**
  * Small container class that contains information about a history event of a
- * single repository item. This class contains information that is common to a
- * VcsEvent (which represents a single item) and a VcsChange (which may have
- * information about several items).
+ * single repository item.
  */
 class VcsItemEvent
 {
@@ -129,8 +127,12 @@ public:
 };
 
 /**
- * Small container class that contains information about a history event of a
- * single change concerning a particular repository item.
+ * Small container class that contains information about a single revision.
+ *
+ * @note log() only returns information about the specific item that was asked
+ * about. When working with a VCS that supports atomic commits (i.e. where a
+ * revision might affect more than one item), use change() to retrieve
+ * information about all items affected by a particular revision.
  */
 class VcsEvent
 {
@@ -139,21 +141,7 @@ public:
     QString user();
     QDate date();
     QString message();
-    VcsItemEvent item();
-};
-
-/**
- * Small container class that contains information about a single change.
- *
- * The actions() will be the comined actions of all items. This corresponds to
- * a cvs or svn commit for example.
- */
-class VcsChange
-{
-    VcsRevision revision();
-    QString user();
-    QDate date();
-    QString message();
+    VcsActions actions();
     QList<VcsItemEvent> items();
 };
 
