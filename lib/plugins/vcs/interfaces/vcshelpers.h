@@ -158,8 +158,8 @@ class VcsChange
 };
 
 /**
- * This class encapsulates running a vcs job. It allows to start a job and retrieve
- * results
+ * This class encapsulates running a vcs job. It allows to start a job and
+ * retrieve results
  *
  * @TODO: Should this stay an interface or do we just subclass KJob?
  */
@@ -168,7 +168,8 @@ class VcsJob
     /**
      * To easily check which type of job this is
      *
-     * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not QFlags!)
+     * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not
+     * QFlags!)
      */
     enum VcsJobType
     {
@@ -215,30 +216,42 @@ class VcsJob
 
         /**
          * Can be used to obtain an error message if the job exited with an error
-         * status. If there's no error or the job is not finished this is an
+         * status. If there is no error, or the job is not finished, this is an
          * empty string.
          */
         QString errorMessage();
 
     public Q_SLOTS:
         /**
-         * The job is not allowed to emit any signals until this method has been called.
-         * A plugin may either really start the job here or it may as well buffer any
-         * signals before start has been called.
+         * The job is not allowed to emit any signals until this method has been
+         * called. A plugin may either really start the job here, or it may
+         * buffer any signals before start has been called.
          */
         void start();
 
         /**
-         * This cancels the job, the job shall not emit any signals excep the finished()
-         * signal when the cancelling is done and any resources have been cleaned up
+         * This cancels the job. The job shall not emit any signals except the
+         * finished() signal when the cancelling is done and any resources have
+         * been cleaned up.
          */
         void cancel();
 
     Q_SIGNALS:
         /**
-         * this signal is emitted whenever new results are available
+         * This signal is emitted when new results are available. Depending on
+         * the plugin and the operation, it may be emitted only once when all
+         * results are ready, or several times.
          */
         void resultsReady( VcsJob* );
+
+        /**
+         * This signal is emitted when the job has completed. Depending on
+         * @p FinishStatus, this may mean that the job failed, succeeded, or has
+         * been fully cancelled.
+         *
+         * It is safe to delete the job once this signal has been emitted.
+         * job.
+         */
         void finished( VcsJob*, FinishStatus );
 };
 
