@@ -74,6 +74,14 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( AssignmentTest, quotedVal, "VARIABLE += \" value \"\n" )
 
+BEGINTESTFUNCIMPL( AssignmentTest, quotedValEscapeQuote, 1 )
+    QMake::AssignmentAST* assignment;
+    assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
+TESTASSIGNMENT( assignment, "VARIABLE", " += ", 1, "\" va\\\"lue \"" )
+ENDTESTFUNCIMPL
+
+DATAFUNCIMPL( AssignmentTest, quotedValEscapeQuote, "VARIABLE += \" va\\\"lue \"\n" )
+
 BEGINTESTFUNCIMPL( AssignmentTest, dotVariable, 1 )
     QMake::AssignmentAST* assignment;
     assignment = dynamic_cast<QMake::AssignmentAST*>( ast->statements().first() );
