@@ -202,8 +202,11 @@ class VcsJob
 
     public:
         /**
-         * This method will return all available results of the job. The actual
-         * data type that is wrapped in the QVariant depends on the type of job.
+         * This method will return all new results of the job. The actual data
+         * type that is wrapped in the QVariant depends on the type of job.
+         *
+         * @note Results returned by a previous call to fetchResults are not
+         * returned.
          */
         QVariant fetchResults();
 
