@@ -21,7 +21,8 @@
 #include "projecttreeview.h"
 #include "projectmanagerview_part.h"
 #include "projectmodel.h"
-
+#include "context.h"
+#include "iplugincontroller.h"
 #include <QtGui/QHeaderView>
 
 #include <icore.h>
@@ -161,25 +162,12 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 {
     QModelIndex index = indexAt( pos );
 
-    if ( ProjectBaseItem *item = projectModel()->item( index ) )
+    if ( KDevelop::ProjectBaseItem *item = projectModel()->item( index ) )
     {
         KMenu menu( this );
 
-        if ( ProjectFolderItem *folder = item->folder() )
-        {
-            menu.addTitle( i18n( "Folder: %1", folder->url().directory() ) );
-        }
-        else if ( ProjectFileItem *file = item->file() )
-        {
-            menu.addTitle( i18n( "File: %1", file->url().fileName() ) );
-        }
-        else if ( ProjectTargetItem *target = item->target() )
-        {
-            menu.addTitle( i18n( "Target: %1", target->text() ) );
-        }
-
-//       ProjectItemContext context(item);
-//       m_part->core()->mainWindow()->fillContextMenu(&menu, &context);
+        KDevelop::ProjectItemContext context(item);
+        d->m_part->core()->pluginController()->buildContextMenu(&context, &menu);
 
         menu.exec( mapToGlobal( pos ) );
     }

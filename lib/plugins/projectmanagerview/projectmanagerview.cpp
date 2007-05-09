@@ -87,23 +87,7 @@ public:
                 m_projectOverview->selectionModel()->currentIndex() );
         if( item )
         {
-            while( !item->type() == ProjectBaseItem::Project )
-            {
-                ProjectBaseItem* it = dynamic_cast<ProjectBaseItem*>(item->parent());
-                if( !it )
-                    return;
-                item = it;
-            }
-            ProjectItem* prjitem = static_cast<ProjectItem*>(item);
-            IProject* project = item->project();
-            IPlugin* fmgr = project->managerPlugin();
-            IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
-            if( mgr )
-            {
-                IProjectBuilder* builder = mgr->builder( prjitem );
-                if( builder)
-                  builder->build( item );
-            }
+            m_part->executeProjectBuilder( item );
         }
     }
 };

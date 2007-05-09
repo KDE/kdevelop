@@ -43,6 +43,8 @@ Boston, MA 02110-1301, USA.
 #include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kstaticdeleter.h>
+#include <kmenu.h>
+#include <QAction>
 
 #include "iplugin.h"
 #include "profileengine.h"
@@ -451,6 +453,27 @@ QStringList PluginController::allPluginNames()
         names << info->pluginName();
     }
     return names;
+}
+
+void PluginController::buildContextMenu( KDevelop::Context* context, KMenu* menu )
+{
+    Q_FOREACH( KPluginInfo* info, d->loadedPlugins.keys() )
+    {
+        IPlugin* plug = d->loadedPlugins[info];
+        QPair<QString, QList<QAction*> > actions = plug->requestContextMenuActions( context );
+        if( actions.first.isEmpty() || actions.second.isEmpty() )
+            continue;
+        if( actions.second.size() == 1 )
+        {
+            QAction* a = actions.second.first();
+            a->setText( a->text() + i18n( " (%1)", actions.first ) );
+            menu->addAction(a);
+        }else
+        {
+            QMenu* submenu = menu->addMenu( actions.first );
+            submenu->addActions( actions.second );
+        }
+    }
 }
 
 }

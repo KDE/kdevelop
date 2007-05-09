@@ -27,7 +27,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "kdevcontext.h"
+#include "context.h"
 
 #include <QDir>
 
@@ -125,45 +125,46 @@ const KUrl::List &FileContext::urls() const
     return d->m_urls;
 }
 
-class CodeItemContext::Private
-{
-public:
-    Private( const CodeItem* item ) : m_item( item )
-    {}
-
-    const CodeItem* m_item;
-};
-
-CodeItemContext::CodeItemContext( const CodeItem* item )
-        : Context(), d( new Private( item ) )
-{}
-
-CodeItemContext::~CodeItemContext()
-{
-    delete d;
-    d = 0;
-}
-
-int CodeItemContext::type() const
-{
-    return Context::CodeItemContext;
-}
-
-const CodeItem* CodeItemContext::item() const
-{
-    return d->m_item;
-}
+// Disabled until we have a code-model or duchain-model
+// class CodeItemContext::Private
+// {
+// public:
+//     Private( const CodeItem* item ) : m_item( item )
+//     {}
+//
+//     const CodeItem* m_item;
+// };
+//
+// CodeItemContext::CodeItemContext( const CodeItem* item )
+//         : Context(), d( new Private( item ) )
+// {}
+//
+// CodeItemContext::~CodeItemContext()
+// {
+//     delete d;
+//     d = 0;
+// }
+//
+// int CodeItemContext::type() const
+// {
+//     return Context::CodeItemContext;
+// }
+//
+// const CodeItem* CodeItemContext::item() const
+// {
+//     return d->m_item;
+// }
 
 class ProjectItemContext::Private
 {
 public:
-    Private( const ProjectItem* item ) : m_item( item )
+    Private( ProjectBaseItem* item ) : m_item( item )
     {}
 
-    const ProjectItem* m_item;
+    ProjectBaseItem* m_item;
 };
 
-ProjectItemContext::ProjectItemContext( const ProjectItem* item )
+ProjectItemContext::ProjectItemContext( ProjectBaseItem* item )
         : Context(), d( new Private( item ) )
 {}
 
@@ -178,7 +179,7 @@ int ProjectItemContext::type() const
     return Context::ProjectItemContext;
 }
 
-const ProjectItem* ProjectItemContext::item() const
+ProjectBaseItem* ProjectItemContext::item() const
 {
     return d->m_item;
 }

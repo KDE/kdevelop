@@ -4,8 +4,9 @@ include_directories(
 )
 
 set(kdevplatforminterfaces_LIB_SRCS
+    context.cpp
     iplugin.cpp
-	idocument.cpp
+    idocument.cpp
     icore.cpp
     iuicontroller.cpp
     iplugincontroller.cpp
@@ -24,6 +25,7 @@ set_target_properties(kdevplatforminterfaces PROPERTIES VERSION 4.0.0 SOVERSION 
 install(TARGETS kdevplatforminterfaces DESTINATION ${LIB_INSTALL_DIR} )
 
 install(FILES
+    context.h
     iplugin.h
     icore.h
     iuicontroller.h

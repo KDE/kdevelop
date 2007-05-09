@@ -27,13 +27,14 @@
 
 #include <QList>
 #include <QPointer>
+#include <QPair>
 #include <QtDesigner/QExtensionManager>
 #include "kdevexport.h"
 
 class QWidget;
 class KInstance;
 class KIconLoader;
-
+class QAction;
 
 /**
  * Current KDevelop plugin interface version. Interfaces declare plugin version
@@ -54,6 +55,7 @@ namespace KDevelop
 {
 
 class ICore;
+class Context;
 
 /**
  * The base class for all KDevelop plugins.
@@ -179,6 +181,8 @@ public:
     {
         return qt_extension<Extension*>( extensionManager(), this );
     }
+
+    virtual QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
 
 public Q_SLOTS:
     /**

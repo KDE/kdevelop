@@ -62,6 +62,11 @@ public:
     // Plugin methods
     virtual void unload();
 
+    QPair<QString, QList<QAction*> > requestContextMenuActions( Context* );
+
+
+    void executeProjectBuilder( KDevelop::ProjectBaseItem* );
+
 Q_SIGNALS:
     void refresh();
     void addedProjectItem(ProjectBaseItem *dom);
@@ -69,6 +74,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void openURL(const KUrl &url);
+    void executeContextMenuAction( const QString& objectname );
+    void buildSelectedItem();
     void updateDetails(ProjectBaseItem *item);
 
 protected:

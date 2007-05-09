@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevexport.h"
 
 class QExtensionManager;
+class KMenu;
 
 namespace KDevelop
 {
@@ -98,7 +99,7 @@ public:
     virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginname = "" ) = 0;
 
     virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints) = 0;
-    
+
      /**
      * Queries for the plugin which supports given extension interface and returns a pointer to the extension interface.
      * This is the difference between this method and pluginForExtension, what returns the plugin itself.
@@ -151,6 +152,8 @@ public:
     virtual QString changeProfile( const QString &newProfile ) = 0;
 
     virtual QExtensionManager* extensionManager() = 0;
+
+    virtual void buildContextMenu( KDevelop::Context*, KMenu* ) = 0;
 
 Q_SIGNALS:
     void loadingPlugin( const QString& );

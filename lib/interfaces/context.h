@@ -10,6 +10,7 @@ Copyright (C) 2003 Harald Fernengel <harry@kdevelop.org>
 Copyright (C) 2003,2006 Hamish Rodda <rodda@kde.org>
 Copyright (C) 2004 Alexander Dymo <adymo@kdevelop.org>
 Copyright (C) 2006 Adam Treat <treat@kde.org>
+Copyright (C) 2007 Andreas Pakulat <apaku@gmx.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -27,8 +28,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVCONTEXT_H
-#define KDEVCONTEXT_H
+#ifndef CONTEXT_H
+#define CONTEXT_H
 
 #include "kdevexport.h"
 
@@ -39,48 +40,49 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
-class CodeItem;
-class ProjectItem;
+// class CodeItem;
+class ProjectBaseItem;
 
 /**
 Base class for every context.
 Think of a Context-based class as "useful information associated with a context menu".
- 
+
 When a context menu with a certain "context" associated appears, the platform's
-MainWindow sends a notification signal and all plugins which receive this signal have
-the ability to add their own actions to the menu. For example, a SVN plugin could
-add "commit" and "update" actions to the context menu of a document.
- 
-<b>How to use show a context menu from a plugin:</b>
+PluginController requests all plugins to return a list of QActions* they want to add
+to the context menu and a QString that should be used as the submenu entry.
+For example, a SVN plugin could add "commit" and "update" actions to the context
+menu of a document in a submenu called "Subversion".
+
+The plugin that originally gets the contextmenu event shouldn't add its own
+actions directly to the menu but instead use the same mechanism.
+
+<b>How to show a context menu from a plugin:</b>
 -# Create a KMenu in context menu event handler: @code KMenu menu(this); @endcode
 -# Create a context: @code FileContext context(list). @endcode
--# Ask MainWindow to fill the menu:
-@code Core::mainWindow()->fillContextMenu(&menu, &context); @endcode
+-# Ask PluginController to fill the menu:
+@code core()->pluginController()->buildContextMenu(&menu, context); @endcode
 -# Show the popup menu: @code menu.exec(mapToGlobal(pos)); @endcode
- 
+
 <b>How to fill a context menu from a plugin:</b>
--# Create a @code contextMenu(KMenu *, const Context *) @endcode slot in your plugin class.
--# Connect MainWindow::contextMenu(KMenu *, const Context *) signal to that slot in
-the constructor of your plugin:\n
+-# Implement the @code requestContextMenuActions(const Context &) @endcode
+   function in your plugin class.
+-# Depending on the context return a pair of a submenu title and a list of
+   actions that should appear in the menu:\n
 @code
-connect(Core::mainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
-        this, SLOT(contextMenu(KMenu *, const Context *)));
-@endcode
--# Fill the menu in the slot you created, for example:\n
-@code
+QList<QAction*> actionlist;
 if (context->hasType(Context::EditorContext))
 {
-    menu->addAction(...);
+    actionlist << new QAction(...);
 }
 else if context->hasType(Context::FileContext))
 {
-    menu->addAction(...);
+    actionlist << new QAction(...);
     ...
 }
-...
+return qMakePair("Subversion", actionlist);
 @endcode
  */
-class KDEVPLATFORM_EXPORT Context
+class KDEVPLATFORMINTERFACES_EXPORT Context
 {
 public:
     /**Pre-defined context types. More may be added so it is possible to add custom
@@ -110,7 +112,7 @@ protected:
 };
 
 /**A context for the KTextEditor.*/
-class KDEVPLATFORM_EXPORT EditorContext: public Context
+class KDEVPLATFORMINTERFACES_EXPORT EditorContext: public Context
 {
 public:
     /**Builds a context for a KTextEditor part.
@@ -151,7 +153,7 @@ private:
 /**
 A context for the a list of selected urls.
  */
-class KDEVPLATFORM_EXPORT FileContext : public Context
+class KDEVPLATFORMINTERFACES_EXPORT FileContext : public Context
 {
 public:
     /**Builds the file context using a @ref KUrl::List
@@ -177,38 +179,39 @@ private:
 /**
 A context for CodeItem's.
  */
-class KDEVPLATFORM_EXPORT CodeItemContext: public Context
-{
-public:
-    /**Builds the context.
-    @param item The item to build the context from.*/
-    CodeItemContext( const CodeItem* item );
-
-    /**Destructor.*/
-    virtual ~CodeItemContext();
-
-    virtual int type() const;
-
-    /**@return The code model item for the selected item.*/
-    const CodeItem* item() const;
-
-private:
-    class Private;
-    Private *d;
-
-    CodeItemContext( const CodeItemContext & );
-    CodeItemContext &operator=( const CodeItemContext & );
-};
+// Disabled until we have a code-model or duchain-model
+//  class KDEVPLATFORMINTERFACES_EXPORT CodeItemContext: public Context
+// {
+// public:
+//     /**Builds the context.
+//     @param item The item to build the context from.*/
+//     CodeItemContext( const CodeItem* item );
+//
+//     /**Destructor.*/
+//     virtual ~CodeItemContext();
+//
+//     virtual int type() const;
+//
+//     /**@return The code model item for the selected item.*/
+//     const CodeItem* item() const;
+//
+// private:
+//     class Private;
+//     Private *d;
+//
+//     CodeItemContext( const CodeItemContext & );
+//     CodeItemContext &operator=( const CodeItemContext & );
+// };
 
 /**
 A context for ProjectItem's.
  */
-class KDEVPLATFORM_EXPORT ProjectItemContext : public Context
+class KDEVPLATFORMINTERFACES_EXPORT ProjectItemContext : public Context
 {
 public:
     /**Builds the context.
         @param item The item to build the context from.*/
-    ProjectItemContext( const ProjectItem* item );
+    ProjectItemContext( ProjectBaseItem* item );
 
     /**Destructor.*/
     virtual ~ProjectItemContext();
@@ -216,7 +219,7 @@ public:
     virtual int type() const;
 
     /**@return The project model item for the selected item.*/
-    const ProjectItem* item() const;
+    ProjectBaseItem* item() const;
 
 private:
     class Private;

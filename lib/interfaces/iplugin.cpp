@@ -85,10 +85,10 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
         KXMLGUIClient(), d( new IPluginPrivate )
 {
     // The following cast is safe, there's no component in KDevPlatform that
-    // creates plugins except the plugincontroller. The controller passes 
-    // Core::self() as parent to KServiceTypeTrader::createInstanceFromQuery 
+    // creates plugins except the plugincontroller. The controller passes
+    // Core::self() as parent to KServiceTypeTrader::createInstanceFromQuery
     // so we know the parent is always a Core* pointer.
-    // This is the only way to pass the Core pointer to the plugin during its 
+    // This is the only way to pass the Core pointer to the plugin during its
     // creation so plugins have access to ICore during their creation.
     d->core = static_cast<KDevelop::ICore*>(parent);
     setComponentData( instance );
@@ -179,6 +179,11 @@ void KDevelop::IPlugin::addExtension( const QString& ext )
     d->m_extensions << ext;
 }
 
+QPair<QString,QList<QAction*> > KDevelop::IPlugin::requestContextMenuActions(
+        KDevelop::Context* )
+{
+    return qMakePair(QString(),QList<QAction*>());
+}
 
 #include "iplugin.moc"
 

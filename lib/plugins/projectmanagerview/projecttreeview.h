@@ -67,7 +67,6 @@ class ProjectTreeView: public QTreeView
 
     private:
         class ProjectTreeViewPrivate* const d;
-        ProjectManagerViewPart *m_part;
 };
 
 }

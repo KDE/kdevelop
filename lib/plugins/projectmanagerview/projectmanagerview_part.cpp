@@ -30,6 +30,7 @@
 #include "iprojectbuilder.h"
 #include "iprojectcontroller.h"
 #include "importprojectjob.h"
+#include "context.h"
 
 #include <kservicetypetrader.h>
 #include <kgenericfactory.h>
@@ -44,6 +45,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QTimer>
 #include <QtCore/QList>
+#include <QtCore/QSignalMapper>
 
 namespace KDevelop
 {
@@ -71,13 +73,21 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 class ProjectManagerViewPartPrivate
 {
 public:
+    ProjectManagerViewPartPrivate() : build_objectname("projectmanagerview_buildaction")
+    {}
     KDevProjectManagerViewFactory *factory;
+    QMap<QString, Context*> contexts;
+    QSignalMapper* contextMenuMapper;
+    const QString build_objectname;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QStringList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPartPrivate)
 {
     d->factory = new KDevProjectManagerViewFactory( this );
+    d->contextMenuMapper = new QSignalMapper( this );
+    connect( d->contextMenuMapper, SIGNAL( mapped( const QString& ) ),
+             this, SLOT( executeContextMenuAction( const QString& ) ) );
     core()->uiController()->addToolView( "Project Manager", d->factory );
     setXMLFile( "kdevprojectmanagerview.rc" );
 }
@@ -142,6 +152,75 @@ void ProjectManagerViewPart::unload()
     core()->uiController()->removeToolView(d->factory);
 }
 
+QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActions( KDevelop::Context* context )
+{
+    if( context->type() == KDevelop::Context::ProjectItemContext )
+    {
+        QList<QAction*> actions;
+        KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+        KDevelop::ProjectBaseItem* item = ctx->item();
+        if ( KDevelop::ProjectFolderItem *folder = item->folder() )
+        {
+            actions << new QAction( i18n( "Folder: %1", folder->url().directory() ), this );
+            //executeProjectBuilder( item );
+            QAction* buildaction = new QAction( i18n( "Build this project" ), this );
+            buildaction->setObjectName(d->build_objectname);
+            d->contextMenuMapper->setMapping( buildaction, buildaction->objectName() );
+            QObject* o = d->contextMenuMapper->mapping( buildaction->objectName() );
+            kDebug() << "Mapping object:" << o << "|" << (o == buildaction) << endl;
+            d->contexts[buildaction->objectName()] = context;
+            kDebug() << "Context Map:" << d->contexts << "|" << d->contexts[buildaction->objectName()] << endl;
+            connect( buildaction, SIGNAL(triggered() ), d->contextMenuMapper, SLOT( map() ) );
+            // This is a workaround to show that the stuff is working, for some reason the signal mapper doesn't work atm
+            connect( buildaction, SIGNAL( triggered() ), this, SLOT( buildSelectedItem() ) );
+            actions << buildaction;
+        }
+        else if ( KDevelop::ProjectFileItem *file = item->file() )
+        {
+            actions << new QAction( i18n( "File: %1", file->url().fileName() ), this );
+        }
+        else if ( KDevelop::ProjectTargetItem *target = item->target() )
+        {
+            actions << new QAction( i18n( "Target: %1", target->text() ), this );
+        }
+        return qMakePair(QString("Project Management"), actions);
+    }
+    return IPlugin::requestContextMenuActions( context );
+}
+
+void ProjectManagerViewPart::executeContextMenuAction( const QString& objectname )
+{
+    if( !d->contexts.contains(objectname) )
+        return;
+    Context* ctxt = d->contexts[objectname];
+    if( ctxt && objectname == d->build_objectname &&
+        ctxt->type() == KDevelop::Context::ProjectItemContext )
+    {
+        ProjectItemContext* prjctxt = dynamic_cast<ProjectItemContext*>(ctxt);
+        executeProjectBuilder( prjctxt->item() );
+    }
+}
+
+void ProjectManagerViewPart::buildSelectedItem()
+{
+    kDebug() << "building selected item" << endl;
+}
+
+void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* item )
+{
+    if( !item )
+        return;
+    IProject* project = item->project();
+    ProjectItem* prjitem = project->projectItem();
+    IPlugin* fmgr = project->managerPlugin();
+    IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
+    if( mgr )
+    {
+        IProjectBuilder* builder = mgr->builder( prjitem );
+        if( builder)
+          builder->build( item );
+    }
+}
 }
 #include "projectmanagerview_part.moc"
 
