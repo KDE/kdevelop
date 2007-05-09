@@ -40,8 +40,6 @@ kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
 kde4_automoc(${kdevsubversion_PART_SRCS})
 kde4_add_plugin(kdevsubversion ${kdevsubversion_PART_SRCS})
 
-add_definitions (${APR_CPP_FLAGS})
-# set_target_properties(kdevsubversion PROPERTIES LINK_FLAGS "${APR_EXTRA_LIBFLAGS} ${APU_EXTRA_LIBFLAGS}")
 target_link_libraries(kdevsubversion
                     ${SUBVERSION_LIBRARIES}
                     ${QT_QTDESIGNER_LIBRARY}
