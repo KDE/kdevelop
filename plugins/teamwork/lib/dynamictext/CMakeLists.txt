@@ -1,6 +1,6 @@
 PROJECT( dynamictext )
 include_directories(
-        ${COMMONCPP2_INCLUDE_DIRS}/..
+        ${COMMONCPP2_INCLUDE_DIRS}
         ${Boost_INCLUDE_DIRS}
     )
 
