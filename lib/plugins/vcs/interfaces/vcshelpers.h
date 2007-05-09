@@ -42,8 +42,8 @@ enum VcsState
  * Class that tells you what happened to a given repository location in a
  * specific revision.
  *
- * Combinations of some of the flags are possible, for example add+modify,
- * copy+modify or merge+modify
+ * Combinations of some of the flags are possible, for example Add|Modified,
+ * Copy|Modified or Merge|Modified, or when returned from VcsEvent::actions().
  */
 enum VcsAction
 {
@@ -57,7 +57,9 @@ enum VcsAction
 Q_DECLARE_FLAGS( VcsActions, VcsAction )
 
 /**
- * Specify the type of difference the diff() method creates
+ * Specify the type of difference the diff() method should create. Note that a
+ * request for DiffUnified may not be honored, e.g. if the items being diffed are
+ * binary rather than text.
  */
 enum VcsDiffMode
 {
@@ -74,14 +76,24 @@ class VcsRevision
 public:
     enum RevisionType
     {
-        GlobalNumber    /**<Global repository version when file was last changed./*/,
+        Special         /**<One of the special versions in RevisionSpecialType.*/,
+        GlobalNumber    /**<Global repository version when file was last changed.*/,
         FileNumber      /**<File version number, may be the same as GlobalNumber.*/,
         Date,
         Range
     };
-    setRevisionValue( const QVariant& rev, RevisionType );
-    setSourceRevision( const VcsRevision& );
-    setTargetRevision( const VcsRevision& );
+    enum RevisionSpecialType
+    {
+        Head            /**<Latest revision in the repository.*/,
+        Working         /**<The local copy (including any changes made).*/,
+        Base            /**<The repository source of the local copy.*/,
+        Previous        /**<Only valid in a range; the version prior the other one.*/,
+        Invalid
+    };
+    bool isValid();
+    void setRevisionValue( const QVariant& rev, RevisionType );
+    void setSourceRevision( const VcsRevision& );
+    void setTargetRevision( const VcsRevision& );
     RevisionType revisionType() const;
     QString revisionValue() const;
     VcsRevision sourceRevision() const;
@@ -92,8 +104,7 @@ public:
  * Small container class that has a mapping of
  * repository-location -> local location including a recursion flag
  *
- * Just a convenient API around QMap<KUrl, QPair<KUrl, MappingFlags>>
- *
+ * Just a convenient API around QMap\<KUrl, QPair\<KUrl, MappingFlags\>\>
  */
 class VcsMapping
 {
@@ -122,7 +133,8 @@ class VcsItemEvent
 {
 public:
     KUrl repositoryLocation();
-    KUrl repositoryCopySourceLocation(); // may be NULL
+    KUrl repositoryCopySourceLocation(); // may be empty
+    VcsRevision repositoryCopySourceRevision(); // may be invalid, even if rCSL is not
     VcsActions actions();
 };
 
