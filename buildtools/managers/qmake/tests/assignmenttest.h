@@ -50,6 +50,8 @@ class AssignmentTest : public QObject
         void quotedBrace_data();
         void quotedVal();
         void quotedVal_data();
+        void quotedValEscapeQuote();
+        void quotedValEscapeQuote_data();
         void dotVariable();
         void dotVariable_data();
         void underscoreVariable();
