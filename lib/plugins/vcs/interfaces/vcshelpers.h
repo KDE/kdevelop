@@ -195,9 +195,9 @@ class VcsJob
      */
     enum FinishStatus
     {
-        Done,
-        Cancelled,
-        Error
+        Succeeded,
+        Canceled,
+        Failed
     };
 
     public:
