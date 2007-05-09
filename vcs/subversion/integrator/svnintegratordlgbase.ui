@@ -82,9 +82,6 @@ to perform any subversion operations.</string>
                     <property name="text">
                         <string>&amp;Create a project tree and import new project into trunk, then checkout from the repository</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Creates project, imports it into the subversion
 repository and checks it out as a working copy.
