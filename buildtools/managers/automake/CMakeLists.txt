@@ -6,8 +6,6 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/projectmanag
     )
 
 
-add_definitions(-fPIC)
-
 ########### next target ###############
 
 set(kdevautomakeparser_STAT_SRCS
