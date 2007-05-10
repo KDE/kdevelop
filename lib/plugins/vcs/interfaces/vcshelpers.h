@@ -74,11 +74,17 @@ enum VcsDiffMode
 class VcsRevision
 {
 public:
+    /**
+     * @note Not all VCS's support both FileNumber and GlobalNumber. For those
+     * that don't, asking for one may give you the other, therefore you should
+     * check which is returned. For example, CVS does not support GlobalNumber,
+     * and Subversion does not support FileNumber, while Perforce supports both.
+     */
     enum RevisionType
     {
         Special         /**<One of the special versions in RevisionSpecialType.*/,
-        GlobalNumber    /**<Global repository version when file was last changed.*/,
-        FileNumber      /**<File version number, may be the same as GlobalNumber.*/,
+        GlobalNumber    /**<Global repository version when item was last changed.*/,
+        FileNumber      /**<Item's independent version number.*/,
         Date,
         Range
     };
@@ -135,6 +141,7 @@ public:
     KUrl repositoryLocation();
     KUrl repositoryCopySourceLocation(); // may be empty
     VcsRevision repositoryCopySourceRevision(); // may be invalid, even if rCSL is not
+    VcsRevision revision(); // the FileNumber revision, may be the same as the GlobalNumber
     VcsActions actions();
 };
 
@@ -149,7 +156,7 @@ public:
 class VcsEvent
 {
 public:
-    VcsRevision revision();
+    VcsRevision revision(); // the GlobalNumber revision
     QString user();
     QDate date();
     QString message();
