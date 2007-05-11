@@ -2,9 +2,9 @@ add_subdirectory(cvs)
 
 find_package(SubversionLibrary)
 
-if(SUBVERSION_FOUND)
+if(SUBVERSION_FOUND AND NOT WIN32)
     add_subdirectory(subversion)
-endif(SUBVERSION_FOUND)
+endif(SUBVERSION_FOUND AND NOT WIN32)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/lib

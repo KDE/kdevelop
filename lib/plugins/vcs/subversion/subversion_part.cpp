@@ -8,9 +8,9 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
-#include "projectmodel.h"
+
 #include "subversion_part.h"
+#include "projectmodel.h"
 #include "subversion_view.h"
 #include "subversion_utils.h"
 #include "subversionthreads.h"

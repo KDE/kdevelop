@@ -36,9 +36,9 @@
 
 #include <klocale.h>
 
-#include <subversion-1/svn_opt.h>
-#include <subversion-1/svn_auth.h>
-#include <subversion-1/svn_wc.h>
+#include <svn_opt.h>
+#include <svn_auth.h>
+#include <svn_wc.h>
 
 // using namespace ThreadWeaver;
 

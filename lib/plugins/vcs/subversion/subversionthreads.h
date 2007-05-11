@@ -18,12 +18,12 @@
 
 #include <QThread>
 
-#include <subversion-1/svn_pools.h>
-#include <subversion-1/svn_auth.h>
-#include <subversion-1/svn_client.h>
-#include <subversion-1/svn_config.h>
-#include <subversion-1/svn_wc.h>
-#include <subversion-1/svn_path.h>
+#include <svn_pools.h>
+#include <svn_auth.h>
+#include <svn_client.h>
+#include <svn_config.h>
+#include <svn_wc.h>
+#include <svn_path.h>
 #include <apr_portable.h>
 
 #include <kurl.h>
