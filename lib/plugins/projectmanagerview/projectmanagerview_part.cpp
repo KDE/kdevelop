@@ -171,8 +171,6 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
             d->contexts[buildaction->objectName()] = context;
             kDebug() << "Context Map:" << d->contexts << "|" << d->contexts[buildaction->objectName()] << endl;
             connect( buildaction, SIGNAL(triggered() ), d->contextMenuMapper, SLOT( map() ) );
-            // This is a workaround to show that the stuff is working, for some reason the signal mapper doesn't work atm
-            connect( buildaction, SIGNAL( triggered() ), this, SLOT( buildSelectedItem() ) );
             actions << buildaction;
         }
         else if ( KDevelop::ProjectFileItem *file = item->file() )
@@ -182,6 +180,13 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         else if ( KDevelop::ProjectTargetItem *target = item->target() )
         {
             actions << new QAction( i18n( "Target: %1", target->text() ), this );
+            
+            QAction* targetBldAction = new QAction( i18n( "Build this target" ), this );
+            targetBldAction->setObjectName( d->build_objectname );
+            d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
+            d->contexts[ targetBldAction->objectName() ] = context;
+            connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
+            actions << targetBldAction;
         }
         return qMakePair(QString("Project Management"), actions);
     }
@@ -201,10 +206,10 @@ void ProjectManagerViewPart::executeContextMenuAction( const QString& objectname
     }
 }
 
-void ProjectManagerViewPart::buildSelectedItem()
-{
-    kDebug() << "building selected item" << endl;
-}
+// void ProjectManagerViewPart::buildSelectedItem()
+// {
+//     kDebug() << "building selected item" << endl;
+// }
 
 void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* item )
 {
