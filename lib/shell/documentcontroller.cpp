@@ -108,7 +108,7 @@ struct DocumentControllerPrivate {
     QString presetEncoding;
 
     // used to map urls to open docs
-    QHash< KUrl, Document* > documents;
+    QHash< KUrl, IDocument* > documents;
 
     struct HistoryEntry
     {
@@ -199,11 +199,18 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
         emit documentLoaded( d->documents[url] );
     }
-    Document *doc = d->documents[url];
+    IDocument *doc = d->documents[url];
 
+    Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
+    if( !sdoc )
+    {
+        d->documents.remove(url);
+        delete doc;
+        return 0;
+    }
     //find a view if there's one already opened in this area
     Sublime::View *partView = 0;
-    foreach (Sublime::View *view, doc->views())
+    foreach (Sublime::View *view, sdoc->views())
     {
         if (area->views().contains(view))
         {
@@ -214,7 +221,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     if (!partView)
     {
         //no view currently shown for this url
-        partView = doc->createView();
+        partView = sdoc->createView();
 
         //add view to the area
         area->addView(partView, uiController->activeSublimeWindow()->activeView());
@@ -240,9 +247,14 @@ IDocument * DocumentController::documentForUrl( const KUrl & url ) const
 QList<IDocument*> DocumentController::openDocuments() const
 {
     QList<IDocument*> opened;
-    foreach (Document *doc, d->documents.values())
+    foreach (IDocument *doc, d->documents.values())
     {
-        if (!doc->views().isEmpty())
+        Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
+        if( !sdoc )
+        {
+            continue;
+        }
+        if (!sdoc->views().isEmpty())
             opened << doc;
     }
     return opened;
@@ -257,7 +269,7 @@ IDocument* DocumentController::activeDocument() const
 {
     UiController *uiController = Core::self()->uiControllerInternal();
     if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
-    return qobject_cast<Document*>(uiController->activeSublimeWindow()->activeView()->document());
+    return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
 }
 
 void DocumentController::emitSaved(IDocument *document)
