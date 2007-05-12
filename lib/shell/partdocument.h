@@ -19,7 +19,8 @@
 #ifndef KDEV_PARTDOCUMENT_H
 #define KDEV_PARTDOCUMENT_H
 
-#include <document.h>
+#include <idocument.h>
+#include <sublime/urldocument.h>
 
 namespace KParts {
 class Part;

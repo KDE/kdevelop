@@ -49,7 +49,6 @@ install(FILES
     projectcontroller.h
     project.h
     partcontroller.h
-    document.h
     partdocument.h
     textdocument.h
     documentcontroller.h

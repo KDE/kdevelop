@@ -52,7 +52,7 @@ struct TextDocumentPrivate {
         if (document->isModified())
             state = IDocument::Clean;
         else
-            state = Document::Dirty;
+            state = IDocument::Dirty;
         m_textDocument->notifyStateChanged();
     }
 
