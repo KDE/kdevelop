@@ -111,6 +111,8 @@ struct DocumentControllerPrivate {
     // used to map urls to open docs
     QHash< KUrl, IDocument* > documents;
 
+    QHash< QString, IDocumentFactory* > factories;
+
     struct HistoryEntry
     {
         HistoryEntry() {}
@@ -193,12 +195,20 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             return 0;
         }
 
-        if (Core::self()->partController()->isTextType(mimeType))
+        if( d->factories.contains( mimeType->name() ) )
+        {
+            IDocument* idoc = d->factories[mimeType->name()]->create(url, Core::self());
+            if( idoc )
+            {
+                 d->documents[url] = idoc;
+            }
+        }
+        if ( !d->documents.contains(url) && Core::self()->partController()->isTextType(mimeType))
             d->documents[url] = new TextDocument(url, Core::self());
-        else
+        else if( !d->documents.contains(url) )
             d->documents[url] = new PartDocument(url, Core::self());
-
-        emit documentLoaded( d->documents[url] );
+        if( d->documents.contains(url) )
+            emit documentLoaded( d->documents[url] );
     }
     IDocument *doc = d->documents[url];
 
@@ -271,6 +281,13 @@ IDocument* DocumentController::activeDocument() const
     UiController *uiController = Core::self()->uiControllerInternal();
     if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
+}
+
+void DocumentController::registerDocumentForMimetype( const QString& mimetype,
+                                        KDevelop::IDocumentFactory* factory )
+{
+    if( !d->factories.contains( mimetype ) )
+        d->factories[mimetype] = factory;
 }
 
 }

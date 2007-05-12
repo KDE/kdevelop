@@ -30,6 +30,14 @@
 namespace KDevelop {
 
 class IDocument;
+class ICore;
+
+class KDEVPLATFORMINTERFACES_EXPORT IDocumentFactory {
+public:
+    virtual ~IDocumentFactory() {}
+    virtual IDocument* create(const KUrl&, ICore* ) = 0;
+};
+
 
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentController: public QObject {
     Q_OBJECT
@@ -60,6 +68,8 @@ public:
     virtual IDocument* activeDocument() const = 0;
 
     virtual void activateDocument( IDocument * document ) = 0;
+
+    virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
 public Q_SLOTS:
     /**Opens a new or existing document.

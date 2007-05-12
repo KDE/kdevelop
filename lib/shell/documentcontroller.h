@@ -70,6 +70,8 @@ public:
 
     virtual void activateDocument( IDocument * document );
 
+    virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* );
+
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
