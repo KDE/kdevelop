@@ -28,6 +28,7 @@
 #include <QtGui/QListView>
 #include <QtCore/QTimer>
 #include <QtGui/QStandardItemModel>
+#include <QtCore/QQueue>
 
 #include <icore.h>
 #include <iuicontroller.h>
@@ -67,8 +68,7 @@ public:
     QMap<QString, QStandardItemModel* > m_models;
     QMap<QString, QString> m_titles;
     QStringList m_ids;
-    QMap<QString, OutputViewCommand* > m_jobs;
-
+    QMap<QString, QQueue<OutputViewCommand*> > m_jobs;
 };
 
 SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
@@ -79,14 +79,23 @@ SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
     d->m_factory = new SimpleOutputViewViewFactory( this );
     core()->uiController()->addToolView( "Output View", d->m_factory );
 
+    connect( this, SIGNAL(commandFinished( const QString& )),
+             this, SLOT(slotCommandFinished(const QString&)) );
+    connect( this, SIGNAL(commandFailed( const QString& )),
+             this, SLOT(slotCommandFailed(const QString&)) );
 }
 
 SimpleOutputView::~SimpleOutputView()
 {
     foreach( QStandardItemModel* m, d->m_models )
         delete m;
-    foreach( OutputViewCommand* o, d->m_jobs )
-        delete o;
+    foreach( QQueue< OutputViewCommand* > queue, d->m_jobs )
+    {
+        foreach( OutputViewCommand* cmd, queue )
+        {
+            delete cmd;
+        }
+    }
     delete d;
 }
 
@@ -98,16 +107,29 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     QString title = command.first();
     if( !d->m_jobs.contains(title) )
     {
-        QStandardItemModel* model = new QStandardItemModel();
-        OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, model );
+        // Models will be created in the same place with QListView. not here.
+//         QStandardItemModel* model = new QStandardItemModel();
+        OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, NULL );
         connect( cmd, SIGNAL( commandFinished( const QString& ) ),
                  this, SIGNAL( commandFinished( const QString& ) ) );
         connect( cmd, SIGNAL( commandFailed( const QString& ) ),
                  this, SIGNAL( commandFailed( const QString& ) ) );
 
-        d->m_jobs[title] = cmd;
-        emit modelAdded( title, model );
-        d->m_jobs[title]->start();
+        QQueue< OutputViewCommand* > cmdQueue;
+        cmdQueue.enqueue( cmd );
+        d->m_jobs[title] = cmdQueue;
+        emit commandAdded( cmd );
+        d->m_jobs[title].head()->start();
+        kDebug(9004) << "Adding and start now " << endl;
+    }
+    else
+    {
+        // Append m_job. When the job named "title" is finished, completed job will be removed
+        // and this new job will get started by slotCommandFinished/Failed()
+//         QStandardItemModel* model = new QStandardItemModel();
+        OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, NULL );
+        d->m_jobs[title].enqueue( cmd );
+        kDebug(9004) << "Adding and pending" << endl;
     }
 }
 
@@ -160,6 +182,53 @@ QString SimpleOutputView::registeredTitle( const QString& id )
         return d->m_titles[id];
     }
     return QString();
+}
+
+void SimpleOutputView::slotCommandFinished( const QString& id )
+{
+    cleanupTerminatedJobs( id );
+    startNextPendingJob( id );    
+}
+
+void SimpleOutputView::slotCommandFailed( const QString& id )
+{
+    cleanupTerminatedJobs( id );
+    startNextPendingJob( id );
+}
+
+void SimpleOutputView::cleanupTerminatedJobs( const QString& id )
+{
+    Q_ASSERT( d->m_jobs.contains(id) );
+    
+    QQueue<OutputViewCommand*> &cmdQ = d->m_jobs[id];
+    Q_ASSERT( cmdQ.isEmpty() == FALSE );
+    OutputViewCommand *cmd = cmdQ.dequeue();
+    cmd->deleteLater();
+    kDebug(9004) << "OutputViewCommand removed and deleteLater()ed " << (long)cmd << endl;
+
+    if( cmdQ.isEmpty() )
+    {
+        d->m_jobs.remove( id );
+    }
+}
+
+void SimpleOutputView::startNextPendingJob( const QString &id )
+{
+    if( d->m_jobs.contains(id) && !(d->m_jobs[id].isEmpty()) )
+    {
+        // execute next pending job, whose title was the same with justly finished job.
+        QQueue< OutputViewCommand* > &cmdQ = d->m_jobs[id];
+        OutputViewCommand *nextCmd = cmdQ.head();
+        
+        connect( nextCmd, SIGNAL( commandFinished( const QString& ) ),
+                 this, SIGNAL( commandFinished( const QString& ) ) );
+        connect( nextCmd, SIGNAL( commandFailed( const QString& ) ),
+                 this, SIGNAL( commandFailed( const QString& ) ) );
+
+        emit commandAdded( nextCmd );
+        nextCmd->start();
+        kDebug(9004) << "Started next pended job " << (long)nextCmd << endl;
+    }
 }
 
 #include "simpleoutputview.moc"

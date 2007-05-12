@@ -35,9 +35,14 @@ class OutputViewCommand : public QObject
 Q_OBJECT
 public:
     OutputViewCommand( const KUrl& workdir, const QStringList& command,
-                       const QMap<QString, QString>& env, QStandardItemModel* model );
+                       const QMap<QString, QString>& env, QStandardItemModel* model = NULL );
     virtual ~OutputViewCommand();
     virtual void start();
+
+    void setModel( QStandardItemModel *model );
+    QStandardItemModel *model();
+    QString title();
+    
     private Q_SLOTS:
         void procReadStdout( K3Process* proc, char* buf, int len );
         void procReadStderr( K3Process* proc, char* buf, int len );

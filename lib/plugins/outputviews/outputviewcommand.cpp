@@ -52,7 +52,8 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
 OutputViewCommand::~OutputViewCommand()
 {
     delete m_proc;
-    delete m_model;
+//     delete m_model; // model is created and deleted in OutputWidget
+    kDebug(9004) << "OutputViewCommand destructor.." << endl;
 }
 
 void OutputViewCommand::start()
@@ -60,6 +61,21 @@ void OutputViewCommand::start()
     QStandardItem* i = new QStandardItem( m_command );
     m_model->appendRow( i );
     m_proc->start( K3Process::OwnGroup, K3Process::AllOutput );
+}
+
+void OutputViewCommand::setModel( QStandardItemModel *model )
+{
+    m_model = model;
+}
+
+QStandardItemModel* OutputViewCommand::model()
+{
+    return m_model;
+}
+
+QString OutputViewCommand::title()
+{
+    return m_command.section( ' ', 0, 0 );
 }
 
 void OutputViewCommand::procReadStdout(K3Process* proc, char* buf, int len)
@@ -91,14 +107,16 @@ void OutputViewCommand::procFinished( K3Process* proc )
         QStandardItem* endItem = new QStandardItem(QString("Finished (%1)").arg(m_proc->exitStatus()) );
         m_model->appendRow( endItem );
         kDebug(9004) << "Finished Sucessfully" << endl;
-        emit commandFinished( m_command );
+        QString titlestring = title();
+        emit commandFinished( titlestring );
     }
     else
     {
         QStandardItem* endItem = new QStandardItem(QString("Failed (%1)").arg(m_proc->exitStatus()));
         m_model->appendRow( endItem );
         kDebug(9004) << "Failed" << endl;
-        emit commandFailed( m_command );
+        QString titlestring = title();
+        emit commandFailed( titlestring );
     }
 }
 

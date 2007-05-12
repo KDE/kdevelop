@@ -19,17 +19,19 @@
  */
 
 #include "outputwidget.h"
+#include "outputviewcommand.h"
 
 #include "simpleoutputview.h"
 #include <QtGui/QListView>
 #include <QtGui/QStandardItemModel>
-
 
 OutputWidget::OutputWidget(QWidget* parent, SimpleOutputView* view)
     : KTabWidget( parent )
 {
     connect( view, SIGNAL( modelAdded( const QString&, QStandardItemModel* ) ),
              this, SLOT( addNewTab( const QString&, QStandardItemModel* ) ) );
+    connect( view, SIGNAL( commandAdded( OutputViewCommand* ) ),
+             this, SLOT( addNewTab( OutputViewCommand* ) ) );
     foreach( QString id, view->registeredViews() )
     {
         addNewTab( view->registeredTitle(id), view->registeredModel(id) );
@@ -38,12 +40,51 @@ OutputWidget::OutputWidget(QWidget* parent, SimpleOutputView* view)
 
 void OutputWidget::addNewTab(const QString& title, QStandardItemModel* model )
 {
-    if( !model || title.isEmpty() || m_listviews.contains( title ) )
+    if( !model || title.isEmpty() )
         return;
-    QListView* listview = new QListView(this);
-    listview->setModel( model );
-    m_listviews[title] = listview;
-    addTab( listview, title );
+    
+    if( !m_listviews.contains( title ) )
+    {
+        QListView* listview = new QListView(this);
+        listview->setModel( model );
+        m_listviews[title] = listview;
+        addTab( listview, title );
+    }
+    else
+    {
+        QListView* listview = m_listviews[title];
+        listview->setModel( model );
+    }
+}
+
+void OutputWidget::addNewTab( OutputViewCommand* cmd )
+{
+    if( !cmd )
+        return;
+
+    if( !m_listviews.contains( cmd->title() ) )
+    {
+        // create new listview and model
+        QListView* listview = new QListView(this);
+        QStandardItemModel* model = new QStandardItemModel();
+        
+        listview->setModel( model );
+        cmd->setModel( model );
+        
+        m_listviews[cmd->title()] = listview;
+        addTab( listview, cmd->title() );
+    }
+    else
+    {
+        // reuse the same view and model. Retrieve model from view
+        QListView* listview = m_listviews[ cmd->title() ];
+        QAbstractItemModel *absmodel = listview->model();
+        QStandardItemModel *stdModel = dynamic_cast< QStandardItemModel* >( absmodel );
+
+        Q_ASSERT( stdModel ); // maybe we can use more general model later
+        
+        cmd->setModel( stdModel );
+    }
 }
 
 #include "outputwidget.moc"

@@ -29,6 +29,7 @@ class QStandardItemModel;
 class KUrl;
 class K3Process;
 class QString;
+class OutputViewCommand;
 
 /**
 @author Andreas Pakulat
@@ -56,8 +57,16 @@ Q_SIGNALS:
     void commandFinished( const QString& id );
     void commandFailed( const QString& id );
     void modelAdded( const QString&, QStandardItemModel* );
+    void commandAdded( OutputViewCommand* );
+
+private Q_SLOTS:
+    void slotCommandFinished( const QString& id );
+    void slotCommandFailed( const QString& id );
 
 private:
+    void cleanupTerminatedJobs( const QString& id );
+    void startNextPendingJob( const QString& id );
+    
     class SimpleOutputViewPrivate* const d;
     friend class SimpleOutputViewPrivate;
 };

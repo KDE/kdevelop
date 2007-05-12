@@ -27,6 +27,7 @@ class QListView;
 class QStandardItemModel;
 class QString;
 class SimpleOutputView;
+class OutputViewCommand;
 
 class OutputWidget : public KTabWidget
 {
@@ -35,6 +36,9 @@ class OutputWidget : public KTabWidget
         OutputWidget(QWidget* parent, SimpleOutputView* view);
     public Q_SLOTS:
         void addNewTab(const QString& title, QStandardItemModel* );
+
+        // Note that *cmd should not be const. 
+        void addNewTab( OutputViewCommand* cmd );
 
     private:
         QMap<QString, QListView*> m_listviews;
