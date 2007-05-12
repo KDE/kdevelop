@@ -162,14 +162,10 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         if ( KDevelop::ProjectFolderItem *folder = item->folder() )
         {
             actions << new QAction( i18n( "Folder: %1", folder->url().directory() ), this );
-            //executeProjectBuilder( item );
             QAction* buildaction = new QAction( i18n( "Build this project" ), this );
             buildaction->setObjectName(d->build_objectname);
             d->contextMenuMapper->setMapping( buildaction, buildaction->objectName() );
-            QObject* o = d->contextMenuMapper->mapping( buildaction->objectName() );
-            kDebug() << "Mapping object:" << o << "|" << (o == buildaction) << endl;
             d->contexts[buildaction->objectName()] = context;
-            kDebug() << "Context Map:" << d->contexts << "|" << d->contexts[buildaction->objectName()] << endl;
             connect( buildaction, SIGNAL(triggered() ), d->contextMenuMapper, SLOT( map() ) );
             actions << buildaction;
         }
@@ -180,7 +176,7 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         else if ( KDevelop::ProjectTargetItem *target = item->target() )
         {
             actions << new QAction( i18n( "Target: %1", target->text() ), this );
-            
+
             QAction* targetBldAction = new QAction( i18n( "Build this target" ), this );
             targetBldAction->setObjectName( d->build_objectname );
             d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
@@ -205,11 +201,6 @@ void ProjectManagerViewPart::executeContextMenuAction( const QString& objectname
         executeProjectBuilder( prjctxt->item() );
     }
 }
-
-// void ProjectManagerViewPart::buildSelectedItem()
-// {
-//     kDebug() << "building selected item" << endl;
-// }
 
 void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* item )
 {
