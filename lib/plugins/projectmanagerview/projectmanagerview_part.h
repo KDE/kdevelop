@@ -75,7 +75,6 @@ Q_SIGNALS:
 public Q_SLOTS:
     void openURL(const KUrl &url);
     void executeContextMenuAction( const QString& objectname );
-//     void buildSelectedItem();
     void updateDetails(ProjectBaseItem *item);
 
 protected:
