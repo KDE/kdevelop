@@ -86,7 +86,7 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
-    Document *doc = qobject_cast<KDevelop::Document*>(view->document());
+    IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
     if (doc)
     {
         //activate part if it is not yet activated

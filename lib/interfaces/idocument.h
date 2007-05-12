@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2006 by Hamish Rodda <rodda@kde.org>                    *
  *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -27,8 +28,10 @@
 
 namespace KParts { class Part; }
 namespace KTextEditor { class Document; }
+namespace Sublime{ class View; }
 
 namespace KDevelop {
+class ICore;
 
 /**
  * A single document being edited by the IDE.
@@ -110,6 +113,21 @@ public:
 
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor) = 0;
 
+    /**
+     * Performs document activation actions if any.
+     * This needs to emit IDocumentController::documentActivated
+     */
+    virtual void activate(Sublime::View *activeView) = 0;
+
+protected:
+    ICore* core();
+    IDocument( ICore* );
+    void notifySaved();
+    void notifyStateChanged();
+    void notifyActivated();
+
+private:
+    class IDocumentPrivate* const d;
 };
 
 }

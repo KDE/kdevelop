@@ -36,11 +36,13 @@ are incapable of loading the url.
 This document loads one KPart (read-only or read-write) per view
 and sets part widget to be a view widget.
 */
-class PartDocument: public Document {
+class PartDocument: public Sublime::UrlDocument, public KDevelop::IDocument {
     Q_OBJECT
 public:
-    PartDocument(const KUrl &url);
+    PartDocument(const KUrl &url, ICore* core );
     virtual ~PartDocument();
+
+    virtual KUrl url() const;
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;
@@ -57,7 +59,7 @@ public:
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
 private:
-    class PartDocumentPrivate *d;
+    class PartDocumentPrivate * const d;
 };
 
 }

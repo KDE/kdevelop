@@ -23,7 +23,7 @@ set(kdevplatformshell_LIB_SRCS
     projectcontroller.cpp
     project.cpp
     partcontroller.cpp
-    document.cpp
+    #document.cpp
     partdocument.cpp
     textdocument.cpp
     documentcontroller.cpp

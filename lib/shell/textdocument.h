@@ -32,7 +32,7 @@ limited to Kate. Each conforming text editor will work.
 class TextDocument: public PartDocument {
     Q_OBJECT
 public:
-    TextDocument(const KUrl &url);
+    TextDocument(const KUrl &url, ICore* );
     virtual ~TextDocument();
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
@@ -50,7 +50,7 @@ private:
     Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
     Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
 
-    struct TextDocumentPrivate *d;
+    struct TextDocumentPrivate * const d;
     friend class TextDocumentPrivate;
 };
 

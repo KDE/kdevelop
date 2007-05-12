@@ -87,7 +87,7 @@ Q_SIGNALS:
     /**This is emitted when the document changes, either internally
     or on disc.*/
     void documentStateChanged( KDevelop::IDocument* document );
-
+    friend class IDocument;
 };
 
 }

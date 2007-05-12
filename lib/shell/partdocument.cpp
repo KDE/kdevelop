@@ -25,6 +25,7 @@
 #include "core.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
+#include "idocumentcontroller.h"
 
 namespace KDevelop {
 
@@ -32,10 +33,9 @@ struct PartDocumentPrivate {
     QMap<QWidget*, KParts::Part*> partForView;
 };
 
-PartDocument::PartDocument(const KUrl &url)
-    :Document(url)
+PartDocument::PartDocument(const KUrl &url, ICore* core)
+    : Sublime::UrlDocument(core->uiController()->controller(), url), KDevelop::IDocument(core), d(new PartDocumentPrivate)
 {
-    d = new PartDocumentPrivate();
 }
 
 PartDocument::~PartDocument()
@@ -115,12 +115,17 @@ void PartDocument::activate(Sublime::View *activeView)
     KParts::Part *part = partForView(activeView->widget());
     if (Core::self()->partController()->activePart() != part)
         Core::self()->partController()->setActivePart(part);
-    Document::activate(activeView);
+    notifyActivated();
 }
 
 void PartDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
     //do nothing here
+}
+
+KUrl PartDocument::url() const
+{
+    return Sublime::UrlDocument::url();
 }
 
 }

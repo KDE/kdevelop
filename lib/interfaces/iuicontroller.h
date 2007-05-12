@@ -27,6 +27,9 @@
 namespace KParts {
     class MainWindow;
 }
+namespace Sublime{
+    class Controller;
+}
 
 namespace KDevelop {
 
@@ -51,11 +54,18 @@ public:
 
     virtual void addToolView(const QString &name, IToolViewFactory *factory) = 0;
     virtual void removeToolView(IToolViewFactory *factory) = 0;
-    
+
     /** @return active mainwindow or 0 if no such mainwindow is active.*/
     virtual KParts::MainWindow *activeMainWindow() = 0;
 
-
+    /**
+     * This is meant to be used by IDocument subclasses to initialize the
+     * Sublime::Document.
+     *
+     * This cannot be used for anything else, without linking to the sublime
+     * library, which is forbidden and may break your plugin
+     */
+    virtual Sublime::Controller* controller() = 0;
 protected:
     IUiController();
 };

@@ -7,6 +7,7 @@ Copyright (C) 2003 Harald Fernengel <harry@kdevelop.org>
 Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
 Copyright (C) 2005 Adam Treat <treat@kde.org>
 Copyright (C) 2004-2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -193,9 +194,9 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         }
 
         if (Core::self()->partController()->isTextType(mimeType))
-            d->documents[url] = new TextDocument(url);
+            d->documents[url] = new TextDocument(url, Core::self());
         else
-            d->documents[url] = new PartDocument(url);
+            d->documents[url] = new PartDocument(url, Core::self());
 
         emit documentLoaded( d->documents[url] );
     }
@@ -270,21 +271,6 @@ IDocument* DocumentController::activeDocument() const
     UiController *uiController = Core::self()->uiControllerInternal();
     if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
-}
-
-void DocumentController::emitSaved(IDocument *document)
-{
-    emit documentSaved(document);
-}
-
-void DocumentController::emitStateChanged(IDocument *document)
-{
-    emit documentStateChanged(document);
-}
-
-void DocumentController::emitActivated(IDocument *document)
-{
-    emit documentActivated(document);
 }
 
 }

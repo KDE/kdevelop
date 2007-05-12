@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Andreas Pakulat <apaku@gmx.de>            *
+ *   Copyright (C) 2007 by Andreas Pakulat <apaku@gmx.de>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,10 +18,47 @@
  ***************************************************************************/
 #include "idocument.h"
 
+#include "icore.h"
+#include "idocumentcontroller.h"
+
 namespace KDevelop {
+
+class IDocumentPrivate
+{
+public:
+    KDevelop::ICore* m_core;
+};
+
+IDocument::IDocument( KDevelop::ICore* core )
+  : d(new IDocumentPrivate)
+{
+    d->m_core = core;
+}
 
 IDocument::~IDocument()
 {
 }
 
+KDevelop::ICore* IDocument::core()
+{
+    return d->m_core;
 }
+
+void IDocument::notifySaved()
+{
+    emit core()->documentController()->documentSaved(this);
+}
+
+void IDocument::notifyStateChanged()
+{
+    emit core()->documentController()->documentStateChanged(this);
+}
+
+void IDocument::notifyActivated()
+{
+    emit core()->documentController()->documentActivated(this);
+}
+
+}
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

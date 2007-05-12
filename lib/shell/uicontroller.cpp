@@ -176,7 +176,7 @@ void UiController::initialize()
 
 void UiController::openEmptyDocument()
 {
-    PartDocument *doc = new PartDocument(KUrl());
+    PartDocument *doc = new PartDocument(KUrl(), Core::self());
     Sublime::View *view = doc->createView();
     activeArea()->addView(view);
     activeSublimeWindow()->activateView(view);
@@ -222,6 +222,11 @@ void UiController::showSettingsDialog()
 //     if( d->cfgDlg->dialog()->parentWidget() != activeMainWindow() )
 //         d->cfgDlg->dialog()->setParent( activeMainWindow() );
     d->cfgDlg->show();
+}
+
+Sublime::Controller* UiController::controller()
+{
+    return this;
 }
 
 }

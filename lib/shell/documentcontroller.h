@@ -7,6 +7,7 @@ Copyright (C) 2003 Harald Fernengel <harry@kdevelop.org>
 Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
 Copyright (C) 2005 Adam Treat <treat@kde.org>
 Copyright (C) 2004-2007 Alexander Dymo <adymo@kdevelop.org>
+Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -79,13 +80,7 @@ public Q_SLOTS:
             DocumentActivation activate = IDocumentController::ActivateOnOpen );
 
 private:
-    void emitSaved(IDocument *document);
-    void emitStateChanged(IDocument *document);
-    void emitActivated(IDocument *document);
-
     struct DocumentControllerPrivate *d;
-
-    friend class Document;
 };
 
 }

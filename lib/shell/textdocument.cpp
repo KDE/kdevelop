@@ -80,10 +80,9 @@ private:
 };
 
 
-TextDocument::TextDocument(const KUrl &url)
-    :PartDocument(url)
+TextDocument::TextDocument(const KUrl &url, ICore* core)
+    :PartDocument(url, core), d(new TextDocumentPrivate(this))
 {
-    d = new TextDocumentPrivate(this);
 }
 
 TextDocument::~TextDocument()
@@ -168,10 +167,10 @@ bool TextDocument::save(DocumentSaveMode mode)
 
     switch (d->state)
     {
-        case Document::Clean: return true;
-        case Document::Modified: break;
-        case Document::Dirty:
-        case Document::DirtyAndModified:
+        case IDocument::Clean: return true;
+        case IDocument::Modified: break;
+        case IDocument::Dirty:
+        case IDocument::DirtyAndModified:
             if (!(mode & Silent))
             {
                 int code = KMessageBox::warningYesNoCancel(

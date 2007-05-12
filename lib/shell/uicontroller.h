@@ -63,6 +63,7 @@ public:
     void initialize();
 
     void showSettingsDialog();
+    Sublime::Controller* controller();
 private:
     class UiControllerPrivate * const d;
 };
