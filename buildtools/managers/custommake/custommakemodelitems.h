@@ -7,7 +7,7 @@
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  */
- 
+
 #ifndef CUSTOMMAKEMODELITEMS_H
 #define CUSTOMMAKEMODELITEMS_H
 
@@ -32,12 +32,13 @@ public:
     virtual const KUrl::List& includeDirectories() const;
     virtual const QHash<QString, QString>& environment() const;
     virtual const QList<QPair<QString, QString> >& defines() const;
-    
+
 private:
     KUrl::List m_includeDirs;
     QHash<QString, QString> m_envs;
     QList<QPair <QString, QString> > m_defines;
-    
+
 };
 
 #endif
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

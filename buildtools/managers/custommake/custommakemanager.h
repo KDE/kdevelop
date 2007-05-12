@@ -36,9 +36,9 @@ class CustomMakeManager : public KDevelop::IPlugin, public KDevelop::IBuildSyste
 public:
 
     CustomMakeManager( QObject *parent = NULL, const QStringList& args = QStringList()  );
-    
+
     virtual ~CustomMakeManager();
-    
+
     /**
      * Provide access to the builder
      */
@@ -198,10 +198,10 @@ private:
      * @return Target lists in Makefile at @arg dir.
      */
     QStringList parseCustomMakeFile( const KUrl &makefile );
-    
+
 private:
     class Private;
     Private *d;
 };
 #endif
-
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

@@ -44,13 +44,13 @@ public:
 //     CustomMakeFolderItem *m_rootItem;
     KDevelop::ProjectItem *m_rootItem;
     KDevelop::IProject *m_project;
-    
+
     QActionGroup *m_targetGroup;
     KMenu *m_targetMenu;
 
 //     QList< KDevelop::ProjectBaseItem* > m_testItems; // for debug
 };
-        
+
 CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
     : KDevelop::IPlugin( CustomMakeSupportFactory::componentData(), parent )
     , d( new Private )
@@ -60,7 +60,7 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
 
     setXMLFile( "kdevcustommakemanager.rc" );
-    
+
     // TODO use CustomMakeBuilder
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IMakeBuilder" );
     Q_ASSERT(i);
@@ -72,13 +72,13 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
     d->m_project = NULL;
 
     KActionMenu *actionMenu = new KActionMenu( i18n( "Build &Target" ), this );
-    QAction *action = actionCollection()->addAction("build_target", actionMenu);
+    actionCollection()->addAction("build_target", actionMenu);
     d->m_targetMenu = actionMenu->menu();
-    
+
     d->m_targetGroup = new QActionGroup( this );
 //     d->m_targetObjectFilesGroup = new QActionGroup( this );
 //     d->m_targetOtherFilesGroup = new QActionGroup( this );
-    
+
     actionMenu->setToolTip( i18n( "Build target" ) );
     actionMenu->setWhatsThis( i18n( "<b>Build target</b><p>Runs <b>make targetname</b> from the project directory (targetname is the name of the target selected).<br>"
             "Environment variables and make arguments can be specified "
@@ -88,13 +88,13 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
 //     d->m_targetOtherFilesMenu = new KMenu( i18n( "Other Files" ), d->m_targetMenu );
 
     connect( d->m_targetMenu, SIGNAL( aboutToShow() ), this, SLOT( updateTargetMenu() ) );
-    
+
     connect( d->m_targetGroup, SIGNAL( triggered( QAction* ) ),
              this, SLOT( targetMenuActivated( QAction* ) ) );
-    
+
     connect( i, SIGNAL(built( KDevelop::ProjectBaseItem* )),
              this, SLOT(slotBuilt( KDevelop::ProjectBaseItem* )) );
-    
+
 //     connect( d->m_targetObjectFilesGroup, SIGNAL( triggered(QAction*) ),
 //              this, SLOT( targetObjectMenuActivated( QAction* ) ) );
 //     connect( d->m_targetOtherFilesGroup, SIGNAL( triggered(QAction*) ),
@@ -182,7 +182,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
 {
     QList<KDevelop::ProjectFolderItem*> folder_list;
     QDir dir( item->url().toLocalFile() );
-    
+
     QFileInfoList entries = dir.entryInfoList();
 
     // fill subfolders
@@ -210,7 +210,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
         QStringList targetlist = this->parseCustomMakeFile( makefileUrl );
         foreach( QString target, targetlist )
         {
-            CustomMakeTargetItem *targetItem = new CustomMakeTargetItem( item->project(), target, item );
+            new CustomMakeTargetItem( item->project(), target, item );
 //             d->m_testItems.append( targetItem ); // debug
         }
     }
@@ -267,7 +267,7 @@ bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, con
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// private slots 
+// private slots
 
 void CustomMakeManager::updateTargetMenu()
 {
@@ -299,7 +299,7 @@ void CustomMakeManager::updateTargetMenu()
 //         action->setData( *it );
 //         action->setActionGroup( d->m_targetObjectFilesGroup );
 //     }
-// 
+//
 //     for ( it = d->m_targetsOtherFiles.begin(); it != d->m_targetsOtherFiles.end(); ++it ){
 //         action = d->m_targetOtherFilesMenu->addAction( *it );
 //         action->setData( *it );
@@ -315,7 +315,7 @@ void CustomMakeManager::targetMenuActivated( QAction* action )
 //     {
 //         builder( d->m_rootItem )->build( item );
 //     }
-    
+
 }
 
 void CustomMakeManager::slotBuilt( KDevelop::ProjectBaseItem* item )
@@ -324,7 +324,7 @@ void CustomMakeManager::slotBuilt( KDevelop::ProjectBaseItem* item )
         return;
     kDebug() << " CustomMakeManager:: slotBuilt() " << endl;
 //     KDevelop::ProjectTargetItem *target = static_cast< KDevelop::ProjectTargetItem* >( item );
-//     
+//
 //     if( d->m_targetsByMenu.contains( target ) )
 //     {
 //         d->m_targetsByMenu.removeAll( target );
@@ -337,7 +337,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
 {
     if( !makefile.isValid() )
         return QStringList();
-    
+
     QStringList ret; // the list of targets
 //     KUrl absFileUrl = dir;
     // TODO support Makefile, Makefile.xxx, makefile
@@ -348,7 +348,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
         kDebug() << "could not open " << makefile<< endl;
         return ret;
     }
-    
+
     QRegExp targetRe( "^ *([^\\t$.#]\\S+) *:.*$" );
     targetRe.setMinimal( true );
 
@@ -384,3 +384,4 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
 
 #include "custommakemanager.moc"
 
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
