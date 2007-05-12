@@ -49,6 +49,8 @@
 
 #include "projectmodel.h"
 #include "backgroundparser.h"
+#include "idocument.h"
+#include "idocumentcontroller.h"
 
 /*
 #include <kdevcore.h>
@@ -95,13 +97,13 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
 
 /*    connect( KDevelop::Core::documentController(),
              SIGNAL( documentLoaded( KDevelop::Document* ) ),
-             this, SLOT( documentLoaded( KDevelop::Document* ) ) );
-    connect( KDevelop::Core::documentController(),
-             SIGNAL( documentClosed( KDevelop::Document* ) ),
-             this, SLOT( documentClosed( KDevelop::Document* ) ) );
-    connect( KDevelop::Core::documentController(),
-             SIGNAL( documentActivated( KDevelop::Document* ) ),
-             this, SLOT( documentActivated( KDevelop::Document* ) ) );*/
+             this, SLOT( documentLoaded( KDevelop::Document* ) ) );*/
+    connect( core()->documentController(),
+             SIGNAL( documentClosed( KDevelop::IDocument* ) ),
+             this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
+    connect( core()->documentController(),
+             SIGNAL( documentActivated( KDevelop::IDocument* ) ),
+             this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( core()->projectController(),
              SIGNAL( projectOpened( KDevelop::IProject* ) ),
              this, SLOT( projectOpened( KDevelop::IProject* ) ) );
@@ -110,10 +112,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent,
              this, SLOT( projectClosing( KDevelop::IProject* ) ) );
 
     ///@todo these connects should be here until proper document controller system is in place
-    connect( core()->partManager(), SIGNAL( partAdded(KParts::Part*)),
-             this, SLOT( documentActivated(KParts::Part*) ) );
-    connect( core()->partManager(), SIGNAL( partRemoved(KParts::Part*)),
-             this, SLOT( documentClosed(KParts::Part*) ) );
+//     connect( core()->partManager(), SIGNAL( partAdded(KParts::Part*)),
+//              this, SLOT( documentActivated(KParts::Part*) ) );
+//     connect( core()->partManager(), SIGNAL( partRemoved(KParts::Part*)),
+//              this, SLOT( documentClosed(KParts::Part*) ) );
 
     // Initialise singletons, to prevent needing a mutex in their self() methods
     TypeRepository::self();
@@ -182,24 +184,18 @@ void CppLanguageSupport::documentActivated( KDevelop::Document *document )
     Q_UNUSED( document );
 }
 */
-void CppLanguageSupport::documentActivated(KParts::Part *part)
+void CppLanguageSupport::documentActivated(KDevelop::IDocument* doc)
 {
     kDebug( 9007 ) << "CppLanguageSupport::documentActivated" << endl;
-    if (KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(part))
-    {
-        kDebug( 9007 ) << "adding document to bgparser" << endl;
-        language()->backgroundParser()->addDocument(ropart->url());
-    }
+    kDebug( 9007 ) << "adding document to bgparser" << endl;
+    language()->backgroundParser()->addDocument(doc->url());
 }
 
-void CppLanguageSupport::documentClosed(KParts::Part *part)
+void CppLanguageSupport::documentClosed(KDevelop::IDocument* doc)
 {
     kDebug( 9007 ) << "CppLanguageSupport::documentClosed" << endl;
-    if (KParts::ReadOnlyPart *ropart = dynamic_cast<KParts::ReadOnlyPart*>(part))
-    {
-        kDebug( 9007 ) << "removing document from bgparser" << endl;
-        language()->backgroundParser()->removeDocument(ropart->url());
-    }
+    kDebug( 9007 ) << "removing document from bgparser" << endl;
+    language()->backgroundParser()->removeDocument(doc->url());
 }
 
 KDevelop::CodeHighlighting *CppLanguageSupport::codeHighlighting() const

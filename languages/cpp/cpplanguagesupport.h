@@ -34,7 +34,7 @@ class CppCodeCompletion;
 class TranslationUnitAST;
 
 namespace KParts { class Part; }
-namespace KDevelop { class CodeHighlighting; class IProject; }
+namespace KDevelop { class CodeHighlighting; class IProject; class IDocument; }
 
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -73,8 +73,8 @@ private slots:
     void documentClosed( KDevelop::Document *document );
     void documentActivated( KDevelop::Document *document );
 */
-    void documentActivated(KParts::Part *part);
-    void documentClosed(KParts::Part *part);
+    void documentActivated(KDevelop::IDocument* );
+    void documentClosed(KDevelop::IDocument*);
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
 
