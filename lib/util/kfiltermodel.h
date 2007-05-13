@@ -26,7 +26,7 @@
 
 class KFilterModelPrivate;
 
-class KDEVUTIL_EXPORT KFilterModel: public QAbstractItemModel
+class KDEVPLATFORMUTIL_EXPORT KFilterModel: public QAbstractItemModel
 {
     Q_OBJECT
     friend class KFilterModelPrivate;

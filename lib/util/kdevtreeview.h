@@ -31,7 +31,7 @@ class ItemGroup;
 class ItemCollection;
 class ItemModel;
 
-class KDEVUTIL_EXPORT TreeView: public QTreeView
+class KDEVPLATFORMUTIL_EXPORT TreeView: public QTreeView
 {
   Q_OBJECT
 public:

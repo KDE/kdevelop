@@ -35,7 +35,7 @@ class ItemGroup;
 class ItemCollection;
 class ItemModel;
 
-class KDEVPLATFORM_EXPORT Item : public Shared
+class KDEVPLATFORMUTIL_EXPORT Item : public Shared
 {
 public:
   Item(ItemGroup *parent)

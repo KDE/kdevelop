@@ -34,7 +34,7 @@ class QString;
 /**
 Convenience class to catch output of K3Process.
 */
-class KDEVUTIL_EXPORT ProcessLineMaker : public QObject
+class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
 {
 Q_OBJECT
 

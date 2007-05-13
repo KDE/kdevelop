@@ -43,7 +43,7 @@ Command execution facilities.
  * The object will delete itself after the finished signal has been emitted.
  * Additional environment can be set in the QStringList env via QStrings with the format "foo=blah"
  */
-class KDEVUTIL_EXPORT ExecCommand : public QObject
+class KDEVPLATFORMUTIL_EXPORT ExecCommand : public QObject
 {
     Q_OBJECT
 public:
