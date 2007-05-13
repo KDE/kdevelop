@@ -212,6 +212,7 @@ Comment[ga]=Cruthaíodh páirt KDE i %{dest}
 Comment[gl]=Creouse unha 'part' para KOffice en %{dest}
 Comment[hu]=Létrejött egy KOffice-objektum itt: %{dest}
 Comment[it]=È stata creata una part di KOffice in %{dest}
+Comment[ja]=KOffice パートを %{dest} に作成しました
 Comment[nds]=In %{dest} wöör en KOffice-Komponent opstellt
 Comment[nl]=Een KOffice-part is aangemaakt in %{dest}
 Comment[pl]=KOffice part została utworzona w %{dest}

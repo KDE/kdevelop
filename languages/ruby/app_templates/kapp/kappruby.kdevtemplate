@@ -220,6 +220,7 @@ Comment[ga]=Cruthaíodh Feidhmchlár Korundum ag %{dest}
 Comment[gl]=Creouse unha aplicación Korundum en %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione Korundum in %{dest}
+Comment[ja]=Korundum アプリケーションを %{dest} に作成しました
 Comment[nds]=In %{dest} wöör en Korundum-Programm opstellt.
 Comment[nl]=Een Korundum-toepassing is aangemaakt in %{dest}
 Comment[pl]=Program Korundum został utworzony w %{dest}

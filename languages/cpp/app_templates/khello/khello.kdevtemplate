@@ -199,6 +199,7 @@ Comment[ga]=Cruthaíodh ríomhchlár "Hello World" KDE i %{dest}
 Comment[gl]=Creouse un programa KDE Ola mundo en %{dest}
 Comment[hu]=Létrejött egy KDE Hello world program itt: %{dest}
 Comment[it]=È stato creato un semplice programma KDE di "Hello world" in %{dest}
+Comment[ja]=KDE Hello world プログラムを %{dest} に作成しました
 Comment[nds]=In %{dest} wöör en "Moin Welt"-Programm för KDE opstellt
 Comment[nl]=Een KDE Hello World-programma is aangemaakt in %{dest}
 Comment[pl]=Program 'Witaj świecie' dla KDE został utworzony w %{dest}

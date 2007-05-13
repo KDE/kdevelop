@@ -220,6 +220,7 @@ Comment[ga]=Cruthaíodh breiseán KDevelop i %{dest}
 Comment[gl]=Creouse unha extensión para KDevelop en %{dest}
 Comment[hu]=Létrejött egy KDevelop-bővítőmodul itt: %{dest}
 Comment[it]=È stato creato un plugin per KDevelop in %{dest}
+Comment[ja]=KDevelop プラグインを %{dest} に作成しました
 Comment[nds]=In %{dest} wöör en KDevelop-Moduul opstellt
 Comment[nl]=Er is een KDevelop-plugin aangemaakt in %{dest}
 Comment[pl]=Wtyczka do KDevelopa została utworzona w %{dest}
