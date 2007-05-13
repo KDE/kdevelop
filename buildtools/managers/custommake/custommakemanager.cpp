@@ -43,9 +43,6 @@ class CustomMakeManager::Private
 {
 public:
     IMakeBuilder *m_builder;
-//     CustomMakeFolderItem *m_rootItem;
-    KDevelop::ProjectItem *m_rootItem;
-    KDevelop::IProject *m_project;
 
     QActionGroup *m_targetGroup;
     KMenu *m_targetMenu;
@@ -71,9 +68,6 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
     {
         d->m_builder = i->extension<IMakeBuilder>();
     }
-    d->m_rootItem = NULL;
-    d->m_project = NULL;
-    d->m_ctxItem = NULL;
 
     KActionMenu *actionMenu = new KActionMenu( i18n( "Build &Target" ), this );
     actionCollection()->addAction("build_target", actionMenu);
@@ -225,9 +219,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
 KDevelop::ProjectItem* CustomMakeManager::import(KDevelop::IProject *project)
 {
     if( !project ) return NULL;
-    d->m_project = project;
-    d->m_rootItem =  new KDevelop::ProjectItem( project, project->folder().pathOrUrl(), NULL );
-    return d->m_rootItem;
+    return new KDevelop::ProjectItem( project, project->folder().pathOrUrl(), NULL );
 }
 
 ProjectFolderItem* CustomMakeManager::addFolder(const KUrl& folder, KDevelop::ProjectFolderItem *parent)
@@ -279,8 +271,8 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
     KDevelop::ProjectBaseItem* baseitem = ctx->item();
     
-    KDevelop::ProjectItem *myPrjItem = baseitem->project()->projectItem();
-    if( myPrjItem != d->m_rootItem )
+    IPlugin *manager = baseitem->project()->managerPlugin();
+    if( manager != this )
     {
         // This project is not managed by me. No context menu.
         return IPlugin::requestContextMenuActions( context );
@@ -334,15 +326,16 @@ void CustomMakeManager::updateTargetMenu()
 //     while ( !(d->m_makefilesToParse.isEmpty()) )
 //         parseMakefile( d->m_makefilesToParse.pop() );
 
-    QStringList targetlist = parseCustomMakeFile( findMakefile( d->m_rootItem ) );
-
-    QAction *action = NULL;
-    foreach( QString target, targetlist )
-    {
-        action = d->m_targetMenu->addAction( target );
-        action->setData( target );
-        action->setActionGroup( d->m_targetGroup );
-    }
+    // disabled because we shouldn't rely on rootItem.
+//     QStringList targetlist = parseCustomMakeFile( findMakefile( d->m_rootItem ) );
+// 
+//     QAction *action = NULL;
+//     foreach( QString target, targetlist )
+//     {
+//         action = d->m_targetMenu->addAction( target );
+//         action->setData( target );
+//         action->setActionGroup( d->m_targetGroup );
+//     }
 
 //     for ( it = d->m_targetsObjectFiles.begin(); it != d->m_targetsObjectFiles.end(); ++it ){
 //         action = d->m_targetObjectFilesMenu->addAction( *it );
