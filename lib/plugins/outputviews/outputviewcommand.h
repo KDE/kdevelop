@@ -28,6 +28,7 @@ class QStringList;
 class QString;
 class QStandardItemModel;
 class K3Process;
+class ProcessLineMaker;
 template <typename T1, typename T2> class QMap;
 
 class OutputViewCommand : public QObject
@@ -44,14 +45,15 @@ public:
     QString title();
     
     private Q_SLOTS:
-        void procReadStdout( K3Process* proc, char* buf, int len );
-        void procReadStderr( K3Process* proc, char* buf, int len );
+        void procReadStdout( const QString& line );
+        void procReadStderr( const QString& line );
         void procFinished( K3Process* proc );
     signals:
         void commandFinished( const QString& command );
         void commandFailed( const QString& command );
     private:
         K3Process *m_proc;
+        ProcessLineMaker *m_procLineMaker;
         QStandardItemModel* m_model;
         QString m_command;
 };

@@ -6,10 +6,11 @@ include_directories(${CMAKE_SOURCE_DIR}/lib )
 
 set(kdevplatformutil_LIB_SRCS
 #     execcommand.cpp
-    kfiltermodel.cpp
-    kdevtreeview.cpp
+#     kfiltermodel.cpp
+#     kdevtreeview.cpp
 #     settings.cpp
-    kdevitemmodel.cpp
+#     kdevitemmodel.cpp
+    processlinemaker.cpp
 )
 
 kde4_automoc(${kdevplatformutil_LIB_SRCS})

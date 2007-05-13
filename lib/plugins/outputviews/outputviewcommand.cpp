@@ -19,6 +19,7 @@
  */
 
 #include "outputviewcommand.h"
+#include "processlinemaker.h"
 
 #include <QtCore/QMap>
 #include <QtGui/QStandardItemModel>
@@ -34,6 +35,7 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
 {
     m_proc = new K3Process();
     m_proc->setWorkingDirectory( workdir.path() );
+    m_procLineMaker = new ProcessLineMaker( m_proc );
     foreach( QString s, env.keys() )
         m_proc->setEnvironment( s, env[s] );
     foreach(QString s, command)
@@ -41,10 +43,14 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
             *m_proc << s;
 
     m_command = command.join(" ");
-    connect( m_proc, SIGNAL(receivedStdout(K3Process* , char*, int) ),
-             this, SLOT( procReadStdout(K3Process* , char*, int) ) );
-    connect( m_proc, SIGNAL(receivedStderr(K3Process* , char*, int) ),
-             this, SLOT( procReadStderr(K3Process* , char*, int) ) );
+//     connect( m_proc, SIGNAL(receivedStdout(K3Process* , char*, int) ),
+//              this, SLOT( procReadStdout(K3Process* , char*, int) ) );
+//     connect( m_proc, SIGNAL(receivedStderr(K3Process* , char*, int) ),
+//              this, SLOT( procReadStderr(K3Process* , char*, int) ) );
+    connect( m_procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
+             this, SLOT(procReadStdout(const QString&) ));
+    connect( m_procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
+             this, SLOT(procReadStderr(const QString&) ));
     connect( m_proc, SIGNAL(processExited( K3Process* ) ),
              this, SLOT( procFinished( K3Process* ) ) );
 }
@@ -52,6 +58,7 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
 OutputViewCommand::~OutputViewCommand()
 {
     delete m_proc;
+    delete m_procLineMaker;
 //     delete m_model; // model is created and deleted in OutputWidget
     kDebug(9004) << "OutputViewCommand destructor.." << endl;
 }
@@ -78,26 +85,14 @@ QString OutputViewCommand::title()
     return m_command.section( ' ', 0, 0 );
 }
 
-void OutputViewCommand::procReadStdout(K3Process* proc, char* buf, int len)
+void OutputViewCommand::procReadStdout(const QString &line)
 {
-    Q_UNUSED(proc);
-    QString txt = QString::fromLocal8Bit( buf, len );
-    QStringList l = txt.split("\n");
-    foreach( QString s, l )
-    {
-        m_model->appendRow( new QStandardItem( s ) );
-    }
+    m_model->appendRow( new QStandardItem( line ) );
 }
 
-void OutputViewCommand::procReadStderr(K3Process* proc, char* buf, int len)
+void OutputViewCommand::procReadStderr(const QString &line)
 {
-    Q_UNUSED(proc);
-    QString txt = QString::fromLocal8Bit( buf, len );
-    QStringList l = txt.split("\n");
-    foreach( QString s, l )
-    {
-        m_model->appendRow( new QStandardItem( s ) );
-    }
+    m_model->appendRow( new QStandardItem( line ) );
 }
 
 void OutputViewCommand::procFinished( K3Process* proc )
