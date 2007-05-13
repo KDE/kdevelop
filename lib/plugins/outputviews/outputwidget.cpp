@@ -40,21 +40,12 @@ OutputWidget::OutputWidget(QWidget* parent, SimpleOutputView* view)
 
 void OutputWidget::addNewTab(const QString& title, QStandardItemModel* model )
 {
-    if( !model || title.isEmpty() )
+    if( !model || title.isEmpty() || m_listviews.contains(title) )
         return;
-    
-    if( !m_listviews.contains( title ) )
-    {
-        QListView* listview = new QListView(this);
-        listview->setModel( model );
-        m_listviews[title] = listview;
-        addTab( listview, title );
-    }
-    else
-    {
-        QListView* listview = m_listviews[title];
-        listview->setModel( model );
-    }
+    QListView* listview = new QListView(this);
+    listview->setModel( model );
+    m_listviews[title] = listview;
+    addTab( listview, title );
 }
 
 void OutputWidget::addNewTab( OutputViewCommand* cmd )
