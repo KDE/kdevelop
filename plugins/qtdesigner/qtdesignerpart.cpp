@@ -1,4 +1,5 @@
 /***************************************************************************
+ *   Copyright (C) 2005 by Roberto Raggi <roberto@kdevelop.org>            *
  *   Copyright (C) 2005 by Harald Fernengel <harry@kdevelop.org>           *
  *   Copyright (C) 2006 by Matt Rogers <mattr@kde.org>                     *
  *   Copyright (C) 2007 by Andreas Pakulat <apaku@gmx.de>                  *
