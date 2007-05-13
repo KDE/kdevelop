@@ -21,7 +21,7 @@ kde4_add_ui_files(kdevvalgrind_PART_SRCS ${kdevvalgrind_PART_UI})
 
 
 kde4_add_plugin(kdevvalgrind ${kdevvalgrind_PART_SRCS})
-target_link_libraries(kdevvalgrind ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} ktexteditor kdevplatform)
+target_link_libraries(kdevvalgrind ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS} kdevplatform)
 
 install(TARGETS kdevvalgrind DESTINATION ${PLUGIN_INSTALL_DIR} )
 

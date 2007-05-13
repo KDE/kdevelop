@@ -66,8 +66,8 @@ set (
 )
 
 
-#ADD_DEFINITIONS( -fexceptions -Wall -fno-inline)
-ADD_DEFINITIONS(-fexceptions -Wall)
+#ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS} -Wall -fno-inline)
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS} -Wall)
 
 kde4_automoc(${kdevteamwork_PART_SRCS})
 kde4_add_ui_files(kdevteamwork_PART_SRCS ${kdevteamwork_UI} )

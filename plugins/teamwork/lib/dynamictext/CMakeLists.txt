@@ -15,17 +15,17 @@ SET( dynamictext_SRCS
 )
 
 #add definitions, compiler switches, etc.
-#ADD_DEFINITIONS(-Wall -g -fno-inline -fexceptions)
-#ADD_DEFINITIONS(-Wall -os -finline -fexceptions)
-#ADD_DEFINITIONS(-Wall -o3 -g -fexceptions)
+#ADD_DEFINITIONS(-Wall -g -fno-inline ${KDE4_ENABLE_EXCEPTIONS})
+#ADD_DEFINITIONS(-Wall -os -finline ${KDE4_ENABLE_EXCEPTIONS})
+#ADD_DEFINITIONS(-Wall -o3 -g ${KDE4_ENABLE_EXCEPTIONS})
 
-ADD_DEFINITIONS(-Wall -fexceptions)
+ADD_DEFINITIONS(-Wall ${KDE4_ENABLE_EXCEPTIONS})
 
 #list all source files here
 
 ######## next target ########
 
-ADD_LIBRARY( dynamictext STATIC ${dynamictext_SRCS} )
+KDE4_ADD_LIBRARY( dynamictext STATIC ${dynamictext_SRCS} )
 TARGET_LINK_LIBRARIES( dynamictext ${COMMONCPP2_LIBRARIES} boost_serialization boost_thread)
 set_target_properties( dynamictext PROPERTIES VERSION 1.0.0 SOVERSION 1)
 #install(TARGETS dynamictext DESTINATION ${LIB_INSTALL_DIR})

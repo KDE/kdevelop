@@ -12,7 +12,7 @@ set(parsertest_SRCS test_parser.cpp)
 
 kdevelop_add_test(${parsertest_SRCS})
 kde4_add_executable(parsertest NOGUI RUN_UNINSTALLED ${parsertest_SRCS})
-target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser ktexteditor)
+target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser)
 add_test(kdevelop-parsertest ${EXECUTABLE_OUTPUT_PATH}/parsertest)
 
 
@@ -22,7 +22,7 @@ set(pooltest_SRCS test_pool.cpp)
 
 kdevelop_add_test(${pooltest_SRCS})
 kde4_add_executable(pooltest NOGUI RUN_UNINSTALLED ${pooltest_SRCS})
-target_link_libraries(pooltest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser ktexteditor)
+target_link_libraries(pooltest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser)
 add_test(kdevelop-memorypooltest ${EXECUTABLE_OUTPUT_PATH}/pooltest)
 
 
