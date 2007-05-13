@@ -185,13 +185,17 @@ public:
     virtual bool renameFolder(KDevelop::ProjectFolderItem* oldFolder,
                               const KUrl& newFolder );
 
+    // IPlugin interface
+    QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+
 private Q_SLOTS:
+    void slotCtxTriggered();
     void updateTargetMenu();
 
     /// Displays targets in top src dir
     void targetMenuActivated( QAction* );
     void slotBuilt( KDevelop::ProjectBaseItem* item );
-
+    
 private:
     /**
      * Initialize targets by reading Makefile in @arg dir

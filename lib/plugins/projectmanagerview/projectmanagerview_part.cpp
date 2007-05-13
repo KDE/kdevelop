@@ -162,12 +162,12 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         if ( KDevelop::ProjectFolderItem *folder = item->folder() )
         {
             actions << new QAction( i18n( "Folder: %1", folder->url().directory() ), this );
-            QAction* buildaction = new QAction( i18n( "Build this project" ), this );
-            buildaction->setObjectName(d->build_objectname);
-            d->contextMenuMapper->setMapping( buildaction, buildaction->objectName() );
-            d->contexts[buildaction->objectName()] = context;
-            connect( buildaction, SIGNAL(triggered() ), d->contextMenuMapper, SLOT( map() ) );
-            actions << buildaction;
+//             QAction* buildaction = new QAction( i18n( "Build this project" ), this );
+//             buildaction->setObjectName(d->build_objectname);
+//             d->contextMenuMapper->setMapping( buildaction, buildaction->objectName() );
+//             d->contexts[buildaction->objectName()] = context;
+//             connect( buildaction, SIGNAL(triggered() ), d->contextMenuMapper, SLOT( map() ) );
+//             actions << buildaction;
         }
         else if ( KDevelop::ProjectFileItem *file = item->file() )
         {
@@ -177,12 +177,12 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         {
             actions << new QAction( i18n( "Target: %1", target->text() ), this );
 
-            QAction* targetBldAction = new QAction( i18n( "Build this target" ), this );
-            targetBldAction->setObjectName( d->build_objectname );
-            d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
-            d->contexts[ targetBldAction->objectName() ] = context;
-            connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
-            actions << targetBldAction;
+//             QAction* targetBldAction = new QAction( i18n( "Build this target" ), this );
+//             targetBldAction->setObjectName( d->build_objectname );
+//             d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
+//             d->contexts[ targetBldAction->objectName() ] = context;
+//             connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
+//             actions << targetBldAction;
         }
         return qMakePair(QString("Project Management"), actions);
     }

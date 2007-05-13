@@ -16,6 +16,7 @@
 #include "imakebuilder.h"
 #include "kgenericfactory.h"
 #include "projectmodel.h"
+#include "context.h"
 
 #include <QList>
 #include <QDir>
@@ -24,6 +25,7 @@
 #include <QActionGroup>
 #include <QVariant>
 #include <QStack>
+#include <QAction>
 #include <QtDesigner/QExtensionFactory>
 
 #include <kurl.h>
@@ -47,6 +49,7 @@ public:
 
     QActionGroup *m_targetGroup;
     KMenu *m_targetMenu;
+    KDevelop::ProjectBaseItem *m_ctxItem;
 
 //     QList< KDevelop::ProjectBaseItem* > m_testItems; // for debug
 };
@@ -70,6 +73,7 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QStringList& args )
     }
     d->m_rootItem = NULL;
     d->m_project = NULL;
+    d->m_ctxItem = NULL;
 
     KActionMenu *actionMenu = new KActionMenu( i18n( "Build &Target" ), this );
     actionCollection()->addAction("build_target", actionMenu);
@@ -266,8 +270,54 @@ bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, con
     return false;
 }
 
+QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( KDevelop::Context* context )
+{
+    if( context->type() != KDevelop::Context::ProjectItemContext )
+    {
+        return IPlugin::requestContextMenuActions( context );
+    }
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+    KDevelop::ProjectBaseItem* baseitem = ctx->item();
+    
+    KDevelop::ProjectItem *myPrjItem = baseitem->project()->projectItem();
+    if( myPrjItem != d->m_rootItem )
+    {
+        // This project is not managed by me. No context menu.
+        return IPlugin::requestContextMenuActions( context );
+    }
+
+    QList<QAction*> actions;
+    if( KDevelop::ProjectItem *prjItem = baseitem->projectItem() )
+    {
+        QAction* prjBldAction = new QAction( i18n( "Build this project" ), this );
+        d->m_ctxItem = prjItem;
+        connect( prjBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
+        actions << prjBldAction;
+    }
+    else if( KDevelop::ProjectTargetItem *targetItem = baseitem->target() )
+    {
+        QAction* targetBldAction = new QAction( i18n( "Build this target" ), this );
+//         targetBldAction->setObjectName( d->build_objectname );
+//         d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
+//         d->contexts[ targetBldAction->objectName() ] = context;
+//         connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
+        d->m_ctxItem = targetItem;
+        connect( targetBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
+        actions << targetBldAction;
+    }
+    return qMakePair(QString("Custom Make Manager"), actions);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // private slots
+void CustomMakeManager::slotCtxTriggered()
+{
+    if( d->m_ctxItem )
+    {
+        d->m_builder->build( d->m_ctxItem );
+    }
+    d->m_ctxItem = NULL;
+}
 
 void CustomMakeManager::updateTargetMenu()
 {
