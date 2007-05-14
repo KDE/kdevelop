@@ -36,23 +36,6 @@
 #include <iostream>
     
 
-class SpecialMutexLocker {
-public:
-  SpecialMutexLocker( QMutex& mutex ) : m_mutex(mutex) {
-    if( !m_mutex.tryLock() ) {
-      m_mutex.lock(); //place breakpoint here to find out when the object is used by another thread
-    }
-  }
-  ~SpecialMutexLocker() {
-    m_mutex.unlock();
-  }
-private:
-  QMutex& m_mutex;
-};
-
-#define LOCK_PROBLEMS_1 SpecialMutexLocker problemLocker( const_cast<QMutex&>(m_problemMutex) );
-#define LOCK_PROBLEMS(x) { SpecialMutexLocker problemLocker( const_cast<QMutex&>(m_problemMutex) ); x; };
-
 //     void Macro::read( QDataStream& stream ) {
 //         stream >> m_idHashValid;
 //         stream >> m_valueHashValid;
@@ -144,8 +127,7 @@ void Driver::reset( ) {
   m_lexerCache.clear();
   m_dependences.clear();
   m_macros.clear();
-  
-  LOCK_PROBLEMS ( m_problems.clear(); );
+  m_problems.clear();
   m_includePaths.clear();
 
   while ( m_parsedUnits.size() ) {
@@ -162,7 +144,7 @@ QStringList Driver::getCustomIncludePath( const QString& ) {
 void Driver::remove
   ( const QString & fileName ) {
   m_dependences.remove( fileName );
-    LOCK_PROBLEMS ( m_problems.remove( fileName ); );
+  m_problems.remove( fileName );
     if( !isResolveDependencesEnabled() )
       removeAllMacrosInFile( fileName );
 
@@ -297,11 +279,7 @@ class Driver::ParseHelper {
       CachedLexedFilePointer lexedFileP = m_driver->m_lexerCache.lexedFile(  HashedString( fileName ) );
       
       m_driver->m_dependences.remove( fileName );
-      if( fileName != m_driver->m_currentMasterFileName ) {
-        //For the master-filename, the problems are removed when parseFile(..) is called
-        SpecialMutexLocker l( m_driver->m_problemMutex );
-        m_driver->m_problems.remove( fileName );
-      }
+      m_driver->m_problems.remove( fileName );
 
       driver->m_currentFileName = fileName;
 
@@ -471,7 +449,6 @@ QMap< QString, Dependence >& Driver::findOrInsertDependenceList( const QString &
 }
 
 QValueList < Problem >& Driver::findOrInsertProblemList( const QString & fileName ) {
-  LOCK_PROBLEMS_1;
   QMap<QString, QValueList<Problem> >::Iterator it = m_problems.find( fileName );
   if ( it != m_problems.end() )
     return it.data();
@@ -499,7 +476,6 @@ void Driver::insertMacros( const MacroSet& macros ) {
 }
 
 QValueList < Problem > Driver::problems( const QString & fileName ) const {
-  LOCK_PROBLEMS_1;
   QMap<QString, QValueList<Problem> >::ConstIterator it = m_problems.find( fileName );
   if ( it != m_problems.end() )
     return it.data();
