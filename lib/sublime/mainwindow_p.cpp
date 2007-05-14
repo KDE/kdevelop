@@ -69,6 +69,21 @@ Area::WalkerMode MainWindowPrivate::ToolViewCreator::operator() (View *view, Sub
         d->viewDocks[view] = dock;
 
         d->m_mainWindow->addDockWidget(d->positionToDockArea(position), dock);
+        /*
+          Automatic tabification of new docks, currently KDevelop has far
+          too many dockwidgets when a project is loaded and a ui file is opened
+          This can be made a config option or removed completely later on when
+          new areas are created for things like ui-editing
+        */
+        foreach(QDockWidget* dck, d->docks)
+        {
+            if( dck != dock &&
+                d->m_mainWindow->dockWidgetArea(dck) == d->positionToDockArea(position) )
+            {
+                d->m_mainWindow->tabifyDockWidget(dck, dock);
+                break;
+            }
+        }
     }
     return Area::ContinueWalker;
 }
