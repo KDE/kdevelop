@@ -23,11 +23,16 @@
 #include "qtdesignerplugin.h"
 #include "icore.h"
 #include "iuicontroller.h"
-#include <QtGui/QWidget>
+#include <QtDesigner/QDesignerFormWindowManagerInterface>
+#include <QtDesigner/QDesignerFormWindowInterface>
+#include <QtDesigner/QDesignerFormEditorInterface>
+#include <QtGui/QMdiArea>
+#include <QtCore/QFile>
 
 QtDesignerDocument::QtDesignerDocument( const KUrl& url , KDevelop::ICore* core )
     : Sublime::UrlDocument(core->uiController()->controller(), url), KDevelop::IDocument(core), m_url(url)
 {
+
 }
 
 KUrl QtDesignerDocument::url() const
@@ -91,8 +96,18 @@ void QtDesignerDocument::setDesignerPlugin(QtDesignerPlugin* plugin)
 
 QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
 {
-    kDebug(9000) << "CREATING NEW UI WIDGET" << endl;
-    return new QWidget(parent);
+    kDebug(9039) << "Creating new area for form: " << m_url << endl;
+    QMdiArea* area = new QMdiArea(parent);
+    QFile uiFile(m_url.path());
+    QDesignerFormWindowManagerInterface* manager = m_designerPlugin->designer()->formWindowManager();
+    QDesignerFormWindowInterface* widget = manager->createFormWindow();
+    kDebug(9039) << "now we have " << manager->formWindowCount() << " formwindows" << endl;
+    widget->setFileName(m_url.path());
+    widget->setContents(&uiFile);
+    manager->setActiveFormWindow(widget);
+    area->addSubWindow(widget);
+    m_areas << area;
+    return area;
 }
 
 

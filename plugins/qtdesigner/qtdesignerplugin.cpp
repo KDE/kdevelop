@@ -42,6 +42,7 @@
 
 #include "icore.h"
 #include "idocumentcontroller.h"
+#include "iuicontroller.h"
 #include "qtdesignerdocument.h"
 #include "internals/qdesigner_integration_p.h"
 
@@ -73,6 +74,53 @@ public:
         QtDesignerPlugin* m_plugin;
 };
 
+class QtDesignerToolViewFactory : public KDevelop::IToolViewFactory
+{
+public:
+    enum Type
+    {
+        WidgetBox,
+        PropertyEditor,
+        ActionEditor,
+        ObjectInspector
+    };
+    QtDesignerToolViewFactory( QtDesignerPlugin* plugin, Type typ )
+        : IToolViewFactory(), m_plugin(plugin), m_type(typ)
+    {
+    }
+
+    virtual QWidget* create(QWidget *parent = 0)
+    {
+        if( m_type == WidgetBox )
+            return m_plugin->designer()->widgetBox();
+        else if( m_type == PropertyEditor )
+            return m_plugin->designer()->propertyEditor();
+        else if( m_type == ActionEditor )
+            return m_plugin->designer()->actionEditor();
+        else if( m_type == ObjectInspector )
+            return m_plugin->designer()->objectInspector();
+        kDebug(9039) << "Type not found: " << m_type << endl;
+        return 0;
+    }
+    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    {
+        if( m_type == WidgetBox )
+            return Qt::LeftDockWidgetArea;
+        else if( m_type == PropertyEditor )
+            return Qt::RightDockWidgetArea;
+        else if( m_type == ActionEditor )
+            return Qt::RightDockWidgetArea;
+        else if( m_type == ObjectInspector )
+            return Qt::RightDockWidgetArea;
+        kDebug(9039) << "Type not found: " << m_type << endl;
+        return Qt::TopDockWidgetArea;
+    }
+
+private:
+    QtDesignerPlugin* m_plugin;
+    Type m_type;
+};
+
 QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     : KDevelop::IPlugin(QtDesignerPluginFactory::componentData(),parent),
       m_docFactory(new QtDesignerDocumentFactory(this))
@@ -86,27 +134,42 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
 //   m_workspace->setScrollBarsEnabled(true);
 //   setWidget( m_workspace );
 
-  setXMLFile( "kdevqtdesigner.rc" );
+    setXMLFile( "kdevqtdesigner.rc" );
 
-//   m_designer = QDesignerComponents::createFormEditor(this);
-//   m_designer->setTopLevel( parentWidget );
+    m_designer = QDesignerComponents::createFormEditor(this);
+//     m_designer->setTopLevel( parentWidget );
 
-//   m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
+    m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
 //   Q_ASSERT(m_designer->widgetBox() != 0);
 //
 //   // load the standard widgets
-//   m_designer->widgetBox()->setFileName(QLatin1String(":/trolltech/widgetbox/widgetbox.xml"));
-//   m_designer->widgetBox()->load();
+    m_designer->widgetBox()->setFileName(QLatin1String(":/trolltech/widgetbox/widgetbox.xml"));
+    m_designer->widgetBox()->load();
 //
-//   m_designer->setPropertyEditor(QDesignerComponents::createPropertyEditor(m_designer, 0));
+    m_designer->setPropertyEditor(QDesignerComponents::createPropertyEditor(m_designer, 0));
+    m_designer->setActionEditor(QDesignerComponents::createActionEditor(m_designer, 0));
+    m_designer->setObjectInspector(QDesignerComponents::createObjectInspector(m_designer, 0));
 //   Q_ASSERT(m_designer->propertyEditor() != 0);
 //
 //   (void) new qdesigner_internal::QDesignerIntegration(m_designer, this);
 //
-//   m_designer->widgetBox()->setObjectName( i18n("Widget Box") );
-//   m_designer->propertyEditor()->setObjectName( i18n("Property Editor") );
+    m_designer->widgetBox()->setObjectName( i18n("Widget Box") );
+    m_designer->propertyEditor()->setObjectName( i18n("Property Editor") );
 //
 //   setupActions();
+
+    m_widgetBoxFactory = new QtDesignerToolViewFactory( this,
+            QtDesignerToolViewFactory::WidgetBox );
+    m_propertyEditorFactory = new QtDesignerToolViewFactory( this,
+            QtDesignerToolViewFactory::PropertyEditor);
+    m_actionEditorFactory = new QtDesignerToolViewFactory( this,
+            QtDesignerToolViewFactory::ActionEditor);
+    m_objectInspectorFactory = new QtDesignerToolViewFactory( this,
+            QtDesignerToolViewFactory::ObjectInspector);
+    core()->uiController()->addToolView("Widget Box", m_widgetBoxFactory );
+    core()->uiController()->addToolView("Property Editor", m_propertyEditorFactory );
+    core()->uiController()->addToolView("Action Editor", m_actionEditorFactory );
+    core()->uiController()->addToolView("Object Inspector", m_objectInspectorFactory );
 
 //   connect( KDevelop::ICore::documentController(), SIGNAL( documentActivated( KDevelop::Document* ) ),
 //            this, SLOT( activated( KDevelop::Document* ) ) );
@@ -114,24 +177,21 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
 
 QtDesignerPlugin::~QtDesignerPlugin()
 {
-//     if (m_designer)
-//     {
 //         if (m_window)
 //         {
 //             m_designer->formWindowManager()->removeFormWindow( m_window );
 //             delete m_window;
 //         }
 //
-//         delete m_designer;
-//     }
+    delete m_designer;
 //     if (m_workspace)
 //         m_workspace->deleteLater();
     delete m_docFactory;
 }
 
-void QtDesignerPlugin::activated( KDevelop::IDocument *document )
-{
-    Q_UNUSED(document)
+// void QtDesignerPlugin::activated( KDevelop::IDocument *document )
+// {
+//     Q_UNUSED(document)
     //FIXME
 //     if ( document->url() == url() )
 //     {
@@ -148,7 +208,7 @@ void QtDesignerPlugin::activated( KDevelop::IDocument *document )
 //         KDevCore::mainWindow()->lowerView( m_designer->widgetBox() );
 //         KDevCore::mainWindow()->lowerView( m_designer->propertyEditor() );
 //     }
-}
+// }
 
 // KAboutData* QtDesignerPlugin::createAboutData()
 // {
@@ -163,13 +223,13 @@ void QtDesignerPlugin::activated( KDevelop::IDocument *document )
 //   return aboutData;
 // }
 
-// QDesignerFormEditorInterface *QtDesignerPlugin::designer() const
-// {
-//   return m_designer;
-// }
-
-void QtDesignerPlugin::setupActions()
+QDesignerFormEditorInterface *QtDesignerPlugin::designer() const
 {
+    return m_designer;
+}
+
+// void QtDesignerPlugin::setupActions()
+// {
 //     QAction *a = KStandardAction::save( this, SLOT( save() ), actionCollection());
 //     actionCollection()->addAction( "file_save", a );
 //     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
@@ -239,7 +299,7 @@ void QtDesignerPlugin::setupActions()
 //     designerAction = manager->actionSelectAll();
 //     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
 //                                           "designer_select_all" );
-}
+// }
 
 // bool QtDesignerPlugin::openFile()
 // {
@@ -291,46 +351,46 @@ void QtDesignerPlugin::setupActions()
 //     return false;
 // }
 
-QAction* QtDesignerPlugin::wrapDesignerAction( QAction* dAction,
-                                         KActionCollection* parent,
-                                         const char* name )
-{
-    QAction *a = parent->addAction( name );
-    a->setText( dAction->text() );
-    a->setIcon(  KIcon( dAction->icon() ) );
-    a->setShortcut( dAction->shortcut() );
-    a->setShortcutContext( dAction->shortcutContext() );
-    connect( a, SIGNAL( triggered() ), dAction, SIGNAL( triggered() ) );
-
-    m_designerActions[a] = dAction;
-    updateDesignerAction( a, dAction );
-    return a;
-}
-
-void QtDesignerPlugin::updateDesignerAction( QAction* a, QAction* dAction )
-{
-    a->setActionGroup( dAction->actionGroup() );
-    a->setCheckable( dAction->isCheckable() );
-    a->setChecked( dAction->isChecked() );
-    a->setEnabled( dAction->isEnabled() );
-    a->setData( dAction->data() );
-    a->setFont( dAction->font() );
-    a->setIconText( dAction->iconText() );
-    a->setSeparator( dAction->isSeparator() );
-    a->setStatusTip( dAction->statusTip() );
-    a->setText( dAction->text() );
-    a->setToolTip( dAction->toolTip() );
-    a->setWhatsThis( dAction->whatsThis() );
-}
-
-void QtDesignerPlugin::updateDesignerActions()
-{
-    DesignerActionHash::ConstIterator it, itEnd = m_designerActions.constEnd();
-    for ( it = m_designerActions.constBegin(); it != itEnd; ++it )
-    {
-        updateDesignerAction( it.key(), it.value() );
-    }
-}
+// QAction* QtDesignerPlugin::wrapDesignerAction( QAction* dAction,
+//                                          KActionCollection* parent,
+//                                          const char* name )
+// {
+//     QAction *a = parent->addAction( name );
+//     a->setText( dAction->text() );
+//     a->setIcon(  KIcon( dAction->icon() ) );
+//     a->setShortcut( dAction->shortcut() );
+//     a->setShortcutContext( dAction->shortcutContext() );
+//     connect( a, SIGNAL( triggered() ), dAction, SIGNAL( triggered() ) );
+//
+//     m_designerActions[a] = dAction;
+//     updateDesignerAction( a, dAction );
+//     return a;
+// }
+//
+// void QtDesignerPlugin::updateDesignerAction( QAction* a, QAction* dAction )
+// {
+//     a->setActionGroup( dAction->actionGroup() );
+//     a->setCheckable( dAction->isCheckable() );
+//     a->setChecked( dAction->isChecked() );
+//     a->setEnabled( dAction->isEnabled() );
+//     a->setData( dAction->data() );
+//     a->setFont( dAction->font() );
+//     a->setIconText( dAction->iconText() );
+//     a->setSeparator( dAction->isSeparator() );
+//     a->setStatusTip( dAction->statusTip() );
+//     a->setText( dAction->text() );
+//     a->setToolTip( dAction->toolTip() );
+//     a->setWhatsThis( dAction->whatsThis() );
+// }
+//
+// void QtDesignerPlugin::updateDesignerActions()
+// {
+//     DesignerActionHash::ConstIterator it, itEnd = m_designerActions.constEnd();
+//     for ( it = m_designerActions.constBegin(); it != itEnd; ++it )
+//     {
+//         updateDesignerAction( it.key(), it.value() );
+//     }
+// }
 
 #include "qtdesignerplugin.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; indent-mode cstyle;

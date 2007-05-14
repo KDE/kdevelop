@@ -31,7 +31,7 @@ class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
 class QWorkspace;
 class QtDesignerDocumentFactory;
-
+class QtDesignerToolViewFactory;
 class KAboutData;
 class KAction;
 
@@ -54,12 +54,12 @@ public:
 
 //   static KAboutData* createAboutData();
 
-  void setupActions();
+//   void setupActions();
 
 //   virtual bool openFile();
 //   virtual bool saveFile();
 
-//   QDesignerFormEditorInterface *designer() const;
+  QDesignerFormEditorInterface *designer() const;
 
 protected:
 //   bool eventFilter(QObject*, QEvent*);
@@ -67,19 +67,23 @@ protected:
 private:
   //wrap the actions provided by QDesignerFormWindowManagerInterface in
   //KActions
-  QAction* wrapDesignerAction( QAction*, KActionCollection*, const char* );
-  void updateDesignerAction( QAction*, QAction* );
+//   QAction* wrapDesignerAction( QAction*, KActionCollection*, const char* );
+//   void updateDesignerAction( QAction*, QAction* );
 
 private Q_SLOTS:
-  void updateDesignerActions();
-  void activated( KDevelop::IDocument* );
+//   void updateDesignerActions();
+//   void activated( KDevelop::IDocument* );
 
 
 private:
   QPointer<QDesignerFormEditorInterface> m_designer;
 
-  DesignerActionHash m_designerActions;
+//   DesignerActionHash m_designerActions;
   QtDesignerDocumentFactory* m_docFactory;
+  QtDesignerToolViewFactory* m_widgetBoxFactory;
+  QtDesignerToolViewFactory* m_propertyEditorFactory;
+  QtDesignerToolViewFactory* m_objectInspectorFactory;
+  QtDesignerToolViewFactory* m_actionEditorFactory;
 };
 
 #endif // QTDESIGNER_PART_H

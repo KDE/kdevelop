@@ -24,12 +24,15 @@
 #include <sublime/urldocument.h>
 #include <idocument.h>
 
+#include <QtCore/QList>
+
 namespace KDevelop
 {
     class ICore;
 }
 
 class QtDesignerPlugin;
+class QMdiArea;
 
 class QtDesignerDocument : public Sublime::UrlDocument, public KDevelop::IDocument
 {
@@ -54,6 +57,7 @@ protected:
 private:
     QtDesignerPlugin* m_designerPlugin;
     KUrl m_url;
+    QList<QMdiArea*> m_areas;
 };
 
 #endif
