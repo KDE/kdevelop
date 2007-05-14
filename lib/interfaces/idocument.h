@@ -115,7 +115,7 @@ public:
 
     /**
      * Performs document activation actions if any.
-     * This needs to emit IDocumentController::documentActivated
+     * This needs to call notifyActivated()
      */
     virtual void activate(Sublime::View *activeView) = 0;
 
