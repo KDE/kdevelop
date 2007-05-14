@@ -19,18 +19,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef QTDESIGNER_PART_H
-#define QTDESIGNER_PART_H
+#ifndef QTDESIGNER_PLUGIN_H
+#define QTDESIGNER_PLUGIN_H
 
-#include <QObject>
 #include <QHash>
 #include <QtCore/QPointer>
-#include <kparts/part.h>
+#include "iplugin.h"
 
 class QAction;
 class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
 class QWorkspace;
+class QtDesignerDocumentFactory;
 
 class KAboutData;
 class KAction;
@@ -45,24 +45,24 @@ template<class T> class QList;
 typedef QHash<QAction*, QAction*> DesignerActionHash;
 
 
-class QtDesignerPart: public KDevelop::IPlugin
+class QtDesignerPlugin: public KDevelop::IPlugin
 {
   Q_OBJECT
 public:
-  QtDesignerPart(QWidget* parentWidget, QObject *parent, const QStringList &args);
-  virtual ~QtDesignerPart();
+  QtDesignerPlugin(QObject *parent, const QStringList &args);
+  virtual ~QtDesignerPlugin();
 
-  static KAboutData* createAboutData();
+//   static KAboutData* createAboutData();
 
   void setupActions();
 
-  virtual bool openFile();
-  virtual bool saveFile();
+//   virtual bool openFile();
+//   virtual bool saveFile();
 
-  QDesignerFormEditorInterface *designer() const;
+//   QDesignerFormEditorInterface *designer() const;
 
 protected:
-  bool eventFilter(QObject*, QEvent*);
+//   bool eventFilter(QObject*, QEvent*);
 
 private:
   //wrap the actions provided by QDesignerFormWindowManagerInterface in
@@ -72,16 +72,14 @@ private:
 
 private Q_SLOTS:
   void updateDesignerActions();
-  void activated( KDevelop::Document* );
+  void activated( KDevelop::IDocument* );
 
 
 private:
   QPointer<QDesignerFormEditorInterface> m_designer;
-  QPointer<QDesignerFormWindowInterface> m_window;
-  QPointer<QWorkspace> m_workspace;
 
   DesignerActionHash m_designerActions;
-
+  QtDesignerDocumentFactory* m_docFactory;
 };
 
 #endif // QTDESIGNER_PART_H
