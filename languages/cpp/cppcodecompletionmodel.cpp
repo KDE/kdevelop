@@ -30,8 +30,9 @@
 #include "classfunctiondeclaration.h"
 #include "ducontext.h"
 #include "duchain.h"
-#include "duchain/topducontext.h"
-#include "duchain/dumpchain.h"
+#include "duchainlock.h"
+#include "topducontext.h"
+#include "dumpchain.h"
 
 using namespace KTextEditor;
 
@@ -51,12 +52,11 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   KUrl url = view->document()->url();
   if (TopDUContext* top = DUChain::self()->chainForDocument(url)) {
     kDebug(9007) << "completion invoked for context " << top << endl;
-    QReadLocker lock(DUChain::lock());
+    DUChainReadLocker lock(DUChain::lock());
     DUContext* thisContext = top->findContextAt(range.start());
 
     kDebug(9007) << "context is set to " << thisContext << endl;
     {
-      QReadLocker lock(DUChain::lock());
       kDebug( 9007 ) << "================== duchain for the context =======================" << endl;
       DumpChain dump;
       dump.dump(thisContext);
@@ -72,7 +72,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
   if (!dec)
     return QVariant();
 
-  QReadLocker lock(DUChain::lock());
+  DUChainReadLocker lock(DUChain::lock());
 
   switch (role) {
     case Qt::DisplayRole:

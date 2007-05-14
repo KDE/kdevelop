@@ -8,7 +8,7 @@ include_directories( ${CMAKE_TOP_BUILD_DIR}
     ${CMAKE_SOURCE_DIR}/lib/language
     ${CMAKE_SOURCE_DIR}/lib/language/interfaces
     ${CMAKE_SOURCE_DIR}/lib/editor
-	${CMAKE_SOURCE_DIR}/languages/cpp/
+    ${CMAKE_SOURCE_DIR}/languages/cpp/
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
 )
 
@@ -22,7 +22,7 @@ set(kdevduchain_LIB_SRCS
     topducontext.cpp
     declaration.cpp
     definition.cpp
-	../kdevcodehighlighting.cpp
+    ../kdevcodehighlighting.cpp
     classmemberdeclaration.cpp
     classfunctiondeclaration.cpp
     use.cpp
@@ -36,6 +36,7 @@ set(kdevduchain_LIB_SRCS
     symboltable.cpp
     forwarddeclaration.cpp
     duchainbase.cpp
+    duchainlock.cpp
 )
 
 kde4_automoc(${kdevduchain_LIB_SRCS})

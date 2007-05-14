@@ -28,6 +28,7 @@
 #include "use.h"
 #include "topducontext.h"
 #include "duchain.h"
+#include "duchainlock.h"
 
 using namespace KTextEditor;
 
@@ -71,7 +72,7 @@ void UseBuilder::newUse(NameAST* name)
 
   QualifiedIdentifier id = identifierForName(name);
 
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
   QList<Declaration*> declarations = currentContext()->findDeclarations(id, newRange.start());
   foreach (Declaration* declaration, declarations)
     if (!declaration->isForwardDeclaration()) {
@@ -111,7 +112,7 @@ void UseBuilder::newUse(NameAST* name)
 
   if (!ret) {
     readLock.unlock();
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
     Range* prior = m_editor->currentRange();
     Range* use = m_editor->createRange(newRange);

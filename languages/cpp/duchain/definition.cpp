@@ -18,12 +18,10 @@
 
 #include "definition.h"
 
-#include <QReadLocker>
-#include <QWriteLocker>
-
 #include "topducontext.h"
 #include "declaration.h"
 #include "duchain.h"
+#include "duchainlock.h"
 
 using namespace KTextEditor;
 

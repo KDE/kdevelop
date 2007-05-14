@@ -19,11 +19,11 @@
 #include "ducontext.h"
 
 #include <QMutableLinkedListIterator>
-#include <QReadLocker>
 
 #include "declaration.h"
 #include "definition.h"
 #include "duchain.h"
+#include "duchainlock.h"
 #include "use.h"
 #include "typesystem.h"
 #include "topducontext.h"

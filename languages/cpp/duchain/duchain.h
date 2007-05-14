@@ -23,11 +23,10 @@
 
 #include <kurl.h>
 #include "duchainexport.h"
-
 #include "duchainobserver.h"
 
 class TopDUContext;
-class QReadWriteLock;
+class DUChainLock;
 
 /**
  * Holds references to all top level source file contexts.
@@ -60,7 +59,7 @@ public:
    *
    * \threadsafe
    */
-  inline static QReadWriteLock* lock() { return s_lock; }
+  inline static DUChainLock* lock() { return s_lock; }
 
   const QList<DUChainObserver*>& observers() const;
   void addObserver(DUChainObserver* observer);
@@ -80,7 +79,7 @@ private:
   ~DUChain();
 
   static DUChain* s_chain;
-  static QReadWriteLock* s_lock;
+  static DUChainLock* s_lock;
   QMap<KUrl, TopDUContext*> m_chains;
 
   QList<DUChainObserver*> m_observers;

@@ -30,6 +30,7 @@
 #include "symboltable.h"
 #include "forwarddeclaration.h"
 #include "duchain.h"
+#include "duchainlock.h"
 
 using namespace KTextEditor;
 
@@ -109,7 +110,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       // TODO: make correct for incremental parsing; at the moment just skips if there is a definition
       Definition* def = 0;
       {
-        QReadLocker lock(DUChain::lock());
+        DUChainReadLocker lock(DUChain::lock());
         def = currentDeclaration()->definition();
       }
 
@@ -121,7 +122,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
           //kDebug() << k_funcinfo << "Searching for declaration of " << id << endl;
 
           // TODO: potentially excessive locking
-          QWriteLocker lock(DUChain::lock());
+          DUChainWriteLocker lock(DUChain::lock());
           QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, lastType());
           foreach (Declaration* dec, declarations) {
             if (dec->isForwardDeclaration())
@@ -160,7 +161,7 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, b
 
 Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition)
 {
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
 
   Declaration::Scope scope = Declaration::GlobalScope;
   switch (currentContext()->type()) {
@@ -228,7 +229,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
           ClassMemberDeclaration* classDeclaration = static_cast<ClassMemberDeclaration*>(declaration);
           if (classDeclaration->accessPolicy() != currentAccessPolicy()) {
             readLock.unlock();
-            QWriteLocker writeLock(declaration ? DUChain::lock() : 0);
+            DUChainWriteLocker writeLock(declaration ? DUChain::lock() : 0);
             classDeclaration->setAccessPolicy(currentAccessPolicy());
           }
         }
@@ -242,7 +243,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   if (!declaration) {
     readLock.unlock();
-    QWriteLocker writeLock(DUChain::lock());
+    DUChainWriteLocker writeLock(DUChain::lock());
 
     Range* prior = m_editor->currentRange();
     Range* range = m_editor->createRange(newRange);
@@ -298,7 +299,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 void DeclarationBuilder::closeDeclaration()
 {
   if (lastType()) {
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
     currentDeclaration()->setType(lastType());
   }
 
@@ -339,7 +340,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
     Declaration* actual = 0;
     {
-      QReadLocker lock(DUChain::lock());
+      DUChainReadLocker lock(DUChain::lock());
       QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
       foreach (Declaration* declaration, declarations)
         if (!declaration->isForwardDeclaration()) {
@@ -479,7 +480,7 @@ void DeclarationBuilder::applyStorageSpecifiers()
 {
   if (!m_storageSpecifiers.isEmpty())
     if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
-      QWriteLocker lock(DUChain::lock());
+      DUChainWriteLocker lock(DUChain::lock());
 
       member->setStorageSpecifiers(m_storageSpecifiers.top());
     }
@@ -491,7 +492,7 @@ void DeclarationBuilder::applyFunctionSpecifiers()
     Q_ASSERT(dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()));
     ClassFunctionDeclaration* function = static_cast<ClassFunctionDeclaration*>(currentDeclaration());
 
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
     function->setFunctionSpecifiers(m_functionSpecifiers.top());
   }

@@ -42,6 +42,7 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "duchain/duchain.h"
+#include "duchain/duchainlock.h"
 #include "duchain/dumpchain.h"
 #include "duchain/cppeditorintegrator.h"
 #include "duchain/declarationbuilder.h"
@@ -229,8 +230,8 @@ void ParseJob::run()
         // Debug output...
 
         if (topContext->smartRange()) {
-            QReadLocker lock(DUChain::lock());
-            kDebug( 9007 ) << "================== duchain =======================" << endl;
+            DUChainReadLocker lock(DUChain::lock());
+            kDebug( 9007 ) << "================== duchain ==================" << endl;
         /*if (topContext->smartRange()) {
             DumpChain dump;
             dump.dump(ast, parentJob()->parseSession());

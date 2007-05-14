@@ -17,9 +17,7 @@
 */
 
 #include "duchain.h"
-
-#include <QMutexLocker>
-#include <QWriteLocker>
+#include "duchainlock.h"
 
 #include <kstaticdeleter.h>
 
@@ -27,32 +25,11 @@
 
 #include "topducontext.h"
 
-#undef ENSURE_CHAIN_READ_LOCKED
-#undef ENSURE_CHAIN_WRITE_LOCKED
-
-#ifdef NDEBUG
-
-#define ENSURE_CHAIN_READ_LOCKED
-#define ENSURE_CHAIN_WRITE_LOCKED
-
-#else
-
-// Unfortunately, impossible to check this exactly as we could be in a write lock
-#define ENSURE_CHAIN_READ_LOCKED \
-bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
-Q_ASSERT(!_ensure_chain_locked); \
-
-#define ENSURE_CHAIN_WRITE_LOCKED \
-bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
-Q_ASSERT(!_ensure_chain_locked); \
-
-#endif
 
 static KStaticDeleter<DUChain> sd;
 
 DUChain* DUChain::s_chain = 0;
-
-QReadWriteLock* DUChain::s_lock = 0;
+DUChainLock* DUChain::s_lock = 0;
 
 DUChain * DUChain::self( )
 {
@@ -64,7 +41,7 @@ DUChain * DUChain::self( )
 
 DUChain::DUChain()
 {
-  s_lock = new QReadWriteLock();
+  s_lock = new DUChainLock();
 }
 
 DUChain::~DUChain()
@@ -92,7 +69,7 @@ TopDUContext * DUChain::chainForDocument( const KUrl & document )
 
 void DUChain::clear()
 {
-  QWriteLocker writeLock(lock());
+  DUChainWriteLocker writeLock(lock());
   foreach (TopDUContext* context, m_chains) {
     KDevelop::EditorIntegrator::releaseTopRange(context->textRangePtr());
     delete context;

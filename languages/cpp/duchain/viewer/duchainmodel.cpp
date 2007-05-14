@@ -21,8 +21,6 @@
 
 #include "duchainmodel.h"
 
-#include <QReadLocker>
-
 #include <klocale.h>
 
 #include "icore.h"
@@ -33,6 +31,7 @@
 #include "definition.h"
 #include "use.h"
 #include "duchain.h"
+#include "duchainlock.h"
 
 using namespace KTextEditor;
 
@@ -67,7 +66,7 @@ void DUChainModel::documentActivated( KDevelop::Document* document )
 
 void DUChainModel::setTopContext(TopDUContext* context)
 {
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
   QMutexLocker lock(&m_mutex);
 
   if (m_chain != context)
@@ -113,7 +112,7 @@ QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & paren
     return createIndex(row, column, m_chain);
   }
 
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
   QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(parent);
@@ -136,7 +135,7 @@ QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
   if (!index.isValid())
     return QModelIndex();
 
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
   QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(index);
@@ -171,7 +170,7 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
   if (!index.isValid())
     return QVariant();
 
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
   QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(index);
@@ -226,7 +225,7 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
   if (!parent.isValid())
     return 1;
 
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
   QMutexLocker lock(&m_mutex);
 
   DUChainBase* base = objectForIndex(parent);
@@ -348,7 +347,7 @@ bool DUChainModel::hasChildren( const QModelIndex & parent ) const
     return m_chain;
 
   QMutexLocker lock(&m_mutex);
-  QReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
 
   DUChainBase* base = objectForIndex(parent);
   if (!base)

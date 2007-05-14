@@ -34,24 +34,6 @@ class DUChain;
 class Use;
 class TopDUContext;
 
-#ifdef NDEBUG
-
-#define ENSURE_CHAIN_READ_LOCKED
-#define ENSURE_CHAIN_WRITE_LOCKED
-
-#else
-
-// Unfortunately, impossible to check this exactly as we could be in a write lock
-#define ENSURE_CHAIN_READ_LOCKED \
-bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
-Q_ASSERT(!_ensure_chain_locked);
-
-#define ENSURE_CHAIN_WRITE_LOCKED \
-bool _ensure_chain_locked = DUChain::lock()->tryLockForWrite(); \
-Q_ASSERT(!_ensure_chain_locked);
-
-#endif
-
 /**
  * A single context in source code, represented as a node in a
  * directed acyclic graph.

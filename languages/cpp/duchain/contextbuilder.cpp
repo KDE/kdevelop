@@ -24,6 +24,7 @@
 #include <ktexteditor/smartinterface.h>
 
 #include "duchain.h"
+#include "duchainlock.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "declaration.h"
@@ -90,7 +91,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
 
     Range* range = m_editor->topRange(CppEditorIntegrator::DefinitionUseChain);
     topLevelContext = new TopDUContext(range);
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
     topLevelContext->setType(DUContext::Global);
 
     DUChain::self()->addDocumentChain(url, topLevelContext);
@@ -102,7 +103,7 @@ TopDUContext* ContextBuilder::buildContexts(const KUrl& url, AST *node, QList<DU
   node->ducontext = topLevelContext;
 
   if (includes) {
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
     foreach (DUContext* parent, topLevelContext->importedParentContexts())
       if (includes->contains(parent))
@@ -149,7 +150,7 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
 {
   QualifiedIdentifier identifier;
   if (m_compilingContexts) {
-    QReadLocker lock(DUChain::lock());
+    DUChainReadLocker lock(DUChain::lock());
 
     identifier = currentContext()->scopeIdentifier();
     if (node->namespace_name)
@@ -192,7 +193,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       // This is a class function
       functionName.pop();
 
-      QReadLocker lock(DUChain::lock());
+      DUChainReadLocker lock(DUChain::lock());
 
       QList<DUContext*> classContexts = currentContext()->findContexts(DUContext::Class, functionName);
       if (classContexts.count() == 1)
@@ -279,7 +280,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
   DUContext* ret = 0L;
 
   {
-    QReadLocker readLock(DUChain::lock());
+    DUChainReadLocker readLock(DUChain::lock());
 
     if (recompiling()) {
       const QList<DUContext*>& childContexts = currentContext()->childContexts();
@@ -300,7 +301,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
           // Match
           ret = child;
           readLock.unlock();
-          QWriteLocker writeLock(DUChain::lock());
+          DUChainWriteLocker writeLock(DUChain::lock());
           ret->clearUsingNamespaces();
           ret->clearImportedParentContexts();
           m_editor->setCurrentRange(ret->textRangePtr());
@@ -311,7 +312,7 @@ DUContext* ContextBuilder::openContextInternal(const Range& range, DUContext::Co
 
     if (!ret) {
       readLock.unlock();
-      QWriteLocker writeLock(DUChain::lock());
+      DUChainWriteLocker writeLock(DUChain::lock());
 
       ret = new DUContext(m_editor->createRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
       ret->setType(type);
@@ -343,7 +344,7 @@ void ContextBuilder::closeContext()
   // Don't need to clean if it's new (encountered will be current if so)
   if (currentContext()->lastEncountered() != m_encounteredToken)
   {
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
     currentContext()->cleanIfNotEncountered(m_encounteredToken, m_compilingContexts);
     currentContext()->setEncountered(m_encounteredToken);
   }
@@ -401,7 +402,7 @@ void ContextBuilder::visitUsingDirective(UsingDirectiveAST * node)
   DefaultVisitor::visitUsingDirective(node);
 
   if (m_compilingContexts && node->name) {
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
     currentContext()->addUsingNamespace(m_editor->createCursor(m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge)), identifierForName(node->name));
   }
 }
@@ -444,7 +445,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
 {
   DUContext::ContextType type;
   {
-    QReadLocker lock(DUChain::lock());
+    DUChainReadLocker lock(DUChain::lock());
     type = currentContext()->type();
   }
 
@@ -458,7 +459,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     case DUContext::Function:
     case DUContext::Other:
       if (m_compilingContexts) {
-        QReadLocker lock(DUChain::lock());
+        DUChainReadLocker lock(DUChain::lock());
         IdentifierVerifier iv(this, m_editor->findPosition(node->start_token));
         iv.visit(node->expression);
         //kDebug() << k_funcinfo << m_editor->findPosition(node->start_token) << " IdentifierVerifier returned " << iv.result << endl;
@@ -512,7 +513,7 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
 void ContextBuilder::addImportedContexts()
 {
   if (m_compilingContexts && !m_importedParentContexts.isEmpty()) {
-    QWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
     foreach (DUContext* imported, m_importedParentContexts)
       currentContext()->addImportedParentContext(imported);

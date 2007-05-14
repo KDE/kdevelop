@@ -21,8 +21,6 @@
 
 #include "cpphighlighting.h"
 
-#include <QReadLocker>
-
 #include <ktexteditor/smartrange.h>
 
 #include "duchain/topducontext.h"
@@ -31,6 +29,7 @@
 #include "duchain/use.h"
 #include "duchain/cpptypes.h"
 #include "duchain/duchain.h"
+#include "duchain/duchainlock.h"
 
 using namespace KTextEditor;
 
@@ -187,7 +186,7 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
   kDebug( 9007 ) << "highighting du chain" << endl;
-  QReadLocker lock(DUChain::lock());
+  DUChainReadLocker lock(DUChain::lock());
   Q_ASSERT(context->topContext() == context);
   highlightDUChain(static_cast<DUContext*>(context));
 }

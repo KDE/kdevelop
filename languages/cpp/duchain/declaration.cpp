@@ -18,9 +18,6 @@
 
 #include "declaration.h"
 
-#include <QReadLocker>
-#include <QWriteLocker>
-
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
@@ -31,6 +28,7 @@
 #include "symboltable.h"
 #include "forwarddeclaration.h"
 #include "duchain.h"
+#include "duchainlock.h"
 
 using namespace KTextEditor;
 

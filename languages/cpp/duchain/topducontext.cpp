@@ -21,6 +21,7 @@
 #include "symboltable.h"
 #include "declaration.h"
 #include "duchain.h"
+#include "duchainlock.h"
 
 using namespace KTextEditor;
 
