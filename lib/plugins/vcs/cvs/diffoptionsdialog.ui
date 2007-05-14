@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>246</height>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -21,7 +21,7 @@
     </widget>
    </item>
    <item>
-    <widget class="Q3ButtonGroup" name="buttonGroup1" >
+    <widget class="QGroupBox" name="buttonGroup1" >
      <property name="title" >
       <string>Build Difference Between</string>
      </property>
@@ -136,19 +136,13 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
