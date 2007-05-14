@@ -24,8 +24,14 @@
 #include <QList>
 #include <QObject>
 #include <QMetaType>
+#include <QStringList>
+#include <QString>
+
+#include <KUrl>
+
 #include "cmListFileLexer.h"
 #include "cmakeexport.h"
+// #include "cmakemodelitems.h"
 
 class CMakeAst;
 struct CMakeFunctionArgument;
@@ -74,6 +80,29 @@ struct CMakeFunctionArgument
 };
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
+struct TargetInfo
+{
+    QString name;
+    QString type;
+    QStringList sources;
+};
+
+struct FolderInfo
+{
+    QString name;
+    QList<FolderInfo> subFolders;
+    QStringList includes;
+    QStringList defines;
+    QList<TargetInfo> targets;
+};
+
+struct ProjectInfo
+{
+    QString name;
+    QString root;
+    FolderInfo rootFolder;
+};
+
 /**
  * Recursive descent parser for CMakeLists.txt files
  * @author Matt Rogers <mattr@kde.org>
@@ -83,7 +112,13 @@ class KDEVCMAKECOMMON_EXPORT CMakeListsParser : public QObject
 public:
     CMakeListsParser(QObject *parent = 0);
     ~CMakeListsParser();
-
+    
+    ProjectInfo parse( const KUrl& file );
+    
+    ProjectInfo parseProject( const CMakeAst* );
+    TargetInfo parseTarget( const CMakeAst* );
+    FolderInfo parseFolder( const CMakeAst* );
+    
     static bool parseCMakeFile( CMakeAst* root, const QString& fileName );
 
 private:

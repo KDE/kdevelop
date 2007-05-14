@@ -12,11 +12,12 @@ add_subdirectory(tests)
 
 set( cmakecommon_SRCS
   cmakemodelitems.cpp
-  cmakexmlparser.cpp
+  #cmakexmlparser.cpp
   parser/cmListFileLexer.c
   parser/astfactory.cpp
   parser/cmakelistsparser.cpp
   parser/cmakeast.cpp
+  parser/cmakeprojectvisitor.cpp
  )
 
 set( cmakemanager_SRCS

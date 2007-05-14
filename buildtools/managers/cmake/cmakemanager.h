@@ -27,9 +27,7 @@
 #include <ibuildsystemmanager.h>
 #include <iplugin.h>
 
-#include <domutil.h>
-
-#include "cmakexmlparser.h"
+#include "cmakelistsparser.h"
 
 class QDir;
 class QObject;
@@ -103,9 +101,8 @@ private:
     KDevelop::IProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
-    CMakeXmlParser m_xmlParser;
+    CMakeListsParser m_parser;
     ProjectInfo m_projectInfo;
-
 };
 
 #endif

@@ -26,6 +26,7 @@
 #include <QtCore/QStringList>
 #include "cmakeexport.h"
 #include "cmakelistsparser.h"
+#include "cmakeastvisitor.h"
 
 class KDEVCMAKECOMMON_EXPORT CMakeAst
 {
@@ -53,6 +54,8 @@ public:
      * @return the list of this ast's children
      */
     QList<CMakeAst*> children() const  { return m_children; }
+    
+    virtual void accept(CMakeAstVisitor*) const {} //Must be = 0
 
     /**
      * Writes the information stored in the Ast into the @p buffer.
@@ -102,6 +105,8 @@ public:
 
     void setComment( const QString& comment ) { m_comment = comment; }
     QString comment() const { return m_comment; }
+    
+    virtual void accept(CMakeAstVisitor* visitor) const { visitor->visit(this); }
 
     virtual void writeBack( QString& );
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
@@ -136,6 +141,7 @@ private:
        ~klassName();                                         \
                                                              \
         virtual void writeBack( QString& buffer );           \
+	virtual void accept(CMakeAstVisitor* visitor) const { visitor->visit(this); } \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
@@ -541,80 +547,4 @@ CMAKE_ADD_AST_MEMBER( QList<CMakeFunctionArgument>, const QList<CMakeFunctionArg
 CMAKE_END_AST_CLASS( CustomInvokationAst )
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

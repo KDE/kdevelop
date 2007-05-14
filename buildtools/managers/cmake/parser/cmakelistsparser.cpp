@@ -20,6 +20,9 @@
 
 #include "cmakelistsparser.h"
 #include "cmakeast.h"
+#include "cmakeprojectvisitor.h"
+
+#include <kdebug.h>
 
 void CMakeFunctionDesc::addArguments( const QStringList& args )
 {
@@ -128,5 +131,53 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
 
     return false;
 
+}
+
+ProjectInfo CMakeListsParser::parse( const KUrl& file )
+{
+    ProjectInfo pi;
+    CMakeAst *ast = 0;
+    
+    kDebug(9032) << "Parsing file: " << file << endl;
+    
+    if ( !CMakeListsParser::parseCMakeFile( ast, file.url() ) )
+    {
+        pi = parseProject( ast );
+    } else {
+        //FIXME: Put here the error.
+    }
+    return pi;
+}
+
+ProjectInfo CMakeListsParser::parseProject( const CMakeAst* ast )
+{
+    ProjectInfo pi;
+    if ( false )
+    {
+        CMakeProjectVisitor v;
+	ast->accept(&v);
+    }
+    return pi;
+}
+
+FolderInfo CMakeListsParser::parseFolder( const CMakeAst*  )
+{
+    FolderInfo mainInfo;
+    if ( false )
+    {
+        
+    }
+    return mainInfo;
+}
+
+TargetInfo CMakeListsParser::parseTarget( const CMakeAst* )
+{
+    TargetInfo ti;
+    if ( false )
+    {
+        
+    }
+
+    return ti;
 }
 

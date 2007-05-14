@@ -107,11 +107,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
 KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project )
 {
-    QString buildDir = CMakeSettings::self()->buildFolder();
-    kDebug( 9025 ) << k_funcinfo << "build dir is " << qPrintable( buildDir ) << endl;
-    KUrl cmakeInfoFile(buildDir);
-    cmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
-    cmakeInfoFile.addPath("cmakeinfo.xml");
+    QString projectDir = project->projectFileUrl().url();
+    KUrl cmakeInfoFile(projectDir);
+//     cmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
+//     cmakeInfoFile.addPath("CMakeLists.txt");
     kDebug(9025) << k_funcinfo << "file is " << cmakeInfoFile.path() << endl;
     if ( !cmakeInfoFile.isLocalFile() )
     {
@@ -120,7 +119,7 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     }
     else
     {
-        m_projectInfo = m_xmlParser.parse( cmakeInfoFile );
+        m_projectInfo = m_parser.parse( cmakeInfoFile );
         FolderInfo rootFolder = m_projectInfo.rootFolder;
         m_rootItem = new CMakeFolderItem( project, rootFolder, 0 );
         m_rootItem->setText( project->name() );

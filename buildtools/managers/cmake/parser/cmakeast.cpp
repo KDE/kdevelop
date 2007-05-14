@@ -33,7 +33,6 @@ void CMakeAst::writeBack(QString& buffer)
 
 }
 
-
 CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
 CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
@@ -93,7 +92,7 @@ bool CustomCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
     for ( it = func.arguments.begin(); it != itEnd; ++it)
     {
-        QString copy = ( *it ).value;
+        QString copy = it->value;
         if(copy == "SOURCE")
             doing = doing_source;
         else if(copy == "COMMAND")
@@ -242,7 +241,7 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     it = func.arguments.begin() + 2; //advance the iterator two places
     for ( ; it != itEnd; ++it )
     {
-        QString arg = ( *it ).value;
+        QString arg = it->value;
         if ( arg == "DEPENDS" )
             act = ParsingDep;
         else if ( arg == "WORKING_DIRECTORY" )
@@ -358,7 +357,7 @@ bool AddDependenciesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     it = args.begin() + 1; //skip the first argument since it's the target
     for ( ; it != itEnd; ++it )
     {
-        m_dependencies << ( *it ).value;
+        m_dependencies << it->value;
     }
 
     return true;
@@ -390,18 +389,18 @@ bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument> args = func.arguments;
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
     it = args.begin();
-    m_executable = ( *it ).value;
+    m_executable = it->value;
     ++it;
     for ( ; it != itEnd; ++it )
     {
-        if ( ( *it ).value == "WIN32" )
+        if ( it->value == "WIN32" )
             m_isWin32 = true;
-        else if ( ( *it ).value == "MACOSX_BUNDLE" )
+        else if ( it->value == "MACOSX_BUNDLE" )
             m_isOsXBundle = true;
-        else if ( ( *it ).value == "EXCLUDE_FROM_ALL" )
+        else if ( it->value == "EXCLUDE_FROM_ALL" )
             m_excludeFromAll = true;
         else
-            m_sourceLists.append( ( *it ).value );
+            m_sourceLists.append( it->value );
     }
 
     if ( m_sourceLists.isEmpty() )
@@ -439,29 +438,29 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument> args = func.arguments;
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
     it = args.begin();
-    m_libraryName = ( *it ).value;
+    m_libraryName = it->value;
     ++it;
     while ( it != itEnd )
     {
-        if ( ( *it ).value == "STATIC" && !libTypeSet )
+        if ( it->value == "STATIC" && !libTypeSet )
         {
             m_isStatic = true;
             libTypeSet = true;
             ++it;
         }
-        else if ( ( *it ).value == "SHARED" && !libTypeSet )
+        else if ( it->value == "SHARED" && !libTypeSet )
         {
             m_isShared = true;
             libTypeSet = true;
             ++it;
         }
-        else if ( ( *it ).value == "MODULE" && !libTypeSet )
+        else if ( it->value == "MODULE" && !libTypeSet )
         {
             m_isModule = true;
             libTypeSet = true;
             ++it;
         }
-        else if ( ( *it ).value == "EXCLUDE_FROM_ALL" )
+        else if ( it->value == "EXCLUDE_FROM_ALL" )
         {
             m_excludeFromAll = true;
             ++it;
@@ -475,7 +474,7 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     while ( it != itEnd )
     {
-            m_sourceLists.append( ( *it ).value );
+            m_sourceLists.append( it->value );
             ++it;
     }
 
@@ -509,10 +508,10 @@ bool AddSubdirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     it = ++func.arguments.begin();
     for ( ; it != itEnd; ++it )
     {
-        if ( ( *it ).value == "EXCLUDE_FROM_ALL" )
+        if ( it->value == "EXCLUDE_FROM_ALL" )
             m_excludeFromAll = true;
         else if ( m_binaryDir.isEmpty() )
-            m_binaryDir = ( *it ).value;
+            m_binaryDir = it->value;
         else
             return false; //invalid num of args
     }
@@ -544,7 +543,7 @@ bool AddTestAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
     it = func.arguments.begin() + 2;
     for ( ; it != itEnd; ++it )
-        m_testArgs << ( *it ).value;
+        m_testArgs << it->value;
 
     return true;
 }
@@ -1348,7 +1347,7 @@ bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_macroName = func.arguments[0].value;
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
     for ( it = func.arguments.begin() + 1; it != itEnd; ++it )
-        m_knownArgs.append( ( *it ).value );
+        m_knownArgs.append( it->value );
 
     return true;
 }
@@ -1647,7 +1646,7 @@ bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         it = args.begin() + 1;
         itEnd = args.end() - numCacheArgs - numForceArgs;
         for ( ; it != itEnd; ++it )
-            m_values.append( ( *it ).value );
+            m_values.append( it->value );
     }
 
     //catch some simple things. if CACHE is the last or next to last arg or if
@@ -1851,7 +1850,7 @@ bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if ( it == itEnd )
                 return false;
             else
-                m_debugLibs.append( ( *it ).value );
+                m_debugLibs.append( it->value );
         }
         else if ( arg.value == "optimized" )
         {
@@ -1859,7 +1858,7 @@ bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if ( it == itEnd )
                 return false;
             else
-                m_optimizedLibs.append( ( *it ).value );
+                m_optimizedLibs.append( it->value );
         }
         else
             m_otherLibs.append( arg.value );

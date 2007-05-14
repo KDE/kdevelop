@@ -23,7 +23,7 @@
 
 #include <projectmodel.h>
 #include <domutil.h>
-#include "cmakexmlparser.h"
+#include "cmakelistsparser.h"
 #include <cmakeexport.h>
 
 namespace KDevelop {
