@@ -39,6 +39,9 @@ Boston, MA 02110-1301, USA.
 #include "textdocument.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
+#include "iplugincontroller.h"
+
+#include <kplugininfo.h>
 
 /*
 
@@ -195,12 +198,22 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             return 0;
         }
 
-        if( d->factories.contains( mimeType->name() ) )
+        // Try to find a plugin that handles this mimetype
+        QString constraint = QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimeType->name());
+        KPluginInfo::List plugins = IPluginController::queryPlugins( constraint );
+
+        if( !plugins.isEmpty() )
         {
-            IDocument* idoc = d->factories[mimeType->name()]->create(url, Core::self());
-            if( idoc )
+            KPluginInfo* info = plugins.first();
+            kDebug(9000) << "loading " << info->pluginName() << endl;
+            Core::self()->pluginController()->loadPlugin( info->pluginName() );
+            if( d->factories.contains( mimeType->name() ) )
             {
-                 d->documents[url] = idoc;
+                IDocument* idoc = d->factories[mimeType->name()]->create(url, Core::self());
+                if( idoc )
+                {
+                     d->documents[url] = idoc;
+                }
             }
         }
         if ( !d->documents.contains(url) && Core::self()->partController()->isTextType(mimeType))
