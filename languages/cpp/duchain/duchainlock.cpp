@@ -24,8 +24,11 @@
 #include <QThread>
 
 // Uncomment the following to turn on verbose locking information
-//#include <kdebug.h>
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
+
+#ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
+#include <kdebug.h>
+#endif
 
 DUChainLock::DUChainLock()
   : m_writer(0)

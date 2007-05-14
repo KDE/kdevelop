@@ -35,22 +35,22 @@
 class DUCHAIN_EXPORT DUChainLock : public QReadWriteLock
 {
 public:
-  DUChainLock() : QReadWriteLock() {;}
-  ~DUChainLock() {;}
+  DUChainLock() : QReadWriteLock() {}
+  ~DUChainLock() {}
 };
 
 class DUCHAIN_EXPORT DUChainReadLocker : public QReadLocker
 {
 public:
-  DUChainReadLocker(DUChainLock* duChainLock) : QReadLocker(duChainLock) {;}
-  ~DUChainReadLocker() {;}
+  DUChainReadLocker(DUChainLock* duChainLock) : QReadLocker(duChainLock) {}
+  ~DUChainReadLocker() {}
 };
 
 class DUCHAIN_EXPORT DUChainWriteLocker : public QWriteLocker
 {
 public:
-  DUChainWriteLocker(DUChainLock* duChainLock) : QWriteLocker(duChainLock) {;}
-  ~DUChainWriteLocker() {;}
+  DUChainWriteLocker(DUChainLock* duChainLock) : QWriteLocker(duChainLock) {}
+  ~DUChainWriteLocker() {}
 };
 
 #else
