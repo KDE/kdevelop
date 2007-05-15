@@ -125,12 +125,12 @@ void ProjectController::setupActions()
     action->setToolTip( i18n( "Open project" ) );
     action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project." ) );
 
-    action = ac->addAction( "project_close" );
-    action->setText( i18n( "C&lose Project" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeProject() ) );
-    action->setToolTip( i18n( "Close project" ) );
-    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
-    action->setEnabled( false );
+//    action = ac->addAction( "project_close" );
+//    action->setText( i18n( "C&lose Project" ) );
+//    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeProject() ) );
+//    action->setToolTip( i18n( "Close project" ) );
+//    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
+//    action->setEnabled( false );
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
