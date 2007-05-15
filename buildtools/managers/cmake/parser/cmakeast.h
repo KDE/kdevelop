@@ -55,7 +55,7 @@ public:
      */
     QList<CMakeAst*> children() const  { return m_children; }
     
-    virtual void accept(CMakeAstVisitor*) const {} //Must be = 0
+    virtual void accept(CMakeAstVisitor* v) const { v->visit(this); } //Must be = 0
 
     /**
      * Writes the information stored in the Ast into the @p buffer.

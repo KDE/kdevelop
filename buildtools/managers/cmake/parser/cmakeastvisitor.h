@@ -41,23 +41,24 @@ class CMakeAst;
 
 class CMakeAstVisitor {
     public: //maybe protected?
-	virtual ~CMakeAstVisitor();
-	virtual void visit( const CustomCommandAst * ) const = 0;
-	virtual void visit( const CustomTargetAst * ) const = 0;
-	virtual void visit( const AddDefinitionsAst * ) const = 0;
-	virtual void visit( const AddDependenciesAst * ) const = 0;
-	virtual void visit( const AddExecutableAst * ) const = 0;
-	virtual void visit( const AddLibraryAst * ) const = 0;
-	virtual void visit( const AddSubdirectoryAst * ) const = 0;
-	virtual void visit( const AddTestAst * ) const = 0;
-	virtual void visit( const AuxSourceDirectoryAst * ) const = 0;
-	virtual void visit( const BuildCommandAst * ) const = 0;
-	virtual void visit( const BuildNameAst * ) const = 0;
-	virtual void visit( const CMakeMinimumRequiredAst * ) const = 0;
-	virtual void visit( const ConfigureFileAst * ) const = 0;
-	virtual void visit( const IncludeAst * ) const = 0;
-	virtual void visit( const SetAst * ) const = 0;
-	virtual void visit( const CMakeAst * ) const = 0;
+	virtual ~CMakeAstVisitor() {}
+	
+	virtual void visit( const CustomCommandAst * ) = 0;
+	virtual void visit( const CustomTargetAst * ) = 0;
+	virtual void visit( const AddDefinitionsAst * ) = 0;
+	virtual void visit( const AddDependenciesAst * ) = 0;
+	virtual void visit( const AddExecutableAst * ) = 0;
+	virtual void visit( const AddLibraryAst * ) = 0;
+	virtual void visit( const AddSubdirectoryAst * ) = 0;
+	virtual void visit( const AddTestAst * ) = 0;
+	virtual void visit( const AuxSourceDirectoryAst * ) = 0;
+	virtual void visit( const BuildCommandAst * ) = 0;
+	virtual void visit( const BuildNameAst * ) = 0;
+	virtual void visit( const CMakeMinimumRequiredAst * ) = 0;
+	virtual void visit( const ConfigureFileAst * ) = 0;
+	virtual void visit( const IncludeAst * ) = 0;
+	virtual void visit( const SetAst * ) = 0;
+	virtual void visit( const CMakeAst * ) = 0;
 };
 
 #endif

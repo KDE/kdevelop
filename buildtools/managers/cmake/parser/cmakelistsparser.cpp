@@ -136,23 +136,29 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
 ProjectInfo CMakeListsParser::parse( const KUrl& file )
 {
     ProjectInfo pi;
-    CMakeAst *ast = 0;
+    CMakeAst *ast = new CMakeAst;
     
-    kDebug(9032) << "Parsing file: " << file << endl;
+    kDebug(9032) << "Parsing file: " << file.path() << endl;
     
-    if ( !CMakeListsParser::parseCMakeFile( ast, file.url() ) )
+    if ( !CMakeListsParser::parseCMakeFile( ast, file.path() ) )
     {
         pi = parseProject( ast );
     } else {
         //FIXME: Put here the error.
+	kDebug(9032) << "Parsing error." << endl;
     }
+    
+    if(!pi.name.isEmpty())
+            kDebug(9032) << "Parsed: " << file << endl;
+    
+    delete ast;
     return pi;
 }
 
 ProjectInfo CMakeListsParser::parseProject( const CMakeAst* ast )
 {
     ProjectInfo pi;
-    if ( false )
+    if ( ast )
     {
         CMakeProjectVisitor v;
 	ast->accept(&v);

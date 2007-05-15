@@ -109,8 +109,8 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
 {
     QString projectDir = project->projectFileUrl().url();
     KUrl cmakeInfoFile(projectDir);
-//     cmakeInfoFile.adjustPath( KUrl::AddTrailingSlash );
-//     cmakeInfoFile.addPath("CMakeLists.txt");
+    cmakeInfoFile = cmakeInfoFile.upUrl();
+    cmakeInfoFile.addPath("CMakeLists.txt");
     kDebug(9025) << k_funcinfo << "file is " << cmakeInfoFile.path() << endl;
     if ( !cmakeInfoFile.isLocalFile() )
     {

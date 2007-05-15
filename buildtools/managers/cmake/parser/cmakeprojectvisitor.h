@@ -22,32 +22,35 @@
 #define CMAKEPROJECTVISITOR_H
 
 #include "cmakeastvisitor.h"
+#include <QString>
 
 class CMakeProjectVisitor : public CMakeAstVisitor {
     public:
-	virtual ~CMakeProjectVisitor();
+	virtual ~CMakeProjectVisitor() {}
 	
-	virtual void visit( const CMakeAst * ) const { notImplemented(); }
-	virtual void visit( const CustomCommandAst * ) const { notImplemented(); }
-	virtual void visit( const CustomTargetAst * ) const { notImplemented(); }
-	virtual void visit( const AddDefinitionsAst * ) const { notImplemented(); }
-	virtual void visit( const AddDependenciesAst * ) const { notImplemented(); }
-	virtual void visit( const AddExecutableAst * ) const { notImplemented(); }
-	virtual void visit( const AddLibraryAst * ) const { notImplemented(); }
-	virtual void visit( const AddSubdirectoryAst * ) const { notImplemented(); }
-	virtual void visit( const AddTestAst * ) const { notImplemented(); }
-	virtual void visit( const AuxSourceDirectoryAst * ) const { notImplemented(); }
-	virtual void visit( const BuildCommandAst * ) const { notImplemented(); }
-	virtual void visit( const BuildNameAst * ) const { notImplemented(); }
-	virtual void visit( const CMakeMinimumRequiredAst * ) const { notImplemented(); }
-	virtual void visit( const ConfigureFileAst * ) const { notImplemented(); }
-	virtual void visit( const IncludeAst * ) const { notImplemented(); }
-	virtual void visit( const SetAst * ) const { notImplemented(); }
+	virtual void visit( const CustomCommandAst * ) { notImplemented(); }
+	virtual void visit( const CustomTargetAst * ) { notImplemented(); }
+	virtual void visit( const AddDefinitionsAst * ) { notImplemented(); }
+	virtual void visit( const AddDependenciesAst * ) { notImplemented(); }
+	virtual void visit( const AddExecutableAst * ) { notImplemented(); }
+	virtual void visit( const AddLibraryAst * ) { notImplemented(); }
+	virtual void visit( const AddSubdirectoryAst * ) { notImplemented(); }
+	virtual void visit( const AddTestAst * ) { notImplemented(); }
+	virtual void visit( const AuxSourceDirectoryAst * ) { notImplemented(); }
+	virtual void visit( const BuildCommandAst * ) { notImplemented(); }
+	virtual void visit( const BuildNameAst * ) { notImplemented(); }
+	virtual void visit( const CMakeMinimumRequiredAst * ) { notImplemented(); }
+	virtual void visit( const ConfigureFileAst * ) { notImplemented(); }
+	virtual void visit( const IncludeAst * ) { notImplemented(); }
+	virtual void visit( const SetAst * ) { notImplemented(); }
 	
-	//catch all
-	virtual void visit( CMakeAst * ) { notImplemented(); }
+	virtual void visit( const CMakeAst * );
     private:
 	void notImplemented() const;
+        
+        QString name;
+        QString root;
+        //FolderInfo rootFolder;
 };
 
 #endif
