@@ -26,9 +26,10 @@ class IBrowsableVersionControl
 {
 public:
     /**
-     * Retrieve a list of entries in the given repository location
+     * retrieve the last revision in which the repository location was changed
      */
-    virtual VcsJob ls( const QString& repoLocation, const VcsRevision& rev ) = 0;
+    virtual VcsJob repositoryRevision( const QString& repoLocation,
+                                       VcsRevision::RevisionType ) = 0;
 
     /**
      * Retrieve the history of the repository location
@@ -48,6 +49,41 @@ public:
      */
     virtual VcsJob showLog( const QString& repoLocation,
                             const VcsRevision& rev ) = 0;
+
+    /**
+     * Get the changes made by a particular revision
+     *
+     * @param rev Show information about the revision @p rev.
+     * @param repoLocation Any repository path that specifies what VCS server
+     * is to be queried. For VCS's that support global versioning, the actual
+     * path is unimportant (and ignored), as long as it contains the repoitory
+     * root. Otherwise look up the change associated with the requested path.
+     *
+     * @note VcsRevision objects with type VcsRevision::FileNumber may store the
+     * associated path internally, in which case @p repoLocation may be ignored.
+     */
+    virtual VcsJob change( const VcsRevision& rev,
+                           const QString& repoLocation ) = 0;
+
+    /**
+     * Show the changes made by a particular revision
+     *
+     * @param rev Show information about the revision @p rev.
+     * @param repoLocation Any repository path that specifies what VCS server
+     * is to be queried. For VCS's that support global versioning, the actual
+     * path is unimportant (and ignored), as long as it contains the repoitory
+     * root. Otherwise look up the change associated with the requested path.
+     *
+     * @note VcsRevision objects with type VcsRevision::FileNumber may store the
+     * associated path internally, in which case @p repoLocation may be ignored.
+     */
+    virtual VcsJob showChange( const VcsRevision& rev,
+                               const QString& repoLocation ) = 0;
+
+    /**
+     * Retrieve a list of entries in the given repository location
+     */
+    virtual VcsJob ls( const QString& repoLocation, const VcsRevision& rev ) = 0;
 
     /**
      * Retrieve a file from the repository without checking it out
