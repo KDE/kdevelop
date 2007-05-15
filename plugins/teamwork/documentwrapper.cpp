@@ -185,7 +185,7 @@ void DocumentWrapper::saveAsBufferFile() {
 
   if ( doc && doc->textDocument() ) {
     if ( doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified ) {
-      int answer = KMessageBox::warningYesNo( KDevTeamworkPart::staticCore()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" ).arg( m_fileName ) );
+      int answer = KMessageBox::warningYesNo( KDevTeamworkPart::staticCore()->uiController()->activeMainWindow()->window(), i18n( "The buffer of %1 is modified, should the content be replaced?" , m_fileName ) );
       if ( answer != KMessageBox::Yes )
         return ;
     }
