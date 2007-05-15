@@ -37,8 +37,8 @@ SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope, const QS
   ct = SimpleType( ct->clone() );
   cm->setMasterProxy( this );
   ct->setMasterProxy( this );
-  addImport( ct->desc() );
   addImport( cm->desc() );
+  addImport( ct->desc() );
 }
 
 SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope ) : SimpleTypeImpl( fakeScope ), m_currentSlaveId(0) {

@@ -2100,8 +2100,8 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
 	QFileInfo fileInfo( fileName );
 	QString path = URLUtil::canonicalPath( fileInfo.absFilePath() );
 
-	return project() && project() ->isProjectFile( path )
-		&& ( isSource( path ) || isHeader( path ) )
+	return /*project() && project() ->isProjectFile( path )
+		&&*/ ( isSource( path ) || isHeader( path ) )
 		&& !QFile::exists( fileInfo.dirPath( true ) + "/.kdev_ignore" );
 }
 
@@ -2372,7 +2372,7 @@ int CppSupportPart::parseFilesAndDependencies( QStringList files, bool backgroun
 				}
 			} else {
 				for(QStringList::iterator it = group.begin(); it != group.end(); ++it) {
-					backgroundParser()->addFile(*it);
+				  backgroundParser()->addFile(*it);
 				}
 			}
 
