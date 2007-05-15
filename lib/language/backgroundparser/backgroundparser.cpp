@@ -279,11 +279,11 @@ void BackgroundParser::parseDocumentsInternal()
 
             parse->setBackgroundParser(this);
 
-            connect( parse, SIGNAL( done( Job* ) ),
-                     this, SLOT( parseComplete( Job* ) ) );
+            connect( parse, SIGNAL( done( ThreadWeaver::Job* ) ),
+                     this, SLOT( parseComplete( ThreadWeaver::Job* ) ) );
 
-            connect( parse, SIGNAL( failed( Job* ) ),
-                     this, SLOT( parseComplete( Job* ) ) );
+            connect( parse, SIGNAL( failed( ThreadWeaver::Job* ) ),
+                     this, SLOT( parseComplete( ThreadWeaver::Job* ) ) );
 
             p = false; //Don't parse for next time
 
