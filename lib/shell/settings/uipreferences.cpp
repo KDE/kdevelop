@@ -35,7 +35,7 @@ UiPreferences::UiPreferences(QWidget* parent, const QStringList& args )
     : KCModule( UiPreferencesFactory::componentData(), parent, args )
 {
     QVBoxLayout* l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
+    QWidget* w = new QWidget(parent);
     m_uiconfigUi = new Ui::UiConfig();
     m_uiconfigUi->setupUi( w );
     l->addWidget( w );

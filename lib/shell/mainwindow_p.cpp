@@ -131,23 +131,23 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( i18n( "Show statusbar" ) );
     action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar." ) );
 
-    KToolBarPopupAction *popupAction;
-    popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
-                                           i18n( "&Stop" ),
-                                           actionCollection()
-                                           );
-    actionCollection()->addAction( "stop_processes",popupAction );
+//     KToolBarPopupAction *popupAction;
+//     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
+//                                            i18n( "&Stop" ),
+//                                            actionCollection()
+//                                            );
+//     actionCollection()->addAction( "stop_processes",popupAction );
 
-    popupAction->setShortcut( Qt::Key_Escape );
-    popupAction->setToolTip( i18n( "Stop" ) );
-    popupAction->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes." ) );
-    popupAction->setEnabled( false );
-    connect( popupAction, SIGNAL( triggered() ),
-             this, SLOT( stopButtonPressed() ) );
-    connect( popupAction->menu(), SIGNAL( aboutToShow() ),
-             this, SLOT( stopMenuAboutToShow() ) );
-    connect( popupAction->menu(), SIGNAL( activated( int ) ),
-             this, SLOT( stopPopupActivated( int ) ) );
+//     popupAction->setShortcut( Qt::Key_Escape );
+//     popupAction->setToolTip( i18n( "Stop" ) );
+//     popupAction->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes." ) );
+//     popupAction->setEnabled( false );
+//     connect( popupAction, SIGNAL( triggered() ),
+//              this, SLOT( stopButtonPressed() ) );
+//     connect( popupAction->menu(), SIGNAL( aboutToShow() ),
+//              this, SLOT( stopMenuAboutToShow() ) );
+//     connect( popupAction->menu(), SIGNAL( triggered( Action* ) ),
+//              this, SLOT( stopPopupActivated( QAction* ) ) );
 
     action = KStandardAction::showMenubar(
                  this, SLOT( showMenuBar() ),

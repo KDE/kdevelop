@@ -241,11 +241,11 @@ bool ProjectController::openProject( const KUrl &projectFile )
     d->m_projects.append( project );
 
 
-    KActionCollection * ac = d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
-    QAction * action;
+//     KActionCollection * ac = d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
+//     QAction * action;
 
-    action = ac->action( "project_close" );
-    action->setEnabled( true );
+    //action = ac->action( "project_close" );
+    //action->setEnabled( true );
 
     d->m_recentAction->addUrl( url );
     KSharedConfig * config = KGlobal::config().data();
