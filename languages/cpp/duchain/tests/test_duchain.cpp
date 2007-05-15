@@ -26,7 +26,7 @@
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include "declaration.h"
-#include "kdevdocumentrange.h"
+#include "documentrange.h"
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 
@@ -122,6 +122,8 @@ void TestDUChain::cleanupTestCase()
   delete type2;
   delete type3;*/
 
+  DUChainWriteLocker lock(DUChain::lock());
+
   KDevelop::EditorIntegrator::releaseTopRange(topContext->textRangePtr());
   delete topContext;
 }
@@ -212,7 +214,7 @@ void TestDUChain::testDeclareInt()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 0);
@@ -223,7 +225,7 @@ void TestDUChain::testDeclareInt()
   QCOMPARE(def->identifier(), Identifier("i"));
   QCOMPARE(findDeclaration(top, def->identifier()), def);
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testIntegralTypes()
@@ -234,7 +236,7 @@ void TestDUChain::testIntegralTypes()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 0);
@@ -295,7 +297,7 @@ void TestDUChain::testIntegralTypes()
   QVERIFY(base->isConstant());
   QVERIFY(!base->isVolatile());
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testArrayType()
@@ -306,7 +308,7 @@ void TestDUChain::testArrayType()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 0);
@@ -324,7 +326,7 @@ void TestDUChain::testArrayType()
   QCOMPARE(element->integralType(), CppIntegralType::TypeInt);
   QCOMPARE(array->dimension(), 3);
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testDeclareFor()
@@ -337,7 +339,7 @@ void TestDUChain::testDeclareFor()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 2);
@@ -393,7 +395,7 @@ void TestDUChain::testDeclareFor()
 
   QCOMPARE(findDeclaration(ifCtx,  defI->identifier()), defI);
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testDeclareStruct()
@@ -406,7 +408,7 @@ void TestDUChain::testDeclareStruct()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 1);
@@ -476,7 +478,7 @@ void TestDUChain::testDeclareStruct()
   QCOMPARE(insideCtorCtx->localDeclarations().count(), 0);
   QVERIFY(insideCtorCtx->localScopeIdentifier().isEmpty());*/
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testDeclareClass()
@@ -489,7 +491,7 @@ void TestDUChain::testDeclareClass()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
@@ -517,7 +519,7 @@ void TestDUChain::testDeclareClass()
   Declaration* defTest = classA->localDeclarations().first();
   Q_UNUSED(defTest);
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testDeclareNamespace()
@@ -530,7 +532,7 @@ void TestDUChain::testDeclareNamespace()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
@@ -570,7 +572,7 @@ void TestDUChain::testDeclareNamespace()
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testDeclareUsingNamespace()
@@ -583,7 +585,7 @@ void TestDUChain::testDeclareUsingNamespace()
 
   DUContext* top = parse(method, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
@@ -622,7 +624,7 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier());
   QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier());
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::testFileParse()
@@ -646,11 +648,11 @@ void TestDUChain::testFileParse()
 
   DUContext* top = parse(preprocessed, DumpNone);
 
-  { DUChainReadLocker lock(DUChain::lock());
+  DUChainWriteLocker lock(DUChain::lock());
 
   SymbolTable::self()->dumpStatistics();
 
-  } release(top);
+  release(top);
 }
 
 void TestDUChain::release(DUContext* top)
@@ -688,7 +690,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   if (dump & DumpDUChain) {
     kDebug() << "===== DUChain:" << endl;
 
-    DUChainReadLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
     dumper.dump(top);
   }
 

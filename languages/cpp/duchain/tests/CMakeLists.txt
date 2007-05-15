@@ -10,7 +10,7 @@ kde4_automoc(${duchaintest_SRCS})
 
 kdevelop_add_test(${duchaintest_SRCS})
 kde4_add_executable(duchaintest NOGUI RUN_UNINSTALLED ${duchaintest_SRCS})
-target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser kdevcpprpp kdevcpplanguage)
+target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdevcppparser kdevcpprpp kdevduchain)
 add_test(kdevelop-duchaintest ${EXECUTABLE_OUTPUT_PATH}/duchaintest)
 
 endif(KDE4_BUILD_TESTS)

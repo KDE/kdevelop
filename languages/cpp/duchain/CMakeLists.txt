@@ -1,5 +1,5 @@
 
-# add_subdirectory(tests)
+add_subdirectory(tests)
 add_subdirectory(viewer)
 
 include_directories( ${CMAKE_TOP_BUILD_DIR}
