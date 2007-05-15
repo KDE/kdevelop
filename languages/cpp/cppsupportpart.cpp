@@ -3130,11 +3130,11 @@ QString CppSupportPart::findHeaderSimple( const QString &header )
         return QString::null;
 }
 
-UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ) {
+UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {
 }
       
 void UIBlockTester::UIBlockTesterThread::run() {
-  while(1) {
+  while(!m_stop) {
 	  msleep( m_parent.m_msecs / 10 );
 	  m_parent.m_timeMutex.lock();
 	  QDateTime t = QDateTime::currentDateTime();
@@ -3146,7 +3146,11 @@ void UIBlockTester::UIBlockTesterThread::run() {
 	  m_parent.m_timeMutex.unlock();
   }
 }
-      
+
+void UIBlockTester::UIBlockTesterThread::stop() {
+	m_stop = true;
+}
+
 UIBlockTester::UIBlockTester( uint milliseconds ) : m_thread( *this ), m_msecs( milliseconds ) {
 	m_timer = new QTimer( this );
 	m_timer->start( milliseconds/10 );
@@ -3155,7 +3159,7 @@ UIBlockTester::UIBlockTester( uint milliseconds ) : m_thread( *this ), m_msecs( 
 	m_thread.start();
 }
 UIBlockTester::~UIBlockTester() {
-  m_thread.terminate();
+  m_thread.stop();
   m_thread.wait();
 }
 	

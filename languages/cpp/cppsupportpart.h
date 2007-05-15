@@ -43,9 +43,10 @@ class UIBlockTester : public QObject {
     public:
       UIBlockTesterThread( UIBlockTester& parent );
       void run();
-      
+      void stop();
     private:
       UIBlockTester& m_parent;
+      bool m_stop;
     };
   friend class UIBlockTesterThread;
 public:
