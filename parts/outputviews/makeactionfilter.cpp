@@ -87,7 +87,7 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 
 		ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
                 //can distcc link too ?
-		ActionFormat( i18n("linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)"),
+		ActionFormat( i18n("linking"), 1, 2, "(gcc|CC|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)"),
 		ActionFormat( i18n("linking"), 1, 2, "^linking (.*)" ), //unsermaker
 		ActionFormat( i18n("linking"), 1, 1, "^Linking .* module (.*)" ), //cmake
 		ActionFormat( i18n("linking"), 1, 1, "^Linking (.*)" ), //cmake
