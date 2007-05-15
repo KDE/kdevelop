@@ -8,7 +8,10 @@ add_subdirectory(qtdesigner)
 add_subdirectory(filemanager)
 add_subdirectory(snippet)
 
-if(COMMONCPP2_FOUND AND Boost_FOUND)
+find_package(Commoncpp)
+find_package(BoostLibraries)
+
+if(COMMONCPP2_FOUND AND Boost_FOUND AND Boost_LIBS_FOUND)
 	add_subdirectory(teamwork)
-endif(COMMONCPP2_FOUND AND Boost_FOUND)
+endif(COMMONCPP2_FOUND AND Boost_FOUND  AND Boost_LIBS_FOUND)
 
