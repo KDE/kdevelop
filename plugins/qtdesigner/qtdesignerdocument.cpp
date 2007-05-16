@@ -80,17 +80,43 @@ KTextEditor::Document* QtDesignerDocument::textDocument() const
     return 0;
 }
 
-bool QtDesignerDocument::save(DocumentSaveMode)
+bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
 {
+    Q_UNUSED(mode);
+    if( m_forms.isEmpty() )
+        return false;
+    QFile f(m_url.path());
+    if( !f.open( QIODevice::WriteOnly ) )
+    {
+        return false;
+    }
+    QTextStream s(&f);
+    s << m_forms.first()->contents();
+    s.flush();
+    f.close();
     return true;
 }
 
 void QtDesignerDocument::reload()
 {
+    QFile uiFile(m_url.path());
+    foreach(QDesignerFormWindowInterface* form, m_forms)
+    {
+        form->setContents(&uiFile);
+    }
 }
 
 void QtDesignerDocument::close()
 {
+    foreach(QDesignerFormWindowInterface* form, m_forms)
+    {
+        m_designerPlugin->designer()->formWindowManager()->removeFormWindow(form);
+        QMdiArea* area = m_areas.at(m_forms.indexOf(form));
+        m_areas.removeAll(area);
+        m_forms.removeAll(form);
+        delete area;
+        delete form;
+    }
 }
 
 bool QtDesignerDocument::isActive() const

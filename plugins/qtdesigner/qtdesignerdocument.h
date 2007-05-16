@@ -46,7 +46,7 @@ public:
     virtual KSharedPtr<KMimeType> mimeType() const;
     virtual KParts::Part* partForView(QWidget*) const;
     virtual KTextEditor::Document* textDocument() const;
-    virtual bool save(DocumentSaveMode);
+    virtual bool save(KDevelop::IDocument::DocumentSaveMode);
     virtual void reload();
     virtual void close();
     virtual bool isActive() const;
