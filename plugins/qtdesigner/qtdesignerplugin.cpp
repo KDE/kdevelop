@@ -151,7 +151,7 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     m_designer->setObjectInspector(QDesignerComponents::createObjectInspector(m_designer, 0));
 //   Q_ASSERT(m_designer->propertyEditor() != 0);
 //
-//   (void) new qdesigner_internal::QDesignerIntegration(m_designer, this);
+    new qdesigner_internal::QDesignerIntegration(m_designer, this);
 //
     m_designer->widgetBox()->setObjectName( i18n("Widget Box") );
     m_designer->propertyEditor()->setObjectName( i18n("Property Editor") );
