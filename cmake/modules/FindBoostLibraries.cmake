@@ -34,7 +34,7 @@ else(NOT Boost_FOUND)
 	set(Boost_LIBRARIES ${Boost_LIBRARIES} CACHE STRING "List of Boost libraries for Kdevelop")
         set(Boost_LIBS_FOUND TRUE)
         if(NOT Boost_FIND_QUIETLY)
-            message(STATUS "Found Boost libraries: ${BOOST_LIBRARIES}")
+            message(STATUS "Found Boost libraries: ${Boost_LIBRARIES}")
         endif(NOT Boost_FIND_QUIETLY)
     endif(NOT Boost_THREAD OR NOT Boost_SERIALIZATION)
     
