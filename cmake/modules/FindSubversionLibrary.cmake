@@ -172,17 +172,17 @@ ELSE (NOT WIN32)
       ENDIF(SUBVERSION_INSTALL_PATH)
     ENDMACRO(FIND_SUB_INC)
 
-    MACRO(FIND_SUB_LIB targetvar libname pathadd)
+    MACRO(FIND_SUB_LIB targetvar libname)
       IF (SUBVERSION_INSTALL_PATH)
           FIND_LIBRARY(${targetvar} ${libname}
               PATHS
-              ${SUBVERSION_INSTALL_PATH}/lib${pathadd}
-              "$ENV{ProgramFiles}/Subversion/lib"${pathadd}
+              ${SUBVERSION_INSTALL_PATH}/lib
+              "$ENV{ProgramFiles}/Subversion/lib
           )
       ELSE(SUBVERSION_INSTALL_PATH)
           FIND_LIBRARY(${targetvar} ${libname}
               PATHS
-              "$ENV{ProgramFiles}/Subversion/lib"${pathadd}
+              "$ENV{ProgramFiles}/Subversion/lib
           )
       ENDIF(SUBVERSION_INSTALL_PATH)
     ENDMACRO(FIND_SUB_LIB)
@@ -195,50 +195,50 @@ ELSE (NOT WIN32)
 
 
   # search for libraries
-    FIND_SUB_LIB(APR_LIBRARY libapr /apr)
+    FIND_SUB_LIB(APR_LIBRARY libapr)
 
-    FIND_SUB_LIB(APRICONV_LIB libapriconv /apr-iconv)
+    FIND_SUB_LIB(APRICONV_LIB libapriconv)
 
-    FIND_SUB_LIB(APU_LIBRARY libaprutil /apr-util)
+    FIND_SUB_LIB(APU_LIBRARY libaprutil)
 
-    FIND_SUB_LIB(APU_XMLLIB xml /apr-util)
+    #FIND_SUB_LIB(APU_XMLLIB xml)
 
-    FIND_SUB_LIB(NEON_LIB libneon /neon)
+    #FIND_SUB_LIB(NEON_LIB libneon)
 
-    FIND_SUB_LIB(NEON_ZLIBSTATLIB zlibstat /neon)
+    #FIND_SUB_LIB(NEON_ZLIBSTATLIB zlibstat )
 
-    FIND_LIBRARY(SUBVERSION_CLIENTLIB libsvn_client-1 )
+    FIND_SUB_LIB(SUBVERSION_CLIENTLIB libsvn_client-1)
 
-    FIND_LIBRARY(SUBVERSION_DELTALIB libsvn_delta-1 )
+    FIND_SUB_LIB(SUBVERSION_DELTALIB libsvn_delta-1)
 
-    FIND_LIBRARY(SUBVERSION_DIFFLIB libsvn_dIFf-1 )
+    FIND_SUB_LIB(SUBVERSION_DIFFLIB libsvn_diff-1)
 
-    FIND_LIBRARY(SUBVERSION_FSBASELIB libsvn_fs_base-1 )
+    #FIND_SUB_LIB(SUBVERSION_FSBASELIB libsvn_fs_base-1)
 
-    FIND_LIBRARY(SUBVERSION_FSFSLIB libsvn_fs_fs-1 )
+    #FIND_SUB_LIB(SUBVERSION_FSFSLIB libsvn_fs_fs-1)
 
-    FIND_LIBRARY(SUBVERSION_FSLIB libsvn_fs-1 )
+    FIND_SUB_LIB(SUBVERSION_FSLIB libsvn_fs-1)
 
-    FIND_LIBRARY(SUBVERSION_RADAVLIB libsvn_ra_dav-1 )
+    #FIND_SUB_LIB(SUBVERSION_RADAVLIB libsvn_ra_dav-1)
 
-    FIND_LIBRARY(SUBVERSION_RALOCALLIB libsvn_ra_local-1 )
+    #FIND_SUB_LIB(SUBVERSION_RALOCALLIB libsvn_ra_local-1)
 
-    FIND_LIBRARY(SUBVERSION_RASVNLIB libsvn_ra_svn-1 )
+    #FIND_SUB_LIB(SUBVERSION_RASVNLIB libsvn_ra_svn-1)
 
-    FIND_LIBRARY(SUBVERSION_RALIB libsvn_ra-1 )
+    FIND_SUB_LIB(SUBVERSION_RALIB libsvn_ra-1)
 
-    FIND_LIBRARY(SUBVERSION_REPOSITORYLIB libsvn_repos-1 )
+    FIND_SUB_LIB(SUBVERSION_REPOSITORYLIB libsvn_repos-1)
 
-    FIND_LIBRARY(SUBVERSION_SUBRLIB libsvn_subr-1 )
+    FIND_SUB_LIB(SUBVERSION_SUBRLIB libsvn_subr-1)
 
-    FIND_LIBRARY(SUBVERSION_WCLIB libsvn_wc-1 )
+    FIND_SUB_LIB(SUBVERSION_WCLIB libsvn_wc-1)
 
     # these are the win32-only libs, the others handled at the bottom.
     MARK_AS_ADVANCED(
         APRICONV_LIB
-        APU_XMLLIB
-        NEON_LIB
-        NEON_ZLIBSTATLIB
+        #APU_XMLLIB
+        #NEON_LIB
+        #NEON_ZLIBSTATLIB
         SUBVERSION_DELTALIB
         SUBVERSION_DIFFLIB
         SUBVERSION_FSBASELIB
@@ -259,32 +259,32 @@ ELSE (NOT WIN32)
         SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${APRICONV_LIB})
     ENDIF(NOT APRICONV_LIB)
 
-    IF (NOT APU_XMLLIB)
-        MESSAGE(STATUS "No xml lib found!")
-    ELSE (NOT APU_XMLLIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found xml lib: ${APU_XMLLIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${APU_XMLLIB})
-    ENDIF(NOT APU_XMLLIB)
+    #IF (NOT APU_XMLLIB)
+    #    MESSAGE(STATUS "No xml lib found!")
+    #ELSE (NOT APU_XMLLIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found xml lib: ${APU_XMLLIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${APU_XMLLIB})
+    #ENDIF(NOT APU_XMLLIB)
 
-    IF (NOT NEON_LIB)
-        MESSAGE(STATUS "No neon lib found!")
-    ELSE (NOT NEON_LIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found neon lib: ${NEON_LIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${NEON_LIB})
-    ENDIF(NOT NEON_LIB)
+    #IF (NOT NEON_LIB)
+    #    MESSAGE(STATUS "No neon lib found!")
+    #ELSE (NOT NEON_LIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found neon lib: ${NEON_LIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${NEON_LIB})
+    #ENDIF(NOT NEON_LIB)
 
-    IF (NOT NEON_ZLIBSTATLIB)
-        MESSAGE(STATUS "No zlibstat lib found!")
-    ELSE (NOT APRICONV_LIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found zlibstat lib: ${NEON_ZLIBSTATLIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${NEON_ZLIBSTATLIB})
-    ENDIF(NOT NEON_ZLIBSTATLIB)
+    #IF (NOT NEON_ZLIBSTATLIB)
+    #    MESSAGE(STATUS "No zlibstat lib found!")
+    #ELSE (NOT APRICONV_LIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found zlibstat lib: ${NEON_ZLIBSTATLIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${NEON_ZLIBSTATLIB})
+    #ENDIF(NOT NEON_ZLIBSTATLIB)
 
     IF (NOT SUBVERSION_DELTALIB)
         MESSAGE(STATUS "No subversion delta lib found!")
@@ -296,7 +296,7 @@ ELSE (NOT WIN32)
     ENDIF(NOT SUBVERSION_DELTALIB)
 
     IF (NOT SUBVERSION_DIFFLIB)
-        MESSAGE(STATUS "No subversion dIFf lib found!")
+        MESSAGE(STATUS "No subversion diff lib found!")
     ELSE (NOT SUBVERSION_DIFFLIB)
         IF(NOT Subversion_FIND_QUIETLY)
             MESSAGE(STATUS "Found subversion dIFf lib: ${SUBVERSION_DIFFLIB}")
@@ -304,50 +304,50 @@ ELSE (NOT WIN32)
         SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_DIFFLIB})
     ENDIF(NOT SUBVERSION_DIFFLIB)
 
-    IF (NOT SUBVERSION_FSBASELIB)
-        MESSAGE(STATUS "No subversion fs base lib found!")
-    ELSE (NOT SUBVERSION_FSBASELIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found subversion fs base lib: ${SUBVERSION_FSBASELIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_FSBASELIB})
-    ENDIF(NOT SUBVERSION_FSBASELIB)
+    #IF (NOT SUBVERSION_FSBASELIB)
+    #    MESSAGE(STATUS "No subversion fs base lib found!")
+    #ELSE (NOT SUBVERSION_FSBASELIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found subversion fs base lib: ${SUBVERSION_FSBASELIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_FSBASELIB})
+    #ENDIF(NOT SUBVERSION_FSBASELIB)
 
-    IF (NOT SUBVERSION_FSFSLIB)
-        MESSAGE(STATUS "No subversion fs fs lib found!")
-    ELSE (NOT SUBVERSION_FSFSLIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found subversion fs fs lib: ${SUBVERSION_FSFSLIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_FSFSLIB})
-    ENDIF(NOT SUBVERSION_FSFSLIB)
+    #IF (NOT SUBVERSION_FSFSLIB)
+    #    MESSAGE(STATUS "No subversion fs fs lib found!")
+    #ELSE (NOT SUBVERSION_FSFSLIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found subversion fs fs lib: ${SUBVERSION_FSFSLIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_FSFSLIB})
+    #ENDIF(NOT SUBVERSION_FSFSLIB)
 
-    IF (NOT SUBVERSION_RADAVLIB)
-        MESSAGE(STATUS "No subversion ra dav lib found!")
-    ELSE (NOT SUBVERSION_RADAVLIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found subversion lib: ${SUBVERSION_RADAVLIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_RADAVLIB})
-    ENDIF(NOT SUBVERSION_RADAVLIB)
+    #IF (NOT SUBVERSION_RADAVLIB)
+    #    MESSAGE(STATUS "No subversion ra dav lib found!")
+    #ELSE (NOT SUBVERSION_RADAVLIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found subversion lib: ${SUBVERSION_RADAVLIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_RADAVLIB})
+    #ENDIF(NOT SUBVERSION_RADAVLIB)
 
-    IF (NOT SUBVERSION_RALOCALLIB)
-        MESSAGE(STATUS "No subversion ra local lib found!")
-    ELSE (NOT SUBVERSION_RALOCALLIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found subversion ra local lib: ${SUBVERSION_RALOCALLIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_RALOCALLIB})
-    ENDIF(NOT SUBVERSION_RALOCALLIB)
+    #IF (NOT SUBVERSION_RALOCALLIB)
+    #    MESSAGE(STATUS "No subversion ra local lib found!")
+    #ELSE (NOT SUBVERSION_RALOCALLIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found subversion ra local lib: ${SUBVERSION_RALOCALLIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_RALOCALLIB})
+    #ENDIF(NOT SUBVERSION_RALOCALLIB)
 
-    IF (NOT SUBVERSION_RASVNLIB)
-        MESSAGE(STATUS "No subversion ra svn lib found!")
-    ELSE (NOT SUBVERSION_RASVNLIB)
-        IF(NOT Subversion_FIND_QUIETLY)
-            MESSAGE(STATUS "Found subversion ra svn lib: ${SUBVERSION_RASVNLIB}")
-        ENDIF(NOT Subversion_FIND_QUIETLY)
-        SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_RASVNLIB})
-    ENDIF(NOT SUBVERSION_RASVNLIB)
+    #IF (NOT SUBVERSION_RASVNLIB)
+    #    MESSAGE(STATUS "No subversion ra svn lib found!")
+    #ELSE (NOT SUBVERSION_RASVNLIB)
+    #    IF(NOT Subversion_FIND_QUIETLY)
+    #        MESSAGE(STATUS "Found subversion ra svn lib: ${SUBVERSION_RASVNLIB}")
+    #    ENDIF(NOT Subversion_FIND_QUIETLY)
+    #    SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${SUBVERSION_RASVNLIB})
+    #ENDIF(NOT SUBVERSION_RASVNLIB)
 
 ENDIF (NOT WIN32)
 
