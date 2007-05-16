@@ -123,40 +123,39 @@ private:
 
 QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     : KDevelop::IPlugin(QtDesignerPluginFactory::componentData(),parent),
-      m_docFactory(new QtDesignerDocumentFactory(this))
+      m_activeDoc(0), m_docFactory(new QtDesignerDocumentFactory(this)),
+      m_widgetBoxFactory(0), m_propertyEditorFactory(0),
+      m_objectInspectorFactory(0), m_actionEditorFactory(0)
 {
     Q_UNUSED(args)
     QDesignerComponents::initializeResources();
+    KDevelop::IDocumentController* idc = core()->documentController();
+    idc->registerDocumentForMimetype("application/x-designer", m_docFactory);
 
-    core()->documentController()->registerDocumentForMimetype("application/x-designer", m_docFactory);
-
-//   m_workspace = new QWorkspace(parentWidget);
-//   m_workspace->setScrollBarsEnabled(true);
-//   setWidget( m_workspace );
+    connect( idc, SIGNAL( docdocumentActivated( KDevelop::IDocument* ) ),
+             this, SLOT( documentActivated( KDevelop::IDocuemnt* ) ) );
 
     setXMLFile( "kdevqtdesigner.rc" );
 
     m_designer = QDesignerComponents::createFormEditor(this);
-//     m_designer->setTopLevel( parentWidget );
-
     m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
-//   Q_ASSERT(m_designer->widgetBox() != 0);
-//
-//   // load the standard widgets
+
+//    load the standard widgets
     m_designer->widgetBox()->setFileName(QLatin1String(":/trolltech/widgetbox/widgetbox.xml"));
     m_designer->widgetBox()->load();
-//
+
     m_designer->setPropertyEditor(QDesignerComponents::createPropertyEditor(m_designer, 0));
     m_designer->setActionEditor(QDesignerComponents::createActionEditor(m_designer, 0));
     m_designer->setObjectInspector(QDesignerComponents::createObjectInspector(m_designer, 0));
-//   Q_ASSERT(m_designer->propertyEditor() != 0);
-//
+
     new qdesigner_internal::QDesignerIntegration(m_designer, this);
-//
+
     m_designer->widgetBox()->setObjectName( i18n("Widget Box") );
     m_designer->propertyEditor()->setObjectName( i18n("Property Editor") );
-//
-//   setupActions();
+    m_designer->actionEditor()->setObjectName( i18n("Action Editor") );
+    m_designer->objectInspector()->setObjectName( i18n("Object Inspector") );
+
+    setupActions();
 
     m_widgetBoxFactory = new QtDesignerToolViewFactory( this,
             QtDesignerToolViewFactory::WidgetBox );
@@ -170,22 +169,11 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     core()->uiController()->addToolView("Property Editor", m_propertyEditorFactory );
     core()->uiController()->addToolView("Action Editor", m_actionEditorFactory );
     core()->uiController()->addToolView("Object Inspector", m_objectInspectorFactory );
-
-//   connect( KDevelop::ICore::documentController(), SIGNAL( documentActivated( KDevelop::Document* ) ),
-//            this, SLOT( activated( KDevelop::Document* ) ) );
 }
 
 QtDesignerPlugin::~QtDesignerPlugin()
 {
-//         if (m_window)
-//         {
-//             m_designer->formWindowManager()->removeFormWindow( m_window );
-//             delete m_window;
-//         }
-//
     delete m_designer;
-//     if (m_workspace)
-//         m_workspace->deleteLater();
     delete m_docFactory;
 }
 
@@ -210,96 +198,32 @@ QtDesignerPlugin::~QtDesignerPlugin()
 //     }
 // }
 
-// KAboutData* QtDesignerPlugin::createAboutData()
-// {
-//   KAboutData* aboutData = new KAboutData( "KDevQtDesignerPlugin",
-//                                           I18N_NOOP( "KDevelop GUI Builder" ),
-//                                           "4.0", 0,
-//                                           KAboutData::License_GPL_V2 );
-//
-//   aboutData->addAuthor( "Matt Rogers", 0, "mattr@kde.org" );
-//   aboutData->addCredit( "Roberto Raggi", 0, "roberto@kdevelop.org" );
-//
-//   return aboutData;
-// }
-
 QDesignerFormEditorInterface *QtDesignerPlugin::designer() const
 {
     return m_designer;
 }
 
-// void QtDesignerPlugin::setupActions()
-// {
-//     QAction *a = KStandardAction::save( this, SLOT( save() ), actionCollection());
-//     actionCollection()->addAction( "file_save", a );
-//     QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
-//
-//     QAction* designerAction = 0;
-//     QAction* designerKAction = 0;
-//     designerAction = manager->actionAdjustSize();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "adjust_size" );
-//
-//     designerAction = manager->actionBreakLayout();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "break_layout" );
-//     designerKAction->setShortcut( Qt::CTRL + Qt::Key_B );
-//
-//     designerAction = manager->actionCut();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "designer_cut" );
-//
-//     designerAction = manager->actionCopy();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "designer_copy" );
-//
-//     designerAction = manager->actionPaste();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "designer_paste" );
-//
-//     designerAction = manager->actionDelete();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "designer_delete" );
-//
-//     designerAction = manager->actionGridLayout();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "layout_grid" );
-//     designerKAction->setShortcut( Qt::CTRL + Qt::Key_G );
-//
-//     designerAction = manager->actionHorizontalLayout();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "layout_horiz" );
-//     designerKAction->setShortcut( Qt::CTRL + Qt::Key_H );
-//
-//     designerAction = manager->actionVerticalLayout();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "layout_vertical" );
-//     designerKAction->setShortcut( Qt::CTRL + Qt::Key_V );
-//
-//     designerAction = manager->actionSplitHorizontal();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "layout_split_horiz" );
-//     designerKAction->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_H );
-//
-//     designerAction = manager->actionSplitVertical();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "layout_split_vert" );
-//     designerKAction->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
-//
-//     designerAction = manager->actionUndo();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "designer_undo" );
-//     designerKAction->setIcon( KIcon( "edit-undo" ) );
-//
-//     designerAction = manager->actionRedo();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "designer_redo" );
-//     designerKAction->setIcon( KIcon( "edit-redo" ) );
-//
-//     designerAction = manager->actionSelectAll();
-//     designerKAction = wrapDesignerAction( designerAction, actionCollection(),
-//                                           "designer_select_all" );
-// }
+void QtDesignerPlugin::setupActions()
+{
+    QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
+    KActionCollection* ac = actionCollection();
+
+    ac->addAction( "file_save", KStandardAction::save( this, SLOT( saveActiveDocument() ), ac) );
+    ac->addAction( "adjust_size", manager->actionAdjustSize() );
+    ac->addAction( "break_layout", manager->actionBreakLayout() );
+    ac->addAction( "designer_cut", manager->actionCut() );
+    ac->addAction( "designer_copy", manager->actionCopy() );
+    ac->addAction( "designer_paste", manager->actionPaste() );
+    ac->addAction( "designer_delete", manager->actionDelete() );
+    ac->addAction( "layout_grid", manager->actionGridLayout() );
+    ac->addAction( "layout_horiz", manager->actionHorizontalLayout() );
+    ac->addAction( "layout_vertical", manager->actionVerticalLayout() );
+    ac->addAction( "layout_split_horiz", manager->actionSplitHorizontal() );
+    ac->addAction( "layout_split_vert", manager->actionSplitVertical() );
+    ac->addAction( "designer_undo", manager->actionUndo() );
+    ac->addAction( "designer_redo", manager->actionRedo() );
+    ac->addAction( "designer_select_all", manager->actionSelectAll() );
+}
 
 // bool QtDesignerPlugin::openFile()
 // {
@@ -341,56 +265,21 @@ QDesignerFormEditorInterface *QtDesignerPlugin::designer() const
 //     return true;
 // }
 
-// bool QtDesignerPlugin::eventFilter( QObject* obj, QEvent* event )
-// {
-//     if ( event->type() == QEvent::Close && obj == m_window )
-//     {
-//         designer()->formWindowManager()->removeFormWindow( m_window );
-//         widget()->deleteLater();
-//     }
-//     return false;
-// }
+void QtDesignerPlugin::saveActiveDocument()
+{
+    if( m_activeDoc )
+    {
+        m_activeDoc->save( KDevelop::IDocument::Default );
+    }
+}
 
-// QAction* QtDesignerPlugin::wrapDesignerAction( QAction* dAction,
-//                                          KActionCollection* parent,
-//                                          const char* name )
-// {
-//     QAction *a = parent->addAction( name );
-//     a->setText( dAction->text() );
-//     a->setIcon(  KIcon( dAction->icon() ) );
-//     a->setShortcut( dAction->shortcut() );
-//     a->setShortcutContext( dAction->shortcutContext() );
-//     connect( a, SIGNAL( triggered() ), dAction, SIGNAL( triggered() ) );
-//
-//     m_designerActions[a] = dAction;
-//     updateDesignerAction( a, dAction );
-//     return a;
-// }
-//
-// void QtDesignerPlugin::updateDesignerAction( QAction* a, QAction* dAction )
-// {
-//     a->setActionGroup( dAction->actionGroup() );
-//     a->setCheckable( dAction->isCheckable() );
-//     a->setChecked( dAction->isChecked() );
-//     a->setEnabled( dAction->isEnabled() );
-//     a->setData( dAction->data() );
-//     a->setFont( dAction->font() );
-//     a->setIconText( dAction->iconText() );
-//     a->setSeparator( dAction->isSeparator() );
-//     a->setStatusTip( dAction->statusTip() );
-//     a->setText( dAction->text() );
-//     a->setToolTip( dAction->toolTip() );
-//     a->setWhatsThis( dAction->whatsThis() );
-// }
-//
-// void QtDesignerPlugin::updateDesignerActions()
-// {
-//     DesignerActionHash::ConstIterator it, itEnd = m_designerActions.constEnd();
-//     for ( it = m_designerActions.constBegin(); it != itEnd; ++it )
-//     {
-//         updateDesignerAction( it.key(), it.value() );
-//     }
-// }
+void QtDesignerPlugin::activateDocument( KDevelop::IDocument* doc )
+{
+    if( doc->mimeType()->is( "application/x-designer" ) )
+    {
+        m_activeDoc = doc;
+    }
+}
 
 #include "qtdesignerplugin.moc"
 //kate: space-indent on; indent-width 4; replace-tabs on; indent-mode cstyle;
