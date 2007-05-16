@@ -66,6 +66,7 @@ public:
         {
             QtDesignerDocument* d = new QtDesignerDocument(url, core);
             d->setDesignerPlugin(m_plugin);
+            m_plugin->activateDocument(d);
             return d;
         }
         return 0;
@@ -132,8 +133,8 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     KDevelop::IDocumentController* idc = core()->documentController();
     idc->registerDocumentForMimetype("application/x-designer", m_docFactory);
 
-    connect( idc, SIGNAL( docdocumentActivated( KDevelop::IDocument* ) ),
-             this, SLOT( documentActivated( KDevelop::IDocuemnt* ) ) );
+    connect( idc, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
+             this, SLOT( activateDocument( KDevelop::IDocuemnt* ) ) );
 
     setXMLFile( "kdevqtdesigner.rc" );
 
@@ -267,6 +268,7 @@ void QtDesignerPlugin::setupActions()
 
 void QtDesignerPlugin::saveActiveDocument()
 {
+    kDebug(9039) << "going to save: " << m_activeDoc << endl;
     if( m_activeDoc )
     {
         m_activeDoc->save( KDevelop::IDocument::Default );
@@ -277,6 +279,7 @@ void QtDesignerPlugin::activateDocument( KDevelop::IDocument* doc )
 {
     if( doc->mimeType()->is( "application/x-designer" ) )
     {
+        kDebug(9039) << "Doc activated: " << doc << endl;
         m_activeDoc = doc;
     }
 }

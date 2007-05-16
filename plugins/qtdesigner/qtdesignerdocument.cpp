@@ -55,7 +55,7 @@
 
 QtDesignerDocument::QtDesignerDocument( const KUrl& url , KDevelop::ICore* core )
     : Sublime::UrlDocument(core->uiController()->controller(), url),
-      KDevelop::IDocument(core), m_url(url)
+      KDevelop::IDocument(core), m_url(url), m_state(KDevelop::IDocument::Clean)
 {
 
 }
@@ -83,17 +83,22 @@ KTextEditor::Document* QtDesignerDocument::textDocument() const
 bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
 {
     Q_UNUSED(mode);
+    kDebug(9039) << "Going to Save" << endl;
+    if( m_state == KDevelop::IDocument::Clean )
+        return false;
     if( m_forms.isEmpty() )
         return false;
     QFile f(m_url.path());
     if( !f.open( QIODevice::WriteOnly ) )
     {
+        kDebug(9039) << "Couldn't open file: " << f.error() << endl;
         return false;
     }
     QTextStream s(&f);
     s << m_forms.first()->contents();
     s.flush();
     f.close();
+    m_state = KDevelop::IDocument::Clean;
     return true;
 }
 
@@ -104,6 +109,7 @@ void QtDesignerDocument::reload()
     {
         form->setContents(&uiFile);
     }
+    m_state = KDevelop::IDocument::Clean;
 }
 
 void QtDesignerDocument::close()
@@ -121,12 +127,19 @@ void QtDesignerDocument::close()
 
 bool QtDesignerDocument::isActive() const
 {
-    return true;
+    QDesignerFormWindowInterface* activeWin =
+            m_designerPlugin->designer()->formWindowManager()->activeFormWindow();
+    foreach( QDesignerFormWindowInterface* form, m_forms )
+    {
+        if( activeWin == form )
+            return true;
+    }
+    return false;
 }
 
 KDevelop::IDocument::DocumentState QtDesignerDocument::state() const
 {
-    return KDevelop::IDocument::Clean;
+    return m_state;
 }
 
 void QtDesignerDocument::setCursorPosition(const KTextEditor::Cursor&)
@@ -200,6 +213,7 @@ void QtDesignerDocument::formChanged()
             connect( form, SIGNAL(changed()), this, SLOT(formChanged()));
         }
     }
+    m_state = KDevelop::IDocument::Modified;
 }
 
 #include "qtdesignerdocument.moc"

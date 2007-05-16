@@ -64,6 +64,7 @@ private:
     KUrl m_url;
     QList<QDesignerFormWindowInterface*> m_forms;
     QList<QMdiArea*> m_areas;
+    KDevelop::IDocument::DocumentState m_state;
 };
 
 #endif
