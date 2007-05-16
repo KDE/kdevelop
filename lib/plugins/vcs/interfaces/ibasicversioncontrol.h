@@ -198,7 +198,7 @@ public:
      *
      * @param rev List @p rev and earlier. The default is HEAD.
      */
-    virtual VcsJob showLog( const KUrl& localLocation
+    virtual VcsJob showLog( const KUrl& localLocation,
                             const VcsRevision& rev ) = 0;
 
     /**

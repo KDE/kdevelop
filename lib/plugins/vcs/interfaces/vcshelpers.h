@@ -96,12 +96,40 @@ public:
         Previous        /**<Only valid in a range; the version prior the other one.*/,
         Invalid
     };
+
+    /**
+     * Check wether this is a valid revision
+     */
     bool isValid();
+
+    /**
+     * Set the value of this revision
+     */
     void setRevisionValue( const QVariant& rev, RevisionType );
+
+    /**
+     * Set the starting revision of a revision range
+     */
     void setSourceRevision( const VcsRevision& );
+
+    /**
+     * Set the ending revision of a revision range
+     */
     void setTargetRevision( const VcsRevision& );
+
+    /**
+     * returns the type of the revision
+     */
     RevisionType revisionType() const;
+
+    /**
+     * return the value of this revision
+     */
     QString revisionValue() const;
+
+    /**
+     * return starting and ending revision of a revision range
+     */
     VcsRevision sourceRevision() const;
     VcsRevision targetRevision() const;
 };
