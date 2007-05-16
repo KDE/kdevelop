@@ -51,9 +51,11 @@
 #include <QtGui/QMdiArea>
 #include <QtGui/QMdiSubWindow>
 #include <QtCore/QFile>
+#include <sublime/view.h>
 
 QtDesignerDocument::QtDesignerDocument( const KUrl& url , KDevelop::ICore* core )
-    : Sublime::UrlDocument(core->uiController()->controller(), url), KDevelop::IDocument(core), m_url(url)
+    : Sublime::UrlDocument(core->uiController()->controller(), url),
+      KDevelop::IDocument(core), m_url(url)
 {
 
 }
@@ -108,7 +110,16 @@ void QtDesignerDocument::setCursorPosition(const KTextEditor::Cursor&)
 
 void QtDesignerDocument::activate(Sublime::View* view)
 {
-    Q_UNUSED(view)
+    QMdiArea* a = dynamic_cast<QMdiArea*>(view->widget());
+    if(a)
+    {
+        int num = m_areas.indexOf(a);
+        kDebug(9039) << k_funcinfo << "Area found at " << num << endl;
+        if( num >= 0 )
+        {
+            m_designerPlugin->designer()->formWindowManager()->setActiveFormWindow( m_forms.at(num) );
+        }
+    }
     notifyActivated();
 }
 
@@ -126,15 +137,16 @@ QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
 //     area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     QFile uiFile(m_url.path());
     QDesignerFormWindowManagerInterface* manager = m_designerPlugin->designer()->formWindowManager();
-    QDesignerFormWindowInterface* widget = manager->createFormWindow();
+
+    QDesignerFormWindowInterface* form = manager->createFormWindow();
     kDebug(9039) << "now we have " << manager->formWindowCount() << " formwindows" << endl;
-    widget->setFileName(m_url.path());
-    widget->setContents(&uiFile);
-    manager->setActiveFormWindow(widget);
-    QMdiSubWindow* window = area->addSubWindow(widget, Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
-    const QSize containerSize = widget->mainContainer()->size();
-    const QSize containerMinimumSize = widget->mainContainer()->minimumSize();
-    const QSize containerMaximumSize = widget->mainContainer()->maximumSize();
+    form->setFileName(m_url.path());
+    form->setContents(&uiFile);
+    manager->setActiveFormWindow(form);
+    QMdiSubWindow* window = area->addSubWindow(form, Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
+    const QSize containerSize = form->mainContainer()->size();
+    const QSize containerMinimumSize = form->mainContainer()->minimumSize();
+    const QSize containerMaximumSize = form->mainContainer()->maximumSize();
     const QSize decorationSize = window->geometry().size() - window->contentsRect().size();
     window->resize(containerSize+decorationSize);
     window->setMinimumSize(containerMinimumSize+decorationSize);
@@ -142,10 +154,28 @@ QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
         window->setMaximumSize(containerMaximumSize);
     else
         window->setMaximumSize(containerMaximumSize+decorationSize);
-    window->setWindowTitle( widget->mainContainer()->windowTitle() );
+    window->setWindowTitle( form->mainContainer()->windowTitle() );
     m_areas << area;
+    connect( form, SIGNAL(changed()), this, SLOT(formChanged()));
+    m_forms << form;
     return area;
 }
 
+void QtDesignerDocument::formChanged()
+{
+    kDebug(9039) << "Form changed" << endl;
+    QDesignerFormWindowInterface* activeForm = m_designerPlugin->designer()->formWindowManager()->activeFormWindow();
+    foreach(QDesignerFormWindowInterface* form, m_forms)
+    {
+        if( form != activeForm )
+        {
+            form->disconnect( this );
+            form->setContents(activeForm->contents());
+            connect( form, SIGNAL(changed()), this, SLOT(formChanged()));
+        }
+    }
+}
+
+#include "qtdesignerdocument.moc"
 
 //kate: space-indent on;indent-width 4;replace-tabs on;auto-insert-doxygen on;indent-mode cstyle;

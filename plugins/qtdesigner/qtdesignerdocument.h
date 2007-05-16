@@ -32,10 +32,12 @@ namespace KDevelop
 }
 
 class QtDesignerPlugin;
+class QDesignerFormWindowInterface;
 class QMdiArea;
 
 class QtDesignerDocument : public Sublime::UrlDocument, public KDevelop::IDocument
 {
+    Q_OBJECT
 public:
     QtDesignerDocument( const KUrl&, KDevelop::ICore* );
 
@@ -52,11 +54,15 @@ public:
     virtual void setCursorPosition(const KTextEditor::Cursor&);
     virtual void activate(Sublime::View*);
     void setDesignerPlugin(QtDesignerPlugin*);
+
+private slots:
+    void formChanged();
 protected:
         virtual QWidget *createViewWidget(QWidget *parent = 0);
 private:
     QtDesignerPlugin* m_designerPlugin;
     KUrl m_url;
+    QList<QDesignerFormWindowInterface*> m_forms;
     QList<QMdiArea*> m_areas;
 };
 
