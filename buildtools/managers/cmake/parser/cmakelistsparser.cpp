@@ -90,7 +90,7 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
 
 bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
                                            CMakeFunctionDesc& func,
-                                           const QString fileName )
+                                           const QString& fileName )
 {
     // Command name has already been parsed.  Read the left paren.
     cmListFileLexer_Token* token;

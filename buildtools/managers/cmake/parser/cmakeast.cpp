@@ -3,7 +3,7 @@
  * Copyright 2006 Matt Rogers <mattr@kde.org>
  *
  * Some parts of this code are based on CMake
- * Copyright 2002 Kitware, Inc. Insight Consortium
+ * Copyright 2002 Kitware, Inc. Insight Consortium <kitware@kitware.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1383,28 +1383,28 @@ void MarkAsAdvancedAst::writeBack( QString& )
 
 
 bool MarkAsAdvancedAst::parseFunctionInfo( const CMakeFunctionDesc& func )
-{   
+{
     if ( func.name.toLower() != "mark_as_advanced" || func.arguments.isEmpty() )
         return false;
 
     m_isClear = func.arguments[0].value == "CLEAR";
     m_isForce = func.arguments[0].value == "FORCE";
-    
+
     if ( (m_isClear || m_isForce) && func.arguments.size() < 2 )
         return false;
 
     QList<CMakeFunctionArgument>::const_iterator it, itEnd;
     it=func.arguments.begin();
     itEnd = func.arguments.end();
-    
+
     if(m_isClear || m_isForce)
 	it++;
 
     for ( ; it != itEnd; ++it )
-    {	
+    {
         m_advancedVars.append(it->value);
     }
-    
+
     return true;
 }
 

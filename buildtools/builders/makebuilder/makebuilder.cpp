@@ -18,11 +18,11 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "makebuilder.h"
 #include <config.h>
 
 #include <QtCore/QStringList>
 
-#include "makebuilder.h"
 #include <projectmodel.h>
 
 #include <ibuildsystemmanager.h>

@@ -51,7 +51,7 @@ Q_OBJECT
 Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
-    QMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
+    explicit QMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
 
     virtual ~QMakeProjectManager();
 

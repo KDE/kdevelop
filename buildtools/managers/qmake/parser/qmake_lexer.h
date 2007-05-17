@@ -33,7 +33,7 @@ namespace QMake
     {
         public:
             enum LineEnding { None = 0, Unix = 1, MacOS = 2, Windows = 4 };
-            Lexer( std::istream* argin = 0, std::ostream* argout = 0 );
+            explicit Lexer( std::istream* argin = 0, std::ostream* argout = 0 );
             int yylex( QMake::Parser::semantic_type* yylval );
             int yylex();
             void setLineEndingFromString( const QString& );

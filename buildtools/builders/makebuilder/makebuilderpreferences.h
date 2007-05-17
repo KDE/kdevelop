@@ -36,7 +36,7 @@ namespace Ui { class MakeConfig; }
 class MakeBuilderPreferences : public ProjectKCModule<MakeBuilderSettings>
 {
 public:
-    MakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+    explicit MakeBuilderPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
     ~MakeBuilderPreferences();
 
 private slots:

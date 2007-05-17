@@ -35,7 +35,7 @@ class CustomMakeManager : public KDevelop::IPlugin, public KDevelop::IBuildSyste
     Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
 
-    CustomMakeManager( QObject *parent = NULL, const QStringList& args = QStringList()  );
+    explicit CustomMakeManager( QObject *parent = NULL, const QStringList& args = QStringList()  );
 
     virtual ~CustomMakeManager();
 
@@ -195,7 +195,7 @@ private Q_SLOTS:
     /// Displays targets in top src dir
     void targetMenuActivated( QAction* );
     void slotBuilt( KDevelop::ProjectBaseItem* item );
-    
+
 private:
     /**
      * Initialize targets by reading Makefile in @arg dir

@@ -46,7 +46,7 @@ namespace KDevelop
 class AutoMakeImporter : public KDevelop::BuildManager
 {
 public:
-	AutoMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
+	explicit AutoMakeImporter( QObject* parent = 0, const QStringList& args = QStringList() );
 
 	virtual ~AutoMakeImporter();
 

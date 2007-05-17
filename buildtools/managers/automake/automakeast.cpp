@@ -70,7 +70,7 @@ void ProjectAST::writeBack(QString &buffer)
 		buffer += scopedID;
 	else
 		buffer += indentation();
-	
+
 	AST::writeBack(buffer);
 
 }
@@ -83,22 +83,22 @@ void ProjectAST::addChildAST(AST *node)
 
 void AssignmentAST::writeBack(QString &buffer)
 {
-	buffer += indentation() + scopedID + " " + op + " " + values.join(" ");
+	buffer += indentation() + scopedID + ' ' + op + ' ' + values.join(' ');
 }
 
 void AutomakeTargetAST::writeBack( QString& buffer )
 {
-	buffer += target + ":" + deps.join("");
+	buffer += target + ':' + deps.join('');
 }
 
 void ConditionAST::writeBack( QString& buffer )
 {
-	buffer += indentation() + type + " " + conditionName;
+	buffer += indentation() + type + ' ' + conditionName;
 }
 
 void NewLineAST::writeBack(QString &buffer)
 {
-	buffer += "\n";
+	buffer += '\n';
 }
 
 void CommentAST::writeBack(QString &buffer)

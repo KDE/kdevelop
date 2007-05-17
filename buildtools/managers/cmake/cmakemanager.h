@@ -53,7 +53,7 @@ Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
-    CMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
+    explicit CMakeProjectManager( QObject* parent = 0, const QStringList& args = QStringList() );
 
     virtual ~CMakeProjectManager();
 

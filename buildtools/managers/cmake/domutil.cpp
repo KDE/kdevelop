@@ -21,7 +21,7 @@
 
 namespace KDevelop
 {
-    
+
 void DomUtil::makeEmpty( QDomElement& e )
 {
     while( !e.firstChild().isNull() )
@@ -105,7 +105,7 @@ DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QStr
                                              const QString &firstAttr, const QString &secondAttr)
 {
     PairList list;
-    
+
     QDomElement el = elementByPath(doc, path);
     QDomElement subEl = el.firstChild().toElement();
     while (!subEl.isNull()) {
@@ -116,7 +116,7 @@ DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QStr
         }
         subEl = subEl.nextSibling().toElement();
     }
-    
+
     return list;
 }
 
@@ -170,7 +170,7 @@ QDomElement DomUtil::createElementByPath(QDomDocument &doc, const QString &path)
     }
     for (; it != l.end(); ++it)
         el = DomUtil::namedChildElement( el, *it );
-        
+
     while (!el.firstChild().isNull())
         el.removeChild(el.firstChild());
 
@@ -186,7 +186,7 @@ void DomUtil::writeEntry(QDomDocument &doc, const QString &path, const QString &
 
 void DomUtil::writeMapEntry(QDomDocument &doc, const QString &path, const QMap<QString, QString> &map)
 {
-    QString basePath( path + "/" );
+    QString basePath( path + '/' );
     QMap<QString,QString>::ConstIterator it;
     for (it = map.begin(); it != map.end(); ++it)
     {
@@ -198,7 +198,7 @@ void DomUtil::writeMapEntry(QDomDocument &doc, const QString &path, const QMap<Q
 
 void DomUtil::writeHashEntry(QDomDocument &doc, const QString &path, const QHash<QString, QString> &hash)
 {
-    QString basePath( path + "/" );
+    QString basePath( path + '/' );
     QHash<QString,QString>::ConstIterator it;
     for (it = hash.begin(); it != hash.end(); ++it)
     {
@@ -249,7 +249,7 @@ void DomUtil::writePairListEntry(QDomDocument &doc, const QString &path, const Q
     }
 }
 
-DomPath DomUtil::resolvPathStringExt(const QString pathstring)
+DomPath DomUtil::resolvPathStringExt(const QString& pathstring)
 {
     // parse path
     int i;
@@ -317,7 +317,7 @@ QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstri
             wrongchild = true;
             break;
           }
-        }      
+        }
       }
       else
         wrongchild=true;
@@ -341,7 +341,7 @@ QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstri
 }
 
 
-bool DomUtil::openDOMFile(QDomDocument &doc, QString filename)
+bool DomUtil::openDOMFile(QDomDocument &doc, const QString& filename)
 {
   QFile file( filename );
   if ( !file.open( QIODevice::ReadOnly ) )
@@ -354,7 +354,7 @@ bool DomUtil::openDOMFile(QDomDocument &doc, QString filename)
   return true;
 }
 
-bool DomUtil::saveDOMFile(QDomDocument &doc, QString filename)
+bool DomUtil::saveDOMFile(const QDomDocument &doc, const QString& filename)
 {
   QFile file( filename );
   if ( !file.open( QIODevice::ReadWrite | QIODevice::Truncate ) )
@@ -365,7 +365,7 @@ bool DomUtil::saveDOMFile(QDomDocument &doc, QString filename)
   return true;
 }
 
-bool DomUtil::removeTextNodes(QDomDocument doc,QString pathExt)
+bool DomUtil::removeTextNodes(const QDomDocument& doc,const QString& pathExt)
 {
   QDomElement elem = elementByPathExt(doc,pathExt);
   if (elem.isNull())
@@ -378,7 +378,7 @@ bool DomUtil::removeTextNodes(QDomDocument doc,QString pathExt)
 }
 
 
-bool DomUtil::appendText(QDomDocument doc, QString pathExt, QString text)
+bool DomUtil::appendText(const QDomDocument& doc, const QString& pathExt, const QString& text)
 {
   QDomElement elem = elementByPathExt(doc,pathExt);
   if (elem.isNull())
@@ -388,7 +388,7 @@ bool DomUtil::appendText(QDomDocument doc, QString pathExt, QString text)
 }
 
 
-bool DomUtil::replaceText(QDomDocument doc, QString pathExt, QString text)
+bool DomUtil::replaceText(const QDomDocument& doc, QString pathExt, QString text)
 {
   if (removeTextNodes(doc,pathExt) &&
       appendText(doc,pathExt,text))

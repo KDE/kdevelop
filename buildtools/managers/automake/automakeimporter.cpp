@@ -26,7 +26,6 @@
 #include "kdevproject.h"
 #include "kdevprojectmodel.h"
 
-#include "automakeprojectmodel.h"
 #include "makefileinterface.h"
 
 typedef KGenericFactory<AutoMakeImporter> AutotoolsSupportFactory;

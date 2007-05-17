@@ -112,19 +112,19 @@ class KDEVCMAKECOMMON_EXPORT CMakeListsParser : public QObject
 public:
     CMakeListsParser(QObject *parent = 0);
     ~CMakeListsParser();
-    
+
     ProjectInfo parse( const KUrl& file );
-    
+
     ProjectInfo parseProject( const CMakeAst* );
     TargetInfo parseTarget( const CMakeAst* );
     FolderInfo parseFolder( const CMakeAst* );
-    
+
     static bool parseCMakeFile( CMakeAst* root, const QString& fileName );
 
 private:
     static bool parseCMakeFunction( cmListFileLexer*,
                                     CMakeFunctionDesc&,
-                                    const QString fileName );
+                                    const QString& fileName );
 };
 
 #endif

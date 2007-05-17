@@ -18,10 +18,10 @@
  * 02110-1301, USA.
  */
 
+#include "cmakemodelitems.h"
 #include <QString>
 
 #include <iproject.h>
-#include "cmakemodelitems.h"
 
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const FolderInfo& fi, QStandardItem* item )
     : KDevelop::ProjectItem( project, fi.name, item )

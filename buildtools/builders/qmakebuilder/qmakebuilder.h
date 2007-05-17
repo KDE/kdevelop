@@ -40,7 +40,7 @@ class QMakeBuilder : public KDevelop::IPlugin, public IQMakeBuilder
     Q_INTERFACES( KDevelop::IProjectBuilder )
 
 public:
-    QMakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
+    explicit QMakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~QMakeBuilder();
 
     virtual bool build(KDevelop::ProjectBaseItem *dom);

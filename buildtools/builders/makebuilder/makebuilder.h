@@ -46,7 +46,7 @@ class MakeBuilder: public KDevelop::IPlugin, public IMakeBuilder
     Q_INTERFACES( IMakeBuilder )
     Q_INTERFACES( KDevelop::IProjectBuilder )
 public:
-    MakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
+    explicit MakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~MakeBuilder();
 
     /** Can accept KDevelop::ProjectTargetItem or KDevelop::ProjectItem

@@ -29,7 +29,7 @@ namespace AutoTools { class ProjectAST; }
 class AutoMakeDirItem : public KDevelop::ProjectFolderItem
 {
 public:
-    AutoMakeDirItem( const KUrl& url, QStandardItem* parent = 0 );
+    explicit AutoMakeDirItem( const KUrl& url, QStandardItem* parent = 0 );
     virtual ~AutoMakeDirItem();
 
     virtual KDevelop::ProjectFolderItem* folder() const
@@ -44,7 +44,7 @@ public:
 class AutoMakeFileItem : public KDevelop::ProjectFileItem
 {
 public:
-    AutoMakeFileItem( const KUrl& url, QStandardItem* parent = 0 );
+    explicit AutoMakeFileItem( const KUrl& url, QStandardItem* parent = 0 );
     virtual ~AutoMakeFileItem();
 
     virtual KDevelop::ProjectFileItem* file() const
@@ -56,8 +56,8 @@ public:
 class AutoMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    AutoMakeTargetItem( const TargetInfo& target, QStandardItem* parent = 0 );
-    
+    explicit AutoMakeTargetItem( const TargetInfo& target, QStandardItem* parent = 0 );
+
     virtual ~AutoMakeTargetItem();
 
     virtual KDevelop::ProjectTargetItem* target() const
@@ -81,7 +81,7 @@ private:
 class AutoMakeGenericItem : public KDevelop::ProjectItem
 {
 public:
-    AutoMakeGenericItem( const QString& target, QStandardItem* parent = 0 );
+    explicit AutoMakeGenericItem( const QString& target, QStandardItem* parent = 0 );
     virtual ~AutoMakeGenericItem();
 
 };

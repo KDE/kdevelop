@@ -23,7 +23,6 @@
  ***************************************************************************/
 
 #include "autotools_yacc.h"
-#include <stdlib.h>
 
 /**
 @file autotools.ll

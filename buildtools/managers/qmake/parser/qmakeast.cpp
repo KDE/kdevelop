@@ -78,7 +78,7 @@ namespace QMake
     {
         buf += whitespace();
         if ( !m_comment.startsWith( "#" ) )
-            buf += "#";
+            buf += '#';
         buf += m_comment;
     }
 

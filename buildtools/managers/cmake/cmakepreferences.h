@@ -39,7 +39,7 @@ namespace Ui { class CMakeBuildSettings; }
 class CMakePreferences : public ProjectKCModule<CMakeSettings>
 {
 public:
-    CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+    explicit CMakePreferences(QWidget* parent = 0, const QStringList& args = QStringList());
     ~CMakePreferences();
 
 
