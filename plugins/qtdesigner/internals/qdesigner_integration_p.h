@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 1992-2006 Trolltech AS. All rights reserved.
+** Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
 **
 ** This file is part of the Qt Designer of the Qt Toolkit.
 **
@@ -36,6 +36,7 @@
 #define QDESIGNER_INTEGRATION_H
 
 #include "shared_global_p.h"
+#include <QtDesigner/QDesignerIntegrationInterface>
 
 #include <QtCore/QObject>
 
@@ -48,39 +49,47 @@ class QWidget;
 
 namespace qdesigner_internal {
 
-class QDESIGNER_SHARED_EXPORT QDesignerIntegration: public QObject
+struct Selection;
+
+class QDESIGNER_SHARED_EXPORT QDesignerIntegration: public QDesignerIntegrationInterface
 {
     Q_OBJECT
 public:
     QDesignerIntegration(QDesignerFormEditorInterface *core, QObject *parent = 0);
     virtual ~QDesignerIntegration();
 
-    inline QDesignerFormEditorInterface *core() const;
+    virtual QWidget *containerWindow(QWidget *widget) const;
+
+    // Load plugins into widget database and factory.
+    static void initializePlugins(QDesignerFormEditorInterface *formEditor);
 
 signals:
     void propertyChanged(QDesignerFormWindowInterface *formWindow, const QString &name, const QVariant &value);
 
 public slots:
     virtual void updateProperty(const QString &name, const QVariant &value);
+    // Additional signals of designer property editor
+    virtual void updatePropertyComment(const QString &name, const QString &value);
+    virtual void resetProperty(const QString &name);
+    virtual void addDynamicProperty(const QString &name, const QVariant &value);
+    virtual void removeDynamicProperty(const QString &name);
+
+
     virtual void updateActiveFormWindow(QDesignerFormWindowInterface *formWindow);
     virtual void setupFormWindow(QDesignerFormWindowInterface *formWindow);
     virtual void updateSelection();
     virtual void updateGeometry();
     virtual void activateWidget(QWidget *widget);
 
-protected:
-    virtual QWidget *containerWindow(QWidget *widget);
+    void updateCustomWidgetPlugins();
 
 private:
     void initialize();
+    void getSelection(Selection &s);
+    QObject *propertyEditorObject();
 
-private:
-    QDesignerFormEditorInterface *m_core;
     QDesignerFormWindowManagerInterface *m_formWindowManager;
 };
-
-inline QDesignerFormEditorInterface *QDesignerIntegration::core() const
-{ return m_core; }
 
 } // namespace qdesigner_internal
 

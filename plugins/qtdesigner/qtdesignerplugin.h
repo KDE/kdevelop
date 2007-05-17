@@ -27,6 +27,7 @@
 #include "iplugin.h"
 
 class QAction;
+class QDesignerIntegrationInterface;
 class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
 class QWorkspace;
@@ -75,7 +76,7 @@ private:
 private Q_SLOTS:
     void saveActiveDocument();
 private:
-    QPointer<QDesignerFormEditorInterface> m_designer;
+    QPointer<QDesignerIntegrationInterface> m_designer;
 
     KDevelop::IDocument* m_activeDoc;
     QtDesignerDocumentFactory* m_docFactory;

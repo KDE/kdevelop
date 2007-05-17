@@ -138,23 +138,24 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
 
     setXMLFile( "kdevqtdesigner.rc" );
 
-    m_designer = QDesignerComponents::createFormEditor(this);
-    m_designer->setWidgetBox(QDesignerComponents::createWidgetBox(m_designer, 0));
+    QDesignerFormEditorInterface* formeditor = QDesignerComponents::createFormEditor(this);
+
+    formeditor->setWidgetBox(QDesignerComponents::createWidgetBox(formeditor, 0));
 
 //    load the standard widgets
-    m_designer->widgetBox()->setFileName(QLatin1String(":/trolltech/widgetbox/widgetbox.xml"));
-    m_designer->widgetBox()->load();
+    formeditor->widgetBox()->setFileName(QLatin1String(":/trolltech/widgetbox/widgetbox.xml"));
+    formeditor->widgetBox()->load();
 
-    m_designer->setPropertyEditor(QDesignerComponents::createPropertyEditor(m_designer, 0));
-    m_designer->setActionEditor(QDesignerComponents::createActionEditor(m_designer, 0));
-    m_designer->setObjectInspector(QDesignerComponents::createObjectInspector(m_designer, 0));
+    formeditor->setPropertyEditor(QDesignerComponents::createPropertyEditor(formeditor, 0));
+    formeditor->setActionEditor(QDesignerComponents::createActionEditor(formeditor, 0));
+    formeditor->setObjectInspector(QDesignerComponents::createObjectInspector(formeditor, 0));
 
-    new qdesigner_internal::QDesignerIntegration(m_designer, this);
+    m_designer = new qdesigner_internal::QDesignerIntegration(formeditor, this);
 
-    m_designer->widgetBox()->setObjectName( i18n("Widget Box") );
-    m_designer->propertyEditor()->setObjectName( i18n("Property Editor") );
-    m_designer->actionEditor()->setObjectName( i18n("Action Editor") );
-    m_designer->objectInspector()->setObjectName( i18n("Object Inspector") );
+    m_designer->core()->widgetBox()->setObjectName( i18n("Widget Box") );
+    m_designer->core()->propertyEditor()->setObjectName( i18n("Property Editor") );
+    m_designer->core()->actionEditor()->setObjectName( i18n("Action Editor") );
+    m_designer->core()->objectInspector()->setObjectName( i18n("Object Inspector") );
 
     setupActions();
 
@@ -201,7 +202,7 @@ QtDesignerPlugin::~QtDesignerPlugin()
 
 QDesignerFormEditorInterface *QtDesignerPlugin::designer() const
 {
-    return m_designer;
+    return m_designer->core();
 }
 
 void QtDesignerPlugin::setupActions()
