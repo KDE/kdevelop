@@ -240,7 +240,7 @@ public:
      * hierarchy. The mapping exactly tells which file in the repository
      * should go to which local file
      */
-    virtual VcsJob checkout( const VCSMapping& mapping ) = 0;
+    virtual VcsJob checkout( const VcsMapping& mapping ) = 0;
 };
 
 }
