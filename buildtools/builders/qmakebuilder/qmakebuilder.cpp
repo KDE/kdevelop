@@ -101,7 +101,7 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             kDebug(9024) << "Reading setting: " << group.readEntry("QMake Binary") << endl;
             KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
 //             kDebug(9024) << v << v.type() << v.userType() << endl;
-            cmd << v.path();
+            cmd << v.toLocalFile();
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
             view->queueCommand( item->url(), cmd, QMap<QString, QString>() );
             return true;

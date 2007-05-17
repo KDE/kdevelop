@@ -44,7 +44,7 @@ QString ProjectSelectionPage::location()
 {
     KUrl url = ui->locationUrl->url();
     url.addPath(ui->appNameEdit->text());
-    return url.path();
+    return url.toLocalFile();
 }
 
 QString ProjectSelectionPage::appName()

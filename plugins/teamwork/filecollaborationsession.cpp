@@ -168,7 +168,7 @@ void FileCollaborationSession::fillContextMenu( int /*i*/, QMenu* menu ) {
   if ( d && d->textDocument() ) {
     KUrl u = TeamworkFolderManager::workspaceRelative( d->url() );
 
-    if ( !m_files.values( u.path() ) )
+    if ( !m_files.values( u.toLocalFile() ) )
       menu->addAction( "Add Current File", this, SLOT( addFile() ) );
   }
   QMenu* m = new QMenu( menu );
@@ -387,7 +387,7 @@ uint FileCollaborationSession::addFileInternal( const CollabFile& f, bool fromBu
       KUrl u( file );
 
       if ( u.isParentOf( KDevCore::projectController() ->activeProject() ->projectDirectory() ) ) {
-        QString d = KDevCore::projectController() ->activeProject() ->projectDirectory().path();
+        QString d = KDevCore::projectController() ->activeProject() ->projectDirectory().toLocalFile();
         if( !d.endsWith( "/" ) ) d += "/";
         file = KUrl::relativeUrl( d, u );
       }
@@ -447,13 +447,13 @@ void FileCollaborationSession::addFile() {
 
     KUrl u = TeamworkFolderManager::workspaceRelative( document->url() );
 
-    out( Logger::Debug ) << "adding " << u.path() << " to the session";
+    out( Logger::Debug ) << "adding " << u.toLocalFile() << " to the session";
 
     uint index = allocateWrapperIndex();
     QString fileName = TeamworkFolderManager::teamworkRelative( u );
 
     if ( !addFileInternal( CollabFile( index, fileName ), true, true ) )
-      throw "could not add file " + u.path();
+      throw "could not add file " + u.toLocalFile();
 
     DocumentWrapperPointer wrapper = m_files[ index ];
     if ( !wrapper )

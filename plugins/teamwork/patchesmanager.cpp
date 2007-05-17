@@ -163,7 +163,7 @@ void PatchesManager::addPatch( const LocalPatchSourcePointer& patch ) {
 void PatchesManager::editStateChanged( EditPatch* ) {
   m_updateTimer->start( 100 );
 }
-    
+
 void PatchesManager::editDialogClosed( EditPatch* dialog ) {
   m_editing.removeAll( dialog );
   m_updateTimer->start( 100 );
@@ -187,7 +187,7 @@ EditPatchPointer PatchesManager::showEditDialog(  const LocalPatchSourcePointer 
     if( (*it)->patch() == patch ) return *it;
   }
   EditPatchPointer p = new EditPatch( this, patch, local );
-  
+
   connect( p.data(), SIGNAL(dialogClosed( EditPatch* )), this, SLOT( editDialogClosed( EditPatch* ) ) );
   connect( p.data(), SIGNAL(stateChanged( EditPatch* )), this, SLOT( editStateChanged( EditPatch* ) ) );
   m_editing << p;
@@ -398,12 +398,12 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 
     {
       ///@todo make this work with remove files
-      QFile file( filePath.path() );
-  
+      QFile file( filePath.toLocalFile() );
+
       file.open( QIODevice::WriteOnly );
       if ( !file.isOpen() )
         throw QString( "could not open %1" ).arg( filePath.prettyUrl() );
-  
+
       file.write( msg->data() );
       log( QString( "writing patch of size %1 to %2" ).arg( msg->data().size() ).arg( filePath.prettyUrl() ), Debug );
     }
@@ -419,14 +419,14 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
         //LocalPatchSourcePointer::Locked newPatchInfo( patchInfo );//new LocalPatchSource( *patchInfo ) );
         if( !hasPatch( patchInfo ) ) {
           ///@todo make work with remote files
-          patchInfo->setFileName( ~filePath.path() );
+          patchInfo->setFileName( ~filePath.toLocalFile() );
           addPatch( patchInfo);
         }
 
         EditPatch* p = showEditDialog( patchInfo, true );
         if( !p ) throw QString( "cannot edit received patch" );
         ///@todo ...
-        p->apply( false, filePath.path() );
+        p->apply( false, filePath.toLocalFile() );
 
         guiUpdatePatchesList();
       };
@@ -437,7 +437,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
         ///Store the patch locally
         LocalPatchSourcePointer::Locked newPatchInfo( new LocalPatchSource( *patchInfo ) );
           ///@todo make work with remote files
-        newPatchInfo->setFileName( ~filePath.path() );
+        newPatchInfo->setFileName( ~filePath.toLocalFile() );
         m_config.patchSources.push_back( newPatchInfo );
         guiUpdatePatchesList();
       }
@@ -448,7 +448,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
         ///@todo where has KDevDiffFrontend gone? When will it be back?
 //         if ( patchInfo->type == "text/x-diff" ) {
 //           QString str = msg->data();
-// 
+//
 //           KDevDiffFrontend *df = KDevTeamworkPart::staticCore()->pluginController()->pluginForExtension<KDevDiffFrontend>( "KDevelop/DiffFrontend" );
 //           if ( df ) {
 //             df->showDiff( str );
@@ -460,7 +460,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 
         if( !KDevTeamworkPart::staticDocumentController()->openDocument( filePath, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen ) ) {
           log( QString( "could not open %1 with the document-controller" ).arg( filePath.prettyUrl() ), Warning );
-          
+
           auto_ptr<KOpenWithDialog> d( new KOpenWithDialog( ~patchInfo->type, "" ) );
 
           if ( d->exec() == KDialog::Accepted ) {
@@ -479,7 +479,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
             throw QString( "open-with dialog was closed" );
           }
           d.reset(0);
-          
+
 /*          ///Open with KRun instead
           if( KRun::runUrl( KUrl(filePath), ~patchInfo->type, KDevTeamworkPart::staticCore()->uiController()->activeMainWindow() ) == 0 ) {
             log( QString( "Failed to open %1 with an application" ).arg( filePath ), Warning );
@@ -584,7 +584,7 @@ LocalPatchSourcePointer PatchesManager::merge( const QString& name, const QList<
     KUrl file = TeamworkFolderManager::createUniqueFile( "patches/"+user, name+".diff" );
 
     ///@todo make this work with remove Urls
-    QFile target( file.path() );
+    QFile target( file.toLocalFile() );
     if ( !target.open( QIODevice::WriteOnly ) )
       throw QString( "could not open file %1" ).arg( file.prettyUrl() );
 
@@ -593,11 +593,11 @@ LocalPatchSourcePointer PatchesManager::merge( const QString& name, const QList<
       if ( !l )
         throw "could not lock patch-source";
 
-      
-      
+
+
       KUrl u = TeamworkFolderManager::teamworkAbsolute( ~l->filename, "patches" );
       ///@todo make this work with remove Urls
-      QFile f( u.path() );
+      QFile f( u.toLocalFile() );
       if ( !f.open( QIODevice::ReadOnly ) )
         throw QString( "could not open file %1" ).arg( u.prettyUrl() );
 
@@ -625,7 +625,7 @@ int PatchesManager::receiveMessage( PatchRequestMessage* msg ) {
 
   bool overrideAccess = false;
   if( msg->info().session().cast<FakeSession>() ) overrideAccess = true;
-  
+
   LocalPatchSourcePointer::Locked lpatch = patch;
   if ( patch && lpatch ) {
     if( !overrideAccess ) {
@@ -881,35 +881,35 @@ LocalPatchSource::State PatchesManager::determineState( const LocalPatchSourcePo
       throw "state can only be determined for files of type \"text/x-diff\"";
     if( lpatch->filename.empty() )
         throw "state can only be determined for file-patches";
-    
+
 /*    KUrl fileUrl = projectDir();
-    if( (~lpatch->filename).startsWith( fileUrl.path() ) )
+    if( (~lpatch->filename).startsWith( fileUrl.toLocalFile() ) )
       fileUrl = KUrl( ~lpatch->filename );
     else
     fileUrl.addPath( ~lpatch->filename );*/
     KUrl fileUrl = ~lpatch->filename;
 
     if( lpatch->patchTool() != "patch" || lpatch->patchTool(true) != "patch" ) throw QString( "cannot determine state with other tool than patch: \"%1\" \"%2\"").arg(~lpatch->patchTool()).arg(~lpatch->patchTool(true)) ;
-    
+
     {
       K3Process proc;
       ///@todo does not work with remove directories
-      proc.setWorkingDirectory( TeamworkFolderManager::workspaceDirectory().path() );
+      proc.setWorkingDirectory( TeamworkFolderManager::workspaceDirectory().toLocalFile() );
      // proc << ~lpatch->patchTool();
       bool hadFile = false;
       QString applyParams = ~lpatch->patchParams(false);
       if( applyParams.contains( "$FILE" ) )
         hadFile = true;
-        //applyParams.replace( "$FILE", fileUrl.path() );
-      proc.setEnvironment( "FILE", fileUrl.path() );
+        //applyParams.replace( "$FILE", fileUrl.toLocalFile() );
+      proc.setEnvironment( "FILE", fileUrl.toLocalFile() );
       //proc << "--dry-run" << "-s" << "-f";
       QString cmd = ~lpatch->patchTool() + " --dry-run " + applyParams + " -s -f";
       if( !hadFile ) {
-        //proc << "-i" << fileUrl.path();
-        cmd += " -i " + fileUrl.path();
+        //proc << "-i" << fileUrl.toLocalFile();
+        cmd += " -i " + fileUrl.toLocalFile();
       }
       proc << splitArgs( cmd );
-      
+
       log( "determineState(...) calling " + cmd, Debug );
 
       if( !proc.start( K3Process::Block ) ) throw "could not start process";
@@ -924,25 +924,25 @@ LocalPatchSource::State PatchesManager::determineState( const LocalPatchSourcePo
     {
       K3Process proc;
       ///@todo does not work with remove directories
-      proc.setWorkingDirectory( TeamworkFolderManager::workspaceDirectory().path() );
+      proc.setWorkingDirectory( TeamworkFolderManager::workspaceDirectory().toLocalFile() );
       //proc << ~lpatch->patchTool(true);
-      
+
       bool hadFile = false;
       QString applyParams = ~lpatch->patchParams(true);
       if( applyParams.contains( "$FILE" ) ) {
         hadFile = true;
       }
-      proc.setEnvironment( "FILE", fileUrl.path() );
+      proc.setEnvironment( "FILE", fileUrl.toLocalFile() );
 
       //proc << "--dry-run" << "-s" << "-f" << applyParams;
       QString cmd = ~lpatch->patchTool(true) + " --dry-run -s -f " + applyParams;
       if( !hadFile ) {
-        //proc << "-i" << fileUrl.path();
-        cmd += " -i " + fileUrl.path();
+        //proc << "-i" << fileUrl.toLocalFile();
+        cmd += " -i " + fileUrl.toLocalFile();
       }
       proc << splitArgs( cmd );
       log( "determineState(...) calling " + cmd, Debug );
-    
+
       if( !proc.start( K3Process::Block ) ) throw "could not start patch-process";
       if( !proc.normalExit() ) throw "process did not exit normally";
       log( QString( "exit-status: %1").arg( proc.exitStatus() ), Debug );
@@ -965,8 +965,8 @@ void PatchesManager::save() {
     KUrl fileName = TeamworkFolderManager::teamworkAbsolute( "patches.database" );
     ///@todo does not work with remote files
     if( !fileName.isLocalFile() ) throw QString( "file is not a local Url: %1" ).arg( fileName.prettyUrl() );
-    
-    std::ofstream file(fileName.path().toLocal8Bit(), ios_base::out | ios_base::binary );
+
+    std::ofstream file(fileName.toLocalFile().toLocal8Bit(), ios_base::out | ios_base::binary );
     if( !file.good() ) throw "could not open " + fileName.prettyUrl() + " for writing";
     boost::archive::polymorphic_xml_oarchive arch( file );
     arch << NVP(m_config);
@@ -984,8 +984,8 @@ void PatchesManager::load() {
     KUrl fileName = TeamworkFolderManager::teamworkAbsolute( "patches.database" );
     ///@todo does not work with remote files
     if( !fileName.isLocalFile() ) throw QString( "file is not a local Url: %1" ).arg( fileName.prettyUrl() );
-    
-    std::ifstream file(fileName.path().toLocal8Bit(), ios_base::binary );
+
+    std::ifstream file(fileName.toLocalFile().toLocal8Bit(), ios_base::binary );
     if( !file.good() ) throw "could not open " + fileName.prettyUrl() + " for reading";
     boost::archive::polymorphic_xml_iarchive arch( file );
     arch >> NVP(m_config);

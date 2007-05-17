@@ -384,8 +384,8 @@ KUrl Project::relativeUrl( const KUrl& absolute ) const
 
 KUrl Project::urlRelativeToProject( const KUrl & relativeUrl ) const
 {
-    if ( KUrl::isRelativeUrl( relativeUrl.path() ) )
-        return KUrl( folder(), relativeUrl.path() );
+    if ( KUrl::isRelativeUrl( relativeUrl.toLocalFile() ) )
+        return KUrl( folder(), relativeUrl.toLocalFile() );
 
     return relativeUrl;
 }

@@ -36,7 +36,7 @@ void CvsProxy::slotResult(KJob* job)
 
 bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
 {
-    QString path = dirPath.path() + QDir::separator() + "CVS";
+    QString path = dirPath.toLocalFile() + QDir::separator() + "CVS";
     return QFileInfo(path).exists();
 }
 
@@ -83,7 +83,7 @@ CvsJob* CvsProxy::log(const KUrl& url)
 {
     kDebug() << k_funcinfo << endl;
 
-    QFileInfo info(url.path());
+    QFileInfo info(url.toLocalFile());
     if (!info.isFile())
         return false;
 
@@ -104,7 +104,7 @@ CvsJob* CvsProxy::diff(const KUrl& url, const QString& diffOptions,
 {
     kDebug() << k_funcinfo << endl;
 
-    QFileInfo info(url.path());
+    QFileInfo info(url.toLocalFile());
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, info.absolutePath()) ) {
@@ -129,7 +129,7 @@ CvsJob * CvsProxy::annotate(const KUrl & url, const QString & revision)
 {
     kDebug() << k_funcinfo << endl;
 
-    QFileInfo info(url.path());
+    QFileInfo info(url.toLocalFile());
 
     CvsJob* job = new CvsJob(this);
     if ( prepareJob(job, info.absolutePath()) ) {
@@ -284,15 +284,15 @@ CvsJob* CvsProxy::update(const QString & repo, const KUrl::List & files,
     return NULL;
 }
 
-CvsJob * CvsProxy::import(const KUrl & directory, 
-                          const QString & server, const QString & repositoryName, 
+CvsJob * CvsProxy::import(const KUrl & directory,
+                          const QString & server, const QString & repositoryName,
                           const QString & vendortag, const QString & releasetag,
                           const QString& message)
 {
     kDebug() << k_funcinfo << endl;
 
     CvsJob* job = new CvsJob(this);
-    if ( prepareJob(job, directory.path(), CvsProxy::Import) ) {
+    if ( prepareJob(job, directory.toLocalFile(), CvsProxy::Import) ) {
         *job << "cvs";
         *job << "-q"; // don't print directory changes
         *job << "-d";
@@ -312,10 +312,10 @@ CvsJob * CvsProxy::import(const KUrl & directory,
     return NULL;
 }
 
-CvsJob * CvsProxy::checkout(const KUrl & targetDir, 
-                            const QString & server, const QString & module, 
-                            const QString & checkoutOptions, 
-                            const QString & revision, 
+CvsJob * CvsProxy::checkout(const KUrl & targetDir,
+                            const QString & server, const QString & module,
+                            const QString & checkoutOptions,
+                            const QString & revision,
                             bool recursive,
                             bool pruneDirs)
 {
@@ -343,7 +343,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
         if (!recursive)
             *job << "-l";
 
-        *job << "-d" << targetDir.path();
+        *job << "-d" << targetDir.toLocalFile();
 
         *job << module;
 
@@ -358,7 +358,7 @@ CvsJob * CvsProxy::status(const KUrl & directory, bool recursive, bool taginfo)
     kDebug() << k_funcinfo << endl;
 
     CvsJob* job = new CvsJob(this);
-    if ( prepareJob(job, directory.path()) ) {
+    if ( prepareJob(job, directory.toLocalFile()) ) {
         *job << "cvs";
         *job << "status";
 

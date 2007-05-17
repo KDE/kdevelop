@@ -17,7 +17,7 @@ DiffOptionsDialog::DiffOptionsDialog(QWidget *parent, const KUrl& url)
 {
     Ui::DiffOptionsDialogBase::setupUi(this);
 
-    labelUrl->setText( url.path() );
+    labelUrl->setText( url.toLocalFile() );
 }
 
 DiffOptionsDialog::~DiffOptionsDialog()

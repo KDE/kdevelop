@@ -192,7 +192,7 @@ void DocumentWrapper::saveAsBufferFile() {
     doc->textDocument() ->setText( ~m_text->text().text() );
 
   } else {
-    err() << "saveAsBufferFile(): could not open document for " << u.path();
+    err() << "saveAsBufferFile(): could not open document for " << u.toLocalFile();
   }
 }
 
@@ -236,43 +236,43 @@ LocalPatchSourcePointer DocumentWrapper::saveAsPatch( bool addToList, bool edit 
     KUrl subFolder( TeamworkFolderManager::teamworkRelative( workingDir ) );
     subFolder.addPath( QFileInfo( m_fileName ).path() );
 
-    KUrl tempCurrent = TeamworkFolderManager::createUniqueFile( subFolder.path(), m_fileName );
-    KUrl tempBase = TeamworkFolderManager::createUniqueFile( subFolder.path(), m_fileName, "base_" );
+    KUrl tempCurrent = TeamworkFolderManager::createUniqueFile( subFolder.toLocalFile(), m_fileName );
+    KUrl tempBase = TeamworkFolderManager::createUniqueFile( subFolder.toLocalFile(), m_fileName, "base_" );
 
     TeamworkFolderManager::self() ->registerTempItem( tempCurrent );
     TeamworkFolderManager::self() ->registerTempItem( tempBase );
 
     {
-      std::ofstream fCurrent( tempCurrent.path().toUtf8().data(), ios_base::out );
+      QByteArray path = tempCurrent.toLocalFile().toUtf8();
+      std::ofstream fCurrent( path.data(), ios_base::out );
       if ( !fCurrent.is_open() )
-        throw "could not open file for writing: " + tempCurrent.path();
+        throw "could not open file for writing: " + tempCurrent.toLocalFile();
       fCurrent << m_text->text().text();
     }
     {
-      std::ofstream fBase( tempBase.path().toUtf8().data(), ios_base::out );
+      QByteArray path = tempBase.toLocalFile().toUtf8();
+      std::ofstream fBase( path.data(), ios_base::out );
       if ( !fBase.is_open() )
-        throw "could not open file for writing: " + tempBase.path();
+        throw "could not open file for writing: " + tempBase.toLocalFile();
       fBase << m_text->initialText();
     }
-
     K3Process proc;
-
     ///@todo make this work with remote files
-    OutputFileWriter ow( u.path() );
-    proc.setWorkingDirectory( workingDir.path() );
-    QString cmdLine = + + " " + tempCurrent.path() + " > " + u.path();
+    OutputFileWriter ow( u.toLocalFile() );
+    proc.setWorkingDirectory( workingDir.toLocalFile() );
+    QString cmdLine = + + " " + tempCurrent.toLocalFile() + " > " + u.toLocalFile();
     proc.setPriority( K3Process::PrioLowest );
     proc << "diff";
     proc << "--unified=4";
-    proc << tempBase.path();
-    proc << tempCurrent.path();
+    proc << tempBase.toLocalFile();
+    proc << tempCurrent.toLocalFile();
 
     connect( &proc, SIGNAL( receivedStdout ( K3Process *, char *, int ) ), &ow, SLOT( receivedStdout( K3Process*, char*, int ) ) );
 
     if ( ow.failed() )
       throw QString( "writing to %1 failed" ).arg( u.prettyUrl() );
 
-    out( Logger::Debug ) << "saveAsPatch(..) executing \"diff --unified=4 " + tempBase.path() + " " + tempCurrent.path() + "\"";
+    out( Logger::Debug ) << "saveAsPatch(..) executing \"diff --unified=4 " + tempBase.toLocalFile() + " " + tempCurrent.toLocalFile() + "\"";
 
     proc.start( K3Process::Block );
     if ( addToList )
@@ -379,18 +379,18 @@ void DocumentWrapper::notifyFlexibleTextErase( int position, int length ) {
       m_text->text().linearToLineColumn( position, line, column );
       if ( line == -1 || column == -1 )
         throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
-      
+
       KTextEditor::Cursor start( line, column );
 
-      
+
       m_text->text().linearToLineColumn( position + length, line, column );
-      
+
       if ( line == -1 || column == -1 )
         throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
-      
+
       KTextEditor::Cursor end( line, column );
 
-      
+
       m_document->textDocument() ->replaceText( KTextEditor::Range( start, end ), "" );
     }
 }
@@ -403,7 +403,7 @@ void DocumentWrapper::notifyFlexibleTextInsert( int position, const std::string&
       m_text->text().linearToLineColumn( position, line, column );
       if ( line == -1 || column == -1 )
         throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
-      
+
       KTextEditor::Cursor start( line, column );
 
       m_document->textDocument() ->replaceText( KTextEditor::Range( start, start ), toQ( text.c_str() ) );
@@ -418,18 +418,18 @@ void DocumentWrapper::notifyFlexibleTextReplace( int position, int length, const
       m_text->text().linearToLineColumn( position, line, column );
       if ( line == -1 || column == -1 )
         throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
-      
+
       KTextEditor::Cursor start( line, column );
 
-      
+
       m_text->text().linearToLineColumn( position + length, line, column );
-      
+
       if ( line == -1 || column == -1 )
         throw DynamicTextError( "receiveMessage( FileEditMessage ): could not convert index to cursor" );
-      
+
       KTextEditor::Cursor end( line, column );
 
-      
+
       m_document->textDocument() ->replaceText( KTextEditor::Range( start, end ), toQ( replacement.c_str() ) );
     }
 }
@@ -498,7 +498,7 @@ void DocumentWrapper::openDocument( bool toForeground ) {
       }
 
       ///@todo make this work work remote files
-      m_tempFile = TeamworkFolderManager::createUniqueFile( subfolder.path(), m_fileName, "", "@" + m_session->name() ).path();
+      m_tempFile = TeamworkFolderManager::createUniqueFile( subfolder.toLocalFile(), m_fileName, "", "@" + m_session->name() ).toLocalFile();
     }
 
     out( Logger::Debug ) << "temporary file for " << fileName() << " is " << m_tempFile;
@@ -717,10 +717,10 @@ void DocumentWrapper::readFile( bool fromBuffer ) throw ( QString ) {
   if ( txt.isEmpty() ) {
     if ( !u.isLocalFile() )
       throw QString( "file is not local" );
-    if ( !QFileInfo( u.path() ).exists() )
+    if ( !QFileInfo( u.toLocalFile() ).exists() )
       throw QString( "file does not exist" );
 
-    QFile f( u.path() );
+    QFile f( u.toLocalFile() );
     if ( !f.open( QIODevice::ReadOnly ) )
       throw QString( "could not open file" );
 

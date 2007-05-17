@@ -34,7 +34,7 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
     : QObject(0), m_proc(0), m_model(model)
 {
     m_proc = new K3Process();
-    m_proc->setWorkingDirectory( workdir.path() );
+    m_proc->setWorkingDirectory( workdir.toLocalFile() );
     m_procLineMaker = new ProcessLineMaker( m_proc );
     foreach( QString s, env.keys() )
         m_proc->setEnvironment( s, env[s] );

@@ -140,7 +140,7 @@ void TextDocument::reload()
                 i18n( "The file \"%1\" is modified "
                       "in memory. Are you sure you "
                       "want to reload it? (Local "
-                      "changes will be lost.)", url().path() ),
+                      "changes will be lost.)", url().toLocalFile() ),
                 i18n( "Document is Modified" ) ) == KMessageBox::Yes )
             d->document->setModified(false);
         else
@@ -177,7 +177,7 @@ bool TextDocument::save(DocumentSaveMode mode)
                     Core::self()->uiControllerInternal()->activeMainWindow(),
                     i18n("The file \"%1\" is modified on disk.\n\nAre "
                         "you sure you want to overwrite it? (External "
-                        "changes will be lost.)", d->document->url().path()),
+                        "changes will be lost.)", d->document->url().toLocalFile()),
                     i18n("Document Externally Modified"));
                 if (code != KMessageBox::Yes)
                     return false;

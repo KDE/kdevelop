@@ -119,7 +119,7 @@ LocalPatchSourcePointer EditPatch::patchFromEdit() {
   ls.name = ~m_editPatch.name->text();
   ls.unApplyCommand = ~m_editPatch.unapplyCommand->text();
   ls.type = ~m_editPatch.type->text();
-  if( !m_editPatch.filename->url().path().isEmpty() )
+  if( !m_editPatch.filename->url().toLocalFile().isEmpty() )
     ls.filename = ~TeamworkFolderManager::teamworkRelative( ( m_editPatch.filename->url() ) );
   else
     ls.filename = "";
@@ -387,14 +387,14 @@ KUrl EditPatch::getPatchFile( bool temp ) {
 
     {
       ///@todo use NetAccess
-      QFile file( filePath.path() );
+      QFile file( filePath.toLocalFile() );
 
       file.open( QIODevice::WriteOnly );
       if ( !file.isOpen() )
-        throw QString( "could not open %1" ).arg( filePath.path() );
+        throw QString( "could not open %1" ).arg( filePath.toLocalFile() );
 
       if ( file.write( msg->data() ) != msg->data().size() )
-        throw "writing the file " + filePath.path() + " failed";
+        throw "writing the file " + filePath.toLocalFile() + " failed";
     }
     return filePath;
   } catch ( const QString & str ) {
@@ -797,7 +797,7 @@ void EditPatch::apply( bool reverse, const QString& _fileName ) {
     QString command = "FILE=" + fileName + " " + ~patch->patchTool( reverse ) + " " + params + " && echo " + QString( terminalSuccessMarker ) + "\n";
 
     ///@todo not working with remove directories
-    terminal->showShellInDir( TeamworkFolderManager::workspaceDirectory().path() );
+    terminal->showShellInDir( TeamworkFolderManager::workspaceDirectory().toLocalFile() );
 
     if ( reverse )
       m_actionState = LocalPatchSource::NotApplied;
@@ -883,10 +883,10 @@ void EditPatch::seekHunk( bool forwards, bool isSource, QString fileName ) {
         file.addPath( model->destinationPath() );
         file.addPath( model->destinationFile() );
       }
-      if ( !fileName.isEmpty() && fileName != file.path() )
+      if ( !fileName.isEmpty() && fileName != file.toLocalFile() )
         continue;
 
-      //out( Logger::Debug ) << "highlighting " << file.path();
+      //out( Logger::Debug ) << "highlighting " << file.toLocalFile();
 
       IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
 
@@ -958,17 +958,17 @@ void EditPatch::highlightFile() {
         file.addPath( model->destinationFile() );
       }
 
-      out( Logger::Debug ) << "highlighting " << file.path();
+      out( Logger::Debug ) << "highlighting " << file.toLocalFile();
 
       IDocument* doc = KDevTeamworkPart::staticDocumentController() ->documentForUrl( file );
 
       if ( !doc ) {
         doc = KDevTeamworkPart::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
-        seekHunk( true, m_isSource, file.path() );
+        seekHunk( true, m_isSource, file.toLocalFile() );
       }
-      removeHighlighting( file.path() );
+      removeHighlighting( file.toLocalFile() );
 
-      m_highlighters[ file.path() ] = new DocumentHighlighter( model, doc, m_isSource );
+      m_highlighters[ file.toLocalFile() ] = new DocumentHighlighter( model, doc, m_isSource );
     }
 
   } catch ( const QString & str ) {
@@ -998,11 +998,11 @@ void EditPatch::fileDoubleClicked( const QModelIndex& i ) {
       file.addPath( model->destinationFile() );
     }
 
-    out( Logger::Debug ) << "opening " << file.path();
+    out( Logger::Debug ) << "opening " << file.toLocalFile();
 
     KDevTeamworkPart::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
 
-    seekHunk( true, m_isSource, file.path() );
+    seekHunk( true, m_isSource, file.toLocalFile() );
   } catch ( const QString & str ) {
     err() << "fileDoubleClicked(): " << str;
   } catch ( const char * str ) {
@@ -1141,8 +1141,8 @@ void EditPatch::updateKompareModel() {
       return ;
     try {
       ///@todo does not work with remote URLs
-      if ( !m_modelList->openDirAndDiff( TeamworkFolderManager::workspaceDirectory().path(), diffFile.path() ) )
-        throw "could not open diff " + diffFile.path();
+      if ( !m_modelList->openDirAndDiff( TeamworkFolderManager::workspaceDirectory().toLocalFile(), diffFile.toLocalFile() ) )
+        throw "could not open diff " + diffFile.toLocalFile();
     } catch ( const QString & str ) {
       throw;
     } catch ( ... ) {
@@ -1174,7 +1174,7 @@ void EditPatch::updateKompareModel() {
       QModelIndex i = m_filesModel->index( 0, 0 );
       if ( i.isValid() ) {
         //m_filesModel->setData( i, file, Qt::DisplayRole );
-        m_filesModel->setData( i, QString( "%1 (%2 hunks)" ).arg( file.path() ).arg( cnt ), Qt::DisplayRole );
+        m_filesModel->setData( i, QString( "%1 (%2 hunks)" ).arg( file.toLocalFile() ).arg( cnt ), Qt::DisplayRole );
         QVariant v;
         v.setValue<const Diff2::DiffModel*>( *it );
         m_filesModel->setData( i, v, Qt::UserRole );

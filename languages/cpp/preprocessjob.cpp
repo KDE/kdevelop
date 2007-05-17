@@ -72,11 +72,11 @@ void PreprocessJob::run()
 
     if ( readFromDisk )
     {
-        QFile file( parentJob()->document().path() );
+        QFile file( parentJob()->document().toLocalFile() );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
-            parentJob()->setErrorMessage(i18n( "Could not open file '%1'", parentJob()->document().path() ));
-            kWarning( 9007 ) << k_funcinfo << "Could not open file " << parentJob()->document() << " (path " << parentJob()->document().path() << ")" << endl;
+            parentJob()->setErrorMessage(i18n( "Could not open file '%1'", parentJob()->document().toLocalFile() ));
+            kWarning( 9007 ) << k_funcinfo << "Could not open file " << parentJob()->document() << " (path " << parentJob()->document().toLocalFile() << ")" << endl;
             return ;
         }
 

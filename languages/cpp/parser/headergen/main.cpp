@@ -244,7 +244,7 @@ HeaderGenerator::HeaderGenerator()
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
   kdeIncludes = args->getOption("includes");
-  QDir includeDir(kdeIncludes.path());
+  QDir includeDir(kdeIncludes.toLocalFile());
 
   if (!includeDir.exists()) {
     kWarning() << "KDE includes directory must be set, and point to an existing directory; please use --includes <path>" << endl;
@@ -262,7 +262,7 @@ HeaderGenerator::HeaderGenerator()
   outputDirectory = kdeIncludes;
   outputDirectory.cd("KDE");
 
-  outputDir = outputDirectory.path();
+  outputDir = outputDirectory.toLocalFile();
 
   QFile buildInfoFile(args->getOption("buildinfo"));
   if (!buildInfoFile.open(QIODevice::ReadOnly)) {
@@ -337,15 +337,15 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 
   preprocessing.push(url);
 
-  QFile sourceToParse(url.path());
+  QFile sourceToParse(url.toLocalFile());
   if (!sourceToParse.open(QIODevice::ReadOnly)) {
     kWarning() << "Could not open install file " << url << endl;
     return QByteArray();
   }
 
   FileBlock* fileMacros = new FileBlock;
-  fileMacros->file = url.path();
-  headerMacros.insert(url.path(), fileMacros);
+  fileMacros->file = url.toLocalFile();
+  headerMacros.insert(url.toLocalFile(), fileMacros);
 
   preprocessor.environment()->enterBlock(fileMacros);
 
@@ -383,10 +383,10 @@ rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type
 
   foreach (const KUrl& url, toTry) {
     if (url.isValid()) {
-      if (QFile::exists(url.path())) {
+      if (QFile::exists(url.toLocalFile())) {
         // found it
-        if (headerMacros.contains(url.path())) {
-          FileBlock* macros = headerMacros[url.path()];
+        if (headerMacros.contains(url.toLocalFile())) {
+          FileBlock* macros = headerMacros[url.toLocalFile()];
           preprocessor.environment()->visitBlock(macros);
           preprocessor.environment()->currentBlock()->childBlocks.append(macros);
           return 0;
@@ -435,7 +435,7 @@ void HeaderGenerator::run()
 
     for (QDomElement install = folderElement.firstChildElement(installElementName); !install.isNull(); install = install.nextSiblingElement(installElementName)) {
       KUrl installDestination(install.attribute("destination"));
-      if (!installDestination.path().startsWith(kdeIncludes.path())) {
+      if (!installDestination.toLocalFile().startsWith(kdeIncludes.toLocalFile())) {
         continue;
       }
 
@@ -519,12 +519,12 @@ void HeaderGenerator::run()
 
           QTextStream ts(&forwardingHeader);
 
-          QString sourceRelativeInstallPath = installDestination.path().mid(kdeIncludes.path().length() + 1);
+          QString sourceRelativeInstallPath = installDestination.toLocalFile().mid(kdeIncludes.toLocalFile().length() + 1);
           if (!sourceRelativeInstallPath.isEmpty())
             sourceRelativeInstallPath += '/';
 
           KUrl sourceUrl(source.text());
-          QString sourceRelativeUrl = sourceRelativeInstallPath + source.text().mid(folderUrl.path().length());
+          QString sourceRelativeUrl = sourceRelativeInstallPath + source.text().mid(folderUrl.toLocalFile().length());
 
           QString dotdot;
           int dotdotcount = className.count('/');

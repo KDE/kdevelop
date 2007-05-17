@@ -152,10 +152,10 @@ KDevSubversionPart::~KDevSubversionPart()
 bool KDevSubversionPart::isValidDirectory(const KUrl &dirPath) const
 {
     QString svn = "/.svn/";
-    QDir svndir( dirPath.path() + svn );
-    QString entriesFileName = dirPath.path() + svn + "entries";
+    QDir svndir( dirPath.toLocalFile() + svn );
+    QString entriesFileName = dirPath.toLocalFile() + svn + "entries";
 
-    kDebug() << "dirpath " << dirPath.path() +"/.svn/" << " exists:" << svndir.exists() << endl;
+    kDebug() << "dirpath " << dirPath.toLocalFile() +"/.svn/" << " exists:" << svndir.exists() << endl;
     kDebug() << "entries " << entriesFileName << " exists:" << QFile::exists( entriesFileName ) << endl;
     return svndir.exists() &&
             QFile::exists( entriesFileName );
@@ -164,7 +164,7 @@ QList<KDevelop::VcsFileInfo> KDevSubversionPart::statusSync( const KUrl &dirPath
                                                     KDevelop::IVersionControl::WorkingMode mode )
 {
     d->m_vcsInfoList.clear();
-    
+
     bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
     SvnRevision rev;
     rev.setKey( SvnRevision::WORKING );
@@ -175,10 +175,10 @@ QList<KDevelop::VcsFileInfo> KDevSubversionPart::statusSync( const KUrl &dirPath
         KMessageBox::error( NULL, job->errorText() );
         return d->m_vcsInfoList;
     }
-    
+
     SvnStatusJob *th = dynamic_cast<SvnStatusJob*>(job->svnThread());
     if( !th ) return d->m_vcsInfoList;
-    
+
     QList<SvnStatusHolder> holder = th->m_holderList;
 
     for( QList<SvnStatusHolder>::iterator it = holder.begin(); it != holder.end(); ++it ){
@@ -230,7 +230,7 @@ void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
 {
     d->m_ctxUrl = ctxUrl;
     QMenu *subMenu = new QMenu( "Subversion", (QWidget*)&ctxMenu );
-    
+
     QAction *action;
     action = subMenu->addAction(i18n("Log View"));
     connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
@@ -256,7 +256,7 @@ void KDevSubversionPart::fillContextMenu( const KDevelop::ProjectBaseItem *prjIt
     if ( KDevelop::ProjectFolderItem *folder = prjItem->folder() ){
         if( !isValidDirectory( folder->url() ) )
             return;
-        
+
         this->fillContextMenu( folder->url(), ctxMenu );
     }
     else if ( KDevelop::ProjectFileItem *file = prjItem->file() ){
@@ -284,7 +284,7 @@ void KDevSubversionPart::commit( const KUrl::List &wcPaths )
     dlg.setCommitCandidates( wcPaths );
     if( dlg.exec() != QDialog::Accepted )
         return;
-    
+
     KUrl::List checkedList = dlg.checkedUrls();
     if( checkedList.count() < 1 )
         return;
@@ -294,7 +294,7 @@ void KDevSubversionPart::commit( const KUrl::List &wcPaths )
     for( QList<KUrl>::iterator it = checkedList.begin(); it!=checkedList.end() ; ++it ){
         kDebug() << "KDevSubversionPart::commit(KUrl::List&) : " << *it << endl;
     }
-    
+
     d->m_impl->spawnCommitThread( checkedList, recurse, keeplocks );
 }
 void KDevSubversionPart::update( const KUrl::List &wcPaths )
@@ -499,7 +499,7 @@ void KDevSubversionPart::slotJobFinished( SvnKJobBase *job )
             }
             SvnStatusJob *statusJob = dynamic_cast<SvnStatusJob*>( job->svnThread() );
             if( !statusJob ) return;
-            
+
             QList<KDevelop::VcsFileInfo> infos = d->m_fileInfoMap.value( job );
 
             for( QList<SvnStatusHolder>::iterator it = statusJob->m_holderList.begin() ;

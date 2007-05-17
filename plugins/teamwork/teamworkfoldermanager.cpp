@@ -36,7 +36,7 @@ TeamworkFolderManager::TeamworkFolderManager( const KUrl& directory ) {
 
   KUrl u = directory;
   u.cleanPath();
-  
+
   m_workspaceDir = u;
   u.addPath( ".teamwork" );
   u.cleanPath();
@@ -50,7 +50,7 @@ TeamworkFolderManager* TeamworkFolderManager::self() {
 KUrl TeamworkFolderManager::teamworkAbsolute( const QString& subDirectory, const QString& subFolder ) {
   KUrl ret( self()->m_teamworkDir );
   ret.addPath( subFolder );
-  if( subDirectory.startsWith( ret.path() ) ) return subDirectory;
+  if( subDirectory.startsWith( ret.toLocalFile() ) ) return subDirectory;
   ret.addPath( subDirectory );
   ret.cleanPath();
   return ret;
@@ -59,7 +59,7 @@ KUrl TeamworkFolderManager::teamworkAbsolute( const QString& subDirectory, const
 KUrl TeamworkFolderManager::workspaceAbsolute( const QString& subDirectory, const QString& subFolder ) {
   KUrl ret( self()->m_workspaceDir );
   ret.addPath( subFolder );
-  if( subDirectory.startsWith( ret.path() ) ) return subDirectory;
+  if( subDirectory.startsWith( ret.toLocalFile() ) ) return subDirectory;
   ret.addPath( subDirectory );
   ret.cleanPath();
   return ret;
@@ -87,7 +87,7 @@ KUrl TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString na
   if ( !KIO::NetAccess::exists( ul, true, 0 ) )
     throw QString( "could not create .teamwork-directory" );
 
-    
+
   QStringList sub = subFolder.split( "/" );
   while( !sub.isEmpty() ) {
     ul.addPath( sub.front() );
@@ -96,15 +96,15 @@ KUrl TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString na
 
     if ( !KIO::NetAccess::exists( ul, true, 0 ) )
       throw QString( "could not create directory %1 directory" ).arg( ul.prettyUrl() );
-      
+
     sub.pop_front();
   }
 
-    
+
   KUrl nu = ul;
   nu.addPath( namePrefix + name + nameSuffix );
   nu.cleanPath();
-  
+
   if( !KIO::NetAccess::exists( nu, true, 0 ) ){
     KIO::NetAccess::mkdir( nu, 0 );
 
@@ -115,7 +115,7 @@ KUrl TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString na
     ///If the file exists try it with additional date/time
   nu = ul;
   nu.addPath( namePrefix + name + QDateTime::currentDateTime().toString( Qt::ISODate ) + nameSuffix );
-    
+
   nu.cleanPath();
   if( !KIO::NetAccess::exists( nu, true, 0 ) ) {
     KIO::NetAccess::mkdir( nu, 0 );
@@ -152,7 +152,7 @@ KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString extensi
     if ( !KIO::NetAccess::exists( ul, true, 0 ) )
       throw QString( "could not create .teamwork-directory" );
 
-    
+
     QStringList sub = subFolder.split( "/" );
     while( !sub.isEmpty() ) {
       ul.addPath( sub.front() );
@@ -161,11 +161,11 @@ KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString extensi
 
       if ( !KIO::NetAccess::exists( ul, true, 0 ) )
         throw QString( "could not create directory %1 directory" ).arg( ul.prettyUrl() );
-      
+
       sub.pop_front();
     }
 
-    
+
     KUrl nu = ul;
     nu.addPath( namePrefix + name + nameSuffix + "." + extension );
 
@@ -178,7 +178,7 @@ KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString extensi
     ///If the file exists try it with additional date/time
     nu = ul;
     nu.addPath( namePrefix + name + QDateTime::currentDateTime().toString( Qt::ISODate ) + nameSuffix + "." + extension );
-    
+
     nu.cleanPath();
     if( !KIO::NetAccess::exists( nu, true, 0 ) ) {
       if( createFile( nu ) )
@@ -203,12 +203,12 @@ KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString fileNam
   QFileInfo i( fileName );
   KUrl u( subFolder );
   u.addPath( i.path() );
-  return createUniqueFile( u.path(), i.completeSuffix(), i.baseName(), namePrefix, nameSuffix );
+  return createUniqueFile( u.toLocalFile(), i.completeSuffix(), i.baseName(), namePrefix, nameSuffix );
 }
 
 void TeamworkFolderManager::registerTempItem( const KUrl& u ) {
   if( u.isRelative() )
-    self()->m_tempItems[teamworkAbsolute(u.path()).pathOrUrl()] = true;
+    self()->m_tempItems[teamworkAbsolute(u.toLocalFile()).pathOrUrl()] = true;
   else
     self()->m_tempItems[u.pathOrUrl()] = true;
 }

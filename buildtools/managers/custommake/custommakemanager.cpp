@@ -123,7 +123,7 @@ KUrl CustomMakeManager::findMakefile(KDevelop::ProjectFolderItem* folder) const
 {
     KUrl ret = folder->url();
     ret.addPath( "Makefile" );
-    QFileInfo fileInfo( ret.path() );
+    QFileInfo fileInfo( ret.toLocalFile() );
     if( ! fileInfo.exists() )
     {
         // not exist
@@ -270,7 +270,7 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
     }
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
     KDevelop::ProjectBaseItem* baseitem = ctx->item();
-    
+
     IPlugin *manager = baseitem->project()->managerPlugin();
     if( manager != this )
     {
@@ -328,7 +328,7 @@ void CustomMakeManager::updateTargetMenu()
 
     // disabled because we shouldn't rely on rootItem.
 //     QStringList targetlist = parseCustomMakeFile( findMakefile( d->m_rootItem ) );
-// 
+//
 //     QAction *action = NULL;
 //     foreach( QString target, targetlist )
 //     {
@@ -385,7 +385,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
 //     KUrl absFileUrl = dir;
     // TODO support Makefile, Makefile.xxx, makefile
 //     absFileUrl.addPath( "Makefile" );
-    QFile f( makefile.path() );
+    QFile f( makefile.toLocalFile() );
     if ( !f.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
         kDebug() << "could not open " << makefile<< endl;

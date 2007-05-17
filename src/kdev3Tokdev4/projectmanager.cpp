@@ -188,7 +188,7 @@ bool ProjectManager::loadProject(const KUrl &url)
     return false;
 
   // reopen the already opened project?
-  if( url.path() == projectFile().path() )
+  if( url.path() == projectFile().toLocalFile() )
   {
     if (KMessageBox::questionYesNo(TopLevel::getInstance()->main(),
         i18n("Are you sure you want to reopen the current project?")) == KMessageBox::No)
@@ -256,7 +256,7 @@ void ProjectManager::slotLoadProject( )
         // first restore the project session stored in a .kdevses file
         if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() ))
         {
-            kWarning() << i18n("error during restoring of the KDevelop session") << endl;  
+            kWarning() << i18n("error during restoring of the KDevelop session") << endl;
             Core::getInstance()->doEmitProjectOpened();
         }
     }
@@ -365,7 +365,7 @@ bool ProjectManager::loadProjectFile()
 bool ProjectManager::saveProjectFile()
 {
   if (m_info->m_projectURL.isLocalFile()) {
-    QFile fout(m_info->m_projectURL.path());
+    QFile fout(m_info->m_projectURL.toLocalFile());
     if( !fout.open(QIODevice::WriteOnly) ) {
       KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
       return false;

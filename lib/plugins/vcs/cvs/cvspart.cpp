@@ -248,13 +248,13 @@ void CvsPart::slotImport()
     KUrl url = urlFocusedDocument();
 
     /// @todo just for testing; remove me...
-    // In order to be able the test the ImportDialog and the 
+    // In order to be able the test the ImportDialog and the
     // import job I need to get to a directory somehow.
     // So this is a bit of a hack right now. I take the directory
     // from the currently opened file are directory to import.
     // This whole slot will be removed later when createNewProject()
     // gets called via the IVersionControl interface.
-    QFileInfo info(url.path());
+    QFileInfo info(url.toLocalFile());
 
     createNewProject( KUrl(info.absolutePath()) );
 }
@@ -273,7 +273,7 @@ void CvsPart::slotCheckout()
 void CvsPart::slotStatus()
 {
     KUrl url = urlFocusedDocument();
-    QFileInfo info(url.path());
+    QFileInfo info(url.toLocalFile());
 
     QList<KDevelop::VcsFileInfo> infos;
 
@@ -375,7 +375,7 @@ void CvsPart::update(const KUrl::List & urls)
     UpdateOptionsDialog dlg;
     if (dlg.exec() == QDialog::Accepted) {
         ///@todo find a common base directory for the files
-        QFileInfo info( urls[0].path() );
+        QFileInfo info( urls[0].toLocalFile() );
 
         CvsJob* job = d->m_proxy->update( info.absolutePath(), urls, dlg.options() );
         if (job) {
@@ -391,7 +391,7 @@ void CvsPart::commit(const KUrl::List & urls)
     CommitDialog dlg;
     if (dlg.exec() == QDialog::Accepted) {
         ///@todo find a common base directory for the files
-        QFileInfo info( urls[0].path() );
+        QFileInfo info( urls[0].toLocalFile() );
 
         CvsJob* job = d->m_proxy->commit( info.absolutePath(), urls, dlg.message() );
         if (job) {
@@ -405,7 +405,7 @@ void CvsPart::commit(const KUrl::List & urls)
 void CvsPart::remove(const KUrl::List & urls)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( urls[0].path() );
+    QFileInfo info( urls[0].toLocalFile() );
 
     CvsJob* job = d->m_proxy->remove( info.absolutePath(), urls );
     if (job) {
@@ -418,7 +418,7 @@ void CvsPart::remove(const KUrl::List & urls)
 void CvsPart::add(const KUrl::List & urls)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( urls[0].path() );
+    QFileInfo info( urls[0].toLocalFile() );
 
     CvsJob* job = d->m_proxy->add( info.absolutePath(), urls );
     if (job) {
@@ -451,7 +451,7 @@ void CvsPart::diff(const KUrl& url)
 void CvsPart::edit(const KUrl::List& urls)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( urls[0].path() );
+    QFileInfo info( urls[0].toLocalFile() );
 
     CvsJob* job = d->m_proxy->edit( info.absolutePath(), urls );
     if (job) {
@@ -470,7 +470,7 @@ void CvsPart::unEdit(const KUrl::List& urls)
     }
 
     ///@todo find a common base directory for the files
-    QFileInfo info( urls[0].path() );
+    QFileInfo info( urls[0].toLocalFile() );
 
     CvsJob* job = d->m_proxy->unedit( info.absolutePath(), urls );
     if (job) {
@@ -483,7 +483,7 @@ void CvsPart::unEdit(const KUrl::List& urls)
 void CvsPart::editors(const KUrl::List& urls)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( urls[0].path() );
+    QFileInfo info( urls[0].toLocalFile() );
 
     CvsJob* job = d->m_proxy->editors( info.absolutePath(), urls );
     if (job) {

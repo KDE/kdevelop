@@ -88,7 +88,7 @@ bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
         return false;
     if( m_forms.isEmpty() )
         return false;
-    QFile f(m_url.path());
+    QFile f(m_url.toLocalFile());
     if( !f.open( QIODevice::WriteOnly ) )
     {
         kDebug(9039) << "Couldn't open file: " << f.error() << endl;
@@ -105,7 +105,7 @@ bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
 
 void QtDesignerDocument::reload()
 {
-    QFile uiFile(m_url.path());
+    QFile uiFile(m_url.toLocalFile());
     foreach(QDesignerFormWindowInterface* form, m_forms)
     {
         form->setContents(&uiFile);
@@ -176,12 +176,12 @@ QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
     area->setScrollBarsEnabled( true );
 //     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 //     area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    QFile uiFile(m_url.path());
+    QFile uiFile(m_url.toLocalFile());
     QDesignerFormWindowManagerInterface* manager = m_designerPlugin->designer()->formWindowManager();
 
     QDesignerFormWindowInterface* form = manager->createFormWindow();
     kDebug(9039) << "now we have " << manager->formWindowCount() << " formwindows" << endl;
-    form->setFileName(m_url.path());
+    form->setFileName(m_url.toLocalFile());
     form->setContents(&uiFile);
     manager->setActiveFormWindow(form);
     QMdiSubWindow* window = area->addSubWindow(form, Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint);

@@ -363,9 +363,9 @@ bool KompareModelList::saveDestination( DiffModel* model )
 		kDebug(8101) << "Tempfilename   : " << temp->name() << endl;
 		kDebug(8101) << "DestinationURL : " << destination << endl;
 		KIO::UDSEntry entry;
-		if ( !KIO::NetAccess::stat( KUrl( destination ).path(), entry, (QWidget*)parent() ) )
+		if ( !KIO::NetAccess::stat( KUrl( destination ).toLocalFile(), entry, (QWidget*)parent() ) )
 		{
-			if ( !KIO::NetAccess::mkdir( KUrl( destination ).path(), (QWidget*)parent() ) )
+			if ( !KIO::NetAccess::mkdir( KUrl( destination ).toLocalFile(), (QWidget*)parent() ) )
 			{
 				#warning i18n: Missing argument to the i18n call below
 				emit error( i18n( "<qt>Could not create destination directory <b>%1</b>.\nThe file has not been saved.</qt>" ) );
@@ -908,7 +908,7 @@ bool KompareModelList::blendOriginalIntoModelList( const QString& localURL )
 			if ( !filename.startsWith( localURL ) ) {
 				KUrl u( localURL );
 				u.addPath( filename );
-				filename = u.path();
+				filename = u.toLocalFile();
 			}
 			QFileInfo fi2( filename );
 			if ( fi2.exists() )

@@ -200,8 +200,8 @@ void ConversationManager::save() {
     KUrl fileName = TeamworkFolderManager::teamworkAbsolute( "conversation.database" );
     ///@todo make this work with remote Urls
     if( !fileName.isLocalFile() ) throw QString( "file is not a local Url: %1" ).arg( fileName.prettyUrl() );
-    
-    std::ofstream file(fileName.path().toLocal8Bit(), ios_base::out | ios_base::binary );
+
+    std::ofstream file(fileName.toLocalFile().toLocal8Bit(), ios_base::out | ios_base::binary );
     if( !file.good() ) throw "could not open " + fileName.prettyUrl() + " for writing";
     boost::archive::polymorphic_xml_oarchive arch( file );
     arch << NVP(m_conversations);
@@ -219,8 +219,8 @@ void ConversationManager::load() {
     KUrl fileName = TeamworkFolderManager::teamworkAbsolute( "conversation.database" );
     ///@todo make this work with remote Urls
     if( !fileName.isLocalFile() ) throw QString( "file is not a local Url: %1" ).arg( fileName.prettyUrl() );
-    
-    std::ifstream file(fileName.path().toLocal8Bit(), ios_base::binary );
+
+    std::ifstream file(fileName.toLocalFile().toLocal8Bit(), ios_base::binary );
     if( !file.good() ) throw "could not open " + fileName.prettyUrl() + " for reading";
     boost::archive::polymorphic_xml_iarchive arch( file );
     arch >> NVP(m_conversations);
@@ -256,7 +256,7 @@ void InDocumentConversation::messageSelected( const MessagePointer& msg ) {
   LogSuffix( "messageSelected: ", this );
   try {
     m_selectNearestMessageTimer->stop();
-    
+
   if( !m_currentConnectedDocument )
     throw "no connected document";
 
@@ -336,7 +336,7 @@ void InDocumentConversation::selectMessage( InDocumentMessagePointer msg ) {
 
     KUrl url = TeamworkFolderManager::workspaceAbsolute( l->document() );
 
-    out( Logger::Debug ) << "opening: " << url.path();
+    out( Logger::Debug ) << "opening: " << url.toLocalFile();
 
 
     IDocumentController* docControl = KDevTeamworkPart::staticDocumentController();
@@ -370,10 +370,10 @@ void InDocumentConversation::selectMessage( InDocumentMessagePointer msg ) {
 
         messageSelected( msg );
       } else {
-        throw "could not get view for " + url.path();
+        throw "could not get view for " + url.toLocalFile();
       }
     } else {
-      throw "could not open document " + url.path();
+      throw "could not open document " + url.toLocalFile();
     }
   } catch ( const char * str ) {
     err() << str;

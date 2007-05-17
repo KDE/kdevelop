@@ -25,7 +25,7 @@
 ProjectInfo CMakeXmlParser::parse( const KUrl& file )
 {
     ProjectInfo pi;
-    QFile cmakeFile(file.path());
+    QFile cmakeFile(file.toLocalFile());
     if ( cmakeFile.open(QIODevice::ReadOnly) )
     {
         QDomDocument cmakeInfo;

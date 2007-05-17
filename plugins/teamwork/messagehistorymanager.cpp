@@ -67,7 +67,7 @@ HistoryMessageDesc::HistoryMessageDesc( const HistoryMessagePointer& msg )
   HistoryMessagePointer::Locked l = msg;
   if( l ) {
     isIncoming = l->info().isIncoming();
-    
+
     UserPointer::Locked lu = userFromSession( l->info().session() );
     if( lu ) {
       user = lu->identity();
@@ -99,11 +99,11 @@ QList< HistoryMessagePointer > MessageHistoryManager::getMessages( const KDevTea
   QList< HistoryMessageDesc > ret;
   try {
     KUrl kdir = directory();
-    
+
     if( !kdir.isLocalFile() )
       throw QString( "directory \"%1\" is not local" ).arg( kdir.prettyUrl() );
-    
-    QDir dir( kdir.path() );
+
+    QDir dir( kdir.toLocalFile() );
     if( !dir.isReadable() ) throw QString( "directory \"%1\" is not readable" ).arg( dir.path() );
 
     QStringList files = dir.entryList( QDir::Files );
@@ -136,22 +136,22 @@ QList< HistoryMessagePointer > MessageHistoryManager::getMessages( const KDevTea
     for( QStringList::iterator it = interestingFiles.begin(); it != interestingFiles.end(); ++it ) {
       KUrl fileUrl = kdir;
       fileUrl.addPath( *it );
-      std::ifstream f( fileUrl.path().toLatin1(), ios_base::binary );
+      std::ifstream f( fileUrl.toLocalFile().toLatin1(), ios_base::binary );
       if( !f.good() ) {
-        err() << "could not open " << ~fileUrl.path();
+        err() << "could not open " << ~fileUrl.toLocalFile();
       }
       while( !f.eof() ) {
         if( !f.good() ) {
-          err() << "error while reading " << ~fileUrl.path();
+          err() << "error while reading " << ~fileUrl.toLocalFile();
           break;
         }
 
         FileEntryHeader header;
         header.read( f );
-      
+
         //f.read( (char*)&header, sizeof( FileEntryHeader ) );
         if( f.eof() ) break;
-      
+
         if( !f.good() ) {
           err() << "could not read a header from file \"" << ~*it << "\"";
           break;
@@ -197,11 +197,11 @@ void MessageHistoryManager::writePending()
   {
     KUrl dir = directory();
     if( !dir.isLocalFile() ) throw QString( "the directory %1 is not local" ).arg( dir.prettyUrl() );
-    
+
     m_pendingTimer->start( 1000 );
     QMap< QDate, QList<HistoryMessageDesc> > map;
     std::map< Teamwork::UniqueMessageId, HistoryGroupLocation > insertions;
-    
+
     for( QList<HistoryMessageDesc>::iterator it = m_pending.begin(); it != m_pending.end(); ++it ) {
       HistoryMessagePointer::Locked l = it->message;
       if( l ) {
@@ -211,7 +211,7 @@ void MessageHistoryManager::writePending()
         err() << "could not lock a message for storing it into the history, the message will be lost";
       }
     }
-  
+
     for( QMap< QDate, QList<HistoryMessageDesc> >::iterator it = map.begin(); it != map.end(); ++it ) {
       QDate date( it.key() );
 
@@ -238,8 +238,8 @@ void MessageHistoryManager::writePending()
       KUrl file = dir;
       QString localFileName = date.toString( Qt::ISODate );
       file.addPath( localFileName );
-      std::string fileName = ~file.path();
-      
+      std::string fileName = ~file.toLocalFile();
+
       if( fileName.empty() ) {
         err() << "empty file-path for date " << ~date.toString( Qt::ISODate );
         continue;
@@ -261,7 +261,7 @@ void MessageHistoryManager::writePending()
 
       header.write( f );
       //f.write( (char*)&header, sizeof( FileEntryHeader ) );
-      
+
       if( !f.good() ) {
         err() << "could not write header into file \"" << fileName << "\"";
         continue;
@@ -296,12 +296,12 @@ void MessageHistoryManager::writePending()
       catch( QString str ) {
         out( Logger::Warning ) << "error in readIndex: " << str;
       }
-  
+
       index.insert( insertions.begin(), insertions.end() );
-  
+
       writeIndex( index );
     }
-  
+
 
     m_pending.clear();
   }
@@ -321,20 +321,20 @@ void MessageHistoryManager::writePending()
 QString MessageHistoryManager::lockFileName() {
   KUrl file = directory();
   file.addPath( ".lock" );
-  return file.path();
+  return file.toLocalFile();
 }
 
 void MessageHistoryManager::readIndex( std::map<Teamwork::UniqueMessageId, HistoryGroupLocation>& index ) throw( QString) {
   KUrl ind = directory();
   ind.addPath( "index" );
   if( !ind.isLocalFile() ) throw  QString( "the index-file is not local" );
-    
-  std::string indexFile = ~ind.path();
+
+  std::string indexFile = ~ind.toLocalFile();
 
   {
     std::ifstream f( indexFile.c_str(), ios_base::binary );
     if( !f.good() )  throw QString( "could not open index-file for reading" );
-      
+
     try  {
       boost::archive::binary_iarchive arch( f );
       arch & index;
@@ -352,11 +352,11 @@ void MessageHistoryManager::writeIndex( const std::map<Teamwork::UniqueMessageId
     ind.addPath( "index" );
     if( !ind.isLocalFile() ) throw  QString( "the index-file is not local" );
 
-    std::string indexFile = ~ind.path();
+    std::string indexFile = ~ind.toLocalFile();
 
     std::ofstream f( indexFile.c_str(), ios_base::binary );
     if( !f.good() )  throw QString( "could not open index-file for writing" );
-      
+
     try  {
           ///Store the messages into the archive
       boost::archive::binary_oarchive arch( f );
@@ -373,12 +373,12 @@ KUrl MessageHistoryManager::directory() throw(QString)
 {
   KUrl ul = TeamworkFolderManager::teamworkAbsolute( "messages" );
   TeamworkFolderManager::createTeamworkFolder();
-  
+
   if( !KIO::NetAccess::exists( ul, true, 0 ) )
     KIO::NetAccess::mkdir( ul, 0 );
 
   if( !KIO::NetAccess::exists( ul, true, 0 ) )
-    throw QString( "could not create messages-directory " ) + ul.path();
+    throw QString( "could not create messages-directory " ) + ul.toLocalFile();
 
   return ul;
 }
@@ -387,21 +387,21 @@ void MessageHistoryManager::readMessages( const QString& file, uint offset, QLis
 {
   KUrl path = directory();
   path.addPath( file );
-    
+
   if( !path.isLocalFile() ) throw QString( "message is not local" );
   if( !KIO::NetAccess::exists( path, true, 0 ) ) throw QString( "index does not exist" );
-  
-  std::ifstream f( path.path().toLatin1(), ios_base::binary );
+
+  std::ifstream f( path.toLocalFile().toLatin1(), ios_base::binary );
   f.seekg( offset );
-  if( !f.good() || f.eof() ) throw QString( "could not open file and seek to offset %1 in file %2" ).arg( offset ).arg( path.path() );
+  if( !f.good() || f.eof() ) throw QString( "could not open file and seek to offset %1 in file %2" ).arg( offset ).arg( path.toLocalFile() );
 
     FileEntryHeader header;
 
     header.read( f );
     if( !f.eof() ) {
       if( !f.good() || f.eof() )
-        throw QString( "could not read a header from file \"%1\"" ).arg( path.path() );
-  
+        throw QString( "could not read a header from file \"%1\"" ).arg( path.toLocalFile() );
+
       try  {
         boost::archive::xml_iarchive arch( f );
         for( int a = 0; a < header.messages; a++ ) {
@@ -411,7 +411,7 @@ void MessageHistoryManager::readMessages( const QString& file, uint offset, QLis
         }
       }
       catch( std::exception& exc ) {
-        err() << "error while deserializing from \"" << ~path.path() << "\": " << exc.what();
+        err() << "error while deserializing from \"" << ~path.toLocalFile() << "\": " << exc.what();
       }
     }
 }
@@ -479,7 +479,7 @@ QList<HistoryMessagePointer> MessageHistoryManager::fillMessageUsers( const QLis
   } else {
     err() << "could not lock teamwork-client";
   }
-  
+
   return ret;
 }
 

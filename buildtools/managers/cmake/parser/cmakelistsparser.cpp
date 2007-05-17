@@ -137,20 +137,20 @@ ProjectInfo CMakeListsParser::parse( const KUrl& file )
 {
     ProjectInfo pi;
     CMakeAst *ast = new CMakeAst;
-    
+
     kDebug(9032) << "Parsing file: " << file.path() << endl;
-    
-    if ( !CMakeListsParser::parseCMakeFile( ast, file.path() ) )
+
+    if ( !CMakeListsParser::parseCMakeFile( ast, file.toLocalFile() ) )
     {
         pi = parseProject( ast );
     } else {
         //FIXME: Put here the error.
 	kDebug(9032) << "Parsing error." << endl;
     }
-    
+
     if(!pi.name.isEmpty())
             kDebug(9032) << "Parsed: " << file << endl;
-    
+
     delete ast;
     return pi;
 }
@@ -171,7 +171,7 @@ FolderInfo CMakeListsParser::parseFolder( const CMakeAst*  )
     FolderInfo mainInfo;
     if ( false )
     {
-        
+
     }
     return mainInfo;
 }
@@ -181,7 +181,7 @@ TargetInfo CMakeListsParser::parseTarget( const CMakeAst* )
     TargetInfo ti;
     if ( false )
     {
-        
+
     }
 
     return ti;

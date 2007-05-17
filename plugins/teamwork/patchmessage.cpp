@@ -88,7 +88,7 @@ string LocalPatchSource::patchTool( bool reverse ) const {
 }
 
 string LocalPatchSource::patchParams( bool reverse ) const {
-  
+
   QString cmd;
   bool normalCommand = false;
   if( reverse )
@@ -102,7 +102,7 @@ string LocalPatchSource::patchParams( bool reverse ) const {
   else
     if( reverse && normalCommand )
       cmd += " --reverse";
-  
+
   if( cmd.startsWith( ~patchTool(reverse) ) )
     return ~cmd.mid( patchTool(reverse).length() ).trimmed();
   else
@@ -138,11 +138,11 @@ class PatchArchiver {
   Archive& arch;
   PatchArchiver( Archive& a ) : arch(a) {
   }
- 
+
   virtual void put( QByteArray& data ) {
     arch & data;
   }
-  
+
   virtual void put( int i ) {
     arch & i;
   }
@@ -154,7 +154,7 @@ void PatchData::transferData( KIO::Job* /*job*/, const QByteArray& data ) {
   memcpy( &(vec[0]), data.data(), data.size() );
   EntryType v = Vector;
   *currentArchive << v;
-  *currentArchive & vec; 
+  *currentArchive & vec;
 }
 
 void PatchData::transferFinished() {
@@ -227,14 +227,14 @@ void PatchData::saveInternal( OutArchive& arch, const uint /*version*/ ) {
         LoggerPrinter l = log() << "calling process: \"" << lpatch->command << "\" params: ";
         for ( QStringList::iterator it = args.begin(); it != args.end(); ++it )
           l << "\"" << ~( *it ) << "\"";
-        l << " in folder " << ~projectDir.path();
+        l << " in folder " << ~projectDir.toLocalFile();
       }
 
       auto_ptr<K3Process> proc( new K3Process() );
       QObject::connect( &( *proc ), SIGNAL( receivedStdout( K3Process*, char*, int ) ), &( *rec ), SLOT( receivedStdout( K3Process*, char*, int ) ), Qt::DirectConnection );
 
       proc->setPriority( K3Process::PrioLowest );
-      proc->setWorkingDirectory( projectDir.path() );
+      proc->setWorkingDirectory( projectDir.toLocalFile() );
       *proc << args;
       if ( !proc->start( K3Process::Block, K3Process::Stdout ) )
         throw "the process could not be started";
@@ -307,15 +307,15 @@ void PatchData::load( InArchive& arch, const uint /*version*/ ) {
 
 /*
 template void PatchData::load( boost::archive::polymorphic_iarchive& arch, const uint );
- 
+
 template void PatchData::saveInternal( boost::archive::polymorphic_oarchive& arch, const uint );
- 
+
 template void PatchData::load( boost::archive::text_iarchive& arch, const uint );
- 
+
 template void PatchData::saveInternal( boost::archive::text_oarchive& arch, const uint );
- 
+
 template void PatchData::load( boost::archive::binary_iarchive& arch, const uint );
- 
+
 template void PatchData::saveInternal( boost::archive::binary_oarchive& arch, const uint );
 */
 

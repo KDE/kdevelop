@@ -184,7 +184,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         url.cleanPath( KUrl::SimplifyDirSeparators );
         if ( url.isLocalFile() )
         {
-            QString path = QFileInfo( url.path() ).canonicalFilePath();
+            QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
             if ( !path.isEmpty() )
                 url.setPath( path );
         }

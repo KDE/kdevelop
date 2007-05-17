@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "svn_commitwidgets.h"
 #include "subversion_part.h"
 #include <iversioncontrol.h>
@@ -32,10 +32,10 @@ void SvnCommitLogInputDlg::setCommitItems( apr_array_header_t *cis )
 {
     for( int i = 0; i < cis->nelts; i++ ){
         svn_client_commit_item_t *item = ((svn_client_commit_item_t **) cis->elts)[i];
-        
+
         QString path( item->path );
         if( path.isEmpty() ) path = ".";
-        
+
         char text_mod = '_', prop_mod = '_';
         if ((item->state_flags & SVN_CLIENT_COMMIT_ITEM_DELETE) && (item->state_flags & SVN_CLIENT_COMMIT_ITEM_ADD))
             text_mod = 'R';
@@ -79,13 +79,13 @@ void SvnCommitOptionDlg::setCommitCandidates( const KUrl::List &urls )
 {
     for( QList<KUrl>::const_iterator it = urls.begin(); it != urls.end(); ++it ){
         KUrl url(*it);
-        QFileInfo fileInfo(url.path());
-        
+        QFileInfo fileInfo(url.toLocalFile());
+
         if( fileInfo.isFile() ){
             //QString dirPath = fileInfo.dirPath(true); //absolute parent path
             const QList<VcsFileInfo> vcslist =
                     m_part->statusSync( url, IVersionControl::NonRecursive );
-            
+
             if( vcslist.count() == 1 ){
                 if( vcslist.at(0).filePath() == url )
                     insertRow( vcslist.at(0) );
@@ -93,7 +93,7 @@ void SvnCommitOptionDlg::setCommitCandidates( const KUrl::List &urls )
                 insertRow( VcsFileInfo::state2String( VcsFileInfo::Unknown), url );
             }
         }// end of isFile()
-        
+
         else if( fileInfo.isDir() ){
             const QList<VcsFileInfo> vcslist =
                     m_part->statusSync( url, IVersionControl::Recursive );
@@ -101,24 +101,24 @@ void SvnCommitOptionDlg::setCommitCandidates( const KUrl::List &urls )
             VcsFileInfo vcsInfo;
             for( QList<VcsFileInfo>::const_iterator it = vcslist.begin(); it != vcslist.end(); ++it ){
                 vcsInfo = *it;
-                
+
                 if( vcsInfo.state() == VcsFileInfo::Added ||
                     vcsInfo.state() == VcsFileInfo::Deleted ||
                     vcsInfo.state() == VcsFileInfo::Modified ||
                     vcsInfo.state() == VcsFileInfo::Replaced ) {
-                    
+
                     insertRow( vcsInfo );
                 }
             }
-            
+
         }// end of isDIr()
-        
+
         else if( !fileInfo.exists() ){
             // maybe delete file
 //             this->insertItem( VCSFileInfo::state2String( VCSFileInfo::Deleted ), oneUrl );
             insertRow( VcsFileInfo::state2String(VcsFileInfo::Deleted), url );
         }
-        
+
         else{
             // should not reach here
         }
@@ -127,7 +127,7 @@ void SvnCommitOptionDlg::setCommitCandidates( const KUrl::List &urls )
 KUrl::List SvnCommitOptionDlg::checkedUrls()
 {
     KUrl::List list;
-    
+
     QTreeWidgetItemIterator it( treeWidget, QTreeWidgetItemIterator::Checked );
     for( ; *it; ++it ){
         QString path = (*it)->text( 2 );
