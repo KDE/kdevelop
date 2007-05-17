@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Qt3 Application
+Name[br]=Meziant Qt3
 Name[ca]=Aplicació Qt3
 Name[da]=Qt3-Program
 Name[de]=Qt3-Anwendung

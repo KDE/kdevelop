@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Qt4 Application
+Name[br]=Meziant Qt4
 Name[ca]=Aplicació Qt4
 Name[da]=Qt4-Program
 Name[de]=Qt4-Anwendung
