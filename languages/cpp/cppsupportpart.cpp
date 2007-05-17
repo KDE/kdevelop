@@ -3002,6 +3002,8 @@ SynchronizedFileSet& CppSupportPart::safeFileSet() {
 }
 
 void CppSupportPart::buildSafeFileSet() {
+        if( codeCompletion() == 0 ) //probably the project has already been closed
+          return;
 	SynchronizedFileSet::SetType files; //everything that goes into this set must be deep-copied
 
 	kdDebug( 9007 ) << "CppSupportPart:: rebuilding safe-file-set" << endl;
