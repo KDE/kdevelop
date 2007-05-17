@@ -45,6 +45,14 @@ template<class T> class QList;
 typedef QHash<QAction*, QAction*> DesignerActionHash;
 
 
+/**
+ * This is a plugin that embeds Qt designer into a kdevplatform application
+ *
+ * TODO: - fix moving of form contents via mouse
+ * TODO: - properly enable/disable save button
+ * TODO: - detect external changes by using QFileSystemWatcher (more reliable implementation than KDirWatch)
+ * TODO: - fix other ui bugs, like having to double-click in a menubar to edit it
+ */
 class QtDesignerPlugin: public KDevelop::IPlugin
 {
     Q_OBJECT

@@ -99,6 +99,7 @@ bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
     s.flush();
     f.close();
     m_state = KDevelop::IDocument::Clean;
+    notifySaved();
     return true;
 }
 
@@ -110,6 +111,7 @@ void QtDesignerDocument::reload()
         form->setContents(&uiFile);
     }
     m_state = KDevelop::IDocument::Clean;
+    notifyStateChanged();
 }
 
 void QtDesignerDocument::close()
@@ -214,6 +216,7 @@ void QtDesignerDocument::formChanged()
         }
     }
     m_state = KDevelop::IDocument::Modified;
+    notifyStateChanged();
 }
 
 #include "qtdesignerdocument.moc"
