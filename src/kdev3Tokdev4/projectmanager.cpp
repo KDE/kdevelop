@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2005-2006 by Jens Dagerbo <jens.dagerbo@swipnet.se>     *
+ *   Copyright (C) 2005-2006 by Matt Rogers <mattr@kde.org>                *
+ *   Copyright (C) 2005-2006 by Adam Treat <treat@kde.org>                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+ ***************************************************************************/
+#include "projectmanager.h"
+
 #include <QFile>
 #include <qfileinfo.h>
 #include <qdom.h>
@@ -35,7 +57,6 @@ class QDomDocument;
 #include <kvbox.h>
 #include <ktoolbar.h>
 #include <krecentfilesaction.h>
-#include <krecentfilesaction.h>
 #include <ksettings/dialog.h>
 
 #include "kdevproject.h"
@@ -53,7 +74,6 @@ class QDomDocument;
 #include "projectsession.h"
 #include "domutil.h"
 
-#include "projectmanager.h"
 
 QString ProjectInfo::sessionFile() const
 {
@@ -127,9 +147,9 @@ void ProjectManager::slotOpenProject()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("General Options");
-    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+"/");
+    QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homePath()+'/');
 
-  KUrl url = KFileDialog::getOpenUrl(defaultProjectsDir,
+    KUrl url = KFileDialog::getOpenUrl(defaultProjectsDir,
         i18n("*.kdevelop|KDevelop 3 Project Files\n"),
         TopLevel::getInstance()->main(), i18n("Open Project") );
 
@@ -386,13 +406,13 @@ bool ProjectManager::saveProjectFile()
   return true;
 }
 
-static QString getAttribute(QDomElement elem, QString attr)
+static QString getAttribute(const QDomElement& elem, const QString& attr)
 {
   QDomElement el = elem.namedItem(attr).toElement();
   return el.firstChild().toText().data();
 }
 
-static void getAttributeList(QDomElement elem, QString attr, QString tag, QStringList &list)
+static void getAttributeList(const QDomElement& elem, const QString& attr, const QString& tag, QStringList &list)
 {
   list.clear();
 

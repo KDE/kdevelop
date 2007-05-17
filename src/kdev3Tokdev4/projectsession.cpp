@@ -14,6 +14,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "projectsession.h"
 
 #include <qdom.h>
 #include <q3ptrlist.h>
@@ -36,8 +37,6 @@
 #include "toplevel.h"
 #include "kdevplugin.h"
 
-#include "projectsession.h"
-#include "projectsession.moc"
 //---------------------------------------------------------------------------
 ProjectSession::ProjectSession()
 {
@@ -163,7 +162,7 @@ void ProjectSession::recreateDocs(QDomElement& el)
 }
 
 //---------------------------------------------------------------------------
-void ProjectSession::recreateViews(KUrl& url, QDomElement docEl, bool activate)
+void ProjectSession::recreateViews(KUrl& url, const QDomElement& docEl, bool activate)
 {
   // read information about the views
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
@@ -429,10 +428,11 @@ void ProjectSession::loadDocument( )
               loadDocument();
               //QTimer::singleShot( 0, this, SLOT(loadDocument()) );
        }
-       else 
+       else
        {
            Core::getInstance()->doEmitProjectOpened();
        }
 }
 
 // kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
+#include "projectsession.moc"

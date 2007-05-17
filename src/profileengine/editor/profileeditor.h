@@ -28,7 +28,7 @@ class K3ListViewItem;
 class ProfileEditor: public ProfileEditorBase {
     Q_OBJECT
 public:
-    ProfileEditor(QWidget *parent = 0, const char *name = 0);
+    ProfileEditor(QWidget *parent = 0, const char *name = 0); //krazy:exclude-explicit
 
 public slots:
     virtual void removeProperty();
