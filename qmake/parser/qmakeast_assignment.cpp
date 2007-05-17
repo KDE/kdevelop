@@ -85,7 +85,7 @@ namespace QMake
 #ifdef Q_WS_WIN
             buf += "\r\n";
 #else
-            buf += "\n";
+            buf += '\n';
 #endif
         else
             buf += m_lineend;
