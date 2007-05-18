@@ -109,6 +109,8 @@ protected:
 
     /**Destructor.*/
     virtual ~Context();
+private:
+    class ContextPrivate* const d;
 };
 
 /**A context for the KTextEditor.*/
@@ -143,8 +145,7 @@ public:
     QString currentWord() const;
 
 private:
-    class Private;
-    Private *d;
+    class EditorContextPrivate* const d;
 
     EditorContext( const EditorContext & );
     EditorContext &operator=( const EditorContext & );
@@ -169,8 +170,7 @@ public:
     KUrl::List urls() const;
 
 private:
-    class Private;
-    Private *d;
+    class FileContextPrivate* const d;
 
     FileContext( const FileContext & );
     FileContext &operator=( const FileContext & );
@@ -222,8 +222,7 @@ public:
     ProjectBaseItem* item() const;
 
 private:
-    class Private;
-    Private *d;
+    class ProjectItemContextPrivate* const d;
 
     ProjectItemContext( const ProjectItemContext & );
     ProjectItemContext &operator=( const ProjectItemContext & );

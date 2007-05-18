@@ -102,6 +102,8 @@ protected:
     volatile bool m_abortRequested : 1;
     bool m_aborted : 1;
     int m_revisionToken;
+private:
+    class ParseJobPrivate* const d;
 };
 
 }

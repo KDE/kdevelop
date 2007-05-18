@@ -37,6 +37,33 @@ public:
     IProject* project;
 };
 
+class ProjectFolderItemPrivate : public ProjectBaseItemPrivate
+{
+public:
+    KUrl m_url;
+};
+
+class ProjectBuildFolderItemPrivate : public ProjectFolderItemPrivate
+{
+public:
+    KUrl::List m_includeDirs; ///include directories
+    QHash<QString, QString> m_env;
+};
+
+class ProjectFileItemPrivate : public ProjectBaseItemPrivate
+{
+public:
+    KUrl m_url;
+};
+
+class ProjectItemPrivate : public ProjectBuildFolderItemPrivate
+{
+};
+
+class ProjectTargetItemPrivate : public ProjectBaseItemPrivate
+{
+};
+
 ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStandardItem *parent )
         : QStandardItem( name ), d_ptr(new ProjectBaseItemPrivate)
 {
@@ -144,10 +171,18 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     return lst;
 }
 
+ProjectItem::ProjectItem( ProjectItemPrivate& dd )
+    : ProjectBuildFolderItem( dd )
+{
+}
 
 ProjectItem::ProjectItem( IProject * project, const QString & name, QStandardItem * parent )
-    : ProjectBuildFolderItem( project, project->folder(), parent )
+    : ProjectBuildFolderItem( *new ProjectItemPrivate )
 {
+    Q_D(ProjectItem);
+    d->project = project;
+    setUrl( project->folder() );
+    setParent( parent );
     setText( name );
 }
 
@@ -166,7 +201,7 @@ int ProjectItem::type( ) const
 }
 
 ProjectModel::ProjectModel( QObject *parent )
-        : QStandardItemModel( parent )
+        : QStandardItemModel( parent ), d(0)
 {}
 
 ProjectModel::~ProjectModel()
@@ -183,11 +218,6 @@ void ProjectModel::resetModel()
     reset();
 }
 
-class ProjectFolderItemPrivate : public ProjectBaseItemPrivate
-{
-public:
-    KUrl m_url;
-};
 
 ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStandardItem * parent )
         : ProjectBaseItem( *new ProjectFolderItemPrivate )
@@ -232,12 +262,10 @@ void ProjectFolderItem::setUrl( const KUrl& url )
     setText( url.fileName() );
 }
 
-class ProjectBuildFolderItemPrivate : public ProjectFolderItemPrivate
+ProjectBuildFolderItem::ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& dd )
+    : ProjectFolderItem( dd )
 {
-public:
-    KUrl::List m_includeDirs; ///include directories
-    QHash<QString, QString> m_env;
-};
+}
 
 ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, QStandardItem *parent)
     : ProjectFolderItem( *new ProjectBuildFolderItemPrivate )
@@ -272,11 +300,10 @@ const QHash<QString, QString>& ProjectBuildFolderItem::environment() const
     return d->m_env;
 }
 
-class ProjectFileItemPrivate : public ProjectBaseItemPrivate
+ProjectFileItem::ProjectFileItem( ProjectFileItemPrivate& dd)
+    : ProjectBaseItem(dd)
 {
-    public:
-        KUrl m_url;
-};
+}
 
 ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandardItem * parent )
         : ProjectBaseItem( *new ProjectFileItemPrivate )
@@ -311,9 +338,19 @@ ProjectFileItem *ProjectFileItem::file() const
     return const_cast<ProjectFileItem*>( this );
 }
 
+ProjectTargetItem::ProjectTargetItem( ProjectTargetItemPrivate& dd)
+    : ProjectBaseItem( dd )
+{
+}
+
 ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, QStandardItem *parent )
-                : ProjectBaseItem( project, name, parent )
-{}
+                : ProjectBaseItem( *new ProjectTargetItemPrivate )
+{
+    Q_D(ProjectTargetItem);
+    d->project = project;
+    setText( name );
+    setParent( parent );
+}
 
 int ProjectTargetItem::type() const
 {

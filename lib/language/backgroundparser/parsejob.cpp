@@ -47,6 +47,10 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+class ParseJobPrivate
+{
+};
+
 ParseJob::ParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
@@ -55,7 +59,8 @@ ParseJob::ParseJob( const KUrl &url,
         m_abortMutex(new QMutex),
         m_abortRequested( false ),
         m_aborted( false ),
-        m_revisionToken(-1)
+        m_revisionToken(-1),
+        d(new ParseJobPrivate)
 {}
 
 ParseJob::~ParseJob()

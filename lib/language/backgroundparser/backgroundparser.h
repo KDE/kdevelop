@@ -109,39 +109,14 @@ protected:
     virtual void initialize();
     virtual void cleanup();
 
-private Q_SLOTS:
-    void acceptAddDocument(const QUrl& url);
-
 Q_SIGNALS:
     void requestAddDocument(const QUrl& url);
 
+
+
 private:
-    // Non-mutex guarded functions, only call with m_mutex acquired.
-    void parseDocumentsInternal();
-//     void cacheModelsInternal( uint modelsToCache );
-
-    ILanguageSupport *m_languageSupport;
-
-    QTimer *m_timer;
-    int m_delay;
-    int m_threads;
-    uint m_modelsToCache;
-
-    // A list of known documents, and whether they are due to be parsed or not
-    QMap<KUrl, bool> m_documents;
-    // A list of open documents
-//     QMap<KUrl, Document*> m_openDocuments;
-    // Current parse jobs
-    QHash<KUrl, ParseJob*> m_parseJobs;
-
-    QPointer<QProgressBar> m_progressBar;
-
-    ThreadWeaver::Weaver* m_weaver;
-
-    ParserDependencyPolicy* m_dependencyPolicy;
-
-    QMutex* m_mutex;
-    QWaitCondition* m_waitForJobCreation;
+    Q_PRIVATE_SLOT( d, void acceptAddDocument(const QUrl& url))
+    class BackgroundParserPrivate* const d;
 };
 
 }

@@ -99,26 +99,25 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 class ProjectFolderItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
-    public:
-        ProjectFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
+public:
+    ProjectFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
 
-        virtual ~ProjectFolderItem();
+    virtual ~ProjectFolderItem();
 
-        virtual ProjectFolderItem *folder() const;
+    virtual ProjectFolderItem *folder() const;
 
-        ///Reimplemented from QStandardItem
-        virtual int type() const;
+    ///Reimplemented from QStandardItem
+    virtual int type() const;
 
-        /** Get the url of this folder */
-        const KUrl& url() const;
+    /** Get the url of this folder */
+    const KUrl& url() const;
 
-        /** Set the url of this folder */
-        void setUrl( const KUrl& );
-    protected:
-        ProjectFolderItem( ProjectFolderItemPrivate& );
-    private:
-        Q_DECLARE_PRIVATE(ProjectFolderItem)
-//         class ProjectFolderItemPrivate* const d;
+    /** Set the url of this folder */
+    void setUrl( const KUrl& );
+protected:
+    ProjectFolderItem( ProjectFolderItemPrivate& );
+private:
+    Q_DECLARE_PRIVATE(ProjectFolderItem)
 };
 
 
@@ -128,32 +127,35 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 class ProjectBuildFolderItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
-    public:
-        ProjectBuildFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
+public:
+    ProjectBuildFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
 
-        ///Reimplemented from QStandardItem
-        virtual int type() const;
+    ///Reimplemented from QStandardItem
+    virtual int type() const;
 
-        void setIncludeDirectories( const KUrl::List& includeList );
+    void setIncludeDirectories( const KUrl::List& includeList );
 
-        /**
-         * Return a list of directories that are used as include directories
-         * for all targets in this directory.
-         */
-        const KUrl::List& includeDirectories() const;
+    /**
+     * Return a list of directories that are used as include directories
+     * for all targets in this directory.
+     */
+    const KUrl::List& includeDirectories() const;
 
-        /**
-         * Returns an association of environment variables which have been defined
-         * for all targets in this directory.
-         */
-        const QHash<QString, QString>& environment() const;
-    private:
-        Q_DECLARE_PRIVATE(ProjectBuildFolderItem)
+    /**
+     * Returns an association of environment variables which have been defined
+     * for all targets in this directory.
+     */
+    const QHash<QString, QString>& environment() const;
+protected:
+    ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& );
+private:
+    Q_DECLARE_PRIVATE(ProjectBuildFolderItem)
 };
 
 /**
  * Special folder, the project root folder
  */
+class ProjectItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectItem: public ProjectBuildFolderItem
 {
     public:
@@ -163,6 +165,10 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectItem: public ProjectBuildFolderItem
         int type() const;
 
         ProjectItem* projectItem() const;
+    protected:
+        ProjectItem( ProjectItemPrivate& );
+    private:
+        Q_DECLARE_PRIVATE(ProjectItem);
 };
 
 
@@ -172,32 +178,37 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectItem: public ProjectBuildFolderItem
  *
  * This object contains all properties specific to a target.
  */
+class ProjectTargetItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectTargetItem: public ProjectBaseItem
 {
-    public:
-        ProjectTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+public:
+    ProjectTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
 
-        ///Reimplemented from QStandardItem
-        virtual int type() const;
+    ///Reimplemented from QStandardItem
+    virtual int type() const;
 
-        virtual ProjectTargetItem *target() const;
+    virtual ProjectTargetItem *target() const;
 
-        /**
-         * Return a list of directories that are used as additional include directories
-         * specific to this target.
-         */
-        virtual const KUrl::List& includeDirectories() const = 0;
+    /**
+     * Return a list of directories that are used as additional include directories
+     * specific to this target.
+     */
+    virtual const KUrl::List& includeDirectories() const = 0;
 
-        /**
-         * Returns an association of additional environment variables which have been defined
-         * specifically for this target.
-         */
-        virtual const QHash<QString, QString>& environment() const = 0;
+    /**
+     * Returns an association of additional environment variables which have been defined
+     * specifically for this target.
+     */
+    virtual const QHash<QString, QString>& environment() const = 0;
 
-        /**
-         * Returns a list of defines passed to the compiler with -D(macro) (value)
-         */
-        virtual const QList<QPair<QString, QString> >& defines() const = 0;
+    /**
+     * Returns a list of defines passed to the compiler with -D(macro) (value)
+     */
+    virtual const QList<QPair<QString, QString> >& defines() const = 0;
+protected:
+    ProjectTargetItem( ProjectTargetItemPrivate& );
+private:
+    Q_DECLARE_PRIVATE(ProjectTargetItem);
 };
 
 /**
@@ -206,20 +217,22 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectTargetItem: public ProjectBaseItem
 class ProjectFileItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 {
-    public:
-        ProjectFileItem( IProject*, const KUrl& file, QStandardItem *parent = 0 );
+public:
+    ProjectFileItem( IProject*, const KUrl& file, QStandardItem *parent = 0 );
 
-        ///Reimplemented from QStandardItem
-        virtual int type() const;
+    ///Reimplemented from QStandardItem
+    virtual int type() const;
 
-        virtual ProjectFileItem *file() const;
+    virtual ProjectFileItem *file() const;
 
-        /** Get the url of this file. */
-        const KUrl& url() const;
-        void setUrl( const KUrl& );
+    /** Get the url of this file. */
+    const KUrl& url() const;
+    void setUrl( const KUrl& );
 
-    private:
-        Q_DECLARE_PRIVATE(ProjectFileItem)
+protected:
+    ProjectFileItem( ProjectFileItemPrivate& );
+private:
+    Q_DECLARE_PRIVATE(ProjectFileItem)
 };
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
@@ -233,6 +246,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
         ProjectBaseItem *item( const QModelIndex &index ) const;
 
         void resetModel();
+
+    private:
+        class ProjectModelPrivate* const d;
 
 };
 

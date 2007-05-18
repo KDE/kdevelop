@@ -35,6 +35,7 @@ namespace KDevelop
 {
 
 Context::Context()
+    : d(0)
 {}
 
 Context::~Context()
@@ -45,10 +46,10 @@ bool Context::hasType( int aType ) const
     return aType == this->type();
 }
 
-class EditorContext::Private
+class EditorContextPrivate
 {
 public:
-    Private( const KUrl &url, const KTextEditor::Cursor& position, const QString &linestr,
+    EditorContextPrivate( const KUrl &url, const KTextEditor::Cursor& position, const QString &linestr,
              const QString &wordstr )
             : m_url( url ), m_position( position ),
             m_linestr( linestr ), m_wordstr( wordstr )
@@ -61,13 +62,12 @@ public:
 
 EditorContext::EditorContext( const KUrl &url, const KTextEditor::Cursor& position,
                               const QString &linestr, const QString &wordstr )
-        : Context(), d( new Private( url, position, linestr, wordstr ) )
+        : Context(), d( new EditorContextPrivate( url, position, linestr, wordstr ) )
 {}
 
 EditorContext::~EditorContext()
 {
     delete d;
-    d = 0;
 }
 
 int EditorContext::type() const
@@ -95,10 +95,10 @@ QString EditorContext::currentWord() const
     return d->m_wordstr;
 }
 
-class FileContext::Private
+class FileContextPrivate
 {
 public:
-    Private( const KUrl::List &urls )
+    FileContextPrivate( const KUrl::List &urls )
             : m_urls( urls )
     {}
 
@@ -106,13 +106,12 @@ public:
 };
 
 FileContext::FileContext( const KUrl::List &urls )
-        : Context(), d( new Private( urls ) )
+        : Context(), d( new FileContextPrivate( urls ) )
 {}
 
 FileContext::~FileContext()
 {
     delete d;
-    d = 0;
 }
 
 int FileContext::type() const
@@ -155,23 +154,22 @@ KUrl::List FileContext::urls() const
 //     return d->m_item;
 // }
 
-class ProjectItemContext::Private
+class ProjectItemContextPrivate
 {
 public:
-    Private( ProjectBaseItem* item ) : m_item( item )
+    ProjectItemContextPrivate( ProjectBaseItem* item ) : m_item( item )
     {}
 
     ProjectBaseItem* m_item;
 };
 
 ProjectItemContext::ProjectItemContext( ProjectBaseItem* item )
-        : Context(), d( new Private( item ) )
+        : Context(), d( new ProjectItemContextPrivate( item ) )
 {}
 
 ProjectItemContext::~ProjectItemContext()
 {
     delete d;
-    d = 0;
 }
 
 int ProjectItemContext::type() const
