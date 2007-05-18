@@ -75,12 +75,12 @@ int EditorContext::type() const
     return Context::EditorContext;
 }
 
-const KUrl &EditorContext::url() const
+KUrl EditorContext::url() const
 {
     return d->m_url;
 }
 
-const KTextEditor::Cursor& EditorContext::position() const
+KTextEditor::Cursor EditorContext::position() const
 {
     return d->m_position;
 }
@@ -120,7 +120,7 @@ int FileContext::type() const
     return Context::FileContext;
 }
 
-const KUrl::List &FileContext::urls() const
+KUrl::List FileContext::urls() const
 {
     return d->m_urls;
 }

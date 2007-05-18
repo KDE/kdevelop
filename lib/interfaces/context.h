@@ -132,7 +132,7 @@ public:
     KUrl url() const;
 
     /**@return The cursor position.*/
-    const KTextEditor::Cursor& position() const;
+    KTextEditor::Cursor position() const;
 
     /**@return A QString with the content of the line which this context was
         invoked for.*/
@@ -166,7 +166,7 @@ public:
     virtual int type() const;
 
     /**@return A reference to the selected URLs.*/
-    const KUrl::List &urls() const;
+    KUrl::List urls() const;
 
 private:
     class Private;

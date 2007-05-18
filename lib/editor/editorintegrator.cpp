@@ -278,7 +278,7 @@ Range* EditorIntegrator::currentRange( ) const
   return m_currentRange;
 }
 
-const KUrl& EditorIntegrator::currentUrl() const
+KUrl EditorIntegrator::currentUrl() const
 {
   return m_currentUrl;
 }

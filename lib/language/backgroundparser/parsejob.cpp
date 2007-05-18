@@ -69,7 +69,7 @@ ParseJob::~ParseJob()
     }*/
 }
 
-const KUrl& ParseJob::document() const
+KUrl ParseJob::document() const
 {
     return m_document;
 }
@@ -79,7 +79,7 @@ bool ParseJob::success() const
     return !m_aborted;
 }
 
-const QString & ParseJob::errorMessage() const
+QString ParseJob::errorMessage() const
 {
     return m_errorMessage;
 }
