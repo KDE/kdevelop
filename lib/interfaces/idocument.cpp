@@ -37,6 +37,7 @@ IDocument::IDocument( KDevelop::ICore* core )
 
 IDocument::~IDocument()
 {
+    delete d;
 }
 
 KDevelop::ICore* IDocument::core()
