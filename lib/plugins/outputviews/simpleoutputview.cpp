@@ -105,11 +105,12 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
         return;
     kDebug(9004) << "Queueing Command: " << dir << "|" << command << endl;
     QString title = command.first();
+    // todo: when all the outputviews using this model are closed by user, delete this model
+    // maybe use KSharedPtr or something.. 
+    QStandardItemModel* model = new QStandardItemModel(this);
+    OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, model );
     if( !d->m_jobs.contains(title) )
     {
-        // Models will be created in the same place with QListView. not here.
-//         QStandardItemModel* model = new QStandardItemModel();
-        OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, NULL );
         connect( cmd, SIGNAL( commandFinished( const QString& ) ),
                  this, SIGNAL( commandFinished( const QString& ) ) );
         connect( cmd, SIGNAL( commandFailed( const QString& ) ),
@@ -126,8 +127,6 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     {
         // Append m_job. When the job named "title" is finished, completed job will be removed
         // and this new job will get started by slotCommandFinished/Failed()
-//         QStandardItemModel* model = new QStandardItemModel();
-        OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, NULL );
         d->m_jobs[title].enqueue( cmd );
         kDebug(9004) << "Adding and pending" << endl;
     }

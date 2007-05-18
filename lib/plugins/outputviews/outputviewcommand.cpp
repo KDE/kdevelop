@@ -59,7 +59,7 @@ OutputViewCommand::~OutputViewCommand()
 {
     delete m_proc;
     delete m_procLineMaker;
-//     delete m_model; // model is created and deleted in OutputWidget
+//     delete m_model; // model is created and deleted in OutputViewPart
     kDebug(9004) << "OutputViewCommand destructor.." << endl;
 }
 
