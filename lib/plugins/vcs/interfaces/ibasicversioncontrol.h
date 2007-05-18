@@ -54,7 +54,6 @@ public:
      * revisions can contain a date in format parseable by QDate, a number,
      * or the special words HEAD and BASE (whose exact meaning depends on the
      * used VCS system)
-     *
      */
 
     /**
@@ -135,7 +134,6 @@ public:
      * a range.
      * @param recursion defines wether the directories should be updated
      * recursively
-     *
      */
     virtual VcsJob update( const KUrl::List& localLocations,
                            const VcsRevision& rev,
@@ -163,8 +161,6 @@ public:
      *
      * The diff is in unified diff format for text files
      */
-    // We presumably need to define some diff format for binary files, unless
-    // we should always return DiffRaw in that case?
     virtual VcsJob diff( const QVariant& localOrRepoLocationSrc,
                          const QVariant& localOrRepoLocationDst,
                          const VcsRevision& srcRevision,
