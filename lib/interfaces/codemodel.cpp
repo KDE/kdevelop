@@ -1182,6 +1182,7 @@ void FunctionModel::removeArgument( ArgumentDom arg )
 }
 
 void FunctionModel::update( const FunctionModel* i ) {
+  m_access = i->m_access;
   CodeModelItem::update( i );
 }
 
@@ -1644,6 +1645,7 @@ void VariableModel::write( QDataStream & stream ) const
 }
 
 void VariableModel::update( const VariableModel* i ) {
+  m_access = i->m_access;
   CodeModelItem::update( i );
 }
 
@@ -1744,6 +1746,7 @@ void EnumModel::removeEnumerator( EnumeratorDom e )
 }
 
 void EnumModel::update( const EnumModel* i ) {
+  m_access = i->m_access;
   CodeModelItem::update( i );
 }
 
