@@ -55,26 +55,18 @@ void OutputWidget::addNewTab( OutputViewCommand* cmd )
 
     if( !m_listviews.contains( cmd->title() ) )
     {
-        // create new listview and model
+        // create new listview, assign view's model.
         QListView* listview = new QListView(this);
-        QStandardItemModel* model = new QStandardItemModel();
-        
-        listview->setModel( model );
-        cmd->setModel( model );
-        
+        listview->setModel( cmd->model() );
+
         m_listviews[cmd->title()] = listview;
         addTab( listview, cmd->title() );
     }
     else
     {
-        // reuse the same view and model. Retrieve model from view
+        // reuse the same view.
         QListView* listview = m_listviews[ cmd->title() ];
-        QAbstractItemModel *absmodel = listview->model();
-        QStandardItemModel *stdModel = dynamic_cast< QStandardItemModel* >( absmodel );
-
-        Q_ASSERT( stdModel ); // maybe we can use more general model later
-        
-        cmd->setModel( stdModel );
+        listview->setModel( cmd->model() );
     }
 }
 
