@@ -434,7 +434,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         values << outsideItem->text( 0 );
         outsideItem = ( QCheckListItem* ) outsideItem->itemBelow();
     }
-    myProjectItem->removeValues( "INCLUDEPATH", values );
+//     myProjectItem->removeValues( "INCLUDEPATH", values );
     myProjectItem->updateValues( "INCLUDEPATH", values );
 
     //target.install
@@ -499,7 +499,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
 
 
-    myProjectItem->removeValues( "LIBS", values );
+//     myProjectItem->removeValues( "LIBS", values );
     myProjectItem->updateValues( "LIBS", values );
 
     values.clear();
@@ -538,7 +538,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         }
         insideItem = dynamic_cast<InsideCheckListItem *>( insideItem->itemBelow() );
     }
-    myProjectItem->removeValues( "TARGETDEPS", values );
+//     myProjectItem->removeValues( "TARGETDEPS", values );
     myProjectItem->updateValues( "TARGETDEPS", values );
 
     values.clear();
