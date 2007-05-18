@@ -103,8 +103,8 @@ VcsFileInfo::VcsFileState VcsFileInfo::state() const
 
 QString VcsFileInfo::toString() const
 {
-    return "(" + d->filePath.fileName() + ", " + d->workRevision + ", " +
-            d->repoRevision + ", " + state2String( d->state ) + ")";
+    return '(' + d->filePath.fileName() + ", " + d->workRevision + ", " +
+            d->repoRevision + ", " + state2String( d->state ) + ')';
 }
 
 QString VcsFileInfo::state2String( VcsFileInfo::VcsFileState state )

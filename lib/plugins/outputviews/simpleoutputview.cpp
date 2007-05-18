@@ -187,7 +187,7 @@ QString SimpleOutputView::registeredTitle( const QString& id )
 void SimpleOutputView::slotCommandFinished( const QString& id )
 {
     cleanupTerminatedJobs( id );
-    startNextPendingJob( id );    
+    startNextPendingJob( id );
 }
 
 void SimpleOutputView::slotCommandFailed( const QString& id )
@@ -199,9 +199,9 @@ void SimpleOutputView::slotCommandFailed( const QString& id )
 void SimpleOutputView::cleanupTerminatedJobs( const QString& id )
 {
     Q_ASSERT( d->m_jobs.contains(id) );
-    
+
     QQueue<OutputViewCommand*> &cmdQ = d->m_jobs[id];
-    Q_ASSERT( cmdQ.isEmpty() == FALSE );
+    Q_ASSERT( cmdQ.isEmpty() == false );
     OutputViewCommand *cmd = cmdQ.dequeue();
     cmd->deleteLater();
     kDebug(9004) << "OutputViewCommand removed and deleteLater()ed " << (long)cmd << endl;
@@ -219,7 +219,7 @@ void SimpleOutputView::startNextPendingJob( const QString &id )
         // execute next pending job, whose title was the same with justly finished job.
         QQueue< OutputViewCommand* > &cmdQ = d->m_jobs[id];
         OutputViewCommand *nextCmd = cmdQ.head();
-        
+
         connect( nextCmd, SIGNAL( commandFinished( const QString& ) ),
                  this, SIGNAL( commandFinished( const QString& ) ) );
         connect( nextCmd, SIGNAL( commandFailed( const QString& ) ),

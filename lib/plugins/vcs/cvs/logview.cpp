@@ -116,7 +116,7 @@ void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revision
         } else {
             if (firstSeperatorReached) {
 //                 kDebug() << "ADDING LOG" <<endl;
-                item.log += s+"\n";
+                item.log += s+'\n';
             }
         }
     }

@@ -68,7 +68,7 @@ void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap
                 profile = new Profile(root, dirName);
                 passedPaths[currPath + dirName] = profile;
             }
-            processDir(dir + *eit + "/", currPath + dirName, passedPaths, profile);
+            processDir(dir + *eit + '/', currPath + dirName, passedPaths, profile);
         }
     }
 }

@@ -121,7 +121,7 @@ void MainWindow::saveSettings()
 {
     QString group = "MainWindow";
     if (area())
-        group += "_" + area()->objectName();
+        group += '_' + area()->objectName();
     KConfigGroup cg = KGlobal::config()->group(group);
     saveMainWindowSettings(cg);
 }
@@ -130,7 +130,7 @@ void MainWindow::loadSettings()
 {
     QString group = "MainWindow";
     if (area())
-        group += "_" + area()->objectName();
+        group += '_' + area()->objectName();
     KConfigGroup cg = KGlobal::config()->group(group);
     applyMainWindowSettings(cg);
 

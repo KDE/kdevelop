@@ -83,7 +83,7 @@ public:
    */
   static bool documentLoaded(KTextEditor::Document* document);
 
-  const KUrl& currentUrl() const;
+  KUrl currentUrl() const;
   void setCurrentUrl(const KUrl& currentUrl);
 
   /**

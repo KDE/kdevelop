@@ -67,10 +67,10 @@ public:
     /// or -1 if there was a problem.
     int revisionToken() const;
 
-    const KUrl& document() const;
+    KUrl document() const;
 
     void setErrorMessage(const QString& message);
-    const QString& errorMessage() const;
+    QString errorMessage() const;
 
     /// Overriden to allow jobs to determine if they've been requested to abort
     virtual void requestAbort();

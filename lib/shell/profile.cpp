@@ -79,7 +79,7 @@ void Profile::removeChildProfile(Profile *profile)
 QString Profile::dirName() const
 {
     if (m_parent)
-        return m_parent->dirName() + "/" + m_name;
+        return m_parent->dirName() + '/' + m_name;
     else
         return "/"/* + m_name*/;
 }

@@ -129,7 +129,7 @@ public:
     virtual int type() const;
 
     /**@return The url for the file which this context was invoked for.*/
-    const KUrl &url() const;
+    KUrl url() const;
 
     /**@return The cursor position.*/
     const KTextEditor::Cursor& position() const;

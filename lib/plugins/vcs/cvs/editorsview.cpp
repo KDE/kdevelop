@@ -101,7 +101,7 @@ void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLoc
             CvsLocker item;
             QString file = re.cap(1);
             item.user = re.cap(2);
-            item.date = re.cap(5)+" "+re.cap(4)+" "+re.cap(7)+" "+re.cap(6);
+            item.date = re.cap(5)+' '+re.cap(4)+' '+re.cap(7)+' '+re.cap(6);
             item.machine = re.cap(9);
             item.localrepo = re.cap(10);
 
@@ -112,7 +112,7 @@ void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLoc
             if (subre.exactMatch(s)) {
                 CvsLocker item;
                 item.user = subre.cap( 1 );
-                item.date = subre.cap(4)+" "+subre.cap(3)+" "+subre.cap(6)+" "+subre.cap(5);
+                item.date = subre.cap(4)+' '+subre.cap(3)+' '+subre.cap(6)+' '+subre.cap(5);
                 item.machine = subre.cap(8);
                 item.localrepo = subre.cap(9);
 

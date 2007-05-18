@@ -12,7 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "subversionthreads.h"
 #include "svnkjobbase.h"
 #include "subversion_core.h"
@@ -37,7 +37,7 @@ public:
     SvnLoginInfo *m_loginInfo;
     int m_type;
     SvnKJobBase *m_kjob;
-    
+
     svn_client_ctx_t *m_ctx;
     apr_pool_t *m_pool;
 
@@ -52,9 +52,9 @@ SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
     d->m_sent_first_txdelta = false;
     connect( this, SIGNAL(terminated()), this, SLOT(slotTerminated()) );
     connect( this, SIGNAL(finished()), this, SLOT(slotFinished()) );
-    
+
     d->m_pool = svn_pool_create (NULL);
-    
+
     svn_error_t *err = svn_client_create_context(&(d->m_ctx), pool());
     if ( err ) {
         kDebug() << "SvnJobBase::SvnJobBase() create_context ERROR" << endl;
@@ -67,7 +67,7 @@ SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
     } else{
         kDebug() << " SvnJobBase:: svn_config_ensure failed: " << endl;
     }
-    
+
 //     ctx->cancel_func = SubversionThread::cancelCallback;
 
     // notification callback
@@ -95,7 +95,7 @@ SubversionThread::SubversionThread( int actionType, SvnKJobBase *parent )
     //interactive prompt
     svn_client_get_simple_prompt_provider (&provider, SubversionThread::displayLoginDialog, this, 2, pool());
     APR_ARRAY_PUSH(providers, svn_auth_provider_object_t*) = provider;
-    
+
     //we always ask user+pass, no need for a user only question
     //   svn_client_get_username_prompt_provider(&provider,kio_svnProtocol::checkAuth,this,2,pool());
     //APR_ARRAY_PUSH(providers, svn_auth_provider_object_t*) = provider;
@@ -148,7 +148,7 @@ SubversionThread::displayLoginDialog(svn_auth_cred_simple_t **cred,
     SubversionThread *p = ( SubversionThread* )baton;
     QString userName, passWord;
     bool maySave;
-    
+
     SvnLoginInfo *loginInfo = new SvnLoginInfo();
     *(p->loginInfo()) = loginInfo;
     loginInfo->realm = QString( realm );
@@ -159,7 +159,7 @@ SubversionThread::displayLoginDialog(svn_auth_cred_simple_t **cred,
     kDebug() << " Entering event loop " << endl;
     p->enterLoop();
     kDebug() << " Exiting event loop " << endl;
-    
+
     if( loginInfo->receivedInfos() ){
         userName = loginInfo->userName;
         passWord = loginInfo->passWord;
@@ -175,7 +175,7 @@ SubversionThread::displayLoginDialog(svn_auth_cred_simple_t **cred,
     if(may_save)
         ret->may_save = maySave;
     *cred = ret;
-    
+
     return SVN_NO_ERROR;
 }
 svn_error_t*
@@ -189,7 +189,7 @@ SubversionThread::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **cred_p,
 {
     kDebug() << "trustSSLPrompt called" << endl;
     SubversionThread *th = ( SubversionThread* )baton;
-    
+
     SvnServerCertInfo *info = new SvnServerCertInfo;
     *(th->certInfo()) = info;
     info->cert_info = ci;
@@ -203,7 +203,7 @@ SubversionThread::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **cred_p,
     th->enterLoop();
     kDebug() << " Exiting event loop " << endl;
     int userDecision = info->m_decision;
-    
+
     delete info; *(th->certInfo()) = NULL;
 
     switch( userDecision ){
@@ -336,7 +336,7 @@ SubversionThread::commitLogUserInput( const char **log_msg,
     QCoreApplication::postEvent( thread->kjob()->parent(), ev );
 
     thread->enterLoop();
-    
+
     QString fetchedMsg = info->m_message;
     bool isAccepted = info->m_accept;
     delete info; info = NULL;
@@ -366,12 +366,12 @@ SubversionThread::commitLogUserInput( const char **log_msg,
 // 	}
 // 	else
 // 		return SVN_NO_ERROR;
-// 
+//
 // }
 
 void SubversionThread::enterLoop()
 {
-    // start QThread's event loop. 
+    // start QThread's event loop.
     exec();
 }
 
@@ -447,13 +447,13 @@ void SubversionThread::setErrorMsgExt( svn_error_t *err )
 {
     apr_status_t aprErr = err->apr_err;
     QString msg = QString::fromLocal8Bit(err->message);
-    
+
     if( aprErr ){
         char buf[128];
         svn_strerror(aprErr, buf, 128);
         msg = msg + "\n: " + QString::fromLocal8Bit( buf );
     }
-    
+
     kjob()->setErrorText( msg );
     if( err->apr_err >= 100 )
         kjob()->setError( err->apr_err );
@@ -519,7 +519,7 @@ void SvnBlameJob::run()
         }
         // if the out_url is same with m_pathOrUrl..toUtf8, out_url's memory address is just m_pathUrl
         // so we must allocate separate memory
-        path_or_url = apr_pstrdup( subpool, out_url ); 
+        path_or_url = apr_pstrdup( subpool, out_url );
         kDebug() << " repository URL from PATH: " << path_or_url << endl;
     } else{
         const char *out_url = 0;
@@ -552,7 +552,7 @@ svn_error_t* SvnBlameJob::blameReceiver( void *baton, apr_int64_t line_no, svn_r
     holder.contents = line;
 
     job->m_blameList << holder;
-    return 0;     
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////
@@ -579,7 +579,7 @@ void SvnLogviewJob::run()
     kDebug() << "inside the subversion logview job " << (long int)this << endl;
     setTerminationEnabled(true);
     apr_pool_t *subpool = svn_pool_create (pool());
-    
+
     svn_opt_revision_t rev1, rev2;
     rev1 = m_rev1.revision();
     rev2 = m_rev2.revision();
@@ -593,12 +593,12 @@ void SvnLogviewJob::run()
         && rev2.value.number == 1 ){
         rev2.value.number = 0;
     }
-    
+
     apr_array_header_t *targets = apr_array_make(subpool, 1+urls.count(), sizeof(const char *));
 
     for ( QList<KUrl>::const_iterator it = urls.begin(); it != urls.end() ; ++it ) {
         KUrl nurl = *it;
-        
+
         if ( repositLog ){ // show repository log
             const char *urlFromPath=0;
             svn_error_t *urlErr=0;
@@ -617,12 +617,12 @@ void SvnLogviewJob::run()
                     apr_pstrdup( subpool, urlFromPath );
             kDebug() << " urlFromPath: " << urlFromPath << endl;
         }else{ // show working copy log
-            nurl.setProtocol( "file" ); 
+            nurl.setProtocol( "file" );
             (*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
                     apr_pstrdup( subpool, svn_path_canonicalize( nurl.path().toUtf8(), subpool ) );
         }
     }
-    
+
     svn_log_message_receiver_t receiver = SvnLogviewJob::receiveLogMessage;
     svn_error_t *err =
             svn_client_log2(targets, &rev1, &rev2,
@@ -644,7 +644,7 @@ svn_error_t* SvnLogviewJob::receiveLogMessage(void *baton, apr_hash_t *changed_p
     holder.author = author;
     holder.date = date;
     holder.logmsg = message;
-    
+
     if( changed_paths != NULL ){
         QString pathlist;
         void *onePath;
@@ -654,10 +654,10 @@ svn_error_t* SvnLogviewJob::receiveLogMessage(void *baton, apr_hash_t *changed_p
             apr_hash_this(hi, &pathkey, NULL, &onePath);
             svn_log_changed_path_t *cp = (svn_log_changed_path_t*)onePath;
             pathlist += cp->action;
-            pathlist += " ";
+            pathlist += ' ';
 //          pathlist += cp->copyfrom_path;
             pathlist += (const char*)pathkey;
-            pathlist += "\n";
+            pathlist += '\n';
         }
         holder.pathlist = pathlist;
     }
@@ -683,7 +683,7 @@ void SvnCommitJob::run()
     apr_pool_t *subpool = svn_pool_create( pool() );
 //     svn_client_commit_info_t *commit_info = NULL;
     svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
-    
+
     apr_array_header_t *targets = apr_array_make(subpool, 1+m_urls.count(), sizeof(const char *));
     for ( QList<KUrl>::iterator it = m_urls.begin(); it != m_urls.end() ; ++it ) {
         KUrl nurl = *it;
@@ -699,7 +699,7 @@ void SvnCommitJob::run()
         svn_pool_destroy (subpool);
         return;
     }
-    
+
     QString notifyString;
     if( commit_info ){
         if( commit_info->revision == SVN_INVALID_REVNUM ){
@@ -713,7 +713,7 @@ void SvnCommitJob::run()
     }
     SvnNotificationEvent *event = new SvnNotificationEvent( notifyString );
     QCoreApplication::postEvent( kjob()->parent(), event );
-    
+
     // TODO handle separately to adjust svn+ssh  SVN_ERR_RA_SVN_CONNECTION_CLOSED,
     svn_pool_destroy (subpool);
 }
@@ -762,14 +762,14 @@ void SvnStatusJob::run()
         svn_pool_destroy( subpool );
         return;
     }
-    
+
     svn_pool_destroy(subpool);
 }
 
 void SvnStatusJob::statusReceiver( void *baton, const char *path, svn_wc_status2_t *status )
 {
     if( !status || !baton ) return;
-    
+
     SvnStatusJob *job = (SvnStatusJob*) baton;
     SvnStatusHolder holder;
 
@@ -803,10 +803,10 @@ void SvnAddJob::run()
     kDebug() << "SvnAddJob::run()  " << endl;
     apr_pool_t *subpool = svn_pool_create (pool());
     for( QList<KUrl>::iterator it = m_wcPaths.begin(); it != m_wcPaths.end(); ++it ){
-        
+
         KUrl nurl = *it;
         nurl.setProtocol( "file" );
-        
+
         svn_error_t *err = svn_client_add2( svn_path_canonicalize( nurl.path().toUtf8(), subpool ),
                                             m_recurse, m_force, ctx(), subpool );
         if ( err ){
@@ -814,7 +814,7 @@ void SvnAddJob::run()
             svn_pool_destroy( subpool );
             return;
         }
-    
+
     }
     svn_pool_destroy (subpool);
 }
@@ -828,7 +828,7 @@ SvnDeleteJob::SvnDeleteJob( const KUrl::List &urls, bool force, int type, SvnKJo
 void SvnDeleteJob::run()
 {
     kDebug() << " SvnDeleteJob:run() " <<endl;
-    
+
     apr_pool_t *subpool = svn_pool_create (pool());
     svn_client_commit_info_t *commit_info = NULL;
     apr_array_header_t *targets = apr_array_make(subpool, 1+m_urls.count(), sizeof(const char *));
@@ -847,7 +847,7 @@ void SvnDeleteJob::run()
         svn_pool_destroy (subpool);
         return;
     }
-    
+
     svn_pool_destroy (subpool);
 }
 
@@ -867,7 +867,7 @@ void SvnUpdateJob::run()
 {
     setTerminationEnabled(true);
     kDebug() << " SvnUpdateJob:run() " <<endl;
-    
+
     apr_pool_t *subpool = svn_pool_create (pool());
     apr_array_header_t *targets = apr_array_make( subpool, 1+m_wcPaths.count(), sizeof(const char *));
 
@@ -908,7 +908,7 @@ svn_error_t* SvnInfoJob::infoReceiver( void *baton, const char *path,
     SvnInfoJob *job = (SvnInfoJob*)baton ;
     if( !job )
         return SVN_NO_ERROR;
-    
+
     SvnInfoHolder holder;
     holder.path = KUrl( path );
     holder.url = KUrl( info->URL );
@@ -927,7 +927,7 @@ void SvnInfoJob::run()
 {
     setTerminationEnabled(true);
     kDebug() << " SvnInfoJob:run() " <<endl;
-    
+
     apr_pool_t *subpool = svn_pool_create (pool());
     svn_opt_revision_t peg_rev = m_peg.revision();
     svn_opt_revision_t revision = m_revision.revision();
@@ -970,11 +970,11 @@ void SvnDiffJob::run()
     setTerminationEnabled(true);
     apr_pool_t *subpool = svn_pool_create (pool());
     // null options
-    apr_array_header_t *options = svn_cstring_split( "", "\t\r\n", TRUE, subpool );
+    apr_array_header_t *options = svn_cstring_split( "", "\t\r\n", false, subpool );
 
     // make 2 path or url
     const char *path1 = 0, *path2 = 0;
-    
+
     if ( m_pathOrUrl1.protocol() == "file" ) {
         path1 = svn_path_canonicalize( apr_pstrdup( subpool, m_pathOrUrl1.path().toUtf8() ), subpool );
     } else {
@@ -1135,7 +1135,7 @@ void SvnCopyJob::run()
     setTerminationEnabled( true );
     apr_pool_t *subpool = svn_pool_create( pool() );
     svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
-    
+
     svn_opt_revision_t rev = d->m_srcRev.revision();
 
     svn_error_t *err = svn_client_copy2( &commit_info,
@@ -1143,7 +1143,7 @@ void SvnCopyJob::run()
                                          &rev,
                                          d->m_dstPathOrUrl.pathOrUrl().toUtf8(),
                                          ctx(), subpool);
-    
+
     if( err ){
         setErrorMsgExt( err );
         svn_pool_destroy( subpool );
@@ -1183,13 +1183,13 @@ void SvnMoveJob::run()
     setTerminationEnabled( true );
     apr_pool_t *subpool = svn_pool_create( pool() );
     svn_commit_info_t *commit_info = svn_create_commit_info( subpool );
-    
+
     svn_error_t *err = svn_client_move3( &commit_info,
                                          d->m_srcPathOrUrl.pathOrUrl().toUtf8(),
                                          d->m_dstPathOrUrl.pathOrUrl().toUtf8(),
                                          d->m_force,
                                          ctx(), subpool);
-    
+
     if( err ){
         setErrorMsgExt( err );
         svn_pool_destroy( subpool );

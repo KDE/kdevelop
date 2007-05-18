@@ -53,7 +53,7 @@ void SvnCommitLogInputDlg::setCommitItems( apr_array_header_t *cis )
             prop_mod = 'L';
 
         QString oneRow;
-        oneRow = oneRow + text_mod + " " + prop_mod + " " + path;
+        oneRow = oneRow + text_mod + ' ' + prop_mod + ' ' + path;
         listWidget->addItem( oneRow );
     }
 }

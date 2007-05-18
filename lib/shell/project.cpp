@@ -255,7 +255,7 @@ bool Project::open( const KUrl& projectFileUrl )
     else
     {
         KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "project importing plugin (%1) doesn't support the IProjectFileManager interface.", managerSetting ) );
+                            i18n( "project importing plugin (%1) does not support the IProjectFileManager interface.", managerSetting ) );
         delete d->manager;
         d->manager = 0;
         return false;
@@ -287,7 +287,7 @@ void Project::close()
                 Core::self()->uiControllerInternal()->activeMainWindow() ) )
     {
         KMessageBox::sorry( Core::self()->uiControllerInternal()->activeMainWindow(),
-                    i18n("Couldn't store developer specific project configuration.\n"
+                    i18n("Could not store developer specific project configuration.\n"
                          "Attention: The project settings you changed will be lost."
                     ) );
     }

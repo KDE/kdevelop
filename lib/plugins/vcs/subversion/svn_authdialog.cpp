@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "svn_authdialog.h"
 #include <QTreeWidgetItem>
 #include <svn_auth.h>
@@ -44,13 +44,13 @@ void SvnSSLTrustDialog::setFailedReasons( unsigned int failures )
     if( failures & SVN_AUTH_SSL_NOTYETVALID )
         errs += i18n("Certificate is not yet valid");
     if( failures & SVN_AUTH_SSL_EXPIRED )
-        errs += "\n" + i18n("Certificate has expired.");
+        errs += '\n' + i18n("Certificate has expired.");
     if( failures & SVN_AUTH_SSL_CNMISMATCH )
-        errs += "\n" + i18n("Certificate's CN (hostname) does not match the remote hostname.");
+        errs += '\n' + i18n("Certificate's CN (hostname) does not match the remote hostname.");
     if( failures & SVN_AUTH_SSL_UNKNOWNCA )
-        errs += "\n" + i18n("Certificate authority is unknown");
+        errs += '\n' + i18n("Certificate authority is unknown");
     if( failures & SVN_AUTH_SSL_OTHER )
-        errs += "\n" + i18n("Other unknown failures");
+        errs += '\n' + i18n("Other unknown failures");
     reasonLabel->setText( errs );
 }
 void SvnSSLTrustDialog::setCertInfos( const svn_auth_ssl_server_cert_info_t *ci )
@@ -78,7 +78,7 @@ void SvnSSLTrustDialog::setCertInfos( QString hostname,
     list5 << "Issuer Name" << issuerName;
     QStringList list6;
     list6 << "Ascii Cert" << ascii_cert;
-    
+
     QTreeWidgetItem *item1 = new QTreeWidgetItem((QTreeWidget*)0, list1);
     items.append(item1);
     QTreeWidgetItem *item2 = new QTreeWidgetItem((QTreeWidget*)0, list2);
@@ -127,7 +127,7 @@ void SvnLoginDialog::setRealm( QString &realm )
 {
     QString msg;
     msg = i18n("ID and Password for the following repository");
-    msg = msg + "\n\n" + realm + "\n";
+    msg = msg + "\n\n" + realm + '\n';
     realmLabel->setText( msg );
 }
 
