@@ -69,6 +69,8 @@ public:
     QMap<QString, QString> m_titles;
     QStringList m_ids;
     QMap<QString, QQueue<OutputViewCommand*> > m_jobs;
+    // command model can live longer than command itself.
+    QMap<QString, QStandardItemModel* > m_cmdModels;
 };
 
 SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
@@ -89,6 +91,8 @@ SimpleOutputView::~SimpleOutputView()
 {
     foreach( QStandardItemModel* m, d->m_models )
         delete m;
+    foreach( QStandardItemModel* m, d->m_cmdModels )
+        delete m;
     foreach( QQueue< OutputViewCommand* > queue, d->m_jobs )
     {
         foreach( OutputViewCommand* cmd, queue )
@@ -107,10 +111,24 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     QString title = command.first();
     // todo: when all the outputviews using this model are closed by user, delete this model
     // maybe use KSharedPtr or something.. 
-    QStandardItemModel* model = new QStandardItemModel(this);
-    OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, model );
+    OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, 0 );
     if( !d->m_jobs.contains(title) )
     {
+        // set model into command. Model lives longer than command, so although the command
+        // doesn't exist, model may exist. 
+        QStandardItemModel *model = 0;
+        if( d->m_cmdModels.contains(title) )
+        {
+            model = d->m_cmdModels[title]; // reuse the previous model.
+            model->clear();
+        }
+        else
+        {
+            model = new QStandardItemModel(this);
+            d->m_cmdModels.insert( title, model );
+        }
+        cmd->setModel( model );
+        
         connect( cmd, SIGNAL( commandFinished( const QString& ) ),
                  this, SIGNAL( commandFinished( const QString& ) ) );
         connect( cmd, SIGNAL( commandFailed( const QString& ) ),
@@ -125,6 +143,9 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     }
     else
     {
+        // If there are pending command named "title", there should exist model named "title" as well.
+        QStandardItemModel *model = d->m_cmdModels[title];
+        cmd->setModel( model );
         // Append m_job. When the job named "title" is finished, completed job will be removed
         // and this new job will get started by slotCommandFinished/Failed()
         d->m_jobs[title].enqueue( cmd );

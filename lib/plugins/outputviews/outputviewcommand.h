@@ -36,7 +36,7 @@ class OutputViewCommand : public QObject
 Q_OBJECT
 public:
     OutputViewCommand( const KUrl& workdir, const QStringList& command,
-                       const QMap<QString, QString>& env, QStandardItemModel* model = NULL );
+                       const QMap<QString, QString>& env, QStandardItemModel* model = 0 );
     virtual ~OutputViewCommand();
     virtual void start();
 
