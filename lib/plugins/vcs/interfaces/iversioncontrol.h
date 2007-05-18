@@ -15,10 +15,10 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
 */
 #ifndef IVERSIONCONTROL_H
 #define IVERSIONCONTROL_H
@@ -167,7 +167,7 @@ public:
  *  @param ctxMenu The reference to QMenu to be filled out by VCS plugins
  */
     virtual void fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu ) = 0;
-    
+
 /** Same with above, except that this accepts ProjectBaseitem&
  *  @param prjItem The Project Item for which the context menu was requested
  *  @param ctxMenu The reference to QMenu to be filled out by VCS plugins

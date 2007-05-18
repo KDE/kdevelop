@@ -38,7 +38,7 @@ class KDEVPLATFORMEDITOR_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
     DocumentRange(const KUrl& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
-    DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
+    explicit DocumentRange(const KUrl& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
     DocumentRange(const DocumentRange& copy);
     virtual ~DocumentRange();
 

@@ -46,7 +46,7 @@ class KDEVPLATFORMSHELL_EXPORT MainWindow: public Sublime::MainWindow {
     friend class UiController;
     Q_OBJECT
 public:
-    MainWindow( Sublime::Controller *parent = 0, Qt::WFlags flags = KDE_DEFAULT_WINDOWFLAGS );
+    explicit MainWindow( Sublime::Controller *parent = 0, Qt::WFlags flags = KDE_DEFAULT_WINDOWFLAGS );
     virtual ~MainWindow();
 
     //FIXME document this
@@ -64,7 +64,7 @@ protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
     virtual bool queryClose();
 
-protected slots:
+protected Q_SLOTS:
     virtual void loadSettings();
     virtual void saveSettings();
 protected:

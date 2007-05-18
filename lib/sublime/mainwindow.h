@@ -60,7 +60,7 @@ public:
     };
 
     /**Creates a mainwindow and adds it to the controller.*/
-    MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
+    explicit MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
     ~MainWindow();
 
     /**@return the menu to switch areas within this mainwindow.*/

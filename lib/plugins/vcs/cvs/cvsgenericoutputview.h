@@ -22,17 +22,17 @@ class CvsJob;
 
 /**
  * Shows plain text.
- * 
+ *
  * Text can either be added directly by calling appendText().
- * 
+ *
  * Or by connecting a job's result() signal to slotJobFinished().
- * 
+ *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
 class CvsGenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
     Q_OBJECT
 public:
-    CvsGenericOutputView(CvsPart *part, CvsJob* job=0, QWidget* parent=0);
+    explicit CvsGenericOutputView(CvsPart *part, CvsJob* job=0, QWidget* parent=0);
     virtual ~CvsGenericOutputView();
 
 public slots:

@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>ImportDialogBase</class>
- <widget class="QDialog" name="ImportDialogBase" >
+ <widget class="KDialog" name="ImportDialogBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

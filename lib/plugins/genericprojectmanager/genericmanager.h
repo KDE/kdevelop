@@ -40,7 +40,7 @@ class GenericProjectManager: public KDevelop::IPlugin, public KDevelop::IProject
     Q_OBJECT
     Q_INTERFACES( KDevelop::IProjectFileManager )
 public:
-    GenericProjectManager( QObject *parent = 0,
+    explicit GenericProjectManager( QObject *parent = 0,
                      const QStringList &args = QStringList() );
     virtual ~GenericProjectManager();
 

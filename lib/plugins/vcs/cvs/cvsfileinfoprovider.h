@@ -23,24 +23,24 @@ class CvsProxy;
 /**
  * The CvsFileInfoProvider allows to request status information about
  * files in a CVS managed directory.
- * 
+ *
  * The retrieving of the file infos can be done either async of sync.
  * @see requestStatusASync()
  * @see requestStatusSync()
- * 
+ *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
 class CvsFileInfoProvider : public QObject
 {
     Q_OBJECT
 public:
-    CvsFileInfoProvider(CvsProxy* proxy, QObject* parent=0);
+    explicit CvsFileInfoProvider(CvsProxy* proxy, QObject* parent=0);
     virtual ~CvsFileInfoProvider();
 
     /**
      * Retrieves the file infos async.
      * @param directory This directory will be searched for CVS managed files
-     * @return true if the job has been started. In such a case the caller needs to 
+     * @return true if the job has been started. In such a case the caller needs to
      *         connect to the statusReady() to be informed when the operation finished
      */
     bool requestStatusASync( const KUrl& directory, KDevelop::IVersionControl::WorkingMode mode );

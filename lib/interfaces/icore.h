@@ -72,7 +72,7 @@ public:
     virtual IDocumentController *documentController() = 0;
 
 protected:
-    ICore(QObject *parent = 0) { Q_UNUSED(parent) };
+    ICore(QObject *parent = 0);
 
 };
 

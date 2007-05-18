@@ -24,4 +24,9 @@ ICore::~ICore()
 {
 }
 
+ICore::ICore(QObject* parent )
+{
+    Q_UNUSED(parent)
+}
+
 }

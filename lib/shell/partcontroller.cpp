@@ -52,8 +52,6 @@ namespace KDevelop
 
 PartController::PartController(Core *core, QWidget *toplevel)
         : KParts::PartManager( toplevel, 0 ),
-        m_editor( QString::null ),
-        m_textTypes( QStringList() ),
         m_core(core)
 {
     //Cache this as it is too expensive when creating parts

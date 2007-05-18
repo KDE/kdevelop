@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef SVN_COMMITWIDGETS_H
 #define SVN_COMMITWIDGETS_H
 
@@ -22,7 +22,7 @@ namespace KDevelop
     class VcsFileInfo;
 }
 
-class SvnCommitLogInputDlg : public QDialog, public Ui::SvnCommitLogInputDlg
+class SvnCommitLogInputDlg : public KDialog, public Ui::SvnCommitLogInputDlg
 {
 //     Q_OBJECT
     public:
@@ -31,12 +31,12 @@ class SvnCommitLogInputDlg : public QDialog, public Ui::SvnCommitLogInputDlg
 
         void setCommitItems( apr_array_header_t *cis );
         QString message();
-    
+
     private:
         apr_array_header_t *m_commit_items;
 };
 
-class SvnCommitOptionDlg : public QDialog, public Ui::SvnCommitOptionDlg
+class SvnCommitOptionDlg : public KDialog, public Ui::SvnCommitOptionDlg
 {
     Q_OBJECT
 public:
@@ -46,7 +46,7 @@ public:
     KUrl::List checkedUrls();
     bool recursive();
     bool keepLocks();
-        
+
 public slots:
     int exec();
 private:

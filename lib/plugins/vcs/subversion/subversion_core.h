@@ -39,7 +39,7 @@ class SubversionCore : public QObject
 {
     Q_OBJECT
 public:
-    SubversionCore( KDevSubversionPart *part, QObject *parent = 0 );
+    explicit SubversionCore( KDevSubversionPart *part, QObject *parent = 0 );
     virtual ~SubversionCore();
 
     // not used anymore
@@ -57,7 +57,7 @@ public:
                         bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
     void spawnBlameThread( const KUrl &url, bool repositBlame,
                     const SvnRevision &rev1, const SvnRevision &rev2 );
-    
+
     /// Creates job. Starts it ASynchronously. Also returns the running job.
     const SvnKJobBase* spawnStatusThread( const KUrl &wcPath, const SvnRevision &rev,
                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals );
@@ -86,7 +86,7 @@ public:
 
     void spawnMoveThread( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force );
 
-    
+
 protected Q_SLOTS:
     /// slot for logview only. Logview is the testbed whenever a big change happens.
     /// so keep logview, slotresult separately
@@ -112,11 +112,11 @@ protected:
     /// as SSL-trust, ID-PWD dialog, commit-message and so on.
     /// Please keep in mind that only main GUI thread can handle QWidgets.
     virtual void customEvent( QEvent * event );
-    
+
 private:
     /// Attach the job to UiServer
     void initProgressDlg( SvnKJobBase *job );
-    
+
     KDevSubversionPart *m_part;
     KDevSubversionView *m_view;
 	KUiServerJobTracker *m_uiServer;

@@ -39,7 +39,7 @@ namespace KDevelop
 class KDEVPLATFORMEDITOR_EXPORT DocumentCursor : public KTextEditor::Cursor
 {
 public:
-    DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
+    explicit DocumentCursor(const KUrl& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
     ~DocumentCursor();
 
     enum Position {

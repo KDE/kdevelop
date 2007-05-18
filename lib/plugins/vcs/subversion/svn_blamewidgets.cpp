@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "svn_blamewidgets.h"
 #include <QListWidget>
 #include <QGridLayout>
@@ -19,9 +19,9 @@ SvnBlameWidget::SvnBlameWidget(QWidget *parent)
     : QWidget(parent), Ui::SvnBlameWidget()
 {
     Ui::SvnBlameWidget::setupUi(this);
-    
+
     m_item = new BlameItem();
-        
+
     m_blameModel= new BlameTreeModel(m_item);
     treeView->setModel( m_blameModel );
     treeView->setSortingEnabled(true);
@@ -46,11 +46,11 @@ void SvnBlameWidget::refreshWithNewData( QList<SvnBlameHolder> datalist )
 /////////////////////////////////////////////////////////////////////////////
 
 SvnBlameFileSelectDlg::SvnBlameFileSelectDlg( QWidget *parent )
-    : QDialog( parent )
+    : KDialog( parent )
 {
     m_selected = "";
     setWindowTitle( i18n("Select one file to view annotation") );
-    
+
     m_layout = new QGridLayout( this );
     m_listWidget = new QListWidget( this );
     m_okBtn = new QPushButton( i18n("OK"), this );
@@ -58,7 +58,7 @@ SvnBlameFileSelectDlg::SvnBlameFileSelectDlg( QWidget *parent )
     m_layout->addWidget( m_listWidget, 0, 0, 1, -1 );
     m_layout->addWidget( m_okBtn, 1, 0 );
     m_layout->addWidget( m_cancelBtn, 1, 1 );
-    
+
     connect( m_okBtn, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( m_cancelBtn, SIGNAL(clicked()), this, SLOT(reject()) );
 }

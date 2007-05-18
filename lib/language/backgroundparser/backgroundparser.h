@@ -61,7 +61,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject
 {
     Q_OBJECT
 public:
-    BackgroundParser(ILanguageSupport *languageSupport, QObject* parent = 0 );
+    explicit BackgroundParser(ILanguageSupport *languageSupport, QObject* parent = 0 );
     virtual ~BackgroundParser();
 
     /**

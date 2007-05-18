@@ -44,7 +44,7 @@ class LogView : public QWidget, private Ui::LogViewBase
 {
 Q_OBJECT
 public:
-    LogView(CvsPart* part, CvsJob* job=0, QWidget *parent = 0);
+    explicit LogView(CvsPart* part, CvsJob* job=0, QWidget *parent = 0);
     virtual ~LogView();
 
     /**
@@ -53,14 +53,14 @@ public:
      * @param jobOutput Pass in the plain output of a @code cvs log @endcode job
      * @param revisions Will be filled with all revision infos found in @p jobOutput
      */
-    static void parseOutput(const QString& jobOutput, 
+    static void parseOutput(const QString& jobOutput,
                         QList<CvsRevision>& revisions);
 
 private slots:
     /**
      * Connect a job's result() signal to this slot. When called, the output from the job
      * will be passed to the parseOutput() method and all found revisions will be displayed.
-     * @note If you pass a CvsJob object to the ctor, it's result() signal 
+     * @note If you pass a CvsJob object to the ctor, it's result() signal
      *       will automatically be connected to this slot.
      */
     void slotJobFinished(KJob* job);

@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>CheckoutDialogBase</class>
- <widget class="QDialog" name="CheckoutDialogBase" >
+ <widget class="KDialog" name="CheckoutDialogBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

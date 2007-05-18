@@ -65,7 +65,7 @@ public:
     KParts::Part* createPart( const QString &mimeType,
                               const QString &partType,
                               const QString &className,
-                              const QString &preferredName = QString::null );
+                              const QString &preferredName = QString() );
 
     virtual void removePart( KParts::Part *part);
 
@@ -85,7 +85,7 @@ protected:
 private:
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
-                                      const QString &preferredName = QString::null );
+                                      const QString &preferredName = QString() );
     QString m_editor;
     QStringList m_textTypes;
 

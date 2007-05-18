@@ -43,7 +43,7 @@ class CodeModel;
 class KDEVPLATFORM_EXPORT CodeItem: public ItemCollection, public KTextEditor::SmartRangeWatcher
 {
 public:
-    CodeItem( const QString &name, ItemGroup *parent = 0 );
+    explicit CodeItem( const QString &name, ItemGroup *parent = 0 );
     virtual ~CodeItem();
 
     virtual CodeItem *itemAt( int index ) const;

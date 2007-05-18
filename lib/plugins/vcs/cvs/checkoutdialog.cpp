@@ -18,7 +18,7 @@
 #include "cvsproxy.h"
 
 CheckoutDialog::CheckoutDialog(CvsPart* part, QWidget *parent)
-    : QDialog(parent), Ui::CheckoutDialogBase(), m_part(part)
+    : KDialog(parent), Ui::CheckoutDialogBase(), m_part(part)
 {
     Ui::CheckoutDialogBase::setupUi(this);
 
@@ -73,7 +73,7 @@ void CheckoutDialog::jobFinished(KJob * job)
 
 
     if (error) {
-        KMessageBox::error(this, 
+        KMessageBox::error(this,
             i18n("Some errors occured while checking out into") + localWorkingDir->url().path(),
             i18n("Checkout Error"));
     } else {

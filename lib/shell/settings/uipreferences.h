@@ -35,7 +35,7 @@ class UiPreferences : public KCModule
 {
 
     public:
-        UiPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
+        explicit UiPreferences(QWidget* parent = 0, const QStringList& args = QStringList());
 
         ~UiPreferences();
 

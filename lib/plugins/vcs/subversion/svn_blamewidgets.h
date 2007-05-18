@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef SVN_BLAMEWIDGET_H
 #define SVN_BLAMEWIDGET_H
 
@@ -31,7 +31,7 @@ private:
     BlameTreeModel *m_blameModel;
 };
 
-class SvnBlameFileSelectDlg : public QDialog {
+class SvnBlameFileSelectDlg : public KDialog {
     Q_OBJECT
 public:
     SvnBlameFileSelectDlg( QWidget *parent = 0L );

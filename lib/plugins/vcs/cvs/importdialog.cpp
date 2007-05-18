@@ -18,7 +18,7 @@
 #include "cvsjob.h"
 
 ImportDialog::ImportDialog(CvsPart* part, const KUrl& url, QWidget *parent)
-    : QDialog(parent), Ui::ImportDialogBase(), m_url(url), m_part(part)
+    : KDialog(parent), Ui::ImportDialogBase(), m_url(url), m_part(part)
 {
     Ui::ImportDialogBase::setupUi(this);
 
@@ -31,11 +31,11 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    CvsJob *job = m_part->proxy()->import(m_url, 
-                            repository->text(), 
-                            module->text(), 
-                            vendorTag->text(), 
-                            releaseTag->text(), 
+    CvsJob *job = m_part->proxy()->import(m_url,
+                            repository->text(),
+                            module->text(),
+                            vendorTag->text(),
+                            releaseTag->text(),
                             comment->text());
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
@@ -75,7 +75,7 @@ void ImportDialog::jobFinished(KJob * job)
     }
 
     if (error) {
-        KMessageBox::error(this, 
+        KMessageBox::error(this,
             i18n("Some errors occured while importing") + m_url.path(),
             i18n("Import Error"));
     } else {

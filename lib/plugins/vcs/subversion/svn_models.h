@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef SVN_MODELS_H
 #define SVN_MODELS_H
 
@@ -41,7 +41,7 @@ public:
 class SvnLogHolder : public SvnGenericHolder {
 public:
     virtual QVariant variant(int col);
-    
+
     long int rev;
     QString author;
     QString date;
@@ -113,10 +113,10 @@ public:
 //     int rowCount();
 //     QVariant data( int row, int col );
 //     void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
-// 
+//
 //     QList<SvnBlameHolder> m_itemList;
 // };
-// 
+//
 // /** data repository for Logview-fetched data
 //  */
 // class LogItem : public TreeItemIface {
@@ -131,7 +131,7 @@ public:
 // //     static bool intLessThan( SvnGenericHolder &h1, SvnGenericHolder &h2 );
 // //     static bool intGreaterThan( SvnGenericHolder &h1, SvnGenericHolder &h2 );
 //     void sort(  int column, Qt::SortOrder order = Qt::AscendingOrder );
-//             
+//
 //     QList<SvnLogHolder> m_itemList;
 // };
 template <class T>
@@ -144,7 +144,7 @@ public:
     int rowCount();
     QVariant data( int row, int col );
     void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
-    
+
 protected:
     QList< T > m_itemList;
 };
@@ -161,12 +161,12 @@ class ParentlessTreeModel: public QAbstractItemModel
 {
     Q_OBJECT
 public:
-//     ParentlessTreeModel( TreeItemIface *item, QObject *parent = 0 ):QAbstractItemModel(parent)
+//     explicit ParentlessTreeModel( TreeItemIface *item, QObject *parent = 0 ):QAbstractItemModel(parent)
 //     {
 //         rootItem = item;
 //     }
     virtual ~ParentlessTreeModel(){}
-    
+
 // implementing pure virtual methods.
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const = 0;
     virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const = 0 ;
@@ -177,7 +177,7 @@ public:
     QModelIndex parent( const QModelIndex &parent=QModelIndex()) const;
 
     void sort ( int column, Qt::SortOrder order = Qt::AscendingOrder )= 0;
-    
+
 // item updating methods
     //void setHolderList(QList<SvnGenericHolder> datalist);
     //void setNewItem( TreeItemIface* newItem );
@@ -191,7 +191,7 @@ protected:
 class BlameTreeModel : public ParentlessTreeModel {
     Q_OBJECT
 public:
-    BlameTreeModel( BlameItem *item, QObject *parent=0 );
+    explicit BlameTreeModel( BlameItem *item, QObject *parent=0 );
     virtual ~BlameTreeModel();
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const ;
@@ -208,13 +208,13 @@ protected:
 class LogviewTreeModel : public ParentlessTreeModel {
     Q_OBJECT
 public:
-    LogviewTreeModel( LogItem *item, QObject *parent = 0 );
+    explicit LogviewTreeModel( LogItem *item, QObject *parent = 0 );
     virtual ~LogviewTreeModel();
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const ;
     virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const ;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    
+
     void sort ( int column, Qt::SortOrder order = Qt::AscendingOrder );
     /// on error, return -1
     long revision( const QModelIndex &index ) const;
@@ -227,14 +227,14 @@ protected:
 class LogviewDetailedModel : public QAbstractListModel {
     Q_OBJECT
 public:
-    LogviewDetailedModel( LogItem *item, QObject *parent = 0 );
+    explicit LogviewDetailedModel( LogItem *item, QObject *parent = 0 );
     virtual ~LogviewDetailedModel();
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const ;
-    
+
 public Q_SLOTS:
     void setNewRevision( const QModelIndex &index );
-    
+
 protected:
     int m_activeRow;
     QList<QString> m_pathlist;

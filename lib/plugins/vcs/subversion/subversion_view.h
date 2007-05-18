@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef KDEVSUBVERSIONVIEW_H
 #define KDEVSUBVERSIONVIEW_H
 
@@ -34,19 +34,19 @@ class KDevSubversionView : public QWidget/*, public Ui::SvnLogviewWidget*/ {
 public:
     KDevSubversionView(KDevSubversionPart *part, QWidget* parent);
     virtual ~KDevSubversionView();
-    
+
 public Q_SLOTS:
     void printNotification( QString msg );
     void printLog( SvnKJobBase *job );
     void printBlame( SvnKJobBase *job );
     void printDiff( SvnKJobBase *job );
     void slotJobFinished( SvnKJobBase *job );
-    void closeCurrentTab();    
+    void closeCurrentTab();
 private:
     KTabWidget *tab();
 
     KDevSubversionViewPrivate* const d;
-    
+
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,16 +56,16 @@ private:
 class SvnProgressDialog : public KDialog /*public QDialog, public Ui::SvnProgressDialog*/
 {
 public:
-    SvnProgressDialog( QWidget *parent, const QString &caption = QString() );
+    explicit SvnProgressDialog( QWidget *parent, const QString &caption = QString() );
     virtual ~SvnProgressDialog();
-    
+
     QProgressBar* progressBar();
     void setSource( const QString &src );
     void setDestination( const QString &dest );
 private:
 	class SvnProgressDialogPrivate;
 	SvnProgressDialogPrivate* const d;
-	
+
 };
 
 #endif

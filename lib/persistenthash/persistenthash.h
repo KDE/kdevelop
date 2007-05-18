@@ -69,7 +69,7 @@ class KDEVPLATFORM_EXPORT PersistentHash: public IPlugin, public IPersistentHash
     Q_OBJECT
     Q_INTERFACES( KDevelop::IPersistentHash )
 public:
-    PersistentHash( KInstance* instance, QObject *parent = 0 );
+    explicit PersistentHash( KInstance* instance, QObject *parent = 0 );
     virtual ~PersistentHash();
 
     void insertAST( const KUrl &url, AST* ast );

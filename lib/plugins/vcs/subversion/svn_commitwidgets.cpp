@@ -22,7 +22,7 @@
 using namespace KDevelop;
 
 SvnCommitLogInputDlg::SvnCommitLogInputDlg( QWidget *parent )
-    : QDialog( parent ), Ui::SvnCommitLogInputDlg()
+    : KDialog( parent ), Ui::SvnCommitLogInputDlg()
 {
     Ui::SvnCommitLogInputDlg::setupUi( this );
 //     m_commit_items = commit_items;
@@ -65,7 +65,7 @@ QString SvnCommitLogInputDlg::message()
 //////////////////////////////////////////////////////////////////////
 
 SvnCommitOptionDlg::SvnCommitOptionDlg( KDevSubversionPart *part, QWidget *parent )
-    : QDialog( parent ), Ui::SvnCommitOptionDlg()
+    : KDialog( parent ), Ui::SvnCommitOptionDlg()
     , m_part(part)
 {
     Ui::SvnCommitOptionDlg::setupUi(this);

@@ -59,7 +59,7 @@ public:
     /**@return the list of documents created in this controller.*/
     QList<Document*> &documents() const;
 
-public slots:
+public Q_SLOTS:
     //@todo adymo: this should not be a part of public API
     /**Area can connect to this slot to release itself from its mainwindow.*/
     void areaReleased();

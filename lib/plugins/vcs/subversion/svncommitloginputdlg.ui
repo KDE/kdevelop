@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>SvnCommitLogInputDlg</class>
- <widget class="QDialog" name="SvnCommitLogInputDlg" >
+ <widget class="KDialog" name="SvnCommitLogInputDlg" >
   <property name="geometry" >
    <rect>
     <x>0</x>

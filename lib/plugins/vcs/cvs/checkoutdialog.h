@@ -25,11 +25,11 @@ class CvsPart;
  * Allows the user to define from where to checkout
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CheckoutDialog : public QDialog, private Ui::CheckoutDialogBase
+class CheckoutDialog : public KDialog, private Ui::CheckoutDialogBase
 {
     Q_OBJECT
 public:
-    CheckoutDialog(CvsPart* part, QWidget *parent=0);
+    explicit CheckoutDialog(CvsPart* part, QWidget *parent=0);
     virtual ~CheckoutDialog();
 
 public slots:

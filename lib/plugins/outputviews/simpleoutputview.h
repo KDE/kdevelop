@@ -41,7 +41,7 @@ Q_OBJECT
 Q_INTERFACES( KDevelop::IOutputView )
 
 public:
-    SimpleOutputView(QObject *parent = 0, const QStringList &args = QStringList());
+    explicit SimpleOutputView(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~SimpleOutputView();
     void queueCommand(const KUrl& dir, const QStringList& command, const QMap<QString, QString>& env );
 
@@ -66,7 +66,7 @@ private Q_SLOTS:
 private:
     void cleanupTerminatedJobs( const QString& id );
     void startNextPendingJob( const QString& id );
-    
+
     class SimpleOutputViewPrivate* const d;
     friend class SimpleOutputViewPrivate;
 };

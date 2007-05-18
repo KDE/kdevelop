@@ -25,7 +25,7 @@ class CvsPart;
  * a CVS repository
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class ImportDialog : public QDialog, private Ui::ImportDialogBase
+class ImportDialog : public KDialog, private Ui::ImportDialogBase
 {
     Q_OBJECT
 public:
