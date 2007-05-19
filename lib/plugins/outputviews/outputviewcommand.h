@@ -30,13 +30,15 @@ class QStandardItemModel;
 class K3Process;
 class ProcessLineMaker;
 template <typename T1, typename T2> class QMap;
+class IOutputViewItemFactory;
 
 class OutputViewCommand : public QObject
 {
 Q_OBJECT
 public:
     OutputViewCommand( const KUrl& workdir, const QStringList& command,
-                       const QMap<QString, QString>& env, QStandardItemModel* model = 0 );
+                       const QMap<QString, QString>& env, QStandardItemModel* model = 0,
+                       IOutputViewItemFactory *factory = 0 );
     virtual ~OutputViewCommand();
     virtual void start();
 
@@ -56,6 +58,7 @@ public:
         ProcessLineMaker *m_procLineMaker;
         QStandardItemModel* m_model;
         QString m_command;
+        IOutputViewItemFactory *m_factory;
 };
 
 

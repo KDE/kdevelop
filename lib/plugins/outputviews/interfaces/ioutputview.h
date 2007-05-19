@@ -26,6 +26,7 @@
 class KUrl;
 class QString;
 template <typename T1, typename T2> class QMap;
+class IOutputViewItemFactory;
 
 /**
 @author Andreas Pakulat
@@ -56,8 +57,15 @@ public:
     /**
      * Execute the Command in a K3Process and capture the output in
      * a new tab with the command as title
+     * 
+     * @param factory Custom factory that will process output strings from KProcess and
+     * create corresponding IOutputViewItem subclasses. Note that factory objected
+     * handed to queueCommand() will be deleted after the command finishes. So the
+     * caller of this method shouldn't delete or reuse it.
+     * When null, use default factory.
      */
-    virtual void queueCommand( const KUrl& workingdir, const QStringList&, const QMap<QString, QString>& ) = 0;
+    virtual void queueCommand( const KUrl& workingdir, const QStringList&, const QMap<QString, QString>&,
+                               IOutputViewItemFactory *factory = 0 ) = 0;
 
     /**
      * Register a new Tab for Outputting logging information, this can be used

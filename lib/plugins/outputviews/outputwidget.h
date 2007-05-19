@@ -23,11 +23,12 @@
 
 #include <ktabwidget.h>
 #include <QtCore/QMap>
-class QListView;
+#include <QtGui/QListView>
 class QStandardItemModel;
 class QString;
 class SimpleOutputView;
 class OutputViewCommand;
+class QModelIndex;
 
 class OutputWidget : public KTabWidget
 {
@@ -42,6 +43,22 @@ class OutputWidget : public KTabWidget
 
     private:
         QMap<QString, QListView*> m_listviews;
+};
+
+/** @class OutputListView
+ * Actual listview that will be embedded in OutputWidget's tab
+ * Subclassed to handle context-menu and item activation.
+ */
+class OutputListView : public QListView
+{
+    Q_OBJECT
+public:
+    OutputListView( QWidget* parent );
+    virtual ~OutputListView();
+
+protected Q_SLOTS:
+    void slotActivated( const QModelIndex& index );
+    void customContextMenuRequested( const QPoint & point );
 };
 
 #endif

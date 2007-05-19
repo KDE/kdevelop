@@ -20,10 +20,12 @@
 
 #include "outputwidget.h"
 #include "outputviewcommand.h"
+#include "ioutputviewitem.h"
 
 #include "simpleoutputview.h"
-#include <QtGui/QListView>
 #include <QtGui/QStandardItemModel>
+#include <kmenu.h>
+#include <kdebug.h>
 
 OutputWidget::OutputWidget(QWidget* parent, SimpleOutputView* view)
     : KTabWidget( parent )
@@ -56,7 +58,7 @@ void OutputWidget::addNewTab( OutputViewCommand* cmd )
     if( !m_listviews.contains( cmd->title() ) )
     {
         // create new listview, assign view's model.
-        QListView* listview = new QListView(this);
+        QListView* listview = new OutputListView(this);
         listview->setModel( cmd->model() );
 
         m_listviews[cmd->title()] = listview;
@@ -68,6 +70,60 @@ void OutputWidget::addNewTab( OutputViewCommand* cmd )
         QListView* listview = m_listviews[ cmd->title() ];
         listview->setModel( cmd->model() );
     }
+}
+
+//////////////////////////////////////////////////////////////////////
+
+OutputListView::OutputListView( QWidget* parent )
+    : QListView( parent )
+{
+//     setWordWrap( true ); // doesn't work!
+    setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( this, SIGNAL(customContextMenuRequested( const QPoint & )),
+             this, SLOT( customContextMenuRequested( const QPoint & ) ) );
+    connect( this, SIGNAL(activated( const QModelIndex& )),
+             this, SLOT(slotActivated( const QModelIndex& )) );
+    connect( this, SIGNAL(clicked( const QModelIndex& )),
+             this, SLOT(slotActivated( const QModelIndex& )) );
+}
+
+OutputListView::~OutputListView()
+{}
+
+void OutputListView::slotActivated( const QModelIndex& index )
+{
+    if( !index.isValid() )
+    {
+        kDebug(9004) << "contextMenu is invalid" << endl;
+        return;
+    }
+    QStandardItemModel *stdmodel = (QStandardItemModel*)model();
+    QStandardItem *stditem = stdmodel->itemFromIndex( index );
+    IOutputViewItem *outitem = dynamic_cast<IOutputViewItem*>( stditem );
+    Q_ASSERT( outitem );
+
+    outitem->activated();
+}
+
+void OutputListView::customContextMenuRequested( const QPoint & point )
+{
+    QModelIndex modelIndex = indexAt( point );
+    if( !modelIndex.isValid() )
+    {
+        kDebug(9004) << "contextMenu is invalid" << endl;
+        return;
+    }
+
+    QStandardItemModel *stdmodel = (QStandardItemModel*)model();
+    QStandardItem *stditem = stdmodel->itemFromIndex( modelIndex );
+    IOutputViewItem *outitem = dynamic_cast<IOutputViewItem*>( stditem );
+    Q_ASSERT(outitem);
+
+    QList<QAction*> actions = outitem->contextMenuActions();
+    KMenu menu( this );
+    menu.addActions( actions );
+
+    menu.exec( viewport()->mapToGlobal(point) );
 }
 
 #include "outputwidget.moc"

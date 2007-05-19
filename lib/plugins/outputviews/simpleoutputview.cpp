@@ -21,6 +21,7 @@
 #include "simpleoutputview.h"
 #include "outputwidget.h"
 #include "outputviewcommand.h"
+#include "ioutputviewitemfactory.h"
 
 #include <QtCore/QStringList>
 
@@ -103,7 +104,9 @@ SimpleOutputView::~SimpleOutputView()
     delete d;
 }
 
-void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command, const QMap<QString, QString>& env )
+void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
+                                    const QMap<QString, QString>& env,
+                                    IOutputViewItemFactory *factory)
 {
     if( command.isEmpty() )
         return;
@@ -111,7 +114,7 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     QString title = command.first();
     // todo: when all the outputviews using this model are closed by user, delete this model
     // maybe use KSharedPtr or something.. 
-    OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, 0 );
+    OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, 0, factory );
     if( !d->m_jobs.contains(title) )
     {
         // set model into command. Model lives longer than command, so although the command
@@ -223,6 +226,7 @@ void SimpleOutputView::cleanupTerminatedJobs( const QString& id )
     QQueue<OutputViewCommand*> &cmdQ = d->m_jobs[id];
     Q_ASSERT( cmdQ.isEmpty() == false );
     OutputViewCommand *cmd = cmdQ.dequeue();
+    cmd->disconnect();
     cmd->deleteLater();
     kDebug(9004) << "OutputViewCommand removed and deleteLater()ed " << (long)cmd << endl;
 

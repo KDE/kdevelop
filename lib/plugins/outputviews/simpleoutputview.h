@@ -30,6 +30,7 @@ class KUrl;
 class K3Process;
 class QString;
 class OutputViewCommand;
+class IOutputViewItemFactory;
 
 /**
 @author Andreas Pakulat
@@ -43,7 +44,8 @@ Q_INTERFACES( KDevelop::IOutputView )
 public:
     explicit SimpleOutputView(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~SimpleOutputView();
-    void queueCommand(const KUrl& dir, const QStringList& command, const QMap<QString, QString>& env );
+    void queueCommand(const KUrl& dir, const QStringList& command, const QMap<QString, QString>& env,
+                      IOutputViewItemFactory *factory = 0 );
 
     void registerLogView( const QString& id, const QString& title );
     void appendLine( const QString& id, const QString& line );
