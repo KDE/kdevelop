@@ -168,7 +168,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectItem: public ProjectBuildFolderItem
     protected:
         ProjectItem( ProjectItemPrivate& );
     private:
-        Q_DECLARE_PRIVATE(ProjectItem);
+        Q_DECLARE_PRIVATE(ProjectItem)
 };
 
 
@@ -208,7 +208,7 @@ public:
 protected:
     ProjectTargetItem( ProjectTargetItemPrivate& );
 private:
-    Q_DECLARE_PRIVATE(ProjectTargetItem);
+    Q_DECLARE_PRIVATE(ProjectTargetItem)
 };
 
 /**
