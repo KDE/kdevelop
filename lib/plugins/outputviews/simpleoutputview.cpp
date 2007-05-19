@@ -226,7 +226,6 @@ void SimpleOutputView::cleanupTerminatedJobs( const QString& id )
     QQueue<OutputViewCommand*> &cmdQ = d->m_jobs[id];
     Q_ASSERT( cmdQ.isEmpty() == false );
     OutputViewCommand *cmd = cmdQ.dequeue();
-    cmd->disconnect();
     cmd->deleteLater();
     kDebug(9004) << "OutputViewCommand removed and deleteLater()ed " << (long)cmd << endl;
 

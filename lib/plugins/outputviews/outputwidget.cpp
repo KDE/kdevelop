@@ -60,6 +60,8 @@ void OutputWidget::addNewTab( OutputViewCommand* cmd )
         // create new listview, assign view's model.
         QListView* listview = new OutputListView(this);
         listview->setModel( cmd->model() );
+        connect( cmd->model(), SIGNAL(rowsInserted( const QModelIndex &, int, int )),
+                 listview, SLOT(scrollToBottom()) );
 
         m_listviews[cmd->title()] = listview;
         addTab( listview, cmd->title() );
@@ -68,7 +70,11 @@ void OutputWidget::addNewTab( OutputViewCommand* cmd )
     {
         // reuse the same view.
         QListView* listview = m_listviews[ cmd->title() ];
+        disconnect( listview->model(), SIGNAL(rowsInserted( const QModelIndex &, int, int )),
+                    listview, SLOT(scrollToBottom()) );
         listview->setModel( cmd->model() );
+        connect( cmd->model(), SIGNAL(rowsInserted( const QModelIndex &, int, int )),
+                 listview, SLOT(scrollToBottom()) );
     }
 }
 
