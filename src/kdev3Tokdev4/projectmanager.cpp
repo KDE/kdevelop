@@ -55,7 +55,6 @@ class QDomDocument;
 #include <kstatusbar.h>
 #include <kiconloader.h>
 #include <kvbox.h>
-#include <ktoolbar.h>
 #include <krecentfilesaction.h>
 #include <ksettings/dialog.h>
 

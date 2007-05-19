@@ -55,7 +55,7 @@ void SplashScreen::animate()
 
 void SplashScreen::showMessage( const QString &str, int flags, const QColor &color )
 {
-    QSplashScreen::showMessage( str, flags, color );
+    KSplashScreen::showMessage( str, flags, color );
     animate();
     m_string = str;
 }
