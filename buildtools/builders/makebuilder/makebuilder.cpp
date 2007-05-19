@@ -19,6 +19,7 @@
 */
 
 #include "makebuilder.h"
+#include "makeitemfactory.h"
 #include <config.h>
 
 #include <QtCore/QStringList>
@@ -86,7 +87,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
 
             kDebug(9038) << "Starting build: " << cmd << " Build directory " << buildDir << endl;
-            view->queueCommand( buildDir, cmd, QMap<QString,QString>() );
+            view->queueCommand( buildDir, cmd, QMap<QString,QString>(), new MakeItemFactory(this) );
             return true;
         } // end of if(view)
     }

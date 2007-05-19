@@ -12,6 +12,8 @@ include_directories(
 
 set(kdevmakebuilder_LIB_SRCS
     makebuilder.cpp
+    makeitem.cpp
+    makeitemfactory.cpp
 )
 
 kde4_automoc(${kdevmakebuilder_LIB_SRCS})
@@ -20,7 +22,9 @@ target_link_libraries(kdevmakebuilder
         ${KDE4_KDECORE_LIBS}
         ${QT_QTDESIGNER_LIBRARY}
         kdevplatforminterfaces
-        kdevplatformproject )
+        kdevplatformproject
+        kdevoutputviewinterfaces
+)
 
 install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
