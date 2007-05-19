@@ -190,7 +190,6 @@ QList<KDevelop::ProjectTargetItem*> AutoMakeImporter::targets() const
     return QList<KDevelop::ProjectTargetItem*>();
 }
 
-#include "automakeimporter.h"
 // kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on;
 
 
