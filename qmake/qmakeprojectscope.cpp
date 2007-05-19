@@ -87,7 +87,7 @@ QList<QMakeProjectScope*> QMakeProjectScope::subProjects() const
             foreach( QString value, ast->values() )
             {
                 kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
-                if( value.trimmed().isEmpty() && value.trimmed() != "\\" )
+                if( !value.trimmed().isEmpty() && value.trimmed() != "\\" )
                 {
                     KUrl u = absoluteDirUrl();
                     u.adjustPath( KUrl::AddTrailingSlash );
@@ -119,7 +119,7 @@ KUrl::List QMakeProjectScope::files() const
             foreach( QString value, ast->values() )
             {
                 kDebug(9024) << k_funcinfo << "Found value: " << value << endl;
-                if( value.trimmed().isEmpty() && value.trimmed() != "\\" )
+                if( !value.trimmed().isEmpty() && value.trimmed() != "\\" )
                 {
                     KUrl u = absoluteDirUrl();
                     u.adjustPath( KUrl::AddTrailingSlash );
