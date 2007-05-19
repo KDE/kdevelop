@@ -176,7 +176,7 @@ public:
      * where matchNumber is zero-based
      * path: pathpart[/pathpart/..]
      */
-    static DomPath resolvPathStringExt(const QString pathstring);
+    static DomPath resolvPathStringExt(const QString& pathstring);
 
     /**
       Retrieve an element specified with extended path
@@ -211,27 +211,27 @@ public:
     /**
     * Open file @a filename and set setContents of @a doc
     */
-    static bool openDOMFile(QDomDocument &doc, QString filename);
+    static bool openDOMFile(QDomDocument &doc, const QString& filename);
 
     /**
     * Store contents of @a doc in file @a filename. Existing file will be truncated!
     */
-    static bool saveDOMFile(QDomDocument &doc, QString filename);
+    static bool saveDOMFile(QDomDocument &doc, const QString& filename);
 
     /**
     * Remove all child text nodes of parent described in pathExt
     */
-    static bool removeTextNodes(QDomDocument doc,QString pathExt);
+    static bool removeTextNodes(QDomDocument doc,const QString& pathExt);
 
     /**
     * Add child text node to parent described in pathExt
     */
-    static bool appendText(QDomDocument doc, QString pathExt, QString text);
+    static bool appendText(QDomDocument doc, const QString& pathExt, const QString& text);
 
     /**
     * Replace all chilt text nodes of parent described in pathExt with one new.
     */
-    static bool replaceText(QDomDocument doc, QString pathExt, QString text);
+    static bool replaceText(QDomDocument doc, const QString& pathExt, const QString& text);
 
 private:
     static QString readEntryAux(const QDomDocument &doc, const QString &path);

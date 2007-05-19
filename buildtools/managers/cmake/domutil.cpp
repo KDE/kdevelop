@@ -388,7 +388,7 @@ bool DomUtil::appendText(const QDomDocument& doc, const QString& pathExt, const 
 }
 
 
-bool DomUtil::replaceText(const QDomDocument& doc, QString pathExt, QString text)
+bool DomUtil::replaceText(const QDomDocument& doc, const QString& pathExt, const QString& text)
 {
   if (removeTextNodes(doc,pathExt) &&
       appendText(doc,pathExt,text))
