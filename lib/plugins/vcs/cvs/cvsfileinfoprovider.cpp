@@ -36,8 +36,8 @@ bool CvsFileInfoProvider::requestStatusASync(const KUrl & directory, KDevelop::I
                 this, SLOT( slotJobFinished(KJob*) ));
 
         // Mergind stdout and stderr is needed in this case, as K3Process will not emit the stderr signal
-        // immediatly when stderr output is received. As cvs tells directory changes via stderr, we would 
-        // be unable to tell wich part from the ouput to stdout belongs to which directory.
+        // immediately when stderr output is received. As cvs tells directory changes via stderr, we would
+        // be unable to tell which part from the output to stdout belongs to which directory.
         job->setCommunicationMode( K3Process::Stdout | K3Process::MergedStderr );
         job->start();
         return true;
@@ -150,7 +150,7 @@ void CvsFileInfoProvider::parseOutput(const QString & output, QList<KDevelop::Vc
     }
 }
 
-KDevelop::VcsFileInfo::VcsFileState CvsFileInfoProvider::String2EnumState(QString stateAsString)
+KDevelop::VcsFileInfo::VcsFileState CvsFileInfoProvider::String2EnumState(const QString& stateAsString)
 {
     if (stateAsString == "Up-to-date")
         return KDevelop::VcsFileInfo::Uptodate;

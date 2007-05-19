@@ -19,8 +19,8 @@
 #ifndef KDEVPROFILEENGINE_H
 #define KDEVPROFILEENGINE_H
 
-#include <QMap>
-#include <QList>
+#include <QtCore/QMap>
+#include <QtCore/QList>
 #include <kservicetypetrader.h>
 #include "profile.h"
 #include "plugincontroller.h"
@@ -135,7 +135,7 @@ public:
     /**@return The root profile. Root profile is always named "KDevelop" and it
     defines an empty list of plugins. Applications built on KDevelop platform
     will define nested profiles.*/
-    Profile *rootProfile() const { return m_rootProfile; }
+    Profile *rootProfile() const;
     /**Finds a profile with given name.
     @return The profile found or 0 if it does not exist.*/
     Profile *findProfile(const QString &profileName);
@@ -146,7 +146,7 @@ public:
     Operation is a class that have operator(Profile *).
     Example of operation class which is used to build a plain list of profiles:
     @code
-    class ProfileListing{
+    class ProfileListing{ //krazy:exclude-dpointer
     public:
         void operator() (Profile *profile)
         {
@@ -192,7 +192,7 @@ public:
     Example of operation class which is used to build a listview with items
     where each item represents a profile:
     @code
-    class ProfileListBuilding {
+    class ProfileListBuilding { //krazy:exclude-dpointer
     public:
         ProfileItem * operator() (ProfileItem *parent, Profile *profile)
         {
@@ -201,7 +201,7 @@ public:
         }
     };
 
-    class ProfileItem: public K3ListViewItem {
+    class ProfileItem: public K3ListViewItem { //krazy:exclude-dpointer
     public:
         ProfileItem(K3ListView *parent, Profile *profile)
             :K3ListViewItem(parent), m_profile(profile)
@@ -261,7 +261,7 @@ protected:
         const QString &profileName);
 
 private:
-    Profile *m_rootProfile;
+    class ProfileEnginePrivate* const d;
 };
 
 }

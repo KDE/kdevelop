@@ -17,6 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #include "mainwindow.h"
+#include "mainwindow_p.h"
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -27,7 +28,6 @@
 #include "view.h"
 #include "controller.h"
 #include "container.h"
-#include "mainwindow_p.h"
 
 namespace Sublime {
 

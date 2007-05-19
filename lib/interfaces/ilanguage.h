@@ -19,7 +19,7 @@
 #ifndef ILANGUAGE_H
 #define ILANGUAGE_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <kurl.h>
 
@@ -35,7 +35,7 @@ class BackgroundParser;
 
 class KDEVPLATFORMINTERFACES_EXPORT ILanguage: public QObject {
 public:
-    ILanguage(const QString &name, QObject *parent = 0);
+    explicit ILanguage(const QString &name, QObject *parent = 0);
     virtual ~ILanguage();
 
     QString name() const;

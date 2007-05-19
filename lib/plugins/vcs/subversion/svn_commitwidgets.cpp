@@ -148,7 +148,7 @@ bool SvnCommitOptionDlg::keepLocks()
 
 int SvnCommitOptionDlg::exec()
 {
-    return QDialog::exec();
+    return KDialog::exec();
 }
 
 void SvnCommitOptionDlg::insertRow( const KDevelop::VcsFileInfo &info )
@@ -159,7 +159,7 @@ void SvnCommitOptionDlg::insertRow( const KDevelop::VcsFileInfo &info )
     item->setCheckState(0, Qt::Checked);
 }
 
-void SvnCommitOptionDlg::insertRow( QString state, KUrl url )
+void SvnCommitOptionDlg::insertRow( const QString& state, const KUrl& url )
 {
     QStringList strings;
     strings << " " << state << url.prettyUrl();

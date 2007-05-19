@@ -280,7 +280,7 @@ bool ProjectController::closeProject( IProject* proj )
 
 //     Core::self()->documentController() ->closeAllDocuments();
 
-    // save the the project to open it automaticly on startup if needed
+    // save the the project to open it automatically on startup if needed
 //     d->m_lastProject = d->m_globalFile;
 
 //     d->m_name = QString::null;

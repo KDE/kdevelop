@@ -19,7 +19,7 @@
 #ifndef SUBLIMECONTAINER_H
 #define SUBLIMECONTAINER_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 #include <kdevexport.h>
 

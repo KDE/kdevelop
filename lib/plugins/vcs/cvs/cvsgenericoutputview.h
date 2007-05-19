@@ -36,7 +36,7 @@ public:
     virtual ~CvsGenericOutputView();
 
 public slots:
-    void appendText(QString text);
+    void appendText(const QString& text);
     void slotJobFinished(KJob* job);
 
 private:

@@ -29,10 +29,13 @@ class Document;
 /**Proxy class to allow descendants to create instances of View class.*/
 class SUBLIME_EXPORT ViewCreator {
 public:
+    ViewCreator();
     virtual ~ViewCreator();
 protected:
     /**Creates and returns the new view.*/
     virtual View *newView(Document *doc);
+private:
+    class ViewCreatorPrivate* const d;
 };
 
 }

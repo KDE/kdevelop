@@ -20,7 +20,7 @@
 #ifndef IDOCUMENTCONTROLLER_H
 #define IDOCUMENTCONTROLLER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <kurl.h>
 #include <ktexteditor/cursor.h>

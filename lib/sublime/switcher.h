@@ -19,7 +19,7 @@
 #ifndef SUBLIMESWITCHER_H
 #define SUBLIMESWITCHER_H
 
-#include <QComboBox>
+#include <QtGui/QComboBox>
 
 #include <kdevexport.h>
 
@@ -33,7 +33,8 @@ Q_OBJECT
 public:
     Switcher(QWidget *parent = 0);
     ~Switcher();
-
+private:
+    class SwitcherPrivate* const d;
 };
 
 }

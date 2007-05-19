@@ -65,7 +65,7 @@ public:
     void showSettingsDialog();
     Sublime::Controller* controller();
 private:
-    class UiControllerPrivate * const d;
+    class UiControllerPrivate* const d;
 };
 
 }

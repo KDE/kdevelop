@@ -54,23 +54,23 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
 {
     d->m_part = part;
     d->m_view = this;
-    
+
     d->m_tab = new KTabWidget(this);
     d->m_layout = new QVBoxLayout( this );
     d->m_layout->setMargin(0);
     d->m_layout->addWidget( tab() );
-    
+
     d->m_closeButton = new QPushButton( tab() );
     d->m_closeButton->setText( i18n("Close") );
     tab()->setCornerWidget( d->m_closeButton );
     connect( d->m_closeButton, SIGNAL(clicked()), this, SLOT(closeCurrentTab()) );
-    
+
     setObjectName( i18n( "Subversion" ) );
     setWhatsThis( i18n( "<b>Subversion</b><p>"
             "This window contains an embedded Subversion View Reusults." ) );
     setWindowIcon( KIcon( "subversion" ) );
     setWindowTitle( i18n( "subversion" ) );
-    
+
     connect( d->m_part->svncore(), SIGNAL(logFetched(SvnKJobBase*)),
              this, SLOT(printLog(SvnKJobBase*)) );
     connect( d->m_part->svncore(), SIGNAL(blameFetched(SvnKJobBase*)),
@@ -79,7 +79,7 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
              this, SLOT(printDiff(SvnKJobBase *)) );
     connect( d->m_part->svncore(), SIGNAL(jobFinished(SvnKJobBase*)),
              this, SLOT(slotJobFinished(SvnKJobBase*)) );
-    
+
     KDevelop::IPlugin* plugin =
         d->m_part->core()->pluginController()->pluginForExtension( "org.kdevelop.IOutputView" );
     if( plugin ){
@@ -89,7 +89,7 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
             connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),
                     this, SLOT(printNotification(QString)) );
         }
-        
+
     } else{
         d->m_outview = NULL;
     }
@@ -102,7 +102,7 @@ KDevSubversionView::~KDevSubversionView()
     delete d;
 }
 
-void KDevSubversionView::printNotification(QString msg)
+void KDevSubversionView::printNotification(const QString& msg)
 {
     if( !d->m_outview ){
         return;
@@ -146,17 +146,17 @@ void KDevSubversionView::printDiff( SvnKJobBase *job )
         KMessageBox::error( this, job->errorText(), "error" );
         return;
     }
-    
+
     SvnDiffJob *th = dynamic_cast<SvnDiffJob*>( job->svnThread() );
     if( !job ) return;
-    
+
     QFile file( th->out_name );
     if( !file.exists() ){
         KMessageBox::error( this, i18n("The output diff file cannot be located") );
         return;
     }
     // end of error check
-    
+
     KTextBrowser *widget = new KTextBrowser( tab() );
     if ( file.open( QIODevice::ReadOnly ) ) {
         QTextStream stream( &file );
@@ -167,7 +167,7 @@ void KDevSubversionView::printDiff( SvnKJobBase *job )
         }
         file.close();
     }
-    
+
     widget->setReadOnly( true );
     tab()->addTab( widget, i18n("Diff") );
     tab()->setCurrentIndex( tab()->indexOf(widget) );
@@ -266,7 +266,7 @@ SvnProgressDialog::SvnProgressDialog( QWidget *parent, const QString &caption )
 	d->sourceEdit->setSizePolicy( policy );
 	d->destEdit->setSizePolicy( policy );
 	d->m_progressBar->setSizePolicy( policy );
-	
+
 	setMainWidget(mainWidget);
 }
 

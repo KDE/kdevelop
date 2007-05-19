@@ -21,7 +21,7 @@
 
 #include "kdevexport.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <kurl.h>
 
 namespace KParts {

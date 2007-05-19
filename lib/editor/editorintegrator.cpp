@@ -24,7 +24,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include <kstaticdeleter.h>
+#include <kglobal.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartrange.h>
@@ -38,8 +38,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-static KStaticDeleter<EditorIntegratorPrivate> sd;
-EditorIntegratorPrivate* EditorIntegrator::s_data = 0;
+K_GLOBAL_STATIC( EditorIntegratorPrivate, s_data);
 
 EditorIntegrator::EditorIntegrator()
   : m_currentDocument(0)
@@ -327,11 +326,8 @@ void EditorIntegrator::releaseRange(KTextEditor::Range* range)
   }
 }
 
-EditorIntegratorPrivate * EditorIntegrator::data()
+KDevelop::EditorIntegratorPrivate * EditorIntegrator::data()
 {
-  if (!s_data)
-    sd.setObject(s_data, new EditorIntegratorPrivate());
-
   return s_data;
 }
 
@@ -344,11 +340,6 @@ void EditorIntegrator::exitCurrentRange()
     m_currentRange = m_currentRange->toSmartRange()->parentRange();
   else
     m_currentRange = static_cast<DocumentRange*>(m_currentRange)->parentRange();
-}
-
-void EditorIntegrator::initialise()
-{
-  data();
 }
 
 }

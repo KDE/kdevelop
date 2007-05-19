@@ -21,8 +21,8 @@ Boston, MA 02110-1301, USA.
 #ifndef IPROJECTCONTROLLER_H
 #define IPROJECTCONTROLLER_H
 
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 #include <kurl.h>
 #include "kdevexport.h"
 

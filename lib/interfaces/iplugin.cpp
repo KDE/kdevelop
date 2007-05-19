@@ -26,13 +26,13 @@
  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  Boston, MA 02110-1301, USA.
 */
+#include "iplugin.h"
 #include <kaction.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include "iplugin.h"
 #include "icore.h"
 #include "iplugincontroller.h"
 #include <QtDesigner/QExtensionFactory>

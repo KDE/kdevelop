@@ -91,7 +91,6 @@ void Core::initialize()
         return;
     m_self = new Core();
     m_self->d->initialize();
-    EditorIntegrator::initialise();
 }
 
 Core *KDevelop::Core::self()

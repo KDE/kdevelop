@@ -27,7 +27,7 @@
 #ifndef IPROJECT_H
 #define IPROJECT_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <kurl.h>
 

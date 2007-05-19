@@ -16,7 +16,7 @@
 #include <klocale.h>
 
 SvnSSLTrustDialog::SvnSSLTrustDialog( QWidget *parent )
-    : QDialog( parent ), Ui::SvnSSLTrustDialog()
+    : KDialog( parent ), Ui::SvnSSLTrustDialog()
 {
     Ui::SvnSSLTrustDialog::setupUi(this);
     msgLabel->setText( i18n("Fail to automatically validiate certificate from server.") );
@@ -58,12 +58,12 @@ void SvnSSLTrustDialog::setCertInfos( const svn_auth_ssl_server_cert_info_t *ci 
     setCertInfos( ci->hostname, ci->fingerprint,ci->valid_from, ci->valid_until, ci->issuer_dname, ci->ascii_cert );
 }
 
-void SvnSSLTrustDialog::setCertInfos( QString hostname,
-                                      QString fingerPrint,
-                                      QString validfrom,
-                                      QString validuntil,
-                                      QString issuerName,
-                                      QString ascii_cert)
+void SvnSSLTrustDialog::setCertInfos( const QString& hostname,
+                                      const QString& fingerPrint,
+                                      const QString& validfrom,
+                                      const QString& validuntil,
+                                      const QString& issuerName,
+                                      const QString& ascii_cert)
 {
     QList<QTreeWidgetItem*> items;
     QStringList list1;
@@ -107,16 +107,16 @@ void SvnSSLTrustDialog::accept()
     } else{
         m_decision = 0;
     }
-    QDialog::accept();
+    KDialog::accept();
 }
 void SvnSSLTrustDialog::reject()
 {
     m_decision = -1;
-    QDialog::reject();
+    KDialog::reject();
 }
 //////////////////////////////////////////////////////////////
 SvnLoginDialog::SvnLoginDialog( QWidget *parent )
-    : QDialog( parent ), Ui::SvnLoginDialog()
+    : KDialog( parent ), Ui::SvnLoginDialog()
 {
     Ui::SvnLoginDialog::setupUi(this);
 }

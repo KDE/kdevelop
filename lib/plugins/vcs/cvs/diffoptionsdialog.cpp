@@ -45,7 +45,7 @@ QString DiffOptionsDialog::revA() const
     else  if (requestedDiff() == diffLocalHEAD)
         return "HEAD";
     else
-        return QString::null;
+        return QString();
 }
 
 QString DiffOptionsDialog::revB() const
@@ -53,7 +53,7 @@ QString DiffOptionsDialog::revB() const
     if (requestedDiff())
         return this->revbEdit->text();
     else
-        return QString::null;
+        return QString();
 }
 
 #include "diffoptionsdialog.moc"

@@ -55,7 +55,7 @@ private:
      * There's no way in KDE4 API to find out the file that the config object
      * was created from, so we can't apply defaults when using this
      * constructory. Thus I'm making this private, so we can find out when
-     * this constructor is used and see if we need to add apropriate API to
+     * this constructor is used and see if we need to add appropriate API to
      * kdelibs
      */
      ProjectConfigSkeleton( KSharedConfig::Ptr config );

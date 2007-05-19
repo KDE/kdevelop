@@ -21,7 +21,7 @@
 
 #include "ilanguage.h"
 
-#include <QList>
+#include <QtCore/QList>
 
 namespace KDevelop {
 

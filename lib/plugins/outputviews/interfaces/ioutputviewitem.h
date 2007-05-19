@@ -12,7 +12,7 @@
 #define IOUTPUTVIEWITEM_H
 
 #include "kdevexport.h"
-#include <QStandardItem>
+#include <QtGui/QStandardItem>
 class QAction;
 template<typename T1> class QList;
 

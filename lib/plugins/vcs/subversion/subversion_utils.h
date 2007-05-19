@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef SUBVERSION_UTILS_H
 #define SUBVERSION_UTILS_H
 
@@ -48,24 +48,24 @@ public:
         WORKING = 4,
         HEAD = 5
     };
-    
+
     /// Construct InValid (Unspecified) Revision.
     SvnRevision();
 
     /// Specify revision as number.
     void setNumber( long int revnum );
-    
+
     /** Specify revision as keyword. Supported string is
      *  WORKING, BASE, HEAD, COMMITTED, PREV and UNSPECIFIED
-     */ 
+     */
     void setKey( RevKeyword key );
 
     /// Specify revision as date,time
-    void setDate( QDateTime date );
+    void setDate( const QDateTime& date );
 
     /// Overloaded method. Same with above.
-    void setDate( QDate aDate, QTime aTime = QTime() );
-            
+    void setDate( const QDate& aDate, const QTime& aTime = QTime() );
+
     /// Returns SVN C-Api compatible struct. Use this to call svn_client_* and etc.
     svn_opt_revision_t revision();
 
@@ -77,7 +77,7 @@ private:
         date = 2
     };
     RevType type;
-    
+
     long int revNum;
     RevKeyword revKind;
     QDateTime revDate;

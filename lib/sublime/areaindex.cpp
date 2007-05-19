@@ -220,7 +220,7 @@ bool Sublime::AreaIndex::isSplitted() const
 // class RootAreaIndex
 
 RootAreaIndex::RootAreaIndex()
-    :AreaIndex()
+    :AreaIndex(), d(0)
 {
 }
 

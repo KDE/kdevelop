@@ -22,14 +22,14 @@
 #ifndef KDEVBACKGROUNDPARSER_H
 #define KDEVBACKGROUNDPARSER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
+#include <QtCore/QMap>
+#include <QtCore/QPair>
+#include <QtCore/QMutex>
+#include <QtCore/QHash>
+#include <QtCore/QPointer>
 #include <kurl.h>
-#include <QMap>
-#include <QPair>
-#include <QMutex>
-#include <QHash>
-#include <QPointer>
 
 #include "kdevexport.h"
 

@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 
 #include "iplugincontroller.h"
 
-#include <QHash>
+#include <QtCore/QHash>
 
 #include <kurl.h>
 #include <kservice.h>
@@ -174,8 +174,7 @@ private:
     void cleanup();
 
 private:
-    struct PluginControllerPrivate* const d;
-    QExtensionManager* m_manager;
+    class PluginControllerPrivate* const d;
 };
 
 }

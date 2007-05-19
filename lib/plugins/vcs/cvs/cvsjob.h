@@ -22,7 +22,7 @@
 #include <K3Process>
 
 /**
- * This class is capable of running our cvs commands 
+ * This class is capable of running our cvs commands
  * Connect to Kjob::result(KJob*) to be notified when the job finished.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
@@ -50,11 +50,11 @@ public:
     virtual void start();
 
     /**
-     * In some cases it's needed to specify the communisation mode between the 
+     * In some cases it's needed to specify the communisation mode between the
      * process and the job object. This is for instance done for the "cvs status"
      * command. If stdout and stderr are processed as separate streams their signals
-     * do not always get emmited in correct order by K3Process. Which will lead to a 
-     * screwed up ouput.
+     * do not always get emmited in correct order by K3Process. Which will lead to a
+     * screwed up output.
      * @note Default communiaction mode is K3Process::AllOutput.
      */
     void setCommunicationMode(K3Process::Communication comm);

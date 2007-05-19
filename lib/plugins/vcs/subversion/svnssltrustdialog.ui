@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>SvnSSLTrustDialog</class>
- <widget class="QDialog" name="SvnSSLTrustDialog" >
+ <widget class="KDialog" name="SvnSSLTrustDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>

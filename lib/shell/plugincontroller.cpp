@@ -23,9 +23,9 @@ Boston, MA 02110-1301, USA.
 */
 #include "plugincontroller.h"
 
-#include <QFile>
-#include <QTimer>
-#include <QApplication>
+#include <QtCore/QFile>
+#include <QtCore/QTimer>
+#include <QtGui/QApplication>
 #include <kcmdlineargs.h>
 #include <klibloader.h>
 #include <kservice.h>
@@ -40,11 +40,10 @@ Boston, MA 02110-1301, USA.
 #include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
-#include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kstaticdeleter.h>
 #include <kmenu.h>
-#include <QAction>
+#include <QtGui/QAction>
 
 #include "iplugin.h"
 #include "profileengine.h"
@@ -58,7 +57,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-struct PluginControllerPrivate
+class PluginControllerPrivate
 {
 public:
     QList<KPluginInfo*> plugins;
@@ -77,6 +76,7 @@ public:
     QString profile;
     ProfileEngine engine;
     Core *core;
+    QExtensionManager* m_manager;
 };
 
 PluginController::PluginController(Core *core)
@@ -87,7 +87,7 @@ PluginController::PluginController(Core *core)
     d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
         QLatin1String( "[X-KDevelop-Version] == 4" ) ) );
     d->cleanupMode = PluginControllerPrivate::Running;
-    m_manager = new QExtensionManager();
+    d->m_manager = new QExtensionManager();
 }
 
 PluginController::~PluginController()
@@ -106,7 +106,7 @@ PluginController::~PluginController()
                 << "'" << endl;
         delete it.value();
     }
-    delete m_manager;
+    delete d->m_manager;
     qDeleteAll(d->plugins);
     delete d;
 }
@@ -297,7 +297,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         if( !error && !missingInterfaces.isEmpty() )
         {
             kDebug(9000) << k_funcinfo << "Can't load plugin '" << pluginId
-                    << "' some of its required dependecies could not be fullfilled:" << endl
+                    << "' some of its required dependecies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         }else
         {
@@ -442,7 +442,7 @@ KPluginInfo::List PluginController::queryExtensionPlugins(const QString &extensi
 
 QExtensionManager* PluginController::extensionManager()
 {
-    return m_manager;
+    return d->m_manager;
 }
 
 QStringList PluginController::allPluginNames()

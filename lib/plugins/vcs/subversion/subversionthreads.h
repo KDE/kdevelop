@@ -12,7 +12,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef SUBVERSIONTHREADS_H
 #define SUBVERSIONTHREADS_H
 
@@ -72,7 +72,7 @@ public:
 
     static void progressCallback( apr_off_t progress, apr_off_t total,
                                     void *baton, apr_pool_t *pool);
-	
+
     static void notifyCallback( void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool );
 
     static svn_error_t* commitLogUserInput( const char **log_msg,
@@ -80,21 +80,21 @@ public:
                                             apr_array_header_t *commit_items,
                                             void *baton,
                                             apr_pool_t *pool );
-    
+
 //     static svn_error_t* cancelCallback( void *cancel_baton );
-    
-    // Accessors to be used for static authentication callback funtions
+
+    // Accessors to be used for static authentication callback functions
     /// Enters thread's own event loop. This simply calls QThread::exec()
     /// This is needed because the static callback functions should be able to call exec()
     void enterLoop();
 
-    /// Used for svn-lib's authentication callbacks. 
+    /// Used for svn-lib's authentication callbacks.
     SvnServerCertInfo** certInfo();
     /// Used for svn-lib's authentication callbacks
     SvnLoginInfo** loginInfo();
     /// Used for commit operation's notification.
     bool* sentFirstTxDelta();
-    
+
 public Q_SLOTS:
     /** @param ms Wait the thread to be terminated up to ms milisecond
      *  @return true if the tread is terminated in the given timeout, false otherwise */
@@ -111,13 +111,13 @@ protected:
     /// set error message into parent SvnKJobBase
     void setErrorMsgExt( svn_error_t *err );
     /// set error message into parent SvnKJobBase
-    void setErrorMsg( QString msg );
+    void setErrorMsg( const QString& msg );
 
     /// subversion API internal
     svn_client_ctx_t* ctx();
     /// subversion API internal
     apr_pool_t* pool();
-    
+
     class Private;
     Private *d;
 };
@@ -125,7 +125,7 @@ protected:
 class SvnBlameJob : public SubversionThread
 {
 public:
-    SvnBlameJob( KUrl path_or_url,
+    SvnBlameJob( const KUrl& path_or_url,
                  bool repositblame,
                 const SvnRevision &rev1, const SvnRevision &rev2,
                 int actionType, SvnKJobBase *parent );
@@ -154,7 +154,7 @@ private:
 class SvnLogviewJob : public SubversionThread
 {
 public:
-    SvnLogviewJob( const SvnRevision &rev1, 
+    SvnLogviewJob( const SvnRevision &rev1,
                    const SvnRevision &rev2,
                    int listLimit,
                    bool repositLog,
@@ -162,19 +162,19 @@ public:
                    bool strictNodeHistory,
                    const KUrl::List& urls,
                    int actionType, SvnKJobBase *parent );
-    
+
     virtual ~SvnLogviewJob();
-    
+
     static svn_error_t* receiveLogMessage(void *baton,
-                                          apr_hash_t *changed_paths, 
+                                          apr_hash_t *changed_paths,
                                           svn_revnum_t revision,
                                           const char *author,
                                           const char *date,
-                                          const char *message, 
+                                          const char *message,
                                           apr_pool_t *pool );
-    
+
     KUrl::List urlList() { return urls; };
-    
+
     QList<SvnLogHolder> m_loglist;
 protected:
     virtual void run();
@@ -206,7 +206,7 @@ public:
     SvnStatusJob( const KUrl &wcPath, const SvnRevision &rev,
                   bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals,
                   int type, SvnKJobBase *parent );
-    
+
     static void statusReceiver( void *baton, const char *path, svn_wc_status2_t *status );
 
     QList<SvnStatusHolder> m_holderList;
@@ -224,9 +224,9 @@ protected:
 //     SvnStatusSyncJob( int type );
 //     QList<SvnStatusHolder>& statusExec( const KUrl &wcPath, long rev, QString revKind,
 //                     bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals);
-// 
+//
 //     static void statusReceiver( void *baton, const char *path, svn_wc_status2_t *status );
-//     
+//
 //     QList<SvnStatusHolder> m_holderList;
 // };
 
@@ -236,7 +236,7 @@ public:
     SvnAddJob( const KUrl::List &wcPaths,
                bool recurse, bool force, bool noIgnore,
                int type, SvnKJobBase *parent );
-    
+
 protected:
     virtual void run();
     KUrl::List m_wcPaths;
@@ -249,7 +249,7 @@ public:
     SvnDeleteJob( const KUrl::List &urls, bool force, int type, SvnKJobBase *parent );
 protected:
     virtual void run();
-    
+
     KUrl::List m_urls;
     bool m_force;
 };
@@ -260,10 +260,10 @@ public:
     SvnUpdateJob( const KUrl::List &wcPaths, const SvnRevision &rev,
                   bool recurse, bool ignoreExternals,
                   int type, SvnKJobBase *parent );
-    
+
 protected:
     virtual void run();
-    
+
     KUrl::List m_wcPaths;
     SvnRevision m_rev;
     bool m_recurse, m_ignoreExternals;
@@ -281,7 +281,7 @@ public:
                                       const svn_info_t *info,
                                       apr_pool_t *pool);
     QMap< KUrl, SvnInfoHolder > m_holderMap;
-    
+
 protected:
     virtual void run();
     KUrl m_pathOrUrl;
@@ -321,7 +321,7 @@ public:
     char *err_name;
 protected:
     virtual void run();
-    
+
     KUrl m_pathOrUrl1, m_pathOrUrl2;
     SvnRevision m_rev1, m_rev2;
     bool m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType;
@@ -354,7 +354,7 @@ protected:
 //                     int type, QObject *parent );
 // protected:
 //     virtual void run();
-//     
+//
 //     KUrl m_servUrl, m_wcRoot;
 //     long int m_pegRev;
 //     QString m_pegRevKind;
@@ -372,7 +372,7 @@ public:
 
 protected:
     virtual void run();
-    
+
     class Private;
     Private *d;
 };
@@ -384,7 +384,7 @@ public:
     SvnCopyJob( const KUrl& srcPathOrUrl, const SvnUtils::SvnRevision &srcRev,
                 const KUrl& dstPathOrUrl, int type, SvnKJobBase *parent );
     virtual ~SvnCopyJob();
-    
+
 protected:
     virtual void run();
 
@@ -401,7 +401,7 @@ public:
 
 protected:
     virtual void run();
-    
+
     class Private;
     Private *d;
 };

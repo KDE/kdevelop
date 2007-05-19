@@ -71,7 +71,7 @@ private slots:
     void slotJobFinished(KJob* job);
 
 private:
-    KDevelop::VcsFileInfo::VcsFileState String2EnumState(QString stateAsString);
+    KDevelop::VcsFileInfo::VcsFileState String2EnumState(const QString& stateAsString);
 
     CvsProxy* m_proxy;
 };

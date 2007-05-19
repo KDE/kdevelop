@@ -204,9 +204,7 @@ public:
   void exitCurrentRange();
 
 protected:
-  static EditorIntegratorPrivate* data();
-
-  static EditorIntegratorPrivate* s_data;
+  static KDevelop::EditorIntegratorPrivate* data();
 
   KUrl m_currentUrl;
   KTextEditor::Document* m_currentDocument;

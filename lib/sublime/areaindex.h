@@ -19,8 +19,8 @@
 #ifndef SUBLIMEAREAINDEX_H
 #define SUBLIMEAREAINDEX_H
 
-#include <Qt>
-#include <QList>
+#include <QtCore/Qt>
+#include <QtCore/QList>
 
 #include <kdevexport.h>
 
@@ -174,6 +174,8 @@ Doesn't provide any additional functionality beyond AreaIndex.
 class SUBLIME_EXPORT RootAreaIndex: public AreaIndex {
 public:
     RootAreaIndex();
+private:
+    class RootAreaIndexPrivate* const d;
 };
 
 }

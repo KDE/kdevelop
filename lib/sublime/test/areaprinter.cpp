@@ -34,11 +34,11 @@ Area::WalkerMode AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
 {
     result += printIndentation(index) + "[ ";
     if (index->views().isEmpty())
-        result += printOrientation(index->orientation()) + " ";
+        result += printOrientation(index->orientation()) + ' ';
     else
     {
         foreach (View *view, index->views())
-            result += view->objectName() + " ";
+            result += view->objectName() + ' ';
     }
     result += "]\n";
     return Area::ContinueWalker;
@@ -71,7 +71,7 @@ AreaToolViewsPrinter::AreaToolViewsPrinter()
 
 Area::WalkerMode AreaToolViewsPrinter::operator()(Sublime::View *view, Sublime::Position position)
 {
-    result += view->objectName() + " [ " + printPosition(position) + " ]" + "\n";
+    result += view->objectName() + " [ " + printPosition(position) + " ]" + '\n';
     return Area::ContinueWalker;
 }
 

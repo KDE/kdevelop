@@ -24,8 +24,8 @@ Boston, MA 02110-1301, USA.
 #ifndef IPLUGINCONTROLLER_H
 #define IPLUGINCONTROLLER_H
 
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 
 #include <kplugininfo.h>
 #include <kurl.h>

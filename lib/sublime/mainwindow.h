@@ -19,7 +19,7 @@
 #ifndef SUBLIMEMAINWINDOW_H
 #define SUBLIMEMAINWINDOW_H
 
-#include <QList>
+#include <QtCore/QList>
 #include <kparts/mainwindow.h>
 
 #include <kdevexport.h>

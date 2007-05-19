@@ -19,8 +19,8 @@
 #ifndef ILANGUAGECONTROLLER_H
 #define ILANGUAGECONTROLLER_H
 
-#include <QList>
-#include <QObject>
+#include <QtCore/QList>
+#include <QtCore/QObject>
 
 #include <kdevexport.h>
 

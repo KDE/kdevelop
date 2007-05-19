@@ -90,7 +90,7 @@ void SvnBlameFileSelectDlg::accept()
             KMessageBox::error( this, i18n("Select file from list to view annotation") );
         }
     }
-    QDialog::accept();
+    KDialog::accept();
 }
 
 #include "svn_blamewidgets.moc"

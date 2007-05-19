@@ -21,7 +21,7 @@
 namespace Sublime {
 
 Switcher::Switcher(QWidget *parent)
-    :QComboBox(parent)
+    :QComboBox(parent), d(0)
 {
 }
 

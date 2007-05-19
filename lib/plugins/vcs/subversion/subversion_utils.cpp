@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "subversion_utils.h"
 #include <svn_opt.h>
 
@@ -32,13 +32,13 @@ void SvnRevision::setKey( RevKeyword keyword )
     revKind = keyword;
 }
 
-void SvnRevision::setDate( QDateTime aDate )
+void SvnRevision::setDate( const QDateTime& aDate )
 {
     type = date;
     revDate = aDate;
 }
 
-void SvnRevision::setDate( QDate aDate, QTime aTime )
+void SvnRevision::setDate( const QDate& aDate, const QTime& aTime )
 {
     setDate( QDateTime( aDate, aTime ) );
 }
@@ -81,7 +81,7 @@ svn_opt_revision_t SvnRevision::revision()
             ret.kind = svn_opt_revision_unspecified;
             break;
     }
-    
+
     return ret;
 }
 

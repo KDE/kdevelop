@@ -20,7 +20,7 @@
 #ifndef SHELLEXTENSION_H
 #define SHELLEXTENSION_H
 
-#include <QString>
+#include <QtCore/QString>
 #include "kdevexport.h"
 
 namespace KDevelop
@@ -51,7 +51,7 @@ public:
         s_instance = new MyExtension();
     }
     @endcode*/
-    static ShellExtension *getInstance() { return s_instance; }
+    static ShellExtension *getInstance();
 
     /**Reimplement to return the name of KXMLGUI resource file for an application.*/
     virtual QString xmlFile() = 0;

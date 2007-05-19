@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "svnkjobbase.h"
 #include "subversion_core.h"
 #include "subversionthreads.h"
@@ -26,7 +26,7 @@ SvnKJobBase::SvnKJobBase( int type, QObject *parent )
 {
     d->m_th = 0;
     d->m_type = type;
-    
+
     // The forceful termination of thread causes deadlock in some cases.
     // Don't set Killable for a moment
     // setCapabilities( KJob::Killable );
@@ -64,7 +64,7 @@ QString SvnKJobBase::smartError()
 {
     QString msg = errorText();
     if( msg.isEmpty() ){
-        msg = i18n("An error occured during subversion operation");
+        msg = i18n("An error occurred during subversion operation");
     }
     return msg;
 }

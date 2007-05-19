@@ -17,13 +17,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #include "view.h"
+#include "view_p.h"
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 #include <kdebug.h>
 
 #include "document.h"
-#include "view_p.h"
 
 namespace Sublime {
 

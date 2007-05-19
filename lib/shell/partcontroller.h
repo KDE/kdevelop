@@ -23,10 +23,10 @@
 #include <kparts/partmanager.h>
 #include "core.h"
 
-#include <QMap>
-#include <QHash>
-#include <QWidget>
-#include <QPointer>
+#include <QtCore/QMap>
+#include <QtCore/QHash>
+#include <QtGui/QWidget>
+#include <QtCore/QPointer>
 
 #include <kurl.h>
 #include <kmimetype.h>
@@ -83,13 +83,7 @@ protected:
     virtual void cleanup();
 
 private:
-    KParts::Factory *findPartFactory( const QString &mimeType,
-                                      const QString &partType,
-                                      const QString &preferredName = QString() );
-    QString m_editor;
-    QStringList m_textTypes;
-
-    Core *m_core;
+    class PartControllerPrivate* const d;
 };
 
 }

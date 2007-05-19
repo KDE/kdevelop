@@ -53,7 +53,7 @@ CvsMainView::~CvsMainView()
     delete m_mainview;
 }
 
-void CvsMainView::slotAddTab(QWidget * tab, QString label)
+void CvsMainView::slotAddTab(QWidget * tab, const QString& label)
 {
     kDebug() <<  k_funcinfo << label << endl;
 

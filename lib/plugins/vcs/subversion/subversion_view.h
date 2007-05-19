@@ -36,7 +36,7 @@ public:
     virtual ~KDevSubversionView();
 
 public Q_SLOTS:
-    void printNotification( QString msg );
+    void printNotification( const QString& msg );
     void printLog( SvnKJobBase *job );
     void printBlame( SvnKJobBase *job );
     void printDiff( SvnKJobBase *job );

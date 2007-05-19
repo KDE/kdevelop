@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>SvnLoginDialog</class>
- <widget class="QDialog" name="SvnLoginDialog" >
+ <widget class="KDialog" name="SvnLoginDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>

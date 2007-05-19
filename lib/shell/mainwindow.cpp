@@ -20,10 +20,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 #include "mainwindow.h"
+#include "mainwindow_p.h"
 
-#include <QHash>
-#include <QDockWidget>
-#include <QStackedWidget>
+#include <QtCore/QHash>
+#include <QtGui/QDockWidget>
+#include <QtGui/QStackedWidget>
 
 #include <kmenu.h>
 #include <kglobal.h>
@@ -33,7 +34,6 @@ Boston, MA 02110-1301, USA.
 
 #include "shellextension.h"
 #include "partcontroller.h"
-#include "mainwindow_p.h"
 #include "plugincontroller.h"
 
 namespace KDevelop

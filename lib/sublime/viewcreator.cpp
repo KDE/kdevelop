@@ -22,6 +22,11 @@
 
 namespace Sublime {
 
+ViewCreator::ViewCreator()
+  : d(0)
+{
+}
+
 ViewCreator::~ViewCreator()
 {
 }

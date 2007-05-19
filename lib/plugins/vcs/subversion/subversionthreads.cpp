@@ -460,7 +460,7 @@ void SubversionThread::setErrorMsgExt( svn_error_t *err )
     else
         kjob()->setError( 100 );
 }
-void SubversionThread::setErrorMsg( QString msg )
+void SubversionThread::setErrorMsg( const QString& msg )
 {
     kjob()->setErrorText( msg );
     kjob()->setError( 100 );
@@ -478,7 +478,7 @@ apr_pool_t* SubversionThread::pool()
 
 //////////////////////////////////////////////////////////////////////
 
-SvnBlameJob::SvnBlameJob(  KUrl path_or_url,
+SvnBlameJob::SvnBlameJob(  const KUrl& path_or_url,
                         bool reposit,
                         const SvnRevision &rev1, const SvnRevision &rev2,
                         int actionType, SvnKJobBase *parent )

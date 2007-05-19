@@ -51,7 +51,7 @@ public slots:
     int exec();
 private:
     void insertRow( const KDevelop::VcsFileInfo &info );
-    void insertRow( QString state, KUrl url );
+    void insertRow( const QString& state, const KUrl& url );
     KDevSubversionPart *m_part;
 };
 

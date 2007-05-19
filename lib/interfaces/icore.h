@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVCORE_H
 #define KDEVCORE_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include "kdevexport.h"
 
 class KXmlGuiWindow;

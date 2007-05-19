@@ -15,7 +15,8 @@
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
- ***************************************************************************/
+***************************************************************************/
+//krazy:excludeall-dpointer
 #ifndef SUBLIMEMAINWINDOWOPERATOR_H
 #define SUBLIMEMAINWINDOWOPERATOR_H
 
@@ -40,7 +41,6 @@ protected:
     void setActiveView(MainWindow *w, View *view);
     /**Sets the active toolview for the mainwindow and focuses it.*/
     void setActiveToolView(MainWindow *w, View *view);
-
 };
 
 }

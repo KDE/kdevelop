@@ -19,7 +19,7 @@
 #ifndef SUBLIMEVIEW_H
 #define SUBLIMEVIEW_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <kdevexport.h>
 

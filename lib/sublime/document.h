@@ -19,8 +19,8 @@
 #ifndef SUBLIMEDOCUMENT_H
 #define SUBLIMEDOCUMENT_H
 
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 
 
 #include <kdevexport.h>

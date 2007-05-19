@@ -28,7 +28,7 @@ struct apr_array_header_t;
 class SvnNotificationEvent : public QEvent
 {
 public:
-    SvnNotificationEvent( QString msg );
+    SvnNotificationEvent( const QString& msg );
     virtual ~SvnNotificationEvent();
     // notification message
     QString m_msg;
@@ -46,7 +46,7 @@ class SvnUserinputInfo
 {
 public:
     SvnUserinputInfo();
-    
+
     bool receivedInfos();
     void setHasInfos();
     QObject *origSender;
@@ -58,9 +58,9 @@ class SvnLoginInfo : public SvnUserinputInfo
 {
 public:
     SvnLoginInfo();
-    
-    void setData( QString userId, QString passWd, bool save );
-    
+
+    void setData( const QString& userId, const QString& passWd, bool save );
+
     QString realm;
     QString userName;
     QString passWord;
@@ -74,7 +74,7 @@ public:
 
     /// called by dialog box side
     void setData( int decision );
-    /// certification informations to be displayed to user
+    /// certification information to be displayed to user
     const svn_auth_ssl_server_cert_info_t *cert_info;
     /// failed reason reported by svn library
     unsigned int fails;
@@ -87,8 +87,8 @@ class SvnCommitLogInfo : public SvnUserinputInfo
 public:
     SvnCommitLogInfo();
 
-    void setData( bool accept, QString msg );
-    
+    void setData( bool accept, const QString& msg );
+
     // from thread to dialogbox
     apr_array_header_t *m_commit_items;
     // from dialogbox to thread

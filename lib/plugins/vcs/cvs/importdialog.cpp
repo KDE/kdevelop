@@ -68,7 +68,7 @@ void ImportDialog::jobFinished(KJob * job)
         } else if (line.contains("No conflicts created by this import")) {
             continue;
         } else {
-            // any other line must mean that an error occured
+            // any other line must mean that an error occurred
             kDebug() << k_funcinfo << line << endl;
             error = true;
         }
@@ -76,10 +76,10 @@ void ImportDialog::jobFinished(KJob * job)
 
     if (error) {
         KMessageBox::error(this,
-            i18n("Some errors occured while importing") + m_url.path(),
+            i18n("Some errors occurred while importing") + m_url.path(),
             i18n("Import Error"));
     } else {
-        QDialog::accept();
+        KDialog::accept();
     }
 }
 

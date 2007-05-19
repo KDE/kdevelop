@@ -11,7 +11,7 @@
 
 #include "interthreadevents.h"
 
-SvnNotificationEvent::SvnNotificationEvent( QString msg )
+SvnNotificationEvent::SvnNotificationEvent( const QString& msg )
     : QEvent( SVNACTION_NOTIFICATION ), m_msg(msg)
 {}
 
@@ -44,7 +44,7 @@ SvnLoginInfo::SvnLoginInfo()
     : SvnUserinputInfo()
 {}
 
-void SvnLoginInfo::setData( QString userId, QString passWd, bool save )
+void SvnLoginInfo::setData( const QString& userId, const QString& passWd, bool save )
 {
     userName = userId;
     passWord = passWd;
@@ -66,7 +66,7 @@ SvnCommitLogInfo::SvnCommitLogInfo()
     : SvnUserinputInfo()
 {}
 
-void SvnCommitLogInfo::setData( bool accept, QString msg )
+void SvnCommitLogInfo::setData( bool accept, const QString& msg )
 {
     m_accept = accept;
     m_message = msg;

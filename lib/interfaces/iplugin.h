@@ -22,12 +22,12 @@
 #ifndef IPLUGIN_H
 #define IPLUGIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <kxmlguiclient.h>
 
-#include <QList>
-#include <QPointer>
-#include <QPair>
+#include <QtCore/QList>
+#include <QtCore/QPointer>
+#include <QtCore/QPair>
 #include <QtDesigner/QExtensionManager>
 #include "kdevexport.h"
 

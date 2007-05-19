@@ -20,14 +20,14 @@ class CvsJob;
 
 /**
  * This proxy acts as a single point of entry for most of the common cvs commands.
- * It is very easy to use, as the caller does not have to deal wich the CvsJob class directly.
+ * It is very easy to use, as the caller does not have to deal which the CvsJob class directly.
  * All the command line generation and job handling is done internally. The caller gets a CvsJob
  * object returned from the proxy and can then call it's start() method.
  *
  * @note The caller does not have to worry about deleting the KJob. The proxy
  *       connects a default slot to all jobs that he created. See slotResult().
  *       This slot calls deleteLater() on the CvsJob that just finised.
- * 
+ *
  * Here is and example of how to user the proxy:
  * @code
  * CvsJob* job = proxy->editors( repo, urls );
@@ -37,12 +37,12 @@ class CvsJob;
  *     job->start();
  * }
  * @endcode
- * 
- * @note All actions that take a KUrl::List also need an url to the repository which 
+ *
+ * @note All actions that take a KUrl::List also need an url to the repository which
  *       must be a common base directory to all files from the KUrl::List.
  *       Actions that just take a single KUrl don't need a repository, the cvs command will be
  *       called directly in the directory of the given file
- * 
+ *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
 class CvsProxy : public QObject
@@ -54,27 +54,27 @@ public:
 
     bool isValidDirectory(const KUrl &dirPath) const;
 
-    CvsJob* import(const KUrl& directory, 
+    CvsJob* import(const KUrl& directory,
                 const QString & server, const QString& repositoryName,
                 const QString& vendortag, const QString& releasetag,
                 const QString& message);
     CvsJob* log(const KUrl& file);
-    CvsJob* diff(const KUrl& url, const QString& diffOptions="", 
+    CvsJob* diff(const KUrl& url, const QString& diffOptions="",
               const QString& revA="", const QString& revB="");
     CvsJob* annotate(const KUrl& url, const QString& revision="");
     CvsJob* edit(const QString& repo, const KUrl::List& files);
     CvsJob* unedit(const QString& repo, const KUrl::List& files);
     CvsJob* editors(const QString& repo, const KUrl::List& files);
-    CvsJob* commit(const QString& repo, const KUrl::List& files, 
+    CvsJob* commit(const QString& repo, const KUrl::List& files,
                 const QString& message);
-    CvsJob* add(const QString& repo, const KUrl::List& files, 
+    CvsJob* add(const QString& repo, const KUrl::List& files,
              bool binary = false);
     CvsJob* remove(const QString& repo, const KUrl::List& files);
-    CvsJob* update(const QString& repo, const KUrl::List& files, 
+    CvsJob* update(const QString& repo, const KUrl::List& files,
                 const QString& updateOptions,
                 bool pruneDirs = true, bool createDirs = true);
 
-    CvsJob* checkout(const KUrl& targetDir, 
+    CvsJob* checkout(const KUrl& targetDir,
                 const QString & server, const QString& module,
                 const QString& checkoutOptions="",
                 const QString& revision="",
@@ -94,7 +94,7 @@ private:
         Import,
         CheckOut
     };
-    bool prepareJob(CvsJob* job, const QString& repository, 
+    bool prepareJob(CvsJob* job, const QString& repository,
                     enum RequestedOperation op = CvsProxy::NormalOperation);
 };
 

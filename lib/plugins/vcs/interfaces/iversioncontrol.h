@@ -54,7 +54,7 @@ public:
     /**State of the file.*/
     enum VcsFileState {
         Unknown        /**<No VCS information about a file is known.*/,
-        Added          /**<File was added to the repository but not commited.*/,
+        Added          /**<File was added to the repository but not committed.*/,
         Uptodate       /**<File was updated or it is already at up to date version.*/,
         Modified       /**<File was modified locally.*/,
         Conflict       /**<Local version conflicts with the one in a repository.*/,
@@ -193,7 +193,7 @@ Q_SIGNALS:
 
 /**Emitted when the status request to remote repository has finished.
     @param fileInfoMap The status for <b>registered in repository</b> files.
-    The status of files under dirPath, including informations from repository
+    The status of files under dirPath, including information from repository
     such as out-of-dateness, since this is async operation.
     @see statusASync for to find out when this signal should be used.*/
     virtual void statusReady(const QList<VcsFileInfo> &infos) = 0;

@@ -19,7 +19,7 @@
 #ifndef KDEVDOCUMENTRANGEOBJECT_H
 #define KDEVDOCUMENTRANGEOBJECT_H
 
-#include <QMutex>
+#include <QtCore/QMutex>
 
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>

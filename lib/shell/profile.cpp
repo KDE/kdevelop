@@ -169,7 +169,7 @@ QStringList &Profile::listByType(List type)
     return dummy;
 }
 
-bool Profile::hasInEntryList(EntryList &list, QString value)
+bool Profile::hasInEntryList(EntryList &list, const QString& value)
 {
     for (EntryList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
         if ((*it).name == value)

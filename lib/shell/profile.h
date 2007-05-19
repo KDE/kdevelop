@@ -19,7 +19,7 @@
 #ifndef KDEVPROFILE_H
 #define KDEVPROFILE_H
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <kurl.h>
 
 #include "kdevexport.h"
@@ -69,7 +69,7 @@ public:
     void addEntry(List type, const QString &value);
     void removeEntry(List type, const QString &value);
 
-    bool hasInEntryList(EntryList &list, QString value);
+    bool hasInEntryList(EntryList &list, const QString& value);
 
     KUrl::List resources(const QString &nameFilter);
     void addResource(const KUrl &url);

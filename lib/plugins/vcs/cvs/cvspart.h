@@ -24,9 +24,9 @@ class CvsProxy;
 
 /**
  * This is the main class of KDevelop's CVS plugin.
- * 
+ *
  * It implements the IVersionControl interface.
- * 
+ *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
 class CvsPart: public KDevelop::IPlugin , public KDevelop::IVersionControl
@@ -90,7 +90,7 @@ Q_SIGNALS:
 signals:
     /**
      * Some actions like commit, add, remove... will connect the job's
-     * result() signal to this signal. Anybody, like for instance the 
+     * result() signal to this signal. Anybody, like for instance the
      * CvsMainView class, that is interested in getting notified about
      * jobs that finished can connect to this signal.
      * @see class CvsMainView
@@ -99,8 +99,8 @@ signals:
 
     /**
      * Gets emmited when a job like log, editors... was created.
-     * CvsPart will connect the newly created view to the result() signal 
-     * of a job. So the new view will show the ouput of that job as
+     * CvsPart will connect the newly created view to the result() signal
+     * of a job. So the new view will show the output of that job as
      * soon as it has finished.
      */
     void addNewTabToMainView(QWidget* tab, QString label);

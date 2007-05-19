@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "profileengine.h"
 
-#include <QDir>
+#include <QtCore/QDir>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -31,22 +31,29 @@
 namespace KDevelop
 {
 
+class ProfileEnginePrivate
+{
+public:
+    Profile *m_rootProfile;
+};
+
 ProfileEngine::ProfileEngine()
+    : d(new ProfileEnginePrivate)
 {
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kdevelop/profiles");
 
-    m_rootProfile = new Profile(0, "KDevelop");
+    d->m_rootProfile = new Profile(0, "KDevelop");
 
     QString currPath = "/";
     QMap<QString, Profile*> passedPaths;
 
     for (QStringList::const_iterator it = dirs.constBegin(); it != dirs.constEnd(); ++it)
-        processDir(*it, currPath, passedPaths, m_rootProfile);
+        processDir(*it, currPath, passedPaths, d->m_rootProfile);
 }
 
 ProfileEngine::~ProfileEngine()
 {
-    delete m_rootProfile;
+    delete d->m_rootProfile;
 }
 
 void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root)
@@ -168,10 +175,10 @@ void ProfileEngine::getProfileWithListing(ProfileListing &listing, Profile **pro
     const QString &profileName)
 {
     if (profileName == "KDevelop")
-        *profile = m_rootProfile;
+        *profile = d->m_rootProfile;
     else
     {
-        walkProfiles<ProfileListing>(listing, m_rootProfile);
+        walkProfiles<ProfileListing>(listing, d->m_rootProfile);
         *profile = listing.profiles[profileName];
     }
 }
@@ -262,6 +269,11 @@ void ProfileEngine::addResource(const QString &profileName, const KUrl &url)
         return;
 
     profile->addResource(url);
+}
+
+Profile *ProfileEngine::rootProfile() const
+{
+    return d->m_rootProfile;
 }
 
 }
