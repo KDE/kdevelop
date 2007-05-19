@@ -54,15 +54,15 @@ public:
     Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description);
     ~Profile();
 
-    QList<Profile*> children() const { return m_children; }
-    Profile *parent() const { return m_parent; }
+    QList<Profile*> children() const;
+    Profile *parent() const;
 
     void save();
     bool remove();
 
-    QString name() const { return m_name; }
-    QString genericName() const { return m_genericName; }
-    QString description() const { return m_description; }
+    QString name() const;
+    QString genericName() const;
+    QString description() const;
 
     EntryList list(List type);
 
@@ -84,18 +84,10 @@ protected:
     QStringList &listByType(List type);
 
 private:
-    Profile *m_parent;
-    QList<Profile*> m_children;
-
-    QString m_name;
-
-    QString m_genericName;
-    QString m_description;
-
-    QStringList m_properties;
-    QStringList m_explicitEnable;
-    QStringList m_explicitDisable;
+    class ProfilePrivate* const d;
 };
 
 }
 #endif
+
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

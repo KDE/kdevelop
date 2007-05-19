@@ -70,7 +70,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
             Project,
             Target,
             BuildFolder
-    };
+        };
 
         // Convenience function to return the current project
         IProject* project() const;

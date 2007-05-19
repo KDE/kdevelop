@@ -29,59 +29,81 @@
 namespace KDevelop
 {
 
-Profile::Profile(Profile *parent, const QString &name)
-    :m_parent(parent), m_name(name)
+class ProfilePrivate
 {
-    if (m_parent)
-        m_parent->addChildProfile(this);
+public:
+    Profile *m_parent;
+    QList<Profile*> m_children;
+
+    QString m_name;
+
+    QString m_genericName;
+    QString m_description;
+
+    QStringList m_properties;
+    QStringList m_explicitEnable;
+    QStringList m_explicitDisable;
+};
+
+Profile::Profile(Profile *parent, const QString &name)
+    :d(new ProfilePrivate)
+{
+    d->m_parent = parent;
+    d->m_name = name;
+    if (d->m_parent)
+        d->m_parent->addChildProfile(this);
 
     QString profileConfig = KStandardDirs::locate("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
 
     KConfigGroup group = config.group("Information");
-    m_genericName = group.readEntry("GenericName");
-    m_description = group.readEntry("Description");
+    d->m_genericName = group.readEntry("GenericName");
+    d->m_description = group.readEntry("Description");
 
     group = config.group("Properties");
-    m_properties = group.readEntry("List", QStringList());
+    d->m_properties = group.readEntry("List", QStringList());
 
     group = config.group("Enable");
-    m_explicitEnable = group.readEntry("List", QStringList());
+    d->m_explicitEnable = group.readEntry("List", QStringList());
 
     group = config.group("Disable");
-    m_explicitDisable = group.readEntry("List", QStringList());
+    d->m_explicitDisable = group.readEntry("List", QStringList());
 }
 
 Profile::Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description)
-    :m_parent(parent), m_name(name), m_genericName(genericName), m_description(description)
+    :d(new ProfilePrivate)
 {
-    if (m_parent)
-        m_parent->addChildProfile(this);
+    d->m_parent = parent;
+    d->m_name = name;
+    d->m_genericName = genericName;
+    d->m_description = description;
+    if (d->m_parent)
+        d->m_parent->addChildProfile(this);
     save();
 }
 
 Profile::~Profile()
 {
-    for (QList<Profile*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
+    for (QList<Profile*>::iterator it = d->m_children.begin(); it != d->m_children.end(); ++it)
         delete *it;
 }
 
 void Profile::addChildProfile(Profile *profile)
 {
-    m_children.append(profile);
+    d->m_children.append(profile);
 }
 
 void Profile::removeChildProfile(Profile *profile)
 {
-    m_children.removeAll(profile);
+    d->m_children.removeAll(profile);
 }
 
 QString Profile::dirName() const
 {
-    if (m_parent)
-        return m_parent->dirName() + '/' + m_name;
+    if (d->m_parent)
+        return d->m_parent->dirName() + '/' + d->m_name;
     else
-        return "/"/* + m_name*/;
+        return "/"/* + d->m_name*/;
 }
 
 void Profile::save()
@@ -90,17 +112,17 @@ void Profile::save()
     KConfig config(profileConfig);
 
     KConfigGroup group = config.group("Information");
-    group.writeEntry("GenericName", m_genericName);
-    group.writeEntry("Description", m_description);
+    group.writeEntry("GenericName", d->m_genericName);
+    group.writeEntry("Description", d->m_description);
 
     group = config.group("Properties");
-    group.writeEntry("List", m_properties);
+    group.writeEntry("List", d->m_properties);
 
     group = config.group("Enable");
-    group.writeEntry("List", m_explicitEnable);
+    group.writeEntry("List", d->m_explicitEnable);
 
     group = config.group("Disable");
-    group.writeEntry("List", m_explicitDisable);
+    group.writeEntry("List", d->m_explicitDisable);
 
     config.sync();
 }
@@ -108,8 +130,8 @@ void Profile::save()
 Profile::EntryList Profile::list(List type)
 {
     EntryList parentList;
-    if (m_parent)
-        parentList = m_parent->list(type);
+    if (d->m_parent)
+        parentList = d->m_parent->list(type);
     EntryList list = parentList;
     for (EntryList::iterator it = list.begin(); it != list.end(); ++it)
         (*it).derived = true;
@@ -138,11 +160,11 @@ QStringList &Profile::listByType(List type)
 
     switch (type) {
         case Properties:
-            return m_properties;
+            return d->m_properties;
         case ExplicitEnable:
-            return m_explicitEnable;
+            return d->m_explicitEnable;
         case ExplicitDisable:
-            return m_explicitDisable;
+            return d->m_explicitDisable;
     }
     return dummy;
 }
@@ -165,8 +187,8 @@ bool Profile::remove()
 
 void Profile::detachFromParent()
 {
-    if (m_parent)
-        m_parent->removeChildProfile(this);
+    if (d->m_parent)
+        d->m_parent->removeChildProfile(this);
 }
 
 KUrl::List Profile::resources(const QString &nameFilter)
@@ -193,4 +215,29 @@ void Profile::addResource(const KUrl &url)
     KIO::NetAccess::file_copy(url, KUrl(saveLocation), -1, true);
 }
 
+QList<Profile*> Profile::children() const
+{
+    return d->m_children;
 }
+
+Profile *Profile::parent() const
+{
+    return d->m_parent;
+}
+
+QString Profile::name() const
+{
+    return d->m_name;
+}
+QString Profile::genericName() const
+{
+    return d->m_genericName;
+}
+QString Profile::description() const
+{
+    return d->m_description;
+}
+
+}
+
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
