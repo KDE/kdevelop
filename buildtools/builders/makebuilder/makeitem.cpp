@@ -25,14 +25,14 @@
 // MakeItem::MakeItem( const QString &text )
 //     : IOutputViewItem( text )
 // {}
-// 
+//
 // MakeItem::~MakeItem()
 // {}
-// 
+//
 // void MakeItem::activated()
 // {
 // }
-// 
+//
 // QList<QAction*> MakeItem::contextMenuActions()
 // {
 //     QList<QAction*> actions;

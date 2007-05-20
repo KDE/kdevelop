@@ -32,18 +32,6 @@
 #include <k3process.h>
 #include <kdebug.h>
 
-class DefaultOutputItemFactory : public IOutputViewItemFactory
-{
-public:
-    virtual ~DefaultOutputItemFactory()
-    {}
-
-    IOutputViewItem* createItem( const QString& lineOutput )
-    {
-        return new DefaultOutputItem( lineOutput );
-    }
-};
-
 OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& command,
                                       const QMap<QString, QString>& env,
                                       QStandardItemModel* model,
@@ -53,16 +41,16 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
     m_proc = new K3Process();
     m_proc->setWorkingDirectory( workdir.toLocalFile() );
     m_procLineMaker = new ProcessLineMaker( m_proc );
-    
+
     if( itemFactory )
     {
         m_factory = itemFactory;
     }
     else
     {
-        m_factory = new DefaultOutputItemFactory();
+        m_factory = new StandardOutputViewItemFactory<IOutputViewItem>();
     }
-    
+
     foreach( QString s, env.keys() )
         m_proc->setEnvironment( s, env[s] );
     foreach(QString s, command)

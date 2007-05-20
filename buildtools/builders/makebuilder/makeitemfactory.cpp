@@ -14,6 +14,8 @@
 #include "makeitemfactory.h"
 #include "makeitem.h"
 #include <QRegExp>
+#include <QApplication>
+#include <QPalette>
 
 class ErrorFormat
 {
@@ -131,14 +133,12 @@ IOutputViewItem* MakeItemFactory::createItem( const QString& line )
         if( isWarning )
         {
             ret = new MakeWarningItem( line, m_builder );
-            QBrush brush(Qt::darkGray);
-            ret->setForeground(brush);
+            ret->setForeground(QApplication::palette().highlight());
         }
         else // case of real error
         {
             ret = new MakeErrorItem( line, m_builder );
-            QBrush brush(Qt::blue);
-            ret->setForeground(brush);
+            ret->setForeground(QApplication::palette().linkVisited());
         }
         ret->file = file;
         ret->lineNo = lineNum;
@@ -147,7 +147,7 @@ IOutputViewItem* MakeItemFactory::createItem( const QString& line )
     }
     else
     {
-        DefaultOutputItem *ret =  new DefaultOutputItem( line );
+        IOutputViewItem *ret =  new IOutputViewItem( line );
         return ret;
     }
 }

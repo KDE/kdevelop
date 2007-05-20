@@ -22,7 +22,7 @@ class MakeBuilder;
 // public:
 //     MakeItem( const QString &text );
 //     virtual ~MakeItem();
-// 
+//
 //     virtual void activated();
 //     virtual QList<QAction*> contextMenuActions();
 // };
@@ -40,7 +40,7 @@ public:
     QString file;
     int lineNo;
     QString errorText;
-    
+
 protected:
     const MakeBuilder *m_builder;
 };

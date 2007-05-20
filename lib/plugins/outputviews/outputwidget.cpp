@@ -108,7 +108,7 @@ void OutputListView::slotActivated( const QModelIndex& index )
     IOutputViewItem *outitem = dynamic_cast<IOutputViewItem*>( stditem );
     Q_ASSERT( outitem );
 
-    outitem->activated();
+    outitem->activate();
 }
 
 void OutputListView::customContextMenuRequested( const QPoint & point )
