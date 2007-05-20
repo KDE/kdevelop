@@ -30,7 +30,7 @@
 #include <QtCore/QTimer>
 #include <QtGui/QStandardItemModel>
 #include <QtCore/QQueue>
-#include <QtGui/QStandardItem>
+
 #include <icore.h>
 #include <iuicontroller.h>
 
@@ -113,12 +113,12 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
     kDebug(9004) << "Queueing Command: " << dir << "|" << command << endl;
     QString title = command.first();
     // todo: when all the outputviews using this model are closed by user, delete this model
-    // maybe use KSharedPtr or something..
+    // maybe use KSharedPtr or something.. 
     OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, 0, factory );
     if( !d->m_jobs.contains(title) )
     {
         // set model into command. Model lives longer than command, so although the command
-        // doesn't exist, model may exist.
+        // doesn't exist, model may exist. 
         QStandardItemModel *model = 0;
         if( d->m_cmdModels.contains(title) )
         {
@@ -131,7 +131,7 @@ void SimpleOutputView::queueCommand(const KUrl& dir, const QStringList& command,
             d->m_cmdModels.insert( title, model );
         }
         cmd->setModel( model );
-
+        
         connect( cmd, SIGNAL( commandFinished( const QString& ) ),
                  this, SIGNAL( commandFinished( const QString& ) ) );
         connect( cmd, SIGNAL( commandFailed( const QString& ) ),

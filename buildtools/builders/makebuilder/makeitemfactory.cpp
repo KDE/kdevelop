@@ -54,7 +54,7 @@ MakeItemFactory::~MakeItemFactory()
 {}
 
 // ported from KDev3.4's outputview
-QStandardItem* MakeItemFactory::createItem( const QString& line )
+IOutputViewItem* MakeItemFactory::createItem( const QString& line )
 {
     QList<ErrorFormat> list;
     // @todo could get these from emacs compile.el
@@ -147,7 +147,7 @@ QStandardItem* MakeItemFactory::createItem( const QString& line )
     }
     else
     {
-        QStandardItem *ret =  new QStandardItem( line );
+        DefaultOutputItem *ret =  new DefaultOutputItem( line );
         return ret;
     }
 }

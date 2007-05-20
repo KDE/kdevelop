@@ -24,7 +24,7 @@ public:
     MakeItemFactory( const MakeBuilder *builder );
     virtual ~MakeItemFactory();
 
-    QStandardItem* createItem( const QString& lineOutput );
+    IOutputViewItem* createItem( const QString& lineOutput );
 
 private:
     const MakeBuilder *m_builder;

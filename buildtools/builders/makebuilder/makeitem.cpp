@@ -25,14 +25,14 @@
 // MakeItem::MakeItem( const QString &text )
 //     : IOutputViewItem( text )
 // {}
-//
+// 
 // MakeItem::~MakeItem()
 // {}
-//
+// 
 // void MakeItem::activated()
 // {
 // }
-//
+// 
 // QList<QAction*> MakeItem::contextMenuActions()
 // {
 //     QList<QAction*> actions;
@@ -42,7 +42,7 @@
 //////////////////////////////////
 
 MakeWarningItem::MakeWarningItem( const QString &text, const MakeBuilder *builder )
-    : QStandardItem( text )
+    : IOutputViewItem( text )
     , file( "" ), lineNo(-1), errorText( "" )
     , m_builder(builder)
 {}

@@ -9,27 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IOUTPUTVIEWITEMFACTORY_H
-#define IOUTPUTVIEWITEMFACTORY_H
+#include "ioutputviewitemfactory.h"
 
-#include "kdevexport.h"
-
-class IOutputViewItem;
-class QString;
-
-class OUTPUTVIEWINTERFACES_EXPORT IOutputViewItemFactory
-{
-public:
-    /// Destructor
-    virtual ~IOutputViewItemFactory();
-
-    /**
-     * Parses @arg lineOutput from KProcess and generates appropriate item.
-     * May use different appearance depending on the types of output.
-     * @return IOutputViewItem object which will be appended at the end of the OutputView.
-     * @sa IOutputViewItem
-     */
-    virtual IOutputViewItem* createItem( const QString& lineOutput ) = 0;
-};
-
-#endif
+IOutputViewItemFactory::~IOutputViewItemFactory()
+{}

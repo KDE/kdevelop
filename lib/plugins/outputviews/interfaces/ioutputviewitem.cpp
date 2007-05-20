@@ -9,27 +9,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IOUTPUTVIEWITEMFACTORY_H
-#define IOUTPUTVIEWITEMFACTORY_H
+#include "ioutputviewitem.h"
 
-#include "kdevexport.h"
+IOutputViewItem::IOutputViewItem( const QString& text )
+    : QStandardItem( text )
+{}
 
-class IOutputViewItem;
-class QString;
+IOutputViewItem::~IOutputViewItem()
+{}
 
-class OUTPUTVIEWINTERFACES_EXPORT IOutputViewItemFactory
+int IOutputViewItem::type() const
 {
-public:
-    /// Destructor
-    virtual ~IOutputViewItemFactory();
+    return OUTPUTVIEWITEM_TYPE;
+}
 
-    /**
-     * Parses @arg lineOutput from KProcess and generates appropriate item.
-     * May use different appearance depending on the types of output.
-     * @return IOutputViewItem object which will be appended at the end of the OutputView.
-     * @sa IOutputViewItem
-     */
-    virtual IOutputViewItem* createItem( const QString& lineOutput ) = 0;
-};
+//////////////////////////////////////////////////////////////////////
 
-#endif
+DefaultOutputItem::DefaultOutputItem( const QString& text )
+    : IOutputViewItem( text )
+{}
+
+DefaultOutputItem::~DefaultOutputItem()
+{}
+
+void DefaultOutputItem::activated()
+{}
+
+QList<QAction*> DefaultOutputItem::contextMenuActions()
+{
+    QList<QAction*> nullist;
+    return nullist;
+}
