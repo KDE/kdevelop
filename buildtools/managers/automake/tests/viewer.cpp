@@ -40,9 +40,9 @@ Viewer::Viewer(QWidget *parent)
     : QWidget(parent), Ui::ViewerBase()
 {
 	setupUi(this);
-    if (QFile::exists(QDir::currentDirPath() + "/" + "qtlist"))
+    if (QFile::exists(QDir::currentDirPath() + '/' + "qtlist"))
     {
-        QFile f(QDir::currentDirPath() + "/" + "qtlist");
+        QFile f(QDir::currentDirPath() + '/' + "qtlist");
         f.open(QIODevice::ReadOnly);
         QTextStream str(&f);
         while (!str.atEnd())
@@ -59,7 +59,7 @@ void Viewer::on_addAll_clicked()
     QDir d(allLocation->text());
     QStringList l = d.entryList("*.am");
     for (QStringList::iterator it = l.begin(); it != l.end(); ++it)
-        (*it) = QDir::cleanDirPath(allLocation->text() + "/" + (*it));
+        (*it) = QDir::cleanDirPath(allLocation->text() + '/' + (*it));
     files->insertStringList(l);
 }
 
