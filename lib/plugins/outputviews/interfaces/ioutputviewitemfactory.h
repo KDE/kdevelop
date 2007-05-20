@@ -16,6 +16,7 @@
 
 class IOutputViewItem;
 class QString;
+class QStandardItem;
 
 class OUTPUTVIEWINTERFACES_EXPORT IOutputViewItemFactory
 {
@@ -29,7 +30,7 @@ public:
      * @return IOutputViewItem object which will be appended at the end of the OutputView.
      * @sa IOutputViewItem
      */
-    virtual IOutputViewItem* createItem( const QString& lineOutput ) = 0;
+    virtual QStandardItem* createItem( const QString& lineOutput ) = 0;
 };
 
 #endif

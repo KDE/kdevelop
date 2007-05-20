@@ -13,6 +13,8 @@
 #define MAKEITEM_H
 
 #include "ioutputviewitem.h"
+#include <QtGui/QStandardItem>
+
 class QAction;
 template<typename T1> class QList;
 class MakeBuilder;
@@ -22,12 +24,12 @@ class MakeBuilder;
 // public:
 //     MakeItem( const QString &text );
 //     virtual ~MakeItem();
-// 
+//
 //     virtual void activated();
 //     virtual QList<QAction*> contextMenuActions();
 // };
 
-class MakeWarningItem : public IOutputViewItem
+class MakeWarningItem : public QStandardItem, public IOutputViewItem
 {
 public:
     MakeWarningItem( const QString &text, const MakeBuilder *builder );
@@ -40,7 +42,7 @@ public:
     QString file;
     int lineNo;
     QString errorText;
-    
+
 protected:
     const MakeBuilder *m_builder;
 };

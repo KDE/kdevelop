@@ -58,7 +58,7 @@ void OutputWidget::addNewTab( OutputViewCommand* cmd )
     if( !m_listviews.contains( cmd->title() ) )
     {
         // create new listview, assign view's model.
-        QListView* listview = new OutputListView(this);
+        OutputListView* listview = new OutputListView(this);
         listview->setModel( cmd->model() );
         connect( cmd->model(), SIGNAL(rowsInserted( const QModelIndex &, int, int )),
                  listview, SLOT(scrollToBottom()) );
@@ -106,13 +106,13 @@ void OutputListView::slotActivated( const QModelIndex& index )
     QStandardItemModel *stdmodel = (QStandardItemModel*)model();
     QStandardItem *stditem = stdmodel->itemFromIndex( index );
     IOutputViewItem *outitem = dynamic_cast<IOutputViewItem*>( stditem );
-    Q_ASSERT( outitem );
-
-    outitem->activated();
+    if( outitem )
+        outitem->activated();
 }
 
 void OutputListView::customContextMenuRequested( const QPoint & point )
 {
+    //TODO: use proper context menu handling via plugincontroller
     QModelIndex modelIndex = indexAt( point );
     if( !modelIndex.isValid() )
     {
@@ -123,13 +123,15 @@ void OutputListView::customContextMenuRequested( const QPoint & point )
     QStandardItemModel *stdmodel = (QStandardItemModel*)model();
     QStandardItem *stditem = stdmodel->itemFromIndex( modelIndex );
     IOutputViewItem *outitem = dynamic_cast<IOutputViewItem*>( stditem );
-    Q_ASSERT(outitem);
+    if(outitem)
+    {
 
-    QList<QAction*> actions = outitem->contextMenuActions();
-    KMenu menu( this );
-    menu.addActions( actions );
+        QList<QAction*> actions = outitem->contextMenuActions();
+        KMenu menu( this );
+        menu.addActions( actions );
 
-    menu.exec( viewport()->mapToGlobal(point) );
+        menu.exec( viewport()->mapToGlobal(point) );
+    }
 }
 
 #include "outputwidget.moc"

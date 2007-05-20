@@ -38,9 +38,9 @@ public:
     virtual ~DefaultOutputItemFactory()
     {}
 
-    IOutputViewItem* createItem( const QString& lineOutput )
+    QStandardItem* createItem( const QString& lineOutput )
     {
-        return new DefaultOutputItem( lineOutput );
+        return new QStandardItem( lineOutput );
     }
 };
 
@@ -53,7 +53,7 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
     m_proc = new K3Process();
     m_proc->setWorkingDirectory( workdir.toLocalFile() );
     m_procLineMaker = new ProcessLineMaker( m_proc );
-    
+
     if( itemFactory )
     {
         m_factory = itemFactory;
@@ -62,7 +62,7 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
     {
         m_factory = new DefaultOutputItemFactory();
     }
-    
+
     foreach( QString s, env.keys() )
         m_proc->setEnvironment( s, env[s] );
     foreach(QString s, command)
@@ -89,7 +89,7 @@ OutputViewCommand::~OutputViewCommand()
 
 void OutputViewCommand::start()
 {
-    IOutputViewItem *i = m_factory->createItem( m_command );
+    QStandardItem *i = m_factory->createItem( m_command );
     m_model->appendRow( i );
     m_proc->start( K3Process::OwnGroup, K3Process::AllOutput );
 }
@@ -123,7 +123,7 @@ void OutputViewCommand::procFinished( K3Process* proc )
 {
     if( !m_proc->exitStatus() )
     {
-        IOutputViewItem* endItem = m_factory->createItem(QString("Finished (%1)").arg(m_proc->exitStatus()));
+        QStandardItem* endItem = m_factory->createItem(QString("Finished (%1)").arg(m_proc->exitStatus()));
         m_model->appendRow( endItem );
         kDebug(9004) << "Finished Sucessfully" << endl;
         QString titlestring = title();
@@ -131,7 +131,7 @@ void OutputViewCommand::procFinished( K3Process* proc )
     }
     else
     {
-        IOutputViewItem* endItem = m_factory->createItem(QString("Failed (%1)").arg(m_proc->exitStatus()));
+        QStandardItem* endItem = m_factory->createItem(QString("Failed (%1)").arg(m_proc->exitStatus()));
         m_model->appendRow( endItem );
         kDebug(9004) << "Failed" << endl;
         QString titlestring = title();
