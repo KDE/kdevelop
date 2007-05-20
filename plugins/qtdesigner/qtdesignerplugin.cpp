@@ -34,6 +34,7 @@
 #include <kmimetype.h>
 #include <kxmlguiwindow.h>
 #include <kparts/genericfactory.h>
+#include <kparts/mainwindow.h>
 #include <kparts/partmanager.h>
 #include <ksavefile.h>
 #include <kstandardaction.h>
@@ -134,11 +135,13 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     idc->registerDocumentForMimetype("application/x-designer", m_docFactory);
 
     connect( idc, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
-             this, SLOT( activateDocument( KDevelop::IDocuemnt* ) ) );
+             this, SLOT( activateDocument( KDevelop::IDocument* ) ) );
 
     setXMLFile( "kdevqtdesigner.rc" );
 
     QDesignerFormEditorInterface* formeditor = QDesignerComponents::createFormEditor(this);
+
+    formeditor->setTopLevel(core()->uiController()->activeMainWindow());
 
     formeditor->setWidgetBox(QDesignerComponents::createWidgetBox(formeditor, 0));
 
@@ -179,27 +182,6 @@ QtDesignerPlugin::~QtDesignerPlugin()
     delete m_docFactory;
 }
 
-// void QtDesignerPlugin::activated( KDevelop::IDocument *document )
-// {
-//     Q_UNUSED(document)
-    //FIXME
-//     if ( document->url() == url() )
-//     {
-//         KDevCore::mainWindow()->raiseView(
-//                 m_designer->widgetBox(),
-//                 Qt::LeftDockWidgetArea);
-//         KDevCore::mainWindow()->raiseView(
-//                 m_designer->propertyEditor(),
-//                 Qt::RightDockWidgetArea);
-//     }
-//     KMimeType::Ptr mimeType = KMimeType::findByURL( document->url() );
-//     if (!mimeType->is( "application/x-designer" ))
-//     {
-//         KDevCore::mainWindow()->lowerView( m_designer->widgetBox() );
-//         KDevCore::mainWindow()->lowerView( m_designer->propertyEditor() );
-//     }
-// }
-
 QDesignerFormEditorInterface *QtDesignerPlugin::designer() const
 {
     return m_designer->core();
@@ -227,26 +209,6 @@ void QtDesignerPlugin::setupActions()
     ac->addAction( "designer_select_all", manager->actionSelectAll() );
 }
 
-// bool QtDesignerPlugin::openFile()
-// {
-//   QFile uiFile(localFilePath());
-//   QDesignerFormWindowManagerInterface* manager = m_designer->formWindowManager();
-//   QDesignerFormWindowInterface* widget = manager->createFormWindow();
-//   widget->setFileName(localFilePath());
-//   widget->setContents(&uiFile);
-//   manager->setActiveFormWindow(widget);
-//   m_workspace->addWindow(widget);
-//   m_window = widget;
-//   m_window->installEventFilter( this ); //be able to catch the close event
-//
-//   connect( m_window, SIGNAL( changed() ), this, SLOT(setModified()));
-//   connect( m_window, SIGNAL( changed() ), this, SLOT( updateDesignerActions() ) );
-//   connect( m_window, SIGNAL( selectionChanged() ), this, SLOT( updateDesignerActions() ) );
-//   connect( m_window, SIGNAL( toolChanged( int ) ), this, SLOT( updateDesignerActions() ) );
-//
-//   return true;
-// }
-//
 // bool QtDesignerPlugin::saveFile()
 // {
 //     KSaveFile uiFile( localFilePath() );

@@ -67,7 +67,7 @@ public:
 //   virtual bool saveFile();
 
     QDesignerFormEditorInterface *designer() const;
-public slots:
+public Q_SLOTS:
     void activateDocument( KDevelop::IDocument* );
 protected:
 
