@@ -38,7 +38,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-K_GLOBAL_STATIC( EditorIntegratorPrivate, s_data);
+K_GLOBAL_STATIC( EditorIntegratorPrivate, s_data)
 
 EditorIntegrator::EditorIntegrator()
   : m_currentDocument(0)
