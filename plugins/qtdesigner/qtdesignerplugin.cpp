@@ -141,6 +141,7 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
 
     QDesignerFormEditorInterface* formeditor = QDesignerComponents::createFormEditor(this);
 
+    //TODO apaku: if multiple mainwindows exist, this needs to be changed on mainwindow-change
     formeditor->setTopLevel(core()->uiController()->activeMainWindow());
 
     formeditor->setWidgetBox(QDesignerComponents::createWidgetBox(formeditor, 0));
