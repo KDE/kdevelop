@@ -150,13 +150,13 @@ public:
     };
     Q_DECLARE_FLAGS( MappingFlags, MappingFlag )
 
-    void addMapping( const KUrl& repositoryLocation,
-                     const KUrl& localLocation,
+    void addMapping( const KUrl& sourceLocation,
+                     const KUrl& destinationLocation,
                      MappingFlags recursion );
-    void removeMapping( const KUrl& repositoryLocation);
-    KUrl::List repositoryLocations();
-    KUrl localLocation( const KUrl& repositoryLocation );
-    MappingFlags mappingFlags( const KUrl& repositoryLocation ) const;
+    void removeMapping( const KUrl& sourceLocation);
+    KUrl::List sourceLocations();
+    KUrl destinationLocation( const KUrl& sourceLocation );
+    MappingFlags mappingFlags( const KUrl& sourceLocation ) const;
 };
 
 /**
