@@ -86,7 +86,6 @@ public:
         GlobalNumber    /**<Global repository version when item was last changed.*/,
         FileNumber      /**<Item's independent version number.*/,
         Date,
-        Range
     };
     enum RevisionSpecialType
     {
@@ -105,17 +104,7 @@ public:
     /**
      * Set the value of this revision
      */
-    void setRevisionValue( const QVariant& rev, RevisionType );
-
-    /**
-     * Set the starting revision of a revision range
-     */
-    void setSourceRevision( const VcsRevision& );
-
-    /**
-     * Set the ending revision of a revision range
-     */
-    void setTargetRevision( const VcsRevision& );
+    bool setRevisionValue( const QVariant& rev, RevisionType );
 
     /**
      * returns the type of the revision
@@ -126,12 +115,6 @@ public:
      * return the value of this revision
      */
     QString revisionValue() const;
-
-    /**
-     * return starting and ending revision of a revision range
-     */
-    VcsRevision sourceRevision() const;
-    VcsRevision targetRevision() const;
 };
 
 /**

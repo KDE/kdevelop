@@ -190,6 +190,17 @@ public:
                         unsigned long limit ) = 0;
 
     /**
+     * Retrieve the history of a given local url
+     *
+     * @param rev List @p rev and earlier. The default is HEAD.
+     * @param limit Do not show entries earlier than @p limit. Note that the
+     * limit is @e advisory and may be ignored.
+     */
+    virtual VcsJob log( const KUrl& localLocation,
+                        const VcsRevision& rev,
+                        const VcsRevision& limit ) = 0;
+
+    /**
      * Show the history of a given local url
      *
      * @param rev List @p rev and earlier. The default is HEAD.
