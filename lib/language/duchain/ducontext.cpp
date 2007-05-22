@@ -29,8 +29,6 @@
 #include "topducontext.h"
 #include "symboltable.h"
 
-#include "dumpchain.h"
-
 using namespace KTextEditor;
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)

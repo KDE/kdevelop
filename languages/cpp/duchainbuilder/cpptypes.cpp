@@ -84,7 +84,7 @@ CppTypeAliasType::CppTypeAliasType()
 {
 }*/
 
-CppClassType::CppClassType(Cpp::CVSpecs spec)
+CppClassType::CppClassType(Declaration::CVSpecs spec)
   : CppCVType(spec)
   , m_classType(Class)
   , m_closed(false)
@@ -154,9 +154,9 @@ QString CppIntegralType::toString() const
   return QString("%1%2").arg(cvString()).arg(IntegralType::toString());
 }
 
-CppCVType::CppCVType(Cpp::CVSpecs spec)
-  : m_constant(spec & Cpp::Const)
-  , m_volatile(spec & Cpp::Volatile)
+CppCVType::CppCVType(Declaration::CVSpecs spec)
+  : m_constant(spec & Declaration::Const)
+  , m_volatile(spec & Declaration::Volatile)
 {
 }
 
@@ -170,7 +170,7 @@ QString CppFunctionType::toString() const
   return QString("%1 %2").arg(FunctionType::toString()).arg(cvString());
 }
 
-CppPointerType::CppPointerType(Cpp::CVSpecs spec)
+CppPointerType::CppPointerType(Declaration::CVSpecs spec)
   : CppCVType(spec)
 {
 }
@@ -180,7 +180,7 @@ QString CppPointerType::toString() const
   return QString("%1%2").arg(PointerType::toString()).arg(cvString());
 }
 
-CppReferenceType::CppReferenceType(Cpp::CVSpecs spec)
+CppReferenceType::CppReferenceType(Declaration::CVSpecs spec)
   : CppCVType(spec)
 {
 }
@@ -190,7 +190,7 @@ QString CppReferenceType::toString() const
   return QString("%1%2").arg(ReferenceType::toString()).arg(cvString());
 }
 
-/*CppArrayType::CppArrayType(Cpp::CVSpecs spec)
+/*CppArrayType::CppArrayType(Declaration::CVSpecs spec)
   : CppCVType(spec)
 {
 }
@@ -276,7 +276,7 @@ QString CppClassType::toString() const
   return QString("<%1>%2").arg(type).arg(cvString());
 }
 
-CppEnumerationType::CppEnumerationType(Cpp::CVSpecs spec)
+CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec)
   : CppIntegralType(TypeInt)
 {
   setCV(spec);
@@ -359,31 +359,6 @@ QString CppReferenceType::mangled() const
   return ret;
 }
 
-CppIdentifiedType::CppIdentifiedType()
-  : m_declaration(0)
-{
-}
-
-QualifiedIdentifier CppIdentifiedType::identifier() const
-{
-  return m_declaration ? m_declaration->qualifiedIdentifier() : QualifiedIdentifier();
-}
-
-Declaration* CppIdentifiedType::declaration() const
-{
-  return m_declaration;
-}
-
-void CppIdentifiedType::setDeclaration(Declaration* declaration)
-{
-  m_declaration = declaration;
-}
-
-QString CppIdentifiedType::idMangled() const
-{
-  return identifier().mangled();
-}
-
 QString CppClassType::mangled() const
 {
   return idMangled();
@@ -417,12 +392,12 @@ QString CppFunctionType::mangled() const
 
 ClassFunctionDeclaration* CppFunctionType::declaration() const
 {
-  return static_cast<ClassFunctionDeclaration*>(CppIdentifiedType::declaration());
+  return static_cast<ClassFunctionDeclaration*>(IdentifiedType::declaration());
 }
 
 void CppFunctionType::setDeclaration(ClassFunctionDeclaration* declaration)
 {
-  CppIdentifiedType::setDeclaration(declaration);
+  IdentifiedType::setDeclaration(declaration);
 }
 
 QString CppArrayType::mangled() const

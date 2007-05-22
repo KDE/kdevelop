@@ -22,7 +22,7 @@
 
 ClassMemberDeclaration::ClassMemberDeclaration(KTextEditor::Range * range, DUContext* context)
   : Declaration(range, ClassScope, context)
-  , m_accessPolicy(Cpp::Public)
+  , m_accessPolicy(Declaration::Public)
   , m_isStatic(false)
   , m_isAuto(false)
   , m_isFriend(false)
@@ -92,12 +92,12 @@ void ClassMemberDeclaration::setMutable(bool isMutable)
   m_isMutable = isMutable;
 }
 
-Cpp::AccessPolicy ClassMemberDeclaration::accessPolicy() const
+Declaration::AccessPolicy ClassMemberDeclaration::accessPolicy() const
 {
   return m_accessPolicy;
 }
 
-void ClassMemberDeclaration::setAccessPolicy(Cpp::AccessPolicy accessPolicy)
+void ClassMemberDeclaration::setAccessPolicy(Declaration::AccessPolicy accessPolicy)
 {
   m_accessPolicy = accessPolicy;
 }

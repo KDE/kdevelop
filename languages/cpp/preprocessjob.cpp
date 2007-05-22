@@ -37,13 +37,13 @@
 #include "ilanguage.h"
 
 #include "cpplanguagesupport.h"
-#include "parser/parsesession.h"
 #include "cppparsejob.h"
+#include "parser/parsesession.h"
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-engine.h"
-#include "duchain/duchain.h"
+#include "duchain.h"
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)

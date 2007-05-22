@@ -74,7 +74,7 @@ public:
   ~DUChainLock();
 
   /**
-   * Acquires a read lock. Will not return until the lock is aquired
+   * Acquires a read lock. Will not return until the lock is acquired
    * or timeout is reached (10 seconds).
    *
    * Any number of read locks can be aquired at once, but not while
@@ -93,7 +93,7 @@ public:
   bool currentThreadHasReadLock();
 
   /**
-   * Acquires a write lock. Will not return until the lock is aquired
+   * Acquires a write lock. Will not return until the lock is acquired
    * or timeout is reached (10 seconds).
    *
    * There can be no other read or write locks held at the same time.

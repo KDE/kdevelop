@@ -31,8 +31,8 @@ class DUCHAIN_EXPORT ClassMemberDeclaration : public Declaration
 public:
   ClassMemberDeclaration(KTextEditor::Range* range, DUContext* context);
 
-  Cpp::AccessPolicy accessPolicy() const;
-  void setAccessPolicy(Cpp::AccessPolicy accessPolicy);
+  AccessPolicy accessPolicy() const;
+  void setAccessPolicy(AccessPolicy accessPolicy);
 
   enum StorageSpecifier {
     StaticSpecifier   = 0x1,
@@ -65,7 +65,7 @@ public:
   void setMutable(bool isMutable);
 
 private:
-  Cpp::AccessPolicy m_accessPolicy;
+  Declaration::AccessPolicy m_accessPolicy;
   bool m_isStatic: 1;
   bool m_isAuto: 1;
   bool m_isFriend: 1;

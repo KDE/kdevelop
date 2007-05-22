@@ -1,9 +1,11 @@
-# include_directories( ${CMAKE_SOURCE_DIR}/lib )
 
 add_subdirectory(rpp)
 add_subdirectory(tests)
 add_subdirectory(headergen)
 
+include_directories(
+    ${CMAKE_SOURCE_DIR}/lib/language/duchain
+)
 
 
 ########### next target ###############
@@ -30,12 +32,11 @@ set(kdevcppparser_LIB_SRCS
     dumptree.cpp
     parsesession.cpp
     type_compiler.cpp
-    identifier.cpp
 )
 
 kde4_automoc(${kdevcppparser_LIB_SRCS})
 kde4_add_library(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
-target_link_libraries(kdevcppparser ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} )
+target_link_libraries(kdevcppparser kdevduchain ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} )
 set_target_properties(kdevcppparser PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevcppparser DESTINATION ${LIB_INSTALL_DIR} )
 
@@ -46,11 +47,9 @@ install(FILES
     ast.h
     codemodel_finder.h
     control.h
-    identifier.h
     name_compiler.h
     rxx_allocator.h
     visitor.h
-    identifier.h
 #     binder.h
 #     codemodel_fwd.h
 #     declarator_compiler.h
@@ -70,5 +69,5 @@ install(FILES
     problem.h
     type_compiler.h
     cppparserexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cppparser
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/parser
 )

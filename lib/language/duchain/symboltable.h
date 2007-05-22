@@ -21,15 +21,11 @@
 
 #include <QMultiHash>
 #include <QMultiMap>
-#include <QReadWriteLock>
 #include "duchainexport.h"
-
-#include "identifier.h"
-
-class QReadWriteLock;
 
 class Declaration;
 class DUContext;
+class QualifiedIdentifier;
 
 /**
  * A global symbol table, which stores mangled identifiers for quick lookup.
@@ -61,10 +57,7 @@ private:
 
   static SymbolTable* s_instance;
 
-  mutable QReadWriteLock m_declarationMutex;
   QMultiMap<QString, Declaration*> m_declarations;
-
-  mutable QReadWriteLock m_contextMutex;
   QMultiHash<QString, DUContext*> m_contexts;
 };
 

@@ -28,16 +28,17 @@
 
 #include <ktexteditor/attribute.h>
 
-#include "kdevcodehighlighting.h"
+#include "icodehighlighting.h"
 
 namespace KTextEditor { class SmartRange; }
 
 class DUContext;
 class Declaration;
 
-class CppHighlighting : public QObject, public KDevelop::CodeHighlighting
+class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
 {
   Q_OBJECT
+  Q_INTERFACES(KDevelop::ICodeHighlighting)
 
   public:
     enum Types {

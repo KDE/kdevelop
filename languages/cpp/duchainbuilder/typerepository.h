@@ -19,18 +19,19 @@
 #ifndef TYPEREPOSITORY_H
 #define TYPEREPOSITORY_H
 
-#include "cpptypes.h"
-#include "duchainexport.h"
 #include <QSet>
 #include <QMultiHash>
 #include <QMutex>
 
-class DUCHAIN_EXPORT TypeRepository
+#include "cpptypes.h"
+#include "cppduchainbuilderexport.h"
+
+class KDEVDUCHAINBUILDER_EXPORT TypeRepository
 {
 public:
   static TypeRepository* self();
 
-  CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, Cpp::CVSpecs cv = Cpp::CVNone) const;
+  CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, Declaration::CVSpecs cv = Declaration::CVNone) const;
 
   /**
    * Registers the given \a input type, and returns a pointer to the

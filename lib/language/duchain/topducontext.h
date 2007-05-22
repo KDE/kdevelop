@@ -69,7 +69,6 @@ protected:
 private:
   bool imports(TopDUContext* origin, int depth) const;
 
-  mutable QReadWriteLock m_chainLock;
   bool m_hasUses  : 1;
   bool m_deleting : 1;
 };

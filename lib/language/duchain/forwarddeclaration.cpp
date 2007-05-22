@@ -21,10 +21,11 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
+#include "duchain.h"
+#include "duchainlock.h"
 #include "ducontext.h"
 #include "use.h"
 #include "definition.h"
-#include "cpptypes.h"
 #include "symboltable.h"
 
 using namespace KTextEditor;
@@ -42,11 +43,15 @@ ForwardDeclaration::~ForwardDeclaration()
 
 Declaration * ForwardDeclaration::resolved() const
 {
+  ENSURE_CHAIN_READ_LOCKED
+
   return m_resolvedDeclaration;
 }
 
 void ForwardDeclaration::setResolved(Declaration * declaration)
 {
+  ENSURE_CHAIN_WRITE_LOCKED
+
   if (m_resolvedDeclaration)
     m_resolvedDeclaration->m_forwardDeclarations.removeAll(this);
 

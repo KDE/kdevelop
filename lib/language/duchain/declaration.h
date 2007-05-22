@@ -20,12 +20,10 @@
 #define DECLARATION_H
 
 #include <QList>
-#include <QReadWriteLock>
 #include "duchainexport.h"
 
 #include "identifier.h"
 #include "documentrangeobject.h"
-#include "cppnamespace.h"
 #include "typesystem.h"
 #include "duchainbase.h"
 
@@ -51,6 +49,17 @@ public:
     FunctionScope,
     LocalScope
   };
+  enum AccessPolicy {
+    Public,
+    Protected,
+    Private
+  };
+  enum CVSpec {
+    CVNone = 0,
+    Const = 0x1,
+    Volatile = 0x2
+  };
+  Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
   Declaration(KTextEditor::Range* range, Scope scope, DUContext* context);
   virtual ~Declaration();
@@ -125,6 +134,8 @@ private:
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Declaration::CVSpecs)
 
 #endif // DECLARATION_H
 

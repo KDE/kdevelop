@@ -20,7 +20,6 @@
 #define DUCONTEXT_H
 
 #include <QHash>
-#include <QReadWriteLock>
 #include "duchainexport.h"
 
 #include "documentcursorobject.h"

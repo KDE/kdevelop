@@ -1,3 +1,6 @@
+
+add_subdirectory(duchain)
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/lib/
     ${CMAKE_SOURCE_DIR}/lib/interfaces
@@ -23,6 +26,7 @@ install(TARGETS kdevplatformlanguage DESTINATION ${LIB_INSTALL_DIR} )
 
 install(FILES
     interfaces/ilanguagesupport.h
+    interfaces/icodehighlighting.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language/interfaces
 )
 

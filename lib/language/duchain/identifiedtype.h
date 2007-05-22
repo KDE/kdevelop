@@ -1,4 +1,6 @@
 /* This file is part of KDevelop
+    Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Adam Treat <treat@kde.org>
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,47 +18,28 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEFINITION_H
-#define DEFINITION_H
+#ifndef IDENTIFIEDTYPE_H
+#define IDENTIFIEDTYPE_H
 
-#include "documentrangeobject.h"
-#include "duchainbase.h"
 #include "duchainexport.h"
+#include "identifier.h"
 
 class Declaration;
-class DUContext;
 
-/**
- * Represents a definition of a previously encountered declaration in a definition-use chain.
- */
-class DUCHAIN_EXPORT Definition : public DUChainBase
+class DUCHAIN_EXPORT IdentifiedType
 {
-  friend class Declaration;
-
 public:
-  Definition(KTextEditor::Range* range, DUContext* context);
-  virtual ~Definition();
+  IdentifiedType();
 
-  virtual TopDUContext* topContext() const;
+  QualifiedIdentifier identifier() const;
 
-  DUContext* context() const;
-  void setContext(DUContext* context);
-
-  /**
-   * Retrieve the declaration for this use.
-   */
   Declaration* declaration() const;
-
-private:
-  /**
-   * Set the declaration for this use.
-   */
   void setDeclaration(Declaration* declaration);
 
-  DUContext* m_context;
+  QString idMangled() const;
+
+private:
   Declaration* m_declaration;
 };
 
-#endif // DEFINITION_H
-
-// kate: indent-width 2;
+#endif

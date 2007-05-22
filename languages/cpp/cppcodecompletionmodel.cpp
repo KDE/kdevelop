@@ -144,13 +144,13 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
       CompletionProperties p;
       if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(dec)) {
         switch (member->accessPolicy()) {
-          case Cpp::Public:
+          case Declaration::Public:
             p |= Public;
             break;
-          case Cpp::Protected:
+          case Declaration::Protected:
             p |= Protected;
             break;
-          case Cpp::Private:
+          case Declaration::Private:
             p |= Private;
             break;
         }

@@ -114,7 +114,7 @@ private:
   bool m_registered;
 };
 
-class IntegralType: public AbstractType
+class DUCHAIN_EXPORT IntegralType: public AbstractType
 {
 public:
   typedef KSharedPtr<IntegralType> Ptr;
@@ -148,7 +148,7 @@ private:
   QString m_name;
 };
 
-class PointerType: public AbstractType
+class DUCHAIN_EXPORT PointerType: public AbstractType
 {
 public:
   typedef KSharedPtr<PointerType> Ptr;
@@ -186,7 +186,7 @@ private:
   AbstractType::Ptr m_baseType;
 };
 
-class ReferenceType: public AbstractType
+class DUCHAIN_EXPORT ReferenceType: public AbstractType
 {
 public:
   typedef KSharedPtr<ReferenceType> Ptr;
@@ -224,7 +224,7 @@ private:
   AbstractType::Ptr m_baseType;
 };
 
-class FunctionType : public AbstractType
+class DUCHAIN_EXPORT FunctionType : public AbstractType
 {
 public:
   typedef KSharedPtr<FunctionType> Ptr;
@@ -273,7 +273,7 @@ private:
   QList<AbstractType::Ptr> m_arguments;
 };
 
-class StructureType : public AbstractType
+class DUCHAIN_EXPORT StructureType : public AbstractType
 {
 public:
   typedef KSharedPtr<StructureType> Ptr;

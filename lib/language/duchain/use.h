@@ -23,8 +23,6 @@
 #include "documentrangeobject.h"
 #include "duchainbase.h"
 
-#include <QReadWriteLock>
-
 class DUContext;
 class Declaration;
 
@@ -63,7 +61,6 @@ private:
   void setDeclaration(Declaration* definition);
 
   DUContext* m_context;
-  mutable QReadWriteLock m_declarationLock;
   Declaration* m_declaration;
 };
 

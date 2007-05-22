@@ -319,9 +319,9 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct || kind == Token_union)
-    m_accessPolicyStack.push(Cpp::Public);
+    m_accessPolicyStack.push(Declaration::Public);
   else
-    m_accessPolicyStack.push(Cpp::Private);
+    m_accessPolicyStack.push(Declaration::Private);
 
   DeclarationBuilderBase::visitClassSpecifier(node);
 
@@ -388,13 +388,13 @@ void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
         case Token_k_dcop_signals:
           break;
         case Token_public:
-          setAccessPolicy(Cpp::Public);
+          setAccessPolicy(Declaration::Public);
           break;
         case Token_protected:
-          setAccessPolicy(Cpp::Protected);
+          setAccessPolicy(Declaration::Protected);
           break;
         case Token_private:
-          setAccessPolicy(Cpp::Private);
+          setAccessPolicy(Declaration::Private);
           break;
       }
 

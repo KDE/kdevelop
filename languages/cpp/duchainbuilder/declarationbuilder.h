@@ -20,8 +20,8 @@
 #define DECLARATIONBUILDER_H
 
 #include "typebuilder.h"
-#include "duchainexport.h"
-#include "cppnamespace.h"
+#include "cppduchainbuilderexport.h"
+#include "declaration.h"
 #include "classfunctiondeclaration.h"
 
 class Declaration;
@@ -31,7 +31,7 @@ typedef TypeBuilder DeclarationBuilderBase;
 /**
  * A class which iterates the AST to extract definitions of types.
  */
-class DUCHAIN_EXPORT DeclarationBuilder: public DeclarationBuilderBase
+class KDEVDUCHAINBUILDER_EXPORT DeclarationBuilder: public DeclarationBuilderBase
 {
 public:
   DeclarationBuilder(ParseSession* session);
@@ -75,8 +75,8 @@ private:
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
   inline Declaration* currentDeclaration() const { return m_declarationStack.top(); }
 
-  inline Cpp::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
-  inline void setAccessPolicy(Cpp::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
+  inline Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
+  inline void setAccessPolicy(Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
   inline int& nextDeclaration() { return m_nextDeclarationStack.top(); }
 
@@ -85,7 +85,7 @@ private:
   void popSpecifiers();
 
   QStack<Declaration*> m_declarationStack;
-  QStack<Cpp::AccessPolicy> m_accessPolicyStack;
+  QStack<Declaration::AccessPolicy> m_accessPolicyStack;
   QStack<int> m_nextDeclarationStack;
 
   QStack<ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;

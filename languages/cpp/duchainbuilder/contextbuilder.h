@@ -24,7 +24,7 @@
 
 #include "identifier.h"
 #include "ducontext.h"
-#include "duchainexport.h"
+#include "cppduchainbuilderexport.h"
 
 class ParseSession;
 class DUChain;
@@ -38,7 +38,7 @@ namespace KTextEditor { class Range; }
 /**
  * A class which iterates the AST to identify contexts.
  */
-class DUCHAIN_EXPORT ContextBuilder: protected DefaultVisitor
+class KDEVDUCHAINBUILDER_EXPORT ContextBuilder: protected DefaultVisitor
 {
   friend class IdentifierVerifier;
 

@@ -387,9 +387,9 @@ AbstractType::Ptr TypeBuilder::lastType() const
   return m_lastType;
 }
 
-Cpp::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
+Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
 {
-  Cpp::CVSpecs ret = Cpp::CVNone;
+  Declaration::CVSpecs ret = Declaration::CVNone;
 
   if (cv) {
     const ListNode<std::size_t> *it = cv->toFront();
@@ -397,9 +397,9 @@ Cpp::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
     do {
       int kind = m_editor->parseSession()->token_stream->kind(it->element);
       if (kind == Token_const)
-        ret |= Cpp::Const;
+        ret |= Declaration::Const;
       else if (kind == Token_volatile)
-        ret |= Cpp::Volatile;
+        ret |= Declaration::Volatile;
 
       it = it->next;
     } while (it != end);

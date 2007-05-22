@@ -69,13 +69,13 @@
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 
-#include "duchain/duchain.h"
-#include "duchain/topducontext.h"
-#include "duchain/smartconverter.h"
-#include "duchain/cppeditorintegrator.h"
-#include "duchain/usebuilder.h"
-#include "duchain/symboltable.h"
-#include "duchain/typerepository.h"
+#include "duchain.h"
+#include "topducontext.h"
+#include "smartconverter.h"
+#include "cppeditorintegrator.h"
+#include "usebuilder.h"
+#include "symboltable.h"
+#include "typerepository.h"
 
 #include "cppparsejob.h"
 // #include "codeproxy.h"
@@ -198,7 +198,7 @@ void CppLanguageSupport::documentClosed(KDevelop::IDocument* doc)
     language()->backgroundParser()->removeDocument(doc->url());
 }
 
-KDevelop::CodeHighlighting *CppLanguageSupport::codeHighlighting() const
+KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }

@@ -26,21 +26,22 @@
 #include <QtCore/QVector>
 #include <QtCore/QPair>
 
-#include "duchainexport.h"
 #include "typesystem.h"
-#include "cppnamespace.h"
+#include "declaration.h"
+#include "identifiedtype.h"
+#include "cppduchainbuilderexport.h"
 
 class DUContext;
 class Declaration;
 class ClassFunctionDeclaration;
 
-class DUCHAIN_EXPORT CppCVType
+class KDEVDUCHAINBUILDER_EXPORT CppCVType
 {
   friend class TypeRepository;
   friend class TypeBuilder;
 
 public:
-  CppCVType(Cpp::CVSpecs spec = Cpp::CVNone);
+  CppCVType(Declaration::CVSpecs spec = Declaration::CVNone);
 
   inline bool isConstant() const { return m_constant; }
 
@@ -51,10 +52,10 @@ public:
 
   //uint cvHash(uint input) const { return input; }
 
-  Cpp::CVSpecs cv() const { return static_cast<Cpp::CVSpecs>((m_constant & Cpp::Const) | (m_volatile & Cpp::Volatile)); }
+  Declaration::CVSpecs cv() const { return static_cast<Declaration::CVSpecs>((m_constant & Declaration::Const) | (m_volatile & Declaration::Volatile)); }
 
 protected:
-  inline void setCV(Cpp::CVSpecs spec) { m_constant = spec & Cpp::Const; m_volatile = spec & Cpp::Volatile; }
+  inline void setCV(Declaration::CVSpecs spec) { m_constant = spec & Declaration::Const; m_volatile = spec & Declaration::Volatile; }
   inline void setConstant(bool is) { m_constant = is; }
   inline void setVolatile(bool is) { m_volatile = is; }
 
@@ -63,23 +64,7 @@ private:
   bool m_volatile : 1;
 };
 
-class CppIdentifiedType
-{
-public:
-  CppIdentifiedType();
-
-  QualifiedIdentifier identifier() const;
-
-  Declaration* declaration() const;
-  void setDeclaration(Declaration* declaration);
-
-  QString idMangled() const;
-
-private:
-  Declaration* m_declaration;
-};
-
-class DUCHAIN_EXPORT CppIntegralType : public IntegralType, public CppCVType
+class KDEVDUCHAINBUILDER_EXPORT CppIntegralType : public IntegralType, public CppCVType
 {
   friend class TypeRepository;
 
@@ -127,7 +112,7 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
-class DUCHAIN_EXPORT CppFunctionType : public FunctionType, public CppIdentifiedType, public CppCVType
+class KDEVDUCHAINBUILDER_EXPORT CppFunctionType : public FunctionType, public IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
@@ -142,12 +127,12 @@ public:
   virtual QString mangled() const;
 };
 
-class DUCHAIN_EXPORT CppPointerType : public PointerType, public CppCVType
+class KDEVDUCHAINBUILDER_EXPORT CppPointerType : public PointerType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppPointerType> Ptr;
 
-  CppPointerType(Cpp::CVSpecs spec = Cpp::CVNone);
+  CppPointerType(Declaration::CVSpecs spec = Declaration::CVNone);
 
   virtual QString toString() const;
 
@@ -156,12 +141,12 @@ public:
   //virtual uint hash() const;
 };
 
-class DUCHAIN_EXPORT CppReferenceType : public ReferenceType, public CppCVType
+class KDEVDUCHAINBUILDER_EXPORT CppReferenceType : public ReferenceType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppReferenceType> Ptr;
 
-  CppReferenceType(Cpp::CVSpecs spec = Cpp::CVNone);
+  CppReferenceType(Declaration::CVSpecs spec = Declaration::CVNone);
 
   virtual QString toString() const;
 
@@ -170,19 +155,17 @@ public:
   //virtual uint hash() const;
 };
 
-class CppClassType;
-
-class DUCHAIN_EXPORT CppClassType : public StructureType, public CppIdentifiedType, public CppCVType
+class KDEVDUCHAINBUILDER_EXPORT CppClassType : public StructureType, public IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
 
-  CppClassType(Cpp::CVSpecs spec = Cpp::CVNone);
+  CppClassType(Declaration::CVSpecs spec = Declaration::CVNone);
 
   struct BaseClassInstance
   {
     CppClassType::Ptr baseClass;
-    Cpp::AccessPolicy access;
+    Declaration::AccessPolicy access;
     bool virtualInheritance;
   };
 
@@ -228,12 +211,12 @@ private:
 public:
   typedef KSharedPtr<CppArrayType> Ptr;
 
-  CppArrayType(Cpp::CVSpecs spec = Cpp::CVNone);
+  CppArrayType(Declaration::CVSpecs spec = Declaration::CVNone);
 
   virtual QString toString() const;
 };*/
 
-class CppTypeAliasType : public AbstractType, public CppIdentifiedType, public CppCVType
+class KDEVDUCHAINBUILDER_EXPORT CppTypeAliasType : public AbstractType, public IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppTypeAliasType> Ptr;
@@ -278,25 +261,24 @@ private:
   QString m_value;
 };*/
 
-class DUCHAIN_EXPORT CppEnumerationType : public CppIntegralType, public CppIdentifiedType
+class KDEVDUCHAINBUILDER_EXPORT CppEnumerationType : public CppIntegralType, public IdentifiedType
 {
 public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
 
-  CppEnumerationType(Cpp::CVSpecs spec = Cpp::CVNone);
+  CppEnumerationType(Declaration::CVSpecs spec = Declaration::CVNone);
   //virtual uint hash() const;
 
   virtual QString mangled() const;
 };
 
-class CppArrayType : public ArrayType
+class KDEVDUCHAINBUILDER_EXPORT CppArrayType : public ArrayType
 {
 public:
   typedef KSharedPtr<CppArrayType> Ptr;
 
   virtual QString mangled() const;
 };
-
 
 /*class CppTemplateParameterType : public
 {
@@ -312,7 +294,7 @@ private:
   bool m_defaultValue;
 };*/
 
-class CppTemplateType : public AbstractType, public CppIdentifiedType
+class KDEVDUCHAINBUILDER_EXPORT CppTemplateType : public AbstractType, public IdentifiedType
 {
 public:
   typedef KSharedPtr<CppTemplateType> Ptr;

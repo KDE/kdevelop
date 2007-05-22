@@ -46,14 +46,14 @@ Use::~Use()
 
 Declaration* Use::declaration() const
 {
-  QReadLocker lock(&m_declarationLock);
+  ENSURE_CHAIN_READ_LOCKED
 
   return m_declaration;
 }
 
 void Use::setDeclaration(Declaration* declaration)
 {
-  QWriteLocker lock(&m_declarationLock);
+  ENSURE_CHAIN_WRITE_LOCKED
 
   if (m_declaration)
     DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::DeclarationRelationship, m_declaration);

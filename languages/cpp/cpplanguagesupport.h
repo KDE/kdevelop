@@ -34,7 +34,7 @@ class CppCodeCompletion;
 class TranslationUnitAST;
 
 namespace KParts { class Part; }
-namespace KDevelop { class CodeHighlighting; class IProject; class IDocument; }
+namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; }
 
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -58,7 +58,7 @@ public:
     virtual KDevelop::ParseJob *createParseJob( KDevelop::Document *document );
     virtual QStringList mimeTypes() const;
 */
-    virtual KDevelop::CodeHighlighting *codeHighlighting() const;
+    virtual KDevelop::ICodeHighlighting *codeHighlighting() const;
 /*
     virtual void releaseAST( KDevelop::AST *ast);
 */

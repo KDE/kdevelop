@@ -16,8 +16,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVCODEHIGHLIGHTING_H
-#define KDEVCODEHIGHLIGHTING_H
+#ifndef ICODEHIGHLIGHTING_H
+#define ICODEHIGHLIGHTING_H
+
+#include "iextension.h"
+#include "kdevexport.h"
 
 class TopDUContext;
 class Definition;
@@ -28,22 +31,24 @@ namespace KDevelop
 {
 
 /**
-KDevelop text highlighting support interface - the base class for
-language support text highlighting routines. Languages can apply highlighting
-to parsed code here.
+  KDevelop text highlighting support interface - the base class for
+  language support text highlighting routines. Languages can apply
+  highlighting to parsed code here.
 */
-class CodeHighlighting
+class KDEVPLATFORMLANGUAGE_EXPORT ICodeHighlighting
 {
 public:
-    virtual ~CodeHighlighting();
+    virtual ~ICodeHighlighting() {}
 
-    /**@return Whether the given url is supported by the language part.*/
     virtual void highlightDUChain(TopDUContext* context) const = 0;
-
     virtual void highlightDefinition(Definition* definition) const = 0;
     virtual void highlightDeclaration(Declaration* declaration) const = 0;
     virtual void highlightUse(Use* use) const = 0;
 };
 
 }
-#endif
+
+KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, ICodeHighlighting, "org.kdevelop.ICodeHighlighting")
+Q_DECLARE_INTERFACE(KDevelop::ICodeHighlighting, "org.kdevelop.ICodeHighlighting")
+
+#endif // ICODEHIGHLIGHTING_H

@@ -31,8 +31,8 @@
 #include "cpplanguagesupport.h"
 #include "cppcodecompletionmodel.h"
 
-#include "duchain/duchain.h"
-#include "duchain/topducontext.h"
+#include "duchain.h"
+#include "topducontext.h"
 
 using namespace KTextEditor;
 

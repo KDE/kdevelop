@@ -66,7 +66,7 @@ TypeRepository::TypeRepository()
   newIntegralType(CppIntegralType::TypeWchar_t);
 }
 
-CppIntegralType::Ptr TypeRepository::integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers, Cpp::CVSpecs cv) const
+CppIntegralType::Ptr TypeRepository::integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers, Declaration::CVSpecs cv) const
 {
   switch (type) {
     case CppIntegralType::TypeVoid:
@@ -211,7 +211,7 @@ AbstractType::Ptr TypeRepository::registerPointer(CppPointerType::Ptr input)
     // Invalid
     return AbstractType::Ptr::staticCast(input);
 
-  const Cpp::CVSpecs cv = input->cv();
+  const Declaration::CVSpecs cv = input->cv();
 
   if (m_pointers.contains(input->baseType())) {
     QMultiHash<AbstractType::Ptr, CppPointerType::Ptr>::ConstIterator it(m_pointers.constFind(input->baseType()));
@@ -237,7 +237,7 @@ AbstractType::Ptr TypeRepository::registerReference(CppReferenceType::Ptr input)
     // Invalid
     return AbstractType::Ptr::staticCast(input);
 
-  const Cpp::CVSpecs cv = input->cv();
+  const Declaration::CVSpecs cv = input->cv();
 
   if (m_references.contains(input->baseType())) {
     QMultiHash<AbstractType::Ptr, CppReferenceType::Ptr>::ConstIterator it = m_references.constFind(input->baseType());
@@ -269,7 +269,7 @@ AbstractType::Ptr TypeRepository::registerFunction(CppFunctionType::Ptr input)
       return AbstractType::Ptr::staticCast(input);
 
   const int numElements = input->arguments().count();
-  const Cpp::CVSpecs cv = input->cv();
+  const Declaration::CVSpecs cv = input->cv();
 
   QMultiHash<int, CppFunctionType::Ptr>::ConstIterator it = m_functions.constFind(numElements);
   if (it != m_functions.constEnd()) {

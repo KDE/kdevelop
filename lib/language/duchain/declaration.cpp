@@ -24,11 +24,11 @@
 #include "topducontext.h"
 #include "use.h"
 #include "definition.h"
-#include "cpptypes.h"
 #include "symboltable.h"
 #include "forwarddeclaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
+#include "identifiedtype.h"
 
 using namespace KTextEditor;
 
@@ -126,7 +126,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (CppIdentifiedType* idType = dynamic_cast<CppIdentifiedType*>(m_type.data()))
+  if (IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_type.data()))
     idType->setDeclaration(0);
 
   if (m_type)
@@ -134,7 +134,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 
   m_type = type;
 
-  if (CppIdentifiedType* idType = dynamic_cast<CppIdentifiedType*>(m_type.data()))
+  if (IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_type.data()))
     idType->setDeclaration(this);
 
   if (m_type)

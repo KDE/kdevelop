@@ -21,8 +21,8 @@
 
 #include "contextbuilder.h"
 #include "typesystem.h"
-#include "cppnamespace.h"
-#include "duchainexport.h"
+#include "declaration.h"
+#include "cppduchainbuilderexport.h"
 
 typedef ContextBuilder TypeBuilderBase;
 
@@ -33,7 +33,7 @@ typedef ContextBuilder TypeBuilderBase;
  * array types; parent classes will not have
  * their visitDeclarator function called.
  */
-class DUCHAIN_EXPORT TypeBuilder: public TypeBuilderBase
+class KDEVDUCHAINBUILDER_EXPORT TypeBuilder: public TypeBuilderBase
 {
 public:
   TypeBuilder(ParseSession* session);
@@ -74,7 +74,7 @@ private:
   void openAbstractType(AbstractType::Ptr type, AST* node);
   void closeType();
 
-  Cpp::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
+  Declaration::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
 
   bool hasCurrentType() { return !m_typeStack.isEmpty(); }
 

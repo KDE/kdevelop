@@ -22,7 +22,7 @@
 #include <ktexteditor/smartrange.h>
 
 #include <editorintegrator.h>
-#include "kdevcodehighlighting.h"
+#include "icodehighlighting.h"
 
 #include "ducontext.h"
 #include "declaration.h"
@@ -34,7 +34,7 @@
 
 using namespace KTextEditor;
 
-SmartConverter::SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::CodeHighlighting* hl)
+SmartConverter::SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl)
   : m_editor(editor)
   , m_hl(hl)
 {

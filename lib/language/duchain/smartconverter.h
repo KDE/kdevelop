@@ -25,13 +25,13 @@ class DUContext;
 namespace KDevelop
 {
 class EditorIntegrator;
-class CodeHighlighting;
+class ICodeHighlighting;
 }
 
 class DUCHAIN_EXPORT SmartConverter
 {
 public:
-  SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::CodeHighlighting* hl);
+  SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl);
 
   void convertDUChain(DUContext* context) const;
 
@@ -39,7 +39,7 @@ private:
   void convertDUChainInternal(DUContext* context, bool first = false) const;
 
   KDevelop::EditorIntegrator* m_editor;
-  KDevelop::CodeHighlighting* m_hl;
+  KDevelop::ICodeHighlighting* m_hl;
 };
 
 #endif

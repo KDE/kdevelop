@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2006 Adam Treat <treat@kde.org>
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,33 +18,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUMPCHAIN_H
-#define DUMPCHAIN_H
+#include "identifiedtype.h"
+#include "declaration.h"
 
-#include "default_visitor.h"
-#include "cppduchainbuilderexport.h"
-
-class ParseSession;
-class DUContext;
-
-class KDEVDUCHAINBUILDER_EXPORT DumpChain: protected DefaultVisitor
+IdentifiedType::IdentifiedType()
+  : m_declaration(0)
 {
-public:
-  DumpChain();
-  virtual ~DumpChain();
+}
 
-  void dump(AST *node, ParseSession* session = 0);
+QualifiedIdentifier IdentifiedType::identifier() const
+{
+  return m_declaration ? m_declaration->qualifiedIdentifier() : QualifiedIdentifier();
+}
 
-  void dump(DUContext* context, bool imported = false);
+Declaration* IdentifiedType::declaration() const
+{
+  return m_declaration;
+}
 
-protected:
-  virtual void visit(AST *node);
+void IdentifiedType::setDeclaration(Declaration* declaration)
+{
+  m_declaration = declaration;
+}
 
-private:
-  class CppEditorIntegrator* m_editor;
-  int indent;
-};
-
-#endif // DUMPCHAIN_H
-
-// kate: space-indent on; indent-width 2; replace-tabs on;
+QString IdentifiedType::idMangled() const
+{
+  return identifier().mangled();
+}

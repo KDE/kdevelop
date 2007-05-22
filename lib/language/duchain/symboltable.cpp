@@ -18,11 +18,10 @@
 
 #include "symboltable.h"
 
-#include <QReadLocker>
-#include <QWriteLocker>
-
 #include <kstaticdeleter.h>
 
+#include "duchain.h"
+#include "duchainlock.h"
 #include "declaration.h"
 #include "ducontext.h"
 
@@ -44,7 +43,7 @@ SymbolTable* SymbolTable::self()
 
 void SymbolTable::addDeclaration(Declaration* declaration)
 {
-  QWriteLocker lock(&m_declarationMutex);
+  ENSURE_CHAIN_WRITE_LOCKED
 
   //kDebug() << k_funcinfo << "Adding declaration " << declaration->qualifiedIdentifier().toString(true) << " from " << declaration->textRange() << endl;
 
@@ -55,7 +54,7 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 
 void SymbolTable::removeDeclaration(Declaration* declaration)
 {
-  QWriteLocker lock(&m_declarationMutex);
+  ENSURE_CHAIN_WRITE_LOCKED
 
   QString id = declaration->qualifiedIdentifier().toString(true);
   QMultiMap<QString, Declaration*>::Iterator it = m_declarations.find(id);
@@ -72,26 +71,29 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
 
 QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id) const
 {
-  QReadLocker lock(&m_declarationMutex);
+  ENSURE_CHAIN_READ_LOCKED
 
   return m_declarations.values(id.toString(true));
 }
 
 QList<Declaration*> SymbolTable::findDeclarationsBeginningWith(const QualifiedIdentifier& id) const
 {
-  QReadLocker lock(&m_declarationMutex);
+  ENSURE_CHAIN_READ_LOCKED
 
+  QList<Declaration*> ret;
   QString idString = id.toString(true);
   QMultiMap<QString, Declaration*>::ConstIterator end = m_declarations.constEnd();
   QMultiMap<QString, Declaration*>::ConstIterator it = m_declarations.lowerBound(idString);
 
-  bool forwards = it.key().startsWith(idString);
-  if (!forwards)
-    --it;
-
-  QList<Declaration*> ret;
-  for (; it != end && it.key().startsWith(idString); forwards ? ++it : --it)
-    ret.append(it.value());
+  if (it != end) {
+    bool forwards = it.key().startsWith(idString);
+    if (!forwards) {
+      end = m_declarations.constBegin();
+      --it;
+    }
+    for (; it != end && it.key().startsWith(idString); forwards ? ++it : --it)
+      ret.append(it.value());
+  }
 
   return ret;
 }
@@ -100,24 +102,23 @@ QList<Declaration*> SymbolTable::findDeclarationsBeginningWith(const QualifiedId
 
 void SymbolTable::dumpStatistics() const
 {
-  QReadLocker lock(&m_declarationMutex);
-  QReadLocker lock2(&m_contextMutex);
+  ENSURE_CHAIN_READ_LOCKED
 
   kDebug() << k_funcinfo << "Definitions " << m_declarations.count() << ", Contexts " << m_contexts.count() << endl;
 
   // TODO: more data
 }
 
-QList< DUContext * > SymbolTable::findContexts(const QualifiedIdentifier & id) const
+QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) const
 {
-  QReadLocker lock(&m_contextMutex);
+  ENSURE_CHAIN_READ_LOCKED
 
   return m_contexts.values(id.toString(true));
 }
 
 void SymbolTable::addContext(DUContext * namedContext)
 {
-  QWriteLocker lock(&m_contextMutex);
+  ENSURE_CHAIN_WRITE_LOCKED
 
   m_contexts.insert(namedContext->scopeIdentifier(true).toString(true), namedContext);
 
@@ -126,7 +127,7 @@ void SymbolTable::addContext(DUContext * namedContext)
 
 void SymbolTable::removeContext(DUContext * namedContext)
 {
-  QWriteLocker lock(&m_contextMutex);
+  ENSURE_CHAIN_WRITE_LOCKED
 
   QString id = namedContext->scopeIdentifier(true).toString(true);
   QMultiHash<QString, DUContext*>::Iterator it = m_contexts.find(id);
