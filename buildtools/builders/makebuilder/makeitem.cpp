@@ -50,7 +50,7 @@ MakeWarningItem::MakeWarningItem( const QString &text, const MakeBuilder *builde
 MakeWarningItem::~MakeWarningItem()
 {}
 
-void MakeWarningItem::activated()
+void MakeWarningItem::activate()
 {
     KDevelop::IDocumentController *docCtrl = m_builder->core()->documentController();
     if( !docCtrl )
@@ -84,7 +84,10 @@ MakeErrorItem::MakeErrorItem( const QString &text, const MakeBuilder *builder )
 MakeErrorItem::~MakeErrorItem()
 {}
 
-
+IOutputViewItem::StopAtItemMode MakeErrorItem::stopHere()
+{
+    return IOutputViewItem::Stop;
+}
 
 
 

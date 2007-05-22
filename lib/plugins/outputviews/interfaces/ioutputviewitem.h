@@ -54,10 +54,22 @@ public:
      * @return List of QAction which will be inserted in context menu.
      */
     virtual QList<QAction*> contextMenuActions();
+
+    enum StopAtItemMode
+    {
+        DontStop = 0,
+        Stop = 1
+    };
+
+    /**
+     * @return Stop if the listview should highlight this item when user performs
+     * incremental "error" search, such as "show next error" or "show next conflict"
+     */
+    virtual StopAtItemMode stopHere();
+
 private:
     class IOutputViewItemPrivate* const d;
 };
-
 
 #endif
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

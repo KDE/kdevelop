@@ -33,7 +33,7 @@ public:
     MakeWarningItem( const QString &text, const MakeBuilder *builder );
     virtual ~MakeWarningItem();
 
-    virtual void activated();
+    virtual void activate();
     virtual QList<QAction*> contextMenuActions();
 
     // used to open a docuement which caused warning or error
@@ -50,6 +50,8 @@ class MakeErrorItem : public MakeWarningItem
 public:
     MakeErrorItem( const QString &text, const MakeBuilder *builder );
     virtual ~MakeErrorItem();
+
+    IOutputViewItem::StopAtItemMode stopHere();
 
 };
 

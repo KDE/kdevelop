@@ -1,6 +1,7 @@
 /* KDevelop Simple OutputView
  *
  * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +32,8 @@
 #include <QtGui/QStandardItemModel>
 #include <QtCore/QQueue>
 
+#include <QtGui/QAction>
+#include <QtGui/QKeySequence>
 #include <icore.h>
 #include <iuicontroller.h>
 
@@ -40,6 +43,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kactioncollection.h>
 
 typedef KGenericFactory<SimpleOutputView> SimpleOutputViewFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevsimpleoutputview,
@@ -86,6 +90,23 @@ SimpleOutputView::SimpleOutputView(QObject *parent, const QStringList &)
              this, SLOT(slotCommandFinished(const QString&)) );
     connect( this, SIGNAL(commandFailed( const QString& )),
              this, SLOT(slotCommandFailed(const QString&)) );
+
+    setXMLFile("kdevsimpleoutputview.rc");
+
+    // setup actions
+    QAction *action;
+
+    action = actionCollection()->addAction("next_error");
+    // TODO more general namechoose other than "next error"
+    // Not all messages user is interested are error.
+    action->setText("Next Error");
+    action->setShortcut( QKeySequence(Qt::Key_F4) );
+    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(searchNextError()));
+
+    action = actionCollection()->addAction("prev_error");
+    action->setText("Previous Error");
+    action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
+    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(searchPrevError()));
 }
 
 SimpleOutputView::~SimpleOutputView()

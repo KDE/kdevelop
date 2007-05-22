@@ -1,6 +1,7 @@
 /* KDevelop Simple OutputView
  *
  * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +61,8 @@ Q_SIGNALS:
     void commandFailed( const QString& id );
     void modelAdded( const QString&, QStandardItemModel* );
     void commandAdded( OutputViewCommand* );
+    void searchNextError();
+    void searchPrevError();
 
 private Q_SLOTS:
     void slotCommandFinished( const QString& id );
@@ -69,6 +72,7 @@ private:
     void cleanupTerminatedJobs( const QString& id );
     void startNextPendingJob( const QString& id );
 
+private:
     class SimpleOutputViewPrivate* const d;
     friend class SimpleOutputViewPrivate;
 };

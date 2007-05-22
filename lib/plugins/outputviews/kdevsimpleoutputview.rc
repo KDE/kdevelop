@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="kdevsimpleoutputview" version="4">
+<MenuBar>
+  <Menu name="view"><Text>&amp;View</Text>
+    <Action name="next_error" />
+    <Action name="prev_error" />
+  </Menu>
+</MenuBar>
+</kpartgui>

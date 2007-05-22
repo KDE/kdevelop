@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
  *
  * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +42,9 @@ class OutputWidget : public KTabWidget
         // Note that *cmd should not be const. 
         void addNewTab( OutputViewCommand* cmd );
 
+        void searchNextError();
+        void searchPrevError();
+
     private:
         QMap<QString, QListView*> m_listviews;
 };
@@ -56,9 +60,18 @@ public:
     OutputListView( QWidget* parent );
     virtual ~OutputListView();
 
+    virtual void setModel( QAbstractItemModel *model );
+
+public Q_SLOTS:
+    void highlightNextErrorItem();
+    void highlightPrevErrorItem();
+
 protected Q_SLOTS:
     void slotActivated( const QModelIndex& index );
     void customContextMenuRequested( const QPoint & point );
+
+private:
+    class OutputListViewPrivate * d;
 };
 
 #endif

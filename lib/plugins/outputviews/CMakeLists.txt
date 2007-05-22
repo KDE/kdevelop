@@ -39,5 +39,5 @@ install( FILES
          interfaces/ioutputviewitemfactory.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/outputviews )
 install( FILES kdevsimpleoutputview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-
+install( FILES kdevsimpleoutputview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsimpleoutputview )
 
