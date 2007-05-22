@@ -69,7 +69,9 @@ MakeBuilder::~MakeBuilder()
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
 {
     kDebug(9038) << "Building with make" << endl;
-    if( ! (dom->type() == KDevelop::ProjectBaseItem::Project || dom->type() == KDevelop::ProjectBaseItem::Target) )
+    if( ! (dom->type() == KDevelop::ProjectBaseItem::Project ||
+           dom->type() == KDevelop::ProjectBaseItem::Target ||
+           dom->type() == KDevelop::ProjectBaseItem::BuildFolder ) )
         return false;
 
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
@@ -140,6 +142,7 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
         else
             buildDir = prjitem->url();
     }
+
     else if( item->type() == KDevelop::ProjectBaseItem::Target )
     {
         KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(item);
@@ -209,6 +212,34 @@ KUrl MakeBuilder::computeBuildDir( KDevelop::ProjectBaseItem* item )
             }
         }
     } // end of else if( type() == ProjectTargetItem )
+
+    else if( item->type() == KDevelop::ProjectBaseItem::BuildFolder )
+    {
+        KDevelop::ProjectBuildFolderItem *bldFolderItem = static_cast<KDevelop::ProjectBuildFolderItem*>(item);
+        // get top build directory, specified by build system manager
+        KDevelop::IPlugin* plugin = bldFolderItem->project()->managerPlugin();
+        KDevelop::IBuildSystemManager *bldMan = plugin->extension<KDevelop::IBuildSystemManager>();
+        KDevelop::ProjectItem *prjItem = bldFolderItem->project()->projectItem();
+        KUrl topBldDir;
+        if( !prjItem || !bldMan )
+        {
+            // can't find top build dir. Just set to item's url
+            buildDir = bldFolderItem->url();
+            return buildDir;
+        }
+        else
+        {
+            topBldDir = bldMan->buildDirectory( prjItem ); // the correct build dir
+        }
+        // now compute rel_dir between prjItem::url() and buildfolderItem::url()
+        QString relative;
+        KUrl rootUrl = prjItem->url();
+        rootUrl.adjustPath(KUrl::AddTrailingSlash);
+        relative = KUrl::relativeUrl( rootUrl, bldFolderItem->url() );
+        // and append that difference to top_build_dir found above.
+        buildDir = topBldDir;
+        buildDir.addPath( relative );
+    }
     return buildDir;
 }
 

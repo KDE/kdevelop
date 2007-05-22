@@ -191,7 +191,11 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
         if ( fileInfo.isDir() && fileInfo.fileName() != QLatin1String( "." )
              && fileInfo.fileName() != QLatin1String( ".." ) )
         {
-            KDevelop::ProjectFolderItem *cmfi= new KDevelop::ProjectFolderItem(
+//             KDevelop::ProjectFolderItem *cmfi= new KDevelop::ProjectFolderItem(
+//                     item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+            // TODO more faster algorithm. should determine whether this directory
+            // contains makefile or not.
+            KDevelop::ProjectBuildFolderItem *cmfi = new KDevelop::ProjectBuildFolderItem(
                     item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
             folder_list.append( cmfi );
 //             d->m_testItems.append( cmfi ); // debug
@@ -297,6 +301,14 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
         connect( targetBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
         actions << targetBldAction;
     }
+    else if( baseitem->type() == KDevelop::ProjectBaseItem::BuildFolder )
+    {
+        QAction *bldFolderAction = new QAction( i18n( "Build this directory" ), this );
+        d->m_ctxItem = baseitem;
+        connect( bldFolderAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
+        actions << bldFolderAction;
+    }
+
     return qMakePair(QString("Custom Make Manager"), actions);
 }
 

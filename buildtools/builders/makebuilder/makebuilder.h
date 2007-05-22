@@ -49,8 +49,7 @@ public:
     explicit MakeBuilder(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~MakeBuilder();
 
-    /** Can accept KDevelop::ProjectTargetItem or KDevelop::ProjectItem
-     *
+    /**
      * If argument is ProjectItem, invoke "make" in IBuildSystemManager::buildDirectory(), with no target
      *
      * If argument is ProjectTargetItem, invoke "make" with targetname QStandardItem::text(). In this case,
@@ -58,7 +57,12 @@ public:
      * If it fails to fetch ProjectItem, the top build directory is defaulted to project directory.
      * Based on top build directory, the actual build_dir is computed and handed to outputview
      *
-     * @TODO: Work on any project item, for fileitems you may find a target, for folder just run make in buildir/rel_folder
+     * If argument is ProjectBuildFolderItem, invoke "make" with no target. To determine the build directory,
+     * first calculates rel_dir between top_project_dir(ProjectItem::url()) and ProjectBuildFolderItem::url().
+     * Then invokes make in top_build_dir/rel_dir.
+     * If this fails to fetch top_build_dir, just invoke "make" in ProjectBuildFolderItem::url().
+     *
+     * @TODO: Work on any project item, for fileitems you may find a target.
      */
     virtual bool build(KDevelop::ProjectBaseItem *dom);
     virtual bool clean(KDevelop::ProjectBaseItem *dom);
