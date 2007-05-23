@@ -33,8 +33,9 @@ CustomMakeConfigWidget::CustomMakeConfigWidget(CustomProjectPart* part, const QS
     m_part(part), m_configGroup(configGroup), m_dom( *part->projectDom() )
 {
     abort_box->setChecked(DomUtil::readBoolEntry(m_dom, m_configGroup + "/make/abortonerror"));
-    jobs_box->setValue(DomUtil::readIntEntry(m_dom, m_configGroup + "/make/numberofjobs"));
-    runMultiJobs->setChecked( (jobs_box->value() > 0 ) );
+    int numjobs = DomUtil::readIntEntry(m_dom, m_configGroup + "/make/numberofjobs");
+    jobs_box->setValue(numjobs);
+    runMultiJobs->setChecked( (numjobs > 0 ) );
 
     prio_box->setValue(DomUtil::readIntEntry(m_dom, m_configGroup + "/make/prio"));
     dontact_box->setChecked(DomUtil::readBoolEntry(m_dom, m_configGroup + "/make/dontact"));
