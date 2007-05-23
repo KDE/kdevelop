@@ -23,6 +23,7 @@ set(kdevcppduchainbuilder_LIB_SRCS
     dumpchain.cpp
     cpptypes.cpp
     typerepository.cpp
+    dumptypes.cpp
 )
 
 kde4_add_library(kdevcppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})
