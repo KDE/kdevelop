@@ -23,6 +23,7 @@
 
 #include "cmakeastvisitor.h"
 #include <QString>
+#include <QStringList>
 
 class CMakeProjectVisitor : public CMakeAstVisitor {
     public:
@@ -34,7 +35,7 @@ class CMakeProjectVisitor : public CMakeAstVisitor {
 	virtual void visit( const AddDependenciesAst * ) { notImplemented(); }
 	virtual void visit( const AddExecutableAst * ) { notImplemented(); }
 	virtual void visit( const AddLibraryAst * ) { notImplemented(); }
-	virtual void visit( const AddSubdirectoryAst * ) { notImplemented(); }
+	virtual void visit( const AddSubdirectoryAst * );
 	virtual void visit( const AddTestAst * ) { notImplemented(); }
 	virtual void visit( const AuxSourceDirectoryAst * ) { notImplemented(); }
 	virtual void visit( const BuildCommandAst * ) { notImplemented(); }
@@ -43,13 +44,18 @@ class CMakeProjectVisitor : public CMakeAstVisitor {
 	virtual void visit( const ConfigureFileAst * ) { notImplemented(); }
 	virtual void visit( const IncludeAst * ) { notImplemented(); }
 	virtual void visit( const SetAst * ) { notImplemented(); }
+        virtual void visit( const ProjectAst * );
 	
 	virtual void visit( const CMakeAst * );
+        
+        QString projectName() const { return m_projectName; }
+        QStringList subdirectories() const { return m_subdirectories; }
     private:
 	void notImplemented() const;
         
-        QString name;
-        QString root;
+        QString m_projectName;
+        QStringList m_subdirectories;
+        QString m_root;
         //FolderInfo rootFolder;
 };
 

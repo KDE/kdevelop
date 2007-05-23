@@ -55,7 +55,7 @@ public:
      */
     QList<CMakeAst*> children() const  { return m_children; }
     
-    virtual void accept(CMakeAstVisitor* v) const { v->visit(this); } //Must be = 0
+    virtual void accept(CMakeAstVisitor * v) const { v->visit(this); }
 
     /**
      * Writes the information stored in the Ast into the @p buffer.
@@ -141,14 +141,14 @@ private:
        ~klassName();                                         \
                                                              \
         virtual void writeBack( QString& buffer );           \
-	virtual void accept(CMakeAstVisitor* visitor) const { visitor->visit(this); } \
+	virtual void accept(CMakeAstVisitor * visitor) const { visitor->visit(this); } \
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
-    public:                                              \
-        returnType returnName() const;                         \
-        void set##setterName( setterType );                    \
-    private:                                             \
+    public:                                                         \
+        returnType returnName() const { return m_##returnName; }    \
+        void set##setterName( setterType );                         \
+    private:                                                        \
         returnType m_##returnName;
 
 #define CMAKE_ADD_AST_FUNCTION( function ) \

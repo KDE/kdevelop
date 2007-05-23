@@ -21,8 +21,9 @@
 #include "cmakelistsparser.h"
 #include "cmakeast.h"
 #include "cmakeprojectvisitor.h"
+#include "astfactory.h"
 
-#include <kdebug.h>
+#include <KDebug>
 
 void CMakeFunctionDesc::addArguments( const QStringList& args )
 {
@@ -71,10 +72,8 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
                 function.name = token->text;
                 function.filePath = fileName;
                 function.line = token->line;
-                if ( parseCMakeFunction( lexer, function, fileName ) )
-                    parseError = false;
-                else
-                    parseError = true;
+
+                parseError = !parseCMakeFunction( lexer, function, fileName, root );
             }
             else
                 parseError = true;
@@ -90,7 +89,7 @@ bool CMakeListsParser::parseCMakeFile( CMakeAst* root, const QString& fileName )
 
 bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
                                            CMakeFunctionDesc& func,
-                                           const QString& fileName )
+                                           const QString& fileName, CMakeAst *parent )
 {
     // Command name has already been parsed.  Read the left paren.
     cmListFileLexer_Token* token;
@@ -109,6 +108,13 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
     {
         if(token->type == cmListFileLexer_Token_ParenRight)
         {
+            CMakeAst* newElement = AstFactory::self()->createAst(func.name);
+            if(newElement)
+                parent->addChildAst(newElement);
+            else
+                kWarning(9032) << "The <" << func.name << "> AST is not registered" << endl;
+            kDebug(9032) << "Adding: " << func.name << newElement << endl;
+            
             return true;
         }
         else if(token->type == cmListFileLexer_Token_Identifier ||
@@ -162,6 +168,9 @@ ProjectInfo CMakeListsParser::parseProject( const CMakeAst* ast )
     {
         CMakeProjectVisitor v;
 	ast->accept(&v);
+        
+        pi.name = v.projectName();
+        kDebug(9032) << "Subdirectories: " << v.subdirectories() << endl;
     }
     return pi;
 }

@@ -36,6 +36,7 @@ class CMakeMinimumRequiredAst;
 class ConfigureFileAst;
 class IncludeAst;
 class SetAst;
+class ProjectAst;
 
 class CMakeAst;
 
@@ -56,8 +57,9 @@ class CMakeAstVisitor {
 	virtual void visit( const BuildNameAst * ) = 0;
 	virtual void visit( const CMakeMinimumRequiredAst * ) = 0;
 	virtual void visit( const ConfigureFileAst * ) = 0;
-	virtual void visit( const IncludeAst * ) = 0;
-	virtual void visit( const SetAst * ) = 0;
+        virtual void visit( const IncludeAst * ) = 0;
+        virtual void visit( const SetAst * ) = 0;
+        virtual void visit( const ProjectAst * ) = 0;
 	virtual void visit( const CMakeAst * ) = 0;
 };
 

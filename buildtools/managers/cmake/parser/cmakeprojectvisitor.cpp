@@ -22,7 +22,6 @@
 
 #include <kdebug.h>
 
-
 void CMakeProjectVisitor::notImplemented() const {
     kDebug(9032) << "not implemented!" << endl;
 }
@@ -31,9 +30,23 @@ void CMakeProjectVisitor::visit(const CMakeAst *ast)
 {
     QList<CMakeAst*> children = ast->children();
     QList<CMakeAst*>::const_iterator it = children.begin();
-    QList<CMakeAst*>::const_iterator end = children.end();
-    for(; it!=end; it++) {
-        kDebug(9032) << "Parsing ast" << endl;
-        ast->accept(this);
+    for(; it!=children.end(); it++) {
+        kDebug(9032) << "Navigating ast: " << *it << endl;
+        if(*it)
+            (*it)->accept(this);
+        else
+            kWarning(9032) << "Oops!!! found a null object in the AST!" << endl;
     }
+}
+
+void CMakeProjectVisitor::visit(const ProjectAst *project)
+{
+    kDebug(9032) << "Project: " << project->projectName() << endl;
+    m_projectName = project->projectName();
+}
+
+void CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
+{
+    kDebug(9032) << "Subdirectory: " << subd->sourceDir() << subd->binaryDir() << endl;
+    m_subdirectories += subd->sourceDir();
 }

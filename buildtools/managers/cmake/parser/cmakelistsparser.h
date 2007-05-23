@@ -124,7 +124,7 @@ public:
 private:
     static bool parseCMakeFunction( cmListFileLexer*,
                                     CMakeFunctionDesc&,
-                                    const QString& fileName );
+                                    const QString& fileName, CMakeAst* parent);
 };
 
 #endif

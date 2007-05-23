@@ -48,6 +48,7 @@ CMAKE_REGISTER_AST( CMakeMinimumRequiredAst, cmake_minimum_required )
 CMAKE_REGISTER_AST( ConfigureFileAst, configure_file )
 CMAKE_REGISTER_AST( IncludeAst, include )
 CMAKE_REGISTER_AST( SetAst, set )
+CMAKE_REGISTER_AST( ProjectAst, project )
 
 CustomCommandAst::CustomCommandAst()
 {
