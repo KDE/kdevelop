@@ -160,7 +160,7 @@ QString KDevelop::DocumentController::encoding() const
 }
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
-        const KTextEditor::Cursor& /*cursor*/,
+        const KTextEditor::Cursor& cursor,
         DocumentActivation activate )
 {
     UiController *uiController = Core::self()->uiControllerInternal();
@@ -255,6 +255,10 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         uiController->activeSublimeWindow()->activateView(partView);
         Core::self()->partController()->setActivePart(doc->partForView(partView->widget()), partView->widget());
         emit documentActivated( doc );
+    }
+    if( cursor.isValid() )
+    {
+        doc->setCursorPosition( cursor );
     }
 
     return doc;
