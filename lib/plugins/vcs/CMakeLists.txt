@@ -1,9 +1,9 @@
-add_subdirectory(cvs)
+macro_optional_add_subdirectory(cvs)
 
 find_package(SubversionLibrary)
 
 if(SUBVERSION_FOUND AND NOT WIN32)
-    add_subdirectory(subversion)
+    macro_optional_add_subdirectory(subversion)
 endif(SUBVERSION_FOUND AND NOT WIN32)
 
 include_directories(

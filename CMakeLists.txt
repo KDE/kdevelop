@@ -9,6 +9,7 @@ find_package(KDE4 REQUIRED)
 #find_package(TDB)
 include (KDE4Defaults)
 include (MacroLibrary)
+include (MacroOptionalAddSubdirectory)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 

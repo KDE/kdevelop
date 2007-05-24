@@ -1,4 +1,4 @@
 
 add_subdirectory(makebuilder)
-add_subdirectory(qmakebuilder)
+macro_optional_add_subdirectory(qmakebuilder)
 
