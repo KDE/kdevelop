@@ -92,14 +92,8 @@ public:
         Head            /**<Latest revision in the repository.*/,
         Working         /**<The local copy (including any changes made).*/,
         Base            /**<The repository source of the local copy.*/,
-        Previous        /**<Only valid in a range; the version prior the other one.*/,
-        Invalid
+        Previous        /**<The version prior the other one (only valid in functions that take two revisions).*/,
     };
-
-    /**
-     * Check wether this is a valid revision
-     */
-    bool isValid();
 
     /**
      * Set the value of this revision
