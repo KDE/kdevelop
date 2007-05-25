@@ -4,6 +4,7 @@ add_subdirectory(tests)
 add_subdirectory(headergen)
 
 include_directories(
+    ${CMAKE_SOURCE_DIR}/lib/language
     ${CMAKE_SOURCE_DIR}/lib/language/duchain
 )
 
