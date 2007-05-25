@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
  *
  * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,8 +48,8 @@ public:
     QString title();
     
     private Q_SLOTS:
-        void procReadStdout( const QString& line );
-        void procReadStderr( const QString& line );
+        void procReadStdout( const QStringList& lineList );
+        void procReadStderr( const QStringList& lineList );
         void procFinished( K3Process* proc );
     signals:
         void commandFinished( const QString& command );

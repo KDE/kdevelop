@@ -32,6 +32,7 @@ Utility objects for process output views.
 class K3Process;
 
 class QString;
+class QStringList;
 
 /**
 Convenience class to catch output of K3Process.
@@ -46,15 +47,9 @@ public:
     ProcessLineMaker( const K3Process* );
     void clearBuffers();
 
-public slots:
-    void slotReceivedStdout( const QString& );
-    void slotReceivedStderr( const QString& );
-    void slotReceivedStdout( const char* );
-    void slotReceivedStderr( const char* );
-
 signals:
-    void receivedStdoutLine( const QString& );
-    void receivedStderrLine( const QString& );
+    void receivedStdoutLines( const QStringList& );
+    void receivedStderrLines( const QStringList& );
 
 private:
     Q_PRIVATE_SLOT(d, void slotReceivedStdout( K3Process *, char *buffer, int buflen ) )

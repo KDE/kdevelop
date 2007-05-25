@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
  *
  * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,10 +59,10 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
             *m_proc << s;
 
     m_command = command.join(" ");
-    connect( m_procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-             this, SLOT(procReadStdout(const QString&) ));
-    connect( m_procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-             this, SLOT(procReadStderr(const QString&) ));
+    connect( m_procLineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
+             this, SLOT(procReadStdout(const QStringList&) ));
+    connect( m_procLineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
+             this, SLOT(procReadStderr(const QStringList&) ));
     connect( m_proc, SIGNAL(processExited( K3Process* ) ),
              this, SLOT( procFinished( K3Process* ) ) );
 }
@@ -97,14 +98,16 @@ QString OutputViewCommand::title()
     return m_command.section( ' ', 0, 0 );
 }
 
-void OutputViewCommand::procReadStdout(const QString &line)
+void OutputViewCommand::procReadStdout(const QStringList &lineList)
 {
-    m_model->appendRow( m_factory->createItem( line ) );
+    Q_FOREACH( QString line, lineList )
+        m_model->appendRow( m_factory->createItem( line ) );
 }
 
-void OutputViewCommand::procReadStderr(const QString &line)
+void OutputViewCommand::procReadStderr(const QStringList &lineList)
 {
-    m_model->appendRow( m_factory->createItem( line ) );
+    Q_FOREACH( QString line, lineList )
+        m_model->appendRow( m_factory->createItem( line ) );
 }
 
 void OutputViewCommand::procFinished( K3Process* proc )

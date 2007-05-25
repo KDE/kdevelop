@@ -21,7 +21,7 @@
 #include "processlinemaker.h"
 
 #include <k3process.h>
-#include <QString>
+#include <QStringList>
 
 class ProcessLineMakerPrivate
 {
@@ -38,33 +38,12 @@ public:
         processStdOut( QString::fromLocal8Bit( buffer, buflen ) );
     }
 
-    void processStdErr( const QString& s )
-    {
-        // First Flush the opposite buffer
-        if (!stdoutbuf.isEmpty())
-        {
-            emit p->receivedStdoutLine(stdoutbuf);
-
-            stdoutbuf = "";
-        }
-
-
-        stderrbuf += s;
-        int pos;
-        while ( (pos = stderrbuf.indexOf('\n')) != -1)
-        {
-            QString line = stderrbuf.left(pos);
-            emit p->receivedStderrLine(line);
-            stderrbuf.remove(0, pos+1);
-        }
-    }
-
     void processStdOut( const QString& s )
     {
         // First Flush the opposite buffer
         if (!stderrbuf.isEmpty())
         {
-            emit p->receivedStderrLine(stderrbuf);
+            emit p->receivedStderrLines( QStringList(stderrbuf) );
 
             stderrbuf = "";
         }
@@ -72,17 +51,42 @@ public:
 
         stdoutbuf += s;
         int pos;
+        QStringList lineList;
         while ( (pos = stdoutbuf.indexOf('\n')) != -1)
         {
             QString line = stdoutbuf.left(pos);
-            emit p->receivedStdoutLine(line);
+            lineList += line;
             stdoutbuf.remove(0, pos+1);
         }
+        emit p->receivedStdoutLines(lineList);
     }
 
     void slotReceivedStderr( K3Process*, char *buffer, int buflen )
     {
         processStdErr( QString::fromLocal8Bit(buffer, buflen) );
+    }
+
+    void processStdErr( const QString& s )
+    {
+        // First Flush the opposite buffer
+        if (!stdoutbuf.isEmpty())
+        {
+            emit p->receivedStdoutLines( QStringList(stdoutbuf) );
+
+            stdoutbuf = "";
+        }
+
+
+        stderrbuf += s;
+        int pos;
+        QStringList lineList;
+        while ( (pos = stderrbuf.indexOf('\n')) != -1)
+        {
+            QString line = stderrbuf.left(pos);
+            lineList += line;
+            stderrbuf.remove(0, pos+1);
+        }
+        emit p->receivedStderrLines(lineList);
     }
 };
 
@@ -99,26 +103,6 @@ ProcessLineMaker::ProcessLineMaker( const K3Process* proc )
 
     connect(proc, SIGNAL(receivedStderr(K3Process*,char*,int)),
             this, SLOT(slotReceivedStderr(K3Process*,char*,int)) );
-}
-
-void ProcessLineMaker::slotReceivedStdout( const QString& s )
-{
-    d->processStdOut( s );
-}
-
-void ProcessLineMaker::slotReceivedStdout( const char* buffer )
-{
-    d->processStdOut( QString::fromLocal8Bit( buffer ) );
-}
-
-void ProcessLineMaker::slotReceivedStderr( const QString& s )
-{
-    d->processStdErr( s );
-}
-
-void ProcessLineMaker::slotReceivedStderr( const char* buffer )
-{
-    d->processStdErr( QString::fromLocal8Bit( buffer ) );
 }
 
 void ProcessLineMaker::clearBuffers( )
