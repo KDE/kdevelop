@@ -19,10 +19,10 @@
 #ifndef IDENTIFIER_H
 #define IDENTIFIER_H
 
-#include <QList>
-#include <QStack>
-#include <QStringList>
-#include <QVarLengthArray>
+#include <QtCore/QList>
+#include <QtCore/QStack>
+#include <QtCore/QStringList>
+#include <QtCore/QVarLengthArray>
 
 #include <kdebug.h>
 #include "kdevlanguageexport.h"
@@ -35,7 +35,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Identifier
   friend class QualifiedIdentifier;
 
 public:
-  explicit Identifier(const QString id);
+  explicit Identifier(const QString& id);
   Identifier();
 
   static Identifier unique(int token);
@@ -85,7 +85,7 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
 {
 public:
-  explicit QualifiedIdentifier(const QString id);
+  explicit QualifiedIdentifier(const QString& id);
   explicit QualifiedIdentifier(const Identifier& id);
   QualifiedIdentifier(const QualifiedIdentifier& id, int reserve = 0);
   QualifiedIdentifier();

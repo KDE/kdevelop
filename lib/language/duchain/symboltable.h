@@ -19,8 +19,8 @@
 #ifndef SYMBOLTABLE_H
 #define SYMBOLTABLE_H
 
-#include <QMultiHash>
-#include <QMultiMap>
+#include <QtCore/QMultiHash>
+#include <QtCore/QMultiMap>
 #include "kdevlanguageexport.h"
 
 class Declaration;

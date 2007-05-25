@@ -20,7 +20,7 @@
 
 #include <QHash>
 
-Identifier::Identifier(const QString id)
+Identifier::Identifier(const QString& id)
   : m_unique(0)
   , m_identifier(id)
 {
@@ -128,7 +128,7 @@ bool Identifier::operator!=(const Identifier& rhs) const
 
 static const int idguess = 4;
 
-QualifiedIdentifier::QualifiedIdentifier(const QString id)
+QualifiedIdentifier::QualifiedIdentifier(const QString& id)
 {
   if (id.startsWith("::")) {
     m_explicitlyGlobal = true;

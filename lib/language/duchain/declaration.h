@@ -19,7 +19,7 @@
 #ifndef DECLARATION_H
 #define DECLARATION_H
 
-#include <QList>
+#include <QtCore/QList>
 #include "kdevlanguageexport.h"
 
 #include "identifier.h"

@@ -22,9 +22,9 @@
 
 #include "identifier.h"
 #include "kdevlanguageexport.h"
-#include <QSet>
+#include <QtCore/QSet>
 
-#include <QList>
+#include <QtCore/QList>
 
 #include <ksharedptr.h>
 

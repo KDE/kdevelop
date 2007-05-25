@@ -19,7 +19,7 @@
 #ifndef DUCHAIN_H
 #define DUCHAIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <kurl.h>
 #include "kdevlanguageexport.h"
@@ -71,7 +71,7 @@ public:
   static void definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
   static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
 
-public slots:
+public Q_SLOTS:
   void removeDocumentChain(const KUrl& document);
 
 private:

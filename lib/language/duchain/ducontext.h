@@ -19,7 +19,7 @@
 #ifndef DUCONTEXT_H
 #define DUCONTEXT_H
 
-#include <QHash>
+#include <QtCore/QHash>
 #include "kdevlanguageexport.h"
 
 #include "documentcursorobject.h"
@@ -53,7 +53,7 @@ public:
    * Constructor. No convenience methods, as the initialisation order is important,
    * and providing all permutations would be overkill.
    */
-  DUContext(KTextEditor::Range* range, DUContext* parent = 0);
+  explicit DUContext(KTextEditor::Range* range, DUContext* parent = 0);
 
   /**
    * Destructor. Will delete all child contexts which are defined within

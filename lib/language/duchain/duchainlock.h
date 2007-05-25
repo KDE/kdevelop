@@ -27,7 +27,7 @@
  */
 #ifdef NDEBUG
 
-#include <QReadWriteLock>
+#include <QtCore/QReadWriteLock>
 
 #define ENSURE_CHAIN_READ_LOCKED
 #define ENSURE_CHAIN_WRITE_LOCKED
@@ -77,7 +77,7 @@ public:
    * Acquires a read lock. Will not return until the lock is acquired
    * or timeout is reached (10 seconds).
    *
-   * Any number of read locks can be aquired at once, but not while
+   * Any number of read locks can be acquired at once, but not while
    * there is a write lock.  Read locks can be recursive.
    */
   bool lockForRead();

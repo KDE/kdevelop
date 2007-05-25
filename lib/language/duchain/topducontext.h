@@ -21,7 +21,7 @@
 
 #include "ducontext.h"
 #include "kdevlanguageexport.h"
-#include <QMutex>
+#include <QtCore/QMutex>
 
 /**
  * The top context in a definition-use chain for one source file.
