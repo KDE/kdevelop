@@ -19,7 +19,7 @@ set(kdevduchainview_PART_SRCS
 
 kde4_automoc(${kdevduchainview_PART_SRCS})
 kde4_add_plugin(kdevduchainview ${kdevduchainview_PART_SRCS})
-target_link_libraries(kdevduchainview kdevduchain kdevplatformlanguage kdevplatforminterfaces kdevplatformeditor)
+target_link_libraries(kdevduchainview kdevplatformlanguage kdevplatforminterfaces kdevplatformeditor)
 
 install(TARGETS kdevduchainview DESTINATION ${PLUGIN_INSTALL_DIR})
 
