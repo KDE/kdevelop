@@ -478,7 +478,7 @@ void DeclarationBuilder::popSpecifiers()
 
 void DeclarationBuilder::applyStorageSpecifiers()
 {
-  if (!m_storageSpecifiers.isEmpty())
+  if (!m_storageSpecifiers.isEmpty() && m_storageSpecifiers.top() != 0)
     if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
       DUChainWriteLocker lock(DUChain::lock());
 
@@ -488,7 +488,7 @@ void DeclarationBuilder::applyStorageSpecifiers()
 
 void DeclarationBuilder::applyFunctionSpecifiers()
 {
-  if (!m_functionSpecifiers.isEmpty()) {
+  if (!m_functionSpecifiers.isEmpty() && m_functionSpecifiers.top() != 0) {
     Q_ASSERT(dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()));
     ClassFunctionDeclaration* function = static_cast<ClassFunctionDeclaration*>(currentDeclaration());
 
