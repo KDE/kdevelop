@@ -21,7 +21,7 @@
 
 #include "documentrangeobject.h"
 #include "duchainbase.h"
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 
 class Declaration;
 class DUContext;
@@ -29,7 +29,7 @@ class DUContext;
 /**
  * Represents a definition of a previously encountered declaration in a definition-use chain.
  */
-class DUCHAIN_EXPORT Definition : public DUChainBase
+class KDEVPLATFORMLANGUAGE_EXPORT Definition : public DUChainBase
 {
   friend class Declaration;
 

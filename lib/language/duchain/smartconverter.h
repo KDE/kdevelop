@@ -20,7 +20,7 @@
 #ifndef DUCHAIN_SMARTCONVERTER_H
 #define DUCHAIN_SMARTCONVERTER_H
 
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 class DUContext;
 namespace KDevelop
 {
@@ -28,7 +28,7 @@ class EditorIntegrator;
 class ICodeHighlighting;
 }
 
-class DUCHAIN_EXPORT SmartConverter
+class KDEVPLATFORMLANGUAGE_EXPORT SmartConverter
 {
 public:
   SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl);

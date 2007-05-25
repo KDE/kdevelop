@@ -21,7 +21,7 @@
 
 #include <QMultiHash>
 #include <QMultiMap>
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 
 class Declaration;
 class DUContext;
@@ -32,7 +32,7 @@ class QualifiedIdentifier;
  *
  * \todo profiling, map vs hash etc...
  */
-class DUCHAIN_EXPORT SymbolTable
+class KDEVPLATFORMLANGUAGE_EXPORT SymbolTable
 {
 public:
   static SymbolTable* self();

@@ -20,7 +20,7 @@
 #define ICODEHIGHLIGHTING_H
 
 #include "iextension.h"
-#include "kdevexport.h"
+#include "kdevlanguageexport.h"
 
 class TopDUContext;
 class Definition;

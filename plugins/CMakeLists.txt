@@ -1,4 +1,5 @@
 add_subdirectory(appwizard)
+add_subdirectory(duchainviewer)
 #add_subdirectory(documentview)
 #add_subdirectory(codeview)
 macro_optional_add_subdirectory(konsole)

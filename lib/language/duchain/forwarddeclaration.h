@@ -20,12 +20,12 @@
 #define FORWARDDECLARATION_H
 
 #include "declaration.h"
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 
 /**
  * Represents a forward declaration
  */
-class DUCHAIN_EXPORT ForwardDeclaration : public Declaration
+class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclaration : public Declaration
 {
 public:
   ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context);

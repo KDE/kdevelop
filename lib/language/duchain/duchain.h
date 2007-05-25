@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include <kurl.h>
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 #include "duchainobserver.h"
 
 class TopDUContext;
@@ -34,7 +34,7 @@ class DUChainLock;
  * \todo to pull the sorting off properly, will need to know the location of
  *       the defines used to pull in URLs other than the source file URL.
  */
-class DUCHAIN_EXPORT DUChain : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT DUChain : public QObject
 {
   Q_OBJECT
 

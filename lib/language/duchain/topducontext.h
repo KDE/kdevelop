@@ -20,7 +20,7 @@
 #define TOPDUCONTEXT_H
 
 #include "ducontext.h"
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 #include <QMutex>
 
 /**
@@ -30,7 +30,7 @@
  *
  * \todo move the registration with DUChain here
  */
-class DUCHAIN_EXPORT TopDUContext : public DUContext
+class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
   TopDUContext(KTextEditor::Range* range);

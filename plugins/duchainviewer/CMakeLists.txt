@@ -4,6 +4,7 @@ include_directories( ${CMAKE_TOP_BUILD_DIR} ${CMAKE_SOURCE_DIR}/lib
     ${CMAKE_SOURCE_DIR}/lib/editor
     ${CMAKE_SOURCE_DIR}/lib/project
     ${CMAKE_SOURCE_DIR}/lib/project/interfaces
+    ${CMAKE_SOURCE_DIR}/lib/language
     ${CMAKE_SOURCE_DIR}/lib/language/interfaces
     ${CMAKE_SOURCE_DIR}/lib/language/duchain
     )

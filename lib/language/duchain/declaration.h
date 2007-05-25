@@ -20,7 +20,7 @@
 #define DECLARATION_H
 
 #include <QList>
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 
 #include "identifier.h"
 #include "documentrangeobject.h"
@@ -36,7 +36,7 @@ class ForwardDeclaration;
 /**
  * Represents a single declaration in a definition-use chain.
  */
-class DUCHAIN_EXPORT Declaration : public DUChainBase
+class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 {
   friend class DUContext;
   friend class ForwardDeclaration;

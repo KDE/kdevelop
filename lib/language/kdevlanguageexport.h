@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Alexander Dymo  <adymo@kdevelop.org>            *
+ *   This file is part of KDevelop                                         *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,35 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef ILANGUAGESUPPORT_H
-#define ILANGUAGESUPPORT_H
 
-#include <kurl.h>
+#ifndef kdevlanguageexport_H
+#define kdevlanguageexport_H
 
-#include "iextension.h"
-#include "kdevlanguageexport.h"
+/* needed for KDE_EXPORT macros */
+#include <kdemacros.h>
 
-namespace KDevelop {
+/* needed, because e.g. Q_OS_UNIX is so frequently used */
+#ifdef __cplusplus
+# include <QtCore/qglobal.h>
+#endif
 
-class ParseJob;
-class ILanguage;
+#if defined _WIN32 || defined _WIN64
 
-class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
-public:
-    virtual ~ILanguageSupport() {}
+#ifndef KDEVPLATFORMLANGUAGE_EXPORT
+# ifdef MAKE_KDEVPLATFORMLANGUAGE_LIB
+#  define KDEVPLATFORMLANGUAGE_EXPORT KDE_EXPORT
+# else
+#  define KDEVPLATFORMLANGUAGE_EXPORT KDE_IMPORT
+# endif
+#endif
 
-    /** @return the name of the language.*/
-    virtual QString name() const = 0;
-    /** @return the parse job that is used by background parser to parse given @p url.*/
-    virtual ParseJob *createParseJob(const KUrl &url) = 0;
-    /** @return the language for this support.*/
-    virtual ILanguage *language() = 0;
+#else //UNIX
 
-};
-
-}
-
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, "org.kdevelop.ILanguageSupport")
-Q_DECLARE_INTERFACE( KDevelop::ILanguageSupport, "org.kdevelop.ILanguageSupport")
+#define KDEVPLATFORMLANGUAGE_EXPORT KDE_EXPORT
 
 #endif
+
+#endif
+
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

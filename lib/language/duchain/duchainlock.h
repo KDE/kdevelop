@@ -19,7 +19,7 @@
 #ifndef DUCHAINLOCK_H
 #define DUCHAINLOCK_H
 
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 
 /**
  * In a DEBUG build, keeps track of additional locking information.
@@ -32,21 +32,21 @@
 #define ENSURE_CHAIN_READ_LOCKED
 #define ENSURE_CHAIN_WRITE_LOCKED
 
-class DUCHAIN_EXPORT DUChainLock : public QReadWriteLock
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock : public QReadWriteLock
 {
 public:
   DUChainLock() : QReadWriteLock() {}
   ~DUChainLock() {}
 };
 
-class DUCHAIN_EXPORT DUChainReadLocker : public QReadLocker
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker : public QReadLocker
 {
 public:
   DUChainReadLocker(DUChainLock* duChainLock) : QReadLocker(duChainLock) {}
   ~DUChainReadLocker() {}
 };
 
-class DUCHAIN_EXPORT DUChainWriteLocker : public QWriteLocker
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker : public QWriteLocker
 {
 public:
   DUChainWriteLocker(DUChainLock* duChainLock) : QWriteLocker(duChainLock) {}
@@ -67,7 +67,7 @@ public:
 #define ENSURE_CHAIN_READ_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasReadLock() || DUChain::lock()->currentThreadHasWriteLock());
 #define ENSURE_CHAIN_WRITE_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasWriteLock());
 
-class DUCHAIN_EXPORT DUChainLock
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock
 {
 public:
   DUChainLock();
@@ -117,7 +117,7 @@ private:
   QSet<Qt::HANDLE> m_readers;
 };
 
-class DUCHAIN_EXPORT DUChainReadLocker
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker
 {
 public:
   DUChainReadLocker(DUChainLock* duChainLock) : m_lock(duChainLock) { lock(); }
@@ -142,7 +142,7 @@ private:
   DUChainLock* m_lock;
 };
 
-class DUCHAIN_EXPORT DUChainWriteLocker
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker
 {
 public:
   DUChainWriteLocker(DUChainLock* duChainLock) : m_lock(duChainLock) { lock(); }

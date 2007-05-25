@@ -20,7 +20,7 @@
 #define DUCONTEXT_H
 
 #include <QHash>
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 
 #include "documentcursorobject.h"
 #include "identifier.h"
@@ -42,7 +42,7 @@ class TopDUContext;
  *
  * \todo change child relationships to a linked list within the context?
  */
-class DUCHAIN_EXPORT DUContext : public DUChainBase
+class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
 {
   friend class Use;
   friend class Declaration;

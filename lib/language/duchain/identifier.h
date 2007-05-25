@@ -25,12 +25,12 @@
 #include <QVarLengthArray>
 
 #include <kdebug.h>
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 
 class QualifiedIdentifier;
 
 /// Represents a single unqualified identifier
-class DUCHAIN_EXPORT Identifier
+class KDEVPLATFORMLANGUAGE_EXPORT Identifier
 {
   friend class QualifiedIdentifier;
 
@@ -82,7 +82,7 @@ private:
 };
 
 /// Represents a qualified identifier
-class DUCHAIN_EXPORT QualifiedIdentifier
+class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
 {
 public:
   explicit QualifiedIdentifier(const QString id);
@@ -149,7 +149,7 @@ private:
   bool m_explicitlyGlobal;
 };
 
-DUCHAIN_EXPORT uint qHash(const QualifiedIdentifier& id);
+KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);
 
 #endif // IDENTIFIER_H
 

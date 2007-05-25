@@ -21,12 +21,12 @@
 #ifndef IDENTIFIEDTYPE_H
 #define IDENTIFIEDTYPE_H
 
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 #include "identifier.h"
 
 class Declaration;
 
-class DUCHAIN_EXPORT IdentifiedType
+class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedType
 {
 public:
   IdentifiedType();

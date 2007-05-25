@@ -21,7 +21,7 @@
 #define TYPESYSTEM_H
 
 #include "identifier.h"
-#include "duchainexport.h"
+#include "kdevlanguageexport.h"
 #include <QSet>
 
 #include <QList>
@@ -62,7 +62,7 @@ public:
   virtual void endVisit (const ArrayType *) {}
 };
 
-class DUCHAIN_EXPORT AbstractType : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public KShared
 {
 public:
   typedef KSharedPtr<AbstractType> Ptr;
@@ -114,7 +114,7 @@ private:
   bool m_registered;
 };
 
-class DUCHAIN_EXPORT IntegralType: public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
 {
 public:
   typedef KSharedPtr<IntegralType> Ptr;
@@ -148,7 +148,7 @@ private:
   QString m_name;
 };
 
-class DUCHAIN_EXPORT PointerType: public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
 {
 public:
   typedef KSharedPtr<PointerType> Ptr;
@@ -186,7 +186,7 @@ private:
   AbstractType::Ptr m_baseType;
 };
 
-class DUCHAIN_EXPORT ReferenceType: public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType: public AbstractType
 {
 public:
   typedef KSharedPtr<ReferenceType> Ptr;
@@ -224,7 +224,7 @@ private:
   AbstractType::Ptr m_baseType;
 };
 
-class DUCHAIN_EXPORT FunctionType : public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionType : public AbstractType
 {
 public:
   typedef KSharedPtr<FunctionType> Ptr;
@@ -273,7 +273,7 @@ private:
   QList<AbstractType::Ptr> m_arguments;
 };
 
-class DUCHAIN_EXPORT StructureType : public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public AbstractType
 {
 public:
   typedef KSharedPtr<StructureType> Ptr;
@@ -312,7 +312,7 @@ private:
   QList<AbstractType::Ptr> m_elements;
 };
 
-class DUCHAIN_EXPORT ArrayType : public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
 {
 public:
   typedef KSharedPtr<ArrayType> Ptr;

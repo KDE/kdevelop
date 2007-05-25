@@ -31,7 +31,7 @@
 #include <QtCore/QPointer>
 #include <kurl.h>
 
-#include "kdevexport.h"
+#include "kdevlanguageexport.h"
 
 namespace ThreadWeaver
 {

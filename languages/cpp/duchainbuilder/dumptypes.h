@@ -20,9 +20,9 @@
 #define DUMPTYPES_H
 
 #include "typesystem.h"
-#include "duchainexport.h"
+#include "cppduchainbuilderexport.h"
 
-class DUCHAIN_EXPORT DumpTypes : protected TypeVisitor
+class KDEVDUCHAINBUILDER_EXPORT DumpTypes : protected TypeVisitor
 {
 public:
   DumpTypes();
