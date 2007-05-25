@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
+   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,77 +23,109 @@
 #include <k3process.h>
 #include <QString>
 
+class ProcessLineMakerPrivate
+{
+public:
+    ProcessLineMakerPrivate( ProcessLineMaker* maker )
+        : p(maker)
+    {}
+    QString stdoutbuf;
+    QString stderrbuf;
+    ProcessLineMaker* p;
+
+    void slotReceivedStdout( K3Process*, char *buffer, int buflen )
+    {
+        processStdOut( QString::fromLocal8Bit( buffer, buflen ) );
+    }
+
+    void processStdErr( const QString& s )
+    {
+        // First Flush the opposite buffer
+        if (!stdoutbuf.isEmpty())
+        {
+            emit p->receivedStdoutLine(stdoutbuf);
+
+            stdoutbuf = "";
+        }
+
+
+        stderrbuf += s;
+        int pos;
+        while ( (pos = stderrbuf.indexOf('\n')) != -1)
+        {
+            QString line = stderrbuf.left(pos);
+            emit p->receivedStderrLine(line);
+            stderrbuf.remove(0, pos+1);
+        }
+    }
+
+    void processStdOut( const QString& s )
+    {
+        // First Flush the opposite buffer
+        if (!stderrbuf.isEmpty())
+        {
+            emit p->receivedStderrLine(stderrbuf);
+
+            stderrbuf = "";
+        }
+
+
+        stdoutbuf += s;
+        int pos;
+        while ( (pos = stdoutbuf.indexOf('\n')) != -1)
+        {
+            QString line = stdoutbuf.left(pos);
+            emit p->receivedStdoutLine(line);
+            stdoutbuf.remove(0, pos+1);
+        }
+    }
+
+    void slotReceivedStderr( K3Process*, char *buffer, int buflen )
+    {
+        processStdErr( QString::fromLocal8Bit(buffer, buflen) );
+    }
+};
+
 ProcessLineMaker::ProcessLineMaker()
+    : d( new ProcessLineMakerPrivate( this ) )
 {
 }
 
 ProcessLineMaker::ProcessLineMaker( const K3Process* proc )
+    : d( new ProcessLineMakerPrivate( this ) )
 {
     connect(proc, SIGNAL(receivedStdout(K3Process*,char*,int)),
             this, SLOT(slotReceivedStdout(K3Process*,char*,int)) );
-    
+
     connect(proc, SIGNAL(receivedStderr(K3Process*,char*,int)),
             this, SLOT(slotReceivedStderr(K3Process*,char*,int)) );
 }
 
 void ProcessLineMaker::slotReceivedStdout( const QString& s )
 {
-    // Flush stderr buffer
-    if (!stderrbuf.isEmpty()) {
-        emit receivedStderrLine(stderrbuf);
-        stderrbuf = "";
-    }
-    
-    stdoutbuf += s;
-    int pos;
-    while ( (pos = stdoutbuf.indexOf('\n')) != -1) {
-        QString line = stdoutbuf.left(pos);
-        emit receivedStdoutLine(line);
-        stdoutbuf.remove(0, pos+1);
-    }
-}
-
-void ProcessLineMaker::slotReceivedStdout( K3Process*, char *buffer, int buflen )
-{
-    slotReceivedStdout( QString::fromLocal8Bit( buffer, buflen ) );
+    d->processStdOut( s );
 }
 
 void ProcessLineMaker::slotReceivedStdout( const char* buffer )
 {
-    slotReceivedStdout( QString::fromLocal8Bit( buffer ) );
+    d->processStdOut( QString::fromLocal8Bit( buffer ) );
 }
 
 void ProcessLineMaker::slotReceivedStderr( const QString& s )
 {
-    // Flush stdout buffer
-    if (!stdoutbuf.isEmpty()) {
-        emit receivedStdoutLine(stdoutbuf);
-        stdoutbuf = "";
-    }
-    
-    stderrbuf += s;
-    int pos;
-    while ( (pos = stderrbuf.indexOf('\n')) != -1) {
-        QString line = stderrbuf.left(pos);
-        emit receivedStderrLine(line);
-        stderrbuf.remove(0, pos+1);
-    }
-}
-
-void ProcessLineMaker::slotReceivedStderr( K3Process*, char *buffer, int buflen )
-{
-    slotReceivedStderr( QString::fromLocal8Bit( buffer, buflen ) );
+    d->processStdErr( s );
 }
 
 void ProcessLineMaker::slotReceivedStderr( const char* buffer )
 {
-    slotReceivedStderr( QString::fromLocal8Bit( buffer ) );
+    d->processStdErr( QString::fromLocal8Bit( buffer ) );
 }
 
 void ProcessLineMaker::clearBuffers( )
 {
-	stderrbuf = "";
-	stdoutbuf = "";
+    d->stderrbuf = "";
+    d->stdoutbuf = "";
 }
 
 #include "processlinemaker.moc"
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

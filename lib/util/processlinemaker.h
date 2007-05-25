@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
+   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,39 +30,38 @@ Utility objects for process output views.
 */
 
 class K3Process;
+
 class QString;
 
 /**
 Convenience class to catch output of K3Process.
 */
+
 class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-	ProcessLineMaker();
-	ProcessLineMaker( const K3Process* );
-	
-	void clearBuffers();
+    ProcessLineMaker();
+    ProcessLineMaker( const K3Process* );
+    void clearBuffers();
 
 public slots:
-	void slotReceivedStdout(const QString&);
-	void slotReceivedStderr(const QString&);
+    void slotReceivedStdout( const QString& );
+    void slotReceivedStderr( const QString& );
+    void slotReceivedStdout( const char* );
+    void slotReceivedStderr( const char* );
 
-	void slotReceivedStdout(const char*);
-	void slotReceivedStderr(const char*);
-
-protected slots:
-	void slotReceivedStdout(K3Process *, char *buffer, int buflen);
-	void slotReceivedStderr(K3Process *, char *buffer, int buflen);
-        
 signals:
-	void receivedStdoutLine( const QString& line );
-	void receivedStderrLine( const QString& line );
-        
+    void receivedStdoutLine( const QString& );
+    void receivedStderrLine( const QString& );
+
 private:
-	QString stdoutbuf;
-	QString stderrbuf;
+    Q_PRIVATE_SLOT(d, void slotReceivedStdout( K3Process *, char *buffer, int buflen ) )
+    Q_PRIVATE_SLOT(d, void slotReceivedStderr( K3Process *, char *buffer, int buflen ) )
+    class ProcessLineMakerPrivate* const d;
+    friend class ProcessLineMakerPrivate;
 };
 
 #endif
+// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
