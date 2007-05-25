@@ -141,3 +141,5 @@ void SymbolTable::removeContext(DUContext * namedContext)
 
   kWarning() << k_funcinfo << "Could not find context matching " << id << endl;
 }
+
+// kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

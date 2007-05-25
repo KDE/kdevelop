@@ -28,7 +28,7 @@ set(kdevcppduchainbuilder_LIB_SRCS
 )
 
 kde4_add_library(kdevcppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})
-target_link_libraries(kdevcppduchainbuilder kdevduchain kdevcppparser)
+target_link_libraries(kdevcppduchainbuilder kdevplatformlanguage kdevcppparser)
 set_target_properties(kdevcppduchainbuilder PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevcppduchainbuilder DESTINATION ${LIB_INSTALL_DIR} )
 

@@ -30,9 +30,30 @@
 #include <kdebug.h>
 #endif
 
-DUChainLock::DUChainLock()
-  : m_writer(0)
+class DUChainLockPrivate
 {
+public:
+  QMutex m_mutex;
+  Qt::HANDLE m_writer;
+  QSet<Qt::HANDLE> m_readers;
+};
+
+class DUChainReadLockerPrivate
+{
+public:
+  DUChainLock* m_lock;
+};
+
+class DUChainWriteLockerPrivate
+{
+public:
+  DUChainLock* m_lock;
+};
+
+DUChainLock::DUChainLock()
+  : d(new DUChainLockPrivate)
+{
+  d->m_writer = 0;
 }
 
 DUChainLock::~DUChainLock()
@@ -45,21 +66,21 @@ bool DUChainLock::lockForRead()
   kDebug(9007) << "DUChain read lock requested by thread: " << QThread::currentThreadId() << endl;
 #endif
 
-  QMutexLocker lock(&m_mutex);
+  QMutexLocker lock(&d->m_mutex);
 
   int currentTime = 0;
   bool locked = false;
 
   // 10 second timeout...
-  while (m_writer != 0 && currentTime < 1000) {
+  while (d->m_writer != 0 && currentTime < 1000) {
     lock.unlock();
     usleep(10000);
     currentTime++;
     lock.relock();
   }
 
-  if (m_writer == 0) {
-    m_readers << QThread::currentThreadId();
+  if (d->m_writer == 0) {
+    d->m_readers << QThread::currentThreadId();
     locked = true;
   }
 
@@ -72,14 +93,14 @@ void DUChainLock::releaseReadLock()
   kDebug(9007) << "DUChain read lock released by thread: " << QThread::currentThreadId() << endl;
 #endif
 
-  QMutexLocker lock(&m_mutex);
-  m_readers.remove(QThread::currentThreadId());
+  QMutexLocker lock(&d->m_mutex);
+  d->m_readers.remove(QThread::currentThreadId());
 }
 
 bool DUChainLock::currentThreadHasReadLock()
 {
-  QMutexLocker lock(&m_mutex);
-  return m_readers.contains(QThread::currentThreadId());
+  QMutexLocker lock(&d->m_mutex);
+  return d->m_readers.contains(QThread::currentThreadId());
 }
 
 bool DUChainLock::lockForWrite()
@@ -88,24 +109,24 @@ bool DUChainLock::lockForWrite()
   kDebug(9007) << "DUChain write lock requested by thread: " << QThread::currentThreadId() << endl;
 #endif
 
-  QMutexLocker lock(&m_mutex);
+  QMutexLocker lock(&d->m_mutex);
 
   // Write locks are non-recursive.
-  Q_ASSERT(m_writer != QThread::currentThreadId());
+  Q_ASSERT(d->m_writer != QThread::currentThreadId());
 
   int currentTime = 0;
   bool locked = false;
 
   // 10 second timeout...
-  while (m_writer != 0 && !m_readers.empty() && currentTime < 1000) {
+  while (d->m_writer != 0 && !d->m_readers.empty() && currentTime < 1000) {
     lock.unlock();
     usleep(10000);
     currentTime++;
     lock.relock();
   }
 
-  if (m_writer == 0 && m_readers.empty()) {
-    m_writer = QThread::currentThreadId();
+  if (d->m_writer == 0 && d->m_readers.empty()) {
+    d->m_writer = QThread::currentThreadId();
     locked = true;
   }
 
@@ -118,16 +139,71 @@ void DUChainLock::releaseWriteLock()
   kDebug(9007) << "DUChain write lock released by thread: " << QThread::currentThreadId() << endl;
 #endif
 
-  QMutexLocker lock(&m_mutex);
-  m_writer = 0;
+  QMutexLocker lock(&d->m_mutex);
+  d->m_writer = 0;
 }
 
 bool DUChainLock::currentThreadHasWriteLock()
 {
-  QMutexLocker lock(&m_mutex);
-  return m_writer == QThread::currentThreadId();
+  QMutexLocker lock(&d->m_mutex);
+  return d->m_writer == QThread::currentThreadId();
+}
+
+DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock)
+: d(new DUChainReadLockerPrivate)
+{
+  d->m_lock = duChainLock;
+  lock();
+}
+
+DUChainReadLocker::~DUChainReadLocker()
+{
+  unlock();
+  delete d;
+}
+
+bool DUChainReadLocker::lock() {
+  bool l = false;
+  if (d->m_lock) {
+    l = d->m_lock->lockForRead();
+    Q_ASSERT(l);
+  };
+  return l;
+}
+
+void DUChainReadLocker::unlock() {
+  if (d->m_lock) {
+    d->m_lock->releaseReadLock();
+  }
+}
+
+DUChainWriteLocker::DUChainWriteLocker(DUChainLock* duChainLock)
+  : d(new DUChainWriteLockerPrivate)
+{
+  d->m_lock = duChainLock;
+  lock();
+}
+DUChainWriteLocker::~DUChainWriteLocker()
+{
+  unlock();
+  delete d;
+}
+
+bool DUChainWriteLocker::lock() {
+  bool l = false;
+  if (d->m_lock) {
+    l = d->m_lock->lockForWrite();
+    Q_ASSERT(l);
+  };
+  return l;
+}
+
+void DUChainWriteLocker::unlock() {
+  if (d->m_lock) {
+    d->m_lock->releaseWriteLock();
+  }
 }
 
 #endif // NDEBUG
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

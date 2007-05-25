@@ -55,8 +55,8 @@ public:
 
 #else
 
-#include <QMutex>
-#include <QSet>
+#include <QtCore/QMutex>
+#include <QtCore/QSet>
 
 /**
  * Macros for ensuring the DUChain is locked properly.
@@ -112,63 +112,39 @@ public:
   bool currentThreadHasWriteLock();
 
 private:
-  QMutex m_mutex;
-  Qt::HANDLE m_writer;
-  QSet<Qt::HANDLE> m_readers;
+  class DUChainLockPrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker
 {
 public:
-  DUChainReadLocker(DUChainLock* duChainLock) : m_lock(duChainLock) { lock(); }
-  ~DUChainReadLocker() { unlock(); }
+  DUChainReadLocker(DUChainLock* duChainLock);
+  ~DUChainReadLocker();
 
-  bool lock() {
-    bool l = false;
-    if (m_lock) {
-      l = m_lock->lockForRead();
-      Q_ASSERT(l);
-    };
-    return l;
-  }
+  bool lock();
 
-  void unlock() {
-    if (m_lock) {
-      m_lock->releaseReadLock();
-    }
-  }
+  void unlock();
 
 private:
-  DUChainLock* m_lock;
+  class DUChainReadLockerPrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker
 {
 public:
-  DUChainWriteLocker(DUChainLock* duChainLock) : m_lock(duChainLock) { lock(); }
-  ~DUChainWriteLocker() { unlock(); }
+  DUChainWriteLocker(DUChainLock* duChainLock);
+  ~DUChainWriteLocker();
 
-  bool lock() {
-    bool l = false;
-    if (m_lock) {
-      l = m_lock->lockForWrite();
-      Q_ASSERT(l);
-    };
-    return l;
-  }
+  bool lock();
 
-  void unlock() {
-    if (m_lock) {
-      m_lock->releaseWriteLock();
-    }
-  }
+  void unlock();
 
 private:
-  DUChainLock* m_lock;
+  class DUChainWriteLockerPrivate* const d;
 };
 
 #endif // NDEBUG
 
 #endif // DUCHAINLOCK_H
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

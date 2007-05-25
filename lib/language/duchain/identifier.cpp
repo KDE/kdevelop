@@ -477,4 +477,4 @@ Identifier QualifiedIdentifier::at(int i) const
   return Identifier(m_qid.mid(m_idSplits[i], (i == m_idSplits.count() - 1) ? -1 : m_idSplits[i + 1] - 2));
 }
 
-// kate: indent-width 2;
+// kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
