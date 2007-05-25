@@ -395,8 +395,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
 
     QString targetpath = m_targetPath->url();
-    if( !QFileInfo( targetpath ).isRelative() )
-        targetpath = URLUtil::getRelativePath( myProjectItem->scope->projectDir(), targetpath );
+//     if( !QFileInfo( targetpath ).isRelative() )
+//         targetpath = URLUtil::getRelativePath( myProjectItem->scope->projectDir(), targetpath );
     if( myProjectItem->scope->scopeType() == Scope::FunctionScope || myProjectItem->scope->scopeType() == Scope::SimpleScope )
     {
         if( myProjectItem->scope->variableValues("TARGET").findIndex( m_targetOutputFile->text() ) == -1 )
@@ -572,6 +572,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     myProjectItem->scope->setEqualOp( "OBJECTS_DIR", QStringList( objdir_url->url() ) );
     myProjectItem->scope->setEqualOp( "UI_DIR", QStringList( uidir_url->url() ) );
     myProjectItem->scope->setEqualOp( "MOC_DIR", QStringList( mocdir_url->url() ) );
+    myProjectItem->scope->setEqualOp( "RCC_DIR", QStringList( rccdir_url->url() ) );
 
     //CORBA
     myProjectItem->scope->setEqualOp( "IDL_COMPILER", QStringList( idlCmdEdit->url() ) );
@@ -679,8 +680,20 @@ void ProjectConfigurationDlg::updateControls()
         if( targetname.findRev("/") != -1 )
             targetname = targetname.right( targetname.length() - targetname.findRev("/") - 1 );
         m_editRunArguments->setText( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/runarguments/"+targetname, "" ) );
-        m_CWDEdit->setURL( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/cwd/"+targetname, "" ) );
-        m_CWDEdit->fileDialog()->setURL( KURL::fromPathOrURL( DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/cwd/"+targetname, "" ) ) );
+
+        QString dir = DomUtil::readEntry( *prjWidget->m_part->projectDom(), "/kdevtrollproject/run/cwd/"+targetname, "" );
+        if( QFileInfo(dir).isRelative() )
+        {
+            m_CWDEdit->completionObject()->setDir( myProjectItem->scope->projectDir() );
+            m_CWDEdit->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+        }else
+        {
+
+            m_CWDEdit->completionObject()->setDir( dir);
+            m_CWDEdit->fileDialog()->setURL( KURL( dir ) );
+        }
+        m_CWDEdit->setURL( dir );
+
         if( m_CWDEdit->url().isEmpty() )
         {
             QString destdir = myProjectItem->m_widget->getCurrentDestDir();
@@ -835,8 +848,17 @@ void ProjectConfigurationDlg::updateControls()
     }
     editConfigExtra->setText( extraValues.join( " " ) );
 
-    //makefile
-    makefile_url->setURL( myProjectItem->scope->variableValues( "MAKEFILE" ).front() );
+    QString dir = myProjectItem->scope->variableValues( "MAKEFILE" ).front();
+    if( QFileInfo(dir).isRelative() )
+    {
+        makefile_url->completionObject()->setDir( myProjectItem->scope->projectDir() );
+        makefile_url->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+    }else
+    {
+        makefile_url->completionObject()->setDir( dir );
+        makefile_url->fileDialog()->setURL( KURL( dir ) );
+    }
+    makefile_url->setURL( dir );
 
     if ( myProjectItem->scope->variableValues( "INSTALLS" ).findIndex( "target" ) != -1 )
     {
@@ -851,7 +873,18 @@ void ProjectConfigurationDlg::updateControls()
     m_InstallTargetPath->setText( myProjectItem->scope->variableValues( "target.path" ).front() );
 
     m_targetOutputFile->setText( myProjectItem->scope->variableValues( "TARGET" ).front() );
-    m_targetPath->setURL( myProjectItem->scope->projectDir()+"/"+myProjectItem->scope->variableValues( "DESTDIR" ).front() );
+
+    dir = myProjectItem->scope->variableValues( "DESTDIR" ).front();
+    if( QFileInfo(dir).isRelative() )
+    {
+        m_targetPath->completionObject()->setDir( myProjectItem->scope->projectDir() );
+        m_targetPath->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+    }else
+    {
+        m_targetPath->completionObject()->setDir( dir );
+        m_targetPath->fileDialog()->setURL( KURL( dir ) );
+    }
+    m_targetPath->setURL( dir );
 
     m_defines->setText( myProjectItem->scope->variableValues( "DEFINES" ).join( " " ) );
     m_debugFlags->setText( myProjectItem->scope->variableValues( "QMAKE_CXXFLAGS_DEBUG" ).join( " " ) );
@@ -862,11 +895,63 @@ void ProjectConfigurationDlg::updateControls()
     updateBuildOrderControl();
     updateDependenciesControl();
 
-    objdir_url->setURL( myProjectItem->scope->variableValues( "OBJECTS_DIR" ).front() );
-    uidir_url->setURL( myProjectItem->scope->variableValues( "UI_DIR" ).front() );
-    mocdir_url->setURL( myProjectItem->scope->variableValues( "MOC_DIR" ).front() );
+    dir = myProjectItem->scope->variableValues( "OBJECTS_DIR" ).front();
+    if( QFileInfo(dir).isRelative() )
+    {
+        objdir_url->completionObject()->setDir( myProjectItem->scope->projectDir() );
+        objdir_url->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+    }else
+    {
+        objdir_url->completionObject()->setDir( dir );
+        objdir_url->fileDialog()->setURL( KURL( dir ) );
+    }
+    objdir_url->setURL( dir );
+    dir = myProjectItem->scope->variableValues( "UI_DIR" ).front();
+    if( QFileInfo(dir).isRelative() )
+    {
+        uidir_url->completionObject()->setDir( myProjectItem->scope->projectDir() );
+        uidir_url->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+    }else
+    {
+        uidir_url->completionObject()->setDir( dir );
+        uidir_url->fileDialog()->setURL( KURL( dir ) );
+    }
+    uidir_url->setURL( dir );
+    dir = myProjectItem->scope->variableValues( "MOC_DIR" ).front();
+    if( QFileInfo(dir).isRelative() )
+    {
+        mocdir_url->completionObject()->setDir( myProjectItem->scope->projectDir() );
+        mocdir_url->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+    }else
+    {
+        mocdir_url->completionObject()->setDir( dir );
+        mocdir_url->fileDialog()->setURL( KURL( dir ) );
+    }
+    mocdir_url->setURL( dir );
+    dir = myProjectItem->scope->variableValues( "RC_DIR" ).front();
+    if( QFileInfo(dir).isRelative() )
+    {
+        rccdir_url->completionObject()->setDir( myProjectItem->scope->projectDir() );
+        rccdir_url->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+    }else
+    {
+        rccdir_url->completionObject()->setDir( dir );
+        rccdir_url->fileDialog()->setURL( KURL( dir ) );
+    }
+    rccdir_url->setURL( dir );
 
-    idlCmdEdit->setURL( myProjectItem->scope->variableValues( "IDL_COMPILER" ).front() );
+
+    dir = myProjectItem->scope->variableValues( "IDL_COMPILER" ).front();
+    if( QFileInfo(dir).isRelative() )
+    {
+        idlCmdEdit->completionObject()->setDir( myProjectItem->scope->projectDir() );
+        idlCmdEdit->fileDialog()->setURL( KURL( myProjectItem->scope->projectDir()+"/"+dir ) );
+    }else
+    {
+        idlCmdEdit->completionObject()->setDir( dir );
+        idlCmdEdit->fileDialog()->setURL( KURL( dir ) );
+    }
+    idlCmdEdit->setURL( dir );
     idlCmdOptionsEdit->setText( myProjectItem->scope->variableValues( "IDL_OPTIONS" ).join( " " ) );
 
     customVariables->clear();
@@ -1388,18 +1473,17 @@ void ProjectConfigurationDlg::outsideIncEditClicked()
 
     KURLRequesterDlg dialog( text, i18n( "Change include directory:" ), 0, 0 );
     dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
-    if( !text.startsWith( "/" ) )
+    if( QFileInfo(text).isRelative() )
     {
-        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
-        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
-        dialog.urlRequester() ->setURL( myProjectItem->scope->projectDir()+text );
+        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+"/"+text ) );
     }
     else
     {
         dialog.urlRequester() ->completionObject() ->setDir( text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
-        dialog.urlRequester() ->setURL( text );
     }
+    dialog.urlRequester() ->setURL( text );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
@@ -1418,9 +1502,16 @@ void ProjectConfigurationDlg::outsideLibEditClicked()
 
     KURLRequesterDlg dialog( text, i18n( "Change Library:" ), 0, 0 );
     dialog.urlRequester() ->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
+    if( QFileInfo(text).isRelative() )
+    {
+        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+"/"+text ) );
+    }else
+    {
         dialog.urlRequester() ->completionObject() ->setDir( text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
-        dialog.urlRequester() ->setURL( text );
+    }
+    dialog.urlRequester() ->setURL( text );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString file = dialog.urlRequester() ->url();
@@ -1468,18 +1559,17 @@ void ProjectConfigurationDlg::outsideLibDirEditClicked()
     KURLRequesterDlg dialog( text, i18n( "Change library directory:" ), 0, 0 );
     dialog.urlRequester() ->setMode( KFile::Directory | KFile::LocalOnly );
 
-    if( !text.startsWith( "/" ) )
+    if( QFileInfo(text).isRelative() )
     {
-        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
-        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
-        dialog.urlRequester() ->setURL( myProjectItem->scope->projectDir()+text );
+        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+"/"+text ) );
     }
     else
     {
         dialog.urlRequester() ->completionObject() ->setDir( text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
-        dialog.urlRequester() ->setURL( text );
     }
+    dialog.urlRequester() ->setURL( text );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString dir = dialog.urlRequester() ->url();
@@ -1516,17 +1606,17 @@ void ProjectConfigurationDlg::extEdit_button_clicked( )
 
     KURLRequesterDlg dialog( text, i18n( "Change target:" ), 0, 0 );
     dialog.urlRequester() ->setMode( KFile::File | KFile::LocalOnly );
-    dialog.urlRequester() ->setURL( QString::null );
-    if( !text.startsWith( "/" ) )
+    if( QFileInfo(text).isRelative() )
     {
-        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir()+text );
-        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+text ) );
+        dialog.urlRequester() ->completionObject() ->setDir( myProjectItem->scope->projectDir() );
+        dialog.urlRequester() ->fileDialog() ->setURL( KURL( myProjectItem->scope->projectDir()+"/"+text ) );
     }
     else
     {
         dialog.urlRequester() ->completionObject() ->setDir( text );
         dialog.urlRequester() ->fileDialog() ->setURL( KURL( text ) );
     }
+    dialog.urlRequester() ->setURL( text );
     if ( dialog.exec() != QDialog::Accepted )
         return ;
     QString path = dialog.urlRequester() ->url();
