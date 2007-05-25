@@ -59,7 +59,7 @@ public:
    *
    * \threadsafe
    */
-  inline static DUChainLock* lock() { return s_lock; }
+  static DUChainLock* lock();
 
   const QList<DUChainObserver*>& observers() const;
   void addObserver(DUChainObserver* observer);
@@ -78,11 +78,7 @@ private:
   DUChain();
   ~DUChain();
 
-  static DUChain* s_chain;
-  static DUChainLock* s_lock;
-  QMap<KUrl, TopDUContext*> m_chains;
-
-  QList<DUChainObserver*> m_observers;
+  friend class DUChainPrivate;
 };
 
 #endif // DUCHAIN_H

@@ -19,85 +19,95 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
-#include <kstaticdeleter.h>
+#include <kglobal.h>
 
 #include "editorintegrator.h"
 
 #include "topducontext.h"
 
+class DUChainPrivate
+{
+public:
+  DUChainPrivate()
+  {
+    s_lock = new DUChainLock();
+  }
+  DUChain instance;
+  DUChainLock* s_lock;
+  QMap<KUrl, TopDUContext*> m_chains;
+  QList<DUChainObserver*> m_observers;
+};
 
-static KStaticDeleter<DUChain> sd;
-
-DUChain* DUChain::s_chain = 0;
-DUChainLock* DUChain::s_lock = 0;
+K_GLOBAL_STATIC( DUChainPrivate, sdDUChainPrivate)
 
 DUChain * DUChain::self( )
 {
-  if (!s_chain)
-    sd.setObject(s_chain, new DUChain());
-
-  return s_chain;
+  return &sdDUChainPrivate->instance;
 }
 
 DUChain::DUChain()
 {
-  s_lock = new DUChainLock();
 }
 
 DUChain::~DUChain()
 {
-  delete s_lock;
+  delete sdDUChainPrivate->s_lock;
+}
+
+DUChainLock* DUChain::lock()
+{
+  return sdDUChainPrivate->s_lock;
 }
 
 void DUChain::removeDocumentChain( const KUrl & document )
 {
-  m_chains.remove(document);
+  sdDUChainPrivate->m_chains.remove(document);
 }
 
 void DUChain::addDocumentChain( const KUrl & document, TopDUContext * chain )
 {
   Q_ASSERT(chain);
-  m_chains.insert(document, chain);
+  sdDUChainPrivate->m_chains.insert(document, chain);
 }
 
 TopDUContext * DUChain::chainForDocument( const KUrl & document )
 {
-  if (m_chains.contains(document))
-    return m_chains[document];
+  if (sdDUChainPrivate->m_chains.contains(document))
+    return sdDUChainPrivate->m_chains[document];
   return 0;
 }
 
 void DUChain::clear()
 {
   DUChainWriteLocker writeLock(lock());
-  foreach (TopDUContext* context, m_chains) {
+  foreach (TopDUContext* context, sdDUChainPrivate->m_chains) {
     KDevelop::EditorIntegrator::releaseTopRange(context->textRangePtr());
     delete context;
   }
 
-  m_chains.clear();
+  sdDUChainPrivate->m_chains.clear();
 }
 
 const QList< DUChainObserver * > & DUChain::observers() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_observers;
+  return sdDUChainPrivate->m_observers;
 }
 
 void DUChain::addObserver(DUChainObserver * observer)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  Q_ASSERT(!m_observers.contains(observer));
-  m_observers.append(observer);
+  Q_ASSERT(!sdDUChainPrivate->m_observers.contains(observer));
+  sdDUChainPrivate->m_observers.append(observer);
 }
 
 void DUChain::removeObserver(DUChainObserver * observer)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  m_observers.removeAll(observer);
+  sdDUChainPrivate->m_observers.removeAll(observer);
 }
 
 void DUChain::contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject)
