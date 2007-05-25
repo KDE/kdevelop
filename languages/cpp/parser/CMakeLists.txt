@@ -37,7 +37,7 @@ set(kdevcppparser_LIB_SRCS
 
 kde4_automoc(${kdevcppparser_LIB_SRCS})
 kde4_add_library(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
-target_link_libraries(kdevcppparser kdevduchain ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} )
+target_link_libraries(kdevcppparser kdevplatformlanguage ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} )
 set_target_properties(kdevcppparser PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevcppparser DESTINATION ${LIB_INSTALL_DIR} )
 
