@@ -32,7 +32,7 @@ set(kdevcpplanguagesupport_PART_SRCS
 kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY}
-    kdevplatforminterfaces kdevduchain kdevcppduchainbuilder kdevcpprpp kdevplatformproject kdevplatformlanguage)
+    kdevplatforminterfaces kdevcppduchainbuilder kdevcpprpp kdevplatformproject kdevplatformlanguage)
 
 install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
 
