@@ -253,6 +253,7 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
 
     language()->unlockAllParseMutexes();
 }
+
 /*
 void CppLanguageSupport::releaseAST( KDevelop::AST *ast)
 {
@@ -261,38 +262,34 @@ void CppLanguageSupport::releaseAST( KDevelop::AST *ast)
     // The ast is in the memory pool which has been deleted as part of the session.
 }
 */
+
 KUrl CppLanguageSupport::findInclude(const KUrl &source, const QString& includeName )
 {
-    // TODO: require that the target which specified the original file be passed, so that the correct set of includes can be retrieved rather than all of them
-
-    KUrl ret;
-
     foreach (KDevelop::IProject *project, core()->projectController()->projects())
     {
-        if (!project->inProject(source))
-            continue;
-
-        KDevelop::IBuildSystemManager* buildManager =
-            project->managerPlugin()->extension<KDevelop::IBuildSystemManager>();
-        if (!buildManager)
-            continue;
         KDevelop::ProjectFileItem *file = project->fileForUrl(source);
         if (!file)
             continue;
 
+        KDevelop::IBuildSystemManager* buildManager =
+            project->managerPlugin()->extension<KDevelop::IBuildSystemManager>();
+        if (!buildManager) {
+            // We found the project, but no build manager!!
+            continue;
+        }
+
         foreach (KUrl u, buildManager->includeDirectories(file)) {
             u.adjustPath( KUrl::AddTrailingSlash );
 
-            KUrl newUrl (u, includeName);
+            KUrl newUrl(u, includeName);
             //kDebug(9007) << k_funcinfo << "checking for existance of " << newUrl << endl;
             if ( KIO::NetAccess::exists( newUrl, true, qApp->activeWindow() ) ) {
-                ret = newUrl;
-                break;
+                return newUrl; // Found it.
             }
         }
     }
 
-    return ret;
+    return KUrl();
 }
 
 void CppLanguageSupport::documentLoaded(TranslationUnitAST *ast, const KUrl & document)

@@ -293,11 +293,39 @@ void Project::close()
     }
     delete d->tmp;
 }
+
 bool Project::inProject( const KUrl& url ) const
 {
+    return fileForUrl( url ) != 0;
+}
+
+ProjectFileItem* Project::fileAt( int num ) const
+{
+    QList<ProjectFileItem*> files;
+    if ( d->topItem )
+        files = d->recurseFiles( d->topItem );
+
+    if( !files.isEmpty() && num >= 0 && num < files.count() )
+        return files.at( num );
+    return 0;
+}
+
+QList<ProjectFileItem *> KDevelop::Project::files() const
+{
+    QList<ProjectFileItem *> files;
+    if ( d->topItem )
+        files = d->recurseFiles( d->topItem );
+    return files;
+}
+
+ProjectFileItem *Project::fileForUrl(const KUrl& url) const
+{
+    // TODO: This is moderately efficient, but could be much faster with a
+    // QHash<QString, ProjectFolderItem> member. Would it be worth it?
+
     KUrl u = d->topItem->url();
     if ( u.protocol() != url.protocol() || u.host() != url.host() )
-        return false;
+        return 0;
 
     foreach( ProjectFolderItem* top, d->topItem->folderList() )
     {
@@ -323,48 +351,15 @@ bool Project::inProject( const KUrl& url ) const
                     {
                         if ( file->url() == url )
                         {
-                            return true; //we found it
+                            return file; //we found it
                             break;
                         }
                     }
-                    return false; //not in the project
+                    return 0; //not in the project
                 }
                 top = parent;
             }
         }
-    }
-    return false;
-}
-
-ProjectFileItem* Project::fileAt( int num ) const
-{
-    QList<ProjectFileItem*> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-
-    if( !files.isEmpty() && num >= 0 && num < files.count() )
-        return files.at( num );
-    return 0;
-}
-
-QList<ProjectFileItem *> KDevelop::Project::files() const
-{
-    QList<ProjectFileItem *> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-    return files;
-}
-
-ProjectFileItem *Project::fileForUrl(const KUrl& url) const
-{
-    QList<ProjectFileItem*> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-
-    foreach (ProjectFileItem *file, files)
-    {
-        if (file->url() == url)
-            return file;
     }
     return 0;
 }
