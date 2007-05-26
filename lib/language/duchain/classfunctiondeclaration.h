@@ -66,10 +66,7 @@ public:
   //bool isSimilar(KDevelop::CodeItem *other, bool strict = true) const;
 
 private:
-  QtFunctionType m_functionType;
-  bool m_isVirtual: 1;
-  bool m_isInline: 1;
-  bool m_isExplicit: 1;
+  class ClassFunctionDeclarationPrivate* const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ClassFunctionDeclaration::FunctionSpecifiers)

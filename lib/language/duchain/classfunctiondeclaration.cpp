@@ -22,13 +22,23 @@
 
 #include "ducontext.h"
 
+class ClassFunctionDeclarationPrivate
+{
+public:
+  ClassFunctionDeclaration::QtFunctionType m_functionType;
+  bool m_isVirtual: 1;
+  bool m_isInline: 1;
+  bool m_isExplicit: 1;
+};
+
 ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, DUContext* context)
   : ClassMemberDeclaration(range, context)
-  , m_functionType(Normal)
-  , m_isVirtual(false)
-  , m_isInline(false)
-  , m_isExplicit(false)
+  , d(new ClassFunctionDeclarationPrivate)
 {
+  d->m_functionType = Normal;
+  d->m_isVirtual = false;
+  d->m_isInline = false;
+  d->m_isExplicit = false;
 }
 
 /*bool ClassFunctionDeclaration::isSimilar(KDevelop::CodeItem *other, bool strict ) const
@@ -58,12 +68,12 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, D
 
 ClassFunctionDeclaration::QtFunctionType ClassFunctionDeclaration::functionType() const
 {
-  return m_functionType;
+  return d->m_functionType;
 }
 
 void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 {
-  m_functionType = functionType;
+  d->m_functionType = functionType;
 }
 
 bool ClassFunctionDeclaration::isConstructor() const
@@ -81,39 +91,39 @@ bool ClassFunctionDeclaration::isDestructor() const
 
 bool ClassFunctionDeclaration::isVirtual() const
 {
-  return m_isVirtual;
+  return d->m_isVirtual;
 }
 
 void ClassFunctionDeclaration::setVirtual(bool isVirtual)
 {
-  m_isVirtual = isVirtual;
+  d->m_isVirtual = isVirtual;
 }
 
 bool ClassFunctionDeclaration::isInline() const
 {
-  return m_isInline;
+  return d->m_isInline;
 }
 
 void ClassFunctionDeclaration::setInline(bool isInline)
 {
-  m_isInline = isInline;
+  d->m_isInline = isInline;
 }
 
 bool ClassFunctionDeclaration::isExplicit() const
 {
-  return m_isExplicit;
+  return d->m_isExplicit;
 }
 
 void ClassFunctionDeclaration::setExplicit(bool isExplicit)
 {
-  m_isExplicit = isExplicit;
+  d->m_isExplicit = isExplicit;
 }
 
 void ClassFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifiers)
 {
-  m_isInline = specifiers & InlineSpecifier;
-  m_isExplicit = specifiers & ExplicitSpecifier;
-  m_isVirtual = specifiers & VirtualSpecifier;
+  d->m_isInline = specifiers & InlineSpecifier;
+  d->m_isExplicit = specifiers & ExplicitSpecifier;
+  d->m_isVirtual = specifiers & VirtualSpecifier;
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
