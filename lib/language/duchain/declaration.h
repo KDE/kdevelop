@@ -38,8 +38,6 @@ class ForwardDeclaration;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 {
-  friend class DUContext;
-  friend class ForwardDeclaration;
 
 public:
   enum Scope {
@@ -67,6 +65,9 @@ public:
   virtual TopDUContext* topContext() const;
 
   const QList<ForwardDeclaration*>& forwardDeclarations() const;
+  void addForwardDeclaration(ForwardDeclaration* );
+  void removeForwardDeclaration(ForwardDeclaration* );
+
   virtual bool isForwardDeclaration() const;
   ForwardDeclaration* toForwardDeclaration();
   const ForwardDeclaration* toForwardDeclaration() const;
@@ -120,19 +121,7 @@ public:
   virtual QString toString() const;
 
 private:
-  DUContext* m_context;
-  Scope m_scope;
-  AbstractType::Ptr m_type;
-  Identifier m_identifier;
-
-  QList<ForwardDeclaration*> m_forwardDeclarations;
-
-  Definition* m_definition;
-
-  QList<Use*> m_uses;
-
-  bool m_isDefinition  : 1;
-  bool m_inSymbolTable : 1;
+  class DeclarationPrivate* const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Declaration::CVSpecs)

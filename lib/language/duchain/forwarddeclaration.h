@@ -37,7 +37,7 @@ public:
   void setResolved(Declaration* declaration);
 
 private:
-  Declaration* m_resolvedDeclaration;
+  class ForwardDeclarationPrivate* const d;
 };
 
 #endif // DECLARATION_H

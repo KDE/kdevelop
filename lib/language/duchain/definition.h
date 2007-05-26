@@ -31,8 +31,7 @@ class DUContext;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT Definition : public DUChainBase
 {
-  friend class Declaration;
-
+friend class Declaration;
 public:
   Definition(KTextEditor::Range* range, DUContext* context);
   virtual ~Definition();
@@ -52,9 +51,7 @@ private:
    * Set the declaration for this use.
    */
   void setDeclaration(Declaration* declaration);
-
-  DUContext* m_context;
-  Declaration* m_declaration;
+  class DefinitionPrivate* const d;
 };
 
 #endif // DEFINITION_H

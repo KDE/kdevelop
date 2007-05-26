@@ -36,10 +36,7 @@ public:
   void convertDUChain(DUContext* context) const;
 
 private:
-  void convertDUChainInternal(DUContext* context, bool first = false) const;
-
-  KDevelop::EditorIntegrator* m_editor;
-  KDevelop::ICodeHighlighting* m_hl;
+  class SmartConverterPrivate* const d;
 };
 
 #endif

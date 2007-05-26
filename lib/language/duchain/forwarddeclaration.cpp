@@ -30,10 +30,17 @@
 
 using namespace KTextEditor;
 
+class ForwardDeclarationPrivate
+{
+public:
+  Declaration* m_resolvedDeclaration;
+};
+
 ForwardDeclaration::ForwardDeclaration(KTextEditor::Range* range, Scope scope, DUContext* context )
   : Declaration(range, scope, context)
-  , m_resolvedDeclaration(0)
+  , d(new ForwardDeclarationPrivate)
 {
+  d->m_resolvedDeclaration = 0;
 }
 
 ForwardDeclaration::~ForwardDeclaration()
@@ -45,27 +52,27 @@ Declaration * ForwardDeclaration::resolved() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_resolvedDeclaration;
+  return d->m_resolvedDeclaration;
 }
 
 void ForwardDeclaration::setResolved(Declaration * declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (m_resolvedDeclaration)
-    m_resolvedDeclaration->m_forwardDeclarations.removeAll(this);
+  if (d->m_resolvedDeclaration)
+    d->m_resolvedDeclaration->removeForwardDeclaration(this);
 
-  m_resolvedDeclaration = declaration;
+  d->m_resolvedDeclaration = declaration;
 
-  if (m_resolvedDeclaration) {
-    m_resolvedDeclaration->m_forwardDeclarations.append(this);
+  if (d->m_resolvedDeclaration) {
+    d->m_resolvedDeclaration->addForwardDeclaration(this);
 
     Q_ASSERT(!isDefinition());
     Q_ASSERT(!definition());
 
     // Offload uses...
     foreach (Use* use, uses())
-      use->setDeclaration(m_resolvedDeclaration);
+      use->setDeclaration(d->m_resolvedDeclaration);
   }
 }
 

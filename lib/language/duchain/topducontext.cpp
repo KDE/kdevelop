@@ -25,26 +25,58 @@
 
 using namespace KTextEditor;
 
+class TopDUContextPrivate
+{
+public:
+  TopDUContextPrivate( TopDUContext* ctxt)
+    : m_ctxt(ctxt)
+  {
+  }
+  bool imports(TopDUContext* origin, int depth) const
+  {
+    if (depth == 100) {
+      kWarning() << k_funcinfo << "Imported context list too deep! Infinite recursion?" << endl;
+      return false;
+    }
+
+    foreach (DUContext* context, m_ctxt->importedParentContexts()) {
+      Q_ASSERT(dynamic_cast<TopDUContext*>(context));
+      TopDUContext* top = static_cast<TopDUContext*>(context);
+      if (top == origin)
+        return true;
+
+      if (top->d->imports(origin, depth + 1))
+        return true;
+    }
+
+    return false;
+  }
+  bool m_hasUses  : 1;
+  bool m_deleting : 1;
+  TopDUContext* m_ctxt;
+};
+
 TopDUContext::TopDUContext(KTextEditor::Range* range)
   : DUContext(range)
-  , m_hasUses(false)
-  , m_deleting(false)
+  , d(new TopDUContextPrivate(this))
 {
+  d->m_hasUses = false;
+  d->m_deleting = false;
 }
 
 TopDUContext::~TopDUContext( )
 {
-  m_deleting = true;
+  d->m_deleting = true;
 }
 
 void TopDUContext::setHasUses(bool hasUses)
 {
-  m_hasUses = hasUses;
+  d->m_hasUses = hasUses;
 }
 
 bool TopDUContext::hasUses() const
 {
-  return m_hasUses;
+  return d->m_hasUses;
 }
 
 void TopDUContext::findDeclarationsInternal(const QualifiedIdentifier& identifier, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType, QList<UsingNS*>& usingNS, QList<Declaration*>& ret, bool inImportedContext) const
@@ -131,27 +163,7 @@ bool TopDUContext::imports(TopDUContext * origin, const KTextEditor::Cursor& pos
   Q_UNUSED(position);
   // TODO use position
 
-  return imports(origin, 0);
-}
-
-bool TopDUContext::imports(TopDUContext * origin, int depth) const
-{
-  if (depth == 100) {
-    kWarning() << k_funcinfo << "Imported context list too deep! Infinite recursion?" << endl;
-    return false;
-  }
-
-  foreach (DUContext* context, importedParentContexts()) {
-    Q_ASSERT(dynamic_cast<TopDUContext*>(context));
-    TopDUContext* top = static_cast<TopDUContext*>(context);
-    if (top == origin)
-      return true;
-
-    if (top->imports(origin, depth + 1))
-      return true;
-  }
-
-  return false;
+  return d->imports(origin, 0);
 }
 
 QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const KTextEditor::Cursor& position, const AbstractType::Ptr& dataType) const
@@ -252,11 +264,14 @@ void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*
   }
 }
 
-// kate: indent-width 2;
-
 TopDUContext * TopDUContext::topContext() const
 {
   return const_cast<TopDUContext*>(this);
+}
+
+bool TopDUContext::deleting() const
+{
+  return d->m_deleting;
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

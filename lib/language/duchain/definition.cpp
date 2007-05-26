@@ -25,11 +25,19 @@
 
 using namespace KTextEditor;
 
+class DefinitionPrivate
+{
+public:
+  DUContext* m_context;
+  Declaration* m_declaration;
+};
+
 Definition::Definition(KTextEditor::Range* range, DUContext* context)
   : DUChainBase(range)
-  , m_context(0)
-  , m_declaration(0)
+  , d(new DefinitionPrivate)
 {
+  d->m_context = 0;
+  d->m_declaration = 0;
   setContext(context);
 }
 
@@ -47,23 +55,23 @@ DUContext* Definition::context() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_context;
+  return d->m_context;
 }
 
 void Definition::setContext(DUContext* context)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (m_context) {
-    m_context->takeDefinition(this);
-    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::Context, m_context);
+  if (d->m_context) {
+    d->m_context->takeDefinition(this);
+    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
   }
 
-  m_context = context;
+  d->m_context = context;
 
-  if (m_context) {
-    m_context->addDefinition(this);
-    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::Context, m_context);
+  if (d->m_context) {
+    d->m_context->addDefinition(this);
+    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
   }
 }
 
@@ -71,21 +79,21 @@ Declaration* Definition::declaration() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_declaration;
+  return d->m_declaration;
 }
 
 void Definition::setDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (m_declaration)
-    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, m_declaration);
+  if (d->m_declaration)
+    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, d->m_declaration);
 
   // TODO if declaration is 0, highlight as definition without declaration
-  m_declaration = declaration;
+  d->m_declaration = declaration;
 
-  if (m_declaration)
-    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, m_declaration);
+  if (d->m_declaration)
+    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, d->m_declaration);
 }
 
 // kate: indent-width 2;

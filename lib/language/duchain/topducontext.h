@@ -39,7 +39,7 @@ public:
   TopDUContext* topContext() const;
 
   /// Returns true if this object is being deleted, otherwise false.
-  inline bool deleting() const { return m_deleting; }
+  bool deleting() const;
 
   bool hasUses() const;
   void setHasUses(bool hasUses);
@@ -67,10 +67,8 @@ protected:
   void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const KTextEditor::Cursor& position, QList<DUContext*>& ret) const;
 
 private:
-  bool imports(TopDUContext* origin, int depth) const;
-
-  bool m_hasUses  : 1;
-  bool m_deleting : 1;
+  class TopDUContextPrivate* const d;
+  friend class TopDUContextPrivate;
 };
 
 #endif // TOPDUCONTEXT_H

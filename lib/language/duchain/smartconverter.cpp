@@ -34,55 +34,63 @@
 
 using namespace KTextEditor;
 
-SmartConverter::SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl)
-  : m_editor(editor)
-  , m_hl(hl)
+class SmartConverterPrivate
 {
+public:
+  void convertDUChainInternal(DUContext* context, bool first = false) const
+  {
+    if (!first)
+      context->setTextRange(m_editor->createRange(context->textRange()));
+
+    foreach (Declaration* dec, context->localDeclarations()) {
+      dec->setTextRange(m_editor->createRange(dec->textRange()));
+      m_hl->highlightDeclaration(dec);
+      m_editor->exitCurrentRange();
+    }
+
+    foreach (Definition* def, context->localDefinitions()) {
+      def->setTextRange(m_editor->createRange(def->textRange()));
+      m_hl->highlightDefinition(def);
+      m_editor->exitCurrentRange();
+    }
+
+    foreach (Use* use, context->uses()) {
+      use->setTextRange(m_editor->createRange(use->textRange()));
+      m_hl->highlightUse(use);
+      m_editor->exitCurrentRange();
+    }
+
+    foreach (DUContext::UsingNS* usingNS, context->usingNamespaces())
+      usingNS->setTextCursor(m_editor->createCursor(usingNS->textCursor()));
+
+    foreach (DUContext* child, context->childContexts())
+      convertDUChainInternal(child);
+
+    m_editor->exitCurrentRange();
+  }
+  KDevelop::EditorIntegrator* m_editor;
+  KDevelop::ICodeHighlighting* m_hl;
+};
+
+SmartConverter::SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl)
+  : d(new SmartConverterPrivate)
+{
+  d->m_editor = editor;
+  d->m_hl = hl;
 }
 
 void SmartConverter::convertDUChain(DUContext* context) const
 {
   DUChainWriteLocker lock(DUChain::lock());
 
-  m_editor->setCurrentUrl(context->url());
+  d->m_editor->setCurrentUrl(context->url());
 
-  if (m_editor->smart()) {
-    context->setTextRange(m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
+  if (d->m_editor->smart()) {
+    context->setTextRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain));
 
-    convertDUChainInternal(context, true);
+    d->convertDUChainInternal(context, true);
   }
 }
 
-void SmartConverter::convertDUChainInternal(DUContext* context, bool first) const
-{
-  if (!first)
-    context->setTextRange(m_editor->createRange(context->textRange()));
-
-  foreach (Declaration* dec, context->localDeclarations()) {
-    dec->setTextRange(m_editor->createRange(dec->textRange()));
-    m_hl->highlightDeclaration(dec);
-    m_editor->exitCurrentRange();
-  }
-
-  foreach (Definition* def, context->localDefinitions()) {
-    def->setTextRange(m_editor->createRange(def->textRange()));
-    m_hl->highlightDefinition(def);
-    m_editor->exitCurrentRange();
-  }
-
-  foreach (Use* use, context->uses()) {
-    use->setTextRange(m_editor->createRange(use->textRange()));
-    m_hl->highlightUse(use);
-    m_editor->exitCurrentRange();
-  }
-
-  foreach (DUContext::UsingNS* usingNS, context->usingNamespaces())
-    usingNS->setTextCursor(m_editor->createCursor(usingNS->textCursor()));
-
-  foreach (DUContext* child, context->childContexts())
-    convertDUChainInternal(child);
-
-  m_editor->exitCurrentRange();
-}
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
