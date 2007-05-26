@@ -36,17 +36,16 @@ public:
 
   int modelRow;
 
-  inline unsigned int lastEncountered() const { return m_encountered; }
+  unsigned int lastEncountered() const;
   /// TODO atomic set? or assert locked?
-  void setEncountered(unsigned int encountered) { m_encountered = encountered; }
+  void setEncountered(unsigned int encountered);
 
   virtual TopDUContext* topContext() const;
 
 private:
   // For proxy object
   DUChainBase();
-
-  unsigned int m_encountered;
+  class DUChainBasePrivate* const d;
 };
 
 #endif // DUCHAINBASE_H

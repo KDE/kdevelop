@@ -18,22 +18,40 @@
 
 #include "duchainbase.h"
 
+class DUChainBasePrivate
+{
+public:
+  unsigned int m_encountered;
+};
+
 DUChainBase::DUChainBase(KTextEditor::Range* range)
   : KDevelop::DocumentRangeObject(range)
   , modelRow(0)
-  , m_encountered(0)
+  , d(new DUChainBasePrivate)
 {
+  d->m_encountered = 0;
 }
 
 DUChainBase::DUChainBase()
   : KDevelop::DocumentRangeObject(0)
   , modelRow(0)
-  , m_encountered(0)
+  , d(new DUChainBasePrivate)
 {
+  d->m_encountered = 0;
 }
 
 DUChainBase::~DUChainBase()
 {
+}
+
+unsigned int DUChainBase::lastEncountered() const
+{
+  return d->m_encountered;
+}
+
+void DUChainBase::setEncountered(unsigned int encountered)
+{
+  d->m_encountered = encountered;
 }
 
 TopDUContext* DUChainBase::topContext() const
