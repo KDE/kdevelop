@@ -22,17 +22,12 @@ install(TARGETS kdevcpprpp DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### next target ###############
 
-if(KDE4_BUILD_TESTS)
-
 set(pp_SRCS
     main.cpp
 )
 
-kde4_add_executable(pp NOGUI RUN_UNINSTALLED ${pp_SRCS})
+kde4_add_test(pp ${pp_SRCS})
 target_link_libraries(pp ${KDE4_KDECORE_LIBS} kdevcpprpp)
-add_test(pp ${EXECUTABLE_OUTPUT_PATH}/pp)
-
-endif(KDE4_BUILD_TESTS)
 
 
 ########### install files ###############
