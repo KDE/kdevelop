@@ -25,11 +25,19 @@
 
 using namespace KTextEditor;
 
+class UsePrivate
+{
+public:
+  DUContext* m_context;
+  Declaration* m_declaration;
+};
+
 Use::Use(KTextEditor::Range* range, DUContext* context)
   : DUChainBase(range)
-  , m_context(0)
-  , m_declaration(0)
+  , d(new UsePrivate)
 {
+  d->m_context = 0;
+  d->m_declaration = 0;
   if (context)
     setContext(context);
 }
@@ -38,50 +46,51 @@ Use::~Use()
 {
   setContext(0);
 
-  if (m_declaration)
-    m_declaration->removeUse(this);
+  if (d->m_declaration)
+    d->m_declaration->removeUse(this);
 
   DUChain::useChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+  delete d;
 }
 
 Declaration* Use::declaration() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_declaration;
+  return d->m_declaration;
 }
 
 void Use::setDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (m_declaration)
-    DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::DeclarationRelationship, m_declaration);
+  if (d->m_declaration)
+    DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::DeclarationRelationship, d->m_declaration);
 
-  m_declaration = declaration;
+  d->m_declaration = declaration;
 
-  if (m_declaration)
-    DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::DeclarationRelationship, m_declaration);
+  if (d->m_declaration)
+    DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::DeclarationRelationship, d->m_declaration);
 }
 
 void Use::setContext(DUContext * context)
 {
-  if (m_context) {
+  if (d->m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    m_context->removeUse(this);
+    d->m_context->removeUse(this);
 
-    DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::Context, m_context);
+    DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
   }
 
-  m_context = context;
+  d->m_context = context;
 
-  if (m_context) {
+  if (d->m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    m_context->addUse(this);
+    d->m_context->addUse(this);
 
-    DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::Context, m_context);
+    DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
   }
 }
 
@@ -89,7 +98,7 @@ DUContext * Use::context() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_context;
+  return d->m_context;
 }
 
 bool Use::isOrphan() const

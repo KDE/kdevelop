@@ -59,9 +59,7 @@ private:
    * \note Does not require the chain to be locked.
    */
   void setDeclaration(Declaration* definition);
-
-  DUContext* m_context;
-  Declaration* m_declaration;
+  class UsePrivate* const d;
 };
 
 #endif // DEFINITIONUSE_H
