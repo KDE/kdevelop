@@ -48,7 +48,8 @@ Definition::~Definition()
   if (Declaration* dec = declaration())
     dec->setDefinition(0);
 
-  DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+    DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+    delete d;
 }
 
 DUContext* Definition::context() const

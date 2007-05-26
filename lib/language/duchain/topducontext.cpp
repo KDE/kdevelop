@@ -67,6 +67,7 @@ TopDUContext::TopDUContext(KTextEditor::Range* range)
 TopDUContext::~TopDUContext( )
 {
   d->m_deleting = true;
+  delete d;
 }
 
 void TopDUContext::setHasUses(bool hasUses)

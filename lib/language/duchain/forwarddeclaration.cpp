@@ -46,6 +46,7 @@ ForwardDeclaration::ForwardDeclaration(KTextEditor::Range* range, Scope scope, D
 ForwardDeclaration::~ForwardDeclaration()
 {
   setResolved(0);
+  delete d;
 }
 
 Declaration * ForwardDeclaration::resolved() const

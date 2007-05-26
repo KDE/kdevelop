@@ -79,6 +79,11 @@ SmartConverter::SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICo
   d->m_hl = hl;
 }
 
+SmartConverter::~SmartConverter()
+{
+  delete d;
+}
+
 void SmartConverter::convertDUChain(DUContext* context) const
 {
   DUChainWriteLocker lock(DUChain::lock());

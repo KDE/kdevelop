@@ -32,7 +32,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT SmartConverter
 {
 public:
   SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl);
-
+  ~SmartConverter();
   void convertDUChain(DUContext* context) const;
 
 private:

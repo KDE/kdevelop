@@ -89,6 +89,7 @@ Declaration::~Declaration()
   setAbstractType(AbstractType::Ptr());
 
   DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+  delete d;
 }
 
 void Declaration::removeUse( Use* use )
