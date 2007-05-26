@@ -47,6 +47,12 @@ public:
     ProcessLineMaker( const K3Process* );
     void clearBuffers();
 
+public slots:
+    void slotReceivedStdout( const QString& );
+    void slotReceivedStderr( const QString& );
+    void slotReceivedStdout( const char* );
+    void slotReceivedStderr( const char* );
+
 signals:
     void receivedStdoutLines( const QStringList& );
     void receivedStderrLines( const QStringList& );
