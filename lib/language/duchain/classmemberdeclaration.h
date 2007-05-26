@@ -65,13 +65,7 @@ public:
   void setMutable(bool isMutable);
 
 private:
-  Declaration::AccessPolicy m_accessPolicy;
-  bool m_isStatic: 1;
-  bool m_isAuto: 1;
-  bool m_isFriend: 1;
-  bool m_isRegister: 1;
-  bool m_isExtern: 1;
-  bool m_isMutable: 1;
+  class ClassMemberDeclarationPrivate* const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDeclaration::StorageSpecifiers)
