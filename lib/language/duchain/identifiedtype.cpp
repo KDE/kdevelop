@@ -21,24 +21,31 @@
 #include "identifiedtype.h"
 #include "declaration.h"
 
-IdentifiedType::IdentifiedType()
-  : m_declaration(0)
+class IdentifiedTypePrivate
 {
+public:
+  Declaration* m_declaration;
+};
+
+IdentifiedType::IdentifiedType()
+  : d(new IdentifiedTypePrivate)
+{
+  d->m_declaration = 0;
 }
 
 QualifiedIdentifier IdentifiedType::identifier() const
 {
-  return m_declaration ? m_declaration->qualifiedIdentifier() : QualifiedIdentifier();
+  return d->m_declaration ? d->m_declaration->qualifiedIdentifier() : QualifiedIdentifier();
 }
 
 Declaration* IdentifiedType::declaration() const
 {
-  return m_declaration;
+  return d->m_declaration;
 }
 
 void IdentifiedType::setDeclaration(Declaration* declaration)
 {
-  m_declaration = declaration;
+  d->m_declaration = declaration;
 }
 
 QString IdentifiedType::idMangled() const

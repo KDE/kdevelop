@@ -39,7 +39,7 @@ public:
   QString idMangled() const;
 
 private:
-  Declaration* m_declaration;
+  class IdentifiedTypePrivate* const d;
 };
 
 #endif

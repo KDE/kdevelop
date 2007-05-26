@@ -19,16 +19,33 @@
 #include "identifier.h"
 
 #include <QHash>
+class IdentifierPrivate
+{
+public:
+  int m_unique;
+  QString m_identifier;
+  QList<QualifiedIdentifier> m_templateIdentifiers;
+};
+
+class QualifiedIdentifierPrivate
+{
+public:
+  QString m_qid;
+  QVarLengthArray<int, 8> m_idSplits;
+  bool m_explicitlyGlobal;
+};
 
 Identifier::Identifier(const QString& id)
-  : m_unique(0)
-  , m_identifier(id)
+  : d(new IdentifierPrivate)
 {
+  d->m_unique = 0;
+  d->m_identifier = id;
 }
 
 Identifier::Identifier()
-  : m_unique(0)
+  : d(new IdentifierPrivate)
 {
+  d->m_unique = 0;
 }
 
 Identifier Identifier::unique(int token)
@@ -40,47 +57,47 @@ Identifier Identifier::unique(int token)
 
 bool Identifier::isUnique() const
 {
-  return m_unique;
+  return d->m_unique;
 }
 
 int Identifier::uniqueToken() const
 {
-  return m_unique;
+  return d->m_unique;
 }
 
 void Identifier::setUnique(int token)
 {
-  m_unique = token;
+  d->m_unique = token;
 }
 
 const QString& Identifier::identifier() const
 {
-  return m_identifier;
+  return d->m_identifier;
 }
 
 void Identifier::setIdentifier(const QString& identifier)
 {
-  m_identifier = identifier;
+  d->m_identifier = identifier;
 }
 
 const QList<QualifiedIdentifier>& Identifier::templateIdentifiers() const
 {
-  return m_templateIdentifiers;
+  return d->m_templateIdentifiers;
 }
 
 void Identifier::appendTemplateIdentifier(const QualifiedIdentifier& identifier)
 {
-  m_templateIdentifiers.append(identifier);
+  d->m_templateIdentifiers.append(identifier);
 }
 
 void Identifier::clearTemplateIdentifiers()
 {
-  m_templateIdentifiers.clear();
+  d->m_templateIdentifiers.clear();
 }
 
 void Identifier::setTemplateIdentifiers(const QList<QualifiedIdentifier>& templateIdentifiers)
 {
-  m_templateIdentifiers = templateIdentifiers;
+  d->m_templateIdentifiers = templateIdentifiers;
 }
 
 QString Identifier::toString() const
@@ -126,62 +143,77 @@ bool Identifier::operator!=(const Identifier& rhs) const
   return !operator==(rhs);
 }
 
+Identifier& Identifier::operator=(const Identifier& rhs)
+{
+  if( d != rhs.d )
+  {
+    d->m_identifier = rhs.d->m_identifier;
+    d->m_unique = rhs.d->m_unique;
+    d->m_templateIdentifiers = rhs.d->m_templateIdentifiers;
+  }
+  return *this;
+}
+
 static const int idguess = 4;
 
 QualifiedIdentifier::QualifiedIdentifier(const QString& id)
+  : d(new QualifiedIdentifierPrivate)
 {
   if (id.startsWith("::")) {
-    m_explicitlyGlobal = true;
-    m_qid = id.mid(2);
+    d->m_explicitlyGlobal = true;
+    d->m_qid = id.mid(2);
   } else {
-    m_explicitlyGlobal = false;
-    m_qid = id;
+    d->m_explicitlyGlobal = false;
+    d->m_qid = id;
   }
 
-  m_idSplits.append(0);
+  d->m_idSplits.append(0);
   int split = 0;
   forever {
-    split = m_qid.indexOf("::", split);
+    split = d->m_qid.indexOf("::", split);
     if (split == -1)
       break;
-    m_idSplits.append(split + 2);
+    d->m_idSplits.append(split + 2);
     split += 2;
   }
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
+  : d(new QualifiedIdentifierPrivate)
 {
-  if (id.m_identifier.isEmpty()) {
-    m_explicitlyGlobal = true;
+  if (id.d->m_identifier.isEmpty()) {
+    d->m_explicitlyGlobal = true;
   } else {
-    m_explicitlyGlobal = false;
-    m_qid = id.m_identifier;
-    m_idSplits.append(0);
+    d->m_explicitlyGlobal = false;
+    d->m_qid = id.d->m_identifier;
+    d->m_idSplits.append(0);
   }
 }
 
 QualifiedIdentifier::QualifiedIdentifier()
-  : m_explicitlyGlobal(false)
+  : d(new QualifiedIdentifierPrivate)
 {
+  d-> m_explicitlyGlobal = false;
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id, int reserve)
+  : d(new QualifiedIdentifierPrivate)
 {
   if (reserve)
-    m_qid.reserve(reserve);
+    d->m_qid.reserve(reserve);
 
-  m_qid = id.m_qid;
-  m_idSplits = id.m_idSplits;
-  m_explicitlyGlobal = id.m_explicitlyGlobal;
+  d->m_qid = id.d->m_qid;
+  d->m_idSplits = id.d->m_idSplits;
+  d->m_explicitlyGlobal = id.d->m_explicitlyGlobal;
 }
 
 QStringList QualifiedIdentifier::toStringList() const
 {
   QStringList ret;
-  if (m_explicitlyGlobal)
+  if (d->m_explicitlyGlobal)
     ret.append(QString());
 
-  ret << m_qid.split("::");
+  ret << d->m_qid.split("::");
 
   return ret;
 }
@@ -189,9 +221,9 @@ QStringList QualifiedIdentifier::toStringList() const
 QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
 {
   if (ignoreExplicitlyGlobal || !explicitlyGlobal())
-    return m_qid;
+    return d->m_qid;
   else
-    return QString("::") + m_qid;
+    return QString("::") + d->m_qid;
 }
 
 QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) const
@@ -199,14 +231,14 @@ QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) 
   if (explicitlyGlobal())
     return *this;
 
-  QualifiedIdentifier ret(base, base.m_qid.length() + 2 + m_qid.length());
+  QualifiedIdentifier ret(base, base.d->m_qid.length() + 2 + d->m_qid.length());
   if (ret.count())
-    ret.m_qid.append("::");
-  ret.m_qid.append(m_qid);
+    ret.d->m_qid.append("::");
+  ret.d->m_qid.append(d->m_qid);
 
-  const int offset = ret.m_qid.length();
-  for (int i = 0; i < m_idSplits.count(); ++i)
-    ret.m_idSplits.append(m_idSplits[i] + offset);
+  const int offset = ret.d->m_qid.length();
+  for (int i = 0; i < d->m_idSplits.count(); ++i)
+    ret.d->m_idSplits.append(d->m_idSplits[i] + offset);
 
   // TODO verify...
 
@@ -244,19 +276,19 @@ QualifiedIdentifier QualifiedIdentifier::strip(const QualifiedIdentifier & unwan
   if (count() <= unwantedBase.count())
     return *this;
 
-  if (m_qid.startsWith(unwantedBase.m_qid)) {
-    const int offset = unwantedBase.m_qid.length() + 2;
+  if (d->m_qid.startsWith(unwantedBase.d->m_qid)) {
+    const int offset = unwantedBase.d->m_qid.length() + 2;
 
-    for (int index = 0; index < m_idSplits.count(); ++index) {
-      if (m_idSplits[index] != offset)
+    for (int index = 0; index < d->m_idSplits.count(); ++index) {
+      if (d->m_idSplits[index] != offset)
         continue;
 
       // Match
       QualifiedIdentifier id;
       // Don't convey explicitly global...
-      id.m_qid = m_qid.mid(m_idSplits[index]);
-      for (; index < m_idSplits.count(); ++index)
-        id.m_idSplits.append(m_idSplits[index] - offset);
+      id.d->m_qid = d->m_qid.mid(d->m_idSplits[index]);
+      for (; index < d->m_idSplits.count(); ++index)
+        id.d->m_idSplits.append(d->m_idSplits[index] - offset);
 
       return id;
     }
@@ -268,21 +300,21 @@ QualifiedIdentifier QualifiedIdentifier::strip(const QualifiedIdentifier & unwan
 bool QualifiedIdentifier::explicitlyGlobal() const
 {
   // True if started with "::"
-  return m_explicitlyGlobal;
+  return d->m_explicitlyGlobal;
 }
 
 void QualifiedIdentifier::setExplicitlyGlobal(bool eg)
 {
-  m_explicitlyGlobal = eg;
+  d->m_explicitlyGlobal = eg;
 }
 
 bool QualifiedIdentifier::operator==(const QualifiedIdentifier& rhs) const
 {
   // Fast path
-  if (m_idSplits.count() != rhs.m_idSplits.count())
+  if (d->m_idSplits.count() != rhs.d->m_idSplits.count())
     return false;
 
-  return m_qid == rhs.m_qid;
+  return d->m_qid == rhs.d->m_qid;
 }
 
 bool QualifiedIdentifier::operator!=(const QualifiedIdentifier& rhs) const
@@ -290,17 +322,28 @@ bool QualifiedIdentifier::operator!=(const QualifiedIdentifier& rhs) const
   return !operator==(rhs);
 }
 
+QualifiedIdentifier& QualifiedIdentifier::operator=(const QualifiedIdentifier& rhs)
+{
+  if( d != rhs.d )
+  {
+    d->m_explicitlyGlobal = rhs.d->m_explicitlyGlobal;
+    d->m_qid = rhs.d->m_qid;
+    d->m_idSplits = rhs.d->m_idSplits;
+  }
+  return *this;
+}
+
 QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const Identifier& rhs) const
 {
   const int difference = count() - 1;
   if (difference == 0) {
-    if (m_qid == rhs.m_identifier)
+    if (d->m_qid == rhs.d->m_identifier)
       return ExactMatch;
     else
       return NoMatch;
 
   } else if (difference > 0) {
-    if (m_qid.endsWith(rhs.m_identifier))
+    if (d->m_qid.endsWith(rhs.d->m_identifier))
       return Contains;
   }
 
@@ -311,7 +354,7 @@ QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdenti
 {
   const int difference = count() - rhs.count();
   if (difference == 0) {
-    if (m_qid == rhs.m_qid)
+    if (d->m_qid == rhs.d->m_qid)
       return ExactMatch;
     else
       return NoMatch;
@@ -322,7 +365,7 @@ QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdenti
       return NoMatch;
 
     //if (m_idSplits[count() - 1 - rhs.count()] == rhs.m_qid.length())
-      if (m_qid.endsWith(rhs.m_qid))
+      if (d->m_qid.endsWith(rhs.d->m_qid))
         return Contains;
 
   } else {
@@ -330,7 +373,7 @@ QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdenti
       return NoMatch;
 
     //if (rhs.m_idSplits[rhs.count() - 1 - count()] == m_qid.length())
-      if (rhs.m_qid.endsWith(m_qid))
+      if (rhs.d->m_qid.endsWith(d->m_qid))
         return ContainedBy;
   }
 
@@ -397,11 +440,11 @@ bool QualifiedIdentifier::isQualified() const
 QString Identifier::mangled() const
 {
   static QRegExp simpleIdentifier("[a-zA-Z0-9_]*");
-  if (simpleIdentifier.exactMatch(m_identifier))
-    return QString("%1%2").arg(m_identifier.length()).arg(m_identifier);
+  if (simpleIdentifier.exactMatch(d->m_identifier))
+    return QString("%1%2").arg(d->m_identifier.length()).arg(d->m_identifier);
 
   // Get the encoded utf form
-  QString utf = QString::fromLatin1(m_identifier.toUtf8());
+  QString utf = QString::fromLatin1(d->m_identifier.toUtf8());
 
   return QString("U%1%2").arg(utf.length()).arg(utf);
 }
@@ -429,52 +472,78 @@ QString QualifiedIdentifier::mangled() const
 
 void QualifiedIdentifier::push(const Identifier& id)
 {
-  if (m_qid.isEmpty()) {
-    if (id.m_identifier.isEmpty()) {
-      m_explicitlyGlobal = true;
+  if (d->m_qid.isEmpty()) {
+    if (id.d->m_identifier.isEmpty()) {
+      d->m_explicitlyGlobal = true;
     } else {
-      m_idSplits.append(0);
-      m_qid.append(id.m_identifier);
+      d->m_idSplits.append(0);
+      d->m_qid.append(id.d->m_identifier);
     }
   } else {
-    m_qid.append("::");
-    m_idSplits.append(m_qid.length());
-    m_qid.append(id.m_identifier);
+    d->m_qid.append("::");
+    d->m_idSplits.append(d->m_qid.length());
+    d->m_qid.append(id.d->m_identifier);
   }
 }
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)
 {
-  if (m_qid.isEmpty()) {
-    m_qid = id.m_qid;
-    m_idSplits = id.m_idSplits;
-    m_explicitlyGlobal = id.m_explicitlyGlobal;
+  if (d->m_qid.isEmpty()) {
+    d->m_qid = id.d->m_qid;
+    d->m_idSplits = id.d->m_idSplits;
+    d->m_explicitlyGlobal = id.d->m_explicitlyGlobal;
 
   } else {
-    m_qid.append("::");
-    const int offset = m_qid.length();
-    m_qid.append(id.m_qid);
-    for (int i = 0; i < id.m_idSplits.count(); ++i)
-      m_idSplits.append(offset + id.m_idSplits[i]);
+    d->m_qid.append("::");
+    const int offset = d->m_qid.length();
+    d->m_qid.append(id.d->m_qid);
+    for (int i = 0; i < id.d->m_idSplits.count(); ++i)
+      d->m_idSplits.append(offset + id.d->m_idSplits[i]);
   }
 }
 
 void QualifiedIdentifier::pop()
 {
-  m_qid = m_qid.left(m_idSplits[m_idSplits.count() - 1] - 2);
-  m_idSplits.resize(m_idSplits.count() - 1);
+  d->m_qid = d->m_qid.left(d->m_idSplits[d->m_idSplits.count() - 1] - 2);
+  d->m_idSplits.resize(d->m_idSplits.count() - 1);
 }
 
 void QualifiedIdentifier::clear()
 {
-  m_qid.clear();
-  m_idSplits.clear();
-  m_explicitlyGlobal = false;
+  d->m_qid.clear();
+  d->m_idSplits.clear();
+  d->m_explicitlyGlobal = false;
+}
+
+
+bool QualifiedIdentifier::isEmpty() const
+{
+  return d->m_idSplits.isEmpty();
+}
+
+int QualifiedIdentifier::count() const
+{
+  return d->m_idSplits.count();
+}
+
+Identifier QualifiedIdentifier::first() const
+{
+  return at(0);
+}
+
+Identifier QualifiedIdentifier::last() const
+{
+  return at(count() - 1);
+}
+
+Identifier QualifiedIdentifier::top() const
+{
+  return at(count() - 1);
 }
 
 Identifier QualifiedIdentifier::at(int i) const
 {
-  return Identifier(m_qid.mid(m_idSplits[i], (i == m_idSplits.count() - 1) ? -1 : m_idSplits[i + 1] - 2));
+  return Identifier(d->m_qid.mid(d->m_idSplits[i], (i == d->m_idSplits.count() - 1) ? -1 : d->m_idSplits[i + 1] - 2));
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

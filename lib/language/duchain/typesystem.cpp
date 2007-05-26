@@ -81,6 +81,11 @@ uint AbstractType::hash() const
   return static_cast<uint>(reinterpret_cast<long>(this));
 }
 
+QString AbstractType::mangled() const
+{
+  return QString();
+}
+
 IntegralType::IntegralType(const QString & name)
   : d(new IntegralTypePrivate)
 {

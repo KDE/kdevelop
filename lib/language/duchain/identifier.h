@@ -61,6 +61,7 @@ public:
 
   bool operator==(const Identifier& rhs) const;
   bool operator!=(const Identifier& rhs) const;
+  Identifier& operator=(const Identifier& rhs);
 
   /**
     * kDebug() stream operator.  Writes this identifier to the debug output in a nicely formatted way.
@@ -76,9 +77,7 @@ public:
   inline friend kndbgstream& operator<< (kndbgstream& s, const Identifier&) { return s; }
 
 private:
-  int m_unique;
-  QString m_identifier;
-  QList<QualifiedIdentifier> m_templateIdentifiers;
+  class IdentifierPrivate* const d;
 };
 
 /// Represents a qualified identifier
@@ -94,12 +93,12 @@ public:
   void push(const QualifiedIdentifier& id);
   void pop();
   void clear();
-  inline bool isEmpty() const { return m_idSplits.isEmpty(); }
-  inline int count() const { return m_idSplits.count(); }
+  bool isEmpty() const;
+  int count() const;
+  Identifier first() const;
+  Identifier last() const;
+  Identifier top() const;
   Identifier at(int i) const;
-  inline Identifier first() const { return at(0); }
-  inline Identifier last() const { return at(count() - 1); }
-  inline Identifier top() const { return at(count() - 1); }
 
   static QualifiedIdentifier merge(const QStack<QualifiedIdentifier>& idStack);
 
@@ -118,6 +117,7 @@ public:
 
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
+  QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
 
   enum MatchTypes {
     NoMatch,
@@ -144,9 +144,7 @@ public:
   inline friend kndbgstream& operator<< (kndbgstream& s, const QualifiedIdentifier&) { return s; }
 
 private:
-  QString m_qid;
-  QVarLengthArray<int, 8> m_idSplits;
-  bool m_explicitlyGlobal;
+  class QualifiedIdentifierPrivate* const d;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);

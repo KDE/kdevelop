@@ -32,21 +32,21 @@
 #define ENSURE_CHAIN_READ_LOCKED
 #define ENSURE_CHAIN_WRITE_LOCKED
 
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock : public QReadWriteLock
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock : public QReadWriteLock //krazy:exclude=dpointer
 {
 public:
   DUChainLock() : QReadWriteLock() {}
   ~DUChainLock() {}
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker : public QReadLocker
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker : public QReadLocker //krazy:exclude=dpointer
 {
 public:
   DUChainReadLocker(DUChainLock* duChainLock) : QReadLocker(duChainLock) {}
   ~DUChainReadLocker() {}
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker : public QWriteLocker
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker : public QWriteLocker //krazy:exclude=dpointer
 {
 public:
   DUChainWriteLocker(DUChainLock* duChainLock) : QWriteLocker(duChainLock) {}

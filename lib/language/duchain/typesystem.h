@@ -88,7 +88,7 @@ public:
 
   virtual QString toString() const = 0;
 
-  virtual QString mangled() const { return QString(); }
+  virtual QString mangled() const;
 
   uint hash() const;
 
