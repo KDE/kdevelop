@@ -23,6 +23,7 @@ class TopDUContext;
 
 #include "documentrangeobject.h"
 #include "kdevlanguageexport.h"
+
 /**
  * Base class for definition-use chain objects.
  */
@@ -34,7 +35,9 @@ public:
   DUChainBase(KTextEditor::Range* range);
   virtual ~DUChainBase();
 
-  int modelRow;
+  int modelRow() const;
+  /// TODO atomic set? or assert locked?
+  void setModelRow(int row);
 
   unsigned int lastEncountered() const;
   /// TODO atomic set? or assert locked?

@@ -200,10 +200,9 @@ FileManager::FileManager(KDevFileManagerPart *part, QWidget* parent)
     l->setSpacing(0);
 
     d->m_toolBar = new QWidget(this);
-    QHBoxLayout *toolBarLayout = new QHBoxLayout(this);
+    QHBoxLayout *toolBarLayout = new QHBoxLayout(d->m_toolBar);
     toolBarLayout->setMargin(0);
     toolBarLayout->setSpacing(0);
-    d->m_toolBar->setLayout(toolBarLayout);
     l->addWidget(d->m_toolBar);
 
     d->m_urlBox = new KUrlComboBox(KUrlComboBox::Directories, true, this);

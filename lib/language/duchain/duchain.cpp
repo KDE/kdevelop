@@ -28,22 +28,14 @@
 class DUChainPrivate
 {
 public:
-  DUChainPrivate()
-  {
-    s_lock = new DUChainLock();
-  }
   DUChain instance;
-  DUChainLock* s_lock;
+  DUChainLock lock;
   QMap<KUrl, TopDUContext*> m_chains;
   QList<DUChainObserver*> m_observers;
 };
 
-K_GLOBAL_STATIC( DUChainPrivate, sdDUChainPrivate)
+K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
-DUChain * DUChain::self( )
-{
-  return &sdDUChainPrivate->instance;
-}
 
 DUChain::DUChain()
 {
@@ -51,12 +43,16 @@ DUChain::DUChain()
 
 DUChain::~DUChain()
 {
-  delete sdDUChainPrivate->s_lock;
+}
+
+DUChain* DUChain::self()
+{
+  return &sdDUChainPrivate->instance;
 }
 
 DUChainLock* DUChain::lock()
 {
-  return sdDUChainPrivate->s_lock;
+  return &sdDUChainPrivate->lock;
 }
 
 void DUChain::removeDocumentChain( const KUrl & document )

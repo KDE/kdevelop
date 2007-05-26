@@ -21,12 +21,12 @@
 
 #include <QtCore/QObject>
 
-#include <kurl.h>
 #include "kdevlanguageexport.h"
 #include "duchainobserver.h"
 
 class TopDUContext;
 class DUChainLock;
+class KUrl;
 
 /**
  * Holds references to all top level source file contexts.
@@ -37,9 +37,6 @@ class DUChainLock;
 class KDEVPLATFORMLANGUAGE_EXPORT DUChain : public QObject
 {
   Q_OBJECT
-
-  template <typename T>
-  friend class KStaticDeleter;
 
 public:
   TopDUContext* chainForDocument(const KUrl& document);

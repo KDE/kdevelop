@@ -78,7 +78,7 @@ class DUChainModel : public QAbstractItemModel, public DUChainObserver
     template <typename T>
     QModelIndex createParentIndex(T* type) const
     {
-      return createIndex(type->modelRow, 0, type);
+      return createIndex(type->modelRow(), 0, type);
     }
 
     template <typename T>

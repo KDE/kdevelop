@@ -308,7 +308,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
         if (!list)
           list = new QList<DUChainBase*>();
 
-        currentItem->modelRow = list->count();
+        currentItem->setModelRow(list->count());
         list->append(currentItem);
 
       } else {
@@ -388,7 +388,7 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
         case Removal: {
           int index = list->indexOf(relatedObject);
           Q_ASSERT(index != -1);
-          beginRemoveRows(createIndex(context->modelRow, 0, context), index, index);
+          beginRemoveRows(createIndex(context->modelRow(), 0, context), index, index);
           list->removeAt(index);
           endInsertRows();
           if (change == Removal)
@@ -398,7 +398,7 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
 
         case Addition: {
           int index = findInsertIndex(*list, relatedObject);
-          beginInsertRows(createIndex(context->modelRow, 0, context), index, index);
+          beginInsertRows(createIndex(context->modelRow(), 0, context), index, index);
           list->insert(index, relatedObject);
           endInsertRows();
           break;

@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2007 Kris Wong <kwong@fuse.net>
+    Copyright (C) 2007 Kris Wong <kris.p.wong@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,9 +54,6 @@ public:
 };
 
 #else
-
-#include <QtCore/QMutex>
-#include <QtCore/QSet>
 
 /**
  * Macros for ensuring the DUChain is locked properly.
@@ -122,7 +119,6 @@ public:
   ~DUChainReadLocker();
 
   bool lock();
-
   void unlock();
 
 private:
@@ -136,7 +132,6 @@ public:
   ~DUChainWriteLocker();
 
   bool lock();
-
   void unlock();
 
 private:

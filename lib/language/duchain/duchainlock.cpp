@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2007 Kris Wong <kwong@fuse.net>
+    Copyright (C) 2007 Kris Wong <kris.p.wong@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,9 @@
 #ifndef NDEBUG
 
 #include <unistd.h>
-#include <QThread>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QSet>
 
 // Uncomment the following to turn on verbose locking information
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
@@ -33,6 +35,9 @@
 class DUChainLockPrivate
 {
 public:
+  DUChainLockPrivate() {
+    m_writer = 0;
+  }
   QMutex m_mutex;
   Qt::HANDLE m_writer;
   QSet<Qt::HANDLE> m_readers;
@@ -50,14 +55,15 @@ public:
   DUChainLock* m_lock;
 };
 
+
 DUChainLock::DUChainLock()
   : d(new DUChainLockPrivate)
 {
-  d->m_writer = 0;
 }
 
 DUChainLock::~DUChainLock()
 {
+  delete d;
 }
 
 bool DUChainLock::lockForRead()
@@ -149,8 +155,9 @@ bool DUChainLock::currentThreadHasWriteLock()
   return d->m_writer == QThread::currentThreadId();
 }
 
+
 DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock)
-: d(new DUChainReadLockerPrivate)
+  : d(new DUChainReadLockerPrivate)
 {
   d->m_lock = duChainLock;
   lock();
@@ -162,7 +169,8 @@ DUChainReadLocker::~DUChainReadLocker()
   delete d;
 }
 
-bool DUChainReadLocker::lock() {
+bool DUChainReadLocker::lock()
+{
   bool l = false;
   if (d->m_lock) {
     l = d->m_lock->lockForRead();
@@ -171,11 +179,13 @@ bool DUChainReadLocker::lock() {
   return l;
 }
 
-void DUChainReadLocker::unlock() {
+void DUChainReadLocker::unlock()
+{
   if (d->m_lock) {
     d->m_lock->releaseReadLock();
   }
 }
+
 
 DUChainWriteLocker::DUChainWriteLocker(DUChainLock* duChainLock)
   : d(new DUChainWriteLockerPrivate)
@@ -189,7 +199,8 @@ DUChainWriteLocker::~DUChainWriteLocker()
   delete d;
 }
 
-bool DUChainWriteLocker::lock() {
+bool DUChainWriteLocker::lock()
+{
   bool l = false;
   if (d->m_lock) {
     l = d->m_lock->lockForWrite();
@@ -198,7 +209,8 @@ bool DUChainWriteLocker::lock() {
   return l;
 }
 
-void DUChainWriteLocker::unlock() {
+void DUChainWriteLocker::unlock()
+{
   if (d->m_lock) {
     d->m_lock->releaseWriteLock();
   }

@@ -21,27 +21,40 @@
 class DUChainBasePrivate
 {
 public:
+  DUChainBasePrivate() {
+    m_modelRow = 0;
+    m_encountered = 0;
+  }
+  int m_modelRow;
   unsigned int m_encountered;
 };
 
+
 DUChainBase::DUChainBase(KTextEditor::Range* range)
   : KDevelop::DocumentRangeObject(range)
-  , modelRow(0)
   , d(new DUChainBasePrivate)
 {
-  d->m_encountered = 0;
 }
 
 DUChainBase::DUChainBase()
   : KDevelop::DocumentRangeObject(0)
-  , modelRow(0)
   , d(new DUChainBasePrivate)
 {
-  d->m_encountered = 0;
 }
 
 DUChainBase::~DUChainBase()
 {
+  delete d;
+}
+
+int DUChainBase::modelRow() const
+{
+  return d->m_modelRow;
+}
+
+void DUChainBase::setModelRow(int row)
+{
+  d->m_modelRow = row;
 }
 
 unsigned int DUChainBase::lastEncountered() const
