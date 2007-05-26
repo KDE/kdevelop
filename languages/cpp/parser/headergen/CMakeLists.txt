@@ -1,15 +1,12 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/languages/cpp/parser )
-
-
-if(KDE4_BUILD_TESTS)
+include_directories( 
+	${CMAKE_SOURCE_DIR}/lib/language/duchain 
+	${CMAKE_SOURCE_DIR}/lib/language
+	${CMAKE_SOURCE_DIR}/languages/cpp/parser )
 
 set(headergen_SRCS
     main.cpp
 )
 
-kde4_add_executable(headergen ${headergen_SRCS})
+kde4_add_test(headergen ${headergen_SRCS})
 target_link_libraries(headergen ${QT_QTXML_LIBRARY} ${KDE4_KDECORE_LIBS} kdevcpprpp kdevcppparser)
-add_test(headergen ${EXECUTABLE_OUTPUT_PATH}/headergen)
-
-endif(KDE4_BUILD_TESTS)
