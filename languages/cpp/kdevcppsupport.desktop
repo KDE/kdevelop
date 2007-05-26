@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=C/C++ Language Support
+Comment[be]=Падтрымка мовы C/C++
 Comment[es]=Soporte para lenguaje C/C++
 Comment[x-test]=xxC/C++ Language Supportxx
 Name=KDevCppSupport
