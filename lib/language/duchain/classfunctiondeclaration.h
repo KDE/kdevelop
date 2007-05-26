@@ -31,7 +31,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberD
 {
 public:
   ClassFunctionDeclaration(KTextEditor::Range* range, DUContext* context);
-
+  ~ClassFunctionDeclaration();
   enum QtFunctionType
   {
     Normal,

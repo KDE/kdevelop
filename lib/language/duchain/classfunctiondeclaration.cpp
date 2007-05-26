@@ -41,6 +41,11 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(KTextEditor::Range * range, D
   d->m_isExplicit = false;
 }
 
+ClassFunctionDeclaration::~ClassFunctionDeclaration()
+{
+  delete d;
+}
+
 /*bool ClassFunctionDeclaration::isSimilar(KDevelop::CodeItem *other, bool strict ) const
 {
   if (!CppClassMemberType::isSimilar(other,strict))

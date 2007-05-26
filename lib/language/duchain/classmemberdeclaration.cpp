@@ -45,6 +45,11 @@ ClassMemberDeclaration::ClassMemberDeclaration(KTextEditor::Range * range, DUCon
   d->m_isMutable = false;
 }
 
+ClassMemberDeclaration::~ClassMemberDeclaration()
+{
+  delete d;
+}
+
 bool ClassMemberDeclaration::isStatic() const
 {
   return d->m_isStatic;

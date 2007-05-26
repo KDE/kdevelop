@@ -30,6 +30,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
 {
 public:
   ClassMemberDeclaration(KTextEditor::Range* range, DUContext* context);
+  ~ClassMemberDeclaration();
 
   AccessPolicy accessPolicy() const;
   void setAccessPolicy(AccessPolicy accessPolicy);
