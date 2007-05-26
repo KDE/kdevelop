@@ -18,15 +18,22 @@
 
 #include "symboltable.h"
 
-#include <kstaticdeleter.h>
+#include <kglobal.h>
 
 #include "duchain.h"
 #include "duchainlock.h"
 #include "declaration.h"
 #include "ducontext.h"
 
-static KStaticDeleter<SymbolTable> sdSymbol;
-SymbolTable* SymbolTable::s_instance = 0;
+class SymbolTablePrivate
+{
+public:
+  QMultiMap<QString, Declaration*> m_declarations;
+  QMultiHash<QString, DUContext*> m_contexts;
+  SymbolTable m_instance;
+};
+
+K_GLOBAL_STATIC(SymbolTablePrivate, sdSymbolPrivate)
 
 SymbolTable::SymbolTable()
 {
@@ -35,10 +42,7 @@ SymbolTable::SymbolTable()
 
 SymbolTable* SymbolTable::self()
 {
-  if (!s_instance)
-    sdSymbol.setObject(s_instance, new SymbolTable());
-
-  return s_instance;
+  return &sdSymbolPrivate->m_instance;
 }
 
 void SymbolTable::addDeclaration(Declaration* declaration)
@@ -47,7 +51,7 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 
   //kDebug() << k_funcinfo << "Adding declaration " << declaration->qualifiedIdentifier().toString(true) << " from " << declaration->textRange() << endl;
 
-  m_declarations.insert(declaration->qualifiedIdentifier().toString(true), declaration);
+  sdSymbolPrivate->m_declarations.insert(declaration->qualifiedIdentifier().toString(true), declaration);
 
   declaration->setInSymbolTable(true);
 }
@@ -57,11 +61,11 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
   ENSURE_CHAIN_WRITE_LOCKED
 
   QString id = declaration->qualifiedIdentifier().toString(true);
-  QMultiMap<QString, Declaration*>::Iterator it = m_declarations.find(id);
-  if (it != m_declarations.end())
+  QMultiMap<QString, Declaration*>::Iterator it = sdSymbolPrivate->m_declarations.find(id);
+  if (it != sdSymbolPrivate->m_declarations.end())
     for (; it.key() == id; ++it)
       if (it.value() == declaration) {
-        m_declarations.erase(it);
+        sdSymbolPrivate->m_declarations.erase(it);
         declaration->setInSymbolTable(false);
         return;
       }
@@ -73,7 +77,7 @@ QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id)
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_declarations.values(id.toString(true));
+  return sdSymbolPrivate->m_declarations.values(id.toString(true));
 }
 
 QList<Declaration*> SymbolTable::findDeclarationsBeginningWith(const QualifiedIdentifier& id) const
@@ -82,13 +86,13 @@ QList<Declaration*> SymbolTable::findDeclarationsBeginningWith(const QualifiedId
 
   QList<Declaration*> ret;
   QString idString = id.toString(true);
-  QMultiMap<QString, Declaration*>::ConstIterator end = m_declarations.constEnd();
-  QMultiMap<QString, Declaration*>::ConstIterator it = m_declarations.lowerBound(idString);
+  QMultiMap<QString, Declaration*>::ConstIterator end = sdSymbolPrivate->m_declarations.constEnd();
+  QMultiMap<QString, Declaration*>::ConstIterator it = sdSymbolPrivate->m_declarations.lowerBound(idString);
 
   if (it != end) {
     bool forwards = it.key().startsWith(idString);
     if (!forwards) {
-      end = m_declarations.constBegin();
+      end = sdSymbolPrivate->m_declarations.constBegin();
       --it;
     }
     for (; it != end && it.key().startsWith(idString); forwards ? ++it : --it)
@@ -104,7 +108,7 @@ void SymbolTable::dumpStatistics() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  kDebug() << k_funcinfo << "Definitions " << m_declarations.count() << ", Contexts " << m_contexts.count() << endl;
+  kDebug() << k_funcinfo << "Definitions " << sdSymbolPrivate->m_declarations.count() << ", Contexts " << sdSymbolPrivate->m_contexts.count() << endl;
 
   // TODO: more data
 }
@@ -113,14 +117,14 @@ QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) cons
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  return m_contexts.values(id.toString(true));
+  return sdSymbolPrivate->m_contexts.values(id.toString(true));
 }
 
 void SymbolTable::addContext(DUContext * namedContext)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  m_contexts.insert(namedContext->scopeIdentifier(true).toString(true), namedContext);
+  sdSymbolPrivate->m_contexts.insert(namedContext->scopeIdentifier(true).toString(true), namedContext);
 
   namedContext->setInSymbolTable(true);
 }
@@ -130,11 +134,11 @@ void SymbolTable::removeContext(DUContext * namedContext)
   ENSURE_CHAIN_WRITE_LOCKED
 
   QString id = namedContext->scopeIdentifier(true).toString(true);
-  QMultiHash<QString, DUContext*>::Iterator it = m_contexts.find(id);
-  if (it != m_contexts.end())
+  QMultiHash<QString, DUContext*>::Iterator it = sdSymbolPrivate->m_contexts.find(id);
+  if (it != sdSymbolPrivate->m_contexts.end())
     for (; it.key() == id; ++it)
       if (it.value() == namedContext) {
-        m_contexts.erase(it);
+        sdSymbolPrivate->m_contexts.erase(it);
         namedContext->setInSymbolTable(false);
         return;
       }

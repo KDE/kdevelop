@@ -54,11 +54,7 @@ public:
 
 private:
   SymbolTable();
-
-  static SymbolTable* s_instance;
-
-  QMultiMap<QString, Declaration*> m_declarations;
-  QMultiHash<QString, DUContext*> m_contexts;
+  friend class SymbolTablePrivate;
 };
 
 #endif // SYMBOLTABLE_H
