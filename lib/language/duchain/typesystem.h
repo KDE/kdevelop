@@ -125,11 +125,11 @@ public:
 
   const QString& name() const;
 
-  inline void setName(const QString& name);
+  void setName(const QString& name);
 
-  inline bool operator == (const IntegralType &other) const;
+  bool operator == (const IntegralType &other) const;
 
-  inline bool operator != (const IntegralType &other) const;
+  bool operator != (const IntegralType &other) const;
 
   virtual QString toString() const;
 

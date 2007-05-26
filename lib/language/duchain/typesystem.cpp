@@ -211,9 +211,30 @@ QString ReferenceType::toString() const
   return baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&");
 }
 
+FunctionType::FunctionType()
+  : d(new FunctionTypePrivate)
+{
+}
+
+FunctionType::~FunctionType()
+{
+  delete d;
+}
+
+
+void FunctionType::addArgument(AbstractType::Ptr argument)
+{
+  d->m_arguments.append(argument);
+}
+
 void FunctionType::removeArgument(AbstractType::Ptr argument)
 {
   d->m_arguments.removeAll(argument);
+}
+
+void FunctionType::setReturnType(AbstractType::Ptr returnType)
+{
+  d->m_returnType = returnType;
 }
 
 const AbstractType::Ptr FunctionType::returnType () const
