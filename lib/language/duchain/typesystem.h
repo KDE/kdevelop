@@ -111,7 +111,7 @@ protected:
 //  void deregister(T* that) { TypeSystem::self()->deregisterType(that); }
 
 private:
-  bool m_registered;
+  class AbstractTypePrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
@@ -121,20 +121,17 @@ public:
 
   IntegralType();
   IntegralType(const QString& name);
+  ~IntegralType();
 
-  inline const QString& name() const
-  { return m_name; }
+  const QString& name() const;
 
-  inline void setName(const QString& name)
-  { m_name = name; }
+  inline void setName(const QString& name);
 
-  inline bool operator == (const IntegralType &other) const
-  { return m_name == other.m_name; }
+  inline bool operator == (const IntegralType &other) const;
 
-  inline bool operator != (const IntegralType &other) const
-  { return m_name != other.m_name; }
+  inline bool operator != (const IntegralType &other) const;
 
-  virtual QString toString() const { return m_name; }
+  virtual QString toString() const;
 
   //virtual uint hash() const;
 
@@ -145,7 +142,7 @@ protected:
   { v->visit (this); }
 
 private:
-  QString m_name;
+  class IntegralTypePrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
@@ -154,18 +151,13 @@ public:
   typedef KSharedPtr<PointerType> Ptr;
 
   PointerType ();
+  ~PointerType();
 
-  inline AbstractType::Ptr baseType () const
-  { return m_baseType; }
+  bool operator != (const PointerType &other) const;
+  bool operator == (const PointerType &other) const;
+  void setBaseType(AbstractType::Ptr type);
+  AbstractType::Ptr baseType () const;
 
-  inline void setBaseType(AbstractType::Ptr type)
-  { m_baseType = type; }
-
-  inline bool operator == (const PointerType &other) const
-  { return m_baseType == other.m_baseType; }
-
-  inline bool operator != (const PointerType &other) const
-  { return m_baseType != other.m_baseType; }
 
   virtual QString toString() const;
 
@@ -174,16 +166,10 @@ public:
   virtual WhichType whichType() const { return TypePointer; }
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const
-  {
-    if (v->visit (this))
-      acceptType (m_baseType, v);
-
-    v->endVisit (this);
-  }
+  virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  AbstractType::Ptr m_baseType;
+  class PointerTypePrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType: public AbstractType
@@ -192,18 +178,14 @@ public:
   typedef KSharedPtr<ReferenceType> Ptr;
 
   ReferenceType ();
+  ~ReferenceType();
+  const AbstractType::Ptr baseType () const;
 
-  inline const AbstractType::Ptr baseType () const
-  { return m_baseType; }
+  void setBaseType(AbstractType::Ptr baseType);
 
-  inline void setBaseType(AbstractType::Ptr baseType)
-  { m_baseType = baseType; }
+  bool operator == (const ReferenceType &other) const;
 
-  inline bool operator == (const ReferenceType &other) const
-  { return m_baseType == other.m_baseType; }
-
-  inline bool operator != (const ReferenceType &other) const
-  { return m_baseType != other.m_baseType; }
+  bool operator != (const ReferenceType &other) const;
 
   virtual QString toString() const;
 
@@ -212,16 +194,10 @@ public:
   virtual WhichType whichType() const { return TypeReference; }
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const
-  {
-    if (v->visit (this))
-      acceptType (m_baseType, v);
-
-    v->endVisit (this);
-  }
+  virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  AbstractType::Ptr m_baseType;
+  class ReferenceTypePrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionType : public AbstractType
@@ -230,23 +206,20 @@ public:
   typedef KSharedPtr<FunctionType> Ptr;
 
   FunctionType();
+  ~FunctionType();
 
-  inline const AbstractType::Ptr returnType () const
-  { return m_returnType; }
+  const AbstractType::Ptr returnType () const;
 
   void setReturnType(AbstractType::Ptr returnType);
 
-  inline const QList<AbstractType::Ptr>& arguments () const
-  { return m_arguments; }
+  const QList<AbstractType::Ptr>& arguments () const;
 
   void addArgument(AbstractType::Ptr argument);
   void removeArgument(AbstractType::Ptr argument);
 
-  inline bool operator == (const FunctionType &other) const
-  { return m_returnType == other.m_returnType && m_arguments == other.m_arguments; }
+  bool operator == (const FunctionType &other) const;
 
-  inline bool operator != (const FunctionType &other) const
-  { return m_returnType != other.m_returnType || m_arguments != other.m_arguments; }
+  bool operator != (const FunctionType &other) const;
 
   virtual QString toString() const;
 
@@ -255,40 +228,28 @@ public:
   virtual WhichType whichType() const { return TypeFunction; }
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const
-  {
-    if (v->visit (this))
-      {
-        acceptType (m_returnType, v);
-
-        for (int i = 0; i < m_arguments.count (); ++i)
-          acceptType (m_arguments.at (i), v);
-      }
-
-    v->endVisit (this);
-  }
+  virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  AbstractType::Ptr m_returnType;
-  QList<AbstractType::Ptr> m_arguments;
+  class FunctionTypePrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public AbstractType
 {
 public:
+  StructureType();
+  ~StructureType();
   typedef KSharedPtr<StructureType> Ptr;
 
-  inline const QList<AbstractType::Ptr>& elements () const
-  { return m_elements; }
+  const QList<AbstractType::Ptr>& elements () const;
+
+  bool operator == (const StructureType &other) const;
+
+  bool operator != (const StructureType &other) const;
 
   virtual void addElement(AbstractType::Ptr element);
   void removeElement(AbstractType::Ptr element);
 
-  inline bool operator == (const StructureType &other) const
-  { return m_elements == other.m_elements; }
-
-  inline bool operator != (const StructureType &other) const
-  { return m_elements != other.m_elements; }
 
   virtual QString toString() const;
 
@@ -297,19 +258,10 @@ public:
   virtual WhichType whichType() const { return TypeStructure; }
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const
-  {
-    if (v->visit (this))
-      {
-        for (int i = 0; i < m_elements.count (); ++i)
-          acceptType (m_elements.at (i), v);
-      }
-
-    v->endVisit (this);
-  }
+  virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  QList<AbstractType::Ptr> m_elements;
+  class StructureTypePrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
@@ -317,23 +269,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
 public:
   typedef KSharedPtr<ArrayType> Ptr;
 
-  inline int dimension () const
-  { return m_dimension; }
+  ArrayType();
+  ~ArrayType();
 
-  inline void setDimension(int dimension)
-  { m_dimension = dimension; }
+  int dimension () const;
 
-  inline AbstractType::Ptr elementType () const
-  { return m_elementType; }
+  void setDimension(int dimension);
 
-  inline void setElementType(AbstractType::Ptr type)
-  { m_elementType = type; }
+  AbstractType::Ptr elementType () const;
 
-  inline bool operator == (const ArrayType &other) const
-  { return m_elementType == other.m_elementType && m_dimension == other.m_dimension; }
+  void setElementType(AbstractType::Ptr type);
 
-  inline bool operator != (const ArrayType &other) const
-  { return m_elementType != other.m_elementType || m_dimension != other.m_dimension; }
+  bool operator == (const ArrayType &other) const;
+
+  bool operator != (const ArrayType &other) const;
 
   virtual QString toString() const;
 
@@ -342,19 +291,10 @@ public:
   virtual WhichType whichType() const { return TypeArray; }
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const
-  {
-    if (v->visit (this))
-      {
-        acceptType (m_elementType, v);
-      }
-
-    v->endVisit (this);
-  }
+  virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  int m_dimension;
-  AbstractType::Ptr m_elementType;
+  class ArrayTypePrivate* const d;
 };
 
 template <class T>
