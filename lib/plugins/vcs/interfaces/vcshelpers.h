@@ -177,98 +177,138 @@ public:
  */
 class VcsJob
 {
-    /**
-     * To easily check which type of job this is
-     *
-     * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not
-     * QFlags!)
-     */
-    enum VcsJobType
-    {
-        Add,
-        Remove,
-        Copy,
-        Move,
-        Diff,
-        Commit,
-        Update,
-        Merge,
-        Resolve,
-        Import,
-        Checkout,
-        Log,
-        Push,
-        Pull,
-        Clone
-    };
-
-    /**
-     * Simple enum to define how the job finished
-     */
-    enum FinishStatus
-    {
-        Succeeded,
-        Canceled,
-        Failed
-    };
-
-    public:
-        /**
-         * This method will return all new results of the job. The actual data
-         * type that is wrapped in the QVariant depends on the type of job.
-         *
-         * @note Results returned by a previous call to fetchResults are not
-         * returned.
-         */
-        QVariant fetchResults();
-
-        /**
-         * Used to find out about the type of job
-         *
-         * @return the type of job
-         */
-        VcsJobType type();
-
-        /**
-         * Can be used to obtain an error message if the job exited with an error
-         * status. If there is no error, or the job is not finished, this is an
-         * empty string.
-         */
-        QString errorMessage();
-
-    public Q_SLOTS:
-        /**
-         * The job is not allowed to emit any signals until this method has been
-         * called. A plugin may either really start the job here, or it may
-         * buffer any signals before start has been called.
-         */
-        void start();
-
-        /**
-         * This cancels the job. The job shall not emit any signals except the
-         * finished() signal when the cancelling is done and any resources have
-         * been cleaned up.
-         */
-        void cancel();
-
-    Q_SIGNALS:
-        /**
-         * This signal is emitted when new results are available. Depending on
-         * the plugin and the operation, it may be emitted only once when all
-         * results are ready, or several times.
-         */
-        void resultsReady( VcsJob* );
-
-        /**
-         * This signal is emitted when the job has completed. Depending on
-         * @p FinishStatus, this may mean that the job failed, succeeded, or has
-         * been fully cancelled.
-         *
-         * It is safe to delete the job once this signal has been emitted.
-         * job.
-         */
-        void finished( VcsJob*, FinishStatus );
+/**
+    * To easily check which type of job this is
+    *
+    * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not
+    * QFlags!)
+    */
+enum VcsJobType
+{
+    Add,
+    Remove,
+    Copy,
+    Move,
+    Diff,
+    Commit,
+    Update,
+    Merge,
+    Resolve,
+    Import,
+    Checkout,
+    Log,
+    Push,
+    Pull,
+    Clone
 };
+
+/**
+    * Simple enum to define how the job finished
+    */
+enum FinishStatus
+{
+    Succeeded,
+    Canceled,
+    Failed
+};
+
+public:
+    /**
+        * This method will return all new results of the job. The actual data
+        * type that is wrapped in the QVariant depends on the type of job.
+        *
+        * @note Results returned by a previous call to fetchResults are not
+        * returned.
+        */
+    QVariant fetchResults();
+
+    /**
+        * Used to find out about the type of job
+        *
+        * @return the type of job
+        */
+    VcsJobType type();
+
+    /**
+        * Can be used to obtain an error message if the job exited with an error
+        * status. If there is no error, or the job is not finished, this is an
+        * empty string.
+        */
+    QString errorMessage();
+
+public Q_SLOTS:
+    /**
+        * The job is not allowed to emit any signals until this method has been
+        * called. A plugin may either really start the job here, or it may
+        * buffer any signals before start has been called.
+        */
+    void start();
+
+    /**
+        * This cancels the job. The job shall not emit any signals except the
+        * finished() signal when the cancelling is done and any resources have
+        * been cleaned up.
+        */
+    void cancel();
+
+Q_SIGNALS:
+    /**
+        * This signal is emitted when new results are available. Depending on
+        * the plugin and the operation, it may be emitted only once when all
+        * results are ready, or several times.
+        */
+    void resultsReady( VcsJob* );
+
+    /**
+        * This signal is emitted when the job has completed. Depending on
+        * @p FinishStatus, this may mean that the job failed, succeeded, or has
+        * been fully cancelled.
+        *
+        * It is safe to delete the job once this signal has been emitted.
+        * job.
+        */
+    void finished( VcsJob*, FinishStatus );
+};
+
+/**
+ * Annotations for a local file.
+ *
+ * This class lets the user fetch informations for each line of a local file,
+ * including date of last change, author of last change and revision of
+ * last change to the line.
+ */
+class VcsAnnotation
+{
+public:
+    /**
+     * @return the local url of the file
+     */
+    KUrl location();
+    /**
+     * @return the number of lines in the file
+     */
+    int lineCount();
+    /**
+     * @param linenum the number of the line, counting from 0
+     * @return the content of the specified line
+     */
+    QString line( int linenum );
+    /**
+     * @param linenum the number of the line, counting from 0
+     * @return the revision of the last change on the specified line
+     */
+    VcsRevision revision( int linenum );
+    /**
+     * @param linenum the number of the line, counting from 0
+     * @return the author of the last change on the specified line
+     */
+    QString author( int linenum );
+    /**
+     * @param linenum the number of the line, counting from 0
+     * @return the date of the last change on the specified line
+     */
+    QDateTime date( int linenum );
+}
 
 }
 

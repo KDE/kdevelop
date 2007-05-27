@@ -209,6 +209,24 @@ public:
                             const VcsRevision& rev ) = 0;
 
     /**
+     * Annotate each line of the given local url at the given revision
+     * with information about who changed it and when.
+     * @param localLocation local file that should be annotated.
+     * @param rev Revision that should be annotated.
+     */
+    virtual VcsJob annotate( const KUrl& localLocation,
+                             const VcsRevision& rev ) = 0;
+
+    /**
+     * Annotate each line of the given local url at the given revision
+     * with information about who changed it and when and show the information.
+     * @param localLocation local file that should be annotated.
+     * @param rev Revision that should be annotated.
+     */
+    virtual VcsJob showAnnotate( const KUrl& localLocation,
+                                 const VcsRevision& rev ) = 0;
+
+    /**
      * merge/integrate the changes between src and dest into the given local file
      *
      * The QVariant should either be a KUrl, which is assumed to be a local file
