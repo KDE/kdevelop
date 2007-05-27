@@ -199,6 +199,7 @@ enum VcsJobType
     Log,
     Push,
     Pull,
+    Annotate,
     Clone
 };
 
