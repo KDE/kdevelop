@@ -17,6 +17,8 @@
 #include "ioutputviewitemfactory.h"
 class IOutputViewItem;
 class MakeBuilder;
+class OutputFilter;
+template <typename T> class QList;
 
 class MakeItemFactory : public IOutputViewItemFactory
 {
@@ -28,6 +30,7 @@ public:
 
 private:
     const MakeBuilder *m_builder;
+    QList<OutputFilter*> m_filters;
 };
 
 #endif

@@ -14,6 +14,7 @@
 #include <QAction>
 #include <QBrush>
 #include <QColor>
+#include <QFont>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -89,5 +90,28 @@ IOutputViewItem::StopAtItemMode MakeErrorItem::stopHere()
     return IOutputViewItem::Stop;
 }
 
+//////////////////////////////////
 
+MakeActionItem::MakeActionItem( const QString& action, const QString& file, const QString& tool, const QString& line )
+    : IOutputViewItem( QString() )
+{
+    if( tool.isEmpty() || file.isEmpty() )
+    {
+        setText( line );
+    }
+    else
+    {
+        QString itemString = QString(action).append(" ").append(file);
+        itemString.append(" (").append(tool).append(")");
+
+        setText( itemString );
+    }
+
+    QFont newfont( font() );
+    newfont.setBold( true );
+    setFont( newfont );
+}
+
+MakeActionItem::~MakeActionItem()
+{}
 

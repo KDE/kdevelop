@@ -55,5 +55,18 @@ public:
 
 };
 
+class MakeActionItem : public IOutputViewItem
+{
+public:
+    MakeActionItem( const QString& action, const QString& file, const QString& tool, const QString& line );
+    virtual ~MakeActionItem();
+
+// private:
+//     QString m_action;
+//     QString m_file;
+//     QString m_tool;
+};
+
+
 
 #endif

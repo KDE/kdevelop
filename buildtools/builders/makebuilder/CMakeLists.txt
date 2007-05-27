@@ -14,6 +14,7 @@ set(kdevmakebuilder_LIB_SRCS
     makebuilder.cpp
     makeitem.cpp
     makeitemfactory.cpp
+    outputfilters.cpp
 )
 
 kde4_automoc(${kdevmakebuilder_LIB_SRCS})
