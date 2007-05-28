@@ -30,7 +30,6 @@
 #include <QAction>
 
 #include <kurl.h>
-#include <k3process.h>
 #include <kdebug.h>
 
 OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& command,
@@ -39,7 +38,7 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
                                       IOutputViewItemFactory *itemFactory )
     : QObject(0), m_proc(0), m_model(model)
 {
-    m_proc = new K3Process();
+    m_proc = new QProcess();
     m_proc->setWorkingDirectory( workdir.toLocalFile() );
     m_procLineMaker = new ProcessLineMaker( m_proc );
 
@@ -52,19 +51,19 @@ OutputViewCommand::OutputViewCommand( const KUrl& workdir, const QStringList& co
         m_factory = new StandardOutputViewItemFactory<IOutputViewItem>();
     }
 
+    QMap<QString,QString> sysenv = buildEnvMap(QProcess::systemEnvironment());
+
     foreach( QString s, env.keys() )
-        m_proc->setEnvironment( s, env[s] );
-    foreach(QString s, command)
-        if( !s.isEmpty() )
-            *m_proc << s;
+        sysenv[s] = env[s];
+    m_proc->setEnvironment( buildEnvList( sysenv ) );
 
     m_command = command.join(" ");
     connect( m_procLineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
              this, SLOT(procReadStdout(const QStringList&) ));
     connect( m_procLineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
              this, SLOT(procReadStderr(const QStringList&) ));
-    connect( m_proc, SIGNAL(processExited( K3Process* ) ),
-             this, SLOT( procFinished( K3Process* ) ) );
+    connect( m_proc, SIGNAL(finished( int, QProcess::ExitStatus ) ),
+             this, SLOT( procFinished( int, QProcess::ExitStatus  ) ) );
 }
 
 OutputViewCommand::~OutputViewCommand()
@@ -76,11 +75,32 @@ OutputViewCommand::~OutputViewCommand()
     kDebug(9004) << "OutputViewCommand destructor.." << endl;
 }
 
+QMap<QString,QString> OutputViewCommand::buildEnvMap( const QStringList& list )
+{
+    QMap<QString,QString> env;
+    foreach( QString s, list )
+    {
+        int index = s.indexOf("=");
+        env[s.left(index)] = s.right(index+1);
+    }
+    return env;
+}
+
+QStringList OutputViewCommand::buildEnvList( const QMap<QString,QString>& map )
+{
+    QStringList env;
+    foreach( QString s, map.keys() )
+    {
+        env.append(s+"="+map[s]);
+    }
+    return env;
+}
+
 void OutputViewCommand::start()
 {
     IOutputViewItem *i = m_factory->createItem( m_command );
     m_model->appendRow( i );
-    m_proc->start( K3Process::OwnGroup, K3Process::AllOutput );
+    m_proc->start( m_command );
 }
 
 void OutputViewCommand::setModel( QStandardItemModel *model )
@@ -110,11 +130,11 @@ void OutputViewCommand::procReadStderr(const QStringList &lineList)
         m_model->appendRow( m_factory->createItem( line ) );
 }
 
-void OutputViewCommand::procFinished( K3Process* proc )
+void OutputViewCommand::procFinished( int exitstatus, QProcess::ExitStatus status )
 {
-    if( !m_proc->exitStatus() )
+    if( !exitstatus )
     {
-        IOutputViewItem* endItem = m_factory->createItem(QString("Finished (%1)").arg(m_proc->exitStatus()));
+        IOutputViewItem* endItem = m_factory->createItem(QString("Finished (%1)").arg(exitstatus));
         m_model->appendRow( endItem );
         kDebug(9004) << "Finished Sucessfully" << endl;
         QString titlestring = title();
@@ -122,7 +142,7 @@ void OutputViewCommand::procFinished( K3Process* proc )
     }
     else
     {
-        IOutputViewItem* endItem = m_factory->createItem(QString("Failed (%1)").arg(m_proc->exitStatus()));
+        IOutputViewItem* endItem = m_factory->createItem(QString("Failed (%1)").arg(exitstatus));
         m_model->appendRow( endItem );
         kDebug(9004) << "Failed" << endl;
         QString titlestring = title();

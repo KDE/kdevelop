@@ -23,12 +23,12 @@
 #define OUTPUTVIEWCOMMAND_H
 
 #include <QtCore/QObject>
+#include <QtCore/QProcess>
 
 class KUrl;
 class QStringList;
 class QString;
 class QStandardItemModel;
-class K3Process;
 class ProcessLineMaker;
 template <typename T1, typename T2> class QMap;
 class IOutputViewItemFactory;
@@ -46,16 +46,19 @@ public:
     void setModel( QStandardItemModel *model );
     QStandardItemModel *model();
     QString title();
-    
+
+    static QMap<QString,QString> buildEnvMap( const QStringList& );
+    static QStringList buildEnvList( const QMap<QString,QString>& );
+
     private Q_SLOTS:
         void procReadStdout( const QStringList& lineList );
         void procReadStderr( const QStringList& lineList );
-        void procFinished( K3Process* proc );
+        void procFinished( int, QProcess::ExitStatus );
     signals:
         void commandFinished( const QString& command );
         void commandFailed( const QString& command );
     private:
-        K3Process *m_proc;
+        QProcess *m_proc;
         ProcessLineMaker *m_procLineMaker;
         QStandardItemModel* m_model;
         QString m_command;

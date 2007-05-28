@@ -20,8 +20,8 @@
 
 #include "processlinemaker.h"
 
-#include <k3process.h>
-#include <QStringList>
+#include <QtCore/QProcess>
+#include <QtCore/QStringList>
 
 class ProcessLineMakerPrivate
 {
@@ -32,10 +32,12 @@ public:
     QString stdoutbuf;
     QString stderrbuf;
     ProcessLineMaker* p;
+    QProcess* m_proc;
 
-    void slotReceivedStdout( K3Process*, char *buffer, int buflen )
+    void slotReadyReadStdout( )
     {
-        processStdOut( QString::fromLocal8Bit( buffer, buflen ) );
+        QString out = m_proc->readAllStandardOutput();
+        processStdOut( out );
     }
 
     void processStdOut( const QString& s )
@@ -61,9 +63,10 @@ public:
         emit p->receivedStdoutLines(lineList);
     }
 
-    void slotReceivedStderr( K3Process*, char *buffer, int buflen )
+    void slotReadyReadStderr( )
     {
-        processStdErr( QString::fromLocal8Bit(buffer, buflen) );
+        QString err = m_proc->readAllStandardError();
+        processStdErr( err );
     }
 
     void processStdErr( const QString& s )
@@ -95,14 +98,16 @@ ProcessLineMaker::ProcessLineMaker()
 {
 }
 
-ProcessLineMaker::ProcessLineMaker( const K3Process* proc )
+ProcessLineMaker::ProcessLineMaker( QProcess* proc )
     : d( new ProcessLineMakerPrivate( this ) )
 {
-    connect(proc, SIGNAL(receivedStdout(K3Process*,char*,int)),
-            this, SLOT(slotReceivedStdout(K3Process*,char*,int)) );
+    d->m_proc = proc;
+    d->m_proc->setTextModeEnabled( true );
+    connect(proc, SIGNAL(readyReadStandardOutput()),
+            this, SLOT(slotReadyReadStdout()) );
 
-    connect(proc, SIGNAL(receivedStderr(K3Process*,char*,int)),
-            this, SLOT(slotReceivedStderr(K3Process*,char*,int)) );
+    connect(proc, SIGNAL(readyReadStandardError()),
+            this, SLOT(slotReadyReadStderr()) );
 }
 
 void ProcessLineMaker::slotReceivedStdout( const QString& s )

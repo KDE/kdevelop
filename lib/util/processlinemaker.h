@@ -29,7 +29,7 @@
 Utility objects for process output views.
 */
 
-class K3Process;
+class QProcess;
 
 class QString;
 class QStringList;
@@ -44,7 +44,7 @@ class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
 
 public:
     ProcessLineMaker();
-    ProcessLineMaker( const K3Process* );
+    ProcessLineMaker( QProcess* );
     void clearBuffers();
 
 public slots:
@@ -58,8 +58,8 @@ signals:
     void receivedStderrLines( const QStringList& );
 
 private:
-    Q_PRIVATE_SLOT(d, void slotReceivedStdout( K3Process *, char *buffer, int buflen ) )
-    Q_PRIVATE_SLOT(d, void slotReceivedStderr( K3Process *, char *buffer, int buflen ) )
+    Q_PRIVATE_SLOT(d, void slotReadyReadStdout( ) )
+    Q_PRIVATE_SLOT(d, void slotReadyReadStderr( ) )
     class ProcessLineMakerPrivate* const d;
     friend class ProcessLineMakerPrivate;
 };
