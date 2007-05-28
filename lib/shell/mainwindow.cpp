@@ -42,16 +42,28 @@ namespace KDevelop
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
+    KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
+    int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
+    int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
+    kDebug(9000) << "Bottom Left: " << bottomleft << endl;
+    kDebug(9000) << "Bottom Right: " << bottomright << endl;
+
+    // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
+    if( bottomleft == 0 )
+        setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
+    else if( bottomleft == 1 )
+        setCorner( Qt::BottomLeftCorner, Qt::BottomDockWidgetArea );
+
+    if( bottomright == 0 )
+        setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
+    else if( bottomright == 1 )
+        setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
+
     setObjectName( "MainWindow" );
     d = new MainWindowPrivate(this);
     d->center = new QStackedWidget( this );
     setCentralWidget( d->center );
-
-    setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
-    setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
-    setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
-    setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
-
+    
     setStandardToolBarMenuEnabled( true );
     d->setupActions();
 //     setStatusBar( new KDevelop::StatusBar( this ) );
@@ -64,6 +76,7 @@ MainWindow::~ MainWindow()
     delete d;
 }
 
+// TODO why doesn't called automatically when the settings are changed??
 void MainWindow::loadSettings()
 {
     kDebug(9000) << "Loading Settings" << endl;
@@ -80,6 +93,24 @@ void MainWindow::loadSettings()
         setVerticalToolViewTitleBarMode( Sublime::MainWindow::HorizontalDocks );
     else
         setVerticalToolViewTitleBarMode( Sublime::MainWindow::NoDocks );
+
+    // dock widget corner layout
+    int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
+    int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
+    kDebug(9000) << "Bottom Left: " << bottomleft << endl;
+    kDebug(9000) << "Bottom Right: " << bottomright << endl;
+
+    // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
+    if( bottomleft == 0 )
+        setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
+    else if( bottomleft == 1 )
+        setCorner( Qt::BottomLeftCorner, Qt::BottomDockWidgetArea );
+
+    if( bottomright == 0 )
+        setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
+    else if( bottomright == 1 )
+        setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
+
     Sublime::MainWindow::loadSettings();
 
 }

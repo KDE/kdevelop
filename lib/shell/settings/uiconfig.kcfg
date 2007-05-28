@@ -9,5 +9,13 @@
         <entry name="VerticalTitleBar" key="Use Vertical TitleBar" type="Bool">
             <default>true</default>
         </entry>
+        <entry name="TopLeftCornerOwner" key="TopLeftCornerOwner" type="Int">
+        </entry>
+        <entry name="TopRightCornerOwner" key="TopRightCornerOwner" type="Int">
+        </entry>
+        <entry name="BottomLeftCornerOwner" key="BottomLeftCornerOwner" type="Int">
+        </entry>
+        <entry name="BottomRightCornerOwner" key="BottomRightCornerOwner" type="Int">
+        </entry>
   </group>
 </kcfg>
