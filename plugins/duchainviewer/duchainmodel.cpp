@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-#include "icore.h"
+#include "idocument.h"
 
 #include "duchainview_part.h"
 #include "topducontext.h"
@@ -36,32 +36,31 @@
 using namespace KTextEditor;
 
 ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
-  : parent(_parent)
+  : DUChainBase(_object->textRangePtr())
+  , parent(_parent)
   , object(_object)
 {
-  Q_ASSERT(parent && object);
-
-  setTextRange(object->textRangePtr(), Own);
 }
 
 DUChainModel::DUChainModel(DUChainViewPart* parent)
   : QAbstractItemModel(parent)
   , m_chain(0)
 {
-  //connect (KDevelop::ICore::documentController(), SIGNAL(documentActivated(KDevelop::Document*)), SLOT(documentActivated(KDevelop::Document*)));
+  DUChainWriteLocker writeLock(DUChain::lock());
+  DUChain::self()->addObserver(this);
 }
 
 DUChainModel::~DUChainModel()
 {
 }
 
-void DUChainModel::documentActivated( KDevelop::Document* document )
+void DUChainModel::documentActivated(KDevelop::IDocument* document)
 {
-  /*if (document) {
+  if (document) {
     TopDUContext* chain = DUChain::self()->chainForDocument(document->url());
     if (chain)
       setTopContext(chain);
-  }*/
+  }
 }
 
 void DUChainModel::setTopContext(TopDUContext* context)
@@ -80,7 +79,7 @@ void DUChainModel::setTopContext(TopDUContext* context)
   reset();
 }
 
-int DUChainModel::columnCount ( const QModelIndex & parent ) const
+int DUChainModel::columnCount(const QModelIndex & parent) const
 {
   Q_UNUSED(parent);
 
@@ -89,18 +88,10 @@ int DUChainModel::columnCount ( const QModelIndex & parent ) const
 
 DUChainBase* DUChainModel::objectForIndex(const QModelIndex& index) const
 {
-  DUChainBase* base = static_cast<DUChainBase*>(index.internalPointer());
-  if (!base)
-    return 0;
-
-  if (m_objectLists.contains(base))
-    return base;
-
-  // Called after it's been deleted...
-  return 0;
+  return static_cast<DUChainBase*>(index.internalPointer());
 }
 
-QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & parent ) const
+QModelIndex DUChainModel::index(int row, int column, const QModelIndex & parent) const
 {
   if (row < 0 || column < 0 || column > 0 || !m_chain)
     return QModelIndex();
@@ -130,7 +121,7 @@ QModelIndex DUChainModel::index ( int row, int column, const QModelIndex & paren
   return createIndex(row, column, items->at(row));
 }
 
-QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
+QModelIndex DUChainModel::parent(const QModelIndex & index) const
 {
   if (!index.isValid())
     return QModelIndex();
@@ -165,7 +156,7 @@ QModelIndex DUChainModel::parent ( const QModelIndex & index ) const
   return QModelIndex();
 }
 
-QVariant DUChainModel::data(const QModelIndex& index, int role ) const
+QVariant DUChainModel::data(const QModelIndex& index, int role) const
 {
   if (!index.isValid())
     return QVariant();
@@ -220,7 +211,7 @@ QVariant DUChainModel::data(const QModelIndex& index, int role ) const
   return QVariant();
 }
 
-int DUChainModel::rowCount ( const QModelIndex & parent ) const
+int DUChainModel::rowCount(const QModelIndex & parent) const
 {
   if (!parent.isValid())
     return 1;
@@ -239,18 +230,13 @@ int DUChainModel::rowCount ( const QModelIndex & parent ) const
   return items->count();
 }
 
-#define TEST_NEXT(iterator, index)\
-      current = nextItem(iterator, firstInit); \
-      if (current.isValid() && (current < first || !first.isValid())) { \
-        first = current; \
-        found = index; \
-      }
-
-#define TEST_PROXY_NEXT(iterator, index)\
-      current = nextItem(iterator, firstInit); \
-      if (current.isValid() && (current < first || !first.isValid())) { \
-        first = current; \
-        found = index; \
+#define TEST_NEXT(iterator, index) \
+      if (!first.isValid()) { \
+        current = nextItem(iterator, firstInit); \
+        if (current.isValid() && (current < first || !first.isValid())) { \
+          first = current; \
+          found = index; \
+        } \
       }
 
 QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
@@ -311,6 +297,7 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
         currentItem->setModelRow(list->count());
         list->append(currentItem);
 
+        first = Cursor::invalid();
       } else {
         break;
       }
@@ -341,10 +328,10 @@ QList< DUChainBase * >* DUChainModel::childItems(DUChainBase * parent) const
   return list;
 }
 
-bool DUChainModel::hasChildren( const QModelIndex & parent ) const
+/*bool DUChainModel::hasChildren(const QModelIndex & parent) const
 {
   if (!parent.isValid())
-    return m_chain;
+    return true;
 
   QMutexLocker lock(&m_mutex);
   DUChainReadLocker readLock(DUChain::lock());
@@ -367,7 +354,7 @@ bool DUChainModel::hasChildren( const QModelIndex & parent ) const
     return dec->definition() || !dec->uses().isEmpty();
 
   return false;
-}
+}*/
 
 void DUChainModel::contextChanged(DUContext * context, Modification change, Relationship relationship, DUChainBase * relatedObject)
 {
@@ -379,19 +366,22 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
   QList<DUChainBase*>* list = m_objectLists[context];
 
   switch (relationship) {
-    case ParentContext:
-      break;
-
     case ChildContexts:
       switch (change) {
-        case Change:
+        case Deletion:
         case Removal: {
+          if (m_objectLists.contains(context))
+            m_objectLists.remove(context);
+          // fallthrough
+        }
+
+        case Change: {
           int index = list->indexOf(relatedObject);
           Q_ASSERT(index != -1);
           beginRemoveRows(createIndex(context->modelRow(), 0, context), index, index);
           list->removeAt(index);
-          endInsertRows();
-          if (change == Removal)
+          endRemoveRows();
+          if (change == Removal || change == Deletion)
             break;
           // else fallthrough
         }
@@ -403,36 +393,36 @@ void DUChainModel::contextChanged(DUContext * context, Modification change, Rela
           endInsertRows();
           break;
         }
-
-        case Deletion:
-          if (m_objectLists.contains(context))
-            m_objectLists.remove(context);
-          break;
       }
       break;
 
-    case ImportedParentContexts:
-    case ImportedChildContexts:
-    case LocalDeclarations:
-    case LocalDefinitions:
-    case UsingNamespaces:
-    case ContextType:
-    case Uses:
-    case Identifier:
+    default:
       break;
   }
 }
 
 void DUChainModel::declarationChanged(Declaration * declaration, Modification change, Relationship relationship, DUChainBase * relatedObject)
 {
+  Q_UNUSED(declaration);
+  Q_UNUSED(change);
+  Q_UNUSED(relationship);
+  Q_UNUSED(relatedObject);
 }
 
 void DUChainModel::definitionChanged(Definition * definition, Modification change, Relationship relationship, DUChainBase * relatedObject)
 {
+  Q_UNUSED(definition);
+  Q_UNUSED(change);
+  Q_UNUSED(relationship);
+  Q_UNUSED(relatedObject);
 }
 
 void DUChainModel::useChanged(Use * use, Modification change, Relationship relationship, DUChainBase * relatedObject)
 {
+  Q_UNUSED(use);
+  Q_UNUSED(change);
+  Q_UNUSED(relationship);
+  Q_UNUSED(relatedObject);
 }
 
 int DUChainModel::findInsertIndex(QList<DUChainBase*>& list, DUChainBase* object) const

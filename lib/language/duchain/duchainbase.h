@@ -29,8 +29,6 @@ class TopDUContext;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
 {
-  friend class ProxyObject;
-
 public:
   DUChainBase(KTextEditor::Range* range);
   virtual ~DUChainBase();
@@ -46,8 +44,6 @@ public:
   virtual TopDUContext* topContext() const;
 
 private:
-  // For proxy object
-  DUChainBase();
   class DUChainBasePrivate* const d;
 };
 

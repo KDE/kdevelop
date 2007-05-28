@@ -23,13 +23,15 @@
 #include "duchainview_part.h"
 #include "duchainmodel.h"
 
-#include <QTreeView>
+#include <QtGui/QTreeView>
+#include <QtGui/QHeaderView>
 
 #include <klocale.h>
 #include <kgenericfactory.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
+#include <idocumentcontroller.h>
 
 typedef KGenericFactory<DUChainViewPart> KDevDUChainViewFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevduchainview, KDevDUChainViewFactory( "kdevduchainview" ) )
@@ -45,6 +47,8 @@ public:
         view->setObjectName("DUChain Viewer Tree");
         view->setWindowTitle(i18n("Definition-Use Chain"));
         view->setModel(m_part->model());
+        view->header()->hide();
+        QObject::connect(m_part->model(), SIGNAL(modelReset()), view, SLOT(reset()));
         return view;
     }
 
@@ -57,14 +61,16 @@ private:
     DUChainViewPart *m_part;
 };
 
-DUChainViewPart::DUChainViewPart( QObject *parent,
-                                    const QStringList& )
-    : KDevelop::IPlugin( KDevDUChainViewFactory::componentData(), parent )
+DUChainViewPart::DUChainViewPart(QObject *parent,
+                                 const QStringList&)
+    : KDevelop::IPlugin(KDevDUChainViewFactory::componentData(), parent)
     , m_model(new DUChainModel(this))
     , m_factory(new DUChainViewFactory(this))
 {
     core()->uiController()->addToolView(i18n("DUChain Viewer"), m_factory);
     setXMLFile( "kdevduchainview.rc" );
+
+    connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_model, SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
 DUChainViewPart::~DUChainViewPart()

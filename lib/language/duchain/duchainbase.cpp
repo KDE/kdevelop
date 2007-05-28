@@ -36,12 +36,6 @@ DUChainBase::DUChainBase(KTextEditor::Range* range)
 {
 }
 
-DUChainBase::DUChainBase()
-  : KDevelop::DocumentRangeObject(0)
-  , d(new DUChainBasePrivate)
-{
-}
-
 DUChainBase::~DUChainBase()
 {
   delete d;

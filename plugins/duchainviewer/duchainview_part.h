@@ -25,17 +25,14 @@
 
 #include <iplugin.h>
 
-#include <QPointer>
-
 class DUChainModel;
-class QTreeView;
 
 class DUChainViewPart : public KDevelop::IPlugin
 {
     Q_OBJECT
 
 public:
-    DUChainViewPart( QObject *parent, const QStringList & );
+    DUChainViewPart(QObject *parent, const QStringList &);
     virtual ~DUChainViewPart();
 
     // KDevelop::Plugin methods

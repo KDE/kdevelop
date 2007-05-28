@@ -22,9 +22,8 @@
 #ifndef DUCHAINMODEL_H
 #define DUCHAINMODEL_H
 
-#include <QAbstractItemModel>
-#include <QHash>
-#include <QSet>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QHash>
 
 #include <ktexteditor/cursor.h>
 
@@ -33,7 +32,10 @@
 
 class TopDUContext;
 class DUChainViewPart;
-namespace KDevelop { class Document; }
+
+namespace KDevelop {
+  class IDocument;
+}
 
 class ProxyObject : public DUChainBase
 {
@@ -48,81 +50,81 @@ class DUChainModel : public QAbstractItemModel, public DUChainObserver
 {
   Q_OBJECT
 
-  public:
-    DUChainModel(DUChainViewPart* parent);
-    virtual ~DUChainModel();
+public:
+  DUChainModel(DUChainViewPart* parent);
+  virtual ~DUChainModel();
 
-    void setTopContext(TopDUContext* context);
+  void setTopContext(TopDUContext* context);
 
-  public slots:
-    void documentActivated( KDevelop::Document* document );
+public Q_SLOTS:
+  void documentActivated(KDevelop::IDocument* document);
 
-  public:
-    virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex parent ( const QModelIndex & index ) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
-    virtual bool hasChildren ( const QModelIndex & parent = QModelIndex() ) const;
+public:
+  virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
+  virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
+  virtual QModelIndex parent(const QModelIndex & index) const;
+  virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+  virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  //virtual bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
 
-    // Definition use chain observer implementation
-    virtual void contextChanged(DUContext* context, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
-    virtual void declarationChanged(Declaration* declaration, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
-    virtual void definitionChanged(Definition* definition, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
-    virtual void useChanged(Use* use, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
+  // Definition use chain observer implementation
+  virtual void contextChanged(DUContext* context, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
+  virtual void declarationChanged(Declaration* declaration, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
+  virtual void definitionChanged(Definition* definition, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
+  virtual void useChanged(Use* use, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
 
-  private:
-    DUChainBase* objectForIndex(const QModelIndex& index) const;
-    int findInsertIndex(QList<DUChainBase*>& list, DUChainBase* object) const;
+private:
+  DUChainBase* objectForIndex(const QModelIndex& index) const;
+  int findInsertIndex(QList<DUChainBase*>& list, DUChainBase* object) const;
 
-    template <typename T>
-    QModelIndex createParentIndex(T* type) const
-    {
-      return createIndex(type->modelRow(), 0, type);
-    }
+  template <typename T>
+  QModelIndex createParentIndex(T* type) const
+  {
+    return createIndex(type->modelRow(), 0, type);
+  }
 
-    template <typename T>
-    KTextEditor::Cursor nextItem(QListIterator<T*>& it, bool initialise) const
-    {
-      if (initialise)
-        if (it.hasNext())
-          it.next();
-
-      if (it.hasPrevious())
-        return it.peekPrevious()->textRange().start();
-
-      return KTextEditor::Cursor::invalid();
-    }
-
-    template <typename T>
-    DUChainBase* item(QListIterator<T*>& it) const
-    {
-      Q_ASSERT(it.hasPrevious());
-      DUChainBase* item = it.peekPrevious();
+  template <typename T>
+  KTextEditor::Cursor nextItem(QListIterator<T*>& it, bool initialise) const
+  {
+    if (initialise)
       if (it.hasNext())
         it.next();
-      else
-        // Make hasPrevious return false
-        it.toFront();
 
-      return item;
-    }
+    if (it.hasPrevious())
+      return it.peekPrevious()->textRange().start();
 
-    template <typename T>
-    DUChainBase* proxyItem(DUChainBase* parent, QListIterator<T*>& it) const
-    {
-      DUChainBase* target = item(it);
-      DUChainBase* proxy = new ProxyObject(parent, target);
-      m_proxyObjects.insert(target, proxy);
-      return proxy;
-    }
+    return KTextEditor::Cursor::invalid();
+  }
 
-    QList<DUChainBase*>* childItems(DUChainBase* parent) const;
+  template <typename T>
+  DUChainBase* item(QListIterator<T*>& it) const
+  {
+    Q_ASSERT(it.hasPrevious());
+    DUChainBase* item = it.peekPrevious();
+    if (it.hasNext())
+      it.next();
+    else
+      // Make hasPrevious return false
+      it.toFront();
 
-    TopDUContext* m_chain;
-    mutable QMutex m_mutex;
-    mutable QHash<DUChainBase*, QList<DUChainBase*>* > m_objectLists;
-    mutable QHash<DUChainBase*, DUChainBase*> m_proxyObjects;
+    return item;
+  }
+
+  template <typename T>
+  DUChainBase* proxyItem(DUChainBase* parent, QListIterator<T*>& it) const
+  {
+    DUChainBase* target = item(it);
+    DUChainBase* proxy = new ProxyObject(parent, target);
+    m_proxyObjects.insert(target, proxy);
+    return proxy;
+  }
+
+  QList<DUChainBase*>* childItems(DUChainBase* parent) const;
+
+  TopDUContext* m_chain;
+  mutable QMutex m_mutex;
+  mutable QHash<DUChainBase*, QList<DUChainBase*>* > m_objectLists;
+  mutable QHash<DUChainBase*, DUChainBase*> m_proxyObjects;
 };
 
 #endif
