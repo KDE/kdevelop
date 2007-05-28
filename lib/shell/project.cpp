@@ -73,6 +73,8 @@ public:
     ProjectItem* topItem;
     QString name;
     KSharedConfig::Ptr m_cfg;
+    Project *project;
+
     QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
     {
         QList<ProjectFileItem*> files;
@@ -103,9 +105,18 @@ public:
         return files;
     }
 
-    void importDone( KJob* job )
+    void importDone( KJob* /*job*/ )
     {
-        job->deleteLater();
+        // set icon for toplevel file/dirs only. Subsequent children's icon will be set
+        // when the treeview is expanded
+        int rowcount = topItem->rowCount();
+        for( int i=0; i<rowcount; i++ )
+        {
+            ProjectBaseItem *childItem = dynamic_cast<ProjectBaseItem*>(topItem->child(i));
+            if( childItem )
+                childItem->setIcon();
+        }
+        emit project->importingFinished(project);
     }
 
 };
@@ -116,6 +127,7 @@ Project::Project( QObject *parent )
 {
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/Project", this, QDBusConnection::ExportScriptableSlots );
 
+    d->project = this;
     d->manager = 0;
     d->topItem = 0;
     d->tmp = 0;
@@ -244,9 +256,9 @@ bool Project::open( const KUrl& projectFileUrl )
     }
     if ( d->manager && iface )
     {
-        ProjectModel* model = Core::self()->projectController()->projectModel();
+//         ProjectModel* model = Core::self()->projectController()->projectModel();
         d->topItem = iface->import( this );
-        model->insertRow( model->rowCount(), d->topItem );
+//         model->insertRow( model->rowCount(), d->topItem );
 
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );

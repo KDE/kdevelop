@@ -1,6 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
-    Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>
+    Copyright (C) 2007 Dukju Ahn <dukjuahn@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,50 +16,36 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVIMPORTPROJECTJOB_H
-#define KDEVIMPORTPROJECTJOB_H
 
-#include <kjob.h>
-// #include "projectmodel.h"
-#include "kdevexport.h"
+#ifndef IMPORTPROJECTTHREAD_H
+#define IMPORTPROJECTTHREAD_H
 
-class QStandardItem;
-
-namespace ThreadWeaver
-{
-class Job;
-}
+#include <threadweaver/Job.h>
 
 namespace KDevelop
 {
 
-class IProjectFileManager;
 class ProjectFolderItem;
+class IProjectFileManager;
 
-class KDEVPLATFORMPROJECT_EXPORT ImportProjectJob: public KJob
+class ImportProjectThread : public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
-    ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer);
-    virtual ~ImportProjectJob();
+    ImportProjectThread( QObject *parent );
+    virtual ~ImportProjectThread();
 
-public:
-    void start();
+    void setProjectFolderItem( ProjectFolderItem *folder );
+    void setProjectFileManager( IProjectFileManager *importer );
 
 protected:
-    void startNextJob(ProjectFolderItem *folder);
-    void slotResult(KJob *job);
-
-protected Q_SLOTS:
-    void slotDone(ThreadWeaver::Job*);
-//     void slotFinished();
+    void run();
+    void startNextJob(ProjectFolderItem *dom);
 
 private:
-    struct ImportProjectJobPrivate* const d;
+    struct ImportProjectThreadPrivate* const d;
 };
 
 }
-#endif // IMPORTPROJECTJOB_H
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
-
+#endif

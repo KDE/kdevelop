@@ -81,6 +81,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
         virtual ProjectItem* projectItem() const;
 
         void setParent( QStandardItem* );
+        virtual void setIcon();
 
         QList<ProjectFolderItem*> folderList() const;
         QList<ProjectTargetItem*> targetList() const;
@@ -114,6 +115,9 @@ public:
 
     /** Set the url of this folder */
     void setUrl( const KUrl& );
+
+    virtual void setIcon();
+
 protected:
     ProjectFolderItem( ProjectFolderItemPrivate& );
 private:
@@ -146,6 +150,9 @@ public:
      * for all targets in this directory.
      */
     const QHash<QString, QString>& environment() const;
+
+    virtual void setIcon();
+
 protected:
     ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& );
 private:
@@ -229,6 +236,8 @@ public:
     const KUrl& url() const;
     void setUrl( const KUrl& );
 
+    virtual void setIcon();
+
 protected:
     ProjectFileItem( ProjectFileItemPrivate& );
 private:
@@ -246,6 +255,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
         ProjectBaseItem *item( const QModelIndex &index ) const;
 
         void resetModel();
+
+        virtual void fetchMore( const QModelIndex &parent );
+        virtual bool canFetchMore( const QModelIndex & parent ) const;
 
     private:
         class ProjectModelPrivate* const d;

@@ -81,6 +81,9 @@ public:
     virtual KUrl projectFileUrl() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 
+Q_SIGNALS:
+    void importingFinished(IProject*);
+
 public Q_SLOTS:
     /**
      * @brief Open a project
@@ -170,6 +173,7 @@ private:
     Q_PRIVATE_SLOT(d, void importDone(KJob*) )
 
     class ProjectPrivate* const d;
+    friend class ProjectPrivate;
 };
 
 }

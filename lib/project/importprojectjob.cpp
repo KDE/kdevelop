@@ -19,34 +19,40 @@
 */
 
 #include "importprojectjob.h"
+#include "importprojectthread.h"
 
 #include "interfaces/iprojectfilemanager.h"
+#include "projectmodel.h"
 
 #include <kglobal.h>
 #include <kdebug.h>
+#include <threadweaver/ThreadWeaver.h>
 
 namespace KDevelop
 {
 
 struct ImportProjectJobPrivate
 {
-    ProjectFolderItem *m_folder;
-    IProjectFileManager *m_importer;
-    QList<ProjectFolderItem*> m_workingList;
+    ThreadWeaver::Weaver *m_weaver;
+    ImportProjectThread *m_weaverJob;
 };
 
 ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer)
     : KJob(0), d(new ImportProjectJobPrivate)
 
 {
-    d->m_importer = importer;
-    d->m_folder = 0;
+    d->m_weaver = new ThreadWeaver::Weaver( this );
+    d->m_weaverJob = new ImportProjectThread( this );
+
+    d->m_weaverJob->setProjectFileManager( importer );
+    ProjectFolderItem *folderItem = 0;
     if ( folder->type() == ProjectBaseItem::Folder ||
          folder->type() == ProjectBaseItem::BuildFolder ||
          folder->type() == ProjectBaseItem::Project )
     {
-        d->m_folder = dynamic_cast<ProjectFolderItem*>( folder );
+        folderItem = dynamic_cast<ProjectFolderItem*>( folder );
     }
+    d->m_weaverJob->setProjectFolderItem( folderItem );
 }
 
 ImportProjectJob::~ImportProjectJob()
@@ -56,27 +62,25 @@ ImportProjectJob::~ImportProjectJob()
 
 void ImportProjectJob::start()
 {
-    if ( d->m_folder )
-        startNextJob( d->m_folder );
+    if( !(d->m_weaverJob) )
+        return;
 
+    d->m_weaver->enqueue( d->m_weaverJob );
+    connect( d->m_weaverJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(slotDone(ThreadWeaver::Job*)) );
+
+//     d->m_weaverJob->start();
+//     connect( d->m_weaverJob, SIGNAL(finished()), this, SLOT(slotFinished()) );
+}
+
+void ImportProjectJob::slotDone(ThreadWeaver::Job*)
+{
     emitResult();
 }
 
-void ImportProjectJob::startNextJob(ProjectFolderItem *dom)
-{
-    d->m_workingList += d->m_importer->parse(dom);
-    while ( !d->m_workingList.isEmpty() )
-    {
-      ProjectFolderItem *folder = d->m_workingList.first();
-      d->m_workingList.pop_front();
-
-      startNextJob(folder);
-    }
-}
-
-void ImportProjectJob::processList()
-{
-}
+// void ImportProjectJob::slotFinished()
+// {
+//     emitResult();
+// }
 
 }
 #include "importprojectjob.moc"

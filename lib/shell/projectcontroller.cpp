@@ -220,7 +220,6 @@ bool ProjectController::openProject( const KUrl &projectFile )
     }
 
     //FIXME Create the hidden directory if it doesn't exist
-
     if ( loadProjectPart() )
     {
         //The project file has been opened.
@@ -231,15 +230,23 @@ bool ProjectController::openProject( const KUrl &projectFile )
     else
         return false;
 
-
-    IProject* project = new Project();
+    Project* project = new Project();
     if ( !project->open( url ) )
     {
         delete project;
         return false;
     }
-    d->m_projects.append( project );
+    connect( project, SIGNAL(importingFinished(IProject*)), this, SLOT(projectImportingFinished(IProject*)) );
+    return true;
+}
 
+bool ProjectController::projectImportingFinished( IProject* project )
+{
+    ProjectItem *topItem = project->projectItem();
+    ProjectModel *model = projectModel();
+    model->insertRow( model->rowCount(), topItem );
+
+    d->m_projects.append( project );
 
 //     KActionCollection * ac = d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
 //     QAction * action;
@@ -247,7 +254,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
     //action = ac->action( "project_close" );
     //action->setEnabled( true );
 
-    d->m_recentAction->addUrl( url );
+    d->m_recentAction->addUrl( project->projectFileUrl() );
     KSharedConfig * config = KGlobal::config().data();
     KConfigGroup recentGroup = config->group("RecentProjects");
     d->m_recentAction->saveEntries( recentGroup );
