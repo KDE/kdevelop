@@ -237,11 +237,25 @@ public:
      */
     QString errorMessage();
 
+    /**
+     * The job is started and the method returns control to the caller only
+     * after the job has finished.
+     *
+     * There's no need to setup signal/slot connections to be able to use
+     * this method, all results are available after exec returned.
+     *
+     * @return the FinishStatus
+     */
+    FinishStatus exec();
+
 public Q_SLOTS:
     /**
      * The job is not allowed to emit any signals until this method has been
      * called. A plugin may either really start the job here, or it may
      * buffer any signals before start has been called.
+     *
+     * This method executes the job in an asynchronous way and the job
+     * will emit signals.
      */
     void start();
 
