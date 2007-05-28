@@ -21,6 +21,7 @@
 #include <QString>
 #include <QPalette>
 #include <klocale.h>
+#include <kgraphicsutils.h>
 
 // ported from KDev3.4's outputview
 
@@ -140,12 +141,21 @@ IOutputViewItem* ErrorFilter::processAndCreate( const QString& line )
         if( isWarning )
         {
             ret = new MakeWarningItem( line, m_builder );
-            ret->setForeground(QApplication::palette().highlight());
+            QColor background = QApplication::palette().window().color();
+            QBrush foreground = ret->foreground();
+            if( background.alphaF() > 0 )
+                foreground.setColor(KGraphicsUtils::blendColor(QApplication::palette().highlight().color(), background));
+            else
+            {
+                background.setAlpha(128);
+                foreground.setColor(KGraphicsUtils::blendColor(QApplication::palette().highlight().color(), background));
+            }
+            ret->setForeground(foreground);
         }
         else // case of real error
         {
             ret = new MakeErrorItem( line, m_builder );
-            ret->setForeground(QApplication::palette().linkVisited());
+            ret->setForeground(QApplication::palette().highlight());
         }
         ret->file = file;
         ret->lineNo = lineNum;
