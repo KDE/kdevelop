@@ -56,7 +56,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include <ktexteditor/view.h>
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/smartinterface.h>
-#include <ktexteditor/highlightinginterface.h>
 #include "idocumentcontroller.h"
 
 #include "kdevteamwork_client.h"

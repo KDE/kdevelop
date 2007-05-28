@@ -32,7 +32,6 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/markinterface.h>
-#include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/attribute.h>
 
 #include "idocumentcontroller.h"
