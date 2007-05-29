@@ -1,2 +1,0 @@
-SKIP /lib/util/execcommand\.cpp|/lib/util/kdevtreeview\.cpp|/lib/util/kdevitemmodel\.cpp|/lib/util/kfiltermodel\.cpp|/lib/util/settings\.cpp|/lib/util/execcommand\.h|/lib/util/kdevstandardtree\.h|/lib/util/kdevtreeview.h|/lib/util/kdevitemmodel\.h|/lib/util/kdevstandardtree_impl\.h|/lib/util/kfiltermodel\.h|/lib/util/settings\.h
-
