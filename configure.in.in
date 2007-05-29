@@ -101,10 +101,6 @@ AM_CONDITIONAL(include_cvsservice, test "$cvsservice_stub_h" = "found")
 AC_ARG_ENABLE(perforce, AC_HELP_STRING([--disable-perforce], [disable vcs support for perforce]), [with_perforce=${enableval}], [with_perforce=yes])
 AM_CONDITIONAL(include_perforce, test "$with_perforce" = "yes")
 
-AC_ARG_ENABLE(subversion, AC_HELP_STRING([--disable-subversion], [disable vcs support for subversion]), [with_subversion=${enableval}], [with_subversion=yes])
-AM_CONDITIONAL(include_subversion, test "$with_subversion" = "yes" -a "$DISABLE_SUBVERSION" != "yes" )
-
-
 dnl  **********
 dnl  Check which embedded support should be compiled
 dnl  **********
