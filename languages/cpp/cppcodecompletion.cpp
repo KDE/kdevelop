@@ -35,6 +35,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include "cppsupport_utils.h"
 #include "tag_creator.h"
 
+#include <typeinfo>
 
 #include <qpopupmenu.h>
 

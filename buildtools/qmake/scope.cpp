@@ -25,6 +25,7 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <stdlib.h>
 
 #include "urlutil.h"
 #include "trollprojectpart.h"

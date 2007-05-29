@@ -17,6 +17,7 @@
 #else
 #include <cctype>
 #endif
+#include <cstring>
 
 #if ( _MSC_VER == 1200 )
 // VC6 seems to need this

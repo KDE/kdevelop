@@ -1767,7 +1767,7 @@ void GDBController::debugStateChange(int oldState, int newState)
 
                 bool found = false;
 #define STATE_CHECK(name)\
-    if (i == name) { out += #name; found = true; } else
+    if (i == name) { out += #name; found = true; }
                 STATE_CHECK(s_dbgNotStarted);
                 STATE_CHECK(s_appNotStarted);
                 STATE_CHECK(s_waitForWrite);

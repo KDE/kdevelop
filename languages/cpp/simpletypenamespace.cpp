@@ -12,6 +12,7 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 #include <qtl.h>
+#include <typeinfo>
 #include "simpletypenamespace.h"
 #include "simpletypecachebinder.h"
 

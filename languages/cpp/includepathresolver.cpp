@@ -35,6 +35,8 @@
 #include "includepathresolver.h"
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <time.h>
+#include <stdlib.h>
 
 #ifdef TEST
 #include "blockingkprocess.cpp"
