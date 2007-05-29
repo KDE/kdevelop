@@ -240,6 +240,7 @@ void PerforcePart::diff( const QString& filename )
     QStringList args;
 
     args << "diff";
+    args << "-du";
     args << name;
     ExecCommand* cmv = new ExecCommand( "p4", args, QString::null, QStringList(), this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
@@ -271,10 +272,10 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
     }
 
     // strip the ==== headers
-    static QRegExp rx( "(^|\\n)====.*====\\n" );
+    static QRegExp rx( "(^|\\n)==== ([^ ]+) -.*====\\n" );
     rx.setMinimal( true );
     QString strippedDiff = diff;
-    strippedDiff.replace( rx, QString::null );
+    strippedDiff.replace( rx, "--- \\2\n+++ \\2\n" );
 
     if (KDevDiffFrontend *diffFrontend = extension<KDevDiffFrontend>("KDevelop/DiffFrontend"))
         diffFrontend->showDiff( strippedDiff );
