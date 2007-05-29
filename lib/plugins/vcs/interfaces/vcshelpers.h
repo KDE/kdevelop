@@ -162,7 +162,7 @@ class VcsEvent
 {
 public:
     VcsRevision revision(); // the GlobalNumber revision
-    QString user();
+    QString author();
     QDate date();
     QString message();
     VcsActions actions();
