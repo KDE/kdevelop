@@ -29,11 +29,11 @@ SET(testfiles main.cpp )
 
 #ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions -finline)
 #ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions -fno-inline)
-ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT ${KDE4_ENABLE_EXCEPTIONS})
+ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions)
 #list all source files here
 
 ###### First Target ##########
-KDE4_ADD_LIBRARY( network STATIC ${libfiles} )
+ADD_LIBRARY( network STATIC ${libfiles} )
 TARGET_LINK_LIBRARIES( network ${COMMONCPP2_LIBRARIES} ${Boost_LIBRARIES})
 SET_TARGET_PROPERTIES( network PROPERTIES VERSION 1.0.0 SOVERSION 1)
 #INSTALL(TARGETS network DESTINATION ${LIB_INSTALL_DIR})
