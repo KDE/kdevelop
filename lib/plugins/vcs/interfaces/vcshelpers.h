@@ -129,6 +129,7 @@ public:
  */
 class KDEVPLATFORMVCS_EXPORT VcsEvent
 {
+public:
     /**
      * Class that tells you what happened to a given repository location in a
      * specific revision.
@@ -146,7 +147,7 @@ class KDEVPLATFORMVCS_EXPORT VcsEvent
         Merge                /**<File had changes merged into it.*/,
     };
     Q_DECLARE_FLAGS( VcsActions, VcsAction )
-public:
+
     VcsRevision revision(); // the GlobalNumber revision
     QString author();
     QDate date();
@@ -163,6 +164,7 @@ public:
  */
 class KDEVPLATFORMVCS_EXPORT VcsJob
 {
+public:
     /**
      * To easily check which type of job this is
      *
@@ -199,7 +201,6 @@ class KDEVPLATFORMVCS_EXPORT VcsJob
         Failed
     };
 
-public:
     /**
      * This method will return all new results of the job. The actual data
      * type that is wrapped in the QVariant depends on the type of job.
@@ -313,6 +314,7 @@ public:
 
 class KDEVPLATFORMVCS_EXPORT VcsDiff
 {
+public:
     /**
      * Specify the type of difference the diff() method should create. Note that a
      * request for DiffUnified may not be honored, e.g. if the items being diffed are
