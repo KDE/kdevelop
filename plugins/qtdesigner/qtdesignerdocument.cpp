@@ -173,7 +173,7 @@ QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
 {
     kDebug(9039) << "Creating new area for form: " << m_url << endl;
     QMdiArea* area = new QMdiArea(parent);
-    area->setScrollBarsEnabled( true );
+//     area->setScrollBarsEnabled( true ); //FIXME commented just to make it compile with the new qt-copy
 //     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 //     area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     QFile uiFile(m_url.toLocalFile());
