@@ -23,6 +23,8 @@ template<typename T1,typename T2> class QPair;
 #include <QHash>
 template<typename T1> class QList;
 class QString;
+// class QFileSystemWatcher;
+class ProjectFileSystemWatcher;
 
 class CustomMakeTargetItem : public KDevelop::ProjectTargetItem
 {
@@ -38,6 +40,21 @@ private:
     QHash<QString, QString> m_envs;
     QList<QPair <QString, QString> > m_defines;
 
+};
+
+class CustomMakeProjectItem : public KDevelop::ProjectItem
+{
+public:
+    CustomMakeProjectItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent = 0 );
+    virtual ~CustomMakeProjectItem();
+
+    // watcher is reentrant. Only project parsing thread can call the methods of Watcher.
+    // No locking is required because parsing thread is the only one to access this.
+    ProjectFileSystemWatcher* fsWatcher();
+
+private:
+//     QFileSystemWatcher *m_watcher;
+    ProjectFileSystemWatcher *m_watcher;
 };
 
 #endif

@@ -10,8 +10,10 @@
 
 #include "custommakemanager.h"
 #include "custommakemodelitems.h"
+#include "projectfilesystemwatcher.h"
 #include "icore.h"
 #include "iproject.h"
+#include "iprojectcontroller.h"
 #include "iplugincontroller.h"
 #include "imakebuilder.h"
 #include "kgenericfactory.h"
@@ -183,39 +185,61 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
 
     QFileInfoList entries = dir.entryInfoList();
 
+    KDevelop::ProjectItem *prjitem = item->project()->projectItem();
+    CustomMakeProjectItem *topItem = dynamic_cast<CustomMakeProjectItem*>( prjitem );
+
     // fill subfolders
     for ( int i = 0; i < entries.count(); ++i )
     {
         QFileInfo fileInfo = entries.at( i );
+        QString fileName = fileInfo.fileName();
+        QString absFilePath = fileInfo.absoluteFilePath();
 
-        if ( fileInfo.isDir() && fileInfo.fileName() != QLatin1String( "." )
-             && fileInfo.fileName() != QLatin1String( ".." ) )
+        if ( fileInfo.isDir() && fileName != QLatin1String( "." )
+             && fileName != QLatin1String( ".." ) )
         {
 //             KDevelop::ProjectFolderItem *cmfi= new KDevelop::ProjectFolderItem(
 //                     item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
             // TODO more faster algorithm. should determine whether this directory
             // contains makefile or not.
             KDevelop::ProjectBuildFolderItem *cmfi = new KDevelop::ProjectBuildFolderItem(
-                    item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+                    item->project(), KUrl( absFilePath ), item );
             folder_list.append( cmfi );
 //             d->m_testItems.append( cmfi ); // debug
+            if( topItem )
+                topItem->fsWatcher()->addDirectory( absFilePath, cmfi );
         }
         else if ( fileInfo.isFile() )
         {
-            new KDevelop::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+            KUrl fileUrl( absFilePath );
+            KDevelop::ProjectFileItem *fileItem =
+                new KDevelop::ProjectFileItem( item->project(), fileUrl, item );
+
+            if( topItem && fileName == QString("Makefile") )
+            {
+                topItem->fsWatcher()->addFile( absFilePath, fileItem );
+                QStringList targetlist = this->parseCustomMakeFile( KUrl(absFilePath) );
+                foreach( QString target, targetlist )
+                {
+                    new CustomMakeTargetItem( item->project(), target, item );
+    //             d->m_testItems.append( targetItem ); // debug
+                }
+            }
         }
     }
     // find makefile, parse and get the target list
-    KUrl makefileUrl = this->findMakefile( item );
-    if( makefileUrl.isValid() )
-    {
-        QStringList targetlist = this->parseCustomMakeFile( makefileUrl );
-        foreach( QString target, targetlist )
-        {
-            new CustomMakeTargetItem( item->project(), target, item );
-//             d->m_testItems.append( targetItem ); // debug
-        }
-    }
+//     KUrl makefileUrl = this->findMakefile( item );
+//     if( makefileUrl.isValid() )
+//     {
+//         QStringList targetlist = this->parseCustomMakeFile( makefileUrl );
+//         foreach( QString target, targetlist )
+//         {
+//             new CustomMakeTargetItem( item->project(), target, item );
+// //             d->m_testItems.append( targetItem ); // debug
+//         }
+//         if( topItem )
+//             topItem->fsWatcher()->addFile( makefileUrl.toLocalFile() );
+//     }
 
     return folder_list;
 }
@@ -223,7 +247,18 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
 KDevelop::ProjectItem* CustomMakeManager::import(KDevelop::IProject *project)
 {
     if( !project ) return NULL;
-    return new KDevelop::ProjectItem( project, project->folder().pathOrUrl(), NULL );
+//     return new KDevelop::ProjectItem( project, project->folder().pathOrUrl(), NULL );
+    CustomMakeProjectItem *item = new CustomMakeProjectItem( project, project->folder().pathOrUrl(), NULL );
+
+    item->fsWatcher()->addDirectory( project->folder().toLocalFile(), item );
+
+    connect( item->fsWatcher(), SIGNAL(directoryChanged(const QString&, KDevelop::ProjectFolderItem*)),
+             this, SLOT(slotDirectoryChanged(const QString&, KDevelop::ProjectFolderItem*)) );
+
+    connect( item->fsWatcher(), SIGNAL(fileChanged(const QString&, KDevelop::ProjectFileItem*)),
+             this, SLOT(slotFileChanged(const QString&, KDevelop::ProjectFileItem*)) );
+
+    return item;
 }
 
 ProjectFolderItem* CustomMakeManager::addFolder(const KUrl& folder, KDevelop::ProjectFolderItem *parent)
@@ -387,7 +422,159 @@ void CustomMakeManager::slotBuilt( KDevelop::ProjectBaseItem* item )
 //     }
 }
 
-// TODO whenever Makefile is modified, call this again.
+void CustomMakeManager::slotDirectoryChanged( const QString& dir, KDevelop::ProjectFolderItem* folderItem )
+{
+    kDebug() << "Directory " << dir << " changed " << endl;
+    KDevelop::ProjectItem *prjitem = folderItem->project()->projectItem();
+    CustomMakeProjectItem *cmpi = dynamic_cast<CustomMakeProjectItem*>( prjitem );
+    Q_ASSERT(cmpi);
+
+    QDir changedDir( dir );
+
+    if( !changedDir.exists() )
+    {
+        //directory itself deleted
+        int row = folderItem->row();
+        QStandardItem *parent = folderItem->parent();
+        parent->removeRow( row );
+
+        cmpi->fsWatcher()->removeDirectory( dir );
+
+        return;
+    }
+    else //subdirectory or file is created or deleted.
+    {
+        // retrieve current disk info
+        QFileInfoList fileEntries = changedDir.entryInfoList(QDir::Files);
+        QFileInfoList dirEntries = changedDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
+
+        // convert disk info into QStringList
+        QStringList fileList;
+        for ( int i = 0; i < fileEntries.count(); ++i )
+        {
+            QFileInfo fileInfo = fileEntries.at( i );
+            QString absFilePath = fileInfo.absoluteFilePath();
+            fileList << absFilePath;
+        }
+        QStringList dirList;
+        for ( int i = 0; i < dirEntries.count(); ++i )
+        {
+            QFileInfo fileInfo = dirEntries.at( i );
+            QString absFilePath = fileInfo.absoluteFilePath();
+            dirList << absFilePath;
+        }
+
+        // retrieve model item info, and convert into QStringList
+        QList<ProjectFileItem*> itemFileList = folderItem->fileList();
+        QStringList itemFileListString;
+        Q_FOREACH( KDevelop::ProjectFileItem* _item, itemFileList )
+        {
+            itemFileListString << _item->url().toLocalFile();
+        }
+
+        QList<ProjectFolderItem*> itemFolderList = folderItem->folderList();
+        QStringList itemFolderListString;
+        Q_FOREACH( KDevelop::ProjectFolderItem *_item, itemFolderList )
+        {
+            itemFolderListString << _item->url().toLocalFile();
+        }
+
+        // Compare the difference between disk file and model items
+
+        // round 1 -- file
+        Q_FOREACH( KDevelop::ProjectFileItem* _fileItem, itemFileList )
+        {
+            if( fileList.contains( _fileItem->url().toLocalFile() ) == false )
+            {
+                int row = _fileItem->row();
+                folderItem->removeRow( row );
+                // TODO if Makefile, delete all targets and remove from watcher
+
+            }
+        }
+        Q_FOREACH( QString diskFile, fileList )
+        {
+            if( itemFileListString.contains( diskFile ) == false )
+            {
+                KDevelop::ProjectFileItem *newitem = new KDevelop::ProjectFileItem(
+                        folderItem->project(), KUrl(diskFile), folderItem );
+                // TODO if Makefile, parse new targets and add to watcher
+            }
+        }
+        // round 2 -- directory
+        Q_FOREACH( KDevelop::ProjectFolderItem* _folderItem, itemFolderList )
+        {
+            if( dirList.contains( _folderItem->url().toLocalFile() ) == false)
+            {
+                int row = _folderItem->row();
+                QString tobeRemovedDir = _folderItem->url().toLocalFile();
+                folderItem->removeRow( row );
+
+                cmpi->fsWatcher()->removeDirectory( tobeRemovedDir );
+            }
+        }
+        Q_FOREACH( QString diskDir, dirList )
+        {
+            if( itemFolderListString.contains( diskDir ) == false )
+            {
+                KDevelop::ProjectBuildFolderItem *newitem =new KDevelop::ProjectBuildFolderItem(
+                        folderItem->project(), KUrl(diskDir), folderItem );
+
+                cmpi->fsWatcher()->addDirectory( diskDir, newitem );
+                // TODO parse recursively into children
+            }
+        }
+
+    }
+}
+
+// treat only Makefiles
+void CustomMakeManager::slotFileChanged( const QString& file, KDevelop::ProjectFileItem* fileItem)
+{
+    kDebug() << "File " << file << " changed " << endl;
+    // remove every previous target and reparse this file.
+    QFileInfo info( file );
+    if( info.exists() == false )
+        return;
+    if( info.fileName() != QString("Makefile") )
+        return;
+
+    KDevelop::ProjectFileItem *makefileItem=0;
+    KDevelop::IProject *project;
+    if( !fileItem )
+    {
+        KUrl url(file);
+        project = core()->projectController()->findProjectForUrl( url );
+        Q_ASSERT(project);
+        makefileItem = project->fileForUrl( KUrl(file) );
+    }
+    else
+    {
+        makefileItem = fileItem;
+    }
+    Q_ASSERT(makefileItem);
+
+    QStandardItem *stditem = makefileItem->parent();
+    KDevelop::ProjectBuildFolderItem *parentFolder =
+            dynamic_cast<KDevelop::ProjectBuildFolderItem*>( stditem );
+    if( !parentFolder )
+        return;
+
+    QList<KDevelop::ProjectTargetItem*> targets = parentFolder->targetList();
+    Q_FOREACH( KDevelop::ProjectTargetItem* target, targets )
+    {
+        int row = target->row();
+        parentFolder->removeRow( row );
+    }
+
+    QStringList newTargets = parseCustomMakeFile( KUrl(file) );
+    Q_FOREACH( QString newTarget, newTargets )
+    {
+        new CustomMakeTargetItem( project, newTarget, parentFolder );
+    }
+
+}
+
 QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
 {
     if( !makefile.isValid() )

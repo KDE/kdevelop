@@ -14,6 +14,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib
 set(kdevcustommakemanager_PART_SRCS
     custommakemanager.cpp
     custommakemodelitems.cpp
+    projectfilesystemwatcher.cpp
 )
 
 kde4_automoc(${kdevcustommakemanager_PART_SRCS})

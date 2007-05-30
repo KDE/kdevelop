@@ -196,6 +196,10 @@ private Q_SLOTS:
     void targetMenuActivated( QAction* );
     void slotBuilt( KDevelop::ProjectBaseItem* item );
 
+    // notified by QFileSystemWatcher
+    void slotDirectoryChanged( const QString& dir, KDevelop::ProjectFolderItem* folderItem );
+    void slotFileChanged( const QString& file, KDevelop::ProjectFileItem* fileItem );
+
 private:
     /**
      * Initialize targets by reading Makefile in @arg dir
