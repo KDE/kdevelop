@@ -80,7 +80,7 @@ struct CMakeFunctionArgument
 };
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
-struct TargetInfo
+/*struct TargetInfo
 {
     QString name;
     QString type;
@@ -101,7 +101,7 @@ struct ProjectInfo
     QString name;
     QString root;
     FolderInfo rootFolder;
-};
+};*/
 
 /**
  * Recursive descent parser for CMakeLists.txt files
@@ -113,11 +113,11 @@ public:
     CMakeListsParser(QObject *parent = 0);
     ~CMakeListsParser();
 
-    ProjectInfo parse( const KUrl& file );
+/*    ProjectInfo parse( const KUrl& file );
 
     ProjectInfo parseProject( const CMakeAst* );
     TargetInfo parseTarget( const CMakeAst* );
-    FolderInfo parseFolder( const CMakeAst* );
+    FolderInfo parseFolder( const CMakeAst* );*/
 
     static bool parseCMakeFile( CMakeAst* root, const QString& fileName );
 

@@ -25,6 +25,7 @@
 #include <domutil.h>
 #include "cmakelistsparser.h"
 #include <cmakeexport.h>
+#include "cmakeast.h"
 
 namespace KDevelop {
 class IProject;
@@ -37,14 +38,13 @@ class IProject;
  */
 class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
 {
-public:
-    CMakeFolderItem( KDevelop::IProject *project, const FolderInfo& fi, QStandardItem* item = 0 );
-    ~CMakeFolderItem();
-
-    FolderInfo folderInfo() const;
-
-private:
-    FolderInfo m_folderInfo;
+    public:
+        CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeAst *tree, QStandardItem* item = 0 );
+        ~CMakeFolderItem();
+        
+        CMakeAst* tree() const { return m_tree; }
+    private:
+        CMakeAst *m_tree;
 };
 
 
@@ -56,10 +56,10 @@ private:
 class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    CMakeTargetItem( KDevelop::IProject *project, const TargetInfo& target, CMakeFolderItem* item );
+    CMakeTargetItem( KDevelop::IProject *project,  const CMakeAst* , CMakeFolderItem* item );
     ~CMakeTargetItem();
 
-    TargetInfo targetInfo() const;
+//     TargetInfo targetInfo() const;
 
     virtual const KDevelop::DomUtil::PairList& defines() const;
     virtual const KUrl::List& includeDirectories() const;
@@ -69,7 +69,6 @@ private:
     KUrl::List m_includeList;
     KDevelop::DomUtil::PairList m_defines;
     QHash<QString, QString> m_environment;
-    TargetInfo m_targetInfo;
 };
 
 #endif

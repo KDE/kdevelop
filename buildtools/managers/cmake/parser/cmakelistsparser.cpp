@@ -20,7 +20,7 @@
 
 #include "cmakelistsparser.h"
 #include "cmakeast.h"
-#include "cmakeprojectvisitor.h"
+// #include "cmakeprojectvisitor.h"
 #include "astfactory.h"
 
 #include <KDebug>
@@ -109,8 +109,12 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
         if(token->type == cmListFileLexer_Token_ParenRight)
         {
             CMakeAst* newElement = AstFactory::self()->createAst(func.name);
+
             if(newElement)
+            {
+                newElement->parseFunctionInfo(func);
                 parent->addChildAst(newElement);
+            }
             else
                 kWarning(9032) << "The <" << func.name << "> AST is not registered" << endl;
             kDebug(9032) << "Adding: " << func.name << newElement << endl;
@@ -139,7 +143,7 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
 
 }
 
-ProjectInfo CMakeListsParser::parse( const KUrl& file )
+/*ProjectInfo CMakeListsParser::parse( const KUrl& file )
 {
     ProjectInfo pi;
     CMakeAst *ast = new CMakeAst;
@@ -167,7 +171,7 @@ ProjectInfo CMakeListsParser::parseProject( const CMakeAst* ast )
     if ( ast )
     {
         CMakeProjectVisitor v;
-	ast->accept(&v);
+        ast->accept(&v);
         
         pi.name = v.projectName();
         kDebug(9032) << "Subdirectories: " << v.subdirectories() << endl;
@@ -194,5 +198,5 @@ TargetInfo CMakeListsParser::parseTarget( const CMakeAst* )
     }
 
     return ti;
-}
+}*/
 

@@ -27,6 +27,7 @@
 
 class CMakeProjectVisitor : public CMakeAstVisitor {
     public:
+        CMakeProjectVisitor();
 	virtual ~CMakeProjectVisitor() {}
 	
 	virtual void visit( const CustomCommandAst * ) { notImplemented(); }

@@ -96,13 +96,13 @@ public:
 
 private:
 
-//     KDevelop::IProject* m_project;
+    KDevelop::IProject* m_project;
     CMakeFolderItem* m_rootItem;
     KDevelop::IProjectBuilder* m_builder;
 
     KUrl::List m_includeDirList;
     CMakeListsParser m_parser;
-    ProjectInfo m_projectInfo;
+//     ProjectInfo m_projectInfo;
 };
 
 #endif

@@ -26,7 +26,7 @@
 
 #include <QtDesigner/QExtensionFactory>
 
-#include <kurl.h>
+#include <KUrl>
 #include <kio/job.h>
 
 #include "icore.h"
@@ -36,6 +36,10 @@
 
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
+
+#include "cmakeastvisitor.h"
+#include "cmakeprojectvisitor.h"
+#include "cmakeexport.h"
 
 typedef KGenericFactory<CMakeProjectManager> CMakeSupportFactory ;
 K_EXPORT_COMPONENT_FACTORY( kdevcmakemanager,
@@ -74,41 +78,61 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
+
     if ( !folder )
         return folderList;
 
-    FolderInfo fi = folder->folderInfo();
-    for ( QStringList::iterator it = fi.includes.begin();
-          it != fi.includes.end(); ++it )
-    {
-        KUrl urlCandidate = KUrl( ( *it ) );
-        if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
-            m_includeDirList.append( urlCandidate );
-    }
+    kDebug(9025) << "parse: " << folder->url() << endl;
+    CMakeAst *node = folder->tree();
+    CMakeProjectVisitor v;
+    node->accept(&v);
+//     FolderInfo fi = folder->folderInfo();
+//     for ( QStringList::iterator it = fi.includes.begin();
+//           it != fi.includes.end(); ++it )
+//     {
+//         KUrl urlCandidate = KUrl( ( *it ) );
+//         if ( m_includeDirList.indexOf( urlCandidate ) == -1 )
+//             m_includeDirList.append( urlCandidate );
+//     }
 
-    foreach ( FolderInfo sfi, fi.subFolders )
-        folderList.append( new CMakeFolderItem( item->project(), sfi, folder ) );
-
-    foreach ( TargetInfo ti, fi.targets )
-    {
-        CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), ti, folder );
-        foreach( QString sFile, ti.sources )
+    foreach ( QString subf, v.subdirectories() ) {
+        CMakeAst *newFolder = new CMakeAst;
+        KUrl path(folder->url());
+        path.addPath(subf);
+        KUrl cmakelistsPath(path);
+        cmakelistsPath.addPath("CMakeLists.txt");
+        if ( !CMakeListsParser::parseCMakeFile( newFolder, cmakelistsPath.toLocalFile() ) )
         {
-            KUrl sourceFile = folder->url();
-            sourceFile.adjustPath( KUrl::AddTrailingSlash );
-            sourceFile.addPath( sFile );
-            new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+            kDebug(9032) << "Subfolder: " << path.toLocalFile() << endl;
+            CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, newFolder, folder );
+            a->setUrl(path);
+            folderList.append( a );
+        } else {
+            //FIXME: Put here the error.
+            kDebug(9032) << "Parsing error." << endl;
+            return folderList;
         }
     }
 
+//     foreach ( TargetInfo ti, fi.targets )
+//     {
+//         CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), ti, folder );
+//         foreach( QString sFile, ti.sources )
+//         {
+//             KUrl sourceFile = folder->url();
+//             sourceFile.adjustPath( KUrl::AddTrailingSlash );
+//             sourceFile.addPath( sFile );
+//             new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+//         }
+//     }
 
-    return folderList;
+
+     return folderList;
 }
 
 KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project )
 {
-    QString projectDir = project->projectFileUrl().url();
-    KUrl cmakeInfoFile(projectDir);
+    KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();
     cmakeInfoFile.addPath("CMakeLists.txt");
     kDebug(9025) << k_funcinfo << "file is " << cmakeInfoFile.path() << endl;
@@ -119,10 +143,25 @@ KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project 
     }
     else
     {
-        m_projectInfo = m_parser.parse( cmakeInfoFile );
-        FolderInfo rootFolder = m_projectInfo.rootFolder;
-        m_rootItem = new CMakeFolderItem( project, rootFolder, 0 );
-        m_rootItem->setText( project->name() );
+        CMakeAst *rootFolder = new CMakeAst;
+        QString name;
+
+        kDebug(9032) << "Parsing file: " << cmakeInfoFile.path() << endl;
+
+        if ( !CMakeListsParser::parseCMakeFile( rootFolder, cmakeInfoFile.toLocalFile() ) )
+        {
+            CMakeProjectVisitor v;
+            rootFolder->accept(&v);
+
+            name = v.projectName();
+        } else {
+            //FIXME: Put here the error.
+            kDebug(9032) << "Parsing error." << endl;
+        }
+
+        m_rootItem = new CMakeFolderItem(project, "/", rootFolder, 0 );
+        m_rootItem->setText(name);
+//         m_rootItem->setUrl(project->projectFileUrl().upUrl());
     }
     return m_rootItem;
 }

@@ -23,32 +23,33 @@
 
 #include <iproject.h>
 
-CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const FolderInfo& fi, QStandardItem* item )
-    : KDevelop::ProjectItem( project, fi.name, item )
+CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeAst* tree, QStandardItem* item )
+    : KDevelop::ProjectItem( project, name, item ), m_tree(tree)
 {
-    m_folderInfo = fi;
-    KUrl::List includeList;
-    foreach( QString inc, fi.includes )
-    {
-        includeList.append( KUrl( inc ) );
-    }
-    setIncludeDirectories( includeList );
+//     m_folderInfo = fi;
+//     KUrl::List includeList;
+//     foreach( QString inc, fi.includes )
+//     {
+//         includeList.append( KUrl( inc ) );
+//     }
+//     setIncludeDirectories( includeList );
 }
 
 CMakeFolderItem::~CMakeFolderItem()
 {
+    delete m_tree;
 }
 
-FolderInfo CMakeFolderItem::folderInfo() const
-{
-    return m_folderInfo;
-}
+// FolderInfo CMakeFolderItem::folderInfo() const
+// {
+//     return m_folderInfo;
+// }
 
-CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const TargetInfo& target, CMakeFolderItem* item)
-    : KDevelop::ProjectTargetItem( project, target.name, item )
+CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const CMakeAst*, CMakeFolderItem* item)
+    : KDevelop::ProjectTargetItem( project, /*target.name*/"wrongTarget", item )
 {
     m_includeList = item->includeDirectories();
-    m_targetInfo = target;
+//     m_targetInfo = target;
 }
 
 
@@ -56,10 +57,10 @@ CMakeTargetItem::~CMakeTargetItem()
 {
 }
 
-TargetInfo CMakeTargetItem::targetInfo() const
-{
-    return m_targetInfo;
-}
+// TargetInfo CMakeTargetItem::targetInfo() const
+// {
+//     return m_targetInfo;
+// }
 
 const KDevelop::DomUtil::PairList& CMakeTargetItem::defines() const
 {

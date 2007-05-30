@@ -17,10 +17,10 @@ set( cmakecommon_SRCS
   parser/astfactory.cpp
   parser/cmakelistsparser.cpp
   parser/cmakeast.cpp
-  parser/cmakeprojectvisitor.cpp
  )
 
 set( cmakemanager_SRCS
+  parser/cmakeprojectvisitor.cpp
   cmakemanager.cpp
 )
 

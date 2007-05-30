@@ -50,3 +50,7 @@ void CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
     kDebug(9032) << "Subdirectory: " << subd->sourceDir() << subd->binaryDir() << endl;
     m_subdirectories += subd->sourceDir();
 }
+
+CMakeProjectVisitor::CMakeProjectVisitor()
+{
+}
