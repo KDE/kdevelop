@@ -57,18 +57,6 @@ enum VcsAction
 Q_DECLARE_FLAGS( VcsActions, VcsAction )
 
 /**
- * Specify the type of difference the diff() method should create. Note that a
- * request for DiffUnified may not be honored, e.g. if the items being diffed are
- * binary rather than text.
- */
-enum VcsDiffMode
-{
-    DiffRaw         /**<Request complete copies of both items.*/,
-    DiffUnified     /**<Request copy of first item with diff.*/,
-    DiffDontCare    /**<Don't care; plugin will return whichever is easiest.*/,
-};
-
-/**
  * Encapsulates a vcs revision number, date or range of revisions
  */
 class VcsRevision
@@ -323,6 +311,68 @@ public:
      * @return the date of the last change on the specified line
      */
     QDateTime date( int linenum );
+};
+
+class VcsDiff
+{
+    /**
+     * Specify the type of difference the diff() method should create. Note that a
+     * request for DiffUnified may not be honored, e.g. if the items being diffed are
+     * binary rather than text.
+     */
+    enum VcsDiffType
+    {
+        DiffRaw         /**<Request complete copies of both items.*/,
+        DiffUnified     /**<Request copy of first item with diff.*/,
+        DiffDontCare    /**<Don't care; plugin will return whichever is easiest.*/,
+    };
+
+    enum VcsDiffContent
+    {
+        Binary          /** Binary diff, using the full content of both files.*/,
+        Text            /** Textual diff.*/,
+    };
+
+    /**
+     * @returns the type of diff, i.e. raw or unified
+     */
+    VcsDiffType type() const;
+
+    /**
+     * @returns the content type, i.e. binary or text
+     */
+    VcsDiffContent contentType() const;
+
+    /**
+     * @returns the binary content of the first file of the difference or
+     * an empty QByteArray if this is a textual diff
+     */
+    QByteArray firstBinary() const;
+
+    /**
+     * @returns the binary content of the second file of the difference or
+     * an empty QByteArray if this is a textual diff
+     */
+    QByteArray secondBinary() const;
+
+    /**
+     * @returns the textual content of the first file of the difference or
+     * an empty QString if this is a binary diff
+     */
+    QString firstText() const;
+
+    /**
+     * @returns the textual content of the second file of the difference or
+     * an empty QString if this is a unified or binary diff
+     */
+    QString secondText() const;
+
+    /**
+     * @returns the difference between the first and the second file in
+     * unified diff format or an empty QString if this is a binary diff
+     * or a textual diff using raw format
+     */
+    QString diff() const;
 };
 
 }
