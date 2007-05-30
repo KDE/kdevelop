@@ -236,7 +236,6 @@ bool ProjectController::openProject( const KUrl &projectFile )
         delete project;
         return false;
     }
-    connect( project, SIGNAL(importingFinished(IProject*)), this, SLOT(projectImportingFinished(IProject*)) );
     return true;
 }
 

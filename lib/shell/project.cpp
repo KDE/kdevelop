@@ -48,7 +48,7 @@
 #include "core.h"
 #include "iplugin.h"
 #include "mainwindow.h"
-#include "iprojectcontroller.h"
+#include "projectcontroller.h"
 #include "importprojectjob.h"
 #include "projectmodel.h"
 // #include "ipersistenthash.h"
@@ -73,7 +73,7 @@ public:
     ProjectItem* topItem;
     QString name;
     KSharedConfig::Ptr m_cfg;
-    Project *project;
+    IProject *project;
 
     QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
     {
@@ -107,16 +107,7 @@ public:
 
     void importDone( KJob* /*job*/ )
     {
-        // set icon for toplevel file/dirs only. Subsequent children's icon will be set
-        // when the treeview is expanded
-        int rowcount = topItem->rowCount();
-        for( int i=0; i<rowcount; i++ )
-        {
-            ProjectBaseItem *childItem = dynamic_cast<ProjectBaseItem*>(topItem->child(i));
-            if( childItem )
-                childItem->setIcon();
-        }
-        emit project->importingFinished(project);
+        Core::self()->projectControllerInternal()->projectImportingFinished( project );
     }
 
 };

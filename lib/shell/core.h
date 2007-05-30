@@ -68,6 +68,8 @@ public:
 
     PluginController* pluginControllerInternal();
 
+    ProjectController* projectControllerInternal();
+
     void cleanup();
 
 private:
