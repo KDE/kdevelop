@@ -1,3 +1,7 @@
+################################################################################################
+# This library needs to build without KDE4, please don't add KDE4 specific cmake stuff in here #
+################################################################################################
+
 PROJECT( dynamictext )
 include_directories(
         ${COMMONCPP2_INCLUDE_DIRS}
