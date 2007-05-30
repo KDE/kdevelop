@@ -70,7 +70,7 @@ id_simple         ({digit}|{letter}|\!|-|_|\*|\$)({letter}|{digit}|\||\!|-|_|\*|
 id_args           [^\r\n]*\)
 number            {digit}+
 comment           #[^\r\n]*{newline}
-comment_cont      \\{ws}*#[^\r\n]*{newline}
+comment_cont      (\\{ws}*#[^\r\n]*{newline}|#[^\r\n]*\\{newline})
 cont              \\{ws}*{newline}
 
 %%

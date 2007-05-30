@@ -260,21 +260,14 @@ variable_assignment : ID_SIMPLE operator multiline_values listws NEWLINE
         }
     ;
 
-multiline_values : multiline_values LIST_WS variable_value
+possible_value : variable_value | COMMENT_CONT | CONT
+
+multiline_values : multiline_values LIST_WS possible_value
         {
             $<values>$.append( $<value>2 );
             $<values>$.append( $<value>3 );
         }
-    | multiline_values listws CONT listws variable_value
-        {
-            $<values>$.append( $<value>2 );
-            $<values>$.append( $<value>3 );
-            $<values>$.append( $<value>4 );
-            $<values>$.append( $<value>5 );
-            if( $<indent>4 != "" && $<indent>$ == "" )
-                $<indent>$ = $<indent>4;
-        }
-    | multiline_values listws COMMENT_CONT listws variable_value
+    | multiline_values listws CONT listws possible_value
         {
             $<values>$.append( $<value>2 );
             $<values>$.append( $<value>3 );
@@ -283,27 +276,16 @@ multiline_values : multiline_values LIST_WS variable_value
             if( $<indent>4 != "" && $<indent>$ == "" )
                 $<indent>$ = $<indent>4;
         }
-    | listws variable_value
+    | multiline_values listws COMMENT_CONT listws possible_value
         {
-            $<values>$ = QStringList();
-            $<values>$.append( $<value>1 );
-            $<values>$.append( $<value>2 );
-        }
-    | listws CONT
-        {
-            $<values>$ = QStringList();
-            $<values>$.append( $<value>1 );
-            $<values>$.append( $<value>2 );
-        }
-    | listws CONT listws variable_value
-        {
-            $<values>$ = QStringList();
-            $<values>$.append( $<value>1 );
             $<values>$.append( $<value>2 );
             $<values>$.append( $<value>3 );
             $<values>$.append( $<value>4 );
+            $<values>$.append( $<value>5 );
+            if( $<indent>4 != "" && $<indent>$ == "" )
+                $<indent>$ = $<indent>4;
         }
-    | listws COMMENT_CONT
+    | listws possible_value
         {
             $<values>$ = QStringList();
             $<values>$.append( $<value>1 );
