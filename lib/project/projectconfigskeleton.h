@@ -47,9 +47,9 @@ public:
     void setProjectFileUrl( const QString& );
     void setDeveloperFileUrl( const QString& );
 protected:
-    void usrSetDefaults();
-    bool usrUseDefaults( bool b );
-    void usrWriteConfig();
+    void setDefaults();
+    bool useDefaults( bool b );
+    void writeConfig();
 private:
     /**
      * There's no way in KDE4 API to find out the file that the config object

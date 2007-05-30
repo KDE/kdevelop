@@ -64,7 +64,7 @@ void ProjectConfigSkeleton::setDeveloperFileUrl( const QString& cfg )
     d->m_developerFileUrl = KUrl(cfg);
 }
 
-void ProjectConfigSkeleton::usrSetDefaults()
+void ProjectConfigSkeleton::setDefaults()
 {
     kDebug(9000) << "Setting Defaults" << endl;
     KConfig cfg( d->m_projectTempFile );
@@ -79,7 +79,7 @@ void ProjectConfigSkeleton::usrSetDefaults()
     }
 }
 
-bool ProjectConfigSkeleton::usrUseDefaults( bool b )
+bool ProjectConfigSkeleton::useDefaults( bool b )
 {
     if( b == d->mUseDefaults )
         return d->mUseDefaults;
@@ -122,7 +122,7 @@ bool ProjectConfigSkeleton::usrUseDefaults( bool b )
     return !d->mUseDefaults;
 }
 
-void ProjectConfigSkeleton::usrWriteConfig()
+void ProjectConfigSkeleton::writeConfig()
 {
     KConfigSkeletonItem::List myitems = items();
     KConfigSkeletonItem::List::ConstIterator it;
@@ -138,7 +138,6 @@ void ProjectConfigSkeleton::usrWriteConfig()
     KIO::NetAccess::upload( d->m_developerTempFile, d->m_developerFileUrl, 0 );
 
     emit configChanged();
-
 }
 
 ProjectConfigSkeleton::~ProjectConfigSkeleton()
