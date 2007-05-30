@@ -37,7 +37,7 @@ namespace KDevelop
  *
  * @TODO implement VcsJob!
  */
-class KDEVVCS_EXPORT IBasicVersionControl
+class KDEVPLATFORMVCS_EXPORT IBasicVersionControl
 {
 public:
 

@@ -39,27 +39,9 @@ enum VcsState
 };
 
 /**
- * Class that tells you what happened to a given repository location in a
- * specific revision.
- *
- * Combinations of some of the flags are possible, for example Add|Modified,
- * Copy|Modified or Merge|Modified, or when returned from VcsEvent::actions().
- */
-enum VcsAction
-{
-    ContentsModified     /**<Directory was not changed (only contents changed).*/,
-    Add                  /**<File was added.*/,
-    Delete               /**<File was deleted.*/,
-    Modified             /**<File was modified, for example by editing.*/,
-    Copy                 /**<File was copied.*/,
-    Merge                /**<File had changes merged into it.*/,
-};
-Q_DECLARE_FLAGS( VcsActions, VcsAction )
-
-/**
  * Encapsulates a vcs revision number, date or range of revisions
  */
-class VcsRevision
+class KDEVPLATFORMVCS_EXPORT VcsRevision
 {
 public:
     /**
@@ -105,7 +87,7 @@ public:
  *
  * Just a convenient API around QMap\<KUrl, QPair\<KUrl, MappingFlags\>\>
  */
-class VcsMapping
+class KDEVPLATFORMVCS_EXPORT VcsMapping
 {
 public:
     enum MappingFlag
@@ -113,7 +95,6 @@ public:
         Recursive = 1,
         NonRecursive = 2
     };
-    Q_DECLARE_FLAGS( MappingFlags, MappingFlag )
 
     void addMapping( const KUrl& sourceLocation,
                      const KUrl& destinationLocation,
@@ -121,14 +102,14 @@ public:
     void removeMapping( const KUrl& sourceLocation);
     KUrl::List sourceLocations();
     KUrl destinationLocation( const KUrl& sourceLocation );
-    MappingFlags mappingFlags( const KUrl& sourceLocation ) const;
+    MappingFlag mappingFlags( const KUrl& sourceLocation ) const;
 };
 
 /**
  * Small container class that contains information about a history event of a
  * single repository item.
  */
-class VcsItemEvent
+class KDEVPLATFORMVCS_EXPORT VcsItemEvent
 {
 public:
     KUrl repositoryLocation();
@@ -146,8 +127,25 @@ public:
  * revision might affect more than one item), use change() to retrieve
  * information about all items affected by a particular revision.
  */
-class VcsEvent
+class KDEVPLATFORMVCS_EXPORT VcsEvent
 {
+    /**
+     * Class that tells you what happened to a given repository location in a
+     * specific revision.
+     *
+     * Combinations of some of the flags are possible, for example Add|Modified,
+     * Copy|Modified or Merge|Modified, or when returned from VcsEvent::actions().
+     */
+    enum VcsAction
+    {
+        ContentsModified     /**<Directory was not changed (only contents changed).*/,
+        Add                  /**<File was added.*/,
+        Delete               /**<File was deleted.*/,
+        Modified             /**<File was modified, for example by editing.*/,
+        Copy                 /**<File was copied.*/,
+        Merge                /**<File had changes merged into it.*/,
+    };
+    Q_DECLARE_FLAGS( VcsActions, VcsAction )
 public:
     VcsRevision revision(); // the GlobalNumber revision
     QString author();
@@ -163,7 +161,7 @@ public:
  *
  * @TODO: Should this stay an interface or do we just subclass KJob?
  */
-class VcsJob
+class KDEVPLATFORMVCS_EXPORT VcsJob
 {
     /**
      * To easily check which type of job this is
@@ -280,7 +278,7 @@ Q_SIGNALS:
  * including date of last change, author of last change and revision of
  * last change to the line.
  */
-class VcsAnnotation
+class KDEVPLATFORMVCS_EXPORT VcsAnnotation
 {
 public:
     /**
@@ -313,7 +311,7 @@ public:
     QDateTime date( int linenum );
 };
 
-class VcsDiff
+class KDEVPLATFORMVCS_EXPORT VcsDiff
 {
     /**
      * Specify the type of difference the diff() method should create. Note that a
@@ -377,8 +375,7 @@ class VcsDiff
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::MappingFlags )
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsActions )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsEvent::VcsActions )
 
 #endif
 

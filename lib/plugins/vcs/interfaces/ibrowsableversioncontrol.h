@@ -22,7 +22,7 @@
 #ifndef IBROWSABLEVERSIONCONTROL_H
 #define IBROWSABLEVERSIONCONTROL_H
 
-class IBrowsableVersionControl
+class KDEVPLATFORMVCS_EXPORT IBrowsableVersionControl
 {
 public:
     /**

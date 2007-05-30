@@ -25,7 +25,7 @@
  * This interface has methods to support distributed version control systems
  * like git or svk
  */
-class IDistributedVersionControl
+class KDEVPLATFORMVCS_EXPORT IDistributedVersionControl
 {
 public:
     VcsJob* push( const QString& repositoryLocation ) = 0;

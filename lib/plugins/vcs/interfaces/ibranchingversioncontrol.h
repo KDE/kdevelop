@@ -25,7 +25,7 @@
 namespace KDevelop
 {
 
-class IBranchingVersionControl
+class KDEVPLATFORMVCS_EXPORT IBranchingVersionControl
 {
 public:
     /**

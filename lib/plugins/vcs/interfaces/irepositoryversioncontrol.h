@@ -22,7 +22,7 @@
 #ifndef IREPOSITORYVERSIONCONTROL_H
 #define IREPOSITORYVERSIONCONTROL_H
 
-class IRepositoryVersionControl
+class KDEVPLATFORMVCS_EXPORT IRepositoryVersionControl
 {
 public:
     /**
