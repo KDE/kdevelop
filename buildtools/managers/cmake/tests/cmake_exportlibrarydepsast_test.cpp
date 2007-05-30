@@ -34,6 +34,21 @@ void ExportLibraryDepsAstTest::testGoodParse()
 
 void ExportLibraryDepsAstTest::testGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = func2.name = "export_library_dependencies";
+
+    QStringList argList1, argList2;
+    argList1 << "dep_file";
+    argList2 = argList1;
+    argList2 << "APPEND";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good 1" ) << func1;
+    QTest::newRow( "good 2" ) << func2;
+ 
 }
 
 void ExportLibraryDepsAstTest::testBadParse()
@@ -46,6 +61,21 @@ void ExportLibraryDepsAstTest::testBadParse()
 
 void ExportLibraryDepsAstTest::testBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "export_library_dependencies";
+    func2.name = "foo_foo_bar";
+
+    QStringList argList1, argList2;
+    argList1 << "dep_file";
+    argList2 = argList1;
+    argList2 << "APPEND";
+
+    func1.addArguments( argList1 );
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad 1" ) << func1;
+    QTest::newRow( "bad 2" ) << func2;
 }
 
 #include "cmake_exportlibrarydepsast_test.moc"
