@@ -76,7 +76,7 @@ private:
 private Q_SLOTS:
     void saveActiveDocument();
 private:
-    QPointer<QDesignerIntegrationInterface> m_designer;
+    QDesignerIntegrationInterface* m_designer;
 
     KDevelop::IDocument* m_activeDoc;
     QtDesignerDocumentFactory* m_docFactory;

@@ -140,6 +140,7 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     setXMLFile( "kdevqtdesigner.rc" );
 
     QDesignerFormEditorInterface* formeditor = QDesignerComponents::createFormEditor(this);
+    QDesignerComponents::initializePlugins( formeditor );
 
     //TODO apaku: if multiple mainwindows exist, this needs to be changed on mainwindow-change
     formeditor->setTopLevel(core()->uiController()->activeMainWindow());
@@ -154,7 +155,9 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     formeditor->setActionEditor(QDesignerComponents::createActionEditor(formeditor, 0));
     formeditor->setObjectInspector(QDesignerComponents::createObjectInspector(formeditor, 0));
 
+    qdesigner_internal::QDesignerIntegration::initializePlugins( formeditor );
     m_designer = new qdesigner_internal::QDesignerIntegration(formeditor, this);
+
 
     m_designer->core()->widgetBox()->setObjectName( i18n("Widget Box") );
     m_designer->core()->propertyEditor()->setObjectName( i18n("Property Editor") );
@@ -209,6 +212,7 @@ void QtDesignerPlugin::setupActions()
     ac->addAction( "designer_redo", manager->actionRedo() );
     ac->addAction( "designer_select_all", manager->actionSelectAll() );
 }
+
 
 // bool QtDesignerPlugin::saveFile()
 // {
