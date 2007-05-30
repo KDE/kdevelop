@@ -24,6 +24,8 @@
 
 #include <QtCore/qdebug.h>
 
+using namespace KDevelop;
+
 NameCompiler::NameCompiler(ParseSession* session)
   : m_session(session)
 {

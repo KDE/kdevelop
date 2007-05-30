@@ -18,6 +18,8 @@
 
 #include "dumptypes.h"
 
+using namespace KDevelop;
+
 DumpTypes::DumpTypes()
   : indent(0)
 {

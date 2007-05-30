@@ -35,6 +35,7 @@
 #include "dumpchain.h"
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel(parent)

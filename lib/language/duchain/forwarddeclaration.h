@@ -22,6 +22,9 @@
 #include "declaration.h"
 #include "kdevlanguageexport.h"
 
+namespace KDevelop
+{
+
 /**
  * Represents a forward declaration
  */
@@ -39,6 +42,8 @@ public:
 private:
   class ForwardDeclarationPrivate* const d;
 };
+
+}
 
 #endif // DECLARATION_H
 

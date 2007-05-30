@@ -83,6 +83,8 @@
 #include "cppcodecompletion.h"
 #include <QtDesigner/QExtensionFactory>
 
+using namespace KDevelop;
+
 typedef KGenericFactory<CppLanguageSupport> KDevCppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( kdevcpplanguagesupport, KDevCppSupportFactory( "kdevcppsupport" ) )
 

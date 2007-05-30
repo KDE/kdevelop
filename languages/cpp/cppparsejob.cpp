@@ -44,11 +44,14 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "dumpchain.h"
+#include "parsejob.h"
 #include "cppeditorintegrator.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include "topducontext.h"
 #include "preprocessjob.h"
+
+using namespace KDevelop;
 
 CPPParseJob::CPPParseJob( const KUrl &url,
                     CppLanguageSupport *parent )
@@ -60,7 +63,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
 {
     PreprocessJob* ppj;
     addJob(ppj = new PreprocessJob(this));
-    addJob(m_parseJob = new ::ParseJob(this));
+    addJob(m_parseJob = new ::CPPInternalParseJob(this));
 
     // Higher priority means it will be preferred over other waiting preprocess jobs
     m_parseJob->setPriority(1);
@@ -107,7 +110,7 @@ CppLanguageSupport * CPPParseJob::cpp() const
     return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
 }
 
-CPPParseJob * ParseJob::parentJob() const
+CPPParseJob * CPPInternalParseJob::parentJob() const
 {
     Q_ASSERT(parent());
     return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
@@ -128,13 +131,13 @@ const KTextEditor::Range& CPPParseJob::textRangeToParse() const
     return m_textRangeToParse;
 }
 
-ParseJob::ParseJob(CPPParseJob * parent)
+CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_priority(0)
 {
 }
 
-void ParseJob::run()
+void CPPInternalParseJob::run()
 {
     kDebug( 9007 ) << "===-- PARSING --===> "
     << parentJob()->document().fileName()
@@ -275,17 +278,17 @@ bool CPPParseJob::wasReadFromDisk() const
     return m_readFromDisk;
 }
 
-ParseJob * CPPParseJob::parseJob() const
+CPPInternalParseJob * CPPParseJob::parseJob() const
 {
     return m_parseJob;
 }
 
-int ParseJob::priority() const
+int CPPInternalParseJob::priority() const
 {
     return m_priority;
 }
 
-void ParseJob::setPriority(int priority)
+void CPPInternalParseJob::setPriority(int priority)
 {
     m_priority = priority;
 }

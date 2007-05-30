@@ -22,6 +22,9 @@
 
 #include "ducontext.h"
 
+namespace KDevelop
+{
+
 class ClassFunctionDeclarationPrivate
 {
 public:
@@ -130,5 +133,5 @@ void ClassFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers specifie
   d->m_isExplicit = specifiers & ExplicitSpecifier;
   d->m_isVirtual = specifiers & VirtualSpecifier;
 }
-
+}
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

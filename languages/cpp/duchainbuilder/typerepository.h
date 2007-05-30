@@ -31,14 +31,14 @@ class KDEVDUCHAINBUILDER_EXPORT TypeRepository
 public:
   static TypeRepository* self();
 
-  CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, Declaration::CVSpecs cv = Declaration::CVNone) const;
+  CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, KDevelop::Declaration::CVSpecs cv = KDevelop::Declaration::CVNone) const;
 
   /**
    * Registers the given \a input type, and returns a pointer to the
    * type, or the previously registered type if it has been encountered
    * before.
    */
-  AbstractType::Ptr registerType(AbstractType::Ptr input);
+  KDevelop::AbstractType::Ptr registerType(KDevelop::AbstractType::Ptr input);
 
 private:
   TypeRepository();
@@ -46,21 +46,21 @@ private:
   void newIntegralType(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone);
   CppIntegralType::Ptr getIntegral(int index, int cv) const;
 
-  AbstractType::Ptr registerPointer(CppPointerType::Ptr input);
-  AbstractType::Ptr registerReference(CppReferenceType::Ptr input);
-  AbstractType::Ptr registerFunction(CppFunctionType::Ptr input);
-  AbstractType::Ptr registerArray(ArrayType::Ptr input);
+  KDevelop::AbstractType::Ptr registerPointer(CppPointerType::Ptr input);
+  KDevelop::AbstractType::Ptr registerReference(CppReferenceType::Ptr input);
+  KDevelop::AbstractType::Ptr registerFunction(CppFunctionType::Ptr input);
+  KDevelop::AbstractType::Ptr registerArray(KDevelop::ArrayType::Ptr input);
 
   static TypeRepository* s_instance;
 
   // Inbuilt integral types
   QVector<CppIntegralType::Ptr> m_integrals;
 
-  QMultiHash<AbstractType::Ptr, CppPointerType::Ptr> m_pointers;
-  QMultiHash<AbstractType::Ptr, CppReferenceType::Ptr> m_references;
+  QMultiHash<KDevelop::AbstractType::Ptr, CppPointerType::Ptr> m_pointers;
+  QMultiHash<KDevelop::AbstractType::Ptr, CppReferenceType::Ptr> m_references;
   QMultiHash<int, CppFunctionType::Ptr> m_functions;
   //QSet<CppClassType::Ptr> m_structures;
-  QMultiHash<AbstractType::Ptr, ArrayType::Ptr> m_arrays;
+  QMultiHash<KDevelop::AbstractType::Ptr, KDevelop::ArrayType::Ptr> m_arrays;
   //QSet<AbstractType::Ptr> m_others;
 
   mutable QMutex m_mutex;

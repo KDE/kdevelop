@@ -31,8 +31,11 @@
 class TranslationUnitAST;
 class CppLanguageSupport;
 class ParseSession;
-class ParseJob;
+class CPPInternalParseJob;
+namespace KDevelop
+{
 class TopDUContext;
+}
 
 class CPPParseJob : public KDevelop::ParseJob
 {
@@ -53,8 +56,8 @@ public:
     void setAST(TranslationUnitAST* ast);
     virtual TranslationUnitAST *AST() const;
 
-    void setDUChain(TopDUContext* duChain);
-    virtual TopDUContext* duChain() const;
+    void setDUChain(KDevelop::TopDUContext* duChain);
+    virtual KDevelop::TopDUContext* duChain() const;
 
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
@@ -63,7 +66,7 @@ public:
     const QStringList& includedFiles() const;
     void requestDependancies();
 
-    ::ParseJob* parseJob() const;
+    ::CPPInternalParseJob* parseJob() const;
 
     const KTextEditor::Range& textRangeToParse() const;
 
@@ -71,17 +74,17 @@ private:
     ParseSession* m_session;
     TranslationUnitAST *m_AST;
     QStringList m_includedFiles;
-    TopDUContext* m_duContext;
+    KDevelop::TopDUContext* m_duContext;
     bool m_readFromDisk;
-    ::ParseJob* m_parseJob;
+    ::CPPInternalParseJob* m_parseJob;
     KTextEditor::Range m_textRangeToParse;
 };
 
-class ParseJob : public ThreadWeaver::Job
+class CPPInternalParseJob : public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
-    ParseJob(CPPParseJob* parent);
+    CPPInternalParseJob(CPPParseJob* parent);
 
     CPPParseJob* parentJob() const;
 

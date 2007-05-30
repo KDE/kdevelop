@@ -30,23 +30,23 @@
 #include "duchainbase.h"
 #include "duchainobserver.h"
 
-class TopDUContext;
 class DUChainViewPart;
 
 namespace KDevelop {
-  class IDocument;
+ class TopDUContext;
+ class IDocument;
 }
 
-class ProxyObject : public DUChainBase
+class ProxyObject : public KDevelop::DUChainBase
 {
 public:
-  ProxyObject(DUChainBase* _parent, DUChainBase* _object);
+  ProxyObject(KDevelop::DUChainBase* _parent, KDevelop::DUChainBase* _object);
 
-  DUChainBase* parent;
-  DUChainBase* object;
+  KDevelop::DUChainBase* parent;
+  KDevelop::DUChainBase* object;
 };
 
-class DUChainModel : public QAbstractItemModel, public DUChainObserver
+class DUChainModel : public QAbstractItemModel, public KDevelop::DUChainObserver
 {
   Q_OBJECT
 
@@ -54,7 +54,7 @@ public:
   DUChainModel(DUChainViewPart* parent);
   virtual ~DUChainModel();
 
-  void setTopContext(TopDUContext* context);
+  void setTopContext(KDevelop::TopDUContext* context);
 
 public Q_SLOTS:
   void documentActivated(KDevelop::IDocument* document);
@@ -68,14 +68,14 @@ public:
   //virtual bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
 
   // Definition use chain observer implementation
-  virtual void contextChanged(DUContext* context, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
-  virtual void declarationChanged(Declaration* declaration, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
-  virtual void definitionChanged(Definition* definition, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
-  virtual void useChanged(Use* use, Modification change, Relationship relationship, DUChainBase* relatedObject = 0);
+  virtual void contextChanged(KDevelop::DUContext* context, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
+  virtual void declarationChanged(KDevelop::Declaration* declaration, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
+  virtual void definitionChanged(KDevelop::Definition* definition, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
+  virtual void useChanged(KDevelop::Use* use, Modification change, Relationship relationship, KDevelop::DUChainBase* relatedObject = 0);
 
 private:
-  DUChainBase* objectForIndex(const QModelIndex& index) const;
-  int findInsertIndex(QList<DUChainBase*>& list, DUChainBase* object) const;
+  KDevelop::DUChainBase* objectForIndex(const QModelIndex& index) const;
+  int findInsertIndex(QList<KDevelop::DUChainBase*>& list, KDevelop::DUChainBase* object) const;
 
   template <typename T>
   QModelIndex createParentIndex(T* type) const
@@ -97,10 +97,10 @@ private:
   }
 
   template <typename T>
-  DUChainBase* item(QListIterator<T*>& it) const
+  KDevelop::DUChainBase* item(QListIterator<T*>& it) const
   {
     Q_ASSERT(it.hasPrevious());
-    DUChainBase* item = it.peekPrevious();
+    KDevelop::DUChainBase* item = it.peekPrevious();
     if (it.hasNext())
       it.next();
     else
@@ -111,20 +111,20 @@ private:
   }
 
   template <typename T>
-  DUChainBase* proxyItem(DUChainBase* parent, QListIterator<T*>& it) const
+  KDevelop::DUChainBase* proxyItem(KDevelop::DUChainBase* parent, QListIterator<T*>& it) const
   {
-    DUChainBase* target = item(it);
-    DUChainBase* proxy = new ProxyObject(parent, target);
+    KDevelop::DUChainBase* target = item(it);
+    KDevelop::DUChainBase* proxy = new ProxyObject(parent, target);
     m_proxyObjects.insert(target, proxy);
     return proxy;
   }
 
-  QList<DUChainBase*>* childItems(DUChainBase* parent) const;
+  QList<KDevelop::DUChainBase*>* childItems(KDevelop::DUChainBase* parent) const;
 
-  TopDUContext* m_chain;
+  KDevelop::TopDUContext* m_chain;
   mutable QMutex m_mutex;
-  mutable QHash<DUChainBase*, QList<DUChainBase*>* > m_objectLists;
-  mutable QHash<DUChainBase*, DUChainBase*> m_proxyObjects;
+  mutable QHash<KDevelop::DUChainBase*, QList<KDevelop::DUChainBase*>* > m_objectLists;
+  mutable QHash<KDevelop::DUChainBase*, KDevelop::DUChainBase*> m_proxyObjects;
 };
 
 #endif

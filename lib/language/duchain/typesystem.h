@@ -28,6 +28,9 @@
 
 #include <ksharedptr.h>
 
+namespace KDevelop
+{
+
 class AbstractType;
 class IntegralType;
 class PointerType;
@@ -299,6 +302,8 @@ private:
 
 template <class T>
 uint qHash(const KSharedPtr<T>& type) { return type->hash(); }
+
+}
 
 #endif // TYPESYSTEM_H
 

@@ -19,6 +19,9 @@
 #ifndef DUCHAINOBSERVER_H
 #define DUCHAINOBSERVER_H
 
+namespace KDevelop
+{
+
 class DUChainBase;
 class DUContext;
 class Declaration;
@@ -81,6 +84,7 @@ public:
 
   virtual void useChanged(Use* use, Modification change, Relationship relationship, DUChainBase* relatedObject = 0) = 0;
 };
+}
 
 #endif // DUCHAINOBSERVER_H
 

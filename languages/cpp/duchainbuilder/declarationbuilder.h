@@ -24,7 +24,10 @@
 #include "declaration.h"
 #include "classfunctiondeclaration.h"
 
+namespace KDevelop
+{
 class Declaration;
+}
 
 typedef TypeBuilder DeclarationBuilderBase;
 
@@ -43,10 +46,10 @@ public:
    *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
-  TopDUContext* buildDeclarations(const KUrl& url, AST *node, QList<DUContext*>* includes = 0);
+  KDevelop::TopDUContext* buildDeclarations(const KUrl& url, AST *node, QList<KDevelop::DUContext*>* includes = 0);
 
 protected:
-  virtual void openContext(DUContext* newContext);
+  virtual void openContext(KDevelop::DUContext* newContext);
   virtual void closeContext();
 
   virtual void visitDeclarator (DeclaratorAST*);
@@ -57,15 +60,15 @@ protected:
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
 
 private:
-  ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
+  KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    * \param range provide a valid AST here if name is null
    */
-  Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false);
+  KDevelop::Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false);
   /// Same as the above, but sets it as the definition too
-  Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
+  KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   void closeDeclaration();
   void abortDeclaration();
 
@@ -73,10 +76,10 @@ private:
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
-  inline Declaration* currentDeclaration() const { return m_declarationStack.top(); }
+  inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.top(); }
 
-  inline Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
-  inline void setAccessPolicy(Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
+  inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
+  inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
   inline int& nextDeclaration() { return m_nextDeclarationStack.top(); }
 
@@ -84,12 +87,12 @@ private:
   void applyFunctionSpecifiers();
   void popSpecifiers();
 
-  QStack<Declaration*> m_declarationStack;
-  QStack<Declaration::AccessPolicy> m_accessPolicyStack;
+  QStack<KDevelop::Declaration*> m_declarationStack;
+  QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;
   QStack<int> m_nextDeclarationStack;
 
-  QStack<ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
-  QStack<ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
+  QStack<KDevelop::ClassFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
+  QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;
 };
 

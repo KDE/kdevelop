@@ -33,7 +33,7 @@ class TypeCompiler: protected DefaultVisitor
 public:
   TypeCompiler(ParseSession* session);
 
-  QualifiedIdentifier identifier() const;
+  KDevelop::QualifiedIdentifier identifier() const;
   inline QStringList qualifiedName() const { return _M_type.toStringList(); }
   inline QList<int> cv() const { return _M_cv; }
 
@@ -54,7 +54,7 @@ protected:
 
 private:
   ParseSession* m_session;
-  QualifiedIdentifier _M_type;
+  KDevelop::QualifiedIdentifier _M_type;
   QList<int> _M_cv;
 };
 

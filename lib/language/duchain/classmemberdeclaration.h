@@ -23,6 +23,10 @@
 
 #include "declaration.h"
 #include "kdevlanguageexport.h"
+
+namespace KDevelop
+{
+
 /**
  * Represents a single class member definition in a definition-use chain.
  */
@@ -68,8 +72,9 @@ public:
 private:
   class ClassMemberDeclarationPrivate* const d;
 };
+}
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDeclaration::StorageSpecifiers)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassMemberDeclaration::StorageSpecifiers)
 
 #endif // CLASSMEMBERDECLARATION_H
 

@@ -21,6 +21,9 @@
 #include "identifiedtype.h"
 #include "declaration.h"
 
+namespace KDevelop
+{
+
 class IdentifiedTypePrivate
 {
 public:
@@ -51,6 +54,8 @@ void IdentifiedType::setDeclaration(Declaration* declaration)
 QString IdentifiedType::idMangled() const
 {
   return identifier().mangled();
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

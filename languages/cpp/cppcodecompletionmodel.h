@@ -24,8 +24,11 @@
 
 #include <ktexteditor/codecompletionmodel.h>
 
+namespace KDevelop
+{
 class DUContext;
 class Declaration;
+}
 
 class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
 {
@@ -35,7 +38,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     CppCodeCompletionModel(QObject* parent);
     virtual ~CppCodeCompletionModel();
 
-    void setContext(DUContext* context, const KTextEditor::Cursor& position);
+    void setContext(KDevelop::DUContext* context, const KTextEditor::Cursor& position);
 
     virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
 
@@ -44,9 +47,9 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
   private:
-    DUContext* m_context;
+    KDevelop::DUContext* m_context;
 
-    QList<Declaration*> m_declarations;
+    QList<KDevelop::Declaration*> m_declarations;
 };
 
 #endif

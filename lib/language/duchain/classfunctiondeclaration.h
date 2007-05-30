@@ -24,6 +24,8 @@
 #include "classmemberdeclaration.h"
 #include "kdevlanguageexport.h"
 
+namespace KDevelop
+{
 /**
  * Represents a single variable definition in a definition-use chain.
  */
@@ -68,8 +70,8 @@ public:
 private:
   class ClassFunctionDeclarationPrivate* const d;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(ClassFunctionDeclaration::FunctionSpecifiers)
+}
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassFunctionDeclaration::FunctionSpecifiers)
 
 #endif // CLASSFUNCTIONDECLARATION_H
 

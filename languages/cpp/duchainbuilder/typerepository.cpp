@@ -22,6 +22,8 @@
 
 #include <kstaticdeleter.h>
 
+using namespace KDevelop;
+
 static KStaticDeleter<TypeRepository> sdType;
 TypeRepository* TypeRepository::s_instance = 0;
 

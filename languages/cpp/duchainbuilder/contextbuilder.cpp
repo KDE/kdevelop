@@ -34,6 +34,7 @@
 #include "symboltable.h"
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 ContextBuilder::ContextBuilder (ParseSession* session)
   : m_editor(new CppEditorIntegrator(session))

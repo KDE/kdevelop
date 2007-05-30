@@ -23,6 +23,9 @@
 #include "kdevlanguageexport.h"
 #include <QtCore/QMutex>
 
+namespace KDevelop
+{
+
 /**
  * The top context in a definition-use chain for one source file.
  *
@@ -70,6 +73,8 @@ private:
   class TopDUContextPrivate* const d;
   friend class TopDUContextPrivate;
 };
+
+}
 
 #endif // TOPDUCONTEXT_H
 

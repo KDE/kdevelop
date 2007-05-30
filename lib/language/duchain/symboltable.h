@@ -23,6 +23,9 @@
 #include <QtCore/QMultiMap>
 #include "kdevlanguageexport.h"
 
+namespace KDevelop
+{
+
 class Declaration;
 class DUContext;
 class QualifiedIdentifier;
@@ -56,6 +59,8 @@ private:
   SymbolTable();
   friend class SymbolTablePrivate;
 };
+
+}
 
 #endif // SYMBOLTABLE_H
 

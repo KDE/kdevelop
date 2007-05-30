@@ -34,6 +34,7 @@
 #include "duchainlock.h"
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
   : DUChainBase(_object->textRangePtr())

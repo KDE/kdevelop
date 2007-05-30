@@ -27,6 +27,9 @@
 #include "typesystem.h"
 #include "duchainbase.h"
 
+namespace KDevelop
+{
+
 class AbstractType;
 class DUContext;
 class Use;
@@ -124,7 +127,9 @@ private:
   class DeclarationPrivate* const d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Declaration::CVSpecs)
+}
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::Declaration::CVSpecs)
 
 #endif // DECLARATION_H
 

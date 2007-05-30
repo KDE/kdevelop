@@ -25,6 +25,9 @@
 
 using namespace KTextEditor;
 
+namespace KDevelop
+{
+
 class DefinitionPrivate
 {
 public:
@@ -106,5 +109,5 @@ TopDUContext * Definition::topContext() const
 
   return 0;
 }
-
+}
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

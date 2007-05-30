@@ -19,6 +19,9 @@
 #include "identifier.h"
 
 #include <QHash>
+namespace KDevelop
+{
+
 class IdentifierPrivate
 {
 public:
@@ -544,6 +547,8 @@ Identifier QualifiedIdentifier::top() const
 Identifier QualifiedIdentifier::at(int i) const
 {
   return Identifier(d->m_qid.mid(d->m_idSplits[i], (i == d->m_idSplits.count() - 1) ? -1 : d->m_idSplits[i + 1] - 2));
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

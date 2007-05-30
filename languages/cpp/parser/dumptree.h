@@ -23,7 +23,6 @@
 #include "default_visitor.h"
 
 class TokenStream;
-class DUContext;
 
 class DumpTree: protected DefaultVisitor
 {

@@ -29,6 +29,8 @@
 #include "definition.h"
 #include "use.h"
 
+using namespace KDevelop;
+
 static char const * const names[] = {
   0,
   "AccessSpecifier",

@@ -29,6 +29,8 @@
 #include "declaration.h"
 #include "typerepository.h"
 
+using namespace KDevelop;
+
 TypeBuilder::TypeBuilder(ParseSession* session)
   : TypeBuilderBase(session)
 {

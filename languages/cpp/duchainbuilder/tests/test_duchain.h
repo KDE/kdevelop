@@ -33,8 +33,11 @@
 #include "identifier.h"
 #include "dumpchain.h"
 
+namespace KDevelop
+{
 class Declaration;
 class TopDUContext;
+}
 
 class TestDUChain : public QObject
 {
@@ -43,8 +46,8 @@ class TestDUChain : public QObject
 public:
   TestDUChain();
 
-  Declaration* findDeclaration(DUContext* context, const Identifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
-  Declaration* findDeclaration(DUContext* context, const QualifiedIdentifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KTextEditor::Cursor& position = KTextEditor::Cursor::invalid());
 
 private slots:
   void initTestCase();
@@ -71,21 +74,21 @@ public:
   Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 
 private:
-  DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType));
+  KDevelop::DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType));
 
-  void release(DUContext* top);
+  void release(KDevelop::DUContext* top);
 
   // Parser
   Control control;
   DumpChain dumper;
 
   // Declaration - use chain
-  Declaration* noDef;
+  KDevelop::Declaration* noDef;
   KUrl file1, file2;
-  TopDUContext* topContext;
+  KDevelop::TopDUContext* topContext;
 
-  AbstractType::Ptr typeVoid;
-  AbstractType::Ptr typeInt;
+  KDevelop::AbstractType::Ptr typeVoid;
+  KDevelop::AbstractType::Ptr typeInt;
 
   bool testFileParseOnly;
 };

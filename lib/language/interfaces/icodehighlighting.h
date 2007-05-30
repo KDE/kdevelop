@@ -22,13 +22,13 @@
 #include "iextension.h"
 #include "kdevlanguageexport.h"
 
+namespace KDevelop
+{
+
 class TopDUContext;
 class Definition;
 class Declaration;
 class Use;
-
-namespace KDevelop
-{
 
 /**
   KDevelop text highlighting support interface - the base class for

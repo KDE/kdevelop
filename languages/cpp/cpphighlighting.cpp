@@ -32,6 +32,7 @@
 #include "duchainlock.h"
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 CppHighlighting::CppHighlighting( QObject * parent )
   : QObject(parent)

@@ -22,6 +22,8 @@
 
 #include "classfunctiondeclaration.h"
 
+using namespace KDevelop;
+
 // ---------------------------------------------------------------------------
 const QList<CppClassType::BaseClassInstance>& CppClassType::baseClasses() const
 {

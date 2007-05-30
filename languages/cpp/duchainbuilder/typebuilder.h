@@ -44,10 +44,10 @@ public:
    */
   virtual void supportBuild(AST *node);
 
-  const QList< AbstractType::Ptr >& topTypes() const;
+  const QList< KDevelop::AbstractType::Ptr >& topTypes() const;
 
 protected:
-  AbstractType::Ptr lastType() const;
+  KDevelop::AbstractType::Ptr lastType() const;
 
   // Created visitors
   virtual void visitArrayExpression(ExpressionAST*);
@@ -69,27 +69,27 @@ protected:
 private:
   template <class T>
   void openType(KSharedPtr<T> type, AST* node)
-  { openAbstractType(AbstractType::Ptr::staticCast(type), node); }
+  { openAbstractType(KDevelop::AbstractType::Ptr::staticCast(type), node); }
 
-  void openAbstractType(AbstractType::Ptr type, AST* node);
+  void openAbstractType(KDevelop::AbstractType::Ptr type, AST* node);
   void closeType();
 
-  Declaration::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
+  KDevelop::Declaration::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
 
   bool hasCurrentType() { return !m_typeStack.isEmpty(); }
 
   // You must not use this in creating another type definition, as it may not be the registered type.
-  inline AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
+  inline KDevelop::AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
 
   // You must not use this in creating another type definition, as it may not be the registered type.
   template <class T>
   KSharedPtr<T> currentType() { return KSharedPtr<T>::dynamicCast(m_typeStack.top()); }
 
-  QStack<AbstractType::Ptr> m_typeStack;
+  QStack<KDevelop::AbstractType::Ptr> m_typeStack;
 
-  AbstractType::Ptr m_lastType;
+  KDevelop::AbstractType::Ptr m_lastType;
 
-  QList<AbstractType::Ptr> m_topTypes;
+  QList<KDevelop::AbstractType::Ptr> m_topTypes;
 };
 
 #endif // TYPEBUILDER_H

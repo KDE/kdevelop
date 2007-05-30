@@ -36,7 +36,7 @@ public:
   QString name() const { return _M_name.toString(); }
   QStringList qualifiedName() const { return _M_name.toStringList(); }
 
-  const QualifiedIdentifier& identifier() const;
+  const KDevelop::QualifiedIdentifier& identifier() const;
 
 protected:
   virtual void visitUnqualifiedName(UnqualifiedNameAST *node);
@@ -47,9 +47,9 @@ protected:
 
 private:
   ParseSession* m_session;
-  QualifiedIdentifier m_base;
-  Identifier m_currentIdentifier;
-  QualifiedIdentifier _M_name;
+  KDevelop::QualifiedIdentifier m_base;
+  KDevelop::Identifier m_currentIdentifier;
+  KDevelop::QualifiedIdentifier _M_name;
 };
 
 #endif // NAME_COMPILER_H

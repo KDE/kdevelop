@@ -25,6 +25,9 @@
 
 #include "topducontext.h"
 
+namespace KDevelop
+{
+
 class DUChainPrivate
 {
 public:
@@ -128,6 +131,8 @@ void DUChain::useChanged(Use* use, DUChainObserver::Modification change, DUChain
 {
   foreach (DUChainObserver* observer, self()->observers())
     observer->useChanged(use, change, relationship, relatedObject);
+}
+
 }
 
 #include "duchain.moc"

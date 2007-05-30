@@ -19,10 +19,13 @@
 #ifndef DUCHAINBASE_H
 #define DUCHAINBASE_H
 
-class TopDUContext;
-
 #include "documentrangeobject.h"
 #include "kdevlanguageexport.h"
+
+namespace KDevelop
+{
+
+class TopDUContext;
 
 /**
  * Base class for definition-use chain objects.
@@ -46,6 +49,7 @@ public:
 private:
   class DUChainBasePrivate* const d;
 };
+}
 
 #endif // DUCHAINBASE_H
 

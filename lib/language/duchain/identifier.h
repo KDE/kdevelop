@@ -27,6 +27,9 @@
 #include <kdebug.h>
 #include "kdevlanguageexport.h"
 
+namespace KDevelop
+{
+
 class QualifiedIdentifier;
 
 /// Represents a single unqualified identifier
@@ -148,6 +151,8 @@ private:
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);
+
+}
 
 #endif // IDENTIFIER_H
 

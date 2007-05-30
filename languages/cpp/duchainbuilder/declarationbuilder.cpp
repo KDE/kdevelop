@@ -33,6 +33,7 @@
 #include "duchainlock.h"
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
   : DeclarationBuilderBase(session)

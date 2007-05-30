@@ -38,6 +38,8 @@
 
 using namespace KTextEditor;
 
+using namespace KDevelop;
+
 QTEST_MAIN(TestDUChain)
 
 namespace QTest {

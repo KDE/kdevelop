@@ -42,7 +42,7 @@ public:
   void buildUses(AST *node);
 
 protected:
-  virtual void openContext(DUContext* newContext);
+  virtual void openContext(KDevelop::DUContext* newContext);
   virtual void closeContext();
 
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);

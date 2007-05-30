@@ -23,6 +23,9 @@
 #include "documentrangeobject.h"
 #include "duchainbase.h"
 
+namespace KDevelop
+{
+
 class DUContext;
 class Declaration;
 
@@ -61,6 +64,8 @@ private:
   void setDeclaration(Declaration* definition);
   class UsePrivate* const d;
 };
+
+}
 
 #endif // DEFINITIONUSE_H
 

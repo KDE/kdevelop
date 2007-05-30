@@ -27,6 +27,9 @@
 #include "typesystem.h"
 #include "duchainbase.h"
 
+namespace KDevelop
+{
+
 class Declaration;
 class Definition;
 class DUChain;
@@ -341,10 +344,7 @@ protected:
   void acceptUsingNamespace(UsingNS* ns, QList<UsingNS*>& usingNS) const;
 
 private:
-  ContextType m_contextType;
-
-  QualifiedIdentifier m_scopeIdentifier;
-
+  class DUContextPrivate* const d;
   /**
    * Adds a child context.
    *
@@ -353,31 +353,18 @@ private:
    */
   void addChildContext(DUContext* context);
 
-  DUContext* m_parentContext;
-  QList<DUContext*> m_importedParentContexts;
-  QList<DUContext*> m_childContexts;
 
   void addImportedChildContext( DUContext * context );
   void removeImportedChildContext( DUContext * context );
-  QList<DUContext*> m_importedChildContexts;
 
   void addDeclaration(Declaration* declaration);
   void removeDeclaration(Declaration* declaration);
-  QList<Declaration*> m_localDeclarations;
-
-  QList<Definition*> m_localDefinitions;
-
-  QList<UsingNS*> m_usingNamespaces;
 
   void addUse(Use* use);
   void removeUse(Use* use);
-
-  QList<Use*> m_uses;
-
-  QList<Use*> m_orphanUses;
-
-  bool m_inSymbolTable : 1;
 };
+
+}
 
 #endif // DUCONTEXT_H
 

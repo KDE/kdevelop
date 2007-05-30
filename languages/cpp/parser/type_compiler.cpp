@@ -25,6 +25,8 @@
 
 #include <QtCore/QString>
 
+using namespace KDevelop;
+
 TypeCompiler::TypeCompiler(ParseSession* session)
   : m_session(session)
 {

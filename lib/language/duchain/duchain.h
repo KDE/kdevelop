@@ -24,9 +24,13 @@
 #include "kdevlanguageexport.h"
 #include "duchainobserver.h"
 
+class KUrl;
+
+namespace KDevelop
+{
+
 class TopDUContext;
 class DUChainLock;
-class KUrl;
 
 /**
  * Holds references to all top level source file contexts.
@@ -77,6 +81,7 @@ private:
 
   friend class DUChainPrivate;
 };
+}
 
 #endif // DUCHAIN_H
 

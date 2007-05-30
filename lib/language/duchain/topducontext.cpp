@@ -25,6 +25,9 @@
 
 using namespace KTextEditor;
 
+namespace KDevelop
+{
+
 class TopDUContextPrivate
 {
 public:
@@ -273,6 +276,8 @@ TopDUContext * TopDUContext::topContext() const
 bool TopDUContext::deleting() const
 {
   return d->m_deleting;
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

@@ -21,6 +21,9 @@
 
 #include "kdevlanguageexport.h"
 
+namespace KDevelop
+{
+
 /**
  * In a DEBUG build, keeps track of additional locking information.
  * In a non-DEBUG build, is actually a QReadWriteLock.
@@ -139,6 +142,7 @@ private:
 };
 
 #endif // NDEBUG
+}
 
 #endif // DUCHAINLOCK_H
 

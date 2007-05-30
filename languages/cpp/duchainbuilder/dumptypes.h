@@ -22,41 +22,41 @@
 #include "typesystem.h"
 #include "cppduchainbuilderexport.h"
 
-class KDEVDUCHAINBUILDER_EXPORT DumpTypes : protected TypeVisitor
+class KDEVDUCHAINBUILDER_EXPORT DumpTypes : protected KDevelop::TypeVisitor
 {
 public:
   DumpTypes();
   virtual ~DumpTypes();
 
-  void dump(const AbstractType* type);
+  void dump(const KDevelop::AbstractType* type);
 
 protected:
-  virtual bool preVisit (const AbstractType * type);
-  virtual void postVisit (const AbstractType * type);
+  virtual bool preVisit (const KDevelop::AbstractType * type);
+  virtual void postVisit (const KDevelop::AbstractType * type);
 
-  virtual void visit (const IntegralType * type);
+  virtual void visit (const KDevelop::IntegralType * type);
 
-  virtual bool visit (const PointerType * type);
-  virtual void endVisit (const PointerType * type);
+  virtual bool visit (const KDevelop::PointerType * type);
+  virtual void endVisit (const KDevelop::PointerType * type);
 
-  virtual bool visit (const ReferenceType * type);
-  virtual void endVisit (const ReferenceType * type);
+  virtual bool visit (const KDevelop::ReferenceType * type);
+  virtual void endVisit (const KDevelop::ReferenceType * type);
 
-  virtual bool visit (const FunctionType * type);
-  virtual void endVisit (const FunctionType * type);
+  virtual bool visit (const KDevelop::FunctionType * type);
+  virtual void endVisit (const KDevelop::FunctionType * type);
 
-  virtual bool visit (const StructureType * type);
-  virtual void endVisit (const StructureType * type);
+  virtual bool visit (const KDevelop::StructureType * type);
+  virtual void endVisit (const KDevelop::StructureType * type);
 
-  virtual bool visit (const ArrayType * type);
-  virtual void endVisit (const ArrayType * type);
+  virtual bool visit (const KDevelop::ArrayType * type);
+  virtual void endVisit (const KDevelop::ArrayType * type);
 
 private:
-  bool seen(const AbstractType* type);
+  bool seen(const KDevelop::AbstractType* type);
 
   class CppEditorIntegrator* m_editor;
   int indent;
-  QSet<const AbstractType*> m_encountered;
+  QSet<const KDevelop::AbstractType*> m_encountered;
 };
 
 #endif // DUMPTYPES_H

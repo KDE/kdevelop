@@ -24,6 +24,9 @@
 #include "kdevlanguageexport.h"
 #include "identifier.h"
 
+namespace KDevelop
+{
+
 class Declaration;
 
 class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedType
@@ -41,6 +44,8 @@ public:
 private:
   class IdentifiedTypePrivate* const d;
 };
+
+}
 
 #endif
 

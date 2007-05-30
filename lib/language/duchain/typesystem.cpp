@@ -20,6 +20,9 @@
 
 #include "typesystem.h"
 
+namespace KDevelop
+{
+
 class AbstractTypePrivate
 {
 public:
@@ -429,5 +432,7 @@ uint ArrayType::hash() const
 {
   return elementType()->hash() * 47 * dimension();
 }*/
+
+}
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

@@ -26,6 +26,8 @@
 #include "rpp/pp-macro.h"
 #include "rpp/pp-engine.h"
 
+using namespace KDevelop;
+
 struct HeaderGeneratorVisitor : public DefaultVisitor
 {
   HeaderGeneratorVisitor(ParseSession* session) : inTemplate(false), m_session(session), nc(session) {};

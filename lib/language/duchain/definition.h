@@ -23,6 +23,9 @@
 #include "duchainbase.h"
 #include "kdevlanguageexport.h"
 
+namespace KDevelop
+{
+
 class Declaration;
 class DUContext;
 
@@ -53,7 +56,7 @@ private:
   void setDeclaration(Declaration* declaration);
   class DefinitionPrivate* const d;
 };
-
+}
 #endif // DEFINITION_H
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

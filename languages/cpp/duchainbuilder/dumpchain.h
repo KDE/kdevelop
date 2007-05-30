@@ -24,7 +24,10 @@
 #include "cppduchainbuilderexport.h"
 
 class ParseSession;
+namespace KDevelop
+{
 class DUContext;
+}
 
 class KDEVDUCHAINBUILDER_EXPORT DumpChain: protected DefaultVisitor
 {
@@ -34,7 +37,7 @@ public:
 
   void dump(AST *node, ParseSession* session = 0);
 
-  void dump(DUContext* context, bool imported = false);
+  void dump(KDevelop::DUContext* context, bool imported = false);
 
 protected:
   virtual void visit(AST *node);

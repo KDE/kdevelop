@@ -32,8 +32,11 @@
 
 namespace KTextEditor { class SmartRange; }
 
+namespace KDevelop 
+{
 class DUContext;
 class Declaration;
+}
 
 class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
 {
@@ -75,20 +78,20 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     virtual ~CppHighlighting();
 
     void highlightTree(KTextEditor::SmartRange* topRange) const;
-    void highlightDUChain(TopDUContext* context) const;
+    void highlightDUChain(KDevelop::TopDUContext* context) const;
 
-    virtual void highlightDefinition(Definition* definition) const;
-    virtual void highlightDeclaration(Declaration* declaration) const;
-    virtual void highlightUse(Use* use) const;
+    virtual void highlightDefinition(KDevelop::Definition* definition) const;
+    virtual void highlightDeclaration(KDevelop::Declaration* declaration) const;
+    virtual void highlightUse(KDevelop::Use* use) const;
 
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context) const;
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
   private:
-    void highlightDUChain(DUContext* context) const;
+    void highlightDUChain(KDevelop::DUContext* context) const;
     void outputRange( KTextEditor::SmartRange * range ) const;
 
-    Types typeForDeclaration(Declaration* dec) const;
+    Types typeForDeclaration(KDevelop::Declaration* dec) const;
 
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;

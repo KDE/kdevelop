@@ -20,6 +20,8 @@
 
 #include "classmemberdeclaration.h"
 
+namespace KDevelop
+{
 class ClassMemberDeclarationPrivate
 {
 public:
@@ -129,5 +131,5 @@ void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
   d->m_isExtern = specifiers & ExternSpecifier;
   d->m_isMutable = specifiers & MutableSpecifier;
 }
-
+}
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

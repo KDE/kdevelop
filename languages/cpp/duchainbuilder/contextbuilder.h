@@ -26,11 +26,14 @@
 #include "ducontext.h"
 #include "cppduchainbuilderexport.h"
 
-class ParseSession;
+namespace KDevelop
+{
 class DUChain;
 class DUContext;
 class TopDUContext;
+}
 class CppEditorIntegrator;
+class ParseSession;
 class NameCompiler;
 
 namespace KTextEditor { class Range; }
@@ -53,7 +56,7 @@ public:
    *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
-  TopDUContext* buildContexts(const KUrl& url, AST *node, QList<DUContext*>* includes = 0);
+  KDevelop::TopDUContext* buildContexts(const KUrl& url, AST *node, QList<KDevelop::DUContext*>* includes = 0);
 
   /**
    * Support another builder by tracking the current context.
@@ -61,7 +64,7 @@ public:
   void supportBuild(AST *node);
 
 protected:
-  inline DUContext* currentContext() { return m_contextStack.top(); }
+  inline KDevelop::DUContext* currentContext() { return m_contextStack.top(); }
 
   /**
    * Compile an identifier for the specifed NameAST \a id.
@@ -69,7 +72,7 @@ protected:
    * \note this reference will only be valid until the next time the function
    * is called, so you need to create a copy (store as non-reference).
    */
-  const QualifiedIdentifier& identifierForName(NameAST* id) const;
+  const KDevelop::QualifiedIdentifier& identifierForName(NameAST* id) const;
 
   CppEditorIntegrator* m_editor;
 
@@ -81,7 +84,7 @@ protected:
   inline uint encounteredToken() const { return m_encounteredToken; }
 
   // Write lock is already held here...
-  virtual void openContext(DUContext* newContext);
+  virtual void openContext(KDevelop::DUContext* newContext);
   // Write lock is already held here...
   virtual void closeContext();
 
@@ -107,13 +110,13 @@ protected:
   virtual void visitIfStatement(IfStatementAST*);
 
 private:
-  DUContext* openContext(AST* range, DUContext::ContextType type, const QualifiedIdentifier& identifier);
-  DUContext* openContext(AST* range, DUContext::ContextType type, NameAST* identifier = 0);
-  DUContext* openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier = 0);
-  DUContext* openContextInternal(const KTextEditor::Range& range, DUContext::ContextType type, const QualifiedIdentifier& identifier);
+  KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
+  KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
+  KDevelop::DUContext* openContext(AST* fromRange, AST* toRange, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
+  KDevelop::DUContext* openContextInternal(const KTextEditor::Range& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
 
-  bool createContextIfNeeded(AST* node, const QList<DUContext*>& importedParentContexts);
-  bool createContextIfNeeded(AST* node, DUContext* importedParentContext);
+  bool createContextIfNeeded(AST* node, const QList<KDevelop::DUContext*>& importedParentContexts);
+  bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
   void addImportedContexts();
 
   // Variables
@@ -125,14 +128,14 @@ private:
 
   uint m_encounteredToken;
 
-  QStack<DUContext*> m_contextStack;
+  QStack<KDevelop::DUContext*> m_contextStack;
   int m_nextContextIndex;
 
   inline int& nextContextIndex() { return m_nextContextStack.top(); }
 
   QStack<int> m_nextContextStack;
 
-  QList<DUContext*> m_importedParentContexts;
+  QList<KDevelop::DUContext*> m_importedParentContexts;
 };
 
 #endif // CONTEXTBUILDER_H

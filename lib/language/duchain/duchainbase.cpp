@@ -18,6 +18,9 @@
 
 #include "duchainbase.h"
 
+namespace KDevelop
+{
+
 class DUChainBasePrivate
 {
 public:
@@ -64,6 +67,7 @@ void DUChainBase::setEncountered(unsigned int encountered)
 TopDUContext* DUChainBase::topContext() const
 {
   return 0;
+}
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
