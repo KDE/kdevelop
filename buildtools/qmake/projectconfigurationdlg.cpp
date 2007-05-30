@@ -243,14 +243,26 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
 
     // Buildmode
-  if ( radioReleaseMode->isChecked() )
+    int releaseidx = myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "release" );
+    int debugidx = myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "debug" );
+    if ( radioReleaseMode->isChecked() )
+    {
+        if( releaseidx != -1 && releaseidx < debugidx )
+            myProjectItem->removeValue( "CONFIG", "debug" );
+        else if( debugidx != -1 )
+            myProjectItem->removeValue( "CONFIG", "debug" );
         myProjectItem->addValue( "CONFIG", "release" );
-    else
+    }else if( !checkDebugReleaseMode->isChecked() )
         myProjectItem->removeValue( "CONFIG", "release" );
 
     if ( radioDebugMode->isChecked() )
+    {
+        if( debugidx != -1 && debugidx < releaseidx )
+            myProjectItem->removeValue( "CONFIG", "release" );
+        else if( releaseidx != -1 )
+            myProjectItem->removeValue( "CONFIG", "release" );
         myProjectItem->addValue( "CONFIG", "debug" );
-    else
+    }else if( !checkDebugReleaseMode->isChecked() )
         myProjectItem->removeValue( "CONFIG", "debug" );
 
     // requirements
@@ -318,7 +330,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     //Qt4 libs
     if ( prjWidget->m_part->isQt4Project() )
     {
-        if ( radioDebugReleaseMode->isChecked() )
+        if ( checkDebugReleaseMode->isChecked() )
             myProjectItem->addValue( "CONFIG", "debug_and_release" );
         else
             myProjectItem->removeValue( "CONFIG", "debug_and_release" );
@@ -706,17 +718,19 @@ void ProjectConfigurationDlg::updateControls()
     }
 
     // Buildmode
-    if ( configValues.findIndex( "debug" ) != -1 )
+    int debugidx = configValues.findIndex( "debug" );
+    int releaseidx = configValues.findIndex( "release" );
+    if ( debugidx != -1 && debugidx > releaseidx )
     {
         radioDebugMode->setChecked( true );
     }
-    else if ( configValues.findIndex( "release" ) != -1 )
+    if ( releaseidx != -1 && releaseidx > debugidx )
     {
         radioReleaseMode->setChecked( true );
     }
-    else if ( configValues.findIndex( "debug_and_release" ) != -1 )
+    if ( configValues.findIndex( "debug_and_release" ) != -1 )
     {
-        radioDebugReleaseMode->setChecked( true );
+        checkDebugReleaseMode->setChecked( true );
     }
 
     // Requirements
@@ -830,7 +844,7 @@ void ProjectConfigurationDlg::updateControls()
         else
             checkQt3Support->setChecked( false );
 
-        radioDebugReleaseMode->setEnabled( true );
+        checkDebugReleaseMode->setEnabled( true );
         checkBuildAll->setEnabled( true );
         groupQt4Libs->setEnabled( checkQt->isChecked() );
         rccdir_url->setEnabled( true );

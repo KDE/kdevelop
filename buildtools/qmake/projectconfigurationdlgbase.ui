@@ -405,9 +405,9 @@
                                             <string>Set project to be built in release mode</string>
                                         </property>
                                     </widget>
-                                    <widget class="QRadioButton">
+                                    <widget class="QCheckBox">
                                         <property name="name">
-                                            <cstring>radioDebugReleaseMode</cstring>
+                                            <cstring>checkDebugReleaseMode</cstring>
                                         </property>
                                         <property name="enabled">
                                             <bool>false</bool>
@@ -2640,7 +2640,7 @@
     <tabstop>makefile_url</tabstop>
     <tabstop>radioDebugMode</tabstop>
     <tabstop>radioReleaseMode</tabstop>
-    <tabstop>radioDebugReleaseMode</tabstop>
+    <tabstop>checkDebugReleaseMode</tabstop>
     <tabstop>checkWarning</tabstop>
     <tabstop>checkBuildAll</tabstop>
     <tabstop>checkOpenGL</tabstop>
