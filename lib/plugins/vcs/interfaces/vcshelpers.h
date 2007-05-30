@@ -320,14 +320,14 @@ class VcsDiff
      * request for DiffUnified may not be honored, e.g. if the items being diffed are
      * binary rather than text.
      */
-    enum VcsDiffType
+    enum Type
     {
         DiffRaw         /**<Request complete copies of both items.*/,
         DiffUnified     /**<Request copy of first item with diff.*/,
         DiffDontCare    /**<Don't care; plugin will return whichever is easiest.*/,
     };
 
-    enum VcsDiffContent
+    enum Content
     {
         Binary          /** Binary diff, using the full content of both files.*/,
         Text            /** Textual diff.*/,
@@ -336,12 +336,12 @@ class VcsDiff
     /**
      * @returns the type of diff, i.e. raw or unified
      */
-    VcsDiffType type() const;
+    Type type() const;
 
     /**
      * @returns the content type, i.e. binary or text
      */
-    VcsDiffContent contentType() const;
+    Content contentType() const;
 
     /**
      * @returns the binary content of the first file of the difference or
