@@ -28,7 +28,7 @@ public:
     /**
      * Copies the source location in the repository to the destination
      */
-    virtual VcsJob copy( const QString& commitMessage,
+    virtual VcsJob* copy( const QString& commitMessage,
                          const QString& repoSrc,
                          const QString& repoDst,
                          const VcsRevision& srcRev ) = 0;
@@ -37,7 +37,7 @@ public:
      * Shows a dialog asking for a commit message that will copy the source
      * location in the repository to the destination
      */
-    virtual VcsJob showCopy( const QString& commitMessage,
+    virtual VcsJob* showCopy( const QString& commitMessage,
                              const QString& repoSrc,
                              const QString& repoDst,
                              const VcsRevision& srcRev ) = 0;
@@ -45,7 +45,7 @@ public:
     /**
      * Moves the source location in the repository to the destination
      */
-    virtual VcsJob move( const QString& commitMessage,
+    virtual VcsJob* move( const QString& commitMessage,
                          const QString& repoSrc,
                          const QString& repoDst,
                          const VcsRevision& srcRev ) = 0;
@@ -54,7 +54,7 @@ public:
      * Shows a dialog asking for a commit message that will move the source
      * location in the repository to the destination
      */
-    virtual VcsJob showMove( const QString& commitMessage,
+    virtual VcsJob* showMove( const QString& commitMessage,
                              const QString& repoSrc,
                              const QString& repoDst,
                              const VcsRevision& srcRev ) = 0;
@@ -62,14 +62,14 @@ public:
     /**
      * Removes the source locations in the repository
      */
-    virtual VcsJob remove( const QString& commitMessage,
+    virtual VcsJob* remove( const QString& commitMessage,
                            const QStringList& repoLocations ) = 0;
 
     /**
      * Shows a dialog asking for a commit message that will remove the source
      * locations in the repository
      */
-    virtual VcsJob showRemove( const QString& commitMessage,
+    virtual VcsJob* showRemove( const QString& commitMessage,
                                const QStringList& repoLocations ) = 0;
 };
 

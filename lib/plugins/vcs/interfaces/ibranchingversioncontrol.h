@@ -40,7 +40,7 @@ public:
      * that take branch names instead of destination paths, or store metadata
      * about the branch. Not all VCS's will use this parameter.
      */
-    virtual VcsJob branch( const QString& commitMessage,
+    virtual VcsJob* branch( const QString& commitMessage,
                            const VcsMapping& mapping,
                            const VcsRevision& rev,
                            const QString& branchName ) = 0;
@@ -58,7 +58,7 @@ public:
      * that take branch names instead of destination paths, or store metadata
      * about the branch. Not all VCS's will use this parameter.
      */
-    virtual VcsJob showBranch( const QString& commitMessage,
+    virtual VcsJob* showBranch( const QString& commitMessage,
                                const VcsMapping& mapping,
                                const VcsRevision& rev,
                                const QString& branchName ) = 0;
@@ -75,7 +75,7 @@ public:
      * take tag names instead of destination paths, or store metadata about the
      * tag. Not all VCS's will use this parameter.
      */
-    virtual VcsJob tag( const QString& commitMessage,
+    virtual VcsJob* tag( const QString& commitMessage,
                         const VcsMapping& mapping,
                         const VcsRevision& rev,
                         const QString& tagName ) = 0;
@@ -93,7 +93,7 @@ public:
      * take tag names instead of destination paths, or store metadata about the
      * tag. Not all VCS's will use this parameter.
      */
-    virtual VcsJob showTag( const QString& commitMessage,
+    virtual VcsJob* showTag( const QString& commitMessage,
                             const VcsMapping& mapping,
                             const VcsRevision& rev,
                             const QString& tagName ) = 0;

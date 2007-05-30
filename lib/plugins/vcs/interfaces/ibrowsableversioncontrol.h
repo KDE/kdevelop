@@ -28,7 +28,7 @@ public:
     /**
      * retrieve the last revision in which the repository location was changed
      */
-    virtual VcsJob repositoryRevision( const QString& repoLocation,
+    virtual VcsJob* repositoryRevision( const QString& repoLocation,
                                        VcsRevision::RevisionType ) = 0;
 
     /**
@@ -38,7 +38,7 @@ public:
      * @param limit Restrict to the most recent @p limit entries. Note that the
      * limit is @e advisory and may be ignored.
      */
-    virtual VcsJob log( const QString& repoLocation,
+    virtual VcsJob* log( const QString& repoLocation,
                         const VcsRevision& rev,
                         unsigned int limit ) = 0;
 
@@ -49,7 +49,7 @@ public:
      * @param limit Do not show entries earlier than @p limit. Note that the
      * limit is @e advisory and may be ignored.
      */
-    virtual VcsJob log( const KUrl& localLocation,
+    virtual VcsJob* log( const KUrl& localLocation,
                         const VcsRevision& rev,
                         const VcsRevision& limit ) = 0;
 
@@ -58,7 +58,7 @@ public:
      *
      * @param rev List @p rev and earlier. The default is HEAD.
      */
-    virtual VcsJob showLog( const QString& repoLocation,
+    virtual VcsJob* showLog( const QString& repoLocation,
                             const VcsRevision& rev ) = 0;
 
     /**
@@ -73,7 +73,7 @@ public:
      * @note VcsRevision objects with type VcsRevision::FileNumber may store the
      * associated path internally, in which case @p repoLocation may be ignored.
      */
-    virtual VcsJob change( const VcsRevision& rev,
+    virtual VcsJob* change( const VcsRevision& rev,
                            const QString& repoLocation ) = 0;
 
     /**
@@ -88,18 +88,18 @@ public:
      * @note VcsRevision objects with type VcsRevision::FileNumber may store the
      * associated path internally, in which case @p repoLocation may be ignored.
      */
-    virtual VcsJob showChange( const VcsRevision& rev,
+    virtual VcsJob* showChange( const VcsRevision& rev,
                                const QString& repoLocation ) = 0;
 
     /**
      * Retrieve a list of entries in the given repository location
      */
-    virtual VcsJob ls( const QString& repoLocation, const VcsRevision& rev ) = 0;
+    virtual VcsJob* ls( const QString& repoLocation, const VcsRevision& rev ) = 0;
 
     /**
      * Retrieve a file from the repository without checking it out
      */
-    virtual VcsJob cat( const QString& repoLocation, const VcsRevision& rev ) = 0;
+    virtual VcsJob* cat( const QString& repoLocation, const VcsRevision& rev ) = 0;
 };
 
 #endif

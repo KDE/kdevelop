@@ -28,9 +28,9 @@
 class IDistributedVersionControl
 {
 public:
-    VcsJob push( const QString& repositoryLocation ) = 0;
-    VcsJob pull( const QString& repositoryLocation ) = 0;
-    VcsJob clone( const QString& repositoryLocationSrc,
+    VcsJob* push( const QString& repositoryLocation ) = 0;
+    VcsJob* pull( const QString& repositoryLocation ) = 0;
+    VcsJob* clone( const QString& repositoryLocationSrc,
                   const QString& repositoryLocationDst ) = 0;
 };
 
