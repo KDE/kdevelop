@@ -27,6 +27,7 @@
 #include <QTextStream>
 #include <QtDesigner/QtDesigner>
 #include <QtDesigner/QDesignerComponents>
+#include <QPluginLoader>
 #include <QWorkspace>
 
 #include <kaboutdata.h>
@@ -142,6 +143,8 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     QDesignerFormEditorInterface* formeditor = QDesignerComponents::createFormEditor(this);
     QDesignerComponents::initializePlugins( formeditor );
 
+    kDebug(9039) << "integration: " << formeditor->integration() << endl;
+
     //TODO apaku: if multiple mainwindows exist, this needs to be changed on mainwindow-change
     formeditor->setTopLevel(core()->uiController()->activeMainWindow());
 
@@ -155,14 +158,37 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QStringList &args)
     formeditor->setActionEditor(QDesignerComponents::createActionEditor(formeditor, 0));
     formeditor->setObjectInspector(QDesignerComponents::createObjectInspector(formeditor, 0));
 
-    qdesigner_internal::QDesignerIntegration::initializePlugins( formeditor );
     m_designer = new qdesigner_internal::QDesignerIntegration(formeditor, this);
-
+    qdesigner_internal::QDesignerIntegration::initializePlugins( formeditor );
 
     m_designer->core()->widgetBox()->setObjectName( i18n("Widget Box") );
     m_designer->core()->propertyEditor()->setObjectName( i18n("Property Editor") );
     m_designer->core()->actionEditor()->setObjectName( i18n("Action Editor") );
     m_designer->core()->objectInspector()->setObjectName( i18n("Object Inspector") );
+
+    QList<QObject*> plugins = QPluginLoader::staticInstances();
+    kDebug(9039) << "pluginlist from designer: " << plugins << endl;
+    foreach (QObject *plugin, plugins)
+    {
+        QDesignerFormEditorPluginInterface *fep;
+
+        if ( (fep = qobject_cast<QDesignerFormEditorPluginInterface*>(plugin)) )
+        {
+                if ( !fep->isInitialized() )
+                        fep->initialize(formeditor);
+
+                fep->action()->setCheckable(true);
+                if( fep->action()->text() == "Edit Signals/Slots" )
+                    actionCollection()->addAction("signaleditor", fep->action());
+                if( fep->action()->text() == "Edit Buddies" )
+                    actionCollection()->addAction("buddyeditor", fep->action());
+                if( fep->action()->text() == "Edit Tab Order" )
+                    actionCollection()->addAction("tabordereditor", fep->action());
+
+                kDebug(9039) << "Added action: " << fep->action()->objectName() << "|" << fep->action()->text()<< endl;
+        }
+    }
+
 
     setupActions();
 

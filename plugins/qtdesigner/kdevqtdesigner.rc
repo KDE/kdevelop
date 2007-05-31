@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="guibuilder" version="5">
+<gui name="guibuilder" version="6">
 <MenuBar>
     <Menu name="file"><text>&amp;File</text>
         <Action name="file_save" group="save_merge"/>
@@ -20,6 +20,10 @@
         <Action name="break_layout"/>
         <Separator/>
         <Action name="adjust_size"/>
+        <Separator/>
+        <Action name="signaleditor"/>
+        <Action name="buddyeditor"/>
+        <Action name="tabordereditor"/>
     </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
