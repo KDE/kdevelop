@@ -40,7 +40,6 @@ public:
 
 protected:
     void run();
-    void startNextJob(ProjectFolderItem *dom);
 
 private:
     struct ImportProjectThreadPrivate* const d;

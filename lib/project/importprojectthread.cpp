@@ -21,6 +21,7 @@
 #include "projectmodel.h"
 #include "interfaces/iprojectfilemanager.h"
 #include "kdebug.h"
+#include <QQueue>
 
 namespace KDevelop
 {
@@ -54,21 +55,23 @@ void ImportProjectThread::setProjectFileManager( IProjectFileManager *importer )
 
 void ImportProjectThread::run()
 {
-    if ( d->m_folder )
-        startNextJob( d->m_folder );
-    kDebug() << "ImportProjectThread::run() returning" << endl;
-}
+    QQueue< QList<KDevelop::ProjectFolderItem*> > workQueue;
+    QList<KDevelop::ProjectFolderItem*> initial;
+    initial.append( d->m_folder );
+    workQueue.enqueue( initial );
 
-void ImportProjectThread::startNextJob(ProjectFolderItem *dom)
-{
-    d->m_workingList << d->m_importer->parse(dom);
-    while ( !d->m_workingList.isEmpty() )
+    while( workQueue.count() > 0 )
     {
-        ProjectFolderItem *folder = d->m_workingList.first();
-        d->m_workingList.pop_front();
-
-        startNextJob(folder);
+        QList<KDevelop::ProjectFolderItem*> front = workQueue.dequeue();
+        Q_FOREACH( KDevelop::ProjectFolderItem* _item, front )
+        {
+            QList<KDevelop::ProjectFolderItem*> workingList = d->m_importer->parse( _item );
+            if( workingList.count() > 0 )
+                workQueue.enqueue( workingList );
+        }
     }
+
+    kDebug() << "ImportProjectThread::run() returning" << endl;
 }
 
 }
