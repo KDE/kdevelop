@@ -90,6 +90,7 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor( "Mario Scalas", I18N_NOOP( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
     aboutData.addAuthor( "Jens Dagerbo", I18N_NOOP( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
     aboutData.addAuthor( "Julian Rockey", I18N_NOOP( "Filecreate part and other bits and patches" ), "linux@jrockey.com" );
+    aboutData.addAuthor( "Dukju Ahn", I18N_NOOP( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
     aboutData.addCredit( "Ajay Guleria", I18N_NOOP( "ClearCase support" ), "ajay_guleria@yahoo.com" );
     aboutData.addCredit( "Marek Janukowicz", I18N_NOOP( "Ruby support" ), "child@t17.ds.pwr.wroc.pl" );
 
