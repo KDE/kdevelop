@@ -201,6 +201,8 @@ private Q_SLOTS:
     void slotFileChanged( const QString& file, KDevelop::ProjectFileItem* fileItem );
 
 private:
+    void parseDirectoryRecursively( KDevelop::ProjectFolderItem* dir,
+                                    KDevelop::IProjectFileManager* manager );
     /**
      * Initialize targets by reading Makefile in @arg dir
      * @return Target lists in Makefile at @arg dir.

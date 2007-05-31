@@ -37,10 +37,25 @@ public:
     void addFile( const QString &path, KDevelop::ProjectFileItem *fileItem = 0 );
 
     void removeDirectory( const QString & path );
+    void removeFile( const QString & path );
 //     void removePaths ( const QStringList & paths );
 
 Q_SIGNALS:
+    /**
+     * Emitted when the files or subdirectories under @arg path were created or deleted.
+     *
+     * Note that if some file, which was being monitored by addFile(), is deleted,
+     * directoryChanged() is not emitted. Rather only fileChanged() will be emitted in that case.
+     *
+     * Also, if both the parent and *empty* child directory are being watched, and child directory
+     * is deleted, the directoryChanged( parentDir ) will be emitted. But if child directory
+     * is not empty, then directoryChanged( childDir ) will be emitted.
+     */
     void directoryChanged( const QString & path, KDevelop::ProjectFolderItem* folderItem );
+
+    /**
+     * Emitted when the contents of file were modified, or the file itself was deleted on disk.
+     */
     void fileChanged( const QString & path, KDevelop::ProjectFileItem* fileItem );
 
 private Q_SLOTS:

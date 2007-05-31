@@ -53,6 +53,12 @@ void ProjectFileSystemWatcher::removeDirectory( const QString & path )
 
 }
 
+void ProjectFileSystemWatcher::removeFile( const QString & path )
+{
+    m_watch->removePath( path );
+    m_fileHash.remove( path );
+}
+
 // void ProjectFileSystemWatcher::removePaths( const QStringList & paths );
 
 void ProjectFileSystemWatcher::slotDirChanged( const QString& path )

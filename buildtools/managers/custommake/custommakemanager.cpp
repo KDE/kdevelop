@@ -20,7 +20,7 @@
 #include "projectmodel.h"
 #include "context.h"
 
-#include <QList>
+#include <QQueue>
 #include <QDir>
 #include <QFileInfoList>
 #include <QFile>
@@ -484,21 +484,45 @@ void CustomMakeManager::slotDirectoryChanged( const QString& dir, KDevelop::Proj
         // round 1 -- file
         Q_FOREACH( KDevelop::ProjectFileItem* _fileItem, itemFileList )
         {
-            if( fileList.contains( _fileItem->url().toLocalFile() ) == false )
+            KUrl deletingCandidate = _fileItem->url();
+            if( fileList.contains( deletingCandidate.toLocalFile() ) == false )
             {
+                // disk file was deleted, so project file items should be also deleted
+
+                // ### note: if some file, previously added to watching list, was deleted,
+                // than this directoryChanged() is not emitted. Rather fileChanged() is emitted.
+                if( deletingCandidate.fileName() == QString("Makefile") ) // TODO portable, setting aware
+                {
+                    //delete every targets in this directory
+                    QList<KDevelop::ProjectTargetItem*> targets = folderItem->targetList();
+                    Q_FOREACH( KDevelop::ProjectTargetItem* _deletingTarget, targets )
+                    {
+                        int targetrow = _deletingTarget->row();
+                        folderItem->removeRow( targetrow );
+                    }
+                    cmpi->fsWatcher()->removeFile( deletingCandidate.toLocalFile() );
+                }
                 int row = _fileItem->row();
                 folderItem->removeRow( row );
-                // TODO if Makefile, delete all targets and remove from watcher
-
             }
         }
         Q_FOREACH( QString diskFile, fileList )
         {
             if( itemFileListString.contains( diskFile ) == false )
             {
+                // disk file was created, file items should be also created
                 KDevelop::ProjectFileItem *newitem = new KDevelop::ProjectFileItem(
                         folderItem->project(), KUrl(diskFile), folderItem );
-                // TODO if Makefile, parse new targets and add to watcher
+                // if Makefile, parse new targets and add to watcher
+                if( diskFile.endsWith( "/Makefile" ) ) // TODO portable, setting aware
+                {
+                    QStringList newTargets = parseCustomMakeFile( KUrl(diskFile) );
+                    Q_FOREACH( QString newTarget, newTargets )
+                    {
+                        new CustomMakeTargetItem( folderItem->project(), newTarget, folderItem );
+                    }
+                    cmpi->fsWatcher()->addFile( diskFile, newitem );
+                }
             }
         }
         // round 2 -- directory
@@ -521,26 +545,25 @@ void CustomMakeManager::slotDirectoryChanged( const QString& dir, KDevelop::Proj
                         folderItem->project(), KUrl(diskDir), folderItem );
 
                 cmpi->fsWatcher()->addDirectory( diskDir, newitem );
-                // TODO parse recursively into children
+                this->parseDirectoryRecursively( newitem, this );
             }
         }
 
     }
 }
 
-// treat only Makefiles
+// treat only Makefiles. Remove every previous target and reparse this file.
 void CustomMakeManager::slotFileChanged( const QString& file, KDevelop::ProjectFileItem* fileItem)
 {
     kDebug() << "File " << file << " changed " << endl;
-    // remove every previous target and reparse this file.
+
     QFileInfo info( file );
-    if( info.exists() == false )
-        return;
     if( info.fileName() != QString("Makefile") )
         return;
 
+    // find Makefile item, because it is allowed to be null
     KDevelop::ProjectFileItem *makefileItem=0;
-    KDevelop::IProject *project;
+    KDevelop::IProject *project=0;
     if( !fileItem )
     {
         KUrl url(file);
@@ -551,26 +574,64 @@ void CustomMakeManager::slotFileChanged( const QString& file, KDevelop::ProjectF
     else
     {
         makefileItem = fileItem;
+        project = fileItem->project();
     }
     Q_ASSERT(makefileItem);
 
+    // find parent folder item
     QStandardItem *stditem = makefileItem->parent();
     KDevelop::ProjectBuildFolderItem *parentFolder =
             dynamic_cast<KDevelop::ProjectBuildFolderItem*>( stditem );
     if( !parentFolder )
         return;
 
+    // delete every targets in the fileItem's parent directory
     QList<KDevelop::ProjectTargetItem*> targets = parentFolder->targetList();
-    Q_FOREACH( KDevelop::ProjectTargetItem* target, targets )
+    Q_FOREACH( KDevelop::ProjectTargetItem* _deletingTarget, targets )
     {
-        int row = target->row();
-        parentFolder->removeRow( row );
+        int targetrow = _deletingTarget->row();
+        parentFolder->removeRow( targetrow );
     }
 
-    QStringList newTargets = parseCustomMakeFile( KUrl(file) );
-    Q_FOREACH( QString newTarget, newTargets )
+    // determine whether the file contents were modified or the entire file itself was deleted.
+    if( info.exists() == false )
     {
-        new CustomMakeTargetItem( project, newTarget, parentFolder );
+        // Makefile deleted
+        KDevelop::ProjectItem *prjitem = project->projectItem();
+        CustomMakeProjectItem *cmpi = dynamic_cast<CustomMakeProjectItem*>( prjitem );
+        cmpi->fsWatcher()->removeFile( file );
+        int makefileRow = makefileItem->row();
+        parentFolder->removeRow( makefileRow );
+    }
+    else
+    {
+        // Makefile contents modified
+        QStringList newTargets = parseCustomMakeFile( KUrl(file) );
+        Q_FOREACH( QString newTarget, newTargets )
+        {
+            new CustomMakeTargetItem( project, newTarget, parentFolder );
+        }
+    }
+
+}
+
+void CustomMakeManager::parseDirectoryRecursively( KDevelop::ProjectFolderItem* dir,
+                                                   KDevelop::IProjectFileManager* manager )
+{
+    QQueue< QList<KDevelop::ProjectFolderItem*> > workQueue;
+    QList<KDevelop::ProjectFolderItem*> initial;
+    initial.append( dir );
+    workQueue.enqueue( initial );
+
+    while( workQueue.count() > 0 )
+    {
+        QList<KDevelop::ProjectFolderItem*> front = workQueue.dequeue();
+        Q_FOREACH( KDevelop::ProjectFolderItem* _item, front )
+        {
+            QList<KDevelop::ProjectFolderItem*> workingList = manager->parse( _item );
+            if( workingList.count() > 0 )
+                workQueue.enqueue( workingList );
+        }
     }
 
 }
