@@ -30,12 +30,12 @@ namespace KDevelop
  */
 enum VcsState
 {
-    Unknown         /**<No VCS information about a file is known (or file is not under VCS control).*/,
-    Added           /**<File was added to the repository but not committed.*/,
-    Uptodate        /**<File was updated or it is already at up to date version.*/,
-    Modified        /**<File was modified locally.*/,
-    Conflict        /**<Local version has conflicts that need to be resolved before commit.*/,
-    Deleted         /**<File or Directory is scheduled to be deleted. */,
+    Unknown             /**<No VCS information about a file is known (or file is not under VCS control).*/,
+    ItemUpToDate        /**<Item was updated or it is already at up to date version.*/,
+    ItemAdded           /**<Item was added to the repository but not committed.*/,
+    ItemModified        /**<Item was modified locally.*/,
+    ItemDeleted         /**<Item is scheduled to be deleted. */,
+    ItemHasConflicts    /**<Local version has conflicts that need to be resolved before commit.*/,
 };
 
 /**
@@ -112,11 +112,29 @@ public:
 class KDEVPLATFORMVCS_EXPORT VcsItemEvent
 {
 public:
+    /**
+     * Class that tells you what happened to a given repository location in a
+     * specific revision.
+     *
+     * Combinations of some of the flags are possible, for example Add|Modified,
+     * Copy|Modified or Merge|Modified, or when returned from VcsEvent::actions().
+     */
+    enum Action
+    {
+        Added            = 1<<0 /**<Item was added.*/,
+        Deleted          = 1<<1 /**<Item was deleted.*/,
+        Modified         = 1<<2 /**<Item was modified, for example by editing.*/,
+        Copied           = 1<<3 /**<Item was copied.*/,
+        Merged           = 1<<4 /**<Item had changes merged into it.*/,
+        ContentsModified = 1<<5 /**<Directory was not changed (only contents changed).*/,
+    };
+    Q_DECLARE_FLAGS( Actions, Action )
+
     KUrl repositoryLocation();
     KUrl repositoryCopySourceLocation(); // may be empty
     VcsRevision repositoryCopySourceRevision(); // may be invalid, even if rCSL is not
     VcsRevision revision(); // the FileNumber revision, may be the same as the GlobalNumber
-    VcsActions actions();
+    Actions actions();
 };
 
 /**
@@ -130,29 +148,11 @@ public:
 class KDEVPLATFORMVCS_EXPORT VcsEvent
 {
 public:
-    /**
-     * Class that tells you what happened to a given repository location in a
-     * specific revision.
-     *
-     * Combinations of some of the flags are possible, for example Add|Modified,
-     * Copy|Modified or Merge|Modified, or when returned from VcsEvent::actions().
-     */
-    enum VcsAction
-    {
-        ContentsModified     /**<Directory was not changed (only contents changed).*/,
-        Add                  /**<File was added.*/,
-        Delete               /**<File was deleted.*/,
-        Modified             /**<File was modified, for example by editing.*/,
-        Copy                 /**<File was copied.*/,
-        Merge                /**<File had changes merged into it.*/,
-    };
-    Q_DECLARE_FLAGS( VcsActions, VcsAction )
-
     VcsRevision revision(); // the GlobalNumber revision
     QString author();
     QDate date();
     QString message();
-    VcsActions actions();
+    VcsItemEvent::Actions actions();
     QList<VcsItemEvent> items();
 };
 
@@ -171,7 +171,7 @@ public:
      * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not
      * QFlags!)
      */
-    enum VcsJobType
+    enum Type
     {
         Add,
         Remove,
@@ -377,7 +377,7 @@ public:
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsEvent::VcsActions )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsEvent::Actions )
 
 #endif
 
