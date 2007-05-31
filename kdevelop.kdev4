@@ -1,11 +1,2 @@
-[Background Parser]
-Enabled=true
-
-[CMake]
-Generator=0
-
-[General Options]
-Builder=KDevMakeBuilder
-Importer=KDevGenericImporter
-PrimaryLanguage=C++
-Project Management=KDevProjectManager
+[Project]
+Manager=KDevCMakeManager
