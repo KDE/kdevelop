@@ -100,11 +100,11 @@ public:
 
     void addMapping( const KUrl& sourceLocation,
                      const KUrl& destinationLocation,
-                     MappingFlags recursion );
+                     MappingFlag recursion );
     void removeMapping( const KUrl& sourceLocation);
     KUrl::List sourceLocations();
     KUrl destinationLocation( const KUrl& sourceLocation );
-    MappingFlag mappingFlags( const KUrl& sourceLocation ) const;
+    MappingFlag mappingFlag( const KUrl& sourceLocation ) const;
 };
 
 /**
