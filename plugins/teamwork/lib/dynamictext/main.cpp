@@ -432,6 +432,41 @@ void verifyDynamicText() {
 
   try {
     DynamicText t;
+    cout << "test 0.1: \n";
+    VectorTimestamp a5 = t.insert( 0, SimpleReplacement( 0, "a", "" ) );
+    VectorTimestamp a1 = t.insert( 0, SimpleReplacement( 1, "a", "" ) );
+    VectorTimestamp b1 = t.insert( 1, SimpleReplacement( 2, "b", "" ) );
+    VectorTimestamp a2 = t.insert( 0, SimpleReplacement( 3, "a", "" ) );
+    
+    cout << t.state().print() << "text: " << t.text() << endl;
+    
+    VectorTimestamp v( t.state() );
+    v.setStamp( 0, 0 );
+    t.changeState( v );
+    cout << t.state().print() << v << " text: " << t.text() << endl;
+    DYN_VERIFY_SAME( t.text().text(), "b" );
+    
+    v.setStamp( 0, 1 );
+    t.changeState( v );
+    cout << t.state().print() << v << " text: " << t.text() << endl;
+    DYN_VERIFY_SAME( t.text().text(), "ab" );
+
+    v.setStamp( 0, 2 );
+    t.changeState( v );
+    cout << t.state().print() << v << " text: " << t.text() << endl;
+    DYN_VERIFY_SAME( t.text().text(), "aab" );
+
+    v.setStamp( 0, 3 );
+    t.changeState( v );
+    DYN_VERIFY_SAME( t.text().text(), "aaba" );
+
+  } catch ( DynamicTextError err ) {
+    cout << "error: " << err.what();
+    terminate();
+  }
+  
+  try {
+    DynamicText t;
     cout << "test 4: \n";
     VectorTimestamp a1 = t.insert( 0, SimpleReplacement( 0, "i", "" ) );
     VectorTimestamp b1 = t.insert( 1, SimpleReplacement( 0, "d", "" ) );
@@ -797,10 +832,10 @@ void verifyOffsets() {
 
 
 int main( int /* argc */, char /**argv[]*/ ) {
+  verifyDynamicText();
   verifySumTree();
   verifyFlexibleText();
   verifyOffsets();
-  verifyDynamicText();
 
   //printf("testing\n");
   //  for( int q = 0; q < CYCLES; q++ ) {

@@ -57,11 +57,6 @@ using namespace KDevelop;
 #define IFDEBUG( x ) /**/
 //#define IFDEBUG( x ) x
 
-std::ostream& operator << ( std::ostream& o, const SimpleReplacement& rhs ) {
-  o << "( at " << rhs.m_position << ": '" << rhs.m_oldText << "' -> '" << rhs.m_newText << "' )";
-  return o;
-}
-
 struct DocumentWrapperTreeAction : public StandardCollaborationTreeAction<DocumentWrapper> {
   DocumentWrapperTreeAction( DocumentWrapper* w ) : StandardCollaborationTreeAction<DocumentWrapper>( w ) {}
   virtual void doubleClicked() {

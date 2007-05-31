@@ -53,7 +53,7 @@ Timestamp TimestampEditor::stamp() {
 
 bool TimestampEditor::trySeekTo( Timestamp s ) {
   VectorTimestamp state = m_parent->text()->state();
-  state.setStamp( m_index, s );
+  state.setStamp( m_index, s ); state.setPrimaryIndex( m_index );
   try {
   return m_parent->text()->changeState( state );
   } catch( const DynamicTextError& err ) {

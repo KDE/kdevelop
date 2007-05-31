@@ -15,6 +15,7 @@ email                : david.nolden.kdevelop@art-master.de
 #define NOCATCH
 
 #include "network/serialization.h"
+#include <ostream>
 #include "dynamictext.h"
 #include "verify.h"
 
@@ -24,6 +25,10 @@ typedef DynamicTextError CatchedDynamicTextError;
 typedef DynamicTextErrorDummy CatchedDynamicTextError;
 #endif
 
+std::ostream& operator << ( std::ostream& o, const SimpleReplacement& rhs ) {
+  o << "( at " << rhs.m_position << ": '" << rhs.m_oldText << "' -> '" << rhs.m_newText << "' )";
+  return o;
+}
 
 CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, WeakReplacementPointer, 0, value )
 CROSSMAP_KEY_EXTRACTOR( WeakReplacementPointer, VectorTimestamp, 0, value->vectorStamp() )
@@ -61,32 +66,33 @@ void Replacement::setEnabled( bool e ) {
 
 
 template <class TextType>
-bool Replacement::apply( TextType& text, const OffsetMap& outerOffset, OffsetMap& contextOffset ) {
+bool Replacement::apply( TextType& text, const OffsetMap& outerOffset, OffsetMap& staticOffset ) {
   if ( m_enabled ) {
-    int pos = outerOffset( contextOffset( m_replacement.m_position ) );
+    std::cout << "applying replacement " << replacement() << "\noffset: " << outerOffset.print() << "\nstaticOffset: " << staticOffset.print() << endl;
+    int pos = outerOffset( staticOffset( m_replacement.m_position ) );
     DYN_VERIFY_SMALLERSAME( 0, pos );
     DYN_VERIFY_SMALLERSAME( (int)pos, (int)text.length() );
     DYN_VERIFY_SAME( text.substr( pos, m_replacement.m_oldText.length() ), m_replacement.m_oldText );
 
     text.replace( pos, m_replacement.m_oldText.length(), m_replacement.m_newText );
   } else {
-    contextOffset %= ~offset( outerOffset );
+    staticOffset %= ~offset( outerOffset );
   }
 
   return true;
 }
 
 template <class TextType>
-bool Replacement::unApply( TextType& text, const OffsetMap& outerOffset, OffsetMap& contextOffset ) {
+bool Replacement::unApply( TextType& text, const OffsetMap& outerOffset, OffsetMap& staticOffset ) {
   if ( m_enabled ) {
-    int pos = outerOffset( contextOffset( m_replacement.m_position ) );
+    int pos = outerOffset( staticOffset( m_replacement.m_position ) );
     DYN_VERIFY_SMALLERSAME( 0, pos );
     DYN_VERIFY_SMALLERSAME( (int)pos, (int)text.length() );
     DYN_VERIFY_SAME( text.substr( pos, m_replacement.m_newText.length() ), m_replacement.m_newText );
 
     text.replace( pos, m_replacement.m_newText.length(), m_replacement.m_oldText );
   } else {
-    contextOffset %= offset( outerOffset );
+    staticOffset %= offset( outerOffset );
   }
 
   return true;
@@ -378,164 +384,6 @@ bool DynamicText::toTail() {
   return true;
 }
 
-#ifdef OLDOFFSET
-OffsetMap DynamicText::offset( VectorTimestamp from, VectorTimestamp to ) {
-  if ( from == to )
-    return OffsetMap();
-
-  OffsetRequest request( from, to );
-
-  OffsetCache::iterator it = m_offsetCache.find( request );
-
-  if ( it != m_offsetCache.end() ) {
-    return ( *it ).second;
-  }
-
-  bool backwards = true;
-  if ( from.smallerOrSame( to ) ) {
-    backwards = false;
-    VectorTimestamp t = from;
-    from = to;
-    to = t;
-  }
-  DYN_VERIFY( to.smallerOrSame( from ) );
-
-  static int depth = 0;
-  depth++;
-
-  DYN_VERIFY_SMALLER( depth, 5000 );
-
-  if ( from == to )
-    return OffsetMap();
-
-  bool applied = true;
-
-  uint sz = m_applied.size();
-
-  DYN_VERIFY_SMALLERSAME( to.size(), sz );
-  DYN_VERIFY_SMALLERSAME( from.size(), sz );
-
-  std::vector<ReplacementPointer> chains( sz );
-  for ( uint a = 0; a < sz; a++ ) {
-    chains[ a ] = m_applied[ a ].last;
-    if ( !chains[ a ] )
-      chains[ a ] = m_unApplied[ a ].first;
-    if ( chains[ a ] )
-      DYN_VERIFY_SAME( chains[ a ] ->primaryIndex(), a );
-    //if( backwards ) {
-    while ( chains[ a ] && chains[ a ] ->primaryStamp() > from[ a ] )
-      chains[ a ] = chains[ a ] ->prev();
-    //} else {
-    while ( chains[ a ] && chains[ a ] ->primaryStamp() < from[ a ] )
-      chains[ a ] = chains[ a ] ->next();
-    //}
-    if ( chains[ a ] )
-      DYN_VERIFY_SAME( chains[ a ] ->primaryStamp(), from[ a ] );
-  }
-
-  OffsetMap offset;
-  VectorTimestamp currentState = from;
-
-  SafetyCounter s( 10000 );
-
-  bool waited = false;
-
-  while ( applied || waited ) {
-    DYN_VERIFY( s );
-
-    bool force = false;
-    if ( waited && !applied ) { ///If there is an inheritance-chain, break it by just applying the first one.
-      force = true;
-      waited = false;
-    }
-    applied = false;
-    waited = false;
-
-    //Apply all replacements that can be applied to the current state, and need to be applied.
-    for ( uint a = 0; a < chains.size(); a++ ) {
-      ReplacementPointer& r( chains[ a ] );
-      if ( !r )
-        continue;
-      DYN_VERIFY( r );
-      const VectorTimestamp& s( r->vectorStamp() );
-
-      if ( s.primaryStamp() > to[ s.primaryIndex() ] ) {
-
-        if ( !force ) {
-          ///Find out if there's another one that can be unapplied, and that should be unapplied before this one. If there is one, wait.
-          bool wait = false;
-          for ( uint b = 0; b < chains.size(); b++ ) {
-            if ( b == a )
-              continue;
-
-            ReplacementPointer& r2( chains[ b ] );
-            if ( !r2 )
-              continue;
-            const VectorTimestamp& s2( r2->vectorStamp() );
-
-            if ( s2.primaryStamp() > to[ s2.primaryIndex() ] && currentState[ s2.primaryIndex() ] >= s2.primaryStamp() ) {
-              ///The other replacement has to be unapplied
-              if ( s[ b ] < s2.primaryStamp() || s2[ a ] >= s.primaryStamp() ) {
-                ///The other replacement should be unapplied before this one
-                wait = true;
-                break;
-              }
-            }
-          }
-
-          if ( wait ) {
-            waited = true;
-            continue;
-          }
-        } else {
-          force = false;
-        }
-
-        OffsetMap selfOffset;
-
-        /*VectorTimestamp prev = currentState;
-        prev.setPrimaryIndex( a );
-        if ( prev.primaryStamp() != 0 ) {
-          prev.decrease();
-          VectorTimestamp selfPrev = s;
-          DYN_VERIFY( selfPrev.primaryStamp() != 0 );
-          selfPrev.decrease();
-          DYN_VERIFY( selfPrev.primaryStamp() >= 0 );
-
-          selfOffset = this->offset( prev, selfPrev );
-        }*/
-
-        if ( backwards ) {
-          offset = offset % ( chains[ a ] ->offset( selfOffset ) );
-        } else {
-          offset = offset % ( ~chains[ a ] ->offset( selfOffset ) );
-        }
-        /*if ( backwards ) {
-          offset = ( chains[ a ] ->offset( selfOffset ) ) % offset;
-        } else {
-          offset = ( ~chains[ a ] ->offset( selfOffset ) ) % offset;
-        }*/
-
-        r = r->prev();
-
-        currentState.setPrimaryIndex( s.primaryIndex() );
-        currentState.decrease();
-        DYN_VERIFY_SMALLERSAME( to[ s.primaryIndex() ], currentState.primaryStamp() );
-
-        applied = true;
-      }
-    }
-  }
-
-  depth--;
-
-  DYN_VERIFY_SAME( currentState, to );
-  m_offsetCache.insert( OffsetCache::value_type( request, offset ) );
-
-  return offset;
-}
-#else
-
 OffsetMap DynamicText::offset( VectorTimestamp from, VectorTimestamp to, int position ) {
   if ( from == to )
     return OffsetMap();
@@ -656,15 +504,15 @@ OffsetMap DynamicText::offset( VectorTimestamp from, VectorTimestamp to, int pos
         if ( to[ a ] < from[ a ] ) {
           VectorTimestamp n = from;
           n.setPrimaryIndex( a );
-          n.decrease();
+          n.decrease(); ///n = the intermediate state we are stepping to
 
           VectorTimestamp prev = chains[a]->vectorStamp();
-          prev.decrease();
+          prev.decrease(); ///prev = the state the replacement in chains[a] was applied to
 
-          ///The position-checking has to be done to avoid endless recursion
+          ///The position-checking needs to be done to avoid endless recursion
           OffsetMap innerOffset = ~offset( prev, n, chains[a]->replacement().m_position );
           ret = offset( n, to );
-          if( position != -1 && position < innerOffset( chains[a]->replacement().m_position ) )
+          if( position != INVALID_POSITION && position < innerOffset( chains[a]->replacement().m_position ) )
               return ret;
           ret = chains[a]->offset( innerOffset ) % ret;
         } else {
@@ -675,7 +523,7 @@ OffsetMap DynamicText::offset( VectorTimestamp from, VectorTimestamp to, int pos
           prev.decrease();
           OffsetMap innerOffset = ~offset( prev, from, next[a]->replacement().m_position );
           ret = offset( n, to );
-          if( position != -1 && position < innerOffset( next[a]->replacement().m_position ) )
+          if( position != INVALID_POSITION && position < innerOffset( next[a]->replacement().m_position ) )
             return ret;
           ret = ~next[a]->offset( innerOffset ) % ret;
         }
@@ -700,8 +548,6 @@ OffsetMap DynamicText::offset( VectorTimestamp from, VectorTimestamp to, int pos
 
   DYN_VERIFY( 0 );
 }
-#endif
-
 
 bool DynamicText::rewindInternal( const VectorTimestamp& state ) {
   SafetyCounter s( 10000 );
@@ -775,15 +621,10 @@ bool DynamicText::rewindInternal( const VectorTimestamp& state ) {
 
         VectorTimestamp prev( s );
         //prev.decrease();
-        OffsetMap prevOffset;
         OffsetMap offset;
-        //if ( !prev.isZero() )
-        offset = prevOffset = this->offset( prevCurrent, prev );
+        offset = ~this->offset( prev, prevCurrent, r.first->replacement().m_position - 1 ); ///@todo -1 or not?
 
         DYN_VERIFY( r.last->unApply( m_text, offset, m_currentOffset ) );
-
-        /*OffsetMap relOffset = ~( prevOffset % (~offset) );
-        m_currentOffset %= relOffset;*/
 
         m_state.setPrimaryIndex( s.primaryIndex() );
         m_state.decrease();
@@ -939,15 +780,10 @@ bool DynamicText::advanceInternal( const VectorTimestamp& state ) {
         //It can be applied now
         VectorTimestamp prev( s );
         prev.decrease();
-        OffsetMap prevOffset;
         OffsetMap offset;
-        if ( !prev.isZero() )
-          offset = prevOffset = this->offset( m_state, prev );
+        offset = ~this->offset( prev, m_state, r.first->replacement().m_position-1 );
 
         DYN_VERIFY( r.first->apply( m_text, offset, m_currentOffset ) );
-
-        /*OffsetMap relOffset = ~( prevOffset % (~offset) );
-        m_currentOffset %= relOffset;*/
 
         m_state.setPrimaryIndex( s.primaryIndex() );
         m_state.increase();

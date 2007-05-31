@@ -17,6 +17,8 @@
 #ifndef DYNAMICTEXT_HELPERS
 #define DYNAMICTEXT_HELPERS
 
+#include <iosfwd>
+
 #include "offsetutils.h"
 #include "verify.h"
 #include "network/sharedptr.h"
@@ -48,6 +50,8 @@ struct SimpleReplacement {
 		arch & m_position & m_oldText & m_newText;
 	}
 };
+
+std::ostream& operator << ( std::ostream& o, const SimpleReplacement& rhs );
 
 class Replacement : public WeakShared {
 	public:
@@ -89,9 +93,9 @@ class Replacement : public WeakShared {
 		void setPrev( ReplacementPointer prev );
 
     template<class TextType>
-    bool apply( TextType& text, const OffsetMap& outerOffset, OffsetMap& contextOffset );
+    bool apply( TextType& text, const OffsetMap& offset, OffsetMap& staticOffset );
     template<class TextType>
-    bool unApply( TextType& text, const OffsetMap& outerOffset, OffsetMap& contextOffset );
+    bool unApply( TextType& text, const OffsetMap& offset, OffsetMap& staticOffset );
 
 #ifdef USE_LINKS
     ///Checks whether "link" should be put into the "links"-map. If it should

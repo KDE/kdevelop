@@ -29,7 +29,6 @@
 #include <QStandardItemModel>
 
 Q_DECLARE_METATYPE( MessagePointer )
-
 using namespace std;
 typedef QPointer<FileCollaborationSession> QFileCollaborationSessionPointer;
 Q_DECLARE_METATYPE( QPersistentModelIndex )

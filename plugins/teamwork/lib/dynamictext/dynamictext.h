@@ -30,6 +30,8 @@ typedef std::string String;
 #include "flexibletext.h"
 using namespace Tree;
 
+#define INVALID_POSITION -1000000
+         
 struct OffsetRequest {
   VectorTimestamp from;
   VectorTimestamp to;
@@ -206,8 +208,8 @@ class DynamicText : public SafeShared {
     void hashReplacement( const ReplacementPointer& rep );
     void unHashReplacement( const ReplacementPointer& rep );
 
-		///Returns the backwards-offset from the current position to the searched one(the searched must be legal, and smaller than current state). If position is set, offsets that do not affect the given position in the from-space are not included.
-		OffsetMap offset( VectorTimestamp from, VectorTimestamp to, int position = -1 );
+		///Returns the offset from the 'from' position to the 'to' one. If position is set, all replacements that are behind that position(given in from-space) will be excluded while computation.
+		OffsetMap offset( VectorTimestamp from, VectorTimestamp to, int position = INVALID_POSITION );
 
     ReplacementPointer m_dummy;
 
