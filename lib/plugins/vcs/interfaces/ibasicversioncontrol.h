@@ -165,7 +165,7 @@ public:
                          const QVariant& localOrRepoLocationDst,
                          const VcsRevision& srcRevision,
                          const VcsRevision& dstRevision,
-                         VcsDiffMode ) = 0;
+                         VcsDiff::Type ) = 0;
 
     /**
      * Shows a diff between the two locations at the given revisions

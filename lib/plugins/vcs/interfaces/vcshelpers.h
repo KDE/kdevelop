@@ -22,6 +22,8 @@
 #ifndef VCSHELPERS_H
 #define VCSHELPERS_H
 
+#include "kdevexport.h"
+
 namespace KDevelop
 {
 
@@ -215,7 +217,7 @@ public:
      *
      * @return the type of job
      */
-    VcsJobType type();
+    Type type();
 
     /**
      * Can be used to obtain an error message if the job exited with an error
@@ -377,7 +379,7 @@ public:
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsEvent::Actions )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsItemEvent::Actions )
 
 #endif
 
