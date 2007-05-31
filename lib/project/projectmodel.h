@@ -167,7 +167,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectItem: public ProjectBuildFolderItem
 {
     public:
         ProjectItem( IProject*, const QString &name, QStandardItem *parent = 0 );
-        ~ProjectItem();
+        virtual ~ProjectItem();
 
         int type() const;
 
