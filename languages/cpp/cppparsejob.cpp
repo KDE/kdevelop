@@ -232,18 +232,19 @@ void CPPInternalParseJob::run()
 
         // Debug output...
 
-        if (topContext->smartRange()) {
+        /*if (topContext->smartRange()) {
             DUChainReadLocker lock(DUChain::lock());
             kDebug( 9007 ) << "================== duchain ==================" << endl;
-        /*if (topContext->smartRange()) {
-            DumpChain dump;
-            dump.dump(ast, parentJob()->parseSession());
-            dump.dump(topContext);
+            if (topContext->smartRange()) {
+                DumpChain dump;
+                dump.dump(ast, parentJob()->parseSession());
+                dump.dump(topContext);
+            }
         }*/
-        }
     }
-    //     DumpTree dumpTree;
-    //     dumpTree.dump( m_AST );
+
+    //DumpTree dumpTree;
+    //dumpTree.dump( m_AST );
 
     kDebug( 9007 ) << "===-- Parsing finished --===> " << parentJob()->document().fileName() << endl;
 }

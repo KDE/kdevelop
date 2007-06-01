@@ -359,29 +359,20 @@ void ContextBuilder::closeContext()
   m_editor->exitCurrentRange();
 }
 
-void ContextBuilder::visitParameterDeclarationClause (ParameterDeclarationClauseAST * node)
-{
-  m_importedParentContexts.append(openContext(node, DUContext::Function));
-
-  DefaultVisitor::visitParameterDeclarationClause (node);
-
-  closeContext();
-}
-
-void ContextBuilder::visitCompoundStatement (CompoundStatementAST * node)
+void ContextBuilder::visitCompoundStatement(CompoundStatementAST * node)
 {
   openContext(node, DUContext::Other);
 
   addImportedContexts();
 
-  DefaultVisitor::visitCompoundStatement (node);
+  DefaultVisitor::visitCompoundStatement(node);
 
   closeContext();
 }
 
-void ContextBuilder::visitSimpleDeclaration (SimpleDeclarationAST *node)
+void ContextBuilder::visitSimpleDeclaration(SimpleDeclarationAST *node)
 {
-  DefaultVisitor::visitSimpleDeclaration (node);
+  DefaultVisitor::visitSimpleDeclaration(node);
 
   // Didn't get claimed if it was still set
   m_importedParentContexts.clear();

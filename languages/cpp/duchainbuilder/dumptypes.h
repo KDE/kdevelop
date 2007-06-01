@@ -32,24 +32,24 @@ public:
 
 protected:
   virtual bool preVisit (const KDevelop::AbstractType * type);
-  virtual void postVisit (const KDevelop::AbstractType * type);
+  virtual void postVisit (const KDevelop::AbstractType *);
 
-  virtual void visit (const KDevelop::IntegralType * type);
+  virtual void visit (const KDevelop::IntegralType *);
 
   virtual bool visit (const KDevelop::PointerType * type);
-  virtual void endVisit (const KDevelop::PointerType * type);
+  virtual void endVisit (const KDevelop::PointerType *);
 
   virtual bool visit (const KDevelop::ReferenceType * type);
-  virtual void endVisit (const KDevelop::ReferenceType * type);
+  virtual void endVisit (const KDevelop::ReferenceType *);
 
   virtual bool visit (const KDevelop::FunctionType * type);
-  virtual void endVisit (const KDevelop::FunctionType * type);
+  virtual void endVisit (const KDevelop::FunctionType *);
 
   virtual bool visit (const KDevelop::StructureType * type);
-  virtual void endVisit (const KDevelop::StructureType * type);
+  virtual void endVisit (const KDevelop::StructureType *);
 
   virtual bool visit (const KDevelop::ArrayType * type);
-  virtual void endVisit (const KDevelop::ArrayType * type);
+  virtual void endVisit (const KDevelop::ArrayType *);
 
 private:
   bool seen(const KDevelop::AbstractType* type);

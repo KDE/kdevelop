@@ -94,14 +94,13 @@ protected:
   virtual void visitPostSimpleDeclaration(SimpleDeclarationAST*);
 
   // Normal overridden visitors
-  virtual void visitNamespace (NamespaceAST *);
-  virtual void visitClassSpecifier (ClassSpecifierAST *);
-  virtual void visitTypedef (TypedefAST *);
-  virtual void visitFunctionDefinition (FunctionDefinitionAST *);
-  virtual void visitParameterDeclarationClause (ParameterDeclarationClauseAST *);
-  virtual void visitCompoundStatement (CompoundStatementAST *);
-  virtual void visitSimpleDeclaration (SimpleDeclarationAST *);
-  virtual void visitName (NameAST *);
+  virtual void visitNamespace(NamespaceAST *);
+  virtual void visitClassSpecifier(ClassSpecifierAST *);
+  virtual void visitTypedef(TypedefAST *);
+  virtual void visitFunctionDefinition(FunctionDefinitionAST *);
+  virtual void visitCompoundStatement(CompoundStatementAST *);
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST *);
+  virtual void visitName(NameAST *);
   virtual void visitUsingDirective(UsingDirectiveAST *);
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
   virtual void visitUsing(UsingAST*);
@@ -109,7 +108,6 @@ protected:
   virtual void visitForStatement(ForStatementAST*);
   virtual void visitIfStatement(IfStatementAST*);
 
-private:
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
   KDevelop::DUContext* openContext(AST* fromRange, AST* toRange, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
@@ -119,6 +117,7 @@ private:
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
   void addImportedContexts();
 
+protected:
   // Variables
   NameCompiler* m_nameCompiler;
 

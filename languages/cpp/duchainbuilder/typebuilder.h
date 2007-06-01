@@ -24,6 +24,9 @@
 #include "declaration.h"
 #include "cppduchainbuilderexport.h"
 
+class CppClassType;
+class CppFunctionType;
+
 typedef ContextBuilder TypeBuilderBase;
 
 /**
@@ -73,6 +76,9 @@ private:
 
   void openAbstractType(KDevelop::AbstractType::Ptr type, AST* node);
   void closeType();
+
+  CppClassType* openClass(int kind);
+  CppFunctionType* openFunction(DeclaratorAST *node);
 
   KDevelop::Declaration::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
 

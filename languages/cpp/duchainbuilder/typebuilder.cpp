@@ -72,9 +72,9 @@ void TypeBuilder::closeType()
     m_topTypes.append(m_lastType);
 }
 
-static CppClassType::Ptr openClass(int kind)
+CppClassType* TypeBuilder::openClass(int kind)
 {
-  CppClassType::Ptr classType(new CppClassType());
+  CppClassType* classType = new CppClassType();
 
   if (kind == Token_struct)
     classType->setClassType(CppClassType::Struct);
@@ -86,7 +86,7 @@ static CppClassType::Ptr openClass(int kind)
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  CppClassType::Ptr classType = openClass(m_editor->parseSession()->token_stream->kind(node->class_key));
+  CppClassType::Ptr classType(openClass(m_editor->parseSession()->token_stream->kind(node->class_key)));
   openType(classType, node);
 
   TypeBuilderBase::visitClassSpecifier(node);
@@ -140,7 +140,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
       case Token_class:
       case Token_struct:
       case Token_union:
-        type = AbstractType::Ptr::staticCast(openClass(kind));
+        type = AbstractType::Ptr(openClass(kind));
         break;
       case Token_enum:
         type = AbstractType::Ptr(new CppEnumerationType());
@@ -307,6 +307,19 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
     closeType();
 }
 
+CppFunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
+{
+  CppFunctionType* functionType = new CppFunctionType();
+
+  if (node->fun_cv)
+    functionType->setCV(parseConstVolatile(node->fun_cv));
+
+  if (lastType())
+    functionType->setReturnType(lastType());
+
+  return functionType;
+}
+
 void TypeBuilder::visitDeclarator(DeclaratorAST *node)
 {
   //BEGIN Copied from default visitor
@@ -329,15 +342,8 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
 
   if (node->parameter_declaration_clause) {
     // New function type
-    CppFunctionType::Ptr newFunction(new CppFunctionType());
-
-    if (node->fun_cv)
-      newFunction->setCV(parseConstVolatile(node->fun_cv));
-
-    if (lastType())
-      newFunction->setReturnType(lastType());
-
-    openType(newFunction, node);
+    openType(CppFunctionType::Ptr(openFunction(node)), node);
+    m_importedParentContexts.append(openContext(node, DUContext::Function, node->id));
   }
 
   //BEGIN Copied from default visitor
@@ -345,12 +351,15 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
   visit(node->exception_spec);
   //END Finished with default visitor
 
-  if (node->parameter_declaration_clause)
+  if (node->parameter_declaration_clause) {
     closeType();
+    closeContext();
+  }
 
-  if (lastType() && hasCurrentType())
+  if (lastType() && hasCurrentType()) {
     if (StructureType::Ptr structure = currentType<StructureType>())
       structure->addElement(lastType());
+  }
 }
 
 void TypeBuilder::visitArrayExpression(ExpressionAST* expression)

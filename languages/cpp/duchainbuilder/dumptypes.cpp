@@ -42,12 +42,12 @@ bool DumpTypes::preVisit(const AbstractType * type)
   return true;
 }
 
-void DumpTypes::postVisit(const AbstractType * type)
+void DumpTypes::postVisit(const AbstractType *)
 {
   --indent;
 }
 
-void DumpTypes::visit(const IntegralType * type)
+void DumpTypes::visit(const IntegralType *)
 {
 }
 
@@ -56,7 +56,7 @@ bool DumpTypes::visit(const PointerType * type)
   return !seen(type);
 }
 
-void DumpTypes::endVisit(const PointerType * type)
+void DumpTypes::endVisit(const PointerType *)
 {
 }
 
@@ -65,7 +65,7 @@ bool DumpTypes::visit(const ReferenceType * type)
   return !seen(type);
 }
 
-void DumpTypes::endVisit(const ReferenceType * type)
+void DumpTypes::endVisit(const ReferenceType *)
 {
 }
 
@@ -74,7 +74,7 @@ bool DumpTypes::visit(const FunctionType * type)
   return !seen(type);
 }
 
-void DumpTypes::endVisit(const FunctionType * type)
+void DumpTypes::endVisit(const FunctionType *)
 {
 }
 
@@ -83,7 +83,7 @@ bool DumpTypes::visit(const StructureType * type)
   return !seen(type);
 }
 
-void DumpTypes::endVisit(const StructureType * type)
+void DumpTypes::endVisit(const StructureType *)
 {
 }
 
@@ -92,7 +92,7 @@ bool DumpTypes::visit(const ArrayType * type)
   return !seen(type);
 }
 
-void DumpTypes::endVisit(const ArrayType * type)
+void DumpTypes::endVisit(const ArrayType *)
 {
 }
 
