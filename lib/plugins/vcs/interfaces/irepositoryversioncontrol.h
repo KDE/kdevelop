@@ -29,48 +29,48 @@ public:
      * Copies the source location in the repository to the destination
      */
     virtual VcsJob* copy( const QString& commitMessage,
-                         const QString& repoSrc,
-                         const QString& repoDst,
-                         const VcsRevision& srcRev ) = 0;
+                          const QString& repoSrc,
+                          const QString& repoDst,
+                          const VcsRevision& srcRev ) = 0;
 
     /**
      * Shows a dialog asking for a commit message that will copy the source
      * location in the repository to the destination
      */
     virtual VcsJob* showCopy( const QString& commitMessage,
-                             const QString& repoSrc,
-                             const QString& repoDst,
-                             const VcsRevision& srcRev ) = 0;
+                              const QString& repoSrc,
+                              const QString& repoDst,
+                              const VcsRevision& srcRev ) = 0;
 
     /**
      * Moves the source location in the repository to the destination
      */
     virtual VcsJob* move( const QString& commitMessage,
-                         const QString& repoSrc,
-                         const QString& repoDst,
-                         const VcsRevision& srcRev ) = 0;
+                          const QString& repoSrc,
+                          const QString& repoDst,
+                          const VcsRevision& srcRev ) = 0;
 
     /**
      * Shows a dialog asking for a commit message that will move the source
      * location in the repository to the destination
      */
     virtual VcsJob* showMove( const QString& commitMessage,
-                             const QString& repoSrc,
-                             const QString& repoDst,
-                             const VcsRevision& srcRev ) = 0;
+                              const QString& repoSrc,
+                              const QString& repoDst,
+                              const VcsRevision& srcRev ) = 0;
 
     /**
      * Removes the source locations in the repository
      */
     virtual VcsJob* remove( const QString& commitMessage,
-                           const QStringList& repoLocations ) = 0;
+                            const QStringList& repoLocations ) = 0;
 
     /**
      * Shows a dialog asking for a commit message that will remove the source
      * locations in the repository
      */
     virtual VcsJob* showRemove( const QString& commitMessage,
-                               const QStringList& repoLocations ) = 0;
+                                const QStringList& repoLocations ) = 0;
 };
 
 #endif

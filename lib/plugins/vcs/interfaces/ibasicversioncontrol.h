@@ -71,7 +71,7 @@ public:
      * only active for directories
      */
     virtual VcsJob* add( const KUrl::List& localLocations,
-                        RecursionMode recursion ) = 0;
+                         RecursionMode recursion ) = 0;
 
     /**
      * removes a local file/dir from the list of versioned files
@@ -95,27 +95,27 @@ public:
      * active for directories
      */
     virtual VcsJob* status( const KUrl::List& localLocations,
-                           RecursionMode recursion ) = 0;
+                            RecursionMode recursion ) = 0;
     /**
      * gives the revision of file/dir, that is the revision to which this files
      * was updated when update() was run the last time
      */
     virtual VcsJob* localRevision( const KUrl& localLocation,
-                                  VcsRevision::RevisionType ) = 0;
+                                   VcsRevision::RevisionType ) = 0;
 
     /**
      * executes a copy of a file/dir, preserving history if the VCS system
      * allows that, may be implemented by filesystem copy+add
      */
     virtual VcsJob* copy( const KUrl& localLocationSrc,
-                         const KUrl& localLocationDstn ) = 0;
+                          const KUrl& localLocationDstn ) = 0;
 
     /**
      * moves src to dst, preserving history if the VCS system allows that, may
      * be implemented by copy+remove
      */
     virtual VcsJob* move( const KUrl& localLocationSrc,
-                         const KUrl& localLocationDst ) = 0;
+                          const KUrl& localLocationDst ) = 0;
 
     /**
      * revert all local changes on the given file, making its content equal
@@ -123,7 +123,7 @@ public:
      * unedit() (if not a no-op) is implied.
      */
     virtual VcsJob* revert( const KUrl::List& localLocations,
-                           RecursionMode recursion ) = 0;
+                            RecursionMode recursion ) = 0;
 
     /**
      * fetches the latest changes from the repository, if there are
@@ -136,23 +136,23 @@ public:
      * recursively
      */
     virtual VcsJob* update( const KUrl::List& localLocations,
-                           const VcsRevision& rev,
-                           RecursionMode recursion ) = 0;
+                            const VcsRevision& rev,
+                            RecursionMode recursion ) = 0;
 
     /**
      * Checks in the changes of the given file(s)/dir(s) into the repository
      */
     virtual VcsJob* commit( const QString& message,
-                           const KUrl::List& localLocations,
-                           RecursionMode recursion ) = 0;
+                            const KUrl::List& localLocations,
+                            RecursionMode recursion ) = 0;
 
     /**
      * Shows a dialog asking for a commit message that will check in the changes
      * of the given file(s)/dir(s) into the repository
      */
     virtual VcsJob* showCommit( const QString& message,
-                               const KUrl::List& localLocations,
-                               RecursionMode recursion ) = 0;
+                                const KUrl::List& localLocations,
+                                RecursionMode recursion ) = 0;
     /**
      * Retrieves a diff between the two locations at the given revisions
      *
@@ -162,10 +162,10 @@ public:
      * The diff is in unified diff format for text files
      */
     virtual VcsJob* diff( const QVariant& localOrRepoLocationSrc,
-                         const QVariant& localOrRepoLocationDst,
-                         const VcsRevision& srcRevision,
-                         const VcsRevision& dstRevision,
-                         VcsDiff::Type ) = 0;
+                          const QVariant& localOrRepoLocationDst,
+                          const VcsRevision& srcRevision,
+                          const VcsRevision& dstRevision,
+                          VcsDiff::Type ) = 0;
 
     /**
      * Shows a diff between the two locations at the given revisions
@@ -174,9 +174,9 @@ public:
      * or a QString which is assumed to define a repository path
      */
     virtual VcsJob* showDiff( const QVariant& localOrRepoLocationSrc,
-                             const QVariant& localOrRepoLocationDst,
-                             const VcsRevision& srcRevision,
-                             const VcsRevision& dstRevision ) = 0;
+                              const QVariant& localOrRepoLocationDst,
+                              const VcsRevision& srcRevision,
+                              const VcsRevision& dstRevision ) = 0;
 
     /**
      * Retrieve the history of a given local url
@@ -186,8 +186,8 @@ public:
      * limit is @e advisory and may be ignored.
      */
     virtual VcsJob* log( const KUrl& localLocation,
-                        const VcsRevision& rev,
-                        unsigned long limit ) = 0;
+                         const VcsRevision& rev,
+                         unsigned long limit ) = 0;
 
     /**
      * Retrieve the history of a given local url
@@ -197,8 +197,8 @@ public:
      * limit is @e advisory and may be ignored.
      */
     virtual VcsJob* log( const KUrl& localLocation,
-                        const VcsRevision& rev,
-                        const VcsRevision& limit ) = 0;
+                         const VcsRevision& rev,
+                         const VcsRevision& limit ) = 0;
 
     /**
      * Show the history of a given local url
@@ -206,7 +206,7 @@ public:
      * @param rev List @p rev and earlier. The default is HEAD.
      */
     virtual VcsJob* showLog( const KUrl& localLocation,
-                            const VcsRevision& rev ) = 0;
+                             const VcsRevision& rev ) = 0;
 
     /**
      * Annotate each line of the given local url at the given revision
@@ -215,7 +215,7 @@ public:
      * @param rev Revision that should be annotated.
      */
     virtual VcsJob* annotate( const KUrl& localLocation,
-                             const VcsRevision& rev ) = 0;
+                              const VcsRevision& rev ) = 0;
 
     /**
      * Annotate each line of the given local url at the given revision
@@ -224,7 +224,7 @@ public:
      * @param rev Revision that should be annotated.
      */
     virtual VcsJob* showAnnotate( const KUrl& localLocation,
-                                 const VcsRevision& rev ) = 0;
+                                  const VcsRevision& rev ) = 0;
 
     /**
      * merge/integrate the changes between src and dest into the given local file
@@ -233,17 +233,17 @@ public:
      * or a QString which is assumed to define a repository path
      */
     virtual VcsJob* merge( const QVariant& localOrRepoLocationSrc,
-                          const QVariant& localOrRepoLocationDst,
-                          const VcsRevision& srcRevision,
-                          const VcsRevision& dstRevision,
-                          const KUrl& localLocation ) = 0;
+                           const QVariant& localOrRepoLocationDst,
+                           const VcsRevision& srcRevision,
+                           const VcsRevision& dstRevision,
+                           const KUrl& localLocation ) = 0;
 
     /**
      * check for conflicts in the given file and eventually present a
      * conflict solving dialog to the user
      */
     virtual VcsJob* resolve( const KUrl::List& localLocations,
-                            RecursionMode recursion ) = 0;
+                             RecursionMode recursion ) = 0;
 
     /**
      * The following two methods are part of the basic interface so other plugins
@@ -257,8 +257,8 @@ public:
      * target
      */
     virtual VcsJob* import( const KUrl& localLocation,
-                           const QString& repositoryLocation,
-                           RecursionMode recursion ) = 0;
+                            const QString& repositoryLocation,
+                            RecursionMode recursion ) = 0;
 
     /**
      * Checks out files or dirs from a repository into a local directory

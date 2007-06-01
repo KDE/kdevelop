@@ -41,9 +41,9 @@ public:
      * about the branch. Not all VCS's will use this parameter.
      */
     virtual VcsJob* branch( const QString& commitMessage,
-                           const VcsMapping& mapping,
-                           const VcsRevision& rev,
-                           const QString& branchName ) = 0;
+                            const VcsMapping& mapping,
+                            const VcsRevision& rev,
+                            const QString& branchName ) = 0;
 
     /**
      * Show a dialog to create a branch, intialized with the given mapping
@@ -59,9 +59,9 @@ public:
      * about the branch. Not all VCS's will use this parameter.
      */
     virtual VcsJob* showBranch( const QString& commitMessage,
-                               const VcsMapping& mapping,
-                               const VcsRevision& rev,
-                               const QString& branchName ) = 0;
+                                const VcsMapping& mapping,
+                                const VcsRevision& rev,
+                                const QString& branchName ) = 0;
 
     /**
      * Creates a new tag from the given mapping information
@@ -76,9 +76,9 @@ public:
      * tag. Not all VCS's will use this parameter.
      */
     virtual VcsJob* tag( const QString& commitMessage,
-                        const VcsMapping& mapping,
-                        const VcsRevision& rev,
-                        const QString& tagName ) = 0;
+                         const VcsMapping& mapping,
+                         const VcsRevision& rev,
+                         const QString& tagName ) = 0;
 
     /**
      * Show a dialog to create a new tag, intialized with the given mapping
@@ -94,9 +94,9 @@ public:
      * tag. Not all VCS's will use this parameter.
      */
     virtual VcsJob* showTag( const QString& commitMessage,
-                            const VcsMapping& mapping,
-                            const VcsRevision& rev,
-                            const QString& tagName ) = 0;
+                             const VcsMapping& mapping,
+                             const VcsRevision& rev,
+                             const QString& tagName ) = 0;
 };
 
 }
