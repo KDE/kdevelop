@@ -87,7 +87,7 @@ public:
  * Small container class that has a mapping of
  * repository-location -> local location including a recursion flag
  *
- * Just a convenient API around QMap\<KUrl, QPair\<KUrl, MappingFlags\>\>
+ * Just a convenient API around QMap\<KUrl, QPair\<KUrl, MappingFlag\>\>
  */
 class KDEVPLATFORMVCS_EXPORT VcsMapping
 {
