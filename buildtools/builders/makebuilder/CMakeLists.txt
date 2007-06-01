@@ -24,7 +24,7 @@ target_link_libraries(kdevmakebuilder
         ${QT_QTDESIGNER_LIBRARY}
         kdevplatforminterfaces
         kdevplatformproject
-        kdevoutputviewinterfaces
+        kdevplatformoutputview  
 )
 
 install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
