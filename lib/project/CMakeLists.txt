@@ -6,7 +6,6 @@ set(kdevplatformproject_LIB_SRCS
     projectmodel.cpp
     projectconfigskeleton.cpp
     importprojectjob.cpp
-    importprojectthread.cpp
 	interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp

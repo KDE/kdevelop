@@ -19,32 +19,27 @@
 */
 
 #include "importprojectjob.h"
-#include "importprojectthread.h"
-
 #include "interfaces/iprojectfilemanager.h"
 #include "projectmodel.h"
 
 #include <kglobal.h>
 #include <kdebug.h>
-#include <threadweaver/ThreadWeaver.h>
+#include <QQueue>
 
 namespace KDevelop
 {
 
 struct ImportProjectJobPrivate
 {
-    ThreadWeaver::Weaver *m_weaver;
-    ImportProjectThread *m_weaverJob;
+    ProjectFolderItem *m_folder;
+    IProjectFileManager *m_importer;
 };
 
 ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer)
     : KJob(0), d(new ImportProjectJobPrivate)
 
 {
-    d->m_weaver = new ThreadWeaver::Weaver( this );
-    d->m_weaverJob = new ImportProjectThread( this );
-
-    d->m_weaverJob->setProjectFileManager( importer );
+    d->m_importer = importer;
     ProjectFolderItem *folderItem = 0;
     if ( folder->type() == ProjectBaseItem::Folder ||
          folder->type() == ProjectBaseItem::BuildFolder ||
@@ -52,7 +47,7 @@ ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *i
     {
         folderItem = dynamic_cast<ProjectFolderItem*>( folder );
     }
-    d->m_weaverJob->setProjectFolderItem( folderItem );
+    d->m_folder = folderItem;
 }
 
 ImportProjectJob::~ImportProjectJob()
@@ -62,25 +57,25 @@ ImportProjectJob::~ImportProjectJob()
 
 void ImportProjectJob::start()
 {
-    if( !(d->m_weaverJob) )
-        return;
+    QQueue< QList<KDevelop::ProjectFolderItem*> > workQueue;
+    QList<KDevelop::ProjectFolderItem*> initial;
+    initial.append( d->m_folder );
+    workQueue.enqueue( initial );
 
-    d->m_weaver->enqueue( d->m_weaverJob );
-    connect( d->m_weaverJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(slotDone(ThreadWeaver::Job*)) );
+    while( workQueue.count() > 0 )
+    {
+        QList<KDevelop::ProjectFolderItem*> front = workQueue.dequeue();
+        Q_FOREACH( KDevelop::ProjectFolderItem* _item, front )
+        {
+            QList<KDevelop::ProjectFolderItem*> workingList = d->m_importer->parse( _item );
+            if( workingList.count() > 0 )
+                workQueue.enqueue( workingList );
+        }
+    }
 
-//     d->m_weaverJob->start();
-//     connect( d->m_weaverJob, SIGNAL(finished()), this, SLOT(slotFinished()) );
-}
-
-void ImportProjectJob::slotDone(ThreadWeaver::Job*)
-{
     emitResult();
+    kDebug() << "ImportProjectThread::run() returning" << endl;
 }
-
-// void ImportProjectJob::slotFinished()
-// {
-//     emitResult();
-// }
 
 }
 #include "importprojectjob.moc"

@@ -47,14 +47,6 @@ public:
 public:
     void start();
 
-protected:
-    void startNextJob(ProjectFolderItem *folder);
-    void slotResult(KJob *job);
-
-protected Q_SLOTS:
-    void slotDone(ThreadWeaver::Job*);
-//     void slotFinished();
-
 private:
     struct ImportProjectJobPrivate* const d;
 };
