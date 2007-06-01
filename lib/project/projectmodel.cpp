@@ -297,7 +297,6 @@ void ProjectFolderItem::setUrl( const KUrl& url )
 void ProjectFolderItem::setIcon()
 {
     QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
-    setForeground(QApplication::palette().highlight());
 }
 
 ProjectBuildFolderItem::ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& dd )
@@ -382,23 +381,6 @@ ProjectFileItem *ProjectFileItem::file() const
 void ProjectFileItem::setIcon()
 {
     QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, K3Icon::Small ) );
-
-    QBrush fg = foreground();
-    kDebug() << "highlight: " << QApplication::palette().highlight().color() << "|base: "<< QApplication::palette().base().color() << endl;
-    fg.setColor( KGraphicsUtils::blendColor(
-                                QApplication::palette().highlight().color(),
-                                QApplication::palette().base().color()
-                                ) );
-    kDebug() << "blend: " << fg.color() <<endl;
-    setForeground(fg);
-//     QColor highlight(QApplication::palette().highlight().color());
-//     QColor bkg(QApplication::palette().window().color());
-//     bkg.setAlpha(128);
-//     QColor blend = KGraphicsUtils::blendColor(QApplication::palette().highlight().color(), bkg);
-//     kDebug(9038) << " blended: " << bkg << "x" << highlight << "=" << blend << "lightended:" << highlight.lighter()<< endl;
-//     QBrush b = QApplication::palette().highlight();
-//     b.setColor(blend);
-//     setForeground(b);
 }
 
 ProjectTargetItem::ProjectTargetItem( ProjectTargetItemPrivate& dd)
