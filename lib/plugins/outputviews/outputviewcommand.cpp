@@ -91,7 +91,7 @@ QStringList OutputViewCommand::buildEnvList( const QMap<QString,QString>& map )
     QStringList env;
     foreach( QString s, map.keys() )
     {
-        env.append(s+"="+map[s]);
+        env.append(s+'='+map[s]);
     }
     return env;
 }
