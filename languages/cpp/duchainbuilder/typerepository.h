@@ -26,7 +26,7 @@
 #include "cpptypes.h"
 #include "cppduchainbuilderexport.h"
 
-class KDEVDUCHAINBUILDER_EXPORT TypeRepository
+class KDEVCPPDUCHAINBUILDER_EXPORT  TypeRepository
 {
 public:
   static TypeRepository* self();

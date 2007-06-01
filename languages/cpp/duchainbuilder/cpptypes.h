@@ -38,7 +38,7 @@ class Declaration;
 class ClassFunctionDeclaration;
 }
 
-class KDEVDUCHAINBUILDER_EXPORT CppCVType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppCVType
 {
   friend class TypeRepository;
   friend class TypeBuilder;
@@ -67,7 +67,7 @@ private:
   bool m_volatile : 1;
 };
 
-class KDEVDUCHAINBUILDER_EXPORT CppIntegralType : public KDevelop::IntegralType, public CppCVType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppIntegralType : public KDevelop::IntegralType, public CppCVType
 {
   friend class TypeRepository;
 
@@ -115,7 +115,7 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 
-class KDEVDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionType, public KDevelop::IdentifiedType, public CppCVType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppFunctionType : public KDevelop::FunctionType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppFunctionType> Ptr;
@@ -130,7 +130,7 @@ public:
   virtual QString mangled() const;
 };
 
-class KDEVDUCHAINBUILDER_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppPointerType> Ptr;
@@ -144,7 +144,7 @@ public:
   //virtual uint hash() const;
 };
 
-class KDEVDUCHAINBUILDER_EXPORT CppReferenceType : public KDevelop::ReferenceType, public CppCVType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppReferenceType : public KDevelop::ReferenceType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppReferenceType> Ptr;
@@ -158,7 +158,7 @@ public:
   //virtual uint hash() const;
 };
 
-class KDEVDUCHAINBUILDER_EXPORT CppClassType : public KDevelop::StructureType, public KDevelop::IdentifiedType, public CppCVType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppClassType : public KDevelop::StructureType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppClassType> Ptr;
@@ -219,7 +219,7 @@ public:
   virtual QString toString() const;
 };*/
 
-class KDEVDUCHAINBUILDER_EXPORT CppTypeAliasType : public KDevelop::AbstractType, public KDevelop::IdentifiedType, public CppCVType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppTypeAliasType : public KDevelop::AbstractType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
   typedef KSharedPtr<CppTypeAliasType> Ptr;
@@ -264,7 +264,7 @@ private:
   QString m_value;
 };*/
 
-class KDEVDUCHAINBUILDER_EXPORT CppEnumerationType : public CppIntegralType, public KDevelop::IdentifiedType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppEnumerationType : public CppIntegralType, public KDevelop::IdentifiedType
 {
 public:
   typedef KSharedPtr<CppEnumerationType> Ptr;
@@ -275,7 +275,7 @@ public:
   virtual QString mangled() const;
 };
 
-class KDEVDUCHAINBUILDER_EXPORT CppArrayType : public KDevelop::ArrayType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppArrayType : public KDevelop::ArrayType
 {
 public:
   typedef KSharedPtr<CppArrayType> Ptr;
@@ -297,7 +297,7 @@ private:
   bool m_defaultValue;
 };*/
 
-class KDEVDUCHAINBUILDER_EXPORT CppTemplateType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
+class KDEVCPPDUCHAINBUILDER_EXPORT CppTemplateType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
 {
 public:
   typedef KSharedPtr<CppTemplateType> Ptr;

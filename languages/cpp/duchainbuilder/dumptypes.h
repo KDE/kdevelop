@@ -22,7 +22,7 @@
 #include "typesystem.h"
 #include "cppduchainbuilderexport.h"
 
-class KDEVDUCHAINBUILDER_EXPORT DumpTypes : protected KDevelop::TypeVisitor
+class KDEVCPPDUCHAINBUILDER_EXPORT DumpTypes : protected KDevelop::TypeVisitor
 {
 public:
   DumpTypes();

@@ -41,7 +41,7 @@ namespace KTextEditor { class Range; }
 /**
  * A class which iterates the AST to identify contexts.
  */
-class KDEVDUCHAINBUILDER_EXPORT ContextBuilder: protected DefaultVisitor
+class KDEVCPPDUCHAINBUILDER_EXPORT  ContextBuilder: protected DefaultVisitor
 {
   friend class IdentifierVerifier;
 

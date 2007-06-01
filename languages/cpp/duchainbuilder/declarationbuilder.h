@@ -34,7 +34,7 @@ typedef TypeBuilder DeclarationBuilderBase;
 /**
  * A class which iterates the AST to extract definitions of types.
  */
-class KDEVDUCHAINBUILDER_EXPORT DeclarationBuilder: public DeclarationBuilderBase
+class KDEVCPPDUCHAINBUILDER_EXPORT DeclarationBuilder: public DeclarationBuilderBase
 {
 public:
   DeclarationBuilder(ParseSession* session);

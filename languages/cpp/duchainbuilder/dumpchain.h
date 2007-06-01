@@ -29,7 +29,7 @@ namespace KDevelop
 class DUContext;
 }
 
-class KDEVDUCHAINBUILDER_EXPORT DumpChain: protected DefaultVisitor
+class KDEVCPPDUCHAINBUILDER_EXPORT DumpChain: protected DefaultVisitor
 {
 public:
   DumpChain();

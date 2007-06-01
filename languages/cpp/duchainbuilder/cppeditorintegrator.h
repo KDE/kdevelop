@@ -33,7 +33,7 @@ class AST;
  *
  * \todo introduce stacks for the state?
  */
-class KDEVDUCHAINBUILDER_EXPORT CppEditorIntegrator : public KDevelop::EditorIntegrator
+class KDEVCPPDUCHAINBUILDER_EXPORT CppEditorIntegrator : public KDevelop::EditorIntegrator
 {
 public:
   CppEditorIntegrator(ParseSession* session);

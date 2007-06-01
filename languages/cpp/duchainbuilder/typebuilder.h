@@ -33,7 +33,7 @@ typedef ContextBuilder TypeBuilderBase;
  * array types; parent classes will not have
  * their visitDeclarator function called.
  */
-class KDEVDUCHAINBUILDER_EXPORT TypeBuilder: public TypeBuilderBase
+class KDEVCPPDUCHAINBUILDER_EXPORT TypeBuilder: public TypeBuilderBase
 {
 public:
   TypeBuilder(ParseSession* session);

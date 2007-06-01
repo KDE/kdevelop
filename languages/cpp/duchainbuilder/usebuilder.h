@@ -27,7 +27,7 @@ typedef ContextBuilder UseBuilderBase;
 /**
  * A class which iterates the AST to extract uses of definitions.
  */
-class KDEVDUCHAINBUILDER_EXPORT UseBuilder: public UseBuilderBase
+class KDEVCPPDUCHAINBUILDER_EXPORT  UseBuilder: public UseBuilderBase
 {
 public:
   UseBuilder(ParseSession* session);
