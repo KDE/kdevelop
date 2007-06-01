@@ -21,7 +21,7 @@
 #ifndef IDENTIFIEDTYPE_H
 #define IDENTIFIEDTYPE_H
 
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 #include "identifier.h"
 
 namespace KDevelop

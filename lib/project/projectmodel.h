@@ -23,7 +23,7 @@
 
 #include <QtGui/QStandardItem>
 #include <QtGui/QStandardItemModel>
-#include "kdevexport.h"
+#include "projectexport.h"
 #include "kurl.h"
 
 template<typename T1,typename T2> class QPair;

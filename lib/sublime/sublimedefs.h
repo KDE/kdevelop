@@ -22,7 +22,7 @@
 #include <QtCore/Qt>
 #include <QtCore/QFlags>
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 /**
 @file sublimedefs.h

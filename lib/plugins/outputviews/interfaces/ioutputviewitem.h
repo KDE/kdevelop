@@ -20,7 +20,7 @@
 #ifndef IOUTPUTVIEWITEM_H
 #define IOUTPUTVIEWITEM_H
 
-#include "kdevexport.h"
+#include "outputviewexport.h"
 #include <QtGui/QStandardItem>
 class QAction;
 template<typename T1> class QList;
@@ -30,7 +30,7 @@ template<typename T1> class QList;
  * Generated in IOutputViewItemFactory.
  * @sa IOutputViewItemFactory
  */
-class OUTPUTVIEWINTERFACES_EXPORT IOutputViewItem : public QStandardItem
+class KDEVPLATFORMOUTPUTVIEW_EXPORT IOutputViewItem : public QStandardItem
 {
 public:
     /**

@@ -1,5 +1,4 @@
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/
     ${CMAKE_SOURCE_DIR}/lib/interfaces
 )
 
@@ -33,5 +32,6 @@ install(FILES
     importprojectjob.h
     projectconfigskeleton.h
     projectmodel.h
+    projectexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project
  )

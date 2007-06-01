@@ -29,7 +29,7 @@
 #include <QtCore/QPointer>
 #include <QtCore/QPair>
 #include <QtDesigner/QExtensionManager>
-#include "kdevexport.h"
+#include "interfacesexport.h"
 
 class QWidget;
 class KInstance;

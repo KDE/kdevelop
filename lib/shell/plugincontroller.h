@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
 
-#include "kdevexport.h"
+#include "shellexport.h"
 
 class KDialog;
 class KXMLGUIClient;

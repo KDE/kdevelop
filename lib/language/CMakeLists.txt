@@ -1,6 +1,5 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/
     ${CMAKE_SOURCE_DIR}/lib/interfaces
     ${CMAKE_SOURCE_DIR}/lib/language/interfaces
     ${CMAKE_SOURCE_DIR}/lib/editor
@@ -39,7 +38,7 @@ install(TARGETS kdevplatformlanguage DESTINATION ${LIB_INSTALL_DIR} )
 ########### install files ###############
 
 install(FILES
-    kdevlanguageexport.h
+    languageexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language
 )
 

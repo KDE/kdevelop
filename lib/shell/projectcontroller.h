@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include "iprojectcontroller.h"
 
-#include "kdevexport.h"
+#include "shellexport.h"
 
 class KRecentFilesAction;
 

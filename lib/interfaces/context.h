@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include "kdevexport.h"
+#include "interfacesexport.h"
 
 #include <QtCore/QStringList>
 

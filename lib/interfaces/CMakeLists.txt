@@ -37,6 +37,7 @@ install(FILES
     idocument.h
     idocumentcontroller.h
     iextension.h
+    interfacesexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces
 )
 

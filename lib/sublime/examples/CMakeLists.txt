@@ -1,4 +1,7 @@
-include_directories(${CMAKE_SOURCE_DIR}/lib)
+include_directories(
+    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/sublime
+    )
 
 ########### next target ###############
 

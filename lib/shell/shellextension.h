@@ -21,7 +21,7 @@
 #define SHELLEXTENSION_H
 
 #include <QtCore/QString>
-#include "kdevexport.h"
+#include "shellexport.h"
 
 namespace KDevelop
 {

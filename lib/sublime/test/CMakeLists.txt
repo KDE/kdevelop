@@ -1,6 +1,9 @@
 if (KDE4_BUILD_TESTS)
 
-include_directories(${CMAKE_SOURCE_DIR}/lib)
+include_directories(
+    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/sublime
+    )
 
 set( areaoperationtest_SRCS areaoperationtest.cpp areaprinter.cpp )
 kde4_automoc(${areaoperationtest_SRCS})

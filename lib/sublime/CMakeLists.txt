@@ -44,6 +44,7 @@ install(FILES
     mainwindowoperator.h
     urldocument.h
     sublimedefs.h
+    sublimeexport.h
     switcher.h
     tooldocument.h
     view.h

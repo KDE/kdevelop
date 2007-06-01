@@ -20,7 +20,7 @@
 #define TOPDUCONTEXT_H
 
 #include "ducontext.h"
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 #include <QtCore/QMutex>
 
 namespace KDevelop

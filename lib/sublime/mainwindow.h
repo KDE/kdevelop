@@ -22,7 +22,7 @@
 #include <QtCore/QList>
 #include <kparts/mainwindow.h>
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 class QDockWidget;
 

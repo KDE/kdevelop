@@ -21,7 +21,7 @@
 
 #include <QtCore/QObject>
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 #include "areaindex.h"
 #include "sublimedefs.h"

@@ -22,7 +22,7 @@
 
 #include <kjob.h>
 // #include "projectmodel.h"
-#include "kdevexport.h"
+#include "projectexport.h"
 
 class QStandardItem;
 

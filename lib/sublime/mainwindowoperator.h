@@ -21,7 +21,7 @@
 
 //krazy:excludeall=dpointer
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 namespace Sublime {
 

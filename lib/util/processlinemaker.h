@@ -22,7 +22,7 @@
 #define _PROCESSLINEMAKER_H_
 
 #include <QObject>
-#include "kdevexport.h"
+#include "utilexport.h"
 
 /**
 @file processlinemaker.h

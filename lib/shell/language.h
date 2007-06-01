@@ -23,6 +23,8 @@
 
 #include <QtCore/QList>
 
+#include "shellexport.h"
+
 namespace KDevelop {
 
 class KDEVPLATFORMSHELL_EXPORT Language: public ILanguage {

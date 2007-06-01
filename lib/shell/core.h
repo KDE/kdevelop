@@ -19,7 +19,7 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <kdevexport.h>
+#include <shellexport.h>
 #include "icore.h"
 
 namespace Sublime {

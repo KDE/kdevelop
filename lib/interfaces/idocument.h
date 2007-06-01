@@ -23,7 +23,7 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
-#include <kdevexport.h>
+#include <interfacesexport.h>
 #include <ktexteditor/cursor.h>
 
 namespace KParts { class Part; }

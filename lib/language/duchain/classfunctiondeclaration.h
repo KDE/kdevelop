@@ -22,7 +22,7 @@
 #define CLASSFUNCTIONDECLARATION_H
 
 #include "classmemberdeclaration.h"
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {

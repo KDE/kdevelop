@@ -23,7 +23,7 @@
 #include <QtCore/QList>
 
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 #include "viewcreator.h"
 

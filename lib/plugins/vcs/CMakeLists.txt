@@ -7,8 +7,8 @@ if(SUBVERSION_FOUND AND NOT WIN32)
 endif(SUBVERSION_FOUND AND NOT WIN32)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/lib/interfaces
 )
 
@@ -27,3 +27,8 @@ install(FILES
     interfaces/iversioncontrol.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/vcs/interfaces
 )
+install(FILES
+    vcsexport.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/vcs
+)
+

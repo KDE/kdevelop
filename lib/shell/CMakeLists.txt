@@ -1,7 +1,8 @@
 add_subdirectory(settings)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/
+    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/sublime
     ${CMAKE_SOURCE_DIR}/lib/interfaces
     ${CMAKE_SOURCE_DIR}/lib/editor
     ${CMAKE_SOURCE_DIR}/lib/project
@@ -54,5 +55,6 @@ install(FILES
     documentcontroller.h
     languagecontroller.h
     language.h
+    shellexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell
 )

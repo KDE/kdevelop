@@ -20,7 +20,7 @@
 #define FORWARDDECLARATION_H
 
 #include "declaration.h"
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {

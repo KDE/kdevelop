@@ -22,7 +22,7 @@
 
 #include <qabstractitemmodel.h>
 #include <qvector.h>
-#include "kdevexport.h"
+#include "utilexport.h"
 
 class KFilterModelPrivate;
 

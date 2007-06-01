@@ -21,11 +21,11 @@
 #ifndef IOUTPUTVIEWITEMFACTORY_H
 #define IOUTPUTVIEWITEMFACTORY_H
 
-#include "kdevexport.h"
+#include "outputviewexport.h"
 #include <QtCore/QString>
 #include <ioutputviewitem.h>
 
-class OUTPUTVIEWINTERFACES_EXPORT IOutputViewItemFactory
+class KDEVPLATFORMOUTPUTVIEW_EXPORT IOutputViewItemFactory
 {
 public:
     virtual ~IOutputViewItemFactory();
@@ -39,7 +39,7 @@ public:
 };
 
 template<typename T>
-class OUTPUTVIEWINTERFACES_EXPORT StandardOutputViewItemFactory : public IOutputViewItemFactory
+class KDEVPLATFORMOUTPUTVIEW_EXPORT StandardOutputViewItemFactory : public IOutputViewItemFactory
 {
 public:
     StandardOutputViewItemFactory()

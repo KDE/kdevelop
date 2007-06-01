@@ -47,13 +47,13 @@ void ProjectManagerDelegate::paint( QPainter *painter, const QStyleOptionViewIte
         {
             if ( item->folder() )
             {
-                opt.font.setBold( true );
-                opt.palette.setColor( QPalette::Text, Qt::blue );
+//                 opt.font.setBold( true );
+//                 opt.palette.setColor( QPalette::Text, Qt::blue );
             }
             else if ( item->target() )
             {
-                opt.font.setBold( true );
-                opt.palette.setColor( QPalette::Text, Qt::red );
+//                 opt.font.setBold( true );
+//                 opt.palette.setColor( QPalette::Text, Qt::red );
             }
         }
     }

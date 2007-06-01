@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <kurl.h>
-#include "kdevexport.h"
+#include "interfacesexport.h"
 
 class QModelIndex;
 

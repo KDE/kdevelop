@@ -22,7 +22,7 @@
 #ifndef VCSHELPERS_H
 #define VCSHELPERS_H
 
-#include "kdevexport.h"
+#include "vcsexport.h"
 
 namespace KDevelop
 {

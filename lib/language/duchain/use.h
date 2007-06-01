@@ -19,7 +19,7 @@
 #ifndef DEFINITIONUSE_H
 #define DEFINITIONUSE_H
 
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 #include "documentrangeobject.h"
 #include "duchainbase.h"
 

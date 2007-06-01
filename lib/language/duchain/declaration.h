@@ -20,7 +20,7 @@
 #define DECLARATION_H
 
 #include <QtCore/QList>
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 
 #include "identifier.h"
 #include "documentrangeobject.h"

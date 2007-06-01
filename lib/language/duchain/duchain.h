@@ -21,7 +21,7 @@
 
 #include <QtCore/QObject>
 
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 #include "duchainobserver.h"
 
 class KUrl;

@@ -22,7 +22,7 @@
 #include <kurl.h>
 
 #include "iextension.h"
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
 

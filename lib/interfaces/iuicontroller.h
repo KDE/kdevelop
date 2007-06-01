@@ -19,7 +19,7 @@
 #ifndef IUICONTROLLER_H
 #define IUICONTROLLER_H
 
-#include "kdevexport.h"
+#include "interfacesexport.h"
 
 #include <QtCore/QStringList>
 #include <kurl.h>

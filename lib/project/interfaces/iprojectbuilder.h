@@ -21,7 +21,7 @@
 #define IPROJECTBUILDER_H
 
 #include "iextension.h"
-#include "kdevexport.h"
+#include "projectexport.h"
 
 namespace KDevelop
 {

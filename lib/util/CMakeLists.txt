@@ -1,15 +1,7 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/lib )
-
-
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS
-#     execcommand.cpp
-#     kfiltermodel.cpp
-#     kdevtreeview.cpp
-#     settings.cpp
-#     kdevitemmodel.cpp
     processlinemaker.cpp
 )
 
@@ -23,6 +15,9 @@ install(TARGETS kdevplatformutil DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES execcommand.h kfiltermodel.h kdevtreeview.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/util)
+install( FILES 
+	processlinemaker.h
+	utilexport.h
+	DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/util)
 
 

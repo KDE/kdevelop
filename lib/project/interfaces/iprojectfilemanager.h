@@ -28,7 +28,7 @@
 
 #include "iextension.h"
 
-#include "kdevexport.h"
+#include "projectexport.h"
 
 class QObject;
 class QAbstractExtensionManager;

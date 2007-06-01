@@ -22,7 +22,7 @@
 #include <QtCore/Qt>
 #include <QtCore/QList>
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 namespace Sublime {
 

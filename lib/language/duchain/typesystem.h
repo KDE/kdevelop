@@ -21,7 +21,7 @@
 #define TYPESYSTEM_H
 
 #include "identifier.h"
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 #include <QtCore/QSet>
 
 #include <QtCore/QList>

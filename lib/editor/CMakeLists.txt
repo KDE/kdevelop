@@ -1,5 +1,4 @@
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/
     ${CMAKE_SOURCE_DIR}/lib/interfaces
 )
 
@@ -26,5 +25,6 @@ install(FILES
     documentcursor.h
     documentcursorobject.h
     editorintegrator.h
+    editorexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/editor
  )

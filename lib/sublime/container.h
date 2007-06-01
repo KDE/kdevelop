@@ -21,7 +21,7 @@
 
 #include <QtGui/QWidget>
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 class QStackedLayout;
 

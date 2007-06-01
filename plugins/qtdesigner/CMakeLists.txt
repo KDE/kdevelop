@@ -1,5 +1,9 @@
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces )
+INCLUDE_DIRECTORIES( 
+    ${CMAKE_SOURCE_DIR}/lib 
+    ${CMAKE_SOURCE_DIR}/lib/sublime
+    ${CMAKE_SOURCE_DIR}/lib/interfaces
+)
 
 
 ########### next target ###############

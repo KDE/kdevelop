@@ -21,7 +21,7 @@
 
 #include "document.h"
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 namespace Sublime {
 

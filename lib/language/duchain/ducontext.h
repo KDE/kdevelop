@@ -20,7 +20,7 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 
 #include "documentcursorobject.h"
 #include "identifier.h"

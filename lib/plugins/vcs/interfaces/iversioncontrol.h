@@ -24,7 +24,7 @@
 #define IVERSIONCONTROL_H
 
 #include "iextension.h"
-#include "kdevexport.h"
+#include "vcsexport.h"
 #include <QtDesigner/QAbstractExtensionFactory>
 #include <kurl.h>
 

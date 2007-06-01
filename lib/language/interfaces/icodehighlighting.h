@@ -20,7 +20,7 @@
 #define ICODEHIGHLIGHTING_H
 
 #include "iextension.h"
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {

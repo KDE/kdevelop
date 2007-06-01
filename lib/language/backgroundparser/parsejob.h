@@ -24,7 +24,7 @@
 
 #include <JobSequence.h>
 #include <kurl.h>
-#include <kdevlanguageexport.h>
+#include <languageexport.h>
 
 
 class QByteArray;

@@ -31,7 +31,7 @@
 
 #include <kurl.h>
 
-#include "kdevexport.h"
+#include "shellexport.h"
 
 template<typename T> class QList;
 

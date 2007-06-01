@@ -25,7 +25,7 @@
 #include <QtCore/QPair>
 
 #include "kdevsharedptr.h"
-#include "kdevexport.h"
+#include "utilexport.h"
 
 namespace KDevelop
 {

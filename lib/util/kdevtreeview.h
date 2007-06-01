@@ -21,7 +21,7 @@
 #define KDEVTREEVIEW_H
 
 #include <QtGui/QTreeView>
-#include "kdevexport.h"
+#include "utilexport.h"
 
 namespace KDevelop
 {

@@ -1,6 +1,7 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib
                      ${CMAKE_SOURCE_DIR}/lib/interfaces
+                     ${CMAKE_SOURCE_DIR}/lib/plugins/vcs
                      ${CMAKE_SOURCE_DIR}/lib/plugins/vcs/interfaces
                      ${CMAKE_SOURCE_DIR}/lib/project
                      ${CMAKE_SOURCE_DIR}/lib/plugins/outputviews/interfaces

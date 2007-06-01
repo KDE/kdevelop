@@ -21,7 +21,7 @@
 
 #include "documentrangeobject.h"
 #include "duchainbase.h"
-#include "kdevlanguageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {

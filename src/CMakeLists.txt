@@ -3,6 +3,7 @@ add_subdirectory(profiles)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/sublime
     ${CMAKE_SOURCE_DIR}/lib/shell
     ${CMAKE_SOURCE_DIR}/lib/interfaces
     )

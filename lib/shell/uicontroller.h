@@ -19,7 +19,7 @@
 #ifndef UICONTROLLER_H
 #define UICONTROLLER_H
 
-#include <kdevexport.h>
+#include <shellexport.h>
 
 #include "iuicontroller.h"
 #include <sublime/controller.h>

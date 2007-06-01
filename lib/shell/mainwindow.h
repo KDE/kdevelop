@@ -28,7 +28,7 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include <sublime/mainwindow.h>
 
-#include "kdevexport.h"
+#include "shellexport.h"
 
 namespace KDevelop
 {

@@ -21,7 +21,7 @@
 
 #include <kurl.h>
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 #include "document.h"
 

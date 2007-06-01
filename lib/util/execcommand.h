@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <qstringlist.h>
-#include "kdevexport.h"
+#include "utilexport.h"
 
 class K3Process;
 class KProgressDialog;

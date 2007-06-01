@@ -19,7 +19,7 @@
 #ifndef SUBLIMEVIEWCREATOR_H
 #define SUBLIMEVIEWCREATOR_H
 
-#include <kdevexport.h>
+#include <sublimeexport.h>
 
 namespace Sublime {
 

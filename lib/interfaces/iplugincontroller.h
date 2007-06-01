@@ -32,7 +32,7 @@ Boston, MA 02110-1301, USA.
 #include <kservice.h>
 
 #include "iplugin.h"
-#include "kdevexport.h"
+#include "interfacesexport.h"
 
 class QExtensionManager;
 class KMenu;
