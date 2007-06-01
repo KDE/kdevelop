@@ -277,7 +277,7 @@ Q_SIGNALS:
 /**
  * Annotations for a local file.
  *
- * This class lets the user fetch informations for each line of a local file,
+ * This class lets the user fetch information for each line of a local file,
  * including date of last change, author of last change and revision of
  * last change to the line.
  */
