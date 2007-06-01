@@ -23,7 +23,6 @@
 
 #include <QtGui/QWidget>
 
-#include "kdevexport.h"
 
 class KUrl;
 

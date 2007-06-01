@@ -22,7 +22,6 @@
 #define KDEVPROJECTMANAGERDELEGATE_H
 
 #include <QtGui/QItemDelegate>
-#include "kdevexport.h"
 
 namespace KDevelop
 {

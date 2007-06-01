@@ -40,10 +40,7 @@ public:
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
     virtual Sublime::MainWindow *activeSublimeWindow();
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
-    virtual KParts::MainWindow *activeMainWindow()
-    {
-      return (KParts::MainWindow*)(activeSublimeWindow());
-    };
+    virtual KParts::MainWindow *activeMainWindow();
 
     /** @return default main window - the main window for default area in the shell.
     No guarantee is given that it always exists so this method may return 0.*/

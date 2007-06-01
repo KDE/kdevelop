@@ -23,7 +23,6 @@
 
 #include <QtGui/QTreeView>
 
-#include "kdevexport.h"
 
 class KUrl;
 class QItemSelectionModel;
