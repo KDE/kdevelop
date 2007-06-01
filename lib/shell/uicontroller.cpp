@@ -232,7 +232,7 @@ Sublime::Controller* UiController::controller()
 KParts::MainWindow *UiController::activeMainWindow()
 {
     return (KParts::MainWindow*)(activeSublimeWindow());
-};
+}
 
 }
 
