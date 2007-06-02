@@ -79,6 +79,7 @@ public:
     QMap<QString, Context*> contexts;
     QSignalMapper* contextMenuMapper;
     const QString build_objectname;
+    IProject *ctxProject;
 };
 
 ProjectManagerViewPart::ProjectManagerViewPart( QObject *parent, const QStringList& )
@@ -159,7 +160,15 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPart::requestContextMenuActio
         QList<QAction*> actions;
         KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
         KDevelop::ProjectBaseItem* item = ctx->item();
-        if ( KDevelop::ProjectFolderItem *folder = item->folder() )
+
+        if ( KDevelop::ProjectItem *prjitem = item->projectItem() )
+        {
+            QAction* close = new QAction( i18n( "Close this project" ), this );
+            d->ctxProject = prjitem->project();
+            connect( close, SIGNAL(triggered()), this, SLOT(slotCloseProject()), Qt::QueuedConnection );
+            actions << close;
+        }
+        else if ( KDevelop::ProjectFolderItem *folder = item->folder() )
         {
             actions << new QAction( i18n( "Folder: %1", folder->url().directory() ), this );
 //             QAction* buildaction = new QAction( i18n( "Build this project" ), this );
@@ -217,6 +226,13 @@ void ProjectManagerViewPart::executeProjectBuilder( KDevelop::ProjectBaseItem* i
           builder->build( item );
     }
 }
+
+void ProjectManagerViewPart::slotCloseProject()
+{
+    IProject *project = d->ctxProject;
+    core()->projectController()->closeProject( project );
+}
+
 }
 #include "projectmanagerview_part.moc"
 

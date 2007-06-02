@@ -80,6 +80,9 @@ public Q_SLOTS:
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
 
+protected Q_SLOTS:
+    void slotCloseProject();
+
 private:
     class ProjectManagerViewPartPrivate* const d;
 

@@ -269,15 +269,16 @@ bool Project::open( const KUrl& projectFileUrl )
 
 void Project::close()
 {
-    KPluginInfo* pluginInfo = Core::self()->pluginController()->pluginInfo( d->manager );
-    if ( pluginInfo )
-    {
-        Core::self()->pluginController()->unloadPlugin( pluginInfo->pluginName() );
-    }
+    // unloaded by project controller, depending on shared count
+//     KPluginInfo* pluginInfo = Core::self()->pluginController()->pluginInfo( d->manager );
+//     if ( pluginInfo )
+//     {
+//         Core::self()->pluginController()->unloadPlugin( pluginInfo->pluginName() );
+//     }
 
     //the manager plugin will be deleted in the plugin controller, so just set
     //the manager to zero.
-    d->manager = 0;
+//     d->manager = 0;
     QList<QStandardItem*> itemList = Core::self()->projectController()->projectModel()->takeRow( d->topItem->row() );
     qDeleteAll( itemList );
 

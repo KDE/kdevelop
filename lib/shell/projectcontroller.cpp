@@ -23,6 +23,9 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QDir>
 #include <QtCore/QSignalMapper>
 #include <QtGui/QAction>
+#include <QSet>
+#include <QList>
+#include <QMap>
 
 #include <kaction.h>
 #include <kconfig.h>
@@ -56,6 +59,7 @@ class ProjectControllerPrivate
 {
 public:
     QList<IProject*> m_projects;
+    QMap< IProject*, QList<IPlugin*> > m_projectPlugins;
     IPlugin* m_projectPart;
     KRecentFilesAction *m_recentAction;
     KActionMenu *m_projectConfigAction;
@@ -241,6 +245,11 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
 bool ProjectController::projectImportingFinished( IProject* project )
 {
+    IPlugin *managerPlugin = project->managerPlugin();
+    QList<IPlugin*> pluglist;
+    pluglist.append( managerPlugin );
+    d->m_projectPlugins.insert( project, pluglist );
+
     ProjectItem *topItem = project->projectItem();
     ProjectModel *model = projectModel();
     model->insertRow( model->rowCount(), topItem );
@@ -300,7 +309,33 @@ bool ProjectController::closeProject( IProject* proj )
         QAction * action;
 
         action = ac->action( "project_close" );
-        action->setEnabled( false );
+        if( action )
+            action->setEnabled( false );
+    }
+
+
+    QList<IPlugin*> pluginsForProj = d->m_projectPlugins.value( proj );;
+    d->m_projectPlugins.remove( proj );
+
+    QList<IPlugin*> otherProjectPlugins;
+    Q_FOREACH( QList<IPlugin*> _list, d->m_projectPlugins )
+    {
+        otherProjectPlugins << _list;
+    }
+
+    QSet<IPlugin*> pluginsForProjSet = QSet<IPlugin*>::fromList( pluginsForProj );
+    QSet<IPlugin*> otherPrjPluginsSet = QSet<IPlugin*>::fromList( otherProjectPlugins );
+    // loaded - target = tobe unloaded.
+    QSet<IPlugin*> tobeRemoved = pluginsForProjSet.subtract( otherPrjPluginsSet );
+    Q_FOREACH( IPlugin* _plugin, tobeRemoved )
+    {
+        KPluginInfo *_plugInfo = Core::self()->pluginController()->pluginInfo( _plugin );
+        if( _plugInfo )
+        {
+            QString _plugName = _plugInfo->pluginName();
+            kDebug() << k_funcinfo << "about to unloading : " << _plugName << endl;
+            Core::self()->pluginController()->unloadPlugin( _plugName );
+        }
     }
 
 
