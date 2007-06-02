@@ -17,7 +17,7 @@
 */
 
 #include "editorintegrator.h"
-#include "editorintegrator_p.h"
+#include "editorintegratorstatic.h"
 
 #include <limits.h>
 
@@ -27,7 +27,6 @@
 #include <kglobal.h>
 
 #include <ktexteditor/document.h>
-#include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
 #include "documentrange.h"
@@ -38,35 +37,28 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-K_GLOBAL_STATIC( EditorIntegratorPrivate, s_data)
+class EditorIntegratorPrivate
+{
+public:
+  KUrl m_currentUrl;
+  KTextEditor::Document* m_currentDocument;
+  KTextEditor::SmartInterface* m_smart;
+  KTextEditor::Range* m_currentRange;
+  KTextEditor::Range m_newRangeMarker;
+};
+
+K_GLOBAL_STATIC( EditorIntegratorStatic, s_data)
 
 EditorIntegrator::EditorIntegrator()
-  : m_currentDocument(0)
-  , m_smart(0)
-  , m_currentRange(0)
+: d(new EditorIntegratorPrivate)
 {
+  d->m_currentDocument = 0;
+  d->m_smart = 0;
+  d->m_currentRange = 0;
 }
 
 EditorIntegrator::~ EditorIntegrator()
 {
-}
-
-EditorIntegratorPrivate::EditorIntegratorPrivate()
-  : mutex(new QMutex)
-{
-}
-
-EditorIntegratorPrivate::~EditorIntegratorPrivate()
-{
-  QHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
-  while (it.hasNext()) {
-    it.next();
-    foreach (KTextEditor::Range* range, it.value())
-      if (range && range->isSmartRange())
-        range->toSmartRange()->removeWatcher(this);
-  }
-
-  delete mutex;
 }
 
 void EditorIntegrator::addDocument( KTextEditor::Document * document )
@@ -77,43 +69,7 @@ void EditorIntegrator::addDocument( KTextEditor::Document * document )
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
 }
 
-void EditorIntegratorPrivate::documentLoaded()
-{
-  Document* doc = qobject_cast<Document*>(sender());
-  if (!doc) {
-    kWarning() << k_funcinfo << "Unexpected non-document sender called this slot!" << endl;
-    return;
-  }
 
-  {
-    QMutexLocker lock(mutex);
-
-    documents.insert(doc->url(), doc);
-  }
-}
-
-void EditorIntegratorPrivate::documentUrlChanged(KTextEditor::Document* document)
-{
-  QMutexLocker lock(mutex);
-
-  QMutableHashIterator<KUrl, Document*>  it = documents;
-  while (it.hasNext()) {
-    it.next();
-    if (it.value() == document) {
-      if (topRanges.contains(it.key())) {
-        kDebug() << k_funcinfo << "Document URL change - found corresponding document" << endl;
-        topRanges.insert(document->url(), topRanges.take(it.key()));
-      }
-
-      it.remove();
-      documents.insert(document->url(), document);
-      // TODO trigger reparsing??
-      return;
-    }
-  }
-
-  //kWarning() << k_funcinfo << "Document URL change - couldn't find corresponding document!" << endl;
-}
 
 Document * EditorIntegrator::documentForUrl(const KUrl& url)
 {
@@ -130,24 +86,9 @@ bool EditorIntegrator::documentLoaded(KTextEditor::Document* document)
   return data()->documents.values().contains(document);
 }
 
-void EditorIntegratorPrivate::removeDocument( KTextEditor::Document* document )
-{
-  QMutexLocker lock(mutex);
-
-  // TODO save smart stuff to non-smart cursors and ranges
-
-  documents.remove(document->url());
-
-  foreach (KTextEditor::Range* range, topRanges[document->url()])
-    if (range && range->isSmartRange())
-      range->toSmartRange()->removeWatcher(this);
-
-  topRanges.remove(document->url());
-}
-
 SmartInterface* EditorIntegrator::smart() const
 {
-  return m_smart;
+  return d->m_smart;
 }
 
 Cursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
@@ -160,14 +101,14 @@ Cursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
   }
 
   if (!ret)
-    ret = new DocumentCursor(m_currentUrl, position);
+    ret = new DocumentCursor(d->m_currentUrl, position);
 
   return ret;
 }
 
 Document* EditorIntegrator::currentDocument() const
 {
-  return m_currentDocument;
+  return d->m_currentDocument;
 }
 
 Range* EditorIntegrator::topRange( TopRangeType type )
@@ -198,27 +139,8 @@ Range* EditorIntegrator::topRange( TopRangeType type )
       data()->topRanges[currentUrl()][type] = createRange(Range(0,0, INT_MAX, INT_MAX));
     }
 
-  m_currentRange = data()->topRanges[currentUrl()][type];
-  return m_currentRange;
-}
-
-void EditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange * range)
-{
-  QMutexLocker lock(mutex);
-
-  QMutableHashIterator<KUrl, QVector<KTextEditor::Range*> > it = topRanges;
-  while (it.hasNext()) {
-    it.next();
-    //kDebug() << k_funcinfo << "Searching for " << range << ", potentials " << it.value().toList() << endl;
-    int index = it.value().indexOf(range);
-    if (index != -1) {
-      it.value()[index] = 0;
-      return;
-    }
-  }
-
-  // Should have found the top level range by now
-  kWarning() << k_funcinfo << "Could not find record of top level range " << range << "!" << endl;
+  d->m_currentRange = data()->topRanges[currentUrl()][type];
+  return d->m_currentRange;
 }
 
 Range* EditorIntegrator::createRange( const KTextEditor::Range & range )
@@ -228,17 +150,17 @@ Range* EditorIntegrator::createRange( const KTextEditor::Range & range )
   if (SmartInterface* iface = smart()) {
     QMutexLocker lock(iface->smartMutex());
 
-    if (m_currentRange && m_currentRange->isSmartRange())
-      ret = iface->newSmartRange(range, m_currentRange->toSmartRange());
+    if (d->m_currentRange && d->m_currentRange->isSmartRange())
+      ret = iface->newSmartRange(range, d->m_currentRange->toSmartRange());
     else
       ret = iface->newSmartRange(range);
 
   } else {
-    ret = new DocumentRange(m_currentUrl, range, m_currentRange);
+    ret = new DocumentRange(d->m_currentUrl, range, d->m_currentRange);
   }
 
-  m_currentRange = ret;
-  return m_currentRange;
+  d->m_currentRange = ret;
+  return d->m_currentRange;
 }
 
 
@@ -249,44 +171,44 @@ Range* EditorIntegrator::createRange( const KTextEditor::Cursor& start, const KT
 
 Range* EditorIntegrator::createRange()
 {
-  return createRange(m_newRangeMarker);
+  return createRange(d->m_newRangeMarker);
 }
 
 void EditorIntegrator::setNewRange(const KTextEditor::Range& range)
 {
-  m_newRangeMarker = range;
+  d->m_newRangeMarker = range;
 }
 
 void EditorIntegrator::setNewEnd( const KTextEditor::Cursor & position )
 {
-  m_newRangeMarker.end() = position;
+  d->m_newRangeMarker.end() = position;
 }
 
 void EditorIntegrator::setNewStart( const KTextEditor::Cursor & position )
 {
-  m_newRangeMarker.start() = position;
+  d->m_newRangeMarker.start() = position;
 }
 
 void EditorIntegrator::setCurrentRange( KTextEditor::Range* range )
 {
-  m_currentRange = range;
+  d->m_currentRange = range;
 }
 
 Range* EditorIntegrator::currentRange( ) const
 {
-  return m_currentRange;
+  return d->m_currentRange;
 }
 
 KUrl EditorIntegrator::currentUrl() const
 {
-  return m_currentUrl;
+  return d->m_currentUrl;
 }
 
 void EditorIntegrator::setCurrentUrl(const KUrl& url)
 {
-  m_currentUrl = url;
-  m_currentDocument = documentForUrl(url);
-  m_smart = dynamic_cast<KTextEditor::SmartInterface*>(m_currentDocument);
+  d->m_currentUrl = url;
+  d->m_currentDocument = documentForUrl(url);
+  d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
 }
 
 void EditorIntegrator::releaseTopRange(KTextEditor::Range * range)
@@ -326,23 +248,22 @@ void EditorIntegrator::releaseRange(KTextEditor::Range* range)
   }
 }
 
-KDevelop::EditorIntegratorPrivate * EditorIntegrator::data()
+KDevelop::EditorIntegratorStatic * EditorIntegrator::data()
 {
   return s_data;
 }
 
 void EditorIntegrator::exitCurrentRange()
 {
-  if (!m_currentRange)
+  if (!d->m_currentRange)
     return;
 
-  if (m_currentRange->isSmartRange())
-    m_currentRange = m_currentRange->toSmartRange()->parentRange();
+  if (d->m_currentRange->isSmartRange())
+    d->m_currentRange = d->m_currentRange->toSmartRange()->parentRange();
   else
-    m_currentRange = static_cast<DocumentRange*>(m_currentRange)->parentRange();
+    d->m_currentRange = static_cast<DocumentRange*>(d->m_currentRange)->parentRange();
 }
 
 }
-#include "editorintegrator_p.moc"
 
 // kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on

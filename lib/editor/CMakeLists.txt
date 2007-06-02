@@ -8,6 +8,7 @@ set(kdevplatformeditor_LIB_SRCS
     documentcursor.cpp
     documentcursorobject.cpp
     editorintegrator.cpp
+    editorintegratorstatic.cpp
 )
 
 kde4_automoc(${kdevplatformeditor_LIB_SRCS})

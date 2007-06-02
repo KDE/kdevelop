@@ -33,7 +33,7 @@ namespace KDevelop
 {
   class DocumentRange;
   class DocumentCursor;
-  class EditorIntegratorPrivate;
+  class EditorIntegratorStatic;
 
 /**
  * Provides facilities for easy integration of a text editor component with
@@ -83,8 +83,8 @@ public:
    */
   static bool documentLoaded(KTextEditor::Document* document);
 
-  KUrl currentUrl() const;
-  void setCurrentUrl(const KUrl& currentUrl);
+   KUrl currentUrl() const;
+   void setCurrentUrl(const KUrl& currentUrl);
 
   /**
    * Return the current text editor document, based on the current URL.
@@ -203,14 +203,10 @@ public:
    */
   void exitCurrentRange();
 
-protected:
-  static KDevelop::EditorIntegratorPrivate* data();
+private:
+  static KDevelop::EditorIntegratorStatic *data();
+  class EditorIntegratorPrivate* const d;
 
-  KUrl m_currentUrl;
-  KTextEditor::Document* m_currentDocument;
-  KTextEditor::SmartInterface* m_smart;
-  KTextEditor::Range* m_currentRange;
-  KTextEditor::Range m_newRangeMarker;
 };
 
 }
