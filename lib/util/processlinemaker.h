@@ -21,7 +21,7 @@
 #ifndef _PROCESSLINEMAKER_H_
 #define _PROCESSLINEMAKER_H_
 
-#include <QObject>
+#include <QtCore/QObject>
 #include "utilexport.h"
 
 /**
@@ -47,13 +47,13 @@ public:
     ProcessLineMaker( QProcess* );
     void clearBuffers();
 
-public slots:
+public Q_SLOTS:
     void slotReceivedStdout( const QString& );
     void slotReceivedStderr( const QString& );
     void slotReceivedStdout( const char* );
     void slotReceivedStderr( const char* );
 
-signals:
+Q_SIGNALS:
     void receivedStdoutLines( const QStringList& );
     void receivedStderrLines( const QStringList& );
 
