@@ -141,16 +141,14 @@ IOutputViewItem* ErrorFilter::processAndCreate( const QString& line )
         if( isWarning )
         {
             ret = new MakeWarningItem( line, m_builder );
-            QColor background = QApplication::palette().window().color();
-            QBrush foreground = ret->foreground();
-            if( background.alphaF() > 0 )
-                foreground.setColor(KGraphicsUtils::blendColor(QApplication::palette().highlight().color(), background));
-            else
-            {
-                background.setAlpha(128);
-                foreground.setColor(KGraphicsUtils::blendColor(QApplication::palette().highlight().color(), background));
-            }
-            ret->setForeground(foreground);
+            QBrush fg = ret->foreground();
+            QColor back = QApplication::palette().window().color();
+            back.setAlpha(150);
+            fg.setColor( KGraphicsUtils::blendColor(
+                                      QApplication::palette().highlight().color(),
+                                      back
+                ) );
+            ret->setForeground(fg);
         }
         else // case of real error
         {
