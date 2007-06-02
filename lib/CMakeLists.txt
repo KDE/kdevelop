@@ -8,4 +8,7 @@ add_subdirectory(persistenthash)
 add_subdirectory(plugins)
 add_subdirectory(util)
 
-#install(FILES kdevexport.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/)
+# Needed by external plugins like Ruby and Python
+install(FILES
+  kdevast.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/)

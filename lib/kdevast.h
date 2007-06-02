@@ -22,14 +22,14 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 
-#include "kdevexport.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {
 class LanguageSupport;
 
 /** KDevelop::AST is a simple base struct for the various Abstract Syntax Trees of the parsers. */
-struct KDEVPLATFORM_EXPORT AST
+struct KDEVPLATFORMLANGUAGE_EXPORT AST
 {
 public:
     /// Language support part which generated the AST

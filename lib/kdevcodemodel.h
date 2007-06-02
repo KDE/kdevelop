@@ -40,7 +40,7 @@ namespace KDevelop
 class CodeItem;
 class CodeModel;
 
-class KDEVPLATFORM_EXPORT CodeItem: public ItemCollection, public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORMLANGUAGE_EXPORT CodeItem: public ItemCollection, public KTextEditor::SmartRangeWatcher
 {
 public:
     explicit CodeItem( const QString &name, ItemGroup *parent = 0 );
@@ -126,7 +126,7 @@ private:
     KTextEditor::SmartRange* m_definition;
 };
 
-class KDEVPLATFORM_EXPORT CodeModel: public ItemModel
+class KDEVPLATFORMLANGUAGE_EXPORT CodeModel: public ItemModel
 {
     Q_OBJECT
 public:
