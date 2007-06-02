@@ -267,6 +267,10 @@ multiline_values : multiline_values LIST_WS possible_value
             $<values>$.append( $<value>2 );
             $<values>$.append( $<value>3 );
         }
+    | multiline_values variable_value
+        {
+            $<values>$.append( $<value>2 );
+        }
     | multiline_values listws CONT listws possible_value
         {
             $<values>$.append( $<value>2 );
