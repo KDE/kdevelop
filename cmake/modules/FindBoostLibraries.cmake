@@ -13,7 +13,7 @@ endif(Boost_LIBRARIES)
 find_package(Boost)
 
 if(NOT Boost_FOUND)
-    message(Couldn't find Boost, will not try to find the libraries)
+    message(STATUS "Couldn't find Boost, will not try to find the libraries")
     set(Boost_LIBS_FOUND FALSE)
 else(NOT Boost_FOUND)
     find_library(Boost_SERIALIZATION NAMES boost_serialization boost_serialization-mt

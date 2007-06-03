@@ -56,7 +56,7 @@ ELSE(COMMONCPP2_FOUND)
   IF(Commoncpp_FIND_REQUIRED)
       MESSAGE(FATAL_ERROR "Could not find libccgnu2 or libccext2")
   ELSE(Commoncpp_FIND_REQUIRED)
-      MESSAGE("Could not find libccgnu2 or libccext2, teamwork plugin disabled")
+      MESSAGE(STATUS "Could not find libccgnu2 or libccext2, teamwork plugin disabled")
   ENDIF(Commoncpp_FIND_REQUIRED)
 ENDIF(COMMONCPP2_FOUND)
 
