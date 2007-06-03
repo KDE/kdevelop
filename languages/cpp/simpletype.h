@@ -46,11 +46,11 @@ typedef KSharedPtr<SimpleTypeImpl> TypePointer;
 //#define PHYSICAL_IMPORT
 
 enum Repository {
-  CodeModel,
-  Catalog,
-  StringList,
-  Both,
-  Undefined
+  RepoCodeModel,
+  RepoCatalog,
+  RepoStringList,
+  RepoBoth,
+  RepoUndefined
 };
 
 class BuiltinTypes {
@@ -82,15 +82,15 @@ class SimpleType {
       *this = rhs;
     }
 
-    SimpleType( const QStringList& scope, const HashedStringSet& files, Repository rep = Undefined ) : m_resolved( false ) {
+    SimpleType( const QStringList& scope, const HashedStringSet& files, Repository rep = RepoUndefined ) : m_resolved( false ) {
       init( scope, files, rep );
     }
 
-    SimpleType( const QString& text,const HashedStringSet& files, Repository rep = Undefined ) : m_resolved( false ) {
+    SimpleType( const QString& text,const HashedStringSet& files, Repository rep = RepoUndefined ) : m_resolved( false ) {
       init( splitType( text ), files, rep );
     };
 
-    SimpleType( Repository rep = Undefined ) : m_resolved( false ) {
+    SimpleType( Repository rep = RepoUndefined ) : m_resolved( false ) {
       init( QStringList(), HashedStringSet(), rep );
     };
 
@@ -170,7 +170,7 @@ class SimpleType {
 
     void init( const QStringList& scope, const HashedStringSet& files, Repository rep );
 
-    void resolve( Repository rep = Undefined ) const ;
+    void resolve( Repository rep = RepoUndefined ) const ;
 
     HashedStringSet m_includeFiles;
 
@@ -307,7 +307,7 @@ class SimpleTypeImpl : public KShared {
     }
 
     virtual Repository rep() {
-      return StringList;
+      return RepoStringList;
     }
 
     ///Returns the function-interface if this is a function, else zero

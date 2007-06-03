@@ -27,6 +27,7 @@ class CppSupportPart;
 class KDevProject;
 class QPopupMenu;
 class KCompletion;
+class CodeModel;
 
 
 template <class T>

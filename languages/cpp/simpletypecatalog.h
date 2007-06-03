@@ -55,7 +55,7 @@ public:
   virtual TypePointer clone();
   
   virtual Repository rep() const {
-    return Catalog;
+    return RepoCatalog;
   }
   
   virtual bool hasNode() const {

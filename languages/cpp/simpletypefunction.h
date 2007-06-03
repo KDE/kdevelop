@@ -192,7 +192,7 @@ public:
   }
   
   virtual Repository rep() {
-    return CodeModel;
+    return RepoCodeModel;
   }
   
   virtual bool isNamespace() const {

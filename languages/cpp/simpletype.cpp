@@ -63,7 +63,7 @@ QString globalCurrentFile = "";
 void SimpleType::resolve( Repository rep ) const {
   if ( !m_resolved ) {
     if ( m_globalNamespace ) {
-      if ( ( rep == Undefined || rep == Both ) ) {
+      if ( ( rep == RepoUndefined || rep == RepoBoth ) ) {
         m_resolved = true;
         if ( scope().isEmpty() || str().isEmpty() ) {
           m_type = m_globalNamespace;
@@ -86,19 +86,19 @@ void SimpleType::resolve( Repository rep ) const {
 
     TypePointer cm;
 
-    if ( rep == Undefined || rep == CodeModel ) {
+    if ( rep == RepoUndefined || rep == RepoCodeModel ) {
       if ( !m_type ) {
         cm = TypePointer( new SimpleTypeCachedCodeModel( scope() ) );
       } else {
         cm = TypePointer( new SimpleTypeCachedCodeModel( &( *m_type ) ) );
       }
 
-      if ( cm->hasNode() || rep == CodeModel ) {
+      if ( cm->hasNode() || rep == RepoCodeModel ) {
         if ( cm->hasNode() ) {
           ifVerbose( dbg() << "resolved \"" << str() << "\" from the code-model" << endl );
-          if ( cm->isNamespace() && rep != CodeModel ) {
+          if ( cm->isNamespace() && rep != RepoCodeModel ) {
             ifVerbose( dbg() << "\"" << str() << "\": is namespace, resolving proxy" << endl );
-            resolve( Both );
+            resolve( RepoBoth );
             return ;
           }
         } else {
@@ -109,7 +109,7 @@ void SimpleType::resolve( Repository rep ) const {
         return ;
       }
     }
-    if ( rep == Undefined || rep == Catalog ) {
+    if ( rep == RepoUndefined || rep == RepoCatalog ) {
 
       if ( !m_type ) {
         cm = TypePointer( new SimpleTypeCachedCatalog( scope() ) );
@@ -117,12 +117,12 @@ void SimpleType::resolve( Repository rep ) const {
         cm = TypePointer( new SimpleTypeCachedCatalog( &( *m_type ) ) );
       }
 
-      if ( cm->hasNode() || rep == Catalog ) {
+      if ( cm->hasNode() || rep == RepoCatalog ) {
         if ( cm->hasNode() ) {
           ifVerbose( dbg() << "resolved \"" << str() << "\" from the catalog" << endl );
-          if ( cm->isNamespace() && rep != Catalog ) {
+          if ( cm->isNamespace() && rep != RepoCatalog ) {
             ifVerbose( dbg() << "\"" << str() << "\": is namespace, resolving proxy" << endl );
-            resolve( Both );
+            resolve( RepoBoth );
             return ;
           }
         } else {
@@ -134,7 +134,7 @@ void SimpleType::resolve( Repository rep ) const {
       }
     }
 
-    if ( rep == Both ) {
+    if ( rep == RepoBoth ) {
       cm = new SimpleTypeCachedNamespace( scope() );
       m_type = cm;
       m_resolved = true;
@@ -191,7 +191,7 @@ void SimpleType::init( const QStringList& scope, const HashedStringSet& files, R
     m_includeFiles = files;
 
   m_type = TypePointer( new SimpleTypeImpl( scope ) );
-  if ( rep != Undefined )
+  if ( rep != RepoUndefined )
     resolve( rep );
 }
 

@@ -32,8 +32,8 @@ TypePointer SimpleTypeNamespace::clone() {
 
 SimpleTypeNamespace::SimpleTypeNamespace( const QStringList& fakeScope, const QStringList& realScope ) : SimpleTypeImpl( fakeScope ), m_currentSlaveId(0) {
   ifVerbose( dbg() << "\"" << str() << "\": created namespace-proxy with real scope \"" << realScope.join( "::" ) << "\"" << endl );
-  SimpleType cm = SimpleType( realScope, HashedStringSet(), CodeModel );
-  SimpleType ct = SimpleType( realScope, HashedStringSet(), Catalog );
+  SimpleType cm = SimpleType( realScope, HashedStringSet(), RepoCodeModel );
+  SimpleType ct = SimpleType( realScope, HashedStringSet(), RepoCatalog );
   cm = SimpleType( cm->clone() );
   ct = SimpleType( ct->clone() );
   cm->setMasterProxy( this );
