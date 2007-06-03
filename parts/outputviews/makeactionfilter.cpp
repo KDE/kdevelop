@@ -72,9 +72,7 @@ MakeActionFilter::MakeActionFilter( OutputFilter& next )
 MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 {
 	static ActionFormat formats[] = {
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)"),
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)"),
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)"),
+		ActionFormat( i18n("compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|java|hpf|f|F|f90|F90|f95|F95))"),
 		ActionFormat( i18n("compiling"), 1, 1, "^compiling (.*)" ), //unsermake
 		ActionFormat( i18n("compiling"), 1, 1, "\\[.+%\\] Building .* object (.*)" ), //cmake
 
@@ -171,6 +169,10 @@ void MakeActionFilter::test()
 	<< TestItem( // simple qmake compile
 		"g++ -c -pipe -Wall -W -O2 -DQT_NO_DEBUG -I/home/john/src/kde/qt-copy/mkspecs/default -I. "
 		"-I/home/john/src/kde/qt-copy/include -o test.o test.cpp",
+		"compiling", "g++", "test.cpp" )
+	<< TestItem( // simple qmake compile different option order
+		"g++ -c -o test.o -pipe -Wall -W -O2 -DQT_NO_DEBUG -I/home/john/src/kde/qt-copy/mkspecs/default -I. "
+		"-I/home/john/src/kde/qt-copy/include test.cpp",
 		"compiling", "g++", "test.cpp" )
 	<< TestItem( // simple qmake link
 		"g++ -o ../bin/test test.o -Wl,-rpath,/home/john/src/kde/qt-copy/lib -L/home/john/src/kde/qt-copy/lib "
