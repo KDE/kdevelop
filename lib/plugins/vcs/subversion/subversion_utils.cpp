@@ -10,8 +10,9 @@
  ***************************************************************************/
 
 #include "subversion_utils.h"
+extern "C" {
 #include <svn_opt.h>
-
+}
 
 namespace SvnUtils
 {

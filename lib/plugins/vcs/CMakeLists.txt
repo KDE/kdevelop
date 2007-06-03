@@ -2,9 +2,9 @@ macro_optional_add_subdirectory(cvs)
 
 find_package(SubversionLibrary)
 
-if(SUBVERSION_FOUND AND NOT WIN32)
+if(SUBVERSION_FOUND)
     macro_optional_add_subdirectory(subversion)
-endif(SUBVERSION_FOUND AND NOT WIN32)
+endif(SUBVERSION_FOUND)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/interfaces

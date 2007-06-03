@@ -10,6 +10,15 @@
  ***************************************************************************/
  
 #include "subversion_core.h"
+
+extern "C" {
+#include <apr_general.h>
+#include <svn_opt.h>
+#include <svn_auth.h>
+#include <svn_wc.h>
+
+}
+
 #include "subversion_part.h"
 #include "subversion_view.h"
 #include "subversion_utils.h"
@@ -36,9 +45,6 @@
 
 #include <klocale.h>
 
-#include <svn_opt.h>
-#include <svn_auth.h>
-#include <svn_wc.h>
 
 // using namespace ThreadWeaver;
 

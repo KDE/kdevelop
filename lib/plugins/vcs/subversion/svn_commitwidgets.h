@@ -14,7 +14,10 @@
 
 #include "ui_svncommitloginputdlg.h"
 #include "ui_uicommit_option_dlg.h"
+
+extern "C" {
 #include <apr_tables.h>
+}
 
 class KDevSubversionPart;
 namespace KDevelop

@@ -19,8 +19,9 @@
 #include "svn_models.h"
 #include "svn_commitwidgets.h"
 #include "svn_importwidgets.h"
+extern "C" {
 #include <svn_wc.h>
-
+}
 #include <iuicontroller.h>
 #include <icore.h>
 

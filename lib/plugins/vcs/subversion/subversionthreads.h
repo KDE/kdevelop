@@ -18,13 +18,16 @@
 
 #include <QThread>
 
+extern "C" {
 #include <svn_pools.h>
 #include <svn_auth.h>
 #include <svn_client.h>
 #include <svn_config.h>
 #include <svn_wc.h>
 #include <svn_path.h>
+
 #include <apr_portable.h>
+}
 
 #include <kurl.h>
 

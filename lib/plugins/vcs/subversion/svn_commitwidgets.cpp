@@ -12,8 +12,10 @@
 #include "svn_commitwidgets.h"
 #include "subversion_part.h"
 #include <iversioncontrol.h>
+extern "C" {
 #include <svn_auth.h>
 #include <svn_client.h>
+}   
 #include <ktextedit.h>
 #include <klocale.h>
 

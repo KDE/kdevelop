@@ -11,8 +11,10 @@
 
 #include "svn_authdialog.h"
 #include <QTreeWidgetItem>
+extern "C" {
 #include <svn_auth.h>
 #include <svn_client.h>
+}
 #include <klocale.h>
 
 SvnSSLTrustDialog::SvnSSLTrustDialog( QWidget *parent )
