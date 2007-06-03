@@ -5,15 +5,15 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
                    )
 
 set( kdevqmakeparser_SRCS
-    qmakeast.cpp
-    qmakeast_assignment.cpp
-    qmakeast_body.cpp
-    qmakeast_or.cpp
-    qmakeast_project.cpp
-    qmakeast_func.cpp
-    qmakeast_scope.cpp
-    qmakeast_simple.cpp
-    qmakedriver.cpp
+     qmakeast.cpp
+     qmakeast_assignment.cpp
+     qmakeast_body.cpp
+     qmakeast_or.cpp
+     qmakeast_project.cpp
+     qmakeast_func.cpp
+     qmakeast_scope.cpp
+     qmakeast_simple.cpp
+     qmakedriver.cpp
     )
 
 include(FindFlex)
@@ -81,9 +81,9 @@ if(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
                      ${FLEX_INCLUDE_DIR} )
 
 else(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
-    message("Assuming existence of the generated lexer file qmake_lexer.cpp")
+    message(STATUS "Assuming existence of the generated lexer file qmake_lexer.cpp")
     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_lexer.cpp ${kdevqmakeparser_SRCS})
-    message("Assuming existence of the generated parser file qmake_parser.cpp")
+    message(STATUS "Assuming existence of the generated parser file qmake_parser.cpp")
     set(kdevqmakeparser_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/generated/qmake_parser.cpp ${kdevqmakeparser_SRCS})
     include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/generated )
 endif(BISON_EXECUTABLE AND FLEX_EXECUTABLE AND BISON_NOT_OLD AND FLEX_NOT_OLD)
