@@ -21,6 +21,12 @@
 #ifndef IDISTRIBUTEDVERSIONCONTROL_H
 #define IDISTRIBUTEDVERSIONCONTROL_H
 
+#include "iextension.h"
+#include "vcshelpers.h"
+
+namespace KDevelop
+{
+
 /**
  * This interface has methods to support distributed version control systems
  * like git or svk
@@ -33,6 +39,11 @@ public:
     VcsJob* clone( const QString& repositoryLocationSrc,
                   const QString& repositoryLocationDst ) = 0;
 };
+
+}
+
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IDistributedVersionControl, "org.kdevelop.IDistributedVersionControl" )
+Q_DECLARE_INTERFACE( KDevelop::IDistributedVersionControl, "org.kdevelop.IDistributedVersionControl" )
 
 #endif
 

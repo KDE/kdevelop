@@ -22,6 +22,12 @@
 #ifndef IBROWSABLEVERSIONCONTROL_H
 #define IBROWSABLEVERSIONCONTROL_H
 
+#include "iextension.h"
+#include "vcshelpers.h"
+
+namespace KDevelop
+{
+
 class KDEVPLATFORMVCS_EXPORT IBrowsableVersionControl
 {
 public:
@@ -101,6 +107,11 @@ public:
      */
     virtual VcsJob* cat( const QString& repoLocation, const VcsRevision& rev ) = 0;
 };
+
+}
+
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBrowsableVersionControl, "org.kdevelop.IBrowsableVersionControl" )
+Q_DECLARE_INTERFACE( KDevelop::IBrowsableVersionControl, "org.kdevelop.IBrowsableVersionControl" )
 
 #endif
 

@@ -22,6 +22,7 @@
 #ifndef IBASICVERSIONCONTROL_H
 #define IBASICVERSIONCONTROL_H
 
+#include "iextension.h"
 #include "vcshelpers.h"
 
 namespace KDevelop
@@ -269,6 +270,9 @@ public:
 };
 
 }
+
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBasicVersionControl, "org.kdevelop.IBasicVersionControl" )
+Q_DECLARE_INTERFACE( KDevelop::IBasicVersionControl, "org.kdevelop.IBasicVersionControl" )
 
 #endif
 

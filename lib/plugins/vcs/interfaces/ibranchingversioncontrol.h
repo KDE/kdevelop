@@ -22,6 +22,9 @@
 #ifndef IBRANCHINGVERSIONCONTROL_H
 #define IBRANCHINGVERSIONCONTROL_H
 
+#include "iextension.h"
+#include "vcshelpers.h"
+
 namespace KDevelop
 {
 
@@ -100,6 +103,9 @@ public:
 };
 
 }
+
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBranchingVersionControl, "org.kdevelop.IBranchingVersionControl" )
+Q_DECLARE_INTERFACE( KDevelop::IBranchingVersionControl, "org.kdevelop.IBranchingVersionControl" )
 
 #endif
 

@@ -22,6 +22,12 @@
 #ifndef IREPOSITORYVERSIONCONTROL_H
 #define IREPOSITORYVERSIONCONTROL_H
 
+#include "iextension.h"
+#include "vcshelpers.h"
+
+namespace KDevelop
+{
+
 class KDEVPLATFORMVCS_EXPORT IRepositoryVersionControl
 {
 public:
@@ -73,6 +79,10 @@ public:
                                 const QStringList& repoLocations ) = 0;
 };
 
+}
+
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IRepositoryVersionControl, "org.kdevelop.IRepositoryVersionControl" )
+Q_DECLARE_INTERFACE( KDevelop::IRepositoryVersionControl, "org.kdevelop.IRepositoryVersionControl" )
 #endif
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

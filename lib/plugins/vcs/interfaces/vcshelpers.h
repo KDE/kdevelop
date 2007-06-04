@@ -22,6 +22,10 @@
 #ifndef VCSHELPERS_H
 #define VCSHELPERS_H
 
+#include <QVariant>
+#include <QString>
+#include <KUrl>
+
 #include "vcsexport.h"
 
 namespace KDevelop
