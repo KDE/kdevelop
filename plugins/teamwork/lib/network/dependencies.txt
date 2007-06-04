@@ -1,7 +1,0 @@
-To build, this project needs(descriptions followed by their debian package-names):
-Common-C++( libcommoncpp2-dev )
-Boost's serialization-library( libboost-serialization-dev )
-Boost's threading-library( libboost-thread-dev )
-Boost's iostream-library (libbost-iostreams-dev )
-
-Although this is located within the kdevelop-tree, kdevelop is no dependency of this code.
