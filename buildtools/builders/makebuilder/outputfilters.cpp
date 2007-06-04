@@ -21,7 +21,7 @@
 #include <QString>
 #include <QPalette>
 #include <klocale.h>
-#include <kgraphicsutils.h>
+#include <kcolorutils.h>
 
 // ported from KDev3.4's outputview
 
@@ -142,11 +142,9 @@ IOutputViewItem* ErrorFilter::processAndCreate( const QString& line )
         {
             ret = new MakeWarningItem( line, m_builder );
             QBrush fg = ret->foreground();
-            QColor back = QApplication::palette().window().color();
-            back.setAlpha(150);
-            fg.setColor( KGraphicsUtils::blendColor(
+            fg.setColor( KColorUtils::mix(
                                       QApplication::palette().highlight().color(),
-                                      back
+                                      QApplication::palette().window().color()
                 ) );
             ret->setForeground(fg);
         }
