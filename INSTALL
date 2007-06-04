@@ -1,0 +1,14 @@
+Basic Installation
+==================
+
+Create a build directory, for example:
+mkdir build
+
+Then run cmake and point it to the sources like this:
+cmake ../
+
+Afterwards run:
+make
+
+And to install run:
+make install

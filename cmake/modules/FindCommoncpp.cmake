@@ -1,0 +1,65 @@
+# - Try to find libcommoncpp2
+#
+#  COMMONCPP2_FOUND - system has libcommoncpp2
+#  COMMONCPP2_INCLUDE_DIRS - the commoncpp2 include directory
+#  COMMONCPP2_LIBRARIES - The libraries needed to use commoncpp2
+
+
+IF(COMMONCPP2_INCLUDE_DIRS AND COMMONCPP2_LIBRARIES)
+    # Already in cache, be silent
+    SET(Commoncpp_FIND_QUIETLY TRUE)
+ENDIF(COMMONCPP2_INCLUDE_DIRS AND COMMONCPP2_LIBRARIES)
+
+IF( NOT WIN32 )
+    INCLUDE(UsePkgConfig)
+    PKGCONFIG(libccgnu2 _Libccgnu2IncDir _Libccgnu2LinkDir _Libccgnu2LinkFlags _Libccgnu2Cflags)
+    SET(LIBCCGNU2_DEFINITIONS ${_Libccgnu2Cflags})
+    PKGCONFIG(libccext2 _Libccext2IncDir _Libccext2LinkDir _Libccext2LinkFlags _Libccext2Cflags)
+    SET(LIBCCEXT2_DEFINITIONS ${_Libccext2Cflags})
+    SET(COMMONCPP2_DEFINTIONS ${LIBCCGNU2_DEFINITIONS} ${LIBCCEXT2_DEFINITIONS})
+ENDIF( NOT WIN32 )
+
+FIND_PATH(COMMONCPP2_INCLUDE_DIRS cc++/network.h
+    PATHS
+    ${_Libccgnu2IncDir}
+    /usr/include/
+    /usr/local/include/
+    PATH_SUFFIX cc++
+)
+
+FIND_LIBRARY(LIBCCGNU2_LIBRARY NAMES ccgnu2 libccgnu2
+    PATHS
+    ${_Libccext2LinkDir}
+    /usr/lib
+    /usr/local/lib
+)
+
+FIND_LIBRARY(LIBCCEXT2_LIBRARY NAMES ccext2 libccext2
+    PATHS
+    ${_Libccext2LinkDir}
+    /usr/lib
+    /usr/local/lib
+)
+
+IF(COMMONCPP2_INCLUDE_DIRS AND LIBCCGNU2_LIBRARY AND LIBCCEXT2_LIBRARY)
+    SET(COMMONCPP2_FOUND TRUE)
+    SET(COMMONCPP2_LIBRARIES ${LIBCCGNU2_LIBRARY} ${LIBCCEXT2_LIBRARY})
+ELSE(COMMONCPP2_INCLUDE_DIRS AND LIBCCGNU2_LIBRARY AND LIBCCEXT2_LIBRARY)
+    SET(COMMONCPP2_FOUND FALSE)
+ENDIF(COMMONCPP2_INCLUDE_DIRS AND LIBCCGNU2_LIBRARY AND LIBCCEXT2_LIBRARY)
+
+IF(COMMONCPP2_FOUND)
+  IF(NOT Commoncpp_FIND_QUIETLY)
+    MESSAGE(STATUS "Found libccgnu2 and libccext2 ${COMMONCPP2_LIBRARIES}")
+  ENDIF(NOT Commoncpp_FIND_QUIETLY)
+ELSE(COMMONCPP2_FOUND)
+  IF(Commoncpp_FIND_REQUIRED)
+      MESSAGE(FATAL_ERROR "Could not find libccgnu2 or libccext2")
+  ELSE(Commoncpp_FIND_REQUIRED)
+      MESSAGE(STATUS "Could not find libccgnu2 or libccext2, teamwork plugin disabled")
+  ENDIF(Commoncpp_FIND_REQUIRED)
+ENDIF(COMMONCPP2_FOUND)
+
+SET(COMMONCPP2_LIBRARIES ${COMMONCPP2_LIBRARIES} CACHE String "All libraries of Common C++")
+
+MARK_AS_ADVANCED( COMMONCPP2_INCLUDE_DIRS LIBCCGNU2_LIBRARY LIBCCEXT2_LIBRARY COMMONCPP2_LIBRARIES )

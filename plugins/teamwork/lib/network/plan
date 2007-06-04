@@ -1,0 +1,27 @@
+A client-server-system is needed, which will be implemented as a static C++-library.
+
+The library will provide classes and functions to:
+- run a client in a seperate thread.
+- run a server in a seperate thread.
+
+The final link between the program using the library and the library will be established by virtual member-functions.
+
+The library will then be used by kdevelop to connect to a server, or to open an own server. The whole library will only depend on STL and common-c++.
+Additionally a standalone server-program will be developed that opens a server using the library, independent from kdevelop.
+
+Objects that have the same number will share one implementation
+
+What the server implemented in the library has to do:
+- keep a list of (user, password, additional authentication-date, additional user-information, user-log) tuples
+- [2] store, manage, and use some options like whether anonymous users are allowed using a storage-class that allows simple changing, storing and restoring of the settings(the storage is done by the program that implements the server)
+- [3] provide a unified message-class for messages to either the server, or to other clients(the clients can communicate through the server or directly, but always moderated by the server). It will allow the clients sending each other messages of types the server does not know and would not understand.
+- provide a set of administrative messages for communications with clients.
+- store messages that are flagged to be safely delivered until the target-client comes online and gives a reply that it got the message
+
+What the client implemented in the library has to do:
+- keep a log of all interesting communication communication
+- keep and manage list of connected users
+- care about most of the implementation-details, and offer the client-program a simple interface to just override interesting high-level functions
+- [2] store, manage, etc. settings
+- [3] provide additional derived message-classes to communicate with other clients through the server
+- implementation of the client will be finished together with the kdevelop-plugin

@@ -1,0 +1,67 @@
+CVS plugin for KDevelop4
+========================
+(C) Robert Gruber [rgruber A users!sourceforge!net]
+
+
+The CVS plugin is separated into three part.
+
+1) The CvsPart (cvspart.h)
+   It is the main entry point to the CVS plugin. By implementing 
+   the IVersionControl interface it offers a lot of slots that will
+   invoke the different CVS actions.
+   This class serves as a dispatcher. It takes the urls and options 
+   for the requested CVS action and passes them to the CvsProxy (#2)
+   to get a CvsJob returned. After starting, the job's result() singal
+   gets connected either directly to CvsMainView (#3) or to a custom
+   output view.
+
+2) CvsProxy (cvsproxy.h) and CvsJob (cvsjob.h)
+   The CvsProxy serves as a single point of entry for creating the
+   CvsJobs. The proxy offers a list of methods for the different
+   supported CVS actions. Each of these methods will return a CvsJob
+   object. So the caller does not have to worry about the whole 
+   job and ommandline creation. Calling the appropriate method will
+   do all the work and return a CvsJob object ready for starting.
+
+   But a CvsJob can also be created directly. In such cases, it must
+   be deleted manually in order to not leak memory. All jobs created
+   by the CvsProxy will automatically be deleted. CvsProxy does this 
+   by calling deleteLater() for the job as soon as it's result() signal
+   got emitted. So any other slots that also connected to the result() 
+   signal can still work with the CvsJob object. But as soon as all 
+   connected slots where called, the CvsJob object gets freed by QT.
+
+3) The CvsMainView (cvsmainview.h) and custom view (like editorsview.h)
+   The CvsMainView displays output from finished jobs. It holds a 
+   KTabWidget to which everbody can add custom output views. For
+   instance when the user requested a "cvs log" action, a new view
+   will be added. This view will then parse the output of the "cvs log"
+   job and display it in a nice way.
+   But it does not make sense to add new views for every cvs action.
+   For example, adding a new view everytime "cvs commit", "cvs edit" or
+   similar actions get executed would be an overkill. Therefore 
+   CvsMainView also provides a generic output view that just displays 
+   the plain text output from such jobs. Unlike custom views, this 
+   generic view can not be closed and it will simply append the ouput 
+   from each job that got connected to it.
+
+
+
+The workflow of the CVS plugin looks like this:
+1) The user requests a CVS action
+2) The matching slot from CvsPart will be called
+3) Optional: The user may be prompted for additional input
+   [ see: CvsPart::commit() ]
+4) CvsPart passes all needed options to the CvsProxy by calling
+   it's method for the requested action.
+5) CvsProxy assembles the commandline, creates a CvsJob object and
+   returns a pointer to the CvsJobs object
+6) CvsPart calls start() for the returned CvsJob object and continues
+   with either #6.1 or #6.2
+6.1) Connectes the job's result() signal to the generic ouput view 
+     from CvsMainView
+6.2) Creates a custom view, connects the job's result() signal to it
+     and adds the view to CvsMainView
+
+
+

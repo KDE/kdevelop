@@ -1,0 +1,26 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=KDevProjectManager
+Comment[da]=KDevelop Projekthåndtering
+Comment[fa]=مدیر پروژۀ KDev
+Comment[nds]=KDevelop-Projektpleger
+Comment[sv]=KDevelop projekthantering
+Comment[x-test]=xxKDevProjectManagerxx
+Comment[zh_TW]=KDevelop 專案管理員
+Name=Project Manager
+Name[es]=Gestor de proyectos
+Name[x-test]=xxProject Managerxx
+GenericName=Project Manager
+GenericName[es]=Gestor de proyectos
+GenericName[x-test]=xxProject Managerxx
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevprojectmanagerview
+X-KDE-PluginInfo-Name=KDevProjectManagerView
+X-KDE-PluginInfo-Author=Roberto Raggi
+X-KDE-PluginInfo-License=LGPL
+X-KDevelop-Version=4
+X-KDevelop-Category=Project
+X-KDevelop-Properties=ProjectFileManagement
