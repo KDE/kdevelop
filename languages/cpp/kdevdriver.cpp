@@ -157,9 +157,11 @@ void KDevDriver::setup()
 	setResolveDependencesEnabled( cfg->preProcessAllHeaders() | cfg->parseMissingHeaders() );
 
 	delete m_includePathResolver;
-	if( cfg->resolveIncludePaths() )
+	if( cfg->resolveIncludePaths() ) {
 		m_includePathResolver = new CppTools::IncludePathResolver( m_foreground );
-	else
+		if( m_cppSupport && m_cppSupport->project() )
+			m_includePathResolver->setOutOfSourceBuildSystem( m_cppSupport->project()->projectDirectory(), m_cppSupport->project()->buildDirectory() );
+	} else
 		m_includePathResolver = 0;
 	
 	m_shouldParseIncludedFiles = cfg->parseMissingHeaders();
