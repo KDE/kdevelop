@@ -35,7 +35,6 @@ namespace KDevelop
 {
 
 class IProjectFileManager;
-class ProjectFolderItem;
 
 class KDEVPLATFORMPROJECT_EXPORT ImportProjectJob: public KJob
 {

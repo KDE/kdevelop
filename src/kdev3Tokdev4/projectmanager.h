@@ -32,8 +32,6 @@
 
 class KUrl;
 class KAction;
-class KSelectAction;
-class KService;
 class ProjectInfo;
 class ProjectSession;
 class KRecentFilesAction;

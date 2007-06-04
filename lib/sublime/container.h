@@ -23,7 +23,6 @@
 
 #include <sublimeexport.h>
 
-class QStackedLayout;
 
 namespace Sublime {
 

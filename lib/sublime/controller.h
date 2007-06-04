@@ -25,12 +25,10 @@
 
 #include "mainwindowoperator.h"
 
-class QChildEvent;
 
 namespace Sublime {
 
 class Area;
-class View;
 class Document;
 class MainWindow;
 

@@ -27,8 +27,6 @@
 
 #include <kdevplugin.h>
 
-class KUrl;
-class QModelIndex;
 class KDevCodeView;
 
 class KDevCodeViewPart: public KDevelop::Plugin

@@ -39,7 +39,6 @@ using namespace Teamwork;
 
 class EditPatch;
 class QDomElement;
-class IconCache;
 class KDevTeamwork;
 class KDevTeamworkClient;
 class PatchesManager;

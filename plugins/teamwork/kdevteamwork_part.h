@@ -20,10 +20,7 @@
 #include <iplugin.h>
 
 class KDevTeamworkViewFactory;
-class KUrl;
-class QModelIndex;
 class KDevTeamwork;
-class KDevTeamworkPartFactory;
 
 namespace KDevelop {
   class ICore;

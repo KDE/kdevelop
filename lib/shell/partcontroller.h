@@ -34,7 +34,6 @@
 namespace KParts
 {
 class Part;
-class Factory;
 class PartManager;
 class ReadOnlyPart;
 class ReadWritePart;

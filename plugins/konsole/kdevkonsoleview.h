@@ -17,14 +17,9 @@
 
 class KUrl;
 
-class QVBoxLayout;
 
 class KDevKonsoleViewPart;
 
-namespace KParts
-{
-class ReadOnlyPart;
-}
 
 class KDevKonsoleView : public QWidget
 {

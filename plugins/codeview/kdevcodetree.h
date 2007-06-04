@@ -24,7 +24,6 @@
 
 #include "kdevtreeview.h"
 
-class KUrl;
 namespace KDevelop
 {
 class Document;

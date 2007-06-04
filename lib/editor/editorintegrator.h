@@ -32,8 +32,7 @@ namespace KTextEditor { class SmartRange; class SmartCursor; class SmartInterfac
 namespace KDevelop
 {
   class DocumentRange;
-  class DocumentCursor;
-  class EditorIntegratorStatic;
+    class EditorIntegratorStatic;
 
 /**
  * Provides facilities for easy integration of a text editor component with

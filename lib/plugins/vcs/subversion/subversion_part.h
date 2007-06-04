@@ -17,10 +17,8 @@
 #include "subversion_core.h"
 #include <qwidget.h>
 
-class KMenu;
 class QMenu;
 class KUrl;
-class QWidget;
 
 class KDevSubversionPart: public KDevelop::IPlugin, public KDevelop::IVersionControl
 {

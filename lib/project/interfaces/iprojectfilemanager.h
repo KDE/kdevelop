@@ -30,19 +30,15 @@
 
 #include "projectexport.h"
 
-class QObject;
-class QAbstractExtensionManager;
 
 
 namespace KDevelop
 {
 
-class ProjectModel;
 class IProject;
 class ProjectItem;
 class ProjectBaseItem;
 class ProjectFolderItem;
-class ProjectTargetItem;
 class ProjectFileItem;
 class KDialogBase;
 

@@ -30,7 +30,6 @@
 
 class DynamicText;
 class Replacement;
-class Advancer;
 typedef SharedPtr<Replacement, BoostSerializationNormal> ReplacementPointer;
 typedef WeakSharedPtr<Replacement, BoostSerializationNormal> WeakReplacementPointer;
 

@@ -25,7 +25,6 @@
 #include <QtCore/QString>
 #include <cppparserexport.h>
 
-class FileSymbol;
 class TokenStream;
 class Control;
 

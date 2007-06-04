@@ -28,14 +28,11 @@
 
 template<typename T1,typename T2> class QPair;
 template<typename T> class QList;
-class QDir;
-class QFileInfo;
 
 namespace KDevelop
 {
 
 class IProject;
-class BuildProject;
 class ProjectFolderItem;
 class ProjectBuildFolderItem;
 class ProjectFileItem;

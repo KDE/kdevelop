@@ -18,12 +18,8 @@
 class KJob;
 class QWidget;
 struct KDevSubversionViewPrivate;
-class QModelIndex;
 class KTabWidget;
-class SvnLogHolder;
-class SvnBlameHolder;
 class QProgressBar;
-class KUrl;
 
 /** @class KDevSubversionView
  *  @short Displays any subversion results in a bottom-docked tabwidget.

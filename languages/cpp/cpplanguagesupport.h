@@ -28,7 +28,6 @@
 class CodeModel;
 class CodeProxy;
 class CodeDelegate;
-class CodeAggregate;
 class CppHighlighting;
 class CppCodeCompletion;
 class TranslationUnitAST;

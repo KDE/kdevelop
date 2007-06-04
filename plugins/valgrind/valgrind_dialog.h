@@ -4,8 +4,6 @@
 
 #include <kdialog.h>
 
-class KUrlRequester;
-class DialogWidget;
 
 namespace Ui { class ValgrindDialog; }
 

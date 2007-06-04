@@ -32,17 +32,13 @@
 namespace KTextEditor
 {
    class SmartRange;
-   class SmartCursor;
-   class SmartInterface;
-}
+      }
 
 class QMutex;
 
 namespace KDevelop
 {
 
-class DocumentRange;
-class DocumentCursor;
 
 class EditorIntegratorStatic : public QObject, public KTextEditor::SmartRangeWatcher
 {

@@ -27,12 +27,6 @@
 #include <languageexport.h>
 
 
-class QByteArray;
-
-namespace KTextEditor
-{
-class SmartRange;
-}
 
 namespace KDevelop
 {

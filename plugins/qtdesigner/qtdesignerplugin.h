@@ -29,12 +29,8 @@
 class QAction;
 class QDesignerIntegrationInterface;
 class QDesignerFormEditorInterface;
-class QDesignerFormWindowInterface;
-class QWorkspace;
 class QtDesignerDocumentFactory;
 class QtDesignerToolViewFactory;
-class KAboutData;
-class KAction;
 
 namespace KDevelop
 {

@@ -21,7 +21,6 @@
 
 #include "difference.h"
 
-class QString;
 
 namespace Diff2 {
 

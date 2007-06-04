@@ -22,14 +22,9 @@
 #include <shellexport.h>
 #include "icore.h"
 
-namespace Sublime {
-class Area;
-}
 
 namespace KDevelop {
 
-class MainWindow;
-class Config;
 class PluginController;
 class ProjectController;
 class PartController;

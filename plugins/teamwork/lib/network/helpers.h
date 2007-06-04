@@ -19,8 +19,7 @@
 
 namespace Teamwork {
 
-  class BasicTCPSession;
-
+  
   MessagePointer buildMessageFromArchive( InArchive& arch, MessageTypeSet& messages, SessionPointer sess  );
   
   ///May throw several exceptions

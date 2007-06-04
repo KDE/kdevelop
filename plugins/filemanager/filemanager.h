@@ -25,11 +25,8 @@
 #include <QtGui/QWidget>
 #include <kurl.h>
 
-class QTreeView;
 class QModelIndex;
-class KDirModel;
 class KFileItem;
-class DrillDownView;
 class KDevFileManagerPart;
 
 class FileManager: public QWidget {

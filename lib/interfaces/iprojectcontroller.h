@@ -26,12 +26,10 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include "interfacesexport.h"
 
-class QModelIndex;
 
 namespace KDevelop
 {
 
-class IPlugin;
 class IProject;
 class ProjectModel;
 class ProjectBaseItem;

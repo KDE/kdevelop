@@ -36,16 +36,13 @@
 template<typename T> class QList;
 
 class KJob;
-class KInstance;
 
 namespace KDevelop
 {
 
 class IProjectFileManager;
-class ProjectModel;
 class ProjectItem;
 class ProjectFileItem;
-class ProjectFolderItem;
 class PersistentHash;
 
 /**

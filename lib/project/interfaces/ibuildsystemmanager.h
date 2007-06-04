@@ -30,7 +30,7 @@ namespace KDevelop
 
 class IProjectBuilder;
 typedef QList<ProjectFileItem*> FileItemList;
-
+class ProjectTargetItem;
 /**
  * Manage the file and build system of the project.
  * @author Matt Rogers <mattr@kde.org>, Hamish Rodda <rodda@kde.org>

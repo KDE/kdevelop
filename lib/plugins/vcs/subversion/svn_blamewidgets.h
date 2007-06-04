@@ -16,7 +16,6 @@
 #include "svn_models.h"
 #include <QDialog>
 
-class QListView;
 class QGridLayout;
 class QPushButton;
 class QListWidget;

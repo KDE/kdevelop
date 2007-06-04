@@ -24,16 +24,11 @@
 #include <QtGui/QWidget>
 
 
-class KUrl;
 
 namespace KDevelop
 {
 
 class ProjectManagerViewPart;
-class ProjectModel;
-class ProjectFolderItem;
-class ProjectFileItem;
-class ProjectTargetItem;
 
 class ProjectManagerView: public QWidget
 {

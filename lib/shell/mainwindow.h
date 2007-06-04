@@ -35,8 +35,6 @@ namespace KDevelop
 
 class Context;
 
-class IPlugin;
-class Document;
 
 /**
 KDevelop main window.

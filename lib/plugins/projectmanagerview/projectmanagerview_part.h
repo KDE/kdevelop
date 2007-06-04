@@ -23,8 +23,6 @@
 #include <QtCore/QPointer>
 #include "iplugin.h"
 
-class QTimer;
-class QModelIndex;
 
 class KUrl;
 
@@ -32,10 +30,8 @@ namespace KDevelop
 {
 
 class ProjectBaseItem;
-class ProjectModel;
 class ProjectManagerView;
 class ProjectBuilder;
-class ProjectImporter;
 class ProjectFileItem;
 class ProjectFolderItem;
 class ProjectTargetItem;

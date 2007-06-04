@@ -31,7 +31,6 @@
 
 class QStandardItemModel;
 class TemporaryConversationConnector;
-class KDevTeamworkClient;
 class QTimer;
 class InDocumentMessage;
 

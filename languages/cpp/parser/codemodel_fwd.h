@@ -40,7 +40,6 @@ class _TemplateParameterModelItem;
 class _TypeAliasModelItem;
 class _VariableModelItem;
 class _MemberModelItem;
-class TypeInfo;
 
 typedef KDevelop::SharedPtr<_ArgumentModelItem> ArgumentModelItem;
 typedef KDevelop::SharedPtr<_ClassModelItem> ClassModelItem;

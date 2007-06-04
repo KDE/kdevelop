@@ -22,8 +22,6 @@
 
 #include <shellextension.h>
 
-class KDialog;
-class QWidget;
 
 class KDevIDEExtension : public KDevelop::ShellExtension {
 public:

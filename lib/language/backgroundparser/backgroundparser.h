@@ -44,10 +44,7 @@ namespace KTextEditor
 class Document;
 }
 
-class QTimer;
-class QProgressBar;
 class QMutex;
-class QWaitCondition;
 
 namespace KDevelop
 {

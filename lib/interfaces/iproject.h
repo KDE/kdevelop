@@ -35,7 +35,6 @@
 #include <ksharedconfig.h>
 template<typename T> class QList;
 
-class KJob;
 
 
 namespace KDevelop
@@ -43,10 +42,8 @@ namespace KDevelop
 
 class IPlugin;
 class IProjectFileManager;
-class ProjectModel;
 class ProjectItem;
 class ProjectFileItem;
-class ProjectFolderItem;
 
 /**
  * \brief Object which represents a KDevelop project

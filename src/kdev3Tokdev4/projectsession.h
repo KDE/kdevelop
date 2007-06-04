@@ -23,7 +23,6 @@
 #include <q3valuelist.h>
 #include "shellexport.h"
 
-class QWidget;
 class KUrl;
 class KDevPlugin;
 

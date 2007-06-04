@@ -28,7 +28,6 @@
 class QStringList;
 class QStandardItemModel;
 class KUrl;
-class K3Process;
 class QString;
 class OutputViewCommand;
 class IOutputViewItemFactory;

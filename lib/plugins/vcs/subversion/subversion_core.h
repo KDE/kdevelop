@@ -21,8 +21,6 @@ class KJob;
 class KUiServerJobTracker;
 
 class SvnKJobBase;
-class SvnInfoJob;
-class SvnStatusJob;
 
 class KDevSubversionPart;
 class KDevSubversionView;

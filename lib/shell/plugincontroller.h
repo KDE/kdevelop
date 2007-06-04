@@ -35,14 +35,11 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
-class KDialog;
-class KXMLGUIClient;
 
 namespace KDevelop
 {
 class Core;
 class IPlugin;
-class ProjectInfo;
 class ProfileEngine;
 class PluginControllerPrivate;
 /**

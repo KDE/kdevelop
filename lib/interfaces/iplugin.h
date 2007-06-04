@@ -31,8 +31,6 @@
 #include <QtDesigner/QExtensionManager>
 #include "interfacesexport.h"
 
-class QWidget;
-class KInstance;
 class KIconLoader;
 class QAction;
 

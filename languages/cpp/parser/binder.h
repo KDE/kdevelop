@@ -29,8 +29,6 @@
 
 #include <kurl.h>
 
-class Lexer;
-class TokenStream;
 struct NameSymbol;
 
 /**

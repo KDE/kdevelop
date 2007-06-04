@@ -19,7 +19,6 @@
 
 #include <QHash>
 
-class AppWizardDialog;
 class ProjectTemplatesModel;
 class ProjectSelectionPage;
 class KArchiveDirectory;

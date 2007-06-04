@@ -19,7 +19,6 @@
 #include <iplugin.h>
 #include <qobject.h>
 
-class KDevCvsViewFactory;
 class CvsProxy;
 
 /**

@@ -40,7 +40,6 @@ class SvnStatusHolder;
 class SubversionJob;
 class SvnInfoHolder;
 class KTempDir;
-class KProgressDialog;
 class SvnServerCertInfo;
 class SvnLoginInfo;
 

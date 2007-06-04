@@ -31,7 +31,6 @@
 class QMenu;
 class QString;
 template <typename T> class QList;
-class QWidget;
 namespace KDevelop
 {
     class ProjectBaseItem;

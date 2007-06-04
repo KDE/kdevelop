@@ -23,7 +23,6 @@
 
 #include "kdevcodeproxy.h"
 
-class _FunctionModelItem;
 
 class CodeProxy : public KDevelop::CodeProxy
 {
