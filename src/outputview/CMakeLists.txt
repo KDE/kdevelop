@@ -23,5 +23,5 @@ install( FILES
          ioutputviewitem.h
          ioutputviewitemfactory.h
          outputviewexport.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputviews )
+         DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview )
 
