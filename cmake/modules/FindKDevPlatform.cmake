@@ -29,11 +29,17 @@ if( KDEVPLATFORM_INCLUDE_DIR AND KDEVPLATFORM_LIBRARIES )
     set(KDEVPLATFORM_FIND_QUIETLY TRUE)
 endif( KDEVPLATFORM_INCLUDE_DIR AND KDEVPLATFORM_LIBRARIES )
 
+if(WIN32)
+    file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _progFiles)
+    set(KDE4_INCLUDE_DIR ${KDE4_INCLUDE_DIR} ${_progFiles}/kdevplatform/include/kdevplatform)
+    set(KDE4_LIB_DIR ${KDE4_LIB_DIR} ${_progFiles}/kdevplatform/lib)
+endif(WIN32)
+
 if( NOT KDEVPLATFORM_INCLUDE_DIR )
-    find_path( KDEVPLATFORM_INCLUDE_DIR interfaces/iplugin.h
+    find_path( KDEVPLATFORM_INCLUDE_DIR kdevplatform/interfaces/iplugin.h
         PATHS
-        /usr/include/kdevplatform
-        /usr/local/include/kdevplatform
+	${KDE4_INCLUDE_DIR}
+	PATH_SUFFIXES kdevplatform
         DOC "kdevplatform include directory containing the various platform modules"
     )
 else( NOT KDEVPLATFORM_INCLUDE_DIR )
@@ -41,59 +47,92 @@ else( NOT KDEVPLATFORM_INCLUDE_DIR )
 endif( NOT KDEVPLATFORM_INCLUDE_DIR )
 
 if( NOT KDEVPLATFORM_LIBRARY_DIR )
-    find_library( _platforminterfaces_lib kdevplatforminterfaces)
-    get_filename_component(KDEVPLATFORM_LIBRARY_DIR _platforminterfaces_lib PATH )
+    find_library( _platforminterfaces_lib NAMES kdevplatforminterfaces
+	    PATHS
+	    ${KDE4_LIB_DIR}
+	    )
+    get_filename_component(KDEVPLATFORM_LIBRARY_DIR ${_platforminterfaces_lib} PATH )
 endif( NOT KDEVPLATFORM_LIBRARY_DIR )
 set( KDEVPLATFORM_LIBRARY_DIR ${KDEVPLATFORM_LIBRARY_DIR} CACHE PATH "path for kdevplatform libraries" )
 
 message(STATUS "Using kdevplatform include dir: ${KDEVPLATFORM_INCLUDE_DIR}")
 message(STATUS "Using kdevplatform library dir: ${KDEVPLATFORM_LIBRARY_DIR}")
 
-find_library(KDEVPLATFORM_INTERFACES_LIBRARY libkdevplatforminterfaces
+find_library(KDEVPLATFORM_INTERFACES_LIBRARY kdevplatforminterfaces
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
+
+if(NOT KDEVPLATFORM_INTERFACES_LIBRARY)
+message("Didn't find INTERFACES")
+endif(NOT KDEVPLATFORM_INTERFACES_LIBRARY)
+
 
 find_library(KDEVPLATFORM_EDITOR_LIBRARY kdevplatformeditor
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_EDITOR_LIBRARY)
+message("Didn't find EDITOR")
+endif(NOT KDEVPLATFORM_EDITOR_LIBRARY)
 find_library(KDEVPLATFORM_LANGUAGE_LIBRARY kdevplatformlanguage
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_LANGUAGE_LIBRARY)
+message("Didn't find LANGUAGE")
+endif(NOT KDEVPLATFORM_LANGUAGE_LIBRARY)
 find_library(KDEVPLATFORM_OUTPUTVIEW_LIBRARY kdevplatformoutputview
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_OUTPUTVIEW_LIBRARY)
+message("Didn't find OUTPUTVIEW")
+endif(NOT KDEVPLATFORM_OUTPUTVIEW_LIBRARY)
 find_library(KDEVPLATFORM_PROJECT_LIBRARY kdevplatformproject
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_PROJECT_LIBRARY)
+message("Didn't find PROJECT")
+endif(NOT KDEVPLATFORM_PROJECT_LIBRARY)
 find_library(KDEVPLATFORM_SUBLIME_LIBRARY sublime
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_SUBLIME_LIBRARY)
+message("Didn't find SUBLIME")
+endif(NOT KDEVPLATFORM_SUBLIME_LIBRARY)
 find_library(KDEVPLATFORM_SHELL_LIBRARY kdevplatformshell
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_SHELL_LIBRARY)
+message("Didn't find SHELL")
+endif(NOT KDEVPLATFORM_SHELL_LIBRARY)
 find_library(KDEVPLATFORM_UTIL_LIBRARY kdevplatformutil
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_UTIL_LIBRARY)
+message("Didn't find UTIL")
+endif(NOT KDEVPLATFORM_UTIL_LIBRARY)
 find_library(KDEVPLATFORM_VCS_LIBRARY kdevplatformvcs
     PATHS
     ${KDEVPLATFORM_LIBRARY_DIR}
+    NO_DEFAULT_PATH
 )
-
+if(NOT KDEVPLATFORM_VCS_LIBRARY)
+message("Didn't find VCS")
+endif(NOT KDEVPLATFORM_VCS_LIBRARY)
 if( KDEVPLATFORM_INCLUDE_DIR
  AND KDEVPLATFORM_INTERFACES_LIBRARY
  AND KDEVPLATFORM_EDITOR_LIBRARY
@@ -138,7 +177,7 @@ else( KDEVPLATFORM_INCLUDE_DIR
 
     if( KDevPlatform_FIND_REQUIRED)
         message(FATAL_ERROR "Couldn't find all platform modules")
-    else
+    else( KDevPlatform_FIND_REQUIRED)
         message(STATUS "Couldn't find all platform modules")
     endif( KDevPlatform_FIND_REQUIRED)
 # not all platform modules found
