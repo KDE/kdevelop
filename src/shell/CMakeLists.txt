@@ -1,15 +1,15 @@
 add_subdirectory(settings)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/sublime
-    ${CMAKE_SOURCE_DIR}/src/interfaces
-    ${CMAKE_SOURCE_DIR}/src/editor
-    ${CMAKE_SOURCE_DIR}/src/project
-    ${CMAKE_SOURCE_DIR}/src/project/interfaces
-    ${CMAKE_SOURCE_DIR}/src/language
-    ${CMAKE_SOURCE_DIR}/src/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/src/language/interfaces
+    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/lib/sublime
+    ${CMAKE_SOURCE_DIR}/lib/interfaces
+    ${CMAKE_SOURCE_DIR}/lib/editor
+    ${CMAKE_SOURCE_DIR}/lib/project
+    ${CMAKE_SOURCE_DIR}/lib/project/interfaces
+    ${CMAKE_SOURCE_DIR}/lib/language
+    ${CMAKE_SOURCE_DIR}/lib/language/backgroundparser
+    ${CMAKE_SOURCE_DIR}/lib/language/interfaces
 )
 
 set(kdevplatformshell_LIB_SRCS
@@ -56,5 +56,5 @@ install(FILES
     languagecontroller.h
     language.h
     shellexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/shell
 )
