@@ -31,6 +31,7 @@ install(FILES
     importprojectjob.h
     projectconfigskeleton.h
     projectmodel.h
+    projectkcmodule.h
     projectexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project
  )
