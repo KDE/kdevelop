@@ -24,6 +24,7 @@
 
 #include "kompare.h"
 
+class QTextCodec;
 
 class DiffSettings;
 

@@ -41,11 +41,13 @@ using namespace Teamwork;
 
 class KDevTeamwork;
 class QMenu;
+class QModelIndex;
 class QWidget;
 
 class SafeTeamworkEmitter;
 typedef SharedPtr<SafeTeamworkEmitter> SafeTeamworkEmitterPointer;
 
+class IconCache;
 
 class KDevSystemMessage : public SystemMessage {
     DECLARE_MESSAGE( KDevSystemMessage, SystemMessage, 5 );

@@ -46,6 +46,7 @@ class DynamicText;
 class QStandardItemModel;
 class QModelIndex;
 class QMenu;
+class QVariant;
 class DocumentWrapperTreeAction;
 namespace KDevelop {
 class IDocument;

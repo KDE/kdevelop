@@ -17,12 +17,36 @@
 
 #include "network/networkfwd.h"
 
+class MessageManager;
+class CollaborationManager;
+class MessageSendManager;
 class PatchesManager;
+class KUrl;
+class KDevTeamworkPart;
 class KDevTeamwork;
+class QStandardItemModel;
+class QTimer;
+class QListView;
+class QWidget;
+class QModeIndex;
+class MessageSerialization;
 class BoostSerialization;
+class Ui_List;
+class KDevTeamworkLogger;
+class MessageUserTab;
+class QPersistentModelIndex;
+class TeamworkFolderManager;
+class IconCache;
+class PatchesListMessage;
+class KDevSystemMessage;
 class KDevTeamworkTextMessage;
 class PatchesManagerMessage;
 
+namespace KDevelop {
+  class ICore;
+  class IDocumentController;
+  class IDocument;
+}
 
 class KDevTeamworkUser;
 typedef SafeSharedPtr< KDevTeamworkUser, BoostSerialization > KDevTeamworkUserPointer;

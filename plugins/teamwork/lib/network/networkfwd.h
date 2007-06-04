@@ -51,15 +51,20 @@ namespace boost {
 
 namespace Teamwork {
   class HandlerInterface;
+  class BasicTCPSession;
   class SessionInterface;
   class MultiSession;
   class ForwardSession;
   class BasicServer;
   class MessageInterface;
   class User;
+  class UserIdentity;
   class Logger;
+  class LoggerPrinter;
   class MessageTypeSet;
 
+  class ClientSessionDesc;
+  class ServerInformation;
   class Server;
 
   typedef SafeSharedPtr<HandlerInterface> HandlerPointer;

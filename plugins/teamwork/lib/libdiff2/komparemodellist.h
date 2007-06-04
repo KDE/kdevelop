@@ -26,6 +26,7 @@
 #include "diffmodellist.h"
 #include "kompare.h"
 
+class QFile;
 
 class KAction;
 class KDirWatch;

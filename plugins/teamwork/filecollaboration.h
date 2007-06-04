@@ -39,6 +39,7 @@ class CollaborationManager;
 
 class FileCollaborationManager;
 class FileCollaborationSession;
+class QAction;
 class DocumentWrapper;
 class QModelIndex;
 class QStandardItemModel;
