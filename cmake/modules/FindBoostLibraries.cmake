@@ -18,12 +18,12 @@ if(NOT Boost_FOUND)
 else(NOT Boost_FOUND)
     find_library(Boost_SERIALIZATION NAMES boost_serialization boost_serialization-mt
         PATHS
-        Boost_LIBRARY_DIRS
+        ${Boost_LIBRARY_DIRS}
     )
     
     find_library(Boost_THREAD NAMES boost_thread boost_thread-mt
         PATHS
-        Boost_LIBRARY_DIRS
+        ${Boost_LIBRARY_DIRS}
     )
 
     if(NOT Boost_THREAD OR NOT Boost_SERIALIZATION)
