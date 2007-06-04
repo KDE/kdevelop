@@ -1,0 +1,150 @@
+<ui version="4.0" >
+ <class>SvnUpdateOptionDlg</class>
+ <widget class="QDialog" name="SvnUpdateOptionDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>358</width>
+    <height>247</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="1" column="0" >
+    <widget class="QCheckBox" name="checkBox" >
+     <property name="text" >
+      <string>Update immediate childrens only (non-recursive)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QCheckBox" name="checkBox_2" >
+     <property name="text" >
+      <string>Ignore external entries</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Select Revision</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="startNumEdit" />
+      </item>
+      <item row="1" column="1" >
+       <widget class="QComboBox" name="startKindEdit" >
+        <item>
+         <property name="text" >
+          <string>HEAD</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QDateEdit" name="startDateEdit" >
+        <property name="date" >
+         <date>
+          <year>2007</year>
+          <month>3</month>
+          <day>1</day>
+         </date>
+        </property>
+        <property name="calendarPopup" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="startKind" >
+        <property name="text" >
+         <string>Specify By Keyword</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QRadioButton" name="startDate" >
+        <property name="text" >
+         <string>Specify By Date</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QRadioButton" name="startNum" >
+        <property name="text" >
+         <string>Specify By number</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton" >
+       <property name="text" >
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <includes>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >knuminput.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

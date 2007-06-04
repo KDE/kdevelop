@@ -1,0 +1,66 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/Plugin
+X-KDE-Derived=KPluginInfo
+Name=KDevelop Plugin
+Name[br]=Lugent KDevelop
+Name[ca]=Connector per a KDevelop
+Name[da]=KDevelop plugin
+Name[de]=KDevelop-Plugin
+Name[el]=Πρόσθετο KDevelop
+Name[es]=Extensión de KDevelop
+Name[et]=KDevelopi plugin
+Name[eu]=KDevelop plugin-a
+Name[fa]=وصلۀ KDevelop
+Name[fr]=Module externe de KDevelop
+Name[ga]=Breiseán KDevelop
+Name[hu]=KDevelop-bővítőmodul
+Name[it]=Plugin di KDevelop
+Name[ja]=KDevelop プラグイン
+Name[nb]=KDevelop-programtillegg
+Name[nds]=KDevelop-Moduul
+Name[pl]=Wtyczka do KDevelopa
+Name[pt]='Plugin' do KDevelop
+Name[pt_BR]=Plugin do KDevelop
+Name[ru]=Модуль KDevelop
+Name[sl]=Vstavek za KDevelop
+Name[sr]=Прикључак за KDevelop
+Name[sr@latin]=Priključak za KDevelop
+Name[sv]=KDevelop insticksmodul
+Name[ta]=KDevelop  சொருகு
+Name[tg]=Модули KDevelop
+Name[tr]=KDevelop Eklentisi
+Name[x-test]=xxKDevelop Pluginxx
+Name[zh_TW]=KDevelop 外掛程式
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
+
+[PropertyDef::X-KDevelop-Category]
+Type=QString
+
+[PropertyDef::X-KDevelop-Mode]
+Type=QString
+
+# defines a list of properties which the plugin has
+# a profile will query all plugins for properties and will load only
+# those that have queried properties
+[PropertyDef::X-KDevelop-Properties]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-Args]
+Type=QString
+
+[PropertyDef::X-KDevelop-Interfaces]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-IRequired]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-IOptional]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-SupportedMimeTypes]
+Type=QStringList

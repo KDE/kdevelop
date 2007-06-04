@@ -1,0 +1,2 @@
+#!/bin/sh
+colorgcc test.cpp  test -lstdc++ -I../../ -ftemplate-depth-30 && ./test

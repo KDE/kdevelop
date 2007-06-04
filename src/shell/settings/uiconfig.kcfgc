@@ -1,0 +1,6 @@
+File=uiconfig.kcfg
+ClassName=UiConfig
+Singleton=true
+UseEnumTypes=true
+SetUserTexts=true
+ItemAccessors=true
