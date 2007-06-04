@@ -1,6 +1,6 @@
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/
-    ${CMAKE_SOURCE_DIR}/lib/interfaces
+    ${CMAKE_SOURCE_DIR}/src/
+    ${CMAKE_SOURCE_DIR}/src/interfaces
 )
 
 set(kdevplatforminterfaces_LIB_SRCS
@@ -38,7 +38,7 @@ install(FILES
     idocumentcontroller.h
     iextension.h
     interfacesexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces
 )
 
 install(FILES

@@ -1,12 +1,12 @@
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/interfaces
+    ${CMAKE_SOURCE_DIR}/src/interfaces
 )
 
 set(kdevplatformproject_LIB_SRCS
     projectmodel.cpp
     projectconfigskeleton.cpp
     importprojectjob.cpp
-	interfaces/iprojectbuilder.cpp
+    interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
 )
@@ -24,7 +24,7 @@ install(FILES
     interfaces/iprojectbuilder.h
     interfaces/iprojectfilemanager.h
     interfaces/ibuildsystemmanager.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project/interfaces
  )
 
 install(FILES
@@ -32,5 +32,5 @@ install(FILES
     projectconfigskeleton.h
     projectmodel.h
     projectexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/project
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project
  )

@@ -1,8 +1,8 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/lib/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/language/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/editor
+    ${CMAKE_SOURCE_DIR}/src/interfaces
+    ${CMAKE_SOURCE_DIR}/src/language/interfaces
+    ${CMAKE_SOURCE_DIR}/src/editor
 )
 
 set(kdevplatformlanguage_LIB_SRCS
@@ -39,20 +39,20 @@ install(TARGETS kdevplatformlanguage DESTINATION ${LIB_INSTALL_DIR} )
 
 install(FILES
     languageexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language
 )
 
 install(FILES
     interfaces/ilanguagesupport.h
     interfaces/icodehighlighting.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces
 )
 
 install(FILES
     backgroundparser/backgroundparser.h
     backgroundparser/parsejob.h
     backgroundparser/parserdependencypolicy.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language/backgroundparser
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser
 )
 
 install(FILES
@@ -72,5 +72,5 @@ install(FILES
     duchain/duchainlock.h
     duchain/identifier.h
     duchain/identifiedtype.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/language/duchain
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
