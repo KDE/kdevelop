@@ -37,7 +37,7 @@ target_link_libraries(qmake-scopetest
     kdevqmakeparser
     )
 
-add_test(qmake-parsetest ${EXECUTABLE_OUTPUT_PATH}/qmake-parsetest)
-add_test(qmake-assignmenttest ${EXECUTABLE_OUTPUT_PATH}/qmake-assignmenttest)
-add_test(qmake-functionscopetest ${EXECUTABLE_OUTPUT_PATH}/qmake-functionscopetest)
-add_test(qmake-scopetest ${EXECUTABLE_OUTPUT_PATH}/qmake-scopetest)
+#add_test(qmake-parsetest ${EXECUTABLE_OUTPUT_PATH}/qmake-parsetest)
+#add_test(qmake-assignmenttest ${EXECUTABLE_OUTPUT_PATH}/qmake-assignmenttest)
+#add_test(qmake-functionscopetest ${EXECUTABLE_OUTPUT_PATH}/qmake-functionscopetest)
+#add_test(qmake-scopetest ${EXECUTABLE_OUTPUT_PATH}/qmake-scopetest)
