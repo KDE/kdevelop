@@ -39,12 +39,10 @@ if( NOT KDEVPLATFORM_INCLUDE_DIR )
     find_path( KDEVPLATFORM_INCLUDE_DIR kdevplatform/interfaces/iplugin.h
         PATHS
 	${KDE4_INCLUDE_DIR}
-	PATH_SUFFIXES kdevplatform
-        DOC "kdevplatform include directory containing the various platform modules"
     )
-else( NOT KDEVPLATFORM_INCLUDE_DIR )
-    set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatform include directory containing the various platform modules")
+    set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR}/kdevplatform)
 endif( NOT KDEVPLATFORM_INCLUDE_DIR )
+set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatform include directory containing the various platform modules")
 
 if( NOT KDEVPLATFORM_LIBRARY_DIR )
     find_library( _platforminterfaces_lib NAMES kdevplatforminterfaces
