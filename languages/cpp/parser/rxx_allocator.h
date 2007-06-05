@@ -21,6 +21,7 @@
 
 #include <cstddef>
 #include <cstdlib>
+#include <string.h>
 #include <memory>
 
 /**The allocator which uses fixed size blocks for allocation of its elements.

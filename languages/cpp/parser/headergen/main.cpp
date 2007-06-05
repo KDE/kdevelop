@@ -30,7 +30,7 @@ using namespace KDevelop;
 
 struct HeaderGeneratorVisitor : public DefaultVisitor
 {
-  HeaderGeneratorVisitor(ParseSession* session) : inTemplate(false), m_session(session), nc(session) {};
+  HeaderGeneratorVisitor(ParseSession* session) : inTemplate(false), m_session(session), nc(session) {}
 
   bool inTemplate;
 
