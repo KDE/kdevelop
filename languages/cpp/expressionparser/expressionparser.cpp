@@ -86,7 +86,7 @@ ExpressionEvaluationResult::Pointer ExpressionParser::evaluateType( const QByteA
   delete session;
 
   return evaluateType( ast, debug );
-};
+}
 
 ExpressionEvaluationResult::Pointer ExpressionParser::evaluateType( AST* ast, bool debug ) {
   ExpressionEvaluationResult::Pointer ret( new ExpressionEvaluationResult );
@@ -94,4 +94,4 @@ ExpressionEvaluationResult::Pointer ExpressionParser::evaluateType( AST* ast, bo
   return ret;
 }
 
-};
+}
