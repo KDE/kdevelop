@@ -29,7 +29,6 @@
 #include <QPalette>
 #include <QBrush>
 #include <QColor>
-#include <kgraphicsutils.h>
 #include <kdebug.h>
 
 #include "iproject.h"
