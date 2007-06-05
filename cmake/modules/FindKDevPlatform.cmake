@@ -42,7 +42,6 @@ if( NOT KDEVPLATFORM_INCLUDE_DIR )
     )
     set(KDEVPLATFORM_INCLUDE_DIR ${_platformIncDir}/kdevplatform)
 endif( NOT KDEVPLATFORM_INCLUDE_DIR )
-message("CACHING inc dir: ${KDEVPLATFORM_INCLUDE_DIR}")
 set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatform include directory containing the various platform modules")
 
 if( NOT KDEVPLATFORM_LIBRARY_DIR )
