@@ -36,12 +36,13 @@ if(WIN32)
 endif(WIN32)
 
 if( NOT KDEVPLATFORM_INCLUDE_DIR )
-    find_path( KDEVPLATFORM_INCLUDE_DIR kdevplatform/interfaces/iplugin.h
+    find_path( _platformIncDir kdevplatform/interfaces/iplugin.h
         PATHS
 	${KDE4_INCLUDE_DIR}
     )
-    set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR}/kdevplatform)
+    set(KDEVPLATFORM_INCLUDE_DIR ${_platformIncDir}/kdevplatform)
 endif( NOT KDEVPLATFORM_INCLUDE_DIR )
+message("CACHING inc dir: ${KDEVPLATFORM_INCLUDE_DIR}")
 set(KDEVPLATFORM_INCLUDE_DIR ${KDEVPLATFORM_INCLUDE_DIR} CACHE PATH "kdevplatform include directory containing the various platform modules")
 
 if( NOT KDEVPLATFORM_LIBRARY_DIR )
