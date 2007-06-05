@@ -21,14 +21,14 @@
 #ifndef QMAKEMANAGER_H
 #define QMAKEMANAGER_H
 
-#include "ibuildsystemmanager.h"
-#include "iplugin.h"
+#include <ibuildsystemmanager.h>
+#include <iplugin.h>
 
 template <typename T> class QList;
 class QString;
 
 //#include "domutil.h"
-//#include "projectmodel.h"
+//#include <projectmodel.h>
 
 class QDir;
 class QObject;

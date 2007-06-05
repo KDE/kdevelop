@@ -29,7 +29,7 @@
 
 #include "Thread.h"
 
-#include "ilanguage.h"
+#include <ilanguage.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
@@ -41,14 +41,14 @@
 // #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
-#include "duchain.h"
-#include "duchainlock.h"
+#include <duchain.h>
+#include <duchainlock.h>
 #include "dumpchain.h"
-#include "parsejob.h"
+#include <parsejob.h>
 #include "cppeditorintegrator.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
-#include "topducontext.h"
+#include <topducontext.h>
 #include "preprocessjob.h"
 
 using namespace KDevelop;

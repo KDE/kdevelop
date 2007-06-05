@@ -30,8 +30,8 @@
 #include "ktexteditor/document.h"
 #include "ktexteditor/view.h"
 
-#include "core.h"
-#include "documentcontroller.h"
+#include <core.h>
+#include <documentcontroller.h>
 #include "domutil.h"
 #include "documentationpart.h"
 #include "toplevel.h"

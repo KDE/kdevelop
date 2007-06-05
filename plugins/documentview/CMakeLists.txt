@@ -1,7 +1,7 @@
 
 add_subdirectory(settings)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets
+include_directories( ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/util ${KDEVPLATFORM_INCLUDE_DIR}/widgets
     )
 
 

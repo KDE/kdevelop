@@ -43,8 +43,8 @@
 #include "qtdesignerdocument.h"
 
 #include "qtdesignerplugin.h"
-#include "icore.h"
-#include "iuicontroller.h"
+#include <icore.h>
+#include <iuicontroller.h>
 #include <QtDesigner/QDesignerFormWindowManagerInterface>
 #include <QtDesigner/QDesignerFormWindowInterface>
 #include <QtDesigner/QDesignerFormEditorInterface>

@@ -18,8 +18,8 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include "idocumentcontroller.h"
-#include "icore.h"
+#include <idocumentcontroller.h>
+#include <icore.h>
 #include "makebuilder.h"
 #include <ktexteditor/cursor.h>
 

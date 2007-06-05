@@ -29,10 +29,10 @@
 #include <KUrl>
 #include <kio/job.h>
 
-#include "icore.h"
-#include "iproject.h"
+#include <icore.h>
+#include <iproject.h>
 #include "kgenericfactory.h"
-#include "projectmodel.h"
+#include <projectmodel.h>
 
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"

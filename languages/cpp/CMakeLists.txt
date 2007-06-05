@@ -3,18 +3,18 @@ add_subdirectory(parser)
 add_subdirectory(duchainbuilder)
 add_subdirectory(app_templates)
 
-include_directories(${CMAKE_TOP_BUILD_DIR} ${CMAKE_SOURCE_DIR}/lib
-    ${CMAKE_SOURCE_DIR}/lib/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/editor
+include_directories(${CMAKE_TOP_BUILD_DIR} ${KDEVPLATFORM_INCLUDE_DIR}
+    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/editor
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
     ${CMAKE_SOURCE_DIR}/languages/cpp/duchainbuilder
-    ${CMAKE_SOURCE_DIR}/lib/project
-    ${CMAKE_SOURCE_DIR}/lib/project/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/language
-    ${CMAKE_SOURCE_DIR}/lib/language/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/lib/language/duchain
-    ${CMAKE_SOURCE_DIR}/lib/language/duchain/viewer
+    ${KDEVPLATFORM_INCLUDE_DIR}/project
+    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/language
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/backgroundparser
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain/viewer
 )
 
 
@@ -32,7 +32,7 @@ set(kdevcpplanguagesupport_PART_SRCS
 kde4_automoc(${kdevcpplanguagesupport_PART_SRCS})
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport ${QT_QTDESIGNER_LIBRARY}
-    kdevplatforminterfaces kdevcppduchainbuilder kdevcpprpp kdevplatformproject kdevplatformlanguage)
+    ${KDEVPLATFORM_INTERFACES_LIBRARY} kdevcppduchainbuilder kdevcpprpp ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARY})
 
 install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR} )
 

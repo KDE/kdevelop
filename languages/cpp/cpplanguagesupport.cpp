@@ -40,17 +40,17 @@
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 
-#include "icore.h"
-#include "iproject.h"
-#include "ilanguage.h"
-#include "ilanguagecontroller.h"
-#include "iprojectcontroller.h"
-#include "ibuildsystemmanager.h"
+#include <icore.h>
+#include <iproject.h>
+#include <ilanguage.h>
+#include <ilanguagecontroller.h>
+#include <iprojectcontroller.h>
+#include <ibuildsystemmanager.h>
 
-#include "projectmodel.h"
-#include "backgroundparser.h"
-#include "idocument.h"
-#include "idocumentcontroller.h"
+#include <projectmodel.h>
+#include <backgroundparser.h>
+#include <idocument.h>
+#include <idocumentcontroller.h>
 
 /*
 #include <kdevcore.h>
@@ -69,12 +69,12 @@
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 
-#include "duchain.h"
-#include "topducontext.h"
-#include "smartconverter.h"
+#include <duchain.h>
+#include <topducontext.h>
+#include <smartconverter.h>
 #include "cppeditorintegrator.h"
 #include "usebuilder.h"
-#include "symboltable.h"
+#include <symboltable.h>
 #include "typerepository.h"
 
 #include "cppparsejob.h"

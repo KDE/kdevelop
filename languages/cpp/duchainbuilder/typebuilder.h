@@ -20,8 +20,8 @@
 #define TYPEBUILDER_H
 
 #include "contextbuilder.h"
-#include "typesystem.h"
-#include "declaration.h"
+#include <typesystem.h>
+#include <declaration.h>
 #include "cppduchainbuilderexport.h"
 
 class CppClassType;

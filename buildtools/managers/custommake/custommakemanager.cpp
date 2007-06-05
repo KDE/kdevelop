@@ -11,14 +11,14 @@
 #include "custommakemanager.h"
 #include "custommakemodelitems.h"
 #include "projectfilesystemwatcher.h"
-#include "icore.h"
-#include "iproject.h"
-#include "iprojectcontroller.h"
-#include "iplugincontroller.h"
+#include <icore.h>
+#include <iproject.h>
+#include <iprojectcontroller.h>
+#include <iplugincontroller.h>
 #include "imakebuilder.h"
 #include "kgenericfactory.h"
-#include "projectmodel.h"
-#include "context.h"
+#include <projectmodel.h>
+#include <context.h>
 
 #include <QQueue>
 #include <QDir>

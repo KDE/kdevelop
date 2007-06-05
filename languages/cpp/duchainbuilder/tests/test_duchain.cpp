@@ -20,19 +20,19 @@
 
 #include <QtTest/QtTest>
 
-#include "duchain.h"
-#include "duchainlock.h"
-#include "topducontext.h"
+#include <duchain.h>
+#include <duchainlock.h>
+#include <topducontext.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
-#include "declaration.h"
-#include "documentrange.h"
+#include <declaration.h>
+#include <documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 
 #include "tokens.h"
 #include "parsesession.h"
-#include "symboltable.h"
+#include <symboltable.h>
 
 #include "rpp/preprocessor.h"
 

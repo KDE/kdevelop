@@ -1,11 +1,11 @@
 
 # add_subdirectory(tests)
 
-include_directories(${CMAKE_SOURCE_DIR}/lib
+include_directories(${KDEVPLATFORM_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/buildtools/builders/makebuilder
-    ${CMAKE_SOURCE_DIR}/lib/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/project
-    ${CMAKE_SOURCE_DIR}/lib/project/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/project
+    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
     )
 
 
@@ -20,7 +20,7 @@ set(kdevcustommakemanager_PART_SRCS
 kde4_automoc(${kdevcustommakemanager_PART_SRCS})
 kde4_add_plugin(kdevcustommakemanager ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries( kdevcustommakemanager
-                    ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject
+                    ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY}
 )
 
 install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )

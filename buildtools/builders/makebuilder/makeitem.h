@@ -12,7 +12,7 @@
 #ifndef MAKEITEM_H
 #define MAKEITEM_H
 
-#include "ioutputviewitem.h"
+#include <ioutputviewitem.h>
 class QAction;
 template<typename T1> class QList;
 class MakeBuilder;

@@ -21,8 +21,8 @@
 
 #include "typebuilder.h"
 #include "cppduchainbuilderexport.h"
-#include "declaration.h"
-#include "classfunctiondeclaration.h"
+#include <declaration.h>
+#include <classfunctiondeclaration.h>
 
 namespace KDevelop
 {

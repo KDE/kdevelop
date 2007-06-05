@@ -20,7 +20,7 @@
 #define NAME_COMPILER_H
 
 #include "default_visitor.h"
-#include "identifier.h"
+#include <identifier.h>
 #include <cppparserexport.h>
 
 class ParseSession;

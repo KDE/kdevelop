@@ -28,7 +28,7 @@
 
 #include <kxmlguiclient.h>
 #include <kservice.h>
-#include "shellexport.h"
+#include <shellexport.h>
 
 class KUrl;
 class KAction;

@@ -21,7 +21,7 @@
 #include <qdom.h>
 #include <q3dict.h>
 #include <q3valuelist.h>
-#include "shellexport.h"
+#include <shellexport.h>
 
 class KUrl;
 class KDevPlugin;

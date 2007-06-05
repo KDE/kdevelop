@@ -8,7 +8,7 @@
  * of the License, or (at your option) any later version.
  */
 
-#include "projectmodel.h"
+#include <projectmodel.h>
 #include "projectfilesystemwatcher.h"
 #include <QHash>
 #include <QFileSystemWatcher>

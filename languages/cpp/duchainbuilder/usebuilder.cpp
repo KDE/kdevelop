@@ -24,11 +24,11 @@
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "declaration.h"
-#include "use.h"
-#include "topducontext.h"
-#include "duchain.h"
-#include "duchainlock.h"
+#include <declaration.h>
+#include <use.h>
+#include <topducontext.h>
+#include <duchain.h>
+#include <duchainlock.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;

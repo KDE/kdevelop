@@ -1,8 +1,8 @@
 
 add_subdirectory(tests) 
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/projectmanager/interfaces 
-    ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util
+include_directories(${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/projectmanager/interfaces 
+    ${KDEVPLATFORM_INCLUDE_DIR}/project ${KDEVPLATFORM_INCLUDE_DIR}/util
     )
 
 

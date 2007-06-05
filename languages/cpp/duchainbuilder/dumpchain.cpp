@@ -24,10 +24,10 @@
 #include <kdebug.h>
 
 #include "cppeditorintegrator.h"
-#include "ducontext.h"
-#include "declaration.h"
-#include "definition.h"
-#include "use.h"
+#include <ducontext.h>
+#include <declaration.h>
+#include <definition.h>
+#include <use.h>
 
 using namespace KDevelop;
 

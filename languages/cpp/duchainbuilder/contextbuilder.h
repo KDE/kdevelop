@@ -22,8 +22,8 @@
 
 #include "default_visitor.h"
 
-#include "identifier.h"
-#include "ducontext.h"
+#include <identifier.h>
+#include <ducontext.h>
 #include "cppduchainbuilderexport.h"
 
 namespace KDevelop

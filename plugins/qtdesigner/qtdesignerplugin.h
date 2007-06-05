@@ -24,7 +24,7 @@
 
 #include <QHash>
 #include <QtCore/QPointer>
-#include "iplugin.h"
+#include <iplugin.h>
 
 class QAction;
 class QDesignerIntegrationInterface;

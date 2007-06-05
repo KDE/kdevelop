@@ -22,11 +22,11 @@
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "ducontext.h"
+#include <ducontext.h>
 #include "cpptypes.h"
 #include "parsesession.h"
 #include "tokens.h"
-#include "declaration.h"
+#include <declaration.h>
 #include "typerepository.h"
 
 using namespace KDevelop;

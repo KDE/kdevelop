@@ -20,7 +20,7 @@
 #define TYPE_COMPILER_H
 
 #include "default_visitor.h"
-#include "identifier.h"
+#include <identifier.h>
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>

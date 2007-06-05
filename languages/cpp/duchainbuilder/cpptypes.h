@@ -26,9 +26,9 @@
 #include <QtCore/QVector>
 #include <QtCore/QPair>
 
-#include "typesystem.h"
-#include "declaration.h"
-#include "identifiedtype.h"
+#include <typesystem.h>
+#include <declaration.h>
+#include <identifiedtype.h>
 #include "cppduchainbuilderexport.h"
 
 namespace KDevelop

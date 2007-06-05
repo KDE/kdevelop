@@ -29,12 +29,12 @@
 #include <kurl.h>
 #include <kio/job.h>
 
-#include "icore.h"
-#include "iplugincontroller.h"
-#include "iproject.h"
+#include <icore.h>
+#include <iplugincontroller.h>
+#include <iproject.h>
 #include "iqmakebuilder.h"
 #include "kgenericfactory.h"
-#include "projectmodel.h"
+#include <projectmodel.h>
 
 #include "qmakemodelitems.h"
 #include "qmakeprojectscope.h"

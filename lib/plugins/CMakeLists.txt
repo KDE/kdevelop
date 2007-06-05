@@ -1,4 +1,0 @@
-add_subdirectory(projectmanagerview)
-add_subdirectory(outputviews)
-macro_optional_add_subdirectory(genericprojectmanager)
-add_subdirectory(vcs)

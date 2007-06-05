@@ -30,7 +30,7 @@
 #include "control.h"
 
 #include "typerepository.h"
-#include "identifier.h"
+#include <identifier.h>
 #include "dumpchain.h"
 
 namespace KDevelop

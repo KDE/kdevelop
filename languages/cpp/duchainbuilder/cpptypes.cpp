@@ -20,7 +20,7 @@
 
 #include "cpptypes.h"
 
-#include "classfunctiondeclaration.h"
+#include <classfunctiondeclaration.h>
 
 using namespace KDevelop;
 

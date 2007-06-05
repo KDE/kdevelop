@@ -22,7 +22,7 @@
 #ifndef PARSEJOB_H
 #define PARSEJOB_H
 
-#include "parsejob.h"
+#include <parsejob.h>
 
 #include <QStringList>
 

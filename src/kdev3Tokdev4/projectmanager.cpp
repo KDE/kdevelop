@@ -64,9 +64,9 @@ class QDomDocument;
 #include "kdevcreatefile.h"
 
 #include "toplevel.h"
-#include "core.h"
-#include "plugincontroller.h"
-#include "documentcontroller.h"
+#include <core.h>
+#include <plugincontroller.h>
+#include <documentcontroller.h>
 #include "partselectwidget.h"
 #include "languageselectwidget.h"
 #include "generalinfowidget.h"

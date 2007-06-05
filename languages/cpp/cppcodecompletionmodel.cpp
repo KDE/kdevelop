@@ -25,13 +25,13 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include "declaration.h"
+#include <declaration.h>
 #include "cpptypes.h"
-#include "classfunctiondeclaration.h"
-#include "ducontext.h"
-#include "duchain.h"
-#include "duchainlock.h"
-#include "topducontext.h"
+#include <classfunctiondeclaration.h>
+#include <ducontext.h>
+#include <duchain.h>
+#include <duchainlock.h>
+#include <topducontext.h>
 #include "dumpchain.h"
 
 using namespace KTextEditor;

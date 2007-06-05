@@ -28,7 +28,7 @@
 
 #include <ktexteditor/attribute.h>
 
-#include "icodehighlighting.h"
+#include <icodehighlighting.h>
 
 namespace KTextEditor { class SmartRange; }
 

@@ -3,12 +3,12 @@ add_subdirectory(tests)
 
 include_directories(
     ${CMAKE_TOP_BUILD_DIR}
-    ${CMAKE_SOURCE_DIR}/lib/
-    ${CMAKE_SOURCE_DIR}/lib/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/language
-    ${CMAKE_SOURCE_DIR}/lib/language/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/language/duchain
-    ${CMAKE_SOURCE_DIR}/lib/editor
+    ${KDEVPLATFORM_INCLUDE_DIR}
+    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/language
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
+    ${KDEVPLATFORM_INCLUDE_DIR}/editor
     ${CMAKE_SOURCE_DIR}/languages/cpp
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
 )
@@ -28,7 +28,7 @@ set(kdevcppduchainbuilder_LIB_SRCS
 )
 
 kde4_add_library(kdevcppduchainbuilder SHARED ${kdevcppduchainbuilder_LIB_SRCS})
-target_link_libraries(kdevcppduchainbuilder kdevplatformlanguage kdevcppparser)
+target_link_libraries(kdevcppduchainbuilder ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} kdevcppparser)
 set_target_properties(kdevcppduchainbuilder PROPERTIES VERSION 4.0.0 SOVERSION 4)
 install(TARGETS kdevcppduchainbuilder DESTINATION ${LIB_INSTALL_DIR} )
 

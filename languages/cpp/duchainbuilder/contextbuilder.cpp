@@ -23,15 +23,15 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "duchain.h"
-#include "duchainlock.h"
+#include <duchain.h>
+#include <duchainlock.h>
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "declaration.h"
-#include "use.h"
-#include "topducontext.h"
+#include <declaration.h>
+#include <use.h>
+#include <topducontext.h>
 #include "dumpchain.h"
-#include "symboltable.h"
+#include <symboltable.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;

@@ -26,11 +26,11 @@
 #include "name_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
-#include "definition.h"
-#include "symboltable.h"
-#include "forwarddeclaration.h"
-#include "duchain.h"
-#include "duchainlock.h"
+#include <definition.h>
+#include <symboltable.h>
+#include <forwarddeclaration.h>
+#include <duchain.h>
+#include <duchainlock.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;

@@ -14,7 +14,7 @@
 #ifndef MAKEITEMFACTORY_H
 #define MAKEITEMFACTORY_H
 
-#include "ioutputviewitemfactory.h"
+#include <ioutputviewitemfactory.h>
 class IOutputViewItem;
 class MakeBuilder;
 class OutputFilter;

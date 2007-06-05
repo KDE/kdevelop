@@ -23,13 +23,13 @@
 
 #include <ktexteditor/smartrange.h>
 
-#include "topducontext.h"
-#include "declaration.h"
-#include "definition.h"
-#include "use.h"
+#include <topducontext.h>
+#include <declaration.h>
+#include <definition.h>
+#include <use.h>
 #include "cpptypes.h"
-#include "duchain.h"
-#include "duchainlock.h"
+#include <duchain.h>
+#include <duchainlock.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;

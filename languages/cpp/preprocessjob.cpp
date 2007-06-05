@@ -30,11 +30,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "backgroundparser.h"
+#include <backgroundparser.h>
 
 #include "Thread.h"
 
-#include "ilanguage.h"
+#include <ilanguage.h>
 
 #include "cpplanguagesupport.h"
 #include "cppparsejob.h"
@@ -43,7 +43,7 @@
 #include "parser/parsesession.h"
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-engine.h"
-#include "duchain.h"
+#include <duchain.h>
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)

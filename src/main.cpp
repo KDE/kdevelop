@@ -39,14 +39,14 @@
 #include <QPixmap>
 #include <QTimer>
 
-#include "core.h"
+#include <core.h>
 // #include "kdevconfig.h"
-#include "mainwindow.h"
+#include <mainwindow.h>
 // #include "kdevenvironment.h"
 // #include "kdevpartcontroller.h"
 // #include "kdevlanguagecontroller.h"
 #include "splashscreen.h"
-#include "plugincontroller.h"
+#include <plugincontroller.h>
 // #include "kdevprojectcontroller.h"
 // #include "kdevdocumentcontroller.h"
 // #include "kdevbackgroundparser.h"

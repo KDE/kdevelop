@@ -19,7 +19,7 @@
 #ifndef CPPEDITORINTEGRATOR_H
 #define CPPEDITORINTEGRATOR_H
 
-#include "editorintegrator.h"
+#include <editorintegrator.h>
 #include "cppduchainbuilderexport.h"
 #include "lexer.h"
 
