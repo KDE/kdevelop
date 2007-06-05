@@ -108,8 +108,8 @@ void TestDUChain::initTestCase()
 {
   noDef = 0;
 
-  file1 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/duchain.cpp";
-  file2 = "file:///opt/kde4/src/kdevelop/languages/cpp/parser/dubuilder.cpp";
+  file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
+  file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
   topContext = new TopDUContext(new KDevelop::DocumentRange(file1, Range(0,0,25,0)));
   DUChain::self()->addDocumentChain(file1, topContext);
