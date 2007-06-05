@@ -1,0 +1,45 @@
+/*!
+ * @mainpage The KDevelop Platform Libraries API Reference
+ *
+ *
+ * <b>The KDE online class reference for the current development version of
+ * the KDevelop Platform Libraries.</b>
+ *
+ * The libraries available in this KDE module are:
+ *
+ * - <a href="src/editor/html/index.html"><b>editor</b></a>.
+ *   <i>An Editor integration library.</i>
+ *
+ * - <a href="src/interface/html/index.html"><b>interface</b></a>.
+ *   <i>Library with the basic interfaces for the Shell.</i>
+ *
+ * - <a href="src/language/html/index.html"><b>language</b></a>.
+ *   <i>Language Interfaces and helper library.</i>
+ *
+ * - <a href="src/project/html/index.html"><b>outputview</b></a>.
+ *   <i>Interface and Library for the Outputview.</i>
+ *
+ * - <a href="src/project/html/index.html"><b>project</b></a>.
+ *   <i>Project library and manager interfaces.</i>
+ *
+ * - <a href="src/shell/html/index.html"><b>shell</b></a>.
+ *   <i>The application shell.</i>
+ *
+ * - <a href="src/sublime/html/index.html"><b>sublime</b></a>.
+ *   <i>Sublime the user interface library.</i>
+ *
+ * - <a href="src/util/html/index.html"><b>util</b></a>.
+ *   <i>A library with stuff that doesn't fit elsewhere.</i>
+ *
+ * - <a href="src/vcs/html/index.html"><b>vcs</b></a>.
+ *   <i>Interfaces and support library for Version Control Systems.</i>
+ *
+ * @b Read about the KDevelop Platform architecture in
+ * the \ref architecture.
+ *
+ * @b Follow the development of these libraries. Please consider joining the
+ * <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">KDevelop Development Mailing List</a> (<a href="http://lists.kde.org/?l=kdevelop-devel">archives</a>).
+ */
+
+// DOXYGEN_NAME="KDevelop Platform Libraries"
+// DOXYGEN_ENABLE=YES

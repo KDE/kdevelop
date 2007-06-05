@@ -1,7 +1,7 @@
 /*!
- * @mainpage util - A library with stuff that doesn't fit elsewhere.
+ * @mainpage outputview - Interface and library for the outputview.
  *
- * util contains helper classes that can be used by plugins and applications.
+ * outputview provides an interface and a library to display program output.
  *
  * @section desc Description
  *
@@ -15,4 +15,4 @@
  * mailing list.
  */
 
-// DOXYGEN_PROJECT_NAME=Util library
+// DOXYGEN_PROJECT_NAME=Outputview library

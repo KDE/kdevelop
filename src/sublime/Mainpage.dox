@@ -1,7 +1,9 @@
 /*!
- * @mainpage util - A library with stuff that doesn't fit elsewhere.
+ * @mainpage sublime - An user interface library.
  *
- * util contains helper classes that can be used by plugins and applications.
+ * sublime provides a user interface that supports multiple
+ * mainwindows, multiple dockwidgets, split views and area's (which are known
+ * as perspectives in some IDE's).
  *
  * @section desc Description
  *
@@ -15,4 +17,4 @@
  * mailing list.
  */
 
-// DOXYGEN_PROJECT_NAME=Util library
+// DOXYGEN_PROJECT_NAME=Sublime library

@@ -1,0 +1,24 @@
+## In kdevplatform, everything is supposed to be documented. Except the plugins, who don't have a Mainpage.dox
+EXTRACT_ALL = NO
+WARN_NO_PARAMDOC = YES
+WARN_IF_UNDOCUMENTED = YES
+
+## Sort methods to make 'same as above' easier.
+SORT_MEMBER_DOCS = YES
+
+## Predefined macros, to remove all the _EXPORT things
+## from function definitions.
+PREDEFINED = KDEVPLATFORMEDITOR_EXPORT="" \
+        KDEVPLATFORMINTERFACES_EXPORT="" \
+        KDEVPLATFORMLANGUAGE_EXPORT="" \
+        KDEVPLATFORMOUTPUTVIEW_EXPORT="" \
+        KDEVPLATFORMPROJECT_EXPORT="" \
+        KDEVPLATFORMSHELL_EXPORT="" \
+        SUBLIME_EXPORT="" \
+        KDEVPLATFORMUTIL_EXPORT="" \
+        KDEVPLATFORMVCS_EXPORT="" \
+	KDE_DEPRECATED="" \
+	Q_OS_UNIX="" \
+	Q_SLOTS="slots" \
+	Q_SIGNALS="signals" \
+

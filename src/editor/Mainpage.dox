@@ -1,11 +1,14 @@
 /*!
- * @mainpage util - A library with stuff that doesn't fit elsewhere.
+ * @mainpage editor - An editor integration library.
  *
- * util contains helper classes that can be used by plugins and applications.
+ * editor is a library that provides easier access to the KTextEditor
+ * API.
  *
  * @section desc Description
  *
  * @todo: add description and examples
+ *
+ * @authors Hamish Rodda \<rodda@kde.org\>
  *
  * @licenses
  * @lgpl
@@ -15,4 +18,4 @@
  * mailing list.
  */
 
-// DOXYGEN_PROJECT_NAME=Util library
+// DOXYGEN_PROJECT_NAME=Editor library

@@ -1,7 +1,8 @@
 /*!
- * @mainpage util - A library with stuff that doesn't fit elsewhere.
+ * @mainpage interfaces - Library with the basic interface for the Shell.
  *
- * util contains helper classes that can be used by plugins and applications.
+ * interfaces is a library that provides Interfaces to various parts of 
+ * the shell, for example the plugin and project controller or the uicontroller
  *
  * @section desc Description
  *
@@ -15,4 +16,4 @@
  * mailing list.
  */
 
-// DOXYGEN_PROJECT_NAME=Util library
+// DOXYGEN_PROJECT_NAME=Interfaces library

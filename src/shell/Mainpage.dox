@@ -1,0 +1,23 @@
+/*!
+ * @mainpage shell - The application shell.
+ *
+ * The shell provides implementation of many interfaces from the
+ * <a href="../interfaces/index.html">interfaces</a> library and
+ * thus is the glue that brings everything together.
+ *
+ * The shell shall only be used from the application binary, no
+ * plugin or support library should link against the shell.
+ *
+ * @section desc Description
+ *
+ * @todo: add description and examples
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussons about editor either contact the author
+ * or the <a href="mailto:kdevelop-devel@kdevelop.org">kdevelop-devel@kdevelop.org</a>
+ * mailing list.
+ */
+
+// DOXYGEN_PROJECT_NAME=Shell library

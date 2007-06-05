@@ -1,7 +1,9 @@
 /*!
- * @mainpage util - A library with stuff that doesn't fit elsewhere.
+ * @mainpage project - Project library and manager interfaces.
  *
- * util contains helper classes that can be used by plugins and applications.
+ * project provides the project model, base classes to create
+ * project configuration dialogs and the interfaces for the
+ * project managers
  *
  * @section desc Description
  *
@@ -15,4 +17,4 @@
  * mailing list.
  */
 
-// DOXYGEN_PROJECT_NAME=Util library
+// DOXYGEN_PROJECT_NAME=Project library
