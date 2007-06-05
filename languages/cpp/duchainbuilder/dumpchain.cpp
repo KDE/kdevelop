@@ -145,8 +145,8 @@ void DumpChain::visit(AST *node)
 
       
       kDebug() << indentation <<  "\\" << names[node->kind]
-              << "[" << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
-              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << "] " << nodeText << endl;
+              << "[(" << node->start_token << ") " << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << /*", "
+              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) <<*/ "] " << nodeText << endl;
     } else
       kDebug() << indentation << "\\" << names[node->kind]
               << "[" << node->start_token << ", " << node->end_token << "]" << endl;
@@ -158,11 +158,11 @@ void DumpChain::visit(AST *node)
   if (node)
     if (m_editor)
       kDebug() << indentation << "/" << names[node->kind]
-              << "[: " << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
-              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << ']' << endl;
+              << "[("  << node->end_token << ") "/*<< m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "*/
+              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << "]" << endl;
     else
       kDebug() << indentation << "/" << names[node->kind]
-              << "[: " << node->start_token << ", " << node->end_token << ']' << endl;
+              << "[" << node->start_token << ", " << node->end_token << ']' << endl;
 }
 
 DumpChain::~ DumpChain( )
