@@ -1,14 +1,33 @@
-#include "/media/data/kdedev/4.0/kdevplatform/src/language/duchain/duchain.h" /* defines DUChain */
-#include "languages/cpp/duchainbuilder/usebuilder.h" /* defines UseBuilder */
-#include "languages/cpp/duchainbuilder/declarationbuilder.h" /* defines DeclarationBuilder */
-#include "languages/cpp/duchainbuilder/dumpchain.h" /* defines DumpChain */
-#include "ducontext.h"
+/* This file is part of KDevelop
+    Copyright (C) 2007 David Nolden [david.nolden.kdevelop  art-master.de]
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
 #include "expressionparser.h"
+
+#include <duchain.h>
+#include "duchainbuilder/usebuilder.h"
+#include "duchainbuilder/declarationbuilder.h"
+#include "duchainbuilder/dumpchain.h"
+#include "duchainbuilder/dumptypes.h"
+#include "ducontext.h"
 #include "ast.h"
 #include "parsesession.h"
 #include "parser.h"
 #include "control.h"
-#include "duchainbuilder/dumptypes.h" /* defines DumpTypes */
 #include "duchainlock.h"
 //#include "typerepository.h"
 #include <identifier.h>

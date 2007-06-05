@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
+    Copyright (C) 2006 Hamish Rodda<rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -136,11 +136,11 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
 void TestExpressionParser::testSimpleExpression() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "template<class T> class Temp { T* member; } ; struct Cont { int a; void* b; Cont c; Temp<Cont> d; }; Cont c; void test() { c += 5; for( int a = 0; a < 10; a++ ) { a--; } }";
-  DUContext* c = parse( test, DumpDUChain );
+  QByteArray test = "struct Cont { int a; }; Cont c; void test() { c += 5;}";
+  DUContext* c = parse( test, DumpDUChain | DumpAST );
   DUChainWriteLocker lock(DUChain::lock());
   
-  DUContext* testContext = c->childContexts()[2];
+  DUContext* testContext = c->childContexts()[1];
   QCOMPARE( testContext->type(), DUContext::Function );
 
   QList<Declaration*> cont = testContext->findDeclarations( QualifiedIdentifier("c") );
