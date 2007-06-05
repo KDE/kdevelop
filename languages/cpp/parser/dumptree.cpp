@@ -18,6 +18,7 @@
 */
 
 #include "dumptree.h"
+#include "lexer.h"
 
 #include <QtCore/QString>
 
@@ -101,20 +102,29 @@ static char const * const names[] = {
 };
 
 DumpTree::DumpTree()
-  : indent(0)
+  : indent(0), m_tokenStream(0)
 {
 }
 
 void DumpTree::dump( AST * node, class TokenStream * tokenStream )
 {
+  m_tokenStream = tokenStream;
   visit(node);
+  m_tokenStream = 0;
 }
 
 void DumpTree::visit(AST *node)
 {
+  QString nodeText;
+  if( m_tokenStream ) {
+    for( int a = node->start_token; a != node->end_token; a++ ) {
+      const Token& tok( m_tokenStream->token(a) );
+      nodeText += QByteArray( tok.text+tok.position, tok.size );
+    }
+  }
   if (node)
     kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
-             << '[' << node->start_token << ", " << node->end_token << ']' << endl;
+             <<  "[" << node->start_token << ", " << node->end_token << "]  " << nodeText << endl;
 
   ++indent;
   DefaultVisitor::visit(node);

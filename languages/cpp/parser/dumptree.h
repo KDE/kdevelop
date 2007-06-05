@@ -36,6 +36,7 @@ protected:
   virtual void visit(AST *node);
 
 private:
+  TokenStream* m_tokenStream;
   int indent;
 };
 

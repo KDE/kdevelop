@@ -28,6 +28,7 @@
 #include <declaration.h>
 #include <definition.h>
 #include <use.h>
+#include "parser/parsesession.h"
 
 using namespace KDevelop;
 
@@ -128,13 +129,22 @@ void DumpChain::dump( AST * node, ParseSession* session)
 void DumpChain::visit(AST *node)
 {
   if (node)
-    if (m_editor)
+    if (m_editor) {
+      QString nodeText;
+      for( int a = node->start_token; a != node->end_token; a++ ) {
+        const Token& tok( m_editor->parseSession()->token_stream->token(a) );
+        if( !nodeText.isEmpty() )
+          nodeText += " ";
+        nodeText += QByteArray( tok.text+tok.position, tok.size );
+      }
+      if( !nodeText.isEmpty() )nodeText = "\"" + nodeText + "\"";
+
       kDebug() << QString(indent * 2, ' ') << names[node->kind]
-              << '[' << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
-              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << ']' << endl;
-    else
+              << "[" << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
+              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << "] " << nodeText << endl;
+    } else
       kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
-              << '[' << node->start_token << ", " << node->end_token << ']' << endl;
+              << "[" << node->start_token << ", " << node->end_token << "]" << endl;
 
   ++indent;
   DefaultVisitor::visit(node);
