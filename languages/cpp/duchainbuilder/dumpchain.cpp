@@ -128,6 +128,10 @@ void DumpChain::dump( AST * node, ParseSession* session)
 
 void DumpChain::visit(AST *node)
 {
+  QString indentation;
+  for( int a = 0; a < indent; a++ )
+    indentation += "| ";
+  
   if (node)
     if (m_editor) {
       QString nodeText;
@@ -139,11 +143,12 @@ void DumpChain::visit(AST *node)
       }
       if( !nodeText.isEmpty() )nodeText = "\"" + nodeText + "\"";
 
-      kDebug() << QString(indent * 2, ' ') << names[node->kind]
+      
+      kDebug() << indentation <<  "\\" << names[node->kind]
               << "[" << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
               << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << "] " << nodeText << endl;
     } else
-      kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+      kDebug() << indentation << "\\" << names[node->kind]
               << "[" << node->start_token << ", " << node->end_token << "]" << endl;
 
   ++indent;
@@ -152,12 +157,12 @@ void DumpChain::visit(AST *node)
 
   if (node)
     if (m_editor)
-      kDebug() << QString(indent * 2, ' ') << names[node->kind]
-              << "[Close: " << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
+      kDebug() << indentation << "/" << names[node->kind]
+              << "[: " << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "
               << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) << ']' << endl;
     else
-      kDebug() << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
-              << "[Close: " << node->start_token << ", " << node->end_token << ']' << endl;
+      kDebug() << indentation << "/" << names[node->kind]
+              << "[: " << node->start_token << ", " << node->end_token << ']' << endl;
 }
 
 DumpChain::~ DumpChain( )
