@@ -173,8 +173,9 @@ else( KDEVPLATFORM_INCLUDE_DIR
  AND KDEVPLATFORM_UTIL_LIBRARY
  AND KDEVPLATFORM_VCS_LIBRARY )
 
+    message(STATUS "You can set KDEVPLATFORM_INCLUDE_DIR and KDEVPLATFORM_LIBRARY_DIR to help cmake find KDevPlatform")
     if( KDevPlatform_FIND_REQUIRED)
-        message(FATAL_ERROR "Couldn't find all platform modules")
+        message(FATAL_ERROR "Couldn't find all platform modules.")
     else( KDevPlatform_FIND_REQUIRED)
         message(STATUS "Couldn't find all platform modules")
     endif( KDevPlatform_FIND_REQUIRED)
