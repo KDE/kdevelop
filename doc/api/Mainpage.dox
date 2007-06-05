@@ -3,56 +3,46 @@
 */
 
 /**
-\mainpage The KDevelop API Documentation
+\mainpage The KDevPlatform API Documentation
 
-%KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications
+%KDevPlatform is an easy to use base for building an IDE (Integrated Development Environment) like applications
 under Unix, MacOS and Windows.
 \n \n
-%KDevelop Platform is set of libraries and tools that are used to build IDEs (Integrated Development Environments),
+%KDevelop Platform is set a of libraries, interfaces and tools that are used to build IDEs (Integrated Development Environments),
 applications similar to IDEs (web development enviroment, text editors for programmers and designers, etc.)
 and/or IDE plugins for all possible purposes.
 
 Platform provides:
 - the plugin architecture (interfaces);
 - the common support libraries;
+- extension interfaces for various parts of an IDE, like project manager, language support, editor integration
 - the generic shell with plugin profiles support.
 .
 
 
 \section Introduction Introduction
 
-This document is targeted at all those that want to add or improve KDevelop's source code.
-If you are instead looking for a user manual, just go to the help menu of your %KDevelop and select %KDevelop handbook.
-This documentation contains the %KDevelop online class reference for the current
-development version of %KDevelop.  Additionally, you
+This document is targeted at all those that want to add or improve KDevPlatform's source code.
+This documentation contains the %KDevPlatform online class reference for the current
+development version of %KDevPlatform.  Additionally, you
 can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">mailing list</a> for any additions and/or modifications to the API.
 
-An on-line, updated every 24H, html version of this documentation can be found at: http://www.kdevelop.org/HEAD/doc/api/html/index.html
-
-More information about the %KDevelop architecture in form of tutorials, HOWTOs,
+More information about the %KDevPlatform architecture in form of tutorials, HOWTOs,
 and FAQs can be found at
 the <a href="http://www.kdevelop.org">KDevelop website</a>.
 
 
 \section status Current Status
 
-<a href="http://www.kdevelop.org/index.html?filename=HEAD/requirements.html">KDevelop Requirements</a> \n
-<a href="http://www.kdevelop.org/index.html?filename=HEAD/features.html">KDevelop Features</a> \n
-\ref LangSupportStatus (doc/api/LangSupportStatus.dox file)
+<a href="http://www.kdevelop.org/index.html?filename=HEAD/requirements.html">KDevPlatform Requirements</a> \n
+<a href="http://www.kdevelop.org/index.html?filename=HEAD/features.html">KDevPlatform Features</a> \n
 
 
 \section expand How to extend KDevelop
 
-First of all read the \ref architecture (doc/api/Architecture.dox file) then you can find more information on how to extend %KDevelop:
-  - \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file)
-  - \ref howToAddProgrammingLanguages (doc/api/HowToAddProgrammingLanguages.dox file)
-  - \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
-  - \ref howToAddFileTemplates (doc/api/HowToAddFileTemplates.dox file)
-  - \ref howToAddGenericBuildTools (doc/api/HowToAddGenericBuildTools.dox file)
+Read the \ref architecture (doc/api/Architecture.dox file).
 
-Additionally you may also want to find out \ref howToDocument (doc/api/HowToDocument.dox file).
-
-\section participate How to participate in KDevelop development
+\section participate How to participate in KDevPlatform development
 
 \subsection cooperation KDevelop Development Team Cooperation Model
 
@@ -81,17 +71,6 @@ They get interconnected like this:
 You're always welcome to join the team. Read the
 <a href="http://www.kdevelop.org/index.html?filename=join-the-team.html">detailed guide</a> on how to proceed.
 
-\section PlannedTasks Planned tasks
-
-Here is a priority ordered list:
-  -# fix the dispersed \ref fixme
-  -# <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">fix reported bugs in bugzilla database</a>
-  -# fix the dispersed \ref todo all over the code.
-  .
-
-For the list of future tasks, ideas, unmaintained plugins and many more, visit
-<a href="http://www.kdevelop.org/mediawiki/index.php/Main_Page">KDevelop Wiki</a>
-
 \section misc Misc
 
   - <a href="http://www.kdevelop.org/index.html?filename=HEAD/authors.html">Authors</a>
@@ -104,7 +83,6 @@ To build your local copy of this documentation download doxygen version 1.5.0 or
 - export KDEDIR=/location_of_your_kde_instalation
 - export QTDIR=/location_of_your_qt_instalation
 - doxygen
-- make install-apidox (as root)
 .
 
 \section License

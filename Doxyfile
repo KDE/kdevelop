@@ -1,9 +1,9 @@
-# Doxyfile 1.5.1-KDevelop
+# Doxyfile 1.5.1-KDevPlatform
 
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = KDevelop
+PROJECT_NAME           = KDevPlatform
 PROJECT_NUMBER         = "Version 4.0"
 OUTPUT_DIRECTORY       = ./apidocs
 CREATE_SUBDIRS         = NO
@@ -90,13 +90,15 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = doc/api \
-                         lib/interfaces \
-                         lib/config \
-                         lib/editor \
-                         lib/language \
-                         lib/project \
-                         lib/shell \
-                         lib/sublime
+                         src/interfaces \
+                         src/outputview \
+                         src/editor \
+                         src/language \
+                         src/project \
+                         src/shell \
+                         src/sublime \
+			 src/util \
+			 src/vcs
 FILE_PATTERNS          = *.h \
                          *.cpp \
                          *.cc \
@@ -109,14 +111,14 @@ FILE_PATTERNS          = *.h \
 RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = *.moc.* \
+EXCLUDE_PATTERNS       = *.moc \
                          moc* \
                          *.all_cpp.* \
                          *unload.* \
                          */test/* \
                          */tests/* \
                          *face_skel.cpp \
-                         *.ui.h \
+                         ui_*.h \
                          kdev*
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = 
