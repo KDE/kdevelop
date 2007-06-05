@@ -345,6 +345,22 @@ CMAKE_END_AST_CLASS( IncludeRegularExpressionAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallAst )
+struct InstallTargetForm {    //Targets
+    enum DestType { };
+    QStringList targets;
+    QString destination;
+    QString permissions;
+    QString configuration;
+    QString component;
+    QString optional;
+};
+
+struct InstallFileForm {
+    QStringList files;
+    
+};
+
+CMAKE_ADD_AST_MEMBER(QList<InstallTargetForm>, const QList<InstallTargetForm>&, targets, Targets)
 CMAKE_END_AST_CLASS( InstallAst )
 
 

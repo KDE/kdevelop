@@ -56,7 +56,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectItem
 class KDEVCMAKECOMMON_EXPORT CMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    CMakeTargetItem( KDevelop::IProject *project,  const CMakeAst* , CMakeFolderItem* item );
+    CMakeTargetItem( KDevelop::IProject *project, const QString& name, CMakeFolderItem* item );
     ~CMakeTargetItem();
 
 //     TargetInfo targetInfo() const;

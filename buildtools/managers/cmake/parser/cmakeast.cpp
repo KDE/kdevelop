@@ -30,7 +30,13 @@
 
 void CMakeAst::writeBack(QString& buffer)
 {
-
+    QString aux;
+    foreach(CMakeAst* s, m_children) {
+        aux.clear();
+        s->writeBack(aux);
+        buffer += aux;
+        buffer += '\n';
+    }
 }
 
 CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )

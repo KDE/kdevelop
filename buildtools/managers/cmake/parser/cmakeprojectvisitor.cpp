@@ -41,16 +41,33 @@ void CMakeProjectVisitor::visit(const CMakeAst *ast)
 
 void CMakeProjectVisitor::visit(const ProjectAst *project)
 {
-    kDebug(9032) << "Project: " << project->projectName() << endl;
     m_projectName = project->projectName();
 }
 
 void CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
 {
-    kDebug(9032) << "Subdirectory: " << subd->sourceDir() << subd->binaryDir() << endl;
     m_subdirectories += subd->sourceDir();
 }
 
 CMakeProjectVisitor::CMakeProjectVisitor()
 {
 }
+
+void CMakeProjectVisitor::visit(const AddExecutableAst *exec)
+{
+    foreach(QString s, exec->sourceLists()) {
+        m_filesPerTarget.insert(exec->executable(), s);
+    }
+    
+    kDebug(9032) << "exec: " << exec->executable() << endl;
+}
+
+void CMakeProjectVisitor::visit(const AddLibraryAst *lib)
+{
+    foreach(QString s, lib->sourceLists()) {
+        m_filesPerTarget.insert(lib->libraryName(), s);
+    }
+    
+    kDebug(9032) << "lib: " << lib->libraryName() << endl;
+}
+

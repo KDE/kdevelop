@@ -114,20 +114,18 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         }
     }
 
-//     foreach ( TargetInfo ti, fi.targets )
-//     {
-//         CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), ti, folder );
-//         foreach( QString sFile, ti.sources )
-//         {
-//             KUrl sourceFile = folder->url();
-//             sourceFile.adjustPath( KUrl::AddTrailingSlash );
-//             sourceFile.addPath( sFile );
-//             new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-//         }
-//     }
-
-
-     return folderList;
+    foreach ( QString t, v.targets())
+    {
+        CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
+        foreach( QString sFile, v.files(t) )
+        {
+            KUrl sourceFile = folder->url();
+            sourceFile.adjustPath( KUrl::AddTrailingSlash );
+            sourceFile.addPath( sFile );
+            new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+        }
+    }
+    return folderList;
 }
 
 KDevelop::ProjectItem* CMakeProjectManager::import( KDevelop::IProject *project )

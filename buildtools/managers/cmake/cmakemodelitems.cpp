@@ -45,8 +45,8 @@ CMakeFolderItem::~CMakeFolderItem()
 //     return m_folderInfo;
 // }
 
-CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const CMakeAst*, CMakeFolderItem* item)
-    : KDevelop::ProjectTargetItem( project, /*target.name*/"wrongTarget", item )
+CMakeTargetItem::CMakeTargetItem( KDevelop::IProject *project, const QString& name,CMakeFolderItem* item)
+    : KDevelop::ProjectTargetItem( project, name, item )
 {
     m_includeList = item->includeDirectories();
 //     m_targetInfo = target;
