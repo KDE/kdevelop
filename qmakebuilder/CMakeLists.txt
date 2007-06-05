@@ -1,11 +1,11 @@
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/buildtools/builders/makebuilder
-    ${CMAKE_SOURCE_DIR}/lib
-    ${CMAKE_SOURCE_DIR}/lib/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/plugins/outputviews/interfaces
-    ${CMAKE_SOURCE_DIR}/lib/project
-    ${CMAKE_SOURCE_DIR}/lib/project/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}
+    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/outputview
+    ${KDEVPLATFORM_INCLUDE_DIR}/project
+    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
     )
 
 
@@ -19,10 +19,10 @@ kde4_automoc(${qmakebuilder_LIB_SRCS})
 kde4_add_plugin(kdevqmakebuilder ${qmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevqmakebuilder
-        ${KDE4_KDECORE_LIBS}
+        ${KDE4_KDEUI_LIBS}
         ${QT_QTDESIGNER_LIBRARY}
-        kdevplatforminterfaces
-        kdevplatformproject
+        ${KDEVPLATFORM_INTERFACES_LIBRARY}
+        ${KDEVPLATFORM_PROJECT_LIBRARY}
 )
 
 install(TARGETS kdevqmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
@@ -40,7 +40,7 @@ kde4_automoc(${qmakebuilder_cfg_SRCS})
 kde4_add_ui_files( qmakebuilder_cfg_SRCS ${qmakebuilder_cfg_UI} )
 kde4_add_kcfg_files( qmakebuilder_cfg_SRCS qmakebuilderconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_qmakebuilder ${qmakebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KUTILS_LIBS} kdevplatforminterfaces kdevplatformproject )
+target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KUTILS_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} )
 
 ########### install files ###############
 install( FILES kdevqmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

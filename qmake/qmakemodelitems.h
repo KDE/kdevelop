@@ -21,7 +21,7 @@
 #ifndef QMAKEMODELITEMS_H
 #define QMAKEMODELITEMS_H
 
-#include "projectmodel.h"
+#include <projectmodel.h>
 
 class QMakeProjectScope;
 

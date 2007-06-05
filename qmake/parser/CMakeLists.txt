@@ -1,6 +1,6 @@
 project(kdevqmakeparser)
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interface
+include_directories( ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/interface
                      ${CMAKE_SOURCE_DIR}/buildtools/managers/qmake
                    )
 
