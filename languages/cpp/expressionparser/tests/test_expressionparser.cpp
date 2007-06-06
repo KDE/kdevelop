@@ -40,7 +40,7 @@ using namespace KTextEditor;
 
 using namespace KDevelop;
 
-QTEST_MAIN(TestExpressionParser);
+QTEST_MAIN(TestExpressionParser)
 
 namespace QTest {
   template<>
