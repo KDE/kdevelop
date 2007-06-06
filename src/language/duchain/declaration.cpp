@@ -149,16 +149,10 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  if (IdentifiedType* idType = dynamic_cast<IdentifiedType*>(d->m_type.data()))
-    idType->setDeclaration(0);
-
   if (d->m_type)
     DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
 
   d->m_type = type;
-
-  if (IdentifiedType* idType = dynamic_cast<IdentifiedType*>(d->m_type.data()))
-    idType->setDeclaration(this);
 
   if (d->m_type)
     DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
