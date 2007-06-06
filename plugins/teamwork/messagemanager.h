@@ -59,17 +59,17 @@ class MessageManager : public QObject {
 
     KDevTeamwork* teamwork();
 
-    void log( QString str, LogLevel level = Info );
+    void log( const QString& str, LogLevel level = Info );
 
     MessageHistoryManager& historyManager();
     ConversationManager& conversationManager();
 
-    void showMessageHistory( const QList<KDevTeamworkUserPointer>& users = QList<KDevTeamworkUserPointer>(), QString context = "" );
+    void showMessageHistory( const QList<KDevTeamworkUserPointer>& users = QList<KDevTeamworkUserPointer>(), const QString& context = "" );
 
     void fillMessageMenu( QMenu* menu, MessagePointer msg );
 
     void showMessage( const MessagePointer& msg );
-    
+
   public slots:
     ///This can be used to indicate that information about the message(like icon, text, etc.) has been changed.
     void updateMessage( const MessagePointer& msg );

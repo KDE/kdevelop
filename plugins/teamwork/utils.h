@@ -27,7 +27,7 @@ std::string operator ~ ( const QString& rhs );
 
 QString operator ~ ( const std::string& rhs );
 
-std::ostream& operator << ( std::ostream& stream, const QString str );
+std::ostream& operator << ( std::ostream& stream, const QString& str );
 
 void indexToLineCol( int index, const QString& text, int& line, int& col );
 

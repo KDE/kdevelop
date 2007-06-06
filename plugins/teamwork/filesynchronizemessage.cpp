@@ -17,7 +17,7 @@
 #include "utils.h"
 #include "qtserialization.h"
 
-FileSynchronizeData::FileSynchronizeData( QString fileName, const QDynamicText& text, bool sendDynamic ) {
+FileSynchronizeData::FileSynchronizeData( const QString& fileName, const QDynamicText& text, bool sendDynamic ) {
   if( sendDynamic ) {
     m_fileText = ~text.text().text();
   } else {

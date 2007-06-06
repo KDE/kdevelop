@@ -13,6 +13,7 @@
  ***************************************************************************/
 
 
+#include "messagehistorymanager.h"
 #include <fstream>
 #include <QDate>
 #include <QMap>
@@ -24,7 +25,6 @@
 #include "network/serialization.h"
 #include "network/messageserialization.h"
 
-#include "messagehistorymanager.h"
 #include "kdevteamwork_messages.h"
 #include "kdevteamwork_user.h"
 #include "teamworkfoldermanager.h"
@@ -93,7 +93,7 @@ void MessageHistoryManager::addMessage( KDevTeamworkTextMessage* msg ) {
   emit newMessage( msg );
 }
 
-QList< HistoryMessagePointer > MessageHistoryManager::getMessages( const KDevTeamworkClientPointer& client, QDate from, QDate until, UserSet users  ) {
+QList< HistoryMessagePointer > MessageHistoryManager::getMessages( const KDevTeamworkClientPointer& client, const QDate& from, const QDate& until, UserSet users  ) {
   writePending();
   QStringList interestingFiles;
   QList< HistoryMessageDesc > ret;
@@ -228,7 +228,7 @@ void MessageHistoryManager::writePending()
             throw WaitError( "locking the lockfile " + lockFileName() + " failed" );
             break;
           case KLockFile::LockError:
-            throw "an error occured while locking the lockfile " + lockFileName();
+            throw "an error occurred while locking the lockfile " + lockFileName();
             break;
           case KLockFile::LockStale:
             throw WaitError( "the lockfile " + lockFileName() + " is stale" );

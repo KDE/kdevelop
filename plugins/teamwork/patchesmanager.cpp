@@ -12,8 +12,9 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
- #include <boost/archive/polymorphic_xml_oarchive.hpp>
- #include <boost/archive/polymorphic_xml_iarchive.hpp>
+#include "patchesmanager.h"
+#include <boost/archive/polymorphic_xml_oarchive.hpp>
+#include <boost/archive/polymorphic_xml_iarchive.hpp>
 
 #include <QPersistentModelIndex>
 #include <QMenu>
@@ -35,7 +36,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include "kdevteamwork_part.h"
 #include "kdevteamwork_user.h"
 #include "ui_kdevteamwork_interface.h"
-#include "patchesmanager.h"
 #include "collaborationmanager.h"
 #include "messagemanager.h"
 #include "kdevteamwork_client.h"
@@ -149,7 +149,7 @@ void PatchesManager::slotUpdateConnection( TeamworkClientPointer newClient ) {
   }
 }
 
-void PatchesManager::log( QString str, LogLevel level ) {
+void PatchesManager::log( const QString& str, LogLevel level ) {
   m_teamwork->log( "patchesmanager: " + str, level );
 }
 
@@ -366,11 +366,11 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
     if ( !request )
       throw QString( "got unrequested patch-message, or could not lock patch-request" );
 
-    LocalPatchSourcePointer::Locked patchInfo = request->request(); ///For security, informations like apply-command etc. are cached
+    LocalPatchSourcePointer::Locked patchInfo = request->request(); ///For security, information like apply-command etc. are cached
     if ( !patchInfo )
       throw QString( "could not get or lock patch-information" );
 
-    LocalPatchSourcePointer::Locked patchInfoNew = msg->patch(); ///For security, informations like apply-command etc. are cached
+    LocalPatchSourcePointer::Locked patchInfoNew = msg->patch(); ///For security, information like apply-command etc. are cached
     if ( !patchInfo )
       throw QString( "could not get or lock patch-information" );
 
@@ -824,7 +824,7 @@ void PatchesManager::restorePartialProjectSession( const QDomElement* /*el*/ ) {
   /*try {
     xmlDeserializeFromElementItem( el, "PatchesManager", NVP( m_config ) );
   } catch ( const QString & str ) {
-    log( "could not restore the patch-informations: " + str, Error );
+    log( "could not restore the patch-information: " + str, Error );
   }*/
 }
 
@@ -832,7 +832,7 @@ void PatchesManager::savePartialProjectSession( QDomElement* /*el*/ ) {
   /*try {
     xmlSerializeToElementItem( el, "PatchesManager", NVP( m_config ) );
   } catch ( const QString & str ) {
-    log( "could not save the patch-informations: " + str, Error );
+    log( "could not save the patch-information: " + str, Error );
   }*/
 }
 
@@ -971,7 +971,7 @@ void PatchesManager::save() {
     boost::archive::polymorphic_xml_oarchive arch( file );
     arch << NVP(m_config);
   } catch ( std::exception & exc ) {
-    log( QString("save(): exception occured while serialization: %1").arg( exc.what() ), Error );
+    log( QString("save(): exception occurred while serialization: %1").arg( exc.what() ), Error );
   } catch( const char* str ) {
     log( QString("save(): %1").arg( str ), Error );
   } catch( const QString& str ) {
@@ -990,7 +990,7 @@ void PatchesManager::load() {
     boost::archive::polymorphic_xml_iarchive arch( file );
     arch >> NVP(m_config);
   } catch ( std::exception & exc ) {
-    log( QString("load(): exception occured while serialization: %1").arg( exc.what() ), Error );
+    log( QString("load(): exception occurred while serialization: %1").arg( exc.what() ), Error );
   } catch( const char* str ) {
     log( QString("load(): %1").arg( str ), Error );
   } catch( const QString& str ) {

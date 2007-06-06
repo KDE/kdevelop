@@ -38,13 +38,13 @@ class TeamworkFolderManager {
      * @param name name of the file. If a file with that name already exists, it will be prefixed to be unique.
      * @return the absolute URL of the file
      * */
-    static KUrl createUniqueFile( QString subFolder, QString extension, QString name, QString namePrefix, QString nameSuffix ) throw(QString);
+    static KUrl createUniqueFile( const QString& subFolder, const QString& extension, const QString& name, const QString& namePrefix, const QString& nameSuffix ) throw(QString);
 
-    static KUrl createUniqueDirectory( QString subFolder, QString name, QString namePrefix = "", QString nameSuffix = "" ) throw(QString);
-    
+    static KUrl createUniqueDirectory( const QString& subFolder, const QString& name, const QString& namePrefix = "", const QString& nameSuffix = "" ) throw(QString);
+
     /** This takes a complete reference-filename which may include folders(those will be created), and from which extension and name will be extracted.(see function above)
      * */
-    static KUrl createUniqueFile( QString subFolder, QString fileName, QString namePrefix = "", QString nameSuffix = "" ) throw(QString);
+    static KUrl createUniqueFile( const QString& subFolder, const QString& fileName, const QString& namePrefix = "", const QString& nameSuffix = "" ) throw(QString);
 
     /**
      * This may be called with a file/folder. On destruction of the class(close of the workspace), that folder will automatically be deleted.
@@ -57,19 +57,19 @@ class TeamworkFolderManager {
      * @return the URL relative to the .teamwork-directory
      * */
     static QString teamworkRelative( const KUrl& url, const QString& subfolder = QString() );
-    
+
     /**
      * @param subfolder a subfolder of workspace-dir that the url will be relative to
      * @return the URL relative to the workspace-directory
      * */
     static QString workspaceRelative( const KUrl& url, const QString& subfolder = QString() );
-    
+
     /**
      * @param subFolder an additional subFolder of workspace-dir that the sub-url is in
      * @return the absolute directory of the given sub-directory
      * */
     static KUrl workspaceAbsolute( const QString& subPath, const QString& subFolder = QString() );
-    
+
     /**
      * @param subFolder an additional subFolder of .teamwork that the sub-url is in
      * @return the absolute directory of the given sub-directory of the .teamwork-folder
@@ -77,21 +77,21 @@ class TeamworkFolderManager {
     static KUrl teamworkAbsolute( const QString& subPath, const QString& subFolder = QString() );
 
     static KUrl workspaceDirectory();
-    
+
     static TeamworkFolderManager* self();
 
     /**
      * Creates the .teamwork folder if it does not exist yet.
      **/
     static void createTeamworkFolder() throw(QString);
-    
+
   private:
     static bool createFile( const KUrl& url );
     static TeamworkFolderManager* m_self;
 
     KUrl m_teamworkDir;
     KUrl m_workspaceDir;
-    
+
     QMap<QString, bool> m_tempItems;
 };
 

@@ -92,7 +92,7 @@ class MessageHistoryManager : public QObject {
 		void addMessage( KDevTeamworkTextMessage* msg );
 
 		///Returns all matching messages. If user is zero, returns messages from/to all users. This is slow(always reads the messages from disk)
-		QList<HistoryMessagePointer>  getMessages( const KDevTeamworkClientPointer& client, QDate from = QDate(), QDate until = QDate(), UserSet users = UserSet() );
+		QList<HistoryMessagePointer>  getMessages( const KDevTeamworkClientPointer& client, const QDate& from = QDate(), const QDate& until = QDate(), UserSet users = UserSet() );
 
 		HistoryMessagePointer  getMessageFromId( Teamwork::UniqueMessageId id, const KDevTeamworkClientPointer& client );
 

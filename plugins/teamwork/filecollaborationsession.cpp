@@ -220,7 +220,7 @@ bool FileCollaborationSession::acceptMessage( const FileCollaborationRequestPoin
   return false;
 }
 
-DocumentWrapperPointer FileCollaborationSession::getDocument( QString fileName ) {
+DocumentWrapperPointer FileCollaborationSession::getDocument( const QString& fileName ) {
   if ( ! m_files.values( fileName ) ) {
     out( Logger::Warning ) << "getDocument: Document-wrapper for a file not being collaborated was requested: " << fileName;
     return 0;

@@ -229,7 +229,7 @@ class PatchesManagerMessage : public SystemMessage
 	PatchesManagerMessage( InArchive& arch, const Teamwork::MessageInfo& info ) : Precursor( arch, info ) {
 	}
 
-	PatchesManagerMessage( const Teamwork::MessageConstructionInfo& info, Message msg = None ) : Precursor( info(this), (SystemMessage::Message)msg, "" ) {
+	explicit PatchesManagerMessage( const Teamwork::MessageConstructionInfo& info, Message msg = None ) : Precursor( info(this), (SystemMessage::Message)msg, "" ) {
 	}
 
 	Message message() {
@@ -287,7 +287,7 @@ class PatchRequestData : public AbstractGUIMessage {
 		Apply
 	};
 
-  PatchRequestData( const LocalPatchSourcePointer& id = LocalPatchSourcePointer(), KDevTeamwork* tw = 0, RequestType req = View );
+  explicit PatchRequestData( const LocalPatchSourcePointer& id = LocalPatchSourcePointer(), KDevTeamwork* tw = 0, RequestType req = View );
   virtual ~PatchRequestData();
 
 	template<class Arch>
@@ -359,7 +359,7 @@ class PatchDataReceiver : public QObject {
 
 class PatchData {
 	public:
-		PatchData( const LocalPatchSourcePointer& p = LocalPatchSourcePointer(), LoggerPointer logg = LoggerPointer() );
+		explicit PatchData( const LocalPatchSourcePointer& p = LocalPatchSourcePointer(), LoggerPointer logg = LoggerPointer() );
 
 	//template<class Arch>
 	void load( InArchive& arch, const uint /*version*/  );

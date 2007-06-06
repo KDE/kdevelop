@@ -56,7 +56,7 @@ void xmlTextDeserialize( QString& buffer, Type& object ) throw( QString ) {
     XmlIArchive arch( str );
     arch & object;
   } catch ( std::exception & exc ) {
-    throw QString( "exception occured while deserialization: " ) + exc.what();
+    throw QString( "exception occurred while deserialization: " ) + exc.what();
   }
 }
 
@@ -71,7 +71,7 @@ void xmlTextSerialize( QString& buffer, Type& object ) throw( QString ) {
 
     arch & object;
   } catch ( std::exception & exc ) {
-    throw QString( "exception occured while serialization: " ) + exc.what();
+    throw QString( "exception occurred while serialization: " ) + exc.what();
   }
 
   buffer = str.str().c_str();
@@ -91,7 +91,7 @@ void xmlDeserialize( QDomNode& node, Type& object ) throw( QString ) {
   if ( !header.isElement() && !header.isText() )
     throw QString( "header is no element" );
   /*if( type.isElement() && !type.isText() )
-  throw QString( "type is no element" );*/ 
+  throw QString( "type is no element" );*/
   /*  if( serializationNode.isElement() )
       throw QString( "serialization-node is no element" );*/
 

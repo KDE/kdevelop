@@ -12,6 +12,7 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "documentwrapper.h"
 #include "kdevteamwork_messages.h"
 #include "kdevteamwork_part.h"
 #include <QStandardItemModel>
@@ -24,7 +25,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include <klocalizedstring.h>
 #include <k3process.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor/document.h>
 #include <ktexteditor/range.h>
 #include <idocumentcontroller.h>
 #include <idocument.h>
@@ -32,7 +32,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include "kdevteamwork_helpers.h"
 #include "collaborationmanager.h"
 #include "filecollaborationmessages.h"
-#include "documentwrapper.h"
 #include "network/basicsession.h"
 #include "utils.h"
 #include "dynamictext/verify.h"
@@ -43,8 +42,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include "patchesmanager.h"
 #include "teamworkfoldermanager.h"
 #include "filecollaborationsession.h"
-#include "teamworkfoldermanager.h"
-#include "dynamictext/verify.h"
 #include "patchmessage.h"
 #include "filecollaborationmanager.h"
 #include "network/messagetypeset.h"

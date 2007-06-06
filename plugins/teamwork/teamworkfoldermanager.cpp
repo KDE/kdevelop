@@ -75,7 +75,7 @@ void TeamworkFolderManager::createTeamworkFolder() throw(QString) {
 }
 
 
-KUrl TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString name, QString namePrefix, QString nameSuffix ) throw(QString) {
+KUrl TeamworkFolderManager::createUniqueDirectory( const QString& subFolder, const QString& name, const QString& namePrefix, const QString& nameSuffix ) throw(QString) {
   if( self()->m_workspaceDir.isEmpty() )
     throw QString( "no teamwork-workspace-directory set" );
   KUrl ul = self()->m_workspaceDir;
@@ -140,7 +140,7 @@ KUrl TeamworkFolderManager::createUniqueDirectory( QString subFolder, QString na
   throw QString( "failed to allocate filename for %1" ).arg( name + "." + nameSuffix );
 }
 
-KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString extension, QString name, QString namePrefix, QString nameSuffix ) throw(QString) {
+KUrl TeamworkFolderManager::createUniqueFile( const QString& subFolder, const QString& extension, const QString& name, const QString& namePrefix, const QString& nameSuffix ) throw(QString) {
   if( self()->m_workspaceDir.isEmpty() )
     throw QString( "no teamwork-workspace-directory set" );
     KUrl ul = self()->m_workspaceDir;
@@ -199,7 +199,7 @@ KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString extensi
     throw QString( "failed to allocate filename for %1" ).arg( name + "." + nameSuffix );
 }
 
-KUrl TeamworkFolderManager::createUniqueFile( QString subFolder, QString fileName, QString namePrefix, QString nameSuffix ) throw(QString) {
+KUrl TeamworkFolderManager::createUniqueFile( const QString& subFolder, const QString& fileName, const QString& namePrefix, const QString& nameSuffix ) throw(QString) {
   QFileInfo i( fileName );
   KUrl u( subFolder );
   u.addPath( i.path() );

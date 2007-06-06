@@ -13,6 +13,7 @@ email                : david.nolden.kdevelop@art-master.de
  ***************************************************************************/
 
 
+#include "messagesendmanager.h"
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
@@ -22,7 +23,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include <indocumentreference.h>
 
 #include "kdevteamwork_part.h"
-#include "messagesendmanager.h"
 #include "teamworkfoldermanager.h"
 
 MessageSendManager::MessageSendManager( Ui::Teamwork& widgets ) : m_widgets( widgets ), m_lastDocument(0) {
@@ -49,7 +49,7 @@ void MessageSendManager::connectDocument( KDevelop::IDocument* document ) {
   if( !document->textDocument() ) return;
   connect( document->textDocument(), SIGNAL(destroyed( QObject* )), this, SLOT( documentDestroyed( QObject* ) ) );
   connect( document->textDocument(), SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
-  
+
   KTextEditor::View* v  = view();
   if( !v ) return;
   connectView( v );
@@ -72,7 +72,7 @@ void MessageSendManager::disconnectDocument() {
   if( !document->textDocument() ) return;
   disconnect( document->textDocument(), SIGNAL(destroyed( QObject* )), this, SLOT( documentDestroyed( QObject* ) ) );
   disconnect( document->textDocument(), SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
-  
+
   m_lastDocument = 0;
 }
 
@@ -84,7 +84,7 @@ void MessageSendManager::viewCreated( KTextEditor::Document* , KTextEditor::View
 }
 
 void MessageSendManager::selectionChanged( KTextEditor::View* view ) {
-  
+
   m_currentSelection = view->selectionRange();
   KTextEditor::Document* doc = view->document();
   m_currentFile = "";

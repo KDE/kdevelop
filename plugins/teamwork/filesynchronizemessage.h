@@ -22,7 +22,7 @@ class DynamicText;
 class FileSynchronizeData {
 
   public:
-    FileSynchronizeData( QString fileName = "", const QDynamicText& text = QDynamicText(), bool sendDynamic = true );
+    explicit FileSynchronizeData( const QString& fileName = "", const QDynamicText& text = QDynamicText(), bool sendDynamic = true );
 
     template <class Archive>
     void serialize( Archive& arch, unsigned int /*version*/ ) {

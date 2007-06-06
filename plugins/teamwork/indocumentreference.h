@@ -1,3 +1,16 @@
+/***************************************************************************
+copyright            : (C) 2006 by David Nolden
+email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #ifndef INDOCUMENTREFERENCE_H
 #define INDOCUMENTREFERENCE_H
 
@@ -34,9 +47,9 @@ class InDocumentReference {
     static void parseReference( const QString& ref, QString& file, int& startLine, int& startCol, int& endLine, int& endCol );
 
     ///This creates a reference that refers to a position, but not intelligently.
-    InDocumentReference( bool start = true, QString ref = "" );
+    InDocumentReference( bool start = true, const QString& ref = "" );
 
-    InDocumentReference( QString document, int line, int col = 0, const QString& text = "" );
+    InDocumentReference( const QString& document, int line, int col = 0, const QString& text = "" );
 
     void useText( const QString& text );
 
@@ -71,7 +84,7 @@ class DocumentContextLines {
   public:
     DocumentContextLines();
 
-    DocumentContextLines( const InDocumentReference& beginRef, const InDocumentReference& endRef, QString text, int /*contextSize*/ = 5 );
+    DocumentContextLines( const InDocumentReference& beginRef, const InDocumentReference& endRef, const QString& text, int /*contextSize*/ = 5 );
 
     template <class Arch>
     void serialize( Arch& arch, uint /*version*/ ) {

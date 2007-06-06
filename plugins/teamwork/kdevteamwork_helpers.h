@@ -81,7 +81,7 @@ class KDevTeamworkLogger : public QObject, public Teamwork::Logger {
       m_teamwork = 0;
     }
 
-    ///This function is used when an error occured while locking the Logger, or in other dangerous error-cases. It must be thread-safe.
+    ///This function is used when an error occurred while locking the Logger, or in other dangerous error-cases. It must be thread-safe.
     virtual void safeErrorLog( const std::string& str, Level lv );
 };
 

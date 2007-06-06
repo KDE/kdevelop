@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QMenu>
 #include "messagehistorymanager.h"
-#include <QDialog>
+#include <kdialog.h>
 #include <QMetaType>
 #include "conversationmanager.h"
 #include <qtextdocument.h>
@@ -106,7 +106,7 @@ void KDevTeamworkMessageShower::isReplyToButton() {
         repliedMessage = m_teamwork->messageManager() ->historyManager().getMessageFromId( l->info().isReplyTo() , m_teamwork->client() );
 
       if ( LockedSharedPtr<KDevTeamworkTextMessage> lrep = repliedMessage.cast<KDevTeamworkTextMessage>() ) {
-        QDialog * dialog = new QDialog( m_widget );
+        KDialog * dialog = new KDialog( m_widget );
         dialog->setAttribute( Qt::WA_DeleteOnClose, true );
         new KDevTeamworkMessageShower( lrep, dialog, m_teamwork );
         dialog->show();
@@ -194,13 +194,13 @@ void KDevTeamworkUserInfoShower::historyButton() {
 
 void KDevTeamworkUserInfoShower::setIp() {
   LockedSharedPtr<KDevTeamworkUser> l = m_user;
-  QString adress = QString( "Unknown" );
+  QString address = QString( "Unknown" );
   if ( l ) {
     SessionPointer::Locked ls = l->online().session();
     if ( ls )
-      adress = ~ls->peerDesc();
+      address = ~ls->peerDesc();
   }
-  m_widgetData.ipadress->setText( QString( adress ) );
+  m_widgetData.ipadress->setText( QString( address ) );
 }
 
 

@@ -60,7 +60,7 @@ class FileCollaborationMessageData {
       CloseSession
   };
 
-    FileCollaborationMessageData( CollabSessionId sessionId = 0, Message message = NoMessage, const QVariant& messageData = QVariant() ) : m_sessionId( sessionId ), m_message( message ), m_messageData( messageData ) {}
+    explicit FileCollaborationMessageData( CollabSessionId sessionId = 0, Message message = NoMessage, const QVariant& messageData = QVariant() ) : m_sessionId( sessionId ), m_message( message ), m_messageData( messageData ) {}
 
 
     template <class Archive>
@@ -247,7 +247,7 @@ class FileEditMessageData {
       arch & m_replacement & m_state;
     }
 
-    FileEditMessageData( const VectorTimestamp& state = VectorTimestamp(), const SimpleReplacement& rep = SimpleReplacement() ) : m_replacement( rep ), m_state(state) {
+    explicit FileEditMessageData( const VectorTimestamp& state = VectorTimestamp(), const SimpleReplacement& rep = SimpleReplacement() ) : m_replacement( rep ), m_state(state) {
     }
 
     const SimpleReplacement& replacement () const {

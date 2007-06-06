@@ -142,7 +142,7 @@ class PatchesManager : public QObject {
 
     LocalPatchSourcePointer::Locked patchFromIdentity( const LocalPatchSource::Identity& identity );
 
-    void log( QString str, LogLevel level = Info );
+    void log( const QString& str, LogLevel level = Info );
 
     LocalPatchSourcePointer selectedPatch();
 

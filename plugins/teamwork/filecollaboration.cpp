@@ -12,6 +12,7 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "filecollaboration.h"
 #include <QAction>
 #include <QMenu>
 #include <QFileInfo>
@@ -31,7 +32,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include "network/messagesendhelper.h"
 #include "network/messagetypeset.h"
 
-#include "filecollaboration.h"
 
 
 FileCollaboration::FileCollaboration( KDevTeamworkUserPointer user, FileCollaborationSession* session, const FileCollaborationRequestPointer& request ) : SafeLogger( session->manager() ->teamwork() ->logger() ), m_user( user ), m_session( session ),  /*m_dispatcher( *this ),*/ m_index( 0 ), m_connectionActive( false ), m_userConnected( false ), m_invited( false ) {

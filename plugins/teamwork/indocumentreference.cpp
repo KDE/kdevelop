@@ -1,3 +1,16 @@
+/***************************************************************************
+copyright            : (C) 2006 by David Nolden
+email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #include "indocumentreference.h"
 #include "utils.h"
 
@@ -36,7 +49,7 @@ void InDocumentReference::parseReference( const QString& ref, QString& file, int
 }
 
 ///This creates a reference that refers to a position, but not intelligently.
-InDocumentReference::InDocumentReference( bool start, QString ref ) : m_line( -1 ), m_col( -1 ) {
+InDocumentReference::InDocumentReference( bool start, const QString& ref ) : m_line( -1 ), m_col( -1 ) {
 	int d1, d2;
 	QString doc;
 	if( start )
@@ -46,7 +59,7 @@ InDocumentReference::InDocumentReference( bool start, QString ref ) : m_line( -1
 	m_document = ~doc;
 }
 
-InDocumentReference::InDocumentReference( QString document, int line, int col, const QString& text ) {
+InDocumentReference::InDocumentReference( const QString& document, int line, int col, const QString& text ) {
 	m_line = line;
 	m_document = ~document;
 	m_col = col;
@@ -71,9 +84,9 @@ QString InDocumentReference::document() const {
 struct InDocumentReference::TextSearchInstance::Private : public Shared {
 	SumSearch<10> search;
 	QString text;
-	
+
 	Private( const QString& txt ) : search( ~txt ), text( txt ) {
-		
+
 	}
 };
 
@@ -167,7 +180,7 @@ int InDocumentReference::col() const {
 
 DocumentContextLines::DocumentContextLines() : m_lineOffset( 0 ) {}
 
-DocumentContextLines::DocumentContextLines( const InDocumentReference& beginRef, const InDocumentReference& endRef, QString text, int /*contextSize*/ ) : m_lineOffset( 0 ) {
+DocumentContextLines::DocumentContextLines( const InDocumentReference& beginRef, const InDocumentReference& endRef, const QString& text, int /*contextSize*/ ) : m_lineOffset( 0 ) {
 	int startLine = beginRef.line();
 	int endLine = endRef.line();
 	if ( startLine == -1 )

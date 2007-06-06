@@ -47,7 +47,7 @@ class FileCollaborationManager : public QObject, public SafeLogger {
     const SessionSet& sessions();
 
     ///May return zero on failure
-    FileCollaborationSession* startSession( QString name, CollabFileList files , uint primaryIndex = 0, CollabSessionId id = 0 );
+    FileCollaborationSession* startSession( const QString& name, CollabFileList files , uint primaryIndex = 0, CollabSessionId id = 0 );
 
     KDevTeamwork* teamwork();
 

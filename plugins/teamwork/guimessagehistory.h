@@ -1,3 +1,16 @@
+/***************************************************************************
+copyright            : (C) 2006 by David Nolden
+email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #ifndef MESSAGEHISTORY_H
 #define MESSAGEHISTORY_H
 
@@ -13,7 +26,7 @@ namespace Teamwork {
 	typedef SafeSharedPtr<Logger> LoggerPointer;
 }
 
-
+class KDialog;
 class MessageManager;
 class KDevTeamworkTextMessage;
 
@@ -27,7 +40,7 @@ class GuiMessageHistory : public QObject, public SafeLogger {
 		typedef QList<KDevTeamworkUserPointer> UserList;
 		typedef QMap<KDevTeamworkUserPointer, bool> UserSet;
 		///Empty list means All Users
-		GuiMessageHistory( MessageManager* manager, UserList users = UserList(), QString context = "" );
+		explicit GuiMessageHistory( MessageManager* manager, UserList users = UserList(), const QString& context = "" );
 		~GuiMessageHistory();
 
 	public slots:
@@ -52,7 +65,7 @@ class GuiMessageHistory : public QObject, public SafeLogger {
 		void updateUserIcon( const KDevTeamworkUserPointer& user );
 		UserSet selectedUsers();
 		void fillMessages();
-		
+
 		void clearFilters();
 		void  applyFilters( int firstN = 0 );
 
@@ -71,7 +84,7 @@ class GuiMessageHistory : public QObject, public SafeLogger {
 		QStandardItemModel* m_messagesModel;
 		QTimer* m_updateTimer;
 		QTimer* m_userIconUpdateTimer;
-		QDialog* m_dialog;
+		KDialog* m_dialog;
 		QString m_defaultContext;
 
 		enum TableColumns {

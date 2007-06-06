@@ -24,6 +24,7 @@
 #include <QMenu>
 #include <QHeaderView>
 #include "kdevteamwork_messageshower.h"
+#include <kdialog.h>
 
 using namespace Teamwork;
 
@@ -31,14 +32,14 @@ Q_DECLARE_METATYPE( KDevTeamworkUserPointer )
 Q_DECLARE_METATYPE( HistoryMessagePointer )
 Q_DECLARE_METATYPE( Teamwork::MessageType )
 
-GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, QString context ) : SafeLogger( manager->teamwork() ->logger() ), m_manager( manager ), m_defaultContext( context ) {
+GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, const QString& context ) : SafeLogger( manager->teamwork() ->logger() ), m_manager( manager ), m_defaultContext( context ) {
   foreach( KDevTeamworkUserPointer user, users )
   addUser( user );
 
   if ( users.isEmpty() )
     m_allUsers = true;
 
-  m_dialog = new QDialog( manager->teamwork() ->widget() );
+  m_dialog = new KDialog( manager->teamwork() ->widget() );
   m_widgetData.setupUi( m_dialog );
 
   m_developersModel = new QStandardItemModel( 0, 1, m_widgetData.developers );

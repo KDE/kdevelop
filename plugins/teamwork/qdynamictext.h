@@ -18,12 +18,11 @@
 #include <QObject>
 #include <boost/serialization/base_object.hpp>
 #include "dynamictext/dynamictext.h"
-#include <boost/serialization/export.hpp>
 
 class QDynamicText : public QObject, public DynamicText {
     Q_OBJECT
   public:
-    QDynamicText( const VectorTimestamp& initialState = VectorTimestamp(), const std::string& initialText = std::string() );
+    explicit QDynamicText( const VectorTimestamp& initialState = VectorTimestamp(), const std::string& initialText = std::string() );
 
     QDynamicText( const QDynamicText& rhs );
 

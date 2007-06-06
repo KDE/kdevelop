@@ -12,8 +12,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "network/serialization.h"
 #include "conversationmanager.h"
+#include "network/serialization.h"
 
 #include <boost/archive/polymorphic_xml_oarchive.hpp>
 #include <boost/archive/polymorphic_xml_iarchive.hpp>
@@ -44,7 +44,6 @@
 #include "kdevteamwork_part.h"
 #include "kdevteamwork_messages.h"
 #include "kdevteamwork.h"
-#include "kdevteamwork_user.h"
 #include "kdevteamwork_helpers.h"
 #include "teamworkfoldermanager.h"
 
@@ -168,7 +167,7 @@ ConversationManager::ConversationManager( MessageManager* mng ) {
 ConversationManager::~ConversationManager() {
 }
 
-InDocumentConversationPointer ConversationManager::findConversation( QString context ) {
+InDocumentConversationPointer ConversationManager::findConversation( const QString& context ) {
   ConversationSet::iterator it = m_conversations.find( ~context );
 
   if ( it != m_conversations.end() ) {
@@ -205,7 +204,7 @@ void ConversationManager::save() {
     boost::archive::polymorphic_xml_oarchive arch( file );
     arch << NVP(m_conversations);
   } catch ( std::exception & exc ) {
-    log( QString("save(): exception occured while serialization: %1").arg( exc.what() ), Error );
+    log( QString("save(): exception occurred while serialization: %1").arg( exc.what() ), Error );
   } catch( const char* str ) {
     log( QString("save(): %1").arg( str ), Error );
   } catch( const QString& str ) {
@@ -224,7 +223,7 @@ void ConversationManager::load() {
     boost::archive::polymorphic_xml_iarchive arch( file );
     arch >> NVP(m_conversations);
   } catch ( std::exception & exc ) {
-    log( QString("load(): exception occured while serialization: %1").arg( exc.what() ), Error );
+    log( QString("load(): exception occurred while serialization: %1").arg( exc.what() ), Error );
   } catch( const char* str ) {
     log( QString("load(): %1").arg( str ), Error );
   } catch( const QString& str ) {
@@ -239,7 +238,7 @@ void ConversationManager::documentActivated( IDocument* /*document*/ ) {
   }*/
 }
 
-void ConversationManager::log( QString str, LogLevel level ) {
+void ConversationManager::log( const QString& str, LogLevel level ) {
   m_manager->log( str, level );
 }
 
@@ -360,7 +359,7 @@ void InDocumentConversation::selectMessage( InDocumentMessagePointer msg ) {
         view->setCursorPosition( c );
         //view->setCursorPosition( KTextEditor::Cursor( c.line() > 10 ? c.line() - 10 : c.line(), c.column() ) );
         if ( !c.isValid() )
-          throw "could not find corrent position, cursor is invalid";
+          throw "could not find current position, cursor is invalid";
 
         {
           Block b( m_block );
@@ -599,7 +598,7 @@ void InDocumentConversation::verticalScrollPositionChanged ( KTextEditor::View *
   //manager()->log( "verticalScrollPositionChanged", Debug );
 }
 
-void InDocumentConversation::log( QString str, LogLevel level ) const {
+void InDocumentConversation::log( const QString& str, LogLevel level ) const {
   const_cast<ConversationManager*>( manager() ) ->log( "InDocumentConversation: " + str, level );
 }
 

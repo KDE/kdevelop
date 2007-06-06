@@ -12,10 +12,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "utils.h"
 #include <QDomDocument>
 #include <QDomNode>
 #include <QTextStream>
-#include "utils.h"
 #include <sstream>
 #include <iostream>
 //#include <ostringstream>
@@ -45,7 +45,7 @@ QString operator ~ ( const std::string& rhs ) {
 	return toQ(rhs );
 }
 
-std::ostream& operator << ( std::ostream& stream, const QString str ) {
+std::ostream& operator << ( std::ostream& stream, const QString& str ) {
 	stream << str.toUtf8().data();
   return stream;
 }

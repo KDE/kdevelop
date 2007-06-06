@@ -19,7 +19,7 @@
 #include "guimessagehistory.h"
 #include "messagehistorymanager.h"
 #include "network/messagetypeset.h"
-#include <QDialog>
+#include <kdialog.h>
 #include <QMenu>
 #include "kdevteamwork_messageshower.h"
 
@@ -65,7 +65,7 @@ void MessageManager::showMessage( const MessagePointer& msg ) {
   if ( !l.freeCast<AbstractGUIMessage>() )
     throw "message is no GUI-message";
 
-  QDialog* d = new QDialog( m_teamwork->widget() );
+  KDialog* d = new KDialog( m_teamwork->widget() );
   d->setAttribute( Qt::WA_DeleteOnClose, true );
 
   l.freeCast<AbstractGUIMessage>() ->showInWidget( d, m_teamwork );
@@ -109,7 +109,7 @@ int MessageManager::processMessage( KDevTeamworkTextMessage* msg ) {
   return dispatcher_( msg );
 }
 
-void MessageManager::log( QString str, LogLevel level ) {
+void MessageManager::log( const QString& str, LogLevel level ) {
   m_teamwork->log( "MessageManager: " + str, level );
 }
 
@@ -125,7 +125,7 @@ ConversationManager& MessageManager::conversationManager() {
   return * m_conversationManager;
 }
 
-void MessageManager::showMessageHistory( const QList<KDevTeamworkUserPointer>& users, QString context ) {
+void MessageManager::showMessageHistory( const QList<KDevTeamworkUserPointer>& users, const QString& context ) {
   new GuiMessageHistory( this, users, context );
 }
 

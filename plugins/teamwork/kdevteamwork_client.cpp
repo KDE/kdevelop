@@ -12,6 +12,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "kdevteamwork_client.h"
 #include <list>
 #include <kdebug.h>
 
@@ -22,7 +23,6 @@
 #include "network/messagetypeset.h"
 #include "network/teamworkmessages.h"
 #include "network/defines.h"
-#include "kdevteamwork_client.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_helpers.h"
 

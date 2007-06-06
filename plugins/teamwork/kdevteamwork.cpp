@@ -21,7 +21,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QAction>
 #include <QTimer>
 #include <QCursor>
-#include <QDialog>
+#include <kdialog.h>
 #include <QPersistentModelIndex>
 #include <QWidget>
 
@@ -555,7 +555,7 @@ void KDevTeamwork::showUserInfo( const UserPointer& user ) {
     if ( !l.freeCast<KDevTeamworkUser>() )
       throw QString( "bad user-type" );
 
-    QDialog* d = new QDialog( m_widget );
+    KDialog* d = new KDialog( m_widget );
     d->setAttribute( Qt::WA_DeleteOnClose, true );
     KDevTeamworkUserInfoShower( l.freeCast<KDevTeamworkUser>(), d, this );
     d->show();

@@ -18,7 +18,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include <QObject>
 #include "network/sharedptr.h"
 #include "ui_kdevteamwork_editpatch.h"
-#include <QDialog>
 #include <QPointer>
 #include "safelogger.h"
 #include <memory>
@@ -28,6 +27,8 @@ email                : david.nolden.kdevelop@art-master.de
 namespace KParts{
   class Part;
 }
+
+class KDialog;
 
 class PatchesManager;
 namespace Diff2 {
@@ -103,7 +104,7 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
 
     void updateByType();
   private:
-    void seekHunk( bool forwards, bool isSource, QString file = QString() );
+    void seekHunk( bool forwards, bool isSource, const QString& file = QString() );
 
     virtual std::string logPrefix();
 
@@ -128,7 +129,7 @@ class EditPatch : public QObject, public Shared, public SafeLogger {
     bool m_editPatchLocal;
 
     Ui_EditPatch m_editPatch;
-    QDialog* m_editDlg;
+    KDialog* m_editDlg;
 
     QTime m_lastDataTime;
     QString m_lastTerminalData;

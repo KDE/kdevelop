@@ -44,6 +44,7 @@ email                : david.nolden.kdevelop@art-master.de
 #include <kde_terminal_interface.h>
 #include <kparts/part.h>
 #include <kparts/factory.h>
+#include <kdialog.h>
 
 #include "libdiff2/komparemodellist.h"
 #include "libdiff2/kompare.h"
@@ -60,7 +61,7 @@ email                : david.nolden.kdevelop@art-master.de
 
 #include "kdevteamwork_client.h"
 
-///Whether arbitrary exceptions that occure while diff-parsing within the library should be catched
+///Whether arbitrary exceptions that occured while diff-parsing within the library should be caught
 #define CATCHLIBDIFF
 
 using namespace KDevelop;
@@ -604,7 +605,7 @@ void EditPatch::showEditDialog() {
   }
 
 
-  m_editDlg = new QDialog( m_parent->teamwork() ->widget() );
+  m_editDlg = new KDialog( m_parent->teamwork() ->widget() );
 
   connect( m_editDlg, SIGNAL( destroyed( QObject* ) ), this, SLOT( dialogDestroyed() ) );
   m_editPatch.setupUi( m_editDlg );
@@ -858,7 +859,7 @@ void EditPatch::prevHunk() {
   seekHunk( false, m_isSource );
 }
 
-void EditPatch::seekHunk( bool forwards, bool isSource, QString fileName ) {
+void EditPatch::seekHunk( bool forwards, bool isSource, const QString& fileName ) {
   try {
     QModelIndexList il = m_editPatch.filesList->selectionModel() ->selectedIndexes();
     if ( il.isEmpty() )

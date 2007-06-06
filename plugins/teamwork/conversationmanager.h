@@ -163,7 +163,7 @@ class InDocumentConversation : public QObject, public Shared, public SafeLogger 
     void selectMessage( InDocumentMessagePointer msg );
 
     void userInfo();
-    void log( QString str, LogLevel level = Info ) const;
+    void log( const QString& str, LogLevel level = Info ) const;
     void selectNearestMessage();
   private slots:
     void textChanged ( KTextEditor::Document * document, const KTextEditor::Range & oldRange, const KTextEditor::Range & newRange );
@@ -249,7 +249,7 @@ class ConversationManager : public QObject {
       return m_instance;
     }
 
-    void log( QString str, LogLevel level );
+    void log( const QString& str, LogLevel level );
 
     /*    template <class ArchType>
       void serialize( ArchType& arch, unsigned int ) {
@@ -261,7 +261,7 @@ class ConversationManager : public QObject {
     }
 
     ///Returns zero if the conversation does not exist.
-    InDocumentConversationPointer findConversation( QString context );
+    InDocumentConversationPointer findConversation( const QString& context );
 
     ///If the conversation does not exist, it is created.
     InDocumentConversationPointer getConversation( InDocumentMessage* );

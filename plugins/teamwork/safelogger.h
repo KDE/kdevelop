@@ -32,7 +32,7 @@ class SafeLogger {
   public:
     friend class LogSuffix;
 
-    SafeLogger( Teamwork::LoggerPointer logger, std::string logPrefix = "" );
+    explicit SafeLogger( Teamwork::LoggerPointer logger, std::string logPrefix = "" );
 
     virtual ~SafeLogger();
 

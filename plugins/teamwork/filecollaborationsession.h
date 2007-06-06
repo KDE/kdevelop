@@ -151,7 +151,7 @@ class FileCollaborationSession : public QObject, public WeakShared, public SafeL
 
     virtual std::string logPrefix();
 
-    DocumentWrapperPointer getDocument( QString fileName );
+    DocumentWrapperPointer getDocument( const QString& fileName );
 
     friend class FileCollaboration;
     friend class FileCollaborationManager;

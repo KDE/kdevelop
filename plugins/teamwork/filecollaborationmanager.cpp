@@ -12,6 +12,7 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "filecollaborationmanager.h"
 #include <QAction>
 #include <QMenu>
 #include <QTimer>
@@ -31,7 +32,6 @@ email                : david.nolden.kdevelop@art-master.de
 #include "dynamictext/verify.h"
 
 #include "teamworkfwd.h"
-#include "filecollaborationmanager.h"
 #include "patchesmanager.h"
 #include "kdevteamwork_user.h"
 #include "kdevutils.h"
@@ -94,7 +94,7 @@ const FileCollaborationManager::SessionSet& FileCollaborationManager::sessions()
   return m_sessions;
 }
 
-FileCollaborationSession * FileCollaborationManager::startSession( QString name, CollabFileList files, uint primaryIndex, CollabSessionId id ) {
+FileCollaborationSession * FileCollaborationManager::startSession( const QString& name, CollabFileList files, uint primaryIndex, CollabSessionId id ) {
   FileCollaborationSessionPointer s = new FileCollaborationSession( name, files, this, primaryIndex, id );
   m_sessions.insert( s );
 
