@@ -14,12 +14,12 @@
 **   ( at your option ) any later version.
 **
 ***************************************************************************/
-
+#include "cvsdiffparser.h"
 #include <qregexp.h>
 
 #include <kdebug.h>
 
-#include "cvsdiffparser.h"
+
 #include "komparemodellist.h"
 
 

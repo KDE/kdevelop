@@ -103,12 +103,12 @@ public:
 	const QString sourceRevision() const       { return m_sourceRevision; }
 	const QString destinationRevision() const  { return m_destinationRevision; }
 
-	void setSourceFile( QString path );
-	void setDestinationFile( QString path );
-	void setSourceTimestamp( QString timestamp );
-	void setDestinationTimestamp( QString timestamp );
-	void setSourceRevision( QString revision );
-	void setDestinationRevision( QString revision );
+	void setSourceFile( const QString& path );
+	void setDestinationFile( const QString& path );
+	void setSourceTimestamp( const QString& timestamp );
+	void setDestinationTimestamp( const QString& timestamp );
+	void setSourceRevision( const QString& revision );
+	void setDestinationRevision( const QString& revision );
 
 	void addHunk( DiffHunk* hunk );
 	void addDiff( Difference* diff );

@@ -25,6 +25,7 @@
 #include "kompare.h"
 
 class QTextCodec;
+class QTextDecoder;
 
 class DiffSettings;
 
@@ -33,7 +34,7 @@ class KompareProcess : public K3Process, public KompareFunctions
 	Q_OBJECT
 
 public:
-	KompareProcess( DiffSettings* diffSettings, enum Kompare::DiffMode mode, QString source, QString destination, QString directory = QString::null );
+	KompareProcess( DiffSettings* diffSettings, enum Kompare::DiffMode mode, const QString& source, const QString& destination, const QString& directory = QString() );
 	~KompareProcess();
 
 	bool start();

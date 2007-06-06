@@ -7,7 +7,7 @@
         email                   : otto.bruggeman@home.nl
                                   jfirebaugh@kde.org
 ****************************************************************************/
- 
+
 /***************************************************************************
 **
 **   This program is free software; you can redistribute it and/or modify
@@ -17,9 +17,9 @@
 **
 ***************************************************************************/
 
+#include "settingsbase.h"
 #include <qwidget.h>
 
-#include "settingsbase.h"
 
 SettingsBase::SettingsBase( QWidget* parent ) : QObject( parent )
 {

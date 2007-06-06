@@ -15,6 +15,7 @@
 **
 ***************************************************************************/
 
+#include "parserbase.h"
 #include <qobject.h>
 
 #include <kdebug.h>
@@ -24,7 +25,6 @@
 #include "difference.h"
 #include "komparemodellist.h"
 
-#include "parserbase.h"
 
 using namespace Diff2;
 
@@ -75,7 +75,7 @@ ParserBase::ParserBase( const KompareModelList* list, const QStringList& diff ) 
 ParserBase::~ParserBase()
 {
 	if ( m_models )
-		m_models = 0; // dont delete this, i pass it around...
+		m_models = 0; // do not delete this, i pass it around...
 }
 
 enum Kompare::Format ParserBase::determineFormat()
@@ -202,7 +202,7 @@ bool ParserBase::parseUnifiedDiffHeader()
 //	kDebug(8101) << "ParserBase::parseUnifiedDiffHeader()" << endl;
 	bool result = false;
 
-	while ( m_diffIterator != m_diffLines.end() ) // dont assume we start with the diffheader1 line
+	while ( m_diffIterator != m_diffLines.end() ) // do not assume we start with the diffheader1 line
 	{
 		if ( !m_unifiedDiffHeader1.exactMatch( *m_diffIterator ) )
 		{
@@ -457,7 +457,7 @@ bool ParserBase::parseNormalHunkBody()
 {
 //	kDebug(8101) << "ParserBase::parseNormalHunkBody" << endl;
 
-	QString type = QString::null;
+	QString type;
 
 	int linenoA = 0, linenoB = 0;
 
@@ -508,7 +508,7 @@ bool ParserBase::parseNormalHunkBody()
 
 	return true;
 }
- 
+
 bool ParserBase::parseRCSHunkBody()
 {
 	return false;

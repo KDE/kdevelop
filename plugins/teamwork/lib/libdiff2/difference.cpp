@@ -36,12 +36,12 @@ Difference::~Difference()
 	delete m_table;
 }
 
-void Difference::addSourceLine( QString line )
+void Difference::addSourceLine( const QString& line )
 {
 	m_sourceLines.append( new DifferenceString( line ) );
 }
 
-void Difference::addDestinationLine( QString line )
+void Difference::addDestinationLine( const QString& line )
 {
 	m_destinationLines.append( new DifferenceString( line ) );
 }
@@ -79,7 +79,7 @@ void Difference::determineInlineDifferences()
 		DifferenceString* sl = sourceLineAt( i );
 		DifferenceString* dl = destinationLineAt( i );
 
-		// FIXME: If the table cant be created dont do the rest
+		// FIXME: If the table cant be created do not do the rest
 		m_table->createTable( sl, dl );
 
 		m_table->createListsOfMarkers();
@@ -105,7 +105,7 @@ QString Difference::recreateDifference() const
 		{
 		case Change:
 		case Delete:
-			difference += "-";
+			difference += '-';
 			break;
 		default:
 		// Insert but this is not possible in source
@@ -127,10 +127,10 @@ QString Difference::recreateDifference() const
 		{
 		case Change:
 		case Insert:
-			difference += "+";
+			difference += '+';
 			break;
 		case Unchanged:
-			difference += " ";
+			difference += ' ';
 			break;
 		default: // Delete but this is not possible in destination
 //			kDebug( 8101 ) << "Go away, nothing to do for you in destination..." << endl;

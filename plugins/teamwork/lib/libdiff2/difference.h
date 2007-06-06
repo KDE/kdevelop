@@ -73,8 +73,8 @@ public:
 	{
 //		kDebug(8101) << "DifferenceString::DifferenceString()" << endl;
 	}
-	DifferenceString( const QString& string, const MarkerList& markerList = MarkerList() ) :
-		m_string( string ), 
+	explicit DifferenceString( const QString& string, const MarkerList& markerList = MarkerList() ) :
+		m_string( string ),
 		m_markerList( markerList )
 	{
 //		kDebug(8101) << "DifferenceString::DifferenceString( " << string << ", " << markerList << " )" << endl;
@@ -190,8 +190,8 @@ public:
 
 	void setType( int type ) { m_type = type; }
 
-	void addSourceLine( QString line );
-	void addDestinationLine( QString line );
+	void addSourceLine( const QString& line );
+	void addDestinationLine( const QString& line );
 
 	/** This method will calculate the differences between the individual strings and store them as Markers */
 	void determineInlineDifferences();

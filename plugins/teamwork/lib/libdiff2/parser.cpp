@@ -15,9 +15,9 @@
 **
 ***************************************************************************/
 
+#include "parser.h"
 #include <kdebug.h>
 
-#include "parser.h"
 #include "cvsdiffparser.h"
 #include "diffparser.h"
 #include "perforceparser.h"
@@ -57,7 +57,7 @@ int Parser::cleanUpCrap( QStringList& diffLines )
 	}
 
 	return nol;
-} 
+}
 
 DiffModelList* Parser::parse( QStringList& diffLines )
 {

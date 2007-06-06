@@ -18,12 +18,12 @@
 ***************************************************************************/
 
 
-#include "difference.h"
 #include "diffhunk.h"
+#include "difference.h"
 
 using namespace Diff2;
 
-DiffHunk::DiffHunk( int sourceLine, int destinationLine, QString function, Type type ) :
+DiffHunk::DiffHunk( int sourceLine, int destinationLine, const QString& function, Type type ) :
 	m_sourceLine( sourceLine ),
 	m_destinationLine( destinationLine ),
 	m_function( function ),
@@ -101,10 +101,10 @@ QString DiffHunk::recreateHunk() const
 	        .arg( m_sourceLine )
 	        .arg( m_destinationLine )
 	        .arg( slc )
-	        .arg( dlc ); 
+	        .arg( dlc );
 
 	if ( !m_function.isEmpty() )
-		hunk += " " + m_function;
+		hunk += ' ' + m_function;
 
 	hunk += QString::fromLatin1( "\n" );
 

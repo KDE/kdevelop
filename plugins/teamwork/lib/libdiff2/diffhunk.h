@@ -35,7 +35,7 @@ public:
 	enum Type { Normal, AddedByBlend };
 
 public:
-	DiffHunk( int sourceLine, int destinationLine, QString function = QString::null, Type type = Normal );
+	DiffHunk( int sourceLine, int destinationLine, const QString& function = QString(), Type type = Normal );
 	~DiffHunk();
 
 	const DifferenceList& differences() const { return m_differences; };

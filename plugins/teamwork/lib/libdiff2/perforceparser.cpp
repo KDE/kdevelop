@@ -15,11 +15,11 @@
 **
 ***************************************************************************/
 
+#include "perforceparser.h"
 #include <qregexp.h>
 
 #include <kdebug.h>
 
-#include "perforceparser.h"
 
 using namespace Diff2;
 
@@ -143,7 +143,7 @@ bool PerforceParser::parseNormalDiffHeader()
 			kDebug(8101) << "Matched string Header1 = " << m_normalDiffHeader.cap( 0 ) << endl;
 			kDebug(8101) << "First  capture Header1 = \"" << m_normalDiffHeader.cap( 1 ) << "\"" << endl;
 			kDebug(8101) << "Second capture Header1 = \"" << m_normalDiffHeader.cap( 2 ) << "\"" << endl;
-			
+
 			m_currentModel = new DiffModel();
 			sourceFileRE.exactMatch( m_normalDiffHeader.cap( 1 ) );
 			destinationFileRE.exactMatch( m_normalDiffHeader.cap( 2 ) );
@@ -194,7 +194,7 @@ bool PerforceParser::parseUnifiedDiffHeader()
 //			kDebug(8101) << "Matched string Header1 = " << m_unifiedDiffHeader1.cap( 0 ) << endl;
 //			kDebug(8101) << "First  capture Header1 = \"" << m_unifiedDiffHeader1.cap( 1 ) << "\"" << endl;
 //			kDebug(8101) << "Second capture Header1 = \"" << m_unifiedDiffHeader1.cap( 2 ) << "\"" << endl;
-			
+
 			m_currentModel = new DiffModel();
 			sourceFileRE.exactMatch( m_unifiedDiffHeader1.cap( 1 ) );
 			destinationFileRE.exactMatch( m_unifiedDiffHeader1.cap( 2 ) );

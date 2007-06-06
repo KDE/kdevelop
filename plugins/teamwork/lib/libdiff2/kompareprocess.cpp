@@ -17,6 +17,7 @@
 **
 ***************************************************************************/
 
+#include "kompareprocess.h"
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qtextcodec.h>
@@ -29,9 +30,8 @@
 #include <kglobal.h>
 
 #include "diffsettings.h"
-#include "kompareprocess.h"
 
-KompareProcess::KompareProcess( DiffSettings* diffSettings, enum Kompare::DiffMode mode, QString source, QString destination, QString dir )
+KompareProcess::KompareProcess( DiffSettings* diffSettings, enum Kompare::DiffMode mode, const QString& source, const QString& destination, const QString& dir )
 	: K3Process(),
 	m_diffSettings( diffSettings ),
 	m_mode( mode ),
@@ -121,11 +121,11 @@ void KompareProcess::writeCommandLine()
 		break;
 	}
 
-	if ( m_diffSettings->m_largeFiles 
+	if ( m_diffSettings->m_largeFiles
 // default diff does not have -H on OpenBSD
 // so don't pass this option unless the user overrode the default program
 #if defined(__OpenBSD__)
-		&& !m_diffSettings->m_diffProgram.isEmpty() 
+		&& !m_diffSettings->m_diffProgram.isEmpty()
 #endif
 	   )
 	{

@@ -17,6 +17,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "komparemodellist.h"
 #include <qfile.h>
 #include <qdir.h>
 #include <qregexp.h>
@@ -39,7 +40,6 @@
 #include "diffmodel.h"
 #include "diffmodellist.h"
 #include "kompareprocess.h"
-#include "komparemodellist.h"
 #include "parser.h"
 #include <assert.h>
 
@@ -367,8 +367,7 @@ bool KompareModelList::saveDestination( DiffModel* model )
 		{
 			if ( !KIO::NetAccess::mkdir( KUrl( destination ).toLocalFile(), (QWidget*)parent() ) )
 			{
-				#warning i18n: Missing argument to the i18n call below
-				emit error( i18n( "<qt>Could not create destination directory <b>%1</b>.\nThe file has not been saved.</qt>" ) );
+				emit error( i18n( "<qt>Could not create destination directory <b>%1</b>.\nThe file has not been saved.</qt>", destination ) );
 				return false;
 			}
 		}
@@ -434,7 +433,7 @@ void KompareModelList::slotDiffProcessFinished( bool success )
 		{
 			if ( m_info.mode != Kompare::ShowingDiff )
 			{
-				kDebug() << "Blend this crap please and dont gimme any conflicts..." << endl;
+				kDebug() << "Blend this crap please and do not gimme any conflicts..." << endl;
 				blendOriginalIntoModelList( m_info.localSource );
 			}
 			updateModelListActions();
@@ -567,7 +566,7 @@ QString KompareModelList::recreateDiff() const
 	return diff;
 }
 
-bool KompareModelList::saveDiff( const QString& url, QString directory, DiffSettings* diffSettings )
+bool KompareModelList::saveDiff( const QString& url, const QString& directory, DiffSettings* diffSettings )
 {
 	kDebug() << "KompareModelList::saveDiff: " << endl;
 
@@ -1153,7 +1152,7 @@ bool KompareModelList::blendFile( DiffModel* model, const QString& fileContents 
 				newModel->addDiff( diff );
 				break;
 			default:
-				kDebug(8101) << "****, some diff type we dont know about ???" << endl;
+				kDebug(8101) << "****, some diff type we do not know about ???" << endl;
 			}
 		}
 	}

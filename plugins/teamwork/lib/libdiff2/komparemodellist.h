@@ -60,7 +60,7 @@ public:
 	bool openFileAndDiff( const QString& file, const QString& diff );
 	bool openDirAndDiff( const QString& dir, const QString& diff );
 
-	bool saveDiff( const QString& url, QString directory, DiffSettings* diffSettings );
+	bool saveDiff( const QString& url, const QString& directory, DiffSettings* diffSettings );
 	bool saveAll();
 
 	bool saveDestination( DiffModel* model );
