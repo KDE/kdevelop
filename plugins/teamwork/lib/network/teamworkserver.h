@@ -51,12 +51,12 @@ typedef WeakSafeSharedPtr<MultiSession> WeakMultiSessionPointer;
 class Server : public BasicServer, public MessageSendHelper {
     typedef std::map< SessionPointer, UserPointer > SessionMap;
     typedef std::set< MultiSessionPointer > SessionSet;
-    
+
     UserPointer ident_;
 
   public:
     typedef std::set< UserPointer, UserPointer::ValueSmallerCompare > UserSet;
-    
+
     Server( const ServerInformation& inf, const LoggerPointer& logger );
     ~Server();
 
@@ -101,7 +101,7 @@ class Server : public BasicServer, public MessageSendHelper {
     virtual UserPointer findSessionUser( const SessionPointer& session );
 
     virtual void closeSession( const SessionPointer& session );
-    
+
     virtual void closeAllIncomingSessions();
 
         /**Associate this client with a user-identity. May be invalid( is initialized as such ).
@@ -118,7 +118,7 @@ class Server : public BasicServer, public MessageSendHelper {
 
     ///Internally maps the given user to his session. Fails if the user already has a session
     virtual bool registerSessionUser( const UserPointer& user );
-    
+
     virtual void initial( void );
 
     virtual bool think();
@@ -139,7 +139,7 @@ class Server : public BasicServer, public MessageSendHelper {
     UserSet users_;
 
     ServerConfiguration configuration_;
-    
+
     bool userListDirty_;
 
     void sendUserLists();
@@ -152,7 +152,7 @@ class ServerInformation {
     std::string addr_;
     int port_;
   public:
-    ServerInformation( const std::string& addr = "", int port = 0 ) {
+    explicit ServerInformation( const std::string& addr = "", int port = 0 ) {
       addr_ = addr;
       port_ = port;
     }

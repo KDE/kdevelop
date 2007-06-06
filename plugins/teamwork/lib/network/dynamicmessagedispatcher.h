@@ -17,14 +17,14 @@ email                : david.nolden.kdevelop@art-master.de
 /** This class works similar to MessageDispatcher, except that it is not static.
  *  Callback-functions can be registered at runtime, and
  *  there is less dynamically generated code.
- * 
+ *
  * The target-classes must be based on WeakSafeShared.
- * That way noone has to care about unregistering targets, because DynamicMessageDispatcher will disconnect
+ * That way nobody has to care about unregistering targets, because DynamicMessageDispatcher will disconnect
  * destroyed targets automatically..
  *
  * Also the target must be kept alive by a SafeSharedPtr.
  * (else they would get destructed as soon as the reference-count gets increased and decreased once)
- * 
+ *
  *
  * The downside is that it's slower, the callback-functions need to be registered on runtime,
  * it's probably more error-prone, and what's happening is not absolutely clear on compile-time.
@@ -62,7 +62,7 @@ class DynamicMessageDispatcher {
      * Use this to register your class for receiving all messages based on a given one.
      *
      * When a callback is registered using this function, the target will be locked before the target-function is called.
-     * 
+     *
      * @param Message(template-param 1) The message-type your class should receive
      * @param target a weak-pointer to the target the message should be delivered to(the weak pointer makes it safe to register and later delete the object without notification)
      * @param function pointer to a member-function of the taget-class, that must have the signature "int function( const SafeSharedPtr<Message>& )"
@@ -92,7 +92,7 @@ class DynamicMessageDispatcher {
      * @return 0 if there is no fitting target, or the value returned by the target's dispatch-function
     */
     int dispatch( const MessagePointer& msg );
-    
+
     void addDeliverer( MessageDelivererBase* );
 
   private:

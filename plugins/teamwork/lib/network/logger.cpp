@@ -36,7 +36,7 @@ void Logger::log( const std::string& str , Level lv ) {
   std::cout << "log-level: \"" << levelToString( lv ) << "\" message:  \"" << str << "\"" << endl;
 }
 
-///This function is used when an error occured while locking the Logger, or in other dangerous error-cases. It must be thread-safe.
+///This function is used when an error occurred while locking the Logger, or in other dangerous error-cases. It must be thread-safe.
 void Logger::safeErrorLog( const std::string& str, Level lv ) {
   std::cout << "problem while logging, statically logging: \"" << "log-level: \"" << levelToString( lv ) << "\" message:  \"" << str << "\"" << endl;
 }

@@ -18,7 +18,6 @@
 #include "teamworkmessages.h"
 #include "teamworkservermessages.h"
 #include "messagesendhelper.h"
-#include "forwardsession.h"
 #include "multisession.h"
 
 

@@ -39,15 +39,15 @@ namespace Teamwork {
 
     /** Use this to send a message to the other side, that is correctly marked as
      *  a reply to the message given by @param replyTo. This is just a convenience-function.
-     * 
+     *
      * @param msg The message to be sent. It will be changed so its info().replyTo() etc. will be filled correctly
      * @param replyTo The message to reply to. It does not need to be locked.
      *
      * This is thread-safe.
      * */
     virtual bool sendReply( MessageInterface* msg, MessageInterface* replyTo );
-    
-    ///Returns true if no errors occured and the session was not ended.  Must be thread-safe.
+
+    ///Returns true if no errors occurred and the session was not ended.  Must be thread-safe.
     virtual bool isOk() = 0;
 
     ///Returns whether the thread is running. Must be thread-safe.
@@ -82,7 +82,7 @@ namespace Teamwork {
 
     ///This must never be called again once it has been set on a session, to make it thread-safe.
     void setUser( const UserPointer& user );
-     
+
   private:
     std::string sessionName_;
     UserPointer user_;

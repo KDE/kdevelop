@@ -13,13 +13,13 @@
  ***************************************************************************/
 
 
+#include "user.h"
 #include "serialization.h"
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/export.hpp> //must be included after archive-headers
 
-#include "user.h"
 #include "sessioninterface.h"
 #include "teamworkmessages.h"
 
@@ -77,7 +77,7 @@ std::string User::rightsAsString() const {
   if( rights_ & (int)TrustedRights ) ret += "trusted, ";
   if( rights_ & (int)AdminRights ) ret += "admin, ";
   if(!ret.empty() ) ret = ret.substr( 0, ret.length() - 2 );
-  
+
   return ret;
 }
 
@@ -102,7 +102,7 @@ void User::serialize( Archive& arch, const uint /*version*/ ) {
   arch & boost::serialization::make_nvp( "email", email_ );
 }
 
-///this function is used for authentification. The given user should be the one trying to connect.
+///this function is used for authentication. The given user should be the one trying to connect.
 bool User::match( const User& u ) {
   if ( rights_ & BannedRights )
     return false;
@@ -113,7 +113,7 @@ bool User::matchIdentity( const User& u ) {
   return name_ == u.name_;
 }
 
-///this function strips all information that is not necessary for correct authentification/identification at the given target-user
+///this function strips all information that is not necessary for correct authentication/identification at the given target-user
 void User::stripForTarget( const User& /*target*/ ) {
   password_ = "";
   description_ = "";

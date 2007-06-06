@@ -12,19 +12,19 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "basicsession.h"
 #include <boost/archive/archive_exception.hpp>
 
 #include "serialization.h"
 #include "logger.h"
 #include "handler.h"
-#include "basicsession.h"
 #include "messageimpl.h"
 #include "user.h"
 #include "messagetypeset.h"
 #include "helpers.h"
-#define MESSAGEDEBUG 
+#define MESSAGEDEBUG
 //#define DISABLETRYCATCH
-#define DISABLEUNIVERSALCATCH 
+#define DISABLEUNIVERSALCATCH
 //#define DEBUGLOG(x) out( Logger::Debug ) << x
 //#define DEBUGLOG(x)
 #define DEBUGLOG( x ) cout << x
@@ -38,7 +38,7 @@ void compare( const std::vector<char>& buffer, const std::vector<char>& buffer2 
   std::vector<char> buf2=buffer2;
   buf2.push_back(0);
   std::cout << "comparing buffers, first buffer:\n" << &buf1[0] << "\nsecond buffer:\n" << &buf2[0] << "\n";
-} 
+}
 
 SessionReplyManager::SessionReplyManager( MutexInterfaceImpl* selfMutex ) : selfMutex_( selfMutex ) {}
 
@@ -132,7 +132,7 @@ void BasicTCPSession::initial( void ) {
   out() << "connecting";
   ost::TCPSession::initial();
   if ( isConnected() ) {
-    out() << "connection successfull";
+    out() << "connection successful";
   } else {
     err() << "connection failed";
   }
@@ -220,12 +220,12 @@ bool BasicTCPSession::inputOutput() {
   catch( const boost::archive::archive_exception& exc ) {
     failed( std::string( "archive-exception while deserializing message: " + std::string( exc.what() ) ) );
   }
-  
+
 #ifndef DISABLEUNIVERSALCATCH
   catch ( std::exception & err ) {
-    failed( std::string( "exception occured in inputOuput: " ) + err.what() );
+    failed( std::string( "exception occurred in inputOuput: " ) + err.what() );
   } catch ( ... ) {
-    failed( std::string( "unknown exception occured in inputOuput" ) );
+    failed( std::string( "unknown exception occurred in inputOuput" ) );
   }
 #endif
  #endif

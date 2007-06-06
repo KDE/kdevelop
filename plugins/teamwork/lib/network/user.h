@@ -99,7 +99,7 @@ class User : public WeakSafeShared {
 
     User( const User* user );
 
-    User( std::string name = "", std::string password = "", std::string description = "" );
+    explicit User( std::string name = "", std::string password = "", std::string description = "" );
 
     virtual ~User();
 
@@ -108,12 +108,12 @@ class User : public WeakSafeShared {
 
     bool matchRight( int right );
 
-    ///this function is used for authentification. The given user should be the one trying to connect.
+    ///this function is used for authentication. The given user should be the one trying to connect.
     virtual bool match( const User& u );
 
     virtual bool matchIdentity( const User& u );
 
-    ///this function strips all information that is not necessary for correct authentification/identification at the given target-user
+    ///this function strips all information that is not necessary for correct authentication/identification at the given target-user
     virtual void stripForTarget( const User& /*target*/ );
 
     ///strips away all information that should stay private, but leaves things like description etc.

@@ -1,3 +1,16 @@
+/***************************************************************************
+copyright            : (C) 2006 by David Nolden
+email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #ifndef MESSAGEPOINTER_H
 #define MESSAGEPOINTER_H
 
@@ -43,13 +56,13 @@ struct MessageSerialization {
     if ( t ) {
       bool b = true;
 #ifdef USE_BUFFER_SERIALIZATION
-      
+
       arch << boost::serialization::make_nvp( "valid", b );
       std::vector<char> v;
       Teamwork::serializeMessageToBuffer( v, *t.unsafe() );
 
 #ifdef USE_TEXT_ARCHIVE
-      
+
       std::string s;
       if ( v.size() )
         s = &v[ 0 ];
@@ -58,7 +71,7 @@ struct MessageSerialization {
 #else
       arch & boost::serialization::make_nvp( "data", v );
 #endif
-      
+
 #else
       Teamwork::serializeMessageToArchive( arch, *t.unsafe() );
 #endif

@@ -12,8 +12,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "serialization.h"
 #include "serverconfig.h"
+#include "serialization.h"
 #include "boost/archive/polymorphic_xml_oarchive.hpp"
 #include "boost/archive/polymorphic_xml_iarchive.hpp"
 #include "boost/archive/polymorphic_text_oarchive.hpp"

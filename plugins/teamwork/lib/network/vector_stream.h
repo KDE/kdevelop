@@ -1,3 +1,16 @@
+/***************************************************************************
+copyright            : (C) 2006 by David Nolden
+email                : david.nolden.kdevelop@art-master.de
+***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #include <boost/iostreams/categories.hpp>   // seekable_device_tag
 #include <boost/iostreams/positioning.hpp>
 #include <boost/iostreams/stream.hpp>
@@ -6,7 +19,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <memory.h>
-#include <stdio.h>
 
 #ifndef VECTOR_STREAM_H
 #define VECTOR_STREAM_H
@@ -18,7 +30,7 @@ class vector_device {
 	public:
 		typedef char                 char_type;
 		typedef bidirectional_device_tag category;
-		
+
 		vector_device( std::vector<char>& vec ) : v_(vec), readPosition_(0) {
 		}
 
@@ -29,7 +41,7 @@ class vector_device {
 
 			memcpy( s, &(v_[readPosition_]), n );
 			readPosition_ += n;
-			
+
 			return n;
 		}
 
@@ -50,7 +62,7 @@ class vector_read_device {
 	public:
 		typedef char                 char_type;
 		typedef bidirectional_device_tag category;
-		
+
 		vector_read_device( const std::vector<char>& vec ) : v_(vec), readPosition_(0) {
 		}
 
@@ -61,7 +73,7 @@ class vector_read_device {
 
 			memcpy( s, &(v_[readPosition_]), n );
 			readPosition_ += n;
-			
+
 			return n;
 		}
 

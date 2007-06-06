@@ -73,7 +73,7 @@ class Client : public Server {
     virtual void processMessage( MessageInterface* msg );
 
   public:
-    Client( ServerInformation serverInfo, LoggerPointer logger = new Logger() );
+    explicit Client( ServerInformation serverInfo, LoggerPointer logger = new Logger() );
 
     virtual ~Client();
 

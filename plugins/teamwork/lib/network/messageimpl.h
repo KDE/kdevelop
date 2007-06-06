@@ -29,7 +29,7 @@ class CustomMessage : public RawMessage {
   DECLARE_MESSAGE( CustomMessage, RawMessage, 83 );
   typedef vector<MyType> MyDataType;
   MyDataType myData;
-  
+
   template<class Arch>
   void serial( Arch& arch ) {
     arch & myData;
@@ -89,14 +89,14 @@ class CustomMessage : public RawMessage {
     DataVector body_;
 
     public:
-    
+
       RawMessage( const MessageConstructionInfo& messageTypes, const DataVector& data );
 
       ///This should be used to indicate that this message is a reply to the other message(replyTarget)
       void setReply( MessageInterface* replyTarget );
-      
+
       RawMessage( InArchive& from, const MessageInfo& info );
-      
+
       virtual void serialize( OutArchive& target );
 
       virtual const MessageInfo& info() const;
@@ -106,10 +106,10 @@ class CustomMessage : public RawMessage {
       /**This is called once a message has been tried to be sent, with the appropriate result, and can be used by the message to give some feedback to the sender. The Session used to send the message is still locked.
        */
       virtual void result( bool success );
-      
+
       /**Returns a reference to the data-store of this raw message. It does not include data serialized to inherited messages. */
       DataVector& body();
-      
+
       /**Returns a reference to the data-store of this raw message. It does not include data serialized to inherited messages. */
       const DataVector& body() const;
   };
@@ -118,10 +118,10 @@ class CustomMessage : public RawMessage {
   class TextMessage : public RawMessage {
     DECLARE_MESSAGE( TextMessage, RawMessage, 3 );
     public:
-      TextMessage( const MessageConstructionInfo& messageTypes, const std::string& text = "" );
-      
+      explicit TextMessage( const MessageConstructionInfo& messageTypes, const std::string& text = "" );
+
       TextMessage( InArchive& from, const MessageInfo& info );
-  
+
       std::string text() const;
   };
 
@@ -144,7 +144,7 @@ class CustomMessage : public RawMessage {
       };
     private:
       Message msg_;
-    
+
       template<class Arch>
       void serial( Arch& arch ) {
         arch & msg_;
@@ -157,10 +157,10 @@ class CustomMessage : public RawMessage {
       virtual void serialize( OutArchive& arch );
 
       Message message();
-  
+
       string messageAsString();
   };
-  
+
   typedef Binder< RawMessage > ::
   Append< TextMessage >
   ::Result::Append<SystemMessage>::Result StandardMessageTypes;

@@ -37,14 +37,14 @@ struct Logger : public SafeShared {
   ///This can be overridden for custom logging
   virtual void log( const std::string& str , Level lv );
 
-  ///This function is used when an error occured while locking the Logger, or in other dangerous error-cases. It must be thread-safe.
+  ///This function is used when an error occurred while locking the Logger, or in other dangerous error-cases. It must be thread-safe.
   virtual void safeErrorLog( const std::string& str, Level lv );
 };
 
 ///this class represents one line of logger-output. On its destruction the line is given to the logger. When it is copied, the copy-source is invalidated.
 class LoggerPrinter {
   public:
-    LoggerPrinter( const LoggerPointer& logger, Logger::Level level = Logger::Info );
+    explicit LoggerPrinter( const LoggerPointer& logger, Logger::Level level = Logger::Info );
 
     LoggerPrinter( const LoggerPrinter& rhs );
 

@@ -12,8 +12,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "serialization.h"
 #include "teamworkserver.h"
+#include "serialization.h"
 #include "messageimpl.h"
 #include "teamworkmessages.h"
 #include "teamworkservermessages.h"
@@ -290,7 +290,7 @@ int Server::receiveMessage( IdentificationMessage* msg ) {
         throw TeamworkError( "failed to lock user" );
       if ( !nul->match( *ul ) ) {
         ostringstream str;
-        str << "authentification failed, names: \"" << nul->name() << "\" \"" << ul->name() << "\", banned: " << nul->banned();
+        str << "authentication failed, names: \"" << nul->name() << "\" \"" << ul->name() << "\", banned: " << nul->banned();
         throw TeamworkError( str.str() );
       }
       ul = nul;

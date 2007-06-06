@@ -11,7 +11,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "forwardsession.h"
 #include "multisession.h"
 #include "helpers.h"
@@ -51,7 +51,7 @@ ForwardSession::ForwardSession( const UserPointer& sourceUser, const UserPointer
     }
 
   } else {
-    err() << "could not lock target-user of a foward-session";
+    err() << "could not lock target-user of a forward-session";
   }
 }
 
