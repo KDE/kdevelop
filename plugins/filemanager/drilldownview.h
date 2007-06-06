@@ -33,7 +33,7 @@ public:
     void slideLeft();
     void slideRight();
 
-    void setDirty(QRect rect);
+    void setDirty(const QRect& rect);
 
     bool isBusy();
 

@@ -200,7 +200,7 @@ void DrillDownView::horizontalScrollbarValueChanged(int /*value*/)
     //to try fetching more items, KDirModel doesn't like that
 }
 
-void DrillDownView::setDirty(QRect rect)
+void DrillDownView::setDirty(const QRect& rect)
 {
     setDirtyRegion(rect);
 }
