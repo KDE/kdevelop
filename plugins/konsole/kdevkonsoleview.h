@@ -25,7 +25,7 @@ class KDevKonsoleView : public QWidget
 {
     Q_OBJECT
 public:
-    KDevKonsoleView( KDevKonsoleViewPart* part, QWidget *parent = 0 );
+    explicit KDevKonsoleView( KDevKonsoleViewPart* part, QWidget *parent = 0 );
     virtual ~KDevKonsoleView();
 
 public slots:
