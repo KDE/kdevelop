@@ -419,7 +419,7 @@ void TestDUChain::testDeclareStruct()
 
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[1]->abstractType().data());
   QVERIFY(idType);
-  QCOMPARE( idType->identifier(), Identifier("A") );
+  QCOMPARE( idType->identifier(), QualifiedIdentifier("A") );
   
   Declaration* defStructA = top->localDeclarations().first();
   QCOMPARE(defStructA->identifier(), Identifier("A"));
@@ -456,7 +456,7 @@ void TestDUChain::testDeclareStruct()
   QVERIFY(ctorCtx->parentContext());
   QCOMPARE(ctorCtx->childContexts().count(), 0);
   QCOMPARE(ctorCtx->localDeclarations().count(), 2);
-  QVERIFY(ctorCtx->localScopeIdentifier().isEmpty());
+  QCOMPARE(ctorCtx->localScopeIdentifier(), QualifiedIdentifier("A")); ///@todo check if it should really be this way
 
   Declaration* defB = ctorCtx->localDeclarations().first();
   QCOMPARE(defB->identifier(), Identifier("b"));
@@ -473,7 +473,7 @@ void TestDUChain::testDeclareStruct()
   DUContext* testCtx = structA->childContexts().last();
   QCOMPARE(testCtx->childContexts().count(), 0);
   QCOMPARE(testCtx->localDeclarations().count(), 1);
-  QVERIFY(testCtx->localScopeIdentifier().isEmpty());
+  QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier("test")); ///@todo check if it should really be this way
 
   Declaration* defJ = testCtx->localDeclarations().first();
   QCOMPARE(defJ->identifier(), Identifier("j"));

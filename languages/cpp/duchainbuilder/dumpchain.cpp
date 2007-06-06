@@ -173,7 +173,7 @@ DumpChain::~ DumpChain( )
 
 void DumpChain::dump( DUContext * context, bool imported )
 {
-  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context \"") << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
+  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << " \"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
   if (!imported) {
     foreach (Declaration* dec, context->localDeclarations()) {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
