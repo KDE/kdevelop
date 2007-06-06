@@ -17,9 +17,9 @@
 SnippetFilterProxyModel::SnippetFilterProxyModel(QObject *parent)
  : QSortFilterProxyModel(parent)
 {
-    connect(SnippetStore::instance(), 
+    connect(SnippetStore::instance(),
             SIGNAL( dataChanged(const QModelIndex&, const QModelIndex&) ),
-            this, 
+            this,
             SLOT( dataChanged(const QModelIndex&, const QModelIndex&) ));
 }
 
@@ -28,7 +28,7 @@ SnippetFilterProxyModel::~SnippetFilterProxyModel()
 {
 }
 
-void SnippetFilterProxyModel::changeFilter(const QString filter)
+void SnippetFilterProxyModel::changeFilter(const QString& filter)
 {
     filter_ = filter;
     clear();
@@ -49,7 +49,7 @@ bool SnippetFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex 
 
     Snippet* snippet = dynamic_cast<Snippet*>( item );
     if (snippet) {
-        if ( snippet->text().contains( filter_) || 
+        if ( snippet->text().contains( filter_) ||
              snippet->getKeywordList().contains( filter_ ) )
             return true;
         else
@@ -62,8 +62,8 @@ bool SnippetFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex 
 
 void SnippetFilterProxyModel::dataChanged(const QModelIndex& /*topLeft*/, const QModelIndex& /*bottomRight*/)
 {
-    // If we don't do this, the model will contain strange QModelIndex elements after a 
-    // sync of a repository. Stangely this only happens on Linux. When running under Windows 
+    // If we don't do this, the model will contain strange QModelIndex elements after a
+    // sync of a repository. Stangely this only happens on Linux. When running under Windows
     // everything's ok, evan without this hack.
     // By letting the proxy reevaluate the items, these elements will be removed.
 

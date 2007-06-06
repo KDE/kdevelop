@@ -17,7 +17,7 @@
 #include "snippetrepository.h"
 
 MoveRepository::MoveRepository(SnippetRepository* repo, QWidget* parent)
-: QDialog(parent), Ui::MoveRepositoryBase(), repo_(repo)
+: KDialog(parent), Ui::MoveRepositoryBase(), repo_(repo)
 {
     Ui::MoveRepositoryBase::setupUi(this);
 

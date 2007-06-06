@@ -41,7 +41,7 @@ public:
      * @param repo The SnippetRepository which should hold this Snippet.
      *             The new Snippet appends itself to this SnippetRepository
      */
-    Snippet(QString filename, SnippetRepository* repo);
+    Snippet(const QString& filename, SnippetRepository* repo);
     virtual ~Snippet();
 
     /**
@@ -50,8 +50,8 @@ public:
     QStringList& getKeywordList() { return keywords_; }
 
     /**
-     * @attention This method only returns the snippet's plain text; If you would 
-     *            like to get variables substituted which real values call 
+     * @attention This method only returns the snippet's plain text; If you would
+     *            like to get variables substituted which real values call
      *            interpretSnippet() instead.
      * @return The snippet's plain text
      */
@@ -83,7 +83,7 @@ public:
     /**
      * Changing the snippet's name also includes changing the filename
      * Calling this function will do so.
-     * @note If a file before the name change does not yet exist, the filename 
+     * @note If a file before the name change does not yet exist, the filename
      *       will be changed and the snippet gets saved to the new file
      */
     void changeName(const QString& newName);
@@ -101,10 +101,10 @@ private slots:
 
 private:
     /**
-     * Parses all information out of @p data and stores it in this object's 
+     * Parses all information out of @p data and stores it in this object's
      * private members.
      */
-    void setRawData(QString data);
+    void setRawData(const QString& data);
     int initVariableModel(SnippetVariableModel& model);
     void handleMetaData(QStringList& metadata);
 

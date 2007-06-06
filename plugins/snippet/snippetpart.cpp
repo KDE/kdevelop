@@ -62,7 +62,7 @@ void SnippetPart::unload()
     core()->uiController()->removeToolView(m_factory);
 }
 
-void SnippetPart::insertText(QString snippet)
+void SnippetPart::insertText(const QString& snippet)
 {
     kDebug() << "Insert Snippet: " << snippet <<endl;
 

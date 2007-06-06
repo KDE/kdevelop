@@ -29,10 +29,10 @@ public:
 
     /**
      * Inserts the given @p snippet into the currently active view.
-     * If the current active view is not inherited from KTextEditor::View 
+     * If the current active view is not inherited from KTextEditor::View
      * nothing will happen.
      */
-    void insertText(QString snippet);
+    void insertText(const QString& snippet);
 
     // KDevelop::IPlugin methods
     virtual void unload();

@@ -68,7 +68,7 @@ bool SnippetVariableModel::setData(const QModelIndex & index, const QVariant & v
     Q_UNUSED(value);
     Q_UNUSED(role);
 
-    if (!index.isValid()) 
+    if (!index.isValid())
         return false;
 
     SnippetVariableItem* item = reinterpret_cast<SnippetVariableItem*>(index.internalPointer());
@@ -84,7 +84,7 @@ bool SnippetVariableModel::setData(const QModelIndex & index, const QVariant & v
 
 QVariant SnippetVariableModel::data(const QModelIndex & index, int role) const
 {
-    if (!index.isValid()) 
+    if (!index.isValid())
         return false;
 
     SnippetVariableItem* item = reinterpret_cast<SnippetVariableItem*>(index.internalPointer());
@@ -98,7 +98,7 @@ QVariant SnippetVariableModel::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-void SnippetVariableModel::appendVariable(QString name)
+void SnippetVariableModel::appendVariable(const QString& name)
 {
     QModelIndex parent;
 
@@ -112,7 +112,7 @@ void SnippetVariableModel::appendVariable(QString name)
 
 Qt::ItemFlags SnippetVariableModel::flags(const QModelIndex & index) const
 {
-    if (!index.isValid()) 
+    if (!index.isValid())
         return false;
 
     Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;

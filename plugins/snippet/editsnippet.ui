@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>EditSnippetBase</class>
- <widget class="QDialog" name="EditSnippetBase" >
+ <widget class="KDialog" name="EditSnippetBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

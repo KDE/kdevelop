@@ -22,7 +22,7 @@
 #include "snippetrepository.h"
 #include "snippetvariablesubst.h"
 
-Snippet::Snippet(QString filename, SnippetRepository* repo)
+Snippet::Snippet(const QString& filename, SnippetRepository* repo)
     : QStandardItem(filename), repo_(repo), name_(filename)
 {
     // append ourself to the given parent repo
@@ -97,7 +97,7 @@ void Snippet::changeName(const QString& newName)
     // no need to do anything if the name didn't change
 }
 
-void Snippet::setRawData(QString data)
+void Snippet::setRawData(const QString& data)
 {
     QStringList rows = data.split( QRegExp("[\\r\\n]+") );
     QStringList metadata;
@@ -105,7 +105,7 @@ void Snippet::setRawData(QString data)
     QString newText;
 
     // A snippet file can contain meta information
-    // which needs to be separeted from the snippet's text
+    // which needs to be separated from the snippet's text
     QStringListIterator it(rows);
     while (it.hasNext()) {
         QString str = it.next();
@@ -124,7 +124,7 @@ void Snippet::setRawData(QString data)
     keywords_.clear();
 
     if (metadata.count() > 0) {
-        // if there is meta information, call handleMetaData() which is 
+        // if there is meta information, call handleMetaData() which is
         // capable of parsing them
         handleMetaData( metadata );
     }
@@ -195,12 +195,12 @@ const QString Snippet::interpretSnippet()
         // open the SnippetVariables dialog and give it our model
         SnippetVariables dlg( &variables );
         if ( dlg.exec() == QDialog::Accepted ) {
-            // If the user accepted the dialog, it holds a list of variables and the 
+            // If the user accepted the dialog, it holds a list of variables and the
             // values the user wants to substitute
 
             SnippetVariableItem* variable;
             foreach(variable, variables.getVariableList()) {
-                snippet.replace( "$"+variable->name()+"$", variable->value() );
+                snippet.replace( '$'+variable->name()+'$', variable->value() );
             }
         } else {
             // the user canceled the dialog; return an empty string

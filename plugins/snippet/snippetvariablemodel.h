@@ -39,10 +39,10 @@ private:
 };
 
 /**
- * Each row of this model hold one variable. The first column holds the 
- * variable's name. The second column is editable and stores the value the 
+ * Each row of this model hold one variable. The first column holds the
+ * variable's name. The second column is editable and stores the value the
  * user can insert as replacement for the variable.
- * After the user entered the values, calling getVariableList() will return 
+ * After the user entered the values, calling getVariableList() will return
  * all variables and their values.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
@@ -52,7 +52,7 @@ public:
     SnippetVariableModel(QObject * parent = 0);
     ~SnippetVariableModel();
 
-    void appendVariable(QString name);
+    void appendVariable(const QString& name);
     QList<SnippetVariableItem*>& getVariableList() { return variables_; }
 
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;

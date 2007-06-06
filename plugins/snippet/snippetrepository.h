@@ -37,7 +37,7 @@ public:
      * @param name A name for the repository
      * @param location The directory from where to load the snippets
      */
-    SnippetRepository(QString name, QString location);
+    SnippetRepository(const QString& name, const QString& location);
     ~SnippetRepository();
 
     /**
@@ -63,7 +63,7 @@ public:
      * @param newLocation The repository will be moved to this location
      * @param newName If set, the name of the repository will be changed
      */
-    void changeLocation(QString newLocation, QString newName = "");
+    void changeLocation(const QString& newLocation, const QString& newName = "");
 
     /**
      * Remove this repository from the disk.
@@ -74,7 +74,7 @@ public:
      * Creates a new subdirectory named @p subrepo.
      * @note Also calles slotSyncRepository()
      */
-    void createSubRepo(QString subrepo);
+    void createSubRepo(const QString& subrepo);
 
 public slots:
     /**

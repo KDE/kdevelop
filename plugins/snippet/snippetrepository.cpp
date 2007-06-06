@@ -21,7 +21,7 @@
 #include "snippetstore.h"
 #include "snippet.h"
 
-SnippetRepository::SnippetRepository(QString name, QString location)
+SnippetRepository::SnippetRepository(const QString& name, const QString& location)
  : QStandardItem(name)
 {
     setIcon( KIcon("folder") );
@@ -87,7 +87,7 @@ void SnippetRepository::slotSyncRepository()
     }
 }
 
-void SnippetRepository::changeLocation(QString newLocation, QString newName)
+void SnippetRepository::changeLocation(const QString& newLocation, const QString& newName)
 {
     // In case the location didn't change, we might still need to update the name
     if (getLocation() == QDir::cleanPath(newLocation)) {
@@ -106,7 +106,7 @@ void SnippetRepository::changeLocation(QString newLocation, QString newName)
         if (!newName.isEmpty())
             setText( newName );
 
-        // as the snippets and subrepos now changed their 
+        // as the snippets and subrepos now changed their
         // location on the disk, resync everything in this repo
         slotSyncRepository();
     }
@@ -121,7 +121,7 @@ void SnippetRepository::removeDirectory()
     }
 }
 
-void SnippetRepository::createSubRepo(QString subrepo)
+void SnippetRepository::createSubRepo(const QString& subrepo)
 {
     // First create the directory ...
     QDir dir( location_ );

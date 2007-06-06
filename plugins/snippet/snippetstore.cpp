@@ -37,7 +37,7 @@ SnippetStore* SnippetStore::instance()
     return self_;
 }
 
-void SnippetStore::createNewRepository(SnippetRepository* parent, QString name, QString dir)
+void SnippetStore::createNewRepository(SnippetRepository* parent, const QString& name, const QString& dir)
 {
     if (!parent) {
         // Check if the directory is not already in the SnippetStore

@@ -14,6 +14,7 @@
 
 
 #include "ui_editsnippet.h"
+#include <kdialog.h>
 
 class Snippet;
 
@@ -22,12 +23,12 @@ class Snippet;
  * @see editsnippet.ui
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class EditSnippet : public QDialog, public Ui::EditSnippetBase
+class EditSnippet : public KDialog, public Ui::EditSnippetBase
 {
     Q_OBJECT
 
 public:
-    EditSnippet(Snippet *s, QWidget *parent = 0);
+    explicit EditSnippet(Snippet *s, QWidget *parent = 0);
     virtual ~EditSnippet();
 
 

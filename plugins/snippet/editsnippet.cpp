@@ -18,7 +18,7 @@
 #include "snippetstore.h"
 
 EditSnippet::EditSnippet(Snippet *s, QWidget* parent)
- : QDialog(parent), Ui::EditSnippetBase(), snippet_(s)
+ : KDialog(parent), Ui::EditSnippetBase(), snippet_(s)
 {
     Ui::EditSnippetBase::setupUi(this);
 

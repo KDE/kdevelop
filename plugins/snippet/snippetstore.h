@@ -44,10 +44,10 @@ public:
      * be stored in the @a repos_ QList.
      * Other repos become a children of the passed @a parent.
      */
-    void createNewRepository(SnippetRepository* parent, QString name, QString dir);
+    void createNewRepository(SnippetRepository* parent, const QString& name, const QString& dir);
 
     /**
-     * 
+     *
      */
     void remove(SnippetRepository* repo);
 

@@ -14,8 +14,8 @@
 
 #include <QHeaderView>
 #include <QContextMenuEvent>
-#include <QInputDialog>
 #include <kmenu.h>
+#include <kinputdialog.h>
 
 #include "snippet.h"
 #include "snippetpart.h"
@@ -261,9 +261,9 @@ void SnippetView::slotCreateSubRepo()
     if (!repo)
         return;
 
-    QString subdir = QInputDialog::getText(this, 
-                            i18n("Create a new subrepository"), 
-                            i18n("Directoryname"));
+    QString subdir = KInputDialog::getText(
+                            i18n("Create a new subrepository"),
+                            i18n("Directoryname"), QString(), 0, this);
     if (!subdir.isEmpty()) {
         repo->createSubRepo( subdir );
     }

@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>MoveRepositoryBase</class>
- <widget class="QDialog" name="MoveRepositoryBase" >
+ <widget class="KDialog" name="MoveRepositoryBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

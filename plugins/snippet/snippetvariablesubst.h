@@ -25,7 +25,7 @@ class SnippetVariableModel;
 class SnippetVariables: public QDialog, public Ui::SnippetVariableSubstBase {
 Q_OBJECT
 public:
-    SnippetVariables(SnippetVariableModel* model, QWidget *parent = 0);
+    explicit SnippetVariables(SnippetVariableModel* model, QWidget *parent = 0);
 };
 
 #endif

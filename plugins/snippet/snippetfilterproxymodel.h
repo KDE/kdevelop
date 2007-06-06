@@ -25,7 +25,7 @@ public:
     ~SnippetFilterProxyModel();
 
 public slots:
-    void changeFilter(const QString filter);
+    void changeFilter(const QString& filter);
 
 private slots:
     void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);

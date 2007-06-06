@@ -27,7 +27,7 @@ class SnippetView : public QWidget, public Ui::SnippetViewBase
     Q_OBJECT
 
 public:
-    SnippetView(SnippetPart* part, QWidget* parent = 0);
+    explicit SnippetView(SnippetPart* part, QWidget* parent = 0);
     virtual ~SnippetView();
 
 public slots:
@@ -84,9 +84,9 @@ public slots:
 
 signals:
     /**
-     * This signal gets emitted whenever the user requests a contextmenu. 
+     * This signal gets emitted whenever the user requests a contextmenu.
      * The slot that gets connected to this signal can insert additional entries
-     * to the contextmenu @p menu. The parameter @p item is either a Snippet, 
+     * to the contextmenu @p menu. The parameter @p item is either a Snippet,
      * a SnippetRepository or NULL, depending on where the users requested the contextmenu.
      */
     void popupContextMenu( QMenu* menu, QStandardItem* item );
