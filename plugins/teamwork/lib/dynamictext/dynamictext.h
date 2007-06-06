@@ -12,11 +12,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef DOCUMENTMANAGER_H
-#define DOCUMENTMANAGER_H
+#ifndef DYNAMICTEXT_H
+#define DYNAMICTEXT_H
 #include <string>
-#include<boost/serialization/split_member.hpp>
-#include <boost/serialization/export.hpp>
+#include <boost/serialization/split_member.hpp>
 
 typedef std::string String;
 
@@ -31,7 +30,7 @@ typedef std::string String;
 using namespace Tree;
 
 #define INVALID_POSITION -1000000
-         
+
 struct OffsetRequest {
   VectorTimestamp from;
   VectorTimestamp to;
@@ -70,7 +69,7 @@ class DynamicText : public SafeShared {
 		/**
 		 * @param initialState the state which will be used as zero-state.
 		 * */
-		DynamicText( const VectorTimestamp& initialState = VectorTimestamp(), const String& initialText = String() );
+		explicit DynamicText( const VectorTimestamp& initialState = VectorTimestamp(), const String& initialText = String() );
 
     /**Does the replacement precisely, considering the timestamp. Jumps back to the current state after inserting.
     * @param stamp The timestamp in whose context the replacement has to be done
@@ -180,7 +179,7 @@ class DynamicText : public SafeShared {
     ///The given state must be bigger/same than the current state in every stamp
     bool advanceInternal( const VectorTimestamp& state );
 
-    ///The following are notification-functions that can be overriden by derived classes
+    ///The following are notification-functions that can be overridden by derived classes
     ///To get notified about exact string-changes you can register a notifier to the FlexibleText returned by text().
     virtual void notifyInserted( const ReplacementPointer& rep );
     virtual void notifyStateChanged();

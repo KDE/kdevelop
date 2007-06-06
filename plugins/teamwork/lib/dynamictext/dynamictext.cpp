@@ -14,9 +14,10 @@ email                : david.nolden.kdevelop@art-master.de
 
 #define NOCATCH
 
-#include "network/serialization.h"
-#include <ostream>
 #include "dynamictext.h"
+#include "network/serialization.h"
+#include <boost/serialization/export.hpp>
+#include <ostream>
 #include "verify.h"
 
 #ifndef NOCATCH

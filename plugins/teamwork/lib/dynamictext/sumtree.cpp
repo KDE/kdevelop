@@ -12,10 +12,10 @@ email                : david.nolden.kdevelop@art-master.de
  *                                                                         *
  ***************************************************************************/
 
+#include "sumtree.h"
 #include <string>
 #include <sstream>
 #include <algorithm>
-#include "sumtree.h"
 #include "verify.h"
 #include <limits.h>
 
