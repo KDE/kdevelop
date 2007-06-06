@@ -406,7 +406,7 @@ void TestDUChain::testDeclareStruct()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; };");
+  QByteArray method("struct A { int i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; }; A instance;");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -414,9 +414,13 @@ void TestDUChain::testDeclareStruct()
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 1);
-  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[1]->abstractType().data());
+  QVERIFY(idType);
+  QCOMPARE( idType->identifier(), Identifier("A") );
+  
   Declaration* defStructA = top->localDeclarations().first();
   QCOMPARE(defStructA->identifier(), Identifier("A"));
   QCOMPARE(defStructA->uses().count(), 0);

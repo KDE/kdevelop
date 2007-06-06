@@ -42,6 +42,13 @@ using namespace KDevelop;
 
 QTEST_MAIN(TestExpressionParser)
 
+char* debugString( const QString& str ) {
+  char* ret = new char[str.length()+1];
+  QByteArray b = str.toAscii();
+  strcpy( ret, b.data() );
+  return ret;
+}
+
 namespace QTest {
   template<>
   char* toString(const Cursor& cursor)
@@ -182,7 +189,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   KUrl url(QString("file:///internal/%1").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session);
-  
+
   TopDUContext* top = definitionBuilder.buildDeclarations(url, ast);
 
   UseBuilder useBuilder(session);

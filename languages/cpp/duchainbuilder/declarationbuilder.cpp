@@ -22,6 +22,7 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
+#include <identifiedtype.h>
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "tokens.h"
@@ -301,6 +302,12 @@ void DeclarationBuilder::closeDeclaration()
 {
   if (lastType()) {
     DUChainWriteLocker lock(DUChain::lock());
+
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
+    
+    if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
+        idType->setDeclaration( currentDeclaration() );
+    
     currentDeclaration()->setType(lastType());
   }
 

@@ -20,6 +20,8 @@
 
 #include <ktexteditor/smartrange.h>
 
+#include <duchain.h>
+#include <duchainlock.h>
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include <ducontext.h>
@@ -224,13 +226,18 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     }
 
   } else if (node->name) {
-    /*QualifiedIdentifier id = identifierForName(node->name);
+    QualifiedIdentifier id = identifierForName(node->name);
     KTextEditor::Cursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-    Declaration* dec = currentContext()->findDeclarations(id, pos);
-    if (dec && dec->abstractType()) {
-      openedType = true;
-      openType(dec->abstractType(), node);
-    }*/
+    DUChainReadLocker lock(DUChain::lock());
+    QList<Declaration*> dec = currentContext()->findDeclarations(id, pos);
+    if (!dec.isEmpty() && dec.front()->abstractType()) {
+      ///@todo only functions can have multiple declarations here, or maybe template-classes
+      if( dec.count() > 1 )
+        kdDebug() << id.toString() << " was found " << dec.count() << " times" << endl;
+      kdDebug() << "found for " << id.toString() << ": " << dec.front()->toString() << " type: " << dec.front()->abstractType()->toString() << endl;
+       openedType = true;
+       openType(dec.front()->abstractType(), node);
+    }
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);

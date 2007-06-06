@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 
+#include <identifiedtype.h>
 #include "cppeditorintegrator.h"
 #include <ducontext.h>
 #include <declaration.h>
@@ -175,7 +176,8 @@ void DumpChain::dump( DUContext * context, bool imported )
   kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context \"") << context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "] " << context->textRange() << endl;
   if (!imported) {
     foreach (Declaration* dec, context->localDeclarations()) {
-      kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << " [" << dec->qualifiedIdentifier() << "]  " << dec->textRange() << ", " << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << " use(s)." << endl;
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
+      kDebug() << QString((indent+1) * 2, ' ') << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]  " << dec->textRange() << ", " << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << " use(s)." << endl;
       if (dec->definition())
         kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition: " << dec->definition()->textRange() << endl;
       foreach (Use* use, dec->uses())
