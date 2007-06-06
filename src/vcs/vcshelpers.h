@@ -194,7 +194,9 @@ public:
         Push,
         Pull,
         Annotate,
-        Clone
+        Clone,
+        Status,
+        Revert
     };
 
     /**
