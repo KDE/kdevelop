@@ -26,7 +26,7 @@
 
 namespace KDevelop {
   class Declaration;
-};
+}
 
 class Token;
 class TranslationUnitAST;

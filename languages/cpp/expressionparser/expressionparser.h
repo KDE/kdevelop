@@ -29,7 +29,7 @@ class AST;
 namespace KDevelop {
 class Declaration;
 class DUContext;
-};
+}
 
 namespace Cpp  {
 using namespace KDevelop;
