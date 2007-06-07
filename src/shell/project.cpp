@@ -362,7 +362,8 @@ ProjectFileItem *Project::fileForUrl(const KUrl& url) const
                     return 0; //not in the project
                 }
                 top = parent;
-            }
+            }else
+                top = 0;
         }
     }
     return 0;
