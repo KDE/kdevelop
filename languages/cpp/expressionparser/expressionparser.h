@@ -20,26 +20,34 @@
 #define EXPRESSIONPARSER_H
 
 #include <ksharedptr.h>
+#include <typesystem.h>
+#include "visitor.h"
 #include "cppexpressionparserexport.h"
 
 class TranslationUnitAST;
 class AST;
 namespace KDevelop {
+class Declaration;
 class DUContext;
-  
-class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult : public KShared {
-  public:
-    ExpressionEvaluationResult() : ast(0), isMacro(0) {
-    }
-    ~ExpressionEvaluationResult() {
-      //delete ast;
-    }
-
-    AST* ast;
-    bool isMacro;
-    typedef KSharedPtr<ExpressionEvaluationResult> Pointer;
 };
 
+namespace Cpp  {
+using namespace KDevelop;
+
+class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionEvaluationResult : public KShared {
+  public:
+    ExpressionEvaluationResult() : instanceDeclaration(0) {
+    }
+
+    AbstractType::Ptr type; ///Type the expression evaluated to, may be zero when the expression failed to evaluate
+    Declaration* instanceDeclaration; ///If the expression evaluates to an instance, this contains a pointer to the instance's declaration(@see CppExpressionVisitor::expressionType())
+    
+    typedef KSharedPtr<ExpressionEvaluationResult> Ptr;
+};
+
+/**
+ * A class that simplifies the usage of CppExpressionVisitor by eventually parsing the expression and using CppExpressionVisitor to evaluate it's type
+ **/
 class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
   public:
     /**
@@ -49,14 +57,14 @@ class KDEVCPPEXPRESSIONPARSER_EXPORT ExpressionParser {
      * @param context the context within which the expression should be evaluated
      * @param debug whether additional output to kdDebug should be issued
     */
-    ExpressionEvaluationResult::Pointer evaluateType( const QByteArray& exp, DUContext* context, bool debug = true );
+    ExpressionEvaluationResult::Ptr evaluateType( const QByteArray& exp, DUContext* context, bool debug = true );
     /**
      * Evaluates the type of an expression given as an AST.
      *
      * @param ast the AST. It's context must be built already(context-member filled).
      * @param debug whether additional output to kdDebug should be issued
     */
-    ExpressionEvaluationResult::Pointer evaluateType( AST* ast, bool debug = true );
+    ExpressionEvaluationResult::Ptr evaluateType( AST* ast, ParseSession* session, bool debug = true );
 };
 
 }

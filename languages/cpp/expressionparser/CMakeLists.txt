@@ -17,6 +17,7 @@ include_directories(
 
 set(kdevcppexpressionparser_LIB_SRCS
     expressionparser.cpp
+    expressionvisitor.cpp
 )
 
 kde4_add_library(kdevcppexpressionparser SHARED ${kdevcppexpressionparser_LIB_SRCS})
@@ -28,6 +29,7 @@ install(TARGETS kdevcppexpressionparser DESTINATION ${LIB_INSTALL_DIR} )
 
 install(FILES
     expressionparser.h
+    expressionvisitor.cpp
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cpp/expressionparser
 
 )

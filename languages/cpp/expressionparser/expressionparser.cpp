@@ -23,6 +23,8 @@
 #include "duchainbuilder/declarationbuilder.h"
 #include "duchainbuilder/dumpchain.h"
 #include "duchainbuilder/dumptypes.h"
+#include <declaration.h>
+
 #include "ducontext.h"
 #include "ast.h"
 #include "parsesession.h"
@@ -31,10 +33,13 @@
 #include "duchainlock.h"
 //#include "typerepository.h"
 #include <identifier.h>
+#include "expressionvisitor.h"
 
 
-namespace KDevelop {
-ExpressionEvaluationResult::Pointer ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool debug ) {
+namespace Cpp {
+using namespace KDevelop;
+
+ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( const QByteArray& unit, DUContext* context, bool debug ) {
 
   if( debug )
     kDebug() << "==== .Evaluating ..:" << endl << unit << endl << endl;
@@ -70,7 +75,7 @@ ExpressionEvaluationResult::Pointer ExpressionParser::evaluateType( const QByteA
     kDebug() << "===== DUChain:" << endl;
 
     DUChainWriteLocker lock(DUChain::lock());
-    //dumper.dump(top);
+    //dumper.dump(top, false);
   }
 
   if (debug) {
@@ -83,14 +88,19 @@ ExpressionEvaluationResult::Pointer ExpressionParser::evaluateType( const QByteA
   if (debug)
     kDebug() << "===== Finished evaluation." << endl;
 
+  ExpressionEvaluationResult::Ptr ret = evaluateType( ast, session, debug );
+
   delete session;
 
-  return evaluateType( ast, debug );
+  return ret;
 }
 
-ExpressionEvaluationResult::Pointer ExpressionParser::evaluateType( AST* ast, bool debug ) {
-  ExpressionEvaluationResult::Pointer ret( new ExpressionEvaluationResult );
-  ret->ast = ast;
+ExpressionEvaluationResult::Ptr ExpressionParser::evaluateType( AST* ast, ParseSession* session, bool debug ) {
+  ExpressionEvaluationResult::Ptr ret( new ExpressionEvaluationResult );
+  ExpressionVisitor v(session);
+  v.parse( ast );
+  ret->type = v.lastType();
+  ret->instanceDeclaration = v.lastDeclaration();
   return ret;
 }
 

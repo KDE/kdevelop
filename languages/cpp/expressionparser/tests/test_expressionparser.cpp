@@ -23,6 +23,7 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <topducontext.h>
+#include <duchain/typesystem.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <declaration.h>
@@ -35,12 +36,28 @@
 #include <symboltable.h>
 
 #include "rpp/preprocessor.h"
+#include "expressionvisitor.h"
 
 using namespace KTextEditor;
 
 using namespace KDevelop;
 
-QTEST_MAIN(TestExpressionParser)
+class MyExpressionVisitor : public Cpp::ExpressionVisitor {
+  public:
+  MyExpressionVisitor( ParseSession* session ) : ExpressionVisitor(session)  {
+  }
+  protected:
+  virtual void expressionType( AST* node, const AbstractType::Ptr& type, Declaration* decl ) {
+    DumpChain d;
+    kDebug() << "expression-result for " << endl;
+    DUChainReadLocker lock( DUChain::lock() );
+    d.dump( node, session() );
+    kDebug() << "is: " << type->toString() << endl;
+  }
+};
+
+
+QTEST_MAIN(TestExpressionParser);
 
 char* debugString( const QString& str ) {
   char* ret = new char[str.length()+1];
@@ -143,16 +160,14 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
 void TestExpressionParser::testSimpleExpression() {
   TEST_FILE_PARSE_ONLY
       
-  QByteArray test = "struct Cont { int a; }; Cont c; void test() { c += 5;}";
+  QByteArray test = "struct Cont { int a; int* operator -> () {}; }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
   DUContext* c = parse( test, DumpDUChain | DumpAST );
   DUChainWriteLocker lock(DUChain::lock());
   
   DUContext* testContext = c->childContexts()[1];
   QCOMPARE( testContext->type(), DUContext::Function );
 
-  QList<Declaration*> cont = testContext->findDeclarations( QualifiedIdentifier("c") );
-  QVERIFY( !cont.isEmpty() );
-  kdDebug() << cont.front()->identifier().toString() << " " << cont.front()->toString() << "\n"; //abstractType()->toString() <<
+//abstractType()->toString() <<
   //c->childContexts()
   //Q_COMPARE( c->childContexts().
   //DUChainWriteLocker lock(DUChain::lock());
@@ -210,6 +225,9 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
       dt.dump(type.data());
   }
 
+  MyExpressionVisitor v(session);
+  v.visit(ast);
+  
   if (dump)
     kDebug() << "===== Finished test case." << endl;
 
