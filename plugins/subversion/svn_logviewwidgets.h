@@ -8,12 +8,13 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef SVN_LOGVIEWWIDGET
 #define SVN_LOGVIEWWIDGET
 #include "ui_svnlogviewwidget.h"
 #include "svn_models.h"
 #include "subversion_part.h"
+#include <kdialog.h>
 
 class QModelIndex;
 
@@ -26,7 +27,7 @@ public:
     void refreshWithNewData( QList<SvnLogHolder> datalist );
 protected:
     virtual void contextMenuEvent( QContextMenuEvent * event );
-    
+
 protected slots:
     void customContextMenuEvent( const QPoint &point );
     void blameRev();
@@ -42,6 +43,25 @@ private:
 
     QModelIndex m_contextIndex;
     KUrl m_url;
+};
+
+class SvnLogviewOptionDialogPrivate;
+
+class SvnLogviewOptionDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    SvnLogviewOptionDialog( const KUrl &url, QWidget *parent = 0 );
+    virtual ~SvnLogviewOptionDialog();
+
+    bool repositLog();
+    SvnRevision startRev();
+    SvnRevision endRev();
+    int limit();
+    bool strictNode();
+private:
+    SvnLogviewOptionDialogPrivate *d;
+
 };
 
 #endif

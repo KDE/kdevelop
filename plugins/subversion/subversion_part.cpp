@@ -19,11 +19,17 @@
 #include "svn_models.h"
 #include "svn_commitwidgets.h"
 #include "svn_importwidgets.h"
+#include "svn_logviewwidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
+
+#include "ibasicversioncontrol.h"
+#include "vcshelpers.h"
+
 #include <iuicontroller.h>
 #include <icore.h>
+#include <context.h>
 
 #include <kmessagebox.h>
 #include <kparts/part.h>
@@ -36,6 +42,7 @@ extern "C" {
 
 #include <QPointer>
 #include <QDir>
+#include <QPair>
 #include <QtDesigner/QExtensionFactory>
 
 // KDEV_ADD_EXTENSION_FACTORY_NS(KDevelop, IVersionControl, KDevSubversionPart)
@@ -66,9 +73,9 @@ public:
     KUrl m_ctxUrl;
 //     QPointer<SvnFileInfoProvider> m_infoProvider;
 //     SvnFileInfoProvider *m_infoProvider;
-    QList<KDevelop::VcsFileInfo> m_vcsInfoList;
-    QMap< SvnKJobBase*, QList<KDevelop::VcsFileInfo> > m_fileInfoMap;
-    QList<KDevelop::VcsFileInfo> asyncStatusList;
+//     QList<KDevelop::VcsFileInfo> m_vcsInfoList;
+//     QMap< SvnKJobBase*, QList<KDevelop::VcsFileInfo> > m_fileInfoMap;
+//     QList<KDevelop::VcsFileInfo> asyncStatusList;
 
 };
 
@@ -76,7 +83,7 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     : KDevelop::IPlugin(KDevSubversionFactory::componentData(), parent)
     , d(new KDevSubversionPartPrivate)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IVersionControl )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl)
 
     d->m_factory = new KDevSubversionViewFactory(this);
     core()->uiController()->addToolView("Subversion", d->m_factory);
@@ -120,13 +127,13 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action->setText(i18n("Show Blame (annotate)..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(blame()));
 
-    action = actionCollection()->addAction("svn_status_sync");
-    action->setText(i18n("Show status with blocking mode"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(statusSync()));
+//     action = actionCollection()->addAction("svn_status_sync");
+//     action->setText(i18n("Show status with blocking mode"));
+//     connect(action, SIGNAL(triggered(bool)), this, SLOT(statusSync()));
 
-    action = actionCollection()->addAction("svn_status_async");
-    action->setText(i18n("Show status with non-blocking mode"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(statusASync()));
+//     action = actionCollection()->addAction("svn_status_async");
+//     action->setText(i18n("Show status with non-blocking mode"));
+//     connect(action, SIGNAL(triggered(bool)), this, SLOT(statusASync()));
 
     action = actionCollection()->addAction("svn_info");
     action->setText(i18n("Show the system-generated metadatas"));
@@ -136,12 +143,6 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     action->setText(i18n("Import into repository"));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(import()));
 
-    // init context menu
-//     connect( ((UiController*)(core()->uiController()))->defaultMainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
-//             this, SLOT(contextMenu(KMenu *, const Context *)));
-//     connect( Core::mainWindow(), SIGNAL(contextMenu(KMenu *, const Context *)),
-//             this, SLOT(contextMenu(KMenu *, const Context *)));
-
 }
 
 KDevSubversionPart::~KDevSubversionPart()
@@ -150,123 +151,308 @@ KDevSubversionPart::~KDevSubversionPart()
 //     delete d->m_infoProvider;
     delete d;
 }
-bool KDevSubversionPart::isValidDirectory(const KUrl &dirPath) const
+bool KDevSubversionPart::isVersionControlled( const KUrl& localLocation )
 {
-    QString svn = "/.svn/";
-    QDir svndir( dirPath.toLocalFile() + svn );
-    QString entriesFileName = dirPath.toLocalFile() + svn + "entries";
-
-    kDebug() << "dirpath " << dirPath.toLocalFile() +"/.svn/" << " exists:" << svndir.exists() << endl;
-    kDebug() << "entries " << entriesFileName << " exists:" << QFile::exists( entriesFileName ) << endl;
-    return svndir.exists() &&
-            QFile::exists( entriesFileName );
-}
-QList<KDevelop::VcsFileInfo> KDevSubversionPart::statusSync( const KUrl &dirPath,
-                                                    KDevelop::IVersionControl::WorkingMode mode )
-{
-    d->m_vcsInfoList.clear();
-
-    bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
-    SvnRevision rev;
-    rev.setKey( SvnRevision::WORKING );
-    SvnKJobBase * job = d->m_impl->createStatusJob( dirPath, rev,
-                                                    recurse, true, false, true, false );
-    if( !job->exec() ){
-        // error
-        KMessageBox::error( NULL, job->errorText() );
-        return d->m_vcsInfoList;
+    // TODO faster
+    SvnRevision nullRev;
+    SvnKJobBase *job = svncore()->createStatusJob( localLocation, nullRev,
+                                                       false, true, false, true, false );
+    if( job->exec() != KDevelop::VcsJob::Succeeded ){
+        return false;
     }
 
     SvnStatusJob *th = dynamic_cast<SvnStatusJob*>(job->svnThread());
-    if( !th ) return d->m_vcsInfoList;
+    if( !th ) return false;
 
-    QList<SvnStatusHolder> holder = th->m_holderList;
-
-    for( QList<SvnStatusHolder>::iterator it = holder.begin(); it != holder.end(); ++it ){
-        // get revision.
-        QString rev = QString::number( (*it).baseRevision );
-        // get status
-        KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
-
-        SvnStatusHolder hold = (*it); // debug
-        kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
-        kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
-
-        // get status -- working copy
-        if( (*it).textStatus == svn_wc_status_normal
-            && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
-            // text status always exist if under VC. but in most cases, property value may not exist
-            state = KDevelop::VcsFileInfo::Uptodate;
-        else if( (*it).textStatus == svn_wc_status_added || (*it).propStatus == svn_wc_status_added )
-            state = KDevelop::VcsFileInfo::Added;
-        else if( (*it).textStatus == svn_wc_status_modified || (*it).propStatus == svn_wc_status_modified )
-            state = KDevelop::VcsFileInfo::Modified;
-        else if( (*it).textStatus == svn_wc_status_conflicted || (*it).propStatus == svn_wc_status_conflicted )
-            state = KDevelop::VcsFileInfo::Conflict;
-        else if( (*it).textStatus == svn_wc_status_deleted || (*it).propStatus == svn_wc_status_deleted )
-            state = KDevelop::VcsFileInfo::Deleted;
-        else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
-            state = KDevelop::VcsFileInfo::Replaced;
-
-        KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
-        d->m_vcsInfoList.append( vcsInfo );
-    }
-//     delete job;
-    return d->m_vcsInfoList;
+    QList<SvnStatusHolder> holderlist = th->m_holderList;
+    SvnStatusHolder holder = holderlist.first();
+    if( holder.textStatus == svn_wc_status_unversioned )
+        return false;
+    else
+        return true;
 }
-bool KDevSubversionPart::statusASync( const KUrl &dirPath,
-                                      KDevelop::IVersionControl::WorkingMode mode,
-                                      const QList<KDevelop::VcsFileInfo> &infos )
+
+VcsJob* KDevSubversionPart::repositoryLocation( const KUrl& localLocation )
 {
-    bool recurse = (mode == KDevelop::IVersionControl::Recursive) ? true : false;
-    const SvnKJobBase *job;
+    SvnRevision nullRev;
+    SvnKJobBase *job = svncore()->createInfoJob( localLocation, nullRev, nullRev, false );
+    if( job->exec() != VcsJob::Succeeded ){
+        return 0;
+    }
+    QMap<KUrl,SvnInfoHolder> holderMap = ( dynamic_cast<SvnInfoJob*>(job->svnThread()) )->m_holderMap;
+    SvnInfoHolder holder = holderMap[localLocation];
+    KUrl repos = holder.reposRootUrl;
+    QVariant result( repos.toLocalFile() );
+    job->setResult( result );
+}
+
+QList<SvnStatusHolder> KDevSubversionPart::statusSync( const KUrl &dirPath, bool recurse,
+                        bool getall, bool contactReposit, bool noIgnore, bool ignoreExternals )
+{
+    QList<SvnStatusHolder> holder;
     SvnRevision rev;
-    rev.setKey( SvnRevision::HEAD );
-    job = d->m_impl->spawnStatusThread( dirPath, rev, recurse, true, true, true, false );
-    // after the job complete, retrieve proper QList<VcsfileInfo> using SvnKJobBase* as QMap's key
-    d->m_fileInfoMap.insert( (SvnKJobBase*)job, infos );
-    return true;
-}
-void KDevSubversionPart::fillContextMenu( const KUrl &ctxUrl, QMenu &ctxMenu )
-{
-    d->m_ctxUrl = ctxUrl;
-    QMenu *subMenu = new QMenu( "Subversion", (QWidget*)&ctxMenu );
-
-    QAction *action;
-    action = subMenu->addAction(i18n("Log View"));
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
-    action = subMenu->addAction(i18n("Blame (Annotate)"));
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
-    action = subMenu->addAction(i18n("Update"));
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-    action = subMenu->addAction(i18n("Commit..."));
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-    action = subMenu->addAction(i18n("Add to version control"));
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-    action = subMenu->addAction(i18n("Remove from version control"));
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-
-
-    ctxMenu.addMenu( subMenu );
-}
-
-void KDevSubversionPart::fillContextMenu( const KDevelop::ProjectBaseItem *prjItem,
-                                          QMenu &ctxMenu )
-{
-
-    if ( KDevelop::ProjectFolderItem *folder = prjItem->folder() ){
-        if( !isValidDirectory( folder->url() ) )
-            return;
-
-        this->fillContextMenu( folder->url(), ctxMenu );
-    }
-    else if ( KDevelop::ProjectFileItem *file = prjItem->file() ){
-        this->fillContextMenu( file->url(), ctxMenu );
+    rev.setKey( SvnRevision::WORKING );
+    SvnKJobBase * job = svncore()->createStatusJob( dirPath, rev,
+                                    recurse, getall, contactReposit, noIgnore, ignoreExternals);
+    if( job->exec() != KDevelop::VcsJob::Succeeded ){
+        // error
+        return holder;
     }
 
+    SvnStatusJob *th = dynamic_cast<SvnStatusJob*>(job->svnThread());
+    if( !th ) return holder;
+
+    holder = th->m_holderList;
+    return holder;
+
+    // legacy of the old iversioncontrol iface.
+
+//     for( QList<SvnStatusHolder>::iterator it = holder.begin(); it != holder.end(); ++it ){
+//         // get revision.
+//         QString rev = QString::number( (*it).baseRevision );
+//         // get status
+//         KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
+//
+//         SvnStatusHolder hold = (*it); // debug
+//         kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
+//         kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
+//
+//         // get status -- working copy
+//         if( (*it).textStatus == svn_wc_status_normal
+//             && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
+//             // text status always exist if under VC. but in most cases, property value may not exist
+//             state = KDevelop::VcsFileInfo::Uptodate;
+//         else if( (*it).textStatus == svn_wc_status_added || (*it).propStatus == svn_wc_status_added )
+//             state = KDevelop::VcsFileInfo::Added;
+//         else if( (*it).textStatus == svn_wc_status_modified || (*it).propStatus == svn_wc_status_modified )
+//             state = KDevelop::VcsFileInfo::Modified;
+//         else if( (*it).textStatus == svn_wc_status_conflicted || (*it).propStatus == svn_wc_status_conflicted )
+//             state = KDevelop::VcsFileInfo::Conflict;
+//         else if( (*it).textStatus == svn_wc_status_deleted || (*it).propStatus == svn_wc_status_deleted )
+//             state = KDevelop::VcsFileInfo::Deleted;
+//         else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
+//             state = KDevelop::VcsFileInfo::Replaced;
+//
+//         KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
+//         d->m_vcsInfoList.append( vcsInfo );
+//     }
+//     delete job;
 }
+
+VcsJob* KDevSubversionPart::status( const KUrl::List& localLocations,
+                                    KDevelop::IBasicVersionControl::RecursionMode mode )
+{
+    bool recurse = (mode == KDevelop::IBasicVersionControl::Recursive) ? true : false;
+    SvnRevision rev;
+    rev.setKey( SvnUtils::SvnRevision::WORKING );
+    // TODO support multiple paths
+    KUrl path = localLocations.first();
+    SvnKJobBase *job = svncore()->createStatusJob( path, rev, recurse, true, false, true, false );
+
+    return job;
+}
+
+VcsJob* KDevSubversionPart::add( const KUrl::List& localLocations, RecursionMode recursion )
+{
+    bool recurse = (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false;
+    SvnKJobBase *job = svncore()->createAddJob( localLocations, recurse, true, true );
+    return job;
+}
+
+VcsJob* KDevSubversionPart::remove( const KUrl::List& localLocations )
+{
+    SvnKJobBase *job = svncore()->createRemoveJob( localLocations, false );
+    return job;
+}
+
+VcsJob* KDevSubversionPart::edit( const KUrl& /*localLocation*/ )
+{
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::unedit( const KUrl& /*localLocation*/ )
+{
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::localRevision( const KUrl& localLocation, VcsRevision::RevisionType )
+{
+    SvnRevision nullRev;
+    SvnKJobBase *job = svncore()->createInfoJob( localLocation, nullRev, nullRev, false );
+    if( job->exec() != KDevelop::VcsJob::Succeeded ){
+        return 0;
+    }
+    QMap<KUrl,SvnInfoHolder> holderMap = ( dynamic_cast<SvnInfoJob*>(job->svnThread()) )->m_holderMap;
+
+    if( !holderMap.contains(localLocation) ){
+        return 0;
+    }
+
+    SvnInfoHolder holder = holderMap[localLocation];
+    int revnum = holder.rev;
+    job->setResult( QVariant(revnum) );
+    return job;
+}
+
+VcsJob* KDevSubversionPart::copy( const KUrl& localLocationSrc, const KUrl& localLocationDstn )
+{
+    SvnUtils::SvnRevision headRev;
+    headRev.setKey( SvnUtils::SvnRevision::WORKING ); // TODO not sure whether BASE OR WORKING
+    SvnKJobBase *job = svncore()->createCopyJob( localLocationSrc, headRev, localLocationDstn );
+    return job;
+}
+
+VcsJob* KDevSubversionPart::move( const KUrl& localLocationSrc, const KUrl& localLocationDst )
+{
+    return svncore()->createMoveJob( localLocationSrc, localLocationDst, false );
+}
+
+VcsJob* KDevSubversionPart::revert( const KUrl::List& localLocations, RecursionMode recursion )
+{
+    bool recurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? true : false );
+    return svncore()->createRevertJob( localLocations, recurse );
+}
+
+VcsJob* KDevSubversionPart::update( const KUrl::List& localLocations,
+                                    const VcsRevision& rev, RecursionMode recursion )
+{
+    bool recurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? true : false );
+    // FIXME convert from VcsRevision
+    SvnUtils::SvnRevision headRev;
+    headRev.setKey( SvnUtils::SvnRevision::HEAD );
+    return svncore()->createUpdateJob( localLocations, headRev, recurse, false );
+}
+
+VcsJob* KDevSubversionPart::commit( const QString& message, const KUrl::List& localLocations,
+                    RecursionMode recursion )
+{
+    bool recurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? true : false );
+    return svncore()->createCommitJob( localLocations, message, recurse, false );
+}
+
+VcsJob* KDevSubversionPart::showCommit( const QString& message,
+                                        const KUrl::List& localLocations,
+                                        RecursionMode recursion )
+{
+    SvnCommitOptionDlg dlg( this, NULL );
+    dlg.setCommitCandidates( localLocations );
+    if( dlg.exec() != QDialog::Accepted )
+        return 0;
+
+    KUrl::List checkedList = dlg.checkedUrls();
+    if( checkedList.count() < 1 )
+        return 0;
+    bool recurse = dlg.recursive();
+    bool keeplocks = dlg.keepLocks();
+    //debug
+    for( QList<KUrl>::iterator it = checkedList.begin(); it!=checkedList.end() ; ++it ){
+        kDebug() << "KDevSubversionPart::commit(KUrl::List&) : " << *it << endl;
+    }
+    return svncore()->createCommitJob( checkedList, message, recurse, keeplocks );
+}
+
+VcsJob* KDevSubversionPart::diff( const QVariant& localOrRepoLocationSrc,
+                const QVariant& localOrRepoLocationDst,
+                const VcsRevision& srcRevision,
+                const VcsRevision& dstRevision,
+                VcsDiff::Type )
+{
+    // FIXME IMPLEMENT, diff between WORKING and BASE ATM
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::showDiff( const QVariant& localOrRepoLocationSrc,
+                const QVariant& localOrRepoLocationDst,
+                const VcsRevision& srcRevision,
+                const VcsRevision& dstRevision )
+{
+    // FIXME IMPLEMENT
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::log( const KUrl& localLocation, const VcsRevision& rev, unsigned long limit )
+{
+    // FIXME convert from VcsRevision
+    SvnUtils::SvnRevision startRev, endRev;
+    startRev.setKey( SvnUtils::SvnRevision::HEAD );
+    endRev.setNumber(0);
+    KUrl::List list;
+    list << localLocation;
+    return svncore()->createLogviewJob( list, startRev, endRev, limit, true, true, false );
+}
+
+VcsJob* KDevSubversionPart::log( const KUrl& localLocation,
+            const VcsRevision& rev,
+            const VcsRevision& limit )
+{
+    //FIXME implement
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::showLog( const KUrl& localLocation,
+                const VcsRevision& rev )
+{
+    KUrl::List list;
+    list << localLocation;
+    SvnRevision rev1, rev2;
+    SvnLogviewOptionDialog dlg(localLocation, 0);
+    if( dlg.exec() != QDialog::Accepted ){
+        return 0;
+    }
+    rev1 = dlg.startRev();
+    rev2 = dlg.endRev();
+    return svncore()->createLogviewJob( list, rev1, rev2,
+                            dlg.limit() , dlg.repositLog(), true, dlg.strictNode() );
+}
+
+VcsJob* KDevSubversionPart::annotate( const KUrl& localLocation,
+                const VcsRevision& rev )
+{
+    // TODO implement vcsannotation
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::showAnnotate( const KUrl& localLocation,
+                    const VcsRevision& rev )
+{
+    // TODO implement vcsannotation
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::merge( const QVariant& localOrRepoLocationSrc,
+            const QVariant& localOrRepoLocationDst,
+            const VcsRevision& srcRevision,
+            const VcsRevision& dstRevision,
+            const KUrl& localLocation )
+{
+    // TODO implement merge
+    return 0;
+}
+
+VcsJob* KDevSubversionPart::resolve( const KUrl::List& localLocations,
+                RecursionMode recursion )
+{
+    bool recurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? true : false );
+    return svncore()->createRevertJob( localLocations, recurse );
+}
+
+VcsJob* KDevSubversionPart::import( const KUrl& localLocation,
+                const QString& repositoryLocation,
+                RecursionMode recursion )
+{
+    bool nonrecurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? false: true );
+    svncore()->createImportJob( localLocation, KUrl(repositoryLocation), nonrecurse, true );
+}
+
+VcsJob* KDevSubversionPart::checkout( const VcsMapping& mapping )
+{
+    // TODO understand vcsmapping, implement checkoutjob
+    return 0;
+}
+
+
 //////////////////////////////////////////////
-void KDevSubversionPart::checkout( const KUrl &repository, const KUrl &targetDir, KDevelop::IVersionControl::WorkingMode mode )
+void KDevSubversionPart::checkout( const KUrl &repository, const KUrl &targetDir, bool recurse )
 {
 }
 
@@ -275,7 +461,7 @@ void KDevSubversionPart::add( const KUrl::List &wcPaths )
 //     void spawnAddThread( KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore );
     d->m_impl->spawnAddThread( wcPaths, true, true, true );
 }
-void KDevSubversionPart::remove( const KUrl::List &urls )
+void KDevSubversionPart::removeInternal( const KUrl::List &urls )
 {//void spawnRemoveThread( KUrl::List &urls, bool force );
     d->m_impl->spawnRemoveThread( urls, true );
 }
@@ -310,9 +496,13 @@ void KDevSubversionPart::logview( const KUrl &wcPath_or_url )
     KUrl::List list;
     list << wcPath_or_url;
     SvnRevision rev1, rev2;
-    rev1.setKey( SvnRevision::HEAD );
-    rev2.setNumber( 0 );
-    d->m_impl->spawnLogviewThread(list, rev1, rev2, 0, true, true, false );
+    SvnLogviewOptionDialog dlg(wcPath_or_url, 0);
+    if( dlg.exec() != QDialog::Accepted ){
+        return;
+    }
+    rev1 = dlg.startRev();
+    rev2 = dlg.endRev();
+    svncore()->spawnLogviewThread(list, rev1, rev2, dlg.limit() , dlg.repositLog(), true, dlg.strictNode() );
 }
 void KDevSubversionPart::annotate( const KUrl &path_or_url )
 {
@@ -343,6 +533,75 @@ const KUrl KDevSubversionPart::urlFocusedDocument()
     }
     return KUrl();
 }
+
+QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( KDevelop::Context* context )
+{
+    if( context->type() == KDevelop::Context::ProjectItemContext ){
+        KDevelop::ProjectItemContext *itemCtx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
+        KDevelop::ProjectBaseItem *baseItem = itemCtx->item();
+        KUrl ctxUrl;
+
+        if( baseItem->folder() ){
+            KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(baseItem);
+            ctxUrl = folderItem->url();
+            if( !isVersionControlled( ctxUrl ) ){
+                return KDevelop::IPlugin::requestContextMenuActions( context );
+            }
+        }
+
+        else if( baseItem->file() ){
+            KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(baseItem);
+            ctxUrl = fileItem->url();
+            if( !isVersionControlled( ctxUrl ) ){
+                return KDevelop::IPlugin::requestContextMenuActions( context );
+            }
+        }
+
+        else if( baseItem->projectItem() ){
+
+        }
+
+        else {
+            return KDevelop::IPlugin::requestContextMenuActions( context );
+        }
+
+        if( ctxUrl.isValid() ){
+            d->m_ctxUrl = ctxUrl;
+            QList<QAction*> actions;
+            QAction *action;
+
+            action = new QAction(i18n("Log View..."), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxLogView()) );
+            actions << action;
+
+            action = new QAction(i18n("Blame/Annotate)"), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
+            actions << action;
+
+            action = new QAction(i18n("Update"), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+            actions << action;
+
+            action = new QAction(i18n("Commit..."), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+            actions << action;
+
+            action = new QAction(i18n("Add to SVN"), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+            actions << action;
+
+            action = new QAction(i18n("Remove from SVN"), this);
+            connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+            actions << action;
+
+            return qMakePair( QString("Subversion"), actions );
+        }
+
+    }
+
+    return KDevelop::IPlugin::requestContextMenuActions( context );
+}
+
 ////////////////////////////////////////////
 void KDevSubversionPart::checkout()
 {
@@ -365,7 +624,7 @@ void KDevSubversionPart::remove()
     if( activeUrl.isValid() ){
         KUrl::List list;
         list << activeUrl;
-        remove( list );
+        removeInternal( list );
     } else {
         KMessageBox::error(NULL, i18n("No active docuement to remove") );
     }
@@ -410,28 +669,28 @@ void KDevSubversionPart::blame()
         KMessageBox::error(NULL, "No active docuement to view blame" );
     }
 }
-void KDevSubversionPart::statusSync()
-{
-    KUrl activeUrl = urlFocusedDocument();
-    if( activeUrl.isValid() ){
-        const QList<KDevelop::VcsFileInfo> &vcsList = statusSync( activeUrl, KDevelop::IVersionControl::Recursive );
-        for( QList<KDevelop::VcsFileInfo>::const_iterator it = vcsList.constBegin(); it != vcsList.constEnd(); ++it ){
-            // TODO print to GUI
-            kDebug() << (*it).toString() << endl;
-        }
-    } else{
-        KMessageBox::error(NULL, "No active docuement to view status" );
-    }
-}
-void KDevSubversionPart::statusASync()
-{
-    KUrl activeUrl = urlFocusedDocument();
-    if( activeUrl.isValid() ){
-        statusASync( activeUrl, KDevelop::IVersionControl::Recursive, d->asyncStatusList );
-    } else{
-        KMessageBox::error(NULL, "No active docuement to view status" );
-    }
-}
+// void KDevSubversionPart::statusSync()
+// {
+//     KUrl activeUrl = urlFocusedDocument();
+//     if( activeUrl.isValid() ){
+//         const QList<KDevelop::VcsFileInfo> &vcsList = statusSync( activeUrl, KDevelop::IVersionControl::Recursive );
+//         for( QList<KDevelop::VcsFileInfo>::const_iterator it = vcsList.constBegin(); it != vcsList.constEnd(); ++it ){
+//             // TODO print to GUI
+//             kDebug() << (*it).toString() << endl;
+//         }
+//     } else{
+//         KMessageBox::error(NULL, "No active docuement to view status" );
+//     }
+// }
+// void KDevSubversionPart::statusASync()
+// {
+//     KUrl activeUrl = urlFocusedDocument();
+//     if( activeUrl.isValid() ){
+//         statusASync( activeUrl, KDevelop::IVersionControl::Recursive, d->asyncStatusList );
+//     } else{
+//         KMessageBox::error(NULL, "No active docuement to view status" );
+//     }
+// }
 void KDevSubversionPart::svnInfo()
 {
     KUrl activeUrl = urlFocusedDocument();
@@ -486,62 +745,62 @@ void KDevSubversionPart::ctxRemove()
 {
     KUrl::List list;
     list << d->m_ctxUrl;
-    remove( list );
+    removeInternal( list );
 }
 
 //////////////////////////////////////////////
 void KDevSubversionPart::slotJobFinished( SvnKJobBase *job )
 {
     switch( job->type() ){
-        case SVN_STATUS:{
-            if( job->error() ){
-                KMessageBox::error(NULL, job->smartError() );
-                break;
-            }
-            SvnStatusJob *statusJob = dynamic_cast<SvnStatusJob*>( job->svnThread() );
-            if( !statusJob ) return;
-
-            QList<KDevelop::VcsFileInfo> infos = d->m_fileInfoMap.value( job );
-
-            for( QList<SvnStatusHolder>::iterator it = statusJob->m_holderList.begin() ;
-                 it != statusJob->m_holderList.end() ;
-                 ++it ) {
-                SvnStatusHolder hold = (*it); // debug
-                kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
-                kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
-                // get revision.
-                QString rev = QString::number( (*it).baseRevision );
-
-                KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
-                // get status -- working copy first
-                if( (*it).textStatus == svn_wc_status_normal
-                    && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
-                    // text status always exist if under VC. but in most cases, property value may not exist
-                    state = KDevelop::VcsFileInfo::Uptodate;
-                else if( (*it).textStatus == svn_wc_status_added || (*it).propStatus == svn_wc_status_added )
-                    state = KDevelop::VcsFileInfo::Added;
-                else if( (*it).textStatus == svn_wc_status_modified || (*it).propStatus == svn_wc_status_modified )
-                    state = KDevelop::VcsFileInfo::Modified;
-                else if( (*it).textStatus == svn_wc_status_conflicted || (*it).propStatus == svn_wc_status_conflicted )
-                    state = KDevelop::VcsFileInfo::Conflict;
-                else if( (*it).textStatus == svn_wc_status_deleted || (*it).propStatus == svn_wc_status_deleted )
-                    state = KDevelop::VcsFileInfo::Deleted;
-                else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
-                    state = KDevelop::VcsFileInfo::Replaced;
-                // get status -- override the previous result if remote repository is modified
-                if( (*it).reposTextStat == svn_wc_status_added || (*it).reposTextStat == svn_wc_status_modified
-                    || (*it).reposPropStat == svn_wc_status_modified )
-                    state = KDevelop::VcsFileInfo::NeedsPatch;
-
-                // TODO retrive repository revision. Set workingcopy and reposit revision same for a moment
-                KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
-                infos.append( vcsInfo );
-            }
-
-            emit statusReady( infos );
-            d->m_fileInfoMap.remove( job );
-            break;
-        } //end of case SVN_STATUS
+//         case SVN_STATUS:{
+//             if( job->error() ){
+//                 KMessageBox::error(NULL, job->smartError() );
+//                 break;
+//             }
+//             SvnStatusJob *statusJob = dynamic_cast<SvnStatusJob*>( job->svnThread() );
+//             if( !statusJob ) return;
+//
+//             QList<KDevelop::VcsFileInfo> infos = d->m_fileInfoMap.value( job );
+//
+//             for( QList<SvnStatusHolder>::iterator it = statusJob->m_holderList.begin() ;
+//                  it != statusJob->m_holderList.end() ;
+//                  ++it ) {
+//                 SvnStatusHolder hold = (*it); // debug
+//                 kDebug() << hold.wcPath << " textStat " << hold.textStatus << " propStat " << hold.propStatus << endl;
+//                 kDebug() << hold.wcPath << " reposTextStat " << hold.reposTextStat<< " reposPropStat " << hold.reposPropStat<< endl;
+//                 // get revision.
+//                 QString rev = QString::number( (*it).baseRevision );
+//
+//                 KDevelop::VcsFileInfo::VcsFileState state = KDevelop::VcsFileInfo::Unknown;
+//                 // get status -- working copy first
+//                 if( (*it).textStatus == svn_wc_status_normal
+//                     && ((*it).propStatus == svn_wc_status_normal||(*it).propStatus == svn_wc_status_none ) )
+//                     // text status always exist if under VC. but in most cases, property value may not exist
+//                     state = KDevelop::VcsFileInfo::Uptodate;
+//                 else if( (*it).textStatus == svn_wc_status_added || (*it).propStatus == svn_wc_status_added )
+//                     state = KDevelop::VcsFileInfo::Added;
+//                 else if( (*it).textStatus == svn_wc_status_modified || (*it).propStatus == svn_wc_status_modified )
+//                     state = KDevelop::VcsFileInfo::Modified;
+//                 else if( (*it).textStatus == svn_wc_status_conflicted || (*it).propStatus == svn_wc_status_conflicted )
+//                     state = KDevelop::VcsFileInfo::Conflict;
+//                 else if( (*it).textStatus == svn_wc_status_deleted || (*it).propStatus == svn_wc_status_deleted )
+//                     state = KDevelop::VcsFileInfo::Deleted;
+//                 else if( (*it).textStatus == svn_wc_status_replaced || (*it).propStatus == svn_wc_status_replaced )
+//                     state = KDevelop::VcsFileInfo::Replaced;
+//                 // get status -- override the previous result if remote repository is modified
+//                 if( (*it).reposTextStat == svn_wc_status_added || (*it).reposTextStat == svn_wc_status_modified
+//                     || (*it).reposPropStat == svn_wc_status_modified )
+//                     state = KDevelop::VcsFileInfo::NeedsPatch;
+//
+//                 // TODO retrive repository revision. Set workingcopy and reposit revision same for a moment
+//                 KDevelop::VcsFileInfo vcsInfo( (*it).wcPath, rev, rev, state );
+//                 infos.append( vcsInfo );
+//             }
+//
+//             emit statusReady( infos );
+//             d->m_fileInfoMap.remove( job );
+//             break;
+//         } //end of case SVN_STATUS
         case SVN_INFO: {
             if( job->error() ){
                 KMessageBox::error(NULL, job->smartError() );

@@ -12,13 +12,71 @@
 #include "svnkjobbase.h"
 #include "subversion_core.h"
 #include "subversionthreads.h"
+#include "svn_models.h"
+#include "vcshelpers.h"
 #include <klocale.h>
+#include <QVariant>
+#include <QMap>
 
 class SvnKJobBase::Private
 {
 public:
     SubversionThread *m_th;
     int m_type;
+    QVariant m_variant;
+    bool m_validResult;
+
+    QVariant result_status()
+    {
+        QMap< QString, QVariant > ret;
+        SvnStatusJob *thread = dynamic_cast<SvnStatusJob*>(m_th);
+        QList<SvnStatusHolder> holderList = thread->m_holderList;
+
+        foreach( SvnStatusHolder _holder, holderList ){
+
+            int stat = KDevelop::Unknown;
+            if( _holder.textStatus == svn_wc_status_normal||
+                _holder.propStatus == svn_wc_status_normal){
+
+                stat = KDevelop::ItemUpToDate;
+            }
+            else if( _holder.textStatus == svn_wc_status_added ){
+                stat = KDevelop::ItemAdded;
+            }
+            else if( _holder.textStatus == svn_wc_status_modified ||
+                     _holder.propStatus == svn_wc_status_modified ){
+                stat = KDevelop::ItemModified;
+            }
+            else if( _holder.textStatus == svn_wc_status_deleted ){
+                stat = KDevelop::ItemDeleted;
+            }
+            else if( _holder.textStatus == svn_wc_status_conflicted ||
+                     _holder.propStatus == svn_wc_status_conflicted ){
+                stat = KDevelop::ItemHasConflicts;
+            }
+
+            QVariant statVar( stat );
+            ret.insert( QString(), statVar );
+        }
+
+        QVariant variant( ret );
+        return variant;
+    }
+
+    QVariant result_log()
+    {
+        return QVariant();
+    }
+
+    QVariant result_annotate()
+    {
+        return QVariant();
+    }
+
+    QVariant result_diff()
+    {
+        return QVariant();
+    }
 };
 
 SvnKJobBase::SvnKJobBase( int type, QObject *parent )
@@ -26,6 +84,7 @@ SvnKJobBase::SvnKJobBase( int type, QObject *parent )
 {
     d->m_th = 0;
     d->m_type = type;
+    d->m_validResult = false;
 
     // The forceful termination of thread causes deadlock in some cases.
     // Don't set Killable for a moment
@@ -44,6 +103,29 @@ SvnKJobBase::~SvnKJobBase()
     kDebug() << " SvnKJobBase::Destructor: end cleanup " << endl;
 }
 
+void SvnKJobBase::setResult( const QVariant &result )
+{
+    d->m_variant = result;
+    d->m_validResult = true;
+}
+
+QVariant SvnKJobBase::fetchResults()
+{
+//     return d->m_variant;
+    switch( type() ){
+        case KDevelop::VcsJob::Status:
+            return d->result_status();
+        case KDevelop::VcsJob::Log:
+            return d->result_log();
+        case KDevelop::VcsJob::Diff:
+            return d->result_diff();
+        case KDevelop::VcsJob::Annotate:
+            return d->result_annotate();
+        default:
+            return QVariant();
+    }
+}
+
 void SvnKJobBase::setSvnThread( SubversionThread *th )
 {
     d->m_th = th;
@@ -55,9 +137,9 @@ SubversionThread* SvnKJobBase::svnThread()
     return d->m_th;
 }
 
-int SvnKJobBase::type()
+KDevelop::VcsJob::Type SvnKJobBase::type()
 {
-    return d->m_type;
+    return (KDevelop::VcsJob::Type)(d->m_type);
 }
 
 QString SvnKJobBase::smartError()
@@ -69,10 +151,31 @@ QString SvnKJobBase::smartError()
     return msg;
 }
 
+QString SvnKJobBase::errorMessage()
+{
+    return KJob::errorText();
+}
+
 void SvnKJobBase::start()
 {
+    if( d->m_validResult ){
+        threadFinished();
+        return;
+    }
+
     if( !d->m_th ) return;
     d->m_th->start();
+}
+
+KDevelop::VcsJob::FinishStatus SvnKJobBase::exec()
+{
+    bool ret = KJob::exec();
+    if( ret ){
+        return KDevelop::VcsJob::Succeeded;
+    }
+    else{
+        return KDevelop::VcsJob::Failed;
+    }
 }
 
 // SvnUiDelegate* SvnKJobBase::ui()
@@ -89,6 +192,19 @@ void SvnKJobBase::start()
 
 void SvnKJobBase::threadFinished()
 {
+    KDevelop::VcsJob::FinishStatus finishStatus;
+    if( KJob::error() ){
+        finishStatus = KDevelop::VcsJob::Failed;
+    }
+    else{
+        finishStatus = KDevelop::VcsJob::Succeeded;
+    }
+
+    // for VcsJob ifaces
+    emit resultsReady( this );
+    emit finished( this, finishStatus );
+
+    // for SubversionPart internals
     emitResult();
 }
 

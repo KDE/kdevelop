@@ -60,6 +60,15 @@ public:
 
     int type();
     SvnKJobBase* kjob();
+    /// Set a result QVariant to KJob. QVariant object is not stored in thread.
+    void setResult( const QVariant& result );
+
+    /// Used by commit callback routine to test whether this job has commit
+    /// message or not. Note that not only commit operations, but also other
+    /// operations such as import(), copy() can have commit message
+    /// return QString() if no commit message.
+    QString commitMessage();
+    void setCommitMessage( const QString &msg );
 
     static svn_error_t* displayLoginDialog(
             svn_auth_cred_simple_t **cred, void *baton, const char *realm,
@@ -190,7 +199,7 @@ private:
 class SvnCommitJob : public SubversionThread
 {
 public:
-    SvnCommitJob( const KUrl::List &urls, bool recurse, bool keepLocks,
+    SvnCommitJob( const KUrl::List &urls, const QString &msg, bool recurse, bool keepLocks,
                   int actionType, SvnKJobBase *parent );
     virtual ~SvnCommitJob();
 

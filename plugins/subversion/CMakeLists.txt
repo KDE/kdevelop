@@ -33,6 +33,7 @@ set(kdevsubversion_PART_UI
     svnssltrustdialog.ui
     svncommitloginputdlg.ui
     uicommit_option_dlg.ui
+    uilogview_option_dlg.ui
     svnimportdialog.ui
 )
 

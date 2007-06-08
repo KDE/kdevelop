@@ -8,7 +8,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
+#include "ui_uilogview_option_dlg.h"
 #include "svn_logviewwidgets.h"
 #include "svn_blamewidgets.h"
 #include "subversion_core.h"
@@ -19,18 +20,25 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
+#include <knuminput.h>
+#include <kurl.h>
 #include <QList>
 #include <QVariant>
 #include <QModelIndex>
 #include <QContextMenuEvent>
 #include <QCursor>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDateTimeEdit>
+#include <QSpinBox>
 
 SvnLogviewWidget::SvnLogviewWidget( KUrl &url, KDevSubversionPart *part, QWidget *parent )
     :QWidget(parent), Ui::SvnLogviewWidget()
     ,m_url(url), m_part(part)
 {
     Ui::SvnLogviewWidget::setupUi(this);
-    
+
     m_item = new LogItem();
     m_logviewModel= new LogviewTreeModel(m_item);
     treeView->setModel( m_logviewModel );
@@ -68,10 +76,10 @@ void SvnLogviewWidget::customContextMenuEvent( const QPoint &point )
 
     QAction *action = menu.addAction(i18n("Blame this Revision"));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(blameRev()) );
-    
+
     action = menu.addAction(i18n("Diff to previous revision"));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(diffToPrev()) );
-    
+
     menu.exec( treeView->viewport()->mapToGlobal(point) );
 }
 
@@ -83,9 +91,9 @@ void SvnLogviewWidget::contextMenuEvent( QContextMenuEvent * event )
 //         kDebug() << " contextMenu is not in TreeView " << endl;
 //         return;
 //     }
-// 
+//
 //     KMenu menu( this );
-// 
+//
 //     QAction *action = menu.addAction(i18n("Blame this Revision"));
 //     connect( action, SIGNAL(triggered(bool)), this, SLOT(blameRev()) );
 //     menu.exec(event->globalPos());
@@ -157,7 +165,7 @@ void SvnLogviewWidget::diffToPrev()
 void SvnLogviewWidget::treeViewClicked( const QModelIndex &index )
 {
     m_logviewDetailedModel->setNewRevision( index );
-    
+
 //     QMenu menu( this );
 //     QAction *action = menu.addAction( i18n( "Blame this revision" ) );
 //     connect( action, SIGNAL(triggered(bool)), this, SLOT(blameRev()) );
@@ -166,8 +174,115 @@ void SvnLogviewWidget::treeViewClicked( const QModelIndex &index )
 void SvnLogviewWidget::listViewClicked( const QModelIndex &index )
 {
 }
-// void SvnLogviewWidget::printLog(SubversionJob *j)
-// {
-// 
-// }
+
+/////////////////////////////////////////////////////////////////////////
+
+class SvnLogviewOptionDialogPrivate
+{
+public:
+    Ui::SvnLogViewOptionDlg ui;
+    KUrl m_url;
+};
+
+SvnLogviewOptionDialog::SvnLogviewOptionDialog( const KUrl &url, QWidget *parent )
+    : KDialog( parent )
+    , d( new SvnLogviewOptionDialogPrivate )
+{
+    d->m_url = url;
+    QWidget *widget = new QWidget( this );
+    d->ui.setupUi( widget );
+    setMainWidget( widget );
+    setCaption( QString("LogView for %1").arg(d->m_url.toLocalFile()) );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+
+    d->ui.startDateEdit->setDateTime( QDateTime::currentDateTime() );
+    d->ui.endDateEdit->setDateTime( QDateTime::currentDateTime() );
+}
+
+SvnLogviewOptionDialog::~SvnLogviewOptionDialog()
+{
+    delete d;
+}
+
+bool SvnLogviewOptionDialog::repositLog()
+{
+    return d->ui.reposit->isChecked();
+}
+
+SvnRevision SvnLogviewOptionDialog::startRev()
+{
+    SvnUtils::SvnRevision rev;
+    if( d->ui.startNum->isChecked() ){
+        rev.setNumber( d->ui.startNumEdit->value() );
+        return rev;
+    }
+    else if( d->ui.startKind->isChecked() ){
+        // note. If you add more keywords in .ui, you should update below.
+        if( d->ui.startKindEdit->currentText() == "HEAD" ){
+            rev.setKey( SvnUtils::SvnRevision::HEAD );
+        }
+        else if( d->ui.startKindEdit->currentText() == "BASE" ){
+            rev.setKey( SvnUtils::SvnRevision::BASE );
+        }
+        else if( d->ui.startKindEdit->currentText() == "PREV" ){
+            rev.setKey( SvnUtils::SvnRevision::PREV );
+        }
+        else if( d->ui.startKindEdit->currentText() == "COMMITTED" ){
+            rev.setKey( SvnUtils::SvnRevision::COMMITTED );
+        }
+        return rev;
+    }
+    else if( d->ui.startDate->isChecked() ){
+        rev.setDate( d->ui.startDateEdit->dateTime() );
+        return rev;
+    }
+    else{
+        // should not reach here
+        return rev;
+    }
+}
+
+SvnRevision SvnLogviewOptionDialog::endRev()
+{
+    SvnUtils::SvnRevision rev;
+    if( d->ui.endNum->isChecked() ){
+        rev.setNumber( d->ui.endNumEdit->value() );
+        return rev;
+    }
+    else if( d->ui.endKind->isChecked() ){
+        // note. If you add more keywords in .ui, you should update below.
+        if( d->ui.endKindEdit->currentText() == "HEAD" ){
+            rev.setKey( SvnUtils::SvnRevision::HEAD );
+        }
+        else if( d->ui.endKindEdit->currentText() == "BASE" ){
+            rev.setKey( SvnUtils::SvnRevision::BASE );
+        }
+        else if( d->ui.endKindEdit->currentText() == "PREV" ){
+            rev.setKey( SvnUtils::SvnRevision::PREV );
+        }
+        else if( d->ui.endKindEdit->currentText() == "COMMITTED" ){
+            rev.setKey( SvnUtils::SvnRevision::COMMITTED );
+        }
+        return rev;
+    }
+    else if( d->ui.endDate->isChecked() ){
+        rev.setDate( d->ui.endDateEdit->dateTime() );
+        return rev;
+    }
+    else{
+        // should not reach here
+        return rev;
+    }
+}
+
+int SvnLogviewOptionDialog::limit()
+{
+    return d->ui.limitNumber->value();
+}
+
+bool SvnLogviewOptionDialog::strictNode()
+{
+    return d->ui.checkBox1->isChecked();
+}
+
 #include "svn_logviewwidgets.moc"

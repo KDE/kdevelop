@@ -33,6 +33,7 @@ public:
         m_certInfo = 0L;
         m_loginInfo = 0L;
     }
+    QString m_commitMsg;
     SvnServerCertInfo *m_certInfo;
     SvnLoginInfo *m_loginInfo;
     int m_type;
@@ -134,6 +135,21 @@ int SubversionThread::type()
 SvnKJobBase* SubversionThread::kjob()
 {
     return d->m_kjob;
+}
+
+void SubversionThread::setResult( const QVariant& result )
+{
+    kjob()->setResult( result );
+}
+
+QString SubversionThread::commitMessage()
+{
+    return d->m_commitMsg;
+}
+
+void SubversionThread::setCommitMessage( const QString &msg )
+{
+    d->m_commitMsg = msg;
 }
 
 svn_error_t*
@@ -318,7 +334,7 @@ void SubversionThread::notifyCallback( void *baton, const svn_wc_notify_t *notif
     QCoreApplication::postEvent( thread->kjob()->parent(), event );
 }
 
-// static callback function called by svn_client_commit2
+// static callback function called by svn_client_commit2 or other methods which changes repository
 svn_error_t*
 SubversionThread::commitLogUserInput( const char **log_msg,
                                     const char **tmp_file,
@@ -326,7 +342,13 @@ SubversionThread::commitLogUserInput( const char **log_msg,
                                     void *baton,
                                     apr_pool_t *pool )
 {
+    *tmp_file = NULL;
     SubversionThread *thread = (SubversionThread*)baton;
+    if( !thread->commitMessage().isEmpty() ){
+        char *msg = apr_pstrdup( pool, thread->commitMessage().toUtf8() );
+        *log_msg = msg;
+        return SVN_NO_ERROR;
+    }
 
     SvnCommitLogInfo *info = new SvnCommitLogInfo();
     info->m_commit_items = commit_items;
@@ -341,7 +363,6 @@ SubversionThread::commitLogUserInput( const char **log_msg,
     bool isAccepted = info->m_accept;
     delete info; info = NULL;
 
-    *tmp_file = NULL;
     if( isAccepted ){
         svn_string_t *string = svn_string_create( fetchedMsg.toUtf8(), pool );
         *log_msg = string->data;
@@ -667,13 +688,15 @@ svn_error_t* SvnLogviewJob::receiveLogMessage(void *baton, apr_hash_t *changed_p
 
 /////////////////////////////////////////////////////////////////////
 
-SvnCommitJob::SvnCommitJob( const KUrl::List &urls,
+SvnCommitJob::SvnCommitJob( const KUrl::List &urls, const QString &msg,
                             bool recurse, bool keepLocks,
                             int actionType, SvnKJobBase *parent )
     : SubversionThread( actionType, parent )
     , m_urls(urls), m_recurse(recurse), m_keepLocks(keepLocks)
 {
+    setCommitMessage( msg );
 }
+
 SvnCommitJob::~SvnCommitJob()
 {}
 

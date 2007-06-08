@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "subversion_core.h"
 
 extern "C" {
@@ -116,25 +116,47 @@ void SubversionCore::spawnAddThread( const KUrl::List &wcPaths, bool recurse, bo
     if( wcPaths.count() < 1 ) return;
     SvnKJobBase *job = new SvnKJobBase(SVN_ADD, this);
     SvnAddJob *thread = new SvnAddJob( wcPaths, recurse, force, noIgnore, SVN_ADD, job );
-    
+
     SVNCORE_SPAWN_COMMON( job, thread )
 }
+SvnKJobBase* SubversionCore::createAddJob( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_ADD, this );
+    SvnAddJob *thread = new SvnAddJob( wcPaths, recurse, force, noIgnore, SVN_ADD, job );
+    job->setSvnThread( thread );
+    return job;
+}
+
 void SubversionCore::spawnRemoveThread( const KUrl::List &urls, bool force )
 {
     if( urls.count() < 1 ) return;
     SvnKJobBase *job = new SvnKJobBase( SVN_DELETE, this );
     SvnDeleteJob *thread = new SvnDeleteJob( urls, force, SVN_DELETE, job );
-    
+
     SVNCORE_SPAWN_COMMON( job, thread )
 }
+SvnKJobBase* SubversionCore::createRemoveJob( const KUrl::List &urls, bool force )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_DELETE, this );
+    SvnDeleteJob *thread = new SvnDeleteJob( urls, force, SVN_DELETE, job );
+    job->setSvnThread( thread );
+}
+
 void SubversionCore::spawnCommitThread( const KUrl::List &urls, bool recurse, bool keepLocks )
 {
     if( urls.count() < 1 ) return;
     SvnKJobBase *job = new SvnKJobBase( SVN_COMMIT, this );
-    SvnCommitJob *thread = new SvnCommitJob( urls, recurse, keepLocks, SVN_COMMIT, job );
-    
+    SvnCommitJob *thread = new SvnCommitJob( urls, QString(), recurse, keepLocks, SVN_COMMIT, job );
+
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
+}
+SvnKJobBase* SubversionCore::createCommitJob( const KUrl::List &urls, const QString &msg,
+                                              bool recurse, bool keepLocks )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_COMMIT, this );
+    SvnCommitJob *thread = new SvnCommitJob( urls, msg, recurse, keepLocks, SVN_COMMIT, job );
+    job->setSvnThread( thread );
 }
 void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
                                         const SvnRevision &rev,
@@ -148,6 +170,17 @@ void SubversionCore::spawnUpdateThread( const KUrl::List &wcPaths,
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
 }
+SvnKJobBase* SubversionCore::createUpdateJob( const KUrl::List &wcPaths,
+                                  const SvnRevision &rev,
+                                  bool recurse, bool ignoreExternals )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_UPDATE, this );
+    SvnUpdateJob *thread = new SvnUpdateJob( wcPaths, rev,
+                                             recurse, ignoreExternals,
+                                             SVN_UPDATE, job );
+    job->setSvnThread( thread );
+}
+
 void SubversionCore::spawnLogviewThread(const KUrl::List& list,
                                         const SvnRevision &rev1, const SvnRevision &rev2,
                                         int limit, bool repositLog,
@@ -155,7 +188,7 @@ void SubversionCore::spawnLogviewThread(const KUrl::List& list,
 {
     // KUrl::List is handed. But only one Url will be used effectively.
     if( list.count() < 1 ) return;
-    
+
     SvnKJobBase *job= new SvnKJobBase( SVN_LOGVIEW, this );
     SvnLogviewJob* thread = new SvnLogviewJob(
                             rev1, rev2,
@@ -166,12 +199,27 @@ void SubversionCore::spawnLogviewThread(const KUrl::List& list,
     job->setSvnThread( thread );
 
     // note: logview is testbed for all radical framework changes.
-    // So please don't connect to slotResult as other methods. 
+    // So please don't connect to slotResult as other methods.
     connect( job, SIGNAL(result(KJob*)), this, SLOT(slotLogResult(KJob*)) );
 
 	job->start();
-    
+
     initProgressDlg( job );
+}
+
+SvnKJobBase* SubversionCore::createLogviewJob( const KUrl::List& list,
+                                   const SvnRevision &rev1, const SvnRevision &rev2, int limit,
+                                   bool repositLog, bool discorverChangedPath, bool strictNodeHistory )
+{
+    SvnKJobBase *job= new SvnKJobBase( SVN_LOGVIEW, this );
+    SvnLogviewJob* thread = new SvnLogviewJob(
+                            rev1, rev2,
+                            limit,
+                            repositLog, discorverChangedPath, strictNodeHistory,
+                            list,
+                            SVN_LOGVIEW, job );
+    job->setSvnThread( thread );
+    return job;
 }
 
 void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
@@ -179,25 +227,35 @@ void SubversionCore::spawnBlameThread( const KUrl &url, bool repositBlame,
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_BLAME, this );
     SvnBlameJob *thread = new SvnBlameJob( url, repositBlame,
-                               rev1, rev2, 
+                               rev1, rev2,
                                SVN_BLAME, job );
-    
+
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
 }
+SvnKJobBase* SubversionCore::createBlamdJob( const KUrl &url, bool repositBlame,
+                                 const SvnRevision &rev1, const SvnRevision &rev2 )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_BLAME, this );
+    SvnBlameJob *thread = new SvnBlameJob( url, repositBlame,
+                                           rev1, rev2,
+                                           SVN_BLAME, job );
+    return job;
+}
+
 const SvnKJobBase* SubversionCore::spawnStatusThread( const KUrl &wcPath, const SvnRevision &rev,
                 bool recurse, bool getAll, bool update, bool noIgnore, bool ignoreExternals )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_STATUS, this );
     SvnStatusJob *thread = new SvnStatusJob( wcPath, rev,
                     recurse, getAll, update, noIgnore, ignoreExternals, SVN_STATUS, job );
-    
+
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
     return job;
 }
 
-SvnKJobBase* SubversionCore::createStatusJob( const KUrl &wcPath, const SvnRevision &rev, 
+SvnKJobBase* SubversionCore::createStatusJob( const KUrl &wcPath, const SvnRevision &rev,
                                         bool recurse, bool getAll, bool update,
                                         bool noIgnore, bool ignoreExternals )
 {
@@ -214,7 +272,7 @@ void SubversionCore::spawnInfoThread( const KUrl &pathOrUrl,
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_INFO, this );
     SvnInfoJob *thread = new SvnInfoJob( pathOrUrl, peg, revision, recurse, SVN_INFO, job );
-    
+
     SVNCORE_SPAWN_COMMON( job, thread )
     initProgressDlg( job );
 }
@@ -242,13 +300,35 @@ void SubversionCore::spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOr
     initProgressDlg( job );
 }
 
+SvnKJobBase *SubversionCore::createDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+                                      const SvnRevision &rev1, const SvnRevision &rev2,
+                                      bool recurse, bool ignoreAncestry, bool noDiffDeleted,
+                                      bool ignoreContentType )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_DIFF, this );
+    SvnDiffJob *thread = new SvnDiffJob( pathOrUrl1, pathOrUrl2, rev1, rev2,
+                                      recurse, ignoreAncestry, noDiffDeleted, ignoreContentType,
+                                      SVN_DIFF, job );
+    job->setSvnThread( thread );
+    return job;
+}
+
 void SubversionCore::spawnImportThread( const KUrl &path, const KUrl &url,
                                         bool nonRecurse, bool noIgnore )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_IMPORT, this );
     SvnImportJob *thread = new SvnImportJob( path, url, nonRecurse, noIgnore, SVN_IMPORT, job );
-    
+
     SVNCORE_SPAWN_COMMON( job, thread )
+}
+
+SvnKJobBase* SubversionCore::createImportJob( const KUrl &path, const KUrl &url,
+                                      bool nonRecurse, bool noIgnore )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_IMPORT, this );
+    SvnImportJob *thread = new SvnImportJob( path, url, nonRecurse, noIgnore, SVN_IMPORT, job );
+    job->setSvnThread( thread );
+    return job;
 }
 
 void SubversionCore::spawnRevertThread( const KUrl &path, bool recurse )
@@ -259,14 +339,32 @@ void SubversionCore::spawnRevertThread( const KUrl &path, bool recurse )
     SVNCORE_SPAWN_COMMON( job, thread )
 }
 
+SvnKJobBase* SubversionCore::createRevertJob( const KUrl::List &paths, bool recurse )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_REVERT, this );
+    SvnRevertJob *thread = new SvnRevertJob( paths, recurse, SVN_REVERT, job );
+    job->setSvnThread( thread );
+    return job;
+}
+
 void SubversionCore::spawnCopyThread( const KUrl &srcPathOrUrl,
                                       const SvnRevision &srcRev,
                                       const KUrl &dstPathOrUrl )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_COPY, this );
     SvnCopyJob *thread = new SvnCopyJob( srcPathOrUrl, srcRev, dstPathOrUrl, SVN_COPY, job );
-    
+
     SVNCORE_SPAWN_COMMON( job, thread )
+}
+
+SvnKJobBase* SubversionCore::createCopyJob( const KUrl &srcPathOrUrl,
+                                    const SvnRevision &srcRev,
+                                    const KUrl &dstPathOrUrl )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_COPY, this );
+    SvnCopyJob *thread = new SvnCopyJob( srcPathOrUrl, srcRev, dstPathOrUrl, SVN_COPY, job );
+    job->setSvnThread( thread );
+    return job;
 }
 
 void SubversionCore::spawnMoveThread( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force )
@@ -277,13 +375,21 @@ void SubversionCore::spawnMoveThread( const KUrl &srcPathOrUrl, const KUrl &dstP
     SVNCORE_SPAWN_COMMON( job, thread )
 }
 
+SvnKJobBase* SubversionCore::createMoveJob( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_MOVE, this );
+    SvnMoveJob *thread = new SvnMoveJob( srcPathOrUrl, dstPathUrl, force, SVN_MOVE, job );
+    job->setSvnThread( thread );
+    return job;
+}
+
 ///////////////////////     internals       ///////////////////////////////////////////////
 
 void SubversionCore::slotLogResult( KJob *aJob )
 {
     SvnKJobBase *job = dynamic_cast<SvnKJobBase*>( aJob );
     if( !job ) return;
-    
+
     emit logFetched( job );
 }
 
@@ -291,7 +397,7 @@ void SubversionCore::slotResult( KJob* aJob )
 {
     SvnKJobBase *job = dynamic_cast<SvnKJobBase*> (aJob );
     if( !job ) return;
-    
+
     if( job->type() == SVN_BLAME ){
         emit blameFetched( job );
     } else if( job->type() == SVN_DIFF ){
@@ -314,7 +420,7 @@ void SubversionCore::customEvent( QEvent * event )
         case SVNLOGIN_SERVERTRUSTPROMPT : {
             SvnInterThreadPromptEvent *ev = (SvnInterThreadPromptEvent*)event;
             SvnServerCertInfo *certInfo= (SvnServerCertInfo *) ev->m_data;
-            
+
             SvnSSLTrustDialog dialog;
             dialog.setFailedReasons( certInfo->fails );
             dialog.setCertInfos( certInfo->cert_info );
@@ -347,7 +453,7 @@ void SubversionCore::customEvent( QEvent * event )
             SvnCommitLogInputDlg dlg;
             dlg.setCommitItems( (apr_array_header_t*)info->m_commit_items );
             int ret = dlg.exec();
-            
+
             if( ret == QDialog::Accepted ){
                 info->setData( true, dlg.message() );
             } else {
@@ -366,18 +472,18 @@ void SubversionCore::customEvent( QEvent * event )
 void SubversionCore::initProgressDlg( SvnKJobBase *job )
 {
 	m_uiServer->registerJob( job );
-	
+
 //     SvnProgressDialog *dlg = new SvnProgressDialog( (QWidget*)NULL, caption );
-// 
+//
 //     dlg->setSource( src );
 //     dlg->setDestination( dest );
-// 
+//
 //     QProgressBar *bar = dlg->progressBar();
-// 
+//
 //     dlg->setAttribute( Qt::WA_DeleteOnClose );
 // //     connect( job, SIGNAL(finished()), dlg, SLOT(close()) );
 // 	connect( dlg, SIGNAL(finished()), job, SLOT(requestKill()) );
-// 
+//
 //     // when QThread terminates, it emits terminated() first and finished() second.
 //     // so I don't connect terminated() to any slot. Every work will be done in finished() signal
 //     // connect( logJob, SIGNAL(terminated()), dlg, SLOT(close()) );

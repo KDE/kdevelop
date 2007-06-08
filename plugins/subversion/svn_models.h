@@ -53,6 +53,8 @@ class SvnStatusHolder : public SvnGenericHolder {
 public:
     virtual QVariant variant(int col);
 
+    static QString statusToString( int status );
+
     QString wcPath;
     QString entityName;
     long int baseRevision;

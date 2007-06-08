@@ -45,16 +45,33 @@ public:
 
     void spawnCheckoutThread();
     void spawnAddThread( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore );
+    SvnKJobBase* createAddJob( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore );
+
     void spawnRemoveThread( const KUrl::List &urls, bool force );
+    SvnKJobBase* createRemoveJob( const KUrl::List &urls, bool force );
+
     void spawnCommitThread( const KUrl::List &urls, bool recurse, bool keepLocks );
+    SvnKJobBase* createCommitJob( const KUrl::List &urls, const QString &msg,
+                                  bool recurse, bool keepLocks );
+
     void spawnUpdateThread( const KUrl::List &wcPaths,
                             const SvnRevision &rev,
                             bool recurse, bool ignoreExternals );
+    SvnKJobBase* createUpdateJob( const KUrl::List &wcPaths,
+                                  const SvnRevision &rev,
+                                  bool recurse, bool ignoreExternals );
+
     void spawnLogviewThread(const KUrl::List& list,
                         const SvnRevision &rev1, const SvnRevision &rev2, int limit,
                         bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
+    SvnKJobBase* createLogviewJob( const KUrl::List& list,
+                                   const SvnRevision &rev1, const SvnRevision &rev2, int limit,
+                                   bool repositLog, bool discorverChangedPath, bool strictNodeHistory );
+
     void spawnBlameThread( const KUrl &url, bool repositBlame,
                     const SvnRevision &rev1, const SvnRevision &rev2 );
+    SvnKJobBase* createBlamdJob( const KUrl &url, bool repositBlame,
+                                 const SvnRevision &rev1, const SvnRevision &rev2 );
 
     /// Creates job. Starts it ASynchronously. Also returns the running job.
     const SvnKJobBase* spawnStatusThread( const KUrl &wcPath, const SvnRevision &rev,
@@ -71,18 +88,28 @@ public:
     SvnKJobBase* createInfoJob( const KUrl &pathOrUrl,
                                 const SvnRevision &peg, const SvnRevision &revision,
                                 bool recurse );
+
     void spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
                           const SvnRevision &rev1, const SvnRevision &rev2,
                           bool recurse, bool ignoreAncestry, bool noDiffDeleted,
                           bool ignoreContentType );
 
+    SvnKJobBase* createDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+                          const SvnRevision &rev1, const SvnRevision &rev2,
+                          bool recurse, bool ignoreAncestry, bool noDiffDeleted,
+                          bool ignoreContentType );
+
     void spawnImportThread( const KUrl &path, const KUrl &url, bool nonRecurse, bool noIgnore );
+    SvnKJobBase* createImportJob( const KUrl &path, const KUrl &url, bool nonRecurse, bool noIgnore );
 
     void spawnRevertThread( const KUrl &path, bool recurse );
+    SvnKJobBase* createRevertJob( const KUrl::List &paths, bool recurse );
 
     void spawnCopyThread( const KUrl &srcPathOrUrl, const SvnRevision &srcRev, const KUrl &dstPathOrUrl );
+    SvnKJobBase* createCopyJob( const KUrl &srcPathOrUrl, const SvnRevision &srcRev, const KUrl &dstPathOrUrl );
 
     void spawnMoveThread( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force );
+    SvnKJobBase* createMoveJob( const KUrl &srcPathOrUrl, const KUrl &dstPathUrl, bool force );
 
 
 protected Q_SLOTS:

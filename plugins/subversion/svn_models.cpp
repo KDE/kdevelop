@@ -8,8 +8,11 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #include "svn_models.h"
+extern "C"{
+#include <svn_wc.h>
+}
 
 #include <klocale.h>
 
@@ -62,6 +65,29 @@ QVariant SvnStatusHolder::variant(int col)
     // TODO refactor this function.
     return QVariant();
 }
+
+QString SvnStatusHolder::statusToString( int status )
+{
+    switch( status ){
+        case svn_wc_status_none: return QString("NoExist");
+        case svn_wc_status_unversioned: return QString("unversioned");
+        case svn_wc_status_normal: return QString("up-to-date");
+        case svn_wc_status_added: return QString("added");
+        case svn_wc_status_missing: return QString("missing");
+        case svn_wc_status_deleted: return QString("deleted");
+        case svn_wc_status_replaced: return QString("replaced");
+        case svn_wc_status_modified: return QString("modified");
+        case svn_wc_status_merged: return QString("merged");
+        case svn_wc_status_conflicted: return QString("conflict");
+        case svn_wc_status_ignored: return QString("ignored");
+        case svn_wc_status_obstructed: return QString("obstructed");
+        case svn_wc_status_external: return QString("external");
+        case svn_wc_status_incomplete: return QString("incomplete");
+        default:
+            return QString("unknown");
+    }
+}
+
 //////////////////////////////////
 bool TreeItemIface::intLessThan( SvnGenericHolder &h1, SvnGenericHolder &h2 )
 {
@@ -103,7 +129,7 @@ void ResultItem<T>::sort( int column, Qt::SortOrder order )
 // {
 //     return rootItem->rowCount();
 // }
-// int ParentlessTreeModel::columnCount( const QModelIndex &  parent )const 
+// int ParentlessTreeModel::columnCount( const QModelIndex &  parent )const
 // {
 //     return rootItem->columnCount();
 // }
@@ -131,7 +157,7 @@ QModelIndex ParentlessTreeModel::index( int row, int col, const QModelIndex &par
     if ( !parent.isValid() ) // toplevel
         return createIndex(row, col, 0);
     return QModelIndex();
-    
+
 }
 QModelIndex ParentlessTreeModel::parent( const QModelIndex &parent ) const
 {
@@ -188,20 +214,20 @@ QVariant BlameTreeModel::data( const QModelIndex & index, int role )const
     }
     //if revision is same with previous one, do not print revision number again
     if( index.column() == 1 || index.column() == 2 || index.column() == 3){
-        
+
         if( index.row() == 0 )
             return rootItem->data( 0, index.column() ).toString();
-        
+
         QString prevRev = rootItem->data( index.row() - 1, 1 ).toString();
         QString currentRev = rootItem->data( index.row(), 1 ).toString();
-        
+
         if( prevRev == currentRev ){
             return QVariant();
         }
         else{
             return rootItem->data( index.row(), index.column() ).toString();
         }
-        
+
     }
     // case of lineNo and Contents
     return rootItem->data( index.row(), index.column() );
@@ -253,14 +279,14 @@ QVariant LogviewTreeModel::data( const QModelIndex & index, int role )const
         return QVariant();
     if( !index.isValid() )
         return QVariant();
-    
+
     if( index.column() == 3 ){
         //case of whitespace-stripped comment
         return rootItem->data( index.row(), index.column() ).toString().simplified();
     } else if ( index.column() == 0 ){
         return QString("  ") + rootItem->data( index.row(), 0 ).toString();
     }
-    
+
     return rootItem->data( index.row(), index.column() );
 }
 QVariant LogviewTreeModel::headerData(int section, Qt::Orientation orientation, int role) const

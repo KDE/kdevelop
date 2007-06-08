@@ -13,6 +13,7 @@
 extern "C" {
 #include <svn_opt.h>
 }
+#include "vcshelpers.h"
 
 namespace SvnUtils
 {
@@ -20,6 +21,32 @@ namespace SvnUtils
 SvnRevision::SvnRevision()
 : type( kind ), revNum(-1), revKind( UNSPECIFIED )
 {}
+
+// TODO implement VcsRevisionS
+SvnRevision::SvnRevision( const KDevelop::VcsRevision &vcsRev )
+{
+//     KDevelop::VcsRevision::RevisionType vcsRevType = vcsRev.revisionType();
+//     QString revVal;
+//
+//     if( vcsRevType == KDevelop::VcsRevision::Special ){
+// //         type = kind;
+// //         revNum = -1;
+// //         KDevelop::VcsRevision::RevisionSpecialType special = revVal.toInt();
+// //         switch( special ){
+// //             // TODO HERE
+// //         }
+//     }
+//     else if( type == KDevelop::VcsRevision::GlobalNumber ){
+//     }
+//     else if( type == KDevelop::VcsRevision::Date ){
+//     }
+//     else{
+//         // invalid rev.
+//         type = kind;
+//         revNum = -1;
+//         revKind = UNSPECIFIED;
+//     }
+}
 
 void SvnRevision::setNumber( long int revnum )
 {

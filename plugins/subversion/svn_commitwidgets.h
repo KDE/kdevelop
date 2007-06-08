@@ -15,6 +15,8 @@
 #include "ui_svncommitloginputdlg.h"
 #include "ui_uicommit_option_dlg.h"
 
+#include <kdialog.h>
+
 extern "C" {
 #include <apr_tables.h>
 }
@@ -36,10 +38,10 @@ class SvnCommitLogInputDlg : public KDialog, public Ui::SvnCommitLogInputDlg
         QString message();
 
     private:
-        apr_array_header_t *m_commit_items;
+        class SvnCommitLogInputDlgPrivate *d;
 };
 
-class SvnCommitOptionDlg : public KDialog, public Ui::SvnCommitOptionDlg
+class SvnCommitOptionDlg : public KDialog
 {
     Q_OBJECT
 public:
@@ -50,12 +52,11 @@ public:
     bool recursive();
     bool keepLocks();
 
-public slots:
-    int exec();
 private:
-    void insertRow( const KDevelop::VcsFileInfo &info );
+//     void insertRow( const KDevelop::VcsFileInfo &info );
     void insertRow( const QString& state, const KUrl& url );
-    KDevSubversionPart *m_part;
+
+    class SvnCommitOptionDlgPrivate *d;
 };
 
 #endif

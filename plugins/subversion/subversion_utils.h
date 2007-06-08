@@ -12,24 +12,31 @@
 #ifndef SUBVERSION_UTILS_H
 #define SUBVERSION_UTILS_H
 
-#define SVN_LOGVIEW  10
-#define SVN_BLAME    11
-#define SVN_CHECKOUT 12
-#define SVN_ADD      13
-#define SVN_DELETE   14
-#define SVN_COMMIT   15
-#define SVN_UPDATE   16
-#define SVN_STATUS   17
-#define SVN_INFO     18
-#define SVN_DIFF     19
-#define SVN_IMPORT   20
-#define SVN_REVERT   21
-#define SVN_COPY     22
-#define SVN_MOVE     23
+#define SVN_LOGVIEW  (KDevelop::VcsJob::Log)
+#define SVN_BLAME    (KDevelop::VcsJob::Annotate)
+#define SVN_CHECKOUT (KDevelop::VcsJob::Checkout)
+#define SVN_ADD      (KDevelop::VcsJob::Add)
+#define SVN_DELETE   (KDevelop::VcsJob::Remove)
+#define SVN_COMMIT   (KDevelop::VcsJob::Commit)
+#define SVN_UPDATE   (KDevelop::VcsJob::Update)
+#define SVN_STATUS   (KDevelop::VcsJob::Status)
+#define SVN_DIFF     (KDevelop::VcsJob::Diff)
+#define SVN_IMPORT   (KDevelop::VcsJob::Import)
+#define SVN_REVERT   (KDevelop::VcsJob::Revert)
+#define SVN_COPY     (KDevelop::VcsJob::Copy)
+#define SVN_MOVE     (KDevelop::VcsJob::Move)
+
+// subversion internals
+#define SVN_INFO     (101)
 
 struct svn_opt_revision_t;
 
 #include <QDateTime>
+
+namespace KDevelop
+{
+class VcsRevision;
+}
 
 namespace SvnUtils
 {
@@ -51,6 +58,9 @@ public:
 
     /// Construct InValid (Unspecified) Revision.
     SvnRevision();
+
+    /// Construct using informations from VcsRevision.
+    SvnRevision( const KDevelop::VcsRevision &vcsRev );
 
     /// Specify revision as number.
     void setNumber( long int revnum );

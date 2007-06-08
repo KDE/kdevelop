@@ -8,41 +8,50 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef SVNKJOB_H
 #define SVNKJOB_H
 
 #include <kjob.h>
+#include "vcshelpers.h"
 
 class SubversionThread;
+class QVariant;
 
-class SvnKJobBase : public KJob
+class SvnKJobBase : public KJob, public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
     friend class SubversionThread;
-    
+
     SvnKJobBase( int type, QObject *parent );
     virtual ~SvnKJobBase();
-    
+
+    void setResult( const QVariant &result );
+    virtual QVariant fetchResults();
+
     void setSvnThread( SubversionThread *job );
     SubversionThread *svnThread();
-    int type();
-    QString smartError();
+    KDevelop::VcsJob::Type type();
+
+    QString smartError(); // subversion internal
+    QString errorMessage(); // VcsJob iface
 
     virtual void start();
+    FinishStatus exec();
 //     SvnUiDelegate* ui();
 
-// public Q_SLOTS:
-//     bool requestKill();
-    
+Q_SIGNALS:
+    void resultsReady( VcsJob* );
+    void finished( VcsJob*, FinishStatus );
+
 protected Q_SLOTS:
     void threadFinished();
 
 protected:
     // The forceful termination of thread causes deadlock in some cases.
     // Currently not used.
-    // TODO 
+    // TODO
     virtual bool doKill();
 
 protected:
