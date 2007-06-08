@@ -6,7 +6,6 @@ set(kdevplatformproject_LIB_SRCS
     projectmodel.cpp
     projectconfigskeleton.cpp
     importprojectjob.cpp
-    projectfilesystemwatcher.cpp
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
@@ -34,6 +33,5 @@ install(FILES
     projectmodel.h
     projectkcmodule.h
     projectexport.h
-    projectfilesystemwatcher.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project
  )
