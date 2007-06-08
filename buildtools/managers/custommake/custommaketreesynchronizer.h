@@ -1,7 +1,10 @@
 #ifndef CustomMakeTreeSynchronizer_H
 #define CustomMakeTreeSynchronizer_H
 
-#include <kurl.h>
+#include "projectfilesystemwatcher.h"
+
+class KUrl;
+class KUrl::List;
 
 namespace KDevelop
 {
