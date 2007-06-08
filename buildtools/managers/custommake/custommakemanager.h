@@ -188,6 +188,12 @@ public:
     // IPlugin interface
     QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
 
+    /**
+     * Initialize targets by reading Makefile in @arg dir
+     * @return Target lists in Makefile at @arg dir.
+     */
+    QStringList parseCustomMakeFile( const KUrl &makefile );
+
 private Q_SLOTS:
     void slotCtxTriggered();
     void updateTargetMenu();
@@ -195,19 +201,6 @@ private Q_SLOTS:
     /// Displays targets in top src dir
     void targetMenuActivated( QAction* );
     void slotBuilt( KDevelop::ProjectBaseItem* item );
-
-    // notified by QFileSystemWatcher
-    void slotDirectoryChanged( const QString& dir, KDevelop::ProjectFolderItem* folderItem );
-    void slotFileChanged( const QString& file, KDevelop::ProjectFileItem* fileItem );
-
-private:
-    void parseDirectoryRecursively( KDevelop::ProjectFolderItem* dir,
-                                    KDevelop::IProjectFileManager* manager );
-    /**
-     * Initialize targets by reading Makefile in @arg dir
-     * @return Target lists in Makefile at @arg dir.
-     */
-    QStringList parseCustomMakeFile( const KUrl &makefile );
 
 private:
     class Private;

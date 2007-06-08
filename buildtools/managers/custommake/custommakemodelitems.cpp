@@ -11,7 +11,9 @@
 #include "custommakemodelitems.h"
 #include <QHash>
 // #include <QFileSystemWatcher>
-#include "projectfilesystemwatcher.h"
+#include "custommaketreesynchronizer.h"
+#include "iproject.h"
+#include "custommakemanager.h"
 
 CustomMakeTargetItem::CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, QStandardItem *parent )
     : KDevelop::ProjectTargetItem( project, name, parent )
@@ -38,8 +40,9 @@ const QList<QPair<QString, QString> >& CustomMakeTargetItem::defines() const
 CustomMakeProjectItem::CustomMakeProjectItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent )
     : KDevelop::ProjectItem( project, name, parent )
 {
-//     m_watcher = new QFileSystemWatcher();
-    m_watcher = new ProjectFileSystemWatcher();
+    KDevelop::IProjectFileManager *fileMan = project->fileManager();
+    CustomMakeManager *manager = dynamic_cast<CustomMakeManager*>(fileMan);
+    m_watcher = new CustomMakeTreeSynchronizer( manager );
 }
 
 CustomMakeProjectItem::~CustomMakeProjectItem()
@@ -47,7 +50,7 @@ CustomMakeProjectItem::~CustomMakeProjectItem()
     delete m_watcher;
 }
 
-ProjectFileSystemWatcher* CustomMakeProjectItem::fsWatcher()
+CustomMakeTreeSynchronizer* CustomMakeProjectItem::fsWatcher()
 {
     return m_watcher;
 }

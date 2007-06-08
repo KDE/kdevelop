@@ -15,6 +15,7 @@ set(kdevcustommakemanager_PART_SRCS
     custommakemanager.cpp
     custommakemodelitems.cpp
     projectfilesystemwatcher.cpp
+    custommaketreesynchronizer.cpp
 )
 
 kde4_automoc(${kdevcustommakemanager_PART_SRCS})
