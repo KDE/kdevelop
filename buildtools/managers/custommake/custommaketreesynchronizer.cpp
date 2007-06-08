@@ -1,5 +1,5 @@
 #include "custommaketreesynchronizer.h"
-#include "projectfilesystemwatcher.h"
+#include <projectfilesystemwatcher.h>
 #include "custommakemanager.h"
 #include "custommakemodelitems.h"
 #include "iprojectcontroller.h"

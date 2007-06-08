@@ -14,7 +14,6 @@ include_directories(${KDEVPLATFORM_INCLUDE_DIR}
 set(kdevcustommakemanager_PART_SRCS
     custommakemanager.cpp
     custommakemodelitems.cpp
-    projectfilesystemwatcher.cpp
     custommaketreesynchronizer.cpp
 )
 
