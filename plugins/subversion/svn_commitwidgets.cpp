@@ -106,7 +106,7 @@ void SvnCommitOptionDlg::setCommitCandidates( const KUrl::List &urls )
         QFileInfo fileInfo(url.toLocalFile());
 
         if( fileInfo.isFile() ){
-            QList<SvnStatusHolder> holderList = d->m_part->statusSync( url, false, true, false );
+            QList<SvnStatusHolder> holderList = d->m_part->statusSync( url, false, true, false ).values();
 //             SvnKJobBase *statJob = m_part->svncore()->createStatusJob( url, workingRev,
 //                             false, true, false, true, false );
             if( holderList.count() < 1 ){
@@ -125,7 +125,7 @@ void SvnCommitOptionDlg::setCommitCandidates( const KUrl::List &urls )
         else if( fileInfo.isDir() ){
 //             const QList<VcsFileInfo> vcslist =
 //                     m_part->statusSync( url, IVersionControl::Recursive );
-            QList<SvnStatusHolder> holderList = d->m_part->statusSync( url, true, false, false );
+            QList<SvnStatusHolder> holderList = d->m_part->statusSync( url, true, false, false ).values();
 
             Q_FOREACH( SvnStatusHolder _holder, holderList ) {
 

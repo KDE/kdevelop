@@ -164,8 +164,11 @@ bool KDevSubversionPart::isVersionControlled( const KUrl& localLocation )
     SvnStatusJob *th = dynamic_cast<SvnStatusJob*>(job->svnThread());
     if( !th ) return false;
 
-    QList<SvnStatusHolder> holderlist = th->m_holderList;
-    SvnStatusHolder holder = holderlist.first();
+    if( !th->m_holderMap.contains(localLocation) ){
+        return false;
+    }
+
+    SvnStatusHolder holder = th->m_holderMap[localLocation];
     if( holder.textStatus == svn_wc_status_unversioned )
         return false;
     else
@@ -186,24 +189,25 @@ VcsJob* KDevSubversionPart::repositoryLocation( const KUrl& localLocation )
     job->setResult( result );
 }
 
-QList<SvnStatusHolder> KDevSubversionPart::statusSync( const KUrl &dirPath, bool recurse,
+QMap<KUrl, SvnStatusHolder> KDevSubversionPart::statusSync( const KUrl &dirPath, bool recurse,
                         bool getall, bool contactReposit, bool noIgnore, bool ignoreExternals )
 {
-    QList<SvnStatusHolder> holder;
+//     QList<SvnStatusHolder> holder;
+    QMap<KUrl, SvnStatusHolder> holderMap;
     SvnRevision rev;
     rev.setKey( SvnRevision::WORKING );
     SvnKJobBase * job = svncore()->createStatusJob( dirPath, rev,
                                     recurse, getall, contactReposit, noIgnore, ignoreExternals);
     if( job->exec() != KDevelop::VcsJob::Succeeded ){
         // error
-        return holder;
+        return holderMap;
     }
 
     SvnStatusJob *th = dynamic_cast<SvnStatusJob*>(job->svnThread());
-    if( !th ) return holder;
+    if( !th ) return holderMap;
 
-    holder = th->m_holderList;
-    return holder;
+    holderMap = th->m_holderMap;
+    return holderMap;
 
     // legacy of the old iversioncontrol iface.
 

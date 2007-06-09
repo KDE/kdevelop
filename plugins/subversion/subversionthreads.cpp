@@ -810,7 +810,7 @@ void SvnStatusJob::statusReceiver( void *baton, const char *path, svn_wc_status2
     holder.reposTextStat = status->repos_text_status;
     holder.reposPropStat = status->repos_prop_status;
 
-    job->m_holderList << holder;
+    job->m_holderMap.insert( KUrl(holder.wcPath), holder );
 }
 
 ////////////////////////////////////////////////////////////

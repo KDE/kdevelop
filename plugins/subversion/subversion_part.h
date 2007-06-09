@@ -129,7 +129,7 @@ private:
 
 public:
     // SubversionPart internal methods
-    QList<SvnStatusHolder> statusSync( const KUrl &dirPath, bool recurse,
+    QMap<KUrl, SvnStatusHolder> statusSync( const KUrl &dirPath, bool recurse,
         bool getall, bool contactReposit = false, bool noIgnore = true, bool ignoreExternals = false );
     SubversionCore* svncore();
     const KUrl urlFocusedDocument( );

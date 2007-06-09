@@ -30,7 +30,7 @@ public:
     {
         QMap< QString, QVariant > ret;
         SvnStatusJob *thread = dynamic_cast<SvnStatusJob*>(m_th);
-        QList<SvnStatusHolder> holderList = thread->m_holderList;
+        QList<SvnStatusHolder> holderList = thread->m_holderMap.values();
 
         foreach( SvnStatusHolder _holder, holderList ){
 

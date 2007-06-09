@@ -220,7 +220,8 @@ public:
 
     static void statusReceiver( void *baton, const char *path, svn_wc_status2_t *status );
 
-    QList<SvnStatusHolder> m_holderList;
+//     QList<SvnStatusHolder> m_holderList;
+    QMap< KUrl, SvnStatusHolder > m_holderMap;
 
 protected:
     virtual void run();
