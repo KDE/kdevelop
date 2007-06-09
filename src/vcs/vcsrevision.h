@@ -48,14 +48,14 @@ public:
         Special         /**<One of the special versions in RevisionSpecialType.*/,
         GlobalNumber    /**<Global repository version when item was last changed.*/,
         FileNumber      /**<Item's independent version number.*/,
-        Date,
+        Date
     };
     enum RevisionSpecialType
     {
         Head            /**<Latest revision in the repository.*/,
         Working         /**<The local copy (including any changes made).*/,
         Base            /**<The repository source of the local copy.*/,
-        Previous        /**<The version prior the other one (only valid in functions that take two revisions).*/,
+        Previous        /**<The version prior the other one (only valid in functions that take two revisions).*/
     };
 
     VcsRevision();
