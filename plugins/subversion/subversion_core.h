@@ -90,12 +90,14 @@ public:
                                 bool recurse );
 
     void spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
-                          const SvnRevision &rev1, const SvnRevision &rev2,
+                          const SvnRevision &peg, const SvnRevision &rev1, const SvnRevision &rev2,
                           bool recurse, bool ignoreAncestry, bool noDiffDeleted,
                           bool ignoreContentType );
 
+    /// If peg revision @arg peg is SvnRevision::UNSPECIFIED, diff between path1 and path2
+    /// Otherwise, do peg revision diff using path1 only.
     SvnKJobBase* createDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
-                          const SvnRevision &rev1, const SvnRevision &rev2,
+                          const SvnRevision &peg, const SvnRevision &rev1, const SvnRevision &rev2,
                           bool recurse, bool ignoreAncestry, bool noDiffDeleted,
                           bool ignoreContentType );
 

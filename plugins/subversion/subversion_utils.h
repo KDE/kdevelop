@@ -79,6 +79,8 @@ public:
     /// Returns SVN C-Api compatible struct. Use this to call svn_client_* and etc.
     svn_opt_revision_t revision();
 
+    bool isValid();
+
 private:
     enum RevType
     {

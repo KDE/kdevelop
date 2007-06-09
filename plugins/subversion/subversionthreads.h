@@ -319,7 +319,7 @@ protected:
 class SvnDiffJob : public SubversionThread
 {
 public:
-    SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+    SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,const SvnRevision &peg,
                 const SvnRevision &rev1, const SvnRevision &rev2,
                 bool recurse, bool ignoreAncestry, bool noDiffDeleted, bool ignoreContentType,
                 int type, SvnKJobBase *parent );
@@ -335,7 +335,7 @@ protected:
     virtual void run();
 
     KUrl m_pathOrUrl1, m_pathOrUrl2;
-    SvnRevision m_rev1, m_rev2;
+    SvnRevision m_peg, m_rev1, m_rev2;
     bool m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType;
 
 };

@@ -972,12 +972,12 @@ void SvnInfoJob::run()
 
 ////////////////////////////////////////////////////////////
 
-SvnDiffJob::SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+SvnDiffJob::SvnDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2, const SvnRevision &peg,
                         const SvnRevision &rev1, const SvnRevision &rev2,
                         bool recurse, bool ignoreAncestry, bool noDiffDeleted, bool ignoreContentType,
                         int type, SvnKJobBase *parent )
     : SubversionThread( type, parent )
-    , m_pathOrUrl1(pathOrUrl1), m_pathOrUrl2(pathOrUrl2), m_rev1(rev1), m_rev2(rev2)
+    , m_pathOrUrl1(pathOrUrl1), m_pathOrUrl2(pathOrUrl2), m_peg(peg), m_rev1(rev1), m_rev2(rev2)
     , m_recurse(recurse), m_ignoreAncestry(ignoreAncestry)
     , m_noDiffDeleted(noDiffDeleted), m_ignoreContentType(ignoreContentType)
     , m_tmpDir(0), out_name(0), err_name(0)
@@ -1028,9 +1028,19 @@ void SvnDiffJob::run()
     apr_file_mktemp( &errfile, err_name , APR_READ|APR_WRITE|APR_CREATE|APR_TRUNCATE, pool() );
     kDebug() << " SvnDiffJob::run() out_name " << out_name << " err_name " << err_name << endl;
 
-    svn_error_t *err = svn_client_diff2(options, path1, &revision1, path2, &revision2,
-                                        m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType,
-                                        outfile, errfile, ctx(), subpool);
+    svn_error_t *err = 0;
+    if( ! m_peg.isValid() ){
+        err = svn_client_diff2(options, path1, &revision1, path2, &revision2,
+                                m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType,
+                                outfile, errfile, ctx(), subpool);
+    }
+    else{
+        svn_opt_revision_t peg_rev = m_peg.revision();
+        err = svn_client_diff_peg2( options, path1, &peg_rev, &revision1, &revision2,
+                                    m_recurse, m_ignoreAncestry, m_noDiffDeleted, m_ignoreContentType,
+                                    outfile, errfile, ctx(), subpool );
+    }
+
     if ( err ){
         setErrorMsgExt( err );
         apr_file_close(outfile);

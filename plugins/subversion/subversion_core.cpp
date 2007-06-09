@@ -287,13 +287,13 @@ SvnKJobBase* SubversionCore::createInfoJob( const KUrl &pathOrUrl,
     return job;
 }
 
-void SubversionCore::spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+void SubversionCore::spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2, const SvnRevision &peg,
                                       const SvnRevision &rev1, const SvnRevision &rev2,
                                       bool recurse, bool ignoreAncestry, bool noDiffDeleted,
                                       bool ignoreContentType )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_DIFF, this );
-    SvnDiffJob *thread = new SvnDiffJob( pathOrUrl1, pathOrUrl2, rev1, rev2,
+    SvnDiffJob *thread = new SvnDiffJob( pathOrUrl1, pathOrUrl2, peg, rev1, rev2,
                                       recurse, ignoreAncestry, noDiffDeleted, ignoreContentType,
                                       SVN_DIFF, job );
     SVNCORE_SPAWN_COMMON( job, thread )
@@ -301,12 +301,13 @@ void SubversionCore::spawnDiffThread( const KUrl &pathOrUrl1, const KUrl &pathOr
 }
 
 SvnKJobBase *SubversionCore::createDiffJob( const KUrl &pathOrUrl1, const KUrl &pathOrUrl2,
+                                            const SvnRevision &peg,
                                       const SvnRevision &rev1, const SvnRevision &rev2,
                                       bool recurse, bool ignoreAncestry, bool noDiffDeleted,
                                       bool ignoreContentType )
 {
     SvnKJobBase *job = new SvnKJobBase( SVN_DIFF, this );
-    SvnDiffJob *thread = new SvnDiffJob( pathOrUrl1, pathOrUrl2, rev1, rev2,
+    SvnDiffJob *thread = new SvnDiffJob( pathOrUrl1, pathOrUrl2, peg, rev1, rev2,
                                       recurse, ignoreAncestry, noDiffDeleted, ignoreContentType,
                                       SVN_DIFF, job );
     job->setSvnThread( thread );

@@ -157,10 +157,15 @@ void SvnLogviewWidget::diffToPrev()
     if( rev == -1 ){ //error
         return;
     }
-    SvnUtils::SvnRevision rev1, rev2;
+    SvnUtils::SvnRevision rev1, rev2, peg_rev;
     rev1.setNumber( rev - 1 );
     rev2.setNumber( rev );
-    m_part->svncore()->spawnDiffThread( m_url, m_url, rev1, rev2, true, false, false, false );
+    if( m_url.isLocalFile() ){
+        // peg revision is local.
+        peg_rev.setKey( SvnUtils::SvnRevision::BASE );
+    }
+
+    m_part->svncore()->spawnDiffThread( m_url, m_url, peg_rev, rev1, rev2, true, false, false, false );
 }
 void SvnLogviewWidget::treeViewClicked( const QModelIndex &index )
 {

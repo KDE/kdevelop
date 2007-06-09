@@ -113,4 +113,18 @@ svn_opt_revision_t SvnRevision::revision()
     return ret;
 }
 
+bool SvnRevision::isValid()
+{
+    if( type == SvnRevision::kind ){
+        if( revKind == SvnRevision::UNSPECIFIED )
+            return false;
+    }
+
+    if( type == SvnRevision::number ){
+        if( revNum < 0 )
+            return false;
+    }
+    return true;
+}
+
 } // end of namespace SvnUtils
