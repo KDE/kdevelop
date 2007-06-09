@@ -45,45 +45,67 @@ void SvnBlameWidget::refreshWithNewData( QList<SvnBlameHolder> datalist )
 
 /////////////////////////////////////////////////////////////////////////////
 
-SvnBlameFileSelectDlg::SvnBlameFileSelectDlg( QWidget *parent )
-    : KDialog( parent )
+class SvnBlameFileSelectWidget : public QWidget
 {
-    m_selected = "";
+public:
+    SvnBlameFileSelectWidget( QWidget* parent )
+    : QWidget( parent )
+    {
+        m_layout = new QGridLayout( this );
+        m_listWidget = new QListWidget( this );
+        m_layout->addWidget( m_listWidget, 0, 0, 1, -1 );
+    }
+    virtual ~SvnBlameFileSelectWidget()
+    {
+    }
+
+    QGridLayout *m_layout;
+    QListWidget *m_listWidget;
+};
+
+class SvnBlameFileSelectDlgPrivate
+{
+public:
+    QStringList *m_candidates;
+    QString m_selected;
+    SvnBlameFileSelectWidget *widget;
+};
+
+SvnBlameFileSelectDlg::SvnBlameFileSelectDlg( QWidget *parent )
+    : KDialog( parent ), d( new SvnBlameFileSelectDlgPrivate )
+{
+    d->m_selected = "";
     setWindowTitle( i18n("Select one file to view annotation") );
 
-    m_layout = new QGridLayout( this );
-    m_listWidget = new QListWidget( this );
-    m_okBtn = new QPushButton( i18n("OK"), this );
-    m_cancelBtn = new QPushButton( i18n("Cancel"), this );
-    m_layout->addWidget( m_listWidget, 0, 0, 1, -1 );
-    m_layout->addWidget( m_okBtn, 1, 0 );
-    m_layout->addWidget( m_cancelBtn, 1, 1 );
+    d->widget = new SvnBlameFileSelectWidget( this );
+    setMainWidget( d->widget );
 
-    connect( m_okBtn, SIGNAL(clicked()), this, SLOT(accept()) );
-    connect( m_cancelBtn, SIGNAL(clicked()), this, SLOT(reject()) );
+    setButtons( KDialog::Ok | KDialog::Cancel );
 }
 
 SvnBlameFileSelectDlg::~SvnBlameFileSelectDlg()
-{}
+{
+    delete d;
+}
 
 void SvnBlameFileSelectDlg::setCandidate( QStringList *list )
 {
     for( QList<QString>::iterator it = list->begin(); it != list->end(); ++it ){
-        m_listWidget->addItem( *it );
+        d->widget->m_listWidget->addItem( *it );
     }
 }
 
 QString SvnBlameFileSelectDlg::selected()
 {
-    return m_selected;
+    return d->m_selected;
 }
 
 void SvnBlameFileSelectDlg::accept()
 {
     while( true ){
-        QListWidgetItem *item = m_listWidget->currentItem();
+        QListWidgetItem *item = d->widget->m_listWidget->currentItem();
         if( item ){
-            m_selected = item->text();
+            d->m_selected = item->text();
             break;
         }
         else{

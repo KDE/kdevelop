@@ -39,6 +39,9 @@
      <property name="indentation" >
       <number>0</number>
      </property>
+     <property name="allColumnsShowFocus" >
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text" >
        <string>Chk</string>

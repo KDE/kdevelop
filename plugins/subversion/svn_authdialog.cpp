@@ -17,16 +17,28 @@ extern "C" {
 }
 #include <klocale.h>
 
-SvnSSLTrustDialog::SvnSSLTrustDialog( QWidget *parent )
-    : KDialog( parent ), Ui::SvnSSLTrustDialog()
+class SvnSSLTrustDialogPrivate
 {
-    Ui::SvnSSLTrustDialog::setupUi(this);
-    msgLabel->setText( i18n("Fail to automatically validiate certificate from server.") );
+public:
+    int m_decision;
+    Ui::SvnSSLTrustDialog ui;
+};
+
+SvnSSLTrustDialog::SvnSSLTrustDialog( QWidget *parent )
+    : KDialog( parent ), d( new SvnSSLTrustDialogPrivate )
+{
+    QWidget *widget = new QWidget( this );
+    setMainWidget( widget );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    d->ui.setupUi( widget );
+    d->ui.msgLabel->setText( i18n("Fail to automatically validiate certificate from server.") );
 //     connect( okBtn, SIGNAL(clicked()), this, SLOT(slotAccept()) );
 //     connect( cancelBtn, SIGNAL(clicked()), this, SLOT(slotReject()) );
 }
 SvnSSLTrustDialog::~SvnSSLTrustDialog()
-{}
+{
+    delete d;
+}
 
 /** Certificate is not yet valid. */
 #define SVN_AUTH_SSL_NOTYETVALID 0x00000001
@@ -53,7 +65,7 @@ void SvnSSLTrustDialog::setFailedReasons( unsigned int failures )
         errs += '\n' + i18n("Certificate authority is unknown");
     if( failures & SVN_AUTH_SSL_OTHER )
         errs += '\n' + i18n("Other unknown failures");
-    reasonLabel->setText( errs );
+    d->ui.reasonLabel->setText( errs );
 }
 void SvnSSLTrustDialog::setCertInfos( const svn_auth_ssl_server_cert_info_t *ci )
 {
@@ -94,43 +106,70 @@ void SvnSSLTrustDialog::setCertInfos( const QString& hostname,
     QTreeWidgetItem *item6 = new QTreeWidgetItem((QTreeWidget*)0, list6);
     items.append(item6);
 
-    treeWidget->insertTopLevelItems(0, items);
+    d->ui.treeWidget->insertTopLevelItems(0, items);
 }
 
 int SvnSSLTrustDialog::userDecision()
 {
-    return m_decision;
+    return d->m_decision;
 }
 
 void SvnSSLTrustDialog::accept()
 {
-    if( permanentCheck->isChecked() ){
-        m_decision = 1;
+    if( d->ui.permanentCheck->isChecked() ){
+        d->m_decision = 1;
     } else{
-        m_decision = 0;
+        d->m_decision = 0;
     }
     KDialog::accept();
 }
 void SvnSSLTrustDialog::reject()
 {
-    m_decision = -1;
+    d->m_decision = -1;
     KDialog::reject();
 }
 //////////////////////////////////////////////////////////////
-SvnLoginDialog::SvnLoginDialog( QWidget *parent )
-    : KDialog( parent ), Ui::SvnLoginDialog()
+
+class SvnLoginDialogPrivate
 {
-    Ui::SvnLoginDialog::setupUi(this);
+public:
+    Ui::SvnLoginDialog ui;
+};
+
+SvnLoginDialog::SvnLoginDialog( QWidget *parent )
+    : KDialog( parent ), d( new SvnLoginDialogPrivate )
+{
+    QWidget *widget = new QWidget( this );
+    setMainWidget( widget );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    d->ui.setupUi( widget );
 }
 SvnLoginDialog::~SvnLoginDialog()
-{}
+{
+    delete d;
+}
 
 void SvnLoginDialog::setRealm( QString &realm )
 {
     QString msg;
     msg = i18n("ID and Password for the following repository");
     msg = msg + "\n\n" + realm + '\n';
-    realmLabel->setText( msg );
+    d->ui.realmLabel->setText( msg );
+}
+
+QString SvnLoginDialog::userName()
+{
+    return d->ui.userEdit->text();
+}
+
+QString SvnLoginDialog::passWord()
+{
+    return d->ui.pwdEdit->text();
+}
+
+bool SvnLoginDialog::save()
+{
+    return d->ui.checkBox->isChecked();
 }
 
 #include "svn_authdialog.moc"

@@ -27,7 +27,7 @@ namespace KDevelop
     class VcsFileInfo;
 }
 
-class SvnCommitLogInputDlg : public KDialog, public Ui::SvnCommitLogInputDlg
+class SvnCommitLogInputDlg : public KDialog
 {
 //     Q_OBJECT
     public:

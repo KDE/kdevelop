@@ -42,13 +42,7 @@ public Q_SLOTS:
     virtual void accept();
 
 private:
-    QGridLayout *m_layout;
-    QListWidget *m_listWidget;
-    QPushButton *m_okBtn;
-    QPushButton *m_cancelBtn;
-
-    QStringList *m_candidates;
-    QString m_selected;
+    class SvnBlameFileSelectDlgPrivate *d;
 };
 
 

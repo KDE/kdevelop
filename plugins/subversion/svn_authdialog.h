@@ -17,7 +17,7 @@
 
 struct svn_auth_ssl_server_cert_info_t;
 
-class SvnSSLTrustDialog: public KDialog, public Ui::SvnSSLTrustDialog
+class SvnSSLTrustDialog: public KDialog
 {
     Q_OBJECT
 public:
@@ -36,10 +36,10 @@ protected Q_SLOTS:
     virtual void reject();
 
 private:
-    int m_decision;
+    class SvnSSLTrustDialogPrivate *d;
 };
 
-class SvnLoginDialog : public KDialog, public Ui::SvnLoginDialog
+class SvnLoginDialog : public KDialog
 {
     Q_OBJECT
 public:
@@ -47,6 +47,12 @@ public:
     virtual ~SvnLoginDialog();
 
     void setRealm( QString &realm );
+    QString userName();
+    QString passWord();
+    bool save();
+
+private:
+    class SvnLoginDialogPrivate *d;
 
 };
 

@@ -442,7 +442,7 @@ void SubversionCore::customEvent( QEvent * event )
 
             SvnInterThreadPromptEvent *reply = new SvnInterThreadPromptEvent(
                                                SVNLOGIN_IDPWDPROMPT, (void*)info );
-            info->setData( dlg.userEdit->text(), dlg.pwdEdit->text(), dlg.checkBox->isChecked() );
+            info->setData( dlg.userName(), dlg.passWord(), dlg.save() );
             QCoreApplication::postEvent( info->origSender, reply );
             break;
         }

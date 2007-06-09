@@ -129,7 +129,7 @@ void SvnLogviewWidget::blameRev()
     // get repository root URL
     SvnUtils::SvnRevision nullRev;
     SvnKJobBase* job = m_part->svncore()->createInfoJob( m_url, nullRev, nullRev, false );
-    if( !job->exec() ) return;
+    if( job->exec() != KDevelop::VcsJob::Succeeded ) return;
     SvnInfoJob *thread = dynamic_cast<SvnInfoJob*>(job->svnThread());
     QMap<KUrl, SvnInfoHolder> &infoMap = thread->m_holderMap;
 

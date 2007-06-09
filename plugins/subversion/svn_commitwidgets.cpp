@@ -66,12 +66,12 @@ void SvnCommitLogInputDlg::setCommitItems( apr_array_header_t *cis )
 
         QString oneRow;
         oneRow = oneRow + text_mod + ' ' + prop_mod + ' ' + path;
-        listWidget->addItem( oneRow );
+        d->ui.listWidget->addItem( oneRow );
     }
 }
 QString SvnCommitLogInputDlg::message()
 {
-    return messageBox->toPlainText();
+    return d->ui.messageBox->toPlainText();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -92,6 +92,7 @@ SvnCommitOptionDlg::SvnCommitOptionDlg( KDevSubversionPart *part, QWidget *paren
     d->ui.setupUi( widget );
     setMainWidget( widget );
     setButtons( KDialog::Ok | KDialog::Cancel );
+    setWindowTitle( i18n("Select files to be committed") );
 
     d->ui.treeWidget->resizeColumnToContents(0);
     d->ui.treeWidget->resizeColumnToContents(1);
@@ -138,7 +139,8 @@ void SvnCommitOptionDlg::setCommitCandidates( const KUrl::List &urls )
                     _holder.propStatus == svn_wc_status_modified ||
                     _holder.propStatus == svn_wc_status_replaced ){
 
-                        insertRow( SvnStatusHolder::statusToString( _holder.textStatus ), url );
+                        insertRow( SvnStatusHolder::statusToString( _holder.textStatus ),
+                                   KUrl(_holder.wcPath) );
 
                     }
             }
