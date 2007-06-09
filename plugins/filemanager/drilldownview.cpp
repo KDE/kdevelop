@@ -41,7 +41,7 @@ public:
         {
             QStyleOptionViewItem opt(option);
             opt.rect = m_parent->normalizeDrillIconRect(m_parent->visualRect(index));
-            m_parent->style()->drawPrimitive(QStyle::PE_IndicatorArrowRight, &opt, painter);
+            m_parent->style()->drawPrimitive(QStyle::PE_IndicatorColumnViewArrow, &opt, painter);
         }
         painter->restore();
     }
