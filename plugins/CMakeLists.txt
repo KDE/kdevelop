@@ -5,7 +5,7 @@ add_subdirectory(projectmanagerview)
 add_subdirectory(genericprojectmanager)
 add_subdirectory(standardoutputview)
 macro_optional_add_subdirectory(snippet)
-macro_optional_add_subdirectory(cvs)
+#macro_optional_add_subdirectory(cvs)
 
 find_package(Commoncpp)
 find_package(BoostLibraries)
@@ -15,7 +15,7 @@ endif(COMMONCPP2_FOUND AND Boost_FOUND  AND Boost_LIBS_FOUND)
 
 find_package(SubversionLibrary)
 if(SUBVERSION_FOUND)
-    macro_optional_add_subdirectory(subversion)
+#macro_optional_add_subdirectory(subversion)
 endif(SUBVERSION_FOUND)
 
 

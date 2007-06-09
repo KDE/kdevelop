@@ -1,10 +1,14 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/src/interfaces
 )
 
 set(kdevplatformvcs_LIB_SRCS
-    iversioncontrol.cpp
+    vcsjob.cpp
+    vcsrevision.cpp
+    vcsannotation.cpp
+    vcsdiff.cpp
+    vcsevent.cpp
+    vcshelpers.cpp
 )
 
 kde4_automoc(${kdevplatformvcs_LIB_SRCS})
@@ -16,7 +20,21 @@ install(TARGETS kdevplatformvcs DESTINATION ${LIB_INSTALL_DIR} )
 
 install(FILES
     vcsexport.h
-    iversioncontrol.h
+    vcsjob.h
+    vcsrevision.h
+    vcsannotation.h
+    vcsdiff.h
+    vcsevent.h
+    vcshelpers.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs
 )
 
+
+install(FILES
+    interfaces/ibasicversioncontrol.h
+    interfaces/ibranchingversioncontrol.h
+    interfaces/ibrowsableversioncontrol.h
+    interfaces/idistributedversioncontrol.h
+    interfaces/irepositoryversioncontrol.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces
+)

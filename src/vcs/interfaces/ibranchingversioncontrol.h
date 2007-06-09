@@ -23,7 +23,10 @@
 #define IBRANCHINGVERSIONCONTROL_H
 
 #include "iextension.h"
-#include "vcshelpers.h"
+
+class QString;
+class VcsMapping;
+class VcsRevision;
 
 namespace KDevelop
 {

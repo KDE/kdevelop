@@ -23,7 +23,9 @@
 #define IBROWSABLEVERSIONCONTROL_H
 
 #include "iextension.h"
-#include "vcshelpers.h"
+#include "vcsrevision.h"
+
+class QString;
 
 namespace KDevelop
 {

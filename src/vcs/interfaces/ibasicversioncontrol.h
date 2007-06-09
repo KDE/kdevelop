@@ -23,7 +23,12 @@
 #define IBASICVERSIONCONTROL_H
 
 #include "iextension.h"
-#include "vcshelpers.h"
+#include <kurl.h>
+#include "vcsrevision.h"
+#include "vcsdiff.h"
+
+class QString;
+class VcsMapping;
 
 namespace KDevelop
 {

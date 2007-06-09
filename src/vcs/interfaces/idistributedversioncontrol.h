@@ -22,7 +22,8 @@
 #define IDISTRIBUTEDVERSIONCONTROL_H
 
 #include "iextension.h"
-#include "vcshelpers.h"
+
+class QString;
 
 namespace KDevelop
 {

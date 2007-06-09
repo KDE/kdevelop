@@ -23,7 +23,9 @@
 #define IREPOSITORYVERSIONCONTROL_H
 
 #include "iextension.h"
-#include "vcshelpers.h"
+class QString;
+class VcsRevision;
+class QStringList;
 
 namespace KDevelop
 {
