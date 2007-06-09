@@ -41,7 +41,7 @@ enum VcsState
     ItemAdded           /**<Item was added to the repository but not committed.*/,
     ItemModified        /**<Item was modified locally.*/,
     ItemDeleted         /**<Item is scheduled to be deleted. */,
-    ItemHasConflicts    /**<Local version has conflicts that need to be resolved before commit.*/,
+    ItemHasConflicts    /**<Local version has conflicts that need to be resolved before commit.*/
 };
 
 /**

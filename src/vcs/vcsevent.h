@@ -55,7 +55,7 @@ public:
         Modified         = 1<<2 /**<Item was modified, for example by editing.*/,
         Copied           = 1<<3 /**<Item was copied.*/,
         Merged           = 1<<4 /**<Item had changes merged into it.*/,
-        ContentsModified = 1<<5 /**<Directory was not changed (only contents changed).*/,
+        ContentsModified = 1<<5 /**<Directory was not changed (only contents changed).*/
     };
     Q_DECLARE_FLAGS( Actions, Action )
 
