@@ -20,6 +20,7 @@
 
 #include "makeoutputmodel.h"
 #include "outputfilters.h"
+#include <kdebug.h>
 
 MakeOutputModel::MakeOutputModel( QObject* parent )
     : QStandardItemModel(parent), actionFilter(new MakeActionFilter), errorFilter(new ErrorFilter)
@@ -28,18 +29,24 @@ MakeOutputModel::MakeOutputModel( QObject* parent )
 
 void MakeOutputModel::addStandardError( const QStringList& lines )
 {
+    kDebug(9038) << k_funcinfo << "Error with: " << lines << endl;
     foreach( QString line, lines)
     {
         QStandardItem* item = errorFilter->processAndCreate(line);
+        if( !item )
+            item = new QStandardItem(line);
         appendRow(item);
     }
 }
 
 void MakeOutputModel::addStandardOutput( const QStringList& lines )
 {
+    kDebug(9038) << k_funcinfo << "Output with: " << lines << endl;
     foreach( QString line, lines)
     {
         QStandardItem* item = actionFilter->processAndCreate(line);
+        if( !item )
+            item = new QStandardItem(line);
         appendRow(item);
     }
 }
