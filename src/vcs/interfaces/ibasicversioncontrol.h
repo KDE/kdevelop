@@ -26,12 +26,14 @@
 #include <kurl.h>
 #include "vcsrevision.h"
 #include "vcsdiff.h"
-#include "vcshelpers.h"
 
 class QString;
 
 namespace KDevelop
 {
+
+class VcsJob;
+class VcsMapping;
 
 /**
  * This is the basic interface that all Version Control or Source Code Management
@@ -41,10 +43,7 @@ namespace KDevelop
  * offer functionality that works solely on the server see the
  * IRepositoryVersionControl interface
  *
- * @TODO implement VcsJob!
  */
-
-class VcsJob;
 
 class KDEVPLATFORMVCS_EXPORT IBasicVersionControl
 {
