@@ -1,6 +1,6 @@
 /* KDevelop QMake Support
  *
- * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2006-2007 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,10 +96,20 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         if( view )
         {
 
-            QString id = view->registerView(i18n("QMake: %1", dom->project()->name() ) );
-            m_ids << id;
-            m_models[id] = new KDevelop::OutputModel(this);
-            view->setModel( id, m_models[id] );
+            QString id;
+            if( m_ids.contains( dom->project() ) )
+            {
+                id = m_ids[dom->project()];
+                m_models[id]->clear();
+                if( m_cmds.contains(id) )
+                    delete m_cmds[id];
+            }else
+            {
+                id = view->registerView(i18n("QMake: %1", dom->project()->name() ) );
+                m_ids[dom->project()] = id;
+                m_models[id] = new KDevelop::OutputModel(this);
+                view->setModel( id, m_models[id] );
+            }
             m_items[id] = dom;
             QString cmd;
             KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
