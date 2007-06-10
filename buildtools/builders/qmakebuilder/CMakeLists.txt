@@ -4,6 +4,7 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
     ${KDEVPLATFORM_INCLUDE_DIR}/outputview
+    ${KDEVPLATFORM_INCLUDE_DIR}/util
     ${KDEVPLATFORM_INCLUDE_DIR}/project
     ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
     )
@@ -22,6 +23,8 @@ target_link_libraries(
         ${KDE4_KDEUI_LIBS}
         ${QT_QTDESIGNER_LIBRARY}
         ${KDEVPLATFORM_INTERFACES_LIBRARY}
+        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
+        ${KDEVPLATFORM_UTIL_LIBRARY}
         ${KDEVPLATFORM_PROJECT_LIBRARY}
 )
 
