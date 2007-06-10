@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <klibloader.h>
-
+#include <kde_terminal_interface.h>
 #include <kparts/part.h>
 
 #include <icore.h>
@@ -58,6 +58,11 @@ public:
                 m_vbox->addWidget( konsolepart->widget() );
                 m_view->setFocusProxy( konsolepart->widget() );
                 konsolepart->widget() ->show();
+
+                TerminalInterface* interface = qobject_cast<TerminalInterface*>(konsolepart);
+                Q_ASSERT(interface);
+
+                interface->showShellInDir( QString() );
             }
         }
         else
