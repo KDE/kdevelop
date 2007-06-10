@@ -19,7 +19,7 @@
 */
 
 #include "makebuilder.h"
-#include "makeitemfactory.h"
+#include "makeoutputmodel.h"
 #include <config.h>
 
 #include <QtCore/QStringList>
@@ -27,11 +27,13 @@
 #include <projectmodel.h>
 
 #include <ibuildsystemmanager.h>
+#include <commandexecutor.h>
 #include <iproject.h>
 #include <icore.h>
 #include <iplugincontroller.h>
 #include <ioutputview.h>
 #include <QtDesigner/QExtensionFactory>
+#include <QtCore/QSignalMapper>
 
 #include <kgenericfactory.h>
 #include <kglobal.h>
@@ -48,18 +50,12 @@ MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-    if( i )
-    {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-        if( view )
-        {
-            connect(i, SIGNAL(commandFinished(const QString &)),
-                this, SLOT(commandFinished(const QString &)));
-            connect(i, SIGNAL(commandFailed(const QString &)),
-                this, SLOT(commandFailed(const QString &)));
-        }
-    }
+    errorMapper = new QSignalMapper(this);
+    successMapper = new QSignalMapper(this);
+    connect(errorMapper, SIGNAL(mapped(const QString&)),
+            this, SLOT(commandFailed(const QString&) ));
+    connect(successMapper, SIGNAL(mapped(const QString&)),
+            this, SLOT(commandFinished(const QString&) ));
 }
 
 MakeBuilder::~MakeBuilder()
@@ -86,10 +82,38 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             QStringList cmd = computeBuildCommand( dom );
             if( cmd.isEmpty() )
                 return false;
-            m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
+            QString id;
+            if( m_ids.contains(dom->project()) )
+            {
+                id = m_ids[dom->project()];
+                m_models[id]->clear();
+            }else
+            {
+                id = view->registerView(i18n("Make: %1", dom->project()->name() ) );
+                m_ids[dom->project()] = id;
+                m_models[id] = new MakeOutputModel(this);
+                view->setModel(id, m_models[id]);
+            }
 
+            if( m_commands.contains(id) )
+                delete m_commands[id];
+
+            m_commands[id] = new KDevelop::CommandExecutor(cmd.first());
+            m_commands[id]->setWorkingDirectory(buildDir.toLocalFile() );
+            cmd.pop_front();
+            m_commands[id]->setArguments( cmd );
+
+            connect(m_commands[id], SIGNAL(receivedStandardOutput(const QStringList&)),
+                    m_models[id], SLOT(addStandardOutput(const QStringList&)));
+            connect(m_commands[id], SIGNAL(receivedStandardError(const QStringList&)),
+                    m_models[id], SLOT(addStandardError(const QStringList&)));
+
+            connect( m_commands[id], SIGNAL( failed() ), errorMapper, SLOT( map() ) );
+            connect( m_commands[id], SIGNAL( completed() ), successMapper, SLOT( map() ) );
+            errorMapper->setMapping( m_commands[id], id );
+            successMapper->setMapping( m_commands[id], id );
             kDebug(9038) << "Starting build: " << cmd << " Build directory " << buildDir << endl;
-            view->queueCommand( buildDir, cmd, QMap<QString,QString>(), new MakeItemFactory(this) );
+            m_commands[id]->start();
             return true;
         } // end of if(view)
     }
@@ -102,30 +126,19 @@ bool MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
     return false;
 }
 
-void MakeBuilder::commandFinished(const QString &command)
+void MakeBuilder::commandFinished(const QString &id)
 {
-    if( !m_queue.isEmpty() )
+    if( m_items.contains(id) )
     {
-        QPair< QStringList, KDevelop::ProjectBaseItem* > pair = m_queue.front();
-
-        if( pair.first.join(" ") == command )
-        {
-            m_queue.pop_front();
-            emit built( pair.second );
-        }
+        emit built( m_items[id] );
     }
 }
 
-void MakeBuilder::commandFailed(const QString &command)
+void MakeBuilder::commandFailed(const QString &id)
 {
-    if( !m_queue.isEmpty() )
+    if( m_items.contains(id) )
     {
-        QPair<QStringList, KDevelop::ProjectBaseItem*> pair = m_queue.front();
-        if( pair.first.join(" ") == command )
-        {
-            m_queue.pop_front();
-            emit failed(pair.second);
-        }
+        emit failed( m_items[id] );
     }
 }
 

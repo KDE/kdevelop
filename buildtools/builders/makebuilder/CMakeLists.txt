@@ -5,6 +5,7 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}/outputview
     ${KDEVPLATFORM_INCLUDE_DIR}/project
     ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/util
     )
 
 
@@ -12,8 +13,7 @@ include_directories(
 
 set(kdevmakebuilder_LIB_SRCS
     makebuilder.cpp
-    makeitem.cpp
-    makeitemfactory.cpp
+    makeoutputmodel.cpp
     outputfilters.cpp
 )
 
@@ -26,6 +26,7 @@ target_link_libraries(kdevmakebuilder
         ${KDEVPLATFORM_INTERFACES_LIBRARY}
         ${KDEVPLATFORM_PROJECT_LIBRARY}
         ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
+        ${KDEVPLATFORM_UTIL_LIBRARY}
 )
 
 install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )

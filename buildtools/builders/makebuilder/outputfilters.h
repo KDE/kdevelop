@@ -20,49 +20,39 @@ class QString;
 #include <QList>
 class ErrorFormat;
 class ActionFormat;
+class QStandardItem;
 
-class OutputFilter
+class ErrorFilter
 {
 public:
-    virtual ~OutputFilter();
-
-    /// @return Output-line specific outputview item. Or return NULL if the @arg line
-    /// is not a valid kind of this filter.
-    virtual IOutputViewItem* processAndCreate( const QString& line ) = 0;
-};
-
-class ErrorFilter : public OutputFilter
-{
-public:
-    ErrorFilter( const MakeBuilder *builder );
+    ErrorFilter( );
     virtual ~ErrorFilter();
 
-    virtual IOutputViewItem* processAndCreate( const QString& line );
+    virtual QStandardItem* processAndCreate( const QString& line );
 
 private:
-    const MakeBuilder *m_builder;
     QList<ErrorFormat> m_errList;
 };
 
-class MakeActionFilter : public OutputFilter
+class MakeActionFilter
 {
 public:
     MakeActionFilter();
     virtual ~MakeActionFilter();
 
-    IOutputViewItem* processAndCreate( const QString& line );
+    QStandardItem* processAndCreate( const QString& line );
 private:
     QList<ActionFormat> m_actlist;
 };
 
 /// TODO read regexps from project file (.kdev4)
-class CustomFilter : public OutputFilter
+class CustomFilter
 {
 public:
     CustomFilter();
     virtual ~CustomFilter();
 
-    IOutputViewItem* processAndCreate( const QString& line );
+    QStandardItem* processAndCreate( const QString& line );
 };
 
 #endif

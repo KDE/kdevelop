@@ -12,22 +12,16 @@
  ***************************************************************************/
 
 #include "outputfilters.h"
-#include "makeitem.h"
-#include "makebuilder.h"
 #include <kdebug.h>
 #include <QRegExp>
 #include <QList>
 #include <QApplication>
+#include <QStandardItem>
 #include <QString>
 #include <QPalette>
 #include <klocale.h>
 #include <kcolorutils.h>
-
-// ported from KDev3.4's outputview
-
-OutputFilter::~OutputFilter()
-{}
-
+#include <QFont>
 ////////////////////////////////////////////////////////
 
 class ErrorFormat
@@ -58,8 +52,7 @@ ErrorFormat::ErrorFormat( const char * regExp, int file, int line, int text, QSt
     , compiler( comp )
 {}
 
-ErrorFilter::ErrorFilter( const MakeBuilder* builder )
-    : m_builder(builder)
+ErrorFilter::ErrorFilter( )
 {
     // @todo could get these from emacs compile.el
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
@@ -92,7 +85,7 @@ ErrorFilter::ErrorFilter( const MakeBuilder* builder )
 ErrorFilter::~ErrorFilter()
 {}
 
-IOutputViewItem* ErrorFilter::processAndCreate( const QString& line )
+QStandardItem* ErrorFilter::processAndCreate( const QString& line )
 {
     bool hasmatch = false;
     QString file;
@@ -137,10 +130,10 @@ IOutputViewItem* ErrorFilter::processAndCreate( const QString& line )
 
     if( hasmatch )
     {
-        MakeWarningItem *ret = 0;
+        QStandardItem *ret = 0;
         if( isWarning )
         {
-            ret = new MakeWarningItem( line, m_builder );
+            ret = new QStandardItem( line );
             QBrush fg = ret->foreground();
             fg.setColor( KColorUtils::mix(
                                       QApplication::palette().highlight().color(),
@@ -150,12 +143,9 @@ IOutputViewItem* ErrorFilter::processAndCreate( const QString& line )
         }
         else // case of real error
         {
-            ret = new MakeErrorItem( line, m_builder );
+            ret = new QStandardItem( line );
             ret->setForeground(QApplication::palette().highlight());
         }
-        ret->file = file;
-        ret->lineNo = lineNum;
-        ret->errorText = text;
         return ret;
     }
     else
@@ -259,7 +249,7 @@ MakeActionFilter::MakeActionFilter()
 MakeActionFilter::~MakeActionFilter()
 {}
 
-IOutputViewItem* MakeActionFilter::processAndCreate( const QString& line )
+QStandardItem* MakeActionFilter::processAndCreate( const QString& line )
 {
 // #ifdef DEBUG
 //     QTime t;
@@ -271,7 +261,23 @@ IOutputViewItem* MakeActionFilter::processAndCreate( const QString& line )
     {
         if( format.matches( line ) )
         {
-            MakeActionItem *actionItem = new MakeActionItem( format.action(), format.file(), format.tool(), line );
+            QString txt;
+            if( format.tool().isEmpty() || format.file().isEmpty() )
+            {
+                txt = line;
+            }
+            else
+            {
+                QString itemString = QString(format.action()).append(" ").append(format.file());
+                itemString.append(" (").append(format.tool()).append(")");
+
+                txt = itemString;
+            }
+
+            QStandardItem *actionItem = new QStandardItem( txt );
+            QFont newfont( actionItem->font() );
+            newfont.setBold( true );
+            actionItem->setFont( newfont );
             kDebug( 9038 ) << "Found: " << format.action() << " " << format.file() << "(" << format.tool() << ")" << endl;
             return actionItem;
         }
@@ -286,14 +292,13 @@ IOutputViewItem* MakeActionFilter::processAndCreate( const QString& line )
 ////////////////////////////////////////////////////////////////////////////////////
 
 CustomFilter::CustomFilter()
-    : OutputFilter()
 {
 }
 
 CustomFilter::~CustomFilter()
 {}
 
-IOutputViewItem* CustomFilter::processAndCreate( const QString& /*line*/ )
+QStandardItem* CustomFilter::processAndCreate( const QString& /*line*/ )
 {
     return 0;
 }

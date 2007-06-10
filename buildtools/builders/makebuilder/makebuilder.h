@@ -27,7 +27,9 @@
 
 
 class QStringList;
+class MakeOutputModel;
 class KDialog;
+class QSignalMapper;
 class QString;
 class QStandardItem;
 class KUrl;
@@ -35,6 +37,7 @@ class KUrl;
 namespace KDevelop {
 class ProjectBaseItem;
 class ProjectItem;
+class CommandExecutor;
 }
 
 /**
@@ -72,8 +75,8 @@ Q_SIGNALS:
     void failed( KDevelop::ProjectBaseItem* );
 
 private Q_SLOTS:
-    void commandFinished(const QString &command);
-    void commandFailed(const QString &command);
+    void commandFinished(const QString &id);
+    void commandFailed(const QString &id);
 
 private:
     QStringList computeBuildCommand(KDevelop::ProjectBaseItem *item);
@@ -81,7 +84,12 @@ private:
 
 
 private:
-    QList<QPair< QStringList, KDevelop::ProjectBaseItem* > > m_queue;
+    QMap< KDevelop::IProject*, QString > m_ids;
+    QMap< QString, KDevelop::CommandExecutor* > m_commands;
+    QMap< QString, KDevelop::ProjectBaseItem* > m_items;
+    QMap< QString, MakeOutputModel* > m_models;
+    QSignalMapper* errorMapper;
+    QSignalMapper* successMapper;
 };
 
 #endif // KDEVMAKEBUILDER_H
