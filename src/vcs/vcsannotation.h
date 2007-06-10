@@ -23,7 +23,7 @@
 #define VCSANNOTATION_H
 
 #include "vcsexport.h"
-#include <QVariant>
+#include <QtCore/QVariant>
 
 class QString;
 class QDateTime;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copysecond (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
