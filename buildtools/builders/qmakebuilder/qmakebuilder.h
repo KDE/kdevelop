@@ -1,6 +1,6 @@
 /* KDevelop QMake Support
  *
- * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2006-2007 Andreas Pakulat <apaku@gmx.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ private Q_SLOTS:
     void errored(const QString &id);
 
 private:
-    QStringList m_ids;
+    QMap< KDevelop::IProject*, QString > m_ids;
     QMap< QString, KDevelop::CommandExecutor* > m_cmds;
     QMap< QString, KDevelop::ProjectBaseItem* > m_items;
     QMap< QString, KDevelop::OutputModel* > m_models;
