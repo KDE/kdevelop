@@ -31,7 +31,7 @@ class QSignalMapper;
 class KDialog;
 namespace KDevelop{
     class ProjectBaseItem;
-    class ExecuteCommand;
+    class CommandExecutor;
     class OutputModel;
 }
 
@@ -60,7 +60,7 @@ private Q_SLOTS:
 
 private:
     QStringList m_ids;
-    QMap< QString, KDevelop::ExecuteCommand* > m_cmds;
+    QMap< QString, KDevelop::CommandExecutor* > m_cmds;
     QMap< QString, KDevelop::ProjectBaseItem* > m_items;
     QMap< QString, KDevelop::OutputModel* > m_models;
     QSignalMapper* m_failedMapper;
