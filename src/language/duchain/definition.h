@@ -50,10 +50,6 @@ public:
   Declaration* declaration() const;
 
 private:
-  /**
-   * Set the declaration for this use.
-   */
-  void setDeclaration(Declaration* declaration);
   class DefinitionPrivate* const d;
 };
 }

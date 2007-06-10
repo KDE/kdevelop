@@ -22,22 +22,35 @@
 #include "declaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
+#include "definition_p.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-class DefinitionPrivate
+DefinitionPrivate::DefinitionPrivate( Definition* d )
+  : m_definition(d)
 {
-public:
-  DUContext* m_context;
-  Declaration* m_declaration;
-};
+}
+
+void DefinitionPrivate::setDeclaration(Declaration* declaration)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  if (m_declaration)
+    DUChain::definitionChanged(m_definition, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, m_declaration);
+
+  // TODO if declaration is 0, highlight as definition without declaration
+  m_declaration = declaration;
+
+  if (m_declaration)
+    DUChain::definitionChanged(m_definition, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, m_declaration);
+}
 
 Definition::Definition(KTextEditor::Range* range, DUContext* context)
   : DUChainBase(range)
-  , d(new DefinitionPrivate)
+  , d(new DefinitionPrivate(this))
 {
   d->m_context = 0;
   d->m_declaration = 0;
@@ -51,8 +64,8 @@ Definition::~Definition()
   if (Declaration* dec = declaration())
     dec->setDefinition(0);
 
-    DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
-    delete d;
+  DUChain::definitionChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+  delete d;
 }
 
 DUContext* Definition::context() const
@@ -84,20 +97,6 @@ Declaration* Definition::declaration() const
   ENSURE_CHAIN_READ_LOCKED
 
   return d->m_declaration;
-}
-
-void Definition::setDeclaration(Declaration* declaration)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  if (d->m_declaration)
-    DUChain::definitionChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, d->m_declaration);
-
-  // TODO if declaration is 0, highlight as definition without declaration
-  d->m_declaration = declaration;
-
-  if (d->m_declaration)
-    DUChain::definitionChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, d->m_declaration);
 }
 
 // kate: indent-width 2;

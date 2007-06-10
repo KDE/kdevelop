@@ -29,6 +29,7 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "identifiedtype.h"
+#include "definition_p.h"
 
 using namespace KTextEditor;
 
@@ -81,7 +82,7 @@ Declaration::~Declaration()
     use->setDeclaration(0);
 
   if (Definition* def = definition())
-    def->setDeclaration(0);
+    def->d->setDeclaration(0);
 
   // context is only null in the test cases
   if (context())
@@ -255,7 +256,7 @@ void Declaration::setDefinition(Definition* definition)
   ENSURE_CHAIN_WRITE_LOCKED
 
   if (d->m_definition) {
-    d->m_definition->setDeclaration(0);
+    d->m_definition->d->setDeclaration(0);
 
     DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DefinitionRelationship, d->m_definition);
   }
@@ -263,7 +264,7 @@ void Declaration::setDefinition(Definition* definition)
   d->m_definition = definition;
 
   if (d->m_definition) {
-    d->m_definition->setDeclaration(this);
+    d->m_definition->d->setDeclaration(this);
     d->m_isDefinition = false;
 
     DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DefinitionRelationship, d->m_definition);
