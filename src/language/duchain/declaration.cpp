@@ -31,6 +31,7 @@
 #include "identifiedtype.h"
 #include "definition_p.h"
 #include "ducontext_p.h"
+#include "use_p.h"
 
 using namespace KTextEditor;
 
@@ -80,7 +81,7 @@ Declaration::~Declaration()
 
   QList<Use*> _uses = uses();
   foreach (Use* use, _uses)
-    use->setDeclaration(0);
+    use->d->setDeclaration(0);
 
   if (Definition* def = definition())
     def->d->setDeclaration(0);
@@ -101,7 +102,7 @@ void Declaration::removeUse( Use* use )
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  use->setDeclaration(0L);
+  use->d->setDeclaration(0L);
   d->m_uses.removeAll(use);
 
   DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Uses, use);
@@ -111,7 +112,7 @@ void Declaration::addUse( Use* use )
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  use->setDeclaration(this);
+  use->d->setDeclaration(this);
   d->m_uses.append(use);
 
   DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Uses, use);

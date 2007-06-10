@@ -27,6 +27,7 @@
 #include "use.h"
 #include "definition.h"
 #include "symboltable.h"
+#include "use_p.h"
 
 using namespace KTextEditor;
 
@@ -76,7 +77,7 @@ void ForwardDeclaration::setResolved(Declaration * declaration)
 
     // Offload uses...
     foreach (Use* use, uses())
-      use->setDeclaration(d->m_resolvedDeclaration);
+      use->d->setDeclaration(d->m_resolvedDeclaration);
   }
 }
 

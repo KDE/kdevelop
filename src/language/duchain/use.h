@@ -56,12 +56,6 @@ public:
   bool isOrphan() const;
 
 private:
-  /**
-   * Set the declaration for this use.
-   *
-   * \note Does not require the chain to be locked.
-   */
-  void setDeclaration(Declaration* definition);
   class UsePrivate* const d;
 };
 

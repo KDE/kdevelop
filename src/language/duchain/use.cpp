@@ -23,22 +23,35 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "ducontext_p.h"
+#include "use_p.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-class UsePrivate
+UsePrivate::UsePrivate( Use* u)
+  : m_use(u)
 {
-public:
-  DUContext* m_context;
-  Declaration* m_declaration;
-};
+}
+
+void UsePrivate::setDeclaration(Declaration* declaration)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  if (m_declaration)
+    DUChain::useChanged(m_use, DUChainObserver::Removal, DUChainObserver::DeclarationRelationship, m_declaration);
+
+  m_declaration = declaration;
+
+  if (m_declaration)
+    DUChain::useChanged(m_use, DUChainObserver::Addition, DUChainObserver::DeclarationRelationship, m_declaration);
+}
+
 
 Use::Use(KTextEditor::Range* range, DUContext* context)
   : DUChainBase(range)
-  , d(new UsePrivate)
+  , d(new UsePrivate(this))
 {
   d->m_context = 0;
   d->m_declaration = 0;
@@ -62,19 +75,6 @@ Declaration* Use::declaration() const
   ENSURE_CHAIN_READ_LOCKED
 
   return d->m_declaration;
-}
-
-void Use::setDeclaration(Declaration* declaration)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  if (d->m_declaration)
-    DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::DeclarationRelationship, d->m_declaration);
-
-  d->m_declaration = declaration;
-
-  if (d->m_declaration)
-    DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::DeclarationRelationship, d->m_declaration);
 }
 
 void Use::setContext(DUContext * context)
