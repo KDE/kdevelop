@@ -80,7 +80,7 @@ public:
 };
 
 SvnKJobBase::SvnKJobBase( int type, QObject *parent )
-    : KJob( parent ), d( new Private )
+    : VcsJob( parent ), d( new Private )
 {
     d->m_th = 0;
     d->m_type = type;
@@ -101,6 +101,16 @@ SvnKJobBase::~SvnKJobBase()
     }
     delete d;
     kDebug() << " SvnKJobBase::Destructor: end cleanup " << endl;
+}
+
+KDevelop::VcsJob::JobStatus SvnKJobBase::status()
+{
+    if( !error() ){
+        return KDevelop::VcsJob::JobSucceeded;
+    }
+    else{
+        return KDevelop::VcsJob::JobFailed;
+    }
 }
 
 void SvnKJobBase::setResult( const QVariant &result )
@@ -137,9 +147,9 @@ SubversionThread* SvnKJobBase::svnThread()
     return d->m_th;
 }
 
-KDevelop::VcsJob::Type SvnKJobBase::type()
+KDevelop::VcsJob::JobType SvnKJobBase::type()
 {
-    return (KDevelop::VcsJob::Type)(d->m_type);
+    return (KDevelop::VcsJob::JobType)(d->m_type);
 }
 
 QString SvnKJobBase::smartError()
@@ -167,14 +177,14 @@ void SvnKJobBase::start()
     d->m_th->start();
 }
 
-KDevelop::VcsJob::FinishStatus SvnKJobBase::exec()
+KDevelop::VcsJob::JobStatus SvnKJobBase::exec()
 {
     bool ret = KJob::exec();
     if( ret ){
-        return KDevelop::VcsJob::Succeeded;
+        return KDevelop::VcsJob::JobSucceeded;
     }
     else{
-        return KDevelop::VcsJob::Failed;
+        return KDevelop::VcsJob::JobFailed;
     }
 }
 
@@ -192,17 +202,8 @@ KDevelop::VcsJob::FinishStatus SvnKJobBase::exec()
 
 void SvnKJobBase::threadFinished()
 {
-    KDevelop::VcsJob::FinishStatus finishStatus;
-    if( KJob::error() ){
-        finishStatus = KDevelop::VcsJob::Failed;
-    }
-    else{
-        finishStatus = KDevelop::VcsJob::Succeeded;
-    }
-
     // for VcsJob ifaces
     emit resultsReady( this );
-    emit finished( this, finishStatus );
 
     // for SubversionPart internals
     emitResult();

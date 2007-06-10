@@ -14,11 +14,12 @@
 
 #include <kjob.h>
 #include "vcshelpers.h"
+#include "vcsjob.h"
 
 class SubversionThread;
 class QVariant;
 
-class SvnKJobBase : public KJob, public KDevelop::VcsJob
+class SvnKJobBase : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
@@ -27,23 +28,24 @@ public:
     SvnKJobBase( int type, QObject *parent );
     virtual ~SvnKJobBase();
 
+    JobStatus status();
+
     void setResult( const QVariant &result );
     virtual QVariant fetchResults();
 
     void setSvnThread( SubversionThread *job );
     SubversionThread *svnThread();
-    KDevelop::VcsJob::Type type();
+    KDevelop::VcsJob::JobType type();
 
     QString smartError(); // subversion internal
     QString errorMessage(); // VcsJob iface
 
     virtual void start();
-    FinishStatus exec();
+    JobStatus exec();
 //     SvnUiDelegate* ui();
 
 Q_SIGNALS:
     void resultsReady( VcsJob* );
-    void finished( VcsJob*, FinishStatus );
 
 protected Q_SLOTS:
     void threadFinished();

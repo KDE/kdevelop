@@ -17,5 +17,5 @@ X-KDE-PluginInfo-License=GPL
 X-KDevelop-Version=4
 X-KDevelop-Category=Global
 X-KDevelop-Properties=GlobalFileManagement
-X-KDevelop-Interfaces=org.kdevelop.IVersionControl
+X-KDevelop-Interfaces=org.kdevelop.IBasicVersionControl
 X-KDevelop-IRequired=org.kdevelop.IOutputView

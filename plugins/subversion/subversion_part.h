@@ -112,8 +112,7 @@ public:
                             const QString& repositoryLocation,
                             RecursionMode recursion );
 
-    VcsJob* checkout( const VcsMapping& mapping );
-
+    VcsJob* checkout( const KDevelop::VcsMapping & mapping );
 
 private:
     // context menu slots and IVCS::showXXXX() will be redirected to these methods,

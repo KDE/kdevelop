@@ -157,7 +157,7 @@ bool KDevSubversionPart::isVersionControlled( const KUrl& localLocation )
     SvnRevision nullRev;
     SvnKJobBase *job = svncore()->createStatusJob( localLocation, nullRev,
                                                        false, true, false, true, false );
-    if( job->exec() != KDevelop::VcsJob::Succeeded ){
+    if( job->exec() != KDevelop::VcsJob::JobSucceeded ){
         return false;
     }
 
@@ -179,7 +179,7 @@ VcsJob* KDevSubversionPart::repositoryLocation( const KUrl& localLocation )
 {
     SvnRevision nullRev;
     SvnKJobBase *job = svncore()->createInfoJob( localLocation, nullRev, nullRev, false );
-    if( job->exec() != VcsJob::Succeeded ){
+    if( job->exec() != VcsJob::JobSucceeded ){
         return 0;
     }
     QMap<KUrl,SvnInfoHolder> holderMap = ( dynamic_cast<SvnInfoJob*>(job->svnThread()) )->m_holderMap;
@@ -198,7 +198,7 @@ QMap<KUrl, SvnStatusHolder> KDevSubversionPart::statusSync( const KUrl &dirPath,
     rev.setKey( SvnRevision::WORKING );
     SvnKJobBase * job = svncore()->createStatusJob( dirPath, rev,
                                     recurse, getall, contactReposit, noIgnore, ignoreExternals);
-    if( job->exec() != KDevelop::VcsJob::Succeeded ){
+    if( job->exec() != KDevelop::VcsJob::JobSucceeded ){
         // error
         return holderMap;
     }
@@ -283,7 +283,7 @@ VcsJob* KDevSubversionPart::localRevision( const KUrl& localLocation, VcsRevisio
 {
     SvnRevision nullRev;
     SvnKJobBase *job = svncore()->createInfoJob( localLocation, nullRev, nullRev, false );
-    if( job->exec() != KDevelop::VcsJob::Succeeded ){
+    if( job->exec() != KDevelop::VcsJob::JobSucceeded ){
         return 0;
     }
     QMap<KUrl,SvnInfoHolder> holderMap = ( dynamic_cast<SvnInfoJob*>(job->svnThread()) )->m_holderMap;
@@ -448,7 +448,7 @@ VcsJob* KDevSubversionPart::import( const KUrl& localLocation,
     svncore()->createImportJob( localLocation, KUrl(repositoryLocation), nonrecurse, true );
 }
 
-VcsJob* KDevSubversionPart::checkout( const VcsMapping& mapping )
+VcsJob* KDevSubversionPart::checkout( const KDevelop::VcsMapping& mapping )
 {
     // TODO understand vcsmapping, implement checkoutjob
     return 0;

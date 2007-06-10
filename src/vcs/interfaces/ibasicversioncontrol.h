@@ -26,9 +26,9 @@
 #include <kurl.h>
 #include "vcsrevision.h"
 #include "vcsdiff.h"
+#include "vcshelpers.h"
 
 class QString;
-class VcsMapping;
 
 namespace KDevelop
 {
@@ -43,6 +43,9 @@ namespace KDevelop
  *
  * @TODO implement VcsJob!
  */
+
+class VcsJob;
+
 class KDEVPLATFORMVCS_EXPORT IBasicVersionControl
 {
 public:
