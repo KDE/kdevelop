@@ -231,7 +231,7 @@ void subversionCore::diff( const KURL::List& list, const QString& where){
 
 void subversionCore::diffAsync( const KURL &pathOrUrl1, const KURL &pathOrUrl2,
 							int rev1, QString revKind1, int rev2, QString revKind2,
-							bool recurse )
+							bool recurse, bool pegdiff )
 {
 	KURL servURL = "kdevsvn+svn://blah/";
 	QByteArray parms;
@@ -239,6 +239,7 @@ void subversionCore::diffAsync( const KURL &pathOrUrl1, const KURL &pathOrUrl2,
 	int cmd = 13;
 	kdDebug(9036) << "diffing async : " << pathOrUrl1 << " and " << pathOrUrl2 << endl;
 	s << cmd << pathOrUrl1 << pathOrUrl2 << rev1 << revKind1 << rev2 << revKind2 << recurse;
+	s << pegdiff;
 	KIO::SimpleJob * job = KIO::special(servURL, parms, false);
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotDiffResult( KIO::Job * ) ) );
 	initProcessDlg( (KIO::Job*)job, pathOrUrl1.prettyURL(), pathOrUrl2.prettyURL() );

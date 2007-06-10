@@ -184,7 +184,8 @@ void SvnLogViewWidget::diffToPrevious()
     int revThis = m_ctxLogItem->text(0).toInt();
 	int revPrev = revThis - 1;
 	kdDebug(9036) << " Diff to prev requested on " << m_reqUrl << endl;
-	m_part->svncore()->diffAsync( m_reqUrl, m_reqUrl, revPrev, "", revThis, "", true/*recurse*/ );
+	m_part->svncore()->diffAsync( m_reqUrl, m_reqUrl, revPrev, "", revThis, "",
+	 				true/*recurse*/, true/*peg_diff*/ );
 }
 
 SvnLogViewOptionDlg::SvnLogViewOptionDlg( QWidget *parent, const char* name, bool modal, WFlags f )

@@ -59,7 +59,7 @@ public:
 	void diff( const KURL::List&, const QString& where);
 	void diffAsync( const KURL &pathOrUrl1, const KURL &pathOrUrl2,
 					int rev1, QString revKind1, int rev2, QString revKind2,
-					bool recurse );
+					bool recurse, bool pegdiff = false );
 	void revert( const KURL::List&);
 	void resolve( const KURL::List&);
 	void checkout();

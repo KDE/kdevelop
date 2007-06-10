@@ -893,7 +893,7 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 			{
 				KURL url1,url2;
 				int rev1, rev2;
-				bool recurse;
+				bool recurse, pegdiff;
 				QString revkind1, revkind2;
 				stream >> url1;
 				stream >> url2;
@@ -901,9 +901,9 @@ void kio_svnProtocol::special( const QByteArray& data ) {
 				stream >> revkind1;
 				stream >> rev2;
 				stream >> revkind2;
-				stream >> recurse;
+				stream >> recurse >> pegdiff;
 				kdDebug(9036) << "kio_svnProtocol DIFF" << endl;
-				svn_diff(url1,url2,rev1,rev2,revkind1,revkind2,recurse);
+				svn_diff(url1,url2,rev1,rev2,revkind1,revkind2,recurse,pegdiff);
 				break;
 			}
 		case SVN_BLAME:
@@ -1072,8 +1072,7 @@ void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int re
 
 	m_counter = 0;
 	apr_array_header_t *targets = apr_array_make(subpool, 1+urls.count(), sizeof(const char *));
-	QString convertedPathUrl;
-	
+
 	for ( QValueListConstIterator<KURL> it = urls.begin(); it != urls.end() ; ++it ) {
 		KURL nurl = *it;
 
@@ -1090,16 +1089,14 @@ void kio_svnProtocol::svn_log( int revstart, const QString& revkindstart, int re
 			}
 			(*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
 				urlFromPath;
-			convertedPathUrl = QString::fromUtf8(urlFromPath);
 			kdDebug(9036) << " urlFromPath: " << urlFromPath << endl;
 			
 		}else{ // show working copy log
 			nurl.setProtocol( "file" );
-			convertedPathUrl = QString::fromUtf8( svn_path_canonicalize( nurl.path().utf8(), subpool ) );
 			(*(( const char ** )apr_array_push(( apr_array_header_t* )targets)) ) =
 				svn_path_canonicalize( nurl.path().utf8(), subpool );
 		}
-		setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "requrl", convertedPathUrl );
+		setMetaData(QString::number( counter() ).rightJustify( 10,'0' )+ "requrl", nurl.path() );
 		incCounter();
 	}
 	
@@ -1174,7 +1171,8 @@ svn_opt_revision_t kio_svnProtocol::createRevision( int revision, const QString&
 	return result;
 }
 
-void kio_svnProtocol::svn_diff(const KURL & url1, const KURL& url2,int rev1, int rev2,const QString& revkind1,const QString& revkind2,bool recurse) {
+void kio_svnProtocol::svn_diff(const KURL & url1, const KURL& url2,int rev1, int rev2,const QString& revkind1,const QString& revkind2,bool recurse, bool pegdiff )
+{
 	kdDebug(9036) << "kio_svn::diff : " << url1.path() << " at revision " << rev1 << " or " << revkind1 << " with "
 		<< url2.path() << " at revision " << rev2 << " or " << revkind2
 		<< endl ;
@@ -1218,7 +1216,16 @@ void kio_svnProtocol::svn_diff(const KURL & url1, const KURL& url2,int rev1, int
 	apr_file_mktemp( &outfile, templ , APR_READ|APR_WRITE|APR_CREATE|APR_TRUNCATE, subpool );
 
 	initNotifier(false, false, false, subpool);
-	svn_error_t *err = svn_client_diff (options, path1, &revision1, path2, &revision2, recurse, false, true, outfile, NULL, ctx, subpool);
+	svn_error_t *err = 0;
+	if( pegdiff ){
+		svn_opt_revision_t peg_rev = createRevision(-1, "BASE", subpool );
+		err = svn_client_diff_peg( options, path1, &peg_rev, &revision1, &revision2,
+								recurse, false, false, outfile, NULL, ctx, subpool );
+	} else{
+		err = svn_client_diff( options, path1, &revision1, path2, &revision2, recurse,
+							false, false, outfile, NULL, ctx, subpool );
+	}
+
 	if ( err ){
 		error( KIO::ERR_SLAVE_DEFINED, QString::fromLocal8Bit(err->message) );
 		svn_pool_destroy (subpool);
