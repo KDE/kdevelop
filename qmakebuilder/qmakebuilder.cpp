@@ -65,7 +65,13 @@ QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
     m_completedMapper = new QSignalMapper(this);
     connect(m_completedMapper, SIGNAL(mapped(const QString& )),
             this, SLOT(completed(const QString&)));
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    if( i )
+    {
+        connect( i, SIGNAL( viewRemoved( const QString& ) ),
+                 this, SLOT( cleanupModel( const QString& ) ) );
+    }
+    i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
     {
         IMakeBuilder* view = i->extension<IMakeBuilder>();
@@ -83,12 +89,37 @@ QMakeBuilder::~QMakeBuilder()
 {
 }
 
+void QMakeBuilder::cleanupModel( const QString& id )
+{
+    kDebug(9024) << "view was removed, check wether its one of ours" << endl;
+    if( m_models.contains( id ) )
+    {
+        kDebug(9024) << "do some cleanup" << endl;
+        KDevelop::OutputModel* model = m_models[id];
+        KDevelop::CommandExecutor* cmd = m_cmds[id];
+        foreach( KDevelop::IProject* p, m_ids.keys() )
+        {
+            if( m_ids[p] == id )
+            {
+                m_ids.remove(p);
+                break;
+            }
+        }
+        m_models.remove(id);
+        m_cmds.remove(id);
+        m_items.remove(id);
+        m_failedMapper->removeMappings(cmd);
+        m_completedMapper->removeMappings(cmd);
+        delete model;
+        delete cmd;
+    }
+}
+
 bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     kDebug(9024) << "Building" << endl;
     if( dom->type() != KDevelop::ProjectBaseItem::Project )
         return false;
-    KDevelop::ProjectItem* item = static_cast<KDevelop::ProjectItem*>(dom);
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {

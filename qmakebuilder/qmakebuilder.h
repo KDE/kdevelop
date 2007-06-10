@@ -55,9 +55,9 @@ Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
 private Q_SLOTS:
-    void completed(const QString &id);
-    void errored(const QString &id);
-
+    void completed( const QString &id );
+    void errored( const QString &id );
+    void cleanupModel( const QString& id );
 private:
     QMap< KDevelop::IProject*, QString > m_ids;
     QMap< QString, KDevelop::CommandExecutor* > m_cmds;
