@@ -88,7 +88,8 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
     if( plugin ){
         d->m_outview = plugin->extension<KDevelop::IOutputView>();
         if( d->m_outview ){
-            d->m_outputViewId = d->m_outview->registerView( i18n("Subversion Notification") );
+            d->m_outputViewId = d->m_outview->registerView( i18n("Subversion Notification"),
+                              KDevelop::IOutputView::AlwaysShowView );
             d->m_outputModel = new QStandardItemModel(this);
             d->m_outview->setModel( d->m_outputViewId, d->m_outputModel );
             connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),

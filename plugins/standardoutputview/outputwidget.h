@@ -30,6 +30,7 @@ class StandardOutputView;
 class OutputViewCommand;
 class QModelIndex;
 class QListView;
+class QToolButton;
 
 class OutputWidget : public KTabWidget
 {
@@ -38,11 +39,15 @@ class OutputWidget : public KTabWidget
         OutputWidget(QWidget* parent, StandardOutputView* view);
     public Q_SLOTS:
         void changeModel(const QString& title );
-    private Q_SLOTS:
-        void customContextMenuRequested( const QPoint & point );
+        void removeView( const QString& id );
+        void closeActiveView();
+    Q_SIGNALS:
+        void viewRemoved( const QString& );
     private:
         QMap<QString, QListView*> m_listviews;
+        QMap<int, QString> m_tabToIds;
         StandardOutputView* m_outputView;
+        QToolButton* m_closeButton;
 };
 
 #endif

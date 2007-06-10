@@ -25,12 +25,22 @@
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QItemSelectionModel>
 #include <QtGui/QListView>
+#include <QtGui/QToolButton>
 #include <kmenu.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kicon.h>
 
 OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     : KTabWidget( parent ), m_outputView(view)
 {
+    m_closeButton = new QToolButton( this );
+    connect( m_closeButton, SIGNAL( clicked() ),
+             this, SLOT(closeActiveView() ) );
+    m_closeButton->setIcon( KIcon("tab-remove") );
+    m_closeButton->adjustSize();
+    m_closeButton->setToolTip( i18n( "Close the currently active output view") );
+    setCornerWidget( m_closeButton, Qt::TopRightCorner );
     connect( m_outputView, SIGNAL( modelChanged( const QString& ) ),
              this, SLOT( changeModel( const QString& ) ) );
 
@@ -52,14 +62,45 @@ void OutputWidget::changeModel(const QString& id )
         listview->setModel( m_outputView->registeredModel(id) );
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         m_listviews[id] = listview;
-        addTab( listview, m_outputView->registeredTitle(id) );
+        int num = addTab( listview, m_outputView->registeredTitle(id) );
+        m_tabToIds[num] = id;
     }
 }
 
-void OutputWidget::customContextMenuRequested( const QPoint & point )
+void OutputWidget::removeView( const QString& id )
 {
-    kDebug(9004) << "Custom context menu for outputview" << endl;
+    if( m_listviews.contains( id ) )
+    {
+        QWidget* w = m_listviews[id];
+        int idx = indexOf( w );
+        if( idx != -1 )
+        {
+            removeTab( idx );
+            delete w;
+            m_tabToIds.remove( idx );
+            m_listviews.remove( id );
+        }
+    }
 }
+
+void OutputWidget::closeActiveView()
+{
+    int idx = currentIndex();
+    if( m_tabToIds.contains( idx ) )
+    {
+        QString id = m_tabToIds[currentIndex()];
+        if( m_outputView->closeBehaviour( id ) == KDevelop::IOutputView::AllowUserClose )
+        {
+            QWidget* widget = currentWidget();
+            removeTab( idx );
+            delete widget;
+            m_tabToIds.remove( idx );
+            m_listviews.remove( id );
+            emit viewRemoved( id );
+        }else kDebug(9004) << "OOops, the view is not user closeable" << endl;
+    }else kDebug(9004) << "OOops, the selected tab is not in our list??" << endl;
+}
+
 #include "outputwidget.moc"
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

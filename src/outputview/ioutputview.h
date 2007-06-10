@@ -39,16 +39,20 @@ class IOutputView
 {
 public:
 
+    enum CloseBehaviour{
+        AllowUserClose = 1,
+        AlwaysShowView = 2
+    };
+
     virtual ~IOutputView() {}
 
-public:
     /**
      * Register a new view with the given title
      * @param title the Title to be displayed on the view-switcher
      * @returns an id that identifies the new view and is used in the other
      *          methods
      */
-    virtual QString registerView( const QString& title ) = 0;
+    virtual QString registerView( const QString& title, CloseBehaviour = AllowUserClose ) = 0;
 
     /**
      * Sets the model of the registered view identified by id to model
@@ -59,6 +63,7 @@ public:
 
 Q_SIGNALS:
     void activated( const QModelIndex& );
+    void viewRemoved( const QString& );
 };
 }
 KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutputView" )

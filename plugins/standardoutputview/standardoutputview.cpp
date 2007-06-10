@@ -47,6 +47,10 @@ public:
     {
         Q_UNUSED(parent)
         OutputWidget* l = new OutputWidget( parent, m_part);
+        QObject::connect( l, SIGNAL( viewRemoved( const QString& ) ),
+                 m_part, SIGNAL( viewRemoved( const QString &) ) );
+        QObject::connect( m_part, SIGNAL( viewRemoved( const QString& ) ),
+                 l, SLOT( removeView( const QString &) ) );
         return l;
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -64,6 +68,7 @@ public:
     QMap<QString, QAbstractItemModel* > m_models;
     QMap<QString, QString> m_titles;
     QList<unsigned int> m_ids;
+    QMap<QString, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
@@ -82,18 +87,31 @@ StandardOutputView::~StandardOutputView()
     delete d;
 }
 
-QString StandardOutputView::registerView(const QString& title)
+QString StandardOutputView::registerView( const QString& title,
+                                          KDevelop::IOutputView::CloseBehaviour behaviour )
 {
     unsigned int newid;
     if( d->m_ids.isEmpty() )
         newid = 0;
     else
         newid = d->m_ids.last()+1;
+    kDebug(9004) << "Registering view" << title << " with behaviour: " << behaviour << endl;
     QString idstr = QString::number(newid);
     d->m_ids << newid;
     d->m_titles[idstr] = title;
     d->m_models[idstr] = 0;
+    d->m_behaviours[idstr] = behaviour;
     return idstr;
+}
+
+KDevelop::IOutputView::CloseBehaviour StandardOutputView::closeBehaviour( const QString& id )
+{
+
+    if( d->m_titles.contains( id ) )
+    {
+        return d->m_behaviours[id];
+    }
+    return KDevelop::IOutputView::AllowUserClose;
 }
 
 void StandardOutputView::setModel( const QString& id, QAbstractItemModel* model )
