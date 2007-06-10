@@ -45,7 +45,7 @@ class OutputWidget : public KTabWidget
         void viewRemoved( const QString& );
     private:
         QMap<QString, QListView*> m_listviews;
-        QMap<int, QString> m_tabToIds;
+        QMap<QWidget*, QString> m_widgetMap;
         StandardOutputView* m_outputView;
         QToolButton* m_closeButton;
 };

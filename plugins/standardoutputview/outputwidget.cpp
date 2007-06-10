@@ -62,8 +62,8 @@ void OutputWidget::changeModel(const QString& id )
         listview->setModel( m_outputView->registeredModel(id) );
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         m_listviews[id] = listview;
-        int num = addTab( listview, m_outputView->registeredTitle(id) );
-        m_tabToIds[num] = id;
+        m_widgetMap[listview] = id;
+        addTab( listview, m_outputView->registeredTitle(id) );
     }
 }
 
@@ -76,25 +76,24 @@ void OutputWidget::removeView( const QString& id )
         if( idx != -1 )
         {
             removeTab( idx );
-            delete w;
-            m_tabToIds.remove( idx );
+            m_widgetMap.remove( w );
             m_listviews.remove( id );
+            delete w;
         }
     }
 }
 
 void OutputWidget::closeActiveView()
 {
-    int idx = currentIndex();
-    if( m_tabToIds.contains( idx ) )
+    QWidget* widget = currentWidget();
+    if( m_widgetMap.contains( widget ) )
     {
-        QString id = m_tabToIds[currentIndex()];
+        QString id = m_widgetMap[widget];
         if( m_outputView->closeBehaviour( id ) == KDevelop::IOutputView::AllowUserClose )
         {
-            QWidget* widget = currentWidget();
-            removeTab( idx );
+            removeTab( currentIndex() );
             delete widget;
-            m_tabToIds.remove( idx );
+            m_widgetMap.remove( widget );
             m_listviews.remove( id );
             emit viewRemoved( id );
         }else kDebug(9004) << "OOops, the view is not user closeable" << endl;
