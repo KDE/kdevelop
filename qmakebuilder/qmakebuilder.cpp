@@ -24,6 +24,8 @@
 #include <config.h>
 
 #include <QtCore/QStringList>
+#include <QtCore/QSignalMapper>
+
 
 #include <projectmodel.h>
 
@@ -31,6 +33,8 @@
 #include <icore.h>
 #include <iplugincontroller.h>
 #include <ioutputview.h>
+#include <outputmodel.h>
+#include <executecommand.h>
 #include <QtDesigner/QExtensionFactory>
 
 #include <kgenericfactory.h>
@@ -49,26 +53,22 @@ K_EXPORT_COMPONENT_FACTORY( kdevqmakebuilder,
                             QMakeBuilderFactory( "kdevqmakebuilder" ) )
 
 QMakeBuilder::QMakeBuilder(QObject *parent, const QStringList &)
-    : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent)
+    : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent),
+      m_failedMapper( new QSignalMapper( this ) ),
+      m_completedMapper( new QSignalMapper( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IQMakeBuilder )
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    m_failedMapper = new QSignalMapper(this);
+    connect(m_failedMapper, SIGNAL(mapped(const QString& )),
+            this, SLOT(errored(const QString&)));
+    m_completedMapper = new QSignalMapper(this);
+    connect(m_completedMapper, SIGNAL(mapped(const QString& )),
+            this, SLOT(completed(const QString&)));
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
     {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-        if( view )
-        {
-            connect(i, SIGNAL(commandFinished(const QString &)),
-                this, SLOT(commandFinished(const QString &)));
-            connect(i, SIGNAL(commandFailed(const QString &)),
-                this, SLOT(commandFailed(const QString &)));
-        }
-    }
-    i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
-    if( i )
-    {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        IMakeBuilder* view = i->extension<IMakeBuilder>();
         if( view )
         {
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)),
@@ -95,15 +95,30 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            QStringList cmd;
+
+            QString id = view->registerView(i18n("QMake: %1", dom->project()->name() ) );
+            m_ids << id;
+            m_models[id] = new KDevelop::OutputModel(this);
+            view->setModel( id, m_models[id] );
+            m_items[id] = dom;
+            QString cmd;
             KSharedConfig::Ptr cfg = dom->project()->projectConfiguration();
             KConfigGroup group(cfg.data(), "QMake Builder");
             kDebug(9024) << "Reading setting: " << group.readEntry("QMake Binary") << endl;
             KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
 //             kDebug(9024) << v << v.type() << v.userType() << endl;
-            cmd << v.toLocalFile();
-            m_queue << QPair<QStringList, KDevelop::ProjectBaseItem*>( cmd, dom );
-            view->queueCommand( item->url(), cmd, QMap<QString, QString>() );
+            cmd = v.toLocalFile();
+            m_cmds[id] = new KDevelop::ExecuteCommand(cmd, this);
+            connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
+                    m_models[id], SLOT(appendLines(const QStringList&) ) );
+            connect(m_cmds[id], SIGNAL(receivedStandardOutput(const QStringList&)),
+                    m_models[id], SLOT(appendLines(const QStringList&) ) );
+            m_failedMapper->setMapping( m_cmds[id], id );
+            m_completedMapper->setMapping( m_cmds[id], id );
+            m_cmds[id]->setWorkingDirectory( dom->project()->folder().toLocalFile() );
+            connect( m_cmds[id], SIGNAL( failed() ), m_failedMapper, SLOT(map()));
+            connect( m_cmds[id], SIGNAL( completed() ), m_completedMapper, SLOT(map()));
+            m_cmds[id]->start();
             return true;
         }
     }
@@ -116,45 +131,30 @@ bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
     return false;
 }
 
-void QMakeBuilder::commandFinished(const QString &command)
+void QMakeBuilder::completed(const QString &id)
 {
-    kDebug(9024) << "command finished " << command << endl;
-    if( !m_queue.isEmpty() )
+    kDebug(9024) << "command finished " << id << endl;
+    if( m_items.contains(id))
     {
-        kDebug(9024) << "queue not empty" << endl;
-        QPair< QStringList, KDevelop::ProjectBaseItem* > pair = m_queue.front();
-
-        if( pair.first.join(" ") == command )
+        IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
+        if( i )
         {
-            kDebug(9024) << "found command" << endl;
-            m_queue.pop_front();
-            IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
-            if( i )
+            IMakeBuilder* builder = i->extension<IMakeBuilder>();
+            if( builder )
             {
-                IMakeBuilder* builder = i->extension<IMakeBuilder>();
-                if( builder )
-                {
-                    kDebug(9024) << "Building with make" << endl;
-                    builder->build(pair.second);
-                }else kDebug(9024) << "Make builder not with extension" << endl;
-            }
-            else kDebug(9024) << "Make builder not found" << endl;
-        }
+                kDebug(9024) << "Building with make" << endl;
+                builder->build(m_items[id]);
+            }else kDebug(9024) << "Make builder not with extension" << endl;
+        } else kDebug(9024) << "Make builder not found" << endl;
     }
 }
 
-void QMakeBuilder::commandFailed(const QString &command)
+void QMakeBuilder::errored(const QString &id)
 {
-    if( !m_queue.isEmpty() )
-    {
-        QPair<QStringList, KDevelop::ProjectBaseItem*> pair = m_queue.front();
-        if( pair.first.join(" ") == command )
-        {
-            m_queue.pop_front();
-            emit failed(pair.second);
-        }
-    }
+    if( m_items.contains(id))
+        emit failed(m_items[id]);
 }
 
 #include "qmakebuilder.moc"
-// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

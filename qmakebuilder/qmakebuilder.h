@@ -27,8 +27,13 @@
 #include <QtCore/QPair>
 
 class QStringList;
+class QSignalMapper;
 class KDialog;
-namespace KDevelop{ class ProjectBaseItem; }
+namespace KDevelop{
+    class ProjectBaseItem;
+    class ExecuteCommand;
+    class OutputModel;
+}
 
 /**
 @author Andreas Pakulat
@@ -50,13 +55,18 @@ Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
 private Q_SLOTS:
-    void commandFinished(const QString &command);
-    void commandFailed(const QString &command);
+    void completed(const QString &id);
+    void errored(const QString &id);
 
 private:
-    QList< QPair< QStringList, KDevelop::ProjectBaseItem*> > m_queue;
+    QStringList m_ids;
+    QMap< QString, KDevelop::ExecuteCommand* > m_cmds;
+    QMap< QString, KDevelop::ProjectBaseItem* > m_items;
+    QMap< QString, KDevelop::OutputModel* > m_models;
+    QSignalMapper* m_failedMapper;
+    QSignalMapper* m_completedMapper;
 };
 
 #endif // QMAKEBUILDER_H
 
-// kate: space-indent on; indent-width 4; tab-width: 4; replace-tabs on; auto-insert-doxygen on
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
