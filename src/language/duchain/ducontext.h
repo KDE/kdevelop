@@ -345,23 +345,7 @@ protected:
 
 private:
   class DUContextPrivate* const d;
-  /**
-   * Adds a child context.
-   *
-   * \note Be sure to have set the text location first, so that
-   * the chain is sorted correctly.
-   */
-  void addChildContext(DUContext* context);
-
-
-  void addImportedChildContext( DUContext * context );
-  void removeImportedChildContext( DUContext * context );
-
-  void addDeclaration(Declaration* declaration);
-  void removeDeclaration(Declaration* declaration);
-
-  void addUse(Use* use);
-  void removeUse(Use* use);
+  friend class DUContextPrivate;
 };
 
 }

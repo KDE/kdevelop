@@ -22,6 +22,7 @@
 #include "topducontext.h"
 #include "duchain.h"
 #include "duchainlock.h"
+#include "ducontext_p.h"
 
 using namespace KTextEditor;
 
@@ -81,7 +82,7 @@ void Use::setContext(DUContext * context)
   if (d->m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    d->m_context->removeUse(this);
+    d->m_context->d->removeUse(this);
 
     DUChain::useChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
   }
@@ -91,7 +92,7 @@ void Use::setContext(DUContext * context)
   if (d->m_context) {
     ENSURE_CHAIN_WRITE_LOCKED
 
-    d->m_context->addUse(this);
+    d->m_context->d->addUse(this);
 
     DUChain::useChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
   }

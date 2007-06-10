@@ -28,38 +28,107 @@
 #include "typesystem.h"
 #include "topducontext.h"
 #include "symboltable.h"
+#include "ducontext_p.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-class DUContextPrivate
+DUContextPrivate::DUContextPrivate( DUContext* d)
+  : m_context(d)
 {
-public:
-  DUContext::ContextType m_contextType;
-  QualifiedIdentifier m_scopeIdentifier;
-  DUContext* m_parentContext;
-  QList<DUContext*> m_importedParentContexts;
-  QList<DUContext*> m_childContexts;
-  QList<DUContext*> m_importedChildContexts;
-  QList<Declaration*> m_localDeclarations;
-  QList<Definition*> m_localDefinitions;
-  QList<DUContext::UsingNS*> m_usingNamespaces;
-  QList<Use*> m_uses;
-  QList<Use*> m_orphanUses;
-  bool m_inSymbolTable : 1;
-};
+}
+
+void DUContextPrivate::addUse(Use* use)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  m_uses.append(use);
+
+  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::Uses, use);
+}
+
+void DUContextPrivate::removeUse(Use* use)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  Q_ASSERT(m_uses.contains(use));
+  m_uses.removeAll(use);
+
+  DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::Uses, use);
+}
+
+void DUContextPrivate::addDeclaration( Declaration * newDeclaration )
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
+
+  m_localDeclarations.append(newDeclaration);
+
+  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
+}
+
+void DUContextPrivate::removeDeclaration(Declaration* declaration)
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  m_localDeclarations.removeAll(declaration);
+
+  DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
+}
+
+void DUContextPrivate::addChildContext( DUContext * context )
+{
+  // Internal, don't need to assert a lock
+
+  for (int i = 0; i < m_childContexts.count(); ++i) {
+    DUContext* child = m_childContexts.at(i);
+    if (context->textRange().start() < child->textRange().start()) {
+      m_childContexts.insert(i, context);
+      context->d->m_parentContext = m_context;
+      return;
+    }
+  }
+  m_childContexts.append(context);
+  context->d->m_parentContext = m_context;
+
+  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
+}
+
+void DUContextPrivate::addImportedChildContext( DUContext * context )
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  Q_ASSERT(!m_importedChildContexts.contains(context));
+
+  m_importedChildContexts.append(context);
+
+  DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
+}
+
+void DUContextPrivate::removeImportedChildContext( DUContext * context )
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+
+  Q_ASSERT(m_importedChildContexts.contains(context));
+
+  m_importedChildContexts.removeAll(context);
+
+  DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
+}
+
 
 DUContext::DUContext(KTextEditor::Range* range, DUContext* parent)
   : DUChainBase(range)
-  , d(new DUContextPrivate)
+  , d(new DUContextPrivate(this))
 {
   d->m_contextType = Other;
   d->m_parentContext = 0;
   d->m_inSymbolTable = false;
   if (parent)
-    parent->addChildContext(this);
+    parent->d->addChildContext(this);
 }
 
 DUContext::~DUContext( )
@@ -107,26 +176,6 @@ DUContext* DUContext::parentContext( ) const
   ENSURE_CHAIN_READ_LOCKED
 
   return d->m_parentContext;
-}
-
-void DUContext::addDeclaration( Declaration * newDeclaration )
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
-
-  d->m_localDeclarations.append(newDeclaration);
-
-  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
-}
-
-void DUContext::removeDeclaration(Declaration* declaration)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  d->m_localDeclarations.removeAll(declaration);
-
-  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
 }
 
 QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch ) const
@@ -274,24 +323,6 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
   return ret;
 }
 
-void DUContext::addChildContext( DUContext * context )
-{
-  // Internal, don't need to assert a lock
-
-  for (int i = 0; i < d->m_childContexts.count(); ++i) {
-    DUContext* child = d->m_childContexts.at(i);
-    if (context->textRange().start() < child->textRange().start()) {
-      d->m_childContexts.insert(i, context);
-      context->d->m_parentContext = this;
-      return;
-    }
-  }
-  d->m_childContexts.append(context);
-  context->d->m_parentContext = this;
-
-  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
-}
-
 void DUContext::addImportedParentContext( DUContext * context )
 {
   ENSURE_CHAIN_WRITE_LOCKED
@@ -299,7 +330,7 @@ void DUContext::addImportedParentContext( DUContext * context )
   if (d->m_importedParentContexts.contains(context))
     return;
 
-  context->addImportedChildContext(this);
+  context->d->addImportedChildContext(this);
 
   for (int i = 0; i < d->m_importedParentContexts.count(); ++i) {
     DUContext* parent = d->m_importedParentContexts.at(i);
@@ -319,31 +350,9 @@ void DUContext::removeImportedParentContext( DUContext * context )
 
   d->m_importedParentContexts.removeAll(context);
 
-  context->removeImportedChildContext(this);
+  context->d->removeImportedChildContext(this);
 
   DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
-}
-
-void DUContext::addImportedChildContext( DUContext * context )
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  Q_ASSERT(!d->m_importedChildContexts.contains(context));
-
-  d->m_importedChildContexts.append(context);
-
-  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
-}
-
-void DUContext::removeImportedChildContext( DUContext * context )
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  Q_ASSERT(d->m_importedChildContexts.contains(context));
-
-  d->m_importedChildContexts.removeAll(context);
-
-  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
 }
 
 const QList<DUContext*>& DUContext::importedChildContexts() const
@@ -627,25 +636,6 @@ const QList< Use * > & DUContext::uses() const
   ENSURE_CHAIN_READ_LOCKED
 
   return d->m_uses;
-}
-
-void DUContext::addUse(Use* use)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  d->m_uses.append(use);
-
-  DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::Uses, use);
-}
-
-void DUContext::removeUse(Use* use)
-{
-  ENSURE_CHAIN_WRITE_LOCKED
-
-  Q_ASSERT(d->m_uses.contains(use));
-  d->m_uses.removeAll(use);
-
-  DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::Uses, use);
 }
 
 DUContext * DUContext::findContextAt(const KTextEditor::Cursor & position) const

@@ -30,6 +30,7 @@
 #include "duchainlock.h"
 #include "identifiedtype.h"
 #include "definition_p.h"
+#include "ducontext_p.h"
 
 using namespace KTextEditor;
 
@@ -86,7 +87,7 @@ Declaration::~Declaration()
 
   // context is only null in the test cases
   if (context())
-    context()->removeDeclaration(this);
+    context()->d->removeDeclaration(this);
 
   setContext(0);
 
@@ -201,14 +202,14 @@ void Declaration::setContext(DUContext* context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
 
   if (d->m_context) {
-    d->m_context->removeDeclaration(this);
+    d->m_context->d->removeDeclaration(this);
     DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
   }
 
   d->m_context = context;
 
   if (d->m_context) {
-    d->m_context->addDeclaration(this);
+    d->m_context->d->addDeclaration(this);
     DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
   }
 }
