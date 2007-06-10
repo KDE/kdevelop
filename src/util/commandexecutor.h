@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef EXECUTECOMMAND_H
-#define EXECUTECOMMAND_H
+#ifndef COMMANDEXECUTOR_H
+#define COMMANDEXECUTOR_H
 
 #include <QtCore/QObject>
 #include <QtCore/QProcess>
@@ -44,7 +44,7 @@ namespace KDevelop
  * @author Andreas Pakulat <apaku@gmx.de>
  * TODO: Should this be a KJob??
  */
-class KDEVPLATFORMUTIL_EXPORT ExecuteCommand : public QObject
+class KDEVPLATFORMUTIL_EXPORT CommandExecutor : public QObject
 {
     Q_OBJECT
 public:
@@ -53,8 +53,8 @@ public:
      *
      * The process is not started immediately, instead start() has to be called.
      */
-    explicit ExecuteCommand( const QString& command, QObject* parent = 0 );
-    ~ExecuteCommand();
+    explicit CommandExecutor( const QString& command, QObject* parent = 0 );
+    ~CommandExecutor();
 
     /**
      * set additional arguments to be used when executing the command
@@ -83,8 +83,8 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT( d, void procError( QProcess::ProcessError ) )
     Q_PRIVATE_SLOT( d, void procFinished( int, QProcess::ExitStatus ) )
-    class ExecuteCommandPrivate* const d;
-    friend class ExecuteCommandPrivate;
+    class CommandExecutorPrivate* const d;
+    friend class CommandExecutorPrivate;
 };
 
 }

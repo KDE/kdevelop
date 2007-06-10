@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "executecommand.h"
+#include "commandexecutor.h"
 
 #include "processlinemaker.h"
 #include <QtCore/QMap>
@@ -28,14 +28,14 @@
 namespace KDevelop
 {
 
-class ExecuteCommandPrivate
+class CommandExecutorPrivate
 {
 public:
-    ExecuteCommandPrivate( ExecuteCommand* cmd )
+    CommandExecutorPrivate( ExecuteCommand* cmd )
         : m_exec(cmd)
     {
     }
-    ExecuteCommand* m_exec;
+    CommandExecutor* m_exec;
     QProcess* m_process;
     ProcessLineMaker* m_lineMaker;
     QString m_command;
@@ -57,8 +57,8 @@ public:
     }
 };
 
-ExecuteCommand::ExecuteCommand( const QString& command, QObject* parent )
-  : QObject(parent), d(new ExecuteCommandPrivate(this))
+CommandExecutor::CommandExecutor( const QString& command, QObject* parent )
+  : QObject(parent), d(new CommandExecutorPrivate(this))
 {
     d->m_process = new QProcess(this);
     d->m_lineMaker = new ProcessLineMaker( d->m_process );
@@ -74,28 +74,28 @@ ExecuteCommand::ExecuteCommand( const QString& command, QObject* parent )
 }
 
 
-ExecuteCommand::~ExecuteCommand()
+CommandExecutor::~CommandExecutor()
 {
     delete d->m_lineMaker;
     delete d;
 }
 
-void ExecuteCommand::setEnvironment( const QMap<QString,QString>& env )
+void CommandExecutor::setEnvironment( const QMap<QString,QString>& env )
 {
     d->m_env = env;
 }
 
-void ExecuteCommand::setArguments( const QStringList& args )
+void CommandExecutor::setArguments( const QStringList& args )
 {
     d->m_args = args;
 }
 
-void ExecuteCommand::setWorkingDirectory( const QString& dir )
+void CommandExecutor::setWorkingDirectory( const QString& dir )
 {
     d->m_workDir = dir;
 }
 
-void ExecuteCommand::start()
+void CommandExecutor::start()
 {
     QStringList env = QProcess::systemEnvironment();
     Q_FOREACH( QString s, d->m_env.keys() )
