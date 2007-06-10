@@ -34,7 +34,7 @@
 #include <iplugincontroller.h>
 #include <ioutputview.h>
 #include <outputmodel.h>
-#include <executecommand.h>
+#include <commandexecutor.h>
 #include <QtDesigner/QExtensionFactory>
 
 #include <kgenericfactory.h>
@@ -108,7 +108,7 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
 //             kDebug(9024) << v << v.type() << v.userType() << endl;
             cmd = v.toLocalFile();
-            m_cmds[id] = new KDevelop::ExecuteCommand(cmd, this);
+            m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
             connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
                     m_models[id], SLOT(appendLines(const QStringList&) ) );
             connect(m_cmds[id], SIGNAL(receivedStandardOutput(const QStringList&)),
