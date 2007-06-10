@@ -29,7 +29,6 @@ MakeOutputModel::MakeOutputModel( QObject* parent )
 
 void MakeOutputModel::addStandardError( const QStringList& lines )
 {
-    kDebug(9038) << k_funcinfo << "Error with: " << lines << endl;
     foreach( QString line, lines)
     {
         QStandardItem* item = errorFilter->processAndCreate(line);
@@ -41,7 +40,6 @@ void MakeOutputModel::addStandardError( const QStringList& lines )
 
 void MakeOutputModel::addStandardOutput( const QStringList& lines )
 {
-    kDebug(9038) << k_funcinfo << "Output with: " << lines << endl;
     foreach( QString line, lines)
     {
         QStandardItem* item = actionFilter->processAndCreate(line);
