@@ -31,7 +31,7 @@ namespace KDevelop
 class CommandExecutorPrivate
 {
 public:
-    CommandExecutorPrivate( ExecuteCommand* cmd )
+    CommandExecutorPrivate( CommandExecutor* cmd )
         : m_exec(cmd)
     {
     }
@@ -110,4 +110,4 @@ void CommandExecutor::start()
 }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
-#include "executecommand.moc"
+#include "commandexecutor.moc"
