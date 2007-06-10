@@ -50,6 +50,7 @@ void OutputWidget::changeModel(const QString& id )
         kDebug(9004) << "creating listview" << endl;
         QListView* listview = new QListView(this);
         listview->setModel( m_outputView->registeredModel(id) );
+        listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         m_listviews[id] = listview;
         addTab( listview, m_outputView->registeredTitle(id) );
     }
