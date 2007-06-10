@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Dukju Ahn <dukjuahn@gmail.com>                  *
- *   Copyright (C) 2007 by Andreas Pakulat  <apaku@gmx.de>                 *
+ *   This file is part of KDevelop                                         *
+ *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,30 +18,29 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "ioutputviewitem.h"
-#include <QtCore/QList>
-#include <QtGui/QAction>
+#ifndef OUTPUTMODEL_H
+#define OUTPUTMODEL_H
 
-IOutputViewItem::IOutputViewItem( const QString& text )
-    : QStandardItem( text ), d(0)
-{}
+#include <QtGui/QStandardItemModel>
+#include "outputviewexport.h"
+class QString;
+class QStringList;
 
-IOutputViewItem::~IOutputViewItem()
+namespace KDevelop
 {
+
+class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QStandardItemModel
+{
+    Q_OBJECT
+    public:
+        OutputModel( QObject* parent = 0 );
+    public Q_SLOTS:
+        void appendLine( const QString& );
+        void appendLines( const QStringList& );
+};
 }
 
-void IOutputViewItem::activate()
-{
-}
+#endif
 
-QList<QAction*> IOutputViewItem::contextMenuActions()
-{
-    return QList<QAction*>();
-}
-
-IOutputViewItem::StopAtItemMode IOutputViewItem::stopHere()
-{
-    return DontStop;
-}
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

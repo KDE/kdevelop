@@ -37,6 +37,7 @@
 #include <QDialog>
 #include <QLabel>
 #include <QProgressBar>
+#include <QtGui/QStandardItemModel>
 
 class KDevSubversionViewPrivate{
 public:
@@ -46,6 +47,8 @@ public:
     KTabWidget *m_tab;
     QPushButton *m_closeButton;
     KDevelop::IOutputView *m_outview;
+    QString m_outputViewId;
+    QStandardItemModel* m_outputModel;
 };
 // TODO first make empty widget by factory. This host container widget is parent
 // of every other subwidgets, including logviewer, blame, notifier, ...
@@ -85,13 +88,15 @@ KDevSubversionView::KDevSubversionView( KDevSubversionPart *part, QWidget* paren
     if( plugin ){
         d->m_outview = plugin->extension<KDevelop::IOutputView>();
         if( d->m_outview ){
-            d->m_outview->registerLogView( "id_kdevsubversion", i18n("Subversion Notification") );
+            d->m_outputViewId = d->m_outview->registerView( i18n("Subversion Notification") );
+            d->m_outputModel = new QStandardItemModel(this);
+            d->m_outview->setModel( d->m_outputViewId, d->m_outputModel );
             connect( d->m_part->svncore(), SIGNAL(svnNotify(QString)),
                     this, SLOT(printNotification(QString)) );
         }
 
     } else{
-        d->m_outview = NULL;
+        d->m_outview = 0;
     }
 
 }
@@ -104,11 +109,10 @@ KDevSubversionView::~KDevSubversionView()
 
 void KDevSubversionView::printNotification(const QString& msg)
 {
-    if( !d->m_outview ){
+    if(! d->m_outputModel )
         return;
-    }
     kDebug() << " printNotification " << msg << endl;
-    d->m_outview->appendLine( "id_kdevsubversion", msg );
+    d->m_outputModel->appendRow(new QStandardItem( msg ));
 }
 
 void KDevSubversionView::printLog(SvnKJobBase *j)

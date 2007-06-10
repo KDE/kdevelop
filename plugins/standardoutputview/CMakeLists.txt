@@ -10,7 +10,6 @@ include_directories(
 
 set(standardoutputview_LIB_SRCS
     standardoutputview.cpp
-    outputviewcommand.cpp
     outputwidget.cpp
 )
 

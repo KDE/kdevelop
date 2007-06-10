@@ -25,11 +25,10 @@
 #include "ioutputview.h"
 #include "iplugin.h"
 
-class QStringList;
-class QStandardItemModel;
+template <typename T> class QList;
+class QAbstractItemModel;
 class KUrl;
 class QString;
-class OutputViewCommand;
 class IOutputViewItemFactory;
 
 /**
@@ -44,36 +43,19 @@ Q_INTERFACES( KDevelop::IOutputView )
 public:
     explicit StandardOutputView(QObject *parent = 0, const QStringList &args = QStringList());
     virtual ~StandardOutputView();
-    void queueCommand(const KUrl& dir, const QStringList& command, const QMap<QString, QString>& env,
-                      IOutputViewItemFactory *factory = 0 );
+    QString registerView( const QString& title );
+    void setModel( const QString& id, QAbstractItemModel* );
 
-    void registerLogView( const QString& id, const QString& title );
-    void appendLine( const QString& id, const QString& line );
-    void appendLines( const QString& id, const QStringList& line );
-
-    QStandardItemModel* registeredModel( const QString& );
-    QString registeredTitle( const QString& );
+    QAbstractItemModel* registeredModel( const QString& );
+    QString registeredTitle( const QString& id );
     QStringList registeredViews();
 
 Q_SIGNALS:
-    void commandFinished( const QString& id );
-    void commandFailed( const QString& id );
-    void modelAdded( const QString&, QStandardItemModel* );
-    void commandAdded( OutputViewCommand* );
-    void searchNextError();
-    void searchPrevError();
-
-private Q_SLOTS:
-    void slotCommandFinished( const QString& id );
-    void slotCommandFailed( const QString& id );
-
-private:
-    void cleanupTerminatedJobs( const QString& id );
-    void startNextPendingJob( const QString& id );
+    void activated( const QModelIndex& );
+    void modelChanged( const QString& );
 
 private:
     class StandardOutputViewPrivate* const d;
-    friend class StandardOutputViewPrivate;
 };
 
 #endif // STANDARDOUTPUTVIEW_H

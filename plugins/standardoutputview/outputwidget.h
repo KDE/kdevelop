@@ -24,12 +24,12 @@
 
 #include <ktabwidget.h>
 #include <QtCore/QMap>
-#include <QtGui/QListView>
-class QStandardItemModel;
+class QAbstractItemModel;
 class QString;
 class StandardOutputView;
 class OutputViewCommand;
 class QModelIndex;
+class QListView;
 
 class OutputWidget : public KTabWidget
 {
@@ -37,41 +37,12 @@ class OutputWidget : public KTabWidget
     public:
         OutputWidget(QWidget* parent, StandardOutputView* view);
     public Q_SLOTS:
-        void addNewTab(const QString& title, QStandardItemModel* );
-
-        // Note that *cmd should not be const.
-        void addNewTab( OutputViewCommand* cmd );
-
-        void searchNextError();
-        void searchPrevError();
-
+        void changeModel(const QString& title );
+    private Q_SLOTS:
+        void customContextMenuRequested( const QPoint & point );
     private:
         QMap<QString, QListView*> m_listviews;
-};
-
-/** @class OutputListView
- * Actual listview that will be embedded in OutputWidget's tab
- * Subclassed to handle context-menu and item activation.
- */
-class OutputListView : public QListView
-{
-    Q_OBJECT
-public:
-    OutputListView( QWidget* parent );
-    virtual ~OutputListView();
-
-    virtual void setModel( QAbstractItemModel *model );
-
-public Q_SLOTS:
-    void highlightNextErrorItem();
-    void highlightPrevErrorItem();
-
-protected Q_SLOTS:
-    void slotActivated( const QModelIndex& index );
-    void customContextMenuRequested( const QPoint & point );
-
-private:
-    class OutputListViewPrivate * d;
+        StandardOutputView* m_outputView;
 };
 
 #endif

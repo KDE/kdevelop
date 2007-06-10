@@ -3,6 +3,7 @@
 
 set(kdevplatformutil_LIB_SRCS
     processlinemaker.cpp
+    executecommand.cpp
 )
 
 kde4_automoc(${kdevplatformutil_LIB_SRCS})
@@ -15,9 +16,10 @@ install(TARGETS kdevplatformutil DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES 
-	processlinemaker.h
-	utilexport.h
-	DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
+install( FILES
+    processlinemaker.h
+    executecommand.h
+    utilexport.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
 
 

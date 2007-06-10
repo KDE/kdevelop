@@ -21,26 +21,17 @@
 
 #include "standardoutputview.h"
 #include "outputwidget.h"
-#include "outputviewcommand.h"
-#include "ioutputviewitemfactory.h"
 
 #include <QtCore/QStringList>
 
 #include <QtDesigner/QExtensionFactory>
-#include <QtGui/QListView>
-#include <QtCore/QTimer>
-#include <QtGui/QStandardItemModel>
-#include <QtCore/QQueue>
+#include <QtCore/QAbstractItemModel>
 
 #include <QtGui/QAction>
-#include <QtGui/QKeySequence>
 #include <icore.h>
 #include <iuicontroller.h>
 
 #include <kgenericfactory.h>
-#include <k3process.h>
-#include <kdialog.h>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
@@ -70,12 +61,9 @@ class StandardOutputViewPrivate
 {
 public:
     StandardOutputViewViewFactory* m_factory;
-    QMap<QString, QStandardItemModel* > m_models;
+    QMap<QString, QAbstractItemModel* > m_models;
     QMap<QString, QString> m_titles;
-    QStringList m_ids;
-    QMap<QString, QQueue<OutputViewCommand*> > m_jobs;
-    // command model can live longer than command itself.
-    QMap<QString, QStandardItemModel* > m_cmdModels;
+    QList<unsigned int> m_ids;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
@@ -86,131 +74,50 @@ StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
     d->m_factory = new StandardOutputViewViewFactory( this );
     core()->uiController()->addToolView( "Output View", d->m_factory );
 
-    connect( this, SIGNAL(commandFinished( const QString& )),
-             this, SLOT(slotCommandFinished(const QString&)) );
-    connect( this, SIGNAL(commandFailed( const QString& )),
-             this, SLOT(slotCommandFailed(const QString&)) );
-
     setXMLFile("kdevstandardoutputview.rc");
-
-    // setup actions
-    QAction *action;
-
-    action = actionCollection()->addAction("next_error");
-    // TODO more general namechoose other than "next error"
-    // Not all messages user is interested are error.
-    action->setText("Next Error");
-    action->setShortcut( QKeySequence(Qt::Key_F4) );
-    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(searchNextError()));
-
-    action = actionCollection()->addAction("prev_error");
-    action->setText("Previous Error");
-    action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
-    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(searchPrevError()));
 }
 
 StandardOutputView::~StandardOutputView()
 {
-    foreach( QStandardItemModel* m, d->m_models )
-        delete m;
-    foreach( QStandardItemModel* m, d->m_cmdModels )
-        delete m;
-    foreach( QQueue< OutputViewCommand* > queue, d->m_jobs )
-    {
-        foreach( OutputViewCommand* cmd, queue )
-        {
-            delete cmd;
-        }
-    }
     delete d;
 }
 
-void StandardOutputView::queueCommand(const KUrl& dir, const QStringList& command,
-                                    const QMap<QString, QString>& env,
-                                    IOutputViewItemFactory *factory)
+QString StandardOutputView::registerView(const QString& title)
 {
-    if( command.isEmpty() )
-        return;
-    kDebug(9004) << "Queueing Command: " << dir << "|" << command << endl;
-    QString title = command.first();
-    // todo: when all the outputviews using this model are closed by user, delete this model
-    // maybe use KSharedPtr or something..
-    OutputViewCommand* cmd = new OutputViewCommand( dir, command, env, 0, factory );
-    if( !d->m_jobs.contains(title) )
-    {
-        // set model into command. Model lives longer than command, so although the command
-        // doesn't exist, model may exist.
-        QStandardItemModel *model = 0;
-        if( d->m_cmdModels.contains(title) )
-        {
-            model = d->m_cmdModels[title]; // reuse the previous model.
-            model->clear();
-        }
-        else
-        {
-            model = new QStandardItemModel(this);
-            d->m_cmdModels.insert( title, model );
-        }
-        cmd->setModel( model );
-
-        connect( cmd, SIGNAL( commandFinished( const QString& ) ),
-                 this, SIGNAL( commandFinished( const QString& ) ) );
-        connect( cmd, SIGNAL( commandFailed( const QString& ) ),
-                 this, SIGNAL( commandFailed( const QString& ) ) );
-
-        QQueue< OutputViewCommand* > cmdQueue;
-        cmdQueue.enqueue( cmd );
-        d->m_jobs[title] = cmdQueue;
-        emit commandAdded( cmd );
-        d->m_jobs[title].head()->start();
-        kDebug(9004) << "Adding and start now " << endl;
-    }
+    unsigned int newid;
+    if( d->m_ids.isEmpty() )
+        newid = 0;
     else
-    {
-        // If there are pending command named "title", there should exist model named "title" as well.
-        QStandardItemModel *model = d->m_cmdModels[title];
-        cmd->setModel( model );
-        // Append m_job. When the job named "title" is finished, completed job will be removed
-        // and this new job will get started by slotCommandFinished/Failed()
-        d->m_jobs[title].enqueue( cmd );
-        kDebug(9004) << "Adding and pending" << endl;
-    }
+        newid = d->m_ids.last()+1;
+    QString idstr = QString::number(newid);
+    d->m_ids << newid;
+    d->m_titles[idstr] = title;
+    d->m_models[idstr] = 0;
+    return idstr;
 }
 
-void StandardOutputView::registerLogView( const QString& id, const QString& title )
+void StandardOutputView::setModel( const QString& id, QAbstractItemModel* model )
 {
-    if( !d->m_ids.contains( id ) && !d->m_models.contains(id) && !d->m_titles.contains(id) )
+    unsigned int viewid = id.toUInt();
+    if( d->m_ids.contains( viewid ) )
     {
-        d->m_ids << id;
-        d->m_titles[id] = title;
-        d->m_models[id] = new QStandardItemModel(this);
-        emit modelAdded( d->m_titles[id], d->m_models[id] );
-    }
-}
-
-void StandardOutputView::appendLine( const QString& id, const QString& line )
-{
-    if( d->m_models.contains( id ) )
-    {
-        d->m_models[id]->appendRow( new QStandardItem( line ) );
-    }
-}
-
-void StandardOutputView::appendLines( const QString& id, const QStringList& lines )
-{
-    if( d->m_models.contains( id ) )
-    {
-        foreach( QString line, lines )
-            d->m_models[id]->appendRow( new QStandardItem( line ) );
-    }
+        d->m_models[id] = model;
+        emit modelChanged( id );
+    }else
+        kDebug(9004) << "AAAH id is not known:" << id << "|" << viewid<< endl;
 }
 
 QStringList StandardOutputView::registeredViews()
 {
-    return d->m_ids;
+    QStringList ret;
+    foreach(unsigned int id, d->m_ids)
+    {
+        ret << QString::number(id);
+    }
+    return ret;
 }
 
-QStandardItemModel* StandardOutputView::registeredModel( const QString& id )
+QAbstractItemModel* StandardOutputView::registeredModel( const QString& id )
 {
     if( d->m_models.contains( id ) )
     {
@@ -226,53 +133,6 @@ QString StandardOutputView::registeredTitle( const QString& id )
         return d->m_titles[id];
     }
     return QString();
-}
-
-void StandardOutputView::slotCommandFinished( const QString& id )
-{
-    cleanupTerminatedJobs( id );
-    startNextPendingJob( id );
-}
-
-void StandardOutputView::slotCommandFailed( const QString& id )
-{
-    cleanupTerminatedJobs( id );
-    startNextPendingJob( id );
-}
-
-void StandardOutputView::cleanupTerminatedJobs( const QString& id )
-{
-    Q_ASSERT( d->m_jobs.contains(id) );
-
-    QQueue<OutputViewCommand*> &cmdQ = d->m_jobs[id];
-    Q_ASSERT( cmdQ.isEmpty() == false );
-    OutputViewCommand *cmd = cmdQ.dequeue();
-    cmd->deleteLater();
-    kDebug(9004) << "OutputViewCommand removed and deleteLater()ed " << (long)cmd << endl;
-
-    if( cmdQ.isEmpty() )
-    {
-        d->m_jobs.remove( id );
-    }
-}
-
-void StandardOutputView::startNextPendingJob( const QString &id )
-{
-    if( d->m_jobs.contains(id) && !(d->m_jobs[id].isEmpty()) )
-    {
-        // execute next pending job, whose title was the same with justly finished job.
-        QQueue< OutputViewCommand* > &cmdQ = d->m_jobs[id];
-        OutputViewCommand *nextCmd = cmdQ.head();
-
-        connect( nextCmd, SIGNAL( commandFinished( const QString& ) ),
-                 this, SIGNAL( commandFinished( const QString& ) ) );
-        connect( nextCmd, SIGNAL( commandFailed( const QString& ) ),
-                 this, SIGNAL( commandFailed( const QString& ) ) );
-
-        emit commandAdded( nextCmd );
-        nextCmd->start();
-        kDebug(9004) << "Started next pended job " << (long)nextCmd << endl;
-    }
 }
 
 #include "standardoutputview.moc"
