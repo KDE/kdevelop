@@ -77,6 +77,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void commandFinished(const QString &id);
     void commandFailed(const QString &id);
+    void cleanupModel( const QString& id );
 
 private:
     QStringList computeBuildCommand(KDevelop::ProjectBaseItem *item);

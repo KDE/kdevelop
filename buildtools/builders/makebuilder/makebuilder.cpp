@@ -56,10 +56,42 @@ MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
             this, SLOT(commandFailed(const QString&) ));
     connect(successMapper, SIGNAL(mapped(const QString&)),
             this, SLOT(commandFinished(const QString&) ));
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    if( i )
+    {
+        connect( i, SIGNAL( viewRemoved( const QString& ) ),
+                 this, SLOT( cleanupModel( const QString& ) ) );
+    }
 }
 
 MakeBuilder::~MakeBuilder()
 {
+}
+
+void MakeBuilder::cleanupModel( const QString& id )
+{
+    kDebug(9038) << "view was removed, check wether its one of ours" << endl;
+    if( m_models.contains( id ) )
+    {
+        kDebug(9038) << "do some cleanup" << endl;
+        MakeOutputModel* model = m_models[id];
+        KDevelop::CommandExecutor* cmd = m_commands[id];
+        foreach( KDevelop::IProject* p, m_ids.keys() )
+        {
+            if( m_ids[p] == id )
+            {
+                m_ids.remove(p);
+                break;
+            }
+        }
+        m_models.remove(id);
+        m_commands.remove(id);
+        m_items.remove(id);
+        errorMapper->removeMappings(cmd);
+        successMapper->removeMappings(cmd);
+        delete model;
+        delete cmd;
+    }
 }
 
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
