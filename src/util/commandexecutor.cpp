@@ -100,7 +100,7 @@ void CommandExecutor::start()
     QStringList env = QProcess::systemEnvironment();
     Q_FOREACH( QString s, d->m_env.keys() )
     {
-        env << s+"="+d->m_env[s];
+        env << s+'='+d->m_env[s];
     }
     d->m_process->setEnvironment(env);
     d->m_process->setWorkingDirectory( d->m_workDir );
