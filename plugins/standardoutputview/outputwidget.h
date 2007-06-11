@@ -43,6 +43,7 @@ class OutputWidget : public KTabWidget
         void closeActiveView();
     Q_SIGNALS:
         void viewRemoved( const QString& );
+        void activated( const QModelIndex& );
     private:
         QMap<QString, QListView*> m_listviews;
         QMap<QWidget*, QString> m_widgetMap;

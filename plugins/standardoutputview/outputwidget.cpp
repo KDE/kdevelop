@@ -63,6 +63,10 @@ void OutputWidget::changeModel(const QString& id )
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         m_listviews[id] = listview;
         m_widgetMap[listview] = id;
+        connect( listview, SIGNAL(activated(const QModelIndex&)),
+                 this, SIGNAL(activated(const QModelIndex&)));
+        connect( listview, SIGNAL(clicked(const QModelIndex&)),
+                 this, SIGNAL(activated(const QModelIndex&)));
         addTab( listview, m_outputView->registeredTitle(id) );
     }
 }

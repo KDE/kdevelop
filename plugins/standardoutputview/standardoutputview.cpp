@@ -51,6 +51,8 @@ public:
                  m_part, SIGNAL( viewRemoved( const QString &) ) );
         QObject::connect( m_part, SIGNAL( viewRemoved( const QString& ) ),
                  l, SLOT( removeView( const QString &) ) );
+        QObject::connect( l, SIGNAL( activated(const QModelIndex&) ),
+                 m_part, SIGNAL(activated(const QModelIndex&)) );
         return l;
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -80,6 +82,7 @@ StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
     core()->uiController()->addToolView( "Output View", d->m_factory );
 
     setXMLFile("kdevstandardoutputview.rc");
+
 }
 
 StandardOutputView::~StandardOutputView()
