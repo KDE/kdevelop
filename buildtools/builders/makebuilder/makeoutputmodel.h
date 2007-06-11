@@ -26,18 +26,23 @@
 class QObject;
 class MakeActionFilter;
 class ErrorFilter;
+class MakeBuilder;
 
 class MakeOutputModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    MakeOutputModel( QObject* parent = 0 );
+    MakeOutputModel( MakeBuilder *builder, QObject* parent = 0 );
 public slots:
     void addStandardError( const QStringList& );
     void addStandardOutput( const QStringList& );
+
+    void activated( const QModelIndex & index );
+
 private:
     MakeActionFilter* actionFilter;
     ErrorFilter* errorFilter;
+    MakeBuilder *m_builder;
 };
 
 #endif

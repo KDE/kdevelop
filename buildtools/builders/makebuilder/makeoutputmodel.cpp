@@ -20,10 +20,16 @@
 
 #include "makeoutputmodel.h"
 #include "outputfilters.h"
+#include "makeitem.h"
+#include "makebuilder.h"
+#include "icore.h"
+#include "idocumentcontroller.h"
+#include <ktexteditor/cursor.h>
 #include <kdebug.h>
 
-MakeOutputModel::MakeOutputModel( QObject* parent )
+MakeOutputModel::MakeOutputModel( MakeBuilder *builder, QObject* parent )
     : QStandardItemModel(parent), actionFilter(new MakeActionFilter), errorFilter(new ErrorFilter)
+    , m_builder( builder )
 {
 }
 
@@ -48,6 +54,28 @@ void MakeOutputModel::addStandardOutput( const QStringList& lines )
         appendRow(item);
     }
 }
+
+void MakeOutputModel::activated( const QModelIndex & index )
+{
+    if( index.model() != this ){
+        kDebug(9038) << "not my model, returning" << endl;
+        return;
+    }
+    kDebug(9038) << "Model activated " << index.row() << endl;
+
+    QStandardItem *stditem = itemFromIndex( index );
+    MakeWarningItem *warn = dynamic_cast<MakeWarningItem*>( stditem );
+    if( warn )
+    {
+        KTextEditor::Cursor range( warn->lineNo, 0);
+        KDevelop::IDocumentController *docCtrl = m_builder->core()->documentController();
+        docCtrl->openDocument( warn->file, range );
+    }
+}
+
+// void MakeOutputModel::searchNextError()
+// {
+// }
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
 

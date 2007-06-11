@@ -12,6 +12,7 @@
  ***************************************************************************/
 
 #include "outputfilters.h"
+#include "makeitem.h"
 #include <kdebug.h>
 #include <QRegExp>
 #include <QList>
@@ -130,10 +131,10 @@ QStandardItem* ErrorFilter::processAndCreate( const QString& line )
 
     if( hasmatch )
     {
-        QStandardItem *ret = 0;
+        MakeWarningItem *ret = 0;
         if( isWarning )
         {
-            ret = new QStandardItem( line );
+            ret = new MakeWarningItem( line );
             QBrush fg = ret->foreground();
             fg.setColor( KColorUtils::mix(
                                       QApplication::palette().highlight().color(),
@@ -143,9 +144,13 @@ QStandardItem* ErrorFilter::processAndCreate( const QString& line )
         }
         else // case of real error
         {
-            ret = new QStandardItem( line );
+            ret = new MakeErrorItem( line );
             ret->setForeground(QApplication::palette().highlight());
         }
+
+        ret->errorText = text;
+        ret->lineNo = lineNum;
+        ret->file = file;
         return ret;
     }
     else

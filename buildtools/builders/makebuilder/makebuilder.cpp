@@ -123,7 +123,7 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
             {
                 id = view->registerView(i18n("Make: %1", dom->project()->name() ) );
                 m_ids[dom->project()] = id;
-                m_models[id] = new MakeOutputModel(this);
+                m_models[id] = new MakeOutputModel(this, this);
                 view->setModel(id, m_models[id]);
             }
 
@@ -139,7 +139,13 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
                     m_models[id], SLOT(addStandardOutput(const QStringList&)));
             connect(m_commands[id], SIGNAL(receivedStandardError(const QStringList&)),
                     m_models[id], SLOT(addStandardError(const QStringList&)));
+            IPlugin* viewPlugin = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+            if( viewPlugin )
+            {
 
+                connect(viewPlugin, SIGNAL(activated( const QModelIndex& )),
+                        m_models[id], SLOT(activated(const QModelIndex&)) );
+            }
             connect( m_commands[id], SIGNAL( failed() ), errorMapper, SLOT( map() ) );
             connect( m_commands[id], SIGNAL( completed() ), successMapper, SLOT( map() ) );
             errorMapper->setMapping( m_commands[id], id );
