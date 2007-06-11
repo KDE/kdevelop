@@ -441,7 +441,7 @@ void KompareModelList::slotDiffProcessFinished( bool success )
 		}
 		emit status( Kompare::FinishedParsing );
 	}
-	else if ( m_diffProcess->exitStatus() == 0 )
+	else if ( m_diffProcess->process()->exitStatus() == QProcess::NormalExit )
 	{
 		emit error( i18n( "The files are identical." ) );
 	}
@@ -588,7 +588,8 @@ bool KompareModelList::saveDiff( const QString& url, const QString& directory, D
 	         this, SLOT(slotWriteDiffOutput( bool )) );
 
 	emit status( Kompare::RunningDiff );
-	return m_diffProcess->start();
+	m_diffProcess->start();
+    return m_diffProcess->process()->waitForStarted();
 }
 
 void KompareModelList::slotWriteDiffOutput( bool success )

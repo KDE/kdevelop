@@ -20,16 +20,16 @@
 #ifndef KOMPAREPROCESS_H
 #define KOMPAREPROCESS_H
 
-#include <k3process.h>
-
 #include "kompare.h"
+#include <QtCore/QProcess>
 
 class QTextCodec;
 class QTextDecoder;
+class QProcess;
 
 class DiffSettings;
 
-class KompareProcess : public K3Process, public KompareFunctions
+class KompareProcess : public QObject, public KompareFunctions
 {
 	Q_OBJECT
 
@@ -37,11 +37,13 @@ public:
 	KompareProcess( DiffSettings* diffSettings, enum Kompare::DiffMode mode, const QString& source, const QString& destination, const QString& directory = QString() );
 	~KompareProcess();
 
-	bool start();
+	void start();
+
+	QProcess* process();
 
 	QString diffOutput() { return m_stdout; }
-	QString stdOut()     { return m_stdout; }
-	QString stdErr()     { return m_stderr; }
+	QString stdOut()	 { return m_stdout; }
+	QString stdErr()	 { return m_stderr; }
 
 	void setEncoding( const QString& encoding );
 
@@ -53,16 +55,20 @@ protected:
 	void writeCommandLine();
 
 protected slots:
-	void slotReceivedStdout( K3Process*, char*, int );
-	void slotReceivedStderr( K3Process*, char*, int );
-	void slotProcessExited( K3Process* proc );
+	void slotReceivedStdout( );
+	void slotReceivedStderr( );
+	void slotProcessExited( int, QProcess::ExitStatus );
 
 private:
-	DiffSettings*          m_diffSettings;
+	DiffSettings*		  m_diffSettings;
 	enum Kompare::DiffMode m_mode;
-	QString                m_stdout;
-	QString                m_stderr;
-	QTextDecoder*          m_textDecoder;
+	QString				m_stdout;
+	QString				m_stderr;
+	QTextDecoder*		  m_textDecoder;
+	QProcess*			  m_proc;
+	QStringList			m_env;
+	QStringList			m_args;
+	QString				m_prog;
 };
 
 #endif
