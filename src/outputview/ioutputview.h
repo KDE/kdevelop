@@ -61,6 +61,11 @@ public:
      */
     virtual void setModel( const QString& id, QAbstractItemModel* model ) = 0;
 
+    /**
+     * Returns the model id of currently active view.
+     */
+    virtual QString currentId() = 0;
+
 Q_SIGNALS:
     void activated( const QModelIndex& );
     void viewRemoved( const QString& );

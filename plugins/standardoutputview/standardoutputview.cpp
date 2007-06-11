@@ -53,6 +53,8 @@ public:
                  l, SLOT( removeView( const QString &) ) );
         QObject::connect( l, SIGNAL( activated(const QModelIndex&) ),
                  m_part, SIGNAL(activated(const QModelIndex&)) );
+        QObject::connect( l, SIGNAL( activePageChanged(const QString&) ),
+                 m_part, SLOT(activePageChanged(const QString&)) );
         return l;
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -71,6 +73,7 @@ public:
     QMap<QString, QString> m_titles;
     QList<unsigned int> m_ids;
     QMap<QString, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
+    QString m_activePageId;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
@@ -128,6 +131,11 @@ void StandardOutputView::setModel( const QString& id, QAbstractItemModel* model 
         kDebug(9004) << "AAAH id is not known:" << id << "|" << viewid<< endl;
 }
 
+QString StandardOutputView::currentId()
+{
+    return d->m_activePageId;
+}
+
 QStringList StandardOutputView::registeredViews()
 {
     QStringList ret;
@@ -154,6 +162,11 @@ QString StandardOutputView::registeredTitle( const QString& id )
         return d->m_titles[id];
     }
     return QString();
+}
+
+void StandardOutputView::activePageChanged( const QString &id )
+{
+    d->m_activePageId = id;
 }
 
 #include "standardoutputview.moc"

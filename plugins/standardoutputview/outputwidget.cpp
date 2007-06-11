@@ -48,6 +48,8 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     {
         changeModel( id );
     }
+
+    connect( this, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)) );
 }
 
 void OutputWidget::changeModel(const QString& id )
@@ -90,6 +92,8 @@ void OutputWidget::removeView( const QString& id )
 void OutputWidget::closeActiveView()
 {
     QWidget* widget = currentWidget();
+    if( !widget )
+        return;
     if( m_widgetMap.contains( widget ) )
     {
         QString id = m_widgetMap[widget];
@@ -102,6 +106,18 @@ void OutputWidget::closeActiveView()
             emit viewRemoved( id );
         }else kDebug(9004) << "OOops, the view is not user closeable" << endl;
     }else kDebug(9004) << "OOops, the selected tab is not in our list??" << endl;
+}
+
+void OutputWidget::slotCurrentChanged( int /*index*/ )
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    if( m_widgetMap.contains( widget ) )
+    {
+        QString id = m_widgetMap[widget];
+        emit activePageChanged(id);
+    }
 }
 
 #include "outputwidget.moc"

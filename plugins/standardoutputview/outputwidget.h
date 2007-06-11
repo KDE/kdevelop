@@ -44,6 +44,11 @@ class OutputWidget : public KTabWidget
     Q_SIGNALS:
         void viewRemoved( const QString& );
         void activated( const QModelIndex& );
+        void activePageChanged( const QString& id );
+
+    private Q_SLOTS:
+        void slotCurrentChanged( int index );
+
     private:
         QMap<QString, QListView*> m_listviews;
         QMap<QWidget*, QString> m_widgetMap;
