@@ -53,5 +53,5 @@ install( TARGETS kcm_kdev_makebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES imakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/make)
 install( FILES kcm_kdev_makebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-
+install( FILES kdevmakebuilder.rc DESTINATION ${DATA_INSTALL_DIR}/kdevmakebuilder )
 

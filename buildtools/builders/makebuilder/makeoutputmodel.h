@@ -38,11 +38,13 @@ public slots:
     void addStandardOutput( const QStringList& );
 
     void activated( const QModelIndex & index );
+    void activateNextError();
 
 private:
     MakeActionFilter* actionFilter;
     ErrorFilter* errorFilter;
     MakeBuilder *m_builder;
+    int m_lastStoppedIndex;
 };
 
 #endif

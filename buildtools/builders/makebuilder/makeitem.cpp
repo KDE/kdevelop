@@ -84,11 +84,6 @@ MakeErrorItem::MakeErrorItem( const QString &text )
 MakeErrorItem::~MakeErrorItem()
 {}
 
-bool  MakeErrorItem::stopHere()
-{
-    return true;
-}
-
 //////////////////////////////////
 
 MakeActionItem::MakeActionItem( const QString& action, const QString& file, const QString& tool, const QString& line )

@@ -29,7 +29,7 @@
 
 MakeOutputModel::MakeOutputModel( MakeBuilder *builder, QObject* parent )
     : QStandardItemModel(parent), actionFilter(new MakeActionFilter), errorFilter(new ErrorFilter)
-    , m_builder( builder )
+    , m_builder( builder ), m_lastStoppedIndex(0)
 {
 }
 
@@ -70,6 +70,50 @@ void MakeOutputModel::activated( const QModelIndex & index )
         KTextEditor::Cursor range( warn->lineNo, 0);
         KDevelop::IDocumentController *docCtrl = m_builder->core()->documentController();
         docCtrl->openDocument( warn->file, range );
+    }
+}
+
+void MakeOutputModel::activateNextError()
+{
+    int rowCount = this->rowCount();
+
+    bool reachedEnd = false;
+
+    // determine from which index we should start
+    int i = m_lastStoppedIndex;
+    if( i >= rowCount - 1 )
+        i = 0;
+    else
+        i++;
+
+    for( ; i < rowCount; i++ )
+    {
+        QStandardItem *stditem = item( i );
+        MakeErrorItem *outItem = dynamic_cast<MakeErrorItem*>( stditem );
+        if( outItem )
+        {
+            // yes. found.
+            QModelIndex modelIndex = outItem->index();
+    //         setCurrentIndex( modelIndex ); // TODO set selection
+            m_lastStoppedIndex = i;
+            this->activated( modelIndex );
+
+            break;
+        }
+
+        if( i >= rowCount - 1 ) // at the last index and couldn't find error yet.
+        {
+            if( reachedEnd )
+            {
+                m_lastStoppedIndex = 0;
+                break; // no matching item
+            }
+            else
+            {
+                reachedEnd = true;
+                i = -1; // search from index 0
+            }
+        }
     }
 }
 

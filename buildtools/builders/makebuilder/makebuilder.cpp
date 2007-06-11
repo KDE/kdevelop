@@ -34,11 +34,14 @@
 #include <ioutputview.h>
 #include <QtDesigner/QExtensionFactory>
 #include <QtCore/QSignalMapper>
+#include <QtGui/QAction>
+#include <QtGui/QKeySequence>
 
 #include <kgenericfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kactioncollection.h>
 
 #define MAKE_COMMAND "make"
 
@@ -62,6 +65,20 @@ MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
         connect( i, SIGNAL( viewRemoved( const QString& ) ),
                  this, SLOT( cleanupModel( const QString& ) ) );
     }
+
+    setXMLFile("kdevmakebuilder.rc");
+    // setup actions
+    QAction *action;
+
+    action = actionCollection()->addAction("next_make_error");
+    action->setText("Next Error");
+    action->setShortcut( QKeySequence(Qt::Key_F4) );
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(searchNextError()));
+
+    action = actionCollection()->addAction("prev_make_error");
+    action->setText("Previous Error");
+    action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(searchPrevError()));
 }
 
 MakeBuilder::~MakeBuilder()
@@ -92,6 +109,28 @@ void MakeBuilder::cleanupModel( const QString& id )
         delete model;
         delete cmd;
     }
+}
+
+void MakeBuilder::searchNextError()
+{
+    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    if( ! i )
+        return;
+
+    KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+    if( !view )
+        return;
+
+    QString id = view->currentId();
+    if( m_models.contains(id) )
+    {
+        MakeOutputModel *model = m_models[id];
+        model->activateNextError();
+    }
+}
+
+void MakeBuilder::searchPrevError()
+{
 }
 
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )

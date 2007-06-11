@@ -50,8 +50,6 @@ public:
     MakeErrorItem( const QString &text );
     virtual ~MakeErrorItem();
 
-    bool stopHere();
-
 };
 
 class MakeActionItem : public QStandardItem
