@@ -37,6 +37,8 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QStandardItemModel
     public Q_SLOTS:
         void appendLine( const QString& );
         void appendLines( const QStringList& );
+    private:
+      class OutputModelPrivate* const d;
 };
 }
 

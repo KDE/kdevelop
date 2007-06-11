@@ -26,7 +26,7 @@ namespace KDevelop
 {
 
 OutputModel::OutputModel( QObject* parent )
-    : QStandardItemModel( parent )
+    : QStandardItemModel( parent ), d(0)
 {
 }
 
