@@ -45,7 +45,7 @@ class KDEVPLATFORMVCS_EXPORT VcsAnnotation
 public:
     VcsAnnotation();
     VcsAnnotation(const VcsAnnotation&);
-    ~VcsAnnotation();
+    virtual ~VcsAnnotation();
     /**
      * @return the local url of the file
      */

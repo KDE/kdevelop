@@ -53,7 +53,7 @@ public:
     };
 
     VcsDiff();
-    ~VcsDiff();
+    virtual ~VcsDiff();
     VcsDiff( const VcsDiff& );
 
     /**

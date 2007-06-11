@@ -60,7 +60,7 @@ public:
     Q_DECLARE_FLAGS( Actions, Action )
 
     VcsItemEvent();
-    ~VcsItemEvent();
+    virtual ~VcsItemEvent();
     VcsItemEvent(const VcsItemEvent& );
 
     QString repositoryLocation() const;
@@ -92,7 +92,7 @@ class KDEVPLATFORMVCS_EXPORT VcsEvent
 {
 public:
     VcsEvent();
-    ~VcsEvent();
+    virtual ~VcsEvent();
     VcsEvent( const VcsEvent& );
     VcsRevision revision();
     QString author();

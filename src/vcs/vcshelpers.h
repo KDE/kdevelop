@@ -60,7 +60,7 @@ public:
     };
 
     VcsMapping();
-    ~VcsMapping();
+    virtual ~VcsMapping();
     VcsMapping(const VcsMapping&);
 
     void addMapping( const QString& sourceLocation,
