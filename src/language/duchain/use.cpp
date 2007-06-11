@@ -17,13 +17,13 @@
 */
 
 #include "use.h"
+#include "use_p.h"
 
 #include "declaration.h"
 #include "topducontext.h"
 #include "duchain.h"
 #include "duchainlock.h"
 #include "ducontext_p.h"
-#include "use_p.h"
 
 using namespace KTextEditor;
 

@@ -17,6 +17,7 @@
 */
 
 #include "ducontext.h"
+#include "ducontext_p.h"
 
 #include <QMutableLinkedListIterator>
 
@@ -28,7 +29,6 @@
 #include "typesystem.h"
 #include "topducontext.h"
 #include "symboltable.h"
-#include "ducontext_p.h"
 
 using namespace KTextEditor;
 

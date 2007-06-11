@@ -17,13 +17,12 @@
 */
 
 #include "definition.h"
+#include "definition_p.h"
 
 #include "topducontext.h"
 #include "declaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
-#include "definition_p.h"
-
 using namespace KTextEditor;
 
 namespace KDevelop
