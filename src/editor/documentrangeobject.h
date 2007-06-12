@@ -24,8 +24,8 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include "documentcursor.h"
-#include "documentrange.h"
+#include <documentcursor.h>
+#include <documentrange.h>
 
 namespace KDevelop
 {

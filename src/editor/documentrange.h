@@ -19,7 +19,7 @@
 #ifndef KDEVDOCUMENTRANGE_H
 #define KDEVDOCUMENTRANGE_H
 
-#include "editorexport.h"
+#include <editorexport.h>
 
 #include <kurl.h>
 

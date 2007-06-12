@@ -27,7 +27,7 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include "documentcursor.h"
+#include <documentcursor.h>
 
 namespace KTextEditor
 {
