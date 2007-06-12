@@ -31,8 +31,8 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include <kservice.h>
 
-#include "iplugin.h"
-#include "interfacesexport.h"
+#include <iplugin.h>
+#include <interfacesexport.h>
 
 class QExtensionManager;
 class KMenu;

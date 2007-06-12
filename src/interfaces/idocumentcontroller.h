@@ -25,7 +25,7 @@
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
 
-#include "interfacesexport.h"
+#include <interfacesexport.h>
 
 namespace KDevelop {
 

@@ -29,7 +29,7 @@
 #include <QtCore/QPointer>
 #include <QtCore/QPair>
 #include <QtDesigner/QExtensionManager>
-#include "interfacesexport.h"
+#include <interfacesexport.h>
 
 class KIconLoader;
 class QAction;

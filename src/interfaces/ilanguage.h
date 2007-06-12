@@ -23,7 +23,7 @@
 
 #include <kurl.h>
 
-#include "interfacesexport.h"
+#include <interfacesexport.h>
 
 class QMutex;
 class QThread;
