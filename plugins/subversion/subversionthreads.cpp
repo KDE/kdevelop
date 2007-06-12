@@ -1092,6 +1092,45 @@ void SvnImportJob::run()
 
 /////////////////////////////////////////////////////////////////////////////////////
 
+SvnCheckoutJob::SvnCheckoutJob( const KUrl &servUrl, const KUrl &wcRoot,
+                    const SvnUtils::SvnRevision &peg_revision,
+                    const SvnUtils::SvnRevision &revision,
+                    bool recurse, bool ignoreExternals,
+                    int type, SvnKJobBase *parent )
+    : SubversionThread( type, parent )
+    , m_servUrl( servUrl ), m_wcRoot( wcRoot ), m_pegRevision( peg_revision )
+    , m_revision( revision ), m_recurse( recurse ), m_ignoreExternals( ignoreExternals )
+{}
+
+void SvnCheckoutJob::run()
+{
+    setTerminationEnabled(true);
+    apr_pool_t *subpool = svn_pool_create( pool() );
+
+    const char *reposUrl = apr_pstrdup( subpool, m_servUrl.url().toUtf8() );
+    const char *wcRoot = apr_pstrdup( subpool,
+                        svn_path_canonicalize(m_wcRoot.path().toUtf8(), subpool ) );
+
+    svn_revnum_t result_rev;
+    svn_opt_revision_t peg_rev = m_pegRevision.revision();
+    svn_opt_revision_t rev = m_revision.revision();
+
+    kDebug() << k_funcinfo << " path: " << wcRoot << " Url: " << reposUrl << endl;
+
+    svn_error_t *err = svn_client_checkout2( &result_rev, reposUrl, wcRoot, &peg_rev, &rev,
+                                             m_recurse, m_ignoreExternals, ctx(), subpool );
+    if( err ){
+        setErrorMsgExt( err );
+        svn_pool_destroy( subpool );
+        return;
+    }
+
+    svn_pool_destroy( subpool );
+    return;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
 class SvnRevertJob::Private
 {
 public:

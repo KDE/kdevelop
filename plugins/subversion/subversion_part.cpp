@@ -20,6 +20,7 @@
 #include "svn_commitwidgets.h"
 #include "svn_importwidgets.h"
 #include "svn_logviewwidgets.h"
+#include "svn_checkoutwidgets.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -95,10 +96,6 @@ KDevSubversionPart::KDevSubversionPart( QObject *parent, const QStringList & )
     setXMLFile("kdevsubversion.rc");
 
     QAction *action;
-
-    action = actionCollection()->addAction("svn_checkout");
-    action->setText(i18n("Checkout from repository..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(checkout()));
 
     action = actionCollection()->addAction("svn_add");
     action->setText(i18n("Add to version control..."));
@@ -445,7 +442,7 @@ VcsJob* KDevSubversionPart::import( const KUrl& localLocation,
                 RecursionMode recursion )
 {
     bool nonrecurse = ( recursion == KDevelop::IBasicVersionControl::Recursive ? false: true );
-    svncore()->createImportJob( localLocation, KUrl(repositoryLocation), nonrecurse, true );
+    return svncore()->createImportJob( localLocation, KUrl(repositoryLocation), nonrecurse, true );
 }
 
 VcsJob* KDevSubversionPart::checkout( const KDevelop::VcsMapping& mapping )
@@ -456,8 +453,21 @@ VcsJob* KDevSubversionPart::checkout( const KDevelop::VcsMapping& mapping )
 
 
 //////////////////////////////////////////////
-void KDevSubversionPart::checkout( const KUrl &repository, const KUrl &targetDir, bool recurse )
+void KDevSubversionPart::checkout( const KUrl &targetDir )
 {
+    SvnCheckoutDialog dlg( targetDir, 0 );
+    if( dlg.exec() != QDialog::Accepted )
+        return;
+
+    KUrl repos = dlg.reposUrl();
+    KUrl path = dlg.destPath();
+    SvnUtils::SvnRevision peg_rev;
+    peg_rev.setKey( SvnRevision::HEAD );
+    SvnUtils::SvnRevision rev = dlg.revision();
+    bool recurse = dlg.recurse();
+    bool ignoreExternals = dlg.ignoreExternals();
+
+    svncore()->spawnCheckoutThread( repos, path, peg_rev, rev, recurse, ignoreExternals );
 }
 
 void KDevSubversionPart::add( const KUrl::List &wcPaths )
@@ -549,7 +559,13 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
             KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(baseItem);
             ctxUrl = folderItem->url();
             if( !isVersionControlled( ctxUrl ) ){
-                return KDevelop::IPlugin::requestContextMenuActions( context );
+                // checkout only can be done under the non-vcs dir.
+                d->m_ctxUrl = ctxUrl;
+                QList<QAction*> actions;
+                QAction *action = new QAction(i18n("Checkout.."), this);
+                connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
+                actions << action;
+                return qMakePair( QString("Subversion"), actions );
             }
         }
 
@@ -750,6 +766,11 @@ void KDevSubversionPart::ctxRemove()
     KUrl::List list;
     list << d->m_ctxUrl;
     removeInternal( list );
+}
+
+void KDevSubversionPart::ctxCheckout()
+{
+    checkout(d->m_ctxUrl);
 }
 
 //////////////////////////////////////////////

@@ -25,6 +25,7 @@ set(kdevsubversion_PART_SRCS
     subversion_utils.cpp
     interthreadevents.cpp
     svn_importwidgets.cpp
+    svn_checkoutwidgets.cpp
 )
 
 set(kdevsubversion_PART_UI
@@ -35,6 +36,7 @@ set(kdevsubversion_PART_UI
     svncommitloginputdlg.ui
     uicommit_option_dlg.ui
     uilogview_option_dlg.ui
+    uicheckout_option_dlg.ui
     svnimportdialog.ui
 )
 

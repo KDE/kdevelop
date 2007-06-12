@@ -43,7 +43,11 @@ public:
     // not used anymore
 //     void cleanupFinishedThreads();
 
-    void spawnCheckoutThread();
+    void spawnCheckoutThread( const KUrl &repos, const KUrl &path, const SvnRevision &peg,
+                              const SvnRevision &revision, bool recurse, bool ignoreExternals );
+    SvnKJobBase* createCheckoutJob( const KUrl &repos, const KUrl &path, const SvnRevision &peg,
+                            const SvnRevision &revision, bool recurse, bool ignoreExternals );
+
     void spawnAddThread( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore );
     SvnKJobBase* createAddJob( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore );
 

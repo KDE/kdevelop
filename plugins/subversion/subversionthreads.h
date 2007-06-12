@@ -37,7 +37,6 @@ class SvnKJobBase;
 class SvnLogHolder;
 class SvnBlameHolder;
 class SvnStatusHolder;
-class SubversionJob;
 class SvnInfoHolder;
 class KTempDir;
 class SvnServerCertInfo;
@@ -355,25 +354,22 @@ protected:
     bool m_nonRecurse, m_noIgnore;
 };
 
-// class SvnCheckoutJob : public SubversionJob
-// {
-// public:
-//     /// currently, peg revision is set to "HEAD" internally.
-//     SvnCheckoutJob( KUrl &servUrl, KUrl &wcRoot,
-//                     long int pegRev, QString pegRegKind,
-//                     long int rev, QString revKind,
-//                     bool recurse, bool ignoreExternals,
-//                     int type, QObject *parent );
-// protected:
-//     virtual void run();
-//
-//     KUrl m_servUrl, m_wcRoot;
-//     long int m_pegRev;
-//     QString m_pegRevKind;
-//     long int m_rev;
-//     QString m_revKind;
-//     bool m_recurse, m_ignoreExternals;
-// };
+class SvnCheckoutJob : public SubversionThread
+{
+public:
+    /// currently, peg revision is set to "HEAD" internally.
+    SvnCheckoutJob( const KUrl &servUrl, const KUrl &wcRoot,
+                    const SvnUtils::SvnRevision &pegRevision,
+                    const SvnUtils::SvnRevision &revision,
+                    bool recurse, bool ignoreExternals,
+                    int type, SvnKJobBase *parent );
+protected:
+    virtual void run();
+
+    KUrl m_servUrl, m_wcRoot;
+    SvnUtils::SvnRevision m_pegRevision, m_revision;
+    bool m_recurse, m_ignoreExternals;
+};
 
 class SvnRevertJob : public SubversionThread
 {

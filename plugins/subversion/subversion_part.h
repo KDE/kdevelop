@@ -117,7 +117,7 @@ public:
 private:
     // context menu slots and IVCS::showXXXX() will be redirected to these methods,
     // because these two should be able to execute job internally.
-    void checkout( const KUrl &repository, const KUrl &targetDir, bool recurse );
+    void checkout( const KUrl &targetDir );
     void add( const KUrl::List &wcPaths );
     void removeInternal( const KUrl::List &paths_or_urls );
     void commit( const KUrl::List &wcPaths );
@@ -156,6 +156,7 @@ public Q_SLOTS:
     void ctxUpdate();
     void ctxAdd();
     void ctxRemove();
+    void ctxCheckout();
 
 private Q_SLOTS:
     void slotJobFinished( SvnKJobBase *job );

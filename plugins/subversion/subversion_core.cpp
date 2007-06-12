@@ -109,8 +109,25 @@ SubversionCore::~SubversionCore()
     connect( job, SIGNAL(result(KJob*)), this, SLOT(slotResult(KJob*)) ); \
     job->start();
 
-void SubversionCore::spawnCheckoutThread()
-{}
+void SubversionCore::spawnCheckoutThread( const KUrl &repos, const KUrl &path, const SvnRevision &peg,
+                            const SvnRevision &revision, bool recurse, bool ignoreExternals )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_CHECKOUT, this );
+    SvnCheckoutJob *thread = new SvnCheckoutJob( repos, path, peg, revision,
+                                            recurse, ignoreExternals, SVN_CHECKOUT, job );
+    SVNCORE_SPAWN_COMMON( job, thread )
+}
+SvnKJobBase* SubversionCore::createCheckoutJob( const KUrl &repos, const KUrl &path,
+                                            const SvnRevision &peg, const SvnRevision &revision,
+                                            bool recurse, bool ignoreExternals )
+{
+    SvnKJobBase *job = new SvnKJobBase( SVN_CHECKOUT, this );
+    SvnCheckoutJob *thread = new SvnCheckoutJob( repos, path, peg, revision,
+            recurse, ignoreExternals, SVN_CHECKOUT, job );
+    job->setSvnThread( thread );
+    return job;
+}
+
 void SubversionCore::spawnAddThread( const KUrl::List &wcPaths, bool recurse, bool force, bool noIgnore )
 {
     if( wcPaths.count() < 1 ) return;
