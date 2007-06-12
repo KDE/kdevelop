@@ -45,7 +45,6 @@ public:
     QString registerView( const QString& title,
                           KDevelop::IOutputView::CloseBehaviour behaviour = AllowUserClose );
     void setModel( const QString& id, QAbstractItemModel* );
-    QString currentId();
 
     QAbstractItemModel* registeredModel( const QString& );
     QString registeredTitle( const QString& id );
@@ -54,11 +53,10 @@ public:
 
 Q_SIGNALS:
     void activated( const QModelIndex& );
+    void selectNextItem();
+    void selectPrevItem();
     void modelChanged( const QString& );
     void viewRemoved( const QString& );
-
-public Q_SLOTS:
-    void activePageChanged( const QString &id );
 
 private:
     class StandardOutputViewPrivate* const d;

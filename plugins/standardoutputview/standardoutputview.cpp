@@ -51,10 +51,10 @@ public:
                  m_part, SIGNAL( viewRemoved( const QString &) ) );
         QObject::connect( m_part, SIGNAL( viewRemoved( const QString& ) ),
                  l, SLOT( removeView( const QString &) ) );
-        QObject::connect( l, SIGNAL( activated(const QModelIndex&) ),
-                 m_part, SIGNAL(activated(const QModelIndex&)) );
-        QObject::connect( l, SIGNAL( activePageChanged(const QString&) ),
-                 m_part, SLOT(activePageChanged(const QString&)) );
+//         QObject::connect( l, SIGNAL( activated(const QModelIndex&) ),
+//                  m_part, SIGNAL(activated(const QModelIndex&)) );
+        QObject::connect( m_part, SIGNAL(selectNextItem()), l, SLOT(selectNextItem()) );
+        QObject::connect( m_part, SIGNAL(selectPrevItem()), l, SLOT(selectPrevItem()) );
         return l;
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
@@ -73,7 +73,6 @@ public:
     QMap<QString, QString> m_titles;
     QList<unsigned int> m_ids;
     QMap<QString, KDevelop::IOutputView::CloseBehaviour> m_behaviours;
-    QString m_activePageId;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
@@ -85,6 +84,18 @@ StandardOutputView::StandardOutputView(QObject *parent, const QStringList &)
     core()->uiController()->addToolView( "Output View", d->m_factory );
 
     setXMLFile("kdevstandardoutputview.rc");
+    // setup actions
+    QAction *action;
+
+    action = actionCollection()->addAction("next_error");
+    action->setText("Next");
+    action->setShortcut( QKeySequence(Qt::Key_F4) );
+    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectNextItem()));
+
+    action = actionCollection()->addAction("prev_error");
+    action->setText("Previous");
+    action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
+    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
 }
 
@@ -131,11 +142,6 @@ void StandardOutputView::setModel( const QString& id, QAbstractItemModel* model 
         kDebug(9004) << "AAAH id is not known:" << id << "|" << viewid<< endl;
 }
 
-QString StandardOutputView::currentId()
-{
-    return d->m_activePageId;
-}
-
 QStringList StandardOutputView::registeredViews()
 {
     QStringList ret;
@@ -162,11 +168,6 @@ QString StandardOutputView::registeredTitle( const QString& id )
         return d->m_titles[id];
     }
     return QString();
-}
-
-void StandardOutputView::activePageChanged( const QString &id )
-{
-    d->m_activePageId = id;
 }
 
 #include "standardoutputview.moc"

@@ -41,13 +41,13 @@ class OutputWidget : public KTabWidget
         void changeModel(const QString& title );
         void removeView( const QString& id );
         void closeActiveView();
+        void selectNextItem();
+        void selectPrevItem();
+        void activate(const QModelIndex&);
+
     Q_SIGNALS:
         void viewRemoved( const QString& );
-        void activated( const QModelIndex& );
-        void activePageChanged( const QString& id );
-
-    private Q_SLOTS:
-        void slotCurrentChanged( int index );
+//         void activated( const QModelIndex& );
 
     private:
         QMap<QString, QListView*> m_listviews;

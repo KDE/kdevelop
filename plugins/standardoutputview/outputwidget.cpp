@@ -20,6 +20,7 @@
  */
 
 #include "outputwidget.h"
+#include "ioutputviewmodel.h"
 
 #include "standardoutputview.h"
 #include <QtGui/QStandardItemModel>
@@ -30,6 +31,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
+
 
 OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     : KTabWidget( parent ), m_outputView(view)
@@ -49,7 +51,6 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
         changeModel( id );
     }
 
-    connect( this, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)) );
 }
 
 void OutputWidget::changeModel(const QString& id )
@@ -65,10 +66,12 @@ void OutputWidget::changeModel(const QString& id )
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         m_listviews[id] = listview;
         m_widgetMap[listview] = id;
-        connect( listview, SIGNAL(activated(const QModelIndex&)),
-                 this, SIGNAL(activated(const QModelIndex&)));
+//         connect( listview, SIGNAL(activated(const QModelIndex&)),
+//                  this, SIGNAL(activated(const QModelIndex&)));
         connect( listview, SIGNAL(clicked(const QModelIndex&)),
-                 this, SIGNAL(activated(const QModelIndex&)));
+                 this, SLOT(activate(const QModelIndex&)));
+        connect( listview, SIGNAL(activated(const QModelIndex&)),
+                 this, SLOT( activate(const QModelIndex&) ) );
         addTab( listview, m_outputView->registeredTitle(id) );
     }
 }
@@ -108,15 +111,64 @@ void OutputWidget::closeActiveView()
     }else kDebug(9004) << "OOops, the selected tab is not in our list??" << endl;
 }
 
-void OutputWidget::slotCurrentChanged( int /*index*/ )
+void OutputWidget::selectNextItem()
 {
     QWidget* widget = currentWidget();
     if( !widget )
         return;
-    if( m_widgetMap.contains( widget ) )
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+
+    QAbstractItemModel *absmodel = view->model();
+    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+    if( iface )
     {
-        QString id = m_widgetMap[widget];
-        emit activePageChanged(id);
+        QModelIndex index = iface->nextHighlightIndex( view->currentIndex() );
+        if( index.isValid() )
+        {
+            view->setCurrentIndex( index );
+            iface->activate( index );
+        }
+    }
+}
+
+void OutputWidget::selectPrevItem()
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+
+    QAbstractItemModel *absmodel = view->model();
+    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+    if( iface )
+    {
+        QModelIndex index = iface->previousHighlightIndex( view->currentIndex() );
+        if( index.isValid() )
+        {
+            view->setCurrentIndex( index );
+            iface->activate( index );
+        }
+    }
+}
+
+void OutputWidget::activate(const QModelIndex& index)
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+
+    QAbstractItemModel *absmodel = view->model();
+    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+    if( iface )
+    {
+        iface->activate( index );
     }
 }
 

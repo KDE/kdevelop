@@ -9,6 +9,7 @@ include_directories(
 
 set( outputviewinterfaces_LIB_SRCS
     outputmodel.cpp
+    ioutputviewmodel.cpp
 )
 kde4_automoc( ${outputviewinterfaces_LIB_SRCS} )
 kde4_add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
@@ -20,5 +21,6 @@ install(TARGETS kdevplatformoutputview DESTINATION ${LIB_INSTALL_DIR} )
  install( FILES
           ioutputview.h
           outputmodel.h
+          ioutputviewmodel.h
           outputviewexport.h
           DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview )
