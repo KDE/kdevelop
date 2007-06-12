@@ -1,5 +1,6 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/src/interfaces
+    ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
 )
 
 set(kdevplatformproject_LIB_SRCS
