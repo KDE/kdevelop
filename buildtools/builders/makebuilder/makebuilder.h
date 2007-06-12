@@ -79,9 +79,6 @@ private Q_SLOTS:
     void commandFailed(const QString &id);
     void cleanupModel( const QString& id );
 
-    void searchNextError();
-    void searchPrevError();
-
 private:
     QStringList computeBuildCommand(KDevelop::ProjectBaseItem *item);
     KUrl computeBuildDir( KDevelop::ProjectBaseItem* item );

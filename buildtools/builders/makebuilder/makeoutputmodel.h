@@ -22,29 +22,32 @@
 #define MAKEOUTPUTMODEL_H
 
 #include <QtGui/QStandardItemModel>
+#include <ioutputviewmodel.h>
 
 class QObject;
 class MakeActionFilter;
 class ErrorFilter;
 class MakeBuilder;
 
-class MakeOutputModel : public QStandardItemModel
+class MakeOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT
 public:
     MakeOutputModel( MakeBuilder *builder, QObject* parent = 0 );
+
+    // IOutputViewModel interfaces
+    void activate( const QModelIndex& index );
+    QModelIndex nextHighlightIndex( const QModelIndex &current );
+    QModelIndex previousHighlightIndex( const QModelIndex &current );
+
 public slots:
     void addStandardError( const QStringList& );
     void addStandardOutput( const QStringList& );
-
-    void activated( const QModelIndex & index );
-    void activateNextError();
 
 private:
     MakeActionFilter* actionFilter;
     ErrorFilter* errorFilter;
     MakeBuilder *m_builder;
-    int m_lastStoppedIndex;
 };
 
 #endif

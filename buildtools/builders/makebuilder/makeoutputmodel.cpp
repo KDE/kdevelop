@@ -29,8 +29,112 @@
 
 MakeOutputModel::MakeOutputModel( MakeBuilder *builder, QObject* parent )
     : QStandardItemModel(parent), actionFilter(new MakeActionFilter), errorFilter(new ErrorFilter)
-    , m_builder( builder ), m_lastStoppedIndex(0)
+    , m_builder( builder )
 {
+}
+
+void MakeOutputModel::activate( const QModelIndex& index )
+{
+    if( index.model() != this )
+    {
+        kDebug(9038) << "not my model, returning" << endl;
+        return;
+    }
+    kDebug(9038) << "Model activated " << index.row() << endl;
+
+    QStandardItem *stditem = itemFromIndex( index );
+    MakeWarningItem *warn = dynamic_cast<MakeWarningItem*>( stditem );
+    if( warn )
+    {
+        KTextEditor::Cursor range( warn->lineNo, 0);
+        KDevelop::IDocumentController *docCtrl = m_builder->core()->documentController();
+        docCtrl->openDocument( warn->file, range );
+    }
+}
+
+QModelIndex MakeOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
+{
+    int rowCount = this->rowCount();
+
+    bool reachedEnd = false;
+
+    // determine from which index we should start
+    int i=0;
+    if( currentIdx.isValid() )
+        i = currentIdx.row();
+
+    if( i >= rowCount - 1 )
+        i = 0;
+    else
+        i++;
+
+    for( ; i < rowCount; i++ )
+    {
+        QStandardItem *stditem = item( i );
+        MakeErrorItem *outItem = dynamic_cast<MakeErrorItem*>( stditem );
+        if( outItem )
+        {
+            // yes. found.
+            QModelIndex modelIndex = outItem->index();
+            return modelIndex;
+        }
+
+        if( i >= rowCount - 1 ) // at the last index and couldn't find error yet.
+        {
+            if( reachedEnd )
+            {
+                break; // no matching item
+            }
+            else
+            {
+                reachedEnd = true;
+                i = -1; // search from index 0
+            }
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex MakeOutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
+{
+    int rowCount = this->rowCount();
+
+    bool reachedFirst = false;
+
+    // determine from which index we should start
+    int i = rowCount -1;
+    if( currentIdx.isValid() )
+        i = currentIdx.row();
+
+    if( ( i > rowCount - 1 ) || ( i == 0 ) )
+        i = rowCount-1; // set to last index
+    else
+        i--;
+
+    for( ; i >= 0; i-- )
+    {
+        QStandardItem *stditem = item( i );
+        MakeErrorItem *outItem = dynamic_cast<MakeErrorItem*>( stditem );
+        if( outItem )
+        {
+            // yes. found.
+            QModelIndex modelIndex = outItem->index();
+            return modelIndex;
+        }
+        if( i <= 0 ) // at the last index and couldn't find error yet.
+        {
+            if( reachedFirst )
+            {
+                break; // no matching item
+            }
+            else
+            {
+                reachedFirst = true;
+                i = rowCount; // search from last index
+            }
+        }
+    }
+    return QModelIndex();
 }
 
 void MakeOutputModel::addStandardError( const QStringList& lines )
@@ -55,67 +159,7 @@ void MakeOutputModel::addStandardOutput( const QStringList& lines )
     }
 }
 
-void MakeOutputModel::activated( const QModelIndex & index )
-{
-    if( index.model() != this ){
-        kDebug(9038) << "not my model, returning" << endl;
-        return;
-    }
-    kDebug(9038) << "Model activated " << index.row() << endl;
 
-    QStandardItem *stditem = itemFromIndex( index );
-    MakeWarningItem *warn = dynamic_cast<MakeWarningItem*>( stditem );
-    if( warn )
-    {
-        KTextEditor::Cursor range( warn->lineNo, 0);
-        KDevelop::IDocumentController *docCtrl = m_builder->core()->documentController();
-        docCtrl->openDocument( warn->file, range );
-    }
-}
-
-void MakeOutputModel::activateNextError()
-{
-    int rowCount = this->rowCount();
-
-    bool reachedEnd = false;
-
-    // determine from which index we should start
-    int i = m_lastStoppedIndex;
-    if( i >= rowCount - 1 )
-        i = 0;
-    else
-        i++;
-
-    for( ; i < rowCount; i++ )
-    {
-        QStandardItem *stditem = item( i );
-        MakeErrorItem *outItem = dynamic_cast<MakeErrorItem*>( stditem );
-        if( outItem )
-        {
-            // yes. found.
-            QModelIndex modelIndex = outItem->index();
-    //         setCurrentIndex( modelIndex ); // TODO set selection
-            m_lastStoppedIndex = i;
-            this->activated( modelIndex );
-
-            break;
-        }
-
-        if( i >= rowCount - 1 ) // at the last index and couldn't find error yet.
-        {
-            if( reachedEnd )
-            {
-                m_lastStoppedIndex = 0;
-                break; // no matching item
-            }
-            else
-            {
-                reachedEnd = true;
-                i = -1; // search from index 0
-            }
-        }
-    }
-}
 
 // void MakeOutputModel::searchNextError()
 // {

@@ -66,19 +66,6 @@ MakeBuilder::MakeBuilder(QObject *parent, const QStringList &)
                  this, SLOT( cleanupModel( const QString& ) ) );
     }
 
-    setXMLFile("kdevmakebuilder.rc");
-    // setup actions
-    QAction *action;
-
-    action = actionCollection()->addAction("next_make_error");
-    action->setText("Next Error");
-    action->setShortcut( QKeySequence(Qt::Key_F4) );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(searchNextError()));
-
-    action = actionCollection()->addAction("prev_make_error");
-    action->setText("Previous Error");
-    action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(searchPrevError()));
 }
 
 MakeBuilder::~MakeBuilder()
@@ -109,28 +96,6 @@ void MakeBuilder::cleanupModel( const QString& id )
         delete model;
         delete cmd;
     }
-}
-
-void MakeBuilder::searchNextError()
-{
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-    if( ! i )
-        return;
-
-    KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-    if( !view )
-        return;
-
-    QString id = view->currentId();
-    if( m_models.contains(id) )
-    {
-        MakeOutputModel *model = m_models[id];
-        model->activateNextError();
-    }
-}
-
-void MakeBuilder::searchPrevError()
-{
 }
 
 bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
@@ -178,8 +143,6 @@ bool MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
                     m_models[id], SLOT(addStandardOutput(const QStringList&)));
             connect(m_commands[id], SIGNAL(receivedStandardError(const QStringList&)),
                     m_models[id], SLOT(addStandardError(const QStringList&)));
-            connect(i, SIGNAL(activated( const QModelIndex& )),
-                    m_models[id], SLOT(activated(const QModelIndex&)) );
 
             connect( m_commands[id], SIGNAL( failed() ), errorMapper, SLOT( map() ) );
             connect( m_commands[id], SIGNAL( completed() ), successMapper, SLOT( map() ) );
