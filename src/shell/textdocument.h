@@ -19,7 +19,7 @@
 #ifndef KDEV_TEXTDOCUMENT_H
 #define KDEV_TEXTDOCUMENT_H
 
-#include "partdocument.h"
+#include <partdocument.h>
 
 namespace KDevelop {
 

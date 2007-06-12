@@ -19,11 +19,11 @@
 #ifndef LANGUAGE_H
 #define LANGUAGE_H
 
-#include "ilanguage.h"
+#include <ilanguage.h>
 
 #include <QtCore/QList>
 
-#include "shellexport.h"
+#include <shellexport.h>
 
 namespace KDevelop {
 

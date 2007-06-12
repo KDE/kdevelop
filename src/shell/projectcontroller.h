@@ -21,9 +21,9 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPROJECTCONTROLLER_H
 #define KDEVPROJECTCONTROLLER_H
 
-#include "iprojectcontroller.h"
+#include <iprojectcontroller.h>
 
-#include "shellexport.h"
+#include <shellexport.h>
 
 
 namespace KDevelop

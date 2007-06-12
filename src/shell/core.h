@@ -20,7 +20,7 @@
 #define CORE_H
 
 #include <shellexport.h>
-#include "icore.h"
+#include <icore.h>
 
 
 namespace KDevelop {

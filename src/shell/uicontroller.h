@@ -21,7 +21,7 @@
 
 #include <shellexport.h>
 
-#include "iuicontroller.h"
+#include <iuicontroller.h>
 #include <sublime/controller.h>
 
 namespace KDevelop {

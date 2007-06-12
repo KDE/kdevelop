@@ -22,8 +22,8 @@
 #include <QtCore/QMap>
 #include <QtCore/QList>
 #include <kservicetypetrader.h>
-#include "profile.h"
-#include "plugincontroller.h"
+#include <profile.h>
+#include <plugincontroller.h>
 
 namespace KDevelop
 {

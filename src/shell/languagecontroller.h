@@ -20,9 +20,9 @@
 #ifndef LANGUAGECONTROLLER_H
 #define LANGUAGECONTROLLER_H
 
-#include "ilanguagecontroller.h"
+#include <ilanguagecontroller.h>
 
-#include "shellexport.h"
+#include <shellexport.h>
 
 namespace KParts {
 class Part;

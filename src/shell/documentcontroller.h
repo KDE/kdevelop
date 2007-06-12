@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QList>
 
-#include "idocumentcontroller.h"
+#include <idocumentcontroller.h>
 
 #include <shellexport.h>
 

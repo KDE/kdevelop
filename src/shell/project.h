@@ -27,11 +27,11 @@
 #ifndef KDEVPROJECT_H
 #define KDEVPROJECT_H
 
-#include "iproject.h"
+#include <iproject.h>
 
 #include <kurl.h>
 
-#include "shellexport.h"
+#include <shellexport.h>
 
 template<typename T> class QList;
 

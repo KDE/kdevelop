@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLUGINCONTROLLER_H
 #define KDEVPLUGINCONTROLLER_H
 
-#include "iplugincontroller.h"
+#include <iplugincontroller.h>
 
 #include <QtCore/QHash>
 
@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
 
-#include "shellexport.h"
+#include <shellexport.h>
 
 
 namespace KDevelop
