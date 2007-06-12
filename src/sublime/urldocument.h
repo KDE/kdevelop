@@ -23,7 +23,7 @@
 
 #include <sublimeexport.h>
 
-#include "document.h"
+#include <document.h>
 
 namespace Sublime {
 

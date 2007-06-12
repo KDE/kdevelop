@@ -25,7 +25,7 @@
 
 #include <sublimeexport.h>
 
-#include "viewcreator.h"
+#include <viewcreator.h>
 
 class QWidget;
 

@@ -23,7 +23,7 @@
 
 #include <sublimeexport.h>
 
-#include "mainwindowoperator.h"
+#include <mainwindowoperator.h>
 
 
 namespace Sublime {
