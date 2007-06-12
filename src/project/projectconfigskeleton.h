@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPROJECTCONFIGSKELETON_H
 #define KDEVPROJECTCONFIGSKELETON_H
 
-#include "projectexport.h"
+#include <projectexport.h>
 #include <kconfigskeleton.h>
 
 namespace KDevelop

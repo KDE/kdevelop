@@ -20,8 +20,8 @@
 #ifndef IPROJECTBUILDER_H
 #define IPROJECTBUILDER_H
 
-#include "iextension.h"
-#include "projectexport.h"
+#include <iextension.h>
+#include <projectexport.h>
 
 namespace KDevelop
 {
