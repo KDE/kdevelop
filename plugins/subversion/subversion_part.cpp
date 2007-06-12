@@ -21,6 +21,7 @@
 #include "svn_importwidgets.h"
 #include "svn_logviewwidgets.h"
 #include "svn_checkoutwidgets.h"
+#include "svn_updatewidget.h"
 extern "C" {
 #include <svn_wc.h>
 }
@@ -501,9 +502,15 @@ void KDevSubversionPart::commit( const KUrl::List &wcPaths )
 void KDevSubversionPart::update( const KUrl::List &wcPaths )
 {
     // paths, rev, revKind, recurse, ignoreExternals
-    SvnRevision rev;
-    rev.setKey( SvnRevision::HEAD );
-    d->m_impl->spawnUpdateThread( wcPaths, rev, true, true );
+
+    SvnUpdateOptionDlg dlg(0);
+    if( dlg.exec() != QDialog::Accepted ){
+        return;
+    }
+    SvnRevision rev = dlg.revision();
+    bool recurse = dlg.recurse();
+    bool ignoreExternal = dlg.ignoreExternal();
+    svncore()->spawnUpdateThread( wcPaths, rev, recurse, ignoreExternal );
 }
 void KDevSubversionPart::logview( const KUrl &wcPath_or_url )
 {
@@ -598,7 +605,7 @@ QPair<QString,QList<QAction*> > KDevSubversionPart::requestContextMenuActions( K
             connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
             actions << action;
 
-            action = new QAction(i18n("Update"), this);
+            action = new QAction(i18n("Update.."), this);
             connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
             actions << action;
 
