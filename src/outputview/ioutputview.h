@@ -21,7 +21,7 @@
 #ifndef KDEVIOUTPUTVIEW_H
 #define KDEVIOUTPUTVIEW_H
 
-#include "iextension.h"
+#include <iextension.h>
 
 class KUrl;
 class QString;

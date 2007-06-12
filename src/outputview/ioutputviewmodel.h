@@ -21,7 +21,7 @@
 #ifndef IOUTPUTVIEWMODEL_H
 #define IOUTPUTVIEWMODEL_H
 
-#include "outputviewexport.h"
+#include <outputviewexport.h>
 class QModelIndex;
 
 namespace KDevelop

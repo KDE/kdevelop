@@ -22,7 +22,7 @@
 #define OUTPUTMODEL_H
 
 #include <QtGui/QStandardItemModel>
-#include "outputviewexport.h"
+#include <outputviewexport.h>
 class QString;
 class QStringList;
 
