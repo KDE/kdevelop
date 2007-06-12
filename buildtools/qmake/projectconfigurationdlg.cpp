@@ -238,7 +238,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             if( myProjectItem->scope->variableValues( "CONFIG" ).findIndex( "staticlib" ) != -1 )
                 myProjectItem->scope->removeFromPlusOp( "CONFIG", "staticlib" );
             myProjectItem->scope->setEqualOp( "TEMPLATE", "subdirs" );
-            myProjectItem->setPixmap( 0, SmallIcon( "qmake_sub" ) );
+            myProjectItem->setPixmap( 0, SmallIcon( "folder" ) );
         }
     }
 

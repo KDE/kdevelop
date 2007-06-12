@@ -524,7 +524,7 @@ void QMakeScopeItem::init()
         if( scope->isEnabled() )
         {
             if ( tmp.findIndex( "subdirs" ) != -1 )
-                setPixmap( 0, SmallIcon( "qmake_sub" ) );
+                setPixmap( 0, SmallIcon( "folder" ) );
             else if ( tmp.findIndex( "lib" ) != -1 )
                 setPixmap( 0, SmallIcon( "qmake_lib" ) );
             else
@@ -532,7 +532,7 @@ void QMakeScopeItem::init()
         }else
         {
             if ( tmp.findIndex( "subdirs" ) != -1 )
-                setPixmap( 0, SmallIcon( "qmake_sub_disabled" ) );
+                setPixmap( 0, SmallIcon( "folder_grey" ) );
             else if ( tmp.findIndex( "lib" ) != -1 )
                 setPixmap( 0, SmallIcon( "qmake_lib_disabled" ) );
             else
