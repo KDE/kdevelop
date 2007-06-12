@@ -2,6 +2,8 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/src/interfaces
     ${CMAKE_SOURCE_DIR}/src/language/interfaces
+    ${CMAKE_SOURCE_DIR}/src/language/duchain
+    ${CMAKE_SOURCE_DIR}/src/language/backgroundparser
     ${CMAKE_SOURCE_DIR}/src/editor
 )
 

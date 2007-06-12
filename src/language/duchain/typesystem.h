@@ -20,8 +20,8 @@
 #ifndef TYPESYSTEM_H
 #define TYPESYSTEM_H
 
-#include "identifier.h"
-#include "languageexport.h"
+#include <identifier.h>
+#include <languageexport.h>
 #include <QtCore/QSet>
 
 #include <QtCore/QList>

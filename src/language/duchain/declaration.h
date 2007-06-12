@@ -20,12 +20,12 @@
 #define DECLARATION_H
 
 #include <QtCore/QList>
-#include "languageexport.h"
+#include <languageexport.h>
 
-#include "identifier.h"
-#include "documentrangeobject.h"
-#include "typesystem.h"
-#include "duchainbase.h"
+#include <identifier.h>
+#include <documentrangeobject.h>
+#include <typesystem.h>
+#include <duchainbase.h>
 
 namespace KDevelop
 {

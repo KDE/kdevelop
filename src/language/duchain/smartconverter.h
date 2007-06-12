@@ -20,7 +20,7 @@
 #ifndef DUCHAIN_SMARTCONVERTER_H
 #define DUCHAIN_SMARTCONVERTER_H
 
-#include "languageexport.h"
+#include <languageexport.h>
 
 namespace KDevelop
 {

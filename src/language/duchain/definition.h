@@ -19,9 +19,9 @@
 #ifndef DEFINITION_H
 #define DEFINITION_H
 
-#include "documentrangeobject.h"
-#include "duchainbase.h"
-#include "languageexport.h"
+#include <documentrangeobject.h>
+#include <duchainbase.h>
+#include <languageexport.h>
 
 namespace KDevelop
 {

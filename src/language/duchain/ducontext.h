@@ -20,12 +20,12 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
-#include "languageexport.h"
+#include <languageexport.h>
 
-#include "documentcursorobject.h"
-#include "identifier.h"
-#include "typesystem.h"
-#include "duchainbase.h"
+#include <documentcursorobject.h>
+#include <identifier.h>
+#include <typesystem.h>
+#include <duchainbase.h>
 
 namespace KDevelop
 {

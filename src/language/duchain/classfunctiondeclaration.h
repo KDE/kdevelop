@@ -21,8 +21,8 @@
 #ifndef CLASSFUNCTIONDECLARATION_H
 #define CLASSFUNCTIONDECLARATION_H
 
-#include "classmemberdeclaration.h"
-#include "languageexport.h"
+#include <classmemberdeclaration.h>
+#include <languageexport.h>
 
 namespace KDevelop
 {

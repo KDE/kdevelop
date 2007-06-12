@@ -19,8 +19,8 @@
 #ifndef DUCHAINBASE_H
 #define DUCHAINBASE_H
 
-#include "documentrangeobject.h"
-#include "languageexport.h"
+#include <documentrangeobject.h>
+#include <languageexport.h>
 
 namespace KDevelop
 {

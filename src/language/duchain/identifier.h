@@ -25,7 +25,7 @@
 #include <QtCore/QVarLengthArray>
 
 #include <kdebug.h>
-#include "languageexport.h"
+#include <languageexport.h>
 
 namespace KDevelop
 {
