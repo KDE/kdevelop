@@ -21,7 +21,7 @@
 #include <QString>
 #include <QPalette>
 #include <klocale.h>
-#include <kcolorutils.h>
+#include <kcolorscheme.h>
 #include <QFont>
 ////////////////////////////////////////////////////////
 
@@ -134,18 +134,14 @@ QStandardItem* ErrorFilter::processAndCreate( const QString& line )
         MakeWarningItem *ret = 0;
         if( isWarning )
         {
+            //TODO: Maybe using KColorUtils::mix() is better here, the default NeutralText is a blue-greenish color and doesn't really fit, IMHO
             ret = new MakeWarningItem( line );
-            QBrush fg = ret->foreground();
-            fg.setColor( KColorUtils::mix(
-                                      QApplication::palette().highlight().color(),
-                                      QApplication::palette().window().color()
-                ) );
-            ret->setForeground(fg);
+            ret->setForeground(KColorScheme().foreground(KColorScheme::NeutralText));
         }
         else // case of real error
         {
             ret = new MakeErrorItem( line );
-            ret->setForeground(QApplication::palette().highlight());
+            ret->setForeground(KColorScheme().foreground(KColorScheme::NegativeText));
         }
 
         ret->errorText = text;
