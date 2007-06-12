@@ -22,8 +22,8 @@
 #ifndef IBROWSABLEVERSIONCONTROL_H
 #define IBROWSABLEVERSIONCONTROL_H
 
-#include "iextension.h"
-#include "vcsrevision.h"
+#include <iextension.h>
+#include <vcsrevision.h>
 
 class QString;
 

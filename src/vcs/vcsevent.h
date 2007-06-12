@@ -24,7 +24,7 @@
 
 #include <QtCore/QVariant>
 
-#include "vcsexport.h"
+#include <vcsexport.h>
 
 class QString;
 class QDateTime;

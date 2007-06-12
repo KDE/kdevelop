@@ -24,7 +24,7 @@
 
 #include <kjob.h>
 
-#include "vcsexport.h"
+#include <vcsexport.h>
 
 class QVariant;
 class QString;

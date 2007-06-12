@@ -22,7 +22,7 @@
 #ifndef IBRANCHINGVERSIONCONTROL_H
 #define IBRANCHINGVERSIONCONTROL_H
 
-#include "iextension.h"
+#include <iextension.h>
 
 class QString;
 class VcsMapping;

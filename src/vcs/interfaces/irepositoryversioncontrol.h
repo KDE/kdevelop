@@ -22,7 +22,7 @@
 #ifndef IREPOSITORYVERSIONCONTROL_H
 #define IREPOSITORYVERSIONCONTROL_H
 
-#include "iextension.h"
+#include <iextension.h>
 class QString;
 class VcsRevision;
 class QStringList;

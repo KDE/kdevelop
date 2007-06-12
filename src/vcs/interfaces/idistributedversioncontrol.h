@@ -21,7 +21,7 @@
 #ifndef IDISTRIBUTEDVERSIONCONTROL_H
 #define IDISTRIBUTEDVERSIONCONTROL_H
 
-#include "iextension.h"
+#include <iextension.h>
 
 class QString;
 

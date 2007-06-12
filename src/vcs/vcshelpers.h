@@ -23,7 +23,7 @@
 #define VCSHELPERS_H
 
 #include <QtCore/QVariant>
-#include "vcsexport.h"
+#include <vcsexport.h>
 
 class QString;
 class QStringList;

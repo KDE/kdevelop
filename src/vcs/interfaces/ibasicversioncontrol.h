@@ -22,10 +22,10 @@
 #ifndef IBASICVERSIONCONTROL_H
 #define IBASICVERSIONCONTROL_H
 
-#include "iextension.h"
+#include <iextension.h>
 #include <kurl.h>
-#include "vcsrevision.h"
-#include "vcsdiff.h"
+#include <vcsrevision.h>
+#include <vcsdiff.h>
 
 class QString;
 

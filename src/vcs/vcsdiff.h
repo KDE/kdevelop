@@ -22,7 +22,7 @@
 #ifndef VCSDIFF_H
 #define VCSDIFF_H
 
-#include "vcsexport.h"
+#include <vcsexport.h>
 #include <QtCore/QVariant>
 
 class QString;

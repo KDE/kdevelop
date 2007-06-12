@@ -22,7 +22,7 @@
 #ifndef VCSREVISION_H
 #define VCSREVISION_H
 
-#include "vcsexport.h"
+#include <vcsexport.h>
 #include <QtCore/QVariant>
 class QStringList;
 class QString;
