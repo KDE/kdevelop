@@ -7,7 +7,7 @@
 # Sets Boost_LIBRARIES to the libraries boost_serialization and boost_thread
 
 if(Boost_LIBRARIES)
-    set(Boost_FIND_QUIETLY TRUE)
+    set(BoostLibraries_FIND_QUIETLY TRUE)
 endif(Boost_LIBRARIES)
 
 find_package(Boost)
@@ -33,9 +33,9 @@ else(NOT Boost_FOUND)
         set(Boost_LIBRARIES ${Boost_SERIALIZATION} ${Boost_THREAD})
 	set(Boost_LIBRARIES ${Boost_LIBRARIES} CACHE STRING "List of Boost libraries for Kdevelop")
         set(Boost_LIBS_FOUND TRUE)
-        if(NOT Boost_FIND_QUIETLY)
+        if(NOT BoostLibraries_FIND_QUIETLY)
             message(STATUS "Found Boost libraries: ${Boost_LIBRARIES}")
-        endif(NOT Boost_FIND_QUIETLY)
+        endif(NOT BoostLibraries_FIND_QUIETLY)
     endif(NOT Boost_THREAD OR NOT Boost_SERIALIZATION)
     
     MARK_AS_ADVANCED(
