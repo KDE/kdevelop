@@ -1,6 +1,6 @@
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/sublime
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/sublime
     )
 
 ########### next target ###############

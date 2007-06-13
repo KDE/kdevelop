@@ -1,13 +1,13 @@
 
 include_directories(
     ${CMAKE_TOP_BUILD_DIR}
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/interfaces
-    ${CMAKE_SOURCE_DIR}/src/editor
-    ${CMAKE_SOURCE_DIR}/src/language
-    ${CMAKE_SOURCE_DIR}/src/language/interfaces
-    ${CMAKE_SOURCE_DIR}/src/language/duchain
-    ${CMAKE_SOURCE_DIR}/src/shell
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/interfaces
+    ${CMAKE_SOURCE_DIR}/editor
+    ${CMAKE_SOURCE_DIR}/language
+    ${CMAKE_SOURCE_DIR}/language/interfaces
+    ${CMAKE_SOURCE_DIR}/language/duchain
+    ${CMAKE_SOURCE_DIR}/shell
 )
 
 

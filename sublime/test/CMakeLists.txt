@@ -1,8 +1,8 @@
 if (KDE4_BUILD_TESTS)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/sublime
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/sublime
     )
 
 set( areaoperationtest_SRCS areaoperationtest.cpp areaprinter.cpp )

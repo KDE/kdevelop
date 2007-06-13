@@ -1,10 +1,10 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src/interfaces
-    ${CMAKE_SOURCE_DIR}/src/language/interfaces
-    ${CMAKE_SOURCE_DIR}/src/language/duchain
-    ${CMAKE_SOURCE_DIR}/src/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/src/editor
+    ${CMAKE_SOURCE_DIR}/interfaces
+    ${CMAKE_SOURCE_DIR}/language/interfaces
+    ${CMAKE_SOURCE_DIR}/language/duchain
+    ${CMAKE_SOURCE_DIR}/language/backgroundparser
+    ${CMAKE_SOURCE_DIR}/editor
 )
 
 set(kdevplatformlanguage_LIB_SRCS

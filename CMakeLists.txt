@@ -18,7 +18,15 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${K
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 add_subdirectory(cmake)
-add_subdirectory(src)
+add_subdirectory(sublime)
+add_subdirectory(interfaces)
+add_subdirectory(project)
+add_subdirectory(editor)
+add_subdirectory(language)
+add_subdirectory(shell)
+add_subdirectory(util)
+add_subdirectory(outputview)
+add_subdirectory(vcs)
 add_subdirectory(plugins)
 add_subdirectory(doc)
 

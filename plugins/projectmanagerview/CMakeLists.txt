@@ -1,10 +1,10 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/interfaces
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/interfaces
     ${THREADWEAVER_INCLUDE_DIR}
-    ${CMAKE_SOURCE_DIR}/src/project
-    ${CMAKE_SOURCE_DIR}/src/project/interfaces
+    ${CMAKE_SOURCE_DIR}/project
+    ${CMAKE_SOURCE_DIR}/project/interfaces
     )
 
 

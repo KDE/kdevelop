@@ -1,5 +1,9 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/util ${CMAKE_SOURCE_DIR}/src/interfaces )
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/util
+    ${CMAKE_SOURCE_DIR}/interfaces
+)
 
 
 ########### next target ###############

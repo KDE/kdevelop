@@ -1,10 +1,10 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/src
-                     ${CMAKE_SOURCE_DIR}/src/interfaces
-                     ${CMAKE_SOURCE_DIR}/src/vcs
-                     ${CMAKE_SOURCE_DIR}/src/vcs/interfaces
-                     ${CMAKE_SOURCE_DIR}/src/project
-                     ${CMAKE_SOURCE_DIR}/src/outputview
+include_directories( ${CMAKE_SOURCE_DIR}
+                     ${CMAKE_SOURCE_DIR}/interfaces
+                     ${CMAKE_SOURCE_DIR}/vcs
+                     ${CMAKE_SOURCE_DIR}/vcs/interfaces
+                     ${CMAKE_SOURCE_DIR}/project
+                     ${CMAKE_SOURCE_DIR}/outputview
                      ${SUBVERSION_INCLUDE_DIRS}
 )
 

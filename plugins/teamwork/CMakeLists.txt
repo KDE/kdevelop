@@ -1,7 +1,7 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/interfaces
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/plugins/teamwork/lib
     ${COMMONCPP2_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}

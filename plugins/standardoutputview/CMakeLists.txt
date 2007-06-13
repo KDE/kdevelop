@@ -1,8 +1,8 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src/interfaces
-    ${CMAKE_SOURCE_DIR}/src/util
-    ${CMAKE_SOURCE_DIR}/src/outputview
+    ${CMAKE_SOURCE_DIR}/interfaces
+    ${CMAKE_SOURCE_DIR}/util
+    ${CMAKE_SOURCE_DIR}/outputview
     )
 
 

@@ -1,8 +1,8 @@
 add_subdirectory(tests)
 
 include_directories( ${KDE4_INCLUDES}
-	${CMAKE_SOURCE_DIR}/src/interfaces 
-	${CMAKE_SOURCE_DIR}/src/vcs
+	${CMAKE_SOURCE_DIR}/interfaces
+	${CMAKE_SOURCE_DIR}/vcs
 )
 
 

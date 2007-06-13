@@ -1,15 +1,15 @@
 add_subdirectory(settings)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/sublime
-    ${CMAKE_SOURCE_DIR}/src/interfaces
-    ${CMAKE_SOURCE_DIR}/src/editor
-    ${CMAKE_SOURCE_DIR}/src/project
-    ${CMAKE_SOURCE_DIR}/src/project/interfaces
-    ${CMAKE_SOURCE_DIR}/src/language
-    ${CMAKE_SOURCE_DIR}/src/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/src/language/interfaces
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/sublime
+    ${CMAKE_SOURCE_DIR}/interfaces
+    ${CMAKE_SOURCE_DIR}/editor
+    ${CMAKE_SOURCE_DIR}/project
+    ${CMAKE_SOURCE_DIR}/project/interfaces
+    ${CMAKE_SOURCE_DIR}/language
+    ${CMAKE_SOURCE_DIR}/language/backgroundparser
+    ${CMAKE_SOURCE_DIR}/language/interfaces
 )
 
 set(kdevplatformshell_LIB_SRCS
