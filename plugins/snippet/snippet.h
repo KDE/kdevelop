@@ -55,7 +55,7 @@ public:
      *            interpretSnippet() instead.
      * @return The snippet's plain text
      */
-    const QString getSnippetPlainText() { return snippetText_; };
+    const QString getSnippetPlainText() { return snippetText_; }
 
     /**
      * Returns the snippet's text. If the snippet conatins variables, a dialog will
