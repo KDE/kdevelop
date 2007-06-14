@@ -304,13 +304,14 @@ void DUContext::findDeclarationsInternal( const QualifiedIdentifier & identifier
   it.toBack();
   while (it.hasPrevious()) {
     DUContext* context = it.previous();
-    context->findDeclarationsInternal(identifier, position, dataType, usingNS, ret, true);
+    //Do not give the position, because the document is probably different
+    context->findDeclarationsInternal(identifier,  context->textRange().end(), dataType, usingNS, ret, true);
     if (!ret.isEmpty())
       return;
   }
 
   if (!inImportedContext && parentContext())
-    parentContext()->findDeclarationsInternal(identifier, position, dataType, usingNS, ret);
+    parentContext()->findDeclarationsInternal(identifier, url() == parentContext()->url() ? position : parentContext()->textRange().end(), dataType, usingNS, ret);
 }
 
 QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const KTextEditor::Cursor & position, const AbstractType::Ptr& dataType) const
