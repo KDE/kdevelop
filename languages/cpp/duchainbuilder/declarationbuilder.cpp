@@ -308,6 +308,18 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   return declaration;
 }
 
+void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
+  //We override this so we can get the class-declaration into a usable state(with filled type) earlier
+    DUChainWriteLocker lock(DUChain::lock());
+
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
+    
+    if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
+        idType->setDeclaration( currentDeclaration() );
+
+    currentDeclaration()->setType(type);
+}
+
 void DeclarationBuilder::closeDeclaration()
 {
   if (lastType()) {

@@ -91,6 +91,8 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   CppClassType::Ptr classType(openClass(m_editor->parseSession()->token_stream->kind(node->class_key)));
   openType(classType, node);
 
+  classTypeOpened( TypeRepository::self()->registerType(currentAbstractType()) ); //This callback is needed, because the type of the class-declaration needs to be set so the class can be referenced from within intself
+
   TypeBuilderBase::visitClassSpecifier(node);
 
   // Prevent additional elements being added if this becomes the current type again

@@ -52,9 +52,12 @@ public:
 protected:
   KDevelop::AbstractType::Ptr lastType() const;
 
+  // Called at the beginning of processing a class-specifier, right after the type for the class was created. The type can be gotten through currentAbstractType().
+  virtual void classTypeOpened(KDevelop::AbstractType::Ptr) {};
+  
   // Created visitors
   virtual void visitArrayExpression(ExpressionAST*);
-
+  
   // Regular visitors
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitBaseSpecifier(BaseSpecifierAST*);

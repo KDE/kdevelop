@@ -69,6 +69,7 @@ public:
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
 
+  virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
 private:
   KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**
