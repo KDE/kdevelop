@@ -43,11 +43,11 @@ TypeBuilder::TypeBuilder(CppEditorIntegrator * editor)
 {
 }
 
-void TypeBuilder::supportBuild(AST *node)
+void TypeBuilder::supportBuild(AST *node, DUContext* context)
 {
   m_topTypes.clear();
 
-  TypeBuilderBase::supportBuild(node);
+  TypeBuilderBase::supportBuild(node, context);
 
   Q_ASSERT(m_typeStack.isEmpty());
 }

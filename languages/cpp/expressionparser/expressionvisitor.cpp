@@ -177,6 +177,9 @@ ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
 /** Find the member in the declaration's du-chain. This does not respect function-parameters yet.
  **/
 void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const QualifiedIdentifier& member, bool isConst, bool postProblem ) {
+    
+    ///have test
+    
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
     LOCKDUCHAIN;
@@ -188,13 +191,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     isConst |= isConstant(base.data());
     
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>( base.data() );
-    if( !idType )  {
-      problem( node, QString("findMember called on not identified type \"%1\"").arg(base->toString()) );
-    }
-
     //Make sure that it is a structure-type, because other types do not have members
     StructureType* structureType = dynamic_cast<StructureType*>( base.data() );
-    MUST_HAVE(structureType);
+    
+    if( !structureType || !idType ) {
+      problem( node, QString("findMember called on non-identified or non-structure type \"%1\"").arg(base->toString()) );
+      return;
+    }
 
     Declaration* declaration = idType->declaration();
     MUST_HAVE(declaration);
@@ -240,6 +243,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
  *  Here the . and -> operators are implemented.
  *  Before visitClassMemberAccess is called, m_lastType and m_lastInstance must be set
  *  to the base-types
+ *
+ * have test
+ * 
  **/
   void ExpressionVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
 {
@@ -252,13 +258,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
 
     if( !baseInstance || !base ) {
       problem(node, "VisitClassMemberAccess called without a base-declaration. '.' and '->' operators are only allowed on type-instances.");
-      return;
-    }
-    
-    StructureType* st = dynamic_cast<StructureType*>( base.data() );
-
-    if( !st ) {
-      problem( node, QString("member-access requested on non-structure type: %1").arg( typeid(*base.data()).name() ) );
       return;
     }
     
@@ -275,11 +274,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     switch( tokenFromIndex(node->op).kind ) {
       case Token_arrow:
       {
+        ///have test
         LOCKDUCHAIN;
         //When the type is a reference, dereference it so we get to the pointer-type
 
-        PointerType* pnt = dynamic_cast<PointerType*>( realLastType().data() );
+        PointerType* pnt = dynamic_cast<PointerType*>( realType(base).data() );
         if( pnt ) {
+          kDebug() << "got type: " << pnt->toString() << endl;
+          kDebug() << "base-type: " << pnt->baseType()->toString() << endl;
+          
           isConst = isConstant(pnt);
           //It is a pointer, reduce the pointer-depth by one
           base = pnt->baseType();
@@ -307,6 +310,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         }
       }
       case '.':
+        ///have test
       break;
       default:
         problem( node, QString("unknown class-member access operation: %1").arg( tokenFromIndex(node->op).kind ) );
@@ -394,7 +398,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       return idType->declaration();
     } else {
       LOCKDUCHAIN;
-      problem(node, QString("type \"%1\" is not identified").arg(base->toString() ) );
       return 0;
     }
     
@@ -402,6 +405,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   
   /**
    * Here declarations are located
+   *
+   * have test
    **/
   
   void ExpressionVisitor::visitName(NameAST* node)
@@ -452,7 +457,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       expressionType( node, m_lastType, m_lastInstance );
   }
   
-  /** Primary expressions just forward to their encapsulated expression */
+  /** Primary expressions just forward to their encapsulated expression
+   *
+   * have test
+   * 
+  */
   void ExpressionVisitor::visitPrimaryExpression(PrimaryExpressionAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -477,8 +486,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       expressionType( node, m_lastType, m_lastInstance );
   }
 
-  /** Sub-expressions of a post-fix expression, will be applied in order to m_lastType */
+  /** Sub-expressions of a post-fix expression, will be applied in order to m_lastType
+   *
+   * have test  */
+  
   void  ExpressionVisitor::visitSubExpressions( AST* node, const ListNode<ExpressionAST*>* nodes ) {
+    if( !nodes )
+      return;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     
     if( !m_lastType ) {
@@ -505,7 +519,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       expressionType( node, m_lastType, m_lastInstance );
   }
   
-  /** A postfix-expression is a primary expression together with a chain of sub-expressions that are applied from left to right */
+  /** A postfix-expression is a primary expression together with a chain of sub-expressions that are applied from left to right
+   *
+   * have test */
+  
   void ExpressionVisitor::visitPostfixExpression(PostfixExpressionAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -529,7 +546,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   }
 
   /**
-   **/
+   *
+   * partially have test **/
   void ExpressionVisitor::visitBinaryExpression(BinaryExpressionAST* node)  {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     
@@ -566,6 +584,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
         problem(node, "not implemented binary expression" );
       case Token_assign:
       case '=':
+        ///have test
         m_lastType = leftType;
         m_lastInstance = leftInstance;
       break;
@@ -574,6 +593,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }
+
+  /**
+   *
+   * Not ready yet */
   
   void ExpressionVisitor::visitCppCastExpression(CppCastExpressionAST* node)  {
     
@@ -584,8 +607,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     visit( node->expression );
     clearLast();
 
+    ///Change this, don't use type-builder, instead somehow parse a QualifiedIdentifier and some decoration, and search for that in the du-context
     TypeBuilder t( m_session );
-    t.supportBuild(node->type_id);
+    t.supportBuild(node->type_id,m_currentContext);
     if( t. topTypes().size() != 1 ) {
       problem( node, QString("wrong count of types built: %1").arg(t.topTypes().size() ) );
       return;
@@ -600,6 +624,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     visitSubExpressions( node, node->sub_expressions );
   }
   
+  /**
+   *
+   * Not ready yet */
   void ExpressionVisitor::visitCastExpression(CastExpressionAST* node)  {
 
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -609,8 +636,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     visit( node->expression );
     clearLast();
     
+    ///Change this, don't use type-builder, instead somehow parse a QualifiedIdentifier and some decoration, and search for that in the du-context
     TypeBuilder t( m_session );
-    t.supportBuild(node->type_id);
+    t.supportBuild(node->type_id, m_currentContext);
     if( t. topTypes().size() != 1 ) {
       problem( node, QString("wrong count of types built: %1").arg(t.topTypes().size() ) );
       return;
@@ -626,6 +654,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       expressionType( node, m_lastType, m_lastInstance );
   }
 
+  /**
+   *
+   * have test */
   void ExpressionVisitor::visitConditionalExpression(ConditionalExpressionAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -637,13 +668,17 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     visit(node->left_expression);
     clearLast();
 
+    ///@todo test if result of right expression can be converted to the result of the right expression. If not, post a problem(because c++ wants it that way)
+
     //Since both possible results of a conditional expression must have the same type, we only consider the right one here
     visit(node->right_expression);
     
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }  
-  
+
+  /**
+   * have test */
   void ExpressionVisitor::visitExpressionStatement(ExpressionStatementAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -653,18 +688,17 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       expressionType( node, m_lastType, m_lastInstance );
   }
 
-  void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node)
-  {
-    PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    problem(node, "node-type cannot be parsed");
-  }
-
-  /** For a compound statement, process all statements and return the type of the last one */
+  /** For a compound statement, process all statements and return the type of the last one
+   *
+   * have test */
   void ExpressionVisitor::visitCompoundStatement(CompoundStatementAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     visitIndependentNodes(node->statements);
   }
+
+  /**
+   * have test */
   
   void ExpressionVisitor::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)  {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -675,6 +709,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
       expressionType( node, m_lastType, m_lastInstance );
   }
 
+  /**
+   * partially have test */
   void ExpressionVisitor::visitUnaryExpression(UnaryExpressionAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
@@ -693,7 +729,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     case '*':
     {
       LOCKDUCHAIN;
-      
       if( PointerType* pt = dynamic_cast<PointerType*>( m_lastType.data() ) )
       {
         //Dereference
@@ -726,7 +761,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     case '-':
     case '!':
     case '~':
-      ///@todo implement
+      ///@todo use overloaded functions
     break;
     }
     
@@ -766,7 +801,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
   void ExpressionVisitor::visitTypeId(TypeIdAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNewTypeId(NewTypeIdAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  
+
+  void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node)
+  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    problem(node, "node-type cannot be parsed");
+  }
+
   ///Nodes that are invalid inside an expression:
   void ExpressionVisitor::visitAccessSpecifier(AccessSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitAsmDefinition(AsmDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }

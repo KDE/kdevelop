@@ -168,13 +168,13 @@ KDevelop::DUContext* ContextBuilder::buildSubContexts(const KUrl& url, AST *node
 }
 
 
-void ContextBuilder::supportBuild(AST *node)
+void ContextBuilder::supportBuild(AST *node, DUContext* context)
 {
   //Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext)); This assertion is invalid, because the node may also be a statement that has a non-top context set
-  
-  openContext(node->ducontext);
 
-  m_editor->setCurrentUrl(node->ducontext->url());
+  openContext( context ? context : node->ducontext );
+
+  m_editor->setCurrentUrl(currentContext()->url());
 
   m_editor->setCurrentRange(currentContext()->textRangePtr());
 

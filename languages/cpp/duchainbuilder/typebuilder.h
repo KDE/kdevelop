@@ -44,8 +44,9 @@ public:
 
   /**
    * Build types by iterating the given \a node.
+   * @param context the context to use. Must be set when the given node has no context. When it has one attached, this parameter is not needed. However it will always be preferred over the node's context.
    */
-  virtual void supportBuild(AST *node);
+  virtual void supportBuild(AST *node, KDevelop::DUContext* context = 0);
 
   const QList< KDevelop::AbstractType::Ptr >& topTypes() const;
 
